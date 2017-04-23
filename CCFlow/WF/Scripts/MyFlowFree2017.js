@@ -578,8 +578,8 @@ function setToobarUnVisible() {
 //隐藏下方的功能按钮
 function setToobarDisiable() {
     //隐藏下方的功能按钮
-    $('#bottomToolBar input').css('background', 'gray');
-    $('#bottomToolBar input').attr('disabled', 'disabled');
+    $('.Bar input').css('background', 'gray');
+    $('.Bar input').attr('disabled', 'disabled');
 }
 
 function setToobarEnable() {
@@ -645,6 +645,22 @@ function Save() {
 //退回工作
 function returnWorkWindowClose(data) {
     $('#returnWorkModal').modal('hide');
+    //通过下发送按钮旁的下拉框选择下一个节点
+    if (data.indexOf('SaveOK@') == 0) {
+        //说明保存人员成功,开始调用发送按钮.
+        var toNode = 0;
+        //含有发送节点 且接收
+        if ($('#DDL_ToNode').length > 0) {
+            var selectToNode = $('#DDL_ToNode  option:selected').data();
+            toNode = selectToNode.No;
+        }
+
+        execSend(toNode);
+        //$('[name=Send]:visible').click();
+        return;
+    } else {//可以重新打开接收人窗口
+        winSelectAccepter = null;
+    }
 
     if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
         $('#Message').html(data);
@@ -833,135 +849,6 @@ function initGroup(workNodeData, groupFiled) {
     return groupHtml;
 }
 
-//解析分组类型 如果返回的为 '' 就表明是字段分组
-function initTrackList(workNodeData) {
-    var trackNavHtml = '';
-    var trackHtml = '';
-    var trackList = workNodeData.Track;
-    var filterTrackList = $.grep(trackList, function (value) {
-        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 || value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1 || value.ActionType == 8 || value.ActionType == 5;
-    });
-    workNodeData.Track = filterTrackList;
-    $.each(workNodeData.Track, function (i, track) {
-        //流程执行人
-        var exerNoName = track.Exer.substr(1, track.Exer.length - 2);
-        //var exerNoName = track.Exer.substr(1, track.Exer.length - 2).replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
-
-        var exerNo = exerNoName.split(',')[0];
-        var exerName = exerNoName.split(',')[1];
-        var exerEmpP = (exerNo == track.EmpFrom ? "" : "（实际发送人：" + exerName + "）");
-        track.RDT = track.RDT;
-        //track.RDT = track.RDT.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
-
-
-        var actionType = track.ActionType;
-        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + (actionType == 5 ? track.NDToT : track.NDFromT) + '<p>发送人:' + track.EmpFromT +exerEmpP+ '</p><p>时间:' + track.RDT + '</p>' + '</a></li>';
-        if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11 && actionType != 8) {
-            switch (actionType) {
-                case 5:
-                    trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + "撤销发送信息" + '</span></div>' + "<div class='returnTackDiv' >" + track.NDToT + "撤消节点发送;时间" + track.RDT + '</div></div>';
-                    break;
-                case 2:
-                    trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
-            trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
-        }
-    });
-    //不是查看模式   显示当前处理节点
-    function HgetNowFormatDate(time) {
-        var date = time ? new Date(time) : new Date();
-        var seperator1 = "-";
-        var seperator2 = ":";
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-                + " " + date.getHours() + seperator2 + date.getMinutes()
-                + seperator2 + date.getSeconds();
-        return {
-            currentdate: currentdate,
-            getDay: date.getFullYear() + seperator1 + month + seperator1 + strDate,
-            getTime: date.getHours() + seperator2 + date.getMinutes()
-                + seperator2 + date.getSeconds()
-        };
-    }
-    var sendName = $.cookie("CCS").split("=")[2].split("&")[0];
-    var sendNo = $.cookie("CCS").split("=")[1].split("&")[0];
-    var sendt = HgetNowFormatDate().currentdate;
-    if (pageData.DoType != 'View') {
-        trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendName + '</p><p>时间:' + sendt + '</p></a></li>';
-        $('#header b').text((workNodeData.Track.length + 1));
-        //trackNavHtml += '<li class="scrollNav" title="发送人："><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + "dsfsf" + '</a></li>';
-    }
-    $('#nav').html(trackNavHtml);
-    if (workNodeData.Track.length > 0) {
-        $('.navbars').css('display', 'block');
-    } else {//新建单子时，不显示轨迹导航，表单宽度为100%
-        $('.navbars').css('display', 'none');
-        $('#divCurrentForm').css('width', '100%');
-        $('#header').css('background', '#5598f3');
-    }
-
-    //设置表单宽度为81%  当时新建工单的时候不显示左侧的导航栏
-    var width = 81;
-    //先去掉
-    //if (workNodeData.Sys_MapData != undefined && workNodeData.Sys_MapData.length > 0 && workNodeData.Sys_MapData[0].TableWidth > 900) {//处于中屏时设置宽度最小值
-    //    width = workNodeData.Sys_MapData[0].TableWidth;
-    //}
-    width = width + '%';
-    $('#divCurrentForm').css('width', width);
-    $('#divTrack').css('width', width);
-    //显示左侧导航栏 暂时不显示
-    $('#nav').css('display', 'block');
-
-    if (workNodeData.Track.length > 0) {
-        $('#nav').css('display', 'block');
-    } else {//新建单子时，不显示轨迹导航，表单宽度为100%
-        $('#nav').css('display', 'none');
-        $('#divCurrentForm').css('width', '100%');
-        $('#header').css('background', '#5598f3');
-    }
-
-    $($('#nav li')[0]).addClass('current');
-    $('#nav').onePageNav();
-
-    $('#divTrack').html(trackHtml);
-
-    $('#divTrack').bind('click', function (obj) {
-        var returnContentDiv = $(obj.target).next(".returnTackDiv");
-        var i = returnContentDiv.parent().children().first();
-        if (returnContentDiv.length == 0) {
-            returnContentDiv = $(obj.target).parent().next(".returnTackDiv");
-        }
-        if (returnContentDiv.css('display') != 'none') {
-            returnContentDiv.css('display', 'none');
-            i.hide();
-        } else {
-            returnContentDiv.css('display', 'block');
-            i.show();
-        }
-    });
-
-    //如果工作已经处理  提示用户工作已处理  并关闭处理页面
-    if (workNodeData.Track.length > 0 && (workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) && (workNodeData.Track[workNodeData.Track.length - 1].ActionType != 5) && pageData.DoType != 'View') {//ACTIONTYPE=5 是撤销移交
-        alert("当前工作已处理");
-        //刷新父窗口
-        if (window.opener != null) {
-            window.opener.location.reload();
-        }
-        window.close();
-    }
-}
 
 function InitForm() {
     var workNodeData = JSON.parse(jsonStr);
@@ -1811,6 +1698,9 @@ function GenerWorkNode1() {
             
             Common.MaxLengthError();
             // window.location.href = "#divCurrentForm";
+
+            //设置窗口大小
+            
         }
     });
 }
@@ -1920,7 +1810,10 @@ function Send() {
             toNode = selectToNode.No;
         }
     }
+    execSend(toNode);
+}
 
+function execSend(toNode) {
     //先设置按钮等不可用
     setToobarDisiable();
 
@@ -1994,19 +1887,20 @@ function OptSuc(msg) {
     var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
     trackA.remove();
     trackImg.remove();
+    $("#msgModal").modal().show();
 
-    //如果是申请页面
-    if ($('.navbars').css('display') == "none") {
-        $("#msgModalContent").append("<a href='/ITILFlow/MainPage.html'>返回流程工作台</a>");
-        $('#CCForm').html($('#msgModalContent').html());
-        setToobarUnVisible();
-    } else {
-        $("#msgModal").modal().show();
-        if (window.opener != null) {
-            //刷新父窗口
-            window.opener.location.reload();
-        }
-    }
+    ////如果是申请页面
+    //if ($('.navbars').css('display') == "none") {
+    //    $("#msgModalContent").append("<a href='/ITILFlow/MainPage.html'>返回流程工作台</a>");
+    //    $('#CCForm').html($('#msgModalContent').html());
+    //    setToobarUnVisible();
+    //} else {
+    //    $("#msgModal").modal().show();
+    //    if (window.opener != null) {
+    //        //刷新父窗口
+    //        window.opener.location.reload();
+    //    }
+    //}
 }
 //移交
 //初始化发送节点下拉框
@@ -2393,8 +2287,16 @@ function GenerWorkNode() {
                 }
 
 
+               //初始化Sys_MapData
+                var h = flow_Data.Sys_MapData[0].FrmH;
+                var w = flow_Data.Sys_MapData[0].FrmW;
 
-
+            $('#topContentDiv').height(h);
+            $('#topContentDiv').width(w);
+            $('.Bar').width(w+15);
+            var marginLeft = $('#topContentDiv').css('margin-left');
+            marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
+            $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
             //原有的
             
             //为 DISABLED 的 TEXTAREA 加TITLE 
@@ -2420,6 +2322,8 @@ function GenerWorkNode() {
                         $(obj).attr("id", $(obj).attr("name"));
                     }
                 })
+
+            
 
             ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
                 var enName = workNodeData.Sys_MapData[0].No;
@@ -2454,8 +2358,6 @@ function GenerWorkNode() {
             }
 
             InitToNodeDDL();
-           alert(1)
-
             Common.MaxLengthError();
 
                 //处理下拉框级联等扩展信息
@@ -2632,7 +2534,8 @@ function figure_Template_Label(frmLab) {
     var eleHtml = '';
     eleHtml = '<label></label>'
     eleHtml = $(eleHtml);
-    eleHtml.html(frmLab.Text);
+    var text = frmLab.Text.replace(/@/g, "<br>");
+    eleHtml.html(text);
     eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize)
         .css('padding-top','5px');
     return eleHtml;
@@ -2665,11 +2568,31 @@ function figure_Template_Rb(frmRb) {
 
 //初始化超链接
 function figure_Template_HyperLink(frmLin) {
+    //URL @@@ 变量替换
+
+    //x = link.X + wtX;
+    //this.Add("\t\n<DIV id=u2 style='position:absolute;left:" + x + "px;top:" + link.Y + "px;text-align:left;' >");
+    //this.Add("\t\n<span style='color:" + link.FontColorHtml + ";font-family: " + link.FontName + ";font-size: " + link.FontSize + "px;' > <a href=\"" + url + "\" target='" + link.Target + "'> " + link.Text + "</a></span>");
+    //this.Add("\t\n</DIV>");
+    //}
+
+    var url = frmLin.URL;
+    $.each(workNodeData.Sys_MapAttr, function (obj, i) {
+        if (url.indexOf('@' + obj.KeyOfEn)) {
+            //替换
+            url = url.replace('@' + obj.KeyOfEn, workNodeData.MainTable[obj.keyOfEn]);
+        }
+    });
+
     var eleHtml = '<a></a>';
     eleHtml = $(eleHtml);
-    eleHtml.html(frmLin.Text).attr('href', frmLin.URL).attr("_target",frmLin.target);
+    eleHtml.html(frmLin.Text).attr('href', url).attr("_target", frmLin.target);
     eleHtml.css('position', 'absolute').css('top', frmLin.Y).css('left', frmLin.X).css('color', frmLin.FontColr).css('fontsize', frmLin.FontSize);
     return eleHtml;
+}
+
+function FontColorHtml() {
+
 }
 
 //初始化 IMAGE

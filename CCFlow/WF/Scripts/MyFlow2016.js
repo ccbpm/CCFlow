@@ -451,7 +451,7 @@ function initPageParam() {
     pageData.IsReadOnly = GetQueryString("IsReadOnly");//如果是IsReadOnly，就表示是查看页面，不是处理页面
     pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
 
-    pageData.DoType = GetQueryString("DoType")//View
+    pageData.DoType1 = GetQueryString("DoType")//View
     //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID);
 }
 
@@ -469,7 +469,7 @@ function initBar() {
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?Method=InitToolBar&m=" + Math.random(),
+        url: "MyFlow.ashx?DoType=InitToolBar&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
             var barHtml = data;
@@ -645,6 +645,23 @@ function Save() {
 //退回工作
 function returnWorkWindowClose(data) {
     $('#returnWorkModal').modal('hide');
+    //通过下发送按钮旁的下拉框选择下一个节点
+    if (data.indexOf('SaveOK@') == 0) {
+        //说明保存人员成功,开始调用发送按钮.
+        var toNode = 0;
+        //含有发送节点 且接收
+        if ($('#DDL_ToNode').length > 0) {
+            var selectToNode = $('#DDL_ToNode  option:selected').data();
+            toNode = selectToNode.No;
+        }
+        execSend(toNode);
+        //$('[name=Send]:visible').click();
+        return;
+    } else {//可以重新打开接收人窗口
+        winSelectAccepter = null;
+    }
+
+
 
     if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
         $('#Message').html(data);
@@ -898,7 +915,7 @@ function initTrackList(workNodeData) {
     var sendName = $.cookie("CCS").split("=")[2].split("&")[0];
     var sendNo = $.cookie("CCS").split("=")[1].split("&")[0];
     var sendt = HgetNowFormatDate().currentdate;
-    if (pageData.DoType != 'View') {
+    if (pageData.DoType1 != 'View') {
         trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendName + '</p><p>时间:' + sendt + '</p></a></li>';
         $('#header b').text((workNodeData.Track.length + 1));
         //trackNavHtml += '<li class="scrollNav" title="发送人："><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + "dsfsf" + '</a></li>';
@@ -953,7 +970,7 @@ function initTrackList(workNodeData) {
     });
 
     //如果工作已经处理  提示用户工作已处理  并关闭处理页面
-    if (workNodeData.Track.length > 0 && (workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) && (workNodeData.Track[workNodeData.Track.length - 1].ActionType != 5) && pageData.DoType != 'View') {//ACTIONTYPE=5 是撤销移交
+    if (workNodeData.Track.length > 0 && (workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) && (workNodeData.Track[workNodeData.Track.length - 1].ActionType != 5) && pageData.DoType1 != 'View') {//ACTIONTYPE=5 是撤销移交
         alert("当前工作已处理");
         //刷新父窗口
         if (window.opener != null) {
@@ -1933,7 +1950,7 @@ function GenerWorkNode() {
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?Method=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
+        url: "MyFlow.ashx?DoType=GenerWorkNode&DoType1=" + pageData.DoType1 + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
             jsonStr = data;
@@ -1972,7 +1989,7 @@ function GenerWorkNode() {
 
             //如果为查看页面，只显示历史轨迹
             initTrackList(gengerWorkNode);
-            if (pageData.DoType == 'View') {
+            if (pageData.DoType1 == 'View') {
                 $('#divCurrentForm').css('display', 'none');
                 return;
             }
@@ -2111,6 +2128,11 @@ function Send() {
         }
     }
 
+    execSend(toNode);
+}
+
+//执行发送
+function execSend(toNode) {
     //先设置按钮等不可用
     setToobarDisiable();
 

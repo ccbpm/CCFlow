@@ -67,6 +67,10 @@ namespace BP.WF.HttpHandler
         /// <returns>执行结果</returns>
         public string Imp_LoadFrmTempleteFromLocalFile()
         {
+            if (this.context.Request.Files.Count == 0) {
+                return "请上传导入的模板文件.";
+            }
+
             string fk_mapData = this.FK_MapData;
             //读取上传的XML 文件.
             DataSet ds = new DataSet();

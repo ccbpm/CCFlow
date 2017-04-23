@@ -170,6 +170,11 @@ namespace BP.WF.HttpHandler
         /// </summary>
         public string appPath = "/";
         public bool isAskFor = false;
+
+        //杨玉慧
+        public string DoType1 {
+            get { return this.context.Request.Params["DoType1"]; }
+        }
         #endregion
 
         /// <summary>
@@ -670,7 +675,7 @@ namespace BP.WF.HttpHandler
             try
             {
                 DataSet ds = new DataSet();
-                if (this.DoType.ToUpper() != "VIEW")
+                if (this.DoType1.ToUpper() != "VIEW")
                 {
                     ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
                         this.FID, BP.Web.WebUser.No);

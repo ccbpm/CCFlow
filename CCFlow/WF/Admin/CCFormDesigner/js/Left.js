@@ -310,7 +310,7 @@ function ExpFlow() {
     }
 
     var fk_flow = currFlow.id;
-    url = "./../AttrFlow/Exp.aspx?FK_Flow=" + fk_flow + "&Lang=CH";
+    url = "./../AttrFlow/Exp.htm?FK_Flow=" + fk_flow + "&Lang=CH";
     addTab(fk_flow + "PO", "导出流程模版", url);
 }
 
@@ -332,7 +332,7 @@ function ExpFlowBySort() {
     }
     var fk_flowSort = currFlow.id;
     fk_flowSort = fk_flowSort.replace("F", "");
-    url = "./../AttrFlow/Exp.aspx?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
+    url = "./../AttrFlow/Exp.htm?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
     addTab(fk_flowSort + "PO", "导出流程模版", url);
 }
 
@@ -423,7 +423,7 @@ function designFrm() {
 
 //新建数据源，added by liuxc,2015-10-7
 function newSrc() {
-    //  var url = "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.Sys.SFDBSrcs";
+    //  var url = "../../Comm/En.htm?EnsName=BP.Sys.SFDBSrcs";
     var url = "../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New";
     //OpenEasyUiDialog(url, "euiframeid", '新建数据源', 800, 495, 'icon-new');
     //todo:增加数据源后，在树上增加新结节的逻辑
@@ -555,7 +555,7 @@ function newDept() {
     if (!node) return;
 
     var pnode = $("#" + ORG_TREE).tree("getParent", node.target);
-    addTab("NewDept", "新建同级部门", "../../Comm/RefFunc/UIEn.aspx?EnsName=BP.GPM.Depts&ParentNo=" + node.id, "icon-new");
+    addTab("NewDept", "新建同级部门", "../../Comm/En.htm?EnsName=BP.GPM.Depts&ParentNo=" + node.id, "icon-new");
 }
 
 function newSubDept() {

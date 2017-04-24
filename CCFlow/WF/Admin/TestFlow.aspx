@@ -33,7 +33,7 @@
         function Open(no) {
             if (window.confirm('您确定要该流程编号为:'+no+'的数据吗？') == false)
                 return;
-            var url = '../Comm/RefMethod.aspx?Index=3&EnsName=BP.WF.Template.FlowSheets&No='+no;
+            var url = '../Comm/RefMethod.htm?Index=3&EnsName=BP.WF.Template.FlowSheets&No='+no;
             var a = window.showModalDialog(url, 'OneVs', 'dialogHeight: 400px; dialogWidth: 500px; dialogTop: 100px; dialogLeft: 110px; center: yes; help: no');
         }
 

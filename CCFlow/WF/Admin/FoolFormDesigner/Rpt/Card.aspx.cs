@@ -81,8 +81,8 @@ public partial class WF_MapDef_WFRpt : BP.Web.WebPage
         }
 
         this.Pub1.AddB(this.Title + "&nbsp;&nbsp;<a href=\"javascript:GroupFieldNew('" + md.No + "')\">字段分组</a>");
-        //  this.Pub1.AddB("-<a href=\"javascript:WinOpen('/WF/Comm/Search.aspx?EnsName=" + this.MyPK + "')\">查询预览</a>");
-        // this.Pub1.AddB("-<a href=\"javascript:WinOpen('/WF/Comm/Group.aspx?EnsName=" + this.MyPK + "')\">分析预览</a>");
+        //  this.Pub1.AddB("-<a href=\"javascript:WinOpen('/WF/Comm/Search.htm?EnsName=" + this.MyPK + "')\">查询预览</a>");
+        // this.Pub1.AddB("-<a href=\"javascript:WinOpen('/WF/Comm/Group.htm?EnsName=" + this.MyPK + "')\">分析预览</a>");
 
         if (this.FK_MapData.Contains("RptDtl") == false)
         {
@@ -448,7 +448,7 @@ public partial class WF_MapDef_WFRpt : BP.Web.WebPage
         #endregion 处理隐藏字段。
 
         #region 查询条件定义
-        this.Pub1.AddFieldSet("查询条件定义" + " - <a href=\"javascript:WinOpen('../Rpt/Search.aspx?FK_Flow=" + this.FK_Flow + "')\">查询预览</a>-<a href=\"javascript:WinOpen('/WF/Comm/Group.aspx?EnsName=" + this.MyPK + "')\">分析预览</a>");
+        this.Pub1.AddFieldSet("查询条件定义" + " - <a href=\"javascript:WinOpen('../Rpt/Search.aspx?FK_Flow=" + this.FK_Flow + "')\">查询预览</a>-<a href=\"javascript:WinOpen('/WF/Comm/Group.htm?EnsName=" + this.MyPK + "')\">分析预览</a>");
         foreach (MapAttr mattr in mattrs)
         {
             if (mattr.UIContralType != UIContralType.DDL)

@@ -110,36 +110,36 @@ namespace CCFlow.WF.Admin.XAP
                         case "BP.WF.Flow":
                             Flow fl = new Flow(this.PK);
                             if (fl.FlowAppType == FlowAppType.DocFlow)
-                                this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowDocs&No=" + this.PK, true);
+                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowDocs&No=" + this.PK, true);
                             else
-                                this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSheets&No=" + this.PK, true);
+                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowSheets&No=" + this.PK, true);
                             return;
                         case "BP.WF.Template.FlowSheet":
                         case "BP.WF.Template.Ext.FlowSheet":
-                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSheets&No=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowSheets&No=" + this.PK, true);
                             return;
                         case "BP.WF.Template.Ext.NodeExts":
-                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.NodeExts&No=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&No=" + this.PK, true);
                             return;
                         case "BP.WF.Rpt.MapRptExts":
-                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK="+this.PK, true);
+                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK="+this.PK, true);
                             return;
                         case "BP.WF.Node":
                             Node nd = new Node(this.PK);
-                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.NodeSheets&PK=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.NodeSheets&PK=" + this.PK, true);
                             return;
                         case "BP.WF.Template.FlowExt":
-                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowExts&PK=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowExts&PK=" + this.PK, true);
                             return;
                         case "BP.WF.Template.NodeExt":
-                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.NodeExts&PK=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&PK=" + this.PK, true);
                             return;
                         case "BP.WF.Template.FlowSort":
-                            this.Response.Redirect("../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSorts&PK=" + this.PK, true);
+                            this.Response.Redirect("../../Comm/En.htm?EnsName=BP.WF.Template.FlowSorts&PK=" + this.PK, true);
                             return;
                         default:
                             throw new Exception("err");
-                            //this.Response.Redirect("./Comm/RefFunc/UIEn.aspx?EnsName=" + this.EnsName + "&No=" + this.PK, true);
+                            //this.Response.Redirect("./Comm/En.htm?EnsName=" + this.EnsName + "&No=" + this.PK, true);
                     }
                 case "FrmLib": //"表单库"
                     this.Response.Redirect("../BindFrms.htm?ShowType=SelectedFrm&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&Lang=" + BP.Web.WebUser.SysLang, true);

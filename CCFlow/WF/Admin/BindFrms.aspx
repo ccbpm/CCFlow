@@ -28,13 +28,13 @@
 
     function ToolbarExcel(fk_mapdata, nodeid, fk_flow) {
         var pk = fk_mapdata + '_' + nodeid + '_' + fk_flow;
-        var url = "../Comm/RefFunc/UIEn.aspx?EnName=BP.Sys.ToolbarExcelSln&PK=" + pk;
+        var url = "../Comm/En.htm?EnName=BP.Sys.ToolbarExcelSln&PK=" + pk;
         WinOpen(url);
     }
 
     function ToolbarWord(fk_mapdata, nodeid, fk_flow) {
         var pk = fk_mapdata + '_' + nodeid + '_' + fk_flow;
-        var url = "../Comm/RefFunc/UIEn.aspx?EnName=BP.Sys.ToolbarWordSln&PK=" + pk;
+        var url = "../Comm/En.htm?EnName=BP.Sys.ToolbarWordSln&PK=" + pk;
         WinOpen(url);
     }
 

@@ -172,7 +172,7 @@ namespace CCFlow.WF.MapDef
 
             if (mapAttr.UIBindKey.Contains("."))
             {
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('../../Comm/Search.aspx?EnsName=" + mapAttr.UIBindKey + "','df');\" >数据维护</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('../../Comm/Search.htm?EnsName=" + mapAttr.UIBindKey + "','df');\" >数据维护</a>");
             }
             else
             {

@@ -112,7 +112,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <a href="javascript:WinOpen('/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=<%=nodeID%>')">
+                            <a href="javascript:WinOpen('/WF/Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=<%=nodeID%>')">
                                 节点表单组件属性</a>
 
                                

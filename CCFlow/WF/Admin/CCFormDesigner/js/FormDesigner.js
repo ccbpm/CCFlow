@@ -499,7 +499,7 @@ function CCForm_FoolFrm() {
 
 //表单属性
 function CCForm_Attr() {
-    var url = '/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmFrees&PK=' + CCForm_FK_MapData;
+    var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=' + CCForm_FK_MapData;
   //  OpenWindow(url, 400, 300);
     CCForm_ShowDialog(url, '表单属性');
 }

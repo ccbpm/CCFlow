@@ -7,7 +7,7 @@
     <script type="text/javascript">
         //节点属性.
         function OpenAttr(nodeID) {
-            var url = "../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.NodeExt&PK=" + nodeID;
+            var url = "../../Comm/En.htm?EnName=BP.WF.Template.NodeExt&PK=" + nodeID;
             window.open(url, 'att1r', 'height=590, width=1030, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
         }
         // 表单方案.
@@ -29,7 +29,7 @@
         }
         // 审核组件
         function OpenAuditModule(nodeID) {
-            var url = "../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmWorkCheck&PK=" + nodeID;
+            var url = "../../Comm/En.htm?EnName=BP.WF.Template.FrmWorkCheck&PK=" + nodeID;
             window.open(url, 'OpenFreeFrm', 'height=470, width=840, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
         }
 
@@ -74,7 +74,7 @@
 
         // 按钮权限配置.
         function OpenButtonControl(nodeID) {
-            var url = "../../Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.BtnLab&PK=" + nodeID;
+            var url = "../../Comm/En.htm?EnName=BP.WF.Template.BtnLab&PK=" + nodeID;
            // window.open(url, 'OpenFrmAttr', 'height=auto, width=810, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
             window.parent.addTab('Btns', '按钮权限', url);
         }

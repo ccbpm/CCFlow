@@ -98,7 +98,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner
                 if (sem.SrcType == SrcType.TableOrView)
                 {
                     if (sem.No.Contains("."))
-                        this.Pub1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/Search.aspx?EnsName=" + sem.No + "');\" >编辑</a>");
+                        this.Pub1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/Search.htm?EnsName=" + sem.No + "');\" >编辑</a>");
                     else
                         this.Pub1.AddTD("<a href=\"javascript:WinOpen('SFTableEditData.aspx?FK_SFTable=" + sem.No + "');\" >编辑</a>");
                 }

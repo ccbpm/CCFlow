@@ -55,7 +55,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
             BP.Sys.ToolbarExcel en = new ToolbarExcel(this.FK_MapData);
 
             //this.Pub1.AddH2("编辑Excel表单属性.");
-            //this.Pub1.Add("<a href=\"javascript:WinOpen('/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.Sys.ToolbarExcel&No=" + this.FK_MapData + "')\" >Excel配置项</a>");
+            //this.Pub1.Add("<a href=\"javascript:WinOpen('/WF/Comm/En.htm?EnName=BP.Sys.ToolbarExcel&No=" + this.FK_MapData + "')\" >Excel配置项</a>");
 
             //确定模板文件
             string moduleFile = getModuleFile(new[] { ".xls", ".xlsx" });
@@ -90,7 +90,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
             this.Pub1.AddSpace(2);
             this.Pub1.Add(
                 string.Format(
-                    "<a href=\"javascript:OpenEasyUiDialog('/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.Sys.ToolbarExcel&No={0}','eudlgframe','Excel配置顶',800,495,'icon-config')\" class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-config'\">Excel配置项</a>",
+                    "<a href=\"javascript:OpenEasyUiDialog('/WF/Comm/En.htm?EnName=BP.Sys.ToolbarExcel&No={0}','eudlgframe','Excel配置顶',800,495,'icon-config')\" class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-config'\">Excel配置项</a>",
                     this.FK_MapData));
             this.Pub1.AddEasyUiPanelInfoEnd();
         }

@@ -63,8 +63,8 @@ functrees.push({
                                                 { Type: "Node", Id: "DevAPI", ParentId: null, Name: "API接口", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [
 						                                { Type: "Node", Id: "NEWAPI", ParentId: "DevAPI", Name: "新建/增加", TType: "NORMAL", DType: "-1", IconCls: "icon-URL", Inherits: ["fk_frm"], Url: "../../CCForm/Frm.aspx?FK_MapData=@@fk_frm&IsTest=1" },
-						                                { Type: "Node", Id: "SEARCHAPI", ParentId: "DevAPI", Name: "列表/查询", TType: "NORMAL", DType: "-1", IconCls: "icon-Search", Inherits: ["fk_frm"], Url: "../../Comm/Search.aspx?EnsName=@@fk_frm" },
-						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "分组分析", TType: "NORMAL", DType: "-1", IconCls: "icon-Group", Inherits: ["fk_frm"], Url: "../../Comm/Group.aspx?EnsName=@@fk_frm" },
+						                                { Type: "Node", Id: "SEARCHAPI", ParentId: "DevAPI", Name: "列表/查询", TType: "NORMAL", DType: "-1", IconCls: "icon-Search", Inherits: ["fk_frm"], Url: "../../Comm/Search.htm?EnsName=@@fk_frm" },
+						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "分组分析", TType: "NORMAL", DType: "-1", IconCls: "icon-Group", Inherits: ["fk_frm"], Url: "../../Comm/Group.htm?EnsName=@@fk_frm" },
 						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "代码事例", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_frm"], Url: "../CCFormDesigner/APICode.htm?FK_MapData=@@fk_frm" }
 
                                                         ]

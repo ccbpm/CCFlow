@@ -627,19 +627,26 @@ namespace BP.WF.Template
                 string para = town.HisNode.DeliveryParas;
                 para = para.Replace("@", "");
 
-                if (DataType.IsNumStr(para) == true)
+                if (string.IsNullOrEmpty(para)  ==false)
                 {
-                    ps = new Paras();
-                    ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node ";
-                    ps.Add("OID", this.WorkID);
-                    ps.Add("FK_Node", int.Parse(para));
+                    string[] strs = para.Split(',');
 
-                    dt = DBAccess.RunSQLReturnTable(ps);
-                    if (dt.Rows.Count != 1)
-                        throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）在指定的节点中没有数据，无法找到工作的人员。");
+                    foreach (string str in strs)
+                    {
+                        ps = new Paras();
+                        ps.SQL = "SELECT FK_Emp,FK_Dept FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node ";
+                        ps.Add("OID", this.WorkID);
+                        ps.Add("FK_Node", int.Parse(para));
 
-                    empNo = dt.Rows[0][0].ToString();
-                    empDept = dt.Rows[0][1].ToString();
+                        dt = DBAccess.RunSQLReturnTable(ps);
+                        if (dt.Rows.Count != 1)
+                            continue;
+
+                        empNo = dt.Rows[0][0].ToString();
+                        empDept = dt.Rows[0][1].ToString();
+                    }
+
+                  //  throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）在指定的节点中没有数据，无法找到工作的人员，指定的节点是:"+para);
                 }
                 else
                 {

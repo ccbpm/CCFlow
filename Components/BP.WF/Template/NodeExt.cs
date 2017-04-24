@@ -1137,7 +1137,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCRole()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.CC&PK=" + this.NodeID; 
+            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/En.htm?EnName=BP.WF.Template.CC&PK=" + this.NodeID; 
             //PubClass.WinOpen("./RefFunc/UIEn.aspx?EnName=BP.WF.CC&PK=" + this.NodeID, "抄送规则", "Bill", 800, 500, 200, 300);
             //return null;
         }
@@ -1147,7 +1147,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAccepter()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.Selector&PK=" + this.NodeID;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/En.htm?EnName=BP.WF.Template.Selector&PK=" + this.NodeID;
         }
         /// <summary>
         /// 可触发的子流程
@@ -1155,7 +1155,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoActiveFlows()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/ConditionSubFlow.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/ConditionSubFlow.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 退回节点

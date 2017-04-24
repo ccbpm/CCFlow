@@ -787,6 +787,7 @@ namespace BP.Sys.XML
             {
                 dt.Columns.Add(key, typeof(string));
             }
+
             foreach (XmlEn en1 in this)
             {
                 DataRow dr = dt.NewRow();

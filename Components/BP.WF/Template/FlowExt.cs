@@ -974,7 +974,7 @@ namespace BP.WF.Template
         }
         public string DoDataManger_DeleteLog()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.aspx?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=" + this.No + "&WFSta=all";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=" + this.No + "&WFSta=all";
         }
 
         /// <summary>
@@ -991,8 +991,8 @@ namespace BP.WF.Template
         public string DoDRpt()
         {
 
-            ///WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt;
-            return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK=ND" + int.Parse(this.No) + "MyRpt";
+            ///WF/Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt;
+            return SystemConfig.CCFlowWebPath + "WF/Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK=ND" + int.Parse(this.No) + "MyRpt";
             //  UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt
             //return SystemConfig.CCFlowWebPath + "WF/Rpt/OneFlow.aspx?FK_Flow=" + this.No + "&FK_MapData=ND" + int.Parse(this.No) + "MyRpt";
         }
@@ -1598,7 +1598,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoExps()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/Exp.aspx?FK_Flow=" + this.No + "&Lang=CH";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/Exp.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 执行重新装载数据

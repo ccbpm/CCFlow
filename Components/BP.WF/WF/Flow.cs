@@ -948,6 +948,10 @@ namespace BP.WF
 
                 wk.Copy(dt.Rows[0]);
                 rpt.Copy(dt.Rows[0]);
+
+                //设置单号为空.
+                wk.SetValByKey("BillNo", "");
+                rpt.BillNo = "";
                 #endregion copy 首先从父流程的NDxxxRpt copy.
 
                 #region 从调用的节点上copy.

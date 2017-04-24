@@ -393,7 +393,7 @@ namespace BP.WF.Template
         public string DoNodeFrmCompent()
         {
             if (this.No.Contains("ND") == true)
-                return SystemConfig.CCFlowWebPath + "WF/Comm/RefFunc/UIEn.aspx?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
+                return SystemConfig.CCFlowWebPath + "WF/Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
             else
                 return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Do.aspx&DoType=FWCShowError";
         }

@@ -8,6 +8,7 @@ using BP.WF.Template;
 using BP.Sys;
 using BP.Web;
 using BP.DA;
+using BP.En;
 
 namespace CCFlow.WF.CCForm
 {
@@ -34,8 +35,20 @@ namespace CCFlow.WF.CCForm
 		{
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
-			MapData md = new MapData(frmID);
-			return md.ExcelGenerFile(oid, ref bytes);
+			//如果是一个实体类.
+			if (frmID.Contains("BP."))
+			{
+				// 执行map同步.
+				Entities ens = BP.En.ClassFactory.GetEns(frmID);
+				Entity en = ens.GetNewEntity;
+				var md = en.DTSMapToSys_MapData();
+				return md.ExcelGenerFile(oid, ref bytes);
+			}
+			else
+			{
+				MapData md = new MapData(frmID);
+				return md.ExcelGenerFile(oid, ref bytes);
+			}
 		}
 		/// <summary>
 		/// 生成vsto模式的数据
@@ -44,16 +57,16 @@ namespace CCFlow.WF.CCForm
 		/// <param name="sid"></param>
 		/// <param name="frmID"></param>
 		/// <param name="oid"></param>
-        /// <param name="atParas">参数</param>
+		/// <param name="atParas">参数</param>
 		/// <returns></returns>
 		[WebMethod]
-		public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid,string atParas)
+		public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid, string atParas)
 		{
 			//让他登录.
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
-            //解析这个表单.
-			return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid,atParas);
+			//解析这个表单.
+			return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid, atParas);
 		}
 		/// <summary>
 		/// 执行保存
@@ -66,111 +79,122 @@ namespace CCFlow.WF.CCForm
 		/// <param name="dsDtlsChange">从表数据（新）</param>
 		/// <param name="dsDtlsOld">从表数据（原始）</param>
 		/// <param name="byt">文件流</param>
-        [WebMethod]
-        public void SaveExcelFile(string userNo, string sid, string frmID, int mainEnPKOID, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt)
-        {
-            //执行登录.
-            BP.WF.Dev2Interface.Port_Login(userNo);
+		[WebMethod]
+		public void SaveExcelFile(string userNo, string sid, string frmID, int mainEnPKOID, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt)
+		{
+			//执行登录.
+			BP.WF.Dev2Interface.Port_Login(userNo);
 
-            //执行保存文件.
-            MapData md = new MapData(frmID);
-            md.ExcelSaveFile(mainEnPKOID, byt); //把文件保存到该实体对应的数据表的 DBFile 列中。
+			if (frmID.IndexOf("BP.") > -1)
+			{
+				Entities ens = BP.En.ClassFactory.GetEns(frmID);
+				Entity en = ens.GetEntityByKey(mainEnPKOID); //TODO: 2017-04-21：返回null：why?
+				en.RetrieveFromDBSources();
+				en.SetValByKey("DBFile", byt);
+				en.Update();
+			}
+			else
+			{
+				//执行保存文件.
+				MapData md = new MapData(frmID);
+				md.ExcelSaveFile(mainEnPKOID, byt); //把文件保存到该实体对应的数据表的 DBFile 列中。
+			}
 
-            //保存主表数据.
-            GEEntity wk = new GEEntity(frmID, mainEnPKOID);
-            wk.ResetDefaultVal();
+			//保存主表数据.
+			GEEntity wk = new GEEntity(frmID, mainEnPKOID);
+			wk.ResetDefaultVal();
 
-            if (mainTableAtParas != null)
-            {
-                AtPara ap = new AtPara(mainTableAtParas);
-                foreach (string str in ap.HisHT.Keys)
-                {
-                    if (wk.Row.ContainsKey(str))
-                        wk.SetValByKey(str, ap.GetValStrByKey(str));
-                    else
-                        wk.Row.Add(str, ap.GetValStrByKey(str));
-                }
-            }
+			if (mainTableAtParas != null)
+			{
+				AtPara ap = new AtPara(mainTableAtParas);
+				foreach (string str in ap.HisHT.Keys)
+				{
+					if (wk.Row.ContainsKey(str))
+						wk.SetValByKey(str, ap.GetValStrByKey(str));
+					else
+						wk.Row.Add(str, ap.GetValStrByKey(str));
+				}
+			}
 
-            wk.OID = mainEnPKOID;
-            wk.Save();
+			wk.OID = mainEnPKOID;
+			wk.Save();
 
-            if (dsDtlsChange == null)
-                return;
+			if (dsDtlsChange == null)
+				return;
 
-            #region 保存从表
-            //明细集合.
-            MapDtls dtls = new MapDtls(frmID);
+			#region 保存从表
+			//明细集合.
+			MapDtls dtls = new MapDtls(frmID);
 
-            //保存从表
-            foreach (System.Data.DataTable dt in dsDtlsChange.Tables)
-            {
-                foreach (MapDtl dtl in dtls)
-                {
-                    if (dt.TableName != dtl.No)
-                        continue;
+			//保存从表
+			foreach (System.Data.DataTable dt in dsDtlsChange.Tables)
+			{
+				foreach (MapDtl dtl in dtls)
+				{
+					if (dt.TableName != dtl.No)
+						continue;
 
-                    #region 根据原始数据,与当前数据求出已经删除的oids .
-                    DataTable dtDtlOld = dsDtlsOld.Tables[dtl.No]; // ???
-                    foreach (DataRow dr in dtDtlOld.Rows)
-                    {
-                        string oidOld = dr["OID"].ToString();
+					#region 根据原始数据,与当前数据求出已经删除的oids .
+					DataTable dtDtlOld = dsDtlsOld.Tables[dtl.No]; // ???
+					foreach (DataRow dr in dtDtlOld.Rows)
+					{
+						string oidOld = dr["OID"].ToString();
 
-                        bool isHave = false;
-                        //遍历变更的数据.
-                        foreach (DataRow dtNew in dt.Rows)
-                        {
-                            string oidNew = dtNew["OID"].ToString();
-                            if (oidOld == oidNew)
-                            {
-                                isHave = true;
-                                break;
-                            }
-                        }
+						bool isHave = false;
+						//遍历变更的数据.
+						foreach (DataRow dtNew in dt.Rows)
+						{
+							string oidNew = dtNew["OID"].ToString();
+							if (oidOld == oidNew)
+							{
+								isHave = true;
+								break;
+							}
+						}
 
-                        //如果不存在.
-                        if (isHave == false)
-                            DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE OID=" + oidOld);
-                    }
-                    #endregion 根据原始数据,与当前数据求出已经删除的oids .
+						//如果不存在.
+						if (isHave == false)
+							DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE OID=" + oidOld);
+					}
+					#endregion 根据原始数据,与当前数据求出已经删除的oids .
 
-                    //获取dtls
-                    GEDtls daDtls = new GEDtls(dtl.No);
+					//获取dtls
+					GEDtls daDtls = new GEDtls(dtl.No);
 
-                    // 更新数据.
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
-                        daDtl.RefPK = mainEnPKOID.ToString();
+					// 更新数据.
+					foreach (DataRow dr in dt.Rows)
+					{
+						GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
+						daDtl.RefPK = mainEnPKOID.ToString();
 
-                        daDtl.OID = int.Parse(dr["OID"].ToString());
+						daDtl.OID = int.Parse(dr["OID"].ToString());
 
-                        if (daDtl.OID > 100)
-                            daDtl.RetrieveFromDBSources();
-                        daDtl.ResetDefaultVal();
+						if (daDtl.OID > 100)
+							daDtl.RetrieveFromDBSources();
+						daDtl.ResetDefaultVal();
 
-                        //明细列.
-                        foreach (DataColumn dc in dt.Columns)
-                        {
-                            //设置属性.
-                            daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
-                        }
+						//明细列.
+						foreach (DataColumn dc in dt.Columns)
+						{
+							//设置属性.
+							daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
+						}
 
-                        daDtl.RefPK = mainEnPKOID.ToString();
-                        daDtl.RDT = DataType.CurrentDataTime;
+						daDtl.RefPK = mainEnPKOID.ToString();
+						daDtl.RDT = DataType.CurrentDataTime;
 
-                        //执行保存.
-                        if (daDtl.OID > 100)
-                            daDtl.Update(); //插入数据.
-                        else
-                            daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
-                    }
-                }
-            }
-            #endregion 保存从表结束
+						//执行保存.
+						if (daDtl.OID > 100)
+							daDtl.Update(); //插入数据.
+						else
+							daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
+					}
+				}
+			}
+			#endregion 保存从表结束
 
-            //缺少表单保存后的方法.
-        }
+			//缺少表单保存后的方法.
+		}
 		/// <summary>
 		/// 级联接口
 		/// </summary>

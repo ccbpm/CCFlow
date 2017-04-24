@@ -34,7 +34,7 @@ namespace CCFlow.WF.CCForm
 
             if (dtls.Count == 1)
             {
-                this.Response.Redirect("../Comm/Search.aspx?EnsName=" + dtls[0].GetValStrByKey("No"), true);
+                this.Response.Redirect("../Comm/Search.htm?EnsName=" + dtls[0].GetValStrByKey("No"), true);
                 return;
             }
 
@@ -43,7 +43,7 @@ namespace CCFlow.WF.CCForm
             this.Pub1.AddUL();
             foreach (MapDtl dtl in dtls)
             {
-                this.Pub1.AddLi("../Comm/Search.aspx?EnsName=" + dtls[0].GetValStrByKey("No"), dtl.Name);
+                this.Pub1.AddLi("../Comm/Search.htm?EnsName=" + dtls[0].GetValStrByKey("No"), dtl.Name);
             }
             this.Pub1.AddULEnd();
             this.Pub1.AddFieldSetEnd();

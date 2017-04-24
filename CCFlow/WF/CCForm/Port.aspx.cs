@@ -140,10 +140,10 @@ namespace CCFlow.WF.CCForm
                     url = "Frm.aspx?FK_MapData=" + this.FrmID + "&OID=" + this.OID + paras;
                     break;
                 case "Search": //调用查询界面.
-                    url = "../Comm/Search.aspx?EnsName=" + this.FrmID +  paras;
+                    url = "../Comm/Search.htm?EnsName=" + this.FrmID +  paras;
                     break;
                 case "Group": //分组分析界面.
-                    url = "../Comm/Group.aspx?EnsName=" + this.FrmID + paras;
+                    url = "../Comm/Group.htm?EnsName=" + this.FrmID + paras;
                     break;
                 default:
                     break;

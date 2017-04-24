@@ -798,7 +798,7 @@ namespace BP.Sys
         /// <returns></returns>
         public string DoMangDBSrc()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.aspx";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.htm";
         }
         /// <summary>
         /// 创建表向导

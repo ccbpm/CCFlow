@@ -277,7 +277,7 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
             {
                 /*傻瓜表单*/
-                return "./FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=" + this.FK_MapData;
+                return "./FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + this.FK_MapData;
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)

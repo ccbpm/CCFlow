@@ -1156,7 +1156,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDesignerFool()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.aspx?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
         }
         #endregion
 
@@ -1255,7 +1255,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFrom()
         {
-            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             PubClass.WinOpen(url, 800, 650);
             return null;
         }
@@ -1265,7 +1265,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFromCol4()
         {
-            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.aspx?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             PubClass.WinOpen(url, 800, 650);
             return null;
         }
@@ -1303,11 +1303,11 @@ namespace BP.WF.Template
         }
         public string DoPageLoadFull()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/PageLoadFull.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         public string DoInitScript()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/InitScript.aspx?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/InitScript.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         /// <summary>
         /// 表单属性.
@@ -1339,7 +1339,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoExp()
         {
-            string urlExt = SystemConfig.CCFlowWebPath + "WF/Admin/XAP/DoPort.aspx?DoType=DownFormTemplete&FK_MapData=" + this.No;
+            string urlExt = SystemConfig.CCFlowWebPath + "WF/Admin/XAP/DoPort.htm?DoType=DownFormTemplete&FK_MapData=" + this.No;
             PubClass.WinOpen(urlExt, 900, 1000);
             return null;
         }

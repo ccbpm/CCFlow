@@ -690,7 +690,7 @@ namespace BP.WF.Template
         }
         public string DoDBSrc()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.aspx";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.htm";
         }
         public string DoBTable()
         {
@@ -1027,7 +1027,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDataManger()
         {
-            //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Rpt/OneFlow.aspx?FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
+            //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
             PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.aspx?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=", 700, 500);
             return null;
         }
@@ -1155,7 +1155,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoOpenRpt()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Rpt/OneFlow.aspx?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +
+            return BP.WF.Glo.CCFlowAppPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +
                    int.Parse(this.No) + "Rpt";
         }
         /// <summary>

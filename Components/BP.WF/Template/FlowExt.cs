@@ -994,7 +994,7 @@ namespace BP.WF.Template
             ///WF/Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt;
             return SystemConfig.CCFlowWebPath + "WF/Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK=ND" + int.Parse(this.No) + "MyRpt";
             //  UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt
-            //return SystemConfig.CCFlowWebPath + "WF/Rpt/OneFlow.aspx?FK_Flow=" + this.No + "&FK_MapData=ND" + int.Parse(this.No) + "MyRpt";
+            //return SystemConfig.CCFlowWebPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&FK_MapData=ND" + int.Parse(this.No) + "MyRpt";
         }
         public string DoDRptSearch()
         {
@@ -1139,7 +1139,7 @@ namespace BP.WF.Template
         }
         public string DoDBSrc()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.aspx";
+            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.htm";
         }
         public string DoBTable()
         {
@@ -1628,7 +1628,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoOpenRpt()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Rpt/OneFlow.aspx?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +
+            return BP.WF.Glo.CCFlowAppPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +
                    int.Parse(this.No) + "Rpt";
         }
         /// <summary>

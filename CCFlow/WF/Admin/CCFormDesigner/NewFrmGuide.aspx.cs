@@ -471,7 +471,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
             {
                 /*把表单模版存储到数据库里 */
-                this.Response.Redirect("/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No, true);
+                this.Response.Redirect("/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No, true);
                 return;
             }
 

@@ -497,7 +497,7 @@
                         return;
                     }
 
-                    var url = '../../Comm/UIEn.aspx?EnsName=BP.Sys.MapFrames&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
+                    var url = '../../Comm/En.htm?EnsName=BP.Sys.MapFrames&FK_MapData=' + fk_mapdata + '&MyPK=' + data;
 
                     OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
                         window.location.href = window.location.href;
@@ -508,7 +508,7 @@
         }
 
         function EditFrame(fk_mapdata, myPK) {
-            var url = '../../Comm/UIEn.aspx?EnsName=BP.Sys.MapFrames&FK_MapData=' + fk_mapdata + '&MyPK=' + myPK;
+            var url = '../../Comm/En.htm?EnsName=BP.Sys.MapFrames&FK_MapData=' + fk_mapdata + '&MyPK=' + myPK;
 
             OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;

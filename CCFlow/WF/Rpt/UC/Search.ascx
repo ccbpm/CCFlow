@@ -23,7 +23,7 @@
 
     function Setting(rptNo, flowNo) {
         alert(rptNo);
-        var url = '/WF/Rpt/OneFlow.aspx?FK_MapData=' + rptNo + '&FK_Flow=' + flowNo;
+        var url = '/WF/Rpt/OneFlow.htm?FK_MapData=' + rptNo + '&FK_Flow=' + flowNo;
         var s = 'dialogWidth=680px;dialogHeight=480px;status:no;center:1;resizable:yes'.toString();
         val = window.showModalDialog(url, null, s);
         window.location.href = window.location.href;

@@ -462,7 +462,7 @@
                     onClick: function (node) {
                         if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {/*普通表单和必填表单*/
                             var urlExt = urlExtFrm();
-                            var url = "../CCForm/Frm.aspx?FK_MapData=" + node.id + "&IsEdit=1&IsPrint=0" + urlExt;
+                            var url = "../CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=1&IsPrint=0" + urlExt;
                             addTab(node.id, node.text, url);
                         } else if (node.attributes.NodeType == "tools|0") {
                             var urlExt = urlExtFrm();

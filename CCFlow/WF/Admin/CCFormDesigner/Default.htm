@@ -443,14 +443,14 @@
 
         //登录
         function Login2App() {
-            var url = "../../App/Classic/Login.aspx?DoType=Logout";
+            var url = "../../App/Classic/Login.htm?DoType=Logout";
             window.open(url);
         }
         //退出
         function LoginOut() {
             $.messager.confirm("提示", "确定需要退出？", function (n) {
                 if (n == true) {
-                    window.location.href = "Login.aspx?DoType=Logout";
+                    window.location.href = "Login.htm?DoType=Logout";
                 }
             });
         }

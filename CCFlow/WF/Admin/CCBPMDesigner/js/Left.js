@@ -377,7 +377,7 @@ function FlowProperty() {
     if (currFlow == null || currFlow.attributes.ISPARENT != '0') return;
 
     var fk_flow = currFlow.id;
-    url = "../XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Flow&PK=" + fk_flow + "&Lang=CH";
+    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Flow&PK=" + fk_flow + "&Lang=CH";
     addTab(currFlow + "PO", "流程属性" + fk_flow, url);
     //WinOpen(url);
 }
@@ -427,7 +427,7 @@ function designFrm() {
 //新建数据源，added by liuxc,2015-10-7
 function newSrc() {
     //  var url = "../../Comm/En.htm?EnsName=BP.Sys.SFDBSrcs";
-    var url = "../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=New";
+    var url = "../../Comm/Sys/SFDBSrcNewGuide.htm?DoType=New";
     //OpenEasyUiDialog(url, "euiframeid", '新建数据源', 800, 495, 'icon-new');
     //todo:增加数据源后，在树上增加新结节的逻辑
     addTab("NewSrc", "新建数据源", url);
@@ -449,7 +449,7 @@ function srcProperty() {
         return;
     }
 
-    var url = '../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=Edit&No=' + srcNode.id + '&t=' + Math.random();
+    var url = '../../Comm/Sys/SFDBSrcNewGuide.htm?DoType=Edit&No=' + srcNode.id + '&t=' + Math.random();
     //OpenEasyUiDialog(url, "euiframeid", srcNode.text + ' 属性', 800, 495, 'icon-edit');
     //todo:数据源属性修改后，在树上的结节信息的相应变更逻辑
     addTab(srcNode.id, srcNode.text, url, srcNode.iconCls);
@@ -463,7 +463,7 @@ function srcTableProperty() {
         return;
     }
 
-    var url = '../FoolFormDesigner/Do.aspx?DoType=EditSFTable&RefNo=' + srcTableNode.id + '&t=' + Math.random();
+    var url = '../FoolFormDesigner/Do.htm?DoType=EditSFTable&RefNo=' + srcTableNode.id + '&t=' + Math.random();
     //OpenEasyUiDialog(url, "euiframeid", srcTableNode.text + ' 属性', 800, 495, 'icon-edit');
     //todo:数据源表属性修改后，在树上的结节信息的相应变更逻辑
     addTab(srcTableNode.id, srcTableNode.text, url, srcTableNode.iconCls);
@@ -495,7 +495,7 @@ function openForm(id, text) {
         text = formNode.text;
     }
 
-    addTab(id, text, "../FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID, formNode.iconCls);
+    addTab(id, text, "../FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID, formNode.iconCls);
 }
 
 /*组织结构树操作开始*/
@@ -623,7 +623,7 @@ function InitUserInfo() {
         }
         else {
             alert('获取当前登录用户失败：' + jdata.msg);
-            window.location.href = "Login.aspx?DoType=Logout";
+            window.location.href = "Login.htm?DoType=Logout";
         }
     }, this);
 }

@@ -42,7 +42,7 @@
                 <fieldset>
                     <legend>下载到本机 </legend>
                     <ul>
-                        <li>我们已经为您生成了流程模版文件，<a href="javascript:WinOpen('/WF/Admin/XAP/DoPort.aspx?DoType=ExpFlowTemplete&FK_Flow=<%=fl.No%>&Lang=CH');">请点击这里下载到本机</a>。
+                        <li>我们已经为您生成了流程模版文件，<a href="javascript:WinOpen('/WF/Admin/XAP/DoPort.htm?DoType=ExpFlowTemplete&FK_Flow=<%=fl.No%>&Lang=CH');">请点击这里下载到本机</a>。
                         </li>
                         <li>该xml格式的流程模版文件可以通过，软盘交换到其它ccbpm系统中去。</li>
                     </ul>

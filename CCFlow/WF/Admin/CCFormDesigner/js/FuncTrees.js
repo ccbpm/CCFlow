@@ -47,14 +47,14 @@ functrees.push({
 															{ IconCls: "icon-tree_folder", MenuId: "mFormSort" }
 														]
 											},
-											{ Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID", LazyLoad: true, InheritForChild: [{ From: "@@id", To: "fk_frm"}], Nodes: [
+											{ Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../FoolFormDesigner/CCForm/Frm.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID", LazyLoad: true, InheritForChild: [{ From: "@@id", To: "fk_frm"}], Nodes: [
                                                 { Type: "Node", Id: "RelatedFunction", ParentId: null, Name: "相关功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [
-						                                { Type: "Node", Id: "FormPreview", ParentId: "RelatedFunction", Name: "表单预览", TType: "NORMAL", DType: "-1", IconCls: "icon-Glasses", Inherits: ["fk_frm"], Url: "../../CCForm/Frm.aspx?FK_MapData=@@fk_frm&IsTest=1" },
+						                                { Type: "Node", Id: "FormPreview", ParentId: "RelatedFunction", Name: "表单预览", TType: "NORMAL", DType: "-1", IconCls: "icon-Glasses", Inherits: ["fk_frm"], Url: "../../CCForm/Frm.htm?FK_MapData=@@fk_frm&IsTest=1" },
 						                                { Type: "Node", Id: "FormField", ParentId: "RelatedFunction", Name: "表单字段", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../CCFormDesigner/FiledsList.htm?FK_MapData=@@fk_frm" },
-						                                { Type: "Node", Id: "FormFool", ParentId: "RelatedFunction", Name: "傻瓜表单设计", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../Admin/FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=@@fk_frm" },
-						                                { Type: "Node", Id: "PageLoadFull", ParentId: "RelatedFunction", Name: "装载填充", TType: "NORMAL", DType: "-1", IconCls: "icon-LoadFull", Inherits: ["fk_frm"], Url: "../FoolFormDesigner/MapExt/PageLoadFull.aspx?s=34&FK_MapData=@@fk_frm&ExtType=PageLoadFull" },
-						                                { Type: "Node", Id: "InitScript", ParentId: "RelatedFunction", Name: "内置JS脚本", TType: "NORMAL", DType: "-1", IconCls: "icon-JavaScript", Inherits: ["fk_frm"], Url: "../FoolFormDesigner/MapExt/InitScript.aspx?s=34&FK_MapData=@@fk_frm" },
+						                                { Type: "Node", Id: "FormFool", ParentId: "RelatedFunction", Name: "傻瓜表单设计", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../Admin/FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=@@fk_frm" },
+						                                { Type: "Node", Id: "PageLoadFull", ParentId: "RelatedFunction", Name: "装载填充", TType: "NORMAL", DType: "-1", IconCls: "icon-LoadFull", Inherits: ["fk_frm"], Url: "../FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=@@fk_frm&ExtType=PageLoadFull" },
+						                                { Type: "Node", Id: "InitScript", ParentId: "RelatedFunction", Name: "内置JS脚本", TType: "NORMAL", DType: "-1", IconCls: "icon-JavaScript", Inherits: ["fk_frm"], Url: "../FoolFormDesigner/MapExt/InitScript.htm?s=34&FK_MapData=@@fk_frm" },
 						                                { Type: "Node", Id: "FormAction", ParentId: "RelatedFunction", Name: "表单事件", TType: "NORMAL", DType: "-1", IconCls: "icon-Event", Inherits: ["fk_frm"], Url: "../AttrNode/Action.htm?FK_MapData=@@fk_frm" },
 						                                { Type: "Node", Id: "Imp", ParentId: "RelatedFunction", Name: "模版导入", TType: "NORMAL", DType: "-1", IconCls: "icon-redo", Inherits: ["fk_frm"], Url: "../CCFormDesigner/Imp.aspx?FK_MapData=@@fk_frm" },
 						                                { Type: "Node", Id: "Exp", ParentId: "RelatedFunction", Name: "模版导出", TType: "NORMAL", DType: "-1", IconCls: "icon-unredo", Inherits: ["fk_frm"], Url: "../CCFormDesigner/Exp.aspx?FK_MapData=@@fk_frm" }
@@ -62,7 +62,7 @@ functrees.push({
                                                 },
                                                 { Type: "Node", Id: "DevAPI", ParentId: null, Name: "API接口", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [
-						                                { Type: "Node", Id: "NEWAPI", ParentId: "DevAPI", Name: "新建/增加", TType: "NORMAL", DType: "-1", IconCls: "icon-URL", Inherits: ["fk_frm"], Url: "../../CCForm/Frm.aspx?FK_MapData=@@fk_frm&IsTest=1" },
+						                                { Type: "Node", Id: "NEWAPI", ParentId: "DevAPI", Name: "新建/增加", TType: "NORMAL", DType: "-1", IconCls: "icon-URL", Inherits: ["fk_frm"], Url: "../../CCForm/Frm.htm?FK_MapData=@@fk_frm&IsTest=1" },
 						                                { Type: "Node", Id: "SEARCHAPI", ParentId: "DevAPI", Name: "列表/查询", TType: "NORMAL", DType: "-1", IconCls: "icon-Search", Inherits: ["fk_frm"], Url: "../../Comm/Search.htm?EnsName=@@fk_frm" },
 						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "分组分析", TType: "NORMAL", DType: "-1", IconCls: "icon-Group", Inherits: ["fk_frm"], Url: "../../Comm/Group.htm?EnsName=@@fk_frm" },
 						                                { Type: "Node", Id: "GROUPAPI", ParentId: "DevAPI", Name: "代码事例", TType: "NORMAL", DType: "-1", IconCls: "icon-API", Inherits: ["fk_frm"], Url: "../CCFormDesigner/APICode.htm?FK_MapData=@@fk_frm" }
@@ -84,7 +84,7 @@ functrees.push({
 //			    Nodes: [
 //						{ Type: "Service", ServiceMethod: "GetSrcTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "SrcRoot",
 //						    ColDefine: "TTYPE", Defines: [
-//											{ Value: "SRC", IconCls: "icon-src", MenuId: "mSrc", Url: "../../Comm/Sys/SFDBSrcNewGuide.aspx?DoType=Edit&No=@@id&t=" + Math.random() },
+//											{ Value: "SRC", IconCls: "icon-src", MenuId: "mSrc", Url: "../../Comm/Sys/SFDBSrcNewGuide.htm?DoType=Edit&No=@@id&t=" + Math.random() },
 //											{ Value: "SRCTABLE", IconCls: "icon-srctable", MenuId: "mSrcTable", Url: "../FoolFormDesigner/Do.aspx?DoType=EditSFTable&RefNo=@@id&t=" + Math.random() }
 //										  ]
 //						}

@@ -27,8 +27,8 @@ namespace CCFlow.WF.Admin
             {
                 this.Pub1.AddFieldSet("提示");
                 this.Pub1.Add("ccflow数据库初始化成功.");
-                // this.Pub1.AddBR("<a href='./XAP/Designer.aspx?IsCheckUpdate=1' >进入流程设计器.</a>");
-                // this.Response.Redirect("./XAP/Designer.aspx?IsCheckUpdate=1", true);
+                // this.Pub1.AddBR("<a href='./XAP/Designer.htm?IsCheckUpdate=1' >进入流程设计器.</a>");
+                // this.Response.Redirect("./XAP/Designer.htm?IsCheckUpdate=1", true);
                 this.Response.Redirect("./CCBPMDesigner/Login.htm?IsCheckUpdate=1", true);
                 this.Pub1.AddFieldSetEnd();
                 return;
@@ -46,7 +46,7 @@ namespace CCFlow.WF.Admin
                 this.Pub1.AddFieldSetEnd();
 
                 this.Pub1.AddFieldSet("流程设计器");
-                this.Pub1.AddLi("<a href='./Xap/Designer.aspx' >进入旧版本流程设计器</a>,执行设计与调试流程。");
+                this.Pub1.AddLi("<a href='./XAP/Designer.htm' >进入旧版本流程设计器</a>,执行设计与调试流程。");
                 this.Pub1.AddLi("<a href='/' >进入新版本的流程设计器</a>,执行设计与调试流程。");
                 this.Pub1.AddFieldSetEnd();
 
@@ -54,7 +54,7 @@ namespace CCFlow.WF.Admin
                 {
                     string rpt = BP.Sys.PubClass.DBRpt(BP.DA.DBCheckLevel.High);
                     this.Pub1.AddMsgGreen("同步数据表结构成功, 部分错误不会影响系统运行.",
-                        "执行成功，希望在系统每次升级后执行此功能，不会对你的数据库数据产生影响。<br><br> <a href='./XAP/Designer.aspx'>进入流程设计器.</a>");
+                        "执行成功，希望在系统每次升级后执行此功能，不会对你的数据库数据产生影响。<br><br> <a href='./XAP/Designer.htm'>进入流程设计器.</a>");
                 }
                 return;
             }

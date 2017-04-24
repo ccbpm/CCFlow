@@ -1,4 +1,5 @@
-﻿<%@ Page Title="内置表单脚本" Language="C#" MasterPageFile="~/WF/WinOpen.master" AutoEventWireup="true" CodeBehind="InitScript.aspx.cs" Inherits="CCFlow.WF.MapDef.MapExtUI.InitScriptUI" %>
+﻿<%@ Page Title="内置表单脚本" Language="C#" MasterPageFile="~/WF/WinOpen.master" AutoEventWireup="true"
+ CodeBehind="InitScript.aspx.cs" Inherits="CCFlow.WF.MapDef.MapExtUI.InitScriptUI" %>
 <%@ Register src="../Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link  href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />

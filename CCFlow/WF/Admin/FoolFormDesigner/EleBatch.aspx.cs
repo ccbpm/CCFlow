@@ -207,9 +207,9 @@ namespace CCFlow.WF.MapDef
                 this.Pub1.AddTD(md.Name);
                 //this.Pub1.AddTD("<a href=''>预览自由表单</a> - <a href=''>设计自由表单</a>");
                 this.Pub1.AddTDBegin();
-                this.Pub1.Add("<a href='../CCForm/Frm.aspx?FK_MapData=" + md.No + "&IsTest=1' class='easyui-linkbutton' target='_blank'>预览自由表单</a>");
+                this.Pub1.Add("<a href='../CCForm/Frm.htm?FK_MapData=" + md.No + "&IsTest=1' class='easyui-linkbutton' target='_blank'>预览自由表单</a>");
                 this.Pub1.AddSpace(1);
-                this.Pub1.Add("<a href='./CCForm/Frm.aspx?FK_MapData=" + md.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + BP.Web.WebUser.SID + "' class='easyui-linkbutton' target='_blank'>设计自由表单</a>");
+                this.Pub1.Add("<a href='./CCForm/Frm.htm?FK_MapData=" + md.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + BP.Web.WebUser.SID + "' class='easyui-linkbutton' target='_blank'>设计自由表单</a>");
                 this.Pub1.AddTDEnd();
                 this.Pub1.AddTREnd();
             }

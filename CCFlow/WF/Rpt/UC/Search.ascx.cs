@@ -106,7 +106,7 @@ namespace CCFlow.WF.Rpt
 
             if (BP.Web.WebUser.No == "admin")
             {
-                string url = "/WF/Rpt/OneFlow.aspx?FK_MapData=ND" + int.Parse(this.FK_Flow) + "Rpt&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.currMapRpt.No;
+                string url = "/WF/Rpt/OneFlow.htm?FK_MapData=ND" + int.Parse(this.FK_Flow) + "Rpt&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.currMapRpt.No;
 
                 //  string str = "<div style='float:right'><a href=\"javascript:Setting('"+this.RptNo+"','"+this.FK_Flow+"');\" >设置</a></div>";
                 string str = "<div style='float:right'><a href='" + url + "' ><img src='/WF/Img/Setting.png' width='12px' border=0/>&nbsp;设置</a></div>";

@@ -35,7 +35,7 @@
     <FlowData No="0103" Name="" CH="表结构"  W="700" H="800" Url="/WF/Comm/Sys/SystemClass.aspx"  Icon="" />
     <FlowData No="0102" Name="" CH="系统枚举值"  W="700" H="800" Url="/WF/Comm/Sys/EnumList.aspx" Icon=""  />
   
-    <FlowData No="0103" Name="" CH="数据源管理"  W="700" H="800" Url="/WF/Comm/Sys/SFDBSrcNewGuide.aspx" Icon=""  />
+    <FlowData No="0103" Name="" CH="数据源管理"  W="700" H="800" Url="/WF/Comm/Sys/SFDBSrcNewGuide.htm" Icon=""  />
     <FlowData No="0103" Name="" CH="编码表管理"  W="700" H="800" Url="/WF/Comm/Search.htm?EnsName=BP.Sys.SFTables" Icon=""  />
 
   <!--<FlowData No="0103" Name="" CH="数据源管理"  W="700" H="800" Url="/WF/Comm/Sys/SFTableList.aspx" Icon=""  />-->

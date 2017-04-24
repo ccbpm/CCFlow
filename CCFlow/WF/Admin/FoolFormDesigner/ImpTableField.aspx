@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="导入字段生成表单" Language="C#" MasterPageFile="~/WF/Admin/FoolFormDesigner/WinOpen.master"
-    AutoEventWireup="true" CodeBehind="ImpTableField.aspx.cs" Inherits="CCFlow.WF.MapDef.ImpTableField" %>
+    AutoEventWireup="true" CodeBehind="ImpTableField.htm.cs" Inherits="CCFlow.WF.MapDef.ImpTableField" %>
 
 <%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">

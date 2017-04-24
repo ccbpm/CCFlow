@@ -668,7 +668,7 @@ namespace CCFlow.WF.MapDef
 
             this.Pub1.AddFieldSet("从已有表里导入字段");
             this.Pub1.AddUL();
-            this.Pub1.AddLi("<a href=\"javascript:WinOpen('ImpTableField.aspx?FK_MapData=" + this.MyPK + "&FType=Class&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "');\" ><b>导入字段</b></a> &nbsp;&nbsp;从现有的表中导入字段,以提高开发的速度与字段拼写的正确性.");
+            this.Pub1.AddLi("<a href=\"javascript:WinOpen('ImpTableField.htm?FK_MapData=" + this.MyPK + "&FType=Class&Idx=" + this.Idx + "&GroupField=" + this.GroupField + "');\" ><b>导入字段</b></a> &nbsp;&nbsp;从现有的表中导入字段,以提高开发的速度与字段拼写的正确性.");
             this.Pub1.AddULEnd();
             this.Pub1.AddFieldSetEnd();
 

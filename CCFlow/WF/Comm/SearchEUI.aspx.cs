@@ -146,7 +146,7 @@ namespace CCFlow.WF.Comm
             string json = "{\"IsCanStartFlow\":";
             json += BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(fk_flow, BP.Web.WebUser.No).ToString().ToLower() + ",\"StartFlowUrl\":";
             json += "\"/WF/MyFlow.aspx?FK_Flow=" + fk_flow + "\",\"IsCanConfigReport\":";
-            json += (BP.Web.WebUser.No == "admin").ToString().ToLower() + ",\"ConfigReportUrl\":\"/WF/Rpt/OneFlow.aspx?FK_MapData=" + EnsName.Replace("MyRpt","Rpt") + "&FK_Flow=" + fk_flow + "\"}";
+            json += (BP.Web.WebUser.No == "admin").ToString().ToLower() + ",\"ConfigReportUrl\":\"/WF/Rpt/OneFlow.htm?FK_MapData=" + EnsName.Replace("MyRpt","Rpt") + "&FK_Flow=" + fk_flow + "\"}";
 
             return json;
         }

@@ -63,7 +63,7 @@
                             <td>--%>
                                 你可以在表单库中, <a href="javascript:OpenDBASource();">
                                     设置数据源</a>。
-                                <%--<a href="javascript:WinOpen('../../Comm/Sys/SFDBSrcNewGuide.aspx','_blank');">设置数据源</a>。--%>
+                                <%--<a href="javascript:WinOpen('../../Comm/Sys/SFDBSrcNewGuide.htm','_blank');">设置数据源</a>。--%>
                             </td>
                         </tr>
                         <tr>
@@ -90,9 +90,9 @@
                         <script type="text/javascript">
                         function OpenDBASource(){
                             if(window.parent && window.parent.addTab){
-                            window.parent.addTab('dtsbTable','设置数据源','../../Comm/Sys/SFDBSrcNewGuide.aspx','');
+                            window.parent.addTab('dtsbTable','设置数据源','../../Comm/Sys/SFDBSrcNewGuide.htm','');
                             }else{
-                                window.open('../../Comm/Sys/SFDBSrcNewGuide.aspx','newwindow', 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=no, location=no, status=no');
+                                window.open('../../Comm/Sys/SFDBSrcNewGuide.htm','newwindow', 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=no, location=no, status=no');
                             }
                         }
    //设置字段匹配

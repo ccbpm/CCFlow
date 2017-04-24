@@ -46,7 +46,7 @@ function OpenDialog(oid, showModel) {
     strTimeKey += date.getHours(); //HH
     strTimeKey += date.getMinutes(); //MM
     strTimeKey += date.getSeconds(); //SS
-    var url = "../CCForm/Frm.aspx?FK_MapData=" + fk_MapData + "&WorkID=" + oid + "&IsEdit=0&T=" + strTimeKey;
+    var url = "../CCForm/Frm.htm?FK_MapData=" + fk_MapData + "&WorkID=" + oid + "&IsEdit=0&T=" + strTimeKey;
     var winWidth = document.body.clientWidth;
     //计算显示宽度
     winWidth = winWidth * 0.9;

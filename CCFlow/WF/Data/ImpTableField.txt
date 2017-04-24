@@ -4,4 +4,4 @@
 3，对字段进行排序。
 4，执行导入。
 
-<a href=\"javascript:WinOpen('ImpTableField.aspx');\">执行导入</a>
+<a href=\"javascript:WinOpen('ImpTableField.htm');\">执行导入</a>

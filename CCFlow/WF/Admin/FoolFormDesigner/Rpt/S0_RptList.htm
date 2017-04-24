@@ -51,7 +51,7 @@
         tmpFK_Flow=tmpFK_Flow.substring(1,tmpFK_Flow.length);
         }
         flowRptNo="ND"+tmpFK_Flow+"Rpt";
-            WinOpen("../../../RPT/OneFlow.aspx?FK_Flow="+pageData.FK_Flow+"&FK_MapData="+flowRptNo+"&RptNo="+no);
+            WinOpen("../../../Rpt/OneFlow.htm?FK_Flow="+pageData.FK_Flow+"&FK_MapData="+flowRptNo+"&RptNo="+no);
         }
         function BindRptList(data){
             var tbodyHtml="";

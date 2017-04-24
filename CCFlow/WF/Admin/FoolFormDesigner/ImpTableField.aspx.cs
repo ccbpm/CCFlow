@@ -124,10 +124,10 @@ namespace CCFlow.WF.MapDef
 
                 foreach (BP.Sys.SFDBSrc item in ens)
                 {
-                    Pub1.AddLi("<div><a href='ImpTableField.aspx?Step=2&FK_MapData=" + this.FK_MapData + "&FK_SFDBSrc=" + item.No + "'><span class='nav'>" + item.No + "  -  " + item.Name + "</span></a></div>");
+                    Pub1.AddLi("<div><a href='ImpTableField.htm?Step=2&FK_MapData=" + this.FK_MapData + "&FK_SFDBSrc=" + item.No + "'><span class='nav'>" + item.No + "  -  " + item.Name + "</span></a></div>");
                 }
 
-                Pub1.AddLi("<div><a href=\"javascript:WinOpen('../Comm/Sys/SFDBSrcNewGuide.aspx')\" ><img src='../../Img/New.gif' align='middle' /><span class='nav'>新建数据源</span></a></div>");
+                Pub1.AddLi("<div><a href=\"javascript:WinOpen('../Comm/Sys/SFDBSrcNewGuide.htm')\" ><img src='../../Img/New.gif' align='middle' /><span class='nav'>新建数据源</span></a></div>");
 
                 Pub1.AddULEnd();
                 Pub1.AddTDEnd();

@@ -45,8 +45,8 @@ functrees.push({
 														]
 											},
 											{ Value: "FLOW", ColDefine: "DTYPE", Defines: [
-                                                { Value: "1", IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=2" },
-                                                { IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.aspx?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=1" }
+                                                { Value: "1", IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=2" },
+                                                { IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=1" }
                                             ]
 											}
 										  ]

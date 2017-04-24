@@ -201,7 +201,7 @@ function Designer_ShowMsg(msg, callBack) {
 
 //流程属性
 function FlowProperty() {
-    url = "../XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Template.FlowExt&PK=" + CCBPM_Data_FK_Flow + "&Lang=CH";
+    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PK=" + CCBPM_Data_FK_Flow + "&Lang=CH";
     if (window.parent) {
         window.parent.addTab(CCBPM_Data_FK_Flow + "PO", "流程属性" + CCBPM_Data_FK_Flow, url);
     } else {
@@ -212,7 +212,7 @@ function FlowProperty() {
 function DesignMyRpt() {
     var flowId = Number(CCBPM_Data_FK_Flow);
     flowId = String(flowId);
-    url = "../../Rpt/OneFlow.aspx?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
+    url = "../../Rpt/OneFlow.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
     if (window.parent) {
         window.parent.addTab(CCBPM_Data_FK_Flow + "DESIGNRPT", "报表设计" + CCBPM_Data_FK_Flow, url);
     } else {
@@ -225,7 +225,7 @@ function DesignMyRptNew() {
 
     var flowId = Number(CCBPM_Data_FK_Flow);
     flowId = String(flowId);
-    url = "../XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Rpt.MapRptExts&PK=ND" + flowId + "MyRpt&Lang=CH";
+    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Rpt.MapRptExts&PK=ND" + flowId + "MyRpt&Lang=CH";
     if (window.parent) {
         window.parent.addTab(CCBPM_Data_FK_Flow + "Rpt", "设计报表" + CCBPM_Data_FK_Flow, url);
     } else {
@@ -297,7 +297,7 @@ function NodeProperty_Funs(item) {
     //根据事件名称进行执行
     switch (item.name) {
         case "NodePropertyNew": //节点属性.
-            url = "../XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Template.NodeExt&PK=" + FK_Node + "&Lang=CH";
+            url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.NodeExt&PK=" + FK_Node + "&Lang=CH";
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "PO", "节点属性" + FK_Node, url, item.iconCls);
             } else {
@@ -305,7 +305,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "NodeProperty": //节点属性.
-            url = "../XAP/DoPort.aspx?DoType=En&EnName=BP.WF.Node&PK=" + FK_Node + "&Lang=CH";
+            url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Node&PK=" + FK_Node + "&Lang=CH";
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "PO", "节点属性" + FK_Node, url, item.iconCls);
             } else {
@@ -366,7 +366,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "BindStations":  //绑定岗位.
-            url = "../XAP/DoPort.aspx?DoType=StaDefNew&PK=" + FK_Node + "&Lang=CH";
+            url = "../XAP/DoPort.htm?DoType=StaDefNew&PK=" + FK_Node + "&Lang=CH";
             WinOpenIt(url, 500, 400 );
             break;
            // Glo.OpenDialog(Glo.BPMHost + url, "执行", 500, 400);
@@ -387,7 +387,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "FlowCompleteCond": // 流程完成条件..
-            url = "../Cond.aspx?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
+            url = "../Cond.htm?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "流程完成条件" + FK_Node, url, item.iconCls);
             } else {
@@ -405,7 +405,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "SelfToolbar": // 自定义工具栏..
-            url = "../Cond.aspx?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
+            url = "../Cond.htm?CondType=1&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + FK_Node + "&FK_Node=" + FK_Node + "&FK_Attr=&DirType=&ToNodeID=" + FK_Node;
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "自定义工具栏" + FK_Node, url, item.iconCls);
             } else {
@@ -421,9 +421,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "DesignerNodeFormFix": //设计傻瓜表单
-          //  url = "../CCFormDesigner/CCFormDesignerSL.aspx?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + FK_Node + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID;
-
-            url = "../FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=ND" + FK_Node + "&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node;
+            url = "../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=ND" + FK_Node + "&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node;
             if (window.parent && 1 == 3) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "傻瓜表单" + FK_Node, url, item.iconCls);
             } else {

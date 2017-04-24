@@ -477,7 +477,7 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm && this.Pub1.GetRadioButtonByID("RB_FrmGenerMode_2").Checked)
             {
-                this.Response.Redirect("../FoolFormDesigner/ImpTableField.aspx?DoType=New&FK_MapData=" + md.No);
+                this.Response.Redirect("../FoolFormDesigner/ImpTableField.htm?DoType=New&FK_MapData=" + md.No);
                 return;
             }
 

@@ -145,7 +145,7 @@ namespace CCFlow.WF.Admin
             {
                 Cond nd = new Cond(this.MyPK);
                 nd.Delete();
-                this.Response.Redirect("Cond.aspx?CondType=" + (int)this.HisCondType + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + nd.NodeID + "&FK_Node=" + this.FK_MainNode + "&ToNodeID=" + nd.ToNodeID, true);
+                this.Response.Redirect("Cond.htm?CondType=" + (int)this.HisCondType + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + nd.NodeID + "&FK_Node=" + this.FK_MainNode + "&ToNodeID=" + nd.ToNodeID, true);
                 return;
             }
 

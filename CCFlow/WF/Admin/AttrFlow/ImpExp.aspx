@@ -50,7 +50,7 @@
 <fieldset>
 <legend> 模版导出 </legend>
 <ul>
-<li>我们已经为您生成了流程模版文件，<a href="javascript:WinOpen('/WF/Admin/XAP/DoPort.aspx?DoType=ExpFlowTemplete&FK_Flow=<%=fl.No%>&Lang=CH');">请点击这里下载到本机</a>。 </li>
+<li>我们已经为您生成了流程模版文件，<a href="javascript:WinOpen('/WF/Admin/XAP/DoPort.htm?DoType=ExpFlowTemplete&FK_Flow=<%=fl.No%>&Lang=CH');">请点击这里下载到本机</a>。 </li>
 <li>您可以把此模版放入到您的私有云里，我们会好好的为您永久的保管，点击这里<a href="" target="_blank" >上传到到私有云服务器</a> 。</li>
 <li>如果您想支持ccbpm的工作，分享自己的设计成果为更多的ccbpm的爱好者，点击这里<a href="" target="_blank" >上传到到共有云服务器</a>。 </li>
 </ul>

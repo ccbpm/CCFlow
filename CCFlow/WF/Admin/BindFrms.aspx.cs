@@ -143,13 +143,13 @@ namespace CCFlow.WF.Admin
                     this.Pub1.AddTD(cb);
                     if (cb.Checked)
                     {
-                        //this.Pub1.AddTDB("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" ><b>" + md.Name + "</b></a>");
+                        //this.Pub1.AddTDB("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" ><b>" + md.Name + "</b></a>");
                         this.Pub1.AddTDB("<b>" + md.Name + "</b>");
                         this.Pub1.AddTDB(md.PTable);
                     }
                     else
                     {
-                        //this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                        //this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
                         this.Pub1.AddTD(md.Name);
                         this.Pub1.AddTD(md.PTable);
                     }
@@ -326,12 +326,12 @@ namespace CCFlow.WF.Admin
 
                 if (fn.FK_Frm == "ND" + this.FK_Node)
                 {
-                    //this.Pub1.AddTDB("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                    //this.Pub1.AddTDB("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
                     this.Pub1.AddTDB(md.Name);
                 }
                 else
                 {
-                    //this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
+                    //this.Pub1.AddTD("<a href=\"javascript:WinOpen('./FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + md.No + "&FK_Flow=" + this.FK_Flow + "');\" >" + md.Name + "</a>");
                     this.Pub1.AddTD(md.Name);
                 }
 

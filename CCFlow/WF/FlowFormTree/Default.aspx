@@ -902,7 +902,7 @@
                                 i++;
                                 var isEdit = node.attributes.IsEdit;
                                 if (IsCC && IsCC == "1") isEdit = "0";
-                                var url = "../CCForm/Frm.aspx?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
+                                var url = "../CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                                 addTab(node.id, node.text, url);
                             }
                         }
@@ -913,7 +913,7 @@
                             var urlExt = urlExtFrm();
                             var isEdit = node.attributes.IsEdit;
                             if (IsCC && IsCC == "1") isEdit = "0";
-                            var url = "../CCForm/Frm.aspx?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
+                            var url = "../CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                             addTab(node.id, node.text, url);
                         } else if (node.attributes.NodeType == "tools|0") {/*工具栏按钮添加选项卡*/
                             var urlExt = urlExtFrm();

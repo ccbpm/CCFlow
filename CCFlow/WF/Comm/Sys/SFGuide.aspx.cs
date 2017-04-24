@@ -407,7 +407,7 @@ namespace CCFlow.WF.Comm.Sys
             //   // this.Pub1.AddFieldSetEnd();
 
             //    //创建.
-            //    //Pub1.AddLi("<div><a href=\"javascript:WinOpen('./SFDBSrcNewGuide.aspx?DoType=New')\" ><img src='../../Img/New.gif' align='middle' /><span class='nav'>新建数据源</span></a></div>");
+            //    //Pub1.AddLi("<div><a href=\"javascript:WinOpen('./SFDBSrcNewGuide.htm?DoType=New')\" ><img src='../../Img/New.gif' align='middle' /><span class='nav'>新建数据源</span></a></div>");
             //    //Pub1.AddLi("<div><a href='SFGuide.aspx?Step=22'><img src='../../Img/New.gif' align='middle' /><span class='nav'>新建WebService数据源</span></a></div>");
 
 

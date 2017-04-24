@@ -218,7 +218,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner.Rpt
             rpt.Name = name;
             Flow flow = new Flow(this.FK_Flow);
             rpt.PTable = flow.PTable == "" ? "ND" + this.FK_Flow.TrimStart('0') + "RPT" : flow.PTable;
-
             rpt.Update();
 
             string sql = "";

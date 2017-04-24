@@ -211,19 +211,19 @@ namespace BP.Web.Port
                     if (this.FK_Flow == null)
                         this.Response.Redirect("FlowSearch.aspx", true);
                     else
-                        this.Response.Redirect("./Comm/Search.aspx?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras, true);
+                        this.Response.Redirect("./Comm/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras, true);
                     break;
                 case DoWhatList.FlowSearchSmallSingle: // 流程查询。
                     if (this.FK_Flow == null)
                         this.Response.Redirect("FlowSearchSmallSingle.aspx", true);
                     else
-                        this.Response.Redirect("./Comm/Search.aspx?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras, true);
+                        this.Response.Redirect("./Comm/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras, true);
                     break;
                 case DoWhatList.FlowFX: // 流程查询。
                     if (this.FK_Flow == null)
                         throw new Exception("@没有参数流程编号。");
 
-                    this.Response.Redirect("./Comm/Group.aspx?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras, true);
+                    this.Response.Redirect("./Comm/Group.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras, true);
                     break;
                 case DoWhatList.DealWork:
                     if (this.FK_Flow == null || this.WorkID == null)

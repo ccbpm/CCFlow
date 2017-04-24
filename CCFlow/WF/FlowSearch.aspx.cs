@@ -557,7 +557,7 @@ namespace CCFlow.WF
             this.Pub1.AddCaption("您的位置:单据查询 <a href='FlowSearch.aspx' >返回</a> => " + fl1.Name);
             this.Pub1.AddTR();
             this.Pub1.Add("<TD  class=TD  height=800px  width=100% >");
-            string src = "" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.aspx?EnsName=BP.WF.Bills&FK_Flow=" + this.FK_Flow;
+            string src = "" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.htm?EnsName=BP.WF.Bills&FK_Flow=" + this.FK_Flow;
             this.Pub1.Add("<iframe ID='f23' frameborder=0  style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' src='" + src + "' height='100%' width='100%' scrolling=no  /></iframe>");
             this.Pub1.AddTDEnd();
             this.Pub1.AddTREnd();
@@ -657,7 +657,7 @@ namespace CCFlow.WF
             if (WebUser.IsWap)
                 this.Pub1.AddCaptionLeftTX2("<img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Home.gif' ><a href='Home.aspx' >Home</a> - <img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Search.gif' >-流程查询");
             else
-                this.Pub1.AddCaptionLeftTX2("<div style='float:left'><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Search.gif' >流程查询/分析</div><div style='float:right'><a href=\"javascript:WinOpen('KeySearch.aspx',900,900); \">关键字查询</a>|<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); \">综合查询</a>|<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Group.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); \">综合分析</a>|<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.aspx?EnsName=BP.WF.WorkFlowDeleteLogs',900,900); \">删除日志</a></div>");
+                this.Pub1.AddCaptionLeftTX2("<div style='float:left'><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/Search.gif' >流程查询/分析</div><div style='float:right'><a href=\"javascript:WinOpen('KeySearch.aspx',900,900); \">关键字查询</a>|<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); \">综合查询</a>|<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); \">综合分析</a>|<a href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs',900,900); \">删除日志</a></div>");
 
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("序");
@@ -779,16 +779,16 @@ namespace CCFlow.WF
                         this.Pub1.Add("--");
                     else
                     {
-                        string src = "" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.aspx?EnsName=BP.WF.Bills&FK_Flow=" + fl.No;
+                        string src = "" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.htm?EnsName=BP.WF.Bills&FK_Flow=" + fl.No;
                         this.Pub1.Add("<a href=\"javascript:WinOpen('" + src + "');\"  >" + bill + "</a>");
                     }
 
 
-                    string src1 = "" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.aspx?EnsName=ND" + int.Parse(fl.No) + "Rpt";
+                    string src1 = "" + BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.htm?EnsName=ND" + int.Parse(fl.No) + "Rpt";
                     this.Pub1.Add("-<a href=\"javascript:WinOpen('" + src1 + "');\" >" + search + "</a>");
                     this.Pub1.Add("-<a href=\"javascript:Dtl('" + fl.No + "');\" >" + dtl + "</a>");
 
-                    src1 = BP.WF.Glo.CCFlowAppPath + "WF/Comm/Group.aspx?EnsName=ND" + int.Parse(fl.No) + "Rpt";
+                    src1 = BP.WF.Glo.CCFlowAppPath + "WF/Comm/Group.htm?EnsName=ND" + int.Parse(fl.No) + "Rpt";
                     this.Pub1.Add("-<a href=\"javascript:WinOpen('" + src1 + "');\" >" + FX + "</a>");
 
                     this.Pub1.Add("-<a href='FlowSearch.aspx?FK_Flow=" + fl.No + "'>" + nodeSearch + "</a>");

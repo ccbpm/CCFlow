@@ -23,9 +23,9 @@
 
  <div style='float:left'>提示：点击流程名称，进入流程数据查询。</div>
  <div style='float:right'><a href="javascript:WinOpen('KeySearch.aspx',900,900);" >关键字查询</a> - 
-                <a href="javascript:WinOpen('Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900);" >综合查询</a> - 
-                <a href="javascript:WinOpen('Comm/Group.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); " >综合分析</a> - 
-                <a href="javascript:WinOpen('Comm/Search.aspx?EnsName=BP.WF.WorkFlowDeleteLogs',900,900); "  >删除日志</a></div>
+                <a href="javascript:WinOpen('Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900);" >综合查询</a> - 
+                <a href="javascript:WinOpen('Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); " >综合分析</a> - 
+                <a href="javascript:WinOpen('Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs',900,900); "  >删除日志</a></div>
  </td>
 <tr>
 <td>

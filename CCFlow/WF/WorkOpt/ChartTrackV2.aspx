@@ -175,7 +175,7 @@
                     class="easyui-linkbutton" data-options="iconCls:'icon-redo'">调度</a>
                 <a id="A2" href="javascript:WinOp('../App/EasyUI/FlowSkip.aspx?FK_Flow=<%=FK_Flow %>&WorkID=<%=WorkID %> ')"
                     class="easyui-linkbutton" data-options="iconCls:'icon-undo'">跳转</a>
-                     <a id="A4" href="javascript:WinOp('../Comm/RefMethod.aspx?Index=12&EnsName=BP.WF.Template.FlowSheets&No=<%=FK_Flow %>')"class="easyui-linkbutton" data-options="iconCls:'icon-reload'">回滚</a>
+                     <a id="A4" href="javascript:WinOp('../Comm/RefMethod.htm?Index=12&EnsName=BP.WF.Template.FlowSheets&No=<%=FK_Flow %>')"class="easyui-linkbutton" data-options="iconCls:'icon-reload'">回滚</a>
                      <asp:LinkButton runat="server" ID="LogOut" class="easyui-linkbutton" data-options="iconCls:'icon-delete'"
                 OnClick="LogOut_Click">删除</asp:LinkButton>
                 <%} %>

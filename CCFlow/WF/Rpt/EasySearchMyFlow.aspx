@@ -16,7 +16,7 @@
     string html = "<ul>";
     foreach (System.Data.DataRow dr in dt.Rows)
     {
-        html += "<li><a href='../Comm/Search.aspx?EnsName=BP.WF.Data.MyStartFlows&FK_Flow=" + dr["FK_Flow"] + "&WFSta=All&TSpan=All' >" + dr["FlowName"] + "(" + dr["Num"] + ")</a></li>";
+        html += "<li><a href='../Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows&FK_Flow=" + dr["FK_Flow"] + "&WFSta=All&TSpan=All' >" + dr["FlowName"] + "(" + dr["Num"] + ")</a></li>";
     }
     html += "</ul>";
 %>
@@ -64,7 +64,7 @@
     html = "<ul>";
     foreach (System.Data.DataRow dr in dt.Rows)
     {
-        html += "<li><a href='../Comm/Search.aspx?EnsName=BP.WF.Data.MyFlows&FK_Flow=" + dr["FK_Flow"] + "&WFSta=1&TSpan=All' >" + dr["FlowName"] + "(" + dr["Num"] + ")</a></li>";
+        html += "<li><a href='../Comm/Search.htm?EnsName=BP.WF.Data.MyFlows&FK_Flow=" + dr["FK_Flow"] + "&WFSta=1&TSpan=All' >" + dr["FlowName"] + "(" + dr["Num"] + ")</a></li>";
     }
     html += "</ul>";
 %>

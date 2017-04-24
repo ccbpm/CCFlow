@@ -259,7 +259,7 @@ function Line_MenusFuns(item, cId) {
             if (rFirstFigure.CCBPM_Shape == CCBPM_Shape_Node && rSecondFigure.CCBPM_Shape == CCBPM_Shape_Node) {
                 var fNode = rFirstFigure.CCBPM_OID;
                 var tNode = rSecondFigure.CCBPM_OID;
-                var url = "../ConditionLine.aspx?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + fNode + "&FK_Node=" + fNode + "&ToNodeID=" + tNode + "&CondType=2&Lang=CH";
+                var url = "../ConditionLine.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MainNode=" + fNode + "&FK_Node=" + fNode + "&ToNodeID=" + tNode + "&CondType=2&Lang=CH";
                 window.parent.addTab(CCBPM_Data_FK_Flow + fNode + "DIRECTION" + tNode, "设置方向条件" + fNode + "->" + tNode, url);
             }
             break;
@@ -494,13 +494,13 @@ function TextProperty_Funs(item) {
 
 //运行流程
 function Run_Flow() {
-    var url = "../TestFlow.aspx?FK_Flow=" + CCBPM_Data_FK_Flow + "&Lang=CH";
+    var url = "../TestFlow.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&Lang=CH";
     WinOpen(url);
 }
 
 //检查流程
 function Check_Flow() {
-    var url = "../DoType.aspx?RefNo=" + CCBPM_Data_FK_Flow + "&DoType=FlowCheck&Lang=CH";
+    var url = "../DoType.htm?RefNo=" + CCBPM_Data_FK_Flow + "&DoType=FlowCheck&Lang=CH";
     if (window.parent) {
         window.parent.addTab(CCBPM_Data_FK_Flow + "WFCHECK", "检查流程" + CCBPM_Data_FK_Flow, url);
     } else {

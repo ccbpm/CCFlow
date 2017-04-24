@@ -5,13 +5,11 @@
     <script type="text/javascript">
         function OpenRpt(flowNo) {
             window.parent.closeTab('设计报表');
-            window.parent.addTab('OpenRpt', '设计报表', '../../Rpt/OneFlow.aspx?FK_MapData=ND' + flowNo + 'Rpt&FK_Flow=' + flowNo, '');
-            //WinOpen('../../Rpt/OneFlow.aspx?FK_MapData=ND' + flowNo + 'Rpt&FK_Flow=' + flowNo, 'csd');
+            window.parent.addTab('OpenRpt', '设计报表', '../../Rpt/OneFlow.htm?FK_MapData=ND' + flowNo + 'Rpt&FK_Flow=' + flowNo, '');
         }
         function FlowAttr(flowNo) {
             window.parent.closeTab('流程属性');
-            window.parent.addTab('FlowAttr', '流程属性', '../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, '');
-            //WinOpen('../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, 'csd');
+            window.parent.addTab('FlowAttr', '流程属性', '../../Comm/En.htm?EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, '');
         }
         function NodesAttr(flowNo) {
             window.parent.closeTab('节点设置');
@@ -19,13 +17,11 @@
         }
         function OpenDel(flowNo) {
             window.parent.closeTab('删除');
-            window.parent.addTab('OpenDel', '删除', '../../Comm/RefMethod.aspx?Index=4&EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, '');
-            //window.open('../../Comm/RefMethod.aspx?Index=4&EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, 'cc', 'height=100,width=400,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no');
+            window.parent.addTab('OpenDel', '删除', '../../Comm/RefMethod.htm?Index=4&EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, '');
         }
         function OpenRollback(flowNo) {
             window.parent.closeTab('回滚');
-            window.parent.addTab('OpenRollback', '回滚', '../../Comm/RefMethod.aspx?Index=12&EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, '');
-            //window.open('../../Comm/RefMethod.aspx?Index=12&EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, 'cc', 'height=100,width=400,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no');
+            window.parent.addTab('OpenRollback', '回滚', '../../Comm/RefMethod.htm?Index=12&EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, '');
         }
         //设计流程
         function openFlow(flowDType, flowName, flowNo, webUserNo, webUserSID) {
@@ -42,11 +38,6 @@
                 window.parent.closeTab(flowName);
                 window.parent.addTab('flow', flowName, "../CCBPMDesigner/Designer.htm?FK_Flow=" +
                   flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=0", '');
-                //} else {
-                //  window.parent.closeTab(flowName);
-                // window.parent.addTab('flow', flowName, "../CCBPMDesigner/DesignerSL.htm?FK_Flow=" +
-                //flowNo + "&UserNo=" + webUserNo + "&SID=" + webUserSID + "&Flow_V=0", '');
-                //}
             }
         }
     </script>
@@ -239,7 +230,7 @@
                   else
                   {
                 %>
-                <a href="javascript:window.parent.closeTab('运行中');window.parent.addTab('running', '运行中', '../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=0&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
+                <a href="javascript:window.parent.closeTab('运行中');window.parent.addTab('running', '运行中', '../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=0&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
                     <%=sta0%></a>
                 <%}%>
             </td>
@@ -252,7 +243,7 @@
                 <%}
               else
               {%>
-                <a href="javascript:window.parent.closeTab('已完成');window.parent.addTab('complete', '已完成', '../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=1&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
+                <a href="javascript:window.parent.closeTab('已完成');window.parent.addTab('complete', '已完成', '../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=1&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
                     <%=sta1%></a>
                 <%}
                 %>
@@ -266,7 +257,7 @@
                 <%}
               else
               {%>
-                <a href="javascript:window.parent.closeTab('其他');window.parent.addTab('other', '其他', '../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=2&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
+                <a href="javascript:window.parent.closeTab('其他');window.parent.addTab('other', '其他', '../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=2&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
                     <%=sta2%></a>
                 <%} %>
             </td>

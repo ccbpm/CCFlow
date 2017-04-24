@@ -296,7 +296,7 @@
                   else
                   {
                 %>
-                <a href="javascript:window.parent.closeTab('运行中');window.parent.addTab('running', '运行中', '../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=0&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
+                <a href="javascript:window.parent.closeTab('运行中');window.parent.addTab('running', '运行中', '../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=0&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
                     <%=sta0%></a>
                 <%}%>
             </td>
@@ -309,7 +309,7 @@
                 <%}
               else
               {%>
-                <a href="javascript:window.parent.closeTab('已完成');window.parent.addTab('complete', '已完成', '../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=1&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
+                <a href="javascript:window.parent.closeTab('已完成');window.parent.addTab('complete', '已完成', '../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=1&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
                     <%=sta1%></a>
                 <%}
                 %>
@@ -323,7 +323,7 @@
                 <%}
               else
               {%>
-                <a href="javascript:window.parent.closeTab('其他');window.parent.addTab('other', '其他', '../../Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=2&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
+                <a href="javascript:window.parent.closeTab('其他');window.parent.addTab('other', '其他', '../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&WFSta=2&FK_NY=all&FK_Flow=<%=flow.No %>&', '');">
                     <%=sta2%></a>
                 <%} %>
             </td>
@@ -396,8 +396,8 @@
          }
          function FlowAttr(flowNo) {
              window.parent.closeTab('流程属性');
-             window.parent.addTab('FlowAttr', '流程属性', '../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, '');
-             //WinOpen('../../Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, 'csd');
+             window.parent.addTab('FlowAttr', '流程属性', '../../Comm/En.htm?EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, '');
+             //WinOpen('../../Comm/En.htm?EnsName=BP.WF.Template.FlowSheets&No=' + flowNo, 'csd');
          }
          function NodesAttr(flowNo) {
              window.parent.closeTab('节点设置');

@@ -36,21 +36,22 @@ namespace CCFlow.WF.CCForm
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
 			//如果是一个实体类.
-            if (frmID.Contains("BP."))
-            {
-                // 执行map同步.
-                Entities ens = BP.En.ClassFactory.GetEns(frmID);
-                Entity en = ens.GetNewEntity;
-                en.DTSMapToSys_MapData();
-
-                MapData md = new MapData(frmID);
-                return md.ExcelGenerFile(oid, ref bytes);
-            }
-            else
-            {
-                MapData md = new MapData(frmID);
-                return md.ExcelGenerFile(oid, ref bytes);
-            }
+			if (frmID.Contains("BP."))
+			{
+				// 执行map同步.
+				Entities ens = BP.En.ClassFactory.GetEns(frmID);
+				Entity en = ens.GetNewEntity;
+				//en.DTSMapToSys_MapData();
+				//
+				//MapData md = new MapData(frmID);
+				var md = en.DTSMapToSys_MapData();
+				return md.ExcelGenerFile(oid, ref bytes);
+			}
+			else
+			{
+				MapData md = new MapData(frmID);
+				return md.ExcelGenerFile(oid, ref bytes);
+			}
 		}
 		/// <summary>
 		/// 生成vsto模式的数据
@@ -87,23 +88,21 @@ namespace CCFlow.WF.CCForm
 			//执行登录.
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
-            if (frmID.IndexOf("BP.") > -1)
-            {
-                Entities ens = BP.En.ClassFactory.GetEns(frmID);
-                Entity en = ens.GetNewEntity;
-                en.PKVal = mainEnPKOID;
-                en.RetrieveFromDBSources();
-                //Entity en = ens.GetEntityByKey(mainEnPKOID); //TODO: 2017-04-21：返回null：why?
-                //en.RetrieveFromDBSources();
-                en.SetValByKey("DBFile", byt);
-                en.Update();
-            }
-            else
-            {
-                //执行保存文件.
-                MapData md = new MapData(frmID);
-                md.ExcelSaveFile(mainEnPKOID, byt); //把文件保存到该实体对应的数据表的 DBFile 列中。
-            }
+			if (frmID.IndexOf("BP.") > -1)
+			{
+				Entities ens = BP.En.ClassFactory.GetEns(frmID);
+				Entity en = ens.GetNewEntity;
+				var md = en.DTSMapToSys_MapData();
+				md.ExcelSaveFile(mainEnPKOID, byt);
+
+				frmID = frmID.Substring(0, frmID.Length - 1); //若不去掉s，下方 new GEEntity() 获取不到。
+			}
+			else
+			{
+				//执行保存文件.
+				MapData md = new MapData(frmID);
+				md.ExcelSaveFile(mainEnPKOID, byt); //把文件保存到该实体对应的数据表的 DBFile 列中。
+			}
 
 			//保存主表数据.
 			GEEntity wk = new GEEntity(frmID, mainEnPKOID);

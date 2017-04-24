@@ -315,7 +315,7 @@ namespace CCFlow.WF.Comm.RefFunc
                 }
 
                 if (isOpenCard)
-                    this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/RefFunc/UIEn.aspx?EnName=BP.LI.ZhiBiaoFXFF&PK=" + dtl.PKVal + "')\" >打开</a>");
+                    this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/En.htm?EnName=BP.LI.ZhiBiaoFXFF&PK=" + dtl.PKVal + "')\" >打开</a>");
 
                 this.ucsys1.AddTREnd();
             }

@@ -14,7 +14,7 @@ function RefMethod1(path, index, warning, target, ensName, keys) {
             return false;
     }
 
-    var url = "../Comm/RefMethod.aspx?Index=" + index + "&EnsName=" + ensName + keys;
+    var url = "../Comm/RefMethod.htm?Index=" + index + "&EnsName=" + ensName + keys;
     if (target == null || target == '')
         var b = WinOpen(url, 'remmed');
     else

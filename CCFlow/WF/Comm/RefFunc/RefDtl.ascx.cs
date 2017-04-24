@@ -308,7 +308,7 @@ namespace CCFlow.WF.Comm.RefFunc
                         this.ucsys1.AddTD("<img src='../Images/FileType/" + ext + ".gif' border=0/>" + dtl.GetValStrByKey("MyFileName"));
                 }
                 if (isOpenCard)
-                    this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/RefFunc/UIEn.aspx?EnName=" + en.ToString()+ "&PK=" + dtl.PKVal + "')\" >详细</a>");
+                    this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/En.htm?EnName=" + en.ToString()+ "&PK=" + dtl.PKVal + "')\" >详细</a>");
 
                 this.ucsys1.AddTREnd();
             }

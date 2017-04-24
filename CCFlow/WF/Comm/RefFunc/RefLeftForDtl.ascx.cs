@@ -384,7 +384,7 @@ namespace CCFlow.Comm.RefFunc
                     continue;
                 }
 
-                // string url = path + "/Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
+                // string url = path + "/Comm/RefMethod.htm?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
                 string url = "../RefMethod.aspx?Index=" + func.Index + "&EnsName=" + en.GetNewEntities.ToString() + keys;
 
                 //  string urlRefFunc = "RefMethod.aspx?Index=" + func.Index + "&EnsName=" + en.GetNewEntities.ToString() + keys;

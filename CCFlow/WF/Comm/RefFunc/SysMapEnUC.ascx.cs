@@ -411,8 +411,8 @@ namespace CCFlow.WF.Comm.RefFunc
                     if (func.IsCanBatch == true)
                         continue;
 
-                    // string url = path + "/Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
-                    string url = "../Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
+                    // string url = path + "/Comm/RefMethod.htm?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
+                    string url = "../Comm/RefMethod.htm?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
                     if (func.Warning == null)
                     {
                         if (func.Target == null)

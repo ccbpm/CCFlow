@@ -85,8 +85,8 @@ namespace CCFlow.Web.Comm.UC
                     if (func.IsCanBatch == true)
                         continue;
 
-                    // string url = path + "/Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
-                    string url = "./Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
+                    // string url = path + "/Comm/RefMethod.htm?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
+                    string url = "./Comm/RefMethod.htm?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
                     if (func.Warning == null)
                     {
                         if (func.Target == null)
@@ -2571,7 +2571,7 @@ namespace CCFlow.Web.Comm.UC
         //					if (func.Visable==false)
         //						continue;
         //
-        //					string url=path+"/Comm/RefMethod.aspx?Index="+func.Index+"&EnsName="+hisens.ToString()+keys;
+        //					string url=path+"/Comm/RefMethod.htm?Index="+func.Index+"&EnsName="+hisens.ToString()+keys;
         //
         //					if (func.Warning==null)
         //					{

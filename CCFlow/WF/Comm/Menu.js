@@ -39,7 +39,7 @@ function RefMethod( index , warning, target, ensName )
   if ( confirm(  warning ) ==false)   
       return false;
  }
-  var url=WebPath+"/Comm/RefMethod.aspx?Index="+index+"&EnsName="+ ensName + CurrKeys;
+  var url=WebPath+"/Comm/RefMethod.htm?Index="+index+"&EnsName="+ ensName + CurrKeys;
   //alert( url );
     if (target==null)
       var a=window.location.href=url; 
@@ -61,7 +61,7 @@ function RefMethodExt(  index , warning, target, ensName, key , path)
       return ;
  }
  
-  var url=path+"/Comm/RefMethod.aspx?Index="+index+"&EnsName="+ ensName +"&"+ key;
+  var url=path+"/Comm/RefMethod.htm?Index="+index+"&EnsName="+ ensName +"&"+ key;
  // alert (url);
     if (target==null)
       var a=window.location.href=url; 
@@ -181,7 +181,7 @@ function GroupEns( className )
  if (CurrEnsName==null)
       return ;
    //document.location='UIEnsCols.aspx?EnsName='+className;
-   var newWindow=window.open( WebPath+'/Comm/Group.aspx?EnsName='+className ,'mainfrm', 'width=900,top=60,left=60,height=500,scrollbars=yes,resizable=yes,toolbar=false,location=false' );
+   var newWindow=window.open( WebPath+'/Comm/Group.htm?EnsName='+className ,'mainfrm', 'width=900,top=60,left=60,height=500,scrollbars=yes,resizable=yes,toolbar=false,location=false' );
    return true;
 }
 

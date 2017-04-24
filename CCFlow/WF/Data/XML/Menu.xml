@@ -15,7 +15,7 @@
   <!-- 信息发布  -->
   <Item No="02" Name="权限管理" Url="" Img="../Images/Btn/Help.gif" ForUser="" DESC=""  DFor="" Enable="">
     <Item No="0200" Name="系统类别" Url="/WF/Comm/SearchEUI.aspx?EnsName=BP.GPM.AppSorts" Img="/Images/Btn/Card.gif" />
-    <!--<Item No="0201" Name="系统与菜单" Url="/Comm/Search.aspx?EnsName=BP.GPM.Apps"
+    <!--<Item No="0201" Name="系统与菜单" Url="/Comm/Search.htm?EnsName=BP.GPM.Apps"
           Img="/GPM/Images/Menu/application.png" />-->
     
     <Item No="0201" Name="系统与菜单" Url="AppList.aspx" Img="/GPM/Images/Menu/application.png" />

@@ -4910,8 +4910,8 @@ namespace CCFlow.WF.UC
                     if (func.IsCanBatch == true)
                         continue;
 
-                    // string url = path + "/Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
-                    string url = appPath + "WF/Comm/RefMethod.aspx?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
+                    // string url = path + "/Comm/RefMethod.htm?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
+                    string url = appPath + "WF/Comm/RefMethod.htm?Index=" + func.Index + "&EnsName=" + hisens.ToString() + keys;
                     if (func.Warning == null)
                     {
                         if (func.Target == null)

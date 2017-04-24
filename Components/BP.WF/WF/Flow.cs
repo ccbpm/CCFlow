@@ -5727,8 +5727,12 @@ namespace BP.WF
                             nd.FlowName = fl.Name;
                             try
                             {
-                                if (nd.GetValStringByKey("OfficePrintEnable") == "打印")
-                                    nd.SetValByKey("OfficePrintEnable", 0);
+
+                                if (nd.EnMap.Attrs.Contains("OfficePrintEnable"))
+                                {
+                                    if (nd.GetValStringByKey("OfficePrintEnable") == "打印")
+                                        nd.SetValByKey("OfficePrintEnable", 0);
+                                }
 
                                 nd.DirectInsert();
 

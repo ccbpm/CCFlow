@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20170421";
+        public static string Ver = "20170423";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -181,6 +181,9 @@ namespace BP.WF
             string msg = "";
             try
             {
+                BP.Sys.MapAttr myattr = new MapAttr();
+                myattr.CheckPhysicsTable();
+
                 //删除垃圾数据.
                 BP.Sys.MapExt.DeleteDB();
 

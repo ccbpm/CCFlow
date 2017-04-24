@@ -127,7 +127,6 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean("ExtIsSum", false, "是否显示合计(对从表有效)", true, true);
 
-
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 4000, 20, true);
                 #endregion 基本信息.
 

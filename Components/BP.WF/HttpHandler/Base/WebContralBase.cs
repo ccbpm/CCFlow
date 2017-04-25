@@ -201,6 +201,8 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
+          
+        
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -236,6 +238,16 @@ namespace BP.WF.HttpHandler
                 if (str == null || str == "" || str == "null")
                     return null;
 
+                return str;
+            }
+        }
+        public string FK_Dept
+        {
+            get
+            {
+                string str = this.GetRequestVal("FK_Dept");
+                if (str == null || str == "" || str == "null")
+                    return null;
                 return str;
             }
         }

@@ -172,6 +172,7 @@
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_App_CH.cs" />
     <Compile Include="HttpHandler\WF_App_ACE.cs" />
     <Compile Include="HttpHandler\WF_Admin.cs" />
+    <Compile Include="HttpHandler\WF_WorkOpt.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\MapRptExt.cs" />

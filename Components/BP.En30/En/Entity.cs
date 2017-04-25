@@ -3477,7 +3477,7 @@ namespace BP.En
         /// <summary>
         /// 调度
         /// </summary>
-        public void DTSMapToSys_MapData()
+        public MapData DTSMapToSys_MapData()
         {
             Map map=this.EnMap;
 
@@ -3521,6 +3521,8 @@ namespace BP.En
                 DTSMapToSys_MapData_InitMapAttr(enDtl.EnMap.Attrs, enDtl.ClassIDOfShort);
             }
             #endregion 同步从表.
+
+            return md;
 
         }
         /// <summary>

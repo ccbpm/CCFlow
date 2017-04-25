@@ -43,8 +43,9 @@ namespace CCFlow.WF.CCForm
 				Entity en = ens.GetNewEntity;
 				//en.DTSMapToSys_MapData();
 				//
-				//MapData md = new MapData(frmID);
-				var md = en.DTSMapToSys_MapData();
+				MapData md = new MapData(frmID);
+				en.DTSMapToSys_MapData();
+
 				return md.ExcelGenerFile(oid, ref bytes);
 			}
 			else
@@ -92,7 +93,9 @@ namespace CCFlow.WF.CCForm
 			{
 				Entities ens = BP.En.ClassFactory.GetEns(frmID);
 				Entity en = ens.GetNewEntity;
-				var md = en.DTSMapToSys_MapData();
+				 
+                var md= en.DTSMapToSys_MapData();
+
 				md.ExcelSaveFile(mainEnPKOID, byt);
 
 				frmID = frmID.Substring(0, frmID.Length - 1); //若不去掉s，下方 new GEEntity() 获取不到。

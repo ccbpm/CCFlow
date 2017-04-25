@@ -39,12 +39,12 @@ namespace CCFlow.WF.CCForm
 			if (frmID.Contains("BP."))
 			{
 				// 执行map同步.
-				Entities ens = BP.En.ClassFactory.GetEns(frmID);
+				Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
 				Entity en = ens.GetNewEntity;
+
 				//en.DTSMapToSys_MapData();
-				//
-				MapData md = new MapData(frmID);
-				en.DTSMapToSys_MapData();
+				//MapData md = new MapData(frmID);
+				var md = en.DTSMapToSys_MapData();
 
 				return md.ExcelGenerFile(oid, ref bytes);
 			}
@@ -89,16 +89,13 @@ namespace CCFlow.WF.CCForm
 			//执行登录.
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
+			//保存excel文件流
 			if (frmID.IndexOf("BP.") > -1)
 			{
-				Entities ens = BP.En.ClassFactory.GetEns(frmID);
+				Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
 				Entity en = ens.GetNewEntity;
-				 
-                var md= en.DTSMapToSys_MapData();
-
+				var md = en.DTSMapToSys_MapData();
 				md.ExcelSaveFile(mainEnPKOID, byt);
-
-				frmID = frmID.Substring(0, frmID.Length - 1); //若不去掉s，下方 new GEEntity() 获取不到。
 			}
 			else
 			{
@@ -107,7 +104,8 @@ namespace CCFlow.WF.CCForm
 				md.ExcelSaveFile(mainEnPKOID, byt); //把文件保存到该实体对应的数据表的 DBFile 列中。
 			}
 
-			//保存主表数据.
+			#region 保存主表数据.
+
 			GEEntity wk = new GEEntity(frmID, mainEnPKOID);
 			wk.ResetDefaultVal();
 
@@ -129,7 +127,14 @@ namespace CCFlow.WF.CCForm
 			if (dsDtlsChange == null)
 				return;
 
+			#endregion
+
 			#region 保存从表
+
+			//截去BP.LI.
+			if (frmID.Contains("BP."))
+				frmID = frmID.Substring(frmID.LastIndexOf(".") + 1);
+
 			//明细集合.
 			MapDtls dtls = new MapDtls(frmID);
 
@@ -138,7 +143,7 @@ namespace CCFlow.WF.CCForm
 			{
 				foreach (MapDtl dtl in dtls)
 				{
-					if (dt.TableName != dtl.No)
+					if (dt.TableName != dtl.No) //!++ TODO: BP.LI.BZQXxys != BZQXxy
 						continue;
 
 					#region 根据原始数据,与当前数据求出已经删除的oids .

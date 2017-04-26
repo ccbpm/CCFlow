@@ -19,7 +19,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=AutoFull_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+                url: Handler + "?DoType=CHOvertimeRole_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (json) {
 
@@ -30,13 +30,13 @@
 
                     json = JSON.parse(json);
 
-                    var mapExt = json['Sys_MapExt'];
+                    var nodeEntity = json['Node'];
 
                     //绑定数据源.
-                    GenerBindDDL("DDL_FK_DBSrc", json['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
+                    GenerBindDDL("DDL_Nodes", json['Nodes'], "NodeID", "Name", mapExt.FK_DBSrc);
 
                     //调用公共类库的方法:执行批量主表赋值.
-                    GenerFullAllCtrlsVal(mapExt);
+                    GenerFullAllCtrlsVal(nodeEntity);
                     return;
                 }
             });
@@ -52,13 +52,9 @@
 <table style="width:100%;">
 <tr>
 <td>
-<%
-    int nodeID = int.Parse(this.Request.QueryString["FK_Node"]);
-    BP.WF.Node nd = new BP.WF.Node(nodeID);
-  %>
 <fieldset>
-<legend><asp:RadioButton ID="RB_0" Text="不处理"  Checked="true" runat="server" GroupName="xxxx" />
-    </legend>
+
+<legend><input type="radio" value="0"  id="RB_OutTimeDeal_0" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_0">不处理 </label> </legend>
 <ul style=" color:Gray">
 <li>超时的时候一直处理超时的状态。</li>
 </ul>
@@ -66,8 +62,8 @@
 
 
 <fieldset>
-<legend><asp:RadioButton ID="RB_1" Text="自动向下运动" runat="server"  GroupName="xxxx"/>
-    </legend>
+<legend><input type="radio" value="1"  id="RB_OutTimeDeal_1" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_1">自动向下运动 </label> </legend>
+
 <ul style=" color:Gray">
 <li>超时了当前节点自动运动到下一个环节，如果要控制特定的条件下不向下运动，就需要在当前节点的发送前事件里编写相关的业务逻辑。</li>
 </ul>
@@ -75,11 +71,13 @@
 
 
 <fieldset>
-<legend><asp:RadioButton ID="RB_2" Text="跳转到指定的节点" runat="server" GroupName="xxxx" />
-    </legend>
+<legend><input type="radio" value="2"  id="RB_OutTimeDeal_2" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_2">跳转到指定的节点 </label> </legend>
+ 
     <ul style=" color:Gray">
-    <li> 要跳转到的节点:<asp:DropDownList ID="DDL_Node" runat="server">
-    </asp:DropDownList>
+    <li> 要跳转到的节点: <select id="DDL_Nodes" > </select>
+   <!-- <asp:DropDownList ID="DDL_Node" runat="server">
+    </asp:DropDownList>-->
+
     </li>
     </ul>
 </fieldset>
@@ -87,8 +85,7 @@
 
 
 <fieldset>
-<legend><asp:RadioButton ID="RB_3" Text="移交给指定的人员" runat="server" GroupName="xxxx" />
-    </legend>
+<legend><input type="radio" value="3"  id="RB_OutTimeDeal_3" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_3">移交给指定的人员 </label> </legend>
 
      <a href="javascript:ShowHidden('shift');" > 请输入要移交的工作人员：</a>
  <div id="shift" style="display:none">
@@ -99,14 +96,13 @@
   </ul>
   </div>
       
-      <asp:TextBox ID="TB_3_Shift" runat="server" Width="95%"></asp:TextBox>
-
+  <input id="TB_Shift" name="TB_Shift"  type="text"  />
 </fieldset>
 
 
 <fieldset>
-<legend><asp:RadioButton ID="RB_4" Text="向指定的人员发信息,如果设置为空就向当前人发信息." runat="server" GroupName="xxxx" />
-    </legend>
+<legend><input type="radio" value="4"  id="RB_OutTimeDeal_4" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_4">移交给指定的人员 </label> </legend>
+
      <a href="javascript:ShowHidden('emps');" > 请输入要发送的工作人员：</a>
  <div id="emps" style="display:none">
   <ul>
@@ -115,16 +111,14 @@
    <li>超时后，系统就会向这些人员发送消息。</li>
   </ul>
   </div>
-
-<asp:TextBox ID="TB_4_SendMsg" runat="server" Width="95%"></asp:TextBox>
-
-
-
+  <input id="TB_SendEmps" name="TB_SendEmps"  type="text"  />
+   
 </fieldset>
 
+
 <fieldset>
-<legend><asp:RadioButton ID="RB_5" Text="删除流程" runat="server" GroupName="xxxx" />
-    </legend>
+<legend><input type="radio" value="5"  id="RB_OutTimeDeal_5" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_5">删除流程 </label> </legend>
+
  <ul style=" color:Gray">
   <li>超时后就自动删除当前的流程。</li>
 </ul>
@@ -132,8 +126,7 @@
 
 
 <fieldset>
-<legend><asp:RadioButton ID="RB_6" Text="执行SQL" runat="server" GroupName="xxxx" />
-   </legend>
+<legend><input type="radio" value="6"  id="RB_OutTimeDeal_6" name="RB_OutTimeDeal" /> <label for="RB_OutTimeDeal_6">执行SQL </label> </legend>
 
      <a href="javascript:ShowHidden('sql');" > 请输入要执行的SQL：</a>
  <div id="sql" style="display:none">
@@ -143,17 +136,17 @@
   </ul>
   </div>
 
-    <asp:TextBox ID="TB_6_SQL" runat="server" Width="95%"></asp:TextBox>
+  <textarea id="TB_SQL" name="TB_SQL" rows="3"> </textarea>
+     
 </fieldset>
 
 
 <fieldset>
 <legend>其他选项 </legend>
-    <asp:CheckBox ID="CB_IsEval" runat="server" Text="是否质量考核点" />
+<input type=checkbox id="CB_IsEval" /><label for="CB_IsEval">是否质量考核点</label>  
 </fieldset>
 
-    <asp:Button ID="Btn_Save" runat="server" Text=" 保 存 " 
-        onclick="Btn_Save_Click" />
+<input type=button value="保存" onclick="Save()" />
 
 </td>
 
@@ -175,7 +168,7 @@
 
         var frmData = $("#cc").serialize();
 
-        var myurl = Handler + "?DoType=AutoFull_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
+        var myurl = Handler + "?DoType=CHOvertimeRole_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
         $.ajax({
             data: frmData,
             type: 'post',

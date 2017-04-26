@@ -763,7 +763,7 @@ namespace CCFlow.WF.FlowFormTree
             SysFormTrees formTrees = new SysFormTrees();
             formTrees.RetrieveAll(SysFormTreeAttr.Name);
 
-            //所有表单集合
+            //所有表单集合.
             MapDatas mds = new MapDatas();
             mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
 
@@ -798,14 +798,23 @@ namespace CCFlow.WF.FlowFormTree
                         break;
                     case FrmEnableRole.WhenHaveFrmPara: //判断是否有参数.
                         string frms = this.Request.QueryString["Frms"];
-                        if (frms != null && frms.Contains(frmNode.FK_Frm) == true)
-                        {
-                            /*包含这个表单.*/
-                        }
-                        else
-                        {
+
+                        //修改算法：解决 frmID = ABC  frmID=AB 的问题.
+                        if (string.IsNullOrEmpty(frms)==true)
                             continue;
+
+                        if (frms.Contains(",") == false )
+                        {
+                            if (frms != frmNode.FK_Frm)
+                                continue;
                         }
+
+                        if (frms.Contains(",") == true )
+                        {
+                            if (frms.Contains(frmNode.FK_Frm + ",") == false)
+                                continue;
+                        }
+
                         break;
                     case FrmEnableRole.ByFrmFields:
                         throw new Exception("@这种类型的判断，ByFrmFields 还没有完成。");

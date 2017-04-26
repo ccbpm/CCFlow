@@ -16,7 +16,7 @@
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("正在加载,请稍后......");`1QS
+            $("#Msg").html("正在加载,请稍后......");
 
             InitPage();
 
@@ -62,21 +62,20 @@
                             newRow = "<tr style='width:100%'><td class=Idx style='width:10%'>" + i + "</td>";
                             newRow += "<td style='width:40%'>第" + nd.Step + "步</td>";
                             if ($.inArray(nd.NodeID, rndsArr) > -1) {
-                                newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID+"' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' checked='checked' />" + nd.Name + "</td>";
+                                newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' checked='checked' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
                             } else {
-                                newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' />" + nd.Name + "</td>";
+                                newRow += "<td style='width:50%'>" + "<input id='CB_" + nd.NodeID + "' name='CB_" + nd.NodeID + "' type='checkbox' value='" + nd.Name + "' /><label for='CB_" + nd.NodeID + "' >" + nd.Name + "</label></td>";
                             }
                             newRow += "</tr>";
                             $("#table1 tr:last").after(newRow);
                         }
                     }
-                    var newBtn = "<TR class='TRSum' ><TD >&nbsp;</TD><TD ><input type='button' value='保存' class='Btn' onclick='Btn_Save_Click()'/></TD><TD >&nbsp;</TD>";
+                    var newBtn = "<TR class='TRSum' ><TD >&nbsp;</TD><TD>&nbsp;</TD><TD><input type='button' value='保存' class='Btn' onclick='Btn_Save_Click()'/></TD>";
                     $("#table1 tr:last").after(newBtn);
                     return;
                 }
             });
         }
-
 
         //ajax 提交
         function Btn_Save_Click() {
@@ -107,12 +106,19 @@
 
 <form id="cc">
  
+ 
 <table width='100%' id="table1" >
 <Caption  style="text-align:center">为'<span id="titl"></span>', 设置可撤销的节点。</Caption>
     <tr></tr>
 </table>
-<fieldset class='FieldsetInfo' ><legend>&nbsp;特别说明:&nbsp;</legend>1，只有节点属性的撤销规则被设置成撤销制订的节点，此功能才有效。<br> 2，设置撤销的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，撤销时才做检查。</fieldset>
 
+<fieldset class='FieldsetInfo' ><legend>&nbsp;特别说明:&nbsp;</legend>
+
+<ul>
+<li>只有节点属性的撤销规则被设置成撤销制订的节点，此功能才有效。 </li>
+<li>设置撤销的节点如果是当前节点下一步骤的节点，设置无意义，系统不做检查，撤销时才做检查。</li>
+</ul>
+</fieldset>
 
 </form>
 

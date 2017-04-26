@@ -835,6 +835,7 @@ namespace CCFlow.WF.UC
                 url += "?" + urlExt;
 
             url = url.Replace("?&", "?");
+            url = url.Replace("&&", "&");
             return url;
         }
         #endregion 方法.

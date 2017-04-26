@@ -338,7 +338,7 @@ namespace BP.WF.HttpHandler
         public string ActiveDDL_Save()
         {
             MapExt me = new MapExt();
-            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
+            me.Delete(MapExtAttr.ExtType, MapExtXmlList.ActiveDDL,
                 MapExtAttr.FK_MapData, this.FK_MapData,
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
 
@@ -347,11 +347,10 @@ namespace BP.WF.HttpHandler
             me.AttrsOfActive = this.GetValFromFrmByKey("DDL_AttrsOfActive");
             me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
             me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
-
             me.ExtType = MapExtXmlList.ActiveDDL;
 
             //执行保存.
-            me.MyPK = MapExtXmlList.ActiveDDL + "_" + me.FK_MapData + "_" + me.AttrOfOper + "_" + me.AttrsOfActive;
+            me.MyPK = MapExtXmlList.ActiveDDL + "_" + me.FK_MapData + "_" + me.AttrOfOper + "_" + me.AttrOfOper;
             me.Save();
 
             return "保存成功.";

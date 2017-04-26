@@ -839,7 +839,7 @@ namespace BP.Sys
             switch (this.ExtType)
             {
                 case MapExtXmlList.ActiveDDL:
-                    this.MyPK = MapExtXmlList.ActiveDDL + "_" + this.FK_MapData + "_" + this.AttrsOfActive;
+                    this.MyPK = MapExtXmlList.ActiveDDL + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
                 case MapExtXmlList.DDLFullCtrl:
                     this.MyPK = MapExtXmlList.DDLFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper;

@@ -211,10 +211,9 @@ namespace BP.Sys.FrmUI
             attr.IsRichText = this.GetValBooleanByKey("IsRichText"); //是否是富文本？
             attr.IsSupperText = this.GetValBooleanByKey("IsSupperText"); //是否是大块文本？
 
-
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");
-            if (defval == "")
+            if (defval == "" || defval == "0")
             {
                 string defVal = this.GetValStrByKey("DefVal");
                 if (defval.Contains("@") == true)
@@ -222,7 +221,7 @@ namespace BP.Sys.FrmUI
             }
             else
             {
-                this.SetValByKey("DefVal", this.GetValByKey("ExtDefVal") );
+                this.SetValByKey("DefVal", this.GetValByKey("ExtDefVal"));
             }
 
             //执行保存.

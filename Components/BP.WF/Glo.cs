@@ -370,7 +370,7 @@ namespace BP.WF
                 #region 把节点的toolbarExcel, word 信息放入mapdata
                 BP.WF.Template.NodeSheets nss = new Template.NodeSheets();
                 nss.RetrieveAll();
-                foreach (BP.WF.Template.NodeExt ns in nss)
+                foreach (BP.WF.Template.NodeSheet ns in nss)
                 {
                     ToolbarExcel te = new ToolbarExcel();
                     te.No = "ND" + ns.NodeID;
@@ -525,11 +525,14 @@ namespace BP.WF
                 #region 升级Img
                 FrmImg img = new FrmImg();
                 img.CheckPhysicsTable();
-                #endregion
 
-                #region 判断Sys_FrmImg中ImgSrcType字段，从SrcType复制值，edited by liuxc,2017-4-21
-                DBAccess.RunSQL("UPDATE Sys_FrmImg SET ImgSrcType = SrcType WHERE ImgSrcType IS NULL");
-                DBAccess.RunSQL("UPDATE Sys_FrmImg SET ImgSrcType = 0 WHERE ImgSrcType IS NULL");
+                BP.Sys.FrmUI.FrmImg myimg = new BP.Sys.FrmUI.FrmImg();
+                myimg.CheckPhysicsTable();
+                if (DBAccess.IsExitsTableCol("Sys_FrmImg", "SrcType") == true)
+                {
+                    DBAccess.RunSQL("UPDATE Sys_FrmImg SET ImgSrcType = SrcType WHERE ImgSrcType IS NULL");
+                    DBAccess.RunSQL("UPDATE Sys_FrmImg SET ImgSrcType = 0 WHERE ImgSrcType IS NULL");
+                }
                 #endregion
 
                 #region 修复 mapattr UIHeight, UIWidth 类型错误.

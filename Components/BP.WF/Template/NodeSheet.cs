@@ -13,6 +13,18 @@ namespace BP.WF.Template
     /// </summary>
     public class NodeSheet : Entity
     {
+        public int NodeID
+        {
+            get
+            {
+                return this.GetValIntByKey(NodeAttr.NodeID);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.NodeID,value);
+            }
+        }
+
         #region 构造函数
         /// <summary>
         /// 节点

@@ -721,7 +721,8 @@ namespace BP.Pub
                         case "NYR":
                             return DA.DataType.ParseSysDate2DateTime(val).ToString("yyyy年MM月dd日");
                         case "RMB":
-                            return float.Parse(val).ToString("0.00");
+                            decimal md= Math.Round( decimal.Parse(val) ,2);
+                            return md.ToString();
                         case "RMBDX":
                             return DA.DataType.ParseFloatToCash(float.Parse(val));
                         case "Siganture":

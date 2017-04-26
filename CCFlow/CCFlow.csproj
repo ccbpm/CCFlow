@@ -2357,7 +2357,6 @@
     <Content Include="WF\CCForm\SLFrm.aspx" />
     <Content Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx" />
     <Content Include="WF\CCForm\UploadFile.aspx" />
-    <Content Include="WF\CH.aspx" />
     <Content Include="WF\Comm\Batch.aspx" />
     <Content Include="WF\Comm\Charts\css\prettify.css" />
     <Content Include="WF\Comm\Charts\css\Style.css" />
@@ -10205,13 +10204,6 @@
     </Compile>
     <Compile Include="WF\CCForm\WinOpen.master.designer.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CH.aspx.cs">
-      <DependentUpon>CH.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CH.aspx.designer.cs">
-      <DependentUpon>CH.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Batch.aspx.cs">
       <DependentUpon>Batch.aspx</DependentUpon>

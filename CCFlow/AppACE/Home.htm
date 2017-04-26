@@ -129,7 +129,8 @@ r<!--[if !IE]> -->
                         var no = ClassicMenus[i].No;
                         if (no == "AdvFunc" || no == "Tools")
                             continue;
-
+                        if (ClassicMenus[i].Enable == "0")
+                            continue;
                         var name = ClassicMenus[i].CH;
                         var url = ClassicMenus[i].ACEUrl;
                         var li = "";
@@ -146,7 +147,8 @@ r<!--[if !IE]> -->
                     var ClassicMenusAdv = data["ClassicMenusAdv"];
 
                     for (var i = 0; i < ClassicMenusAdv.length; i++) {
-
+                        if (ClassicMenusAdv[i].Enable == "0")
+                            continue;
                         var no = ClassicMenusAdv[i].No;
                         var name = ClassicMenusAdv[i].CH;
                         var url = ClassicMenusAdv[i].ACEUrl;

@@ -207,7 +207,7 @@ namespace BP.WF.HttpHandler
         /// 获取授权人列表
         /// </summary>
         /// <returns></returns>
-        public string LoadAuthor()
+        public string Load_Author()
         {
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM WF_EMP WHERE AUTHOR='" + BP.Web.WebUser.No + "'");
             return BP.Tools.FormatToJson.ToJson(dt);

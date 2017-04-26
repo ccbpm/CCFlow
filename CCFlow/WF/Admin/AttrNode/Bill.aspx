@@ -14,10 +14,9 @@
         var b=window.showModalDialog( url , 'ass' ,'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no'); 
         window.location.href = window.location.href;
     }
-    function AddBillType()
-    {
-        var url='../../Comm/Search.htm?EnsName=BP.WF.BillTypes';
-        var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no'); 
+    function AddBillType() {
+        var url = '../../Comm/Search.htm?EnsName=BP.WF.BillTypes';
+        var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
         window.location.href = window.location.href;
     }
 

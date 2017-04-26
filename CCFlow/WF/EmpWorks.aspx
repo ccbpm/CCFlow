@@ -254,11 +254,21 @@
                 string sdt = dr["SDT"] as string;
                 string paras = dr["AtPara"] as string;
 
+                if (paras != "")
+                {
+                    paras = paras.Replace("'", "\\'");
+                    paras = paras.Replace('@', '&');
+                    paras = paras.Replace('@', '&');
+                    paras = paras.Replace('@', '&');
+                    paras = paras.Replace('@', '&');
+                    paras = paras.Replace('@', '&');
+                    paras = "1" + paras;
+                }
+
                 if (!string.IsNullOrEmpty(paras))
                 {
                     paras = paras.Replace("'", "\\'");
                 }
-                
 
                 if (is1)
                 {

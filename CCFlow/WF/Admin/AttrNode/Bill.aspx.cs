@@ -484,7 +484,6 @@ namespace CCFlow.WF.Admin
 
                 this.Ucsys1.AddTD(Bill.No);
                 string fileUrl = "";
-                //../WorkOpt/GridEdit.aspx?grf=" +Bill.Url + ".grf&t="+DateTime.Now.ToString("yyMMddhh:mm:ss")+" target='_blank'
                 if (Bill.HisBillFileType == BillFileType.RuiLang)
                 {
                     string name = Bill.Url;

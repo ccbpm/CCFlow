@@ -31,7 +31,7 @@ DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
 
 DELETE FROM Sys_GloVar WHERE GroupKey='DefVal';
 
-INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('','选择系统约定默认值','DefVal');
+INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('0','选择系统约定默认值','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.No','登陆人员账号','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.Name','登陆人员名称','DefVal');
 INSERT INTO Sys_GloVar (No,Name,GroupKey) VALUES ('@WebUser.FK_Dept','登陆人员部门编号','DefVal');

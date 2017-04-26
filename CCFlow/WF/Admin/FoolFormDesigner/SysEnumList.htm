@@ -68,9 +68,6 @@
 
         function AddFrm( enumID, fk_mapdata) {
 
-
-        //    alert(enumID);
-
             var url = '';
             var str = prompt("请输入字段名(必须为字母开头、数字或者下划线组合):", enumID);
 
@@ -81,7 +78,7 @@
             if (groupField == null)
                 groupField = "0";
 
-            url = Handler + "?DoType=SysEnumList_SaveEnumField&KeyOfEn=" + str + "&FK_MapData=" + fk_mapdata + "&GroupFeid=" + groupField + "&EnumKey=" + enumID + "&m=" + Math.random(),
+            url = Handler + "?DoType=SysEnumList_SaveEnumField&KeyOfEn=" + str + "&FK_MapData=" + fk_mapdata + "&GroupFeid=" + groupField + "&EnumKey=" + enumID + "&m=" + Math.random();
 
             $.ajax({
                 type: 'post',

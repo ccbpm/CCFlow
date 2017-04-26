@@ -402,7 +402,10 @@ namespace BP.WF.HttpHandler
             attr.Insert();
             return attr.MyPK;
         }
-
+        /// <summary>
+        /// 增加一个枚举类型
+        /// </summary>
+        /// <returns></returns>
         public string SysEnumList_SaveEnumField()
         {
             MapAttr attr = new Sys.MapAttr();
@@ -425,6 +428,8 @@ namespace BP.WF.HttpHandler
             sem.No = attr.UIBindKey;
             if (sem.RetrieveFromDBSources() != 0)
                 attr.Name = sem.Name;
+            else
+                attr.Name = "枚举"+attr.UIBindKey;
 
             attr.Insert();
 

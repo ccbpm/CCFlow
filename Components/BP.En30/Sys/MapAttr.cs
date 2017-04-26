@@ -1558,7 +1558,7 @@ namespace BP.Sys
                 else
                 {
                     group.EnName = this.FK_MapData;
-                    group.Lab = new MapData(this.FK_MapData).Name;
+                    group.Lab ="基础信息";
                     group.Idx = 1;
                     group.Insert();
 

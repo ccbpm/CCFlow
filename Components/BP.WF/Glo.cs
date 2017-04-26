@@ -753,7 +753,7 @@ namespace BP.WF
             {
                 string err = "问题出处:" + ex.Message + "<hr>" + msg + "<br>详细信息:@" + ex.StackTrace + "<br>@<a href='../DBInstall.aspx' >点这里到系统升级界面。</a>";
                 BP.DA.Log.DebugWriteError("系统升级错误:" + err);
-                return "0";
+                return err;
             }
         }
         /// <summary>

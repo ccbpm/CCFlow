@@ -910,6 +910,7 @@ namespace BP.Sys
         {
             MapExts exts = new MapExts();
             exts.RetrieveAll();
+            return;
            
             foreach (MapExt ext in exts)
             {

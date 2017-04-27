@@ -2403,12 +2403,13 @@ namespace BP.WF
         public static DataTable DB_GenerRuning()
         {
             DataTable dt = DB_GenerRuning(BP.Web.WebUser.No, null);
-            dt.Columns.Add("Type");
+            /*暂时屏蔽type的拼接，拼接后转json会报错 于庆海修改*/
+            /*dt.Columns.Add("Type");
 
             foreach (DataRow row in dt.Rows)
             {
                 row["Type"] = "RUNNING";
-            }
+            }*/
 
             dt.DefaultView.Sort = "RDT DESC";
             return dt.DefaultView.ToTable();

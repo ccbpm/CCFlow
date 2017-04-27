@@ -31,7 +31,26 @@
 
         var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl;
 
-        $(function () { $("#F").attr("src", url); });
+        $(function () {
+            $("#F").attr("src", url);
+
+            //初始化 GroupID.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=MapDefDtlFreeFrm_Init&FK_MapData=" + fk_mapData + "&FK_MapDtl=" + fk_mapDtl + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                }
+            });
+
+        });
 
         function HelpGroup() {
             var msg = '字段分组：就是把类似的字段放在一起，让用户操作更友好。\t\n比如：我们纳税人设计一个基础信息采集节点。';
@@ -42,7 +61,6 @@
         function AddF(fk_mapdata) {
 
             var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata + '&s=' + Math.random();
-
             OpenEasyUiDialog(url, "eudlgframe", "插入列", 800, 500, "icon-edit", true, null, null, null, function () {
                 ReloadDtlFrame();
             });

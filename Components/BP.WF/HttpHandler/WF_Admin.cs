@@ -50,8 +50,14 @@ namespace BP.WF.HttpHandler
         /// 获取流程所有节点
         /// </summary>
         /// <returns></returns>
-        private string BindForm_GenderFlowNode()
+        public string BindForm_GenderFlowNode()
         {
+            //规范做法.
+            Nodes nds = new Nodes(this.FK_Flow);
+            return nds.ToJson();
+
+
+            // 屏蔽一下代码.
             StringBuilder append = new StringBuilder();
             Flow flow = new Flow(this.FK_Flow);
             append.Append("[");
@@ -69,7 +75,7 @@ namespace BP.WF.HttpHandler
         /// 获取表单库所有表单
         /// </summary>
         /// <returns></returns>
-        private string BindForm_GenerForms()
+        public string BindForm_GenerForms()
         {
             //形成树
             FlowFormTrees appendFormTrees = new FlowFormTrees();
@@ -139,7 +145,7 @@ namespace BP.WF.HttpHandler
         /// 保存流程表单
         /// </summary>
         /// <returns></returns>
-        private string BindForm_SaveBindForms()
+        public string BindForm_SaveBindForms()
         {
             try
             {

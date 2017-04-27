@@ -84,7 +84,7 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果</returns>
         protected virtual string DoDefaultMethod()
         {
-            return "err@子类没有重写该["+this.DoType+"]方法.";
+            return "err@子类["+this.ToString()+"]没有重写该["+this.DoType+"]方法，请确认该方法是否缺少或者是非public类型的.";
         }
         #endregion 执行方法.
 

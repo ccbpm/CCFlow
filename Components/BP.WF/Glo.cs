@@ -3310,6 +3310,64 @@ namespace BP.WF
                     break;
             }
         }
+
+        /// <summary>
+        /// 处理人员显示格式
+        /// <para>added by liuxc,2017-4-27</para>
+        /// </summary>
+        /// <param name="emps">人员字符串，类似“duqinglian,杜清莲;wangyihan,王一涵;”</param>
+        /// <param name="idBefore">是否用户id在前面、用户name在后面</param>
+        /// <returns></returns>
+        public static string DealUserInfoShowModel(string emps, bool idBefore = true)
+        {
+            if (string.IsNullOrWhiteSpace(emps))
+                return emps;
+
+            bool haveKH = emps.StartsWith("(");
+
+            if (haveKH)
+                emps = emps.Replace("(", "").Replace(")", "");
+
+            string[] es = emps.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            string newEmps = haveKH ? "(" : string.Empty;
+            string[] ess = null;
+
+            switch (BP.WF.Glo.UserInfoShowModel)
+            {
+                case UserInfoShowModel.UserIDOnly:
+                    foreach(string e in es)
+                    {
+                        ess = e.Split(',');
+
+                        if (ess.Length == 1)
+                        {
+                            newEmps += ess[0] + ";";
+                            continue;
+                        }
+
+                        newEmps += (idBefore ? ess[0] : ess[1]) + ";";
+                    }
+
+                    return haveKH ? (newEmps + ")") : newEmps;
+                case UserInfoShowModel.UserNameOnly:
+                    foreach(string e in es)
+                    {
+                        ess = e.Split(',');
+
+                        if (ess.Length == 1)
+                        {
+                            newEmps += ess[0] + ";";
+                            continue;
+                        }
+
+                        newEmps += (idBefore ? ess[1] : ess[0]) + ";";
+                    }
+
+                    return haveKH ? (newEmps + ")") : newEmps;
+                default:
+                    return emps;
+            }
+        }
         /// <summary>
         /// 钉钉是否启用
         /// </summary>

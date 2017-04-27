@@ -12,6 +12,7 @@
     <script src="JS/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="JS/EasyUI/locale/easyui-lang-zh_CN.js" type="text/javascript" charset="UTF-8"></script>
     <script src="JS/SearchEasyUI.js" type="text/javascript"></script>
+    <script src="JS/Calendar/WdatePicker.js" type="text/javascript"></script>
 </head>
 <body class="easyui-layout">
     <form id="Form1" method="post" runat="server">

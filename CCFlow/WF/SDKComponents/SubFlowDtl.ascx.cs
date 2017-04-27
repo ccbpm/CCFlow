@@ -112,6 +112,7 @@ namespace CCFlow.WF.SDKComponents
 
             /*有要启动的子流程, 生成启动子流程的连接.*/
             string html = "";
+            string emps = null;
             string[] strs = sf.SFDefInfo.Split(',');
             foreach (string str in strs)
             {
@@ -180,8 +181,9 @@ namespace CCFlow.WF.SDKComponents
                     //    this.AddTD("已完成");
                     //else
                     //    this.AddTD("未完成");
+                    emps = BP.WF.Glo.DealUserInfoShowModel(item.TodoEmps);
 
-                    this.AddTD("title='"+item.TodoEmps+"'",item.TodoEmps); //到达人员.
+                    this.AddTD("title='"+emps+"'",emps); //到达人员.
                     this.AddTD(BP.DA.DataType.ParseSysDate2DateTimeFriendly(item.RDT)); //日期.
                     this.AddTD("title='"+item.FlowNote+"'",item.FlowNote); //流程备注.
                     this.AddTREnd();

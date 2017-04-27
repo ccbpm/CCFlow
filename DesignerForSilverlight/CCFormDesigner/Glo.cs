@@ -976,17 +976,21 @@ namespace CCForm
                 if (url.Contains("/XAP"))
                     url = url.Replace("/XAP", "/xap");
             }
-            BrowserInformation info = HtmlPage.BrowserInformation;
-            if (!info.Name.Contains("Netscape"))
-            {
-                HtmlPage.Window.Eval(
-                string.Format("window.showModalDialog('{0}',window,'dialogHeight:{1}px;dialogWidth:{2}px;help:no;scroll:auto;resizable:yes;status:no;');",
-                    url, h, w));
-            }
-            else
-            {
-                WinOpen(url, h, w);
-            }
+
+            WinOpen(url, h, w); //2017-04-27，为解决IE弹出双窗口的问题，均改成用window.open，不用dialog，liuxc
+
+            //BrowserInformation info = HtmlPage.BrowserInformation;
+
+            //if (!info.Name.Contains("Netscape"))
+            //{
+            //    HtmlPage.Window.Eval(
+            //    string.Format("window.showModalDialog('{0}',window,'dialogHeight:{1}px;dialogWidth:{2}px;help:no;scroll:auto;resizable:yes;status:no;');",
+            //        url, h, w));
+            //}
+            //else
+            //{
+            //    WinOpen(url, h, w);
+            //}
         }
         public static void WinOpen(string url, int h = 0, int w = 0)
         {

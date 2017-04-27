@@ -23,6 +23,20 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 考核超时规则.
+        public string CHOvertimeRole_Init()
+        {
+            BP.WF.Node nd = new Node(this.FK_Node);
+
+            return nd.ToJson();
+        }
+        public string CHOvertimeRole_Save()
+        {
+            BP.WF.Node nd = new Node(this.FK_Node);
+            return nd.ToJson();
+        }
+        #endregion
+
         #region 考核规则.
         public string CHRole_Init()
         {
@@ -296,9 +310,6 @@ namespace BP.WF.HttpHandler
 
             return nd.ToJson();
         }
-        #endregion
-
-        #region 发送阻塞模式save
         public string BlockModel_Save()
         {
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
@@ -354,9 +365,6 @@ namespace BP.WF.HttpHandler
 
             return "{\"mynd\":" + mynd.ToJson() + ",\"rnds\":" + rnds.ToJson() + ",\"nds\":" + nds.ToJson() + "}";
         }
-        #endregion
-
-        #region 可以撤销的节点save
         public string CanCancelNodes_Save()
         {
             BP.WF.Template.NodeCancels rnds = new BP.WF.Template.NodeCancels();
@@ -385,6 +393,53 @@ namespace BP.WF.HttpHandler
             return "设置成功.";
         }
         #endregion
+
+
+        #region 可以退回的节点
+        public string CanReturnNodes_Init()
+        {
+
+            BP.WF.Node mynd = new BP.WF.Node();
+            mynd.NodeID = this.FK_Node;
+            mynd.RetrieveFromDBSources();
+
+            BP.WF.Template.NodeReturns rnds = new BP.WF.Template.NodeReturns();
+            rnds.Retrieve(NodeReturnAttr.FK_Node, this.FK_Node);
+
+            BP.WF.Nodes nds = new Nodes();
+            nds.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FK_Flow);
+
+            return "{\"mynd\":" + mynd.ToJson() + ",\"rnds\":" + rnds.ToJson() + ",\"nds\":" + nds.ToJson() + "}";
+        }
+        public string CanReturnNodes_Save()
+        {
+            BP.WF.Template.NodeReturns rnds = new BP.WF.Template.NodeReturns();
+            rnds.Delete(BP.WF.Template.NodeReturnAttr.FK_Node, this.FK_Node);
+
+            BP.WF.Nodes nds = new Nodes();
+            nds.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, this.FK_Flow);
+
+            int i = 0;
+            foreach (BP.WF.Node nd in nds)
+            {
+                string cb = this.GetRequestVal("CB_" + nd.NodeID);
+                if (cb == null || cb == "")
+                    continue;
+
+                NodeReturn nr = new NodeReturn();
+                nr.FK_Node = this.FK_Node;
+                nr.ReturnTo = nd.NodeID;
+                nr.Insert();
+                i++;
+            }
+            if (i == 0)
+            {
+                return "请您选择要撤销的节点。";
+            }
+            return "设置成功.";
+        }
+        #endregion
+
 
         #region 消息事件
         public string PushMessage_Init()

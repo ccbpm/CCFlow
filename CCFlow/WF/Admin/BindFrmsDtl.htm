@@ -11,17 +11,28 @@
     <script type="text/javascript" language="javascript">
         //绑定流程所有节点
         function InitFlowNodes(FK_Flow, FK_Node) {
+
+
             var param = {
-                DoType: "Gender_FlowNode",
+                DoType: "BindForm_GenderFlowNode",
                 FK_Flow: FK_Flow
             };
             Handler_AjaxQueryData(param, function (data, scope) {
+
+
+                //提示错误.
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+
+                //转化数据.
                 var pushData = eval('(' + data + ')');
                 var objSelect = document.getElementById("lbFlowNodes");
                 if (pushData.length > 0) {
                     $.each(pushData, function (index, val) {
-                        var varItem = new Option("[" + val.No + "]" + val.Name, val.No);
-                        if (FK_Node && FK_Node == val.No) {
+                        var varItem = new Option("[" + val.NodeID + "]" + val.Name, val.NodeID);
+                        if (FK_Node && FK_Node == val.NodeID) {
                             varItem.selected = "selected";
                         }
                         objSelect.options.add(varItem);
@@ -33,7 +44,7 @@
         //绑定表单库
         function InitFormTree(FK_Flow, FK_Node) {
             var param = {
-                DoType: "Gener_BindForms",
+                DoType: "BindForm_GenerForms",
                 FK_Flow: FK_Flow,
                 FK_Node: FK_Node
             };
@@ -105,7 +116,7 @@
                 var options = document.getElementById("lbFlowNodes").options;
                 if (selectIndex >= 0) {
                     var param = {
-                        DoType: "Save_BindForms",
+                        DoType: "BindForm_SaveBindForms",
                         FK_Flow: FK_Flow,
                         FK_Node: options[selectIndex].value,
                         formNos: formNos
@@ -132,13 +143,18 @@
         $(function () {
             var FK_Flow = Application.common.getArgsFromHref("FK_Flow");
             var FK_Node = Application.common.getArgsFromHref("FK_Node");
+
+            //初始化节点.
             InitFlowNodes(FK_Flow, FK_Node);
+
+            //初始化表单树.
             InitFormTree(FK_Flow, FK_Node);
 
             //查询 事件 
             $('#QueryFlowNodes').bind('click', function () {
                 QueryFlowNodes();
             });
+
             //保存 事件
             $('#saveBindTree').bind('click', function () {
                 SaveBindTreeToNode();

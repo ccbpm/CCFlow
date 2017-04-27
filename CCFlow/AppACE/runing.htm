@@ -67,7 +67,7 @@
                 url: Handler + "?DoType=Runing_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
+                    //console.info(data);
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -88,8 +88,8 @@
 
                         newRow += "<td>" + data[i].RDT + "</td>";
                         newRow += "<td>";
-                        newRow += "<a href=\"javascript:UnSend('" + data[i].WORKID + "')\"><img src='../WF/Img/Action/UnSend.png' border=0 />撤销</a>";
-                        newRow += "<a href=\"javascript:Press('" + data[i].WORKID + "')\"><img src='../WF/Img/Action/Press.png' border=0 />催办</a>";
+                        newRow += "<a href=\"javascript:UnSend('" + data[i].WORKID + "','" + data[i].FK_FLOW + "')\"><img src='../WF/Img/Action/UnSend.png' border=0 />撤销</a>";
+                        newRow += "<a href=\"javascript:Press('" + data[i].WORKID + "','" + data[i].FK_FLOW + "')\"><img src='../WF/Img/Action/Press.png' border=0 />催办</a>";
                         newRow += "</td>";
                         newRow += "</tr>";
                     }
@@ -107,16 +107,16 @@
             window.location.href = url;
         }
         // 撤销。
-        function UnSend(appPath, pageID, fid, workid, fk_flow) {
+        function UnSend(workid, fk_flow) {
             if (window.confirm('您确定要撤销本次发送吗？') == false)
                 return;
-            var url = appPath + 'WF/Do.aspx?DoType=UnSend&FID=' + fid + '&WorkID=' + workid + '&FK_Flow=' + fk_flow + '&PageID=' + pageID;
+            var url = '../WF/Do.aspx?DoType=UnSend&WorkID=' + workid + '&FK_Flow=' + fk_flow;
             window.location.href = url;
             return;
         }
-        function Press(appPath, fid, workid, fk_flow) {
-            var url = appPath + 'WF/WorkOpt/Press.htm?FID=' + fid + '&WorkID=' + workid + '&FK_Flow=' + fk_flow;
-            var v = window.showModalDialog(url, 'sd', 'dialogHeight: 200px; dialogWidth: 350px;center: yes; help: no');
+        function Press(workid, fk_flow) {
+            var url = '../WF/WorkOpt/Press.jsp?WorkID=' + workid + '&FK_Flow=' + fk_flow;
+            var v = window.showModalDialog(url, 'sd', 'dialogHeight: 400px; dialogWidth: 550px;center: yes; help: no');
         }
 
 

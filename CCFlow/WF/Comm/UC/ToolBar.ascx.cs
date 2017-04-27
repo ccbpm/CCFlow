@@ -582,9 +582,9 @@ namespace CCFlow.WF.Comm.UC
                 if (string.IsNullOrEmpty(dtTo) == true)
                 {
                     if (dw == DTSearchWay.ByDate)
-                        dtFrom = "2999-01-01";
+                        dtTo = "2999-01-01";
                     else
-                        dtFrom = "2999-01-01 01:01";
+                        dtTo = "2999-01-01 01:01";
                 }
 
 

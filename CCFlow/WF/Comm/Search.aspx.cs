@@ -236,7 +236,7 @@ namespace CCFlow.Web.Comm
                 }
             }
 
-            if (this.Request.QueryString["Key"] != null)
+            if (this.Request.QueryString["Key"] != null && this.DoType != "Exp")
             {
                 this.ToolBar1.GetTBByID("TB_Key").Text = this.Request.QueryString["Key"];
                 isChange = true;
@@ -274,7 +274,7 @@ namespace CCFlow.Web.Comm
             if (this.DoType == "Exp")
             {
                 /*如果是导出，就把它导出到excel.*/
-                string filePath = this.ExportDGToExcel(qo.DoQueryToTable(), en.EnMap, en.EnDesc + "数据导出");
+                string filePath = this.ExportDGToExcel(qo.DoQueryToTable(), en, en.EnDesc + "数据导出");
                 this.WinClose(filePath);
                 return null;
             }

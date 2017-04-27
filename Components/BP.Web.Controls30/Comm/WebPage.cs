@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
+using System.Linq;
 using System.IO;
 using System.Data;
 using System.Web.UI.WebControls;
@@ -500,7 +502,7 @@ namespace BP.Web
             }
             this.WinOpen(this.Request.ApplicationPath + "/Temp/" + fileNameS);
         }
-        protected string ExportDGToExcel(System.Data.DataTable dt, Map map, string title)
+        protected string ExportDGToExcel(System.Data.DataTable dt, Entity en, string title)
         {
             string filename = title + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";//"Ep" + this.Session.SessionID + ".xls";
             string file = filename;
@@ -518,6 +520,9 @@ namespace BP.Web
 
             filename = filepath + filename;
 
+            if (File.Exists(filename))
+                File.Delete(filename);
+
             FileStream objFileStream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write);
             StreamWriter objStreamWriter = new StreamWriter(objFileStream, System.Text.Encoding.Unicode);
             #endregion
@@ -525,32 +530,55 @@ namespace BP.Web
             #region 生成导出文件
             try
             {
+                Attrs attrs = en.EnMap.Attrs;
+                IEnumerable<Attr> selectedAttrs = null;
+                BP.Sys.UIConfig cfg = new UIConfig(en);
+
+                if (cfg.ShowColumns.Length == 0)
+                    selectedAttrs = attrs.Cast<Attr>();
+                else
+                    selectedAttrs = attrs.Cast<Attr>().Where(a => cfg.ShowColumns.Contains(a.Key));
+
                 objStreamWriter.WriteLine();
                 objStreamWriter.WriteLine(Convert.ToChar(9) + title + Convert.ToChar(9));
                 objStreamWriter.WriteLine();
                 string strLine = "";
-                //生成文件标题
-                for (int i = 0; i < dt.Columns.Count; i++)
-                {
-                    //strLine = strLine + dt.Columns[i].HeaderText + Convert.ToChar(9);
 
-                    foreach (Attr attr in map.Attrs)
-                    {
-                        if (attr.Key == dt.Columns[i].ColumnName)
-                        {
-                            strLine = strLine + attr.Desc + Convert.ToChar(9);
-                        }
-                    }
+                //生成文件标题
+                foreach (Attr attrT in selectedAttrs)
+                {
+                    if (attrT.UIVisible == false)
+                        continue;
+
+                    if (attrT.Key == "MyNum")
+                        continue;
+
+                    strLine = strLine + attrT.Desc + Convert.ToChar(9);
                 }
 
                 objStreamWriter.WriteLine(strLine);
                 strLine = "";
+
                 foreach (DataRow dr in dt.Rows)
                 {
-                    foreach (Attr attr in map.Attrs)
+                    foreach (Attr attr in selectedAttrs)
                     {
-                        strLine = strLine + dr[attr.Key] + Convert.ToChar(9);
+                        if (attr.UIVisible == false)
+                            continue;
+
+                        if (attr.Key == "MyNum")
+                            continue;
+
+                        if (attr.MyDataType == DataType.AppBoolean)
+                        {
+                            strLine = strLine + (dr[attr.Key].Equals(1) ? "是" : "否") + Convert.ToChar(9);
+                        }
+                        else
+                        {
+                            strLine = strLine + dr[attr.IsFKorEnum ? (attr.Key + "Text") : attr.Key] + Convert.ToChar(9);
+                        }
                     }
+
                     objStreamWriter.WriteLine(strLine);
                     strLine = "";
                 }

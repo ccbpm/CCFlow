@@ -158,7 +158,7 @@ namespace CCFlow.Web.WF.Comm
             if (this.DoType == "Exp")
             {
                 /*如果是导出，就把它导出到excel.*/
-                this.ExportDGToExcel(qo.DoQueryToTable(), en.EnMap, en.EnDesc + "数据导出");
+                this.ExportDGToExcel(qo.DoQueryToTable(), en, en.EnDesc + "数据导出");
                 this.WinClose();
                 return;
             }

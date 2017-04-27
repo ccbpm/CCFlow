@@ -119,23 +119,26 @@
                     </fieldset>
                     <fieldset>
                         <legend>
-                            <input type="radio" ID="RB_TurnToDeal_1" name="TurnToDeal" runat="server" value="1"
-                                onClick="rb_onchange(1)" />提示指定信息
-                        </legend><a href="javascript:ShowHidden('SpecMsg')">输入提示的信息:</a>
+                            <input type="radio" ID="RB_TurnToDeal_1" name="TurnToDeal"  value="1"
+                                onClick="rb_onchange(1)" />提示指定信息 - <a href="javascript:ShowHidden('SpecMsg')">帮助:</a>
+                        </legend>
                         <div id="SpecMsg" style="display: none">
                             <ul style="color: Gray">
                                 <li>按照您定义的信息格式，提示给已经操作完成的用户。</li>
                                 <li>比如：您的申请已经发送至XXX用户进行审批。 </li>
                                 <li>该自定义信息支持ccbpm的表达式，具体可参考右侧帮助文档。 </li>
+                                <li>发送后系统变量如下: </li>
+                                <li>您可以设置为: 当前工作提交给:【 @VarAcceptersName 】处理. </li>
                             </ul>
+                           
                         </div>
                         <input type="text" ID="TB_SpecMsg" name="TB_SpecMsg" runat="server" TextMode="MultiLine" Rows=3  style="width:90%"/>
                     </fieldset>
                     <fieldset>
                         <legend>
                             <input type="radio" ID="RB_TurnToDeal_2" name="TurnToDeal" runat="server" value="2"
-                                onClick="rb_onchange(2)" />转向指定的URL
-                        </legend><a href="javascript:ShowHidden('SpecUrl')">输入提示的信息:</a>
+                                onClick="rb_onchange(2)" />转向指定的URL - <a href="javascript:ShowHidden('SpecUrl')">帮助:</a>
+                        </legend>
                         <div id="SpecUrl" style="display: none">
                             <ul style="color: Gray">
                                 <li>按照您定义的url转向，可处理较为复杂的业务逻辑处理。</li>
@@ -155,6 +158,49 @@
                             <li><a href="http://ccbpm.mydoc.io/?v=5404&t=17914" target="_blank">转向指定的URL</a></li>
                         </ul>
                     </fieldset>
+
+
+                     <fieldset>
+                        <legend>发送后系统参数</legend>
+                        <table>
+                            <tr> <th>变量名</th> <th>中文名</th> </tr>
+                            <tr> 
+                            <td>VarCurrNodeID</td>	 
+                            <td>当前节点ID</td>	 
+                            </tr> 
+
+                             <tr> 
+                            <td>VarCurrNodeName</td>	 
+                            <td>当前节点名称</td>	 
+                            </tr> 
+
+                             <tr> 
+                            <td>VarToNodeID</td>	 
+                            <td>到达节点ID</td>	 
+                            </tr> 
+
+                             <tr> 
+                            <td>VarToNodeName</td>	 
+                            <td>到达节点名称</td>	 
+                            </tr> 
+
+                             <tr> 
+                            <td>VarAcceptersName</td>	 
+                            <td>接受人集合的名称(用逗号分开)</td>	 
+                            </tr> 
+
+                             <tr> 
+                            <td>VarAcceptersID</td>	 
+                            <td>接受人集合的ID(用逗号分开)</td>	 
+                            </tr> 
+
+                             <tr> 
+                            <td>VarAcceptersNID</td>	 
+                            <td>接受人集合的ID&Name(用逗号分开)</td>	 
+                            </tr> 
+                            </table>
+                    </fieldset>
+
                 </td>
             </tr>
             <tr>

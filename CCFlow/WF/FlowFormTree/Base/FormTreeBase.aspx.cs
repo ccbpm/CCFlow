@@ -799,9 +799,15 @@ namespace CCFlow.WF.FlowFormTree
                     case FrmEnableRole.WhenHaveFrmPara: //判断是否有参数.
                         string frms = this.Request.QueryString["Frms"];
 
-                        //修改算法：解决 frmID = ABC  frmID=AB 的问题.
+                        //修改算法：解决 frmID =ABC  frmID=AB 的问题.
                         if (string.IsNullOrEmpty(frms)==true)
                             continue;
+
+                        frms = frms.Trim();
+
+                        frms = frms.Replace(" ", "");
+                        frms = frms.Replace(" ", "");
+
 
                         if (frms.Contains(",") == false )
                         {

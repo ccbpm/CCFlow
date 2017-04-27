@@ -176,7 +176,12 @@ namespace BP.Sys
             dtl.No = dtlNo;
 
             if (dtl.RetrieveFromDBSources() == 0)
+            {
+                if (dtlName == null)
+                    dtlName = dtlNo;
+
                 dtl.W = 500;
+            }
 
             dtl.X = x;
             dtl.Y = y;

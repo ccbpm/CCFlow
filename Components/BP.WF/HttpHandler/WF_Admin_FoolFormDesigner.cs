@@ -40,6 +40,21 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_FoolFormDesigner : WebContralBase
     {
         /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string MapDefDtlFreeFrm_Init()
+        {
+            MapDtl md = new Sys.MapDtl();
+            md.No = this.FK_MapDtl;
+            if (md.RetrieveFromDBSources() != 0)
+                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, md.Name, 100, 200);
+            else
+                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, this.FK_MapDtl, md.X, md.Y);
+
+            return "创建成功.";
+        }
+        /// <summary>
         /// 初始化数据
         /// </summary>
         /// <param name="mycontext"></param>

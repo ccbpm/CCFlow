@@ -896,8 +896,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoAdv()
         {
-            return "/WF/Admin/FoolFormDesigner/Attachment.htm?FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK + "&Ath=" + this.NoOfObj;
-            //   var url = 'Attachment.htm?FK_MapData=' + fk_mapdata + '&Ath=' + ath;
+            return "/WF/Admin/FoolFormDesigner/Attachment.aspx?FK_MapData=" + this.FK_MapData + "&MyPK=" + this.MyPK + "&Ath=" + this.NoOfObj;
         }
 
         public bool IsUse = false;

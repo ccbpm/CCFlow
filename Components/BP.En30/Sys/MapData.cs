@@ -2626,7 +2626,7 @@ namespace BP.Sys
 	/// <summary>
 	/// 映射基础s
 	/// </summary>
-	public class MapDatas : EntitiesMyPK
+	public class MapDatas : EntitiesNoName
 	{
 		#region 构造
 		/// <summary>

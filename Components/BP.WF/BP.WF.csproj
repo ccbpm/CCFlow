@@ -183,6 +183,7 @@
     </Compile>
     <Compile Include="Template\Direction.cs" />
     <Compile Include="Template\FlowSort.cs" />
+    <Compile Include="Template\FrmNodeExt.cs" />
     <Compile Include="Template\TemplateGlo.cs">
       <SubType>Code</SubType>
     </Compile>

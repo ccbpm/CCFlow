@@ -981,9 +981,7 @@
     <Content Include="WF\Admin\AttrNode\BatchStartFields.htm" />
     <Content Include="WF\Admin\AttrNode\Bill.aspx" />
     <Content Include="WF\Admin\AttrNode\BlockModel.htm" />
-    <Content Include="WF\Admin\AttrNode\CanCancelNodes.aspx" />
     <Content Include="WF\Admin\AttrNode\CanCancelNodes.htm" />
-    <Content Include="WF\Admin\AttrNode\CanReturnNodes.aspx" />
     <Content Include="WF\Admin\AttrNode\CanReturnNodes.htm" />
     <Content Include="WF\Admin\AttrNode\CHOvertimeRole.aspx" />
     <Content Include="WF\Admin\AttrNode\CHOvertimeRole.htm" />
@@ -1014,9 +1012,7 @@
     <Content Include="WF\Admin\AttrNode\TurnTo.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnTo.htm" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
-    <Content Include="WF\Admin\BindFrms.aspx" />
     <Content Include="WF\Admin\BindFrms.htm" />
-    <Content Include="WF\Admin\BindFrmsFrmEnableRole.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\content-background.jpg" />
@@ -8839,20 +8835,6 @@
     <Compile Include="WF\Admin\AttrNode\Bill.aspx.designer.cs">
       <DependentUpon>Bill.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrNode\CanCancelNodes.aspx.cs">
-      <DependentUpon>CanCancelNodes.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\CanCancelNodes.aspx.designer.cs">
-      <DependentUpon>CanCancelNodes.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\CanReturnNodes.aspx.cs">
-      <DependentUpon>CanReturnNodes.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\CanReturnNodes.aspx.designer.cs">
-      <DependentUpon>CanReturnNodes.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\AttrNode\CHOvertimeRole.aspx.cs">
       <DependentUpon>CHOvertimeRole.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8925,20 +8907,6 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\TurnTo.aspx.designer.cs">
       <DependentUpon>TurnTo.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\BindFrms.aspx.cs">
-      <DependentUpon>BindFrms.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\BindFrms.aspx.designer.cs">
-      <DependentUpon>BindFrms.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\BindFrmsFrmEnableRole.aspx.cs">
-      <DependentUpon>BindFrmsFrmEnableRole.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\BindFrmsFrmEnableRole.aspx.designer.cs">
-      <DependentUpon>BindFrmsFrmEnableRole.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>

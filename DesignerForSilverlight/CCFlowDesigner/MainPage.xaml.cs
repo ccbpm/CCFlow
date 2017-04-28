@@ -1611,7 +1611,7 @@ namespace BP
                         case "Frm_EditForm": //表单属性.
                             //string url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDataExts&PK=" + selectedNode.ID;
                             string url = "/WF/Admin/CCFormDesigner/FrmAttr.aspx?FrmID=" + selectedNode.ID;
-                            Glo.OpenDialog(url, "表单属性");
+                            Glo.OpenDialog(url, "表单属性", 600, 1000);
                             return;
                         case "Frm_NewForm": //新建表单
                             BP.Frm.Frm frm1 = new BP.Frm.Frm();
@@ -1700,7 +1700,7 @@ namespace BP
                             imp.Show();
                             break;
                         case "Frm_FormSln":
-                            Glo.OpenDialog("/WF/Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + selectedNode.ID, "表单权限方案");
+                            Glo.OpenDialog("/WF/Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + selectedNode.ID, "表单权限方案", 600, 1000);
                             break;
                         default:
                             MessageBox.Show("功能未完成:" + Glo.TempCmd);

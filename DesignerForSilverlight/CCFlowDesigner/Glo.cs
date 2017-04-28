@@ -523,35 +523,36 @@ namespace BP
             {
                 if (windowModel == WindowModelEnum.Dialog)
                 {
-                    BrowserInformation info = HtmlPage.BrowserInformation;
-                    if (!info.Name.Contains("Netscape"))
-                    {
-                        HtmlPage.Window.Eval(
-                        string.Format("window.showModalDialog('{0}',window,'dialogHeight:" + height + "px;dialogWidth:" + width + "px;help:no;scroll:auto;resizable:yes;status:no;');",
-                            url));
-                    }
-                    else
-                    {
+                    OpenWindow(url, title, height, width);
+                    //BrowserInformation info = HtmlPage.BrowserInformation;
+                    //if (!info.Name.Contains("Netscape"))
+                    //{
+                    //    HtmlPage.Window.Eval(
+                    //    string.Format("window.showModalDialog('{0}',window,'dialogHeight:" + height + "px;dialogWidth:" + width + "px;help:no;scroll:auto;resizable:yes;status:no;');",
+                    //        url));
+                    //}
+                    //else
+                    //{
 
-                        //HtmlPage.Window.Invoke("showDialog", url, title, height, width);
-                        OpenWindow(url, title, height, width);
-                        return;
-                        //HtmlPopupWindowOptions options = new HtmlPopupWindowOptions()
-                        //{
-                        //    Directories = false,
-                        //    Location = false,
-                        //    Menubar = false,
-                        //    Status = false,
-                        //    Toolbar = false,
-                        //    Width = 1024,
-                        //    Height = 600,
-                        //    Scrollbars = true,
-                        //    Resizeable = false
-                        //};
-                        //options.Left = (Glo.ScreenWidth - options.Width) / 2;
-                        //options.Top = (Glo.ScreenHeight - options.Height) / 2;
-                        //HtmlPage.PopupWindow(new Uri(url), "self", options);
-                    }
+                    //    //HtmlPage.Window.Invoke("showDialog", url, title, height, width);
+                    //    OpenWindow(url, title, height, width);
+                    //    return;
+                    //    //HtmlPopupWindowOptions options = new HtmlPopupWindowOptions()
+                    //    //{
+                    //    //    Directories = false,
+                    //    //    Location = false,
+                    //    //    Menubar = false,
+                    //    //    Status = false,
+                    //    //    Toolbar = false,
+                    //    //    Width = 1024,
+                    //    //    Height = 600,
+                    //    //    Scrollbars = true,
+                    //    //    Resizeable = false
+                    //    //};
+                    //    //options.Left = (Glo.ScreenWidth - options.Width) / 2;
+                    //    //options.Top = (Glo.ScreenHeight - options.Height) / 2;
+                    //    //HtmlPage.PopupWindow(new Uri(url), "self", options);
+                    //}
                 }
                 else if (windowModel == WindowModelEnum.Max)
                 {

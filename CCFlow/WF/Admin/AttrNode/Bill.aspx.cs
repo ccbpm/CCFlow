@@ -508,7 +508,7 @@ namespace CCFlow.WF.Admin
                 {
                     fileUrl = "<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID +
                             "&DoType=Edit&RefNo=" + Bill.No +
-                            "'><img src='../../Img/Btn/Edit.gif' border=0/编辑/a>|<a href='../../DataUser/CyclostyleFile/" +
+                            "'><img src='../../Img/Btn/Edit.gif' border=0/编辑/a>|<a href='/DataUser/CyclostyleFile/" +
                             Bill.Url + ".rtf'><img src='../../Img/Btn/save.gif' border=0/> 模板下载</a>";
                 }
                 this.Ucsys1.AddTD("<img src='../../Img/Btn/Word.gif' >" + Bill.Name);

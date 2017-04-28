@@ -825,8 +825,10 @@ namespace BP.WF.HttpHandler
         }
 
         //多附件上传方法
-        public void MoreAttach(HttpContext context, string attachPk, Int64 workid, Int64 fid, int fk_node, string ensNamestring, string fk_flow, string pkVal)
+        public void MoreAttach()
         {
+            string PKVal = this.GetRequestVal("PKVal");
+            string attachPk = this.getUTF8ToString("AttachPK");
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
 
@@ -838,14 +840,14 @@ namespace BP.WF.HttpHandler
                     /*如果有变量*/
                     savePath = savePath.Replace("*", "@");
                     GEEntity en = new GEEntity(athDesc.FK_MapData);
-                    en.PKVal = pkVal;
+                    en.PKVal = PKVal;
                     en.Retrieve();
                     savePath = BP.WF.Glo.DealExp(savePath, en, null);
 
                     if (savePath.Contains("@") && this.FK_Node != 0)
                     {
                         /*如果包含 @ */
-                        BP.WF.Flow flow = new BP.WF.Flow(fk_flow);
+                        BP.WF.Flow flow = new BP.WF.Flow(this.FK_Flow);
                         BP.WF.Data.GERpt myen = flow.HisGERpt;
                         myen.OID = this.WorkID;
                         myen.RetrieveFromDBSources();
@@ -856,7 +858,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    savePath = athDesc.SaveTo + "\\" + pkVal;
+                    savePath = athDesc.SaveTo + "\\" + PKVal;
                 }
 
                 //替换关键的字串.
@@ -899,7 +901,7 @@ namespace BP.WF.HttpHandler
 
                 FrmAttachmentDB dbUpload = new FrmAttachmentDB();
                 dbUpload.MyPK = guid; // athDesc.FK_MapData + oid.ToString();
-                dbUpload.NodeID = fk_node.ToString();
+                dbUpload.NodeID = this.FK_Node.ToString();
                 dbUpload.FK_FrmAttachment = attachPk;
                 dbUpload.FK_MapData = athDesc.FK_MapData;
                 dbUpload.FK_FrmAttachment = attachPk;
@@ -924,7 +926,7 @@ namespace BP.WF.HttpHandler
                 dbUpload.RDT = DataType.CurrentDataTimess;
                 dbUpload.Rec = BP.Web.WebUser.No;
                 dbUpload.RecName = BP.Web.WebUser.Name;
-                dbUpload.RefPKVal = pkVal;
+                dbUpload.RefPKVal = PKVal;
                 dbUpload.FID = this.FID;
 
                 //if (athDesc.IsNote)

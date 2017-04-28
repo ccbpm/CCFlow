@@ -691,7 +691,7 @@ namespace CCFlow.WF.Rpt
                         //获取流程绑定的表单库中的表单信息
                         List<string> listFrms = new List<string>(); //存储绑定表单mapdata编号
                         FrmNodes frms = new FrmNodes();
-                        frms.Retrieve(FrmNodeAttr.FK_Flow, FK_Flow, FrmNodeAttr.IsEnable, 1);
+                        frms.Retrieve(FrmNodeAttr.FK_Flow, FK_Flow );
 
                         foreach (FrmNode fn in frms)
                         {

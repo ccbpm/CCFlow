@@ -278,6 +278,7 @@ namespace CCFlow.WF.Admin
             #endregion 如果没有ndFrm 就增加上.
 
             string tfModel = SystemConfig.AppSettings["TreeFrmModel"];
+
             this.Pub1.AddTable("width=100%");
             this.Pub1.AddCaption("设置节点:(" + nd.Name + ")绑定表单");
             this.Pub1.AddTR();

@@ -534,7 +534,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "../WF/WorkOpt/forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "askfor":
-                $('#modalHeader').text("工作移交");
+                $('#modalHeader').text("加签");
                 modalIframeSrc = "../WF/WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "accepter":
@@ -2275,6 +2275,20 @@ function GenerWorkNode() {
                     $('#CCForm').append(createdConnector);
                 }
 
+                //循环之前的提示信息
+                for (var i in flow_Data.AlertMsg) {
+                    var alertMsg = flow_Data.AlertMsg[i];
+                    var alertMsgEle = figure_Template_MsgAlert(alertMsg);
+                    $('#lastOptMsg').append(alertMsgEle);
+                }
+                //循环Sys_MapFrame
+                for (var i in flow_Data.Sys_MapFrame) {
+                    var frame = flow_Data.Sys_MapFrame[i];
+                    var alertMsgEle = figure_Template_IFrame(frame);
+                    $('#lastOptMsg').append(alertMsgEle);
+                }
+                
+
                 //循环组件 轨迹图 审核组件 子流程 子线程
                 $('#CCForm').append(figure_Template_FigureFlowChart(flow_Data["WF_Node"][0]));
                 $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_Node"][0]));
@@ -2929,6 +2943,14 @@ function figure_Template_IFrame(fram) {
 
     eleHtml.css('position', 'absolute').css('top', fram.Y).css('left', fram.X).css('width', fram.W).css('height', fram.H);
     return frameHtml;
+}
+
+function figure_Template_MsgAlert(msgAlert) {
+    var eleHtml = $('<div></div>');
+    var titleSpan = $('<span>' + msgAlert.Title + '</span>');
+    var msgDiv = $('<div>' + msgAlert.Msg + '</div>');
+    eleHtml.append(titleSpan).append(msgDiv)
+    return eleHtml;
 }
 
 //处理URL，MainTable URL 参数 替换问题

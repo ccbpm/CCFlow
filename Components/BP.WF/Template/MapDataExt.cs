@@ -1085,6 +1085,16 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "重命表单ID";
+                //  rm.GroupName = "高级设置";
+                rm.HisAttrs.AddTBString("NewFrmID1", null, "新表单ID名称", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("NewFrmID2", null, "确认表单ID名称", true, false, 0, 100, 100);
+                rm.ClassMethodName = this.ToString() + ".DoChangeFrmID";
+                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/ReName.png";
+                map.AddRefMethod(rm);
+
+
                 #endregion 方法 - 基本功能.
 
 
@@ -1161,6 +1171,43 @@ namespace BP.WF.Template
         #endregion
 
         #region 方法.
+        /// <summary>
+        /// 重命名
+        /// </summary>
+        /// <param name="frmID1"></param>
+        /// <param name="frmID2"></param>
+        /// <returns></returns>
+        public string DoChangeFrmID(string frmID1, string frmID2)
+        {
+            MapData md = new MapData();
+            md.No = frmID1;
+            if (md.IsExits == true)
+                return "表单ID【" + frmID1 + "】已经存在";
+
+            if (frmID1 != frmID2)
+                return "两次输入的ID不一致.";
+
+
+            string frmIDOld = this.No;
+
+            string sqls = "";
+            sqls += "@UPDATE Sys_MapData SET No='" + frmID1 + "' WHERE No='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmLine SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmLab SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmBtn SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_MapAttr SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_MapExt SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmImg SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmImgAth SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmRB SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_MapDtl SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_MapFrame SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmEle SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmEvent SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            BP.DA.DBAccess.RunSQLs(sqls);
+
+            return "重命名成功，你需要关闭窗口重新刷新。";
+        }
         /// <summary>
         /// 替换名称
         /// </summary>

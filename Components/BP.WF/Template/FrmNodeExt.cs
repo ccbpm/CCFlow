@@ -27,6 +27,7 @@ namespace BP.WF.Template
             {
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
+                uac.IsInsert = false;
                 return uac;
             }
         }
@@ -63,10 +64,7 @@ namespace BP.WF.Template
 
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, false);
-
-              //  map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);
-
-                map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, true);
+                map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, false);
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
@@ -82,34 +80,32 @@ namespace BP.WF.Template
                 // add 2014-01-26
 
                 //add 2016.3.25.
-                map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？", true, true);
-
-                map.AddTBInt(FrmNodeAttr.Is1ToN, 0, "是否1变N？", true, false);
-                map.AddTBString(FrmNodeAttr.HuiZong, null, "子线程要汇总的数据表", true, true, 0, 300, 20);
-
-                map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "表单启用规则?", true, true);
-
-                //map.AddTBString(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, true, 0, 900, 20);
-
+                map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？(分流节点有效)", true, true,true);
+                map.AddTBString(FrmNodeAttr.HuiZong, null, "子线程要汇总的数据表(子线程节)", true, true, 0, 300, 20);
+             
                 //模版文件，对于office表单有效.
                 map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, true, 0, 500, 20);
 
                 //是否显示
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan,null,"关键字段",true,true,0,20,20);
 
+                #region 表单启用规则.
+                map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "表单启用规则?", true, true);
+                map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, true,true);
+                #endregion 表单启用规则.
 
-                RefMethod rm = new RefMethod();
-                rm.Title = "启用规则";
-                rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "自定义方案";
-                rm.ClassMethodName = this.ToString() + ".DoSelfSln()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
+                //RefMethod rm = new RefMethod();
+                //rm.Title = "启用规则";
+                //rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
+                //rm = new RefMethod();
+                //rm.Title = "自定义方案";
+                //rm.ClassMethodName = this.ToString() + ".DoSelfSln()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;

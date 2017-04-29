@@ -793,7 +793,8 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
         {
             try
             {
-                string s = BP.DA.DataType.ParseStringToPinyin(name);
+                string s = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
+                //  string s = BP.DA.DataType.ParseStringToPinyin(name);
                 if (s.Length > 15)
                     s = BP.DA.DataType.ParseStringToPinyinWordFirst(name);
                 return s;

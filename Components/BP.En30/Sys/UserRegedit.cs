@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BP.DA;
 using BP.En;
 using BP;
+using BP.Web;
 namespace BP.Sys
 {
 	/// <summary>
@@ -424,6 +425,52 @@ namespace BP.Sys
             }
 
             return kvs;
+        }
+
+        /// <summary>
+        /// 获取当前用户是否具有导入数据的权限
+        /// <para>added by liuxc,2017-04-30</para>
+        /// <remarks>注意：此权限数据保存于Sys_Regedit.Paras字段中，为@ImpEmpNos=liyan,liping,ligen格式</remarks>
+        /// </summary>
+        /// <param name="ensName">集合类全名，如BP.Port.Emps</param>
+        /// <returns></returns>
+        public static bool HaveRoleForImp(string ensName)
+        {
+            //获取可导入权限
+            UserRegedit ur = new UserRegedit("admin", ensName + "_SearchAttrs");
+            string impEmps = new AtPara(ur.Paras).GetValStrByKey("ImpEmpNos");
+
+            if (string.IsNullOrWhiteSpace(impEmps))
+            {
+                return true;
+            }
+            else
+            {
+                return WebUser.No == "admin" || ("," + impEmps + ",").IndexOf("," + WebUser.No + ",") != -1;
+            }
+        }
+
+        /// <summary>
+        /// 获取当前用户是否具有导出数据的权限
+        /// <para>added by liuxc,2017-04-30</para>
+        /// <remarks>注意：此权限数据保存于Sys_Regedit.Paras字段中，为@ExpEmpNos=liyan,liping,ligen格式</remarks>
+        /// </summary>
+        /// <param name="ensName">集合类全名，如BP.Port.Emps</param>
+        /// <returns></returns>
+        public static bool HaveRoleForExp(string ensName)
+        {
+            //获取可导入权限
+            UserRegedit ur = new UserRegedit("admin", ensName + "_SearchAttrs");
+            string impEmps = new AtPara(ur.Paras).GetValStrByKey("ExpEmpNos");
+
+            if (string.IsNullOrWhiteSpace(impEmps))
+            {
+                return true;
+            }
+            else
+            {
+                return WebUser.No == "admin" || ("," + impEmps + ",").IndexOf("," + WebUser.No + ",") != -1;
+            }
         }
     }
 	/// <summary>

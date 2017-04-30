@@ -69,7 +69,9 @@
         }
 
         $(function () {
-            document.getElementById("ToolBar1_Btn_Excel").href = "#";
+            try{
+                document.getElementById("ToolBar1_Btn_Excel").href = "#";
+            }catch(e){}
             $("#dialogExpFile").hide();
         });
 

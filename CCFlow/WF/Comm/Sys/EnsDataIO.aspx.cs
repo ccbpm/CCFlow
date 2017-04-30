@@ -18,7 +18,7 @@ using BP.Web.Controls;
 using BP.En;
 using BP;
 
-public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
+public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageSession
 {
     public new string EnsName
     {
@@ -139,6 +139,13 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
         btn = new LinkBtn(false, NamesOfBtn.Update, "执行更新方式导入");
         btn.Click += new EventHandler(btn_UpdateIO_Click);
         btn.Attributes["onclick"] = "return window.confirm('您确定要执行吗？ 如果执行现有的数据将会按照主键更新。');";
+        this.Pub1.Add(btn);
+        this.Pub1.AddSpace(1);
+        //added by liuxc,2017-04-30
+        btn = new LinkBtn(false, NamesOfBtn.Add, "执行跳过存在编号方式导入");
+        btn.SetDataOption("iconCls", "'icon-add'");
+        btn.Click += new EventHandler(btn_AddIO_Click);
+        btn.Attributes["onclick"] = "return window.confirm('您确定要执行吗？已存在主键的记录，将会跳过不进行更新。');";
         this.Pub1.Add(btn);
         this.Pub1.AddBR();
         this.Pub1.AddBR();
@@ -308,68 +315,80 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
     }
     protected void Page_Load(object sender, EventArgs e)
     {
+        Entities ens = BP.En.ClassFactory.GetEns(this.EnsName);
+        Entity en = ens.GetNewEntity;
+
         switch (this.DoType)
         {
             case "OutHtml":
-                Entities ens2 = BP.En.ClassFactory.GetEns(this.EnsName);
-                ens2.RetrieveAll();
+                ens.RetrieveAll();
                 this.Pub1.Clear();
-                this.Pub1.BindEns(ens2);
+                this.Pub1.BindEns(ens);
                 return;
             case "OutAll":
-                Entities ens = BP.En.ClassFactory.GetEns(this.EnsName);
+                if (en.HisUAC.IsExp == false)
+                    return;
+
                 ens.RetrieveAll();
                 this.ExportDGToExcel(ens);
                 string file1 = this.ExportDGToExcel(ens);
                 this.Response.Redirect(this.Request.ApplicationPath + "Temp" + "\\" + file1, true);
                 return;
             case "OutCurrent":
-                Entities ens1 = BP.En.ClassFactory.GetEns(this.EnsName);
-                //QueryObject qo = BP.Web.Com
-                ens1.RetrieveAll();
-                string file = this.ExportDGToExcel(ens1);
+                if (en.HisUAC.IsExp == false)
+                    return;
+
+                ens.RetrieveAll();
+                string file = this.ExportDGToExcel(ens);
                 this.Response.Redirect(this.Request.ApplicationPath + "Temp" + "\\" + file, true);
                 return;
             default:
                 break;
         }
 
-        this.Pub1.AddTableNormal();
-        this.Pub1.AddTRGroupTitle(
-            "<a href='EnsAppCfg.aspx?EnsName=" + this.EnsName + "&T=" +
-            DateTime.Now.ToString("yyyyMMddHHmmssfff") +
-            "'>基本配置</a> - <a href='EnsAppCfg.aspx?EnsName=" + this.EnsName +
-            "&DoType=SelectCols&T=" +
-            DateTime.Now.ToString("yyyyMMddHHmmssfff") +
-            "' >选择列</a> - <b>数据导入导出</b>");
-        this.Pub1.AddTableEnd();
+        if (WebUser.No == "admin")
+        {
+            this.Pub1.AddTableNormal();
+            this.Pub1.AddTRGroupTitle(
+                "<a href='EnsAppCfg.aspx?EnsName=" + this.EnsName + "&T=" +
+                DateTime.Now.ToString("yyyyMMddHHmmssfff") +
+                "'>基本配置</a> - <a href='EnsAppCfg.aspx?EnsName=" + this.EnsName +
+                "&DoType=SelectCols&T=" +
+                DateTime.Now.ToString("yyyyMMddHHmmssfff") +
+                "' >选择列</a> - <b>数据导入导出</b>");
+            this.Pub1.AddTableEnd();
+        }
 
         switch (this.Step)
         {
             case "3":
                 break;
             case "2":
-                this.Bind2();
+                if (en.HisUAC.IsImp)
+                    this.Bind2();
                 return;
             case "1":
-                this.Bind1();
+                if (en.HisUAC.IsImp)
+                    this.Bind1();
                 return;
             default:
-                //this.Pub1.AddFieldSet("导入导出选项");
-
                 this.Pub1.AddUL("class='navlist'");
 
-                this.Pub1.AddLi(
-                    "<div><a href='EnsDataIO.aspx?EnsName=" + this.EnsName + "&DoType=OutAll'><span class='nav'>1. 导出全部数据到Excel（把所有的数据导出Excel）</span></a></div>");
-                this.Pub1.AddLi(
-                    "<div><a href='EnsDataIO.aspx?EnsName=" + this.EnsName + "&Step=1'><span class='nav'>2. 执行数据导入（按照固定的格式从Excel中导入数据）</span></a></div>");
+                if (en.HisUAC.IsExp)
+                {
+                    this.Pub1.AddLi(
+                        "<div><a href='EnsDataIO.aspx?EnsName=" + this.EnsName +
+                        "&DoType=OutAll'><span class='nav'>1. 导出全部数据到Excel（把所有的数据导出Excel）</span></a></div>");
+                }
 
-                //this.Pub1.AddLi("<b><a href='EnsDataIO.aspx?EnsName=" + this.EnsName + "&DoType=OutAll' target=_self >导出全部数据到Excel。</a></b><br><font color=green>把所有的数据导出Excel。</font>");
-                //this.Pub1.AddLi("<b><a href='EnsDataIO.aspx?EnsName=" + this.EnsName + "&Step=1' target=_self  >执行数据导入</a></b><br><font color=green>按照固定的格式从Excel中导入数据。</font>");
-
+                if (en.HisUAC.IsImp)
+                {
+                    this.Pub1.AddLi(
+                        "<div><a href='EnsDataIO.aspx?EnsName=" + this.EnsName +
+                        "&Step=1'><span class='nav'>2. 执行数据导入（按照固定的格式从Excel中导入数据）</span></a></div>");
+                }
+                
                 this.Pub1.AddULEnd();
-
-                //this.Pub1.AddFieldSetEndBR();  
                 break;
         }
     }
@@ -377,27 +396,19 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
     {
         HtmlInputFile file = new HtmlInputFile();
         file.ID = "f";
-        //this.Pub1.DivInfoBlockBegin();
-        //this.Pub1.Add("<b>第1/3步：</b>上传Excel数据文件<hr>");
         this.Pub1.AddTableNormal();
         this.Pub1.AddTRGroupTitle("第1/3步：上传Excel数据文件");
         this.Pub1.AddTableEnd();
         this.Pub1.AddBR();
         this.Pub1.Add(file);
         this.Pub1.AddSpace(1);
-        //Button btn = new Button();
-        //btn.CssClass = "Btn";
-        //btn.ID = "Btn_Up";
-        //btn.Text = "上传数据文件";
+
         LinkBtn btn = new LinkBtn(false, NamesOfBtn.Up, "上传数据文件");
         btn.Click += new EventHandler(btn_Click);
         this.Pub1.Add(btn);
-
-        //this.Pub1.DivInfoBlockEnd();
         this.Pub1.AddBR();
         this.Pub1.AddBR();
         this.OutExcel("Excel数据导入模版样本,请制作成Excel 97-2003格式，否则导入不进去.");
-
     }
     void btn_Click(object sender, EventArgs e)
     {
@@ -405,31 +416,30 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
         {
             if (File.Exists(BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xls"))
                 File.Delete(BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xls");
-
-
+            
             if (File.Exists(BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xlsx"))
                 File.Delete(BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xlsx");
-
-
+            
             HtmlInputFile file = this.Pub1.FindControl("f") as HtmlInputFile;
+
             if (file.Value.Contains(".xls"))
             {
                 this.Alert("请上传xls文件。 \t\n" + file.Value);
             }
 
-
             string ext= ".xls";
+
             if ( file.PostedFile.FileName.Contains(".xlsx"))
                 ext=".xlsx";
 
             string filePath = BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS" + ext;
             file.PostedFile.SaveAs(filePath);
             DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, null);
+
             if (dt.Rows.Count == 0)
                 throw new Exception("@读取文件失败，没有数据在文件里。");
 
             this.Response.Redirect("EnsDataIO.aspx?EnsName=" + this.EnsName + "&Step=2", true);
-
             return;
         }
         catch (Exception ex)
@@ -437,6 +447,7 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
             this.ResponseWriteRedMsg("@读取文件错误:" + ex.Message);
         }
     }
+
     public void OutExcel( string desc)
     {
         Entities ens = BP.En.ClassFactory.GetEns(this.EnsName);
@@ -461,31 +472,10 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
             attrs.Add(attr.Key, attr.Desc);
         }
 
-        //string strLine = "<table border=1 style='width:100%' >";
-        //strLine += "<caption>"+desc+"</caption>";
         this.Pub1.AddTableNormal();
         this.Pub1.AddTRGroupTitle(attrs.Count, desc);
         this.Pub1.AddTR();
 
-        //生成文件标题
-        //strLine += "<TR>";
-        //foreach (Attr attr in map.Attrs)
-        //{
-        //    if (attr.Key.IndexOf("Text") == -1)
-        //    {
-        //        if (attr.UIVisible == false)
-        //            continue;
-        //    }
-
-        //    if (attr.MyFieldType == FieldType.Enum
-        //        || attr.MyFieldType == FieldType.PKEnum
-        //        || attr.MyFieldType == FieldType.PKFK
-        //        || attr.MyFieldType == FieldType.FK)
-        //        continue;
-
-        //    strLine += "<th>" + attr.Desc + "</th>";
-        //}
-        //strLine += "</TR>";
         foreach(System.Collections.Generic.KeyValuePair<string,string> attr in attrs)
         {
             Pub1.AddTDGroupTitle(attr.Value);
@@ -521,15 +511,7 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
             Pub1.AddTREnd();
         }
 
-        //strLine += "</Table>";
         Pub1.AddTableEnd();
-
-
-        //this.Pub1.DivInfoBlockBegin();
-
-        //this.Pub1.Add(strLine);
-        //this.Pub1.DivInfoBlockEnd();
-
     }
 
     public void OutExcel_bak()
@@ -580,5 +562,95 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageAdmin
 
         string url = this.Request.ApplicationPath + "Temp" + "\\" + file;
         this.Response.Redirect(url, true);
+    }
+
+    public void btn_AddIO_Click(object sender, EventArgs e)
+    {
+        Entities ens = BP.En.ClassFactory.GetEns(this.EnsName);
+        ens.RetrieveAll();
+        string msg = "执行信息如下：<hr>";
+        try
+        {
+            string filePath = BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xls";
+            if (System.IO.File.Exists(filePath) == false)
+                filePath = BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xlsx";
+
+            DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, null);
+            Entity en = ens.GetNewEntity;
+            Attrs attrs = en.EnMap.Attrs;
+
+            string updateKey = this.Pub1.GetDDLByID("DDL_PK").SelectedValue;
+            int idx = 0;
+            bool isExist;
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                idx++;
+                Entity en1 = ens.GetNewEntity;
+                isExist = false;
+
+                // 查询出来数据,根据要更新的主键。
+                foreach (Attr attr in attrs)
+                {
+                    if (updateKey == attr.Key)
+                    {
+                        this.Pub1.GetCBByID("CB_" + attr.Key).Checked = true;
+                        string item = this.Pub1.GetDDLByID("DDL_" + attr.Key).SelectedItem.Text;
+                        en1.SetValByKey(attr.Key, dr[item]);
+
+                        if (en1.Retrieve(attr.Key, dr[item]) > 0)
+                            isExist = true;
+
+                        break;
+                    }
+                }
+
+                if (isExist)
+                {
+                    msg += "@row：" + idx + " 已存在，跳过。";
+                    continue;
+                }
+
+                string rowMsg = "";
+                foreach (Attr attr in attrs)
+                {
+                    if (this.Pub1.GetCBByID("CB_" + attr.Key).Checked == false)
+                        continue;
+                    string item = this.Pub1.GetDDLByID("DDL_" + attr.Key).SelectedItem.Text;
+
+                    en1.SetValByKey(attr.Key, dr[item]);
+                    rowMsg += attr.Key + " = " + dr[item] + " , ";
+                }
+
+                try
+                {
+                    en1.Save();
+                    msg += "@row：" + idx + " OK。";
+                }
+                catch (Exception ex)
+                {
+                    msg += "<font color=red>@Row：" + idx + "error。" + rowMsg + " @error:" + ex.Message + "</font>";
+                    msg += ex.Message;
+                }
+            }
+            this.ResponseWriteBlueMsg(msg);
+        }
+        catch (Exception ex)
+        {
+            ens.ClearTable();
+            foreach (Entity myen in ens)
+            {
+                if (myen.IsOIDEntity)
+                {
+                    EntityOID enOId = (EntityOID)myen;
+                    enOId.InsertAsOID(enOId.OID);
+                }
+                else
+                {
+                    myen.Insert();
+                }
+            }
+            this.ResponseWriteRedMsg("执行错误：数据已经回滚回来。错误信息：" + ex.Message + "。 MSG= " + msg);
+        }
     }
 }

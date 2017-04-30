@@ -72,8 +72,8 @@ namespace CCFlow.Web.Comm
         /// <summary>
         /// _HisEns
         /// </summary>
-        public new  Entities _HisEns = null;
-        private  Entity _HisEn = null;
+        public new Entities _HisEns = null;
+        private Entity _HisEn = null;
         public new Entity HisEn
         {
             get
@@ -200,7 +200,7 @@ namespace CCFlow.Web.Comm
 
             #region 设置toolbar2 的 contral  设置查寻功能.
             this.ToolBar1.InitByMapV2(map, 1);
-            
+
             bool isEdit = true;
             if (this.IsReadonly)
                 isEdit = false;
@@ -216,8 +216,18 @@ namespace CCFlow.Web.Comm
             if (WebUser.No == "admin")
                 this.ToolBar1.AddLinkBtn(NamesOfBtn.Setting, "设置", js);
 
-            js = "DoExp();";
+            if (uac.IsExp)
+            {
+                js = "DoExp();";
                 this.ToolBar1.AddLinkBtn(NamesOfBtn.Excel, "导出", js);
+            }
+
+            if (uac.IsImp)
+            {
+                js = "OpenDialogAndCloseRefresh('./Sys/EnsDataIO.aspx?EnsName=" + this.EnsName + "&Step=1&t=' + Math.random(), '导入数据', 720, 500, 'icon-insert');";
+                this.ToolBar1.AddLinkBtn("Btn_Import", "导入", js);
+                this.ToolBar1.GetLinkBtnByID("Btn_Import").SetDataOption("iconCls", "'icon-insert'");
+            }
 
             #endregion
 
@@ -251,7 +261,7 @@ namespace CCFlow.Web.Comm
 
             this.SetDGData();
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Search).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
-           // this.Label1.Text = this.GenerCaption(this.HisEn.EnMap.EnDesc + "" + this.HisEn.EnMap.TitleExt);
+            // this.Label1.Text = this.GenerCaption(this.HisEn.EnMap.EnDesc + "" + this.HisEn.EnMap.TitleExt);
 
             //临时文件名
             this.expFileName.Value = this.HisEns.GetNewEntity.EnDesc + "数据导出" + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
@@ -273,6 +283,12 @@ namespace CCFlow.Web.Comm
 
             if (this.DoType == "Exp")
             {
+                if(en.HisUAC.IsExp == false)
+                {
+                    this.WinCloseWithMsg("您没有数据导出权限，请联系管理员解决！");
+                    return null;
+                }
+
                 /*如果是导出，就把它导出到excel.*/
                 string filePath = this.ExportDGToExcel(qo.DoQueryToTable(), en, en.EnDesc + "数据导出");
                 this.WinClose(filePath);
@@ -283,8 +299,8 @@ namespace CCFlow.Web.Comm
             try
             {
                 this.UCSys2.Clear();
-                  maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(),
-                      SystemConfig.PageSize, pageIdx, "Search.aspx?EnsName=" + this.EnsName);
+                maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(),
+                    SystemConfig.PageSize, pageIdx, "Search.aspx?EnsName=" + this.EnsName);
                 if (maxPageNum > 1)
                     this.UCSys2.Add("翻页键:← → PageUp PageDown");
             }
@@ -294,7 +310,7 @@ namespace CCFlow.Web.Comm
                 {
                     en.CheckPhysicsTable();
                 }
-                catch(Exception wx)
+                catch (Exception wx)
                 {
                     BP.DA.Log.DefaultLogWriteLineError(wx.Message);
                 }

@@ -103,9 +103,20 @@ namespace BP.WF.HttpHandler
             {
                 return "url@FrmExcel.aspx?1=2" + this.RequestParas;
             }
+
             #endregion 判断是否是返回的URL.
 
+            //返回自由表单解析执行器.
+            return "url@FrmFree.htm?1=2" + this.RequestParas;
+        }
+        /// <summary>
+        /// 执行数据初始化
+        /// </summary>
+        /// <returns></returns>
+        public string FrmFree_Init()
+        {
 
+            MapData md = new MapData(this.EnsName);
             DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
             #region 把主表数据放入.
@@ -127,11 +138,6 @@ namespace BP.WF.HttpHandler
                         if (pk == 0)
                             throw new Exception("@没有接收到参数FID");
                         break;
-                    //case WhoIsPK.CWorkID: /*延续流程ID*/
-                    //    pk = this.CWorkID;
-                    //    if (pk == 0)
-                    //        throw new Exception("@没有接收到参数CWorkID");
-                    //    break;
                     case WhoIsPK.PWorkID: /*父流程ID*/
                         pk = this.PWorkID;
                         if (pk == 0)
@@ -202,7 +208,7 @@ namespace BP.WF.HttpHandler
         /// 执行保存
         /// </summary>
         /// <returns></returns>
-        public string Frm_Save()
+        public string FrmFree_Save()
         {
             //保存主表数据.
             GEEntity en = new GEEntity(this.EnsName, this.RefOID);

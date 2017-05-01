@@ -2624,19 +2624,21 @@ function figure_Template_Image(frmImage) {
     var eleHtml = '';
     if (frmImage.ImgAppType == 0) {//图片类型
         //数据来源为本地.
+        var imgSrc = '';
         if (frmImage.ImgSrcType == 0) {
             if (frmImage.ImgPath.indexOf(";") < 0)
                 imgSrc = frmImage.ImgPath;
+            else
+                imgSrc = frmImage.ImgPath;
+           
         }
         //数据来源为指定路径.
         if (frmImage.ImgSrcType == 1) {
             //图片路径不为默认值
-            imgSrc = frmImage.ImgURL;
-            if (imgSrc.Contains("@")) {
-                /*如果有变量 此处可能已经处理过    */
-                //imgSrc = BP.WF.Glo.DealExp(imgSrc, en, "");
-                imgSrc = imgSrc;
-            }
+            if (frmImage.ImgURL.indexOf(";") < 0)
+                imgSrc = frmImage.ImgURL;
+            else
+                imgSrc = frmImage.ImgURL;
             
         }
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端

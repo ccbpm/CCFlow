@@ -11,14 +11,7 @@
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
-
-            //求表单ID.
-            var frmID = GetQueryString("FK_MapData");
-            if (frmID == "" || frmID == null)
-                frmID = GetQueryString("FrmID");
-            if (frmID == "" || frmID == null)
-                frmID = GetQueryString("EnsName");
-
+           
             var name, value;
             var str = location.href; //取得整个地址栏
             var num = str.indexOf("?")

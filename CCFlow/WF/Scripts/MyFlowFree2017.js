@@ -582,8 +582,8 @@ function setToobarDisiable() {
 
 function setToobarEnable() {
     //隐藏下方的功能按钮
-    $('#bottomToolBar input').css('background', '#2884fa');
-    $('#bottomToolBar input').removeAttr('disabled');
+    $('.Bar input').css('background', '#2884fa');
+    $('.Bar input').removeAttr('disabled');
 }
 //设置表单元素不可用
 function setFormEleDisabled() {

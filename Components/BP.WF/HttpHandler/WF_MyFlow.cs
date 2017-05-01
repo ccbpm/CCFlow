@@ -178,6 +178,249 @@ namespace BP.WF.HttpHandler
         #endregion
 
         /// <summary>
+        /// 初始化(处理分发)
+        /// </summary>
+        /// <returns></returns>
+        public string MyFlow_Init()
+        {
+            //当前工作.
+            Work currWK = this.currND.HisWork;
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            if (this.WorkID != 0)
+            {
+                gwf = new GenerWorkFlow();
+                gwf.WorkID = this.WorkID;
+                if (gwf.RetrieveFromDBSources() == 0)
+                {
+                    return ("err@该流程ID{" + this.WorkID + "}不存在，或者已经被删除.");
+                }
+            }
+
+            #region 判断前置导航.
+            if (this.currND.IsStartNode && this.IsCC == false && this.WorkID == 0)
+            {
+                if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No) == false)
+                {
+                    /*是否可以发起流程？*/
+                    return "err@您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.";
+                }
+            }
+
+            if (this.WorkID == 0 && this.currND.IsStartNode && this.context.Request.QueryString["IsCheckGuide"] == null)
+            {
+                Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow);
+                switch (this.currFlow.StartGuideWay)
+                {
+                    case StartGuideWay.None:
+                        break;
+                    case StartGuideWay.SubFlowGuide:
+                    case StartGuideWay.SubFlowGuideEntity:
+                        return "url@StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                    case StartGuideWay.ByHistoryUrl: // 历史数据.
+                        if (this.currFlow.IsLoadPriData == true)
+                        {
+                            return "err@流程配置错误，您不能同时启用前置导航，自动装载上一笔数据两个功能。";
+                        }
+                        return "url@StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                    case StartGuideWay.BySystemUrlOneEntity:
+                    case StartGuideWay.BySQLOne:
+                        return "url@StartGuideEntities.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                    case StartGuideWay.BySelfUrl: //按照定义的url.
+                        return "url@" + this.currFlow.StartGuidePara1 + this.RequestParas + "&WorkID=" + workid;
+                    case StartGuideWay.ByFrms: //选择表单.
+                        return "url@./WorkOpt/StartGuideFrms.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                    default:
+                        break;
+                }
+            }
+
+            //string appPath = BP.WF.Glo.CCFlowAppPath; //this.Request.ApplicationPath;
+            //this.Page.Title = "第" + this.currND.Step + "步:" + this.currND.Name;
+            #endregion 判断前置导航
+
+            #region 处理表单类型.
+            if (this.currND.HisFormType == NodeFormType.SheetTree
+                 || this.currND.HisFormType == NodeFormType.SheetAutoTree)
+            {
+                /*如果是多表单流程.*/
+                string pFlowNo = this.GetRequestVal("PFlowNo");
+                string pWorkID = this.GetRequestVal("PWorkID");
+                string pNodeID = this.GetRequestVal("PNodeID");
+                string pEmp = this.GetRequestVal("PEmp");
+                if (string.IsNullOrEmpty(pEmp))
+                    pEmp = WebUser.No;
+
+                if (this.WorkID == 0)
+                {
+                    if (string.IsNullOrEmpty(pFlowNo) == true)
+                        this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null);
+                    else
+                        this.WorkID = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow, null, null, WebUser.No, null, Int64.Parse(pWorkID), 0, pFlowNo, int.Parse(pNodeID));
+
+                    currWK = currND.HisWork;
+                    currWK.OID = this.WorkID;
+                    currWK.Retrieve();
+                    this.WorkID = currWK.OID;
+                }
+                else
+                {
+                    gwf.WorkID = this.WorkID;
+                    gwf.RetrieveFromDBSources();
+                    pFlowNo = gwf.PFlowNo;
+                    pWorkID = gwf.PWorkID.ToString();
+                }
+
+                if (this.currND.IsStartNode)
+                {
+                    /*如果是开始节点, 先检查是否启用了流程限制。*/
+                    if (BP.WF.Glo.CheckIsCanStartFlow_InitStartFlow(this.currFlow) == false)
+                    {
+                        /* 如果启用了限制就把信息提示出来. */
+                        string msg = BP.WF.Glo.DealExp(this.currFlow.StartLimitAlert, currWK, null);
+                        return "err@" + msg;
+                    }
+                }
+
+                string toUrl = "";
+                if (this.currND.HisFormType == NodeFormType.SheetTree || this.currND.HisFormType == NodeFormType.SheetAutoTree)
+                    toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                else
+                    toUrl = "./WebOffice/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+
+                string[] ps = this.RequestParas.Split('&');
+                foreach (string s in ps)
+                {
+                    if (string.IsNullOrEmpty(s))
+                        continue;
+                    if (toUrl.Contains(s))
+                        continue;
+                    toUrl += "&" + s;
+                }
+
+                if (gwf == null)
+                {
+                    gwf = new GenerWorkFlow();
+                    gwf.WorkID = this.WorkID;
+                    gwf.RetrieveFromDBSources();
+                }
+                //设置url.
+                if (gwf.WFState == WFState.Runing || gwf.WFState == WFState.Blank || gwf.WFState == WFState.Draft)
+                {
+                    if (toUrl.Contains("IsLoadData") == false)
+                        toUrl += "&IsLoadData=1";
+                    else
+                        toUrl = toUrl.Replace("&IsLoadData=0", "&IsLoadData=1");
+                }
+                //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
+                toUrl = toUrl.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
+
+                //// 加入设置父子流程的参数.
+                //toUrl += "&DoFunc=" + this.DoFunc;
+                //toUrl += "&CFlowNo=" + this.CFlowNo;
+                //toUrl += "&Nos=" + this.Nos;
+                return "url@" + toUrl;
+            }
+
+            if (this.currND.HisFormType == NodeFormType.SDKForm)
+            {
+                if (this.WorkID == 0)
+                {
+                    currWK = this.currFlow.NewWork();
+                    this.WorkID = currWK.OID;
+                }
+
+                string url = currND.FormUrl;
+                if (string.IsNullOrEmpty(url))
+                {
+                    return "err@设置读取状流程设计错误态错误,没有设置表单url.";
+                }
+
+                //处理连接.
+                url = this.MyFlow_Init_DealUrl(currND, currWK);
+
+                //sdk表单就让其跳转.
+                return "url@" + url;
+            }
+
+            if (this.currND.HisFormType == NodeFormType.FixForm)
+            {
+                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
+                if (this.WorkID == 0)
+                {
+                    currWK = this.currFlow.NewWork();
+                    this.WorkID = currWK.OID;
+                }
+
+                string url = "MyFlowFool.htm";
+
+                //处理连接.
+                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
+                return "err@" + url;
+            }
+            #endregion 处理表单类型.
+
+            /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
+            if (this.WorkID == 0)
+            {
+                currWK = this.currFlow.NewWork();
+                this.WorkID = currWK.OID;
+            }
+
+            string myurl = "MyFlow.aspx";
+           
+          //  string myurl = "MyFlowFree.htm";
+            //处理连接.
+            myurl = this.MyFlow_Init_DealUrl(currND, currWK, myurl);
+            myurl = myurl.Replace("DoType=MyFlow_Init&", "");
+            myurl = myurl.Replace("&DoWhat=StartClassic", "");
+            return "url@" + myurl;
+        }
+        public string MyFlow_Init_DealUrl(BP.WF.Node currND, Work currWK, string url = null)
+        {
+            if (url == null)
+                url = currND.FormUrl;
+
+            string urlExt = this.RequestParas;
+            //防止查询不到.
+            urlExt = urlExt.Replace("?WorkID=", "&WorkID=");
+            if (urlExt.Contains("&WorkID") == false)
+            {
+                urlExt += "&WorkID=" + this.WorkID;
+            }
+            else
+            {
+                urlExt = urlExt.Replace("&WorkID=0", "&WorkID=" + this.WorkID);
+                urlExt = urlExt.Replace("&WorkID=&", "&WorkID=" + this.WorkID + "&");
+            }
+            //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
+            url = url.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
+
+
+            if (urlExt.Contains("&NodeID") == false)
+                urlExt += "&NodeID=" + currND.NodeID;
+
+            if (urlExt.Contains("FK_Node") == false)
+                urlExt += "&FK_Node=" + currND.NodeID;
+
+            if (urlExt.Contains("&FID") == false && currWK != null)
+                urlExt += "&FID=" + currWK.FID;
+
+            if (urlExt.Contains("&UserNo") == false)
+                urlExt += "&UserNo=" + WebUser.No;
+
+            if (urlExt.Contains("&SID") == false)
+                urlExt += "&SID=" + WebUser.SID;
+
+            if (url.Contains("?") == true)
+                url += "&" + urlExt;
+            else
+                url += "?" + urlExt;
+
+            url = url.Replace("?&", "?");
+            url = url.Replace("&&", "&");
+            return url;
+        }
+        /// <summary>
         /// 初始化函数
         /// </summary>
         /// <param name="mycontext"></param>

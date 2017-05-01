@@ -403,11 +403,13 @@ namespace BP.WF.HttpHandler
                 return int.Parse(str);
             }
         }
-        
+        private Int64 _workID = 0;
         public Int64 WorkID
         {
             get
             {
+                if (_workID != 0)
+                    return _workID;
                 //string str = context.Request.QueryString["WorkID"];
                 //if (str == null || str == "" || str == "null")
                 //    return 0;
@@ -416,6 +418,10 @@ namespace BP.WF.HttpHandler
                 if (str == null || str == "" || str == "null")
                     return 0;
                 return int.Parse(str);
+            }
+            set
+            {
+                _workID = value;
             }
         }
         /// <summary>

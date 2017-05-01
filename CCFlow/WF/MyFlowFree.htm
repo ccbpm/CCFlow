@@ -198,6 +198,21 @@
         input[type=text], select ,textarea, iframe[src*="AttachmentUpload.aspx"]{
         margin:4px 0px !important;
         }
+
+        #Message {
+        text-align:left;
+        word-wrap:break-word;
+        color:red;
+        }
+        #lastOptMsg {
+            text-align: left;
+            margin: 10px auto;
+            padding-left: 10px;
+        }
+
+        .titleAlertSpan {
+            font-weight: bold;
+        }
     </style>
 
     <!--杨玉慧 -->
@@ -261,14 +276,31 @@
         <button id="btnShowPFlow" value="查看父流程信息" style="float:left;">查看父流程信息</button>
     </div>
     <!--之前返回的信息-->
-    <div id="lastOptMsg">
+    <div id="lastOptMsg" >
 
     </div>
     <!--Message-->
-    <div class="Message alert">
+    <!--<div class="Message alert">
         <button type="button" id="btnCloseMsg" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
         <div id='Message'></div>
-    </div>
+    </div>-->
+    <!--将错误提示信息改成模态框-->
+    <div class="modal fade" id="MessageDiv">
+        <div class="modal-dialog" style="margin-left:auto;margin-right:auto;width:800px;">
+            <div class="modal-content" style="border-radius: 0px;">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none; border: none; float: right;">×</button>
+                    <h4 class="modal-title">错误提示</h4>
+                </div>
+                <div class="modal-body">
+                    <div id='Message'></div>
+                    <div style="text-align: right;">
+                        <button type="button" class="btn" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
         <!--底部功能按钮 发送、移交-->

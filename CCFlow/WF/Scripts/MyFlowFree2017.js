@@ -619,22 +619,9 @@ function Save() {
         success: function (data) {
 
             setToobarEnable();
-            if (data.indexOf('err@') == 0) {
+            if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
                 $('#Message').html(data.substring(4, data.length));
-                $('.Message').show();
-            }
-            else {
-                //OptSuc(data);
-                $('#Message').html(data);
-                $('.Message').show();
-                //表示退回OK
-                //if (data.indexOf('工作已经被您退回到') == 0) {
-                //  OptSuc(data);
-
-                //setAttachDisabled();
-                //setToobarUnVisible();
-                //setFormEleDisabled();
-                //}
+                $('#MessageDiv').modal().show();
             }
         }
     });
@@ -662,7 +649,7 @@ function returnWorkWindowClose(data) {
 
     if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
         $('#Message').html(data);
-        $('.Message').show();
+        $('#MessageDiv').modal().show();
     }
     else {
         OptSuc(data);
@@ -1443,7 +1430,7 @@ function AfterBindEn_DealMapExt() {
                         //{
                         //    this.Clear();
                         //    this.AddFieldSet("配置错误");
-                        //    this.Add(me.ToStringAtParas() + "<hr>错误信息:<br>" + ex.Message);
+                        //    this.Add(me.ToStringAtParas() + "<hr>错误信息:<br>" + ex#MessageDiv);
                         //    this.AddFieldSetEnd();
                         //    return;
                         //}
@@ -1824,7 +1811,7 @@ function execSend(toNode) {
         success: function (data) {
             if (data.indexOf('err@') == 0) {//发送时发生错误
                 $('#Message').html(data.substring(4, data.length));
-                $('.Message').show();
+                $('#MessageDiv').modal().show();
                 setToobarEnable();
             }
             else if (data.indexOf('url@') == 0) {//发送成功时转到指定的URL 
@@ -1833,7 +1820,7 @@ function execSend(toNode) {
                 window.location.href = url;
                 // WinOpen(url, 'ss');
                 // $('#Message').html("<a href=" + data.substring(4, data.length) + ">待处理</a>");
-                // $('.Message').show();
+                // $('#MessageDiv').modal().show();
             }
             else {
                 OptSuc(data);
@@ -1842,7 +1829,7 @@ function execSend(toNode) {
                 }
                 //if (window.opener != null && window.opener != undefined && window.opener)
                 //    $('#Message').html(data);
-                //$('.Message').show();
+                //$('#MessageDiv').modal().show();
                 ////发送成功时
                 //setAttachDisabled();
                 //setToobarUnVisible();
@@ -1874,7 +1861,7 @@ $(function () {
 //发送 退回 移交等执行成功后转到  指定页面
 function OptSuc(msg) {
     // window.location.href = "/WF/MyFlowInfo.aspx";
-    $('.Message').hide();
+    // $('#MessageDiv').modal().hide();
     if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
         $('#returnWorkModal').modal().hide()
     }
@@ -2280,6 +2267,7 @@ function GenerWorkNode() {
                     var alertMsg = flow_Data.AlertMsg[i];
                     var alertMsgEle = figure_Template_MsgAlert(alertMsg);
                     $('#lastOptMsg').append(alertMsgEle);
+                    $('#lastOptMsg').append($('<hr/>'));
                 }
                 //循环Sys_MapFrame
                 for (var i in flow_Data.Sys_MapFrame) {
@@ -2301,7 +2289,8 @@ function GenerWorkNode() {
 
             $('#topContentDiv').height(h);
             $('#topContentDiv').width(w);
-            $('.Bar').width(w+15);
+            $('.Bar').width(w + 15);
+            $('#lastOptMsg').width(w + 15);
             var marginLeft = $('#topContentDiv').css('margin-left');
             marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
             $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
@@ -2949,8 +2938,8 @@ function figure_Template_IFrame(fram) {
 
 function figure_Template_MsgAlert(msgAlert) {
     var eleHtml = $('<div></div>');
-    var titleSpan = $('<span>' + msgAlert.Title + '</span>');
-    var msgDiv = $('<div>' + msgAlert.Msg + '</div>');
+    var titleSpan = $('<span class="titleAlertSpan"> 标题：' + msgAlert.Title + '</span>');
+    var msgDiv = $('<div>内容：' + msgAlert.Msg + '</div>');
     eleHtml.append(titleSpan).append(msgDiv)
     return eleHtml;
 }

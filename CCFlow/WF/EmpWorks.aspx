@@ -254,7 +254,7 @@
                 string sdt = dr["SDT"] as string;
                 string paras = dr["AtPara"] as string;
 
-                if (paras != "")
+                if ( string.IsNullOrEmpty( paras)==false)
                 {
                     paras = paras.Replace("'", "\\'");
                     paras = paras.Replace('@', '&');
@@ -361,7 +361,7 @@
                         lab = "已完成";
                         break;
                     case BP.WF.WFState.Runing:
-                        if (paras.Contains("CC") == true)
+                        if (string.IsNullOrEmpty(paras) == false && paras.Contains("CC") == true)
                             lab = "抄送";
                         else
                             lab = "待办";

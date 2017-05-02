@@ -131,7 +131,7 @@ namespace CCFlow.WF.CCForm
 
 			#region 保存从表
 
-			//截去BP.LI.
+			//截去『BP.XXX.』以便下方的“new MapDtls(frmID)”能正常取值
 			if (frmID.Contains("BP."))
 				frmID = frmID.Substring(frmID.LastIndexOf(".") + 1);
 
@@ -143,11 +143,15 @@ namespace CCFlow.WF.CCForm
 			{
 				foreach (MapDtl dtl in dtls)
 				{
-					if (dt.TableName != dtl.No) //!++ TODO: BP.LI.BZQXxys != BZQXxy
+					//if (dt.TableName != dtl.No) //!++ TO DO: BP.XXX.YYYYYs != YYYYY
+					//	continue;
+					var tname = dt.TableName.Substring(dt.TableName.LastIndexOf(".") + 1,
+						dt.TableName.Length - dt.TableName.LastIndexOf(".") - 2);
+					if (tname != dtl.No)
 						continue;
 
 					#region 根据原始数据,与当前数据求出已经删除的oids .
-					DataTable dtDtlOld = dsDtlsOld.Tables[dtl.No]; // ???
+					DataTable dtDtlOld = dsDtlsOld.Tables[dt.TableName]; //这里要用原始（打开excel时获取到的）表名『BP.XXX.YYYYY』
 					foreach (DataRow dr in dtDtlOld.Rows)
 					{
 						string oidOld = dr["OID"].ToString();
@@ -177,12 +181,12 @@ namespace CCFlow.WF.CCForm
 					foreach (DataRow dr in dt.Rows)
 					{
 						GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
-						daDtl.RefPK = mainEnPKOID.ToString();
 
 						daDtl.OID = int.Parse(dr["OID"].ToString());
 
 						if (daDtl.OID > 100)
 							daDtl.RetrieveFromDBSources();
+
 						daDtl.ResetDefaultVal();
 
 						//明细列.
@@ -192,7 +196,9 @@ namespace CCFlow.WF.CCForm
 							daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
 						}
 
-						daDtl.RefPK = mainEnPKOID.ToString();
+
+						daDtl.SetValByKey(dtl.RefPK, mainEnPKOID.ToString());
+
 						daDtl.RDT = DataType.CurrentDataTime;
 
 						//执行保存.
@@ -264,7 +270,8 @@ namespace CCFlow.WF.CCForm
 		[WebMethod]
 		public String GetVstoExtensionVersion()
 		{
-			return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];
+			//return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
+			return "1.0.0.6";
 		}
 	}
 }

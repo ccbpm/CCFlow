@@ -45,6 +45,11 @@ namespace CCFormExcel2010
 			}
 		}
 
+		public Excel.Worksheet GetFirstWorkSheet()
+		{
+			return _app.Worksheets[1];
+		}
+
 		#region Cell相关
 
 		/// <summary>

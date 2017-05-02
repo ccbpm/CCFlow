@@ -62,7 +62,8 @@ namespace CCFormExcel2010
 
 		public Dictionary<string, string> InitTesterArgsString()
 		{
-			string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6501,IsEdit=1,IsPrint=0,WorkID=2830,FK_Flow=002,FK_Node=201,UserNo=anjian,FID=0,SID=tsg2uzxxeeoaqritr3l0umre,PWorkID=2843,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6501,IsCheckGuide=1,FK_CaiYangFangFa=011,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
+			string argstr = "excelform://-fromccflow,App=Class,FK_MapData=BP.LI.BZQX,UseSheet=格式6,oid=116663,s=0.19068293080891674,SID=1pecqwilzeszdj3aoaxrqqdy,UserNo=anjian,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
+			//string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6501,IsEdit=1,IsPrint=0,WorkID=2830,FK_Flow=002,FK_Node=201,UserNo=anjian,FID=0,SID=tsg2uzxxeeoaqritr3l0umre,PWorkID=2843,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6501,IsCheckGuide=1,FK_CaiYangFangFa=011,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
 			//string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6501,IsEdit=0,IsPrint=0,WorkID=2528,FK_Flow=002,FK_Node=202,UserNo=anjian,FID=0,SID=4uiq32c4hzd1335re15dwd0d,PWorkID=2518,PFlowNo=001,IsLoadData=1,CWorkID=0,WSUrl=http://localhost:26508/WF/CCForm/CCFormAPI.asmx";
 			string prefix = "-fromccflow,";
 			int beginidx = -1;
@@ -121,6 +122,11 @@ namespace CCFormExcel2010
 				if (!Glo.LoadSuccessful)
 					return false;
 
+				if (args.ContainsKey("App"))
+					Glo.App = args["App"];
+				else
+					throw new Exception("缺少参数: App");
+
 				if (args.ContainsKey("IsReadonly"))
 					Glo.IsReadonly = args["IsReadonly"] == "1";
 				else if (args.ContainsKey("IsEdit"))
@@ -137,30 +143,43 @@ namespace CCFormExcel2010
 				else
 					throw new Exception("缺少参数: SID");
 
-				if (args.ContainsKey("FK_Flow"))
-					Glo.FK_Flow = args["FK_Flow"];
-				else
-					throw new Exception("缺少参数: FK_Flow");
-
-				if (args.ContainsKey("FK_Node"))
-					Glo.FK_Node = int.Parse(args["FK_Node"]);
-				else
-					throw new Exception("缺少参数: FK_Node");
-
 				if (args.ContainsKey("FK_MapData"))
 					Glo.FrmID = args["FK_MapData"];//FrmID
 				else
 					throw new Exception("缺少参数: FK_MapData");
 
-				if (args.ContainsKey("WorkID"))
-					Glo.WorkID = int.Parse(args["WorkID"]);
-				else
-					throw new Exception("缺少参数: WorkID");
+				if (Glo.FrmID.IndexOf("BP.") == -1) //若为表单
+				{
+					if (args.ContainsKey("FK_Flow"))
+						Glo.FK_Flow = args["FK_Flow"];
+					else
+						throw new Exception("缺少参数: FK_Flow");
 
-				if (args.ContainsKey("PWorkID"))
-					Glo.PWorkID = int.Parse(args["PWorkID"]);
-				else
-					throw new Exception("缺少参数: PWorkID");
+					if (args.ContainsKey("FK_Node"))
+						Glo.FK_Node = int.Parse(args["FK_Node"]);
+					else
+						throw new Exception("缺少参数: FK_Node");
+
+					if (args.ContainsKey("WorkID"))
+						Glo.WorkID = int.Parse(args["WorkID"]);
+					else
+						throw new Exception("缺少参数: WorkID");
+
+					if (args.ContainsKey("PWorkID"))
+						Glo.PWorkID = int.Parse(args["PWorkID"]);
+					else
+						throw new Exception("缺少参数: PWorkID");
+				}
+				else //if (Glo.App == "Class") //若为类
+				{
+					if (args.ContainsKey("oid"))
+						Glo.WorkID = Convert.ToInt32(args["oid"]);
+					else
+						throw new Exception("缺少参数: oid");
+
+					if (args.ContainsKey("UseSheet"))
+						Glo.UseSheet = args["UseSheet"];
+				}
 
 				if (args.ContainsKey("WSUrl"))
 					Glo.WSUrl = args["WSUrl"];
@@ -248,6 +267,9 @@ namespace CCFormExcel2010
 				//如果打开的是模板，则还需填充数据
 				if (isExistDbFile == false)
 				{
+					//设置启用的Sheet页
+					SetUseSheet();
+
 					//加载外键枚举数据.
 					SetMetaData(_originData);
 
@@ -540,6 +562,35 @@ namespace CCFormExcel2010
 		private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
 		{
 
+		}
+
+		/// <summary>
+		/// 设置启用的Sheet页
+		/// </summary>
+		/// <returns></returns>
+		public bool SetUseSheet()
+		{
+			if (Glo.UseSheet == null) //未收到“启用Sheet”参数
+				return false;
+
+			var ws = _base.GetWorksheet(Glo.UseSheet);
+			if (ws == null) //excel中没有该Sheet页
+			{
+				MessageBox.Show("没有找到名为“" + Glo.UseSheet + "”的Sheet页，请检查【UseSheet】参数，或联系您的系统管理员！");
+				return false;
+			}
+
+			ws.Move(Before: _base.GetFirstWorkSheet());
+
+			//遍历命名
+			foreach (Excel.Name name in Application.Names)
+			{
+				if (name.NameLocal.IndexOf(Glo.UseSheet + ".") == 0)
+				{
+					name.Name = name.NameLocal.Replace(Glo.UseSheet + ".", string.Empty);
+				}
+			}
+			return true;
 		}
 
 		/// <summary>
@@ -1438,7 +1489,7 @@ namespace CCFormExcel2010
 
 				//若该列有绑定列
 				if (!string.IsNullOrEmpty(name) && name.IndexOf(".") > -1)
-					htColumns.Add(c, name.Split('.')[1]);
+					htColumns.Add(c, name.Substring(name.LastIndexOf('.') + 1));
 
 				//!下一个要循环的列
 				c += currentThMergeColumnsCount;

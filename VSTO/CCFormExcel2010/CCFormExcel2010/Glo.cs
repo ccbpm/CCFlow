@@ -82,25 +82,39 @@ namespace BP.Excel
 		/// 当前Excel表单绑定的节点ID
 		/// </summary>
 		public static int FK_Node;
+		/// <summary>
+		/// 以“@key=value”形式接收的参数
+		/// </summary>
 		public static string AtParas = "";
 		/// <summary>
 		/// 插件引用的服务地址
 		/// </summary>
 		public static string WSUrl = "";
+
+		public static string App = "";
+
 		/// <summary>
-		/// 本地保存的Excel（路径+文件名）
+		/// 启用的Sheet页
+		/// 用于同一个表单/类有可能使用不同的Excel模板时，可以将这些模板以Sheet页的形式存到同一个Excel模板中。
+		/// 注意：在Sheet页中所有的命名应该加上“Sheet页名.”前缀，在加载时插件会自动去掉这些前缀。
 		/// </summary>
-		public static string LocalFile;
+		public static string UseSheet = null;
 		#endregion 参数.
 
 		/// <summary>
 		/// 参数是否加载成功，加载不成功，所有插件功能不启用
 		/// </summary>
 		public static bool LoadSuccessful = false;
+
 		/// <summary>
 		/// 是否只读
 		/// </summary>
 		public static bool IsReadonly = false;
+
+		/// <summary>
+		/// 本地保存的Excel（路径+文件名）
+		/// </summary>
+		public static string LocalFile;
 
 		#region 方法.
 		/// <summary>
@@ -256,6 +270,10 @@ namespace BP.Excel
 		}
 		#endregion 方法.
 
+		/// <summary>
+		/// 获取当前插件的版本号
+		/// </summary>
+		/// <returns></returns>
 		public static string GetCurrentVersion()
 		{
 			System.Reflection.Assembly fileAssembly = System.Reflection.Assembly.GetExecutingAssembly();

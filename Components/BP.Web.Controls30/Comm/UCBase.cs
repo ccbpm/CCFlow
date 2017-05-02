@@ -226,6 +226,7 @@ namespace BP.Web.UC
                 if (_pageID == null)
                 {
                     string url = System.Web.HttpContext.Current.Request.RawUrl;
+
                     int i = url.LastIndexOf("/") + 1;
                     int i2 = url.IndexOf(".aspx") - 6;
                     try

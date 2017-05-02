@@ -3515,6 +3515,8 @@ namespace BP.En
 
                 mdtl.Name = enDtl.EnDesc;
                 mdtl.FK_MapData = fk_mapdata;
+
+                mdtl.RefPK = dtl.RefKey; //关联的主键.
                 mdtl.Update();
 
                 //同步字段.

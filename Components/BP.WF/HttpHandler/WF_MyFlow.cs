@@ -355,7 +355,7 @@ namespace BP.WF.HttpHandler
 
                 //处理连接.
                 url = this.MyFlow_Init_DealUrl(currND, currWK, url);
-                return "err@" + url;
+                return "url@" + url;
             }
             #endregion 处理表单类型.
 
@@ -367,8 +367,9 @@ namespace BP.WF.HttpHandler
             }
 
             string myurl = "MyFlow.aspx";
-           
-          //  string myurl = "MyFlowFree.htm";
+            if (SystemConfig.CustomerNo == "CCFlowTest")
+                myurl = "MyFlowFree.htm";
+
             //处理连接.
             myurl = this.MyFlow_Init_DealUrl(currND, currWK, myurl);
             myurl = myurl.Replace("DoType=MyFlow_Init&", "");

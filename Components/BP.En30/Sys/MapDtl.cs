@@ -230,6 +230,10 @@ namespace BP.Sys
         /// </summary>
         public const string GroupField = "GroupField";
         /// <summary>
+        /// 关联主键
+        /// </summary>
+        public const string RefPK = "RefPK";
+        /// <summary>
         /// 是否启用分组字段
         /// </summary>
         public const string IsEnableGroupField = "IsEnableGroupField";
@@ -302,6 +306,23 @@ namespace BP.Sys
     public class MapDtl : EntityNoName
     {
         #region 导入导出属性.
+        /// <summary>
+        /// 关联主键
+        /// </summary>
+        public string RefPK
+        {
+            get
+            {
+                string str= this.GetValStrByKey(MapDtlAttr.RefPK);
+                if (string.IsNullOrEmpty(str))
+                    return "RefPK";
+                return str;
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.RefPK, value);
+            }
+        }
         /// <summary>
         /// Rowid
         /// </summary>
@@ -1296,6 +1317,8 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);
                 map.AddTBString(MapDtlAttr.PTable, null, "物理表", true, false, 0, 200, 20);
                 map.AddTBString(MapDtlAttr.GroupField, null, "分组字段", true, false, 0, 300, 20);
+                map.AddTBString(MapDtlAttr.RefPK, null, "关联的主键", true, false, 0, 100, 20);
+
 
                 //map.AddTBInt(MapDtlAttr.Model, 0, "工作模式", false, false);
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,
@@ -1346,7 +1369,6 @@ namespace BP.Sys
                 //MTR 多表头列.
                 map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
 
-
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤SQL表达式", true, false, 0, 200, 20, true);
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 
@@ -1354,10 +1376,6 @@ namespace BP.Sys
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
 
 
-
-
-                //参数.
-                map.AddTBAtParas(300);
 
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
@@ -1368,6 +1386,10 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLFull, null, "数据填充SQL", true, false, 0, 500, 20);
                 #endregion 导入导出填充.
+
+
+                //参数.
+                map.AddTBAtParas(300);
 
                 this._enMap = map;
                 return this._enMap;

@@ -2265,9 +2265,13 @@ function GenerWorkNode() {
                 //循环之前的提示信息
                 for (var i in flow_Data.AlertMsg) {
                     var alertMsg = flow_Data.AlertMsg[i];
-                    var alertMsgEle = figure_Template_MsgAlert(alertMsg);
+                    var alertMsgEle = figure_Template_MsgAlert(alertMsg,i);
                     $('#lastOptMsg').append(alertMsgEle);
                     $('#lastOptMsg').append($('<hr/>'));
+                }
+
+                if (flow_Data.AlertMsg.length == 0) {
+                    $('#lastOptMsg').hide();
                 }
                 //循环Sys_MapFrame
                 for (var i in flow_Data.Sys_MapFrame) {
@@ -2936,10 +2940,10 @@ function figure_Template_IFrame(fram) {
     return frameHtml;
 }
 
-function figure_Template_MsgAlert(msgAlert) {
+function figure_Template_MsgAlert(msgAlert, i) {
     var eleHtml = $('<div></div>');
-    var titleSpan = $('<span class="titleAlertSpan"> 标题：' + msgAlert.Title + '</span>');
-    var msgDiv = $('<div>内容：' + msgAlert.Msg + '</div>');
+    var titleSpan = $('<span class="titleAlertSpan"> ' + (parseInt(i)+1) + "&nbsp;&nbsp;&nbsp;" + msgAlert.Title + '</span>');
+    var msgDiv = $('<div>' + msgAlert.Msg + '</div>');
     eleHtml.append(titleSpan).append(msgDiv)
     return eleHtml;
 }

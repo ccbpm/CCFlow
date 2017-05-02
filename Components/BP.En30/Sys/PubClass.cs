@@ -1438,7 +1438,7 @@ namespace BP.Sys
             HttpContext.Current.Response.Charset = "GB2312";
             HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
             HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");
-
+            HttpContext.Current.Response.ContentType = "application/octet-stream;charset=utf8";
             //HttpContext.Current.Response.ContentType = "application/ms-msword";  //image/JPEG;text/HTML;image/GIF;application/ms-excel
             //HttpContext.Current.EnableViewState =false;
 

@@ -177,12 +177,41 @@ namespace CCFlow.WF.Comm
                 //每页多少行
                 string pageSize = getUTF8ToString("pageSize");
                 int iPageSize = string.IsNullOrEmpty(pageSize) ? 9999 : Convert.ToInt32(pageSize);
+                string sortBy = getUTF8ToString("SortBy");
+                string sortType = getUTF8ToString("SortType");
+
+                if (string.IsNullOrWhiteSpace(sortType))
+                    sortType = "ASC";
 
                 QueryObject obj = new QueryObject(ens);
                 obj = this.ToolBar1.GetnQueryObject(ens, en);
                 RowCount = obj.GetCount();
+
+                //增加排序,added by liuxc,2017-05-22
+                obj.ClearOrderBy();
+
+                if (!string.IsNullOrWhiteSpace(sortBy))
+                {
+                    string[] sortbys = sortBy.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+                    if (sortType == "DESC")
+                    {
+                        if (sortbys.Length > 1)
+                            obj.addOrderByDesc(sortbys[0], sortbys[1]);
+                        else
+                            obj.addOrderByDesc(sortbys[0]);
+                    }
+                    else
+                    {
+                        if (sortbys.Length > 1)
+                            obj.addOrderBy(sortbys[0], sortbys[1]);
+                        else
+                            obj.addOrderBy(sortBy);
+                    }
+                }
+
                 //查询
-                obj.DoQuery(en.PK, iPageSize, iPageNumber);
+                obj.DoQuery(en.PK, iPageSize, iPageNumber, string.IsNullOrWhiteSpace(sortBy) ? en.PK : sortBy, sortType == "DESC");
 
                 return Entitis2Json.ConvertEntitis2GridJsonAndData(ens, RowCount);
             }

@@ -168,6 +168,37 @@ namespace CCFlow.Web.Comm
                 return false;
             }
         }
+        /// <summary>
+        /// 排序字段
+        /// </summary>
+        public string SortBy
+        {
+            get
+            {
+                return Request.QueryString["SortBy"] ?? "";
+            }
+        }
+        /// <summary>
+        /// 排序方式，ASC/DESC
+        /// </summary>
+        public string SortType
+        {
+            get
+            {
+                var t = Request.QueryString["SortType"] ?? "ASC";
+                return t.ToUpper();
+            }
+        }
+        /// <summary>
+        /// URL中关于排序的拼接字符串
+        /// </summary>
+        public string SortString
+        {
+            get
+            {
+                return "&SortBy=" + SortBy + "&SortType=" + SortType;
+            }
+        }
         #endregion 属性.
 
         #region 装载方法. Page_Load
@@ -300,7 +331,7 @@ namespace CCFlow.Web.Comm
             {
                 this.UCSys2.Clear();
                 maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(),
-                    SystemConfig.PageSize, pageIdx, "Search.aspx?EnsName=" + this.EnsName);
+                    SystemConfig.PageSize, pageIdx, "Search.aspx?EnsName=" + this.EnsName + SortString);
                 if (maxPageNum > 1)
                     this.UCSys2.Add("翻页键:← → PageUp PageDown");
             }
@@ -314,10 +345,32 @@ namespace CCFlow.Web.Comm
                 {
                     BP.DA.Log.DefaultLogWriteLineError(wx.Message);
                 }
-                maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(), SystemConfig.PageSize, pageIdx, "Search.aspx?EnsName=" + this.EnsName);
+                maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(), SystemConfig.PageSize, pageIdx, "Search.aspx?EnsName=" + this.EnsName + SortString);
             }
 
-            qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx);
+            qo.ClearOrderBy();
+
+            if (!string.IsNullOrWhiteSpace(SortBy))
+            {
+                string[] sortbys = SortBy.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+                if (SortType == "DESC")
+                {
+                    if (sortbys.Length > 1)
+                        qo.addOrderByDesc(sortbys[0], sortbys[1]);
+                    else
+                        qo.addOrderByDesc(sortbys[0]);
+                }
+                else
+                {
+                    if (sortbys.Length > 1)
+                        qo.addOrderBy(sortbys[0], sortbys[1]);
+                    else
+                        qo.addOrderBy(SortBy);
+                }
+            }
+
+            qo.DoQuery(en.PK, SystemConfig.PageSize, pageIdx, string.IsNullOrWhiteSpace(SortBy) ? en.PK : SortBy, SortType == "DESC");
 
             if (map.IsShowSearchKey)
             {
@@ -368,7 +421,7 @@ namespace CCFlow.Web.Comm
             else
             {
                 this.UCSys1.Add("\t\n if (event.keyCode == 37  || event.keyCode == 38 || event.keyCode == 33) ");
-                this.UCSys1.Add("\t\n     location='Search.aspx?EnsName=" + this.EnsName + "&PageIdx=" + PPageIdx + "';");
+                this.UCSys1.Add("\t\n     location='Search.aspx?EnsName=" + this.EnsName + SortString + "&PageIdx=" + PPageIdx + "';");
             }
 
             if (this.PageIdx == maxPageNum)
@@ -378,7 +431,7 @@ namespace CCFlow.Web.Comm
             else
             {
                 this.UCSys1.Add("\t\n if (event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 34) ");
-                this.UCSys1.Add("\t\n     location='Search.aspx?EnsName=" + this.EnsName + "&PageIdx=" + ToPageIdx + "';");
+                this.UCSys1.Add("\t\n     location='Search.aspx?EnsName=" + this.EnsName + SortString + "&PageIdx=" + ToPageIdx + "';");
             }
 
             this.UCSys1.Add("\t\n } ");

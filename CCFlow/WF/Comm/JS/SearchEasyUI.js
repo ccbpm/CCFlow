@@ -32,6 +32,8 @@ function getArgsFromHref(sArgName) {
 }
 var ensName = '';
 var fk_flow = '';
+var sortBy = '';
+var sortType = '';
 //加载表格数据
 function LoadGridData(pageNumber, pageSize) {
     this.pageNumber = pageNumber;
@@ -47,7 +49,9 @@ function LoadGridData(pageNumber, pageSize) {
         method: "getensgriddata",
         EnsName: ensName,
         pageNumber: pageNumber,
-        pageSize: pageSize
+        pageSize: pageSize,
+        SortBy: sortBy,
+        SortType: sortType
     };
     queryData(params, function (js, scope) {
         $("#pageloading").hide();
@@ -279,6 +283,8 @@ function DelSelected() {
 $(function () {
     ensName = getArgsFromHref("EnsName");
     fk_flow = getArgsFromHref("FK_Flow");
+    sortBy = getArgsFromHref("SortBy");
+    sortType = getArgsFromHref("SortType");
 
     var params = {
         method: "getuserrole",

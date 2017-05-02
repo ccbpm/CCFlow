@@ -333,9 +333,9 @@ namespace BP.WF
             msg += nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneAfter, nd, wn.HisWork, null);
 
             if (wnOfCancelTo.HisNode.IsStartNode)
-                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + this.VirPath + this.AppType + "/Do.aspx?ActionType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + this.VirPath + this.AppType + "/Do.aspx?ActionType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
             else
-                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>  . " + msg;
+                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>  . " + msg;
 
             return "工作已经被您撤销到:" + cancelToNode.Name;
         }
@@ -589,7 +589,7 @@ namespace BP.WF
                 if (BP.Web.WebUser.IsWap)
                 {
                     if (wnOfCancelTo.HisNode.HisFormType != NodeFormType.SDKForm)
-                        return "@撤消发送执行成功，您可以点这里<a href='" + VirPath + "WF/Wap/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                        return "@撤消发送执行成功，您可以点这里<a href='" + VirPath + "WF/Wap/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                     else
                         return "@撤销成功." + msg;
                 }
@@ -599,7 +599,7 @@ namespace BP.WF
                     {
                         case NodeFormType.FixForm:
                         case NodeFormType.FreeForm:
-                            return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + this.VirPath + this.AppType + "/Do.aspx?ActionType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                            return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + this.VirPath + this.AppType + "/Do.aspx?ActionType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                             break;
                         default:
                             return "撤销成功" + msg;
@@ -615,7 +615,7 @@ namespace BP.WF
                 {
                     case NodeFormType.FixForm:
                     case NodeFormType.FreeForm:
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>  . " + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>  . " + msg;
                         break;
                     default:
                         return "撤销成功:" + msg;
@@ -691,14 +691,14 @@ namespace BP.WF
             {
                 if (BP.Web.WebUser.IsWap)
                 {
-                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                 }
                 else
                 {
                     if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                     else
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='Do.aspx?ActionType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='Do.aspx?ActionType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                 }
             }
             else
@@ -708,13 +708,13 @@ namespace BP.WF
                 if (BP.Web.WebUser.IsWap == false)
                 {
                     if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                     else
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                 }
                 else
                 {
-                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                 }
             }
         }
@@ -800,13 +800,13 @@ namespace BP.WF
             if (cNode.IsStartNode)
             {
 
-                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='Do.aspx?ActionType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='Do.aspx?ActionType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
 
             }
             else
             {
 
-                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
 
             }
         }
@@ -875,14 +875,14 @@ namespace BP.WF
             {
                 if (BP.Web.WebUser.IsWap)
                 {
-                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                 }
                 else
                 {
                     if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                     else
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='Do.aspx?ActionType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='Do.aspx?ActionType=DeleteFlow&WorkID=" + cWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                 }
             }
             else
@@ -892,13 +892,13 @@ namespace BP.WF
                 if (BP.Web.WebUser.IsWap == false)
                 {
                     if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                     else
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                 }
                 else
                 {
-                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=0&FK_Node=" + gwf.FK_Node + "' ><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                 }
             }
         }
@@ -976,14 +976,14 @@ namespace BP.WF
                 if (BP.Web.WebUser.IsWap)
                 {
                     if (wnPri.HisNode.HisFormType != NodeFormType.SDKForm)
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。";
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。";
                     else
                         return "@撤销成功.";
                 }
                 else
                 {
                     if (wnPri.HisNode.HisFormType != NodeFormType.SDKForm)
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。";
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。";
                     else
                         return "@撤销成功.";
                 }
@@ -995,11 +995,11 @@ namespace BP.WF
                 // DBAccess.RunSQL("UPDATE WF_ForwardWork SET IsRead=1 WHERE WORKID=" + this.WorkID + " AND FK_Node=" + wnPri.HisNode.NodeID);
                 if (BP.Web.WebUser.IsWap == false)
                 {
-                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。";
+                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。";
                 }
                 else
                 {
-                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。";
+                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。";
                 }
             }
         }
@@ -1055,14 +1055,14 @@ namespace BP.WF
             {
                 if (BP.Web.WebUser.IsWap)
                 {
-                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + VirPath + "WF/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + VirPath + "WF/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                 }
                 else
                 {
                     if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + VirPath + "WF/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + VirPath + "WF/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                     else
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + VirPath + "WF/Do.aspx?ActionType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + VirPath + "WF/Do.aspx?ActionType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
                 }
             }
             else
@@ -1072,13 +1072,13 @@ namespace BP.WF
                 if (BP.Web.WebUser.IsWap == false)
                 {
                     if (this.HisFlow.FK_FlowSort != "00")
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                     else
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                 }
                 else
                 {
-                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
+                    return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FID=" + gwf.FID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>。" + msg;
                 }
             }
         }

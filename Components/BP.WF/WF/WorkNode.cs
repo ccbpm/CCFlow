@@ -2297,9 +2297,9 @@ namespace BP.WF
                 if (this.HisNode.IsStartNode)
                 {
                     if (WebUser.IsWap)
-                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/Wap/MyFlow.aspx?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse( toND.FK_Flow) + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。", SendReturnMsgType.Info);
+                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/Wap/MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。", SendReturnMsgType.Info);
                     else
-                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/MyFlow.aspx?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。", SendReturnMsgType.Info);
+                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。", SendReturnMsgType.Info);
                 }
                 else
                     this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>。", SendReturnMsgType.Info);
@@ -3235,9 +3235,9 @@ namespace BP.WF
             if (this.HisNode.IsStartNode)
             {
                 if (WebUser.IsWap)
-                    this.addMsg("UnDoNew", "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/Wap/MyFlow.aspx?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
+                    this.addMsg("UnDoNew", "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/Wap/MyFlow.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
                 else
-                    this.addMsg("UnDoNew", "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + this.VirPath + this.AppType + "/MyFlow.aspx?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
+                    this.addMsg("UnDoNew", "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
             }
             else
             {
@@ -6087,7 +6087,7 @@ namespace BP.WF
                         && this.HisRememberMe != null
                         && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
                     {
-                        string url = "/WF/MyFlow.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
+                        string url = "/WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
                           htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
                           textInfo = "@下一步工作您仍然可以处理。";
                         this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, htmlInfo);
@@ -6283,7 +6283,7 @@ namespace BP.WF
                     && this.HisRememberMe!=null 
                     && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
                 {
-                    string url = "/WF/MyFlow.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
+                    string url = "/WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
                     string htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
                     string textInfo = "@下一步工作您仍然可以处理。";
 
@@ -6910,11 +6910,7 @@ namespace BP.WF
             {
                 this.HisGenerWorkFlow.Paras_LastSendTruckID = t.MyPK;
             }
-
-
-             
         }
-       
         /// <summary>
         /// 向他们发送消息
         /// </summary>
@@ -6943,99 +6939,6 @@ namespace BP.WF
                 // this.addMsg(SendReturnMsgFlag.SendSuccessMsg, "已经转给，加签的发起人(" + item.FK_Emp + "," + item.FK_EmpText + ")", SendReturnMsgType.Info);
             }
             return;
-
-
-            #region 判断是否可以发送.
-            bool isSendEmail = false;
-            bool isSendSMS = false;
-            FrmEvent fEvent = this.HisNode.SendSuccess_FrmEvent;
-            switch (fEvent.MsgCtrl)
-            {
-                case MsgCtrl.BySet:
-                    //是否启动消息?
-                    isSendEmail = fEvent.MailEnable;
-                    isSendSMS = fEvent.SMSEnable;
-
-                    if (isSendEmail == false && isSendSMS == false)
-                        return;
-                    break;
-                case MsgCtrl.ByFrmIsSendMsg:
-                    try
-                    {
-                        /*从表单字段里取参数.*/
-                        if (this.HisWork.Row.ContainsKey("IsSendEmail") == true)
-                            isSendEmail = this.HisWork.GetValBooleanByKey("IsSendEmail");
-                        if (this.HisWork.Row.ContainsKey("IsSendSMS") == true)
-                            isSendSMS = this.HisWork.GetValBooleanByKey("IsSendSMS");
-
-                        if (isSendEmail == false && isSendSMS == false)
-                            return;
-                    }
-                    catch
-                    {
-                        if (this.HisWork.Row.ContainsKey("IsSendEmail") == false || this.HisWork.Row.ContainsKey("IsSendSMS") == false)
-                            throw new Exception("没有在ccform里接收到IsSendEmail， IsSendSMS 参数.");
-                    }
-                    break;
-                case MsgCtrl.BySDK:
-                    try
-                    {
-                        if (this.HisWork.GetValBooleanByKey("IsSendMsg") == false)
-                            return;
-                    }
-                    catch
-                    {
-                        if (this.HisWork.Row.ContainsKey("IsSendMsg") == false)
-                            throw new Exception("没有接收到IsSendMsg参数.");
-                    }
-                    break;
-                default:
-                    break;
-            }
-            #endregion 判断是否可以发送.
-
-            // 取出模版文件.
-            string hostUrl = Glo.HostURL;
-
-            //邮件标题.
-            string mailTitle = fEvent.MailTitle;
-
-            //邮件内容.
-            string mailDoc = fEvent.MailDoc;
-            string mailEnd = "<a href='{0}'>用计算机打开工作</a>,地址:{0}.";
-            
-            //短消息内容.
-            string msgTemp = fEvent.SMSDoc;
-            foreach (GenerWorkerList wl in gwls)
-            {
-                if (wl.IsEnable == false)
-                    continue;
-
-                // 邮件标题.
-                string title = "";
-                if (string.IsNullOrEmpty(mailTitle))
-                    title = string.Format("流程:{0}.工作:{1},发送人:{2},标题:{3},需您处理.", this.HisNode.FlowName, wl.FK_NodeText, this.ExecerName, this.rptGe.Title);
-                else
-                    title = Glo.DealExp(mailTitle, this.HisWork, null);
-
-                //邮件内容.
-                string sid = wl.FK_Emp + "_" + wl.WorkID + "_" + wl.FK_Node + "_" + wl.RDT;
-                string url = hostUrl + "WF/Do.aspx?DoType=OF&SID=" + sid;
-                url = url.Replace("//", "/");
-                url = url.Replace("//", "/");
-                mailDoc = Glo.DealExp(mailDoc, this.HisWork, null);
-                mailDoc += "\t\n " + string.Format(mailEnd.Clone().ToString(), url);
-                mailDoc = mailDoc.Replace("{Url}", url);
-
-                // 短信信息.
-                if (string.IsNullOrEmpty(msgTemp) == true)
-                    msgTemp = "新工作:" + this.rptGe.Title + "发送人:"+Glo.DealUserInfoShowModel(WebUser.No,WebUser.Name)+ ",流程:" + this.HisFlow.Name;
-                else
-                    msgTemp = Glo.DealExp(msgTemp, this.HisWork, null);
-
-                BP.WF.Dev2Interface.Port_SendMsg(wl.FK_Emp, title, mailDoc,
-                    "WKAlt" + wl.FK_Node + "_" + wl.WorkID, BP.WF.SMSMsgType.SendSuccess, wl.FK_Flow, wl.FK_Node, wl.WorkID, wl.FID);
-            }
         }
         /// <summary>
         /// 发送前的流程状态。

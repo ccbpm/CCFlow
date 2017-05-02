@@ -299,7 +299,6 @@ namespace BP.Sys
         public const string ImpSQLFull = "ImpSQLFull";
         #endregion
     }
-
     /// <summary>
     /// 明细
     /// </summary>

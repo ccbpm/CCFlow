@@ -882,29 +882,13 @@ namespace BP.WF
                 Log.DebugWriteWarning(ex.Message);
             }
 
-            // 以退回到的节点向前数据用递归删除它。
-            if (IsBackTrack == false)
-            {
-                /*如果退回不需要原路返回，就删除中间点的数据。*/
-#warning 没有考虑两种流程数据存储模式。
-                //DeleteToNodesData(this.ReturnToNode.HisToNodes);
-            }
-
-            //// 向他发送消息。 删除，该消息写入了事件里。
-            //if (Glo.IsEnableSysMessage == true)
-            //{
-            //    //   WF.Port.WFEmp wfemp = new Port.WFEmp(wnOfBackTo.HisWork.Rec);
-            //    string title = string.Format("工作退回：流程:{0}.工作:{1},退回人:{2},需您处理",
-            //        this.HisNode.FlowName, this.ReturnToNode.Name, WebUser.Name);
-            //    BP.WF.Dev2Interface.Port_SendMsg(gwl.FK_Emp, title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnWork, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
-            //}
-
             //把退回原因加入特殊变量里. 为软通小杨处理rpt变量不能替换的问题.
             string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt,
                 atPara, null, gwl.FK_Emp);
 
             if (text != null && text.Length > 1000)
                 text = "退回事件:无返回信息.";
+
             // 返回退回信息.
             if (this.ReturnToNode.IsGuestNode)
             {

@@ -728,7 +728,7 @@ namespace BP.WF
                     gwl.RDT = BP.DA.DataType.CurrentDataTime;
                     gwl.SDT = BP.DA.DataType.CurrentDataTime;
                     gwl.Update();
-                    return "子线程被删除成功,这是最后一个删除的子线程已经为您在{" + gwfMain.NodeName + "}产生了待办,<a href='/WF/MyFlow.aspx?WorkID=" + gwfMain.WorkID + "&FK_Flow=" + gwfMain.FK_Flow + "'>点击处理工作</a>.";
+                    return "子线程被删除成功,这是最后一个删除的子线程已经为您在{" + gwfMain.NodeName + "}产生了待办,<a href='/WF/MyFlow.htm?WorkID=" + gwfMain.WorkID + "&FK_Flow=" + gwfMain.FK_Flow + "'>点击处理工作</a>.";
 
                 }
             }
@@ -2073,7 +2073,7 @@ namespace BP.WF
                 wl.IsEnable = true;
                 wl.IsPass = false;
                 wl.Update();
-                return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.aspx?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
+                return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
             }
 
             GenerWorkerList mywl = null;
@@ -2094,7 +2094,7 @@ namespace BP.WF
                 }
             }
             if (mywl != null)
-                return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.aspx?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + mywl.FK_Node + "&FID=" + mywl.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
+                return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + mywl.FK_Node + "&FID=" + mywl.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
 
             GenerWorkerList wk = (GenerWorkerList)wls[0];
             GenerWorkerList wkNew = new GenerWorkerList();
@@ -2108,7 +2108,7 @@ namespace BP.WF
             //删除撤销信息.
             BP.DA.DBAccess.RunSQL("DELETE FROM WF_ShiftWork WHERE WorkID=" + this.WorkID + " AND FK_Node=" + wk.FK_Node);
 
-            return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.aspx?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + wk.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
+            return "@撤消移交成功，<a href='" + Glo.CCFlowAppPath + "WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&FK_Node=" + wk.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "'><img src='" + Glo.CCFlowAppPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>";
         }
         #endregion
     }

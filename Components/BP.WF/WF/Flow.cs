@@ -6681,7 +6681,7 @@ namespace BP.WF
                 string treeNo = DBAccess.GenerOID("BP.GPM.Menu").ToString();
 
                 // 插入流程名称.
-                string url = SystemConfig.CCFlowWebPath + "WF/MyFlow.aspx?FK_Flow=" + this.No + "&FK_Node=" + int.Parse(this.No) + "01";
+                string url = SystemConfig.CCFlowWebPath + "WF/MyFlow.htm?FK_Flow=" + this.No + "&FK_Node=" + int.Parse(this.No) + "01";
 
                 sql = "INSERT INTO GPM_Menu(No,Name,ParentNo,IsDir,MenuType,FK_App,IsEnable,Flag,Url)";
                 sql += " VALUES('{0}','{1}','{2}',{3},{4},'{5}',{6},'{7}','{8}')";

@@ -111,7 +111,7 @@
                     <fieldset>
                         <legend>
                             <input type="radio" ID="RB_TurnToDeal_0" name="TurnToDeal" runat="server" value="0"
-                                onclick="rb_onchange(0)" />提示ccflow默认信息</legend>
+                                onclick="rb_onchange(0)" /><label for="RB_TurnToDeal_0"> 提示ccflow默认信息</label></legend>
                         <ul style="color: Gray">
                             <li>默认为不设置，按照机器自动生成的语言提示，这是标准的信息提示。</li>
                             <li>比如：您的当前的工作已经处理完成。下一步工作自动启动，已经提交给xxx处理。 </li>
@@ -120,7 +120,7 @@
                     <fieldset>
                         <legend>
                             <input type="radio" ID="RB_TurnToDeal_1" name="TurnToDeal"  value="1"
-                                onClick="rb_onchange(1)" />提示指定信息 - <a href="javascript:ShowHidden('SpecMsg')">帮助:</a>
+                                onClick="rb_onchange(1)" /><label for="RB_TurnToDeal_1">提示指定信息 </label> - <a href="javascript:ShowHidden('SpecMsg')">帮助:</a>
                         </legend>
                         <div id="SpecMsg" style="display: none">
                             <ul style="color: Gray">
@@ -137,7 +137,7 @@
                     <fieldset>
                         <legend>
                             <input type="radio" ID="RB_TurnToDeal_2" name="TurnToDeal" runat="server" value="2"
-                                onClick="rb_onchange(2)" />转向指定的URL - <a href="javascript:ShowHidden('SpecUrl')">帮助:</a>
+                                onClick="rb_onchange(2)" /><label for="RB_TurnToDeal_2"> 转向指定的URL </label>- <a href="javascript:ShowHidden('SpecUrl')">帮助:</a>
                         </legend>
                         <div id="SpecUrl" style="display: none">
                             <ul style="color: Gray">

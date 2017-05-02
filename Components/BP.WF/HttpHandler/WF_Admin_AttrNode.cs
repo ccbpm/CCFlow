@@ -169,7 +169,12 @@ namespace BP.WF.HttpHandler
             BP.WF.Node nd = new BP.WF.Node();
             nd.NodeID = this.FK_Node;
             nd.RetrieveFromDBSources();
-            return nd.ToJson();
+
+            Hashtable ht = new Hashtable();
+            ht.Add(NodeAttr.TurnToDeal, (int)nd.HisTurnToDeal);
+            ht.Add(NodeAttr.TurnToDealDoc, nd.TurnToDealDoc);
+
+            return BP.Tools.Json.ToJsonEntityModel(ht); 
         }
         #endregion
 

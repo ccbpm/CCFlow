@@ -173,6 +173,7 @@
     <Compile Include="HttpHandler\WF_App_ACE.cs" />
     <Compile Include="HttpHandler\WF_Admin.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt.cs" />
+    <Compile Include="HttpHandler\CCMobile.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\MapRptExt.cs" />
@@ -482,10 +483,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CCInterface\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CodeBak\BPMN\" />
-    <Folder Include="CodeBak\XML\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

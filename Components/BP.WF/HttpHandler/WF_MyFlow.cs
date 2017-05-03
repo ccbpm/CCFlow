@@ -19,7 +19,6 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_MyFlow : WebContralBase
     {
-
         #region  运行变量
         /// <summary>
         /// 从节点.
@@ -197,6 +196,7 @@ namespace BP.WF.HttpHandler
             }
 
             #region 判断前置导航.
+
             if (this.currND.IsStartNode && this.IsCC == false && this.WorkID == 0)
             {
                 if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No) == false)
@@ -367,6 +367,7 @@ namespace BP.WF.HttpHandler
             }
 
             string myurl = "MyFlow.aspx";
+
             if (SystemConfig.CustomerNo == "CCFlowTest")
                 myurl = "MyFlowFree.htm";
 
@@ -801,18 +802,9 @@ namespace BP.WF.HttpHandler
                     if (exSend.Message.Contains("请选择下一步骤工作") == true || exSend.Message.Contains("用户没有选择发送到的节点") == true)
                     {
                         /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
-                        return "url@./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
+                        return "url@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
                     }
-
-
-                    //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示
-                    //if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && exSend.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
-                    //if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && exSend.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
-                    //{
-                    //    return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
-                    //}
                 }
-
 
                 //当前节点.
                 Node currNode = new Node(this.FK_Node);

@@ -115,7 +115,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmFree_Init()
         {
-
             MapData md = new MapData(this.EnsName);
             DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 

@@ -342,7 +342,7 @@ function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
     var date = new Date();
     var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
 
-    var url = 'WebOffice/AttachOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
+    var url = 'WebOffice/AttachOffice.htm?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
     //var url = 'WebOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal;
     // var str = window.showModalDialog(url, '', 'dialogHeight: 1250px; dialogWidth:900px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
     //var str = window.open(url, '', 'dialogHeight: 1200px; dialogWidth:1110px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
@@ -357,7 +357,7 @@ function FocusBtn(btn, workid) {
     else {
         btn.value = '关注';
     }
-    $.ajax({ url: "Do.aspx?ActionType=Focus&WorkID=" + workid, async: false });
+    $.ajax({ url: "Do.htm?ActionType=Focus&WorkID=" + workid, async: false });
 }
 
 function ReturnVal(ctrl, url, winName) {
@@ -463,11 +463,14 @@ function pageParamToUrl() {
 }
 //初始化按钮
 function initBar() {
+
+      var  url = MyFlow + "?DoType=InitToolBar&m=" + Math.random();
+
     $.ajax({
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?DoType=InitToolBar&m=" + Math.random(),
+        url: url,
         dataType: 'html',
         success: function (data) {
             var barHtml = data;
@@ -527,24 +530,24 @@ function initModal(modalType, toNode) {
         switch (modalType) {
             case "returnBack":
                 $('#modalHeader').text("工作退回");
-                modalIframeSrc = "../WF/WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
             case "shift":
                 $('#modalHeader').text("工作移交");
-                modalIframeSrc = "../WF/WorkOpt/forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "askfor":
                 $('#modalHeader').text("加签");
-                modalIframeSrc = "../WF/WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "accepter":
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");
-                modalIframeSrc = "../WF/WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
                 //发送选择接收节点和接收人
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);
-                modalIframeSrc = "../WF/WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
                 break;
             default:
                 break;
@@ -610,11 +613,12 @@ function Save() {
     }
     setToobarDisiable();
 
+
     $.ajax({
         type: 'post',
         async: true,
         data: getFormData(true, true),
-        url: "MyFlow.ashx?DoType=Save",
+        url: MyFlow+"?DoType=Save",
         dataType: 'html',
         success: function (data) {
 
@@ -750,7 +754,7 @@ function initGroup(workNodeData, groupFiled) {
             break;
         case "Dtl":
             //WF/CCForm/Dtl.aspx?EnsName=ND501Dtl1&RefPKVal=0&PageIdx=1
-            var src = "/WF/CCForm/Dtl.aspx?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
+            var src = "./CCForm/Dtl.htm?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
             src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
@@ -762,20 +766,19 @@ function initGroup(workNodeData, groupFiled) {
                     continue;
                 var src = "";
                 if (pageData.IsReadonly)
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+                    src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
                 else
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
+                    src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
 
                 groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             }
             break;
         case "FWC": //审核组件.
-            var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
+            var src = "./WorkOpt/WorkCheck.htm?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;
             }
-
 
             if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
                 paras += "&DoType=View";
@@ -784,7 +787,7 @@ function initGroup(workNodeData, groupFiled) {
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "SubFlow": //子流程..
-            var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
+            var src = "./WorkOpt/SubFlow.htm?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;
@@ -797,7 +800,7 @@ function initGroup(workNodeData, groupFiled) {
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "Track": //轨迹图.
-            var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
+            var src = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
             //var paras = pageParamToUrl();
             //if (paras.indexOf('OID') < 0) {
             //    paras += "&OID=" + pageData.WorkID;
@@ -811,7 +814,7 @@ function initGroup(workNodeData, groupFiled) {
 
             break;
         case "Thread": //子线程.
-            var src = "/WF/WorkOpt/Thread.aspx?s=2";
+            var src = "./WorkOpt/Thread.htm?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;
@@ -820,7 +823,7 @@ function initGroup(workNodeData, groupFiled) {
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "FTC": //流转自定义.  有问题
-            var src = "/WF/WorkOpt/FTC.aspx?s=2";
+            var src = "./WorkOpt/FTC.htm?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;
@@ -1617,8 +1620,7 @@ function GenerWorkNode1() {
         type: 'post',
         async: true,
         data: pageData,
-        //url: "MyFlow.ashx?DoType=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
-        url: "MyFlow.ashx?DoType=GenerWorkNode" + "&m=" + Math.random(),
+        url: MyFlow+"?DoType=GenerWorkNode" + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
             jsonStr = data;
@@ -1806,7 +1808,7 @@ function execSend(toNode) {
         type: 'post',
         async: true,
         data: getFormData(true, true) + "&ToNode=" + toNode,
-        url: "MyFlow.ashx?DoType=Send",
+        url: MyFlow+"?DoType=Send",
         dataType: 'html',
         success: function (data) {
             if (data.indexOf('err@') == 0) {//发送时发生错误
@@ -2178,8 +2180,7 @@ function GenerWorkNode() {
         type: 'post',
         async: true,
         data: pageData,
-        //url: "MyFlow.ashx?DoType=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
-        url: "MyFlow.ashx?DoType=GenerWorkNode" + "&m=" + Math.random(),
+        url: MyFlow + "?DoType=GenerWorkNode" + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
             jsonStr = data;

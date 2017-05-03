@@ -1745,55 +1745,59 @@ namespace CCFlow.WF.Comm.UC
                     this.DataPanelDtlAdd(en, attr, cfgs, url, urlExt, cfg.FocusField);
                 }
 
-                if (isRefFunc && cfg.IsEnableRefFunc)
-                {
-                    string str = "";
+                this.AddTD();
 
-                    #region 加入他门的 方法
-                    RefMethods myreffuncs = en.EnMap.HisRefMethods;
-                    foreach (RefMethod func in myreffuncs)
-                    {
-                        if (func.Visable == false || func.IsForEns == false)
-                            continue;
 
-                        //myurl="../Comm/RefMethod.htm?Index="+func.Index+"&EnsName="+ens.ToString() ;
-                        str += "<A onclick=\"javascript:RefMethod1('" + this.Request.ApplicationPath + "', '" + func.Index + "', '" + func.Warning + "', '" + func.Target + "', '" + ens.ToString() + "','" + url + "') \"  > " + func.GetIcon(this.Request.ApplicationPath) + " " + func.Title + "</A>";
-                        // str += "<A onclick=\"javascript:RefMethod1('" + this.Request.ApplicationPath + "', '" + func.Index + "', '" + func.Warning + "', '" + func.Target + "', '" + ens.ToString() + "','" + url + "') \"  > " + func.GetIcon(this.Request.ApplicationPath) + "<font color=blue >" + func.Title + "</font></A>";
-                        //this.AddItem(func.Title, "RefMethod('"+func.Index+"', '"+func.Warning+"', '"+func.Target+"', '"+this.EnsName+"')", func.Icon);
-                    }
-                    #endregion
+                //if (isRefFunc && cfg.IsEnableRefFunc)
+                //{
+                //    string str = "";
 
-                    #region 加入他的明细
-                    EnDtls enDtls = en.EnMap.Dtls;
-                    foreach (EnDtl enDtl in enDtls)
-                    {
-                        str += "[<A onclick=\"javascript:EditDtl1('" + this.Request.ApplicationPath + "', '" + myen.ToString() + "',  '" + enDtl.EnsName + "', '" + enDtl.RefKey + "', '" + url + "&IsShowSum=1')\" >" + enDtl.Desc + "</A>]";
-                    }
-                    #endregion
+                //    #region 加入他门的 方法
+                //    RefMethods myreffuncs = en.EnMap.HisRefMethods;
+                //    foreach (RefMethod func in myreffuncs)
+                //    {
+                //        if (func.Visable == false || func.IsForEns == false)
+                //            continue;
 
-                    #region 加入一对多的实体编辑
-                    //AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
-                    //foreach (AttrOfOneVSM vsM in oneVsM)
-                    //{
-                    //    str += "[<A onclick=\"javascript:EditOneVsM1('" + this.Request.ApplicationPath + "','" + en.ToString() + "','" + vsM.EnsOfMM.ToString() + "s','" + vsM.EnsOfMM + "&dt=" + DateTime.Now.ToString("hhss") + "','" + myen.ToString() + "','" + url + "'); return; \" >" + vsM.Desc + "</A>]";
-                    //}
-                    #endregion
+                //        //myurl="../Comm/RefMethod.htm?Index="+func.Index+"&EnsName="+ens.ToString() ;
+                //        str += "<A onclick=\"javascript:RefMethod1('" + this.Request.ApplicationPath + "', '" + func.Index + "', '" + func.Warning + "', '" + func.Target + "', '" + ens.ToString() + "','" + url + "') \"  > " + func.GetIcon(this.Request.ApplicationPath) + " " + func.Title + "</A>";
+                //        // str += "<A onclick=\"javascript:RefMethod1('" + this.Request.ApplicationPath + "', '" + func.Index + "', '" + func.Warning + "', '" + func.Target + "', '" + ens.ToString() + "','" + url + "') \"  > " + func.GetIcon(this.Request.ApplicationPath) + "<font color=blue >" + func.Title + "</font></A>";
+                //        //this.AddItem(func.Title, "RefMethod('"+func.Index+"', '"+func.Warning+"', '"+func.Target+"', '"+this.EnsName+"')", func.Icon);
+                //    }
+                //    #endregion
 
-                    if (cfg.IsEnableOpenICON)
-                        this.Add("<TD class='TD' style='cursor:hand;' nowrap=true  >" + str + " </TD>");
-                    else
-                        this.Add("<TD class='TD' style='cursor:hand;' nowrap=true  >" + str + " </TD>");
-                    // this.Add("<TD class='TD' style='cursor:hand;' nowrap=true  >" + str + " <a href=\"" + urlExt + "\" ><img src='../Img/Btn/Open.gif' border=0/></a></TD>");
+                //    #region 加入他的明细
+                //    EnDtls enDtls = en.EnMap.Dtls;
+                //    foreach (EnDtl enDtl in enDtls)
+                //    {
+                //        str += "[<A onclick=\"javascript:EditDtl1('" + this.Request.ApplicationPath + "', '" + myen.ToString() + "',  '" + enDtl.EnsName + "', '" + enDtl.RefKey + "', '" + url + "&IsShowSum=1')\" >" + enDtl.Desc + "</A>]";
+                //    }
+                //    #endregion
 
-                }
-                else
-                {
-                    if (cfg.IsEnableOpenICON)
-                        this.AddTD();
-                    // this.Add("<TD class='TD' style='cursor:hand;' nowrap=true><a href=\"" + urlExt + "\" ><img src='../Img/Btn/Open.gif' border=0/></a></TD>");
-                    else
-                        this.AddTD();
-                }
+                //    #region 加入一对多的实体编辑
+                //    //AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
+                //    //foreach (AttrOfOneVSM vsM in oneVsM)
+                //    //{
+                //    //    str += "[<A onclick=\"javascript:EditOneVsM1('" + this.Request.ApplicationPath + "','" + en.ToString() + "','" + vsM.EnsOfMM.ToString() + "s','" + vsM.EnsOfMM + "&dt=" + DateTime.Now.ToString("hhss") + "','" + myen.ToString() + "','" + url + "'); return; \" >" + vsM.Desc + "</A>]";
+                //    //}
+                //    #endregion
+
+                //    if (cfg.IsEnableOpenICON)
+                //        this.Add("<TD class='TD' style='cursor:hand;' nowrap=true  >" + str + " </TD>");
+                //    else
+                //        this.Add("<TD class='TD' style='cursor:hand;' nowrap=true  >" + str + " </TD>");
+                //    // this.Add("<TD class='TD' style='cursor:hand;' nowrap=true  >" + str + " <a href=\"" + urlExt + "\" ><img src='../Img/Btn/Open.gif' border=0/></a></TD>");
+
+                //}
+                //else
+                //{
+                //    if (cfg.IsEnableOpenICON)
+                //        this.AddTD();
+                //    // this.Add("<TD class='TD' style='cursor:hand;' nowrap=true><a href=\"" + urlExt + "\" ><img src='../Img/Btn/Open.gif' border=0/></a></TD>");
+                //    else
+                //        this.AddTD();
+                //}
+
                 this.AddTREnd();
             }
             this.AddTableEnd();

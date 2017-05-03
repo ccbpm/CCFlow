@@ -2,6 +2,7 @@
 //  For .net 后台的调用的url ,  java的与.net的不同.
 var plant = 'CCFlow'; //运行平台.
 var Handler = "Handler.ashx"; //处理器,一般来说，都放在与当前处理程序的相同的目录下。
+var MyFlow = "MyFlow.ashx"; //工作处理器.
 
 
 //公共方法

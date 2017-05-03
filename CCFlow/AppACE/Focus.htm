@@ -53,10 +53,9 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Start_Init&m=" + Math.random(),
+                url: Handler + "?DoType=Focus_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -69,41 +68,38 @@
 
                     for (var i = 0; i < data.length; i++) {
 
-                        var no = data[i].NO;
-                        var name = data[i].NAME;
-                        var sortName = data[i].FK_FLOWSORTTEXT;
-
-                        if (sortNames.indexOf(sortName + ';') > 0) {
-                            sortName = "";
-                        } else {
-                            sortNames += sortName + ';';
-                        }
-
-                        var isBatchStart = data[i].ISBATCHSTART;
-                        var searchUrl = '../WF/Rpt/Search.aspx?RptNo=ND' + no + 'MyRpt&FK_Flow=' + no;
-                        var groupUrl = '../WF/Rpt/Group.aspx?RptNo=ND' + no + 'MyRpt&FK_Flow=' + no;
-                        var batchUrl = '../WF/BatchStart.aspx?FK_Flow=' + no;
+                        var batchUrl = "../WF/WFRpt.aspx?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW;
 
                         row += "\t\n<tr>";
                         row += "<td>" + i + "</td>";
-                        row += "<td>" + sortName + "</td>";
-                        row += "<td><a href='../WF/MyFlow.aspx?FK_Flow=" + no + "' target=_blank >" + name + "</a></td>";
-
-                        if (isBatchStart == "1")
-                            row += "<td><a href='" + batchUrl + "'  target=_blank >批量发起</a></td>";
-                        else
-                            row += "<td></td>";
-
-                        row += "<td><a href='" + searchUrl + "' target=_blank >查询</a></td>";
-                        row += "<td><a href='" + groupUrl + "' target=_blank >分析</a></td>";
+                        row += "<td>" + data[i].FLOWNAME + "</td>";
+                        row += "<td><a href=\"" + batchUrl + "\"  target=_blank >" + data[i].TITLE + "</a></td>";
+                        row += "<td>" + data[i].STARTERNAME + "</td>";
+                        row += "<td>" + data[i].RDT + "</td>";
+                        row += "<td>" + data[i].FLOWNOTE + "</td>";
+                        row += "<td>" + data[i].NODENAME + "</td>";
+                        row += "<td>" + data[i].TODOEMPS + "</td>";
+                        row += "<td>" + data[i].ATPARA + "</td>";
+                        row += "<td><a href='#' onclick='unfollow(" + data[i].WORKID + "'>取消关注</a></td>";
                         row += "</tr>";
                     }
-
                     $("#Rows").html(row);
                     return;
                 }
             });
         });
+
+        //取消关注
+        function unfollow(workid) {
+            $.ajax({
+                url: "Do.aspx?ActionType=Focus&WorkID=" + workid,
+                async: false,
+                success: function () {
+                    window.location.href = window.location.href;
+                    alert("您已取消关注！");
+                }
+            });
+        }
     </script>
 	</head>
 	<body>

@@ -240,6 +240,9 @@ namespace CCFlow.WF.Admin.CCFormDesigner.ExcelFrmDesigner
 					case "SetBindCell":
 						msg = SetBindCell();
 						break;
+					case "RemoveBindCell":
+						msg = RemoveBindCell();
+						break;
 					case "GetSubTables": //获取所有子表信息
 						msg = GetSubTables();
 						break;
@@ -393,13 +396,25 @@ namespace CCFlow.WF.Admin.CCFormDesigner.ExcelFrmDesigner
 		}
 
 		/// <summary>
-		/// 设置字段对应单元格
+		/// 设置字段单元格绑定
 		/// </summary>
 		/// <returns></returns>
 		public string SetBindCell()
 		{
 			MapAttr ma = new MapAttr(this.MyPK);
 			ma.SetPara("BindCell", this.GetRequestVal("Cell"));
+			ma.Update();
+			return "success";
+		}
+
+		/// <summary>
+		/// 移除字段单元格绑定
+		/// </summary>
+		/// <returns></returns>
+		public string RemoveBindCell()
+		{
+			MapAttr ma = new MapAttr(this.MyPK);
+			ma.SetPara("BindCell", "");
 			ma.Update();
 			return "success";
 		}

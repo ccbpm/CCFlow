@@ -272,20 +272,30 @@
 								// } else {
 								// 	return value;
 								// }
-								if(row.CellName)
-									return "<button onclick=\"Unbind('" + tableId + "','" + index + "','" + row.KeyOfEn + "')\" title='解除单元格绑定'>解绑</button>";
-								else
+								var bindCell = GetAtPara(row.AtPara, "BindCell");
+								if(bindCell == null || bindCell == "") {
 									return "<button onclick=\"Insert('" + tableId + "','" + index + "','" + row.KeyOfEn + "')\" title='插入到当前单元格'>插入</button>";
+
+								}else{
+									// var btn = document.createElement("button");
+									// btn.innerText = "解绑";
+									// btn.title = "解除单元格绑定";
+									// btn.onclick = function(){
+									// 	Unbind(tableId,row);
+									// };
+									// return btn; //前端会显示“[object HTMLButtonElement]”
+									return "<button onclick=\"Unbind('" + tableId + "','" + row.MyPK + "','" + row.KeyOfEn + "')\" title='解除单元格绑定'>解绑</button>";
+								}
 							}
 						}
 				]],
-				onSelect: function (i, r) {
-					//if (r.Sheet && r.Cell) {
+				onSelect: function (index, row) {
+					//if (row.Sheet && row.Cell) {
 					//	//选中sheet/单元格
-					//	excel.SetSelection(r.Sheet, r.Cell);
+					//	excel.SetSelection(row.Sheet, row.Cell);
 					//}
-					var bindCell = GetAtPara(r.AtPara, "BindCell");
-					if(bindCell != null){
+					var bindCell = GetAtPara(row.AtPara, "BindCell");
+					if(bindCell != null && bindCell != ""){
 						var arrayAddress = bindCell.split("!");
 						var sheet = arrayAddress[0].replace("=", "");
 						var cell = arrayAddress[1];
@@ -323,9 +333,31 @@
 			$('#main').datagrid("selectRecord", id);
 		}
 
-		function Unbind(tableId,rowIndex,columnName){
-			//TODO: 更改数据库数据
-			//删除命名
+		//解除字段与单元格的绑定
+		function Unbind(tableId,pk,name){
+			//更改数据库数据
+			if(confirm("确定要解除单元格绑定吗？")){
+				var result = false;
+				$.ajax({
+					async: false,
+					url: Handler + "?DoType=RemoveBindCell&MyPK=" + pk + "&m=" + Math.random(),
+					// dataType: 'json',
+					success: function (data) {
+						if (data.indexOf("err@") > -1) {
+							alert(data);
+							result = false;
+						} else {
+							//删除命名
+							result = excel.DelName(name);
+						}
+					}
+				});
+				if(result){
+					RefreshGrid(tableId);
+				}
+
+				//TODO: 枚举/外键 删除“数据有效性”
+			}
 		}
 
 
@@ -411,7 +443,7 @@
 			}
 		}
 
-		//在当前单元格插入枚举字段
+		//在当前单元格插入枚举字段 //TODO: 处理enumKey=column.KeyOfEn的情况
 		function InsertEnum(tableId,column){
 			//1.设置枚举/外键区域
 			//1.1.建立枚举/外键sheet页
@@ -782,7 +814,7 @@
 			}
 			//创建子表
 			var newTableId = NewSub();
-			if (newTableId) {
+			if (newTableId != false) { //Q: 直接使用“if(newTableId)”且“newTableId=false”时为什么会继续执行？
 				//命名
 				excel.SetRangeName(newTableId);
 				CreateSubDom(newTableId);

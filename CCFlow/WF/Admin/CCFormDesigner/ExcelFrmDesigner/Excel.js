@@ -191,7 +191,7 @@ Excel.prototype = {
 		range = range ? range : this.GetRange();
 		//this.Log("Excel.SetRangeName | range: " + range);
 		if (this.GetRangeName(sheet, range) != null) {
-			this.Log("Excel.SetRangeName | false: " + "该区域已存在命名！");
+			console.warn("Excel.SetRangeName | false: " + "该区域已存在命名！");
 			return "该区域已存在命名！";
 		}
 		//if (range.indexOf("$") > -1) {
@@ -199,6 +199,19 @@ Excel.prototype = {
 		//}
 		// 实测传入带“$”符号的range【能】正常执行
 		this.app.Names.Add(name, "=" + sheet + "!" + range);
+	},
+	//删除命名
+	DelName: function(name){
+		if(name){
+			try{
+				var a = this.app.Names.Item(name).Delete();
+				this.Log("Excel.DelName | " + a);
+				return true;
+			}catch(e){ //命名不存在时
+				return true;
+			}
+		}
+		return false;
 	},
 	//设置单元格【数据有效性】//只支持“序列”、“=命名”的方式
 	SetValidation: function(name, sheet, cell) {

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<title>流程发起</title>
+		<title>流程抄送</title>
 		<!-- basic styles -->
 
 		<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -53,10 +53,9 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Start_Init&m=" + Math.random(),
+                url: Handler + "?DoType=cc_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -65,40 +64,20 @@
                     //转换.
                     data = JSON.parse(data);
                     var row = "";
-                    var sortNames = ";";
-
                     for (var i = 0; i < data.length; i++) {
-
-                        var no = data[i].NO;
-                        var name = data[i].NAME;
-                        var sortName = data[i].FK_FLOWSORTTEXT;
-
-                        if (sortNames.indexOf(sortName + ';') > 0) {
-                            sortName = "";
-                        } else {
-                            sortNames += sortName + ';';
-                        }
-
-                        var isBatchStart = data[i].ISBATCHSTART;
-                        var searchUrl = '../WF/Rpt/Search.aspx?RptNo=ND' + no + 'MyRpt&FK_Flow=' + no;
-                        var groupUrl = '../WF/Rpt/Group.aspx?RptNo=ND' + no + 'MyRpt&FK_Flow=' + no;
-                        var batchUrl = '../WF/BatchStart.aspx?FK_Flow=' + no;
-
+                        var batchUrl = '../WF/WFRpt.aspx?FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + data[i].FK_NODE + '&WorkID=' + data[i].WORKID + '&FID=' + data[i].FID;
+                        var url = '../WF/WorkOpt/CCCheckNote.aspx?WorkID='+data[i].WORKID+'&FK_Flow='+data[i].FK_FLOW+'&FID=0&FK_Node='+data[i].FK_NODE;
                         row += "\t\n<tr>";
                         row += "<td>" + i + "</td>";
-                        row += "<td>" + sortName + "</td>";
-                        row += "<td><a href='../WF/MyFlow.aspx?FK_Flow=" + no + "' target=_blank >" + name + "</a></td>";
-
-                        if (isBatchStart == "1")
-                            row += "<td><a href='" + batchUrl + "'  target=_blank >批量发起</a></td>";
-                        else
-                            row += "<td></td>";
-
-                        row += "<td><a href='" + searchUrl + "' target=_blank >查询</a></td>";
-                        row += "<td><a href='" + groupUrl + "' target=_blank >分析</a></td>";
+                        row += "<td>" + data[i].FLOWNAME + "</td>";
+                        row += "<td>" + data[i].NODENAME + "</td>";
+                        row += "<td>" + data[i].REC + "</td>";
+                        row += "<td><a href='" + batchUrl + "' target=_blank >" + data[i].TITLE + "</a></td>";
+                        row += "<td>" + data[i].DOC + "</td>";
+                        row += "<td>" + data[i].RDT + "</td>";
+                        row += "<td><a href='" + url + "' target=_blank >回复</a></td>"; ;
                         row += "</tr>";
                     }
-
                     $("#Rows").html(row);
                     return;
                 }
@@ -114,7 +93,7 @@
 								<i class="icon-home home-icon"></i>
 								<a href="welcome.htm">Home</a>
 							</li>
-							<li class="active">发起</li>
+							<li class="active">抄送</li>
 						</ul><!-- .breadcrumb -->
 
 						<div class="nav-search" id="nav-search">
@@ -132,21 +111,23 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->
-
+                                <a href='?Sta=-1'>全部</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='?Sta=0'>已读</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='?Sta=1'>未读</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<div class="row">
 									<div class="col-xs-12">
 										<div class="table-responsive">
 											<table id="sample-table-1" class="table table-striped table-bordered table-hover">
 												<thead>
 													<tr>
-														<th>序</th>
-														<th>类别</th>
-														<th><i class="icon-time bigger-110 hidden-480"></i>名称</th>
+                                                        <th>序 </th>
+                                                        <th>工作流程 </th>
+                                                        <th>节点 </th>
+                                                        <th>抄送人 </th>
+                                                        <th>标题 </th>
+                                                        <th>内容 </th>
+                                                        <th>日期 </th>
+                                                        <th>操作 </th>
 
-														<th>批量发起</th>
-														<th class="hidden-480">查询</th>
-														<th>分析</th>
-													</tr>
+                                                    </tr>
 												</thead>
 
 												<tbody id="Rows">

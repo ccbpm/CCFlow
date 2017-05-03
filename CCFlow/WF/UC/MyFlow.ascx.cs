@@ -1526,10 +1526,19 @@ namespace CCFlow.WF.UC
                             isLoadData = true;
 
                         this.UCEn1.IsLoadData = isLoadData;
+
+
+                        //执行装载前事件.
+                        string frmLoadBefore = this.currFlow.DoFlowEventEntity(EventListOfNode.FrmLoadBefore, this.currND, wk, null);
+                         
                         this.UCEn1.BindCCForm(wk, nd.NodeFrmID, false, 0, isLoadData);
                         if (wk.WorkEndInfo.Length > 2)
                             this.Pub3.Add(wk.WorkEndInfo);
                         this.UCEn1.Add("</div>");
+
+                        //执行装载后事件.
+                        string frmLoadAfter = this.currFlow.DoFlowEventEntity(EventListOfNode.FrmLoadAfter, this.currND, wk, null);
+                         
 
                     }
                     else if (frmType == NodeFormType.FixForm)

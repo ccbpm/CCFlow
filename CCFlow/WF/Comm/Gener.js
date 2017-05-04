@@ -452,3 +452,20 @@ function IsObject(obj) {
     ///<param name="obj" type="All Type">要判断的对象</param>
     return typeof obj != "undefined" && obj.constructor == Object;
 }
+
+function To(url) {
+    //window.location.href = url;
+    window.name = "dialogPage"; window.open(url, "dialogPage")
+}
+
+function WinOpen(url, winName) {
+    var newWindow = window.open(url, winName, 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
+    newWindow.focus();
+    return;
+}
+
+function WinOpenFull(url, winName) {
+    var newWindow = window.open(url, winName, 'width=' + window.screen.availWidth + ',height=' + window.screen.availHeight + ',scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
+    newWindow.focus();
+    return;
+}

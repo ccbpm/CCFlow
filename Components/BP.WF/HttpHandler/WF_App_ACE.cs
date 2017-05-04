@@ -198,7 +198,7 @@ namespace BP.WF.HttpHandler
         {
             System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable(this.FK_Flow);
 
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.Json.ToJsonUpper(dt);
         }
         #endregion 草稿.
 

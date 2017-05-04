@@ -16,7 +16,7 @@
 
 		<!-- fonts -->
 
-		
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
 
 		<!-- ace styles -->
 
@@ -61,7 +61,6 @@
                         alert(data);
                         return;
                     }
-
                     //转换.
                     data = JSON.parse(data);
                     var row = "";
@@ -87,15 +86,19 @@
                         row += "\t\n<tr>";
                         row += "<td>" + i + "</td>";
                         row += "<td>" + sortName + "</td>";
-                        row += "<td><a href='../WF/MyFlow.htm?FK_Flow=" + no + "' target=_blank >" + name + "</a></td>";
+                        //row += "<td><a href='../WF/MyFlow.htm?FK_Flow=" + no + "' target=_blank >" + name + "</a></td>";
+                        row += "<td><a href='#' onclick='WinOpenFull(" + "\"../WF/MyFlow.htm?FK_Flow=" + no + "\")'>" + name + "</a></td>";
 
                         if (isBatchStart == "1")
-                            row += "<td><a href='" + batchUrl + "'  target=_blank >批量发起</a></td>";
+                        //row += "<td><a href='" + batchUrl + "'  target=_blank >批量发起</a></td>";
+                            row += "<td><a href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + name + "</a></td>";
                         else
                             row += "<td></td>";
 
-                        row += "<td><a href='" + searchUrl + "' target=_blank >查询</a></td>";
-                        row += "<td><a href='" + groupUrl + "' target=_blank >分析</a></td>";
+                        //row += "<td><a href='" + searchUrl + "' target=_blank >查询</a></td>";
+                        //row += "<td><a href='" + groupUrl + "' target=_blank >分析</a></td>";
+                        row += "<td><a href='#' onclick='WinOpenFull(\"" + searchUrl + "\")'>" + name + "</a></td>";
+                        row += "<td><a href='#' onclick='WinOpenFull(\"" + groupUrl + "\")'>" + name + "</a></td>";
                         row += "</tr>";
                     }
 
@@ -167,12 +170,12 @@
 
 		<!--[if !IE]> -->
 
-		
+		<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
 
 		<!-- <![endif]-->
 
 		<!--[if IE]>
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <![endif]-->
 
 		<!--[if !IE]> -->

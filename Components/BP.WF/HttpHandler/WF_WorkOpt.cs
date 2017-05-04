@@ -310,7 +310,7 @@ namespace BP.WF.HttpHandler
                 return BP.Tools.Json.ToJsonEntityModel(ht);
 
             //表单模版.
-            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID, true);
+            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(nd.NodeFrmID);
             string json = BP.WF.Dev2Interface.CCFrom_GetFrmDBJson(this.FK_Flow, this.MyPK);
             DataTable mainTable = BP.Tools.Json.ToDataTableOneRow(json);
             mainTable.TableName = "MainTable";

@@ -90,7 +90,7 @@ namespace CCFlow.WF.CCForm
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
 			//保存excel文件流
-			if (frmID.IndexOf("BP.") > -1)
+			if (frmID.Contains("BP."))
 			{
 				Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
 				Entity en = ens.GetNewEntity;
@@ -145,10 +145,18 @@ namespace CCFlow.WF.CCForm
 				{
 					//if (dt.TableName != dtl.No) //!++ TO DO: BP.XXX.YYYYYs != YYYYY
 					//	continue;
-					var tname = dt.TableName.Substring(dt.TableName.LastIndexOf(".") + 1,
-						dt.TableName.Length - dt.TableName.LastIndexOf(".") - 2);
-					if (tname != dtl.No)
-						continue;
+					if (dt.TableName.Contains("BP."))
+					{
+						var tname = dt.TableName.Substring(dt.TableName.LastIndexOf(".") + 1,
+							dt.TableName.Length - dt.TableName.LastIndexOf(".") - 2);
+						if (tname != dtl.No)
+							continue;
+					}
+					else
+					{
+						if (dt.TableName != dtl.No)
+							continue;
+					}
 
 					#region 根据原始数据,与当前数据求出已经删除的oids .
 					DataTable dtDtlOld = dsDtlsOld.Tables[dt.TableName]; //这里要用原始（打开excel时获取到的）表名『BP.XXX.YYYYY』

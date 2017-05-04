@@ -275,7 +275,6 @@ function DoDelSubFlow(fk_flow, workid) {
 
 //公共方法
 function AjaxService(param, callback, scope, levPath) {
-
     $.ajax({
         type: "GET", //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据
@@ -388,7 +387,7 @@ function FocusBtn(btn, workid) {
         btn.value = '关注';
     }
 
-    var para = 'DoType=Focus&FK_Flow=' + fk_flow + '&WorkID=' + workid;
+    var para = "DoType=Focus&WorkID=" + workid;
     AjaxService(para, function (msg, scope) {
         alert(msg);
     });

@@ -295,6 +295,18 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJsonUpper(dt) ;
         }
         #endregion 我的关注.
+
+        #region 取消关注流程.
+        /// <summary>
+        /// 我的关注流程
+        /// </summary>
+        /// <returns></returns>
+        public string Focus_Delete()
+        {
+            BP.WF.Dev2Interface.Flow_Focus(Int64.Parse(this.GetRequestVal("WorkID")));
+            return "您已取消关注！";
+        }
+        #endregion 取消关注流程.
     }
    
 }

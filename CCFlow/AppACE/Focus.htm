@@ -68,7 +68,7 @@
 
                     for (var i = 0; i < data.length; i++) {
 
-                        var batchUrl = "../WF/WFRpt.aspx?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW;
+                        var batchUrl = "../WF/WFRpt.jsp?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW;
 
                         row += "\t\n<tr>";
                         row += "<td>" + i + "</td>";
@@ -80,7 +80,7 @@
                         row += "<td>" + data[i].NODENAME + "</td>";
                         row += "<td>" + data[i].TODOEMPS + "</td>";
                         row += "<td>" + data[i].ATPARA + "</td>";
-                        row += "<td><a href='#' onclick='unfollow(" + data[i].WORKID + "'>取消关注</a></td>";
+                        row += "<td><a href='#' onclick='unfollow(" + data[i].WORKID + ")'>取消关注</a></td>";
                         row += "</tr>";
                     }
                     $("#Rows").html(row);
@@ -92,11 +92,11 @@
         //取消关注
         function unfollow(workid) {
             $.ajax({
-                url: "Do.aspx?ActionType=Focus&WorkID=" + workid,
+                url: Handler + "?DoType=Focus_Delete&WorkID=" + workid + "&m=" + Math.random(),
                 async: false,
-                success: function () {
+                success: function (data) {
+                    alert(data);
                     window.location.href = window.location.href;
-                    alert("您已取消关注！");
                 }
             });
         }

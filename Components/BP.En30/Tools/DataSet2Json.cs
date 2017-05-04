@@ -336,7 +336,7 @@ namespace BP.Tools
         /// </summary> 
         /// <param name="table">Datatable对象</param> 
         /// <returns>Json字符串</returns> 
-        public static string ToJson(DataTable dt)
+        public static string ToJson(DataTable dt, bool isUpper = true)
         {
             StringBuilder jsonString = new StringBuilder();
             if (dt.Rows.Count == 0)
@@ -352,7 +352,14 @@ namespace BP.Tools
                 jsonString.Append("{");
                 for (int j = 0; j < dt.Columns.Count; j++)
                 {
-                    string strKey = dt.Columns[j].ColumnName.ToUpper();
+                    string strKey = null;
+
+                    if (isUpper == true)
+                        strKey = dt.Columns[j].ColumnName.ToUpper();
+                    else
+                        strKey = dt.Columns[j].ColumnName;
+
+
                     string strValue = drc[i][j] == null ? "" : drc[i][j].ToString();
                     Type type = dt.Columns[j].DataType;
                     jsonString.Append("\"" + strKey + "\":");
@@ -447,7 +454,7 @@ namespace BP.Tools
             return jsonString.ToString();
         }
         /// <summary> 
-        /// DataSet转换为Json 
+        /// DataSet转换为Json  都是大写的列.
         /// </summary> 
         /// <param name="dataSet">DataSet对象</param> 
         /// <returns>Json字符串</returns> 
@@ -460,6 +467,16 @@ namespace BP.Tools
             }
             jsonString = jsonString.TrimEnd(',');
             return jsonString + "}";
+        }
+      
+        /// <summary>
+        /// 把dataset转成json 列名大写.
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <returns>json字串.</returns>
+        public static string DataSetToJsonUpper(DataSet dataSet)
+        {
+            return ToJson(dataSet);
         }
         /// <summary> 
         /// 过滤特殊字符 

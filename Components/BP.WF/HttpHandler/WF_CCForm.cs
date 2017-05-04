@@ -201,7 +201,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(mainTable);
             #endregion 把主表数据放入.
 
-            return BP.Tools.FormatToJson.ToJson(ds);
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
         /// <summary>
         /// 执行保存

@@ -203,7 +203,134 @@ namespace BP.Tools
             }
             return tb;
         }
+        /// <summary>
+        /// 把dataset转成json 不区分大小写.
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <returns></returns>
+        public static string DataSetToJson(DataSet dataSet, bool isUpperColumn = true)
+        {
+            string jsonString = "{";
+            foreach (DataTable table in dataSet.Tables)
+            {
+                if (isUpperColumn == true)
+                    jsonString += "\"" + table.TableName.ToUpper() + "\":" + DataTableToJson(table, true) + ",";
+                else
+                    jsonString += "\"" + table.TableName + "\":" + DataTableToJson(table, false) + ",";
+            }
+            jsonString = jsonString.TrimEnd(',');
+            return jsonString + "}";
+        }
+        /// <summary> 
+        /// Datatable转换为Json 
+        /// </summary> 
+        /// <param name="table">Datatable对象</param> 
+        /// <returns>Json字符串</returns> 
+        public static string DataTableToJson(DataTable dt, bool isUpper = true)
+        {
+            StringBuilder jsonString = new StringBuilder();
+            if (dt.Rows.Count == 0)
+            {
+                jsonString.Append("[]");
+                return jsonString.ToString();
+            }
 
+            jsonString.Append("[");
+            DataRowCollection drc = dt.Rows;
+            for (int i = 0; i < drc.Count; i++)
+            {
+                jsonString.Append("{");
+                for (int j = 0; j < dt.Columns.Count; j++)
+                {
+                    string strKey = null;
+
+                    if (isUpper == true)
+                        strKey = dt.Columns[j].ColumnName.ToUpper();
+                    else
+                        strKey = dt.Columns[j].ColumnName;
+
+                    string strValue = drc[i][j] == null ? "" : drc[i][j].ToString();
+                    Type type = dt.Columns[j].DataType;
+                    jsonString.Append("\"" + strKey + "\":");
+                    strValue = StringFormat(strValue, type);
+                    if (j < dt.Columns.Count - 1)
+                    {
+                        jsonString.Append(strValue + ",");
+                    }
+                    else
+                    {
+                        jsonString.Append(strValue);
+                    }
+                }
+                jsonString.Append("},");
+            }
+            jsonString.Remove(jsonString.Length - 1, 1);
+            jsonString.Append("]");
+            return jsonString.ToString();
+        }
+        /// <summary> 
+        /// 格式化字符型、日期型、布尔型 
+        /// </summary> 
+        /// <param name="str"></param> 
+        /// <param name="type"></param> 
+        /// <returns></returns> 
+        private static string StringFormat(string str, Type type)
+        {
+            if (type == typeof(string))
+            {
+                str = String2Json(str);
+                str = "\"" + str + "\"";
+            }
+            else if (type == typeof(DateTime))
+            {
+                str = "\"" + Convert.ToDateTime(str).ToShortDateString() + "\"";
+            }
+            else if (type == typeof(bool))
+            {
+                str = str.ToLower();
+            }
+
+            if (str.Length == 0)
+                str = "\"\"";
+
+            return str;
+        }
+        /// <summary> 
+        /// 过滤特殊字符 
+        /// </summary> 
+        /// <param name="s"></param> 
+        /// <returns></returns> 
+        private static string String2Json(String s)
+        {
+            System.Text.StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s.ToCharArray()[i];
+
+                switch (c)
+                {
+                    case '\"':
+                        sb.Append("\\\""); break;
+                    case '\\':
+                        sb.Append("\\\\"); break;
+                    case '/':
+                        sb.Append("\\/"); break;
+                    case '\b':
+                        sb.Append("\\b"); break;
+                    case '\f':
+                        sb.Append("\\f"); break;
+                    case '\n':
+                        sb.Append("\\n"); break;
+                    case '\r':
+                        sb.Append("\\r"); break;
+                    case '\t':
+                        sb.Append("\\t"); break;
+                    default:
+                        sb.Append(c); break;
+                }
+            }
+            return sb.ToString();
+        }
         /// <summary>
         /// 把一个json转化一个datatable
         /// </summary>
@@ -362,47 +489,10 @@ namespace BP.Tools
         /// </summary>
         /// <param name="table">Datatable对象</param>
         /// <returns>Json字符串</returns>
-        public static string ToJsonUpper(DataTable table)
-        {
-            return BP.Tools.FormatToJson.ToJson(table);
-        }
-        /// <summary>
-        /// Datatable转换为Json
-        /// </summary>
-        /// <param name="table">Datatable对象</param>
-        /// <returns>Json字符串</returns>
         public static string ToJson(DataTable table)
         {
             // 旧版本...
            return JsonConvert.SerializeObject(table);
-
-            string jsonString = "[";
-            DataRowCollection drc = table.Rows;
-            for (int i = 0; i < drc.Count; i++)
-            {
-                jsonString += "{";
-                foreach (DataColumn column in table.Columns)
-                {
-                    jsonString += "\"" + ToJson(column.ColumnName) + "\":";
-                    if (column.DataType == typeof(DateTime)
-                        || column.DataType == typeof(string)
-                        || column.DataType == typeof(bool)
-                        || column.DataType == typeof(Boolean))
-                    {
-                        jsonString += "\"" + ToJson(drc[i][column.ColumnName].ToString()) + "\",";
-                    }
-                    else
-                    {
-                        string val = ToJson(drc[i][column.ColumnName].ToString());
-                        if (string.IsNullOrEmpty(val) == true)
-                            val = "0";
-
-                        jsonString += val + ",";
-                    }
-                }
-                jsonString = DeleteLast(jsonString) + "},";
-            }
-            return DeleteLast(jsonString) + "]";
         }
         /// <summary>
         /// DataSet转换为Json

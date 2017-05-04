@@ -98,7 +98,7 @@ namespace BP.WF.HttpHandler
             dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable();
 
             //转化大写.
-            return BP.Tools.Json.ToJsonUpper(dt);
+            return BP.Tools.Json.DataTableToJson(dt,true);
         }
         /// <summary>
         /// 获得授权人的待办.
@@ -110,7 +110,7 @@ namespace BP.WF.HttpHandler
             dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(this.No, this.FK_Node);
 
             //转化大写的toJson.
-            return BP.Tools.Json.ToJsonUpper(dt);
+            return BP.Tools.Json.DataTableToJson(dt,true);
         }
         /// <summary>
         /// 获得待办.
@@ -123,7 +123,7 @@ namespace BP.WF.HttpHandler
             dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, this.FK_Node);
 
             //转化大写的toJson.
-            return BP.Tools.Json.ToJsonUpper(dt);
+            return BP.Tools.Json.DataTableToJson(dt,true);
         }
         #endregion 获得列表.
 

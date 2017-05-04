@@ -151,6 +151,7 @@
     <Compile Include="Dev2InterfaceGuest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Dev2InterfaceHtml.cs" />
     <Compile Include="DTS\ChangeUserNo.cs" />
     <Compile Include="DTS\DeleteBlankGroupField.cs" />
     <Compile Include="DTS\LoadTempleteOfBuess.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="HttpHandler\WF_Admin.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt.cs" />
     <Compile Include="HttpHandler\CCMobile.cs" />
+    <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\MapRptExt.cs" />

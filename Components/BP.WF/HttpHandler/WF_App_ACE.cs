@@ -34,7 +34,7 @@ namespace BP.WF.HttpHandler
         public string Start_Init()
         {
             DataTable dt = BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(WebUser.No);
-            return BP.Tools.Json.ToJsonUpper(dt);
+            return BP.Tools.Json.DataTableToJson(dt,true);
         }
         /// <summary>
         /// 获得待办
@@ -44,7 +44,7 @@ namespace BP.WF.HttpHandler
         {
             string fk_node = this.GetRequestVal("FK_Node");
             DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node);
-            return BP.Tools.Json.ToJsonUpper(dt);
+            return BP.Tools.Json.DataTableToJson(dt,true);
         }
         /// <summary>
         /// 运行
@@ -56,7 +56,7 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerRuning();
-            return BP.Tools.Json.ToJsonUpper(dt);
+            return BP.Tools.Json.DataTableToJson(dt,true);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace BP.WF.HttpHandler
                 link += "<a href='?Sta=" + tp.No + "'>" + tp.Name + "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             }*/
 
-            return BP.Tools.Json.ToJsonUpper(dt);
+            return BP.Tools.Json.DataTableToJson(dt,true);
         }
         #endregion 抄送.
 
@@ -292,7 +292,7 @@ namespace BP.WF.HttpHandler
                 dr["FlowNote"] = wfstaT;
                 dr["AtPara"] = (wfsta == (int)BP.WF.WFSta.Complete ? dr["Sender"].ToString().TrimStart('(').TrimEnd(')').Split(',')[1] : "");
             }
-            return BP.Tools.Json.ToJsonUpper(dt) ;
+            return BP.Tools.Json.DataTableToJson(dt,true);
         }
         #endregion 我的关注.
 

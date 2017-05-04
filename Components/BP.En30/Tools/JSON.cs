@@ -226,7 +226,7 @@ namespace BP.Tools
         /// </summary> 
         /// <param name="table">Datatable对象</param> 
         /// <returns>Json字符串</returns> 
-        public static string DataTableToJson(DataTable dt, bool isUpper = true)
+        public static string DataTableToJson(DataTable dt, bool isUpperColumn = true)
         {
             StringBuilder jsonString = new StringBuilder();
             if (dt.Rows.Count == 0)
@@ -244,7 +244,7 @@ namespace BP.Tools
                 {
                     string strKey = null;
 
-                    if (isUpper == true)
+                    if (isUpperColumn == true)
                         strKey = dt.Columns[j].ColumnName.ToUpper();
                     else
                         strKey = dt.Columns[j].ColumnName;

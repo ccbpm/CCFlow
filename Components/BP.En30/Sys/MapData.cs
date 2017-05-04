@@ -766,6 +766,23 @@ namespace BP.Sys
 				return obj;
 			}
 		}
+        /// <summary>
+        /// 枚举值
+        /// </summary>
+        public SysEnums SysEnums
+		{
+			get
+			{
+				SysEnums obj = this.GetRefObject("SysEnums") as SysEnums;
+				if (obj == null)
+				{
+                    SysEnums ses = new SysEnums();
+                    ses.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+                    this.SetRefObject("SysEnums", ses);
+				}
+				return obj;
+			}
+		}
 		/// <summary>
 		/// 报表
 		/// </summary>
@@ -814,6 +831,7 @@ namespace BP.Sys
 				return obj;
 			}
 		}
+      
 		/// <summary>
 		/// 元素
 		/// </summary>

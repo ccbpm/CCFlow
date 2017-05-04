@@ -34,6 +34,7 @@ namespace BP.WF.HttpHandler
         public string Start_Init()
         {
             DataTable dt = BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(WebUser.No);
+
             return BP.Tools.Json.DataTableToJson(dt,true);
         }
         /// <summary>

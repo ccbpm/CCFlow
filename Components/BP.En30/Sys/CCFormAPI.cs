@@ -1031,7 +1031,6 @@ namespace BP.Sys
                 sqls += "@DELETE FROM Sys_FrmImgAth WHERE CtrlID='" + pk + "' AND FK_MapData='" + fk_mapdata + "'";
             }
 
-
             //删除这些，没有替换下来的数据.
             BP.DA.DBAccess.RunSQLs(sqls);
             #endregion 删除没有替换下来的 PKs, 说明这些都已经被删除了.
@@ -1048,12 +1047,107 @@ namespace BP.Sys
             MapData.ImpMapData(toFrmID, fromds, isSetReadonly);
         }
         /// <summary>
+        /// 获得表单信息.
+        /// </summary>
+        /// <param name="fk_mapdata"></param>
+        /// <returns></returns>
+        public static System.Data.DataSet GenerHisDataSet(string fk_mapdata)
+        {
+
+            DataSet ds = new DataSet();
+
+            //创建实体对象.
+            MapData md = new MapData(fk_mapdata);
+
+            //加入主表信息.
+            DataTable Sys_MapData = md.ToDataTableField("Sys_MapData");
+            ds.Tables.Add(Sys_MapData);
+
+
+            //加入分组表.
+            DataTable Sys_GroupField = md.GroupFields.ToDataTableField("Sys_GroupField");
+            ds.Tables.Add(Sys_GroupField);
+
+
+            //加入明细表.
+            DataTable Sys_MapDtl = md.MapDtls.ToDataTableField("Sys_MapDtl");
+            ds.Tables.Add(Sys_MapDtl);
+
+
+            //加入枚举表.
+            DataTable Sys_Menu = md.SysEnums.ToDataTableField("Sys_Enum");
+            ds.Tables.Add(Sys_Menu);
+
+
+            // 审核组件
+            string nodeIDstr = fk_mapdata.Replace("ND", "");
+            if (DataType.IsNumStr(nodeIDstr))
+            {
+                // 审核组件状态:0 禁用;1 启用;2 只读;
+                string sql = "@SELECT * FROM WF_Node WHERE NodeID=" + nodeIDstr;
+                DataTable WF_Node = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                WF_Node.TableName = "WF_Node";
+                ds.Tables.Add(WF_Node);
+            }
+
+            //加入外键属性.
+            DataTable Sys_MapAttr = md.MapAttrs.ToDataTableField("Sys_MapAttr");
+            ds.Tables.Add(Sys_MapAttr);
+
+            //加入扩展属性.
+            DataTable Sys_MapExt = md.MapExts.ToDataTableField("Sys_MapExt");
+            ds.Tables.Add(Sys_MapExt);
+
+
+            //线.
+            DataTable Sys_FrmLine = md.FrmLines.ToDataTableField("Sys_FrmLine");
+            ds.Tables.Add(Sys_FrmLine);
+
+            //link.
+            DataTable Sys_FrmLink = md.FrmLinks.ToDataTableField("Sys_FrmLink");
+            ds.Tables.Add(Sys_FrmLink);
+
+            //btn.
+            DataTable Sys_FrmBtn = md.FrmBtns.ToDataTableField("Sys_FrmBtn");
+            ds.Tables.Add(Sys_FrmBtn);
+
+            //Sys_FrmLab.
+            DataTable Sys_FrmLab = md.FrmLabs.ToDataTableField("Sys_FrmLab");
+            ds.Tables.Add(Sys_FrmLab);
+
+            //img.
+            DataTable Sys_FrmImg = md.FrmImgs.ToDataTableField("Sys_FrmImg");
+            ds.Tables.Add(Sys_FrmImg);
+
+            //Sys_FrmRB.
+            DataTable Sys_FrmRB = md.FrmRBs.ToDataTableField("Sys_FrmRB");
+            ds.Tables.Add(Sys_FrmRB);
+
+            //Sys_FrmEle.
+            DataTable Sys_FrmEle = md.FrmEles.ToDataTableField("Sys_FrmEle");
+            ds.Tables.Add(Sys_FrmEle);
+
+            //Sys_MapFrame.
+            DataTable Sys_MapFrame = md.MapFrames.ToDataTableField("Sys_MapFrame");
+            ds.Tables.Add(Sys_MapFrame);
+
+            //Sys_FrmAttachment.
+            DataTable Sys_FrmAttachment = md.FrmAttachments.ToDataTableField("Sys_FrmAttachment");
+            ds.Tables.Add(Sys_FrmAttachment);
+
+            //FrmImgAths. 上传图片附件.
+            DataTable Sys_FrmImgAth = md.FrmImgAths.ToDataTableField("Sys_FrmImgAth");
+            ds.Tables.Add(Sys_FrmImgAth);
+
+            return ds;
+        }
+        /// <summary>
         /// 获得表单模版dataSet格式.
         /// </summary>
         /// <param name="fk_mapdata">表单ID</param>
         /// <param name="isCheckFrmType">是否检查表单类型</param>
         /// <returns>DataSet</returns>
-        public static System.Data.DataSet GenerHisDataSet(string fk_mapdata, bool isCheckFrmType = false)
+        public static System.Data.DataSet GenerHisDataSet_ForAndroid(string fk_mapdata, bool isCheckFrmType = false)
         {
             MapData md = new MapData(fk_mapdata);
 

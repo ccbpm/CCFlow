@@ -181,7 +181,15 @@ namespace BP.WF.HttpHandler
             BP.WF.Dev2Interface.Flow_Focus( this.WorkID);
             return "设置成功.";
         }
-
+        /// <summary>
+        /// 确认
+        /// </summary>
+        /// <returns></returns>
+        public string Confirm()
+        {
+            BP.WF.Dev2Interface.Flow_Confirm(this.WorkID);
+            return "设置成功.";
+        }
         /// <summary>
         /// 删除子流程
         /// </summary>
@@ -383,7 +391,6 @@ namespace BP.WF.HttpHandler
             }
 
             string myurl = "MyFlow.aspx";
-
             if (Glo.IsBeta==true)
                 myurl = "MyFlowFree.htm";
 
@@ -725,6 +732,26 @@ namespace BP.WF.HttpHandler
                         toolbar += "<input type=button  value='取消关注' enable=true onclick=\"FocusBtn(this,'" + this.WorkID + "'); \" />";
                     else
                         toolbar += "<input type=button name='Focus' value='" + btnLab.FocusLab + "' enable=true onclick=\"FocusBtn(this,'" + this.WorkID + "'); \" />";
+                }
+
+                /* 分配工作 */
+                if (btnLab.AllotEnable == true)
+                {
+                    /*分配工作*/
+                    string urlAllot = "./WorkOpt/Allot.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + "移交原因.";
+                    toolbar += "<input name='Allot' type=button  value='" + btnLab.AllotLab + "' enable=true onclick=\"To('" + urlAllot + "'); \" />";
+                }
+
+                //    toolbar += "<input type=button name='Allot' value='" + btnLab.AllotLab + "' enable=true onclick=\"AllotBtn(this,'" + this.WorkID + "'); \" />";
+                //}
+
+                /* 确认 */
+                if (btnLab.ConfirmEnable == true)
+                {
+                    if (HisGenerWorkFlow.Paras_Confirm == true)
+                        toolbar += "<input type=button  value='取消确认' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" />";
+                    else
+                        toolbar += "<input type=button name='Confirm' value='" + btnLab.ConfirmLab + "' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" />";
                 }
                 #endregion
 

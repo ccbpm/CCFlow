@@ -211,6 +211,24 @@ namespace BP.WF.Template
         /// 是否启用-关注
         /// </summary>
         public const string FocusEnable = "FocusEnable";
+        /// <summary>
+        /// 确认
+        /// </summary>
+        public const string ConfirmLab = "ConfirmLab";
+        /// <summary>
+        /// 是否启用确认
+        /// </summary>
+        public const string ConfirmEnable = "ConfirmEnable";
+
+        /// <summary>
+        /// 分配
+        /// </summary>
+        public const string AllotLab = "AllotLab";
+        /// <summary>
+        /// 分配启用
+        /// </summary>
+        public const string AllotEnable = "AllotEnable";
+
 
 
         #region 公文属性

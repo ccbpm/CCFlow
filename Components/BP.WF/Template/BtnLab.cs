@@ -567,6 +567,49 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.FocusLab);
             }
         }
+
+        /// <summary>
+        /// 分配 是否可用
+        /// </summary>
+        public bool AllotEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.AllotEnable);
+            }
+        }
+        /// <summary>
+        /// 分配 标签
+        /// </summary>
+        public string AllotLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.AllotLab);
+            }
+        }
+
+
+        /// <summary>
+        /// 确认 是否可用
+        /// </summary>
+        public bool ConfirmEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.ConfirmEnable);
+            }
+        }
+        /// <summary>
+        /// 确认标签
+        /// </summary>
+        public string ConfirmLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.ConfirmLab);
+            }
+        }
         /// <summary>
         /// 批量处理是否可用
         /// </summary>
@@ -986,7 +1029,6 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TCEnable, false, "是否启用", true, true);
 
-
                 map.AddTBString(BtnAttr.WebOfficeLab, "公文", "公文标签", true, false, 0, 50, 10);
                 //map.AddBoolean(BtnAttr.WebOfficeEnable, false, "是否启用", true, true);
                 map.AddDDLSysEnum(BtnAttr.WebOfficeEnable, 0, "文档启用方式", true, true, BtnAttr.WebOfficeEnable,
@@ -1000,9 +1042,18 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.CHEnable, false, "是否启用", true, true);
 
+                // add 2017.5.4  邀请其他人参与当前的工作.
+                map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.AllotEnable, false, "是否启用", true, true);
+
+
                 // add by 周朋 2015-12-24. 节点时限.
                 map.AddTBString(BtnAttr.FocusLab, "关注", "关注", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.FocusEnable, true, "是否启用", true, true);
+
+                // add 2017.5.4 确认就是告诉发送人，我接受这件工作了.
+                map.AddTBString(BtnAttr.ConfirmLab, "确认", "确认按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.ConfirmEnable, false, "是否启用", true, true);
 
 
                 #region 公文按钮

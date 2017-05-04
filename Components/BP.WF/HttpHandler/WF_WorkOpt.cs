@@ -536,6 +536,16 @@ namespace BP.WF.HttpHandler
             return BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
         }
         /// <summary>
+        /// 执行分配工作.
+        /// </summary>
+        /// <returns></returns>
+        public string Allot()
+        {
+            string msg = context.Request.QueryString["Message"];
+            string toEmp = context.Request.QueryString["ToEmp"];
+            return BP.WF.Dev2Interface.Node_Allot(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
+        }
+        /// <summary>
         /// 撤销移交
         /// </summary>
         /// <returns></returns>

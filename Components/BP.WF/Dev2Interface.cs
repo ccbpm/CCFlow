@@ -4709,6 +4709,27 @@ namespace BP.WF
         }
 
         /// <summary>
+        /// 取消、确认.
+        /// </summary>
+        /// <param name="workid">要取消设置的工作ID</param>
+        public static void Flow_Confirm(Int64 workid)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = workid;
+            int i = gwf.RetrieveFromDBSources();
+            if (i == 0)
+                throw new Exception("@ 设置关注错误：没有找到 WorkID= " + workid + " 的实例。");
+            string isFocus = gwf.GetParaString("C_" + WebUser.No, "0"); 
+
+            if (isFocus == "0")
+                gwf.SetPara("C_" + WebUser.No, "1");
+            else
+                gwf.SetPara("C_" + WebUser.No, "0");
+
+            gwf.DirectUpdate();
+        }
+
+        /// <summary>
         /// 设置委托
         /// </summary>
         /// <param name="Author">接收委托人账号</param>
@@ -7066,6 +7087,64 @@ namespace BP.WF
             return info;
         }
         /// <summary>
+        /// 执行工作分配
+        /// </summary>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="nodeID">节点ID</param>
+        /// <param name="workID">工作ID</param>
+        /// <param name="fid">FID</param>
+        /// <param name="toEmps">要分配的人，多个人用逗号分开.</param>
+        /// <param name="msg">分配原因.</param>
+        /// <returns>分配信息.</returns>
+        public static string Node_Allot(string flowNo, int nodeID, Int64 workID, Int64 fid, string toEmps, string msg)
+        {
+            //生成实例.
+            GenerWorkerLists gwls = new GenerWorkerLists(workID, nodeID);
+
+            //要分配给的人员.
+            string[] emps = toEmps.Split(',');
+            foreach (string empNo in emps)
+            {
+                if (string.IsNullOrEmpty(empNo) == true)
+                    continue;
+
+                //人员实体.
+                Emp empEmp = new Emp(empNo);
+
+                GenerWorkerList gwl = null; //接收人
+
+                //开始找接收人.
+                foreach (GenerWorkerList item in gwls)
+                {
+                    if (item.FK_Emp == empNo)
+                    {
+                        gwl = item;
+                        break;
+                    }
+                }
+
+                // 没有找到的情况, 就获得一个实例，作为数据样本然后把数据insert.
+                if (gwl == null)
+                {
+                    gwl = gwls[0] as GenerWorkerList;
+                    gwl.FK_Emp = empEmp.No;
+                    gwl.FK_EmpText = empEmp.Name;
+                    gwl.IsEnable = true;
+                    gwl.IsPassInt = 0;
+                    gwl.Insert();
+                    continue;
+                }
+
+                //如果被禁用了，就启用他.
+                if (gwl.IsEnable == false)
+                {
+                    gwl.IsEnable = true;
+                    gwl.Update();
+                }
+            }
+            return "分配成功.";
+        }
+        /// <summary>
         /// 工作移交
         /// </summary>
         /// <param name="workid">工作ID</param>
@@ -7073,7 +7152,7 @@ namespace BP.WF
         /// <param name="msg">移交消息</param>
         public static string Node_Shift(string flowNo, int nodeID, Int64 workID, Int64 fid, string toEmp, string msg)
         {
-            // 人员.
+            //人员.
             Emp emp = new Emp(toEmp);
             Node nd = new Node(nodeID);
 

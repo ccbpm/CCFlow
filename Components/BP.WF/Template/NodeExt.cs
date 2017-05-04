@@ -391,6 +391,9 @@ namespace BP.WF.Template
                 #endregion
 
                 #region  功能按钮状态
+              
+
+
                 map.AddTBString(BtnAttr.SendLab, "发送", "发送按钮标签", true, false, 0, 50, 10);
                 map.SetHelperUrl(BtnAttr.SendLab, "http://ccbpm.mydoc.io/?v=5404&t=16219");
                 map.AddTBString(BtnAttr.SendJS, "", "按钮JS函数", true, false, 0, 999, 10);
@@ -527,10 +530,18 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.CHLab, "节点时限", "节点时限", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.CHEnable, false, "是否启用", true, true);
 
+                // add 2017.5.4  邀请其他人参与当前的工作.
+                map.AddTBString(BtnAttr.AllotLab, "分配", "分配按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.AllotEnable, false, "是否启用", true, true);
 
                 // add by 周朋 2015-12-24. 节点时限.
                 map.AddTBString(BtnAttr.FocusLab, "关注", "关注", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.FocusEnable, true, "是否启用", true, true);
+
+                // add 2017.5.4 确认就是告诉发送人，我接受这件工作了.
+                map.AddTBString(BtnAttr.ConfirmLab, "确认", "确认按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.ConfirmEnable, false, "是否启用", true, true);
+
 
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态

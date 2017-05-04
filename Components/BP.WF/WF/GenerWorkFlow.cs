@@ -887,6 +887,20 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 确认与取消确认
+        /// </summary>
+        public bool Paras_Confirm
+        {
+            get
+            {
+                return this.GetParaBoolen("C_"+BP.Web.WebUser.No,false);
+            }
+            set
+            {
+                this.SetPara("C_" + BP.Web.WebUser.No, value);
+            }
+        }
+        /// <summary>
         /// 最后一个执行发送动作的ID.
         /// </summary>
         public string Paras_LastSendTruckID

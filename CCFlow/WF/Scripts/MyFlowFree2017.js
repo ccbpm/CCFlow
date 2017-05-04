@@ -462,8 +462,8 @@ function pageParamToUrl() {
     return paramUrlStr;
 }
 //初始化按钮
+var MyFlow = "MyFlow.ashx";
 function initBar() {
-
       var  url = MyFlow + "?DoType=InitToolBar&m=" + Math.random();
 
     $.ajax({

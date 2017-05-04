@@ -157,8 +157,7 @@ public partial class AppDemo_Default1 : System.Web.UI.Page
                             break;
                     }
                 }
-                //mainSrc = "/WF/MyFlow.aspx?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + FK_Node;
-                string s = "../../MyFlow.aspx?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + FK_Node;
+                string s = "../../MyFlow.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + FK_Node;
                 this.Response.Write("<script type='text/javascript' language='javascript'> window.open('" + s + "');</script>");
             }
         }

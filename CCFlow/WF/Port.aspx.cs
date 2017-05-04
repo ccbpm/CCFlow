@@ -153,7 +153,7 @@ namespace BP.Web.Port
                 case DoWhatList.OneWork: // 工作处理器调用.
                     if (this.FK_Flow == null || this.WorkID == null)
                         throw new Exception("@参数 FK_Flow 或者 WorkID 为 Null 。");
-                    this.Response.Redirect(this.AppPath + "WF/WFRpt.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras, true);
+                    this.Response.Redirect(this.AppPath + "WF/WFRpt.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras, true);
                     break;
                 case DoWhatList.StartSimple: // 极速模式的方式发起工作
                     if (this.FK_Flow == null)
@@ -178,13 +178,13 @@ namespace BP.Web.Port
                     if (this.FK_Flow == null)
                         this.Response.Redirect("Start.aspx", true);
                     else
-                        this.Response.Redirect("MyFlow.aspx?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID, true);
+                        this.Response.Redirect("MyFlow.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID, true);
                     break;
                 case DoWhatList.Runing: // 在途中工作
-                    this.Response.Redirect("Runing.aspx?FK_Flow=" + this.FK_Flow, true);
+                    this.Response.Redirect("Runing.htm?FK_Flow=" + this.FK_Flow, true);
                     break;
                 case DoWhatList.Tools: // 工具栏目。
-                    this.Response.Redirect("Tools.aspx", true);
+                    this.Response.Redirect("Tools.htm", true);
                     break;
                 case DoWhatList.EmpWorks: // 我的工作小窗口.
                     if (this.FK_Flow == null || this.FK_Flow == "")
@@ -231,7 +231,7 @@ namespace BP.Web.Port
                         this.ToErrorPage("@参数 FK_Flow 或者 WorkID 为Null 。");
                         return;
                     }
-                    this.Response.Redirect("MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras, true);
+                    this.Response.Redirect("MyFlow.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras, true);
                     break;
                 case DoWhatList.DealMsg: //处理消息的连接，比如待办、退回、移交的消息处理.
                     string guid = this.Request.QueryString["GUID"];
@@ -248,10 +248,10 @@ namespace BP.Web.Port
                     switch (sms.MsgType)
                     {
                         case SMSMsgType.SendSuccess: // 发送成功的提示.
-                            this.Response.Redirect("MyFlow.aspx?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);
+                            this.Response.Redirect("MyFlow.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);
                             return;
                         default: //其他的情况都是查看工作报告.
-                            this.Response.Redirect("WFRpt.aspx?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);
+                            this.Response.Redirect("WFRpt.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);
                             return;
                     }
                     //this.Response.Redirect("MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras, true);

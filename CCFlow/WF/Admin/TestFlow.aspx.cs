@@ -100,7 +100,7 @@ namespace CCFlow.WF.Admin
                 this.Session["FK_Flow"] = this.FK_Flow;
                 if (this.Request.QueryString["Type"] != null)
                 {
-                    string url = "../WAP/MyFlow.aspx?FK_Flow=" + this.FK_Flow;
+                    string url = "../WAP/MyFlow.htm?FK_Flow=" + this.FK_Flow;
                     if (this.Request.QueryString["IsWap"] == "1")
                         this.Response.Redirect("../WAP/MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01", true);
                     else

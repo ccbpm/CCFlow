@@ -206,12 +206,16 @@
         }
         #lastOptMsg {
             text-align: left;
-            margin: 10px auto;
+            margin: 10px auto 0px auto;
             padding-left: 10px;
+            background:white;
         }
 
         .titleAlertSpan {
             font-weight: bold;
+        }
+        body {
+        background: #E3E7F4;
         }
     </style>
 
@@ -220,6 +224,7 @@
         $(function () {
 
             var frm = document.forms["divCCForm"];
+            var plant = "CCFlow";
             if (plant=="CCFlow")
                 frm.action = "MyFlow.ashx?method=login";
             else
@@ -310,7 +315,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
+    <div id="divCurrentForm" style="position: relative;">
         <!--底部功能按钮 发送、移交-->
         <div id="topToolBar" style="text-align:left;display: block;margin:0px auto;height:50px;background:rgb(157, 159, 175);padding-top:5px;" class="Bar">
         </div>

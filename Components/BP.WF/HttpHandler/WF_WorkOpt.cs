@@ -330,7 +330,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AskForRe()
         {
-            string note = context.Request.QueryString["Note"]; //原因.
+            string note = this.GetRequestVal("Note"); //原因.
             return BP.WF.Dev2Interface.Node_AskforReply(this.WorkID, note);
         }
         /// <summary>
@@ -339,10 +339,12 @@ namespace BP.WF.HttpHandler
         /// <returns>执行信息</returns>
         public string Askfor()
         {
-            Int64 workID = int.Parse(context.Request.QueryString["WorkID"]); //工作ID
-            string toEmp = context.Request.QueryString["ToEmp"]; //让谁加签?
-            string note = context.Request.QueryString["Note"]; //原因.
-            string model = context.Request.QueryString["Model"]; //模式.
+
+
+            Int64 workID = int.Parse(this.GetRequestVal("WorkID")); //工作ID
+            string toEmp = this.GetRequestVal("ToEmp"); //让谁加签?
+            string note = this.GetRequestVal("Note"); //原因.
+            string model = this.GetRequestVal("Model"); //模式.
 
             BP.WF.AskforHelpSta sta = BP.WF.AskforHelpSta.AfterDealSend;
             if (model == "0")
@@ -512,11 +514,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DoReturnWork()
         {
-            int toNodeID = int.Parse(context.Request.QueryString["ReturnToNode"]);
-            string reMesage = context.Request.QueryString["ReturnInfo"];
+            int toNodeID = int.Parse(this.GetRequestVal("ReturnToNode"));
+            string reMesage = this.GetRequestVal("ReturnInfo");
 
             bool isBackBoolen = false;
-            string isBack = context.Request.QueryString["IsBack"];
+            string isBack = this.GetRequestVal("IsBack");
             if (isBack == "1")
                 isBackBoolen = true;
 
@@ -531,8 +533,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Shift()
         {
-            string msg = context.Request.QueryString["Message"];
-            string toEmp = context.Request.QueryString["ToEmp"];
+            string msg = this.GetRequestVal("Message");
+            string toEmp = this.GetRequestVal("ToEmp");
             return BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
         }
         /// <summary>
@@ -541,8 +543,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Allot()
         {
-            string msg = context.Request.QueryString["Message"];
-            string toEmp = context.Request.QueryString["ToEmp"];
+            string msg = this.GetRequestVal("Message");
+            string toEmp = this.GetRequestVal("ToEmp");
             return BP.WF.Dev2Interface.Node_Allot(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
         }
         /// <summary>
@@ -559,7 +561,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Press()
         {
-            string msg = context.Request.QueryString["Msg"];
+            string msg = this.GetRequestVal("Msg");
 
             //调用API.
             return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);

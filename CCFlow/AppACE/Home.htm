@@ -30,7 +30,7 @@
 <script type="text/javascript">
 			if("ontouchend" in document) {
 				//手机适应;
-				document.write("<script src='"+jypath+"/static/js/jquery/jquery.mobile.custom.min.js'><"+"/script>");
+				document.write("<script src='./static/js/jquery/jquery.mobile.custom.min.js'><"+"/script>");
 				//document.write("<script src='"+jypath+"/static/js/jquery/jquery.mobile-1.4.5.min.js'><"+"/script>");
 			}
 </script>
@@ -72,10 +72,16 @@
         //页面启动函数.
         $(function () {
 
+            var paras = "";
+            var fk_flow = GetQueryString("FK_Flow");
+            if (fk_flow != null) {
+                paras = "&FK_Flow=" + fk_flow + "&UserNo=" + GetQueryString("UserNo");
+            }
+
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Home_Init&m=" + Math.random(),
+                url: Handler + "?DoType=Home_Init&m=" + Math.random() + paras,
                 dataType: 'html',
                 success: function (data) {
 
@@ -95,6 +101,13 @@
                     img.onerror = "this.src='../DataUser/ICON/CCFlow/LogBig.png'";
 
                     document.title = data.SysName;
+
+
+                    if (fk_flow != null) {
+                        window.open('../WF/MyFlow.htm?FK_Flow=' + fk_flow);
+                        return;
+                    }
+
                     return;
                 }
             });
@@ -170,15 +183,11 @@
         }
 
         function ShowIt() {
-
             //var div = document.getElementById('menu');
-
             ShowHidden('menu');
-
         }
 
      </script>
-
 </head>
 <body id='indexBody'>
 	<div class="navbar navbar-default" id="navbar">

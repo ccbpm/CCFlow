@@ -377,7 +377,7 @@ function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
     window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
 }
 
-//按钮.
+//关注 按钮.
 function FocusBtn(btn, workid) {
 
     if (btn.value == '关注') {
@@ -389,7 +389,24 @@ function FocusBtn(btn, workid) {
 
     var para = "DoType=Focus&WorkID=" + workid;
     AjaxService(para, function (msg, scope) {
-        alert(msg);
+        // alert(msg);
+    });
+}
+
+
+//确认 按钮.
+function ConfirmBtn(btn, workid) {
+
+    if (btn.value == '确认') {
+        btn.value = '取消确认';
+    }
+    else {
+        btn.value = '确认';
+    }
+
+    var para = "DoType=Confirm&WorkID=" + workid;
+    AjaxService(para, function (msg, scope) {
+        //  alert(msg);
     });
 }
 
@@ -705,7 +722,6 @@ function getData(data, url, dataParam) {
     var data = JSON.parse(jsonStr);
     if (data.IsSuccess != true) {
         alert('返回参数失败，ErrMsg:' + data.ErrMsg + ";Msg:" + data.Msg + ";url:" + url);
-
     }
     return data;
 }

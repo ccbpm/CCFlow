@@ -68,7 +68,13 @@
 
                     for (var i = 0; i < data.length; i++) {
 
-                        var batchUrl = "../WF/WFRpt.jsp?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW;
+                        var batchUrl = "";
+
+                        if (plant == "CCFlow") {
+                            batchUrl = "../WF/WFRpt.aspx?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW;
+                        } else {
+                            batchUrl = "../WF/WFRpt.jsp?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW;
+                        }
 
                         row += "\t\n<tr>";
                         row += "<td>" + i + "</td>";

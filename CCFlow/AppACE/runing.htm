@@ -11,7 +11,7 @@
 		<![endif]-->
     <!-- page specific plugin styles -->
     <!-- fonts -->
-    
+    <!-- <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" /> -->
     <!-- ace styles -->
     <link rel="stylesheet" href="assets/css/ace.min.css" />
     <link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
@@ -67,19 +67,15 @@
                 url: Handler + "?DoType=Runing_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    //console.info(data);
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
-
-
                     data = JSON.parse(data);
-
                     var newRow = "";
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
-
                         newRow += "<tr ><td class=Idx>" + i + "</td>";
                         newRow += "<td>" + "<a href=\"javascript:WinOpenIt('../WF/MyFlow.htm?FK_Flow=" + data[i].FK_FLOW + "&FID=0&WorkID=" + data[i].WORKID + "&FK_Node=" + data[i].FK_FLOW + "01&IsRead=0&T=" + timeKey + "');\" >" + data[i].TITLE + "</a></td>";
                         newRow += "<td>" + data[i].FLOWNAME + "</td>";
@@ -93,7 +89,6 @@
                         newRow += "</td>";
                         newRow += "</tr>";
                     }
-
                     $("#Rows").html(newRow);
                     return;
                 }
@@ -110,12 +105,22 @@
         function UnSend(workid, fk_flow) {
             if (window.confirm('您确定要撤销本次发送吗？') == false)
                 return;
-            var url = '../WF/Do.aspx?DoType=UnSend&WorkID=' + workid + '&FK_Flow=' + fk_flow;
+            var url = "";
+            if (plant = "CCFlow") {
+                url = '../WF/Do.aspx?DoType=UnSend&WorkID=' + workid + '&FK_Flow=' + fk_flow;
+            } else {
+                url = '../WF/Do.jsp?DoType=UnSend&WorkID=' + workid + '&FK_Flow=' + fk_flow;
+            }
             window.location.href = url;
             return;
         }
         function Press(workid, fk_flow) {
-            var url = '../WF/WorkOpt/Press.jsp?WorkID=' + workid + '&FK_Flow=' + fk_flow;
+            var url = "";
+            if (plant = "CCFlow") {
+                url = '../WF/WorkOpt/Press.htm?WorkID=' + workid + '&FK_Flow=' + fk_flow;
+            } else {
+                url = '../WF/WorkOpt/Press.jsp?WorkID=' + workid + '&FK_Flow=' + fk_flow;
+            }
             var v = window.showModalDialog(url, 'sd', 'dialogHeight: 400px; dialogWidth: 550px;center: yes; help: no');
         }
 
@@ -214,10 +219,10 @@
     <!-- /.main-container -->
     <!-- basic scripts -->
     <!--[if !IE]> -->
-    
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> -->
     <!-- <![endif]-->
     <!--[if IE]>
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <![endif]-->
     <!--[if !IE]> -->
     <script type="text/javascript">

@@ -1,114 +1,152 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title>草稿</title>
-    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="/WF/Scripts/config.js" type="text/javascript"></script>
-     <base target="_self" />
-    <link href="/DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <script language="javascript" type="text/javascript" >
-        function WinOpenIt(url) {
-            //窗口最大化e
-            var scrWidth = screen.availWidth;
-            var scrHeight = screen.availHeight;
-            var self = window.open(url, '_blank', "resizable=1,scrollbars=yes");
-            self.moveTo(0, 0);
-            self.resizeTo(scrWidth, scrHeight);
-            self.focus();
-            // var newWindow = window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
-            // newWindow.focus();
-            return;
-        }
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>草稿</title>
+		<!-- basic styles -->
 
-        /* ESC Key Down */
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/font-awesome.min.css" />
 
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="assets/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+		<!-- page specific plugin styles -->
+
+		<!-- fonts -->
+
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+
+		<!-- ace styles -->
+
+		<link rel="stylesheet" href="assets/css/ace.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+
+		<!-- ace settings handler -->
+
+		<script src="assets/js/ace-extra.min.js"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+		<!--[if lt IE 9]>
+		<script src="assets/js/html5shiv.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
+    <script type="text/javascript" language="javascript" >
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("正在加载,请稍后......");
-
-            InitPage();
-
-            $("#Msg").html("");
-        });
-
-        //初始化数据.
-        function InitPage() {
-
-            //初始化表格.
             $.ajax({
                 type: 'post',
                 async: true,
                 url: Handler + "?DoType=Draft_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+                    console.info(data);
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
 
+                    //转换.
                     data = JSON.parse(data);
-
+                    var newRow = "";
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
-
-                        var newRow = "";
-                        newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + data[i].FK_FLOW + "&FID=0&WorkID=" + data[i].WORKID + "&FK_Node=" + data[i].FK_FLOW + "01&IsRead=0&T=" + timeKey + "');\" >" + data[i].TITLE + "</a></td>";
-                        newRow += "<td>" + data[i].FLOWNAME + "</td>";
+                        var fk_node = Number(data[i].FK_FLOW) + "01";
+                        newRow += "\t\n<tr>";
+                        newRow += "<td class=Idx>" + i + "</td>";
+                        newRow += "<td>" + data[i].WORKID + "</td>";
+                        if (plant == 'CCFlow') {
+                            newRow += "<td>" + "<a href='../WF/MyFlow.aspx?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW + "&FK_Node=" + fk_node + "'>" + data[i].TITLE + "</a>" + "</td>";
+                        } else {
+                            newRow += "<td>" + "<a href='../WF/MyFlow.jsp?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW + "&FK_Node=" + fk_node + "'>" + data[i].TITLE + "</a>" + "</td>";
+                        }
                         newRow += "<td>" + data[i].RDT + "</td>";
-                        newRow += "<td>" + data[i].FLOWNOTE + "</td>";
-                        newRow += "<td>";
-                        newRow += "<a href=\"javascript:Delete('" + data[i].WORKID + "')\"><img src='./Img/Btn/Delete.gif' border=0 />删除</a>";
-                        newRow += "</td>";
+                        newRow += "<td>" + "<a href=\"javascript:DelDraft(" + data[i].WORKID + "," + fk_node + ");\"> " + "删除</a>" + "</td>";
                         newRow += "</tr>";
-
-                        $("#Table1 tr:last").after(newRow);
                     }
+                    $("#Rows").html(newRow);
+                    return;
                 }
             });
-        }
-     </script>
-     
- <style type="text/css">
-        table
-        {
-            font: 12px 宋体, Arial, Verdana;
-        }
-        .TRSum
-        {
-            font: 12px 宋体, Arial, Verdana;
-        }
-        .centerTitle th
-        {
-            text-align: center;
-        }
-        .Idx
-        {
-            font-size: 16px;
-            font-family: Vijaya;
-        }
-    </style>
-
-</head>
-<body onkeypress="Esc()" >
-
-<table id="Table1" style="width:100%;">
-<caption ><div class='CaptionMsg' >草稿</div></caption>
-<tr>
-<th>序</th>
-<th>标题</th>
-<th>流程</th>
-<th>日期</th>
-<th>备注</th>
-</tr>
-</table>
-
-<div id="Msg"></div>
-
+        });
+    </script>
+	</head>
+	<body>
+<div class="main-container" id="main-container">
+        <div class="breadcrumbs" id="breadcrumbs">
+            <ul class="breadcrumb">
+                <li><i class="icon-home home-icon"></i><a href="welcome.htm">Home</a> </li>
+                <li class="active">草稿</li>
+            </ul>
+            <!-- .breadcrumb -->
+            <div class="nav-search" id="nav-search">
+                <form class="form-search">
+                <span class="input-icon">
+                    <input type="text" placeholder="查找 ..." class="nav-search-input" id="nav-search-input"
+                        autocomplete="off" />
+                    <i class="icon-search nav-search-icon"></i></span>
+                </form>
+            </div>
+            <!-- #nav-search -->
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <!-- PAGE CONTENT BEGINS -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="table-responsive">
+                            <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            序
+                                        </th>
+                                        <th>
+                                            流水号
+                                        </th>
+                                        <th>
+                                            流程标题
+                                        </th>
+                                        <th>
+                                            时间
+                                        </th>
+                                        <th>
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="Rows">
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /span -->
+                </div>
+                <!-- /row -->
+                <div class="hr hr-18 dotted hr-double">
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+<!--<input type="button"  ID="Btn_Del" runat="server" value="批量删除" onclick="Del_Click()"  />-->
 </body>
 </html>

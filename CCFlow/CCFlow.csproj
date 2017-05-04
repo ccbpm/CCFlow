@@ -230,10 +230,18 @@
     <Content Include="AppACE\assets\js\typeahead-bs2.min.js" />
     <Content Include="AppACE\assets\js\x-editable\ace-editable.min.js" />
     <Content Include="AppACE\assets\js\x-editable\bootstrap-editable.min.js" />
+    <Content Include="AppACE\Batch.htm" />
+    <Content Include="AppACE\Blank.htm" />
     <Content Include="AppACE\blank.html" />
+    <Content Include="AppACE\Calendar.htm" />
     <Content Include="AppACE\cc.htm" />
+    <Content Include="AppACE\Draft.htm" />
+    <Content Include="AppACE\FlowCH.htm" />
+    <Content Include="AppACE\Focus.htm" />
+    <Content Include="AppACE\GetTask.htm" />
     <Content Include="AppACE\Home.htm" />
     <Content Include="AppACE\Home.js" />
+    <Content Include="AppACE\HungUpList.htm" />
     <Content Include="AppACE\login.htm" />
     <Content Include="AppACE\runing.htm" />
     <Content Include="AppACE\search.htm" />
@@ -697,7 +705,10 @@
     <Content Include="AppACE\static\plugins\zTree\3.5\jquery.ztree.excheck-3.5.js" />
     <Content Include="AppACE\static\plugins\zTree\3.5\jquery.ztree.excheck-3.5.min.js" />
     <Content Include="AppACE\static\plugins\zTree\3.5\zTreeStyle.css" />
+    <Content Include="AppACE\TaskPoolSharing.htm" />
     <Content Include="AppACE\todolist.htm" />
+    <Content Include="AppACE\TodolistOfAuto.htm" />
+    <Content Include="AppACE\Welcome.htm" />
     <Content Include="AppSimple\CC.aspx" />
     <Content Include="AppSimple\Complete.aspx" />
     <Content Include="AppSimple\Default.aspx" />
@@ -715,6 +726,7 @@
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="DataUser\XML\Menu.xml" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ1\Student.htm" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ1\StudentList.htm" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
@@ -3703,6 +3715,9 @@
     <Content Include="WF\MessagesReplay.aspx" />
     <Content Include="WF\MyFlow.aspx" />
     <Content Include="WF\MyFlow.htm" />
+    <Content Include="WF\MyFlowFool.htm" />
+    <Content Include="WF\MyFlowFree.htm" />
+    <Content Include="WF\MyFlowFree2017.js" />
     <Content Include="WF\MyFlowInfo.aspx" />
     <Content Include="WF\MyFlowView.aspx" />
     <Content Include="WF\Port.aspx" />

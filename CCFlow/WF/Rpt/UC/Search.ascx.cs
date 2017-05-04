@@ -393,7 +393,7 @@ namespace CCFlow.WF.Rpt
                         continue;
                     }
 
-                    if (attr.UIContralType == UIContralType.DDL)
+                    if (attr.UIContralType == UIContralType.DDL || attr.UIContralType == UIContralType.RadioBtn)
                     {
                         string s = en.GetValRefTextByKey(attr.Key);
                         if (string.IsNullOrEmpty(s))
@@ -511,7 +511,7 @@ namespace CCFlow.WF.Rpt
                     || attr.Key == "MyNum")
                         continue;
 
-                    if (attr.UIContralType == UIContralType.DDL)
+                    if (attr.UIContralType == UIContralType.DDL || attr.UIContralType == UIContralType.RadioBtn)
                     {
                         this.UCSys1.AddTD();
                         continue;

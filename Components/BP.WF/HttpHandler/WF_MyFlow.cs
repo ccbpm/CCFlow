@@ -176,6 +176,22 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        public string Focus()
+        {
+            BP.WF.Dev2Interface.Flow_Focus( this.WorkID);
+            return "设置成功.";
+        }
+
+        /// <summary>
+        /// 删除子流程
+        /// </summary>
+        /// <returns></returns>
+        public string DelSubFlow()
+        {
+            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
+            return "删除成功.";
+        }
+
         /// <summary>
         /// 初始化(处理分发)
         /// </summary>
@@ -368,7 +384,7 @@ namespace BP.WF.HttpHandler
 
             string myurl = "MyFlow.aspx";
 
-            if (SystemConfig.CustomerNo == "CCFlowTest")
+            if (Glo.IsBeta==true)
                 myurl = "MyFlowFree.htm";
 
             //处理连接.

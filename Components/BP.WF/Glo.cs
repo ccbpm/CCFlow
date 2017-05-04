@@ -1974,6 +1974,24 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 是否启用beta?
+        /// </summary>
+        public static bool IsBeta
+        {
+            get
+            {
+                string s = BP.Sys.SystemConfig.AppSettings["IsBeta"];
+                if (string.IsNullOrEmpty(s))
+                    return false;
+
+                if (s == "0")
+                    return false;
+
+                return true;
+            }
+        }
+        
+        /// <summary>
         /// 获取mapdata字段查询Like。
         /// </summary>
         /// <param name="flowNo">流程编号</param>

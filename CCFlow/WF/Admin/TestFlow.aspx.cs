@@ -281,6 +281,7 @@ namespace CCFlow.WF.Admin
             cball.Text = "选择全部";
             this.Ucsys1.AddTDTitle(cball);
             //this.Ucsys1.AddTDTitle("EasyUI模式");
+            this.Ucsys1.AddTDTitle("ACE模式");
             this.Ucsys1.AddTDTitle("经典模式");
             this.Ucsys1.AddTDTitle("素颜模式");
             this.Ucsys1.AddTDTitle("手机模式");
@@ -314,6 +315,7 @@ namespace CCFlow.WF.Admin
 
                 //this.Ucsys1.AddTD("<a href='./../Port.aspx?DoWhat=StartLigerUI&UserNo=" + emp.No + "&FK_Flow=" + this.FK_Flow + "&Lang=" + BP.Web.WebUser.SysLang + "&Type=" + this.Request.QueryString["Type"] + "&SID=" + this.GloSID + "'  ><img src='./../Img/IE.gif' border=0 />LigerUI模式</a>");
 
+                this.Ucsys1.AddTD("<a href='?DoType=ReturnToUser&DoWhat=ACE&UserNo=" + emp.No + "&FK_Flow=" + this.FK_Flow + "&Lang=" + BP.Web.WebUser.SysLang + "&Type=" + this.Request.QueryString["Type"] + "'  ><img src='./../Img/IE.gif' border=0 />AppACE</a>");
                 this.Ucsys1.AddTD("<a href='?DoType=ReturnToUser&DoWhat=StartClassic&UserNo=" + emp.No + "&FK_Flow=" + this.FK_Flow + "&Lang=" + BP.Web.WebUser.SysLang + "&Type=" + this.Request.QueryString["Type"] + "'  ><img src='./../Img/IE.gif' border=0 />经典</a>");
                 this.Ucsys1.AddTD("<a href='?DoType=ReturnToUser&DoWhat=StartSimple&UserNo=" + emp.No + "&FK_Flow=" + this.FK_Flow + "&Lang=" + BP.Web.WebUser.SysLang + "&Type=" + this.Request.QueryString["Type"] + "'  ><img src='./../Img/IE.gif' border=0 />素颜</a>");
                 this.Ucsys1.AddTD("<a href='?DoType=ReturnToUser&DoWhat=StartClassic&UserNo=" + emp.No + "&FK_Flow=" + this.FK_Flow + "&Lang=" + BP.Web.WebUser.SysLang + "&Type=" + this.Request.QueryString["Type"] + "&IsMobile=1'  ><img src='./CCFormDesigner/Img/telephone.png' border=0 />手机模式</a>");

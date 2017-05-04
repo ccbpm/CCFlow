@@ -168,6 +168,12 @@ namespace BP.Web.Port
                     else
                         this.Response.Redirect(this.AppPath + "WF/App/Classic/Default.aspx?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID, true);
                     break;
+                case "ACE": // 发起工作
+                    if (this.FK_Flow == null)
+                        this.Response.Redirect("../AppACE/Login.htm", true);
+                    else
+                        this.Response.Redirect("../AppACE/Home.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID, true);
+                    break;
                 case DoWhatList.StartLigerUI:
                     if (this.FK_Flow == null)
                         this.Response.Redirect(this.AppPath + "WF/App/EasyUI/Default.aspx", true);

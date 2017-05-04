@@ -40,7 +40,7 @@ function OpenSelectAccepter(flowNo, nodeid, workid, fid) {
 
 function OpenAccepter() {
 
-    var url = '/WF/CCForm/FrmPopVal.aspx?FK_MapExt=' + popNameInXML + '&CtrlVal=' + ctrl.value;
+    var url = './CCForm/FrmPopVal.aspx?FK_MapExt=' + popNameInXML + '&CtrlVal=' + ctrl.value;
     var v = window.showModalDialog(url, 'opp', 'dialogHeight: 550px; dialogWidth: 650px; dialogTop: 100px; dialogLeft: 150px; center: yes; help: no');
     if (v == null || v == '' || v == 'NaN') {
         return;
@@ -263,10 +263,39 @@ function WinOpen(url, winName) {
 function DoDelSubFlow(fk_flow, workid) {
     if (window.confirm('您确定要终止进程吗？') == false)
         return;
-    var url = 'Do.aspx?DoType=DelSubFlow&FK_Flow=' + fk_flow + '&WorkID=' + workid;
-    WinShowModalDialog(url, '');
-    window.location.href = window.location.href; //aspxPage + '.aspx?WorkID=';
+
+    var para = 'DoType=DelSubFlow&FK_Flow=' + fk_flow + '&WorkID=' + workid;
+
+    AjaxService(para, function (msg, scope) {
+        alert(msg);
+        window.location.href = window.location.href;
+    });
 }
+
+
+//公共方法
+function AjaxService(param, callback, scope, levPath) {
+
+    $.ajax({
+        type: "GET", //使用GET或POST方法访问后台
+        dataType: "text", //返回json格式的数据
+        contentType: "application/json; charset=utf-8",
+        url: MyFlow, //要访问的后台地址
+        data: param, //要发送的数据
+        async: true,
+        cache: false,
+        complete: function () { }, //AJAX请求完成时隐藏loading提示
+        error: function (XMLHttpRequest, errorThrown) {
+            callback(XMLHttpRequest);
+        },
+        success: function (msg) {//msg为返回的数据，在这里做数据绑定
+            var data = msg;
+            callback(data, scope);
+        }
+    });
+}
+
+
 function Do(warning, url) {
     if (window.confirm(warning) == false)
         return;
@@ -351,13 +380,18 @@ function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
 
 //按钮.
 function FocusBtn(btn, workid) {
+
     if (btn.value == '关注') {
         btn.value = '取消关注';
     }
     else {
         btn.value = '关注';
     }
-    $.ajax({ url: "Do.htm?ActionType=Focus&WorkID=" + workid, async: false });
+
+    var para = 'DoType=Focus&FK_Flow=' + fk_flow + '&WorkID=' + workid;
+    AjaxService(para, function (msg, scope) {
+        alert(msg);
+    });
 }
 
 function ReturnVal(ctrl, url, winName) {

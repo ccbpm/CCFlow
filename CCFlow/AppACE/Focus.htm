@@ -79,7 +79,8 @@
                         row += "\t\n<tr>";
                         row += "<td>" + i + "</td>";
                         row += "<td>" + data[i].FLOWNAME + "</td>";
-                        row += "<td><a href=\"" + batchUrl + "\"  target=_blank >" + data[i].TITLE + "</a></td>";
+                        //row += "<td><a href=\"" + batchUrl + "\"  target=_blank >" + data[i].TITLE + "</a></td>";
+                        row += "<td><a href=href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].TITLE + "</a></td>";
                         row += "<td>" + data[i].STARTERNAME + "</td>";
                         row += "<td>" + data[i].RDT + "</td>";
                         row += "<td>" + data[i].FLOWNOTE + "</td>";

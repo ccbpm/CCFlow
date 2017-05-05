@@ -65,17 +65,27 @@
                     data = JSON.parse(data);
                     var row = "";
                     for (var i = 0; i < data.length; i++) {
-                        var batchUrl = '../WF/WFRpt.aspx?FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + data[i].FK_NODE + '&WorkID=' + data[i].WORKID + '&FID=' + data[i].FID;
-                        var url = '../WF/WorkOpt/CCCheckNote.aspx?WorkID='+data[i].WORKID+'&FK_Flow='+data[i].FK_FLOW+'&FID=0&FK_Node='+data[i].FK_NODE;
+                        var batchUrl = "";
+                        var url = "";
+                        if (plant == "CCFlow") {
+                            batchUrl = '../WF/WFRpt.aspx?FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + data[i].FK_NODE + '&WorkID=' + data[i].WORKID + '&FID=' + data[i].FID;
+                            url = '../WF/WorkOpt/CCCheckNote.aspx?WorkID=' + data[i].WORKID + '&FK_Flow=' + data[i].FK_FLOW + '&FID=0&FK_Node=' + data[i].FK_NODE;
+                        } else {
+                            batchUrl = '../WF/WFRpt.jsp?FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + data[i].FK_NODE + '&WorkID=' + data[i].WORKID + '&FID=' + data[i].FID;
+                            url = '../WF/WorkOpt/CCCheckNote.jsp?WorkID=' + data[i].WORKID + '&FK_Flow=' + data[i].FK_FLOW + '&FID=0&FK_Node=' + data[i].FK_NODE;
+                        }
+
                         row += "\t\n<tr>";
                         row += "<td>" + i + "</td>";
                         row += "<td>" + data[i].FLOWNAME + "</td>";
                         row += "<td>" + data[i].NODENAME + "</td>";
                         row += "<td>" + data[i].REC + "</td>";
-                        row += "<td><a href='" + batchUrl + "' target=_blank >" + data[i].TITLE + "</a></td>";
+                        //row += "<td><a href='" + batchUrl + "' target=_blank >" + data[i].TITLE + "</a></td>";
+                        row += "<td><a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].TITLE + "</a></td>";
                         row += "<td>" + data[i].DOC + "</td>";
                         row += "<td>" + data[i].RDT + "</td>";
-                        row += "<td><a href='" + url + "' target=_blank >回复</a></td>"; ;
+                        //row += "<td><a href='" + url + "' target=_blank >回复</a></td>";
+                        row += "<td><a href='#' onclick='WinOpenFull(\"" + url + "\")' >回复</a></td>";
                         row += "</tr>";
                     }
                     $("#Rows").html(row);

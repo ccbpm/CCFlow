@@ -72,9 +72,13 @@
                         newRow += "<td class=Idx>" + i + "</td>";
                         newRow += "<td>" + data[i].WORKID + "</td>";
                         if (plant == 'CCFlow') {
-                            newRow += "<td>" + "<a href='../WF/MyFlow.aspx?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW + "&FK_Node=" + fk_node + "'>" + data[i].TITLE + "</a>" + "</td>";
+                            //newRow += "<td>" + "<a href='../WF/MyFlow.aspx?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW + "&FK_Node=" + fk_node + "'>" + data[i].TITLE + "</a>" + "</td>";
+                            var batchUrl = '../WF/MyFlow.aspx?WorkID=' + data[i].WORKID + '&FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + fk_node;
+                            newRow += "<td>" + "<a href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].TITLE + "</a>" + "</td>";
                         } else {
-                            newRow += "<td>" + "<a href='../WF/MyFlow.jsp?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW + "&FK_Node=" + fk_node + "'>" + data[i].TITLE + "</a>" + "</td>";
+                            //newRow += "<td>" + "<a href='../WF/MyFlow.jsp?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW + "&FK_Node=" + fk_node + "'>" + data[i].TITLE + "</a>" + "</td>";
+                            var batchUrl = '../WF/MyFlow.jsp?WorkID=' + data[i].WORKID + '&FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + fk_node;
+                            newRow += "<td>" + "<a href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].TITLE + "</a>" + "</td>";
                         }
                         newRow += "<td>" + data[i].RDT + "</td>";
                         newRow += "<td>" + "<a href=\"javascript:DelDraft(" + data[i].WORKID + "," + fk_node + ");\"> " + "删除</a>" + "</td>";

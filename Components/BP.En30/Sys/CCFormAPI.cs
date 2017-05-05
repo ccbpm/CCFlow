@@ -1216,7 +1216,6 @@ namespace BP.Sys
         /// <returns></returns>
         public static System.Data.DataSet GenerHisDataSet_2017(string fk_mapdata)
         {
-
             DataSet ds = new DataSet();
 
             //创建实体对象.
@@ -1260,7 +1259,6 @@ namespace BP.Sys
             //加入扩展属性.
             DataTable Sys_MapExt = md.MapExts.ToDataTableField("Sys_MapExt");
             ds.Tables.Add(Sys_MapExt);
-
 
             //线.
             DataTable Sys_FrmLine = md.FrmLines.ToDataTableField("Sys_FrmLine");

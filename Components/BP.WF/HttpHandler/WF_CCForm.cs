@@ -116,7 +116,7 @@ namespace BP.WF.HttpHandler
         public string FrmFree_Init()
         {
             MapData md = new MapData(this.EnsName);
-            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
 
             #region 把主表数据放入.
             string atParas = "";

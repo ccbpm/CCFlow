@@ -289,22 +289,22 @@
                 {
                     if (isRead == 0)
                     {
-                        sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\"" + " >" + "<a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
+                        sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\"" + " >" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
                     }
                     else
                     {
-                        sBuilder.Append("<td  nowrap >" + "<a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&Paras=" + paras + "&T=" + timeKey + "');\"  ><img src='Img/Mail_Read.png' id='I" + gIdx + "_" + i + "' class=Icon align='middle'  />" + dr["Title"].ToString() + "</a>" + "</td>");
+                        sBuilder.Append("<td  nowrap >" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&Paras=" + paras + "&T=" + timeKey + "');\"  ><img src='Img/Mail_Read.png' id='I" + gIdx + "_" + i + "' class=Icon align='middle'  />" + dr["Title"].ToString() + "</a>" + "</td>");
                     }
                 }
                 else
                 {
                     if (isRead == 0)
                     {
-                        sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\" " + " >" + "<a href=\"MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "\" ><img class=Icon src='Img/Mail_UnRead.png' align='middle'  id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
+                        sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\" " + " >" + "<a href=\"MyFlow.htm?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "\" ><img class=Icon src='Img/Mail_UnRead.png' align='middle'  id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
                     }
                     else
                     {
-                        sBuilder.Append("<td  nowrap >" + "<a href=\"MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&Paras=" + paras + "&T=" + timeKey + "\" ><img class=Icon src='Img/Mail_Read.png' align='middle'  id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
+                        sBuilder.Append("<td  nowrap >" + "<a href=\"MyFlow.htm?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&Paras=" + paras + "&T=" + timeKey + "\" ><img class=Icon src='Img/Mail_Read.png' align='middle'  id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
                     }
                 }
 

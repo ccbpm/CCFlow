@@ -814,7 +814,7 @@ namespace BP.WF.HttpHandler
 + " union select '审核组件' Name, 'FrmCheck' No,FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node where nodeid=" + this.FK_Node
 + " union select '子流程' Name,'SubFlowDtl' No,SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W from WF_Node  where nodeid=" + this.FK_Node
 + " union select '子线程' Name, 'ThreadDtl' No,FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W W from WF_Node where nodeid=" + this.FK_Node
-+ " union select '流转自定义' Name,'FrmTransferCustom' No,FTCSta Sta,FTC_X X,FTC_Y Y,FTC_H H,FTC_W  W from WF_Node  where nodeid=" + this.FK_Node + ";";
++ " union select '流转自定义' Name,'FrmTransferCustom' No,FTCSta Sta,FTC_X X,FTC_Y Y,FTC_H H,FTC_W  W FROM WF_Node  where nodeid=" + this.FK_Node + ";";
                 ;
 
                 DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
@@ -880,7 +880,6 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-
         /// <summary>
         /// 保存表单
         /// </summary>
@@ -957,10 +956,10 @@ namespace BP.WF.HttpHandler
             ht.Add("SumAttrFK", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "' AND LGType=2 ")); //外键.
             ht.Add("SumAttrEnum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "' AND LGType=1 ")); //外键.
 
-            ht.Add("MapFrmFrees", "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=" + no); //自由表单属性.
-            ht.Add("MapFrmFools", "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmFools&PK=" + no); //傻瓜表单属性.
-            ht.Add("MapFrmExcels", "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + no); //Excel表单属性.
-            ht.Add("MapDataURLs", "/WF/Comm/En.htm?EnsName=BP.WF.Template.MapDataURLs&PK=" + no);  //嵌入式表单属性.
+            ht.Add("MapFrmFrees", "../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=" + no); //自由表单属性.
+            ht.Add("MapFrmFools", "../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmFools&PK=" + no); //傻瓜表单属性.
+            ht.Add("MapFrmExcels", "../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + no); //Excel表单属性.
+            ht.Add("MapDataURLs", "../../Comm/En.htm?EnsName=BP.WF.Template.MapDataURLs&PK=" + no);  //嵌入式表单属性.
 
             return BP.DA.DataType.ToJsonEntityModel(ht);
         }
@@ -1003,11 +1002,9 @@ namespace BP.WF.HttpHandler
         {
             MapAttr attr = new MapAttr(this.MyPK);
             if (attr.Delete() == 1)
-            {
                 return "删除成功！";
-            }
 
-            throw new Exception("删除失败！");
+            return "err@删除成功！";
         }
         #endregion 字段列表 的操作
     }

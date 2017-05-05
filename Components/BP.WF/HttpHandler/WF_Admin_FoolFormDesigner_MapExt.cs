@@ -192,7 +192,7 @@ namespace BP.WF.HttpHandler
         public string AutoFullDLL_Save()
         {
             MapExt me = new MapExt();
-            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.DDLFullCtrl,
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL,
                 MapExtAttr.FK_MapData, this.FK_MapData,
                 MapExtAttr.AttrOfOper, this.KeyOfEn);
 

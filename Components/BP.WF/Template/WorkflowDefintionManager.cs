@@ -131,16 +131,16 @@ namespace BP.WF.Template
         /// <param name="flowNo">流程编号</param>
         public static string DeleteFlowTemplete(string flowNo)
         {
-            BP.WF.Flow fl1 = new BP.WF.Flow(flowNo);
+            BP.WF.Flow fl = new BP.WF.Flow(flowNo);
             try
             {
-                fl1.DoDelete();
-                return null;
+                fl.DoDelete();
+                return "删除成功.";
             }
             catch (Exception ex)
             {
                 BP.DA.Log.DefaultLogWriteLineError("Do Method DelFlow Branch has a error , para:\t" + flowNo + ex.Message);
-                return ex.Message;
+                return "err@" + ex.Message;
             }
         }
     }

@@ -201,7 +201,16 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-          
+        public string Name
+        {
+            get
+            {
+                string str = context.Request.QueryString["Name"];
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
         
         /// <summary>
         /// 执行类型

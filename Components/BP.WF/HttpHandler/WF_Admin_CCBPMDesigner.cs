@@ -166,7 +166,6 @@ namespace BP.WF.HttpHandler
                 dr["NumOfOverTime"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='" + no + "' AND WFSta=1");
             }
             ds.Tables.Add(dt);
-
             return BP.Tools.Json.ToJson(ds);
         }
 
@@ -182,24 +181,9 @@ namespace BP.WF.HttpHandler
             {
                 switch (this.DoType)
                 {
-                  
                     case "Logout": //获得枚举列表的JSON.
                         BP.WF.Dev2Interface.Port_SigOut();
                         break;
-                    case "LoginInit": //登录初始化..
-                        if (BP.DA.DBAccess.IsExitsObject("WF_Emp") == false)
-                            msg = "url@=../DBInstall.aspx";
-
-                        string userNo = this.GetRequestVal("UserNo");
-                        string sid = this.GetRequestVal("SID");
-                        if (sid != null && userNo == "admin")
-                        {
-                            BP.WF.Dev2Interface.Port_Login(userNo, sid);
-                            msg = "url@Default.htm?UserNo=" + userNo + "&SessionID=" + this.context.Session.SessionID;
-                        }
-
-                        break;
-                  
                     case "load"://获取流程图表数据
                         msg = Flow_LoadFlowJsonData();
                         break;
@@ -218,21 +202,10 @@ namespace BP.WF.HttpHandler
                     case "editnodename"://修改节点名称
                         msg = Node_EditNodeName();
                         break;
-                    case "ccbpm_flow_elements"://流程所有元素集合
-                        msg = Flow_AllElements_ResponseJson();
-                        break;
                     case "changenoderunmodel"://修改节点运行模式
                         msg = Node_ChangeRunModel();
                         break;
-                    case "ccbpm_flow_resetversion"://重置流程版本为1.0
-                        msg = Flow_ResetFlowVersion();
-                        break;
-                    case "WebUserInfo"://获取用户信息
-                        msg = GetWebUserInfo();
-                        break;
-                    case "GetFlowTree"://获取流程树数据
-                        msg = GetFlowTreeTable();// GetFlowTree();
-                        break;
+                   
                     case "GetFormTree"://获取表单库数据
                         msg = GetFormTreeTable();//GetFormTree();
                         break;
@@ -254,9 +227,7 @@ namespace BP.WF.HttpHandler
                     case "GetBindingForms"://获取流程绑定表单列表
                         msg = GetBindingFormsTable();
                         break;
-                    case "GetFlowNodes"://获取流程节点列表
-                        msg = GetFlowNodesTable();
-                        break;
+                  
                     case "Do"://公共方法
                         msg = Do();
                         break;
@@ -280,7 +251,7 @@ namespace BP.WF.HttpHandler
         /// 根据部门、岗位获取人员列表
         /// </summary>
         /// <returns></returns>
-        private string GetEmpsByStationTable()
+        public string GetEmpsByStationTable()
         {
             string deptid = context.Request.QueryString["deptid"];
             string stid = context.Request.QueryString["stationid"];
@@ -338,7 +309,7 @@ namespace BP.WF.HttpHandler
             return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
         }
 
-        private string GetStructureTreeRootTable()
+        public string GetStructureTreeRootTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("NO", typeof(string));
@@ -382,7 +353,7 @@ namespace BP.WF.HttpHandler
         /// 获取指定部门下一级子部门及岗位列表
         /// </summary>
         /// <returns></returns>
-        private string GetSubDeptsTable()
+        public string GetSubDeptsTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("NO", typeof(string));
@@ -585,7 +556,7 @@ namespace BP.WF.HttpHandler
         /// 加载流程图数据 
         /// </summary>
         /// <returns></returns>
-        private string Flow_LoadFlowJsonData()
+        public string Flow_LoadFlowJsonData()
         {
             string diagramId = this.GetValFromFrmByKey("diagramId");
             BP.WF.Flow fl = new BP.WF.Flow(diagramId);
@@ -595,7 +566,7 @@ namespace BP.WF.HttpHandler
         /// 保存流程图信息
         /// </summary>
         /// <returns></returns>
-        private string Flow_Save()
+        public string Flow_Save()
         {
             //流程格式.
             string diagram = GetValFromFrmByKey("diagram");
@@ -620,7 +591,9 @@ namespace BP.WF.HttpHandler
             drToNode.Delete(DirectionAttr.FK_Flow, flowNo);
             foreach (string item in dir_Nodes)
             {
-                if (string.IsNullOrEmpty(item)) continue;
+                if (string.IsNullOrEmpty(item)) 
+                    continue;
+
                 string[] nodes = item.Split(':');
                 if (nodes.Length == 2)
                 {
@@ -633,55 +606,51 @@ namespace BP.WF.HttpHandler
             }
 
             #region //保存节点坐标及标签
-            try
-            {
-                //清空标签
-                LabNote labelNode = new LabNote();
-                labelNode.Delete(LabNoteAttr.FK_Flow, flowNo);
 
-                JsonData flowJsonData = JsonMapper.ToObject(diagram);
-                if (flowJsonData.IsObject == true)
+            //清空标签
+            LabNote labelNode = new LabNote();
+            labelNode.Delete(LabNoteAttr.FK_Flow, flowNo);
+
+            JsonData flowJsonData = JsonMapper.ToObject(diagram);
+            if (flowJsonData.IsObject == true)
+            {
+                JsonData flow_Nodes = flowJsonData["s"]["figures"];
+                for (int iNode = 0, jNode = flow_Nodes.Count; iNode < jNode; iNode++)
                 {
-                    JsonData flow_Nodes = flowJsonData["s"]["figures"];
-                    for (int iNode = 0, jNode = flow_Nodes.Count; iNode < jNode; iNode++)
+                    JsonData figure = flow_Nodes[iNode];
+                    //不存在不进行处理，继续循环
+                    if (figure == null || figure["CCBPM_Shape"] == null)
+                        continue;
+                    if (figure["CCBPM_Shape"].ToString() == "Node")
                     {
-                        JsonData figure = flow_Nodes[iNode];
-                        //不存在不进行处理，继续循环
-                        if (figure == null || figure["CCBPM_Shape"] == null)
-                            continue;
-                        if (figure["CCBPM_Shape"].ToString() == "Node")
+                        //节点坐标处理
+                        BP.WF.Node node = new BP.WF.Node();
+                        node.RetrieveByAttr(NodeAttr.NodeID, figure["CCBPM_OID"]);
+                        if (!string.IsNullOrEmpty(node.Name) && figure["rotationCoords"].Count > 0)
                         {
-                            //节点坐标处理
-                            BP.WF.Node node = new BP.WF.Node();
-                            node.RetrieveByAttr(NodeAttr.NodeID, figure["CCBPM_OID"]);
-                            if (!string.IsNullOrEmpty(node.Name) && figure["rotationCoords"].Count > 0)
-                            {
-                                JsonData rotationCoord = figure["rotationCoords"][0];
-                                node.X = Convert.ToInt32(float.Parse(rotationCoord["x"].ToString()));
-                                node.Y = Convert.ToInt32(float.Parse(rotationCoord["y"].ToString()));
-                                node.DirectUpdate();
-                            }
-                        }
-                        else if (figure["CCBPM_Shape"].ToString() == "Text")
-                        {
-                            //流程标签处理
-                            JsonData primitives = figure["primitives"][0];
-                            JsonData vector = primitives["vector"][0];
-                            labelNode = new LabNote();
-                            labelNode.FK_Flow = flowNo;
-                            labelNode.Name = primitives["str"].ToString();
-                            labelNode.X = Convert.ToInt32(float.Parse(vector["x"].ToString()));
-                            labelNode.Y = Convert.ToInt32(float.Parse(vector["y"].ToString()));
-                            labelNode.Insert();
+                            JsonData rotationCoord = figure["rotationCoords"][0];
+                            node.X = Convert.ToInt32(float.Parse(rotationCoord["x"].ToString()));
+                            node.Y = Convert.ToInt32(float.Parse(rotationCoord["y"].ToString()));
+                            node.DirectUpdate();
                         }
                     }
-                    return "true";
+                    else if (figure["CCBPM_Shape"].ToString() == "Text")
+                    {
+                        //流程标签处理
+                        JsonData primitives = figure["primitives"][0];
+                        JsonData vector = primitives["vector"][0];
+                        labelNode = new LabNote();
+                        labelNode.FK_Flow = flowNo;
+                        labelNode.Name = primitives["str"].ToString();
+                        labelNode.X = Convert.ToInt32(float.Parse(vector["x"].ToString()));
+                        labelNode.Y = Convert.ToInt32(float.Parse(vector["y"].ToString()));
+                        labelNode.Insert();
+                    }
                 }
+                return "true";
             }
-            catch (Exception ex)
-            {
-            }
-            #endregion
+
+            #endregion 保存节点坐标及标签
 
             return "true";
         }
@@ -689,7 +658,7 @@ namespace BP.WF.HttpHandler
         /// 另存为流程图
         /// </summary>
         /// <returns></returns>
-        private string Flow_SaveAs()
+        public string Flow_SaveAs()
         {
             return "";
         }
@@ -698,7 +667,7 @@ namespace BP.WF.HttpHandler
         /// 重置流程版本为1.0
         /// </summary>
         /// <returns></returns>
-        private string Flow_ResetFlowVersion()
+        public string Flow_ResetFlowVersion()
         {
             DBAccess.RunSQL("UPDATE WF_FLOW SET DType=0, FlowJson='' WHERE No='" + this.FK_Flow + "'");
             return "true";
@@ -708,32 +677,28 @@ namespace BP.WF.HttpHandler
         /// 获取流程所有元素
         /// </summary>
         /// <returns>json data</returns>
-        private string Flow_AllElements_ResponseJson()
+        public string Flow_AllElements_ResponseJson()
         {
-            try
-            {
-                BP.WF.Flow flow = new BP.WF.Flow();
-                flow.No = this.FK_Flow;
-                flow.RetrieveFromDBSources();
-                if (flow.DType == 0)
-                {
-                    //获取所有节点
-                    string sqls = "SELECT NODEID,NAME,X,Y,RUNMODEL FROM WF_NODE WHERE FK_FLOW='" + this.FK_Flow + "';" + Environment.NewLine
-                                + "SELECT NODE,TONODE FROM WF_DIRECTION WHERE FK_FLOW='" + this.FK_Flow + "';" + Environment.NewLine
-                                + "SELECT MYPK,NAME,X,Y FROM WF_LABNOTE WHERE FK_FLOW='" + this.FK_Flow + "';";
-                    DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
-                    ds.Tables[0].TableName = "Nodes";
-                    ds.Tables[1].TableName = "Direction";
-                    ds.Tables[2].TableName = "LabNote";
+            BP.WF.Flow flow = new BP.WF.Flow();
+            flow.No = this.FK_Flow;
+            flow.RetrieveFromDBSources();
 
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, msg = "", data = Newtonsoft.Json.JsonConvert.SerializeObject(ds) });
-                }
-                return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = "", data = new { } });
-            }
-            catch (Exception ex)
-            {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message, data = new { } });
-            }
+            //获取所有节点
+            string sqls = "SELECT NODEID,NAME,X,Y,RUNMODEL FROM WF_NODE WHERE FK_FLOW='" + this.FK_Flow + "';" + Environment.NewLine
+                        + "SELECT NODE,TONODE FROM WF_DIRECTION WHERE FK_FLOW='" + this.FK_Flow + "';" + Environment.NewLine
+                        + "SELECT MYPK,NAME,X,Y FROM WF_LABNOTE WHERE FK_FLOW='" + this.FK_Flow + "';";
+
+            DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
+
+            ds.Tables[0].TableName = "Nodes";
+            ds.Tables[1].TableName = "Direction";
+            ds.Tables[2].TableName = "LabNote";
+
+           // return BP.Tools.Json.DataSetToJson(ds, false);
+
+            return BP.Tools.Json.ToJson(ds);
+
+
         }
         #endregion end Flow
 
@@ -742,7 +707,7 @@ namespace BP.WF.HttpHandler
         /// 创建流程节点并返回编号
         /// </summary>
         /// <returns></returns>
-        private string Node_Create_GenerNodeID()
+        public string Node_Create_GenerNodeID()
         {
             try
             {
@@ -772,7 +737,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="figureName"></param>
         /// <returns></returns>
-        private BP.WF.RunModel Node_GetRunModelByFigureName(string figureName)
+        public BP.WF.RunModel Node_GetRunModelByFigureName(string figureName)
         {
             BP.WF.RunModel runModel = BP.WF.RunModel.Ordinary;
             switch (figureName)
@@ -802,7 +767,7 @@ namespace BP.WF.HttpHandler
         /// 根据节点编号删除流程节点
         /// </summary>
         /// <returns>执行结果</returns>
-        private string Node_DeleteNodeOfNodeID()
+        public string Node_DeleteNodeOfNodeID()
         {
             try
             {
@@ -835,7 +800,7 @@ namespace BP.WF.HttpHandler
         /// 修改节点名称
         /// </summary>
         /// <returns></returns>
-        private string Node_EditNodeName()
+        public string Node_EditNodeName()
         {
             string FK_Node = this.GetValFromFrmByKey("NodeID");
 
@@ -857,7 +822,7 @@ namespace BP.WF.HttpHandler
         /// 修改节点运行模式
         /// </summary>
         /// <returns></returns>
-        private string Node_ChangeRunModel()
+        public string Node_ChangeRunModel()
         {
             string runModel = GetValFromFrmByKey("RunModel");
             BP.WF.Node node = new BP.WF.Node(this.FK_Node);
@@ -889,20 +854,12 @@ namespace BP.WF.HttpHandler
         /// 获取用户信息
         /// </summary>
         /// <returns></returns>
-        private string GetWebUserInfo()
+        public string GetWebUserInfo()
         {
-            try
-            {
-                if (WebUser.No == null)
-                    return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = "当前用户没有登录，请登录后再试。", data = new { } });
-                BP.Port.Emp emp = new BP.Port.Emp(WebUser.No);
-
-                return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, msg = string.Empty, data = new { No = emp.No, Name = emp.Name, FK_Dept = emp.FK_Dept, SID = emp.SID } });
-            }
-            catch (Exception ex)
-            {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message, data = new { } });
-            }
+            if (WebUser.No == null)
+                return "err@当前用户没有登录，请登录后再试。";
+            BP.Port.Emp emp = new BP.Port.Emp(WebUser.No);
+            return emp.ToJson();
         }
 
         StringBuilder sbJson = new StringBuilder();
@@ -910,42 +867,9 @@ namespace BP.WF.HttpHandler
         /// 获取流程树数据
         /// </summary>
         /// <returns>返回结果Json,流程树</returns>
-        private string GetFlowTree()
+        public string GetFlowTree()
         {
-            string sql = @"SELECT 'F'+No No,'F'+ParentNo ParentNo,Name, Idx, 1 IsParent,'FLOWTYPE' TType,-1 DType FROM WF_FlowSort
-                           union 
-                           SELECT No, 'F'+FK_FlowSort as ParentNo,Name,Idx,0 IsParent,'FLOW' TType,DType FROM WF_Flow";
-
-            if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                sql = @"SELECT 'F'||No No,'F'||ParentNo ParentNo,Name, Idx, 1 IsParent,'FLOWTYPE' TType,-1 DType FROM WF_FlowSort
-                        union 
-                        SELECT No, 'F'||FK_FlowSort as ParentNo,Name,Idx,0 IsParent,'FLOW' TType,DType FROM WF_Flow";
-            }
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            var dt_Clone = dt.Clone();
-
-            //1.流程类别；2.流程
-            foreach (DataRow row in dt.Rows)
-                dt_Clone.Rows.Add(row.ItemArray);
-
-            //3.流程云数据；4.共有云；5.私有云
-            dt_Clone.Rows.Add("FlowCloud", "-1", "流程云", 0, 1, "FLOWCLOUD", "-1");
-            dt_Clone.Rows.Add("ShareFlow", "FlowCloud", "共有流程云", 0, 0, "SHAREFLOW", "-1");
-            dt_Clone.Rows.Add("PriFlow", "FlowCloud", "私有流程云", 0, 0, "PRIFLOW", "-1");
-            sbJson.Clear();
-
-            string sTmp = "";
-            if (dt_Clone != null && dt_Clone.Rows.Count > 0)
-            {
-                GetTreeJsonByTable(dt_Clone, "", attrFields: new[] { "TType", "DType" });
-            }
-            sTmp += sbJson.ToString();
-            return sTmp;
-        }
-
-        private string GetFlowTreeTable()
-        {
+           
             string sql = @"SELECT 'F'+No NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
                            SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
@@ -983,63 +907,10 @@ namespace BP.WF.HttpHandler
                     drs[0]["PARENTNO"] = "F0";
             }
 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+            return BP.Tools.Json.DataTableToJson(dt, false); 
         }
 
-        private string GetFlowNodesTable()
-        {
-            string fk_flow = GetValFromFrmByKey("fk_flow");
-            if (string.IsNullOrWhiteSpace(fk_flow))
-                return "[]";
-
-            var sql = new StringBuilder();
-
-            switch (DBAccess.AppCenterDBType)
-            {
-                case DBType.MSSQL:
-                    sql.AppendLine("SELECT CAST(wn.NodeID AS VARCHAR) AS NO,");
-                    sql.AppendLine("       ('(' + CAST(wn.NodeID AS VARCHAR) + ')' + wn.Name) AS NAME,");
-                    break;
-                case DBType.MySQL:
-                    sql.AppendLine("SELECT CAST(wn.NodeID AS CHAR) AS NO,");
-                    sql.AppendLine("       CONCAT('(',wn.NodeID,')',wn.Name) AS NAME,");
-                    break;
-                case DBType.Informix:
-                    sql.AppendLine("SELECT CAST(wn.NodeID AS CHAR) AS NO,");   //未证实
-                    sql.AppendLine("       ('(' || wn.NodeID || ')' || wn.Name) AS NAME,");    //未证实 
-                    break;
-                case DBType.Oracle:
-                    sql.AppendLine("SELECT to_char(wn.NodeID) AS NO,");
-                    sql.AppendLine("       ('(' || wn.NodeID || ')' || wn.Name) AS NAME,");
-                    break;
-                case DBType.DB2:
-                    sql.AppendLine("SELECT CHAR(wn.NodeID) AS NO,");   //未证实
-                    sql.AppendLine("       ('(' || wn.NodeID || ')' || wn.Name) AS NAME,");    //未证实，也可用CONCAT函数，但此函数只支持两两连接，且两个必须都是字符串
-                    break;
-                case DBType.Access:
-                    sql.AppendLine("SELECT CStr(wn.NodeID) AS NO,");
-                    sql.AppendLine("       ('(' & wn.NodeID & ')' & wn.Name) AS NAME,"); //Access中的别名必须加AS操作符
-                    break;
-                case DBType.Sybase:
-                    sql.AppendLine("SELECT CONVERT(VARCHAR, wn.NodeID) AS NO,");   //未证实
-                    sql.AppendLine("       ('(' + CONVERT(VARCHAR, wn.NodeID) + ')' + wn.Name) AS NAME,"); //未证实
-                    break;
-            }
-
-            sql.AppendLine("       NULL AS PARENTNO,");
-            sql.AppendLine("       'NODE' AS TTYPE,");
-            sql.AppendLine("       -1 AS DTYPE,");
-            sql.AppendLine("       0 AS ISPARENT");
-            sql.AppendLine("FROM   WF_Node wn");
-            sql.AppendLine("WHERE  wn.FK_Flow = '{0}'");
-            sql.AppendLine("ORDER BY");
-            sql.AppendLine("       wn.Step ASC");
-
-            DataTable dt = DBAccess.RunSQLReturnTable(string.Format(sql.ToString(), fk_flow));
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
-        }
-
-        private string GetBindingFormsTable()
+        public string GetBindingFormsTable()
         {
             string fk_flow = GetValFromFrmByKey("fk_flow");
             if (string.IsNullOrWhiteSpace(fk_flow))
@@ -1063,10 +934,10 @@ namespace BP.WF.HttpHandler
             sql.AppendLine("           )");
 
             DataTable dt = DBAccess.RunSQLReturnTable(string.Format(sql.ToString(), fk_flow));
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+            return BP.Tools.Json.DataTableToJson(dt, false); 
         }
 
-        private string GetFormTreeTable()
+        public string GetFormTreeTable()
         {
             string sql1 = "SELECT NO ,PARENTNO,NAME, IDX, 1 ISPARENT, 'FORMTYPE' TTYPE, DBSRC FROM Sys_FormTree ORDER BY Idx ASC";
             string sql2 = "SELECT NO, FK_FrmSort as PARENTNO,NAME,IDX,0 ISPARENT, 'FORM' TTYPE FROM Sys_MapData   WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree)";
@@ -1110,14 +981,14 @@ namespace BP.WF.HttpHandler
                 dt.Rows.Add(row.ItemArray);
             }
 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+            return BP.Tools.Json.DataTableToJson(dt, false); 
         }
 
         /// <summary>
         /// 获取表单库数据
         /// </summary>
         /// <returns>返回结果Json,表单库</returns>
-        private string GetFormTree()
+        public string GetFormTree()
         {
             var sqls = "SELECT No ,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree"
                       + " union "
@@ -1170,7 +1041,7 @@ namespace BP.WF.HttpHandler
             return sTmp;
         }
 
-        private string GetSrcTreeTable()
+        public string GetSrcTreeTable()
         {
             string sql1 = "SELECT ss.NO,'SrcRoot' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC";
             string sql2 = "SELECT st.NO, st.FK_SFDBSrc AS PARENTNO,st.NAME,0 AS IDX, 0 ISPARENT, 'SRCTABLE' TTYPE FROM Sys_SFTable st";
@@ -1184,10 +1055,10 @@ namespace BP.WF.HttpHandler
             foreach (DataRow row in ds.Tables[1].Rows)
                 dt.Rows.Add(row.ItemArray);
 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+            return BP.Tools.Json.DataTableToJson(dt, false); 
         }
 
-        private string GetStructureTreeTable()
+        public string GetStructureTreeTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("NO", typeof(string));
@@ -1319,7 +1190,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+            return BP.Tools.Json.DataTableToJson(dt, false); 
         }
 
         public string GetStructureDatas(string deptNo, string stationNo, string empNo)
@@ -1426,14 +1297,10 @@ namespace BP.WF.HttpHandler
         /// 删除流程
         /// </summary>
         /// <returns></returns>
-        private string DelFlow()
+        public string DelFlow()
         {
-            string msg = WorkflowDefintionManager.DeleteFlowTemplete(this.FK_Flow);
-            if (msg == null)
-                return "true";
-            return "false";
+            return WorkflowDefintionManager.DeleteFlowTemplete(this.FK_Flow);
         }
-
         /// <summary>
         /// 树节点管理
         /// </summary>
@@ -1449,17 +1316,6 @@ namespace BP.WF.HttpHandler
 
             switch (doWhat)
             {
-                case "GetFlowSorts":    //获取所有流程类型
-                    try
-                    {
-                        FlowSorts flowSorts = new FlowSorts();
-                        flowSorts.RetrieveAll(FlowSortAttr.Idx);
-                        return BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, "0");
-                    }
-                    catch (Exception ex)
-                    {
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-                    }
                 case "NewSameLevelFrmSort": //创建同级别的 表单树 目录.
                     SysFormTree frmSort = null;
                     try
@@ -1492,149 +1348,10 @@ namespace BP.WF.HttpHandler
                     {
                         return "Do Method NewSubLevelFrmSort Branch has a error , para:\t" + para1 + ex.Message;
                     }
-                case "NewSameLevelFlowSort":  //创建同级别的 流程树 目录.
-                    FlowSort fs = null;
-                    try
-                    {
-                        var para = para1.Split(',');
-                        fs = new FlowSort(para[0].Replace("F", ""));//传入的编号多出F符号，需要替换掉
-                        string sameNodeNo = fs.DoCreateSameLevelNode().No;
-                        fs = new FlowSort(sameNodeNo);
-                        fs.Name = para[1];
-                        fs.Update();
-                        return
-                            Newtonsoft.Json.JsonConvert.SerializeObject(
-                                new { success = true, msg = string.Empty, data = "F" + fs.No });
-                    }
-                    catch (Exception ex)
-                    {
-                        BP.DA.Log.DefaultLogWriteLineError("Do Method NewSameLevelFlowSort Branch has a error , para:\t" + para1 + ex.Message);
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-                    }
-                case "NewSubFlowSort": //创建子级别的 流程树 目录.
-                    try
-                    {
-                        var para = para1.Split(',');
-                        FlowSort fsSub = new FlowSort(para[0].Replace("F", ""));//传入的编号多出F符号，需要替换掉
-                        string subNodeNo = fsSub.DoCreateSubNode().No;
-                        FlowSort subFlowSort = new FlowSort(subNodeNo);
-                        subFlowSort.Name = para[1];
-                        subFlowSort.Update();
-                        return
-                            Newtonsoft.Json.JsonConvert.SerializeObject(
-                                new { success = true, msg = string.Empty, data = "F" + subFlowSort.No });
-                    }
-                    catch (Exception ex)
-                    {
-                        BP.DA.Log.DefaultLogWriteLineError("Do Method NewSubFlowSort Branch has a error , para:\t" + ex.Message);
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-                    }
-                case "EditFlowSort": //编辑表单树.
-                    try
-                    {
-                        var para = para1.Split(',');
-                        fs = new FlowSort(para[0].Replace("F", ""));//传入的编号多出F符号，需要替换掉
-                        fs.Name = para[1];
-                        fs.Save();
-                        return
-                            Newtonsoft.Json.JsonConvert.SerializeObject(
-                                new { success = true, msg = string.Empty, data = fs.No });
-                    }
-                    catch (Exception ex)
-                    {
-                        BP.DA.Log.DefaultLogWriteLineError("Do Method EditFlowSort Branch has a error , para:\t" + para1 + ex.Message);
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-                    }
-                case "NewFlow": //创建新流程.
-                    try
-                    {
-                        string[] ps = para1.Split(',');
-                        if (ps.Length != 6)
-                            throw new Exception("@创建流程参数错误");
-
-                        string fk_floSort = ps[0]; //类别编号.
-                        fk_floSort = fk_floSort.Replace("F", "");//传入的编号多出F符号，需要替换掉
-
-                        string flowName = ps[1]; // 流程名称.
-                        DataStoreModel dataSaveModel = (DataStoreModel)int.Parse(ps[2]); //数据保存方式。
-                        string pTable = ps[3]; // 物理表名。
-                        string flowMark = ps[4]; // 流程标记.
-                        string flowVer = ps[5]; // 流程版本
-
-                        string FK_Flow = BP.WF.Template.TemplateGlo.NewFlow(fk_floSort, flowName, dataSaveModel, pTable, flowMark, flowVer);
-                        return
-                            Newtonsoft.Json.JsonConvert.SerializeObject(
-                                new { success = true, msg = string.Empty, data = new { no = FK_Flow, name = flowName } });
-                    }
-                    catch (Exception ex)
-                    {
-                        BP.DA.Log.DefaultLogWriteLineError("Do Method NewFlow Branch has a error , para:\t" + para1 + ex.Message);
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-                    }
-                case "DelFlow": //删除流程.
-                    try
-                    {
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(
-                                new { success = true, msg = WorkflowDefintionManager.DeleteFlowTemplete(para1) });
-                    }
-                    catch (Exception ex)
-                    {
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-                    }
-                case "DelFlowSort":
-                    try
-                    {
-                        string FK_FlowSort = para1.Replace("F", "");
-                        string forceDel = GetValFromFrmByKey("force");
-                        FlowSort delfs = new FlowSort();
-                        delfs.No = FK_FlowSort;
-                        //强制删除，不需判断是否含有子项。
-                        if (forceDel == "true")
-                        {
-                            delfs.DeleteFlowSortSubNode_Force();
-                            delfs.Delete();
-                            return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, reason = "" });
-                        }
-
-                        //判断是否包含子类别
-                        if (delfs.HisSubFlowSorts != null && delfs.HisSubFlowSorts.Count > 0)
-                            return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, reason = "havesubsorts", msg = "此类别下包含子类别。" });
-
-                        //判断是否包含工作流程
-                        if (delfs.HisFlows != null && delfs.HisFlows.Count > 0)
-                            return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, reason = "haveflows", msg = "此类别下包含流程。" });
-
-                        //执行删除
-                        delfs.Delete();
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, reason = "" });
-                    }
-                    catch (Exception ex)
-                    {
-                        BP.DA.Log.DefaultLogWriteLineError("Do Method DelFlowSort Branch has a error , para:\t" + para1 + ex.Message);
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-                    }
-                case "DelNode":
-                    try
-                    {
-                        if (!string.IsNullOrEmpty(para1))
-                        {
-                            BP.WF.Node delNode = new BP.WF.Node(int.Parse(para1));
-                            delNode.Delete();
-                        }
-                        else
-                        {
-                            throw new Exception("@参数错误:" + para1);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return "err:" + ex.Message;
-                    }
-                    return null;
                 case "SetBUnit":
                     try
                     {
-                        if (!string.IsNullOrEmpty(para1))
+                        if (string.IsNullOrEmpty(para1)==false)
                         {
                             BP.WF.Node nd = new BP.WF.Node(int.Parse(para1));
                             nd.IsTask = !nd.IsBUnit;
@@ -1652,75 +1369,116 @@ namespace BP.WF.HttpHandler
                     return null;
                 case "GetSettings":
                     return SystemConfig.AppSettings[para1];
-                case "SaveFlowFrm":  //保存流程表单.
-                    Entity en = null;
-                    try
-                    {
-                        AtPara ap = new AtPara(para1);
-                        string enName = ap.GetValStrByKey("EnName");
-                        string pk = ap.GetValStrByKey("PKVal");
-                        en = ClassFactory.GetEn(enName);
-                        en.ResetDefaultVal();
-                        if (en == null)
-                            throw new Exception("无效的类名:" + enName);
-
-                        if (string.IsNullOrEmpty(pk) == false)
-                        {
-                            en.PKVal = pk;
-                            en.RetrieveFromDBSources();
-                        }
-
-                        foreach (string key in ap.HisHT.Keys)
-                        {
-                            if (key == "PKVal")
-                                continue;
-                            en.SetValByKey(key, ap.HisHT[key].ToString().Replace('^', '@'));
-                        }
-                        en.Save();
-                        return en.PKVal as string;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (en != null)
-                            en.CheckPhysicsTable();
-                        return "Error:" + ex.Message;
-                    }
-                case "ChangeNodeType":
-                    var p = para1.Split(',');
-
-                    try
-                    {
-                        if (p.Length != 3)
-                            throw new Exception("@修改节点类型参数错误");
-
-                        //var sql = "UPDATE WF_Node SET Icon='{0}' WHERE FK_Flow='{1}' AND NodeID='{2}'";
-                        var sql = "UPDATE WF_Node SET RunModel={0} WHERE FK_Flow='{1}' AND NodeID={2}";
-                        DBAccess.RunSQL(string.Format(sql, p[0], p[1], p[2]));
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true });
-                    }
-                    catch (Exception ex)
-                    {
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-                    }
-                case "ChangeNodeIcon":
-                    p = para1.Split(',');
-
-                    try
-                    {
-                        if (p.Length != 3)
-                            throw new Exception("@修改节点图标参数错误");
-
-                        var sql = "UPDATE WF_Node SET Icon='{0}' WHERE FK_Flow='{1}' AND NodeID={2}";
-                        DBAccess.RunSQL(string.Format(sql, p[0], p[1], p[2]));
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true });
-                    }
-                    catch (Exception ex)
-                    {
-                        return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
-                    }
                 default:
                     throw new Exception("@没有约定的执行标记:" + doWhat);
             }
+        }
+        public string NewFlow()
+        {
+            try
+            {
+                string[] ps = this.GetRequestVal("paras").Split(',');
+                if (ps.Length != 6)
+                    throw new Exception("@创建流程参数错误");
+
+                string fk_floSort = ps[0]; //类别编号.
+                fk_floSort = fk_floSort.Replace("F", "");//传入的编号多出F符号，需要替换掉
+
+                string flowName = ps[1]; // 流程名称.
+                DataStoreModel dataSaveModel = (DataStoreModel)int.Parse(ps[2]); //数据保存方式。
+                string pTable = ps[3]; // 物理表名。
+                string flowMark = ps[4]; // 流程标记.
+                string flowVer = ps[5]; // 流程版本
+
+                string flowNo = BP.WF.Template.TemplateGlo.NewFlow(fk_floSort, flowName, dataSaveModel, pTable, flowMark, flowVer);
+                return flowNo;
+
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+       
+        public string DelNode()
+        {
+            try
+            {
+                BP.WF.Node nd = new BP.WF.Node();
+                nd.NodeID = this.FK_Node;
+                nd.Delete();
+                return "删除成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+
+        public string GetFlowSorts()
+        {
+            FlowSorts flowSorts = new FlowSorts();
+            flowSorts.RetrieveAll(FlowSortAttr.Idx);
+            return BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, "0");
+        }
+
+        public string DelFlowSort()
+        {
+            string fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
+
+            FlowSort fs = new FlowSort();
+            fs.No = fk_flowSort;
+
+            //检查是否有子流程？
+            string sql = "SELECT COUNT(*) FROM WF_Flow WHERE FK_FlowSort='" + fk_flowSort + "'";
+            if (DBAccess.RunSQLReturnValInt(sql) != 0)
+                return "err@该目录下有流程，您不能删除。";
+
+            //检查是否有子目录？
+            sql = "SELECT COUNT(*) FROM WF_FlowSort WHERE ParentNo='" + fk_flowSort + "'";
+            if (DBAccess.RunSQLReturnValInt(sql) != 0)
+                return "err@该目录下有子目录，您不能删除。";
+
+            fs.Delete();
+
+            return "删除成功.";
+        }
+        /// <summary>
+        /// 新建同级流程类别
+        /// </summary>
+        /// <returns></returns>
+        public string NewSameLevelFlowSort()
+        {
+            FlowSort fs = null;
+            fs = new FlowSort(this.No.Replace("F", ""));//传入的编号多出F符号，需要替换掉
+            string sameNodeNo = fs.DoCreateSameLevelNode().No;
+            fs = new FlowSort(sameNodeNo);
+            fs.Name = this.EnsName;
+            fs.Update();
+            return "F" + fs.No;
+        }
+        /// <summary>
+        /// 新建下级类别.
+        /// </summary>
+        /// <returns></returns>
+        public string NewSubFlowSort()
+        {
+            FlowSort fsSub = new FlowSort(this.No.Replace("F", ""));//传入的编号多出F符号，需要替换掉
+            string subNodeNo = fsSub.DoCreateSubNode().No;
+            FlowSort subFlowSort = new FlowSort(subNodeNo);
+            subFlowSort.Name = this.Name;
+            subFlowSort.Update();
+            return "F" + subFlowSort.No;
+        }
+
+        public string EditFlowSort()
+        {
+            FlowSort fs = new FlowSort();//传入的编号多出F符号，需要替换掉
+            fs.No = this.No;
+            fs.RetrieveFromDBSources();
+            fs.Name = this.GetRequestVal("Name");
+            fs.Update();
+            return fs.No;
         }
 
         /// <summary>

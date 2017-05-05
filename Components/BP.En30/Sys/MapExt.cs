@@ -853,6 +853,9 @@ namespace BP.Sys
                 case MapExtXmlList.AutoFull:
                     this.MyPK = MapExtXmlList.AutoFull + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
+                case MapExtXmlList.AutoFullDLL:
+                    this.MyPK = MapExtXmlList.AutoFullDLL + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    break;
                 case MapExtXmlList.InputCheck:
                     this.MyPK = MapExtXmlList.InputCheck + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
@@ -866,7 +869,7 @@ namespace BP.Sys
                     this.MyPK = MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
                 default:
-                    this.MyPK = MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     // throw new Exception("@没有判断的扩展类型." + this.ExtType);
                     // this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;

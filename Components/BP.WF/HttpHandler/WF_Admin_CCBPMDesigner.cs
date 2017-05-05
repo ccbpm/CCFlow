@@ -867,7 +867,7 @@ namespace BP.WF.HttpHandler
         /// 获取流程树数据
         /// </summary>
         /// <returns>返回结果Json,流程树</returns>
-        public string GetFlowTree()
+        public string GetFlowTreeTable()
         {
            
             string sql = @"SELECT 'F'+No NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
@@ -988,7 +988,7 @@ namespace BP.WF.HttpHandler
         /// 获取表单库数据
         /// </summary>
         /// <returns>返回结果Json,表单库</returns>
-        public string GetFormTree()
+        public string GetFormTree_deleted()
         {
             var sqls = "SELECT No ,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree"
                       + " union "

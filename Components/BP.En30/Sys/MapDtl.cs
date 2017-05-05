@@ -1322,24 +1322,24 @@ namespace BP.Sys
                 //map.AddTBInt(MapDtlAttr.Model, 0, "工作模式", false, false);
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,
                  MapDtlAttr.Model, "@0=普通@1=固定行");
-               
-                map.AddTBInt(MapDtlAttr.RowsOfList, 6, "Rows", false, false);
+
+                map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", false, false);
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", false, false);
 
-                map.AddBoolean(MapDtlAttr.IsShowSum, true, "IsShowSum", false, false);
-                map.AddBoolean(MapDtlAttr.IsShowIdx, true, "IsShowIdx", false, false);
-                map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "IsCopyNDData", false, false);
+                map.AddBoolean(MapDtlAttr.IsShowSum, true, "是否显示合计？", false, false);
+                map.AddBoolean(MapDtlAttr.IsShowIdx, true, "是否显示序号？", false, false);
+                map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "是否允许Copy数据", false, false);
                 map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", false, false);
 
-                map.AddBoolean(MapDtlAttr.IsReadonly, false, "IsReadonly", false, false);
-                map.AddBoolean(MapDtlAttr.IsShowTitle, true, "IsShowTitle", false, false);
+                map.AddBoolean(MapDtlAttr.IsReadonly, false, "是否只读？", false, false);
+                map.AddBoolean(MapDtlAttr.IsShowTitle, true, "是否显示标题？", false, false);
                 map.AddBoolean(MapDtlAttr.IsView, true, "是否可见", false, false);
-              
 
-                map.AddBoolean(MapDtlAttr.IsInsert, true, "IsInsert", false, false);
-                map.AddBoolean(MapDtlAttr.IsDelete, true, "IsDelete", false, false);
-                map.AddBoolean(MapDtlAttr.IsUpdate, true, "IsUpdate", false, false);
+
+                map.AddBoolean(MapDtlAttr.IsInsert, true, "是否可以插入行？", false, false);
+                map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行", false, false);
+                map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", false, false);
 
                 map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", false, false);
@@ -1347,7 +1347,7 @@ namespace BP.Sys
                 map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M", false, false);
 
-                map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "WhenOverSize", true, true,
+                map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true,
                  MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
                 map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true,
@@ -1356,20 +1356,20 @@ namespace BP.Sys
                 map.AddDDLSysEnum(MapDtlAttr.DtlShowModel, 0, "显示格式", true, true,
                MapDtlAttr.DtlShowModel, "@0=表格@1=卡片");
 
-                map.AddTBFloat(MapDtlAttr.X, 5, "X", true, false);
-                map.AddTBFloat(MapDtlAttr.Y, 5, "Y", false, false);
+                map.AddTBFloat(MapDtlAttr.X, 5, "距左", true, false);
+                map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
 
-                map.AddTBFloat(MapDtlAttr.H, 150, "H", true, false);
-                map.AddTBFloat(MapDtlAttr.W, 200, "W", false, false);
+                map.AddTBFloat(MapDtlAttr.H, 150, "高度", true, false);
+                map.AddTBFloat(MapDtlAttr.W, 200, "宽度", false, false);
 
-                map.AddTBFloat(MapDtlAttr.FrmW, 900, "FrmW", true, true);
-                map.AddTBFloat(MapDtlAttr.FrmH, 1200, "FrmH", true, true);
+                map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
+                map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
 
                 //MTR 多表头列.
                 map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
 
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤SQL表达式", true, false, 0, 200, 20, true);
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
                 //add 2014-02-21.
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);

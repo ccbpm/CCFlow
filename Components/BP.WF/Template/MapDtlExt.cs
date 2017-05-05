@@ -958,7 +958,7 @@ namespace BP.WF.Template
                 //map.AddTBString(MapDtlAttr.ImpFixTreeSql, null, "固定列树形SQL", true, false, 0, 500, 20);
                 //map.AddTBString(MapDtlAttr.ImpFixDataSql, null, "固定列数据SQL", true, false, 0, 500, 20);
 
-                map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", false, false);
+                map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", true, false);
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", false, false);
 
@@ -980,7 +980,7 @@ namespace BP.WF.Template
                 map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M", false, false);
 
-                map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "WhenOverSize", true, true,
+                map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true,
                  MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
                 map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true,
@@ -989,19 +989,19 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(MapDtlAttr.DtlShowModel, 0, "显示格式", true, true,
                MapDtlAttr.DtlShowModel, "@0=表格@1=卡片");
 
-                map.AddTBFloat(MapDtlAttr.X, 5, "X", true, false);
-                map.AddTBFloat(MapDtlAttr.Y, 5, "Y", false, false);
+                map.AddTBFloat(MapDtlAttr.X, 5, "距左", true, false);
+                map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
 
-                map.AddTBFloat(MapDtlAttr.H, 150, "H", true, false);
-                map.AddTBFloat(MapDtlAttr.W, 200, "W", false, false);
+                map.AddTBFloat(MapDtlAttr.H, 150, "高度", true, false);
+                map.AddTBFloat(MapDtlAttr.W, 200, "宽度", false, false);
 
-                map.AddTBFloat(MapDtlAttr.FrmW, 900, "FrmW", true, true);
-                map.AddTBFloat(MapDtlAttr.FrmH, 1200, "FrmH", true, true);
+                map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
+                map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
 
                 //对显示的结果要做一定的限制.
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤数据SQL表达式", true, false, 0, 200, 20,true);
                
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
                 #endregion 基础信息.
 
                 #region 导入导出填充.

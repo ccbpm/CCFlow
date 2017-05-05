@@ -573,20 +573,20 @@ function WinOpen(url) {
 var WebUser = { No: '', Name: '', FK_Dept: '', SID: '' };
 function InitUserInfo() {
     var params = {
-        action: "WebUserInfo"
+        action: "GetWebUserInfo"
     };
     ajaxService(params, function (data) {
-        var jdata = $.parseJSON(data);
-        if (jdata.success) {
-            WebUser.No = jdata.data.No;
-            WebUser.Name = jdata.data.Name;
-            WebUser.FK_Dept = jdata.data.FK_Dept;
-            WebUser.SID = jdata.data.SID;
-        }
-        else {
-            alert('获取当前登录用户失败：' + jdata.msg);
+        if (data.indexOf('err@') != -1) {
+            alert(data);
             window.location.href = "Login.htm?DoType=Logout";
+            return;
         }
+
+        var jdata = $.parseJSON(data);
+        WebUser.No = jdata.No;
+        WebUser.Name = jdata.Name;
+        WebUser.FK_Dept = jdata.FK_Dept;
+        WebUser.SID = jdata.SID;
     }, this);
 }
 

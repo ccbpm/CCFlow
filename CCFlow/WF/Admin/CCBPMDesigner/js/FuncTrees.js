@@ -36,7 +36,7 @@ functrees.push({
     AttrCols: ["TTYPE", "DTYPE", "ISPARENT"],
     ServiceCount: 1,
     Nodes: [
-			{ Type: "Service", ServiceMethod: "GetFlowTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "F0",
+			{ Type: "Service", ServiceMethod: "GetFlowTreeTable", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "F0",
 			    ColDefine: "TTYPE", Defines: [
 											{ Value: "FLOWTYPE", ColDefine: "PARENTNO",
 											    Defines: [
@@ -75,7 +75,7 @@ functrees.push({
     RootASC: { Field: "TTYPE", Index: ["FORMTYPE", "FORMREF", "CLOUNDDATA"] },//"SRCROOT", 
     ServiceCount: 1,//2
     Nodes: [
-			{ Type: "Service", ServiceMethod: "GetFormTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null,
+			{ Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "",
 			    ColDefine: "TTYPE", Defines: [
 											{ Value: "FORMTYPE", ColDefine: "PARENTNO",
 											    Defines: [
@@ -213,6 +213,11 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
         }
 
         ajaxService(params, function (data, nd) {
+            if (data.indexOf('err@') != -1) {
+                alert(data);
+                return;
+            }
+
             var re = $.parseJSON(data);
 
             //将所有获取的数据转换为Node

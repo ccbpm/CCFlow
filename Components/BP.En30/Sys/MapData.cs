@@ -776,9 +776,9 @@ namespace BP.Sys
 				SysEnums obj = this.GetRefObject("SysEnums") as SysEnums;
 				if (obj == null)
 				{
-                    SysEnums ses = new SysEnums();
-                    ses.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
-                    this.SetRefObject("SysEnums", ses);
+                    obj = new SysEnums();
+                    obj.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+                    this.SetRefObject("SysEnums", obj);
 				}
 				return obj;
 			}

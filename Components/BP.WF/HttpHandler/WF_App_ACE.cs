@@ -401,11 +401,11 @@ namespace BP.WF.HttpHandler
             Pub1.Append(AddTableEnd());
             return Pub1.ToString();
         }
-        #endregion 取消关注流程.
+        #endregion 流程查询.
 
-        
-        
-        
+
+
+        #region 添加公共的字符串拼接方法table.
         ////正常的页面方法请放在此方法前面
         ///添加公共的字符串拼接方法table
         public string AddTR(bool item)
@@ -461,7 +461,7 @@ namespace BP.WF.HttpHandler
         {
             return "</Table>";
         }
-
+        #endregion 添加公共的字符串拼接方法table.
     }
    
 }

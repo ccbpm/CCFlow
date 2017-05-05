@@ -237,6 +237,7 @@
     <Content Include="AppACE\cc.htm" />
     <Content Include="AppACE\Draft.htm" />
     <Content Include="AppACE\FlowCH.htm" />
+    <Content Include="AppACE\FlowRpt.htm" />
     <Content Include="AppACE\Focus.htm" />
     <Content Include="AppACE\GetTask.htm" />
     <Content Include="AppACE\Home.htm" />
@@ -3303,6 +3304,7 @@
     <Content Include="WF\FlowFormTree\Images\Menu\user1.png" />
     <Content Include="WF\FlowFormTree\Images\Menu\window.png" />
     <Content Include="WF\FlowRpt.aspx" />
+    <Content Include="WF\FlowRpt.htm" />
     <Content Include="WF\FlowSearch.aspx" />
     <Content Include="WF\FlowSearchDtl.aspx" />
     <Content Include="WF\FlowSearchMyWork.aspx" />
@@ -11984,7 +11986,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>8937</DevelopmentServerPort>
+          <DevelopmentServerPort>33800</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

@@ -308,6 +308,160 @@ namespace BP.WF.HttpHandler
             return "您已取消关注！";
         }
         #endregion 取消关注流程.
+
+        #region 流程查询.
+        /// <summary>
+        /// 流程查询
+        /// </summary>
+        /// <returns></returns>
+        public string FlowRpt_Init()
+        {
+            StringBuilder Pub1 = new StringBuilder(); 
+            BP.WF.Flows fls = new BP.WF.Flows();
+            fls.RetrieveAll();
+
+            FlowSorts ens = new FlowSorts();
+            ens.RetrieveAll();
+
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(BP.Web.WebUser.No);
+
+            int cols = 3; //定义显示列数 从0开始。
+            decimal widthCell = 100 / cols;
+            Pub1.Append("<Table width=100% border=0>");
+            int idx = -1;
+            bool is1 = false;
+
+            //string timeKey = "s" + this.Session.SessionID + DateTime.Now.ToString("yyMMddHHmmss");
+            foreach (FlowSort en in ens)
+            {
+                if (en.ParentNo == "0"
+                    || en.ParentNo == ""
+                    || en.No == "")
+                    continue;
+
+                idx++;
+                if (idx == 0)
+                    Pub1.Append(AddTR(is1));
+                    is1 = !is1;
+
+                Pub1.Append(AddTDBegin("width='" + widthCell + "%' border=0 valign=top"));
+                //输出类别.
+                //this.Pub1.AddFieldSet(en.Name);
+                Pub1.Append(AddB(en.Name));
+                Pub1.Append(AddUL());
+
+                #region 输出流程。
+                foreach (Flow fl in fls)
+                {
+                    if (fl.FlowAppType == FlowAppType.DocFlow)
+                        continue;
+
+                    //如果该目录下流程数量为空就返回.
+                    if (fls.GetCountByKey(BP.WF.Template.FlowAttr.FK_FlowSort, en.No) == 0)
+                        continue;
+
+                    if (fl.FK_FlowSort != en.No)
+                        continue;
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        if (dr["No"].ToString() != fl.No)
+                            continue;
+                        break;
+                    }
+
+                    Pub1.Append(AddLi(" <a  href=\"javascript:WinOpen('/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "');\" >" + fl.Name + "</a> "));
+                }
+                #endregion 输出流程。
+
+                Pub1.Append(AddULEnd());
+
+                Pub1.Append(AddTDEnd());
+                if (idx == cols - 1)
+                {
+                    idx = -1;
+                    Pub1.Append(AddTREnd());
+                }
+            }
+
+            while (idx != -1)
+            {
+                idx++;
+                if (idx == cols - 1)
+                {
+                    idx = -1;
+                    Pub1.Append(AddTD());
+                    Pub1.Append(AddTREnd());
+                }
+                else
+                {
+                    Pub1.Append(AddTD());
+                }
+            }
+            Pub1.Append(AddTableEnd());
+            return Pub1.ToString();
+        }
+        #endregion 取消关注流程.
+
+        
+        
+        
+        ////正常的页面方法请放在此方法前面
+        ///添加公共的字符串拼接方法table
+        public string AddTR(bool item)
+        {
+            if (item)
+                return "\n<TR bgcolor=AliceBlue >";
+            else
+                return "\n<TR bgcolor=white class=TR>";
+        }
+
+        public string AddTDBegin(string attr)
+        {
+            return "\n<TD " + attr + " nowrap >";
+        }
+
+        public string AddB(string s)
+        {
+            if (s == null || s == "")
+                return "";
+            return "<B>" + s + "</B>";
+        }
+        public string AddUL()
+        {
+            return "<ul>";
+        }
+
+        public string AddLi(string html)
+        {
+            return "<li>" + html + "</li> \t\n";
+        }
+
+        public string AddULEnd()
+        {
+            return "</ul>\t\n";
+        }
+
+        public string AddTDEnd()
+        {
+            return "\n</TD>";
+        }
+
+        public string AddTREnd()
+        {
+            return "\n</TR>";
+        }
+
+        public string AddTD()
+        {
+            return "\n<TD >&nbsp;</TD>";
+        }
+
+        public string AddTableEnd()
+        {
+            return "</Table>";
+        }
+
     }
    
 }

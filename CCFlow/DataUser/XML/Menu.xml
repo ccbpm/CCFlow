@@ -4,7 +4,7 @@
   <ClassicMenu No="Start" CH="发起"  Url="../../Start.aspx" Img="Img/Menu/Start.png" ACEUrl="Start.htm" Enable="1" Title="发起我能够发起的流程" />
   <ClassicMenu No="EmpWorks" CH="待办" Url="../../EmpWorks.aspx" Img="Img/Menu/EmpWorks.png" ACEUrl="todolist.htm" Enable="1" Title="等待我处理的工作。" />
   <ClassicMenu No="Runing" CH="在途"   Url="../../Runing.aspx" Img="Img/Menu/Ruing.png" ACEUrl="Runing.htm" Enable="1" Title="我参与的工作，没有完成。" />
-  <ClassicMenu No="Search" CH="查询"  Url="../../FlowRpt.aspx"  Img="Img/Menu/Search.png"  ACEUrl="Search.htm" Enable="1" Title="流程查询。" />
+  <ClassicMenu No="Search" CH="查询"  Url="../../FlowRpt.aspx"  Img="Img/Menu/Search.png"  ACEUrl="FlowRpt.htm" Enable="1" Title="流程查询。" />
   <ClassicMenu No="Tools" CH="设置"   Url="../../Tools.aspx" Img="Img/Menu/Setting.png" ACEUrl="Setting.htm" Enable="1" Title="工具栏" />
   <ClassicMenu No="AdvFunc" CH="高级功能"   Url="AdvFunc.aspx" Img="Img/Menu/Sharing.png" Enable="1" Title="高级功能。" />
 

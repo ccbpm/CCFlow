@@ -388,7 +388,7 @@
         }
         //执行保存
         function Login() {
-            //var fk_mapExt = GetQueryString("MyPK");
+
             var frmData = $("#cc").serialize();
             $.ajax({
                 data: frmData,
@@ -415,28 +415,23 @@
 
             var doType = GetQueryString("DoType");
             if (doType == null)
-                doType = "LoginInit";
+                doType = "Login_Init";
 
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=" + doType,       
+                url: Handler + "?DoType=" + doType,
                 success: function (data) {
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
 
-                    if (data.indexOf('url@Default.htm') == 0) {
-                        window.location.href = data.replace('url@','');
-                        return;
-                    }
-
                     if (data.indexOf('url@') == 0) {
-                        window.location.href = '../DBInstall.aspx';
+                        window.location.href = data.replace('url@', '');
                         return;
                     }
-
 
                     if (data != "")
                         alert(data);

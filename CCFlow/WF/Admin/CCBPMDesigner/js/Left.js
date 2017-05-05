@@ -24,7 +24,7 @@ function RefreshFlowJson() {
     //首先关闭tab
     closeTab(node.text);
     $.post(Handler, {
-        action: 'ccbpm_flow_resetversion',
+        DoType: 'Flow_ResetFlowVersion',
         FK_Flow: node.id
     }, function (jsonData) {
         
@@ -63,6 +63,7 @@ function OpenFlowToCanvas(node, id, text) {
 
 /// <summary>新建流程</summary>
 function newFlow() {
+
     var currSort = $('#flowTree').tree('getSelected');
     var currSortId = "99";
     if (currSort && currSort.attributes["ISPARENT"] != 0) {//edit by qin 2016/2/16
@@ -80,45 +81,48 @@ function newFlow() {
         }
         //传入参数
         var params = {
-            action: "Do",
-            doWhat: "NewFlow",
-            para1: newFlowInfo.flowSort + ',' + newFlowInfo.flowName + ',' + newFlowInfo.dataStoreModel + ',' + newFlowInfo.pTable + ',' + newFlowInfo.flowCode + ',' + newFlowInfo.FlowVersion
+            action: "NewFlow",
+            paras: newFlowInfo.flowSort + ',' + newFlowInfo.flowName + ',' + newFlowInfo.dataStoreModel + ',' + newFlowInfo.pTable + ',' + newFlowInfo.flowCode + ',' + newFlowInfo.FlowVersion
         };
         //访问服务
         ajaxService(params, function (data) {
-            var jdata = $.parseJSON(data);
-            if (jdata.success) {
-                //在左侧流程树上增加新建的流程,并选中
-                //获取新建流程所属的类别节点
-                //todo:此处还有问题，类别id与流程id可能重复，重复就会出问题，解决方案有待进一步确定
-                var parentNode = $('#flowTree').tree('find', "F" + newFlowInfo.flowSort);
-                var node = $('#flowTree').tree('append', {
-                    parent: parentNode.target,
-                    data: [{
-                        id: jdata.data.no,
-                        text: jdata.data.name,
-                        attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
-                        iconCls: 'icon-flow1',
-                        checked: false
-                    }]
-                });
-                var nodeData = {
-                    id: jdata.data.no,
-                    text: jdata.data.name,
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            var flowNo = data;
+            var flowName = newFlowInfo.flowName;
+
+            //在左侧流程树上增加新建的流程,并选中
+            //获取新建流程所属的类别节点
+            //todo:此处还有问题，类别id与流程id可能重复，重复就会出问题，解决方案有待进一步确定
+            var parentNode = $('#flowTree').tree('find', "F" + newFlowInfo.flowSort);
+            var node = $('#flowTree').tree('append', {
+                parent: parentNode.target,
+                data: [{
+                    id: flowNo,
+                    text: flowNo +'.'+ flowName,
                     attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
                     iconCls: 'icon-flow1',
                     checked: false
-                };
-                //展开到指定节点
-                $('#flowTree').tree('expandTo', $('#flowTree').tree('find', jdata.data.no).target);
-                $('#flowTree').tree('select', $('#flowTree').tree('find', jdata.data.no).target);
-                //在右侧流程设计区域打开新建的流程
-                RefreshFlowJson();
-                //OpenFlowToCanvas(nodeData, jdata.data.no, jdata.data.name);
-            }
-            else {
-                $.messager.alert('错误', '新建流程失败：' + jdata.msg, 'error');
-            }
+                }]
+            });
+            var nodeData = {
+                id: flowNo,
+                text: flowNo + '.' + flowName,
+                attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
+                iconCls: 'icon-flow1',
+                checked: false
+            };
+            //展开到指定节点
+            $('#flowTree').tree('expandTo', $('#flowTree').tree('find', flowNo).target);
+            $('#flowTree').tree('select', $('#flowTree').tree('find', flowName).target);
+            //在右侧流程设计区域打开新建的流程
+            RefreshFlowJson();
+            //OpenFlowToCanvas(nodeData, jdata.data.no, jdata.data.name);
+
         }, this);
     }, null);
 }
@@ -126,12 +130,16 @@ function newFlow() {
 /// <summary>新建流程类别子级</summary>
 /// <param name="isSub" type="Boolean">是否是新建子级流程类别</param>
 function newFlowSort(isSub) {
+
     var currSort = $('#flowTree').tree('getSelected');
     if (currSort == null || undefined == currSort.attributes.ISPARENT ||
-                currSort.attributes.ISPARENT != '1' || (currSort.attributes.IsRoot == '1' && isSub == false)) return;
+                currSort.attributes.ISPARENT != '1' || (currSort.attributes.IsRoot == '1' && isSub == false))
+        return;
 
     var propName = (isSub ? '子级' : '同级') + '流程类别';
+
     OpenEasyUiSampleEditDialog(propName, '新建', null, function (val) {
+
         if (val == null || val.length == 0) {
             $.messager.alert('错误', '请输入' + propName + '！', 'error');
             return false;
@@ -140,34 +148,31 @@ function newFlowSort(isSub) {
         //传入参数
         var doWhat = isSub ? 'NewSubFlowSort' : 'NewSameLevelFlowSort';
         var params = {
-            action: "Do",
-            doWhat: doWhat,
-            para1: currSort.id + ',' + val
+            action: doWhat,
+            No: currSort.id,
+            Name: val
         };
 
         ajaxService(params, function (data) {
-            var jdata = $.parseJSON(data);
-            if (jdata.success) {
-                var parentNode = isSub ? currSort : $('#flowTree').tree('getParent', currSort.target);
 
-                $('#flowTree').tree('append', {
-                    parent: parentNode.target,
-                    data: [{
-                        id: jdata.data,
-                        text: val,
-                        attributes: { ISPARENT: '1', MenuId: "mFlowSort" },
-                        checked: false,
-                        iconCls: 'icon-tree_folder',
-                        state: 'open',
-                        children: []
-                    }]
-                });
 
-                $('#flowTree').tree('select', $('#flowTree').tree('find', jdata.data).target);
-            }
-            else {
-                $.messager.alert('错误', '新建' + propName + '失败：' + jdata.msg, 'error');
-            }
+            var parentNode = isSub ? currSort : $('#flowTree').tree('getParent', currSort.target);
+
+            $('#flowTree').tree('append', {
+                parent: parentNode.target,
+                data: [{
+                    id: data,
+                    text: val,
+                    attributes: { ISPARENT: '1', MenuId: "mFlowSort" },
+                    checked: false,
+                    iconCls: 'icon-tree_folder',
+                    state: 'open',
+                    children: []
+                }]
+            });
+
+            $('#flowTree').tree('select', $('#flowTree').tree('find', jdata.data).target);
+
         }, this);
     }, null, false, 'icon-new');
 }
@@ -176,33 +181,32 @@ function newFlowSort(isSub) {
 function editFlowSort() {
     /// <summary>编辑流程类别</summary>
     var currSort = $('#flowTree').tree('getSelected');
-    if (currSort == null) return;
+    if (currSort == null)
+        return;
 
-    OpenEasyUiSampleEditDialog('流程类别', '编辑', currSort.text, function (val) {
-        if (val == null || val.length == 0) {
-            $.messager.alert('错误', '请输入流程类别！', 'error');
-            return false;
+    var val = prompt("请输入类别名称", currSort.text);
+    if (val == null || val == '')
+        return;
+
+    //传入后台参数
+    var params = {
+        DoType: "EditFlowSort",
+        No: currSort.id,
+        Name: val
+    };
+
+    ajaxService(params, function (data) {
+
+        if (data.indexof('err@') == 0) {
+            alert(data);
         }
-        //传入后台参数
-        var params = {
-            action: "Do",
-            doWhat: "EditFlowSort",
-            para1: currSort.id + ',' + val
-        };
 
-        ajaxService(params, function (data) {
-            var jdata = $.parseJSON(data);
-            if (jdata.success) {
-                $('#flowTree').tree('update', {
-                    target: currSort.target,
-                    text: val
-                });
-            }
-            else {
-                $.messager.alert('错误', '编辑流程类别失败：' + jdata.msg, 'error');
-            }
+        $('#flowTree').tree('update', {
+            target: currSort.target,
+            text: val
         });
-    }, null, false, 'icon-edit');
+
+    }, this);
 }
 
 function deleteFlowSort() {
@@ -213,59 +217,11 @@ function deleteFlowSort() {
     OpenEasyUiConfirm("你确定要删除名称为“" + currSort.text + "”的流程类别吗？", function () {
         //传入后台参数
         var params = {
-            action: "Do",
-            doWhat: "DelFlowSort",
-            para1: currSort.id
+            DoType: "DelFlowSort",
+            FK_FlowSort: currSort.id
         };
         ajaxService(params, function (data) {
-            var jdata = $.parseJSON(data);
-            if (jdata.success == true) {
-                CloseAllTabs();
-                $('#flowTree').tree('remove', currSort.target);
-            } else if (jdata.success == false && jdata.reason == "havesubsorts") {
-                OpenEasyUiConfirm("所选类别下包含子流程类别，确定强制删除吗？", function () {
-                    //传入后台参数
-                    var params = {
-                        action: "Do",
-                        doWhat: "DelFlowSort",
-                        force: "true",
-                        para1: currSort.id
-                    };
-                    ajaxService(params, function (data) {
-                        var jdata = $.parseJSON(data);
-                        if (jdata.success == true) {
-                            CloseAllTabs();
-                            $('#flowTree').tree('remove', currSort.target);
-                        } else {
-                            $.messager.alert('错误', '删除流程类别失败：' + jdata.msg, 'error');
-                        }
-                    });
-
-                });
-            } else if (jdata.success == false && jdata.reason == "haveflows") {
-                OpenEasyUiConfirm("所选类别下包含流程，确定强制删除吗？", function () {
-                    //传入后台参数
-                    var params = {
-                        action: "Do",
-                        doWhat: "DelFlowSort",
-                        force: "true",
-                        para1: currSort.id
-                    };
-                    ajaxService(params, function (data) {
-                        var jdata = $.parseJSON(data);
-                        if (jdata.success == true) {
-                            CloseAllTabs();
-                            $('#flowTree').tree('remove', currSort.target);
-                        } else {
-                            $.messager.alert('错误', '删除流程类别失败：' + jdata.msg, 'error');
-                        }
-                    });
-
-                });
-            }
-            else {
-                $.messager.alert('错误', '删除流程类别失败：' + jdata.msg, 'error');
-            }
+            alert(data);
         });
     });
 }
@@ -339,7 +295,6 @@ function ExpFlowBySort() {
     addTab(fk_flowSort + "PO", "导出流程模版", url);
 }
 
-
 //删除流程
 function DeleteFlow() {
     /// <summary>删除流程</summary>
@@ -349,27 +304,34 @@ function DeleteFlow() {
 
     OpenEasyUiConfirm("你确定要删除名称为“" + currFlow.text + "”的流程吗？", function () {
         var params = {
-            action: "Do",
-            doWhat: "DelFlow",
-            para1: currFlow.id
+            DoType: "DelFlow",
+            FK_Flow: currFlow.id
         };
         ajaxService(params, function (data) {
-            var jdata = $.parseJSON(data);
-            if (jdata.success) {
-                //如果右侧有打开该流程，则关闭
-                var currFlowTab = $('#tabs').tabs('getTab', currFlow.text);
-                if (currFlowTab) {
-                    //todo:此处因为有关闭前事件，直接这样用会弹出提示关闭框，怎么解决有待进一步确认
-                    $('#tabs').tabs('close', currFlow.text);
-                }
-                $('#flowTree').tree('remove', currFlow.target);
+
+            alert(data);
+
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
             }
-            else {
-                $.messager.alert('错误', '删除流程失败：' + jdata.msg, 'error');
+
+            //如果右侧有打开该流程，则关闭
+            var currFlowTab = $('#tabs').tabs('getTab', currFlow.text);
+            if (currFlowTab) {
+                //todo:此处因为有关闭前事件，直接这样用会弹出提示关闭框，怎么解决有待进一步确认
+                $('#tabs').tabs('close', currFlow.text);
             }
+            $('#flowTree').tree('remove', currFlow.target);
+
+
+            alert(data);
+
         }, this);
     });
 }
+ 
 
 //流程属性
 function FlowProperty() {

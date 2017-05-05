@@ -19,11 +19,13 @@
             var flowSort = getArgsFromHref("sort");
             flowSort = flowSort.replace("F","");
             var params = {
-                action: "Do",
+                action: "GetFlowSorts",
                 doWhat: "GetFlowSorts"
             };
             ajaxService(params, function (data) {
+                
                 var pushData = eval('(' + data + ')');
+
                 $('#DDL_FlowSort').combotree({
                     lines: true,
                     data: pushData,

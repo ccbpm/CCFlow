@@ -285,13 +285,13 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
             {
                 /*傻瓜表单*/
-                return "./FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + this.FK_MapData;
+                return "url@./FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + this.FK_MapData;
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
             {
                 /*自由表单*/
-                return "FormDesigner.htm?FK_MapData=" + this.FK_MapData;
+                return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData;
             }
 
             return "err@没有判断的表单转入类型" + md.HisFrmType.ToString();

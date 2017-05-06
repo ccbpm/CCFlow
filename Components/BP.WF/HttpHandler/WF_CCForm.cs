@@ -107,7 +107,10 @@ namespace BP.WF.HttpHandler
             #endregion 判断是否是返回的URL.
 
             //返回自由表单解析执行器.
-            return "url@Frm.aspx?1=2" + this.RequestParas;
+            if (BP.WF.Glo.IsBeta == true)
+                return "url@FrmFree.htm?1=2" + this.RequestParas;
+            else
+                return "url@Frm.aspx?1=2" + this.RequestParas;
         }
         /// <summary>
         /// 执行数据初始化

@@ -62,7 +62,6 @@ namespace BP.WF.HttpHandler
                     ht.Add("No", "AthImg" + num );
                     ht.Add("Name", "图片附件"+num);
                     break;
-
                 case "HandSiganture": //手写板.
                     sql = "SELECT COUNT(*) FROM Sys_FrmEle WHERE FK_MapData='" + this.FK_MapData + "' AND EleType='"+ctrlType+"'";
                     num = DBAccess.RunSQLReturnValInt(sql)+1;

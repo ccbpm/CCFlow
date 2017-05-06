@@ -21,16 +21,12 @@
 
             url = url.replace('&DoType=MyFlow_Init', '');
 
-            alert(url);
-
             $.ajax({
                 type: 'post',
                 async: true,
                 url: url,
                 dataType: 'html',
                 success: function (data) {
-
-                    alert('re:' + data);
 
                     if (data.indexOf('err@') == 0) {
                         alert(data); //如果是异常，就提提示.

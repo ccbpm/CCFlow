@@ -727,9 +727,21 @@ namespace BP.WF
                     if (i == 0)
                     {
                         if (toNode.HisDeliveryWay == DeliveryWay.BySelected)
+                        {
+                            BtnLab btn = new BtnLab(currNode.NodeID);
+                            if (btn.SelectAccepterEnable != 2)
+                            {
+                                btn.SelectAccepterEnable = 2;
+                                btn.Update();
+                                throw new Exception("@下一个节点的接收人规则是按照上一步发送人员选择器选择的，但是在当前节点您没有启接收人选择器，系统已经自动做了设置，请关闭当前窗口重新打开重试。");
+                            }
+
                             throw new Exception("@请选择下一步骤工作(" + toNode.Name + ")接受人员。");
+                        }
                         else
+                        {
                             throw new Exception("@流程设计错误，请重写FEE，然后为节点(" + toNode.Name + ")设置接受人员，详细请参考cc流程设计手册。");
+                        }
                     }
 
                     //插入里面.

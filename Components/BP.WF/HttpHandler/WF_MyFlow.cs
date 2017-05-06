@@ -838,24 +838,10 @@ namespace BP.WF.HttpHandler
                 Hashtable ht = this.GetMainTableHT();
                 SendReturnObjs objs = null;
                 string msg = "";
-                try
-                {
-                    objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null);
-                    msg = objs.ToMsgOfHtml();
-                    BP.WF.Glo.SessionMsg = msg;
-                }
-                catch (Exception exSend)
-                {
 
-#warning 杨玉慧
-                    return "err@" + exSend.Message.Replace("@@", "@").Replace("@", "<BR>@");
-
-                    if (exSend.Message.Contains("请选择下一步骤工作") == true || exSend.Message.Contains("用户没有选择发送到的节点") == true)
-                    {
-                        /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
-                        return "url@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
-                    }
-                }
+                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, ht, null, this.ToNode, null);
+                msg = objs.ToMsgOfHtml();
+                BP.WF.Glo.SessionMsg = msg;
 
                 //当前节点.
                 Node currNode = new Node(this.FK_Node);
@@ -955,8 +941,6 @@ namespace BP.WF.HttpHandler
                     return "err@" + ex.Message.Replace("@@", "@").Replace("@", "<BR>@");
                 }
 
-                //BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", msg, "Err" + currND.No + "_" + this.WorkID,
-                //    SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
                 return "err@发送工作出现错误:" + ex.Message;
             }
         }

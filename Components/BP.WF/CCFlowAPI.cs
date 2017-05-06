@@ -34,7 +34,6 @@ namespace BP.WF
         /// <returns>返回dataset</returns>
         public static DataSet GenerWorkNode(string fk_flow, int fk_node, Int64 workID, Int64 fid, string userNo)
         {
-
             //让其登录. ??? 为什么需要登录？
             if (WebUser.No != userNo)
             {
@@ -49,11 +48,14 @@ namespace BP.WF
             if (workID == 0)
                 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow, null, null, userNo, null);
 
+
+            Node nd = new Node(fk_node);
+
             try
             {
 
                 MapData md = new MapData();
-                md.No = "ND" + fk_node;
+                md.No = nd.NodeFrmID;
                 if (md.RetrieveFromDBSources() == 0)
                     throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
 
@@ -61,10 +63,8 @@ namespace BP.WF
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
 
                 #region 流程设置信息.
-                Node nd = new Node(fk_node);
                 if (nd.IsStartNode == false)
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
-
                  
 
                 //增加转向下拉框数据.

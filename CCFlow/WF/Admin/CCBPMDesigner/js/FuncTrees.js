@@ -84,8 +84,7 @@ functrees.push({
 														]
 											},
                                             {Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/Home.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID"
-											},
-                                            { Value: "SRC", IconCls: "icon-src", MenuId: "mFormSrc" }
+											}
 										  ]
 			},
 			{ Type: "Node", Id: "FormRef", ParentId: null, Name: "表单相关", Opened: true, TType: "FORMREF", IconCls: "icon-tree_folder",

@@ -160,7 +160,7 @@ namespace BP.WF.HttpHandler
             foreach (DataRow dr in dt.Rows)
             {
                 string no = dr["No"].ToString();
-                dr["NumOfRuning"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='"+no+"' AND WFSta=1");
+                dr["NumOfRuning"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='" + no + "' AND WFSta=1");
                 dr["NumOfComplete"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='" + no + "' AND WFSta=1");
                 dr["NumOfEtc"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='" + no + "' AND WFSta=1");
                 dr["NumOfOverTime"] = DBAccess.RunSQLReturnValInt("SELECT COUNT(WorkID) FROM WF_GenerWorkFlow WHERE FK_Flow='" + no + "' AND WFSta=1");
@@ -196,7 +196,7 @@ namespace BP.WF.HttpHandler
                     case "editnodename"://修改节点名称
                         msg = Node_EditNodeName();
                         break;
-                    
+
                     case "GetFormTree"://获取表单库数据
                         msg = GetFormTreeTable();//GetFormTree();
                         break;
@@ -581,7 +581,7 @@ namespace BP.WF.HttpHandler
             drToNode.Delete(DirectionAttr.FK_Flow, flowNo);
             foreach (string item in dir_Nodes)
             {
-                if (string.IsNullOrEmpty(item)) 
+                if (string.IsNullOrEmpty(item))
                     continue;
 
                 string[] nodes = item.Split(':');
@@ -684,7 +684,7 @@ namespace BP.WF.HttpHandler
             ds.Tables[1].TableName = "Direction";
             ds.Tables[2].TableName = "LabNote";
 
-           // return BP.Tools.Json.DataSetToJson(ds, false);
+            // return BP.Tools.Json.DataSetToJson(ds, false);
 
             return BP.Tools.Json.ToJson(ds);
 
@@ -859,7 +859,7 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果Json,流程树</returns>
         public string GetFlowTreeTable()
         {
-           
+
             string sql = @"SELECT 'F'+No NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
                            SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
@@ -897,7 +897,7 @@ namespace BP.WF.HttpHandler
                     drs[0]["PARENTNO"] = "F0";
             }
 
-            return BP.Tools.Json.DataTableToJson(dt, false); 
+            return BP.Tools.Json.DataTableToJson(dt, false);
         }
 
         public string GetBindingFormsTable()
@@ -924,17 +924,15 @@ namespace BP.WF.HttpHandler
             sql.AppendLine("           )");
 
             DataTable dt = DBAccess.RunSQLReturnTable(string.Format(sql.ToString(), fk_flow));
-            return BP.Tools.Json.DataTableToJson(dt, false); 
+            return BP.Tools.Json.DataTableToJson(dt, false);
         }
 
         public string GetFormTreeTable()
         {
             string sql1 = "SELECT NO ,PARENTNO,NAME, IDX, 1 ISPARENT, 'FORMTYPE' TTYPE, DBSRC FROM Sys_FormTree ORDER BY Idx ASC";
             string sql2 = "SELECT NO, FK_FrmSort as PARENTNO,NAME,IDX,0 ISPARENT, 'FORM' TTYPE FROM Sys_MapData   WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree)";
-            string sql3 = "SELECT ss.NO,'' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC";
             string sqls = sql1 + ";" + Environment.NewLine
-                          + sql2 + ";" + Environment.NewLine
-                          + sql3 + ";";
+                          + sql2 + ";";
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
             DataTable dt = ds.Tables[1].Clone();
             DataRow[] rows = ds.Tables[0].Select("NAME='表单库'");
@@ -942,28 +940,16 @@ namespace BP.WF.HttpHandler
 
             if (rows.Length == 0)
             {
-                rootRow = dt.Rows.Add("0", null, "表单库", 0, 1, "FORMTYPE");
+                dt.Rows.Add("0", null, "表单库", 0, 1, "FORMTYPE");
             }
             else
             {
-                rootRow = dt.Rows.Add(rows[0]["NO"], null, rows[0]["NAME"], rows[0]["IDX"], rows[0]["ISPARENT"], rows[0]["TTYPE"]);
+                dt.Rows.Add(rows[0]["NO"], null, rows[0]["NAME"], rows[0]["IDX"], rows[0]["ISPARENT"], rows[0]["TTYPE"]);
             }
 
-            foreach (DataRow row in ds.Tables[2].Rows)
+            foreach (DataRow dr in ds.Tables[0].Rows)
             {
-                dt.Rows.Add("SRC_" + row["NO"], rootRow["NO"], row["NAME"], row["IDX"], row["ISPARENT"], row["TTYPE"]);
-
-                rows = ds.Tables[0].Select("DBSRC='" + row["NO"] + "' AND NAME <> '表单库'", "Idx ASC");
-
-                foreach (DataRow dr in rows)
-                {
-                    if (Equals(dr["PARENTNO"], rootRow["NO"]))
-                    {
-                        dr["PARENTNO"] = "SRC_" + row["NO"];
-                    }
-
-                    dt.Rows.Add(dr["NO"], dr["PARENTNO"], dr["NAME"], dr["IDX"], dr["ISPARENT"], dr["TTYPE"]);
-                }
+                dt.Rows.Add(dr["NO"], dr["PARENTNO"], dr["NAME"], dr["IDX"], dr["ISPARENT"], dr["TTYPE"]);
             }
 
             foreach (DataRow row in ds.Tables[1].Rows)
@@ -971,7 +957,7 @@ namespace BP.WF.HttpHandler
                 dt.Rows.Add(row.ItemArray);
             }
 
-            return BP.Tools.Json.DataTableToJson(dt, false); 
+            return BP.Tools.Json.DataTableToJson(dt, false);
         }
 
         /// <summary>
@@ -1045,7 +1031,7 @@ namespace BP.WF.HttpHandler
             foreach (DataRow row in ds.Tables[1].Rows)
                 dt.Rows.Add(row.ItemArray);
 
-            return BP.Tools.Json.DataTableToJson(dt, false); 
+            return BP.Tools.Json.DataTableToJson(dt, false);
         }
 
         public string GetStructureTreeTable()
@@ -1180,7 +1166,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return BP.Tools.Json.DataTableToJson(dt, false); 
+            return BP.Tools.Json.DataTableToJson(dt, false);
         }
 
         public string GetStructureDatas(string deptNo, string stationNo, string empNo)
@@ -1341,7 +1327,7 @@ namespace BP.WF.HttpHandler
                 case "SetBUnit":
                     try
                     {
-                        if (string.IsNullOrEmpty(para1)==false)
+                        if (string.IsNullOrEmpty(para1) == false)
                         {
                             BP.WF.Node nd = new BP.WF.Node(int.Parse(para1));
                             nd.IsTask = !nd.IsBUnit;
@@ -1389,7 +1375,7 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-       
+
         public string DelNode()
         {
             try

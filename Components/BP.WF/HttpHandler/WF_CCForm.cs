@@ -99,10 +99,9 @@ namespace BP.WF.HttpHandler
                 else
                     return "url@FrmWord.aspx" + "?" + urlParas;
             }
+
             if (md.HisFrmType == FrmType.ExcelFrm)
-            {
                 return "url@FrmExcel.aspx?1=2" + this.RequestParas;
-            }
 
             #endregion 判断是否是返回的URL.
 
@@ -273,7 +272,7 @@ namespace BP.WF.HttpHandler
 
             //获得他的描述,与数据.
             DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData,mdtl, this.RefOID, strs);
-            return BP.Tools.Json.ToJson(ds);
+            return BP.Tools.Json.DataSetToJson(ds,false);
         }
         /// <summary>
         /// 执行从表的保存.

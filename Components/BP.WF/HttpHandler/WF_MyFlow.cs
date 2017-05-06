@@ -206,6 +206,14 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MyFlow_Init()
         {
+            if (this.WorkID != 0)
+            {
+                //判断是否有执行该工作的权限.
+                bool isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
+                if (isCanDo == false)
+                    return "err@您不能执行当年前工作.";
+            }
+
             //当前工作.
             Work currWK = this.currND.HisWork;
             GenerWorkFlow gwf = new GenerWorkFlow();
@@ -926,6 +934,29 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("请选择下一步骤工作") == true || ex.Message.Contains("用户没有选择发送到的节点") == true)
+                {
+                    if (this.currND.CondModel == CondModel.ByLineCond)
+                    {
+                        /*如果抛出异常，我们就让其转入选择到达的节点里, 在节点里处理选择人员. */
+                        return "url@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
+                    }
+
+                    BtnLab btn = new BtnLab(this.FK_Node);
+                    btn.SelectAccepterEnable = 2;
+                    btn.Update();
+
+                    return "err@下一个节点的接收人规则是，当前节点选择来选择，在当前节点属性里您没有启动接受人按钮，系统自动帮助您启动了，请关闭窗口重新打开。";
+                }
+
+                //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示
+                if (this.currND.HisFrms != null && this.currND.HisFrms.Count > 0 && ex.Message.Contains("在提交前检查到如下必输字段填写不完整") == true)
+                {
+                    return "err@" + ex.Message.Replace("@@", "@").Replace("@", "<BR>@");
+                }
+
+                //BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", msg, "Err" + currND.No + "_" + this.WorkID,
+                //    SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
                 return "err@发送工作出现错误:" + ex.Message;
             }
         }

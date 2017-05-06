@@ -128,80 +128,11 @@ namespace BP.WF.HttpHandler
             string sql = "";
             switch (this.DoType)
             {
-                case "FrmEnumeration_NewEnumField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
-                    UIContralType ctrl = UIContralType.RadioBtn;
-                    string ctrlDoType = GetRequestVal("ctrlDoType");
-                    if (ctrlDoType == "DDL")
-                        ctrl = UIContralType.DDL;
-                    else
-                        ctrl = UIContralType.RadioBtn;
-
-                    string fk_mapdata = this.GetRequestVal("FK_MapData");
-                    string keyOfEn = this.GetRequestVal("KeyOfEn");
-                    string fieldDesc = this.GetRequestVal("Name");
-                    string enumKeyOfBind = this.GetRequestVal("UIBindKey"); //要绑定的enumKey.
-                    float x = float.Parse(this.GetRequestVal("x"));
-                    float y = float.Parse(this.GetRequestVal("y"));
-
-                    BP.Sys.CCFormAPI.NewEnumField(fk_mapdata, keyOfEn, fieldDesc, enumKeyOfBind, ctrl, x, y);
-                    return "绑定成功.";
-
-                case "FrmEnumeration_SaveEnum":
-                    string enumName = this.GetRequestVal("EnumName");
-                    string enumKey1 = this.GetRequestVal("EnumKey");
-                    string cfgVal = this.GetRequestVal("Vals");
-
-                    //调用接口执行保存.
-                    return BP.Sys.CCFormAPI.SaveEnum(enumKey1, enumName, cfgVal, false);
-                case "FrmEnumeration_NewEnum"://杨玉慧加  当枚举已经存在时，提示，不再添加
-                    string newnEumName = this.GetRequestVal("EnumName");
-                    string newEnumKey1 = this.GetRequestVal("EnumKey");
-                    string newCfgVal = this.GetRequestVal("Vals");
-
-                    //调用接口执行保存.
-                    return BP.Sys.CCFormAPI.SaveEnum(newEnumKey1, newnEumName, newCfgVal, true);
-                case "FrmEnumeration_DelEnum":
-                    //删除空数据.
-                    BP.DA.DBAccess.RunSQL("DELETE FROM Sys_MapAttr WHERE FK_MapData IS NULL OR FK_MapData='' ");
-
-                    //获得要删除的枚举值.
-                    string enumKey = this.GetRequestVal("EnumKey");
-
-                    // 检查这个物理表是否被使用.
-                    sql = "SELECT  FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + enumKey + "'";
-                    DataTable dtEnum = DBAccess.RunSQLReturnTable(sql);
-                    string msgDelEnum = "";
-                    foreach (DataRow dr in dtEnum.Rows)
-                    {
-                        msgDelEnum += "\n 表单编号:" + dr["FK_MapData"] + " , 字段:" + dr["KeyOfEn"] + ", 名称:" + dr["Name"];
-                    }
-
-                    if (msgDelEnum != "")
-                        return "error:该枚举已经被如下字段所引用，您不能删除它。" + msgDelEnum;
-
-                    sql = "DELETE FROM Sys_EnumMain WHERE No='" + enumKey + "'";
-                    sql += "@DELETE FROM Sys_Enum WHERE EnumKey='" + enumKey + "' ";
-                    DBAccess.RunSQLs(sql);
-                    return "执行成功.";
                 case "NewSFTableField": //创建一个SFTable字段.
-
-                    //string fk_mapdata = getUTF8ToString("FK_MapData");
-                    //string keyOfEn = getUTF8ToString("KeyOfEn");
-                    //string fieldDesc = getUTF8ToString("Name");
-                    //string sftable = getUTF8ToString("UIBindKey");
-                    //x = float.Parse(getUTF8ToString("x"));
-                    //y = float.Parse(getUTF8ToString("y"));
-
                     //调用接口,执行保存.
                     BP.Sys.CCFormAPI.SaveFieldSFTable(this.FK_MapData, this.KeyOfEn, this.GetRequestVal("Name"),
                         this.GetRequestVal("UIBindKey"), this.GetRequestValFloat("x"), this.GetRequestValFloat("y"));
                     return "执行成功.";
-
-                case "FrmTable_DelSFTable": /* 删除自定义的物理表. */
-                    SFTable sfDel = new SFTable();
-                    sfDel.No = this.GetRequestVal("FK_SFTable");
-                    sfDel.Delete();
-                    return "删除成功.";
                 default:
                     break;
             }
@@ -210,6 +141,63 @@ namespace BP.WF.HttpHandler
             throw new Exception("@标记["+this.DoType+"]，没有找到.");
         }
         #endregion 执行父类的重写方法.
+
+        public string FrmEnumeration_SaveEnum()
+        {
+            string enumName = this.GetRequestVal("EnumName");
+            string enumKey1 = this.GetRequestVal("EnumKey");
+            string cfgVal = this.GetRequestVal("Vals");
+
+            //调用接口执行保存.
+            return BP.Sys.CCFormAPI.SaveEnum(enumKey1, enumName, cfgVal, false);
+            return "保存成功.";
+        }
+
+        /// <summary>
+        /// //杨玉慧加  当枚举已经存在时，提示，不再添加
+        /// </summary>
+        /// <returns></returns>
+        public string FrmEnumeration_NewEnum()
+        {
+            string newnEumName = this.GetRequestVal("EnumName");
+            string newEnumKey1 = this.GetRequestVal("EnumKey");
+            string newCfgVal = this.GetRequestVal("Vals");
+
+            //调用接口执行保存.
+            return BP.Sys.CCFormAPI.SaveEnum(newEnumKey1, newnEumName, newCfgVal, true);
+            return "增加成功.";
+        }
+      
+        /// <summary>
+        /// 删除枚举值
+        /// </summary>
+        /// <returns></returns>
+        public string FrmEnumeration_DelEnum()
+        {
+            string sql = "";
+            //删除空数据.
+            BP.DA.DBAccess.RunSQL("DELETE FROM Sys_MapAttr WHERE FK_MapData IS NULL OR FK_MapData='' ");
+
+            //获得要删除的枚举值.
+            string enumKey = this.GetRequestVal("EnumKey");
+
+            // 检查这个物理表是否被使用.
+            sql = "SELECT  FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + enumKey + "'";
+            DataTable dtEnum = DBAccess.RunSQLReturnTable(sql);
+            string msgDelEnum = "";
+            foreach (DataRow dr in dtEnum.Rows)
+            {
+                msgDelEnum += "\n 表单编号:" + dr["FK_MapData"] + " , 字段:" + dr["KeyOfEn"] + ", 名称:" + dr["Name"];
+            }
+
+            if (msgDelEnum != "")
+                return "err@该枚举已经被如下字段所引用，您不能删除它。" + msgDelEnum;
+
+            sql = "DELETE FROM Sys_EnumMain WHERE No='" + enumKey + "'";
+            sql += "@DELETE FROM Sys_Enum WHERE EnumKey='" + enumKey + "' ";
+            DBAccess.RunSQLs(sql);
+            return "执行成功.";
+        }
 
         #region 功能界面 .
         /// <summary>

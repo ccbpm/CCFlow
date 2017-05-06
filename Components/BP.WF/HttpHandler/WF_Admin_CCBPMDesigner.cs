@@ -193,19 +193,10 @@ namespace BP.WF.HttpHandler
                     case "saveAs"://另存为流程
                         msg = Flow_SaveAs();
                         break;
-                    case "genernodeid"://创建节点获取节点编号
-                        msg = Node_Create_GenerNodeID();
-                        break;
-                    case "deletenode"://删除流程节点
-                        msg = Node_DeleteNodeOfNodeID();
-                        break;
                     case "editnodename"://修改节点名称
                         msg = Node_EditNodeName();
                         break;
-                    case "changenoderunmodel"://修改节点运行模式
-                        msg = Node_ChangeRunModel();
-                        break;
-                   
+                    
                     case "GetFormTree"://获取表单库数据
                         msg = GetFormTreeTable();//GetFormTree();
                         break;
@@ -227,7 +218,6 @@ namespace BP.WF.HttpHandler
                     case "GetBindingForms"://获取流程绑定表单列表
                         msg = GetBindingFormsTable();
                         break;
-                  
                     case "Do"://公共方法
                         msg = Do();
                         break;
@@ -306,7 +296,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+            return BP.Tools.Json.DataTableToJson(dt);
         }
 
         public string GetStructureTreeRootTable()
@@ -346,7 +336,7 @@ namespace BP.WF.HttpHandler
                 dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
             }
 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+            return BP.Tools.Json.DataTableToJson(dt);
         }
 
         /// <summary>
@@ -460,7 +450,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(dt);
+            return BP.Tools.Json.DataTableToJson(dt);
         }
 
         #region 主页.
@@ -670,7 +660,7 @@ namespace BP.WF.HttpHandler
         public string Flow_ResetFlowVersion()
         {
             DBAccess.RunSQL("UPDATE WF_FLOW SET DType=0, FlowJson='' WHERE No='" + this.FK_Flow + "'");
-            return "true";
+            return "重置成功.";
         }
 
         /// <summary>
@@ -707,14 +697,14 @@ namespace BP.WF.HttpHandler
         /// 创建流程节点并返回编号
         /// </summary>
         /// <returns></returns>
-        public string Node_Create_GenerNodeID()
+        public string CreateNode()
         {
             try
             {
                 string FK_Flow = this.GetValFromFrmByKey("FK_Flow");
-                string figureName = GetValFromFrmByKey("FigureName");
-                string x = GetValFromFrmByKey("x");
-                string y = GetValFromFrmByKey("y");
+                string figureName = this.GetValFromFrmByKey("FigureName");
+                string x = this.GetValFromFrmByKey("x");
+                string y = this.GetValFromFrmByKey("y");
                 int iX = 0;
                 int iY = 0;
                 if (!string.IsNullOrEmpty(x)) iX = (int)double.Parse(x);
@@ -725,11 +715,17 @@ namespace BP.WF.HttpHandler
                 BP.WF.Node node = new BP.WF.Node(nodeId);
                 node.HisRunModel = Node_GetRunModelByFigureName(figureName);
                 node.Update();
-                return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = true, msg = "", data = new { NodeID = nodeId, text = node.Name } });
+
+                Hashtable ht = new Hashtable();
+                ht.Add("NodeID", node.NodeID);
+                ht.Add("Name", node.Name);
+
+
+                return BP.Tools.Json.ToJsonEntityModel(ht);
             }
             catch (Exception ex)
             {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message, data = new { } });
+                return "err@" + ex.Message;
             }
         }
         /// <summary>
@@ -767,33 +763,24 @@ namespace BP.WF.HttpHandler
         /// 根据节点编号删除流程节点
         /// </summary>
         /// <returns>执行结果</returns>
-        public string Node_DeleteNodeOfNodeID()
+        public string DeleteNode()
         {
             try
             {
-                int delResult = 0;
-
-                string FK_Node = GetValFromFrmByKey("FK_Node");
-                if (string.IsNullOrEmpty(FK_Node))
-                    return "true";
-
-                BP.WF.Node node = new BP.WF.Node(int.Parse(FK_Node));
-                if (node.IsExits == false)
-                    return "true";
+                BP.WF.Node node = new BP.WF.Node();
+                node.NodeID = this.FK_Node;
+                if (node.RetrieveFromDBSources() == 0)
+                    return "err@删除失败,没有删除到数据，估计该节点已经别删除了.";
 
                 if (node.IsStartNode == true)
-                    return "开始节点不允许被删除。";
+                    return "err@开始节点不允许被删除。";
 
-                delResult = node.Delete();
-
-                if (delResult > 0)
-                    return "true";
-
-                return "Delete Error.";
+                node.Delete();
+                return "删除成功.";
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                return "err@" + ex.Message;
             }
         }
         /// <summary>
@@ -816,6 +803,7 @@ namespace BP.WF.HttpHandler
                 node.Update();
                 return "true";
             }
+
             return "false";
         }
         /// <summary>
@@ -845,7 +833,9 @@ namespace BP.WF.HttpHandler
                     node.HisRunModel = BP.WF.RunModel.SubThread;
                     break;
             }
-            return node.Update().ToString();
+            node.Update();
+
+            return "设置成功.";
         }
         #endregion end Node
 

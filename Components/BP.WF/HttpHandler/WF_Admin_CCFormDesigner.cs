@@ -25,12 +25,54 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        public string FrmEnumeration_NewEnumField()
+        {
+            UIContralType ctrl = UIContralType.RadioBtn;
+            string ctrlDoType = GetRequestVal("ctrlDoType");
+            if (ctrlDoType == "DDL")
+                ctrl = UIContralType.DDL;
+            else
+                ctrl = UIContralType.RadioBtn;
+
+            string fk_mapdata = this.GetRequestVal("FK_MapData");
+            string keyOfEn = this.GetRequestVal("KeyOfEn");
+            string fieldDesc = this.GetRequestVal("Name");
+            string enumKeyOfBind = this.GetRequestVal("UIBindKey"); //要绑定的enumKey.
+            float x = this.GetRequestValFloat("x");
+            float y = this.GetRequestValFloat("y");
+
+            BP.Sys.CCFormAPI.NewEnumField(fk_mapdata, keyOfEn, fieldDesc, enumKeyOfBind, ctrl, x, y);
+            return "绑定成功.";
+        }
+
+        public string NewSFTableField()
+        {
+            try
+            {
+                string fk_mapdata = this.GetRequestVal("FK_MapData");
+                string keyOfEn = this.GetRequestVal("KeyOfEn");
+                string fieldDesc = this.GetRequestVal("Name");
+                string sftable = this.GetRequestVal("UIBindKey");
+                float x = float.Parse(this.GetRequestVal("x"));
+                float y = float.Parse(this.GetRequestVal("y"));
+
+                //调用接口,执行保存.
+                BP.Sys.CCFormAPI.SaveFieldSFTable(fk_mapdata, keyOfEn, fieldDesc, sftable, x, y);
+                return "设置成功";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
         /// <summary>
         /// 默认执行的方法
         /// </summary>
         /// <returns></returns>
         protected override string DoDefaultMethod()
         {
+            string sql = "";
             //返回值
             try
             {
@@ -72,25 +114,6 @@ namespace BP.WF.HttpHandler
                         {
                             return "err@" + ex.Message;
                         }
-                    case "NewSFTableField": //创建一个SFTable字段.
-                        try
-                        {
-                            string fk_mapdata = this.GetRequestVal("FK_MapData");
-                            string keyOfEn = this.GetRequestVal("KeyOfEn");
-                            string fieldDesc = this.GetRequestVal("Name");
-                            string sftable = this.GetRequestVal("UIBindKey");
-                            float x = float.Parse(this.GetRequestVal("x"));
-                            float y = float.Parse(this.GetRequestVal("y"));
-
-                            //调用接口,执行保存.
-                            BP.Sys.CCFormAPI.SaveFieldSFTable(fk_mapdata, keyOfEn, fieldDesc, sftable, x, y);
-                            return "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.Message;
-                        }
-
                     case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
                         try
                         {
@@ -109,22 +132,7 @@ namespace BP.WF.HttpHandler
                     case "CreateCheckGroup": //创建审核分组，暂时未实现.
                         BP.Sys.CCFormAPI.NewCheckGroup(this.FK_MapData, null, null);
                         return "true";
-                    case "DelSFTable": /* 删除自定义的物理表. */
-                        // 检查这个物理表是否被使用。
-                        string sql = "SELECT FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + this.GetRequestVal("v1") + "'";
-                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                        string msgDel = "";
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            msgDel += "\n 表单编号:" + dr["FK_MapData"] + " , 字段:" + dr["KeyOfEn"] + ", 名称:" + dr["Name"];
-                        }
-                        if (msgDel != "")
-                            return "error:该数据表已经被如下字段所引用，您不能删除它。" + msgDel;
-
-                        SFTable sfDel = new SFTable();
-                        sfDel.No = this.GetRequestVal("v1");
-                        sfDel.DirectDelete();
-                        return "true";
+                    
                     case "SaveSFTable":
                         string enName = this.GetRequestVal("v2");
                         string chName = this.GetRequestVal("v1");
@@ -254,7 +262,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@" + ex.Message;
+                return "err@"+this.ToString()+" msg:" + ex.Message;
             }
         }
         #endregion 执行父类的重写方法.
@@ -295,22 +303,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DoFunc()
         {
-            //string dotype = this.GetRequestVal("DoType");
-            //string frmID = this.GetRequestVal("FK_MapData");
 
-            //if (frmID == null)
-            //    frmID = this.GetRequestVal("FrmID");
-            //float x = 0;
-            //float y = 0;
-            //string no = "";
-            //string name = "";
-
-            //string v1 = this.GetRequestVal("v1");
-            //string v2 = this.GetRequestVal("v2");
-            //string v3 = this.GetRequestVal("v3");
-            //string v4 = this.GetRequestVal("v4");
-            //string v5 = this.GetRequestVal("v5");
-
+            string sql = "";
             try
             {
                 switch ( this.DoType )
@@ -366,22 +360,7 @@ namespace BP.WF.HttpHandler
                     case "CreateCheckGroup": //创建审核分组，暂时未实现.
                         BP.Sys.CCFormAPI.NewCheckGroup(FK_MapData, null, null);
                         return "true";
-                    case "DelSFTable": /* 删除自定义的物理表. */
-                        // 检查这个物理表是否被使用。
-                        string sql = "SELECT FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + this.GetRequestVal("v1") + "'";
-                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                        string msgDel = "";
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            msgDel += "\n 表单编号:" + dr["FK_MapData"] + " , 字段:" + dr["KeyOfEn"] + ", 名称:" + dr["Name"];
-                        }
-                        if (msgDel != "")
-                            return "error:该数据表已经被如下字段所引用，您不能删除它。" + msgDel;
-
-                        SFTable sfDel = new SFTable();
-                        sfDel.No = this.GetRequestVal("v1");
-                        sfDel.DirectDelete();
-                        return "true";
+                     
                     case "SaveSFTable":
                         string enName = this.GetRequestVal("v2");
                         string chName = this.GetRequestVal("v1");
@@ -623,22 +602,7 @@ namespace BP.WF.HttpHandler
                         sql += "@DELETE FROM Sys_Enum WHERE EnumKey='" + enumKey + "' ";
                         DBAccess.RunSQLs(sql);
                         return "true";
-                    case "DelSFTable": /* 删除自定义的物理表. */
-                        // 检查这个物理表是否被使用。
-                        sql = "SELECT FK_MapData,KeyOfEn,Name FROM Sys_MapAttr WHERE UIBindKey='" + v1 + "'";
-                        DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                        string msgDel = "";
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            msgDel += "\n 表单编号:" + dr["FK_MapData"] + " , 字段:" + dr["KeyOfEn"] + ", 名称:" + dr["Name"];
-                        }
-                        if (msgDel != "")
-                            return "error:该数据表已经被如下字段所引用，您不能删除它。" + msgDel;
-
-                        SFTable sfDel = new SFTable();
-                        sfDel.No = v1;
-                        sfDel.DirectDelete();
-                        return "true";
+                     
                     case "SaveSFTable":
                         string enName = v2;
                         string chName = v1;
@@ -761,20 +725,6 @@ namespace BP.WF.HttpHandler
                             myfn.DoUp();
                         else
                             myfn.DoDown();
-                        return "true";
-                    case "NewSFTableField": //创建一个SFTable字段.
-
-                        //string fk_mapdata = getUTF8ToString("FK_MapData");
-                        //string keyOfEn = getUTF8ToString("KeyOfEn");
-                        //string fieldDesc = getUTF8ToString("Name");
-                        //string sftable = getUTF8ToString("UIBindKey");
-                        //x = float.Parse(getUTF8ToString("x"));
-                        //y = float.Parse(getUTF8ToString("y"));
-
-                        //调用接口,执行保存.
-                        BP.Sys.CCFormAPI.SaveFieldSFTable(this.FK_MapData, this.KeyOfEn, this.GetRequestVal("Name"),
-                            this.GetRequestVal("UIBindKey"), this.GetRequestValFloat("x"), this.GetRequestValFloat("y"));
-
                         return "true";
                     default:
                         return "error:" + dotype + " , 后台执行错误，未设置此标记.";

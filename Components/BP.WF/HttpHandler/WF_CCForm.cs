@@ -127,8 +127,12 @@ namespace BP.WF.HttpHandler
 
             #region 求出 who is pk 值.
             Int64 pk = this.RefOID;
-            string nodeid = this.FK_Node.ToString();
-            if (nodeid != "0" && string.IsNullOrEmpty(this.FK_Flow) == false)
+            if (pk == 0)
+                pk = this.OID;
+            if (pk == 0)
+                pk = this.WorkID;
+
+            if (this.FK_Node !=  0  && string.IsNullOrEmpty(this.FK_Flow) == false)
             {
                 /*说明是流程调用它， 就要判断谁是表单的PK.*/
                 FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
@@ -212,16 +216,19 @@ namespace BP.WF.HttpHandler
         public string FrmFree_Save()
         {
             //保存主表数据.
-            GEEntity en = new GEEntity(this.EnsName, this.RefOID);
+            GEEntity en = new GEEntity(this.EnsName);
+            en.OID = this.RefOID;
+            int i = en.RetrieveFromDBSources();
+
             en.ResetDefaultVal();
 
-            foreach (string str in context.Request.QueryString.Keys)
-            {
-                en.SetValByKey(str, this.context.Request[str]);
-            }
+            en = BP.Sys.PubClass.CopyFromRequest(en, context.Request) as GEEntity;
 
             en.OID = this.RefOID;
-            en.Save();
+            if (i == 0)
+                en.Insert();
+            else
+                en.Update();
 
             return "保存成功.";
         }

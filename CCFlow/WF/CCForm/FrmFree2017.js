@@ -429,32 +429,7 @@ function ResizeWindow() {
     //}
 }
 window.onload = ResizeWindow;
-
-//以下是软通写的
-//初始化网页URL参数
-function initPageParam() {
-    //新建独有
-    pageData.UserNo = GetQueryString("UserNo");
-    pageData.DoWhat = GetQueryString("DoWhat");
-    pageData.IsMobile = GetQueryString("IsMobile");
-
-    pageData.FK_Flow = GetQueryString("FK_Flow");
-    pageData.FK_Node = GetQueryString("FK_Node");
-    //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
-    pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
-    pageData.WorkID = GetQueryString("WorkID");
-    pageData.IsRead = GetQueryString("IsRead");
-    pageData.T = GetQueryString("T");
-    pageData.Paras = GetQueryString("Paras");
-    pageData.IsReadOnly = GetQueryString("IsReadOnly");//如果是IsReadOnly，就表示是查看页面，不是处理页面
-    pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
-
-    pageData.DoType1 = GetQueryString("DoType")//View
-    pageData.FK_MapData = GetQueryString("FK_MapData")//View
-    pageData.OID = GetQueryString("WorkID") //
-    //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID);
-}
-
+ 
 //将获取过来的URL参数转成URL中的参数形式  &
 function pageParamToUrl() {
     var paramUrlStr = '';
@@ -598,6 +573,7 @@ function setFormEleDisabled() {
 
 //保存
 function Save() {
+
     //必填项和正则表达式检查
     var formCheckResult = true;
     if (!checkBlanks()) {
@@ -610,6 +586,7 @@ function Save() {
         //alert("请检查表单必填项和正则表达式");
         return;
     }
+
     setToobarDisiable();
 
     $.ajax({
@@ -1645,62 +1622,18 @@ function GenerWorkNode1() {
                 alert("GenerWorkNode转换JSON失败:" + data);
                 return;
             }
-            ////显示父流程 链接
-            //if (gengerWorkNode.WF_GenerWorkFlow != null && gengerWorkNode.WF_GenerWorkFlow.length > 0 && (gengerWorkNode.WF_GenerWorkFlow[0].PWorkID != 0 || gengerWorkNode.WF_GenerWorkFlow[0].PWorkID2 != 0)) {
-            //    $('#btnShowPFlow').bind('click', function () {
-            //        var pworkid = 1;
-            //        var pfk_node = 1;
-            //        var pfk_flow = 1;
-            //        if (gengerWorkNode.WF_GenerWorkFlow[0].PWorkID != 0) {
-            //            pworkid = gengerWorkNode.WF_GenerWorkFlow[0].PWorkID;
-            //            pfk_flow = gengerWorkNode.WF_GenerWorkFlow[0].PFlowNo;
-            //            pfk_node = gengerWorkNode.WF_GenerWorkFlow[0].PNodeID;
-            //        } else {
-            //            pworkid = gengerWorkNode.WF_GenerWorkFlow[0].PWorkID2;
-            //            pfk_flow = gengerWorkNode.WF_GenerWorkFlow[0].PFlowNo2;
-            //            pfk_node = gengerWorkNode.WF_GenerWorkFlow[0].PNodeID2;
-            //        }
-
-            //        window.open("WorkOpt/FoolFrmTrack.htm?FK_Flow=" + pfk_flow + "&WorkID=" + pworkid + "&FK_Node=" + pfk_node);
-
-            //    });
-
-            //    $('#ShowPFlow').css('display', 'none');
-            //} else {
-            //    $('#ShowPFlow').css('display', 'none');
-            //}
-
-            ////如果为查看页面，只显示历史轨迹
-            //initTrackList(gengerWorkNode);
-            //if (pageData.DoType == 'View') {
-            //    $('#divCurrentForm').css('display', 'none');
-            //    return;
-            //}
-            ////是分流或者分合流  且是 退回状态 转到页面 WF\WorkOpt\DealSubThreadReturnToHL.html
-            //if ((gengerWorkNode.WF_Node[0].RunModel == 2 || gengerWorkNode.WF_Node[0].RunModel == 3) && gengerWorkNode.WF_GenerWorkFlow[0].WFState == 5) {
-            //    $('#')
-            //    var iframeHtml = "<iframe style='width:100%;' src='./WorkOpt/DealSubThreadReturnToHL.html?FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + pageData.FK_Node + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "'></iframe>";
-            //    $('#topContentDiv').html(iframeHtml);
-            //    $('#header span').html("处理退回信息");
-            //    return;
-            //}
-            ////加签回复
-            //if (gengerWorkNode.WF_GenerWorkFlow[0].WFState == 11) {
-
-            //}
-
+          
             //解析表单
             InitForm();
+
             ///根据下拉框选定的值，绑定表单中哪个元素显示，哪些元素不显示
             //showEleDependOnDRDLValue();
             //
             InitToNodeDDL();
-            
+
             Common.MaxLengthError();
             // window.location.href = "#divCurrentForm";
-
             //设置窗口大小
-            
         }
     });
 }

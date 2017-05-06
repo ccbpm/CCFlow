@@ -201,52 +201,10 @@
 
     <!--杨玉慧 -->
     <script type="text/javascript">
-        //初始化groupID.
-        
-        //var no = GetQueryString("FK_MapData");
-        //$.ajax({
-        //    type: 'post',
-        //    async: true,
-        //    url: Handler + "?DoType=FrmFree_Init&FK_MapData=" + no + "&m=" + Math.random(),
-        //    dataType: 'html',
-        //    success: function (data) {
-                    
-        //        if (data.indexOf('err@') == 0) {
-        //            alert(data); //如果是异常，就提提示.
-        //            return;
-        //        }
-
-        //        if (data.indexOf('url@') == 0) {
-        //            data = data.replace('url@', ''); //如果返回url，就直接转向.
-        //            window.location.href = data;
-        //            return;
-        //        }
-
-
-        //        //$("#Msg").html(data);
-        //        data = JSON.parse(data);
-        //        var mainTable = data.MAINTABLE; //主表单
-        //        var sysFrmLine = data.SYS_FRMLINE; //线
-        //        var sysFrmLab = data.SYS_FRMLAB; //lab
-        //        var sysFrmBtn = data.SYS_FRMBTN; //BTN
-        //        var sysFrmMapAttr = data.SYS_MAPATTR; //组件
-                    
-
-        //        addLines(sysFrmLine); //增加line.
-        //        addLabels(sysFrmLab); //增加label
-        //        addBtns(sysFrmBtn); //增加按钮.
-        //        addMapAttr(sysFrmMapAttr); //增加字段属性.
-
-        //        //调用公共类库的方法:执行批量主表赋值
-        //        //GenerFullAllCtrlsVal(data);
-        //        return;
-        //    }
-        //});
-
 
         $(function () {
             initPageParam(); //初始化参数
-            initBar(); //工具栏.
+         
             GenerWorkNode(); //表单数据.
             $('[name=showCol]').bind('change', function (obj) {
                 if (obj.target.value == "8") {
@@ -255,6 +213,7 @@
                     Col8To4();
                 }
             });
+
             if ($("#Message").html() == "") {
                 $(".Message").hide();
             }
@@ -287,9 +246,11 @@
     </script>
 </head>
 <body>
-    <div id="ShowPFlow" style="display:none;">
-        <button id="btnShowPFlow" value="查看父流程信息" style="float:left;">查看父流程信息</button>
-    </div>
+
+     <div id="" >
+     <input type=button value="Save" onclick="Save()" />
+     </div>
+
     <!--之前返回的信息-->
     <div id="lastOptMsg">
 

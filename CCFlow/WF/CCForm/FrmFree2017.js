@@ -429,7 +429,30 @@ function ResizeWindow() {
     //}
 }
 window.onload = ResizeWindow;
- 
+//以下是软通写的
+//初始化网页URL参数
+function initPageParam() {
+    //新建独有
+    pageData.UserNo = GetQueryString("UserNo");
+    pageData.DoWhat = GetQueryString("DoWhat");
+    pageData.IsMobile = GetQueryString("IsMobile");
+
+    pageData.FK_Flow = GetQueryString("FK_Flow");
+    pageData.FK_Node = GetQueryString("FK_Node");
+    //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
+    pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
+    pageData.WorkID = GetQueryString("WorkID");
+    pageData.IsRead = GetQueryString("IsRead");
+    pageData.T = GetQueryString("T");
+    pageData.Paras = GetQueryString("Paras");
+    pageData.IsReadOnly = GetQueryString("IsReadOnly");//如果是IsReadOnly，就表示是查看页面，不是处理页面
+    pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
+
+    pageData.DoType1 = GetQueryString("DoType")//View
+    pageData.FK_MapData = GetQueryString("FK_MapData")//View
+    pageData.OID = GetQueryString("WorkID") //
+    //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID);
+}
 //将获取过来的URL参数转成URL中的参数形式  &
 function pageParamToUrl() {
     var paramUrlStr = '';

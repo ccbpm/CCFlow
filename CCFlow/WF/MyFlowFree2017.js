@@ -2799,9 +2799,9 @@ function figure_Template_Dtl(frmDtl) {
 
     if (frmDtl.DtlShowModel == "0") {
         if (pageData.IsReadOnly) {
-            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
         } else {
-            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
         }
     }
     else if (frmDtl.DtlShowModel == "1") {
@@ -2824,7 +2824,6 @@ function figure_Template_Dtl(frmDtl) {
         }
     }
     eleHtml.append(eleIframe);
-
 
     //added by liuxc,2017-1-10,此处前台JS中增加变量DtlsLoadedCount记录明细表的数量，用于加载完全部明细表的判断
     var js = "";

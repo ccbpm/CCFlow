@@ -17,7 +17,7 @@
             var num = str.indexOf("?")
             str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
 
-          //  var url = Handler + "MyFlow.ashx?DoType=MyFlow_Init&" + str + "&m=" + Math.random();
+            //  var url = Handler + "MyFlow.ashx?DoType=MyFlow_Init&" + str + "&m=" + Math.random();
             var url = "MyFlow.ashx?DoType=MyFlow_Init&" + str + "&m=" + Math.random();
 
             $.ajax({
@@ -27,8 +27,9 @@
                 dataType: 'html',
                 success: function (data) {
 
+
                     if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>"+data+"</font>");
+                        $("#Msg").html("<font color=red>" + data + "</font>");
                         return;
                     }
 

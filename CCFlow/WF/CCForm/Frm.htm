@@ -11,13 +11,15 @@
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
-           
+
             var name, value;
             var str = location.href; //取得整个地址栏
             var num = str.indexOf("?")
             str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
 
-            var url = Handler + "?DoType=Frm_Init&" + str + "&m=" + Math.random();
+            var url = Handler + "?DoType=Frm_Init&" + str + "&e1m=" + Math.random();
+
+            alert(url);
 
             $.ajax({
                 type: 'post',
@@ -25,6 +27,9 @@
                 url: url,
                 dataType: 'html',
                 success: function (data) {
+
+                    alert(data);
+
 
                     if (data.indexOf('err@') == 0) {
                         alert(data); //如果是异常，就提提示.

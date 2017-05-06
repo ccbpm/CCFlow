@@ -616,28 +616,17 @@ function Save() {
         type: 'post',
         async: true,
         data: getFormData(true, true),
-        url: "Handler.ashx?DoType=FrmFree_Save&OID="+pageData.WorkID,
+        url: "Handler.ashx?DoType=FrmFree_Save&OID=" + pageData.WorkID,
         dataType: 'html',
         success: function (data) {
 
-            setToobarEnable();
             if (data.indexOf('err@') == 0) {
                 $('#Message').html(data.substring(4, data.length));
                 $('.Message').show();
+                return;
             }
-            else {
-                //OptSuc(data);
-                $('#Message').html(data);
-                $('.Message').show();
-                //表示退回OK
-                //if (data.indexOf('工作已经被您退回到') == 0) {
-                //  OptSuc(data);
-
-                //setAttachDisabled();
-                //setToobarUnVisible();
-                //setFormEleDisabled();
-                //}
-            }
+            window.location.href = window.location.href;
+            //alert(data);
         }
     });
 }
@@ -1436,38 +1425,6 @@ function AfterBindEn_DealMapExt() {
                         var sql = myCtl[1].Replace("~", "'");
                         sql = sql.Replace("@Key", txt);
                         //sql = BP.WF.Glo.DealExp(sql, en, null);  怎么办
-
-                        //try
-                        //{
-                        //    dt = DBAccess.RunSQLReturnTable(sql);
-                        //}
-                        //catch (Exception ex)
-                        //{
-                        //    this.Clear();
-                        //    this.AddFieldSet("配置错误");
-                        //    this.Add(me.ToStringAtParas() + "<hr>错误信息:<br>" + ex.Message);
-                        //    this.AddFieldSetEnd();
-                        //    return;
-                        //}
-
-                        //if (dt.Rows.Count != 0)
-                        //{
-                        //    string valC1 = ddlC1.SelectedItemStringVal;
-                        //    foreach (DataRow dr in dt.Rows)
-                        //{
-                        //        ListItem li = ddlC1.Items.FindByValue(dr[0].ToString());
-                        //    if (li == null)
-                        //    {
-                        //        ddlC1.Items.Add(new ListItem(dr[1].ToString(), dr[0].ToString()));
-                        //    }
-                        //    else
-                        //    {
-                        //        li.Attributes["enable"] = "false";
-                        //        li.Attributes["display"] = "false";
-
-                        //    }
-                        //}
-                        //ddlC1.SetSelectItem(valC1);
                     }
                 }
 
@@ -1625,40 +1582,6 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
         //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
     }
     return result = unescape(result);
-}
-//加载表单数据.
-function GenerWorkNode1() {
-    $.ajax({
-        type: 'post',
-        async: true,
-        data: pageData,
-        url: "Hanlder.ashx?DoType=FrmFree_Init&DoType=" + pageData.DoType + "&m=" + Math.random(),
-        //url: "../MyFlow.ashx?DoType=GenerWorkNode" + "&m=" + Math.random(),
-        dataType: 'html',
-        success: function (data) {
-            jsonStr = data;
-            var gengerWorkNode = {};
-            try {
-                var gengerWorkNode = JSON.parse(data);
-            }
-            catch (err) {
-                alert("GenerWorkNode转换JSON失败:" + data);
-                return;
-            }
-          
-            //解析表单
-            InitForm();
-
-            ///根据下拉框选定的值，绑定表单中哪个元素显示，哪些元素不显示
-            //showEleDependOnDRDLValue();
-            //
-            InitToNodeDDL();
-
-            Common.MaxLengthError();
-            // window.location.href = "#divCurrentForm";
-            //设置窗口大小
-        }
-    });
 }
 
 //获取表单数据

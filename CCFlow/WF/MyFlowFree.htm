@@ -19,7 +19,10 @@
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.nav.js"></script>
     <script type="text/javascript" src="MyFlowFree2017.js"></script>
     <script type="text/javascript" src="CCForm/MapExt2016.js"></script>
-    <script type="text/javascript" src="Comm/Gener.js"></script>
+    <script type="text/javascript" src="./Comm/Gener.js"></script>
+    <script type="text/javascript" src="./Scripts/config.js"></script>
+
+    
     <script type="text/javascript" src="Scripts/QueryString2016.js"></script>
     <script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>
 
@@ -224,12 +227,11 @@
         $(function () {
 
             var frm = document.forms["divCCForm"];
-            var plant = "CCFlow";
-            if (plant=="CCFlow")
+
+            if (plant == "CCFlow")
                 frm.action = "MyFlow.ashx?method=login";
             else
                 frm.action = "MyFlow.do?method=login";
-
 
             initPageParam(); //初始化参数
             initBar(); //工具栏.

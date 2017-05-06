@@ -792,10 +792,10 @@ function initGroup(workNodeData, groupFiled) {
                 paras += "&OID=" + pageData.WorkID;
             }
 
-
             if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
                 paras += "&DoType=View";
             }
+
             src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
@@ -1956,10 +1956,12 @@ function GenerWorkNode() {
             jsonStr = data;
             var gengerWorkNode = {};
             try {
+
                 var gengerWorkNode = JSON.parse(data);
+
             }
             catch (err) {
-                alert("GenerWorkNode转换JSON失败:" + data);
+                alert("GenerWorkNode转换JSON失败:ww" + data);
                 return;
             }
             //显示父流程 链接

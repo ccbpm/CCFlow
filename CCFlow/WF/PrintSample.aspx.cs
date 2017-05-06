@@ -1669,8 +1669,6 @@ namespace CCFlow.WF
                 {
                     string url = "";
                     url = "./WorkOpt/Accepter.aspx?IsWinOpen=0&CFlowNo=" + this.CFlowNo + "&DoFunc=" + this.DoFunc + "&WorkIDs=" + this.WorkIDs + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
-                    Page.RegisterClientScriptBlock("aaa", "<script>javascript:WinShowModalDialog_Accepter(\'" + url + "\')</script>");
-                    //this.Response.Redirect("./WorkOpt/Accepter.aspx?IsWinOpen=0&CFlowNo="+this.CFlowNo+"&DoFunc=" + this.DoFunc + "&WorkIDs=" + this.WorkIDs + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID, true);
                     return;
                 }
 

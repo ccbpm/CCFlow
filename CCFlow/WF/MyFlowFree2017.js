@@ -514,6 +514,13 @@ function pageParamToUrl() {
 //初始化按钮
 var MyFlow = "MyFlow.ashx";
 function initBar() {
+
+    if (plant == "CCFlow")
+        MyFlow = "MyFlow.ashx";
+    else
+        MyFlow = "MyFlow.do";
+
+
       var  url = MyFlow + "?DoType=InitToolBar&m=" + Math.random();
 
     $.ajax({
@@ -1857,23 +1864,25 @@ function execSend(toNode) {
         type: 'post',
         async: true,
         data: getFormData(true, true) + "&ToNode=" + toNode,
-        url: MyFlow+"?DoType=Send",
+        url: MyFlow + "?DoType=Send",
         dataType: 'html',
         success: function (data) {
+
             if (data.indexOf('err@') == 0) {//发送时发生错误
                 $('#Message').html(data.substring(4, data.length));
                 $('#MessageDiv').modal().show();
                 setToobarEnable();
+                return;
             }
-            else if (data.indexOf('url@') == 0) {//发送成功时转到指定的URL 
+
+            if (data.indexOf('url@') == 0) { //发送成功时转到指定的URL 
                 var url = data;
                 url = url.replace('url@', '');
                 window.location.href = url;
-                // WinOpen(url, 'ss');
-                // $('#Message').html("<a href=" + data.substring(4, data.length) + ">待处理</a>");
-                // $('#MessageDiv').modal().show();
+                return;
             }
             else {
+
                 OptSuc(data);
                 if (opener != null && opener.window != null && opener.window.parent != null && opener.window.parent.refSubSubFlowIframe != null && typeof (opener.window.parent.refSubSubFlowIframe) == "function") {
                     opener.window.parent.refSubSubFlowIframe();

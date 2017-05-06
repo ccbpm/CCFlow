@@ -32,12 +32,16 @@ FigureDeleteCommand.prototype = {
                         $.ajax({
                             type: 'POST',
                             url: Handler,
-                            data: { action: 'deletenode', FK_Flow: CCBPM_Data_FK_Flow, FK_Node: this.deletedFigure.CCBPM_OID },
+                            data: { action: 'DeleteNode', FK_Flow: CCBPM_Data_FK_Flow, FK_Node: this.deletedFigure.CCBPM_OID },
                             success: function (json) {
-                                if (json != "true") {
+
+                                if (json.indexOf('err@') == 0) {
                                     canDelete = false;
                                     Designer_ShowMsg("err:" + json);
+                                    //alert(json);
+                                    return;
                                 }
+
                             },
                             async: false
                         });
@@ -80,7 +84,7 @@ FigureDeleteCommand.prototype = {
                 for (var m = 0; m < cpLength; m++) {
                     var cPoint = this.deletedCPs[m].point;
                     var cId = CONNECTOR_MANAGER.connectorGetByXY(cPoint.x, cPoint.y);
-                    if(cId != -1) CONNECTOR_MANAGER.connectorRemoveById(cId, true);
+                    if (cId != -1) CONNECTOR_MANAGER.connectorRemoveById(cId, true);
                 }
 
                 //delete it

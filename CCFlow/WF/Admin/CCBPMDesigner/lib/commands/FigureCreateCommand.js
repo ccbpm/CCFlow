@@ -45,11 +45,14 @@ FigureCreateCommand.prototype = {
                     $.ajax({
                         type: 'POST',
                         url: Handler,
-                        data: { action: 'genernodeid', FK_Flow: CCBPM_Data_FK_Flow, FigureName: createdFigure.name, x: this.x, y: this.y },
+                        data: { action: 'CreateNode', FK_Flow: CCBPM_Data_FK_Flow, FigureName: createdFigure.name, x: this.x, y: this.y },
                         success: function (jsonData) {
+
+                            //  alert(jsonData);
+
                             var jData = $.parseJSON(jsonData);
-                            createdFigure.CCBPM_OID = jData.data.NodeID;
-                            figureText_Str = jData.data.text;
+                            createdFigure.CCBPM_OID = jData.NodeID;
+                            figureText_Str = jData.Name;
                             delagetSave = true;
                         },
                         async: false

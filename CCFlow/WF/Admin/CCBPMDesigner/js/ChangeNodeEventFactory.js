@@ -67,7 +67,7 @@ ChangeNodeManager.prototype = {
         $.ajax({
             type: 'POST',
             url: Handler,
-            data: { action: 'changenoderunmodel', FK_Node: nodeID, RunModel: runModel },
+            data: { action: 'Node_ChangeRunModel', FK_Node: nodeID, RunModel: runModel },
             success: function (jsonData) {
 
             },

@@ -219,18 +219,20 @@
 
             // 定义参数，让其保存到数据库里。
             var param = {
-                action: "DoType",
                 DoType: "FrmEnumeration_DelEnum",
                 EnumKey: key
             };
 
             $.post(Handler, param, function (data) {
-                if (data == "true") {
-                    alert('删除成功.');
-                    LoadGridData(1, 6);
-                } else {
+
+                if (data.indexOf('err@') == 0) {
                     alert(data);
+                    return;
                 }
+
+                alert(data);
+                LoadGridData(1, 6);
+
             });
         }
 

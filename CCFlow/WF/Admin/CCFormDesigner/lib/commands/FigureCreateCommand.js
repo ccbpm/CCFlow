@@ -93,11 +93,11 @@ FigureCreateCommand.prototype = {
                 case "CheckGroup":
                     alert('该功能没有实现' + createFigureName + ' 需要连续创建三个字段.');
                     break;
-                //case CCForm_Controls.FrmCheck: //审核组件
-                //case CCForm_Controls.FrmCheck: // 审核组件.
-                //case CCForm_Controls.FlowChart: //轨迹图.
-                //case CCForm_Controls.SubFlowDtl: //子流程.
-                    //case CCForm_Controls.ThreadDtl: //子线城.
+                //case CCForm_Controls.FrmCheck: //审核组件 
+                //case CCForm_Controls.FrmCheck: // 审核组件. 
+                //case CCForm_Controls.FlowChart: //轨迹图. 
+                //case CCForm_Controls.SubFlowDtl: //子流程. 
+                //case CCForm_Controls.ThreadDtl: //子线城. 
                 case "FrmCheck": // 审核组件.
                 case "FlowChart": //轨迹图.
                 case "SubFlowDtl": //子流程.
@@ -269,7 +269,6 @@ FigureCreateCommand.prototype = {
 
             // 定义参数，让其保存到数据库里。
             var param = {
-                action: "DoType",
                 DoType: "FrmEnumeration_NewEnumField",
                 FK_MapData: CCForm_FK_MapData,
                 Name: frmVal.Name,
@@ -280,22 +279,22 @@ FigureCreateCommand.prototype = {
                 y: y
             };
             ajaxService(param, function (json) {
-                if (json == "true") {
 
-                    try {
-
-                        //开始画这个 - 元素.
-                        transField.paint();
-
-                    } catch (e) {
-                        alert('画元素错误：' + e);
-                    }
-
-                } else {
-                    Designer_ShowMsg(json);
+                if (json.indexOf('err@') == 0) {
+                    alert(json);
+                    return;
                 }
-            }, this);
 
+                try {
+
+                    //开始画这个 - 元素.
+                    transField.paint();
+
+                } catch (e) {
+                    alert('画元素错误：' + e);
+                }
+
+            }, this);
 
         }, null);
 
@@ -305,7 +304,7 @@ FigureCreateCommand.prototype = {
     PublicNoNameCtrlCreate: function (createdFigure, x, y, ctrlType) {
 
         var dgId = "iframeRadioButton";
-        var url = "DialogCtr/PublicNoNameCtrlCreate.htm?FrmID="+ CCForm_FK_MapData +"&CtrlType=" + ctrlType + "&s=" + Math.random();
+        var url = "DialogCtr/PublicNoNameCtrlCreate.htm?FrmID=" + CCForm_FK_MapData + "&CtrlType=" + ctrlType + "&s=" + Math.random();
         var funIsExist = this.IsExist;
 
         var lab = '创建从表';
@@ -431,7 +430,6 @@ FigureCreateCommand.prototype = {
 
             // 定义参数，让其保存到数据库里。
             var param = {
-                action: "DoType",
                 DoType: "NewSFTableField",
                 FK_MapData: CCForm_FK_MapData,
                 Name: frmVal.Name,
@@ -441,21 +439,21 @@ FigureCreateCommand.prototype = {
                 y: y
             };
             ajaxService(param, function (json) {
-                if (json == "true") {
 
-                    try {
-                        //开始画这个 - 元素.
-                        transField.paint();
-                    } catch (e) {
-                        alert('画元素失败');
-                        alert(e);
-                    }
-
-                } else {
-                    Designer_ShowMsg(json);
+                if (json.indexOf('err@') == 0) {
+                    alert(json);
+                    return;
                 }
-            }, this);
 
+                try {
+                    //开始画这个 - 元素.
+                    transField.paint();
+                } catch (e) {
+                    alert('画元素失败');
+                    alert(e);
+                }
+
+            }, this);
 
         }, null);
 
@@ -538,7 +536,7 @@ FigureCreateCommand.prototype = {
                 break;
             default:
                 alert('未定义类型:' + createFigureName);
-                return; 
+                return;
         }
         //根据信息创建不同类型的数字控件.
         var transField = new TransFormDataField(createdFigure, frmVal, x, y);

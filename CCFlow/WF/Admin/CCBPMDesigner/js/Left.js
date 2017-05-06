@@ -20,7 +20,8 @@ function showFlow() {
 //重新装载流程图
 function RefreshFlowJson() {
     var node = $('#flowTree').tree('getSelected');
-    if (!node || node.attributes.ISPARENT != '0') return;
+    if (!node || node.attributes.ISPARENT != '0') 
+        return;
     //首先关闭tab
     closeTab(node.text);
     $.post(Handler, {

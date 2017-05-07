@@ -195,7 +195,7 @@
                 }
             });
             insertTr.append($('<td><input type="button" onclick="deleteRow(this)" value="删除" style=""></td>'));
-            //insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
+            insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
             //直接复制上面的即可
 
             var trData = { data: {} };
@@ -297,7 +297,7 @@
                         //添加删除列
                         //var delTh = $('<th></th>');
                         //添加保存列
-                       /* delTh = $('<th></th>');
+                       delTh = $('<th></th>');
                         delTh.text("操作");
                         var delThData = {
                             custom: true,
@@ -307,7 +307,7 @@
                         };
                         delTh.attr('title', "title");
                         delTh.data(delThData);
-                        threadTr.append(delTh);*/
+                        threadTr.append(delTh);
 
                         $('#dtlDiv div table thead').append(threadTr);
                     }

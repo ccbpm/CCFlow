@@ -690,7 +690,7 @@ Common.CustomPagePlug = function (operation) {
                 if (obje) {
                     //把OBJE的值过一遍  replace 掉：  json 转的时候转化了这些值，转化回来
                     for (var ele in obje) {
-                        obje[ele]=obje[ele].toString().replace(/｛/g, '{').replace(/｝/g, '}').replace(/：/g, ':').replace(/，/g, ',').replace(/【/g, '[').replace(/】/g, ']');
+                        obje[ele] = obje[ele];
                     }
                     var headers = $("#" + _this.InitData.DivId + " table thead tr th");
                     for (var i = 0; i < headers.length; i++) {

@@ -16,6 +16,7 @@
     <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
 
     <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
+    <script type="text/javascript" src="MapExt2016.js"></script>
     <script language="javascript" type="text/javascript" >
         var hjl = new Array(); //合计列名称集合
         var mapExt; //mapExt扩展
@@ -155,14 +156,22 @@
         }
 
         function insertRow() {
+            
+            if ($('#dtlDiv div table tbody tr').length == 1 ) {
+                var firstTr = $('#dtlDiv div table tbody tr')[0];
+                if ($(firstTr).data().data == undefined) {
+                    $('#dtlDiv div table tbody').html('')//无数据时，新增的时候先删除 无记录行
+                }
+            }
             var insertTr = $('<tr></tr>');
             var threadTh = $('#dtlDiv div table thead tr th');
+            var newRowIndex = $('#dtlDiv div table tbody tr').length;
             $.each(threadTh, function (k, threadThObj) {
                 if ($(threadThObj).data().colname != undefined) {
                     var o = $(threadThObj);
                     var tmplate = figure_MapAttr_Template(o.data());
-                    tmplate.data({KeyOfEn : o.data().KeyOfEn});
-                    tmplate.attr('id', '');
+                    tmplate.data({ KeyOfEn: o.data().KeyOfEn });
+                    tmplate.attr('id', tmplate.attr('name') + "_" + newRowIndex);
                     if (tmplate.attr('name').indexOf('TB_') == 0) {
                         $(tmplate).bind('blur', function (obj) {
                             $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
@@ -180,7 +189,7 @@
                     insertTr.append(td);
 
                 } else if ($(threadThObj).data().coltype == 'SN') {
-                    insertTr.append($('<td>' + ($('#dtlDiv div table tbody tr').length + 1) + '</td>'));
+                    insertTr.append($('<td>' + (newRowIndex+1) + '</td>'));
                 } else {
                     
                 }
@@ -322,7 +331,10 @@
                                         var tmplate = figure_MapAttr_Template(o.data());
                                         tmplate.data({ KeyOfEn: o.data().KeyOfEn });
 
-                                        tmplate.attr('id', '');
+                                        //ID 设置为  id+'_1'
+                                        var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
+                                        //先写出 NAME   单选扭会出问题
+                                        tmplate.attr('id', tmplate.attr('name') + '_'+rowIndex);
 
                                         var textVal = $($(tbodyTrObj).children('td')[k]).text();
                                         tmplate.val(textVal);
@@ -1297,11 +1309,12 @@
 
                     break;
                 case "ActiveDDL":/*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
-                    var ddlPerant =$(tr).find("#DDL_" + mapExt.AttrOfOper);
-                    var ddlChild =$(tr).find("#DDL_" + mapExt.AttrsOfActive);
+                    var ddlPerant =$(tr).find("[name=DDL_" + mapExt.AttrOfOper+']');
+                    var ddlChild =$(tr).find("[name=DDL_" + mapExt.AttrsOfActive+']');
                     if (ddlPerant == null || ddlChild == null)
                         continue;
-                    ddlPerant.attr("onchange", "DDLAnsc(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\')");
+                    var rowIndex = (parseInt($($(tr).find('td')[0]).text()) - 1);
+                    ddlPerant.attr("onchange", "DDLAnsc(this.value,\'" + "DDL_" + mapExt.AttrsOfActive +"_"+ rowIndex + "\', \'" + mapExt.MyPK + "\')");
                     // 处理默认选择。
                     //string val = ddlPerant.SelectedItemStringVal;
                     var valClient = ConvertDefVal(workNode, '', mapExt.AttrsOfActive); // ddlChild.SelectedItemStringVal;

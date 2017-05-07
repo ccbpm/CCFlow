@@ -528,7 +528,7 @@
                         }
 
                         // AppDouble  AppFloat  .
-                        if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
+                        if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3 || (mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
 
@@ -537,15 +537,15 @@
                             }
                             eleHtml += "<input onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                         }//"+'"'+"
-                        if ((mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {//AppInt
+                       /* if ((mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {//AppInt
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
 
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
-                            eleHtml += "<input onkeyup=" + '"' + "this.value=this.value.replace(/\D/g,'')" + '"' + " onafterpaste=" + '"' + "this.value=this.value.replace(/\D/g,'')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-                        }
+                            eleHtml += "<input onkeyup=" + '"' + "this.value=this.value.replace(/\D/g,'');" + '"' + "onafterpaste=" + '"' + "this.value=this.value.replace(/\D/g,'');" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                        }*/
 
 
                         //AppMoney  AppRate
@@ -1319,24 +1319,39 @@
                             var mapExtDocArr1 = mapExt.Doc.split('*');
                             for (var m = 0; m < mapExtDocArr1.length; m++) {
                                 var extDocObj1 = mapExtDocArr1[m].replace('@', '');
+                                //将extDocObj1转换成KeyOfEn
+                                var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) { return val.Name == extDocObj1; });
+                                if (extObjAr.length == 0) {
+                                    alert("mapExt:" + mapExt.AttrOfOper + "配置有误");
+                                } else {
+                                    extDocObj1 = extObjAr[0].KeyOfEn;
 
-                                $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']').attr('disabled', true);
+
+                                    $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']').attr('disabled', true);
 
 
-                                if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
-                                    $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExtDoc = mapExt.Doc;
-                                    $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
-                                        var mapExtDocArr = $(obj.target).data().mapExtDoc.split('*');
-                                        var tmpResult = 1;
-                                        for (var m = 0; m < mapExtDocArr.length; m++) {
-                                            var extDocObj = mapExtDocArr[m].replace('@', '');
-                                            tmpResult = tmpResult * $(tr).find('[name=TB_' + extDocObj + ']').val();
-                                        }
-                                        $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']').val(tmpResult);
+                                    if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
+                                        $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
+                                        $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
+                                            //可能有误
+                                            var mapExtDocArr = $(obj.target).data().mapExt.Doc.split('*');
+                                            var tmpResult = 1;
+                                            for (var m = 0; m < mapExtDocArr.length; m++) {
+                                                var extDocObj = mapExtDocArr[m].replace('@', '');
+                                                var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) { return val.Name == extDocObj; });
+                                                if (extObjAr.length == 0) {
+                                                    alert("mapExt:" + mapExt.AttrOfOper + "配置有误");
+                                                } else {
+                                                    extDocObj = extObjAr[0].KeyOfEn;
+                                                }
+                                                tmpResult = tmpResult * $(tr).find('[name=TB_' + extDocObj + ']').val();
+                                            }
+                                            $(tr).find('[name=TB_' + $(obj.target).data().mapExt.AttrOfOper + ']').val(tmpResult);
 
-                                        $(obj.target).parent().parent().data().data[mapExt.AttrOfOper] =
-                                tmpResult
-                                    })
+                                            $(obj.target).parent().parent().data().data[$(obj.target).data().mapExt.AttrOfOper] =
+                                    tmpResult
+                                        })
+                                    }
                                 }
                             }
                         }

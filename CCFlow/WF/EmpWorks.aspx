@@ -186,7 +186,7 @@
             groupVals += "@" + dr[GroupBy].ToString() + ",";
         }
 
-        int colspan = 10;
+        int colspan = 11;
 
         sBuilder.Append("<table width='100%'  cellspacing='0' cellpadding='0' align=left>");
             sBuilder.Append("<Caption ><div class='CaptionMsg' >待办</div></Caption>");

@@ -94,7 +94,7 @@ namespace CCFlow.WF.CCForm
             if (System.IO.Directory.Exists(toPath) == false)
                 System.IO.Directory.CreateDirectory(toPath);
 
-           // string billFile = toPath + "\\" + tempName + "." + this.FID + ".doc";
+            // string billFile = toPath + "\\" + tempName + "." + this.FID + ".doc";
             string billFile = toPath + "\\" + Server.UrlDecode(tempNameChinese) + "." + this.WorkID + ".doc";
 
             BP.Pub.RTFEngine engine = new BP.Pub.RTFEngine();
@@ -118,14 +118,26 @@ namespace CCFlow.WF.CCForm
                 // 增加主表.
                 GEEntity myge = new GEEntity("ND" + nd.NodeID, this.WorkID);
                 engine.AddEn(myge);
-                MapDtls mymdtls = new MapDtls("ND" + nd.NodeID);
+
+                //增加从表
+                MapDtls mymdtls = new MapDtls(tempName);
                 foreach (MapDtl dtl in mymdtls)
                 {
                     GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
                     enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
                     engine.EnsDataDtls.Add(enDtls);
                 }
-                
+
+                //增加多附件数据
+                FrmAttachments aths = new FrmAttachments(tempName);
+                foreach (FrmAttachment athDesc in aths)
+                {
+                    FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
+                    if (athDBs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK, FrmAttachmentDBAttr.RefPKVal, this.WorkID, "RDT") == 0)
+                        continue;
+
+                    engine.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
+                }
                 // engine.MakeDoc(file, toPath, tempName + "." + this.WorkID + ".doc", null, false);
                 engine.MakeDoc(file, toPath, Server.UrlDecode(tempNameChinese) + "." + this.WorkID + ".doc", null, false);
             }
@@ -150,17 +162,17 @@ namespace CCFlow.WF.CCForm
                 ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                 ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
                 ps.Add(TrackAttr.WorkID, this.WorkID);
-                engine.dtTrack= BP.DA.DBAccess.RunSQLReturnTable(ps); 
+                engine.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
 
                 engine.MakeDoc(file, toPath, Server.UrlDecode(tempNameChinese) + "." + this.WorkID + ".doc", null, false);
             }
 
             #region 保存单据，以方便查询.
             Bill bill = new Bill();
-            bill.MyPK =  this.FID+"_" + this.WorkID+ "_" + this.FK_Node+ "_" + this.BillIdx;
+            bill.MyPK = this.FID + "_" + this.WorkID + "_" + this.FK_Node + "_" + this.BillIdx;
             bill.WorkID = this.WorkID;
             bill.FK_Node = this.FK_Node;
-            bill.FK_Dept =  WebUser.FK_Dept;
+            bill.FK_Dept = WebUser.FK_Dept;
             bill.FK_Emp = WebUser.No;
 
             bill.Url = "/DataUser/Bill/FlowFrm/" + DateTime.Now.ToString("yyyyMMdd") + "/" + Server.UrlDecode(tempNameChinese) + "." + this.WorkID + ".doc";
@@ -168,18 +180,18 @@ namespace CCFlow.WF.CCForm
 
             bill.RDT = DataType.CurrentDataTime;
             bill.FK_NY = DataType.CurrentYearMonth;
-            bill.FK_Flow =  this.FK_Flow;
+            bill.FK_Flow = this.FK_Flow;
             if (this.WorkID != 0)
             {
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.WorkID = this.WorkID;
                 if (gwf.RetrieveFromDBSources() == 1)
                 {
-                    bill.Emps = gwf.Emps; 
+                    bill.Emps = gwf.Emps;
                     bill.FK_Starter = gwf.Starter;
                     bill.StartDT = gwf.RDT;
                     bill.Title = gwf.Title;
-                    bill.FK_Dept = gwf.FK_Dept; 
+                    bill.FK_Dept = gwf.FK_Dept;
                 }
             }
 
@@ -244,12 +256,12 @@ namespace CCFlow.WF.CCForm
 
                 if (f.Contains(".grf"))
                 {
-                    string fileName = f.Split('\\')[f.Split('\\').Length-1];
+                    string fileName = f.Split('\\')[f.Split('\\').Length - 1];
                     this.Pub1.AddTD("<a href='javascript:btnPreview_onclick(\"" + fileName + "\")' >打印</a>");
                 }
                 else
                 {
-                    this.Pub1.AddTD("<a href='Print.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&FK_Flow="+this.FK_Flow+"&WorkID=" + this.WorkID + "&BillIdx=" + fileIdx + "' target=_blank >打印</a>");    
+                    this.Pub1.AddTD("<a href='Print.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&BillIdx=" + fileIdx + "' target=_blank >打印</a>");
                 }
 
                 this.Pub1.AddTREnd();

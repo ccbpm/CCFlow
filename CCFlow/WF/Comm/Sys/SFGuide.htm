@@ -13,6 +13,9 @@
     <script src="../JScript.js" type="text/javascript"></script>
     <script src="../JS/Ctrls.js" type="text/javascript"></script>
     <script type="text/javascript">
+        function ToURL() {
+            window.location.href = 'SFGuide.aspx';
+        }
         function showInfo(title, msg, autoHiddenMillionSeconds) {
             $.messager.show({
                 title: title,
@@ -718,7 +721,7 @@
         }
     </script>
 </head>
-<body class="easyui-layout">
+<body class="easyui-layout" onload="ToURL()">
     <div data-options="region:'center',title:'创建数据源表'" style="padding: 5px;">
         <table id="mtable" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 98%">
             <tr>

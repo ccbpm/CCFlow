@@ -209,62 +209,55 @@ namespace CCFlow.AppDemoLigerUI.Base
         /// </summary>
         private void GetEmps(HttpContext context)
         {
-            try
+            //string result = "";
+            //string[] str = context.Request.RawUrl.Split('&');
+            //string key3 = str[str.Length - 1].Split('=')[1];
+            //string realKey = HttpUtility.UrlDecode(key3, System.Text.Encoding.UTF8);
+
+            string result = "";
+            string[] str = context.Request.RawUrl.Split('&');
+            string key3 = null;
+            string top = null;
+            foreach (string single in str)
             {
-                //string result = "";
-                //string[] str = context.Request.RawUrl.Split('&');
-                //string key3 = str[str.Length - 1].Split('=')[1];
-                //string realKey = HttpUtility.UrlDecode(key3, System.Text.Encoding.UTF8);
-
-                string result = "";
-                string[] str = context.Request.RawUrl.Split('&');
-                string key3 = null;
-                string top = null;
-                foreach (string single in str)
+                if (single.StartsWith("q="))
                 {
-                    if (single.StartsWith("q="))
-                    {
-                        key3 = single.Split('=')[1];
-                    }
-                    else if (single.StartsWith("limit="))
-                    {
-                        top = single.Split('=')[1];
-                    }
+                    key3 = single.Split('=')[1];
                 }
-                if (string.IsNullOrEmpty(top))
+                else if (single.StartsWith("limit="))
                 {
-                    top = "10";
+                    top = single.Split('=')[1];
                 }
-
-                string realKey = HttpUtility.UrlDecode(key3, System.Text.Encoding.UTF8);
-
-                string sql = "select top " + top + " * from port_emp where Name like '%" + realKey + "%' or No like'%" + realKey + "%'";
-
-                System.Data.DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                System.Collections.ArrayList dic = new System.Collections.ArrayList();
-
-                foreach (DataRow dr in dt.Rows)
-                {
-                    System.Collections.Generic.Dictionary<string, object> drow = new System.Collections.Generic.Dictionary<string, object>();
-                    foreach (DataColumn dc in dt.Columns)
-                    {
-                        drow.Add(dc.ColumnName, dr[dc.ColumnName]);
-                    }
-                    dic.Add(drow);
-                }
-
-                JavaScriptSerializer jss = new JavaScriptSerializer();
-                result = jss.Serialize(dic);
-
-                context.Response.Clear();
-                context.Response.Write(result);
-                context.Response.End();
-
             }
-            catch
+            if (string.IsNullOrEmpty(top))
             {
-
+                top = "10";
             }
+
+            string realKey = HttpUtility.UrlDecode(key3, System.Text.Encoding.UTF8);
+
+            string sql = "select top " + top + " * from port_emp where Name like '%" + realKey + "%' or No like'%" + realKey + "%'";
+
+            System.Data.DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            System.Collections.ArrayList dic = new System.Collections.ArrayList();
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                System.Collections.Generic.Dictionary<string, object> drow = new System.Collections.Generic.Dictionary<string, object>();
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    drow.Add(dc.ColumnName, dr[dc.ColumnName]);
+                }
+                dic.Add(drow);
+            }
+
+            JavaScriptSerializer jss = new JavaScriptSerializer();
+            result = jss.Serialize(dic);
+
+            context.Response.Clear();
+            context.Response.Write(result);
+            context.Response.End();
+
         }
         /// <summary>
         /// 获取企业信息 

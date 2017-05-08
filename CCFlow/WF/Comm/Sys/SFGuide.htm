@@ -13,9 +13,6 @@
     <script src="../JScript.js" type="text/javascript"></script>
     <script src="../JS/Ctrls.js" type="text/javascript"></script>
     <script type="text/javascript">
-        function ToURL() {
-            window.location.href = 'SFGuide.aspx';
-        }
         function showInfo(title, msg, autoHiddenMillionSeconds) {
             $.messager.show({
                 title: title,
@@ -71,10 +68,15 @@
             if (sfno) {
                 //获取信息
                 t.ajax(Handler, { DoType: 'sfguide_getinfo', sfno: sfno }, false, function (msg) {
+                    if (!msg || msg.indexOf("err@") != -1) {
+                        alert('获取编号为' + sfno + '的数据源表时出现错误：' + msg);
+                        return;
+                    }
+
                     var d = $.parseJSON(msg);
 
-                    if (d.msg && d.msg.length == 1) {
-                        sftable = d.msg[0];
+                    if (d.length == 1) {
+                        sftable = d[0];
 
                         $('#srcTypes').val(sftable.SRCTYPE, null);
                         loadSrcType(sftable.SRCTYPE, null);
@@ -85,7 +87,7 @@
                         alert('错误：未能查询到编号为' + sfno + '的数据源表！');
                     }
                 }, function (msg) {
-                    alert('错误：' + msg);
+                    alert('获取编号为' + sfno + '的数据源表时出现错误：' + msg);
                 });
             }
             else {
@@ -422,15 +424,13 @@
             classes = [];
 
             t.ajax(Handler, { DoType: 'sfguide_getclass', struct: struct, sfno: sfno }, false, function (msg) {
-                var re = $.parseJSON(msg);
-
-                if (re.success) {
-                    classes = re.msg;
-                }
-                else {
-                    alert('获取类出错：' + re.msg);
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取类出错：' + msg);
                     classes = [];
+                    return;
                 }
+
+                classes = $.parseJSON(msg);
             }, function (msg) {
                 alert('获取类出错：' + msg);
                 classes = [];
@@ -443,15 +443,13 @@
             srcs = [];
 
             t.ajax(Handler, { DoType: 'sfguide_getsrcs', type: type }, false, function (msg) {
-                var re = $.parseJSON(msg);
-
-                if (re.success) {
-                    srcs = re.msg;
-                }
-                else {
-                    alert('获取数据源列表出错：' + re.msg);
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取数据源列表出错：' + msg);
                     srcs = [];
+                    return;
                 }
+
+                srcs = $.parseJSON(msg);
             }, function (msg) {
                 alert('获取数据源列表出错：' + msg);
                 srcs = [];
@@ -464,15 +462,13 @@
             tvs = [];
 
             t.ajax(Handler, { DoType: 'sfguide_gettvs', src: src }, false, function (msg) {
-                var re = $.parseJSON(msg);
-
-                if (re.success) {
-                    tvs = re.msg;
-                }
-                else {
-                    alert('获取表/视图列表出错：' + re.msg);
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取表/视图列表出错：' + msg);
                     tvs = [];
+                    return;
                 }
+
+                tvs = $.parseJSON(msg);
             }, function (msg) {
                 alert('获取表/视图列表出错：' + msg);
                 tvs = [];
@@ -486,15 +482,13 @@
             var src = $('#DDL_SFDBSrc').val();
 
             t.ajax(Handler, { DoType: 'sfguide_getcols', src: src, table: table }, false, function (msg) {
-                var re = $.parseJSON(msg);
-
-                if (re.success) {
-                    cols = re.msg;
-                }
-                else {
-                    alert('获取列信息出错：' + re.msg);
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取列信息出错：' + msg);
                     cols = [];
+                    return;
                 }
+
+                cols = $.parseJSON(msg);
             }, function (msg) {
                 alert('获取列信息出错：' + msg);
                 cols = [];
@@ -507,15 +501,13 @@
             mtds = [];
 
             t.ajax(Handler, { DoType: 'sfguide_getmtds', src: src }, false, function (msg) {
-                var re = $.parseJSON(msg);
-
-                if (re.success) {
-                    mtds = re.msg;
-                }
-                else {
-                    alert('获取WebService方法列表出错：' + re.msg);
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取WebService方法列表出错：' + msg);
                     mtds = [];
+                    return;
                 }
+
+                mtds = $.parseJSON(msg);
             }, function (msg) {
                 alert('获取WebService方法列表出错：' + msg);
                 mtds = [];
@@ -665,17 +657,16 @@
             sftable.isnew = sfno == null;
 
             t.ajax(Handler, sftable, false, function (msg) {
-                var d = $.parseJSON(msg);
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('保存出错：' + msg);
+                    return;
+                }
 
-                alert(d.msg);
-
-                if (d.success) {
-                    if (sfno) {
-                        location.href = location.href.indexOf("&t=") != -1 ? location.href.replace("&t=" + t.getQueryString("t"), "&t=" + Math.random()) : (location.href + "&t=" + Math.random());
-                    }
-                    else {
-                        location.href += "&sfno=" + sftable.NO + "&t=" + Math.random();
-                    }
+                if (sfno) {
+                    location.href = location.href.indexOf("&t=") != -1 ? location.href.replace("&t=" + t.getQueryString("t"), "&t=" + Math.random()) : (location.href + "&t=" + Math.random());
+                }
+                else {
+                    location.href += "&sfno=" + sftable.NO + "&t=" + Math.random();
                 }
             }, function (msg) {
                 alert(msg);
@@ -721,7 +712,7 @@
         }
     </script>
 </head>
-<body class="easyui-layout" onload="ToURL()">
+<body class="easyui-layout">
     <div data-options="region:'center',title:'创建数据源表'" style="padding: 5px;">
         <table id="mtable" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 98%">
             <tr>

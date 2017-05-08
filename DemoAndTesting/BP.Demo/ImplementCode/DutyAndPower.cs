@@ -130,7 +130,7 @@ namespace BP.WF.MS
     /// <summary>
     /// 职责与权限s
     /// </summary>
-    public class DutyAndPowers : Entities
+    public class DutyAndPowers : EntitiesNoName
     {
         #region 方法
         /// <summary>

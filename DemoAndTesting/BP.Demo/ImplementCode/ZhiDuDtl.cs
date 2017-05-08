@@ -205,7 +205,7 @@ namespace BP.WF.MS
 	/// <summary>
 	/// 章节s
 	/// </summary>
-	public class ZhiDuDtls: Entities
+    public class ZhiDuDtls : EntitiesNoName
 	{
 		#region 方法
 		/// <summary>

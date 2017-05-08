@@ -246,7 +246,7 @@ namespace BP.WF.MS
 	/// <summary>
 	/// 制度s
 	/// </summary>
-	public class ZhiDus: Entities
+	public class ZhiDus: EntitiesNoName
 	{
 		#region 方法
 		/// <summary>

@@ -112,7 +112,7 @@ namespace BP.WF.MS
     /// <summary>
     /// 制度s
     /// </summary>
-    public class ZhiDuDepts : Entities
+    public class ZhiDuDepts : EntitiesNoName
     {
         #region 方法
         /// <summary>

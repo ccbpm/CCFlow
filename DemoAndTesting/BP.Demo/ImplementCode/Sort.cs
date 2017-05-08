@@ -93,7 +93,7 @@ namespace BP.WF.MS
 	/// <summary>
 	/// 目录s
 	/// </summary>
-	public class Sorts: Entities
+	public class Sorts: EntitiesTree
 	{
 		#region 方法
 		/// <summary>

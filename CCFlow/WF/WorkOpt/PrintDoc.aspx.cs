@@ -95,7 +95,7 @@ namespace CCFlow.WF.WorkOpt
                 this.Pub1.AddTR();
                 this.Pub1.AddTD(en.No);
                 this.Pub1.AddTD(en.Name);
-                this.Pub1.AddTD("<a href='PrintDoc.aspx?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Bill=" + en.No + "&FK_Flow="+this.FK_Flow+"' >打印</a>");
+                this.Pub1.AddTD("<a href='PrintDoc.aspx?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Bill=" + en.No + "&FK_Flow=" + this.FK_Flow + "' >打印</a>");
                 this.Pub1.AddTREnd();
             }
             this.Pub1.AddTableEnd();
@@ -116,14 +116,14 @@ namespace CCFlow.WF.WorkOpt
 
             Button button = new Button();
 
-            button.OnClientClick = "return btnPreview_onclick('"+func.Url+"')";
+            button.OnClientClick = "return btnPreview_onclick('" + func.Url + "')";
 
-            button.Text = "预览 '"+func.Name+"'";
+            button.Text = "预览 '" + func.Name + "'";
 
             this.Pub1.Add(button);
         }
 
-        
+
         /// <summary>
         /// 打印单据
         /// </summary>
@@ -167,6 +167,16 @@ namespace CCFlow.WF.WorkOpt
                     foreach (Entities ens in al)
                         rtf.AddDtlEns(ens);
 
+                    //增加多附件数据
+                    FrmAttachments aths = wk.HisFrmAttachments;
+                    foreach (FrmAttachment athDesc in aths)
+                    {
+                        FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
+                        if (athDBs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK, FrmAttachmentDBAttr.RefPKVal, this.WorkID, "RDT") == 0)
+                            continue;
+
+                        rtf.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
+                    }
                     //把审核日志表加入里面去.
                     Paras ps = new BP.DA.Paras();
                     ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
@@ -178,7 +188,7 @@ namespace CCFlow.WF.WorkOpt
                 paths = file.Split('_');
                 path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
 
-                string billUrl = BP.WF.Glo.CCFlowAppPath+ "DataUser/Bill/" + path + file;
+                string billUrl = BP.WF.Glo.CCFlowAppPath + "DataUser/Bill/" + path + file;
 
                 if (func.HisBillFileType == BillFileType.PDF)
                 {
@@ -191,7 +201,7 @@ namespace CCFlow.WF.WorkOpt
                 }
 
                 path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
-              //  path = Server.MapPath(path);
+                //  path = Server.MapPath(path);
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
 
@@ -261,80 +271,6 @@ namespace CCFlow.WF.WorkOpt
             this.Pub1.AddULEnd();
             this.Pub1.AddFieldSetEnd();
             return;
-        }
-
-        public void PrintDoc(BillTemplate en)
-        {
-            Node nd = new Node(this.FK_Node);
-            Work wk = nd.HisWork;
-            wk.OID = this.WorkID;
-            wk.Retrieve();
-            string msg = "";
-            string file = DataType.CurrentYear + "_" + WebUser.FK_Dept + "_" + en.No + "_" + this.WorkID + ".doc";
-            BP.Pub.RTFEngine rtf = new BP.Pub.RTFEngine();
-            //        Works works;
-            string[] paths;
-            string path;
-            try
-            {
-                #region 生成单据
-                rtf.HisEns.Clear();
-                rtf.EnsDataDtls.Clear();
-                rtf.AddEn(wk);
-                rtf.ensStrs += ".ND" + wk.NodeID;
-                ArrayList al = wk.GetDtlsDatasOfArrayList();
-                foreach (Entities ens in al)
-                    rtf.AddDtlEns(ens);
-
-                BP.Sys.GEEntity ge = new BP.Sys.GEEntity("ND" + int.Parse(nd.FK_Flow) + "Rpt");
-                ge.Copy(wk);
-                rtf.HisGEEntity = ge;
-
-                paths = file.Split('_');
-                path = paths[0] + "/" + paths[1] + "/" + paths[2] + "/";
-
-                path = BP.WF.Glo.FlowFileBill + DataType.CurrentYear + "\\" + WebUser.FK_Dept + "\\" + en.No + "\\";
-                if (System.IO.Directory.Exists(path) == false)
-                    System.IO.Directory.CreateDirectory(path);
-                // rtf.ensStrs = ".ND";
-                rtf.MakeDoc(en.Url + ".rtf",
-                    path, file, en.ReplaceVal, false);
-                #endregion
-
-                #region 转化成pdf.
-                if (en.HisBillFileType == BillFileType.PDF)
-                {
-                    string rtfPath = path + file;
-                    string pdfPath = rtfPath.Replace(".doc", ".pdf");
-                    try
-                    {
-                        BP.WF.Glo.Rtf2PDF(rtfPath, pdfPath);
-
-                        file = file.Replace(".doc", ".pdf");
-                        System.IO.File.Delete(rtfPath);
-
-                        file = file.Replace(".doc", ".pdf");
-                        //System.IO.File.Delete(rtfPath);
-                    }
-                    catch (Exception ex)
-                    {
-                        msg += ex.Message;
-                    }
-                }
-                #endregion
-
-                string url = BP.WF.Glo.CCFlowAppPath + "DataUser/Bill/" + DataType.CurrentYear + "/" + WebUser.FK_Dept + "/" + en.No + "/" + file;
-                this.Response.Redirect(url, false);
-                //         BP.Sys.PubClass.OpenWordDocV2( path+file, en.Name);
-            }
-            catch (Exception ex)
-            {
-                BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
-                dir.Do();
-                path = BP.WF.Glo.FlowFileBill + DataType.CurrentYear + "\\" + WebUser.FK_Dept + "\\" + en.No + "\\";
-                string msgErr = "@生成单据失败，请让管理员检查目录设置 [" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
-                throw new Exception(msgErr + "@其它信息:" + ex.Message);
-            }
         }
     }
 

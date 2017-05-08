@@ -56,6 +56,8 @@ namespace BP.WF.HttpHandler
 
                 //记录错误日志以方便分析
                 BP.DA.Log.DebugWriteError(err);
+
+                ctrl.context.Response.Write(err);
             }
         }
 

@@ -91,14 +91,14 @@
 
                         if (isBatchStart == "1")
                         //row += "<td><a href='" + batchUrl + "'  target=_blank >批量发起</a></td>";
-                            row += "<td><a href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + name + "</a></td>";
+                            row += "<td><a href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>批量发起</a></td>";
                         else
                             row += "<td></td>";
 
                         //row += "<td><a href='" + searchUrl + "' target=_blank >查询</a></td>";
                         //row += "<td><a href='" + groupUrl + "' target=_blank >分析</a></td>";
-                        row += "<td><a href='#' onclick='WinOpenFull(\"" + searchUrl + "\")'>" + name + "</a></td>";
-                        row += "<td><a href='#' onclick='WinOpenFull(\"" + groupUrl + "\")'>" + name + "</a></td>";
+                        row += "<td><a href='#' onclick='WinOpenFull(\"" + searchUrl + "\")'>查询</a></td>";
+                        row += "<td><a href='#' onclick='WinOpenFull(\"" + groupUrl + "\")'>分析</a></td>";
                         row += "</tr>";
                     }
 

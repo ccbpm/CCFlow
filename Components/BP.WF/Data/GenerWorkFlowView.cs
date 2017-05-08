@@ -789,7 +789,7 @@ namespace BP.WF.Data
                 rm = new RefMethod();
                 rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/Back.png";
                 rm.Title = "回滚";
-                rm.ClassMethodName = this.ToString() + ".DoRollback";
+                rm.ClassMethodName = this.ToString() + ".Rollback";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 

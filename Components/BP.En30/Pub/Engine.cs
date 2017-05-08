@@ -160,7 +160,7 @@ namespace BP.Pub
             }
             return rtn.Replace("\n", " \\par ");
         }
-
+        //明细表数据
         private ArrayList _EnsDataDtls = null;
         public ArrayList EnsDataDtls
         {
@@ -169,6 +169,17 @@ namespace BP.Pub
                 if (_EnsDataDtls == null)
                     _EnsDataDtls = new ArrayList();
                 return _EnsDataDtls;
+            }
+        }
+        //多附件数据
+        private Hashtable _EnsDataAths = null;
+        public Hashtable EnsDataAths
+        {
+            get
+            {
+                if (_EnsDataAths == null)
+                    _EnsDataAths = new Hashtable();
+                return _EnsDataAths;
             }
         }
 
@@ -1173,6 +1184,28 @@ namespace BP.Pub
 
                         str = str.Substring(0, beginIdx) + (endIdx < str.Length - 1 ? str.Substring(endIdx + 14) : "");
                     }
+                }
+                #endregion
+
+                #region 多附件
+                foreach (string athObjEnsName in this.EnsDataAths.Keys)
+                {
+                    string athName = "Ath." + athObjEnsName;
+                    string athFilesName = "";
+                    if (str.IndexOf(athName) == -1)
+                        continue;
+
+                    FrmAttachmentDBs athDbs = this.EnsDataAths[athObjEnsName] as FrmAttachmentDBs;
+                    if (athDbs == null)
+                        continue;
+                    foreach (FrmAttachmentDB athDb in athDbs)
+                    {
+                        if (athFilesName.Length > 0)
+                            athFilesName += " ， ";
+
+                        athFilesName += athDb.FileName;
+                    }
+                    str = str.Replace("<" + athName + ">", this.GetCode(athFilesName));
                 }
                 #endregion
 

@@ -142,7 +142,7 @@ namespace CCFlow.WF
             }
             this.Pub2.AddTREnd();
 
-            string url = "MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID="+this.WorkID+"&IsCheckGuide=1";
+            string url = "MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID="+this.WorkID+"&IsCheckGuide=1";
             // 输出数据.
             int idx = 0;
             foreach (DataRow dr in dt.Rows)

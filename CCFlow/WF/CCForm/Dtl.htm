@@ -1335,8 +1335,10 @@
                                 var extDocObj1 = mapExtDocArr1[m].replace('@', '');
                                 //将extDocObj1转换成KeyOfEn
                                 var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) { return val.Name == extDocObj1; });
+
                                 if (extObjAr.length == 0) {
                                     alert("mapExt:" + mapExt.AttrOfOper + "配置有误");
+
                                 } else {
                                     extDocObj1 = extObjAr[0].KeyOfEn;
 

@@ -211,7 +211,7 @@ namespace BP.WF.HttpHandler
                 //判断是否有执行该工作的权限.
                 bool isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
                 if (isCanDo == false)
-                    return "err@您不能执行当年前工作.";
+                    return "err@您不能执行当前工作.";
             }
 
             //当前工作.

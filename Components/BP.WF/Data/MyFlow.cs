@@ -756,7 +756,7 @@ namespace BP.WF.Data
                 rm.Title = "流程轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
                 rm.Icon = Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 this._enMap = map;

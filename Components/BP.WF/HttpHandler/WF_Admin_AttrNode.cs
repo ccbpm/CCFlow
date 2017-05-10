@@ -70,7 +70,6 @@ namespace BP.WF.HttpHandler
         #endregion 考核规则.
 
 
-
         #region 节点属性（列表）的操作
         /// <summary>
         /// 初始化节点属性列表.

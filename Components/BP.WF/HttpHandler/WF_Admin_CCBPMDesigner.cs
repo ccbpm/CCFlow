@@ -529,6 +529,12 @@ namespace BP.WF.HttpHandler
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
 
+            //检查是否是管理员？
+            BP.WF.Port.AdminEmp adminEmp = new Port.AdminEmp();
+            adminEmp.No = emp.No;
+            if (adminEmp.RetrieveFromDBSources() == 0 && emp.No != "admin")
+                return "err@您非管理员用户，不能登录.";
+
             string pass = this.GetValFromFrmByKey("TB_Pass");
             if (emp.CheckPass(pass) == false)
                 return "err@用户名或密码错误.";

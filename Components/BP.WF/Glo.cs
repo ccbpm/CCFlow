@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20170423";
+        public static string Ver = "20170510";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -181,6 +181,16 @@ namespace BP.WF
             string msg = "";
             try
             {
+
+                //规范升级根目录
+                DataTable dttree = DBAccess.RunSQLReturnTable("SELECT No FROM Sys_FormTree WHERE ParentNo='-1' ");
+                if (dttree.Rows.Count == 1)
+                {
+                    DBAccess.RunSQL("UPDATE Sys_FormTree SET ParentNo='1' WHERE ParentNo='0' ");
+                    DBAccess.RunSQL("UPDATE Sys_FormTree SET No='1' WHERE No='0'  ");
+                    DBAccess.RunSQL("UPDATE Sys_FormTree SET ParentNo='0' WHERE No='1'");
+                }
+
                 BP.Sys.MapAttr myattr = new MapAttr();
                 myattr.CheckPhysicsTable();
 

@@ -1578,7 +1578,7 @@ namespace BP.WF.HttpHandler
             fs = new FlowSort(this.No.Replace("F", ""));//传入的编号多出F符号，需要替换掉
             string sameNodeNo = fs.DoCreateSameLevelNode().No;
             fs = new FlowSort(sameNodeNo);
-            fs.Name = this.EnsName;
+            fs.Name = this.Name;
             fs.Update();
             return "F" + fs.No;
         }
@@ -1599,9 +1599,9 @@ namespace BP.WF.HttpHandler
         public string EditFlowSort()
         {
             FlowSort fs = new FlowSort();//传入的编号多出F符号，需要替换掉
-            fs.No = this.No;
+            fs.No = this.No.TrimStart('F');
             fs.RetrieveFromDBSources();
-            fs.Name = this.GetRequestVal("Name");
+            fs.Name = this.Name;
             fs.Update();
             return fs.No;
         }

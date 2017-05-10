@@ -278,7 +278,7 @@ namespace BP.WF.HttpHandler
             #endregion 组织参数.
 
             //获得他的描述,与数据.
-            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData,mdtl, this.RefOID, strs);
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData, mdtl, int.Parse( this.RefPKVal), strs);
             return BP.Tools.Json.DataSetToJson(ds,false);
         }
         /// <summary>
@@ -346,6 +346,9 @@ namespace BP.WF.HttpHandler
             {
                 dtl.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
             }
+
+            //关联主赋值.
+            dtl.RefPK = this.RefPKVal;
 
             if (dtl.OID == 0)
             {

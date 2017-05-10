@@ -722,11 +722,37 @@ var treesObj;   //保存功能区处理对象
 
 $(function () {
     $(".mymask").show();
-    InitUserInfo();
-    treesObj = new FuncTrees("menuTab");
-    treesObj.loadTrees();
-    //定义等待界面的位置
-    $(".mymaskContainer").offset({ left: ($(document).innerWidth() - 120) / 2, top: ($(document).innerHeight() - 50) / 2 });
-    $(".mymask").hide();
+    //InitUserInfo();
+
+    var params = {
+        action: "GetWebUserInfo"
+    };
+
+    ajaxService(params, function (data) {
+        if (data.indexOf('err@') != -1) {
+            alert(data);
+            window.location.href = "Login.htm?DoType=Logout";
+            return;
+        }
+
+        var jdata = $.parseJSON(data);
+        WebUser.No = jdata.WebUser.No;
+        WebUser.Name = jdata.WebUser.Name;
+        WebUser.FK_Dept = jdata.WebUser.FK_Dept;
+        WebUser.SID = jdata.WebUser.SID;
+
+        SetTreeRoot(jdata.AdminEmp);
+
+        treesObj = new FuncTrees("menuTab");
+        treesObj.loadTrees();
+        //定义等待界面的位置
+        $(".mymaskContainer").offset({ left: ($(document).innerWidth() - 120) / 2, top: ($(document).innerHeight() - 50) / 2 });
+        $(".mymask").hide();
+    }, this);
 });
 
+function SetTreeRoot(data) {
+    //functrees[0].Nodes[0].RootParentId = data.RootOfFlow;
+    //functrees[1].Nodes[0].RootParentId = data.RootOfForm;
+    functrees[2].Nodes[0].MethodParams[0].value = data.RootOfDept;
+}

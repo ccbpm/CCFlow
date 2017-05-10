@@ -44,7 +44,8 @@ function checklogin(fCallback, oScope) {
     /// <summary>检测登录信息</summary>
     /// <param name="fCallback" type="Function">检测完之后，要运行的方法</param>
     /// <param name="oScope" type="Object">检测完之后，要运行的方法的参数</param>
-    ajaxService({ action: "LetLogin" }, function (re, scps) {
+    var userNo = WebUser.No;
+    ajaxService({ action: "LetLogin", userNo: userNo }, function (re, scps) {
         if (re == null || re.length == 0) {
             if (scps.length == 2 && scps[0]) {
                 scps[0](scps[1]);

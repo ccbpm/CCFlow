@@ -222,7 +222,7 @@ namespace BP.WF.HttpHandler
                         msg = Do();
                         break;
                     case "LetLogin":    //使管理员登录
-                        msg = WebUser.No == "admin" ? string.Empty : LetAdminLogin("CH", true);
+                        msg = string.IsNullOrWhiteSpace(WebUser.No) ? LetAdminLogin(getUTF8ToString("userNo"), true) : string.Empty;
                         break;
                     default:
                         msg = "err@没有判断的标记:" + this.DoType;
@@ -308,16 +308,43 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("TTYPE", typeof(string));
 
             string parentrootid = context.Request.QueryString["parentrootid"];
+            string newRootId = "";
+
+            //判断AdminEmp
+            AdminEmpExt aext = new AdminEmpExt();
+
+            if (WebUser.No != "admin")
+            {
+                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
+                aemp.No = WebUser.No;
+
+                if (aemp.RetrieveFromDBSources() != 0 && aemp.UserType == 1 && !string.IsNullOrWhiteSpace(aemp.RootOfDept))
+                {
+                    newRootId = aemp.RootOfDept;
+                }
+            }
 
             if (BP.WF.Glo.OSModel == OSModel.OneOne)
             {
                 BP.WF.Port.Dept dept = new BP.WF.Port.Dept();
 
-                if (dept.Retrieve(BP.WF.Port.DeptAttr.ParentNo, parentrootid) == 0)
+                if (!string.IsNullOrWhiteSpace(newRootId))
                 {
-                    dept.No = "-1";
-                    dept.Name = "无部门";
-                    dept.ParentNo = "";
+                    if (dept.Retrieve(BP.WF.Port.DeptAttr.No, newRootId) == 0)
+                    {
+                        dept.No = "-1";
+                        dept.Name = "无部门";
+                        dept.ParentNo = "";
+                    }
+                }
+                else
+                {
+                    if (dept.Retrieve(BP.WF.Port.DeptAttr.ParentNo, parentrootid) == 0)
+                    {
+                        dept.No = "-1";
+                        dept.Name = "无部门";
+                        dept.ParentNo = "";
+                    }
                 }
 
                 dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
@@ -326,11 +353,23 @@ namespace BP.WF.HttpHandler
             {
                 BP.GPM.Dept dept = new BP.GPM.Dept();
 
-                if (dept.Retrieve(BP.GPM.DeptAttr.ParentNo, parentrootid) == 0)
+                if (!string.IsNullOrWhiteSpace(newRootId))
                 {
-                    dept.No = "-1";
-                    dept.Name = "无部门";
-                    dept.ParentNo = "";
+                    if (dept.Retrieve(BP.GPM.DeptAttr.No, newRootId) == 0)
+                    {
+                        dept.No = "-1";
+                        dept.Name = "无部门";
+                        dept.ParentNo = "";
+                    }
+                }
+                else
+                {
+                    if (dept.Retrieve(BP.GPM.DeptAttr.ParentNo, parentrootid) == 0)
+                    {
+                        dept.No = "-1";
+                        dept.Name = "无部门";
+                        dept.ParentNo = "";
+                    }
                 }
 
                 dt.Rows.Add(dept.No, dept.ParentNo, dept.Name, "DEPT");
@@ -863,8 +902,47 @@ namespace BP.WF.HttpHandler
         {
             if (WebUser.No == null)
                 return "err@当前用户没有登录，请登录后再试。";
+
             BP.Port.Emp emp = new BP.Port.Emp(WebUser.No);
-            return emp.ToJson();
+            
+            string re = "{\"WebUser\":" + emp.ToJson() + ",\"AdminEmp\":";
+            AdminEmpExt aext = new AdminEmpExt();
+
+            if (WebUser.No != "admin")
+            {
+                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
+                aemp.No = WebUser.No;
+
+                if(aemp.RetrieveFromDBSources() == 0)
+                {
+                    aext.RootOfDept = "-999";
+                    aext.RootOfFlow = "-999";
+                    aext.RootOfForm = "-999";
+                }
+                else
+                {
+                    aext.RootOfDept = aemp.RootOfDept;
+                    aext.RootOfFlow = "F" + aemp.RootOfFlow;
+                    aext.RootOfForm = aext.RootOfForm;
+                }
+            }
+            else
+            {
+                aext.IsAdmin = true;
+                aext.RootOfDept = "0";
+                aext.RootOfFlow = "F0";
+                aext.RootOfForm = "";
+            }
+
+            return re + LitJson.JsonMapper.ToJson(aext) + "}";
+        }
+
+        public class AdminEmpExt
+        {
+            public bool IsAdmin { get; set; }
+            public string RootOfFlow { get; set; }
+            public string RootOfForm { get; set; }
+            public string RootOfDept { get; set; }
         }
 
         StringBuilder sbJson = new StringBuilder();
@@ -874,7 +952,6 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果Json,流程树</returns>
         public string GetFlowTreeTable()
         {
-
             string sql = @"SELECT 'F'+No NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
                            SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
@@ -912,7 +989,41 @@ namespace BP.WF.HttpHandler
                     drs[0]["PARENTNO"] = "F0";
             }
 
+            //判断AdminEmp
+            AdminEmpExt aext = new AdminEmpExt();
+
+            if (WebUser.No != "admin")
+            {
+                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
+                aemp.No = WebUser.No;
+
+                if (aemp.RetrieveFromDBSources() != 0 && aemp.UserType == 1 && !string.IsNullOrWhiteSpace(aemp.RootOfFlow))
+                {
+                    DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
+                    DataRow newRootRow = dt.Select("NO='F" + aemp.RootOfFlow + "'")[0];
+
+                    newRootRow["PARENTNO"] = "F0";
+                    DataTable newDt = dt.Clone();
+                    newDt.Rows.Add(newRootRow.ItemArray);
+
+                    GenerChildRows(dt, newDt, newRootRow);
+                    dt = newDt;
+                }
+            }
+
             return BP.Tools.Json.DataTableToJson(dt, false);
+        }
+
+        public void GenerChildRows(DataTable dt, DataTable newDt, DataRow parentRow)
+        {
+            DataRow[] rows = dt.Select("PARENTNO='" + parentRow["NO"] + "'");
+
+            foreach(DataRow r in rows)
+            {
+                newDt.Rows.Add(r.ItemArray);
+
+                GenerChildRows(dt, newDt, r);
+            }
         }
 
         public string GetBindingFormsTable()
@@ -951,7 +1062,6 @@ namespace BP.WF.HttpHandler
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
             DataTable dt = ds.Tables[1].Clone();
             DataRow[] rows = ds.Tables[0].Select("NAME='表单库'");
-            DataRow rootRow;
 
             if (rows.Length == 0)
             {
@@ -970,6 +1080,28 @@ namespace BP.WF.HttpHandler
             foreach (DataRow row in ds.Tables[1].Rows)
             {
                 dt.Rows.Add(row.ItemArray);
+            }
+            
+            //判断AdminEmp
+            AdminEmpExt aext = new AdminEmpExt();
+
+            if (WebUser.No != "admin")
+            {
+                BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
+                aemp.No = WebUser.No;
+
+                if (aemp.RetrieveFromDBSources() != 0 && aemp.UserType == 1 && !string.IsNullOrWhiteSpace(aemp.RootOfForm))
+                {
+                    DataRow rootRow = dt.Select("PARENTNO IS NULL")[0];
+                    DataRow newRootRow = dt.Select("NO='" + aemp.RootOfForm + "'")[0];
+
+                    newRootRow["PARENTNO"] = null;
+                    DataTable newDt = dt.Clone();
+                    newDt.Rows.Add(newRootRow.ItemArray);
+
+                    GenerChildRows(dt, newDt, newRootRow);
+                    dt = newDt;
+                }
             }
 
             return BP.Tools.Json.DataTableToJson(dt, false);
@@ -1479,13 +1611,13 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="lang">当前的语言</param>
         /// <returns>成功则为空，有异常时返回异常信息</returns>
-        public string LetAdminLogin(string lang, bool islogin)
+        public string LetAdminLogin(string empNo, bool islogin)
         {
             try
             {
                 if (islogin)
                 {
-                    BP.Port.Emp emp = new BP.Port.Emp("admin");
+                    BP.Port.Emp emp = new BP.Port.Emp(empNo);
                     WebUser.SignInOfGener(emp);
                 }
             }

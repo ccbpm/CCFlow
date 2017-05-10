@@ -461,7 +461,10 @@ namespace BP.WF.HttpHandler
         public string Default_Init()
         {
             //让admin登录
-            if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.No != "admin")
+            if (string.IsNullOrEmpty(BP.Web.WebUser.No))
+                return "url@Login.htm?DoType=Logout";
+
+            if (BP.Web.WebUser.IsAdmin == false)
                 return "url@Login.htm?DoType=Logout";
 
             //如果没有流程表，就执行安装.
@@ -500,7 +503,7 @@ namespace BP.WF.HttpHandler
         public string Login_Init()
         {
             //让admin登录
-            if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.No != "admin")
+            if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.IsAdmin==false )
                 return "url@Login.htm?DoType=Logout";
 
             //如果没有流程表，就执行安装.
@@ -529,11 +532,17 @@ namespace BP.WF.HttpHandler
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
 
-            //检查是否是管理员？
-            BP.WF.Port.AdminEmp adminEmp = new Port.AdminEmp();
-            adminEmp.No = emp.No;
-            if (adminEmp.RetrieveFromDBSources() == 0 && emp.No != "admin")
-                return "err@您非管理员用户，不能登录.";
+            if (emp.No != "admin")
+            {
+                //检查是否是管理员？
+                BP.WF.Port.AdminEmp adminEmp = new Port.AdminEmp();
+                adminEmp.No = emp.No;
+                if (adminEmp.RetrieveFromDBSources() == 0)
+                    return "err@您非管理员用户，不能登录.";
+
+                if (adminEmp.IsAdmin == false)
+                    return "err@您非管理员用户，不能登录.";
+            }
 
             string pass = this.GetValFromFrmByKey("TB_Pass");
             if (emp.CheckPass(pass) == false)
@@ -1399,9 +1408,12 @@ namespace BP.WF.HttpHandler
 
         public string GetFlowSorts()
         {
+            BP.WF.Port.AdminEmp emp = new Port.AdminEmp(BP.Web.WebUser.No);
+
             FlowSorts flowSorts = new FlowSorts();
             flowSorts.RetrieveAll(FlowSortAttr.Idx);
-            return BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, "0");
+
+            return BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, emp.RootOfFlow);
         }
 
         public string DelFlowSort()

@@ -63,7 +63,7 @@ namespace BP.WF.Port
         /// <summary>
         /// 用户状态
         /// </summary>
-        public const string UseType = "UseType";
+        public const string UserType = "UserType";
         /// <summary>
         /// 流程根目录
         /// </summary>
@@ -84,6 +84,34 @@ namespace BP.WF.Port
     public class AdminEmp : EntityNoName
     {
         #region 基本属性
+        public bool IsAdmin
+        {
+            get
+            {
+                if (this.No == "admin")
+                    return true;
+
+                if (this.UserType == 1)
+                    return true;
+
+                return false;
+            }
+        }
+        /// <summary>
+        /// 用户类型
+        /// </summary>
+        public int UserType
+        {
+            get
+            {
+                return this.GetValIntByKey(AdminEmpAttr.UserType);
+            }
+            set
+            {
+                SetValByKey(AdminEmpAttr.UserType, value);
+            }
+        }
+
         public string FK_Dept
         {
             get
@@ -173,7 +201,7 @@ namespace BP.WF.Port
                 map.AddDDLEntities(AdminEmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), false);
 
                 map.AddDDLSysEnum(AdminEmpAttr.UseSta, 3, "用户状态", true, true, AdminEmpAttr.UseSta, "@0=禁用@1=启用");
-                map.AddDDLSysEnum(AdminEmpAttr.UseType, 3, "用户状态", true, true, AdminEmpAttr.UseType, "@0=普通用户@1=管理员用户");
+                map.AddDDLSysEnum(AdminEmpAttr.UserType, 3, "用户状态", true, true, AdminEmpAttr.UserType, "@0=普通用户@1=管理员用户");
 
                 map.AddDDLEntities(AdminEmpAttr.RootOfFlow, null, "流程权限节点", new BP.WF.Template.FlowSorts(), true);
                 map.AddDDLEntities(AdminEmpAttr.RootOfForm, null, "表单权限节点", new BP.WF.Template.SysFormTrees(), true);
@@ -181,7 +209,7 @@ namespace BP.WF.Port
 
                 //查询条件.
                 map.AddSearchAttr(AdminEmpAttr.UseSta);
-                map.AddSearchAttr(AdminEmpAttr.UseType);
+                map.AddSearchAttr(AdminEmpAttr.UserType);
 
                 this._enMap = map;
                 return this._enMap;

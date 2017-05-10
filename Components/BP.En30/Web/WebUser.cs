@@ -714,6 +714,28 @@ namespace BP.Web
             throw new Exception("@err-001 (" + valKey + ")登陆信息丢失。");
         }
         /// <summary>
+        /// 是否是操作员？
+        /// </summary>
+        public static bool IsAdmin
+        {
+            get
+            {
+                if (BP.Web.WebUser.No == "admin")
+                    return true;
+                try
+                {
+                    string sql = "SELECT * FROM WF_Emp WHERE UserType=1 AND No='"+WebUser.No+"'";
+                    if (DBAccess.RunSQLReturnTable(sql).Rows.Count == 1)
+                        return true;
+                    return false;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+        /// <summary>
         /// 编号
         /// </summary>
         public static string No

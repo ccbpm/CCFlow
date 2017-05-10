@@ -111,7 +111,6 @@ namespace BP.WF.Port
                 SetValByKey(AdminEmpAttr.UserType, value);
             }
         }
-
         public string FK_Dept
         {
             get
@@ -127,6 +126,9 @@ namespace BP.WF.Port
         {
             get
             {
+                if (this.No == "admin")
+                    return "0";
+
                 return this.GetValStringByKey(AdminEmpAttr.RootOfDept);
             }
             set
@@ -138,6 +140,9 @@ namespace BP.WF.Port
         {
             get
             {
+                if (this.No == "admin")
+                    return "0";
+
                 return this.GetValStrByKey(AdminEmpAttr.RootOfFlow);
             }
             set
@@ -149,6 +154,9 @@ namespace BP.WF.Port
         {
             get
             {
+                if (this.No == "admin")
+                    return "0";
+
                 return this.GetValStringByKey(AdminEmpAttr.RootOfForm);
             }
             set
@@ -218,6 +226,17 @@ namespace BP.WF.Port
         #endregion
 
         #region 方法
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (this.No == "admin")
+            {
+                this.RootOfDept = "0";
+                this.RootOfFlow = "0";
+                this.RootOfForm = "0";
+            }
+
+            return base.beforeUpdateInsertAction();
+        }
         #endregion
     }
 	/// <summary>

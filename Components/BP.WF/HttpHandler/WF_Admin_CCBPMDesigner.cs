@@ -1408,11 +1408,10 @@ namespace BP.WF.HttpHandler
 
         public string GetFlowSorts()
         {
-            BP.WF.Port.AdminEmp emp = new Port.AdminEmp(BP.Web.WebUser.No);
-
             FlowSorts flowSorts = new FlowSorts();
             flowSorts.RetrieveAll(FlowSortAttr.Idx);
 
+            BP.WF.Port.AdminEmp emp = new Port.AdminEmp(BP.Web.WebUser.No);
             return BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, emp.RootOfFlow);
         }
 

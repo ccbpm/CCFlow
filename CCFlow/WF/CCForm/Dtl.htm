@@ -622,7 +622,7 @@
             <div class="portlet-body " id="" style="overflow: auto;">
                 <div class="tab-content" style="margin: 4px 0px;">
                     <div class="tab-pane active portlet_tab flowLists" id="dtlDiv">
-                        <div id="" style="min-height: 520px; overflow: auto;">
+                        <div id="" style=" overflow: auto;">
                             <table class="table wupop" data-data="true">
                                 <thead></thead>
                                 <tbody></tbody>
@@ -893,6 +893,17 @@
                     //循环  KEYOFEN
                     //替换@变量
                     //处理 +-*%
+
+                    //直接替换
+
+                    /*if (mapExt.Doc.indexOf('*') > 0 || mapExt.Doc.indexOf('+') > 0 || mapExt.Doc.indexOf('-') > 0 || mapExt.Doc.indexOf('/') > 0 || mapExt.Doc.indexOf('%') > 0) {
+                        //替换  MAPATTR
+                        $.each(workNodeData.Sys_MapAttr, function (i, obj) {
+                            if (mapExt.Doc.indexOf('@'+obj.KeyOfEn) >= 0) {
+
+                            }
+                        })
+                    }*/
                     if (mapExt.Doc != undefined && mapExt.Doc != '') {
                         if (mapExt.Doc.indexOf('*')) {
                             var mapExtDocArr1 = mapExt.Doc.split('*');

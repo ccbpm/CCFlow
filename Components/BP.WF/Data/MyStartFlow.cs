@@ -2,15 +2,15 @@
 using System.Data;
 using BP.DA;
 using BP.WF;
-using BP.Port ;
+using BP.Port;
 using BP.Sys;
 using BP.En;
 
 namespace BP.WF.Data
 {
-	/// <summary>
+    /// <summary>
     /// 我发起的流程
-	/// </summary>
+    /// </summary>
     public class MyStartFlowAttr
     {
         #region 基本属性
@@ -164,12 +164,12 @@ namespace BP.WF.Data
         public const string GUID = "GUID";
         #endregion
     }
-	/// <summary>
+    /// <summary>
     /// 我发起的流程
-	/// </summary>
-	public class MyStartFlow : Entity
-	{	
-		#region 基本属性
+    /// </summary>
+    public class MyStartFlow : Entity
+    {
+        #region 基本属性
         public override UAC HisUAC
         {
             get
@@ -203,20 +203,20 @@ namespace BP.WF.Data
                 SetValByKey(MyStartFlowAttr.FlowNote, value);
             }
         }
-		/// <summary>
-		/// 工作流程编号
-		/// </summary>
-		public string  FK_Flow
-		{
-			get
-			{
-				return this.GetValStrByKey(MyStartFlowAttr.FK_Flow);
-			}
-			set
-			{
-				SetValByKey(MyStartFlowAttr.FK_Flow,value);
-			}
-		}
+        /// <summary>
+        /// 工作流程编号
+        /// </summary>
+        public string FK_Flow
+        {
+            get
+            {
+                return this.GetValStrByKey(MyStartFlowAttr.FK_Flow);
+            }
+            set
+            {
+                SetValByKey(MyStartFlowAttr.FK_Flow, value);
+            }
+        }
         /// <summary>
         /// BillNo
         /// </summary>
@@ -332,31 +332,31 @@ namespace BP.WF.Data
         /// <summary>
         /// 部门编号
         /// </summary>
-		public string  FK_Dept
-		{
-			get
-			{
-				return this.GetValStrByKey(MyStartFlowAttr.FK_Dept);
-			}
-			set
-			{
-				SetValByKey(MyStartFlowAttr.FK_Dept,value);
-			}
-		}
-		/// <summary>
-		/// 标题
-		/// </summary>
-		public string  Title
-		{
-			get
-			{
-				return this.GetValStrByKey(MyStartFlowAttr.Title);
-			}
-			set
-			{
-				SetValByKey(MyStartFlowAttr.Title,value);
-			}
-		}
+        public string FK_Dept
+        {
+            get
+            {
+                return this.GetValStrByKey(MyStartFlowAttr.FK_Dept);
+            }
+            set
+            {
+                SetValByKey(MyStartFlowAttr.FK_Dept, value);
+            }
+        }
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title
+        {
+            get
+            {
+                return this.GetValStrByKey(MyStartFlowAttr.Title);
+            }
+            set
+            {
+                SetValByKey(MyStartFlowAttr.Title, value);
+            }
+        }
         /// <summary>
         /// 客户编号
         /// </summary>
@@ -385,20 +385,20 @@ namespace BP.WF.Data
                 SetValByKey(MyStartFlowAttr.GuestName, value);
             }
         }
-		/// <summary>
-		/// 产生时间
-		/// </summary>
-		public string  RDT
-		{
-			get
-			{
-				return this.GetValStrByKey(MyStartFlowAttr.RDT);
-			}
-			set
-			{
-				SetValByKey(MyStartFlowAttr.RDT,value);
-			}
-		}
+        /// <summary>
+        /// 产生时间
+        /// </summary>
+        public string RDT
+        {
+            get
+            {
+                return this.GetValStrByKey(MyStartFlowAttr.RDT);
+            }
+            set
+            {
+                SetValByKey(MyStartFlowAttr.RDT, value);
+            }
+        }
         /// <summary>
         /// 节点应完成时间
         /// </summary>
@@ -427,20 +427,20 @@ namespace BP.WF.Data
                 SetValByKey(MyStartFlowAttr.SDTOfFlow, value);
             }
         }
-		/// <summary>
-		/// 流程ID
-		/// </summary>
+        /// <summary>
+        /// 流程ID
+        /// </summary>
         public Int64 WorkID
-		{
-			get
-			{
+        {
+            get
+            {
                 return this.GetValInt64ByKey(MyStartFlowAttr.WorkID);
-			}
-			set
-			{
-				SetValByKey(MyStartFlowAttr.WorkID,value);
-			}
-		}
+            }
+            set
+            {
+                SetValByKey(MyStartFlowAttr.WorkID, value);
+            }
+        }
         /// <summary>
         /// 主线程ID
         /// </summary>
@@ -567,9 +567,9 @@ namespace BP.WF.Data
                 this.SetValByKey(MyStartFlowAttr.NodeName, value);
             }
         }
-		/// <summary>
-		/// 当前工作到的节点
-		/// </summary>
+        /// <summary>
+        /// 当前工作到的节点
+        /// </summary>
         public int FK_Node
         {
             get
@@ -582,8 +582,8 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-		/// 工作流程状态
-		/// </summary>
+        /// 工作流程状态
+        /// </summary>
         public WFState WFState
         {
             get
@@ -621,7 +621,7 @@ namespace BP.WF.Data
             get
             {
                 BP.WF.WFState ws = (WFState)this.WFState;
-                switch(ws)
+                switch (ws)
                 {
                     case WF.WFState.Complete:
                         return "已完成";
@@ -650,7 +650,7 @@ namespace BP.WF.Data
                 SetValByKey(MyStartFlowAttr.GUID, value);
             }
         }
-		#endregion
+        #endregion
 
         #region 参数属性.
         public string Paras_ToNodes
@@ -686,11 +686,11 @@ namespace BP.WF.Data
 
         #region 构造函数
         /// <summary>
-		/// 产生的工作流程
-		/// </summary>
-		public MyStartFlow()
-		{
-		}
+        /// 产生的工作流程
+        /// </summary>
+        public MyStartFlow()
+        {
+        }
         public MyStartFlow(Int64 workId)
         {
             QueryObject qo = new QueryObject(this);
@@ -702,11 +702,11 @@ namespace BP.WF.Data
         /// 执行修复
         /// </summary>
         public void DoRepair()
-        { 
+        {
         }
-		/// <summary>
-		/// 重写基类方法
-		/// </summary>
+        /// <summary>
+        /// 重写基类方法
+        /// </summary>
         public override Map EnMap
         {
             get
@@ -719,10 +719,10 @@ namespace BP.WF.Data
                 map.Java_SetEnType(EnType.View);
 
                 map.AddTBInt(MyStartFlowAttr.FID, 0, "FID", false, false);
-
+                map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
                 map.AddDDLEntities(MyStartFlowAttr.FK_Flow, null, "流程", new Flows(), false);
                 map.AddTBString(MyStartFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
-
+                map.AddTBInt(MyStartFlowAttr.FK_Node, 0, "节点编号", false, false);
                 map.AddTBString(MyStartFlowAttr.Title, null, "标题", true, false, 0, 100, 10, true);
 
                 map.AddDDLSysEnum(MyStartFlowAttr.WFSta, 0, "状态", true, false, MyStartFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
@@ -760,53 +760,78 @@ namespace BP.WF.Data
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "打开表单";
+                rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
+                rm.Icon = Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
-		#endregion 
+        #endregion
 
-		#region 执行诊断
+        #region 执行诊断
         public string DoTrack()
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
             return Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
         }
-		#endregion
-	}
-	/// <summary>
+        /// <summary>
+        /// 打开最后一个节点表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoOpenLastForm()
+        {
+            Paras pss = new Paras();
+            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
+            pss.Add("ActionType", (int)BP.WF.ActionType.Forward);
+            pss.Add("WorkID", this.WorkID);
+            DataTable dt = DBAccess.RunSQLReturnTable(pss);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                string myPk = dt.Rows[0][0].ToString();
+                return Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+            }
+            return Glo.CCFlowAppPath + "WF/CCForm/Frm.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" + this.FK_Node + "&ReadOnly=1&IsEdit=0";
+        }
+        #endregion
+    }
+    /// <summary>
     /// 我发起的流程s
-	/// </summary>
-	public class MyStartFlows : Entities
-	{
-		/// <summary>
-		/// 根据工作流程,工作人员 ID 查询出来他当前的能做的工作.
-		/// </summary>
-		/// <param name="flowNo">流程编号</param>
-		/// <param name="empId">工作人员ID</param>
-		/// <returns></returns>
-		public static DataTable QuByFlowAndEmp(string flowNo, int empId)
-		{
-			string sql="SELECT a.WorkID FROM WF_MyStartFlow a, WF_GenerWorkerlist b WHERE a.WorkID=b.WorkID   AND b.FK_Node=a.FK_Node  AND b.FK_Emp='"+empId.ToString()+"' AND a.FK_Flow='"+flowNo+"'";
-			return DBAccess.RunSQLReturnTable(sql);
-		}
+    /// </summary>
+    public class MyStartFlows : Entities
+    {
+        /// <summary>
+        /// 根据工作流程,工作人员 ID 查询出来他当前的能做的工作.
+        /// </summary>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="empId">工作人员ID</param>
+        /// <returns></returns>
+        public static DataTable QuByFlowAndEmp(string flowNo, int empId)
+        {
+            string sql = "SELECT a.WorkID FROM WF_MyStartFlow a, WF_GenerWorkerlist b WHERE a.WorkID=b.WorkID   AND b.FK_Node=a.FK_Node  AND b.FK_Emp='" + empId.ToString() + "' AND a.FK_Flow='" + flowNo + "'";
+            return DBAccess.RunSQLReturnTable(sql);
+        }
 
-		#region 方法
-		/// <summary>
-		/// 得到它的 Entity 
-		/// </summary>
-		public override Entity GetNewEntity
-		{
-			get
-			{			 
-				return new MyStartFlow();
-			}
-		}
-		/// <summary>
-		/// 我发起的流程集合
-		/// </summary>
-		public MyStartFlows(){}
-		#endregion
+        #region 方法
+        /// <summary>
+        /// 得到它的 Entity 
+        /// </summary>
+        public override Entity GetNewEntity
+        {
+            get
+            {
+                return new MyStartFlow();
+            }
+        }
+        /// <summary>
+        /// 我发起的流程集合
+        /// </summary>
+        public MyStartFlows() { }
+        #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
         /// <summary>
@@ -831,6 +856,6 @@ namespace BP.WF.Data
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-	}
-	
+    }
+
 }

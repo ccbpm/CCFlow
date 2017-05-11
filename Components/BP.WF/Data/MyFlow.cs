@@ -720,10 +720,10 @@ namespace BP.WF.Data
 
                 map.AddTBIntPK(MyFlowAttr.WorkID, 0, "WorkID", false, false);
                 map.AddTBInt(MyFlowAttr.FID, 0, "FID", false, false);
-
+                map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
                 map.AddTBString(MyFlowAttr.Title, null, "流程标题", true, false, 0, 100, 10, true);
                 map.AddDDLEntities(MyFlowAttr.FK_Flow, null, "流程名称", new Flows(), false);
-
+                map.AddTBInt(MyFlowAttr.FK_Node, 0, "节点编号", false, false);
                 //map.AddDDLEntities(MyFlowAttr.FK_Dept, null, "发起人部门", new BP.Port.Depts(), false);
                 //map.AddTBString(MyFlowAttr.Starter, null, "发起人编号", true, false, 0, 30, 10);
                 //map.AddTBString(MyFlowAttr.StarterName, null, "发起人名称", true, false, 0, 30, 10);
@@ -759,6 +759,13 @@ namespace BP.WF.Data
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "打开表单";
+                rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
+                rm.Icon = Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -770,6 +777,24 @@ namespace BP.WF.Data
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
             return Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+        }
+        /// <summary>
+        /// 打开最后一个节点表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoOpenLastForm()
+        {
+            Paras pss = new Paras();
+            pss.SQL = "SELECT MYPK FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID ORDER BY RDT DESC";
+            pss.Add("ActionType", (int)BP.WF.ActionType.Forward);
+            pss.Add("WorkID", this.WorkID);
+            DataTable dt = DBAccess.RunSQLReturnTable(pss);
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                string myPk = dt.Rows[0][0].ToString();
+                return Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+            }
+            return Glo.CCFlowAppPath + "WF/CCForm/Frm.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" + this.FK_Node + "&ReadOnly=1&IsEdit=0";
         }
 		#endregion
 	}

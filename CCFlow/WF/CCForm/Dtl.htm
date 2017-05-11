@@ -22,6 +22,20 @@
         var hjl = new Array(); //合计列名称集合
         var mapExt; //mapExt扩展
         var isEditable;
+
+        //页面数据
+        var pageData = {
+            DBDtl: [{ OID: 0, RowData: {} }],
+            updateRowIndex: -1,//正在更新的列索引
+            /*
+            count：需要保存的行数
+            overCount：已经保存完的行数
+            saveAll:是否保存所有行
+            rowIndex 只有当 saveAll=false 时，设置保存行的序号  从0开始
+            */
+            saveRowCurrent: { count: 0, overCount: 0, saveAll: false, rowIndex: 0 },
+            currentRowIndex: -1,//如果该值有改变，就表明需要存盘，入库  -1 表示还未做操作  光标所在行
+        };
         /* ESC Key Down */
         function Esc() {
             if (event.keyCode == 27)
@@ -59,76 +73,65 @@
                 }
             });
         }
-        var saveFlag = true;
-        var updateRowIndex;
-        //function SaveRow(index) {
-        //    var row = $('#dg').datagrid('getData').rows[Number(index)]; // $('#dg').datagrid('selectRow', { index: rowIndex });
-        //    console.info(row);
-        //    row.DoType = "Dtl_SaveRow";
-        //    row.FK_MapDtl = GetQueryString("EnsName");
-        //    //row.FK_MapData = "ND101";
-        //    row.RefPKVal = GetQueryString("RefPKVal");
-        //    updateRowIndex = index;
-        //    AjaxServiceGener(row, SaveRowAfter, this);
-        //}
-
+        
+        //保存数据
         function saveRow(index) {
-            saveRowCurrent.count = 1;
-            saveRowCurrent.overCount = 0;
+            pageData.saveRowCurrent.count = 1;
+            pageData.saveRowCurrent.overCount = 0;
             //获取序号的值
-            saveRowCurrent.rowIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
-
-            $(index).attr('enable', false);
-            $(index).css('background', 'gray');
-
-            var row = $(index).parent().parent().data().data; // $('#dg').datagrid('selectRow', { index: rowIndex });
-            row.DoType = "Dtl_SaveRow";
-            row.FK_MapDtl = GetQueryString("EnsName");
+            pageData.saveRowCurrent.rowIndex = index;
+            
+            var trData = $($('table tbody tr')[index]).data().data;
+            var rowData = trData;
+            rowData.DoType = "Dtl_SaveRow";
+            rowData.FK_MapDtl = GetQueryString("EnsName");
             //row.FK_MapData = "ND101";
-            row.RefPKVal = GetQueryString("RefPKVal");
-            updateRowIndex = index;
-            AjaxServiceGener(row, SaveRowAfter, this);
+            rowData.RefPKVal = GetQueryString("RefPKVal");
+            var dbDataRow= $.grep(pageData.DBDtl, function (val) { return val.OID == rowData.OID; });
+            if (rowData.OID != 0 && dbDataRow.length == 1 && JSON.stringify(dbDataRow[0].RowData) == JSON.stringify(trData)) {
+                //值未改变，无需存盘
+                return;
+            } else {
+                AjaxServiceGener(rowData, SaveRowAfter, this);
+            }
         }
-
-        /*
-        count：需要保存的行数
-        overCount：已经保存完的行数
-        saveAll:是否保存所有行
-        rowIndex 只有当 saveAll=false 时，设置保存行的序号  从0开始
-        */
-        var saveRowCurrent = { count: 0, overCount: 0, saveAll: false, rowIndex: 0 };
-        //保存所有行
-        function saveAllRow() {
-            $('#Message').html('数据正在保存，请稍后');
-            $('#dtlDiv').hide();
-            $('#Message').show();
-            $('#saveBtn').attr('enable', 'true');
-            $('#saveBtn').css('background', 'gray');
-            //循环保存所有行
-            var trs = $('#dtlDiv div table tbody tr');
-            saveRowCurrent.count = trs.length;
-            saveRowCurrent.overCount = 0;
-            saveRowCurrent.saveAll = true;
-            saveRowCurrent.rowIndex = 0;
-
-            $.each(trs, function (i, trObj) {
-                var row = $(trObj).data().data; // $('#dg').datagrid('selectRow', { index: rowIndex });
-                row.DoType = "Dtl_SaveRow";
-                row.FK_MapDtl = GetQueryString("EnsName");
-                //row.FK_MapData = "ND101";
-                row.RefPKVal = GetQueryString("RefPKVal");
-                AjaxServiceGener(row, SaveRowAfter, this);
-            });
-        }
-
+        
+        //保存后执行
         function SaveRowAfter(data) {
-            saveRowCurrent.overCount = saveRowCurrent.overCount + 1;
+            pageData.saveRowCurrent.overCount =pageData.saveRowCurrent.overCount + 1;
             if (data.indexOf('err') > -1) {
                 alert('保存失败！' + data);
             }
             
+            var returnRowData=JSON.parse(data);
+            //更新表格的DATA
+            var updateTr =$( $('table tbody tr')[pageData.saveRowCurrent.rowIndex]);
+            //更新 pageData.DBDTL
+            var updateData = $.grep(pageData.DBDtl, function (val) { return val.OID == returnRowData.OID });
+            if (updateData.length == 0) {//新增的  直接PUSH
+                var rowData = {};
+                $.each(workNodeData.Sys_MapAttr, function (i, mapAttr) {
+                    rowData[mapAttr.KeyOfEn] = returnRowData[mapAttr.KeyOfEn];
+                });
+                pageData.DBDtl.push({ OID: rowData.OID, RowData: rowData });
+
+                updateTr.data().data = rowData;
+            } else {
+                for (var obj in updateData[0].RowData) {//更新值
+                    updateData[0].RowData[obj] = returnRowData[obj];
+                }
+                updateTr.data().data = updateData[0].RowData;
+            }
+
+            //保存后刷新行数据
+            setTdDataByTrData(pageData.saveRowCurrent.rowIndex);
+
+            pageData.saveRowCurrent.rowIndex = -1;
+            return;
+            
+            
             //数据保存完后 刷新页面数据
-            if (saveRowCurrent.count == saveRowCurrent.overCount) {
+            if (pageData.saveRowCurrent.count == pageData.saveRowCurrent.overCount) {
                 InitPage();
                 if (saveRowCurrent.saveAll) { //保存所有的
                     $('#saveBtn').attr('enable', 'true');
@@ -150,14 +153,10 @@
                 $('#Message').html('数据已保存完成');
                 $('#dtlDiv').show();
                 $('#Message').hide();
-                //$('#dg').datagrid('updateRow', { index: updateRowIndex, row: data });
-
-                //$('#dg').datagrid('refreshRow', updateRowIndex);
             }
         }
 
         function insertRow() {
-            
             if ($('#dtlDiv div table tbody tr').length == 1 ) {
                 var firstTr = $('#dtlDiv div table tbody tr')[0];
                 if ($(firstTr).data().data == undefined) {
@@ -196,7 +195,7 @@
                 }
             });
             insertTr.append($('<td><input type="button" onclick="deleteRow(this)" value="删除" style=""></td>'));
-            insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
+            //insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
             //直接复制上面的即可
 
             var trData = { data: {} };
@@ -215,6 +214,8 @@
             $('#dtlDiv div table tbody').append(insertTr);
             AfterBindEn_DealMapExt(insertTr);
         }
+
+
 
         //初始化数据.
         function InitPage() {
@@ -240,15 +241,11 @@
                 url: Handler + "?DoType=Dtl_Init&FK_Node=" + fk_node + "&EnsName=" + ensName + "&RefPKVal=" + refPKVal + "&FID=" + fid + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
                         $("#Msg").html(data);
                         return;
                     }
-
-                    //$("#Msg").html(data);
-
                     //解析.
                     data = JSON.parse(data);
 
@@ -270,12 +267,13 @@
                         //制造表头
                         //添加序号列
                         workNodeData = data;
-                        var snTh = $('<th data-coltype="SN">序号</th>');
+                        var snTh = $('<th data-coltype="SN" style="height;60px;">序号</th>');
                         threadTr.append(snTh);
                         $.each(sys_mapAttr, function (i, mapAttrObj) {
                             var th = $('<th></th>');
                             th.text(mapAttrObj.Name);
                             th.data(mapAttrObj);
+                            th.css('min-width',mapAttrObj.UIWidth);
                             th.data().colname = mapAttrObj.KeyOfEn;
                             if (mapAttrObj.UIVisible == 1) {
                                 threadTr.append(th);
@@ -308,12 +306,18 @@
                         };
                         delTh.attr('title', "title");
                         delTh.data(delThData);
-                        threadTr.append(delTh);
+                        //threadTr.append(delTh);
 
                         $('#dtlDiv div table thead').append(threadTr);
                     }
                     //初始化表数据
                     var dbDtlTmp = { DTObjs: dbDtl };
+
+                    //为PageData.DBDtl 赋值
+                    $.each(dbDtl, function (i, objRow) {
+                        pageData.DBDtl.push({ OID: objRow.OID, RowData: objRow });
+                    })
+
                     var dtlDataOption = {
                         IsShowAll:true,
                         PageSize: 10,
@@ -383,78 +387,76 @@
                     var IsShowTitle = sys_MapDtl[0].IsShowTitle == 1 ? true : false; //是否显示标题
                     var IsView = sys_MapDtl[0].IsView == 1 ? true : false; //是否可见
                     var titles = IsShowTitle ? sys_MapDtl[0].Name : '';
+                   
+                }
+            });
+        }
 
-                    //设置表格信息
-                    $('#dg').datagrid({
-                        //url: '../Test/GetDataFormSql.ashx',
-                        //width: 900,//sys_MapDtl[0].FrmW,
-                        //height: 500,//sys_MapDtl[0].FrmH,
-                        title: '', //titles,
-                        rownumbers: IsShowIdx,
-                        nowrap: false, //是否单行显示
-                        fitColumns: true,
-                        showFooter: IsShowSum,
-                        fit: true
-                    });
+        //根据表格中编辑过的值，设置表格TR 的 data
+        function setTrDataByData(rowIndex) {
+            var tr = $($('table tbody tr')[rowIndex]);
+            var tdArr = tr.children();
+            var trData = tr.data().data;
+            //input text
+            //select
+            //循环  td  
+            $.each(tdArr, function (i, tdObj) {
+                tdObj = $(tdObj);
+                var text = tdObj.find('input[type=text]');
+                var select = tdObj.find('select');
 
-                    //列名称数组
-                    var cols = new Array();
-                    for (var i = 0; i < sys_mapAttr.length; i++) {
-                        var clsJson = gridTitle(sys_mapAttr[i], data); //
-                        cols.push(clsJson);
+                var keyOfEn = '', value = '';
+                if (text.length == 1) {
+                    var name = text.attr('name');
+                    if (name.indexOf('TB_') == 0) {
+                        keyOfEn = name.substring(3);
+                        value = text.val();
                     }
-                    //删除按钮
-                    if (!IsReadonly && IsDelete) {
-                        cols.push({ field: 'operation', title: '操作', width: 100,
-                            formatter: function (value, rec, index) {
-                                if (isEmpty(rec)) {
-                                    return '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">X</a>';
-                                }
-                                
-                                if (rec.operation != 0) {
-                                    return '<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:\'icon-remove\'" onclick="deleteRow(' + index + ')">删除</a>';
-                                }
-                            }
-                        });
+                } else if (select.length == 1) {
+                    var name = select.attr('name');
+                    if (name.indexOf('DDL_') == 0) {
+                        keyOfEn = name.substring(4);
+                        value = select.val();
                     }
-                    function isEmpty(obj) {
-                        for (var name in obj) {
-                            return false;
-                        }
-                        return true;
-                    };
-                    //新增按钮
-                    if (IsReadonly || !IsInsert) {
-                        $("#append").hide();
+                }
+                //
+                if (trData[keyOfEn] != undefined) {
+                    trData[keyOfEn] = value;
+                }
+            });
+
+            tr.data().data = trData;
+        }
+
+        //根据表格的DATA 更新 编辑的值
+        function setTdDataByTrData(rowIndex) {
+            var tr = $($('table tbody tr')[rowIndex]);
+            var tdArr = tr.children();
+            var trData = tr.data().data;
+            //input text
+            //select
+            //循环  td  
+            $.each(tdArr, function (i, tdObj) {
+                tdObj = $(tdObj);
+                var text = tdObj.find('input[type=text]');
+                var select = tdObj.find('select');
+
+                var keyOfEn = '', value = '';
+                if (text.length == 1) {
+                    var name = text.attr('name');
+                    if (name.indexOf('TB_') == 0) {
+                        keyOfEn = name.substring(3);
+                        value = text.val();
+
+                        text.val(trData[keyOfEn])
                     }
-
-                    //更新操作
-                    if (IsReadonly || !IsUpdate) {//IsReadonly || !IsUpdate
-                        //$('#dg').datagrid('disableEditing');
-                        //$('#dg').datagrid('disableEditing');
-                        isEditable = false;
-                    } else {
-                        isEditable = true;
+                } else if (select.length == 1) {
+                    var name = select.attr('name');
+                    if (name.indexOf('DDL_') == 0) {
+                        keyOfEn = name.substring(4);
+                        
+                        select.val(trData[keyOfEn]);
                     }
-
-                    //更新列名称
-                    $('#dg').datagrid({
-                        columns: [cols]
-                    });
-
-                    //拼装数据+拼接合计  hjl IsSum = 1
-                    footSum(dbDtl);
-                    $('#dg').datagrid({
-                        onBeginEdit: function (rowIndex) {
-                            autoFull(rowIndex);
-                        },
-                        onAfterEdit: function (rowIndex) {
-                            SaveRow(rowIndex);
-                        },
-                        onClickCell: function (rowIndex, field, value) {
-                            fieldMM = field;
-                        }
-                    });
                 }
             });
         }
@@ -590,40 +592,32 @@
             eleHtml.val(defValue);
             //eleHtml = $('<div>' + eleHtml + '</div>');
             //eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
+            eleHtml.width(mapAttr.UIWidth);
+
+            eleHtml.bind('focus', blurEvent);
             return eleHtml;
         }
 
+        //获取焦点时执行  改变currentRowIndex 再确定是否需要 存盘  获取焦点  上一行存盘 foucs
+        function blurEvent(obj) {
+            var thisRowIndex=parseInt($($(obj.target).parent().parent().children()[0]).text()) - 1;
+            if (pageData.currentRowIndex != thisRowIndex) {//改变编辑行，存盘
+                
+                if (pageData.currentRowIndex != -1) {
+                    console.log("存盘" + pageData.currentRowIndex)
+                    setTrDataByData(pageData.currentRowIndex);
+                    saveRow(pageData.currentRowIndex);
+                }
+                pageData.currentRowIndex = thisRowIndex;
+            }
+        }
      </script>
+
 </head>
 <body>
-<div id="Msg"></div>
-<!--<table id="dg" class="easyui-datagrid" title="" style="width:700px;height:auto"
-			data-options="
-				iconCls: 'icon-edit',
-                rownumbers: true,
-				singleSelect: true,
-				toolbar: '#tb',
-				url: '',
-				method: 'get',
-				onClickRow: onClickRow,
-                onEndEdit: onEndEdit
-			">
-		<thead>
-		</thead>
-</table>-->
-	<!--<div id="tb" style="height:auto">-->
-		<!--<a href="javascript:void(0)" id="append" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">新增</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>-->
-		<!--<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除行</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存行</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销行</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">获取改变行</a>-->
-	<!--</div>-->
-
-
+    <div id="Msg"></div>
     <!--杨玉慧-->
     <input type="button" value="新增" id="insertBtn" onclick="insertRow()">
-    <input type="button" value="保存" id="saveBtn" onclick="saveAllRow()" />
     <div id="">
         <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
             <div class="portlet-body " id="" style="overflow: auto;">
@@ -645,70 +639,18 @@
     </div>
 	
 	<script type="text/javascript">
-	    var editIndex = undefined;
-	    function endEditing() {
-	        if (editIndex == undefined) { return true }
-	        if ($('#dg').datagrid('validateRow', editIndex)) {
-//	            var ed = $('#dg').datagrid('getEditor', { index: editIndex, field: 'productid' });
-//	            var productname = $(ed.target).combobox('getText');
-//	            $('#dg').datagrid('getRows')[editIndex]['productname'] = productname;
-//	            $('#dg').datagrid('endEdit', editIndex);
-//	            editIndex = undefined;
-	            return true;
-	        } else {
-	            return false;  
-	        }
-	    }
-	    function onClickRow(index) {
-//	        if (editIndex != index) {
-//	            if (endEditing()) {
-//	                $('#dg').datagrid('selectRow', index)
-//							.datagrid('beginEdit', index);
-//	                //setEditing(index);//暂时屏蔽，因为在numberbox动态绑定blur、change等事件存在bug，绑定不成功
-//	                editIndex = index;
-//	            } else {
-//	                $('#dg').datagrid('selectRow', editIndex);
-//	            }
-	        //	        }
-	        if (isEditable && (editIndex != index)) {
-//	            if (editIndex != undefined) {
-//	                SaveRow(editIndex);
-//	            } else {
-//	                saveFlag = true;
-//                }
-//	            if (saveFlag) {
-//	                $(this).datagrid('endEdit', editIndex);
-//	                $(this).datagrid('beginEdit', index);
-//	                editIndex = index;
-//	            }
-	            $(this).datagrid('endEdit', editIndex);
-	            $(this).datagrid('beginEdit', index);
-	        }
-	        editIndex = index;
-	    }
-	    function append() {
-            $('#dg').datagrid('endEdit', editIndex);
-	        $('#dg').datagrid('appendRow', {});
-	        editIndex = $('#dg').datagrid('getRows').length - 1;
-	        $('#dg').datagrid('selectRow', editIndex)
-						.datagrid('beginEdit', editIndex);
-            
-	    }
-	    function removeit() {
-	        if (editIndex == undefined) { return }
-	        $('#dg').datagrid('cancelEdit', editIndex)
-					.datagrid('deleteRow', editIndex);
-	        editIndex = undefined;
-	    }
 	    function deleteRow(index) {
 	        $.messager.confirm('删除确认', '确定要删除吗?', function (r) {
 	            if (r) {
 	                var rowData = $(index).parent().parent().data().data;
+	                var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
+	                pageData.currentRowIndex = rowCurrentIndex;
 	                if (rowData.OID > 0) {
 	                    rowData.DoType = "Dtl_DeleteRow";
 	                    rowData.FK_MapDtl = GetQueryString("EnsName");
 	                    //row.FK_MapData = "ND101";
 	                    rowData.RefPKVal = GetQueryString("RefPKVal");
+	                    currentRowIndex = -1;
 	                    AjaxServiceGener(rowData, deleteRowAfter, this);
 	                }
 	            } 
@@ -720,338 +662,39 @@
 	            alert('删除失败！');
 	        } else {
 	            //
-	            InitPage();//刷新页面
-	            return;
-	            if (editIndex == undefined) { return }
-	            $('#dg').datagrid('cancelEdit', editIndex)
-					.datagrid('deleteRow', editIndex);
-	            editIndex = undefined;
-	        }
-        }
-        function accept() {
-            var rowIndex = $('#dg').datagrid('getRowIndex', $('#dg').datagrid('getSelected'))
-            //endEditing();
-            //SaveRow(rowIndex);
-            $('#dg').datagrid("endEdit", rowIndex);
-	    }
-	    function reject() {
-	        $('#dg').datagrid('rejectChanges');
-	        editIndex = undefined;
-	    }
-	    function getChanges() {
-	        var rows = $('#dg').datagrid('getChanges');
-	        alert(rows.length + ' rows are changed!');
-	    }
-
-	    function onAfterEdit(rowIndex, rowData, changes) {
-	        //alert("执行保存");
-	        SaveRow(rowIndex);
-        }
-	    
-	    //动态拼接表
-	    function gridTitle(obj, datax) {
-	        var hid = obj.UIVisible == 1 ? false : true; //1
-	        var isread = obj.UIIsEnable == 1 ? false : true;
-	        var req = obj.UIIsInput == 1 ? true : false;
-	        //是否是合计列
-	        if (obj.AtPara.indexOf("IsSum=1") > 0) {
-	            hjl.push(obj.KeyOfEn);
-            }
-	        //拼接之前，查询和划定ext内容
-	        /*mapExt解析*/
-	        //autoFull
-	        var docArrs = [];
-	        var AttrOfOper = [];
-	        var ddlMap = {};
-	        if (mapExt != null && mapExt != undefined && mapExt != '' && mapExt.length != 0) {
-	            for (var i = 0; i < mapExt.length; i++) {
-	                switch (mapExt[i].ExtType) {
-	                    case 'AutoFull':
-	                        if (mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
-	                            break;
-	                        }
-	                        //docArrs.push(mapExt[i].Doc);
-	                        AttrOfOper.push(mapExt[i].AttrOfOper);
-	                        var ofoper = mapExt[i].AttrOfOper;
-	                        var doc = mapExt[i].Doc;
-	                        doc = doc.replace('单价', 'DanJia').replace('数量', 'ShuLiang');
-	                        docArrs.push(doc);
-	                        //var docs = doc.replace('*', '').split("@");
-	                        //var opts = $('#dg').datagrid('getColumnFields');   // get unfrozen columns
-	                    case 'ActiveDDL':
-	                        if (mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
-	                            break;
-	                        }
-	                        ddlMap[mapExt[i].AttrOfOper] = mapExt[i].AttrsOfActive + "&" + mapExt[i].Doc
-	                }
+	            //InitPage();//刷新页面
+	            //删除数据
+	            var tr = $('table tbody tr')[pageData.currentRowIndex];
+	            var delOid = $(tr).data().data.OID;
+	            var delRow = $.grep(pageData.DBDtl, function (val) { return val.OID == delOid });
+	            if (delRow.length == 1) {
+	                delRow.OID = -1;
+	                delRow.RowData = undefined;
 	            }
-	        }
-	        //根据数据类型设定组件类型
-	        if (obj.UIContralType == 0 ) {//文本
-	            switch (obj.MyDataType) {
-	                case 1: //文本类型.
-	                    if (isread) {
-                            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan:1, hidden: hid, align: 'center' };
-                        }else{
-                            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan:1, editor: { type: 'text', options: {disabled:isread,required:req} }, hidden: hid, align: 'center' };
-                        }
-	                case 2: //Int 类型.
-	                case 3: // float 类型.
-	                case 5: // AppDouble
-	                case 8: // AppMoney
-	                case 9: // 率百分比
-	                    var pre = 2;
-	                    if (obj.MyDataType == 2) {
-	                        pre = 0;
-	                    }
-	                    var indexArr = [];
-	                    for (var k = 0; k < docArrs.length; k++) {
-	                        if (docArrs[k].indexOf("@" + obj.KeyOfEn) > -1) {
-	                            indexArr.push(k);
-	                        }
-	                    }
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'numberbox', options: { disabled: isread, required: req, precision: pre, formatter: function (value) { if (!value) { return 0.00; } else { return value } } } }, hidden: hid, align: 'center' }; //, onChange: function (newValue, oldValue) { autoFull(newValue, obj.KeyOfEn, indexArr, docArrs, AttrOfOper) }
-	                case 6: ////AppDate
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'datebox', options: { currentText: '当前', closeText: '关闭', okText: '确定', disabled: isread, required: req,formatter:formatterDate} }, hidden: hid, align: 'center' };
-	                case 7: // AppDateTime 类型.
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, editor: { type: 'datetimebox', options: { currentText: '当前', closeText: '关闭', okText: '确定', disabled: isread, required: req, formatter: formatterDateTime} }, hidden: hid, align: 'center' };
-	                default:
-	                    return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: 1, hidden: hid ,align:'center'};
+
+	            tr = $(tr).next();
+	            while (tr.length == 1) {
+	                var snTd = $(tr.children('td')[0]);
+	                var sn = snTd.text();
+	                snTd.text(parseInt(sn) - 1);
+	                tr = $(tr).next();
 	            }
-	        }
 
-	        if (obj.UIContralType == 1 || obj.UIContralType == 3) {  //下拉框UIBindKey
-	            comboboxArr.push(obj.KeyOfEn);
-	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'combobox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread,
-	                onSelect: function (record) {
-	                    //更改触发事件
-	                    if (ddlMap[obj.KeyOfEn] != null && ddlMap[obj.KeyOfEn] != '' && ddlMap[obj.KeyOfEn] != undefined) {
-	                        var docTem = ddlMap[obj.KeyOfEn].replace("~@Key~", "'" + record.No + "'");
-	                        var OfActive = docTem.split('&')[0];
-	                        docTem = docTem.split('&')[1];
-	                        var temx = docTem.split('~');
-	                        var rowIndex = $('#dg').datagrid('getRowIndex', $('#dg').datagrid('getSelected'))
-	                        for (var m = 0; m < temx.length; m++) {
-	                            if (temx[m].indexOf('@') > -1) {
-	                                var nax = temx[m].replace('@', '');
-	                                var x = $('#dg').datagrid('getEditor', { index: rowIndex, field: nax }).target;
-	                                docTem = docTem.replace("~@" + nax + "~", "'" + x.combobox('getValue') + "'");
-	                            }
-	                        }
-	                        var OfActiveEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: OfActive }).target;
-	                        //清空被选项
-	                        //OfActiveEditor.combobox('setValue', '请选择');
-	                        OfActiveEditor.combobox('clear');
-                            //重新加载下拉
-	                        OfActiveEditor.combobox('reload', Handler + "?DoType=Dtl_ReloadDdl&Doc=" + docTem + "&m=" + Math.random());
-	                    }
-	                    //更改触发事件
-	                }
-	            }, required: req
-	            }, hidden: hid, align: 'center',
-	                formatter: function (value, row) {
-	                    return row[obj.KeyOfEn + "Text"];
-	                }
-	            };
-	        }
-
-	        if (obj.UIContralType == 2) { //选择框
-	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan: obj.ColSpan, editor: { type: 'checkbox', options: { valueField: 'No', textField: 'Name', data: datax[obj.UIBindKey], disabled: isread }, required: req }, hidden: hid, align: 'center',
-	                formatter: function (value, row) {
-	                    return row[obj.KeyOfEn + "Text"];
-	                }
-	            };
-	        }
-
-//	        if (obj.UIContralType == 3) { //单选
-	        //	            return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth,colspan:obj.ColSpan,editor: { type: 'checkbox', options: { on: '1', off: '0'} }, hidden: hid ,align:'center};
-//	        }
-
-	        //return { field: obj.KeyOfEn, title: obj.Name, width: obj.UIWidth, colspan:obj.ColSpan,hidden: hid };
-	    }
-        //日期格式化
-	    function formatterDate(date) {
-	        var y = date.getFullYear();
-	        var m = date.getMonth() + 1;
-	        var d = date.getDate();
-	        return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d);
-	    }
-        //时间格式化
-        function formatterDateTime(date) {
-	        var y = date.getFullYear();
-	        var m = date.getMonth() + 1;
-	        var d = date.getDate();
-            var t = date.getDate();
-            var h = date.getHours();
-            var i = date.getMinutes();
-            var s = date.getSeconds();
-	        return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d) + ' ' + (h < 10 ? '0' + h : h) + ':' + (i < 10 ? '0' + i : i) + ':' + (s < 10 ? '0' + s : s);
-	    }
-	    //自动计算
-	    function autoFull(rowIndex) {
-	        /*mapExt解析*/
-	        //autoFull
-	        if (mapExt == null || mapExt == undefined || mapExt == '' || mapExt.length == 0) {
+	            tr = $('table tbody tr')[pageData.currentRowIndex];
+	            tr.remove();
+	            pageData.currentRowIndex = -1;
 	            return;
 	        }
-	        for (var i = 0; i < mapExt.length; i++) {
-	            switch (mapExt[i].ExtType) {
-	                case 'AutoFull':
+	    }
 
-	                    if (mapExt[i] == undefined || mapExt[i] == null || mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
-	                        break;
-	                    }
-	                    var ofoper = mapExt[i].AttrOfOper;
-	                    var doc = mapExt[i].Doc;
-	                    var docs = doc.replace('*', '').replace('+', '').replace('-', '').replace('/', '').replace('^', '').replace('%', '').replace('(', '').replace(')', '').replace('[', '').replace(']', '').replace('{', '').replace('}', '').split("@");
-	                    var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
-	                    var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper }).target;
-	                    for (var i = 0; i < opts.length; i++) {
-	                        if ($.inArray(opts[i], docs) > -1) {
-	                            var optEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: opts[i] }).target;
-	                            optEditor.numberbox({
-	                                onChange: function () {
-	                                    //获取和替换数值
-	                                    var docTem = doc;
-	                                    docTem.replace('@' + opts[i], optEditor.numberbox('getValue')); //oldHtml
-	                                    //替换其他数值
-	                                    for (var m = 0; m < docs.length; m++) {
-	                                        if (docs[m] != '' && docs[m] != null) {
-	                                            var tem = $('#dg').datagrid('getEditor', { index: rowIndex, field: docs[m] }).target;
-	                                            docTem = docTem.replace('@' + docs[m], tem.numberbox('getValue'));
-	                                        }
-	                                    }
-	                                    costEditor.numberbox('setValue', CalculateJS(docTem));
-	                                }
-	                            });
-	                        }
-	                    }
-	                case 'ActiveDDL':
-	                    break;//在拼接时实现
-                    default:
-	            }
-            }
-        }
-        var docMM = {};
-        var fieldMM;
-        var opMM = [];
-        var acMM = [];
+        
+        //更新表格序号
+	    function updateTableSn() {
 
-        var docArr = [];
-	    function footSum(dbDtl) {
-	        var rows = $('#dg').datagrid('getRows')//获取当前的数据行<br>
-            var total = 0;
-            var zjxx = Array();
-            var jsonStr = '{';
-            for (var j = 0; j < hjl.length; j++) {
-                for (var i = 0; i < rows.length; i++) {;
-                    if (rows[i][hjl[j]] != null && rows[i][hjl[j]] != undefined && rows[i][hjl[j]] != 'undefined') {
-                        total += Number(rows[i][hjl[j]]);
-                    }
-                }
-                jsonStr += '"' + hjl[j] + '": ' + total + ((j == hjl.length - 1) ? '' : ',');
-            }
-            if (hjl.length==0) {
-                jsonStr += '"operation": 0';
-            }else{
-                jsonStr += ',"operation": 0';
-            }
-            jsonStr += '}';
-            zjxx.push(JSON.parse(jsonStr));
-            $('#dg').datagrid({
-                data: { "rows": dbDtl , "footer": zjxx }
-            });
-        }
-
-        //map_ext汇总 autoFull等
-        function setEditing(rowIndex) {
-            /*mapExt解析*/
-            //autoFull
-            if (mapExt == null || mapExt==undefined||mapExt==''||mapExt.length==0){
-                 return;
-             }
-             for (var i=0;i<mapExt.length;i++) {
-                 switch (mapExt[i].ExtType) {
-                     case 'AutoFull':
-                         if (mapExt[i].Doc == null || mapExt[i].Doc == undefined || mapExt[i].Doc == '') {
-                             break;
-                         }
-                         var ofoper = mapExt[i].AttrOfOper;
-                         var doc = mapExt[i].Doc;
-                         var docs = doc.replace('*', '').split("@");
-                         var opts = $('#dg').datagrid('getColumnFields'); // get unfrozen columns
-                         var costEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: ofoper });
-                         for (var i = 0; i < opts.length; i++) {
-                             if ($.inArray(opts[i], docs) > -1) {
-                                 var optEditor = $('#dg').datagrid('getEditor', { index: rowIndex, field: opts[i] });
-                                 optEditor.target.bind('change', function () {
-                                     //var cost = 123; //priceEditor.target.val() * amountEditor.target.val();
-                                     //获取和替换数值
-                                     doc.replace('@' + opts[i], optEditor.target.val()); //oldHtml
-                                     //替换其他数值
-                                     for (var m = 0; m < docs.length; m++) {
-                                         var tem = $('#dg').datagrid('getEditor', { index: rowIndex, field: docs[m] });
-                                     }
-                                     $(costEditor.target).numberbox('setValue', CalculateJS(doc));
-                                 });
-                             }
-                         }
-                 }
-            }
-         }
-         //执行运算表达式  lxc提供
-         function CalculateJS(sCode) {
-             /// <summary>动态运行JS表达式，返回运行结果</summary>
-             /// <param name="sCode" type="String">JS表达式字符串</param>
-             if (!sCode || sCode.length == 0) {
-                 return "";
-             }
-
-             if (sCode.indexOf("return ") == -1) {
-                 sCode = "return " + sCode;
-             }
-             
-             return new Function(sCode)();
-         }
-
-         //循环combobox设置编辑名
-         var comboboxArr = [];
-         function onEndEdit(index, row) {
-             for (var i = 0; i < comboboxArr.length;i++) {
-                 var ed = $(this).datagrid('getEditor', {
-                     index: index,
-                     field: comboboxArr[i]
-                 });
-                 row[comboboxArr[i]+'Text'] = $(ed.target).combobox('getText');
-             }
-         }
+	    }
 	</script>
 
     <script>
-    //以下是软通写的
-    //初始化网页URL参数
-    function initPageParam() {
-        //新建独有
-        pageData.UserNo = GetQueryString("UserNo");
-        pageData.DoWhat = GetQueryString("DoWhat");
-        pageData.IsMobile = GetQueryString("IsMobile");
-
-        pageData.FK_Flow = GetQueryString("FK_Flow");
-        pageData.FK_Node = GetQueryString("FK_Node");
-        //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
-        pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
-        pageData.WorkID = GetQueryString("WorkID");
-        pageData.IsRead = GetQueryString("IsRead");
-        pageData.T = GetQueryString("T");
-        pageData.Paras = GetQueryString("Paras");
-        pageData.IsReadOnly = GetQueryString("IsReadOnly");//如果是IsReadOnly，就表示是查看页面，不是处理页面
-        pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
-
-        pageData.DoType1 = GetQueryString("DoType")//View
-        pageData.FK_MapData = GetQueryString("FK_MapData")//View
-        pageData.OID = GetQueryString("WorkID") //
-        //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID);
-    }
     //将获取过来的URL参数转成URL中的参数形式  &
     function pageParamToUrl() {
         var paramUrlStr = '';
@@ -1059,83 +702,6 @@
             paramUrlStr += '&' + (param.indexOf('@') == 0 ? param.substring(1) : param) + '=' + pageData[param];
         }
         return paramUrlStr;
-    }
-
-    //移交
-    //子线程
-    //子流程
-    //{"IsSuccess":true,"Msg":null,"ErrMsg":null,"List":null,"Data":2}
-    function getData(data, url, dataParam) {
-        var jsonStr = '{"IsSuccess":true,"Msg":null,"ErrMsg":null,"List":null,"Data":2}';
-        var data = JSON.parse(jsonStr);
-        if (data.IsSuccess != true) {
-            alert('返回参数失败，ErrMsg:' + data.ErrMsg + ";Msg:" + data.Msg + ";url:" + url);
-
-        }
-        return data;
-    }
-
-    //FK_Flow=005&UserNo=zhwj&DoWhat=StartClassic&=&IsMobile=&FK_Node=501
-    var pageData = {};
-    var globalVarList = {};
-   
-    function InitForm() {
-        var workNodeData = JSON.parse(jsonStr);
-        var CCFormHtml = '';
-
-        //开始解析表单字段
-        var mapAttrsHtml = InitMapAttr(workNodeData.Sys_MapAttr, workNodeData);
-        $('#divCCForm').html(mapAttrsHtml);
-
-        //设置位置和大小
-        $.each(workNodeData.Sys_MapAttr, function (i, obj) {
-            var ele = $('[name$=' + obj.KeyOfEn + ']');
-            if (ele.length == 1) {
-                $(ele).css('left', obj.X);
-                $(ele).css('top', obj.Y);
-                $(ele).css('position', 'absolute');
-                $(ele).css('width', obj.UIWidth);
-                $(ele).css('width', obj.UIHeight);
-            }
-        })
-
-        //为 DISABLED 的 TEXTAREA 加TITLE 
-        var disabledTextAreas = $('#divCCForm textarea:disabled');
-        $.each(disabledTextAreas, function (i, obj) {
-            $(obj).attr('title', $(obj).val());
-        })
-
-        //初始化提示信息
-        var alertMsgs = workNodeData.AlertMsg;
-        if (alertMsgs != undefined && alertMsgs.length > 0) {
-            var alertMsgHtml = '';
-            $.each(alertMsgs, function (i, alertMsg) {
-                alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
-            });
-            $('#Message').html(alertMsgHtml);
-        }
-
-        //根据NAME 设置ID的值
-        var inputs = $('[name]');
-        $.each(inputs, function (i, obj) {
-            if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
-                $(obj).attr("id", $(obj).attr("name"));
-            }
-        })
-
-        //处理下拉框级联等扩展信息
-        AfterBindEn_DealMapExt();
-
-        //设置默认值
-        for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
-            var mapAttr = workNodeData.Sys_MapAttr[j];
-            //添加 label
-            //如果是整行的需要添加  style='clear:both'
-            var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
-            if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
-                $('#TB_' + mapAttr.KeyOfEn).val(defValue);
-            }
-        }
     }
 
     //处理MapExt
@@ -1514,85 +1080,6 @@
         return result = unescape(result);
     }
 
-    //获取表单数据
-    function getFormData(isCotainTextArea, isCotainUrlParam) {
-        var formss = $('#divCCForm').serialize();
-        var formArr = formss.split('&');
-        var formArrResult = [];
-        //获取CHECKBOX的值
-        $.each(formArr, function (i, ele) {
-            if (ele.split('=')[0].indexOf('CB_') == 0) {
-                if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
-                    ele = ele.split('=')[0] + '=1';
-                } else {
-                    ele = ele.split('=')[0] + '=0';
-                }
-            }
-            formArrResult.push(ele);
-        });
-
-        //获取表单中禁用的表单元素的值
-        var disabledEles = $('#divCCForm :disabled');
-        $.each(disabledEles, function (i, disabledEle) {
-            var name = $(disabledEle).attr('name');
-            switch (disabledEle.tagName.toUpperCase()) {
-                case "INPUT":
-                    switch (disabledEle.type.toUpperCase()) {
-                        case "CHECKBOX"://复选框
-                            formArrResult.push(name + '=' + $(disabledEle).is(':checked') ? 1 : 0);
-                            break;
-                        case "TEXT"://文本框
-                            formArrResult.push(name + '=' + $(disabledEle).val());
-                            break;
-                        case "RADIO"://单选钮
-                            var eleResult = name + '=' + $('[name="' + name + ':checked"]').val();
-                            if (!$.inArray(formArrResult, eleResult)) {
-                                formArrResult.push();
-                            }
-                            break;
-                    }
-                    break;
-                    //下拉框
-                case "SELECT":
-                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-                    break;
-                    //文本区域
-                case "TEXTAREA":
-                    formArrResult.push(name + '=' + $(disabledEle).val());
-                    break;
-            }
-        });
-
-        //获取表单中隐藏的表单元素的值
-        var hiddens = $('input[type=hidden]');
-        $.each(hiddens, function (i, hidden) {
-            if ($(hidden).attr("name").indexOf('TB_') == 0) {
-                //formArrResult.push($(hidden).attr("name") + '=' + $(hidden).val());
-            }
-        });
-
-        if (!isCotainTextArea) {
-            formArrResult = $.grep(formArrResult, function (value) {
-                return value.split('=').length == 2 ? value.split('=')[1].length <= 50 : true;
-            });
-        }
-
-        formss = formArrResult.join('&');
-        var dataArr = [];
-        //加上URL中的参数
-        if (pageData != undefined && isCotainUrlParam) {
-            var pageDataArr = [];
-            for (var data in pageData) {
-                pageDataArr.push(data + '=' + pageData[data]);
-            }
-            dataArr.push(pageDataArr.join('&'));
-        }
-        if (formss != '')
-            dataArr.push(formss);
-        var formData = dataArr.join('&');
-        return formData;
-    }
-
     //必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
     function checkBlanks() {
         var checkBlankResult = true;
@@ -1661,75 +1148,6 @@
             }
         });
         return checkRegResult;
-    }
-
-
-    //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
-    function GenerWorkNode() {
-        $.ajax({
-            type: 'post',
-            async: true,
-            data: pageData,
-            //url: "../MyFlow.ashx?DoType=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
-            url: "Handler.ashx?DoType=FrmFree_Init" + "&m=" + Math.random(),
-            // url:"Handler.ashx?DoType=FrmFree_Init&FK_MapData="+pageData.FK_MapData + "&m=" + Math.random(),
-            dataType: 'html',
-            success: function (data) {
-                //制造表头  初始化数据
-
-                jsonStr = data;
-                var gengerWorkNode = {};
-                var flow_Data;
-                try {
-                    flow_Data = JSON.parse(data);
-                    workNodeData = flow_Data;
-                }
-                catch (err) {
-                    alert("GenerWorkNode转换JSON失败:" + jsonStr);
-                    return;
-                }
-
-                $('#CCForm').html('');
-                //循环MapAttr
-                for (var mapAtrrIndex in flow_Data.Sys_MapAttr) {
-                    var mapAttr = flow_Data.Sys_MapAttr[mapAtrrIndex];
-                    var eleHtml = figure_MapAttr_Template(mapAttr);
-                    $('#CCForm').append(eleHtml);
-                }
-                //循环FrmRB
-                for (var i in flow_Data.Sys_FrmRB) {
-                    var frmLab = flow_Data.Sys_FrmRB[i];
-                    var label = figure_Template_Rb(frmLab);
-                    $('#CCForm').append(label);
-                }
-
-                //根据NAME 设置ID的值
-                var inputs = $('[name]');
-                $.each(inputs, function (i, obj) {
-                    if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
-                        $(obj).attr("id", $(obj).attr("name"));
-                    }
-                })
-
-                //处理下拉框级联等扩展信息
-                AfterBindEn_DealMapExt();
-
-
-                //先不处理默认值  20170506
-                /*//设置默认值
-                for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
-                    var mapAttr = workNodeData.Sys_MapAttr[j];
-                    //添加 label
-                    //如果是整行的需要添加  style='clear:both'
-
-
-                    var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                    if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
-                        $('#TB_' + mapAttr.KeyOfEn).val(defValue);
-                    }
-                }*/
-            }
-        })
     }
 
     var workNodeData = {};

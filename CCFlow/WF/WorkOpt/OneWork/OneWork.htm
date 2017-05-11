@@ -27,13 +27,6 @@
             });
 
             InitPage();
-
-            if (window.screen) {
-                var w = screen.availWidth;
-                var h = screen.availHeight;
-                window.moveTo(0, 0);
-                window.resizeTo(w, h);
-            }
         });
 
         function InitPage() {
@@ -77,6 +70,13 @@
                     }
                     else {
                         $("#mtabs").tabs("select", tpo[currtab]);
+                    }
+
+                    if (window.screen) {
+                        var w = screen.availWidth;
+                        var h = screen.availHeight;
+                        window.moveTo(0, 0);
+                        window.resizeTo(w, h);
                     }
                 }
             });

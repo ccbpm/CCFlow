@@ -99,8 +99,9 @@
         //保存后执行
         function SaveRowAfter(data) {
             pageData.saveRowCurrent.overCount =pageData.saveRowCurrent.overCount + 1;
-            if (data.indexOf('err') > -1) {
+            if (data.indexOf('err@') > -1) {
                 alert('保存失败！' + data);
+                return;
             }
             
             var returnRowData=JSON.parse(data);
@@ -214,8 +215,6 @@
             $('#dtlDiv div table tbody').append(insertTr);
             AfterBindEn_DealMapExt(insertTr);
         }
-
-
 
         //初始化数据.
         function InitPage() {

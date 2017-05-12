@@ -42,8 +42,6 @@ namespace CCFlow.WF
             if (this.DoType != null)
                 return;
 
-            BP.WF.Glo.DoInstallDataBase
-
             Flow fl = new Flow(this.FK_Flow);
             this.Title = fl.Name;
             this.Label1.Text = fl.Name;

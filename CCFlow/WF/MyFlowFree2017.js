@@ -520,7 +520,6 @@ function initBar() {
     else
         MyFlow = "MyFlow.do";
 
-
       var  url = MyFlow + "?DoType=InitToolBar&m=" + Math.random();
 
     $.ajax({

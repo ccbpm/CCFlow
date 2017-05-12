@@ -178,10 +178,16 @@
                     catch (err) {
                         alert("转换JSON 失败" + err + data)
                     }
-                    
+
                     var selDataArr = initData.NODES;
                     var dtgArr = initData.DEPTS;
                     var dteArr = initData.EMPS;
+
+                    //增加了: 默认选择接收人，与强制选择接收人的数据源,让其在打开的时候，可以把默认值选择上.
+                    // 有可能值是空的.
+                    var defaultSelected = initData.DefaultSelected;
+                    var forceSelected = initData.ForceSelected;
+
                     //初始化到达节点数据
                     if (firstLoad == true) {
                         firstLoad = false;
@@ -204,7 +210,7 @@
                     var selectNode = $.grep(selDataArr, function (value) {
                         return value.NO == selectNodeVal;
                     });
-                    
+
                     //通过SQL 和树的时候可以显示为树
                     if (selectNode[0].SELECTORDBSHOWWAY == "Tree" && selectNode[0].SELECTORMODEL == "SQL") {
                         //树展示
@@ -231,7 +237,7 @@
                                 }
                             }
                         }
-                        
+
                         $('#jstree').jstree({
                             plugins: [
                             "checkbox",
@@ -286,7 +292,7 @@
                     var groupFileds = $.grep(dteArr, function (value) {
                         return ($('[name="' + value.FK_DEPT + '"]').length != "0");
                     });
-                    
+
                     $.each(groupFileds, function (j, objj) {
                         ultdes += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + objj.NAME + "</li>";
                     });
@@ -381,9 +387,7 @@
                 alert('请选择人员.');
                 return;
             }
-
            // var empNos = "zhoupeng";
-
             
             if (pageUrlParam.toNode == 0) {
                 toNode = $("#searchS1 option:selected").val();

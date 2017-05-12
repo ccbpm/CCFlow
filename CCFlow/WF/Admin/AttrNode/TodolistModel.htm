@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>考核规则</title>
+    <title>多人处理规则</title>
      <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -22,12 +22,12 @@
             var nodeID = GetQueryString("FK_Node");
 
             //调用公共类库的方法.
-            GenerBindEnumKey("DDL_TWay", "TWay", "1");
+           // GenerBindEnumKey("DDL_TWay", "TWay", "1");
            
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CHRole_Init&FK_Node=" + nodeID + "&m=" + Math.random(),
+                url: Handler + "?DoType=TodolistModel_Init&FK_Node=" + nodeID + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -46,65 +46,27 @@
     </script>
 </head>
 <body>
-
 <form id="cc">
-
-<table style="width:100%;">
-<tr>
-<td> 
+ 
 <fieldset>
-<legend> <input type=radio value="0"  id="RB_CHWay_0" name="RB_CHWay" > <label for="RB_CHWay_0">不考核 </label> </legend>
+<legend> <input type="radio" value="0"  id="RB_TodolistModel_0" name="RB_TodolistModel" /> <label for="RB_TodolistModel_0">抢办模式 </label> </legend>
 <ul >
-<li style=" color:Gray">默认为不考核，当前节点不设置任何形式的考核。</li>
+<li style=" color:Gray">谁抢到谁处理。 比如：该节点工作有5个人都可以处理，并且他们同时打开，第一个发送到下一个节点这件工作就是他处理的。</li>
 </ul>
 </fieldset>
 
 <fieldset>
-<legend><input type="radio" value="1"  id="RB_CHWay_1" name="RB_CHWay" > <label for="RB_CHWay_1">按时效考核 </label></legend>
+<legend><input type="radio" value="1"  id="RB_TodolistModel_1" name="RB_TodolistModel" /> <label for="RB_TodolistModel_1">协作模式 </label></legend>
+ 
+ <ul style=" color:Gray">
+<li>这个节点多人处理:</li>
+<li>这样的节点，一般都是多人处理的节点。</li>
+</ul>
 
-<table style=" width:100%;">
-<tr>
-<td nowarp=true> 限期完成时限：</td>
-<td> <input type=text id="TB_TimeLimit" name="TB_TimeLimit" />天,</td>
-<td>天数</td>
-<td style=" color:Gray">天数</td>
-</tr>
-
-<tr>
-<td>预警：</td>
-<td>  <input type=text id="TB_WarningDay" name="TB_WarningDay" /> 天,</td>
-<td> 天数 </td>
-<td style=" color:Gray">天数</td>
-</tr>
-
-<tr>
-<td>节假日</td>
-
-<td> 
-<select name="DDL_TWay" id="DDL_TWay" > </select> 
-    </td>
-
-<td colspan="2"  >
-<a href="javascript:WinOpen('../../Comm/Sys/Holiday.aspx');" > 节假日维护</a>
-
-</td>
-</tr>
-
-
-<tr>
-<td> 扣分</td>
-<td> <input type=text id="TB_TCent" name="TB_TCent" /> 分</td>
-<td colspan="2" style=" color:Gray">此分值可以作为时效考核的依据或者参考，每延期1小时的扣分。
-<br />如果设置此分值，那末系统就会计算出来得分。该分值，可以转化为奖励或者罚款的金额。
-</td>
-</tr>
-
-
-</table>
 </fieldset>
   
 <fieldset>
-<legend><input type="radio" value="2"  id="RB_CHWay_2" name="RB_CHWay" > <label for="RB_CHWay_2">按工作量考核 </label></legend>
+<legend><input type="radio" value="2"  id="RB_TodolistModel_2" name="RB_TodolistModel" /> <label for="RB_TodolistModel_2">队列模式 </label></legend>
 <ul style=" color:Gray">
 <li>按照处理工作的多少进行考核。</li>
 <li>这样的节点，一般都是多人处理的节点。</li>
@@ -113,21 +75,32 @@
 
 
 <fieldset>
-<legend> 是否是质量考核点？</legend>
-
+<legend><input type="radio" value="3"  id="RB_TodolistModel_3" name="RB_TodolistModel" /> <label for="RB_TodolistModel_3">共享模式 </label></legend>
 <ul style=" color:Gray">
-<li>质量考核，是当前节点对上一步的工作进行一个工作好坏的一个考核。</li>
-<li>考核的方式是对上一个节点进行打分，该分值记录到WF_CHEval的表里，开发人员对WF_CHEval的数据根据用户的需求进行二次处理。</li>
+<li>按照处理工作的多少进行考核。</li>
+<li>这样的节点，一般都是多人处理的节点。</li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend><input type="radio" value="4"  id="RB_TodolistModel_4" name="RB_TodolistModel" /> <label for="RB_TodolistModel_4">协作组长模式 </label></legend>
+<ul style=" color:Gray">
+<li>按照处理工作的多少进行考核。</li>
+<li>这样的节点，一般都是多人处理的节点。</li>
+<li>组长确认：<select name="DDL_TeamLeaderConfirmRole" id="DDL_TeamLeaderConfirmRole" >
+<option value="0">按照Port_Dept中的Leader字段, 来确定处理人集合的组长。 </option>
+<option value="1">按照SQL表达式作为接受人集合的组长。 </option>
+  </select> </li>
+
+  <li>内容(对于按照SQL方式填写才有效)：<input type=text id="TB_TeamLeaderConfirmDoc" name="TB_TeamLeaderConfirmDoc" /> </li>
+
 </ul>
 
-<input type="checkbox" id="CB_IsEval" name="CB_IsEval" value="1"  /> <label for="CB_IsEval">是否是质量考核点?</label>
+
 </fieldset>
 
 <input type="button"  value="保存" onclick="Save()" />
-</td>
- 
-</tr>
-</table>
 
 <script type="text/javascript">
 
@@ -135,18 +108,18 @@
 
         var nodeID = GetQueryString("FK_Node");
 
-   //    var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-     //   alert(CheckBoxIDs);
+        // var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+        // alert(CheckBoxIDs);
 
         var frmData = $("#cc").serialize();
 
-       // alert(frmData);
+        //alert(frmData);
 
         $.ajax({
             data: frmData,
             type: 'post',
             async: true,
-            url: Handler + "?DoType=CHRole_Save&FK_Node=" + nodeID + "&m=" + Math.random(),
+            url: Handler + "?DoType=TodolistModel_Save&FK_Node=" + nodeID + "&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
 

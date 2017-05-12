@@ -1934,6 +1934,38 @@ namespace BP.WF
             {
                 return (TodolistModel)this.GetValIntByKey(NodeAttr.TodolistModel);
             }
+            set
+            {
+                this.SetValByKey(NodeAttr.TodolistModel, (int)value);
+            }
+        }
+        /// <summary>
+        /// 组长确认规则
+        /// </summary>
+        public TeamLeaderConfirmRole TeamLeaderConfirmRole
+        {
+            get
+            {
+                return (TeamLeaderConfirmRole)this.GetValIntByKey(NodeAttr.TeamLeaderConfirmRole);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.TeamLeaderConfirmRole, (int)value);
+            }
+        }
+        /// <summary>
+        /// 组长确认规则内容.
+        /// </summary>
+        public string TeamLeaderConfirmDoc
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeAttr.TeamLeaderConfirmDoc);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.TeamLeaderConfirmDoc, value);
+            }
         }
         /// <summary>
         /// 阻塞模式
@@ -2478,7 +2510,14 @@ namespace BP.WF
                 map.AddTBInt(NodeAttr.IsCanDelFlow, 0, "是否可以删除流程", true, true);
 
                 map.AddTBInt(NodeAttr.ThreadKillRole, 0, "子线程删除方式", true, true);
-                map.AddTBInt(NodeAttr.TodolistModel, 0, "是否是队列节点", true, true);
+
+                map.AddTBInt(NodeAttr.TodolistModel, 0, "多人处理规则", true, true);
+
+                //add.
+                map.AddTBInt(NodeAttr.TeamLeaderConfirmRole, 0, "组长确认规则", true, true);
+                map.AddTBString(NodeAttr.TeamLeaderConfirmDoc, null, "组长确认设置内容", true, false, 0, 200, 10);
+
+
 
                 map.AddTBInt(NodeAttr.IsAllowRepeatEmps, 0, "是否允许子线程接受人员重复(对子线程点有效)?", true, true);
                 map.AddTBInt(NodeAttr.IsBackTracking, 0, "是否可以在退回后原路返回(只有启用退回功能才有效)", true, true);
@@ -2567,7 +2606,6 @@ namespace BP.WF
                 //map.AddBoolean(FrmEventAttr.SMSEnable, false, "是否启用短信发送？(如果启用就要设置短信模版，支持ccflow表达式。)", true, true, true);
                 //map.AddTBStringDoc(FrmEventAttr.SMSDoc, null, "短信内容模版", true, false, true);
                 //map.AddBoolean(FrmEventAttr.MobilePushEnable, true, "是否推送到手机、pad端。", true, true, true);
-
                 #endregion
 
                 this._enMap = map;

@@ -31,6 +31,14 @@ namespace BP.WF.Template
         /// </summary>
         public const string TodolistModel = "TodolistModel";
         /// <summary>
+        /// 组长确认规则
+        /// </summary>
+        public const string TeamLeaderConfirmRole = "TeamLeaderConfirmRole";
+        /// <summary>
+        /// 组长确认内容
+        /// </summary>
+        public const string TeamLeaderConfirmDoc = "TeamLeaderConfirmDoc";
+        /// <summary>
         /// 当没有找到处理人时处理方式
         /// </summary>
         public const string WhenNoWorker = "WhenNoWorker";

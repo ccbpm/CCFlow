@@ -425,6 +425,7 @@ namespace BP.WF.HttpHandler
                 urlExt = urlExt.Replace("&WorkID=0", "&WorkID=" + this.WorkID);
                 urlExt = urlExt.Replace("&WorkID=&", "&WorkID=" + this.WorkID + "&");
             }
+
             //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
             url = url.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
 

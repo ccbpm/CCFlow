@@ -352,11 +352,10 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.ThreadIsCanDel, false, "是否可以删除子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
                 map.AddBoolean(BtnAttr.ThreadIsCanShift, false, "是否可以移交子线程(当前节点已经发送出去的线程，并且当前节点是分流，或者分合流有效，在子线程退回后的操作)？", true, true, true);
 
-
-                //待办处理模式.
-                map.AddDDLSysEnum(NodeAttr.TodolistModel, (int)TodolistModel.QiangBan, "多人待办处理模式", true, true, NodeAttr.TodolistModel,
-                    "@0=抢办模式@1=协作模式@2=队列模式@3=共享模式@4=协作组长模式");
-                map.SetHelperUrl(NodeAttr.TodolistModel, "http://ccbpm.mydoc.io/?v=5404&t=17947"); //增加帮助.
+                ////待办处理模式.
+                //map.AddDDLSysEnum(NodeAttr.TodolistModel, (int)TodolistModel.QiangBan, "多人待办处理模式", true, true, NodeAttr.TodolistModel,
+                //    "@0=抢办模式@1=协作模式@2=队列模式@3=共享模式@4=协作组长模式");
+                //map.SetHelperUrl(NodeAttr.TodolistModel, "http://ccbpm.mydoc.io/?v=5404&t=17947"); //增加帮助.
                 
 
                 //发送阻塞模式.
@@ -391,8 +390,6 @@ namespace BP.WF.Template
                 #endregion
 
                 #region  功能按钮状态
-              
-
 
                 map.AddTBString(BtnAttr.SendLab, "发送", "发送按钮标签", true, false, 0, 50, 10);
                 map.SetHelperUrl(BtnAttr.SendLab, "http://ccbpm.mydoc.io/?v=5404&t=16219");
@@ -757,9 +754,16 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "发送阻塞规则"; // "调用事件接口";
+                rm.Title = "发送阻塞规则";  
                 rm.ClassMethodName = this.ToString() + ".DoBlockModel";
                 rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/BlockModel.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "多人处理规则";
+                rm.ClassMethodName = this.ToString() + ".DoTodolistModel";
+                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Multiplayer.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -975,6 +979,14 @@ namespace BP.WF.Template
         #endregion 考核规则.
 
         #region 基础设置.
+        /// <summary>
+        /// 多人处理规则.
+        /// </summary>
+        /// <returns></returns>
+        public string DoTodolistModel()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/TodolistModel.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
+        }
         /// <summary>
         /// 批处理规则
         /// </summary>

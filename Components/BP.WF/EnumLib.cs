@@ -368,6 +368,20 @@ namespace BP.WF
         All,
     }
     /// <summary>
+    /// 组长确认规则
+    /// </summary>
+    public enum TeamLeaderConfirmRole
+    {
+        /// <summary>
+        /// 按照部门表的字段 Leader 模式计算.
+        /// </summary>
+        ByDeptFieldLeader,
+        /// <summary>
+        /// 按照SQL计算.
+        /// </summary>
+        BySQL
+    }
+    /// <summary>
     /// 普通工作节点处理模式
     /// </summary>
     public enum TodolistModel

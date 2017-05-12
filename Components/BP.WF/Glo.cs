@@ -2459,6 +2459,9 @@ namespace BP.WF
                 if (row.ContainsKey("OID")==true)
                     exp = exp.Replace("@WorkID", row["OID"].ToString());
 
+                if (exp.Contains("@") == false)
+                    return exp;
+
                 foreach (string key in row.Keys)
                 {
                     if (exp.Contains("@" + key + ";"))
@@ -2466,7 +2469,6 @@ namespace BP.WF
                 }
                 if (exp.Contains("@") == false)
                     return exp;
-
 
                 #region 解决排序问题.
                 Attrs attrs = en.EnMap.Attrs;

@@ -155,9 +155,22 @@ namespace BP.WF.Template
         /// 接受模式
         /// </summary>
         public const string SelectorModel = "SelectorModel";
-
+        /// <summary>
+        /// 选择人分组
+        /// </summary>
         public const string SelectorP1 = "SelectorP1";
+        /// <summary>
+        /// 操作员
+        /// </summary>
         public const string SelectorP2 = "SelectorP2";
+        /// <summary>
+        /// 默认选择的数据源
+        /// </summary>
+        public const string SelectorP3 = "SelectorP3";
+        /// <summary>
+        /// 强制选择的数据源
+        /// </summary>
+        public const string SelectorP4 = "SelectorP4";
         /// <summary>
         /// 数据显示方式(表格与树)
         /// </summary>
@@ -222,6 +235,9 @@ namespace BP.WF.Template
                 this.SetValByKey(SelectorAttr.AccepterDBSort, (int)value);
             }
         }
+        /// <summary>
+        /// 分组数据源
+        /// </summary>
         public string SelectorP1
         {
             get
@@ -235,6 +251,9 @@ namespace BP.WF.Template
                 this.SetValByKey(SelectorAttr.SelectorP1, value);
             }
         }
+        /// <summary>
+        /// 实体数据源
+        /// </summary>
         public string SelectorP2
         {
             get
@@ -242,13 +261,48 @@ namespace BP.WF.Template
                 string s = this.GetValStringByKey(SelectorAttr.SelectorP2);
                 s = s.Replace("~", "'");
                 return s;
-                //return this.GetValStringByKey(SelectorAttr.SelectorP2);
             }
             set
             {
                 this.SetValByKey(SelectorAttr.SelectorP2, value);
             }
         }
+        /// <summary>
+        /// 默认选择数据源
+        /// </summary>
+        public string SelectorP3
+        {
+            get
+            {
+                string s = this.GetValStringByKey(SelectorAttr.SelectorP3);
+                s = s.Replace("~", "'");
+                return s;
+            }
+            set
+            {
+                this.SetValByKey(SelectorAttr.SelectorP3, value);
+            }
+        }
+        /// <summary>
+        /// 强制选择数据源
+        /// </summary>
+        public string SelectorP4
+        {
+            get
+            {
+                string s = this.GetValStringByKey(SelectorAttr.SelectorP4);
+                s = s.Replace("~", "'");
+                return s;
+            }
+            set
+            {
+                this.SetValByKey(SelectorAttr.SelectorP3, value);
+            }
+        }
+
+        /// <summary>
+        /// 节点ID
+        /// </summary>
         public int NodeID
         {
             get
@@ -311,7 +365,7 @@ namespace BP.WF.Template
 
 
                 map.AddTBIntPK(SelectorAttr.NodeID, 0, "NodeID", true, true);
-                map.AddTBString(SelectorAttr.Name, null, "节点名称", true, true, 0,100,100);
+                map.AddTBString(SelectorAttr.Name, null, "节点名称", true, true, 0, 100, 100);
 
                 map.AddDDLSysEnum(SelectorAttr.SelectorDBShowWay, 0, "数据显示方式", true, true,
                 SelectorAttr.SelectorDBShowWay, "@0=表格显示@1=树形显示");
@@ -321,15 +375,19 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(SelectorAttr.AccepterDBSort, 0, "选择的数据类别", true, true,
               SelectorAttr.AccepterDBSort, "@0=人员@1=部门@2=岗位@3=权限组");
-                
+
 
                 map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数:可以为空,比如:SELECT No,Name,ParentNo FROM  Port_Dept", true, false, true);
                 map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源:比如:SELECT No,Name,FK_Dept FROM  Port_Emp", true, false, true);
 
+                map.AddTBStringDoc(SelectorAttr.SelectorP3, null, "默认选择的数据源:比如:SELECT FK_Emp FROM  WF_GenerWorkerList WHERE FK_Node=102 AND WorkID=@WorkID", true, false, true);
+                map.AddTBStringDoc(SelectorAttr.SelectorP4, null, "强制选择的数据源:比如:SELECT FK_Emp FROM  WF_GenerWorkerList WHERE FK_Node=102 AND WorkID=@WorkID", true, false, true);
+
+
                 //map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数,可以为空", true, false, true);
                 //map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源", true, false, true);
 
-            
+
                 // 相关功能。
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
                     NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
@@ -352,7 +410,7 @@ namespace BP.WF.Template
         /// 产生数据.
         /// </summary>
         /// <returns></returns>
-        public System.Data.DataSet GenerDataSet(int nodeid)
+        public System.Data.DataSet GenerDataSet(int nodeid, Entity en)
         {
             switch (this.SelectorModel)
             {
@@ -363,7 +421,7 @@ namespace BP.WF.Template
                 case Template.SelectorModel.Station:
                     return ByStation(nodeid);
                 case Template.SelectorModel.SQL:
-                    return BySQL(nodeid);
+                    return BySQL(nodeid, en);
                 default:
                     DataSet ds= new DataSet();
                     return ds;
@@ -376,12 +434,12 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="nodeID">节点ID</param>
         /// <returns>返回值</returns>
-        private DataSet BySQL(int nodeID)
+        private DataSet BySQL(int nodeID, Entity en)
         {
             // 定义数据容器.
             DataSet ds = new DataSet();
 
-            //部门.
+            //求部门.
             string sqlGroup = this.SelectorP1;
             if (string.IsNullOrEmpty(sqlGroup) == false)
             {
@@ -394,7 +452,7 @@ namespace BP.WF.Template
             }
 
 
-            //人员.
+            //求人员范围.
             string sqlDB = this.SelectorP2;
             sqlDB = sqlDB.Replace("@WebUser.No", WebUser.No);
             sqlDB = sqlDB.Replace("@WebUser.Name", WebUser.Name);
@@ -402,6 +460,48 @@ namespace BP.WF.Template
             DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
+             
+            //求默认选择的数据.
+            if (this.SelectorP3 != "")
+            {
+                sqlDB = this.SelectorP3;
+
+                sqlDB = sqlDB.Replace("@WebUser.No", WebUser.No);
+                sqlDB = sqlDB.Replace("@WebUser.Name", WebUser.Name);
+                sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+                sqlDB = sqlDB.Replace("@WorkID", en.GetValStringByKey("OID"));
+                sqlDB = sqlDB.Replace("@OID", en.GetValStringByKey("OID"));
+
+                if (sqlDB.Contains("@"))
+                    sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);
+
+                DataTable dtDef = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
+                dtDef.TableName = "DefaultSelected";
+                ds.Tables.Add(dtEmp);
+            }
+
+
+            //求强制选择的数据源.
+            if (this.SelectorP4 != "")
+            {
+                sqlDB = this.SelectorP4;
+
+                sqlDB = sqlDB.Replace("@WebUser.No", WebUser.No);
+                sqlDB = sqlDB.Replace("@WebUser.Name", WebUser.Name);
+                sqlDB = sqlDB.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+                sqlDB = sqlDB.Replace("@WorkID", en.GetValStringByKey("OID"));
+                sqlDB = sqlDB.Replace("@OID", en.GetValStringByKey("OID"));
+
+                if (sqlDB.Contains("@"))
+                    sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);
+
+                DataTable dtDef = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
+                dtDef.TableName = "ForceSelected";
+                ds.Tables.Add(dtEmp);
+            }
+
             return ds;
         }
 

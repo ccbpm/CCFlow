@@ -4940,12 +4940,7 @@ namespace BP.WF
                     string val = string.Empty;
                     val = dt.Rows[0][ff.KeyOfEn].ToString();
 
-                    //判断是否需要写入流程数据表.
-                    //if (ff.IsWriteToFlowTable == true)
-                    //{
                     this.HisWork.SetValByKey(ff.KeyOfEn, val);
-                    //this.rptGe.SetValByKey(ff.KeyOfEn, val);
-                    //  }
                 }
             }
 
@@ -4992,7 +4987,6 @@ namespace BP.WF
             //把当前的待办设置已办，并且提示未处理的人。
             foreach (GenerWorkerList gwl in gwls)
             {
-
                 if (gwl.FK_Emp != WebUser.No)
                     continue;
 
@@ -5025,10 +5019,29 @@ namespace BP.WF
             if (gwls.Count == 1)
                 return false; /*让其向下执行,因为只有一个人。就没有顺序的问题.*/
 
-            //判断自己是否是组长？如果是组长，就让返回false, 让其运动到最后一个节点，因为组长同意了，就全部同意了。
-            string sql = "SELECT COUNT(No) AS num FROM Port_Dept WHERE No='"+WebUser.FK_Dept+"' AND Leader='"+WebUser.No+"'";
-            if (BP.DA.DBAccess.RunSQLReturnValInt(sql, 0) == 1)
-                return false;
+            #region  判断自己是否是组长？如果是组长，就让返回false, 让其运动到最后一个节点，因为组长同意了，就全部同意了。
+            if (this.HisNode.TeamLeaderConfirmRole == TeamLeaderConfirmRole.ByDeptFieldLeader)
+            {
+                string sql = "SELECT COUNT(No) AS num FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "' AND Leader='" + WebUser.No + "'";
+                if (BP.DA.DBAccess.RunSQLReturnValInt(sql, 0) == 1)
+                    return false;
+            }
+
+            if (this.HisNode.TeamLeaderConfirmRole == TeamLeaderConfirmRole.BySQL)
+            {
+                string sql = this.HisNode.TeamLeaderConfirmDoc;
+                sql = Glo.DealExp(sql, this.HisWork, null);
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+                string userNo=WebUser.No;
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string str = dr[0] as string;
+                    if (str == userNo)
+                        return false;
+                }
+            }
+            #endregion
 
             //查看是否我是最后一个？
             int num = 0;
@@ -5048,8 +5061,6 @@ namespace BP.WF
                 this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
             }
-
-
 
             //把当前的待办设置已办，并且提示未处理的人。
             foreach (GenerWorkerList gwl in gwls)

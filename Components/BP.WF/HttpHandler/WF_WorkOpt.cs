@@ -415,10 +415,16 @@ namespace BP.WF.HttpHandler
             if (toNodeID == 0)
                 toNodeID = toNodes[0].GetValIntByKey("NodeID");   //取第一个.
 
+            Work wk = nd.HisWork;
+            wk.OID = this.WorkID;
+            wk.Retrieve();
+
+
+
             Selector select = new Selector(toNodeID);
 
             //获得 部门与人员.
-            DataSet ds = select.GenerDataSet(toNodeID);
+            DataSet ds = select.GenerDataSet(toNodeID,wk);
 
             //加入到到达节点的列表.
             ds.Tables.Add(dtNodes);

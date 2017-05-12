@@ -37,6 +37,38 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region 多人处理规则.
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string TodolistModel_Init()
+        {
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            return nd.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string TodolistModel_Save()
+        {
+            BP.WF.Node nd = new BP.WF.Node();
+            nd.NodeID = this.FK_Node;
+            nd.RetrieveFromDBSources();
+
+            nd.TodolistModel = (TodolistModel)this.GetRequestValInt("RB_TodolistModel");  //考核方式.
+            nd.TeamLeaderConfirmRole = (TeamLeaderConfirmRole)this.GetRequestValInt("DDL_TeamLeaderConfirmRole");  //考核方式.
+            nd.TeamLeaderConfirmDoc = this.GetRequestVal("TB_TeamLeaderConfirmDoc");
+
+            nd.Update();
+
+            return "保存成功...";
+        }
+        
+        #endregion 多人处理规则.
+
+
         #region 考核规则.
         public string CHRole_Init()
         {

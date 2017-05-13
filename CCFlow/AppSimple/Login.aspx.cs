@@ -33,7 +33,7 @@ namespace CCFlow.WF.App.Simple
             //取到用户编号.
             string userNo = this.TB_No.Text;
 
-            // 调用登录接口,写入登录信息.
+            //调用登录接口,写入登录信息.
             BP.WF.Dev2Interface.Port_Login(userNo);
 
             //与登陆相对应的是退出。

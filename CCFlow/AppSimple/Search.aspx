@@ -21,7 +21,7 @@
     <table width='90%' align=left >
     <caption>
     <div style='float:left'><img src='../WF/Img/Search.gif' />流程查询/分析</div>
-    <div style='float:right'><a href="javascript:WinOpen('/WF/KeySearch.aspx',900,900);">关键字查询</a>|<a href="javascript:WinOpen('/WF/Comm/Search.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); ">综合查询</a>|<a href="javascript:WinOpen('/WF/Comm/Group.aspx?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); ">综合分析</a>|<a href="javascript:WinOpen('/WF/Comm/Search.aspx?EnsName=BP.WF.WorkFlowDeleteLogs');">删除日志</a></div>
+    <div style='float:right'><a href="javascript:WinOpen('/WF/KeySearch.aspx',900,900);">关键字查询</a>|<a href="javascript:WinOpen('/WF/Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); ">综合查询</a>|<a href="javascript:WinOpen('/WF/Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews',900,900); ">综合分析</a>|<a href="javascript:WinOpen('/WF/Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs');">删除日志</a></div>
     </caption>
     <tr>
     <th>序</th>

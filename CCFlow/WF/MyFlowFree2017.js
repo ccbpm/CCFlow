@@ -2349,7 +2349,7 @@ function GenerWorkNode() {
                 var h = flow_Data.Sys_MapData[0].FrmH;
                 var w = flow_Data.Sys_MapData[0].FrmW;
 
-            $('#topContentDiv').height(h);
+           // $('#topContentDiv').height(h);
             $('#topContentDiv').width(w);
             $('.Bar').width(w + 15);
             $('#lastOptMsg').width(w + 15);

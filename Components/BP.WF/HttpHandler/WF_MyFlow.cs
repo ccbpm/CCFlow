@@ -980,16 +980,11 @@ namespace BP.WF.HttpHandler
 
                     DataTable wf_generWorkFlowDt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     wf_generWorkFlowDt.TableName = "WF_GenerWorkFlow";
-                    ds.Tables.Add(wf_generWorkFlowDt);
 
-                    sql = "select * from WF_Node where NodeID=" + this.FK_Node;
-                    DataTable wf_node = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                    wf_node.TableName = "WF_Node";
-                    if (ds.Tables.Contains(wf_node.TableName))
-                    {
-                        ds.Tables.Remove("WF_Node");
-                    }
-                    ds.Tables.Add(wf_node);
+                    //把他转化小写,适应多个数据库.
+                    wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
+                    ds.Tables.Add(wf_generWorkFlowDt);
+                  
                 }
 
                 DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];

@@ -586,6 +586,7 @@ namespace BP.WF
             try
             {
                 dt = DBAccess.RunSQLReturnTable(ps);
+                dt = DBAccess.ToLower(dt);
             }
             catch
             {
@@ -612,17 +613,14 @@ namespace BP.WF
 
 
             //把节点信息写入里面.
-            sql = "SELECT * FROM WF_Node WHERE FK_Flow='" + fk_flow + "'";
-            DataTable dtNode = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dtNode.TableName = "WF_Node";
-            ds.Tables.Add(dtNode);
+            BP.WF.Nodes nds = new Nodes();
+            nds.Retrieve(NodeAttr.FK_Flow, fk_flow);
+            ds.Tables.Add(nds.ToDataTableField("WF_Node"));
 
             //把方向写入里面.
-            sql = "SELECT * FROM WF_Direction WHERE FK_Flow='" + fk_flow + "'";
-            DataTable dtDir = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dtDir.TableName = "WF_Direction";
-            ds.Tables.Add(dtDir);
-
+            Directions dirs = new Directions();
+            dirs.Retrieve(NodeAttr.FK_Flow, fk_flow);
+            ds.Tables.Add(dirs.ToDataTableField("WF_Direction"));
             return ds;
         }
 

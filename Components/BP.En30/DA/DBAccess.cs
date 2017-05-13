@@ -3576,6 +3576,16 @@ namespace BP.DA
             return BP.DA.DBAccess.RunSQLReturnTable(sql);
         }
 
+        public static DataTable ToLower(DataTable dt)
+        {
+            //把列名转成小写.
+            for (int i = 0; i < dt.Columns.Count; i++)
+            {
+                dt.Columns[i].ColumnName = dt.Columns[i].ColumnName.ToLower();
+            }
+            return dt;
+        }
+
         #region LoadConfig
         public static void LoadConfig(string cfgFile, string basePath)
         {

@@ -60,7 +60,7 @@ namespace BP.WF
                     throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
 
                 //获得表单模版.
-                DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet(md.No);
+                DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
 
                 #region 流程设置信息.
                 if (nd.IsStartNode == false)

@@ -372,7 +372,13 @@ namespace BP.WF.HttpHandler
             var sql = "SELECT KeyOfEn AS No, Name FROM Sys_MapAttr WHERE UIContralType=1 AND FK_MapData='" + this.FK_MapData + "' AND KeyOfEn!='" + this.KeyOfEn + "'";
             DataTable dt=BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapAttr";
+
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
             ds.Tables.Add(dt);
+
+            if (dt.Rows.Count == 0)
+                return "err@表单中没有要级联的下拉框.";
            
             //加载数据源.
             SFDBSrcs srcs = new SFDBSrcs();

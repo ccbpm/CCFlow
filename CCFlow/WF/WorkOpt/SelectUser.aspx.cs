@@ -80,11 +80,11 @@ namespace CCFlow.WF.WorkOpt
             switch (method)
             {
                 case "getdepts":
-                     string sql = "";
-            if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
-                sql = "select NO,NAME,ParentNo from port_dept ORDER BY Idx";
-            else
-                sql = "select NO,NAME,ParentNo from port_dept  ";
+                    string sql = "";
+                    if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
+                        sql = "select NO,NAME,ParentNo from port_dept ORDER BY Idx";
+                    else
+                        sql = "select NO,NAME,ParentNo from port_dept  ";
 
                     DataTable dt_dept = DBAccess.RunSQLReturnTable(sql);
                     s_responsetext = DataTableConvertJson.TransDataTable2TreeJson(dt_dept, "NO", "NAME", "ParentNo", "0");
@@ -142,7 +142,7 @@ namespace CCFlow.WF.WorkOpt
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            return DataTableConvertJson.DataTable2Json(ColumnName2UpperCase(dt));
+            return BP.Tools.Json.DataTableToJson(dt); 
         }
 
         /// <summary>

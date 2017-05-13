@@ -171,11 +171,13 @@ Common.CustomPagePlug1 = function (operation) {
     PageData.InitData = {
         PageSize: 10, PageIndex: 1, PageCount: 1, DivId: 'listDiv', countUrl: '', listUrl: '', RenderOverFun: undefined, IsShowAll: false, LocalData: null, IsUseLocalData: false, DataEmptyRender: function () {
             var html = "";
-            html += "<tr style='text-align: center;'>";
-            html += "<td>";
-            html += '没有查询记录';
-            html += "</td>";
-            html += "</tr>";
+
+//            html += "<tr style='text-align: center;'>";
+//            html += "<td>";
+//            html += '没有查询记录';
+//            html += "</td>";
+//            html += "</tr>";
+
             $("#" + PageData.InitData.DivId + ' table tbody').html(html);
             $("#" + PageData.InitData.DivId + " .loadDate").css("display", "none");
         }
@@ -524,7 +526,7 @@ Common.CustomPagePlug = function (operation) {
                 }
                 html += "<td colspan='" + colSpan + "'>";
                 //console.log(colSpan)
-                html += '没有查询记录';
+             //   html += '没有查询记录';
                 html += "</td>";
                 html += "</tr>";
                 $("#" + obj.InitData.DivId + ' table tbody').html(html);

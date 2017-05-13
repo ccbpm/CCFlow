@@ -330,7 +330,8 @@ namespace CCFlow.WF.Comm.Sys
                                                  : string.Format("[{0}]", r["NAME"]));
                             }
 
-                            resultString = ReturnJson(true, DataTableConvertJson.DataTable2Json(dt), true);
+                            string re = BP.Tools.Json.DataTableToJson(dt);
+                            resultString = ReturnJson(true, re, true);
                         }
                         break;
                     case "getmtds": //获取WebService方法列表

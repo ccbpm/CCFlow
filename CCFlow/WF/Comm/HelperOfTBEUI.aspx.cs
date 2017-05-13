@@ -510,6 +510,8 @@ namespace CCFlow.WF.Comm
 
             int totalCount = DBAccess.RunSQLReturnCOUNT("select " + key + " from " + tableName);
 
+           // string re = BP.Tools.Json.DataTableToJson(dt);
+
             return DataTableConvertJson.DataTable2Json(DTable, totalCount);
         }
         /// <summary>

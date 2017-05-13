@@ -1,1 +1,0 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="DataService.aspx.cs" Inherits="CCFlow.AppDemoLigerUI.Base.DataService" %>

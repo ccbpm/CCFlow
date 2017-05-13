@@ -1239,9 +1239,7 @@ namespace BP.Sys
             //加入枚举表.
             DataTable Sys_Menu = md.SysEnums.ToDataTableField("Sys_Enum");
             ds.Tables.Add(Sys_Menu);
-
-
-         
+        
 
             //加入外键属性.
             DataTable Sys_MapAttr = md.MapAttrs.ToDataTableField("Sys_MapAttr");

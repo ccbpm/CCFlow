@@ -279,6 +279,9 @@ namespace BP.WF.HttpHandler
 
             //获得他的描述,与数据.
             DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData, mdtl, int.Parse( this.RefPKVal), strs);
+
+
+
             return BP.Tools.Json.DataSetToJson(ds,false);
         }
         /// <summary>

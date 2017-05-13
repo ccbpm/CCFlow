@@ -69,7 +69,6 @@ namespace BP.WF
                 BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
                 myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
 
-
                 #region 流程设置信息.
                 if (nd.IsStartNode == false)
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);

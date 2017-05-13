@@ -1004,6 +1004,8 @@ namespace BP.WF.HttpHandler
                 }
 
                 DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];
+
+
                 ds.Tables.Add(trackDt.Copy());
 
                 //ds.WriteXml(xml);

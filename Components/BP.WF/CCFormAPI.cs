@@ -643,9 +643,7 @@ namespace BP.WF
             DataTable Sys_MapExt = dtl.MapExts.ToDataTableField("Sys_MapExt");
             myds.Tables.Add(Sys_MapExt);
 
-
 			#region 把从表的- 外键表/枚举 加入 DataSet.
-
             MapExts mes = dtl.MapExts;
             MapExt me = null;
 
@@ -669,6 +667,10 @@ namespace BP.WF
                     string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
                     DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
                     dtEnum.TableName = uiBindKey;
+
+                    dtEnum.Columns[0].ColumnName = "No";
+                    dtEnum.Columns[1].ColumnName = "Name";
+
                     myds.Tables.Add(dtEnum);
                     continue;
                 }
@@ -693,6 +695,10 @@ namespace BP.WF
                     DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
 
                     dt.TableName = mypk;
+
+                    dt.Columns[0].ColumnName = "No";
+                    dt.Columns[1].ColumnName = "Name";
+
                     myds.Tables.Add(dt);
                     continue;
                 }
@@ -784,56 +790,10 @@ namespace BP.WF
 			myds.Tables.Add(dtDtl); //加入这个明细表, 如果没有数据，xml体现为空.
 			#endregion 把从表的数据放入.
 
-            //#region 把主表的- 外键表/枚举 加入 DataSet.
-            //dtMapAttr = myds.Tables["Sys_MapAttr"];
-            //mes = md.MapExts;
-            //foreach (DataRow dr in dtMapAttr.Rows)
-            //{
-            //    string uiBindKey = dr["UIBindKey"].ToString();
-            //    string myPK = dr["MyPK"].ToString();
-            //    string lgType = dr["LGType"].ToString();
-            //    // 如果是枚举值, 判断是否存在., 
-            //    if (myds.Tables.Contains(uiBindKey) == true)
-            //        continue;
-            //    if (lgType == "1")
-            //    {
-            //        string mysql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + uiBindKey + "' ORDER BY IntKey ";
-            //        DataTable dtEnum = DBAccess.RunSQLReturnTable(mysql);
-            //        dtEnum.TableName = uiBindKey;
-            //        myds.Tables.Add(dtEnum);
-            //        continue;
-            //    }
 
-            //    if (lgType != "2")
-            //        continue;
-
-            //    string UIIsEnable = dr["UIIsEnable"].ToString();
-            //    if (UIIsEnable == "0")
-            //        continue;
-
-            //    // 检查是否有下拉框自动填充。
-            //    string keyOfEn = dr["KeyOfEn"].ToString();
-            //    string fk_mapData = dr["FK_MapData"].ToString();
-
-            //    #region 处理下拉框数据范围. for 小杨.
-            //    me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
-            //    if (me != null)
-            //    {
-            //        string fullSQL = me.Doc.Clone() as string;
-            //        fullSQL = fullSQL.Replace("~", ",");
-            //        fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
-            //        dt = DBAccess.RunSQLReturnTable(fullSQL);
-            //        dt.TableName = myPK; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
-            //        myds.Tables.Add(dt);
-            //        continue;
-            //    }
-            //    #endregion 处理下拉框数据范围.
-
-            //    dt = BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey);
-            //    dt.TableName = uiBindKey;
-            //    myds.Tables.Add(dt);
-            //}
-            //#endregion 把主表的- 外键表/枚举 加入 DataSet.
+            //放入一个空白的实体，用与获取默认值.
+            GEDtl dtlBlank = dtls.GetNewEntity as GEDtl;
+            myds.Tables.Add(dtl.ToDataTableField("Blank"));
 
 			return myds;
 		}

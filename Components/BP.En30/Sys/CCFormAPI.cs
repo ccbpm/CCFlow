@@ -1575,23 +1575,10 @@ namespace BP.Sys
             //查询
             obj.DoQuery(SysEnumMainAttr.No, pageSize, pageNumber);
 
-            return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(sftables, RowCount);
-        }
-        /// <summary>
-        /// 获取所有枚举
-        /// </summary>
-        /// <param name="pageNumber">第几页</param>
-        /// <param name="pageSize">每页大小</param>
-        /// <returns>json</returns>
-        public static string DB_EnumerationList(int pageNumber, int pageSize)
-        {
-            SysEnumMains enumMains = new SysEnumMains();
-            QueryObject obj = new QueryObject(enumMains);
-            int RowCount = obj.GetCount();
-            //查询
-            obj.DoQuery(SysEnumMainAttr.No, pageSize, pageNumber);
+            //转化成json.
+            return BP.Tools.Json.DataTableToJson(sftables.ToDataTableField(), false);
 
-            return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(enumMains, RowCount);
+           // return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(sftables, RowCount);
         }
         /// <summary>
         /// 获得隐藏字段集合.
@@ -1600,7 +1587,6 @@ namespace BP.Sys
         /// <returns></returns>
         public static string DB_Hiddenfielddata(string fk_mapdata)
         {
-            int RowCount = 0;
             MapAttrs mapAttrs = new MapAttrs();
             QueryObject obj = new QueryObject(mapAttrs);
             obj.AddWhere(MapAttrAttr.FK_MapData, fk_mapdata);
@@ -1608,11 +1594,10 @@ namespace BP.Sys
             obj.AddWhere(MapAttrAttr.UIVisible, "0");
             obj.addAnd();
             obj.AddWhere(MapAttrAttr.EditType, "0");
-            RowCount = obj.GetCount();
             //查询
             obj.DoQuery();
 
-            return BP.Tools.Entitis2Json.ConvertEntitis2GridJsonOnlyData(mapAttrs);
+            return mapAttrs.ToJson();
         }
         #endregion 其他功能.
 

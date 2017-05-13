@@ -236,6 +236,9 @@
     </Compile>
     <Compile Include="Tools\chs2py.cs" />
     <Compile Include="Tools\CRC32Helper.cs" />
+    <Compile Include="Tools\Entitis2Json.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tools\JSON.cs" />
     <Compile Include="DA\Log.cs" />
     <Compile Include="DTS\DataToCash.cs" />
@@ -315,7 +318,6 @@
     <Compile Include="Pub\Engine.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Tools\Entitis2Json.cs" />
     <Compile Include="Port\Current.cs" />
     <Compile Include="Web\GuestUser.cs">
       <SubType>Code</SubType>

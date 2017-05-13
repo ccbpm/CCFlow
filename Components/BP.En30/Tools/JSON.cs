@@ -25,7 +25,6 @@ namespace BP.Tools
         public static string Hastable2Json_del(Hashtable ht)
         {
             return ToJsonEntityModel(ht);
-            //return ToJson(ht, false);
         }
         /// <summary>
         /// 把一个json转化一个datatable
@@ -98,7 +97,6 @@ namespace BP.Tools
             }
             return tb;
         }
-
         /// <summary>
         /// 把一个json转化一个datatable 杨玉慧
         /// </summary>

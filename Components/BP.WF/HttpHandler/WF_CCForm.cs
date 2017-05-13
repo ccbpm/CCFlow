@@ -280,8 +280,6 @@ namespace BP.WF.HttpHandler
             //获得他的描述,与数据.
             DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData, mdtl, int.Parse( this.RefPKVal), strs);
 
-
-
             return BP.Tools.Json.DataSetToJson(ds,false);
         }
         /// <summary>
@@ -375,6 +373,7 @@ namespace BP.WF.HttpHandler
 
             //返回当前数据存储信息.
             string str= dtl.ToJson();
+
            // BP.DA.DataType.WriteFile("c:\\cc.txt", str);
             return str;
         }

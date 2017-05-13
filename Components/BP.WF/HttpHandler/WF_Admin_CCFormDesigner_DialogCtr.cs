@@ -92,30 +92,17 @@ namespace BP.WF.HttpHandler
         #region 枚举界面.
         public string FrmTable_GetSFTableList()
         {
-            int pageNumber = this.GetRequestValInt("pageNumber");
-            if (pageNumber == 0)
-                pageNumber = 1;
-
-            int pageSize = this.GetRequestValInt("pageSize");
-            if (pageSize == 0)
-                pageSize = 9999;
-
-            return BP.Sys.CCFormAPI.DB_SFTableList(pageNumber, pageSize);
+            SFTables ens = new SFTables();
+            ens.RetrieveAll();
+            return ens.ToJson();
         }
         public string FrmEnumeration_GetEnumerationList()
         {
-            int pageNumber = this.GetRequestValInt("pageNumber");
-            if (pageNumber == 0)
-                pageNumber = 1;
-
-            int pageSize = this.GetRequestValInt("pageSize");
-            if (pageSize == 0)
-                pageSize = 9999;
-
-            return BP.Sys.CCFormAPI.DB_EnumerationList(pageNumber, pageSize); //调用API获得数据.
+            SysEnumMains ens = new SysEnumMains();
+            ens.RetrieveAll();
+            return ens.ToJson();
         }
         #endregion 枚举界面.
-
 
         #region 执行父类的重写方法.
         /// <summary>

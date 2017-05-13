@@ -276,7 +276,7 @@ namespace BP.WF.HttpHandler
                                          : string.Format("[{0}]", r["NAME"]));
                     }
 
-                    return DataTableConvertJson.DataTable2Json(dt);
+                    return BP.Tools.Json.ToJson(dt); 
 
                 case "sfguide_getmtds": //获取WebService方法列表
                     src = context.Request.QueryString["src"];

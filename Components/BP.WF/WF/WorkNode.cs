@@ -5032,6 +5032,7 @@ namespace BP.WF
                 string sql = this.HisNode.TeamLeaderConfirmDoc;
                 sql = Glo.DealExp(sql, this.HisWork, null);
                 sql=sql.Replace("~", "'");
+                sql=sql.Replace("@WorkID", this.WorkID.ToString());
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
 
                 string userNo=WebUser.No;

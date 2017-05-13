@@ -561,6 +561,35 @@ namespace BP.WF
             //定义变量，把数据都放入这个track里面.
             DataSet ds = new DataSet();
 
+            //把轨迹表.
+            ds.Tables.Add(  DB_GenerTrackTable(fk_flow, workid, fid) );
+
+            //把抄送信息加入.
+            CCLists ens = new CCLists(fk_flow, workid, fid);
+            ds.Tables.Add(ens.ToDataTableField("WF_CCList"));
+
+            //把未来节点选择人信息写入里面.
+            Int64 wfid = 0;
+            if (fid != 0)
+                wfid = fid;
+            SelectAccpers accepts = new SelectAccpers(wfid);
+            ds.Tables.Add(ens.ToDataTableField("WF_SelectAccper"));
+
+
+            //把节点信息写入里面.
+            BP.WF.Nodes nds = new Nodes();
+            nds.Retrieve(NodeAttr.FK_Flow, fk_flow);
+            ds.Tables.Add(nds.ToDataTableField("WF_Node"));
+
+
+            //把方向写入里面.
+            Directions dirs = new Directions();
+            dirs.Retrieve(NodeAttr.FK_Flow, fk_flow);
+            ds.Tables.Add(dirs.ToDataTableField("WF_Direction"));
+            return ds;
+        }
+        public static DataTable DB_GenerTrackTable(string fk_flow, Int64 workid, Int64 fid)
+        {
             #region 获取track数据.
             string sqlOfWhere2 = "";
             string sqlOfWhere1 = "";
@@ -580,7 +609,7 @@ namespace BP.WF
             }
 
             string sql = "";
-            sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + " ORDER BY RDT asc";
+            sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + " ORDER BY RDT asc ";
             ps.SQL = sql;
             DataTable dt = null;
             try
@@ -597,33 +626,9 @@ namespace BP.WF
 
             //把track加入里面去.
             dt.TableName = "Track";
-            ds.Tables.Add(dt);
+            return dt;
             #endregion 获取track数据.
-
-            //把抄送信息加入.
-            CCLists ens = new CCLists(fk_flow, workid, fid);
-            ds.Tables.Add(ens.ToDataTableField("WF_CCList"));
-
-            //把未来节点选择人信息写入里面.
-            Int64 wfid = 0;
-            if (fid != 0)
-                wfid = fid;
-            SelectAccpers accepts = new SelectAccpers(wfid);
-            ds.Tables.Add(ens.ToDataTableField("WF_SelectAccper"));
-
-
-            //把节点信息写入里面.
-            BP.WF.Nodes nds = new Nodes();
-            nds.Retrieve(NodeAttr.FK_Flow, fk_flow);
-            ds.Tables.Add(nds.ToDataTableField("WF_Node"));
-
-            //把方向写入里面.
-            Directions dirs = new Directions();
-            dirs.Retrieve(NodeAttr.FK_Flow, fk_flow);
-            ds.Tables.Add(dirs.ToDataTableField("WF_Direction"));
-            return ds;
         }
-
         /// <summary>
         /// 获取一个流程
         /// </summary>

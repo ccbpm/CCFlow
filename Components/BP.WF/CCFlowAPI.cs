@@ -50,7 +50,6 @@ namespace BP.WF
 
 
             Node nd = new Node(fk_node);
-
             try
             {
 
@@ -65,13 +64,16 @@ namespace BP.WF
                 //加入WF_Node.
                 DataTable WF_Node = nd.ToDataTableField("WF_Node");
                 myds.Tables.Add(WF_Node);
-              
+
+                //加入组件的状态信息, 在解析表单的时候使用.
+                BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
+                myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
+
 
                 #region 流程设置信息.
                 if (nd.IsStartNode == false)
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);
                  
-
                 //增加转向下拉框数据.
                 if (nd.CondModel == CondModel.SendButtonSileSelect)
                 {
@@ -151,71 +153,6 @@ namespace BP.WF
 
                 string sql = "";
                 DataTable dt = null;
-
-                ////把附件的数据放入.
-                //if (md.FrmAttachments.Count > 0)
-                //{
-                //    sql = "SELECT * FROM Sys_FrmAttachmentDB where RefPKVal=" + workID + " AND FK_MapData='ND" + fk_node + "'";
-                //    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                //    dt.TableName = "Sys_FrmAttachmentDB";
-                //    myds.Tables.Add(dt);
-                //}
-                //// 图片附件数据放入
-                //if (md.FrmImgAths.Count > 0)
-                //{
-                //    sql = "SELECT * FROM Sys_FrmImgAthDB where RefPKVal=" + workID + " AND FK_MapData='ND" + fk_node + "'";
-                //    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                //    dt.TableName = "Sys_FrmImgAthDB";
-                //    myds.Tables.Add(dt);
-                //}
-
-                ////把从表的数据放入.
-                //if (md.MapDtls.Count > 0)
-                //{
-                //    foreach (MapDtl dtl in md.MapDtls)
-                //    {
-                //        GEDtls dtls = new GEDtls(dtl.No);
-                //        QueryObject qo = null;
-                //        try
-                //        {
-                //            qo = new QueryObject(dtls);
-                //            switch (dtl.DtlOpenType)
-                //            {
-                //                case DtlOpenType.ForEmp:  // 按人员来控制.
-                //                    qo.AddWhere(GEDtlAttr.RefPK, workID);
-                //                    qo.addAnd();
-                //                    qo.AddWhere(GEDtlAttr.Rec, WebUser.No);
-                //                    break;
-                //                case DtlOpenType.ForWorkID: // 按工作ID来控制
-                //                    qo.AddWhere(GEDtlAttr.RefPK, workID);
-                //                    break;
-                //                case DtlOpenType.ForFID: // 按流程ID来控制.
-                //                    qo.AddWhere(GEDtlAttr.FID, workID);
-                //                    break;
-                //            }
-                //        }
-                //        catch
-                //        {
-                //            dtls.GetNewEntity.CheckPhysicsTable();
-                //        }
-                //        DataTable dtDtl = qo.DoQueryToTable();
-
-                //        // 为明细表设置默认值.
-                //        MapAttrs dtlAttrs = new MapAttrs(dtl.No);
-                //        foreach (MapAttr attr in dtlAttrs)
-                //        {
-                //            //处理它的默认值.
-                //            if (attr.DefValReal.Contains("@") == false)
-                //                continue;
-
-                //            foreach (DataRow dr in dtDtl.Rows)
-                //                dr[attr.KeyOfEn] = attr.DefVal;
-                //        }
-
-                //        dtDtl.TableName = dtl.No; //修改明细表的名称.
-                //        myds.Tables.Add(dtDtl); //加入这个明细表, 如果没有数据，xml体现为空.
-                //    }
-                //}
                 #endregion
 
                 #region 把外键表加入DataSet
@@ -272,78 +209,7 @@ namespace BP.WF
                 GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.WorkID = workID;
                 gwf.RetrieveFromDBSources();
-
-                //myds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
-
-                //if (gwf.WFState == WFState.Shift)
-                //{
-                //    //如果是转发.
-                //    BP.WF.ShiftWorks fws = new ShiftWorks();
-                //    fws.Retrieve(ShiftWorkAttr.WorkID, workID, ShiftWorkAttr.FK_Node, fk_node);
-                //    myds.Tables.Add(fws.ToDataTableField("WF_ShiftWork"));
-                //}
-
-                //if (gwf.WFState == WFState.ReturnSta)
-                //{
-                //    //如果是退回.
-                //    ReturnWorks rts = new ReturnWorks();
-                //    rts.Retrieve(ReturnWorkAttr.WorkID, workID,
-                //        ReturnWorkAttr.ReturnToNode, fk_node,
-                //        ReturnWorkAttr.RDT);
-                //    myds.Tables.Add(rts.ToDataTableField("WF_ReturnWork"));
-                //}
-
-                //if (gwf.WFState == WFState.HungUp)
-                //{
-                //    //如果是挂起.
-                //    HungUps hups = new HungUps();
-                //    hups.Retrieve(HungUpAttr.WorkID, workID, HungUpAttr.FK_Node, fk_node);
-                //    myds.Tables.Add(hups.ToDataTableField("WF_HungUp"));
-                //}
-               
-                //Int64 wfid = workID;
-                //if (fid != 0)
-                //    wfid = fid;
-
-                ////放入track信息.
-                //Paras ps = new Paras();
-                //ps.SQL = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
-                //ps.Add("WorkID", wfid);
-                //DataTable dtNode = DBAccess.RunSQLReturnTable(ps);
-                //dtNode.TableName = "Track";
-                //myds.Tables.Add(dtNode);
-
-                ////工作人员列表，用于审核组件.
-                //ps = new Paras();
-                //ps.SQL = "SELECT * FROM  WF_GenerWorkerlist WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
-                //ps.Add("WorkID", wfid);
-                //DataTable dtGenerWorkerlist = DBAccess.RunSQLReturnTable(ps);
-                //dtGenerWorkerlist.TableName = "WF_GenerWorkerlist";
-                //myds.Tables.Add(dtGenerWorkerlist);
-
-                ////放入CCList信息. 用于审核组件.
-                //ps = new Paras();
-                //ps.SQL = "SELECT * FROM WF_CCList WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
-                //ps.Add("WorkID", wfid);
-                //DataTable dtCCList = DBAccess.RunSQLReturnTable(ps);
-                //dtCCList.TableName = "WF_CCList";
-                //myds.Tables.Add(dtCCList);
-
-                ////放入WF_SelectAccper信息. 用于审核组件.
-                //ps = new Paras();
-                //ps.SQL = "SELECT * FROM WF_SelectAccper WHERE WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
-                //ps.Add("WorkID", wfid);
-                //DataTable dtSelectAccper = DBAccess.RunSQLReturnTable(ps);
-                //dtSelectAccper.TableName = "WF_SelectAccper";
-                //myds.Tables.Add(dtSelectAccper);
-
-                ////放入所有的节点信息. 用于审核组件.
-                //ps = new Paras();
-                //ps.SQL = "SELECT * FROM WF_Node WHERE FK_Flow=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "FK_Flow ORDER BY " + NodeAttr.Step;
-                //ps.Add("FK_Flow", fk_flow);
-                //DataTable dtNodes = DBAccess.RunSQLReturnTable(ps);
-                //dtNodes.TableName = "Nodes";
-                //myds.Tables.Add(dtNodes);
+                
                 #endregion 把流程信息放入里面.
 
                 #region 处理流程-消息提示.
@@ -358,6 +224,7 @@ namespace BP.WF
                 {
                     case WFState.AskForReplay: // 返回加签的信息.
                         string mysql = "SELECT * FROM ND" + int.Parse(fk_flow) + "Track WHERE WorkID=" + workID + " AND " + TrackAttr.ActionType + "=" + (int)ActionType.ForwardAskfor;
+
                         DataTable mydt = BP.DA.DBAccess.RunSQLReturnTable(mysql);
                         foreach (DataRow dr in mydt.Rows)
                         {
@@ -425,8 +292,6 @@ namespace BP.WF
 
                                 str = str.Replace("@WorkID", workID.ToString());
                                 str = str.Replace("@OID", workID.ToString());
-
-
 
                                 DataRow drMsg = dtAlert.NewRow();
                                 drMsg["Title"] = "退回信息";

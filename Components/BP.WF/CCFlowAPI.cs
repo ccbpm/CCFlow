@@ -62,6 +62,11 @@ namespace BP.WF
                 //获得表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
 
+                //加入WF_Node.
+                DataTable WF_Node = nd.ToDataTableField("WF_Node");
+                myds.Tables.Add(WF_Node);
+              
+
                 #region 流程设置信息.
                 if (nd.IsStartNode == false)
                     BP.WF.Dev2Interface.Node_SetWorkRead(fk_node, workID);

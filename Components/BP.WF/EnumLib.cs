@@ -1109,6 +1109,10 @@ namespace BP.WF
         /// </summary>
         WordForm=9,
         /// <summary>
+        /// 傻瓜轨迹表单
+        /// </summary>
+        FoolTruck = 10,
+        /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>
         DisableIt = 100,

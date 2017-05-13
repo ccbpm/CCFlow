@@ -376,7 +376,7 @@ namespace BP.WF.HttpHandler
 
             if (this.currND.HisFormType == NodeFormType.FixForm)
             {
-                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
+                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上。*/
                 if (this.WorkID == 0)
                 {
                     currWK = this.currFlow.NewWork();
@@ -389,6 +389,23 @@ namespace BP.WF.HttpHandler
                 url = this.MyFlow_Init_DealUrl(currND, currWK, url);
                 return "url@" + url;
             }
+
+            if (this.currND.HisFormType == NodeFormType.FoolTruck)
+            {
+                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
+                if (this.WorkID == 0)
+                {
+                    currWK = this.currFlow.NewWork();
+                    this.WorkID = currWK.OID;
+                }
+
+                string url = "MyFlowFoolTruck.htm";
+
+                //处理连接.
+                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
+                return "url@" + url;
+            }
+
             #endregion 处理表单类型.
 
             /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
@@ -984,7 +1001,6 @@ namespace BP.WF.HttpHandler
                     //把他转化小写,适应多个数据库.
                     wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
                     ds.Tables.Add(wf_generWorkFlowDt);
-                  
                 }
 
                 DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];

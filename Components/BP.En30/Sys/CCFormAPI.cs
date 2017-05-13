@@ -1241,19 +1241,7 @@ namespace BP.Sys
             ds.Tables.Add(Sys_Menu);
 
 
-            // 审核组件
-            string nodeIDstr = fk_mapdata.Replace("ND", "");
-            if (DataType.IsNumStr(nodeIDstr))
-            {
-                // 审核组件状态:0 禁用;1 启用;2 只读;
-                string sql = "SELECT * FROM WF_Node WHERE NodeID=" + nodeIDstr;
-                DataTable WF_Node = BP.DA.DBAccess.RunSQLReturnTable(sql);
-
-                WF_Node = DBAccess.ToLower(WF_Node);
-              
-                WF_Node.TableName = "WF_Node";
-                ds.Tables.Add(WF_Node);
-            }
+         
 
             //加入外键属性.
             DataTable Sys_MapAttr = md.MapAttrs.ToDataTableField("Sys_MapAttr");

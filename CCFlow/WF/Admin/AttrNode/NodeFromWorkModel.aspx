@@ -135,6 +135,27 @@
                 </table>
             </td>
         </tr>
+          <!-- =================================== 使用 轨迹模式表单  -->
+        <tr>
+            <th colspan="2" class="DemoImgTD">
+                <asp:RadioButton ID="RB_FoolTruck" runat="server" GroupName="xxx" Text="轨迹模式傻瓜表单" />
+            </th>
+        </tr>
+        <tr>
+            <td class="DemoImgTD">
+                <a href="http://ccbpm.mydoc.io/?v=5404&t=17925" target="_blank">
+                    <img src="./Img/SelfFrm.png" class="DemoImg" alt="点击放大" />
+                </a>
+            </td>
+            <td>
+               <ul>
+               <li>该表单是傻瓜表单的一种变形展现方式.</li>
+               <li>也叫轨迹表单模式,为软通动力定制的一种表单展示类型.</li>
+               <li>适合一个节点一个表单模式,简洁流畅，容易追踪历史运动过程.</li>
+               </ul>
+            </td>
+        </tr>
+
         <!-- =================================== 使用 嵌入式表单  -->
         <tr>
             <th colspan="2" class="DemoImgTD">
@@ -161,6 +182,7 @@
                 </font>
             </td>
         </tr>
+
         <!-- =================================== 使用SDK表单 -->
         <tr>
             <th colspan="2" class="DemoImgTD">

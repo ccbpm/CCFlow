@@ -88,6 +88,11 @@ namespace CCFlow.WF.Admin
                         }
                         this.DDL_Frm.SelectedValue = nd.NodeFrmID.Substring(2);
                         break;
+                    //傻瓜轨迹表单
+                    case NodeFormType.FoolTruck:
+                        this.RB_FoolTruck.Checked = true;
+                        //this.TB_CustomURL.Text = nd.FormUrl;
+                        break;
                     //加载使用嵌入式表单
                     case NodeFormType.SelfForm:
                         this.RB_SelfForm.Checked = true;
@@ -178,6 +183,17 @@ namespace CCFlow.WF.Admin
                     nd.DirectUpdate();
                 }
             }
+
+            //使用傻瓜轨迹表单模式.
+            if (this.RB_FoolTruck.Checked)
+            {
+                nd.FormType = NodeFormType.FoolTruck;
+                nd.DirectUpdate();
+
+                md.HisFrmType = BP.Sys.FrmType.FoolForm;  //同时更新表单表住表.
+                md.Update();
+            }
+
             //使用嵌入式表单
             if (this.RB_SelfForm.Checked)
             {

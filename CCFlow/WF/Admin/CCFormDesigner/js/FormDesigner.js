@@ -1272,6 +1272,7 @@ function figure_Template_Dtl(frmDtl) {
 
 //初始化轨迹图 审核组件 子流程 子线程
 function figure_Template_FigureCom(figureCom) {
+
     if (figureCom.Sta == 0) {//未启用该组件
         return;
     }

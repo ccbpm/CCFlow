@@ -40,7 +40,7 @@ function OpenSelectAccepter(flowNo, nodeid, workid, fid) {
 
 function OpenAccepter() {
 
-    var url = './CCForm/FrmPopVal.aspx?FK_MapExt=' + popNameInXML + '&CtrlVal=' + ctrl.value;
+    var url = './CCForm/FrmPopVal.htm?FK_MapExt=' + popNameInXML + '&CtrlVal=' + ctrl.value;
     var v = window.showModalDialog(url, 'opp', 'dialogHeight: 550px; dialogWidth: 650px; dialogTop: 100px; dialogLeft: 150px; center: yes; help: no');
     if (v == null || v == '' || v == 'NaN') {
         return;
@@ -105,18 +105,6 @@ function KindEditerSync() {
     catch (err) {
     }
 }
-
-function Shift() {
-    //  var url = '/WF/WorkOpt/Forward.htm';
-    //window.open(url);
-}
-
-function ReturnWork() {
-    //var url = '/WF/WorkOpt/ReturnWork.htm';
-    //window.open(url);
-}
-
-
 
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
@@ -228,9 +216,10 @@ function SetCtrlVal(ctrlID, val) {
     document.getElementById(longCtlID + 'DDL_' + ctrlID).value = val;
     document.getElementById(longCtlID + 'CB_' + ctrlID).value = val;
 }
+
 //执行分支流程退回到分合流节点。
 function DoSubFlowReturn(fid, workid, fk_node) {
-    var url = 'ReturnWorkSubFlowToFHL.aspx?FID=' + fid + '&WorkID=' + workid + '&FK_Node=' + fk_node;
+    var url = 'ReturnWorkSubFlowToFHL.htm?FID=' + fid + '&WorkID=' + workid + '&FK_Node=' + fk_node;
     var v = WinShowModalDialog(url, 'df');
     window.location.href = window.history.url;
 }
@@ -619,7 +608,7 @@ function showReturnWorkModel() {
 //设置附件为只读
 function setAttachDisabled() {
     //附件设置
-    var attachs = $('iframe[src*="AttachmentUpload.aspx"]');
+    var attachs = $('iframe[src*="AttachmentUpload.htm"]');
     $.each(attachs, function (i, attach) {
         if (attach.src.indexOf('IsReadOnly') == -1) {
             $(attach).attr('src', $(attach).attr('src') + "&IsReadOnly=1");
@@ -2733,9 +2722,9 @@ function figure_Template_Attachment(frmAttachment) {
     }
     var src = "";
     if (pageData.IsReadonly)
-        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+        src = "/WF/CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
     else
-        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+        src = "/WF/CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
     eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml=$(eleHtml);
@@ -2814,9 +2803,9 @@ function figure_Template_Dtl(frmDtl) {
     }
     else if (frmDtl.DtlShowModel == "1") {
         if (pageData.IsReadOnly)
-            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
         else
-            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
 
     }
     var eleIframe = '<iframe></iframe>';
@@ -2856,15 +2845,24 @@ function figure_Template_Dtl(frmDtl) {
 
 //初始化轨迹图
 function figure_Template_FigureFlowChart(wf_node) {
+
     //轨迹图
     var sta = wf_node.FrmTrackSta;
     var x = wf_node.FrmTrack_X;
     var y = wf_node.FrmTrack_Y;
     var h = wf_node.FrmTrack_H;
     var w = wf_node.FrmTrack_W;
+
     if (sta == 0) {
         return $('');
     }
+
+    if (sta == undefined) {
+        return;
+    }
+
+
+
     var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
     src += '&FK_Flow=' + pageData.FK_Flow;
     src += '&FK_Node=' + pageData.FK_Node;
@@ -2879,6 +2877,7 @@ function figure_Template_FigureFlowChart(wf_node) {
 
 //审核组件
 function figure_Template_FigureFrmCheck(wf_node) {
+
     //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
     var sta = wf_node.FWCSta;
     var x = wf_node.FWC_X;
@@ -2888,7 +2887,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
     if (sta == 0)
         return $('');
 
-    var src = appPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
+    var src = appPath + "WF/WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";
     var paras = '';
     
@@ -2925,7 +2924,7 @@ function figure_Template_FigureThreadDtl(wf_node) {
     if (sta == 0)
         return $('');
 
-    var src = appPath + "WF/WorkOpt/Thread.aspx?s=2";
+    var src = appPath + "WF/WorkOpt/Thread.htm?s=2";
     var fwcOnload = "";
     var paras = '';
 
@@ -2961,7 +2960,7 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
     if (sta == 0)
         return $('');
 
-    var src = appPath + "WF/WorkOpt/SubFlow.aspx?s=2";
+    var src = appPath + "WF/WorkOpt/SubFlow.htm?s=2";
     var fwcOnload = "";
     var paras = '';
 

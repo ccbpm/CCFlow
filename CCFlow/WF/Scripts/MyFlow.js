@@ -214,13 +214,7 @@ function SetCtrlVal(ctrlID, val) {
     document.getElementById(longCtlID + 'TB_' + ctrlID).value = val;
     document.getElementById(longCtlID + 'DDL_' + ctrlID).value = val;
     document.getElementById(longCtlID + 'CB_' + ctrlID).value = val;
-}
-//执行分支流程退回到分合流节点。
-function DoSubFlowReturn(fid, workid, fk_node) {
-    var url = 'ReturnWorkSubFlowToFHL.aspx?FID=' + fid + '&WorkID=' + workid + '&FK_Node=' + fk_node;
-    var v = WinShowModalDialog(url, 'df');
-    window.location.href = window.history.url;
-}
+} 
 function To(url) {
     //window.location.href = url;
     window.name = "dialogPage"; window.open(url, "dialogPage")
@@ -245,8 +239,6 @@ function WinOpen(url, winName) {
     newWindow.focus();
     return;
 }
-
- 
 
 function DoDelSubFlow(fk_flow, workid) {
     if (window.confirm('您确定要终止进程吗？') == false)

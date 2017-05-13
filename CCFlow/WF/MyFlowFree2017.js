@@ -2861,8 +2861,6 @@ function figure_Template_FigureFlowChart(wf_node) {
         return;
     }
 
-
-
     var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
     src += '&FK_Flow=' + pageData.FK_Flow;
     src += '&FK_Node=' + pageData.FK_Node;

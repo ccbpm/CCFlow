@@ -6074,9 +6074,25 @@ namespace BP.WF
                         }
                         #endregion 检查流程启动条件.
 
-                        //启动子流程.
-                        SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_StartWork(fl.No, this.HisWork.Row, null, 0, null, this.WorkID, this.HisFlow.No);
+
+                        #region 启动子流程.
+                        //组织从表数据，把它copy到子流程里面.
+                        DataSet dsDtl = new DataSet();
+                        MapDtls dtls = new MapDtls();
+                        dtls.RetrieveAll(MapDtlAttr.FK_MapData, this.HisWork.ClassID);
+                        foreach (MapDtl dtl in dtls)
+                        {
+                            string sqlDtl = "SELECT * FROM " + dtl.PTable + " WHERE RefPK='" + this.WorkID + "'";
+
+                            DataTable dtDtl = DBAccess.RunSQLReturnTable(sqlDtl);
+                            dtDtl.TableName = dtl.No;
+                            dsDtl.Tables.Add(dtDtl);
+                        }
+
+                        SendReturnObjs sendObjs = BP.WF.Dev2Interface.Node_StartWork(fl.No, this.HisWork.Row, dsDtl, 0, null, this.WorkID, this.HisFlow.No);
                         msg += "@子流程[" + fl.Name + "]已经启动，已经发送给：" + sendObjs.VarAcceptersName + "，发送到：" + sendObjs.VarToNodeName + "。";
+                        #endregion 启动子流程.
+
                     }
                     if (msg != "")
                         this.addMsg(SendReturnMsgFlag.MsgOfText, msg);

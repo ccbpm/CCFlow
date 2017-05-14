@@ -6074,12 +6074,11 @@ namespace BP.WF
                         }
                         #endregion 检查流程启动条件.
 
-
                         #region 启动子流程.
                         //组织从表数据，把它copy到子流程里面.
                         DataSet dsDtl = new DataSet();
                         MapDtls dtls = new MapDtls();
-                        dtls.RetrieveAll(MapDtlAttr.FK_MapData, this.HisWork.ClassID);
+                        dtls.Retrieve(MapDtlAttr.FK_MapData, this.HisWork.ClassID);
                         foreach (MapDtl dtl in dtls)
                         {
                             string sqlDtl = "SELECT * FROM " + dtl.PTable + " WHERE RefPK='" + this.WorkID + "'";

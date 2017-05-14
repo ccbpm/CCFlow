@@ -6084,7 +6084,9 @@ namespace BP.WF
                             string sqlDtl = "SELECT * FROM " + dtl.PTable + " WHERE RefPK='" + this.WorkID + "'";
 
                             DataTable dtDtl = DBAccess.RunSQLReturnTable(sqlDtl);
-                            dtDtl.TableName = dtl.No;
+
+                            dtDtl.TableName = dtl.No.Replace("ND"+this.HisNode.NodeID, "ND"+int.Parse(fl.No+"01") );
+
                             dsDtl.Tables.Add(dtDtl);
                         }
 

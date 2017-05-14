@@ -4926,6 +4926,7 @@ namespace BP.WF
                     {
                         if (dt.TableName != dtl.No)
                             continue;
+
                         //获取dtls
                         GEDtls daDtls = new GEDtls(dtl.No);
                         daDtls.Delete(GEDtlAttr.RefPK, wk.OID); // 清除现有的数据.
@@ -4937,7 +4938,6 @@ namespace BP.WF
                         foreach (DataRow dr in dt.Rows)
                         {
                             daDtl.ResetDefaultVal();
-                            daDtl.RefPK = wk.OID.ToString();
 
                             //明细列.
                             foreach (DataColumn dc in dt.Columns)
@@ -4945,6 +4945,8 @@ namespace BP.WF
                                 //设置属性.
                                 daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
                             }
+
+                            daDtl.RefPK = wk.OID.ToString();
                             daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
                         }
                     }

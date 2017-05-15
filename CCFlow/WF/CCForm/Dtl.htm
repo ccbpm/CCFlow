@@ -213,10 +213,10 @@
             $.each(workNodeData.Sys_MapAttr, function (k, mapAttr) {
                 var defVal = undefined;
                 //设置新增时的默认值
-                if (workNodeData.DBDtl[0][mapAttr.KeyOfEn] == undefined) {
+                if (workNodeData.Blank[0][mapAttr.KeyOfEn] == undefined) {
                     defVal = mapAttr.DefVal;
                 } else {
-                    defVal = workNodeData.DBDtl[0][mapAttr.KeyOfEn];
+                    defVal = workNodeData.Blank[0][mapAttr.KeyOfEn];
                 }
 
                 trData.data[mapAttr.KeyOfEn] = defVal;

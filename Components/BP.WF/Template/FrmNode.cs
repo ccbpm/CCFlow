@@ -38,6 +38,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string Is1ToN = "Is1ToN";
         /// <summary>
+        /// 是否默认打开
+        /// </summary>
+        public const string IsDefaultOpen = "IsDefaultOpen";
+        /// <summary>
         /// Idx
         /// </summary>
         public const string Idx = "Idx";
@@ -236,6 +240,20 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(FrmNodeAttr.Is1ToN, value);
+            }
+        }
+        /// <summary>
+        /// 是否默认打开
+        /// </summary>
+        public bool IsDefaultOpen
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmNodeAttr.IsDefaultOpen);
+            }
+            set
+            {
+                this.SetValByKey(FrmNodeAttr.IsDefaultOpen, value);
             }
         }
         /// <summary>
@@ -529,7 +547,7 @@ namespace BP.WF.Template
                // map.AddTBInt(FrmNodeAttr.IsEdit, 1, "是否可以更新", true, false);
                 map.AddTBInt(FrmNodeAttr.IsPrint, 0, "是否可以打印", true, false);
                 map.AddTBInt(FrmNodeAttr.IsEnableLoadData, 0, "是否启用装载填充事件", true, false);
-
+                map.AddTBInt(FrmNodeAttr.IsDefaultOpen, 0, "是否默认打开", true, false);
 
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);

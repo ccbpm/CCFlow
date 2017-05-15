@@ -682,6 +682,10 @@
 	                    rowData.RefPKVal = GetQueryString("RefPKVal");
 	                    currentRowIndex = -1;
 	                    AjaxServiceGener(rowData, deleteRowAfter, this);
+	                } else {//移除  新增的 尚未入库
+	                    var tr=$(index).parent().parent();
+	                    updateTableSn(tr);
+	                    tr.remove();
 	                }
 	            } 
 	        });
@@ -702,14 +706,8 @@
 	                delRow.RowData = undefined;
 	            }
 
-	            tr = $(tr).next();
-	            while (tr.length == 1) {
-	                var snTd = $(tr.children('td')[0]);
-	                var sn = snTd.text();
-	                snTd.text(parseInt(sn) - 1);
-	                tr = $(tr).next();
-	            }
-
+	            
+	            updateTableSn(tr);
 	            tr = $('table tbody tr')[pageData.currentRowIndex];
 	            tr.remove();
 	            pageData.currentRowIndex = -1;
@@ -719,8 +717,14 @@
 
         
         //更新表格序号
-	    function updateTableSn() {
-
+	    function updateTableSn(tr) {
+	        tr = $(tr).next();
+	        while (tr.length == 1) {
+	            var snTd = $(tr.children('td')[0]);
+	            var sn = snTd.text();
+	            snTd.text(parseInt(sn) - 1);
+	            tr = $(tr).next();
+	        }
 	    }
 	</script>
 

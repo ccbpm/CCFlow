@@ -204,10 +204,7 @@
                     
                 }
             });
-            //如果能删除，就有删除按钮
-            if (workNodeData.Sys_MapDtl[0].IsDelete == "1") {
-                insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
-            }
+            insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
             //insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
             //直接复制上面的即可
 
@@ -313,10 +310,13 @@
                         //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
                         delTh.attr('title', "title");
                         //如果能删除，就有删除按钮
-                        if (sys_MapDtl[0].IsDelete == "1" && sys_MapDtl[0].IsReadonly=="0") {
+                        //if (sys_MapDtl[0].IsDelete == "1" && sys_MapDtl[0].IsReadonly=="0") {
                             delTh.data(delThData);
-                        }
+                       // }
+                        //可删除或者可新增时，有操作列
+                        //if ((sys_MapDtl[0].IsDelete == "1" ||  sys_MapDtl[0].IsInsert=="1") && sys_MapDtl[0].IsReadonly=="0") {
                         threadTr.append(delTh);
+                        //}
 
                         //添加删除列
                         //var delTh = $('<th></th>');
@@ -636,6 +636,10 @@
             eleHtml.css('width', '100%');
 
             eleHtml.bind('focus', blurEvent);
+            if (mapAttr.UIIsEnable == "0") {
+                enableAttr = eleHtml.find('[name=TB_' + mapAttr.KeyOfEn + ']').attr('disabled', true);
+                enableAttr = eleHtml.find('[name=DDL_' + mapAttr.KeyOfEn + ']').attr('disabled', true);
+            }
             return eleHtml;
         }
 
@@ -718,7 +722,7 @@
 	            
 	            updateTableSn(tr);
 	            tr = $('table tbody tr')[pageData.currentRowIndex];
-	            tr.remove();
+	            $(tr).remove();
 	            pageData.currentRowIndex = -1;
 	            return;
 	        }

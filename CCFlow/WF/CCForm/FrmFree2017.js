@@ -2421,6 +2421,11 @@ function figure_MapAttr_Template( mapAttr) {
     eleHtml = $('<div>' + eleHtml + '</div>');
     eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
+
+    if (mapAttr.UIIsEnable == "0") {
+        enableAttr = eleHtml.find('[name=TB_' + mapAttr.KeyOfEn + ']').attr('disabled', true);
+        enableAttr = eleHtml.find('[name=DDL_' + mapAttr.KeyOfEn + ']').attr('disabled', true);
+    }
     return eleHtml;
 }
 

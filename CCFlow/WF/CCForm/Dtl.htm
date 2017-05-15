@@ -310,13 +310,13 @@
                         //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
                         delTh.attr('title', "title");
                         //如果能删除，就有删除按钮
-                        //if (sys_MapDtl[0].IsDelete == "1" && sys_MapDtl[0].IsReadonly=="0") {
+                        if (sys_MapDtl[0].IsDelete == "1" && sys_MapDtl[0].IsReadonly=="0") {
                             delTh.data(delThData);
-                       // }
+                        }
                         //可删除或者可新增时，有操作列
-                        //if ((sys_MapDtl[0].IsDelete == "1" ||  sys_MapDtl[0].IsInsert=="1") && sys_MapDtl[0].IsReadonly=="0") {
+                        if ((sys_MapDtl[0].IsDelete == "1" ||  sys_MapDtl[0].IsInsert=="1") && sys_MapDtl[0].IsReadonly=="0") {
                         threadTr.append(delTh);
-                        //}
+                        }
 
                         //添加删除列
                         //var delTh = $('<th></th>');

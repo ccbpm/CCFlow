@@ -36,28 +36,28 @@ INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('11','人力资源助�
 -- Port_Emp ;
 -- 总经理部 ;
 INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('admin','admin','pub','1')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhoupeng','周朋','pub','1')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhoupeng','周朋','123','1')  ;
 
 -- 市场部 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhanghaicheng','张海成','pub','2')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhangyifan','张一帆','pub','2')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhoushengyu','周升雨','pub','2')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhanghaicheng','张海成','123','2')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhangyifan','张一帆','123','2')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhoushengyu','周升雨','123','2')  ;
 
 -- 研发部 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('qifenglin','祁凤林','pub','3')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhoutianjiao','周天娇','pub','3')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('qifenglin','祁凤林','123','3')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhoutianjiao','周天娇','123','3')  ;
 
 -- 服务部经理 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('guoxiangbin','郭祥斌','pub','4')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('fuhui','福惠','pub','4')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('guoxiangbin','郭祥斌','123','4')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('fuhui','福惠','123','4')  ;
 
 -- 财务部 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('yangyilei','杨依雷','pub','5')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('guobaogeng','郭宝庚','pub','5') ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('yangyilei','杨依雷','123','5')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('guobaogeng','郭宝庚','123','5') ;
 
 -- 人力资源部 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('liping','李萍','pub','6')  ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('liyan','李言','pub','6')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('liping','李萍','123','6')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('liyan','李言','123','6')  ;
 
  
 -- Port_DeptEmp 人员与部门的对应 ;

@@ -9,8 +9,8 @@
     <script src="../Scripts/config.js" type="text/javascript"></script>
      <base target="_self" /> 
 
-    <!--<link href="Dtl.css" rel="stylesheet" type="text/css" />-->
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="Dtl.css" rel="stylesheet" type="text/css" />
+    <!--<link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
 
 
     <link rel="stylesheet" type="text/css" href="../Scripts/easyUI145/themes/default/easyui.css" />
@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
 
-    <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
+    <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
     <script type="text/javascript" src="MapExt2016.js"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
@@ -121,6 +121,9 @@
                 pageData.DBDtl.push({ OID: rowData.OID, RowData: rowData });
 
                 updateTr.data().data = rowData;
+
+                //新增数据  将移除改成删除
+                updateTr.find('.delRow').attr('src', '../Img/Btn/delete.png');
             } else {
                 for (var obj in updateData[0].RowData) {//更新值
                     updateData[0].RowData[obj] = returnRowData[obj];
@@ -199,19 +202,23 @@
                     
                 }
             });
-
-            insertTr.append($('<td><img src="../Img/Btn/Delete.gif"  onclick="deleteRow(this)" /></td>'));
+            //如果能删除，就有删除按钮
+            if (workNodeData.Sys_MapDtl[0].IsDelete == "1") {
+                insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
+            }
             //insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
             //直接复制上面的即可
 
             var trData = { data: {} };
             $.each(workNodeData.Sys_MapAttr, function (k, mapAttr) {
                 var defVal = undefined;
-                if (workNodeData.MainTable[0][mapAttr.KeyOfEn] == undefined) {
+                //设置新增时的默认值
+                if (workNodeData.DBDtl[0][mapAttr.KeyOfEn] == undefined) {
                     defVal = mapAttr.DefVal;
                 } else {
-                    defVal = workNodeData.MainTable[0][mapAttr.KeyOfEn];
+                    defVal = workNodeData.DBDtl[0][mapAttr.KeyOfEn];
                 }
+
                 trData.data[mapAttr.KeyOfEn] = defVal;
             })
 
@@ -219,6 +226,8 @@
             insertTr.data(trData);
             $('#dtlDiv div table tbody').append(insertTr);
             AfterBindEn_DealMapExt(insertTr);
+
+            setTdDataByTrData(newRowIndex);
         }
 
         //初始化数据.
@@ -250,7 +259,6 @@
                         $("#Msg").html(data);
                         return;
                     }
-                    
                     //解析.
                     data = JSON.parse(data);
 
@@ -267,7 +275,7 @@
                     //如果不能新增，就把新增按钮去掉.
                     if (sys_MapDtl[0].IsInsert == "0" ) 
                       document.getElementById('insertBtn').style.display='none';
-                    
+					  
                     $('#dtlDiv div table tbody').html('');//清空表格数据
                     var sys_mapAttr = data["Sys_MapAttr"];
                     if ($('#dtlDiv div table thead tr').length == 0) {
@@ -294,11 +302,16 @@
                         var delThData = {
                             custom: true,
                             customcontent: 1,
-                            customcontent1: 'input@type="button" onclick="deleteRow(this)" Value="删除" style=""@',
+                            customcontent1: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
                             coltype: 'Operation1'
                         };
+
+                        //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
                         delTh.attr('title', "title");
-                        delTh.data(delThData);
+                        //如果能删除，就有删除按钮
+                        if (sys_MapDtl[0].IsDelete == "1") {
+                            delTh.data(delThData);
+                        }
                         threadTr.append(delTh);
 
                         //添加删除列
@@ -368,6 +381,13 @@
                                     }
                                 });
                             })
+
+                            //如果是只读的，全部设置成只读
+                            if (workNodeData.Sys_MapDtl[0].IsReadonly == "1") {
+                                $('#dtlDiv div table tbody tr input[type=text]').attr('disabled', 'disabled');
+                                $('#dtlDiv div table tbody tr textarea').attr('disabled', 'disabled');
+                                $('#dtlDiv div table tbody tr select').attr('disabled', 'disabled');
+                            }
 
                             //循环TBODY 初始化 SYS_MAPEXT
                             var tbodyTrs1 = $('#dtlDiv div table tbody tr');
@@ -612,7 +632,6 @@
             if (pageData.currentRowIndex != thisRowIndex) {//改变编辑行，存盘
                 
                 if (pageData.currentRowIndex != -1) {
-                    console.log("存盘" + pageData.currentRowIndex)
                     setTrDataByData(pageData.currentRowIndex);
                     saveRow(pageData.currentRowIndex);
                 }
@@ -625,7 +644,7 @@
 <body>
     <div id="Msg"></div>
     <!--杨玉慧-->
-    <input type="button" value="新增" id="insertBtn" onclick="insertRow()" >
+    <input type="button" value="新增" id="insertBtn" onclick="insertRow()">
     <div id="">
         <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
             <div class="portlet-body " id="" style="overflow: auto;">
@@ -894,65 +913,86 @@
                     //string val = ddlPerant.SelectedItemStringVal;
                     var valClient = ConvertDefVal(workNode, '', mapExt.AttrsOfActive); // ddlChild.SelectedItemStringVal;
 
-
                     //ddlChild.select(valClient);  未写
                     break;
                 case "AutoFullDLL": // 自动填充下拉框.
                     continue; //已经处理了。
-                case "AutoFull": //自动填充  //a+b=c DOC='@DanJia*@ShuLiang'  等待后续优化
+                case "AutoFull"://自动填充  //a+b=c DOC='@DanJia*@ShuLiang'  等待后续优化
                     //循环  KEYOFEN
                     //替换@变量
                     //处理 +-*%
 
                     //直接替换
 
-                    /*if (mapExt.Doc.indexOf('*') > 0 || mapExt.Doc.indexOf('+') > 0 || mapExt.Doc.indexOf('-') > 0 || mapExt.Doc.indexOf('/') > 0 || mapExt.Doc.indexOf('%') > 0) {
-                    //替换  MAPATTR
-                    $.each(workNodeData.Sys_MapAttr, function (i, obj) {
-                    if (mapExt.Doc.indexOf('@'+obj.KeyOfEn) >= 0) {
-
-                    }
-                    })
-                    }*/
                     if (mapExt.Doc != undefined && mapExt.Doc != '') {
-                        if (mapExt.Doc.indexOf('*')) {
+                        //以 + -* 、% 来分割
+                        //先来计算  + -* 、%  的位置
+                        
+                        if (mapExt.Doc.indexOf('+') > 0 || mapExt.Doc.indexOf('-') > 0 || mapExt.Doc.indexOf('*') > 0 || mapExt.Doc.indexOf('/') > 0) {
                             var mapExtDocArr1 = mapExt.Doc.split('*');
+                            var lastOperatorIndex = -1;
+                            var operatorArr = [];
+                            for (var j = 0; j < mapExt.Doc.length; j++) {
+                                if (mapExt.Doc[j] == "+" || mapExt.Doc[j] == "-" || mapExt.Doc[j] == "+" || mapExt.Doc[j] == "/"
+                                    ) {
+                                    operatorArr.push(mapExt[j]);
+
+                                    mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex, j));
+                                    lastOperatorIndex = j;
+                                }
+                            }
                             for (var m = 0; m < mapExtDocArr1.length; m++) {
                                 var extDocObj1 = mapExtDocArr1[m].replace('@', '');
-
                                 //将extDocObj1转换成KeyOfEn
-                                var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) { return val.Name == extDocObj1; });
+                                var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) { return val.Name == extDocObj1 || val.KeyOfEn == extDocObj1; });
 
                                 if (extObjAr.length == 0) {
-                                    alert("mapExt:" + mapExt.MyPK+ '  ' + mapExt.AttrOfOper + ' ' + mapExt.ExtType + "配置有误");
-                                    return;
-                                }
+                                    alert("mapExt:" + mapExt.AttrOfOper + "配置有误");
 
-                                extDocObj1 = extObjAr[0].KeyOfEn;
+                                } else {
+                                    extDocObj1 = extObjAr[0].KeyOfEn;
+                                    $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']').attr('disabled', true);
 
-                                $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']').attr('disabled', true);
 
-                                if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
-                                    $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
-                                    $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
-                                        //可能有误
-                                        var mapExtDocArr = $(obj.target).data().mapExt.Doc.split('*');
-                                        var tmpResult = 1;
-                                        for (var m = 0; m < mapExtDocArr.length; m++) {
-                                            var extDocObj = mapExtDocArr[m].replace('@', '');
-                                            var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) { return val.Name == extDocObj; });
-                                            if (extObjAr.length == 0) {
-                                                alert("mapExt:" + mapExt.AttrOfOper + "配置有误");
-                                            } else {
-                                                extDocObj = extObjAr[0].KeyOfEn;
+                                    if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
+                                        $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
+                                        $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
+
+
+                                            //替换 
+                                            var mapExt = $(obj.target).data().mapExt;
+                                            var mapExtDoc = mapExt.Doc;
+                                            var tmpResult = 1;
+                                            var tr = $(obj.target).parent().parent();
+                                            var attrOfOperEle = $(obj.target).parent().parent().find('[name=TB_' + mapExt.AttrOfOper + "]");
+                                            for (var m = 0; m < workNodeData.Sys_MapAttr.length; m++) {
+                                                var mapAttr = workNodeData.Sys_MapAttr[m];
+                                                var hasKeyOfEn = true;
+                                                while (hasKeyOfEn) {
+                                                    var mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.KeyOfEn);
+                                                    var tranValue = mapAttr.KeyOfEn;
+                                                    if (mapExdDocKeyOfEnIndex == -1) {
+                                                        mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.Name);
+                                                        tranValue = mapAttr.Name;
+                                                    }
+                                                    //判断参数后面是否是一个运算操作符
+                                                    var optionVal=mapExtDoc.substring(tranValue.length + 1, tranValue.length + 2);
+
+                                                    if (mapExdDocKeyOfEnIndex >= 0 && (optionVal == '+' || optionVal == '-' || optionVal == '*' || optionVal == '/' || optionVal == '')) {
+                                                        mapExtDoc = mapExtDoc.replace('@' + tranValue, "parseFloat($(tr).find('[name=TB_" + mapAttr.KeyOfEn + "]').val())");
+                                                    } else {
+                                                        hasKeyOfEn = false;
+                                                    }
+                                                }
                                             }
-                                            tmpResult = tmpResult * $(tr).find('[name=TB_' + extDocObj + ']').val();
-                                        }
-                                        $(tr).find('[name=TB_' + $(obj.target).data().mapExt.AttrOfOper + ']').val(tmpResult);
 
-                                        $(obj.target).parent().parent().data().data[$(obj.target).data().mapExt.AttrOfOper] =
-                                    tmpResult
-                                    })
+                                            tmpResult = eval(mapExtDoc);
+                                            attrOfOperEle.val(tmpResult);
+                                            
+                                            $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] =
+                                    tmpResult;
+                                        })
+                                    }
                                 }
                             }
                         }

@@ -234,7 +234,9 @@
                 frm.action = "MyFlow.do?method=login";
 
             initPageParam(); //初始化参数
+
             initBar(); //工具栏.
+
             GenerWorkNode(); //表单数据.
             $('[name=showCol]').bind('change', function (obj) {
                 if (obj.target.value == "8") {

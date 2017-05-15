@@ -1139,24 +1139,24 @@ namespace CCFlow.WF.UC
                 this.Response.Redirect(url, true);
                 return;
             }
-            //if (this.currND.HisFormType == NodeFormType.FreeForm)
-            //{
-            //    /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
-            //    if (this.WorkID == 0)
-            //    {
-            //        currWK = this.currFlow.NewWork();
-            //        this.WorkID = currWK.OID;
-            //    }
+            if (this.currND.HisFormType == NodeFormType.FreeForm)
+            {
+                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
+                if (this.WorkID == 0)
+                {
+                    currWK = this.currFlow.NewWork();
+                    this.WorkID = currWK.OID;
+                }
 
-            //    string url = "MyFlowFree.htm";
+                string url = "MyFlowFree.htm";
 
-            //    //处理连接.
-            //    url = this.DealUrl(currND, url);
+                //处理连接.
+                url = this.DealUrl(currND, url);
 
-            //    //sdk表单就让其跳转.
-            //    this.Response.Redirect(url, true);
-            //    return;
-            //}
+                //sdk表单就让其跳转.
+                this.Response.Redirect(url, true);
+                return;
+            }
             #endregion 处理表单类型.
 
             #region 判断是否有 workid

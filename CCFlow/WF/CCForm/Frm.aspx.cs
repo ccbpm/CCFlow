@@ -245,7 +245,7 @@ namespace CCFlow.WF.CCForm
                 if (md.HisFrmType == FrmType.Url )
                 {
                     string no = Request.QueryString["NO"];
-                    string urlParas = "OID=" + this.OID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
+                    string urlParas = "OID=" + this.OID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Flow="+this.FK_Flow+"&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
                     /*如果是URL.*/
                     if (md.Url.Contains("?") == true)
                         this.Response.Redirect(md.Url + "&" + urlParas, true);
@@ -314,7 +314,7 @@ namespace CCFlow.WF.CCForm
                 if (md.HisFrmType == FrmType.Url )
                 {
                     string no = Request.QueryString["NO"];
-                    string urlParas = "OID=" + this.OID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&IsEdit=" + this.IsEdit.ToString() + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
+                    string urlParas = "OID=" + this.OID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&IsEdit=" + this.IsEdit.ToString() + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
                     /*如果是URL.*/
                     if (md.Url.Contains("?") == true)
                         this.Response.Redirect(md.Url + "&" + urlParas, true);
@@ -336,7 +336,7 @@ namespace CCFlow.WF.CCForm
                 if (md.HisFrmType == FrmType.WordFrm)
                 {
                     string no = Request.QueryString["NO"];
-                    string urlParas = "OID=" + this.OID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID + "&FK_MapData=" + this.FK_MapData + "&OIDPKVal=" + this.OIDPKVal + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+                    string urlParas = "OID=" + this.OID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID + "&FK_MapData=" + this.FK_MapData + "&OIDPKVal=" + this.OIDPKVal + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
                     /*如果是URL.*/
                     string requestParas = this.RequestParas;
                     string[] parasArrary = this.RequestParas.Split('&');

@@ -726,6 +726,7 @@ var pageData = {};
 var globalVarList = {};
 //解析分组类型 如果返回的为 '' 就表明是字段分组
 function initGroup(workNodeData, groupFiled) {
+    
     var groupHtml = '';
     /*根据控件类型解析分组*/
     switch (groupFiled.CtrlType) {
@@ -738,7 +739,6 @@ function initGroup(workNodeData, groupFiled) {
                 var src = fram.URL.replace(new RegExp(/(：)/g), ':');
                 var params = '&FID=' + pageData.FID;
                 params += '&WorkID=' + groupFiled.OID;
-
 
                 if (src.indexOf("?") > 0) {
                     var params = getQueryStringFromUrl(src);
@@ -991,9 +991,9 @@ function InitForm() {
             ath = ath[0];
             var src = "";
             if (pageData.IsReadonly)
-                src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
             else
-                src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
             $('#iframeAthForm').attr('src', src);
             atParamObj["tbId"] = tbId;
             atParamObj["divId"] = divId;
@@ -2329,10 +2329,10 @@ function GenerWorkNode() {
                 
 
                 //循环组件 轨迹图 审核组件 子流程 子线程
-                $('#CCForm').append(figure_Template_FigureFlowChart(flow_Data["WF_Node"][0]));
-                $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_Node"][0]));
-                $('#CCForm').append(figure_Template_FigureSubFlowDtl(flow_Data["WF_Node"][0]));
-                $('#CCForm').append(figure_Template_FigureThreadDtl(flow_Data["WF_Node"][0]));
+                $('#CCForm').append(figure_Template_FigureFlowChart(flow_Data["WF_FrmNodeComponent"][0]));
+                $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_FrmNodeComponent"][0]));
+                $('#CCForm').append(figure_Template_FigureSubFlowDtl(flow_Data["WF_FrmNodeComponent"][0]));
+                $('#CCForm').append(figure_Template_FigureThreadDtl(flow_Data["WF_FrmNodeComponent"][0]));
 
                //初始化Sys_MapData
                 var h = flow_Data.Sys_MapData[0].FrmH;
@@ -2913,6 +2913,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
 
 //子线程
 function figure_Template_FigureThreadDtl(wf_node) {
+
     //FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W
     var sta = wf_node.FrmThreadSta;
     var x = wf_node.FrmThread_X;
@@ -2931,7 +2932,10 @@ function figure_Template_FigureThreadDtl(wf_node) {
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.WorkID;
-    if (sta == 2)//只读
+
+    alert(sta);
+
+    if (sta == 2) //只读
     {
         src += "&DoType=View";
     }

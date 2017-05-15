@@ -52,7 +52,7 @@
         <fieldset>
         <legend>插件安装说明</legend>
         <ul>
-          <li>该插件是一个ccflow开发的excel插件，用户打开处理excel表单的插件。</li>
+          <li >该插件是一个ccflow开发的excel插件，用户打开处理excel表单的插件。</li>
           <li>该需要下载后安装</li>
 		   <li><a href="http://<%= this.Request.Url.Authority %>/DataUser/FrmOfficeTemplate/Excel表单插件安装程序.zip">点击此处下载VSTO表单插件</a></li>
 		</ul>

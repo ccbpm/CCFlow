@@ -929,18 +929,20 @@
                         //先来计算  + -* 、%  的位置
                         
                         if (mapExt.Doc.indexOf('+') > 0 || mapExt.Doc.indexOf('-') > 0 || mapExt.Doc.indexOf('*') > 0 || mapExt.Doc.indexOf('/') > 0) {
-                            var mapExtDocArr1 = mapExt.Doc.split('*');
+                            var mapExtDocArr1 = [];
                             var lastOperatorIndex = -1;
                             var operatorArr = [];
                             for (var j = 0; j < mapExt.Doc.length; j++) {
-                                if (mapExt.Doc[j] == "+" || mapExt.Doc[j] == "-" || mapExt.Doc[j] == "+" || mapExt.Doc[j] == "/"
+                                if (mapExt.Doc[j] == "+" || mapExt.Doc[j] == "-" || mapExt.Doc[j] == "*" || mapExt.Doc[j] == "/"
                                     ) {
-                                    operatorArr.push(mapExt[j]);
+                                    operatorArr.push(mapExt.Doc[j]);
 
-                                    mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex, j));
+                                    mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex+1, j));
                                     lastOperatorIndex = j;
                                 }
                             }
+                            mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex + 1, mapExt.Doc.length))
+
                             for (var m = 0; m < mapExtDocArr1.length; m++) {
                                 var extDocObj1 = mapExtDocArr1[m].replace('@', '');
                                 //将extDocObj1转换成KeyOfEn
@@ -958,10 +960,11 @@
                                         $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
                                         $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
 
-
+                                            
                                             //替换 
                                             var mapExt = $(obj.target).data().mapExt;
                                             var mapExtDoc = mapExt.Doc;
+                                            var evelStr = mapExt.Doc;
                                             var tmpResult = 1;
                                             var tr = $(obj.target).parent().parent();
                                             var attrOfOperEle = $(obj.target).parent().parent().find('[name=TB_' + mapExt.AttrOfOper + "]");
@@ -976,7 +979,7 @@
                                                         tranValue = mapAttr.Name;
                                                     }
                                                     //判断参数后面是否是一个运算操作符
-                                                    var optionVal=mapExtDoc.substring(tranValue.length + 1, tranValue.length + 2);
+                                                    var optionVal = mapExtDoc.substring(mapExdDocKeyOfEnIndex + tranValue.length + 1, mapExdDocKeyOfEnIndex+tranValue.length + 2);
 
                                                     if (mapExdDocKeyOfEnIndex >= 0 && (optionVal == '+' || optionVal == '-' || optionVal == '*' || optionVal == '/' || optionVal == '')) {
                                                         mapExtDoc = mapExtDoc.replace('@' + tranValue, "parseFloat($(tr).find('[name=TB_" + mapAttr.KeyOfEn + "]').val())");

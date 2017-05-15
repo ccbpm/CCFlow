@@ -64,18 +64,15 @@ table
 /*  时学业添加 结束位置 */
 th, .Title
 {
-    border-width: 1px;
-    border-color: #C2D5E3;
-    border-style: solid;
-    line-height: 25px;
-    color: 0a0a0a;
-    white-space: nowrap;
-    padding: 0 2px;
-    background-color: #e0ecff;
-    font-size: 14px;
-    text-align: left;
+   background-color: #f4f4f4;
     font-size: 12px;
-    font-weight: normal;
+    border: 1px solid #C2D5E3;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    padding: 3px;
+    font-style: normal;
+    color: #333333;
 }
 
 .Idx

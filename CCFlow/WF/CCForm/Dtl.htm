@@ -283,7 +283,7 @@
                         //制造表头
                         //添加序号列
                         workNodeData = data;
-                        var snTh = $('<th data-coltype="SN" style="height;60px;">序</th>');
+                        var snTh = $('<th data-coltype="SN" style="height;60px;">序号</th>');
                         threadTr.append(snTh);
                         $.each(sys_mapAttr, function (i, mapAttrObj) {
                             var th = $('<th></th>');
@@ -620,7 +620,8 @@
             eleHtml.val(defValue);
             //eleHtml = $('<div>' + eleHtml + '</div>');
             //eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
-            eleHtml.width(mapAttr.UIWidth);
+            eleHtml.css('min-width', mapAttr.UIWidth);
+            eleHtml.css('width', '100%');
 
             eleHtml.bind('focus', blurEvent);
             return eleHtml;
@@ -643,15 +644,17 @@
 </head>
 <body>
     <div id="Msg"></div>
-    <!--杨玉慧-->
-    <input type="button" value="新增" id="insertBtn" onclick="insertRow()">
+    <div style="text-align:right;">
+        <!--杨玉慧-->
+        <input type="button" value="新增" id="insertBtn" onclick="insertRow()" />
+    </div>
     <div id="">
         <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
             <div class="portlet-body " id="" style="overflow: auto;">
                 <div class="tab-content" style="margin: 4px 0px;">
                     <div class="tab-pane active portlet_tab flowLists" id="dtlDiv">
                         <div id="" style=" overflow: auto;">
-                            <table class="table wupop" data-data="true">
+                            <table class="table wupop" data-data="true" style="width:100%;">
                                 <thead></thead>
                                 <tbody></tbody>
                             </table>

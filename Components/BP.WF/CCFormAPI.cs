@@ -793,7 +793,8 @@ namespace BP.WF
 
             //放入一个空白的实体，用与获取默认值.
             GEDtl dtlBlank = dtls.GetNewEntity as GEDtl;
-            myds.Tables.Add(dtl.ToDataTableField("Blank"));
+
+            myds.Tables.Add(dtlBlank.ToDataTableField("Blank"));
 
 			return myds;
 		}

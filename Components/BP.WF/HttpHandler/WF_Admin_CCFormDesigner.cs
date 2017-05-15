@@ -16,6 +16,7 @@ namespace BP.WF.HttpHandler
 {
     public class WF_Admin_CCFormDesigner : BP.WF.HttpHandler.WebContralBase
     {
+
         #region 执行父类的重写方法.
         /// <summary>
         /// 初始化数据
@@ -307,15 +308,15 @@ namespace BP.WF.HttpHandler
             string sql = "";
             try
             {
-                switch ( this.DoType )
+                switch (this.DoType)
                 {
                     case "PublicNoNameCtrlCreate": //创建通用的控件.
                         try
                         {
-                           float x = float.Parse(this.GetRequestVal("x"));
-                           float y = float.Parse(this.GetRequestVal("y"));
+                            float x = float.Parse(this.GetRequestVal("x"));
+                            float y = float.Parse(this.GetRequestVal("y"));
                             BP.Sys.CCFormAPI.CreatePublicNoNameCtrl(this.FrmID, this.GetRequestVal("CtrlType"),
-                                this.GetRequestVal("No"), 
+                                this.GetRequestVal("No"),
                                 this.GetRequestVal("Name"), x, y);
                             return "true";
                         }
@@ -330,8 +331,8 @@ namespace BP.WF.HttpHandler
                             string keyOfEn = this.GetRequestVal("KeyOfEn");
                             string fieldDesc = this.GetRequestVal("Name");
                             string sftable = this.GetRequestVal("UIBindKey");
-                           float x = float.Parse(this.GetRequestVal("x"));
-                           float y = float.Parse(this.GetRequestVal("y"));
+                            float x = float.Parse(this.GetRequestVal("x"));
+                            float y = float.Parse(this.GetRequestVal("y"));
 
                             //调用接口,执行保存.
                             BP.Sys.CCFormAPI.SaveFieldSFTable(fk_mapdata, keyOfEn, fieldDesc, sftable, x, y);
@@ -360,7 +361,7 @@ namespace BP.WF.HttpHandler
                     case "CreateCheckGroup": //创建审核分组，暂时未实现.
                         BP.Sys.CCFormAPI.NewCheckGroup(FK_MapData, null, null);
                         return "true";
-                     
+
                     case "SaveSFTable":
                         string enName = this.GetRequestVal("v2");
                         string chName = this.GetRequestVal("v1");

@@ -246,12 +246,14 @@
             var fk_node = GetQueryString("FK_Node");
 
             //如何获得全部的参数？ &FK_Node=120&FK_Flow=222 放入到url里面去？
-
+            var href = window.location.href;
+            var urlParam = href.substring(href.indexOf('?') + 1, href.length);
             //初始化表格.
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Dtl_Init&FK_Node=" + fk_node + "&EnsName=" + ensName + "&RefPKVal=" + refPKVal + "&FID=" + fid + "&m=" + Math.random(),
+                //url: Handler + "?DoType=Dtl_Init&FK_Node=" + fk_node + "&EnsName=" + ensName + "&RefPKVal=" + refPKVal + "&FID=" + fid + "&m=" + Math.random(),
+                url: Handler + "?DoType=Dtl_Init&" + urlParam + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     // 检查是否有错误.
@@ -273,9 +275,10 @@
                     var dbDtl = data["DBDtl"]; //从表数据.
 
                     //如果不能新增，就把新增按钮去掉.
-                    if (sys_MapDtl[0].IsInsert == "0" ) 
-                      document.getElementById('insertBtn').style.display='none';
-					  
+                    if (sys_MapDtl[0].IsInsert == "0" ||  sys_MapDtl[0].IsReadonly=="1") {
+                        document.getElementById('insertBtn').style.display = 'none';
+                    }
+
                     $('#dtlDiv div table tbody').html('');//清空表格数据
                     var sys_mapAttr = data["Sys_MapAttr"];
                     if ($('#dtlDiv div table thead tr').length == 0) {
@@ -283,13 +286,14 @@
                         //制造表头
                         //添加序号列
                         workNodeData = data;
-                        var snTh = $('<th data-coltype="SN" style="height;60px;width:1%;">序</th>');
+                        var snTh = $('<th data-coltype="SN" style="height;60px;"><input type="button" value="新增" id="insertBtn" onclick="insertRow()" /></th>');
+
                         threadTr.append(snTh);
                         $.each(sys_mapAttr, function (i, mapAttrObj) {
                             var th = $('<th></th>');
                             th.text(mapAttrObj.Name);
                             th.data(mapAttrObj);
-                            th.css('min-width',mapAttrObj.UIWidth);
+                            th.css('min-width', mapAttrObj.UIWidth);
                             th.data().colname = mapAttrObj.KeyOfEn;
                             if (mapAttrObj.UIVisible == 1) {
                                 threadTr.append(th);
@@ -309,7 +313,7 @@
                         //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
                         delTh.attr('title', "title");
                         //如果能删除，就有删除按钮
-                        if (sys_MapDtl[0].IsDelete == "1") {
+                        if (sys_MapDtl[0].IsDelete == "1" && sys_MapDtl[0].IsReadonly=="0") {
                             delTh.data(delThData);
                         }
                         threadTr.append(delTh);
@@ -317,7 +321,7 @@
                         //添加删除列
                         //var delTh = $('<th></th>');
                         //添加保存列
-                       delTh = $('<th></th>');
+                        delTh = $('<th></th>');
                         delTh.text("操作");
                         var delThData = {
                             custom: true,
@@ -340,12 +344,12 @@
                     })
 
                     var dtlDataOption = {
-                        IsShowAll:true,
+                        IsShowAll: true,
                         PageSize: 10,
                         PageIndex: 1,
                         DivId: 'dtlDiv',
                         IsUseLocalData: true,
-                        LocalData:JSON.stringify(dbDtlTmp),
+                        LocalData: JSON.stringify(dbDtlTmp),
                         RenderOverFun: function () {
                             //循环TBODY
                             var tbodyTrs = $('#dtlDiv div table tbody tr');
@@ -360,7 +364,7 @@
                                         //ID 设置为  id+'_1'
                                         var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
                                         //先写出 NAME   单选扭会出问题
-                                        tmplate.attr('id', tmplate.attr('name') + '_'+rowIndex);
+                                        tmplate.attr('id', tmplate.attr('name') + '_' + rowIndex);
 
                                         var textVal = $($(tbodyTrObj).children('td')[k]).text();
                                         tmplate.val(textVal);
@@ -415,7 +419,7 @@
                     var IsShowTitle = sys_MapDtl[0].IsShowTitle == 1 ? true : false; //是否显示标题
                     var IsView = sys_MapDtl[0].IsView == 1 ? true : false; //是否可见
                     var titles = IsShowTitle ? sys_MapDtl[0].Name : '';
-                   
+
                 }
             });
         }
@@ -645,10 +649,6 @@
 <body>
     <div id="Msg"></div>
 
-    <div style="text-align:center;">
-        <!--杨玉慧-->
-        <input type="button" value="新增" id="insertBtn" onclick="insertRow()" />
-    </div>
     <div id="">
         <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
             <div class="portlet-body " id="" style="overflow: auto;">

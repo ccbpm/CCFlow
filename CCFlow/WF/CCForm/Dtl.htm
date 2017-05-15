@@ -274,10 +274,7 @@
                     mapExt = sys_mapExtDtl;
                     var dbDtl = data["DBDtl"]; //从表数据.
 
-                    //如果不能新增，就把新增按钮去掉.
-                    if (sys_MapDtl[0].IsInsert == "0" ||  sys_MapDtl[0].IsReadonly=="1") {
-                        document.getElementById('insertBtn').style.display = 'none';
-                    }
+                    
 
                     $('#dtlDiv div table tbody').html('');//清空表格数据
                     var sys_mapAttr = data["Sys_MapAttr"];
@@ -334,6 +331,11 @@
                         //threadTr.append(delTh);
 
                         $('#dtlDiv div table thead').append(threadTr);
+                    }
+
+                    //如果不能新增，就把新增按钮去掉.
+                    if (sys_MapDtl[0].IsInsert == "0" || sys_MapDtl[0].IsReadonly == "1") {
+                        document.getElementById('insertBtn').style.display = 'none';
                     }
                     //初始化表数据
                     var dbDtlTmp = { DTObjs: dbDtl };

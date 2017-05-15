@@ -370,7 +370,7 @@ namespace BP.WF.HttpHandler
                         break;
                     }
 
-                    Pub1.Append(AddLi(" <a  href=\"javascript:WinOpen('/WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "');\" >" + fl.Name + "</a> "));
+                    Pub1.Append(AddLi(" <a  href=\"javascript:WinOpen('../WF/Rpt/Search.aspx?RptNo=ND" + int.Parse(fl.No) + "MyRpt&FK_Flow=" + fl.No + "');\" >" + fl.Name + "</a> "));
                 }
                 #endregion 输出流程。
 

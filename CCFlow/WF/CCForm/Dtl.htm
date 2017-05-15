@@ -258,6 +258,9 @@
                 url: Handler + "?DoType=Dtl_Init&" + urlParam + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
+                alert(data);
+
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
                         $("#Msg").html(data);
@@ -275,8 +278,6 @@
                     var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
                     mapExt = sys_mapExtDtl;
                     var dbDtl = data["DBDtl"]; //从表数据.
-
-                    
 
                     $('#dtlDiv div table tbody').html('');//清空表格数据
                     var sys_mapAttr = data["Sys_MapAttr"];

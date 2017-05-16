@@ -259,7 +259,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoPopVal()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + this.MyPK + "&FK_MapExt=PopVal_"+this.FK_MapData+"_"+this.KeyOfEn;
         }
 
         /// <summary>

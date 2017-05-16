@@ -179,7 +179,7 @@ namespace BP.Sys
                 case PopValWorkModel.SelfUrl:
                     ht.Add("URL", this.PopValUrl);
                     break;
-                case PopValWorkModel.TableOnly:
+                case PopValWorkModel.TableOnly: 
                     ht.Add("EntitySQL", this.PopValEntitySQL);
                     break;
                 case PopValWorkModel.TablePage:

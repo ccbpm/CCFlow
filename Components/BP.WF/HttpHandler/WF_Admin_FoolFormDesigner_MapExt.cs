@@ -595,19 +595,17 @@ namespace BP.WF.HttpHandler
         public string PopVal_Init()
         {
             MapExt ext = new MapExt();
-            ext.MyPK = this.FK_MapExt;
+            ext.MyPK = this.MyPK;
             if (ext.RetrieveFromDBSources() == 0)
             {
-                ext.FK_DBSrc = "local";
+               // throw new Exception("err@主键=" + ext.MyPK + "的配置数据丢失");
                 ext.PopValSelectModel = PopValSelectModel.One;
                 ext.PopValWorkModel = PopValWorkModel.TableOnly;
             }
 
             // ext.SetValByKey
-
             return ext.PopValToJson();
         }
-
         /// <summary>
         /// 保存设置.
         /// </summary>

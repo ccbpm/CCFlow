@@ -1993,7 +1993,6 @@ namespace BP.WF
                 string s = BP.Sys.SystemConfig.AppSettings["IsBeta"];
                 if (string.IsNullOrEmpty(s))
                     return false;
-
                 if (s == "0")
                     return false;
 

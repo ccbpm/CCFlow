@@ -416,7 +416,7 @@ namespace BP.WF.HttpHandler
             int pageidx = int.Parse(this.GetRequestVal("pageidx"));
             string sql = "SELECT pe.No,pe.Name,pd.No DeptNo,pd.Name DeptName FROM WF_NodeEmp wne "
                          + "  INNER JOIN Port_Emp pe ON pe.No = wne.FK_Emp "
-                         + "  INNER JOIN Port_Dept pd ON pd.No = pe.FK_Dept "
+                         + "  LEFT JOIN Port_Dept pd ON pd.No = pe.FK_Dept "
                          + "WHERE wne.FK_Node = " + nid + " ORDER BY pe.Name";
 
             dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
@@ -772,6 +772,480 @@ namespace BP.WF.HttpHandler
         }
         #endregion Dot2DotTreeDeptModel.htm（部门选择）
 
+        #region Dot2DotStationModel.htm（岗位选择）
+
+        /// <summary>
+        /// 保存节点绑定岗位信息
+        /// </summary>
+        /// <returns></returns>
+        public string Dot2DotStationModel_SaveNodeStations()
+        {
+            JsonResultInnerData jr = new JsonResultInnerData();
+            string nodeid = this.GetRequestVal("nodeid");
+            string data = this.GetRequestVal("data");
+            string partno = this.GetRequestVal("partno");
+            bool lastpart = false;
+            int partidx = 0;
+            int partcount = 0;
+            int nid = 0;
+
+            if (string.IsNullOrWhiteSpace(nodeid) || int.TryParse(nodeid, out nid) == false)
+                throw new Exception("参数nodeid不正确");
+
+            if (string.IsNullOrWhiteSpace(data))
+                data = "";
+
+            BP.WF.Template.NodeStations nsts = new BP.WF.Template.NodeStations();
+            string[] stNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+            //提交内容过长时，采用分段式提交
+            if (string.IsNullOrWhiteSpace(partno))
+            {
+                nsts.Delete(BP.WF.Template.NodeStationAttr.FK_Node, nid);
+            }
+            else
+            {
+                string[] parts = partno.Split("/".ToCharArray());
+
+                if (parts.Length != 2)
+                    throw new Exception("参数partno不正确");
+
+                partidx = int.Parse(parts[0]);
+                partcount = int.Parse(parts[1]);
+
+                stNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+                if (partidx == 1)
+                    nsts.Delete(BP.WF.Template.NodeStationAttr.FK_Node, nid);
+
+                lastpart = partidx == partcount;
+            }
+
+            DataTable dtSts = DBAccess.RunSQLReturnTable("SELECT No FROM Port_Station");
+            BP.WF.Template.NodeStation nst = null;
+
+            foreach (string stNo in stNos)
+            {
+                if (dtSts.Select(string.Format("No='{0}'", stNo)).Length == 0)
+                    continue;
+
+                nst = new BP.WF.Template.NodeStation();
+                nst.FK_Node = nid;
+                nst.FK_Station = stNo;
+                nst.Insert();
+            }
+
+            if (string.IsNullOrWhiteSpace(partno))
+            {
+                jr.Msg = "保存成功";
+            }
+            else
+            {
+                jr.InnerData = new { lastpart, partidx, partcount };
+
+                if (lastpart)
+                    jr.Msg = "保存成功";
+                else
+                    jr.Msg = string.Format("第{0}/{1}段保存成功", partidx, partcount);
+            }
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+        }
+
+        /// <summary>
+        /// 获取部门树根结点
+        /// </summary>
+        /// <returns></returns>
+        public string Dot2DotStationModel_GetStructureTreeRoot()
+        {
+            JsonResultInnerData jr = new JsonResultInnerData();
+
+            EasyuiTreeNode node, subnode;
+            List<EasyuiTreeNode> d = new List<EasyuiTreeNode>();
+            string parentrootid = this.GetRequestVal("parentrootid");
+            string sql = null;
+            DataTable dt = null;
+
+            if (string.IsNullOrWhiteSpace(parentrootid))
+                throw new Exception("参数parentrootid不能为空");
+
+            bool isUnitModel = DBAccess.IsExitsTableCol("Port_Dept", "IsUnit");
+
+            if (isUnitModel)
+            {
+                bool isValid = DBAccess.IsExitsTableCol("Port_Station", "FK_Unit");
+
+                if (!isValid)
+                    isUnitModel = false;
+            }
+
+            if (isUnitModel)
+            {
+                sql = string.Format("SELECT No,Name,ParentNo FROM Port_Dept WHERE IsUnit = 1 AND ParentNo = '{0}'", parentrootid);
+                dt = DBAccess.RunSQLReturnTable(sql);
+
+                if (dt.Rows.Count == 0)
+                    dt.Rows.Add("-1", "无单位数据", parentrootid);
+
+                node = new EasyuiTreeNode();
+                node.id = "UNITROOT_" + dt.Rows[0]["No"];
+                node.text = dt.Rows[0]["Name"] as string;
+                node.iconCls = "icon-department";
+                node.attributes = new EasyuiTreeNodeAttributes();
+                node.attributes.No = dt.Rows[0]["No"] as string;
+                node.attributes.Name = dt.Rows[0]["Name"] as string;
+                node.attributes.ParentNo = parentrootid;
+                node.attributes.TType = "UNITROOT";
+                node.state = "closed";
+
+                if (node.text != "无单位数据")
+                {
+                    node.children = new List<EasyuiTreeNode>();
+                    node.children.Add(new EasyuiTreeNode());
+                    node.children[0].text = "loading...";
+                }
+
+                d.Add(node);
+            }
+            else
+            {
+                sql = "SELECT No,Name FROM Port_StationType";
+                dt = DBAccess.RunSQLReturnTable(sql);
+
+                node = new EasyuiTreeNode();
+                node.id = "STROOT_-1";
+                node.text = "岗位类型";
+                node.iconCls = "icon-department";
+                node.attributes = new EasyuiTreeNodeAttributes();
+                node.attributes.No = "-1";
+                node.attributes.Name = "岗位类型";
+                node.attributes.ParentNo = parentrootid;
+                node.attributes.TType = "STROOT";
+                node.state = "closed";
+
+                if (dt.Rows.Count > 0)
+                {
+                    node.children = new List<EasyuiTreeNode>();
+                    node.children.Add(new EasyuiTreeNode());
+                    node.children[0].text = "loading...";
+                }
+
+                d.Add(node);
+            }
+
+            jr.InnerData = d;
+            jr.Msg = isUnitModel.ToString().ToLower();
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+        }
+
+        /// <summary>
+        /// 获取指定部门下一级子部门及人员列表
+        /// </summary>
+        /// <returns></returns>
+        public string Dot2DotStationModel_GetSubUnits()
+        {
+            JsonResultInnerData jr = new JsonResultInnerData();
+
+            EasyuiTreeNode node = null, subnode = null, tnode = null;
+            JsonResultStation jrst = null;
+            List<JsonResultStation> jrsts = new List<JsonResultStation>();
+            List<EasyuiTreeNode> d = new List<EasyuiTreeNode>();
+            List<EasyuiTreeNode> parentNodes = new List<EasyuiTreeNode>();
+            EasyuiTreeNode parent = null;
+            string rootid = this.GetRequestVal("rootid");
+            string parentid = this.GetRequestVal("parentid");
+            string nid = this.GetRequestVal("nodeid");
+            string tp = this.GetRequestVal("stype");    //ST,UNIT
+            string currparentid = parentid;
+            string sql = string.Empty;
+            DataTable dt = null;
+            BP.WF.Template.NodeStations sts = new BP.WF.Template.NodeStations();
+
+            if (string.IsNullOrWhiteSpace(rootid))
+                throw new Exception("参数rootid不能为空");
+            if (string.IsNullOrWhiteSpace(parentid))
+                throw new Exception("参数parentid不能为空");
+            if (string.IsNullOrWhiteSpace(nid))
+                throw new Exception("参数nodeid不能为空");
+
+            sts.Retrieve(BP.WF.Template.NodeStationAttr.FK_Node, int.Parse(nid));
+
+            if (tp == "ST")
+            {
+                node = new EasyuiTreeNode();
+                node.id = "STROOT_-1";
+                node.text = "岗位类型";
+                node.iconCls = "icon-department";
+                node.attributes = new EasyuiTreeNodeAttributes();
+                node.attributes.No = "-1";
+                node.attributes.Name = "岗位类型";
+                node.attributes.ParentNo = null;
+                node.attributes.TType = "STROOT";
+                node.state = "open";
+
+                if (parentid == "-1")
+                {
+                    sql = "SELECT No,Name FROM Port_StationType ORDER BY Name ASC";
+                    dt = DBAccess.RunSQLReturnTable(sql);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        node.children = new List<EasyuiTreeNode>();
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            subnode = new EasyuiTreeNode();
+                            subnode.id = "ST_" + row["No"];
+                            subnode.text = row["Name"] as string;
+                            subnode.iconCls = "icon-department";
+                            subnode.attributes = new EasyuiTreeNodeAttributes();
+                            subnode.attributes.No = row["No"] as string;
+                            subnode.attributes.Name = row["Name"] as string;
+                            subnode.attributes.ParentNo = "-1";
+                            subnode.attributes.TType = "ST";
+                            subnode.state = "closed";
+                            subnode.children = new List<EasyuiTreeNode>();
+                            subnode.children.Add(new EasyuiTreeNode());
+                            subnode.children[0].text = "loading...";
+
+                            node.children.Add(subnode);
+                        }
+                    }
+                }
+                else
+                {
+                    //岗位类型ST
+                    sql = string.Format("SELECT No,Name FROM Port_StationType WHERE No = '{0}'", parentid);
+                    dt = DBAccess.RunSQLReturnTable(sql);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        node.children = new List<EasyuiTreeNode>();
+
+                        subnode = new EasyuiTreeNode();
+                        subnode.id = "ST_" + dt.Rows[0]["No"];
+                        subnode.text = dt.Rows[0]["Name"] as string;
+                        subnode.iconCls = "icon-department";
+                        subnode.attributes = new EasyuiTreeNodeAttributes();
+                        subnode.attributes.No = dt.Rows[0]["No"] as string;
+                        subnode.attributes.Name = dt.Rows[0]["Name"] as string;
+                        subnode.attributes.ParentNo = "-1";
+                        subnode.attributes.TType = "CST";
+                        subnode.state = "open";
+
+                        sql =
+                            string.Format(
+                                "SELECT No,Name FROM Port_Station WHERE FK_StationType = '{0}' ORDER BY Name ASC",
+                                parentid);
+                        dt = DBAccess.RunSQLReturnTable(sql);
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            subnode.children = new List<EasyuiTreeNode>();
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                tnode = new EasyuiTreeNode();
+                                tnode.id = "S_" + parentid + "_" + row["No"];
+                                tnode.text = row["Name"] as string;
+                                tnode.iconCls = "icon-department";
+                                tnode.@checked =
+                                    sts.GetEntityByKey(BP.WF.Template.NodeStationAttr.FK_Station, row["No"]) != null;
+                                tnode.attributes = new EasyuiTreeNodeAttributes();
+                                tnode.attributes.No = row["No"] as string;
+                                tnode.attributes.Name = row["Name"] as string;
+                                tnode.attributes.ParentNo = subnode.attributes.No;
+                                tnode.attributes.TType = "S";
+
+                                subnode.children.Add(tnode);
+
+                                jrst = new JsonResultStation();
+                                jrst.No = row["No"] as string;
+                                jrst.Name = row["Name"] as string;
+                                jrst.UnitNo = subnode.attributes.No;
+                                jrst.UnitName = subnode.attributes.Name;
+                                jrst.Checked = tnode.@checked;
+                                jrst.Code = BP.Tools.chs2py.ConvertStr2Code(row["Name"] as string);
+
+                                jrsts.Add(jrst);
+                            }
+                        }
+
+                        node.children.Add(subnode);
+                    }
+                }
+
+                d.Add(node);
+            }
+            else
+            {
+                //岗位所属单位UNIT
+                dt = DBAccess.RunSQLReturnTable("SELECT * FROM Port_Dept WHERE IsUnit = 1");
+
+                do
+                {
+                    DataRow parentdept = dt.Select(string.Format("No='{0}'", parentid))[0];
+
+                    parent = new EasyuiTreeNode();
+                    parent.id = (parentid == rootid ? "UNITROOT_" : "UNIT_") + parentdept["No"];
+                    parent.text = parentdept["Name"] as string;
+                    parent.iconCls = "icon-department";
+                    parent.attributes = new EasyuiTreeNodeAttributes();
+                    parent.attributes.No = parentdept["No"] as string;
+                    parent.attributes.Name = parentdept["Name"] as string;
+                    parent.attributes.ParentNo = parentdept["ParentNo"] as string;
+                    parent.attributes.TType = parentid == currparentid ? "CUNIT" : parentid == rootid ? "UNITROOT" : "PUNIT";
+                    parent.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(parentdept["Name"] as string);
+                    parent.state = "open";
+                    parent.children = new List<EasyuiTreeNode>();
+
+                    parentNodes.Add(parent);
+                    parentid = parentdept["ParentNo"] as string;
+                } while (parent.attributes.No != rootid);
+
+                //生成父级tree结构
+                for (int i = parentNodes.Count - 1; i >= 0; i--)
+                {
+                    parent = parentNodes[i];
+
+                    if (i == parentNodes.Count - 1)
+                        d.Add(parent);
+
+                    if (i == 0)
+                        break;
+
+                    parent.children.Add(parentNodes[i - 1]);
+                }
+
+                DataRow[] depts = dt.Select(string.Format("ParentNo='{0}'", parent.attributes.No), "Name ASC");
+
+                foreach (DataRow dept in depts)
+                {
+                    node = new EasyuiTreeNode();
+                    node.id = "UNIT_" + dept["No"];
+                    node.text = dept["Name"] as string;
+                    node.iconCls = "icon-department";
+                    node.attributes = new EasyuiTreeNodeAttributes();
+                    node.attributes.No = dept["No"] as string;
+                    node.attributes.Name = dept["Name"] as string;
+                    node.attributes.ParentNo = dept["ParentNo"] as string;
+                    node.attributes.TType = "UNIT";
+                    node.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(dept["Name"] as string);
+                    node.state = "closed";
+                    node.children = new List<EasyuiTreeNode>();
+                    node.children.Add(new EasyuiTreeNode());
+                    node.children[0].text = "loading...";
+
+                    parent.children.Add(node);
+                }
+
+                dt = DBAccess.RunSQLReturnTable(
+                    string.Format("SELECT * FROM Port_Station WHERE FK_Unit = '{0}' ORDER BY Name ASC", parent.attributes.No));
+
+                //增加岗位
+                foreach (DataRow st in dt.Rows)
+                {
+                    node = new EasyuiTreeNode();
+                    node.id = "S_" + parent.attributes.No + "_" + st["No"];
+                    node.text = st["Name"] as string;
+                    node.iconCls = "icon-user";
+                    node.@checked = sts.GetEntityByKey(BP.WF.Template.NodeStationAttr.FK_Station, st["No"]) != null;
+                    node.attributes = new EasyuiTreeNodeAttributes();
+                    node.attributes.No = st["No"] as string;
+                    node.attributes.Name = st["Name"] as string;
+                    node.attributes.ParentNo = parent.attributes.No;
+                    node.attributes.TType = "S";
+                    node.attributes.Code = BP.Tools.chs2py.ConvertStr2Code(st["Name"] as string);
+
+                    parent.children.Add(node);
+
+                    jrst = new JsonResultStation();
+                    jrst.No = st["No"] as string;
+                    jrst.Name = st["Name"] as string;
+                    jrst.UnitNo = parent.attributes.No;
+                    jrst.UnitName = parent.attributes.Name;
+                    jrst.Checked = node.@checked;
+                    jrst.Code = BP.Tools.chs2py.ConvertStr2Code(st["Name"] as string);
+
+                    jrsts.Add(jrst);
+                }
+            }
+
+            jr.InnerData = new { TreeData = d, UnitStations = jrsts };
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+        }
+
+        /// <summary>
+        /// 获取节点绑定人员信息列表
+        /// </summary>
+        /// <returns></returns>
+        public string Dot2DotStationModel_GetNodeStations()
+        {
+            JsonResultInnerData jr = new JsonResultInnerData();
+
+            DataTable dt = null;
+            string nid = this.GetRequestVal("nodeid");
+            int pagesize = int.Parse(this.GetRequestVal("pagesize"));
+            int pageidx = int.Parse(this.GetRequestVal("pageidx"));
+            string st = this.GetRequestVal("stype");
+            string sql = string.Empty;
+
+            if (st == "UNIT")
+            {
+                sql = "SELECT ps.No,ps.Name,pd.No UnitNo,pd.Name UnitName FROM WF_NodeStation wns "
+                             + "  INNER JOIN Port_Station ps ON ps.No = wns.FK_Station "
+                             + "  INNER JOIN Port_Dept pd ON pd.No = ps.FK_Unit "
+                             + "WHERE wns.FK_Node = " + nid + " ORDER BY ps.Name";
+            }
+            else
+            {
+                sql = "SELECT ps.No,ps.Name,pst.No UnitNo,pst.Name UnitName FROM WF_NodeStation wns "
+                             + "  INNER JOIN Port_Station ps ON ps.No = wns.FK_Station "
+                             + "  INNER JOIN Port_StationType pst ON pst.No = ps.FK_StationType "
+                             + "WHERE wns.FK_Node = " + nid + " ORDER BY ps.Name";
+            }
+
+            dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
+            dt.Columns.Add("Code", typeof(string));
+            dt.Columns.Add("Checked", typeof(bool));
+
+            foreach (DataRow row in dt.Rows)
+            {
+                row["Code"] = BP.Tools.chs2py.ConvertStr2Code(row["Name"] as string);
+                row["Checked"] = true;
+            }
+
+            //对Oracle数据库做兼容性处理
+            if (DBAccess.AppCenterDBType == DBType.Oracle)
+            {
+                foreach (DataColumn col in dt.Columns)
+                {
+                    switch (col.ColumnName)
+                    {
+                        case "NO":
+                            col.ColumnName = "No";
+                            break;
+                        case "NAME":
+                            col.ColumnName = "Name";
+                            break;
+                        case "UNITNO":
+                            col.ColumnName = "DeptNo";
+                            break;
+                        case "UNITNAME":
+                            col.ColumnName = "DeptName";
+                            break;
+                    }
+                }
+            }
+
+            jr.InnerData = dt;
+
+            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+        }
+        #endregion Dot2DotStationModel.htm（岗位选择）
+
         #region 辅助实体定义
 
         /// <summary>
@@ -804,6 +1278,16 @@ namespace BP.WF.HttpHandler
             public string Name { get; set; }
             public string DeptNo { get; set; }
             public string DeptName { get; set; }
+            public bool Checked { get; set; }
+            public string Code { get; set; }
+        }
+
+        public class JsonResultStation
+        {
+            public string No { get; set; }
+            public string Name { get; set; }
+            public string UnitNo { get; set; }
+            public string UnitName { get; set; }
             public bool Checked { get; set; }
             public string Code { get; set; }
         }

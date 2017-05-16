@@ -498,7 +498,7 @@
                                         <asp:RadioButton ID="RB_ByStation" Text="按照岗位智能计算" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
+                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
                                             设置/更改岗位(<%=nss.Count %>)</a> | <a href='http://ccbpm.mydoc.io' target='_blank'>
                                                 <img src='/WF/Img/Help.png' style="vertical-align: middle" />帮助</a></div>
                                 </th>
@@ -555,7 +555,7 @@
                                         <asp:RadioButton ID="RB_ByDeptAndStation" Text="按绑定的岗位与部门交集计算" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
+                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
                                             设置与更改岗位(<%=nss.Count%>)</a> |<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=1005101248&ShowWay=FK_StationType')">
                                                 设置与更改部门(<%=ndepts.Count%>)</a>
                                     </div>
@@ -575,7 +575,7 @@
                                         <asp:RadioButton ID="RB_ByStationAndEmpDept" Text="按绑定的岗位计算并且以绑定的部门集合为纬度" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
+                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
                                             设置与更改岗位(<%=nss.Count %>)</a> |<a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotTreeDeptModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=FK_StationType')">
                                                 设置与更改部门(<%=ndepts.Count %>)</a>
                                     </div>
@@ -615,7 +615,7 @@
                                         <asp:RadioButton ID="RB_ByStationOnly" Text="仅按绑定的岗位计算" GroupName="xxx" runat="server" />
                                     </div>
                                     <div style="float: right">
-                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
+                                        <a href="javascript:WinOpen('/WF/Comm/RefFunc/Dot2DotStationModel.htm?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=<%=nd.NodeID %>&r=<%=k %>&ShowWay=None')">
                                             设置/更改岗位(<%=nss.Count %>)</a>
                                     </div>
                                 </th>

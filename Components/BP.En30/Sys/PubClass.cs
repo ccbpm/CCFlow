@@ -1434,7 +1434,9 @@ namespace BP.Sys
         }
         public static void DownloadFile(string filepath, string tempName)
         {
-            tempName = HttpUtility.UrlEncode(tempName);
+            if (!"firefox".Contains(HttpContext.Current.Request.Browser.Browser.ToLower()))
+                tempName = HttpUtility.UrlEncode(tempName);
+
             HttpContext.Current.Response.Charset = "GB2312";
             HttpContext.Current.Response.AppendHeader("Content-Disposition", "attachment;filename=" + tempName);
             HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("GB2312");

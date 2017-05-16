@@ -960,25 +960,25 @@ namespace BP.WF.Template
 
                 map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", true, false);
 
-                map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", false, false);
+                map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", true, true);
 
-                map.AddBoolean(MapDtlAttr.IsShowSum, true, "是否显示合计？", false, false);
-                map.AddBoolean(MapDtlAttr.IsShowIdx, true, "是否显示序号？", false, false);
-            
-                map.AddBoolean(MapDtlAttr.IsReadonly, false, "是否只读？", false, false);
-                map.AddBoolean(MapDtlAttr.IsShowTitle, true, "是否显示标题？", false, false);
-                map.AddBoolean(MapDtlAttr.IsView, true, "是否可见？", false, false);
+                map.AddBoolean(MapDtlAttr.IsShowSum, true, "是否显示合计？", true, true);
+                map.AddBoolean(MapDtlAttr.IsShowIdx, true, "是否显示序号？", true, true);
+
+                map.AddBoolean(MapDtlAttr.IsReadonly, false, "是否只读？", true, true);
+                map.AddBoolean(MapDtlAttr.IsShowTitle, true, "是否显示标题？", true, true);
+                map.AddBoolean(MapDtlAttr.IsView, true, "是否可见？", true, true);
 
 
-                map.AddBoolean(MapDtlAttr.IsInsert, true, "是否可以插入行？", false, false);
-                map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行？", false, false);
-                map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", false, false);
+                map.AddBoolean(MapDtlAttr.IsInsert, true, "是否可以插入行？", true, true);
+                map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行？", true, true);
+                map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", true, true);
 
-                map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", false, false);
-                map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", false, false);
+                map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", true, true);
+                map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", true, true);
 
-                map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", false, false);
-                map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M", false, false);
+                //map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", true, true);
+                //map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M2", true, true);
 
                 map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true,
                  MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
@@ -989,14 +989,14 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(MapDtlAttr.DtlShowModel, 0, "显示格式", true, true,
                MapDtlAttr.DtlShowModel, "@0=表格@1=卡片");
 
-                map.AddTBFloat(MapDtlAttr.X, 5, "距左", true, false);
-                map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
+                //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
+                //map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
 
-                map.AddTBFloat(MapDtlAttr.H, 150, "高度", true, false);
-                map.AddTBFloat(MapDtlAttr.W, 200, "宽度", false, false);
+                //map.AddTBFloat(MapDtlAttr.H, 150, "高度", false, false);
+                //map.AddTBFloat(MapDtlAttr.W, 200, "宽度", false, false);
 
-                map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
-                map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
+                //map.AddTBFloat(MapDtlAttr.FrmW, 900, "表单宽度", true, true);
+                //map.AddTBFloat(MapDtlAttr.FrmH, 1200, "表单高度", true, true);
 
                 //对显示的结果要做一定的限制.
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤数据SQL表达式", true, false, 0, 200, 20,true);

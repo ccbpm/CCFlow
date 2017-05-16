@@ -1336,7 +1336,6 @@ namespace BP.Sys
                 map.AddBoolean(MapDtlAttr.IsShowTitle, true, "是否显示标题？", false, false);
                 map.AddBoolean(MapDtlAttr.IsView, true, "是否可见", false, false);
 
-
                 map.AddBoolean(MapDtlAttr.IsInsert, true, "是否可以插入行？", false, false);
                 map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行", false, false);
                 map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", false, false);

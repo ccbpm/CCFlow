@@ -265,11 +265,15 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            if (this.GetRequestVal("IsReadonly") != null)
+            if (this.GetRequestVal("IsReadonly") == "1")
             {
                 mdtl.IsInsert = false;
                 mdtl.IsDelete = false;
                 mdtl.IsUpdate = false;
+            }
+            else
+            {
+
             }
 
             string strs = this.RequestParas;

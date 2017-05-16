@@ -191,7 +191,8 @@
         });
         function InitPage() {
 
-            var fk_mapExt = GetQueryString("MyPK");
+            var fk_mapExt = GetQueryString("FK_MapExt");
+
             var keyOfEn = GetQueryString("RefNo");
             var fk_mapData = GetQueryString("FK_MapData");
 
@@ -206,6 +207,7 @@
                     if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
                         data = data[0];
                     }
+
                     //设置选择的模式.
                     $("#RB_PopWorkModel_" + data.PopValWorkModel).attr("checked", "checked");
 
@@ -216,6 +218,9 @@
                             $("#TB_Url").val(data.URL);
                             break;
                         case "TableOnly": //仅仅表格.
+
+                            alert(data.EntitySQL);
+
                             $("#TB_Table_SQL").val(data.EntitySQL);
                             break;
                         case "TablePage":  //表格分页模式.

@@ -4,6 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="utf-8" />
     <title></title>
+    <script type="text/javascript" src="../Scripts/config.js"></script>
     <!--<script src="Scripts/JavaScript1.js"></script>-->
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
 
@@ -203,9 +204,12 @@
     <script type="text/javascript">
 
         $(function () {
+
             initPageParam(); //初始化参数
-         
-            GenerWorkNode(); //表单数据.
+
+            //构造表单.
+            GenerFreeFrm(); //表单数据.
+
             $('[name=showCol]').bind('change', function (obj) {
                 if (obj.target.value == "8") {
                     Col4To8();
@@ -247,11 +251,8 @@
 </head>
 <body>
 
-   
-
     <!--之前返回的信息-->
     <div id="lastOptMsg">
-
     </div>
     <!--Message-->
     <div class="Message alert">

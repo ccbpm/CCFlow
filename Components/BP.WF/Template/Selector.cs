@@ -478,7 +478,7 @@ namespace BP.WF.Template
 
                 DataTable dtDef = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
                 dtDef.TableName = "DefaultSelected";
-                ds.Tables.Add(dtEmp);
+                ds.Tables.Add(dtDef);
             }
 
 

@@ -2068,12 +2068,14 @@ function SaveDtlAll() {
 
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
 function GenerWorkNode() {
+    var href = window.location.href;
+    var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     $.ajax({
         type: 'post',
         async: true,
         data: pageData,
         //url: "../MyFlow.ashx?DoType=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
-        url: "Handler.ashx?DoType=FrmFree_Init" + "&m=" + Math.random(),
+        url: "Handler.ashx?DoType=FrmFree_Init" + "&m=" + Math.random() + "&" + urlParam,
        // url:"Handler.ashx?DoType=FrmFree_Init&FK_MapData="+pageData.FK_MapData + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {

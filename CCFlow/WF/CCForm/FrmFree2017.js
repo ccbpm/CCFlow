@@ -516,39 +516,7 @@ function Save() {
         }
     });
 }
-
-//退回工作
-function returnWorkWindowClose(data) {
-    $('#returnWorkModal').modal('hide');
-    //通过下发送按钮旁的下拉框选择下一个节点
-    if (data.indexOf('SaveOK@') == 0) {
-        //说明保存人员成功,开始调用发送按钮.
-        var toNode = 0;
-        //含有发送节点 且接收
-        if ($('#DDL_ToNode').length > 0) {
-            var selectToNode = $('#DDL_ToNode  option:selected').data();
-            toNode = selectToNode.No;
-        }
-
-        execSend(toNode);
-        //$('[name=Send]:visible').click();
-        return;
-    } else {//可以重新打开接收人窗口
-        winSelectAccepter = null;
-    }
-
-    if (data.indexOf('err@') == 0 || data == "取消") {//发送时发生错误
-        $('#Message').html(data);
-        $('.Message').show();
-    }
-    else {
-        OptSuc(data);
-        ////发送成功时
-        //setAttachDisabled();
-        //setToobarUnVisible();
-        //setFormEleDisabled();
-    }
-}
+ 
 //移交
 //子线程
 //子流程
@@ -801,8 +769,6 @@ function InitForm() {
 
     }
 
-
-
     //处理下拉框级联等扩展信息
     AfterBindEn_DealMapExt();
 
@@ -834,9 +800,9 @@ function InitForm() {
             ath = ath[0];
             var src = "";
             if (pageData.IsReadonly)
-                src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
             else
-                src = "/WF/CCForm/AttachmentUpload.aspx?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
             $('#iframeAthForm').attr('src', src);
             atParamObj["tbId"] = tbId;
             atParamObj["divId"] = divId;

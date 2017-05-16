@@ -1660,6 +1660,8 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
 }
 //加载表单数据.
 function GenerWorkNode1() {
+
+
     $.ajax({
         type: 'post',
         async: true,
@@ -2222,8 +2224,10 @@ function SaveDtlAll() {
 
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
 function GenerWorkNode() {
+
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+
     $.ajax({
         type: 'post',
         async: true,
@@ -2373,7 +2377,6 @@ function GenerWorkNode() {
                     }
                 })
 
-            
 
             ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
                 var enName = workNodeData.Sys_MapData[0].No;

@@ -497,9 +497,9 @@ namespace BP.WF.Template
                 if (sqlDB.Contains("@"))
                     sqlDB = BP.WF.Glo.DealExp(sqlDB, en, null);
 
-                DataTable dtDef = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
-                dtDef.TableName = "ForceSelected";
-                ds.Tables.Add(dtEmp);
+                DataTable dtForce = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
+                dtForce.TableName = "ForceSelected";
+                ds.Tables.Add(dtForce);
             }
 
             return ds;

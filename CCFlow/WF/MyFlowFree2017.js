@@ -2892,6 +2892,10 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var y = wf_node.FWC_Y;
     var h = wf_node.FWC_H;
     var w = wf_node.FWC_W;
+
+  //  h = 5000;
+   // alert(h);
+
     if (sta == 0)
         return $('');
 
@@ -2914,9 +2918,11 @@ function figure_Template_FigureFrmCheck(wf_node) {
         $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
     }
     src += "&r=q" + paras;
-    var eleHtml = '<div id="FFWC'+wf_node.NodeID+'">' + "<iframe style='width:100%;' id='FFWC"+wf_node.NodeID+"'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe style='width:" + w + "px;height:"+h+"px;' id='FFWC" + wf_node.NodeID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
+    //eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
+    eleHtml.css('position', 'absolute').css('top', y).css('left', x);
+
 
     return eleHtml;
 }
@@ -2956,7 +2962,7 @@ function figure_Template_FigureThreadDtl(wf_node) {
     src += "&r=q" + paras;
     var eleHtml = '<div id=DIVFT' + wf_node.NodeID + '>' + "<iframe id=FFT" + wf_node.NodeID + " style='width:100%;'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
+    eleHtml.css('position', 'absolute').css('top', y).css('left', x);
 
     return eleHtml;
 }

@@ -410,14 +410,14 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
         }
     });
 }
-/* 级联下拉框*/
-function DDLAnsc(e, ddlChild, fk_mapExt) {
+/* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值*/
+function DDLAnsc(e, ddlChild, fk_mapExt, param) {
     GenerPageKVs();
     var url = GetLocalWFPreHref();
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx",
+        url: url + "/WF/CCForm/HanderMapExt.ashx" + (param != null ? "&" + param : ""),
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();

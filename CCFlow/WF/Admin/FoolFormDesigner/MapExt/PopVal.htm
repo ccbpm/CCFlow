@@ -212,7 +212,7 @@
 
 
                     switch (data.PopValWorkModel) {
-                        case "0":
+                        case "None":
                             break;
                         case "SelfUrl":
                             $("#TB_Url").val(data.URL);
@@ -281,11 +281,9 @@
 <!---------------------------- 模式0 ：禁用 ---------------------------------------------------->
 <fieldset>
 <legend><input id="RB_PopWorkModel_None" type="radio" name="Model" value="None"  /><label for="RB_PopWorkModel_None">禁用</label>  </legend>
- <div id="Div1" style="color:Gray; display:none">
  <ul>
  <li>不使用弹出窗体. </li>
  </ul>
- </div>
 </fieldset>
 
 <!---------------------------- 模式1 ：自定义URL ---------------------------------------------------->

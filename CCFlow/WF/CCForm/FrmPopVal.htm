@@ -706,7 +706,7 @@
                             defVal = defVal.replace('<br/>', '');
                             defVal = defVal.replace('@Now', "(new Date())");
                             defVal = new Date(eval(defVal));
-                            defVal = defVal.FormateDate("yyyy-MM-dd HH:mm");
+                            defVal = defVal.FormateDate("yyyy-MM-dd");
                         }
                         conHtml += '<input value="' + defVal + '"  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";
                     }
@@ -876,11 +876,11 @@
     <div id="selectedlist" style="display:none;"></div>
 <!--无分页显示table-->
 <div id="poptablew" style="display: none;">
-    <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
-        <div class="portlet-body " id="" style="overflow: auto;">
+    <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; ">
+        <div class="portlet-body " id="" style="">
             <div class="tab-content" style="margin: 4px 0px;">
                 <div class="tab-pane active portlet_tab flowLists">
-                    <div id="" style="min-height: 520px; overflow: auto;">
+                    <div id="" style="">
                         <table class="table wupop" data-data="true">
                             <thead></thead>
                             <tbody></tbody>

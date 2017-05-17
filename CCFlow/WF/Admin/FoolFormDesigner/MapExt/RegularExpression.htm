@@ -7,17 +7,14 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <link href="../../../../DataUser/Style/Table0.css" rel="stylesheet" />
     <script type="text/javascript">
-
         var sys_mapExt = null;
         var RE = null;
-        var REDtl = null;
+        var REDtl = null; 
+        var fk_mapdata = GetQueryString("FK_MapData"); //表单id.
+        var keyOfEn = GetQueryString("KeyOfEn"); //字段
 
         //初始加载
         $(function () {
-
-            var fk_mapdata = GetQueryString("FK_MapData"); //表单id.
-            var keyOfEn = GetQueryString("RefNo"); //字段
-
             $.ajax({
                 type: 'post',
                 async: true,
@@ -27,8 +24,6 @@
 
                     if (data == "")
                         return;
-
-                    // alert(data);
 
                     data = JSON.parse(data);
 
@@ -86,7 +81,7 @@
                 data: frmData,
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=RegularExpression_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("RefNo") + "&m=" + Math.random(),
+                url: Handler + "?DoType=RegularExpression_Save&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {

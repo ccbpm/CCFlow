@@ -449,7 +449,7 @@ namespace BP.WF.HttpHandler
                 return;
 
             MapExt me = new MapExt();
-            me.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn;
+            me.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.KeyOfEn + "_" + tagID;
             me.FK_MapData = this.FK_MapData;
             me.AttrOfOper = this.KeyOfEn;
             me.ExtType = "RegularExpression";

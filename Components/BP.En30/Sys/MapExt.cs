@@ -867,7 +867,7 @@ namespace BP.Sys
                     this.MyPK = MapExtXmlList.PageLoadFull + "_" + this.FK_MapData;
                     break;
                 case MapExtXmlList.RegularExpression:
-                    this.MyPK = MapExtXmlList.RegularExpression + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    this.MyPK = MapExtXmlList.RegularExpression + "_" + this.FK_MapData + "_" + this.AttrOfOper + "_" + this.Tag;
                     break;
                 case MapExtXmlList.Link:
                     this.MyPK = MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper;

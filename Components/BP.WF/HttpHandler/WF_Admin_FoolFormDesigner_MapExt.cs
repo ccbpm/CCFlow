@@ -625,6 +625,9 @@ namespace BP.WF.HttpHandler
 
                 switch (valWorkModel)
                 {
+                    case "None":
+                        me.PopValWorkModel = PopValWorkModel.None;
+                        break;
                     case "SelfUrl": //URL模式.
                         me.PopValWorkModel = PopValWorkModel.SelfUrl;
                         me.PopValUrl = this.GetValFromFrmByKey("TB_Url");

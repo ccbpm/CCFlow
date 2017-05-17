@@ -44,9 +44,13 @@ namespace BP.Sys
     public enum PopValWorkModel
     {
         /// <summary>
+        /// 禁用
+        /// </summary>
+        None,
+        /// <summary>
         /// 自定义URL
         /// </summary>
-        SelfUrl =1,
+        SelfUrl,
         /// <summary>
         /// 表格模式
         /// </summary>

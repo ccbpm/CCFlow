@@ -67,6 +67,44 @@ namespace BP.WF
 
                 //加入组件的状态信息, 在解析表单的时候使用.
                 BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
+
+
+                if (nd.NodeFrmID != "ND" + nd.NodeID)
+                {
+                    /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
+
+                    int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
+
+                    BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(refNodeID);
+
+                    fnc.SetValByKey(FrmWorkCheckAttr.FWC_H, refFnc.GetValIntByKey(FrmWorkCheckAttr.FWC_H));
+                    fnc.SetValByKey(FrmWorkCheckAttr.FWC_W, refFnc.GetValIntByKey(FrmWorkCheckAttr.FWC_W));
+                    fnc.SetValByKey(FrmWorkCheckAttr.FWC_X, refFnc.GetValIntByKey(FrmWorkCheckAttr.FWC_X));
+                    fnc.SetValByKey(FrmWorkCheckAttr.FWC_Y, refFnc.GetValIntByKey(FrmWorkCheckAttr.FWC_Y));
+
+
+                    fnc.SetValByKey(FrmSubFlowAttr.SF_H, refFnc.GetValIntByKey(FrmSubFlowAttr.SF_H));
+                    fnc.SetValByKey(FrmSubFlowAttr.SF_W, refFnc.GetValIntByKey(FrmSubFlowAttr.SF_W));
+                    fnc.SetValByKey(FrmSubFlowAttr.SF_X, refFnc.GetValIntByKey(FrmSubFlowAttr.SF_X));
+                    fnc.SetValByKey(FrmSubFlowAttr.SF_Y, refFnc.GetValIntByKey(FrmSubFlowAttr.SF_Y));
+
+                    fnc.SetValByKey(FrmThreadAttr.FrmThread_H, refFnc.GetValIntByKey(FrmThreadAttr.FrmThread_H));
+                    fnc.SetValByKey(FrmThreadAttr.FrmThread_W, refFnc.GetValIntByKey(FrmThreadAttr.FrmThread_W));
+                    fnc.SetValByKey(FrmThreadAttr.FrmThread_X, refFnc.GetValIntByKey(FrmThreadAttr.FrmThread_X));
+                    fnc.SetValByKey(FrmThreadAttr.FrmThread_Y, refFnc.GetValIntByKey(FrmThreadAttr.FrmThread_Y));
+
+                    fnc.SetValByKey(FrmTrackAttr.FrmTrack_H, refFnc.GetValIntByKey(FrmTrackAttr.FrmTrack_H));
+                    fnc.SetValByKey(FrmTrackAttr.FrmTrack_W, refFnc.GetValIntByKey(FrmTrackAttr.FrmTrack_W));
+                    fnc.SetValByKey(FrmTrackAttr.FrmTrack_X, refFnc.GetValIntByKey(FrmTrackAttr.FrmTrack_X));
+                    fnc.SetValByKey(FrmTrackAttr.FrmTrack_Y, refFnc.GetValIntByKey(FrmTrackAttr.FrmTrack_Y));
+
+                    fnc.SetValByKey(FTCAttr.FTC_H, refFnc.GetValIntByKey(FTCAttr.FTC_H));
+                    fnc.SetValByKey(FTCAttr.FTC_W, refFnc.GetValIntByKey(FTCAttr.FTC_W));
+                    fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValIntByKey(FTCAttr.FTC_X));
+                    fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValIntByKey(FTCAttr.FTC_Y));
+
+                }
+
                 myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
 
                 #region 流程设置信息.

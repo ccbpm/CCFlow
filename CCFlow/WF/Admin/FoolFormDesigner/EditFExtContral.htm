@@ -83,6 +83,14 @@
             var frmData = $("#cc").serialize();
             var keyOfEn = GetQueryString("KeyOfEn");
             var fk_mapData = GetQueryString("FK_MapData");
+
+            //增加附件判断
+            var DDL_Ath = $("#DDL_Ath").val();
+            var CtrlType = document.getElementById("RB_CtrlType_6").checked;
+            if (CtrlType && null == DDL_Ath) {
+                alert("该表单中没有附件，请您先在表单设计器中创建一个附件");
+                return;
+            }
             $.ajax({
                 data: frmData,
                 type: 'post',
@@ -127,6 +135,12 @@
 
 <script type="text/javascript">
     function EditAth() {
+        //增加附件判断
+        var DDL_Ath = $("#DDL_Ath").val();
+        if (null == DDL_Ath) {
+            alert("该表单中没有附件，请您先在表单设计器中创建一个附件");
+            return;
+        }
         var ddl = document.getElementById("DDL_Ath");
         var mypk = ddl.options[ddl.selectedIndex].value;
         var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&MyPK=' + mypk;

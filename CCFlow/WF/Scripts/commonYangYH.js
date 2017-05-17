@@ -1,9 +1,9 @@
 ﻿//格式化日期的函数 yyyy:年 MM:月 dd:日 HH:小时 mm:分钟 ss:秒 DAY:星期几 算是Date的一个扩展方法
 $(function () {
     Date.prototype.FormateDate = function (formateStr) {
-        //return formateStr.replace("yyyy", this.getFullYear()).replace("MM",this.getMonth()<9?'0'+ (this.getMonth() + 1):(this.getMonth() + 1)).replace("dd", this.getDate()).replace("HH", this.getHours()<10?'0'+this.getHours():this.getHours()).replace("mm", this.getMinutes()<10?'0'+this.getMinutes():this.getMinutes()).replace("ss", this.getMilliseconds()<10?'0'+this.getMilliseconds():this.getMilliseconds()).replace('DAY', WeekCns[this.getDay()]);
+        return formateStr.replace("yyyy", this.getFullYear()).replace("MM",this.getMonth()<9?'0'+ (this.getMonth() + 1):(this.getMonth() + 1)).replace("dd", this.getDate()<10?'0'+this.getDate():this.getDate()).replace("HH", this.getHours()<10?'0'+this.getHours():this.getHours()).replace("mm", this.getMinutes()<10?'0'+this.getMinutes():this.getMinutes()).replace("ss", this.getMilliseconds()<10?'0'+this.getMilliseconds():this.getMilliseconds()).replace('DAY', WeekCns[this.getDay()]);
 
-        return formateStr.replace("yyyy", this.getFullYear()).replace("MM", (this.getMonth() + 1)).replace("dd", this.getDate()).replace("HH",this.getHours()).replace("mm",  this.getMinutes()).replace("ss",  this.getMilliseconds()).replace('DAY', WeekCns[this.getDay()]);
+        //return formateStr.replace("yyyy", this.getFullYear()).replace("MM", (this.getMonth() + 1)).replace("dd", this.getDate()).replace("HH",this.getHours()).replace("mm",  this.getMinutes()).replace("ss",  this.getMilliseconds()).replace('DAY', WeekCns[this.getDay()]);
     }
 
     var WeekCns = { 1: '一', 2: '二', 3: '三', 4: '四', 5: '五', 6: '六', 0: '日' };

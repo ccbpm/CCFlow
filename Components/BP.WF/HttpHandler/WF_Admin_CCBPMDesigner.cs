@@ -196,7 +196,6 @@ namespace BP.WF.HttpHandler
                     case "editnodename"://修改节点名称
                         msg = Node_EditNodeName();
                         break;
-
                     case "GetFormTree"://获取表单库数据
                         msg = GetFormTreeTable();//GetFormTree();
                         break;
@@ -592,7 +591,6 @@ namespace BP.WF.HttpHandler
             return "SID=" + emp.SID + "&UserNo=" + emp.No;
         }
         #endregion 登录窗口.
-
 
 
         #region 流程相关 Flow
@@ -1081,7 +1079,7 @@ namespace BP.WF.HttpHandler
             {
                 dt.Rows.Add(row.ItemArray);
             }
-            
+
             //判断AdminEmp
             AdminEmpExt aext = new AdminEmpExt();
 
@@ -1106,64 +1104,6 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataTableToJson(dt, false);
         }
-
-        /// <summary>
-        /// 获取表单库数据
-        /// </summary>
-        /// <returns>返回结果Json,表单库</returns>
-        public string GetFormTree_deleted()
-        {
-            var sqls = "SELECT No ,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree"
-                      + " union "
-                      +
-                      " SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData   where AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree);" + Environment.NewLine
-                      +
-                      " SELECT ss.No,'SrcRoot' AS ParentNo,ss.Name,0 AS Idx, 1 IsParent, 'SRC' TType FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC;" + Environment.NewLine
-                      +
-                      " SELECT st.No, st.FK_SFDBSrc AS ParentNo,st.Name,0 AS Idx, 0 IsParent, 'SRCTABLE' TType FROM Sys_SFTable st;";
-
-            DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
-            var dt = ds.Tables[0].Clone();
-
-            //1.表单类别；2.表单
-            foreach (DataRow row in ds.Tables[0].Rows)
-                dt.Rows.Add(row.ItemArray);
-
-            //3.数据源字典表
-            dt.Rows.Add("SrcRoot", "-1", "数据源字典表", 0, 1, "SRCROOT");
-
-            //4.数据源
-            foreach (DataRow row in ds.Tables[1].Rows)
-                dt.Rows.Add(row.ItemArray);
-
-            //5.数据接口表
-            foreach (DataRow row in ds.Tables[2].Rows)
-                dt.Rows.Add(row["No"], Equals(row["ParentNo"], null) || DBNull.Value == row["ParentNo"] || string.IsNullOrWhiteSpace(row["ParentNo"].ToString()) ? "local" : row["ParentNo"], row["Name"], row["Idx"], row["IsParent"],
-                            row["TType"]);
-
-            //6.表单相关；7.枚举列表；8.JS验证库；9.Internet云数据；10.私有表单库；11.共享表单库
-            dt.Rows.Add("FormRef", "-1", "表单相关", 0, 1, "FORMREF");
-            dt.Rows.Add("Enums", "FormRef", "枚举列表", 0, 0, "ENUMS");
-            dt.Rows.Add("JSLib", "FormRef", "JS验证库", 0, 0, "JSLIB");
-            dt.Rows.Add("FUNCM", "FormRef", "功能执行", 0, 0, "FUNCM");
-
-            dt.Rows.Add("CloundData", "-1", "ccbpm云服务-表单云", 0, 1, "CLOUNDDATA");
-            dt.Rows.Add("PriForm", "CloundData", "私有表单云", 0, 0, "PRIFORM");
-            dt.Rows.Add("ShareForm", "CloundData", "共有表单云", 0, 0, "SHAREFORM");
-
-            sbJson.Clear();
-
-            string sTmp = "";
-
-            if (dt.Rows.Count > 0)
-            {
-                GetTreeJsonByTable(dt, "", attrFields: new[] { "TType" });
-            }
-            sTmp += sbJson.ToString();
-
-            return sTmp;
-        }
-
         public string GetSrcTreeTable()
         {
             string sql1 = "SELECT ss.NO,'SrcRoot' PARENTNO,ss.NAME,0 IDX, 1 ISPARENT, 'SRC' TTYPE FROM Sys_SFDBSrc ss ORDER BY ss.DBSrcType ASC";

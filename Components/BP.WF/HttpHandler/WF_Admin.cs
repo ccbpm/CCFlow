@@ -38,7 +38,6 @@ namespace BP.WF.HttpHandler
             //注册这个枚举，防止第一次运行出错.
             BP.Sys.SysEnums ses = new SysEnums("FrmEnableRole");
 
-
             string text = "";
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
 
@@ -46,9 +45,7 @@ namespace BP.WF.HttpHandler
 
             FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
 
-
             #region 如果没有ndFrm 就增加上.
-
             bool isHaveNDFrm = false;
             foreach (FrmNode fn in fns)
             {

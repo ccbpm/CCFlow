@@ -16,6 +16,22 @@ namespace BP.WF.Template
     /// </summary>
     public class FrmNodeExt : EntityMyPK
     {
+        #region 属性.
+        public string FK_Frm
+        {
+            get
+            {
+                return this.GetValStrByKey(FrmNodeAttr.FK_Frm);
+            }
+        }
+        public int FK_Node
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmNodeAttr.FK_Node);
+            }
+        }
+        #endregion
 
         #region 基本属性
         /// <summary>
@@ -64,30 +80,30 @@ namespace BP.WF.Template
 
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, false);
-                map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, false);
+
+             //   map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, false);
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
-
                 map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
                     "@0=默认方案@1=只读方案@2=自定义方案");
 
                 map.AddDDLSysEnum(FrmNodeAttr.WhoIsPK, 0, "谁是主键?", true, true);
 
                 //显示的
-                map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号", true, false);
+                map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号(显示的顺序)", true, false);
 
                 // add 2014-01-26
 
                 //add 2016.3.25.
                 map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？(分流节点有效)", true, true,true);
-                map.AddTBString(FrmNodeAttr.HuiZong, null, "子线程要汇总的数据表(子线程节)", true, true, 0, 300, 20);
+                map.AddTBString(FrmNodeAttr.HuiZong, null, "子线程要汇总的数据表(子线程节点)", true,false, 0, 300, 20);
              
                 //模版文件，对于office表单有效.
-                map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, true, 0, 500, 20);
+                map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, false, 0, 500, 20);
 
                 //是否显示
-                map.AddTBString(FrmNodeAttr.GuanJianZiDuan,null,"关键字段",true,true,0,20,20);
+                map.AddTBString(FrmNodeAttr.GuanJianZiDuan, null, "关键字段", true, false, 0, 20, 20);
 
                 #region 表单启用规则.
                 map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "表单启用规则?", true, true);
@@ -95,17 +111,18 @@ namespace BP.WF.Template
                 #endregion 表单启用规则.
 
 
-                //RefMethod rm = new RefMethod();
+                RefMethod rm = new RefMethod();
+
                 //rm.Title = "启用规则";
                 //rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.Title = "自定义方案";
-                //rm.ClassMethodName = this.ToString() + ".DoSelfSln()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //map.AddRefMethod(rm);
+                rm = new RefMethod();
+                rm.Title = "自定义方案";
+                rm.ClassMethodName = this.ToString() + ".DoSelfSln()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -115,13 +132,12 @@ namespace BP.WF.Template
 
         public string DoSelfSln()
         {
-            return "/WF/Admin/BindFrmsFrmEnableRole.htm?MyPK=" + this.MyPK;
+            return "/WF/Admin/FoolFormDesigner/Sln.aspx?FK_MapData="+this.FK_Frm+"&FK_Node="+this.FK_Node+"&FK_Flow=084&DoType=Field";
         }
         
-
         public string DoEnableRole()
         {
-            return "/WF/Admin/BindFrmsFrmEnableRole.htm?MyPK=" + this.MyPK;
+            return "/WF/Admin/AttrNode/BindFrmsFrmEnableRole.htm?MyPK=" + this.MyPK;
         }
     }
     /// <summary>

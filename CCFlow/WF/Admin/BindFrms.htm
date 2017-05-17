@@ -65,7 +65,10 @@
 
                         newRow = "<tr ><td class=Idx>" + i + "</td>";
                         newRow += "<td>" + data[i].FK_Frm + "</td>";
-                        newRow += "<td><a href=\"javascript:Edit('" + mypk + "')\">" + data[i].FK_FrmText + "</a></td>";
+
+                       
+                        newRow += "<td><a href=\"javascript:Edit('" + mypk + "')\"><img src='./Img/Frm.png'  />" + data[i].FK_FrmText + "</a></td>";
+
                         newRow += "<td>" + data[i].FrmEnableRoleText + "</td>";
                         newRow += "<td>" + data[i].FrmSlnText + "</td>";
                         newRow += "<td>" + data[i].WhoIsPKText + "</td>";

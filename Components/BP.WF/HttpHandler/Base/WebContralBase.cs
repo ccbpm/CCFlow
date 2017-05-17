@@ -336,7 +336,15 @@ namespace BP.WF.HttpHandler
             {
                 string str = this.GetRequestVal("FK_MapExt");
                 if (str == null || str == "" || str == "null")
-                    return null;
+                {
+                    str = this.GetRequestVal("MyPK");
+                    if (str == null || str == "" || str == "null")
+                    {
+                        return null;
+                    }
+                }
+
+                   
                 return str;
             }
         }

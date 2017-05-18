@@ -354,14 +354,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         protected override string DoDefaultMethod()
         {
-            switch (this.DoType)
-            {
-                case "DtlFieldUp": //字段上移
-                    return "执行成功.";
-                default:
-                    break;
-            }
-
             //找不不到标记就抛出异常.
             throw new Exception("@标记[" + this.DoType + "]，没有找到.");
         }

@@ -417,7 +417,7 @@ function DDLAnsc(e, ddlChild, fk_mapExt, param) {
 
     GenerPageKVs();
     var url = GetLocalWFPreHref();
-    if (param!=undefined){
+    if (param != undefined) {
         kvs = '';
     }
 
@@ -425,6 +425,8 @@ function DDLAnsc(e, ddlChild, fk_mapExt, param) {
 
     if (param != undefined) {
         for (var pro in param) {
+            if (pro == 'DoType')
+                continue;
             json_data[pro] = param[pro];
         }
     }

@@ -34,27 +34,12 @@
                 url: Handler + "?DoType=TurnToDeal_Init&FK_Node=" + fk_node + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
-
-                   // alert(data);
-
                     console.info(data);
-
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
-
-
-                    //alert('ddd');
-
                     data = JSON.parse(data);
-
-                    alert(data);
-
-                    alert(data.TurnToDeal);
-
-
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(data);
 

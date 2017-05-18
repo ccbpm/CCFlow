@@ -856,7 +856,6 @@
                         var value = $(obj.target).val();
                         var mapExtThis = $(obj.target).data().MapExt;
                         var mapAttrOfActiveEleId = $(trEle).find("[name='DDL_" + mapExtThis.AttrsOfActive + "']").attr('id');
-                        console.log(mapAttrOfActiveEleId)
                         //获取这一行的数据
                         var rowIndexThis = (parseInt($($(trEle).find('td')[0]).text()) - 1);
                         setTrDataByData(rowIndexThis);

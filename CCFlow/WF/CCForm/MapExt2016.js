@@ -410,10 +410,14 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
         }
     });
 }
-/* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值*/
+/* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
 function DDLAnsc(e, ddlChild, fk_mapExt, param) {
     GenerPageKVs();
     var url = GetLocalWFPreHref();
+    if (param!=undefined){
+        kvs = '';
+    }
+
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
 
     if (param != undefined) {

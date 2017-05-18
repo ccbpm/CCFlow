@@ -20,13 +20,11 @@ namespace BP.WF.HttpHandler
     public class WF_CCForm : WebContralBase
     {
         #region HanderMapExt
-        public string HanderMapExt()
+        public string HandlerMapExt()
         {
-
             string fk_mapExt = context.Request.QueryString["FK_MapExt"].ToString();
             if (string.IsNullOrEmpty(context.Request.QueryString["Key"]))
                 return "";
-
 
             string oid = context.Request.QueryString["OID"];
             string kvs = context.Request.QueryString["KVs"];
@@ -42,15 +40,9 @@ namespace BP.WF.HttpHandler
             // key = "周";
             switch (me.ExtType)
             {
-                //case BP.Sys.MapExtXmlList.DDLFullCtrl: // 级连ddl.
-                //    sql = this.DealSQL(me.DocOfSQLDeal, key);
-                //    dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                //    context.Response.Write(JSONTODT(dt));
-                //    return;
+
                 case BP.Sys.MapExtXmlList.ActiveDDL: // 动态填充ddl。
-
                     sql = this.DealSQL(me.DocOfSQLDeal, key);
-
                     if (sql.Contains("@") == true)
                     {
                         foreach (string strKey in context.Request.QueryString)
@@ -65,14 +57,15 @@ namespace BP.WF.HttpHandler
                 case BP.Sys.MapExtXmlList.AutoFullDLL://填充下拉框
                 case BP.Sys.MapExtXmlList.TBFullCtrl: // 自动完成。
                 case BP.Sys.MapExtXmlList.DDLFullCtrl: // 级连ddl.
-                    switch (context.Request.QueryString["DoType"])
+                    switch (context.Request.QueryString["DoTypeExt"])
                     {
                         case "ReqCtrl":
                             // 获取填充 ctrl 值的信息.
                             sql = this.DealSQL(me.DocOfSQLDeal, key);
                             System.Web.HttpContext.Current.Session["DtlKey"] = key;
                             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                            context.Response.Write(JSONTODT(dt));
+
+                            return JSONTODT(dt);
                             break;
                         case "ReqM2MFullList":
                             /* 获取填充的M2m集合. */
@@ -113,7 +106,8 @@ namespace BP.WF.HttpHandler
                                 mydr[0] = ss[0];
                                 dtM2M.Rows.Add(mydr);
                             }
-                            context.Response.Write(JSONTODT(dtM2M));
+                            return JSONTODT(dtM2M);
+
                             break;
                         case "ReqDtlFullList":
                             /* 获取填充的从表集合. */
@@ -162,7 +156,7 @@ namespace BP.WF.HttpHandler
                                 drRe[0] = fk_dtl;
                                 dtDtl.Rows.Add(drRe);
                             }
-                            context.Response.Write(JSONTODT(dtDtl));
+                            return JSONTODT(dtDtl);
                             break;
                         case "ReqDDLFullList":
                             /* 获取要个性化填充的下拉框. */
@@ -181,7 +175,7 @@ namespace BP.WF.HttpHandler
                                 // dr[1] = ss[1];
                                 dt1.Rows.Add(dr);
                             }
-                            context.Response.Write(JSONTODT(dt1));
+                            return JSONTODT(dt);
                             break;
                         case "ReqDDLFullListDB":
                             /* 获取要个性化填充的下拉框的值. 根据已经传递过来的 ddl id. */
@@ -202,19 +196,20 @@ namespace BP.WF.HttpHandler
                                 }
                             }
                             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                            context.Response.Write(JSONTODT(dt));
+                            return JSONTODT(dt);
                             break;
                         default:
                             sql = this.DealSQL(me.DocOfSQLDeal, key);
                             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                            context.Response.Write(JSONTODT(dt));
+                            return JSONTODT(dt);
                             break;
                     }
                     return "";
                 default:
-                    break;
+                    return "err@没有解析的标记" + me.ExtType;
             }
-            return "";
+
+            return "err@没有解析的标记" + me.ExtType;
         }
         private string DealSQL(string sql, string key)
         {
@@ -227,11 +222,9 @@ namespace BP.WF.HttpHandler
             sql = sql.Replace("@WebUser.Name", WebUser.Name);
             sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
 
-
             string oid = this.GetRequestVal("OID");
             if (oid != null)
                 sql = sql.Replace("@OID", oid);
-
 
             string kvs = this.GetRequestVal("KVs");
 

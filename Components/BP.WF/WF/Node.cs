@@ -1326,6 +1326,8 @@ namespace BP.WF
                 string s = this.GetValStrByKey(NodeAttr.TurnToDealDoc);
                 if (this.HisTurnToDeal == TurnToDeal.SpecUrl)
                 {
+                    if (s.Contains("1=1"))
+                        return s;
                     if (s.Contains("?"))
                         s += "&1=1";
                     else

@@ -95,7 +95,7 @@ function Change() {
             btn.value = btn.value + '*';
     }
 }
-var longCtlID = 'ContentPlaceHolder1_MyFlowUC1_MyFlow1_UCEn1_';
+var longCtlID = '';
 function KindEditerSync() {
     try {
         if (editor1 != null) {

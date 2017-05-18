@@ -67,7 +67,7 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
             var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
             $.ajax({
                 type: "get",
-                url: Hander + "?DoType=HanderMapExt",
+                url: Handler + "?DoType=HandlerMapExt",
                 data: json_data,
                 beforeSend: function (XMLHttpRequest, fk_mapExt) {
                     //ShowLoading();
@@ -385,7 +385,7 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
     $.ajax({
         type: "get",
 
-        url: Hander + "?DoType=HanderMapExt&KVs="+kvs,
+        url: Handler + "?DoType=HandlerMapExt&KVs="+kvs,
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -411,8 +411,10 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
         }
     });
 }
+
 /* 级联下拉框  param 传到后台的一些参数  例如从表的行数据 主表的字段值 如果param参数在，就不去页面中取KVS 了，PARAM 就是*/
 function DDLAnsc(e, ddlChild, fk_mapExt, param) {
+
     GenerPageKVs();
     var url = GetLocalWFPreHref();
     if (param!=undefined){
@@ -427,14 +429,19 @@ function DDLAnsc(e, ddlChild, fk_mapExt, param) {
         }
     }
 
+    var myurl = Handler + "?DoType=HandlerMapExt";
+
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: myurl,
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
         },
         success: function (data, textStatus) {
+
+            alert(data);
+
 
             // 这里要设置一下获取的外部数据.
             // var seleValOfOld = $("#" + ddlChild).selectedindex;
@@ -512,10 +519,10 @@ function FullM2M(key, fk_mapExt) {
     //alert(key);
     GenerPageKVs();
     var url = GetLocalWFPreHref();
-    var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoType": "ReqM2MFullList", "OID": oid, "KVs": kvs };
+    var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqM2MFullList", "OID": oid, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt&KVs=" + kvs,
+        url: Handler + "?DoType=HandlerMapExt&KVs=" + kvs,
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -560,10 +567,10 @@ function FullDtl(key, fk_mapExt) {
     GenerPageKVs();
     var url = GetLocalWFPreHref();
     //FullM2M(key, fk_mapExt); //填充M2M.
-    var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoType": "ReqDtlFullList", "OID": oid, "KVs": kvs };
+    var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqDtlFullList", "OID": oid, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt&KVs=" + kvs,
+        url: Handler + "?DoType=HandlerMapExt&KVs=" + kvs,
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -603,10 +610,10 @@ function FullDtl(key, fk_mapExt) {
 function FullCtrlDDL(key, ctrlIdBefore, fk_mapExt) {
     GenerPageKVs();
     var url = GetLocalWFPreHref();
-    var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoType": "ReqDDLFullList", "KVs": kvs };
+    var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqDDLFullList", "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: Handler + "?DoType=HandlerMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -643,10 +650,10 @@ function FullCtrlDDLDB(e, ddlID, ctrlIdBefore, endID, fk_mapExt) {
     GenerPageKVs();
     // alert('FullCtrlDDLDBs:' + ddlID + ' ctrlIdBefore: ' + ctrlIdBefore);
     var url = GetLocalWFPreHref();
-    var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoType": "ReqDDLFullListDB", "MyDDL": ddlID, "KVs": kvs };
+    var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqDDLFullListDB", "MyDDL": ddlID, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: Handler + "?DoType=HandlerMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -685,10 +692,10 @@ function FullCtrl(e, ctrlIdBefore, fk_mapExt) {
     e = escape(e);
     GenerPageKVs();
     var url = GetLocalWFPreHref();
-    var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoType": "ReqCtrl", "KVs": kvs };
+    var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqCtrl", "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: Handler + "?DoType=HandlerMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();

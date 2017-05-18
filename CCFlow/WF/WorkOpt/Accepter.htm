@@ -185,8 +185,8 @@
 
                     //增加了: 默认选择接收人，与强制选择接收人的数据源,让其在打开的时候，可以把默认值选择上.
                     // 有可能值是空的.
-                    var defaultSelected = initData.DefaultSelected;
-                    var forceSelected = initData.ForceSelected;
+                    var defaultSelected = initData.DEFAULTSELECTED;
+                    var forceSelected = initData.FORCESELECTED;
 
                     //初始化到达节点数据
                     if (firstLoad == true) {
@@ -220,11 +220,32 @@
                             //jsTreedata.push({ "id": obj.No, "parent": (obj.ParentNo == "0" ? '#' : obj.ParentNo), "text": obj.Name,"data":obj });
                             // 2016-12-05 by tianbaoyan 人员选择器默认展开  因为数据量通过sql过滤不是很大
                             jsTreedata.push({ "id": obj.NO, "parent": (obj.PARENTNO == "0" ? '#' : obj.PARENTNO), "text": obj.NAME, "data": obj, state: { opened: true} });
-                        })
+                        });
 
                         $.each(dteArr, function (i, obj) {
-                            jsTreedata.push({ children: {}, "id": "user" + obj.NO, "parent": obj.FK_DEPT, "text": obj.NAME, "icon": "jstree-file", "data": obj });
-                        })
+                            var disabled = false;
+                            var selected = false;
+                            //默认勾选
+                            if (defaultSelected) {
+                                for (var j = 0; j < defaultSelected.length; j++) {
+                                    if (obj.NO == defaultSelected[j].FK_EMP) {
+                                        selected = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            //强制勾选
+                            if (forceSelected) {
+                                for (var k = 0; k < forceSelected.length; k++) {
+                                    if (obj.NO == forceSelected[k].FK_EMP) {
+                                        selected = true;
+                                        disabled = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            jsTreedata.push({ children: {}, "id": "user" + obj.NO, "parent": obj.FK_DEPT, "text": obj.NAME, "icon": "jstree-file", "data": obj, "state": { "disabled": disabled, "selected": selected} });
+                        });
 
                         //没有父节点的给到根节点
                         for (var i = 0; i < jsTreedata.length; i++) {

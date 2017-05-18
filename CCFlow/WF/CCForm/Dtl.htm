@@ -845,24 +845,22 @@
                 case "TBFullCtrl"://自动填充  先不做
                     break;
                 case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
-                    var ddlPerant = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
+                    var ddlParent = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
                     var ddlChild = $(tr).find("[name=DDL_" + mapExt.AttrsOfActive + ']');
-                    if (ddlPerant == null || ddlChild == null)
+                    if (ddlParent == null || ddlChild == null)
                         continue;
                     var rowIndex = (parseInt($($(tr).find('td')[0]).text()) - 1);
-                    ddlPerant.attr("onchange", "DDLAnsc(this.value,'" + "DDL_" + mapExt.AttrsOfActive + "_" + rowIndex + "', '" + mapExt.MyPK + "',)");
-                    ddlParent.parent().parent().data().MapExt = mapExt;
+                    ddlParent.data().MapExt = mapExt;
                     ddlParent.bind('change', function (obj) {
-                        var value = $(obj.target).val();
-                        var mapExt = $(obj.target).data().MapExt;
-                        var mapAttrOfActiveEleId = $("[name='DDL_'" + mapExt.AttrsOfActive + "']").attr('id');
                         var trEle = $(obj.target).parent().parent();
-
+                        var value = $(obj.target).val();
+                        var mapExtThis = $(obj.target).data().MapExt;
+                        var mapAttrOfActiveEleId = $(trEle).find("[name='DDL_" + mapExtThis.AttrsOfActive + "']").attr('id');
+                        console.log(mapAttrOfActiveEleId)
                         //获取这一行的数据
-                        var rowIndex = parseInt(tr.children()[0].text()) - 1;
-                        setTrDataByData(rowIndex);
-                        consoe.log(tr.data());
-                        DDLAnsc(value, mapAttrOfActiveEleId, mapExt.MyPK, '');
+                        var rowIndexThis = (parseInt($($(trEle).find('td')[0]).text()) - 1);
+                        setTrDataByData(rowIndexThis);
+                        DDLAnsc(value, mapAttrOfActiveEleId, mapExtThis.MyPK, $(trEle).data().data);
                     });
                     // 处理默认选择。
                     //string val = ddlPerant.SelectedItemStringVal;

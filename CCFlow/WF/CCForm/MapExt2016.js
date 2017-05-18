@@ -415,9 +415,16 @@ function DDLAnsc(e, ddlChild, fk_mapExt, param) {
     GenerPageKVs();
     var url = GetLocalWFPreHref();
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
+
+    if (param != undefined) {
+        for (var pro in param) {
+            json_data[pro] = param[pro];
+        }
+    }
+
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx" + (param != null ? "&" + param : ""),
+        url: url + "/WF/CCForm/HanderMapExt.ashx" ,
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();

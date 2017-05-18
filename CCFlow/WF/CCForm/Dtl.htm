@@ -99,6 +99,7 @@
                 //值未改变，无需存盘
                 return;
             } else {
+               //alert(rowData.DoType);
                 AjaxServiceGener(rowData, SaveRowAfter, this);
             }
         }
@@ -696,7 +697,7 @@
 	                    rowData.RefPKVal = GetQueryString("RefPKVal");
 	                    currentRowIndex = -1;
 	                    AjaxServiceGener(rowData, deleteRowAfter, this);
-	                } else {//移除  新增的 尚未入库
+	                } else { //移除  新增的 尚未入库
 	                    var tr=$(index).parent().parent();
 	                    updateTableSn(tr);
 	                    tr.remove();

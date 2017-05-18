@@ -440,8 +440,10 @@ function DDLAnsc(e, ddlChild, fk_mapExt, param) {
         },
         success: function (data, textStatus) {
 
-            alert(data);
-
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
             // 这里要设置一下获取的外部数据.
             // var seleValOfOld = $("#" + ddlChild).selectedindex;
@@ -470,7 +472,6 @@ function DDLAnsc(e, ddlChild, fk_mapExt, param) {
                 if (typeof chg == "function") {
                     $("#" + ddlChild).change();
                 }
-
                 return;
             }
 

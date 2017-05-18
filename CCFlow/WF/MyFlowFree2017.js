@@ -544,7 +544,11 @@ function initBar() {
             if ($('[name=Delete]').length > 0) {
                 var onclickFun = $('[name=Delete]').attr('onclick');
                 if (onclickFun != undefined) {
-                    $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.aspx'));
+                    if (plant == 'CCFlow') {
+                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.aspx'));
+                    } else {
+                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.jsp'));
+                    }
                 }
             }
         }

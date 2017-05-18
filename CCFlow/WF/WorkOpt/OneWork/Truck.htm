@@ -9,8 +9,7 @@
         {
             /*width: 1000px;
             height: 600px;*/
-            margin: auto;
-            /*border: 1px dashed #c0c0c0;*/
+            margin: 10px; /*border: 1px dashed #c0c0c0;*/
         }
     </style>
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
@@ -24,6 +23,7 @@
         var rFlow;
         var r;
         var arrs = [];
+        var linedots = [];
         var dragNode;
         var dragBorderPointStart;
         var dragTextPointStart;
@@ -102,15 +102,33 @@
             });
         });
 
-        function getMaxSize(nodes) {
+        function getMaxSize(nodes, dirs) {
             /// <summary>获取所有节点坐标最大值</summary>
             /// <param name="nodes" Type="Array">节点数组</param>
+            /// <param name="dirs" Type="Array">连线数组</param>
             var xmax = 0;
             var ymax = 0;
+            var ps, pss;
 
             $.each(nodes, function () {
                 xmax = Math.max(xmax, this.X);
                 ymax = Math.max(ymax, this.Y);
+            });
+
+            $.each(dirs, function () {
+                if (this.DOTS && this.DOTS.length > 0) {
+                    ps = this.DOTS.split('@');
+
+                    for (var i = 0; i < ps.length; i++) {
+                        if (ps[i].length == 0) {
+                            continue;
+                        }
+
+                        pss = ps[i].split(',');
+                        xmax = Math.max(xmax, parseFloat(pss[0]));
+                        ymax = Math.max(ymax, parseFloat(pss[1]));
+                    }
+                }
             });
 
             return { X: xmax, Y: ymax };
@@ -123,7 +141,7 @@
             $('#holder').css('background-color', STYLE_CANVAS_COLOR);
             var width = $(document).width();
             var height = $(document).height();
-            var max = getMaxSize(datas.WF_NODE);
+            var max = getMaxSize(datas.WF_NODE, datas.WF_DIRECTION);
 
             if (height < 600) {
                 height = 600;
@@ -217,7 +235,7 @@
                     rNode.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR), "font-size": STYLE_NODE_TRACK_FONT_SIZE, "text-anchor": "start" });
                     rNode.rTrackText.toFront();
                 }
-                else if(datas.POSSIBLE) {
+                else if (datas.POSSIBLE) {
                     //检索是否有计算出节点处理人，以及可能处理时间，有则显示出来，added by liuxc,2016-4-15
                     rNode.rPossible = datas.POSSIBLE.findByField("FK_NODE", this.ID);
 
@@ -302,7 +320,7 @@
             });
 
             //绘制节点的连线
-            var fromNode, toNode;
+            var fromNode, toNode, tracknode;
             $.each(datas.WF_DIRECTION, function () {
                 rDir = new RDirection(this.NODE, this.TONODE, this.DIRTYPE, this.ISCANBACK);
                 rDir.FromNode = rFlow.getNode(this.NODE);
@@ -312,6 +330,9 @@
                 rDir.rPath = r.drawArr({
                     rStart: rDir.FromNode.rBorder,
                     rEnd: rDir.ToNode.rBorder,
+                    rDots: getDots(this.DOTS),
+                    node: this.NODE,
+                    tonode: this.TONODE,
                     pathColor: datas.TRACK.findBy2Field("NDFROM", rDir.FromNode.id, "NDTO", rDir.ToNode.id) != null ? STYLE_LINE_TRACK_COLOR : STYLE_LINE_COLOR    //&& rDir.ToNode.isTrackNode,edited by liuxc,2016-03-15,工作到哪个节点的轨迹都显示出来
                 });
 
@@ -323,10 +344,36 @@
             //绘制标签
             $.each(datas.WF_LABNOTE, function () {
                 rLabel = new RLabel(this.MYPK, this.NAME, this.X, this.Y);
-                rLabel.rText = r.text(this.X, this.Y, this.NAME);
+                rLabel.rText = r.text(this.X, this.Y + STYLE_FONT_SIZE_LABEL, this.NAME);
                 rLabel.rText.attr({ "stroke": STYLE_LABEL_COLOR_FORE, "fill": getFillTextColor(STYLE_LABEL_COLOR_FORE), "font-size": STYLE_FONT_SIZE_LABEL, "text-anchor": "start" });
                 rLabel.rText.toFront();
             });
+        }
+
+        function getDots(dotStr) {
+            if (!dotStr || dotStr.length == 0) {
+                return [];
+            }
+
+            var dots = [];
+            var strs = dotStr.split('@');
+            var sub;
+
+            $.each(strs, function () {
+                if (this.length == 0) {
+                    return true;
+                }
+
+                sub = this.split(',');
+
+                if (sub.length != 2) {
+                    return true;
+                }
+
+                dots.push({ x: parseFloat(sub[0]), y: parseFloat(sub[1]) });
+            });
+
+            return dots;
         }
 
         function breakstr(str, rowWordsCount) {
@@ -562,16 +609,36 @@
         }
 
         //获取组成箭头的三条线段的路径
-        function getArr(x1, y1, x2, y2, size) {
-            var angle = Raphael.angle(x1, y1, x2, y2); //得到两点之间的角度
+        function getArr(x1, y1, x2, y2, size, dots) {
+            var angle;
+
+            if (dots.length > 0) {
+                angle = Raphael.angle(dots[dots.length - 1].x, dots[dots.length - 1].y, x2, y2); //得到两点之间的角度
+            }
+            else {
+                angle = Raphael.angle(x1, y1, x2, y2);
+            }
+
             var a45 = Raphael.rad(angle - 45); //角度转换成弧度
             var a45m = Raphael.rad(angle + 45);
             var x2a = x2 + Math.cos(a45) * size;
             var y2a = y2 + Math.sin(a45) * size;
             var x2b = x2 + Math.cos(a45m) * size;
             var y2b = y2 + Math.sin(a45m) * size;
-            var result = ["M", x1, y1, "L", x2, y2, "L", x2a, y2a, "M", x2, y2, "L", x2b, y2b];
-            //var result = ["M", x1, y1, "L", x2, y2];
+
+            var result = [];
+            result.push("M"); result.push(x1); result.push(y1);
+
+            $.each(dots, function () {
+                result.push("L"); result.push(this.x); result.push(this.y);
+            });
+
+            result.push("L"); result.push(x2); result.push(y2);
+            result.push("L"); result.push(x2a); result.push(y2a);
+            result.push("M"); result.push(x2); result.push(y2);
+            result.push("L"); result.push(x2b); result.push(y2b);
+
+            //var result = ["M", x1, y1, "L", x2, y2, "L", x2a, y2a, "M", x2, y2, "L", x2b, y2b];
             return result;
         }
 
@@ -623,8 +690,39 @@
         Raphael.fn.drawArr = function (raphaelObj) {
             /// <summary>绘制带箭头的连接线</summary>
             /// <param name="raphaelObj" Type="Raphael Element">要绘制的连接的信息对象，包括rStart[开始对象]/rEnd[结束对象]/pathColor[连接线颜色]</param>
-            var point = getStartEnd(raphaelObj.rStart, raphaelObj.rEnd);
-            var path1 = getArr(point.start.x, point.start.y, point.end.x, point.end.y, 8);
+            //如果有折线点，则先将点画出，再计算开始结束点
+            var point = { start: { x: 0, y: 0 }, end: { x: 0, y: 0} };
+            var dots = [];
+            var lps = getLinePots(raphaelObj.node, raphaelObj.tonode);
+            var d;
+
+            if (raphaelObj.rDots.length > 0) {
+                if (lps.length == 0) {
+                    dots = [];
+
+                    $.each(raphaelObj.rDots, function () {
+                        d = { rCircle: r.circle(this.x, this.y, 2), node: raphaelObj.node, tonode: raphaelObj.tonode };
+                        linedots.push(d);
+                        dots.push(d);
+                    });
+                }
+                else {
+                    dots = lps;
+                }
+
+                var p1 = getStartEnd(raphaelObj.rStart, dots[0].rCircle);
+                var p2 = getStartEnd(dots[dots.length - 1].rCircle, raphaelObj.rEnd);
+
+                point.start.x = p1.start.x;
+                point.start.y = p1.start.y;
+                point.end.x = p2.end.x;
+                point.end.y = p2.end.y;
+            }
+            else {
+                point = getStartEnd(raphaelObj.rStart, raphaelObj.rEnd);
+            }
+
+            var path1 = getArr(point.start.x, point.start.y, point.end.x, point.end.y, 8, raphaelObj.rDots);
             var pathColor;
 
             if (raphaelObj.arrPath) {
@@ -650,6 +748,22 @@
 
             return raphaelObj;
         };
+
+        function getLinePots(node, tonode) {
+            if (!linedots) {
+                return [];
+            }
+
+            var ps = [];
+
+            for (var i = 0; i < linedots.length; i++) {
+                if (linedots[i].node == node && linedots[i].tonode == tonode) {
+                    ps.push(linedots[i]);
+                }
+            }
+
+            return ps;
+        }
 
         function checkUrl(url) {
 

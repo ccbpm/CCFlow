@@ -279,7 +279,24 @@ namespace BP.Sys
                 try
                 {
                     BP.DA.DBAccess.RunSQL("UPDATE Sys_Enum SET Lang='" + Web.WebUser.SysLang + "' WHERE LANG IS NULL ");
+
                     BP.DA.DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK=EnumKey+'_'+Lang+'_'+cast(IntKey as NVARCHAR )");
+
+                    //增加数据库类型判断
+                    DBUrl dbUrl = new DBUrl();
+                    if (DBType.MSSQL == dbUrl.DBType)
+                    {
+                        BP.DA.DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK=EnumKey+'_'+Lang+'_'+cast(IntKey as NVARCHAR )");
+                    }
+                    else if (DBType.Oracle == dbUrl.DBType)
+                    {
+                        BP.DA.DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK = EnumKey || '_' || Lang || '_' || cast(IntKey  as VARCHAR(5))");
+                    }
+                    else if (DBType.MySQL == dbUrl.DBType)
+                    {
+                        BP.DA.DBAccess.RunSQL("UPDATE Sys_Enum SET MyPK = CONCAT (EnumKey,'_', Lang,'_',CAST(IntKey AS CHAR(5)))");
+                    }
+
                 }
                 catch
                 {

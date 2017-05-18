@@ -355,7 +355,7 @@ namespace BP.WF.HttpHandler
         protected override string DoDefaultMethod()
         {
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到.");
+            throw new Exception("@标记[" + this.DoType + "]，没有找到.@原始URL:"+context.Request.RawUrl);
         }
         #endregion 执行父类的重写方法.
 

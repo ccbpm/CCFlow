@@ -501,13 +501,13 @@ function pageParamToUrl() {
     return paramUrlStr;
 }
 //初始化按钮
-var MyFlow = "MyFlow.ashx";
+//var MyFlow = "MyFlow.ashx";
 function initBar() {
 
     if (plant == "CCFlow")
         MyFlow = "MyFlow.ashx";
-    else
-        MyFlow = "MyFlow.do";
+    //else
+        //MyFlow = "MyFlow.do";
 
       var  url = MyFlow + "?DoType=InitToolBar&m=" + Math.random();
 
@@ -1656,6 +1656,7 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
     if (result != undefined && typeof (result) == 'string') {
         //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
     }
+    //console.info(defVal+"=="+keyOfEn+"=="+result);
     return result = unescape(result);
 }
 //加载表单数据.
@@ -2693,11 +2694,11 @@ function figure_Template_Image(frmImage) {
         }
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
         if (imgSrc == "")//|| !File.Exists(Server.MapPath("~/" + imgSrc)))  //
-            imgSrc = "/DataUser/ICON/CCFlow/LogBig.png";
+            imgSrc = "../DataUser/ICON/CCFlow/LogBig.png";
         eleHtml = $('<div></div>');
         var a = $("<a></a>");
         var img = $("<img/>")
-        img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H).attr('onerror', "this.src='/DataUser/ICON/CCFlow/LogBig.png'");
+        img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H).attr('onerror', "this.src='../DataUser/ICON/CCFlow/LogBig.png'");
         if (frmImage.LinkURL != undefined && frmImage.LinkURL != '') {
             a.attr('href', frmImage.LinkTarget).attr('target', frmImage.LinkTarget).css('width',frmImage.W).css('height',frmImage.H);
             a.append(img);

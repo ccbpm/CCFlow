@@ -258,6 +258,7 @@
                     tabText = $($(val).find("span")[0]).text();
                 }
             });
+
             var lastChar = tabText.substring(tabText.length - 1, tabText.length);
             if (scope == "btnsave") {
                 var currTab = $('#tabs').tabs('getSelected');
@@ -318,6 +319,7 @@
                 return false;
             });
         }
+
         //绑定右键菜单事件
         function tabCloseEven() {
             //刷新
@@ -785,6 +787,32 @@
             Application.data.sendCase(args.FK_Flow, args.FK_Node, args.WorkID, args.DoFunc, args.CFlowNo, args.WorkIDs, function (js) {
                 var strs = new Array();
                 strs = js.split("|");
+
+                //转向页面
+                if (strs[0] == "SpecUrl") {
+                    var url = strs[1];
+                    $("<div id='selectaccepter'></div>").append($("<iframe width='100%' height='100%' frameborder=0 src='" + url + "'/>")).dialog({
+                        title: "发送成功-转向页面",
+                        width: 800,
+                        height: 630,
+                        autoOpen: true,
+                        modal: true,
+                        resizable: false,
+                        onClose: function () {
+                            $('#send').linkbutton({ disabled: false });
+                            $("#selectaccepter").remove();
+                            closeWin();
+                        },
+                        buttons: [{
+                            text: '确定',
+                            iconCls: 'icon-ok',
+                            handler: function () {
+                                $('#selectaccepter').dialog("close");
+                            }
+                        }]
+                    });
+                    return;
+                }
 
                 $('#content').html(strs[1]);
                 //弹出窗体

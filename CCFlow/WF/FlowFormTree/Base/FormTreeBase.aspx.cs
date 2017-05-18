@@ -503,7 +503,56 @@ namespace CCFlow.WF.FlowFormTree
                 {
                     resultMsg = "error|您好：" + BP.Web.WebUser.No + ", " + WebUser.Name + "当前的工作已经被处理，或者您没有执行此工作的权限。";
                 }
+                WorkNode firstwn = new WorkNode(this.WorkID, this.FK_Node);
                 SendReturnObjs returnObjs = Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
+
+                #region 处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
+                /*这里有两种情况
+                 * 1，从中间的节点，通过批量处理，也就是说合并审批处理的情况，这种情况子流程需要执行到下一步。
+                   2，从流程已经完成，或者正在运行中，也就是说合并审批处理的情况. */
+                try
+                {
+                    //处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
+                    BP.WF.Glo.DealBuinessAfterSendWork(this.FK_Flow, this.WorkID, this.DoFunc, WorkIDs);
+                }
+                catch (Exception ex)
+                {
+                    resultMsg = "sysError|" + ex.Message.Replace("@", "<br/>");
+                    return resultMsg;
+                }
+                #endregion 处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
+
+                /*处理转向问题.*/
+                switch (firstwn.HisNode.HisTurnToDeal)
+                {
+                    case TurnToDeal.SpecUrl:
+                        string myurl = firstwn.HisNode.TurnToDealDoc.Clone().ToString();
+                        if (myurl.Contains("?") == false)
+                            myurl += "?1=1";
+                        Attrs myattrs = firstwn.HisNode.EnMap.Attrs;
+                        Work hisWK = firstwn.HisWork;
+                        foreach (Attr attr in myattrs)
+                        {
+                            if (myurl.Contains("@") == false)
+                                break;
+                            myurl = myurl.Replace("@" + attr.Key, hisWK.GetValStrByKey(attr.Key));
+                        }
+                        myurl = myurl.Replace("@WebUser.No", BP.Web.WebUser.No);
+                        myurl = myurl.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                        myurl = myurl.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                        if (myurl.Contains("@"))
+                        {
+                            BP.WF.Dev2Interface.Port_SendMsg("admin", firstwn.HisFlow.Name + "在" + firstwn.HisNode.Name + "节点处，出现错误", "流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl, "Err" + firstwn.HisNode.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+                            throw new Exception("流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl);
+                        }
+
+                        if (myurl.Contains("PWorkID") == false)
+                            myurl += "&PWorkID=" + this.WorkID;
+
+                        myurl += "&FromFlow=" + this.FK_Flow + "&FromNode=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID;
+                        return "SpecUrl|" + myurl;
+                }
                 resultMsg = returnObjs.ToMsgOfHtml();
                 if (resultMsg.IndexOf("@<a") > 0)
                 {
@@ -542,23 +591,6 @@ namespace CCFlow.WF.FlowFormTree
 
                 resultMsg = resultMsg.Replace("@下一步", "<br/><br/>&nbsp;&nbsp;&nbsp;下一步");
                 resultMsg = "success|<br/>" + resultMsg.Replace("@", "&nbsp;&nbsp;&nbsp;");
-
-                #region 处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
-                /*这里有两种情况
-                 * 1，从中间的节点，通过批量处理，也就是说合并审批处理的情况，这种情况子流程需要执行到下一步。
-                   2，从流程已经完成，或者正在运行中，也就是说合并审批处理的情况. */
-                try
-                {
-                    //处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
-                    BP.WF.Glo.DealBuinessAfterSendWork(this.FK_Flow, this.WorkID, this.DoFunc, WorkIDs);
-                }
-                catch (Exception ex)
-                {
-                    resultMsg = "sysError|" + ex.Message.Replace("@", "<br/>");
-                    return resultMsg;
-                }
-                #endregion 处理通用的发送成功后的业务逻辑方法，此方法可能会抛出异常.
-
             }
             catch (Exception ex)
             {
@@ -800,7 +832,7 @@ namespace CCFlow.WF.FlowFormTree
                         string frms = this.Request.QueryString["Frms"];
 
                         //修改算法：解决 frmID =ABC  frmID=AB 的问题.
-                        if (string.IsNullOrEmpty(frms)==true)
+                        if (string.IsNullOrEmpty(frms) == true)
                             continue;
 
                         frms = frms.Trim();
@@ -809,13 +841,13 @@ namespace CCFlow.WF.FlowFormTree
                         frms = frms.Replace(" ", "");
 
 
-                        if (frms.Contains(",") == false )
+                        if (frms.Contains(",") == false)
                         {
                             if (frms != frmNode.FK_Frm)
                                 continue;
                         }
 
-                        if (frms.Contains(",") == true )
+                        if (frms.Contains(",") == true)
                         {
                             if (frms.Contains(frmNode.FK_Frm + ",") == false)
                                 continue;

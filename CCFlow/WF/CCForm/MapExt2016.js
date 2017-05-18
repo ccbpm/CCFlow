@@ -594,7 +594,7 @@ function FullDtl(key, fk_mapExt) {
                     if (idx == -1)
                         src = src + '&Key=' + key + '&FK_MapExt=' + fk_mapExt;
                     else
-                        src = src.substring(0, idx) + '&Key=' + key + '&FK_MapExt=' + fk_mapExt;
+                        src = src.substring(0, idx) + '&ss=d&Key=' + key + '&FK_MapExt=' + fk_mapExt;
                     frm.src = src;
                 }
             }

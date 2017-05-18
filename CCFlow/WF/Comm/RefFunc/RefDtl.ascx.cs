@@ -164,9 +164,11 @@ namespace CCFlow.WF.Comm.RefFunc
                 this.ucsys2.BindPageIdx(qo.GetCount(), BP.Sys.SystemConfig.PageSize, this.PageIdx, "Dtl.aspx?EnName=" + this.EnName + "&PK=" + this.RefVal + "&EnsName=" + this.EnsName + "&RefVal=" + this.RefVal + "&RefKey=" + this.RefKey + "&MainEnsName=" + this.MainEnsName);
                 qo.DoQuery(en.PK, this.PageSize, this.PageIdx, false);
             }
-            catch
+            catch(Exception ex)
             {
                 dtls.GetNewEntity.CheckPhysicsTable();
+
+                this.Response.Write("@查询错误，有可能是表的字段有变化，请重重试让系统自动修复表字段，如果仍然不成功，就根据提示手动的修复字段。错误信息:"+ex.Message);
                 //   this.Response.Redirect("Ens.aspx?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal, true);
                 return;
             }

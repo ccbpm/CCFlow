@@ -583,7 +583,7 @@ function initModal(modalType, toNode) {
                 break;
             case "shift":
                 $('#modalHeader').text("工作移交");
-                modalIframeSrc = "./WorkOpt/forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/Forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "askfor":
                 $('#modalHeader').text("加签");
@@ -593,7 +593,7 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
-                //发送选择接收节点和接收人
+            //发送选择接收节点和接收人  
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()

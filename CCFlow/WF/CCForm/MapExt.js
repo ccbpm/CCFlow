@@ -67,7 +67,7 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
             var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
             $.ajax({
                 type: "get",
-                url: url + "/WF/CCForm/HanderMapExt.ashx",
+                url: Hander + "?DoType=HanderMapExt",
                 data: json_data,
                 beforeSend: function (XMLHttpRequest, fk_mapExt) {
                     //ShowLoading();
@@ -323,7 +323,7 @@ function AutoFullDLL(e, ddl_Id, fk_mapExt) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx",
+        url: Hander + "?DoType=HanderMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -398,7 +398,7 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
 
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx?KVs=" + kvs,
+        url: Hander + "?DoType=HanderMapExt&KVs="+kvs,
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -442,7 +442,7 @@ function DDLAnsc(e, ddlChild, fk_mapExt, rowPK) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": strs };
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx",
+        url: Hander + "?DoType=HanderMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -528,7 +528,7 @@ function FullM2M(key, fk_mapExt) {
     var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoType": "ReqM2MFullList", "OID": oid, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx",
+        url: Hander + "?DoType=HanderMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -576,7 +576,7 @@ function FullDtl(key, fk_mapExt) {
     var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoType": "ReqDtlFullList", "OID": oid, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx",
+        url: Hander + "?DoType=HanderMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -619,7 +619,7 @@ function FullCtrlDDL(key, ctrlIdBefore, fk_mapExt) {
     var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoType": "ReqDDLFullList", "KVs": kvs };
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx",
+        url: Hander + "?DoType=HanderMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -659,7 +659,7 @@ function FullCtrlDDLDB(e, ddlID, ctrlIdBefore, endID, fk_mapExt) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoType": "ReqDDLFullListDB", "MyDDL": ddlID, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx",
+        url: Hander + "?DoType=HanderMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -701,7 +701,7 @@ function FullCtrl(e, ctrlIdBefore, fk_mapExt) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoType": "ReqCtrl", "KVs": kvs };
     $.ajax({
         type: "get",
-        url: url + "/WF/CCForm/HanderMapExt.ashx",
+        url: Hander + "?DoType=HanderMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();

@@ -244,19 +244,19 @@ namespace CCFlow.WF.WorkOpt
 
         public void Cancel()
         {
-            this.Response.Redirect("../MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID, true);
+            this.Response.Redirect("../MyFlow.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID, true);
         }
 
         protected void lbtnUseAutomic_Click(object sender, EventArgs e)
         {
             Dev2Interface.Flow_SetFlowTransferCustom(FK_Flow, WorkID,  BP.WF.TransferCustomType.ByCCBPMDefine, hid_idx_all.Value);
-            Response.Redirect("../MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID, true);
+            Response.Redirect("../MyFlow.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID, true);
         }
 
         protected void lbtnUseManual_Click(object sender, EventArgs e)
         {
             Dev2Interface.Flow_SetFlowTransferCustom(FK_Flow, WorkID, BP.WF.TransferCustomType.ByWorkerSet, hid_idx_all.Value);
-            Response.Redirect("../MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID, true);
+            Response.Redirect("../MyFlow.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID, true);
         }
 
         private DataTable CreateDataTableFromDataRow(DataTable emptyTable, DataRow[] drs)

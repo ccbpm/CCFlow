@@ -143,3 +143,8 @@ body table tr td {
   overflow: hidden;
   white-space: nowrap;
 }
+
+
+.delRow {
+    margin-left:6px;
+}

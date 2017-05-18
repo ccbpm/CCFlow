@@ -257,9 +257,6 @@
                 url: Handler + "?DoType=Dtl_Init&" + urlParam + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
-                //alert(data);
-
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
                         $("#Msg").html(data);
@@ -300,7 +297,7 @@
                         });
 
                         //添加删除列
-                        var delTh = $('<th></th>');
+                        var delTh = $('<th  style="width:30px;"></th>');
                         delTh.text("操作");
                         var delThData = {
                             custom: true,
@@ -323,7 +320,7 @@
                         //添加删除列
                         //var delTh = $('<th></th>');
                         //添加保存列
-                        delTh = $('<th></th>');
+                        delTh = $('<th style="width:30px;"></th>');
                         delTh.text("操作");
                         var delThData = {
                             custom: true,
@@ -378,6 +375,7 @@
 
                                         var textVal = $($(tbodyTrObj).children('td')[k]).text();
                                         tmplate.val(textVal);
+                                        
                                         $($(tbodyTrObj).children('td')[k]).text('');
                                         $($(tbodyTrObj).children('td')[k]).append(tmplate);
 
@@ -387,14 +385,23 @@
                                                     $(obj.target).val();
                                             });
                                         } else if (tmplate.attr('name').indexOf('DDL_') == 0) {
-                                            $(tmplate).bind('change', function (obj) {
-                                                $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
-                                                    $(obj.target).val();
-                                            });
+                                            //对于只读的下拉框做如下处理  为只读的下拉框赋值
+                                            if (o.data().UIIsEnable == "0") {
+                                                var option = $('<option select="selected" value="' + o.data()[o.data().KeyOfEn] + '">' + o.data()[o.data().KeyOfEn + "Text"] + '</option>')
+                                                console.log(option)
+                                                $(tmplate).append(option);
+                                            } else {
+                                                $(tmplate).bind('change', function (obj) {
+                                                    $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
+                                                        $(obj.target).val();
+                                                });
+                                            }
                                         }
                                     }
                                 });
                             })
+
+
 
                             //如果是只读的，全部设置成只读
                             if (workNodeData.Sys_MapDtl[0].IsReadonly == "1") {
@@ -632,15 +639,13 @@
             }
             eleHtml = $(eleHtml);
             eleHtml.val(defValue);
-            //eleHtml = $('<div>' + eleHtml + '</div>');
-            //eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
             eleHtml.css('min-width', mapAttr.UIWidth);
             eleHtml.css('width', '100%');
+            //eleHtml.css('width', mapAttr.UIWidth);
 
             eleHtml.bind('focus', blurEvent);
             if (mapAttr.UIIsEnable == "0") {
-                enableAttr = eleHtml.find('[name=TB_' + mapAttr.KeyOfEn + ']').attr('disabled', true);
-                enableAttr = eleHtml.find('[name=DDL_' + mapAttr.KeyOfEn + ']').attr('disabled', true);
+                eleHtml.attr('disabled', true);
             }
             return eleHtml;
         }

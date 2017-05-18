@@ -512,14 +512,12 @@ namespace BP.WF.Template
         /// <param name="fk_frm">表单</param>
         public FrmNode(string fk_flow, int fk_node, string fk_frm)
         {
-            int i = this.Retrieve(FrmNodeAttr.FK_Flow, fk_flow, FrmNodeAttr.FK_Node, fk_node, FrmNodeAttr.FK_Frm, fk_frm);
+            int i = this.Retrieve(FrmNodeAttr.FK_Node, fk_node, FrmNodeAttr.FK_Frm, fk_frm);
             if (i == 0)
             {
                 this.IsPrint = false;
-
                 //不可以编辑.
                 this.FrmSln = 1;
-
                // this.IsEdit = false;
                 return;
                 throw new Exception("@表单关联信息已被删除。");

@@ -22,17 +22,19 @@ namespace BP.WF.HttpHandler
         #region HanderMapExt
         public string HandlerMapExt()
         {
-            string fk_mapExt = context.Request.QueryString["FK_MapExt"].ToString();
-            if (string.IsNullOrEmpty(context.Request.QueryString["Key"]))
+            string fk_mapExt = this.GetRequestVal("FK_MapExt").ToString();
+            if (string.IsNullOrEmpty(this.GetRequestVal("Key")))
                 return "";
 
-            string oid = context.Request.QueryString["OID"];
-            string kvs = context.Request.QueryString["KVs"];
+            string oid = this.GetRequestVal("OID");
+
+
+            string kvs = this.GetRequestVal("KVs");
 
             BP.Sys.MapExt me = new BP.Sys.MapExt(fk_mapExt);
             DataTable dt = null;
             string sql = "";
-            string key = context.Request.QueryString["Key"];
+            string key = this.GetRequestVal("Key");
             key = System.Web.HttpUtility.UrlDecode(key,
                 System.Text.Encoding.GetEncoding("GB2312"));
             key = key.Trim();
@@ -57,7 +59,7 @@ namespace BP.WF.HttpHandler
                 case BP.Sys.MapExtXmlList.AutoFullDLL://填充下拉框
                 case BP.Sys.MapExtXmlList.TBFullCtrl: // 自动完成。
                 case BP.Sys.MapExtXmlList.DDLFullCtrl: // 级连ddl.
-                    switch (context.Request.QueryString["DoTypeExt"])
+                    switch (this.GetRequestVal("DoTypeExt"))
                     {
                         case "ReqCtrl":
                             // 获取填充 ctrl 值的信息.
@@ -179,7 +181,7 @@ namespace BP.WF.HttpHandler
                             break;
                         case "ReqDDLFullListDB":
                             /* 获取要个性化填充的下拉框的值. 根据已经传递过来的 ddl id. */
-                            string myDDL = context.Request.QueryString["MyDDL"];
+                            string myDDL = this.GetRequestVal("MyDDL");
                             sql = me.DocOfSQLDeal;
                             string[] strs1 = me.Tag.Split('$');
                             foreach (string str in strs1)
@@ -709,7 +711,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Dtl_ReloadDdl()
         {
-            string Doc = context.Request.QueryString["Doc"];
+            string Doc = this.GetRequestVal("Doc");
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(Doc);
             dt.TableName = "ReloadDdl";
             return BP.Tools.Json.ToJson(dt);
@@ -739,7 +741,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string InitPopValTree()
         {
-            string mypk = context.Request.QueryString["FK_MapExt"];
+            string mypk = this.GetRequestVal("FK_MapExt");
 
             MapExt me = new MapExt();
             me.MyPK = mypk;
@@ -749,7 +751,7 @@ namespace BP.WF.HttpHandler
             Hashtable ht = me.PopValToHashtable();
             DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
 
-            string parentNo = context.Request.QueryString["ParentNo"];
+            string parentNo = this.GetRequestVal("ParentNo");
             if (parentNo == null)
                 parentNo = me.PopValTreeParentNo;
 
@@ -826,7 +828,7 @@ namespace BP.WF.HttpHandler
             {
                 /* 分页的 */
                 //key
-                string key = context.Request.QueryString["Key"];
+                string key = this.GetRequestVal("Key");
                 if (string.IsNullOrEmpty(key) == true)
                     key = "";
 
@@ -891,16 +893,15 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-
                 string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
 
                 //pageSize
-                string pageSize = context.Request.QueryString["pageSize"];
+                string pageSize = this.GetRequestVal("pageSize");
                 if (string.IsNullOrEmpty(pageSize))
                     pageSize = "10";
 
                 //pageIndex
-                string pageIndex = context.Request.QueryString["pageIndex"];
+                string pageIndex = this.GetRequestVal("pageIndex");
                 if (string.IsNullOrEmpty(pageIndex))
                     pageIndex = "1";
 

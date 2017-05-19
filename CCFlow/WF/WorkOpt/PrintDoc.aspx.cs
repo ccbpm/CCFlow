@@ -254,6 +254,20 @@ namespace CCFlow.WF.WorkOpt
                     bill.Update();
                 }
                 #endregion
+
+                //在线WebOffice打开
+                if (func.BillOpenModel == BillOpenModel.WebOffice)
+                {
+                    Response.Redirect("../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK, true);
+                }
+                else
+                {
+                    this.Pub1.AddFieldSet("打印单据");
+                    this.Pub1.AddUL();
+                    this.Pub1.AddLi(billInfo);
+                    this.Pub1.AddULEnd();
+                    this.Pub1.AddFieldSetEnd();
+                }
             }
             catch (Exception ex)
             {
@@ -264,12 +278,6 @@ namespace CCFlow.WF.WorkOpt
                 billInfo += "@<font color=red>" + msgErr + "</font>";
                 throw new Exception(msgErr + "@其它信息:" + ex.Message);
             }
-
-            this.Pub1.AddFieldSet("打印单据");
-            this.Pub1.AddUL();
-            this.Pub1.AddLi(billInfo);
-            this.Pub1.AddULEnd();
-            this.Pub1.AddFieldSetEnd();
             return;
         }
     }

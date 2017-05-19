@@ -116,7 +116,7 @@ namespace CCFlow.WF.WorkOpt
 
             Button button = new Button();
 
-            button.OnClientClick = "return btnPreview_onclick('" + func.Url + "')";
+            button.OnClientClick = "return btnPreview_onclick('" + func.TempFilePath + "')";
 
             button.Text = "预览 '" + func.Name + "'";
 
@@ -205,7 +205,7 @@ namespace CCFlow.WF.WorkOpt
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
 
-                rtf.MakeDoc(func.Url + ".rtf",
+                rtf.MakeDoc(func.TempFilePath + ".rtf",
                     path, file, func.ReplaceVal, false);
                 #endregion
 

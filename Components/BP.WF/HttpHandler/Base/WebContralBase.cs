@@ -112,6 +112,7 @@ namespace BP.WF.HttpHandler
             string str = GetRequestVal(param);
             if (str == null || str == "" || str == "null")
                 return 0;
+
             try
             {
                 return int.Parse(str);

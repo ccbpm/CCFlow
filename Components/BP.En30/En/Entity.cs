@@ -1062,7 +1062,7 @@ namespace BP.En
 			}
 			#endregion 任何东西都不放.
 
-			throw new Exception("@没有判断的缓存设置类型.");
+            throw new Exception("@没有判断的缓存设置类型." + this.EnMap.DepositaryOfEntity);
 		}
 		/// <summary>
 		/// 判断是不是存在的方法.

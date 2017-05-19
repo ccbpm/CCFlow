@@ -51,6 +51,14 @@
         //设置留痕,显示所有的留痕用户,是否只读文档
         function SetTrack(track) {
             webOffice.SetTrackRevisions(track);
+            webOffice.HideMenuArea("", "", "", "");
+            webOffice.SetToolBarButton2("Menu Bar", 1, 8);
+            webOffice.SetToolBarButton2("Standard", 1, 8);
+            webOffice.ShowToolBar = true;
+            webOffice.HideMenuItem(0x01); //Hide it
+            webOffice.HideMenuItem(0x02); //Hide it
+
+            //webObj.HideMenuItem(0x02 + 0x8000); //Show it
         }
 
         //打印

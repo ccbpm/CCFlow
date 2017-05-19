@@ -28,6 +28,11 @@ namespace CCFlow.WF.CCForm
                 if (string.IsNullOrEmpty(this.Request.QueryString["FK_Node"]))
                     return 0;
 
+                string str = this.Request.QueryString["FK_Node"];
+                if (str == "null")
+                    return 0;
+
+
                 return int.Parse(this.Request.QueryString["FK_Node"]);
             }
         }

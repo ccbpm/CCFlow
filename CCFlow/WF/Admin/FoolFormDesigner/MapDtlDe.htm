@@ -56,9 +56,10 @@
                           var lgType = data[i].LGType;
                           var uiBindKey = data[i].UIBindKey;
                           var uiContralType = data[i].UIContralType; //控件类型.
+                          var uiWidth = data[i].UIWidth; //宽度.
 
                           var nameLink = "";
-                          if (lgType == 0 ) {
+                          if (lgType == 0) {
                               nameLink = "<a href=\"javascript:Edit('" + fk_mapDtl + "','" + mypk + "','" + dataType + "','" + uiContralType + "')\" > " + name + "</a>";
                           }
 
@@ -68,27 +69,76 @@
                           if (lgType == 2) {
                               nameLink = "<a href=\"javascript:EditTable('" + fk_mapDtl + "','" + mypk + "','" + uiBindKey + "')\" > " + name + "</a>";
                           }
-                          var col = "<th><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='/WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='/WF/Img/Btn/Right.gif' /></a></th>";
+
+                          var col = "";
+                          if (dataType == 2 || dataType == 3 || dataType == 5 || dataType == 6 || dataType == 8)
+                              col = "<th style='word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='/WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='/WF/Img/Btn/Right.gif' /></a></th>";
+                          else
+                              col = "<th style='width:" + uiWidth + "px;word-break: keep-all;' nowarp=true ><a href=\"javascript:Up('" + fk_mapData + "','" + mypk + "');\" ><img src='/WF/Img/Btn/Left.gif' /></a>" + nameLink + "<a href=\"javascript:Down('" + fk_mapData + "','" + mypk + "')\" ><img src='/WF/Img/Btn/Right.gif' /></a></th>";
+
                           $("#trTitle").append(col);
                       }
 
 
                       //生成内容行.
-                      for (var i = 0; i < 6; i++) {
+                      for (var idx = 0; idx < 6; idx++) {
 
-                          var newRow = "<tr><td class=Idx >" + i + "</td>";
 
-                          for (var colIdx = 0; colIdx < colNum; colIdx++) {
-                              newRow += "<td >text</td>";
+                          var newRow = "<tr><td class=Idx >" + idx + "</td>";
+
+                          //   for (var colIdx = 0; colIdx < colNum; colIdx++) {
+
+                          for (var i = 0; i < data.length; i++) {
+                              var visable = data[i].UIVisible;
+                              if (visable == 0)
+                                  continue;
+
+                              var mypk = data[i].MyPK;
+                              var dataType = data[i].MyDataType;
+                              var field = data[i].KeyOfEn;
+                              var name = data[i].Name;
+                              var lgType = data[i].LGType;
+                              var uiBindKey = data[i].UIBindKey;
+                              var uiContralType = data[i].UIContralType; //控件类型.
+                              var uiWidth = data[i].UIWidth; //宽度.
+                              var defVal = data[i].DefVal; //默认值.
+
+                              var td = "";
+                              td = "<td >" + defVal + "</td>";
+
+                              //doubble, float 类型.
+                              if (dataType == 3 || dataType == 5 || dataType == 2 )
+                                  td = "<td style='text-align:right'  >" + defVal + "</td>";
+
+                              //money 类型.
+                              if (dataType == 8)
+                                  td = "<td style='text-align:right' >" + defVal + "</td>";
+
+                              //日期类型.
+                              if (dataType == 6) {
+                                  td = "<td >yyyy-MM-dd</td>";
+                              }
+
+                              //日期时间类型.
+                              if (dataType == 7) {
+                                  td = "<td >yyyy-MM-dd HH:mm</td>";
+                              }
+
+                              if (dataType == 4) {
+                                  td = "<td ><input type=checkbox value='1' id=" + field+"_"+ i+ " />" + name + "</td>";
+                              }
+
+
+                              if (uiContralType ==1 )
+                                  td = "<td >[下拉框]</td>";
+
+
+                              newRow += td;
                           }
 
                           newRow += "</tr>";
-
                           $("#dtlTable tr:last").after(newRow);
                       }
-
-
-
                   }
               });
 

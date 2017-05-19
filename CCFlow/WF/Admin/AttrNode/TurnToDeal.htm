@@ -34,7 +34,7 @@
                 url: Handler + "?DoType=TurnToDeal_Init&FK_Node=" + fk_node + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    console.info(data);
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -42,8 +42,6 @@
                     data = JSON.parse(data);
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(data);
-
-                    alert(data.TurnToDeal);
 
                     switch (data.TurnToDeal) {
                         case '0':

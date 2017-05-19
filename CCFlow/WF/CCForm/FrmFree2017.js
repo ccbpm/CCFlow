@@ -26,29 +26,7 @@ function SendSelfFrom() {
     }
     return true;
 }
-
-var winSelectAccepter = null;
-// 打开选择人接收器.
-function OpenSelectAccepter(flowNo, nodeid, workid, fid) {
-    var url = "./WorkOpt/Accepter.htm?WorkID=" + workid + "&FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&FID=" + fid + "&type=2";
-    if (winSelectAccepter == null)
-        winSelectAccepter = window.open(url, winSelectAccepter, 'height=600, width=600,scrollbars=yes');
-    else
-        winSelectAccepter.focus(); // (0, 0);
-    return false;
-}
-
-function OpenAccepter() {
-
-    var url = '/WF/CCForm/FrmPopVal.aspx?FK_MapExt=' + popNameInXML + '&CtrlVal=' + ctrl.value;
-    var v = window.showModalDialog(url, 'opp', 'dialogHeight: 550px; dialogWidth: 650px; dialogTop: 100px; dialogLeft: 150px; center: yes; help: no');
-    if (v == null || v == '' || v == 'NaN') {
-        return;
-    }
-    ctrl.value = v;
-    return;
-}
-
+  
 function SetHegiht() {
     var screenHeight = document.documentElement.clientHeight;
 
@@ -329,17 +307,7 @@ function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
     //var str = window.open(url, '', 'dialogHeight: 1200px; dialogWidth:1110px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
     window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
 }
-
-//按钮.
-function FocusBtn(btn, workid) {
-    if (btn.value == '关注') {
-        btn.value = '取消关注';
-    }
-    else {
-        btn.value = '关注';
-    }
-    $.ajax({ url: "Do.aspx?ActionType=Focus&WorkID=" + workid, async: false });
-}
+ 
 
 function ReturnVal(ctrl, url, winName) {
     if (url == "")
@@ -422,7 +390,12 @@ function initPageParam() {
     pageData.FK_Node = GetQueryString("FK_Node");
     //FK_Flow=004&FK_Node=402&FID=0&WorkID=232&IsRead=0&T=20160920223812&Paras=
     pageData.FID = GetQueryString("FID") == null ? 0 : GetQueryString("FID");
-    pageData.WorkID = GetQueryString("WorkID");
+
+    var oid = GetQueryString("WorkID");
+    if (oid == null)
+        oid = GetQueryString("OID");
+    pageData.OID = oid; 
+
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
@@ -431,8 +404,8 @@ function initPageParam() {
 
     pageData.DoType1 = GetQueryString("DoType")//View
     pageData.FK_MapData = GetQueryString("FK_MapData")//View
-    pageData.OID = GetQueryString("WorkID") //
-    //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID);
+
+    //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.OID);
 }
 //将获取过来的URL参数转成URL中的参数形式  &
 function pageParamToUrl() {
@@ -502,7 +475,7 @@ function Save() {
         type: 'post',
         async: true,
         data: getFormData(true, true),
-        url: "Handler.ashx?DoType=FrmFree_Save&OID=" + pageData.WorkID,
+        url: "Handler.ashx?DoType=FrmFree_Save&OID=" + pageData.OID,
         dataType: 'html',
         success: function (data) {
 
@@ -608,7 +581,7 @@ function initGroup(workNodeData, groupFiled) {
             break;
         case "Dtl":
             //WF/CCForm/Dtl.aspx?EnsName=ND501Dtl1&RefPKVal=0&PageIdx=1
-            var src = "/WF/CCForm/Dtl.aspx?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
+            var src = "/WF/CCForm/Dtl.htm?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.OID + "&PageIdx=1";
             src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
@@ -620,9 +593,9 @@ function initGroup(workNodeData, groupFiled) {
                     continue;
                 var src = "";
                 if (pageData.IsReadonly)
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
                 else
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
+                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
 
                 groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             }
@@ -631,7 +604,7 @@ function initGroup(workNodeData, groupFiled) {
             var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
-                paras += "&OID=" + pageData.WorkID;
+                paras += "&OID=" + pageData.OID;
             }
 
 
@@ -645,7 +618,7 @@ function initGroup(workNodeData, groupFiled) {
             var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
-                paras += "&OID=" + pageData.WorkID;
+                paras += "&OID=" + pageData.OID;
             }
             if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
                 paras += "&DoType=View";
@@ -658,11 +631,11 @@ function initGroup(workNodeData, groupFiled) {
             var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
             //var paras = pageParamToUrl();
             //if (paras.indexOf('OID') < 0) {
-            //    paras += "&OID=" + pageData.WorkID;
+            //    paras += "&OID=" + pageData.OID;
             //}
             src += '&FK_Flow=' + pageData.FK_Flow;
             src += '&FK_Node=' + pageData.FK_Node;
-            src += '&WorkID=' + pageData.WorkID;
+            src += '&WorkID=' + pageData.OID;
             src += '&FID=' + pageData.FID;
             //先临时写成这样的
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:500px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
@@ -672,7 +645,7 @@ function initGroup(workNodeData, groupFiled) {
             var src = "/WF/WorkOpt/Thread.aspx?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
-                paras += "&OID=" + pageData.WorkID;
+                paras += "&OID=" + pageData.OID;
             }
             src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
@@ -681,7 +654,7 @@ function initGroup(workNodeData, groupFiled) {
             var src = "/WF/WorkOpt/FTC.aspx?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
-                paras += "&OID=" + pageData.WorkID;
+                paras += "&OID=" + pageData.OID;
             }
             src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
@@ -800,9 +773,9 @@ function InitForm() {
             ath = ath[0];
             var src = "";
             if (pageData.IsReadonly)
-                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
             else
-                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
             $('#iframeAthForm').attr('src', src);
             atParamObj["tbId"] = tbId;
             atParamObj["divId"] = divId;
@@ -2360,9 +2333,9 @@ function figure_Template_Attachment(frmAttachment) {
     }
     var src = "";
     if (pageData.IsReadonly)
-        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
     else
-        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
     eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml=$(eleHtml);
@@ -2419,31 +2392,31 @@ function figure_Template_Dtl(frmDtl) {
     ////switch (frmDtl.DtlShowModel) {
     ////    case "0"://Table
     ////        if (pageData.IsReadOnly) {
-    ////            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+    ////            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
     ////        } else {
-    ////            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+    ////            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
     ////        }
     ////        break;
     ////    case "1"://
     ////        if (pageData.IsReadOnly)
-    ////            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+    ////            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
     ////        else
-    ////            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+    ////            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
     ////        break;
     ////}
 
     if (frmDtl.DtlShowModel == "0") {
         if (pageData.IsReadOnly) {
-            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         } else {
-            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
         }
     }
     else if (frmDtl.DtlShowModel == "1") {
         if (pageData.IsReadOnly)
-            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         else
-            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
 
     }
     var eleIframe = '<iframe></iframe>';
@@ -2496,7 +2469,7 @@ function figure_Template_FigureFlowChart(wf_node) {
     var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
     src += '&FK_Flow=' + pageData.FK_Flow;
     src += '&FK_Node=' + pageData.FK_Node;
-    src += '&WorkID=' + pageData.WorkID;
+    src += '&WorkID=' + pageData.OID;
     src += '&FID=' + pageData.FID;
     var  eleHtml = '<div id="divtrack'+wf_node.NodeID+'">' + "<iframe id='track"+wf_node.NodeID+"' style='width:"+w+"px;height="+h+"px;'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
@@ -2524,7 +2497,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
     paras += "&OID=" + pageData["WorkID"];
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
+    paras += '&WorkID=' + pageData.OID;
     if (sta == 2)//只读
     {
         src += "&DoType=View";
@@ -2561,7 +2534,7 @@ function figure_Template_FigureThreadDtl(wf_node) {
     paras += "&OID=" + pageData["WorkID"];
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
+    paras += '&WorkID=' + pageData.OID;
     if (sta == 2)//只读
     {
         src += "&DoType=View";
@@ -2597,7 +2570,7 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
     paras += "&OID=" + pageData["WorkID"];
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
+    paras += '&WorkID=' + pageData.OID;
     if (sta == 2)//只读
     {
         src += "&DoType=View";
@@ -2637,7 +2610,7 @@ function figure_Template_MsgAlert(msgAlert) {
 function dealWithUrl(src) {
     var src = fram.URL.replace(new RegExp(/(：)/g), ':');
     var params = '&FID=' + pageData.FID;
-    params += '&WorkID=' + pageData.WorkID;
+    params += '&WorkID=' + pageData.OID;
     if (src.indexOf("?") > 0) {
         var params = getQueryStringFromUrl(src);
         if (params != null && params.length > 0) {
@@ -2698,7 +2671,7 @@ switch (groupFiled.CtrlType) {
         var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
         var paras = pageParamToUrl();
         if (paras.indexOf('OID') < 0) {
-            paras += "&OID=" + pageData.WorkID;
+            paras += "&OID=" + pageData.OID;
         }
 
 
@@ -2712,7 +2685,7 @@ switch (groupFiled.CtrlType) {
         var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
         var paras = pageParamToUrl();
         if (paras.indexOf('OID') < 0) {
-            paras += "&OID=" + pageData.WorkID;
+            paras += "&OID=" + pageData.OID;
         }
         if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
             paras += "&DoType=View";
@@ -2725,11 +2698,11 @@ switch (groupFiled.CtrlType) {
         var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
         //var paras = pageParamToUrl();
         //if (paras.indexOf('OID') < 0) {
-        //    paras += "&OID=" + pageData.WorkID;
+        //    paras += "&OID=" + pageData.OID;
         //}
         src += '&FK_Flow=' + pageData.FK_Flow;
         src += '&FK_Node=' + pageData.FK_Node;
-        src += '&WorkID=' + pageData.WorkID;
+        src += '&WorkID=' + pageData.OID;
         src += '&FID=' + pageData.FID;
         //先临时写成这样的
         groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:500px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
@@ -2739,7 +2712,7 @@ switch (groupFiled.CtrlType) {
         var src = "/WF/WorkOpt/Thread.aspx?s=2";
         var paras = pageParamToUrl();
         if (paras.indexOf('OID') < 0) {
-            paras += "&OID=" + pageData.WorkID;
+            paras += "&OID=" + pageData.OID;
         }
         src += "&r=q" + paras;
         groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
@@ -2748,7 +2721,7 @@ switch (groupFiled.CtrlType) {
         var src = "/WF/WorkOpt/FTC.aspx?s=2";
         var paras = pageParamToUrl();
         if (paras.indexOf('OID') < 0) {
-            paras += "&OID=" + pageData.WorkID;
+            paras += "&OID=" + pageData.OID;
         }
         src += "&r=q" + paras;
         groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';

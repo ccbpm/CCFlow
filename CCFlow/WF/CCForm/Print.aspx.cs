@@ -205,7 +205,17 @@ namespace CCFlow.WF.CCForm
             }
             #endregion
 
-            BP.Sys.PubClass.OpenWordDocV2(billFile, tempNameChinese + ".doc");
+            BillTemplate template = new BillTemplate();
+            int iHave = template.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.Name, finfo.Name);
+            //在线WebOffice打开
+            if (iHave > 0 && template.BillOpenModel == BillOpenModel.WebOffice)
+            {
+                Response.Redirect("../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK, true);
+            }
+            else
+            {
+                BP.Sys.PubClass.OpenWordDocV2(billFile, tempNameChinese + ".doc");
+            }
         }
         protected void Page_Load(object sender, EventArgs e)
         {

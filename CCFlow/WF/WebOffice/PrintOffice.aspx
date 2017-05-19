@@ -32,7 +32,6 @@
             pageLoadding('正在打开模板...');
             try {
                 var myPK = GetQueryString("MyPK");
-                alert(myPK);
                 var url = location.href + "&action=LoadFile";
                 var fileExt = "doc";
                 var openType = webOffice.LoadOriginalFile(url, fileExt);

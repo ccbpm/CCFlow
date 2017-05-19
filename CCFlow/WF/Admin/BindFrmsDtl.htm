@@ -102,9 +102,9 @@
                 var formNos = "";
                 if (nodes.length > 0) {
                     for (var i = 0; i < nodes.length; i++) {
-                        if (nodes[i].NodeType == "root")
+                        if (nodes[i].attributes.NodeType == "root")
                             continue;
-                        if (nodes[i].NodeType == "folder")
+                        if (nodes[i].attributes.NodeType == "folder")
                             continue;
 
                         formNos += "," + nodes[i].id + ",";

@@ -119,13 +119,11 @@
             var updateData = $.grep(pageData.DBDtl, function (val) { return val.OID == returnRowData.OID });
             if (updateData.length == 0) {//新增的  直接PUSH
                 var rowData = {};
-                $.each(workNodeData.Sys_MapAttr, function (i, mapAttr) {
-                    rowData[mapAttr.KeyOfEn] = returnRowData[mapAttr.KeyOfEn];
-                });
-                pageData.DBDtl.push({ OID: rowData.OID, RowData: rowData });
-
-                updateTr.data().data = rowData;
-
+                //$.each(workNodeData.Sys_MapAttr, function (i, mapAttr) {
+                //    rowData[mapAttr.KeyOfEn] = returnRowData[mapAttr.KeyOfEn];
+                //});
+                pageData.DBDtl.push({ OID: rowData.OID, RowData: returnRowData });
+                updateTr.data().data = returnRowData;
                 //新增数据  将移除改成删除
                 updateTr.find('.delRow').attr('src', '../Img/Btn/delete.png');
             } else {
@@ -140,32 +138,6 @@
 
             pageData.saveRowCurrent.rowIndex = -1;
             return;
-            
-            
-            //数据保存完后 刷新页面数据
-            if (pageData.saveRowCurrent.count == pageData.saveRowCurrent.overCount) {
-                InitPage();
-                if (saveRowCurrent.saveAll) { //保存所有的
-                    $('#saveBtn').attr('enable', 'true');
-                    $('#saveBtn').css('background', '#4D77A7');
-                }//保存1行
-                else {
-                    var saveRow = $('#dtlDiv div table tbody tr')[saveRowCurrent.rowIndex];
-                    var saveBtn = $(saveRow).find('input[value="保存"]');
-
-                    saveBtn.attr('enable', 'true');
-                    saveBtn.css('background', '#4D77A7');
-                }
-                //初始化saveRowCurrent
-                saveRowCurrent.count = 0;
-                saveRowCurrent.overCount = 0;
-                saveRowCurrent.saveAll = false;
-                saveRowCurrent.rowIndex = 0;
-
-                $('#Message').html('数据已保存完成');
-                $('#dtlDiv').show();
-                $('#Message').hide();
-            }
         }
 
         function insertRow() {
@@ -194,14 +166,25 @@
                             $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
                                 $(obj.target).val();
                         });
+
+
+                        //对于只读的下拉框做如下处理  为只读的下拉框赋值
+                        if (o.data().UIIsEnable == "0") {
+                            var readOnlyDdlText = '无';
+                            var readOnlyDdlVal = '';
+                            if (workNodeData.Blank[0][o.data().KeyOfEn + "TEXT"] != undefined) {
+                                readOnlyDdlText = workNodeData.Blank[0][o.data().KeyOfEn + "TEXT"];
+                            }
+                            if (workNodeData.Blank[0][o.data().KeyOfEn] != undefined) {
+                                readOnlyDdlVal = workNodeData.Blank[0][o.data().KeyOfEn];
+                            }
+                            var option = $('<option select="selected" value="' + readOnlyDdlVal + '">' + readOnlyDdlText + '</option>')
+                            $(tmplate).children().remove();
+                            $(tmplate).append(option);
+                        }
                     }
 
-                    //对于只读的下拉框做如下处理  为只读的下拉框赋值
-                    if (o.data().UIIsEnable == "0") {
-                        var option = $('<option select="selected" value="' + workNodeData.Blank[0][o.data().KeyOfEn] + '">' + workNodeData.Blank[0][o.data().KeyOfEn + "TEXT"] + '</option>')
-                        $(tmplate).children().remove();
-                        $(tmplate).append(option);
-                    }
+                    
 
                     var td = $('<td></td>')
                     td.append(tmplate);
@@ -294,14 +277,14 @@
                         //制造表头
                         //添加序号列
                         workNodeData = data;
-                        var snTh = $('<th data-coltype="SN" style="height;60px;"><img src="../Img/Btn/Add.gif" id="insertBtn" name="insertBtn" onclick="insertRow()" /></th>');
+                        var snTh = $('<th data-coltype="SN" style="width;60px;"><img src="../Img/Btn/Add.gif" id="insertBtn" name="insertBtn" onclick="insertRow()" /></th>');
 
                         threadTr.append(snTh);
                         $.each(sys_mapAttr, function (i, mapAttrObj) {
                             var th = $('<th></th>');
                             th.text(mapAttrObj.Name);
                             th.data(mapAttrObj);
-                            th.css('min-width', mapAttrObj.UIWidth);
+                            th.css('width', mapAttrObj.UIWidth);
                             th.data().colname = mapAttrObj.KeyOfEn;
                             if (mapAttrObj.UIVisible == 1) {
                                 threadTr.append(th);
@@ -399,7 +382,9 @@
                                         } else if (tmplate.attr('name').indexOf('DDL_') == 0) {
                                             //对于只读的下拉框做如下处理  为只读的下拉框赋值
                                             if (o.data().UIIsEnable == "0") {
-                                                var option = $('<option select="selected" value="' + $(tbodyTrObj).data().data[o.data().KeyOfEn] + '">' + $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] + '</option>')
+                                                var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
+                                                var ddlText = $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] || $(tbodyTrObj).data().data[o.data().KeyOfEn + "Text"];
+                                                var option = $('<option select="selected" value="' + ddlValue + '">' + ddlText + '</option>');
                                                 $(tmplate).children().remove();
                                                 $(tmplate).append(option);
                                             } else {
@@ -502,22 +487,34 @@
                 var text = tdObj.find('input[type=text]');
                 var select = tdObj.find('select');
 
-                var keyOfEn = '', value = '';
+                var keyOfEn = '', value = '',ddlText='';
                 if (text.length == 1) {
                     var name = text.attr('name');
                     if (name.indexOf('TB_') == 0) {
                         keyOfEn = name.substring(3);
                         value = text.val();
 
-                        text.val(trData[keyOfEn])
+                        text.val(trData[keyOfEn]);
                     }
                 } else if (select.length == 1) {
                     var name = select.attr('name');
                     if (name.indexOf('DDL_') == 0) {
                         keyOfEn = name.substring(4);
-                        
-                        select.val(trData[keyOfEn]);
+                        value = trData[keyOfEn];
+                        ddlText = trData[keyOfEn + "TEXT"] || trData[keyOfEn + "Text"];
+                        //对于只读的文本框 可能需要回填TEXT
+                        var disabled= select.attr('disabled');
+                        if ((disabled == "disabled" || disabled == true )&& value!=undefined &&ddlText!=undefined) {
+                            var option = $('<option select="selected" value="' + value + '">' + ddlText + '</option>');
+                            select.children().remove();
+                            select.append(option);
+                        }
+                        else {
+                            select.val(trData[keyOfEn]);
+                        }
                     }
+
+
                 }
             });
         }
@@ -651,9 +648,9 @@
             }
             eleHtml = $(eleHtml);
             eleHtml.val(defValue);
-            eleHtml.css('min-width', mapAttr.UIWidth);
-            eleHtml.css('width', '100%');
-            //eleHtml.css('width', mapAttr.UIWidth);
+            //eleHtml.css('min-width', mapAttr.UIWidth);
+            //eleHtml.css('width', '100%');
+            eleHtml.css('width', mapAttr.UIWidth);
 
             eleHtml.bind('focus', blurEvent);
             if (mapAttr.UIIsEnable == "0") {
@@ -686,7 +683,7 @@
                 <div class="tab-content" style="margin: 4px 0px;">
                     <div class="tab-pane active portlet_tab flowLists" id="dtlDiv">
                         <div id="" style=" overflow: auto;">
-                            <table class="table wupop" data-data="true" style="width:100%;">
+                            <table class="table wupop" data-data="true">
                                 <thead></thead>
                                 <tbody></tbody>
                             </table>

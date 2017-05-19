@@ -585,7 +585,6 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-
             }
 
             string strs = this.RequestParas;

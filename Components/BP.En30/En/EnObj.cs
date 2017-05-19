@@ -95,10 +95,12 @@ namespace BP.En
         public bool IsAdjunct = false;
         /// <summary>
         /// 是否可以导出
+        /// <para>注意：要启用导出权限控制，请使用uac.IsExp = UserRegedit.HaveRoleForExp(this.ToString());</para>
         /// </summary>
         public bool IsExp = false;
         /// <summary>
         /// 是否可以导入
+        /// <para>注意：要启用导入权限控制，请使用uac.IsImp = UserRegedit.HaveRoleForImp(this.ToString());</para>
         /// </summary>
         public bool IsImp = false;
         #endregion

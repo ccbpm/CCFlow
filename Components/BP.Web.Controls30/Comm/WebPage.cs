@@ -531,13 +531,32 @@ namespace BP.Web
             try
             {
                 Attrs attrs = en.EnMap.Attrs;
-                IEnumerable<Attr> selectedAttrs = null;
+                Attrs selectedAttrs = null;
                 BP.Sys.UIConfig cfg = new UIConfig(en);
 
                 if (cfg.ShowColumns.Length == 0)
-                    selectedAttrs = attrs.Cast<Attr>();
+                    selectedAttrs = attrs;
                 else
-                    selectedAttrs = attrs.Cast<Attr>().Where(a => cfg.ShowColumns.Contains(a.Key));
+                {
+                    selectedAttrs = new Attrs();
+
+                    foreach(Attr attr in attrs)
+                    {
+                        bool contain = false;
+
+                        foreach(string col in cfg.ShowColumns)
+                        {
+                            if(col == attr.Key)
+                            {
+                                contain = true;
+                                break;
+                            }
+                        }
+
+                        if(contain)
+                            selectedAttrs.Add(attr);
+                    }
+                }
 
                 objStreamWriter.WriteLine();
                 objStreamWriter.WriteLine(Convert.ToChar(9) + title + Convert.ToChar(9));

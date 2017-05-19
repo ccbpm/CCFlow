@@ -3,6 +3,8 @@ using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
+using System.Text;
 using System.Web;
 using System.Web.SessionState;
 using System.Web.UI;
@@ -15,6 +17,8 @@ using BP.Web.Controls;
 using BP.Sys;
 using BP.Web.Comm;
 using BP;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
 
 namespace CCFlow.Web.Comm
 {
@@ -314,15 +318,174 @@ namespace CCFlow.Web.Comm
 
             if (this.DoType == "Exp")
             {
-                if(en.HisUAC.IsExp == false)
+                if (en.HisUAC.IsExp == false)
                 {
                     this.WinCloseWithMsg("您没有数据导出权限，请联系管理员解决！");
                     return null;
                 }
 
-                /*如果是导出，就把它导出到excel.*/
-                string filePath = this.ExportDGToExcel(qo.DoQueryToTable(), en, en.EnDesc + "数据导出");
-                this.WinClose(filePath);
+                #region //导出到excel
+                string name = en.EnDesc + "数据导出" + "_" + DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
+                string filepath = BP.Sys.SystemConfig.PathOfTemp;
+                string filename = null;
+                long len = 0;
+                DataTable dt = qo.DoQueryToTable();
+
+                if (Directory.Exists(filepath) == false)
+                    Directory.CreateDirectory(filepath);
+
+                filename = filepath + name;
+
+                using (FileStream fs = new FileStream(filename, FileMode.Create))
+                {
+                    HSSFWorkbook wb = new HSSFWorkbook();
+                    ISheet sheet = wb.CreateSheet("sheet1");
+                    IRow row = sheet.CreateRow(1);
+                    IRow frow = sheet.CreateRow(0);
+                    IRow lrow = sheet.CreateRow(2 + dt.Rows.Count);
+                    ICell cell = null;
+                    IFont font = wb.CreateFont();
+                    int r = 0;
+                    int c = 0;
+                    IDataFormat fmt = wb.CreateDataFormat();
+                    Attrs attrs = en.EnMap.Attrs;
+                    Attrs selectedAttrs = null;
+                    UIConfig cfg = new UIConfig(en);
+
+                    if (cfg.ShowColumns.Length == 0)
+                    {
+                        selectedAttrs = attrs;
+                    }
+                    else
+                    {
+                        selectedAttrs = new Attrs();
+
+                        foreach (Attr attr in attrs)
+                        {
+                            bool contain = false;
+
+                            foreach (string col in cfg.ShowColumns)
+                            {
+                                if (col == attr.Key)
+                                {
+                                    contain = true;
+                                    break;
+                                }
+                            }
+
+                            if (contain)
+                                selectedAttrs.Add(attr);
+                        }
+                    }
+
+                    foreach (Attr attr in selectedAttrs)
+                    {
+                        if (attr.UIVisible == false)
+                            continue;
+
+                        if (attr.Key == "MyNum")
+                            continue;
+
+                        cell = row.CreateCell(c++);
+                        cell.SetCellValue(attr.Desc);
+                        font.IsBold = true;
+                        cell.CellStyle = wb.CreateCellStyle();
+                        cell.CellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                        cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+                        cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                        cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+                        cell.CellStyle.SetFont(font);
+
+                        frow.CreateCell(c - 1);
+                        lrow.CreateCell(c - 1);
+                    }
+
+                    sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 0, 0, c - 1));
+                    cell = frow.GetCell(0);
+                    cell.SetCellValue(en.EnDesc);
+                    cell.CellStyle = wb.CreateCellStyle();
+                    cell.CellStyle.Alignment = HorizontalAlignment.Center;
+                    font = wb.CreateFont();
+                    font.IsBold = true;
+                    cell.CellStyle.SetFont(font);
+
+                    sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(2 + dt.Rows.Count, 2 + dt.Rows.Count, 0, c - 1));
+                    cell = lrow.GetCell(0);
+                    cell.SetCellValue("制表人：" + WebUser.Name);
+                    cell.CellStyle = wb.CreateCellStyle();
+                    cell.CellStyle.Alignment = HorizontalAlignment.Right;
+
+                    r = 2;
+
+                    foreach (DataRow dr in qo.DoQueryToTable().Rows)
+                    {
+                        row = sheet.CreateRow(r++);
+                        c = 0;
+
+                        foreach (Attr attr in selectedAttrs)
+                        {
+                            if (attr.UIVisible == false)
+                                continue;
+
+                            if (attr.Key == "MyNum")
+                                continue;
+
+                            cell = row.CreateCell(c++);
+                            cell.CellStyle = wb.CreateCellStyle();
+                            cell.CellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                            cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+                            cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                            cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+
+                            if (attr.IsFKorEnum)
+                            {
+                                cell.SetCellValue(dr[attr.Key + "Text"] as string);
+                            }
+                            else
+                            {
+                                switch (attr.MyDataType)
+                                {
+                                    case DataType.AppBoolean:
+                                        cell.SetCellValue(dr[attr.Key].Equals(1) ? "是" : "否");
+                                        break;
+                                    case DataType.AppDate:
+                                        cell.SetCellValue(dr[attr.Key] as string);
+                                        cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d;@");
+                                        break;
+                                    case DataType.AppDateTime:
+                                        cell.SetCellValue(dr[attr.Key] as string);
+                                        cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d h:mm;@");
+                                        break;
+                                    case DataType.AppString:
+                                        cell.SetCellValue(dr[attr.Key] as string);
+                                        break;
+                                    case DataType.AppInt:
+                                        cell.SetCellValue((int)dr[attr.Key]);
+                                        break;
+                                    case DataType.AppFloat:
+                                    case DataType.AppMoney:
+                                        cell.SetCellValue((double)dr[attr.Key]);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                    wb.Write(fs);
+                    len = fs.Length;
+                }
+
+                if (!"firefox".Contains(Request.Browser.Browser.ToLower()))
+                    name = HttpUtility.UrlEncode(name);
+
+                Response.AddHeader("Content-Length", len.ToString());
+                Response.ContentType = "application/octet-stream";
+                Response.AddHeader("Content-Disposition", "attachment; filename=" + name);
+                Response.WriteFile(filename);
+                Response.End();
+                Response.Close();
+                #endregion //导出到excel
+
                 return null;
             }
 
@@ -475,6 +638,7 @@ namespace CCFlow.Web.Comm
                         qo = this.ToolBar1.GetnQueryObject(ens, en);
                         qo.DoQuery();
                         string file = "";
+
                         try
                         {
                             file = this.ExportDGToExcel(ens.ToDataTableDesc(), this.HisEn.EnDesc);

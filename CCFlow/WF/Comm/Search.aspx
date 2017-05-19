@@ -60,18 +60,14 @@
             url = url + "&DoType=Exp";
 
             var explorer = window.navigator.userAgent;
-            if (explorer.indexOf("Chrome") >= 0) {
-                window.open(url, "sd", "left=200,height=500,top=150,width=600,location=yes,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no");
-            } else {
-                var reVal = window.showModalDialog(url, 'ddd', 'dialogHeight: 550px; dialogWidth: 650px; dialogTop: 100px; dialogLeft: 150px; center: yes; help: no');
-            }
+            window.open(url, "sd", "left=200,height=500,top=150,width=600,location=yes,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no");
             ReDownExpFile();
         }
 
         $(function () {
-            try{
+            try {
                 document.getElementById("ToolBar1_Btn_Excel").href = "#";
-            }catch(e){}
+            } catch (e) { }
             $("#dialogExpFile").hide();
         });
 
@@ -126,7 +122,8 @@
             提示：如果没有正常导出文件，请手动点击下方按钮进行下载。
             <br />
             <br />
-            <a id="downLoad" href="" class="easyui-linkbutton" data-options="iconCls:'icon-save'">点击下载</a>
+            <a id="downLoad" href="" class="easyui-linkbutton" data-options="iconCls:'icon-save'">
+                点击下载</a>
         </div>
     </div>
     <input type="hidden" id="expFileName" runat="server" />

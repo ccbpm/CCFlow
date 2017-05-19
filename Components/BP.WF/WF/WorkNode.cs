@@ -1070,10 +1070,6 @@ namespace BP.WF
             }
 
             Node nd = NodeSend_GenerNextStepNode_Ext1();
-
-            //写入到达信息.
-            this.addMsg(SendReturnMsgFlag.VarToNodeID, nd.NodeID.ToString(), nd.NodeID.ToString(),SendReturnMsgType.SystemMsg);
-            this.addMsg(SendReturnMsgFlag.VarToNodeName, nd.Name, nd.Name, SendReturnMsgType.SystemMsg);
             return nd;
         }
         /// <summary>
@@ -3569,6 +3565,9 @@ namespace BP.WF
                     Node toND = this.NodeSend_GenerNextStepNode();
                     if (this.IsStopFlow)
                         return;
+                    //写入到达信息.
+                    this.addMsg(SendReturnMsgFlag.VarToNodeID, toND.NodeID.ToString(), toND.NodeID.ToString(), SendReturnMsgType.SystemMsg);
+                    this.addMsg(SendReturnMsgFlag.VarToNodeName, toND.Name, toND.Name, SendReturnMsgType.SystemMsg);
                     switch (toND.HisRunModel)
                     {
                         case RunModel.Ordinary:   /*1-1 普通节to普通节点 */
@@ -6146,7 +6145,7 @@ namespace BP.WF
                                 continue;
 
                             if (msgOfSend.Contains("@") == false)
-                                continue;
+                                break;
 
                             msgOfSendText = msgOfSendText.Replace("@" + item.MsgFlag, item.MsgOfText);
 

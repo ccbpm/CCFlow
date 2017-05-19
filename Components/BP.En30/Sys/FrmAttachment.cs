@@ -833,7 +833,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsRowLock, false);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsRowLock, false);
             }
             set
             {
@@ -861,7 +861,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableReadonly);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableReadonly);
             }
             set
             {
@@ -875,7 +875,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableRevise);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableRevise);
             }
             set
             {
@@ -889,7 +889,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableSave);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableSave);
             }
             set
             {
@@ -903,7 +903,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableViewKeepMark);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableViewKeepMark);
             }
             set
             {
@@ -917,7 +917,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableWF);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableWF);
             }
             set
             {
@@ -932,7 +932,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableOver);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableOver);
             }
             set
             {
@@ -947,7 +947,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableSeal);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableSeal);
             }
             set
             {
@@ -962,7 +962,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableTemplete);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableTemplete);
             }
             set
             {
@@ -977,7 +977,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableCheck);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableCheck);
             }
             set
             {
@@ -992,7 +992,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableInsertFlow);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableInsertFlow);
             }
             set
             {
@@ -1007,7 +1007,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableInsertFengXian);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableInsertFengXian);
             }
             set
             {
@@ -1022,7 +1022,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableMarks);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableMarks);
             }
             set
             {
@@ -1037,7 +1037,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(FrmAttachmentAttr.IsWoEnableDown);
+                return this.GetValBooleanByKey(FrmAttachmentAttr.IsWoEnableDown);
             }
             set
             {

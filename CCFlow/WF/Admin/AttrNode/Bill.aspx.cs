@@ -137,6 +137,16 @@ namespace CCFlow.WF.Admin
             this.Ucsys1.AddTREnd();
 
             this.Ucsys1.AddTR();
+            this.Ucsys1.AddTD("生成的文件打开方式"); // 单据/单据名称
+            ddl = new DDL();
+            ddl.ID = "DDL_BillOpenModel";
+            ddl.BindSysEnum("BillOpenModel");
+            ddl.SetSelectItem((int)bill.BillOpenModel);
+            this.Ucsys1.AddTD(ddl);
+            this.Ucsys1.AddTD("对文件类型：RTF,Word设置有效");
+            this.Ucsys1.AddTREnd();
+
+            this.Ucsys1.AddTR();
             this.Ucsys1.AddTD("单据模板");
             HtmlInputFile file = new HtmlInputFile();
             file.ID = "f";
@@ -200,6 +210,7 @@ namespace CCFlow.WF.Admin
                 bt.No = this.RefNo;
                 bt.Retrieve();
                 bt = this.Ucsys1.Copy(bt) as BillTemplate;
+                bt.Url = this.RefNo;
                 bt.NodeID = this.NodeID;
                 bt.FK_BillType = this.Ucsys1.GetDDLByID("DDL_BillType").SelectedItemStringVal;
                 if (file.Value == null || file.Value.Trim() == "")

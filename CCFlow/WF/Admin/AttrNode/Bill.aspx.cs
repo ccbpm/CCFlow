@@ -58,7 +58,7 @@ namespace CCFlow.WF.Admin
             //表单树时对存放路径进行修改
             if (curNode.FormType == NodeFormType.SheetTree)
             {
-                bt.Url = "FlowFrm\\" + this.FK_Flow + "\\" + this.NodeID + "\\" + fileName.Replace(fileType, "");
+                bt.TempFilePath = "FlowFrm\\" + this.FK_Flow + "\\" + this.NodeID + "\\" + fileName.Replace(fileType, "");
                 filePath = BP.Sys.SystemConfig.PathOfCyclostyleFile + "\\FlowFrm\\" + this.FK_Flow + "\\" + this.NodeID;
                 if (!System.IO.Directory.Exists(filePath))
                 {
@@ -187,7 +187,7 @@ namespace CCFlow.WF.Admin
             }
 
             if (this.RefNo != null)
-                url = "<a href='../../DataUser/CyclostyleFile/" + bill.Url + "." + fileType + "'><img src='../../Img/Btn/save.gif' border=0/> 模板下载</a>";
+                url = "<a href='../../DataUser/CyclostyleFile/" + bill.TempFilePath + "." + fileType + "'><img src='../../Img/Btn/save.gif' border=0/> 模板下载</a>";
 
             this.Ucsys1.Add(url + "</TD>");
             this.Ucsys1.AddTREnd();
@@ -210,7 +210,6 @@ namespace CCFlow.WF.Admin
                 bt.No = this.RefNo;
                 bt.Retrieve();
                 bt = this.Ucsys1.Copy(bt) as BillTemplate;
-                bt.Url = this.RefNo;
                 bt.NodeID = this.NodeID;
                 bt.FK_BillType = this.Ucsys1.GetDDLByID("DDL_BillType").SelectedItemStringVal;
                 if (file.Value == null || file.Value.Trim() == "")
@@ -497,7 +496,7 @@ namespace CCFlow.WF.Admin
                 string fileUrl = "";
                 if (Bill.HisBillFileType == BillFileType.RuiLang)
                 {
-                    string name = Bill.Url;
+                    string name = Bill.TempFilePath;
 
                     name = name.Replace('\\', '-');
 
@@ -513,14 +512,14 @@ namespace CCFlow.WF.Admin
                     fileUrl = "<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID +
                               "&DoType=Edit&RefNo=" + Bill.No +
                               "'><img src='../../Img/Btn/Edit.gif' border=0/编辑/a>|<a href='../../../DataUser/CyclostyleFile/" +
-                              Bill.Url + ".grf'><img src='../../Img/Btn/Save.gif' border=0/> 模板下载</a>|<a href='javascript:openEidt(\"" + name + "\")'  ><img src='../../Img/Btn/Edit.gif' />编辑模版</a>";
+                              Bill.TempFilePath + ".grf'><img src='../../Img/Btn/Save.gif' border=0/> 模板下载</a>|<a href='javascript:openEidt(\"" + name + "\")'  ><img src='../../Img/Btn/Edit.gif' />编辑模版</a>";
                 }
                 else
                 {
                     fileUrl = "<a href='Bill.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID +
                             "&DoType=Edit&RefNo=" + Bill.No +
                             "'><img src='../../Img/Btn/Edit.gif' border=0/编辑/a>|<a href='/DataUser/CyclostyleFile/" +
-                            Bill.Url + ".rtf'><img src='../../Img/Btn/save.gif' border=0/> 模板下载</a>";
+                            Bill.TempFilePath + ".rtf'><img src='../../Img/Btn/save.gif' border=0/> 模板下载</a>";
                 }
                 this.Ucsys1.AddTD("<img src='../../Img/Btn/Word.gif' >" + Bill.Name);
                 this.Ucsys1.AddTD(fileUrl);

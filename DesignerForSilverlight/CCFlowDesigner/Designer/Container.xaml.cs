@@ -48,7 +48,7 @@ namespace BP
         /// </summary>
         FlowNode nodeSelected = null;
 
-     
+
         /// <summary>
         /// 结点集合
         /// </summary>
@@ -65,7 +65,7 @@ namespace BP
         /// 
         /// </summary>
         int nextMaxIndex = 0;
-   
+
         Stack<string> _workFlowXmlNextStack;
         Stack<string> _workFlowXmlPreStack;
         Dictionary<string, FlowNode> dicFlowNode = new Dictionary<string, FlowNode>();
@@ -83,8 +83,8 @@ namespace BP
 
         Point pos;
         #endregion
-      
-       
+
+
         #region FlowChartType变化：一般是设计器已经加载，需要重绘设计器背景和网格
         /// <summary>
         /// 设计器:背景和网格
@@ -92,7 +92,7 @@ namespace BP
         Color colorBackground = Color.FromArgb(250, 224, 238, 224);
         public Color ColorBackground
         {
-            set 
+            set
             {
                 if (value != colorBackground)
                 {
@@ -122,7 +122,7 @@ namespace BP
 
                 if (flow_ChartType == FlowChartType.UserIcon)
                 {
-                   
+
                     colorGrid = Color.FromArgb(255, 220, 220, 220);
                     //ColorBackground = Color.FromArgb(255, 33, 99, 255);
                     ColorBackground = Colors.White;
@@ -130,7 +130,7 @@ namespace BP
                 }
                 else
                 {
-                    colorGrid = Colors.DarkGray; 
+                    colorGrid = Colors.DarkGray;
                     ColorBackground = Color.FromArgb(255, 224, 238, 224);
 
                 }
@@ -166,8 +166,8 @@ namespace BP
                 }
             }
         }
-       
-        
+
+
         //public void SetGridLines()
         //{
         //    ImageBrush imageBrush = new ImageBrush()
@@ -185,7 +185,7 @@ namespace BP
             {
                 if (_gridLinesContainer == null)
                 {
-                    _gridLinesContainer = new Canvas() { Name = "canGridLinesContainer" } ;
+                    _gridLinesContainer = new Canvas() { Name = "canGridLinesContainer" };
                 }
 
                 if (!cnsDesignerContainer.Children.Contains(_gridLinesContainer))
@@ -262,8 +262,8 @@ namespace BP
             }
         }
         #endregion
-       
-        
+
+
         #region 属性
 
 
@@ -554,7 +554,7 @@ namespace BP
         private Point GetPosition { get; set; }
         #endregion
 
-     
+
         public Container()
         {
             InitializeComponent();
@@ -575,16 +575,16 @@ namespace BP
             this.Visibility = System.Windows.Visibility.Collapsed;
         }
 
-      
+
         void Content_Resized(object sender, EventArgs e)
         {
             #region
             try
             {
                 var contentWidth = Application.Current.Host.Content.ActualWidth;
-                cnsDesignerContainer.Width = DesignerWdith > contentWidth ? DesignerWdith : contentWidth ;
-                
-                var contentHeight = Application.Current.Host.Content.ActualHeight ;
+                cnsDesignerContainer.Width = DesignerWdith > contentWidth ? DesignerWdith : contentWidth;
+
+                var contentHeight = Application.Current.Host.Content.ActualHeight;
                 cnsDesignerContainer.Height = DesignerHeight > contentHeight ? DesignerHeight : contentHeight;
             }
             catch (System.Exception ex)
@@ -624,8 +624,8 @@ namespace BP
         }
         public void DragNodeResizeContainer(FlowNode node)
         {
-            FlowNode[] nodes=getFlowNodeRightBottom();
-       
+            FlowNode[] nodes = getFlowNodeRightBottom();
+
             if (null != nodes)
             {
                 bool sizeChanged = false;
@@ -725,7 +725,7 @@ namespace BP
             }
             _Service.DoCompleted += _service_DoCompleted;
         }
-     
+
         void _service_DoCompleted(object sender, DoCompletedEventArgs e)
         {
             _Service.DoCompleted -= _service_DoCompleted;
@@ -744,8 +744,8 @@ namespace BP
         #endregion
 
         #region LoadFlow
-        DataSet ds ;
-       
+        DataSet ds;
+
         public Container DrawFlows()
         {
             DrawFlows(this.FlowID);
@@ -787,7 +787,7 @@ namespace BP
 
             Glo.Loading(true);
             da.RunSQLReturnTableSAsync(sqls, Glo.UserNo, Glo.SID);
-            da.RunSQLReturnTableSCompleted += (object sender, RunSQLReturnTableSCompletedEventArgs e)=>
+            da.RunSQLReturnTableSCompleted += (object sender, RunSQLReturnTableSCompletedEventArgs e) =>
             {
                 Glo.Loading(false);
                 bool toBeContinued = true;
@@ -854,6 +854,8 @@ namespace BP
                 LableCollections.Clear();
                 #region 画节点.
                 DataTable dtNode = ds.Tables[0];
+                double maxWidth = DesignerWdith;
+                double maxHeight = DesignerHeight;
                 foreach (DataRow rowNode in dtNode.Rows)
                 {
                     string icon = string.Empty;
@@ -879,24 +881,20 @@ namespace BP
 
                     if (x < 50)
                         x = 50;
-                    else if (x > 1190)
-                        x = 1190;
+                    //else if (x > 1190)
+                    //    x = 1190;
 
                     if (y < 30)
                         y = 30;
-                    else if (y > 770)
-                        y = 770;
+                    //else if (y > 770)
+                    //    y = 770;
 
                     flowNode.CenterPoint = new Point(x, y);
-
-                    // 永远使设计器的宽和高为节点的最大值　
-                    if (y > DesignerHeight)
-                        DesignerHeight = y + 10;
-
-                    if (x > DesignerWdith)
-                        DesignerWdith = x + 10;
-
                     AddUI(flowNode);
+
+                    // 永远使设计器的宽和高为节点的最大值
+                    maxHeight = Math.Max(maxHeight, flowNode.CenterPoint.Y + flowNode.UIHeight / 2);
+                    maxWidth = Math.Max(maxWidth, flowNode.CenterPoint.X + flowNode.UIWidth / 2);
                 }
 
                 #endregion 画节点.
@@ -941,6 +939,18 @@ namespace BP
                         d.BeginFlowNode = dicFlowNode[begin];
                         d.EndFlowNode = dicFlowNode[to];
                         AddUI(d);
+
+                        if (d.LineType == DirectionLineType.Polyline)
+                        {
+                            maxHeight = Math.Max(maxHeight,
+                                                      d.PointTurn1.CenterPosition.Y + d.PointTurn1.ActualHeight / 2);
+                            maxWidth = Math.Max(maxWidth,
+                                                     d.PointTurn1.CenterPosition.X + d.PointTurn1.ActualWidth / 2);
+                            maxHeight = Math.Max(maxHeight,
+                                                      d.PointTurn2.CenterPosition.Y + d.PointTurn2.ActualHeight / 2);
+                            maxWidth = Math.Max(maxWidth,
+                                                     d.PointTurn2.CenterPosition.X + d.PointTurn2.ActualWidth / 2);
+                        }
                     }
                 }
                 #endregion 画线
@@ -953,10 +963,17 @@ namespace BP
                     r.LabelName = rowLabel["Name"];
                     r.Position = new Point(double.Parse(rowLabel["X"]), double.Parse(rowLabel["Y"]));
                     r.LableID = rowLabel["MyPK"];
+
                     AddUI(r);
+
+                    maxHeight = Math.Max(maxHeight, r.Position.Y + Math.Ceiling(r.txtLabel.ActualHeight));
+                    maxWidth = Math.Max(maxWidth, r.Position.X + Math.Ceiling(r.txtLabel.ActualWidth));
                 }
                 #endregion 画标签
 
+                DesignerHeight = maxHeight + 10;
+                DesignerWdith = maxWidth + 10;
+                SetGridLines(true);
                 //DrawVirtualNode(dtFlow.Rows[0]["Paras"]);
                 result = true;
             }
@@ -971,7 +988,7 @@ namespace BP
         }
 
         #region VirtualNode
-       
+
         /// 获取真实开始节点
         FlowNode GetBeginFlowNode()
         {
@@ -1092,7 +1109,7 @@ namespace BP
         {
             Glo.OpenWinByDoType("CH", "RunFlow", FlowID, null, null);
         }
-      
+
         public void ShowSetting(Direction r)
         {
             this.WinTitle = "方向设置";
@@ -1308,7 +1325,7 @@ namespace BP
                 r.SetDirectionPosition(begin, end);
             }
             r.SetValue(Canvas.ZIndexProperty, NextMaxIndex);
-            r.DirectionName = GetNewElementName(WorkFlowElementType.Direction) ;
+            r.DirectionName = GetNewElementName(WorkFlowElementType.Direction);
             r.DirType = type;
             AddUI(r);
             SaveChange(HistoryType.New);
@@ -1347,7 +1364,7 @@ namespace BP
             _Service.DoNewLabelCompleted += DoNewLabelCompleted;
         }
 
-      
+
         public void AddUI(Direction r)
         {
             if (!cnsDesignerContainer.Children.Contains(r))
@@ -1383,7 +1400,7 @@ namespace BP
             }
             else
             {
-                brush.Color =  Color.FromArgb(255, 0, 128, 0);
+                brush.Color = Color.FromArgb(255, 0, 128, 0);
             }
 
             r.dBegin.Fill = brush;
@@ -1423,7 +1440,7 @@ namespace BP
                 LableCollections.Add(l);
             }
         }
-      
+
         public void AddUI(FlowNode a)
         {
             if (!cnsDesignerContainer.Children.Contains(a))
@@ -1490,17 +1507,17 @@ namespace BP
             MessageTitle.Text = message;
             MessageBody.Visibility = Visibility.Visible;
         }
-     
+
         ToolbarButton HisCtl = null;
         public bool Save(ToolbarButton ctl)
         {
-            if (!IsNeedSave) 
+            if (!IsNeedSave)
                 return true;
 
             Glo.Loading(true);
             if (ctl != null)
                 this.HisCtl = ctl;
-            else 
+            else
                 this.HisCtl = new ToolbarButton();
 
             this.HisCtl.IsEnabled = false;
@@ -1522,6 +1539,8 @@ namespace BP
                 if (cr.IsPass)
                 {
                     IElement ele;
+                    double maxWidth = ContainerWidth;
+                    double maxHeight = ContainerHeight;
                     foreach (UIElement c in cnsDesignerContainer.Children)
                     {
                         ele = c as IElement;
@@ -1537,16 +1556,19 @@ namespace BP
                                 //    && cnsDesignerContainer.Children.Count != 2)
                                 nodes += "~@Name=" + f.NodeName + "@X=" + (int)f.CenterPoint.X + "@Y=" + (int)f.CenterPoint.Y + "@NodeID=" + int.Parse(f.NodeID)
                                     + "@HisRunModel=" + (int)f.NodeType + "@HisPosType=" + (int)f.HisPosType;
+
+                                maxWidth = Math.Max(maxWidth, f.CenterPoint.X + f.DesiredSize.Width / 2);
+                                maxHeight = Math.Max(maxHeight, f.CenterPoint.Y + f.DesiredSize.Height / 2);
                             }
                             else if (ele.ElementType == WorkFlowElementType.Direction)
                             {
                                 Direction d = ele as Direction;
                                 if (d.EndFlowNode != null
-                                    && d.BeginFlowNode != null 
+                                    && d.BeginFlowNode != null
                                     && d.BeginFlowNode.NodeID != "0")  //不为虚开始
                                 {
                                     // 指向同一点的连线不保存
-                                    if (d.EndFlowNode.NodeID == d.BeginFlowNode.NodeID) 
+                                    if (d.EndFlowNode.NodeID == d.BeginFlowNode.NodeID)
                                         continue;
                                     //中间节与虚结束节点有连线时忽略不保存
                                     if (d.EndFlowNode.NodeID == "1" && !CheckVirtualDir(d))
@@ -1558,15 +1580,30 @@ namespace BP
                                         ? ("#" + d.PointTurn1.CenterPosition.X + "," + d.PointTurn1.CenterPosition.Y
                                         + "#" + d.PointTurn2.CenterPosition.X + "," + d.PointTurn2.CenterPosition.Y) : string.Empty)
                                         + "@MyPK=" + (d.BeginFlowNode.NodeID + "_" + d.EndFlowNode.NodeID + "_" + (int)d.DirType);
+
+                                    if (d.LineType == DirectionLineType.Polyline)
+                                    {
+                                        maxWidth = Math.Max(maxWidth, d.PointTurn1.CenterPosition.X + d.PointTurn1.DesiredSize.Width / 2);
+                                        maxHeight = Math.Max(maxHeight, d.PointTurn1.CenterPosition.Y + d.PointTurn1.DesiredSize.Height / 2);
+                                        maxWidth = Math.Max(maxWidth, d.PointTurn2.CenterPosition.X + d.PointTurn2.DesiredSize.Width / 2);
+                                        maxHeight = Math.Max(maxHeight, d.PointTurn2.CenterPosition.Y + d.PointTurn2.DesiredSize.Height / 2);
+                                    }
                                 }
                             }
                             else if (ele.ElementType == WorkFlowElementType.Label)
                             {
                                 NodeLabel l = ele as NodeLabel;
                                 labes += "~@FK_Flow=" + FlowID + "@X=" + (int)l.Position.X + "@Y=" + (int)l.Position.Y + "@MyPK=" + l.LableID + "@Label=" + l.LabelName;
+
+                                maxWidth = Math.Max(maxWidth, l.Position.X + l.txtBorder.ActualWidth);
+                                maxHeight = Math.Max(maxHeight, l.Position.Y + l.txtBorder.ActualHeight);
                             }
                         }
                     }  // 结束遍历。
+
+                    ContainerWidth = maxWidth + 10;
+                    ContainerHeight = maxHeight + 10;
+                    SetGridLines(true);
 
                     WSDesignerSoapClient ws = Glo.GetDesignerServiceInstance();
                     ws.FlowSaveAsync(FlowID, nodes, dirs, labes);
@@ -1576,7 +1613,7 @@ namespace BP
                             Glo.Loading(false);
                             this.HisCtl.IsEnabled = true;
 
-                            if ( e.Error!= null )
+                            if (e.Error != null)
                             {
                                 Glo.ShowException(e.Error);
                             }
@@ -1597,10 +1634,10 @@ namespace BP
                     toBeContinued = false;
                 }
             }
-          
+
             return toBeContinued;
         }
-      
+
         /// <summary>
         /// 保存时检查是否为有效的虚拟方向线
         /// 即其首节点是否为真实结束结点，排除中间节点情况
@@ -1648,7 +1685,7 @@ namespace BP
             return null;
         }
 
-      
+
         public void clearContainer()
         {
             cnsDesignerContainer.Children.Clear();
@@ -1659,7 +1696,7 @@ namespace BP
         }
 
         #region 新建节点
-       
+
         public void CreateFlowNode(Point p)
         {
             CreateFlowNode(FlowNodeType.Ordinary, p);
@@ -1770,7 +1807,7 @@ namespace BP
         }
 
         #endregion
-      
+
         void pushNextQueueToPreQueue()
         {
             if (WorkFlowXmlPreStack.Count > 0)
@@ -1854,14 +1891,14 @@ namespace BP
 
         public void ClearSelectFlowElement()
         {
-            foreach (var item in  this.cnsDesignerContainer.Children)
-	        {
-                if( item is IElement)
+            foreach (var item in this.cnsDesignerContainer.Children)
+            {
+                if (item is IElement)
                 {
                     ((IElement)item).IsSelectd = false;
                 }
-	        }
-           
+            }
+
             SelectedWFElements.Clear();
         }
         public void ClearSelected(IElement uc)
@@ -1877,10 +1914,10 @@ namespace BP
 
         public void DeleteSeleted()
         {
-            if (SelectedWFElements == null 
-                || 0 == SelectedWFElements.Count )
+            if (SelectedWFElements == null
+                || 0 == SelectedWFElements.Count)
                 return;
-          
+
             for (int i = 0; i < SelectedWFElements.Count; i++)
             {
                 IElement iele = SelectedWFElements[i];
@@ -2042,7 +2079,7 @@ namespace BP
         public void MoveControlCollectionByDisplacement(double x, double y, IElement element)
         {
             if (SelectedWFElements == null || SelectedWFElements.Count == 0
-                || element == null || !element.IsSelectd        
+                || element == null || !element.IsSelectd
                 // 如果光标所在的节点没有被选中，则不移动所有被选中的节点，光移动光标所有的节点即可。
 
                 )
@@ -2249,7 +2286,7 @@ namespace BP
             ll.txtLabel.Visibility = Visibility.Collapsed;
             ll.txtEdit.Visibility = Visibility.Visible;
             ll.txtEdit.Focus();
-            ll.txtEdit.LostFocus +=(object sender, RoutedEventArgs e)=>
+            ll.txtEdit.LostFocus += (object sender, RoutedEventArgs e) =>
             {
                 _Service.DoNewLabelAsync(FlowID, (int)l.Position.X, (int)l.Position.Y, l.LabelName, l.LableID);
             };
@@ -2326,7 +2363,7 @@ namespace BP
                 AddUI(db);
             }
         }
-      
+
         #endregion
 
 
@@ -2396,7 +2433,7 @@ namespace BP
                 double top = (double)(e.GetPosition(svContainer).Y);
                 double left = (double)(e.GetPosition(svContainer).X);
                 menuFlowNode.CenterPoint = new Point(left, top);
-               
+
                 menuFlowNode.ShowMenu();
             }
             e.Handled = true;
@@ -2438,14 +2475,14 @@ namespace BP
             double wid = Canvas.GetLeft(element) + element.ActualWidth;
             double hig = Canvas.GetTop(element) + element.ActualHeight;
 
-            
+
         }
         private void btnCloseMessageButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBody.Visibility = Visibility.Collapsed;
             ShowContainerCover(false);
         }
-      
+
 
         private void Container_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -2734,6 +2771,6 @@ namespace BP
 
         #endregion
 
-     
+
     }
 }

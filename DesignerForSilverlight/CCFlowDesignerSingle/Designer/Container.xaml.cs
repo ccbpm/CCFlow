@@ -849,6 +849,8 @@ namespace BP
                 LableCollections.Clear();
                 #region 画节点.
                 DataTable dtNode = ds.Tables[0];
+                double maxWidth = DesignerWdith;
+                double maxHeight = DesignerHeight;
                 foreach (DataRow rowNode in dtNode.Rows)
                 {
                     string icon = string.Empty;
@@ -874,24 +876,20 @@ namespace BP
 
                     if (x < 50)
                         x = 50;
-                    else if (x > 1190)
-                        x = 1190;
+                    //else if (x > 1190)
+                    //    x = 1190;
 
                     if (y < 30)
                         y = 30;
-                    else if (y > 770)
-                        y = 770;
+                    //else if (y > 770)
+                    //    y = 770;
 
                     flowNode.CenterPoint = new Point(x, y);
-
-                    // 永远使设计器的宽和高为节点的最大值　
-                    if (y > DesignerHeight)
-                        DesignerHeight = y + 10;
-
-                    if (x > DesignerWdith)
-                        DesignerWdith = x + 10;
-
                     AddUI(flowNode);
+
+                    // 永远使设计器的宽和高为节点的最大值
+                    maxHeight = Math.Max(maxHeight, flowNode.CenterPoint.Y + flowNode.UIHeight / 2);
+                    maxWidth = Math.Max(maxWidth, flowNode.CenterPoint.X + flowNode.UIWidth / 2);
                 }
 
                 #endregion 画节点.
@@ -936,6 +934,18 @@ namespace BP
                         d.BeginFlowNode = dicFlowNode[begin];
                         d.EndFlowNode = dicFlowNode[to];
                         AddUI(d);
+
+                        if (d.LineType == DirectionLineType.Polyline)
+                        {
+                            maxHeight = Math.Max(maxHeight,
+                                                      d.PointTurn1.CenterPosition.Y + d.PointTurn1.ActualHeight / 2);
+                            maxWidth = Math.Max(maxWidth,
+                                                     d.PointTurn1.CenterPosition.X + d.PointTurn1.ActualWidth / 2);
+                            maxHeight = Math.Max(maxHeight,
+                                                      d.PointTurn2.CenterPosition.Y + d.PointTurn2.ActualHeight / 2);
+                            maxWidth = Math.Max(maxWidth,
+                                                     d.PointTurn2.CenterPosition.X + d.PointTurn2.ActualWidth / 2);
+                        }
                     }
                 }
                 #endregion 画线
@@ -949,9 +959,15 @@ namespace BP
                     r.Position = new Point(double.Parse(rowLabel["X"]), double.Parse(rowLabel["Y"]));
                     r.LableID = rowLabel["MyPK"];
                     AddUI(r);
+
+                    maxHeight = Math.Max(maxHeight, r.Position.Y + Math.Ceiling(r.txtLabel.ActualHeight));
+                    maxWidth = Math.Max(maxWidth, r.Position.X + Math.Ceiling(r.txtLabel.ActualWidth));
                 }
                 #endregion 画标签
 
+                DesignerHeight = maxHeight + 10;
+                DesignerWdith = maxWidth + 10;
+                SetGridLines(true);
                 //DrawVirtualNode(dtFlow.Rows[0]["Paras"]);
                 result = true;
             }
@@ -1517,6 +1533,8 @@ namespace BP
                 if (cr.IsPass)
                 {
                     IElement ele;
+                    double maxWidth = ContainerWidth;
+                    double maxHeight = ContainerHeight;
                     foreach (UIElement c in cnsDesignerContainer.Children)
                     {
                         ele = c as IElement;
@@ -1532,6 +1550,9 @@ namespace BP
                                 //    && cnsDesignerContainer.Children.Count != 2)
                                 nodes += "~@Name=" + f.NodeName + "@X=" + (int)f.CenterPoint.X + "@Y=" + (int)f.CenterPoint.Y + "@NodeID=" + int.Parse(f.NodeID)
                                     + "@HisRunModel=" + (int)f.NodeType + "@HisPosType=" + (int)f.HisPosType;
+
+                                maxWidth = Math.Max(maxWidth, f.CenterPoint.X + f.DesiredSize.Width / 2);
+                                maxHeight = Math.Max(maxHeight, f.CenterPoint.Y + f.DesiredSize.Height / 2);
                             }
                             else if (ele.ElementType == WorkFlowElementType.Direction)
                             {
@@ -1553,15 +1574,30 @@ namespace BP
                                         ? ("#" + d.PointTurn1.CenterPosition.X + "," + d.PointTurn1.CenterPosition.Y
                                         + "#" + d.PointTurn2.CenterPosition.X + "," + d.PointTurn2.CenterPosition.Y) : string.Empty)
                                         + "@MyPK=" + (d.BeginFlowNode.NodeID + "_" + d.EndFlowNode.NodeID + "_" + (int)d.DirType);
+
+                                    if (d.LineType == DirectionLineType.Polyline)
+                                    {
+                                        maxWidth = Math.Max(maxWidth, d.PointTurn1.CenterPosition.X + d.PointTurn1.DesiredSize.Width / 2);
+                                        maxHeight = Math.Max(maxHeight, d.PointTurn1.CenterPosition.Y + d.PointTurn1.DesiredSize.Height / 2);
+                                        maxWidth = Math.Max(maxWidth, d.PointTurn2.CenterPosition.X + d.PointTurn2.DesiredSize.Width / 2);
+                                        maxHeight = Math.Max(maxHeight, d.PointTurn2.CenterPosition.Y + d.PointTurn2.DesiredSize.Height / 2);
+                                    }
                                 }
                             }
                             else if (ele.ElementType == WorkFlowElementType.Label)
                             {
                                 NodeLabel l = ele as NodeLabel;
                                 labes += "~@FK_Flow=" + FlowID + "@X=" + (int)l.Position.X + "@Y=" + (int)l.Position.Y + "@MyPK=" + l.LableID + "@Label=" + l.LabelName;
+
+                                maxWidth = Math.Max(maxWidth, l.Position.X + l.txtBorder.ActualWidth);
+                                maxHeight = Math.Max(maxHeight, l.Position.Y + l.txtBorder.ActualHeight);
                             }
                         }
                     }  // 结束遍历。
+
+                    ContainerWidth = maxWidth + 10;
+                    ContainerHeight = maxHeight + 10;
+                    SetGridLines(true);
 
                     WSDesignerSoapClient ws = Glo.GetDesignerServiceInstance();
                     ws.FlowSaveAsync(FlowID, nodes, dirs, labes);

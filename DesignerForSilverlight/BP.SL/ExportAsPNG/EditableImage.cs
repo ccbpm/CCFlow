@@ -105,10 +105,17 @@ namespace BP.CY.ExportAsPNG
 
             // Set the pixel
             int start = _rowLength * row + col * 4 + 1;
-            _buffer[start] = red;
-            _buffer[start + 1] = green;
-            _buffer[start + 2] = blue;
-            _buffer[start + 3] = alpha;
+            if (start < _buffer.Length)
+                _buffer[start] = red;
+
+            if (start + 1 < _buffer.Length)
+                _buffer[start + 1] = green;
+
+            if (start + 2 < _buffer.Length)
+                _buffer[start + 2] = blue;
+
+            if (start + 3 < _buffer.Length)
+                _buffer[start + 3] = alpha;
         }
 
         public Color GetPixel(int col, int row)

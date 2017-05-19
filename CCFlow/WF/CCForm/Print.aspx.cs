@@ -205,10 +205,10 @@ namespace CCFlow.WF.CCForm
             }
             #endregion
 
-            BillTemplate template = new BillTemplate();
-            int iHave = template.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.Name, finfo.Name);
+            BillTemplates templates = new BillTemplates();
+            int iHave = templates.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.BillOpenModel, (int)BillOpenModel.WebOffice);
             //在线WebOffice打开
-            if (iHave > 0 && template.BillOpenModel == BillOpenModel.WebOffice)
+            if (iHave > 0)
             {
                 Response.Redirect("../WebOffice/PrintOffice.aspx?MyPK=" + bill.MyPK, true);
             }

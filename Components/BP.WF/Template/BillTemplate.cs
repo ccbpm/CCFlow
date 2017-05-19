@@ -39,7 +39,7 @@ namespace BP.WF.Template
     /// </summary>
     public class BillTemplateAttr:BP.En.EntityNoNameAttr
     {
-        public const string Url = "Url";
+        public const string TempFilePath = "TempFilePath";
         /// <summary>
         /// NodeID
         /// </summary>
@@ -134,7 +134,7 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey("No", value);
-                this.SetValByKey(BillTemplateAttr.Url, value);
+                this.SetValByKey(BillTemplateAttr.TempFilePath, value);
             }
         }
         /// <summary>
@@ -168,18 +168,18 @@ namespace BP.WF.Template
         /// <summary>
         /// 打开的连接
         /// </summary>
-        public string Url
+        public string TempFilePath
         {
             get
             {
-                string s= this.GetValStrByKey(BillTemplateAttr.Url);
+                string s= this.GetValStrByKey(BillTemplateAttr.TempFilePath);
                 if (s == "" || s == null)
                     return this.No;
                 return s;
             }
             set
             {
-                this.SetValByKey(BillTemplateAttr.Url, value);
+                this.SetValByKey(BillTemplateAttr.TempFilePath, value);
             }
         }
         /// <summary>
@@ -242,7 +242,7 @@ namespace BP.WF.Template
 
                 map.AddTBStringPK(BillTemplateAttr.No, null, "No", true, false, 1, 190, 6);
                 map.AddTBString(BillTemplateAttr.Name, null, "Name", true, false, 0, 200, 20);
-                map.AddTBString(BillTemplateAttr.Url, null, "URL", true, false, 0, 200, 20);
+                map.AddTBString(BillTemplateAttr.TempFilePath, null, "模板路径", true, false, 0, 200, 20);
                 map.AddTBInt(BillTemplateAttr.NodeID, 0, "NodeID", true, false);
 
                 map.AddDDLSysEnum(BillTemplateAttr.BillFileType, 0, "生成的文件类型", true, false,

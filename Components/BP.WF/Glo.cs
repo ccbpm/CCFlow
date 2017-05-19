@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20170510";
+        public static string Ver = "20170519";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -129,6 +129,7 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
+            updataNote += "20170519.升级打印，修改BillTemplate中的Url为TempFilePath by:dgq";
             updataNote += "20170421.升级表单，给FrmImg中的ImgSrcType赋值 by:liuxianchen";
             updataNote += "20170217.影子字段";
             updataNote += "20161104.附件删除规则修复";
@@ -181,7 +182,8 @@ namespace BP.WF
             string msg = "";
             try
             {
-
+                //2017.5.19 打印模板字段修复
+                DBAccess.RunSQL("UPDATE WF_BillTemplate SET TempFilePath = Url WHERE TempFilePath IS null");
                 //规范升级根目录
                 DataTable dttree = DBAccess.RunSQLReturnTable("SELECT No FROM Sys_FormTree WHERE ParentNo='-1' ");
                 if (dttree.Rows.Count == 1)

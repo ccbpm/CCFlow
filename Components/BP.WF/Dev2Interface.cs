@@ -7802,7 +7802,7 @@ namespace BP.WF
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
 
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/Accepter.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/Accepter.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
                 500, 400);
         }
         /// <summary>

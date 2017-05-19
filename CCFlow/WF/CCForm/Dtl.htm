@@ -196,6 +196,13 @@
                         });
                     }
 
+                    //对于只读的下拉框做如下处理  为只读的下拉框赋值
+                    if (o.data().UIIsEnable == "0") {
+                        var option = $('<option select="selected" value="' + workNodeData.Blank[0][o.data().KeyOfEn] + '">' + workNodeData.Blank[0][o.data().KeyOfEn + "TEXT"] + '</option>')
+                        $(tmplate).children().remove();
+                        $(tmplate).append(option);
+                    }
+
                     var td = $('<td></td>')
                     td.append(tmplate);
                     insertTr.append(td);
@@ -205,6 +212,8 @@
                 } else {
                     
                 }
+
+                
             });
             insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
             //insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
@@ -390,8 +399,8 @@
                                         } else if (tmplate.attr('name').indexOf('DDL_') == 0) {
                                             //对于只读的下拉框做如下处理  为只读的下拉框赋值
                                             if (o.data().UIIsEnable == "0") {
-                                                var option = $('<option select="selected" value="' + o.data()[o.data().KeyOfEn] + '">' + o.data()[o.data().KeyOfEn + "Text"] + '</option>')
-                                                console.log(option)
+                                                var option = $('<option select="selected" value="' + $(tbodyTrObj).data().data[o.data().KeyOfEn] + '">' + $(tbodyTrObj).data().data[o.data().KeyOfEn + "TEXT"] + '</option>')
+                                                $(tmplate).children().remove();
                                                 $(tmplate).append(option);
                                             } else {
                                                 $(tmplate).bind('change', function (obj) {

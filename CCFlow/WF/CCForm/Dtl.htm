@@ -233,6 +233,7 @@
 
         //初始化数据.
         function InitPage() {
+
             var ensName = GetQueryString("EnsName");
 
             var refPKVal = GetQueryString("RefPKVal");
@@ -257,11 +258,13 @@
                 url: Handler + "?DoType=Dtl_Init&" + urlParam + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
                         $("#Msg").html(data);
                         return;
                     }
+
                     //解析.
                     data = JSON.parse(data);
 

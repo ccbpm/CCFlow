@@ -20,7 +20,7 @@
 
             $("#eventAccordion").accordion("select", currEventGroup);
 
-            var urlParams = "?NodeID=<%=this.NodeID %>&MyPK=<%=this.MyPK %>&Event=<%=this.Event %>&FK_MapData=<%=this.FK_MapData %>&FK_Flow=<%=this.FK_Flow %>&tk=";
+            var urlParams = "?NodeID=<%=this.NodeID %>&MyPK=<%=this.MyPK %>&Event=<%=this.Event %>&FK_MapData=<%=this.FK_MapData %>&FK_Flow=<%=this.FK_Flow %>&ShowType=<%=this.ShowType %>&tk=";
             $("#src1").attr("src","ActionEvent.aspx" + urlParams + Math.random());
 
 //            if(showMsg){

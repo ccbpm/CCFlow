@@ -107,7 +107,7 @@ namespace CCFlow.WF.Admin
             if (this.DoType == "Del")
             {
                 FrmEvent delFE = new FrmEvent();
-                delFE.MyPK = this.FK_MapData + "_" + this.Request.QueryString["RefXml"];
+                delFE.MyPK = (this.ShowType == "Flow" ? this.FK_Flow : this.FK_MapData) + "_" + this.Request.QueryString["RefXml"];
                 delFE.Delete();
             }
 
@@ -155,7 +155,7 @@ namespace CCFlow.WF.Admin
                         }
                         else
                         {
-                            Pub1.AddLi(string.Format("<div><a href='Action.aspx?NodeID={0}&Event={1}&FK_Flow={2}&tk={5}&FK_MapData={6}'><span class='nav'><img src='/WF/Img/Event.png' border=0/>" + msg + "{3}</span></a></div>{4}", NodeID, xml.No, FK_Flow, xml.Name, Environment.NewLine, new Random().NextDouble(), this.FK_MapData));
+                            Pub1.AddLi(string.Format("<div><a href='Action.aspx?NodeID={0}&Event={1}&FK_Flow={2}&tk={5}&FK_MapData={6}&ShowType={7}'><span class='nav'><img src='/WF/Img/Event.png' border=0/>" + msg + "{3}</span></a></div>{4}", NodeID, xml.No, FK_Flow, xml.Name, Environment.NewLine, new Random().NextDouble(), this.FK_MapData, this.ShowType));
                         }
                     }
                     else
@@ -168,7 +168,7 @@ namespace CCFlow.WF.Admin
                         }
                         else
                         {
-                            Pub1.AddLi(string.Format("<div><a href='Action.aspx?NodeID={0}&Event={1}&FK_Flow={2}&MyPK={3}&tk={6}&FK_MapData={7}'><span class='nav'><img src='/WF/Img/Event.png' border=0/>" + msg + "{4}</span></a></div>{5}", NodeID, xml.No, FK_Flow, nde.MyPK, xml.Name, Environment.NewLine, new Random().NextDouble(), this.FK_MapData));
+                            Pub1.AddLi(string.Format("<div><a href='Action.aspx?NodeID={0}&Event={1}&FK_Flow={2}&MyPK={3}&tk={6}&FK_MapData={7}&ShowType={8}'><span class='nav'><img src='/WF/Img/Event.png' border=0/>" + msg + "{4}</span></a></div>{5}", NodeID, xml.No, FK_Flow, nde.MyPK, xml.Name, Environment.NewLine, new Random().NextDouble(), this.FK_MapData, this.ShowType));
                         }
                     }
                 }

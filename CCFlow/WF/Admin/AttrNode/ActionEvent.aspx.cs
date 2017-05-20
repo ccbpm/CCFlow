@@ -55,6 +55,14 @@ namespace CCFlow.WF.Admin
                 return this.Request.QueryString["FK_Flow"];
             }
         }
+        //事件类型，Node/Flow/Frm
+        public string ShowType
+        {
+            get
+            {
+                return this.Request.QueryString["ShowType"];
+            }
+        }
         #endregion
 
         #region 通用方法.
@@ -157,13 +165,12 @@ namespace CCFlow.WF.Admin
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            FrmEvents ndevs = new FrmEvents();
-            ndevs.Retrieve(FrmEventAttr.FK_MapData, this.FK_MapData);
+            FrmEvent mynde = new FrmEvent();
+            mynde.MyPK = (this.ShowType == "Flow" ? this.FK_Flow : this.FK_MapData) + "_" + this.Event;
 
-            FrmEvent mynde = ndevs.GetEntityByKey(FrmEventAttr.FK_Event, this.Event) as FrmEvent;
-            if (mynde == null)
+            if (mynde.RetrieveFromDBSources() == 0)
             {
-                mynde = new FrmEvent();
+                mynde.MyPK = string.Empty;
                 mynde.FK_Event = this.Event;
             }
 
@@ -181,7 +188,7 @@ namespace CCFlow.WF.Admin
             ddl.BindSysEnum("EventDoType");
             ddl.ID = "DDL_EventDoType";
             ddl.SetSelectItem((int)mynde.HisDoType);
-            ddl.Attributes["onchange"] = string.Format("location.href='ActionEvent.aspx?NodeID={0}&MyPK={1}&Event={2}&FK_MapData={3}&EventDoType=' + this.options[this.selectedIndex].value + '&tk=' + Math.random()", this.NodeID, this.MyPK, this.Event, this.FK_MapData);
+            ddl.Attributes["onchange"] = string.Format("location.href='ActionEvent.aspx?NodeID={0}&MyPK={1}&Event={2}&FK_MapData={3}&EventDoType=' + this.options[this.selectedIndex].value + '&ShowType={4}&FK_Flow={5}&tk=' + Math.random()", this.NodeID, this.MyPK, this.Event, this.FK_MapData, this.ShowType, this.FK_Flow);
             this.Pub1.AddTD(ddl);
             this.Pub1.AddTREnd();
 
@@ -203,11 +210,11 @@ namespace CCFlow.WF.Admin
                     {
                         case "BitmapCutter.Core.dll":
                         case "BP.Demo.dll":
-                            //   case "BP.En30.dll":
+                        //   case "BP.En30.dll":
                         case "BP.GPM.dll":
                         case "BP.GPMClient.dll":
                         case "BP.Web.Controls.dll":
-                            //  case "BP.WF.dll":
+                        //  case "BP.WF.dll":
                         case "CCFlow.dll":
                         case "ChineseConverter.dll":
                         case "FtpSupport.dll":
@@ -341,13 +348,13 @@ namespace CCFlow.WF.Admin
             btn.Click += new EventHandler(btn_Click);
             Pub1.Add(btn);
 
-            if (!string.IsNullOrWhiteSpace(this.MyPK))
+            if (!string.IsNullOrWhiteSpace(mynde.MyPK))
             {
                 Pub1.AddSpace(1);
                 Pub1.Add(
                     string.Format(
-                        "<a href='javascript:void(0)' onclick=\"DoDel('{2}','{0}','{1}')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-delete'\">删除</a>",
-                        NodeID, Event, FK_Flow));
+                        "<a href='javascript:void(0)' onclick=\"DoDel('{2}','{0}','{1}','{3}')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-delete'\">删除</a>",
+                        NodeID, Event, FK_Flow, ShowType));
             }
         }
         /// <summary>
@@ -458,7 +465,7 @@ namespace CCFlow.WF.Admin
             {
                 types = abl.GetTypes();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Response.Write("<script>alert('载入类出现错误：" + ex.Message + "');history.back();</script>");
                 return;
@@ -477,17 +484,18 @@ namespace CCFlow.WF.Admin
 
         void btn_Click(object sender, EventArgs e)
         {
+            string mypk = (this.ShowType == "Flow" ? this.FK_Flow : this.FK_MapData) + "_" + this.Event;
             FrmEvent fe = new FrmEvent();
-            fe.MyPK = this.FK_MapData + "_" + this.Event;
+            fe.MyPK = mypk;
             fe.RetrieveFromDBSources();
 
             string doc = this.Pub1.GetTextBoxByID("TB_Doc").Text.Trim();
 
             fe = (FrmEvent)this.Pub1.Copy(fe);
-            fe.MyPK = this.FK_MapData + "_" + this.Event;
+            fe.MyPK = mypk;
             fe.DoDoc = doc;
             fe.FK_Event = this.Event;
-            fe.FK_MapData = this.FK_MapData;
+            fe.FK_MapData = this.ShowType == "Flow" ? this.FK_Flow : this.FK_MapData;
             fe.HisDoType = (EventDoType)this.Pub1.GetDDLByID("DDL_EventDoType").SelectedItemIntVal;
             fe.MsgOKString = this.Pub1.GetTextBoxByID("TB_MsgOK").Text;
             fe.MsgErrorString = this.Pub1.GetTextBoxByID("TB_MsgErr").Text;
@@ -503,7 +511,7 @@ namespace CCFlow.WF.Admin
 
             fe.Save();
 
-            this.Response.Redirect("ActionEvent.aspx?NodeID=" + this.NodeID + "&MyPK=" + fe.MyPK + "&Event=" + this.Event + "&FK_MapData=" + this.FK_MapData + "&tk=" + new Random().NextDouble(), true);
+            this.Response.Redirect("ActionEvent.aspx?FK_Flow=" + this.FK_Flow + "&NodeID=" + this.NodeID + "&MyPK=" + fe.MyPK + "&Event=" + this.Event + "&FK_MapData=" + this.FK_MapData + "&ShowType=" + this.ShowType + "&tk=" + new Random().NextDouble(), true);
         }
     }
 }

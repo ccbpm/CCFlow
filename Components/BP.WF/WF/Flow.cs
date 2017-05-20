@@ -4160,6 +4160,24 @@ namespace BP.WF
             }
 
             FrmEvents fes = currNode.MapData.FrmEvents;
+            //增加对流程事件的支持，流程事件时，FrmEvent.FK_MapData=FK_Flow，added by liuxc,2017-05-20
+            switch(doType)
+            {
+                case EventListOfNode.FlowOverAfter:
+                case EventListOfNode.FlowOverBefore:
+                case EventListOfNode.AfterFlowDel:
+                case EventListOfNode.BeforeFlowDel:
+                    if (fes.GetEntityByKey(FrmEventAttr.FK_Event, doType) == null)
+                    {
+                        FrmEvents flowEvents = new FrmEvents();
+                        flowEvents.Retrieve(FrmEventAttr.FK_MapData, this.No);
+                        fes.AddEntities(flowEvents);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
             if (str == null)
                 str = fes.DoEventNode(doType, en, atPara);
 

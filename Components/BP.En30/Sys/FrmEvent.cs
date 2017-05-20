@@ -758,7 +758,7 @@ namespace BP.Sys
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.FK_MapData + "_" + this.FK_Event;
+            //this.MyPK = this.FK_MapData + "_" + this.FK_Event;
             return base.beforeUpdateInsertAction();
         }
     }

@@ -12,10 +12,10 @@
     <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script type="text/javascript">
-        function DoDel(flow, nodeid, xmlEvent) {
+        function DoDel(flow, nodeid, xmlEvent, showType) {
             if (window.confirm('您确认要删除吗?') == false)
                 return;
-            parent.window.location.href = 'Action.aspx?NodeID=' + nodeid + '&FK_MapData=ND' + nodeid + '&FK_Flow=' + flow + '&DoType=Del&RefXml=' + xmlEvent + '&tk=' + Math.random();
+            parent.window.location.href = 'Action.aspx?NodeID=' + nodeid + '&FK_MapData=ND' + nodeid + '&FK_Flow=' + flow + '&ShowType=' + showType + '&DoType=Del&RefXml=' + xmlEvent + '&tk=' + Math.random();
         }
     </script>
 </head>

@@ -176,9 +176,9 @@ namespace BP.WF
             if (currDBVer != null && currDBVer != "" && int.Parse(currDBVer) >= int.Parse(Ver))
                 return null; //不需要升级.
 
-            // 升级fromjson .
-            MapData md = new MapData();
-            md.FormJson = "";
+            // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
+            //MapData md = new MapData();
+            //md.FormJson = "";
 
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
 

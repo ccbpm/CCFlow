@@ -1,5 +1,5 @@
 ﻿// ********************** 根据关键字动态查询. ******************************** //
-var oldValue = "";
+var oldValue = ""; 
 var oid;
 var highlightindex = -1;
 function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {

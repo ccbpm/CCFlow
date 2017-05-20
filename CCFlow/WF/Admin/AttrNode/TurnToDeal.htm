@@ -43,14 +43,19 @@
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(data);
 
+                    var doc = data.TurnToDealDoc.replace('~', '\'');
+                    doc = doc.replace('~', '\'');
+                    doc = doc.replace('~', '\'');
+                    doc = doc.replace('~', '\'');
+
                     switch (data.TurnToDeal) {
                         case '0':
                         case '1':
-                            $('#TB_SpecMsg').val(data.TurnToDealDoc);
+                            $('#TB_SpecMsg').val(doc);
                             break;
                         case '2':
                         case '3':
-                            $('#TB_SpecURL').val(data.TurnToDealDoc);
+                            $('#TB_SpecURL').val(doc);
                             break;
                         default:
                     }

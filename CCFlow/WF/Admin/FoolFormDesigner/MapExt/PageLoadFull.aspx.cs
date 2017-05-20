@@ -39,16 +39,9 @@ namespace CCFlow.WF.MapDef.MapExtUI
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            BindPageLoadFull();
-        }
-        /// <summary>
-        /// BindPageLoadFull
-        /// </summary>
-        public void BindPageLoadFull()
-        {
+         
             MapExt me = new MapExt();
-            me.MyPK = this.FK_MapData + "_" + MapExtXmlList.PageLoadFull;
-            me.RetrieveFromDBSources();
+            me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.FK_MapData);
 
             this.Pub1.AddTable("class='Table' cellspacing='0' cellpadding='0' border='0' style='width:100%'");
             this.Pub1.AddTR();
@@ -130,10 +123,12 @@ namespace CCFlow.WF.MapDef.MapExtUI
         void btn_SavePageLoadFull_Click(object sender, EventArgs e)
         {
             MapExt me = new MapExt();
-            me.MyPK = this.FK_MapData + "_" + MapExtXmlList.PageLoadFull;
+
+            me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.FK_MapData);
+            me.RetrieveFromDBSources();
+
             me.FK_MapData = this.FK_MapData;
             me.ExtType = MapExtXmlList.PageLoadFull;
-            me.RetrieveFromDBSources();
 
             me.Tag = this.Pub1.GetTextBoxByID("TB_" + MapExtAttr.Tag).Text;
             string sql = "";
@@ -144,7 +139,7 @@ namespace CCFlow.WF.MapDef.MapExtUI
             }
             me.Tag1 = sql;
 
-            me.MyPK = this.FK_MapData + "_" + MapExtXmlList.PageLoadFull;
+            me.MyPK = MapExtXmlList.PageLoadFull + "_" + this.FK_MapData;
 
             string info = me.Tag1 + me.Tag;
             if (string.IsNullOrEmpty(info))

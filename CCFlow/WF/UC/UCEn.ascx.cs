@@ -651,6 +651,7 @@ namespace CCFlow.WF.UC
             this.LinkFields = "";
             if (mes.Count == 0)
                 return;
+
             foreach (MapExt myitem in mes)
             {
                 if (myitem.ExtType == MapExtXmlList.Link)

@@ -2493,6 +2493,7 @@
     <Content Include="WF\Comm\RefFunc\Dot2Dot.aspx" />
     <Content Include="WF\Comm\RefFunc\Dot2DotSearch.htm" />
     <Content Include="WF\Comm\RefFunc\Dot2DotSingle.aspx" />
+    <Content Include="WF\Comm\RefFunc\Dot2DotStationModel.htm" />
     <Content Include="WF\Comm\RefFunc\Dot2DotTreeDeptEmpModel.htm" />
     <Content Include="WF\Comm\RefFunc\Dot2DotTreeDeptModel.htm" />
     <Content Include="WF\Comm\RefFunc\Dtl.ascx" />
@@ -7451,8 +7452,6 @@
     <Content Include="WF\UC\UCEn.ascx" />
     <Content Include="WF\UC\WFRpt.ascx" />
     <Content Include="WF\WebOffice\AttachOffice.aspx" />
-    <Content Include="WF\WebOffice\Default.aspx" />
-    <Content Include="WF\WebOffice\Main.aspx" />
     <Content Include="WF\WebOffice\OfficeServices.ashx" />
     <Content Include="WF\WebOffice\OfficeView.aspx" />
     <Content Include="WF\WebOffice\TempLate.aspx" />
@@ -10167,6 +10166,7 @@
     <Compile Include="WF\Comm\UIEn.aspx.designer.cs">
       <DependentUpon>UIEn.aspx</DependentUpon>
     </Compile>
+    <Compile Include="WF\Comm\Utilities\NpoiFuncs.cs" />
     <Compile Include="WF\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10810,20 +10810,6 @@
     <Compile Include="WF\WebOffice\AttachOffice.aspx.designer.cs">
       <DependentUpon>AttachOffice.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WebOffice\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WebOffice\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WebOffice\Main.aspx.cs">
-      <DependentUpon>Main.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WebOffice\Main.aspx.designer.cs">
-      <DependentUpon>Main.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WebOffice\OfficeServices.ashx.cs">
       <DependentUpon>OfficeServices.ashx</DependentUpon>
     </Compile>
@@ -11181,12 +11167,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\SubFlow.aspx.designer.cs">
       <DependentUpon>SubFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\TestOffice.aspx.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\TestOffice.aspx.designer.cs">
-      <DependentUpon>TestOffice.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\Thread.aspx.cs">
       <DependentUpon>Thread.aspx</DependentUpon>

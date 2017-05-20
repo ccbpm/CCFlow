@@ -581,14 +581,50 @@ namespace CCFlow.WF.Rpt
 
                         foreach (MapAttr attr in attrs)
                         {
-                            myDT.Columns.Add(new DataColumn(attr.Name, typeof(string)));
+                            if (attr.KeyOfEn == "MyNum")
+                                continue;
+
+                            Type t = null;
+
+                            switch(attr.LGType)
+                            {
+                                case FieldTypeS.Normal:
+                                    switch (attr.MyDataType)
+                                    {
+                                        case BP.DA.DataType.AppInt:
+                                            t = typeof (int);
+                                            break;
+                                        case BP.DA.DataType.AppFloat:
+                                        case BP.DA.DataType.AppDouble:
+                                        case BP.DA.DataType.AppMoney:
+                                            t = typeof (double);
+                                            break;
+                                        default:
+                                            t = typeof (string);
+                                            break;
+                                    }
+                                    break;
+                                default:
+                                    t = typeof(string);
+                                    break;
+                            }
+
+                            myDT.Columns.Add(new DataColumn(attr.Name, t));
+                            myDT.Columns[attr.Name].ExtendedProperties.Add("width", attr.UIWidthInt);
+
+                            if (attr.IsNum && attr.LGType == FieldTypeS.Normal && "OID,FID,PWorkID,FlowEndNode,PNodeID".IndexOf(attr.KeyOfEn) == -1)
+                                myDT.Columns[attr.Name].ExtendedProperties.Add("sum", attr.IsSum);
                         }
 
                         foreach (DataRow dr in dt.Rows)
                         {
                             DataRow myDR = myDT.NewRow();
+
                             foreach (MapAttr attr in attrs)
                             {
+                                if (attr.KeyOfEn == "MyNum")
+                                    continue;
+
                                 switch (attr.LGType)
                                 {
                                     case FieldTypeS.Normal:
@@ -609,7 +645,6 @@ namespace CCFlow.WF.Rpt
                                                 else
                                                     myDR[attr.Name] = "是";
                                                 break;
-
                                         }
                                         break;
                                     case FieldTypeS.Enum:
@@ -632,9 +667,7 @@ namespace CCFlow.WF.Rpt
                                         break;
                                     case FieldTypeS.WinOpen:
                                         break;
-
                                 }
-
                             }
 
                             myDT.Rows.Add(myDR);
@@ -642,7 +675,10 @@ namespace CCFlow.WF.Rpt
 
                         try
                         {
-                            ExportDGToExcel(myDT, en.EnDesc);
+                            string filename = this.Request.PhysicalApplicationPath + @"\Temp\" + en.EnDesc + "_" +
+                                              DateTime.Today.ToString("yyyy年MM月dd日") + ".xls";
+                            CCFlow.WF.Comm.Utilities.NpoiFuncs.DataTableToExcel(myDT, filename, en.EnDesc,
+                                                                                BP.Web.WebUser.Name, true, true, true);
                         }
                         catch (Exception ex)
                         {

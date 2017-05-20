@@ -339,7 +339,8 @@ namespace CCFlow.Web.Comm
                 using (FileStream fs = new FileStream(filename, FileMode.Create))
                 {
                     HSSFWorkbook wb = new HSSFWorkbook();
-                    ISheet sheet = wb.CreateSheet("sheet1");
+                    ISheet sheet = wb.CreateSheet("Sheet1");
+                    sheet.DefaultRowHeightInPoints = 20;
                     IRow row = sheet.CreateRow(1);
                     IRow frow = sheet.CreateRow(0);
                     IRow lrow = sheet.CreateRow(2 + dt.Rows.Count);
@@ -351,6 +352,16 @@ namespace CCFlow.Web.Comm
                     Attrs attrs = en.EnMap.Attrs;
                     Attrs selectedAttrs = null;
                     UIConfig cfg = new UIConfig(en);
+                    float charWidth = 0;
+
+                    //一个字符的像素宽度，以Arial，10磅，i进行测算
+                    using (Bitmap bmp = new Bitmap(10, 10))
+                    {
+                        using (Graphics g = Graphics.FromImage(bmp))
+                        {
+                            charWidth = g.MeasureString("i", new Font("Arial", 10)).Width;
+                        }
+                    }
 
                     //要显示的列
                     if (cfg.ShowColumns.Length == 0)
@@ -379,6 +390,8 @@ namespace CCFlow.Web.Comm
                         }
                     }
                     //输出列标题头
+                    row.HeightInPoints = 20;
+
                     foreach (Attr attr in selectedAttrs)
                     {
                         if (attr.UIVisible == false)
@@ -395,7 +408,9 @@ namespace CCFlow.Web.Comm
                         cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
                         cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
                         cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+                        cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
                         cell.CellStyle.SetFont(font);
+                        sheet.SetColumnWidth(c - 1, (int)(Math.Ceiling(attr.UIWidthInt / charWidth) + 0.72) * 256);
 
                         frow.CreateCell(c - 1);
                         lrow.CreateCell(c - 1);
@@ -406,21 +421,27 @@ namespace CCFlow.Web.Comm
                     cell.SetCellValue(en.EnDesc);
                     cell.CellStyle = wb.CreateCellStyle();
                     cell.CellStyle.Alignment = HorizontalAlignment.Center;
+                    cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
                     font = wb.CreateFont();
+                    font.FontHeightInPoints = 12;
                     font.IsBold = true;
                     cell.CellStyle.SetFont(font);
+                    frow.HeightInPoints = 26;
                     //输出制表人
                     sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(2 + dt.Rows.Count, 2 + dt.Rows.Count, 0, c - 1));
                     cell = lrow.GetCell(0);
                     cell.SetCellValue("制表人：" + WebUser.Name);
                     cell.CellStyle = wb.CreateCellStyle();
                     cell.CellStyle.Alignment = HorizontalAlignment.Right;
+                    cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                    lrow.HeightInPoints = 20;
 
                     r = 2;
                     //输出查询结果
                     foreach (DataRow dr in dt.Rows)
                     {
                         row = sheet.CreateRow(r++);
+                        row.HeightInPoints = 20;
                         c = 0;
 
                         foreach (Attr attr in selectedAttrs)
@@ -437,6 +458,7 @@ namespace CCFlow.Web.Comm
                             cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
                             cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
                             cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+                            cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
 
                             if (attr.IsFKorEnum)
                             {

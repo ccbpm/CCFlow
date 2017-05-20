@@ -129,10 +129,10 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
+            updataNote += "20170520.附件删除规则修复";
             updataNote += "20170519.升级打印，修改BillTemplate中的Url为TempFilePath by:dgq";
             updataNote += "20170421.升级表单，给FrmImg中的ImgSrcType赋值 by:liuxianchen";
             updataNote += "20170217.影子字段";
-            updataNote += "20161104.附件删除规则修复";
             updataNote += "20161101.升级表单，增加图片附件必填验证 by:liuxianchen";
             updataNote += "20161018.升级用户表密码加密.";
             updataNote += "20160515.升级表单引擎绑定，去掉Isedit列.";
@@ -168,7 +168,6 @@ namespace BP.WF
              * 1, 执行一次Sender发送人的升级，原来由GenerWorkerList 转入WF_GenerWorkFlow.
              * 0, 静默升级启用日期.2014-12
              */
-
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
 
@@ -699,19 +698,18 @@ namespace BP.WF
                 BP.DA.DBAccess.RunSQL(sql);
                 #endregion
 
-                #region 20161104.附件删除规则修复
-
-                
-                //try
-                //{
-                //    DataColumn columns = src.GetColumns("Sys_FrmAttachment");
-                //    if (columns.Select("No='DeleteWay'").Length > 0 && columns.Select("No='IsDelete'").Length > 0)
-                //    {
-                //        DBAccess.RunSQL("UPDATE SYS_FRMATTACHMENT SET DeleteWay=IsDelete WHERE DeleteWay IS NULL");
-                //    }
-                //}
-                //catch { 
-                //}
+                #region 20170520.附件删除规则修复
+                try
+                {
+                    DataTable columns = src.GetColumns("Sys_FrmAttachment");
+                    if (columns.Select("No='DeleteWay'").Length > 0 && columns.Select("No='IsDelete'").Length > 0)
+                    {
+                        DBAccess.RunSQL("UPDATE SYS_FRMATTACHMENT SET DeleteWay=IsDelete WHERE DeleteWay IS NULL");
+                    }
+                }
+                catch
+                {
+                }
                 #endregion
 
                 #region 密码加密

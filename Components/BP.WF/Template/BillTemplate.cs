@@ -247,8 +247,10 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(BillTemplateAttr.BillFileType, 0, "生成的文件类型", true, false,
                     "BillFileType","@0=Word@1=PDF@2=Excel(未完成)@3=Html(未完成)@5=锐浪报表");
+
                 map.AddDDLSysEnum(BillTemplateAttr.BillOpenModel, 0, "生成的文件打开方式", true, false,
                     "BillOpenModel", "@0=下载本地@1=在线WebOffice打开");
+
                 map.AddTBString(BillTemplateAttr.FK_BillType, null, "单据类型", true, false, 0, 4, 4);
 
                 map.AddTBString("IDX", null, "IDX", false, false, 0, 200, 20);

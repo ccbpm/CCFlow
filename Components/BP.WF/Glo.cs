@@ -185,8 +185,18 @@ namespace BP.WF
             string msg = "";
             try
             {
+                // 升级fromjson, 第一次安装的时候，不能自动产生这这个字段.
+                MapData mdT = new MapData();
+                mdT.FormJson = "";
+
+                Flow fl = new Flow();
+                fl.FlowJson = "";
+
                 //2017.5.19 打印模板字段修复
+                BP.WF.Template.BillTemplate bt = new BillTemplate();
+                bt.CheckPhysicsTable();
                 DBAccess.RunSQL("UPDATE WF_BillTemplate SET TempFilePath = Url WHERE TempFilePath IS null");
+
                 //规范升级根目录
                 DataTable dttree = DBAccess.RunSQLReturnTable("SELECT No FROM Sys_FormTree WHERE ParentNo='-1' ");
                 if (dttree.Rows.Count == 1)
@@ -1182,6 +1192,8 @@ namespace BP.WF
                     }
                 }
             }
+
+
             #endregion 如果是第一次运行，就执行检查。
         }
         /// <summary>

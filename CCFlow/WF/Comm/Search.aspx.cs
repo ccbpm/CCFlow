@@ -352,6 +352,7 @@ namespace CCFlow.Web.Comm
                     Attrs selectedAttrs = null;
                     UIConfig cfg = new UIConfig(en);
 
+                    //要显示的列
                     if (cfg.ShowColumns.Length == 0)
                     {
                         selectedAttrs = attrs;
@@ -377,7 +378,7 @@ namespace CCFlow.Web.Comm
                                 selectedAttrs.Add(attr);
                         }
                     }
-
+                    //输出列标题头
                     foreach (Attr attr in selectedAttrs)
                     {
                         if (attr.UIVisible == false)
@@ -399,7 +400,7 @@ namespace CCFlow.Web.Comm
                         frow.CreateCell(c - 1);
                         lrow.CreateCell(c - 1);
                     }
-
+                    //输出文件标题头
                     sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 0, 0, c - 1));
                     cell = frow.GetCell(0);
                     cell.SetCellValue(en.EnDesc);
@@ -408,7 +409,7 @@ namespace CCFlow.Web.Comm
                     font = wb.CreateFont();
                     font.IsBold = true;
                     cell.CellStyle.SetFont(font);
-
+                    //输出制表人
                     sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(2 + dt.Rows.Count, 2 + dt.Rows.Count, 0, c - 1));
                     cell = lrow.GetCell(0);
                     cell.SetCellValue("制表人：" + WebUser.Name);
@@ -416,8 +417,8 @@ namespace CCFlow.Web.Comm
                     cell.CellStyle.Alignment = HorizontalAlignment.Right;
 
                     r = 2;
-
-                    foreach (DataRow dr in qo.DoQueryToTable().Rows)
+                    //输出查询结果
+                    foreach (DataRow dr in dt.Rows)
                     {
                         row = sheet.CreateRow(r++);
                         c = 0;
@@ -477,7 +478,7 @@ namespace CCFlow.Web.Comm
 
                 if (!"firefox".Contains(Request.Browser.Browser.ToLower()))
                     name = HttpUtility.UrlEncode(name);
-
+                //弹出下载
                 Response.AddHeader("Content-Length", len.ToString());
                 Response.ContentType = "application/octet-stream";
                 Response.AddHeader("Content-Disposition", "attachment; filename=" + name);

@@ -1333,6 +1333,7 @@ namespace BP.WF
                     else
                         s += "?1=1";
                 }
+                s = s.Replace("~", "'");
                 return s;
             }
             set

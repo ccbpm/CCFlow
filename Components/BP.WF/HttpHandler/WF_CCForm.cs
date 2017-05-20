@@ -505,8 +505,7 @@ namespace BP.WF.HttpHandler
 
             //执行装载填充.
             MapExt me = new MapExt();
-            me.MyPK = this.EnsName + "_" + MapExtXmlList.PageLoadFull;
-            if (me.RetrieveFromDBSources() == 1)
+            if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.EnsName) == 1)
             {
                 //执行通用的装载方法.
                 MapAttrs attrs = new MapAttrs(this.EnsName);

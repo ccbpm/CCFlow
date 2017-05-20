@@ -169,12 +169,18 @@ namespace BP.WF.Template
                 map.AddDDLEntities(MapFrmFreeAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
                 map.AddDDLEntities(MapFrmFreeAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
 
+                //宽度高度.
+                map.AddTBInt(MapFrmFreeAttr.FrmW, 900, "宽度", true, false);
+                map.AddTBInt(MapFrmFreeAttr.FrmH, 1200, "高度", true, false);
+
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapFrmFreeAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型", true, false, MapFrmFreeAttr.FrmType);
                 #endregion 基本属性.
 
                 #region 模版属性。
                 map.AddTBString(MapFrmFreeAttr.TemplaterVer, null, "模版编号", true, false, 0, 30, 20);
+
+
                 #endregion 模版属性。
 
                 #region 设计者信息.

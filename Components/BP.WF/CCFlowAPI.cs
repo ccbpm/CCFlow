@@ -175,12 +175,11 @@ namespace BP.WF
 
                 //执行装载填充.
                 MapExt me = new MapExt();
-                me.MyPK = wk.NodeFrmID + "_" + MapExtXmlList.PageLoadFull;
-                if (me.RetrieveFromDBSources() == 1)
+                if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, wk.NodeFrmID) == 1)
                 {
                     //执行通用的装载方法.
                     MapAttrs attrs = new MapAttrs("ND" + fk_node);
-                    MapDtls dtls=new MapDtls( "ND"+fk_node);
+                    MapDtls dtls = new MapDtls("ND" + fk_node);
                     wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as Work;
                 }
 

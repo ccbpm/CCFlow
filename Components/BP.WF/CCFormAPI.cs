@@ -456,14 +456,14 @@ namespace BP.WF
 
 			//执行装载填充.
 			me = new MapExt();
-			me.MyPK = frmID + "_" + MapExtXmlList.PageLoadFull;
-			if (me.RetrieveFromDBSources() == 1)
-			{
-				//执行通用的装载方法.
-				MapAttrs attrs = new MapAttrs(frmID);
-				MapDtls dtls = new MapDtls(frmID);
-				wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as GEEntity;
-			}
+
+            if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, frmID) == 1)
+            {
+                //执行通用的装载方法.
+                MapAttrs attrs = new MapAttrs(frmID);
+                MapDtls dtls = new MapDtls(frmID);
+                wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as GEEntity;
+            }
 
 			//增加主表数据.
 			DataTable mainTable = wk.ToDataTableField(md.No);

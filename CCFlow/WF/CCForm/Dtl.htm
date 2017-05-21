@@ -156,12 +156,12 @@
                     var tmplate = figure_MapAttr_Template(o.data());
                     tmplate.data({ KeyOfEn: o.data().KeyOfEn });
                     tmplate.attr('id', tmplate.attr('name') + "_" + newRowIndex);
-                    if (tmplate.attr('name').indexOf('TB_') == 0) {
+                    if (tmplate.attr('name')!=undefined && tmplate.attr('name').indexOf('TB_') == 0) {
                         $(tmplate).bind('blur', function (obj) {
                             $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
                                 $(obj.target).val();
                         });
-                    } else if (tmplate.attr('name').indexOf('DDL_') == 0) {
+                    } else if (tmplate.attr('name')!=undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
                         $(tmplate).bind('change', function (obj) {
                             $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
                                 $(obj.target).val();
@@ -182,7 +182,12 @@
                             $(tmplate).children().remove();
                             $(tmplate).append(option);
                         }
-                    }
+                    }else if (tmplate.attr('name') !=undefined &&tmplate.find('[name^=CB_]') == 0) {
+                                            $(tmplate).find('[name^=CB_]').bind('checked', function (obj) {
+                                                $(obj.target).parent().parent().parent().data().data[$(obj.target).data().KeyOfEn] =
+                                                    $(tmplate).find('[name^=CB_]')[0].checked;
+                                            });
+                                        }
 
                     
 
@@ -367,6 +372,15 @@
                                         var rowIndex = (parseInt($($(tbodyTrObj).find('td')[0]).text()) - 1);
                                         //先写出 NAME   单选扭会出问题
                                         tmplate.attr('id', tmplate.attr('name') + '_' + rowIndex);
+                                        
+                                        //处理复选框
+                                         var ckEle=tmplate.find('[name=CB_'+o.data().KeyOfEn+']');
+                                        if (ckEle.length==1){
+                                        var ckId='CB_'+o.data().KeyOfEn+'_'+rowIndex;
+                                        ckEle.attr('id',ckId);
+                                        tmplate.find('label').attr('for',ckId);
+                                        }
+                                        //处理单选按钮。。。 还没做
 
                                         var textVal = $($(tbodyTrObj).children('td')[k]).text();
                                         tmplate.val(textVal);
@@ -374,12 +388,12 @@
                                         $($(tbodyTrObj).children('td')[k]).text('');
                                         $($(tbodyTrObj).children('td')[k]).append(tmplate);
 
-                                        if (tmplate.attr('name').indexOf('TB_') == 0) {
+                                        if (tmplate.attr('name') !=undefined &&tmplate.attr('name').indexOf('TB_') == 0) {
                                             $(tmplate).bind('blur', function (obj) {
                                                 $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
                                                     $(obj.target).val();
                                             });
-                                        } else if (tmplate.attr('name').indexOf('DDL_') == 0) {
+                                        } else if (tmplate.attr('name') !=undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
                                             //对于只读的下拉框做如下处理  为只读的下拉框赋值
                                             if (o.data().UIIsEnable == "0") {
                                                 var ddlValue = $(tbodyTrObj).data().data[o.data().KeyOfEn];
@@ -393,6 +407,11 @@
                                                         $(obj.target).val();
                                                 });
                                             }
+                                        }else if (tmplate.attr('name') !=undefined &&tmplate.find('[name^=CB_]') == 0) {
+                                            $(tmplate).find('[name^=CB_]').bind('checked', function (obj) {
+                                                $(obj.target).parent().parent().parent().data().data[$(obj.target).data().KeyOfEn] =
+                                                    $(tmplate).find('[name^=CB_]')[0].checked;
+                                            });
                                         }
                                     }
                                 });
@@ -450,6 +469,7 @@
                 tdObj = $(tdObj);
                 var text = tdObj.find('input[type=text]');
                 var select = tdObj.find('select');
+                var checkbox=tdObj.find('input[type=checkbox]');
 
                 var keyOfEn = '', value = '';
                 if (text.length == 1) {
@@ -463,6 +483,13 @@
                     if (name.indexOf('DDL_') == 0) {
                         keyOfEn = name.substring(4);
                         value = select.val();
+                    }
+                }
+                 else if (checkbox.length == 1) {
+                    var name = checkbox.attr('name');
+                    if (name.indexOf('CB_') == 0) {
+                        keyOfEn = name.substring(3);
+                        var value= checkbox[0].checked==true?1:0;
                     }
                 }
                 //
@@ -486,6 +513,7 @@
                 tdObj = $(tdObj);
                 var text = tdObj.find('input[type=text]');
                 var select = tdObj.find('select');
+                var checkbox=tdObj.find('input[type=checkbox]');
 
                 var keyOfEn = '', value = '',ddlText='';
                 if (text.length == 1) {
@@ -513,8 +541,13 @@
                             select.val(trData[keyOfEn]);
                         }
                     }
-
-
+                } else if (checkbox.length == 1) {
+                    var name = checkbox.attr('name');
+                    if (name.indexOf('CB_') == 0) {
+                        keyOfEn = name.substring(3);
+                        checkbox[0].checked=trData[keyOfEn];
+                        //alert(trData[keyOfEn])
+                    }
                 }
             });
         }

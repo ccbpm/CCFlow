@@ -2437,18 +2437,9 @@ namespace CCFlow.WF.UC
                     string myurl = firstwn.HisNode.TurnToDealDoc.Clone().ToString();
                     if (myurl.Contains("?") == false)
                         myurl += "?1=1";
-                    Attrs myattrs = firstwn.HisWork.EnMap.Attrs;
-                    Work hisWK = firstwn.HisWork;
-                    foreach (Attr attr in myattrs)
-                    {
-                        if (myurl.Contains("@") == false)
-                            break;
-                        myurl = myurl.Replace("@" + attr.Key, hisWK.GetValStrByKey(attr.Key));
-                    }
-                    myurl = myurl.Replace("@WebUser.No", BP.Web.WebUser.No);
-                    myurl = myurl.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                    myurl = myurl.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
+                    Work hisWK = firstwn.HisWork;
+                    myurl = BP.WF.Glo.DealExp(myurl, hisWK, null);
                     if (myurl.Contains("@"))
                     {
                         BP.WF.Dev2Interface.Port_SendMsg("admin", currFlow.Name + "在" + currND.Name + "节点处，出现错误", "流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl, "Err" + currND.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);

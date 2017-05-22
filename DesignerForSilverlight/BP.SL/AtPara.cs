@@ -117,7 +117,7 @@ namespace BP.DA
                 return false;
             return true;
         }
-        public int GetValIntByKey(string key)
+        public int GetValIntByKey(string key, int isNullAsVal = 0)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace BP.DA
             }
             catch
             {
-                return 0;
+                return isNullAsVal;
             }
         }
         private Dictionary<string,object> _HisHT = null;

@@ -52,6 +52,7 @@ namespace CCForm
 
         public string KeyName = null;
         public string UIBindKey = null;
+        public string AtPara { get; set; }
         protected override void OnClick()
         {
             base.OnClick();

@@ -44,6 +44,7 @@ namespace CCForm
         public MouseButtonEventHandler LeftUp { get; set; }
         public string KeyName = null;
         public string UIBindKey = null;
+        public string AtPara { get; set; }
         /// <summary>
         /// BPCheckBox
         /// </summary>

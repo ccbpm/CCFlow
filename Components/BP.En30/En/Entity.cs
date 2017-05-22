@@ -1544,9 +1544,9 @@ namespace BP.En
 		{
 			return atPara.GetValIntByKey(key, isNullAsVal);
 		}
-		public float GetParaFloat(string key)
+		public float GetParaFloat(string key, float isNullAsVal = 0)
 		{
-			return atPara.GetValFloatByKey(key);
+			return atPara.GetValFloatByKey(key, isNullAsVal);
 		}
 		/// <summary>
 		/// 获取参数boolen值

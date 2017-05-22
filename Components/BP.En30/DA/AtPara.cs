@@ -116,7 +116,7 @@ namespace BP.DA
                 return isNullAsVal;
             }
         }
-        public float GetValFloatByKey(string key)
+        public float GetValFloatByKey(string key, float isNullAsVal = 0)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace BP.DA
             }
             catch
             {
-                return 0;
+                return isNullAsVal;
             }
         }
         public int GetValIntByKey(string key, int isNullAsVal=0)

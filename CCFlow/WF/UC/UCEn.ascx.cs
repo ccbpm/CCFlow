@@ -3565,6 +3565,7 @@ namespace CCFlow.WF.UC
                                 cb.Checked = attr.DefValOfBool;
                                 cb.Enabled = attr.UIIsEnable;
                                 cb.Checked = en.GetValBooleanByKey(attr.KeyOfEn);
+                                cb.Font.Size = new FontUnit(attr.GetParaInt(MapAttrAttr.FontSize, 12), UnitType.Pixel);
                                 if ((cb.Enabled == false && activeFilds.Contains(attr.KeyOfEn + ",") == false) || isReadonly == true)
                                 {
                                     cb.Enabled = false;
@@ -3893,6 +3894,7 @@ namespace CCFlow.WF.UC
                 rbCtl.ID = "RB_" + rb.KeyOfEn + "_" + rb.IntKey.ToString();
                 rbCtl.GroupName = rb.KeyOfEn;
                 rbCtl.Text = rb.Lab;
+                rbCtl.Font.Size = new FontUnit(rb.FontSize, UnitType.Pixel);
                 this.Add(rbCtl);
 
                 if (attrRB.KeyOfEn != rb.KeyOfEn)
@@ -4226,7 +4228,7 @@ namespace CCFlow.WF.UC
                     if (athDB != null)
                     {
                         if (ath.IsWoEnableWF)
-                            lab.Text = "<a  href=\"javascript:OpenOfiice('" + athDB.FK_FrmAttachment + "','" + this.HisEn.GetValStrByKey("OID") + "','" + athDB.MyPK + "','" + this.FK_MapData + "','" + ath.NoOfObj + "','" + node + "')\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName + "</a>";
+                            lab.Text = "<a  href=\"javascript:OpenOfiice('" + athDB.FK_FrmAttachment + "','" + this.HisEn.GetValStrByKey("OID") + "','" + athDB.MyPK + "','" + this.FK_MapData + "','" + ath.NoOfObj + "','" + node + "','" + athDB.FileExts + "')\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName + "</a>";
                         else
                             lab.Text = "<img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + athDB.FileExts + ".gif' border=0/>" + athDB.FileName;
                     }
@@ -4633,7 +4635,7 @@ namespace CCFlow.WF.UC
                     if (lab != null)
                     {
                         if (frmAth.IsWoEnableWF)
-                            lab.Text = "<a href=\"javascript:OpenOfiice('" + dbUpload.FK_FrmAttachment + "','" + this.HisEn.GetValStrByKey("OID") + "','" + dbUpload.MyPK + "','" + this.FK_MapData + "','" + frmAth.NoOfObj + "','" + this.FK_Node + "')\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + dbUpload.FileExts + ".gif' border=0/>" + dbUpload.FileName + "</a>";
+                            lab.Text = "<a href=\"javascript:OpenOfiice('" + dbUpload.FK_FrmAttachment + "','" + this.HisEn.GetValStrByKey("OID") + "','" + dbUpload.MyPK + "','" + this.FK_MapData + "','" + frmAth.NoOfObj + "','" + this.FK_Node + "','" + dbUpload.FileExts + "')\"><img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + dbUpload.FileExts + ".gif' border=0/>" + dbUpload.FileName + "</a>";
                         else
                             lab.Text = "<img src='" + BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/" + dbUpload.FileExts + ".gif' border=0/>" + dbUpload.FileName;
                     }

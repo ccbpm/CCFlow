@@ -51,6 +51,11 @@ namespace BP.Sys
         public const string GUID = "GUID";
         public const string Tip = "Tip";
 
+        public const string AtPara = "AtPara";
+        /// <summary>
+        /// 字体大小，AtPara中属性，added by liuxc,2017-05-22
+        /// </summary>
+        public const string FontSize = "FontSize";
     }
     /// <summary>
     /// 单选框
@@ -181,6 +186,17 @@ namespace BP.Sys
                 this.SetValByKey(FrmRBAttr.EnumKey, value);
             }
         }
+        public int FontSize
+        {
+            get
+            {
+                return this.GetParaInt(FrmRBAttr.FontSize, 12);
+            }
+            set
+            {
+                this.SetPara(FrmRBAttr.FontSize, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -226,6 +242,7 @@ namespace BP.Sys
                 map.AddTBString(FrmRBAttr.Tip, null, "选择后提示的信息", true, false, 0, 1000, 20);
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
+                map.AddTBAtParas(1000);
 
                 this._enMap = map;
                 return this._enMap;

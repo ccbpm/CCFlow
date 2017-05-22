@@ -15,7 +15,26 @@
     <script type="text/javascript">
         var DtlsLoadedCount = 0;    //已加载明细表数量
 
-        function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
+        function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node, ext) {
+            //only doc/docx ath can be opend by weboffice,added by liuxc,2017-05-20
+            if ("doc,docx".indexOf(ext.toLowerCase()) == -1) {
+                $("input[id$='Btn_Download_" + delPKVal + "']").click();
+                return;
+            }
+
+            var isInstallWebOffice;
+            //判断是否安装了weboffice插件，没安装，则不予打开编辑窗口，added by liuxc,2017-05-20
+            try{
+                var a = new ActiveXObject("WEBOFFICE.WebOfficeCtrl.1");
+                isInstallWebOffice = true;
+            }
+            catch(e){
+                isInstallWebOffice = false;
+                alert("WebOffice插件未安装，不能在线打开.doc/.docx附件进行编辑，请先安装WebOffice插件，本次将直接打开下载！");
+                $("input[id$='Btn_Download_" + delPKVal + "']").click();
+                return;
+            }
+
             var date = new Date();
             var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
 

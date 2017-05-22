@@ -1335,6 +1335,8 @@ namespace CCForm
                                         btn.SetValue(Canvas.LeftProperty, (double)dr["X"]);
                                         btn.SetValue(Canvas.TopProperty, (double)dr["Y"]);
 
+                                        btn.AtPara = (string)dr["ATPARA"];
+                                        btn.FontSize = new BP.DA.AtPara(btn.AtPara).GetValIntByKey("FontSize", 12);
 
                                         attachElementEvent(btn);
                                     }
@@ -1460,6 +1462,9 @@ namespace CCForm
                                                     Name = keyOfEn,
                                                     KeyName = text
                                                 };
+
+                                                cb.AtPara = (string) dr["ATPARA"];
+                                                cb.FontSize = new BP.DA.AtPara(cb.AtPara).GetValIntByKey("FontSize", 12);
 
                                                 cb.Content = new Label()
                                                 {
@@ -1903,6 +1908,7 @@ namespace CCForm
             //   mapAttrDT.Columns.Add(new DataColumn("UIVISIBLE", typeof(string)));
             mapAttrDT.Columns.Add(new DataColumn("X", typeof(double)));
             mapAttrDT.Columns.Add(new DataColumn("Y", typeof(double)));
+            mapAttrDT.Columns.Add(new DataColumn("ATPARA", typeof (string)));
             #endregion mapAttrDT
 
             #region frmRBDT
@@ -1916,6 +1922,7 @@ namespace CCForm
             dtRdb.Columns.Add(new DataColumn("LAB", typeof(string)));
             dtRdb.Columns.Add(new DataColumn("X", typeof(double)));
             dtRdb.Columns.Add(new DataColumn("Y", typeof(double)));
+            dtRdb.Columns.Add(new DataColumn("ATPARA", typeof (string)));
             #endregion frmRBDT
 
             #region Dtl
@@ -2495,6 +2502,10 @@ namespace CCForm
                         mapAttrDR["UIWIDTH"] = "100";
                         mapAttrDR["UIHEIGHT"] = "23";
 
+                        BP.DA.AtPara ap = new BP.DA.AtPara(cb.AtPara);
+                        ap.SetVal("FontSize", Math.Floor(cb.FontSize).ToString());
+                        mapAttrDR["ATPARA"] = ap.GenerAtParaStrs();
+
                         dtMapAttr.Rows.Add(mapAttrDR);
                     }
                     #endregion
@@ -2515,6 +2526,11 @@ namespace CCForm
                         mapAttrRB["ENUMKEY"] = rb.UIBindKey;
                         mapAttrRB["X"] = x.ToString("0.00");
                         mapAttrRB["Y"] = y.ToString("0.00");
+
+                        BP.DA.AtPara ap = new BP.DA.AtPara(rb.AtPara);
+                        ap.SetVal("FontSize", Math.Floor(rb.FontSize).ToString());
+                        mapAttrRB["ATPARA"] = ap.GenerAtParaStrs();
+
                         dtRDB.Rows.Add(mapAttrRB);
                     }
                     #endregion
@@ -4079,6 +4095,18 @@ namespace CCForm
                         {
                             line.MyLine.StrokeThickness = line.MyLine.StrokeThickness + 2;//re,1
                         }
+                        //added by liuxc,2017-05-22
+                        BPCheckBox chk = item as BPCheckBox;
+                        if(chk != null)
+                        {
+                            chk.FontSize = chk.FontSize + 1;
+                        }
+
+                        BPRadioBtn rtn = item as BPRadioBtn;
+                        if(rtn != null)
+                        {
+                            rtn.FontSize = rtn.FontSize + 1;
+                        }
                     }
                     break;
                 case EleFunc.FontSizeCut:
@@ -4108,6 +4136,25 @@ namespace CCForm
                             if (line.MyLine.StrokeThickness < 3)//re,0.5
                                 continue;
                             line.MyLine.StrokeThickness = Math.Abs(line.MyLine.StrokeThickness - 2);//re,1
+                        }
+
+                        //added by liuxc,2017-05-22
+                        BPCheckBox chk = item as BPCheckBox;
+                        if (chk != null)
+                        {
+                            if (chk.FontSize < 8)
+                                continue;
+
+                            chk.FontSize = Math.Abs(chk.FontSize - 1);
+                        }
+
+                        BPRadioBtn rtn = item as BPRadioBtn;
+                        if (rtn != null)
+                        {
+                            if (rtn.FontSize < 8)
+                                continue;
+
+                            rtn.FontSize = Math.Abs(rtn.FontSize - 1);
                         }
                     }
                     break;

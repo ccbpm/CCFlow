@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20170520";
+        public static string Ver = "20170522";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -129,7 +129,8 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
-            updataNote += "20170520.附件删除规则修复";
+            updataNote += "20170522.增加SL表单设计器中对单选/复选按钮进行字体大小调节的功能 by:liuxianchen";
+            updataNote += "20170520.附件删除规则修复 by:liuxianchen";
             updataNote += "20170519.升级打印，修改BillTemplate中的Url为TempFilePath by:dgq";
             updataNote += "20170421.升级表单，给FrmImg中的ImgSrcType赋值 by:liuxianchen";
             updataNote += "20170217.影子字段";
@@ -240,7 +241,6 @@ namespace BP.WF
                 Cond cnd = new Cond();
                 cnd.CheckPhysicsTable();
 
-
                 #region 创建 Port_EmpDept 视图兼容旧版本.
                 //创建视图.
                 try
@@ -300,6 +300,34 @@ namespace BP.WF
                 if (src.RetrieveFromDBSources() == 0)
                     src.Insert();
                 #endregion 检查数据源.
+
+                #region 20170522.增加SL表单设计器中对单选/复选按钮进行字体大小调节的功能 by:liuxianchen
+                try
+                {
+                    DataTable columns = src.GetColumns("Sys_FrmRB");
+                    if (columns.Select("No='AtPara'").Length == 0)
+                    {
+                        switch (src.HisDBType)
+                        {
+                            case DBType.MSSQL:
+                                DBAccess.RunSQL("ALTER TABLE Sys_FrmRB ADD AtPara NVARCHAR(1000) NULL");
+                                break;
+                            case DBType.Oracle:
+                                DBAccess.RunSQL("ALTER TABLE Sys_FrmRB ADD AtPara NVARCHAR2(1000) NULL");
+                                break;
+                            case DBType.MySQL:
+                            case DBType.Informix:
+                                DBAccess.RunSQL("ALTER TABLE Sys_FrmRB ADD AtPara TEXT NULL");
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                catch
+                {
+                }
+                #endregion
 
                 #region 其他.
                 // 更新 PassRate.

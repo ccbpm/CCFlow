@@ -40,6 +40,20 @@ namespace BP.WF.Template
 
         #region 属性
         /// <summary>
+        /// 表单事件实体
+        /// </summary>
+        public string FromEventEntity
+        {
+            get
+            {
+                return this.GetValStrByKey(MapDataAttr.FormEventEntity);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.FormEventEntity,value);
+            }
+        }
+        /// <summary>
         /// 是否是节点表单?
         /// </summary>
         public bool IsNodeFrm
@@ -112,7 +126,6 @@ namespace BP.WF.Template
                 this.SetValByKey(MapFrmFreeAttr.TableCol, value);
             }
         }
-       
         #endregion
 
         #region 权限控制.
@@ -161,9 +174,10 @@ namespace BP.WF.Template
                 map.Java_SetEnType(EnType.Sys);
 
                 #region 基本属性.
-                map.AddTBStringPK(MapFrmFreeAttr.No, null, "表单编号", true, false, 1, 190, 20);
+                map.AddTBStringPK(MapFrmFreeAttr.No, null, "表单编号", true, true, 1, 190, 20);
                 map.AddTBString(MapFrmFreeAttr.PTable, null, "存储表", true, false, 0, 100, 20);
-                map.AddTBString(MapFrmFreeAttr.Name, null, "表单名称", true, false, 0, 500, 20,true);
+                map.AddTBString(MapFrmFreeAttr.Name, null, "表单名称", true, false, 0, 200, 20,true);
+                map.AddTBString(MapDataAttr.FormEventEntity, null, "事件实体", true, true, 0, 100, 20, true);
                  
                 //数据源.
                 map.AddDDLEntities(MapFrmFreeAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
@@ -179,7 +193,6 @@ namespace BP.WF.Template
 
                 #region 模版属性。
                 map.AddTBString(MapFrmFreeAttr.TemplaterVer, null, "模版编号", true, false, 0, 30, 20);
-
 
                 #endregion 模版属性。
 
@@ -405,6 +418,18 @@ namespace BP.WF.Template
         }
         #endregion
 
+        protected override bool beforeUpdate()
+        {
+            //注册事件表单实体.
+            BP.Sys.FormEventBase feb = BP.Sys.Glo.GetFormEventBaseByEnName(this.No);
+            if (feb == null)
+                this.FromEventEntity = "";
+            else
+
+                this.FromEventEntity = feb.ToString();
+
+            return base.beforeUpdate();
+        }
         public string DoTabIdx()
         {
             return SystemConfig.CCFlowWebPath +"WF/Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;

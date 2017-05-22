@@ -6319,13 +6319,13 @@ namespace BP.WF
             {
                 string strID = this.No + idx.ToString().PadLeft(2, '0');
                 nd.NodeID = int.Parse(strID);
-                if (!nd.IsExits)
+                if (nd.IsExits==false)
                     break;
                 idx++;
             }
 
             nd.HisNodeWorkType = NodeWorkType.Work;
-            nd.Name = "节点" + idx;
+            nd.Name = "New Node " + idx;
             nd.HisNodePosType = NodePosType.Mid;
             nd.FK_Flow = this.No;
             nd.FlowName = this.Name;
@@ -6334,7 +6334,7 @@ namespace BP.WF
             nd.Step = idx;
 
             //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-            nd.CondModel = Template.CondModel.SendButtonSileSelect; //默认的发送方向.
+            nd.CondModel = Template.CondModel.ByLineCond; //默认的发送方向.
             nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
             nd.Insert();
             nd.CreateMap();

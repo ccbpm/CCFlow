@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 using BP.Sys;
 using BP.DA;
@@ -11,6 +12,38 @@ namespace BP.Sys
     /// </summary>
     public class Glo
     {
+        #region 与流程事件实体相关.
+        private static Hashtable Htable_FormFEE = null;
+        /// <summary>
+        /// 获得节点事件实体
+        /// </summary>
+        /// <param name="enName">实例名称</param>
+        /// <returns>获得节点事件实体,如果没有就返回为空.</returns>
+        public static FormEventBase GetFormEventBaseByEnName(string enName)
+        {
+            if (Htable_FormFEE == null || Htable_FormFEE.Count == 0)
+            {
+                Htable_FormFEE = new Hashtable();
+                ArrayList al = BP.En.ClassFactory.GetObjects("BP.Sys.FormEventBase");
+                Htable_FormFEE.Clear();
+                foreach (FormEventBase en in al)
+                {
+                    Htable_FormFEE.Add(en.ToString(), en);
+                }
+            }
+
+            foreach (string key in Htable_FormFEE.Keys)
+            {
+                FormEventBase fee = Htable_FormFEE[key] as FormEventBase;
+                if ( fee.FormMark == enName)
+                    return fee;
+            }
+            return null;
+             
+        }
+        #endregion 与流程事件实体相关.
+
+
         #region 公共变量.
         /// <summary>
         /// 部门版本号

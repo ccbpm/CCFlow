@@ -84,6 +84,13 @@ namespace BP.Sys
 	/// </summary>
 	public class MapDataAttr : EntityNoNameAttr
 	{
+        /// <summary>
+        /// 表单事件实体类
+        /// </summary>
+        public const string FormEventEntity = "FormEventEntity";
+        /// <summary>
+        /// 存储表
+        /// </summary>
 		public const string PTable = "PTable";
 		public const string Dtls = "Dtls";
 		public const string EnPK = "EnPK";
@@ -1473,6 +1480,7 @@ namespace BP.Sys
 				#region 基础信息.
 				map.AddTBStringPK(MapDataAttr.No, null, "编号", true, false, 1, 200, 100);
 				map.AddTBString(MapDataAttr.Name, null, "描述", true, false, 0, 500, 20);
+                map.AddTBString(MapDataAttr.FormEventEntity, null, "事件实体", true, true, 0, 100, 20, true);
 
 				map.AddTBString(MapDataAttr.EnPK, null, "实体主键", true, false, 0, 200, 20);
 				map.AddTBString(MapDataAttr.PTable, null, "物理表", true, false, 0, 500, 20);

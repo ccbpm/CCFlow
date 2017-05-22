@@ -161,7 +161,7 @@ namespace BP.WF.Template
 				map.Java_SetEnType(EnType.Sys);
 
 				#region 基本属性.
-				map.AddTBStringPK(MapFrmExcelAttr.No, null, "表单编号", true, false, 1, 190, 20);
+                map.AddTBStringPK(MapFrmExcelAttr.No, null, "表单编号", true, true, 1, 190, 20);
 				map.AddTBString(MapFrmExcelAttr.PTable, null, "存储表", true, false, 0, 100, 20);
 				map.AddTBString(MapFrmExcelAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
 

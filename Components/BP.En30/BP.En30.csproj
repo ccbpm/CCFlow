@@ -182,6 +182,7 @@
     </Compile>
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
+    <Compile Include="Sys\FormEventBase.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
     <Compile Include="Sys\FrmUI\FrmBtn.cs" />
     <Compile Include="Sys\FrmUI\FrmImg.cs" />

@@ -140,7 +140,7 @@ namespace BP.WF.Template
 
                 #region 基本属性.
 
-                map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, false, 1, 190, 20);
+                map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
                 map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
 

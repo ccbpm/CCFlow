@@ -86,6 +86,26 @@ namespace BP.Sys
         /// 表单保存后
         /// </summary>
         public const string SaveAfter = "SaveAfter";
+        /// <summary>
+        /// 创建OID
+        /// </summary>
+        public const string CreateOID = "CreateOID";
+        /// <summary>
+        /// 附件上传前
+        /// </summary>
+        public const string AthUploadeBefore = "AthUploadeBefore";
+        /// <summary>
+        /// 上传后.
+        /// </summary>
+        public const string AthUploadeAfter = "AthUploadeAfter";
+        /// <summary>
+        /// 从表保存前
+        /// </summary>
+        public const string DtlRowSaveBefore = "DtlRowSaveBefore";
+        /// <summary>
+        /// 从表保存后
+        /// </summary>
+        public const string DtlRowSaveAfter = "DtlRowSaveAfter";
     }
     /// <summary>
     /// 事件标记列表

@@ -1060,6 +1060,8 @@ namespace CCFlow.WF.CCForm
 
         protected void btn_Click(object sender, EventArgs e)
         {
+
+
             bool isIE=this.CheckBrowserIsIE();
             try
             {

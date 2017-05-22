@@ -529,24 +529,14 @@ namespace CCFlow.WF.FlowFormTree
                         string myurl = firstwn.HisNode.TurnToDealDoc.Clone().ToString();
                         if (myurl.Contains("?") == false)
                             myurl += "?1=1";
-                        Attrs myattrs = firstwn.HisNode.EnMap.Attrs;
-                        Work hisWK = firstwn.HisWork;
-                        foreach (Attr attr in myattrs)
-                        {
-                            if (myurl.Contains("@") == false)
-                                break;
-                            myurl = myurl.Replace("@" + attr.Key, hisWK.GetValStrByKey(attr.Key));
-                        }
-                        myurl = myurl.Replace("@WebUser.No", BP.Web.WebUser.No);
-                        myurl = myurl.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                        myurl = myurl.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
 
+                        Work hisWK = firstwn.HisWork;
+                        myurl = BP.WF.Glo.DealExp(myurl, hisWK, null);
                         if (myurl.Contains("@"))
                         {
-                            BP.WF.Dev2Interface.Port_SendMsg("admin", firstwn.HisFlow.Name + "在" + firstwn.HisNode.Name + "节点处，出现错误", "流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl, "Err" + firstwn.HisNode.No + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+                            BP.WF.Dev2Interface.Port_SendMsg("admin", firstwn.HisFlow.Name + "在" + firstwn.HisNode.Name + "节点处，出现错误", "流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl, "Err" + FK_Node + "_" + this.WorkID, SMSMsgType.Err, this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
                             throw new Exception("流程设计错误，在节点转向url中参数没有被替换下来。Url:" + myurl);
                         }
-
                         if (myurl.Contains("PWorkID") == false)
                             myurl += "&PWorkID=" + this.WorkID;
 

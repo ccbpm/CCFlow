@@ -182,15 +182,32 @@
                             $(tmplate).children().remove();
                             $(tmplate).append(option);
                         }
-                    }else if (tmplate.attr('name') !=undefined &&tmplate.find('[name^=CB_]') == 0) {
-                                            $(tmplate).find('[name^=CB_]').bind('checked', function (obj) {
-                                                $(obj.target).parent().parent().parent().data().data[$(obj.target).data().KeyOfEn] =
-                                                    $(tmplate).find('[name^=CB_]')[0].checked;
-                                            });
-                                        }
+                    } else if (tmplate.attr('name') == undefined && tmplate.find('[name^=CB_]').length == 1) {
+                        $(tmplate).find('[name^=CB_]').bind('change', function (obj) {
+                            $(obj.target).parent().parent().parent().data().data[$(obj.target).data().KeyOfEn] =
+                                $(tmplate).find('[name^=CB_]')[0].checked == true ? 1 : 0;
+                        });
+                    }
 
-                    
 
+
+                    //处理复选框  设置表格中数据的值
+                    var textVal = workNodeData.Blank[0][o.data().KeyOfEn];
+                    var ckEle = tmplate.find('[name=CB_' + o.data().KeyOfEn + ']');
+                    if (ckEle.length == 1) {
+                        var ckId = 'CB_' + o.data().KeyOfEn + '_' + newRowIndex;
+                        ckEle.attr('id', ckId);
+                        tmplate.find('label').attr('for', ckId);
+                        console.log(textVal)
+                        if (textVal == "1") {
+                            ckEle[0].checked = true;
+                        } else {
+                            ckEle[0].checked = false;
+                        }
+                    }
+                    else {
+                        tmplate.val(textVal);
+                    }
                     var td = $('<td></td>')
                     td.append(tmplate);
                     insertTr.append(td);
@@ -222,6 +239,7 @@
 
             trData.data["OID"] = 0;
             insertTr.data(trData);
+            console.log(trData)
             $('#dtlDiv div table tbody').append(insertTr);
             AfterBindEn_DealMapExt(insertTr);
 
@@ -373,17 +391,24 @@
                                         //先写出 NAME   单选扭会出问题
                                         tmplate.attr('id', tmplate.attr('name') + '_' + rowIndex);
                                         
-                                        //处理复选框
-                                         var ckEle=tmplate.find('[name=CB_'+o.data().KeyOfEn+']');
-                                        if (ckEle.length==1){
-                                        var ckId='CB_'+o.data().KeyOfEn+'_'+rowIndex;
-                                        ckEle.attr('id',ckId);
-                                        tmplate.find('label').attr('for',ckId);
-                                        }
-                                        //处理单选按钮。。。 还没做
-
+                                        //处理复选框  设置表格中数据的值
                                         var textVal = $($(tbodyTrObj).children('td')[k]).text();
-                                        tmplate.val(textVal);
+
+                                         var ckEle=tmplate.find('[name=CB_'+o.data().KeyOfEn+']');
+                                         if (ckEle.length == 1) {
+                                             var ckId = 'CB_' + o.data().KeyOfEn + '_' + rowIndex;
+                                             ckEle.attr('id', ckId);
+                                             tmplate.find('label').attr('for', ckId);
+                                             if (textVal == "1") {
+                                                 ckEle[0].checked = true;
+                                             } else {
+                                                 ckEle[0].checked = false;
+                                             }
+                                         }
+                                         else {
+                                             tmplate.val(textVal);
+                                         }
+                                        //处理单选按钮。。。 还没做
                                         
                                         $($(tbodyTrObj).children('td')[k]).text('');
                                         $($(tbodyTrObj).children('td')[k]).append(tmplate);
@@ -407,10 +432,10 @@
                                                         $(obj.target).val();
                                                 });
                                             }
-                                        }else if (tmplate.attr('name') !=undefined &&tmplate.find('[name^=CB_]') == 0) {
-                                            $(tmplate).find('[name^=CB_]').bind('checked', function (obj) {
-                                                $(obj.target).parent().parent().parent().data().data[$(obj.target).data().KeyOfEn] =
-                                                    $(tmplate).find('[name^=CB_]')[0].checked;
+                                        }else if (tmplate.attr('name') ==undefined &&tmplate.find('[name^=CB_]').length == 1) {
+                                            $(tmplate).find('[name^=CB_]').bind('change', function (obj) {
+                                                $(obj.target).parent().parent().parent().data().data[$(obj.target).parent().data().KeyOfEn] =
+                                                    $(tmplate).find('[name^=CB_]')[0].checked==true ? 1 : 0;
                                             });
                                         }
                                     }
@@ -424,6 +449,7 @@
                                 $('#dtlDiv div table tbody tr input[type=text]').attr('disabled', 'disabled');
                                 $('#dtlDiv div table tbody tr textarea').attr('disabled', 'disabled');
                                 $('#dtlDiv div table tbody tr select').attr('disabled', 'disabled');
+                                $('#dtlDiv div table tbody tr input[type=checkbox]').attr('disabled', 'disabled');
                             }
 
                             //循环TBODY 初始化 SYS_MAPEXT
@@ -485,11 +511,11 @@
                         value = select.val();
                     }
                 }
-                 else if (checkbox.length == 1) {
+                else if (checkbox.length == 1) {
                     var name = checkbox.attr('name');
                     if (name.indexOf('CB_') == 0) {
                         keyOfEn = name.substring(3);
-                        var value= checkbox[0].checked==true?1:0;
+                        value = checkbox[0].checked == true ? 1 : 0;
                     }
                 }
                 //
@@ -545,7 +571,7 @@
                     var name = checkbox.attr('name');
                     if (name.indexOf('CB_') == 0) {
                         keyOfEn = name.substring(3);
-                        checkbox[0].checked=trData[keyOfEn];
+                        checkbox[0].checked = trData[keyOfEn] == 1 ? true : false;
                         //alert(trData[keyOfEn])
                     }
                 }
@@ -617,12 +643,7 @@
                                 enableAttr = "disabled='disabled'";
                             }
                             //CHECKBOX 默认值
-                            var checkedStr = '';
-                            if (checkedStr != "true" && checkedStr != '1') {
-                                checkedStr = ' checked="checked" '
-                            }
-                            checkedStr = ConvertDefVal(workNodeData, '', mapAttr.KeyOfEn);
-                            eleHtml += "<div><input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
+                            eleHtml += "<div><input  type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' />";
                             eleHtml += '<label class="labRb" for="CB_' + mapAttr.KeyOfEn + '">' + mapAttr.Name + '</label></div>';
                         }
 
@@ -686,15 +707,28 @@
             eleHtml.css('width', mapAttr.UIWidth);
 
             eleHtml.bind('focus', blurEvent);
-            if (mapAttr.UIIsEnable == "0") {
-                eleHtml.attr('disabled', true);
+            if (eleHtml.find('[name^=CB_]').length == 1) { //CHECKBOX 处理
+                eleHtml.find('[name^=CB_]').bind('focus', function (obj) { console.log(''); blurEvent(obj); });
             }
+            if (mapAttr.UIIsEnable == "0") {
+                if (eleHtml.find('[name^=CB_]').length == 1) { //CHECKBOX 处理
+                    eleHtml.find('[name^=CB_]').attr('disabled', true);
+                } else {
+                    eleHtml.attr('disabled', true);
+                }
+            }
+
             return eleHtml;
         }
 
         //获取焦点时执行  改变currentRowIndex 再确定是否需要 存盘  获取焦点  上一行存盘 foucs
         function blurEvent(obj) {
-            var thisRowIndex=parseInt($($(obj.target).parent().parent().children()[0]).text()) - 1;
+            var thisRowIndex = parseInt($($(obj.target).parent().parent().children()[0]).text()) - 1;
+            if (obj.target.name.indexOf('CB_') == 0) {
+                thisRowIndex = parseInt($($(obj.target).parent().parent().parent().children()[0]).text()) - 1;
+            } else {
+                thisRowIndex = parseInt($($(obj.target).parent().parent().children()[0]).text()) - 1;
+            }
             if (pageData.currentRowIndex != thisRowIndex) {//改变编辑行，存盘
                 
                 if (pageData.currentRowIndex != -1) {

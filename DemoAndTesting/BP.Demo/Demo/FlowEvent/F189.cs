@@ -74,8 +74,8 @@ namespace BP.Demo.FlowEvent
             switch (this.HisNode.NodeID)
             {
                 case 18901:
-                    string sql = "UPDATE ND18901 SET  QingJiaTianShu=666666 WHERE OID="+this.WorkID;
-                    BP.DA.DBAccess.RunSQL(sql);
+                    //string sql = "UPDATE ND18901 SET  QingJiaTianShu=666666 WHERE OID="+this.WorkID;
+                    //BP.DA.DBAccess.RunSQL(sql);
                     break;
                 default:
                     break;

@@ -223,6 +223,7 @@ namespace BP.Demo.BPFramework
                 uac.IsDelete = true;
                 uac.IsUpdate = true;
                 uac.IsInsert = true;
+                uac.IsView = true;
                 return uac;
             }
         }
@@ -252,7 +253,7 @@ namespace BP.Demo.BPFramework
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Demo_Student","学生");
+                Map map = new Map("Demo_Student", "学生");
                 //基础信息.
                 map.IsAllowRepeatName = true; //是否允许名称重复.
                 map.IsAutoGenerNo = true; //是否自动生成编号.
@@ -264,18 +265,17 @@ namespace BP.Demo.BPFramework
                 map.AddTBString(StudentAttr.PWD, null, "登录密码", true, false, 0, 200, 70);
                 //map.AddTBString("shuoming", null, "说明", true, false, 0, 200, 70);
 
-                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100,true);
+                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, true);
                 map.AddTBInt(StudentAttr.Age, 0, "年龄", true, false);
                 map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 60);
                 map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
                 map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
-               map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
+                map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
 
                 //枚举字段
-                map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true,StudentAttr.XB,"@0=女@1=男");
-
+                map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
                 //外键字段.
-                map.AddDDLEntities(StudentAttr.FK_BanJi, null,"班级", new BP.Demo.BPFramework.BanJis(), true);
+                map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
 
 
                 //增加checkbox属性.
@@ -290,11 +290,11 @@ namespace BP.Demo.BPFramework
 
                 map.AddMyFile("简历");
 
-               // map.AddMyFileS("简历");
+                // map.AddMyFileS("简历");
 
-                    //设置查询条件。
-                    map.AddSearchAttr(StudentAttr.XB);
-                    map.AddSearchAttr(StudentAttr.FK_BanJi);
+                //设置查询条件。
+                map.AddSearchAttr(StudentAttr.XB);
+                map.AddSearchAttr(StudentAttr.FK_BanJi);
 
                 //多对多的映射.
                 map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
@@ -307,7 +307,7 @@ namespace BP.Demo.BPFramework
                 RefMethod rm = new RefMethod();
                 rm.Title = "缴纳班费";
                 rm.HisAttrs.AddTBDecimal("JinE", 100, "缴纳金额", true, false);
-                rm.HisAttrs.AddTBString("Note", null, "备注", true, false,0,100,100);
+                rm.HisAttrs.AddTBString("Note", null, "备注", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoJiaoNaBanFei";
                 map.AddRefMethod(rm);
 
@@ -331,30 +331,6 @@ namespace BP.Demo.BPFramework
             //在插入之前设置注册时间.
             this.RegDate = DataType.CurrentDataTime;
             return base.beforeInsert();
-        }
-        protected override bool beforeDelete()
-        {
-            return base.beforeDelete();
-        }
-        protected override bool beforeUpdate()
-        {
-            return base.beforeUpdate();
-        }
-        protected override void afterInsertUpdateAction()
-        {
-            base.afterInsertUpdateAction();
-        }
-        protected override void afterDelete()
-        {
-            base.afterDelete();
-        }
-        protected override void afterInsert()
-        {
-            base.afterInsert();
-        }
-        protected override void afterUpdate()
-        {
-            base.afterUpdate();
         }
         #endregion 重写基类方法
 

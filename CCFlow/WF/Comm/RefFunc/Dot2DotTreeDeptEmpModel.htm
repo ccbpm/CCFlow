@@ -367,6 +367,7 @@
         }
 
         function Save() {
+
             var param = {
                 DoType: "Dot2DotTreeDeptEmpModel_SaveNodeEmps",
                 data: '|',
@@ -397,6 +398,7 @@
                 param.data = savedatas.shift();
 
                 Handler_AjaxQueryData(param, function (data, scope) {
+
                     $("#save").linkbutton("enable");
 
                     if (data.indexOf("err@") != -1) {

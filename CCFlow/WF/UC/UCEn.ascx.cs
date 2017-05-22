@@ -4080,13 +4080,14 @@ namespace CCFlow.WF.UC
                 if (paras.Contains("OID=") == false)
                     paras += "&OID=" + en.GetValStrByKey("OID");
 
-                if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Readonly)
+                if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Readonly || this.IsReadonly || this.DoType == "View")
                 {
-                    src += "&DoType=View";
+                    if (paras.IndexOf("DoType=View") == -1)
+                        src += "&DoType=View";
                 }
                 else
                 {
-                    fwcOnload = "onload= 'WC" + fwc.No + "load();'";
+                    fwcOnload = "onload= 'FWC" + fwc.No + "load();'";
                     AddLoadFunction("WC" + fwc.No, "blur", "SaveDtl");
                 }
                 src += "&r=q" + paras;

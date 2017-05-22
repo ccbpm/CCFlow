@@ -11,6 +11,7 @@ using BP.Sys;
 using BP.Web;
 using BP.En;
 using BP.Web.Controls;
+using System.Data;
 
 namespace CCFlow.WF.WorkOpt
 {
@@ -223,8 +224,35 @@ namespace CCFlow.WF.WorkOpt
                 SelectAccpers accepts = new SelectAccpers(wfid);
 
                 //取出来该流程的所有的节点。
-                Nodes nds = new Nodes(this.FK_Flow);
-                Nodes ndsOrder = new Nodes();
+                //Nodes nds = new Nodes(this.FK_Flow);
+                #region //为了显示审核顺序正确，获取节点列表的逻辑修改如下，edited by liuxc,2017-05-22
+                Nodes nds = new Nodes();
+                string sql = "SELECT wn.* "
+                          + " FROM   ND120Track         n"
+                          + "        INNER JOIN WF_Node  wn"
+                          + "             ON  wn.NodeID = n.NDFrom"
+                          + " WHERE  (n.ActionType = {0} OR n.ActionType = {1})"
+                          + "        AND (n.WorkID = {2} OR n.FID = {2})"
+                          + " ORDER BY"
+                          + "        n.RDT ASC";
+
+                DataTable dt = DBAccess.RunSQLReturnTable(
+                    string.Format(sql, (int) ActionType.WorkCheck, (int) ActionType.StartChildenFlow, WorkID));
+                
+                BP.En.Attrs attrs = nds.GetNewEntity.EnMap.Attrs;
+                Node _nd = null;
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    _nd = new Node();
+
+                    foreach (BP.En.Attr attr in attrs)
+                        _nd.Row.SetValByKey(attr.Key, dr[attr.Key]);
+
+                    nds.AddEntity(_nd);
+                }
+                #endregion
+
                 //求出已经出现的步骤.
                 string nodes = ""; //已经出现的步骤.
                 foreach (BP.WF.Track tk in tks)
@@ -357,7 +385,7 @@ namespace CCFlow.WF.WorkOpt
                                             this.Pub1.AddTR();
                                             #region
 
-                                            if (tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
+                                            if (this.DoType != "View" && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                                 wcDesc.HisFrmWorkCheckType == FWCType.Check || (
                                                 (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
                                                 ))
@@ -426,7 +454,7 @@ namespace CCFlow.WF.WorkOpt
                                         else
                                         {
                                             this.Pub1.AddTR();
-                                            if (tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
+                                            if (this.DoType != "View" && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                              wcDesc.HisFrmWorkCheckType == FWCType.Check || (
                                              (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog
                                              || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
@@ -734,7 +762,7 @@ namespace CCFlow.WF.WorkOpt
             #region 处理审核意见框.
             if (IsHidden == false
                 && wcDesc.HisFrmWorkCheckSta == FrmWorkCheckSta.Enable
-                && isCanDo)
+                && isCanDo && this.DoType != "View")
             {
                 string lab = wcDesc.FWCOpLabel;
                 lab = lab.Replace("@WebUser.No", BP.Web.WebUser.No);
@@ -745,14 +773,17 @@ namespace CCFlow.WF.WorkOpt
                 PostBackTextBox tb = new PostBackTextBox();
                 tb.ID = "TB_Doc";
                 tb.TextMode = TextBoxMode.MultiLine;
-                tb.OnBlur += new EventHandler(btn_Save_Click);
                 tb.Style["width"] = "99%";
                 tb.Style["border-color"] = "#E2F6FB";
                 tb.Style["border-style"] = "solid";
                 tb.Rows = 3;
-                if (DoType != null && DoType == "View")
+                if (DoType == "View")
                 {
                     tb.ReadOnly = true;
+                }
+                else
+                {
+                    tb.OnBlur += new EventHandler(btn_Save_Click);
                 }
                 tb.Text = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.NodeID);
                 //if (tb.Text == "同意")

@@ -10,6 +10,7 @@
     <link href="/DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/Jquery-plug/fileupload/jquery.uploadify.min.js" type="text/javascript"></script>
     <link href="../Scripts/Jquery-plug/fileupload/uploadify.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
         var isChange = false;
         function NoSubmit(ev) {
@@ -114,6 +115,20 @@
         $(function () {
             $('.HBtn').hide();
             $('#loading-mask').fadeOut();
+            //修改以使iframe自适应审核页面的高度，以使打印时可以打全审核信息，edited by liuxc,2017-5-22
+            //注意：要求审核组件位于表单页面最下方
+            if (window.parent) {
+                var height = $(document.body).height();
+                var parentIframe = window.parent.document.getElementById("FWCND" + GetQueryString("FK_Node"));
+
+                if (parentIframe) {
+                    var iheight = $(parentIframe).height();
+
+                    if (height > iheight) {
+                        $(parentIframe).height(height + 10);
+                    }
+                }
+            }
         });
     </script>
     <style type="text/css">

@@ -1110,7 +1110,7 @@ function onMouseDown(ev) {
                     $.ajax({
                         type: 'POST',
                         url: Handler,
-                        data: { action: 'editnodename', NodeID: ccObj.CCBPM_OID, NodeName: encodeURI(shapeText) },
+                        data: { action: 'Node_EditNodeName', NodeID: ccObj.CCBPM_OID, NodeName: encodeURI(shapeText) },
                         success: function (jsonData) {
                             if (jsonData == "true") {
                                 save(false);
@@ -3379,7 +3379,7 @@ function save(showInfo) {
     var lMap = linkMap();
     //CCBPM Node Direction
     var Node_Direction = "";
-    
+
     for (var cn in CONNECTOR_MANAGER.connectors) {
         var connector = CONNECTOR_MANAGER.connectors[cn];
         var rFirstFigure = STACK.figureGetAsFirstFigureForConnector(connector.id);
@@ -3391,20 +3391,27 @@ function save(showInfo) {
         if (rFirstFigure.CCBPM_Shape != null && rSecondFigure.CCBPM_Shape != null) {
             if (rFirstFigure.CCBPM_Shape == CCBPM_Shape_Node && rSecondFigure.CCBPM_Shape == CCBPM_Shape_Node) {
                 Node_Direction += "@" + rFirstFigure.CCBPM_OID + ":" + rSecondFigure.CCBPM_OID;
-            }    
+            }
         }
     }
 
     $.post(Handler, {
-        action: 'save',
+        action: 'SaveOneFlow',
         diagram: serializedDiagram,
         png: dataURL,
         linkMap: lMap,
         svg: "",
-        diagramId: currentDiagramId,
+        FlowNo: currentDiagramId,
         direction: Node_Direction
     }, function (data) {
+
+        if (data.indexOf('err@') == 0) {
+            alert(data);
+            return;
+        }
+
         if (data == "true" && showInfo == true) {
+
             if (self.parent) {
                 if (typeof self.parent.TabFormExists != 'undefined') {
                     var bExists = self.parent.TabFormExists();
@@ -3521,18 +3528,25 @@ function exportCanvas() {
     window.open('./svg.php', 'SVG', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0');
 }
 
-
 /**Loads a saved diagram
 *@param {Number} diagramId - the id of the diagram you want to load
 **/
-function load(diagramId) {
-    //alert("load diagram [" + diagramId + ']');
+function load(flowNo) {
 
-    $.post(Handler, { action: 'load', diagramId: diagramId },
+    $.post(Handler, { action: 'Designer_LoadOneFlow', FK_Flow: flowNo },
         function (data) {
-            //alert(data);
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data == "") {
+             //   alert("@没有获得流程图的json数据.");
+                return;
+            }
+
             try {
-                if (data == "") return;
 
                 var obj = eval('(' + data + ')');
 

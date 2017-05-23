@@ -39,7 +39,7 @@ functrees.push({
     RootASC: { Field: "TTYPE", Index: ["FORMTYPE", "FORMREF", "CLOUNDDATA"] },//"SRCROOT", 
     ServiceCount: 1,//2
     Nodes: [
-			{ Type: "Service", ServiceMethod: "GetFormTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null,
+			{ Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: null,
 			    ColDefine: "TTYPE", Defines: [
 											{ Value: "FORMTYPE", ColDefine: "PARENTNO",
 											    Defines: [
@@ -127,7 +127,7 @@ functrees.push({
 						{ Type: "Node", Id: "Stations", ParentId: "OneMore", Name: "岗位维护", TType: "STATIONS", IconCls: "icon-table", Url: "../../Comm/Ens.aspx?EnsName=BP.WF.Port.Stations" }
 					  ]
             			},
-			{ Type: "Service", ServiceMethod: "GetStructureTree", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "0",
+			{ Type: "Service", ServiceMethod: "GetStructureTreeTable", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "0",
 			    ColDefine: "TTYPE", Defines: [
 											{ Value: "DEPT", ColDefine: "PARENTNO",
 											    Defines: [

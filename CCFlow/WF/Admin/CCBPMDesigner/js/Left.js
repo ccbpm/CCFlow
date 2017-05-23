@@ -575,7 +575,8 @@ function InitUserInfo() {
         action: "GetWebUserInfo"
     };
     ajaxService(params, function (data) {
-        if (data.indexOf('err@') != -1) {
+
+        if (data.indexOf('err@') == 0) {
             alert(data);
             window.location.href = "Login.htm?DoType=Logout";
             return;
@@ -590,7 +591,7 @@ function InitUserInfo() {
 }
 
 function GenerStructureTree(parentrootid, pnodeid, treeid) {
-    ajaxService({ action: "GetStructureTreeRoot", parentrootid: parentrootid }, function (re) {
+    ajaxService({ action: "GetStructureTreeRootTable", parentrootid: parentrootid }, function (re) {
         var data = $.parseJSON(re);
         var roottarget;
 
@@ -633,7 +634,7 @@ function ShowSubDepts(node, treeid) {
         var deptid = node.attributes.DeptId;
         var stid = node.attributes.StationId;
 
-        ajaxService({ action: "GetEmpsByStation", deptid: deptid, stationid: stid }, function (re) {
+        ajaxService({ action: "GetEmpsByStationTable", deptid: deptid, stationid: stid }, function (re) {
             data = $.parseJSON(re);
 
             var children = $("#" + treeid).tree('getChildren', node.target);
@@ -660,7 +661,7 @@ function ShowSubDepts(node, treeid) {
     }
     else {
         var deptid = node.id.replace(/DEPT_/g, "");
-        ajaxService({ action: "GetSubDepts", rootid: deptid }, function (re) {
+        ajaxService({ action: "GetSubDeptsTable", rootid: deptid }, function (re) {
             data = $.parseJSON(re);
 
             var children = $("#" + treeid).tree('getChildren', node.target);
@@ -727,19 +728,20 @@ $(function () {
     };
 
     ajaxService(params, function (data) {
-        if (data.indexOf('err@') != -1) {
+
+        if (data.indexOf('err@') ==0 ) {
             alert(data);
             window.location.href = "Login.htm?DoType=Logout";
             return;
         }
 
         var jdata = $.parseJSON(data);
-        WebUser.No = jdata.WebUser.No;
-        WebUser.Name = jdata.WebUser.Name;
-        WebUser.FK_Dept = jdata.WebUser.FK_Dept;
-        WebUser.SID = jdata.WebUser.SID;
+        WebUser.No = jdata.No;
+        WebUser.Name = jdata.Name;
+        WebUser.FK_Dept = jdata.FK_Dept;
+        WebUser.SID = jdata.SID;
 
-        SetTreeRoot(jdata.AdminEmp);
+        SetTreeRoot(jdata);
 
         treesObj = new FuncTrees("menuTab");
         treesObj.loadTrees();

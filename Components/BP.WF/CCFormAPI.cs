@@ -777,8 +777,30 @@ namespace BP.WF
 			// 为明细表设置默认值.
 			MapAttrs dtlAttrs = new MapAttrs(dtl.No);
 			foreach (MapAttr attr in dtlAttrs)
-			{
-				//处理它的默认值.
+            {
+                #region 修改区分大小写.
+                //if (BP.WF.Glo.Plant == Plant.JFlow)
+                //{
+                //    foreach (DataColumn dr in dtDtl.Columns)
+                //    {
+                //        if (dr.ColumnName == attr.KeyOfEn.ToLower())
+                //        {
+                //            dr.ColumnName = attr.KeyOfEn;
+                //            continue;
+                //        }
+
+                //        if (attr.LGType == FieldTypeS.Enum || attr.LGType == FieldTypeS.FK)
+                //        {
+                //            if (dr.ColumnName == attr.KeyOfEn.ToLower() + "text")
+                //            {
+                //                dr.ColumnName = attr.KeyOfEn + "Text";
+                //            }
+                //        }
+                //    }
+                //}
+                #endregion 修改区分大小写.
+
+                //处理它的默认值.
 				if (attr.DefValReal.Contains("@") == false)
 					continue;
 

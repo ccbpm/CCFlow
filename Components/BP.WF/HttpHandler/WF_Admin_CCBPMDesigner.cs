@@ -20,107 +20,6 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_CCBPMDesigner : WebContralBase
     {
-        #region 执行.
-        public HttpContext context = null;
-
-        /// <summary>
-        /// 枚举值
-        /// </summary>
-        public string EnumKey
-        {
-            get
-            {
-                string str = GetRequestVal("EnumKey");
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-        /// <summary>
-        /// 实体 EnsName
-        /// </summary>
-        public string EnsName
-        {
-            get
-            {
-                string str = GetRequestVal("EnsName");
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-        public string SFTable
-        {
-            get
-            {
-                string str = GetRequestVal("SFTable");
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-        /// <summary>
-        /// 表单外键
-        /// </summary>
-        public string FK_MapData
-        {
-            get
-            {
-                string str = GetRequestVal("FK_MapData");
-                if (str == null || str == "" || str == "null")
-                    return null;
-                return str;
-            }
-        }
-        /// <summary>
-        /// 公共方法获取值
-        /// </summary>
-        /// <param name="param">参数名</param>
-        /// <returns></returns>
-        public string getUTF8ToString(string param)
-        {
-            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
-        }
-        /// <summary>
-        /// 获得表单的属性.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public string GetValFromFrmByKey(string key)
-        {
-            string val = getUTF8ToString(key);
-            if (val == null)
-                return null;
-            val = val.Replace("'", "~");
-            return val;
-        }
-        public int GetValIntFromFrmByKey(string key)
-        {
-            return int.Parse(this.GetValFromFrmByKey(key));
-        }
-        public bool GetValBoolenFromFrmByKey(string key)
-        {
-            string val = this.GetValFromFrmByKey(key);
-            if (val == null || val == "")
-                return false;
-            return true;
-        }
-        /// <summary>
-        /// 公共方法获取值
-        /// </summary>
-        /// <param name="key">参数名,可以从 form 与request 里面获取.</param>
-        /// <returns></returns>
-        public string GetRequestVal(string key)
-        {
-            string val = context.Request[key];
-            if (val == null)
-                val = context.Request.Form[key];
-            if (val == null)
-                return null;
-            return HttpUtility.UrlDecode(val, System.Text.Encoding.UTF8);
-        }
-        #endregion 执行.
-
         /// <summary>
         /// 初始化函数
         /// </summary>
@@ -129,7 +28,6 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
         /// <summary>
         /// 流程信息.
         /// </summary>
@@ -184,41 +82,8 @@ namespace BP.WF.HttpHandler
                     case "Logout": //获得枚举列表的JSON.
                         BP.WF.Dev2Interface.Port_SigOut();
                         break;
-                    case "load"://获取流程图表数据
-                        msg = Flow_LoadFlowJsonData();
-                        break;
-                    case "save"://保存流程图
-                        msg = Flow_Save();
-                        break;
                     case "saveAs"://另存为流程
                         msg = Flow_SaveAs();
-                        break;
-                    case "editnodename"://修改节点名称
-                        msg = Node_EditNodeName();
-                        break;
-                    case "GetFormTree"://获取表单库数据
-                        msg = GetFormTreeTable();//GetFormTree();
-                        break;
-                    case "GetSrcTree"://获取数据源数据
-                        msg = GetSrcTreeTable();
-                        break;
-                    case "GetStructureTree"://获取组织结构数据
-                        msg = GetStructureTreeTable();
-                        break;
-                    case "GetStructureTreeRoot"://获取组织结构根结点数据
-                        msg = GetStructureTreeRootTable();
-                        break;
-                    case "GetSubDepts": //获取指定部门下一级子部门及岗位列表
-                        msg = GetSubDeptsTable();
-                        break;
-                    case "GetEmpsByStation":    //根据部门、岗位获取人员列表
-                        msg = GetEmpsByStationTable();
-                        break;
-                    case "GetBindingForms"://获取流程绑定表单列表
-                        msg = GetBindingFormsTable();
-                        break;
-                    case "Do"://公共方法
-                        msg = Do();
                         break;
                     case "LetLogin":    //使管理员登录
                         msg = string.IsNullOrWhiteSpace(WebUser.No) ? LetAdminLogin(getUTF8ToString("userNo"), true) : string.Empty;
@@ -242,8 +107,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GetEmpsByStationTable()
         {
-            string deptid = context.Request.QueryString["deptid"];
-            string stid = context.Request.QueryString["stationid"];
+            string deptid = this.GetRequestVal("deptid");
+            string stid = this.GetRequestVal("stationid"); 
 
             if (string.IsNullOrWhiteSpace(deptid) || string.IsNullOrWhiteSpace(stid))
                 return "[]";
@@ -309,8 +174,7 @@ namespace BP.WF.HttpHandler
             string parentrootid = context.Request.QueryString["parentrootid"];
             string newRootId = "";
 
-            //判断AdminEmp
-            AdminEmpExt aext = new AdminEmpExt();
+        
 
             if (WebUser.No != "admin")
             {
@@ -595,27 +459,29 @@ namespace BP.WF.HttpHandler
 
         #region 流程相关 Flow
         /// <summary>
-        /// 加载流程图数据 
+        /// 加载流程数据
         /// </summary>
-        /// <returns></returns>
-        public string Flow_LoadFlowJsonData()
+        /// <returns>流程图数据的JSON</returns>
+        public string Designer_LoadOneFlow()
         {
-            string diagramId = this.GetValFromFrmByKey("diagramId");
-            BP.WF.Flow fl = new BP.WF.Flow(diagramId);
+            string flowNo = this.GetValFromFrmByKey("FK_Flow");
+            BP.WF.Flow fl = new BP.WF.Flow(flowNo);
             return fl.FlowJson;
         }
         /// <summary>
         /// 保存流程图信息
         /// </summary>
         /// <returns></returns>
-        public string Flow_Save()
+        public string SaveOneFlow()
         {
             //流程格式.
             string diagram = GetValFromFrmByKey("diagram");
             //流程图.
             string png = GetValFromFrmByKey("png");
+
             // 流程编号.
-            string flowNo = GetValFromFrmByKey("diagramId");
+            string flowNo = GetValFromFrmByKey("FlowNo");
+
             //节点到节点关系
             string direction = GetValFromFrmByKey("direction");
 
@@ -772,7 +638,6 @@ namespace BP.WF.HttpHandler
                 ht.Add("NodeID", node.NodeID);
                 ht.Add("Name", node.Name);
 
-
                 return BP.Tools.Json.ToJsonEntityModel(ht);
             }
             catch (Exception ex)
@@ -842,9 +707,7 @@ namespace BP.WF.HttpHandler
         public string Node_EditNodeName()
         {
             string FK_Node = this.GetValFromFrmByKey("NodeID");
-
-            string NodeName = GetValFromFrmByKey("NodeName");
-
+            string NodeName = this.GetValFromFrmByKey("NodeName");
 
             BP.WF.Node node = new BP.WF.Node();
             node.NodeID = int.Parse(FK_Node);
@@ -901,46 +764,44 @@ namespace BP.WF.HttpHandler
             if (WebUser.No == null)
                 return "err@当前用户没有登录，请登录后再试。";
 
-            BP.Port.Emp emp = new BP.Port.Emp(WebUser.No);
-            
-            string re = "{\"WebUser\":" + emp.ToJson() + ",\"AdminEmp\":";
-            AdminEmpExt aext = new AdminEmpExt();
+            Hashtable ht = new Hashtable();
 
-            if (WebUser.No != "admin")
+            BP.Port.Emp emp = new BP.Port.Emp(WebUser.No);
+
+            ht.Add("No", emp.No);
+            ht.Add("Name", emp.Name);
+            ht.Add("FK_Dept", emp.FK_Dept);
+            ht.Add("SID", emp.SID);
+
+
+            if (WebUser.No == "admin")
+            {
+                ht.Add("IsAdmin", "1");
+                ht.Add("RootOfDept", "0");
+                ht.Add("RootOfFlow", "F0");
+                ht.Add("RootOfForm", "");
+            }
+            else
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
                 aemp.No = WebUser.No;
 
-                if(aemp.RetrieveFromDBSources() == 0)
+                if (aemp.RetrieveFromDBSources() == 0)
                 {
-                    aext.RootOfDept = "-999";
-                    aext.RootOfFlow = "-999";
-                    aext.RootOfForm = "-999";
+                    ht.Add("RootOfDept", "-9999");
+                    ht.Add("RootOfFlow", "-9999");
+                    ht.Add("RootOfForm", "-9999");
                 }
                 else
                 {
-                    aext.RootOfDept = aemp.RootOfDept;
-                    aext.RootOfFlow = "F" + aemp.RootOfFlow;
-                    aext.RootOfForm = aext.RootOfForm;
+                    ht.Add("RootOfDept", aemp.RootOfDept);
+                    ht.Add("RootOfFlow", "F" + aemp.RootOfFlow);
+                    ht.Add("RootOfForm", aemp.RootOfForm);
                 }
             }
-            else
-            {
-                aext.IsAdmin = true;
-                aext.RootOfDept = "0";
-                aext.RootOfFlow = "F0";
-                aext.RootOfForm = "";
-            }
 
-            return re + LitJson.JsonMapper.ToJson(aext) + "}";
-        }
+            return BP.Tools.Json.ToJsonEntityModel(ht);
 
-        public class AdminEmpExt
-        {
-            public bool IsAdmin { get; set; }
-            public string RootOfFlow { get; set; }
-            public string RootOfForm { get; set; }
-            public string RootOfDept { get; set; }
         }
 
         StringBuilder sbJson = new StringBuilder();
@@ -987,8 +848,7 @@ namespace BP.WF.HttpHandler
                     drs[0]["PARENTNO"] = "F0";
             }
 
-            //判断AdminEmp
-            AdminEmpExt aext = new AdminEmpExt();
+      
 
             if (WebUser.No != "admin")
             {
@@ -1079,10 +939,6 @@ namespace BP.WF.HttpHandler
             {
                 dt.Rows.Add(row.ItemArray);
             }
-
-            //判断AdminEmp
-            AdminEmpExt aext = new AdminEmpExt();
-
             if (WebUser.No != "admin")
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
@@ -1255,12 +1111,6 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataTableToJson(dt, false);
         }
-
-        public string GetStructureDatas(string deptNo, string stationNo, string empNo)
-        {
-            return null;
-        }
-
         /// <summary>
         /// 根据DataTable生成Json树结构
         /// </summary>
@@ -1364,78 +1214,6 @@ namespace BP.WF.HttpHandler
         {
             return WorkflowDefintionManager.DeleteFlowTemplete(this.FK_Flow);
         }
-        /// <summary>
-        /// 树节点管理
-        /// </summary>
-        public string Do()
-        {
-            string doWhat = GetValFromFrmByKey("doWhat");
-            string para1 = GetValFromFrmByKey("para1");
-            // 如果admin账户登陆时有错误发生，则返回错误信息
-            var result = LetAdminLogin("CH", true);
-
-            if (string.IsNullOrEmpty(result) == false)
-                return result;
-
-            switch (doWhat)
-            {
-                case "NewSameLevelFrmSort": //创建同级别的 表单树 目录.
-                    SysFormTree frmSort = null;
-                    try
-                    {
-                        var para = para1.Split(',');
-                        frmSort = new SysFormTree(para[0]);
-                        string sameNodeNo = frmSort.DoCreateSameLevelNode().No;
-                        frmSort = new SysFormTree(sameNodeNo);
-                        frmSort.Name = para[1];
-                        frmSort.Update();
-                        return null;
-                    }
-                    catch (Exception ex)
-                    {
-                        return "Do Method NewFormSort Branch has a error , para:\t" + para1 + ex.Message;
-                    }
-                case "NewSubLevelFrmSort": //创建子级别的 表单树 目录.
-                    SysFormTree frmSortSub = null;
-                    try
-                    {
-                        var para = para1.Split(',');
-                        frmSortSub = new SysFormTree(para[0]);
-                        string sameNodeNo = frmSortSub.DoCreateSubNode().No;
-                        frmSortSub = new SysFormTree(sameNodeNo);
-                        frmSortSub.Name = para[1];
-                        frmSortSub.Update();
-                        return null;
-                    }
-                    catch (Exception ex)
-                    {
-                        return "Do Method NewSubLevelFrmSort Branch has a error , para:\t" + para1 + ex.Message;
-                    }
-                case "SetBUnit":
-                    try
-                    {
-                        if (string.IsNullOrEmpty(para1) == false)
-                        {
-                            BP.WF.Node nd = new BP.WF.Node(int.Parse(para1));
-                            nd.IsTask = !nd.IsBUnit;
-                            nd.Update();
-                        }
-                        else
-                        {
-                            throw new Exception("@参数错误:" + para1);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return "err:" + ex.Message;
-                    }
-                    return null;
-                case "GetSettings":
-                    return SystemConfig.AppSettings[para1];
-                default:
-                    throw new Exception("@没有约定的执行标记:" + doWhat);
-            }
-        }
         public string NewFlow()
         {
             try
@@ -1487,7 +1265,10 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, emp.RootOfFlow);
         }
-
+        /// <summary>
+        /// 删除流程类别.
+        /// </summary>
+        /// <returns></returns>
         public string DelFlowSort()
         {
             string fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
@@ -1562,11 +1343,11 @@ namespace BP.WF.HttpHandler
                     WebUser.SignInOfGener(emp);
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                return exception.Message;
+                return "err@" + ex.Message;
             }
-            return string.Empty;
+            return "@登录成功.";
         }
         #endregion
 

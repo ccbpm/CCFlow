@@ -1566,7 +1566,7 @@ namespace BP.WF.Template
         /// <returns>返回URL</returns>
         public string DoLimit()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/Limit.aspx?FK_Flow=" + this.No + "&Lang=CH";
+            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/Limit.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 设置发起前置导航

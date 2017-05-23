@@ -228,7 +228,7 @@ namespace CCFlow.WF.WorkOpt
                 #region //为了显示审核顺序正确，获取节点列表的逻辑修改如下，edited by liuxc,2017-05-22
                 Nodes nds = new Nodes();
                 string sql = "SELECT wn.* "
-                          + " FROM   ND120Track         n"
+                          + " FROM   ND{3}Track         n"
                           + "        INNER JOIN WF_Node  wn"
                           + "             ON  wn.NodeID = n.NDFrom"
                           + " WHERE  (n.ActionType = {0} OR n.ActionType = {1})"
@@ -237,7 +237,7 @@ namespace CCFlow.WF.WorkOpt
                           + "        n.RDT ASC";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(
-                    string.Format(sql, (int) ActionType.WorkCheck, (int) ActionType.StartChildenFlow, WorkID));
+                    string.Format(sql, (int) ActionType.WorkCheck, (int) ActionType.StartChildenFlow, WorkID, FK_Flow));
                 
                 BP.En.Attrs attrs = nds.GetNewEntity.EnMap.Attrs;
                 Node _nd = null;

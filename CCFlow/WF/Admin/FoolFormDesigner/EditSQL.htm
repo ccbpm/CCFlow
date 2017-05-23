@@ -351,8 +351,11 @@
         var fType = GetQueryString("FType");
         var enumKey = GetQueryString("EnumKey");
         var inlayer = GetQueryString("inlayer");
-       
+
         var frmData = $("#cc").serialize();
+        frmData = DoCheckboxValue(frmData, "CB_IsInput");
+        frmData = DoCheckboxValue(frmData, "CB_IsEnableJS");
+
         $.ajax({
             data: frmData,
             type: 'post',

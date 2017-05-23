@@ -237,8 +237,8 @@ namespace CCFlow.WF.WorkOpt
                           + "        n.RDT ASC";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(
-                    string.Format(sql, (int) ActionType.WorkCheck, (int) ActionType.StartChildenFlow, WorkID, FK_Flow));
-                
+                    string.Format(sql, (int)ActionType.WorkCheck, (int)ActionType.StartChildenFlow, WorkID, FK_Flow));
+
                 BP.En.Attrs attrs = nds.GetNewEntity.EnMap.Attrs;
                 Node _nd = null;
 
@@ -280,9 +280,15 @@ namespace CCFlow.WF.WorkOpt
                 int biaoji = 0;
                 int count = 0;
                 int ndfrom = 0;
+                List<int> nodes2 = new List<int>();
 
                 foreach (BP.WF.Node nd in nds)
                 {
+                    if (nodes2.Contains(nd.NodeID))
+                        continue;
+
+                    nodes2.Add(nd.NodeID);
+
                     if (nodes.Contains(nd.NodeID + ",") == true)
                     {
                         //输出发送审核信息与抄送信息.

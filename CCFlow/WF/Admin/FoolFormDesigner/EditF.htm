@@ -483,6 +483,11 @@
             fType = AppString;
 
         var frmData = $("#cc").serialize();
+        frmData = DoCheckboxValue(frmData, "CB_IsInput");
+        frmData = DoCheckboxValue(frmData, "CB_IsSupperText");
+        frmData = DoCheckboxValue(frmData, "CB_IsRichText");
+        frmData = DoCheckboxValue(frmData, "CB_IsSum");
+
         $.ajax({
             data: frmData,
             type: 'post',

@@ -324,8 +324,10 @@
         var fType = GetQueryString("FType");
         var sfTable = GetQueryString("FK_SFTable");
         var inlayer = GetQueryString("inlayer");
-       
+
         var frmData = $("#cc").serialize();
+        frmData = DoCheckboxValue(frmData, "CB_IsInput");
+
         $.ajax({
             data: frmData,
             type: 'post',

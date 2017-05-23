@@ -334,6 +334,17 @@ function GenerFullAllDivVal(data) {
     // alert('没有找到的控件类型:' + unSetCtrl);
 }
 
+function DoCheckboxValue(frmData, cbId) {
+    if (frmData.indexOf(cbId + "=") == -1) {
+        frmData += "&" + cbId + "=0";
+    }
+    else {
+        frmData.replace(cbId + '=on', cbId + '=1');
+    }
+
+    return frmData;
+}
+
 
 /*隐藏与显示.*/
 function ShowHidden(ctrlID) {

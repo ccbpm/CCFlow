@@ -536,7 +536,7 @@ namespace BP.WF.HttpHandler
         public int GetValIntFromFrmByKey(string key)
         {
             string str = this.GetValFromFrmByKey(key);
-            if (str == null || str == "" || str=="0")
+            if (str == null || str == "")
                 throw new Exception("@参数:" + key + "没有取到值.");
             return int.Parse(str);
         }

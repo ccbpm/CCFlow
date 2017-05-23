@@ -127,6 +127,13 @@
                     if (height > iheight) {
                         $(parentIframe).height(height + 10);
                     }
+
+                    var divCCForm = window.parent.document.getElementById("divCCForm");
+                    var divCCFormHeight = $(divCCForm).height();
+
+                    if (height > divCCFormHeight) {
+                        $(divCCForm).height(height + 20);
+                    }
                 }
             }
         });

@@ -473,7 +473,7 @@ namespace CCFlow.WF.CCForm
                     }
                     else
                     {
-                        FrmFields fls = new FrmFields(this.FK_MapData, this.HisFrmNode.FrmSln);
+                        FrmFields fls = new FrmFields(this.FK_MapData, this.HisFrmNode.FK_Node);
                         //求出集合.
                         MapAttrs mattrs = new MapAttrs(this.FK_MapData);
                         foreach (FrmField item in fls)

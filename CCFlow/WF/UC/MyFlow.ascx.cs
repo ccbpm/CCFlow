@@ -1844,9 +1844,16 @@ namespace CCFlow.WF.UC
                         this.WorkID = wk.OID;
 
                     string url = this.DealUrl(currND);
+                    MapData mapNode = new MapData(nd.NodeFrmID);
+                    Width = mapNode.FrmW+"";
+                    if (float.Parse(Width) < 500)
+                        Width = "900";
 
+                    Height = mapNode.MaxEnd > mapNode.FrmH ? mapNode.MaxEnd + "" : mapNode.FrmH + "";
+                    if (float.Parse(Height) <= 800)
+                        Height = "800";
                     #region 在这里增加 url.
-                    string info = "<iframe ID='SelfForm' src='" + url + "' frameborder=0  style='width:100%; height:800px' leftMargin='0' topMargin='0' />";
+                    string info = "<iframe ID='SelfForm' src='" + url + "' frameborder=0  style='width:100%; height:" + Height + "px' leftMargin='0' topMargin='0' />";
                     info += "\t\n</iframe>";
                     this.UCEn1.Add(info);
                     #endregion

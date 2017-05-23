@@ -5154,11 +5154,15 @@ namespace BP.WF
         /// <summary>
         /// 检查阻塞模式
         /// </summary>
-        /// <returns>返回是否可以向下发送.</returns>
-        private bool CheckBlockModel()
+        private void CheckBlockModel()
         {
             if (this.HisNode.BlockModel == BlockModel.None)
-                return true;
+                return;
+
+            string blockMsg = this.HisNode.BlockAlert;
+
+            if (string.IsNullOrWhiteSpace(this.HisNode.BlockAlert))
+                blockMsg = "@符合发送阻塞规则，不能向下发送！";
 
             if (this.HisNode.BlockModel == BlockModel.CurrNodeAll)
             {
@@ -5177,7 +5181,7 @@ namespace BP.WF
                     qo.AddWhere(GenerWorkFlowAttr.WFSta, (int)WFSta.Runing);
                     qo.DoQuery();
                     if (gwls.Count == 0)
-                        return true;
+                        return;
                 }
                 else
                 {
@@ -5202,7 +5206,7 @@ namespace BP.WF
 
                     qo.DoQuery();
                     if (gwls.Count == 0)
-                        return true;
+                        return;
                 }
 
                 string err = "";
@@ -5210,10 +5214,7 @@ namespace BP.WF
                 foreach (GenerWorkFlow gwf in gwls)
                     err += "@流程ID=" + gwf.WorkID + ",标题:" + gwf.Title + ",当前执行人:" + gwf.TodoEmps + ",运行到节点:" + gwf.NodeName;
 
-                if (string.IsNullOrEmpty(err) == true)
-                    return true;
-
-                err = Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null) + err;
+                err = Glo.DealExp(blockMsg, this.rptGe, null) + err;
                 throw new Exception(err);
             }
 
@@ -5292,9 +5293,9 @@ namespace BP.WF
                 }
 
                 if (string.IsNullOrEmpty(err) == true)
-                    return true;
+                    return;
 
-                err = Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null) + err;
+                err = Glo.DealExp(blockMsg, this.rptGe, null) + err;
                 throw new Exception(err);
             }
 
@@ -5304,8 +5305,9 @@ namespace BP.WF
                 decimal d = DBAccess.RunSQLReturnValDecimal(Glo.DealExp(this.HisNode.BlockExp, this.rptGe, null), 0, 1);
                 //如果值大于0进行阻塞
                 if (d > 0)
-                    throw new Exception("@" + Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null));
-                return true;
+                    throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
+
+                return;
             }
 
             if (this.HisNode.BlockModel == BlockModel.ByExp)
@@ -5315,7 +5317,7 @@ namespace BP.WF
                 string exp = this.HisNode.BlockExp;
                 string[] strs = exp.Trim().Split(' ');
 
-                string key = strs[0].Trim();
+                string key = strs[0].Trim().TrimStart('@');
                 string oper = strs[1].Trim();
                 string val = strs[2].Trim();
                 val = val.Replace("'", "");
@@ -5348,64 +5350,61 @@ namespace BP.WF
                 #region 开始执行判断.
                 if (oper == "=")
                 {
-                    if (valPara == val)
-                        return true;
-                    else
-                        throw new Exception("@" + Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null));
+                    if (valPara != val)
+                        return;
 
+                    throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
                 }
 
                 if (oper.ToUpper() == "LIKE")
                 {
-                    if (valPara.Contains(val))
-                        return true;
-                    else
-                        throw new Exception("@" + Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null));
+                    if (valPara.Contains(val) == false)
+                        return;
 
+                    throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
                 }
 
                 if (oper == ">")
                 {
                     if (float.Parse(valPara) > float.Parse(val))
-                        return true;
-                    else
-                        throw new Exception("@" + Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null));
+                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
 
+                    return;
                 }
+
                 if (oper == ">=")
                 {
                     if (float.Parse(valPara) >= float.Parse(val))
-                        return true;
-                    else
-                        throw new Exception("@" + Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null));
+                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
 
+                    return;
                 }
+
                 if (oper == "<")
                 {
                     if (float.Parse(valPara) < float.Parse(val))
-                        return true;
-                    else
-                        throw new Exception("@" + Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null));
+                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
 
+                    return;
                 }
+
                 if (oper == "<=")
                 {
                     if (float.Parse(valPara) <= float.Parse(val))
-                        return true;
-                    else
-                        throw new Exception("@" + Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null));
+                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
 
+                    return;
                 }
 
                 if (oper == "!=")
                 {
                     if (float.Parse(valPara) != float.Parse(val))
-                        return true;
-                    else
-                        throw new Exception("@" + Glo.DealExp(this.HisNode.BlockAlert, this.rptGe, null));
+                        throw new Exception("@" + Glo.DealExp(blockMsg, this.rptGe, null));
 
+                    return;
                 }
-                throw new Exception("@参数格式错误:" + exp + " Key=" + key + " oper=" + oper + " Val=" + val);
+
+                throw new Exception("@阻塞模式参数配置格式错误:" + exp + " Key=" + key + " oper=" + oper + " Val=" + val);
                 #endregion 开始执行判断.
             }
 

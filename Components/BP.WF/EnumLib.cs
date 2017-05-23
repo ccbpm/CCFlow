@@ -417,7 +417,7 @@ namespace BP.WF
         /// </summary>
         None,
         /// <summary>
-        /// 当前节点的所有未完成的子线程
+        /// 当前节点的有未完成的子线程
         /// </summary>
         CurrNodeAll,
         /// <summary>

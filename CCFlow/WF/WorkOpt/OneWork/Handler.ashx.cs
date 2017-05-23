@@ -517,10 +517,33 @@ namespace CCFlow.WF.WorkOpt.OneWork
                 if (workid != 0)
                 {
                     //获取流程信息，added by liuxc,2016-10-26
-                    sql =
-                        "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT,wgwf.WFSta,wgwf.WFState FROM WF_GenerWorkFlow wgwf WHERE wgwf.WorkID = " +
-                        workid;
-                    dt = DBAccess.RunSQLReturnTable(sql);
+                    //sql =
+                    //    "SELECT wgwf.Starter,wgwf.StarterName,wgwf.RDT,wgwf.WFSta,wgwf.WFState FROM WF_GenerWorkFlow wgwf WHERE wgwf.WorkID = " +
+                    //    workid;
+                    sql = "SELECT wgwf.Starter,"
+                          + "        wgwf.StarterName,"
+                          + "        wgwf.RDT,"
+                          + "        wgwf.WFSta,"
+                          + "        wgwf.WFState,"
+                          + "        wgwf.FID,"
+                          + "        wgwf.PWorkID,"
+                          + "        wgwf.PFlowNo,"
+                          + "        wgwf.PNodeID,"
+                          + "        wgwf.FK_Flow,"
+                          + "        wgwf.FK_Node,"
+                          + "        wgwf.Title,"
+                          + "        wgwf.WorkID,"
+                          + "        wf.Name      FlowName"
+                          + " FROM   WF_GenerWorkFlow wgwf"
+                          + "        INNER JOIN WF_Flow wf"
+                          + "             ON  wf.No = wgwf.FK_Flow"
+                          + " WHERE  wgwf.WorkID = {0}"
+                          + "        OR  wgwf.FID = {0}"
+                          + "        OR  wgwf.PWorkID = {0}"
+                          + " ORDER BY"
+                          + "        wgwf.RDT DESC";
+
+                    dt = DBAccess.RunSQLReturnTable(string.Format(sql, workid));
                     dt.TableName = "FLOWINFO";
                     ds.Tables.Add(dt);
 

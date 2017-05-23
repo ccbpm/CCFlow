@@ -29,6 +29,7 @@
         var dragTextPointStart;
         var dragTrackTextPointStart;
         var dragPossibleTextPointStart;
+        var isSubFlowNode;
 
         //定义样式变量，可在此统一修改流程样式
         var STYLE_CANVAS_COLOR = '#FFFFFF'; //画布背景颜色,E7F1F9
@@ -160,6 +161,11 @@
             var nodeTrack;
             var isExist;
 
+            $('#tracktable').hover(function () { }, function () {
+                $('#trackinfo').offset({ top: 0, left: 0 });
+                $('#trackinfo').hide();
+            });
+
             $.each(datas.WF_NODE, function () {
 
                 //确定边框颜色
@@ -263,6 +269,7 @@
                             //组织节点的轨迹信息
                             var table = $('#tracktable');
                             table.empty();
+
                             table.append(
                                     '<tr>' +
                                     '   <td colspan="4" class="GroupTitle">轨迹信息</td>' +
@@ -283,11 +290,50 @@
                             });
 
                             var p = $(this.node).offset();
-                            $('#trackinfo').offset({ top: p.top + this.attr('height') + 2, left: p.left });
+                            $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
                             $('#trackinfo').show();
                         }
-                        else if (node.rTrackText) { //added by liuxc,2016-03-16
+                        else if (node.rTrackText) { //added by liuxc,2016-03-16                            
                             node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+
+                            var subcount = 0;
+                            var subflows = getSubFlows(node.id);
+
+                            for (var sf in subflows) {
+                                subcount++;
+                            }
+
+                            if (subcount > 0) {
+                                isSubFlowNode = true;
+
+                                var table = $('#tracktable');
+                                table.empty();
+
+                                for (var sf in subflows) {
+                                    table.append(
+                                        '<tr>' +
+                                        '   <td colspan="3" class="GroupTitle">' + subflows[sf].Name + '</td>' +
+                                        '</tr>');
+
+                                    var c = 1;
+
+                                    $.each(subflows[sf].Flows, function () {
+                                        table.append(
+                                            '<tr>' +
+                                            '   <td style="width:40px;text-align:center">' + (c++) + '</td>' +
+                                            '   <td style="width:280px"><a href="' + this.Url + '" target="_blank" style="color:' + STYLE_NODE_COLOR_FORE_HOVER + '">' + this.Title + '</a></td>' +
+                                            '   <td>' + this.RDT + '</td>' +
+                                            '</tr>');
+                                    });
+                                }
+
+                                var p = $(this.node).offset();
+                                $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
+                                $('#trackinfo').show();
+                            }
+                            else {
+                                isSubFlowNode = false;
+                            }
                         }
                         else if (node.rPossibleText) { //added by liuxc,2016-04-15
                             node.rPossibleText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
@@ -348,6 +394,31 @@
                 rLabel.rText.attr({ "stroke": STYLE_LABEL_COLOR_FORE, "fill": getFillTextColor(STYLE_LABEL_COLOR_FORE), "font-size": STYLE_FONT_SIZE_LABEL, "text-anchor": "start" });
                 rLabel.rText.toFront();
             });
+        }
+
+        function getSubFlows(nodeId) {
+            var subflows = {};
+            var flows = "";
+            var subflow;
+
+            $.each(jdata.ds.FLOWINFO, function () {
+                if (this.PNODEID == 0 || this.PNODEID != nodeId) {
+                    return true;
+                }
+
+                if (flows.indexOf(this.FK_FLOW + ",") == -1) {
+                    flows += this.FK_FLOW + ",";
+                    subflow = { No: this.FK_FLOW, Name: this.FLOWNAME, Flows: [] };
+                    subflows["F" + this.FK_FLOW] = subflow;
+                }
+                else {
+                    subflow = subflows["F" + this.FK_FLOW];
+                }
+
+                subflow.Flows.push({ Title: this.TITLE, RDT: getChineseDateTime(this.RDT), Url: "./OneWork.htm?CurrTab=Truck&FK_Flow=" + this.FK_FLOW + "&FK_Node=" + this.FK_NODE + "&WorkID=" + this.WORKID + "&FID=0" });
+            });
+
+            return subflows;
         }
 
         function getDots(dotStr) {

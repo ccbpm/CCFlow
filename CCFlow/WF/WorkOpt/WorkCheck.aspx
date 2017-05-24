@@ -117,25 +117,25 @@
             $('#loading-mask').fadeOut();
             //修改以使iframe自适应审核页面的高度，以使打印时可以打全审核信息，edited by liuxc,2017-5-22
             //注意：要求审核组件位于表单页面最下方
-            if (window.parent) {
-                var height = $(document.body).height();
-                var parentIframe = window.parent.document.getElementById("FWCND" + GetQueryString("FK_Node"));
+//            if (window.parent) {
+//                var height = $(document.body).height();
+//                var parentIframe = window.parent.document.getElementById("FWCND" + GetQueryString("FK_Node"));
 
-                if (parentIframe) {
-                    var iheight = $(parentIframe).height();
+//                if (parentIframe) {
+//                    var iheight = $(parentIframe).height();
 
-                    if (height > iheight) {
-                        $(parentIframe).height(height + 10);
-                    }
+//                    if (height > iheight) {
+//                        $(parentIframe).height(height + 10);
+//                    }
 
-                    var divCCForm = window.parent.document.getElementById("divCCForm");
-                    var divCCFormHeight = $(divCCForm).height();
+//                    var divCCForm = window.parent.document.getElementById("divCCForm");
+//                    var divCCFormHeight = $(divCCForm).height();
 
-                    if (height > divCCFormHeight) {
-                        $(divCCForm).height(height + 20);
-                    }
-                }
-            }
+//                    if (height > divCCFormHeight) {
+//                        $(divCCForm).height(height + 20);
+//                    }
+//                }
+//            }
         });
     </script>
     <style type="text/css">

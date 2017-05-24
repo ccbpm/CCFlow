@@ -256,7 +256,7 @@ namespace CCFlow.WF.UC
                     return;
                 }
 
-                this.Response.Redirect(nd.FormUrl + "?&IsReadonly=1WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
+                this.Response.Redirect(nd.FormUrl + "?IsReadonly=1&WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
                 return;
             }
 

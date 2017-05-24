@@ -280,15 +280,10 @@ namespace CCFlow.WF.WorkOpt
                 int biaoji = 0;
                 int count = 0;
                 int ndfrom = 0;
-                List<int> nodes2 = new List<int>();
+                List<string> tkpks = new List<string>();
 
                 foreach (BP.WF.Node nd in nds)
                 {
-                    if (nodes2.Contains(nd.NodeID))
-                        continue;
-
-                    nodes2.Add(nd.NodeID);
-
                     if (nodes.Contains(nd.NodeID + ",") == true)
                     {
                         //输出发送审核信息与抄送信息.
@@ -300,7 +295,7 @@ namespace CCFlow.WF.WorkOpt
                         {
                             if (tk.NDFrom != nd.NodeID)
                                 continue;
-
+                            
                             #region 如果是前进，并且当前节点没有启用审核组件
                             if (tk.HisActionType == ActionType.Forward)
                                 continue;
@@ -353,6 +348,11 @@ namespace CCFlow.WF.WorkOpt
                                 tb.Text = BP.WF.Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.NodeID);
                                 //if (tb.Text == "同意")
                                 //    tb.Text = "";
+
+                                if (tkpks.Contains(tk.MyPK))
+                                    continue;
+
+                                tkpks.Add(tk.MyPK);
 
                                 switch (wcDesc.HisFrmWorkShowModel)//可编辑框全局唯一
                                 {
@@ -411,7 +411,7 @@ namespace CCFlow.WF.WorkOpt
                                             }
                                             else
                                             {
-                                                this.Pub1.Add("<td style='WORD-WRAP: break-word;min-height:80px;'>" + tk.MsgHtml + "</td>");
+                                                this.Pub1.Add("<td style='WORD-WRAP: break-word;line-height:30px;'>" + tk.MsgHtml + "</td>");
                                             }
                                             #endregion
 
@@ -436,7 +436,7 @@ namespace CCFlow.WF.WorkOpt
                                             int rowspan = 3 * tks.Count;
 
                                             this.Pub1.AddTR();
-                                            this.Pub1.Add("<td  rowspan='" + rowspan + "' style='width:20px;border:1px solid #D6DDE6;'>"
+                                            this.Pub1.Add("<td  rowspan='" + rowspan + "' style='width:120px;border:1px solid #D6DDE6;'>"
                                                 + nd.FWCNodeName + "</td>");
                                             this.Pub1.AddTREnd();
 
@@ -483,7 +483,7 @@ namespace CCFlow.WF.WorkOpt
                                             }
                                             else
                                             {
-                                                this.Pub1.Add("<td style='WORD-WRAP: break-word;min-height:80px;'>" + tk.MsgHtml + "</td>");
+                                                this.Pub1.Add("<td style='WORD-WRAP: break-word;line-height:30px;'>" + tk.MsgHtml + "</td>");
                                             }
                                             this.Pub1.AddTREnd();
                                         }

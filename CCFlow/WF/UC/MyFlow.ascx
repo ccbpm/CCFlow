@@ -105,5 +105,5 @@
     <input type="hidden" id="BtnWord" value="<%=BtnWord %>" />
     <input type="hidden" id="HidWorkID" value="<%=this.WorkID %>" />
     <input type="hidden" id="CC_Url" value="./WorkOpt/CC.aspx?FK_Flow=<%=this.FK_Flow%>&FK_Node=<%=this.FK_Node %>&FID=<%=this.FID %>&WorkID=<%=this.WorkID %>&AtPara=23" />
-    <input type="hidden" id="PrintFrom_Url" value="PrintSample.aspx?FK_Flow=<%=this.FK_Flow%>&FK_Node=<%=this.FK_Node %>&FID=<%=this.FID %>&WorkID=<%=this.WorkID %>&AtPara=" />
+    <input type="hidden" id="PrintFrom_Url" value="PrintSample.aspx?FK_Flow=<%=this.FK_Flow%>&FK_Node=<%=this.FK_Node %>&FID=<%=this.FID %>&WorkID=<%=this.WorkID %>&UserNo=<%=BP.Web.WebUser.No %>&AtPara=" />
 </div>

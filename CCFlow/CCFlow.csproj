@@ -2910,6 +2910,8 @@
     <Content Include="WF\FlowSearch.aspx" />
     <Content Include="WF\FlowSearchDtl.aspx" />
     <Content Include="WF\FlowSearchMyWork.aspx" />
+    <Content Include="WF\FlowShift.aspx" />
+    <Content Include="WF\FlowSkip.aspx" />
     <Content Include="WF\Focus.aspx" />
     <Content Include="WF\Focus.htm" />
     <Content Include="WF\GetTask.aspx" />
@@ -10243,6 +10245,20 @@
     </Compile>
     <Compile Include="WF\FlowSearchMyWork.aspx.designer.cs">
       <DependentUpon>FlowSearchMyWork.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\FlowShift.aspx.cs">
+      <DependentUpon>FlowShift.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\FlowShift.aspx.designer.cs">
+      <DependentUpon>FlowShift.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\FlowSkip.aspx.cs">
+      <DependentUpon>FlowSkip.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\FlowSkip.aspx.designer.cs">
+      <DependentUpon>FlowSkip.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Focus.aspx.cs">
       <DependentUpon>Focus.aspx</DependentUpon>

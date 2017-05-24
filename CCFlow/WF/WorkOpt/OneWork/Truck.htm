@@ -73,12 +73,12 @@
             fk_Flow = uh["FK_Flow"];
             work_ID = uh["WorkID"];
             fid = uh["FID"];
-
-            if (!work_ID) {
+            
+            if (!work_ID || work_ID == "null") {
                 work_ID = "0";
             }
 
-            if (!fid) {
+            if (!fid || fid == "null") {
                 fid = "0";
             }
 
@@ -285,7 +285,7 @@
                                     '   <td style="width:120px">' + this.track.RDT + '</td>' +
                                     '   <td style="width:200px">' + this.track.ACTIONTYPETEXT + '</td>' +
                                     '   <td style="width:50px">' + this.track.EMPTOT + '</td>' +
-                                    '   <td>' + this.track.MSG.replace(/~/g,"'") + '</td>' +
+                                    '   <td>' + this.track.MSG.replace(/~/g, "'") + '</td>' +
                                     '</tr>';
                             });
                         }
@@ -295,6 +295,10 @@
                         }
                         else if (node.rPossibleText) { //added by liuxc,2016-04-15
                             node.rPossibleText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+                        }
+
+                        if (work_ID == "0") {
+                            return;
                         }
 
                         var subcount = 0;
@@ -344,7 +348,6 @@
 
                         if (node.isTrackNode && node.currTrack.type == "FROM") {
                             node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
-
                         }
                         else if (node.rTrackText) { //added by liuxc,2016-03-16
                             node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
@@ -862,7 +865,7 @@
     </script>
     <div id="holder">
     </div>
-    <div id="trackinfo" style="display: none; position: absolute; width: 480px; height: auto;
+    <div id="trackinfo" style="display: none; position: absolute; width: 600px; height: auto;
         background-color: #fff">
         <table id="tracktable" class="Table" cellpadding="0" cellspacing="0" border="1" style="width: 100%">
         </table>

@@ -431,6 +431,10 @@ namespace CCFlow.WF
             try
             {
                 string userNo = this.Request.QueryString["UserNo"];
+
+                if(!string.IsNullOrEmpty(userNo))
+                    BP.WF.Dev2Interface.Port_Login(userNo);
+
                 string no = BP.Web.WebUser.No;
             }
             catch (Exception ex)

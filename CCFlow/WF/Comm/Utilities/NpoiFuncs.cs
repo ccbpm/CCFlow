@@ -70,11 +70,11 @@ namespace CCFlow.WF.Comm.Utilities
             //序
             if (index && dt.Columns.Contains("序") == false)
             {
-                dt.Columns.Add("序", typeof(string)).ExtendedProperties.Add("width", 50);
+                dt.Columns.Add("序", typeof(int)).ExtendedProperties.Add("width", 50);
                 dt.Columns["序"].SetOrdinal(0);
 
                 for (int i = 0; i < dt.Rows.Count; i++)
-                    dt.Rows[i]["序"] = (i + 1).ToString();
+                    dt.Rows[i]["序"] = i + 1;
             }
             //合计列
             foreach (DataColumn col in dt.Columns)
@@ -102,7 +102,7 @@ namespace CCFlow.WF.Comm.Utilities
                     HSSFWorkbook wb = new HSSFWorkbook();
                     ISheet sheet = wb.CreateSheet("Sheet1");
                     sheet.DefaultRowHeightInPoints = DEF_ROW_HEIGHT;
-                    IFont font = wb.CreateFont();
+                    IFont font = null;
                     IDataFormat fmt = wb.CreateDataFormat();
 
                     if (headerRowIndex != -1)
@@ -114,6 +114,76 @@ namespace CCFlow.WF.Comm.Utilities
                     if (creatorRowIndex != -1)
                         creatorRow = sheet.CreateRow(creatorRowIndex);
 
+                    #region 单元格样式定义
+                    //列标题单元格样式设定
+                    ICellStyle titleStyle = wb.CreateCellStyle();
+                    titleStyle.BorderTop = BorderStyle.Thin;
+                    titleStyle.BorderBottom = BorderStyle.Thin;
+                    titleStyle.BorderLeft = BorderStyle.Thin;
+                    titleStyle.BorderRight = BorderStyle.Thin;
+                    titleStyle.VerticalAlignment = VerticalAlignment.Center;
+                    font = wb.CreateFont();
+                    font.IsBold = true;
+                    titleStyle.SetFont(font);
+
+                    //“序”列标题样式设定
+                    ICellStyle idxTitleStyle = wb.CreateCellStyle();
+                    idxTitleStyle.CloneStyleFrom(titleStyle);
+                    idxTitleStyle.Alignment = HorizontalAlignment.Center;
+
+                    //文件标题单元格样式设定
+                    ICellStyle headerStyle = wb.CreateCellStyle();
+                    headerStyle.Alignment = HorizontalAlignment.Center;
+                    headerStyle.VerticalAlignment = VerticalAlignment.Center;
+                    font = wb.CreateFont();
+                    font.FontHeightInPoints = 12;
+                    font.IsBold = true;
+                    headerStyle.SetFont(font);
+
+                    //制表人单元格样式设定
+                    ICellStyle userStyle = wb.CreateCellStyle();
+                    userStyle.Alignment = HorizontalAlignment.Right;
+                    userStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                    //单元格样式设定
+                    ICellStyle cellStyle = wb.CreateCellStyle();
+                    cellStyle.BorderTop = BorderStyle.Thin;
+                    cellStyle.BorderBottom = BorderStyle.Thin;
+                    cellStyle.BorderLeft = BorderStyle.Thin;
+                    cellStyle.BorderRight = BorderStyle.Thin;
+                    cellStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                    //数字单元格样式设定
+                    ICellStyle numCellStyle = wb.CreateCellStyle();
+                    numCellStyle.CloneStyleFrom(cellStyle);
+                    numCellStyle.Alignment = HorizontalAlignment.Right;
+
+                    //“序”列单元格样式设定
+                    ICellStyle idxCellStyle = wb.CreateCellStyle();
+                    idxCellStyle.CloneStyleFrom(cellStyle);
+                    idxCellStyle.Alignment = HorizontalAlignment.Center;
+
+                    //日期单元格样式设定
+                    ICellStyle dateCellStyle = wb.CreateCellStyle();
+                    dateCellStyle.CloneStyleFrom(cellStyle);
+                    dateCellStyle.DataFormat = fmt.GetFormat("yyyy-m-d;@");
+
+                    //日期时间单元格样式设定
+                    ICellStyle timeCellStyle = wb.CreateCellStyle();
+                    timeCellStyle.CloneStyleFrom(cellStyle);
+                    timeCellStyle.DataFormat = fmt.GetFormat("yyyy-m-d h:mm;@");
+
+                    //千分位单元格样式设定
+                    ICellStyle qCellStyle = wb.CreateCellStyle();
+                    qCellStyle.CloneStyleFrom(cellStyle);
+                    qCellStyle.Alignment = HorizontalAlignment.Right;
+                    qCellStyle.DataFormat = fmt.GetFormat("#,##0_ ;@");
+
+                    //小数点、千分位单元格样式设定
+                    Dictionary<string, ICellStyle> cstyles = new Dictionary<string, ICellStyle>();
+                    ICellStyle cstyle = null;
+                    #endregion
+
                     //输出列标题
                     row = sheet.CreateRow(titleRowIndex);
                     row.HeightInPoints = DEF_ROW_HEIGHT;
@@ -122,17 +192,7 @@ namespace CCFlow.WF.Comm.Utilities
                     {
                         cell = row.CreateCell(c++);
                         cell.SetCellValue(col.ColumnName);
-                        font.IsBold = true;
-                        cell.CellStyle = wb.CreateCellStyle();
-                        cell.CellStyle.BorderTop = BorderStyle.Thin;
-                        cell.CellStyle.BorderBottom = BorderStyle.Thin;
-                        cell.CellStyle.BorderLeft = BorderStyle.Thin;
-                        cell.CellStyle.BorderRight = BorderStyle.Thin;
-                        cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
-                        cell.CellStyle.SetFont(font);
-
-                        if (col.ColumnName == "序")
-                            cell.CellStyle.Alignment = HorizontalAlignment.Center;
+                        cell.CellStyle = col.ColumnName == "序" ? idxTitleStyle : titleStyle;
 
                         columnWidth = col.ExtendedProperties.ContainsKey("width")
                                           ? (int)col.ExtendedProperties["width"]
@@ -147,6 +207,43 @@ namespace CCFlow.WF.Comm.Utilities
                             sumRow.CreateCell(c - 1);
                         if (creatorRow != null)
                             creatorRow.CreateCell(c - 1);
+
+                        //定义数字列单元格样式
+                        switch (col.DataType.Name)
+                        {
+                            case "Single":
+                            case "Double":
+                            case "Decimal":
+                                decimalPlaces = col.ExtendedProperties.ContainsKey("dots")
+                                                    ? (int)col.ExtendedProperties["dots"]
+                                                    : 2;
+                                qian = col.ExtendedProperties.ContainsKey("k")
+                                           ? (bool)col.ExtendedProperties["k"]
+                                           : false;
+
+                                if (decimalPlaces > 0 && !qian)
+                                {
+                                    cstyle = wb.CreateCellStyle();
+                                    cstyle.CloneStyleFrom(qCellStyle);
+                                    cstyle.DataFormat = fmt.GetFormat("0." + string.Empty.PadLeft(decimalPlaces, '0') + "_ ;@");
+                                }
+                                else if (decimalPlaces == 0 && qian)
+                                {
+                                    cstyle = wb.CreateCellStyle();
+                                    cstyle.CloneStyleFrom(qCellStyle);
+                                }
+                                else if (decimalPlaces > 0 && qian)
+                                {
+                                    cstyle = wb.CreateCellStyle();
+                                    cstyle.CloneStyleFrom(qCellStyle);
+                                    cstyle.DataFormat = fmt.GetFormat("#,##0." + string.Empty.PadLeft(decimalPlaces, '0') + "_ ;@");
+                                }
+
+                                cstyles.Add(col.ColumnName, cstyle);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     //输出文件标题
                     if (headerRow != null)
@@ -155,13 +252,7 @@ namespace CCFlow.WF.Comm.Utilities
                                                                                 dt.Columns.Count - 1));
                         cell = headerRow.GetCell(0);
                         cell.SetCellValue(header);
-                        cell.CellStyle = wb.CreateCellStyle();
-                        cell.CellStyle.Alignment = HorizontalAlignment.Center;
-                        cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
-                        font = wb.CreateFont();
-                        font.FontHeightInPoints = 12;
-                        font.IsBold = true;
-                        cell.CellStyle.SetFont(font);
+                        cell.CellStyle = headerStyle;
                         headerRow.HeightInPoints = 26;
                     }
                     //输出日期
@@ -171,9 +262,7 @@ namespace CCFlow.WF.Comm.Utilities
                                                                                 dt.Columns.Count - 1));
                         cell = dateRow.GetCell(0);
                         cell.SetCellValue("日期：" + DateTime.Today.ToString("yyyy-MM-dd"));
-                        cell.CellStyle = wb.CreateCellStyle();
-                        cell.CellStyle.Alignment = HorizontalAlignment.Right;
-                        cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                        cell.CellStyle = userStyle;
                         dateRow.HeightInPoints = DEF_ROW_HEIGHT;
                     }
                     //输出制表人
@@ -183,9 +272,7 @@ namespace CCFlow.WF.Comm.Utilities
                                                                                 dt.Columns.Count - 1));
                         cell = creatorRow.GetCell(0);
                         cell.SetCellValue("制表人：" + creator);
-                        cell.CellStyle = wb.CreateCellStyle();
-                        cell.CellStyle.Alignment = HorizontalAlignment.Right;
-                        cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                        cell.CellStyle = userStyle;
                         creatorRow.HeightInPoints = DEF_ROW_HEIGHT;
                     }
 
@@ -200,19 +287,11 @@ namespace CCFlow.WF.Comm.Utilities
                         foreach (DataColumn col in dt.Columns)
                         {
                             cell = row.CreateCell(c++);
-                            cell.CellStyle = wb.CreateCellStyle();
-                            cell.CellStyle.BorderTop = BorderStyle.Thin;
-                            cell.CellStyle.BorderBottom = BorderStyle.Thin;
-                            cell.CellStyle.BorderLeft = BorderStyle.Thin;
-                            cell.CellStyle.BorderRight = BorderStyle.Thin;
-                            cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
-
-                            if (col.ColumnName == "序")
-                                cell.CellStyle.Alignment = HorizontalAlignment.Center;
 
                             switch (col.DataType.Name)
                             {
                                 case "Boolean":
+                                    cell.CellStyle = cellStyle;
                                     cell.SetCellValue(Equals(dr[col.ColumnName], true) ? "是" : "否");
                                     break;
                                 case "DateTime":
@@ -220,45 +299,29 @@ namespace CCFlow.WF.Comm.Utilities
                                                  ? (bool)col.ExtendedProperties["isdate"]
                                                  : false;
 
+                                    cell.CellStyle = isDate ? dateCellStyle : timeCellStyle;
                                     cell.SetCellValue(dr[col.ColumnName] as string);
-                                    cell.CellStyle.DataFormat = isDate
-                                                                    ? fmt.GetFormat("yyyy-m-d;@")
-                                                                    : fmt.GetFormat("yyyy-m-d h:mm;@");
                                     break;
                                 case "Int16":
                                 case "Int32":
                                 case "Int64":
                                     qian = col.ExtendedProperties.ContainsKey("k")
-                                               ? (bool)col.ExtendedProperties["k"]
-                                               : false;
+                                                   ? (bool)col.ExtendedProperties["k"]
+                                                   : false;
 
+                                    cell.CellStyle = col.ColumnName == "序"
+                                                         ? idxCellStyle
+                                                         : qian ? qCellStyle : numCellStyle;
                                     cell.SetCellValue((int)dr[col.ColumnName]);
-
-                                    if (qian)
-                                        cell.CellStyle.DataFormat = fmt.GetFormat("#,##0_ ;@");
                                     break;
                                 case "Single":
                                 case "Double":
                                 case "Decimal":
-                                    decimalPlaces = col.ExtendedProperties.ContainsKey("dots")
-                                                        ? (int)col.ExtendedProperties["dots"]
-                                                        : 2;
-                                    qian = col.ExtendedProperties.ContainsKey("k")
-                                               ? (bool)col.ExtendedProperties["k"]
-                                               : false;
-
+                                    cell.CellStyle = cstyles[col.ColumnName];
                                     cell.SetCellValue(((double)dr[col.ColumnName]));
-
-                                    if (decimalPlaces > 0 && !qian)
-                                        cell.CellStyle.DataFormat =
-                                            fmt.GetFormat("0." + string.Empty.PadLeft(decimalPlaces, '0') + "_ ;@");
-                                    else if (decimalPlaces == 0 && qian)
-                                        cell.CellStyle.DataFormat = fmt.GetFormat("#,##0_ ;@");
-                                    else if (decimalPlaces > 0 && qian)
-                                        cell.CellStyle.DataFormat =
-                                            fmt.GetFormat("#,##0." + string.Empty.PadLeft(decimalPlaces, '0') + "_ ;@");
                                     break;
                                 default:
+                                    cell.CellStyle = cellStyle;
                                     cell.SetCellValue(dr[col.ColumnName] as string);
                                     break;
                             }
@@ -272,12 +335,7 @@ namespace CCFlow.WF.Comm.Utilities
                         for (c = 0; c < dt.Columns.Count; c++)
                         {
                             cell = sumRow.GetCell(c);
-                            cell.CellStyle = wb.CreateCellStyle();
-                            cell.CellStyle.BorderTop = BorderStyle.Thin;
-                            cell.CellStyle.BorderBottom = BorderStyle.Thin;
-                            cell.CellStyle.BorderLeft = BorderStyle.Thin;
-                            cell.CellStyle.BorderRight = BorderStyle.Thin;
-                            cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                            cell.CellStyle = cellStyle;
 
                             if (sumColumns.Contains(c) == false)
                                 continue;
@@ -349,4 +407,5 @@ namespace CCFlow.WF.Comm.Utilities
             return "Unkown";
         }
     }
+
 }

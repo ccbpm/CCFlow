@@ -902,124 +902,6 @@ function onKeyDown(ev) {
             action("down");
             return false;
             break;
-
-        //        case KEY.Z:          
-        //            if (CNTRL_PRESSED) {          
-        //                action('undo');          
-        //            }          
-        //            break;          
-
-        //        case KEY.Y:            
-        //            if(CNTRL_PRESSED){            
-        //                action('redo');            
-        //            }            
-        //            break;            
-
-        //        case KEY.G:         
-        //            if (CNTRL_PRESSED) {         
-        //                action('group');         
-        //            }         
-        //            break;         
-
-        //        case KEY.U:        
-        //            if (CNTRL_PRESSED) {        
-        //                action('ungroup');        
-        //            }        
-        //            break;        
-
-        //        case KEY.D:        
-        //            if (CNTRL_PRESSED) {        
-        //                if (ev.preventDefault) {        
-        //                    ev.preventDefault();        
-        //                }        
-        //                else {        
-        //                    ev.returnValue = false;        
-        //                }        
-        //                action('duplicate');        
-        //            }        
-        //            break;        
-
-        //        case KEY.C:        
-        //            if (CNTRL_PRESSED) {        
-        //                if (selectedFigureId != -1) {        
-        //                    clipboardBuffer[0] = "figure";        
-        //                    clipboardBuffer[1] = selectedFigureId;        
-        //                } else if (selectedGroupId != -1) {        
-        //                    clipboardBuffer[0] = "group";        
-        //                    clipboardBuffer[1] = selectedGroupId;        
-        //                } else {        
-        //                    clipboardBuffer[0] = "";        
-        //                    clipboardBuffer[1] = -1;        
-        //                }        
-        //            }        
-        //            break;        
-
-        //        case KEY.V:       
-        //            if (CNTRL_PRESSED) {       
-        //                /*Description:       
-        //                * If figure or group copied here is what can happen:       
-        //                * - if no selection -> STATE_NONE:       
-        //                *      - if figure copied then duplicate it       
-        //                *      - if group copied then check if it`s not permanent, becase then we have lost it, and if not, then duplicate it       
-        //                * - if figure selected (ONLY if figure copied):       
-        //                *      - if it is same figure as copied, then duplicate it       
-        //                *        also because the duplicate will become selected, add it to the clipboard thus allowing another paste       
-        //                *      - if it is another figure, then apply style to it       
-        //                * - if group selected:       
-        //                *      //TODO: for Janis see comments/description on GroupCloneCommands       
-        //                *      - if it is same group as copied, then duplicate it, in this case we can also duplicate permanent group       
-        //                *        also because the duplicate will become selected, add it to the clipboard thus allowing another paste       
-        //                *      - if it is another group, and if we have COPIED THE FIGURE, then apply its style to all group       
-        //                *        
-        //                */       
-        //                if (clipboardBuffer[0]) {// if something was copied       
-        //                    switch (state) {       
-        //                        case STATE_NONE:       
-        //                            if (clipboardBuffer[0] == "figure") {       
-        //                                selectedFigureId = clipboardBuffer[1];       
-        //                                action('duplicate');       
-        //                            } else if (clipboardBuffer[0] == "group") {       
-        //                                selectedGroupId = clipboardBuffer[1];       
-        //                                if (STACK.groupGetById(selectedGroupId)) { //if this is true, then the group isn`t permanent       
-        //                                    action('duplicate');       
-        //                                }       
-        //                            }       
-        //                            break;       
-        //                        case STATE_FIGURE_SELECTED:       
-        //                            if (clipboardBuffer[0] == "figure") {       
-        //                                if (clipboardBuffer[1] == selectedFigureId) {       
-        //                                    action('duplicate');       
-        //                                    //this means we add the copied to the clipboard, thus allowing another paste (it is ok, since the style is same)       
-        //                                    clipboardBuffer[1] = selectedFigureId;       
-        //                                } else { //apply style       
-        //                                    //TODO: I do think style should be applied by users directly.       
-        //                                    var copiedFigure = STACK.figureGetById(clipboardBuffer[1]);       
-        //                                    var selectedFigure = STACK.figureGetById(selectedFigureId);       
-        //                                    selectedFigure.applyAnotherFigureStyle(copiedFigure);       
-        //                                }       
-        //                            }       
-        //                            break;       
-        //                        case STATE_GROUP_SELECTED:       
-        //                            if (clipboardBuffer[1] == selectedGroupId) {       
-        //                                action('duplicate');       
-        //                                //this means we add the copied to the clipboard, thus allowing another paste (it is ok, since the style is same)       
-        //                                clipboardBuffer[1] = selectedGroupId;       
-        //                            } else {       
-        //                                //TODO: I do think style should be applied by users directly, even less to spread a figure's style to a whole group       
-        //                                if (clipboardBuffer[0] == "figure") { //if we have copied the figure, apply style to group       
-        //                                    var copiedFigure = STACK.figureGetById(clipboardBuffer[1]);       
-        //                                    var groupFigures = STACK.figureGetByGroupId(selectedGroupId);       
-        //                                    for (var i = 0; i < groupFigures.length; i++) {       
-        //                                        groupFigures[i].applyAnotherFigureStyle(copiedFigure);       
-        //                                    }       
-        //                                }       
-        //                            }       
-        //                            break;       
-        //                    }       
-        //                }       
-        //            }       
-        //            break;       
-
         case KEY.S:
             if (CNTRL_PRESSED) {
                 //Log.info("CTRL-S pressed  ");
@@ -1112,9 +994,13 @@ function onMouseDown(ev) {
                         url: Handler,
                         data: { action: 'Node_EditNodeName', NodeID: ccObj.CCBPM_OID, NodeName: encodeURI(shapeText) },
                         success: function (jsonData) {
-                            if (jsonData == "true") {
-                                save(false);
+
+                            if (jsonData.indexOf('err@') == 0) {
+                                alert(jsonData);
+                                return;
                             }
+
+                            save(false);
                         },
                         async: false
                     });
@@ -3345,6 +3231,7 @@ function linkMap() {
 *  3 - from shortcut Ctrl-S (onKeyDown)
 **/
 function save(showInfo) {
+
     if (state == STATE_TEXT_EDITING) {
         currentTextEditor.destroy();
         currentTextEditor = null;
@@ -3410,7 +3297,7 @@ function save(showInfo) {
             return;
         }
 
-        if (data == "true" && showInfo == true) {
+        if (showInfo == true) {
 
             if (self.parent) {
                 if (typeof self.parent.TabFormExists != 'undefined') {
@@ -3632,39 +3519,7 @@ function loadQuickStartDiagram() {
     );
 }
 
-
-/**Saves a diagram. Actually send the serialized version of diagram
-*for saving
-**/
-function saveAs() {
-    var dataURL = renderedCanvas();
-
-    //                var $diagram = {c:canvas.save(), s:STACK, m:CONNECTOR_MANAGER};
-    var $diagram = { c: canvasProps, s: STACK, m: CONNECTOR_MANAGER, p: CONTAINER_MANAGER, v: DIAGRAMO.fileVersion };
-    var $serializedDiagram = JSON.stringify($diagram);
-    //   $serializedDiagram = JSON.stringify($diagram,  Util.operaReplacer);
-    var svgDiagram = toSVG();
-
-    //save the URLs of figures as a CSV 
-    var lMap = linkMap();
-
-    //alert($serializedDiagram);
-
-    //see: http://api.jquery.com/jQuery.post/
-    $.post("./common/controller.php", { action: 'saveAs', diagram: $serializedDiagram, png: dataURL, linkMap: lMap, svg: svgDiagram },
-       function (data) {
-           if (data == 'noaccount') {
-               Log.info('You must have an account to use that feature');
-               //window.location = '../register.php';
-           }
-           else if (data == 'step1Ok') {
-               Log.info('Save as...');
-               window.location = './saveDiagram.php';
-           }
-       }
-   );
-}
-
+ 
 
 /**Add listeners to elements on the page*/
 // TODO: set dblclick handler for mobile (touches)
@@ -3752,9 +3607,6 @@ function init(diagramId) {
     else if (diagramId === 'quickstart') {
         loadQuickStartDiagram();
     }
-
-
-
     // close layer when click-out
 
     addListeners();

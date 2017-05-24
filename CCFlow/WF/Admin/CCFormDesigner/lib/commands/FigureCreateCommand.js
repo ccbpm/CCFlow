@@ -93,11 +93,11 @@ FigureCreateCommand.prototype = {
                 case "CheckGroup":
                     alert('该功能没有实现' + createFigureName + ' 需要连续创建三个字段.');
                     break;
-                //case CCForm_Controls.FrmCheck: //审核组件 
-                //case CCForm_Controls.FrmCheck: // 审核组件. 
-                //case CCForm_Controls.FlowChart: //轨迹图. 
-                //case CCForm_Controls.SubFlowDtl: //子流程. 
-                //case CCForm_Controls.ThreadDtl: //子线城. 
+                //case CCForm_Controls.FrmCheck: //审核组件    
+                //case CCForm_Controls.FrmCheck: // 审核组件.    
+                //case CCForm_Controls.FlowChart: //轨迹图.    
+                //case CCForm_Controls.SubFlowDtl: //子流程.    
+                //case CCForm_Controls.ThreadDtl: //子线城.    
                 case "FrmCheck": // 审核组件.
                 case "FlowChart": //轨迹图.
                 case "SubFlowDtl": //子流程.
@@ -201,7 +201,6 @@ FigureCreateCommand.prototype = {
 
                 // 定义参数，让其保存到数据库里。
                 var param = {
-                    action: "DoType",
                     DoType: "NewField",
                     FrmID: CCForm_FK_MapData,
                     KeyOfEn: frmVal.KeyOfEn,
@@ -212,6 +211,12 @@ FigureCreateCommand.prototype = {
                 };
 
                 ajaxService(param, function (json) {
+
+                    if (json.indexOf('err@') == 0) {
+                        alert(json);
+                        return;
+                    }
+
                     if (json == "true") {
                         //开始画这个-元素.
                         transField.paint();

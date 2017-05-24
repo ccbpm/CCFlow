@@ -631,10 +631,10 @@ function ShowSubDepts(node, treeid) {
     var data;
 
     if (isStation) {
-        var deptid = node.attributes.DeptId;
-        var stid = node.attributes.StationId;
+        var deptNo = node.attributes.DeptId;
+        var stationNo = node.attributes.StationId;
 
-        ajaxService({ action: "GetEmpsByStationTable", deptid: deptid, stationid: stid }, function (re) {
+        ajaxService({ action: "GetEmpsByStationTable", DeptNo: deptNo, StationNo: stationNo }, function (re) {
             data = $.parseJSON(re);
 
             var children = $("#" + treeid).tree('getChildren', node.target);
@@ -651,7 +651,7 @@ function ShowSubDepts(node, treeid) {
                         id: this.PARENTNO +  "|" + this.NO,
                         text: this.NAME,
                         iconCls: "icon-user",
-                        attributes: { TType: "EMP", StationId: stid, DeptId: deptid }
+                        attributes: { TType: "EMP", StationId: stationNo, DeptId: deptNo }
                     }]
                 });
             });
@@ -661,7 +661,7 @@ function ShowSubDepts(node, treeid) {
     }
     else {
         var deptid = node.id.replace(/DEPT_/g, "");
-        ajaxService({ action: "GetSubDeptsTable", rootid: deptid }, function (re) {
+        ajaxService({ action: "GetSubDeptsTable", rootid: deptNo }, function (re) {
             data = $.parseJSON(re);
 
             var children = $("#" + treeid).tree('getChildren', node.target);
@@ -694,14 +694,14 @@ function ShowSubDepts(node, treeid) {
                         n.state = "closed";
                         n.attributes.IsLoad = false;
                         n.attributes.StationId = this.NO;
-                        n.attributes.DeptId = deptid;
+                        n.attributes.DeptId = deptNo;
                         n.children = [{
                             text: "加载中..."
                         }];
                         break;
                     case "EMP":
                         n.iconCls = "icon-user";
-                        n.attributes.DeptId = deptid;
+                        n.attributes.DeptId = deptNo;
                         n.attributes.EmpId = this.NO;
                         break;
                 }

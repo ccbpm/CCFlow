@@ -258,85 +258,82 @@
 
                 //增加节点图片的鼠标滑过/移开效果
                 rNode.rIcon.hover(function () {
+                    $('#tracktable').empty();
+
                     var node = rFlow.getNodeByRIconId(this.id);
                     if (node != null) {
                         node.rBorder.attr({ "stroke": STYLE_NODE_BORDER_COLOR_HOVER, "stroke-width": STYLE_NODE_BORDER_WIDTH_HOVER });
                         node.rText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
 
+                        var tablehtml = "";
+
                         if (node.isTrackNode && node.currTrack.type == "FROM") {
                             node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
 
-                            //组织节点的轨迹信息
-                            var table = $('#tracktable');
-                            table.empty();
-
-                            table.append(
+                            tablehtml +=
                                     '<tr>' +
                                     '   <td colspan="4" class="GroupTitle">轨迹信息</td>' +
-                                    '</tr>');
+                                    '</tr>';
 
                             $.each(node.tracks, function () {
                                 if (this.type == "TO") {
                                     return true;
                                 }
 
-                                table.append(
+                                tablehtml +=
                                     '<tr>' +
                                     '   <td style="width:120px">' + this.track.RDT + '</td>' +
-                                    '   <td style="width:80px">' + this.track.ACTIONTYPETEXT + '</td>' +
+                                    '   <td style="width:200px">' + this.track.ACTIONTYPETEXT + '</td>' +
                                     '   <td style="width:50px">' + this.track.EMPTOT + '</td>' +
                                     '   <td>' + this.track.MSG + '</td>' +
-                                    '</tr>');
+                                    '</tr>';
                             });
-
-                            var p = $(this.node).offset();
-                            $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
-                            $('#trackinfo').show();
                         }
                         else if (node.rTrackText) { //added by liuxc,2016-03-16                            
                             node.rTrackText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
 
-                            var subcount = 0;
-                            var subflows = getSubFlows(node.id);
-
-                            for (var sf in subflows) {
-                                subcount++;
-                            }
-
-                            if (subcount > 0) {
-                                isSubFlowNode = true;
-
-                                var table = $('#tracktable');
-                                table.empty();
-
-                                for (var sf in subflows) {
-                                    table.append(
-                                        '<tr>' +
-                                        '   <td colspan="3" class="GroupTitle">' + subflows[sf].Name + '</td>' +
-                                        '</tr>');
-
-                                    var c = 1;
-
-                                    $.each(subflows[sf].Flows, function () {
-                                        table.append(
-                                            '<tr>' +
-                                            '   <td style="width:40px;text-align:center">' + (c++) + '</td>' +
-                                            '   <td style="width:280px"><a href="' + this.Url + '" target="_blank" style="color:' + STYLE_NODE_COLOR_FORE_HOVER + '">' + this.Title + '</a></td>' +
-                                            '   <td>' + this.RDT + '</td>' +
-                                            '</tr>');
-                                    });
-                                }
-
-                                var p = $(this.node).offset();
-                                $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
-                                $('#trackinfo').show();
-                            }
-                            else {
-                                isSubFlowNode = false;
-                            }
                         }
                         else if (node.rPossibleText) { //added by liuxc,2016-04-15
                             node.rPossibleText.attr({ "stroke": STYLE_NODE_COLOR_FORE_HOVER, "fill": getFillTextColor(STYLE_NODE_COLOR_FORE_HOVER) });
+                        }
+
+                        var subcount = 0;
+                        var subflows = getSubFlows(node.id);
+
+                        for (var sf in subflows) {
+                            subcount++;
+                        }
+
+                        if (subcount > 0) {
+                            isSubFlowNode = true;
+
+                            for (var sf in subflows) {
+                                tablehtml +=
+                                        '<tr>' +
+                                        '   <td colspan="4" class="GroupTitle">' + subflows[sf].Name + '</td>' +
+                                        '</tr>';
+                                        
+                                $.each(subflows[sf].Flows, function () {
+                                    tablehtml +=
+                                            '<tr>' +
+                                            '   <td style="width:120px;">' + this.RDT + '</td>' +
+                                            '   <td style="width:200px"><a href="' + this.Url + '" target="_blank" style="color:' + STYLE_NODE_COLOR_FORE_HOVER + '">' + this.Title + '</a></td>' +
+                                            '   <td style="width:50px;">' + this.WFStaText + '</td>' +
+                                            '   <td>' + this.NodeName + '</td>' +
+                                            '</tr>';
+                                });
+                            }
+                        }
+                        else {
+                            isSubFlowNode = false;
+                        }
+
+                        if (tablehtml.length > 0) {
+                            //组织节点的轨迹信息
+                            var p = $(this.node).offset();
+                            $('#tracktable').append(tablehtml);
+                            $('#trackinfo').offset({ top: p.top + this.attr('height') - 2, left: p.left });
+                            $('#trackinfo').show();
                         }
                     }
                 }, function () {
@@ -415,7 +412,7 @@
                     subflow = subflows["F" + this.FK_FLOW];
                 }
 
-                subflow.Flows.push({ Title: this.TITLE, RDT: getChineseDateTime(this.RDT), Url: "./OneWork.htm?CurrTab=Truck&FK_Flow=" + this.FK_FLOW + "&FK_Node=" + this.FK_NODE + "&WorkID=" + this.WORKID + "&FID=0" });
+                subflow.Flows.push({ Title: this.TITLE, NodeName: this.NODENAME, WFStaText: this.WFSTATEXT, RDT: this.RDT, Url: "./OneWork.htm?CurrTab=Truck&FK_Flow=" + this.FK_FLOW + "&FK_Node=" + this.FK_NODE + "&WorkID=" + this.WORKID + "&FID=0" });
             });
 
             return subflows;

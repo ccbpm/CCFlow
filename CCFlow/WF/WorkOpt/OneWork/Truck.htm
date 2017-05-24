@@ -285,7 +285,7 @@
                                     '   <td style="width:120px">' + this.track.RDT + '</td>' +
                                     '   <td style="width:200px">' + this.track.ACTIONTYPETEXT + '</td>' +
                                     '   <td style="width:50px">' + this.track.EMPTOT + '</td>' +
-                                    '   <td>' + this.track.MSG + '</td>' +
+                                    '   <td>' + this.track.MSG.replace(/~/g,"'") + '</td>' +
                                     '</tr>';
                             });
                         }
@@ -312,7 +312,7 @@
                                         '<tr>' +
                                         '   <td colspan="4" class="GroupTitle">' + subflows[sf].Name + '</td>' +
                                         '</tr>';
-                                        
+
                                 $.each(subflows[sf].Flows, function () {
                                     tablehtml +=
                                             '<tr>' +
@@ -345,14 +345,17 @@
                         if (node.isTrackNode && node.currTrack.type == "FROM") {
                             node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
 
-                            $('#trackinfo').offset({ top: 0, left: 0 });
-                            $('#trackinfo').hide();
                         }
                         else if (node.rTrackText) { //added by liuxc,2016-03-16
                             node.rTrackText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
                         }
                         else if (node.rPossibleText) { //added by liuxc,2016-04-15
                             node.rPossibleText.attr({ "stroke": STYLE_NODE_TRACK_FORE_COLOR, "fill": getFillTextColor(STYLE_NODE_TRACK_FORE_COLOR) });
+                        }
+
+                        if (!isSubFlowNode) {
+                            $('#trackinfo').offset({ top: 0, left: 0 });
+                            $('#trackinfo').hide();
                         }
                     }
                 });

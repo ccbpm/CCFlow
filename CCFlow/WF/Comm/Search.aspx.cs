@@ -345,7 +345,7 @@ namespace CCFlow.Web.Comm
                     IRow frow = sheet.CreateRow(0);
                     IRow lrow = sheet.CreateRow(2 + dt.Rows.Count);
                     ICell cell = null;
-                    IFont font = wb.CreateFont();
+                    IFont font = null;
                     int r = 0;
                     int c = 0;
                     IDataFormat fmt = wb.CreateDataFormat();
@@ -353,6 +353,49 @@ namespace CCFlow.Web.Comm
                     Attrs selectedAttrs = null;
                     UIConfig cfg = new UIConfig(en);
                     float charWidth = 0;
+
+                    //列标题单元格样式设定
+                    ICellStyle titleStyle = wb.CreateCellStyle();
+                    titleStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                    titleStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+                    titleStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                    titleStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+                    titleStyle.VerticalAlignment = VerticalAlignment.Center;
+                    font = wb.CreateFont();
+                    font.IsBold = true;
+                    titleStyle.SetFont(font);
+
+                    //文件标题单元格样式设定
+                    ICellStyle headerStyle = wb.CreateCellStyle();
+                    headerStyle.Alignment = HorizontalAlignment.Center;
+                    headerStyle.VerticalAlignment = VerticalAlignment.Center;
+                    font = wb.CreateFont();
+                    font.FontHeightInPoints = 12;
+                    font.IsBold = true;
+                    headerStyle.SetFont(font);
+
+                    //制表人单元格样式设定
+                    ICellStyle userStyle = wb.CreateCellStyle();
+                    userStyle.Alignment = HorizontalAlignment.Right;
+                    userStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                    //单元格样式设定
+                    ICellStyle cellStyle = wb.CreateCellStyle();
+                    cellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
+                    cellStyle.VerticalAlignment = VerticalAlignment.Center;
+
+                    //日期单元格样式设定
+                    ICellStyle dateCellStyle = wb.CreateCellStyle();
+                    dateCellStyle.CloneStyleFrom(cellStyle);
+                    dateCellStyle.DataFormat = fmt.GetFormat("yyyy-m-d;@");
+
+                    //日期时间单元格样式设定
+                    ICellStyle timeCellStyle = wb.CreateCellStyle();
+                    timeCellStyle.CloneStyleFrom(cellStyle);
+                    timeCellStyle.DataFormat = fmt.GetFormat("yyyy-m-d h:mm;@");
 
                     //一个字符的像素宽度，以Arial，10磅，i进行测算
                     using (Bitmap bmp = new Bitmap(10, 10))
@@ -402,14 +445,7 @@ namespace CCFlow.Web.Comm
 
                         cell = row.CreateCell(c++);
                         cell.SetCellValue(attr.Desc);
-                        font.IsBold = true;
-                        cell.CellStyle = wb.CreateCellStyle();
-                        cell.CellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-                        cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                        cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                        cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                        cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
-                        cell.CellStyle.SetFont(font);
+                        cell.CellStyle = titleStyle;
                         sheet.SetColumnWidth(c - 1, (int)(Math.Ceiling(attr.UIWidthInt / charWidth) + 0.72) * 256);
 
                         frow.CreateCell(c - 1);
@@ -419,21 +455,13 @@ namespace CCFlow.Web.Comm
                     sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 0, 0, c - 1));
                     cell = frow.GetCell(0);
                     cell.SetCellValue(en.EnDesc);
-                    cell.CellStyle = wb.CreateCellStyle();
-                    cell.CellStyle.Alignment = HorizontalAlignment.Center;
-                    cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
-                    font = wb.CreateFont();
-                    font.FontHeightInPoints = 12;
-                    font.IsBold = true;
-                    cell.CellStyle.SetFont(font);
+                    cell.CellStyle = headerStyle;
                     frow.HeightInPoints = 26;
                     //输出制表人
                     sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(2 + dt.Rows.Count, 2 + dt.Rows.Count, 0, c - 1));
                     cell = lrow.GetCell(0);
                     cell.SetCellValue("制表人：" + WebUser.Name);
-                    cell.CellStyle = wb.CreateCellStyle();
-                    cell.CellStyle.Alignment = HorizontalAlignment.Right;
-                    cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
+                    cell.CellStyle = userStyle;
                     lrow.HeightInPoints = 20;
 
                     r = 2;
@@ -453,15 +481,10 @@ namespace CCFlow.Web.Comm
                                 continue;
 
                             cell = row.CreateCell(c++);
-                            cell.CellStyle = wb.CreateCellStyle();
-                            cell.CellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
-                            cell.CellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
-                            cell.CellStyle.BorderLeft = NPOI.SS.UserModel.BorderStyle.Thin;
-                            cell.CellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
-                            cell.CellStyle.VerticalAlignment = VerticalAlignment.Center;
 
                             if (attr.IsFKorEnum)
                             {
+                                cell.CellStyle = cellStyle;
                                 cell.SetCellValue(dr[attr.Key + "Text"] as string);
                             }
                             else
@@ -469,24 +492,28 @@ namespace CCFlow.Web.Comm
                                 switch (attr.MyDataType)
                                 {
                                     case DataType.AppBoolean:
+                                        cell.CellStyle = cellStyle;
                                         cell.SetCellValue(dr[attr.Key].Equals(1) ? "是" : "否");
                                         break;
                                     case DataType.AppDate:
                                         cell.SetCellValue(dr[attr.Key] as string);
-                                        cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d;@");
+                                        cell.CellStyle = dateCellStyle;
                                         break;
                                     case DataType.AppDateTime:
                                         cell.SetCellValue(dr[attr.Key] as string);
-                                        cell.CellStyle.DataFormat = fmt.GetFormat("yyyy-m-d h:mm;@");
+                                        cell.CellStyle = timeCellStyle;
                                         break;
                                     case DataType.AppString:
+                                        cell.CellStyle = cellStyle;
                                         cell.SetCellValue(dr[attr.Key] as string);
                                         break;
                                     case DataType.AppInt:
+                                        cell.CellStyle = cellStyle;
                                         cell.SetCellValue((int)dr[attr.Key]);
                                         break;
                                     case DataType.AppFloat:
                                     case DataType.AppMoney:
+                                        cell.CellStyle = cellStyle;
                                         cell.SetCellValue((double)dr[attr.Key]);
                                         break;
                                 }

@@ -237,7 +237,7 @@ namespace CCFlow.WF.WorkOpt
                           + "        n.RDT ASC";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(
-                    string.Format(sql, (int)ActionType.WorkCheck, (int)ActionType.StartChildenFlow, WorkID, FK_Flow));
+                    string.Format(sql, (int)ActionType.WorkCheck, (int)ActionType.StartChildenFlow, WorkID, int.Parse(FK_Flow)));
 
                 BP.En.Attrs attrs = nds.GetNewEntity.EnMap.Attrs;
                 Node _nd = null;

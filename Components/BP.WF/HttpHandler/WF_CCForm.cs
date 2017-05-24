@@ -1285,17 +1285,17 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="MyPK"></param>
         /// <returns></returns>
-        private string DelWorkCheckAttach(string MyPK)
+        private string DelWorkCheckAttach()
         {
             FrmAttachmentDB athDB = new FrmAttachmentDB();
-            athDB.RetrieveByAttr(FrmAttachmentDBAttr.MyPK, MyPK);
+            athDB.RetrieveByAttr(FrmAttachmentDBAttr.MyPK, this.MyPK);
             //删除文件
             if (athDB.FileFullName != null)
             {
                 if (File.Exists(athDB.FileFullName) == true)
                     File.Delete(athDB.FileFullName);
             }
-            int i = athDB.Delete(FrmAttachmentDBAttr.MyPK, MyPK);
+            int i = athDB.Delete(FrmAttachmentDBAttr.MyPK, this.MyPK);
             if (i > 0)
                 return "true";
             return "false";

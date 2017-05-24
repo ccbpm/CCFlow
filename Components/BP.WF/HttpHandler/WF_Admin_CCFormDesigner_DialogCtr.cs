@@ -122,7 +122,6 @@ namespace BP.WF.HttpHandler
                 default:
                     break;
             }
-
             //找不不到标记就抛出异常.
             throw new Exception("@标记["+this.DoType+"]，没有找到.");
         }
@@ -153,7 +152,6 @@ namespace BP.WF.HttpHandler
             return BP.Sys.CCFormAPI.SaveEnum(newEnumKey1, newnEumName, newCfgVal, true);
             return "增加成功.";
         }
-      
         /// <summary>
         /// 删除枚举值
         /// </summary>

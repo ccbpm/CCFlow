@@ -172,6 +172,9 @@ namespace BP.WF
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
 
+            //先升级脚本.
+            UpdataCCFlowVerSQLScript();
+
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
             string currDBVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
             if (currDBVer != null && currDBVer != "" && int.Parse(currDBVer) >= int.Parse(Ver))
@@ -216,14 +219,6 @@ namespace BP.WF
                 //升级傻瓜表单.
                 MapFrmFool mff = new MapFrmFool();
                 mff.CheckPhysicsTable();
-
-                //删除枚举.
-                DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='TodolistModel'");
-                DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='CCStaWay'");
-                DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='TWay'");
-
-                // 运行升级SQL. D:\ccflow\CCFlow\WF\Data\UpdataCCFlowVer.sql
-                BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
 
                 #region 表单方案中的不可编辑, 旧版本如果包含了这个列.
                 if (BP.DA.DBAccess.IsExitsTableCol("WF_FrmNode", "IsEdit") == true)
@@ -402,8 +397,6 @@ namespace BP.WF
                 //升级
                 BP.Sys.SFTable tab = new SFTable();
                 tab.CheckPhysicsTable();
-                //mySQL = "UPDATE Sys_SFTable SET "+SFTableAttr.SrcTable+"=0 WHERE TabType IS NULL";
-                //BP.DA.DBAccess.RunSQL(mySQL);
                 #endregion
 
                 #region 基础数据更新.
@@ -428,9 +421,6 @@ namespace BP.WF
                     ToolbarExcel te = new ToolbarExcel();
                     te.No = "ND" + ns.NodeID;
                     te.RetrieveFromDBSources();
-
-                    //te.Copy(ns);
-                    //te.Update();
                 }
                 #endregion
 
@@ -474,7 +464,6 @@ namespace BP.WF
                 #region 执行sql．
                 BP.DA.DBAccess.RunSQL("delete  from Sys_Enum WHERE EnumKey in ('BillFileType','EventDoType','FormType','BatchRole','StartGuideWay','NodeFormType')");
                 DBAccess.RunSQL("UPDATE Sys_FrmSln SET FK_Flow =(SELECT FK_FLOW FROM WF_Node WHERE NODEID=Sys_FrmSln.FK_Node) WHERE FK_Flow IS NULL");
-
                 try
                 {
                     DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm+'_'+convert(varchar,FK_Node )+'_'+FK_Flow");
@@ -809,6 +798,30 @@ namespace BP.WF
                 string err = "问题出处:" + ex.Message + "<hr>" + msg + "<br>详细信息:@" + ex.StackTrace + "<br>@<a href='../DBInstall.aspx' >点这里到系统升级界面。</a>";
                 BP.DA.Log.DebugWriteError("系统升级错误:" + err);
                 return err;
+            }
+        }
+
+        /// <summary>
+        /// 如果发现升级sql文件日期变化了，就自动升级.
+        /// </summary>
+        public static void UpdataCCFlowVerSQLScript()
+        {
+            string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='UpdataCCFlowVer'";
+            string currDBVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
+
+            string sqlScript = SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql";
+            System.IO.FileInfo fi = new System.IO.FileInfo(sqlScript);
+            string ver = fi.LastWriteTime.ToString("yyMMDDHHmmss");
+            if (currDBVer == "" || currDBVer != ver)
+            {
+                BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
+                sql = "UPDATE Sys_Serial SET IntVal=" + Ver + " WHERE CfgKey='UpdataCCFlowVer'";
+
+                if (DBAccess.RunSQL(sql) == 0)
+                {
+                    sql = "INSERT INTO Sys_Serial (CfgKey,IntVal) VALUES('UpdataCCFlowVer'," + Ver + ") ";
+                    DBAccess.RunSQL(sql);
+                }
             }
         }
         /// <summary>

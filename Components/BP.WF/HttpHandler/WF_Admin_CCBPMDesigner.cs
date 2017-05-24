@@ -82,9 +82,6 @@ namespace BP.WF.HttpHandler
                     case "Logout": //获得枚举列表的JSON.
                         BP.WF.Dev2Interface.Port_SigOut();
                         break;
-                    case "saveAs"://另存为流程
-                        msg = Flow_SaveAs();
-                        break;
                     case "LetLogin":    //使管理员登录
                         msg = string.IsNullOrWhiteSpace(WebUser.No) ? LetAdminLogin(getUTF8ToString("userNo"), true) : string.Empty;
                         break;
@@ -107,8 +104,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GetEmpsByStationTable()
         {
-            string deptid = this.GetRequestVal("deptid");
-            string stid = this.GetRequestVal("stationid"); 
+            string deptid = this.GetRequestVal("DeptNo");
+            string stid = this.GetRequestVal("StationNo"); 
 
             if (string.IsNullOrWhiteSpace(deptid) || string.IsNullOrWhiteSpace(stid))
                 return "[]";
@@ -173,8 +170,6 @@ namespace BP.WF.HttpHandler
 
             string parentrootid = context.Request.QueryString["parentrootid"];
             string newRootId = "";
-
-        
 
             if (WebUser.No != "admin")
             {
@@ -474,14 +469,18 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SaveOneFlow()
         {
-            //流程格式.
+            //流程图格式.
             string diagram = GetValFromFrmByKey("diagram");
+
+            //检查该数据是否可以被转换为Json对象？
+            JsonData flowJsonData = JsonMapper.ToObject(diagram);
+            if (flowJsonData.IsObject == false)
+                return "err@参数diagram不能转换为json对象.";
+
             //流程图.
             string png = GetValFromFrmByKey("png");
-
             // 流程编号.
             string flowNo = GetValFromFrmByKey("FlowNo");
-
             //节点到节点关系
             string direction = GetValFromFrmByKey("direction");
 
@@ -514,63 +513,46 @@ namespace BP.WF.HttpHandler
             }
 
             #region //保存节点坐标及标签
-
             //清空标签
             LabNote labelNode = new LabNote();
             labelNode.Delete(LabNoteAttr.FK_Flow, flowNo);
 
-            JsonData flowJsonData = JsonMapper.ToObject(diagram);
-            if (flowJsonData.IsObject == true)
+            JsonData flow_Nodes = flowJsonData["s"]["figures"];
+            for (int iNode = 0, jNode = flow_Nodes.Count; iNode < jNode; iNode++)
             {
-                JsonData flow_Nodes = flowJsonData["s"]["figures"];
-                for (int iNode = 0, jNode = flow_Nodes.Count; iNode < jNode; iNode++)
+                JsonData figure = flow_Nodes[iNode];
+                //不存在不进行处理，继续循环
+                if (figure == null || figure["CCBPM_Shape"] == null)
+                    continue;
+                if (figure["CCBPM_Shape"].ToString() == "Node")
                 {
-                    JsonData figure = flow_Nodes[iNode];
-                    //不存在不进行处理，继续循环
-                    if (figure == null || figure["CCBPM_Shape"] == null)
-                        continue;
-                    if (figure["CCBPM_Shape"].ToString() == "Node")
+                    //节点坐标处理
+                    BP.WF.Node node = new BP.WF.Node();
+                    node.RetrieveByAttr(NodeAttr.NodeID, figure["CCBPM_OID"]);
+                    if (!string.IsNullOrEmpty(node.Name) && figure["rotationCoords"].Count > 0)
                     {
-                        //节点坐标处理
-                        BP.WF.Node node = new BP.WF.Node();
-                        node.RetrieveByAttr(NodeAttr.NodeID, figure["CCBPM_OID"]);
-                        if (!string.IsNullOrEmpty(node.Name) && figure["rotationCoords"].Count > 0)
-                        {
-                            JsonData rotationCoord = figure["rotationCoords"][0];
-                            node.X = Convert.ToInt32(float.Parse(rotationCoord["x"].ToString()));
-                            node.Y = Convert.ToInt32(float.Parse(rotationCoord["y"].ToString()));
-                            node.DirectUpdate();
-                        }
-                    }
-                    else if (figure["CCBPM_Shape"].ToString() == "Text")
-                    {
-                        //流程标签处理
-                        JsonData primitives = figure["primitives"][0];
-                        JsonData vector = primitives["vector"][0];
-                        labelNode = new LabNote();
-                        labelNode.FK_Flow = flowNo;
-                        labelNode.Name = primitives["str"].ToString();
-                        labelNode.X = Convert.ToInt32(float.Parse(vector["x"].ToString()));
-                        labelNode.Y = Convert.ToInt32(float.Parse(vector["y"].ToString()));
-                        labelNode.Insert();
+                        JsonData rotationCoord = figure["rotationCoords"][0];
+                        node.X = Convert.ToInt32(float.Parse(rotationCoord["x"].ToString()));
+                        node.Y = Convert.ToInt32(float.Parse(rotationCoord["y"].ToString()));
+                        node.DirectUpdate();
                     }
                 }
-                return "true";
+                else if (figure["CCBPM_Shape"].ToString() == "Text")
+                {
+                    //流程标签处理.
+                    JsonData primitives = figure["primitives"][0];
+                    JsonData vector = primitives["vector"][0];
+                    labelNode = new LabNote();
+                    labelNode.FK_Flow = flowNo;
+                    labelNode.Name = primitives["str"].ToString();
+                    labelNode.X = Convert.ToInt32(float.Parse(vector["x"].ToString()));
+                    labelNode.Y = Convert.ToInt32(float.Parse(vector["y"].ToString()));
+                    labelNode.Insert();
+                }
             }
-
+            return "@保存成功.";
             #endregion 保存节点坐标及标签
-
-            return "true";
         }
-        /// <summary>
-        /// 另存为流程图
-        /// </summary>
-        /// <returns></returns>
-        public string Flow_SaveAs()
-        {
-            return "";
-        }
-
         /// <summary>
         /// 重置流程版本为1.0
         /// </summary>
@@ -603,10 +585,7 @@ namespace BP.WF.HttpHandler
             ds.Tables[2].TableName = "LabNote";
 
             // return BP.Tools.Json.DataSetToJson(ds, false);
-
             return BP.Tools.Json.ToJson(ds);
-
-
         }
         #endregion end Flow
 
@@ -716,10 +695,10 @@ namespace BP.WF.HttpHandler
             {
                 node.Name = NodeName;
                 node.Update();
-                return "true";
+                return "@修改成功.";
             }
 
-            return "false";
+            return "err@修改节点失败，请确认该节点是否存在？";
         }
         /// <summary>
         /// 修改节点运行模式
@@ -1138,7 +1117,6 @@ namespace BP.WF.HttpHandler
                     {
                         DataRow row = rows[i];
 
-
                         string jNo = row[idCol] as string;
                         string jText = row[txtCol] as string;
                         if (jText.Length > 25)
@@ -1227,9 +1205,9 @@ namespace BP.WF.HttpHandler
 
                 string flowName = ps[1]; // 流程名称.
                 DataStoreModel dataSaveModel = (DataStoreModel)int.Parse(ps[2]); //数据保存方式。
-                string pTable = ps[3]; // 物理表名。
+                string pTable = ps[3]; // 物理表名.
                 string flowMark = ps[4]; // 流程标记.
-                string flowVer = ps[5]; // 流程版本
+                string flowVer = ps[5]; // 流程版本.
 
                 string flowNo = BP.WF.Template.TemplateGlo.NewFlow(fk_floSort, flowName, dataSaveModel, pTable, flowMark, flowVer);
                 return flowNo;

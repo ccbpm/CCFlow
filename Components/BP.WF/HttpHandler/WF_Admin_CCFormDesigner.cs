@@ -298,70 +298,53 @@ namespace BP.WF.HttpHandler
             return "err@没有判断的表单转入类型" + md.HisFrmType.ToString();
         }
 
+        public string PublicNoNameCtrlCreate()
+        {
+            try
+            {
+                float x = float.Parse(this.GetRequestVal("x"));
+                float y = float.Parse(this.GetRequestVal("y"));
+                BP.Sys.CCFormAPI.CreatePublicNoNameCtrl(this.FrmID, this.GetRequestVal("CtrlType"),
+                    this.GetRequestVal("No"),
+                    this.GetRequestVal("Name"), x, y);
+                return "true";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        public string NewField()
+        {
+            try
+            {
+                BP.Sys.CCFormAPI.NewField(this.GetRequestVal("FrmID"),
+                    this.GetRequestVal("KeyOfEn"), this.GetRequestVal("Name"),
+                    int.Parse(this.GetRequestVal("FieldType")),
+                    float.Parse(this.GetRequestVal("x")),
+                   float.Parse(this.GetRequestVal("y"))
+                   );
+                return "true";
+            }
+            catch (Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
+        }
         /// <summary>
         /// 处理表单事件方法
         /// </summary>
         /// <returns></returns>
         public string DoFunc()
         {
-
             string sql = "";
             try
             {
                 switch (this.DoType)
                 {
-                    case "PublicNoNameCtrlCreate": //创建通用的控件.
-                        try
-                        {
-                            float x = float.Parse(this.GetRequestVal("x"));
-                            float y = float.Parse(this.GetRequestVal("y"));
-                            BP.Sys.CCFormAPI.CreatePublicNoNameCtrl(this.FrmID, this.GetRequestVal("CtrlType"),
-                                this.GetRequestVal("No"),
-                                this.GetRequestVal("Name"), x, y);
-                            return "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            return "err@" + ex.Message;
-                        }
-                    case "NewSFTableField": //创建一个SFTable字段.
-                        try
-                        {
-                            string fk_mapdata = this.GetRequestVal("FK_MapData");
-                            string keyOfEn = this.GetRequestVal("KeyOfEn");
-                            string fieldDesc = this.GetRequestVal("Name");
-                            string sftable = this.GetRequestVal("UIBindKey");
-                            float x = float.Parse(this.GetRequestVal("x"));
-                            float y = float.Parse(this.GetRequestVal("y"));
-
-                            //调用接口,执行保存.
-                            BP.Sys.CCFormAPI.SaveFieldSFTable(fk_mapdata, keyOfEn, fieldDesc, sftable, x, y);
-                            return "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.Message;
-                        }
-
-                    case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
-                        try
-                        {
-                            BP.Sys.CCFormAPI.NewField(this.GetRequestVal("FrmID"),
-                                this.GetRequestVal("KeyOfEn"), this.GetRequestVal("Name"),
-                                int.Parse(this.GetRequestVal("FieldType")),
-                                float.Parse(this.GetRequestVal("x")),
-                               float.Parse(this.GetRequestVal("y"))
-                               );
-                            return "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.Message;
-                        }
                     case "CreateCheckGroup": //创建审核分组，暂时未实现.
                         BP.Sys.CCFormAPI.NewCheckGroup(FK_MapData, null, null);
                         return "true";
-
                     case "SaveSFTable":
                         string enName = this.GetRequestVal("v2");
                         string chName = this.GetRequestVal("v1");
@@ -748,7 +731,6 @@ namespace BP.WF.HttpHandler
             {
                 MapData mapData = new MapData(this.FK_MapData);
                 mapData.RetrieveFromDBSources();
-
 
                 //获取表单元素
                 string sqls = "SELECT * FROM Sys_MapAttr WHERE UIVisible=1 AND FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine

@@ -487,7 +487,7 @@ namespace BP.En
         public void AddWhere(string attr, object val)
         {
             if (val == null)
-                throw new Exception("Attr=" + attr + ", val is null");
+                throw new Exception("Attr=" + attr + ", 值是空 is null");
 
             if (val.GetType() == typeof(int) || val.GetType() == typeof(Int32))
             {

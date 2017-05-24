@@ -59,15 +59,17 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(FrmImgAttr.ImgSrcType, 0, "装饰图片来源", true, true, FrmImgAttr.ImgSrcType, "@0=本地@1=URL");
 
-                map.AddTBString(FrmImgAttr.ImgURL, null, "装饰图片URL", true, false, 0, 200, 20);
-                map.AddTBString(FrmImgAttr.ImgPath, null, "装饰图片路径", true, false, 0, 200, 20);
+                map.AddTBString(FrmImgAttr.ImgURL, null, "装饰图片URL", true, false, 0, 200, 20,true);
+                map.AddTBString(FrmImgAttr.ImgPath, null, "装饰图片路径", true, false, 0, 200, 20,true);
                 
                 map.AddTBString(FrmImgAttr.LinkURL, null, "连接到URL", true, false, 0, 200, 20);
                 map.AddTBString(FrmImgAttr.LinkTarget, "_blank", "连接目标", true, false, 0, 200, 20);
 
                 //如果是 seal 就是岗位集合。
                 map.AddTBString(FrmImgAttr.Tag0, null, "参数", true, false, 0, 500, 20);
-                map.AddTBInt(FrmImgAttr.IsEdit, 0, "是否可以编辑", true, false);
+                
+                //map.AddTBInt(FrmImgAttr.IsEdit, 0, "是否可以编辑", true, false);
+
                 map.AddTBString(FrmImgAttr.Name, null, "中文名称", true, false, 0, 500, 20);
                 map.AddTBString(FrmImgAttr.EnPK, null, "英文名称", true, false, 0, 500, 20);
 

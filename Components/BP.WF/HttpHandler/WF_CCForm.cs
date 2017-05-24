@@ -1285,7 +1285,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="MyPK"></param>
         /// <returns></returns>
-        private string DelWorkCheckAttach()
+        public string DelWorkCheckAttach()
         {
             FrmAttachmentDB athDB = new FrmAttachmentDB();
             athDB.RetrieveByAttr(FrmAttachmentDBAttr.MyPK, this.MyPK);

@@ -207,7 +207,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner
             this.Pub1.AddTD("您可以把表单创建不同的数据源上.");
             this.Pub1.AddTREnd();
 
-
             this.Pub1.AddTR();
             this.Pub1.AddTDIdx(idx++);
             this.Pub1.AddTD("创建路径");
@@ -223,12 +222,10 @@ namespace CCFlow.WF.Admin.CCFormDesigner
 
             //设置选择的值.
             BP.Web.Controls.Glo.DDL_SetSelectVal(ddl,this.FK_FrmSort);
-
             //ddl.Bind(trees, this.DBSrc);
             this.Pub1.AddTD(ddl);
             this.Pub1.AddTD("表单类别.");
             this.Pub1.AddTREnd();
-
 
             this.Pub1.AddTR();
             this.Pub1.AddTDIdx(idx++);
@@ -352,16 +349,6 @@ namespace CCFlow.WF.Admin.CCFormDesigner
                 this.Pub1.AddTDEnd();
             }
             this.Pub1.AddTREnd();
-
-
-            //  //ExcelFrm,WordFrm 只保留上传
-            //if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.ExcelFrm ||
-            //    (BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.WordFrm)
-            //{
-            //    this.Pub1.AddTRend();
-            //    this.Pub1.AddTREnd();
-            //}
-
             #endregion 表单生成方式.
 
             #region 操作按钮放到table中，布局缩放不会乱

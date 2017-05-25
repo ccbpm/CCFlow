@@ -157,6 +157,7 @@ function figure_Button(x, y) {
 
 /**method of create HyperLink **/
 function figure_HyperLink(x, y) {
+
     var f = new Figure('HyperLink');
     //ccform Property
     f.CCForm_Shape = CCForm_Controls.HyperLink;

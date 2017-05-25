@@ -1060,7 +1060,7 @@ function figure_Template_HyperLink(frmLin) {
 
     var x = frmLin.X;
     var y = frmLin.Y;
-    var t2 = new Text("我的超连接.", x + FigureDefaults.radiusSize / 2, y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+    var t2 = new Text(frmLin.Text, x + FigureDefaults.radiusSize / 2, y + FigureDefaults.radiusSize / 2, FigureDefaults.textFont, FigureDefaults.textSize);
     t2.style.fillStyle = "#0000ff";
     t2.underlined = true;
 

@@ -114,7 +114,7 @@ namespace CCFlow.WF.Comm.RefFunc
 
 		public void Bind()
 		{
-			#region 生成标题
+			#region 生成表头
 			Entity en = this.HisEn;
 			en.SetValByKey(this.RefKey, this.RefVal);
 
@@ -132,8 +132,15 @@ namespace CCFlow.WF.Comm.RefFunc
 			this.ucsys1.AddTR();
 			this.ucsys1.AddTDTitle();
 
+			//“详细”列
+			if (isOpenCard)
+				this.ucsys1.AddTDTitle();
+
+			//“选择全部”
 			string str1 = "<INPUT id='checkedAll' onclick='SelectAll(this);' type='checkbox' name='checkedAll'>";
 			this.ucsys1.AddTDTitle(str1);
+
+			//实体字段
 			foreach (Attr attr in attrs)
 			{
 				if (attr.UIVisible == false)
@@ -141,21 +148,17 @@ namespace CCFlow.WF.Comm.RefFunc
 				this.ucsys1.AddTDTitle(attr.Desc);
 			}
 
-			if (isFJ)
-				this.ucsys1.AddTDTitle();
-			if (isOpenCard)
+			if (isFJ) //“附件”列
 				this.ucsys1.AddTDTitle();
 			this.ucsys1.AddTREnd();
 
-			#endregion 生成标题
+			#endregion
 
 			this.Page.Title = en.EnDesc;
 
 			Entities dtls = this.HisEns;
 			QueryObject qo = new QueryObject(dtls);
 			qo.AddWhere(this.RefKey, this.RefVal);
-
-
 
 			#region 生成翻页
 			this.ucsys2.Clear();
@@ -193,10 +196,15 @@ namespace CCFlow.WF.Comm.RefFunc
 			foreach (Entity dtl in dtls)
 			{
 				i++;
-				if (Equals(dtl.PKVal, "0") || dtl.PKVal.ToString() == "")
+
+
+				if (Equals(dtl.PKVal, "0") || dtl.PKVal.ToString() == "") //如果是新建行
 				{
 					this.ucsys1.AddTRSum();
-					this.ucsys1.AddTD("colspan=2", "<b>*</b>");
+					if (isOpenCard)
+						this.ucsys1.AddTD("colspan=3", "<b>*</b>");
+					else
+						this.ucsys1.AddTD("colspan=2", "<b>*</b>");
 				}
 				else
 				{
@@ -204,7 +212,12 @@ namespace CCFlow.WF.Comm.RefFunc
 					is1 = this.ucsys1.AddTR(is1);
 
 					//  is1 = this.ucsys1.AddTR(is1);
+					//行序号列
 					this.ucsys1.AddTDIdx(i);
+					//“详细”列
+					if (isOpenCard)
+						this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/En.htm?EnName=" + en.ToString() + "&PK=" + dtl.PKVal + "')\" >详细</a>");
+					//“选中”列
 					cb = new CheckBox();
 					cb.ID = "CB_" + dtl.PKVal;
 					this.ucsys1.AddTD(cb);
@@ -309,8 +322,6 @@ namespace CCFlow.WF.Comm.RefFunc
 					if (ext != "")
 						this.ucsys1.AddTD("<img src='../Images/FileType/" + ext + ".gif' border=0/>" + dtl.GetValStrByKey("MyFileName"));
 				}
-				if (isOpenCard)
-					this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/En.htm?EnName=" + en.ToString() + "&PK=" + dtl.PKVal + "')\" >详细</a>");
 
 				this.ucsys1.AddTREnd();
 			}

@@ -294,69 +294,56 @@ namespace BP.WF.HttpHandler
             md.No = this.GetRequestVal("TB_No");
             md.PTable = this.GetRequestVal("TB_PTable");
 
-            md.No = this.Pub1.GetTextBoxByID("TB_No").Text;
-            md.PTable = this.Pub1.GetTextBoxByID("TB_PTable").Text;
-            md.FK_FrmSort = this.Pub1.GetDDLByID("DDL_FrmTree").SelectedValue;
-            md.FK_FormTree = this.Pub1.GetDDLByID("DDL_FrmTree").SelectedValue;
+            md.FK_FrmSort = this.GetRequestVal("DDL_FrmTree");
+            md.FK_FormTree = this.GetRequestVal("DDL_FrmTree");
             md.AppType = "0";//独立表单
-            md.DBSrc = this.DBSrc;
-
-            if (md.Name.Length == 0 || md.No.Length == 0 || md.PTable.Length == 0)
-            {
-                BP.Sys.PubClass.Alert("必填项不能为空.");
-                return;
-            }
-
+            md.DBSrc = this.GetRequestVal("DDL_DBSrc");
             if (md.IsExits == true)
-            {
-                BP.Sys.PubClass.Alert("表单ID:" + md.No + "已经存在.");
-                return;
-            }
+                return "err@表单ID:" + md.No + "已经存在.";
 
-            md.HisFrmTypeInt = this.FrmType; //表单类型.
+            md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
 
-            switch ((BP.Sys.FrmType)(this.FrmType))
+            switch ((BP.Sys.FrmType)(md.HisFrmTypeInt))
             {
                 //自由，傻瓜，SL表单不做判断
                 case BP.Sys.FrmType.FreeFrm:
                 case BP.Sys.FrmType.FoolForm:
                     break;
                 case BP.Sys.FrmType.Url:
-                    string url = this.Pub1.GetTextBoxByID("TB_Url").Text;
-                    if (string.IsNullOrEmpty(url))
-                    {
-                        BP.Sys.PubClass.Alert("必填项不可以为空");
-                        return;
-                    }
-                    md.Url = url;
+                    //string url = this.GetRequestVal("TB_Url").Text;
+                    //if (string.IsNullOrEmpty(url))
+                    //{
+                    //    BP.Sys.PubClass.Alert("必填项不可以为空");
+                    //    return;
+                    //}
+                    //md.Url = url;
                     break;
                 //如果是以下情况，导入模式
                 case BP.Sys.FrmType.WordFrm:
                 case BP.Sys.FrmType.ExcelFrm:
-                    var file = Request.Files[0];
-                    string savePath = null;
-                    var ext = Path.GetExtension(file.FileName).ToLower(); //后缀
+                    //var file = Request.Files[0];
+                    //string savePath = null;
+                    //var ext = Path.GetExtension(file.FileName).ToLower(); //后缀
 
-                    ext = Path.GetExtension(file.FileName).ToLower();
+                    //ext = Path.GetExtension(file.FileName).ToLower();
 
-                    if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.ExcelFrm &&
-                        ext != ".xls" && ext != ".xlsx")
-                    {
-                        BP.Sys.PubClass.Alert("上传的Excel文件格式错误.");
-                        return;
-                    }
+                    //if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.ExcelFrm &&
+                    //    ext != ".xls" && ext != ".xlsx")
+                    //{
+                    //    BP.Sys.PubClass.Alert("上传的Excel文件格式错误.");
+                    //    return;
+                    //}
 
-                    if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.WordFrm &&
-                        ext != ".doc" && ext != ".docx")
-                    {
-                        BP.Sys.PubClass.Alert("上传的Word文件格式错误.");
-                        return;
-                    }
-                    savePath = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\";
-                    if (Directory.Exists(savePath) == false)
-                        Directory.CreateDirectory(savePath);
-                    file.SaveAs(savePath + this.Pub1.GetTextBoxByID("TB_No").Text + ext);
-
+                    //if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.WordFrm &&
+                    //    ext != ".doc" && ext != ".docx")
+                    //{
+                    //    BP.Sys.PubClass.Alert("上传的Word文件格式错误.");
+                    //    return;
+                    //}
+                    //savePath = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\";
+                    //if (Directory.Exists(savePath) == false)
+                    //    Directory.CreateDirectory(savePath);
+                    //file.SaveAs(savePath + this.Pub1.GetTextBoxByID("TB_No").Text + ext);
                     break;
                 default:
                     throw new Exception("未知表单类型.");
@@ -364,27 +351,15 @@ namespace BP.WF.HttpHandler
             md.Insert();
 
             if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
-            {
                 /*把表单模版存储到数据库里 */
-                this.Response.Redirect("/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No, true);
-                return;
-            }
-
-            if (md.HisFrmType == BP.Sys.FrmType.FreeFrm && this.Pub1.GetRadioButtonByID("RB_FrmGenerMode_2").Checked)
-            {
-                this.Response.Redirect("../FoolFormDesigner/ImpTableField.htm?DoType=New&FK_MapData=" + md.No);
-                return;
-            }
+                return "url@/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No;
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
-            {
-                this.Response.Redirect("FormDesigner.htm?FK_MapData=" + md.No);
-            }
+                return "url@FormDesigner.htm?FK_MapData=" + md.No;
 
-            if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
-            {
-                this.Response.Redirect("../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No);
-            }
+            //  if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
+            return "url../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No;
+
         }
         #endregion 创建表单.
 

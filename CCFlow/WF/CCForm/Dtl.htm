@@ -747,6 +747,22 @@
                 }
             });
         })
+
+        //从表全部数据保存 还有问题 需要调整
+        function Save() {
+            return;
+            //循环表格
+            var trs = $('.table.wupop tbody tr');
+            $.each(trs, function ( i,obj) {
+                var sn=$($(obj).children()[0]).text();
+                if (isNaN(sn)) {
+                    return;
+                } else {
+                    pageData.saveRowCurrent.rowIndex = i;
+                    saveRow(i);
+                }
+            });
+        }
      </script>
 
 </head>
@@ -1075,26 +1091,6 @@
 
                             var sql = myCtl[1].Replace("~", "'");
                             sql = sql.Replace("@Key", ddlOper.val());
-
-                            //需要执行SQL语句
-                            //sql = BP.WF.Glo.DealExp(sql, en, null);
-
-                            //dt = DBAccess.RunSQLReturnTable(sql);
-                            //string valC1 = ddlC1.SelectedItemStringVal;
-                            //if (dt.Rows.Count != 0)
-                            //{
-                            //    foreach (DataRow dr in dt.Rows)
-                            //{
-                            //        ListItem li = ddlC1.Items.FindByValue(dr[0].ToString());
-                            //    if (li == null)
-                            //    {
-                            //        ddlC1.Items.Add(new ListItem(dr[1].ToString(), dr[0].ToString()));
-                            //    }
-                            //    else
-                            //    {
-                            //        li.Attributes["visable"] = "false";
-                            //    }
-                            //}
 
                             var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5' }];
                             var operations = '';

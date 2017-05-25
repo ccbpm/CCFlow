@@ -434,6 +434,13 @@ namespace BP
         }
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            //added by liuxc,2017-05-25,当有控件处于编辑状态时，快捷键不起作用
+            if(this.SelectedContainer != null && this.SelectedContainer.IsSomeChildEditing)
+            {
+                base.OnKeyDown(e);
+                return;
+            }
+
             e.Handled = true;
             base.OnKeyDown(e);
 

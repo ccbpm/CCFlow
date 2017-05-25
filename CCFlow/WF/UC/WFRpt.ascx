@@ -21,7 +21,7 @@
 <script language="javascript" type="text/javascript">
     var LODOP; //声明为全局变量 
     function printFrom() {
-        var url = "PrintSample.aspx?FK_Flow=<%=this.FK_Flow%>&FK_Node=<%=this.FK_Node %>&FID=<%=this.FID %>&WorkID=<%=this.WorkID %>&AtPara=";
+        var url = "PrintSample.aspx?FK_Flow=<%=this.FK_Flow%>&FK_Node=<%=this.FK_Node %>&FID=<%=this.FID %>&WorkID=<%=this.WorkID %>&UserNo=<%=BP.Web.WebUser.No %>&AtPara=";
         LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
         LODOP.PRINT_INIT("打印表单");
         // LODOP.ADD_PRINT_URL(30, 20, 746, "100%", location.href);

@@ -92,10 +92,20 @@ namespace CCFlow.WF.Comm.RefFunc
 
 		protected void Page_Load(object sender, EventArgs e)
 		{
-			this.ToolBar1.AddLinkBtn(NamesOfBtn.Save);
-			//    this.ToolBar1.AddLinkBtn(NamesOfBtn.SaveAndClose);
-			this.ToolBar1.AddLinkBtn(NamesOfBtn.Delete);
-			//    this.ToolBar1.AddLinkBtn(NamesOfBtn.Excel, "导出Excel");
+			Entity en = this.HisEn;
+			en.SetValByKey(this.RefKey, this.RefVal);
+			UAC uac = en.HisUAC;
+
+			if (uac.IsInsert || uac.IsUpdate)
+			{
+				this.ToolBar1.AddLinkBtn(NamesOfBtn.Save);
+				//this.ToolBar1.AddLinkBtn(NamesOfBtn.SaveAndClose);
+			}
+			if (uac.IsDelete)
+			{
+				this.ToolBar1.AddLinkBtn(NamesOfBtn.Delete);
+			}
+			//this.ToolBar1.AddLinkBtn(NamesOfBtn.Excel, "导出Excel");
 
 			if (this.ToolBar1.IsExit(NamesOfBtn.Save))
 				this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Save).Click += new EventHandler(ToolBar1_ButtonClick);
@@ -106,8 +116,8 @@ namespace CCFlow.WF.Comm.RefFunc
 			if (this.ToolBar1.IsExit(NamesOfBtn.Delete))
 				this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Delete).Click += new EventHandler(ToolBar1_ButtonClick);
 
-			if (this.ToolBar1.IsExit(NamesOfBtn.Excel))
-				this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Excel).Click += new EventHandler(ToolBar1_ButtonClick);
+			//if (this.ToolBar1.IsExit(NamesOfBtn.Excel))
+			//    this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Excel).Click += new EventHandler(ToolBar1_ButtonClick);
 
 			this.Bind();
 		}
@@ -178,10 +188,10 @@ namespace CCFlow.WF.Comm.RefFunc
 			#endregion 生成翻页
 
 			UAC uac = en.HisUAC;
-			if (uac.IsDelete == false)
-				this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Delete).Enabled = false;
+			//if (uac.IsDelete == false)
+			//    this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Delete).Enabled = false; //禁用删除按钮
 
-			if (uac.IsInsert)
+			if (uac.IsInsert) //默认的新建行
 			{
 				en.PKVal = "0";
 				dtls.AddEntity(en);
@@ -196,7 +206,6 @@ namespace CCFlow.WF.Comm.RefFunc
 			foreach (Entity dtl in dtls)
 			{
 				i++;
-
 
 				if (Equals(dtl.PKVal, "0") || dtl.PKVal.ToString() == "") //如果是新建行
 				{
@@ -245,7 +254,6 @@ namespace CCFlow.WF.Comm.RefFunc
 								case DataType.AppMoney:
 									tb.TextExtMoney = decimal.Parse(val);
 									break;
-
 								case DataType.AppDate:
 									tb.Text = val.ToString();
 									tb.ShowType = TBType.Date;

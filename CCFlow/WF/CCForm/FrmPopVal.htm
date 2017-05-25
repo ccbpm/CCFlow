@@ -758,14 +758,14 @@
                 case "OnlyNo"://仅NO
                     var noArr = [];
                     $.each(selectedTrArr, function (i, selectedTr) {
-                        noArr.push(selectedTr.NO);
+                        noArr.push(selectedTr.No);
                     });
                     returnVal.No = noArr.join(',');
                     break;
                 case "OnlyName"://仅Name
                     var nameArr = [];
                     $.each(selectedTrArr, function (i, selectedTr) {
-                        nameArr.push(selectedTr.NAME);
+                        nameArr.push(selectedTr.Name);
                     });
                     returnVal.Name = nameArr.join(',');
                     break;

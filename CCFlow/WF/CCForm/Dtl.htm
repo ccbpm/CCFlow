@@ -742,7 +742,9 @@
         $(function () {
             $('.table.wupop tbody').bind('mouseleave', function () {
                 //移出TR时执行该事件
-                saveRow(pageData.currentRowIndex);
+                if (pageData.currentRowIndex != -1) {
+                    saveRow(pageData.currentRowIndex);
+                }
             });
         })
      </script>

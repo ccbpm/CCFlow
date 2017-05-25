@@ -239,7 +239,6 @@
 
             trData.data["OID"] = 0;
             insertTr.data(trData);
-            console.log(trData)
             $('#dtlDiv div table tbody').append(insertTr);
             AfterBindEn_DealMapExt(insertTr);
 
@@ -738,6 +737,14 @@
                 pageData.currentRowIndex = thisRowIndex;
             }
         }
+
+        //离开表格，执行当前行的存盘  解决单行数据存盘问题
+        $(function () {
+            $('.table.wupop tbody').bind('mouseleave', function () {
+                //移出TR时执行该事件
+                saveRow(pageData.currentRowIndex);
+            });
+        })
      </script>
 
 </head>

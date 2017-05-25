@@ -4684,7 +4684,7 @@ namespace BP.WF
                     if (attr.UIIsInput == false)
                         continue;
 
-                    string str = row[attr.KeyOfEn] as string;
+                    string str = row[attr.KeyOfEn] == null ? string.Empty : row[attr.KeyOfEn].ToString();
                     /*如果是检查不能为空 */
                     if (str == null || string.IsNullOrEmpty(str) == true || str.Trim() == "")
                         err += "@字段{" + attr.KeyOfEn + " ; " + attr.Name + "}，不能为空。";

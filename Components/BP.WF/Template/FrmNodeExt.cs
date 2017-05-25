@@ -79,7 +79,7 @@ namespace BP.WF.Template
                 map.AddMyPK();
 
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
-                map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, false);
+                map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
 
              //   map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, false);
 
@@ -119,7 +119,7 @@ namespace BP.WF.Template
                 //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "自定义方案";
+                rm.Title = "自定义方案(权限设置)";
                 rm.ClassMethodName = this.ToString() + ".DoSelfSln()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);

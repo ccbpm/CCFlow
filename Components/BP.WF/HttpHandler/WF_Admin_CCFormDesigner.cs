@@ -357,6 +357,8 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
                 return "url@FormDesigner.htm?FK_MapData=" + md.No;
 
+             
+
             //  if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
             return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No;
 

@@ -34,7 +34,7 @@
             $("#Msg").html("正在加载,请稍后......");
 
             var frmType = GetQueryString("FrmType");
-            if (frmType == null)
+            if (frmType == null || frmType=="" )
                 frmType = '1';
 
             //创建表单类型.
@@ -43,8 +43,9 @@
             //创建数据源.
             GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", "local");
 
+            var sort = GetQueryString("FK_FrmSort");
             //创建表单树.
-            GenerBindEntities("DDL_FrmTree", "BP.WF.Template.SysFormTrees");
+            GenerBindEntities("DDL_FrmTree", "BP.WF.Template.SysFormTrees", sort);
 
             $("#Msg").html("");
 
@@ -81,7 +82,7 @@
 <tr>
 <td class="Idx" > 1 </td>
 <td > 创建的表单类型</td>
-<td> <select name="DDL_XB" id="DDL_FrmType" />  </td>
+<td> <select name="DDL_FrmType" id="DDL_FrmType" />  </td>
 <td>根据自己的业务场景需要选择相应的表单类型. </td>
 </tr>
 
@@ -102,7 +103,7 @@
 <tr>
 <td class="Idx" > 4 </td>
 <td > 表单名称</td>
-<td><input type="text" id="TB_Name" name="TB_Name" onBlur="GenerPinYin()" /> </td>
+<td><input type="text" id="TB_Name" name="TB_Name" onblur="GenerPinYin()" /> </td>
 <td>表单的名称，允许重复，允许多个表单映射到一张表上。</td>
 </tr>
 
@@ -111,17 +112,18 @@
 <td >表单编号(必须是字母或者下划线组合)</td>
 <td><input type="text" id="TB_No" name="TB_No" /> </td>
 <td > 
-<input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0"  onclick="GenerPinYin()" /><label for="RB_ZZMM_0" onclick="GenerPinYin()" >全拼</label>
+<input id="RB_ZZMM_0" type="radio" name="RB_ZZMM" value="0" checked=true  onclick="GenerPinYin()" /><label for="RB_ZZMM_0" onclick="GenerPinYin()" >全拼</label>
 <input id="RB_ZZMM_1" type="radio" name="RB_ZZMM" value="1"  onclick="GenerPinYin()" /><label for="RB_ZZMM_1" onclick="GenerPinYin()" >简拼</label>
 </td>
 </tr>
 
 <tr>
 <td class="Idx" > 6 </td>
-<td >存储表（对于嵌入式表单无效）</td>
+<td >存储表（对于嵌入式表单则输入URL）</td>
 <td><input type="text" id="TB_PTable" name="TB_PTable" /> </td>
 <td > 
-数据要存储到那个表里？默认与表单编号一致，指定的表名，必须是下划线或者字母开头，不能包含特殊字符，否则创建表失败。
+数据要存储到那个表里？<br>
+默认与表单编号一致，指定的表名，必须是下划线或者字母开头，不能包含特殊字符，否则创建表失败。
 </td>
 </tr>
 
@@ -135,7 +137,6 @@
 <script type="text/javascript">
 
     function GenerPinYin() {
-
 
         //是否是全拼.
         var isQuanPin = 0;
@@ -183,7 +184,8 @@
         }
 
         var frmData = $("#cc").serialize();
-        //alert(frmData);
+        alert(frmData);
+
         $.ajax({
             data: frmData,
             type: 'post',

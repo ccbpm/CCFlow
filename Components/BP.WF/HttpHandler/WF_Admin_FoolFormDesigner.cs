@@ -37,7 +37,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 处理页面的业务逻辑
     /// </summary>
-    public class WF_Admin_FoolFormDesigner : WebContralBase
+    public class WF_Admin_FoolFormDesigner : DirectoryPageBase
     {
         /// <summary>
         /// 初始化

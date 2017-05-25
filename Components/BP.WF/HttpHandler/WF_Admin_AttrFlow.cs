@@ -11,7 +11,7 @@ using BP.En;
 
 namespace BP.WF.HttpHandler
 {
-    public class WF_Admin_AttrFlow : BP.WF.HttpHandler.WebContralBase
+    public class WF_Admin_AttrFlow : BP.WF.HttpHandler.DirectoryPageBase
     {
         /// <summary>
         /// 初始化数据

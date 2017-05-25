@@ -48,7 +48,6 @@ namespace BP.WF
             if (workID == 0)
                 workID = BP.WF.Dev2Interface.Node_CreateBlankWork(fk_flow, null, null, userNo, null);
 
-
             Node nd = new Node(fk_node);
             try
             {
@@ -65,14 +64,11 @@ namespace BP.WF
                 DataTable WF_Node = nd.ToDataTableField("WF_Node");
                 myds.Tables.Add(WF_Node);
 
-                //加入组件的状态信息, 在解析表单的时候使用.
+                #region 加入组件的状态信息, 在解析表单的时候使用.
                 BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
-
-
                 if (nd.NodeFrmID != "ND" + nd.NodeID)
                 {
                     /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
-
                     int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
 
                     BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(refNodeID);
@@ -102,10 +98,10 @@ namespace BP.WF
                     fnc.SetValByKey(FTCAttr.FTC_W, refFnc.GetValIntByKey(FTCAttr.FTC_W));
                     fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValIntByKey(FTCAttr.FTC_X));
                     fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValIntByKey(FTCAttr.FTC_Y));
-
                 }
 
                 myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
+                #endregion 加入组件的状态信息, 在解析表单的时候使用.
 
                 #region 流程设置信息.
                 if (nd.IsStartNode == false)
@@ -159,19 +155,25 @@ namespace BP.WF
                 wk.OID = workID;
                 wk.RetrieveFromDBSources();
 
+                //重设默认值.
+                wk.ResetDefaultVal();
+
                 // 处理传递过来的参数。
                 foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
                 {
                     wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
                 }
 
+                // 处理传递过来的frm参数。
+                foreach (string k in System.Web.HttpContext.Current.Request.Form.AllKeys)
+                {
+                    wk.SetValByKey(k, System.Web.HttpContext.Current.Request.Form[k]);
+                }
+
                 // 执行表单事件..
                 string msg = md.FrmEvents.DoEventNode(FrmEventList.FrmLoadBefore, wk);
                 if (string.IsNullOrEmpty(msg) == false)
                     throw new Exception("err@错误:" + msg);
-
-                //重设默认值.
-                wk.ResetDefaultVal();
 
                 //执行装载填充.
                 MapExt me = new MapExt();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Web;
 
@@ -34,7 +33,7 @@ namespace BP.WF.HttpHandler
             context = mycontext;
 
             //创建 ctrl 对象, 获得业务实体类.
-            WebContralBase ctrl = Activator.CreateInstance(this.CtrlType, context) as WebContralBase;
+            DirectoryPageBase ctrl = Activator.CreateInstance(this.CtrlType, context) as DirectoryPageBase;
             ctrl.context = mycontext;
 
             try

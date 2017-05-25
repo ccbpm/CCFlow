@@ -17,7 +17,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 表单功能界面
     /// </summary>
-    public class WF_CCForm : WebContralBase
+    public class WF_CCForm : DirectoryPageBase
     {
         #region HanderMapExt
         public string HandlerMapExt()

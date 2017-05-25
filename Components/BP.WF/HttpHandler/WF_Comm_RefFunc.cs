@@ -9,7 +9,7 @@ using BP.Sys;
 
 namespace BP.WF.HttpHandler
 {
-    public class WF_Comm_RefFunc : WebContralBase
+    public class WF_Comm_RefFunc : DirectoryPageBase
     {
         /// <summary>
         /// 初始化数据

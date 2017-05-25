@@ -17,7 +17,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 初始化函数
     /// </summary>
-    public class WF_App_ACE : WebContralBase
+    public class WF_App_ACE : DirectoryPageBase
     {
         /// <summary>
         /// 初始化函数

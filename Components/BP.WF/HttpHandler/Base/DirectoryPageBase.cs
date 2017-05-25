@@ -21,7 +21,7 @@ using System.Reflection;
 
 namespace BP.WF.HttpHandler
 {
-    abstract public class WebContralBase
+    abstract public class DirectoryPageBase
     {
         #region 执行方法.
         /// <summary>
@@ -63,7 +63,7 @@ namespace BP.WF.HttpHandler
         /// <param name="obj">对象名</param>
         /// <param name="methodName">方法</param>
         /// <returns>返回执行的结果，执行错误抛出异常</returns>
-        public string DoMethod(WebContralBase myEn, string methodName)
+        public string DoMethod(DirectoryPageBase myEn, string methodName)
         {
             Type tp = myEn.GetType();
             MethodInfo mp = tp.GetMethod(methodName);

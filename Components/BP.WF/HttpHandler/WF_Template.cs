@@ -16,7 +16,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class WF_Template : WebContralBase
+    public class WF_Template : DirectoryPageBase
     {
         /// <summary>
         /// 页面功能实体

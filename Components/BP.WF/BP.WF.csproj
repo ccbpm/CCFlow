@@ -175,6 +175,7 @@
     <Compile Include="HttpHandler\WF_Admin.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt.cs" />
     <Compile Include="HttpHandler\CCMobile.cs" />
+    <Compile Include="HttpHandler\WF_WorkOpt_OneWork.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />
@@ -202,7 +203,7 @@
     <Compile Include="Template\MapFrmExcel.cs" />
     <Compile Include="Template\MapFrmFree.cs" />
     <Compile Include="HttpHandler\Base\HttpHandlerBase.cs" />
-    <Compile Include="HttpHandler\Base\WebContralBase.cs" />
+    <Compile Include="HttpHandler\Base\DirectoryPageBase.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner.cs" />
     <Compile Include="HttpHandler\WF_Comm_RefFunc.cs" />

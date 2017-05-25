@@ -17,7 +17,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class WF_WorkOpt : WebContralBase
+    public class WF_WorkOpt : DirectoryPageBase
     {
         /// <summary>
         /// 页面功能实体
@@ -71,7 +71,6 @@ namespace BP.WF.HttpHandler
 
             //计算出来曾经抄送过的人.
             string sql = "SELECT CCToName FROM WF_CCList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID;
-
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
             string toAllEmps = "";
             foreach (DataRow dr in mydt.Rows)

@@ -17,7 +17,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 初始化函数
     /// </summary>
-    public class WF_MyFlow : WebContralBase
+    public class WF_MyFlow : DirectoryPageBase
     {
         #region  运行变量
         /// <summary>

@@ -12,7 +12,7 @@ using BP.WF.Port;
 
 namespace BP.WF.HttpHandler
 {
-    public class WF : WebContralBase
+    public class WF : DirectoryPageBase
     {
         /// <summary>
         /// 初始化数据

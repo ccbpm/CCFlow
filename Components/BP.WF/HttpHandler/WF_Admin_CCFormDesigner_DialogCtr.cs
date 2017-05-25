@@ -14,7 +14,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 初始化函数
     /// </summary>
-    public class WF_Admin_CCFormDesigner_DialogCtr : WebContralBase
+    public class WF_Admin_CCFormDesigner_DialogCtr : DirectoryPageBase
     {
         /// <summary>
         /// 初始化函数

@@ -16,7 +16,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class CCMobile : WebContralBase
+    public class CCMobile : DirectoryPageBase
     {
         /// <summary>
         /// 页面功能实体

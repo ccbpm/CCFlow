@@ -16,7 +16,7 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 初始化函数
     /// </summary>
-    public class WF_Admin_CCBPMDesigner_App_OneFlow : WebContralBase
+    public class WF_Admin_CCBPMDesigner_App_OneFlow : DirectoryPageBase
     {
         /// <summary>
         /// 初始化函数

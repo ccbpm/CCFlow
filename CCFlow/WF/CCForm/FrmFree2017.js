@@ -2259,7 +2259,7 @@ function figure_Template_HyperLink(frmLin) {
     eleHtml = $(eleHtml);
     
     var a = $("<a></a>");
-    a.attr('url', url).attr('target', frmLin.Target).html(frmLin.Text);
+    a.attr('href', url).attr('target', frmLin.Target).html(frmLin.Text);
     eleHtml.append(a);
     eleHtml.css('position', 'absolute')
         .css('top', frmLin.Y)

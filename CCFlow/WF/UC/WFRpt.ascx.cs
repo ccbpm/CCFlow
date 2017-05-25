@@ -324,19 +324,23 @@ namespace CCFlow.WF.UC
                     this.UCEn1.Add("</div>");
                 }
 
-               
-
-                BillTemplates bills = new BillTemplates();
-                bills.Retrieve(BillTemplateAttr.NodeID, nd.NodeID);
-                if (bills.Count >= 1)
+               //增加判断是RTF打印时，才会显示打印模板，added by liuxc,2017-05-25
+                if (nd.HisPrintDocEnable == PrintDocEnable.PrintRTF)
                 {
-                    string title = "";
-                    foreach (BillTemplate item in bills)
-                        title += "<img src='/WF/Img/Btn/Word.gif' border=0/>" + item.Name + "</a>";
+                    BillTemplates bills = new BillTemplates();
+                    bills.Retrieve(BillTemplateAttr.NodeID, nd.NodeID);
 
-                    string urlr = appPath + "WF/WorkOpt/PrintDoc.aspx?FK_Node=" + nd.NodeID + "&FID=" + fid + "&WorkID=" + workid + "&FK_Flow=" + nd.FK_Flow;
-                    this.UCEn1.Add("<p><a  href=\"javascript:WinOpen('" + urlr + "','dsdd');\"  />" + title + "</a></p>");
-                    //this.UCEn1.Add("<a href='' target=_blank><img src='/WF/Img/Btn/Word.gif' border=0/>" + bt.Name + "</a>");
+                    if (bills.Count >= 1)
+                    {
+                        string title = "";
+                        foreach (BillTemplate item in bills)
+                            title += "<img src='/WF/Img/Btn/Word.gif' border=0/>" + item.Name + "</a>";
+
+                        string urlr = appPath + "WF/WorkOpt/PrintDoc.aspx?FK_Node=" + nd.NodeID + "&FID=" + fid +
+                                      "&WorkID=" + workid + "&FK_Flow=" + nd.FK_Flow;
+                        this.UCEn1.Add("<p><a  href=\"javascript:WinOpen('" + urlr + "','dsdd');\"  />" + title +
+                                       "</a></p>");
+                    }
                 }
             }
             else

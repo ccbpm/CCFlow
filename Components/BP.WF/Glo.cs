@@ -199,7 +199,8 @@ namespace BP.WF
                 //2017.5.19 打印模板字段修复
                 BP.WF.Template.BillTemplate bt = new BillTemplate();
                 bt.CheckPhysicsTable();
-                DBAccess.RunSQL("UPDATE WF_BillTemplate SET TempFilePath = Url WHERE TempFilePath IS null");
+                if ( DBAccess.IsExitsTableCol("WF_BillTemplate","url")==true)
+                    DBAccess.RunSQL("UPDATE WF_BillTemplate SET TempFilePath = Url WHERE TempFilePath IS null");
 
                 //规范升级根目录
                 DataTable dttree = DBAccess.RunSQLReturnTable("SELECT No FROM Sys_FormTree WHERE ParentNo='-1' ");

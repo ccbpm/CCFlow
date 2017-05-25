@@ -316,7 +316,7 @@ namespace BP.WF.HttpHandler
                     //    BP.Sys.PubClass.Alert("必填项不可以为空");
                     //    return;
                     //}
-                    //md.Url = url;
+                    md.Url = md.PTable;
                     break;
                 //如果是以下情况，导入模式
                 case BP.Sys.FrmType.WordFrm:
@@ -352,13 +352,13 @@ namespace BP.WF.HttpHandler
 
             if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
                 /*把表单模版存储到数据库里 */
-                return "url@/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No;
+                return "url@../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No;
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
                 return "url@FormDesigner.htm?FK_MapData=" + md.No;
 
             //  if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
-            return "url../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No;
+            return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No;
 
         }
         #endregion 创建表单.

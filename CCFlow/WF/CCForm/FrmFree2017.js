@@ -1395,13 +1395,13 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
         }
     }
 
-    //通过URL参数传过来的参数
-    for (var pageParam in pageParamObj) {
-        if (pageParam == keyOfEn) {
-            result = pageParamObj[pageParam];
-            break;
-        }
-    }
+    //通过URL参数传过来的参数 后台处理到MainTable 里面
+    //for (var pageParam in pageParamObj) {
+    //    if (pageParam == keyOfEn) {
+    //        result = pageParamObj[pageParam];
+    //        break;
+    //    }
+    //}
 
     if (result != undefined && typeof (result) == 'string') {
         //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");

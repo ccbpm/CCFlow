@@ -1648,13 +1648,13 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
         }
     }
 
-    //通过URL参数传过来的参数
-    for (var pageParam in pageParamObj) {
-        if (pageParam == keyOfEn) {
-            result = pageParamObj[pageParam];
-            break;
-        }
-    }
+    //通过URL参数传过来的参数  后台处理到MainTable 里面
+    //for (var pageParam in pageParamObj) {
+    //    if (pageParam == keyOfEn) {
+    //        result = pageParamObj[pageParam];
+    //        break;
+    //    }
+    //}
 
     if (result != undefined && typeof (result) == 'string') {
         //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
@@ -2226,11 +2226,15 @@ function SaveDtlAll() {
 
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
 function GenerWorkNode() {
+
+    var href = window.location.href;
+    var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+    urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
     $.ajax({
         type: 'post',
         async: true,
         data: pageData,
-        url: MyFlow + "?DoType=GenerWorkNode" + "&m=" + Math.random(),
+        url: MyFlow + "?DoType=GenerWorkNode" + "&m=" + Math.random() + "&" + urlParam,
         dataType: 'html',
         success: function (data) {
             //console.info(data);
@@ -2802,12 +2806,15 @@ function figure_Template_Dtl(frmDtl) {
     ////            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
     ////        break;
     ////}
-
+    var href = window.location.href;
+    var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+    urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
     if (frmDtl.DtlShowModel == "0") {
         if (pageData.IsReadOnly) {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+
+            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam;
         } else {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam;
         }
     }
     else if (frmDtl.DtlShowModel == "1") {

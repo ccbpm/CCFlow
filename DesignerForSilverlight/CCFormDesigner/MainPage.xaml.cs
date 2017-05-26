@@ -1336,7 +1336,10 @@ namespace CCForm
                                         btn.SetValue(Canvas.TopProperty, (double)dr["Y"]);
 
                                         btn.AtPara = (string)dr["ATPARA"];
-                                        btn.FontSize = new BP.DA.AtPara(btn.AtPara).GetValIntByKey("FontSize", 12);
+
+                                        int fontsize = new BP.DA.AtPara(btn.AtPara).GetValIntByKey("FontSize", 12);
+                                        if (fontsize > 0)
+                                            btn.FontSize = fontsize;
 
                                         attachElementEvent(btn);
                                     }
@@ -1464,7 +1467,10 @@ namespace CCForm
                                                 };
 
                                                 cb.AtPara = (string) dr["ATPARA"];
-                                                cb.FontSize = new BP.DA.AtPara(cb.AtPara).GetValIntByKey("FontSize", 12);
+
+                                                int fontsize = new BP.DA.AtPara(cb.AtPara).GetValIntByKey("FontSize", 12);
+                                                if (fontsize > 0)
+                                                    cb.FontSize = fontsize;
 
                                                 cb.Content = new Label()
                                                 {

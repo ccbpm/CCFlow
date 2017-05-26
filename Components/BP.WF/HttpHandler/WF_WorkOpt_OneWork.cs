@@ -140,28 +140,28 @@ namespace BP.WF.HttpHandler
             return "err@没有判断的执行类型：" + this.DoType;
         }
 
-        private string OP_ComeBack()
+        public string OP_ComeBack()
         {
             WorkFlow wf3 = new WorkFlow(FK_Flow, WorkID);
             wf3.DoComeBackWorkFlow("无");
             return "流程已经被重新启用.";
         }
 
-        private string OP_UnHungUp()
+        public string OP_UnHungUp()
         {
             WorkFlow wf2 = new WorkFlow(FK_Flow, WorkID);
             //  wf2.DoUnHungUp();
             return "流程已经被解除挂起.";
         }
 
-        private string OP_HungUp()
+        public string OP_HungUp()
         {
             WorkFlow wf1 = new WorkFlow(FK_Flow, WorkID);
             //wf1.DoHungUp()
             return "流程已经被挂起.";
         }
 
-        private string OP_DelFlow()
+        public string OP_DelFlow()
         {
             WorkFlow wf = new WorkFlow(FK_Flow, WorkID);
             wf.DoDeleteWorkFlowByReal(true);
@@ -172,7 +172,7 @@ namespace BP.WF.HttpHandler
         /// 获取可操作状态信息
         /// </summary>
         /// <returns></returns>
-        private string OP_GetStatus()
+        public string OP_GetStatus()
         {
             int wfState = BP.DA.DBAccess.RunSQLReturnValInt("SELECT WFState FROM WF_GenerWorkFlow WHERE WorkID=" + WorkID, 1);
             WFState wfstateEnum = (WFState)wfState;
@@ -243,7 +243,7 @@ namespace BP.WF.HttpHandler
         /// 获取附件列表及单据列表
         /// </summary>
         /// <returns></returns>
-        private string GetAthsAndBills()
+        public string GetAthsAndBills()
         {
             string sql = "";
             string json = "{\"Aths\":";
@@ -271,7 +271,7 @@ namespace BP.WF.HttpHandler
         /// 获取OneWork页面的tabs集合
         /// </summary>
         /// <returns></returns>
-        private string OneWork_GetTabs()
+        public string OneWork_GetTabs()
         {
             string re = "[";
 
@@ -298,7 +298,7 @@ namespace BP.WF.HttpHandler
         /// <param name="workid">工作编号</param>
         /// <param name="fid">父流程编号</param>
         /// <returns></returns>
-        private string GetFlowTrackJsonData()
+        public string GetFlowTrackJsonData()
         {
             string fk_flow = this.FK_Flow;
             Int64 workid = this.WorkID;

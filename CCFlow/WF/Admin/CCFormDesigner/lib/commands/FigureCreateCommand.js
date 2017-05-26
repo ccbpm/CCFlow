@@ -460,10 +460,12 @@ FigureCreateCommand.prototype = {
     HidenFieldCreate: function (frmVal) {
         var param = {
             DoType: "NewHidF",
-            v1: CCForm_FK_MapData,
-            v2: frmVal.KeyOfEn,
-            v3: frmVal.Name,
-            v4: frmVal.FieldType
+            FrmID: CCForm_FK_MapData,
+            KeyOfEn: frmVal.KeyOfEn,
+            Name: frmVal.Name,
+            FieldType: frmVal.FieldType,
+            x: 0,
+            y: 0
         };
         ajaxService(param, function (data) {
 

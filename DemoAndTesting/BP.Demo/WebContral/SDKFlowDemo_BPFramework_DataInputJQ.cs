@@ -12,7 +12,7 @@ using BP.En;
 
 namespace BP.Demo.HandlerPage
 {
-    public class SDKFlowDemo_BPFramework_DataInputJQ : BP.WF.HttpHandler.WebContralBase
+    public class SDKFlowDemo_BPFramework_DataInputJQ : BP.WF.HttpHandler.DirectoryPageBase
     {
         /// <summary>
         /// 初始化数据

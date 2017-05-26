@@ -50,10 +50,7 @@
                     data = eval('(' + data + ')');
 
                     $.each(data, function () {
-                        //增加标签
-                        if ((!workid || workid == "null" || workid == "0") && this.No != "Truck") {
-                            return true;
-                        }
+
 
                         $("#mtabs").tabs("add", {
                             id: this.No,

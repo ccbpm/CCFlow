@@ -82,10 +82,21 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 使管理员登录使管理员登录    /// </summary>
         /// <returns></returns>
-        public string Logout()
+        public string LetLogin()
         {
             return string.IsNullOrWhiteSpace(WebUser.No) ? LetAdminLogin(getUTF8ToString("userNo"), true) : string.Empty;
         }
+
+        /// <summary>
+        /// 获得枚举列表的JSON.
+        /// </summary>
+        /// <returns></returns>
+        public string Logout()
+        {
+            BP.WF.Dev2Interface.Port_SigOut();
+            return "";
+        }
+
         /// <summary>
         /// 根据部门、岗位获取人员列表
         /// </summary>

@@ -571,21 +571,5 @@ namespace BP.WF.HttpHandler
             //调用API.
             return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
         }
-
-        /// <summary>
-        /// 获得发起的BBS评论.
-        /// </summary>
-        /// <returns></returns>
-        public string FlowBBSList()
-        {
-            Paras ps = new Paras();
-            ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType";
-            ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
-
-            //转化成json
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
-        }
-
-
     }
 }

@@ -281,12 +281,7 @@ namespace BP.WF.HttpHandler
             foreach (OneWorkXml item in xmls)
             {
                 string url = "";
-                if (item.No == "Track")
-                    url = string.Format("{0}.aspx?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.No, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
-                else
-                    url = string.Format("{0}.htm?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.No, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
-
-                re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\"", item.No, item.Name, url) + "},";
+                url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.URL, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
             }
 
             return re.TrimEnd(',') + "]";
@@ -459,27 +454,6 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(ps));
         }
 
-        public string FlowBBSUser()
-        {
-            string name = string.Empty;
-            name = BP.Web.WebUser.No;
-            return name;
-
-        }
-        public string FlowBBSUserName()
-        {
-            string name = string.Empty;
-            name = BP.Web.WebUser.Name;
-            return name;
-        }
-
-        public string FlowBBSDept()
-        {
-            Paras ps = new Paras();
-            ps.SQL = "select a.name from port_dept a INNER join port_emp b on b.FK_Dept=a.no and b.No='" + this.UserName + "'";
-            return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnString(ps));
-        }
-
         /// 查看某一用户的评论.
         public string FlowBBS_Check()
         {
@@ -489,7 +463,6 @@ namespace BP.WF.HttpHandler
             pss.Add("WorkID", this.WorkID);
 
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(pss));
-
         }
         /// <summary>
         /// 提交评论.

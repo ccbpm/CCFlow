@@ -37,6 +37,7 @@
                 url: Handler + "?DoType=OneWork_GetTabs&FK_Node=" + fk_node + "&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&t=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -46,7 +47,7 @@
                         return;
                     }
 
-                    var data = eval('(' + data + ')');
+                    data = eval('(' + data + ')');
 
                     $.each(data, function () {
                         //增加标签

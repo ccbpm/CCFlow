@@ -330,23 +330,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                 this.BindTrack_ViewSpecialWork();
                 return;
             }
-
-
-            //this.AddTable("class='Table' cellpadding='0' cellspacing='0' border='0' style='width: 100%'");
-            //this.AddTR();
-            //this.AddTDGroupTitle("style='text-align:center'", "序");
-            //this.AddTDGroupTitle("操作时间");
-            //this.AddTDGroupTitle("表单"); //moved by liuxc,2014-12-18,应zhangqingpeng要求将此列提前
-            //this.AddTDGroupTitle("从节点");
-            //this.AddTDGroupTitle("人员");
-            //this.AddTDGroupTitle("到节点");
-            //this.AddTDGroupTitle("人员");
-            //this.AddTDGroupTitle("到达时间");
-            //this.AddTDGroupTitle("用时");
-            //this.AddTDGroupTitle("活动");
-            //this.AddTDGroupTitle("信息");
-            //this.AddTDGroupTitle("执行人");
-            //this.AddTREnd();
+         
 
             //获取track.
             DataTable dt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];

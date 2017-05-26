@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="OneWork.master" AutoEventWireup="true" CodeBehind="CheckTrack.aspx.cs" Inherits="ShenZhenGovOA.WF.WorkOpt.OneWork.CheckTrack" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="OneWork.master" AutoEventWireup="true" CodeBehind="LogOfTable.aspx.cs" Inherits="ShenZhenGovOA.WF.WorkOpt.OneWork.CheckTrack" %>
 <%@ Register src="../../Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />

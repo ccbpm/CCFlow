@@ -23,7 +23,7 @@ namespace ShenZhenGovOA.WF.WorkOpt.OneWork
                 return this.Request.QueryString["CCID"];
             }
         }
-        public   string DoType
+        public string DoType
         {
             get
             {
@@ -235,7 +235,6 @@ namespace ShenZhenGovOA.WF.WorkOpt.OneWork
                 this.Pub2.AddTD(dtt.ToString("yyyy年MM月dd日HH:mm"));
 
                 this.Pub2.AddTD(dr[TrackAttr.NDFromT].ToString());
-
 
                 this.Pub2.AddTD(dr[TrackAttr.EmpFromT].ToString());
                 this.Pub2.AddTD(dr[TrackAttr.NDToT].ToString());

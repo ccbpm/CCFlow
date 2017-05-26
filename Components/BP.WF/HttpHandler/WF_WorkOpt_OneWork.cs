@@ -124,79 +124,44 @@ namespace BP.WF.HttpHandler
         }
         #endregion 属性.
 
-        protected override string DoDefaultMethod()
-        {
-            string msg = "";
-            try
-            {
-                switch (this.DoType)
-                {
-                    case "FlowBBSDelete": //删除评论.
-                        msg = BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK, WebUser.No);
-                        break;
 
-                    case "OneWork_GetTabs": //获取标签列表
-                        msg = this.OneWorkGetTabs();
-                        break;
-                    case "GetFlowTrackJsonData":    //获取轨迹图数据
-                        msg = GetFlowTrackJsonData(this.FK_Flow, this.WorkID, this.FID);
-                        break;
-                    case "OP_GetStatus":    //获取可操作状态信息
-                        msg = OPGetStatus();
-                        break;
-                    case "OP_DelFlow":
-                        msg = OPDelFlow();  //删除流程
-                        break;
-                    case "OP_HungUp":
-                        msg = OPHungUp();   //挂起流程
-                        break;
-                    case "OP_UnHungUp":
-                        msg = OPUnHungUp(); //解除挂起
-                        break;
-                    case "OP_ComeBack":
-                        msg = OPComeBack();
-                        break;
-                    case "OP_Takeback": /*取回审批.*/
-                        break;
-                    case "OP_UnSend":
-                        // 转化成编号.
-                        msg = BP.WF.Dev2Interface.Flow_DoUnSend(FK_Flow, WorkID);
-                        break;
-                    default:
-                        msg = "err@没有判断的执行类型：" + this.DoType;
-                        break;
-                }
-                return msg;
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-            //输出信息.
+        public string FlowBBS_Delete()
+        {
+            return BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK, WebUser.No);
         }
 
-        private string OPComeBack()
+        public string OP_UnSend()
+        {
+            return BP.WF.Dev2Interface.Flow_DoUnSend(FK_Flow, WorkID);
+        }
+
+        protected override string DoDefaultMethod()
+        {
+            return "err@没有判断的执行类型：" + this.DoType;
+        }
+
+        private string OP_ComeBack()
         {
             WorkFlow wf3 = new WorkFlow(FK_Flow, WorkID);
             wf3.DoComeBackWorkFlow("无");
             return "流程已经被重新启用.";
         }
 
-        private string OPUnHungUp()
+        private string OP_UnHungUp()
         {
             WorkFlow wf2 = new WorkFlow(FK_Flow, WorkID);
             //  wf2.DoUnHungUp();
             return "流程已经被解除挂起.";
         }
 
-        private string OPHungUp()
+        private string OP_HungUp()
         {
             WorkFlow wf1 = new WorkFlow(FK_Flow, WorkID);
             //wf1.DoHungUp()
             return "流程已经被挂起.";
         }
 
-        private string OPDelFlow()
+        private string OP_DelFlow()
         {
             WorkFlow wf = new WorkFlow(FK_Flow, WorkID);
             wf.DoDeleteWorkFlowByReal(true);
@@ -207,7 +172,7 @@ namespace BP.WF.HttpHandler
         /// 获取可操作状态信息
         /// </summary>
         /// <returns></returns>
-        private string OPGetStatus()
+        private string OP_GetStatus()
         {
             int wfState = BP.DA.DBAccess.RunSQLReturnValInt("SELECT WFState FROM WF_GenerWorkFlow WHERE WorkID=" + WorkID, 1);
             WFState wfstateEnum = (WFState)wfState;
@@ -306,9 +271,10 @@ namespace BP.WF.HttpHandler
         /// 获取OneWork页面的tabs集合
         /// </summary>
         /// <returns></returns>
-        private string OneWorkGetTabs()
+        private string OneWork_GetTabs()
         {
             string re = "[";
+
             OneWorkXmls xmls = new OneWorkXmls();
             xmls.RetrieveAll();
 
@@ -332,8 +298,13 @@ namespace BP.WF.HttpHandler
         /// <param name="workid">工作编号</param>
         /// <param name="fid">父流程编号</param>
         /// <returns></returns>
-        private string GetFlowTrackJsonData(string fk_flow, long workid, long fid)
+        private string GetFlowTrackJsonData()
         {
+            string fk_flow = this.FK_Flow;
+            Int64 workid = this.WorkID;
+            Int64 fid = this.FID;
+
+
             DataSet ds = new DataSet();
             DataTable dt = null;
             string json = string.Empty;
@@ -463,11 +434,12 @@ namespace BP.WF.HttpHandler
                 }
 
                 var re = new { success = true, msg = string.Empty, ds = ds };
-                json = Newtonsoft.Json.JsonConvert.SerializeObject(re);
+
+                return BP.Tools.Json.DataSetToJson(ds,false);
             }
             catch (Exception ex)
             {
-                json = Newtonsoft.Json.JsonConvert.SerializeObject(new { success = false, msg = ex.Message });
+                return "err@" + ex.Message;
             }
 
             return json;
@@ -509,12 +481,13 @@ namespace BP.WF.HttpHandler
         }
 
         /// 查看某一用户的评论.
-        public string FlowBBSCheck()
+        public string FlowBBS_Check()
         {
             Paras pss = new Paras();
             pss.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID AND  EMPFROMT='" + this.UserName + "'";
             pss.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
             pss.Add("WorkID", this.WorkID);
+
             return BP.Tools.Json.ToJson(BP.DA.DBAccess.RunSQLReturnTable(pss));
 
         }
@@ -522,7 +495,7 @@ namespace BP.WF.HttpHandler
         /// 提交评论.
         /// </summary>
         /// <returns></returns>
-        public string FlowBBSSave()
+        public string FlowBBS_Save()
         {
             string msg = this.GetValFromFrmByKey("TB_Msg");
             string mypk = BP.WF.Dev2Interface.Flow_BBSAdd(this.FK_Flow, this.WorkID, this.FID, msg, WebUser.No, WebUser.Name);
@@ -536,7 +509,7 @@ namespace BP.WF.HttpHandler
         /// 回复评论.
         /// </summary>
         /// <returns></returns>
-        public string FlowBBSReplay()
+        public string FlowBBS_Replay()
         {
             SMS sms = new SMS();
             sms.RetrieveByAttr(SMSAttr.MyPK, MyPK);
@@ -553,9 +526,8 @@ namespace BP.WF.HttpHandler
         /// 统计评论条数.
         /// </summary>
         /// <returns></returns>
-        public string FlowBBSCount()
+        public string FlowBBS_Count()
         {
-
             Paras ps = new Paras();
             ps.SQL = "SELECT COUNT(ActionType) FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "WorkID";
             ps.Add("ActionType", (int)BP.WF.ActionType.FlowBBS);
@@ -563,6 +535,5 @@ namespace BP.WF.HttpHandler
             string count = BP.DA.DBAccess.RunSQLReturnValInt(ps).ToString();
             return count;
         }
-
     }
 }

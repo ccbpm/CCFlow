@@ -79,9 +79,6 @@ namespace BP.WF.HttpHandler
             {
                 switch (this.DoType)
                 {
-                    case "Logout": //获得枚举列表的JSON.
-                        BP.WF.Dev2Interface.Port_SigOut();
-                        break;
                     case "LetLogin":    //使管理员登录
                         msg = string.IsNullOrWhiteSpace(WebUser.No) ? LetAdminLogin(getUTF8ToString("userNo"), true) : string.Empty;
                         break;
@@ -97,6 +94,17 @@ namespace BP.WF.HttpHandler
             return msg;
         }
         #endregion 执行父类的重写方法.
+
+        /// <summary>
+        /// 获得枚举列表的JSON.
+        /// </summary>
+        /// <returns></returns>
+	    public string Logout()
+	    {
+		    BP.WF.Dev2Interface.Port_SigOut();
+		    return "";
+	    }
+	
 
         /// <summary>
         /// 根据部门、岗位获取人员列表

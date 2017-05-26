@@ -1,5 +1,5 @@
 ﻿// ********************** 根据关键字动态查询. ******************************** //
-var oldValue = ""; 
+var oldValue = "";
 var oid;
 var highlightindex = -1;
 function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
@@ -67,7 +67,7 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
             var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
             $.ajax({
                 type: "get",
-                url: Hander + "?DoType=HanderMapExt",
+                url: url + "/WF/CCForm/HanderMapExt.ashx",
                 data: json_data,
                 beforeSend: function (XMLHttpRequest, fk_mapExt) {
                     //ShowLoading();
@@ -81,6 +81,8 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
                         $.each(dataObj.Head, function (idx, item) {
                             $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + item.No + "','" + tbid + "','" + fk_mapExt + "');\" value='" + item.No + "'>" + item.No + '|' + item.Name + "</div>");
                         });
+                    } else {
+                        document.getElementById("divinfo").style.display = "none";
                     }
                 },
                 complete: function (XMLHttpRequest, textStatus) {
@@ -121,24 +123,6 @@ function FullIt(oldValue, tbid, fk_mapExt) {
     FullM2M(oldValue, fk_mapExt);
 }
 //打开div.
-function openDiv_bak(e, tbID) {
-
-    //alert(document.getElementById("divinfo").style.display);
-    if (document.getElementById("divinfo").style.display == "none") {
-        var txtObject = document.getElementById(tbID);
-        var orgObject = document.getElementById("divinfo");
-
-        var rect = getoffset(txtObject);
-        orgObject.style.top = rect[0] + 22;
-        orgObject.style.left = rect[1];
-
-        //        orgObject.style.top =  $("#" + tbID).attr("top") + 22;
-        //        orgObject.style.left = $("#" + tbID).attr("left");
-
-        orgObject.style.display = "block";
-        txtObject.focus();
-    }
-}
 function openDiv(e, tbID) {
 
     //alert(document.getElementById("divinfo").style.display);
@@ -159,10 +143,16 @@ function openDiv(e, tbID) {
 function getoffset(e) {
     var t = e.offsetTop;
     var l = e.offsetLeft;
+    //top
     while (e = e.offsetParent) {
         t += e.offsetTop;
-        l += e.offsetLeft;
+        if (t > 0)
+            break;
     }
+    //left
+    while (e = e.offsetParent) {
+        l += e.offsetLeft;
+    }    
     var rec = new Array(1);
     rec[0] = t;
     rec[1] = l;
@@ -175,12 +165,12 @@ function ReturnValCCFormPopVal(ctrl, fk_mapExt, refEnPK, width, height, title) {
     //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
 
     var wfpreHref = GetLocalWFPreHref();
-    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value+"&CtrlId="+ctrl.id;
+    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&CtrlId=" + ctrl.id;
     //var v = window.showModalDialog(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
     var v = window.open(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
-    
+
     //if (v == null || v == '' || v == 'NaN') {
-        
+
     //}
     //ctrl.value = v.value;
     //return;
@@ -193,13 +183,13 @@ function SetEleValByName(eleName, val) {
         switch (ele[0].tagName.toUpperCase()) {
             case "INPUT":
                 switch (ele[0].type.toUpperCase()) {
-                    case "CHECKBOX"://复选框  0:false  1:true
+                    case "CHECKBOX": //复选框  0:false  1:true
                         val.indexOf('1') >= 0 ? $(ele).attr('checked', true) : $(ele).attr('checked', false);
                         break;
-                    case "TEXT"://文本框
+                    case "TEXT": //文本框
                         $(ele).val(val);
                         break;
-                    case "RADIO"://单选钮
+                    case "RADIO": //单选钮
                         $(ele).attr('checked', false);
                         $('[name=RB_' + eleName + '][value=' + val + ']').attr('checked', true);
                         break;
@@ -208,11 +198,11 @@ function SetEleValByName(eleName, val) {
                         break;
                 }
                 break;
-                //下拉框
+            //下拉框 
             case "SELECT":
                 $(ele).val(val);
                 break;
-                //文本区域
+            //文本区域 
             case "TEXTAREA":
                 $(ele).val(val);
                 break;
@@ -230,7 +220,7 @@ function ReturnValTBFullCtrl(ctrl, fk_mapExt) {
     }
     ctrl.value = v;
     // 填充.
-    FullIt(oldValue, ctrl.id, fk_mapExt);
+    FullIt(ctrl.value, ctrl.id, fk_mapExt);
     return;
 }
 
@@ -323,7 +313,7 @@ function AutoFullDLL(e, ddl_Id, fk_mapExt) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: url + "/WF/CCForm/HanderMapExt.ashx",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -398,7 +388,7 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
 
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt&KVs="+kvs,
+        url: url + "/WF/CCForm/HanderMapExt.ashx?KVs=" + kvs,
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -442,7 +432,7 @@ function DDLAnsc(e, ddlChild, fk_mapExt, rowPK) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": strs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: url + "/WF/CCForm/HanderMapExt.ashx",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -528,7 +518,7 @@ function FullM2M(key, fk_mapExt) {
     var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoType": "ReqM2MFullList", "OID": oid, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: url + "/WF/CCForm/HanderMapExt.ashx",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -576,7 +566,7 @@ function FullDtl(key, fk_mapExt) {
     var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoType": "ReqDtlFullList", "OID": oid, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: url + "/WF/CCForm/HanderMapExt.ashx",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -619,7 +609,7 @@ function FullCtrlDDL(key, ctrlIdBefore, fk_mapExt) {
     var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoType": "ReqDDLFullList", "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: url + "/WF/CCForm/HanderMapExt.ashx",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -659,7 +649,7 @@ function FullCtrlDDLDB(e, ddlID, ctrlIdBefore, endID, fk_mapExt) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoType": "ReqDDLFullListDB", "MyDDL": ddlID, "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: url + "/WF/CCForm/HanderMapExt.ashx",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
@@ -701,7 +691,7 @@ function FullCtrl(e, ctrlIdBefore, fk_mapExt) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoType": "ReqCtrl", "KVs": kvs };
     $.ajax({
         type: "get",
-        url: Hander + "?DoType=HanderMapExt",
+        url: url + "/WF/CCForm/HanderMapExt.ashx",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();

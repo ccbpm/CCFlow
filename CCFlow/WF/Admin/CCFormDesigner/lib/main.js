@@ -3326,8 +3326,9 @@ function exportCanvas() {
 **/
 function loadTempDiagram(FK_MapData) {
 
-    $.post(Handler, { action: 'loadform', FK_MapData: FK_MapData },
+    $.post(Handler, { action: 'Loadform', FK_MapData: FK_MapData },
         function (data) {
+
             if (data.indexOf('err@') != -1) {
                 alert(data);
                 return;

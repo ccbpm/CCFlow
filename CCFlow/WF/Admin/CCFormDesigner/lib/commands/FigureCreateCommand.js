@@ -93,11 +93,11 @@ FigureCreateCommand.prototype = {
                 case "CheckGroup":
                     alert('该功能没有实现' + createFigureName + ' 需要连续创建三个字段.');
                     break;
-                //case CCForm_Controls.FrmCheck: //审核组件    
-                //case CCForm_Controls.FrmCheck: // 审核组件.    
-                //case CCForm_Controls.FlowChart: //轨迹图.    
-                //case CCForm_Controls.SubFlowDtl: //子流程.    
-                //case CCForm_Controls.ThreadDtl: //子线城.    
+                //case CCForm_Controls.FrmCheck: //审核组件       
+                //case CCForm_Controls.FrmCheck: // 审核组件.       
+                //case CCForm_Controls.FlowChart: //轨迹图.       
+                //case CCForm_Controls.SubFlowDtl: //子流程.       
+                //case CCForm_Controls.ThreadDtl: //子线城.       
                 case "FrmCheck": // 审核组件.
                 case "FlowChart": //轨迹图.
                 case "SubFlowDtl": //子流程.
@@ -116,8 +116,6 @@ FigureCreateCommand.prototype = {
                     break;
 
                 default: //按照通用的接受编号，名称的方式来创建.
-                    //canAddFigure = false; // 需要弹出对话框创建.
-                    //this.PublicNoNameCtrlCreate(createdFigure, this.x, this.y, createFigureName);
                     alert('没有判断的控件类型{' + createFigureName + '}，或者该功能为实现。');
                     return;
             }
@@ -217,13 +215,8 @@ FigureCreateCommand.prototype = {
                         return;
                     }
 
-                    if (json == "true") {
-                        //开始画这个-元素.
-                        transField.paint();
+                    transField.paint();
 
-                    } else {
-                        Designer_ShowMsg(json);
-                    }
                 }, this);
             }
         }, this.HidenFieldCreate);
@@ -371,8 +364,7 @@ FigureCreateCommand.prototype = {
 
             // 定义参数，让其保存到数据库里。
             var param = {
-                action: "DoType",
-                DoType: "PublicNoNameCtrlCreate",
+                action: "PublicNoNameCtrlCreate",
                 CtrlType: ctrlType,
                 FK_MapData: CCForm_FK_MapData,
                 Name: frmVal.Name,
@@ -467,18 +459,19 @@ FigureCreateCommand.prototype = {
     /**创建隐藏字段**/
     HidenFieldCreate: function (frmVal) {
         var param = {
-            action: "DoType",
             DoType: "NewHidF",
             v1: CCForm_FK_MapData,
             v2: frmVal.KeyOfEn,
             v3: frmVal.Name,
             v4: frmVal.FieldType
         };
-        ajaxService(param, function (json) {
-            if (json == "true") {
-            } else {
-                Designer_ShowMsg(json);
+        ajaxService(param, function (data) {
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
             }
+           
         }, this);
     },
     IsExist: function (MyPK) {
@@ -548,8 +541,7 @@ FigureCreateCommand.prototype = {
 
         // 定义参数，让其保存到数据库里。
         var param = {
-            action: "DoType",
-            DoType: "PublicNoNameCtrlCreate",
+            action: "PublicNoNameCtrlCreate",
             CtrlType: createFigureName,
             FK_MapData: CCForm_FK_MapData,
             Name: frmVal.Name,

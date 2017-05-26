@@ -401,7 +401,7 @@
 
                     $("#save").linkbutton("enable");
 
-                    if (data.indexOf("err@") != -1) {
+                    if (data.indexOf("err@") ==0) {
                         alert(data);
                         return;
                     }
@@ -429,6 +429,7 @@
 
         function SavePart(param) {
             Handler_AjaxQueryData(param, function (data, scope) {
+
                 if (data.indexOf("err@") != -1) {
                     alert(data);
                     alert("保存过程中出现错误，已经保存部分数据，请手动刷新本页面，重新设置！");

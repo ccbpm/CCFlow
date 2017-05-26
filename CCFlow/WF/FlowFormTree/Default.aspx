@@ -791,26 +791,27 @@
                 //转向页面
                 if (strs[0] == "SpecUrl") {
                     var url = strs[1];
-                    $("<div id='selectaccepter'></div>").append($("<iframe width='100%' height='100%' frameborder=0 src='" + url + "'/>")).dialog({
-                        title: "发送成功-转向页面",
-                        width: 800,
-                        height: 630,
-                        autoOpen: true,
-                        modal: true,
-                        resizable: false,
-                        onClose: function () {
-                            $('#send').linkbutton({ disabled: false });
-                            $("#selectaccepter").remove();
-                            closeWin();
-                        },
-                        buttons: [{
-                            text: '确定',
-                            iconCls: 'icon-ok',
-                            handler: function () {
-                                $('#selectaccepter').dialog("close");
-                            }
-                        }]
-                    });
+                    location.href = url;
+                    //                    $("<div id='selectaccepter'></div>").append($("<iframe width='100%' height='100%' frameborder=0 src='" + url + "'/>")).dialog({
+                    //                        title: "发送成功-转向页面",
+                    //                        width: 800,
+                    //                        height: 630,
+                    //                        autoOpen: true,
+                    //                        modal: true,
+                    //                        resizable: false,
+                    //                        onClose: function () {
+                    //                            $('#send').linkbutton({ disabled: false });
+                    //                            $("#selectaccepter").remove();
+                    //                            closeWin();
+                    //                        },
+                    //                        buttons: [{
+                    //                            text: '确定',
+                    //                            iconCls: 'icon-ok',
+                    //                            handler: function () {
+                    //                                $('#selectaccepter').dialog("close");
+                    //                            }
+                    //                        }]
+                    //                    });
                     return;
                 }
 

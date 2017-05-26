@@ -1942,6 +1942,7 @@ function OptSuc(msg) {
 //移交
 //初始化发送节点下拉框
 function InitToNodeDDL() {
+    console.info(jsonStr);
     var workNode = JSON.parse(jsonStr);
     if (workNode.ToNodes != undefined && workNode.ToNodes.length > 0) {
         // $('[value=发送]').

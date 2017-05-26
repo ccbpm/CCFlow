@@ -88,7 +88,7 @@
                 url: Handler + "?DoType=GetFlowTrackJsonData&FK_Flow=" + fk_Flow + "&WorkID=" + work_ID + "&FID=" + fid,
                 dataType: "html",
                 success: function (data) {
-
+                    
                     if (data.indexOf('err@') == 0) {
                         alert(re);
                         return;

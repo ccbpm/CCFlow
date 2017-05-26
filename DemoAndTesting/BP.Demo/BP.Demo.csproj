@@ -136,7 +136,6 @@
     <Compile Include="UnitTesting\SendCase\Test001.cs" />
     <Compile Include="UnitTesting\TestCaseTemplete.cs" />
     <Compile Include="UnitTesting\SendMessage.cs" />
-    <Compile Include="WebContral\SDKFlowDemo_BPFramework_DataInputJQ.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -151,7 +150,9 @@
       <Name>BP.WF</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WebContral\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

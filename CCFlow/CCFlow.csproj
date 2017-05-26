@@ -980,7 +980,6 @@
     <Content Include="WF\Admin\AttrFlow\StartGuide.htm" />
     <Content Include="WF\Admin\AttrFlow\Imp.aspx" />
     <Content Include="WF\Admin\AttrFlow\ImpExp.aspx" />
-    <Content Include="WF\Admin\AttrFlow\Limit.aspx" />
     <Content Include="WF\Admin\AttrFlow\Limit.htm" />
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.aspx" />
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
@@ -1678,7 +1677,6 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\text.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\util.js" />
     <Content Include="WF\Admin\CCFormDesigner\Login.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide.aspx" />
     <Content Include="WF\Admin\CCFormDesigner\NewFrmGuideNew.htm" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-default.css" />
@@ -1912,18 +1910,24 @@
     <Content Include="WF\AutoTodolist.aspx" />
     <Content Include="WF\AutoTodolist.htm" />
     <Content Include="WF\Batch.aspx" />
+    <Content Include="WF\Batch.htm" />
     <Content Include="WF\BatchSelfDeal.aspx" />
     <Content Include="WF\BatchStart.aspx" />
+    <Content Include="WF\BatchStart.htm" />
     <Content Include="WF\BatchStartGroup.aspx" />
     <Content Include="WF\CC.aspx" />
     <Content Include="WF\CC.htm" />
+    <Content Include="WF\CCFlow.Publish.xml" />
+    <Content Include="WF\CCForm\AttachmentFix.htm" />
     <Content Include="WF\CCForm\AttachmentUpload.aspx" />
+    <Content Include="WF\CCForm\AttachmentUpload.htm" />
     <Content Include="WF\CCForm\AttachmentUploadImg.aspx" />
     <Content Include="WF\CCForm\BPPaint.aspx" />
     <Content Include="WF\CCForm\CCFormAPI.asmx" />
     <Content Include="WF\CCForm\Do.aspx" />
     <Content Include="WF\CCForm\DocMainAth.aspx" />
     <Content Include="WF\CCForm\Dtl.aspx" />
+    <Content Include="WF\CCForm\Dtl.css" />
     <Content Include="WF\CCForm\Dtl.htm" />
     <Content Include="WF\CCForm\DtlCard.aspx" />
     <Content Include="WF\CCForm\DtlOpSelectItems.aspx" />
@@ -1932,9 +1936,13 @@
     <Content Include="WF\CCForm\FilesView.aspx" />
     <Content Include="WF\CCForm\FileUpload.aspx" />
     <Content Include="WF\CCForm\Frm.aspx" />
+    <Content Include="WF\CCForm\Frm.htm" />
     <Content Include="WF\CCForm\FrmDtl.aspx" />
     <Content Include="WF\CCForm\FrmExcel.aspx" />
     <Content Include="WF\CCForm\FrmFix.aspx" />
+    <Content Include="WF\CCForm\FrmFool.htm" />
+    <Content Include="WF\CCForm\FrmFree.htm" />
+    <Content Include="WF\CCForm\FrmFree2017.js" />
     <Content Include="WF\CCForm\FrmPopVal.aspx" />
     <Content Include="WF\CCForm\FrmPopVal.htm" />
     <Content Include="WF\CCForm\FrmPopValDir.aspx" />
@@ -2877,7 +2885,9 @@
     <Content Include="WF\Data\XML\TaoHong.xml" />
     <Content Include="WF\Data\XML\UserTools.xml" />
     <Content Include="WF\Data\XML\WebConfigDesc.xml" />
-    <Content Include="WF\Data\XML\WFAdmin.xml" />
+    <Content Include="WF\Data\XML\WFAdmin.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="WF\Data\XML\XmlDB.xml" />
     <Content Include="WF\Do.aspx" />
     <Content Include="WF\Draft.htm" />
@@ -3315,17 +3325,21 @@
     <Content Include="WF\Img\yaoshi.jpg" />
     <Content Include="WF\JumpWay.aspx" />
     <Content Include="WF\KeySearch.aspx" />
+    <Content Include="WF\KeySearch.htm" />
     <Content Include="WF\Loading.htm" />
     <Content Include="WF\Login.htm" />
     <Content Include="WF\Messages.aspx" />
+    <Content Include="WF\Messages.htm" />
     <Content Include="WF\MessagesReplay.aspx" />
     <Content Include="WF\MyFlow.aspx" />
     <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\MyFlowFool.htm" />
+    <Content Include="WF\MyFlowFoolTruck.htm" />
     <Content Include="WF\MyFlowFree.htm" />
     <Content Include="WF\MyFlowFree2017.js" />
     <Content Include="WF\MyFlowInfo.aspx" />
     <Content Include="WF\MyFlowView.aspx" />
+    <Content Include="WF\MyFlowWord.htm" />
     <Content Include="WF\Port.aspx" />
     <Content Include="WF\PortDemo.htm" />
     <Content Include="WF\PrintSample.aspx" />
@@ -7241,7 +7255,9 @@
     <Content Include="WF\Start.aspx" />
     <Content Include="WF\Start.htm" />
     <Content Include="WF\StartGuide.aspx" />
+    <Content Include="WF\StartGuide.htm" />
     <Content Include="WF\StartGuideEntities.aspx" />
+    <Content Include="WF\StartGuideEntities.htm" />
     <Content Include="WF\Style\BlankTitle.JPG" />
     <Content Include="WF\Style\FormThemes\CCFormFrm.css" />
     <Content Include="WF\Style\FormThemes\CCFormWinOpen.css" />
@@ -7439,6 +7455,7 @@
     <Content Include="WF\TaskPoolSharing.aspx" />
     <Content Include="WF\Todolist.htm" />
     <Content Include="WF\Tools.aspx" />
+    <Content Include="WF\Tools.htm" />
     <Content Include="WF\ToolsSet.aspx" />
     <Content Include="WF\UC\ChangeDept.ascx" />
     <Content Include="WF\UC\Msg.ascx" />
@@ -7458,12 +7475,15 @@
     <Content Include="WF\WebOffice\OfficeView.aspx" />
     <Content Include="WF\WebOffice\TempLate.aspx" />
     <Content Include="WF\WFRpt.aspx" />
+    <Content Include="WF\WFRpt.htm" />
     <Content Include="WF\WFRptDtl.aspx" />
     <Content Include="WF\WFRptFHL.aspx" />
     <Content Include="WF\WorkOpt\Accepter.aspx" />
     <Content Include="WF\WorkOpt\Accepter.htm" />
     <Content Include="WF\WorkOpt\AccepterAdv.aspx" />
+    <Content Include="WF\WorkOpt\Allot.htm" />
     <Content Include="WF\WorkOpt\AllotTask.aspx" />
+    <Content Include="WF\WorkOpt\AllotTask.htm" />
     <Content Include="WF\WorkOpt\Askfor.aspx" />
     <Content Include="WF\WorkOpt\Askfor.htm" />
     <Content Include="WF\WorkOpt\AskForRe.aspx" />
@@ -7493,10 +7513,8 @@
     <Content Include="WF\WorkOpt\OneWork\Ath.aspx" />
     <Content Include="WF\WorkOpt\OneWork\Ath.htm" />
     <Content Include="WF\WorkOpt\OneWork\CH.aspx" />
-    <Content Include="WF\WorkOpt\OneWork\ChartTime.aspx" />
-    <Content Include="WF\WorkOpt\OneWork\ChartTrack.aspx" />
-    <Content Include="WF\WorkOpt\OneWork\ChartTrack.htm" />
-    <Content Include="WF\WorkOpt\OneWork\CheckTrack.aspx" />
+    <Content Include="WF\WorkOpt\OneWork\CH.htm" />
+    <Content Include="WF\WorkOpt\OneWork\Chart.htm" />
     <Content Include="WF\WorkOpt\OneWork\css\demo.css" />
     <Content Include="WF\WorkOpt\OneWork\css\demo.js" />
     <Content Include="WF\WorkOpt\OneWork\css\style.css" />
@@ -7519,20 +7537,22 @@
     <Content Include="WF\WorkOpt\OneWork\Img\WEIBO.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\WIFI.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\时间轴.png" />
+    <Content Include="WF\WorkOpt\OneWork\LogOfTable.aspx" />
+    <Content Include="WF\WorkOpt\OneWork\LogOfTable.htm" />
+    <Content Include="WF\WorkOpt\OneWork\LogOfTimeline.aspx" />
+    <Content Include="WF\WorkOpt\OneWork\LogOfTimeline.htm" />
     <Content Include="WF\WorkOpt\OneWork\NDRpt.aspx" />
     <Content Include="WF\WorkOpt\OneWork\OneWork.htm" />
     <Content Include="WF\WorkOpt\OneWork\OneWork.master" />
     <Content Include="WF\WorkOpt\OneWork\OP.aspx" />
     <Content Include="WF\WorkOpt\OneWork\OP.htm" />
-    <Content Include="WF\WorkOpt\OneWork\Track.aspx" />
-    <Content Include="WF\WorkOpt\OneWork\Track.htm" />
     <Content Include="WF\WorkOpt\OneWork\TrackUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruakUC.ascx" />
-    <Content Include="WF\WorkOpt\OneWork\Truck.htm" />
     <Content Include="WF\WorkOpt\OneWork\TruckOnly.aspx" />
     <Content Include="WF\WorkOpt\Press.htm" />
     <Content Include="WF\WorkOpt\PRI.aspx" />
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
+    <Content Include="WF\WorkOpt\PrintDoc.htm" />
     <Content Include="WF\WorkOpt\ReturnWork.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.htm" />
     <Content Include="WF\WorkOpt\SelectEmps.aspx" />
@@ -7541,15 +7561,22 @@
     <Content Include="WF\WorkOpt\SelectUser.aspx" />
     <Content Include="WF\WorkOpt\ServAccepter.ashx" />
     <Content Include="WF\WorkOpt\SilverlightUploadService.asmx" />
+    <Content Include="WF\WorkOpt\StartGuide.htm" />
+    <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
     <Content Include="WF\WorkOpt\StartGuideFrms.aspx" />
+    <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
     <Content Include="WF\WorkOpt\StopFlow.aspx" />
     <Content Include="WF\WorkOpt\SubFlow.aspx" />
+    <Content Include="WF\WorkOpt\SubFlow.htm" />
     <Content Include="WF\WorkOpt\Thread.aspx" />
+    <Content Include="WF\WorkOpt\Thread.htm" />
     <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
     <Content Include="WF\WorkOpt\ToNodes.aspx" />
+    <Content Include="WF\WorkOpt\ToNodes.htm" />
     <Content Include="WF\WorkOpt\Track.aspx" />
     <Content Include="WF\WorkOpt\TrackChart.aspx" />
     <Content Include="WF\WorkOpt\TransferCustom.aspx" />
+    <Content Include="WF\WorkOpt\TransferCustom.htm" />
     <Content Include="WF\WorkOpt\TransferCustomSimple.aspx" />
     <Content Include="WF\WorkOpt\UnPassDtl.aspx" />
     <Content Include="WF\WorkOpt\UnSend.aspx" />
@@ -8416,13 +8443,6 @@
     <Compile Include="WF\Admin\AttrFlow\ImpExp.aspx.designer.cs">
       <DependentUpon>ImpExp.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrFlow\Limit.aspx.cs">
-      <DependentUpon>Limit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\Limit.aspx.designer.cs">
-      <DependentUpon>Limit.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\AttrFlow\NodeAttrs.aspx.cs">
       <DependentUpon>NodeAttrs.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8552,13 +8572,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\NewFrmGuide.aspx.cs">
-      <DependentUpon>NewFrmGuide.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\NewFrmGuide.aspx.designer.cs">
-      <DependentUpon>NewFrmGuide.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
@@ -11041,29 +11054,20 @@
     <Compile Include="WF\WorkOpt\OneWork\CH.aspx.designer.cs">
       <DependentUpon>CH.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\ChartTime.aspx.cs">
-      <DependentUpon>ChartTime.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\ChartTime.aspx.designer.cs">
-      <DependentUpon>ChartTime.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\ChartTrack.aspx.cs">
-      <DependentUpon>ChartTrack.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\ChartTrack.aspx.designer.cs">
-      <DependentUpon>ChartTrack.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\CheckTrack.aspx.cs">
-      <DependentUpon>CheckTrack.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\CheckTrack.aspx.designer.cs">
-      <DependentUpon>CheckTrack.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\OneWork\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\OneWork\LogOfTable.aspx.cs">
+      <DependentUpon>LogOfTable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\OneWork\LogOfTable.aspx.designer.cs">
+      <DependentUpon>LogOfTable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\OneWork\LogOfTimeline.aspx.cs">
+      <DependentUpon>LogOfTimeline.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\OneWork\LogOfTimeline.aspx.designer.cs">
+      <DependentUpon>LogOfTimeline.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\NDRpt.aspx.cs">
       <DependentUpon>NDRpt.aspx</DependentUpon>
@@ -11085,13 +11089,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\OP.aspx.designer.cs">
       <DependentUpon>OP.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\Track.aspx.cs">
-      <DependentUpon>Track.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\Track.aspx.designer.cs">
-      <DependentUpon>Track.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\TrackUC.ascx.cs">
       <DependentUpon>TrackUC.ascx</DependentUpon>

@@ -282,6 +282,7 @@ namespace BP.WF.HttpHandler
             {
                 string url = "";
                 url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.URL, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
+                re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\"", item.No, item.Name, url) + "},";
             }
 
             return re.TrimEnd(',') + "]";

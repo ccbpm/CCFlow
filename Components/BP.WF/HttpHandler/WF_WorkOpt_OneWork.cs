@@ -137,7 +137,7 @@ namespace BP.WF.HttpHandler
 
         protected override string DoDefaultMethod()
         {
-            return "err@没有判断的执行类型：" + this.DoType;
+            return "err@没有判断的执行类型：" + this.DoType+" @类 "+this.ToString();
         }
 
         public string OP_ComeBack()

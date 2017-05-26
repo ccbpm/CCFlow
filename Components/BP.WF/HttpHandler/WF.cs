@@ -22,46 +22,12 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-      
 
-        #region 入口函数.
-        /// <summary>
-        /// 入口函数
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public void DoDefaultMethod()
+        protected override string DoDefaultMethod()
         {
-            string msg = "";
-            try
-            {
-                switch (this.DoType)
-                {
-                    case "LoginExit": //退出安全登录.
-                        BP.WF.Dev2Interface.Port_SigOut();
-                        break;
-                    case "AuthExit":
-                        msg = this.AuthExitAndLogin(this.No, BP.Web.WebUser.Auth);
-                        break;
-                    default:
-                        msg = "err@没有判断的标记:" + this.DoType;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                msg = "err@" + ex.Message;
-            }
-            context.Response.ContentType = "text/plain";
-            context.Response.Write(msg);
+            return base.DoDefaultMethod();
         }
-        public bool IsReusable
-        {
-            get
-            {
-                return false;
-            }
-        }
-        #endregion 入口函数.
+      
 
         #region 获得列表.
         /// <summary>
@@ -226,6 +192,23 @@ namespace BP.WF.HttpHandler
                 return "suess@有授权";
             else
                 return "err@没有授权";
+        }
+        /// <summary>
+        /// 退出.
+        /// </summary>
+        /// <returns></returns>
+        public string LoginExit()
+        {
+            BP.WF.Dev2Interface.Port_SigOut();
+            return null;
+        }
+        /// <summary>
+        /// 授权退出.
+        /// </summary>
+        /// <returns></returns>
+        public string AuthExit()
+        {
+            return this.AuthExitAndLogin(this.No, BP.Web.WebUser.Auth);
         }
         #endregion 登录相关.
          

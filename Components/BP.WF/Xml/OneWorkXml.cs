@@ -24,9 +24,12 @@ namespace BP.WF.XML
         {
             get
             {
-                return this.GetValStringByKey("No");
+                if (BP.WF.Glo.Plant == Plant.CCFlow)
+                    return this.GetValStringByKey("UrlCCFlow");
+                return this.GetValStringByKey("UrlJFlow");
             }
         }
+      
         #endregion 属性.
 
         #region 构造

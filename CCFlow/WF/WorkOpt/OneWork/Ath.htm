@@ -19,6 +19,12 @@
                 url: Handler + "?DoType=GetAthsAndBills&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
                     data = JSON.parse(data);
                     addAths(data.Aths, data.AppPath);
                     addBills(data.Bills, data.AppPath);

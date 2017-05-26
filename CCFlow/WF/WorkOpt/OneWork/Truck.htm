@@ -73,7 +73,7 @@
             fk_Flow = uh["FK_Flow"];
             work_ID = uh["WorkID"];
             fid = uh["FID"];
-            
+
             if (!work_ID || work_ID == "null") {
                 work_ID = "0";
             }
@@ -87,18 +87,19 @@
                 contentType: "application/json;utf-8",
                 url: Handler + "?DoType=GetFlowTrackJsonData&FK_Flow=" + fk_Flow + "&WorkID=" + work_ID + "&FID=" + fid,
                 dataType: "html",
-                success: function (re) {
-                    jdata = $.parseJSON(re);
+                success: function (data) {
 
-                    if (!jdata.success) {
-                        alert(jdata.msg);
+                    if (data.indexOf('err@') == 0) {
+                        alert(re);
+                        return;
                     }
-                    else {
-                        drawStart(jdata.ds);
-                    }
+
+                    data = $.parseJSON(data);
+                    drawStart(data);
+
                 },
                 error: function (re) {
-                    alert(re.responseText);
+                    alert(re);
                 }
             });
         });

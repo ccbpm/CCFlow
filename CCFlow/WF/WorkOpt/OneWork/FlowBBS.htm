@@ -70,15 +70,17 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSDelete&FK_Flow=" + fk_flow + "&MyPK=" + mypk + "&m=" + Math.random(),
+                url: Handler + "?DoType=FlowBBS_Delete&FK_Flow=" + fk_flow + "&MyPK=" + mypk + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
 
-                    alert(data);
+                   // alert(data);
+
                     $("#Table1  tr[id='" + mypk + "']").remove();
                     Count();
                 }
@@ -105,9 +107,15 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSCount&FK_Flow=" + fk_flow + "&WorkID=" + workid,
+                url: Handler + "?DoType=FlowBBS_Count&FK_Flow=" + fk_flow + "&WorkID=" + workid,
                 dataType: 'html',
                 success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
                     document.getElementById("TB_count").innerText = data;
                 }
 
@@ -118,7 +126,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSCheck&FK_Flow=" + fk_flow + "&UserName=" + encodeURIComponent(empName) + "&WorkID=" + workid,
+                url: Handler + "?DoType=FlowBBS_Check&FK_Flow=" + fk_flow + "&UserName=" + encodeURIComponent(empName) + "&WorkID=" + workid,
                 dataType: 'html',
                 success: function (data) {
 
@@ -126,6 +134,7 @@
                         alert(data);
                         return;
                     }
+
                     if (data == "[]") {
                         return;
                     }
@@ -163,7 +172,7 @@
                 data: frmData,
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FlowBBSSave&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
+                url: Handler + "?DoType=FlowBBS_Save&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 

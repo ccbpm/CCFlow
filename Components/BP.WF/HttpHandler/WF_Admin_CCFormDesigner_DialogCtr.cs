@@ -111,17 +111,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         protected override string DoDefaultMethod()
         {
-            string sql = "";
-            switch (this.DoType)
-            {
-                case "NewSFTableField": //创建一个SFTable字段.
-                    //调用接口,执行保存.
-                    BP.Sys.CCFormAPI.SaveFieldSFTable(this.FK_MapData, this.KeyOfEn, this.GetRequestVal("Name"),
-                        this.GetRequestVal("UIBindKey"), this.GetRequestValFloat("x"), this.GetRequestValFloat("y"));
-                    return "执行成功.";
-                default:
-                    break;
-            }
             //找不不到标记就抛出异常.
             throw new Exception("@标记["+this.DoType+"]，没有找到.");
         }
@@ -135,7 +124,6 @@ namespace BP.WF.HttpHandler
 
             //调用接口执行保存.
             return BP.Sys.CCFormAPI.SaveEnum(enumKey1, enumName, cfgVal, false);
-            return "保存成功.";
         }
 
         /// <summary>
@@ -150,7 +138,6 @@ namespace BP.WF.HttpHandler
 
             //调用接口执行保存.
             return BP.Sys.CCFormAPI.SaveEnum(newEnumKey1, newnEumName, newCfgVal, true);
-            return "增加成功.";
         }
         /// <summary>
         /// 删除枚举值
@@ -175,11 +162,12 @@ namespace BP.WF.HttpHandler
             }
 
             if (msgDelEnum != "")
-                return "err@该枚举已经被如下字段所引用，您不能删除它。" + msgDelEnum;
+                return "err@该枚举已经被如下字段所引用，您不能删除它: " + msgDelEnum;
 
             sql = "DELETE FROM Sys_EnumMain WHERE No='" + enumKey + "'";
             sql += "@DELETE FROM Sys_Enum WHERE EnumKey='" + enumKey + "' ";
             DBAccess.RunSQLs(sql);
+
             return "执行成功.";
         }
 
@@ -191,7 +179,7 @@ namespace BP.WF.HttpHandler
         public string FrmTextBox_ParseStringToPinyin()
         {
             string name = getUTF8ToString("name");
-            string flag = getUTF8ToString("flag");
+            string flag = this.GetRequestVal("flag");
 
             if (flag == "true")
                 return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);

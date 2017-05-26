@@ -1472,7 +1472,7 @@ namespace BP.Sys
             int dataCount = sem.RetrieveFromDBSources();
             if (dataCount > 0 && isNew)
             {
-                return "已存在枚举" + enumKey + ",请修改枚举名字";
+                return "err@已存在枚举" + enumKey + ",请修改枚举名字";
             }
 
             if (dataCount == 0)

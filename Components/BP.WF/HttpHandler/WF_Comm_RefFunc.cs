@@ -176,7 +176,6 @@ namespace BP.WF.HttpHandler
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
         }
-
         /// <summary>
         /// 获取指定部门下一级子部门及人员列表
         /// </summary>
@@ -198,11 +197,11 @@ namespace BP.WF.HttpHandler
             BP.WF.Template.NodeEmps semps = new BP.WF.Template.NodeEmps();
 
             if (string.IsNullOrWhiteSpace(rootid))
-                throw new Exception("参数rootid不能为空");
+                return "err@参数rootid不能为空";
             if (string.IsNullOrWhiteSpace(parentid))
-                throw new Exception("参数parentid不能为空");
+                return "err@参数parentid不能为空";
             if (string.IsNullOrWhiteSpace(nid))
-                throw new Exception("参数nodeid不能为空");
+                return "err@参数nodeid不能为空";
 
             semps.Retrieve(BP.WF.Template.NodeEmpAttr.FK_Node, int.Parse(nid));
 
@@ -478,7 +477,7 @@ namespace BP.WF.HttpHandler
             int nid = 0;
 
             if (string.IsNullOrWhiteSpace(nodeid) || int.TryParse(nodeid, out nid) == false)
-                throw new Exception("参数nodeid不正确");
+                return "err@参数nodeid不正确";
 
             if (string.IsNullOrWhiteSpace(data))
                 data = "";
@@ -496,7 +495,7 @@ namespace BP.WF.HttpHandler
                 string[] parts = partno.Split("/".ToCharArray());
 
                 if (parts.Length != 2)
-                    throw new Exception("参数partno不正确");
+                    return "err@参数partno不正确";
 
                 partidx = int.Parse(parts[0]);
                 partcount = int.Parse(parts[1]);
@@ -733,7 +732,7 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT pd.No,pd.Name,pd1.No DeptNo,pd1.Name DeptName FROM WF_NodeDept wnd "
                          + "  INNER JOIN Port_Dept pd ON pd.No = wnd.FK_Dept "
                          + "  LEFT JOIN Port_Dept pd1 ON pd1.No = pd.ParentNo "
-                         + "WHERE wnd.FK_Node = " + nid + " ORDER BY pd.Name";
+                         + "WHERE wnd.FK_Node = " + nid + " ORDER BY pd.Name ";
 
             dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
             dt.Columns.Add("Code", typeof(string));

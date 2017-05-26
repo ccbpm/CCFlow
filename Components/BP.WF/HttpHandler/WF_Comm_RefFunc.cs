@@ -29,6 +29,7 @@ namespace BP.WF.HttpHandler
         public string Dot2DotTreeDeptEmpModel_SaveNodeEmps()
         {
             JsonResultInnerData jr = new JsonResultInnerData();
+
             string nodeid = this.GetRequestVal("nodeid");
             string data = this.GetRequestVal("data");
             string partno = this.GetRequestVal("partno");
@@ -38,7 +39,7 @@ namespace BP.WF.HttpHandler
             int nid = 0;
 
             if (string.IsNullOrWhiteSpace(nodeid) || int.TryParse(nodeid, out nid) == false)
-                throw new Exception("参数nodeid不正确");
+                 return "err@参数nodeid不正确";
 
             if (string.IsNullOrWhiteSpace(data))
                 data = "";
@@ -56,7 +57,9 @@ namespace BP.WF.HttpHandler
                 string[] parts = partno.Split("/".ToCharArray());
 
                 if (parts.Length != 2)
-                    throw new Exception("参数partno不正确");
+                    return "err@参数partno不正确";
+
+                //throw new Exception("@参数partno不正确");
 
                 partidx = int.Parse(parts[0]);
                 partcount = int.Parse(parts[1]);
@@ -99,7 +102,6 @@ namespace BP.WF.HttpHandler
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
         }
-
         /// <summary>
         /// 获取部门树根结点
         /// </summary>
@@ -113,7 +115,7 @@ namespace BP.WF.HttpHandler
             string parentrootid = this.GetRequestVal("parentrootid");
 
             if (string.IsNullOrWhiteSpace(parentrootid))
-                throw new Exception("参数parentrootid不能为空");
+                return "err@参数parentrootid不能为空.";
 
             if (BP.WF.Glo.OSModel == OSModel.OneOne)
             {

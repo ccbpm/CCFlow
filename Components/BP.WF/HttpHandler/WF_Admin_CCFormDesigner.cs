@@ -26,7 +26,10 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
+        /// <summary>
+        /// 创建枚举类型字段
+        /// </summary>
+        /// <returns></returns>
         public string FrmEnumeration_NewEnumField()
         {
             UIContralType ctrl = UIContralType.RadioBtn;
@@ -46,7 +49,10 @@ namespace BP.WF.HttpHandler
             BP.Sys.CCFormAPI.NewEnumField(fk_mapdata, keyOfEn, fieldDesc, enumKeyOfBind, ctrl, x, y);
             return "绑定成功.";
         }
-
+        /// <summary>
+        /// 创建外键字段.
+        /// </summary>
+        /// <returns></returns>
         public string NewSFTableField()
         {
             try
@@ -68,6 +74,74 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 加载表单
+        /// </summary>
+        /// <returns></returns>
+        public string Loadform()
+        {
+            MapData mapData = new MapData(this.FK_MapData);
+            return mapData.FormJson; //要返回的值.
+        }
+        /// <summary>
+        /// 转换拼音
+        /// </summary>
+        /// <returns></returns>
+        public string ParseStringToPinyin()
+        {
+            string name = getUTF8ToString("name");
+            string flag = getUTF8ToString("flag");
+            if (flag == "true")
+                return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
+            else
+                return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
+        }
+        /// <summary>
+        /// 获取隐藏字段
+        /// </summary>
+        /// <returns></returns>
+        public string Hiddenfielddata()
+        {
+            return BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
+        }
+        public string HiddenFieldDelete()
+        {
+            string records = getUTF8ToString("records");
+            string FK_MapData = getUTF8ToString("FK_MapData");
+            MapAttr mapAttrs = new MapAttr();
+            int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
+            return result.ToString();
+        }
+        public string CcformElements()
+        {
+            return CCForm_AllElements_ResponseJson();
+        }
+        /// <summary>
+        /// 创建隐藏字段.
+        /// </summary>
+        /// <returns></returns>
+        public string NewHidF()
+        {
+            string fk_mapdataHid = this.GetRequestVal("v1");
+            string key = this.GetRequestVal("v2");
+            string myname = this.GetRequestVal("v3");
+            int dataType = int.Parse(this.GetRequestVal("v4"));
+            MapAttr mdHid = new MapAttr();
+            mdHid.MyPK = fk_mapdataHid + "_" + key;
+            mdHid.FK_MapData = fk_mapdataHid;
+            mdHid.KeyOfEn = key;
+            mdHid.Name = myname;
+            mdHid.MyDataType = dataType;
+            mdHid.HisEditType = EditType.Edit;
+            mdHid.MaxLen = 100;
+            mdHid.MinLen = 0;
+            mdHid.LGType = FieldTypeS.Normal;
+            mdHid.UIVisible = false;
+            mdHid.UIIsEnable = false;
+            mdHid.Insert();
+
+            return "创建成功..";
+        }
+        /// <summary>
         /// 默认执行的方法
         /// </summary>
         /// <returns></returns>
@@ -79,184 +153,8 @@ namespace BP.WF.HttpHandler
             {
                 switch (this.DoType)
                 {
-                    case "loadform"://获取表单数据
-                        MapData mapData = new MapData(this.FK_MapData);
-                        return mapData.FormJson; //要返回的值.
-                    case "ParseStringToPinyin": //转拼音方法.
-                        string name = getUTF8ToString("name");
-                        string flag = getUTF8ToString("flag");
-                        if (flag == "true")
-                            return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
-                        else
-                            return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
-                    case "DoType"://表单特殊元素保存公共方法
+                    case "DoType"://表单特殊元素保存公共方法.
                         return DoTypeFunc();
-                    case "Hiddenfielddata"://获取隐藏字段.
-                        return BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
-                    case "HiddenFieldDelete": //删除隐藏字段.
-                        string records = getUTF8ToString("records");
-                        string FK_MapData = getUTF8ToString("FK_MapData");
-                        MapAttr mapAttrs = new MapAttr();
-                        int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
-                        return result.ToString();
-                    case "CcformElements"://杨玉慧 获取表单元素的JSON 字符串
-                        return CCForm_AllElements_ResponseJson();
-                    case "PublicNoNameCtrlCreate": //创建通用的控件.
-                        try
-                        {
-                            float x = float.Parse(this.GetRequestVal("x"));
-                            float y = float.Parse(this.GetRequestVal("y"));
-                            BP.Sys.CCFormAPI.CreatePublicNoNameCtrl(this.FrmID, this.GetRequestVal("CtrlType"),
-                                this.GetRequestVal("No"),
-                                this.GetRequestVal("Name"), x, y);
-                            return "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            return "err@" + ex.Message;
-                        }
-                    case "NewField": //创建一个字段. 对应 FigureCreateCommand.js  里的方法.
-                        try
-                        {
-                            BP.Sys.CCFormAPI.NewField(this.GetRequestVal("FrmID"),
-                                this.GetRequestVal("KeyOfEn"), this.GetRequestVal("Name"),
-                                int.Parse(this.GetRequestVal("FieldType")),
-                                float.Parse(this.GetRequestVal("x")),
-                               float.Parse(this.GetRequestVal("y"))
-                               );
-                            return "true";
-                        }
-                        catch (Exception ex)
-                        {
-                            return ex.Message;
-                        }
-                    case "CreateCheckGroup": //创建审核分组，暂时未实现.
-                        BP.Sys.CCFormAPI.NewCheckGroup(this.FK_MapData, null, null);
-                        return "true";
-                    
-                    case "SaveSFTable":
-                        string enName = this.GetRequestVal("v2");
-                        string chName = this.GetRequestVal("v1");
-                        if (string.IsNullOrEmpty(chName) || string.IsNullOrEmpty(enName))
-                            return "error:视图中的中英文名称不能为空。";
-
-                        SFTable sf = new SFTable();
-                        sf.No = enName;
-                        sf.Name = chName;
-
-                        sf.No = enName;
-                        sf.Name = chName;
-
-                        sf.FK_Val = enName;
-                        sf.Save();
-                        if (DBAccess.IsExitsObject(enName) == true)
-                        {
-                            /*已经存在此对象，检查一下是否有No,Name列。*/
-                            sql = "SELECT No,Name FROM " + enName;
-                            try
-                            {
-                                DBAccess.RunSQLReturnTable(sql);
-                            }
-                            catch (Exception ex)
-                            {
-                                return "您指定的表或视图(" + enName + ")，不包含No,Name两列，不符合ccflow约定的规则。技术信息:" + ex.Message;
-                            }
-                            return "true";
-                        }
-                        else
-                        {
-                            /*创建这个表，并且插入基础数据。*/
-                            try
-                            {
-                                // 如果没有该表或视图，就要创建它。
-                                sql = "CREATE TABLE " + enName + "(No varchar(30) NOT NULL,Name varchar(50) NULL)";
-                                DBAccess.RunSQL(sql);
-                                DBAccess.RunSQL("INSERT INTO " + enName + " (No,Name) VALUES('001','Item1')");
-                                DBAccess.RunSQL("INSERT INTO " + enName + " (No,Name) VALUES('002','Item2')");
-                                DBAccess.RunSQL("INSERT INTO " + enName + " (No,Name) VALUES('003','Item3')");
-                            }
-                            catch (Exception ex)
-                            {
-                                sf.DirectDelete();
-                                return "error:创建物理表期间出现错误,可能是非法的物理表名.技术信息:" + ex.Message;
-                            }
-                        }
-                        return "true"; /*创建成功后返回空值*/
-                    case "FrmTempleteExp":  //导出表单.
-                        MapData mdfrmtem = new MapData();
-                        mdfrmtem.No = this.GetRequestVal("v1");
-                        if (mdfrmtem.RetrieveFromDBSources() == 0)
-                        {
-                            if (this.GetRequestVal("v1").Contains("ND"))
-                            {
-                                int nodeId = int.Parse(this.GetRequestVal("v1").Replace("ND", ""));
-                                Node nd123 = new Node(nodeId);
-                                mdfrmtem.Name = nd123.Name;
-                                mdfrmtem.PTable = this.GetRequestVal("v1");
-                                mdfrmtem.EnPK = "OID";
-                                mdfrmtem.Insert();
-                            }
-                        }
-
-                        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(mdfrmtem.No);
-                        string file = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\Temp\\" + this.GetRequestVal("v1") + ".xml";
-                        if (System.IO.File.Exists(file))
-                            System.IO.File.Delete(file);
-                        ds.WriteXml(file);
-                        // BP.Sys.PubClass.DownloadFile(file, mdfrmtem.Name + ".xml");
-                        //this.DownLoadFile(System.Web.HttpContext.Current, file, mdfrmtem.Name);
-                        return null;
-                    case "FrmTempleteImp": //导入表单.
-                        DataSet dsImp = new DataSet();
-                        string fileImp = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\Temp\\" + this.GetRequestVal("v1") + ".xml";
-                        dsImp.ReadXml(fileImp); //读取文件.
-                        MapData.ImpMapData(this.GetRequestVal("v1"), dsImp, true);
-                        return "true";
-                    case "NewHidF":
-                        string fk_mapdataHid = this.GetRequestVal("v1");
-                        string key = this.GetRequestVal("v2");
-                        string myname = this.GetRequestVal("v3");
-                        int dataType = int.Parse(this.GetRequestVal("v4"));
-                        MapAttr mdHid = new MapAttr();
-                        mdHid.MyPK = fk_mapdataHid + "_" + key;
-                        mdHid.FK_MapData = fk_mapdataHid;
-                        mdHid.KeyOfEn = key;
-                        mdHid.Name = myname;
-                        mdHid.MyDataType = dataType;
-                        mdHid.HisEditType = EditType.Edit;
-                        mdHid.MaxLen = 100;
-                        mdHid.MinLen = 0;
-                        mdHid.LGType = FieldTypeS.Normal;
-                        mdHid.UIVisible = false;
-                        mdHid.UIIsEnable = false;
-                        mdHid.Insert();
-                        return "true";
-                    case "DelDtl":
-                        MapDtl dtl = new MapDtl(this.GetRequestVal("v1"));
-                        dtl.Delete();
-                        return "true";
-                    case "DelWorkCheck":
-                        FrmWorkCheck check = new FrmWorkCheck();
-                        check.No = this.GetRequestVal("v1");
-                        check.Delete();
-                        return "true";
-                    case "DeleteFrm":
-                        string delFK_Frm = this.GetRequestVal("v1");
-                        MapData mdDel = new MapData(delFK_Frm);
-                        mdDel.Delete();
-                        sql = "@DELETE FROM Sys_MapData WHERE No='" + delFK_Frm + "'";
-                        sql = "@DELETE FROM WF_FrmNode WHERE FK_Frm='" + delFK_Frm + "'";
-                        DBAccess.RunSQLs(sql);
-                        return "true";
-                    case "FrmUp":
-                    case "FrmDown":
-                        FrmNode myfn = new FrmNode();
-                        myfn.Retrieve(FrmNodeAttr.FK_Node, this.GetRequestVal("v1"), FrmNodeAttr.FK_Frm, this.GetRequestVal("v2"));
-                        if (this.DoType == "FrmUp")
-                            myfn.DoUp();
-                        else
-                            myfn.DoDown();
-                        return "true";
                     default:
                         throw new Exception("没有判断的执行标记:" + this.DoType);
                 }
@@ -284,7 +182,7 @@ namespace BP.WF.HttpHandler
             md.No = str;
             if (md.RetrieveFromDBSources() == 0)
                 return str;
-                
+
             return "err@表单ID:" + str + "已经被使用.";
         }
         public string NewFrmGuide_Create()
@@ -303,47 +201,18 @@ namespace BP.WF.HttpHandler
 
             md.HisFrmTypeInt = this.GetRequestValInt("DDL_FrmType");
 
-            switch ((BP.Sys.FrmType)(md.HisFrmTypeInt))
+            switch (md.HisFrmType)
             {
                 //自由，傻瓜，SL表单不做判断
                 case BP.Sys.FrmType.FreeFrm:
                 case BP.Sys.FrmType.FoolForm:
                     break;
                 case BP.Sys.FrmType.Url:
-                    //string url = this.GetRequestVal("TB_Url").Text;
-                    //if (string.IsNullOrEmpty(url))
-                    //{
-                    //    BP.Sys.PubClass.Alert("必填项不可以为空");
-                    //    return;
-                    //}
                     md.Url = md.PTable;
                     break;
                 //如果是以下情况，导入模式
                 case BP.Sys.FrmType.WordFrm:
                 case BP.Sys.FrmType.ExcelFrm:
-                    //var file = Request.Files[0];
-                    //string savePath = null;
-                    //var ext = Path.GetExtension(file.FileName).ToLower(); //后缀
-
-                    //ext = Path.GetExtension(file.FileName).ToLower();
-
-                    //if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.ExcelFrm &&
-                    //    ext != ".xls" && ext != ".xlsx")
-                    //{
-                    //    BP.Sys.PubClass.Alert("上传的Excel文件格式错误.");
-                    //    return;
-                    //}
-
-                    //if ((BP.Sys.FrmType)(this.FrmType) == BP.Sys.FrmType.WordFrm &&
-                    //    ext != ".doc" && ext != ".docx")
-                    //{
-                    //    BP.Sys.PubClass.Alert("上传的Word文件格式错误.");
-                    //    return;
-                    //}
-                    //savePath = BP.Sys.SystemConfig.PathOfDataUser + "FrmOfficeTemplate\\";
-                    //if (Directory.Exists(savePath) == false)
-                    //    Directory.CreateDirectory(savePath);
-                    //file.SaveAs(savePath + this.Pub1.GetTextBoxByID("TB_No").Text + ext);
                     break;
                 default:
                     throw new Exception("未知表单类型.");
@@ -351,17 +220,15 @@ namespace BP.WF.HttpHandler
             md.Insert();
 
             if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
+            {
                 /*把表单模版存储到数据库里 */
                 return "url@../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No;
+            }
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
                 return "url@FormDesigner.htm?FK_MapData=" + md.No;
 
-             
-
-            //  if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
             return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No;
-
         }
         #endregion 创建表单.
 

@@ -158,7 +158,9 @@
     <Compile Include="DTS\DocFieldAddLengthTo1000.cs" />
     <Compile Include="CCFlowAPI.cs" />
     <Compile Include="DTS\ResetSortMapAttr.cs" />
-    <Compile Include="HttpHandler\Base\JsonResultInnerData.cs" />
+    <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="HttpHandler\WF_Admin_AttrFlow.cs" />
     <Compile Include="HttpHandler\WF.cs" />
     <Compile Include="HttpHandler\WF_Admin_AttrNode.cs" />

@@ -74,26 +74,18 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         protected override string DoDefaultMethod()
         {
-            string msg = "";
-            try
-            {
-                switch (this.DoType)
-                {
-                    case "LetLogin":    //使管理员登录
-                        msg = string.IsNullOrWhiteSpace(WebUser.No) ? LetAdminLogin(getUTF8ToString("userNo"), true) : string.Empty;
-                        break;
-                    default:
-                        msg = "err@没有判断的标记:" + this.DoType;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                msg = "err@" + ex.Message;
-            }
-            return msg;
+            
+            return "err@没有判断的标记:" + this.DoType;
         }
         #endregion 执行父类的重写方法.
+
+        /// <summary>
+        /// 使管理员登录使管理员登录    /// </summary>
+        /// <returns></returns>
+        public string Logout()
+        {
+            return string.IsNullOrWhiteSpace(WebUser.No) ? LetAdminLogin(getUTF8ToString("userNo"), true) : string.Empty;
+        }
 
         /// <summary>
         /// 获得枚举列表的JSON.

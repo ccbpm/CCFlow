@@ -226,6 +226,15 @@ namespace BP.Tools
         /// <returns>Json字符串</returns> 
         public static string DataTableToJson(DataTable dt, bool isUpperColumn = true)
         {
+            if (isUpperColumn == true)
+            {
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    dt.Columns[i].ColumnName = dt.Columns[i].ColumnName.ToUpper();
+                }
+            }
+
+
             StringBuilder jsonString = new StringBuilder();
             if (dt.Rows.Count == 0)
             {
@@ -241,11 +250,6 @@ namespace BP.Tools
                 for (int j = 0; j < dt.Columns.Count; j++)
                 {
                     string strKey = null;
-
-                    if (isUpperColumn == true)
-                        strKey = dt.Columns[j].ColumnName.ToUpper();
-                    else
-                        strKey = dt.Columns[j].ColumnName;
 
                     string strValue = drc[i][j] == null ? "" : drc[i][j].ToString();
                     Type type = dt.Columns[j].DataType;

@@ -398,6 +398,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Login_Init()
         {
+            if (DBAccess.TestIsConnection() == false)
+                return "err@数据库连接配置错误 AppCenterDSN, AppCenterDBType 参数配置. ccflow请检查 web.config文件, jflow请检查 jflow.properties.";
+
             //让admin登录
             if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.IsAdmin==false )
                 return "url@Login.htm?DoType=Logout";

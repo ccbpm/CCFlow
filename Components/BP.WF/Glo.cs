@@ -189,12 +189,6 @@ namespace BP.WF
             string msg = "";
             try
             {
-                // 升级fromjson, 第一次安装的时候，不能自动产生这这个字段.
-                MapData mdT = new MapData();
-                mdT.FormJson = "";
-
-                Flow fl = new Flow();
-                fl.FlowJson = "";
 
                 //2017.5.19 打印模板字段修复
                 BP.WF.Template.BillTemplate bt = new BillTemplate();
@@ -970,6 +964,7 @@ namespace BP.WF
                 //}
             }
 
+          
             #region 创建 Port_EmpDept 视图兼容旧版本.
             //创建视图.
             try

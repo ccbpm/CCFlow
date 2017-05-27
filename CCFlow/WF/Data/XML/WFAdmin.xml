@@ -13,7 +13,7 @@
   <OneWork No="Chart" CH="轨迹图" UrlCCFlow="Chart.htm" UrlJFlow="Chart.htm"  />
   <OneWork No="LogOfTimeline" CH="流程日志(时间轴)"  UrlCCFlow="LogOfTimeline.aspx" UrlJFlow="LogOfTimeline.htm"  />
   <OneWork No="LogOfTable" CH="流程日志(表格)"   UrlCCFlow="LogOfTable.aspx" UrlJFlow="LogOfTable.htm" />
-  <OneWork No="CH" CH="节点时限"  UrlCCFlow="CH.aspx" UrlJFlow="CH.jsp" />
+  <OneWork No="CH" CH="节点时限"  UrlCCFlow="CH.aspx" UrlJFlow="CH.htm" />
   <OneWork No="FlowBBS" CH="评论"   UrlCCFlow="FlowBBS.htm" UrlJFlow="FlowBBS.htm"  />
   <OneWork No="Ath" CH="流程附件" UrlCCFlow="Ath.htm" UrlJFlow="Ath.htm"/>
   <OneWork No="OP" CH="操作" UrlCCFlow="OP.htm" UrlJFlow="OP.htm"/>

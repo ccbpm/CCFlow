@@ -30,82 +30,6 @@
             padding: 0;
             position: relative;
         }
-        h1
-        {
-            font-size: 28px;
-        }
-        h2
-        {
-            font-size: 26px;
-        }
-        h3
-        {
-            font-size: 18px;
-        }
-        h4
-        {
-            font-size: 16px;
-        }
-        h5
-        {
-            font-size: 14px;
-        }
-        h6
-        {
-            font-size: 12px;
-        }
-        h1, h2, h3, h4, h5, h6
-        {
-            color: #563D64;
-        }
-        small
-        {
-            font-size: 10px;
-        }
-        b, strong
-        {
-            font-weight: bold;
-        }
-        a
-        {
-            text-decoration: none;
-        }
-        a:hover
-        {
-            text-decoration: underline;
-        }
-        .left
-        {
-            float: left;
-        }
-        .right
-        {
-            float: right;
-        }
-        .alignleft
-        {
-            float: left;
-            margin-right: 15px;
-        }
-        .alignright
-        {
-            float: right;
-            margin-left: 15px;
-        }
-        .clearfix:after, form:after
-        {
-            content: ".";
-            display: block;
-            height: 0;
-            clear: both;
-            visibility: hidden;
-        }
-        .container
-        {
-            margin: 25px auto;
-            position: relative;
-            width: 900px;
-        }
         #content
         {
             background: #f9f9f9;
@@ -389,6 +313,8 @@
         //执行保存
         function Login() {
 
+            $("#Msg").html("<font>ccbpm 正在登录请稍候...</font>");
+
             var frmData = $("#cc").serialize();
             $.ajax({
                 data: frmData,
@@ -397,10 +323,8 @@
                 url: Handler + "?DoType=Login_Submit",
                 success: function (data) {
 
-                //   alert(data);
-
                     if (data.indexOf('err@') == 0) {
-                        alert(data);
+                        $("#Msg").html("<font color=red>"+data+"</font>");
                         return;
                     }
 
@@ -418,6 +342,10 @@
                 return;
             }
 
+            $("#Msg").html("<font>ccbpm 正在为登录做准备.</font>");
+
+            document.getElementById("Btn_Login").disabled = 'disabled';
+
             var doType = GetQueryString("DoType");
             if (doType == null)
                 doType = "Login_Init";
@@ -428,8 +356,12 @@
                 url: Handler + "?DoType=" + doType,
                 success: function (data) {
 
+                    $("#Msg").html("ccbpm 准备成功,欢迎登录.");
+
+                    document.getElementById("Btn_Login").disabled = false;
+
                     if (data.indexOf('err@') == 0) {
-                        alert(data);
+                        $("#Msg").html("<font color=red>" + data + "</font>");
                         return;
                     }
 
@@ -439,8 +371,10 @@
                         return;
                     }
 
-                    if (data != "")
-                        alert(data);
+                    if (data != "") {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        // alert(data);
+                    }
                 }
             });
         });
@@ -459,17 +393,33 @@
 				<input  type="password" placeholder="密码" class="password" id="TB_Pass" name="TB_Pass"/>
 			</div>
 			<div>
-				<input type="button" value="H5版(Beta)" id = "Btn_Login" onclick="Login()" /> 
+				<input type="button" value="H5版(Beta)" id="Btn_Login" name="Btn_Login" onclick="Login()" /> 
 			</div>
 
              <div>
               <input type="button" value="Silverlight版" onclick="javascript:window.location.href='../XAP/Designer.htm'"/>
 			</div>
+
+
 </form>
-    <div class="button">
-			<a href="http://ccbpm.mydoc.io/" target="_blank" ><img src="../../Img/Help.png" alt="" />帮助</a>|<a href="/WF/CCFormDesigner/Login.htm">表单引擎(施工中)</a>|<a href="../../App/Classic/Login.htm">前台登录</a>
+
+<br />
+<br />
+<br />
+<br />
+
+<center>
+<div>  
+			<a href="http://ccbpm.mydoc.io/" target="_blank" ><img src="../../Img/Help.png" alt="" />帮助</a>|<a href="../../App/Classic/Login.htm">前台登录</a>
 		        </div>
-	     </section>
+              <div>
+            <div id="Msg" />
+            </div>
    </div>
+   </center>
+
+</section>
+
+
 </body>
 </html>

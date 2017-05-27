@@ -52,12 +52,7 @@
 
         //页面启动函数.
         $(function () {
-
-            $("#Msg").html("正在加载,请稍后......");
-
             InitPage();
-
-            $("#Msg").html("");
         });
 
         //公共方法
@@ -72,11 +67,29 @@
                 cache: false,
                 complete: function () { }, //AJAX请求完成时隐藏loading提示
                 error: function (XMLHttpRequest, errorThrown) {
+                    alert(errorThrown)
                     callback(XMLHttpRequest);
+                    $('#Msg').html('保存数据出错');
+                    $('#Msg').hide();
+                    $('#ContentDtlDiv').show();
                 },
                 success: function (msg) {//msg为返回的数据，在这里做数据绑定
-                    var data = msg;
-                    callback(data, scope);
+                    if (saveAll) {
+                        alerdaySaveCount++;
+                    } else {
+                        var data = msg;
+                        callback(data, scope);
+                    }
+                    if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
+                        $('#Msg').html('正在执行保存');
+                        $('#Msg').hide();
+                        $('#ContentDtlDiv').show();
+                        alerdaySaveCount = 0;
+                        needSaveCount = 0;
+                        saveAll = false;
+
+                        InitPage();
+                    }
                 }
             });
         }
@@ -87,7 +100,8 @@
             pageData.saveRowCurrent.overCount = 0;
             //获取序号的值
             pageData.saveRowCurrent.rowIndex = index;
-            
+            //让界面的值=DAT 的值
+            setTrDataByData(index);
             var trData = $($('table tbody tr')[index]).data().data;
             var rowData = trData;
             rowData.DoType = "Dtl_SaveRow";
@@ -99,7 +113,10 @@
                 //值未改变，无需存盘
                 return;
             } else {
-              // alert(rowData.DoType);
+                // alert(rowData.DoType);
+                //
+                $('#Msg').show();
+                $('#ContentDtlDiv').hide();
                 AjaxServiceGener(rowData, SaveRowAfter, this);
             }
         }
@@ -137,11 +154,12 @@
             setTdDataByTrData(pageData.saveRowCurrent.rowIndex);
 
             pageData.saveRowCurrent.rowIndex = -1;
+
             return;
         }
 
         function insertRow() {
-            if ($('#dtlDiv div table tbody tr').length == 1 ) {
+            if ($('#dtlDiv div table tbody tr').length == 1) {
                 var firstTr = $('#dtlDiv div table tbody tr')[0];
                 if ($(firstTr).data().data == undefined) {
                     $('#dtlDiv div table tbody').html('')//无数据时，新增的时候先删除 无记录行
@@ -156,12 +174,12 @@
                     var tmplate = figure_MapAttr_Template(o.data());
                     tmplate.data({ KeyOfEn: o.data().KeyOfEn });
                     tmplate.attr('id', tmplate.attr('name') + "_" + newRowIndex);
-                    if (tmplate.attr('name')!=undefined && tmplate.attr('name').indexOf('TB_') == 0) {
+                    if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('TB_') == 0) {
                         $(tmplate).bind('blur', function (obj) {
                             $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
                                 $(obj.target).val();
                         });
-                    } else if (tmplate.attr('name')!=undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
+                    } else if (tmplate.attr('name') != undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
                         $(tmplate).bind('change', function (obj) {
                             $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
                                 $(obj.target).val();
@@ -198,7 +216,6 @@
                         var ckId = 'CB_' + o.data().KeyOfEn + '_' + newRowIndex;
                         ckEle.attr('id', ckId);
                         tmplate.find('label').attr('for', ckId);
-                        console.log(textVal)
                         if (textVal == "1") {
                             ckEle[0].checked = true;
                         } else {
@@ -213,14 +230,14 @@
                     insertTr.append(td);
 
                 } else if ($(threadThObj).data().coltype == 'SN') {
-                    insertTr.append($('<td>' + (newRowIndex+1) + '</td>'));
+                    insertTr.append($('<td>' + (newRowIndex + 1) + '</td>'));
                 } else {
-                    
+
                 }
 
-                
+
             });
-            insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
+            insertTr.append($('<td><img ="width:30px;padding:0="" 10px;cursor:pointer;"="" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
             //insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
             //直接复制上面的即可
 
@@ -243,6 +260,16 @@
             AfterBindEn_DealMapExt(insertTr);
 
             setTdDataByTrData(newRowIndex);
+
+            insertTr.bind('mouseleave', mouseLeaveTrFun);
+        }
+
+        //行最后的保存按钮
+        function saveTrRow(obj) {
+            var  thisRowIndex = parseInt($($(obj).parent().parent().children()[0]).text()) - 1;
+            saveRow(thisRowIndex);
+            saveAll = false;
+            $('#Msg').hide();
         }
 
         //初始化数据.
@@ -314,12 +341,13 @@
                         });
 
                         //添加删除列
-                        var delTh = $('<th  style="width:30px;"><img src="../Img/Btn/Save.gif" onclick="Save();" /></th>');
-                      //  delTh.text("<img src='../Img/Btn/Save.gif' onclick='Save();' />");
+                        var delTh = $('<th style="width:40px;cursor:pointer;"><img src="../Img/Btn/Save.gif" onclick="SaveAll();" /></th>');
+                        //delTh.text("<img src='../Img/Btn/Save.gif' onclick='Save();' />");
                         var delThData = {
                             custom: true,
-                            customcontent: 1,
-                            customcontent1: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
+                            customcontent: 2,
+                            customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
+                            customcontent2: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
                             coltype: 'Operation1'
                         };
 
@@ -342,7 +370,7 @@
                         var delThData = {
                             custom: true,
                             customcontent: 1,
-                            customcontent1: 'input@type="button" onclick="saveRow(this)" Value="保存" style=""@',
+                            customcontent1:  'img@src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
                             coltype: 'Operation1'
                         };
                         delTh.attr('title', "title");
@@ -441,8 +469,6 @@
                                 });
                             })
 
-
-
                             //如果是只读的，全部设置成只读
                             if (workNodeData.Sys_MapDtl[0].IsReadonly == "1") {
                                 $('#dtlDiv div table tbody tr input[type=text]').attr('disabled', 'disabled');
@@ -456,6 +482,9 @@
                             $.each(tbodyTrs1, function (m, tbodyTrObj) {
                                 AfterBindEn_DealMapExt(tbodyTrObj);
                             });
+
+                            //mouseleave  鼠标离开行
+                            regMouseLeaveTr();
                         }
                     };
                     $('#dtlDiv div table tbody tr').remove();
@@ -653,8 +682,8 @@
                             }
                         }
 
-                        // AppDouble  AppFloat  .
-                        if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3 || (mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {
+                        // AppDouble  AppFloat  .  mapAttr.MyDataType == 2 是整型
+                        if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3 ) {
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
 
@@ -662,16 +691,16 @@
                                 enableAttr = "disabled='disabled'";
                             }
                             eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-                        }//"+'"'+"
-                       /* if ((mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {//AppInt
+                        }
+                        if ((mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {//AppInt
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
 
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
-                            eleHtml += "<input onkeyup=" + '"' + "this.value=this.value.replace(/\D/g,'');" + '"' + "onafterpaste=" + '"' + "this.value=this.value.replace(/\D/g,'');" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-                        }*/
+                            eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                        }
 
 
                         //AppMoney  AppRate
@@ -707,7 +736,7 @@
 
             eleHtml.bind('focus', blurEvent);
             if (eleHtml.find('[name^=CB_]').length == 1) { //CHECKBOX 处理
-                eleHtml.find('[name^=CB_]').bind('focus', function (obj) { console.log(''); blurEvent(obj); });
+                eleHtml.find('[name^=CB_]').bind('focus', function (obj) {  blurEvent(obj); });
             }
             if (mapAttr.UIIsEnable == "0") {
                 if (eleHtml.find('[name^=CB_]').length == 1) { //CHECKBOX 处理
@@ -720,46 +749,76 @@
             return eleHtml;
         }
 
+        //只能输入数字
+        function keyDown(event) {
+            var value = event.key;
+            var reg_keleyi_com = /^[-+]?\d+$/;
+            if (reg_keleyi_com.test(value)) {
+                return '';
+            } else {
+                return value;
+            }
+        }
+
+        var thisRowIndex = -1;
         //获取焦点时执行  改变currentRowIndex 再确定是否需要 存盘  获取焦点  上一行存盘 foucs
         function blurEvent(obj) {
-            var thisRowIndex = parseInt($($(obj.target).parent().parent().children()[0]).text()) - 1;
+            thisRowIndex = parseInt($($(obj.target).parent().parent().children()[0]).text()) - 1;
             if (obj.target.name.indexOf('CB_') == 0) {
                 thisRowIndex = parseInt($($(obj.target).parent().parent().parent().children()[0]).text()) - 1;
             } else {
                 thisRowIndex = parseInt($($(obj.target).parent().parent().children()[0]).text()) - 1;
             }
-            if (pageData.currentRowIndex != thisRowIndex) {//改变编辑行，存盘
-                
-                if (pageData.currentRowIndex != -1) {
-                    setTrDataByData(pageData.currentRowIndex);
-                    saveRow(pageData.currentRowIndex);
-                }
-                pageData.currentRowIndex = thisRowIndex;
-            }
         }
 
-        //离开表格，执行当前行的存盘  解决单行数据存盘问题
-        $(function () {
-            $('.table.wupop tbody').bind('mouseleave', function () {
-                //移出TR时执行该事件
-                if (pageData.currentRowIndex != -1) {
-                    saveRow(pageData.currentRowIndex);
-                }
-            });
-        })
+        //离开表格，执行当前行的存盘  解决单行数据存盘问题 注册事件
+        function regMouseLeaveTr() {
+            $('.table.wupop tbody tr').bind('mouseleave', mouseLeaveTrFun);
+        }
+
+        //鼠标移出TR时执行的函数
+        function mouseLeaveTrFun() {
+            //移出TR时执行该事件
+            if (thisRowIndex != pageData.currentRowIndex && $('#Msg').css('display') == 'none') {
+                pageData.currentRowIndex = thisRowIndex;
+                return; //暂时去掉行的保存
+                saveRow(pageData.currentRowIndex);
+            }
+        }
+        var saveAll = false;
+        var needSaveCount = 0;
+        var alerdaySaveCount = 0;
 
         //从表全部数据保存 还有问题 需要调整
-        function Save() {
-            return;
+        function SaveAll() {
             //循环表格
             var trs = $('.table.wupop tbody tr');
-            $.each(trs, function ( i,obj) {
+            $.each(trs, function (i,obj) {
                 var sn=$($(obj).children()[0]).text();
                 if (isNaN(sn)) {
                     return;
                 } else {
-                    pageData.saveRowCurrent.rowIndex = i;
-                    saveRow(i);
+                    needSaveCount = trs.length;
+                    saveAll = true;
+                    $('#Msg').show();
+                    $('#ContentDtlDiv').hide();
+                    //让界面的值=DAT 的值
+                    setTrDataByData(i);
+                    var index = i;
+                    var trData = $($('table tbody tr')[index]).data().data;
+                    var rowData = trData;
+                    rowData.DoType = "Dtl_SaveRow";
+                    rowData.FK_MapDtl = GetQueryString("EnsName");
+                    //row.FK_MapData = "ND101";
+                    rowData.RefPKVal = GetQueryString("RefPKVal");
+                    var dbDataRow = $.grep(pageData.DBDtl, function (val) { return val.OID == rowData.OID; });
+                    if (rowData.OID != 0 && dbDataRow.length == 1 && JSON.stringify(dbDataRow[0].RowData) == JSON.stringify(trData)) {
+                        //值未改变，无需存盘
+                        alerdaySaveCount++;
+                        return;
+                    } else {
+                        AjaxServiceGener(rowData, SaveRowAfter, this);
+                    }
                 }
             });
         }
@@ -767,9 +826,8 @@
 
 </head>
 <body>
-    <div id="Msg"></div>
-
-    <div id="">
+    <div id="Msg" style="display:none;">正在执行保存</div>
+    <div id="ContentDtlDiv">
         <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
             <div class="portlet-body " id="" style="overflow: auto;">
                 <div class="tab-content" style="margin: 4px 0px;">

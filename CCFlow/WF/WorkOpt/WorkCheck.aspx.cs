@@ -423,6 +423,7 @@ namespace CCFlow.WF.WorkOpt
                                         this.Pub1.AddTR();
                                         this.Pub1.Add("<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + sigantrueHtml + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;&nbsp;&nbsp;" + tk.RDT + "</td>");
                                         this.Pub1.AddTREnd();
+                                        this.Pub1.AddTableEnd();
                                         break;
                                     #endregion
 
@@ -433,16 +434,14 @@ namespace CCFlow.WF.WorkOpt
                                             this.Pub1.AddTable(" style='padding:0px;width:100%;table-layout: fixed;' leftMargin=0 topMargin=0");
                                             //处理节点名称分组列，合并多少行
                                             //不严格的计算，利用浏览器的容错，渲染时自动匹配
-                                            int rowspan = 3 * tks.Count;
+                                            int rowspan = 2;// 3 * tks.Count;火狐没啥容错机制，必需写对
 
                                             this.Pub1.AddTR();
                                             this.Pub1.Add("<td  rowspan='" + rowspan + "' style='width:120px;border:1px solid #D6DDE6;'>"
                                                 + nd.FWCNodeName + "</td>");
-                                            this.Pub1.AddTREnd();
 
                                             ndfrom = tk.NDFrom;
                                         }
-
 
                                         //审核组件配置字段
                                         frmWorkCheck = new FrmWorkCheck(tk.NDFrom);
@@ -459,7 +458,6 @@ namespace CCFlow.WF.WorkOpt
                                         }
                                         else
                                         {
-                                            this.Pub1.AddTR();
                                             if (this.DoType != "View" && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                              wcDesc.HisFrmWorkCheckType == FWCType.Check || (
                                              (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog
@@ -485,6 +483,7 @@ namespace CCFlow.WF.WorkOpt
                                             {
                                                 this.Pub1.Add("<td style='WORD-WRAP: break-word;line-height:30px;'>" + tk.MsgHtml + "</td>");
                                             }
+
                                             this.Pub1.AddTREnd();
                                         }
                                         //附件
@@ -493,7 +492,7 @@ namespace CCFlow.WF.WorkOpt
                                         this.Pub1.Add("<td style=' text-align:right;height:35px;line-height:35px;'>签名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + sigantrueHtml + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;&nbsp;&nbsp;" + tk.RDT + "</td>");
                                         this.Pub1.AddTREnd();
 
-                                        //this.Pub1.AddTableEnd();
+                                        this.Pub1.AddTableEnd();
                                         break;
                                     #endregion
                                     default:
@@ -909,17 +908,16 @@ namespace CCFlow.WF.WorkOpt
                 if (isHave == false)
                     continue; // 不存在轨迹里就让其显示.
 
+                this.Pub1.AddTable(" style='padding:0px;width:100%;table-layout: fixed;' leftMargin=0 topMargin=0");
                 this.Pub1.AddTR();
                 this.Pub1.AddTD(item.Name);
                 this.Pub1.AddTD("<br><br><br>审核人: &nbsp;&nbsp; 审核日期：&nbsp;&nbsp;年&nbsp;&nbsp;月&nbsp;&nbsp;日<br>");
                 this.Pub1.AddTREnd();
+                this.Pub1.AddTableEnd();
             }
             #endregion 增加空白.
-
-
-
-            this.Pub1.AddTableEnd();
         }
+
         private bool CanEditor(string fileType)
         {
             try

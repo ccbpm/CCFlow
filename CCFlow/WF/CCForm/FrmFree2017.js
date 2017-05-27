@@ -2120,18 +2120,26 @@ function figure_MapAttr_Template( mapAttr) {
                     }
                 }
 
-                // AppDouble  AppFloat AppInt .
-                if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3 || (mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {
+
+                // AppDouble  AppFloat 
+                if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
                     var enableAttr = '';
                     if (mapAttr.UIIsEnable == 1) {
 
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                 }
+                if ((mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {//AppInt
+                    var enableAttr = '';
+                    if (mapAttr.UIIsEnable == 1) {
 
-
+                    } else {
+                        enableAttr = "disabled='disabled'";
+                    }
+                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                }
                 //AppMoney  AppRate
                 if (mapAttr.MyDataType == 8) {
                     var enableAttr = '';
@@ -2140,7 +2148,7 @@ function figure_MapAttr_Template( mapAttr) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                 }
             }
         } else {
@@ -2189,6 +2197,33 @@ function figure_MapAttr_Template( mapAttr) {
     return eleHtml;
 }
 
+//将#FF000000 转换成 #FF0000
+function TranColorToHtmlColor(color) {
+    if (color != undefined && color.indexOf('#') == 0 && color.length == 9) {
+        color = color.substring(0, 7);
+    }
+    return color;
+}
+
+//FontStyle, FontWeight, IsBold, IsItalic
+//fontStyle font-size:19;font-family:"Portable User Interface";font-weight:bolder;color:#FF0051; 为H5设计的，不用解析后面3个
+function analysisFontStyle(ele, fontStyle, isBold, isItalic) {
+    if (fontStyle != undefined && fontStyle.indexOf(':') > 0) {
+        var fontStyleArr = fontStyle.split(';');
+        $.each(fontStyleArr, function (i, fontStyleObj) {
+            ele.css(fontStyleObj.split(':')[0], fontStyleObj.split(':')[1]);
+        });
+    }
+    else {
+        if (isBold == 1) {
+            ele.css('font-weight', 'bold');
+        }
+        if (isItalic == 1) {
+            ele.css('font-style', 'italic')
+        }
+    }
+}
+
 //升级表单元素 初始化Label
 function figure_Template_Label(frmLab) {
     var eleHtml = '';
@@ -2197,7 +2232,8 @@ function figure_Template_Label(frmLab) {
     var text = frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
     eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize)
-        .css('padding-top','5px');
+        .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColr));
+    analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
     return eleHtml;
 }
 

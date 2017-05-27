@@ -456,7 +456,7 @@ namespace BP.WF.HttpHandler
                 urlExt += "&FID=" + currWK.FID;
 
             if (urlExt.Contains("&UserNo") == false)
-                urlExt += "&UserNo=" + WebUser.No;
+                urlExt += "&UserNo=" + HttpUtility.UrlEncode(WebUser.No);
 
             if (urlExt.Contains("&SID") == false)
                 urlExt += "&SID=" + WebUser.SID;

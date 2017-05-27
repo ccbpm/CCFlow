@@ -8,13 +8,14 @@
         function Load() {
 
             var url = window.location.href;
+
             if (plant == "CCFlow") {
                 url = url.replace('.htm', '.aspx');
                 window.location.href = url;
                 return;
             } else {
                 url = url.replace('.htm', '.jsp');
-                window.location.href = url;
+                //window.location.href = url;
                 return;
             }
         }
@@ -23,7 +24,7 @@
 <body  onload="Load()" >
 
 <form id="cc">
- <h2> 正在加载，请稍后。。。</h2>
+ <h2> 正在研发。。。</h2>
 </form>
 
 </body>

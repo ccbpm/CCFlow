@@ -136,6 +136,10 @@
             top: 15px;
             right: 5px;
         }
+
+        li label, li input[type=checkbox], li input[type=radio] {
+            cursor: pointer;
+        }
     </style>
     <script type="text/javascript">
         $(function () {
@@ -166,7 +170,6 @@
                 $('#BtnOk').bind('click', function () {
                     var ctrlId = GetQueryString("CtrlId");
                     var ctrl = opener.window.document.getElementById(ctrlId);
-
                     //为表单元素反填值
                     var returnValSetObj = window.pageSetData;
                     var returnValObj = window.returnVal;
@@ -189,6 +192,7 @@
                             }
                         } else if (returnValSetObj[0].PopValWorkModel == "Group") { //分组模式
                             window.GetGroupReturnVal();
+                            console.log(returnValObj)
                             $(ctrl).val(returnValObj.Value);
                         } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
                             returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
@@ -341,17 +345,17 @@
                                 $.each(dtgArr, function (i, obje) {
                                     for (var k = 0; k < dteArr.length; k++) {
                                         if (obje.No == dteArr[k][fkName]) {
-                                            ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/>" + dteArr[k].Name + "</li>";
-                                         }
+                                            ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;' id='CK_" + obje.No + '_' + k + "'/><label for='CK_" + obje.No + '_' + k + "'>" + dteArr[k].Name + "</label></li>";
+                                        }
                                     }
-                                    ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;'/>" + obje.Name + "<ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" + ultde + "</ul></li>";
+                                    ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;' id='CK_" + obje.No + "'/><label for='CK_" + obje.No + "'>" + obje.Name + "</label><ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" + ultde + "</ul></li>";
                                     ultde = "";
                                 });
-                               } else {//选择模式是单选
+                            } else {//选择模式是单选
                                 $.each(dtgArr, function (i, obje) {
                                     $.each(dteArr, function (k, obj) {
                                         if (obje.No == obj[fkName]) {
-                                            ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='radio' name='cm' style='margin: 5px 5px;' class='groupr'/>" + obj.Name + "</li>";
+                                            ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='radio' name='cm' style='margin: 5px 5px;' class='groupr' id='RB_" + obje.No + "_" + k + "'/><label for='RB_" + obje.No + "_" + k + "'>" + dteArr[k].Name + "</label></li>";
                                         }
                                     });
                                     ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'>" + obje.Name + "<ul style='overflow:hidden;margin:10px 0px;'>" + ultde + "</ul></li>";

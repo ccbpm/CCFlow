@@ -6,7 +6,6 @@
     <title></title>
     <!--<script src="Scripts/JavaScript1.js"></script>-->
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
-
     <script src="./Comm/JScript.js" type="text/javascript"></script>
     <script src="./Comm/JS/TBHelpDiv.js" type="text/javascript"></script>
     <script src="../DataUser/JSLibData/MyFlowPublic.js" type="text/javascript"></script>
@@ -14,20 +13,12 @@
     <script src="./Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.cokie.min.js"></script>
-    <script type="text/javascript" src="Scripts/commonYangYH.js"></script>
     <script type="text/javascript" src="Scripts/Cookie.js"></script>
-    <script type="text/javascript" src="Scripts/bootstrap/js/jquery.nav.js"></script>
-    <script type="text/javascript" src="./Scripts/config.js"></script>
-    <script type="text/javascript" src="MyFlowFree2017.js"></script>
-    <script type="text/javascript" src="CCForm/MapExt2016.js"></script>
-    <script type="text/javascript" src="./Comm/Gener.js"></script>
-    
     <script type="text/javascript" src="Scripts/QueryString2016.js"></script>
     <script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>
 
     <link href="./Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <link href="./Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
-    <link href="./Scripts/bootstrap/css/lanrenzhijia.css" rel="Stylesheet" />
 
     <link href="./Scripts/bootstrap/css/components-rounded.css" rel="Stylesheet" />
     <link href="./Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
@@ -39,6 +30,23 @@
 
     <script src="./Scripts/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
     <link href="./Scripts/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />
+
+
+    <!--JS 加载-->
+    <script type="text/javascript">
+        //使用随机数作为版本号，保证每次加载的config.js 都是最新的，其余的通过公共函数加载，带入版本号，更新版本号即更新文件
+        $.getScript("Scripts/config.js?Version=" + Math.random(), function () {
+            load.LoadJs("Scripts/commonYangYH.js", undefined, function () {
+                load.LoadJs('CCForm/MapExt2016.js', undefined, function () {
+                    load.LoadJs('./Comm/Gener.js', undefined, function () {
+                        load.LoadJs('MyFlowFree2017.js', undefined, function () {
+
+                        })
+                    })
+                })
+            })
+        });
+    </script>
 
     <style type="text/css">
         body {
@@ -198,7 +206,7 @@
         }
 
         input[type=text], select ,textarea, iframe[src*="AttachmentUpload.aspx"]{
-        margin:4px 0px !important;
+       /* margin:4px 0px !important;*/
         }
 
         #Message {
@@ -223,68 +231,7 @@
 
     <!--杨玉慧 -->
     <script type="text/javascript">
-        $(function () {
-
-            var frm = document.forms["divCCForm"];
-
-            if (plant == "CCFlow")
-                frm.action = "MyFlow.ashx?method=login";
-            else
-                frm.action = MyFlow+"?method=login";
-
-            initPageParam(); //初始化参数
-
-            initBar(); //工具栏.
-
-            GenerWorkNode(); //表单数据.
-            $('[name=showCol]').bind('change', function (obj) {
-                if (obj.target.value == "8") {
-                    Col4To8();
-                } else {
-                    Col8To4();
-                }
-            });
-            if ($("#Message").html() == "") {
-                $(".Message").hide();
-            }
-            if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
-                //计算高度，展示滚动条
-                var height = $(parent.document.getElementById('MainFrames')).height() - 110;
-                //$('#topContentDiv').height(height);
-
-                $(window).resize(function () {
-                    $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
-                });
-            }
-            else {//新加
-                //计算高度，展示滚动条
-                var height = $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
-               // $('#topContentDiv').height(height);
-
-                $(window).resize(function () {
-                    $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
-                });
-            }
-            function movetb() {
-                var move;
-                $("#nav").css("top", top);
-            }
-            //nav.init();
-            //$(".navbars").css("margin-top", ($(window).height() - $(".navbars").height()) / 2);
-            //if (navigator.userAgent.indexOf('Chrome') >= 0) {
-            //    $(".navbars i").click(function () {
-            //        $("#nav").removeClass("s");
-            //    });
-            //    $("#nav").bind("mouseover", function () {
-            //        $("#nav").addClass("s");
-            //        $("#nav").css("top", "30px");
-            //    });
-            //}
-
-            $('#btnCloseMsg').bind('click', function () {
-                $('.Message').hide();
-            });
-        })
+        
     </script>
 </head>
 <body>

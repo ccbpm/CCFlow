@@ -1404,7 +1404,8 @@ function AfterBindEn_DealMapExt() {
                     default:
                         break;
                 }
-                var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
+                tb.width(tb.width() - 40);
+                var eleHtml = ' <div class="input-group form_tree" style="width:' + tb.width() + 'px;height:' + tb.height() + 'px">' + tb.parent().html() +
                 '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
                 break;
@@ -1910,6 +1911,7 @@ $(function () {
 
 })
 
+
 //发送 退回 移交等执行成功后转到  指定页面
 function OptSuc(msg) {
     // window.location.href = "/WF/MyFlowInfo.aspx";
@@ -1925,24 +1927,10 @@ function OptSuc(msg) {
     trackA.remove();
     trackImg.remove();
     $("#msgModal").modal().show();
-
-    ////如果是申请页面
-    //if ($('.navbars').css('display') == "none") {
-    //    $("#msgModalContent").append("<a href='/ITILFlow/MainPage.html'>返回流程工作台</a>");
-    //    $('#CCForm').html($('#msgModalContent').html());
-    //    setToobarUnVisible();
-    //} else {
-    //    $("#msgModal").modal().show();
-    //    if (window.opener != null) {
-    //        //刷新父窗口
-    //        window.opener.location.reload();
-    //    }
-    //}
 }
 //移交
 //初始化发送节点下拉框
 function InitToNodeDDL() {
-    console.info(jsonStr);
     var workNode = JSON.parse(jsonStr);
     if (workNode.ToNodes != undefined && workNode.ToNodes.length > 0) {
         // $('[value=发送]').
@@ -2812,6 +2800,8 @@ function addLoadFunction(id, eventName, method) {
     js += "</script>";
     return $(js);
 }
+
+
 var appPath = "../../";
 var DtlsCount = " + dtlsCount + "; //应该加载的明细表数量
 
@@ -3111,70 +3101,53 @@ function dealWithUrl(src) {
     }
     return src;
 }
-
-/*
-switch (groupFiled.CtrlType) {
-case "FWC": //审核组件.
-var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
-var paras = pageParamToUrl();
-if (paras.indexOf('OID') < 0) {
-paras += "&OID=" + pageData.WorkID;
-}
-
-
-if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
-paras += "&DoType=View";
-}
-src += "&r=q" + paras;
-groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-break;
-case "SubFlow": //子流程..
-var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
-var paras = pageParamToUrl();
-if (paras.indexOf('OID') < 0) {
-paras += "&OID=" + pageData.WorkID;
-}
-if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
-paras += "&DoType=View";
-}
-src += "&r=q" + paras;
-src += "&IsShowTitle=0";
-groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-break;
-case "Track": //轨迹图.
-var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
-//var paras = pageParamToUrl();
-//if (paras.indexOf('OID') < 0) {
-//    paras += "&OID=" + pageData.WorkID;
-//}
-src += '&FK_Flow=' + pageData.FK_Flow;
-src += '&FK_Node=' + pageData.FK_Node;
-src += '&WorkID=' + pageData.WorkID;
-src += '&FID=' + pageData.FID;
-//先临时写成这样的
-groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:500px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-
-break;
-case "Thread": //子线程.
-var src = "/WF/WorkOpt/Thread.aspx?s=2";
-var paras = pageParamToUrl();
-if (paras.indexOf('OID') < 0) {
-paras += "&OID=" + pageData.WorkID;
-}
-src += "&r=q" + paras;
-groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-break;
-case "FTC": //流转自定义.  有问题
-var src = "/WF/WorkOpt/FTC.aspx?s=2";
-var paras = pageParamToUrl();
-if (paras.indexOf('OID') < 0) {
-paras += "&OID=" + pageData.WorkID;
-}
-src += "&r=q" + paras;
-groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-break;
-default:
-break;
-}*/
 var colVisibleJsonStr = ''
 var jsonStr = '';
+
+//从MyFlowFree2017.htm 中拿过过的
+$(function () {
+    var frm = document.forms["divCCForm"];
+
+    if (plant == "CCFlow")
+        frm.action = "MyFlow.ashx?method=login";
+    else
+        frm.action = MyFlow + "?method=login";
+
+    initPageParam(); //初始化参数
+
+    initBar(); //工具栏.
+
+    GenerWorkNode(); //表单数据.
+    $('[name=showCol]').bind('change', function (obj) {
+        if (obj.target.value == "8") {
+            Col4To8();
+        } else {
+            Col8To4();
+        }
+    });
+    if ($("#Message").html() == "") {
+        $(".Message").hide();
+    }
+    if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
+        //计算高度，展示滚动条
+        var height = $(parent.document.getElementById('MainFrames')).height() - 110;
+        //$('#topContentDiv').height(height);
+
+        $(window).resize(function () {
+            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");;
+        });
+    }
+    else {//新加
+        //计算高度，展示滚动条
+        var height = $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
+        // $('#topContentDiv').height(height);
+
+        $(window).resize(function () {
+            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");;
+        });
+    }
+    
+    $('#btnCloseMsg').bind('click', function () {
+        $('.Message').hide();
+    });
+})

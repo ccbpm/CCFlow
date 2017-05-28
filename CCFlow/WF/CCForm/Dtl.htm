@@ -341,31 +341,42 @@
                         });
 
                         //添加删除列
-                        var delTh = $('<th style="width:40px;cursor:pointer;"><img src="../Img/Btn/Save.gif" onclick="SaveAll();" /></th>');
+                        var delTh = $('<th style="width:40px;cursor:pointer;"><img style="width:20px;height:20px;" src="../Img/Btn/SaveAll.png" onclick="SaveAll();" /></th>');
                         //delTh.text("<img src='../Img/Btn/Save.gif' onclick='Save();' />");
-                        var delThData = {
-                            custom: true,
-                            customcontent: 2,
-                            customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
-                            customcontent2: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
-                            coltype: 'Operation1'
-                        };
+                        var delThData;
+
+                        if (sys_MapDtl[0].IsDelete == "1" || sys_MapDtl[0].IsInsert == "1") {//有新增或者有删除，就有删除权限
+                            delThData = {
+                                custom: true,
+                                customcontent: 2,
+                                customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
+                                customcontent2: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
+                                coltype: 'Operation1'
+                            };
+                        } else if (sys_MapDtl[0].IsUpdate == "1") {//只有保存，没有删除
+                            delThData = {
+                                custom: true,
+                                customcontent: 1,
+                                customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
+                                coltype: 'Operation1'
+                            };
+                        }
 
                         //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
                         delTh.attr('title', "title");
                         //如果能删除，就有删除按钮
-                        if (sys_MapDtl[0].IsDelete == "1" && sys_MapDtl[0].IsReadonly=="0") {
+                        if (sys_MapDtl[0].IsReadonly=="0") {
                             delTh.data(delThData);
                         }
                         //可删除或者可新增时，有操作列
-                        if ((sys_MapDtl[0].IsDelete == "1" ||  sys_MapDtl[0].IsInsert=="1") && sys_MapDtl[0].IsReadonly=="0") {
-                        threadTr.append(delTh);
+                        if ((sys_MapDtl[0].IsDelete == "1" || sys_MapDtl[0].IsInsert == "1" || sys_MapDtl[0].IsUpdate=="1") && sys_MapDtl[0].IsReadonly == "0") {
+                            threadTr.append(delTh);
                         }
 
                         //添加删除列
                         //var delTh = $('<th></th>');
                         //添加保存列
-                        delTh = $('<th style="width:30px;"></th>');
+                        delTh = $('<th style=""></th>');
                         delTh.text("操作");
                         var delThData = {
                             custom: true,
@@ -682,7 +693,7 @@
                             }
                         }
 
-                        // AppDouble  AppFloat  .  mapAttr.MyDataType == 2 是整型
+                        // AppDouble  AppFloat 
                         if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3 ) {
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {

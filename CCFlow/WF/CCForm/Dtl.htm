@@ -69,7 +69,7 @@
                 error: function (XMLHttpRequest, errorThrown) {
                     alert(errorThrown)
                     callback(XMLHttpRequest);
-                    $('#Msg').html('保存数据出错');
+                    alert('保存数据出错');
                     $('#Msg').hide();
                     $('#ContentDtlDiv').show();
                 },
@@ -81,7 +81,6 @@
                         callback(data, scope);
                     }
                     if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
-                        $('#Msg').html('正在执行保存');
                         $('#Msg').hide();
                         $('#ContentDtlDiv').show();
                         alerdaySaveCount = 0;
@@ -302,7 +301,7 @@
 
                     // 检查是否有错误.
                     if (data.indexOf('err@') == 0) {
-                        $("#Msg").html(data);
+                        alert(data);
                         return;
                     }
 
@@ -326,7 +325,7 @@
                         //制造表头
                         //添加序号列
                         workNodeData = data;
-                        var snTh = $('<th data-coltype="SN" style="width;60px;"><img src="../Img/Btn/Add.gif" id="insertBtn" name="insertBtn" onclick="insertRow()" /></th>');
+                        var snTh = $('<th data-coltype="SN" style="width;60px;"><img src="../Img/Btn/Add.gif" id="insertBtn"  style="    cursor: pointer;" name="insertBtn" onclick="insertRow()" /></th>');
 
                         threadTr.append(snTh);
                         $.each(sys_mapAttr, function (i, mapAttrObj) {
@@ -340,9 +339,8 @@
                             }
                         });
 
-                        //添加删除列
-                        var delTh = $('<th style="width:40px;cursor:pointer;"><img style="width:20px;height:20px;" src="../Img/Btn/SaveAll.png" onclick="SaveAll();" /></th>');
-                        //delTh.text("<img src='../Img/Btn/Save.gif' onclick='Save();' />");
+                        //添加删除,保存列
+                        var delTh = $('<th style="width:40px;"><img title="全部保存" style="width: 20px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/SaveAll.png" onclick="SaveAll();" /></th>');
                         var delThData;
 
                         if (sys_MapDtl[0].IsDelete == "1" || sys_MapDtl[0].IsInsert == "1") {//有新增或者有删除，就有删除权限
@@ -363,7 +361,6 @@
                         }
 
                         //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
-                        delTh.attr('title', "title");
                         //如果能删除，就有删除按钮
                         if (sys_MapDtl[0].IsReadonly=="0") {
                             delTh.data(delThData);
@@ -499,6 +496,8 @@
                     };
                     $('#dtlDiv div table tbody tr').remove();
                     Common.CustomPagePlug(dtlDataOption);//绑定表格
+
+                    $('#Msg').hide();
                     return;
 
 
@@ -833,16 +832,15 @@
             });
         }
      </script>
-
 </head>
 <body>
-    <div id="Msg" style="display:none;">正在执行保存</div>
+    <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
     <div id="ContentDtlDiv">
-        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px; overflow: auto;">
-            <div class="portlet-body " id="" style="overflow: auto;">
+        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px;">
+            <div class="portlet-body " id="">
                 <div class="tab-content" style="margin: 4px 0px;">
                     <div class="tab-pane active portlet_tab flowLists" id="dtlDiv">
-                        <div id="" style=" overflow: auto;">
+                        <div>
                             <table class="table wupop" data-data="true">
                                 <thead></thead>
                                 <tbody></tbody>

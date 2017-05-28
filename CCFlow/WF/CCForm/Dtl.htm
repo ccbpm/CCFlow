@@ -447,7 +447,6 @@
                                              tmplate.val(textVal);
                                          }
                                         //处理单选按钮。。。 还没做
-                                        
                                         $($(tbodyTrObj).children('td')[k]).text('');
                                         $($(tbodyTrObj).children('td')[k]).append(tmplate);
 
@@ -996,7 +995,7 @@
                         default:
                             break;
                     }
-                    var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
+                    var eleHtml = ' <div class="input-group form_tree" style="width:'+tb.width()+'px;height:'+tb.width()+'px">' + tb.parent().html() +
                     '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                     tb.parent().html(eleHtml);
                     break;

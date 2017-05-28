@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="WinOpenSimple.master" AutoEventWireup="true" CodeBehind="FlowRpt.aspx.cs" Inherits="CCFlow.WF.FlowRpt" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" CodeBehind="FlowRpt.aspx.cs" Inherits="CCFlow.WF.FlowRpt" %>
 <%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 

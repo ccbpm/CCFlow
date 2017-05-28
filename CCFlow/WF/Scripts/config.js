@@ -12,8 +12,8 @@ function Handler_AjaxQueryData(param, callback, scope, method, showErrMsg) {
         type: method, //使用GET或POST方法访问后台
         dataType: "text", //返回json格式的数据
         contentType: "application/json; charset=utf-8",
-        url: Handler, //要访问的后台地址
-        data: param, //要发送的数据
+        url: Handler, //要访问的后台地址.
+        data: param, //要发送的数据.
         async: true,
         cache: false,
         complete: function () { }, //AJAX请求完成时隐藏loading提示
@@ -26,6 +26,7 @@ function Handler_AjaxQueryData(param, callback, scope, method, showErrMsg) {
         }
     });
 }
+
 
 //公共方法
 function Handler_AjaxPostData(param, callback, scope) {

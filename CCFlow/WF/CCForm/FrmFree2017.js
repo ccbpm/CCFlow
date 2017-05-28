@@ -14,6 +14,7 @@ function SaveSelfFrom() {
     var frm = document.getElementById('SelfForm');
     if (frm == null) {
         alert('系统错误.');
+        return;
     }
     //执行保存.
     return frm.contentWindow.Save();

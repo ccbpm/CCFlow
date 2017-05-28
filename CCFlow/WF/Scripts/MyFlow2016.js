@@ -106,18 +106,6 @@ function KindEditerSync() {
     }
 }
 
-function Shift() {
-    //  var url = '/WF/WorkOpt/Forward.htm';
-    //window.open(url);
-}
-
-function ReturnWork() {
-    //var url = '/WF/WorkOpt/ReturnWork.htm';
-    //window.open(url);
-}
-
-
-
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
 function ReqDDL(ddlID) {
@@ -528,7 +516,7 @@ function initModal(modalType, toNode) {
                 break;
             case "shift":
                 $('#modalHeader').text("工作移交");
-                modalIframeSrc = "../WF/WorkOpt/forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                modalIframeSrc = "../WF/WorkOpt/Forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "askfor":
                 $('#modalHeader').text("工作移交");

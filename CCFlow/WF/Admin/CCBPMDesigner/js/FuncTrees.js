@@ -71,13 +71,13 @@ functrees.push({
 functrees.push({
     Id: "formTree",
     Name: "表单",
-    AttrCols: ["TTYPE"],
-    RootASC: { Field: "TTYPE", Index: ["FORMTYPE", "FORMREF", "CLOUNDDATA"] },//"SRCROOT", 
+    AttrCols: ["TType"],
+    RootASC: { Field: "TType", Index: ["FormType", "FormType", "CloundData"] },  //"SRCROOT", 
     ServiceCount: 1,//2
     Nodes: [
-			{ Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "",
-			    ColDefine: "TTYPE", Defines: [
-											{ Value: "FORMTYPE", ColDefine: "PARENTNO",
+			{ Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "",
+			    ColDefine: "TType", Defines: [
+											{ Value: "FormType", ColDefine: "ParentNo",
 											    Defines: [
 															{ Value: null, IconCls: "icon-formtree", MenuId: "mFormRoot", Opened: true },
 															{ IconCls: "icon-tree_folder", MenuId: "mFormSort" }

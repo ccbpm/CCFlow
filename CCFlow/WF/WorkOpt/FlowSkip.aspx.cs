@@ -32,7 +32,6 @@ namespace CCFlow.AppDemoLigerUI
         protected void Page_Load(object sender, EventArgs e)
         {
             Nodes nds = new Nodes(this.FK_Flow);
-
             foreach (BP.WF.Node nd in nds)
             {
                 this.DDL_SkipToNode.Items.Add(new ListItem("步骤:" + nd.Step + "名称:" + nd.Name,
@@ -40,7 +39,6 @@ namespace CCFlow.AppDemoLigerUI
             }
 
             string type = Request["action"];
-
             if (!string.IsNullOrEmpty(type))
             {
                 if (type.Equals("getEmp"))

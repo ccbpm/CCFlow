@@ -4,23 +4,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>工作移交</title>
-     <script src="./Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
    
-    <link href="./Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.css"
+    <link href="../Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.css"
         rel="stylesheet" type="text/css" />
-    <script src="./Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.pack.js"
+    <script src="../Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.pack.js"
         type="text/javascript"></script>
-    <script src="./Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.js"
+    <script src="../Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.js"
         type="text/javascript"></script>
-    <script src="./Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.min.js"
+    <script src="../Scripts/Jquery-plug/jquery-autocomplete/jquery.autocomplete.min.js"
         type="text/javascript"></script>
     <script type="text/javascript">
 
         $(function () {
-      
             initComp();
         });
-
 
         function initComp() {
             $('#<%=TB_Emp.ClientID%>').autocomplete("FlowShift.aspx?action=getEmp&key=" + encodeURI($('#<%= TB_Emp.ClientID%>').val()), {

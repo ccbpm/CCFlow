@@ -15,7 +15,7 @@
         $(function () {
 
 
-            $("#Msg").html("正在加载,请稍后......");
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
             var flowNo = GetQueryString("FK_Flow");
             $("#TB_Caption").html("<a href='API.htm?FK_Flow=" + flowNo + "' > URL调用接口</a> |  <a href='APICode.aspx?FK_Flow=" + flowNo + "'>代码开发API</a> |  <a href='APICodeFEE.htm?FK_Flow=" + flowNo + "' >FEE开发API</a> ");
             $("#TB_FQ").html(basePath + "/App/Simple/Start.aspx");

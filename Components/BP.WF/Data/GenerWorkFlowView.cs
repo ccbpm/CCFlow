@@ -766,37 +766,28 @@ namespace BP.WF.Data
                 RefMethod rm = new RefMethod();
                 rm.Title = "轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Track.png";
+                rm.Icon = "../../WF/Img/Track.png";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "删除";
                 rm.ClassMethodName = this.ToString() + ".DoDelete";
                 rm.Warning = "您确定要删除吗？";
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/Delete.gif";
+                rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.IsForEns = false;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/CC.gif";
-                rm.Title = "移交(旧版本)";
-                rm.IsForEns = false;
-                rm.ClassMethodName = this.ToString() + ".DoShift";
-                rm.HisAttrs.AddTBString("ToEmp", null, "移交给", true, false, 0, 300, 100);
-                rm.HisAttrs.AddTBString("Note", null, "移交原因", true, false, 0, 300, 100);
                 map.AddRefMethod(rm);
 
 
                 rm = new RefMethod();
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/CC.gif";
-                rm.Title = "移交（新版本）";
+                rm.Icon = "../../WF/Img/Btn/CC.gif";
+                rm.Title = "移交";
                 rm.ClassMethodName = this.ToString() + ".DoFlowShift";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
 
                 rm = new RefMethod();
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/Back.png";
+                rm.Icon = "../../WF/Img/Btn/Back.png";
                 rm.Title = "回滚";
                 rm.ClassMethodName = this.ToString() + ".Rollback";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -804,12 +795,39 @@ namespace BP.WF.Data
 
 
                 rm = new RefMethod();
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/CC.gif";
+                rm.Icon = "../../WF/Img/Btn/CC.gif";
                 rm.Title = "跳转";
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoFlowSkip";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+
+
+                #region 旧版本.
+                rm = new RefMethod();
+                rm.GroupName = "旧版本";
+                rm.Icon = "../../WF/Img/Btn/CC.gif";
+                rm.Icon = "../../WF/Img/Btn/CC.gif";
+
+                rm.Title = "移交";
+                rm.IsForEns = false;
+                rm.ClassMethodName = this.ToString() + ".DoShift";
+                rm.HisAttrs.AddTBString("ToEmp", null, "移交给", true, false, 0, 300, 100);
+                rm.HisAttrs.AddTBString("Note", null, "移交原因", true, false, 0, 300, 100);
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "旧版本";
+                rm.Title = "回滚";
+                rm.IsForEns = false;
+                rm.ClassMethodName = this.ToString() + ".DoComeBack";
+                rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
+                rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 300, 100);
+                map.AddRefMethod(rm);
+                #endregion 旧版本.
+
+
 
 
                 this._enMap = map;
@@ -819,9 +837,22 @@ namespace BP.WF.Data
         #endregion
 
         #region 执行功能.
+
+        /// <summary>
+        /// 回滚
+        /// </summary>
+        /// <param name="nodeid">节点ID</param>
+        /// <param name="note">回滚原因</param>
+        /// <returns>回滚的结果</returns>
+        public string DoComeBack(int nodeid, string note)
+        {
+            BP.WF.Template.FlowSheet fl = new Template.FlowSheet(this.FK_Flow);
+            return fl.DoRebackFlowData(this.WorkID, nodeid, note);
+        }
+
         public string DoTrack()
         {
-            PubClass.WinOpen("../../WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
+            PubClass.WinOpen("../../WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
             return null;
         }
         /// <summary>
@@ -870,7 +901,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string DoFlowShift()
         {
-            return "../../WorkOpt/FlowShift.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            return "../../WorkOpt/Forward.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         /// <summary>
         /// 回滚流程

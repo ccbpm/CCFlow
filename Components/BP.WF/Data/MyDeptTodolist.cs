@@ -717,7 +717,7 @@ namespace BP.WF.Data
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/Back.png";
+                rm.Icon = "../../WF/Img/Btn/Back.png";
                 rm.Title = "回滚";
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoComeBack";

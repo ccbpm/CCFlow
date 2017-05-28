@@ -556,7 +556,7 @@ namespace BP.WF.Template
                 //rm = new RefMethod();
                 //rm.Title = "与业务表数据同步"; // "抄送规则";
                 //rm.ClassMethodName = this.ToString() + ".DoBTable";
-                //rm.Icon = Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/DTS.png";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DTS.png";
                 //rm.RefAttrLinkLabel = "业务表字段同步配置";
                 //rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 //rm.Target = "_blank";
@@ -564,7 +564,7 @@ namespace BP.WF.Template
 
                 //rm = new RefMethod();
                 //rm.Title = "独立表单树";
-                //rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                //rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 //rm.ClassMethodName = this.ToString() + ".DoFlowFormTree()";
                 //map.AddRefMethod(rm);
 
@@ -1537,7 +1537,7 @@ namespace BP.WF.Template
         {
             string flowID = int.Parse(this.No).ToString() + "01";
             return "../../Admin/AttrFlow/AutoStart.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
-            //return Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/MapExt.aspx?s=d34&FK_MapData=ND" + flowID + "&ExtType=StartFlow&RefNo=";
+            //return "../../WF/Admin/FoolFormDesigner/MapExt.aspx?s=d34&FK_MapData=ND" + flowID + "&ExtType=StartFlow&RefNo=";
         }
         public string DoCCNode()
         {

@@ -597,7 +597,7 @@ namespace BP.WF.Template
 
                 //rm = new RefMethod();
                 //rm.Title = "独立表单树";
-                //rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                //rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 //rm.ClassMethodName = this.ToString() + ".DoFlowFormTree()";
                 //map.AddRefMethod(rm);
 

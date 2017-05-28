@@ -4877,7 +4877,7 @@ namespace BP.WF
         public string DoExp()
         {
             this.DoCheck();
-            return Glo.CCFlowAppPath + "WF/Admin/Exp.aspx?CondType=0&FK_Flow=" + this.No;
+            return "../../WF/Admin/Exp.aspx?CondType=0&FK_Flow=" + this.No;
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Admin/Exp.aspx?CondType=0&FK_Flow=" + this.No, "单据", "cdsn", 800, 500, 210, 300);
             //return null;
         }

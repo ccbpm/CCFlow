@@ -739,7 +739,7 @@ namespace BP.WF.Data
                 RefMethod rm = new RefMethod();
                 rm.Title = "流程轨迹";  
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 map.AddRefMethod(rm);
               
                 this._enMap = map;

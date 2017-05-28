@@ -755,14 +755,14 @@ namespace BP.WF.Data
                 RefMethod rm = new RefMethod();
                 rm.Title = "流程轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "打开表单";
                 rm.ClassMethodName = this.ToString() + ".DoOpenLastForm";
-                rm.Icon = Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
@@ -776,7 +776,7 @@ namespace BP.WF.Data
         public string DoTrack()
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
-            return Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+            return "../../WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 打开最后一个节点表单
@@ -792,9 +792,9 @@ namespace BP.WF.Data
             if (dt != null && dt.Rows.Count > 0)
             {
                 string myPk = dt.Rows[0][0].ToString();
-                return Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+                return "../../WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
             }
-            return Glo.CCFlowAppPath + "WF/CCForm/Frm.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" + this.FK_Node + "&ReadOnly=1&IsEdit=0";
+            return "../../WF/CCForm/Frm.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" + this.FK_Node + "&ReadOnly=1&IsEdit=0";
         }
 		#endregion
 	}

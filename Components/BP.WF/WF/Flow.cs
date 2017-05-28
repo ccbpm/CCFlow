@@ -4828,7 +4828,7 @@ namespace BP.WF
                 RefMethod rm = new RefMethod();
                 rm.Title = "设计检查报告"; // "设计检查报告";
                 rm.ToolTip = "检查流程设计的问题。";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Btn/Confirm.gif";
+                rm.Icon = "../../WF/Img/Btn/Confirm.gif";
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
@@ -4841,7 +4841,7 @@ namespace BP.WF
 
                 rm = new RefMethod();
                 rm.Title = "报表运行"; // "报表运行";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Btn/View.gif";
+                rm.Icon = "../../WF/Img/Btn/View.gif";
                 rm.ClassMethodName = this.ToString() + ".DoOpenRpt()";
                 //rm.Icon = "/WF/Img/Btn/Table.gif";
                 map.AddRefMethod(rm);
@@ -6699,7 +6699,7 @@ namespace BP.WF
                 string treeNo = DBAccess.GenerOID("BP.GPM.Menu").ToString();
 
                 // 插入流程名称.
-                string url = SystemConfig.CCFlowWebPath + "WF/MyFlow.htm?FK_Flow=" + this.No + "&FK_Node=" + int.Parse(this.No) + "01";
+                string url = "../../MyFlow.htm?FK_Flow=" + this.No + "&FK_Node=" + int.Parse(this.No) + "01";
 
                 sql = "INSERT INTO GPM_Menu(No,Name,ParentNo,IsDir,MenuType,FK_App,IsEnable,Flag,Url)";
                 sql += " VALUES('{0}','{1}','{2}',{3},{4},'{5}',{6},'{7}','{8}')";

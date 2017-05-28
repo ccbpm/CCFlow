@@ -179,7 +179,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "启动傻瓜表单设计器";
                 rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/xlsx.gif";
+                rm.Icon = "../../WF/Img/FileType/xlsx.gif";
                 rm.Visable = true;
                 rm.Target = "_blank";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
@@ -188,7 +188,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "装载填充"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoPageLoadFull";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
+                rm.Icon = "../../WF/Img/FullData.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -197,7 +197,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "表单事件"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoEvent";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Event.png";
+                rm.Icon = "../../WF/Img/Event.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -205,7 +205,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "批量设置验证规则";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/RegularExpression.png";
+                rm.Icon = "../../WF/Img/RegularExpression.png";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -213,7 +213,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "批量修改字段"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/Img/field.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/field.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -222,7 +222,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "手机端表单";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/telephone.png";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
                 rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -230,7 +230,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "JS编程"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoInitScript";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Script.png";
+                rm.Icon = "../../WF/Img/Script.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -239,7 +239,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "表单body属性"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoBodyAttr";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Script.png";
+                rm.Icon = "../../WF/Img/Script.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.Target = "_blank";
@@ -248,7 +248,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "导出XML表单模版"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoExp";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Export.png";
+                rm.Icon = "../../WF/Img/Export.png";
                 rm.Visable = true;
                 rm.RefAttrLinkLabel = "导出到xml";
                 rm.Target = "_blank";
@@ -262,7 +262,7 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/ReName.png";
+                rm.Icon = "../../WF/Img/ReName.png";
                 map.AddRefMethod(rm);
               
                 rm = new RefMethod();
@@ -270,7 +270,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
                 rm.Visable = true;
                 rm.RefAttrLinkLabel = "表单检查";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Check.png";
+                rm.Icon = "../../WF/Img/Check.png";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
              
@@ -280,7 +280,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "调用查询API"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoSearch";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Table.gif";
+                rm.Icon = "../../WF/Img/Table.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -290,7 +290,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "调用分析API"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoGroup";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Table.gif";
+                rm.Icon = "../../WF/Img/Table.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -312,7 +312,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDesignerFool()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
+            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
         }
 
         /// <summary>
@@ -322,9 +322,9 @@ namespace BP.WF.Template
         public string DoNodeFrmCompent()
         {
             if (this.No.Contains("ND") == true)
-                return SystemConfig.CCFlowWebPath + "WF/Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
+                return "../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
             else
-                return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Do.aspx&DoType=FWCShowError";
+                return "../../Admin/FoolFormDesigner/Do.aspx&DoType=FWCShowError";
         }
         /// <summary>
         /// 执行旧版本的兼容性检查.
@@ -498,7 +498,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoRegularExpressionBatch()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.aspx?FK_Flow=&FK_MapData=" +
+            return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.aspx?FK_Flow=&FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -507,7 +507,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchEditAttr()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/BatchEdit.aspx?FK_MapData=" +
+            return "../../Admin/FoolFormDesigner/BatchEdit.aspx?FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -516,7 +516,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSortingMapAttrs()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=&FK_MapData=" +
+            return "../../Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=&FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -525,7 +525,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFrom()
         {
-            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             PubClass.WinOpen(url, 800, 650);
             return null;
         }
@@ -535,7 +535,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDFromCol4()
         {
-            string url = SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             PubClass.WinOpen(url, 800, 650);
             return null;
         }
@@ -545,7 +545,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSearch()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.aspx?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
+            return "../../Comm/Search.aspx?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
         }
         /// <summary>
         /// 调用分析API
@@ -553,7 +553,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoGroup()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Group.aspx?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
+            return "../../Comm/Group.aspx?s=34&FK_MapData=" + this.No + "&EnsName=" + this.No;
         }
         /// <summary>
         /// 数据源管理
@@ -561,23 +561,23 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDBSrc()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.aspx?s=34&FK_MapData=" + this.No + "&EnsName=BP.Sys.SFDBSrcs";
+            return "../../Comm/Search.aspx?s=34&FK_MapData=" + this.No + "&EnsName=BP.Sys.SFDBSrcs";
         }
         public string DoWordFrm()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
+            return "../../Admin/FoolFormDesigner/MapExt/WordFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=WordFrm&RefNo=";
         }
         public string DoExcelFrm()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/ExcelFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=ExcelFrm&RefNo=";
+            return "../../Admin/FoolFormDesigner/MapExt/ExcelFrm.aspx?s=34&FK_MapData=" + this.No + "&ExtType=ExcelFrm&RefNo=";
         }
         public string DoPageLoadFull()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return "../../Admin/FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         public string DoInitScript()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/InitScript.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
+            return "../../Admin/FoolFormDesigner/MapExt/InitScript.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         /// <summary>
         /// 傻瓜表单属性.
@@ -585,7 +585,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBodyAttr()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/BodyAttr.aspx?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
+            return "../../Admin/FoolFormDesigner/MapExt/BodyAttr.aspx?s=34&FK_MapData=" + this.No + "&ExtType=BodyAttr&RefNo=";
         }
         /// <summary>
         /// 表单事件
@@ -593,7 +593,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoEvent()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/Action.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
+            return "../../Admin/AttrNode/Action.htm?FK_MapData=" + this.No + "&T=sd&FK_Node=0";
         }
         /// <summary>
         /// 导出
@@ -601,7 +601,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoMapExt()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapExt/List.aspx?FK_MapData=" + this.No + "&T=sd";
+            return "../../Admin/FoolFormDesigner/MapExt/List.aspx?FK_MapData=" + this.No + "&T=sd";
         }
         /// <summary>
         /// 导出表单
@@ -609,7 +609,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoExp()
         {
-            string urlExt = SystemConfig.CCFlowWebPath + "WF/Admin/XAP/DoPort.htm?DoType=DownFormTemplete&FK_MapData=" + this.No;
+            string urlExt = "../../Admin/XAP/DoPort.htm?DoType=DownFormTemplete&FK_MapData=" + this.No;
             PubClass.WinOpen(urlExt, 900, 1000);
             return null;
         }

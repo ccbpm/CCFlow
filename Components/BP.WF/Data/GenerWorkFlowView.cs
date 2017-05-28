@@ -168,9 +168,9 @@ namespace BP.WF.Data
 	/// <summary>
     /// 流程实例
 	/// </summary>
-	public class GenerWorkFlowView : Entity
-	{	
-		#region 基本属性
+    public class GenerWorkFlowView : Entity
+    {
+        #region 基本属性
         /// <summary>
         /// 主键
         /// </summary>
@@ -195,20 +195,20 @@ namespace BP.WF.Data
                 SetValByKey(GenerWorkFlowViewAttr.FlowNote, value);
             }
         }
-		/// <summary>
-		/// 工作流程编号
-		/// </summary>
-		public string  FK_Flow
-		{
-			get
-			{
-				return this.GetValStrByKey(GenerWorkFlowViewAttr.FK_Flow);
-			}
-			set
-			{
-				SetValByKey(GenerWorkFlowViewAttr.FK_Flow,value);
-			}
-		}
+        /// <summary>
+        /// 工作流程编号
+        /// </summary>
+        public string FK_Flow
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowViewAttr.FK_Flow);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowViewAttr.FK_Flow, value);
+            }
+        }
         /// <summary>
         /// BillNo
         /// </summary>
@@ -324,31 +324,31 @@ namespace BP.WF.Data
         /// <summary>
         /// 部门编号
         /// </summary>
-		public string  FK_Dept
-		{
-			get
-			{
-				return this.GetValStrByKey(GenerWorkFlowViewAttr.FK_Dept);
-			}
-			set
-			{
-				SetValByKey(GenerWorkFlowViewAttr.FK_Dept,value);
-			}
-		}
-		/// <summary>
-		/// 标题
-		/// </summary>
-		public string  Title
-		{
-			get
-			{
-				return this.GetValStrByKey(GenerWorkFlowViewAttr.Title);
-			}
-			set
-			{
-				SetValByKey(GenerWorkFlowViewAttr.Title,value);
-			}
-		}
+        public string FK_Dept
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowViewAttr.FK_Dept);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowViewAttr.FK_Dept, value);
+            }
+        }
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowViewAttr.Title);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowViewAttr.Title, value);
+            }
+        }
         /// <summary>
         /// 客户编号
         /// </summary>
@@ -377,20 +377,20 @@ namespace BP.WF.Data
                 SetValByKey(GenerWorkFlowViewAttr.GuestName, value);
             }
         }
-		/// <summary>
-		/// 产生时间
-		/// </summary>
-		public string  RDT
-		{
-			get
-			{
-				return this.GetValStrByKey(GenerWorkFlowViewAttr.RDT);
-			}
-			set
-			{
-				SetValByKey(GenerWorkFlowViewAttr.RDT,value);
-			}
-		}
+        /// <summary>
+        /// 产生时间
+        /// </summary>
+        public string RDT
+        {
+            get
+            {
+                return this.GetValStrByKey(GenerWorkFlowViewAttr.RDT);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowViewAttr.RDT, value);
+            }
+        }
         /// <summary>
         /// 节点应完成时间
         /// </summary>
@@ -419,20 +419,20 @@ namespace BP.WF.Data
                 SetValByKey(GenerWorkFlowViewAttr.SDTOfFlow, value);
             }
         }
-		/// <summary>
-		/// 流程ID
-		/// </summary>
+        /// <summary>
+        /// 流程ID
+        /// </summary>
         public Int64 WorkID
-		{
-			get
-			{
+        {
+            get
+            {
                 return this.GetValInt64ByKey(GenerWorkFlowViewAttr.WorkID);
-			}
-			set
-			{
-				SetValByKey(GenerWorkFlowViewAttr.WorkID,value);
-			}
-		}
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowViewAttr.WorkID, value);
+            }
+        }
         /// <summary>
         /// 主线程ID
         /// </summary>
@@ -559,9 +559,9 @@ namespace BP.WF.Data
                 this.SetValByKey(GenerWorkFlowViewAttr.NodeName, value);
             }
         }
-		/// <summary>
-		/// 当前工作到的节点
-		/// </summary>
+        /// <summary>
+        /// 当前工作到的节点
+        /// </summary>
         public int FK_Node
         {
             get
@@ -574,8 +574,8 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-		/// 工作流程状态
-		/// </summary>
+        /// 工作流程状态
+        /// </summary>
         public WFState WFState
         {
             get
@@ -613,7 +613,7 @@ namespace BP.WF.Data
             get
             {
                 BP.WF.WFState ws = (WFState)this.WFState;
-                switch(ws)
+                switch (ws)
                 {
                     case WF.WFState.Complete:
                         return "已完成";
@@ -646,7 +646,7 @@ namespace BP.WF.Data
                 SetValByKey(GenerWorkFlowViewAttr.GUID, value);
             }
         }
-		#endregion
+        #endregion
 
         #region 参数属性.
         public string Paras_ToNodes
@@ -694,11 +694,11 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-		/// 产生的工作流程
-		/// </summary>
-		public GenerWorkFlowView()
-		{
-		}
+        /// 产生的工作流程
+        /// </summary>
+        public GenerWorkFlowView()
+        {
+        }
         /// <summary>
         /// 产生的工作流程
         /// </summary>
@@ -714,11 +714,11 @@ namespace BP.WF.Data
         /// 执行修复
         /// </summary>
         public void DoRepair()
-        { 
+        {
         }
-		/// <summary>
-		/// 重写基类方法
-		/// </summary>
+        /// <summary>
+        /// 重写基类方法
+        /// </summary>
         public override Map EnMap
         {
             get
@@ -728,12 +728,12 @@ namespace BP.WF.Data
 
                 Map map = new Map("WF_GenerWorkFlow", "流程查询");
 
-               // map.AddTBIntPK("WorkID", 0, "WorkID", true, true);
+                // map.AddTBIntPK("WorkID", 0, "WorkID", true, true);
                 map.AddTBIntPK(GenerWorkFlowViewAttr.WorkID, 0, "WorkID", true, true);
 
 
                 map.AddTBString(GenerWorkFlowViewAttr.StarterName, null, "发起人", true, false, 0, 30, 10);
-                map.AddTBString(GenerWorkFlowViewAttr.Title, null, "标题", true, false, 0, 100, 10,true);
+                map.AddTBString(GenerWorkFlowViewAttr.Title, null, "标题", true, false, 0, 100, 10, true);
                 map.AddDDLSysEnum(GenerWorkFlowViewAttr.WFSta, 0, "流程状态", true, false, GenerWorkFlowViewAttr.WFSta,
                     "@0=运行中@1=已完成@2=其他");
 
@@ -741,7 +741,7 @@ namespace BP.WF.Data
                 map.AddTBString(GenerWorkFlowViewAttr.NodeName, null, "当前节点名称", true, false, 0, 100, 10);
                 map.AddTBDateTime(GenerWorkFlowViewAttr.RDT, "记录日期", true, true);
                 map.AddTBString(GenerWorkFlowViewAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
-                map.AddTBStringDoc(GenerWorkFlowViewAttr.FlowNote, null, "备注", true, false,true);
+                map.AddTBStringDoc(GenerWorkFlowViewAttr.FlowNote, null, "备注", true, false, true);
 
                 map.AddDDLEntities(GenerWorkFlowViewAttr.FK_FlowSort, null, "类别", new FlowSorts(), false);
                 map.AddDDLEntities(GenerWorkFlowViewAttr.FK_Flow, null, "流程", new Flows(), false);
@@ -758,7 +758,7 @@ namespace BP.WF.Data
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_Flow);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.WFSta);
                 map.AddSearchAttr(GenerWorkFlowViewAttr.FK_NY);
-                
+
                 //把不等于 0 的去掉.
                 map.AddHidden(GenerWorkFlowViewAttr.WFState, "!=", "0");
 
@@ -779,12 +779,21 @@ namespace BP.WF.Data
 
                 rm = new RefMethod();
                 rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/CC.gif";
-                rm.Title = "移交";
+                rm.Title = "移交(旧版本)";
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoShift";
                 rm.HisAttrs.AddTBString("ToEmp", null, "移交给", true, false, 0, 300, 100);
                 rm.HisAttrs.AddTBString("Note", null, "移交原因", true, false, 0, 300, 100);
                 map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/CC.gif";
+                rm.Title = "移交（新版本）";
+                rm.ClassMethodName = this.ToString() + ".DoFlowShift";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/Back.png";
@@ -793,16 +802,26 @@ namespace BP.WF.Data
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Icon = Glo.CCFlowAppPath + "WF/Img/Btn/CC.gif";
+                rm.Title = "跳转";
+                rm.IsForEns = false;
+                rm.ClassMethodName = this.ToString() + ".DoFlowSkip";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
-		#endregion 
+        #endregion
 
         #region 执行功能.
         public string DoTrack()
         {
-            PubClass.WinOpen(SystemConfig.CCFlowWebPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
+            PubClass.WinOpen("../../WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
             return null;
         }
         /// <summary>
@@ -845,23 +864,32 @@ namespace BP.WF.Data
                 return "删除失败@" + ex.Message;
             }
         }
-        public string DoSkip()
+        /// <summary>
+        /// 移交
+        /// </summary>
+        /// <returns></returns>
+        public string DoFlowShift()
         {
-            PubClass.WinOpen(SystemConfig.CCFlowWebPath + "WF/Admin/FlowDB/FlowSkip.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node, 900, 800);
-            return null;
+            return "../../WorkOpt/FlowShift.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
-
         /// <summary>
         /// 回滚流程
         /// </summary>
         /// <returns></returns>
         public string Rollback()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/Rollback.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+            return "../../WorkOpt/Rollback.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
+        }
+        /// <summary>
+        /// 执行跳转
+        /// </summary>
+        /// <returns></returns>
+        public string DoFlowSkip()
+        {
+            return "../../WorkOpt/FlowSkip.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         #endregion
-		 
-	}
+    }
 	/// <summary>
     /// 流程实例s
 	/// </summary>

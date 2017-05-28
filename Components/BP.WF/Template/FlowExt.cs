@@ -504,42 +504,42 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "调试运行"; // "设计检查报告";
                 //rm.ToolTip = "检查流程设计的问题。";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/EntityFunc/Flow/Run.png";
+                rm.Icon = "../../WF/Img/EntityFunc/Flow/Run.png";
                 rm.ClassMethodName = this.ToString() + ".DoRunIt";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "检查报告"; // "设计检查报告";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/EntityFunc/Flow/CheckRpt.png";
+                rm.Icon = "../../WF/Img/EntityFunc/Flow/CheckRpt.png";
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "设计报表"; // "报表运行";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/Rpt.gif";
+                rm.Icon = "../../WF/Img/Btn/Rpt.gif";
                 rm.ClassMethodName = this.ToString() + ".DoOpenRpt()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "自动发起";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/AutoStart.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/AutoStart.png";
                 rm.ClassMethodName = this.ToString() + ".DoSetStartFlowDataSources()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "发起限制规则";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Limit.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Limit.png";
                 rm.ClassMethodName = this.ToString() + ".DoLimit()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "发起前置导航";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/StartGuide.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/StartGuide.png";
                 rm.ClassMethodName = this.ToString() + ".DoStartGuide()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -549,7 +549,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "流程事件&消息"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Event.png";
+                rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -578,7 +578,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "流程轨迹表单";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.ClassMethodName = this.ToString() + ".DoBindFlowExt()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
@@ -586,7 +586,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "批量设置节点";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
                 rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
@@ -594,7 +594,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "轨迹查看权限";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Setting.png";
+                rm.Icon = "../../WF/Img/Setting.png";
                 rm.ClassMethodName = this.ToString() + ".DoTruckRight()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
@@ -603,7 +603,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "数据源管理(如果新增数据源后需要关闭重新打开)";
                 rm.ClassMethodName = this.ToString() + ".DoDBSrc";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 //设置相关字段.
                 rm.RefAttrKey = FlowAttr.DTSDBSrc;
                 rm.RefAttrLinkLabel = "数据源管理";
@@ -616,7 +616,7 @@ namespace BP.WF.Template
                 #region 流程模版管理.
                 rm = new RefMethod();
                 rm.Title = "模版导入";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/redo.png";
+                rm.Icon = "../../WF/Img/redo.png";
                 rm.ClassMethodName = this.ToString() + ".DoImp()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程模版";
@@ -624,7 +624,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "模版导出";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/undo.png";
+                rm.Icon = "../../WF/Img/undo.png";
                 rm.ClassMethodName = this.ToString() + ".DoExps()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程模版";
@@ -636,7 +636,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "与业务表数据同步";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/DTS.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DTS.png";
 
                 rm.ClassMethodName = this.ToString() + ".DoDTSBTable()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -645,7 +645,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "URL调用接口";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/URL.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/URL.png";
                 rm.ClassMethodName = this.ToString() + ".DoAPI()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
@@ -653,7 +653,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "SDK开发接口";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/API.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/API.png";
                 rm.ClassMethodName = this.ToString() + ".DoAPICode()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
@@ -661,7 +661,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "代码事件开发接口";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/API.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/API.png";
                 rm.ClassMethodName = this.ToString() + ".DoAPICodeFEE()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "开发接口";
@@ -671,7 +671,7 @@ namespace BP.WF.Template
                 #region 报表设计.
                 rm = new RefMethod();
                 rm.Title = "报表设计";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/DesignRpt.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DesignRpt.png";
                 rm.ClassMethodName = this.ToString() + ".DoDRpt()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
@@ -679,7 +679,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "流程查询";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Search.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoDRptSearch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
@@ -687,7 +687,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "自定义查询";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/SQL.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/SQL.png";
                 rm.ClassMethodName = this.ToString() + ".DoDRptSearchAdv()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
@@ -695,7 +695,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "分组分析";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Group.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoDRptGroup()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
@@ -703,7 +703,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "交叉报表";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/D3.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/D3.png";
                 rm.ClassMethodName = this.ToString() + ".DoDRptD3()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
@@ -711,7 +711,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "对比分析";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Contrast.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Contrast.png";
                 rm.ClassMethodName = this.ToString() + ".DoDRptContrast()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
@@ -720,7 +720,7 @@ namespace BP.WF.Template
 
                 #region 流程运行维护.
                 rm = new RefMethod();
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.Title = "重生成报表数据"; // "删除数据";
                 rm.Warning = "您确定要执行吗? 注意:此方法耗费资源。";// "您确定要执行删除流程数据吗？";
                 rm.ClassMethodName = this.ToString() + ".DoReloadRptData";
@@ -729,7 +729,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "重生成流程标题";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.ClassMethodName = this.ToString() + ".DoGenerTitle()";
                 //设置相关字段.
                 //rm.RefAttrKey = FlowAttr.TitleRole;
@@ -742,7 +742,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "重生成FlowEmps字段";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.ClassMethodName = this.ToString() + ".DoGenerFlowEmps()";
                 rm.RefAttrLinkLabel = "补充修复emps字段，包括wf_generworkflow,NDxxxRpt字段.";
                 rm.RefMethodType = RefMethodType.Func;
@@ -766,7 +766,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "节点表单字段视图";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Field.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Field.png";
                 rm.ClassMethodName = this.ToString() + ".DoFlowFields()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程维护";
@@ -774,7 +774,7 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/Delete.gif";
+                rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Title = "删除该流程全部数据"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
                 rm.Warning = "您确定要执行删除流程数据吗? \t\n该流程的数据删除后，就不能恢复，请注意删除的内容。";// "您确定要执行删除流程数据吗？";
                 rm.ClassMethodName = this.ToString() + ".DoDelData";
@@ -782,7 +782,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/Delete.gif";
+                rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Title = "按工作ID删除"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
                 rm.GroupName = "流程维护";
                 rm.ClassMethodName = this.ToString() + ".DoDelDataOne";
@@ -795,7 +795,7 @@ namespace BP.WF.Template
                 rm.GroupName = "流程维护";
                 rm.Title = "删除指定日期范围内的流程";
                 rm.Warning = "您确定要删除吗？";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/Delete.gif";
+                rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.HisAttrs.AddTBDateTime("DTFrom", null, "时间从", true, false);
                 rm.HisAttrs.AddTBDateTime("DTTo", null, "时间到", true, false);
                 rm.HisAttrs.AddBoolen("thisFlowOnly", true, "仅仅当前流程");
@@ -805,7 +805,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "回滚流程";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/Back.png";
+                rm.Icon = "../../WF/Img/Btn/Back.png";
                 rm.ClassMethodName = this.ToString() + ".DoRebackFlowData()";
                 // rm.Warning = "您确定要回滚它吗？";
                 rm.HisAttrs.AddTBInt("workid", 0, "请输入要会滚WorkID", true, false);
@@ -819,7 +819,7 @@ namespace BP.WF.Template
 
                 //rm = new RefMethod();
                 //rm.Title = "监控面板";
-                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Monitor.png";
+                //rm.Icon = ../../Admin/CCBPMDesigner/Img/Monitor.png";
                 //rm.ClassMethodName = this.ToString() + ".DoDataManger_Welcome()";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //rm.GroupName = "流程监控";
@@ -827,7 +827,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "流程查询";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Search.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
@@ -835,7 +835,7 @@ namespace BP.WF.Template
 
                 //rm = new RefMethod();
                 //rm.Title = "节点列表";
-                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/flows.png";
+                //rm.Icon = ../../Admin/CCBPMDesigner/Img/flows.png";
                 //rm.ClassMethodName = this.ToString() + ".DoDataManger_Nodes()";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //rm.GroupName = "流程监控";
@@ -843,7 +843,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "综合查询";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Search.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_Search()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
@@ -851,7 +851,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "综合分析";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Group.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_Group()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
@@ -859,7 +859,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "实例增长分析";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Grow.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Grow.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_InstanceGrowOneFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
@@ -867,7 +867,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "逾期未完成实例";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Warning.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Warning.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_InstanceWarning()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
@@ -875,7 +875,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "逾期已完成实例";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/overtime.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/overtime.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_InstanceOverTimeOneFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
@@ -883,7 +883,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "删除日志";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/log.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/log.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_DeleteLog()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
@@ -891,7 +891,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "数据订阅-实验中";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/RptOrder.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/RptOrder.png";
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_RptOrder()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
@@ -902,7 +902,7 @@ namespace BP.WF.Template
                 //rm = new RefMethod();
                 //rm.Title = "执行流程数据表与业务表数据手工同步"; 
                 //rm.ClassMethodName = this.ToString() + ".DoBTableDTS";
-                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                //rm.Icon = ../../Img/Btn/DTS.gif";
                 //rm.Warning = "您确定要执行吗？如果执行了可能会对业务表数据造成错误。";
                 ////设置相关字段.
                 //rm.RefAttrKey = FlowAttr.DTSSpecNodes;
@@ -943,38 +943,38 @@ namespace BP.WF.Template
         #region 流程监控.
         //public string DoDataManger_Welcome()
         //{
-        //    return SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/App/OneFlow/Welcome.aspx?FK_Flow=" + this.No;
+        //    return "../../Admin/CCBPMDesigner/App/OneFlow/Welcome.aspx?FK_Flow=" + this.No;
         //}
         //public string DoDataManger_Nodes()
         //{
-        //    return SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/App/OneFlow/Nodes.aspx?FK_Flow=" + this.No;
+        //    return "../../Admin/CCBPMDesigner/App/OneFlow/Nodes.aspx?FK_Flow=" + this.No;
         //}
         public string DoDataManger_Search()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
+            return "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
         }
         public string DoDataManger_Group()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
+            return "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
         }
 
         public string DoDataManger_InstanceGrowOneFlow()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FlowDB/InstanceGrowOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
+            return "../../Admin/FlowDB/InstanceGrowOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
         }
 
         public string DoDataManger_InstanceWarning()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FlowDB/InstanceWarning.aspx?anaTime=mouth&FK_Flow=" + this.No;
+            return "../../Admin/FlowDB/InstanceWarning.aspx?anaTime=mouth&FK_Flow=" + this.No;
         }
 
         public string DoDataManger_InstanceOverTimeOneFlow()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FlowDB/InstanceOverTimeOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
+            return "../../Admin/FlowDB/InstanceOverTimeOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
         }
         public string DoDataManger_DeleteLog()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=" + this.No + "&WFSta=all";
+            return "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=" + this.No + "&WFSta=all";
         }
 
         /// <summary>
@@ -983,7 +983,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDataManger_RptOrder()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/CCBPMDesigner/App/RptOrder.aspx?anaTime=mouth&FK_Flow=" + this.No;
+            return "../../Admin/CCBPMDesigner/App/RptOrder.aspx?anaTime=mouth&FK_Flow=" + this.No;
         }
         #endregion 流程监控.
 
@@ -992,29 +992,29 @@ namespace BP.WF.Template
         {
 
             ///WF/Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt;
-            return SystemConfig.CCFlowWebPath + "WF/Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK=ND" + int.Parse(this.No) + "MyRpt";
+            return "../../Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK=ND" + int.Parse(this.No) + "MyRpt";
             //  UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt
-            //return SystemConfig.CCFlowWebPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&FK_MapData=ND" + int.Parse(this.No) + "MyRpt";
+            //return "../../Rpt/OneFlow.htm?FK_Flow=" + this.No + "&FK_MapData=ND" + int.Parse(this.No) + "MyRpt";
         }
         public string DoDRptSearch()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Rpt/Search.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            return "../../Rpt/Search.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
         }
         public string DoDRptSearchAdv()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Rpt/SearchAdv.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            return "../../Rpt/SearchAdv.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
         }
         public string DoDRptGroup()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Rpt/Group.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            return "../../Rpt/Group.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
         }
         public string DoDRptD3()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Rpt/D3.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            return "../../Rpt/D3.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
         }
         public string DoDRptContrast()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Rpt/Contrast.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            return "../../Rpt/Contrast.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
         }
         #endregion 报表设计.
 
@@ -1104,7 +1104,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFlowFields()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/FlowFields.htm?FK_Flow=" + this.No;
+            return "../../Admin/AttrFlow/FlowFields.htm?FK_Flow=" + this.No;
         }
         /// <summary>
         /// 与业务表数据同步
@@ -1112,19 +1112,19 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDTSBTable()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/DTSBTable.aspx?FK_Flow=" + this.No;
+            return "../../Admin/AttrFlow/DTSBTable.aspx?FK_Flow=" + this.No;
         }
         public string DoAPI()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/API.htm?FK_Flow=" + this.No;
+            return "../../Admin/AttrFlow/API.htm?FK_Flow=" + this.No;
         }
         public string DoAPICode()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/APICode.htm?FK_Flow=" + this.No;
+            return "../../Admin/AttrFlow/APICode.htm?FK_Flow=" + this.No;
         }
         public string DoAPICodeFEE()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/APICodeFEE.htm?FK_Flow=" + this.No;
+            return "../../Admin/AttrFlow/APICodeFEE.htm?FK_Flow=" + this.No;
         }
         #endregion 开发接口
 
@@ -1135,15 +1135,15 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAction()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/Action.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/Action.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
         public string DoDBSrc()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Comm/Sys/SFDBSrcNewGuide.htm";
+            return "../../Comm/Sys/SFDBSrcNewGuide.htm";
         }
         public string DoBTable()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/DTSBTable.aspx?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
+            return "../../Admin/AttrFlow/DTSBTable.aspx?s=d34&ShowType=FlowFrms&FK_Node=" + int.Parse(this.No) + "01&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime;
         }
        
         /// <summary>
@@ -1152,11 +1152,11 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoNodeAttrs()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/NodeAttrs.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrFlow/NodeAttrs.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
         public string DoBindFlowExt()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow";
+            return "../../Admin/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow";
         }
         /// <summary>
         /// 轨迹查看权限
@@ -1164,7 +1164,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTruckRight()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/TruckViewPower.htm?FK_Flow=" + this.No;
+            return "../../Admin/AttrFlow/TruckViewPower.htm?FK_Flow=" + this.No;
         }
         /// <summary>
         /// 批量发起字段
@@ -1172,7 +1172,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStartFields()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow";
+            return "../../Admin/AttrFlow/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow";
         }
         /// <summary>
         /// 执行流程数据表与业务表数据手工同步
@@ -1489,7 +1489,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDataManger()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/Search.aspx?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
+            return "../../Comm/Search.aspx?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
         }
         /// <summary>
         /// 绑定独立表单
@@ -1497,7 +1497,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFlowFormTree()
         {
-            PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "WF/Admin/FlowFormTree.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
+            PubClass.WinOpen("../../Admin/FlowFormTree.aspx?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
             return null;
         }
         /// <summary>
@@ -1536,12 +1536,12 @@ namespace BP.WF.Template
         public string DoSetStartFlowDataSources()
         {
             string flowID = int.Parse(this.No).ToString() + "01";
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrFlow/AutoStart.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
+            return "../../Admin/AttrFlow/AutoStart.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
             //return Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/MapExt.aspx?s=d34&FK_MapData=ND" + flowID + "&ExtType=StartFlow&RefNo=";
         }
         public string DoCCNode()
         {
-            PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCNode.aspx?FK_Flow=" + this.No, 400, 500);
+            PubClass.WinOpen("../../Admin/CCNode.aspx?FK_Flow=" + this.No, 400, 500);
             return null;
         }
         /// <summary>
@@ -1550,7 +1550,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoRunIt()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/TestFlow.htm?FK_Flow=" + this.No + "&Lang=CH";
+            return "../../Admin/TestFlow.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 执行检查
@@ -1558,7 +1558,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCheck()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/CheckFlow.htm?FK_Flow=" + this.No + "&Lang=CH";
+            return "../../Admin/AttrFlow/CheckFlow.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 启动限制规则
@@ -1566,7 +1566,7 @@ namespace BP.WF.Template
         /// <returns>返回URL</returns>
         public string DoLimit()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/Limit.htm?FK_Flow=" + this.No + "&Lang=CH";
+            return "../../Admin/AttrFlow/Limit.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 设置发起前置导航
@@ -1574,7 +1574,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoStartGuide()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/StartGuide.htm?FK_Flow=" + this.No + "&Lang=CH";
+            return "../../Admin/AttrFlow/StartGuide.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 执行数据同步
@@ -1582,7 +1582,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDTS()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/DTSBTable.aspx?FK_Flow=" + this.No + "&Lang=CH";
+            return "../../Admin/AttrFlow/DTSBTable.aspx?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 导入
@@ -1590,7 +1590,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoImp()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/Imp.aspx?FK_Flow=" + this.No + "&Lang=CH";
+            return "../../Admin/AttrFlow/Imp.aspx?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 导出
@@ -1598,7 +1598,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoExps()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/Exp.htm?FK_Flow=" + this.No + "&Lang=CH";
+            return "../../Admin/AttrFlow/Exp.htm?FK_Flow=" + this.No + "&Lang=CH";
         }
         /// <summary>
         /// 执行重新装载数据
@@ -1628,7 +1628,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoOpenRpt()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Rpt/OneFlow.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +
+            return "../../Rpt/OneFlow.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +
                    int.Parse(this.No) + "Rpt";
         }
         /// <summary>

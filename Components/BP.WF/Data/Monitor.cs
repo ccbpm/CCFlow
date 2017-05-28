@@ -703,11 +703,11 @@ namespace BP.WF.Data
                 RefMethod rm = new RefMethod();
                 rm.Title = "流程轨迹";  
                 rm.ClassMethodName = this.ToString() + ".DoTrack";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/doc.gif";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Btn/CC.gif";
+                rm.Icon = "../../WF/Img/Btn/CC.gif";
                 rm.Title = "移交";
                 rm.ClassMethodName = this.ToString() + ".DoShift";
                 rm.HisAttrs.AddDDLEntities("ToEmp", null, "移交给:", new BP.WF.Data.MyDeptEmps(),true);
@@ -715,7 +715,7 @@ namespace BP.WF.Data
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/Btn/Delete.gif";
+                rm.Icon = "../../WF/Img/Btn/Delete.gif";
                 rm.Title = "删除";
                 rm.Warning = "您确定要删除该流程吗？";
                 rm.ClassMethodName = this.ToString() + ".DoDelete";
@@ -740,7 +740,7 @@ namespace BP.WF.Data
 		#region 执行功能.
         public string DoTrack()
         {
-            PubClass.WinOpen(SystemConfig.CCFlowWebPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
+            PubClass.WinOpen("../../WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
             return null;
         }
         /// <summary>
@@ -785,7 +785,7 @@ namespace BP.WF.Data
         }
         public string DoSkip()
         {
-            PubClass.WinOpen(SystemConfig.CCFlowWebPath + "WF/Admin/FlowDB/FlowSkip.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node, 900, 800);
+            PubClass.WinOpen("../../Admin/FlowDB/FlowSkip.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node, 900, 800);
             return null;
         }
         /// <summary>

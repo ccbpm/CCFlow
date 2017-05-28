@@ -136,7 +136,7 @@ namespace BP.WF.Template
                         RefMethod rmDept = new RefMethod();
                         rmDept.Title = "节点绑定部门";
                         rmDept.ClassMethodName = this.ToString() + ".DoDepts";
-                        rmDept.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                        rmDept.Icon = "../../Img/Btn/DTS.gif";
                         map.AddRefMethod(rmDept);
                     }
                     else
@@ -158,7 +158,7 @@ namespace BP.WF.Template
                         RefMethod rmDept = new RefMethod();
                         rmDept.Title = "节点绑定部门";
                         rmDept.ClassMethodName = this.ToString() + ".DoDepts";
-                        rmDept.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                        rmDept.Icon = "../../Img/Btn/DTS.gif";
                         map.AddRefMethod(rmDept);
                     }
                     else

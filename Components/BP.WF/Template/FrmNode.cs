@@ -155,9 +155,9 @@ namespace BP.WF.Template
                 switch (this.HisFrmType)
                 {
                     case FrmType.FoolForm:
-                        return BP.WF.Glo.CCFlowAppPath + "WF/CCForm/FrmFix";
+                        return "../../CCForm/FrmFix";
                     case FrmType.FreeFrm:
-                        return BP.WF.Glo.CCFlowAppPath + "WF/CCForm/Frm";
+                        return "../../CCForm/Frm";
                     default:
                         throw new Exception("err,未处理。");
                 }

@@ -1066,7 +1066,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAdvSetting()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/MapDtl.htm?DoType=Edit&FK_MapDtl=" + this.No + "&t=" + DataType.CurrentDataTime;
+            return "../../Admin/FoolFormDesigner/MapDtl.htm?DoType=Edit&FK_MapDtl=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 高级设置
@@ -1074,11 +1074,11 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAction()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/Action.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
+            return "../../Admin/FoolFormDesigner/Action.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
         public string HidAttr()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/FoolFormDesigner/HidAttr.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
+            return "../../Admin/FoolFormDesigner/HidAttr.htm?DoType=Edit&FK_MapData=" + this.No + "&t=" + DataType.CurrentDataTime;
         }
 
         #region 基本属性.

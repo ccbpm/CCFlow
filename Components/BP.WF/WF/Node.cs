@@ -582,7 +582,7 @@ namespace BP.WF
 
             //给icon设置默认值.
             if (this.GetValStrByKey(NodeAttr.ICON) == "")
-                this.ICON = SystemConfig.CCFlowWebPath + "WF/Data/NodeIcon/审核.png";
+                this.ICON = "../../Data/NodeIcon/审核.png";
 
 
             #region 如果是数据合并模式，就要检查节点中是否有子线程，如果有子线程就需要单独的表.
@@ -882,9 +882,9 @@ namespace BP.WF
                 string s = this.GetValStrByKey(NodeAttr.ICON);
                 if (string.IsNullOrEmpty(s))
                     if (this.IsStartNode)
-                        return SystemConfig.CCFlowWebPath + "WF/Data/NodeIcon/审核.png";
+                        return "../../Data/NodeIcon/审核.png";
                     else
-                        return SystemConfig.CCFlowWebPath + "WF/Data/NodeIcon/前台.png";
+                        return "../../Data/NodeIcon/前台.png";
                 return s;
             }
             set

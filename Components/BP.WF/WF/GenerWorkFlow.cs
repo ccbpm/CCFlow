@@ -1091,7 +1091,7 @@ namespace BP.WF
                 RefMethod rm = new RefMethod();
                 rm.Title = "工作轨迹";  // "工作报告";
                 rm.ClassMethodName = this.ToString() + ".DoRpt";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/doc.gif";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();

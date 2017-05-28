@@ -28,6 +28,40 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 执行跳转.
+        /// <summary>
+        /// 返回可以跳转的节点.
+        /// </summary>
+        /// <returns></returns>
+        public string FlowSkip_Init()
+        {
+            string sql = "SELECT NodeID as No, Name FROM WF_Node WHERE FK_Flow='" + this.FK_Flow + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 执行跳转
+        /// </summary>
+        /// <returns></returns>
+        public string FlowSkip_Do()
+        {
+            string sql = "SELECT NodeID as No, Name FROM WF_Node WHERE FK_Flow='" + this.FK_Flow + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+            }
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion 执行跳转.
+
+
         #region 执行父类的重写方法.
         /// <summary>
         /// 默认执行的方法
@@ -48,6 +82,8 @@ namespace BP.WF.HttpHandler
             throw new Exception("@标记["+this.DoType+"]，没有找到.");
         }
         #endregion 执行父类的重写方法.
+
+      
 
         /// <summary>
         /// 选择权限组

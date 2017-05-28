@@ -992,7 +992,7 @@ namespace BP.WF.Template
                 rm.Title = "打开URL"; // "设计表单";
                 rm.GroupName = "基本功能";
                 rm.ClassMethodName = this.ToString() + ".DoOpenUrl";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FullData.png";
+                rm.Icon = "../../WF/Img/FullData.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";

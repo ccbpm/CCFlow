@@ -464,13 +464,13 @@ namespace BP.WF.Template
                 RefMethod rm = new RefMethod();
                 rm.Title = "打开";
                 rm.ClassMethodName = this.ToString() + ".DoOpen";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/doc.gif";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "打开";
                 rm.ClassMethodName = this.ToString() + ".DoOpenPDF";
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/pdf.gif";
+                rm.Icon = "../../WF/Img/FileType/pdf.gif";
                 map.AddRefMethod(rm);
 
                 this._enMap = map;

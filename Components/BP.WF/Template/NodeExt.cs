@@ -283,13 +283,13 @@ namespace BP.WF.Template
                 map.SetHelperUrl(NodeAttr.WhoExeIt, "http://ccbpm.mydoc.io/?v=5404&t=17913");
 
                 //map.AddDDLSysEnum(NodeAttr.TurnToDeal, 0, "发送后转向",
-                // true, true, NodeAttr.TurnToDeal, "@0=提示ccflow默认信息@1=提示指定信息@2=转向指定的url@3=按照条件转向");
+                //true, true, NodeAttr.TurnToDeal, "@0=提示ccflow默认信息@1=提示指定信息@2=转向指定的url@3=按照条件转向");
                 //map.SetHelperUrl(NodeAttr.TurnToDeal, "http://ccbpm.mydoc.io/?v=5404&t=17914");
                 //map.AddTBString(NodeAttr.TurnToDealDoc, null, "转向处理内容", true, false, 0, 1000, 10, true, "http://ccbpm.mydoc.io/?v=5404&t=17914");
                 //map.AddDDLSysEnum(NodeAttr.ReadReceipts, 0, "已读回执", true, true, NodeAttr.ReadReceipts,
-                //    "@0=不回执@1=自动回执@2=由上一节点表单字段决定@3=由SDK开发者参数决定");
+                // "@0=不回执@1=自动回执@2=由上一节点表单字段决定@3=由SDK开发者参数决定");
                 //map.SetHelperUrl(NodeAttr.ReadReceipts, "http://ccbpm.mydoc.io/?v=5404&t=17915");
-
+               
 
                 map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel,
                  "@0=由连接线条件控制@1=让用户手工选择@2=发送按钮旁下拉框选择");
@@ -701,37 +701,35 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "接收人规则";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/Menu/Sender.png";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Menu/Sender.png";
                 rm.ClassMethodName = this.ToString() + ".DoAccepterRoleNew";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "抄送人规则";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/Menu/CC.png";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Menu/CC.png";
                 rm.ClassMethodName = this.ToString() + ".DoCCer";  //要执行的方法名.
                 rm.RefMethodType = RefMethodType.RightFrameOpen; // 功能类型
                 map.AddRefMethod(rm);
 
-
-
-                 rm = new RefMethod();
+                rm = new RefMethod();
                 rm.Title = "节点事件"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoAction";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Event.png";
+                rm.Icon = "../../WF/Img/Event.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "节点消息"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoMessage";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Message24.png";
+                rm.Icon = "../../WF/Img/Message24.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "父子流程";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Menu/SubFlows.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Menu/SubFlows.png";
                 rm.ClassMethodName = this.ToString() + ".DoSubFlow";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
@@ -740,29 +738,28 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "流程完成条件"; // "流程完成条件";
                 rm.ClassMethodName = this.ToString() + ".DoCond";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "发送后转向"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoTurnToDeal";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Msg.gif";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Turnto.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Turnto.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "发送阻塞规则";  
                 rm.ClassMethodName = this.ToString() + ".DoBlockModel";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/BlockModel.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/BlockModel.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "多人处理规则";
                 rm.ClassMethodName = this.ToString() + ".DoTodolistModel";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Multiplayer.png";
+                rm.Icon = "../../WF/Img/Multiplayer.png";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -772,19 +769,19 @@ namespace BP.WF.Template
                     rm = new RefMethod();
                     rm.Title = "对应制度章节"; // "个性化接受人窗口";
                     rm.ClassMethodName = this.ToString() + ".DoZhiDu";
-                    rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                    rm.Icon = "../../WF/Img/Btn/DTS.gif";
                     map.AddRefMethod(rm);
 
                     rm = new RefMethod();
                     rm.Title = "风险点"; // "个性化接受人窗口";
                     rm.ClassMethodName = this.ToString() + ".DoFengXianDian";
-                    rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                    rm.Icon = "../../WF/Img/Btn/DTS.gif";
                     map.AddRefMethod(rm);
 
                     rm = new RefMethod();
                     rm.Title = "岗位职责"; // "个性化接受人窗口";
                     rm.ClassMethodName = this.ToString() + ".DoGangWeiZhiZe";
-                    rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                    rm.Icon = "../../WF/Img/Btn/DTS.gif";
                     map.AddRefMethod(rm);
                 }
                 #endregion 基础功能.
@@ -793,7 +790,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "可退回的节点(当退回规则设置可退回指定的节点时,该设置有效.)"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCanReturnNodes";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkModel;
                 //设置相关字段.
@@ -805,7 +802,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "可撤销的节点"; // "可撤销发送的节点";
                 rm.ClassMethodName = this.ToString() + ".DoCanCancelNodes";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
 
@@ -818,7 +815,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "发送成功转向条件"; // "转向条件";
                 rm.ClassMethodName = this.ToString() + ".DoTurn";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
 
                 //设置相关字段.
                 rm.RefAttrKey = NodeAttr.TurnToDealDoc;
@@ -829,7 +826,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "绑定rtf打印格式模版(当打印方式为打印RTF格式模版时,该设置有效)"; //"单据&单据";
                 rm.ClassMethodName = this.ToString() + ".DoBill";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
 
                 //设置相关字段.
@@ -843,14 +840,14 @@ namespace BP.WF.Template
                     rm = new RefMethod();
                     rm.Title = "DXReport设置";
                     rm.ClassMethodName = this.ToString() + ".DXReport";
-                    rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/FileType/doc.gif";
+                    rm.Icon = "../../WF/Img/FileType/doc.gif";
                     map.AddRefMethod(rm);
                 }
 
                 rm = new RefMethod();
                 rm.Title = "设置自动抄送规则(当节点为自动抄送时,该设置有效.)"; // "抄送规则";
                 rm.ClassMethodName = this.ToString() + ".DoCCRole";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 //设置相关字段.
                 rm.RefAttrKey = NodeAttr.CCRole;
                 rm.RefAttrLinkLabel = "自动抄送设置";
@@ -862,8 +859,7 @@ namespace BP.WF.Template
                 #region 表单设置.
                 rm = new RefMethod();
                 rm.Title = "表单方案";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/Form.png";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/Form.png";
                 rm.ClassMethodName = this.ToString() + ".DoSheet";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "表单设置";
@@ -871,8 +867,8 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "手机表单字段顺序";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/telephone.png";
-                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Mobile.png";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
+                //rm.Icon = ../../Img/Mobile.png";
                 rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "表单设置";
@@ -880,8 +876,8 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "节点组件";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Components.png";
-                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Mobile.png";
+                rm.Icon = "../../WF/Img/Components.png";
+                //rm.Icon = ../../Img/Mobile.png";
                 rm.ClassMethodName = this.ToString() + ".DoFrmNodeComponent";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "表单设置";
@@ -890,7 +886,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "特别控件特别用户权限";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/SpecUserSpecFields.png";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/SpecUserSpecFields.png";
                 rm.ClassMethodName = this.ToString() + ".DoSpecFieldsSpecUsers()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "表单设置";
@@ -901,7 +897,7 @@ namespace BP.WF.Template
 
                     rm = new RefMethod();
                     rm.Title = "设置考核规则";
-                    rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/CH.png";
+                    rm.Icon = "../../WF/Admin/CCFormDesigner/Img/CH.png";
                     rm.ClassMethodName = this.ToString() + ".DoCHRole";
                     rm.RefMethodType = RefMethodType.RightFrameOpen;
                     rm.GroupName = "考核规则";
@@ -909,7 +905,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "超时处理规则";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCFormDesigner/Img/OvertimeRole.png";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/OvertimeRole.png";
                 rm.ClassMethodName = this.ToString() + ".DoCHOvertimeRole";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "考核规则";
@@ -919,7 +915,7 @@ namespace BP.WF.Template
                 #region 实验中的功能
                 rm = new RefMethod();
                 rm.Title = "批量设置节点属性";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.Icon ="../../WF/Admin/CCBPMDesigner/Img/Node.png";
                 rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
@@ -927,7 +923,7 @@ namespace BP.WF.Template
 
                 //rm = new RefMethod();
                 //rm.Title = "设置独立表单树权限";
-                //rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                //rm.Icon = ../../Img/Btn/DTS.gif";
                 //rm.ClassMethodName = this.ToString() + ".DoNodeFormTree";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //rm.GroupName = "实验中的功能";
@@ -936,7 +932,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "工作批处理规则";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.ClassMethodName = this.ToString() + ".DoBatchStartFields()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
@@ -945,7 +941,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "节点运行模式(开发中)"; // "调用事件接口";
                 rm.ClassMethodName = this.ToString() + ".DoRunModel";
-                rm.Icon = BP.WF.Glo.CCFlowAppPath + "WF/Img/Btn/DTS.gif";
+                rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
@@ -965,7 +961,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCHRole()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/CHRole.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/CHRole.htm?FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 超时处理规则
@@ -973,7 +969,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCHOvertimeRole()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/CHOvertimeRole.aspx?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/CHOvertimeRole.aspx?FK_Node=" + this.NodeID;
         }
         #endregion 考核规则.
 
@@ -984,7 +980,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTodolistModel()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/TodolistModel.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/TodolistModel.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 批处理规则
@@ -992,7 +988,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStartFields()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrNode/BatchStartFields.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node="+this.NodeID;
+            return "../../Admin/AttrNode/BatchStartFields.htm?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node="+this.NodeID;
         }
         /// <summary>
         /// 批量修改节点属性
@@ -1000,7 +996,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoNodeAttrs()
         {
-            return SystemConfig.CCFlowWebPath + "WF/Admin/AttrFlow/NodeAttrs.htm?NodeID=0&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrFlow/NodeAttrs.htm?NodeID=0&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 表单方案
@@ -1008,7 +1004,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSheet()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/NodeFromWorkModel.htm?FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 父子流程
@@ -1016,7 +1012,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSubFlow()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/En.htm?EnsName=BP.WF.Template.FrmSubFlows&PK=" + this.NodeID;
+            return "../../Comm/En.htm?EnsName=BP.WF.Template.FrmSubFlows&PK=" + this.NodeID;
         }
         /// <summary>
         /// 接受人规则
@@ -1024,7 +1020,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAccepterRoleNew()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeAccepterRole.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/NodeAccepterRole.htm?FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 发送阻塞规则
@@ -1032,7 +1028,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBlockModel()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/BlockModel.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/BlockModel.htm?FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 发送后转向规则
@@ -1040,7 +1036,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoTurnToDeal()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/TurnToDeal.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/TurnToDeal.htm?FK_Node=" + this.NodeID;
         }
         
         /// <summary>
@@ -1049,7 +1045,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCer()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeCCRole.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/NodeCCRole.htm?FK_Node=" + this.NodeID;
         }
         #endregion 
 
@@ -1060,7 +1056,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFrmNodeComponent()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK="+this.NodeID+"&t=" + DataType.CurrentDataTime;
+            return "../../Comm/En.htm?EnsName=BP.WF.Template.FrmNodeComponents&PK="+this.NodeID+"&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
         /// 特别用户特殊字段权限.
@@ -1068,7 +1064,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSpecFieldsSpecUsers()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/SepcFiledsSepcUsers.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+            return "../../Admin/AttrNode/SepcFiledsSepcUsers.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
                    this.NodeID + "&FK_Node="+this.NodeID+"&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -1077,7 +1073,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoSortingMapAttrs()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+            return "../../Admin/AttrNode/SortingMapAttrs.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
                    this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
         #endregion 表单相关.
@@ -1088,7 +1084,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoRunModel()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeRunModel.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
+            return "../../Admin/AttrNode/NodeRunModel.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
                    this.NodeID + "&t=" + DataType.CurrentDataTime;
         }
       
@@ -1098,7 +1094,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDepts()
         {
-            PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "WF/Comm/Port/DeptTree.aspx?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&RefNo=" + DataType.CurrentDataTime, 500, 550);
+            PubClass.WinOpen("../../Comm/Port/DeptTree.aspx?s=d34&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&RefNo=" + DataType.CurrentDataTime, 500, 550);
             return null;
         }
        
@@ -1128,8 +1124,8 @@ namespace BP.WF.Template
         {
             BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             if (nd.HisDeliveryWay != DeliveryWay.ByCCFlowBPM)
-                return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/NodeAccepterRole.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+                return "../../Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/NodeAccepterRole.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 找人规则
@@ -1140,15 +1136,15 @@ namespace BP.WF.Template
             BP.WF.Node nd = new BP.WF.Node(this.NodeID);
 
             if (nd.HisDeliveryWay != DeliveryWay.ByCCFlowBPM)
-                return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+                return "../../Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
             //    return "节点访问规则您没有设置按照bpm模式，所以您能执行该操作。要想执行该操作请选择节点属性中节点规则访问然后选择按照bpm模式计算，点保存按钮。";
 
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/FindWorker/List.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
             //   return null;
         }
         public string DoTurn()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/TurnTo.htm?FK_Node=" + this.NodeID;
             //, "节点完成转向处理", "FrmTurn", 800, 500, 200, 300);
             //BP.WF.Node nd = new BP.WF.Node(this.NodeID);
             //return nd.DoTurn();
@@ -1159,7 +1155,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCCRole()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/En.htm?EnName=BP.WF.Template.CC&PK=" + this.NodeID; 
+            return "../../Comm/En.htm?EnName=BP.WF.Template.CC&PK=" + this.NodeID; 
             //PubClass.WinOpen("./RefFunc/UIEn.aspx?EnName=BP.WF.CC&PK=" + this.NodeID, "抄送规则", "Bill", 800, 500, 200, 300);
             //return null;
         }
@@ -1169,7 +1165,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAccepter()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Comm/En.htm?EnName=BP.WF.Template.Selector&PK=" + this.NodeID;
+            return "../../Comm/En.htm?EnName=BP.WF.Template.Selector&PK=" + this.NodeID;
         }
         /// <summary>
         /// 可触发的子流程
@@ -1177,7 +1173,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoActiveFlows()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/ConditionSubFlow.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/ConditionSubFlow.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 退回节点
@@ -1185,7 +1181,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCanReturnNodes()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/CanReturnNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/CanReturnNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 撤销发送的节点
@@ -1193,7 +1189,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCanCancelNodes()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/CanCancelNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow; 
+            return "../../Admin/AttrNode/CanCancelNodes.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow; 
         }
         /// <summary>
         /// DXReport
@@ -1201,13 +1197,13 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DXReport()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/DXReport.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/DXReport.aspx?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
       
       
         public string DoCond()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/Condition.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=" + this.NodeID;
+            return "../../Admin/Condition.htm?CondType=" + (int)CondType.Flow + "&FK_Flow=" + this.FK_Flow + "&FK_MainNode=" + this.NodeID + "&FK_Node=" + this.NodeID + "&FK_Attr=&DirType=&ToNodeID=" + this.NodeID;
         }
         /// <summary>
         /// 设计傻瓜表单
@@ -1215,7 +1211,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFormCol4()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID;
+            return "../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID;
         }
         /// <summary>
         /// 设计自由表单
@@ -1223,7 +1219,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFormFree()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 绑定独立表单
@@ -1231,7 +1227,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFormTree()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&Lang=CH";
+            return "../../Admin/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&Lang=CH";
         }
         
         public string DoMapData()
@@ -1243,11 +1239,11 @@ namespace BP.WF.Template
             switch (type)
             {
                 case NodeFormType.FreeForm:
-                    PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "设计表单", "sheet", 1024, 768, 0, 0);
+                    PubClass.WinOpen("../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "设计表单", "sheet", 1024, 768, 0, 0);
                     break;
                 default:
                 case NodeFormType.FixForm:
-                    PubClass.WinOpen(BP.WF.Glo.CCFlowAppPath + "WF/Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID, "设计表单", "sheet", 800, 500, 210, 300);
+                    PubClass.WinOpen("../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID, "设计表单", "sheet", 800, 500, 210, 300);
                     break;
             }
             return null;
@@ -1259,7 +1255,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoMessage()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/PushMessage.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/PushMessage.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
         /// 事件
@@ -1267,7 +1263,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAction()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/Action.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/Action.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
         /// 单据打印
@@ -1275,7 +1271,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBill()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/AttrNode/Bill.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/Bill.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 设置
@@ -1283,7 +1279,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFAppSet()
         {
-            return BP.WF.Glo.CCFlowAppPath + "WF/Admin/FAppSet.aspx?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/FAppSet.aspx?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
         }
         
         protected override bool beforeUpdate()

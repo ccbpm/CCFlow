@@ -336,7 +336,7 @@ namespace BP.WF.Data
                 rm.Title = "打开流程轨迹";
                 rm.ClassMethodName = this.ToString() + ".DoOpen";
                 rm.RefMethodType = En.RefMethodType.RightFrameOpen;
-                rm.Icon = SystemConfig.CCFlowWebPath + "WF/Img/FileType/doc.gif";
+                rm.Icon = "../../WF/Img/FileType/doc.gif";
                 rm.IsForEns = false;
                 map.AddRefMethod(rm);
 
@@ -354,7 +354,7 @@ namespace BP.WF.Data
 
         public string DoOpen()
         {
-            return SystemConfig.CCFlowWebPath + "WF/WFRpt.aspx?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
+            return "../../WFRpt.aspx?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
         }
     }
 	/// <summary>

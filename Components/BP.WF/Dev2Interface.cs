@@ -624,12 +624,28 @@ namespace BP.WF
                 dt = DBAccess.RunSQLReturnTable(ps);
             }
 
-
-
-
-
-
-
+            //把列名转化成区分大小写.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["MYPK"].ColumnName = "MyPK";
+                dt.Columns["ACTIONTYPE"].ColumnName = "ActionType";
+                dt.Columns["ACTIONTYPETEXT"].ColumnName = "ActionTypeText";
+                dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["NDFROM"].ColumnName = "NDFrom";
+                dt.Columns["NDFROMT"].ColumnName = "NDFromT";
+                dt.Columns["NDTO"].ColumnName = "NDTo";
+                dt.Columns["NDTOT"].ColumnName = "NDToT";
+                dt.Columns["EMPFROM"].ColumnName = "EmpFrom";
+                dt.Columns["EMPFROMT"].ColumnName = "EmpFromT";
+                dt.Columns["EMPTO"].ColumnName = "EmpTo";
+                dt.Columns["EMPTOT"].ColumnName = "EmpToT";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["WORKTIMESPAN"].ColumnName = "Msg";
+                dt.Columns["NODEDATA"].ColumnName = "NodeData";
+                dt.Columns["EXER"].ColumnName = "Exer";
+                dt.Columns["TAG"].ColumnName = "Tag";
+            }
 
 
             //把track加入里面去.

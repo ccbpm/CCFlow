@@ -32,10 +32,15 @@ function Insert(mypk, IDX) {
     var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
     window.location.href = window.location.href;
 }
-function AddF(fk_mapdata) {
+function AddF() {
+    
+    var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + GetQueryString('FK_MapData');
 
-    //var url = 'Do.htm?DoType=AddF&MyPK=' + mypk;
-    var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + fk_mapdata;
+//    OpenEasyUiDialog(url, "eudlgframe", '增加字段', 800, 500, "icon-edit", true, null, null, null, function () {
+//        window.location.href = window.location.href;
+//    });
+//    return;
+
 
     var h = 500;
     var w = 600;
@@ -79,8 +84,9 @@ function CopyFieldFromNode(mypk) {
         window.location.href = window.location.href;
     });
 }
-function GroupFieldNew(mypk) {
-    var url = 'GroupField.htm?FK_MapData=' + mypk + "&RefOID=0&DoType=FunList";
+function GroupFieldNew() {
+
+    var url = 'GroupField.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&RefOID=0&DoType=FunList";
 
     OpenEasyUiDialog(url, "eudlgframe", '新建', 800, 500, "icon-property", true, null, null, null, function () {
 
@@ -89,15 +95,18 @@ function GroupFieldNew(mypk) {
     });
 
 }
-function ExpImp(fk_mapdata, fk_flow) {
-    var url = 'ExpImp.htm?FK_MapData=' + fk_mapdata + "&DoType=FunList&FK_Flow=" + fk_flow;
+function ExpImp() {
+
+    var url = "ExpImp.htm?FK_MapData=" + GetQueryString('FK_MapData') + "&DoType=FunList&FK_Flow=" +  GetQueryString('FK_Flow');
 
     OpenEasyUiDialog(url, "eudlgframe", '导入导出', 800, 500, "icon-edit", true, null, null, null, function () {
         window.location.href = window.location.href;
     });
+
 }
 
 function GroupField(mypk, OID) {
+
 
     // var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
     var url = "../../Comm/En.htm?EnsName=BP.Sys.GroupFields&PK=" + OID;
@@ -229,6 +238,7 @@ function GroupBarClick(rowIdx) {
 var isInser = "";
 
 function CopyFieldFromNode(mypk) {
+
     var url = 'CopyFieldFromNode.htm?FK_Node=' + mypk;
 
     OpenEasyUiDialog(url, "eudlgframe", '复制', 730, 900, "icon-property", true, null, null, null, function () {
@@ -252,9 +262,7 @@ function EditTrack(mypk) {
     OpenEasyUiDialog(url, "eudlgframe", '轨迹图', 400, 700, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
     });
-
 }
-
 
 /// 审核组件.
 function EditFWC(mypk) {
@@ -309,7 +317,10 @@ function EditTrack(mypk) {
 
 }
 
-function MapDataEdit(mypk) {
+function MapDataEdit() {
+
+    var mypk = GetQueryString('FK_MapData');
+
     var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PK=' + mypk;
 
     OpenEasyUiDialog(url, "eudlgframe", '属性', 500, 850, "icon-property", true, null, null, null, function () {
@@ -318,7 +329,11 @@ function MapDataEdit(mypk) {
 
 }
 
-function FrmNodeComponent(mypk) {
+function FrmNodeComponent() {
+
+    var mypk = GetQueryString('FK_MapData');
+    mypk = mypk.replace('ND', '');
+
     var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk;
 
     OpenEasyUiDialog(url, "eudlgframe", '组件', 500, 850, "icon-property", true, null, null, null, function () {
@@ -328,6 +343,9 @@ function FrmNodeComponent(mypk) {
 
 //新增从表.
 function NewMapDtl(fk_mapdata) {
+
+    var fk_mapdata = GetQueryString('FK_MapData');
+
     var val = prompt('请输入从表ID，要求表单唯一。', fk_mapdata + 'Dtl1');
     if (val == null) {
         return;
@@ -377,8 +395,10 @@ function EditM2M(mypk, dtlKey) {
 
 
 /// 多选.
-function MapM2M(mypk) {
-    var url = 'MapM2M.htm?DoType=List&FK_MapData=' + mypk;
+function MapM2M() {
+    var fk_mapdata = GetQueryString('FK_MapData');
+
+    var url = 'MapM2M.htm?DoType=List&FK_MapData=' + fk_mapdata;
 
     OpenEasyUiDialog(url, "eudlgframe", '多选', 800, 500, "icon-edit", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -403,7 +423,9 @@ function EditAth(fk_mapdata, ath) {
 }
 
 //新增附件.
-function NewAth(fk_mapdata) {
+function NewAth() {
+
+    var fk_mapdata = GetQueryString('FK_MapData');
     var val = prompt('请输入附件ID，要求表单唯一。', 'Ath1');
     if (val == null) {
         return;
@@ -435,6 +457,9 @@ function NewAth(fk_mapdata) {
 }
 
 function NewFrame(fk_mapdata) {
+
+    var fk_mapdata = GetQueryString('FK_MapData');
+
 
     var val = prompt('请输入框架ID，要求表单唯一。', 'Frame1');
     if (val == null) {
@@ -476,27 +501,27 @@ function EditFrame(fk_mapdata, myPK) {
     });
 }
 
-function MapFrame(fk_mapdata) {
-    var url = 'MapFrame.htm?FK_MapData=' + fk_mapdata;
+function MapFrame() {
+
+    var fk_mapdata = GetQueryString('FK_MapData');
+
+
+    var url = 'MapFrame.htm?FK_MapData=' + GetQueryString('fk_mapdata');
 
     OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
     });
 }
 
-function HidAttr(fk_mapData) {
-    var url = 'HidAttr.htm?FK_MapData=' + fk_mapData;
+function HidAttr() {
+    var url = 'HidAttr.htm?FK_MapData=' + GetQueryString('fk_mapdata');
 
     OpenEasyUiDialog(url, "eudlgframe", '隐藏字段', 800, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
     });
-
-    // var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-    // window.location.href = window.location.href;
 }
 function EnableAthM(fk_MapDtl) {
     var url = '../CCForm/AttachmentUpload.htm?IsBTitle=1&PKVal=0&Ath=AthMDtl&FK_MapData=' + fk_MapDtl + '&FK_FrmAttachment=' + fk_MapDtl + '_AthMDtl';
-
 
     OpenEasyUiDialog(url, "eudlgframe", '多附件', 800, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -509,13 +534,14 @@ function Sln(fk_mapdata) {
     //var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
 }
 
-//然浏览器最大化.
-function ResizeWindow() {
-    if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     
-        var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽     
-        var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高     
-        window.moveTo(0, 0);           //把window放在左上角     
-        window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
-    }
-}
-window.onload = ResizeWindow();
+
+////然浏览器最大化.
+//function ResizeWindow() {
+//    if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen     
+//        var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽     
+//        var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高     
+//        window.moveTo(0, 0);           //把window放在左上角     
+//        window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
+//    }
+//}
+//window.onload = ResizeWindow();

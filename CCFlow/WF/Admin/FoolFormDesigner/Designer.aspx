@@ -37,6 +37,8 @@
 
     <script language="javascript" type="text/javascript">
 
+
+    
         //公共方法
         function AjaxServiceGener(param,extUrl,callbackFunc, scope) {
             $.ajax({

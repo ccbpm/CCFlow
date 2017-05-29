@@ -612,10 +612,10 @@ namespace BP.WF
             sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + " ORDER BY RDT asc ";
             ps.SQL = sql;
             DataTable dt = null;
+
             try
             {
                 dt = DBAccess.RunSQLReturnTable(ps);
-                dt = DBAccess.ToLower(dt);
             }
             catch
             {
@@ -623,6 +623,14 @@ namespace BP.WF
                 Track.CreateOrRepairTrackTable(fk_flow);
                 dt = DBAccess.RunSQLReturnTable(ps);
             }
+
+
+
+
+
+
+
+
 
             //把track加入里面去.
             dt.TableName = "Track";

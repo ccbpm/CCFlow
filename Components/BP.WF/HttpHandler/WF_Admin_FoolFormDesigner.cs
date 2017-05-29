@@ -31,6 +31,7 @@ using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.En;
+using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
 {
@@ -39,6 +40,67 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Admin_FoolFormDesigner : DirectoryPageBase
     {
+        #region 表单设计器.
+        /// <summary>
+        /// 是不是第一次进来.
+        /// </summary>
+        public bool IsFirst
+        {
+            get
+            {
+                if (this.GetRequestVal("IsFirst") == null || this.GetRequestVal("IsFirst")=="" )
+                    return false;
+                return true;
+            }
+        }
+        /// <summary>
+        ///  设计器初始化.
+        /// </summary>
+        /// <returns></returns>
+        public string Designer_Init()
+        {
+            DataSet ds = new DataSet();
+            //如果是第一次进入，就执行旧版本的升级检查.
+            if (this.IsFirst == true)
+            {
+                MapFrmFool cols = new MapFrmFool(this.FK_MapData);
+                cols.DoCheckFixFrmForUpdateVer();
+                return "url@Designer.htm?FK_MapData="+this.FK_MapData+"&FK_Flow="+this.FK_Flow+"&FK_Node="+this.FK_Node;
+            }
+
+            string sql = "";
+            sql = "SELECT KeyOfEn, Name, Idx, GroupID FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'  ORDER BY IDX ";
+            DataTable dtMapAttr = DBAccess.RunSQLReturnTable(sql);
+            dtMapAttr.TableName = "Sys_MapAttr";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtMapAttr.Columns["KEYOFEN"].ColumnName = "KeyOfEn";
+                dtMapAttr.Columns["NAME"].ColumnName = "Name";
+                dtMapAttr.Columns["IDX"].ColumnName = "Idx";
+                dtMapAttr.Columns["GROUPID"].ColumnName = "GroupID";
+            }
+            ds.Tables.Add(dtMapAttr);
+
+            sql = "SELECT OID, Lab, EnName, Idx, CtrlType, CtrlID,AtPara FROM Sys_GroupField WHERE EnName='" + this.FK_MapData + "' ORDER BY IDX";
+            DataTable dtGroup = DBAccess.RunSQLReturnTable(sql);
+            dtGroup.TableName = "Sys_GroupField";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtGroup.Columns["OID"].ColumnName = "OID";
+                dtGroup.Columns["LAB"].ColumnName = "Lab";
+                dtGroup.Columns["IDX"].ColumnName = "Idx";
+                dtGroup.Columns["CTRLTYPE"].ColumnName = "CtrlType";
+                dtGroup.Columns["CTRLID"].ColumnName = "CtrlID";
+                dtGroup.Columns["ATPARA"].ColumnName = "AtPara";
+            }
+            ds.Tables.Add(dtGroup);
+
+
+            //把dataet转化成json 对象.
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion
+
         /// <summary>
         /// 初始化
         /// </summary>

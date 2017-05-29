@@ -69,7 +69,7 @@ namespace BP.WF.HttpHandler
             }
 
             string sql = "";
-            sql = "SELECT KeyOfEn, Name, Idx, GroupID FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'  ORDER BY IDX ";
+            sql = "SELECT KeyOfEn, Name, Idx, GroupID, UIContralType, UIHeight, UIWidth, LGType FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'  ORDER BY IDX ";
             DataTable dtMapAttr = DBAccess.RunSQLReturnTable(sql);
             dtMapAttr.TableName = "Sys_MapAttr";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -78,6 +78,14 @@ namespace BP.WF.HttpHandler
                 dtMapAttr.Columns["NAME"].ColumnName = "Name";
                 dtMapAttr.Columns["IDX"].ColumnName = "Idx";
                 dtMapAttr.Columns["GROUPID"].ColumnName = "GroupID";
+
+                dtMapAttr.Columns["UICONTRALTYPE"].ColumnName = "UIContralType";
+                dtMapAttr.Columns["UIHEIGHT"].ColumnName = "UIHeight";
+                dtMapAttr.Columns["UIWIDTH"].ColumnName = "UIWidth";
+                dtMapAttr.Columns["LGTYPE"].ColumnName = "LGType";
+
+                //dtMapAttr.Columns["GROUPID"].ColumnName = "GroupID";
+                //dtMapAttr.Columns["GROUPID"].ColumnName = "GroupID";
             }
             ds.Tables.Add(dtMapAttr);
 

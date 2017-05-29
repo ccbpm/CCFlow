@@ -4338,6 +4338,9 @@ namespace BP.WF
             // 转化成编号.
             flowNo = TurnFlowMarkToFlowNo(flowNo);
 
+            //替换标题中出现的英文 ""引号，造成在获取数据时，造成异常
+            title = title.Replace('"', '“');
+            title = title.Replace('"', '”');
 
             string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();

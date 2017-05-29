@@ -14,7 +14,6 @@ function mouseMove() {
 
 function CallState(ev) {
     return;
-
 //    window.status = ev + ' = currFieldID ' + currFieldID + ' currGID=' + currGID + ' moveToFieldID=' + moveToFieldID + ' moveToGID=' + moveToGID;
 }
 

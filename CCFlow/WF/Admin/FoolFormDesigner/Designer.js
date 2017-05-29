@@ -323,7 +323,7 @@ function MapDataEdit() {
 
     var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PK=' + mypk;
 
-    OpenEasyUiDialog(url, "eudlgframe", '属性', 500, 850, "icon-property", true, null, null, null, function () {
+    OpenEasyUiDialog(url, "eudlgframe", '属性', 400, 450, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
     });
 
@@ -336,7 +336,7 @@ function FrmNodeComponent() {
 
     var url = '../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=' + mypk;
 
-    OpenEasyUiDialog(url, "eudlgframe", '组件', 500, 850, "icon-property", true, null, null, null, function () {
+    OpenEasyUiDialog(url, "eudlgframe", '组件', 500, 400, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
     });
 }

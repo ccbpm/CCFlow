@@ -2,43 +2,94 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>驰骋工作流</title>
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/Config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script language="JavaScript" type="text/javascript" src="MapDef.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt.js" ></script>
+    <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
+    <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript" > </script>
 
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
-
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" src="Designer.js" ></script>
+    <script type="text/javascript">
         //页面启动函数.
         $(function () {
 
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
             //初始化groupID.
-            var flowNo = GetQueryString("FK_Flow");
-            var nodeID = GetQueryString("FK_Node");
+            var fk_mapData = GetQueryString("FK_MapData");
 
-            var url = window.location.href;
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Designer_Init&IsFirst=" + GetQueryString("IsFirst") + "&FK_MapData=" + fk_mapData + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
 
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        data = data.replace('url@', '');
+                        window.location.href = data;
+                        return;
+                    }
+
+                    //里面有三个对象. Sys_MapAttr, Sys_GroupField, Sys_MapData
+                    data = JSON.parse(data);
+
+                    return;
+                }
+            });
+
+
+            $("#Msg").html("");
+
         });
     </script>
+
 </head>
-<body  >
+<body>
 
 <form id="cc">
- 
- <h3> 正在加载，请稍后。。。</h3>
+
+   <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'north'" style="height: auto; padding: 5px; overflow-y: hidden;">
+       
+            <a href="javascript:ExpImp();" class="easyui-linkbutton"
+                data-options="plain:true,iconCls:'icon-copy'">导入/导出</a> <a href="javascript:AddF();"
+                    class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-new'">新建字段</a>
+            <a href="javascript:HidAttr();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-hidden'">
+                隐藏字段</a> <a href="javascript:GroupFieldNew();" class="easyui-linkbutton"
+                    data-options="plain:true,iconCls:'icon-groupbar'">新建字段分组</a> <a href="javascript:NewMapDtl();"
+                        class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-dtl'">新建从表</a>
+            <a href="javascript:NewAth();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-attachment'">
+                新建附件组件</a> <a href="javascript:NewFrame();" class="easyui-linkbutton"
+                    data-options="plain:true,iconCls:'icon-frame'">新建框架</a>
+                     
+            <a href="javascript:MapDataEdit();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-property'">
+                表单属性</a>
+             
+            <a href="javascript:FrmNodeComponent();" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-Components'">节点表单组件</a>
+             
+        </div>
+        <div data-options="region:'center'" style="background-color: #d0d0d0; padding-top: 10px;
+            padding-bottom: 10px;">
+           
+           <div id="context" > </div>
+        </div>
+    </div>
 
 </form>
 

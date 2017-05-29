@@ -24,8 +24,6 @@ namespace CCFlow.WF.Admin.AttrFlow
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
-
             //this.Pub1.AddTable();
             //this.Pub1.AddCaption("");
             //this.Pub1.AddTR();
@@ -39,9 +37,7 @@ namespace CCFlow.WF.Admin.AttrFlow
             //this.Pub1.AddTDTitle("流程完成条件");
             //this.Pub1.AddTDTitle("消息收听");
             //this.Pub1.AddTREnd();
-
             //this.Pub1.AddTableEnd();
-
         }
     }
 }

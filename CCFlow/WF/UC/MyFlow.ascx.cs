@@ -749,6 +749,7 @@ namespace CCFlow.WF.UC
                 string urlr3 = appPath + "WF/WorkOpt/SubFlow.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar.Add("<input type=button  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" />");
             }
+
             if (btnLab.CHEnable == true)
             {
                 /* 节点时限设置 */

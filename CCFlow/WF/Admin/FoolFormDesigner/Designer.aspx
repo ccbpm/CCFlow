@@ -14,12 +14,12 @@
         }
     </style>
 
-     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <%--<link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />--%>
   <%--  <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>--%>
 
+     <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../../Scripts/Config.js" type="text/javascript"></script>
@@ -120,12 +120,10 @@
         function GroupFieldNew(mypk) {
             var url = 'GroupField.htm?FK_MapData=' + mypk + "&RefOID=0&DoType=FunList";
 
-
             OpenEasyUiDialog(url, "eudlgframe", '新建', 800, 500, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
 
             });
-
 
         }
         function ExpImp(fk_mapdata, fk_flow) {

@@ -140,9 +140,7 @@ function GetPageParas(sArgName) {
 
 //获取Dtl中TB的值 20160106 from 柳辉
 function ReqDtlBObj(dtlTable, DtlColumn, onValue) {
-
     var getworkid = $('#HidWorkID').val(); //hiddenValue
-
     $.ajax({
 
         url: "../../DataUser/Do.aspx",
@@ -156,9 +154,7 @@ function ReqDtlBObj(dtlTable, DtlColumn, onValue) {
                 return false;
             }
         }
-
     });
-
 }
 // 获取TB值
 function ReqTB(tbID) {
@@ -2815,21 +2811,6 @@ function figure_Template_Dtl(frmDtl) {
             strs += "&" + str + "=" + paras[str];
     }
     var src = "";
-    ////switch (frmDtl.DtlShowModel) {
-    ////    case "0"://Table
-    ////        if (pageData.IsReadOnly) {
-    ////            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
-    ////        } else {
-    ////            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
-    ////        }
-    ////        break;
-    ////    case "1"://
-    ////        if (pageData.IsReadOnly)
-    ////            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
-    ////        else
-    ////            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
-    ////        break;
-    ////}
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
@@ -2861,7 +2842,6 @@ function figure_Template_Dtl(frmDtl) {
         }
     }
     eleHtml.append(eleIframe);
-
     //added by liuxc,2017-1-10,此处前台JS中增加变量DtlsLoadedCount记录明细表的数量，用于加载完全部明细表的判断
     var js = "";
     if (!pageData.IsReadonly) {

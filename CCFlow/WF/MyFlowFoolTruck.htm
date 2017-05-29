@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta charset="utf-8" />
     <title></title>
     <script src="Scripts/JavaScript1.js"></script>
@@ -17,11 +17,65 @@
     <script type="text/javascript" src="Scripts/bootstrap/js/commonYangYH.js"></script>
     <script type="text/javascript" src="Scripts/Cookie.js"></script>
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.nav.js"></script>
-    <script type="text/javascript" src="Scripts/MyFlow2016.js"></script>
-    <script type="text/javascript" src="CCForm/MapExt2016.js"></script>
+    <!--杨玉慧 动态加载JS MyFlow2016和MapExt2016-->
+    <script type="text/javascript">
+
+        var load = {};
+
+        /*JS 动态加载js 文件*/
+        load.LoadJs = function (jsPath, chartset, callbackfun) {
+            try {
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.src = jsPath + "?Version=" + load.Version;
+                script.type = 'text/javascript';
+                if (chartset != undefined) {
+                    script.chartset = chartset;
+                }
+
+                if (script.readyState) {
+                    script.onreadystatechange = function () {
+                        if (script.readyState == "loaded" || script.readyState == "complete") {
+                            script.onreadystatechange = null;
+                            if (callbackfun != undefined && typeof (callbackfun) == 'function') {
+                                callbackfun();
+                            }
+                        }
+                    }
+                } else {
+                    script.onload = function () {
+                        if (callbackfun != undefined && typeof (callbackfun) == 'function') {
+                            callbackfun();
+                        }
+                    }
+                }
+                head.appendChild(script);
+            }
+            catch (err) {
+                alert(err)
+            }
+
+            //$.getScript(jsPath, callbackfun);
+        }
+
+        /*js 和CSS 的版本号*/
+        load.Version = '0412145203';
+        $(function () {
+            //load.LoadJsSort(["Scripts/MyFlow2016.js", "CCForm/MapExt2016.js"], 0, Math.random(), undefined);
+            load.LoadJs("Scripts/MyFlowFoolTrack2016.js", undefined, function () {
+                load.LoadJs('CCForm/MapExt2016.js', undefined, function () {
+                    load.LoadJs('MyFlowFoolTrack2016.js', undefined, function () {
+
+                    })
+                })
+            })
+        })
+    </script>
+    <!--<script type="text/javascript" src="Scripts/MyFlow2016.js"></script>
+    <script type="text/javascript" src="CCForm/MapExt2016.js"></script>-->
     <script type="text/javascript" src="Comm/Gener.js"></script>
     <script type="text/javascript" src="Scripts/QueryString2016.js"></script>
-    <script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>
+    <!--<script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>-->
 
     <link href="./Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <link href="./Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
@@ -86,6 +140,20 @@
                 background: none;
                 font: bold 14px "微软雅黑";
             }
+
+                /*.form_tree {
+            width: 100%;
+        }
+
+            .form_tree input[type=text] {
+                width: 90.1%;
+            }
+
+            .form_tree .input-group-addon {
+                display: inline;
+                float: right;
+                height: 29px;
+            }*/
 
                 #nav li > a p {
                     color: #2884fa;
@@ -187,54 +255,20 @@
             border: none;
             background: #F1F1F2;
         }
+
+        #header > p, .returnTackHeader p {
+            float: right;
+            margin: 0px;
+            margin-right: 15px !important;
+            font-size: 14px;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        #btnPopValCancel {
+            background: #2884fa !important;
+        }
     </style>
-
-    <!--杨玉慧 -->
-    <script type="text/javascript">
-        $(function () {
-            initPageParam(); //初始化参数
-            initBar(); //工具栏.
-            GenerWorkNode(); //表单数据.
-            $('[name=showCol]').bind('change', function (obj) {
-                if (obj.target.value == "8") {
-                    Col4To8();
-                } else {
-                    Col8To4();
-                }
-            });
-            if ($("#Message").html() == "") {
-                $(".Message").hide();
-            }
-            if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
-                //计算高度，展示滚动条
-                var height = $(parent.document.getElementById('MainFrames')).height() - 110;
-                $('#topContentDiv').height(height);
-
-                $(window).resize(function () {
-                    $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");;
-                });
-            }
-            function movetb() {
-                var move;
-                $("#nav").css("top", top);
-            }
-            nav.init();
-            $(".navbars").css("margin-top", ($(window).height() - $(".navbars").height()) / 2);
-            if (navigator.userAgent.indexOf('Chrome') >= 0) {
-                $(".navbars i").click(function () {
-                    $("#nav").removeClass("s");
-                });
-                $("#nav").bind("mouseover", function () {
-                    $("#nav").addClass("s");
-                    $("#nav").css("top", "30px");
-                });
-            }
-
-            $('#btnCloseMsg').bind('click', function () {
-                $('.Message').hide();
-            });
-            })
-    </script>
 </head>
 <body>
     <div id="ShowPFlow" style="display:none;">
@@ -263,6 +297,7 @@
         <!--标题-->
         <div id="header">
             <b></b><span></span>
+            <p class="rdt" style="display:none;">处理时间：</p><p class="emps">处理人：</p>
             <div id="showCol">
                 <input type="radio" name="showCol" id="rdShow4" value="4" /> <label for="rdShow4">4列展示</label>
                 <input type="radio" value="8" id="rdShow8" name="showCol" /> <label for="rdShow8">8列展示</label>
@@ -295,7 +330,7 @@
                     <!--主表单--><!--<uc2:UCEn ID="UCEn1" runat="server"/>-->
                     <div id="CCForm">
                         <br />
-                        <img src='./Img/Loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
+                        正在初始化表单模板及数据，请耐心等待。。。
                         <br />
                         <br />
                     </div>
@@ -324,8 +359,8 @@
                 <div class="modal-body">
                     <iframe style="width: 100%; border: 0px; height: 400px;" id="iframePopModalForm" name="iframePopModalForm"></iframe>
                     <div style="text-align: right;">
-                        <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">取消</button>
                         <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">确定</button>
+                        <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">取消</button>
                     </div>
                 </div>
             </div><!-- /.modal-content -->
@@ -339,7 +374,7 @@
     </div>
     <!--杨玉慧加  附件弹出窗口-->
     <div class="modal fade" id="athModal">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="width:600px;margin:30px auto;">
             <div class="modal-content" style="border-radius:0px;">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white;opacity:1; display:none;">×</button>
@@ -361,7 +396,7 @@
 
     <!--杨玉慧加   提示信息弹出窗口-->
     <div class="modal fade" id="msgModal" data-backdrop="static">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="width:600px;margin:30px auto;">
             <div class="modal-content" style="border-radius:0px;">
                 <div class="modal-header">
                     <button type="button" class="close" id="btnMsgModalOK1" aria-hidden="true" style="color:white;opacity:1; display:none;">×</button>

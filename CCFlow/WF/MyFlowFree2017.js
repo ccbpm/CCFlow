@@ -382,7 +382,6 @@ function FocusBtn(btn, workid) {
     });
 }
 
-
 //确认 按钮.
 function ConfirmBtn(btn, workid) {
 
@@ -801,7 +800,7 @@ function initGroup(workNodeData, groupFiled) {
         case "Dtl":
             //WF/CCForm/Dtl.aspx?EnsName=ND501Dtl1&RefPKVal=0&PageIdx=1
             var src = "./CCForm/Dtl.htm?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
-            src += "&r=q" + paras;
+            src += "&r=q" + paras + "&Version=" + load.Version;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "Ath": //增加附件.
@@ -812,9 +811,9 @@ function initGroup(workNodeData, groupFiled) {
                     continue;
                 var src = "";
                 if (pageData.IsReadonly)
-                    src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+                    src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&"+ "Version=" + load.Version;
                 else
-                    src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
+                    src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&Version=" + load.Version;
 
                 groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             }
@@ -882,7 +881,6 @@ function initGroup(workNodeData, groupFiled) {
     }
     return groupHtml;
 }
-
 
 function InitForm() {
     var workNodeData = JSON.parse(jsonStr);
@@ -2838,9 +2836,9 @@ function figure_Template_Dtl(frmDtl) {
     if (frmDtl.DtlShowModel == "0") {
         if (pageData.IsReadOnly) {
 
-            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam;
+            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=" + load.Version;
         } else {
-            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam;
+            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=" + load.Version;
         }
     }
     else if (frmDtl.DtlShowModel == "1") {

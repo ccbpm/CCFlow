@@ -94,7 +94,7 @@ namespace BP.WF.HttpHandler
         public string Logout()
         {
             BP.WF.Dev2Interface.Port_SigOut();
-            return "";
+            return "您已经安全退出,欢迎使用ccbpm.";
         }
 
         /// <summary>
@@ -401,9 +401,13 @@ namespace BP.WF.HttpHandler
             if (DBAccess.TestIsConnection() == false)
                 return "err@数据库连接配置错误 AppCenterDSN, AppCenterDBType 参数配置. ccflow请检查 web.config文件, jflow请检查 jflow.properties.";
 
-            //让admin登录
-            if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.IsAdmin==false )
-                return "url@Login.htm?DoType=Logout";
+            if (DBAccess.IsExitsObject("Port_Emp") == false)
+                return "url@../DBInstall.htm";
+
+
+            ////让admin登录
+            //if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.IsAdmin == false)
+            //    return "url@Login.htm?DoType=Logout";
 
             //如果没有流程表，就执行安装.
             if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == false)
@@ -414,7 +418,7 @@ namespace BP.WF.HttpHandler
                 // 执行升级
                 string str = BP.WF.Glo.UpdataCCFlowVer();
                 if (str == null)
-                    str = "";
+                    str = "ccbpm 准备完毕,欢迎登录.";
                 return str;
             }
             catch (Exception ex)

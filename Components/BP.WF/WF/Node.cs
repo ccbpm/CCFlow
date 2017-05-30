@@ -836,15 +836,32 @@ namespace BP.WF
         {
             get
             {
-                //switch (this.HisFormType)
-                //{
-                //    case NodeFormType.DisableIt:
-                //        break;
-                //    default:
-                //        break;
-                //}
-                SysEnum se = new SysEnum("NodeFormType", (int)this.HisFormType);
-                return se.Lab;
+                if (this.HisFormType == NodeFormType.DisableIt)
+                    return "树表单";
+
+                if (this.HisFormType == NodeFormType.ExcelForm)
+                    return "Excel表单";
+
+                if (this.HisFormType == NodeFormType.FixForm)
+                    return "傻瓜表单";
+
+                if (this.HisFormType == NodeFormType.FoolTruck)
+                    return "傻瓜轨迹表单";
+
+
+                if (this.HisFormType == NodeFormType.FreeForm)
+                    return "自由表单";
+
+                if (this.HisFormType == NodeFormType.SDKForm)
+                    return "SDK表单";
+
+                if (this.HisFormType == NodeFormType.SelfForm)
+                    return "自定义表单";
+
+                if (this.HisFormType == NodeFormType.SheetAutoTree)
+                    return "动态表单树";
+
+                return "未知";
             }
 
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -26,6 +27,43 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        #region 安装.
+        public string DBInstall_Init()
+        {
+            if (DBAccess.TestIsConnection() == false)
+                return "err@数据库连接配置错误 AppCenterDSN, AppCenterDBType 参数配置. ccflow请检查 web.config文件, jflow请检查 jflow.properties.";
+
+            if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == true)
+                return "err@info数据库已经安装上了，您不必在执行安装. 点击:<a href='./CCBPMDesigner/Login.htm' >这里直接登录流程设计器</a>";
+
+            Hashtable ht = new Hashtable();
+            ht.Add("OSModel", (int)BP.WF.Glo.OSModel); //组织结构类型.
+            ht.Add("DBType", SystemConfig.AppCenterDBType.ToString()); //数据库类型.
+            ht.Add("Ver", BP.WF.Glo.Ver); //版本号.
+
+            return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
+        public string DBInstall_Submit()
+        {
+            string lang = "CH";
+
+            //是否要安装demo.
+            int demoTye = this.GetRequestValInt("DemoType");
+
+            //运行ccflow的安装.
+            BP.WF.Glo.DoInstallDataBase(lang, demoTye);
+
+            //执行ccflow的升级。
+            BP.WF.Glo.UpdataCCFlowVer();
+
+            //加注释.
+            BP.Sys.PubClass.AddComment();
+
+            return "info@系统成功安装 点击:<a href='./CCBPMDesigner/Login.htm' >这里直接登录流程设计器</a>";
+            // this.Response.Redirect("DBInstall.aspx?DoType=OK", true);
+        }
+        #endregion
 
         #region 表单方案.
 

@@ -23,17 +23,72 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 事件.
+        public string Action_Init()
+        {
+            return "";
+        }
+        #endregion 事件.
+
+
         #region 考核超时规则.
+        /// <summary>
+        /// 初始化考核规则.
+        /// </summary>
+        /// <returns></returns>
         public string CHOvertimeRole_Init()
         {
+
             BP.WF.Node nd = new Node(this.FK_Node);
 
-            return nd.ToJson();
+            Nodes nds = new Nodes();
+            nds.Retrieve(NodeAttr.FK_Flow, nd.FK_Flow);
+
+            //组装json.
+            DataSet ds = new DataSet();
+
+            DataTable dtNodes = nds.ToDataTableField("Nodes");
+            dtNodes.TableName = "Nodes";
+            ds.Tables.Add(dtNodes);
+
+            DataTable dtNode = nds.ToDataTableField("Node");
+            dtNode.TableName = "Node";
+            ds.Tables.Add(dtNode);
+
+            return BP.Tools.Json.DataSetToJson(ds, false); 
         }
         public string CHOvertimeRole_Save()
         {
             BP.WF.Node nd = new Node(this.FK_Node);
-            return nd.ToJson();
+
+            int val = this.GetRequestValInt("RB_OutTimeDeal");
+
+            var deal = (BP.WF.Template.OutTimeDeal)val;
+
+            nd.HisOutTimeDeal = deal;
+
+            if (nd.HisOutTimeDeal == OutTimeDeal.AutoJumpToSpecNode)
+                nd.DoOutTime = this.GetRequestVal("DDL_Nodes");
+
+            if (nd.HisOutTimeDeal == OutTimeDeal.AutoShiftToSpecUser)
+                nd.DoOutTime = this.GetRequestVal("TB_Shift");
+
+            if (nd.HisOutTimeDeal == OutTimeDeal.SendMsgToSpecUser)
+                nd.DoOutTime = this.GetRequestVal("TB_SendEmps");
+
+            if (nd.HisOutTimeDeal == OutTimeDeal.RunSQL)
+                nd.DoOutTime = this.GetRequestVal("TB_SQL");
+
+            //是否质量考核节点.
+            if (this.GetRequestValInt("IsEval") == 0)
+                nd.IsEval = false;
+            else
+                nd.IsEval = true;
+
+            //执行更新.
+            nd.Update();
+
+            return "@保存成功.";
         }
         #endregion
 
@@ -68,7 +123,6 @@ namespace BP.WF.HttpHandler
         
         #endregion 多人处理规则.
 
-
         #region 考核规则.
         public string CHRole_Init()
         {
@@ -100,7 +154,6 @@ namespace BP.WF.HttpHandler
             return "保存成功...";
         }
         #endregion 考核规则.
-
 
         #region 节点属性（列表）的操作
         /// <summary>

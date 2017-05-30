@@ -969,7 +969,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoCHOvertimeRole()
         {
-            return "../../Admin/AttrNode/CHOvertimeRole.aspx?FK_Node=" + this.NodeID;
+            return "../../Admin/AttrNode/CHOvertimeRole.htm?FK_Node=" + this.NodeID;
         }
         #endregion 考核规则.
 

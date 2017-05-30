@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="导出" Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true"
-    CodeBehind="Exp.aspx.cs" Inherits="CCFlow.WF.Admin.AttrFlow.Exp" %>
+    CodeBehind="Exp_Delay.aspx.cs" Inherits="CCFlow.WF.Admin.AttrFlow.Exp" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

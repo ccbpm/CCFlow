@@ -356,12 +356,12 @@
                 url: Handler + "?DoType=" + doType,
                 success: function (data) {
 
-                    document.getElementById("Btn_Login").disabled = false;
 
                     if (data.indexOf('err@') == 0) {
                         $("#Msg").html("<font color=red>" + data + "</font>");
                         return;
                     }
+
 
                     if (data.indexOf('url@') == 0) {
                         var url = data.replace('url@', '');
@@ -369,6 +369,7 @@
                        return;
                    }
 
+                   document.getElementById("Btn_Login").disabled = false;
 
                    $("#Msg").html("<font color=green>"+data+"</font>");
 

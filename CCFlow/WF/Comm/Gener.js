@@ -31,6 +31,20 @@ function AtParaToJson(json) {
     return jsObj;
 }
 
+function GetRadioValue(groupName) {
+    var obj;
+    obj = document.getElementsByName(groupName);
+    if (obj != null) {
+        var i;
+        for (i = 0; i < obj.length; i++) {
+            if (obj[i].checked) {
+                return obj[i].value;
+            }
+        }
+    }
+    return null;
+}
+
 //获得所有的checkbox 的id组成一个string用逗号分开, 以方便后台接受的值保存.
 function GenerCheckIDs() {
 
@@ -223,6 +237,7 @@ function GenerFullAllCtrlsVal(data) {
         var div = document.getElementById(attr);
         if (div != null) {
             div.innerHTML = val;
+            continue;
         }
 
 

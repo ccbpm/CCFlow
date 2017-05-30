@@ -296,16 +296,8 @@ function NodeProperty_Funs(item) {
 
     //根据事件名称进行执行
     switch (item.name) {
-        case "NodePropertyNew": //节点属性.
-            url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.NodeExt&PK=" + FK_Node + "&Lang=CH";
-            if (window.parent) {
-                window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "PO", "节点属性" + FK_Node, url, item.iconCls);
-            } else {
-                WinOpen(url);
-            }
-            break;
         case "NodeProperty": //节点属性.
-            url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Node&PK=" + FK_Node + "&Lang=CH";
+            url = "../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&PK=" + FK_Node + "&Lang=CH";
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "PO", "节点属性" + FK_Node, url, item.iconCls);
             } else {

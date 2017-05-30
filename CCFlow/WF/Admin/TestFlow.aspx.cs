@@ -77,10 +77,9 @@ namespace CCFlow.WF.Admin
 
 
             BP.Sys.SystemConfig.DoClearCash();
+
             // 让admin 登录.
             BP.WF.Dev2Interface.Port_Login("admin");
-            //BP.WF.Dev2Interface.Port_Login("admin", this.SID);
-
             if (this.FK_Flow == null)
             {
                 this.Ucsys1.AddFieldSet("关于流程测试");
@@ -97,6 +96,7 @@ namespace CCFlow.WF.Admin
             {
                 Emp emp = new Emp(this.RefNo);
                 BP.Web.WebUser.SignInOfGener(emp, this.Lang);
+
                 this.Session["FK_Flow"] = this.FK_Flow;
                 if (this.Request.QueryString["Type"] != null)
                 {
@@ -115,7 +115,7 @@ namespace CCFlow.WF.Admin
 
             BP.Web.WebUser.SysLang = this.Lang;
             Flow fl = new Flow(this.FK_Flow);
-            fl.DoCheck();
+        //    fl.DoCheck();
 
             int nodeid = int.Parse(this.FK_Flow + "01");
             DataTable dt=null;

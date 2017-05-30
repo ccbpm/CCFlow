@@ -18,6 +18,8 @@
 
             $("#Msg").html("正在执行流程检查,请稍后......");
 
+            $("#Msg").html("<br><br><br><br><center ><img src='../../Img/loading.gif' /><font color=green>正在执行流程检查,大约持续1-3分钟时间,请稍后......</blue><br><br><br><br></center>");
+
             $.ajax({
                 type: 'post',
                 async: true,
@@ -36,7 +38,6 @@
                 }
             });
 
-            $("#Msg").html("");
         });
     </script>
 

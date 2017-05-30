@@ -342,7 +342,7 @@
                 return;
             }
 
-            $("#Msg").html("<font>ccbpm 正在为登录做准备.</font>");
+            $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在为登录做准备.</font>");
 
             document.getElementById("Btn_Login").disabled = 'disabled';
 
@@ -356,8 +356,6 @@
                 url: Handler + "?DoType=" + doType,
                 success: function (data) {
 
-                    $("#Msg").html("ccbpm 准备成功,欢迎登录.");
-
                     document.getElementById("Btn_Login").disabled = false;
 
                     if (data.indexOf('err@') == 0) {
@@ -367,14 +365,13 @@
 
                     if (data.indexOf('url@') == 0) {
                         var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
-                    }
+                       window.location.href = url;
+                       return;
+                   }
 
-                    if (data != "") {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
-                        // alert(data);
-                    }
+
+                   $("#Msg").html("<font color=green>"+data+"</font>");
+
                 }
             });
         });

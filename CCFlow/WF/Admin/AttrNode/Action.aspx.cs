@@ -113,7 +113,7 @@ namespace CCFlow.WF.Admin
 
             FrmEvents ndevs = new FrmEvents();
 
-            if (!string.IsNullOrWhiteSpace(this.FK_MapData))
+            if (string.IsNullOrWhiteSpace(this.FK_MapData)==false)
                 ndevs.Retrieve(FrmEventAttr.FK_MapData, this.FK_MapData);
 
             EventLists xmls = new EventLists();

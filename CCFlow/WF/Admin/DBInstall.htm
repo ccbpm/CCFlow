@@ -34,8 +34,10 @@
                 url: Handler + "?DoType=DBInstall_Init",
                 success: function (data) {
 
+                    alert(data);
+
                     if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>安装准备失败：<br>" + data + "</font> . <br>上面问题解决后，请刷新按钮执行安装.");
+                        $("#Msg").html("<font color=red>安装准备失败：<br>" + data + "</font> .");
                         return;
                     }
 

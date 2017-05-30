@@ -14,7 +14,6 @@ namespace CCFlow.WF.Admin.AttrFlow
 {
     public partial class DTSBTableExt : System.Web.UI.Page
     {
-
         #region 属性.
         public string FK_Flow
         {
@@ -38,7 +37,6 @@ namespace CCFlow.WF.Admin.AttrFlow
             }
         }
         #endregion 属性.
-
 
         protected void Page_Load(object sender, EventArgs e)
         {

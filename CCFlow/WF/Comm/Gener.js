@@ -53,6 +53,7 @@ function GenerCheckIDs() {
 
 
     for (var i = 0; i < arrObj.length; i++) {
+
         if (arrObj[i].type != 'checkbox')
             continue;
 
@@ -62,6 +63,8 @@ function GenerCheckIDs() {
 
         checkBoxIDs += arrObj[i].id + ',';
     }
+
+    alert(checkBoxIDs);
 
     return checkBoxIDs;
 }

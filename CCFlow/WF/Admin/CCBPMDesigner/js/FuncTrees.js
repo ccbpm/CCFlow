@@ -115,7 +115,7 @@ functrees.push({
 						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "表结构", IconCls: "icon-Config", Url: "../../Comm/Sys/SystemClass.htm" },
 						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "二级管理员", IconCls: "icon-Config", Url: "../../Comm/Search.htm?EnsName=BP.WF.Port.AdminEmps" },
 //						{ Type: "Node", Id: "SysVal", ParentId: "BasicSetting2", Name: "系统变量", IconCls: "icon-Config", Url: "javascript:void(0)" },
-						{ Type: "Node", Id: "FlowPrevSetting", ParentId: "BasicSetting2", Name: "流程预先审批设置", IconCls: "icon-Config", Url: "../AttrFlow/GetTask.htm" },
+						//{ Type: "Node", Id: "FlowPrevSetting", ParentId: "BasicSetting2", Name: "流程预先审批设置", IconCls: "icon-Config", Url: "../AttrFlow/GetTask.htm" },
 						{ Type: "Node", Id: "FuncDown", ParentId: "BasicSetting2", Name: "功能执行", IconCls: "icon-Config", Url: "../../Comm/MethodLink.htm" }
 					  ]
 			}

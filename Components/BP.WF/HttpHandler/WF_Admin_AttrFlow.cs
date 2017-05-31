@@ -366,7 +366,7 @@ namespace BP.WF.HttpHandler
 
             // 把流程信息放入.
             BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
-            DataTable dtFlow = fl.ToDataTableField("Flow");
+            DataTable dtFlow = fl.ToDataTableField(this.FK_Flow);
             ds.Tables.Add(dtFlow);
 
             return BP.Tools.Json.DataSetToJson(ds, false);
@@ -386,7 +386,7 @@ namespace BP.WF.HttpHandler
             if (flow.DTSWay == FlowDTSWay.None)
             {
                 flow.Update();
-                return "保存成功111.";
+                return "保存成功.";
             }
 
             flow.DTSDBSrc = this.GetRequestVal("DDL_DBSrc");

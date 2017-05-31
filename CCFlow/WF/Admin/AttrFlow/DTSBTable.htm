@@ -95,7 +95,7 @@
     </script>
 </head>
 <body>
-<form id="cc">
+    <form id="cc">
     <table>
         <caption>与业务表数据同步</caption>
         <tr>
@@ -122,18 +122,18 @@
             <td valign="top" style="text-align: center;">
                 <fieldset>
                     <legend>
-                    <input type=radio value="0"  id="RB_DTSWay_0" name="RB_DTSWay" > <label for="RB_DTSWay_0">不执行同步 </label>
+                    <input type="radio" value="0"  id="RB_DTSWay_0" name="RB_DTSWay"  checked="checked" /> <label for="RB_DTSWay_0">不执行同步 </label>
 
                     </legend>
                     <ul style="color:Gray">
-                        <li>流程运行的数据存储到<span style="color: Blue;" >[<div id="P1" />]</span> ,不与其他系统交换数据。</li>
-                        <li>其他系统可以读写这个表<span style="color: Blue;"> [<div id="P2" />]</span>的数据，完成相关的业务操作。</li>
-                        <li>该表名<span style="color: Blue;">[<div id="P3" />]</span>是可以在流程属性配置。</li>
+                        <li>流程运行的数据存储到[<div id="P1" style="color: Blue;"  />] ,不与其他系统交换数据。</li>
+                        <li>其他系统可以读写这个表[<div id="P2" style="color: Blue;" />]的数据，完成相关的业务操作。</li>
+                        <li>该表名[<div id="P3" style="color: Blue;"  />]是可以在流程属性配置。</li>
                     </ul>
                 </fieldset>
                 <fieldset>
                     <legend>
-                     <input type=radio value="1"  id="RB_DTSWay_1" name="RB_DTSWay" > <label for="RB_DTSWay_1">执行同步 </label>
+                     <input type="radio" value="1"  id="RB_DTSWay_1" name="RB_DTSWay" /> <label for="RB_DTSWay_1">执行同步 </label>
                     </legend>
                     <table style="text-align: center;">
                         <tr>
@@ -165,8 +165,8 @@
                             </td>
                             <td>
                              
-                                <input type=radio value="0"  id="RB_DTSField0" name="DTSField" > <label for="RB_DTSField0">字段名相同 </label>
-                                <input type=radio value="1"  id="RB_DTSField1" name="DTSField" > <label for="RB_DTSField1">按设置字段  </label>
+                                <input type="radio" value="0"  id="RB_DTSField0" name="DTSField" /> <label for="RB_DTSField0">字段名相同 </label>
+                                <input type="radio" value="1"  id="RB_DTSField1" name="DTSField" /> <label for="RB_DTSField1">按设置字段  </label>
 
                                 &nbsp; [<a href="javascript:OpenFields()">设置字段匹配</a>]
                             </td>
@@ -285,7 +285,7 @@ function WinOpen(url, winName) {
                     </table>
                 </fieldset>
 
-                <input type=button value="保存" onclick="Save();" /> 
+                <input type="button" value="保存" onclick="Save();" /> 
 
               <!--  <asp:Button ID="BtnSave" runat="server" OnClick="BtnSave_Click" Text=" 保 存 " />-->
             </td>

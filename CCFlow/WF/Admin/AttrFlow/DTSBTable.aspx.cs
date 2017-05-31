@@ -109,10 +109,9 @@ namespace CCFlow.WF.Admin.AttrFlow
 
             //System.Web.HttpContext.Current.Response.Write("<script language='JavaScript'>   window.parent.closeTab('设置字段匹配'); </script> ");
 
-            System.Web.HttpContext.Current.Response.Write("<script language='JavaScript'>"+
+            System.Web.HttpContext.Current.Response.Write("<script language='JavaScript'>" +
                 "try{window.parent.closeTab('设置字段匹配');}catch{} </script> ");
         }
-
         /// <summary>
         /// 保存数据同步
         /// </summary>

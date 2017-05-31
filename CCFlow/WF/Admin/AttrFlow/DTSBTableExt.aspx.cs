@@ -40,7 +40,6 @@ namespace CCFlow.WF.Admin.AttrFlow
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
             string rpt = "ND" + int.Parse(this.FK_Flow) + "Rpt";
             MapAttrs attrs = new MapAttrs(rpt);
 
@@ -90,7 +89,6 @@ namespace CCFlow.WF.Admin.AttrFlow
             for (int i = 0; i < lcArr.Length; i++)
                 ht.Add(lcArr[i], ywArr[i]);
 
-
             #region 锁定workid 在第一行上.
 
             //guid workid必须选择一项
@@ -132,7 +130,6 @@ namespace CCFlow.WF.Admin.AttrFlow
             this.Pub1.AddTD(textCenter, ddl);
             this.Pub1.AddTREnd();
             #endregion 锁定workid 在第一行上.
-
 
             bool is1 = false;
             foreach (MapAttr attr in attrs)

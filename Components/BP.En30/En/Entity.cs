@@ -4546,7 +4546,9 @@ namespace BP.En
 				}
 			}
 
-			DataSet ds = this.ToDataSet();
+            DataTable dt = this.ToDataTableDescField();
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt); //  this.ToDataSet();
 			ds.WriteXml(file);
 		}
 		#endregion
@@ -4960,22 +4962,7 @@ namespace BP.En
 		{
 			return BP.Tools.Json.ToJson(this.ToDataTableField(dtName));
 		}
-		/// <summary>
-		/// 把当前实体集合的数据库转换成Dataset。
-		/// </summary>
-		/// <returns></returns>
-		public DataSet ToDataSet()
-		{
-			DataSet ds = new DataSet();
-			ds.Tables.Add(this.ToDataTableField());
-			return ds;
-		}
-
-		public DataTable ToDataTableStringField()
-		{
-			return ToDataTableStringField("dt");
-		}
-		public DataTable ToDataTableStringField(string tableName)
+		public DataTable ToDataTableStringField(string tableName="dt")
 		{
 			DataTable dt = this.ToEmptyTableStringField();
 			Entity en = this.GetNewEntity;

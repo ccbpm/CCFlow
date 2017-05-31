@@ -1657,6 +1657,7 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
     //console.info(defVal+"=="+keyOfEn+"=="+result);
     return result = unescape(result);
 }
+
 //加载表单数据.
 function GenerWorkNode1() {
     $.ajax({
@@ -2220,6 +2221,8 @@ function GenerWorkNode() {
         url: MyFlow + "?DoType=GenerWorkNode" + "&m=" + Math.random() + "&" + urlParam,
         dataType: 'html',
         success: function (data) {
+
+
             //console.info(data);
             jsonStr = data;
             var gengerWorkNode = {};
@@ -2251,6 +2254,8 @@ function GenerWorkNode() {
                 var label = figure_Template_Rb(frmLab);
                 $('#CCForm').append(label);
             }
+
+
 
             //循环FrmBtn
             for (var i in flow_Data.Sys_FrmBtn) {
@@ -2308,15 +2313,20 @@ function GenerWorkNode() {
                 $('#lastOptMsg').append($('<hr/>'));
             }
 
+
+
             if (flow_Data.AlertMsg.length == 0) {
                 $('#lastOptMsg').hide();
             }
+
+         //   alert(data);
             //循环Sys_MapFrame
-            for (var i in flow_Data.Sys_MapFrame) {
-                var frame = flow_Data.Sys_MapFrame[i];
-                var alertMsgEle = figure_Template_IFrame(frame);
-                $('#lastOptMsg').append(alertMsgEle);
-            }
+//            for (var i in flow_Data.Sys_MapFrame) {
+//                var frame = flow_Data.Sys_MapFrame[i];
+//                var alertMsgEle = figure_Template_IFrame(frame);
+//                $('#lastOptMsg').append(alertMsgEle);
+//            }
+           // alert('ddddddddddd');
 
 
             //循环组件 轨迹图 审核组件 子流程 子线程
@@ -2354,6 +2364,9 @@ function GenerWorkNode() {
                 $('#Message').html(alertMsgHtml);
             }
 
+            alert('ddddddddddd');
+
+
             //根据NAME 设置ID的值
             var inputs = $('[name]');
             $.each(inputs, function (i, obj) {
@@ -2380,6 +2393,10 @@ function GenerWorkNode() {
             catch (err) {
 
             }
+
+            alert('ddddddddddd');
+
+
 
             var jsSrc = '';
             try {
@@ -2410,6 +2427,9 @@ function GenerWorkNode() {
 
 
                 var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+
+                alert(mapAttr.KeyOfEn + ' - ' + defValue);
+
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);
                 }

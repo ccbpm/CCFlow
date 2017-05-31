@@ -41,11 +41,10 @@
                     var nodes = data["Nodes"];
                     var tables = data["Tables"];
 
-
                     //赋值.
-                    $('P1').val(flow.PTable);
-                    $('P2').val(flow.PTable);
-                    $('P3').val(flow.PTable);
+                    $("#P1").val(flow.PTable);
+                    $("#P2").val(flow.PTable);
+                    $("#P3").val(flow.PTable);
 
                     //绑定表.
                     GenerBindDDL("DDL_Table", tables, "No", "Name", null);
@@ -70,8 +69,9 @@
 //            var table = $("DDL_Table").val();
 
             var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-            // alert(CheckBoxIDs);
+
             var frmData = $("#cc").serialize();
+            alert("cc:"+frmData);
             $.ajax({
                 data: frmData,
                 type: 'post',
@@ -95,6 +95,7 @@
     </script>
 </head>
 <body>
+<form id="cc">
     <table>
         <caption>与业务表数据同步</caption>
         <tr>
@@ -290,5 +291,6 @@ function WinOpen(url, winName) {
             </td>
         </tr>
     </table>
+    </form>
 </body>
 </html>

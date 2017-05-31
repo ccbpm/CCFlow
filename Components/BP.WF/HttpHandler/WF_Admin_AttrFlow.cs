@@ -8,6 +8,9 @@ using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.En;
+using System.Data;
+using System.Web.UI;
+using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
 {
@@ -22,12 +25,7 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
-        #region 数据同步.
-        public string DTSBTable_Init()
-        {
-            return "";
-        }
-        #endregion
+        
 
 
         #region APICodeFEE_Init.
@@ -349,14 +347,122 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 与业务表数据同步
+        public string DTSBTable_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //获得数据源的表.
+            BP.Sys.SFDBSrc src = new SFDBSrc("local");
+            DataTable dt = src.GetTables();
+            dt.TableName = "Tables";
+            ds.Tables.Add(dt);
+
+
+            //把节点信息放入.
+            BP.WF.Nodes nds = new Nodes(this.FK_Flow);
+            DataTable dtNode = nds.ToDataTableField("Nodes");
+            ds.Tables.Add(dtNode);
+
+
+            // 把流程信息放入.
+            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
+            DataTable dtFlow = fl.ToDataTableField("Flow");
+            ds.Tables.Add(dtFlow);
+
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+
         /// <summary>
         /// 与业务表数据同步
         /// </summary>
         /// <returns></returns>
-        public string DTSBTbale_Init()
+        public string DTSBTable_Save()
         {
-            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
-            return fl.ToJson();
+            Flow flow = new Flow(this.FK_Flow);
+
+            BP.WF.Template.FlowDTSWay dtsWay = (BP.WF.Template.FlowDTSWay)this.GetRequestValInt("RB_DTSWay");
+
+            flow.DTSWay = dtsWay;
+            if (flow.DTSWay == FlowDTSWay.None)
+            {
+                flow.Update();
+                return "保存成功111.";
+            }
+
+            flow.DTSDBSrc = this.GetRequestVal("DDL_DBSrc");
+            flow.DTSBTable = this.GetRequestVal("DDL_Table");
+
+            DTSField field = (DTSField)this.GetRequestValInt("DTSField");
+
+            if (field==0)
+                field = DTSField.SameNames;
+            flow.DTSField = field;
+
+            SFDBSrc s = new SFDBSrc("local");
+            if (field == DTSField.SameNames)
+            {
+                DataTable dt = s.GetColumns(flow.PTable);
+
+                s = new SFDBSrc(flow.DTSDBSrc);// this.src);
+                DataTable ywDt = s.GetColumns(flow.DTSBTable);// this.ywTableName);
+
+                string str = "";
+                string ywStr = "";
+                foreach (DataRow ywDr in ywDt.Rows)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        if (ywDr["No"].ToString().ToUpper() == dr["No"].ToString().ToUpper())
+                        {
+                            if (dr["No"].ToString().ToUpper() == "OID")
+                            {
+                                flow.DTSBTablePK = "OID";
+                            }
+                            str += dr["No"].ToString() + ",";
+                            ywStr += ywDr["No"].ToString() + ",";
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(str))
+                    flow.DTSFields = str.TrimEnd(',') + "@" + ywStr.TrimEnd(',');
+                else
+                {
+                    PubClass.Alert("未检测到业务主表【" + flow.PTable + "】与表【" + flow.DTSBTable + "】有相同的字段名.");
+                    return "";//不执行保存
+                }
+            }
+            else//按设置的字段匹配   检查在
+            {
+                try
+                {
+                    s = new SFDBSrc("local");
+                    string str = flow.DTSFields;
+
+                    string[] arr = str.Split('@');
+
+
+                    string sql = "SELECT " + arr[0] + " FROM " + flow.PTable;
+
+                    s.RunSQL(sql);
+
+                    s = new SFDBSrc(flow.DTSDBSrc);
+
+                    sql = "SELECT " + arr[1] + ", " + flow.DTSBTablePK
+                        + " FROM " + flow.DTSBTable;
+
+                    s.RunSQL(sql);
+
+                }
+                catch
+                {
+                    //PubClass.Alert(ex.Message);
+                    PubClass.Alert("设置的字段有误.【" + flow.DTSFields + "】");
+                    return "";//不执行保存
+                }
+            }
+            flow.Update();
+            return flow.ToJson();
         }
         #endregion
 

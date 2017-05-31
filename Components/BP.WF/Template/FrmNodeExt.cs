@@ -107,7 +107,7 @@ namespace BP.WF.Template
 
                 #region 表单启用规则.
                 map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "表单启用规则?", true, true);
-                map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, true,true);
+                map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, false,true);
                 #endregion 表单启用规则.
 
 

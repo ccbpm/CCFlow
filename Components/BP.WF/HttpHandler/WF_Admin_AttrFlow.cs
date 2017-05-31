@@ -8,6 +8,7 @@ using BP.Web;
 using BP.Sys;
 using BP.DA;
 using BP.En;
+using BP.WF.Template;
 using System.Data;
 using System.Web.UI;
 using BP.WF.Template;
@@ -24,9 +25,6 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
-        
-
 
         #region APICodeFEE_Init.
         /// <summary>
@@ -394,7 +392,7 @@ namespace BP.WF.HttpHandler
 
             DTSField field = (DTSField)this.GetRequestValInt("DTSField");
 
-            if (field==0)
+            if (field == 0)
                 field = DTSField.SameNames;
             flow.DTSField = field;
 
@@ -464,7 +462,118 @@ namespace BP.WF.HttpHandler
             flow.Update();
             return flow.ToJson();
         }
+
         #endregion
+
+        #region 数据调度 - 字段映射.
+        public string DTSBTableExt_Init()
+        {
+            //定义数据容器.
+            DataSet ds = new DataSet();
+
+            //获得数据表列.
+            SFDBSrc src = new SFDBSrc(  this.GetRequestVal("FK_DBSrc") );
+            DataTable dtColms = src.GetColumns(  this.GetRequestVal("TableName"));
+            dtColms.TableName="Cols";
+
+            if (SystemConfig.AppCenterDBType== DBType.Oracle)
+            {
+                dtColms.Columns["NO"].ColumnName = "No";
+                dtColms.Columns["NAME"].ColumnName = "Name";
+            }
+            
+            ds.Tables.Add(dtColms);
+
+            //属性列表.
+            MapAttrs attrs = new MapAttrs(  "ND"+int.Parse(this.FK_Flow)+"Rpt" );
+            DataTable dtAttrs = attrs.ToDataTableStringField("Sys_MapAttr");
+            ds.Tables.Add(dtAttrs);
+
+            //转化成json,返回.
+            return BP.Tools.Json.DataSetToJson(ds,false);
+        }
+        public string DTSBTableExt_Save()
+        {
+            string rpt = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            Flow fl = new Flow(this.FK_Flow);
+            MapAttrs attrs = new MapAttrs(rpt);
+
+            string pk = this.GetRequestVal("DDL_OID");
+            if (string.IsNullOrEmpty(pk) == true)
+                return "err@必须设置业务表的主键，否则无法同步。";
+
+
+            string lcStr = "";//要同步的流程字段
+            string ywStr = "";//第三方字段
+            string err = "";
+            foreach (MapAttr attr in attrs)
+            {
+                int val = this.GetRequestValInt("CB_" + attr.KeyOfEn);
+                if (val==0 )
+                    continue;
+
+                string refField = this.GetRequestVal("DDL_" + attr.KeyOfEn);
+
+                //如果选中的业务字段重复，抛出异常
+                if (ywStr.Contains("@" + refField + "@"))
+                {
+                    err += "@配置【" + attr.KeyOfEn + " - " + attr.Name +
+                        "】错误, 请确保选中业务字段的唯一性，该业务字段已经被其他字段所使用。";
+                }
+                lcStr += "@" + attr.KeyOfEn + "@,";
+                ywStr += "@" + refField + "@,";
+            }
+
+        //    BP.Web.Controls.RadioBtn rb = this.Pub1.GetRadioBtnByID("rb_workId");
+
+            int pkModel = this.GetRequestValInt("PKModel");
+
+            string  ddl_key =  this.GetRequestVal("DDL_OID");
+            if (pkModel==0)
+            {
+                if (ywStr.Contains("@" + ddl_key + "@"))
+                {
+                    err += "@请确保选中业务字段的唯一性，该业务字段【" + ddl_key +
+                        "】已经被其他字段所使用。";
+                }
+                lcStr = "@OID@," + lcStr;
+                ywStr = "@" + ddl_key + "@," + ywStr;
+            }
+            else
+            {
+                if (ywStr.Contains("@" + ddl_key + "@"))
+                {
+                    err += "@请确保选中业务字段的唯一性，该业务字段【" + ddl_key +
+                        "】已经被其他字段所使用。";
+                }
+                lcStr = "@GUID@," + lcStr;
+                ywStr = "@" + ddl_key + "@," + ywStr;
+            }
+
+            if (err != "")
+                return "err@"+err;
+
+            lcStr = lcStr.Replace("@", "");
+            ywStr = ywStr.Replace("@", "");
+
+
+            //去除最后一个字符的操作
+            if (string.IsNullOrEmpty(lcStr) || string.IsNullOrEmpty(ywStr))
+            {
+                return "err@要配置的内容为空...";
+            }
+            lcStr = lcStr.Substring(0, lcStr.Length - 1);
+            ywStr = ywStr.Substring(0, ywStr.Length - 1);
+
+
+            //数据存储格式   a,b,c@a_1,b_1,c_1
+            fl.DTSFields = lcStr + "@" + ywStr;
+            fl.DTSBTablePK = pk;
+            fl.Update();
+
+            return "设置成功.";
+        }
+        #endregion 
 
         #region 前置导航
         /// <summary>
@@ -612,5 +721,37 @@ namespace BP.WF.HttpHandler
             
         }
         #endregion 流程轨迹查看权限save
+
+        #region 数据导入.
+        /// <summary>
+        /// 流程模版导入.
+        /// </summary>
+        /// <returns></returns>
+        public string Imp_Done()
+        {
+            HttpFileCollection files = context.Request.Files;
+            if (files.Count == 0)
+                return "err@请选择要上传的流程模版。";
+
+            //设置文件名
+            string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
+
+            //保存文件到服务器的位置.
+            string filePath = "~/DataUser/FlowFile/" + fileNewName;
+            files[0].SaveAs(context.Server.MapPath(filePath));
+
+            string flowNo = this.FK_Flow;
+
+            Flow fl = new Flow(this.FK_Flow);
+            BP.WF.ImpFlowTempleteModel model = (BP.WF.ImpFlowTempleteModel)this.GetRequestValInt("ImpWay");
+            if (model == ImpFlowTempleteModel.AsSpecFlowNo)
+                flowNo = this.GetRequestVal("SpecFlowNo");
+
+            BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(fl.FK_FlowSort, filePath, model, flowNo);
+
+            return "@导入成功,流程编号为:" + flow.No + " 名称为:" + flow.Name;
+        }
+        #endregion 数据导入.
+
     }
 }

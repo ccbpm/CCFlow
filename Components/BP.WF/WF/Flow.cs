@@ -4995,7 +4995,7 @@ namespace BP.WF
         /// <param name="fk_flowSort">流程类别</param>
         /// <param name="path">流程名称</param>
         /// <returns></returns>
-        public static Flow DoLoadFlowTemplate(string fk_flowSort, string path, ImpFlowTempleteModel model, int SpecialFlowNo = -1)
+        public static Flow DoLoadFlowTemplate(string fk_flowSort, string path, ImpFlowTempleteModel model, string SpecialFlowNo="")
         {
             FileInfo info = new FileInfo(path);
             DataSet ds = new DataSet();
@@ -5046,10 +5046,9 @@ namespace BP.WF
                     fl.DoDelete(); /*删除可能存在的垃圾.*/
                     break;
                 case ImpFlowTempleteModel.AsSpecFlowNo:
-                    if (SpecialFlowNo <= 0)
-                    {
+                    if (SpecialFlowNo.Length <= 0)
                         throw new Exception("@您是按照指定的流程编号导入的，但是您没有传入正确的流程编号。");
-                    }
+
                     fl.No = SpecialFlowNo.ToString();
                     fl.DoDelData();
                     fl.DoDelete(); /*删除可能存在的垃圾.*/

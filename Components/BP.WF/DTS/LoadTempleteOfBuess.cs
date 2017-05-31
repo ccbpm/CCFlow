@@ -140,7 +140,9 @@ namespace BP.WF.DTS
                     try
                     {
                         msg += "\t\n@开始调度流程模板文件:" + filePath;
+                        
                         Flow myflow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, filePath, ImpFlowTempleteModel.AsNewFlow);
+
                         msg += "\t\n@流程:" + myflow.Name + "装载成功。";
 
                         System.IO.FileInfo info = new System.IO.FileInfo(filePath);

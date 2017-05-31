@@ -812,16 +812,6 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "发送成功转向条件"; // "转向条件";
-                rm.ClassMethodName = this.ToString() + ".DoTurn";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Menu/Cond.png";
-
-                //设置相关字段.
-                rm.RefAttrKey = NodeAttr.TurnToDealDoc;
-                rm.RefAttrLinkLabel = "";
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "绑定rtf打印格式模版(当打印方式为打印RTF格式模版时,该设置有效)"; //"单据&单据";

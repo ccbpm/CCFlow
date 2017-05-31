@@ -419,7 +419,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AccepterInit()
         {
-
             int toNodeID = 0;
             if (this.GetValFromFrmByKey("ToNode") != "0")
                 toNodeID = this.GetValIntFromFrmByKey("ToNode");

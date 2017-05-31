@@ -1593,11 +1593,8 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
                 if (model == ImpFlowTempleteModel.AsSpecFlowNo)
                 {
                     if (SpecialFlowNo <= 0)
-                    {
                         return "指定流程编号错误";
-                    }
-
-                    flow = Flow.DoLoadFlowTemplate(FK_flowSort, Path, model, SpecialFlowNo);
+                    flow = Flow.DoLoadFlowTemplate(FK_flowSort, Path, model, SpecialFlowNo.ToString());
                 }
                 else
                 {

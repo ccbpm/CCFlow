@@ -536,7 +536,7 @@ namespace BP.WF.Template
                 Map map = new Map("WF_FrmNode", "节点表单");
 
                 map.AddMyPK();
-                map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", true, true, 1, 32, 32);
+                map.AddTBString(FrmNodeAttr.FK_Frm, null, "表单ID", true, true, 1, 200, 200);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点编号", true, false);
                 map.AddTBString(FrmNodeAttr.FK_Flow, null, "流程编号", true, true, 1, 20, 20);
                 map.AddTBString(FrmNodeAttr.FrmType, "0", "表单类型", true, true, 1, 20, 20);

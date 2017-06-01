@@ -315,9 +315,13 @@ namespace BP.WF.HttpHandler
 
                 string toUrl = "";
                 if (this.currND.HisFormType == NodeFormType.SheetTree || this.currND.HisFormType == NodeFormType.SheetAutoTree)
+                {
                     toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                }
                 else
+                {
                     toUrl = "./WebOffice/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                }
 
                 string[] ps = this.RequestParas.Split('&');
                 foreach (string s in ps)
@@ -345,6 +349,11 @@ namespace BP.WF.HttpHandler
                 }
                 //SDK表单上服务器地址,应用到使用ccflow的时候使用的是sdk表单,该表单会存储在其他的服务器上,珠海高凌提出. 
                 toUrl = toUrl.Replace("@SDKFromServHost", SystemConfig.AppSettings["SDKFromServHost"]);
+
+                //增加fk_node
+                if (toUrl.Contains("&FK_Node=") == false)
+                    toUrl += "&FK_Node=" + this.currND.NodeID;
+
 
                 //// 加入设置父子流程的参数.
                 //toUrl += "&DoFunc=" + this.DoFunc;

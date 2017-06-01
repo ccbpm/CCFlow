@@ -8,6 +8,7 @@ using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.WF;
+using BP.WF.Template;
 using BP.WF.Port;
 
 namespace BP.WF.HttpHandler
@@ -27,7 +28,41 @@ namespace BP.WF.HttpHandler
         {
             return base.DoDefaultMethod();
         }
-      
+
+        /// <summary>
+        /// 方法
+        /// </summary>
+        /// <returns></returns>
+        public string HandlerMapExt()
+        {
+            WF_CCForm wf = new WF_CCForm(context);
+            return wf.HandlerMapExt();
+        }
+        /// <summary>
+        /// 获得发起列表
+        /// </summary>
+        /// <returns></returns>
+        public string Start_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //流程类别.
+            FlowSorts fss = new FlowSorts();
+            fss.RetrieveAll();
+            DataTable dtSort = fss.ToDataTableField("Sort");
+            dtSort.TableName = "Sort";
+            ds.Tables.Add(dtSort);
+
+            //获得能否发起的流程.
+            DataTable dtStart = Dev2Interface.DB_GenerCanStartFlowsOfDataTable(Web.WebUser.No);
+            dtStart.TableName = "Start";
+            ds.Tables.Add(dtStart);
+
+            
+
+            //返回组合
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
 
         #region 获得列表.
         /// <summary>
@@ -87,9 +122,9 @@ namespace BP.WF.HttpHandler
             DataTable dt = null;
 
             dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, this.FK_Node);
-
+            
             //转化大写的toJson.
-            return BP.Tools.Json.DataTableToJson(dt,true);
+            return BP.Tools.Json.DataTableToJson(dt,false);
         }
         #endregion 获得列表.
 

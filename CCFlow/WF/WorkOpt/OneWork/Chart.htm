@@ -94,8 +94,8 @@
                         return;
                     }
 
-                    data = $.parseJSON(data);
-                    drawStart(data);
+                    jdata = $.parseJSON(data);
+                    drawStart(jdata);
 
                 },
                 error: function (re) {
@@ -405,7 +405,7 @@
             var flows = "";
             var subflow;
 
-            $.each(jdata.ds.FLOWINFO, function () {
+            $.each(jdata.FLOWINFO, function () {
                 if (this.PNODEID == 0 || this.PNODEID != nodeId) {
                     return true;
                 }

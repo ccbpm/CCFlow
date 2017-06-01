@@ -2364,9 +2364,6 @@ function GenerWorkNode() {
                 $('#Message').html(alertMsgHtml);
             }
 
-            alert('ddddddddddd');
-
-
             //根据NAME 设置ID的值
             var inputs = $('[name]');
             $.each(inputs, function (i, obj) {
@@ -2374,7 +2371,6 @@ function GenerWorkNode() {
                     $(obj).attr("id", $(obj).attr("name"));
                 }
             })
-
 
 
             ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
@@ -2393,9 +2389,6 @@ function GenerWorkNode() {
             catch (err) {
 
             }
-
-            alert('ddddddddddd');
-
 
 
             var jsSrc = '';
@@ -2424,11 +2417,7 @@ function GenerWorkNode() {
                 var mapAttr = workNodeData.Sys_MapAttr[j];
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'
-
-
                 var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
-
-                alert(mapAttr.KeyOfEn + ' - ' + defValue);
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);

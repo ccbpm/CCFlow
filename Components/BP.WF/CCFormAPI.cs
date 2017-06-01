@@ -779,25 +779,36 @@ namespace BP.WF
 			foreach (MapAttr attr in dtlAttrs)
             {
                 #region 修改区分大小写.
-                //if (BP.WF.Glo.Plant == Plant.JFlow)
-                //{
-                //    foreach (DataColumn dr in dtDtl.Columns)
-                //    {
-                //        if (dr.ColumnName == attr.KeyOfEn.ToLower())
-                //        {
-                //            dr.ColumnName = attr.KeyOfEn;
-                //            continue;
-                //        }
+                if (BP.DA.DBType.Oracle == SystemConfig.AppCenterDBType)
+                {
+                    foreach (DataColumn dr in dtDtl.Columns)
+                    {
+                        var a = attr.KeyOfEn;
+                        var b = dr.ColumnName;
+                        if (attr.KeyOfEn.ToUpper() == dr.ColumnName)
+                        {
+                            dr.ColumnName = attr.KeyOfEn;
+                            continue;
+                        }
 
-                //        if (attr.LGType == FieldTypeS.Enum || attr.LGType == FieldTypeS.FK)
-                //        {
-                //            if (dr.ColumnName == attr.KeyOfEn.ToLower() + "text")
-                //            {
-                //                dr.ColumnName = attr.KeyOfEn + "Text";
-                //            }
-                //        }
-                //    }
-                //}
+                        if (attr.LGType == FieldTypeS.Enum || attr.LGType == FieldTypeS.FK)
+                        {
+                            if (dr.ColumnName == attr.KeyOfEn.ToUpper() + "TEXT")
+                            {
+                                dr.ColumnName = attr.KeyOfEn + "Text";
+                            }
+                        }
+                    }
+                    foreach (DataRow dr in dtDtl.Rows)
+                    {
+                        //本身是大写的不进行修改
+                        if (string.IsNullOrEmpty(dr[attr.KeyOfEn] + ""))
+                        {
+                            dr[attr.KeyOfEn] = dr[attr.KeyOfEn.ToUpper()];
+                            dr[attr.KeyOfEn.ToUpper()] = null;
+                        }
+                    }
+                }
                 #endregion 修改区分大小写.
 
                 //处理它的默认值.

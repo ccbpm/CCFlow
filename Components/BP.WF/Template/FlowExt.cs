@@ -1180,7 +1180,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchStartFields()
         {
-            return "../../Admin/AttrFlow/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow";
+            return "../../Admin/AttrNode/BatchStartFields.htm?s=d34&FK_Flow=" + this.No + "&ExtType=StartFlow";
         }
         /// <summary>
         /// 执行流程数据表与业务表数据手工同步

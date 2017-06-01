@@ -969,9 +969,7 @@
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.htm" />
     <Content Include="WF\Admin\AttrFlow\AutoStart.htm" />
     <Content Include="WF\Admin\AttrFlow\CheckFlow.htm" />
-    <Content Include="WF\Admin\AttrFlow\DTSBTable.aspx" />
     <Content Include="WF\Admin\AttrFlow\DTSBTable.htm" />
-    <Content Include="WF\Admin\AttrFlow\DTSBTableExt.aspx" />
     <Content Include="WF\Admin\AttrFlow\FlowFields.htm" />
     <Content Include="WF\Admin\AttrFlow\StartGuide.htm" />
     <Content Include="WF\Admin\AttrFlow\Limit.htm" />
@@ -1011,7 +1009,6 @@
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.htm" />
     <Content Include="WF\Admin\AttrNode\PushMessageEntity.htm" />
-    <Content Include="WF\Admin\AttrNode\TurnTo.aspx" />
     <Content Include="WF\Admin\AttrNode\TurnTo.htm" />
     <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
     <Content Include="WF\Admin\BindFrms.htm" />
@@ -8372,20 +8369,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrFlow\DTSBTable.aspx.cs">
-      <DependentUpon>DTSBTable.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\DTSBTable.aspx.designer.cs">
-      <DependentUpon>DTSBTable.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\DTSBTableExt.aspx.cs">
-      <DependentUpon>DTSBTableExt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrFlow\DTSBTableExt.aspx.designer.cs">
-      <DependentUpon>DTSBTableExt.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -8468,13 +8451,6 @@
     </Compile>
     <Compile Include="WF\Admin\AttrNode\SortingMapAttrs.aspx.designer.cs">
       <DependentUpon>SortingMapAttrs.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\TurnTo.aspx.cs">
-      <DependentUpon>TurnTo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\TurnTo.aspx.designer.cs">
-      <DependentUpon>TurnTo.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx.cs">
       <DependentUpon>Welcome.aspx</DependentUpon>

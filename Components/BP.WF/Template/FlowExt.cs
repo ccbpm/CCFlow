@@ -1120,7 +1120,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDTSBTable()
         {
-            return "../../Admin/AttrFlow/DTSBTable.aspx?FK_Flow=" + this.No;
+            return "../../Admin/AttrFlow/DTSBTable.htm?FK_Flow=" + this.No;
         }
         public string DoAPI()
         {

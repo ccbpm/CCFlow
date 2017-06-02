@@ -71,23 +71,23 @@
                         var batchUrl = "";
 
                         if (plant == "CCFlow") {
-                            batchUrl = "../WF/WFRpt.aspx?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW;
+                            batchUrl = "../WF/WFRpt.aspx?WorkID=" + data[i].WorkID + "&FK_Flow=" + data[i].FK_Flow;
                         } else {
-                            batchUrl = "../WF/WFRpt.jsp?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW;
+                            batchUrl = "../WF/WFRpt.jsp?WorkID=" + data[i].WorkID + "&FK_Flow=" + data[i].FK_Flow;
                         }
 
                         row += "\t\n<tr>";
                         row += "<td>" + i + "</td>";
-                        row += "<td>" + data[i].FLOWNAME + "</td>";
-                        //row += "<td><a href=\"" + batchUrl + "\"  target=_blank >" + data[i].TITLE + "</a></td>";
-                        row += "<td><a href=href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].TITLE + "</a></td>";
-                        row += "<td>" + data[i].STARTERNAME + "</td>";
+                        row += "<td>" + data[i].FlowName + "</td>";
+                        //row += "<td><a href=\"" + batchUrl + "\"  target=_blank >" + data[i].Title + "</a></td>";
+                        row += "<td><a href=href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a></td>";
+                        row += "<td>" + data[i].StarterName + "</td>";
                         row += "<td>" + data[i].RDT + "</td>";
-                        row += "<td>" + data[i].FLOWNOTE + "</td>";
-                        row += "<td>" + data[i].NODENAME + "</td>";
-                        row += "<td>" + data[i].TODOEMPS + "</td>";
-                        row += "<td>" + data[i].ATPARA + "</td>";
-                        row += "<td><a href='#' onclick='unfollow(" + data[i].WORKID + ")'>取消关注</a></td>";
+                        row += "<td>" + data[i].FlowNote + "</td>";
+                        row += "<td>" + data[i].NodeName + "</td>";
+                        row += "<td>" + data[i].TodoEmps + "</td>";
+                        row += "<td>" + data[i].AtPara + "</td>";
+                        row += "<td><a href='#' onclick='unfollow(" + data[i].WorkID + ")'>取消关注</a></td>";
                         row += "</tr>";
                     }
                     $("#Rows").html(row);

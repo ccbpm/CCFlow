@@ -56,7 +56,7 @@
                 url: Handler + "?DoType=Draft_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    console.info(data);
+                    
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -67,21 +67,21 @@
                     var newRow = "";
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
-                        var fk_node = Number(data[i].FK_FLOW) + "01";
+                        var fk_node = Number(data[i].FK_Flow) + "01";
                         newRow += "\t\n<tr>";
                         newRow += "<td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + data[i].WORKID + "</td>";
+                        newRow += "<td>" + data[i].WorkID + "</td>";
                         if (plant == 'CCFlow') {
-                            //newRow += "<td>" + "<a href='../WF/MyFlow.aspx?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW + "&FK_Node=" + fk_node + "'>" + data[i].TITLE + "</a>" + "</td>";
-                            var batchUrl = '../WF/MyFlow.aspx?WorkID=' + data[i].WORKID + '&FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + fk_node;
-                            newRow += "<td>" + "<a href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].TITLE + "</a>" + "</td>";
+                            //newRow += "<td>" + "<a href='../WF/MyFlow.aspx?WorkID=" + data[i].WorkID + "&FK_Flow=" + data[i].FK_Flow + "&FK_Node=" + fk_node + "'>" + data[i].TITLE + "</a>" + "</td>";
+                            var batchUrl = '../WF/MyFlow.aspx?WorkID=' + data[i].WorkID + '&FK_Flow=' + data[i].FK_Flow + '&FK_Node=' + fk_node;
+                            newRow += "<td>" + "<a href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a>" + "</td>";
                         } else {
                             //newRow += "<td>" + "<a href='../WF/MyFlow.jsp?WorkID=" + data[i].WORKID + "&FK_Flow=" + data[i].FK_FLOW + "&FK_Node=" + fk_node + "'>" + data[i].TITLE + "</a>" + "</td>";
-                            var batchUrl = '../WF/MyFlow.jsp?WorkID=' + data[i].WORKID + '&FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + fk_node;
-                            newRow += "<td>" + "<a href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].TITLE + "</a>" + "</td>";
+                            var batchUrl = '../WF/MyFlow.jsp?WorkID=' + data[i].WorkID + '&FK_Flow=' + data[i].FK_Flow + '&FK_Node=' + fk_node;
+                            newRow += "<td>" + "<a href='#' onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a>" + "</td>";
                         }
                         newRow += "<td>" + data[i].RDT + "</td>";
-                        newRow += "<td>" + "<a href=\"javascript:DelDraft(" + data[i].WORKID + "," + fk_node + ");\"> " + "删除</a>" + "</td>";
+                        newRow += "<td>" + "<a href=\"javascript:DelDraft(" + data[i].WorkID + "," + fk_node + ");\"> " + "删除</a>" + "</td>";
                         newRow += "</tr>";
                     }
                     $("#Rows").html(newRow);

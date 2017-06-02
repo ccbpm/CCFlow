@@ -56,6 +56,7 @@
                 url: Handler + "?DoType=cc_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+                    
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -68,20 +69,20 @@
                         var batchUrl = "";
                         var url = "";
                         if (plant == "CCFlow") {
-                            batchUrl = '../WF/WFRpt.aspx?FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + data[i].FK_NODE + '&WorkID=' + data[i].WORKID + '&FID=' + data[i].FID;
-                            url = '../WF/WorkOpt/CCCheckNote.aspx?WorkID=' + data[i].WORKID + '&FK_Flow=' + data[i].FK_FLOW + '&FID=0&FK_Node=' + data[i].FK_NODE;
+                            batchUrl = '../WF/WFRpt.aspx?FK_Flow=' + data[i].FK_Flow + '&FK_Node=' + data[i].FK_Node + '&WorkID=' + data[i].WorkID + '&FID=' + data[i].FID;
+                            url = '../WF/WorkOpt/CCCheckNote.aspx?WorkID=' + data[i].WorkID + '&FK_Flow=' + data[i].FK_Flow + '&FID=0&FK_Node=' + data[i].FK_Node;
                         } else {
-                            batchUrl = '../WF/WFRpt.jsp?FK_Flow=' + data[i].FK_FLOW + '&FK_Node=' + data[i].FK_NODE + '&WorkID=' + data[i].WORKID + '&FID=' + data[i].FID;
-                            url = '../WF/WorkOpt/CCCheckNote.jsp?WorkID=' + data[i].WORKID + '&FK_Flow=' + data[i].FK_FLOW + '&FID=0&FK_Node=' + data[i].FK_NODE;
+                            batchUrl = '../WF/WFRpt.jsp?FK_Flow=' + data[i].FK_Flow + '&FK_Node=' + data[i].FK_Node + '&WorkID=' + data[i].WorkID + '&FID=' + data[i].FID;
+                            url = '../WF/WorkOpt/CCCheckNote.jsp?WorkID=' + data[i].WorkID + '&FK_Flow=' + data[i].FK_Flow + '&FID=0&FK_Node=' + data[i].FK_Node;
                         }
 
                         row += "\t\n<tr>";
                         row += "<td>" + i + "</td>";
-                        row += "<td>" + data[i].FLOWNAME + "</td>";
-                        row += "<td>" + data[i].NODENAME + "</td>";
+                        row += "<td>" + data[i].FlowName + "</td>";
+                        row += "<td>" + data[i].NodeName + "</td>";
                         row += "<td>" + data[i].REC + "</td>";
-                        //row += "<td><a href='" + batchUrl + "' target=_blank >" + data[i].TITLE + "</a></td>";
-                        row += "<td><a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].TITLE + "</a></td>";
+                        //row += "<td><a href='" + batchUrl + "' target=_blank >" + data[i].Title + "</a></td>";
+                        row += "<td><a href='#'  onclick='WinOpenFull(\"" + batchUrl + "\")'>" + data[i].Title + "</a></td>";
                         row += "<td>" + data[i].DOC + "</td>";
                         row += "<td>" + data[i].RDT + "</td>";
                         //row += "<td><a href='" + url + "' target=_blank >回复</a></td>";

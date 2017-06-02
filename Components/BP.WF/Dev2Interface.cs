@@ -738,7 +738,22 @@ namespace BP.WF
                 ps.SQL = "SELECT * FROM WF_CCList WHERE CCTo=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
                 ps.Add("FK_Emp", FK_Emp);
             }
-            return DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["MYPK"].ColumnName = "MyPK";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["DOC"].ColumnName = "DOC";
+                dt.Columns["REC"].ColumnName = "REC";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["FID"].ColumnName = "FID";
+            }
+            return dt;
         }
         public static DataTable DB_CCList(string FK_Emp, CCSta sta)
         {
@@ -754,7 +769,22 @@ namespace BP.WF
                 ps.Add("FK_Emp", FK_Emp);
                 ps.Add("Sta", (int)sta);
             }
-            return DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["MYPK"].ColumnName = "MyPK";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["DOC"].ColumnName = "DOC";
+                dt.Columns["REC"].ColumnName = "REC";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["FID"].ColumnName = "FID";
+            }
+            return dt;
         }
         /// <summary>
         /// 获取指定人员的抄送列表(未读)
@@ -1066,7 +1096,18 @@ namespace BP.WF
                 ps.Add(GenerWorkFlowAttr.FK_Flow, flowNo);
                 ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+            }
+            return dt;
         }
         #endregion 流程草稿
 
@@ -1092,7 +1133,54 @@ namespace BP.WF
                 ps.SQL = "SELECT * FROM WF_GenerWorkFlow WHERE AtPara LIKE  '%F_" + userNo + "=1%' AND FK_Flow=" + SystemConfig.AppCenterDBVarStr + "FK_Flow";
                 ps.Add("FK_Flow", flowNo);
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            //添加oracle的处理
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["WFSTA"].ColumnName = "WFSta";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["BILLNO"].ColumnName = "BillNo";
+                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["WFSTATE"].ColumnName = "WFState";
+                dt.Columns["FK_NY"].ColumnName = "FK_NY";
+                dt.Columns["MYNUM"].ColumnName = "MyNum";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["PRI"].ColumnName = "PRI";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["SDTOFFLOW"].ColumnName = "SDTOfFlow";
+                dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                dt.Columns["PWORKID"].ColumnName = "PWorkID";
+                dt.Columns["PNODEID"].ColumnName = "PNodeID";
+                dt.Columns["PFID"].ColumnName = "PFID";
+                dt.Columns["PEMP"].ColumnName = "PEmp";
+                dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+                dt.Columns["ATPARA"].ColumnName = "AtPara";
+                dt.Columns["EMPS"].ColumnName = "Emps";
+                dt.Columns["GUID"].ColumnName = "GUID";
+                dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
+                dt.Columns["TSPAN"].ColumnName = "TSpan";
+                dt.Columns["TODOSTA"].ColumnName = "TodoSta";
+                dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
+                dt.Columns["CWORKID"].ColumnName = "CWorkID";
+            }
+            return dt;
         }
         #endregion 我关注的流程
 

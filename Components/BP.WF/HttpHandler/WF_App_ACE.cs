@@ -199,7 +199,7 @@ namespace BP.WF.HttpHandler
         {
             System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable(this.FK_Flow);
 
-            return BP.Tools.Json.DataTableToJson(dt,true);
+            return BP.Tools.Json.DataTableToJson(dt,false);
         }
         #endregion 草稿.
 
@@ -248,8 +248,7 @@ namespace BP.WF.HttpHandler
             {
                 link += "<a href='?Sta=" + tp.No + "'>" + tp.Name + "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
             }*/
-
-            return BP.Tools.Json.DataTableToJson(dt,true);
+            return BP.Tools.Json.DataTableToJson(dt,false);
         }
         #endregion 抄送.
 
@@ -293,7 +292,7 @@ namespace BP.WF.HttpHandler
                 dr["FlowNote"] = wfstaT;
                 dr["AtPara"] = (wfsta == (int)BP.WF.WFSta.Complete ? dr["Sender"].ToString().TrimStart('(').TrimEnd(')').Split(',')[1] : "");
             }
-            return BP.Tools.Json.DataTableToJson(dt,true);
+            return BP.Tools.Json.DataTableToJson(dt,false);
         }
         #endregion 我的关注.
 

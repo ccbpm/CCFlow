@@ -35,7 +35,7 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(WebUser.No);
 
-            return BP.Tools.Json.DataTableToJson(dt,true);
+            return BP.Tools.Json.DataTableToJson(dt,false);
         }
         /// <summary>
         /// 获得待办
@@ -45,7 +45,7 @@ namespace BP.WF.HttpHandler
         {
             string fk_node = this.GetRequestVal("FK_Node");
             DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node);
-            return BP.Tools.Json.DataTableToJson(dt,true);
+            return BP.Tools.Json.DataTableToJson(dt,false);
         }
         /// <summary>
         /// 运行
@@ -57,15 +57,6 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerRuning();
-
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dt.Columns["WorkID"].ColumnName = "WorkID";
-                dt.Columns["WorkID"].ColumnName = "WorkID";
-                dt.Columns["WorkID"].ColumnName = "WorkID";
-                dt.Columns["WorkID"].ColumnName = "WorkID";
-                dt.Columns["WorkID"].ColumnName = "WorkID";
-            }
 
             return BP.Tools.Json.DataTableToJson(dt,false);
         }

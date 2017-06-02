@@ -77,15 +77,15 @@
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
                         newRow += "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + "<a href=\"javascript:WinOpenIt('../WF/MyFlow.htm?FK_Flow=" + data[i].FK_FLOW + "&FID=0&WorkID=" + data[i].WORKID + "&FK_Node=" + data[i].FK_FLOW + "01&IsRead=0&T=" + timeKey + "');\" >" + data[i].TITLE + "</a></td>";
-                        newRow += "<td>" + data[i].FLOWNAME + "</td>";
-                        newRow += "<td>" + data[i].STARTERNAME + "</td>";
-                        newRow += "<td>" + data[i].NODENAME + "</td>";
+                        newRow += "<td>" + "<a href=\"javascript:WinOpenIt('../WF/MyFlow.htm?FK_Flow=" + data[i].FK_Flow + "&FID=0&WorkID=" + data[i].WorkID + "&FK_Node=" + data[i].FK_Flow + "01&IsRead=0&T=" + timeKey + "');\" >" + data[i].Title + "</a></td>";
+                        newRow += "<td>" + data[i].FlowName + "</td>";
+                        newRow += "<td>" + data[i].StarterName + "</td>";
+                        newRow += "<td>" + data[i].NodeName + "</td>";
 
                         newRow += "<td>" + data[i].RDT + "</td>";
                         newRow += "<td>";
-                        newRow += "<a href=\"javascript:UnSend('" + data[i].WORKID + "','" + data[i].FK_FLOW + "')\"><img src='../WF/Img/Action/UnSend.png' border=0 />撤销</a>";
-                        newRow += "<a href=\"javascript:Press('" + data[i].WORKID + "','" + data[i].FK_FLOW + "')\"><img src='../WF/Img/Action/Press.png' border=0 />催办</a>";
+                        newRow += "<a href=\"javascript:UnSend('" + data[i].WorkID + "','" + data[i].FK_Flow + "')\"><img src='../WF/Img/Action/UnSend.png' border=0 />撤销</a>";
+                        newRow += "<a href=\"javascript:Press('" + data[i].WorkID + "','" + data[i].FK_Flow + "')\"><img src='../WF/Img/Action/Press.png' border=0 />催办</a>";
                         newRow += "</td>";
                         newRow += "</tr>";
                     }

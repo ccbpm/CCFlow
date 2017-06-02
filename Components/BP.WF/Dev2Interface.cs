@@ -909,8 +909,9 @@ namespace BP.WF
                 {
                     dt.Columns["NO"].ColumnName = "No";
                     dt.Columns["NAME"].ColumnName = "Name";
-                    dt.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
                     dt.Columns["ISBATCHSTART"].ColumnName = "IsBatchStart";
+                    dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                    dt.Columns["FK_FLOWSORTTEXT"].ColumnName = "FK_FlowSortText";
                 }
 
                 return dt;
@@ -1131,7 +1132,49 @@ namespace BP.WF
                     ps.Add("FK_Node", fk_node);
                     ps.Add("FK_Emp", userNo);
                 }
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                //添加oracle的处理
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    dt.Columns["PRI"].ColumnName = "PRI";
+                    dt.Columns["WORKID"].ColumnName = "WorkID";
+                    dt.Columns["ISREAD"].ColumnName = "IsRead";
+                    dt.Columns["STARTER"].ColumnName = "Starter";
+                    dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+                    dt.Columns["WFSTATE"].ColumnName = "WFState";
+                    dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                    dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                    dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                    dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                    dt.Columns["PWORKID"].ColumnName = "PWorkID";
+                    dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                    dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                    dt.Columns["NODENAME"].ColumnName = "NodeName";
+                    dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
+                    dt.Columns["TITLE"].ColumnName = "Title";
+                    dt.Columns["RDT"].ColumnName = "RDT";
+                    dt.Columns["ADT"].ColumnName = "ADT";
+                    dt.Columns["SDT"].ColumnName = "SDT";
+                    dt.Columns["FK_EMP"].ColumnName = "FK_Emp";
+                    dt.Columns["FID"].ColumnName = "FID";
+                    dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                    dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                    dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                    dt.Columns["PRESSTIMES"].ColumnName = "PressTimes";
+                    dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                    dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                    dt.Columns["BILLNO"].ColumnName = "BillNo";
+                    dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                    dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                    dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                    dt.Columns["TODOSTA"].ColumnName = "TodoSta";
+                    dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+                    dt.Columns["LISTTYPE"].ColumnName = "ListType";
+                    dt.Columns["SENDER"].ColumnName = "Sender";
+                    dt.Columns["ATPARA"].ColumnName = "AtPara";
+                    dt.Columns["MYNUM"].ColumnName = "MyNum";
+                }
+                return dt;
             }
 
             /*如果是授权状态, 获取当前委托人的信息. */
@@ -1185,8 +1228,49 @@ namespace BP.WF
                 default:
                     throw new Exception("no such way...");
             }
-
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt2 = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            //添加oracle的处理
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt2.Columns["PRI"].ColumnName = "PRI";
+                dt2.Columns["WORKID"].ColumnName = "WorkID";
+                dt2.Columns["ISREAD"].ColumnName = "IsRead";
+                dt2.Columns["STARTER"].ColumnName = "Starter";
+                dt2.Columns["STARTERNAME"].ColumnName = "StarterName";
+                dt2.Columns["WFSTATE"].ColumnName = "WFState";
+                dt2.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt2.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt2.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt2.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt2.Columns["PWORKID"].ColumnName = "PWorkID";
+                dt2.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                dt2.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt2.Columns["NODENAME"].ColumnName = "NodeName";
+                dt2.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
+                dt2.Columns["TITLE"].ColumnName = "Title";
+                dt2.Columns["RDT"].ColumnName = "RDT";
+                dt2.Columns["ADT"].ColumnName = "ADT";
+                dt2.Columns["SDT"].ColumnName = "SDT";
+                dt2.Columns["FK_EMP"].ColumnName = "FK_Emp";
+                dt2.Columns["FID"].ColumnName = "FID";
+                dt2.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt2.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt2.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt2.Columns["PRESSTIMES"].ColumnName = "PressTimes";
+                dt2.Columns["GUESTNO"].ColumnName = "GuestNo";
+                dt2.Columns["GUESTNAME"].ColumnName = "GuestName";
+                dt2.Columns["BILLNO"].ColumnName = "BillNo";
+                dt2.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                dt2.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                dt2.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                dt2.Columns["TODOSTA"].ColumnName = "TodoSta";
+                dt2.Columns["TASKSTA"].ColumnName = "TaskSta";
+                dt2.Columns["LISTTYPE"].ColumnName = "ListType";
+                dt2.Columns["SENDER"].ColumnName = "Sender";
+                dt2.Columns["ATPARA"].ColumnName = "AtPara";
+                dt2.Columns["MYNUM"].ColumnName = "MyNum";
+            }
+            return dt2;
         }
         /// <summary>
         /// 获取当前人员待处理的工作
@@ -2296,7 +2380,55 @@ namespace BP.WF
                     }
                 }
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+           
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["WFSTA"].ColumnName = "WFSta";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+                dt.Columns["RDT"].ColumnName = "RDT";
+                dt.Columns["BILLNO"].ColumnName = "BillNo";
+                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["WFSTATE"].ColumnName = "WFState";
+                dt.Columns["FK_NY"].ColumnName = "FK_NY";
+                dt.Columns["MYNUM"].ColumnName = "MyNum";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["PRI"].ColumnName = "PRI";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["SDTOFFLOW"].ColumnName = "SDTOfFlow";
+                dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                dt.Columns["PWORKID"].ColumnName = "PWorkID";
+                dt.Columns["PNODEID"].ColumnName = "PNodeID";
+                dt.Columns["PFID"].ColumnName = "PFID";
+                dt.Columns["PEMP"].ColumnName = "PEmp";
+                dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+                dt.Columns["ATPARA"].ColumnName = "AtPara";
+                dt.Columns["EMPS"].ColumnName = "Emps";
+                dt.Columns["GUID"].ColumnName = "GUID";
+                dt.Columns["WEEKNUM"].ColumnName = "WeekNum";
+                dt.Columns["TSPAN"].ColumnName = "TSpan";
+                dt.Columns["TODOSTA"].ColumnName = "TodoSta";
+                dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
+                dt.Columns["CWORKID"].ColumnName = "CWorkID";
+
+            }
+            return dt;
         }
         /// <summary>
         /// 在途统计:用于流程查询

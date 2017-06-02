@@ -56,7 +56,7 @@
                 url: Handler + "?DoType=Start_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
+                    
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -71,7 +71,7 @@
 
                         var no = data[i].No;
                         var name = data[i].Name;
-                        var sortName = data[i].FK_FlowSort;
+                        var sortName = data[i].FK_FlowSortText;
 
                         if (sortNames.indexOf(sortName + ';') > 0) {
                             sortName = "";

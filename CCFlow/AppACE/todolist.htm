@@ -76,7 +76,7 @@
                 url: Handler + "?DoType=Todolist_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
+                    
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -93,18 +93,18 @@
                     var newRow = "";
                     for (var i = 0; i < data.length; i++) {
 
-                        var title = data[i].TITLE;
-                        var isRead = data[i].ISREAD;
-                        var flowNo = data[i].FK_FLOW;
-                        var flowName = data[i].FLOWNAME;
-                        var nodeName = data[i].NODENAME;
-                        var starterName = data[i].STARTERNAME;
+                        var title = data[i].Title;
+                        var isRead = data[i].IsRead;
+                        var flowNo = data[i].FK_Flow;
+                        var flowName = data[i].FlowName;
+                        var nodeName = data[i].NodeName;
+                        var starterName = data[i].StarterName;
                         var pri = data[i].PRI;
-                        var nodeID = data[i].FK_NODE;
+                        var nodeID = data[i].FK_Node;
                         var fid = data[i].FID;
-                        var workID = data[i].WORKID;
-                        var pWorkID = data[i].PWORKID;
-                        var paras = data[i].ATPARA;
+                        var workID = data[i].WorkID;
+                        var pWorkID = data[i].PWorkID;
+                        var paras = data[i].AtPara;
 
 
                         if (paras != "") {
@@ -116,7 +116,7 @@
                             paras = paras.replace('@', '&');
                             paras = "1" + paras;
                         }
-                
+
 
                         newRow += "<tr > <td>" + (i + 1) + "</td>"; //序号
                         newRow += "<td><img class=Icon src='../WF/Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
@@ -176,7 +176,7 @@
                                 break;
                         }
                         //备注
-                        newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + data[i].FLOWNOTE + "'>" + data[i].FLOWNOTE + "</div></td>";
+                        newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + data[i].FlowNote + "'>" + data[i].FlowNote + "</div></td>";
                         newRow += "</tr>";
                     }
                     $("#Rows").html(newRow);

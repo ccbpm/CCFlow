@@ -57,7 +57,17 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerRuning();
-            return BP.Tools.Json.DataTableToJson(dt,true);
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["WorkID"].ColumnName = "WorkID";
+                dt.Columns["WorkID"].ColumnName = "WorkID";
+                dt.Columns["WorkID"].ColumnName = "WorkID";
+                dt.Columns["WorkID"].ColumnName = "WorkID";
+                dt.Columns["WorkID"].ColumnName = "WorkID";
+            }
+
+            return BP.Tools.Json.DataTableToJson(dt,false);
         }
 
         /// <summary>
@@ -72,7 +82,6 @@ namespace BP.WF.HttpHandler
 
             //系统名称.
             ht.Add("SysName", BP.Sys.SystemConfig.SysName);
-
 
             ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);

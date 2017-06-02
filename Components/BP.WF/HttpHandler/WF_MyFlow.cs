@@ -354,7 +354,6 @@ namespace BP.WF.HttpHandler
                 if (toUrl.Contains("&FK_Node=") == false)
                     toUrl += "&FK_Node=" + this.currND.NodeID;
 
-
                 //// 加入设置父子流程的参数.
                 //toUrl += "&DoFunc=" + this.DoFunc;
                 //toUrl += "&CFlowNo=" + this.CFlowNo;

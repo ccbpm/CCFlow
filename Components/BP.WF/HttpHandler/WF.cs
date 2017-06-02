@@ -58,8 +58,6 @@ namespace BP.WF.HttpHandler
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);
 
-            
-
             //返回组合
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
@@ -73,9 +71,8 @@ namespace BP.WF.HttpHandler
         /// <returns>运行中的流程</returns>
         public string Runing_Init()
         {
-            DataTable dt = null;
-            dt = BP.WF.Dev2Interface.DB_GenerRuning();
-            return BP.Tools.FormatToJson.ToJson(dt);
+            WF_App_ACE page = new WF_App_ACE(context);
+            return page.Runing_Init();
         }
         /// <summary>
         /// 挂起列表
@@ -87,7 +84,7 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerHungUpList();
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.Json.DataTableToJson(dt, false);
         }
         /// <summary>
         /// 草稿
@@ -99,7 +96,7 @@ namespace BP.WF.HttpHandler
             dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable();
 
             //转化大写.
-            return BP.Tools.Json.DataTableToJson(dt,true);
+            return BP.Tools.Json.DataTableToJson(dt,false);
         }
         /// <summary>
         /// 获得授权人的待办.

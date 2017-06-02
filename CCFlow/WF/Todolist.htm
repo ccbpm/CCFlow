@@ -72,8 +72,9 @@
             document.getElementById(id).src = appPath + 'WF/Img/Mail_Read.png';
         }
 
-        function GroupBarClick(appPath, rowIdx) {
-            var alt = document.getElementById('Img' + rowIdx).alert;
+        function GroupBarClick(groupName) {
+
+            var alt = document.getElementById('Img' + groupName).alert;
             var sta = 'block';
             if (alt == 'Max') {
                 sta = 'block';
@@ -82,19 +83,23 @@
                 sta = 'none';
                 alt = 'Max';
             }
-            document.getElementById('Img' + rowIdx).src = appPath + 'WF/Img/' + alt + '.gif';
-            document.getElementById('Img' + rowIdx).alert = alt;
-            var i = 0
-            for (i = 0; i <= 5000; i++) {
-                if (document.getElementById(rowIdx + '_' + i) == null)
+
+            document.getElementById('Img' + groupName).src = './Img/' + alt + '.gif';
+            document.getElementById('Img' + groupName).alert = alt;
+
+            var i = 0;
+            for (i = 0; i <= 600; i++) {
+
+                var row = document.getElementsByName(groupName + i);
+
+                if (row == null || row == undefined || row.style == null)
                     continue;
 
                 if (sta == 'block') {
-                    document.getElementById(rowIdx + '_' + i).style.display = '';
+                    row.style.display = '';
                 } else {
-                    document.getElementById(rowIdx + '_' + i).style.display = sta;
+                    row.style.display = sta;
                 }
-
             }
         }
         function WinOpenIt(url) {
@@ -200,12 +205,17 @@
                     var strs = str.split("@"); //生成数组.
 
                     var num = 0;
+                    var is1 = false;
 
                     //循环数组.
                     for (var idx = 0; idx < strs.length; idx++) {
 
                         var groupName = strs[idx];
-                        var grouStr = "<tr> <th colspan=10 >" + groupName + "</th> </tr>";
+
+                        if (groupName == "" || groupName==null )
+                            continue;
+
+                        var grouStr = "<tr class=TRSum onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=10 > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + groupName + "'   border=0 /> " + groupName + "</th> </tr>";
                         $("#Table1 tr:last").after(grouStr);
 
                         //增加处理.
@@ -255,7 +265,17 @@
 
                             num++;
 
-                            newRow += "<tr ><td style='width:20px'>" + num + "</td>"; //序号.
+                            if (is1 == true) {
+                                newRow += "<tr bgcolor=AliceBlue id='" + groupName + num + "' >";
+                                is1 = false;
+                            }
+                            else {
+                                newRow += "<tr bgcolor=white id='" + groupName + num + "' >";
+                                is1 = true;
+                            }
+
+
+                            newRow += "<td style='width:20px'>" + num + "</td>"; //序号.
                             //newRow += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
 
                             var url = "";
@@ -284,9 +304,9 @@
                             newRow += "<td>" + work.SDT + "</td>"; //应完成时间
                             //判断流程是否逾期
                             if (cdt > work.SDT && work.WFState == 2)
-                                newRow += "<td><img src='/WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
+                                newRow += "<td><img src='./Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
                             else
-                                newRow += "<td><img src='/WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
+                                newRow += "<td><img src='./Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
 
                             newRow += "<td>" + GetState(work.WFState) + "</td>";
 
@@ -300,19 +320,19 @@
 
                     $("#Table1").after("<br><br><div style='float:left;' >合计:" + data.length + "条</div> <div style='float:right;' ><a href=\"AutoTodolist.htm\" >查看授权人的待办工作</a></div>");
 
-//                    $.ajax({
-//                        type: 'post',
-//                        async: false,
-//                        url: Handler + "?DoType=IsAuthorize&m=" + Math.random(),
-//                        dataType: 'html',
-//                        success: function (msg) {
-//                            if (msg.indexOf('err@') == 0) {
-//                                //                 alert('没有授权!');
-//                                return;
-//                            }
-//                            $("#Table1").after("<div style='float:right;' ><a href=\"AutoTodolist.htm\" >查看授权人的待办工作</a></div>");
-//                        }
-//                    });
+                    //                    $.ajax({
+                    //                        type: 'post',
+                    //                        async: false,
+                    //                        url: Handler + "?DoType=IsAuthorize&m=" + Math.random(),
+                    //                        dataType: 'html',
+                    //                        success: function (msg) {
+                    //                            if (msg.indexOf('err@') == 0) {
+                    //                                //                 alert('没有授权!');
+                    //                                return;
+                    //                            }
+                    //                            $("#Table1").after("<div style='float:right;' ><a href=\"AutoTodolist.htm\" >查看授权人的待办工作</a></div>");
+                    //                        }
+                    //                    });
 
                 }
             });

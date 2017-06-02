@@ -203,6 +203,25 @@ namespace BP.WF.HttpHandler
         }
         #endregion 草稿.
 
+        #region 草稿删除.
+        /// <summary>
+        /// 草稿.
+        /// </summary>
+        /// <returns></returns>
+        public string Draft_Delete()
+        {
+            try
+            {
+                BP.WF.Dev2Interface.Node_DeleteDraft(this.FK_Flow, this.WorkID);
+                return "删除成功";
+            }
+            catch (Exception e)
+            {
+                return "err@" + e.Message;
+            }
+        }
+        #endregion 草稿删除.
+
         #region 抄送流程.
         /// <summary>
         /// 抄送流程

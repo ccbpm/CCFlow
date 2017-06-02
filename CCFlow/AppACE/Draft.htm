@@ -89,6 +89,23 @@
                 }
             });
         });
+
+        function DelDraft(WorkID, fk_node) {
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Draft_Delete&m=" + Math.random() + "&WorkID=" + WorkID + "&FK_Flow=" + fk_node,
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    } else {
+                        alert(data);
+                    }
+                }
+            });
+        }
     </script>
 	</head>
 	<body>

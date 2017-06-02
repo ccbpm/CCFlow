@@ -692,7 +692,7 @@ namespace BP.WF.HttpHandler
         public string Node_EditNodeName()
         {
             string FK_Node = this.GetValFromFrmByKey("NodeID");
-            string NodeName = this.GetValFromFrmByKey("NodeName");
+            string NodeName = System.Web.HttpContext.Current.Server.UrlDecode(this.GetValFromFrmByKey("NodeName"));
 
             BP.WF.Node node = new BP.WF.Node();
             node.NodeID = int.Parse(FK_Node);
@@ -970,7 +970,7 @@ namespace BP.WF.HttpHandler
                     dtForm = newDt;
                 }
             }
-
+            string str = BP.Tools.Json.DataTableToJson(dtForm, false);
             return BP.Tools.Json.DataTableToJson(dtForm, false);
         }
         public string GetSrcTreeTable()

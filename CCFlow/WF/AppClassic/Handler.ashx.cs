@@ -17,7 +17,7 @@ namespace CCFlow.WF.AppClassic
         {
             get
             {
-                return typeof(BP.WF.HttpHandler.WF);
+                return typeof(BP.WF.HttpHandler.WF_AppClassic);
             }
         }
     }

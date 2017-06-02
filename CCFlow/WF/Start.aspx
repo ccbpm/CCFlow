@@ -9,7 +9,7 @@
             if (v == null || v == "")
                 return;
 
-            window.location.href = appPath + '../MyFlow.htm?FK_Flow=' + fk_flow + v;
+            window.location.href = appPath + '../MyFlow.aspx?FK_Flow=' + fk_flow + v;
         }
         //发起时打开窗口
         function WinOpenIt(url,winName) {
@@ -163,15 +163,15 @@
                 {
                     if (BP.WF.Glo.IsWinOpenStartWork == 1)
                     {
-                        sBuilder.Append("<li><b class='left'><a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01&T=" + timeKey + "','sd');\" >" + fl.Name + "</a></b>" + extUrl + "</li>");
+                        sBuilder.Append("<li><b class='left'><a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01&T=" + timeKey + "','sd');\" >" + fl.Name + "</a></b>" + extUrl + "</li>");
                     }
                     else if (BP.WF.Glo.IsWinOpenStartWork == 2)
                     {
-                        sBuilder.Append("<li><b class='left'><a href=\"javascript:WinOpenIt('/WF/OneFlow/MyFlow.htm?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01&T=" + timeKey + "','sd');\" >" + fl.Name + "</a></b>" + extUrl + "</li>");
+                        sBuilder.Append("<li><b class='left'><a href=\"javascript:WinOpenIt('/WF/OneFlow/MyFlow.aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01&T=" + timeKey + "','sd');\" >" + fl.Name + "</a></b>" + extUrl + "</li>");
                     }
                     else
                     {
-                        sBuilder.Append("<li><b class='left'><a href='MyFlow.htm?FK_Flow=" + fl.No + "&FK_Node=ND" + int.Parse(fl.No) + "01' >" + fl.Name + "</a></b>" + extUrl + "</li>");
+                        sBuilder.Append("<li><b class='left'><a href='MyFlow.aspx?FK_Flow=" + fl.No + "&FK_Node=ND" + int.Parse(fl.No) + "01' >" + fl.Name + "</a></b>" + extUrl + "</li>");
                     }
                 }
                 else

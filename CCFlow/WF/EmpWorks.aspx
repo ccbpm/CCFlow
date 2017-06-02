@@ -138,11 +138,6 @@
     <%
         string FK_Flow = this.Request.QueryString["FK_Flow"];
 
-       int nodeID=0;
-       if (string.IsNullOrEmpty( this.Request.QueryString["FK_Node"])==false)
-           nodeID = int.Parse(  this.Request.QueryString["FK_Node"]);
-        
-
         string HungUp = this.Request.QueryString["IsHungUp"];
         bool IsHungUp = true;
         if (string.IsNullOrEmpty(HungUp))
@@ -172,7 +167,7 @@
         else
         {
             if (string.IsNullOrEmpty(FK_Flow))
-                dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, nodeID);
+                dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
             else
                 dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, FK_Flow);
         }
@@ -186,7 +181,7 @@
             groupVals += "@" + dr[GroupBy].ToString() + ",";
         }
 
-        int colspan = 11;
+        int colspan = 10;
 
         sBuilder.Append("<table width='100%'  cellspacing='0' cellpadding='0' align=left>");
             sBuilder.Append("<Caption ><div class='CaptionMsg' >待办</div></Caption>");
@@ -221,7 +216,6 @@
         sBuilder.Append("<th >接受日期</th>");
         sBuilder.Append("<th >应完成日期</th>");
         sBuilder.Append("<th >状态</th>");
-        sBuilder.Append("<th >类型</th>");
         sBuilder.Append("<th >备注</th>");
         sBuilder.Append("</tr>");
 
@@ -254,21 +248,11 @@
                 string sdt = dr["SDT"] as string;
                 string paras = dr["AtPara"] as string;
 
-                if ( string.IsNullOrEmpty( paras)==false)
-                {
-                    paras = paras.Replace("'", "\\'");
-                    paras = paras.Replace('@', '&');
-                    paras = paras.Replace('@', '&');
-                    paras = paras.Replace('@', '&');
-                    paras = paras.Replace('@', '&');
-                    paras = paras.Replace('@', '&');
-                    paras = "1" + paras;
-                }
-
                 if (!string.IsNullOrEmpty(paras))
                 {
                     paras = paras.Replace("'", "\\'");
                 }
+                
 
                 if (is1)
                 {
@@ -289,22 +273,22 @@
                 {
                     if (isRead == 0)
                     {
-                        sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\"" + " >" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
+                        sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\"" + " >" + "<a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_UnRead.png' id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
                     }
                     else
                     {
-                        sBuilder.Append("<td  nowrap >" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&Paras=" + paras + "&T=" + timeKey + "');\"  ><img src='Img/Mail_Read.png' id='I" + gIdx + "_" + i + "' class=Icon align='middle'  />" + dr["Title"].ToString() + "</a>" + "</td>");
+                        sBuilder.Append("<td  nowrap >" + "<a href=\"javascript:WinOpenIt('MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&Paras=" + paras + "&T=" + timeKey + "');\"  ><img src='Img/Mail_Read.png' id='I" + gIdx + "_" + i + "' class=Icon align='middle'  />" + dr["Title"].ToString() + "</a>" + "</td>");
                     }
                 }
                 else
                 {
                     if (isRead == 0)
                     {
-                        sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\" " + " >" + "<a href=\"MyFlow.htm?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "\" ><img class=Icon src='Img/Mail_UnRead.png' align='middle'  id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
+                        sBuilder.Append("<td onclick=\"SetImg('" + appPath + "','I" + gIdx + "_" + i + "')\" " + " >" + "<a href=\"MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "\" ><img class=Icon src='Img/Mail_UnRead.png' align='middle'  id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
                     }
                     else
                     {
-                        sBuilder.Append("<td  nowrap >" + "<a href=\"MyFlow.htm?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&Paras=" + paras + "&T=" + timeKey + "\" ><img class=Icon src='Img/Mail_Read.png' align='middle'  id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
+                        sBuilder.Append("<td  nowrap >" + "<a href=\"MyFlow.aspx?FK_Flow=" + dr["FK_Flow"] + "&FK_Node=" + dr["FK_Node"] + "&FID=" + dr["FID"] + "&WorkID=" + dr["WorkID"] + "&Paras=" + paras + "&T=" + timeKey + "\" ><img class=Icon src='Img/Mail_Read.png' align='middle'  id='I" + gIdx + "_" + i + "' />" + dr["Title"].ToString() + "</a>" + "</td>");
                     }
                 }
 
@@ -332,59 +316,18 @@
                 {
                     if (cdt.ToString("yyyy-MM-dd") == mysdt.ToString("yyyy-MM-dd"))
                     {
-                        sBuilder.Append("<td align=center nowrap ><img src='/WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font>" + "</td>");
+                        sBuilder.Append("<td align=center nowrap >" + "<img src='/WF/Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font>" + "</td>");
                     }
                     else
                     {
-                        sBuilder.Append("<td align=center nowrap ><img src='/WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font>" + "</td>");
+                        sBuilder.Append("<td align=center nowrap >" + "<img src='/WF/Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font>" + "</td>");
                     }
                 }
                 else
                 {
-                    sBuilder.Append("<td align=center nowrap ><img src='/WF/Img/TolistSta/0.png'class='Icon'/>&nbsp;<font color=green>正常</font>" + "</td>");
+                    sBuilder.Append("<td align=center nowrap >" + "<img src='/WF/Img/TolistSta/0.png'class='Icon'/>&nbsp;<font color=green>正常</font>" + "</td>");
                 }
 
-                
-                BP.WF.WFState ws = BP.WF.WFState.Runing;
-                try
-                {
-                     ws = (BP.WF.WFState)dr["WFState"];
-                }
-                catch
-                {
-                }
-                
-                string lab = "";
-                switch (ws)
-                {
-                    case BP.WF.WFState.Complete:
-                        lab = "已完成";
-                        break;
-                    case BP.WF.WFState.Runing:
-                        if (string.IsNullOrEmpty(paras) == false && paras.Contains("CC") == true)
-                            lab = "抄送";
-                        else
-                            lab = "待办";
-                        break;
-                    case BP.WF.WFState.HungUp:
-                        lab = "挂起";
-                        break;
-                    case BP.WF.WFState.Askfor:
-                        lab = "加签";
-                        break;
-                    case BP.WF.WFState.ReturnSta:
-                        lab = "退回";
-                        break;
-                    case BP.WF.WFState.Draft:
-                        lab = "草稿";
-                        break;
-                    default:
-                        lab = "未判断";
-                        break;
-                }
-                
-                sBuilder.Append("<td>"+  lab +"</td>");
-                
                 sBuilder.Append("<td width='200'><div style='width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + dr["FlowNote"] + "'>" + dr["FlowNote"] + "</div></td>");
                 sBuilder.Append("</tr>");
             }

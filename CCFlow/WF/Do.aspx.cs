@@ -233,6 +233,7 @@ namespace BP.Web.WF
                         int i = wl.Retrieve(GenerWorkerListAttr.FK_Emp, strs[0],
                             GenerWorkerListAttr.WorkID, strs[1],
                             GenerWorkerListAttr.FK_Node, strs[2]);
+
                         if (i == 0)
                         {
                             this.Response.Write("<h2>提示</h2>此工作已经被别人处理或者此流程已删除。");

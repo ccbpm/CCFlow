@@ -647,7 +647,7 @@ namespace CCFlow.WF.UC
                 }
             }
 
-            if (btnLab.EndFlowEnable && this.currND.IsStartNode == false && isAskFor == false)
+            if (btnLab.EndFlowEnable && isAskFor == false)
             {
                 //获取配置文件
                 if (BP.Sys.SystemConfig.IsOpenEndFlow == IsOpenEndFlow.Close)

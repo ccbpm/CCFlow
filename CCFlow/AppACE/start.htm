@@ -61,6 +61,7 @@
                         alert(data);
                         return;
                     }
+
                     //转换.
                     data = JSON.parse(data);
                     var row = "";
@@ -68,9 +69,9 @@
 
                     for (var i = 0; i < data.length; i++) {
 
-                        var no = data[i].NO;
-                        var name = data[i].NAME;
-                        var sortName = data[i].FK_FLOWSORTTEXT;
+                        var no = data[i].No;
+                        var name = data[i].Name;
+                        var sortName = data[i].FK_FlowSort;
 
                         if (sortNames.indexOf(sortName + ';') > 0) {
                             sortName = "";
@@ -78,7 +79,7 @@
                             sortNames += sortName + ';';
                         }
 
-                        var isBatchStart = data[i].ISBATCHSTART;
+                        var isBatchStart = data[i].IsBatchStart;
                         var searchUrl = '../WF/Rpt/Search.htm?RptNo=ND' + no + 'MyRpt&FK_Flow=' + no;
                         var groupUrl = '../WF/Rpt/Group.htm?RptNo=ND' + no + 'MyRpt&FK_Flow=' + no;
                         var batchUrl = '../WF/BatchStart.htm?FK_Flow=' + no;

@@ -83,7 +83,7 @@ functrees.push({
 															{ IconCls: "icon-tree_folder", MenuId: "mFormSort" }
 														]
 											},
-                                            {Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/Home.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID"
+                                            { Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/DesignerFrm.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID"
 											}
 										  ]
 			},

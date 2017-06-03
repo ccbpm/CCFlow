@@ -34,7 +34,6 @@
                 url: Handler + "?DoType=DBInstall_Init",
                 success: function (data) {
 
-                    alert(data);
 
                     if (data.indexOf('err@') == 0) {
                         $("#Msg").html("<font color=red>安装准备失败：<br>" + data + "</font> .");
@@ -67,6 +66,10 @@
 
             var val = GetRadioValue("DemoType");
 
+            if (val == "0")
+                val = "组织结构为OneOne模式(一人一部门多岗位)";
+            else
+                val = "组织结构为OneMore模式(一人多部门多岗位)";
 
             if (confirm('将要执行模式【'+val+'】的安装您确认吗？') == false)
                 return;
@@ -94,6 +97,8 @@
                         return;
                     }
 
+                    document.getElementById("Btn_Submit").value = '安装完成';
+
                     $("#Msg").html("<font color=green>" + data + "</font>");
                 }
             });
@@ -110,6 +115,7 @@
 <tr>
 <td>
      <div style='float:left' ><img src='../../DataUser/Icon/LogBiger.png' width="300px" border="0px" alt="ccbpm" /> </div>
+     <div style='float:right' ><img src='../Img/ccflowWX.jpg' width="150px" border="0px" alt="微信" /> </div>
 </td>
 </tr>
 

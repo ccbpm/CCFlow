@@ -10,8 +10,6 @@
              return true;
          }
          return true;
-         
-          
      }
     </script>
     <link href="../Comm/Style/Table.css" rel="stylesheet" type="text/css" />

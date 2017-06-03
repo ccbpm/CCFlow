@@ -63,9 +63,6 @@ function GenerCheckIDs() {
 
         checkBoxIDs += arrObj[i].id + ',';
     }
-
-    alert(checkBoxIDs);
-
     return checkBoxIDs;
 }
 

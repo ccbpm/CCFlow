@@ -909,6 +909,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoNodeAttrs()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
+                rm.Visable = false;
                 map.AddRefMethod(rm);
 
                 //rm = new RefMethod();
@@ -926,15 +927,10 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoBatchStartFields()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "实验中的功能";
+                rm.Visable = false;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "节点运行模式(开发中)"; // "调用事件接口";
-                rm.ClassMethodName = this.ToString() + ".DoRunModel";
-                rm.Icon = "../../WF/Img/Btn/DTS.gif";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "实验中的功能";
-                map.AddRefMethod(rm);
+            
 
             
                 #endregion 实验中的功能
@@ -1068,15 +1064,7 @@ namespace BP.WF.Template
         }
         #endregion 表单相关.
 
-        /// <summary>
-        /// 节点运行模式.
-        /// </summary>
-        /// <returns></returns>
-        public string DoRunModel()
-        {
-            return "../../Admin/AttrNode/NodeRunModel.htm?FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" +
-                   this.NodeID + "&t=" + DataType.CurrentDataTime;
-        }
+       
       
         /// <summary>
         /// 集团部门树

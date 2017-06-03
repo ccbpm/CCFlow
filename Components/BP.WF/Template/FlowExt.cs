@@ -710,7 +710,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "交叉报表";
+                rm.Title = "交叉报表(beta)";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/D3.png";
                 rm.ClassMethodName = this.ToString() + ".DoDRptD3()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -718,7 +718,7 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "对比分析";
+                rm.Title = "对比分析(beta)";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Contrast.png";
                 rm.ClassMethodName = this.ToString() + ".DoDRptContrast()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -832,23 +832,7 @@ namespace BP.WF.Template
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
                 //rm.GroupName = "流程监控";
                 //map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "流程查询";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
-                rm.ClassMethodName = this.ToString() + ".DoDataManger()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程监控";
-                map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "节点列表";
-                //rm.Icon = ../../Admin/CCBPMDesigner/Img/flows.png";
-                //rm.ClassMethodName = this.ToString() + ".DoDataManger_Nodes()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.GroupName = "流程监控";
-                //map.AddRefMethod(rm);
-
+             
                 rm = new RefMethod();
                 rm.Title = "综合查询";
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
@@ -865,29 +849,31 @@ namespace BP.WF.Template
                 rm.GroupName = "流程监控";
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "实例增长分析";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Grow.png";
-                rm.ClassMethodName = this.ToString() + ".DoDataManger_InstanceGrowOneFlow()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程监控";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "实例增长分析";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Grow.png";
+                //rm.ClassMethodName = this.ToString() + ".DoDataManger_InstanceGrowOneFlow()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "流程监控";
+                //rm.Visable = false;
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "逾期未完成实例";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Warning.png";
-                rm.ClassMethodName = this.ToString() + ".DoDataManger_InstanceWarning()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程监控";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "逾期未完成实例";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Warning.png";
+                //rm.ClassMethodName = this.ToString() + ".DoDataManger_InstanceWarning()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "流程监控";
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "逾期已完成实例";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/overtime.png";
-                rm.ClassMethodName = this.ToString() + ".DoDataManger_InstanceOverTimeOneFlow()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "流程监控";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "逾期已完成实例";
+                //rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/overtime.png";
+                //rm.ClassMethodName = this.ToString() + ".DoDataManger_InstanceOverTimeOneFlow()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Visable = false;
+                //rm.GroupName = "流程监控";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "删除日志";
@@ -903,6 +889,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoDataManger_RptOrder()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "流程监控";
+                rm.Visable = false;
                 map.AddRefMethod(rm);
                 #endregion 流程监控.
 
@@ -918,7 +905,6 @@ namespace BP.WF.Template
                 //rm.RefMethodType = RefMethodType.Func;
                 //rm.Target = "_blank";
                 ////  map.AddRefMethod(rm);
-
 
                 //rm = new RefMethod();
                 //rm.Title = "设置自动发起"; // "报表运行";
@@ -949,14 +935,6 @@ namespace BP.WF.Template
         #endregion
 
         #region 流程监控.
-        //public string DoDataManger_Welcome()
-        //{
-        //    return "../../Admin/CCBPMDesigner/App/OneFlow/Welcome.aspx?FK_Flow=" + this.No;
-        //}
-        //public string DoDataManger_Nodes()
-        //{
-        //    return "../../Admin/CCBPMDesigner/App/OneFlow/Nodes.aspx?FK_Flow=" + this.No;
-        //}
         public string DoDataManger_Search()
         {
             return "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
@@ -966,20 +944,20 @@ namespace BP.WF.Template
             return "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&WFSta=all";
         }
 
-        public string DoDataManger_InstanceGrowOneFlow()
-        {
-            return "../../Admin/FlowDB/InstanceGrowOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
-        }
+        //public string DoDataManger_InstanceGrowOneFlow()
+        //{
+        //    return "../../Admin/FlowDB/InstanceGrowOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
+        //}
 
-        public string DoDataManger_InstanceWarning()
-        {
-            return "../../Admin/FlowDB/InstanceWarning.aspx?anaTime=mouth&FK_Flow=" + this.No;
-        }
+        //public string DoDataManger_InstanceWarning()
+        //{
+        //    return "../../Admin/FlowDB/InstanceWarning.aspx?anaTime=mouth&FK_Flow=" + this.No;
+        //}
 
-        public string DoDataManger_InstanceOverTimeOneFlow()
-        {
-            return "../../Admin/FlowDB/InstanceOverTimeOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
-        }
+        //public string DoDataManger_InstanceOverTimeOneFlow()
+        //{
+        //    return "../../Admin/FlowDB/InstanceOverTimeOneFlow.aspx?anaTime=mouth&FK_Flow=" + this.No;
+        //}
         public string DoDataManger_DeleteLog()
         {
             return "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs&FK_Flow=" + this.No + "&WFSta=all";
@@ -1491,14 +1469,7 @@ namespace BP.WF.Template
 
             return "全部生成成功,影响数据(" + wks.Count + ")条";
         }
-        /// <summary>
-        /// 流程监控
-        /// </summary>
-        /// <returns></returns>
-        public string DoDataManger()
-        {
-            return "../../Comm/Search.aspx?s=d34&EnsName=BP.WF.Data.GenerWorkFlowViews&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=";
-        }
+        
         /// <summary>
         /// 绑定独立表单
         /// </summary>

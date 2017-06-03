@@ -61,7 +61,6 @@ namespace BP.WF.HttpHandler
             //返回组合
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
-
         #region 获得列表.
         /// <summary>
         /// 运行
@@ -213,6 +212,21 @@ namespace BP.WF.HttpHandler
                 return "申请成功.";
             else
                 return "err@申请失败...";
+        }
+        /// <summary>
+        /// 我申请下来的任务
+        /// </summary>
+        /// <returns></returns>
+        public string TaskPoolApply_Init()
+        {
+            DataTable dt = BP.WF.Dev2Interface.DB_TaskPoolOfMyApply();
+
+            return BP.Tools.Json.DataTableToJson(dt, false);
+        }
+        public string TaskPoolApply_PutOne()
+        {
+            BP.WF.Dev2Interface.Node_TaskPoolPutOne(this.WorkID);
+            return "放入成功,其他的同事可以看到这件工作.您可以在任务池里看到它并重新申请下来.";
         }
         #endregion
 

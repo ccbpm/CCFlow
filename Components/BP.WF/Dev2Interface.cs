@@ -208,10 +208,6 @@ namespace BP.WF
         {
             get
             {
-                //if (BP.WF.Glo.IsEnableTaskPool == false)
-                //    return 0
-                //    throw new Exception("@你必须在Web.config中启用IsEnableTaskPool才可以执行此操作。");
-
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 string wfSql = "  (WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + ") AND TaskSta=" + (int)TaskSta.Sharing;
@@ -244,6 +240,54 @@ namespace BP.WF
                         ps.Add("FK_Emp", BP.Web.WebUser.No);
                         return BP.DA.DBAccess.RunSQLReturnValInt(ps);
                     //throw new Exception("对方(" + WebUser.No + ")已经取消了授权.");
+                    default:
+                        throw new Exception("no such way...");
+                }
+                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+            }
+        }
+        /// <summary>
+        /// 申请下来的工作个数
+        /// </summary>
+        public static int Todolist_Apply
+        {
+            get
+            {
+                if (BP.WF.Glo.IsEnableTaskPool == false)
+                    throw new Exception("@你必须在Web.config中启用IsEnableTaskPool才可以执行此操作。");
+
+                Paras ps = new Paras();
+                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                string wfSql = "  (WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + ") AND TaskSta=" + (int)TaskSta.Takeback;
+                string sql;
+                string realSql;
+                if (WebUser.IsAuthorize == false)
+                {
+                    /*不是授权状态*/
+                    // ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ORDER BY FK_Flow,ADT DESC ";
+                    //ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ORDER BY ADT DESC ";
+                    ps.SQL = "SELECT COUNT(WorkID) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp";
+
+                    // ps.SQL = "select v1.*,v2.name,v3.name as ParentName from (" + realSql + ") as v1 left join JXW_Inc v2 on v1.WorkID=v2.OID left join Jxw_Inc V3 on v1.PWorkID = v3.OID ORDER BY v1.ADT DESC";
+
+                    ps.Add("FK_Emp", BP.Web.WebUser.No);
+                    return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                }
+
+                /*如果是授权状态, 获取当前委托人的信息. */
+                WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+                switch (emp.HisAuthorWay)
+                {
+                    case Port.AuthorWay.All:
+                        ps.SQL = "SELECT COUNT(WorkID) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0";
+                        ps.Add("FK_Emp", BP.Web.WebUser.No);
+                        break;
+                    case Port.AuthorWay.SpecFlows:
+                        ps.SQL = "SELECT COUNT(WorkID) FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + "";
+                        ps.Add("FK_Emp", BP.Web.WebUser.No);
+                        break;
+                    case Port.AuthorWay.None:
+                        throw new Exception("对方(" + WebUser.No + ")已经取消了授权.");
                     default:
                         throw new Exception("no such way...");
                 }

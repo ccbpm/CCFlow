@@ -216,9 +216,15 @@
              return;
          }
 
-     if (btnID == 'Btn_CheckNote') {
-            // OpenUrl('CCMsg', '审核', '/WF/WorkOpt/CCCheckNote.aspx?1=2', 700, 450);
-         OpenUrlLocation('/WF/WorkOpt/CCCheckNote.aspx?1=2');
+         if (btnID == 'Btn_EndFlow') {
+            if (confirm("是否真的需要结束流程?"))
+              OpenUrlLocation('/WF/WorkOpt/StopFlow.aspx?&DoType=StopFlow');
+             return;
+         }
+
+         if (btnID == 'Btn_CheckNote') {
+             // OpenUrl('CCMsg', '审核', '/WF/WorkOpt/CCCheckNote.aspx?1=2', 700, 450);
+             OpenUrlLocation('/WF/WorkOpt/CCCheckNote.aspx?1=2');
              return;
          }
 
@@ -460,6 +466,11 @@
 <% if (btn.DeleteEnable != 0 && workState != WFState.Complete && workState != WFState.Fix && workState != WFState.HungUp)
    { %>
 <input type="button" onclick="ShowUrl(this)" id="Btn_Delete" value='<%= btn.DeleteLab %>' />
+<% } %>
+<!-- 流程结束-->
+<% if (btn.EndFlowEnable == true && workState != WFState.Complete && workState != WFState.Fix && workState != WFState.HungUp)
+   { %>
+<input type="button" onclick="ShowUrl(this)" id="Btn_EndFlow" value='<%= btn.EndFlowLab %>' />
 <% } %>
 <!-- 加签-->
 <% if (btn.AskforEnable == true && workState != WFState.Complete && workState != WFState.Fix && workState != WFState.HungUp)

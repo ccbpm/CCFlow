@@ -77,9 +77,9 @@ functrees.push({
     Nodes: [
 			{ Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "0",
 			    ColDefine: "TType", Defines: [
-											{ Value: "FormType", ColDefine: "ParentNo",
+											{ Value: "FORMTYPE", ColDefine: "ParentNo",
 											    Defines: [
-															{ Value: null, IconCls: "icon-formtree", MenuId: "mFormRoot", Opened: true },
+															{ Value: "0", IconCls: "icon-formtree", MenuId: "mFormRoot", Opened: true },
 															{ IconCls: "icon-tree_folder", MenuId: "mFormSort" }
 														]
 											},

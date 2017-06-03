@@ -60,7 +60,6 @@ namespace CCFlow.WF
         }
         #endregion 属性.
 
-       
         
         public DataTable dt = null;
         string timeKey;
@@ -91,8 +90,6 @@ namespace CCFlow.WF
             this.Pub1.AddTable("width='100%' align=left");
             // this.Pub1.AddCaptionMsgLong("任务池-<a href='TaskPoolApply.aspx' >申请下来工作</a>");
             this.Pub1.AddCaptionMsgLong("1.任务池 - <a href='TaskPoolApply.aspx'>》2.申请下来工作</a>");
-
-           
 
             string extStr = "";
             if (this.IsHungUp)

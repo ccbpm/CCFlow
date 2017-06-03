@@ -88,7 +88,6 @@ namespace CCFlow.WF
             timeKey = DateTime.Now.ToString("yyyyMMddHHmmss");
             this.FK_Flow = this.Request.QueryString["FK_Flow"];
             dt = BP.WF.Dev2Interface.DB_TaskPoolOfMyApply();
-
             if (dt.Rows.Count == 0)
             {
                 this.Pub1.AddMsgOfInfoV2LongTitle("<a href='TaskPoolSharing.aspx' >1.任务池</a> -  》2.申请下来工作",

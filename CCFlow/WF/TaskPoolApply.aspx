@@ -80,6 +80,7 @@
          newWindow.focus();
          return;
      }
+
      function PutOne(workid) {
          var doUrl = 'Do.aspx?ActionType=PutOne&WorkID=' + workid;
          var str = window.showModalDialog(doUrl, '', 'dialogHeight: 50px; dialogWidth:50px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no');
@@ -87,12 +88,11 @@
              return;
          if (str == null)
              return;
-
          window.location.href = window.location.href;
      }
 
     </script>
-    <style>
+    <style  type="text/css" >
         .TTD
         {
           word-wrap: break-word; 

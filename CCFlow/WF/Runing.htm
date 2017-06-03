@@ -10,24 +10,52 @@
      <base target="_self" />
     <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script language="javascript" type="text/javascript" >
-        function Do(warning, url) {
-            if (window.confirm(warning) == false)
-                return;
-            window.location.href = url;
-        }
         // 撤销。
-        function UnSend( fk_flow,workid,fid) {
+        function UnSend(fk_flow, workid, fid) {
+
             if (window.confirm('您确定要撤销本次发送吗？') == false)
                 return;
-            var url = 'Do.aspx?DoType=UnSend&FID=' + fid + '&WorkID=' + workid + '&FK_Flow=' + fk_flow;
-            window.location.href = url;
-            return;
+
+            //执行撤销.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Runing_UnSend&FK_Flow="+fk_flow+"&WorkID="+workid+"&FID="+fid+"&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    window.location.href = window.location.href;
+                    return;
+                }
+            });
         }
 
         //催办.
         function Press(fk_flow, workid, fid) {
-            var url = './WorkOpt/Press.htm?FID=' + fid + '&WorkID=' + workid + '&FK_Flow=' + fk_flow;
-            var v = window.showModalDialog(url, 'sd', 'dialogHeight: 200px; dialogWidth: 350px;center: yes; help: no');
+
+            var msg = window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
+            if (msg == null)
+                return;
+
+            //执行催办.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Runing_Press&Msg="+msg+"&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    return;
+                }
+            });
         }
       
         function WinOpenIt(url) {
@@ -62,7 +90,7 @@
         function InitPage() {
 
             //随机串.
-            var timeKey = Math.random(); 
+            var timeKey = Math.random();
 
             //初始化表格.
             $.ajax({
@@ -83,7 +111,7 @@
                         newRow = "<tr ><td class=Idx>" + i + "</td>";
                         newRow += "<td>" + "<a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&FID=0&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node + "&IsRead=0&T=" + timeKey + "');\" ><img src='./Img/Runing.png' width='16px' />" + work.Title + "</a></td>";
                         newRow += "<td>" + work.FlowName + "</td>";
-                        newRow += "<td>" + work.RDT + "</td>";
+                        newRow += "<td>" + work.StarterName + "</td>";
                         newRow += "<td>" + work.RDT + "</td>";
                         newRow += "<td>" + work.FlowNote + "</td>";
                         newRow += "<td>";
@@ -105,11 +133,11 @@
 <caption >在途工作</caption>
 <tr>
 <th style="width:38px;" >序</th>
-<th style="width:38%;" >标题</th>
+<th style="width:48%;" >标题</th>
 <th>流程</th>
 <th>发起人</th>
 <th>当前节点</th>
-<th>发起日期</th>
+<th>流程备注</th>
 <th>操作</th>
 </tr>
 </table>

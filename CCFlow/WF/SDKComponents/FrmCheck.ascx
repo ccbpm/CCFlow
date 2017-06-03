@@ -8,14 +8,10 @@
     src += "&FK_Node=" + this.Request.QueryString["FK_Node"];
     src += "&FK_Flow=" + this.Request.QueryString["FK_Flow"];
     src += "&IsHidden=" + this.IsHidden;
-    string srcTrack = "/WF/WorkOpt/TrackChart.aspx?FK_Flow="+this.Request.QueryString["FK_Flow"];
-    srcTrack += "&FK_Node=" + this.Request.QueryString["FK_Node"];
-    srcTrack += "&WorkID=" + this.Request.QueryString["WorkID"];
-    BP.WF.Template.FrmWorkCheck wc = new BP.WF.Template.FrmWorkCheck(int.Parse(this.Request.QueryString["FK_Node"]));
     
     int nodeID = int.Parse(this.Request.QueryString["FK_Node"]);
     BP.WF.Template.FrmWorkCheck frmWorkCheck = new BP.WF.Template.FrmWorkCheck(nodeID);
-    if (wc.HisFrmWorkCheckSta == BP.WF.Template.FrmWorkCheckSta.Disable == false)
+    if (frmWorkCheck.HisFrmWorkCheckSta == BP.WF.Template.FrmWorkCheckSta.Disable == false)
     {
 %>
 
@@ -24,17 +20,6 @@
         <iframe id='F' src='<%=src%>' frameborder="0" style=' padding: 0px; border: 0px; margin:0px; height:99%'
             leftmargin='0' topmargin='0' width='100%'   >
         </iframe>
-
     </div>
 </div>
-<%--
-<uc1:FrmCheck ID="FrmCheck1" runat="server" />
-<uc2:FTC ID="FTC1" runat="server" />
-<uc3:AccepterCCerSelecter ID="AccepterCCerSelecter1" runat="server" />
-<cc1:PostBackTextBox ID="PostBackTextBox1" runat="server"></cc1:PostBackTextBox>
-<cc2:BPRadioButtonList ID="BPRadioButtonList1" runat="server">
-</cc2:BPRadioButtonList>
-<cc2:DatePicker ID="DatePicker1" runat="server" />
-<cc2:LineChart ID="LineChart1" runat="server" />--%>
-
 <% } %>

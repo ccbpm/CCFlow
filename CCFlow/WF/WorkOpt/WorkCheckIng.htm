@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>审核组件</title>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+    <!-- 导入配置文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
+
+        function InitPage() {
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=WorkCheck_Init&FK_Flow=" + GetQueryString('FK_Flow') + "&FK_Node=" + GetQueryString('FK_Node') + "&WorkID=" + GetQueryString('WorkID') + "&FID=" + GetQueryString('FID') + "&Msg=" + encodeURI(msg) + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data);
+                    window.close();
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="Msg"></div>
+
+ 
+
+</body>
+</html>

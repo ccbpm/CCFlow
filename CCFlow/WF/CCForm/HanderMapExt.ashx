@@ -95,6 +95,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
                         // 获取填充 ctrl 值的信息.
                         sql = this.DealSQL(me.DocOfSQLDeal, key);
                         System.Web.HttpContext.Current.Session["DtlKey"] = key;
+                        sql = sql.Replace("%","");
                         dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                         context.Response.Write(JSONTODT(dt));
                         break;

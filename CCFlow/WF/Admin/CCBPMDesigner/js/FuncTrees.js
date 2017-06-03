@@ -75,7 +75,7 @@ functrees.push({
     RootASC: { Field: "TType", Index: ["FormType", "FormType", "CloundData"] },  //"SRCROOT", 
     ServiceCount: 1,//2
     Nodes: [
-			{ Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "",
+			{ Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "0",
 			    ColDefine: "TType", Defines: [
 											{ Value: "FormType", ColDefine: "ParentNo",
 											    Defines: [

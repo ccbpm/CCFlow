@@ -897,27 +897,30 @@ namespace BP.WF.HttpHandler
         public string GetFormTreeTable()
         {
             #region 检查数据是否符合规范.
-            DBAccess.RunSQL("DELETE FROM Sys_FormTree WHERE ParentNo='' OR  ParentNo IS NULL ");
+            string rootNo =
+                DBAccess.RunSQLReturnStringIsNull("SELECT No FROM Sys_FormTree WHERE ParentNo='' OR ParentNo IS NULL", null);
 
-            string sql = "SELECT ParentNo FROM Sys_FormTree WHERE No='1' ";
-            string rootNo = DBAccess.RunSQLReturnStringIsNull(sql, null);
-            if (rootNo==null)
+            if (!string.IsNullOrWhiteSpace(rootNo))
             {
-                sql = "UPDATE Sys_FormTree SET ParentNo=1 WHERE ParentNo='0' ";
-                DBAccess.RunSQL(sql);
+                DBAccess.RunSQL(string.Format("DELETE FROM Sys_FormTree WHERE No='{0}'", rootNo));
+                DataTable dtRoot = DBAccess.RunSQLReturnTable("SELECT No,ParentNo FROM Sys_FormTree WHERE No='1'");
 
-                sql = "INSERT INTO Sys_FormTree (No,Name,ParentNo) VALUES ('1','根目录','0')";
-                DBAccess.RunSQL(sql);
+                if (dtRoot.Rows.Count == 0)
+                    DBAccess.RunSQL("INSERT INTO Sys_FormTree (No,Name,ParentNo) VALUES ('1','根目录','0')");
+                else if (Equals(dtRoot.Rows[0]["ParentNo"], "0") == false)
+                    DBAccess.RunSQL("UPDATE Sys_FormTree SET ParentNo='0' WHERE No='1'");
+
+                DBAccess.RunSQL(string.Format("UPDATE Sys_FormTree SET ParentNo='1' WHERE ParentNo='{0}' AND No != '1'", rootNo));
             }
             #endregion 检查数据是否符合规范.
 
             //组织数据源.
             string sqls = "SELECT No ,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType, DBSRC FROM Sys_FormTree ORDER BY Idx ASC ; ";
-            sqls += "SELECT NO, FK_FrmSort as PARENTNO,NAME,IDX,0 ISPARENT, 'FORM' TTYPE FROM Sys_MapData   WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree)";
+            sqls += "SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData   WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree)";
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
 
             //获得表单数据.
-            DataTable dtSort = ds.Tables[0].Clone(); //类别表.
+            DataTable dtSort = ds.Tables[0]; //类别表.
             DataTable dtForm = ds.Tables[1].Clone(); //表单表.
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -970,7 +973,7 @@ namespace BP.WF.HttpHandler
                     dtForm = newDt;
                 }
             }
-            string str = BP.Tools.Json.DataTableToJson(dtForm, false);
+
             return BP.Tools.Json.DataTableToJson(dtForm, false);
         }
         public string GetSrcTreeTable()

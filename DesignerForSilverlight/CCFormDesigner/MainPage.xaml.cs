@@ -1413,7 +1413,7 @@ namespace CCForm
 
                                                 tb.SetValue(Canvas.LeftProperty, X);
                                                 tb.SetValue(Canvas.TopProperty, Y);
-
+                                                tb.AtPara = (string)dr["ATPARA"];
                                                 if (this.workSpace.FindName(tb.Name) != null)
                                                     continue;
 
@@ -2131,6 +2131,9 @@ namespace CCForm
 
                         mapAttrDR["X"] = x.ToString("0.00");
                         mapAttrDR["Y"] = y.ToString("0.00");
+
+                        BP.DA.AtPara ap = new BP.DA.AtPara(tb.AtPara);
+                        mapAttrDR["ATPARA"] = ap.GenerAtParaStrs();
                         // mapAttrDR["UIVISIBLE"] = "1";
                         dtMapAttr.Rows.Add(mapAttrDR);
                     }

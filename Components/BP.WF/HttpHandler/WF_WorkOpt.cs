@@ -27,6 +27,25 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        #region 审核组件.
+        /// <summary>
+        /// 初始化审核组件数据.
+        /// </summary>
+        /// <returns></returns>
+        public string WorkCheck_Init()
+        {
+            return "";
+        }
+        /// <summary>
+        /// 审核组件保存.
+        /// </summary>
+        /// <returns></returns>
+        public string WorkCheck_Save()
+        {
+            return "保存成功.";
+        }
+        #endregion
+
 
         #region 执行跳转.
         /// <summary>

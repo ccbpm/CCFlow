@@ -35,6 +35,8 @@ namespace CCForm
         public string NameOfReal = string.Empty;
 
         private string TBVal = string.Empty;
+
+        public string AtPara { get; set; }
        
         /// <summary>
         /// 类型

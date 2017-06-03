@@ -385,6 +385,11 @@ namespace CCFlow.WF.UC
                     /* 如果禁用了节点表单，并且只有一个表单的情况。*/
                     Frm frm = (Frm)frms[0];
                     FrmNode fn = frm.HisFrmNode;
+
+                    Width = frm.FrmW + "";
+                    if (float.Parse(Width) < 500)
+                        Width = "900";
+
                     string src = "";
                     src = fn.FrmUrl + ".aspx?FK_MapData=" + frm.No + "&FID=" + fid + "&IsEdit=0&IsPrint=0&FK_Node=" + nd.NodeID + "&WorkID=" + workid + "&CWorkID=" + this.CWorkID;
                     this.UCEn1.Add("\t\n <DIV id='" + frm.No + "' style='width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left; background-color:white;margin:0;padding:0;' >");
@@ -401,6 +406,9 @@ namespace CCFlow.WF.UC
                         if (frmFirst.FrmW < frm.FrmW)
                             frmFirst = frm;
                     }
+                    Width = frmFirst.FrmW + "";
+                    if (float.Parse(Width) < 500)
+                        Width = "900";
 
                     #region 载入相关文件.
                     this.Page.RegisterClientScriptBlock("sg",

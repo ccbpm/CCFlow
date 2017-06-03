@@ -179,6 +179,10 @@ namespace BP.WF.Template
         /// 是否显示未审核的轨迹
         /// </summary>
         public const string FWCIsShowTruck = "FWCIsShowTruck";
+        /// <summary>
+        /// 是否显示退回信息
+        /// </summary>
+        public const string FWCIsShowReturnMsg = "FWCIsShowReturnMsg";
     }
     /// <summary>
     /// 审核组件
@@ -635,6 +639,8 @@ namespace BP.WF.Template
 
                 map.AddTBString(FrmWorkCheckAttr.FWCFields, null, "审批格式字段", true, false, 0, 1000, 10, true);
                 map.AddBoolean(FrmWorkCheckAttr.FWCIsShowTruck, false, "是否显示未审核的轨迹？", true, true, true);
+
+                map.AddBoolean(FrmWorkCheckAttr.FWCIsShowReturnMsg, false, "是否显示退回信息？", true, true, true);
 
                 //增加如下字段是为了查询与排序的需要.
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 3, 10);

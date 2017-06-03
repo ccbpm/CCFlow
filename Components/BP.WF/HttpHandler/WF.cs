@@ -75,6 +75,36 @@ namespace BP.WF.HttpHandler
             return page.Runing_Init();
         }
         /// <summary>
+        /// 执行撤销
+        /// </summary>
+        /// <returns></returns>
+        public string Runing_UnSend()
+        {
+            try
+            {
+                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID);
+            }
+            catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 执行催办
+        /// </summary>
+        /// <returns></returns>
+        public string Runing_Press()
+        {
+            try
+            {
+                return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, this.GetRequestVal("Msg"),false);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
         /// 挂起列表
         /// </summary>
         /// <param name="userNo">用户编号</param>
@@ -111,6 +141,41 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataTableToJson(dt,true);
         }
         /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string TodolistOfAuth_Init()
+        {
+            return "err@尚未重构完成.";
+           
+            //DataTable dt = null;
+            //foreach (BP.WF.Port.WFEmp item in ems)
+            //{
+            //    if (dt == null)
+            //    {
+            //        dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(item.No, null);
+            //    }
+            //    else
+            //    {
+            //    }
+            //}
+
+          //    return BP.Tools.Json.DataTableToJson(dt, false);
+
+            //string fk_emp = this.FK_Emp;
+            //if (fk_emp == null)
+            //{
+            //    //移除不需要前台看到的数据.
+            //    DataTable dt = ems.ToDataTableField();
+            //    dt.Columns.Remove("SID");
+            //    dt.Columns.Remove("Stas");
+            //    dt.Columns.Remove("Depts");
+            //    dt.Columns.Remove("Msg");
+            //    return BP.Tools.Json.DataTableToJson(dt, false);
+            //}
+
+        }
+        /// <summary>
         /// 获得待办.
         /// </summary>
         /// <returns></returns>
@@ -124,6 +189,32 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataTableToJson(dt,false);
         }
         #endregion 获得列表.
+
+
+        #region 共享任务池.
+        /// <summary>
+        /// 初始化共享任务
+        /// </summary>
+        /// <returns></returns>
+        public string TaskPoolSharing_Init()
+        {
+           DataTable dt = BP.WF.Dev2Interface.DB_TaskPool();
+
+           return BP.Tools.Json.DataTableToJson(dt, false);
+        }
+        /// <summary>
+        /// 申请任务.
+        /// </summary>
+        /// <returns></returns>
+        public string TaskPoolSharing_Apply()
+        {
+            bool b = BP.WF.Dev2Interface.Node_TaskPoolTakebackOne(this.WorkID);
+            if (b == true)
+                return "申请成功.";
+            else
+                return "err@申请失败...";
+        }
+        #endregion
 
         #region 登录相关.
         /// <summary>

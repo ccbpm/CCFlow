@@ -423,7 +423,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@" + ex.Message;
+                return "err@升级失败请联系管理员,或者反馈给ccbpm. 失败原因:" + ex.Message;
             }
         }
 

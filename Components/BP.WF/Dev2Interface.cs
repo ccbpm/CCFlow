@@ -4459,7 +4459,7 @@ namespace BP.WF
         /// <param name="msg">催办消息</param>
         /// <param name="isPressSubFlow">是否催办子流程？</param>
         /// <returns>返回执行结果</returns>
-        public static string Flow_DoPress(Int64 workID, string msg, bool isPressSubFlow)
+        public static string Flow_DoPress(Int64 workID, string msg, bool isPressSubFlow=false)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
 

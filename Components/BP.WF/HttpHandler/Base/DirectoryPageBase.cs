@@ -363,6 +363,19 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 人员编号
+        /// </summary>
+        public string FK_Emp
+        {
+            get
+            {
+                string str = this.GetRequestVal("FK_Emp");
+                if (str == null || str == "" || str == "null")
+                    return null;
+                return str;
+            }
+        }
+        /// <summary>
         /// 表单ID
         /// </summary>
         public string FrmID

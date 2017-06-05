@@ -16,11 +16,20 @@
             if (val == undefined)
                 return;
             ctrl.value = val;
+        } 
+        function closeEvent() {
+            if (window.opener) {
+                try {
+                    window.opener.location.reload();
+                }
+                catch (e) {
+                }
+            }
         }
     </script>
     <base target="_self" />
 </head>
-<body onkeypress="Esc()" leftmargin="0" topmargin="0" onkeydown='DoKeyDown();'>
+<body onkeypress="Esc()" onunload="closeEvent()" leftmargin="0" topmargin="0" onkeydown='DoKeyDown();'>
     <form id="Form1" method="post" runat="server">
     </form>
 </body>

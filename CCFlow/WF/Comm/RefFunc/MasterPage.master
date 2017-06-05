@@ -75,10 +75,19 @@
                 $('#rightFrame').append('<iframe scrolling="auto" frameborder="0"  src="' + url + '&s=' + Math.random() + '" style="width:100%;height:100%;"></iframe>');
             }
         }
+        function closeEvent() {
+            if (window.opener) {
+                try {
+                    window.opener.location.reload();
+                }
+                catch (e) {
+                }
+            }
+        }
     </script>
     <base target="_self" />
 </head>
-<body class="easyui-layout" leftmargin="0" topmargin="0" onkeypress="javascript:Esc();">
+<body class="easyui-layout" leftmargin="0" topmargin="0" onkeypress="javascript:Esc();" onunload="closeEvent()">
     <form id="aspnetForm" runat="server">
     <div id="leftFrame" data-options="region:'west',title:'功能列表',split:true" style="width: 200px;
         padding: 5px">

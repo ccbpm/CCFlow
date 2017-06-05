@@ -1847,7 +1847,7 @@ namespace CCFlow.WF.CCForm
                             if (attr.LGType != FieldTypeS.Normal)
                                 continue;
 
-                            if (ext.Tag == "1" && ext.Doc != "")
+                            if (ext.ExtType == MapExtXmlList.AutoFull && ext.Doc != "")
                             {
                                 script += this.GenerAutoFull(dtl.OID.ToString(), attrs, ext);
                             }

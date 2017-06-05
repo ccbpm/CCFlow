@@ -14,8 +14,7 @@
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightApplicationList>
-    </SilverlightApplicationList>
+    <SilverlightApplicationList>{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj|WF\Admin\ClientBin|False,{83D53118-9A8D-4970-9A88-A2909B13FF64}|..\DesignerForSilverlight\CCFormDesigner\CCFormDesigner.csproj|WF\Admin\ClientBin|False</SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -1543,7 +1542,6 @@
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Excel.js" />
     <Content Include="WF\Admin\CCFormDesigner\FiledsList.htm" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesigner.htm" />
-    <Content Include="WF\Admin\CCFormDesigner\Home.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Img\CH.png" />
     <Content Include="WF\Admin\CCFormDesigner\Img\DBSrc.png" />
     <Content Include="WF\Admin\CCFormDesigner\Img\DBSrcTable.png" />
@@ -1662,7 +1660,6 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\style.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\text.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\util.js" />
-    <Content Include="WF\Admin\CCFormDesigner\Login.htm" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-default.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-style-bar.css" />
@@ -7554,7 +7551,6 @@
     <Content Include="WF\WorkOpt\ToNodes.aspx" />
     <Content Include="WF\WorkOpt\ToNodes.htm" />
     <Content Include="WF\WorkOpt\Track.aspx" />
-    <Content Include="WF\WorkOpt\TrackChart.aspx" />
     <Content Include="WF\WorkOpt\TransferCustom.aspx" />
     <Content Include="WF\WorkOpt\TransferCustom.htm" />
     <Content Include="WF\WorkOpt\TransferCustomSimple.aspx" />
@@ -7610,7 +7606,6 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
-    <Content Include="WF\Admin\CCFormDesigner\Site.Master" />
     <Content Include="WF\Admin\Condition.Master" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
@@ -8480,13 +8475,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Site.Master.cs">
-      <DependentUpon>Site.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CCFormDesigner\Site.Master.designer.cs">
-      <DependentUpon>Site.Master</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Cond.aspx.cs">
       <DependentUpon>Cond.aspx</DependentUpon>
@@ -11083,13 +11071,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\Track.aspx.designer.cs">
       <DependentUpon>Track.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\TrackChart.aspx.cs">
-      <DependentUpon>TrackChart.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\TrackChart.aspx.designer.cs">
-      <DependentUpon>TrackChart.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\TransferCustom.aspx.cs">
       <DependentUpon>TransferCustom.aspx</DependentUpon>

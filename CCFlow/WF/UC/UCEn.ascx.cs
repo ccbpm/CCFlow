@@ -2271,7 +2271,7 @@ namespace CCFlow.WF.UC
             this.Add(js);
             foreach (MapExt ext in mes)
             {
-                if (ext.Tag != "1")
+                if (ext.ExtType.Equals(MapExtXmlList.AutoFull) == false || string.IsNullOrEmpty(ext.Doc) == true)
                     continue;
 
                 js = "\t\n <script type='text/javascript' >";

@@ -17,6 +17,17 @@
             window.opener.location.href = window.opener.location.href;
         }
     }
+    window.onbeforeunload = function () {
+        //alert("关闭窗口");
+        if (document.getElementById('FieldsetInfo').innerHTML.indexOf("工作已经被您退回到") != -1) {
+            try {
+                window.opener.window.close();
+            }
+            catch (e) {
+
+            }
+        }
+    }
 </script>
  
 <table style=" text-align:left; width:100%">

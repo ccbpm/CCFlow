@@ -678,7 +678,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoS2_ColsChose()
         {
-            string url = "../../WF/Admin/FoolFormDesigner/Rpt/S2_ColsChose.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            string url = "/WF/Admin/FoolFormDesigner/Rpt/S2_ColsChose.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
             return url;
         }
         /// <summary>
@@ -687,7 +687,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoS4_ColsOrder()
         {
-            string url = "../../WF/Admin/FoolFormDesigner/Rpt/S3_ColsLabel.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            string url = "/WF/Admin/FoolFormDesigner/Rpt/S3_ColsLabel.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
             return url;
         }
         /// <summary>
@@ -696,7 +696,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoS5_SearchCond()
         {
-            string url = "../../WF/Admin/FoolFormDesigner/Rpt/S5_SearchCond.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            string url = "/WF/Admin/FoolFormDesigner/Rpt/S5_SearchCond.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
             return url;
         }
         /// <summary>
@@ -705,7 +705,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoS8_RptExportTemplate()
         {
-            string url = "../../WF/Admin/FoolFormDesigner/Rpt/S8_RptExportTemplate.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            string url = "/WF/Admin/FoolFormDesigner/Rpt/S8_RptExportTemplate.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
             return url;
         }
         #endregion 映射方法.
@@ -717,7 +717,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch()
         {
-            return "../../WF/Rpt/Search.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "WF/Rpt/Search.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 高级查询
@@ -725,7 +725,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearchAdv()
         {
-            return "../../WF/Rpt/SearchAdv.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "WF/Rpt/SearchAdv.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 高级分析
@@ -733,7 +733,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoGroup()
         {
-            return "../../WF/Rpt/Group.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "WF/Rpt/Group.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 交叉分析
@@ -741,7 +741,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoD3()
         {
-            return "../../WF/Rpt/D3.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "WF/Rpt/D3.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 对比分析
@@ -749,7 +749,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoContrast()
         {
-            return "../../WF/Rpt/Contrast.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "WF/Rpt/Contrast.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 重新设置.

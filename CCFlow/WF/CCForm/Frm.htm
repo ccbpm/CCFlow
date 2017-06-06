@@ -20,6 +20,7 @@
             var url = Handler + "?DoType=Frm_Init&" + str + "&e1m=" + Math.random();
 
             url = url.replace('&DoType=MyFlow_Init', '');
+            url = url.replace('&DoType=View', '');
 
             $.ajax({
                 type: 'post',

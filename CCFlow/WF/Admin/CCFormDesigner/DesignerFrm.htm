@@ -1,8 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
-
+    <title>转入表单设计器</title>
   
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="../../Comm/JScript.js"></script>
@@ -13,7 +12,10 @@
     <script type="text/javascript" language="javascript" >
 
     	//页面启动函数.
-		$(function () {
+        $(function () {
+
+            $("#Msg").html("<h1><img src='../../Img/loading.gif' /> 正在转入对应的表单设计器. </h1>");
+
 		    var url = Handler + "?DoType=DesignerFrm_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random();
 		    $.ajax({
 		        type: 'post',
@@ -46,7 +48,9 @@
 <br />
 
 <center>
-<h1><img src='../../Img/loading.gif' /> 正在转入对应的表单设计器. </h1>
+
+
+<div id="Msg"></div>
 </center>
 </body>
 </html>

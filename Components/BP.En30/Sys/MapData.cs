@@ -66,14 +66,14 @@ namespace BP.Sys
 		/// URL表单(自定义)
 		/// </summary>
 		Url = 3,
+        /// <summary>
+        /// Word类型表单
+        /// </summary>
+        WordFrm = 4,
 		/// <summary>
 		/// Excel类型表单
 		/// </summary>
 		ExcelFrm = 5,
-		/// <summary>
-		/// Word类型表单
-		/// </summary>
-		WordFrm = 4,
 		/// <summary>
 		/// VSTOExccel模式.
 		/// </summary>
@@ -1135,8 +1135,10 @@ namespace BP.Sys
         {
             get
             {
-                SysEnum se = new SysEnum("FrmType", this.HisFrmTypeInt);
-                return se.Lab;
+                return this.HisFrmType.ToString();
+
+                //  SysEnum se = new SysEnum("FrmType", this.HisFrmTypeInt);
+                // return se.Lab;
             }
         }
 		/// <summary>

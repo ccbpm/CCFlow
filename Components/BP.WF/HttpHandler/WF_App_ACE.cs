@@ -184,8 +184,17 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             ht.Add("SysName", SystemConfig.SysName);
             ht.Add("ServiceTel", SystemConfig.ServiceTel);
-            ht.Add("UserNo", WebUser.No);
-            ht.Add("UserName", WebUser.Name);
+
+            if (WebUser.NoOfRel == null)
+            {
+                ht.Add("UserNo", "");
+                ht.Add("UserName", "");
+            }
+            else
+            {
+                ht.Add("UserNo", WebUser.No);
+                ht.Add("UserName", WebUser.Name);
+            }
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }

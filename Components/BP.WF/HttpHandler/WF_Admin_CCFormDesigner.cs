@@ -524,40 +524,6 @@ namespace BP.WF.HttpHandler
           }
         #endregion
 
-        #region 方法 Home
-        public string Home_Init()
-        {
-            string no = this.GetRequestVal("No");
-
-            MapData md = new MapData(no);
-
-            // 基础信息.
-            Hashtable ht = new Hashtable();
-            ht.Add("No", no);
-            ht.Add("Name", md.Name);
-            ht.Add("PTable", md.PTable);
-            ht.Add("FrmTypeT", md.HisFrmTypeText);
-            ht.Add("FrmTreeName", md.FK_FormTreeText);
-
-            //统计信息.
-            if (DBAccess.IsExitsObject(md.PTable) == true)
-                ht.Add("SumDataNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + md.PTable)); //数据量.
-            else
-                ht.Add("SumDataNum", 0); //数据量.
-
-            ht.Add("SumAttrNum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "'")); //字段数量.
-            ht.Add("SumAttrFK", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "' AND LGType=2 ")); //外键.
-            ht.Add("SumAttrEnum", DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM Sys_MapAttr WHERE FK_MapData='" + no + "' AND LGType=1 ")); //外键.
-
-            ht.Add("MapFrmFrees", "../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=" + no); //自由表单属性.
-            ht.Add("MapFrmFools", "../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmFools&PK=" + no); //傻瓜表单属性.
-            ht.Add("MapFrmExcels", "../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + no); //Excel表单属性.
-            ht.Add("MapDataURLs", "../../Comm/En.htm?EnsName=BP.WF.Template.MapDataURLs&PK=" + no);  //嵌入式表单属性.
-
-            return BP.DA.DataType.ToJsonEntityModel(ht);
-        }
-        #endregion 方法 Home
-
         #region 字段列表 的操作
         /// <summary>
         /// 初始化字段列表.

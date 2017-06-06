@@ -304,7 +304,11 @@ namespace BP.WF
                 Frms frms = new Frms();
                 FrmNodes fns = new FrmNodes(this.FK_Flow, this.NodeID);
                 foreach (FrmNode fn in fns)
+                {
+                    if (fn.FrmEnableRole == FrmEnableRole.Disable)
+                        continue;
                     frms.AddEntity(fn.HisFrm);
+                }
                 return frms;
 
                 //this.SetRefObject("HisFrms", obj);

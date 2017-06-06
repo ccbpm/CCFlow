@@ -225,7 +225,7 @@ namespace CCFlow.WF.Comm.RefFunc
 					this.ucsys1.AddTDIdx(i);
 					//“详细”列
 					if (isOpenCard)
-						this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/En.htm?EnName=" + en.ToString() + "&PK=" + dtl.PKVal + "')\" >详细</a>");
+                        this.ucsys1.AddTD("<a href=\"javascript:WinOpen('/WF/Comm/En.htm?EnName=" + en.ToString() + "&PK=" + dtl.PKVal + "&closereload=1')\" >详细</a>");
 					//“选中”列
 					cb = new CheckBox();
 					cb.ID = "CB_" + dtl.PKVal;

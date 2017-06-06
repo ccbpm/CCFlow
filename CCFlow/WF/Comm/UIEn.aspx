@@ -16,8 +16,12 @@
             if (val == undefined)
                 return;
             ctrl.value = val;
-        } 
+        }
         function closeEvent() {
+            if (location.href.indexOf("closereload=1") == -1) {
+                return;
+            }
+
             if (window.opener) {
                 try {
                     window.opener.location.reload();

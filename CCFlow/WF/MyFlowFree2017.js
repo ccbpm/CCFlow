@@ -1747,12 +1747,25 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
             if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
                 ele = ele.split('=')[0] + '=1';
             } else {
-                ele = ele.split('=')[0] + '=0';
+                
             }
         }
         formArrResult.push(ele);
     });
 
+    //处理CHECKBOX
+    var checkboxEles = $('#divCCForm input[type=checkbox]');
+    $.each(checkboxEles, function (i, ele) {
+        ele = $(ele);
+        if (ele.attr ('name')!=undefined && ele.attr('name').indexOf('CB_') == 0) {
+            if ($('#' + ele.id + ':checked').length == 1) {
+               
+            } else {
+                ele = ele.attr('name').substr(3, ele.attr('name').length - 3) + '=0';
+            }
+        }
+        formArrResult.push(ele);
+    });
     //获取表单中禁用的表单元素的值
     var disabledEles = $('#divCCForm :disabled');
     $.each(disabledEles, function (i, disabledEle) {

@@ -1745,12 +1745,13 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     $.each(formArr, function (i, ele) {
         if (ele.split('=')[0].indexOf('CB_') == 0) {
             if ($('#' + ele.split('=')[0] + ':checked').length == 1) {
-                ele = ele.split('=')[0] + '=1';
+                // ele = ele.split('=')[0] + '=1';
             } else {
-                
+
             }
+        } else {
+            formArrResult.push(ele);
         }
-        formArrResult.push(ele);
     });
 
     //处理CHECKBOX
@@ -1758,10 +1759,10 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     $.each(checkboxEles, function (i, ele) {
         ele = $(ele);
         if (ele.attr ('name')!=undefined && ele.attr('name').indexOf('CB_') == 0) {
-            if ($('#' + ele.id + ':checked').length == 1) {
-               
+            if ($('#' + ele.attr('id') + ':checked').length == 1) {
+                ele = ele.attr('name') + '=1';
             } else {
-                ele = ele.attr('name').substr(3, ele.attr('name').length - 3) + '=0';
+                ele = ele.attr('name') + '=0';
             }
         }
         formArrResult.push(ele);
@@ -1773,8 +1774,8 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         switch (disabledEle.tagName.toUpperCase()) {
             case "INPUT":
                 switch (disabledEle.type.toUpperCase()) {
-                    case "CHECKBOX": //复选框
-                        formArrResult.push(name + '=' + $(disabledEle).is(':checked') ? 1 : 0);
+                    case "CHECKBOX": //复选框 已处理
+                        //formArrResult.push(name + '=' + $(disabledEle).is(':checked') ? 1 : 0);
                         break;
                     case "TEXT": //文本框
                         formArrResult.push(name + '=' + $(disabledEle).val());

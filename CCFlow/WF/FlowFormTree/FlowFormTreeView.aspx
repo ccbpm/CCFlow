@@ -417,6 +417,10 @@
                     }
                 }
             }
+
+            extUrl = extUrl.replace('&DoType=MyFlow_Init', '');
+            extUrl = extUrl.replace('&DoType=View', '');
+
             return extUrl;
         }
 
@@ -428,6 +432,7 @@
             //表单树
             var urlExt = urlExtFrm();
             var url = "Base/FormTreeBase.aspx?1=1" + urlExt;
+
             Application.data.getFlowFormTree(url, function (js) {
                 var isSelect = false;
                 var pushData = eval('(' + js + ')');

@@ -5443,7 +5443,25 @@ namespace BP.WF
 
             // 第1.2: 调用发起前的事件接口,处理用户定义的业务逻辑.
             string sendWhen = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendWhen, this.HisNode, 
-                this.HisWork, null,jumpToNode,JumpToEmp);
+                this.HisWork, null);
+
+            //返回格式. @Info=xxxx@ToNodeID=xxxx@ToEmps=xxxx
+            if (sendWhen != null && sendWhen.IndexOf("@") >= 0)
+            {
+                AtPara ap = new AtPara(sendWhen);
+                int nodeid = ap.GetValIntByKey("ToNodeID", 0);
+                if (nodeid != 0)
+                    jumpToNode = new Node(nodeid);
+
+                string toEmps = ap.GetValStrByKey("ToEmps");
+                if (string.IsNullOrEmpty(toEmps) == true)
+                    jumpToEmp = toEmps;
+
+                //处理str信息.
+                sendWhen = sendWhen.Replace("@Info=", "");
+                sendWhen = sendWhen.Replace("@ToNodeID=" + nodeid.ToString(), "");
+                sendWhen = sendWhen.Replace("@ToEmps=" + toEmps, "");
+            }
 
             if (sendWhen != null)
             {

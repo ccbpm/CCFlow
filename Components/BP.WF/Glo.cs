@@ -190,13 +190,16 @@ namespace BP.WF
             try
             {
 
+                SysEnum se = new SysEnum("FrmType", 1);
+
+
                 //2017.5.19 打印模板字段修复
                 BP.WF.Template.BillTemplate bt = new BillTemplate();
                 bt.CheckPhysicsTable();
                 if ( DBAccess.IsExitsTableCol("WF_BillTemplate","url")==true)
                     DBAccess.RunSQL("UPDATE WF_BillTemplate SET TempFilePath = Url WHERE TempFilePath IS null");
 
-                //规范升级根目录
+                //规范升级根目录.
                 DataTable dttree = DBAccess.RunSQLReturnTable("SELECT No FROM Sys_FormTree WHERE ParentNo='-1' ");
                 if (dttree.Rows.Count == 1)
                 {
@@ -205,7 +208,7 @@ namespace BP.WF
                     DBAccess.RunSQL("UPDATE Sys_FormTree SET ParentNo='0' WHERE No='1'");
                 }
 
-                BP.Sys.MapAttr myattr = new MapAttr();
+                MapAttr myattr = new MapAttr();
                 myattr.CheckPhysicsTable();
 
                 //删除垃圾数据.

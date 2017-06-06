@@ -146,7 +146,7 @@ namespace BP.WF
                 wk.RetrieveFromDBSources();
 
                 //调用结束前事件.
-                this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverBefore, nd, wk, null, null, null);
+                this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverBefore, nd, wk, null);
 
                 //设置产生的工作流程为.
                 gwf.WFState = BP.WF.WFState.Delete;
@@ -166,7 +166,7 @@ namespace BP.WF
                 DBAccess.RunSQL(sql);
 
                 //调用结束后事件.
-                this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverAfter, nd, wk, null, null, null);
+                this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverAfter, nd, wk, null);
 
             }
             catch (Exception ex)

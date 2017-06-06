@@ -222,11 +222,8 @@ namespace BP.WF.HttpHandler
                 gwf = new GenerWorkFlow();
                 gwf.WorkID = this.WorkID;
                 if (gwf.RetrieveFromDBSources() == 0)
-                {
                     return ("err@该流程ID{" + this.WorkID + "}不存在，或者已经被删除.");
-                }
             }
-
             #region 判断前置导航.
 
             if (this.currND.IsStartNode && this.IsCC == false && this.WorkID == 0)
@@ -234,7 +231,7 @@ namespace BP.WF.HttpHandler
                 if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No) == false)
                 {
                     /*是否可以发起流程？*/
-                    return "err@您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.";
+                    return "err@您(" + BP.Web.WebUser.No + ")没有发起或者处理该流程的权限.@技术信息:OSModel="+BP.WF.Glo.OSModel.ToString();
                 }
             }
 

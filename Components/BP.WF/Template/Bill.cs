@@ -430,7 +430,7 @@ namespace BP.WF.Template
                     return this._enMap;
                 Map map = new Map("WF_Bill", "单据");
 
-                map.AddMyPKNoVisable();
+                map.AddMyPK(false);
 
                 map.AddTBInt(BillAttr.WorkID, 0, "工作ID", false, true);
                 map.AddTBInt(BillAttr.FID, 0, "FID", false, true);

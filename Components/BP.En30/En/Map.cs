@@ -2685,11 +2685,10 @@ namespace BP.En
         /// <summary>
         /// 主键
         /// </summary>
-        public void AddMyPK()
+        public void AddMyPK(bool uiVisable=true)
         {
             this.PKs = "MyPK";
-            this.AddTBStringPK("MyPK", null, "主键MyPK", true, true, 1, 100, 10);
-
+            this.AddTBStringPK("MyPK", null, "主键MyPK", uiVisable, true, 1, 100, 10);
             //Attr attr = new Attr();
             //attr.Key = "MyPK";
             //attr.Field = "MyPK";
@@ -2703,10 +2702,6 @@ namespace BP.En
             //attr.MinLength = 1;
             //attr.MaxLength = 100;
             //this.Attrs.Add(attr);
-        }
-        public void AddMyPKNoVisable()
-        {
-            this.AddTBStringPK("MyPK", null, "MyPK", false, false, 1, 100, 10);
         }
         /// <summary>
         /// 增加自动增长列

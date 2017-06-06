@@ -148,7 +148,6 @@ namespace BP.Sys
                 {
                     //尝试注册系统的枚举的配置.
                     BP.Sys.SysEnums myee = new SysEnums(enumKey);
-
                     throw new Exception("@ EnumKey=" + EnumKey + " Val=" + val + " Lang=" + Web.WebUser.SysLang + " ...Error");
                 }
             }
@@ -313,6 +312,17 @@ namespace BP.Sys
                     throw new Exception("@你没有预制[" + enumKey + "]枚举值。@在修复枚举值出现错误:" + ex.Message);
                 }
             }
+        }
+        /// <summary>
+        /// 把所有的枚举注册一遍.
+        /// </summary>
+        public static void RegAll()
+        {
+            BP.Sys.XML.EnumInfoXmls xmls = new BP.Sys.XML.EnumInfoXmls();
+            xmls.RetrieveAll();
+            SysEnums ses = new SysEnums();
+            foreach (BP.Sys.XML.EnumInfoXml xml in xmls)
+                ses.RegIt(xml.Key, xml.Vals);
         }
 		/// <summary>
 		/// SysEnums

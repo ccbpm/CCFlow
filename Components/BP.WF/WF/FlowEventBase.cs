@@ -73,7 +73,7 @@ namespace BP.WF
         /// <summary>
         /// 要跳转的节点.(开发人员可以设置该参数,改变发送到的节点转向.)
         /// </summary>
-        public Node JumpToNode = null;
+        public int JumpToNodeID = 0;
         /// <summary>
         /// 接受人, (开发人员可以设置该参数,改变接受人的范围.)
         /// </summary>
@@ -390,14 +390,11 @@ namespace BP.WF
         /// </summary>
         /// <param name="eventType">事件类型</param>
         /// <param name="en">实体参数</param>
-        public string DoIt(string eventType, Node currNode, Entity en, string atPara,Node jumpToNode, string jumpToEmps)
+        public string DoIt(string eventType, Node currNode, Entity en, string atPara)
         {
             this.HisEn = en;
             this.HisNode = currNode;
 
-            //用于代码改变跳转规则,方向条件规则.
-            this.JumpToEmps = jumpToEmps;
-            this.JumpToNode = jumpToNode;
 
             #region 处理参数.
             Row r = en.Row;
@@ -460,7 +457,15 @@ namespace BP.WF
                 case EventListOfNode.SaveBefore: // 节点事件 - 保存前.。
                     return this.SaveBefore();
                 case EventListOfNode.SendWhen: // 节点事件 - 发送前。
-                    return this.SendWhen();
+                    
+                    string str= this.SendWhen();
+
+                    if (this.JumpToNodeID == 0 && this.JumpToEmps == null)
+                        return str;
+
+                    //返回这个格式, NodeSend 来解析.
+                    return "@Info=" + str + "@ToNodeID=" + this.JumpToNodeID + "@ToEmps=" + this.JumpToEmps;
+
                 case EventListOfNode.SendSuccess: // 节点事件 - 发送成功时。
                     return this.SendSuccess();
                 case EventListOfNode.SendError: // 节点事件 - 发送失败。
@@ -481,7 +486,6 @@ namespace BP.WF
                     return this.FlowOverBefore();
                 case EventListOfNode.QueueSendAfter://队列节点发送后
                     return this.AskerReAfter();
-
                 case EventListOfNode.FlowOnCreateWorkID: // 流程事件 -------------------------------------------。
                     return this.FlowOnCreateWorkID();
                 case EventListOfNode.FlowOverBefore: // 流程结束前.。

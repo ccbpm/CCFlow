@@ -786,7 +786,7 @@ namespace BP.WF
                     }
 
                     //调用 OnCreateWorkID的方法.  add by zhoupeng 2016.12.4 for LIMS.
-                    this.DoFlowEventEntity(EventListOfNode.FlowOnCreateWorkID, nd, wk, null, null, null);
+                    this.DoFlowEventEntity(EventListOfNode.FlowOnCreateWorkID, nd, wk, null);
 
                 }
             }
@@ -4147,7 +4147,7 @@ namespace BP.WF
         /// <param name="atPara">参数</param>
         /// <param name="objs">发送对象，可选</param>
         /// <returns>执行结果</returns>
-        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs, Node jumpToNode = null, string jumpToEmps = null)
+        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, SendReturnObjs objs)
         {
             if (currNode == null)
                 return null;
@@ -4156,7 +4156,7 @@ namespace BP.WF
             if (this.FEventEntity != null)
             {
                 this.FEventEntity.SendReturnObjs = objs;
-                str = this.FEventEntity.DoIt(doType, currNode, en, atPara, jumpToNode, jumpToEmps);
+                str = this.FEventEntity.DoIt(doType, currNode, en, atPara);
             }
 
             FrmEvents fes = currNode.MapData.FrmEvents;
@@ -4210,16 +4210,16 @@ namespace BP.WF
                     continue; /* 如果都没有消息设置，就放过.*/
 
                 //执行发送消息.
-                msgAlert += item.DoSendMessage(currNode, en, atPara, objs, jumpToNode, jumpToEmps);
+                msgAlert += item.DoSendMessage(currNode, en, atPara, objs);
             }
             return str + msgAlert;
             #endregion 处理消息推送.
 
             return str;
         }
-        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara, Node jumpToNode = null, string jumpToEmp = null)
+        public string DoFlowEventEntity(string doType, Node currNode, Entity en, string atPara)
         {
-            string str = this.DoFlowEventEntity(doType, currNode, en, atPara, null, jumpToNode, jumpToEmp);
+            string str = this.DoFlowEventEntity(doType, currNode, en, atPara, null);
             return BP.DA.DataType.PraseGB2312_To_utf8(str);
         }
         private BP.WF.FlowEventBase _FDEventEntity = null;

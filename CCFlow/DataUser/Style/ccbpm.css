@@ -8,15 +8,13 @@ body
 /* 按钮风格 */
 input[type="button"], input[type="submit"]
 {
-    border: 0;
-    /*background: #4D77A7;*/
-    background: #2884fa;
+    border: 0; /*background: #4D77A7;*/
+    background: #009999;
     color: #FFF;
     font-size: 12px;
     padding: 4px 8px;
     margin: 5px 3px 5px 3px;
-
-    border-radius:15px;
+    border-radius: 15px;
 }
 
 /* 文本框只读风格. */
@@ -64,9 +62,7 @@ table
     color: #333333;
 }
 
-
-/*  时学业添加 结束位置 */
-th, .Title
+th
 {
     border-width: 1px;
     border-color: #C2D5E3;
@@ -82,18 +78,20 @@ th, .Title
     font-weight: normal;
 }
  
+ /*  idx 表格左侧的序号列 .*/
 .Idx
 {
     font-size: 12px;
     border: 1px solid #ccc;
     text-align: center;
     font-weight: bold;
-    width:20px;
+    width: 20px;
 }
 
+/* ss */
 .Sum
 {
-    background-color: #FFFFFF;
+    background-color:InfoBackground;
     font-size: 12px;
     border: 1px solid #ccc;
     text-align: left;
@@ -119,7 +117,6 @@ td a
     text-decoration: none;
     font-size: 12px;
 }
-
 
 .tdHJ
 {
@@ -168,24 +165,7 @@ td input
     border-width: 1px;
     border-color: #003366;
 }
-
-.TitleMsg
-{
-    font: bolder medium Arial, Helvetica, sans-serif;
-    color: #33517A;
-    text-align: left;
-    font-size: 12px;
-    padding-left: 10px;
-    font-weight: bold;
-    background: url('Img/title_bg0.png');
-    color: #31659C;
-    border: 1px solid #C2D5E3;
-    border-bottom: none;
-    height: 30px;
-    _padding-top: 8px;
-    _height: 20px;
-    vertical-align: middle;
-}
+ 
 
 caption
 {
@@ -201,57 +181,7 @@ caption
     font-weight: bolder;
     color: #333333;
 }
-
-.CaptionMsg
-{
-    vertical-align: middle;
-    text-align: left;
-    height: 32px;
-    background-position: left center;
-    line-height: 34px;
-    font-size: 12px;
-    text-align: center;
-    vertical-align: middle;
-    height: 30px;
-    font-family: 黑体;
-    font-weight: bolder;
-    color: #FFFFFF;
-    background: url('/DataUser/Style/Img/TitleMsg.png');
-    width: 138px;
-    margin-left: -10px;
-    padding-left: 0px;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
-
-.CaptionMsg  a:hover
-{
-    color: white;
-}
-
-.CaptionMsgLong
-{
-    vertical-align: middle;
-    text-align: left;
-    height: 32px;
-    background-position: left center;
-    line-height: 34px;
-    font-size: 12px;
-    text-align: center;
-    vertical-align: middle;
-    height: 30px;
-    font-family: 黑体;
-    font-weight: bolder;
-    color: #FFFFFF;
-    background: url('/DataUser/Style/Img/TitleMsgLong.png');
-    width: 238px;
-    margin-left: -10px;
-    padding-left: 0px;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    text-align:center;
-}
+   
 
 .TBDoc
 {
@@ -669,9 +599,10 @@ background:#a8352c;
             border-style:none;
         }
 
-input[type=text], select {
-    border-radius: 15px;
-    border: #2884fa 1px solid;
+input[type=text], select
+{
+    border-radius: 5px;
+    border: 1px solid #336699;
     margin: 8px 0px;
     line-height: 25px;
     width: 100%;

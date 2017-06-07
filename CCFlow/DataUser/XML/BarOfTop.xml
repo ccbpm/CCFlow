@@ -4,7 +4,7 @@
   <!-- ccflow 主菜单配置: 说明:如果遇到& 号的输出，请用 &amp; 替换。 -->
   <Item1ssss No="Home" CH="主页" EN="Home" JP="ホーム" RU="Дома" OnClick="" Url="Home.aspx" Img="./Img/Home.gif"  Enable="1" Title="个人工作主页。" />
    <Item No="Start" CH="发起" B5="发起" EN="Launch" JP="打ち上げ" RU="Запуск"  Url="Start.aspx" Img="./Img/Start.gif" Enable="1" Title="发起我能够发起的流程" />
-   <Item No="EmpWorks" CH="待办" B5="待办" EN="Pending"  JP="保留中" RU="В ожидании"  Url="EmpWorks.aspx" Img="./Img/MyWork.gif" Enable="1" Title="等待我处理的工作。" />
+   <Item No="Todolist" CH="待办" B5="待办" EN="Pending"  JP="保留中" RU="В ожидании"  Url="Todolist.htm" Img="./Img/MyWork.gif" Enable="1" Title="等待我处理的工作。" />
    <Item No="CC" CH="抄送" B5="抄送" EN="Pending"  JP="保留中" RU="В ожидании"   Url="CC.aspx" Img="./Img/MyWork.gif" Enable="1" Title="等待我处理的工作。" />
    <Item No="HungUpList" CH="挂起" B5="挂起" EN="HungUpList"  JP="HungUpList" RU="HungUpList"    Url="HungUpList.aspx" Img="./Img/MyWork.gif" Enable="1" Title="等待我处理的工作。" />
    <Item No="Runing" CH="已办" B5="已办" EN="In transit"  JP="トランジットで" RU="В пути"  Url="Runing.aspx" Img="./Img/Runing.gif" Enable="1" Title="我参与的工作，没有完成。" />

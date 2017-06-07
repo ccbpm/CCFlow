@@ -7,7 +7,7 @@
     <title></title>
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../Comm/JScript.js" type="text/javascript"></script>
-    <link href="../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/Jquery-plug/fileupload/jquery.uploadify.min.js" type="text/javascript"></script>
     <link href="../Scripts/Jquery-plug/fileupload/uploadify.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>

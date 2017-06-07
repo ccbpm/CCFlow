@@ -734,22 +734,26 @@ TransFormDataField.prototype = {
             y = 5;
         }
         //create
-        var createdFigure = figure_Label(x, y);
-        createdFigure.CCForm_MyPK = Util.NewGUID();
-        createdFigure.CCForm_Shape = CCForm_Controls.Label;
+        var createdFigure;
+        //checkbox 不需要加LABEL
+        if (this.figure.CCForm_Shape != "TextBoxBoolean") {
+            createdFigure = figure_Label(x, y);
+            createdFigure.CCForm_MyPK = Util.NewGUID();
+            createdFigure.CCForm_Shape = CCForm_Controls.Label;
 
-        //store id for later use
-        //TODO: maybe we should try to recreate it with same ID (in case further undo will recreate objects linked to this)
-        this.figureId = createdFigure.id;
+            //store id for later use
+            //TODO: maybe we should try to recreate it with same ID (in case further undo will recreate objects linked to this)
+            this.figureId = createdFigure.id;
 
-        //add to STACK
-        STACK.figureAdd(createdFigure);
+            //add to STACK
+            STACK.figureAdd(createdFigure);
 
-        //make this the selected figure
-        selectedFigureId = createdFigure.id;
+            //make this the selected figure
+            selectedFigureId = createdFigure.id;
 
-        //set up it's editor
-        setUpEditPanel(createdFigure);
+            //set up it's editor
+            setUpEditPanel(createdFigure);
+        }
 
         //move to figure selected state
         state = STATE_FIGURE_SELECTED;

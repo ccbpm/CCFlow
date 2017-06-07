@@ -12,7 +12,7 @@
     if (sta == null || sta=="")
         sta = "-1";
 
-    int pageSize = 6;// int.Parse(pageSizeStr);
+    int pageSize = 6; //int.Parse(pageSizeStr);
 
     string pageIdxStr = this.Request["PageIdx"];
     if (pageIdxStr == null)
@@ -52,7 +52,6 @@
 </th>
 </tr>
 
-
 <tr>
 <th>序 </th>
 <th>工作流程 </th>
@@ -62,7 +61,6 @@
 <th>内容 </th>
 <th>日期 </th>
 <th>操作 </th>
-
 </tr>
 
  

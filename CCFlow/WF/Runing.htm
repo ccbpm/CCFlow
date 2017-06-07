@@ -20,15 +20,18 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Runing_UnSend&FK_Flow="+fk_flow+"&WorkID="+workid+"&FID="+fid+"&m=" + Math.random(),
+                url: Handler + "?DoType=Runing_UnSend&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
+
+                    $("#Msg").html(data + " <br> @点击这里<a href='javascript:window.location.href = window.location.href;' >刷新</a>");
                     alert(data);
-                    window.location.href = window.location.href;
+                    var url = 'MyFlow.htm?FK_Flow=' + fk_flow + '&WorkID=' + workid;
+                    window.location.href = url;
                     return;
                 }
             });
@@ -52,6 +55,7 @@
                         alert(data);
                         return;
                     }
+
                     alert(data);
                     return;
                 }
@@ -115,8 +119,8 @@
                         newRow += "<td>" + work.RDT + "</td>";
                         newRow += "<td>" + work.FlowNote + "</td>";
                         newRow += "<td>";
-                        newRow += "<a href=\"javascript:UnSend('" + work.WorkID + "')\"><img src='./Img/Action/UnSend.png' border=0 />撤销</a>";
-                        newRow += "<a href=\"javascript:Press('" + work.WorkID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
+                        newRow += "<a href=\"javascript:UnSend('"+work.FK_Flow+"','" + work.WorkID + "','"+work.FID+"')\"><img src='./Img/Action/UnSend.png' border=0 />撤销</a>";
+                        newRow += "<a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
                         newRow += "</td>";
                         newRow += "</tr>";
                         $("#Table1 tr:last").after(newRow);

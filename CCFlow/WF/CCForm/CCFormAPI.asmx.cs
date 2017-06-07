@@ -46,12 +46,19 @@ namespace CCFlow.WF.CCForm
 				//MapData md = new MapData(frmID);
 				var md = en.DTSMapToSys_MapData();
 
-				return md.ExcelGenerFile(oid, ref bytes);
+                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+                MapFrmExcel mfe = new MapFrmExcel(md.No);
+
+                return md.ExcelGenerFile(oid, ref bytes, mfe.DBSave);
 			}
 			else
 			{
 				MapData md = new MapData(frmID);
-				return md.ExcelGenerFile(oid, ref bytes);
+
+                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+                MapFrmExcel mfe = new MapFrmExcel(md.No);
+
+				return md.ExcelGenerFile(oid, ref bytes, mfe.DBSave);
 			}
 		}
 		/// <summary>
@@ -95,13 +102,21 @@ namespace CCFlow.WF.CCForm
 				Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
 				Entity en = ens.GetNewEntity;
 				var md = en.DTSMapToSys_MapData();
-				md.ExcelSaveFile(mainEnPKOID, byt);
+
+                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+                MapFrmExcel mfe = new MapFrmExcel(md.No);
+
+                md.ExcelSaveFile(mainEnPKOID, byt, mfe.DBSave);
 			}
 			else
 			{
 				//执行保存文件.
 				MapData md = new MapData(frmID);
-				md.ExcelSaveFile(mainEnPKOID, byt); //把文件保存到该实体对应的数据表的 DBFile 列中。
+
+                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+                MapFrmExcel mfe = new MapFrmExcel(md.No);
+
+                md.ExcelSaveFile(mainEnPKOID, byt, mfe.DBSave); //把文件保存到该实体对应的数据表的 DBFile 列中。
 			}
 
 			#region 保存主表数据.

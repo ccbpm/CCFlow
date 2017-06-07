@@ -2618,9 +2618,9 @@ namespace BP.Sys
 		/// </summary>
 		/// <param name="oid"></param>
 		/// <returns></returns>
-		public bool ExcelGenerFile(int oid, ref byte[] bytes)
+		public bool ExcelGenerFile(int oid, ref byte[] bytes, string saveTo)
 		{
-			byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, oid.ToString(), "DBFile");
+            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, oid.ToString(), saveTo);
             if (by != null)
             {
                 bytes = by;
@@ -2645,9 +2645,9 @@ namespace BP.Sys
         /// </summary>
         /// <param name="oid"></param>
         /// <param name="bty"></param>
-		public void ExcelSaveFile(int oid, byte[] bty)
+		public void ExcelSaveFile(int oid, byte[] bty, string saveTo)
 		{
-			BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, oid.ToString(), "DBFile");
+            BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, oid.ToString(), saveTo);
 		}
 		#endregion 与Excel相关的操作 .
 

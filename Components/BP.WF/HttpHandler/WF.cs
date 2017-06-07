@@ -128,18 +128,6 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
-        /// 挂起列表
-        /// </summary>
-        /// <param name="userNo">用户编号</param>
-        /// <param name="fk_flow">流程编号</param>
-        /// <returns>挂起列表</returns>
-        public string HungUpList_Init()
-        {
-            DataTable dt = null;
-            dt = BP.WF.Dev2Interface.DB_GenerHungUpList();
-            return BP.Tools.Json.DataTableToJson(dt, false);
-        }
-        /// <summary>
         /// 草稿
         /// </summary>
         /// <returns></returns>
@@ -150,6 +138,15 @@ namespace BP.WF.HttpHandler
 
             //转化大写.
             return BP.Tools.Json.DataTableToJson(dt,false);
+        }
+        /// <summary>
+        /// 初始化待办.
+        /// </summary>
+        /// <returns></returns>
+        public string Todolist_Init()
+        {
+            WF_App_ACE en = new WF_App_ACE(context);
+            return en.Todolist_Init();
         }
         /// <summary>
         /// 获得授权人的待办.
@@ -198,15 +195,14 @@ namespace BP.WF.HttpHandler
             //}
 
         }
-        /// <summary>
-        /// 获得待办.
+         /// <summary>
+        /// 获得挂起.
         /// </summary>
         /// <returns></returns>
-        public string Todolist_Init()
+        public string HungUpList_Init()
         {
             DataTable dt = null;
-
-            dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(BP.Web.WebUser.No, this.FK_Node);
+            dt = BP.WF.Dev2Interface.DB_GenerHungUpList();
             
             //转化大写的toJson.
             return BP.Tools.Json.DataTableToJson(dt,false);
@@ -259,11 +255,11 @@ namespace BP.WF.HttpHandler
         /// 返回当前会话信息.
         /// </summary>
         /// <returns></returns>
-        public string LoginInit()
+        public string Login_Init()
         {
             Hashtable ht = new Hashtable();
 
-            if (BP.Web.WebUser.No == null)
+            if (BP.Web.WebUser.NoOfRel == null)
                 ht.Add("UserNo", "");
             else
                 ht.Add("UserNo", BP.Web.WebUser.No);

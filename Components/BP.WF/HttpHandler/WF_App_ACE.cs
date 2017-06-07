@@ -193,7 +193,13 @@ namespace BP.WF.HttpHandler
             else
             {
                 ht.Add("UserNo", WebUser.No);
-                ht.Add("UserName", WebUser.Name);
+
+                string name = WebUser.Name;
+
+                if (string.IsNullOrEmpty(name) == true)
+                    ht.Add("UserName", WebUser.No);
+                else
+                    ht.Add("UserName", name);
             }
 
             return BP.Tools.Json.ToJsonEntityModel(ht);

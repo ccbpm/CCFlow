@@ -2870,7 +2870,6 @@
     <Content Include="WF\Data\XML\XmlDB.xml" />
     <Content Include="WF\Do.aspx" />
     <Content Include="WF\Draft.htm" />
-    <Content Include="WF\EmpWorks.aspx" />
     <Content Include="WF\ErrorPage.aspx" />
     <Content Include="WF\FlowFormTree\Base\FormTreeBase.aspx" />
     <Content Include="WF\FlowFormTree\Default.aspx" />
@@ -2902,7 +2901,6 @@
     <Content Include="WF\Focus.aspx" />
     <Content Include="WF\Focus.htm" />
     <Content Include="WF\GetTask.aspx" />
-    <Content Include="WF\HungUpList.aspx" />
     <Content Include="WF\HungUpList.htm" />
     <Content Include="WF\Img\Action\AskforHelp.png" />
     <Content Include="WF\Img\Action\CallChildenFlow.png" />
@@ -3351,7 +3349,6 @@
     <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
     <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
     <Content Include="WF\Rpt\UC\ToolBar.ascx" />
-    <Content Include="WF\Runing.aspx" />
     <Content Include="WF\Runing.htm" />
     <Content Include="WF\Scripts\bootstrap\css\bootstrap.css" />
     <Content Include="WF\Scripts\bootstrap\css\bootstrap.min.css" />
@@ -7428,8 +7425,6 @@
     <Content Include="WF\Style\themes\icons\xitongleibie.png" />
     <Content Include="WF\Style\Tools.xml" />
     <Content Include="WF\Style\Verify.js" />
-    <Content Include="WF\TaskPoolApply.aspx" />
-    <Content Include="WF\TaskPoolSharing.aspx" />
     <Content Include="WF\Todolist.htm" />
     <Content Include="WF\Tools.aspx" />
     <Content Include="WF\Tools.htm" />
@@ -10071,13 +10066,6 @@
     <Compile Include="WF\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\EmpWorks.aspx.cs">
-      <DependentUpon>EmpWorks.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\EmpWorks.aspx.designer.cs">
-      <DependentUpon>EmpWorks.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\ErrorPage.aspx.cs">
       <DependentUpon>ErrorPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10157,13 +10145,6 @@
     </Compile>
     <Compile Include="WF\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\HungUpList.aspx.cs">
-      <DependentUpon>HungUpList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\HungUpList.aspx.designer.cs">
-      <DependentUpon>HungUpList.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\JumpWay.aspx.cs">
       <DependentUpon>JumpWay.aspx</DependentUpon>
@@ -10441,13 +10422,6 @@
     <Compile Include="WF\Rpt\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Runing.aspx.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Runing.aspx.designer.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\SDKComponents\AccepterCCerSelecter.ascx.cs">
       <DependentUpon>AccepterCCerSelecter.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10587,20 +10561,6 @@
     </Compile>
     <Compile Include="WF\StartGuideEntities.aspx.designer.cs">
       <DependentUpon>StartGuideEntities.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\TaskPoolApply.aspx.cs">
-      <DependentUpon>TaskPoolApply.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\TaskPoolApply.aspx.designer.cs">
-      <DependentUpon>TaskPoolApply.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\TaskPoolSharing.aspx.cs">
-      <DependentUpon>TaskPoolSharing.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\TaskPoolSharing.aspx.designer.cs">
-      <DependentUpon>TaskPoolSharing.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Tools.aspx.cs">
       <DependentUpon>Tools.aspx</DependentUpon>

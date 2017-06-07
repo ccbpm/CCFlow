@@ -180,7 +180,7 @@
                         if (sortName == "" || sortName == null)
                             continue;
 
-                        var grouStr = "<tr class=TRSum onclick=\"GroupBarClick('" + sortName + "')\" > <th colspan=5 > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + sortName + "'   border=0 /> " + sortName + "</th> </tr>";
+                        var grouStr = "<tr  onclick=\"GroupBarClick('" + sortName + "')\" > <th colspan=5 class=Sum > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + sortName + "'   border=0 /> " + sortName + "</th> </tr>";
                         $("#Table1 tr:last").after(grouStr);
 
                         //增加处理.
@@ -193,7 +193,7 @@
 
                             myNum++;
                             var newRow = "<tr id='" + sortName + myNum + "' >";
-                            newRow += "<td class=Idx>" + myNum + "</td>";
+                            newRow += "<td class=Idx >" + myNum + "</td>";
                             newRow += "<td>  </td>";
                             newRow += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "</a></td>";
 

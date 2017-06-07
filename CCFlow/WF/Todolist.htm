@@ -170,7 +170,7 @@
                         if (groupName == "" || groupName == null)
                             continue;
 
-                        var grouStr = "<tr class=TRSum onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=10 > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + groupName + "'   border=0 /> " + groupName + "</th> </tr>";
+                        var grouStr = "<tr class=Sum onclick=\"GroupBarClick('" + groupName + "')\" > <th colspan=10 class=Sum > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + groupName + "'   border=0 /> " + groupName + "</th> </tr>";
                         $("#Table1 tr:last").after(grouStr);
 
                         //增加处理.

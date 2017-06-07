@@ -14,7 +14,14 @@ namespace BP.WF.Template
 	/// </summary>
 	public class MapFrmExcelAttr : MapDataAttr
 	{
+        /// <summary>
+        /// 临时的版本号
+        /// </summary>
 		public const string TemplaterVer = "TemplaterVer";
+        /// <summary>
+        /// 文件存储字段
+        /// </summary>
+        public const string DBSave = "DBSave";
 	}
 	/// <summary>
 	/// Excel表单属性
@@ -34,6 +41,24 @@ namespace BP.WF.Template
 			set
 			{
 				this.SetValByKey(MapFrmExcelAttr.TemplaterVer, value);
+			}
+		}
+        /// <summary>
+        /// Excel数据存储字段
+        /// 为了处理多个excel文件映射到同一张表上.
+        /// </summary>
+        public string DBSave
+		{
+			get
+			{
+                string str= this.GetValStringByKey(MapFrmExcelAttr.DBSave);
+                if (string.IsNullOrEmpty(str))
+                    return "DBFile";
+                return str;
+			}
+			set
+			{
+                this.SetValByKey(MapFrmExcelAttr.DBSave, value);
 			}
 		}
 		#endregion 文件模版属性.
@@ -68,51 +93,7 @@ namespace BP.WF.Template
 				return int.Parse(this.No.Replace("ND", ""));
 			}
 		}
-		/// <summary>
-		/// 傻瓜表单-宽度
-		/// </summary>
-		public string TableWidth
-		{
-			get
-			{
-				int i = this.GetValIntByKey(MapFrmExcelAttr.TableWidth);
-				if (i <= 50)
-					return "900";
-				return i.ToString();
-			}
-		}
-		/// <summary>
-		/// 傻瓜表单-高度
-		/// </summary>
-		public string TableHeight
-		{
-			get
-			{
-				int i = this.GetValIntByKey(MapFrmExcelAttr.TableHeight);
-				if (i <= 500)
-					return "900";
-				return i.ToString();
-			}
-		}
-		/// <summary>
-		/// 表格显示的列
-		/// </summary>
-		public int TableCol
-		{
-			get
-			{
-				return 4;
-				int i = this.GetValIntByKey(MapFrmExcelAttr.TableCol);
-				if (i == 0 || i == 1)
-					return 4;
-				return i;
-			}
-			set
-			{
-				this.SetValByKey(MapFrmExcelAttr.TableCol, value);
-			}
-		}
-
+	 
 		#endregion
 
 		#region 权限控制.
@@ -175,6 +156,7 @@ namespace BP.WF.Template
 
 				#region 模版属性。
 				map.AddTBString(MapFrmExcelAttr.TemplaterVer, null, "模版编号", true, false, 0, 30, 20);
+                map.AddTBString(MapFrmExcelAttr.DBSave, null, "Excel数据文件存储", true, false, 0, 50, 20);
 				#endregion 模版属性。
 
 				#region 设计者信息.

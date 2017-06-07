@@ -248,14 +248,20 @@ namespace BP.WF.HttpHandler
             BP.Sys.MapData md = new BP.Sys.MapData(this.FK_MapData);
             if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
             {
-                /*傻瓜表单*/
+                /* 傻瓜表单 */
                 return "url@./FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + this.FK_MapData;
             }
 
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
             {
-                /*自由表单*/
+                /* 自由表单 */
                 return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData;
+            }
+
+            if (md.HisFrmType == BP.Sys.FrmType.VSTOForExcel)
+            {
+                /* 自由表单 */
+                return "url@../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + this.FK_MapData;
             }
 
             return "err@没有判断的表单转入类型" + md.HisFrmType.ToString();

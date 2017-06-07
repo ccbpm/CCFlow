@@ -61,6 +61,30 @@ namespace BP.WF.HttpHandler
             //返回组合
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
+        /// <summary>
+        /// 获得发起列表
+        /// </summary>
+        /// <returns></returns>
+        public string FlowSearch_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //流程类别.
+            FlowSorts fss = new FlowSorts();
+            fss.RetrieveAll();
+
+            DataTable dtSort = fss.ToDataTableField("Sort");
+            dtSort.TableName = "Sort";
+            ds.Tables.Add(dtSort);
+
+            //获得能否发起的流程.
+            DataTable dtStart = DBAccess.RunSQLReturnTable("SELECT No,Name, FK_FlowSort FROM WF_Flow ORDER BY FK_FlowSort,Idx");
+            dtStart.TableName = "Start";
+            ds.Tables.Add(dtStart);
+
+            //返回组合
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
         #region 获得列表.
         /// <summary>
         /// 运行

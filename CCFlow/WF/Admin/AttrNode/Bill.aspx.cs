@@ -60,10 +60,9 @@ namespace CCFlow.WF.Admin
             {
                 bt.TempFilePath = "FlowFrm\\" + this.FK_Flow + "\\" + this.NodeID + "\\" + fileName.Replace(fileType, "");
                 filePath = BP.Sys.SystemConfig.PathOfCyclostyleFile + "\\FlowFrm\\" + this.FK_Flow + "\\" + this.NodeID;
-                if (!System.IO.Directory.Exists(filePath))
-                {
+                if (System.IO.Directory.Exists(filePath)==false)
                     System.IO.Directory.CreateDirectory(filePath);
-                }
+
                 filePath = BP.Sys.SystemConfig.PathOfCyclostyleFile + "\\FlowFrm\\" + this.FK_Flow + "\\" + this.NodeID + "\\" + fileName;
             }
             return filePath;

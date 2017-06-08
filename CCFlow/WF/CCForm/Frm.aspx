@@ -9,7 +9,7 @@
         type="text/javascript"></script>
     <script language="JavaScript" src="MapExt.js" type="text/javascript"></script>
     <script language='JavaScript' src='../Scripts/jquery-1.4.1.min.js' type="text/javascript"></script>
-    <link href="/DataUser/Style/CCFormFrm.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/CCFormFrm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" language="javascript">
 
         $(function () {

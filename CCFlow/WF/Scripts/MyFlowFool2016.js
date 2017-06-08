@@ -1083,7 +1083,7 @@ function InitForm() {
 
         var s = document.createElement('script');
         s.type = 'text/javascript';
-        s.src = "/DataUser/JSLibData/" + enName + "_Self.js";
+        s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
         var tmp = document.getElementsByTagName('script')[0];
         tmp.parentNode.insertBefore(s, tmp);
     }

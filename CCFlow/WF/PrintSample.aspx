@@ -10,7 +10,7 @@
 <head runat="server">
     <title></title>
     <script src="Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <link href="/DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript">
     </script>
     
@@ -216,7 +216,7 @@
 <div style="width: 0px; height: 0px">
     <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0"
         height="0">
-        <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="/DataUser/PrintTools/install_lodop32.exe"></embed>
+        <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="../DataUser/PrintTools/install_lodop32.exe"></embed>
     </object>
 </div>
 <div id="tabForm" style="<%=Width %>px; margin: 0 auto;">

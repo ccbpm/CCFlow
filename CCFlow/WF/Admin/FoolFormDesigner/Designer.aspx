@@ -22,7 +22,7 @@
      <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../../Scripts/Config.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script language="JavaScript" type="text/javascript" src="MapDef.js" ></script>
 

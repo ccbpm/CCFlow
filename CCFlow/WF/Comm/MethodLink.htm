@@ -1,5 +1,6 @@
 ﻿<head>
     <title>驰骋工作流</title>
+    <meta charset="UTF-8">
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
         //页面启动函数.
@@ -11,6 +12,10 @@
                 window.location.href = url;
                 return;
             } else {
+
+                alert('该功能已经取消...');
+                return;
+
                 url = url.replace('.htm', '.jsp');
                 window.location.href = url;
                 return;

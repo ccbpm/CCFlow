@@ -9,9 +9,9 @@
                 var ReportViewer = document.getElementById("ReportViewer");
 
                 var Report = ReportViewer.Report;
-                Report.LoadFromURL("../../DataUser/CyclostyleFile/" + name+".grf" );
-                // Report.LoadFromURL("../../DataUser/grf/4a.grf");
-               
+                Report.LoadFromURL("../../DataUser/CyclostyleFile/" + name + ".grf");
+
+                               
                 var json_data = { "WorkID": "<%=this.WorkID %>", "FK_Flow": "<%=this.FK_Flow %>", "FK_Node": "<%=this.FK_Node %>", "DoType": "0" };
                 $.ajax({
                     type: "get",
@@ -74,12 +74,7 @@
                         });
 
                         Report.LoadDataFromURL("../WorkOpt/GridData.ashx?WorkID=<%=this.WorkID %>&FK_Flow=<%=this.FK_Flow %>&FK_Node=<%=this.FK_Node %>&DoType=1&Name=MainPage");
-                        //ReportViewer.Start();
                         Report.PrintPreview(true);
-                        //                //   ReportViewer.Stop();
-                        //                Report.LoadDataFromURL("WorkOpt/GridData.ashx?WorkID=<%=this.WorkID %>&FK_Flow=<%=this.FK_Flow %>&FK_Node=<%=this.FK_Node %>");
-                        //                //ReportViewer.Start();
-                        //                Report.PrintPreview(true);
                     },
                     complete: function (XMLHttpRequest, textStatus) {
                         //    alert('HideLoading');

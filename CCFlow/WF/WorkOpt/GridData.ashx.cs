@@ -19,15 +19,28 @@ namespace CCFlow.WF.WorkOpt
     /// </summary>
     public class GridData1 : IHttpHandler
     {
+        private string _FK_MapData = null;
+        private string FK_MapData
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this._FK_MapData))
+                    return null;
 
+                return this._FK_MapData;
+            }
+            set
+            {
+                this._FK_MapData = value;
+            }
+        }
         public void ProcessRequest(HttpContext context)
         {
             string WorkID = context.Request.QueryString["WorkID"];
             string FK_Flow = context.Request.QueryString["FK_Flow"];
             string FK_Node = context.Request.QueryString["FK_Node"];
             string doType = context.Request.QueryString["DoType"];
-
-
+            FK_MapData = context.Request.QueryString["FK_MapData"];
 
             string jsonResult = "";
             switch (doType)
@@ -47,15 +60,13 @@ namespace CCFlow.WF.WorkOpt
                     jsonResult = GetDtlCountFlow(FK_Flow, FK_Node);
                     break;
                 case "3":
-                    string childName = context.Request.QueryString["ChildName"];
                     jsonResult = GetChildDtlCount(FK_Flow, FK_Node);
                     break;
                 case "4":
                     string getType = context.Request.QueryString["GetType"];
-                    //string name = context.Request.QueryString["Name"];
                     jsonResult = GetDataByType(FK_Flow, FK_Node, WorkID, getType);
                     break;
-                case"5"://获取所有的图片信息
+                case "5"://获取所有的图片信息
 
                     jsonResult = GetFlowPhoto(WorkID, FK_Flow, FK_Node);
                     break;
@@ -67,22 +78,13 @@ namespace CCFlow.WF.WorkOpt
             }
             context.Response.Clear();
             context.Response.Write(jsonResult);
-            //context.Response.ContentType = "text/plain";
-            //context.Response.Write("Hello World");
         }
 
         private string GetFlowPhoto(string workID, string flow, string node)
         {
             string json = null;
-
-
             node = "ND" + node;
-
-
             string sql = string.Format("select EnPk,ImgPath from Sys_FrmImg where FK_MapData ='{0}' and ImgPath is not null UNION ALL  select v1.EnPK ,v2.Tag1 as ImgPath  from Sys_FrmImg v1 left join Sys_FrmEleDB v2 on v1.MyPK = v2.RefPKVal  where v1.FK_MapData='{0}' and EleID='{1}'", node, workID);
-
-
-
 
             System.Data.DataTable table = DBAccess.RunSQLReturnTable(sql);
 
@@ -91,15 +93,13 @@ namespace CCFlow.WF.WorkOpt
             {
                 foreach (DataRow row in table.Rows)
                 {
-                    photoEntities.Add(new PhotoEntity(){Name = row[0].ToString(),Value = row[1].ToString()});
+                    photoEntities.Add(new PhotoEntity() { Name = row[0].ToString(), Value = row[1].ToString() });
                 }
             }
-
             json = JsonConvert.SerializeObject(photoEntities);
-
             return json;
-
         }
+
         private string GetPhoto(string workID, string fk_flow, string fk_node)
         {
             string json = null;
@@ -119,14 +119,9 @@ namespace CCFlow.WF.WorkOpt
                         photoEntities.Add(new PhotoEntity() { Name = row[0].ToString(), Value = row[1].ToString() });
                     }
                 }
-
             }
-
-        
             json = JsonConvert.SerializeObject(photoEntities);
-
             return json;
-
         }
 
         private string GetChildDtlCount(string fk_flow, string fk_node)
@@ -135,11 +130,14 @@ namespace CCFlow.WF.WorkOpt
             List<TempEntity> list = new List<TempEntity>();
             foreach (FrmNode fn in fns)
             {
+                if (this.FK_MapData != null && this.FK_MapData.Equals(fn.FK_Frm) == false)
+                    continue;
+
                 MapDtls mdtls = new MapDtls(fn.FK_Frm);
 
                 foreach (MapDtl single in mdtls)
                 {
-                    list.Add(new TempEntity() { Name = single.PTable });
+                    list.Add(new TempEntity() { Name = single.No });
                 }
             }
             return JsonConvert.SerializeObject(list);
@@ -149,72 +147,43 @@ namespace CCFlow.WF.WorkOpt
         {
             FrmNodes fns = new FrmNodes(fk_flow, int.Parse(fk_node));
 
-            string result = "{";
+            string result = "";
             if (getType != "MainPage")
             {
+                result = "{\"jsonDtl\":";
                 foreach (FrmNode fn in fns)
                 {
-                        MapDtls mdtls = new MapDtls(fn.FK_Frm);
+                    if (this.FK_MapData != null && this.FK_MapData.Equals(fn.FK_Frm) == false)
+                        continue;
 
-                        foreach (MapDtl dtl in mdtls)
+                    MapDtls mdtls = new MapDtls(fn.FK_Frm);
+
+                    foreach (MapDtl dtl in mdtls)
+                    {
+                        if (dtl.No.Equals(getType))
                         {
-                            if (dtl.PTable.Equals(getType))
-                            {
-
-                                GEDtls ens = new GEDtls(dtl.No);
-                                ens.Retrieve(GEDtlAttr.RefPK, workID);
-                                result += "\"" + dtl.PTable + "\":" +
-                                          JsonConvert.SerializeObject(ens.ToDataTableField()) + "}";
-                                break;
-                            }
+                            GEDtls ens = new GEDtls(dtl.No);
+                            ens.Retrieve(GEDtlAttr.RefPK, workID);
+                            result += JsonConvert.SerializeObject(ens.ToDataTableField());
+                            break;
+                        }
                     }
                 }
+                result += "}";
             }
             else
             {
+                result = "{\"MainPage\":[";
                 foreach (FrmNode fn in fns)
                 {
+                    if (this.FK_MapData != null && this.FK_MapData.Equals(fn.FK_Frm) == false)
+                        continue;
+
                     GEEntity ge = new GEEntity(fn.FK_Frm, workID);
-                    string tempJson = JsonConvert.SerializeObject(ge.Row);
-
-                    tempJson = tempJson.TrimStart('{');
-                    tempJson = tempJson.TrimEnd('}');
-
-                    result += tempJson + ",";
+                    result += JsonConvert.SerializeObject(ge.Row);
                 }
-                result = result.TrimEnd(',') + "}";
+                result += "]}";
             }
-            //foreach (FrmNode fn in fns)
-            //{
-            //    if (fn.FK_Frm == name)
-            //    {
-            //        GEEntity ge = new GEEntity(fn.FK_Frm, workID);
-            //        if (getType == "MainPage")
-            //        {
-            //            result = JsonConvert.SerializeObject(ge.Row);
-            //        }
-            //        else
-            //        {
-            //            result = JsonConvert.SerializeObject(ge.Row);
-            //            result = result.Substring(0, result.Length - 1);
-            //            MapDtls mdtls = new MapDtls(fn.FK_Frm);
-
-            //            foreach (MapDtl dtl in mdtls)
-            //            {
-            //                if (dtl.PTable.Equals(getType))
-            //                {
-
-            //                    GEDtls ens = new GEDtls(dtl.No);
-            //                    ens.Retrieve(GEDtlAttr.RefPK, workID);
-            //                    result += ",\"" + dtl.PTable + "\":" +
-            //                              JsonConvert.SerializeObject(ens.ToDataTableField()) + "}";
-            //                    break;
-            //                }
-            //            }
-            //        }
-            //        break;
-            //    }
-            //}
             return result;
         }
 
@@ -270,31 +239,17 @@ namespace CCFlow.WF.WorkOpt
             {
                 tempName.Add(new TempEntity() { Name = singleEntities.GetNewEntity.ToString() });
             }
-
             return JsonConvert.SerializeObject(tempName);
-            //if (al.Count > 1)
-            //{
-            //    foreach (Entities ens in al)
-            //    {
-            //        string dtlJson = JsonConvert.SerializeObject(ens.ToDataTableField());
-
-            //        var index = al.IndexOf(ens);
-            //        jsonData += ",\"jsonDtl" + index + "\":" + dtlJson;
-            //    }
-            //}
-            //else
-            //{
-            //    jsonData = JsonConvert.SerializeObject(wk.Row);
-
-            //    jsonData = jsonData.Substring(0, jsonData.Length - 1);
-
-            //    jsonData += ",\"jsonDtl\":" + JsonConvert.SerializeObject(al[0].ToDataTableField());
-
-            //    jsonData += "}";
-            //}
         }
 
-
+        /// <summary>
+        /// 节点表单数据
+        /// </summary>
+        /// <param name="workID">业务编号</param>
+        /// <param name="flow">流程编号</param>
+        /// <param name="node">节点编号</param>
+        /// <param name="name">明细表编号</param>
+        /// <returns></returns>
         private string GetMainPage(string workID, string flow, string node, string name)
         {
             string jsonData = "{";
@@ -319,7 +274,7 @@ namespace CCFlow.WF.WorkOpt
             ndxxRpt.Retrieve();
             ndxxRpt.Copy(wk);
 
-           
+
             //执行序列化
             // string jsonData = JsonConvert.SerializeObject(wk.Row);
 
@@ -328,7 +283,6 @@ namespace CCFlow.WF.WorkOpt
             List<Entities> al = wk.GetDtlsDatasOfList();
             if (!name.Equals("MainPage"))
             {
-
                 foreach (Entities singlEntities in al)
                 {
                     if (singlEntities.GetNewEntity.ToString() == name)
@@ -365,7 +319,7 @@ namespace CCFlow.WF.WorkOpt
 
     public class PhotoEntity
     {
-      public string Name { get; set; }
+        public string Name { get; set; }
         public string Value { get; set; }
     }
 }

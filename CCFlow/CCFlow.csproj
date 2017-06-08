@@ -726,7 +726,9 @@
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="DataUser\XML\Menu.xml" />
+    <Content Include="DataUser\XML\Menu.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ1\Student.htm" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ1\StudentList.htm" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />

@@ -368,6 +368,42 @@ namespace BP.WF.HttpHandler
             return this.AuthExitAndLogin(this.No, BP.Web.WebUser.Auth);
         }
         #endregion 登录相关.
-         
+
+        /// <summary>
+        /// 获得抄送列表
+        /// </summary>
+        /// <returns></returns>
+        public string CC_Init()
+        {
+            string sta = this.GetRequestVal("Sta");
+            if (sta == null || sta == "")
+                sta = "-1";
+
+            int pageSize = 6;// int.Parse(pageSizeStr);
+
+            string pageIdxStr = this.GetRequestVal("PageIdx");
+            if (pageIdxStr == null)
+                pageIdxStr = "1";
+            int pageIdx = int.Parse(pageIdxStr);
+
+            //实体查询.
+            //BP.WF.SMSs ss = new BP.WF.SMSs();
+            //BP.En.QueryObject qo = new BP.En.QueryObject(ss);
+
+            System.Data.DataTable dt = null;
+            if (sta == "-1")
+                dt = BP.WF.Dev2Interface.DB_CCList(BP.Web.WebUser.No);
+            if (sta == "0")
+                dt = BP.WF.Dev2Interface.DB_CCList_UnRead(BP.Web.WebUser.No);
+            if (sta == "1")
+                dt = BP.WF.Dev2Interface.DB_CCList_Read(BP.Web.WebUser.No);
+            if (sta == "2")
+                dt = BP.WF.Dev2Interface.DB_CCList_Delete(BP.Web.WebUser.No);
+
+            //int allNum = qo.GetCount();
+            //qo.DoQuery(BP.WF.SMSAttr.MyPK, pageSize, pageIdx);
+
+            return BP.Tools.Json.DataTableToJson(dt, false);
+        }
     }
 }

@@ -234,8 +234,7 @@ namespace CCFlow.WF.CCForm
             this.Pub1.AddTDTitle("表单名");
             this.Pub1.AddTDTitle("下载");
             this.Pub1.AddTREnd();
-
-
+            
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
             string path = ApplicationPath + @"DataUser\CyclostyleFile\FlowFrm\" + nd.FK_Flow + "\\" + nd.NodeID + "\\";
             string[] fls = null;

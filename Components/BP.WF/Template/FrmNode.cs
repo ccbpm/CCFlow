@@ -581,6 +581,7 @@ namespace BP.WF.Template
                 
                 //模版文件，对于office表单有效.
                 map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, true, 0, 500, 20);
+
                 //是否显示
                 map.AddTBInt(FrmNodeAttr.IsEnable,1,"是否显示",true,false);
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan,null,"关键字段",true,true,1,20,20);

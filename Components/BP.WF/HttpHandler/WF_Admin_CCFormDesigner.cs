@@ -77,7 +77,7 @@ namespace BP.WF.HttpHandler
         /// 加载表单
         /// </summary>
         /// <returns></returns>
-        public string Loadform()
+        public string FormDesigner_Loadform()
         {
             MapData mapData = new MapData(this.FK_MapData);
             return mapData.FormJson; //要返回的值.
@@ -111,10 +111,7 @@ namespace BP.WF.HttpHandler
             int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
             return result.ToString();
         }
-        public string CcformElements()
-        {
-            return CCForm_AllElements_ResponseJson();
-        }
+        
         /// <summary>
         /// 创建隐藏字段.
         /// </summary>
@@ -242,7 +239,7 @@ namespace BP.WF.HttpHandler
         {
             return BP.WF.Glo.SilverlightDownloadUrl;
         }
-        public string DesignerFrm_Init()
+        public string GoToFrmDesigner_Init()
         {
             //根据不同的表单类型转入不同的表单设计器上去.
             BP.Sys.MapData md = new BP.Sys.MapData(this.FK_MapData);
@@ -301,15 +298,14 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
-        /// 获取自由表单所有元素
+        /// 生成所有表单元素.
         /// </summary>
-        /// <returns>json data</returns>
-        private string CCForm_AllElements_ResponseJson_Old()
+        /// <returns></returns>
+        public string CCForm_AllElements_ResponseJson()
         {
             try
             {
                 MapData mapData = new MapData(this.FK_MapData);
-                mapData.RetrieveFromDBSources();
 
                 //获取表单元素
                 string sqls = "SELECT * FROM Sys_MapAttr WHERE UIVisible=1 AND FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
@@ -331,9 +327,10 @@ namespace BP.WF.HttpHandler
 
                 DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
 
+
+
                 ////用列名称进行比对 重新设置
                 string mapAttrCols, frmBtnCols, frmRbCols, frmLabCols, sys_FrmLinkCols, sys_FrmImgCols, sys_FrmImgAthCols, sys_FrmAttachmentCols, sys_MapDtlCols, sys_FrmLineCols, figureComCols;
-                #region
                 mapAttrCols = "MyPK,FK_MapData,KeyOfEn,Name,DefVal,UIContralType,MyDataType,LGType,UIWidth,UIHeight,UIBindKey,UIRefKey,UIRefKeyText,UIVisible,UIIsEnable,UIIsLine,UIIsInput,Idx,IsSigan,X,Y,GUID,Tag,EditType,AtPara,ExtDefVal,ExtDefValText,MinLen,MaxLen,ExtRows,IsRichText,IsSupperText,Tip,ColSpan,ColSpanText,GroupID,GroupIDText";
                 frmBtnCols = "MyPK,FK_MapData,Text,X,Y,IsView,IsEnable,BtnType,UAC,UACContext,EventType,EventContext,MsgOK,MsgErr,GUID,GroupID";
                 frmRbCols = "MyPK,FK_MapData,KeyOfEn,EnumKey,Lab,IntKey,X,Y,GUID,Script,FieldsCfg,Tip";
@@ -345,16 +342,15 @@ namespace BP.WF.HttpHandler
                 sys_MapDtlCols = "No,Name,FK_MapData,PTable,GroupField,Model,ImpFixTreeSql,ImpFixDataSql,RowIdx,GroupID,RowsOfList,IsEnableGroupField,IsShowSum,IsShowIdx,IsCopyNDData,IsHLDtl,IsReadonly,IsShowTitle,IsView,IsInsert,IsDelete,IsUpdate,IsEnablePass,IsEnableAthM,IsEnableM2M,IsEnableM2MM,WhenOverSize,DtlOpenType,DtlShowModel,X,Y,H,W,FrmW,FrmH,MTR,GUID,FK_Node,AtPara,IsExp,IsImp,IsEnableSelectImp,ImpSQLSearch,ImpSQLInit,ImpSQLFull,FilterSQLExp,SubThreadWorker,SubThreadWorkerText";
                 sys_FrmLineCols = " MyPK,FK_MapData,X,Y,X1,Y1,X2,Y2,BorderWidth,BorderColor,GUID";
                 figureComCols = "Name,No,Sta,X,Y,H,W";
-                #endregion
-                string[] tableCols = new string[11];
 
-                ds.Tables[0].TableName = "MapAttr";
+                string[] tableCols = new string[11];
+                ds.Tables[0].TableName = "Sys_MapAttr";
                 tableCols[0] = mapAttrCols;
-                ds.Tables[1].TableName = "FrmBtn";
+                ds.Tables[1].TableName = "Sys_FrmBtn";
                 tableCols[1] = frmBtnCols;
-                ds.Tables[2].TableName = "FrmRb";
+                ds.Tables[2].TableName = "Sys_FrmRB";
                 tableCols[2] = frmRbCols;
-                ds.Tables[3].TableName = "FrmLab";
+                ds.Tables[3].TableName = "Sys_FrmLab";
                 tableCols[3] = frmLabCols;
                 ds.Tables[4].TableName = "Sys_FrmLink";
                 tableCols[4] = sys_FrmLineCols;
@@ -371,97 +367,9 @@ namespace BP.WF.HttpHandler
                 ds.Tables[10].TableName = "FigureCom";
                 tableCols[10] = figureComCols;
 
-                Dictionary<string, string> dicCols = new Dictionary<string, string>();
-                //将所有的列名进行转换（适应ORACLE） ORACLE 不区分大小写，都是大写
-                for (int i = 0; i < ds.Tables.Count; i++)
-                {
-                    dicCols = (new List<string>(tableCols[i].Split(','))).ToDictionary(m => m.ToString().Trim().ToLower(), m => m.Trim());
-                    DataTable dt = ds.Tables[i];
-                    foreach (DataColumn dc in dt.Columns)
-                    {
-                        if (dicCols.ContainsKey(dc.ColumnName.ToLower()))
-                        {
-                            dc.ColumnName = dicCols[dc.ColumnName.ToLower()];
-                        }
-                    }
-                }
-                return BP.Tools.Json.ToJson(ds);
-            }
-            catch (Exception ex)
-            {
-                return "err@" + ex.Message;
-            }
-        }
-        private string CCForm_AllElements_ResponseJson()
-        {
-            try
-            {
-                MapData mapData = new MapData(this.FK_MapData);
-
-                //获取表单元素
-                string sqls = "SELECT * FROM Sys_MapAttr WHERE UIVisible=1 AND FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
-                                + "SELECT * FROM Sys_FrmBtn WHERE FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
-                                + "SELECT * FROM Sys_FrmRB WHERE FK_MapData='" + this.FK_MapData + "';" + Environment.NewLine
-                                + "SELECT * FROM Sys_FrmLab WHERE FK_MapData='" + this.FK_MapData + "';"
-                                + "SELECT * FROM Sys_FrmLink WHERE FK_MapData='" + this.FK_MapData + "';"
-                                + "SELECT * FROM Sys_FrmImg WHERE FK_MapData='" + this.FK_MapData + "';"
-                                + "SELECT * FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FK_MapData + "';"
-                                + "SELECT * FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "';"
-                                 + "SELECT * FROM Sys_MapDtl WHERE FK_MapData='" + this.FK_MapData + "';"
-                                 + "SELECT * FROM Sys_FrmLine WHERE FK_MapData='" + this.FK_MapData + "';"
-                                 + "select '轨迹图' Name,'FlowChart' No,FrmTrackSta Sta,FrmTrack_X X,FrmTrack_Y Y,FrmTrack_H H,FrmTrack_W  W from WF_Node where nodeid=" + this.FK_Node
-+ " union select '审核组件' Name, 'FrmCheck' No,FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node where nodeid=" + this.FK_Node
-+ " union select '子流程' Name,'SubFlowDtl' No,SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W from WF_Node  where nodeid=" + this.FK_Node
-+ " union select '子线程' Name, 'ThreadDtl' No,FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W W from WF_Node where nodeid=" + this.FK_Node
-+ " union select '流转自定义' Name,'FrmTransferCustom' No,FTCSta Sta,FTC_X X,FTC_Y Y,FTC_H H,FTC_W  W FROM WF_Node  where nodeid=" + this.FK_Node + ";";
-                ;
-
-                DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
-
                 #region 解决oracle大小写问题.
-
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 {
-
-                    ////用列名称进行比对 重新设置
-                    string mapAttrCols, frmBtnCols, frmRbCols, frmLabCols, sys_FrmLinkCols, sys_FrmImgCols, sys_FrmImgAthCols, sys_FrmAttachmentCols, sys_MapDtlCols, sys_FrmLineCols, figureComCols;
-                    mapAttrCols = "MyPK,FK_MapData,KeyOfEn,Name,DefVal,UIContralType,MyDataType,LGType,UIWidth,UIHeight,UIBindKey,UIRefKey,UIRefKeyText,UIVisible,UIIsEnable,UIIsLine,UIIsInput,Idx,IsSigan,X,Y,GUID,Tag,EditType,AtPara,ExtDefVal,ExtDefValText,MinLen,MaxLen,ExtRows,IsRichText,IsSupperText,Tip,ColSpan,ColSpanText,GroupID,GroupIDText";
-                    frmBtnCols = "MyPK,FK_MapData,Text,X,Y,IsView,IsEnable,BtnType,UAC,UACContext,EventType,EventContext,MsgOK,MsgErr,GUID,GroupID";
-                    frmRbCols = "MyPK,FK_MapData,KeyOfEn,EnumKey,Lab,IntKey,X,Y,GUID,Script,FieldsCfg,Tip";
-                    frmLabCols = " MyPK,FK_MapData,Text,X,Y,FontSize,FontColor,FontName,FontStyle,FontWeight,IsBold,IsItalic,GUID";
-                    sys_FrmLinkCols = "MyPK,FK_MapData,Text,URL,Target,X,Y,FontSize,FontColor,FontName,FontStyle,IsBold,IsItalic,GUID";
-                    sys_FrmImgCols = "MyPK,FK_MapData,ImgAppType,X,Y,H,W,ImgURL,ImgPath,LinkURL,LinkTarget,GUID,Tag0,SrcType,IsEdit,Name,EnPK,ImgSrcType";
-                    sys_FrmImgAthCols = "MyPK,FK_MapData,CtrlID,X,Y,H,W,IsEdit,GUID,Name,IsRequired";
-                    sys_FrmAttachmentCols = "MyPK,FK_MapData,NoOfObj,FK_Node,Name,Exts,SaveTo,Sort,X,Y,W,H,IsUpload,IsDelete,IsDownload,IsOrder,IsAutoSize,IsNote,IsShowTitle,UploadType,CtrlWay,AthUploadWay,AtPara,RowIdx,GroupID,GUID,DeleteWay,IsWoEnableWF,IsWoEnableSave,IsWoEnableReadonly,IsWoEnableRevise,IsWoEnableViewKeepMark,IsWoEnablePrint,IsWoEnableOver,IsWoEnableSeal,IsWoEnableTemplete,IsWoEnableCheck,IsWoEnableInsertFlow,IsWoEnableInsertFengXian,IsWoEnableMarks,IsWoEnableDown,IsRowLock,IsToHeLiuHZ,IsHeLiuHuiZong,IsTurn2Html,AthRunModel";
-                    sys_MapDtlCols = "No,Name,FK_MapData,PTable,GroupField,Model,ImpFixTreeSql,ImpFixDataSql,RowIdx,GroupID,RowsOfList,IsEnableGroupField,IsShowSum,IsShowIdx,IsCopyNDData,IsHLDtl,IsReadonly,IsShowTitle,IsView,IsInsert,IsDelete,IsUpdate,IsEnablePass,IsEnableAthM,IsEnableM2M,IsEnableM2MM,WhenOverSize,DtlOpenType,DtlShowModel,X,Y,H,W,FrmW,FrmH,MTR,GUID,FK_Node,AtPara,IsExp,IsImp,IsEnableSelectImp,ImpSQLSearch,ImpSQLInit,ImpSQLFull,FilterSQLExp,SubThreadWorker,SubThreadWorkerText";
-                    sys_FrmLineCols = " MyPK,FK_MapData,X,Y,X1,Y1,X2,Y2,BorderWidth,BorderColor,GUID";
-                    figureComCols = "Name,No,Sta,X,Y,H,W";
-
-
-                    string[] tableCols = new string[11];
-                    ds.Tables[0].TableName = "MapAttr";
-                    tableCols[0] = mapAttrCols;
-                    ds.Tables[1].TableName = "FrmBtn";
-                    tableCols[1] = frmBtnCols;
-                    ds.Tables[2].TableName = "FrmRb";
-                    tableCols[2] = frmRbCols;
-                    ds.Tables[3].TableName = "FrmLab";
-                    tableCols[3] = frmLabCols;
-                    ds.Tables[4].TableName = "Sys_FrmLink";
-                    tableCols[4] = sys_FrmLineCols;
-                    ds.Tables[5].TableName = "Sys_FrmImg";
-                    tableCols[5] = sys_FrmImgCols;
-                    ds.Tables[6].TableName = "Sys_FrmImgAth";
-                    tableCols[6] = sys_FrmImgAthCols;
-                    ds.Tables[7].TableName = "Sys_FrmAttachment";
-                    tableCols[7] = sys_FrmAttachmentCols;
-                    ds.Tables[8].TableName = "Sys_MapDtl";
-                    tableCols[8] = sys_MapDtlCols;
-                    ds.Tables[9].TableName = "Sys_FrmLine";
-                    tableCols[9] = sys_FrmLineCols;
-                    ds.Tables[10].TableName = "FigureCom";
-                    tableCols[10] = figureComCols;
-
                     Dictionary<string, string> dicCols = new Dictionary<string, string>();
                     //将所有的列名进行转换（适应ORACLE） ORACLE 不区分大小写，都是大写
                     for (int i = 0; i < ds.Tables.Count; i++)
@@ -497,7 +405,7 @@ namespace BP.WF.HttpHandler
             return "保存成功.";
         }
 
-        #region tables
+        #region 表格处理.
         public string Tables_Init()
         {
             BP.Sys.SFTables tabs = new BP.Sys.SFTables();
@@ -537,47 +445,5 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(dt);
           }
         #endregion
-
-        #region 字段列表 的操作
-        /// <summary>
-        /// 初始化字段列表.
-        /// </summary>
-        /// <returns></returns>
-        public string FiledsList_Init()
-        {
-            MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData);
-            foreach (MapAttr item in attrs)
-            {
-                if (item.LGType == FieldTypeS.Enum)
-                {
-                    SysEnumMain se = new SysEnumMain(item.UIBindKey);
-                    item.UIRefKey = se.CfgVal;
-                    continue;
-                }
-
-                if (item.LGType == FieldTypeS.FK)
-                {
-                    item.UIRefKey = item.UIBindKey;
-                    continue;
-                }
-
-                item.UIRefKey = "无";
-            }
-            return attrs.ToJson();
-        }
-        /// <summary>
-        /// 删除字段
-        /// </summary>
-        /// <returns></returns>
-        public string FiledsList_Delete()
-        {
-            MapAttr attr = new MapAttr(this.MyPK);
-            if (attr.Delete() == 1)
-                return "删除成功！";
-
-            return "err@删除成功！";
-        }
-        #endregion 字段列表 的操作
     }
 }

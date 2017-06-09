@@ -507,7 +507,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBatchEditAttr()
         {
-            return "../../Admin/FoolFormDesigner/BatchEdit.aspx?FK_MapData=" +
+            return "../../Admin/FoolFormDesigner/BatchEdit.htm?FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>

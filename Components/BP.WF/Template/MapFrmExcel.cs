@@ -370,7 +370,7 @@ namespace BP.WF.Template
 		/// <returns></returns>
 		public string DoEditFiledsList()
 		{
-			return "../../Admin/CCFormDesigner/FiledsList.htm?FK_MapData=" + this.No;
+            return "../../Admin/FoolFormDesigner/BatchEdit.htm?FK_MapData=" + this.No;
 		}
 		/// <summary>
 		/// 节点表单组件
@@ -555,7 +555,7 @@ namespace BP.WF.Template
 		/// <returns></returns>
 		public string DoRegularExpressionBatch()
 		{
-			return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.aspx?FK_Flow=&FK_MapData=" +
+			return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.htm?FK_Flow=&FK_MapData=" +
 				   this.No + "&t=" + DataType.CurrentDataTime;
 		}
 		/// <summary>
@@ -564,7 +564,7 @@ namespace BP.WF.Template
 		/// <returns></returns>
 		public string DoBatchEditAttr()
 		{
-			return "../../Admin/FoolFormDesigner/BatchEdit.aspx?FK_MapData=" +
+			return "../../Admin/FoolFormDesigner/BatchEdit.htm?FK_MapData=" +
 				   this.No + "&t=" + DataType.CurrentDataTime;
 		}
 		/// <summary>

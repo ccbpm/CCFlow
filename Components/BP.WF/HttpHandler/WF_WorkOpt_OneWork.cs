@@ -124,7 +124,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 属性.
 
-
         public string FlowBBS_Delete()
         {
             return BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK, WebUser.No);

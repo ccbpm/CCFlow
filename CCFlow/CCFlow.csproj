@@ -1848,7 +1848,6 @@
     <Content Include="WF\Admin\Pub.ascx" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
-    <Content Include="WF\Admin\TestFlow.aspx" />
     <Content Include="WF\Admin\UC\Cond.ascx" />
     <Content Include="WF\Admin\UC\CondBar.ascx" />
     <Content Include="WF\Admin\UC\CondByPara.ascx" />
@@ -1861,6 +1860,11 @@
     <Content Include="WF\Admin\XAP\Designer.aspx" />
     <Content Include="WF\Admin\XAP\DoPort.aspx" />
     <Content Include="WF\Admin\XAP\WebService.asmx" />
+    <Content Include="WF\AppClassic\Home.htm" />
+    <Content Include="WF\AppClassic\Left.htm" />
+    <Content Include="WF\AppClassic\Login.htm" />
+    <Content Include="WF\AppClassic\Top.htm" />
+    <Content Include="WF\AppClassic\Welcome.htm" />
     <Content Include="WF\App\Classic\AdvFunc.aspx" />
     <Content Include="WF\App\Classic\Bottom.aspx" />
     <Content Include="WF\App\Classic\ChangePassword.htm" />
@@ -7620,6 +7624,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <Content Include="WF\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\CCForm\Handler.ashx" />
+    <Content Include="WF\AppClassic\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\CCForm\WinOpen.master" />
     <Content Include="WF\Comm\Handler.ashx" />
@@ -9052,13 +9057,6 @@
     <Compile Include="WF\Admin\SimulationRun.aspx.designer.cs">
       <DependentUpon>SimulationRun.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\TestFlow.aspx.cs">
-      <DependentUpon>TestFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\TestFlow.aspx.designer.cs">
-      <DependentUpon>TestFlow.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\UC\Cond.ascx.cs">
       <DependentUpon>Cond.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9145,6 +9143,9 @@
     </Compile>
     <Compile Include="WF\Admin\XAP\WSDesigner.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WF\AppClassic\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\App\Classic\AdvFunc.aspx.cs">
       <DependentUpon>AdvFunc.aspx</DependentUpon>

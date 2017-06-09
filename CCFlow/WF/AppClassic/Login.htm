@@ -76,38 +76,45 @@
 
 </head>
 <body>
-    <form id="cc" runat="server">
+    <form id="cc" >
 
 
-    <div style="text-align:center">
+   <h2>欢迎登录驰骋工作流引擎</h2>
+   
+   <center>
+   <fieldset style="width:30%;text-align:left; float:center">
+    <legend> <img src="../../DataUser/ICON/LogBiger.png" border=0 width="200px;" />  </legend>
 
-<h2>用户登录</h2>
-   <fieldset>
-    <legend> ccflow登录的API在Button事件后面 </legend>
-    <br/>
-  用户名:  <input type="text" id="TB_UserNo" name="TB_UserNo"  />
-    <br/>
-  密码： <input type="password" id="TB_Pass" name="TB_Pass"  /> 
+    <table style="border:0px; width:100%;  border-color:White" >
+    <tr style="border:0px;border-color:White"  >
+    <td style="border:0px;border-color:White; padding-left:20px;"   > 用户名</td>
+    <td style="border:0px;border-color:White;width:80%;"><input type="text" id="TB_UserNo" name="TB_UserNo"  style="width:80%;" /> </td>
+    </tr>
+    <tr style="border:0px;border-color:White"   >
+    <td style="border:0px;border-color:White;padding-left:20px;"   > 密&nbsp;&nbsp;码</td>
+    <td style="border:0px;border-color:White;width:80%;"><input type="password" id="TB_Pass" name="TB_Pass"  style="width:80%;" /> </td>
+    </tr>
 
-  <input type="button" value="登录" onclick="Login_Submit()" />
-    <font color="gray" > 默认密码为:123 或者 pub</font>
-    <br/>
-    <br/>
-    </fieldset>
-
-    <fieldset>
-    <legend>说明:</legend>
-    <ul>
+    <tr>
+    <td style="border:0px;border-color:White;width:80%;" ></td>
+    <td colspan=1 style="border:0px;border-color:White;width:80%;" > <input type="button" value="登录" onclick="Login_Submit()" />
+    <font color="gray" > 默认密码为:123</font></td>
+</tr>
+    </table>
+     <ul>
      <li>1, 登录界面是有您来编写的。 </li>
      <li>2, 密码的验证，登录前后要处理的业务逻辑均有您来开发。 </li>
      <li>3, 验证成功后，就调用ccflow的登录API。 </li>
      <li>4, 点击这里<a href="../Admin/CCBPMDesigner/Login.htm" >登录流程设计器</a>。</li>
     </ul>
-    </fieldset>
-    </div>
 
     <div id="Msg" />
+    </fieldset>
+     
+     </center>
 
     </form>
+
+
 </body>
 </html>

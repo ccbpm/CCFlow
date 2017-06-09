@@ -241,7 +241,6 @@ namespace CCFlow.WF.CCForm
 							daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
 						}
 
-
 						daDtl.SetValByKey(dtl.RefPK, pkValue);
 
 						daDtl.RDT = DataType.CurrentDataTime;

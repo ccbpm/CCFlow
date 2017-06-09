@@ -3337,7 +3337,7 @@ function loadTempDiagram(FK_MapData) {
             try {
 
                 // 装载表单入口.
-                if (data == "" || data == "") {
+                if (data == "" || data == "" || data==null ) {
                     //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
                     Conver_CCForm_V1ToV2();
                     return;

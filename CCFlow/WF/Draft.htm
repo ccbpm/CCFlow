@@ -51,19 +51,46 @@
                 dataType: 'html',
                 success: function (data) {
 
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    var timeKey = Math.random();
                     data = JSON.parse(data);
 
                     //增加处理.
+                    var idx = 0;
                     for (var i = 0; i < data.length; i++) {
 
+                        idx++;
+
+                        var title = data[i].Title;
+                        var flowNo = data[i].FK_Flow;
+                        var flowName = data[i].FlowName;
+                        var rdt = data[i].RDT;
+                        var flowNote = data[i].FlowNote;
+                        var workID = data[i].WorkID;
+                        var paras = data[i].AtPara; //参数.
+                        if (paras != '') {
+                            paras = paras.replace("'", "\\'");
+                            paras = paras.replace('@', '&');
+                            paras = paras.replace('@', '&');
+                            paras = paras.replace('@', '&');
+                            paras = paras.replace('@', '&');
+                            paras = paras.replace('@', '&');
+                            paras = "1" + paras;
+                        }
+
                         var newRow = "";
-                        newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + data[i].FK_FLOW + "&FID=0&WorkID=" + data[i].WORKID + "&FK_Node=" + data[i].FK_FLOW + "01&IsRead=0&T=" + timeKey + "');\" >" + data[i].TITLE + "</a></td>";
-                        newRow += "<td>" + data[i].FLOWNAME + "</td>";
-                        newRow += "<td>" + data[i].RDT + "</td>";
-                        newRow += "<td>" + data[i].FLOWNOTE + "</td>";
+                        newRow = "<tr ><td class=Idx >" +  idx + "</td>";
+                        newRow += "<td>" + "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&FID=0&WorkID=" + workID + "&IsRead=0&Paras=" + paras + "&T=" + timeKey + "');\" ><img src='./Img/Mail_UnRead.png' border=0 />" + title + "</a></td>";
+                        newRow += "<td>" + flowName + "</td>";
+                        newRow += "<td>" + rdt + "</td>";
+                        newRow += "<td>" + flowNote + "</td>";
                         newRow += "<td>";
-                        newRow += "<a href=\"javascript:Delete('" + data[i].WORKID + "')\"><img src='./Img/Btn/Delete.gif' border=0 />删除</a>";
+                        newRow += "<a href=\"javascript:Delete('" + workID + "')\"><img src='./Img/Btn/Delete.gif' border=0 />删除</a>";
                         newRow += "</td>";
                         newRow += "</tr>";
 
@@ -72,39 +99,46 @@
                 }
             });
         }
-     </script>
-     
- <style type="text/css">
-        table
-        {
-            font: 12px 宋体, Arial, Verdana;
-        }
-        .TRSum
-        {
-            font: 12px 宋体, Arial, Verdana;
-        }
-        .centerTitle th
-        {
-            text-align: center;
-        }
-        .Idx
-        {
-            font-size: 16px;
-            font-family: Vijaya;
-        }
-    </style>
 
+        //删除流程.
+        function Delete(flowNo,workid) {
+
+            if (window.confirm('您确定要删除草稿吗？') == false)
+                return;
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Draft_Delete&FK_Flow="+flowNo+"&WorkID=" + workid + "m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    //删除流程.
+                    alert(data);
+
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+     </script>
 </head>
 <body onkeypress="Esc()" >
 
 <table id="Table1" style="width:100%;">
-<caption ><div class='CaptionMsg' >草稿</div></caption>
+<caption >草稿</caption>
 <tr>
 <th>序</th>
 <th>标题</th>
 <th>流程</th>
-<th>日期</th>
+<th>保存日期</th>
 <th>备注</th>
+<th>操作</th>
 </tr>
 </table>
 

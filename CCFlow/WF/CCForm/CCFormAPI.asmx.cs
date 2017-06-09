@@ -121,23 +121,45 @@ namespace CCFlow.WF.CCForm
 
 			#region 保存主表数据.
 
-			GEEntity wk = new GEEntity(frmID, pkValue);
-			wk.ResetDefaultVal();
+            if (pkValue.Contains("_") == true)
+            {
+                GEEntityMyPK wk = new GEEntityMyPK(frmID, pkValue);
+                wk.ResetDefaultVal();
 
-			if (mainTableAtParas != null)
-			{
-				AtPara ap = new AtPara(mainTableAtParas);
-				foreach (string str in ap.HisHT.Keys)
-				{
-					if (wk.Row.ContainsKey(str))
-						wk.SetValByKey(str, ap.GetValStrByKey(str));
-					else
-						wk.Row.Add(str, ap.GetValStrByKey(str));
-				}
-			}
+                if (mainTableAtParas != null)
+                {
+                    AtPara ap = new AtPara(mainTableAtParas);
+                    foreach (string str in ap.HisHT.Keys)
+                    {
+                        if (wk.Row.ContainsKey(str))
+                            wk.SetValByKey(str, ap.GetValStrByKey(str));
+                        else
+                            wk.Row.Add(str, ap.GetValStrByKey(str));
+                    }
+                }
+                wk.MyPK = pkValue;
+                wk.Save();
+            }
+            else
+            {
+                GEEntity wk = new GEEntity(frmID, pkValue);
+                wk.ResetDefaultVal();
 
-			//wk.OID = pkValue;
-			wk.Save();
+                if (mainTableAtParas != null)
+                {
+                    AtPara ap = new AtPara(mainTableAtParas);
+                    foreach (string str in ap.HisHT.Keys)
+                    {
+                        if (wk.Row.ContainsKey(str))
+                            wk.SetValByKey(str, ap.GetValStrByKey(str));
+                        else
+                            wk.Row.Add(str, ap.GetValStrByKey(str));
+                    }
+                }
+                wk.OID = Int64.Parse(pkValue);
+                wk.Save();
+            }
+
 
 			if (dsDtlsChange == null)
 				return;
@@ -220,7 +242,7 @@ namespace CCFlow.WF.CCForm
 						}
 
 
-						//daDtl.SetValByKey(dtl.RefPK, mainEnPKOID.ToString());
+						daDtl.SetValByKey(dtl.RefPK, pkValue);
 
 						daDtl.RDT = DataType.CurrentDataTime;
 

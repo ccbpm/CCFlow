@@ -31,7 +31,7 @@ namespace CCFlow.WF.CCForm
 		/// <param name="oid">表单主键</param>
 		/// <returns></returns>
 		[WebMethod]
-		public bool GenerExcelFile(string userNo, string sid, string frmID, int oid, ref byte[] bytes)
+		public bool GenerExcelFile(string userNo, string sid, string frmID, string pkValue, ref byte[] bytes)
 		{
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
@@ -46,19 +46,19 @@ namespace CCFlow.WF.CCForm
 				//MapData md = new MapData(frmID);
 				var md = en.DTSMapToSys_MapData();
 
-                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
-                MapFrmExcel mfe = new MapFrmExcel(md.No);
+				//创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+				MapFrmExcel mfe = new MapFrmExcel(md.No);
 
-                return md.ExcelGenerFile(oid, ref bytes, mfe.DBSave);
+				return md.ExcelGenerFile(pkValue, ref bytes, mfe.DBSave);
 			}
 			else
 			{
 				MapData md = new MapData(frmID);
 
-                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
-                MapFrmExcel mfe = new MapFrmExcel(md.No);
+				//创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+				MapFrmExcel mfe = new MapFrmExcel(md.No);
 
-				return md.ExcelGenerFile(oid, ref bytes, mfe.DBSave);
+				return md.ExcelGenerFile(pkValue, ref bytes, mfe.DBSave);
 			}
 		}
 		/// <summary>
@@ -91,7 +91,7 @@ namespace CCFlow.WF.CCForm
 		/// <param name="dsDtlsOld">从表数据（原始）</param>
 		/// <param name="byt">文件流</param>
 		[WebMethod]
-		public void SaveExcelFile(string userNo, string sid, string frmID, int mainEnPKOID, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt)
+		public void SaveExcelFile(string userNo, string sid, string frmID, string pkValue, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt)
 		{
 			//执行登录.
 			BP.WF.Dev2Interface.Port_Login(userNo);
@@ -103,25 +103,25 @@ namespace CCFlow.WF.CCForm
 				Entity en = ens.GetNewEntity;
 				var md = en.DTSMapToSys_MapData();
 
-                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
-                MapFrmExcel mfe = new MapFrmExcel(md.No);
+				//创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+				MapFrmExcel mfe = new MapFrmExcel(md.No);
 
-                md.ExcelSaveFile(mainEnPKOID, byt, mfe.DBSave);
+				md.ExcelSaveFile(pkValue, byt, mfe.DBSave);
 			}
 			else
 			{
 				//执行保存文件.
 				MapData md = new MapData(frmID);
 
-                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
-                MapFrmExcel mfe = new MapFrmExcel(md.No);
+				//创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+				MapFrmExcel mfe = new MapFrmExcel(md.No);
 
-                md.ExcelSaveFile(mainEnPKOID, byt, mfe.DBSave); //把文件保存到该实体对应的数据表的 DBFile 列中。
+				md.ExcelSaveFile(pkValue, byt, mfe.DBSave); //把文件保存到该实体对应的数据表的 DBFile 列中。
 			}
 
 			#region 保存主表数据.
 
-			GEEntity wk = new GEEntity(frmID, mainEnPKOID);
+			GEEntity wk = new GEEntity(frmID, pkValue);
 			wk.ResetDefaultVal();
 
 			if (mainTableAtParas != null)
@@ -136,7 +136,7 @@ namespace CCFlow.WF.CCForm
 				}
 			}
 
-			wk.OID = mainEnPKOID;
+			//wk.OID = pkValue;
 			wk.Save();
 
 			if (dsDtlsChange == null)
@@ -220,7 +220,7 @@ namespace CCFlow.WF.CCForm
 						}
 
 
-						daDtl.SetValByKey(dtl.RefPK, mainEnPKOID.ToString());
+						//daDtl.SetValByKey(dtl.RefPK, mainEnPKOID.ToString());
 
 						daDtl.RDT = DataType.CurrentDataTime;
 

@@ -1,47 +1,119 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>驰骋工作流</title>
-    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <title>绑定列表</title>
+    <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="../../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
 
-    <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="../Comm/Gener.js"></script>
-    <script type="text/javascript" src="../Scripts/config.js"></script>
+        var fk_flow = GetQueryString('FK_Flow');
+        var fk_node = GetQueryString('FK_Node');
 
-    <script type="text/javascript" language="javascript" >
+
         //页面启动函数.
         $(function () {
 
-            //初始化groupID.
-            var flowNo = GetQueryString("FK_Flow");
-            var nodeID = GetQueryString("FK_Node");
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-            var url = window.location.href;
+            InitPage();
 
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
+            $("#Msg").html("");
         });
+
+        //初始化数据.
+        function InitPage() {
+
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            var doType = GetQueryString("DoType");
+            if (doType == "" || doType == null)
+                doType = "TestFlow_Init";
+
+            var fk_flow = GetQueryString("FK_Flow");
+            var doWhat = GetQueryString("DoWhat");
+            var userNo = GetQueryString("UserNo");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=" + doType + "&UserNo=" + userNo + "&DoWhat=" + doWhat + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        var url = data.replace('url@', '');
+                        window.location.href = url;
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    //增加处理.
+                    for (var i = 0; i < data.length; i++) {
+
+                        var newRow = "";
+                        var emp = data[i];
+
+                        newRow = "<tr ><td class=Idx>" + i + "</td>";
+                        newRow += "<td>" + emp.No + "</td>";
+                        newRow += "<td>" + emp.Name + "</td>";
+
+                        var url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + emp.No + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/IE.gif' border=0 />AppACE</a>";
+                        newRow += "<td>" + url + "</td>";
+
+                        url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + emp.No + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/IE.gif' border=0 />经典</a>";
+                        newRow += "<td>" + url + "</td>";
+
+                        url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + emp.No + "&FK_Flow=" + fk_flow + "&IsMobile=1'  ><img src='./../Img/IE.gif' border=0 />手机模式</a>";
+                        newRow += "<td>" + url + "</td>";
+
+                        newRow += "<td>" + emp.FK_DeptText + "</td>";
+                        newRow += "</tr>";
+                        $("#Table1 tr:last").after(newRow);
+                    }
+                }
+            });
+        }
+         
     </script>
 </head>
-<body  >
+<body onkeypress="Esc()" class="easyui-layout">
+    <div data-options="region:'center'">
+        <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+        <caption>流程发起测试</caption>
+            <tr>
+                <th> 序 </th>
+                <th> 编号</th>
+                <th> 名称</th>
+                <th> ACE模式</th>
+                <th> 经典模式</th>
+                <th> 手机模式</th>
+                <th> 所在部门</th>
+            </tr>
 
-<form id="cc">
- 
-<br />
-<center> <img src='../Img/loading.gif' />正在加载，请稍后。。。 </center>
-
-</form>
-
+        </table>
+    </div>
+    <div id="Msg">
+    </div>
 </body>
 </html>

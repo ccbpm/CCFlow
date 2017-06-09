@@ -60,7 +60,6 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="mypk"></param>
         public FrmNodeExt(string mypk)
-            : base(mypk)
         {
         }
          

@@ -66,10 +66,10 @@ namespace BP.Sys
 		/// URL表单(自定义)
 		/// </summary>
 		Url = 3,
-        /// <summary>
-        /// Word类型表单
-        /// </summary>
-        WordFrm = 4,
+		/// <summary>
+		/// Word类型表单
+		/// </summary>
+		WordFrm = 4,
 		/// <summary>
 		/// Excel类型表单
 		/// </summary>
@@ -84,13 +84,13 @@ namespace BP.Sys
 	/// </summary>
 	public class MapDataAttr : EntityNoNameAttr
 	{
-        /// <summary>
-        /// 表单事件实体类
-        /// </summary>
-        public const string FormEventEntity = "FormEventEntity";
-        /// <summary>
-        /// 存储表
-        /// </summary>
+		/// <summary>
+		/// 表单事件实体类
+		/// </summary>
+		public const string FormEventEntity = "FormEventEntity";
+		/// <summary>
+		/// 存储表
+		/// </summary>
 		public const string PTable = "PTable";
 		public const string Dtls = "Dtls";
 		public const string EnPK = "EnPK";
@@ -278,35 +278,35 @@ namespace BP.Sys
 		public const string IsWoEnableDown = "IsWoEnableDown";
 		#endregion weboffice属性。
 
-        #region 参数属性.
-        public const string EnsName = "EnsName";
-        #endregion 参数属性.
-    }
+		#region 参数属性.
+		public const string EnsName = "EnsName";
+		#endregion 参数属性.
+	}
 	/// <summary>
 	/// 映射基础
 	/// </summary>
 	public class MapData : EntityNoName
-    {
-        #region entity 相关属性(参数属性)
-        /// <summary>
-        /// 属性ens
-        /// </summary>
-        public string EnsName
-        {
-            get
-            {
-                return this.GetValStringByKey(MapDataAttr.EnsName);
-            }
-            set
-            {
-                this.SetPara(MapDataAttr.EnsName, value);
-            }
-        }
-        #endregion entity 相关操作.
+	{
+		#region entity 相关属性(参数属性)
+		/// <summary>
+		/// 属性ens
+		/// </summary>
+		public string EnsName
+		{
+			get
+			{
+				return this.GetValStringByKey(MapDataAttr.EnsName);
+			}
+			set
+			{
+				this.SetPara(MapDataAttr.EnsName, value);
+			}
+		}
+		#endregion entity 相关操作.
 
 
-        #region weboffice文档属性(参数属性)
-        /// <summary>
+		#region weboffice文档属性(参数属性)
+		/// <summary>
 		/// 是否启用锁定行
 		/// </summary>
 		public bool IsRowLock
@@ -773,19 +773,19 @@ namespace BP.Sys
 				return obj;
 			}
 		}
-        /// <summary>
-        /// 枚举值
-        /// </summary>
-        public SysEnums SysEnums
+		/// <summary>
+		/// 枚举值
+		/// </summary>
+		public SysEnums SysEnums
 		{
 			get
 			{
 				SysEnums obj = this.GetRefObject("SysEnums") as SysEnums;
 				if (obj == null)
 				{
-                    obj = new SysEnums();
-                    obj.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
-                    this.SetRefObject("SysEnums", obj);
+					obj = new SysEnums();
+					obj.RetrieveInSQL(SysEnumAttr.EnumKey, "SELECT UIBindKey FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "'");
+					this.SetRefObject("SysEnums", obj);
 
 				}
 				return obj;
@@ -839,7 +839,7 @@ namespace BP.Sys
 				return obj;
 			}
 		}
-      
+
 		/// <summary>
 		/// 元素
 		/// </summary>
@@ -970,21 +970,21 @@ namespace BP.Sys
 		}
 		#endregion
 
-        #region 基本属性.
-        /// <summary>
-        /// 表单设计器设计工具
-        /// </summary>
-        public string DesignerTool
-        {
-            get
-            {
-                return this.GetValStringByKey(MapDataAttr.DesignerTool, "Silverlight");
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.DesignerTool, value);
-            }
-        }
+		#region 基本属性.
+		/// <summary>
+		/// 表单设计器设计工具
+		/// </summary>
+		public string DesignerTool
+		{
+			get
+			{
+				return this.GetValStringByKey(MapDataAttr.DesignerTool, "Silverlight");
+			}
+			set
+			{
+				this.SetValByKey(MapDataAttr.DesignerTool, value);
+			}
+		}
 		public static Boolean IsEditDtlModel
 		{
 			get
@@ -1000,70 +1000,70 @@ namespace BP.Sys
 				BP.Web.WebUser.SetSessionByKey("IsEditDtlModel", "1");
 			}
 		}
-        #endregion 基本属性.
+		#endregion 基本属性.
 
-        #region 表单结构数据json
-        /// <summary>
+		#region 表单结构数据json
+		/// <summary>
 		/// 表单图数据
 		/// </summary>
-        public string FormJson
-        {
-            get
-            {
-               // return this.GenerHisFrm();
-                string str = this.GetBigTextFromDB("FormJson");
-                if (str == null || str=="" )
-                {
-                    return "";
-                }
-                return str;
-            }
-            set
-            {
-                this.SaveBigTxtToDB("FormJson", value);
-            }
-        }
-        /// <summary>
-        /// 生成Frm
-        /// </summary>
-        /// <returns></returns>
-        public string GenerHisFrm()
-        {
-            string body = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Body.txt");
+		public string FormJson
+		{
+			get
+			{
+				// return this.GenerHisFrm();
+				string str = this.GetBigTextFromDB("FormJson");
+				if (str == null || str == "")
+				{
+					return "";
+				}
+				return str;
+			}
+			set
+			{
+				this.SaveBigTxtToDB("FormJson", value);
+			}
+		}
+		/// <summary>
+		/// 生成Frm
+		/// </summary>
+		/// <returns></returns>
+		public string GenerHisFrm()
+		{
+			string body = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Body.txt");
 
-            //替换高度宽度.
-            body = body.Replace("@FrmH", this.FrmH.ToString());
-            body = body.Replace("@FrmW", this.FrmW.ToString());
+			//替换高度宽度.
+			body = body.Replace("@FrmH", this.FrmH.ToString());
+			body = body.Replace("@FrmW", this.FrmW.ToString());
 
-            string labTemplate = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Label.txt");
-            string myLabs = "";
-            FrmLabs labs = new FrmLabs(this.No);
-            foreach (FrmLab lab in labs)
-            {
-                string labTxt = labTemplate.Clone() as string;
+			string labTemplate = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfWebApp + "\\WF\\Admin\\CCFormDesigner\\EleTemplate\\Label.txt");
+			string myLabs = "";
+			FrmLabs labs = new FrmLabs(this.No);
+			foreach (FrmLab lab in labs)
+			{
+				string labTxt = labTemplate.Clone() as string;
 
-                labTxt = labTxt.Replace("@MyPK", lab.MyPK);
+				labTxt = labTxt.Replace("@MyPK", lab.MyPK);
 
-                labTxt = labTxt.Replace("@Label", lab.Text);
-                labTxt = labTxt.Replace("@X", lab.X.ToString());
-                labTxt = labTxt.Replace("@Y", lab.Y.ToString());
+				labTxt = labTxt.Replace("@Label", lab.Text);
+				labTxt = labTxt.Replace("@X", lab.X.ToString());
+				labTxt = labTxt.Replace("@Y", lab.Y.ToString());
 
-                float y1 = lab.Y - 20;
-                labTxt = labTxt.Replace("@Y1", y1.ToString());
-                myLabs += labTxt + ",";
-            }
+				float y1 = lab.Y - 20;
+				labTxt = labTxt.Replace("@Y1", y1.ToString());
+				myLabs += labTxt + ",";
+			}
 
-            if (myLabs == "")
-            {
-                body = body.Replace("@Labels", myLabs);
-            }
-            else
-            {
-                myLabs = myLabs.Substring(0, myLabs.Length - 1);
-                body = body.Replace("@Labels", myLabs);
-            }
-            return body;
-        }
+			if (myLabs == "")
+			{
+				body = body.Replace("@Labels", myLabs);
+			}
+			else
+			{
+				myLabs = myLabs.Substring(0, myLabs.Length - 1);
+				body = body.Replace("@Labels", myLabs);
+			}
+			return body;
+		}
 		#endregion
 
 		#region 属性
@@ -1128,19 +1128,19 @@ namespace BP.Sys
 				this.SetValByKey(MapDataAttr.FrmType, (int)value);
 			}
 		}
-        /// <summary>
-        /// 表单类型名称
-        /// </summary>
-        public string HisFrmTypeText
-        {
-            get
-            {
-                return this.HisFrmType.ToString();
+		/// <summary>
+		/// 表单类型名称
+		/// </summary>
+		public string HisFrmTypeText
+		{
+			get
+			{
+				return this.HisFrmType.ToString();
 
-                //  SysEnum se = new SysEnum("FrmType", this.HisFrmTypeInt);
-                // return se.Lab;
-            }
-        }
+				//  SysEnum se = new SysEnum("FrmType", this.HisFrmTypeInt);
+				// return se.Lab;
+			}
+		}
 		/// <summary>
 		/// 备注
 		/// </summary>
@@ -1213,16 +1213,16 @@ namespace BP.Sys
 				this.SetValByKey(MapDataAttr.FK_FormTree, value);
 			}
 		}
-        /// <summary>
-        /// 类别名称
-        /// </summary>
-        public string FK_FormTreeText
-        {
-            get
-            {
-                return DBAccess.RunSQLReturnStringIsNull("SELECT Name FROM Sys_FormTree WHERE No='"+this.No+"'", "数据无");
-            }
-        }
+		/// <summary>
+		/// 类别名称
+		/// </summary>
+		public string FK_FormTreeText
+		{
+			get
+			{
+				return DBAccess.RunSQLReturnStringIsNull("SELECT Name FROM Sys_FormTree WHERE No='" + this.No + "'", "数据无");
+			}
+		}
 		/// <summary>
 		/// 从表集合.
 		/// </summary>
@@ -1337,11 +1337,11 @@ namespace BP.Sys
 				mapAttrs = this.MapAttrs;
 			}
 
-			Map map = new Map(this.PTable,this.Name);
-			map.EnDBUrl = new DBUrl(this.HisDBUrl); 
+			Map map = new Map(this.PTable, this.Name);
+			map.EnDBUrl = new DBUrl(this.HisDBUrl);
 			map.Java_SetEnType(EnType.App);
 			map.Java_SetDepositaryOfEntity(Depositary.None);
-			map.Java_SetDepositaryOfMap( Depositary.Application);
+			map.Java_SetDepositaryOfMap(Depositary.Application);
 
 			Attrs attrs = new Attrs();
 			foreach (MapAttr mapAttr in mapAttrs)
@@ -1473,16 +1473,16 @@ namespace BP.Sys
 				if (this._enMap != null)
 					return this._enMap;
 
-                Map map = new Map("Sys_MapData", "表单注册表");
+				Map map = new Map("Sys_MapData", "表单注册表");
 				map.Java_SetDepositaryOfEntity(Depositary.None);
-				map.Java_SetDepositaryOfMap( Depositary.Application);
+				map.Java_SetDepositaryOfMap(Depositary.Application);
 				map.Java_SetEnType(EnType.Sys);
 				map.Java_SetCodeStruct("4");
 
 				#region 基础信息.
 				map.AddTBStringPK(MapDataAttr.No, null, "编号", true, false, 1, 200, 100);
 				map.AddTBString(MapDataAttr.Name, null, "描述", true, false, 0, 500, 20);
-                map.AddTBString(MapDataAttr.FormEventEntity, null, "事件实体", true, true, 0, 100, 20, true);
+				map.AddTBString(MapDataAttr.FormEventEntity, null, "事件实体", true, true, 0, 100, 20, true);
 
 				map.AddTBString(MapDataAttr.EnPK, null, "实体主键", true, false, 0, 200, 20);
 				map.AddTBString(MapDataAttr.PTable, null, "物理表", true, false, 0, 500, 20);
@@ -1524,7 +1524,7 @@ namespace BP.Sys
 				map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", true, true);
 				map.AddTBString(MapDataAttr.GUID, null, "GUID", true, false, 0, 128, 20);
 				map.AddTBString(MapDataAttr.Ver, null, "版本号", true, false, 0, 30, 20);
-                map.AddTBString(MapDataAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
+				map.AddTBString(MapDataAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
 
 
 				//增加参数字段.
@@ -1552,86 +1552,86 @@ namespace BP.Sys
 		}
 		#endregion
 
-        #region 常用方法.
-        /// <summary>
-        /// 升级逻辑.
-        /// </summary>
-        public void Upgrade()
-        {
-            string sql = "";
-            #region 升级ccform控件.
-            if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLine") == true)
-            {
-                //重命名.
-                BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
-                dbsrc.Rename("Table", "Sys_FrmLine", "Sys_FrmLineBak");
+		#region 常用方法.
+		/// <summary>
+		/// 升级逻辑.
+		/// </summary>
+		public void Upgrade()
+		{
+			string sql = "";
+			#region 升级ccform控件.
+			if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLine") == true)
+			{
+				//重命名.
+				BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
+				dbsrc.Rename("Table", "Sys_FrmLine", "Sys_FrmLineBak");
 
-                /*检查是否升级.*/
-                sql = "SELECT * FROM Sys_FrmLineBak ORDER BY FK_MapData ";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    BP.Sys.FrmEle ele = new FrmEle();
-                    ele.Copy(dr);
-                    ele.EleType = BP.Sys.FrmEle.Line;
-                    //ele.BorderColor = dr["BorderColor"].ToString();
-                    //ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
-                    if (ele.IsExits == true)
-                        ele.MyPK = BP.DA.DBAccess.GenerGUID();
-                    ele.Insert();
-                }
-            }
-            if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLab") == true)
-            {
-                //重命名.
-                BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
-                dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
+				/*检查是否升级.*/
+				sql = "SELECT * FROM Sys_FrmLineBak ORDER BY FK_MapData ";
+				DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+				foreach (DataRow dr in dt.Rows)
+				{
+					BP.Sys.FrmEle ele = new FrmEle();
+					ele.Copy(dr);
+					ele.EleType = BP.Sys.FrmEle.Line;
+					//ele.BorderColor = dr["BorderColor"].ToString();
+					//ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
+					if (ele.IsExits == true)
+						ele.MyPK = BP.DA.DBAccess.GenerGUID();
+					ele.Insert();
+				}
+			}
+			if (BP.DA.DBAccess.IsExitsObject("Sys_FrmLab") == true)
+			{
+				//重命名.
+				BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
+				dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
 
-                /*检查是否升级.*/
-                sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    BP.Sys.FrmEle ele = new FrmEle();
-                    ele.Copy(dr);
-                    ele.EleType = BP.Sys.FrmEle.Label;
+				/*检查是否升级.*/
+				sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
+				DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+				foreach (DataRow dr in dt.Rows)
+				{
+					BP.Sys.FrmEle ele = new FrmEle();
+					ele.Copy(dr);
+					ele.EleType = BP.Sys.FrmEle.Label;
 
-                    ele.EleName = dr[FrmLabAttr.Text].ToString();
+					ele.EleName = dr[FrmLabAttr.Text].ToString();
 
-                    //ele.FontColor = dr[FrmLabAttr.FontColor].ToString();
-                    //ele.FontName = dr[FrmLabAttr.FontName].ToString();
-                    //ele.FontSize = int.Parse(dr[FrmLabAttr.FontSize].ToString());
-                    //ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
+					//ele.FontColor = dr[FrmLabAttr.FontColor].ToString();
+					//ele.FontName = dr[FrmLabAttr.FontName].ToString();
+					//ele.FontSize = int.Parse(dr[FrmLabAttr.FontSize].ToString());
+					//ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
 
-                    if (ele.IsExits == true)
-                        ele.MyPK = BP.DA.DBAccess.GenerGUID();
-                    ele.Insert();
-                }
-            }
-            if (BP.DA.DBAccess.IsExitsObject("Sys_FrmBtn") == true)
-            {
-                //重命名.
-                BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
-                dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
+					if (ele.IsExits == true)
+						ele.MyPK = BP.DA.DBAccess.GenerGUID();
+					ele.Insert();
+				}
+			}
+			if (BP.DA.DBAccess.IsExitsObject("Sys_FrmBtn") == true)
+			{
+				//重命名.
+				BP.Sys.SFDBSrc dbsrc = new SFDBSrc("local");
+				dbsrc.Rename("Table", "Sys_FrmLab", "Sys_FrmLabBak");
 
-                /*检查是否升级.*/
-                sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
-                {
-                    BP.Sys.FrmEle ele = new FrmEle();
-                    ele.Copy(dr);
-                    ele.EleType = BP.Sys.FrmEle.Line;
-                    //ele.BorderColor = dr["BorderColor"].ToString();
-                    //ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
-                    if (ele.IsExits == true)
-                        ele.MyPK = BP.DA.DBAccess.GenerGUID();
-                    ele.Insert();
-                }
-            }
-            #endregion 升级ccform控件.
-        }
-        /// <summary>
+				/*检查是否升级.*/
+				sql = "SELECT * FROM Sys_FrmLabBak ORDER BY FK_MapData ";
+				DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+				foreach (DataRow dr in dt.Rows)
+				{
+					BP.Sys.FrmEle ele = new FrmEle();
+					ele.Copy(dr);
+					ele.EleType = BP.Sys.FrmEle.Line;
+					//ele.BorderColor = dr["BorderColor"].ToString();
+					//ele.BorderWidth = int.Parse(dr["BorderWidth"].ToString());
+					if (ele.IsExits == true)
+						ele.MyPK = BP.DA.DBAccess.GenerGUID();
+					ele.Insert();
+				}
+			}
+			#endregion 升级ccform控件.
+		}
+		/// <summary>
 		/// 导入
 		/// </summary>
 		/// <param name="ds"></param>
@@ -2111,14 +2111,14 @@ namespace BP.Sys
 							}
 							en.MyPK = en.FK_MapData + "_" + en.KeyOfEn;
 
-                            //直接插入.
-                            try
-                            {
-                                en.DirectInsert();
-                            }
-                            catch
-                            {
-                            }
+							//直接插入.
+							try
+							{
+								en.DirectInsert();
+							}
+							catch
+							{
+							}
 						}
 						break;
 					case "Sys_GroupField":
@@ -2219,7 +2219,7 @@ namespace BP.Sys
 				string sqls = "";
 				sqls += "@UPDATE Sys_MapDtl SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
 				sqls += "@UPDATE Sys_MapAttr SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
-                //sqls += "@UPDATE Sys_MapFrame SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
+				//sqls += "@UPDATE Sys_MapFrame SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
 				sqls += "@UPDATE Sys_MapM2M SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
 				sqls += "@UPDATE Sys_FrmAttachment SET GroupID=" + gf.OID + " WHERE FK_MapData='" + this.No + "'";
 				DBAccess.RunSQLs(sqls);
@@ -2230,11 +2230,11 @@ namespace BP.Sys
 				string sqls = "";
 				//sqls += "@UPDATE Sys_MapDtl SET GroupID=" + gfFirst.OID + "        WHERE  No   IN (SELECT X.No FROM (SELECT No FROM Sys_MapDtl WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "')) AS X ) AND FK_MapData='" + this.No + "'";
 				sqls += "@UPDATE Sys_MapAttr SET GroupID=" + gfFirst.OID + "       WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_MapAttr       WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "') or GroupID is null) AS X) AND FK_MapData='" + this.No + "' ";
-                //sqls += "@UPDATE Sys_MapFrame SET GroupID=" + gfFirst.OID + "      WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_MapFrame      WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "')) AS X) AND FK_MapData='" + this.No + "' ";
+				//sqls += "@UPDATE Sys_MapFrame SET GroupID=" + gfFirst.OID + "      WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_MapFrame      WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "')) AS X) AND FK_MapData='" + this.No + "' ";
 				//   sqls += "@UPDATE Sys_MapM2M SET GroupID=" + gfFirst.OID + "        WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_MapM2M        WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "')) AS X) AND FK_MapData='" + this.No + "' ";
 				sqls += "@UPDATE Sys_FrmAttachment SET GroupID=" + gfFirst.OID + " WHERE  MyPK IN (SELECT X.MyPK FROM (SELECT MyPK FROM Sys_FrmAttachment WHERE GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "')) AS X) AND FK_MapData='" + this.No + "' ";
 
-                #warning 这些sql 对于Oracle 有问题，但是不影响使用.
+#warning 这些sql 对于Oracle 有问题，但是不影响使用.
 				try
 				{
 					DBAccess.RunSQLs(sqls);
@@ -2567,9 +2567,9 @@ namespace BP.Sys
 				}
 				else
 				{
-                    // edit by zhoupeng 误删已经有数据的表.
-                    if (DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + this.PTable + " WHERE 1=1 ") == 0)
-                        DBAccess.RunSQL("DROP TABLE " + this.PTable);
+					// edit by zhoupeng 误删已经有数据的表.
+					if (DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + this.PTable + " WHERE 1=1 ") == 0)
+						DBAccess.RunSQL("DROP TABLE " + this.PTable);
 				}
 			}
 
@@ -2610,44 +2610,44 @@ namespace BP.Sys
 			}
 			return " alert( document.forms[0]." + tbPer + "_TB" + me.AttrOfOper + "_" + pk + ".value ) ; \t\n " + left + right;
 		}
-        #endregion 常用方法.
+		#endregion 常用方法.
 
-        #region 与Excel相关的操作 .
-        /// <summary>
+		#region 与Excel相关的操作 .
+		/// <summary>
 		/// 获得Excel文件流
 		/// </summary>
 		/// <param name="oid"></param>
 		/// <returns></returns>
-		public bool ExcelGenerFile(int oid, ref byte[] bytes, string saveTo)
+		public bool ExcelGenerFile(string pkValue, ref byte[] bytes, string saveTo)
 		{
-            byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, oid.ToString(), saveTo);
-            if (by != null)
-            {
-                bytes = by;
-                return true;
-            }
-            else //说明当前excel文件没有生成.
-            {
-                string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
-                if (System.IO.File.Exists(tempExcel) == true)
-                {
-                    bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
-                    return false;
-                }
-                else //模板文件也不存在时
-                {
-                    throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
-                }
-            }
+			byte[] by = BP.DA.DBAccess.GetByteFromDB(this.PTable, this.EnPK, pkValue, saveTo);
+			if (by != null)
+			{
+				bytes = by;
+				return true;
+			}
+			else //说明当前excel文件没有生成.
+			{
+				string tempExcel = BP.Sys.SystemConfig.PathOfDataUser + "\\FrmOfficeTemplate\\" + this.No + ".xlsx";
+				if (System.IO.File.Exists(tempExcel) == true)
+				{
+					bytes = BP.DA.DataType.ConvertFileToByte(tempExcel);
+					return false;
+				}
+				else //模板文件也不存在时
+				{
+					throw new Exception("@没有找到模版文件." + tempExcel + " 请确认表单配置.");
+				}
+			}
 		}
-        /// <summary>
-        /// 保存excel文件
-        /// </summary>
-        /// <param name="oid"></param>
-        /// <param name="bty"></param>
-		public void ExcelSaveFile(int oid, byte[] bty, string saveTo)
+		/// <summary>
+		/// 保存excel文件
+		/// </summary>
+		/// <param name="oid"></param>
+		/// <param name="bty"></param>
+		public void ExcelSaveFile(string pkValue, byte[] bty, string saveTo)
 		{
-            BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, oid.ToString(), saveTo);
+			BP.DA.DBAccess.SaveFileToDB(bty, this.PTable, this.EnPK, pkValue, saveTo);
 		}
 		#endregion 与Excel相关的操作 .
 

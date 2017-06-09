@@ -66,6 +66,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string TempleteFile = "TempleteFile";
         /// <summary>
+        /// 是否显示
+        /// </summary>
+        public const string IsEnable = "IsEnable";
+        /// <summary>
         /// 关键字段
         /// </summary>
         public const string GuanJianZiDuan = "GuanJianZiDuan";
@@ -330,6 +334,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 是否显示
+        /// </summary>
+        public string IsEnable
+        {
+            get
+            {
+                return this.GetValStringByKey(FrmNodeAttr.IsEnable);
+            }
+            set
+            {
+                this.SetValByKey(FrmNodeAttr.IsEnable,value);
+            }
+        }
+        /// <summary>
         /// 关键字段
         /// </summary>
         public string GuanJianZiDuan
@@ -563,10 +581,9 @@ namespace BP.WF.Template
                 
                 //模版文件，对于office表单有效.
                 map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, true, 0, 500, 20);
-
+                //是否显示
+                map.AddTBInt(FrmNodeAttr.IsEnable,1,"是否显示",true,false);
                 map.AddTBString(FrmNodeAttr.GuanJianZiDuan,null,"关键字段",true,true,1,20,20);
-
-             
 
                 this._enMap = map;
                 return this._enMap;
@@ -710,7 +727,7 @@ namespace BP.WF.Template
         /// </summary>
         /// <param name="nodeID">此节点的ID</param>
         /// <returns>转向此节点的集合的Nodes (FromNodes)</returns> 
-        public Nodes GetHisNodes11(int nodeID)
+        public Nodes GetHisNodes(int nodeID)
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(FrmNodeAttr.FK_Frm, nodeID);

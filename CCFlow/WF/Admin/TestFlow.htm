@@ -57,7 +57,12 @@
                 success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
-                        alert(data);
+
+                        if (window.confirm(data) == true) {
+                            window.location.href = './AttrNode/NodeAccepterRole.htm?FK_Node=' + fk_flow + '01';
+                        } else {
+                            window.close();
+                        }
                         return;
                     }
 
@@ -114,7 +119,8 @@
 
         </table>
     </div>
-    <div id="Msg">
-    </div>
+
+    <div id="Msg"></div>
+
 </body>
 </html>

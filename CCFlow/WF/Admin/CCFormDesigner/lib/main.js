@@ -740,7 +740,7 @@ function propertyForm() {
 *If the "snap to" was active and grid made invisible the "snap to"
 *will be disabled
 **/
-function showGrid() {
+function ShowGrid() {
 
     /**If grid was visible and snap to was check we need to take measures*/
     if (gridVisible) {
@@ -3324,9 +3324,9 @@ function exportCanvas() {
 /**Loads a saved diagram
 *@param {String} tempDiagramName - the name of temporary diagram
 **/
-function loadTempDiagram(FK_MapData) {
+function LoadTempDiagram(FK_MapData) {
 
-    $.post(Handler, { action: 'Loadform', FK_MapData: FK_MapData },
+    $.post(Handler, { action: 'FormDesigner_Loadform', FK_MapData: FK_MapData },
         function (data) {
 
             if (data.indexOf('err@') != -1) {
@@ -3337,7 +3337,8 @@ function loadTempDiagram(FK_MapData) {
             try {
 
                 // 装载表单入口.
-                if (data == "" || data == "" || data==null ) {
+                if (data == "" || data == "" || data == null) {
+
                     //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
                     Conver_CCForm_V1ToV2();
                     return;
@@ -3452,7 +3453,7 @@ var currentDiagramId = null;
 /**Initialize the page
 * @param {Integer} diagramId (optional) the diagram Id to load
 * */
-function init(diagramId) {
+function Init_Panel(diagramId) {
 
     var canvas = getCanvas();
 
@@ -3478,7 +3479,7 @@ function init(diagramId) {
     setUpEditPanel(canvasProps);
 
     //loads diagram
-    loadTempDiagram(diagramId);
+    LoadTempDiagram(diagramId);
 
     // close layer when click-out
 

@@ -51,7 +51,7 @@ functrees.push({
                                                 { Type: "Node", Id: "RelatedFunction", ParentId: null, Name: "相关功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [
 						                                { Type: "Node", Id: "FormPreview", ParentId: "RelatedFunction", Name: "表单预览", TType: "NORMAL", DType: "-1", IconCls: "icon-Glasses", Inherits: ["fk_frm"], Url: "../../CCForm/Frm.htm?FK_MapData=@@fk_frm&IsTest=1" },
-						                                { Type: "Node", Id: "FormField", ParentId: "RelatedFunction", Name: "表单字段", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../CCFormDesigner/FiledsList.htm?FK_MapData=@@fk_frm" },
+						                                { Type: "Node", Id: "FormField", ParentId: "RelatedFunction", Name: "表单字段", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../FoolFormDesigner/BatchEdit.htm?FK_MapData=@@fk_frm" },
 						                                { Type: "Node", Id: "FormFool", ParentId: "RelatedFunction", Name: "傻瓜表单设计", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../Admin/FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=@@fk_frm" },
 						                                { Type: "Node", Id: "PageLoadFull", ParentId: "RelatedFunction", Name: "装载填充", TType: "NORMAL", DType: "-1", IconCls: "icon-LoadFull", Inherits: ["fk_frm"], Url: "../FoolFormDesigner/MapExt/PageLoadFull.htm?s=34&FK_MapData=@@fk_frm&ExtType=PageLoadFull" },
 						                                { Type: "Node", Id: "InitScript", ParentId: "RelatedFunction", Name: "内置JS脚本", TType: "NORMAL", DType: "-1", IconCls: "icon-JavaScript", Inherits: ["fk_frm"], Url: "../FoolFormDesigner/MapExt/InitScript.htm?s=34&FK_MapData=@@fk_frm" },
@@ -71,7 +71,7 @@ functrees.push({
                                                 },
                                                 { Type: "Node", Id: "TestFrmFunc", ParentId: null, Name: "实验中的功能", Opened: false, TType: "NORMAL", DType: "-1", IconCls: "icon-FuncFolder", Inherits: ["fk_frm"],
                                                     Nodes: [
-						                                { Type: "Node", Id: "FormHome", ParentId: "TestFrmFunc", Name: "表单主页", TType: "NORMAL", DType: "-1", IconCls: "icon-Home", Inherits: ["fk_frm"], Url: "../CCFormDesigner/DesignerFrm.htm?FK_MapData=@@fk_frm" },
+						                                { Type: "Node", Id: "FormHome", ParentId: "TestFrmFunc", Name: "表单主页", TType: "NORMAL", DType: "-1", IconCls: "icon-Home", Inherits: ["fk_frm"], Url: "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=@@fk_frm" },
                                                         { Type: "Node", Id: "BasicData", ParentId: "TestFrmFunc", Name: "原始数据", TType: "NORMAL", DType: "-1", IconCls: "", Inherits: ["fk_frm"], Url: "../CCFormDesigner/BasicData.htm?FK_MapData=@@fk_frm", },
                                                         ]
                                                 }
@@ -434,7 +434,7 @@ function OnDbClick(oFuncTree) {
     $("#" + oFuncTree.Id).tree({
         //animate: true,
         onClick: function (node) {
-            checklogin();   //check login info
+            Checklogin();   //check login info
             $("#" + oFuncTree.Id).tree('select', node.target);
             //            var msg = '';
             //            if (node.attributes && node.attributes.InheritForChild) {

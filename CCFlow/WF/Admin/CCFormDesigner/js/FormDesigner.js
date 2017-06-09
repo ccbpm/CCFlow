@@ -3,25 +3,30 @@ var figureSetsURL = 'Controls';
 var CCPMB_Form_V = "2";
 
 $(function () {
+
+
     CCForm_FK_MapData = Application.common.getArgsFromHref("FK_MapData");
     CCForm_NodeID = CCForm_FK_MapData.replace("ND", "");
     CCPMB_Form_V = 1;
 
     /**default height for canvas*/
     CanvasProps.DEFAULT_HEIGHT = 1200;
+
     /**default width for canvas*/
     CanvasProps.DEFAULT_WIDTH = 900;
 
     //验证登录用户
-    checklogin();
+   //  Checklogin();
 
     //初始化画板
-    init(CCForm_FK_MapData);
+    Init_Panel(CCForm_FK_MapData);
 
     //显示网格
-    showGrid();
+    ShowGrid();
+
     //右键菜单
     InitContexMenu();
+
     //鼠标双击
     InitDbClick();
 
@@ -170,80 +175,80 @@ function showFigurePropertyWin(figure) {
     var shap = figure.CCForm_Shape;
 
     if (shap == 'TextBoxStr') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段String属性');
         return;
     }
 
     if (shap == 'TextBoxDate') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段Date属性');
         return;
     }
 
     if (shap == 'TextBoxDateTime') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段DateTime属性');
         return;
     }
 
     if (shap == 'TextBoxMoney') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段Money属性');
         return;
     }
 
     if (shap == 'TextBoxDouble') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段Double属性');
         return;
     }
 
     if (shap == 'TextBoxInt') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段Int属性');
         return;
     }
 
     if (shap == 'TextBoxFloat') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段Float属性');
         return;
     }
 
     if (shap == 'DropDownListEnum') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段Enum属性');
         return;
     }
 
     if (shap == 'TextBoxBoolean') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段 Boolen 属性');
         return;
     }
 
     if (shap == 'DropDownListTable') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '字段外键属性');
         return;
     }
 
 
     if (shap == 'Dtl') {
-        var url = '/WF/Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_MapDtl=' + figure.CCForm_MyPK;
+        var url = '../../Admin/FoolFormDesigner/MapDefDtlFreeFrm.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_MapDtl=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '从表/明细表' + figure.CCForm_MyPK + '属性');
         return;
     }
 
     if (shap == 'Image') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmImgs&PK=' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmImgs&PK=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '图片' + figure.CCForm_MyPK + '属性');
         return;
     }
 
     if (shap == 'Button') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmBtns&PK=' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmBtns&PK=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '按钮' + figure.CCForm_MyPK + '属性');
         return;
     }
@@ -251,68 +256,68 @@ function showFigurePropertyWin(figure) {
 
     // 附件类的属性 .... 
     if (shap == 'AthSingle') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '单附件属性');
         return;
     }
 
     if (shap == 'AthMulti') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '多附件属性');
         return;
     }
 
     if (shap == 'AthImg') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmImgAths&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmImgAths&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '图片附件');
         return;
     }
 
     //流程类的组件.
     if (shap == 'FlowChart') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmTracks&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=轨迹组件';
+        var url = '../../Comm/En.htm?EnsName=BP.WF.Template.FrmTracks&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=轨迹组件';
         CCForm_ShowDialog(url, '轨迹组件');
         return;
     }
 
     if (shap == 'FrmCheck') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmWorkChecks&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '../../Comm/En.htm?EnsName=BP.WF.Template.FrmWorkChecks&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '审核组件');
         return;
     }
 
     if (shap == 'SubFlowDtl') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmSubFlows&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '../../Comm/En.htm?EnsName=BP.WF.Template.FrmSubFlows&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '父子流程组件');
         return;
     }
 
     if (shap == 'ThreadDtl') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmThreads&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '../../Comm/En.htm?EnsName=BP.WF.Template.FrmThreads&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '子线程组件');
         return;
     }
 
     if (shap == 'FrmTransferCustom') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.FrmTransferCustoms&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
+        var url = '../../Comm/En.htm?EnsName=BP.WF.Template.FrmTransferCustoms&PK=' + CCForm_FK_MapData.replace('ND', '') + '&tab=子线程组件';
         CCForm_ShowDialog(url, '流转自定义');
         return;
     }
 
     if (shap == 'HyperLink') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmLinks&PK=' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmLinks&PK=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '超链接属性');
         return;
     }
 
     if (shap == 'HyperLink') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmLinks&PK=' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmLinks&PK=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '超链接属性');
         return;
     }
 
     if (shap == 'iFrame') {
-        var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.iFrames&PK=' + figure.CCForm_MyPK;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.iFrames&PK=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '框架');
         return;
     }
@@ -583,24 +588,22 @@ function ReSetEditDivCss() {
 function Conver_CCForm_V1ToV2() {
 
     //transe old CCForm to new
-    $.post( Handler, {
-        action: 'CcformElements',
+    $.post(Handler, {
+        action: 'CCForm_AllElements_ResponseJson',
         FK_MapData: CCForm_FK_MapData,
         FK_Node: CCForm_FK_MapData.substr(2, CCForm_FK_MapData.length)
     }, function (jsonData) {
-
 
         if (jsonData.indexOf('err@') == 0) {
             alert(jsonData);
             return;
         }
 
-
         var flow_Data = $.parseJSON(jsonData);
 
         //循环MapAttr
         for (var mapAtrrIndex in flow_Data.MapAttr) {
-            var mapAttr = flow_Data.MapAttr[mapAtrrIndex];
+            var mapAttr = flow_Data.Sys_MapAttr[mapAtrrIndex];
             var createdFigure = figure_MapAttr_Template(mapAttr);
             if (createdFigure != undefined) {
                 //move it into position
@@ -612,8 +615,8 @@ function Conver_CCForm_V1ToV2() {
         }
 
         //循环FrmLab
-        for (var i in flow_Data.FrmLab) {
-            var frmLab = flow_Data.FrmLab[i];
+        for (var i in flow_Data.Sys_FrmLab) {
+            var frmLab = flow_Data.Sys_FrmLab[i];
             var createdFigure = figure_Template_Label(frmLab);
             //move it into position
             //createdFigure.transform(Matrix.translationMatrix(frmLab.X - createdFigure.rotationCoords[0].x, frmLab.Y - createdFigure.rotationCoords[0].y))
@@ -623,8 +626,8 @@ function Conver_CCForm_V1ToV2() {
         }
 
         //循环FrmRB
-        for (var i in flow_Data.FrmRb) {
-            var frmRb = flow_Data.FrmRb[i];
+        for (var i in flow_Data.Sys_FrmRB) {
+            var frmRb = flow_Data.Sys_FrmRB[i];
             if (i == 0) {
                 var createdFigure = figure_Template_Rb(frmRb);
                 //move it into position
@@ -642,8 +645,9 @@ function Conver_CCForm_V1ToV2() {
         }
 
         //循环FrmBtn
-        for (var i in flow_Data.FrmBtn) {
-            var frmBtn = flow_Data.FrmBtn[i];
+        for (var i in flow_Data.Sys_FrmBtn) {
+            var frmBtn = flow_Data.Sys_FrmBtn[i];
+
             var createdFigure = figure_Template_Btn(frmBtn);
             //move it into position
             //createdFigure.transform(Matrix.translationMatrix(frmBtn.X - createdFigure.rotationCoords[0].x, frmBtn.Y - createdFigure.rotationCoords[0].y))

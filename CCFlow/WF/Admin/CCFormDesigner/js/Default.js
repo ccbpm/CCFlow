@@ -44,7 +44,7 @@ function ajaxServiceDefault(param, callback, scope, levPath) {
     });
 }
 
-function checklogin(fCallback, oScope) {
+function Checklogin(fCallback, oScope) {
     /// <summary>检测登录信息</summary>
     /// <param name="fCallback" type="Function">检测完之后，要运行的方法</param>
     /// <param name="oScope" type="Object">检测完之后，要运行的方法的参数</param>

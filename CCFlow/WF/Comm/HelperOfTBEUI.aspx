@@ -356,6 +356,9 @@
                 if (window.opener.document.getElementById("ContentPlaceHolder1_UCEn1_" + id)) {
                     window.opener.document.getElementById("ContentPlaceHolder1_UCEn1_" + id).value = str;
                 }
+                if (window.opener.document.getElementById(id)) {
+                    window.opener.document.getElementById(id).value = str;
+                }
                 window.close();
             }
             else {//IE...

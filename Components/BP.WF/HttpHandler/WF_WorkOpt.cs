@@ -34,15 +34,364 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string WorkCheck_Init()
         {
-            return "";
+            FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
+            FrmWorkCheck frmWorkCheck = null;
+            FrmAttachmentDBs athDBs = null;
+            Nodes nds = null;
+            Node nd = null;
+            WorkCheck wc = null;
+            Tracks tks = null;
+            string nodes = "";
+            bool isCanDo = false;
+            bool isExitTb_doc = true;
+            DataSet ds = new DataSet();
+            DataRow row = null;
+            string dotype = getUTF8ToString("ShowType");
+
+            ds.Tables.Add(wcDesc.ToDataTableField("wcDesc"));
+
+            DataTable tkDt = new DataTable("Tracks");
+            tkDt.Columns.Add("NodeID", typeof(int));
+            tkDt.Columns.Add("NodeName", typeof(string));
+            tkDt.Columns.Add("Msg", typeof(string));
+            tkDt.Columns.Add("EmpFrom", typeof(string));
+            tkDt.Columns.Add("EmpFromT", typeof(string));
+            tkDt.Columns.Add("RDT", typeof(string));
+            tkDt.Columns.Add("IsDoc", typeof(bool));
+            tkDt.Columns.Add("ParentNode", typeof(int));
+            ds.Tables.Add(tkDt);
+
+            DataTable athDt = new DataTable("Aths");
+            athDt.Columns.Add("NodeID", typeof(int));
+            athDt.Columns.Add("MyPK", typeof(string));
+            athDt.Columns.Add("Href", typeof(string));
+            athDt.Columns.Add("FileName", typeof(string));
+            athDt.Columns.Add("FileExts", typeof(string));
+            athDt.Columns.Add("CanDelete", typeof(string));
+            ds.Tables.Add(athDt);
+
+            if (this.FID != 0)
+                wc = new WorkCheck(this.FK_Flow, this.FK_Node, this.FID, 0);
+            else
+                wc = new WorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+
+            isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
+            //历史审核信息显示
+            if (wcDesc.FWCListEnable)
+            {
+                tks = wc.HisWorkChecks;
+                nds = new Nodes(this.FK_Flow);
+
+                //已走过节点
+                foreach (BP.WF.Track tk in tks)
+                {
+                    switch (tk.HisActionType)
+                    {
+                        case ActionType.WorkCheck:
+                        case ActionType.StartChildenFlow:
+                            if (nodes.Contains(tk.NDFrom + ",") == false)
+                                nodes += tk.NDFrom + ",";
+                            break;
+                        default:
+                            continue;
+                    }
+                }
+
+                foreach (Track tk in tks)
+                {
+                    if (nodes.Contains(tk.NDFrom + ","))
+                    {
+                        if (tk.HisActionType != ActionType.WorkCheck && tk.HisActionType != ActionType.StartChildenFlow)
+                            continue;
+
+                        row = tkDt.NewRow();
+                        row["NodeID"] = tk.NDFrom;
+                        row["NodeName"] = (nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
+                        row["IsDoc"] = false;
+                        row["ParentNode"] = 0;
+                        row["RDT"] = tk.RDT??"";
+                        //审核组件配置字段
+                        frmWorkCheck = new FrmWorkCheck(tk.NDFrom);
+                        //存在审核组件配置字段，则不显示审核意见框
+                        if (!string.IsNullOrEmpty(frmWorkCheck.FWCFields))
+                        {
+                            row["Msg"] = GetFWCFieldsValues(new Attrs(frmWorkCheck.FWCFields),
+                                                            new AtPara(tk.Msg.Replace(";", "@")));
+                        }
+                        else
+                        {
+                            if (dotype != "View" && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
+                                                wcDesc.HisFrmWorkCheckType == FWCType.Check || (
+                                                (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
+                                                ))
+                            {
+                                isExitTb_doc = false;
+                                row["IsDoc"] = true;
+                                row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+                            }
+                            else
+                            {
+                                row["Msg"] = tk.MsgHtml;
+                            }
+                        }
+
+                        row["EmpFrom"] = tk.EmpFrom;
+                        row["EmpFromT"] = tk.EmpFromT;
+
+                        tkDt.Rows.Add(row);
+
+                        #region //审核组件附件数据
+                        athDBs = new FrmAttachmentDBs();
+                        QueryObject obj_Ath = new QueryObject(athDBs);
+                        obj_Ath.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, tk.NDFrom + "_FrmWorkCheck");
+                        obj_Ath.addAnd();
+                        obj_Ath.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                        obj_Ath.addOrderBy(FrmAttachmentDBAttr.RDT);
+                        obj_Ath.DoQuery();
+
+                        foreach (FrmAttachmentDB athDB in athDBs)
+                        {
+                            row = athDt.NewRow();
+
+                            row["NodeID"] = tk.NDFrom;
+                            row["MyPK"] = athDB.MyPK;
+                            row["Href"] = GetFileAction(athDB);
+                            row["FileName"] = athDB.FileName;
+                            row["FileExts"] = athDB.FileExts;
+                            row["CanDelete"] = athDB.FK_MapData == ("ND" + this.FK_Node) && athDB.Rec == WebUser.No && dotype != "View";
+
+                            athDt.Rows.Add(row);
+                        }
+
+                        #endregion
+
+                        #region //子流程的审核组件数据
+                        if (tk.FID != 0 && tk.HisActionType == ActionType.StartChildenFlow && tkDt.Select("ParentNode=" + tk.NDFrom).Length == 0)
+                        {
+                            string[] paras = tk.Tag.Split('@');
+                            string[] p1 = paras[1].Split('=');
+                            string fk_flow = p1[1]; //子流程编号
+
+                            string[] p2 = paras[2].Split('=');
+                            string workId = p2[1]; //子流程ID.
+                            int biaoji = 0;
+
+                            WorkCheck subwc = new WorkCheck(fk_flow, int.Parse(fk_flow + "01"), Int64.Parse(workId), 0);
+
+                            Tracks subtks = subwc.HisWorkChecks;
+                            //取出来子流程的所有的节点。
+                            Nodes subNds = new Nodes(fk_flow);
+                            foreach (Node item in subNds)     //主要按顺序显示
+                            {
+                                foreach (Track mysubtk in subtks)
+                                {
+                                    if (item.NodeID != mysubtk.NDFrom)
+                                        continue;
+
+                                    /*输出该子流程的审核信息，应该考虑子流程的子流程信息, 就不考虑那样复杂了.*/
+                                    if (mysubtk.HisActionType == ActionType.WorkCheck)
+                                    {
+                                        // 发起多个子流程时，发起人只显示一次
+                                        if (mysubtk.NDFrom == int.Parse(fk_flow + "01") && biaoji == 1)
+                                            continue;
+
+                                        row = tkDt.NewRow();
+                                        row["NodeID"] = mysubtk.NDFrom;
+                                        row["NodeName"] = string.Format("(子流程){0}", mysubtk.NDFromT);
+                                        row["Msg"] = mysubtk.MsgHtml;
+                                        row["EmpFrom"] = mysubtk.EmpFrom;
+                                        row["EmpFromT"] = mysubtk.EmpFromT;
+                                        row["RDT"] = mysubtk.RDT??"";
+                                        row["IsDoc"] = false;
+                                        row["ParentNode"] = tk.NDFrom;
+                                        tkDt.Rows.Add(row);
+
+                                        if (mysubtk.NDFrom == int.Parse(fk_flow + "01"))
+                                        {
+                                            biaoji = 1;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        #endregion
+
+                        //todo:抄送暂未处理，不明逻辑
+                        continue;
+                    }
+
+                    //判断是否显示所有步骤
+                    if (wcDesc.FWCIsShowAllStep == false)
+                        continue;
+
+                    //todo:抄送暂未处理，不明逻辑
+                }
+            }
+
+            //审核意见填写
+            if (isExitTb_doc && wcDesc.HisFrmWorkCheckSta == FrmWorkCheckSta.Enable && isCanDo && dotype != "View")
+            {
+                row = tkDt.NewRow();
+                row["NodeID"] = this.FK_Node;
+                row["NodeName"] = (nds.GetEntityByKey(this.FK_Node) as Node).FWCNodeName;
+                row["IsDoc"] = true;
+                row["ParentNode"] = 0;
+                row["RDT"] = "";
+
+                if (!string.IsNullOrEmpty(wcDesc.FWCFields))
+                {
+                    string msg = DBAccess.RunSQLReturnStringIsNull("SELECT MSG FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE  WorkID='" + this.WorkID + "'  AND NDFrom='" + this.FK_Node + "' AND ActionType=" + (int)ActionType.WorkCheck, null);
+
+                    if (string.IsNullOrWhiteSpace(msg) || msg == wcDesc.FWCDefInfo)
+                    {
+                        //todo:不明逻辑
+                        row["Msg"] = "";
+                    }
+                    else
+                    {
+                        row["Msg"] = GetFWCFieldsValues(new Attrs(wcDesc.FWCFields),
+                                                        new AtPara(msg.Replace(";", "@")));
+                    }
+                }
+                else
+                {
+                    row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+                }
+
+                row["EmpFrom"] = WebUser.No;
+                row["EmpFromT"] = WebUser.Name;
+
+                tkDt.Rows.Add(row);
+            }
+
+            return BP.Tools.Json.ToJson(ds);
         }
+
+        private string GetFWCFieldsValues(Attrs attrs, AtPara ap)
+        {
+            //todo:不明逻辑
+            return null;
+        }
+
+        private string GetFileAction(FrmAttachmentDB athDB)
+        {
+            if (athDB == null || athDB.FileExts == "") return "#";
+
+            FrmAttachment athDesc = new FrmAttachment(athDB.FK_FrmAttachment);
+            switch (athDB.FileExts)
+            {
+                case "doc":
+                case "docx":
+                case "xls":
+                case "xlsx":
+                    return "javascript:AthOpenOfiice('" + athDB.FK_FrmAttachment + "','" + this.WorkID + "','" + athDB.MyPK + "','" + athDB.FK_MapData + "','" + athDB.FK_FrmAttachment + "','" + this.FK_Node + "')";
+                case "txt":
+                case "jpg":
+                case "jpeg":
+                case "gif":
+                case "png":
+                case "bmp":
+                case "ceb":
+                    return "javascript:AthOpenView('" + athDB.RefPKVal + "','" + athDB.MyPK + "','" + athDB.FK_FrmAttachment + "','" + athDB.FileExts + "','" + this.FK_Flow + "','" + athDB.FK_MapData + "','" + this.WorkID + "','false')";
+                case "pdf":
+                    return athDesc.SaveTo + this.WorkID + "/" + athDB.MyPK + "." + athDB.FileName;
+            }
+
+            return "javascript:AthDown('" + athDB.FK_FrmAttachment + "','" + this.WorkID + "','" + athDB.MyPK + "','" + athDB.FK_MapData + "','" + this.FK_Flow + "','" + athDB.FK_FrmAttachment + "')";
+        }
+
         /// <summary>
         /// 审核组件保存.
         /// </summary>
         /// <returns></returns>
         public string WorkCheck_Save()
         {
-            return "保存成功.";
+            // 审核信息.
+            string msg = "";
+            string dotype = getUTF8ToString("ShowType");
+            string doc = getUTF8ToString("Doc");
+            bool isCC = getUTF8ToString("IsCC") == "1";
+            //查看时取消保存
+            if (dotype != null && dotype == "View")
+                return "";
+
+            //内容为空，取消保存
+            if (string.IsNullOrEmpty(doc.Trim()))
+                return "";
+
+            string val = string.Empty;
+            FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
+            if (string.IsNullOrEmpty(wcDesc.FWCFields) == false)
+            {
+                //循环属性获取值
+                Attrs fwcAttrs = new Attrs(wcDesc.FWCFields);
+                foreach (Attr attr in fwcAttrs)
+                {
+                    if (attr.UIContralType == UIContralType.TB)
+                    {
+                        val = getUTF8ToString("TB_" + attr.Key);
+
+                        msg += attr.Key + "=" + val + ";";
+                    }
+                    else if (attr.UIContralType == UIContralType.CheckBok)
+                    {
+                        val = getUTF8ToString("CB_" + attr.Key);
+
+                        msg += attr.Key + "=" + Convert.ToInt32(val) + ";";
+                    }
+                    else if (attr.UIContralType == UIContralType.DDL)
+                    {
+                        val = getUTF8ToString("DDL_" + attr.Key);
+
+                        msg += attr.Key + "=" + val + ";";
+                    }
+                }
+            }
+            else
+            {
+                // 加入审核信息.
+                msg = doc;
+            }
+
+            // 处理人大的需求，需要把审核意见写入到FlowNote里面去.
+            string sql = "UPDATE WF_GenerWorkFlow SET FlowNote='" + msg + "' WHERE WorkID=" + this.WorkID;
+            DBAccess.RunSQL(sql);
+
+            // 判断是否是抄送?
+            if (isCC)
+            {
+                // 写入审核信息，有可能是update数据。
+                Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+
+                //设置抄送状态 - 已经审核完毕.
+                Dev2Interface.Node_CC_SetSta(this.FK_Node, this.WorkID, WebUser.No, CCSta.CheckOver);
+            }
+            else
+            {
+                #region 根据类型写入数据  qin
+                if (wcDesc.HisFrmWorkCheckType == FWCType.Check)  //审核组件
+                {
+                    Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                }
+                if (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog)//日志组件
+                {
+                    Dev2Interface.WriteTrackDailyLog(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                }
+                if (wcDesc.HisFrmWorkCheckType == FWCType.WeekLog)//周报
+                {
+                    Dev2Interface.WriteTrackWeekLog(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                }
+                if (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog)//月报
+                {
+                    Dev2Interface.WriteTrackMonthLog(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                }
+                #endregion
+            }
+
+            sql = "SELECT MyPK,RDT FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE NDFrom = " + this.FK_Node + " AND ActionType = " + (int)ActionType.WorkCheck + " AND EmpFrom = '" + WebUser.No + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql, 1, 1, "MyPK", "RDT", "DESC");
+
+            return dt.Rows.Count > 0 ? dt.Rows[0]["RDT"].ToString() : "";
         }
         #endregion
 
@@ -131,7 +480,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns></returns>
         protected override string DoDefaultMethod()
-        { 
+        {
             switch (this.DoType)
             {
 
@@ -142,11 +491,11 @@ namespace BP.WF.HttpHandler
             }
 
             //找不不到标记就抛出异常.
-            throw new Exception("@标记["+this.DoType+"]，没有找到.");
+            throw new Exception("@标记[" + this.DoType + "]，没有找到.");
         }
         #endregion 执行父类的重写方法.
 
-      
+
 
         /// <summary>
         /// 选择权限组
@@ -521,7 +870,7 @@ namespace BP.WF.HttpHandler
             Selector select = new Selector(toNodeID);
 
             //获得 部门与人员.
-            DataSet ds = select.GenerDataSet(toNodeID,wk);
+            DataSet ds = select.GenerDataSet(toNodeID, wk);
 
             //加入到到达节点的列表.
             ds.Tables.Add(dtNodes);

@@ -404,7 +404,6 @@ namespace BP.WF.HttpHandler
             if (DBAccess.IsExitsObject("Port_Emp") == false)
                 return "url@../DBInstall.htm";
 
-
             ////让admin登录
             //if (string.IsNullOrEmpty(BP.Web.WebUser.No) || BP.Web.WebUser.IsAdmin == false)
             //    return "url@Login.htm?DoType=Logout";

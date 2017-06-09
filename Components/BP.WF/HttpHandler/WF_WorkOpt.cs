@@ -54,14 +54,55 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowSkip_Init()
         {
-            string sql = "SELECT NodeID as No, Name FROM WF_Node WHERE FK_Flow='" + this.FK_Flow + "'";
+            Node nd = new Node(this.FK_Node);
+            BP.WF.Template.BtnLab lab = new BtnLab(this.FK_Node);
+
+            string sql = "SELECT NodeID,Name FROM WF_Node WHERE FK_Flow='" + this.FK_Flow + "'";
+            switch (lab.JumpWayEnum)
+            {
+                case JumpWay.Previous:
+                    sql = "SELECT NodeID,Name FROM WF_Node WHERE NodeID IN (SELECT FK_Node FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " )";
+                    break;
+                case JumpWay.Next:
+                    sql = "SELECT NodeID,Name FROM WF_Node WHERE NodeID NOT IN (SELECT FK_Node FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " ) AND FK_Flow='" + this.FK_Flow + "'";
+                    break;
+                case JumpWay.AnyNode:
+                    sql = "SELECT NodeID,Name FROM WF_Node WHERE FK_Flow='" + this.FK_Flow + "' ORDER BY STEP";
+                    break;
+                case JumpWay.JumpSpecifiedNodes:
+                    sql = nd.JumpToNodes;
+                    sql = sql.Replace("@WebUser.No", WebUser.No);
+                    sql = sql.Replace("@WebUser.Name", WebUser.Name);
+                    sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                    if (sql.Contains("@"))
+                    {
+                        Work wk = nd.HisWork;
+                        wk.OID = this.WorkID;
+                        wk.RetrieveFromDBSources();
+                        foreach (Attr attr in wk.EnMap.Attrs)
+                        {
+                            if (sql.Contains("@") == false)
+                                break;
+                            sql = sql.Replace("@" + attr.Key, wk.GetValStrByKey(attr.Key));
+                        }
+                    }
+                    break;
+                case JumpWay.CanNotJump:
+                    return "err@此节点不允许跳转.";
+                default:
+                    return "err@未判断";
+            }
+
+            sql = sql.Replace("~", "'");
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            //如果是oracle,就转成小写.
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["NODEID"].ColumnName = "NodeID";
+                dt.Columns["NAME"].ColumnName = "Name";  
             }
-            return BP.Tools.Json.ToJson(dt);
+            return BP.Tools.Json.DataTableToJson(dt,false);
         }
         /// <summary>
         /// 执行跳转
@@ -69,14 +110,17 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FlowSkip_Do()
         {
-            string sql = "SELECT NodeID as No, Name FROM WF_Node WHERE FK_Flow='" + this.FK_Flow + "'";
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            try
             {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
+                Node ndJump = new Node(this.GetRequestValInt("GoNode") );
+                BP.WF.WorkNode wn = new BP.WF.WorkNode(this.WorkID, this.FK_Node);
+                string msg = wn.NodeSend(ndJump, null).ToMsgOfHtml();
+                return msg;
             }
-            return BP.Tools.Json.ToJson(dt);
+            catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
         #endregion 执行跳转.
 

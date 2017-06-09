@@ -10,21 +10,21 @@ namespace BP.Sys
     /// <summary>
     /// 通用OID实体
     /// </summary>
-    public class GEEntity : Entity
+    public class GEEntityMyPK : Entity
     {
         #region 构造函数
         /// <summary>
         /// 设置或者获取主键值.
         /// </summary>
-        public Int64 OID
+        public string MyPK
         {
             get
             {
-                return this.GetValInt64ByKey("OID");
+                return this.GetValStrByKey("MyPK");
             }
             set
             {
-                this.SetValByKey("OID", value);
+                this.SetValByKey("MyPK", value);
             }
         }
         /// <summary>
@@ -34,7 +34,7 @@ namespace BP.Sys
         {
             get
             {
-                return "OID";
+                return "MyPK";
             }
         }
         /// <summary>
@@ -44,7 +44,7 @@ namespace BP.Sys
         {
             get
             {
-                return "OID";
+                return "MyPK";
             }
         }
         /// <summary>
@@ -69,14 +69,14 @@ namespace BP.Sys
         /// <summary>
         /// 通用OID实体
         /// </summary>
-        public GEEntity()
+        public GEEntityMyPK()
         {
         }
         /// <summary>
         /// 通用OID实体
         /// </summary>
         /// <param name="nodeid">节点ID</param>
-        public GEEntity(string fk_mapdata)
+        public GEEntityMyPK(string fk_mapdata)
         {
             this.FK_MapData = fk_mapdata;
         }
@@ -85,7 +85,7 @@ namespace BP.Sys
         /// </summary>
         /// <param name="nodeid">节点ID</param>
         /// <param name="_oid">OID</param>
-        public GEEntity(string fk_mapdata, object pk)
+        public GEEntityMyPK(string fk_mapdata, string pk)
         {
             this.FK_MapData = fk_mapdata;
             this.PKVal = pk;
@@ -112,15 +112,15 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// GEEntitys
+        /// GEEntityMyPKs
         /// </summary>
         public override Entities GetNewEntities
         {
             get
             {
                 if (this.FK_MapData == null)
-                    return new GEEntitys();
-                return new GEEntitys(this.FK_MapData);
+                    return new GEEntityMyPKs();
+                return new GEEntityMyPKs(this.FK_MapData);
             }
         }
         #endregion
@@ -129,15 +129,15 @@ namespace BP.Sys
         /// 从另外的一个实体来copy数据.
         /// </summary>
         /// <param name="en"></param>
-        public void CopyFromFrm(GEEntity en)
+        public void CopyFromFrm(GEEntityMyPK en)
         {
             //先求出来旧的OID.
-            Int64 oldOID = this.OID;
+            string oldOID = this.MyPK;
 
             //复制主表数据.
             this.Copy(en);
             this.Save();
-            this.OID = oldOID;
+            this.MyPK = oldOID;
 
             //复制从表数据.
             MapDtls dtls = new MapDtls(this.FK_MapData);
@@ -153,7 +153,7 @@ namespace BP.Sys
             foreach (MapDtl dtl in dtls)
             {
                 //删除旧的数据.
-                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.OID);
+                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.MyPK);
 
                 //求对应的Idx的，从表配置.
                 MapDtl dtlFrom = dtlsFrom[i] as MapDtl;
@@ -167,7 +167,7 @@ namespace BP.Sys
                 foreach (GEDtl enDtlFrom in ensDtlFrom)
                 {
                     dtlEnBlank.Copy(enDtlFrom);
-                    dtlEnBlank.RefPK = this.OID.ToString();
+                    dtlEnBlank.RefPK = this.MyPK.ToString();
                     dtlEnBlank.SaveAsNew();
                 }
                 i++;
@@ -179,7 +179,7 @@ namespace BP.Sys
             foreach (FrmAttachment ath in aths)
             {
                 //删除数据,防止copy重复
-                DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='"+this.FK_MapData+"' AND RefPKVal='" + this.OID + "'");
+                DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='" + this.FK_MapData + "' AND RefPKVal='" + this.MyPK + "'");
                 
                 foreach (FrmAttachment athFrom in athsFrom)
                 {
@@ -187,12 +187,12 @@ namespace BP.Sys
                         continue;
 
                     FrmAttachmentDBs athDBsFrom = new FrmAttachmentDBs();
-                    athDBsFrom.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athFrom.MyPK, FrmAttachmentDBAttr.RefPKVal, en.OID.ToString());
+                    athDBsFrom.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athFrom.MyPK, FrmAttachmentDBAttr.RefPKVal, en.MyPK.ToString());
                     foreach (FrmAttachmentDB athDBFrom in athDBsFrom)
                     {
                         athDBFrom.MyPK = BP.DA.DBAccess.GenerGUID();
                         athDBFrom.FK_FrmAttachment = ath.MyPK;
-                        athDBFrom.RefPKVal = this.OID.ToString();
+                        athDBFrom.RefPKVal = this.MyPK.ToString();
                         athDBFrom.Insert();
                     }
 
@@ -203,11 +203,11 @@ namespace BP.Sys
         /// 把当前实体的数据copy到指定的主键数据表里.
         /// </summary>
         /// <param name="oid">指定的主键</param>
-        public void CopyToOID(Int64 oid)
+        public void CopyToOID(string oid)
         {
             //实例化历史数据表单entity.
-            Int64 oidOID = this.OID;
-            this.OID = oid;
+            string oidOID = this.MyPK;
+            this.MyPK = oid;
             this.Save();
 
             //复制从表数据.
@@ -215,13 +215,13 @@ namespace BP.Sys
             foreach (MapDtl dtl in dtls)
             {
                 //删除旧的数据.
-                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.OID);
+                BP.DA.DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE RefPK=" + this.MyPK);
 
                 GEDtls ensDtl = new GEDtls(dtl.No);
                 ensDtl.Retrieve(GEDtlAttr.RefPK, oidOID);
                 foreach (GEDtl enDtl in ensDtl)
                 {
-                    enDtl.RefPK = this.OID.ToString();
+                    enDtl.RefPK = this.MyPK.ToString();
                     enDtl.InsertAsNew();
                 }
             }
@@ -231,7 +231,7 @@ namespace BP.Sys
             foreach (FrmAttachment ath in aths)
             {
                 //删除可能存在的新oid数据。
-                DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='" + this.FK_MapData + "' AND RefPKVal='" + this.OID + "'");
+                DBAccess.RunSQL("DELETE FROM Sys_FrmAttachmentDB WHERE FK_MapData='" + this.FK_MapData + "' AND RefPKVal='" + this.MyPK + "'");
 
                 //找出旧数据.
                 FrmAttachmentDBs athDBs = new FrmAttachmentDBs(this.FK_MapData, oidOID.ToString());
@@ -241,12 +241,12 @@ namespace BP.Sys
                     athDB_N.Copy(athDB);
 
                     athDB_N.FK_MapData = this.FK_MapData;
-                    athDB_N.RefPKVal =this.OID.ToString();
+                    athDB_N.RefPKVal = this.MyPK.ToString();
 
                     if (athDB_N.HisAttachmentUploadType == AttachmentUploadType.Single)
                     {
                         /*如果是单附件.*/
-                        athDB_N.MyPK = athDB_N.FK_FrmAttachment + "_" + this.OID;
+                        athDB_N.MyPK = athDB_N.FK_FrmAttachment + "_" + this.MyPK;
                         if (athDB_N.IsExits == true)
                             continue;  /*说明上一个节点或者子线程已经copy过了, 但是还有子线程向合流点传递数据的可能，所以不能用break.*/
 
@@ -274,7 +274,7 @@ namespace BP.Sys
     /// <summary>
     /// 通用OID实体s
     /// </summary>
-    public class GEEntitys : EntitiesOID
+    public class GEEntityMyPKs : Entities
     {
         #region 重载基类方法
         public override string ToString()
@@ -297,25 +297,22 @@ namespace BP.Sys
         {
             get
             {
-                //if (this.FK_MapData == null)
-                //    throw new Exception("@没有能 FK_MapData 给值。");
-
                 if (this.FK_MapData == null)
-                    return new GEEntity();
-                return new GEEntity(this.FK_MapData);
+                    return new GEEntityMyPK();
+                return new GEEntityMyPK(this.FK_MapData);
             }
         }
         /// <summary>
         /// 通用OID实体ID
         /// </summary>
-        public GEEntitys()
+        public GEEntityMyPKs()
         {
         }
         /// <summary>
         /// 通用OID实体ID
         /// </summary>
         /// <param name="fk_mapdtl"></param>
-        public GEEntitys(string fk_mapdata)
+        public GEEntityMyPKs(string fk_mapdata)
         {
             this.FK_MapData = fk_mapdata;
         }
@@ -326,20 +323,20 @@ namespace BP.Sys
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<GEEntity> ToJavaList()
+        public System.Collections.Generic.IList<GEEntityMyPK> ToJavaList()
         {
-            return (System.Collections.Generic.IList<GEEntity>)this;
+            return (System.Collections.Generic.IList<GEEntityMyPK>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<GEEntity> Tolist()
+        public System.Collections.Generic.List<GEEntityMyPK> Tolist()
         {
-            System.Collections.Generic.List<GEEntity> list = new System.Collections.Generic.List<GEEntity>();
+            System.Collections.Generic.List<GEEntityMyPK> list = new System.Collections.Generic.List<GEEntityMyPK>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((GEEntity)this[i]);
+                list.Add((GEEntityMyPK)this[i]);
             }
             return list;
         }

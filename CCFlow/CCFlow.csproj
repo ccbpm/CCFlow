@@ -1865,34 +1865,6 @@
     <Content Include="WF\AppClassic\Login.htm" />
     <Content Include="WF\AppClassic\Top.htm" />
     <Content Include="WF\AppClassic\Welcome.htm" />
-    <Content Include="WF\App\Classic\AdvFunc.aspx" />
-    <Content Include="WF\App\Classic\Bottom.aspx" />
-    <Content Include="WF\App\Classic\ChangePassword.htm" />
-    <Content Include="WF\App\Classic\Default.aspx" />
-    <Content Include="WF\App\Classic\Img\BJ.jpg" />
-    <Content Include="WF\App\Classic\Img\btlogin.png" />
-    <Content Include="WF\App\Classic\Img\Key.png" />
-    <Content Include="WF\App\Classic\Img\Menu\Batch.png" />
-    <Content Include="WF\App\Classic\Img\Menu\CC.png" />
-    <Content Include="WF\App\Classic\Img\Menu\Emps.png" />
-    <Content Include="WF\App\Classic\Img\Menu\EmpWorks.png" />
-    <Content Include="WF\App\Classic\Img\Menu\GetTask.png" />
-    <Content Include="WF\App\Classic\Img\Menu\HungUp.png" />
-    <Content Include="WF\App\Classic\Img\Menu\Ruing.png" />
-    <Content Include="WF\App\Classic\Img\Menu\Search.png" />
-    <Content Include="WF\App\Classic\Img\Menu\Setting.png" />
-    <Content Include="WF\App\Classic\Img\Menu\Sharing.png" />
-    <Content Include="WF\App\Classic\Img\Menu\Start.png" />
-    <Content Include="WF\App\Classic\Img\Menu\Switch.png" />
-    <Content Include="WF\App\Classic\Img\top.jpg" />
-    <Content Include="WF\App\Classic\Img\TopLeft.jpg" />
-    <Content Include="WF\App\Classic\Img\TopRight.png" />
-    <Content Include="WF\App\Classic\Img\TopRight1.png" />
-    <Content Include="WF\App\Classic\Img\UploadPlugin_2.0.0.3.exe" />
-    <Content Include="WF\App\Classic\Left.aspx" />
-    <Content Include="WF\App\Classic\Login.aspx" />
-    <Content Include="WF\App\Classic\Top.aspx" />
-    <Content Include="WF\App\Classic\Welcome.aspx" />
     <Content Include="WF\AutoTodolist.aspx" />
     <Content Include="WF\AutoTodolist.htm" />
     <Content Include="WF\Batch.aspx" />
@@ -3304,7 +3276,6 @@
     <Content Include="WF\Img\WFState\Save.png" />
     <Content Include="WF\Img\WorkRpt.gif" />
     <Content Include="WF\Img\yaoshi.jpg" />
-    <Content Include="WF\JumpWay.aspx" />
     <Content Include="WF\KeySearch.aspx" />
     <Content Include="WF\KeySearch.htm" />
     <Content Include="WF\Loading.htm" />
@@ -7232,7 +7203,6 @@
     <Content Include="WF\Search.aspx" />
     <Content Include="WF\Search.htm" />
     <Content Include="WF\SendOverClose.htm" />
-    <Content Include="WF\Start.aspx" />
     <Content Include="WF\Start.htm" />
     <Content Include="WF\StartGuide.aspx" />
     <Content Include="WF\StartGuide.htm" />
@@ -7620,7 +7590,6 @@
     <Content Include="WF\Admin\Handler.ashx" />
     <Content Include="WF\Admin\WinOpen.master" />
     <Content Include="WF\Admin\XAP\WebClientDownloadHandler.ashx" />
-    <Content Include="WF\App\Classic\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
     <Content Include="WF\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\CCForm\Handler.ashx" />
@@ -9147,58 +9116,6 @@
     <Compile Include="WF\AppClassic\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\App\Classic\AdvFunc.aspx.cs">
-      <DependentUpon>AdvFunc.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Classic\AdvFunc.aspx.designer.cs">
-      <DependentUpon>AdvFunc.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Classic\Bottom.aspx.cs">
-      <DependentUpon>Bottom.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Classic\Bottom.aspx.designer.cs">
-      <DependentUpon>Bottom.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Classic\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Classic\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Classic\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Classic\Left.aspx.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Classic\Left.aspx.designer.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Classic\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Classic\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Classic\Top.aspx.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Classic\Top.aspx.designer.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\App\Classic\Welcome.aspx.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\App\Classic\Welcome.aspx.designer.cs">
-      <DependentUpon>Welcome.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\AutoTodolist.aspx.cs">
       <DependentUpon>AutoTodolist.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10149,13 +10066,6 @@
     <Compile Include="WF\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\JumpWay.aspx.cs">
-      <DependentUpon>JumpWay.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\JumpWay.aspx.designer.cs">
-      <DependentUpon>JumpWay.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\KeySearch.aspx.cs">
       <DependentUpon>KeySearch.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10543,13 +10453,6 @@
     </Compile>
     <Compile Include="WF\Search.aspx.designer.cs">
       <DependentUpon>Search.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Start.aspx.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Start.aspx.designer.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\StartGuide.aspx.cs">
       <DependentUpon>StartGuide.aspx</DependentUpon>

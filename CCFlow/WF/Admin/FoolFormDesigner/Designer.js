@@ -129,29 +129,29 @@ function Edit(fk_mapdata, mypk, ftype, gf) {
     var title = '';
     if (ftype == 1) {
         title = '字段String属性';
-        url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 2 || ftype == 3 || ftype == 5 || ftype == 8) {
         title = '字段Num属性';
-        url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&PK=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 6 || ftype == 7) {
         title = '字段 date 属性';
 
-        url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 6 || ftype == 7) {
         title = '字段 datetime 属性';
 
-        url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&PK=' + mypk + '&s=' + Math.random();
     }
 
     if (ftype == 4) {
         title = '字段 boolen 属性';
-        url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=' + mypk + '&s=' + Math.random();
+        url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&PK=' + mypk + '&s=' + Math.random();
     }
 
     OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
@@ -163,7 +163,7 @@ function Edit(fk_mapdata, mypk, ftype, gf) {
 }
 
 function EditEnum(fk_mapdata, keyOfEn, mypk, enumKey, gf) {
-    var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
+    var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
 
     OpenEasyUiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
@@ -171,7 +171,7 @@ function EditEnum(fk_mapdata, keyOfEn, mypk, enumKey, gf) {
 }
 
 function EditTable(fk_mapdata, keyOfEn, mypk, sfTable, gf) {
-    var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
+    var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
 
     OpenEasyUiDialog(url, "eudlgframe", '外键' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;

@@ -357,7 +357,7 @@ namespace BP.WF.HttpHandler
         public string Default_Init()
         {
             //让admin登录
-            if (string.IsNullOrEmpty(BP.Web.WebUser.No))
+            if (string.IsNullOrEmpty(BP.Web.WebUser.NoOfRel))
                 return "url@Login.htm?DoType=Logout";
 
             if (BP.Web.WebUser.IsAdmin == false)
@@ -431,7 +431,6 @@ namespace BP.WF.HttpHandler
         {
             BP.Port.Emp emp = new BP.Port.Emp();
             emp.No = this.GetValFromFrmByKey("TB_UserNo");
-
             if (emp.RetrieveFromDBSources() == 0)
                 return "err@用户名或密码错误.";
 

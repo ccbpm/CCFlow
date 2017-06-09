@@ -585,6 +585,15 @@ namespace BP.WF.Template
         }
         protected override bool beforeUpdateInsertAction()
         {
+            if (this.FK_Frm.Length == 0)
+                throw new Exception("@表单编号为空");
+
+            if (this.FK_Node == 0)
+                throw new Exception("@节点ID为空");
+
+            if (this.FK_Flow.Length == 0)
+                throw new Exception("@流程编号为空");
+
             this.MyPK = this.FK_Frm + "_" + this.FK_Node + "_" + this.FK_Flow;
             return base.beforeUpdateInsertAction();
         }

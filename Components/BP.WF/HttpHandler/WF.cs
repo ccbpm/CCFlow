@@ -135,9 +135,15 @@ namespace BP.WF.HttpHandler
         {
             DataTable dt = null;
             dt = BP.WF.Dev2Interface.DB_GenerDraftDataTable();
-
-            //转化大写.
-            return BP.Tools.Json.DataTableToJson(dt,false);
+            return BP.Tools.Json.DataTableToJson(dt, false);
+        }
+        /// <summary>
+        /// 删除草稿.
+        /// </summary>
+        /// <returns></returns>
+        public string Draft_Delete()
+        {
+          return BP.WF.Dev2Interface.Flow_DoDeleteDraft(this.FK_Flow, this.WorkID, false);
         }
         /// <summary>
         /// 初始化待办.

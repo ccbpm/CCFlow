@@ -78,6 +78,7 @@ namespace BP.WF.HttpHandler
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);
             ht.Add("Todolist_Sharing", BP.WF.Dev2Interface.Todolist_Sharing);
             ht.Add("Todolist_Apply", BP.WF.Dev2Interface.Todolist_Apply); //申请下来的任务个数.
+            ht.Add("Todolist_Draft", BP.WF.Dev2Interface.Todolist_Draft); //草稿数量.
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }

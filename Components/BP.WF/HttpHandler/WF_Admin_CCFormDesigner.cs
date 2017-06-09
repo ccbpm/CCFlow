@@ -418,60 +418,68 @@ namespace BP.WF.HttpHandler
 
                 DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
 
-                ////用列名称进行比对 重新设置
-                string mapAttrCols, frmBtnCols, frmRbCols, frmLabCols, sys_FrmLinkCols, sys_FrmImgCols, sys_FrmImgAthCols, sys_FrmAttachmentCols, sys_MapDtlCols, sys_FrmLineCols, figureComCols;
-                #region
-                mapAttrCols = "MyPK,FK_MapData,KeyOfEn,Name,DefVal,UIContralType,MyDataType,LGType,UIWidth,UIHeight,UIBindKey,UIRefKey,UIRefKeyText,UIVisible,UIIsEnable,UIIsLine,UIIsInput,Idx,IsSigan,X,Y,GUID,Tag,EditType,AtPara,ExtDefVal,ExtDefValText,MinLen,MaxLen,ExtRows,IsRichText,IsSupperText,Tip,ColSpan,ColSpanText,GroupID,GroupIDText";
-                frmBtnCols = "MyPK,FK_MapData,Text,X,Y,IsView,IsEnable,BtnType,UAC,UACContext,EventType,EventContext,MsgOK,MsgErr,GUID,GroupID";
-                frmRbCols = "MyPK,FK_MapData,KeyOfEn,EnumKey,Lab,IntKey,X,Y,GUID,Script,FieldsCfg,Tip";
-                frmLabCols = " MyPK,FK_MapData,Text,X,Y,FontSize,FontColor,FontName,FontStyle,FontWeight,IsBold,IsItalic,GUID";
-                sys_FrmLinkCols = "MyPK,FK_MapData,Text,URL,Target,X,Y,FontSize,FontColor,FontName,FontStyle,IsBold,IsItalic,GUID";
-                sys_FrmImgCols = "MyPK,FK_MapData,ImgAppType,X,Y,H,W,ImgURL,ImgPath,LinkURL,LinkTarget,GUID,Tag0,SrcType,IsEdit,Name,EnPK,ImgSrcType";
-                sys_FrmImgAthCols = "MyPK,FK_MapData,CtrlID,X,Y,H,W,IsEdit,GUID,Name,IsRequired";
-                sys_FrmAttachmentCols = "MyPK,FK_MapData,NoOfObj,FK_Node,Name,Exts,SaveTo,Sort,X,Y,W,H,IsUpload,IsDelete,IsDownload,IsOrder,IsAutoSize,IsNote,IsShowTitle,UploadType,CtrlWay,AthUploadWay,AtPara,RowIdx,GroupID,GUID,DeleteWay,IsWoEnableWF,IsWoEnableSave,IsWoEnableReadonly,IsWoEnableRevise,IsWoEnableViewKeepMark,IsWoEnablePrint,IsWoEnableOver,IsWoEnableSeal,IsWoEnableTemplete,IsWoEnableCheck,IsWoEnableInsertFlow,IsWoEnableInsertFengXian,IsWoEnableMarks,IsWoEnableDown,IsRowLock,IsToHeLiuHZ,IsHeLiuHuiZong,IsTurn2Html,AthRunModel";
-                sys_MapDtlCols = "No,Name,FK_MapData,PTable,GroupField,Model,ImpFixTreeSql,ImpFixDataSql,RowIdx,GroupID,RowsOfList,IsEnableGroupField,IsShowSum,IsShowIdx,IsCopyNDData,IsHLDtl,IsReadonly,IsShowTitle,IsView,IsInsert,IsDelete,IsUpdate,IsEnablePass,IsEnableAthM,IsEnableM2M,IsEnableM2MM,WhenOverSize,DtlOpenType,DtlShowModel,X,Y,H,W,FrmW,FrmH,MTR,GUID,FK_Node,AtPara,IsExp,IsImp,IsEnableSelectImp,ImpSQLSearch,ImpSQLInit,ImpSQLFull,FilterSQLExp,SubThreadWorker,SubThreadWorkerText";
-                sys_FrmLineCols = " MyPK,FK_MapData,X,Y,X1,Y1,X2,Y2,BorderWidth,BorderColor,GUID";
-                figureComCols = "Name,No,Sta,X,Y,H,W";
-                #endregion
-                string[] tableCols = new string[11];
+                #region 解决oracle大小写问题.
 
-                ds.Tables[0].TableName = "MapAttr";
-                tableCols[0] = mapAttrCols;
-                ds.Tables[1].TableName = "FrmBtn";
-                tableCols[1] = frmBtnCols;
-                ds.Tables[2].TableName = "FrmRb";
-                tableCols[2] = frmRbCols;
-                ds.Tables[3].TableName = "FrmLab";
-                tableCols[3] = frmLabCols;
-                ds.Tables[4].TableName = "Sys_FrmLink";
-                tableCols[4] = sys_FrmLineCols;
-                ds.Tables[5].TableName = "Sys_FrmImg";
-                tableCols[5] = sys_FrmImgCols;
-                ds.Tables[6].TableName = "Sys_FrmImgAth";
-                tableCols[6] = sys_FrmImgAthCols;
-                ds.Tables[7].TableName = "Sys_FrmAttachment";
-                tableCols[7] = sys_FrmAttachmentCols;
-                ds.Tables[8].TableName = "Sys_MapDtl";
-                tableCols[8] = sys_MapDtlCols;
-                ds.Tables[9].TableName = "Sys_FrmLine";
-                tableCols[9] = sys_FrmLineCols;
-                ds.Tables[10].TableName = "FigureCom";
-                tableCols[10] = figureComCols;
-
-                Dictionary<string, string> dicCols = new Dictionary<string, string>();
-                //将所有的列名进行转换（适应ORACLE） ORACLE 不区分大小写，都是大写
-                for (int i = 0; i < ds.Tables.Count; i++)
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 {
-                    dicCols = (new List<string>(tableCols[i].Split(','))).ToDictionary(m => m.ToString().Trim().ToLower(), m => m.Trim());
-                    DataTable dt = ds.Tables[i];
-                    foreach (DataColumn dc in dt.Columns)
+
+                    ////用列名称进行比对 重新设置
+                    string mapAttrCols, frmBtnCols, frmRbCols, frmLabCols, sys_FrmLinkCols, sys_FrmImgCols, sys_FrmImgAthCols, sys_FrmAttachmentCols, sys_MapDtlCols, sys_FrmLineCols, figureComCols;
+                    mapAttrCols = "MyPK,FK_MapData,KeyOfEn,Name,DefVal,UIContralType,MyDataType,LGType,UIWidth,UIHeight,UIBindKey,UIRefKey,UIRefKeyText,UIVisible,UIIsEnable,UIIsLine,UIIsInput,Idx,IsSigan,X,Y,GUID,Tag,EditType,AtPara,ExtDefVal,ExtDefValText,MinLen,MaxLen,ExtRows,IsRichText,IsSupperText,Tip,ColSpan,ColSpanText,GroupID,GroupIDText";
+                    frmBtnCols = "MyPK,FK_MapData,Text,X,Y,IsView,IsEnable,BtnType,UAC,UACContext,EventType,EventContext,MsgOK,MsgErr,GUID,GroupID";
+                    frmRbCols = "MyPK,FK_MapData,KeyOfEn,EnumKey,Lab,IntKey,X,Y,GUID,Script,FieldsCfg,Tip";
+                    frmLabCols = " MyPK,FK_MapData,Text,X,Y,FontSize,FontColor,FontName,FontStyle,FontWeight,IsBold,IsItalic,GUID";
+                    sys_FrmLinkCols = "MyPK,FK_MapData,Text,URL,Target,X,Y,FontSize,FontColor,FontName,FontStyle,IsBold,IsItalic,GUID";
+                    sys_FrmImgCols = "MyPK,FK_MapData,ImgAppType,X,Y,H,W,ImgURL,ImgPath,LinkURL,LinkTarget,GUID,Tag0,SrcType,IsEdit,Name,EnPK,ImgSrcType";
+                    sys_FrmImgAthCols = "MyPK,FK_MapData,CtrlID,X,Y,H,W,IsEdit,GUID,Name,IsRequired";
+                    sys_FrmAttachmentCols = "MyPK,FK_MapData,NoOfObj,FK_Node,Name,Exts,SaveTo,Sort,X,Y,W,H,IsUpload,IsDelete,IsDownload,IsOrder,IsAutoSize,IsNote,IsShowTitle,UploadType,CtrlWay,AthUploadWay,AtPara,RowIdx,GroupID,GUID,DeleteWay,IsWoEnableWF,IsWoEnableSave,IsWoEnableReadonly,IsWoEnableRevise,IsWoEnableViewKeepMark,IsWoEnablePrint,IsWoEnableOver,IsWoEnableSeal,IsWoEnableTemplete,IsWoEnableCheck,IsWoEnableInsertFlow,IsWoEnableInsertFengXian,IsWoEnableMarks,IsWoEnableDown,IsRowLock,IsToHeLiuHZ,IsHeLiuHuiZong,IsTurn2Html,AthRunModel";
+                    sys_MapDtlCols = "No,Name,FK_MapData,PTable,GroupField,Model,ImpFixTreeSql,ImpFixDataSql,RowIdx,GroupID,RowsOfList,IsEnableGroupField,IsShowSum,IsShowIdx,IsCopyNDData,IsHLDtl,IsReadonly,IsShowTitle,IsView,IsInsert,IsDelete,IsUpdate,IsEnablePass,IsEnableAthM,IsEnableM2M,IsEnableM2MM,WhenOverSize,DtlOpenType,DtlShowModel,X,Y,H,W,FrmW,FrmH,MTR,GUID,FK_Node,AtPara,IsExp,IsImp,IsEnableSelectImp,ImpSQLSearch,ImpSQLInit,ImpSQLFull,FilterSQLExp,SubThreadWorker,SubThreadWorkerText";
+                    sys_FrmLineCols = " MyPK,FK_MapData,X,Y,X1,Y1,X2,Y2,BorderWidth,BorderColor,GUID";
+                    figureComCols = "Name,No,Sta,X,Y,H,W";
+
+
+                    string[] tableCols = new string[11];
+                    ds.Tables[0].TableName = "MapAttr";
+                    tableCols[0] = mapAttrCols;
+                    ds.Tables[1].TableName = "FrmBtn";
+                    tableCols[1] = frmBtnCols;
+                    ds.Tables[2].TableName = "FrmRb";
+                    tableCols[2] = frmRbCols;
+                    ds.Tables[3].TableName = "FrmLab";
+                    tableCols[3] = frmLabCols;
+                    ds.Tables[4].TableName = "Sys_FrmLink";
+                    tableCols[4] = sys_FrmLineCols;
+                    ds.Tables[5].TableName = "Sys_FrmImg";
+                    tableCols[5] = sys_FrmImgCols;
+                    ds.Tables[6].TableName = "Sys_FrmImgAth";
+                    tableCols[6] = sys_FrmImgAthCols;
+                    ds.Tables[7].TableName = "Sys_FrmAttachment";
+                    tableCols[7] = sys_FrmAttachmentCols;
+                    ds.Tables[8].TableName = "Sys_MapDtl";
+                    tableCols[8] = sys_MapDtlCols;
+                    ds.Tables[9].TableName = "Sys_FrmLine";
+                    tableCols[9] = sys_FrmLineCols;
+                    ds.Tables[10].TableName = "FigureCom";
+                    tableCols[10] = figureComCols;
+
+                    Dictionary<string, string> dicCols = new Dictionary<string, string>();
+                    //将所有的列名进行转换（适应ORACLE） ORACLE 不区分大小写，都是大写
+                    for (int i = 0; i < ds.Tables.Count; i++)
                     {
-                        if (dicCols.ContainsKey(dc.ColumnName.ToLower()))
+                        dicCols = (new List<string>(tableCols[i].Split(','))).ToDictionary(m => m.ToString().Trim().ToLower(), m => m.Trim());
+                        DataTable dt = ds.Tables[i];
+                        foreach (DataColumn dc in dt.Columns)
                         {
-                            dc.ColumnName = dicCols[dc.ColumnName.ToLower()];
+                            if (dicCols.ContainsKey(dc.ColumnName.ToLower()))
+                            {
+                                dc.ColumnName = dicCols[dc.ColumnName.ToLower()];
+                            }
                         }
                     }
                 }
+                #endregion 解决oracle大小写问题.
+
+
                 return BP.Tools.Json.ToJson(ds);
             }
             catch (Exception ex)
@@ -558,7 +566,6 @@ namespace BP.WF.HttpHandler
             }
             return attrs.ToJson();
         }
-
         /// <summary>
         /// 删除字段
         /// </summary>

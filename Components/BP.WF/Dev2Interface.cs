@@ -57,19 +57,15 @@ namespace BP.WF
             {
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                string wfSql = "  WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + "  OR WFState=" + (int)WFState.AskForReplay + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + " OR WFState=" + (int)WFState.Fix;
-                string sql;
 
                 if (WebUser.IsAuthorize == false)
                 {
                     /*不是授权状态*/
                     if (BP.WF.Glo.IsEnableTaskPool == true)
-                        ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 ";
+                        ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 ";
                     else
-                        ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ";
-
+                        ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
                     ps.Add("FK_Emp", BP.Web.WebUser.No);
-                    //throw new Exception(ps.SQL);
 
                     //  BP.DA.Log.DebugWriteInfo(ps.SQL);
                     return BP.DA.DBAccess.RunSQLReturnValInt(ps);
@@ -81,25 +77,25 @@ namespace BP.WF
                 {
                     case Port.AuthorWay.All:
                         if (BP.WF.Glo.IsEnableTaskPool == true)
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1  ";
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1  ";
                         else
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ";
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
                         ps.Add("FK_Emp", BP.Web.WebUser.No);
                         break;
                     case Port.AuthorWay.SpecFlows:
                         if (BP.WF.Glo.IsEnableTaskPool == true)
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta!=0   ";
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta!=0   ";
                         else
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows;
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows;
 
                         ps.Add("FK_Emp", BP.Web.WebUser.No);
                         break;
                     case Port.AuthorWay.None:
                         /*不是授权状态 */
                         if (BP.WF.Glo.IsEnableTaskPool == true)
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 ";
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 ";
                         else
-                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ";
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
 
                         ps.Add("FK_Emp", BP.Web.WebUser.No);
                         return BP.DA.DBAccess.RunSQLReturnValInt(ps);
@@ -1131,12 +1127,12 @@ namespace BP.WF
             BP.DA.Paras ps = new BP.DA.Paras();
             if (flowNo == null)
             {
-                ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter ORDER BY RDT";
+                ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter ORDER BY RDT";
                 ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
             }
             else
             {
-                ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND FK_Flow=" + dbStr + "FK_Flow ORDER BY RDT";
+                ps.SQL = "SELECT WorkID,Title,FK_Flow,FlowName,RDT,FlowNote,AtPara FROM WF_GenerWorkFlow A WHERE WFState=1 AND Starter=" + dbStr + "Starter AND FK_Flow=" + dbStr + "FK_Flow ORDER BY RDT";
                 ps.Add(GenerWorkFlowAttr.FK_Flow, flowNo);
                 ps.Add(GenerWorkFlowAttr.Starter, BP.Web.WebUser.No);
             }
@@ -1150,6 +1146,7 @@ namespace BP.WF
                 dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["ATPARA"].ColumnName = "AtPara";
             }
             return dt;
         }
@@ -1667,11 +1664,7 @@ namespace BP.WF
             if (WebUser.IsAuthorize == false)
             {
                 /*不是授权状态*/
-                if (BP.WF.Glo.IsEnableTaskPool == true)
-                    ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1  ORDER BY ADT DESC";
-                else
-                    ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ORDER BY ADT DESC";
-
+                ps.SQL = "SELECT * FROM WF_EmpWorks WHERE (" + wfSql + ") AND FK_Emp=" + dbstr + "FK_Emp ORDER BY ADT DESC";
                 ps.Add("FK_Emp", BP.Web.WebUser.No);
                 return BP.DA.DBAccess.RunSQLReturnTable(ps);
             }
@@ -3857,12 +3850,19 @@ namespace BP.WF
             // 转化成编号.
             flowNo = TurnFlowMarkToFlowNo(flowNo);
 
-            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            Paras ps = new Paras();
-            ps.SQL = "DELETE WF_GenerWorkFlow WHERE WorkID=" + dbstr + "WorkID";
-            ps.Add("WorkID", workID);
-            BP.DA.DBAccess.RunSQL(ps);
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = workID;
+            gwf.RetrieveFromDBSources();
+            if (gwf.Starter != WebUser.No && WebUser.IsAdmin == false)
+                return "err@流程不是您发起的，或者您不是管理员所以您不能删除该草稿。";
 
+            //删除流程。
+            gwf.Delete();
+
+            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            
+            Paras ps = new Paras();
+            
             Flow fl = new Flow(flowNo);
             ps = new Paras();
             ps.SQL = "DELETE " + fl.PTable + " WHERE OID=" + dbstr + "OID";
@@ -3879,7 +3879,7 @@ namespace BP.WF
 
             BP.DA.Log.DefaultLogWriteLineInfo(WebUser.Name + "删除了FlowNo 为'" + flowNo + "',workID为'" + workID + "'的数据");
 
-            return "删除成功";
+            return "草稿删除成功";
         }
         /// <summary>
         /// 删除已经完成的流程

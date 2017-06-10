@@ -556,6 +556,29 @@ namespace BP.Sys
             md.Insert();
         }
         /// <summary>
+        /// 修复表单.
+        /// </summary>
+        /// <param name="frmID"></param>
+        public static void RepareCCForm(string frmID)
+        {
+            MapAttr attr = new MapAttr();
+            if (attr.IsExit(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, frmID) == false)
+            {
+                attr.FK_MapData = frmID;
+                attr.KeyOfEn = "OID";
+                attr.Name = "主键";
+                attr.MyDataType = BP.DA.DataType.AppInt;
+                attr.UIContralType = UIContralType.TB;
+                attr.LGType = FieldTypeS.Normal;
+                attr.UIVisible = false;
+                attr.UIIsEnable = false;
+                attr.DefVal = "0";
+                attr.HisEditType = BP.En.EditType.Readonly;
+                attr.Insert();
+            }
+            
+        }
+        /// <summary>
         /// 执行保存
         /// </summary>
         /// <param name="fk_mapdata"></param>

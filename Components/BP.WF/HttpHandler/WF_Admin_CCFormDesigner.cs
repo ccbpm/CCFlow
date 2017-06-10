@@ -214,6 +214,9 @@ namespace BP.WF.HttpHandler
             }
             md.Insert();
 
+            //增加上OID字段.
+            BP.Sys.CCFormAPI.RepareCCForm(md.No);
+
             if (md.HisFrmType == BP.Sys.FrmType.WordFrm || md.HisFrmType == BP.Sys.FrmType.ExcelFrm)
             {
                 /*把表单模版存储到数据库里 */

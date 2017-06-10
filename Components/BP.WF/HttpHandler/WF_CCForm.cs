@@ -431,96 +431,107 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmFree_Init()
         {
-            MapData md = new MapData(this.EnsName);
-            DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
-
-            #region 把主表数据放入.
-            string atParas = "";
-            //主表实体.
-            GEEntity en = new GEEntity(this.EnsName);
-
-            #region 求出 who is pk 值.
-            Int64 pk = this.RefOID;
-            if (pk == 0)
-                pk = this.OID;
-            if (pk == 0)
-                pk = this.WorkID;
-
-            if (this.FK_Node !=  0  && string.IsNullOrEmpty(this.FK_Flow) == false)
+            try
             {
-                /*说明是流程调用它， 就要判断谁是表单的PK.*/
-                FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
-                switch (fn.WhoIsPK)
+                MapData md = new MapData(this.EnsName);
+                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
+
+                #region 把主表数据放入.
+                string atParas = "";
+                //主表实体.
+                GEEntity en = new GEEntity(this.EnsName);
+
+                #region 求出 who is pk 值.
+                Int64 pk = this.RefOID;
+                if (pk == 0)
+                    pk = this.OID;
+                if (pk == 0)
+                    pk = this.WorkID;
+
+                if (this.FK_Node != 0 && string.IsNullOrEmpty(this.FK_Flow) == false)
                 {
-                    case WhoIsPK.FID:
-                        pk = this.FID;
-                        if (pk == 0)
-                            throw new Exception("@没有接收到参数FID");
-                        break;
-                    case WhoIsPK.PWorkID: /*父流程ID*/
-                        pk = this.PWorkID;
-                        if (pk == 0)
-                            throw new Exception("@没有接收到参数PWorkID");
-                        break;
-                    case WhoIsPK.OID:
-                    default:
-                        break;
+                    /*说明是流程调用它， 就要判断谁是表单的PK.*/
+                    FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                    switch (fn.WhoIsPK)
+                    {
+                        case WhoIsPK.FID:
+                            pk = this.FID;
+                            if (pk == 0)
+                                throw new Exception("@没有接收到参数FID");
+                            break;
+                        case WhoIsPK.PWorkID: /*父流程ID*/
+                            pk = this.PWorkID;
+                            if (pk == 0)
+                                throw new Exception("@没有接收到参数PWorkID");
+                            break;
+                        case WhoIsPK.OID:
+                        default:
+                            break;
+                    }
                 }
-            }
-            #endregion  求who is PK.
+                #endregion  求who is PK.
 
-            en.OID = pk;
-            if (en.RetrieveFromDBSources() == 0)
-                en.Insert();
+                en.OID = pk;
+                if (en.RetrieveFromDBSources() == 0)
+                    en.Insert();
 
-            //把参数放入到 En 的 Row 里面。
-            if (string.IsNullOrEmpty(atParas) == false)
-            {
-                AtPara ap = new AtPara(atParas);
-                foreach (string key in ap.HisHT.Keys)
+                //把参数放入到 En 的 Row 里面。
+                if (string.IsNullOrEmpty(atParas) == false)
                 {
-                    if (en.Row.ContainsKey(key) == true) //有就该变.
-                        en.Row[key] = ap.GetValStrByKey(key);
-                    else
-                        en.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                    AtPara ap = new AtPara(atParas);
+                    foreach (string key in ap.HisHT.Keys)
+                    {
+                        if (en.Row.ContainsKey(key) == true) //有就该变.
+                            en.Row[key] = ap.GetValStrByKey(key);
+                        else
+                            en.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                    }
                 }
-            }
 
-            if (BP.Sys.SystemConfig.IsBSsystem == true)
-            {
-                // 处理传递过来的参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
-                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    // 处理传递过来的参数。
+                    foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                    {
+                        en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    }
                 }
+
+                // 执行表单事件..
+                string msg = md.FrmEvents.DoEventNode(FrmEventList.FrmLoadBefore, en);
+                if (string.IsNullOrEmpty(msg) == false)
+                    throw new Exception("err@错误:" + msg);
+
+                //重设默认值.
+                en.ResetDefaultVal();
+
+                //执行装载填充.
+                MapExt me = new MapExt();
+                if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.EnsName) == 1)
+                {
+                    //执行通用的装载方法.
+                    MapAttrs attrs = new MapAttrs(this.EnsName);
+                    MapDtls dtls = new MapDtls(this.EnsName);
+                    en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                }
+
+                //增加主表数据.
+                DataTable mainTable = en.ToDataTableField(md.No);
+                mainTable.TableName = "MainTable";
+
+                ds.Tables.Add(mainTable);
+                #endregion 把主表数据放入.
+
+                return BP.Tools.Json.DataSetToJson(ds, false);
             }
-
-            // 执行表单事件..
-            string msg = md.FrmEvents.DoEventNode(FrmEventList.FrmLoadBefore, en);
-            if (string.IsNullOrEmpty(msg) == false)
-                throw new Exception("err@错误:" + msg);
-
-            //重设默认值.
-            en.ResetDefaultVal();
-
-            //执行装载填充.
-            MapExt me = new MapExt();
-            if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, this.EnsName) == 1)
+            catch (Exception ex)
             {
-                //执行通用的装载方法.
-                MapAttrs attrs = new MapAttrs(this.EnsName);
-                MapDtls dtls = new MapDtls(this.EnsName);
-                en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
+                GEEntity myen = new GEEntity(this.EnsName);
+                myen.CheckPhysicsTable();
+
+                BP.Sys.CCFormAPI.RepareCCForm(this.EnsName);
+                return "err@装载表单期间出现如下错误,ccform有自动诊断修复功能请在刷新一次，如果仍然存在请联系管理员. @" + ex.Message;
             }
-
-            //增加主表数据.
-            DataTable mainTable = en.ToDataTableField(md.No);
-            mainTable.TableName = "MainTable";
-
-            ds.Tables.Add(mainTable);
-            #endregion 把主表数据放入.
-
-            return BP.Tools.Json.DataSetToJson(ds, false);
         }
         /// <summary>
         /// 执行保存

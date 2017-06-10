@@ -6889,9 +6889,14 @@ namespace BP.WF
                     if (fl.DraftRole == DraftRole.SaveToTodolist)
                         wfState = WFState.Runing;
 
+                    //设置标题.
+                    string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
+
 
                     gwf.WorkID = workID;
                     int i = gwf.RetrieveFromDBSources();
+
+                    gwf.Title = title; //标题.
                     if (i == 0)
                     {
                         gwf.FlowName = fl.Name;
@@ -6905,11 +6910,11 @@ namespace BP.WF
 
                         gwf.FK_Dept = WebUser.FK_Dept;
                         gwf.DeptName = WebUser.FK_DeptName;
-                        gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
                         gwf.Starter = WebUser.No;
                         gwf.StarterName = WebUser.Name;
                         gwf.RDT = DataType.CurrentDataTime;
                         gwf.Insert();
+
                         // 产生工作列表.
                         GenerWorkerList gwl = new GenerWorkerList();
                         gwl.WorkID = workID;
@@ -6944,7 +6949,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                return "保存失败:" + ex.Message;
+                return "err@保存失败:" + ex.Message;
             }
         }
         /// <summary>

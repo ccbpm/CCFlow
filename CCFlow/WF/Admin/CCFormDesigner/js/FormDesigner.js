@@ -482,9 +482,9 @@ function CCForm_ShowDialog(url, title) {
 
     if (plant == 'JFlow') {
         url = url.replace('.aspx', '.jsp');
-        OpenEasyUiDialog(url, 'eudlg', title, 860, 560, 'icon-library', false);
+        OpenEasyUiDialog(url, 'eudlgframe', title, 860, 560, 'icon-library', false);
     } else {
-        OpenEasyUiDialog(url, 'eudlg', title, 860, 560, 'icon-library', false);
+        OpenEasyUiDialog(url, 'eudlgframe', title, 860, 560, 'icon-library', false);
     }
 }
 

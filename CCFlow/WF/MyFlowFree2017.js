@@ -2617,7 +2617,7 @@ function analysisFontStyle(ele, fontStyle, isBold, isItalic) {
     if (fontStyle!=undefined && fontStyle.indexOf(':') > 0) {
         var fontStyleArr = fontStyle.split(';');
         $.each(fontStyleArr, function (i,fontStyleObj) {
-            ele.css(fontStyleObj.split(':')[0], fontStyleObj.split(':')[1]);
+            ele.css(fontStyleObj.split(':')[0],TranColorToHtmlColor(fontStyleObj.split(':')[1]));
         });
     }
     else {

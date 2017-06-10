@@ -370,7 +370,8 @@ namespace BP.Sys
                         lab.Text = val == null ? "" : val.ToString().Replace(" ", "&nbsp;").Replace("\n", "@");
                         break;
                     case "Color":
-                        lab.FontColor = val == null ? "#FF000000" : val.ToString();
+                        // lab.FontColor = val == null ? "#FF000000" : val.ToString();
+                        lab.FontColor = val == null ? "#000000" : val.ToString();
                         fontStyle.Append(string.Format("color:{0};", lab.FontColor));
                         break;
                     case "TextFontFamily":

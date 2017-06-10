@@ -163,8 +163,8 @@
                     return;
                 }
 
-                $('#TB_No').val(data);
-                $('#TB_PTable').val(data);
+                $('#TB_No').val("CCFrm_"+data);
+                $('#TB_PTable').val("CCFrm_" + data);
                 return;
             }
         });
@@ -184,7 +184,6 @@
         }
 
         var frmData = $("#cc").serialize();
-        alert(frmData);
 
         $.ajax({
             data: frmData,

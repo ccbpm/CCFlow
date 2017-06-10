@@ -13,14 +13,16 @@
             var paras = url.substring(idx + 4);
 
             if (plant == "CCFlow") {
-                window.location.href = '/WF/Comm/RefFunc/UIEn.aspx' + paras;
+                window.location.href = '/WF/Comm/RefFunc/UIEn.aspx' + paras +'&inlayer=1';
                 return;
             }
 
-            window.location.href = '/WF/Comm/RefFunc/UIEn.jsp' + paras;
+            window.location.href = '/WF/Comm/RefFunc/UIEn.jsp' + paras + '&inlayer=1';
         }
 
-       window.name = "curWindow";
+      
+
+        window.name = "eudlg";
     </script>
     <base target=_self />
 

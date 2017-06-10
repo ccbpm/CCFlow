@@ -358,7 +358,6 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Save).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 
         if (this.ToolBar1.IsExit(NamesOfBtn.SaveAndClose))
-
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.SaveAndClose).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 
         if (this.ToolBar1.IsExit(NamesOfBtn.SaveAndNew))
@@ -460,6 +459,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                     {
                         this.Save();
                         //this.WinClose();
+
                         string script = "function ParentWindowClose() {";
                         script += "   if(window.parent && window.parent.Win_Close_Dialog){";
                         script += "      window.parent.Win_Close_Dialog();";

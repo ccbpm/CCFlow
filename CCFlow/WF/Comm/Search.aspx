@@ -30,6 +30,7 @@
             var url = './Sys/EnsAppCfg.aspx?EnsName=' + ensName + '&inlayer=1&t=' + Math.random();
             OpenDialogAndCloseRefresh(url, "…Ë÷√", 720, 500, "icon-edit");
         }
+
         function closeDlg() {
             $("#eudlg").dialog("close");
         }

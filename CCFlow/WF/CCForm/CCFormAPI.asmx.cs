@@ -120,7 +120,6 @@ namespace CCFlow.WF.CCForm
 			}
 
 			#region 保存主表数据.
-
             if (pkValue.Contains("_") == true)
             {
                 GEEntityMyPK wk = new GEEntityMyPK(frmID, pkValue);
@@ -226,9 +225,7 @@ namespace CCFlow.WF.CCForm
 					foreach (DataRow dr in dt.Rows)
 					{
 						GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
-
 						daDtl.OID = int.Parse(dr["OID"].ToString());
-
 						if (daDtl.OID > 100)
 							daDtl.RetrieveFromDBSources();
 
@@ -255,7 +252,9 @@ namespace CCFlow.WF.CCForm
 			}
 			#endregion 保存从表结束
 
+
 			//缺少表单保存后的方法.
+
 		}
 		/// <summary>
 		/// 级联接口

@@ -482,9 +482,9 @@ function CCForm_ShowDialog(url, title) {
 
     if (plant == 'JFlow') {
         url = url.replace('.aspx', '.jsp');
-        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, 860, 560, 'icon-library', false);
+        OpenEasyUiDialog(url, 'eudlg', title, 860, 560, 'icon-library', false);
     } else {
-        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, 860, 560, 'icon-library', false);
+        OpenEasyUiDialog(url, 'eudlg', title, 860, 560, 'icon-library', false);
     }
 }
 
@@ -602,7 +602,7 @@ function Conver_CCForm_V1ToV2() {
         var flow_Data = $.parseJSON(jsonData);
 
         //循环MapAttr
-        for (var mapAtrrIndex in flow_Data.MapAttr) {
+        for (var mapAtrrIndex in flow_Data.Sys_MapAttr) {
             var mapAttr = flow_Data.Sys_MapAttr[mapAtrrIndex];
             var createdFigure = figure_MapAttr_Template(mapAttr);
             if (createdFigure != undefined) {

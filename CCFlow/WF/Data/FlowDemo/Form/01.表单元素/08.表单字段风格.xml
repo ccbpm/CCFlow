@@ -1,0 +1,1336 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_GroupField>
+    <OID>2083</OID>
+    <Lab>基础信息</Lab>
+    <EnName>CCFrm_BiaoDanZiDuanFengGe</EnName>
+    <Idx>1</Idx>
+    <GUID />
+    <CtrlType />
+    <CtrlID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_Enum>
+    <MyPK>CeShiMoShi_CH_0</MyPK>
+    <Lab>强办模式</Lab>
+    <EnumKey>CeShiMoShi</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>CeShiMoShi_CH_1</MyPK>
+    <Lab>协作模式</Lab>
+    <EnumKey>CeShiMoShi</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>CeShiMoShi_CH_2</MyPK>
+    <Lab>队列模式</Lab>
+    <EnumKey>CeShiMoShi</EnumKey>
+    <IntKey>2</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>CeShiMoShi_CH_3</MyPK>
+    <Lab>共享模式</Lab>
+    <EnumKey>CeShiMoShi</EnumKey>
+    <IntKey>3</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FaWenZhongLei_CH_0</MyPK>
+    <Lab>通知</Lab>
+    <EnumKey>FaWenZhongLei</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FaWenZhongLei_CH_1</MyPK>
+    <Lab>决定</Lab>
+    <EnumKey>FaWenZhongLei</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FaWenZhongLei_CH_2</MyPK>
+    <Lab>公告</Lab>
+    <EnumKey>FaWenZhongLei</EnumKey>
+    <IntKey>2</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FaWenZhongLei_CH_3</MyPK>
+    <Lab>通告</Lab>
+    <EnumKey>FaWenZhongLei</EnumKey>
+    <IntKey>3</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FaWenZhongLei_CH_4</MyPK>
+    <Lab>意见</Lab>
+    <EnumKey>FaWenZhongLei</EnumKey>
+    <IntKey>4</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FaWenZhongLei_CH_5</MyPK>
+    <Lab>通报</Lab>
+    <EnumKey>FaWenZhongLei</EnumKey>
+    <IntKey>5</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FaWenZhongLei_CH_6</MyPK>
+    <Lab>请示</Lab>
+    <EnumKey>FaWenZhongLei</EnumKey>
+    <IntKey>6</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FaWenZhongLei_CH_7</MyPK>
+    <Lab>批复函</Lab>
+    <EnumKey>FaWenZhongLei</EnumKey>
+    <IntKey>7</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FaWenZhongLei_CH_8</MyPK>
+    <Lab>纪要</Lab>
+    <EnumKey>FaWenZhongLei</EnumKey>
+    <IntKey>8</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_0</MyPK>
+    <Lab>汽车票</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_1</MyPK>
+    <Lab>打的票</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_2</MyPK>
+    <Lab>火车票</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>2</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_3</MyPK>
+    <Lab>飞机票</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>3</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_4</MyPK>
+    <Lab>其它</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>4</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>QingJiaLeiXing_CH_0</MyPK>
+    <Lab>事假</Lab>
+    <EnumKey>QingJiaLeiXing</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>QingJiaLeiXing_CH_1</MyPK>
+    <Lab>病假</Lab>
+    <EnumKey>QingJiaLeiXing</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>QingJiaLeiXing_CH_2</MyPK>
+    <Lab>婚假</Lab>
+    <EnumKey>QingJiaLeiXing</EnumKey>
+    <IntKey>2</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_MapData>
+    <No>CCFrm_BiaoDanZiDuanFengGe</No>
+    <Name>表单字段风格</Name>
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableWidth>800</TableWidth>
+    <TableHeight>900</TableHeight>
+    <TableCol>4</TableCol>
+  </Sys_MapData>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_WenBenLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>WenBenLeiXing</KeyOfEn>
+    <Name>文本类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>245</X>
+    <Y>95.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>1</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_ZhengShuLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>ZhengShuLeiXing</KeyOfEn>
+    <Name>整数类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>245</X>
+    <Y>132.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>2</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_FuDianLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>FuDianLeiXing</KeyOfEn>
+    <Name>浮点类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>244</X>
+    <Y>162.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>3</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_JinELeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>JinELeiXing</KeyOfEn>
+    <Name>金额类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>244</X>
+    <Y>195.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>4</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_RiQiLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>RiQiLeiXing</KeyOfEn>
+    <Name>日期类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>244</X>
+    <Y>229.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>5</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>10</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_RiQiShiJianLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>RiQiShiJianLeiXing</KeyOfEn>
+    <Name>日期时间类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>243</X>
+    <Y>273.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>6</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>20</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_BuErLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>BuErLeiXing</KeyOfEn>
+    <Name>布尔类型</Name>
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>237</X>
+    <Y>314.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>7</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_FYLX</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>FYLX</KeyOfEn>
+    <Name>费用类型</Name>
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>FYLX</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>242</X>
+    <Y>353.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>8</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_QingJiaLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>QingJiaLeiXing</KeyOfEn>
+    <Name>请假类型</Name>
+    <UIContralType>3</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>QingJiaLeiXing</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>237</X>
+    <Y>414</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>9</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_ZhiDuWenBenKuang</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>ZhiDuWenBenKuang</KeyOfEn>
+    <Name>只读文本框</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>634</X>
+    <Y>96.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>10</Idx>
+    <AtPara>@IsRichText=0@IsSupperText=0</AtPara>
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_ZhiDuZhengShuLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>ZhiDuZhengShuLeiXing</KeyOfEn>
+    <Name>只读整数类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>654</X>
+    <Y>155</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>11</Idx>
+    <AtPara>@IsSum=0</AtPara>
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <DefVal>0</DefVal>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_ZhiDuFuDianLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>ZhiDuFuDianLeiXing</KeyOfEn>
+    <Name>只读浮点类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>3</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>658</X>
+    <Y>195</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>12</Idx>
+    <AtPara>@IsSum=0</AtPara>
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <DefVal>0</DefVal>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_ZhiDuJinELeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>ZhiDuJinELeiXing</KeyOfEn>
+    <Name>只读金额类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>664</X>
+    <Y>226</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>13</Idx>
+    <AtPara>@IsSum=0</AtPara>
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <DefVal>0</DefVal>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_ZhiDuRiQiLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>ZhiDuRiQiLeiXing</KeyOfEn>
+    <Name>只读日期类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>654</X>
+    <Y>272</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>14</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <DefVal>@RDT</DefVal>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_ZhiDuRiQiShiJianLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>ZhiDuRiQiShiJianLeiXing</KeyOfEn>
+    <Name>只读日期时间类型</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>650</X>
+    <Y>305</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>15</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <DefVal>@RDT</DefVal>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_FaWenZhongLei</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>FaWenZhongLei</KeyOfEn>
+    <Name>发文种类</Name>
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>FaWenZhongLei</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>649</X>
+    <Y>355.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>16</Idx>
+    <AtPara>@IsEnableJS=0@RBShowModel=0</AtPara>
+    <GroupIDText>0</GroupIDText>
+    <DefVal>0</DefVal>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_ZhiDuDanXuanAnNiu</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>ZhiDuDanXuanAnNiu</KeyOfEn>
+    <Name>只读单选按钮</Name>
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>516</X>
+    <Y>320.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>17</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <DefVal>0</DefVal>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_CeShiMoShi</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>CeShiMoShi</KeyOfEn>
+    <Name>测试模式</Name>
+    <UIContralType>3</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>CeShiMoShi</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>638</X>
+    <Y>423</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>18</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_OID</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>主键</Name>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <Idx>19</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <DefVal>0</DefVal>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>2083</GroupID>
+  </Sys_MapAttr>
+  <Sys_FrmLine>
+    <MyPK>A3A5BDD9-1BFF-9595-ABBF-369B78F00011</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <X1>83</X1>
+    <X2>867</X2>
+    <Y1>61</Y1>
+    <Y2>61</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLab>
+    <MyPK>023CA808-9252-9076-92D6-F6E5FBC56C95</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>浮点类型</Text>
+    <X>159</X>
+    <Y>171</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>06F9C547-A8D0-9082-7E95-5C4A79EA0A93</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>文本类型</Text>
+    <X>155</X>
+    <Y>104</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>0B48A24A-CD4F-E728-BEFD-70E15459AA0E</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>只读金额类型</Text>
+    <X>531</X>
+    <Y>219</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>1D5FBE43-D706-B538-B4F6-B4E9CFA6E125</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>整数类型</Text>
+    <X>156</X>
+    <Y>135</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>2A8538BB-4877-B4D6-4AED-BA53A1197A9B</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>日期类型</Text>
+    <X>156</X>
+    <Y>239</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>2BAD26CB-0A72-22EF-2FE3-DF05DB8D1447</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>只读日期时间类型</Text>
+    <X>499</X>
+    <Y>294</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>2D0A8492-8025-7001-7414-22AABCE4A44E</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>表单字段类型</Text>
+    <X>375</X>
+    <Y>31</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>18</FontSize>
+    <FontStyle>font-size:18;font-weight:bold;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>4CD76573-613B-62EC-6320-25469880C1B8</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>可编辑</Text>
+    <X>84.5</X>
+    <Y>89.5</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>500666FA-0F6D-F0C2-94D3-FC717217EC34</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>只读文本框</Text>
+    <X>544.5</X>
+    <Y>104</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>5465289F-2951-17BA-2632-AB2FAF023196</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>不可编辑</Text>
+    <X>456</X>
+    <Y>88.5</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>7BCB2525-CFCA-7830-023A-9A17A4156403</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>金额类型</Text>
+    <X>157</X>
+    <Y>209</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>7D808DF0-DFA3-8DE9-BC67-625009EFEBC7</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>只读日期类型</Text>
+    <X>533</X>
+    <Y>259</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>948BEF56-2B4A-92D3-6C57-EB7DF20CA087</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>只读浮点类型</Text>
+    <X>534</X>
+    <Y>183</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>A165E74C-6714-0219-8C5A-ADC5B7205009</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>日期时间类型</Text>
+    <X>139</X>
+    <Y>286</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>CeShiMoShi</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>测试模式</Text>
+    <X>545</X>
+    <Y>408</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>D3703621-D8A6-6D13-6159-F7356B1F3154</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>只读整数类型</Text>
+    <X>526</X>
+    <Y>140</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>E9F1E464-4CF4-CDBB-E1A9-43167FC1725F</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>只读枚举下拉框</Text>
+    <X>522.5</X>
+    <Y>360</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>EB2629F8-B72D-F146-BD23-653FB34BE3AE</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>枚举下拉框</Text>
+    <X>146.5</X>
+    <Y>357</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>QingJiaLeiXing</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <Text>单选按钮</Text>
+    <X>150</X>
+    <Y>389</Y>
+    <FontColor>Red</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:Red;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmRB>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_CeShiMoShi_0</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>CeShiMoShi</KeyOfEn>
+    <EnumKey>CeShiMoShi</EnumKey>
+    <Lab>强办模式</Lab>
+    <IntKey>0</IntKey>
+    <X>651</X>
+    <Y>409</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_CeShiMoShi_1</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>CeShiMoShi</KeyOfEn>
+    <EnumKey>CeShiMoShi</EnumKey>
+    <Lab>协作模式</Lab>
+    <IntKey>1</IntKey>
+    <X>649</X>
+    <Y>436</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_CeShiMoShi_2</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>CeShiMoShi</KeyOfEn>
+    <EnumKey>CeShiMoShi</EnumKey>
+    <Lab>队列模式</Lab>
+    <IntKey>2</IntKey>
+    <X>653</X>
+    <Y>464</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_CeShiMoShi_3</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>CeShiMoShi</KeyOfEn>
+    <EnumKey>CeShiMoShi</EnumKey>
+    <Lab>共享模式</Lab>
+    <IntKey>3</IntKey>
+    <X>652</X>
+    <Y>487</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_QingJiaLeiXing_0</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>QingJiaLeiXing</KeyOfEn>
+    <EnumKey>QingJiaLeiXing</EnumKey>
+    <Lab>事假</Lab>
+    <IntKey>0</IntKey>
+    <X>241</X>
+    <Y>409</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_QingJiaLeiXing_1</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>QingJiaLeiXing</KeyOfEn>
+    <EnumKey>QingJiaLeiXing</EnumKey>
+    <Lab>病假</Lab>
+    <IntKey>1</IntKey>
+    <X>238</X>
+    <Y>437</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>CCFrm_BiaoDanZiDuanFengGe_QingJiaLeiXing_2</MyPK>
+    <FK_MapData>CCFrm_BiaoDanZiDuanFengGe</FK_MapData>
+    <KeyOfEn>QingJiaLeiXing</KeyOfEn>
+    <EnumKey>QingJiaLeiXing</EnumKey>
+    <Lab>婚假</Lab>
+    <IntKey>2</IntKey>
+    <X>239</X>
+    <Y>463</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+</NewDataSet>

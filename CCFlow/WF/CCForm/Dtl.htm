@@ -834,7 +834,7 @@
         }
      </script>
 </head>
-<body>
+<body onblur="SaveAll()">
     <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
     <div id="ContentDtlDiv">
         <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px;">
@@ -858,8 +858,8 @@
 	
 	<script type="text/javascript">
 	    function deleteRow(index) {
-	        $.messager.confirm('删除确认', '确定要删除吗?', function (r) {
-	            if (r) {
+	        //$.messager.confirm('删除确认', '确定要删除吗?', function (r) {
+	        //    if (r) {
 	                var rowData = $(index).parent().parent().data().data;
 	                var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
 	                pageData.currentRowIndex = rowCurrentIndex;
@@ -875,8 +875,8 @@
 	                    updateTableSn(tr);
 	                    tr.remove();
 	                }
-	            } 
-	        });
+	           // } 
+	        //});
 	    }
 
 	    function deleteRowAfter(data) {

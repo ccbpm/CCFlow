@@ -666,6 +666,11 @@ function Save() {
         success: function (data) {
             setToobarEnable();
             if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
+                //刷新 从表的IFRAME
+                var dtls = $('.Fdtl');
+                $(dtls, function (dtl, i) {
+                    $(dtl).attr('src', $(dtl).attr('src'));
+                });
                 $('#Message').html(data.substring(4, data.length));
                 $('#MessageDiv').modal().show();
             }
@@ -2853,7 +2858,7 @@ function figure_Template_Dtl(frmDtl) {
 
     }
     var eleIframe = '<iframe></iframe>';
-    eleIframe = $("<iframe ID='F" + frmDtl.No + "' src='" + src +
+    eleIframe = $("<iframe class='Fdtl' ID='F" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
                  "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
     if (pageData.IsReadOnly) {

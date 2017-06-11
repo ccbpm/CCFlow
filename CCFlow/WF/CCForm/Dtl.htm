@@ -237,7 +237,8 @@
 
 
             });
-            insertTr.append($('<td><img ="width:30px;padding:0="" 10px;cursor:pointer;"="" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
+            //insertTr.append($('<td><img ="width:30px;padding:0="" 10px;cursor:pointer;"="" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
+            insertTr.append($('<td><img class="delRow" src="../Img/Btn/Cancel.png"  onclick="deleteRow(this)" style="cursor:pointer;" titile="移除"/></td>'));
             //insertTr.append($('<td><input type="button" onclick="saveRow(this)" value="保存" style=""></td>'));
             //直接复制上面的即可
 
@@ -344,22 +345,31 @@
                         var delTh = $('<th style="width:40px;"><img title="全部保存" style="width: 20px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/SaveAll.png" onclick="SaveAll();" /></th>');
                         var delThData;
 
+                        //if (sys_MapDtl[0].IsDelete == "1" || sys_MapDtl[0].IsInsert == "1") {//有新增或者有删除，就有删除权限
+                        //    delThData = {
+                        //        custom: true,
+                        //        customcontent: 2,
+                        //        customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
+                        //        customcontent2: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
+                        //        coltype: 'Operation1'
+                        //    };
+                        //} else if (sys_MapDtl[0].IsUpdate == "1") {//只有保存，没有删除
+                        //    delThData = {
+                        //        custom: true,
+                        //        customcontent: 1,
+                        //        customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
+                        //        coltype: 'Operation1'
+                        //    };
+                        //}
+
                         if (sys_MapDtl[0].IsDelete == "1" || sys_MapDtl[0].IsInsert == "1") {//有新增或者有删除，就有删除权限
                             delThData = {
                                 custom: true,
-                                customcontent: 2,
-                                customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
-                                customcontent2: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
-                                coltype: 'Operation1'
-                            };
-                        } else if (sys_MapDtl[0].IsUpdate == "1") {//只有保存，没有删除
-                            delThData = {
-                                custom: true,
                                 customcontent: 1,
-                                customcontent1: 'img@="width:30px;padding:0 10px;cursor:pointer;" src="../Img/Btn/Save.gif" onclick="saveTrRow(this)" titile="保存" style="cursor:pointer;"@',
+                                customcontent1: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
                                 coltype: 'Operation1'
                             };
-                        }
+                        } 
 
                         //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
                         //如果能删除，就有删除按钮

@@ -71,13 +71,13 @@ namespace CCFlow.WF.CCForm
 		/// <param name="atParas">参数</param>
 		/// <returns></returns>
 		[WebMethod]
-		public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid, string atParas)
+		public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, string pkValue, string atParas)
 		{
 			//让他登录.
 			BP.WF.Dev2Interface.Port_Login(userNo);
 
 			//解析这个表单.
-			return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, oid, atParas);
+			return BP.WF.CCFormAPI.GenerDBForVSTOExcelFrmModel(frmID, pkValue, atParas);
 		}
 		/// <summary>
 		/// 执行保存
@@ -120,45 +120,52 @@ namespace CCFlow.WF.CCForm
 			}
 
 			#region 保存主表数据.
-            if (pkValue.Contains("_") == true)
-            {
-                GEEntityMyPK wk = new GEEntityMyPK(frmID, pkValue);
-                wk.ResetDefaultVal();
+			if (pkValue.Contains("_") == true)
+			{
+				GEEntityMyPK wk = new GEEntityMyPK(frmID, pkValue);
+				wk.ResetDefaultVal();
 
-                if (mainTableAtParas != null)
-                {
-                    AtPara ap = new AtPara(mainTableAtParas);
-                    foreach (string str in ap.HisHT.Keys)
-                    {
-                        if (wk.Row.ContainsKey(str))
-                            wk.SetValByKey(str, ap.GetValStrByKey(str));
-                        else
-                            wk.Row.Add(str, ap.GetValStrByKey(str));
-                    }
-                }
-                wk.MyPK = pkValue;
-                wk.Save();
-            }
-            else
-            {
-                GEEntity wk = new GEEntity(frmID, pkValue);
-                wk.ResetDefaultVal();
+				if (mainTableAtParas != null)
+				{
+					AtPara ap = new AtPara(mainTableAtParas);
+					foreach (string str in ap.HisHT.Keys)
+					{
+						if (wk.Row.ContainsKey(str))
+							wk.SetValByKey(str, ap.GetValStrByKey(str));
+						else
+							wk.Row.Add(str, ap.GetValStrByKey(str));
+					}
+				}
+				wk.MyPK = pkValue;
+				wk.Save();
+			} //TODO: 增加NoName类型的处理
+			else
+			{
+				long pk;
+				if (Int64.TryParse(pkValue, out pk))
+				{
+					GEEntity wk = new GEEntity(frmID, pkValue);
+					wk.ResetDefaultVal();
 
-                if (mainTableAtParas != null)
-                {
-                    AtPara ap = new AtPara(mainTableAtParas);
-                    foreach (string str in ap.HisHT.Keys)
-                    {
-                        if (wk.Row.ContainsKey(str))
-                            wk.SetValByKey(str, ap.GetValStrByKey(str));
-                        else
-                            wk.Row.Add(str, ap.GetValStrByKey(str));
-                    }
-                }
-                wk.OID = Int64.Parse(pkValue);
-                wk.Save();
-            }
-
+					if (mainTableAtParas != null)
+					{
+						AtPara ap = new AtPara(mainTableAtParas);
+						foreach (string str in ap.HisHT.Keys)
+						{
+							if (wk.Row.ContainsKey(str))
+								wk.SetValByKey(str, ap.GetValStrByKey(str));
+							else
+								wk.Row.Add(str, ap.GetValStrByKey(str));
+						}
+					}
+					wk.OID = Int64.Parse(pkValue);
+					wk.Save();
+				}
+				else
+				{
+					throw new Exception("未识别的主键值类型！");
+				}
+			}
 
 			if (dsDtlsChange == null)
 				return;
@@ -261,13 +268,13 @@ namespace CCFlow.WF.CCForm
 		/// </summary>
 		/// <param name="userNo">用户</param>
 		/// <param name="sid">安全校验码</param>
-		/// <param name="mainEnPK">表单主键值（WorkId）</param>
+		/// <param name="pkValue">表单主键值（WorkId）</param>
 		/// <param name="mapExtMyPK">逻辑逐渐值</param>
 		/// <param name="cheaneKey">级联父字段的值（No)</param>
 		/// <param name="paras">『主表/子表整行』的【所有字段】（@Key=Val@Key1=Val1@Key2=Val2）</param>
 		/// <returns>查询的要填充数据</returns>
 		[WebMethod]
-		public DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, int mainEnPK, string mapExtMyPK, string cheaneKey,
+		public DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, string pkValue, string mapExtMyPK, string cheaneKey,
 			string paras)
 		{
 			BP.WF.Dev2Interface.Port_Login(userNo);
@@ -284,8 +291,8 @@ namespace CCFlow.WF.CCForm
 			sql = sql.Replace("@WebUser.Name", WebUser.Name);
 			sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
 
-			sql = sql.Replace("@OID", mainEnPK.ToString());
-			sql = sql.Replace("@WorkID", mainEnPK.ToString());
+			sql = sql.Replace("@OID", pkValue.ToString());
+			sql = sql.Replace("@WorkID", pkValue.ToString());
 
 			if (sql.Contains("@") == true)
 			{
@@ -314,7 +321,7 @@ namespace CCFlow.WF.CCForm
 		public String GetVstoExtensionVersion()
 		{
 			//return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
-			return "1.0.0.7";
+			return "1.0.0.8";
 		}
 	}
 }

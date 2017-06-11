@@ -831,9 +831,6 @@
                     rowData.FK_MapDtl = GetQueryString("EnsName");
                     //row.FK_MapData = "ND101";
                     rowData.RefPKVal = GetQueryString("RefPKVal");
-
-
-
                     //alert(rowData.OID)
                     var dbDataRow = $.grep(pageData.DBDtl, function (val) { return val.OID == rowData.OID; });
                     if (rowData.OID != 0 && dbDataRow.length == 1 && JSON.stringify(dbDataRow[0].RowData) == JSON.stringify(trData)) {
@@ -853,12 +850,23 @@
                         else {
                             //未录入值  无需存盘
                             alerdaySaveCount++;
+                            return;
                         }
                     } else {
                         AjaxServiceGener(rowData, SaveRowAfter, this);
                     }
                 }
             });
+
+            if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
+                $('#Msg').hide();
+                $('#ContentDtlDiv').show();
+                alerdaySaveCount = 0;
+                needSaveCount = 0;
+                saveAll = false;
+
+                InitPage();
+            }
         }
      </script>
 </head>

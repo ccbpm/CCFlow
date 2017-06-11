@@ -665,12 +665,12 @@ function Save() {
         dataType: 'html',
         success: function (data) {
             setToobarEnable();
+            //刷新 从表的IFRAME
+            var dtls = $('.Fdtl');
+            $.each(dtls, function (i, dtl) {
+                $(dtl).attr('src', $(dtl).attr('src'));
+            });
             if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
-                //刷新 从表的IFRAME
-                var dtls = $('.Fdtl');
-                $(dtls, function (dtl, i) {
-                    $(dtl).attr('src', $(dtl).attr('src'));
-                });
                 $('#Message').html(data.substring(4, data.length));
                 $('#MessageDiv').modal().show();
             }

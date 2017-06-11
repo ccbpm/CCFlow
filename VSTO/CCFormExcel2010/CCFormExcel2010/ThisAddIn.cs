@@ -246,7 +246,7 @@ namespace CCFormExcel2010
 				}
 
 				byte[] bytes = null;
-				var isExistDbFile = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, ref bytes);
+				var isExistDbFile = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID.ToString(), ref bytes);
 
 				// 把这个byt 保存到本地.
 				if (System.IO.File.Exists(Glo.LocalFile) == true)
@@ -541,7 +541,7 @@ namespace CCFormExcel2010
 
 			//保存到服务器
 			CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
-			client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
+			client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.WorkID.ToString(), mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
 			MessageBox.Show("保存成功，表单数据已成功保存到服务器！");
 
 			//获取新的子表数据，绑定行对应关系
@@ -919,7 +919,7 @@ namespace CCFormExcel2010
 			//填充数据
 			DataRow dr;
 			var intTableHeadHeight = Convert.ToInt32(htColumns["TableHeadHeight"]);
-			if (!dt.Columns.Contains("Idx"))
+			if (dt.Columns.Contains("Idx")==false)
 				dt.Columns.Add("Idx");
 			for (var r = range.Row + intTableHeadHeight; r < range.Row + range.Rows.Count; r++)//遍历单元格的行
 			{
@@ -928,7 +928,8 @@ namespace CCFormExcel2010
 
 				foreach (DictionaryEntry col in htColumns)
 				{
-					if (col.Key == "TableHeadHeight") continue;
+					if (col.Key == "TableHeadHeight") 
+                        continue;
 					var rangeCell = range.Worksheet.get_Range(_base.ConvertInt2Letter((int)col.Key) + r, missing);
 					this.GetSaveValue(strSubTableName, (string)col.Value, rangeCell);
 				}
@@ -976,8 +977,9 @@ namespace CCFormExcel2010
 			//删除『已标记为删除的行』
 			foreach (DataRow dr1 in st.Data.Rows)
 			{
-				if (dr1["Idx"] == RowStatus.Deleted.ToString())
+				if (dr1["Idx"].ToString() == RowStatus.Deleted.ToString())
 					st.Data.Rows.Remove(dr1);
+
 				//else if (dr["Idx"] == RowStatus.New.ToString()) //此时还没有dr["Idx"]="new"的行
 				//	dr["OID"] = "0";
 			}
@@ -1120,38 +1122,30 @@ namespace CCFormExcel2010
 		/// <param name="fieldType">(可选)字段类型：若已获取了当前字段的FieldType,则可传入以节省计算步骤</param>
 		/// <param name="listName">(可选)序列名称（序列区域命名）</param>
 		/// <returns></returns>
-		public string GetSaveValue(string tableName, string keyOfEn, Excel.Range rangeCell, FieldType fieldType = FieldType.Nothing, string listName = null)
-		{
-			if (rangeCell == null || rangeCell.Value2 == null)
-			{
-				return null;
-			}
-			else
-			{
-				string text = rangeCell.Text;
-				if (string.IsNullOrEmpty(text) || text.Trim().Length == 0)
-				{
-					return null;
-				}
-				else //特殊类型的字段：日期
-				{
-					DateTime dt;
-					if (DateTime.TryParse(rangeCell.Text, out dt))
-					{
-						return rangeCell.Text;
-					}
-				}
-			}
-			if (fieldType == FieldType.Nothing || string.IsNullOrEmpty(listName))
-				fieldType = GetFieldType(tableName, keyOfEn, out listName);
-			//?是否需要判断单元格IsValidList？？
-			if (_base.IsValidList(rangeCell) && (fieldType == FieldType.CascadeParentList || fieldType == FieldType.CascadeSonList || fieldType == FieldType.LimitedList || fieldType == FieldType.List))//下拉类型的字段（枚举、外键）
-				return Glo.GetNoByName(_originData, listName, rangeCell.Value2);
-			else if (_base.IsValidList(rangeCell) && fieldType == FieldType.TrueOrFalse) //是否型字段
-				return rangeCell.Value2 == "是" ? "1" : "0";
-			else
-				return rangeCell.Value2.ToString();
-		}
+        public string GetSaveValue(string tableName, string keyOfEn, Excel.Range rangeCell, FieldType fieldType = FieldType.Nothing, string listName = null)
+        {
+            if (rangeCell == null || rangeCell.Value2 == null)
+                return null;
+
+            string text = rangeCell.Text;
+            if (string.IsNullOrEmpty(text) || text.Trim().Length == 0)
+                return null;
+
+            //特殊类型的字段：日期
+            DateTime dt;
+            if (DateTime.TryParse(rangeCell.Text, out dt))
+                return rangeCell.Text;
+
+            if (fieldType == FieldType.Nothing || string.IsNullOrEmpty(listName))
+                fieldType = GetFieldType(tableName, keyOfEn, out listName);
+            //?是否需要判断单元格IsValidList？？
+            if (_base.IsValidList(rangeCell) && (fieldType == FieldType.CascadeParentList || fieldType == FieldType.CascadeSonList || fieldType == FieldType.LimitedList || fieldType == FieldType.List))//下拉类型的字段（枚举、外键）
+                return Glo.GetNoByName(_originData, listName, rangeCell.Value2);
+            else if (_base.IsValidList(rangeCell) && fieldType == FieldType.TrueOrFalse) //是否型字段
+                return rangeCell.Value2 == "是" ? "1" : "0";
+            else
+                return rangeCell.Value2.ToString();
+        }
 
 		public enum FieldType
 		{
@@ -1266,19 +1260,18 @@ namespace CCFormExcel2010
 		/// <param name="strWhere"></param>
 		/// <param name="strSelectColumn"></param>
 		/// <returns></returns>
-		public string SelectDataTable(string strTableName, string strWhere, string strSelectColumn)
-		{
-			if (!_originData.Tables.Contains(strTableName))
-				return null;
-			if (!_originData.Tables[strTableName].Columns.Contains(strSelectColumn))
-				return null;
-			var drs = _originData.Tables[strTableName].Select(strWhere);
-			if (drs.Length == 0)
-				return null;
-			//else if (drs.Length > 1)
-			else
-				return drs[0][strSelectColumn].ToString();
-		}
+        public string SelectDataTable(string strTableName, string strWhere, string strSelectColumn)
+        {
+            if (_originData.Tables.Contains(strTableName) == false)
+                return null;
+            if (_originData.Tables[strTableName].Columns.Contains(strSelectColumn) == false)
+                return null;
+
+            var drs = _originData.Tables[strTableName].Select(strWhere);
+            if (drs.Length == 0)
+                return null;
+            return drs[0][strSelectColumn].ToString();
+        }
 
 		/// <summary>
 		/// 【弃用】判断某个字段是否是枚举/外键类型
@@ -1287,21 +1280,22 @@ namespace CCFormExcel2010
 		/// <param name="strKeyOfEn"></param>
 		/// <param name="UiBindKey"></param>
 		/// <returns></returns>
-		public bool __abandon_IsEnumOrFk(string tableName, string strKeyOfEn, ref string UiBindKey)
-		{
-			if (_originData.Tables.Contains(tableName))
-			{
-				foreach (DataRow dr in _originData.Tables[tableName].Rows)
-				{
-					if (dr["KeyOfEn"].ToString() == strKeyOfEn && dr["LGType"].ToString() != "0")
-					{
-						UiBindKey = dr["UIBindKey"].ToString();
-						return !string.IsNullOrEmpty(UiBindKey);
-					}
-				}
-			}
-			return false;
-		}
+        public bool __abandon_IsEnumOrFk(string tableName, string strKeyOfEn, ref string UiBindKey)
+        {
+            if (_originData.Tables.Contains(tableName) == false)
+                return false;
+
+            foreach (DataRow dr in _originData.Tables[tableName].Rows)
+            {
+                if (dr["KeyOfEn"].ToString() == strKeyOfEn && dr["LGType"].ToString() != "0")
+                {
+                    UiBindKey = dr["UIBindKey"].ToString();
+                    return !string.IsNullOrEmpty(UiBindKey);
+                }
+            }
+
+            return false;
+        }
 
 		/// <summary>
 		/// 【弃用】判断某个字段是否是『有范围限制的外键』字段
@@ -1310,37 +1304,37 @@ namespace CCFormExcel2010
 		/// <param name="strKeyOfEn">字段名（KeyOfEn）</param>
 		/// <param name="UiBindKey">ref关联外键区域的命名（return false时不改变值，return true时返回该字段的MyPk）</param>
 		/// <returns></returns>
-		public bool __abandon_IsLimitedFk(string tableName, string strKeyOfEn, ref string UiBindKey)
-		{
-			var strMapExtTableName = tableName == "MainTable" ? "Sys_MapExt" : "Sys_MapExt_For_" + tableName;
-			var strMapAttrTableName = tableName == "MainTable" ? "Sys_MapAttr" : "Sys_MapAttr_For_" + tableName;
-			if (_originData.Tables.Contains(strMapExtTableName))
-			{
-				foreach (DataRow dr in _originData.Tables[strMapExtTableName].Rows)
-				{
-					if ((dr["ExtType"].ToString() == "ActiveDDL" && dr["AttrsOfActive"].ToString() == strKeyOfEn) && //作为级联的下级
-						(dr["ExtType"].ToString() == "AutoFullDLL" && dr["AttrOfOper"].ToString() == strKeyOfEn) && //外键（e.g. 本部门的人员）
-						!string.IsNullOrEmpty(dr["Doc"].ToString()))
-					{
-						if (_originData.Tables.Contains(strMapAttrTableName))
-						{
-							var drs = _originData.Tables[strMapAttrTableName].Select("KeyOfEn='" + strKeyOfEn + "'");
-							if (drs.Length == 0)
-								UiBindKey = null;
-							else
-								UiBindKey = drs[0]["MyPK"].ToString();
-						}
-						else
-						{
-							UiBindKey = null;
-						}
-						return true;
-					}
-				}
-			}
-			return false;
-		}
+        public bool __abandon_IsLimitedFk(string tableName, string strKeyOfEn, ref string UiBindKey)
+        {
+            var strMapExtTableName = tableName == "MainTable" ? "Sys_MapExt" : "Sys_MapExt_For_" + tableName;
+            var strMapAttrTableName = tableName == "MainTable" ? "Sys_MapAttr" : "Sys_MapAttr_For_" + tableName;
+            if (_originData.Tables.Contains(strMapExtTableName) == false)
+                return false;
 
+            foreach (DataRow dr in _originData.Tables[strMapExtTableName].Rows)
+            {
+                if ((dr["ExtType"].ToString() == "ActiveDDL" && dr["AttrsOfActive"].ToString() == strKeyOfEn) && //作为级联的下级
+                    (dr["ExtType"].ToString() == "AutoFullDLL" && dr["AttrOfOper"].ToString() == strKeyOfEn) && //外键（e.g. 本部门的人员）
+                    !string.IsNullOrEmpty(dr["Doc"].ToString()))
+                {
+                    if (_originData.Tables.Contains(strMapAttrTableName))
+                    {
+                        var drs = _originData.Tables[strMapAttrTableName].Select("KeyOfEn='" + strKeyOfEn + "'");
+                        if (drs.Length == 0)
+                            UiBindKey = null;
+                        else
+                            UiBindKey = drs[0]["MyPK"].ToString();
+                    }
+                    else
+                    {
+                        UiBindKey = null;
+                    }
+                    return true;
+                }
+            }
+
+            return false;
+        }
 		/// <summary>
 		/// 验证数据合法性（2017-03-23：目前仅判断必填项；2017-03-24：增加数据类型判断）
 		/// </summary>
@@ -1349,84 +1343,86 @@ namespace CCFormExcel2010
 		/// <param name="range">区域</param>
 		/// <param name="val">输出值：该字段的保存值</param>
 		/// <returns>是否验证通过</returns>
-		public bool VaildData(string tableName, string keyOfEn, Excel.Range range, out string val)
-		{
-			var strMapAttrTableName = tableName == "MainTable" ? "Sys_MapAttr" : "Sys_MapAttr_For_" + tableName;
-			val = GetSaveValue(tableName, keyOfEn, range);
-			var dtAttr = _originData.Tables[strMapAttrTableName];
-			var drs = dtAttr.Select("KeyOfEn='" + keyOfEn + "'");
-			if (drs.Length == 1)
-			{
-				//必填验证
-				if (drs[0]["UIIsInput"].ToString() == "1")
-				{
-					if (string.IsNullOrEmpty(val))
-					{
-						MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”不能为空！\r单元格：" + range.Address);
-						return false;
-					}
-				}
-				//数据类型验证
-				if (!string.IsNullOrEmpty(val) && drs[0]["LGType"].ToString() == "0")
-				{
-					switch (drs[0]["MyDataType"].ToString())
-					{
-						case "2": //整数类型
-							int i;
-							if (!int.TryParse(val, out i))
-							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“整数”！\r单元格：" + range.Address);
-								return false;
-							}
-							break;
-						case "3": //浮点型
-							float f;
-							if (!float.TryParse(val, out f))
-							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\r单元格：" + range.Address);
-								return false;
-							}
-							break;
-						case "5": //双精度型
-							double d;
-							if (!double.TryParse(val, out d))
-							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\r单元格：" + range.Address);
-								return false;
-							}
-							break;
-						case "6": //日期型
-							DateTime date;
-							if (!DateTime.TryParse(val, out date))
-							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“日期”！\r单元格：" + range.Address);
-								return false;
-							}
-							break;
-						case "7": //时间型
-							DateTime time;
-							if (!DateTime.TryParse(val, out time))
-							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“时间”！\r单元格：" + range.Address);
-								return false;
-							}
-							break;
-						case "8": //金额
-							float c;
-							if (!float.TryParse(val, out c))
-							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\r单元格：" + range.Address);
-								return false;
-							}
-							break;
-						default:
-							break;
-					}
-				}
-			}
-			return true;
-		}
+        public bool VaildData(string tableName, string keyOfEn, Excel.Range range, out string val)
+        {
+            var strMapAttrTableName = tableName == "MainTable" ? "Sys_MapAttr" : "Sys_MapAttr_For_" + tableName;
+            val = GetSaveValue(tableName, keyOfEn, range);
+            var dtAttr = _originData.Tables[strMapAttrTableName];
+            var drs = dtAttr.Select("KeyOfEn='" + keyOfEn + "'");
+            if (drs.Length != 1)
+                return true;
 
+            //必填验证
+            if (drs[0]["UIIsInput"].ToString() == "1")
+            {
+                if (string.IsNullOrEmpty(val))
+                {
+                    MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”不能为空！\r单元格：" + range.Address);
+                    return false;
+                }
+            }
+
+            //数据类型验证
+            if ( string.IsNullOrEmpty(val)==false && drs[0]["LGType"].ToString() == "0")
+            {
+                int myDataType = int.Parse(drs[0]["MyDataType"].ToString());
+
+                switch (myDataType)
+                {
+                    case BP.DA.DataType.AppInt: //整数类型
+                        int i;
+                        if (!int.TryParse(val, out i))
+                        {
+                            MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“整数”！\r单元格：" + range.Address);
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppFloat: //浮点型
+                        float f;
+                        if (!float.TryParse(val, out f))
+                        {
+                            MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\r单元格：" + range.Address);
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppDouble: //双精度型
+                        double d;
+                        if (!double.TryParse(val, out d))
+                        {
+                            MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\r单元格：" + range.Address);
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppDate: //日期型
+                        DateTime date;
+                        if (!DateTime.TryParse(val, out date))
+                        {
+                            MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“日期”！\r单元格：" + range.Address);
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppDateTime: //时间型
+                        DateTime time;
+                        if (!DateTime.TryParse(val, out time))
+                        {
+                            MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“时间”！\r单元格：" + range.Address);
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppMoney: //金额
+                        float c;
+                        if (!float.TryParse(val, out c))
+                        {
+                            MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（金额）”！\r单元格：" + range.Address);
+                            return false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return true;
+        }
 		/*
 		//动态获取『有范围限制的外键字段』的区域填充数据
 		public DataTable GetAreaList()
@@ -1434,70 +1430,67 @@ namespace CCFormExcel2010
 			//!获取数据成功后更新_originData
 			return null;
 		}*/
-
 		#endregion
 
 		#region VSTO相关方法
-
 		/// <summary>
 		/// 获取子表区域中的表头（字段）信息
 		/// </summary>
 		/// <param name="range"></param>
 		/// <returns></returns>
-		public Hashtable GetAreaColumns(Excel.Range range)
-		{
-			//获取字段信息，及表头所占子行数
-			Hashtable htColumns = new Hashtable();
-			int intTableHeadHeight = 1; //表头所占子行数
-			for (var c = range.Column; c <= range.Column + range.Columns.Count - 1; )
-			{
-				string name = string.Empty;
-				var currentThMergeColumnsCount = 1; //当前表头（单元格）所占列数
-				for (var r = range.Row; r < range.Row + range.Rows.Count - 1; )
-				{
-					var rangeTableHead = range.Worksheet.get_Range(_base.ConvertInt2Letter(c) + r, missing);
+        public Hashtable GetAreaColumns(Excel.Range range)
+        {
+            //获取字段信息，及表头所占子行数
+            Hashtable htColumns = new Hashtable();
+            int intTableHeadHeight = 1; //表头所占子行数
+            for (var c = range.Column; c <= range.Column + range.Columns.Count - 1; )
+            {
+                string name = string.Empty;
+                var currentThMergeColumnsCount = 1; //当前表头（单元格）所占列数
+                for (var r = range.Row; r < range.Row + range.Rows.Count - 1; )
+                {
+                    var rangeTableHead = range.Worksheet.get_Range(_base.ConvertInt2Letter(c) + r, missing);
 
-					try
-					{
-						//若该单元格有命名
-						if (rangeTableHead.Name != null && rangeTableHead.Name.Name != null) //rangeTableHead.Name抛出异常
-						{
-							name = rangeTableHead.Name.Name;
-							var currentThMergeRowsCount = 1;
-							if (rangeTableHead.MergeCells)
-							{
-								currentThMergeColumnsCount = rangeTableHead.MergeArea.Columns.Count; //用于计算下一个要循环的列
-								currentThMergeRowsCount = rangeTableHead.MergeArea.Rows.Count; //用于计算当前表头所占行数
-							}
-							var currentThHeight = rangeTableHead.Row + currentThMergeRowsCount - range.Row; //当前表头占子表区域的高度（行数）
-							if (intTableHeadHeight < currentThHeight)
-								intTableHeadHeight = currentThHeight;
-							break; //发现表头即停止循环，不再往下寻找表头
-						}
-					}
-					catch (Exception exp)
-					{
-					}
+                    try
+                    {
+                        //若该单元格有命名
+                        if (rangeTableHead.Name != null && rangeTableHead.Name.Name != null) //rangeTableHead.Name抛出异常
+                        {
+                            name = rangeTableHead.Name.Name;
+                            var currentThMergeRowsCount = 1;
+                            if (rangeTableHead.MergeCells)
+                            {
+                                currentThMergeColumnsCount = rangeTableHead.MergeArea.Columns.Count; //用于计算下一个要循环的列
+                                currentThMergeRowsCount = rangeTableHead.MergeArea.Rows.Count; //用于计算当前表头所占行数
+                            }
+                            var currentThHeight = rangeTableHead.Row + currentThMergeRowsCount - range.Row; //当前表头占子表区域的高度（行数）
+                            if (intTableHeadHeight < currentThHeight)
+                                intTableHeadHeight = currentThHeight;
+                            break; //发现表头即停止循环，不再往下寻找表头
+                        }
+                    }
+                    catch (Exception exp)
+                    {
+                    }
 
-					//!下一个要循环的行
-					//r += (rangeTableHead.MergeCells ? rangeTableHead.MergeArea.Rows.Count - 1 : 1);
-					if (rangeTableHead.MergeCells)
-						r += rangeTableHead.MergeArea.Rows.Count;
-					else
-						r++;
-				}
+                    //!下一个要循环的行
+                    //r += (rangeTableHead.MergeCells ? rangeTableHead.MergeArea.Rows.Count - 1 : 1);
+                    if (rangeTableHead.MergeCells)
+                        r += rangeTableHead.MergeArea.Rows.Count;
+                    else
+                        r++;
+                }
 
-				//若该列有绑定列
-				if (!string.IsNullOrEmpty(name) && name.IndexOf(".") > -1)
-					htColumns.Add(c, name.Substring(name.LastIndexOf('.') + 1));
+                //若该列有绑定列
+                if (!string.IsNullOrEmpty(name) && name.IndexOf(".") > -1)
+                    htColumns.Add(c, name.Substring(name.LastIndexOf('.') + 1));
 
-				//!下一个要循环的列
-				c += currentThMergeColumnsCount;
-			}
-			htColumns["TableHeadHeight"] = intTableHeadHeight; //约定：使用Key=TableHeadHeight存放该子表区域中表头所占行数
-			return htColumns;
-		}
-
+                //!下一个要循环的列
+                c += currentThMergeColumnsCount;
+            }
+            htColumns["TableHeadHeight"] = intTableHeadHeight; //约定：使用Key=TableHeadHeight存放该子表区域中表头所占行数
+            return htColumns;
+        }
 		/// <summary>
 		/// 新增一个元数据List区域
 		/// </summary>
@@ -1539,7 +1532,7 @@ namespace CCFormExcel2010
 		/// <returns></returns>
 		public string AddMetaList(string strListName, DataTable dt)
 		{
-			if (!dt.Columns.Contains("Name"))
+			if (dt.Columns.Contains("Name")==false)
 				return null;
 
 			//var colL = this.AddMetaList(listName); //
@@ -1583,7 +1576,7 @@ namespace CCFormExcel2010
 		/// <returns></returns>
 		public bool UpdateMetaList(string strListName, string strTableName)
 		{
-			if (!_originData.Tables.Contains(strTableName))
+			if (_originData.Tables.Contains(strTableName)==false)
 				return false;
 			return this.UpdateMetaList(strListName, _originData.Tables[strTableName]);
 		}
@@ -1621,8 +1614,10 @@ namespace CCFormExcel2010
 		{
 			if (range.Worksheet.Name != "MetaData")
 				return false;
-			if (!dt.Columns.Contains("Name"))
+
+			if (dt.Columns.Contains("Name")==false)
 				return false;
+
 			string name;
 			if (Regex.IsMatch(range.Address, _base.regexAddressCell))
 				name = _base.GetNameFakeArea(range);
@@ -1649,45 +1644,41 @@ namespace CCFormExcel2010
 				Application.Names.Add(name, "=MetaData!$" + colL + "$1:$" + colL + "$" + (r - 1));
 				return true;
 			}
-
 		}
-
 		#endregion
 
 		#region VSTO相关方法-命名相关
-
-
 		/// <summary>
 		/// 获取子表某中个单元格的所属列名
 		/// </summary>
 		/// <param name="range"></param>
 		/// <returns></returns>
-		public string __abandon_GetDtlColName(Excel.Range range)
-		{
-			//获取所属子表
-			var strBelongDtlName = _base.GetBelongDtlName(range);
-			if (string.IsNullOrEmpty(strBelongDtlName))
-				return null;
-			//获取子表列（表头）信息
-			Hashtable htColumns;
-			if (_htSubTables.Contains(strBelongDtlName))
-			{
-				var st = (SubTable)_htSubTables[strBelongDtlName];
-				htColumns = st.Columns;
-			}
-			else
-			{
-				Excel.Range rangeBelongDtl = range.Worksheet.Names.Item(strBelongDtlName).RefersToRange;
-				htColumns = GetAreaColumns(rangeBelongDtl);
-				//subTable.Columns = htColumns;//TODO: 此时是否运行重新获取字段信息？？
-			}
+        public string __abandon_GetDtlColName(Excel.Range range)
+        {
+            //获取所属子表
+            var strBelongDtlName = _base.GetBelongDtlName(range);
+            if (string.IsNullOrEmpty(strBelongDtlName))
+                return null;
 
-			if (htColumns.Contains(range.Column))
-				return htColumns[range.Column].ToString();
-			else
-				return null;
-		}
+            //获取子表列（表头）信息
+            Hashtable htColumns;
+            if (_htSubTables.Contains(strBelongDtlName))
+            {
+                var st = (SubTable)_htSubTables[strBelongDtlName];
+                htColumns = st.Columns;
+            }
+            else
+            {
+                Excel.Range rangeBelongDtl = range.Worksheet.Names.Item(strBelongDtlName).RefersToRange;
+                htColumns = GetAreaColumns(rangeBelongDtl);
+                //subTable.Columns = htColumns;//TODO: 此时是否运行重新获取字段信息？？
+            }
 
+            if (htColumns.Contains(range.Column))
+                return htColumns[range.Column].ToString();
+
+            return null;
+        }
 		#endregion
 
 
@@ -1698,26 +1689,23 @@ namespace CCFormExcel2010
 		}
 
 		#region VSTO generated code
-
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		private void InternalStartup()
-		{
-			this.Startup += new System.EventHandler(ThisAddIn_Startup);
-			this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
+        private void InternalStartup()
+        {
+            this.Startup += new System.EventHandler(ThisAddIn_Startup);
+            this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
 
-			//单元格内容变动监听事件
-			this.Application.SheetChange += new Excel.AppEvents_SheetChangeEventHandler(Application_SheetChange);
-			//保存事件
-			this.Application.WorkbookAfterSave += new Excel.AppEvents_WorkbookAfterSaveEventHandler(Application_WorkbookAfterSave);
+            //单元格内容变动监听事件
+            this.Application.SheetChange += new Excel.AppEvents_SheetChangeEventHandler(Application_SheetChange);
+            //保存事件
+            this.Application.WorkbookAfterSave += new Excel.AppEvents_WorkbookAfterSaveEventHandler(Application_WorkbookAfterSave);
 
-			//撤销事件
-			//this.Application.OnUndo += new Excel.(Application_OnUndo); 
-
-		}
-
+            //撤销事件.
+            //this.Application.OnUndo += new Excel.(Application_OnUndo); 
+        }
 		#endregion
 	}
 }

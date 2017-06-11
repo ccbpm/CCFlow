@@ -77,6 +77,9 @@ namespace BP.Excel
 		/// 当前工作ID
 		/// </summary>
 		public static int WorkID;
+        /// <summary>
+        /// 父流程ID
+        /// </summary>
 		public static int PWorkID;
 		/// <summary>
 		/// 当前Excel表单绑定的节点ID
@@ -105,12 +108,10 @@ namespace BP.Excel
 		/// 参数是否加载成功，加载不成功，所有插件功能不启用
 		/// </summary>
 		public static bool LoadSuccessful = false;
-
 		/// <summary>
 		/// 是否只读
 		/// </summary>
 		public static bool IsReadonly = false;
-
 		/// <summary>
 		/// 本地保存的Excel（路径+文件名）
 		/// </summary>

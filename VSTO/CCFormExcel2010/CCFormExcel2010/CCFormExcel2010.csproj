@@ -179,6 +179,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="BP.DA\DataType.cs" />
     <Compile Include="ExcelFormBase.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -232,7 +233,6 @@
     </None>
     <None Include="Service References\CCForm\configuration.svcinfo" />
     <None Include="Service References\CCForm\configuration91.svcinfo" />
-    <None Include="Service References\CCForm\CCFormAPI1.disco" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -240,6 +240,10 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CCForm\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CCForm\CCFormAPI1.disco" />
+  </ItemGroup>
+  <ItemGroup />
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Include additional build rules for an Office application add-in. -->

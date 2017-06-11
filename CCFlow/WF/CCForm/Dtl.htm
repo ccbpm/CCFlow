@@ -821,11 +821,29 @@
                     rowData.FK_MapDtl = GetQueryString("EnsName");
                     //row.FK_MapData = "ND101";
                     rowData.RefPKVal = GetQueryString("RefPKVal");
+
+
+
+                    //alert(rowData.OID)
                     var dbDataRow = $.grep(pageData.DBDtl, function (val) { return val.OID == rowData.OID; });
                     if (rowData.OID != 0 && dbDataRow.length == 1 && JSON.stringify(dbDataRow[0].RowData) == JSON.stringify(trData)) {
                         //值未改变，无需存盘
                         alerdaySaveCount++;
                         return;
+                    } else if (rowData.OID == 0) {
+                        var isEdit = false;
+                        for (var pro in workNodeData.Blank[0]) {
+                            if (rowData[pro] != undefined && rowData[pro] != workNodeData.Blank[0][pro]) {
+                                isEdit = true;
+                            }
+                        }
+                        if (isEdit) {//改变了，入库
+                            AjaxServiceGener(rowData, SaveRowAfter, this);
+                        }
+                        else {
+                            //未录入值  无需存盘
+                            alerdaySaveCount++;
+                        }
                     } else {
                         AjaxServiceGener(rowData, SaveRowAfter, this);
                     }
@@ -857,25 +875,44 @@
     </div>
 	
 	<script type="text/javascript">
-	    function deleteRow(index) {
-	        //$.messager.confirm('删除确认', '确定要删除吗?', function (r) {
+        function deleteRow(index) {
+            var result = parent.window.confirm('删除确认', '确定要删除吗?');
+            if (result) {
+                var rowData = $(index).parent().parent().data().data;
+                var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
+                pageData.currentRowIndex = rowCurrentIndex;
+                if (rowData.OID > 0) {
+                    rowData.DoType = "Dtl_DeleteRow";
+                    rowData.FK_MapDtl = GetQueryString("EnsName");
+                    //row.FK_MapData = "ND101";
+                    rowData.RefPKVal = GetQueryString("RefPKVal");
+                    currentRowIndex = -1;
+                    AjaxServiceGener(rowData, deleteRowAfter, this);
+                } else { //移除  新增的 尚未入库
+                    var tr = $(index).parent().parent();
+                    updateTableSn(tr);
+                    tr.remove();
+                }
+            }
+	        //parent.window.confirm('删除确认', '确定要删除吗?', function (r) {
+            //    //$.messager.confirm('删除确认', '确定要删除吗?', function (r) {
 	        //    if (r) {
-	                var rowData = $(index).parent().parent().data().data;
-	                var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
-	                pageData.currentRowIndex = rowCurrentIndex;
-	                if (rowData.OID > 0) {
-	                    rowData.DoType = "Dtl_DeleteRow";
-	                    rowData.FK_MapDtl = GetQueryString("EnsName");
-	                    //row.FK_MapData = "ND101";
-	                    rowData.RefPKVal = GetQueryString("RefPKVal");
-	                    currentRowIndex = -1;
-	                    AjaxServiceGener(rowData, deleteRowAfter, this);
-	                } else { //移除  新增的 尚未入库
-	                    var tr=$(index).parent().parent();
-	                    updateTableSn(tr);
-	                    tr.remove();
-	                }
-	           // } 
+	        //        var rowData = $(index).parent().parent().data().data;
+	        //        var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
+	        //        pageData.currentRowIndex = rowCurrentIndex;
+	        //        if (rowData.OID > 0) {
+	        //            rowData.DoType = "Dtl_DeleteRow";
+	        //            rowData.FK_MapDtl = GetQueryString("EnsName");
+	        //            //row.FK_MapData = "ND101";
+	        //            rowData.RefPKVal = GetQueryString("RefPKVal");
+	        //            currentRowIndex = -1;
+	        //            AjaxServiceGener(rowData, deleteRowAfter, this);
+	        //        } else { //移除  新增的 尚未入库
+	        //            var tr=$(index).parent().parent();
+	        //            updateTableSn(tr);
+	        //            tr.remove();
+	        //        }
+	        //    } 
 	        //});
 	    }
 

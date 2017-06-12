@@ -3297,7 +3297,6 @@
     <Content Include="WF\PrintSample.aspx" />
     <Content Include="WF\PrintWorkNode.aspx" />
     <Content Include="WF\Pub.ascx" />
-    <Content Include="WF\Rpt.aspx" />
     <Content Include="WF\Rpt\Attachment.aspx" />
     <Content Include="WF\Rpt\Bill.aspx" />
     <Content Include="WF\Rpt\Contrast.aspx" />
@@ -7209,12 +7208,6 @@
     <Content Include="WF\StartGuideEntities.aspx" />
     <Content Include="WF\StartGuideEntities.htm" />
     <Content Include="WF\Style\BlankTitle.JPG" />
-    <Content Include="WF\Style\FormThemes\CCFormFrm.css" />
-    <Content Include="WF\Style\FormThemes\CCFormWinOpen.css" />
-    <Content Include="WF\Style\FormThemes\MyFlow.css" />
-    <Content Include="WF\Style\FormThemes\Table0.css" />
-    <Content Include="WF\Style\FormThemes\WFWinOpen.css" />
-    <Content Include="WF\Style\FormThemes\WinOpenEUI.css" />
     <Content Include="WF\Style\Frm\jquery.idTabs.min.js" />
     <Content Include="WF\Style\Frm\jquery.min.js" />
     <Content Include="WF\Style\Frm\tab.css" />
@@ -7227,77 +7220,8 @@
     <Content Include="WF\Style\Img\not-found.png" />
     <Content Include="WF\Style\Img\shadow.gif" />
     <Content Include="WF\Style\Img\shadow.png" />
-    <Content Include="WF\Style\JScript.js" />
     <Content Include="WF\Style\Max.gif" />
     <Content Include="WF\Style\Min.gif" />
-    <Content Include="WF\Style\Skin\t0\background.png" />
-    <Content Include="WF\Style\Skin\t0\bgimg.jpg" />
-    <Content Include="WF\Style\Skin\t0\nv.png" />
-    <Content Include="WF\Style\Skin\t0\nv_a.png" />
-    <Content Include="WF\Style\Skin\t0\style.css" />
-    <Content Include="WF\Style\Skin\t1\background.png" />
-    <Content Include="WF\Style\Skin\t1\bgimg.jpg" />
-    <Content Include="WF\Style\Skin\t1\create_group.png" />
-    <Content Include="WF\Style\Skin\t1\hotspot.gif" />
-    <Content Include="WF\Style\Skin\t1\mood_input_btn.png" />
-    <Content Include="WF\Style\Skin\t1\nv.png" />
-    <Content Include="WF\Style\Skin\t1\nv_a.png" />
-    <Content Include="WF\Style\Skin\t1\pn.png" />
-    <Content Include="WF\Style\Skin\t1\pn_post.png" />
-    <Content Include="WF\Style\Skin\t1\pn_reply.png" />
-    <Content Include="WF\Style\Skin\t1\polljoins.gif" />
-    <Content Include="WF\Style\Skin\t1\style.css" />
-    <Content Include="WF\Style\Skin\t1\titlebg.png" />
-    <Content Include="WF\Style\Skin\t1\titlebg_sd.png" />
-    <Content Include="WF\Style\Skin\t1\vlineb.png" />
-    <Content Include="WF\Style\Skin\t2\background.png" />
-    <Content Include="WF\Style\Skin\t2\bgimg.jpg" />
-    <Content Include="WF\Style\Skin\t2\create_group.png" />
-    <Content Include="WF\Style\Skin\t2\hotspot.gif" />
-    <Content Include="WF\Style\Skin\t2\mood_input_btn.png" />
-    <Content Include="WF\Style\Skin\t2\nv.png" />
-    <Content Include="WF\Style\Skin\t2\nv_a.png" />
-    <Content Include="WF\Style\Skin\t2\pn.png" />
-    <Content Include="WF\Style\Skin\t2\pn_post.png" />
-    <Content Include="WF\Style\Skin\t2\pn_reply.png" />
-    <Content Include="WF\Style\Skin\t2\polljoins.gif" />
-    <Content Include="WF\Style\Skin\t2\search.png" />
-    <Content Include="WF\Style\Skin\t2\style.css" />
-    <Content Include="WF\Style\Skin\t2\titlebg.png" />
-    <Content Include="WF\Style\Skin\t2\titlebg_sd.png" />
-    <Content Include="WF\Style\Skin\t2\vlineb.png" />
-    <Content Include="WF\Style\Skin\t3\background.png" />
-    <Content Include="WF\Style\Skin\t3\bgimg.jpg" />
-    <Content Include="WF\Style\Skin\t3\create_group.png" />
-    <Content Include="WF\Style\Skin\t3\hotspot.gif" />
-    <Content Include="WF\Style\Skin\t3\mood_input_btn.png" />
-    <Content Include="WF\Style\Skin\t3\nv.png" />
-    <Content Include="WF\Style\Skin\t3\nv_a.png" />
-    <Content Include="WF\Style\Skin\t3\pn.png" />
-    <Content Include="WF\Style\Skin\t3\pn_post.png" />
-    <Content Include="WF\Style\Skin\t3\pn_reply.png" />
-    <Content Include="WF\Style\Skin\t3\polljoins.gif" />
-    <Content Include="WF\Style\Skin\t3\style.css" />
-    <Content Include="WF\Style\Skin\t3\titlebg.png" />
-    <Content Include="WF\Style\Skin\t3\titlebg_sd.png" />
-    <Content Include="WF\Style\Skin\t3\vlineb.png" />
-    <Content Include="WF\Style\Skin\t4\background.png" />
-    <Content Include="WF\Style\Skin\t4\bgimg.jpg" />
-    <Content Include="WF\Style\Skin\t4\create_group.png" />
-    <Content Include="WF\Style\Skin\t4\hotspot.gif" />
-    <Content Include="WF\Style\Skin\t4\mood_input_btn.png" />
-    <Content Include="WF\Style\Skin\t4\nv.png" />
-    <Content Include="WF\Style\Skin\t4\nv_a.png" />
-    <Content Include="WF\Style\Skin\t4\pn.png" />
-    <Content Include="WF\Style\Skin\t4\pn_post.png" />
-    <Content Include="WF\Style\Skin\t4\pn_reply.png" />
-    <Content Include="WF\Style\Skin\t4\polljoins.gif" />
-    <Content Include="WF\Style\Skin\t4\qmenu.png" />
-    <Content Include="WF\Style\Skin\t4\search.png" />
-    <Content Include="WF\Style\Skin\t4\style.css" />
-    <Content Include="WF\Style\Skin\t4\titlebg.png" />
-    <Content Include="WF\Style\Skin\t4\titlebg_sd.png" />
-    <Content Include="WF\Style\Skin\t4\vlineb.png" />
     <Content Include="WF\Style\themes\default\accordion.css" />
     <Content Include="WF\Style\themes\default\calendar.css" />
     <Content Include="WF\Style\themes\default\combo.css" />
@@ -7424,8 +7348,6 @@
     <Content Include="WF\WebOffice\TempLate.aspx" />
     <Content Include="WF\WFRpt.aspx" />
     <Content Include="WF\WFRpt.htm" />
-    <Content Include="WF\WFRptDtl.aspx" />
-    <Content Include="WF\WFRptFHL.aspx" />
     <Content Include="WF\WorkOpt\Accepter.aspx" />
     <Content Include="WF\WorkOpt\Accepter.htm" />
     <Content Include="WF\WorkOpt\AccepterAdv.aspx" />
@@ -7440,14 +7362,11 @@
     <Content Include="WF\WorkOpt\CC.htm" />
     <Content Include="WF\WorkOpt\CCCheckNote.aspx" />
     <Content Include="WF\WorkOpt\CCFlowAPI.asmx" />
-    <Content Include="WF\WorkOpt\CCFlowAPITester.aspx" />
-    <Content Include="WF\WorkOpt\CH.aspx" />
     <Content Include="WF\WorkOpt\ChartTrackV2.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.htm" />
     <Content Include="WF\WorkOpt\DeleteFlowInstance.htm" />
     <Content Include="WF\WorkOpt\DTC.aspx" />
-    <Content Include="WF\WorkOpt\ExpImp.aspx" />
     <Content Include="WF\WorkOpt\FHLFlow.aspx" />
     <Content Include="WF\WorkOpt\FoolFrmTrack.htm" />
     <Content Include="WF\WorkOpt\Forward.aspx" />
@@ -7626,9 +7545,6 @@
     <None Include="WF\Scripts\jBox\Skins\Blue\OneNote 目录.onetoc2" />
     <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-16x16.psd" />
     <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-32x32.psd" />
-    <None Include="WF\Style\Skin\t2\Thumbs.db" />
-    <None Include="WF\Style\Skin\t3\Thumbs.db" />
-    <None Include="WF\Style\Skin\t4\Thumbs.db" />
     <Content Include="WF\WinOpen.master" />
     <Content Include="WF\WinOpenEUI.Master" />
   </ItemGroup>
@@ -10139,13 +10055,6 @@
     <Compile Include="WF\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt.aspx.cs">
-      <DependentUpon>Rpt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Rpt.aspx.designer.cs">
-      <DependentUpon>Rpt.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Rpt\Attachment.aspx.cs">
       <DependentUpon>Attachment.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10597,20 +10506,6 @@
     <Compile Include="WF\WFRpt.aspx.designer.cs">
       <DependentUpon>WFRpt.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WFRptDtl.aspx.cs">
-      <DependentUpon>WFRptDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WFRptDtl.aspx.designer.cs">
-      <DependentUpon>WFRptDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WFRptFHL.aspx.cs">
-      <DependentUpon>WFRptFHL.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WFRptFHL.aspx.designer.cs">
-      <DependentUpon>WFRptFHL.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WinOpen.master.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10677,20 +10572,6 @@
     <Compile Include="WF\WorkOpt\CCFlowAPI.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WF\WorkOpt\CCFlowAPITester.aspx.cs">
-      <DependentUpon>CCFlowAPITester.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\CCFlowAPITester.aspx.designer.cs">
-      <DependentUpon>CCFlowAPITester.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\CH.aspx.cs">
-      <DependentUpon>CH.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\CH.aspx.designer.cs">
-      <DependentUpon>CH.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\ChartTrackV2.aspx.cs">
       <DependentUpon>ChartTrackV2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10711,13 +10592,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\DTC.aspx.designer.cs">
       <DependentUpon>DTC.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ExpImp.aspx.cs">
-      <DependentUpon>ExpImp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ExpImp.aspx.designer.cs">
-      <DependentUpon>ExpImp.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\FHLFlow.aspx.cs">
       <DependentUpon>FHLFlow.aspx</DependentUpon>

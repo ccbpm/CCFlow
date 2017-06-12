@@ -14,7 +14,7 @@
         emps.RetrieveAll();
       %>
 
-      <table style="border:1px;">
+      <table style="border:1px; width:100%;">
       <caption> 发起前置导航自定义URL测试案例</caption>
       <tr>
       <th>序</th>
@@ -30,7 +30,7 @@
               idx++;
 
               //注意必须有FK_Flow 与 IsCheckGuide=1 的参数.
-              string url = "../../WF/MyFlow.aspx?FK_Flow=163&IsCheckGuide=1&Tel=" + item.Tel + "&Email=" + item.Email + "&EmpNo=" + item.No + "&EmpName=" + item.Name;
+              string url = "../../WF/MyFlow.htm?FK_Flow=163&IsCheckGuide=1&Tel=" + item.Tel + "&Email=" + item.Email + "&EmpNo=" + item.No + "&EmpName=" + item.Name;
       %>
       <tr>
       <td><%=idx %></td>

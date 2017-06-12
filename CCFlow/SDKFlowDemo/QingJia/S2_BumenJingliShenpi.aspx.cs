@@ -111,7 +111,7 @@ namespace CCFlow.SDKFlowDemo.QingJia
 
 
             //objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
-            objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, 1803, "zhangsan,lisi,");
+            //objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, 0, null);
 
             ///***发送后，流程转向问题 BY HZM ******/
             if (en.QingJiaTianShu > 10)

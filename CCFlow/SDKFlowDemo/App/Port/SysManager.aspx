@@ -13,18 +13,18 @@
     <fieldset>
     <legend> 组织结构管理</legend>
     <ul>
-   <li> <a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Emps"> 人员</a> </li>
-  <li>  <a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Depts"> 部门</a></li>
-  <li>  <a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Stations"> 岗位</a></li>
+   <li> <a href="/WF/Comm/Search.htm?EnsName=BP.Port.Emps"> 人员</a> </li>
+  <li>  <a href="/WF/Comm/Search.htm?EnsName=BP.Port.Depts"> 部门</a></li>
+  <li>  <a href="/WF/Comm/Search.htm?EnsName=BP.Port.Stations"> 岗位</a></li>
     </ul>
     </fieldset>
 
      <fieldset>
     <legend> 故障编码配置管理</legend>
     <ul>
-   <li> <a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Emps"> 人员</a> </li>
-  <li>  <a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Depts"> 部门</a></li>
-  <li>  <a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Stations"> 岗位</a> </li>
+   <li> <a href="/WF/Comm/Search.htm?EnsName=BP.Port.Emps"> 人员</a> </li>
+  <li>  <a href="/WF/Comm/Search.htm?EnsName=BP.Port.Depts"> 部门</a></li>
+  <li>  <a href="/WF/Comm/Search.htm?EnsName=BP.Port.Stations"> 岗位</a> </li>
     </ul>
     </fieldset>
 
@@ -32,9 +32,9 @@
      <fieldset>
     <legend> 基础数据配置管理</legend>
     <ul>
-  <li>  <a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Emps"> 人员</a> </li>
-  <li>  <a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Depts"> 部门</a> </li>
-  <li>  <a href="/WF/Comm/Search.aspx?EnsName=BP.Port.Stations"> 岗位</a> </li>
+  <li>  <a href="/WF/Comm/Search.htm?EnsName=BP.Port.Emps"> 人员</a> </li>
+  <li>  <a href="/WF/Comm/Search.htm?EnsName=BP.Port.Depts"> 部门</a> </li>
+  <li>  <a href="/WF/Comm/Search.htm?EnsName=BP.Port.Stations"> 岗位</a> </li>
     </ul>
     </fieldset>
 

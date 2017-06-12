@@ -99,7 +99,7 @@ namespace BP.UnitTesting.SendCase
                 fl.CheckRpt();
                 fl.DoDelData();
 
-                BP.Sys.SystemConfig.DoClearCash_del();
+                BP.Sys.SystemConfig.DoClearCash();
 
                 err = "@第Send023 错误.";
                 Send023 se = new Send023();
@@ -141,7 +141,7 @@ namespace BP.UnitTesting.SendCase
             string sqlscript = "";
             sqlscript = BP.Sys.SystemConfig.PathOfData + "\\Install\\SQLScript\\Port_Inc_CH_BMP.sql";
             BP.DA.DBAccess.RunSQLScript(sqlscript);
-            BP.Sys.SystemConfig.DoClearCash_del();
+            BP.Sys.SystemConfig.DoClearCash();
         }
     }
 }

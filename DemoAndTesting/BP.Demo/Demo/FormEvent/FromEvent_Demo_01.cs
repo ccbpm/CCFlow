@@ -15,7 +15,7 @@ namespace BP.Demo.FormEvent
     /// <summary>
     /// 表单事件demo.
     /// </summary>
-    public class FromEvent_Demo_01: BP.Sys.FormEventBase
+    public class FromEvent_Demo_01 : BP.Sys.FormEventBase
     {
         /// <summary>
         /// 标记该表单事件实体是要注册到那个类上

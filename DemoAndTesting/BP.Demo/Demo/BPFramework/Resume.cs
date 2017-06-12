@@ -144,9 +144,7 @@ namespace BP.Demo
                 map.AddTBString(ResumeAttr.GongZuoDanWei, null, "工作单位", true, false, 0, 200, 70);
                 map.AddTBString(ResumeAttr.ZhengMingRen, "", "证明人", true, false, 0, 200, 50);
                 map.AddTBString(ResumeAttr.BeiZhu, null, "备注", true, false, 0, 200, 150);
-
                 map.AddTBString("QT", null, "其他", true, false, 0, 200, 150);
-
 
                 this._enMap = map;
                 return this._enMap;

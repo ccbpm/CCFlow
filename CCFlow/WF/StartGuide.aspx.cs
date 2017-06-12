@@ -49,7 +49,6 @@ namespace CCFlow.WF
                 string url = "<div style='float:right'><a href=\"javascript:WinOpen('" + fl.StartGuideLink + "')\" >" + fl.StartGuideLab + "</a></div>";
                 this.Pub1.Add(url);
             }
-
             
             this.Pub1.AddTD();
 

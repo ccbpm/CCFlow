@@ -233,7 +233,7 @@ namespace CCFlow.WF.CCForm
             if (this.Request.QueryString["IsTest"] == "1")
             {
                 md.RepairMap();
-                BP.Sys.SystemConfig.DoClearCash_del();
+                BP.Sys.SystemConfig.DoClearCash();
             }
 
             if (this.Request.QueryString["IsLoadData"] == "1")
@@ -253,8 +253,6 @@ namespace CCFlow.WF.CCForm
                         this.Response.Redirect(md.Url + "?" + urlParas, true);
                     return;
                 }
-
-           
 
                 /* 没有找到此map. */
                 MapDtl dtl = new MapDtl(this.FK_MapData);

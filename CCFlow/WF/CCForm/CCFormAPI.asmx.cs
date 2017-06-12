@@ -228,6 +228,17 @@ namespace CCFlow.WF.CCForm
 					//获取dtls
 					GEDtls daDtls = new GEDtls(dtl.No);
 
+                    //获得主表事件.
+                    FrmEvents fes = new FrmEvents(dtl.No); //获得事件.
+                    GEEntity mainEn = null;
+                    if (fes.Count > 0)
+                        mainEn = dtl.GenerGEMainEntity(pkValue);
+
+                    //求出从表实体类.
+                    BP.Sys.FormEventBaseDtl febd =null;
+                    if (dtl.FEBD!="")
+                        febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(dtl.No);
+
 					// 更新数据.
 					foreach (DataRow dr in dt.Rows)
 					{
@@ -246,14 +257,48 @@ namespace CCFlow.WF.CCForm
 						}
 
 						daDtl.SetValByKey(dtl.RefPK, pkValue);
-
 						daDtl.RDT = DataType.CurrentDataTime;
+
+                        #region 从表保存前处理事件.
+                        if (fes.Count > 0)
+                        {
+                            string msg = fes.DoEventNode(FrmEventListDtl.RowSaveBefore, mainEn);
+                            if (msg != null)
+                                throw new Exception(msg);
+                        }
+
+                        if (febd != null)
+                        {
+                            febd.HisEn = mainEn;
+                            febd.HisEnDtl = daDtl;
+                            febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, daDtl, null);
+                        }
+                        #endregion 从表保存前处理事件.
+
 
 						//执行保存.
 						if (daDtl.OID > 100)
 							daDtl.Update(); //插入数据.
 						else
 							daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
+
+                        #region 从表保存后处理事件。
+                        if (fes.Count > 0)
+                        {
+                            string msg = fes.DoEventNode(FrmEventListDtl.RowSaveAfter, daDtl);
+                            if (msg != null)
+                                throw new Exception(msg);
+                        }
+
+                        if (febd  != null)
+                        {
+                            febd.HisEn = mainEn;
+                            febd.HisEnDtl = daDtl;
+
+                            febd.DoIt(FrmEventListDtl.RowSaveAfter, mainEn, daDtl, null);
+                        }
+                        #endregion 处理事件.
+
 					}
 				}
 			}

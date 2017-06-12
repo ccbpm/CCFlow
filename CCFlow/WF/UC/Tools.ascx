@@ -37,15 +37,6 @@
         
          %> <%=msg%> <%
      }
-        if (BP.Web.WebUser.No == "admin")
-        {
-              %> 
-
-              <li> <a href='?RefNo=AdminSet' >网站设置</a></li>
-              <li> <a href='/WF/Comm/Sys/Holiday.aspx' >节假日设置</a></li>
-
-               <%
-        }
        %>
      </ul>
    

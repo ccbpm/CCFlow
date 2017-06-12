@@ -1429,7 +1429,7 @@ namespace BP.Web
             md.UpdateVer();
 
             //清空缓存，后面优化对一个缓存项进行清除
-            BP.Sys.SystemConfig.DoClearCash_del();
+            BP.Sys.SystemConfig.DoClearCash();
 
             //md.DeleteFromCash();  ////移除缓存.
 

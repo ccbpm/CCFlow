@@ -130,7 +130,7 @@ function InitClick() {
         $('#right').css('display', 'none');
         $('#container').css('right', '0px');
     })
-}
+}  
 
 var figureIdMouseMove = -1;
 var dealWhithMouseMove = false;

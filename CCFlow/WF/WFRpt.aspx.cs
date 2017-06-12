@@ -22,7 +22,6 @@ namespace CCFlow.WF
 
             //在途链接 默认显示轨迹图tab页面   by tianbaoyan 2016-11-28
             string redirectURL = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=";
-            //流程日志  ./WorkOpt/OneWork/Track.aspx?FK_Flow=
 
             if (this.Request.QueryString["DoType"] == "CC")
             {

@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" MasterPageFile="SysMapEn.master" AutoEventWireup="true" Inherits="CCFlow.WF.Comm.RefFunc.SysMapEnUI" Title="卡片" Codebehind="SysMapEn.aspx.cs" %>
 <%@ Register src="SysMapEnUC.ascx" tagname="SysMapEnUC" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-    <script language="JavaScript" src="Style/JScript.js"></script>
+    <script language="JavaScript" src="Style/JScript.js" type="text/javascript" ></script>
     <script language="javascript">
     function GroupBarClick(rowIdx) {
         var alt = document.getElementById('Img' + rowIdx).alert;

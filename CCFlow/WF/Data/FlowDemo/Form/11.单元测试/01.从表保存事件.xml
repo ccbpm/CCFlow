@@ -801,12 +801,32 @@
     <MaxLen>50</MaxLen>
     <GroupID>2095</GroupID>
   </Sys_MapAttr>
+  <Sys_MapExt>
+    <MyPK>AutoFull_Demo_TastCaseEventFrmDtl1_XiaoJi</MyPK>
+    <FK_MapData>Demo_TastCaseEventFrmDtl1</FK_MapData>
+    <ExtType>AutoFull</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>XiaoJi</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>@DanJia*@ShuLiang</Doc>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
   <Sys_FrmLab>
     <MyPK>540A899B-9BD1-A562-7980-D9D19E5A2DF5</MyPK>
     <FK_MapData>Demo_TastCaseEventFrm</FK_MapData>
     <Text>从表2(使用事件类)</Text>
     <X>66.5</X>
-    <Y>335</Y>
+    <Y>334</Y>
     <FontColor>Red</FontColor>
     <FontName>Portable User Interface</FontName>
     <FontSize>14</FontSize>
@@ -870,8 +890,8 @@
     <WhenOverSize>0</WhenOverSize>
     <DtlOpenType>1</DtlOpenType>
     <DtlShowModel>0</DtlShowModel>
-    <X>70</X>
-    <Y>95</Y>
+    <X>71</X>
+    <Y>93</Y>
     <H>197</H>
     <W>714.8333</W>
     <FrmW>900</FrmW>
@@ -889,6 +909,7 @@
     <AtPara />
     <SubThreadWorker />
     <SubThreadWorkerText />
+    <FEBD />
   </Sys_MapDtl>
   <Sys_MapDtl>
     <No>Demo_TastCaseEventFrmDtl2</No>
@@ -917,8 +938,8 @@
     <WhenOverSize>0</WhenOverSize>
     <DtlOpenType>1</DtlOpenType>
     <DtlShowModel>0</DtlShowModel>
-    <X>65.00001</X>
-    <Y>360</Y>
+    <X>66.00001</X>
+    <Y>356</Y>
     <H>215</H>
     <W>712.5</W>
     <FrmW>900</FrmW>
@@ -934,7 +955,8 @@
     <ImpSQLInit />
     <ImpSQLFull />
     <AtPara />
-    <SubThreadWorker />
+    <SubThreadWorker>无</SubThreadWorker>
     <SubThreadWorkerText />
+    <FEBD>BP.Demo.FormEvent.Demo_TastCaseEventFrmDtl2</FEBD>
   </Sys_MapDtl>
 </NewDataSet>

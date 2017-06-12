@@ -22,6 +22,7 @@ namespace CCFlow.WF.UC
 {
     public partial class WFRpt : BP.Web.UC.UCBase3
     {
+
         #region 属性
         public new string DoType
         {
@@ -132,6 +133,7 @@ namespace CCFlow.WF.UC
             set { _btnWord = value; }
         }
         #endregion
+
         ToolBar toolbar = null;
         public BP.WF.Node currND = null;
         public void InitToolbar(bool isAskFor, string appPath)

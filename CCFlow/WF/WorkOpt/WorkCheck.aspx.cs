@@ -567,6 +567,7 @@ namespace CCFlow.WF.WorkOpt
                                 continue;
                             if (item.AccType == 0)
                                 continue;
+
                             if (ccls.IsExits(CCListAttr.FK_Node, nd.NodeID) == true)
                                 continue;
 
@@ -597,7 +598,6 @@ namespace CCFlow.WF.WorkOpt
                                 //info.
                                 this.Pub1.Add("<font style='color:Red;'>" + item.Info + "</font>");
                                 this.Pub1.AddHR();
-
                             }
                             else
                             {
@@ -881,7 +881,6 @@ namespace CCFlow.WF.WorkOpt
                     this.Pub1.AddTableEnd();
                 }
             }
-
             #endregion 处理审核意见框.
 
 

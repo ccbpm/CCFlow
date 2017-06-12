@@ -845,6 +845,21 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 事件类.
+        /// </summary>
+        public string FEBD
+        {
+            get
+            {
+                return this.GetValStrByKey(MapDtlAttr.FEBD);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.FEBD, value);
+            }
+        }
+        
+        /// <summary>
         /// 数量
         /// </summary>
         public int RowsOfList
@@ -952,6 +967,8 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.Name, null, "名称", true, false, 1, 200, 20);
                 map.AddTBString(MapDtlAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
                 map.AddTBString(MapDtlAttr.PTable, null, "存储表", true, false, 0, 200, 20);
+
+                map.AddTBString(MapDtlAttr.FEBD, null, "事件类实体", true, true, 0, 100, 20, true);
 
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,MapDtlAttr.Model, "@0=普通@1=固定行");
 
@@ -1131,6 +1148,15 @@ namespace BP.WF.Template
             MapDtl dtl = new MapDtl(this.No);
             dtl.IsEnablePass = this.IsEnableAthM;
             dtl.Update();
+
+            //获得事件实体.
+            var febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(this.No);
+            if (febd == null)
+                this.FEBD = "";
+            else
+                this.FEBD = febd.ToString();
+
+
             return base.beforeUpdate();
         }
         /// <summary>

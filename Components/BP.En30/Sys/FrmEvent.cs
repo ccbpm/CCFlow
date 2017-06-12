@@ -107,6 +107,17 @@ namespace BP.Sys
         /// </summary>
         public const string DtlRowSaveAfter = "DtlRowSaveAfter";
     }
+    public class FrmEventListDtl
+    {
+        /// <summary>
+        /// 从表保存前
+        /// </summary>
+        public const string RowSaveBefore = "DtlRowSaveBefore";
+        /// <summary>
+        /// 从表保存后
+        /// </summary>
+        public const string RowSaveAfter = "DtlRowSaveAfter";
+    }
     /// <summary>
     /// 事件标记列表
     /// </summary>

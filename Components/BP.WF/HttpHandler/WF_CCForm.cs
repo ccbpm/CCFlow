@@ -368,6 +368,13 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Frm_Init()
         {
+            if (this.GetRequestVal("IsTest") != null)
+            {
+                MapData mymd = new MapData(this.EnsName);
+                mymd.RepairMap();
+                BP.Sys.SystemConfig.DoClearCash();
+            }
+
             MapData md = new MapData(this.EnsName);
 
             #region 判断是否是返回的URL.
@@ -565,6 +572,17 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果数据</returns>
         public string Dtl_Init()
         {
+            #region 检查是否是测试.
+            if (this.GetRequestVal("IsTest") != null)
+            {
+                BP.Sys.GEDtl dtl = new GEDtl(this.EnsName);
+                dtl.CheckPhysicsTable();
+
+                //MapDtl mdtl = new MapDtl(this.EnsName);
+                //BP.Sys.CCFormAPI.RepareCCForm();
+            }
+            #endregion
+
             #region 组织参数.
             MapDtl mdtl = new MapDtl(this.EnsName);
             mdtl.No = this.EnsName;
@@ -654,19 +672,7 @@ namespace BP.WF.HttpHandler
                 dtl.RetrieveFromDBSources();
             }
 
-            //获得主表事件.
-            FrmEvents fes = new FrmEvents(this.FK_MapData); //获得事件.
-            GEEntity mainEn = null;
-
-            #region 从表保存前处理事件.
-            if (fes.Count > 0)
-            {
-                mainEn = mdtl.GenerGEMainEntity(this.RefPKVal);
-                string msg = fes.DoEventNode(EventListDtlList.DtlSaveBefore, mainEn);
-                if (msg != null)
-                    throw new Exception(msg);
-            }
-            #endregion 从表保存前处理事件.
+          
 
             #region 给实体循环赋值/并保存.
             BP.En.Attrs attrs = dtl.EnMap.Attrs;
@@ -677,6 +683,34 @@ namespace BP.WF.HttpHandler
 
             //关联主赋值.
             dtl.RefPK = this.RefPKVal;
+
+
+
+            #region 从表保存前处理事件.
+            //获得主表事件.
+            FrmEvents fes = new FrmEvents(this.FK_MapData); //获得事件.
+            GEEntity mainEn = null;
+            if (fes.Count > 0)
+            {
+                mainEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                string msg = fes.DoEventNode(EventListDtlList.DtlSaveBefore, mainEn);
+                if (msg != null)
+                    throw new Exception(msg);
+            }
+
+            if (mdtl.FEBD.Length != 0)
+            {
+                string str = mdtl.FEBD;
+                BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+
+                febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                febd.HisEnDtl = dtl;
+
+                febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, dtl, null);
+            }
+            #endregion 从表保存前处理事件.
+
+
 
             if (dtl.OID == 0)
             {
@@ -696,13 +730,22 @@ namespace BP.WF.HttpHandler
                 if (msg != null)
                     throw new Exception(msg);
             }
+
+            if (mdtl.FEBD.Length != 0)
+            {
+                string str = mdtl.FEBD;
+                BP.Sys.FormEventBaseDtl febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(mdtl.No);
+
+                febd.HisEn = mdtl.GenerGEMainEntity(this.RefPKVal);
+                febd.HisEnDtl = dtl;
+
+                febd.DoIt(FrmEventListDtl.RowSaveAfter, febd.HisEn, dtl, null);
+            }
             #endregion 处理事件.
 
             //返回当前数据存储信息.
-            string str= dtl.ToJson();
-
-           // BP.DA.DataType.WriteFile("c:\\cc.txt", str);
-            return str;
+            return dtl.ToJson();
+             
         }
         /// <summary>
         /// 删除

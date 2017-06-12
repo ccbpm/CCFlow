@@ -220,6 +220,7 @@
     <Compile Include="Sys\FrmUI\MapAttrDT.cs" />
     <Compile Include="Sys\FrmUI\MapAttrBoolen.cs" />
     <Compile Include="Sys\GEEntityMyPK.cs" />
+    <Compile Include="Sys\FormEventBaseDtl.cs" />
     <Compile Include="Tools\Cryptography.cs" />
     <Compile Include="Tools\DataSet2Json.cs" />
     <Compile Include="DA\EnumDA.cs" />

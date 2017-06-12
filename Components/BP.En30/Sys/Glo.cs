@@ -12,7 +12,7 @@ namespace BP.Sys
     /// </summary>
     public class Glo
     {
-        #region 与流程事件实体相关.
+        #region 与 表单 事件实体相关.
         private static Hashtable Htable_FormFEE = null;
         /// <summary>
         /// 获得节点事件实体
@@ -41,7 +41,37 @@ namespace BP.Sys
             return null;
              
         }
-        #endregion 与流程事件实体相关.
+        #endregion 与 表单 事件实体相关.
+
+        #region 与 表单从表 事件实体相关.
+        private static Hashtable Htable_FormFEEDtl = null;
+        /// <summary>
+        /// 获得节点事件实体
+        /// </summary>
+        /// <param name="enName">实例名称</param>
+        /// <returns>获得节点事件实体,如果没有就返回为空.</returns>
+        public static FormEventBaseDtl GetFormDtlEventBaseByEnName(string enName)
+        {
+            if (Htable_FormFEEDtl == null || Htable_FormFEEDtl.Count == 0)
+            {
+                Htable_FormFEEDtl = new Hashtable();
+                ArrayList al = BP.En.ClassFactory.GetObjects("BP.Sys.FormEventBaseDtl");
+                Htable_FormFEEDtl.Clear();
+                foreach (FormEventBaseDtl en in al)
+                {
+                    Htable_FormFEEDtl.Add(en.ToString(), en);
+                }
+            }
+
+            foreach (string key in Htable_FormFEEDtl.Keys)
+            {
+                FormEventBaseDtl fee = Htable_FormFEEDtl[key] as FormEventBaseDtl;
+                if (fee.FormDtlMark == enName)
+                    return fee;
+            }
+            return null;
+        }
+        #endregion 与 表单 事件实体相关.
 
 
         #region 公共变量.

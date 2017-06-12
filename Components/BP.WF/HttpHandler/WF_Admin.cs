@@ -45,6 +45,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TestFlow_Init()
         {
+            //清除缓存.
             BP.Sys.SystemConfig.DoClearCash();
 
             // 让admin 登录.

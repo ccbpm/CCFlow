@@ -528,10 +528,6 @@ namespace BP.Sys
         #endregion
 
         #region 系统配置信息
-        public static void DoClearCash_del()
-        {
-            DoClearCash();
-        }
         /// <summary>
         /// 执行清空
         /// </summary>
@@ -545,15 +541,6 @@ namespace BP.Sys
             BP.DA.Cash.BS_Cash.Clear();
             BP.DA.Cash.Bill_Cash.Clear();
             BP.DA.CashEntity.DCash.Clear();
-
-            try
-            {
-                //   System.Web.HttpContext.Current.Session.Clear();
-                // System.Web.HttpContext.Current.Application.Clear();
-            }
-            catch
-            {
-            }
         }
         /// <summary>
         /// 系统编号

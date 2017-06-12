@@ -156,7 +156,6 @@ namespace BP.Sys
         /// 是否启用通过
         /// </summary>
         public const string IsEnablePass = "IsEnablePass";
-      
         /// <summary>
         /// 是否是合流汇总数据
         /// </summary>
@@ -241,6 +240,11 @@ namespace BP.Sys
         /// 节点(用于多表单的权限控制)
         /// </summary>
         public const string FK_Node = "FK_Node";
+        /// <summary>
+        /// 映射的实体事件类
+        /// </summary>
+        public const string FEBD = "FEBD";
+
 
         #region 参数属性.
         public const string IsEnableLink = "IsEnableLink";
@@ -376,6 +380,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapDtlAttr.IsEnableSelectImp, value);
+            }
+        }
+        /// <summary>
+        /// 执行的类
+        /// </summary>
+        public string FEBD
+        {
+            get
+            {
+                return this.GetValStringByKey(MapDtlAttr.FEBD);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.FEBD, value);
             }
         }
         /// <summary>
@@ -1318,6 +1336,8 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.GroupField, null, "分组字段", true, false, 0, 300, 20);
                 map.AddTBString(MapDtlAttr.RefPK, null, "关联的主键", true, false, 0, 100, 20);
 
+                // 为明细表初始化事件类.
+                map.AddTBString(MapDtlAttr.FEBD, null, "映射的事件实体类", true, false, 0, 100, 20);
 
                 //map.AddTBInt(MapDtlAttr.Model, 0, "工作模式", false, false);
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,
@@ -1684,6 +1704,17 @@ namespace BP.Sys
             //更新MapData中的名称
             BP.Sys.MapData md = new BP.Sys.MapData();
             md.No = this.No;
+
+            //获得事件实体.
+            var febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(this.No);
+            if (febd == null)
+                this.FEBD = "";
+            else
+                this.FEBD = febd.ToString();
+
+            if (this.PTable.Length == 0)
+                this.PTable = this.No;
+
             if (md.RetrieveFromDBSources() == 1)
             {
                 md.Name = this.Name;

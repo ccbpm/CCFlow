@@ -69,6 +69,11 @@ namespace BP.Excel
 		/// Excel表单编号
 		/// </summary>
 		public static string FrmID = "";
+
+		/// <summary>
+		/// Excel表单的WorkID/实体类的主键
+		/// </summary>
+		public static string pkValue = "";
 		/// <summary>
 		/// 发起流程编号
 		/// </summary>
@@ -76,10 +81,7 @@ namespace BP.Excel
 		/// <summary>
 		/// 当前工作ID
 		/// </summary>
-		public static int WorkID;
-        /// <summary>
-        /// 父流程ID
-        /// </summary>
+		//public static int WorkID;
 		public static int PWorkID;
 		/// <summary>
 		/// 当前Excel表单绑定的节点ID
@@ -108,10 +110,12 @@ namespace BP.Excel
 		/// 参数是否加载成功，加载不成功，所有插件功能不启用
 		/// </summary>
 		public static bool LoadSuccessful = false;
+
 		/// <summary>
 		/// 是否只读
 		/// </summary>
 		public static bool IsReadonly = false;
+
 		/// <summary>
 		/// 本地保存的Excel（路径+文件名）
 		/// </summary>

@@ -23,7 +23,7 @@ namespace CCFormExcel2010.CCForm {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenerDBForVSTOExcelFrmModel", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid, string atParas);
+        System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, string pkValue, string atParas);
         
         // CODEGEN: Parameter 'byt' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SaveExcelFile", ReplyAction="*")]
@@ -32,7 +32,11 @@ namespace CCFormExcel2010.CCForm {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/MapExtGenerAcitviDDLDataTable", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        System.Data.DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, int mainEnPK, string mapExtMyPK, string cheaneKey, string paras);
+        System.Data.DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, string pkValue, string mapExtMyPK, string cheaneKey, string paras);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetVstoExtensionVersion", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        string GetVstoExtensionVersion();
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -51,7 +55,7 @@ namespace CCFormExcel2010.CCForm {
         public string frmID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=3)]
-        public int oid;
+        public string pkValue;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=4)]
         [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary")]
@@ -60,11 +64,11 @@ namespace CCFormExcel2010.CCForm {
         public GenerExcelFileRequest() {
         }
         
-        public GenerExcelFileRequest(string userNo, string sid, string frmID, int oid, byte[] bytes) {
+        public GenerExcelFileRequest(string userNo, string sid, string frmID, string pkValue, byte[] bytes) {
             this.userNo = userNo;
             this.sid = sid;
             this.frmID = frmID;
-            this.oid = oid;
+            this.pkValue = pkValue;
             this.bytes = bytes;
         }
     }
@@ -107,7 +111,7 @@ namespace CCFormExcel2010.CCForm {
         public string frmID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=3)]
-        public int mainEnPKOID;
+        public string pkValue;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=4)]
         public string mainTableAtParas;
@@ -125,11 +129,11 @@ namespace CCFormExcel2010.CCForm {
         public SaveExcelFileRequest() {
         }
         
-        public SaveExcelFileRequest(string userNo, string sid, string frmID, int mainEnPKOID, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt) {
+        public SaveExcelFileRequest(string userNo, string sid, string frmID, string pkValue, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt) {
             this.userNo = userNo;
             this.sid = sid;
             this.frmID = frmID;
-            this.mainEnPKOID = mainEnPKOID;
+            this.pkValue = pkValue;
             this.mainTableAtParas = mainTableAtParas;
             this.dsDtlsChange = dsDtlsChange;
             this.dsDtlsOld = dsDtlsOld;
@@ -179,20 +183,20 @@ namespace CCFormExcel2010.CCForm {
             return base.Channel.GenerExcelFile(request);
         }
         
-        public bool GenerExcelFile(string userNo, string sid, string frmID, int oid, ref byte[] bytes) {
+        public bool GenerExcelFile(string userNo, string sid, string frmID, string pkValue, ref byte[] bytes) {
             CCFormExcel2010.CCForm.GenerExcelFileRequest inValue = new CCFormExcel2010.CCForm.GenerExcelFileRequest();
             inValue.userNo = userNo;
             inValue.sid = sid;
             inValue.frmID = frmID;
-            inValue.oid = oid;
+            inValue.pkValue = pkValue;
             inValue.bytes = bytes;
             CCFormExcel2010.CCForm.GenerExcelFileResponse retVal = ((CCFormExcel2010.CCForm.CCFormAPISoap)(this)).GenerExcelFile(inValue);
             bytes = retVal.bytes;
             return retVal.GenerExcelFileResult;
         }
         
-        public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, int oid, string atParas) {
-            return base.Channel.GenerDBForVSTOExcelFrmModel(userNo, sid, frmID, oid, atParas);
+        public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, string pkValue, string atParas) {
+            return base.Channel.GenerDBForVSTOExcelFrmModel(userNo, sid, frmID, pkValue, atParas);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -200,12 +204,12 @@ namespace CCFormExcel2010.CCForm {
             return base.Channel.SaveExcelFile(request);
         }
         
-        public void SaveExcelFile(string userNo, string sid, string frmID, int mainEnPKOID, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt) {
+        public void SaveExcelFile(string userNo, string sid, string frmID, string pkValue, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt) {
             CCFormExcel2010.CCForm.SaveExcelFileRequest inValue = new CCFormExcel2010.CCForm.SaveExcelFileRequest();
             inValue.userNo = userNo;
             inValue.sid = sid;
             inValue.frmID = frmID;
-            inValue.mainEnPKOID = mainEnPKOID;
+            inValue.pkValue = pkValue;
             inValue.mainTableAtParas = mainTableAtParas;
             inValue.dsDtlsChange = dsDtlsChange;
             inValue.dsDtlsOld = dsDtlsOld;
@@ -213,8 +217,12 @@ namespace CCFormExcel2010.CCForm {
             CCFormExcel2010.CCForm.SaveExcelFileResponse retVal = ((CCFormExcel2010.CCForm.CCFormAPISoap)(this)).SaveExcelFile(inValue);
         }
         
-        public System.Data.DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, int mainEnPK, string mapExtMyPK, string cheaneKey, string paras) {
-            return base.Channel.MapExtGenerAcitviDDLDataTable(userNo, sid, mainEnPK, mapExtMyPK, cheaneKey, paras);
+        public System.Data.DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, string pkValue, string mapExtMyPK, string cheaneKey, string paras) {
+            return base.Channel.MapExtGenerAcitviDDLDataTable(userNo, sid, pkValue, mapExtMyPK, cheaneKey, paras);
+        }
+        
+        public string GetVstoExtensionVersion() {
+            return base.Channel.GetVstoExtensionVersion();
         }
     }
 }

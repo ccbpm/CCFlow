@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="UTKI5jOtBFwiHh5lJRKOO+Fzgiw=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="qKFdpO9bBvWrII826RKR6OJDA38=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="CCFormAPISoap">
       <properties>
@@ -263,10 +263,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="CCFormAPISoap" contract="CCForm.CCFormAPISoap" bindingType="basicHttpBinding" address="http://localhost:26507/WF/CCForm/CCFormAPI.asmx" bindingConfiguration="CCFormAPISoap">
+    <endpoint name="CCFormAPISoap" contract="CCForm.CCFormAPISoap" bindingType="basicHttpBinding" address="http://localhost:28048/WF/CCForm/CCFormAPI.asmx" bindingConfiguration="CCFormAPISoap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://localhost:26507/WF/CCForm/CCFormAPI.asmx</serializedValue>
+          <serializedValue>http://localhost:28048/WF/CCForm/CCFormAPI.asmx</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -348,10 +348,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="CCFormAPISoap12" contract="CCForm.CCFormAPISoap" bindingType="customBinding" address="http://localhost:26507/WF/CCForm/CCFormAPI.asmx" bindingConfiguration="CCFormAPISoap12">
+    <endpoint name="CCFormAPISoap12" contract="CCForm.CCFormAPISoap" bindingType="customBinding" address="http://localhost:28048/WF/CCForm/CCFormAPI.asmx" bindingConfiguration="CCFormAPISoap12">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://localhost:26507/WF/CCForm/CCFormAPI.asmx</serializedValue>
+          <serializedValue>http://localhost:28048/WF/CCForm/CCFormAPI.asmx</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

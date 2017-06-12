@@ -127,29 +127,37 @@ namespace CCFormExcel2010
 				else
 					throw new Exception("缺少参数: App");
 
+				//是否只读：只加载Excel文件本身，不取数据不填充
 				if (args.ContainsKey("IsReadonly"))
 					Glo.IsReadonly = args["IsReadonly"] == "1";
 				else if (args.ContainsKey("IsEdit"))
-					Glo.IsReadonly = args["IsEdit"] == "0";
-				//	Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
+					Glo.IsReadonly = args["IsEdit"] == "0"; //Globals.Ribbons.RibbonCCFlow.btnSaveFrm.Enabled = true;
 
+				//是否只保存文件：加载文件、填充数据，保存文件，但不保存表单数据
+				if (args.ContainsKey("IsSaveFileOnly"))
+					Glo.IsSaveFileOnly = args["IsSaveFileOnly"] == "1";
+
+				//身份认证相关
 				if (args.ContainsKey("UserNo"))
 					Glo.UserNo = args["UserNo"];
 				else
 					throw new Exception("缺少参数: UserNo");
-
 				if (args.ContainsKey("SID"))
 					Glo.SID = args["SID"];
 				else
 					throw new Exception("缺少参数: SID");
 
-				if (args.ContainsKey("FK_MapData"))
-					Glo.FrmID = args["FK_MapData"];//FrmID
-				else
-					throw new Exception("缺少参数: FK_MapData");
-
-				if (Glo.FrmID.IndexOf("BP.") == -1) //若为表单
+				if (args.ContainsKey("FK_MapData")) //若为表单
 				{
+					Glo.eType = ExcelType.Form;
+					Glo.FrmID = args["FK_MapData"];//FrmID
+
+					if (args.ContainsKey("WorkID"))
+						//Glo.WorkID = int.Parse(args["WorkID"]);
+						Glo.pkValue = args["WorkID"];
+					else
+						throw new Exception("缺少参数: WorkID");
+
 					if (args.ContainsKey("FK_Flow"))
 						Glo.FK_Flow = args["FK_Flow"];
 					else
@@ -160,29 +168,26 @@ namespace CCFormExcel2010
 					else
 						throw new Exception("缺少参数: FK_Node");
 
-					if (args.ContainsKey("WorkID"))
-					{
-						//Glo.WorkID = int.Parse(args["WorkID"]);
-						Glo.pkValue = args["WorkID"];
-					}
-					else
-						throw new Exception("缺少参数: WorkID");
-
 					if (args.ContainsKey("PWorkID"))
 						Glo.PWorkID = int.Parse(args["PWorkID"]);
 					else
 						throw new Exception("缺少参数: PWorkID");
 				}
-				else //if (Glo.App == "Class") //若为类
+				else if (args.ContainsKey("EnName")) //若为类
 				{
-					if (args.ContainsKey("oid"))
-						Glo.pkValue = args["oid"];
+					Glo.eType = ExcelType.Entity;
+					Glo.FrmID = args["EnName"];
+
+					if (args.ContainsKey("MyPK"))
+						Glo.pkValue = args["MyPK"];
 					else
-						throw new Exception("缺少参数: oid");
+						throw new Exception("缺少参数: MyPK");
 
 					if (args.ContainsKey("UseSheet"))
 						Glo.UseSheet = args["UseSheet"];
 				}
+				else
+					throw new Exception("缺少参数: FK_MapData/EnName");
 
 				if (args.ContainsKey("WSUrl"))
 					Glo.WSUrl = args["WSUrl"];
@@ -530,22 +535,30 @@ namespace CCFormExcel2010
 			byte[] bytes = Glo.ReadFile(Glo.LocalFile);
 			try
 			{
-				//主表字段
-				//DataSet dsDtls = new DataSet();
-				string mainTableAtParas = GetMainData();//ref dsDtls);
-				if (string.IsNullOrEmpty(mainTableAtParas))
-					return;
+				if (Glo.IsSaveFileOnly)
+				{
+					client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, null, null, null, bytes);
+					MessageBox.Show("保存成功！");
+				}
+				else
+				{
+					//主表字段
+					//DataSet dsDtls = new DataSet();
+					string mainTableAtParas = GetMainData();//ref dsDtls);
+					if (string.IsNullOrEmpty(mainTableAtParas))
+						return;
 
-				//子表字段
-				DataSet dsDtlsOld = new DataSet();
-				DataSet dsDtlsNew = GetDtls(dsOld: dsDtlsOld);
-				if (dsDtlsNew == null)
-					return;
+					//子表字段
+					DataSet dsDtlsOld = new DataSet();
+					DataSet dsDtlsNew = GetDtls(dsOld: dsDtlsOld);
+					if (dsDtlsNew == null)
+						return;
 
-				//保存到服务器
-				CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
-				client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
-				MessageBox.Show("保存成功！\n表单数据已成功保存到服务器！");
+					//保存到服务器
+					CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
+					client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
+					MessageBox.Show("保存成功！\n文档及表单数据已成功保存到服务器！");
+				}
 
 				//获取新的子表数据，绑定行对应关系
 				_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, Glo.AtParas);
@@ -1070,7 +1083,12 @@ namespace CCFormExcel2010
 							//st.Data.Rows[i][(string)col.Value] = GetSaveValue(st.Data.TableName, (string)col.Value, rangeCell);
 							string val;
 							if (VaildData(st.Data.TableName, (string)col.Value, rangeCell, out val))
-								st.Data.Rows[i][(string)col.Value] = val;
+							{
+								if (string.IsNullOrEmpty(val))
+									st.Data.Rows[i][(string)col.Value] = DBNull.Value;
+								else
+									st.Data.Rows[i][(string)col.Value] = val;
+							}
 							else
 								return null;
 						}
@@ -1169,25 +1187,17 @@ namespace CCFormExcel2010
 		public string GetSaveValue(string tableName, string keyOfEn, Excel.Range rangeCell, FieldType fieldType = FieldType.Nothing, string listName = null)
 		{
 			if (rangeCell == null || rangeCell.Value2 == null)
-			{
 				return null;
-			}
-			else
-			{
-				string text = rangeCell.Text;
-				if (string.IsNullOrEmpty(text) || text.Trim().Length == 0)
-				{
-					return null;
-				}
-				else //特殊类型的字段：日期
-				{
-					DateTime dt;
-					if (DateTime.TryParse(rangeCell.Text, out dt))
-					{
-						return rangeCell.Text;
-					}
-				}
-			}
+
+			string text = rangeCell.Text;
+			if (string.IsNullOrEmpty(text) || text.Trim().Length == 0)
+				return null;
+
+			//特殊类型的字段：日期
+			DateTime dt;
+			if (DateTime.TryParse(rangeCell.Text, out dt))
+				return rangeCell.Text;
+
 			if (fieldType == FieldType.Nothing || string.IsNullOrEmpty(listName))
 				fieldType = GetFieldType(tableName, keyOfEn, out listName);
 			//?是否需要判断单元格IsValidList？？
@@ -1318,12 +1328,11 @@ namespace CCFormExcel2010
 				return null;
 			if (!_originData.Tables[strTableName].Columns.Contains(strSelectColumn))
 				return null;
+
 			var drs = _originData.Tables[strTableName].Select(strWhere);
 			if (drs.Length == 0)
 				return null;
-			//else if (drs.Length > 1)
-			else
-				return drs[0][strSelectColumn].ToString();
+			return drs[0][strSelectColumn].ToString();
 		}
 
 		/// <summary>
@@ -1413,55 +1422,57 @@ namespace CCFormExcel2010
 					}
 				}
 				//数据类型验证
-				if (!string.IsNullOrEmpty(val) && drs[0]["LGType"].ToString() == "0")
+				if (string.IsNullOrEmpty(val) == false && drs[0]["LGType"].ToString() == "0")
 				{
-					switch (drs[0]["MyDataType"].ToString())
+					int myDataType = int.Parse(drs[0]["MyDataType"].ToString());
+
+					switch (myDataType)
 					{
-						case "2": //整数类型
+						case BP.DA.DataType.AppInt: //整数类型
 							int i;
 							if (!int.TryParse(val, out i))
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“整数”！\n单元格：" + range.Address);
+								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“整数”！\r单元格：" + range.Address);
 								return false;
 							}
 							break;
-						case "3": //浮点型
+						case BP.DA.DataType.AppFloat: //浮点型
 							float f;
 							if (!float.TryParse(val, out f))
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\n单元格：" + range.Address);
+								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\r单元格：" + range.Address);
 								return false;
 							}
 							break;
-						case "5": //双精度型
+						case BP.DA.DataType.AppDouble: //双精度型
 							double d;
 							if (!double.TryParse(val, out d))
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\n单元格：" + range.Address);
+								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\r单元格：" + range.Address);
 								return false;
 							}
 							break;
-						case "6": //日期型
+						case BP.DA.DataType.AppDate: //日期型
 							DateTime date;
 							if (!DateTime.TryParse(val, out date))
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“日期”！\n单元格：" + range.Address);
+								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“日期”！\r单元格：" + range.Address);
 								return false;
 							}
 							break;
-						case "7": //时间型
+						case BP.DA.DataType.AppDateTime: //时间型
 							DateTime time;
 							if (!DateTime.TryParse(val, out time))
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“时间”！\n单元格：" + range.Address);
+								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“时间”！\r单元格：" + range.Address);
 								return false;
 							}
 							break;
-						case "8": //金额
+						case BP.DA.DataType.AppMoney: //金额
 							float c;
 							if (!float.TryParse(val, out c))
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\n单元格：" + range.Address);
+								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（金额）”！\r单元格：" + range.Address);
 								return false;
 							}
 							break;

@@ -57,6 +57,9 @@ namespace BP.Excel
 		}
 
 		#region 参数.
+		
+		#region 身份认证
+
 		/// <summary>
 		/// 当前登录用户编号
 		/// </summary>
@@ -65,6 +68,16 @@ namespace BP.Excel
 		/// 当前登录用户SID
 		/// </summary>
 		public static string SID = "";
+
+		#endregion
+
+		#region 基础参数
+
+		/// <summary>
+		/// Excel类型：表单/实体类
+		/// </summary>
+		public static ExcelType eType;
+
 		/// <summary>
 		/// Excel表单编号
 		/// </summary>
@@ -74,6 +87,19 @@ namespace BP.Excel
 		/// Excel表单的WorkID/实体类的主键
 		/// </summary>
 		public static string pkValue = "";
+
+		/// <summary>
+		/// 插件引用的服务地址
+		/// </summary>
+		public static string WSUrl = "";
+
+
+		public static string App = "";
+
+		#endregion
+		
+		#region Form参数
+
 		/// <summary>
 		/// 发起流程编号
 		/// </summary>
@@ -87,24 +113,30 @@ namespace BP.Excel
 		/// 当前Excel表单绑定的节点ID
 		/// </summary>
 		public static int FK_Node;
-		/// <summary>
-		/// 以“@key=value”形式接收的参数
-		/// </summary>
-		public static string AtParas = "";
-		/// <summary>
-		/// 插件引用的服务地址
-		/// </summary>
-		public static string WSUrl = "";
 
-		public static string App = "";
+		#endregion
+		
+		#region Entity参数
 
 		/// <summary>
-		/// 启用的Sheet页
+		/// 启用的Sheet页【可选】
 		/// 用于同一个表单/类有可能使用不同的Excel模板时，可以将这些模板以Sheet页的形式存到同一个Excel模板中。
 		/// 注意：在Sheet页中所有的命名应该加上“Sheet页名.”前缀，在加载时插件会自动去掉这些前缀。
 		/// </summary>
 		public static string UseSheet = null;
-		#endregion 参数.
+
+		#endregion
+
+		#region 可选参数
+
+		/// <summary>
+		/// 以“@key=value”形式接收的参数
+		/// </summary>
+		public static string AtParas = "";
+
+		#endregion
+
+		#region 插件状态
 
 		/// <summary>
 		/// 参数是否加载成功，加载不成功，所有插件功能不启用
@@ -115,11 +147,19 @@ namespace BP.Excel
 		/// 是否只读
 		/// </summary>
 		public static bool IsReadonly = false;
+		/// <summary>
+		/// 是否只保存文件
+		/// </summary>
+		public static bool IsSaveFileOnly = false;
 
 		/// <summary>
 		/// 本地保存的Excel（路径+文件名）
 		/// </summary>
 		public static string LocalFile;
+
+		#endregion
+
+		#endregion 参数.
 
 		#region 方法.
 		/// <summary>
@@ -286,5 +326,11 @@ namespace BP.Excel
 			return fileVersion.ToString();
 		}
 
+	}
+
+	public enum ExcelType
+	{
+		Form,
+		Entity
 	}
 }

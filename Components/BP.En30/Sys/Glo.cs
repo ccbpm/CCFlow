@@ -50,7 +50,7 @@ namespace BP.Sys
         /// </summary>
         /// <param name="enName">实例名称</param>
         /// <returns>获得节点事件实体,如果没有就返回为空.</returns>
-        public static FormEventBaseDtl GetFormDtlEventBaseByEnName(string enName)
+        public static FormEventBaseDtl GetFormDtlEventBaseByEnName(string dtlEnName)
         {
             if (Htable_FormFEEDtl == null || Htable_FormFEEDtl.Count == 0)
             {
@@ -59,14 +59,14 @@ namespace BP.Sys
                 Htable_FormFEEDtl.Clear();
                 foreach (FormEventBaseDtl en in al)
                 {
-                    Htable_FormFEEDtl.Add(en.ToString(), en);
+                    Htable_FormFEEDtl.Add(en.FormDtlMark, en);
                 }
             }
 
             foreach (string key in Htable_FormFEEDtl.Keys)
             {
                 FormEventBaseDtl fee = Htable_FormFEEDtl[key] as FormEventBaseDtl;
-                if (fee.FormDtlMark == enName)
+                if (fee.FormDtlMark.IndexOf(dtlEnName + ",") >= 0 || fee.FormDtlMark==dtlEnName)
                     return fee;
             }
             return null;

@@ -278,6 +278,7 @@ namespace BP.WF
 				en.DTSMapToSys_MapData();
 
 				return GenerDBForVSTOExcelFrmModelOfEntity(frmID, pkval, atParas, specDtlFrmID = null);
+
 				//上面这行代码的解释（2017-04-25）：
 				//若不加上这行，代码执行到“ MapData md = new MapData(frmID); ”会报错：
 				//@没有找到记录[表单注册表  Sys_MapData, [ 主键=No 值=BP.LI.BZQX ]记录不存在,请与管理员联系, 或者确认输入错误.@在Entity(BP.Sys.MapData)查询期间出现错误@   在 BP.En.Entity.Retrieve() 位置 D:\ccflow\Components\BP.En30\En\Entity.cs:行号 1051
@@ -594,7 +595,6 @@ namespace BP.WF
 			//返回生成的dataset.
 			return myds;
 		}
-
 		/// <summary>
 		/// 获取从表数据，用于显示dtl.htm 
 		/// </summary>

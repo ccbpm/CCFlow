@@ -668,11 +668,11 @@
                         else if (mapAttr.MyDataType == 6) {//AppDate
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
-                                enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+                                enableAttr = 'onfocus="' + 'WdatePicker();SetChange(false);"' + ' readonly="readonly" onchange="SetChange(true);" class="Wdate" style="width:85px;border-width:0px;"';
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }
-                            eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                            eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text'  class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                         }
                         else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                             var enableAttr = '';
@@ -808,9 +808,15 @@
         var saveAll = false;
         var needSaveCount = 0;
         var alerdaySaveCount = 0;
-
+        var isChange = true;
+        function SetChange(val) {
+            isChange = val;
+        }
         //从表全部数据保存 还有问题 需要调整
-        function SaveAll() {
+        function SaveAll(obj) {
+            if (isChange==false) {
+                return;
+            }
             //循环表格
             var trs = $('.table.wupop tbody tr');
             $.each(trs, function (i,obj) {
@@ -870,28 +876,29 @@
         }
      </script>
 </head>
-<body onblur="SaveAll()">
-    <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
-    <div id="ContentDtlDiv">
-        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px;">
-            <div class="portlet-body " id="">
-                <div class="tab-content" style="margin: 4px 0px;">
-                    <div class="tab-pane active portlet_tab flowLists" id="dtlDiv">
-                        <div>
-                            <table class="table wupop" data-data="true">
-                                <thead></thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                        <div class="loadDate" style="text-align: center;">
-                            <img src="../Scripts/bootstrap/fonts/loading.gif" />
+<body onblur="SaveAll(this)">
+    <form>
+        <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
+        <div id="ContentDtlDiv">
+            <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px;">
+                <div class="portlet-body " id="">
+                    <div class="tab-content" style="margin: 4px 0px;">
+                        <div class="tab-pane active portlet_tab flowLists" id="dtlDiv">
+                            <div>
+                                <table class="table wupop" data-data="true">
+                                    <thead></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <div class="loadDate" style="text-align: center;">
+                                <img src="../Scripts/bootstrap/fonts/loading.gif" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-	
+    </form>
 	<script type="text/javascript">
         function deleteRow(index) {
             var result = parent.window.confirm('删除确认', '确定要删除吗?');

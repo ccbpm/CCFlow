@@ -237,7 +237,11 @@ namespace CCFlow.WF.CCForm
                     //求出从表实体类.
                     BP.Sys.FormEventBaseDtl febd = null;
                     if (dtl.FEBD != "")
+                    {
                         febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(dtl.No);
+                        if (mainEn==null)
+                            mainEn = dtl.GenerGEMainEntity(pkValue);
+                    }
 
                     // 更新数据.
                     foreach (DataRow dr in dt.Rows)
@@ -274,7 +278,6 @@ namespace CCFlow.WF.CCForm
                             febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, daDtl, null);
                         }
                         #endregion 从表保存前处理事件.
-
 
                         //执行保存.
                         if (daDtl.OID > 100)

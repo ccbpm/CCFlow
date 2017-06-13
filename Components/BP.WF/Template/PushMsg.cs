@@ -818,7 +818,7 @@ namespace BP.WF.Template
             if (this.FK_Event == BP.Sys.EventListOfNode.WorkArrive || this.FK_Event == BP.Sys.EventListOfNode.ReturnAfter)
             {
                 /*工作到达.*/
-                if (this.MailPushWay == 1)
+                if (this.MailPushWay == 1 && !string.IsNullOrWhiteSpace(jumpToEmps))
                 {
                     /*如果向接受人发送邮件.*/
                     toEmpIDs = jumpToEmps;

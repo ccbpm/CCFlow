@@ -423,6 +423,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 是否显示退回信息？
+        /// </summary>
+        public bool FWCIsShowReturnMsg
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FrmWorkCheckAttr.FWCIsShowReturnMsg);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.FWCIsShowReturnMsg, value);
+            }
+        }
+        /// <summary>
         /// 如果用户未审核是否按照默认意见填充?
         /// </summary>
         public bool FWCIsFullInfo

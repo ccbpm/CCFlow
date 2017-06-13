@@ -359,6 +359,9 @@
                 if (window.opener.document.getElementById(id)) {
                     window.opener.document.getElementById(id).value = str;
                 }
+                if (typeof window.opener.isChange != "undefined") {
+                    window.opener.isChange = true;
+                }
                 window.close();
             }
             else {//IE...

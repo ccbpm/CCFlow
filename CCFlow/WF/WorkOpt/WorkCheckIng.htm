@@ -20,12 +20,15 @@
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
         var dotype = GetQueryString("DoType");
+        var enName = GetQueryString("EnName");
         var isChange = false;
 
         $(function () {
-            //$("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+            if (!workid || workid == "0") {
+                workid = GetQueryString("OID");
+            }
+
             InitPage();
-            //$("#Msg").html("");
         });
 
         function InitPage() {
@@ -43,7 +46,7 @@
                     alert(data);
                     return;
                 }
-                //                    alert(data);
+
                 init = eval('(' + data + ')');
                 wcDesc = init.wcDesc[0];
                 tks = init.Tracks;
@@ -64,7 +67,7 @@
                     else {
                         //自由模式
                         html += "<tr>";
-                        html += "<td rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
+                        html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
                     }
                     //审核意见
                     if (this.IsDoc) {
@@ -87,11 +90,10 @@
 
                     html += '</tr>';
                     //附件
-                    if (subaths.length > 0) {
-                        html += "<tr><td style='word-wrap: break-word;'>";
-                        html += "<b>附件：</b>&nbsp;" + subaths;
-                        html += "</td></tr>";
-                    }
+                    var tdid = this.IsDoc ? ("id='aths_" + this.NodeID + "'") : "";
+                    html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'><td " + tdid + " style='word-wrap: break-word;'>";
+                    html += "<b>附件：</b>&nbsp;" + subaths;
+                    html += "</td></tr>";
                     //签名，日期
                     html += "<tr>";
                     html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -107,7 +109,7 @@
                 }
             }, this);
         }
-
+        //保存审批
         function SaveWorkCheck() {
             var doc = $("#WorkCheck_Doc").val();
 
@@ -137,7 +139,7 @@
                 }
             }, this);
         }
-
+        //删除附件
         function DelWorkCheckAth(athPK) {
             isChange = false;
             if (confirm("确定要删除所选文件吗？")) {
@@ -151,7 +153,8 @@
                     success: function (msg) {//msg为返回的数据，在这里做数据绑定
                         if (msg == "true") {
                             isChange = true;
-                            SaveDtlData();
+
+                            $("#Ath_" + athPK).remove();
                         }
                         if (msg == "false") {
                             alert("删除失败。");
@@ -160,7 +163,7 @@
                 });
             }
         }
-
+        //选择词汇
         function TBHelp(enName) {
             var explorer = window.navigator.userAgent;
             var str = "";
@@ -174,43 +177,46 @@
                     return;
 
                 $("#WorkCheck_Doc").val(str);
+                isChange = true;                
             }
         }
-
+        //附件下载
         function AthDown(fk_ath, pkVal, delPKVal, fk_node, fk_flow, ath) {
             window.location.href = '../CCForm/AttachmentUpload.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=' + fk_node + '&FK_Flow=' + fk_flow + '&FK_MapData=ND' + fk_node + '&Ath=' + ath;
         }
-
+        //附件OFFICE查看
         function AthOpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
             var date = new Date();
             var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
             var url = '../WebOffice/AttachOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
             window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
         }
-
+        //附件查看
         function AthOpenFileView(pkVal, delPKVal, FK_FrmAttachment, FK_FrmAttachmentExt, fk_flow, fk_node, workID, isCC) {
             var url = '../CCForm/FilesView.aspx?DoType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=' + FK_FrmAttachment + '&FK_FrmAttachmentExt=' + FK_FrmAttachmentExt + '&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node + '&WorkID=' + workID + '&IsCC=' + isCC;
             window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
         }
 
+        //附件查看
         function AthOpenView(pkVal, delPKVal, FK_FrmAttachment, FK_FrmAttachmentExt, FK_Flow, FK_Node, WorkID, IsCC) {
             var url = '../CCForm/FilesView.aspx?DoType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=' + FK_FrmAttachment + '&FK_FrmAttachmentExt=' + FK_FrmAttachmentExt + '&FK_Flow=' + FK_Flow + '&FK_Node=' + FK_Node + '&WorkID=' + WorkID + '&IsCC=' + IsCC;
             window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
         }
-
+        //多附件状态，暂时看来无用
         function UploadFileChange(ctrl) {
-            ctrl.detachEvent('onblur', '');
+            //ctrl.detachEvent('onblur', '');
+            $(ctrl).unbind("onblur");
             isChange = false;
         }
-
+        //获取用户手工签名图片
         function GetUserSiganture(userNo, userName) {
             return "<img src='../../DataUser/Siganture/" + userNo + ".jpg' title='" + userName + "' border=0 onerror=\"src='../../DataUser/UserIcon/DefaultSmaller.png'\" />";
         }
-
+        //获取用户小头像图片
         function GetUserSmallIcon(userNo, userName) {
             return "<img src='../../DataUser/UserIcon/" + userNo + "Smaller.png' border=0  style='height:15px;width:15px;padding-right:5px;vertical-align:middle;'  onerror=\"src='../../DataUser/UserIcon/DefaultSmaller.png'\" />" + userName;
         }
-
+        //查找指定节点审核中的附件列表
         function FindSubAths(nd) {
             var subAths = [];
 
@@ -222,38 +228,44 @@
 
             return subAths;
         }
-
+        //获取指定节点审核中的附件列表html
         function GetSubAths(nd) {
             var subAths = FindSubAths(nd);
             var html = '';
 
             $.each(subAths, function () {
-                html += "<div style='margin:5px;'>";
-
-                if (this.CanDelete) {
-                    html += "<img alt='删除' align='middle' src='../Img/Btn/Delete.gif' onclick=\"DelWorkCheckAth('" + this.MyPK + "')\" />&nbsp;&nbsp;";
-                }
-
-                html += "<a style='color:Blue; font-size:14;' href=\"" + this.Href + "\">" + this.FileName;
-                html += "&nbsp;&nbsp;<img src='../Img/FileType/" + this.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" /></a>";
-                html += "</div>&nbsp;&nbsp;";
+                html += GetAthHtml(this);
             });
 
             return html;
         }
+        //获取指定附件html
+        function GetAthHtml(ath) {
+            var html = "<div id='Ath_" + ath.MyPK + "' style='margin:5px; display:inline-block;'>";
 
-        function AddUploadify(id) {
+            if (ath.CanDelete) {
+                html += "<img alt='删除' align='middle' src='../Img/Btn/Delete.gif' onclick=\"DelWorkCheckAth('" + ath.MyPK + "')\" />&nbsp;&nbsp;";
+            }
+
+            html += "<a style='color:Blue; font-size:14;' href=\"" + ath.Href + "\">" + ath.FileName;
+            html += "&nbsp;&nbsp;<img src='../Img/FileType/" + ath.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" /></a>";
+            html += "&nbsp;&nbsp;</div>";
+
+            return html;
+        }
+        //附件上传定义
+        function AddUploadify(divid) {
             if ($("#file_upload").length == 0) {
                 var html = "<div id='file_upload-queue' class='uploadify-queue'></div>"
                              + "<div id='s' style='float:right;margin-right:10px;' >"
                              + "<input type='file' name='file_upload' id='file_upload' width='60' height='30' />"
                              + "</div>";
 
-                $("#" + id).append(html);
+                $("#" + divid).append(html);
 
                 $('#file_upload').uploadify({
                     'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf',
-                    'uploader': '../CCForm/Handler.ashx?AttachPK=&WorkID=&DoType=MoreAttach&FK_Node=&EnsName=&FK_Flow=&PKVal=',
+                    'uploader': '../CCForm/Handler.ashx?AttachPK=' + nodeid + '_FrmWorkCheck&WorkID=' + workid + '&DoType=MoreAttach&FK_Node=' + nodeid + '&EnsName=' + (enName ? enName : '') + '&FK_Flow=' + fk_flow + '&PKVal=' + workid,
                     'auto': true,
                     'fileTypeDesc': '请选择上传文件',
                     'buttonText': '上传附件',
@@ -267,11 +279,49 @@
                     },
                     'onQueueComplete': function (queueData) {
                         isChange = true;
-                        SaveDtlData();
+
+                        GetNewUploadedAths(queueData.files);
                     },
                     'removeCompleted': true
                 });
             }
+        }
+        //获取刚上传的附件信息，并显示出来
+        function GetNewUploadedAths(files) {
+            var param = {
+                DoType: "WorkCheck_GetNewUploadedAths",
+                Names: "|",
+                AttachPK: nodeid + "_FrmWorkCheck",
+                FK_Flow: fk_flow,
+                FK_Node: nodeid,
+                WorkID: workid
+            };
+
+            for (var field in files) {
+                param.Names += files[field].name + "|";
+            }
+
+            Handler_AjaxQueryData(param, function (data) {
+                if (data.indexOf('err@') != -1) {
+                    alert(data);
+                    return;
+                }
+
+                var naths = eval('(' + data + ')');
+                aths = aths.concat(naths);
+
+                if ($("#aths_" + nodeid).length > 0) {
+                    if (wcDesc.FWCShowModel != 0) {
+                        $("#tdnode_" + nodeid).attr("rowspan", "3");
+                    }
+
+                    $("#aths_" + nodeid).parent().removeAttr("style");
+
+                    $.each(naths, function () {
+                        $("#aths_" + nodeid).append(GetAthHtml(this));
+                    });
+                }
+            }, this);
         }
 
         //执行保存
@@ -283,10 +333,9 @@
         }
     </script>
 </head>
-<body>
-    <div id="Msg">
-    </div>
-    <table id="tbTracks" style="padding: 0px; width: 100%; table-layout: fixed;">
+<body style="margin: 0">
+    <table id="tbTracks" style="padding: 0px; width: 100%; table-layout: fixed; margin-left: 0;
+        margin-top: 0;">
     </table>
 </body>
 </html>

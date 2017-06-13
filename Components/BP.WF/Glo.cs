@@ -120,7 +120,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20170522";
+        public static string Ver = "20170613";
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -129,6 +129,7 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
+            updataNote += "20170613.增加审核组件配置项“是否显示退回的审核信息”对应字段 by:liuxianchen";
             updataNote += "20170522.增加SL表单设计器中对单选/复选按钮进行字体大小调节的功能 by:liuxianchen";
             updataNote += "20170520.附件删除规则修复 by:liuxianchen";
             updataNote += "20170519.升级打印，修改BillTemplate中的Url为TempFilePath by:dgq";
@@ -190,7 +191,7 @@ namespace BP.WF
             try
             {
 
-                SysEnum se = new SysEnum("FrmType", 1);
+                //SysEnum se = new SysEnum("FrmType", 1);//NOTE:此处升级时报错，2017-06-13，liuxc
 
 
                 //2017.5.19 打印模板字段修复
@@ -293,6 +294,35 @@ namespace BP.WF
                 if (src.RetrieveFromDBSources() == 0)
                     src.Insert();
                 #endregion 检查数据源.
+
+                #region 20170613.增加审核组件配置项“是否显示退回的审核信息”对应字段 by:liuxianchen
+                try
+                {
+                    if (BP.DA.DBAccess.IsExitsTableCol("WF_Node", "FWCIsShowReturnMsg") == false)
+                    {
+                        switch (src.HisDBType)
+                        {
+                            case DBType.MSSQL:
+                                DBAccess.RunSQL("ALTER TABLE WF_Node ADD FWCIsShowReturnMsg INT NULL");
+                                break;
+                            case DBType.Oracle:
+                            case DBType.Informix:
+                                DBAccess.RunSQL("ALTER TABLE WF_Node ADD FWCIsShowReturnMsg INTEGER NULL");
+                                break;
+                            case DBType.MySQL:
+                                DBAccess.RunSQL("ALTER TABLE WF_Node ADD FWCIsShowReturnMsg INT NULL");
+                                break;
+                            default:
+                                break;
+                        }
+
+                        DBAccess.RunSQL("UPDATE WF_Node SET FWCIsShowReturnMsg = 0");
+                    }
+                }
+                catch
+                {
+                }
+                #endregion
 
                 #region 20170522.增加SL表单设计器中对单选/复选按钮进行字体大小调节的功能 by:liuxianchen
                 try

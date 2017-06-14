@@ -265,7 +265,7 @@ function WinOpen(url, winName) {
 function DoDelSubFlow(fk_flow, workid) {
     if (window.confirm('您确定要终止进程吗？') == false)
         return;
-    var url = 'Do.aspx?DoType=DelSubFlow&FK_Flow=' + fk_flow + '&WorkID=' + workid;
+    var url = 'Do.aspx?DoType1=DelSubFlow&FK_Flow=' + fk_flow + '&WorkID=' + workid;
     WinShowModalDialog(url, '');
     window.location.href = window.location.href; //aspxPage + '.aspx?WorkID=';
 }
@@ -344,8 +344,8 @@ function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
     var date = new Date();
     var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
 
-    var url = 'WebOffice/AttachOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
-    //var url = 'WebOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal;
+    var url = 'WebOffice/AttachOffice.aspx?DoType1=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
+    //var url = 'WebOffice.aspx?DoType1=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal;
     // var str = window.showModalDialog(url, '', 'dialogHeight: 1250px; dialogWidth:900px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
     //var str = window.open(url, '', 'dialogHeight: 1200px; dialogWidth:1110px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
     window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
@@ -455,7 +455,7 @@ function initPageParam() {
     pageData.IsReadOnly = GetQueryString("IsReadOnly");//如果是IsReadOnly，就表示是查看页面，不是处理页面
     pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
 
-    pageData.DoType = GetQueryString("DoType")//View
+    pageData.DoType1 = GetQueryString("DoType")//View
     //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID);
 }
 
@@ -473,7 +473,7 @@ function initBar() {
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?Method=InitToolBar&m=" + Math.random(),
+        url: "MyFlow.ashx?DoType=InitToolBar&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
             var barHtml = data;
@@ -821,7 +821,7 @@ function initGroup(workNodeData, groupFiled) {
 
 
             if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
-                paras += "&DoType=View";
+                paras += "&DoType1=View";
             }
             src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
@@ -833,7 +833,7 @@ function initGroup(workNodeData, groupFiled) {
                 paras += "&OID=" + pageData.WorkID;
             }
             if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
-                paras += "&DoType=View";
+                paras += "&DoType1=View";
             }
             src += "&r=q" + paras;
             src += "&IsShowTitle=0";
@@ -927,7 +927,7 @@ function initTrackList(workNodeData) {
                     break;
             }
         } else {
-            var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i+"&Version="+load.Version;
+            var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType1=View&MyPK=" + track.MyPK + '&IframeId=track' + i+"&Version="+load.Version;
             trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
         }
     });
@@ -967,7 +967,7 @@ function initTrackList(workNodeData) {
     var sendName = $.cookie("CCS").split("=")[2].split("&")[0];
     var sendNo = $.cookie("CCS").split("=")[1].split("&")[0];
     var sendt = HgetNowFormatDate().currentdate;
-    if (pageData.DoType != 'View') {
+    if (pageData.DoType1 != 'View') {
         trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendName + '</p></a></li>';
         $('#header b').text((workNodeData.Track.length + 1));
         //$('#header p.rdt').text("处理时间：" + sendt);
@@ -1024,7 +1024,7 @@ function initTrackList(workNodeData) {
     });
 
     //如果工作已经处理  提示用户工作已处理  并关闭处理页面
-    if (workNodeData.Track.length > 0 && (workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) && (workNodeData.Track[workNodeData.Track.length - 1].ActionType != 5) && (workNodeData.Track[workNodeData.Track.length - 1].NDFromT==pageData.FK_Node) && pageData.DoType != 'View') {//ACTIONTYPE=5 是撤销移交
+    if (workNodeData.Track.length > 0 && (workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) && (workNodeData.Track[workNodeData.Track.length - 1].ActionType != 5) && (workNodeData.Track[workNodeData.Track.length - 1].NDFromT==pageData.FK_Node) && pageData.DoType1 != 'View') {//ACTIONTYPE=5 是撤销移交
         alert("当前工作已处理");
         //刷新父窗口
         if (window.opener != null) {
@@ -2017,7 +2017,7 @@ function GenerWorkNode() {
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?Method=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
+        url: "MyFlow.ashx?DoType=GenerWorkNode&DoType1=" + pageData.DoType1 + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
             jsonStr = data;
@@ -2056,7 +2056,7 @@ function GenerWorkNode() {
 
             //如果为查看页面，只显示历史轨迹
             initTrackList(gengerWorkNode);
-            if (pageData.DoType == 'View') {
+            if (pageData.DoType1 == 'View') {
                 $('#divCurrentForm').css('display', 'none');
                 return;
             }

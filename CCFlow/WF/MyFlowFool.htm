@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <title>驰骋工作流</title>
-    <script src="Scripts/JavaScript1.js" type="text/javascript" ></script>
+    <!--<script src="Scripts/JavaScript1.js" type="text/javascript" ></script>-->
     <script type="text/javascript" src="Scripts/bootstrap/js/jquery.min.js"></script>
 
     <script src="./Comm/JScript.js" type="text/javascript"></script>
@@ -105,37 +105,14 @@
         <button type="button" id="btnCloseMsg" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
         <div id='Message'></div>
     </div>
-    <!--分组导航-->
-    <div class="navbars" style="display: none;">
-        <div style="width: 100%; height: 30px; position: absolute; z-index: 10; background: #fff;">
-            <i class="top_disabled"></i>
-        </div>
-        <div style="width: 100%; height: 30px; position: absolute; z-index: 10; background: #fff; bottom: 0px;">
-            <i class="bottom"></i>
-        </div>
-        <ul class="pageScroll left" id="nav"></ul>
-    </div>
-
-    <!--轨迹导航-->
-    <ul class="pageScroll left" id="navTrackList" style="display: none;"></ul>
-    <div id="divTrack"></div>
+    
     <!--底部功能按钮 发送、移交-->
     <div id="topToolBar"  style="padding: 3px 3px;margin:0px auto; text-align:left;"  class="Bar">
     </div>
-    <div id="divCurrentForm" name="track13" style="background: #E3E7F4; position: relative;">
-        <!--标题-->
-        <!--<div id="header">
-            <b></b><span></span>
-            <p class="rdt" style="display:none;">处理时间：</p><p class="emps">处理人：</p>
-            <div id="showCol">
-                <input type="radio" name="showCol" id="rdShow4" value="4" /> <label for="rdShow4">4列展示</label>
-                <input type="radio" value="8" id="rdShow8" name="showCol" /> <label for="rdShow8">8列展示</label>
-            </div>
-        </div>-->
+    <div id="divCurrentForm" style="background: #E3E7F4; ">
         <!--上半部分表单-->
-        <div id="topContentDiv" class="row" style="padding: 0px 5px;">
-            <i></i>
-            <div id="contentDiv">
+        <div id="topContentDiv" class="row" style="padding: 0px 0px;">
+           <div id="contentDiv">
                 <form id="divCCForm" action="MyFlow.ashx?method=login" method="post">
                     <!--LODOP_OB 先放着 不知道具体是什么-->
                     <div>

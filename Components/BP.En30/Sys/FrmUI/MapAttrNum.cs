@@ -115,7 +115,10 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
 
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 2, "数据类型", true, false);
-                map.AddTBDecimal(MapAttrAttr.DefVal, 0, "默认值", true, false);
+                if (Glo.Plant == "CCFlow")
+                    map.AddTBDecimal(MapAttrAttr.DefVal, 0, "默认值", true, false);
+                else
+                    map.AddTBString(MapAttrAttr.DefVal, null, "默认值(是否选中？0=否,1=是)", true, true, 0, 200, 20);
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
                 map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, true);

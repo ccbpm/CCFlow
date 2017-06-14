@@ -75,6 +75,7 @@ namespace BP.Sys
 
 
         #region 公共变量.
+        public static string Plant = "CCFlow";
         /// <summary>
         /// 部门版本号
         /// </summary>

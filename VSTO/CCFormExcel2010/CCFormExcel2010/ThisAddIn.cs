@@ -31,9 +31,9 @@ namespace CCFormExcel2010
 		/// </summary>
 		private DataSet _originData;
 		/// <summary>
-		/// 子表（[{DtlName:(SubTable)Dtl},...]）
+		/// 子表（[{(string)DtlName:(SubTable)Dtl},...]）
 		/// </summary>
-		private Hashtable _htSubTables = new Hashtable(); //excel中的子表信息
+		private Dictionary<string, SubTable> _dictSubTables = new Dictionary<string, SubTable>(); //excel中的子表信息
 
 		private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件
 		private bool _isDebug = false; //是否是调试模式
@@ -279,28 +279,30 @@ namespace CCFormExcel2010
 					//加载外键枚举数据.
 					SetMetaData(_originData);
 
-					foreach (DataTable dt in _originData.Tables)
-					{
-						if (dt.TableName == "MainTable")
-						{
-							//给主表赋值.
-							SetMainData(_originData.Tables["MainTable"]);
-							continue;
-						}
+					//foreach (DataTable dt in _originData.Tables)
+					//{
+					//	if (dt.TableName == "MainTable")
+					//	{
+					//		//给主表赋值.
+					//		SetMainData(_originData.Tables["MainTable"]);
+					//		continue;
+					//	}
 
-						//给从表赋值.
-						SetDtlData(dt);
-					}
+					//	//给从表赋值.
+					//	SetDtlData(dt);
+					//}
+					FillData(_originData);
 				}
 				else //xTODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）//A:暂时不考虑这种情况，按数据库数据与Excel数据完全一致处理
 				{
-					//初始化_htSubTables数据
-					foreach (DataTable dt in _originData.Tables)
-					{
-						if (dt.TableName == "MainTable")
-							continue;
-						SetDtlData(dt);
-					}
+					////初始化_htSubTables数据
+					//foreach (DataTable dt in _originData.Tables)
+					//{
+					//	if (dt.TableName == "MainTable")
+					//		continue;
+					//	SetDtlData(dt);
+					//}
+					FillData(_originData);
 				}
 			}
 			catch (Exception exp)
@@ -314,7 +316,43 @@ namespace CCFormExcel2010
 					MessageBox.Show("Excel表单出现错误，请联系您的系统管理员！\n错误信息：\n" + exp.Message + "\n\n后续不会记录任何操作，请关闭本文档。");
 			}
 			#endregion 校验用户安全与下载文件.
+		}
 
+		/// <summary>
+		/// 填充数据
+		/// </summary>
+		/// <param name="originData">从服务端获取的数据</param>
+		/// <returns></returns>
+		private bool FillData(DataSet originData, bool isFirstFill = true)
+		{
+			//if(isFirstFill)
+			foreach (DataTable dt in originData.Tables)
+			{
+				if (dt.TableName == "MainTable")
+				{
+					//给主表赋值.
+					SetMainData(originData.Tables["MainTable"]);
+					continue;
+				}
+
+				//给从表赋值.
+				SetDtlData(dt);
+			}
+			//else
+			//{
+			//	foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
+			//	{
+			//		var stnew = st.Value;
+			//		if (_originData.Tables.Contains(stnew.Name))
+			//		{
+			//			stnew.OriginData = _originData.Tables[stnew.Name].Copy();
+			//			stnew.Data = _originData.Tables[stnew.Name].Copy();
+			//			stnew.InitConnection();
+			//		}
+			//	}
+			//}
+
+			return true;
 		}
 
 		/// <summary>
@@ -389,14 +427,14 @@ namespace CCFormExcel2010
 				}
 				else //单元格在某区域内
 				{
-					if (!_htSubTables.Contains(strBelongDtlName)) //单元格所在区域不是子表（可能是MetaData或？）
+					if (!_dictSubTables.ContainsKey(strBelongDtlName)) //单元格所在区域不是子表（可能是MetaData或？）
 						return;
 
 					//↓属于某子表时
-					var subTable = (SubTable)_htSubTables[strBelongDtlName];
+					var subTable = _dictSubTables[strBelongDtlName];
 					//操作的单元格位于子表表头：
 					if (range.Row >= subTable.Range.Row &&
-						range.Row <= subTable.Range.Row + (int)subTable.Columns["TableHeadHeight"] - 1)
+						range.Row <= subTable.Range.Row + subTable.TableHeadHeight - 1)
 					{
 						IgnoreNextOperation();
 						Application.Undo();
@@ -457,9 +495,9 @@ namespace CCFormExcel2010
 					//监听“插入行”“删除行”操作
 					//判断操作行数
 					//x判断各子表Range是否有变化:已保存到SubTable中的range会实时变化
-					foreach (DictionaryEntry st in _htSubTables)
+					foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
 					{
-						if (_base.IsIntersect(range, ((SubTable)st.Value).Range)) //!若插入/删除的行在子表中，则此时SubTable.Range已经变化
+						if (_base.IsIntersect(range, st.Value.Range)) //!若插入/删除的行在子表中，则此时SubTable.Range已经变化
 						{
 							if (range.Rows.Count > 1) //若是针对多行操作，不允许同时删除多行
 							{
@@ -468,13 +506,13 @@ namespace CCFormExcel2010
 								return;
 							}
 
-							if (((SubTable)st.Value).IsInsertRow)//如果是插入行
+							if (st.Value.IsInsertRow)//如果是插入行
 							{
-								((SubTable)st.Value).InsertRow(range.Row);
+								st.Value.InsertRow(range.Row);
 							}
-							else if (((SubTable)st.Value).IsDeteteRow) //如果是删除行
+							else if (st.Value.IsDeteteRow) //如果是删除行
 							{
-								((SubTable)st.Value).DeleteRow(range.Row);
+								st.Value.DeleteRow(range.Row);
 							}
 
 							//如果是插入行（删除行操作的撤销？）
@@ -490,7 +528,7 @@ namespace CCFormExcel2010
 							//如果是删除行（插入行操作的撤销？）
 						}
 
-						((SubTable)st.Value).RefreshConnection();
+						st.Value.RefreshConnection();
 					}
 
 					//↓插入/删除的行不在任何子表中的情况
@@ -503,9 +541,9 @@ namespace CCFormExcel2010
 				else if (Regex.IsMatch(range.Address, _base.regexAddressColumns)) //若是对『整列』的操作
 				{
 					//如果操作涉及到了某个子表，则Undo该操作
-					foreach (DictionaryEntry st in _htSubTables)
+					foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
 					{
-						if (_base.IsIntersect(range, ((SubTable)st.Value).Range)) //!若插入/删除的列在子表中，则此时SubTable.Range已经变化
+						if (_base.IsIntersect(range, st.Value.Range)) //!若插入/删除的列在子表中，则此时SubTable.Range已经变化
 						{
 							IgnoreNextOperation();
 							Application.Undo();
@@ -555,24 +593,25 @@ namespace CCFormExcel2010
 						return;
 
 					//保存到服务器
-					CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
+					//CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
 					client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
 					MessageBox.Show("保存成功！\n文档及表单数据已成功保存到服务器！");
 				}
 
 				//获取新的子表数据，绑定行对应关系
 				_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, Glo.AtParas);
-				//保存成功后用『新数据』替换『旧数据』
-				foreach (DictionaryEntry st in _htSubTables)
-				{
-					var stnew = (SubTable)st.Value;
-					if (_originData.Tables.Contains(stnew.Name))
-					{
-						stnew.OriginData = _originData.Tables[stnew.Name].Copy();
-						stnew.Data = _originData.Tables[stnew.Name].Copy();
-						stnew.InitConnection();
-					}
-				}
+				////保存成功后用『新数据』替换『旧数据』
+				//foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
+				//{
+				//	var stnew = st.Value;
+				//	if (_originData.Tables.Contains(stnew.Name))
+				//	{
+				//		stnew.OriginData = _originData.Tables[stnew.Name].Copy();
+				//		stnew.Data = _originData.Tables[stnew.Name].Copy();
+				//		stnew.InitConnection();
+				//	}
+				//}
+				FillData(_originData);
 			}
 			catch (Exception exp)
 			{
@@ -717,36 +756,41 @@ namespace CCFormExcel2010
 			#region 获取子表
 
 			SubTable st;
-			if (_htSubTables.Contains(dt.TableName))
+			if (_dictSubTables.ContainsKey(dt.TableName))
 			{
-				st = (SubTable)_htSubTables[dt.TableName];
+				st = _dictSubTables[dt.TableName];
+				if (st.Data != _originData.Tables[st.Name]) //用于【保存成功后，更新最新数据源】
+				{
+					st.OriginData = _originData.Tables[st.Name].Copy();
+					st.Data = _originData.Tables[st.Name].Copy();
+				}
 			}
 			else
 			{
-				Hashtable htColumns = new Hashtable();
-				htColumns = GetAreaColumns(range);
-				foreach (DictionaryEntry col in htColumns)
+				Dictionary<int, string> htColumns = new Dictionary<int, string>();
+				int TableHeadHeight;
+				htColumns = GetAreaColumns(range, out TableHeadHeight);
+				foreach (KeyValuePair<int, string> col in htColumns)
 				{
-					if (col.Key.ToString() != "TableHeadHeight" && !dt.Columns.Contains((string)col.Value)) //若数据源表不含此字段
+					if (!dt.Columns.Contains(col.Value)) //若数据源表不含此字段
 					{
 						//则添加
 						//dr.Table.Columns.Add((string)col.Value);
-						throw new Exception("检测到字段绑定异常：子表“" + dt.TableName + "”绑定了『不存在于原始数据表』的字段“" + (string)col.Value + "”！");
+						throw new Exception("检测到字段绑定异常：子表“" + dt.TableName + "”绑定了『不存在于原始数据表』的字段“" + col.Value + "”！");
 					}
 				}
-				st = new SubTable(range, dt, htColumns);
-				_htSubTables.Add(dt.TableName, st);
+				st = new SubTable(range, dt, htColumns, TableHeadHeight, "OID"); //TODO: 暂定所有子表的主键字段都是“OID”
+				_dictSubTables.Add(dt.TableName, st);
 			}
 
 			#endregion
 
 			#region 若子表区域行数不够，则插入行
 
-			var intTableHeadHeight = (int)st.Columns["TableHeadHeight"];
-			if (dt.Rows.Count > range.Rows.Count - intTableHeadHeight) //表单实际数据中『子表行数』多于excel文档子表『区域行数』时
+			if (dt.Rows.Count > range.Rows.Count - st.TableHeadHeight) //表单实际数据中『子表行数』多于excel文档子表『区域行数』时
 			{
 				//插入行（在区域最后一行上方） //已验证：Q:插入行后range的范围是否扩大了？（后面要用到range）A:手动插入行时扩大了；
-				int addRowsCount = dt.Rows.Count - (range.Rows.Count - intTableHeadHeight);
+				int addRowsCount = dt.Rows.Count - (range.Rows.Count - st.TableHeadHeight);
 				int currentRowIdx = range.Row + range.Rows.Count - 1;
 				//var rangeLastRow = range.Worksheet.get_Range(_base.ConvertInt2Letter(range.Column) + (range.Row + range.Rows.Count - 1), missing);
 				//var rangeLastRow = range.Worksheet.get_Range((range.Row + range.Rows.Count - 1), missing);//"$" + 
@@ -777,25 +821,25 @@ namespace CCFormExcel2010
 			#region 填充数据
 			if (isFill)
 			{
-				foreach (DictionaryEntry col in st.Columns)
+				foreach (KeyValuePair<int, string> col in st.Columns)
 				{
-					if (col.Key == "TableHeadHeight") continue;
+					//xif (col.Key == "TableHeadHeight") continue;
 
-					if (!st.Data.Columns.Contains(col.Value.ToString())) continue; //DataTable中不含该字段
+					if (!st.Data.Columns.Contains(col.Value)) continue; //DataTable中不含该字段时
 
 					#region 为子表的每一行的DropdownList类型的字段添加 Validation
 
-					var colL = _base.ConvertInt2Letter(Convert.ToInt32(col.Key));
+					var colL = _base.ConvertInt2Letter(col.Key);
 
 					//（分两种情况：作为级联的子级；有范围限制的外键/枚举） //另：验证插入行是否能自动添加上 Validation
 					var strListName = string.Empty;
-					FieldType ftype = GetFieldType(st.Data.TableName, col.Value.ToString(), out strListName);
+					FieldType ftype = GetFieldType(st.Data.TableName, col.Value, out strListName);
 					if (ftype == FieldType.CascadeSonList) //有范围限制的外键字段 且 为级联字段的子级（值需要动态获取）
 					{
 						//为每行的该字段声明一个区域并设置 Validation
 						for (var r = 0; r < st.Data.Rows.Count; r++)
 						{
-							var row = range.Row + intTableHeadHeight + r;
+							var row = range.Row + st.TableHeadHeight + r;
 							var rangeCell = range.Worksheet.get_Range(colL + row, missing);
 							var tempListName = strListName + "_R" + row; //=数据有效性公式=序列命名={原序列名+_R+行号}
 							AddMetaList(tempListName, strListName); //与主表字段相似，初次加载时填充完整的list
@@ -820,7 +864,7 @@ namespace CCFormExcel2010
 								UpdateMetaList(strListName, _originData.Tables[strListName]);
 							}
 							//设置数据有效性
-							var rangeColumn = range.Worksheet.get_Range(colL + (range.Row + intTableHeadHeight),
+							var rangeColumn = range.Worksheet.get_Range(colL + (range.Row + st.TableHeadHeight),
 								colL + (range.Row + range.Rows.Count - 1));
 							rangeColumn.Validation.Delete(); //若存在Validation，再执行Add()方法时会报错。
 							rangeColumn.Validation.Add(Excel.XlDVType.xlValidateList, Formula1: "=" + strListName);
@@ -839,7 +883,7 @@ namespace CCFormExcel2010
 						}
 
 						//设置数据有效性
-						var rangeColumn = range.Worksheet.get_Range(colL + (range.Row + intTableHeadHeight),
+						var rangeColumn = range.Worksheet.get_Range(colL + (range.Row + st.TableHeadHeight),
 							colL + (range.Row + range.Rows.Count - 1));
 						rangeColumn.Validation.Delete();
 						rangeColumn.Validation.Add(Excel.XlDVType.xlValidateList, Formula1: "=" + strListName);
@@ -853,9 +897,9 @@ namespace CCFormExcel2010
 
 					for (var r = 0; r < st.Data.Rows.Count; r++)
 					{
-						var intRangeColumn = range.Row + intTableHeadHeight + r; //当前行在excel中的行号
+						var intRangeColumn = range.Row + st.TableHeadHeight + r; //当前行在excel中的行号
 						var rangeCell = range.Worksheet.get_Range(colL + intRangeColumn, missing);
-						this.GetDisplayValue(st.Data.TableName, col.Value.ToString(), st.Data.Rows[r][col.Value.ToString()].ToString(),
+						this.GetDisplayValue(st.Data.TableName, col.Value, st.Data.Rows[r][col.Value].ToString(),
 							rangeCell, fieldType: ftype, listName: strListName);
 
 						//设置关联
@@ -869,7 +913,7 @@ namespace CCFormExcel2010
 			}
 			#endregion
 
-			_htSubTables[dt.TableName] = st; //更新st
+			_dictSubTables[dt.TableName] = st; //更新st
 			return true;
 		}
 
@@ -951,53 +995,6 @@ namespace CCFormExcel2010
 		}
 
 		/// <summary>
-		/// 获取从表数据【2017-02-27 17:14:33 暂时弃用】
-		/// </summary>
-		/// <param name="strSubTableName"></param>
-		/// <returns></returns>
-		public DataTable __abandon_GetDtlData(string strSubTableName)
-		{
-			var range = Application.Names.Item(strSubTableName).RefersToRange; //需确保Names[strSubTableName]存在
-			if (!_originData.Tables.Contains(strSubTableName)) //理论上不存在这种情况，_originData中包含所有的子表数据
-				return null;
-			DataTable dt = _originData.Tables[strSubTableName].Copy(); //是否会复制表名？
-			dt.TableName = strSubTableName;
-
-			#region 获取字段信息
-			var htColumns = new Hashtable();
-			if (_htSubTables.Contains(strSubTableName))
-			{
-				htColumns = (Hashtable)_htSubTables[strSubTableName];
-			}
-			else
-			{
-				htColumns = GetAreaColumns(range);
-				_htSubTables[strSubTableName] = htColumns;
-			}
-			#endregion
-
-			//填充数据
-			DataRow dr;
-			var intTableHeadHeight = Convert.ToInt32(htColumns["TableHeadHeight"]);
-			if (!dt.Columns.Contains("Idx"))
-				dt.Columns.Add("Idx");
-			for (var r = range.Row + intTableHeadHeight; r < range.Row + range.Rows.Count; r++)//遍历单元格的行
-			{
-				dr = dt.NewRow();
-				dr["Idx"] = r;
-
-				foreach (DictionaryEntry col in htColumns)
-				{
-					if (col.Key == "TableHeadHeight") continue;
-					var rangeCell = range.Worksheet.get_Range(_base.ConvertInt2Letter((int)col.Key) + r, missing);
-					this.GetSaveValue(strSubTableName, (string)col.Value, rangeCell);
-				}
-				dt.Rows.Add(dr);
-			}
-			return dt;
-		}
-
-		/// <summary>
 		/// 获取所有子表数据
 		/// </summary>
 		/// <param name="dsOld">(可选)所有子表原始数据</param>
@@ -1005,15 +1002,15 @@ namespace CCFormExcel2010
 		public DataSet GetDtls(DataSet dsOld = null)
 		{
 			DataSet ds = new DataSet();
-			foreach (DictionaryEntry st in _htSubTables)
+			foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
 			{
 				//获取最新数据
 				//0.获取Excel中的数据（Range->DataTable,with RowIdxInExcel）
-				//1.根据((SubTable)st.Value).Connection更新newdata
+				//1.根据st.Value.Connection更新newdata
 				//?新数据中是否需要“未绑定到Excel表单的字段”？
 
-				//ds.Tables.Add(GetDtl((SubTable)st.Value));
-				var dt = GetDtl((SubTable)st.Value);
+				//ds.Tables.Add(GetDtl(st.Value));
+				var dt = GetDtl(st.Value);
 				if (dt == null)
 					return null;
 				else
@@ -1021,7 +1018,7 @@ namespace CCFormExcel2010
 
 				//获取原始数据
 				if (dsOld != null)
-					dsOld.Tables.Add(((SubTable)st.Value).OriginData.Copy());
+					dsOld.Tables.Add(st.Value.OriginData.Copy());
 			}
 			return ds;
 		}
@@ -1044,8 +1041,7 @@ namespace CCFormExcel2010
 
 			//遍历单元格的行
 			DataRow dr;
-			var intTableHeadHeight = Convert.ToInt32(st.Columns["TableHeadHeight"]);
-			for (var r = st.Range.Row + intTableHeadHeight; r < st.Range.Row + st.Range.Rows.Count; r++)
+			for (var r = st.Range.Row + st.TableHeadHeight; r < st.Range.Row + st.Range.Rows.Count; r++)
 			{
 				var bindOid = st.GetOidByRowid(r);
 
@@ -1076,18 +1072,19 @@ namespace CCFormExcel2010
 						//保存关联行号
 						st.Data.Rows[i]["Idx"] = r;
 						//保存所有字段
-						foreach (DictionaryEntry col in st.Columns)
+						foreach (KeyValuePair<int, string> col in st.Columns)
 						{
-							if (col.Key == "TableHeadHeight") continue;
-							var rangeCell = st.Range.Worksheet.get_Range(_base.ConvertInt2Letter((int)col.Key) + r, missing);
+							//xif (col.Key == "TableHeadHeight") continue;
+
+							var rangeCell = st.Range.Worksheet.get_Range(_base.ConvertInt2Letter(col.Key) + r, missing);
 							//st.Data.Rows[i][(string)col.Value] = GetSaveValue(st.Data.TableName, (string)col.Value, rangeCell);
 							string val;
-							if (VaildData(st.Data.TableName, (string)col.Value, rangeCell, out val))
+							if (VaildData(st.Data.TableName, col.Value, rangeCell, out val))
 							{
 								if (string.IsNullOrEmpty(val))
-									st.Data.Rows[i][(string)col.Value] = DBNull.Value;
+									st.Data.Rows[i][col.Value] = DBNull.Value;
 								else
-									st.Data.Rows[i][(string)col.Value] = val;
+									st.Data.Rows[i][col.Value] = val;
 							}
 							else
 								return null;
@@ -1104,15 +1101,15 @@ namespace CCFormExcel2010
 					//保存关联行号
 					dr["Idx"] = r;
 					//保存所有字段
-					foreach (DictionaryEntry col in st.Columns)
+					foreach (KeyValuePair<int, string> col in st.Columns)
 					{
-						if (col.Key == "TableHeadHeight") continue;
-						var rangeCell = st.Range.Worksheet.get_Range(_base.ConvertInt2Letter((int)col.Key) + r, missing);
+						//xif (col.Key == "TableHeadHeight") continue;
+						var rangeCell = st.Range.Worksheet.get_Range(_base.ConvertInt2Letter(col.Key) + r, missing);
 						//dr[(string)col.Value] = GetSaveValue(st.Data.TableName, (string)col.Value, rangeCell);
 						string val;
-						if (VaildData(st.Data.TableName, (string)col.Value, rangeCell, out val))
+						if (VaildData(st.Data.TableName, col.Value, rangeCell, out val))
 						{
-							dr[(string)col.Value] = val;
+							dr[col.Value] = val;
 						}
 						else
 						{
@@ -1328,7 +1325,6 @@ namespace CCFormExcel2010
 				return null;
 			if (!_originData.Tables[strTableName].Columns.Contains(strSelectColumn))
 				return null;
-
 			var drs = _originData.Tables[strTableName].Select(strWhere);
 			if (drs.Length == 0)
 				return null;
@@ -1501,11 +1497,11 @@ namespace CCFormExcel2010
 		/// </summary>
 		/// <param name="range"></param>
 		/// <returns></returns>
-		public Hashtable GetAreaColumns(Excel.Range range)
+		public Dictionary<int, string> GetAreaColumns(Excel.Range range, out int intThHeight)
 		{
 			//获取字段信息，及表头所占子行数
-			Hashtable htColumns = new Hashtable();
-			int intTableHeadHeight = 1; //表头所占子行数
+			Dictionary<int, string> dictColumns = new Dictionary<int, string>();
+			intThHeight = 1; //表头所占子行数
 			for (var c = range.Column; c <= range.Column + range.Columns.Count - 1; )
 			{
 				string name = string.Empty;
@@ -1527,8 +1523,8 @@ namespace CCFormExcel2010
 								currentThMergeRowsCount = rangeTableHead.MergeArea.Rows.Count; //用于计算当前表头所占行数
 							}
 							var currentThHeight = rangeTableHead.Row + currentThMergeRowsCount - range.Row; //当前表头占子表区域的高度（行数）
-							if (intTableHeadHeight < currentThHeight)
-								intTableHeadHeight = currentThHeight;
+							if (intThHeight < currentThHeight)
+								intThHeight = currentThHeight;
 							break; //发现表头即停止循环，不再往下寻找表头
 						}
 					}
@@ -1546,13 +1542,12 @@ namespace CCFormExcel2010
 
 				//若该列有绑定列
 				if (!string.IsNullOrEmpty(name) && name.IndexOf(".") > -1)
-					htColumns.Add(c, name.Substring(name.LastIndexOf('.') + 1));
+					dictColumns.Add(c, name.Substring(name.LastIndexOf('.') + 1));
 
 				//!下一个要循环的列
 				c += currentThMergeColumnsCount;
 			}
-			htColumns["TableHeadHeight"] = intTableHeadHeight; //约定：使用Key=TableHeadHeight存放该子表区域中表头所占行数
-			return htColumns;
+			return dictColumns;
 		}
 
 		/// <summary>
@@ -1734,43 +1729,6 @@ namespace CCFormExcel2010
 		}
 
 		#endregion
-
-		#region VSTO相关方法-命名相关
-
-
-		/// <summary>
-		/// 获取子表某中个单元格的所属列名
-		/// </summary>
-		/// <param name="range"></param>
-		/// <returns></returns>
-		public string __abandon_GetDtlColName(Excel.Range range)
-		{
-			//获取所属子表
-			var strBelongDtlName = _base.GetBelongDtlName(range);
-			if (string.IsNullOrEmpty(strBelongDtlName))
-				return null;
-			//获取子表列（表头）信息
-			Hashtable htColumns;
-			if (_htSubTables.Contains(strBelongDtlName))
-			{
-				var st = (SubTable)_htSubTables[strBelongDtlName];
-				htColumns = st.Columns;
-			}
-			else
-			{
-				Excel.Range rangeBelongDtl = range.Worksheet.Names.Item(strBelongDtlName).RefersToRange;
-				htColumns = GetAreaColumns(rangeBelongDtl);
-				//subTable.Columns = htColumns;//TODO: 此时是否运行重新获取字段信息？？
-			}
-
-			if (htColumns.Contains(range.Column))
-				return htColumns[range.Column].ToString();
-			else
-				return null;
-		}
-
-		#endregion
-
 
 		public void Show(string msg)
 		{

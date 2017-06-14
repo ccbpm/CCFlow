@@ -92,8 +92,7 @@ namespace BP.Excel
 		/// 插件引用的服务地址
 		/// </summary>
 		public static string WSUrl = "";
-
-
+		
 		public static string App = "";
 
 		#endregion

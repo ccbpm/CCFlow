@@ -34,7 +34,7 @@
     <PublishUrl>D:\Mayy\Desktop\CCFormExcel2010.Published\</PublishUrl>
     <InstallUrl />
     <TargetCulture>en</TargetCulture>
-    <ApplicationVersion>1.0.0.8</ApplicationVersion>
+    <ApplicationVersion>1.0.0.9</ApplicationVersion>
     <AutoIncrementApplicationRevision>false</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -197,6 +197,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="BP.DA\DataType.cs" />
     <Compile Include="ExcelFormBase.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

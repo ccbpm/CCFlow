@@ -21,10 +21,14 @@ namespace CCFormExcel2010
 		private Excel.Range _range; //子表区域
 		private int _Ro; //子表开始行数
 		private int _rangeRows; //子表区域行数
+
 		private DataTable _originData; //原始数据
 		private DataTable _newData; //新数据
-		private Hashtable _columns; //表头信息：col:KeyOfEn
-		private Hashtable _rowsConnection; //行绑定关系：rowidInExcel:rowOID
+
+		private int _TableHeadHeight; //表头高度
+		private Dictionary<int, string> _columns; //表头（列绑定）信息：col:KeyOfEn
+		private string _PkColumnName; //主键列名
+		private Dictionary<int, string> _rowsConnection; //行绑定关系：rowidInExcel:rowPK
 		private Stack _operations; //操作序列
 
 		#endregion
@@ -56,9 +60,17 @@ namespace CCFormExcel2010
 		}
 
 		/// <summary>
+		/// 表头所占高度
+		/// </summary>
+		public int TableHeadHeight
+		{
+			get { return _TableHeadHeight; }
+		}
+
+		/// <summary>
 		/// 字段信息（Range.Column:KeyOfEn）
 		/// </summary>
-		public Hashtable Columns
+		public Dictionary<int, string> Columns
 		{
 			get { return _columns; }
 		}
@@ -99,7 +111,7 @@ namespace CCFormExcel2010
 		/// </summary>
 		/// <param name="range"></param>
 		/// <param name="data"></param>
-		public SubTable(Excel.Range range, DataTable data, Hashtable columns)
+		public SubTable(Excel.Range range, DataTable data, Dictionary<int, string> columns, int intTableHeadHeight, string strPkColumnName)
 		{
 			this._range = range;
 			this._Ro = range.Row;
@@ -107,8 +119,12 @@ namespace CCFormExcel2010
 			this._originData = data.Copy();
 			this._newData = data.Copy();
 			this._name = data.TableName;
+
 			this._columns = columns;
-			this._rowsConnection = new Hashtable();
+			this._TableHeadHeight = intTableHeadHeight;
+			this._PkColumnName = strPkColumnName;
+			this._rowsConnection = new Dictionary<int, string>();
+
 			this._operations = new Stack();
 			if (!_newData.Columns.Contains("Idx"))
 			{
@@ -132,15 +148,15 @@ namespace CCFormExcel2010
 		/// <param name="rowInDatatable"></param>
 		public void SetConnection(int Idx, int rowInDatatable)
 		{
-			if (_rowsConnection.Contains(Idx))
+			if (_rowsConnection.ContainsKey(Idx))
 			{
 				_newData.Rows[rowInDatatable]["Idx"] = Idx;
-				_rowsConnection[Idx] = _newData.Rows[rowInDatatable]["OID"];
+				_rowsConnection[Idx] = _newData.Rows[rowInDatatable][_PkColumnName].ToString();
 			}
 			else
 			{
 				_newData.Rows[rowInDatatable]["Idx"] = Idx;
-				_rowsConnection.Add(Idx, _newData.Rows[rowInDatatable]["OID"]);
+				_rowsConnection.Add(Idx, _newData.Rows[rowInDatatable][_PkColumnName].ToString());
 			}
 		}
 		/*
@@ -149,12 +165,12 @@ namespace CCFormExcel2010
 			if (_rowsConnection.Contains(Idx))
 			{
 				_newData.Rows[rowInDatatable]["Idx"] = Idx;
-				_rowsConnection[Idx] = _newData.Rows[rowInDatatable]["OID"];
+				_rowsConnection[Idx] = _newData.Rows[rowInDatatable][_PkColumnName];
 			}
 			else
 			{
 				_newData.Rows[rowInDatatable]["Idx"] = Idx;
-				_rowsConnection.Add(Idx, _newData.Rows[rowInDatatable]["OID"]);
+				_rowsConnection.Add(Idx, _newData.Rows[rowInDatatable][_PkColumnName]);
 			}
 		}*/
 
@@ -168,7 +184,7 @@ namespace CCFormExcel2010
 				_newData.Columns.Add("Idx");
 				return;
 			}
-			_rowsConnection = new Hashtable();
+			_rowsConnection = new Dictionary<int, string>();
 			foreach (DataRow dr in _newData.Rows) //!若Excel表单数据与数据库数据不一致，则需修改此方法
 			{
 				if (!string.IsNullOrEmpty(dr["Idx"].ToString()))
@@ -184,13 +200,13 @@ namespace CCFormExcel2010
 			if (this.Range.Row != this._Ro) //在子表前插入行时
 			{
 				var diff = this.Range.Row - this._Ro;
-				this._rowsConnection = new Hashtable();
+				this._rowsConnection = new Dictionary<int, string>();
 				foreach (DataRow dr in this.Data.Rows)
 				{
 					if (!string.IsNullOrEmpty(dr["Idx"].ToString()))
 					{
 						dr["Idx"] = (int)dr["Idx"] + diff;
-						_rowsConnection.Add(dr["Idx"], dr["OID"]);
+						_rowsConnection.Add((int)dr["Idx"], dr[_PkColumnName].ToString());
 					}
 				}
 			}
@@ -206,7 +222,7 @@ namespace CCFormExcel2010
 		/// <returns></returns>
 		public string GetOidByRowid(int Idx)
 		{
-			if (_rowsConnection.Contains(Idx))
+			if (_rowsConnection.ContainsKey(Idx))
 				return _rowsConnection[Idx].ToString();
 			else
 				return null;
@@ -219,10 +235,10 @@ namespace CCFormExcel2010
 		/// <returns></returns>
 		public int GetColumnCx(string column)
 		{
-			foreach (DictionaryEntry col in _columns)
+			foreach (KeyValuePair<int, string> col in _columns)
 			{
-				if (col.Value.ToString() == column)
-					return (int)col.Key;
+				if (col.Value == column)
+					return col.Key;
 			}
 			return -1;
 		}
@@ -234,8 +250,8 @@ namespace CCFormExcel2010
 		/// <returns></returns>
 		public string GetColumnName(int rangeColumn)
 		{
-			if (_columns.Contains(rangeColumn))
-				return (string)_columns[rangeColumn];
+			if (_columns.ContainsKey(rangeColumn))
+				return _columns[rangeColumn];
 			else
 				return null;
 		}
@@ -247,8 +263,8 @@ namespace CCFormExcel2010
 		/// <returns></returns>
 		public string GetColumnName(Excel.Range range)
 		{
-			if (_columns.Contains(range.Column))
-				return (string)_columns[range.Column];
+			if (_columns.ContainsKey(range.Column))
+				return _columns[range.Column];
 			else
 				return null;
 		}
@@ -260,10 +276,10 @@ namespace CCFormExcel2010
 		public void InsertRow(int Idx, Excel.Range range = null)
 		{
 			//记录操作
-			_operations.Push(new RowOperation(Idx, (string)_rowsConnection[Idx], OperationType.New));
+			_operations.Push(new RowOperation(Idx, _rowsConnection[Idx], OperationType.New));
 
 			//更改行关联
-			var point = _range.Row + (int)_columns["TableHeadHeight"] + _rowsConnection.Count; //指向最后一行（新的）
+			var point = _range.Row + _TableHeadHeight + _rowsConnection.Count; //指向最后一行（新的）
 			_rowsConnection.Add(point, null);
 			while (point > Idx)
 			{
@@ -287,7 +303,7 @@ namespace CCFormExcel2010
 		{
 			//更改行关联（所有）
 			var point = Idx; //指向当前行（被撤销的『新增行』）
-			while (_rowsConnection.Contains(point + 1))
+			while (_rowsConnection.ContainsKey(point + 1))
 			{
 				_rowsConnection[point] = _rowsConnection[point + 1];
 				point++;
@@ -307,14 +323,14 @@ namespace CCFormExcel2010
 		{
 			//TODO: 删除多行的情况
 			//记录操作
-			_operations.Push(new RowOperation(Idx, (string)_rowsConnection[Idx], OperationType.Delete));
+			_operations.Push(new RowOperation(Idx, _rowsConnection[Idx], OperationType.Delete));
 
 			//更改newDataTalble中的Status: _newData.Select("OID={0}")[0][Idx or RowStatus]
-			_newData.Select(string.Format("OID='{0}'", (string)_rowsConnection[Idx]))[0]["Idx"] = RowStatus.Deleted.ToString();
+			_newData.Select(string.Format("OID='{0}'", _rowsConnection[Idx]))[0]["Idx"] = RowStatus.Deleted.ToString();
 
 			//更改行关联
 			var point = Idx; //指向被删除的行
-			while (_rowsConnection.Contains(point + 1))
+			while (_rowsConnection.ContainsKey(point + 1))
 			{
 				_rowsConnection[point] = _rowsConnection[point + 1];
 				point++;
@@ -330,15 +346,15 @@ namespace CCFormExcel2010
 		/// 撤销新增行操作
 		/// </summary>
 		/// <param name="Idx"></param>
-		/// <param name="oid"></param>
+		/// <param name=_PkColumnName></param>
 		/// <param name="range"></param>
 		private void UndoDeleteRow(int Idx, string oid, Excel.Range range = null)
 		{
 			//更改newDataTalble中的Status: _newData.Select("OID={0}")[0][Idx or RowStatus]
-			_newData.Select(string.Format("OID='{0}'", (string)_rowsConnection[Idx]))[0]["Idx"] = RowStatus.Origin.ToString();
+			_newData.Select(string.Format("OID='{0}'", _rowsConnection[Idx]))[0]["Idx"] = RowStatus.Origin.ToString();
 
 			//更改行关联
-			var point = _range.Row + (int)_columns["TableHeadHeight"] + _rowsConnection.Count; //指向最后一行
+			var point = _range.Row + _TableHeadHeight + _rowsConnection.Count; //指向最后一行
 			_rowsConnection.Add(point, null);
 			while (point > Idx)
 			{
@@ -370,9 +386,9 @@ namespace CCFormExcel2010
 			else if (oper.OperationType == OperationType.Delete)
 			{
 				if (range != null)
-					this.UndoDeleteRow(oper.Row, oper.OID, range);
+					this.UndoDeleteRow(oper.Row, oper.RowPk, range);
 				else
-					this.UndoDeleteRow(oper.Row, oper.OID);
+					this.UndoDeleteRow(oper.Row, oper.RowPk);
 
 			}
 		}
@@ -421,19 +437,19 @@ namespace CCFormExcel2010
 	{
 		//成员
 		private int _row;
-		private string _oid;
+		private string _rowPk;
 		private OperationType _operationType;
 
 		/// <summary>
 		/// 构造方法
 		/// </summary>
 		/// <param name="row">行(Idx)</param>
-		/// <param name="oid">OID</param>
+		/// <param name="rowPk">rowPk</param>
 		/// <param name="operationType">操作类型</param>
-		public RowOperation(int row, string oid, OperationType operationType)
+		public RowOperation(int row, string rowPk, OperationType operationType)
 		{
 			this._row = row;
-			this._oid = oid;
+			this._rowPk = rowPk;
 			this._operationType = operationType;
 		}
 
@@ -448,9 +464,9 @@ namespace CCFormExcel2010
 		/// <summary>
 		/// 行对应的OID
 		/// </summary>
-		public string OID
+		public string RowPk
 		{
-			get { return this._oid; }
+			get { return this._rowPk; }
 		}
 		/// <summary>
 		/// 操作类型

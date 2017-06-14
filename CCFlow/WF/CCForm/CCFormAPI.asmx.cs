@@ -90,227 +90,227 @@ namespace CCFlow.WF.CCForm
 		/// <param name="dsDtlsChange">从表数据（新）</param>
 		/// <param name="dsDtlsOld">从表数据（原始）</param>
 		/// <param name="byt">文件流</param>
-        [WebMethod]
-        public void SaveExcelFile(string userNo, string sid, string frmID, string pkValue, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt)
-        {
-            //执行登录.
-            BP.WF.Dev2Interface.Port_Login(userNo);
+		[WebMethod]
+		public void SaveExcelFile(string userNo, string sid, string frmID, string pkValue, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt)
+		{
+			//执行登录.
+			BP.WF.Dev2Interface.Port_Login(userNo);
 
-            //保存excel文件流
-            if (frmID.Contains("BP."))
-            {
-                Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
-                Entity en = ens.GetNewEntity;
-                var md = en.DTSMapToSys_MapData();
+			//保存excel文件流
+			if (frmID.Contains("BP."))
+			{
+				Entities ens = BP.En.ClassFactory.GetEns(frmID + "s");
+				Entity en = ens.GetNewEntity;
+				var md = en.DTSMapToSys_MapData();
 
-                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
-                MapFrmExcel mfe = new MapFrmExcel(md.No);
+				//创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+				MapFrmExcel mfe = new MapFrmExcel(md.No);
 
-                md.ExcelSaveFile(pkValue, byt, mfe.DBSave);
-            }
-            else
-            {
-                //执行保存文件.
-                MapData md = new MapData(frmID);
+				md.ExcelSaveFile(pkValue, byt, mfe.DBSave);
+			}
+			else
+			{
+				//执行保存文件.
+				MapData md = new MapData(frmID);
 
-                //创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
-                MapFrmExcel mfe = new MapFrmExcel(md.No);
+				//创建excel表单描述，让其保存到excel表单指定的字段里, 扩展多个表单映射同一张表.
+				MapFrmExcel mfe = new MapFrmExcel(md.No);
 
-                md.ExcelSaveFile(pkValue, byt, mfe.DBSave); //把文件保存到该实体对应的数据表的 DBFile 列中。
-            }
+				md.ExcelSaveFile(pkValue, byt, mfe.DBSave); //把文件保存到该实体对应的数据表的 DBFile 列中。
+			}
 
-            #region 保存主表数据.
-            if (pkValue.Contains("_") == true)
-            {
-                GEEntityMyPK wk = new GEEntityMyPK(frmID, pkValue);
-                wk.ResetDefaultVal();
+			#region 保存主表数据.
+			if (pkValue.Contains("_") == true)
+			{
+				GEEntityMyPK wk = new GEEntityMyPK(frmID, pkValue);
+				wk.ResetDefaultVal();
 
-                if (mainTableAtParas != null)
-                {
-                    AtPara ap = new AtPara(mainTableAtParas);
-                    foreach (string str in ap.HisHT.Keys)
-                    {
-                        if (wk.Row.ContainsKey(str))
-                            wk.SetValByKey(str, ap.GetValStrByKey(str));
-                        else
-                            wk.Row.Add(str, ap.GetValStrByKey(str));
-                    }
-                }
-                wk.MyPK = pkValue;
-                wk.Save();
-            } //TODO: 增加NoName类型的处理
-            else
-            {
-                long pk;
-                if (Int64.TryParse(pkValue, out pk))
-                {
-                    GEEntity wk = new GEEntity(frmID, pkValue);
-                    wk.ResetDefaultVal();
+				if (mainTableAtParas != null)
+				{
+					AtPara ap = new AtPara(mainTableAtParas);
+					foreach (string str in ap.HisHT.Keys)
+					{
+						if (wk.Row.ContainsKey(str))
+							wk.SetValByKey(str, ap.GetValStrByKey(str));
+						else
+							wk.Row.Add(str, ap.GetValStrByKey(str));
+					}
+				}
+				wk.MyPK = pkValue;
+				wk.Save();
+			} //TODO: 增加NoName类型的处理
+			else
+			{
+				long pk;
+				if (Int64.TryParse(pkValue, out pk))
+				{
+					GEEntity wk = new GEEntity(frmID, pkValue);
+					wk.ResetDefaultVal();
 
-                    if (mainTableAtParas != null)
-                    {
-                        AtPara ap = new AtPara(mainTableAtParas);
-                        foreach (string str in ap.HisHT.Keys)
-                        {
-                            if (wk.Row.ContainsKey(str))
-                                wk.SetValByKey(str, ap.GetValStrByKey(str));
-                            else
-                                wk.Row.Add(str, ap.GetValStrByKey(str));
-                        }
-                    }
-                    wk.OID = Int64.Parse(pkValue);
-                    wk.Save();
-                }
-                else
-                {
-                    throw new Exception("未识别的主键值类型！");
-                }
-            }
+					if (mainTableAtParas != null)
+					{
+						AtPara ap = new AtPara(mainTableAtParas);
+						foreach (string str in ap.HisHT.Keys)
+						{
+							if (wk.Row.ContainsKey(str))
+								wk.SetValByKey(str, ap.GetValStrByKey(str));
+							else
+								wk.Row.Add(str, ap.GetValStrByKey(str));
+						}
+					}
+					wk.OID = Int64.Parse(pkValue);
+					wk.Save();
+				}
+				else
+				{
+					throw new Exception("未识别的主键值类型！");
+				}
+			}
 
-            if (dsDtlsChange == null)
-                return;
+			if (dsDtlsChange == null)
+				return;
 
-            #endregion
+			#endregion
 
-            #region 保存从表
+			#region 保存从表
 
-            //截去『BP.XXX.』以便下方的“new MapDtls(frmID)”能正常取值
-            if (frmID.Contains("BP."))
-                frmID = frmID.Substring(frmID.LastIndexOf(".") + 1);
+			//截去『BP.XXX.』以便下方的“new MapDtls(frmID)”能正常取值
+			if (frmID.Contains("BP."))
+				frmID = frmID.Substring(frmID.LastIndexOf(".") + 1);
 
-            //明细集合.
-            MapDtls dtls = new MapDtls(frmID);
+			//明细集合.
+			MapDtls dtls = new MapDtls(frmID);
 
-            //保存从表
-            foreach (System.Data.DataTable dt in dsDtlsChange.Tables)
-            {
-                foreach (MapDtl dtl in dtls)
-                {
-                    //if (dt.TableName != dtl.No) //!++ TO DO: BP.XXX.YYYYYs != YYYYY
-                    //	continue;
-                    if (dt.TableName.Contains("BP."))
-                    {
-                        var tname = dt.TableName.Substring(dt.TableName.LastIndexOf(".") + 1,
-                            dt.TableName.Length - dt.TableName.LastIndexOf(".") - 2);
-                        if (tname != dtl.No)
-                            continue;
-                    }
-                    else
-                    {
-                        if (dt.TableName != dtl.No)
-                            continue;
-                    }
+			//保存从表
+			foreach (System.Data.DataTable dt in dsDtlsChange.Tables)
+			{
+				foreach (MapDtl dtl in dtls)
+				{
+					//if (dt.TableName != dtl.No) //!++ TO DO: BP.XXX.YYYYYs != YYYYY
+					//	continue;
+					if (dt.TableName.Contains("BP."))
+					{
+						var tname = dt.TableName.Substring(dt.TableName.LastIndexOf(".") + 1,
+							dt.TableName.Length - dt.TableName.LastIndexOf(".") - 2);
+						if (tname != dtl.No)
+							continue;
+					}
+					else
+					{
+						if (dt.TableName != dtl.No)
+							continue;
+					}
 
-                    #region 根据原始数据,与当前数据求出已经删除的oids .
-                    DataTable dtDtlOld = dsDtlsOld.Tables[dt.TableName]; //这里要用原始（打开excel时获取到的）表名『BP.XXX.YYYYY』
-                    foreach (DataRow dr in dtDtlOld.Rows)
-                    {
-                        string oidOld = dr["OID"].ToString();
+					#region 根据原始数据,与当前数据求出已经删除的oids .
+					DataTable dtDtlOld = dsDtlsOld.Tables[dt.TableName]; //这里要用原始（打开excel时获取到的）表名『BP.XXX.YYYYY』
+					foreach (DataRow dr in dtDtlOld.Rows)
+					{
+						string oidOld = dr["OID"].ToString();
 
-                        bool isHave = false;
-                        //遍历变更的数据.
-                        foreach (DataRow dtNew in dt.Rows)
-                        {
-                            string oidNew = dtNew["OID"].ToString();
-                            if (oidOld == oidNew)
-                            {
-                                isHave = true;
-                                break;
-                            }
-                        }
+						bool isHave = false;
+						//遍历变更的数据.
+						foreach (DataRow dtNew in dt.Rows)
+						{
+							string oidNew = dtNew["OID"].ToString();
+							if (oidOld == oidNew)
+							{
+								isHave = true;
+								break;
+							}
+						}
 
-                        //如果不存在.
-                        if (isHave == false)
-                            DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE OID=" + oidOld);
-                    }
-                    #endregion 根据原始数据,与当前数据求出已经删除的oids .
+						//如果不存在.
+						if (isHave == false)
+							DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE OID=" + oidOld);
+					}
+					#endregion 根据原始数据,与当前数据求出已经删除的oids .
 
-                    //获取dtls
-                    GEDtls daDtls = new GEDtls(dtl.No);
+					//获取dtls
+					GEDtls daDtls = new GEDtls(dtl.No);
 
-                    //获得主表事件.
-                    FrmEvents fes = new FrmEvents(dtl.No); //获得事件.
-                    GEEntity mainEn = null;
-                    if (fes.Count > 0)
-                        mainEn = dtl.GenerGEMainEntity(pkValue);
+					//获得主表事件.
+					FrmEvents fes = new FrmEvents(dtl.No); //获得事件.
+					GEEntity mainEn = null;
+					if (fes.Count > 0)
+						mainEn = dtl.GenerGEMainEntity(pkValue);
 
-                    //求出从表实体类.
-                    BP.Sys.FormEventBaseDtl febd = null;
-                    if (dtl.FEBD != "")
-                    {
-                        febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(dtl.No);
-                        if (mainEn==null)
-                            mainEn = dtl.GenerGEMainEntity(pkValue);
-                    }
+					//求出从表实体类.
+					BP.Sys.FormEventBaseDtl febd = null;
+					if (dtl.FEBD != "")
+					{
+						febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(dtl.No);
+						if (mainEn == null)
+							mainEn = dtl.GenerGEMainEntity(pkValue);
+					}
 
-                    // 更新数据.
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
-                        daDtl.OID = int.Parse(dr["OID"].ToString());
-                        if (daDtl.OID > 100)
-                            daDtl.RetrieveFromDBSources();
+					// 更新数据.
+					foreach (DataRow dr in dt.Rows)
+					{
+						GEDtl daDtl = daDtls.GetNewEntity as GEDtl;
+						daDtl.OID = int.Parse(dr["OID"].ToString());
+						if (daDtl.OID > 100)
+							daDtl.RetrieveFromDBSources();
 
-                        daDtl.ResetDefaultVal();
+						daDtl.ResetDefaultVal();
 
-                        //明细列.
-                        foreach (DataColumn dc in dt.Columns)
-                        {
-                            //设置属性.
-                            daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
-                        }
+						//明细列.
+						foreach (DataColumn dc in dt.Columns)
+						{
+							//设置属性.
+							daDtl.SetValByKey(dc.ColumnName, dr[dc.ColumnName]);
+						}
 
-                        daDtl.SetValByKey(dtl.RefPK, pkValue);
-                        daDtl.RDT = DataType.CurrentDataTime;
+						daDtl.SetValByKey(dtl.RefPK, pkValue);
+						daDtl.RDT = DataType.CurrentDataTime;
 
-                        #region 从表保存前处理事件.
-                        if (fes.Count > 0)
-                        {
-                            string msg = fes.DoEventNode(FrmEventListDtl.RowSaveBefore, mainEn);
-                            if (msg != null)
-                                throw new Exception(msg);
-                        }
+						#region 从表保存前处理事件.
+						if (fes.Count > 0)
+						{
+							string msg = fes.DoEventNode(FrmEventListDtl.RowSaveBefore, mainEn);
+							if (msg != null)
+								throw new Exception(msg);
+						}
 
-                        if (febd != null)
-                        {
-                            febd.HisEn = mainEn;
-                            febd.HisEnDtl = daDtl;
-                            febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, daDtl, null);
-                        }
-                        #endregion 从表保存前处理事件.
+						if (febd != null)
+						{
+							febd.HisEn = mainEn;
+							febd.HisEnDtl = daDtl;
+							febd.DoIt(FrmEventListDtl.RowSaveBefore, febd.HisEn, daDtl, null);
+						}
+						#endregion 从表保存前处理事件.
 
-                        //执行保存.
-                        if (daDtl.OID > 100)
-                            daDtl.Update(); //插入数据.
-                        else
-                            daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
+						//执行保存.
+						if (daDtl.OID > 100)
+							daDtl.Update(); //插入数据.
+						else
+							daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
 
-                        #region 从表保存后处理事件。
-                        if (fes.Count > 0)
-                        {
-                            string msg = fes.DoEventNode(FrmEventListDtl.RowSaveAfter, daDtl);
-                            if (msg != null)
-                                throw new Exception(msg);
-                        }
+						#region 从表保存后处理事件。
+						if (fes.Count > 0)
+						{
+							string msg = fes.DoEventNode(FrmEventListDtl.RowSaveAfter, daDtl);
+							if (msg != null)
+								throw new Exception(msg);
+						}
 
-                        if (febd != null)
-                        {
-                            febd.HisEn = mainEn;
-                            febd.HisEnDtl = daDtl;
+						if (febd != null)
+						{
+							febd.HisEn = mainEn;
+							febd.HisEnDtl = daDtl;
 
-                            febd.DoIt(FrmEventListDtl.RowSaveAfter, mainEn, daDtl, null);
-                        }
-                        #endregion 处理事件.
+							febd.DoIt(FrmEventListDtl.RowSaveAfter, mainEn, daDtl, null);
+						}
+						#endregion 处理事件.
 
-                    }
-                }
-            }
-            #endregion 保存从表结束
+					}
+				}
+			}
+			#endregion 保存从表结束
 
 
-            //缺少表单保存后的方法.
+			//缺少表单保存后的方法.
 
-        }
+		}
 		/// <summary>
 		/// 级联接口
 		/// </summary>
@@ -369,7 +369,7 @@ namespace CCFlow.WF.CCForm
 		public String GetVstoExtensionVersion()
 		{
 			//return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
-			return "1.0.0.8";
+			return "1.0.0.9";
 		}
 	}
 }

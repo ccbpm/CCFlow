@@ -602,16 +602,25 @@ function Save() {
         url: "MyFlow.ashx?Method=Save",
         dataType: 'html',
         success: function (data) {
-
             setToobarEnable();
+            //刷新 从表的IFRAME
+            var dtls = $('.Fdtl');
+            $.each(dtls, function (i, dtl) {
+                $(dtl).attr('src', $(dtl).attr('src'));
+            });
+            if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
+                $('#Message').html(data.substring(4, data.length));
+                $('#MessageDiv').modal().show();
+            }
             if (data.indexOf('err@') == 0) {
                 $('#Message').html(data.substring(4, data.length));
                 $('.Message').show();
             }
             else {
+                
                 //OptSuc(data);
-                $('#Message').html(data);
-                $('.Message').show();
+                //$('#Message').html(data);
+                //$('.Message').show();
                 //表示退回OK
                 //if (data.indexOf('工作已经被您退回到') == 0) {
                 //  OptSuc(data);
@@ -749,7 +758,7 @@ function initGroup(workNodeData, groupFiled) {
             break;
         case "Dtl":
             //WF/CCForm/Dtl.aspx?EnsName=ND501Dtl1&RefPKVal=0&PageIdx=1
-            var src = "/WF/CCForm/Dtl.aspx?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
+            var src = "/WF/CCForm/Dtl.htm?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
             src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
@@ -833,143 +842,11 @@ function initGroup(workNodeData, groupFiled) {
     return groupHtml;
 }
 
-//解析分组类型 如果返回的为 '' 就表明是字段分组
-function initTrackList(workNodeData) {
-    var trackNavHtml = '';
-    var trackHtml = '';
-    var trackList = workNodeData.Track;
-    var filterTrackList = $.grep(trackList, function (value) {
-        return value.ActionType == 28 || value.ActionType == 27 || value.ActionType == 26 || value.ActionType == 11 || value.ActionType == 10 || value.ActionType == 9 || value.ActionType == 7 || value.ActionType == 6 || value.ActionType == 2 || value.ActionType == 1 || value.ActionType == 8 || value.ActionType == 5;
-    });
-    workNodeData.Track = filterTrackList;
-    $.each(workNodeData.Track, function (i, track) {
-        //流程执行人
-        var exerNoName = track.Exer.substr(1, track.Exer.length - 2);
-        //var exerNoName = track.Exer.substr(1, track.Exer.length - 2).replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
-
-        var exerNo = exerNoName.split(',')[0];
-        var exerName = exerNoName.split(',')[1];
-        var exerEmpP = (exerNo == track.EmpFrom ? "" : "（实际发送人：" + exerName + "）");
-        track.RDT = track.RDT;
-        //track.RDT = track.RDT.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
-
-
-        var actionType = track.ActionType;
-        trackNavHtml += '<li class="scrollNav" title="发送人：' + track.EmpFromT + "；发送时间：" + track.RDT + "；信息：" + $('<p>' + track.Msg + '</p>').text() + '"><a href="#track' + i + '"><div>' + (i + 1) + '</div>' + (actionType == 5 ? track.NDToT : track.NDFromT) + '<p>发送人:' + track.EmpFromT +exerEmpP+ '</p><p>时间:' + track.RDT + '</p>' + '</a></li>';
-        if (actionType != 1 && actionType != 6 && actionType != 7 && actionType != 11 && actionType != 8) {
-            switch (actionType) {
-                case 5:
-                    trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + "撤销发送信息" + '</span></div>' + "<div class='returnTackDiv' >" + track.NDToT + "撤消节点发送;时间" + track.RDT + '</div></div>';
-                    break;
-                case 2:
-                    trackHtml += '<div class="trackDiv"><i style="display:none;"></i>' + '<div class="returnTackHeader" id="track' + i + '" ><b>' + (i + 1) + '</b><span>' + track.ActionTypeText + '信息</span></div>' + "<div class='returnTackDiv' >" + track.EmpFromT + "把工单从节点：（" + track.NDFromT + "）" + track.ActionTypeText + "至：(" + track.EmpToT + "," + track.NDToT + "):" + track.RDT + "</br>" + track.ActionTypeText + "信息：" + track.Msg + '</div></div>';
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            var trackSrc = "/WF/WorkOpt/ViewWorkNodeFrm.htm?WorkID=" + track.WorkID + "&FID=" + track.FID + "&FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK + '&IframeId=track' + i;
-            trackHtml += '<div class="trackDiv"><iframe id="track' + i + '" name="track11' + i + ' " src="' + trackSrc + '"></iframe></div>';
-        }
-    });
-    //不是查看模式   显示当前处理节点
-    function HgetNowFormatDate(time) {
-        var date = time ? new Date(time) : new Date();
-        var seperator1 = "-";
-        var seperator2 = ":";
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-                + " " + date.getHours() + seperator2 + date.getMinutes()
-                + seperator2 + date.getSeconds();
-        return {
-            currentdate: currentdate,
-            getDay: date.getFullYear() + seperator1 + month + seperator1 + strDate,
-            getTime: date.getHours() + seperator2 + date.getMinutes()
-                + seperator2 + date.getSeconds()
-        };
-    }
-    var sendName = $.cookie("CCS").split("=")[2].split("&")[0];
-    var sendNo = $.cookie("CCS").split("=")[1].split("&")[0];
-    var sendt = HgetNowFormatDate().currentdate;
-    if (pageData.DoType1 != 'View') {
-        trackNavHtml += '<li  class="scrollNav"><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + workNodeData.Sys_MapData[0].Name + '<p>发送人:' + sendName + '</p><p>时间:' + sendt + '</p></a></li>';
-        $('#header b').text((workNodeData.Track.length + 1));
-        //trackNavHtml += '<li class="scrollNav" title="发送人："><a href="#divCurrentForm"><div>' + (workNodeData.Track.length + 1) + '</div>' + "dsfsf" + '</a></li>';
-    }
-    $('#nav').html(trackNavHtml);
-    if (workNodeData.Track.length > 0) {
-        $('.navbars').css('display', 'block');
-    } else {//新建单子时，不显示轨迹导航，表单宽度为100%
-        $('.navbars').css('display', 'none');
-        $('#divCurrentForm').css('width', '100%');
-        $('#header').css('background', '#5598f3');
-    }
-
-    //设置表单宽度为81%  当时新建工单的时候不显示左侧的导航栏
-    var width = 81;
-    //先去掉
-    //if (workNodeData.Sys_MapData != undefined && workNodeData.Sys_MapData.length > 0 && workNodeData.Sys_MapData[0].TableWidth > 900) {//处于中屏时设置宽度最小值
-    //    width = workNodeData.Sys_MapData[0].TableWidth;
-    //}
-    width = width + '%';
-    $('#divCurrentForm').css('width', width);
-    $('#divTrack').css('width', width);
-    //显示左侧导航栏 暂时不显示
-    $('#nav').css('display', 'block');
-
-    if (workNodeData.Track.length > 0) {
-        $('#nav').css('display', 'block');
-    } else {//新建单子时，不显示轨迹导航，表单宽度为100%
-        $('#nav').css('display', 'none');
-        $('#divCurrentForm').css('width', '100%');
-        $('#header').css('background', '#5598f3');
-    }
-
-    $($('#nav li')[0]).addClass('current');
-    $('#nav').onePageNav();
-
-    $('#divTrack').html(trackHtml);
-
-    $('#divTrack').bind('click', function (obj) {
-        var returnContentDiv = $(obj.target).next(".returnTackDiv");
-        var i = returnContentDiv.parent().children().first();
-        if (returnContentDiv.length == 0) {
-            returnContentDiv = $(obj.target).parent().next(".returnTackDiv");
-        }
-        if (returnContentDiv.css('display') != 'none') {
-            returnContentDiv.css('display', 'none');
-            i.hide();
-        } else {
-            returnContentDiv.css('display', 'block');
-            i.show();
-        }
-    });
-
-    //如果工作已经处理  提示用户工作已处理  并关闭处理页面
-    if (workNodeData.Track.length > 0 && (workNodeData.Track[workNodeData.Track.length - 1].NDFrom == pageData.FK_Node && workNodeData.Track[workNodeData.Track.length - 1].EmpFrom == sendNo) && (workNodeData.Track[workNodeData.Track.length - 1].ActionType != 5) && pageData.DoType1 != 'View') {//ACTIONTYPE=5 是撤销移交
-        alert("当前工作已处理");
-        //刷新父窗口
-        if (window.opener != null) {
-            window.opener.location.reload();
-        }
-        window.close();
-    }
-}
-
 function InitForm() {
     var workNodeData = JSON.parse(jsonStr);
     var CCFormHtml = '';
 
     var navGroupHtml = '';
-    //解析节点名称
-    $('#header span').text(workNodeData.Sys_MapData[0].Name);
     //解析分组
     var groupFileds = workNodeData.Sys_GroupField.sort(function (a, b) {
         return a.Idx - b.Idx;
@@ -1181,6 +1058,11 @@ function InitForm() {
     showNoticeInfo();
 
     showTbNoticeInfo();
+
+    //当窗口大小大于所设置的窗口大小时，默认100%，当窗口大小小与所设置的大小时，设置宽度，出现横线滚动条
+    $('#divCurrentForm').css('min-width', workNodeData.Sys_MapData[0].FrmW);
+    $('#topToolBar').css('min-width', workNodeData.Sys_MapData[0].FrmW);
+    
 }
 
 //刷新子流程
@@ -1346,6 +1228,7 @@ function Col8To4() {
 
 }
 
+
 //解析表单字段 MapAttr
 function InitMapAttr(mapAttrData, workNodeData) {
     var resultHtml = '';
@@ -1353,7 +1236,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
     var hiddenHtml = '';
     for (var j = 0; j < mapAttrData.length; j++) {
         var mapAttr = mapAttrData[j];
-        if (mapAttr.UIVisible) {//是否显示
+        if (mapAttr.UIVisible=="1") {//是否显示
             //添加 label
             //如果是整行的需要添加  style='clear:both'
 
@@ -1431,7 +1314,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                 else if (mapAttr.MyDataType == 6) {//AppDate
                     var enableAttr = '';
                     if (mapAttr.UIIsEnable == 1) {
-                        enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+                        enableAttr = 'readonly="readonly" onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
@@ -1525,7 +1408,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
                 //AppMoney  AppRate
                 if (mapAttr.MyDataType == 8) {
@@ -1535,7 +1418,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
+                    eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' + "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + "maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" + "</div>";
                 }
 
                 if (mapAttr.LGType == 2) {
@@ -1972,12 +1855,6 @@ function GenerWorkNode() {
                 $('#ShowPFlow').css('display', 'none');
             }
 
-            //如果为查看页面，只显示历史轨迹
-            initTrackList(gengerWorkNode);
-            if (pageData.DoType1 == 'View') {
-                $('#divCurrentForm').css('display', 'none');
-                return;
-            }
             //是分流或者分合流  且是 退回状态 转到页面 WF\WorkOpt\DealSubThreadReturnToHL.html
             if ((gengerWorkNode.WF_Node[0].RunModel == 2 || gengerWorkNode.WF_Node[0].RunModel == 3) && gengerWorkNode.WF_GenerWorkFlow[0].WFState == 5) {
                 $('#')
@@ -2490,17 +2367,5 @@ function SaveDtlAll() {
     return true;
 }
 
-//历史的导航  横向的圆球状
-function SetHisIframe(obj) {
-    $('#hisIframe').attr('src', obj.Href);
-}
-
-//设置历史表单的高度
-function InitLoadFrame(obj) {
-    var height = $(frames[obj.target.name].window.document.getElementsByTagName('BODY')).height();
-
-
-    $(obj.target).height(height + 10);
-}
 var colVisibleJsonStr = ''
 var jsonStr = '';

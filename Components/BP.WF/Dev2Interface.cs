@@ -6833,7 +6833,6 @@ namespace BP.WF
                 }
                 #endregion 更新发送参数.
 
-
                 if (nd.SaveModel == SaveModel.NDAndRpt)
                 {
                     /* 如果保存模式是节点表与Node与Rpt表. */
@@ -6892,7 +6891,6 @@ namespace BP.WF
                     //设置标题.
                     string title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
 
-
                     gwf.WorkID = workID;
                     int i = gwf.RetrieveFromDBSources();
 
@@ -6944,6 +6942,31 @@ namespace BP.WF
                     }
                 }
                 #endregion 为开始工作创建待办
+
+
+
+                #region 处理保存后事件
+                bool isHaveSaveAfter = false;
+                try
+                {
+                    //处理表单保存后。
+                    string s = nd.MapData.FrmEvents.DoEventNode(FrmEventList.SaveAfter, wk);
+
+                    //执行保存前事件.
+                    s += nd.HisFlow.DoFlowEventEntity(EventListOfNode.SaveAfter, nd, wk, null);
+
+                    if (s != null)
+                    {
+                        /*如果不等于null,说明已经执行过数据保存，就让其从数据库里查询一次。*/
+                        wk.RetrieveFromDBSources();
+                        isHaveSaveAfter = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return "err@在执行保存后的事件期间出现错误:" + ex.Message;
+                }
+                #endregion
 
                 return "保存成功.";
             }

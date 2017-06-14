@@ -4707,8 +4707,8 @@ namespace BP.WF
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetCodeStruct("3");
 
-                map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 10, 3);
-                map.AddTBString(FlowAttr.Name, null, "名称", true, false, 0, 500, 10);
+                map.AddTBStringPK(FlowAttr.No, null, "编号", true, true, 1, 5, 3);
+                map.AddTBString(FlowAttr.Name, null, "名称", true, false, 0, 200, 10);
 
                 map.AddDDLEntities(FlowAttr.FK_FlowSort, "01", "流程类别", new FlowSorts(), false);
                 map.AddTBString(FlowAttr.SysType, null, "系统类别", true, false, 0, 3, 10);
@@ -4720,8 +4720,8 @@ namespace BP.WF
                 //    false, FlowAttr.FlowRunWay,
                 //    "@0=手工启动@1=指定人员按时启动@2=数据集按时启动@3=触发式启动");
 
-                map.AddTBString(FlowAttr.RunObj, null, "运行内容", true, false, 0, 3000, 10);
-                map.AddTBString(FlowAttr.Note, null, "备注", true, false, 0, 100, 10);
+                map.AddTBString(FlowAttr.RunObj, null, "运行内容", true, false, 0, 2000, 10);
+                map.AddTBString(FlowAttr.Note, null, "备注", true, false, 0, 300, 10);
                 map.AddTBString(FlowAttr.RunSQL, null, "流程结束执行后执行的SQL", true, false, 0, 2000, 10);
 
                 map.AddTBInt(FlowAttr.NumOfBill, 0, "是否有单据", false, false);
@@ -4738,7 +4738,7 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.IsMD5, 0, "IsMD5", false, false);
                 map.AddTBInt(FlowAttr.Idx, 0, "显示顺序号(在发起列表中)", true, false);
                 map.AddTBInt(FlowAttr.TimelineRole, 0, "时效性规则", true, false);
-                map.AddTBString(FlowAttr.Paras, null, "参数", false, false, 0, 400, 10);
+                map.AddTBString(FlowAttr.Paras, null, "参数", false, false, 0, 2000, 10);
 
                 // add 2013-01-01. 
                 map.AddTBString(FlowAttr.PTable, null, "流程数据存储主表", true, false, 0, 30, 10);

@@ -934,8 +934,15 @@ namespace BP.WF
                 if (en == null)
                     continue;
 
+
+
                 //获得类名.
                 string clsName = en.ToString();
+
+                if (clsName.Contains("FlowSheet") == true)
+                    continue;
+                if (clsName.Contains("NodeSheet") == true)
+                    continue;
 
                 //不安装CCIM的表.
                 if (clsName != null && clsName.Contains("BP.CCIM"))

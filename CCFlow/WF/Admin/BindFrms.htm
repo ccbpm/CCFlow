@@ -50,6 +50,7 @@
                 dataType: 'html',
                 success: function (data) {
 
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -62,17 +63,20 @@
 
                         var newRow = "";
 
+                        var frmNode = data[i];
+
                         var mypk = data[i].MyPK;
 
+
                         newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + data[i].FK_Frm + "</td>";
+                        newRow += "<td>" + frmNode.FK_Frm + "</td>";
 
-                       
-                        newRow += "<td><a href=\"javascript:Edit('" + mypk + "')\"><img src='./Img/Frm.png'  />" + data[i].FK_FrmText + "</a></td>";
 
-                        newRow += "<td>" + data[i].FrmEnableRoleText + "</td>";
-                        newRow += "<td>" + data[i].FrmSlnText + "</td>";
-                        newRow += "<td>" + data[i].WhoIsPKText + "</td>";
+                        newRow += "<td><a href=\"javascript:Edit('" + mypk + "')\"><img src='./Img/Frm.png'  />" + frmNode.FK_FrmText + "</a></td>";
+
+                        newRow += "<td>" + frmNode.FrmEnableRoleText + "</td>";
+                        newRow += "<td>" + frmNode.FrmSlnText + "</td>";
+                        newRow += "<td>" + frmNode.WhoIsPKText + "</td>";
 
                         newRow += "<td><a href=\"javascript:DoOrder('" + mypk + "','Up')\">上移</a></td>";
                         newRow += "<td><a href=\"javascript:DoOrder('" + mypk + "','Down')\">下移</a></td>";

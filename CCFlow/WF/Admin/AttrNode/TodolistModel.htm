@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>多人处理规则</title>
      <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
@@ -12,7 +12,6 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
-
     <script type="text/javascript" language="javascript" >
         //页面启动函数.
         $(function () {
@@ -41,6 +40,8 @@
 
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(data);
+
+                    $("#Msg").html("");
                 }
             });
         });
@@ -49,8 +50,6 @@
 <body>
 <form id="cc">
 
-<h4>多人处理规则</h4>
- 
 <fieldset>
 <legend> <input type="radio" value="0"  id="RB_TodolistModel_0" name="RB_TodolistModel" /> <label for="RB_TodolistModel_0">抢办模式 </label> </legend>
 <ul >
@@ -129,7 +128,6 @@
 
         var frmData = $("#cc").serialize();
 
-        //alert(frmData);
 
         $.ajax({
             data: frmData,
@@ -153,6 +151,7 @@
     }
 </script>
 
+<div id="Msg"></div>
 </form>
 
 </body>

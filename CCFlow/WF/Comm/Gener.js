@@ -282,7 +282,6 @@ function GenerFullAllCtrlsVal(data) {
             continue;
         }
 
-
         // 处理参数字段.....................
 
         // textbox

@@ -934,10 +934,10 @@ namespace BP.WF
                 if (en == null)
                     continue;
 
-
-
                 //获得类名.
                 string clsName = en.ToString();
+                if (clsName == null)
+                    continue;
 
                 if (clsName.Contains("FlowSheet") == true)
                     continue;

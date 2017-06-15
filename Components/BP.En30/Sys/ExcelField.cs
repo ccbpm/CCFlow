@@ -207,11 +207,11 @@ namespace BP.Sys
         /// <summary>
         /// 获取或设置值类型
         /// </summary>
-        public int DataType
+        public ExcelFieldDataType DataType
         {
             get
             {
-                return this.GetValIntByKey(ExcelFieldAttr.DataType);
+                return (ExcelFieldDataType)this.GetValIntByKey(ExcelFieldAttr.DataType, 0);
             }
             set
             {
@@ -426,10 +426,10 @@ namespace BP.Sys
                 map.AddDDLEntities(ExcelFieldAttr.FK_ExcelSheet, null, "所属ExcelSheet表", new ExcelSheets(), false);
                 map.AddTBString(ExcelFieldAttr.Field, null, "存储字段名", true, false, 1, 50, 100);
                 map.AddDDLEntities(ExcelFieldAttr.FK_ExcelTable, null, "存储数据表", new ExcelTables(), false);
-                map.AddDDLSysEnum(ExcelFieldAttr.DataType, 0, "值类型", true, true, ExcelFieldAttr.DataType, "@0=字符串@1=整数@2=浮点数@3=日期@4=日期时间");
-                map.AddTBString(ExcelFieldAttr.UIBindKey, null, "数据源表/枚举", true, false, 1, 100, 100);
-                map.AddTBString(ExcelFieldAttr.UIRefKey, null, "数据源表No", true, false, 1, 30, 100);
-                map.AddTBString(ExcelFieldAttr.UIRefKeyText, null, "数据源表Name", true, false, 1, 30, 100);
+                map.AddDDLSysEnum(ExcelFieldAttr.DataType, 0, "值类型", true, true, ExcelFieldAttr.DataType, "@0=字符串@1=整数@2=浮点数@3=日期@4=日期时间@5=外键@6=枚举");
+                map.AddTBString(ExcelFieldAttr.UIBindKey, null, "外键表/枚举", true, false, 1, 100, 100);
+                map.AddTBString(ExcelFieldAttr.UIRefKey, null, "外键表No", true, false, 1, 30, 100);
+                map.AddTBString(ExcelFieldAttr.UIRefKeyText, null, "外键表Name", true, false, 1, 30, 100);
                 map.AddTBString(ExcelFieldAttr.Validators, null, "校验器", true, false, 1, 4000, 100);
                 map.AddDDLEntities(ExcelFieldAttr.FK_ExcelFile, null, "所属Excel模板", new ExcelFiles(), false);
                 map.AddTBStringDoc(ExcelFieldAttr.AtPara, null, "参数", true, false, true);
@@ -521,10 +521,12 @@ namespace BP.Sys
 
     public enum ExcelFieldDataType
     {
-        String,
-        Int,
-        Float,
-        Date,
-        DateTime
+        String = 0,
+        Int = 1,
+        Float = 2,
+        Date = 3,
+        DateTime = 4,
+        ForeignKey = 5,
+        Enum = 6
     }
 }

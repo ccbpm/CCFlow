@@ -61,8 +61,9 @@ namespace BP.WF.Template
         /// <param name="mypk"></param>
         public FrmNodeExt(string mypk)
         {
+            this.MyPK = mypk;
+            this.Retrieve();
         }
-         
         /// <summary>
         /// 重写基类方法
         /// </summary>

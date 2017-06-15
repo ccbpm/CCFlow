@@ -39,7 +39,7 @@ namespace CCFlow.WF.Admin.XAP
             #region 检查是否是安装了ccflow如果没有就让其安装.
             if (BP.DA.DBAccess.IsExitsObject("WF_Emp") == false)
             {
-                this.Response.Redirect("../DBInstall.aspx", true);
+                this.Response.Redirect("../DBInstall.htm", true);
                 return;
             }
             #endregion 检查是否是安装了ccflow如果没有就让其安装.

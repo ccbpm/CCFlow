@@ -250,7 +250,7 @@ namespace BP.WF
             get
             {
                 if (BP.WF.Glo.IsEnableTaskPool == false)
-                    throw new Exception("@你必须在Web.config中启用IsEnableTaskPool才可以执行此操作。");
+                    return 0;
 
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;

@@ -6949,8 +6949,9 @@ namespace BP.WF
                 bool isHaveSaveAfter = false;
                 try
                 {
-                    //处理表单保存后。
+                    //处理表单保存后.
                     string s = nd.MapData.FrmEvents.DoEventNode(FrmEventList.SaveAfter, wk);
+
 
                     //执行保存前事件.
                     s += nd.HisFlow.DoFlowEventEntity(EventListOfNode.SaveAfter, nd, wk, null);

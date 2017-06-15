@@ -99,8 +99,18 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TodolistModel_Init()
         {
+            //nd.TodolistModel = (TodolistModel)this.GetRequestValInt("RB_TodolistModel");  //考核方式.
+            //nd.TeamLeaderConfirmRole = (TeamLeaderConfirmRole)this.GetRequestValInt("DDL_TeamLeaderConfirmRole");  //考核方式.
+            //nd.TeamLeaderConfirmDoc = this.GetRequestVal("TB_TeamLeaderConfirmDoc");
+            //nd.Update();
+
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
-            return nd.ToJson();
+
+            Hashtable ht = new Hashtable();
+            ht.Add("TodolistModel", (int)nd.TodolistModel);
+            ht.Add("TeamLeaderConfirmRole", (int)nd.TeamLeaderConfirmRole);
+            ht.Add("TeamLeaderConfirmDoc", nd.TeamLeaderConfirmDoc);
+            return BP.Tools.Json.ToJson(ht);
         }
         /// <summary>
         /// 保存

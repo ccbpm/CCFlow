@@ -546,22 +546,36 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FrmFree_Save()
         {
-            //保存主表数据.
-            GEEntity en = new GEEntity(this.EnsName);
-            en.OID = this.RefOID;
-            int i = en.RetrieveFromDBSources();
+            try
+            {
+                //保存主表数据.
+                GEEntity en = new GEEntity(this.EnsName);
+                en.OID = this.RefOID;
+                int i = en.RetrieveFromDBSources();
 
-            en.ResetDefaultVal();
+                en.ResetDefaultVal();
 
-            en = BP.Sys.PubClass.CopyFromRequest(en, context.Request) as GEEntity;
+                en = BP.Sys.PubClass.CopyFromRequest(en, context.Request) as GEEntity;
 
-            en.OID = this.RefOID;
-            if (i == 0)
-                en.Insert();
-            else
-                en.Update();
+                en.OID = this.RefOID;
 
-            return "保存成功.";
+                // 处理表单保存前事件.
+                MapData md = new MapData(this.EnsName);
+                md.FrmEvents.DoEventNode(FrmEventList.SaveBefore, en);
+
+                if (i == 0)
+                    en.Insert();
+                else
+                    en.Update();
+
+                //处理保存后事件.
+                md.FrmEvents.DoEventNode(FrmEventList.SaveAfter, en);
+                return "保存成功.";
+            }
+            catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
         #endregion frm.htm 主表.
 

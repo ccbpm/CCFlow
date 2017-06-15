@@ -127,10 +127,11 @@ namespace BP.Sys
                 map.AddTBString(ExcelFileAttr.Name, null, "名称", true, false, 1, 50, 100, true);
                 map.AddTBString(ExcelFileAttr.Mark, null, "标识", true, false, 1, 50, 100);
                 map.AddDDLSysEnum(ExcelFileAttr.ExcelType, 0, "类型", true, true, ExcelFileAttr.ExcelType, "@0=普通文件数据提取@1=流程附件数据提取");
-                map.AddMyFile("模板文件", "*.xls|*.xlsx");
                 map.AddTBStringDoc(ExcelFileAttr.Note, null, "上传说明", true, false, true);
 
                 map.AddSearchAttr(ExcelFileAttr.ExcelType);
+
+                map.AddMyFile("模板文件", "*.xls|*.xlsx");
 
                 RefMethod rm = new RefMethod();
                 rm.Title = "模板配置";

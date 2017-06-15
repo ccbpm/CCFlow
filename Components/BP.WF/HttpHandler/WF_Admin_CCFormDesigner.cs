@@ -377,7 +377,12 @@ namespace BP.WF.HttpHandler
                     //将所有的列名进行转换（适应ORACLE） ORACLE 不区分大小写，都是大写
                     for (int i = 0; i < ds.Tables.Count; i++)
                     {
-                        dicCols = (new List<string>(tableCols[i].Split(','))).ToDictionary(m => m.ToString().Trim().ToLower(), m => m.Trim());
+                        dicCols.Clear();
+                        //dicCols = (new List<string>(tableCols[i].Split(','))).ToDictionary(m => m.ToString().Trim().ToLower(), m => m.Trim());
+                        for (int m = 0; m < tableCols[i].Split(',').Length; m++)
+                        {
+                            dicCols.Add(tableCols[i].Split(',')[m].ToLower(), tableCols[i].Split(',')[m]);
+                        }
                         DataTable dt = ds.Tables[i];
                         foreach (DataColumn dc in dt.Columns)
                         {

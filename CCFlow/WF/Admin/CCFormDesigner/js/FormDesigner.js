@@ -3,30 +3,25 @@ var figureSetsURL = 'Controls';
 var CCPMB_Form_V = "2";
 
 $(function () {
-
-
     CCForm_FK_MapData = Application.common.getArgsFromHref("FK_MapData");
     CCForm_NodeID = CCForm_FK_MapData.replace("ND", "");
     CCPMB_Form_V = 1;
 
     /**default height for canvas*/
     CanvasProps.DEFAULT_HEIGHT = 1200;
-
     /**default width for canvas*/
     CanvasProps.DEFAULT_WIDTH = 900;
 
     //验证登录用户
-   //  Checklogin();
+    checklogin();
 
     //初始化画板
-    Init_Panel(CCForm_FK_MapData);
+    init(CCForm_FK_MapData);
 
     //显示网格
-    ShowGrid();
-
+    showGrid();
     //右键菜单
     InitContexMenu();
-
     //鼠标双击
     InitDbClick();
 
@@ -130,7 +125,7 @@ function InitClick() {
         $('#right').css('display', 'none');
         $('#container').css('right', '0px');
     })
-}  
+}
 
 var figureIdMouseMove = -1;
 var dealWhithMouseMove = false;
@@ -482,9 +477,9 @@ function CCForm_ShowDialog(url, title) {
 
     if (plant == 'JFlow') {
         url = url.replace('.aspx', '.jsp');
-        OpenEasyUiDialog(url, 'eudlgframe', title, 860, 560, 'icon-library', false);
+        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, 860, 560, 'icon-library', false);
     } else {
-        OpenEasyUiDialog(url, 'eudlgframe', title, 860, 560, 'icon-library', false);
+        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, 860, 560, 'icon-library', false);
     }
 }
 
@@ -496,7 +491,7 @@ function CCForm_BrowserView() {
 
 //预览表单
 function CCForm_FoolFrm() {
-    var url = '/WF/Admin/FoolFormDesigner/Designer.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_Flow=001&MyPK=ND101&IsEditMapData=True';
+    var url = '../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=' + CCForm_FK_MapData + '&FK_Flow=001&MyPK=ND101&IsEditMapData=True';
    // var url = "../../CCForm/Frm.htm?FK_MapData=" + CCForm_FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=999999&s=2&T=" + GetDateString();
     OpenWindow(url);
 }
@@ -504,7 +499,7 @@ function CCForm_FoolFrm() {
 
 //表单属性
 function CCForm_Attr() {
-    var url = '/WF/Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=' + CCForm_FK_MapData;
+    var url = '../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=' + CCForm_FK_MapData;
   //  OpenWindow(url, 400, 300);
     CCForm_ShowDialog(url, '表单属性');
 }
@@ -588,8 +583,8 @@ function ReSetEditDivCss() {
 function Conver_CCForm_V1ToV2() {
 
     //transe old CCForm to new
-    $.post(Handler, {
-        action: 'CCForm_AllElements_ResponseJson',
+    $.post( Handler, {
+        action: 'CcformElements',
         FK_MapData: CCForm_FK_MapData,
         FK_Node: CCForm_FK_MapData.substr(2, CCForm_FK_MapData.length)
     }, function (jsonData) {
@@ -599,11 +594,12 @@ function Conver_CCForm_V1ToV2() {
             return;
         }
 
+
         var flow_Data = $.parseJSON(jsonData);
 
         //循环MapAttr
-        for (var mapAtrrIndex in flow_Data.Sys_MapAttr) {
-            var mapAttr = flow_Data.Sys_MapAttr[mapAtrrIndex];
+        for (var mapAtrrIndex in flow_Data.MapAttr) {
+            var mapAttr = flow_Data.MapAttr[mapAtrrIndex];
             var createdFigure = figure_MapAttr_Template(mapAttr);
             if (createdFigure != undefined) {
                 //move it into position
@@ -615,8 +611,8 @@ function Conver_CCForm_V1ToV2() {
         }
 
         //循环FrmLab
-        for (var i in flow_Data.Sys_FrmLab) {
-            var frmLab = flow_Data.Sys_FrmLab[i];
+        for (var i in flow_Data.FrmLab) {
+            var frmLab = flow_Data.FrmLab[i];
             var createdFigure = figure_Template_Label(frmLab);
             //move it into position
             //createdFigure.transform(Matrix.translationMatrix(frmLab.X - createdFigure.rotationCoords[0].x, frmLab.Y - createdFigure.rotationCoords[0].y))
@@ -626,8 +622,8 @@ function Conver_CCForm_V1ToV2() {
         }
 
         //循环FrmRB
-        for (var i in flow_Data.Sys_FrmRB) {
-            var frmRb = flow_Data.Sys_FrmRB[i];
+        for (var i in flow_Data.FrmRb) {
+            var frmRb = flow_Data.FrmRb[i];
             if (i == 0) {
                 var createdFigure = figure_Template_Rb(frmRb);
                 //move it into position
@@ -645,9 +641,8 @@ function Conver_CCForm_V1ToV2() {
         }
 
         //循环FrmBtn
-        for (var i in flow_Data.Sys_FrmBtn) {
-            var frmBtn = flow_Data.Sys_FrmBtn[i];
-
+        for (var i in flow_Data.FrmBtn) {
+            var frmBtn = flow_Data.FrmBtn[i];
             var createdFigure = figure_Template_Btn(frmBtn);
             //move it into position
             //createdFigure.transform(Matrix.translationMatrix(frmBtn.X - createdFigure.rotationCoords[0].x, frmBtn.Y - createdFigure.rotationCoords[0].y))

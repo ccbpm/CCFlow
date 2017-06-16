@@ -276,6 +276,12 @@ namespace CCFlow.WF.CCForm
 
             #endregion 求主表的主键类型.
 
+            //求出从表实体类.
+            BP.Sys.FormEventBase frmEvent = null;
+            if (md.FormEventEntity != "")
+                frmEvent = BP.Sys.Glo.GetFormEventBaseByEnName(md.No);
+
+
             #region 处理EntityMyPK 类型的实体保存。
             if (pkType == "MyPK")
             {
@@ -296,14 +302,19 @@ namespace CCFlow.WF.CCForm
                 }
                 wk.MyPK = pkValue;
 
-                //保存前.
-                md.FrmEvents.DoEventNode(FrmEventList.SaveBefore, wk);
+                //保存前执行事件.
+                md.DoEvent(FrmEventList.SaveBefore, wk);
 
+                // 保存实体.
                 wk.Save();
 
-                //保存后.
-                md.FrmEvents.DoEventNode(FrmEventList.SaveAfter, wk);
+                //保存前执行事件.
+                md.DoEvent(FrmEventList.SaveAfter, wk);
+                 
 
+                //保存前(执行类事件.)
+                if (frmEvent != null)
+                    frmEvent.DoIt(FrmEventList.SaveAfter, wk, null);
             }
             #endregion 处理EntityMyPK 类型的实体保存。
 
@@ -326,14 +337,15 @@ namespace CCFlow.WF.CCForm
                 }
                 wk.OID = Int64.Parse(pkValue);
 
-                //保存前.
-                md.FrmEvents.DoEventNode(FrmEventList.SaveBefore, wk);
+                //执行事件.
+                md.DoEvent(FrmEventList.SaveBefore, wk);
 
                 //保存.
                 wk.Save();
 
-                //保存后.
-                md.FrmEvents.DoEventNode(FrmEventList.SaveAfter, wk);
+                //执行事件.
+                md.DoEvent(FrmEventList.SaveAfter, wk);
+                 
 
             }
             #endregion 处理 EntityOID 类型的实体保存。

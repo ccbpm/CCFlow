@@ -14,7 +14,7 @@ input[type="button"], input[type="submit"]
     font-size: 12px;
     padding: 4px 8px;
     margin: 5px 3px 5px 3px;
-    border-radius: 15px;
+    border-radius: 5px;
 }
 
 /* 文本框只读风格. */
@@ -656,7 +656,7 @@ textarea,iframe[src*="AttachmentUpload.aspx"] {
 
 #topContentDiv {
     background: #fff;
-    border-radius: 20px;
+    border-radius: 5px;
     padding: 8px 0px 0px 0px;
     margin: 8px 15px 15px 15px;
     border: #2854FF 1px solid;

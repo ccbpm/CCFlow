@@ -414,12 +414,12 @@
             } else {
                 toNode = pageUrlParam.toNode;
             }
-            
+
             $.ajax({
                 type: 'post',
                 async: true,
                 data: { "FK_Flow": pageUrlParam.FK_Flow, "WorkID": pageUrlParam.WorkID, ToNode: toNode, FK_Node: pageUrlParam.fk_node },
-                url: Handler + "?DoType=" + doType + "&m=" + Math.random() + "&SelectEmps=" +encodeURI(empNos) + "&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID,
+                url: Handler + "?DoType=" + doType + "&m=" + Math.random() + "&SelectEmps=" + encodeURI(empNos) + "&FK_Flow=" + pageUrlParam.FK_Flow + "&WorkID=" + pageUrlParam.WorkID,
                 dataType: 'html',
                 success: function (data) {
                     // alert(data);
@@ -427,11 +427,15 @@
                         alert(data);
                         return;
                     }
+                    
                     if ("AccepterSave" == doType) {
                         if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                             window.parent.returnWorkWindowClose(data);
                         } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
                             window.opener.returnWorkWindowClose(data);
+                        } else if (window.parent != undefined && window.parent.AccepterHtmlSave != undefined) {
+                            //表单树使用
+                            window.parent.AccepterHtmlSave(data);
                         } else {
                             $('body').append($('<div>' + data + '</div>'));
                             $('#btnOk').attr('disabled', true);
@@ -439,12 +443,12 @@
                         //alert('保存成功...');
                         window.close();
                         return;
-                    } 
+                    }
 
-                    
+
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                         window.parent.returnWorkWindowClose(data);
-                    } else if (window.opener != undefined && window.opener.returnWorkWindowClose!=undefined) {
+                    } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
                         window.opener.returnWorkWindowClose(data);
                     } else {
                         $('body').append($('<div>' + data + '</div>'));

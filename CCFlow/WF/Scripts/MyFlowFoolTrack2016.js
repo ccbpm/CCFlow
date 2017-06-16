@@ -1437,7 +1437,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
     var hiddenHtml = '';
     for (var j = 0; j < mapAttrData.length; j++) {
         var mapAttr = mapAttrData[j];
-        if (mapAttr.UIVisible) {//是否显示
+        if (mapAttr.UIVisible=="1") {//是否显示
             //添加 label
             //如果是整行的需要添加  style='clear:both'
 

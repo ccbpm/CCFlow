@@ -1869,8 +1869,90 @@ function AfterBindEn_DealMapExt() {
 
                 //ddlChild.select(valClient);  未写
                 break;
-            case "AutoFullDLL": // 自动填充下拉框.
-                continue; //已经处理了。
+            case "AutoFull"://自动填充  //a+b=c DOC='@DanJia*@ShuLiang'  等待后续优化
+                //循环  KEYOFEN
+                //替换@变量
+                //处理 +-*%
+
+                //直接替换
+
+                if (mapExt.Doc != undefined && mapExt.Doc != '') {
+                    //以 + -* 、% 来分割
+                    //先来计算  + -* 、%  的位置
+
+                    if (mapExt.Doc.indexOf('+') > 0 || mapExt.Doc.indexOf('-') > 0 || mapExt.Doc.indexOf('*') > 0 || mapExt.Doc.indexOf('/') > 0) {
+                        var mapExtDocArr1 = [];
+                        var lastOperatorIndex = -1;
+                        var operatorArr = [];
+                        for (var j = 0; j < mapExt.Doc.length; j++) {
+                            if (mapExt.Doc[j] == "+" || mapExt.Doc[j] == "-" || mapExt.Doc[j] == "*" || mapExt.Doc[j] == "/"
+                                ) {
+                                operatorArr.push(mapExt.Doc[j]);
+
+                                mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex + 1, j));
+                                lastOperatorIndex = j;
+                            }
+                        }
+                        mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex + 1, mapExt.Doc.length))
+
+                        for (var m = 0; m < mapExtDocArr1.length; m++) {
+                            var extDocObj1 = mapExtDocArr1[m].replace('@', '');
+                            //将extDocObj1转换成KeyOfEn
+                            var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) { return val.Name == extDocObj1 || val.KeyOfEn == extDocObj1; });
+
+                            if (extObjAr.length == 0) {
+                                // alert("mapExt:" + mapExt.AttrOfOper + "配置有误");
+
+                            } else {
+                                extDocObj1 = extObjAr[0].KeyOfEn;
+                                $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']').attr('disabled', true);
+
+
+                                if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
+                                    $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
+                                    $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
+
+
+                                        //替换 
+                                        var mapExt = $(obj.target).data().mapExt;
+                                        var mapExtDoc = mapExt.Doc;
+                                        var evelStr = mapExt.Doc;
+                                        var tmpResult = 1;
+                                        var tr = $(obj.target).parent().parent();
+                                        var attrOfOperEle = $(obj.target).parent().parent().find('[name=TB_' + mapExt.AttrOfOper + "]");
+                                        for (var m = 0; m < workNodeData.Sys_MapAttr.length; m++) {
+                                            var mapAttr = workNodeData.Sys_MapAttr[m];
+                                            var hasKeyOfEn = true;
+                                            while (hasKeyOfEn) {
+                                                var mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.KeyOfEn);
+                                                var tranValue = mapAttr.KeyOfEn;
+                                                if (mapExdDocKeyOfEnIndex == -1) {
+                                                    mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.Name);
+                                                    tranValue = mapAttr.Name;
+                                                }
+                                                //判断参数后面是否是一个运算操作符
+                                                var optionVal = mapExtDoc.substring(mapExdDocKeyOfEnIndex + tranValue.length + 1, mapExdDocKeyOfEnIndex + tranValue.length + 2);
+
+                                                if (mapExdDocKeyOfEnIndex >= 0 && (optionVal == '+' || optionVal == '-' || optionVal == '*' || optionVal == '/' || optionVal == '')) {
+                                                    mapExtDoc = mapExtDoc.replace('@' + tranValue, "parseFloat($(tr).find('[name=TB_" + mapAttr.KeyOfEn + "]').val())");
+                                                } else {
+                                                    hasKeyOfEn = false;
+                                                }
+                                            }
+                                        }
+
+                                        tmpResult = eval(mapExtDoc);
+                                        attrOfOperEle.val(tmpResult);
+
+                                        $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] =
+                                tmpResult;
+                                    })
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
             case "DDLFullCtrl":// 自动填充其他的控件..  先不做
                 break;
                 var ddlOper = $("#DDL_" + mapExt.AttrOfOper);

@@ -152,7 +152,7 @@
                 url: Handler + "?DoType=FlowSearch_Init&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                
+
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
@@ -207,13 +207,17 @@
                             if (false == false)
                                 newRow += "<td> <a href=\"javascript:WinOpen('/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + flow.No + "&DoType=Chart','sd');\"  >" + flow.Name + "</a></td>";
                             else
-                                newRow += "<td>"+flow.Name+"</td>";
+                                newRow += "<td>" + flow.Name + "</td>";
 
                             newRow += "<td> - </td>";
 
                             var src2 = "./Rpt/Search.aspx?RptNo=ND" + flow.No + "MyRpt&FK_Flow=" + flow.No;
+                            if (plant == "JFlow")
+                                src2 = src2.replace(".aspx",".jsp");
                             var url = "<a href=\"javascript:WinOpen('" + src2 + "');\" >查询</a>";
                             src2 = "./Rpt/Group.aspx?FK_Flow=" + flow.No + "&DoType=Dept";
+                            if (plant == "JFlow")
+                                src2 = src2.replace(".aspx", ".jsp");
                             url = url + " - <a href=\"javascript:WinOpen('" + src2 + "');\" >分析</a>";
                             newRow += "<td>" + url + "</td>";
 

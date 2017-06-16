@@ -1248,7 +1248,6 @@ namespace BP.WF.HttpHandler
         #endregion Dot2DotStationModel.htm（岗位选择）
 
         #region 辅助实体定义
-
         /// <summary>
         /// Eayui tree node对象
         /// <para>主要用于数据的JSON化组织</para>

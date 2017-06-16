@@ -20,6 +20,10 @@ namespace BP.WF.HttpHandler
     public class WF_CCForm : DirectoryPageBase
     {
         #region HanderMapExt
+        /// <summary>
+        /// 扩展处理.
+        /// </summary>
+        /// <returns></returns>
         public string HandlerMapExt()
         {
             string fk_mapExt = this.GetRequestVal("FK_MapExt").ToString();
@@ -27,7 +31,6 @@ namespace BP.WF.HttpHandler
                 return "";
 
             string oid = this.GetRequestVal("OID");
-
 
             string kvs = this.GetRequestVal("KVs");
 
@@ -339,6 +342,7 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion HanderMapExt
+
 
 
         #region 执行父类的重写方法.

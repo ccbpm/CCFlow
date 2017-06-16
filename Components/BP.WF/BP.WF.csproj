@@ -173,7 +173,7 @@
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_App_OneFlow.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCBPMDesigner_App_CH.cs" />
-    <Compile Include="HttpHandler\WF_App_ACE.cs" />
+    <Compile Include="HttpHandler\AppACE.cs" />
     <Compile Include="HttpHandler\WF_Admin.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt.cs" />
     <Compile Include="HttpHandler\CCMobile.cs" />

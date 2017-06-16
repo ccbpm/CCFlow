@@ -195,7 +195,7 @@ namespace BP.WF.HttpHandler
         {
             string userNo = this.GetRequestVal("UserNo");
             string sid = BP.WF.Dev2Interface.Port_Login(userNo);
-            string url = "../../WF/Port.aspx?UserNo=" + userNo + "&SID=" + sid + "&DoWhat=" + this.GetRequestVal("DoWhat") + "&FK_Flow=" + this.FK_Flow + "&IsMobile=" + this.GetRequestVal("IsMobile");
+            string url = "../../WF/Port.htm?UserNo=" + userNo + "&SID=" + sid + "&DoWhat=" + this.GetRequestVal("DoWhat") + "&FK_Flow=" + this.FK_Flow + "&IsMobile=" + this.GetRequestVal("IsMobile");
             return "url@" + url;
         }
         #endregion 测试页面.

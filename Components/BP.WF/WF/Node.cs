@@ -2565,11 +2565,10 @@ namespace BP.WF
                 //父子流程.
                 map.AddTBString(NodeAttr.SFActiveFlows, null, "启动的子流程", true, false, 0, 100, 10);
 
-
                 // 批处理.
                 map.AddTBInt(NodeAttr.BatchRole, 0, "批处理", true, true);
                 map.AddTBInt(NodeAttr.BatchListCount, 12, "批处理数量", true, true);
-                map.AddTBString(NodeAttr.BatchParas, null, "参数", true, false, 0, 100, 10);
+                map.AddTBString(NodeAttr.BatchParas, null, "参数", true, false, 0, 500, 10);
                 map.AddTBInt(NodeAttr.PrintDocEnable, 0, "打印方式", true, true);
 
 

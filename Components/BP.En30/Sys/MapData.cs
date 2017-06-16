@@ -971,6 +971,21 @@ namespace BP.Sys
 		#endregion
 
 		#region 基本属性.
+        /// <summary>
+        /// 事件实体
+        /// </summary>
+        public string FormEventEntity
+		{
+			get
+			{
+                return this.GetValStringByKey(MapDataAttr.FormEventEntity);
+			}
+			set
+			{
+                this.SetValByKey(MapDataAttr.FormEventEntity, value);
+			}
+		}
+        
 		/// <summary>
 		/// 表单设计器设计工具
 		/// </summary>
@@ -1553,6 +1568,44 @@ namespace BP.Sys
 		#endregion
 
 		#region 常用方法.
+        private FormEventBase _HisFEB = null;
+        public FormEventBase HisFEB
+        {
+            get
+            {
+                if (this.FormEventEntity == "")
+                    return _HisFEB;
+
+                if (_HisFEB == null)
+                    _HisFEB = BP.Sys.Glo.GetFormEventBaseByEnName(this.No);
+
+                return _HisFEB;
+            }
+        }
+        /// <summary>
+        /// 执行事件.
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="en"></param>
+        /// <param name="atParas"></param>
+        /// <returns></returns>
+        public string DoEvent(string eventType, Entity en, string atParas=null)
+        {
+            string str=this.FrmEvents.DoEventNode(eventType, en);
+
+            if (this.HisFEB == null)
+                return str;
+
+            string mystrs = this.HisFEB.DoIt(eventType, en, atParas);
+
+            if (str == null)
+                return mystrs;
+
+            if (mystrs == null)
+                return str;
+
+            return str + "@" + mystrs;
+        }
 		/// <summary>
 		/// 升级逻辑.
 		/// </summary>

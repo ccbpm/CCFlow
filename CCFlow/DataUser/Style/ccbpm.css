@@ -6,7 +6,7 @@ body
 }
 
 /* 按钮风格 */
-input[type="button"], input[type="submit"]
+input[type="button"], input[type="submit"] 
 {
     border: 0; /*background: #4D77A7;*/
     background: #009999;
@@ -599,7 +599,7 @@ background:#a8352c;
             border-style:none;
         }
 
-input[type=text], select
+input[type=text],input[type=password], select
 {
     border-radius: 5px;
     border: 1px solid #336699;

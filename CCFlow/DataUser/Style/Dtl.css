@@ -1,0 +1,53 @@
+﻿/*  Table 风格  */
+body
+{
+   font-size: 14px;
+   text-align:center;
+}
+
+
+/*  时学业添加 结束位置 */
+th
+{
+   background-color: #f4f4f4;
+    font-size: 12px;
+    border: 1px solid #C2D5E3;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    padding: 3px;
+    font-style: normal;
+    color: #333333;
+}
+
+
+Idx
+{
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-weight: bold;
+    width: 20px;
+}
+
+  
+td
+{
+    border-right-style: none;
+    border-left-style: none;
+    border-style: solid;
+    padding: 4px;
+    text-align: left;
+    color: #333333;
+    font-size: 12px;
+    border-width: 1px;
+    border-color: #C2D5E3;
+}
+
+
+td input
+{
+    /*border:none;*/
+    width: auto;
+    word-break: keep-all;
+}

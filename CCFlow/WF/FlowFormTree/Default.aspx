@@ -905,6 +905,13 @@
                 }
             }, this);
         }
+
+        //选择人接收器选人后
+        function AccepterHtmlSave() {
+            SendCase();
+            $('#selectaccepter').dialog("close");
+        }
+
         //页面初始
         $(function () {
             $("#pageloading").show();

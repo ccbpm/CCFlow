@@ -657,8 +657,8 @@ textarea,iframe[src*="AttachmentUpload.aspx"] {
 #topContentDiv {
     background: #fff;
     border-radius: 20px;
-    padding: 10px 0px 0px 0px;
-    margin: 20px 15px 15px 15px;
+    padding: 8px 0px 0px 0px;
+    margin: 8px 15px 15px 15px;
     border: #2854FF 1px solid;
     overflow: auto;
 }
@@ -934,9 +934,10 @@ border:none;
 }
 
 
-#divTrack ,#divCurrentForm{
-width:1150px;
-float:right;
+#divTrack, #divCurrentForm {
+    margin:0px;
+    float:right;
+    position:relative;
 }
     #divTrack iframe {
     width:100%;
@@ -1048,4 +1049,9 @@ body table tr td {
   /* for Firefox,mozilla */
   overflow: hidden;
   white-space: nowrap;
+}
+
+
+.errorInput {
+    border-color: red;
 }

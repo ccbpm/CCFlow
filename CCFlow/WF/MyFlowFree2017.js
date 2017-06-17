@@ -2846,9 +2846,9 @@ function figure_Template_Dtl(frmDtl) {
     if (frmDtl.DtlShowModel == "0") {
         if (pageData.IsReadOnly) {
 
-            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=" + load.Version;
+            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=" + load.Version;
         } else {
-            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=" + load.Version;
+            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=" + load.Version;
         }
     }
     else if (frmDtl.DtlShowModel == "1") {
@@ -2909,7 +2909,7 @@ function figure_Template_FigureFlowChart(wf_node) {
         return;
     }
 
-    var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
+    var src = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
     src += '&FK_Flow=' + pageData.FK_Flow;
     src += '&FK_Node=' + pageData.FK_Node;
     src += '&WorkID=' + pageData.WorkID;
@@ -2969,7 +2969,7 @@ function figure_Template_FigureThreadDtl(wf_node) {
     if (sta == 0 || sta == '0')
         return $('');
 
-    var src = appPath + "WF/WorkOpt/Thread.htm?s=2";
+    var src = "./WorkOpt/Thread.htm?s=2";
     var fwcOnload = "";
     var paras = '';
 
@@ -3113,6 +3113,7 @@ var jsonStr = '';
 
 //从MyFlowFree2017.htm 中拿过过的
 $(function () {
+
     var frm = document.forms["divCCForm"];
 
     if (plant == "CCFlow")

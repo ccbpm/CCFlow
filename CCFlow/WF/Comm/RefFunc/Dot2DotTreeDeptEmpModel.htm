@@ -113,6 +113,7 @@
             };
 
             Handler_AjaxQueryData(param, function (data, scope) {
+
                 if (data.indexOf("err@") != -1) {
                     alert(data);
                     return;

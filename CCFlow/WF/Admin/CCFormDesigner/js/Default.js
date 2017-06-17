@@ -48,14 +48,18 @@ function Checklogin(fCallback, oScope) {
     /// <summary>检测登录信息</summary>
     /// <param name="fCallback" type="Function">检测完之后，要运行的方法</param>
     /// <param name="oScope" type="Object">检测完之后，要运行的方法的参数</param>
+
     ajaxServiceDefault({ method: "LetLogin" }, function (re, scps) {
+
+        alert(re);
+
         if (re == null || re.length == 0) {
             if (scps.length == 2 && scps[0]) {
                 scps[0](scps[1]);
             }
         }
         else {
-          $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
+            $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
         }
     }, [fCallback, oScope]);
 }

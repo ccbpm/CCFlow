@@ -25,6 +25,7 @@ function checklogin(fCallback, oScope) {
     /// <param name="fCallback" type="Function">检测完之后，要运行的方法</param>
     /// <param name="oScope" type="Object">检测完之后，要运行的方法的参数</param>
     ajaxService({ action: "LetLogin" }, function (re, scps) {
+
         if (re == null || re.length == 0) {
             if (scps.length == 2 && scps[0]) {
                 scps[0](scps[1]);

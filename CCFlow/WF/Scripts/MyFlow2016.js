@@ -1936,15 +1936,22 @@ function GenerWorkNode() {
         url: "MyFlow.ashx?DoType=GenerWorkNode&DoType1=" + pageData.DoType1 + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
             jsonStr = data;
+
             var gengerWorkNode = {};
+
             try {
 
                 var gengerWorkNode = JSON.parse(data);
-
             }
             catch (err) {
-                alert("GenerWorkNode转换JSON失败:ww" + data);
+                alert("GenerWorkNode转换JSON失败:" + data);
                 return;
             }
             //显示父流程 链接

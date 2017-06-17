@@ -21,7 +21,8 @@ namespace CCFlow
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-          //BP.LI.Glo.LoadFenXiFrms();
+            //  BP.LI.FrmCY
+            //  BP.LI.Glo.RepariCaiYangFrms();
             return;
 
             BP.DA.Log.DefaultLogWriteLine(LogType.Info, "----------------------------------  start ------------------ ");
@@ -29,7 +30,7 @@ namespace CCFlow
 
             if (DBAccess.IsExitsObject("WF_Flow") == false)
             {
-                this.Response.Redirect("./WF/Admin/DBInstall.aspx", true);
+                this.Response.Redirect("./WF/Admin/DBInstall.htm", true);
                 return;
             }
             else
@@ -45,20 +46,19 @@ namespace CCFlow
         public void DemoCopyStartFlow()
         {
             string prjNo = "001";
-            string sql = "SELECT OID from nd11Rpt where prjNo='" + prjNo + "' ORDER RDT DESC";
+            string sql = "SELECT OID FROM ND11Rpt WHERE PrjNo='" + prjNo + "' ORDER RDT DESC ";
             DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count >= 1)
             {
                 Int64 CopyFormWorkID = Int64.Parse(dt.Rows[0][0].ToString());
                 int CopyFormNode = 301;
                 string fk_flow = "003";
-                string url = "./WF/MyFlow.aspx?CopyFormWorkID=" + CopyFormWorkID + "&CopyFormNode=" + CopyFormNode + "&FK_Flow=" + fk_flow;
+                string url = "./WF/MyFlow.htm?CopyFormWorkID=" + CopyFormWorkID + "&CopyFormNode=" + CopyFormNode + "&FK_Flow=" + fk_flow;
             }
             else
             {
                 string url = "";
             }
-           
         }
 
         public void OutEntityDemo()
@@ -99,7 +99,6 @@ namespace CCFlow
 
             foreach (DataRow  dr in dt.Rows)
             {
-
                 BP.Port.Emp emp = new BP.Port.Emp(dr["No"].ToString());
                 string deptName = BP.DA.DataType.ParseStringToPinyin(emp.FK_DeptText);
 

@@ -6,7 +6,6 @@
         <style type="text/css">
            body
            {
-               
            }
            li
            {
@@ -29,7 +28,11 @@
   <td>
     <ul>
     <li><font size="30" color="green" ><a href="WF/Admin/CCBPMDesigner/Login.htm" >进入流程设计器</a></font> 用户名:admin 密码:123</li>
-    <li> <a href='./WF/App/Classic/Login.aspx' >前台登录</a></li>
+
+    <li> <a href='./AppACE/login.htm' >前台登录-ACE模式</a></li>
+    <li> <a href='./WF/AppClassic/Login.htm' >前台登录-经典模式</a></li>
+
+
     <li> <a href="http://ccflow.org" target=_blank >ccflow 官方网站</a> |  <a href="http://bbs.ccflow.org" target=_blank >  技术论坛</a> </li>
     <li> 商务问题 QQ:<span class="style4">793719823</span> 电话:<span  class="style5">0531-82374939 , 18660153393</span>  - <a href="http://ccflow.org/CCS/Site/PG.aspx" target=_blank > 申请专业人员评估</a> </li> 
     </ul>

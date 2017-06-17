@@ -6,7 +6,7 @@ body
 }
 
 /* 按钮风格 */
-input[type="button"], input[type="submit"] 
+input[type="button"], input[type="submit"]
 {
     border: 0; /*background: #4D77A7;*/
     background: #009999;
@@ -117,26 +117,7 @@ td a
     text-decoration: none;
     font-size: 12px;
 }
-
-.tdHJ
-{
-    border: 1px solid #D6DDE6;
-    padding: 4px;
-    text-align: left;
-    background-color: #FFFFFF;
-    color: #333333;
-    font-weight: bold;
-}
-
-.tdHJNum
-{
-    border: 1px solid #D6DDE6;
-    padding: 4px;
-    text-align: right;
-    background-color: #FFFFFF;
-    color: #333333;
-    font-weight: bold;
-}
+ 
 
 td input[type="textbox"]
 {

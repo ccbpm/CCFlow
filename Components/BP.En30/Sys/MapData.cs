@@ -1574,7 +1574,7 @@ namespace BP.Sys
             get
             {
                 if (this.FormEventEntity == "")
-                    return _HisFEB;
+                    return null;
 
                 if (_HisFEB == null)
                     _HisFEB = BP.Sys.Glo.GetFormEventBaseByEnName(this.No);
@@ -1593,10 +1593,9 @@ namespace BP.Sys
         {
             string str=this.FrmEvents.DoEventNode(eventType, en);
 
-            if (this.HisFEB == null)
-                return str;
-
-            string mystrs = this.HisFEB.DoIt(eventType, en, atParas);
+            string mystrs = null;
+            if (this.HisFEB != null)
+                mystrs = this.HisFEB.DoIt(eventType, en, atParas);
 
             if (str == null)
                 return mystrs;

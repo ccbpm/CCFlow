@@ -21,14 +21,16 @@ namespace BP.Sys
         /// <returns>获得节点事件实体,如果没有就返回为空.</returns>
         public static FormEventBase GetFormEventBaseByEnName(string enName)
         {
-            if (Htable_FormFEE == null || Htable_FormFEE.Count == 0)
+            if (Htable_FormFEE == null )
             {
                 Htable_FormFEE = new Hashtable();
+                
                 ArrayList al = BP.En.ClassFactory.GetObjects("BP.Sys.FormEventBase");
                 Htable_FormFEE.Clear();
+
                 foreach (FormEventBase en in al)
                 {
-                    Htable_FormFEE.Add(en.ToString(), en);
+                    Htable_FormFEE.Add(en.FormMark, en);
                 }
             }
 

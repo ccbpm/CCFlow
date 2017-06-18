@@ -3,32 +3,41 @@ var figureSetsURL = 'lib/sets/bpmn';
 var CCPMB_Flow_V = "2";
 
 $(function () {
+
     CCBPM_Data_FK_Flow = getArgsFromHref("FK_Flow");
     CCPMB_Flow_V = getArgsFromHref("Flow_V");
+
     /**default height for canvas*/
     CanvasProps.DEFAULT_HEIGHT = 680;
     /**default width for canvas*/
     CanvasProps.DEFAULT_WIDTH = 1950;
+
     //初始化画板
     init(CCBPM_Data_FK_Flow);
+
     //显示网格
     showGrid();
+
     //右键菜单
     InitContexMenu();
 
     $("#nodeModel_Menu_For_CCBPM").hide();
+
     if (CCPMB_Flow_V == "0") {
         figureSets = [];
         figureSets = figureSets_CCBPM;
         figureSetsURL = 'lib/sets/ccbpm';
         Conver_CCBPM_V1ToV2();
         $("#nodeModel_Menu_For_CCBPM").show();
-    } else if (CCPMB_Flow_V == "1") {
+    } 
+    
+     if (CCPMB_Flow_V == "1") {
         figureSets = [];
         figureSets = figureSets_CCBPM;
         figureSetsURL = 'lib/sets/ccbpm';
         $("#nodeModel_Menu_For_CCBPM").show();
     }
+
     //初始节点元素
     buildPanel();
 });
@@ -569,11 +578,17 @@ function Conver_CCBPM_V1ToV2() {
             return;
         }
 
+        alert(data);
+
         var flow_Data = $.parseJSON(data);
 
         //循环节点
-        for (var node in flow_Data.Nodes) {
-            var curNode = flow_Data.Nodes[node];
+        for (var idx = 0; idx < flow_Data.Nodes.length; idx++) {
+
+            var curNode = flow_Data.Nodes[idx];
+
+            alert(curNode);
+
             var createdFigure = figure_Node_Template(curNode.NODEID, curNode.NAME, curNode.X, curNode.Y, curNode.RUNMODEL);
             //move it into position
             createdFigure.transform(Matrix.translationMatrix(curNode.X - createdFigure.rotationCoords[0].x, curNode.Y - createdFigure.rotationCoords[0].y))
@@ -584,6 +599,7 @@ function Conver_CCBPM_V1ToV2() {
 
         //循环连接线
         for (var lineIdx = 0; lineIdx < flow_Data.Direction.length; lineIdx++) {
+
             var line = flow_Data.Direction[lineIdx];
             var fromFigureId = FigureIdGetByCCBPM_OID(line.NODE);
             var secondFigureId = FigureIdGetByCCBPM_OID(line.TONODE);
@@ -628,6 +644,7 @@ function Conver_CCBPM_V1ToV2() {
 //流程转换节点模板
 function figure_Node_Template(nodeId, name, x, y, NodeWorkType) {
     var f = new Figure("UserTask");
+
     //ccbpm
     f.CCBPM_Shape = "Node";
     f.CCBPM_OID = nodeId;

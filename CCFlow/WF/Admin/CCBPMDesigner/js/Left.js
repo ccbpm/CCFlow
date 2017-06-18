@@ -19,16 +19,24 @@ function showFlow() {
 
 //重新装载流程图
 function RefreshFlowJson() {
+
     var node = $('#flowTree').tree('getSelected');
-    if (!node || node.attributes.ISPARENT != '0') 
+    if (!node || node.attributes.ISPARENT != '0')
         return;
+
     //首先关闭tab
     closeTab(node.text);
+
     $.post(Handler, {
         DoType: 'Flow_ResetFlowVersion',
         FK_Flow: node.id
     }, function (jsonData) {
-        
+
+        if (jsonData.indexOf('err@') == 0) {
+            alert(jsonData);
+            return;
+        }
+
         $(".mymask").show();
 
         addTab(node.id, node.text, "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=0", node.iconCls);

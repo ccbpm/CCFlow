@@ -235,7 +235,7 @@ namespace BP.WF.HttpHandler
         {
             BP.Port.Emp emp = new BP.Port.Emp("admin");
             WebUser.SignInOfGener(emp);
-            return null;
+            return "登录成功.";
         }
 
         public string CCFormDesignerSL_Init()
@@ -394,7 +394,6 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 #endregion 解决oracle大小写问题.
-
 
                 return BP.Tools.Json.ToJson(ds);
             }

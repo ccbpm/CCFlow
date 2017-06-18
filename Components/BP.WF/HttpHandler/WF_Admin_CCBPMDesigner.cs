@@ -84,9 +84,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string LetLogin()
         {
-            return string.IsNullOrWhiteSpace(WebUser.No) ? LetAdminLogin(getUTF8ToString("userNo"), true) : string.Empty;
+            LetAdminLogin(this.GetRequestVal("UserNo"), true);
+            return "登录成功.";
         }
-
         /// <summary>
         /// 获得枚举列表的JSON.
         /// </summary>

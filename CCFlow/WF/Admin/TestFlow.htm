@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
     <title>流程发起测试</title>
-    <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
@@ -104,37 +102,33 @@
     </script>
 </head>
 <body onkeypress="Esc()" class="easyui-layout">
-
-    <div  style=" float:left"  >
+<table>
+<tr>
+<td valign=top style="width:30%"> 
     <fieldset>
-    <legend>发起说明</legend>
+    <legend><img src='../Img/Help.gif' />发起说明</legend>
      <ul>
-     <li> sdsfdfsdfsdfsdf </li>
-     <li> sdsfdfsdfsdfsdf </li>
-     <li> sdsfdfsdfsdfsdf </li>
-     <li> sdsfdfsdfsdfsdf </li>
-     <li> sdsfdfsdfsdfsdf </li>
+     <li> 该界面是流程发起测试界面。 </li>
+     <li> 右侧的人员列表，就是发起该流程的所有人员列表。</li>
+     <li> 一个流程能被那些人发起是由开始节点的访问规则来确定的。</li>
+     <li> 选择一个模式点击一个人员，发起该流程，系统自动按照该人员登录，并且打开该流程的第一个节点表单界面。</li>
      </ul>
     </fieldset>
 
-
-     <fieldset>
-    <legend>功能执行.</legend>
+    <fieldset>
+    <legend><img src='../Img/ccbpm.ico' />功能执行.</legend>
      <ul>
-     <li> sdsfdfsdfsdfsdf </li>
-     <li> sdsfdfsdfsdfsdf </li>
-     <li> sdsfdfsdfsdfsdf </li>
-     <li> sdsfdfsdfsdfsdf </li>
-     <li> sdsfdfsdfsdfsdf </li>
+     <li> <a href="javascript:alert('该功能移动流程属性,设计流程-》流程属性-》流程维护');" > 删除该流程的所有数据 </li>
+     <li> <a href="javascript:alert('该功能移动流程属性,设计流程-》流程属性-》流程维护');" > 删除所有流程的实例数据 </li>
+     <li> <a href="../AppClassic/Login.htm" >转到前端登录窗口 </a></li>
      </ul>
     </fieldset>
 
-    </div>
+ </td>
 
-
-    <div  style=" float:right">
+<td valign=top> 
         <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
-        <caption>流程发起测试</caption>
+        <caption>流程发起测试,能够发起该流程的人员列表.</caption>
             <tr>
                 <th> 序 </th>
                 <th> 编号</th>
@@ -144,10 +138,11 @@
                 <th> 手机模式</th>
                 <th> 所在部门</th>
             </tr>
-
         </table>
-    </div>
-
+    </td>
+</tr>
+</table>
+   
     <div id="Msg"></div>
 
 </body>

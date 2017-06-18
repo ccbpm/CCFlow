@@ -11,7 +11,9 @@
   <CondType No="CondPRI" CH="方向优先级计算设置" />
   <!--此处的Truck、Track的No不要改了，改的话，要搜索整个解决方案中CurrTab=Truck与CurrTab=Track的地方，全部改掉-->
   <OneWork No="Truck" CH="轨迹图" UrlCCFlow="Chart.htm" UrlJFlow="Chart.htm"  />
-  <OneWork No="Track" CH="流程日志(时间轴)"  UrlCCFlow="LogOfTimeline.aspx" UrlJFlow="LogOfTimeline.htm"  />
+  <OneWork No="Track" CH="时间轴"  UrlCCFlow="LogOfTimeline.aspx" UrlJFlow="LogOfTimeline.htm"  />
+  <OneWork No="TimeBase" CH="时间轴-新版"  UrlCCFlow="TimeBase.htm" UrlJFlow="TimeBase.htm"  />
+
   <OneWork1 No="LogOfTable" CH="流程日志(表格)"   UrlCCFlow="LogOfTable.aspx" UrlJFlow="LogOfTable.htm" />
   <OneWork1 No="CH" CH="节点时限"  UrlCCFlow="CH.aspx" UrlJFlow="CH.htm" />
   <OneWork No="FlowBBS" CH="评论"   UrlCCFlow="FlowBBS.htm" UrlJFlow="FlowBBS.htm"  />

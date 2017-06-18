@@ -2234,20 +2234,27 @@ function GenerWorkNode() {
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
+
     $.ajax({
         type: 'post',
         async: true,
         data: pageData,
-        url: MyFlow + "?DoType=GenerWorkNode" + "&m=" + Math.random() + "&" + urlParam,
+        url: MyFlow + "?DoType=GenerWorkNode&m=" + Math.random() + "&" + urlParam,
         dataType: 'html',
         success: function (data) {
 
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
             //console.info(data);
             jsonStr = data;
             var gengerWorkNode = {};
             var flow_Data;
+
             try {
+
                 flow_Data = JSON.parse(data);
                 workNodeData = flow_Data;
             }
@@ -2339,14 +2346,14 @@ function GenerWorkNode() {
                 $('#lastOptMsg').hide();
             }
 
-         //   alert(data);
+            //   alert(data);
             //循环Sys_MapFrame
-//            for (var i in flow_Data.Sys_MapFrame) {
-//                var frame = flow_Data.Sys_MapFrame[i];
-//                var alertMsgEle = figure_Template_IFrame(frame);
-//                $('#lastOptMsg').append(alertMsgEle);
-//            }
-           // alert('ddddddddddd');
+            //            for (var i in flow_Data.Sys_MapFrame) {
+            //                var frame = flow_Data.Sys_MapFrame[i];
+            //                var alertMsgEle = figure_Template_IFrame(frame);
+            //                $('#lastOptMsg').append(alertMsgEle);
+            //            }
+            // alert('ddddddddddd');
 
 
             //循环组件 轨迹图 审核组件 子流程 子线程

@@ -383,11 +383,11 @@ namespace CCFlow.WF.WorkOpt.OneWork
                 //审核信息过滤, 
                 if (at == ActionType.WorkCheck)
                 {
-                    if (currNodeID == checkStr)
+                    if (currNodeID == checkStr && gwf.WFState!= WFState.Complete)
                         continue;
                     //如果当前节点与审核信息节点一致，就说明当前人员的审核意见已经保存，但是工作还没有发送,就不让他显示。
                 }
-
+                 
                 if (at == ActionType.Forward)
                 {
                     if (checkStr == dr[TrackAttr.NDFrom].ToString())

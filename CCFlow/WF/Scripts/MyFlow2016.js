@@ -1929,11 +1929,12 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
 }
 //加载表单数据.
 function GenerWorkNode() {
+
     $.ajax({
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?DoType=GenerWorkNode&DoType1=" + pageData.DoType1 + "&m=" + Math.random(),
+        url: MyFlow +"?DoType=GenerWorkNode&DoType1=" + pageData.DoType1 + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
 

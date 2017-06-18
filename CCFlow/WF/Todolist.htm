@@ -212,13 +212,18 @@
 
                             if (paras != '') {
                                 paras = paras.replace("'", "\\'");
-                                paras = paras.replace('@', '&');
-                                paras = paras.replace('@', '&');
-                                paras = paras.replace('@', '&');
-                                paras = paras.replace('@', '&');
-                                paras = paras.replace('@', '&');
+
+                                while (true) {
+                                    paras = paras.replace('@', '&');
+
+                                    if (paras.indexOf('@') < 0) {
+                                        break;
+                                    } 
+                                }
                                 paras = "1" + paras;
                             }
+
+                            alert(paras);
 
                             num++;
 

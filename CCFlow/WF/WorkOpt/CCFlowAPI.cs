@@ -1681,7 +1681,7 @@ public class CCFlowAPI : CCForm
             myds.Tables.Add(dtNode);
             #endregion 把流程信息放入里面.
 
-            myds.WriteXml("c:\\GenerWorkNode_FlowDataOnly.xml");
+           // myds.WriteXml("c:\\GenerWorkNode_FlowDataOnly.xml");
             return myds;
         }
         catch (Exception ex)

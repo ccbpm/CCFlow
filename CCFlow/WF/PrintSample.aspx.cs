@@ -1539,7 +1539,7 @@ namespace CCFlow.WF
             currWK.SetValByKey("FK_NY", BP.DA.DataType.CurrentYearMonth);
 
             // 处理节点表单保存事件.
-            currND.MapData.FrmEvents.DoEventNode(FrmEventList.SaveBefore, currWK);
+           // currND.MapData.FrmEvents.DoEventNode(FrmEventList.SaveBefore, currWK);
             try
             {
                 if (currND.IsStartNode)
@@ -1572,26 +1572,7 @@ namespace CCFlow.WF
                 return;
             }
 
-            #region 处理保存后事件
-            bool isHaveSaveAfter = false;
-            try
-            {
-                //处理表单保存后。
-                string s = currND.MapData.FrmEvents.DoEventNode(FrmEventList.SaveAfter, currWK);
-                if (s != null)
-                {
-                    /*如果不等于null,说明已经执行过数据保存，就让其从数据库里查询一次。*/
-                    currWK.RetrieveFromDBSources();
-                    isHaveSaveAfter = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                //this.Response.Write(ex.Message);
-                this.Alert(ex.Message.Replace("'", "‘"));
-                return;
-            }
-            #endregion
+             
 
             #region 2012-10-15  数据也要保存到Rpt表里.
             if (currND.SaveModel == SaveModel.NDAndRpt)
@@ -1630,13 +1611,6 @@ namespace CCFlow.WF
             // 调用工作流程，处理节点信息采集后保存后的工作。
             if (isSave)
             {
-                if (isHaveSaveAfter)
-                {
-                    /*如果有保存后事件，就让其重新绑定. */
-                    currWK.RetrieveFromDBSources();
-                    this.UCEn1.ResetEnVal(currWK);
-                    return;
-                }
 
                 if (string.IsNullOrEmpty(this.Request.QueryString["WorkID"]))
                     return;

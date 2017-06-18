@@ -2194,7 +2194,7 @@ namespace CCFlow.WF.UC
             currWK.SetValByKey("FK_NY", BP.DA.DataType.CurrentYearMonth);
 
             //处理节点表单保存事件.
-            currND.MapData.FrmEvents.DoEventNode(FrmEventList.SaveBefore, currWK);
+            currND.MapData.DoEvent(FrmEventList.SaveBefore, currWK);
 
             //执行保存前事件.
             this.currFlow.DoFlowEventEntity(EventListOfNode.SaveBefore, this.currND, this.currWK, null);
@@ -2248,7 +2248,7 @@ namespace CCFlow.WF.UC
             try
             {
                 //处理表单保存后。
-                string s = currND.MapData.FrmEvents.DoEventNode(FrmEventList.SaveAfter, currWK);
+                string s = currND.MapData.DoEvent(FrmEventList.SaveAfter, currWK);
 
                 //执行保存前事件.
                 s+=this.currFlow.DoFlowEventEntity(EventListOfNode.SaveAfter, this.currND, this.currWK, null);

@@ -1130,9 +1130,9 @@ public class CCFlowAPI : CCForm
             }
 
             // 执行一次装载前填充.
-            string msg = md.FrmEvents.DoEventNode(FrmEventList.FrmLoadBefore, wk);
-            if (string.IsNullOrEmpty(msg) == false)
-                throw new Exception("错误:" + msg);
+            md.DoEvent(FrmEventList.FrmLoadBefore, wk);
+
+
 
             wk.ResetDefaultVal();
             myds.Tables.Add(wk.ToDataTableField(md.No));
@@ -1562,10 +1562,7 @@ public class CCFlowAPI : CCForm
             //描述.
             MapData md = new MapData("ND" + fk_node);
 
-            // 执行一次装载前填充.
-            string msg = md.FrmEvents.DoEventNode(FrmEventList.FrmLoadBefore, wk);
-            if (string.IsNullOrEmpty(msg) == false)
-                throw new Exception("错误:" + msg);
+ 
 
             myds.Tables.Add(wk.ToDataTableField(md.No));
             if (md.MapDtls.Count > 0)

@@ -702,15 +702,14 @@ namespace CCFlow.WF.CCForm
             wk.Rec = WebUser.No;
             wk.SetValByKey("FK_Dept", WebUser.FK_Dept);
             wk.SetValByKey("FK_NY", BP.DA.DataType.CurrentYearMonth);
-            FrmEvents fes = nd.MapData.FrmEvents;
-            fes.DoEventNode(FrmEventList.SaveBefore, wk);
 
 
-
+            nd.MapData.DoEvent(FrmEventList.SaveBefore, wk);
             try
             {
                 wk.Update();
-                fes.DoEventNode(FrmEventList.SaveAfter, wk);
+
+                nd.MapData.DoEvent(FrmEventList.SaveAfter, wk);
             }
             catch (Exception ex)
             {
@@ -747,9 +746,9 @@ namespace CCFlow.WF.CCForm
                 en.SetValByKey("OID", this.OIDPKVal);
                 int i = en.RetrieveFromDBSources();
                 en = this.UCEn1.Copy(en) as GEEntity;
-                FrmEvents fes = md.FrmEvents;
-                //new FrmEvents(this.FK_MapData);
-                fes.DoEventNode(FrmEventList.SaveBefore, en);
+
+
+                md.DoEvent(FrmEventList.SaveBefore, en);
 
                 //#region 检查是否有ca签名.
                 //if (md.IsHaveCA == true)
@@ -795,7 +794,7 @@ namespace CCFlow.WF.CCForm
                 else
                     en.Update();
 
-                fes.DoEventNode(FrmEventList.SaveAfter, en);
+                md.DoEvent(FrmEventList.SaveAfter, en);
 
                 //this.Response.Redirect("Frm.aspx?OID=" + en.GetValStringByKey("OID") + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&FK_MapData=" + this.FK_MapData, true);
             }

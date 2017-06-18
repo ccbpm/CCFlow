@@ -64,23 +64,7 @@ namespace CCFlow.WF.UC
             aths = this.mapData.FrmAttachments;
             mes = this.mapData.MapExts;
 
-            #region 处理事件.
-            fes = this.mapData.FrmEvents;
-            if (this.IsPostBack == false)
-            {
-                try
-                {
-                    string msg = fes.DoEventNode(FrmEventList.FrmLoadBefore, en);
-                    if (string.IsNullOrEmpty(msg) == false)
-                        this.Alert(msg);
-                }
-                catch (Exception ex)
-                {
-                    this.Alert(ex.Message);
-                    return;
-                }
-            }
-            #endregion 处理事件.
+            
 
             //处理默认值.
             this.DealDefVal(mattrs);
@@ -688,24 +672,7 @@ namespace CCFlow.WF.UC
             aths = this.mapData.FrmAttachments;
             mes = this.mapData.MapExts;
 
-            #region 处理事件.
-            fes = this.mapData.FrmEvents;
-            if (this.IsPostBack == false)
-            {
-                try
-                {
-                    string msg = fes.DoEventNode(FrmEventList.FrmLoadBefore, en);
-                    if (string.IsNullOrEmpty(msg) == false)
-                        this.Alert(msg);
-                }
-                catch (Exception ex)
-                {
-                    //string msg = ex.Message;
-                    this.Alert(ex.Message);
-                    return;
-                }
-            }
-            #endregion 处理事件.
+            
 
             //处理默认值.
             this.DealDefVal(mattrs);
@@ -1836,15 +1803,11 @@ namespace CCFlow.WF.UC
                 this.Add(scriptSaveDtl);
             }
 
-
-            fes = this.mapData.FrmEvents;
             if (this.IsPostBack == false)
             {
                 try
                 {
-                    string msg = fes.DoEventNode(FrmEventList.FrmLoadAfter, en);
-                    if (msg != null)
-                        this.Alert(msg);
+                    this.mapData.DoEvent(FrmEventList.FrmLoadAfter, en);
                 }
                 catch (Exception ex)
                 {
@@ -2800,12 +2763,11 @@ namespace CCFlow.WF.UC
             bool IsAddCa = false;
 
             #region 处理事件.
-            fes = this.mapData.FrmEvents;
             if (this.IsPostBack == false)
             {
                 try
                 {
-                    string msg = fes.DoEventNode(FrmEventList.FrmLoadBefore, en);
+                    string msg = mapData.DoEvent(FrmEventList.FrmLoadBefore, en);
                     if (msg == "OK")
                     {
                         en.RetrieveFromDBSources();

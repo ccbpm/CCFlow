@@ -578,7 +578,6 @@ function Conver_CCBPM_V1ToV2() {
             return;
         }
 
-        alert(data);
 
         var flow_Data = $.parseJSON(data);
 
@@ -586,8 +585,6 @@ function Conver_CCBPM_V1ToV2() {
         for (var idx = 0; idx < flow_Data.Nodes.length; idx++) {
 
             var curNode = flow_Data.Nodes[idx];
-
-            alert(curNode);
 
             var createdFigure = figure_Node_Template(curNode.NODEID, curNode.NAME, curNode.X, curNode.Y, curNode.RUNMODEL);
             //move it into position

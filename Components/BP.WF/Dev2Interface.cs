@@ -3265,7 +3265,7 @@ namespace BP.WF
         /// <param name="tag">参数:用@符号隔开比如, @PWorkID=101@PFlowNo=003</param>
         /// <param name="cFlowInfo">子流程信息</param>
         public static void WriteTrack(string flowNo, int nodeFrom, Int64 workid, Int64 fid, string msg, ActionType at, string tag,
-            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null)
+            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom=null,string empNameFrom=null, string rdt=null)
         {
             if (at == ActionType.CallChildenFlow)
                 if (string.IsNullOrEmpty(cFlowInfo) == true)
@@ -3277,7 +3277,13 @@ namespace BP.WF
             Track t = new Track();
             t.WorkID = workid;
             t.FID = fid;
-            t.RDT = DataType.CurrentDataTimess;
+
+            //记录日期.
+            if (rdt == null)
+                t.RDT = DataType.CurrentDataTimess;
+            else
+                t.RDT = rdt;
+
             t.HisActionType = at;
             t.ActionTypeText = optionMsg;
 
@@ -3285,8 +3291,17 @@ namespace BP.WF
             t.NDFrom = nodeFrom;
             t.NDFromT = nd.Name;
 
+            if (empNoFrom==null)
             t.EmpFrom = WebUser.No;
+            else
+                t.EmpFrom = empNoFrom;
+
+            if (empNameFrom == null)
             t.EmpFromT = WebUser.Name;
+            else
+                t.EmpFromT = empNameFrom;
+                
+
             t.FK_Flow = flowNo;
 
             t.NDTo = nodeFrom;

@@ -2432,7 +2432,18 @@ namespace BP.WF
                 return str;
             }
         }
-
+        /// <summary>
+        /// 审核组件里面的工作人员先后顺序排列模式
+        /// 0= 按照审批时间.
+        /// 1= 按照接受人员列表(官职大小)
+        /// </summary>
+        public int FWCOrderModel
+        {
+            get
+            {
+               return this.GetValIntByKey(FrmWorkCheckAttr.FWCOrderModel);
+            }
+        }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -2475,6 +2486,8 @@ namespace BP.WF
 
                 #region 审核组件.
                 map.AddTBInt(NodeAttr.FWCSta, 0, "审核组件", false, false);
+                map.AddTBInt(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
+
                 #endregion 审核组件.
 
                 #region 考核属性.

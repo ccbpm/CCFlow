@@ -183,6 +183,10 @@ namespace BP.WF.Template
         /// 是否显示退回信息
         /// </summary>
         public const string FWCIsShowReturnMsg = "FWCIsShowReturnMsg";
+        /// <summary>
+        /// 人员显示顺序
+        /// </summary>
+        public const string FWCOrderModel = "FWCOrderModel";
     }
     /// <summary>
     /// 审核组件
@@ -660,6 +664,10 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.FK_Flow, null, "流程编号", false, false, 0, 3, 10);
                 map.AddTBInt(NodeAttr.Step, 0, "步骤", false, false);
 
+
+                //协作模式下审核人显示顺序. add for yantai zongheng.
+                map.AddDDLSysEnum(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", true, true,
+                  FrmWorkCheckAttr.FWCOrderModel, "@0=按审批时间先后排序@1=按照接受人员列表先后顺序(官职大小)");
                 #endregion 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
 
                 this._enMap = map;

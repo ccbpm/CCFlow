@@ -2165,6 +2165,24 @@ namespace BP.WF
                 }
             }
 
+            if ((town.HisNode.TodolistModel == TodolistModel.Teamup || town.HisNode.TodolistModel == TodolistModel.TeamupGroupLeader) && current_gwls.Count > 1)
+            {
+                /*如果是协作模式 */
+                if (town.HisNode.FWCOrderModel == 1)
+                {
+                    /* 如果是协作模式，并且显示排序按照官职大小排序. */
+                    DateTime dt = DateTime.Now;
+                    foreach (GenerWorkerList gwl in current_gwls)
+                    {
+                        dt = dt.AddMinutes(5);
+                        string rdt = dt.ToString(DataType.CurrentDataTimess);
+
+                        BP.WF.Dev2Interface.WriteTrack(this.HisFlow.No, town.HisNode.NodeID, this.WorkID, town.HisWork.FID, "",
+                            ActionType.WorkCheck, null, null, gwl.FK_Emp, gwl.FK_EmpText, gwl.FK_Emp, gwl.FK_EmpText, rdt);
+                    }
+                }
+            }
+
 
             #region 保存目标节点数据.
             if (this.HisWork.EnMap.PhysicsTable != toWK.EnMap.PhysicsTable)
@@ -5895,7 +5913,6 @@ namespace BP.WF
                     CallSubFlow();
 
                 #endregion 处理子流程
-
 
                 #region 生成单据
                 if (this.HisNode.HisPrintDocEnable == PrintDocEnable.PrintRTF && this.HisNode.BillTemplates.Count > 0)

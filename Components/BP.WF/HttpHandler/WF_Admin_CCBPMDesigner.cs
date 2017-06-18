@@ -564,6 +564,7 @@ namespace BP.WF.HttpHandler
         public string Flow_ResetFlowVersion()
         {
             DBAccess.RunSQL("UPDATE WF_FLOW SET DType=0, FlowJson='' WHERE No='" + this.FK_Flow + "'");
+
             return "重置成功.";
         }
 

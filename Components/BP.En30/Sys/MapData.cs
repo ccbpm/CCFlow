@@ -2375,76 +2375,75 @@ namespace BP.Sys
 		/// <summary>
 		/// 设置Para 参数.
 		/// </summary>
-		public void ResetMaxMinXY()
-		{
-			if (this.HisFrmType != FrmType.FreeFrm)
-				return;
+        public void ResetMaxMinXY()
+        {
+            if (this.HisFrmType != FrmType.FreeFrm)
+                return;
 
-			#region 计算最左边,与最右边的值。
-			// 求最左边.
-			float i1 = DBAccess.RunSQLReturnValFloat("SELECT MIN(X1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
-			if (i1 == 0) /*没有线，只有图片的情况下。*/
-				i1 = DBAccess.RunSQLReturnValFloat("SELECT MIN(X) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
+            #region 计算最左边,与最右边的值。
+            // 求最左边.
+            float i1 = DBAccess.RunSQLReturnValFloat("SELECT MIN(X1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
+            if (i1 == 0) /*没有线，只有图片的情况下。*/
+                i1 = DBAccess.RunSQLReturnValFloat("SELECT MIN(X) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
 
-			float i2 = DBAccess.RunSQLReturnValFloat("SELECT MIN(X)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
-			if (i1 > i2)
-				this.MaxLeft = i2;
-			else
-				this.MaxLeft = i1;
+            float i2 = DBAccess.RunSQLReturnValFloat("SELECT MIN(X)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
+            if (i1 > i2)
+                this.MaxLeft = i2;
+            else
+                this.MaxLeft = i1;
 
-			// 求最右边.
-			i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(X2) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
-			if (i1 == 0)
-			{
-				/*没有线的情况，按照图片来计算。*/
-				i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(X+W) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
-			}
-			this.MaxRight = i1;
+            // 求最右边.
+            i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(X2) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
+            if (i1 == 0)
+            {
+                /*没有线的情况，按照图片来计算。*/
+                i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(X+W) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
+            }
+            this.MaxRight = i1;
 
-			// 求最top.
-			i1 = DBAccess.RunSQLReturnValFloat("SELECT MIN(Y1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
-			i2 = DBAccess.RunSQLReturnValFloat("SELECT MIN(Y)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
+            // 求最top.
+            i1 = DBAccess.RunSQLReturnValFloat("SELECT MIN(Y1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
+            i2 = DBAccess.RunSQLReturnValFloat("SELECT MIN(Y)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
 
-			if (i1 > i2)
-				this.MaxTop = i2;
-			else
-				this.MaxTop = i1;
+            if (i1 > i2)
+                this.MaxTop = i2;
+            else
+                this.MaxTop = i1;
 
-			// 求最end.
-			i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
-			/*小周鹏添加2014/10/23-----------------------START*/
-			if (i1 == 0) /*没有线，只有图片的情况下。*/
-				i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
+            // 求最end.
+            i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y1) FROM Sys_FrmLine WHERE FK_MapData='" + this.No + "'", 0);
+            /*小周鹏添加2014/10/23-----------------------START*/
+            if (i1 == 0) /*没有线，只有图片的情况下。*/
+                i1 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
 
-			/*小周鹏添加2014/10/23-----------------------END*/
-			i2 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
-			if (i2 == 0)
-				i2 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
-			//求出最底部的 附件
-			float endFrmAtt = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_FrmAttachment  WHERE FK_MapData='" + this.No + "'", 0);
-			//求出最底部的明细表
-			float endFrmDtl = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_MapDtl  WHERE FK_MapData='" + this.No + "'", 0);
+            /*小周鹏添加2014/10/23-----------------------END*/
+            i2 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y)  FROM Sys_FrmLab  WHERE FK_MapData='" + this.No + "'", 0);
+            if (i2 == 0)
+                i2 = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H) FROM Sys_FrmImg WHERE FK_MapData='" + this.No + "'", 0);
+            //求出最底部的 附件
+            float endFrmAtt = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_FrmAttachment  WHERE FK_MapData='" + this.No + "'", 0);
+            //求出最底部的明细表
+            float endFrmDtl = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_MapDtl  WHERE FK_MapData='" + this.No + "'", 0);
 
-			//求出最底部的扩展控件
-			float endFrmEle = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_FrmEle  WHERE FK_MapData='" + this.No + "'", 0);
-			//求出最底部的textbox
-			float endFrmAttr = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+UIHeight)  FROM  Sys_MapAttr  WHERE FK_MapData='" + this.No + "' and UIVisible='1'", 0);
+            //求出最底部的扩展控件
+            float endFrmEle = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+H)  FROM Sys_FrmEle  WHERE FK_MapData='" + this.No + "'", 0);
+            //求出最底部的textbox
+            float endFrmAttr = DBAccess.RunSQLReturnValFloat("SELECT Max(Y+UIHeight)  FROM  Sys_MapAttr  WHERE FK_MapData='" + this.No + "' and UIVisible='1'", 0);
 
-			if (i1 > i2)
-				this.MaxEnd = i1;
-			else
-				this.MaxEnd = i2;
+            if (i1 > i2)
+                this.MaxEnd = i1;
+            else
+                this.MaxEnd = i2;
 
-			this.MaxEnd = this.MaxEnd > endFrmAtt ? this.MaxEnd : endFrmAtt;
-			this.MaxEnd = this.MaxEnd > endFrmDtl ? this.MaxEnd : endFrmDtl;
-			this.MaxEnd = this.MaxEnd > endFrmEle ? this.MaxEnd : endFrmEle;
-			this.MaxEnd = this.MaxEnd > endFrmAtt ? this.MaxEnd : endFrmAttr;
+            this.MaxEnd = this.MaxEnd > endFrmAtt ? this.MaxEnd : endFrmAtt;
+            this.MaxEnd = this.MaxEnd > endFrmDtl ? this.MaxEnd : endFrmDtl;
+            this.MaxEnd = this.MaxEnd > endFrmEle ? this.MaxEnd : endFrmEle;
+            this.MaxEnd = this.MaxEnd > endFrmAtt ? this.MaxEnd : endFrmAttr;
 
-			#endregion
+            #endregion
 
-			this.DirectUpdate();
-		}
-
+            this.DirectUpdate();
+        }
 		/// <summary>
 		/// 求位移.
 		/// </summary>

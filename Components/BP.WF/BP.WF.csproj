@@ -179,6 +179,7 @@
     <Compile Include="HttpHandler\CCMobile.cs" />
     <Compile Include="HttpHandler\WF_WorkOpt_OneWork.cs" />
     <Compile Include="HttpHandler\WF_AppClassic.cs" />
+    <Compile Include="HttpHandler\WF_Comm.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />

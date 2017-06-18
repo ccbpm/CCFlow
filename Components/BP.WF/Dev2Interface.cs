@@ -6950,7 +6950,7 @@ namespace BP.WF
                 try
                 {
                     //处理表单保存后.
-                    string s = nd.MapData.FrmEvents.DoEventNode(FrmEventList.SaveAfter, wk);
+                    string s = nd.MapData.DoEvent(FrmEventList.SaveAfter, wk);
 
 
                     //执行保存前事件.
@@ -7007,12 +7007,15 @@ namespace BP.WF
 
             en.SetValByKey("OID", workID);
 
-            FrmEvents fes = md.FrmEvents;
-            fes.DoEventNode(FrmEventList.SaveBefore, en);
+            md.DoEvent(FrmEventList.SaveBefore, en);
+
             if (i == 0)
                 en.Insert();
             else
                 en.Update();
+
+            md.DoEvent(FrmEventList.SaveAfter, en);
+
 
             if (workDtls != null)
             {
@@ -7048,7 +7051,8 @@ namespace BP.WF
                     }
                 }
             }
-            fes.DoEventNode(FrmEventList.SaveAfter, en);
+
+            md.DoEvent(FrmEventList.SaveAfter, en);
         }
         /// <summary>
         /// 从任务池里取出来一个子任务

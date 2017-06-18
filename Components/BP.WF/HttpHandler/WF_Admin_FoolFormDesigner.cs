@@ -806,7 +806,6 @@ namespace BP.WF.HttpHandler
         {
             SysEnumMains ses = new SysEnumMains();
             ses.RetrieveAll();
-
             return ses.ToJson();
         }
         /// <summary>

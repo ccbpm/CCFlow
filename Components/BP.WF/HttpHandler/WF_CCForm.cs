@@ -509,7 +509,7 @@ namespace BP.WF.HttpHandler
                 }
 
                 // 执行表单事件..
-                string msg = md.FrmEvents.DoEventNode(FrmEventList.FrmLoadBefore, en);
+                string msg = md.DoEvent(FrmEventList.FrmLoadBefore, en);
                 if (string.IsNullOrEmpty(msg) == false)
                     throw new Exception("err@错误:" + msg);
 
@@ -565,7 +565,8 @@ namespace BP.WF.HttpHandler
 
                 // 处理表单保存前事件.
                 MapData md = new MapData(this.EnsName);
-                md.FrmEvents.DoEventNode(FrmEventList.SaveBefore, en);
+
+                md.DoEvent(FrmEventList.SaveBefore, en);
 
                 if (i == 0)
                     en.Insert();
@@ -573,7 +574,7 @@ namespace BP.WF.HttpHandler
                     en.Update();
 
                 //处理保存后事件.
-                md.FrmEvents.DoEventNode(FrmEventList.SaveAfter, en);
+                md.DoEvent(FrmEventList.SaveAfter, en);
                 return "保存成功.";
             }
             catch(Exception ex)

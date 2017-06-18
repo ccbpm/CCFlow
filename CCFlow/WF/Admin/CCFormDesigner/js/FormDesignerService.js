@@ -30,9 +30,11 @@ function checklogin(fCallback, oScope) {
             if (scps.length == 2 && scps[0]) {
                 scps[0](scps[1]);
             }
+            return;
         }
-        else {
-            $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
-        }
+
+        //else {
+          //  $.messager.alert("错误", "验证登录信息失败，请重试。失败信息：" + re, "error");
+        //}
     }, [fCallback, oScope]);
 }

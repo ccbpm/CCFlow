@@ -3,6 +3,7 @@ var figureSetsURL = 'Controls';
 var CCPMB_Form_V = "2";
 
 $(function () {
+
     CCForm_FK_MapData = Application.common.getArgsFromHref("FK_MapData");
     CCForm_NodeID = CCForm_FK_MapData.replace("ND", "");
     CCPMB_Form_V = 1;
@@ -16,12 +17,14 @@ $(function () {
     checklogin();
 
     //初始化画板
-    init(CCForm_FK_MapData);
+    Init_Panel(CCForm_FK_MapData);
 
     //显示网格
-    showGrid();
+    ShowGrid();
+
     //右键菜单
     InitContexMenu();
+
     //鼠标双击
     InitDbClick();
 
@@ -583,8 +586,8 @@ function ReSetEditDivCss() {
 function Conver_CCForm_V1ToV2() {
 
     //transe old CCForm to new
-    $.post( Handler, {
-        action: 'CcformElements',
+    $.post(Handler, {
+        action: 'CCForm_AllElements_ResponseJson',
         FK_MapData: CCForm_FK_MapData,
         FK_Node: CCForm_FK_MapData.substr(2, CCForm_FK_MapData.length)
     }, function (jsonData) {
@@ -593,7 +596,6 @@ function Conver_CCForm_V1ToV2() {
             alert(jsonData);
             return;
         }
-
 
         var flow_Data = $.parseJSON(jsonData);
 
@@ -610,9 +612,11 @@ function Conver_CCForm_V1ToV2() {
             }
         }
 
+
+
         //循环FrmLab
-        for (var i in flow_Data.FrmLab) {
-            var frmLab = flow_Data.FrmLab[i];
+        for (var i in flow_Data.Sys_FrmLab) {
+            var frmLab = flow_Data.Sys_FrmLab[i];
             var createdFigure = figure_Template_Label(frmLab);
             //move it into position
             //createdFigure.transform(Matrix.translationMatrix(frmLab.X - createdFigure.rotationCoords[0].x, frmLab.Y - createdFigure.rotationCoords[0].y))
@@ -622,8 +626,8 @@ function Conver_CCForm_V1ToV2() {
         }
 
         //循环FrmRB
-        for (var i in flow_Data.FrmRb) {
-            var frmRb = flow_Data.FrmRb[i];
+        for (var i in flow_Data.Sys_FrmRB) {
+            var frmRb = flow_Data.Sys_FrmRB[i];
             if (i == 0) {
                 var createdFigure = figure_Template_Rb(frmRb);
                 //move it into position
@@ -641,8 +645,10 @@ function Conver_CCForm_V1ToV2() {
         }
 
         //循环FrmBtn
-        for (var i in flow_Data.FrmBtn) {
-            var frmBtn = flow_Data.FrmBtn[i];
+        for (var i in flow_Data.Sys_FrmBtn) {
+            
+            var frmBtn = flow_Data.Sys_FrmBtn[i];
+
             var createdFigure = figure_Template_Btn(frmBtn);
             //move it into position
             //createdFigure.transform(Matrix.translationMatrix(frmBtn.X - createdFigure.rotationCoords[0].x, frmBtn.Y - createdFigure.rotationCoords[0].y))

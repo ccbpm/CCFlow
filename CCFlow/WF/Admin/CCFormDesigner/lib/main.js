@@ -3327,6 +3327,7 @@ function exportCanvas() {
 function LoadTempDiagram(FK_MapData) {
 
     $.post(Handler, { action: 'FormDesigner_Loadform', FK_MapData: FK_MapData },
+
         function (data) {
 
             if (data.indexOf('err@') != -1) {
@@ -3345,7 +3346,7 @@ function LoadTempDiagram(FK_MapData) {
                 }
 
                 action(data);
-
+                
 
                 var obj = eval('(' + data + ')');
 
@@ -3474,15 +3475,13 @@ function Init_Panel(diagramId) {
         modal();
     }
 
-
     //Edit panel
     setUpEditPanel(canvasProps);
 
-    //loads diagram
+    // loads diagram
     LoadTempDiagram(diagramId);
 
     // close layer when click-out
-
     addListeners();
 
     window.addEventListener("mousedown", documentOnMouseDown, false);

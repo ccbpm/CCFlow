@@ -7,6 +7,7 @@ using BP.Port;
 using BP.Web;
 using BP.Sys;
 using BP.WF.Data;
+using BP.WF.Template;
 
 namespace BP.WF
 {
@@ -381,6 +382,14 @@ namespace BP.WF
             Template.FrmWorkCheck fwc = new Template.FrmWorkCheck(this.HisNode.NodeID);
             if (fwc.FWCIsShowReturnMsg == false)
                 BP.WF.Dev2Interface.DeleteCheckInfo(this.HisNode.FK_Flow, this.WorkID, this.HisNode.NodeID);
+
+            //删除审核组件设置“协作模式下操作员显示顺序”为“按照接受人员列表先后顺序(官职大小)”，而生成的待审核轨迹信息
+            if (fwc.FWCSta == FrmWorkCheckSta.Enable && fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
+            {
+                BP.DA.DBAccess.RunSQL("DELETE FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
+                                      " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + this.HisNode.NodeID +
+                                      " AND NDTo = " + this.HisNode.NodeID + " AND (Msg = '' OR Msg IS NULL)");
+            }
 
             switch (this.HisNode.HisRunModel)
             {

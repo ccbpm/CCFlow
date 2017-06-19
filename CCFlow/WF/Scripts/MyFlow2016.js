@@ -769,7 +769,7 @@ function initGroup(workNodeData, groupFiled) {
             }
             break;
         case "FWC": //审核组件.
-            var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
+            var src = "/WF/WorkOpt/WorkCheck.htm?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.WorkID;

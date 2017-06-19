@@ -98,6 +98,20 @@ namespace BP.WF.Template
         Readonly
     }
     /// <summary>
+    /// 协作模式下操作员显示顺序
+    /// </summary>
+    public enum FWCOrderModel
+    {
+        /// <summary>
+        /// 按审批时间先后排序
+        /// </summary>
+        RDT = 0,
+        /// <summary>
+        /// 按照接受人员列表先后顺序(官职大小)
+        /// </summary>
+        SqlAccepter = 1
+    }
+    /// <summary>
     /// 审核组件
     /// </summary>
     public class FrmWorkCheckAttr : EntityNoAttr
@@ -184,7 +198,7 @@ namespace BP.WF.Template
         /// </summary>
         public const string FWCIsShowReturnMsg = "FWCIsShowReturnMsg";
         /// <summary>
-        /// 人员显示顺序
+        /// 协作模式下操作员显示顺序
         /// </summary>
         public const string FWCOrderModel = "FWCOrderModel";
     }
@@ -531,6 +545,35 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(FrmWorkCheckAttr.SigantureEnabel, value);
+            }
+        }
+
+        /// <summary>
+        /// 协作模式下操作员显示顺序
+        /// </summary>
+        public FWCOrderModel FWCOrderModel
+        {
+            get
+            {
+                return (FWCOrderModel)this.GetValIntByKey(FrmWorkCheckAttr.FWCOrderModel, 0);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.FWCOrderModel, (int)value);
+            }
+        }
+        /// <summary>
+        /// 审核组件状态
+        /// </summary>
+        public FrmWorkCheckSta FWCSta
+        {
+            get
+            {
+                return (FrmWorkCheckSta)this.GetValIntByKey(FrmWorkCheckAttr.FWCSta, 0);
+            }
+            set
+            {
+                this.SetValByKey(FrmWorkCheckAttr.FWCSta, (int)value);
             }
         }
         #endregion

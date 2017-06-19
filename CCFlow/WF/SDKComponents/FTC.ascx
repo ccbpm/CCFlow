@@ -2,7 +2,7 @@
 
 <%
     string enName = "ND" + this.Request.QueryString["FK_Node"];
-    string src = "/WF/WorkOpt/WorkCheck.aspx?FID=" + this.Request.QueryString["FID"];
+    string src = "/WF/WorkOpt/WorkCheck.htm?FID=" + this.Request.QueryString["FID"];
     src += "&WorkID=" + this.Request.QueryString["WorkID"];
     src += "&FK_Node=" + this.Request.QueryString["FK_Node"];
     src += "&FK_Flow=" + this.Request.QueryString["FK_Flow"];

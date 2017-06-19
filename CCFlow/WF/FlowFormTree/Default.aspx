@@ -653,7 +653,7 @@
                     Endflow();
                     break;
                 case "workcheck": //审核
-                    window.open("../WorkOpt/WorkCheck.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "审核", "height=600, width=800,scrollbars=yes");
+                    window.open("../WorkOpt/WorkCheck.htm?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "审核", "height=600, width=800,scrollbars=yes");
                     break;
                 case "askfor": //加签
                     window.open("../WorkOpt/Askfor.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "加签", "height=600, width=800,scrollbars=yes");

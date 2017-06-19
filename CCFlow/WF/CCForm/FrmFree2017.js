@@ -602,7 +602,7 @@ function initGroup(workNodeData, groupFiled) {
             }
             break;
         case "FWC": //审核组件.
-            var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
+            var src = "/WF/WorkOpt/WorkCheck.htm?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.OID;
@@ -2526,7 +2526,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
     if (sta == 0)
         return $('');
 
-    var src = appPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
+    var src = appPath + "WF/WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";
     var paras = '';
     
@@ -2705,7 +2705,7 @@ function dealWithUrl(src) {
 /*
 switch (groupFiled.CtrlType) {
     case "FWC": //审核组件.
-        var src = "/WF/WorkOpt/WorkCheck.aspx?s=2";
+        var src = "/WF/WorkOpt/WorkCheck.htm?s=2";
         var paras = pageParamToUrl();
         if (paras.indexOf('OID') < 0) {
             paras += "&OID=" + pageData.OID;

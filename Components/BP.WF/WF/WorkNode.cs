@@ -2175,10 +2175,10 @@ namespace BP.WF
                     foreach (GenerWorkerList gwl in current_gwls)
                     {
                         dt = dt.AddMinutes(5);
-                        string rdt = dt.ToString(DataType.CurrentDataTimess);
+                        string rdt = dt.ToString("yyyy-MM-dd HH:mm:ss");
 
                         BP.WF.Dev2Interface.WriteTrack(this.HisFlow.No, town.HisNode.NodeID, this.WorkID, town.HisWork.FID, "",
-                            ActionType.WorkCheck, null, null, gwl.FK_Emp, gwl.FK_EmpText, gwl.FK_Emp, gwl.FK_EmpText, rdt);
+                            ActionType.WorkCheck, null, null, null, gwl.FK_Emp, gwl.FK_EmpText, gwl.FK_Emp, gwl.FK_EmpText, rdt);
                     }
                 }
             }

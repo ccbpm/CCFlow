@@ -103,7 +103,7 @@ namespace BP.WF
         /// <summary>
         /// 撤销发送
         /// </summary>
-        public WorkUnSend(string flowNo, Int64 workID, int unSendToNode=0)
+        public WorkUnSend(string flowNo, Int64 workID, int unSendToNode = 0)
         {
             this.FlowNo = flowNo;
             this.WorkID = workID;
@@ -339,7 +339,7 @@ namespace BP.WF
 
             return "工作已经被您撤销到:" + cancelToNode.Name;
         }
-       
+
         /// <summary>
         /// 执行撤消
         /// </summary>
@@ -366,12 +366,12 @@ namespace BP.WF
                  * 4, UnSendToNode 这个时间没有值，并且当前干流节点的停留的节点与要撤销到的节点不一致。
                  */
 
-              return  DoUnSendInFeiLiuHeiliu(gwf);
+                return DoUnSendInFeiLiuHeiliu(gwf);
 
             }
 
 
-          
+
 
             // 如果停留的节点是分合流。
             Node nd = new Node(gwf.FK_Node);
@@ -381,7 +381,7 @@ namespace BP.WF
                 throw new Exception("当前节点，不允许撤销。");
             }
 
-            
+
 
             switch (nd.HisNodeWorkType)
             {
@@ -479,7 +479,7 @@ namespace BP.WF
 
             // 删除产生的工作列表。
             GenerWorkerLists wls = new GenerWorkerLists();
-            wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node );
+            wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
             // 删除工作信息,如果是按照ccflow格式存储的。
             if (this.HisFlow.HisDataStoreModel == BP.WF.Template.DataStoreModel.ByCCFlow)
@@ -516,9 +516,18 @@ namespace BP.WF
 
             //更新当前节点，到rpt里面。
             BP.DA.DBAccess.RunSQL("UPDATE " + this.HisFlow.PTable + " SET FlowEndNode=" + gwf.FK_Node + " WHERE OID=" + this.WorkID);
-            
+
             // 记录日志..
             wn.AddToTrack(ActionType.UnSend, WebUser.No, WebUser.Name, cancelToNode.NodeID, cancelToNode.Name, "无");
+
+            //删除审核组件设置“协作模式下操作员显示顺序”为“按照接受人员列表先后顺序(官职大小)”，而生成的待审核轨迹信息
+            FrmWorkCheck fwc = new FrmWorkCheck(nd.NodeID);
+            if (fwc.FWCSta == FrmWorkCheckSta.Enable && fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
+            {
+                BP.DA.DBAccess.RunSQL("DELETE FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
+                                      " AND ActionType = " + (int) ActionType.WorkCheck + " AND NDFrom = " + nd.NodeID +
+                                      " AND NDTo = " + nd.NodeID + " AND (Msg = '' OR Msg IS NULL)");
+            }
 
             // 删除数据.
             if (wn.HisNode.IsStartNode)

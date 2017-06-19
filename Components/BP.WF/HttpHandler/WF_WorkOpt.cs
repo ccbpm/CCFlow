@@ -10,6 +10,7 @@ using BP.Web;
 using BP.Port;
 using BP.En;
 using BP.WF;
+using BP.WF.Data;
 using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
@@ -39,6 +40,7 @@ namespace BP.WF.HttpHandler
             FrmWorkCheck frmWorkCheck = null;
             FrmAttachmentDBs athDBs = null;
             Nodes nds = new Nodes(this.FK_Flow);
+            FrmWorkChecks fwcs = new FrmWorkChecks();
             Node nd = null;
             WorkCheck wc = null;
             Tracks tks = null;
@@ -49,7 +51,14 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             DataRow row = null;
             string dotype = getUTF8ToString("ShowType");
+            Dictionary<int, DataTable> nodeEmps = new Dictionary<int, DataTable>(); //节点id，接收人列表
+            Dictionary<int, Dictionary<string, int>> orderEmps = new Dictionary<int, Dictionary<string, int>>();    //节点id，人员编号，序号
+            FrmWorkCheck fwc = null;
+            DataTable dt = null;
+            int idx = 0;
+            int noneEmpIdx = 0;
 
+            fwcs.Retrieve(NodeAttr.FK_Flow, this.FK_Flow, NodeAttr.Step);
             ds.Tables.Add(wcDesc.ToDataTableField("wcDesc"));
 
             DataTable tkDt = new DataTable("Tracks");
@@ -61,6 +70,8 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("RDT", typeof(string));
             tkDt.Columns.Add("IsDoc", typeof(bool));
             tkDt.Columns.Add("ParentNode", typeof(int));
+            tkDt.Columns.Add("T_NodeIndex", typeof(int));    //节点排列顺序，用于后面的排序
+            tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
             ds.Tables.Add(tkDt);
 
             DataTable athDt = new DataTable("Aths");
@@ -84,12 +95,56 @@ namespace BP.WF.HttpHandler
                 tks = wc.HisWorkChecks;
 
                 //已走过节点
+                int empIdx = 0;
+                int lastNodeId = 0;
                 foreach (BP.WF.Track tk in tks)
                 {
                     switch (tk.HisActionType)
                     {
                         case ActionType.WorkCheck:
                         case ActionType.StartChildenFlow:
+
+                            if (lastNodeId == 0)
+                                lastNodeId = tk.NDFrom;
+
+                            if (lastNodeId != tk.NDFrom)
+                            {
+                                idx++;
+                                lastNodeId = tk.NDFrom;
+                            }
+
+                            tk.Row.Add("T_NodeIndex", idx);
+
+                            //获取所有设有“协作模式下操作员显示顺序”设置为“按照接受人员列表先后顺序(官职大小)”并定义审核人顺序序列
+                            if (orderEmps.ContainsKey(tk.NDFrom) == false)
+                                orderEmps.Add(tk.NDFrom, new Dictionary<string, int>());
+
+                            nd = nds.GetEntityByKey(tk.NDFrom) as Node;
+                            fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
+
+                            if (fwc.FWCSta == FrmWorkCheckSta.Enable &&
+                                fwc.FWCOrderModel == FWCOrderModel.SqlAccepter &&
+                                nd.HisDeliveryWay == DeliveryWay.BySQL)
+                            {
+                                if (orderEmps[tk.NDFrom].ContainsKey(tk.EmpFrom) == false)
+                                {
+                                    dt = GetWorkerListBySQL(nd.DeliveryParas, nd.FK_Flow, tk.NDFrom, this.WorkID);
+                                    empIdx = 0;
+
+                                    foreach (DataRow dr in dt.Rows)
+                                    {
+                                        orderEmps[tk.NDFrom].Add(dr["No"] as string, empIdx++);
+                                    }
+                                }
+
+                                tk.Row["T_CheckIndex"] = orderEmps[tk.NDFrom][tk.EmpFrom];
+                                noneEmpIdx++;
+                            }
+                            else
+                            {
+                                tk.Row["T_CheckIndex"] = noneEmpIdx++;
+                            }
+
                             if (nodes.Contains(tk.NDFrom + ",") == false)
                                 nodes += tk.NDFrom + ",";
                             break;
@@ -110,7 +165,9 @@ namespace BP.WF.HttpHandler
                         row["NodeName"] = (nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
                         row["IsDoc"] = false;
                         row["ParentNode"] = 0;
-                        row["RDT"] = tk.RDT ?? "";
+                        row["RDT"] = string.IsNullOrWhiteSpace(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && string.IsNullOrWhiteSpace(tk.Msg) ? "" : tk.RDT;
+                        row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
+                        row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
 
                         if (dotype != "View" && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                             wcDesc.HisFrmWorkCheckType == FWCType.Check || (
@@ -213,6 +270,8 @@ namespace BP.WF.HttpHandler
                                         row["RDT"] = mysubtk.RDT ?? "";
                                         row["IsDoc"] = false;
                                         row["ParentNode"] = tk.NDFrom;
+                                        row["T_NodeIndex"] = idx++;
+                                        row["T_CheckIndex"] = noneEmpIdx++;
                                         tkDt.Rows.Add(row);
 
                                         if (mysubtk.NDFrom == int.Parse(fk_flow + "01"))
@@ -236,11 +295,11 @@ namespace BP.WF.HttpHandler
                     //todo:抄送暂未处理，不明逻辑
                 }
 
-                if(tkDoc != null)
+                if (tkDoc != null)
                 {
                     //判断可编辑审核信息是否处于最后一条，不处于最后一条，则将其移到最后一条
                     DataRow rdoc = tkDt.Select("IsDoc=True")[0];
-                    if(tkDt.Rows.IndexOf(rdoc) != tkDt.Rows.Count - 1)
+                    if (tkDt.Rows.IndexOf(rdoc) != tkDt.Rows.Count - 1)
                     {
                         tkDt.Rows.Add(rdoc.ItemArray)["RDT"] = "";
 
@@ -267,23 +326,33 @@ namespace BP.WF.HttpHandler
             //审核意见填写
             if (isExitTb_doc && wcDesc.HisFrmWorkCheckSta == FrmWorkCheckSta.Enable && isCanDo && dotype != "View")
             {
-                row = tkDt.NewRow();
-                row["NodeID"] = this.FK_Node;
-                row["NodeName"] = (nds.GetEntityByKey(this.FK_Node) as Node).FWCNodeName;
-                row["IsDoc"] = true;
-                row["ParentNode"] = 0;
-                row["RDT"] = "";
-                row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
-                row["EmpFrom"] = WebUser.No;
-                row["EmpFromT"] = WebUser.Name;
+                nd = nds.GetEntityByKey(this.FK_Node) as Node;
+                if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter && nd.HisDeliveryWay == DeliveryWay.BySQL)
+                {
+                    row = tkDt.Select("NodeID=" + this.FK_Node + " AND Msg='' AND EmpFrom='" + WebUser.No + "'")[0];
+                    row["IsDoc"] = true;
+                    row["RDT"] = "";
+                    row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+                }
+                else
+                {
+                    row = tkDt.NewRow();
+                    row["NodeID"] = this.FK_Node;
+                    row["NodeName"] = nd.FWCNodeName;
+                    row["IsDoc"] = true;
+                    row["ParentNode"] = 0;
+                    row["RDT"] = "";
+                    row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+                    row["EmpFrom"] = WebUser.No;
+                    row["EmpFromT"] = WebUser.Name;
+                    row["T_NodeIndex"] = idx++;
+                    row["T_CheckIndex"] = noneEmpIdx++;
 
-                tkDt.Rows.Add(row);
+                    tkDt.Rows.Add(row);
+                }
             }
 
             #region 显示有审核组件，但还未审核的节点
-            FrmWorkChecks fwcs = new FrmWorkChecks();
-            fwcs.Retrieve(NodeAttr.FK_Flow, this.FK_Flow, NodeAttr.Step);
-
             if (tks == null)
                 tks = wc.HisWorkChecks;
 
@@ -315,12 +384,55 @@ namespace BP.WF.HttpHandler
                 row["Msg"] = "&nbsp;";
                 row["EmpFrom"] = "";
                 row["EmpFromT"] = "";
+                row["T_NodeIndex"] = idx++;
+                row["T_CheckIndex"] = noneEmpIdx++;
 
                 tkDt.Rows.Add(row);
             }
             #endregion 增加空白.
 
+            DataView dv = tkDt.DefaultView;
+            dv.Sort = "T_NodeIndex ASC,T_CheckIndex ASC";
+            DataTable sortedTKs = dv.ToTable("Tracks");
+
+            ds.Tables.Remove("Tracks");
+            ds.Tables.Add(sortedTKs);
+
             return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 获取指定节点按SQL语句查询出的接收人列表
+        /// </summary>
+        /// <param name="sql">SQL语句</param>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="ndto">要发送的节点ID</param>
+        /// <param name="workId">工作ID</param>
+        /// <returns></returns>
+        private DataTable GetWorkerListBySQL(string sql, string fk_flow, int ndto, long workId)
+        {
+            GERpt rptGe = new GERpt("ND" + int.Parse(fk_flow) + "Rpt", workId);
+
+            sql = sql.Replace("@FK_Node", ndto.ToString());
+            sql = sql.Replace("@NodeID", ndto.ToString());
+            sql = BP.WF.Glo.DealExp(sql, rptGe, null);
+            if (sql.Contains("@"))
+            {
+                if (BP.WF.Glo.SendHTOfTemp != null)
+                {
+                    foreach (string key in BP.WF.Glo.SendHTOfTemp.Keys)
+                    {
+                        sql = sql.Replace("@" + key, BP.WF.Glo.SendHTOfTemp[key].ToString());
+                    }
+                }
+            }
+
+            if (sql.Contains("@GuestUser.No"))
+                sql = sql.Replace("@GuestUser.No", GuestUser.No);
+
+            if (sql.Contains("@GuestUser.Name"))
+                sql = sql.Replace("@GuestUser.Name", GuestUser.Name);
+
+            return DBAccess.RunSQLReturnTable(sql);
         }
         /// <summary>
         /// 获取审核组件中刚上传的附件列表信息
@@ -470,7 +582,17 @@ namespace BP.WF.HttpHandler
                 #region 根据类型写入数据  qin
                 if (wcDesc.HisFrmWorkCheckType == FWCType.Check)  //审核组件
                 {
-                    Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                    //判断是否审核组件中“协作模式下操作员显示顺序”设置为“按照接受人员列表先后顺序(官职大小)”，删除原有的空审核信息
+                    if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter && new Node(wcDesc.NodeID).HisDeliveryWay == DeliveryWay.BySQL)
+                    {
+                        sql = "DELETE ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
+                              " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + this.FK_Node +
+                              " AND NDTo = " + this.FK_Node + " AND EmpFrom = '" + WebUser.No + "'";
+                        DBAccess.RunSQL(sql);
+                    }
+
+                    Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg,
+                                                      wcDesc.FWCOpLabel);
                 }
                 if (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog)//日志组件
                 {
@@ -493,7 +615,7 @@ namespace BP.WF.HttpHandler
             return dt.Rows.Count > 0 ? dt.Rows[0]["RDT"].ToString() : "";
         }
         #endregion
-        
+
         #region 执行跳转.
         /// <summary>
         /// 返回可以跳转的节点.

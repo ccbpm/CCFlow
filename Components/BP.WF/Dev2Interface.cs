@@ -3278,7 +3278,8 @@ namespace BP.WF
             t.FID = fid;
 
             //记录日期.
-            if (rdt == null)
+            DateTime d;
+            if (string.IsNullOrWhiteSpace(rdt) || DateTime.TryParse(rdt, out d) == false)
                 t.RDT = DataType.CurrentDataTimess;
             else
                 t.RDT = rdt;

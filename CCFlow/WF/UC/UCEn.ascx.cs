@@ -810,7 +810,7 @@ namespace CCFlow.WF.UC
                         this.AddTR();
                         this.Add("<TD height='" + fwc.FWC_Hstr + "'  colspan=4 >");
 
-                        src = appPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
+                        src = appPath + "WF/WorkOpt/WorkCheck.htm?s=2";
                         string fwcOnload = "";
                         paras = this.RequestParas;
                         if (paras.Contains("FID=") == false)
@@ -4033,7 +4033,7 @@ namespace CCFlow.WF.UC
                 this.Add("<DIV id='DIVWC" + fwc.No + "' style='position:absolute; left:" + x + "px; top:" + fwc.FWC_Y + "px; width:" + fwc.FWC_W + "px; height:" + fwc.FWC_H + "px;text-align: left;' >");
                 this.Add("<span>");
 
-                string src = appPath + "WF/WorkOpt/WorkCheck.aspx?s=2";
+                string src = appPath + "WF/WorkOpt/WorkCheck.htm?s=2";
                 string fwcOnload = "";
                 string paras = this.RequestParas;
                 if (paras.Contains("FID=") == false)

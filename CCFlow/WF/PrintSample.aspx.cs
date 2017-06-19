@@ -927,7 +927,7 @@ namespace CCFlow.WF
                         Height = map.FrmH + "";
 
                         //this.UCEn1.Add("<div id=divCCForm style='width:" + map.FrmW + "px;height:" + map.FrmH + "px' >");
-                        this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + Height + "px' >");
+                        this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + Height + "px;margin-left:auto;margin-right:auto;' >");
                         this.UCEn1.BindCCForm(wk, nd.NodeFrmID, true, 0, false); //, false, false, null);
                         if (wk.WorkEndInfo.Length > 2)
                             this.Pub3.Add(wk.WorkEndInfo);

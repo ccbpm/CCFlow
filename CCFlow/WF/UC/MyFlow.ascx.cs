@@ -561,7 +561,7 @@ namespace CCFlow.WF.UC
             if (btnLab.WorkCheckEnable && isAskFor == false)
             {
                 /*审核*/
-                string urlr1 = appPath + "WF/WorkOpt/WorkCheck.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr1 = appPath + "WF/WorkOpt/WorkCheck.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar.Add("<input type=button  value='" + btnLab.WorkCheckLab + "' enable=true onclick=\"WinOpen('" + urlr1 + "','dsdd'); \" />");
             }
 

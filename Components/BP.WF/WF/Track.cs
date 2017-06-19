@@ -508,7 +508,7 @@ namespace BP.WF
                 map.AddTBString(TrackAttr.ActionTypeText, null, "类型(名称)", true, false, 0, 30, 100);
                 map.AddTBInt(TrackAttr.FID, 0, "流程ID", true, false);
                 map.AddTBInt(TrackAttr.WorkID, 0, "工作ID", true, false);
-              //  map.AddTBInt(TrackAttr.CWorkID, 0, "CWorkID", true, false);
+                //  map.AddTBInt(TrackAttr.CWorkID, 0, "CWorkID", true, false);
 
                 map.AddTBInt(TrackAttr.NDFrom, 0, "从节点", true, false);
                 map.AddTBString(TrackAttr.NDFromT, null, "从节点(名称)", true, false, 0, 300, 100);
@@ -528,7 +528,7 @@ namespace BP.WF
                 map.AddTBStringDoc(TrackAttr.NodeData, null, "节点数据(日志信息)", true, false);
                 map.AddTBString(TrackAttr.Tag, null, "参数", true, false, 0, 300, 3000);
                 map.AddTBString(TrackAttr.Exer, null, "执行人", true, false, 0, 200, 100);
-             //   map.AddTBString(TrackAttr.InnerKey, null, "内部的Key,用于防止插入重复", true, false, 0, 200, 100);
+                //   map.AddTBString(TrackAttr.InnerKey, null, "内部的Key,用于防止插入重复", true, false, 0, 200, 100);
                 #endregion 字段
 
                 this._enMap = map;
@@ -581,14 +581,14 @@ namespace BP.WF
             {
                 tk.CheckPhysicsTable();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                BP.DA.Log.DebugWriteError(ex.Message+" @可以容忍的异常....");
+                BP.DA.Log.DebugWriteError(ex.Message + " @可以容忍的异常....");
             }
 
             // 删除主键.
             DBAccess.DropTablePK("WF_Track");
- 
+
             string sqlRename = "";
             switch (SystemConfig.AppCenterDBType)
             {
@@ -688,7 +688,9 @@ namespace BP.WF
                 this.SetValByKey(TrackAttr.MyPK, mypk);
             }
 
-            this.RDT = DataType.CurrentDataTimess;
+            DateTime d;
+            if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
+                this.RDT = DataType.CurrentDataTimess;
 
             #region 执行保存
             try
@@ -755,7 +757,7 @@ namespace BP.WF
         {
             if (BP.Web.WebUser.No == "Guest")
             {
-                this.Exer = BP.Web.GuestUser.No +","+ BP.Web.GuestUser.Name;
+                this.Exer = BP.Web.GuestUser.No + "," + BP.Web.GuestUser.Name;
             }
             else
             {
@@ -765,12 +767,14 @@ namespace BP.WF
                     this.Exer = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
             }
 
-            this.RDT = BP.DA.DataType.CurrentDataTimess;
+            DateTime d;
+            if (string.IsNullOrWhiteSpace(RDT) || DateTime.TryParse(this.RDT, out d) == false)
+                this.RDT = BP.DA.DataType.CurrentDataTimess;
 
             this.DoInsert(0);
             return false;
         }
-         
+
         #endregion 属性
     }
 

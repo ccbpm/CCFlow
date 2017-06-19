@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -26,6 +27,93 @@ namespace BP.WF.HttpHandler
         public WF_WorkOpt_OneWork(HttpContext mycontext)
         {
             this.context = mycontext;
+        }
+
+        /// <summary>
+        /// 时间轴
+        /// </summary>
+        /// <returns></returns>
+        public string TimeBase_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //获取track.
+            DataTable dt = BP.WF.Dev2Interface.DB_GenerTrackTable(this.FK_Flow, this.WorkID, this.FID);
+            ds.Tables.Add(dt);
+
+            #region  父子流程数据存储到这里.
+
+            Hashtable ht = new Hashtable();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ActionType at = (ActionType)int.Parse(dr[TrackAttr.ActionType].ToString());
+
+                string tag = dr[TrackAttr.Tag].ToString(); //标识.
+                string mypk = dr[TrackAttr.MyPK].ToString(); //主键.
+
+                string msg = "";
+                if (at == ActionType.CallChildenFlow)
+                {
+                    //被调用父流程吊起。
+                    if (string.IsNullOrEmpty(tag) == false)
+                    {
+                        AtPara ap = new AtPara(tag);
+                        GenerWorkFlow mygwf = new GenerWorkFlow();
+                        mygwf.WorkID = ap.GetValInt64ByKey("PWorkID");
+                        if (mygwf.RetrieveFromDBSources() == 1)
+                            msg = "<p>操作员:{" + dr[TrackAttr.EmpFromT].ToString() + "}在当前节点上，被父流程{" + mygwf.FlowName + "},<a target=b" + ap.GetValStrByKey("PWorkID") + " href='Track.aspx?WorkID=" + ap.GetValStrByKey("PWorkID") + "&FK_Flow=" + ap.GetValStrByKey("PFlowNo") + "' >" + msg + "</a></p>";
+                        else
+                            msg = "<p>操作员:{" + dr[TrackAttr.EmpFromT].ToString() + "}在当前节点上，被父流程调用{" + mygwf.FlowName + "}，但是该流程被删除了.</p>" + tag;
+
+                        msg = "<a target=b" + ap.GetValStrByKey("PWorkID") + " href='Track.aspx?WorkID=" + ap.GetValStrByKey("PWorkID") + "&FK_Flow=" + ap.GetValStrByKey("PFlowNo") + "' >" + msg + "</a>";
+                    }
+
+                    //放入到ht里面.
+                    ht.Add(mypk, msg);
+                }
+
+                if (at == ActionType.StartChildenFlow)
+                {
+                    if (string.IsNullOrEmpty(tag) == false)
+                    {
+                        if (tag.Contains("Sub"))
+                            tag = tag.Replace("Sub", "C");
+
+                        AtPara ap = new AtPara(tag);
+                        GenerWorkFlow mygwf = new GenerWorkFlow();
+                        mygwf.WorkID = ap.GetValInt64ByKey("CWorkID");
+                        if (mygwf.RetrieveFromDBSources() == 1)
+                        {
+                            msg = "<p>操作员:{" + dr[TrackAttr.EmpFromT].ToString() + "}在当前节点上调用了子流程{" + mygwf.FlowName + "}, <a target=b" + ap.GetValStrByKey("CWorkID") + " href='Track.aspx?WorkID=" + ap.GetValStrByKey("CWorkID") + "&FK_Flow=" + ap.GetValStrByKey("CFlowNo") + "' >" + msg + "</a></p>";
+                            msg += "<p>当前子流程状态：{" + mygwf.WFStateText + "}，运转到:{" + mygwf.NodeName + "}，最后处理人{" + mygwf.TodoEmps + "}，最后处理时间{" + mygwf.RDT + "}。</p>";
+                        }
+                        else
+                            msg = "<p>操作员:{" + dr[TrackAttr.EmpFromT].ToString() + "}在当前节点上调用了子流程{" + mygwf.FlowName + "}，但是该流程被删除了.</p>" + tag;
+
+                    }
+
+                    //放入到ht里面.
+                    ht.Add(mypk, msg);
+                }
+            }
+            #endregion
+
+            //获取 WF_GenerWorkFlow
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = this.WorkID;
+            gwf.RetrieveFromDBSources();
+            ds.Tables.Add( gwf.ToDataTableField("WF_GenerWorkFlow") );
+
+            if (gwf.WFState != WFState.Complete)
+            {
+                GenerWorkerLists gwls = new GenerWorkerLists();
+                gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID);
+
+                ds.Tables.Add(gwls.ToDataTableField("WF_GenerWorkerList"));
+            }
+
+            //返回结果.
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
 
         #region 执行父类的重写方法.

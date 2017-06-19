@@ -649,7 +649,7 @@ namespace BP.WF
             }
 
             string sql = "";
-            sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + " ORDER BY RDT asc ";
+            sql = "SELECT MyPK,ActionType,ActionTypeText,FID,WorkID,NDFrom,NDFromT,NDTo,NDToT,EmpFrom,EmpFromT,EmpTo,EmpToT,RDT,WorkTimeSpan,Msg,NodeData,Exer,Tag FROM ND" + int.Parse(fk_flow) + "Track " + sqlOfWhere1 + " ORDER BY RDT ASC ";
             ps.SQL = sql;
             DataTable dt = null;
 
@@ -686,7 +686,6 @@ namespace BP.WF
                 dt.Columns["EXER"].ColumnName = "Exer";
                 dt.Columns["TAG"].ColumnName = "Tag";
             }
-
 
             //把track加入里面去.
             dt.TableName = "Track";

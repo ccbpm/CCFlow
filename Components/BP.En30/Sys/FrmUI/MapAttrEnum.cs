@@ -104,7 +104,8 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSQL(MapAttrAttr.DefVal, "0", "默认值（选中）",
                     "SELECT  IntKey as No, Lab as Name FROM Sys_Enum where EnumKey='@UIBindKey'", true);
 
-                map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, true, 0, 4000, 20);
+              //  map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 3000, 20);
+
                 map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "控件类型", true, true, "EnumUIContralType",
                  "@1=下拉框@3=单选按钮");
 

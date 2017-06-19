@@ -349,6 +349,7 @@ namespace BP.WF.HttpHandler
                 string[] tableCols = new string[11];
                 ds.Tables[0].TableName = "Sys_MapAttr";
                 tableCols[0] = mapAttrCols;
+
                 ds.Tables[1].TableName = "Sys_FrmBtn";
                 tableCols[1] = frmBtnCols;
                 ds.Tables[2].TableName = "Sys_FrmRB";

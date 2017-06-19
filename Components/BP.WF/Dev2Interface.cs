@@ -1217,8 +1217,8 @@ namespace BP.WF
                 dt.Columns["TSPAN"].ColumnName = "TSpan";
                 dt.Columns["TODOSTA"].ColumnName = "TodoSta";
                 dt.Columns["SYSTYPE"].ColumnName = "SysType";
-                dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
-                dt.Columns["CWORKID"].ColumnName = "CWorkID";
+               // dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
+               // dt.Columns["CWORKID"].ColumnName = "CWorkID";
             }
             return dt;
         }

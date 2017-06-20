@@ -3412,9 +3412,11 @@ namespace BP.WF
             }
             else
             {
-                ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET Msg=" + dbStr + "Msg WHERE  Tag=" + dbStr + "Tag";
+                ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET Msg=" + dbStr + "Msg,RDT=" + dbStr +
+                         "RDT WHERE  Tag=" + dbStr + "Tag";
                 ps.Add(TrackAttr.Msg, msg);
                 ps.Add(TrackAttr.Tag, tag);
+                ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess);
                 if (DBAccess.RunSQL(ps) == 0)
                 {
                     //如果没有更新到，就写入.

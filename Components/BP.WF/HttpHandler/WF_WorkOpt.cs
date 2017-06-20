@@ -99,52 +99,51 @@ namespace BP.WF.HttpHandler
                 int lastNodeId = 0;
                 foreach (BP.WF.Track tk in tks)
                 {
+                    if (lastNodeId == 0)
+                        lastNodeId = tk.NDFrom;
+
+                    if (lastNodeId != tk.NDFrom)
+                    {
+                        idx++;
+                        lastNodeId = tk.NDFrom;
+                    }
+
+                    tk.Row.Add("T_NodeIndex", idx);
+
+                    //获取所有设有“协作模式下操作员显示顺序”设置为“按照接受人员列表先后顺序(官职大小)”并定义审核人顺序序列
+                    if (orderEmps.ContainsKey(tk.NDFrom) == false)
+                        orderEmps.Add(tk.NDFrom, new Dictionary<string, int>());
+
+                    nd = nds.GetEntityByKey(tk.NDFrom) as Node;
+                    fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
+
+                    if (fwc.FWCSta == FrmWorkCheckSta.Enable &&
+                        fwc.FWCOrderModel == FWCOrderModel.SqlAccepter &&
+                        nd.HisDeliveryWay == DeliveryWay.BySQL)
+                    {
+                        if (orderEmps[tk.NDFrom].ContainsKey(tk.EmpFrom) == false)
+                        {
+                            dt = GetWorkerListBySQL(nd.DeliveryParas, nd.FK_Flow, tk.NDFrom, this.WorkID);
+                            empIdx = 0;
+
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                orderEmps[tk.NDFrom].Add(dr["No"] as string, empIdx++);
+                            }
+                        }
+
+                        tk.Row["T_CheckIndex"] = orderEmps[tk.NDFrom][tk.EmpFrom];
+                        noneEmpIdx++;
+                    }
+                    else
+                    {
+                        tk.Row["T_CheckIndex"] = noneEmpIdx++;
+                    }
+
                     switch (tk.HisActionType)
                     {
                         case ActionType.WorkCheck:
                         case ActionType.StartChildenFlow:
-
-                            if (lastNodeId == 0)
-                                lastNodeId = tk.NDFrom;
-
-                            if (lastNodeId != tk.NDFrom)
-                            {
-                                idx++;
-                                lastNodeId = tk.NDFrom;
-                            }
-
-                            tk.Row.Add("T_NodeIndex", idx);
-
-                            //获取所有设有“协作模式下操作员显示顺序”设置为“按照接受人员列表先后顺序(官职大小)”并定义审核人顺序序列
-                            if (orderEmps.ContainsKey(tk.NDFrom) == false)
-                                orderEmps.Add(tk.NDFrom, new Dictionary<string, int>());
-
-                            nd = nds.GetEntityByKey(tk.NDFrom) as Node;
-                            fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
-
-                            if (fwc.FWCSta == FrmWorkCheckSta.Enable &&
-                                fwc.FWCOrderModel == FWCOrderModel.SqlAccepter &&
-                                nd.HisDeliveryWay == DeliveryWay.BySQL)
-                            {
-                                if (orderEmps[tk.NDFrom].ContainsKey(tk.EmpFrom) == false)
-                                {
-                                    dt = GetWorkerListBySQL(nd.DeliveryParas, nd.FK_Flow, tk.NDFrom, this.WorkID);
-                                    empIdx = 0;
-
-                                    foreach (DataRow dr in dt.Rows)
-                                    {
-                                        orderEmps[tk.NDFrom].Add(dr["No"] as string, empIdx++);
-                                    }
-                                }
-
-                                tk.Row["T_CheckIndex"] = orderEmps[tk.NDFrom][tk.EmpFrom];
-                                noneEmpIdx++;
-                            }
-                            else
-                            {
-                                tk.Row["T_CheckIndex"] = noneEmpIdx++;
-                            }
-
                             if (nodes.Contains(tk.NDFrom + ",") == false)
                                 nodes += tk.NDFrom + ",";
                             break;
@@ -326,13 +325,40 @@ namespace BP.WF.HttpHandler
             //审核意见填写
             if (isExitTb_doc && wcDesc.HisFrmWorkCheckSta == FrmWorkCheckSta.Enable && isCanDo && dotype != "View")
             {
+                DataRow[] rows = null;
                 nd = nds.GetEntityByKey(this.FK_Node) as Node;
                 if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter && nd.HisDeliveryWay == DeliveryWay.BySQL)
                 {
-                    row = tkDt.Select("NodeID=" + this.FK_Node + " AND Msg='' AND EmpFrom='" + WebUser.No + "'")[0];
-                    row["IsDoc"] = true;
-                    row["RDT"] = "";
-                    row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+                    rows = tkDt.Select("NodeID=" + this.FK_Node + " AND Msg='' AND EmpFrom='" + WebUser.No + "'");
+
+                    if (rows.Length == 0)
+                        rows = tkDt.Select("NodeID=" + this.FK_Node + " AND EmpFrom='" + WebUser.No + "'", "RDT DESC");
+
+                    if (rows.Length > 0)
+                    {
+                        row = rows[0];
+                        row["IsDoc"] = true;
+                        row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+
+                        if (row["Msg"] == DBNull.Value || string.IsNullOrWhiteSpace(row["Msg"] as string))
+                            row["RDT"] = "";
+                    }
+                    else
+                    {
+                        row = tkDt.NewRow();
+                        row["NodeID"] = this.FK_Node;
+                        row["NodeName"] = nd.FWCNodeName;
+                        row["IsDoc"] = true;
+                        row["ParentNode"] = 0;
+                        row["RDT"] = "";
+                        row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
+                        row["EmpFrom"] = WebUser.No;
+                        row["EmpFromT"] = WebUser.Name;
+                        row["T_NodeIndex"] = idx++;
+                        row["T_CheckIndex"] = noneEmpIdx++;
+
+                        tkDt.Rows.Add(row);
+                    }
                 }
                 else
                 {
@@ -587,7 +613,7 @@ namespace BP.WF.HttpHandler
                     {
                         sql = "DELETE ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
                               " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + this.FK_Node +
-                              " AND NDTo = " + this.FK_Node + " AND EmpFrom = '" + WebUser.No + "'";
+                              " AND NDTo = " + this.FK_Node + " AND EmpFrom = '" + WebUser.No + "' AND (Msg='' OR Msg IS NULL)";
                         DBAccess.RunSQL(sql);
                     }
 

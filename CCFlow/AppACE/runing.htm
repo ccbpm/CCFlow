@@ -106,7 +106,7 @@
             if (window.confirm('您确定要撤销本次发送吗？') == false)
                 return;
             var url = "";
-            if (plant = "CCFlow") {
+            if (plant == "CCFlow") {
                 url = '../WF/Do.aspx?DoType=UnSend&WorkID=' + workid + '&FK_Flow=' + fk_flow;
             } else {
                 url = '../WF/Do.jsp?DoType=UnSend&WorkID=' + workid + '&FK_Flow=' + fk_flow;
@@ -116,7 +116,7 @@
         }
         function Press(workid, fk_flow) {
             var url = "";
-            if (plant = "CCFlow") {
+            if (plant == "CCFlow") {
                 url = '../WF/WorkOpt/Press.htm?WorkID=' + workid + '&FK_Flow=' + fk_flow;
             } else {
                 url = '../WF/WorkOpt/Press.jsp?WorkID=' + workid + '&FK_Flow=' + fk_flow;

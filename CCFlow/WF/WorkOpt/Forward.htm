@@ -61,7 +61,10 @@
        + '</div>';
 
         $('body').append($(selectEmpModalHtml));
-        $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random());
+        var ccs_fk_dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+        if (plant == "JFlow")
+            ccs_fk_dept = $.cookie('FK_Dept');
+        $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + ccs_fk_dept + "&s=" + Math.random());
 
         $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
         $("section").show();

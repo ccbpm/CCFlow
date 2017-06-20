@@ -793,8 +793,22 @@ function initGroup(workNodeData, groupFiled) {
             break;
         case "Dtl":
             //WF/CCForm/Dtl.aspx?EnsName=ND501Dtl1&RefPKVal=0&PageIdx=1
-            var src = "/WF/CCForm/Dtl.aspx?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
-            src += "&r=q" + paras;
+
+            var href = window.location.href;
+            var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+            urlParam = '&' + urlParam;
+            urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
+            var src = '';
+            if (frmDtl.DtlShowModel == "0") {
+                if (pageData.IsReadOnly) {
+
+                    src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + urlParam + "&Version=" + load.Version;
+                } else {
+                    src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + urlParam + "&Version=" + load.Version;
+                }
+            }
+            //var src = "/WF/CCForm/Dtl.aspx?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
+            //src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "Ath": //增加附件.
@@ -1491,13 +1505,15 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                     mdCol = 4;
                                     smCol = 12;
                                 }
-
+                                //把TEXTAREA都写成10个col-md-10
+                                mdCol = 10;
                                 var uiHeight = mapAttr.UIHeight / 23 * 30;
                                 islabelIsInEle = true;
-                                eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">'
+                                eleHtml += '<div style="text-align:right;padding:0px;margin:0px; clear:both;" class="col-lg-' + 2 + ' col-md-' + 2 + ' col-sm-' + 2 + '">'
                                     + "<label>" + mapAttr.Name + "</label>"
                                     +
-                                    (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
+                                    (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")+"</div>";
+                                eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">'
                                     +
                                     "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';
@@ -2095,11 +2111,15 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
 }
 //加载表单数据.
 function GenerWorkNode() {
+    var href = window.location.href;
+    var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+    urlParam = '&' + urlParam;
+    urlParam = urlParam.replace('DoType=', 'DoTypeDel=xx');
     $.ajax({
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?DoType=GenerWorkNode&DoType1=" + pageData.DoType1 + "&m=" + Math.random(),
+        url: "MyFlow.ashx?DoType=GenerWorkNode" +  "&m=" + Math.random()+urlParam,
         dataType: 'html',
         success: function (data) {
             jsonStr = data;

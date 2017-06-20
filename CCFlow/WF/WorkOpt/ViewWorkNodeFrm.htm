@@ -774,34 +774,22 @@
                                         "/>" +
                                         '</div>';
                                 } else { //大于23就是多行
-                                    if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 2) {
-                                        mdCol = 4;
-                                        smCol = 12;
-                                    }
+                                if (mapAttr.ColSpan == 1 || mapAttr.ColSpan == 2) {
+                                    mdCol = 4;
+                                    smCol = 12;
+                                }
+                                    //把TEXTAREA都写成10个col-md-10
+                                    mdCol = 10;
+                                    var uiHeight = mapAttr.UIHeight / 23 * 30;
                                     islabelIsInEle = true;
-                                    eleHtml += '<div class="col-lg-' +
-                                        mdCol +
-                                        ' col-md-' +
-                                        mdCol +
-                                        ' col-sm-' +
-                                        smCol +
-                                        '">' +
-                                        "<label>" +
-                                        mapAttr.Name +
-                                        "</label>" +
-                                        (mapAttr.UIIsInput == 1
-                                            ? '<span style="color:red" class="mustInput" data-keyofen="' +
-                                            mapAttr.KeyOfEn +
-                                            '">*</span>'
-                                            : "") +
-                                        "<textarea style='height:" +
-                                        mapAttr.UIHeight +
-                                        "px;' name='TB_" +
-                                        mapAttr.KeyOfEn +
-                                        "' type='text' " +
-                                        (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') +
-                                        "/>" +
-                                        '</div>';
+                                    eleHtml += '<div style="text-align:right;padding:0px;margin:0px; clear:both;" class="col-lg-' + 2 + ' col-md-' + 2 + ' col-sm-' + 2 + '">'
+                                        + "<label>" + mapAttr.Name + "</label>"
+                                        +
+                                        (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")+"</div>";
+                                    eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">'
+                                        +
+                                        "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                        + '</div>';
 
                                 }
                             }
@@ -971,13 +959,13 @@
                             enableAttr = "disabled='disabled'";
                         }
                         eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' +
-                            "<input  type='text'" +
+                            "<input style='text-align:right;'  type='text'" +
                             enableAttr +
                             " name='TB_" +
                             mapAttr.KeyOfEn +
                             "'/>" +
                             "</div>";
-                    }
+                    } 
                     //AppMoney  AppRate
                     if (mapAttr.MyDataType == 8) {
                         var enableAttr = '';
@@ -987,7 +975,7 @@
                             enableAttr = "disabled='disabled'";
                         }
                         eleHtml += '<div class="col-lg-2 col-md-2 col-sm-4 col-xs-8">' +
-                            "<input  type='text'" +
+                            "<input style='text-align:right;'  type='text'" +
                             enableAttr +
                             " name='TB_" +
                             mapAttr.KeyOfEn +

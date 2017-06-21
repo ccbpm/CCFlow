@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
+using System.Web.SessionState;
 
 namespace BP.WF.HttpHandler
 {
-    abstract public class HttpHandlerBase : IHttpHandler
+    abstract public class HttpHandlerBase : IHttpHandler, IRequiresSessionState
     {
         /// <summary>
         /// 公共方法获取值

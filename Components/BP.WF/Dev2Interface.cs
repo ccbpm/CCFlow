@@ -3882,7 +3882,7 @@ namespace BP.WF
             
             Flow fl = new Flow(flowNo);
             ps = new Paras();
-            ps.SQL = "DELETE " + fl.PTable + " WHERE OID=" + dbstr + "OID";
+            ps.SQL = "DELETE FROM " + fl.PTable + " WHERE OID=" + dbstr + "OID";
             ps.Add("OID", workID);
             BP.DA.DBAccess.RunSQL(ps);
 
@@ -3890,7 +3890,7 @@ namespace BP.WF
             Node nd = fl.HisStartNode;
             Work wk = nd.HisWork;
             ps = new Paras();
-            ps.SQL = "DELETE " + wk.EnMap.PhysicsTable + " WHERE OID=" + dbstr + "OID";
+            ps.SQL = "DELETE FROM " + wk.EnMap.PhysicsTable + " WHERE OID=" + dbstr + "OID";
             ps.Add("OID", workID);
             BP.DA.DBAccess.RunSQL(ps);
 

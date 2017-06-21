@@ -600,8 +600,8 @@ function Conver_CCForm_V1ToV2() {
         var flow_Data = $.parseJSON(jsonData);
 
         //循环MapAttr
-        for (var mapAtrrIndex in flow_Data.MapAttr) {
-            var mapAttr = flow_Data.MapAttr[mapAtrrIndex];
+        for (var idx in flow_Data.Sys_MapAttr) {
+            var mapAttr = flow_Data.Sys_MapAttr[idx];
             var createdFigure = figure_MapAttr_Template(mapAttr);
             if (createdFigure != undefined) {
                 //move it into position
@@ -646,7 +646,7 @@ function Conver_CCForm_V1ToV2() {
 
         //循环FrmBtn
         for (var i in flow_Data.Sys_FrmBtn) {
-            
+
             var frmBtn = flow_Data.Sys_FrmBtn[i];
 
             var createdFigure = figure_Template_Btn(frmBtn);

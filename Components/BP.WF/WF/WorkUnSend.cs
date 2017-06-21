@@ -598,7 +598,7 @@ namespace BP.WF
                 if (BP.Web.WebUser.IsWap)
                 {
                     if (wnOfCancelTo.HisNode.HisFormType != NodeFormType.SDKForm)
-                        return "@撤消发送执行成功，您可以点这里<a href='" + VirPath + "WF/Wap/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A> , <a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=DeleteFlow&WorkID=" + wn.HisWork.OID + "&FK_Flow=" + this.FlowNo + "' /><img src='" + VirPath + "WF/Img/Btn/Delete.gif' border=0/>此流程已经完成(删除它)</a>。" + msg;
+                        return "@撤消发送执行成功." + msg;
                     else
                         return "@撤销成功." + msg;
                 }
@@ -624,7 +624,7 @@ namespace BP.WF
                 {
                     case NodeFormType.FixForm:
                     case NodeFormType.FreeForm:
-                        return "@撤消执行成功，您可以点这里<a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + this.FlowNo + "&WorkID=" + this.WorkID + "&FK_Node=" + gwf.FK_Node + "'><img src='" + VirPath + "WF/Img/Btn/Do.gif' border=0/>执行工作</A>  . " + msg;
+                        return "@撤消执行成功. " + msg;
                         break;
                     default:
                         return "撤销成功:" + msg;

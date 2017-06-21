@@ -290,9 +290,9 @@ namespace BP.WF
         {
             if (string.IsNullOrEmpty(billNo))
                 return "";
+
             if (billNo.Contains("@"))
                 billNo = BP.WF.Glo.DealExp(billNo, en, null);
-
 
             /*如果，Bill 有规则 */
             billNo = billNo.Replace("{YYYY}", DateTime.Now.ToString("yyyy"));

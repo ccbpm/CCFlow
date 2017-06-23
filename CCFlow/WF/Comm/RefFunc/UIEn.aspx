@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="MasterPage.master" AutoEventWireup="true"
+﻿<%@ Page Title="" Language="C#" MasterPageFile="MasterPage.master" ValidateRequest="false" AutoEventWireup="true"
     Inherits="CCFlow.WF.Comm.RefFunc.UIEn" CodeBehind="UIEn.aspx.cs" %>
 
 <%@ Register Src="../UC/UIEn.ascx" TagName="UIEn" TagPrefix="uc2" %>

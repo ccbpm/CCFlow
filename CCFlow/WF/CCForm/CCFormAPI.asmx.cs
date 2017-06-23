@@ -97,6 +97,16 @@ namespace CCFlow.WF.CCForm
             if (BP.Web.WebUser.NoOfRel != userNo)
                 BP.WF.Dev2Interface.Port_Login(userNo);
 
+            // 登录名丢失.
+            try
+            {
+                string strName = WebUser.Name;
+            }
+            catch
+            {
+                BP.WF.Dev2Interface.Port_Login(userNo);
+            }
+
             MapData md = null;
 
             #region  保存excel文件流

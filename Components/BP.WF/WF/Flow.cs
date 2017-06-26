@@ -628,6 +628,9 @@ namespace BP.WF
             {
                 foreach (string k in BP.Sys.Glo.Request.QueryString.AllKeys)
                 {
+                    if (k == "OID" || k == "WorkID")
+                        continue;
+                   
                     if (paras.ContainsKey(k))
                         //  continue;
                         paras[k] = BP.Sys.Glo.Request.QueryString[k];
@@ -723,7 +726,9 @@ namespace BP.WF
 
                     //设置参数.
                     foreach (string k in paras.Keys)
+                    {
                         rpt.SetValByKey(k, paras[k]);
+                    }
 
                     if (this.PTable == wk.EnMap.PhysicsTable)
                     {
@@ -811,13 +816,16 @@ namespace BP.WF
                 int i = 0;
                 foreach (string k in paras.Keys)
                 {
+
+                    if (k == "OID")
+                        continue;
+
                     i++;
                     wk.SetValByKey(k, paras[k].ToString());
                 }
 
                 if (i >= 3)
                 {
-                    wk.OID = newOID;
                     wk.DirectUpdate();
                 }
             }
@@ -967,6 +975,9 @@ namespace BP.WF
                 #region 获取web变量.
                 foreach (string k in paras.Keys)
                 {
+                    if (k == "OID")
+                        continue;
+
                     wk.SetValByKey(k, paras[k]);
                     rpt.SetValByKey(k, paras[k]);
                 }
@@ -1146,7 +1157,6 @@ namespace BP.WF
                 #endregion 复制独立表单数据.
 
             }
-
 
 
             #endregion 处理流程之间的数据传递1。

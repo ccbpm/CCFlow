@@ -1570,14 +1570,6 @@ namespace BP.En
 		{
 			this.AddDDLFixEnum(key, key, defaultVal, false, desc, showtype, isReadonly);
 		}
-		private void AddBoolean_del(string key, int defaultVal, string desc, bool isReadonly)
-		{
-			this.AddDDLFixEnum(key, key, defaultVal, false, desc, DDLShowType.Boolean, isReadonly);
-		}
-		private void AddBoolean_del(string key, string field, int defaultVal, string desc, bool isReadonly)
-		{
-			this.AddDDLFixEnum(key, field, defaultVal, false, desc, DDLShowType.Boolean, isReadonly);
-		}
 		#endregion
 
 		#region  与boolen 有关系的操作.
@@ -1613,7 +1605,9 @@ namespace BP.En
 			attr.MyDataType = DataType.AppBoolean;
 			attr.Desc = desc;
 			attr.UIContralType = UIContralType.CheckBok;
-			attr.UIIsReadonly = !isUIEnable;
+			
+            attr.UIIsReadonly = isUIEnable;
+
 			attr.UIVisible = isUIVisable;
 			attr.UIIsLine = isLine;
 			this.Attrs.Add(attr);

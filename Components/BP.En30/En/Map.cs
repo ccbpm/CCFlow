@@ -1687,7 +1687,7 @@ namespace BP.En
 			attr.UIBindKey = sysEnumKey;
 			attr.UITag = cfgVal;
 			attr.UIVisible = isUIVisable;
-			attr.UIIsReadonly = !isUIEnable;
+			attr.UIIsReadonly = isUIEnable;
 			attr.UIIsLine = isLine;
 			this.Attrs.Add(attr);
 		}

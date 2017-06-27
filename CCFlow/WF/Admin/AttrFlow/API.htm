@@ -32,11 +32,11 @@
             $("#TB_FQURL").html("发起URL:<font color='Blue'><b> /WF/MyFlow.htm?FK_Flow=" + flowNo + "</b></font>，您可以把该URL 放入到自己的系统菜单里，或者列表里。");
             $("#TB_GZDB_DQ").html("当前流程工作待办:<font color='Blue'><b>/WF/EmpWorks.htm?FK_Flow=" + flowNo + "</b></font>");
             $("#TB_ZTGZ_DQ").html("当前流程工作在途: <font color='Blue'><b>/WF/Runing.htm?FK_Flow= " + flowNo + "</b></font>");
-            $("#TB_CX").html("查询:<font color='Blue'><b>/WF/Rpt/Search.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
-            $("#TB_GJCX").html("高级查询:<font color='Blue'><b>/WF/Rpt/SearchAdv.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
-            $("#TB_FZFX").html("分组分析:<font color='Blue'><b>/WF/Rpt/Group.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
-            $("#TB_JXBB").html("交叉报表:<font color='Blue'><b>/WF/Rpt/D3.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
-            $("#TB_DBFX").html("对比分析:<font color='Blue'><b>/WF/Rpt/Contrast.htm?FK_Flow=" + flowNo + "&RptNo=ND" + flowID + "MyRpt</b></font>");
+            $("#TB_CX").html("查询:<font color='Blue'><b>/WF/Rpt/Search.htm?FK_Flow=" + flowNo + "&RptNo=ND" + Number(no) + "MyRpt</b></font>");
+            $("#TB_GJCX").html("高级查询:<font color='Blue'><b>/WF/Rpt/SearchAdv.htm?FK_Flow=" + flowNo + "&RptNo=ND" + Number(no) + "MyRpt</b></font>");
+            $("#TB_FZFX").html("分组分析:<font color='Blue'><b>/WF/Rpt/Group.htm?FK_Flow=" + flowNo + "&RptNo=ND" + Number(no) + "MyRpt</b></font>");
+            $("#TB_JXBB").html("交叉报表:<font color='Blue'><b>/WF/Rpt/D3.htm?FK_Flow=" + flowNo + "&RptNo=ND" + Number(no) + "MyRpt</b></font>");
+            $("#TB_DBFX").html("对比分析:<font color='Blue'><b>/WF/Rpt/Contrast.htm?FK_Flow=" + flowNo + "&RptNo=ND" + Number(no) + "MyRpt</b></font>");
             $("#Msg").html();
 
         });

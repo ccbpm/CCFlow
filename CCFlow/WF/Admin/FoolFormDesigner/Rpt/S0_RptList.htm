@@ -50,7 +50,7 @@
         while (tmpFK_Flow.indexOf('0')==0){
         tmpFK_Flow=tmpFK_Flow.substring(1,tmpFK_Flow.length);
         }
-        flowRptNo="ND"+tmpFK_Flow+"Rpt";
+        flowRptNo="ND"+Number(no)+"Rpt";
             WinOpen("../../../Rpt/OneFlow.htm?FK_Flow="+pageData.FK_Flow+"&FK_MapData="+flowRptNo+"&RptNo="+no);
         }
         function BindRptList(data){

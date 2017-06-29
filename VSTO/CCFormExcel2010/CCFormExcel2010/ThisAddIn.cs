@@ -158,20 +158,21 @@ namespace CCFormExcel2010
 					else
 						throw new Exception("缺少参数: WorkID");
 
+					//2017-06-28：下面3个参数暂时没用到，不做验证
 					if (args.ContainsKey("FK_Flow"))
 						Glo.FK_Flow = args["FK_Flow"];
-					else
-						throw new Exception("缺少参数: FK_Flow");
+					//else
+					//	throw new Exception("缺少参数: FK_Flow");
 
 					if (args.ContainsKey("FK_Node"))
 						Glo.FK_Node = int.Parse(args["FK_Node"]);
-					else
-						throw new Exception("缺少参数: FK_Node");
+					//else
+					//	throw new Exception("缺少参数: FK_Node");
 
 					if (args.ContainsKey("PWorkID"))
 						Glo.PWorkID = int.Parse(args["PWorkID"]);
-					else
-						throw new Exception("缺少参数: PWorkID");
+					//else
+					//	throw new Exception("缺少参数: PWorkID");
 				}
 				else if (args.ContainsKey("EnName")) //若为类
 				{
@@ -555,6 +556,8 @@ namespace CCFormExcel2010
 				{
 					//判断操作对象是否是某个子表的“整行”
 					//+无须对此情况做特殊处理：若是整行删除，保存时会作为删除行；若再填入值，则会作为修改行处理。
+
+					//TODO: 若为子表跨行合并的单元格，可能需要触发被合并单元格所在行的关联变更，例如下拉联动等
 				}
 			}
 		}
@@ -1150,7 +1153,7 @@ namespace CCFormExcel2010
 			if (fieldType == FieldType.CascadeParentList || fieldType == FieldType.CascadeSonList || fieldType == FieldType.LimitedList || fieldType == FieldType.List) //下拉类型的字段（枚举、外键）
 			{
 				//尝试读取Text字段
-				var text = SelectDataTable(tableName, null, keyOfEn + "Text");
+				var text = SelectDataTable(tableName, string.Format("{0}='{1}'", keyOfEn, value), keyOfEn + "Text");
 				if (!string.IsNullOrEmpty(text))
 					displayValue = text;
 				else
@@ -1167,7 +1170,7 @@ namespace CCFormExcel2010
 			if (rangeCell != null)
 			{
 				IgnoreNextOperation();
-				rangeCell.Value2 = displayValue;
+				rangeCell.Value2 = displayValue; //TODO: 如果该单元格【是合并单元格】且【不是最小坐标的】，则此赋值方法无效，是否有必要调整？（若调整，则需要分主子表的不同情况来处理）
 			}
 			return displayValue;
 		}
@@ -1183,6 +1186,9 @@ namespace CCFormExcel2010
 		/// <returns></returns>
 		public string GetSaveValue(string tableName, string keyOfEn, Excel.Range rangeCell, FieldType fieldType = FieldType.Nothing, string listName = null)
 		{
+			if (_base.IsMerge(rangeCell))//2017-06-29：如果要取值的单元格已与其他单元格合并，则要从合并区域的第一个单元格坐标取值//不是合并时rangeCell==rangeCell.MergeArea
+				rangeCell = rangeCell.MergeArea.Cells[1, 1];
+
 			if (rangeCell == null || rangeCell.Value2 == null)
 				return null;
 

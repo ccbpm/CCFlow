@@ -97,15 +97,15 @@ namespace CCFlow.WF.CCForm
 			if (BP.Web.WebUser.NoOfRel != userNo)
 				BP.WF.Dev2Interface.Port_Login(userNo);
 
-            // 登录名丢失.
-            try
-            {
-                string strName = WebUser.Name;
-            }
-            catch
-            {
-                BP.WF.Dev2Interface.Port_Login(userNo);
-            }
+			// 登录名丢失.
+			try
+			{
+				string strName = WebUser.Name;
+			}
+			catch
+			{
+				BP.WF.Dev2Interface.Port_Login(userNo);
+			}
 
 			MapData md = null;
 
@@ -192,7 +192,7 @@ namespace CCFlow.WF.CCForm
 							#endregion 根据原始数据,与当前数据求出已经删除的oids .
 						}
 
-						if (dtl.IsUpdate && dtl.IsInsert) //从表只有可编辑且可新增时继续执行
+						if (dtl.IsUpdate) //从表【是否可更新行】
 						{
 							//获取dtls
 							GEDtls daDtls = new GEDtls(dtl.No);
@@ -252,9 +252,9 @@ namespace CCFlow.WF.CCForm
 
 								//执行保存.
 								if (daDtl.OID > 100)
-									daDtl.Update(); //插入数据.
-								else
-									daDtl.InsertAsOID(DBAccess.GenerOID("Dtl")); //插入数据.
+									daDtl.Update();
+								else if (dtl.IsInsert) //从表【是否可新增行】
+									daDtl.InsertAsOID(DBAccess.GenerOID("Dtl"));
 
 								#region 从表保存后处理事件。
 
@@ -432,7 +432,7 @@ namespace CCFlow.WF.CCForm
 		public String GetVstoExtensionVersion()
 		{
 			//return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
-			return "1.0.0.10";
+			return "1.0.0.11";
 		}
 	}
 }

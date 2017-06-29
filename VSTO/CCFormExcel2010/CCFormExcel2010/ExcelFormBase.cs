@@ -104,7 +104,8 @@ namespace CCFormExcel2010
 		}
 		/// <summary>
 		/// 是否为合并单元格：仅当range只包含一个合并单元格时返回true
-		/// （若Range中『第一个单元格为合并』且『还有其他单元格』，此时仍然会返回false）
+		/// 1.可以判断【合并后单元格】中的任意一个单元格是否为合并单元格（e.g. 合并单元格为A2:E5，传入range=C4，此时返回true）。
+		/// 2.若Range中『第一个单元格为合并』且『还有其他单元格』，此时仍然会返回false（e.g. range=[merge(A1,A2)+A3]）。
 		/// </summary>
 		/// <param name="range"></param>
 		/// <returns></returns>

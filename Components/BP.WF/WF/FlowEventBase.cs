@@ -73,11 +73,33 @@ namespace BP.WF
         /// <summary>
         /// 要跳转的节点.(开发人员可以设置该参数,改变发送到的节点转向.)
         /// </summary>
-        public int JumpToNodeID = 0;
+        private int _JumpToNodeID = 0;
+        public int JumpToNodeID
+        {
+            get
+            {
+                return _JumpToNodeID;
+            }
+            set
+            {
+                this._JumpToNodeID = value;
+            }
+        }
         /// <summary>
         /// 接受人, (开发人员可以设置该参数,改变接受人的范围.)
         /// </summary>
-        public string JumpToEmps = null;
+        private string _JumpToEmps = null;
+        public string JumpToEmps
+        {
+            get
+            {
+                return _JumpToEmps;
+            }
+            set
+            {
+                this._JumpToEmps = value;
+            }
+        }
         #endregion 在发送前的事件里可以改变参数
 
         #region 系统参数
@@ -394,6 +416,9 @@ namespace BP.WF
         {
             this.HisEn = en;
             this.HisNode = currNode;
+          //  this.WorkID = en.GetValInt64ByKey("OID");
+            this.JumpToEmps = null;
+            this.JumpToNodeID = 0;
 
 
             #region 处理参数.

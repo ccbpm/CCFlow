@@ -125,70 +125,11 @@ namespace BP.WF.HttpHandler
         public string Limit_Save()
         {
             BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
-
-            return "";
-
-            //fl.StartLimitAlert = this.TB_Alert.Text; //限制提示信息
-
-            //if (this.RB_None.Checked)
-            //{
-            //    fl.StartLimitRole = StartLimitRole.None;
-            //}
-
-            //if (this.RB_ByTime.Checked)
-            //{
-            //    if (this.DDL_ByTime.SelectedIndex == 0)//一人一天一次
-            //    {
-            //        fl.StartLimitRole = StartLimitRole.Day;
-            //        fl.StartLimitPara = this.TB_ByTimePara.Text;
-            //    }
-
-            //    if (this.DDL_ByTime.SelectedIndex == 1)//一人一周一次
-            //    {
-            //        fl.StartLimitRole = StartLimitRole.Week;
-            //        fl.StartLimitPara = this.TB_ByTimePara.Text;
-            //    }
-
-            //    if (this.DDL_ByTime.SelectedIndex == 2)//一人一月一次
-            //    {
-            //        fl.StartLimitRole = StartLimitRole.Month;
-            //        fl.StartLimitPara = this.TB_ByTimePara.Text;
-            //    }
-
-            //    if (this.DDL_ByTime.SelectedIndex == 3)//一人一季一次
-            //    {
-            //        fl.StartLimitRole = StartLimitRole.JD;
-            //        fl.StartLimitPara = this.TB_ByTimePara.Text;
-            //        fl.DirectUpdate();
-            //    }
-
-            //    if (this.DDL_ByTime.SelectedIndex == 4)//一人一年一次
-            //    {
-            //        fl.StartLimitRole = StartLimitRole.Year;
-            //        fl.StartLimitPara = this.TB_ByTimePara.Text;
-            //    }
-            //}
-
-            //if (this.RB_ColNotExit.Checked)//按照发起字段不能重复规则
-            //{
-            //    fl.StartLimitRole = StartLimitRole.ColNotExit;
-            //    fl.StartLimitPara = this.TB_ColNotExit_Fields.Text;
-            //}
-
-            //if (this.RB_SQL.Checked == true)
-            //{
-            //    //字段参数.
-            //    fl.StartLimitPara = this.TB_SQL_Para.Text;
-
-            //    //选择的模式.
-            //    if (this.DDL_SQL.SelectedIndex == 0)
-            //        fl.StartLimitRole = StartLimitRole.ResultIsZero;
-
-            //    if (this.DDL_SQL.SelectedIndex == 1)
-            //        fl.StartLimitRole = StartLimitRole.ResultIsNotZero;
-            //}
-
+            fl.StartLimitRole = (StartLimitRole)this.GetRequestValInt("StartLimitRole");
+            fl.StartLimitPara =this.GetRequestVal("StartLimitPara");
+            fl.StartLimitAlert = this.GetRequestVal("StartLimitAlert");
             fl.Update();
+            return "保存成功.";
         }
         #endregion 发起限制.
 

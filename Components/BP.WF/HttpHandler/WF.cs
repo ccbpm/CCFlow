@@ -49,6 +49,7 @@ namespace BP.WF.HttpHandler
             //流程类别.
             FlowSorts fss = new FlowSorts();
             fss.RetrieveAll();
+
             DataTable dtSort = fss.ToDataTableField("Sort");
             dtSort.TableName = "Sort";
             ds.Tables.Add(dtSort);

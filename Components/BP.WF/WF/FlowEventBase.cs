@@ -419,6 +419,7 @@ namespace BP.WF
           //  this.WorkID = en.GetValInt64ByKey("OID");
             this.JumpToEmps = null;
             this.JumpToNodeID = 0;
+            this.SysPara = null;
 
 
             #region 处理参数.

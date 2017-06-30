@@ -74,7 +74,7 @@ namespace CCForm
                 if (Glo.Platform == Platform.JFlow)
                     url = url.Replace(".aspx", ".jsp");
 
-                HtmlPage.Window.Eval("window.showModalDialog('" + url + "',window,'dialogHeight:600px;dialogWidth:500px;center:Yes;help:No;scroll:auto;resizable:1;status:No;');");
+                HtmlPage.Window.Eval("window.showModalDialog('" + url + "',window,'dialogHeight:600px;dialogWidth:700px;center:Yes;help:No;scroll:auto;resizable:1;status:No;');");
                 this.DialogResult = false;
                 return;
             }
@@ -94,13 +94,13 @@ namespace CCForm
                     switch (lgType)
                     {
                         case 0:
-                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditF.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditFieldGuide.htm?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         case 1:
-                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditEnum.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnums&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         case 2:
-                            url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditTable.aspx?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTables&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         default:
                             break;

@@ -3126,7 +3126,8 @@ namespace CCForm
                     if (ath != null)
                     {
                         //this.winSelectAttachment.BindIt(ath);
-                        string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Attachment.aspx?FK_MapData=" + Glo.FK_MapData + "&Ath=" + ath.Name + Glo.TimeKey;
+                        // /WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts
+                        string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Attachment.htm?FK_MapData=" + Glo.FK_MapData + "&Ath=" + ath.Name + Glo.TimeKey;
                         Glo.WinOpen(url, 600, 800);
                     }
                 }
@@ -3135,7 +3136,7 @@ namespace CCForm
                     BPAttachmentM athm = sender as BPAttachmentM;
                     if (athm != null)
                     {
-                        string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Attachment.aspx?FK_MapData=" + Glo.FK_MapData + "&Ath=" + athm.Name + Glo.TimeKey;
+                        string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Attachment.htm?FK_MapData=" + Glo.FK_MapData + "&Ath=" + athm.Name + Glo.TimeKey;
                         Glo.WinOpen(url, 600, 800);
                     }
                 }

@@ -91,7 +91,6 @@ namespace CCForm
             Sys_FrmImgAth = "SYS_FRMIMGATH",
             Sys_FrmRB = "SYS_FRMRB",
             Sys_FrmAttachment = "SYS_FRMATTACHMENT",
-
             Sys_MapData = "SYS_MAPDATA",
             Sys_MapAttr = "SYS_MAPATTR",
             Sys_MapDtl = "SYS_MAPDTL",

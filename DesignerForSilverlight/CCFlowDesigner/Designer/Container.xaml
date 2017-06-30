@@ -51,7 +51,7 @@
         <Canvas  
             Name="canContainerCover"  
             Canvas.ZIndex="9000" 
-            Width="10000" Height="10000" 
+            Width="10000" Height="30000" 
             Opacity="0.8" 
             Visibility="Collapsed" 
             Background="Black"  >

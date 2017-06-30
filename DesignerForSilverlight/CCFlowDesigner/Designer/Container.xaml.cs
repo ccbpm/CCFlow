@@ -852,6 +852,7 @@ namespace BP
                 FlowNodeCollections.Clear();
                 DirectionCollections.Clear();
                 LableCollections.Clear();
+
                 #region 画节点.
                 DataTable dtNode = ds.Tables[0];
                 double maxWidth = DesignerWdith;

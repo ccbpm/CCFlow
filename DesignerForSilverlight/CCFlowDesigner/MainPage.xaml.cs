@@ -1224,7 +1224,7 @@ namespace BP
                         }
                         else
                         {
-                            url3 = @"/WF/App/Classic/Login.aspx?DoType=Logout";
+                            url3 = @"/WF/AppClassic/Login.htm?DoType=Logout";
                         }
                         Glo.OpenWindow(url3, "登陆");
                         return;
@@ -1610,7 +1610,7 @@ namespace BP
                             break;
                         case "Frm_EditForm": //表单属性.
                             //string url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=BP.WF.Template.MapDataExts&PK=" + selectedNode.ID;
-                            string url = "/WF/Admin/CCFormDesigner/FrmAttr.aspx?FrmID=" + selectedNode.ID;
+                            string url = "/WF/Admin/CCFormDesigner/Home.htm?FrmID=" + selectedNode.ID + "&FK_MapData=" + selectedNode.ID;
                             Glo.OpenDialog(url, "表单属性", 600, 1000);
                             return;
                         case "Frm_NewForm": //新建表单

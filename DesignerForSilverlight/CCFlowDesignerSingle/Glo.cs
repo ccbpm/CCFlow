@@ -458,7 +458,7 @@ namespace BP
                     Glo.OpenWindow(Glo.BPMHost + url, "运行流程", 850, 990);
                     break;
                 case "LoginPage": // 登录。
-                    url = @"/WF/App/Classic/Login.aspx?DoType=Logout";
+                    url = @"/WF/AppClassic/Login.htm?DoType=Logout";
                     Glo.OpenWindow(Glo.BPMHost + url, "登录", 850, 990);
                     break;
                 case UrlFlag.WFRpt: // 流程设计。

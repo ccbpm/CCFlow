@@ -487,7 +487,7 @@ namespace BP
                         Glo.OpenWinByDoType("CH", BP.UrlFlag.FrmLib, "", "0", null);
                         return;
                     case "Btn_ToolBarLogin":
-                        string url3 = @"/WF/App/Classic/Login.aspx?DoType=Logout";
+                        string url3 = @"/WF/AppClassic/Login.htm?DoType=Logout";
                         Glo.OpenWindow(url3, "登陆");
                         return;
                     case "Btn_ToolBarFlowUI":

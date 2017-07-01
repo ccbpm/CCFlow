@@ -8,8 +8,6 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.WF.Template;
-using Newtonsoft.Json.Converters;
-
 
 namespace CCFlow.WF.Admin.AttrFlow
 {

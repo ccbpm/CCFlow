@@ -34,7 +34,11 @@
 		//页面启动函数.
 		$(function () {
 		    $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
-			InitPage();
+
+		    InitPage();
+
+		    $("#Msg").html("");
+
 		});
 
 		function InitPage() {
@@ -50,6 +54,7 @@
 		        url: myurl,
 		        dataType: 'html',
 		        success: function (data) {
+
 
 		            if (data.indexOf("err@") == 0) {
 		                alert(data);
@@ -69,108 +74,106 @@
 		                $("#DDL_ByTime").val(0);
 		            }
 
-
-		            var dat = data.main[0];
-		            //alert(typeof(_StartLimitRole.None)); //for test
-		            //debugger;
+		            var dat = data;
 		            $("#TB_Alert").val(dat.StartLimitAlert); //限制提示信息
 		            switch (dat.StartLimitRole) {
-		                case _StartLimitRole.None: //不限制
+		                case "0": //不限制 None
 		                    $("#RB_None").attr("checked", true);
 		                    //$("input[name=xzgz][value=RB_None]").attr("checked", true); 
 		                    $("#TB_ByTimePara").val(dat.StartLimitPara); //for test
 		                    break;
-		                case _StartLimitRole.Day: //天
+		                case "1": //天
 		                    $("#RB_ByTime").attr("checked", true);
 		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
 		                    $("#DDL_ByTime").val(0);
 		                    break;
-		                case _StartLimitRole.Week: //周
+		                case "2": //周
 		                    $("#RB_ByTime").attr("checked", true);
 		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
 		                    $("#DDL_ByTime").val(1);
 		                    break;
-		                case _StartLimitRole.Month: //月份
+		                case "3": //月份
 		                    $("#RB_ByTime").attr("checked", true);
 		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
 		                    $("#DDL_ByTime").val(2);
 		                    break;
-		                case _StartLimitRole.JD: 	//月份？
+		                case "4": 	//月份？
 		                    $("#RB_ByTime").attr("checked", true);
 		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
 		                    $("#DDL_ByTime").val(3);
 		                    break;
-		                case _StartLimitRole.Year: //年度
+		                case "5": //年度
 		                    $("#RB_ByTime").attr("checked", true);
 		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
 		                    $("#DDL_ByTime").val(4);
 		                    break;
-		                case _StartLimitRole.OnlyOneSubFlow: 	//为子流程时仅仅只能被调用1此
-		                    $("#RB_OnlyOneSubFlow").attr("checked", true);
-		                    break;
-		                case _StartLimitRole.ColNotExit: 		//发起的列不能重复,(多个列可以用逗号分开)
+		                case "6": 		//发起的列不能重复,(多个列可以用逗号分开)
 		                    $("#RB_ColNotExit").attr("checked", true);
 		                    $("#TB_ColNotExit_Fields").val(dat.StartLimitPara);
 		                    break;
-		                case _StartLimitRole.ResultIsZero: 	//<=0
+		                case "7": 	//<=0
 		                    $("#RB_SQL").attr("checked", true);
 		                    $("#TB_SQL_Para").val(dat.StartLimitPara);
 		                    $("#DDL_SQL").val(0);
 		                    break;
-		                case _StartLimitRole.ResultIsNotZero: //>0
+		                case "8": //>0
 		                    $("#RB_SQL").attr("checked", true);
 		                    $("#TB_SQL_Para").val(dat.StartLimitPara);
 		                    $("#DDL_SQL").val(1);
 		                    break;
+		                case "9": 	//为子流程时仅仅只能被调用1此
+		                    $("#RB_OnlyOneSubFlow").attr("checked", true);
+		                    break;
 		                default:
+		                    alert('没有判断的类型.');
 		                    break;
 		            }
 		            $("#Msg").html("");
-
 		        }
 		    });
 		}
 
-		function onclick_btnSave(parameters) {
+		function Save(parameters) {
 			//debugger;
 			//获取控件值
 			var startLimitRole = "", startLimitPara = "";
 			var xzgz = $("input[name=xzgz]:checked")[0].id; //$("input[type=radio][name=xzgz]:checked")[0].id
+			alert(xzgz);
 			switch (xzgz) {
 				case "RB_None":
-					startLimitRole = _StartLimitRole.None;
+					startLimitRole ="0";
 					break;
 				case "RB_ByTime":
 					var DDL_ByTime = parseInt($("#DDL_ByTime").val());
 					switch (DDL_ByTime) {
 						case 0:
-							startLimitRole = _StartLimitRole.Day;
+							startLimitRole = "1";
 							break;
 						case 1:
-							startLimitRole = _StartLimitRole.Week;
+							startLimitRole = "2";
 							break;
 						case 2:
-							startLimitRole = _StartLimitRole.Month;
+							startLimitRole = "3";
 							break;
 						case 3:
-							startLimitRole = _StartLimitRole.JD;
+							startLimitRole = "4";
 							break;
 						case 4:
-							startLimitRole = _StartLimitRole.Year;
+							startLimitRole = "5";
 							break;
 					}
 					startLimitPara = $("#TB_ByTimePara").val();
 					break;
 				case "RB_OnlyOneSubFlow":
-					startLimitRole = _StartLimitRole.OnlyOneSubFlow;
+					startLimitRole = "9";
 					break;
 				case "RB_ColNotExit":
-					startLimitRole = _StartLimitRole.ColNotExit;
+					startLimitRole = "6";
 					startLimitPara = $("#TB_ColNotExit_Fields").val();
 					break;
 				case "RB_SQL":
 					var DDL_SQL = $("#DDL_SQL").val();
-					startLimitRole = DDL_SQL == 0 ? _StartLimitRole.ResultIsZero : _StartLimitRole.ResultIsNotZero;
+					startLimitRole = DDL_SQL == 0 ? "7" : "8";
 					startLimitPara = $("#TB_SQL_Para").val();
 					break;
 				default:
@@ -181,7 +184,7 @@
 			$.ajax({
 			    type: 'post',
 			    async: true,
-			    url: Handler + "?DoType=Limit_Save&FK_Flow=" + FK_Flow + "&m=" + Math.random(),
+			    url: Handler + "?DoType=Limit_Save&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
 			    data: {
 			        StartLimitRole: startLimitRole,
 			        StartLimitPara: startLimitPara,
@@ -341,7 +344,7 @@
 		</tr>
 		<tr>
 			<td colspan="2" style="text-align: center;">
-				<button class="easyui-linkbutton" id="Btn_Save" onclick="onclick_btnSave()">
+				<button class="easyui-linkbutton" id="Btn_Save" onclick="Save()">
 					保存</button>
 			</td>
 		</tr>

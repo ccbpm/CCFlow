@@ -808,8 +808,16 @@
         function SetChange(val) {
             isChange = val;
         }
+        var isDelRowAlert=false;
         //从表全部数据保存 还有问题 需要调整
         function SaveAll(obj) {
+
+           if (isDelRowAlert==true)
+           {
+               isDelRowAlert=false;
+               return;
+           }
+
             if (isChange==false) {
                 return;
             }
@@ -872,7 +880,7 @@
         }
      </script>
 </head>
-<body onblur="SaveAll(this)">
+<body onblur="SaveAll(this)" >
     <form>
         <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
         <div id="ContentDtlDiv">
@@ -896,27 +904,35 @@
         </div>
     </form>
 	<script type="text/javascript">
-        function deleteRow(index) {
-            var result = parent.window.confirm('删除确认', '确定要删除吗?');
-            if (result) {
-                var rowData = $(index).parent().parent().data().data;
-                var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
-                pageData.currentRowIndex = rowCurrentIndex;
-                if (rowData.OID > 0) {
-                    rowData.DoType = "Dtl_DeleteRow";
-                    rowData.FK_MapDtl = GetQueryString("EnsName");
-                    //row.FK_MapData = "ND101";
-                    rowData.RefPKVal = GetQueryString("RefPKVal");
-                    currentRowIndex = -1;
-                    AjaxServiceGener(rowData, deleteRowAfter, this);
-                } else { //移除  新增的 尚未入库
-                    var tr = $(index).parent().parent();
-                    updateTableSn(tr);
-                    tr.remove();
-                }
-            }
+	    function deleteRow(index) {
+
+	        isDelRowAlert = true;
+	        var result = parent.window.confirm('确定要删除吗?');
+	        if (result == false)
+	            return;
+
+	        var rowData = $(index).parent().parent().data().data;
+	        var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
+	        pageData.currentRowIndex = rowCurrentIndex;
+	        if (rowData.OID > 0) {
+	            rowData.DoType = "Dtl_DeleteRow";
+	            rowData.FK_MapDtl = GetQueryString("EnsName");
+	            //row.FK_MapData = "ND101";
+	            rowData.RefPKVal = GetQueryString("RefPKVal");
+	            currentRowIndex = -1;
+
+	            $('#Msg').show();
+	            AjaxServiceGener(rowData, deleteRowAfter, this);
+	            $('#Msg').hide();
+
+	        } else { //移除  新增的 尚未入库
+	            var tr = $(index).parent().parent();
+	            updateTableSn(tr);
+	            tr.remove();
+	        }
+
 	        //parent.window.confirm('删除确认', '确定要删除吗?', function (r) {
-            //    //$.messager.confirm('删除确认', '确定要删除吗?', function (r) {
+	        //    //$.messager.confirm('删除确认', '确定要删除吗?', function (r) {
 	        //    if (r) {
 	        //        var rowData = $(index).parent().parent().data().data;
 	        //        var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;

@@ -109,13 +109,13 @@ function InitPage() {
                 {
                     //this.AddTD("<a class='easyui-linkbutton' data-options=\"iconCls:'icon-sheet'\" href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + dr[TrackAttr.WorkID].ToString() + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + dr[TrackAttr.NDFrom].ToString() + "&DoType=View&MyPK=" + dr[TrackAttr.MyPK].ToString() + "','" + dr[TrackAttr.MyPK].ToString() + "');\">表单</a>");
 
-                    var url = "../../WFRpt.htm?WorkID=" + track.WorkID + "&FK_Flow=" + fk_flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK;
+                    var url = "../../WFRpt.htm?OID=" + track.WorkID + "&WorkID=" + track.WorkID + "&FK_Flow=" + fk_flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK;
 
                     url += "&PWorkID=" + gwf.PWorkID;
                     url += "&PFlowNo=" + gwf.PFlowNo;
                     url += "&PNodeID=" + gwf.PNodeID;
                     url += "&Frms=" + gwf.Paras_Frms;
-                    doc += " - <a href=\"javascript:WinOpen('" + url + "','" + track.MyPK + "');\">打开表单</a>";
+                    doc += " - <a href=\"javascript:WinOpen('" + url + "','" + track.MyPK + "');\">表单</a>";
                 }
 
                 if (at == ActionType.FlowOver

@@ -176,7 +176,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
         // 已经明确数据库 sqlserver 类型.
         Paras ps = new Paras();
         ps.SQL = "DELETE FROM Port_Emp WHERE No=@UserNo";
-        ps.Add("UserNo", "abc");
+        ps.Add("UserNo", "zhangsan");
         BP.DA.DBAccess.RunSQL(ps);
 
         // 不知道数据库类型.

@@ -116,14 +116,17 @@ namespace BP.WF.HttpHandler
 
                     nd = nds.GetEntityByKey(tk.NDFrom) as Node;
                     fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
+                    //求出主键
+                    long pkVal = this.WorkID;
+                    if (nd.HisRunModel == RunModel.SubThread)
+                        pkVal = this.FID;
 
-                    if (fwc.FWCSta == FrmWorkCheckSta.Enable &&
-                        fwc.FWCOrderModel == FWCOrderModel.SqlAccepter &&
-                        nd.HisDeliveryWay == DeliveryWay.BySQL)
+                    //排序需要优化，结合人员表Idx进行排序
+                    if (fwc.FWCOrderModel == FWCOrderModel.SqlAccepter && nd.HisDeliveryWay == DeliveryWay.BySQL)
                     {
                         if (orderEmps[tk.NDFrom].ContainsKey(tk.EmpFrom) == false)
                         {
-                            dt = GetWorkerListBySQL(nd.DeliveryParas, nd.FK_Flow, tk.NDFrom, this.WorkID);
+                            dt = GetWorkerListBySQL(nd.DeliveryParas, nd.FK_Flow, tk.NDFrom, pkVal);
                             empIdx = 0;
 
                             foreach (DataRow dr in dt.Rows)
@@ -132,6 +135,22 @@ namespace BP.WF.HttpHandler
                             }
                         }
 
+                        tk.Row["T_CheckIndex"] = orderEmps[tk.NDFrom][tk.EmpFrom];
+                        noneEmpIdx++;
+                    }
+                    else if (fwc.FWCOrderModel == FWCOrderModel.SqlAccepter && nd.HisDeliveryWay == DeliveryWay.BySelected)
+                    {
+                        if (orderEmps[tk.NDFrom].ContainsKey(tk.EmpFrom) == false)
+                        {
+                            Selector selectItem = new Selector(nd.NodeID);
+                            dt = GetWorkerListBySQL(selectItem.SelectorP2, nd.FK_Flow, tk.NDFrom, pkVal);
+                            empIdx = 0;
+
+                            foreach (DataRow dr in dt.Rows)
+                            {
+                                orderEmps[tk.NDFrom].Add(dr["No"] as string, empIdx++);
+                            }
+                        }
                         tk.Row["T_CheckIndex"] = orderEmps[tk.NDFrom][tk.EmpFrom];
                         noneEmpIdx++;
                     }

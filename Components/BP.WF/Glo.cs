@@ -193,7 +193,6 @@ namespace BP.WF
 
                 //SysEnum se = new SysEnum("FrmType", 1);//NOTE:此处升级时报错，2017-06-13，liuxc
 
-
                 //2017.5.19 打印模板字段修复
                 BP.WF.Template.BillTemplate bt = new BillTemplate();
                 bt.CheckPhysicsTable();

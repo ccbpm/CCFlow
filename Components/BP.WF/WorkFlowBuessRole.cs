@@ -882,7 +882,6 @@ namespace BP.WF
                         ps.Add("ActionType3", (int)ActionType.ForwardFL);
                         ps.Add("ActionType4", (int)ActionType.ForwardHL);
                         ps.Add("ActionType5", (int)ActionType.Skip);
-
                         ps.Add("NDFrom", nd.NodeID);
 
                         if (currNode.HisRunModel == RunModel.SubThread)

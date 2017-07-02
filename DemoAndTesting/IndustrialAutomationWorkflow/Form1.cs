@@ -29,7 +29,6 @@ namespace IndustrialAutomationWorkflow
             string flowNo = this.TB_FlowNo.Text; //流程编号.
             #endregion 获得页面参数。
 
-
             #region  创建webservices连接。
             ccbpmAPI.IndustrialAutomationWorkflowWSAPISoapClient myws = null;
             try

@@ -111,14 +111,15 @@ namespace BP.Demo.BPFramework
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
-                {
+
+                //if (BP.Web.WebUser.No == "admin")
+                //{
                     uac.IsView = true;
                     uac.IsDelete = true;
                     uac.IsInsert = true;
                     uac.IsUpdate = true;
                     uac.IsAdjunct = true;
-                }
+              //  }
                 return uac;
             }
         }

@@ -47,9 +47,19 @@ namespace BP.Demo.BPFramework
 			get
 			{
 				UAC uac = new UAC();
-                uac.IsDelete = true;
-                uac.IsUpdate = true;
-                uac.IsInsert = true;
+
+                if (BP.Web.WebUser.No == "zhoupeng" || BP.Web.WebUser.No == "admin")
+                {
+                    uac.IsDelete = true;
+                    uac.IsUpdate = true;
+                    uac.IsInsert = true;
+                }
+                else
+                {
+                    uac.IsDelete = false;
+                    uac.IsUpdate = false;
+                    uac.IsInsert = false;
+                }
 				return uac;
 			}
 		}

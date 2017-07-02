@@ -157,7 +157,7 @@ namespace BP.Demo.BPFramework
                 this.SetValByKey(StudentAttr.FK_BanJi, value);
             }
         }
-          /// <summary>
+        /// <summary>
         /// 班级名称
         /// </summary>
         public string FK_BanJiText
@@ -301,7 +301,7 @@ namespace BP.Demo.BPFramework
                   StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "学习的科目");
 
                 //明细表映射.
-                map.AddDtl(new Resumes(), ResumeAttr.FK_Stu);
+                map.AddDtl(new Resumes(), ResumeAttr.FK_Student);
 
                 //带有参数的方法.
                 RefMethod rm = new RefMethod();
@@ -332,6 +332,15 @@ namespace BP.Demo.BPFramework
             this.RegDate = DataType.CurrentDataTime;
             return base.beforeInsert();
         }
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (this.Email.Length == 0)
+                throw new Exception("@email 不能为空.");
+
+            return base.beforeUpdateInsertAction();
+        }
+
+          
         #endregion 重写基类方法
 
         #region 方法

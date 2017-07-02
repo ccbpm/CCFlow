@@ -68,7 +68,7 @@ namespace BP.UnitTesting.AttrFlow
             string sUser = "zhoupeng";
             BP.WF.Dev2Interface.Port_Login(sUser);
 
-            //删除数据。
+            //删除数据.
             fl.DoDelData();
 
             //创建.

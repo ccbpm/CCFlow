@@ -67,6 +67,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Demo\FormEvent\FromEvent_Demo_01.cs" />
+    <Compile Include="Demo\FormEvent\CCFrm_ZhuBiaoShiJianCeShi.cs" />
     <Compile Include="Demo\License\License.cs" />
     <Compile Include="Demo\License\People.cs" />
     <Compile Include="ImplementCode\GenerFrmHelpLink.cs" />

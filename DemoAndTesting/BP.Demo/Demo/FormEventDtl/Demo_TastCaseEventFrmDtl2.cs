@@ -37,6 +37,8 @@ namespace BP.Demo.FormEvent
         {
             decimal danjia = this.HisEnDtl.GetValDecimalByKey("DanJia");
             decimal shuliang = this.HisEnDtl.GetValDecimalByKey("ShuLiang");
+
+
             this.HisEnDtl.SetValByKey("XiaoJi", danjia * shuliang);
 
             return base.RowSaveBefore();

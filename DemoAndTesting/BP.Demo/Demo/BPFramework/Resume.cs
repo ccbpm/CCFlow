@@ -14,19 +14,19 @@ namespace BP.Demo
     {
         #region 基本属性
         /// <summary>
-        /// 工作节点
+        /// 学生编号
         /// </summary>
-        public const string FK_Stu = "FK_Stu";
+        public const string FK_Student = "FK_Student";
         /// <summary>
-        /// 主机
+        /// 工作单位
         /// </summary>
         public const string GongZuoDanWei = "GongZuoDanWei";
         /// <summary>
-        /// 主机
+        /// 证明人
         /// </summary>
         public const string ZhengMingRen = "ZhengMingRen";
         /// <summary>
-        /// 工作人员（候选)
+        /// 备注
         /// </summary>
         public const string BeiZhu = "BeiZhu";
         /// <summary>
@@ -58,15 +58,15 @@ namespace BP.Demo
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_Stu
+        public string FK_Student
         {
             get
             {
-                return this.GetValStringByKey(ResumeAttr.FK_Stu);
+                return this.GetValStringByKey(ResumeAttr.FK_Student);
             }
             set
             {
-                this.SetValByKey(ResumeAttr.FK_Stu, value);
+                this.SetValByKey(ResumeAttr.FK_Student, value);
             }
         }
         /// <summary>
@@ -139,7 +139,7 @@ namespace BP.Demo
                 Map map = new Map("Demo_Resume", "简历");
 
                 map.AddTBIntPKOID();
-                map.AddTBString(ResumeAttr.FK_Stu, null, "学生编号", false, false, 0, 200, 10);
+                map.AddTBString(ResumeAttr.FK_Student, null, "学生编号", false, false, 0, 10, 10);
                 map.AddTBString(ResumeAttr.NianYue, null, "年月", true, false, 0, 200, 50);
                 map.AddTBString(ResumeAttr.GongZuoDanWei, null, "工作单位", true, false, 0, 200, 70);
                 map.AddTBString(ResumeAttr.ZhengMingRen, "", "证明人", true, false, 0, 200, 50);
@@ -151,6 +151,18 @@ namespace BP.Demo
             }
         }
         #endregion
+
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.IsDelete = true;
+                uac.IsUpdate = true;
+                uac.IsInsert = true;
+                return uac;
+            }
+        }
     }
     /// <summary>
     /// 简历s

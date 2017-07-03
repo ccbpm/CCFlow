@@ -206,4 +206,11 @@ RU="@0=Init@1=Runing@2=Complete@3=Postpone" />
   EN="@0=Init@1=Runing@2=Complete@3=Postpone"
   JP="@0=Init@1=Runing@2=Complete@3=Postpone"
   RU="@0=Init@1=Runing@2=Complete@3=Postpone" />
+  
+  <!-- 批处理规则-->
+  <Item key="BatchRole"
+   CH="@0=不可以@1=批量审批@2=分组批量审核"
+   EN="@0=None@1=Ordinary@2=Group"
+   JP="@0=None@1=Ordinary@2=Group"
+   RU="@0=None@1=Ordinary@2=Group"/>
 </NewDataSet>

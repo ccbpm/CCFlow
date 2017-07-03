@@ -352,12 +352,21 @@ namespace BP.WF.HttpHandler
         {
 
             int nodeID = int.Parse(this.FK_Node.ToString());
+            //获取节点字段集合
             BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs("ND" + nodeID);
+            //获取节点对象
             BP.WF.Node nd = new BP.WF.Node(nodeID);
-
+            //获取批量发起设置规则
             BP.Sys.SysEnums ses = new BP.Sys.SysEnums(BP.WF.Template.NodeAttr.BatchRole);
-
-            return "{\"nd\":" + nd.ToJson() + ",\"ses\":" + ses.ToJson() + ",\"attrs\":" + attrs.ToJson() + "}";
+            //获取当前节点设置的批处理规则
+            string srole = "";
+            if (nd.HisBatchRole == BatchRole.None)
+                srole = "0";
+            else if (nd.HisBatchRole == BatchRole.Ordinary)
+                srole = "1";
+            else
+                srole = "2";
+            return "{\"nd\":" + nd.ToJson() + ",\"ses\":" + ses.ToJson() + ",\"attrs\":" + attrs.ToJson() + ",\"BatchRole\":" + srole + "}";
         }
         #endregion
 

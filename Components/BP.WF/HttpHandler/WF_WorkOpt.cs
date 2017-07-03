@@ -52,7 +52,6 @@ namespace BP.WF.HttpHandler
             DataRow row = null;
             string dotype = getUTF8ToString("ShowType");
             Dictionary<int, DataTable> nodeEmps = new Dictionary<int, DataTable>(); //节点id，接收人列表
-            Dictionary<int, Dictionary<string, int>> orderEmps = new Dictionary<int, Dictionary<string, int>>();    //节点id，人员编号，序号
             FrmWorkCheck fwc = null;
             DataTable dt = null;
             int idx = 0;
@@ -109,11 +108,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     tk.Row.Add("T_NodeIndex", idx);
-
-                    //获取所有设有“协作模式下操作员显示顺序”设置为“按照接受人员列表先后顺序(官职大小)”并定义审核人顺序序列
-                    if (orderEmps.ContainsKey(tk.NDFrom) == false)
-                        orderEmps.Add(tk.NDFrom, new Dictionary<string, int>());
-
+                    
                     nd = nds.GetEntityByKey(tk.NDFrom) as Node;
                     fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
                     //求出主键
@@ -121,37 +116,12 @@ namespace BP.WF.HttpHandler
                     if (nd.HisRunModel == RunModel.SubThread)
                         pkVal = this.FID;
 
-                    //排序需要优化，结合人员表Idx进行排序
-                    if (fwc.FWCOrderModel == FWCOrderModel.SqlAccepter && nd.HisDeliveryWay == DeliveryWay.BySQL)
+                    //排序，结合人员表Idx进行排序
+                    if (fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
                     {
-                        if (orderEmps[tk.NDFrom].ContainsKey(tk.EmpFrom) == false)
-                        {
-                            dt = GetWorkerListBySQL(nd.DeliveryParas, nd.FK_Flow, tk.NDFrom, pkVal);
-                            empIdx = 0;
-
-                            foreach (DataRow dr in dt.Rows)
-                            {
-                                orderEmps[tk.NDFrom].Add(dr["No"] as string, empIdx++);
-                            }
-                        }
-
-                        tk.Row["T_CheckIndex"] = orderEmps[tk.NDFrom][tk.EmpFrom];
-                        noneEmpIdx++;
-                    }
-                    else if (fwc.FWCOrderModel == FWCOrderModel.SqlAccepter && nd.HisDeliveryWay == DeliveryWay.BySelected)
-                    {
-                        if (orderEmps[tk.NDFrom].ContainsKey(tk.EmpFrom) == false)
-                        {
-                            Selector selectItem = new Selector(nd.NodeID);
-                            dt = GetWorkerListBySQL(selectItem.SelectorP2, nd.FK_Flow, tk.NDFrom, pkVal);
-                            empIdx = 0;
-
-                            foreach (DataRow dr in dt.Rows)
-                            {
-                                orderEmps[tk.NDFrom].Add(dr["No"] as string, empIdx++);
-                            }
-                        }
-                        tk.Row["T_CheckIndex"] = orderEmps[tk.NDFrom][tk.EmpFrom];
+                        tk.Row["T_CheckIndex"] =
+                            DBAccess.RunSQLReturnValInt(
+                                string.Format("SELECT Idx FROM Port_Emp WHERE No='{0}'", tk.EmpFrom), 0);
                         noneEmpIdx++;
                     }
                     else
@@ -346,7 +316,7 @@ namespace BP.WF.HttpHandler
             {
                 DataRow[] rows = null;
                 nd = nds.GetEntityByKey(this.FK_Node) as Node;
-                if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter && nd.HisDeliveryWay == DeliveryWay.BySQL)
+                if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter)
                 {
                     rows = tkDt.Select("NodeID=" + this.FK_Node + " AND Msg='' AND EmpFrom='" + WebUser.No + "'");
 
@@ -373,8 +343,8 @@ namespace BP.WF.HttpHandler
                         row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
                         row["EmpFrom"] = WebUser.No;
                         row["EmpFromT"] = WebUser.Name;
-                        row["T_NodeIndex"] = idx++;
-                        row["T_CheckIndex"] = noneEmpIdx++;
+                        row["T_NodeIndex"] = ++idx;
+                        row["T_CheckIndex"] = ++noneEmpIdx;
 
                         tkDt.Rows.Add(row);
                     }
@@ -390,8 +360,8 @@ namespace BP.WF.HttpHandler
                     row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
                     row["EmpFrom"] = WebUser.No;
                     row["EmpFromT"] = WebUser.Name;
-                    row["T_NodeIndex"] = idx++;
-                    row["T_CheckIndex"] = noneEmpIdx++;
+                    row["T_NodeIndex"] = ++idx;
+                    row["T_CheckIndex"] = ++noneEmpIdx;
 
                     tkDt.Rows.Add(row);
                 }
@@ -429,8 +399,8 @@ namespace BP.WF.HttpHandler
                 row["Msg"] = "&nbsp;";
                 row["EmpFrom"] = "";
                 row["EmpFromT"] = "";
-                row["T_NodeIndex"] = idx++;
-                row["T_CheckIndex"] = noneEmpIdx++;
+                row["T_NodeIndex"] = ++idx;
+                row["T_CheckIndex"] = ++noneEmpIdx;
 
                 tkDt.Rows.Add(row);
             }
@@ -444,40 +414,6 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(sortedTKs);
 
             return BP.Tools.Json.ToJson(ds);
-        }
-        /// <summary>
-        /// 获取指定节点按SQL语句查询出的接收人列表
-        /// </summary>
-        /// <param name="sql">SQL语句</param>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="ndto">要发送的节点ID</param>
-        /// <param name="workId">工作ID</param>
-        /// <returns></returns>
-        private DataTable GetWorkerListBySQL(string sql, string fk_flow, int ndto, long workId)
-        {
-            GERpt rptGe = new GERpt("ND" + int.Parse(fk_flow) + "Rpt", workId);
-
-            sql = sql.Replace("@FK_Node", ndto.ToString());
-            sql = sql.Replace("@NodeID", ndto.ToString());
-            sql = BP.WF.Glo.DealExp(sql, rptGe, null);
-            if (sql.Contains("@"))
-            {
-                if (BP.WF.Glo.SendHTOfTemp != null)
-                {
-                    foreach (string key in BP.WF.Glo.SendHTOfTemp.Keys)
-                    {
-                        sql = sql.Replace("@" + key, BP.WF.Glo.SendHTOfTemp[key].ToString());
-                    }
-                }
-            }
-
-            if (sql.Contains("@GuestUser.No"))
-                sql = sql.Replace("@GuestUser.No", GuestUser.No);
-
-            if (sql.Contains("@GuestUser.Name"))
-                sql = sql.Replace("@GuestUser.Name", GuestUser.Name);
-
-            return DBAccess.RunSQLReturnTable(sql);
         }
         /// <summary>
         /// 获取审核组件中刚上传的附件列表信息
@@ -628,7 +564,7 @@ namespace BP.WF.HttpHandler
                 if (wcDesc.HisFrmWorkCheckType == FWCType.Check)  //审核组件
                 {
                     //判断是否审核组件中“协作模式下操作员显示顺序”设置为“按照接受人员列表先后顺序(官职大小)”，删除原有的空审核信息
-                    if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter && new Node(wcDesc.NodeID).HisDeliveryWay == DeliveryWay.BySQL)
+                    if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter)
                     {
                         sql = "DELETE ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
                               " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + this.FK_Node +

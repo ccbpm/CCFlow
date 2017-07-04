@@ -310,7 +310,15 @@ namespace CCFormExcel2010
 			for (int i = 1; i <= _app.Names.Count; i++)
 			{
 				var location = _app.Names.Item(i).RefersToLocal; //=Sheet1!$B$2:$C$3
-				var rangeTemp = _app.Names.Item(i).RefersToRange;
+				Excel.Range rangeTemp;
+				try
+				{
+					rangeTemp = _app.Names.Item(i).RefersToRange;
+				}
+				catch (Exception exp)
+				{
+					return null;
+				}
 				if (rangeTemp.Count > 1 && Regex.IsMatch(location, regexRangeArea)) //是区域//其实若匹配regexRangeArea则注定Count > 1
 				{
 					//排除合并单元格的情况（可能是主/子表字段 或 子表表头）

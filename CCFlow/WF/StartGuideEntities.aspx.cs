@@ -9,6 +9,7 @@ using BP.WF;
 using BP.DA;
 using BP.Port;
 using BP.Web;
+using System.Collections;
 namespace CCFlow.WF
 {
     public partial class StartGuideEntities : BP.Web.WebPage
@@ -93,6 +94,15 @@ namespace CCFlow.WF
                 case StartGuideWay.BySQLOne:
                 case StartGuideWay.BySystemUrlOneEntity:
                     this.BindTableOne(dt);
+                    break;
+                case StartGuideWay.BySQLMulti:
+                    this.BindTableMulti(dt);
+                    //增加启动流程.
+                    Button bton = new Button();
+                    bton.ID = "Btn_Sav2";
+                    bton.Text = "批量发起";
+                    bton.Click += new EventHandler(bton_Start_Click);
+                    this.Pub1.Add(bton);
                     break;
                 default:
                     //绑定多个.
@@ -309,6 +319,72 @@ namespace CCFlow.WF
                     break;
             }
             this.Response.Redirect(url, true);
+
+        }
+        void bton_Start_Click(object sender, EventArgs e)
+        {
+            string no = "";
+            foreach (Control ctl in this.Pub2.Controls)
+            {
+                if (ctl == null || ctl.ID == null || ctl.ID.Contains("CB_") == false)
+                    continue;
+
+                CheckBox cb = ctl as CheckBox;
+                if (cb == null)
+                    continue;
+
+                if (cb.Checked == false)
+                    continue;
+
+                no = no + "'" + ctl.ID.Replace("CB_", "") + "',";
+            }
+            if (string.IsNullOrEmpty(no) == true)
+            {
+                BP.Sys.PubClass.Alert("您没有选择项目.");
+                return;
+            }
+
+            //获取设置的数据源
+            Flow fl = new Flow(this.FK_Flow);
+            string key = this.Pub1.GetTextBoxByID("TB_Key").Text.Trim();
+            string sql = "";
+            if (this.SKey == null)
+            {
+                sql = fl.StartGuidePara2.Clone() as string;
+                sql = sql.Replace("~", "'");
+            }
+            else
+            {
+                sql = fl.StartGuidePara1.Clone() as string;
+                sql = sql.Replace("@Key", key);
+                sql = sql.Replace("~", "'");
+            }
+            //替换变量
+            sql = sql.Replace("@WebUser.No", WebUser.No);
+            sql = sql.Replace("@WebUser.Name", WebUser.Name);
+            sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            //获取选中的数据源
+            DataRow[] drArr = dt.Select("No in(" + no.TrimEnd(',') + ")");
+
+            //获取ht并发送
+            for (int i = 0; i < drArr.Length; i++)
+            {
+                DataRow row = drArr[i];
+                Hashtable ht = new Hashtable();
+                //生成workid
+                long workid = BP.WF.Dev2Interface.Node_CreateBlankWork(this.FK_Flow);
+
+                //生成表单数据
+                for (int k = 0; k < row.Table.Columns.Count; k++)
+                {
+                    ht.Add(row.Table.Columns[k].ColumnName, row[k]);
+                }
+                //执行发送
+                BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht);
+            }
 
         }
     }

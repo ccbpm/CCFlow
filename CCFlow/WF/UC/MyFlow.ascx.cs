@@ -980,6 +980,7 @@ namespace CCFlow.WF.UC
                         }
                         this.Response.Redirect("StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
                         break;
+                    case StartGuideWay.BySQLMulti:
                     case StartGuideWay.BySystemUrlOneEntity:
                     case StartGuideWay.BySQLOne:
                         this.Response.Redirect("StartGuideEntities.aspx?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);

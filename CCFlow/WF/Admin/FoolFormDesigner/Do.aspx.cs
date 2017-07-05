@@ -125,13 +125,13 @@ namespace CCFlow.WF.MapDef
                         switch (mattr.LGType)
                         {
                             case BP.En.FieldTypeS.Enum:
-                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK, true);
+                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(mattr.MyPK), true);
                                 return;
                             case BP.En.FieldTypeS.Normal:
-                                this.Response.Redirect("EditFieldGuide.htm?DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
+                                this.Response.Redirect("EditFieldGuide.htm?DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(mattr.MyPK) + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
                                 return;
                             case BP.En.FieldTypeS.FK:
-                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + mattr.MyPK + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
+                                this.Response.Redirect("../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&DoType=Edit&FK_MapData=" + mattr.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(mattr.MyPK) + "&FType=" + mattr.MyDataType + "&GroupField=0", true);
                                 return;
                             default:
                                 break;

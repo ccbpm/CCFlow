@@ -3056,8 +3056,8 @@ namespace CCForm
                         if (tb.NameOfReal == null)
                             return;
                         string keyName = HttpUtility.UrlEncode(tb.KeyName);
-                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + tb.Name + "&DataType=" + tb.HisDataType + "&GroupField=0&LGType=" + LGType.Normal
-                            + "&KeyOfEn=" + tb.Name + "&UIContralType=" + CtrlType.TextBox + "&KeyName=" + keyName + Glo.TimeKey;
+                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(Glo.FK_MapData + "_" + tb.Name) + "&DataType=" + tb.HisDataType + "&GroupField=0&LGType=" + LGType.Normal
+                            + "&KeyOfEn=" + HttpUtility.UrlEncode(tb.Name) + "&UIContralType=" + CtrlType.TextBox + "&KeyName=" + keyName + Glo.TimeKey;
                         Glo.WinOpenDialog(url);
                     }
                 }
@@ -3067,8 +3067,8 @@ namespace CCForm
                     if (cb != null)
                     {
                         string keyName = HttpUtility.UrlEncode(cb.KeyName);
-                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + cb.Name + "&DataType=" + DataType.AppBoolean + "&GroupField=0&LGType=" + LGType.Normal
-                            + "&KeyOfEn=" + cb.Name + "&UIContralType=" + CtrlType.CheckBox + "&KeyName=" + keyName;
+                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(Glo.FK_MapData + "_" + cb.Name) + "&DataType=" + DataType.AppBoolean + "&GroupField=0&LGType=" + LGType.Normal
+                            + "&KeyOfEn=" + HttpUtility.UrlEncode(cb.Name) + "&UIContralType=" + CtrlType.CheckBox + "&KeyName=" + keyName;
                         Glo.WinOpenDialog(url);
                     }
                 }
@@ -3078,7 +3078,7 @@ namespace CCForm
                     if (dp != null)
                     {
                         string keyName = HttpUtility.UrlEncode(dp.KeyName);
-                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + dp.Name + "&DataType=" + dp.HisDateType + "&GroupField=0&LGType=" + LGType.Normal + "&KeyOfEn=" + dp.Name + "&UIContralType=" + CtrlType.TextBox + "&KeyName=" + keyName;
+                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(Glo.FK_MapData + "_" + dp.Name) + "&DataType=" + dp.HisDateType + "&GroupField=0&LGType=" + LGType.Normal + "&KeyOfEn=" + HttpUtility.UrlEncode(dp.Name) + "&UIContralType=" + CtrlType.TextBox + "&KeyName=" + keyName;
                         Glo.WinOpenDialog(url);
                     }
                 }
@@ -3088,8 +3088,8 @@ namespace CCForm
                     if (ddl != null)
                     {
                         string keyName = HttpUtility.UrlEncode(ddl.KeyName);
-                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + ddl.Name + "&DataType=" + ddl.HisDataType + "&GroupField=0&LGType=" + ddl.HisLGType
-                            + "&KeyOfEn=" + ddl.Name + "&UIBindKey=" + ddl.UIBindKey + "&UIContralType=" + CtrlType.DDL + "&KeyName=" + keyName;
+                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(Glo.FK_MapData + "_" + ddl.Name) + "&DataType=" + ddl.HisDataType + "&GroupField=0&LGType=" + ddl.HisLGType
+                            + "&KeyOfEn=" + HttpUtility.UrlEncode(ddl.Name) + "&UIBindKey=" + ddl.UIBindKey + "&UIContralType=" + CtrlType.DDL + "&KeyName=" + keyName;
                         Glo.WinOpenDialog(url);
                     }
                 }
@@ -3099,8 +3099,8 @@ namespace CCForm
                     if (rb != null)
                     {
                         string keyName = HttpUtility.UrlEncode(rb.KeyName);
-                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + rb.GroupName + "&DataType=" + DataType.AppInt + "&GroupField=0&LGType=" + LGType.Enum
-                            + "&KeyOfEn=" + rb.GroupName + "&UIBindKey=" + rb.UIBindKey + "&UIContralType=" + CtrlType.RB;
+                        string url = host + "&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + HttpUtility.UrlEncode(Glo.FK_MapData + "_" + rb.GroupName) + "&DataType=" + DataType.AppInt + "&GroupField=0&LGType=" + LGType.Enum
+                            + "&KeyOfEn=" + HttpUtility.UrlEncode(rb.GroupName) + "&UIBindKey=" + rb.UIBindKey + "&UIContralType=" + CtrlType.RB;
                         Glo.WinOpenDialog(url);
                     }
                 }

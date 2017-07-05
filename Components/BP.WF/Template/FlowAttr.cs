@@ -418,6 +418,10 @@ namespace BP.WF.Template
         /// </summary>
         ByHistoryUrl = 5,
         /// <summary>
+        /// SQL多条模式
+        /// </summary>
+        BySQLMulti = 6,
+        /// <summary>
         /// 按自定义的Url
         /// </summary>
         BySelfUrl = 10,        

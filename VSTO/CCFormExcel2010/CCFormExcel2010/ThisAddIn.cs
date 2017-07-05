@@ -44,27 +44,16 @@ namespace CCFormExcel2010
 		//internal Microsoft.Office.Tools.CustomTaskPane helpTaskPane;
 
 		#region 测试用代码
-
-		/// <summary>
-		/// 测试的参数变量.
-		/// </summary>
-		public void InitTester()
-		{
-			Glo.LoadSuccessful = true;
-			Glo.UserNo = "anjian";
-			Glo.SID = "d-d-d-d-sdsds";
-			//Glo.WorkID = 2201;
-			Glo.FK_Flow = "002";
-			Glo.FK_Node = 201;
-			Glo.FrmID = "CY_6501"; //采样表单ID.
-			Glo.WSUrl = "http://localhost:26507/WF/CCForm/CCFormAPI.asmx";
-		}
-
 		public Dictionary<string, string> InitTesterArgsString()
 		{
-			string argstr = "excelform://-fromccflow,App=Class,FK_MapData=BP.LI.BZQX,UseSheet=格式6,oid=116663,s=0.19068293080891674,SID=1pecqwilzeszdj3aoaxrqqdy,UserNo=anjian,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
-			//string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6501,IsEdit=1,IsPrint=0,WorkID=2830,FK_Flow=002,FK_Node=201,UserNo=anjian,FID=0,SID=tsg2uzxxeeoaqritr3l0umre,PWorkID=2843,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6501,IsCheckGuide=1,FK_CaiYangFangFa=011,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
+			//bug:5063 : string argstr = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=CY_6501,IsEdit=1,IsPrint=0,WorkID=3401,FK_Flow=002,FK_Node=201,UserNo=anjian,FID=0,SID=wszt3a5umtgopiq5ytfgnhch,PWorkID=3397,PFlowNo=001,IsLoadData=1,CWorkID=0,IsRead=0,T=20170504103843,Paras=1,Frms=CY_6501,m=0.3036874175802582,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
+			//bug:5048 : string argstr = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_07,IsEdit=1,IsPrint=0,WorkID=3407,FK_Flow=003,FK_Node=301,UserNo=huangwei,FID=0,SID=kvd5cqxisomoj2qulbrtnfir,PWorkID=0,IsLoadData=1,CWorkID=0,PFlowNo=,Frms=FX_JNHBG_64_07,IsCheckGuide=1,m=0.4266074772275231,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
+			//bug:5014 : string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6505,IsEdit=0,IsPrint=0,WorkID=3205,CWorkID=,FK_Flow=002,FK_Node=201,IsLoadData=1,PWorkID=3206,PFlowNo=001,DoType=View,MyPK=1650369608,PNodeID=105,Frms=CY_6505,SID=v0pcuhoenqwplpd5r4kvihyp,UserNo=wangtao,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
+			//BP.LI.BZQX://“格式6”
+			//string argstr = "excelform://-fromccflow,App=Class,FK_MapData=BP.LI.BZQX,UseSheet=格式6,oid=112141,s=0.19068293080891674,SID=1pecqwilzeszdj3aoaxrqqdy,UserNo=anjian,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
+			//string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6505,IsEdit=1,IsPrint=0,WorkID=2872,FK_Flow=002,FK_Node=201,UserNo=wangtao,FID=0,SID=aifj1mvelcv0sviv1br0obrq,PWorkID=2873,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6505,IsCheckGuide=1,FK_CaiYangFangFa=003,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
 			//string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6501,IsEdit=0,IsPrint=0,WorkID=2528,FK_Flow=002,FK_Node=202,UserNo=anjian,FID=0,SID=4uiq32c4hzd1335re15dwd0d,PWorkID=2518,PFlowNo=001,IsLoadData=1,CWorkID=0,WSUrl=http://localhost:26508/WF/CCForm/CCFormAPI.asmx";
+			string argstr = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_19,IsEdit=1,IsPrint=0,WorkID=4258,FK_Flow=003,FK_Node=301,UserNo=duqinglian,FID=0,SID=abvccsv4syxcvnibwfn5mva0,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_19,IsCheckGuide=1,e1m=0.6905738965730419,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
 			string prefix = "-fromccflow,";
 			int beginidx = -1;
 			Dictionary<string, string> args = new Dictionary<string, string>();
@@ -596,7 +585,6 @@ namespace CCFormExcel2010
 						return;
 
 					//保存到服务器
-					//CCFormExcel2010.CCForm.CCFormAPISoapClient client = BP.Excel.Glo.GetCCFormAPISoapClient();
 					client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
 					MessageBox.Show("保存成功！\n文档及表单数据已成功保存到服务器！");
 				}
@@ -689,24 +677,6 @@ namespace CCFormExcel2010
 			foreach (Excel.Name name in Application.Names)
 			{
 				this.UpdateMetaList(name.RefersToRange, name.NameLocal);
-				/*var strName = name.NameLocal;
-				var location = name.RefersToLocal;
-				if (location.IndexOf("MetaData") > -1)
-				{
-					this.UpdateMetaList(strName, strName);
-					var range = name.RefersToRange;
-					var col = _base.ConvertInt2Letter(range.Column);
-					//填充数据
-					var r = 1;
-					for (; r <= ds.Tables[strName].Rows.Count; r++)
-					{
-						Excel.Range rangeTemp = range.Worksheet.get_Range(col + r, missing);
-						_rangeChangedByCode = rangeTemp;
-						rangeTemp.Value2 = ds.Tables[strName].Rows[r - 1]["Name"].ToString();
-					}
-					//更新命名
-					Application.Names.Add(strName, "=MetaData!$" + col + "$1:$" + col + "$" + (r == 1 ? 1 : r - 1));
-				}*/
 			}
 			return true;
 		}
@@ -911,7 +881,7 @@ namespace CCFormExcel2010
 
 					#endregion
 
-					//xTODO: 如果该字段是『级联的父级』，则需根据此字段的值来设置相应子级字段的“数据有效性” A:第一次加载时，子级是数据有效性全部，当“父级”改变时，再实时获取、设置子级的数据有效性
+					//xTODO: 如果该字段是『级联的父级』，则需根据此字段的值来设置相应子级字段的“数据有效性” A:第一次加载时，子级是数据有效性全部，当“父级”改变时，B:再实时获取、设置子级的数据有效性
 				}
 			}
 			#endregion
@@ -919,16 +889,6 @@ namespace CCFormExcel2010
 			_dictSubTables[dt.TableName] = st; //更新st
 			return true;
 		}
-
-
-		///// <summary>
-		///// 获取excel中所有的表单字段数据（json）
-		///// </summary>
-		///// <returns></returns>
-		//public string GetJsonData()
-		//{
-		//    return null;
-		//}
 
 		/// <summary>
 		/// 获取主~~、从~~表数据
@@ -943,6 +903,8 @@ namespace CCFormExcel2010
 			{
 				var name = Application.Names.Item(i).NameLocal; //name1
 				var location = Application.Names.Item(i).RefersToLocal; //=Sheet1!$B$2
+				if (location == "=#NAME?") //若单元格配置了公式（函数），则有可能被识别为NAME
+					continue;
 				var range = Application.Names.Item(i).RefersToRange;
 				//var sheet = range.Worksheet.Name; //Sheet1
 				//var col = Application.Names.Item(i).RefersToRange.Column; //2
@@ -1534,7 +1496,7 @@ namespace CCFormExcel2010
 							break; //发现表头即停止循环，不再往下寻找表头
 						}
 					}
-					catch (Exception exp)
+					catch
 					{
 					}
 

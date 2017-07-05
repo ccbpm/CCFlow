@@ -39,7 +39,7 @@ namespace CCFormExcel2010
 
 				return _app.Worksheets[name]; //未发现Contains方法
 			}
-			catch (Exception exp)
+			catch
 			{
 				return null;
 			}
@@ -119,7 +119,7 @@ namespace CCFormExcel2010
 				}
 				return false;
 			}
-			catch (Exception exp)
+			catch
 			{
 				return false;
 			}
@@ -182,7 +182,7 @@ namespace CCFormExcel2010
 				//MessageBox.Show(range.Validation.Type.ToString()); //3
 				return range.Validation.Type == Excel.XlDVType.xlValidateList.GetHashCode();
 			}
-			catch (Exception exp)
+			catch
 			{
 				return false;
 			}
@@ -229,7 +229,7 @@ namespace CCFormExcel2010
 			{
 				return _app.Names.Item(strName);
 			}
-			catch (Exception exp)
+			catch
 			{
 				return null;
 			}
@@ -251,7 +251,7 @@ namespace CCFormExcel2010
 				}
 				return null;
 			}
-			catch (Exception exp)
+			catch
 			{
 				return null;
 			}
@@ -269,7 +269,7 @@ namespace CCFormExcel2010
 				var name = _app.Names.Item(strName);
 				return true;
 			}
-			catch (Exception exp)
+			catch
 			{
 				return false;
 			}
@@ -288,7 +288,7 @@ namespace CCFormExcel2010
 				Name = _app.Names.Item(strName);
 				return true;
 			}
-			catch (Exception exp)
+			catch
 			{
 				Name = null;
 				return false;
@@ -310,15 +310,19 @@ namespace CCFormExcel2010
 			for (int i = 1; i <= _app.Names.Count; i++)
 			{
 				var location = _app.Names.Item(i).RefersToLocal; //=Sheet1!$B$2:$C$3
-				Excel.Range rangeTemp;
-				try
-				{
-					rangeTemp = _app.Names.Item(i).RefersToRange;
-				}
-				catch (Exception exp)
-				{
-					return null;
-				}
+				if (location == "=#NAME?") //若单元格配置了公式（函数），则有可能被识别为NAME
+					continue;
+				var rangeTemp = _app.Names.Item(i).RefersToRange;
+				//Excel.Range rangeTemp;
+				//try
+				//{
+				//	rangeTemp = _app.Names.Item(i).RefersToRange;
+				//}
+				//catch
+				//{
+				//	return null;
+				//}
+
 				if (rangeTemp.Count > 1 && Regex.IsMatch(location, regexRangeArea)) //是区域//其实若匹配regexRangeArea则注定Count > 1
 				{
 					//排除合并单元格的情况（可能是主/子表字段 或 子表表头）
@@ -348,6 +352,8 @@ namespace CCFormExcel2010
 			foreach (Excel.Name name in _app.Names)
 			{
 				location = name.RefersToLocal.ToString();
+				if (location == "=#NAME?") //若单元格配置了公式（函数），则有可能被识别为NAME
+					continue;
 				if (location.IndexOf(strSheetName) > -1)
 				{
 					count += 1;

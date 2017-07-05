@@ -370,6 +370,7 @@ namespace CCFlow.WF
             DataRow[] drArr = dt.Select("No in(" + no.TrimEnd(',') + ")");
 
             //获取ht并发送
+            string sendMsg = "";
             for (int i = 0; i < drArr.Length; i++)
             {
                 DataRow row = drArr[i];
@@ -383,9 +384,25 @@ namespace CCFlow.WF
                     ht.Add(row.Table.Columns[k].ColumnName, row[k]);
                 }
                 //执行发送
-                BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht);
+                try
+                {
+                    sendMsg += BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, workid, ht).ToMsgOfHtml();
+                }
+                catch (Exception ex)
+                {
+                    BP.Sys.PubClass.Alert("发送失败！" + ex.Message.ToString());
+                    return;
+                }
             }
+            this.ToMsg(sendMsg, "info");
 
+        }
+        public void ToMsg(string msg, string type)
+        {
+            this.Session["info"] = msg;
+            this.Application["info" + WebUser.No] = msg;
+            BP.WF.Glo.SessionMsg = msg;
+            this.Response.Redirect("MyFlowInfo.aspx?FK_Flow=" + this.FK_Flow + "&FK_Type=" + type + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=" + this.WorkID, false);
         }
     }
 }

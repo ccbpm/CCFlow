@@ -333,7 +333,7 @@ function DeleteFlow() {
             $('#flowTree').tree('remove', currFlow.target);
 
 
-            alert(data);
+            //alert(data);
 
         }, this);
     });

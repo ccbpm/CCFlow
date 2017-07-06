@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -138,17 +139,15 @@ namespace CCFlow.WF.Comm
         /// <returns></returns>
         private string GetUserRole()
         {
-            string fk_flow = getUTF8ToString("FK_Flow");
+            Hashtable ht = new Hashtable();
+            Entity en = GetEntityByEnName(EnsName);
 
-            if (new BP.WF.Flow().IsExit("No", fk_flow) == false || EnsName != ("ND" + int.Parse(fk_flow) + "MyRpt"))
-                return "{\"IsCanStartFlow\":false,\"IsCanConfigReport\":false}";
+            ht.Add("IsView", en.HisUAC.IsView);
+            ht.Add("IsInsert", en.HisUAC.IsInsert);
+            ht.Add("IsUpdate", en.HisUAC.IsUpdate);
+            ht.Add("IsDelete", en.HisUAC.IsDelete);
 
-            string json = "{\"IsCanStartFlow\":";
-            json += BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(fk_flow, BP.Web.WebUser.No).ToString().ToLower() + ",\"StartFlowUrl\":";
-            json += "\"/WF/MyFlow.aspx?FK_Flow=" + fk_flow + "\",\"IsCanConfigReport\":";
-            json += (BP.Web.WebUser.No == "admin").ToString().ToLower() + ",\"ConfigReportUrl\":\"/WF/Rpt/OneFlow.htm?FK_MapData=" + EnsName.Replace("MyRpt","Rpt") + "&FK_Flow=" + fk_flow + "\"}";
-
-            return json;
+            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
 
         /// <summary>

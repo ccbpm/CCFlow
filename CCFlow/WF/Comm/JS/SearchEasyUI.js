@@ -36,6 +36,12 @@ var sortBy = '';
 var sortType = '';
 //加载表格数据
 function LoadGridData(pageNumber, pageSize) {
+    if (uac.IsView == "False") {
+        $("#pageloading").hide();
+        $.messager.alert('提示', '您没有查看权限，请联系管理员！', 'error');
+        return;
+    }
+
     this.pageNumber = pageNumber;
     this.pageSize = pageSize;
     ensName = getArgsFromHref("EnsName");
@@ -280,16 +286,16 @@ function DelSelected() {
     }
 }
 
+var uac;
+
 $(function () {
     ensName = getArgsFromHref("EnsName");
-    fk_flow = getArgsFromHref("FK_Flow");
     sortBy = getArgsFromHref("SortBy");
     sortType = getArgsFromHref("SortType");
 
     var params = {
         method: "getuserrole",
-        EnsName: ensName,
-        FK_Flow: fk_flow
+        EnsName: ensName
     };
 
     queryData(params, function (js, scope) {
@@ -302,19 +308,22 @@ $(function () {
                 return;
             }
 
-            var data = eval('(' + js + ')');
+            uac = eval('(' + js + ')');
 
-            if (data.IsCanConfigReport == true) {
-                $("#rtools").append('<a href="' + data.ConfigReportUrl + '" data-options="iconCls:\'icon-config\',plain:true" class="lazyEUI" target="_blank">设置</a>&nbsp;&nbsp;');
+            if (uac.IsView == "False") {
+                $("#ToolBar1_TB_Key").remove();
+                $("#querybtn").remove();
             }
 
-            if (data.IsCanStartFlow == true) {
-                $("#rtools").append('<a href="' + data.StartFlowUrl + '" data-options="iconCls:\'icon-ok\',plain:true" class="lazyEUI" target="_blank">发起</a>&nbsp;&nbsp;');
-            }
-
-            if (fk_flow && fk_flow.length > 2 && !isNaN(fk_flow) && (ensName == "ND" + parseInt(fk_flow) + "MyRpt")) {
+            if (uac.IsView == "False" || uac.IsInsert == "False") {
                 $("#newWin").remove();
+            }
+
+            if (uac.IsView == "False" || uac.IsUpdate == "False") {
                 $("#editWin").remove();
+            }
+
+            if (uac.IsView == "False" || uac.IsDelete == "False") {
                 $("#delSelected").remove();
             }
 

@@ -1043,6 +1043,9 @@ namespace BP.WF
             foreach (BP.Sys.XML.EnumInfoXml xml in xmls)
             {
                 BP.Sys.SysEnums ses = new BP.Sys.SysEnums();
+                int count = ses.RetrieveByAttr(SysEnumAttr.EnumKey, xml.Key);
+                if (count > 0)
+                    continue;
                 ses.RegIt(xml.Key, xml.Vals);
             }
             #endregion 注册枚举类型

@@ -4,6 +4,7 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using BP.Sys;
+using System.Web;
 
 namespace BP.Sys.FrmUI
 {
@@ -161,7 +162,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoOldVer()
         {
-            return "/WF/Admin/FoolFormDesigner/EditF.htm?KeyOfEn=" + this.KeyOfEn + "&FType="+this.MyDataType+"&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
+            return "/WF/Admin/FoolFormDesigner/EditF.htm?KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&FType=" + this.MyDataType + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&FK_MapData=" + this.FK_MapData;
         }
         #endregion 方法执行.
     }

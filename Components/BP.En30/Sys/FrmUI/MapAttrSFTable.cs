@@ -4,6 +4,7 @@ using System.Collections;
 using BP.DA;
 using BP.En;
 using BP.Sys;
+using System.Web;
 
 namespace BP.Sys.FrmUI
 {
@@ -184,11 +185,11 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoOldVer()
         {
-            return "/WF/Admin/FoolFormDesigner/EditTable.htm?KeyOfEn=" + this.KeyOfEn + "&EnumKey=" + this.UIBindKey + "&MyPK=" + this.MyPK + "&UIBindKey=" + this.UIBindKey;
+            return "/WF/Admin/FoolFormDesigner/EditTable.htm?KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&EnumKey=" + this.UIBindKey + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&UIBindKey=" + this.UIBindKey;
         }
         public string DoOldVerAspx()
         {
-            return "/WF/Admin/FoolFormDesigner/EditTable.aspx?KeyOfEn=" + this.KeyOfEn + "&EnumKey=" + this.UIBindKey + "&MyPK=" + this.MyPK + "&UIBindKey=" + this.UIBindKey;
+            return "/WF/Admin/FoolFormDesigner/EditTable.aspx?KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&EnumKey=" + this.UIBindKey + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&UIBindKey=" + this.UIBindKey;
         }
         /// <summary>
         /// 外键表属性
@@ -204,7 +205,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoDDLFullCtrl()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn;
+            return "/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn);
         }
         /// <summary>
         /// 设置下拉框显示过滤
@@ -212,7 +213,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoAutoFullDLL()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFullDLL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFullDLL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn);
         }
         /// <summary>
         /// 设置级联
@@ -220,7 +221,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoActiveDDL()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn);
         }
         #endregion 方法执行.
     }

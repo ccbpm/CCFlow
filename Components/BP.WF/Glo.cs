@@ -2386,6 +2386,75 @@ namespace BP.WF
             return false;
         }
         /// <summary>
+        /// 前置导航导入表单数据
+        /// </summary>
+        /// <param name="WorkID"></param>
+        /// <param name="FK_Flow"></param>
+        /// <param name="FK_Node"></param>
+        /// <param name="sKey">选中的No</param>
+        public static void StartGuidEnties(long WorkID, string FK_Flow, int FK_Node, string sKey)
+        {
+            Flow fl = new Flow(FK_Flow);
+            switch (fl.StartGuideWay)
+            {
+                case StartGuideWay.SubFlowGuide:
+                case StartGuideWay.BySQLOne:
+                    string sql = "";
+                    sql = fl.StartGuidePara1.Clone() as string;
+                    if (!string.IsNullOrWhiteSpace(sql))
+                    {
+                        sql = sql.Replace("@Key", sKey);
+                        sql = sql.Replace("~", "'");
+                    }
+                    else
+                    {
+                        sql = fl.StartGuidePara2.Clone() as string;
+                        sql += " SELECT * FROM ('" + sql + "') T WHERE T.NO='" + sKey + "' ";
+                    }
+                    //替换变量
+                    sql = sql.Replace("@WebUser.No", WebUser.No);
+                    sql = sql.Replace("@WebUser.Name", WebUser.Name);
+                    sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                    sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+
+                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    Hashtable ht = new Hashtable();
+                    //转换成ht表
+                    DataRow row = dt.Rows[0];
+                    for (int i = 0; i < row.Table.Columns.Count; i++)
+                    {
+                        switch (row.Table.Columns[i].ColumnName.ToLower())
+                        {
+                            //去除关键字
+                            case "no":
+                            case "name":
+                            case "workid":
+                            case "fk_flow":
+                            case "fk_node":
+                            case "fid":
+                            case "oid":
+                            case "mypk":
+                            case "title":
+                            case "pworkid":
+                                break;
+                            default:
+                                ht.Add(row.Table.Columns[i].ColumnName, row[i]);
+                                break;
+                        }
+
+                    }
+                    //保存
+                    BP.WF.Dev2Interface.Node_SaveWork(FK_Flow, FK_Node, WorkID, ht);
+                    break;
+                case StartGuideWay.SubFlowGuideEntity:
+                case StartGuideWay.BySystemUrlOneEntity:
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        /// <summary>
         /// 执行PageLoad装载数据
         /// </summary>
         /// <param name="item"></param>

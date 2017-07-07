@@ -996,6 +996,9 @@ namespace CCFlow.WF.UC
                 }
             }
 
+            if (this.WorkID != 0 && this.Request.QueryString["IsCheckGuide"] != null)
+                BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, this.Request.QueryString["No"]);
+
             string appPath = BP.WF.Glo.CCFlowAppPath; //this.Request.ApplicationPath;
             this.Page.Title = "第" + this.currND.Step + "步:" + this.currND.Name;
             #endregion 判断前置导航

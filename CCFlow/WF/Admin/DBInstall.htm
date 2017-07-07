@@ -17,6 +17,7 @@
     
     <base target="_self" />
     <script type="text/javascript">
+
         function Esc() {
             if (event.keyCode == 27)
                 window.close();
@@ -25,6 +26,10 @@
 
         //初始化页面函数.....
         $(function () {
+            //显示和隐藏说明
+            var shuoming = "<p><font color=green>如果您不想等待，想节省掉安装的时间，可以不执行此安装操作！<br />然后，可以到jflow程序包根目录：【环境部署及设计文档/数据库安装脚本】的目录下,<br />获取您需要的jflow数据库脚本，导入到您的数据库中即可。<br /></font></p>";
+            if (plant == "JFlow")
+                $("#shuoming").html(shuoming);
 
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>驰骋工作流引擎ccbpm , 正在为安装做准备.</font>");
             document.getElementById("Btn_Submit").disabled = 'disabled';
@@ -72,14 +77,14 @@
             else
                 val = "组织结构为OneMore模式(一人多部门多岗位)";
 
-            if (confirm('将要执行模式【'+val+'】的安装您确认吗？') == false)
+            if (confirm('将要执行模式【' + val + '】的安装您确认吗？') == false)
                 return;
 
             $("#Msg").html("<img src='../Img/loading.gif' /><font color=blue>ccbpm 正在安装，请稍候, 您可以登录官方网站了解关于更多的产品信息. http://ccflow.org http://jflow.cn , 购买ccbpm服务/授权:0531-82374939,18660153393 </font>");
 
             document.getElementById("Btn_Submit").disabled = 'disabled';
             document.getElementById("Btn_Submit").value = '正在执行安装...';
-       
+
 
             $.ajax({
                 type: 'post',
@@ -170,6 +175,9 @@
 <tr>
 <td>
 <div style=" text-align:left">
+<div id="shuoming">
+
+</div>
 <input type="button" value="接受ccbpm的GPL开源协议并执行安装" id="Btn_Submit"  onclick="DoInstall()" />
 </div>
 

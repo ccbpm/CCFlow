@@ -561,7 +561,7 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
     {
         // 创建一个空的简历实体.
         BP.Demo.Resume dtl = new BP.Demo.Resume();
-        dtl.FK_Stu = "zhangsan"; //给关联的主键赋值.
+        dtl.FK_Student = "zhangsan"; //给关联的主键赋值.
         dtl.NianYue = "2014年4月";
         dtl.GongZuoDanWei = "济南驰骋公司"; // 工作单位.
         dtl.ZhengMingRen = "李四";  //证明人,李四.

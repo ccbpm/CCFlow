@@ -162,19 +162,19 @@ namespace CCFlow.WF
                 this.Pub2.AddTDIdx(idx);
 
                 string paras = url + "";
-                foreach (DataColumn dc in dt.Columns)
-                {
-                    string str = dr[dc.ColumnName] as string;
-                    if (string.IsNullOrEmpty(str) == true)
-                        continue;
+                //foreach (DataColumn dc in dt.Columns)
+                //{
+                //    string str = dr[dc.ColumnName] as string;
+                //    if (string.IsNullOrEmpty(str) == true)
+                //        continue;
 
-                    if (str.Contains("<"))
-                    {
-                        /*如果包含特殊标记, 就去掉它.*/
-                        str = BP.DA.DataType.ParseHtmlToText(str);
-                    }
-                    paras += "&" + dc.ColumnName + "=" + dr[dc.ColumnName];
-                }
+                //    if (str.Contains("<"))
+                //    {
+                //        /*如果包含特殊标记, 就去掉它.*/
+                //        str = BP.DA.DataType.ParseHtmlToText(str);
+                //    }
+                //    paras += "&" + System.Web.HttpUtility.HtmlEncode(dc.ColumnName) + "=" + System.Web.HttpUtility.HtmlEncode(dr[dc.ColumnName]);
+                //}
 
                 //输出名称列
                 this.Pub2.AddTD("<a href='" + paras + "' >" +dr["No"]+" - "+ dr["Name"] + "</a>");

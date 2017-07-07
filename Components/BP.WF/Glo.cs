@@ -992,15 +992,6 @@ namespace BP.WF
                 catch
                 {
                 }
-                //en.PKVal = "123";
-                //try
-                //{
-                //    en.RetrieveFromDBSources();
-                //}
-                //catch (Exception ex)
-                //{
-                //    BP.DA.Log.DefaultLogWriteLine(LogType.Error, "@查询失败: ens = " + en.ToString());
-                //}
             }
 
           
@@ -1271,8 +1262,6 @@ namespace BP.WF
                     }
                 }
             }
-
-
             #endregion 如果是第一次运行，就执行检查。
         }
         /// <summary>

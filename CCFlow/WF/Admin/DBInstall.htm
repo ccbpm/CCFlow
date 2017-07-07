@@ -64,7 +64,8 @@
         //执行安装.
         function DoInstall() {
 
-            var val = GetRadioValue("DemoType");
+            var valT = GetRadioValue("DemoType"); //
+            var val = GetRadioValue("RB_OSModel"); //
 
             if (val == "0")
                 val = "组织结构为OneOne模式(一人一部门多岗位)";
@@ -83,7 +84,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=DBInstall_Submit&DemoType=" + val,
+                url: Handler + "?DoType=DBInstall_Submit&DemoType=" + valT,
                 success: function (data) {
 
                     if (data.indexOf('err@') == 0) {

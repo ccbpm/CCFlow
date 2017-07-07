@@ -7,9 +7,9 @@ using BP.Port;
 namespace BP.Demo.BPFramework
 {
     /// <summary>
-    /// 学生 属性
+    /// 人员 属性
     /// </summary>
-    public class StudentAttr : EntityNoNameAttr
+    public class EmployeeAttr : EntityNoNameAttr
     {
         #region 基本属性
         /// <summary>
@@ -48,6 +48,7 @@ namespace BP.Demo.BPFramework
         /// 备注
         /// </summary>
         public const string Note = "Note";
+        public const string BDT = "BDT";
         /// <summary>
         /// 是否特困生？
         /// </summary>
@@ -68,12 +69,17 @@ namespace BP.Demo.BPFramework
         /// 整治面貌
         /// </summary>
         public const string ZZMM = "ZZMM";
+        /// <summary>
+        /// 工龄
+        /// </summary>
+        public const string GL = "GL";
+
         #endregion
     }
     /// <summary>
-    /// 学生
+    /// 人员
     /// </summary>
-    public class Student : BP.En.EntityNoName
+    public class Employee : BP.En.EntityNoName
     {
         #region 属性
         /// <summary>
@@ -83,11 +89,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.PWD);
+                return this.GetValStringByKey(EmployeeAttr.PWD);
             }
             set
             {
-                this.SetValByKey(StudentAttr.PWD, value);
+                this.SetValByKey(EmployeeAttr.PWD, value);
             }
         }
         /// <summary>
@@ -97,11 +103,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValIntByKey(StudentAttr.Age);
+                return this.GetValIntByKey(EmployeeAttr.Age);
             }
             set
             {
-                this.SetValByKey(StudentAttr.Age, value);
+                this.SetValByKey(EmployeeAttr.Age, value);
             }
         }
         /// <summary>
@@ -111,11 +117,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.Addr);
+                return this.GetValStringByKey(EmployeeAttr.Addr);
             }
             set
             {
-                this.SetValByKey(StudentAttr.Addr, value);
+                this.SetValByKey(EmployeeAttr.Addr, value);
             }
         }
 
@@ -126,11 +132,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValIntByKey(StudentAttr.XB);
+                return this.GetValIntByKey(EmployeeAttr.XB);
             }
             set
             {
-                this.SetValByKey(StudentAttr.XB, value);
+                this.SetValByKey(EmployeeAttr.XB, value);
             }
         }
         /// <summary>
@@ -140,7 +146,7 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValRefTextByKey(StudentAttr.XB);
+                return this.GetValRefTextByKey(EmployeeAttr.XB);
             }
         }
         /// <summary>
@@ -150,11 +156,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.FK_BanJi);
+                return this.GetValStringByKey(EmployeeAttr.FK_BanJi);
             }
             set
             {
-                this.SetValByKey(StudentAttr.FK_BanJi, value);
+                this.SetValByKey(EmployeeAttr.FK_BanJi, value);
             }
         }
         /// <summary>
@@ -164,7 +170,7 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValRefTextByKey(StudentAttr.FK_BanJi);
+                return this.GetValRefTextByKey(EmployeeAttr.FK_BanJi);
             }
         }
         /// <summary>
@@ -174,11 +180,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.Email);
+                return this.GetValStringByKey(EmployeeAttr.Email);
             }
             set
             {
-                this.SetValByKey(StudentAttr.Email, value);
+                this.SetValByKey(EmployeeAttr.Email, value);
             }
         }
         /// <summary>
@@ -188,11 +194,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.Tel);
+                return this.GetValStringByKey(EmployeeAttr.Tel);
             }
             set
             {
-                this.SetValByKey(StudentAttr.Tel, value);
+                this.SetValByKey(EmployeeAttr.Tel, value);
             }
         }
         /// <summary>
@@ -202,11 +208,11 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return this.GetValStringByKey(StudentAttr.RegDate);
+                return this.GetValStringByKey(EmployeeAttr.RegDate);
             }
             set
             {
-                this.SetValByKey(StudentAttr.RegDate, value);
+                this.SetValByKey(EmployeeAttr.RegDate, value);
             }
         }
         #endregion
@@ -228,16 +234,16 @@ namespace BP.Demo.BPFramework
             }
         }
         /// <summary>
-        /// 学生
+        /// 人员
         /// </summary>
-        public Student()
+        public Employee()
         {
         }
         /// <summary>
-        /// 学生
+        /// 人员
         /// </summary>
         /// <param name="no"></param>
-        public Student(string no):base(no)
+        public Employee(string no):base(no)
         {
         }
         #endregion
@@ -253,39 +259,45 @@ namespace BP.Demo.BPFramework
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Demo_Student", "学生");
+                Map map = new Map("Demo_Employee", "人员");
                 //基础信息.
                 map.IsAllowRepeatName = true; //是否允许名称重复.
                 map.IsAutoGenerNo = true; //是否自动生成编号.
                 map.Java_SetCodeStruct("4"); // 4位数的编号，从 0001 开始，到 9999.
 
                 //普通字段.
-                map.AddTBStringPK(StudentAttr.No, null, "学号", true, true, 4, 4, 4); // 如果设置自动编号字段必须是只读的.
-                map.AddTBString(StudentAttr.Name, null, "名称", true, false, 0, 200, 70);
-                map.AddTBString(StudentAttr.PWD, null, "登录密码", true, false, 0, 200, 70);
+                map.AddTBStringPK(EmployeeAttr.No, null, "学号", true, true, 4, 4, 4); // 如果设置自动编号字段必须是只读的.
+                map.AddTBString(EmployeeAttr.Name, null, "名称", true, false, 0, 200, 70);
+                map.AddTBString(EmployeeAttr.PWD, null, "登录密码", true, false, 0, 200, 70);
                 //map.AddTBString("shuoming", null, "说明", true, false, 0, 200, 70);
 
-                map.AddTBString(StudentAttr.Addr, null, "地址", true, false, 0, 200, 100, true);
-                map.AddTBInt(StudentAttr.Age, 0, "年龄", true, false);
-                map.AddTBString(StudentAttr.Tel, null, "电话", true, false, 0, 200, 60);
-                map.AddTBString(StudentAttr.Email, null, "邮件", true, false, 0, 200, 50);
-                map.AddTBDateTime(StudentAttr.RegDate, null, "注册日期", true, true);
-                map.AddTBStringDoc(StudentAttr.Note, null, "备注", true, false, true); //大快文本框.
+                map.AddTBString(EmployeeAttr.Addr, null, "地址", true, false, 0, 200, 100,false,"http://sina.com.cn");
+                map.AddTBInt(EmployeeAttr.Age, 0, "年龄", true, false);
+                map.AddTBInt(EmployeeAttr.GL, 0, "工龄", true, false);
+
+                map.AddTBString(EmployeeAttr.Tel, null, "电话", true, false, 0, 200, 60);
+                map.AddTBString(EmployeeAttr.Email, null, "邮件", true, false, 0, 200, 50,true);
+                
+                map.AddTBDateTime(EmployeeAttr.RegDate, null, "注册日期", true, true);
+                map.AddTBDate(EmployeeAttr.BDT, null, "出生日期", true, true);
+
+                map.AddTBStringDoc(EmployeeAttr.Note, null, "备注", true, false, true); //大快文本框.
+
 
                 //枚举字段
-                map.AddDDLSysEnum(StudentAttr.XB, 0, "性别", true, true, StudentAttr.XB, "@0=女@1=男");
+                map.AddDDLSysEnum(EmployeeAttr.XB, 0, "性别", true, true, EmployeeAttr.XB, "@0=女@1=男");
                 //外键字段.
-                map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
+                map.AddDDLEntities(EmployeeAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
 
 
                 //增加checkbox属性.
-                map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true);
-                map.AddBoolean(StudentAttr.IsJiBing, false, "是否有重大疾病？", true, true);
-                map.AddBoolean(StudentAttr.IsPianYuanShanQu, false, "是否偏远山区？", true, true);
-                map.AddBoolean(StudentAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
+                map.AddBoolean(EmployeeAttr.IsDuShengZi, false, "是否是独生子？", true, true);
+                map.AddBoolean(EmployeeAttr.IsJiBing, false, "是否有重大疾病？", true, true);
+                map.AddBoolean(EmployeeAttr.IsPianYuanShanQu, false, "是否偏远山区？", true, true);
+                map.AddBoolean(EmployeeAttr.IsTeKunSheng, false, "是否是特困生？", true, true);
 
                 // 枚举字段 - 整治面貌.
-                map.AddDDLSysEnum(StudentAttr.ZZMM, 0, "整治面貌", true, true, StudentAttr.ZZMM,
+                map.AddDDLSysEnum(EmployeeAttr.ZZMM, 0, "整治面貌", true, true, EmployeeAttr.ZZMM,
                     "@0=少先队员@1=团员@2=党员");
 
                 map.AddMyFile("简历");
@@ -293,15 +305,10 @@ namespace BP.Demo.BPFramework
                 // map.AddMyFileS("简历");
 
                 //设置查询条件。
-                map.AddSearchAttr(StudentAttr.XB);
-                map.AddSearchAttr(StudentAttr.FK_BanJi);
+                map.AddSearchAttr(EmployeeAttr.XB);
+                map.AddSearchAttr(EmployeeAttr.FK_BanJi);
 
-                //多对多的映射.
-                map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
-                  StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "学习的科目");
-
-                //明细表映射.
-                map.AddDtl(new Resumes(), ResumeAttr.FK_Student);
+              
 
                 //带有参数的方法.
                 RefMethod rm = new RefMethod();
@@ -309,7 +316,6 @@ namespace BP.Demo.BPFramework
                 rm.HisAttrs.AddTBDecimal("JinE", 100, "缴纳金额", true, false);
                 rm.HisAttrs.AddTBString("Note", null, "备注", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoJiaoNaBanFei";
-                rm.GroupName = "功能执行测试";
                 map.AddRefMethod(rm);
 
                 //不带有参数的方法.
@@ -352,6 +358,7 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoJiaoNaBanFei(decimal jine, string note)
         {
+
             return "学号:"+this.No+",姓名:"+this.Name+",缴纳了:"+jine+"元,说明:"+note;
         }
         /// <summary>
@@ -376,15 +383,15 @@ namespace BP.Demo.BPFramework
 
     }
     /// <summary>
-    /// 学生s
+    /// 人员s
     /// </summary>
-    public class Students : BP.En.EntitiesNoName
+    public class Employees : BP.En.EntitiesNoName
     {
         #region 方法
         /// <summary>
-        /// 学生s
+        /// 人员s
         /// </summary>
-        public Students() { }
+        public Employees() { }
         #endregion
 
         #region 重写基类方法
@@ -395,7 +402,7 @@ namespace BP.Demo.BPFramework
         {
             get
             {
-                return new Student();
+                return new Employee();
             }
         }
         #endregion 重写基类方法

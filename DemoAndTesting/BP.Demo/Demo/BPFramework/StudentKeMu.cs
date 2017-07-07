@@ -159,16 +159,6 @@ namespace BP.Demo.BPFramework
         /// 学生科目对应s
 		/// </summary>
 		public StudentKeMus(){}
-		/// <summary>
-        /// 学生科目对应s
-		/// </summary>
-		/// <param name="FK_Student">FK_Student</param>
-		public StudentKeMus(string  FK_Student)
-		{
-			QueryObject qo = new QueryObject(this);
-			qo.AddWhere(StudentKeMuAttr.FK_Student, FK_Student);
-			qo.DoQuery();
-		}
 		#endregion
 
 		#region 重写方法

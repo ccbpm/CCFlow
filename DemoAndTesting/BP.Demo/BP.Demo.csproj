@@ -49,6 +49,7 @@
     <Compile Include="Demo\BPFramework\StudentKeMu.cs" />
     <Compile Include="Demo\BPFramework\Student.cs" />
     <Compile Include="Demo\BPFramework\KeMu.cs" />
+    <Compile Include="Demo\BPFramework\Emp.cs" />
     <Compile Include="Demo\CN\City.cs" />
     <Compile Include="Demo\CN\PQ.cs" />
     <Compile Include="Demo\CN\SF.cs" />

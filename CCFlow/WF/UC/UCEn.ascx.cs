@@ -2015,7 +2015,7 @@ namespace CCFlow.WF.UC
                             // tbAuto.Attributes["onkeyup"] = "DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + me.MyPK + "\');";
                             // tbAuto.Attributes["ondblclick"] = "ReturnValTBFullCtrl(this,'" + me.MyPK + "','sd');";
 
-                            tbAuto.Attributes["ondblclick"] = "ReturnValTBFullCtrl(this,'" + me.MyPK + "');";
+                            tbAuto.Attributes["ondblclick"] = "ReturnValTBFullCtrl(this,'" + HttpUtility.UrlEncode(me.MyPK) + "');";
                             tbAuto.Attributes["onkeyup"] = "DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + me.MyPK + "\');";
                             tbAuto.Attributes["AUTOCOMPLETE"] = "OFF";
                             if (me.Tag != "")
@@ -2111,8 +2111,8 @@ namespace CCFlow.WF.UC
                                 }
                                 else
                                 {
-                                    tb.Attributes["onclick"] = "ShowHelpDiv('" + tb.ID + "','','" + me.MyPK + "','" + en.PKVal + "','returnvalccformpopval');";
-                                    tb.Attributes["ondblclick"] = "ReturnValCCFormPopVal(this,'" + me.MyPK + "','" + en.PKVal + "', " + me.W + "," + me.H + ",'" + me.GetParaString("Title") + "');";
+                                    tb.Attributes["onclick"] = "ShowHelpDiv('" + tb.ID + "','','" + HttpUtility.UrlEncode(me.MyPK) + "','" + en.PKVal + "','returnvalccformpopval');";
+                                    tb.Attributes["ondblclick"] = "ReturnValCCFormPopVal(this,'" + HttpUtility.UrlEncode(me.MyPK) + "','" + en.PKVal + "', " + me.W + "," + me.H + ",'" + me.GetParaString("Title") + "');";
                                 }
 
                                 //tb.Attributes["onkeyup"] = "this.value='';";    //added by liuxc,2015.6.26,应新昌增加不允许修改

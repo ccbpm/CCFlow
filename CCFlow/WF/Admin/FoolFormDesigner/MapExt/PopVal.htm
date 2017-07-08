@@ -151,7 +151,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=InitPopVal&pageIndex=1&pageSize=12&ReqCount=0&MyPK=" + fk_mapExt + "&m=" + Math.random(),
+                url: Handler + "?DoType=PopVal_Init&pageIndex=1&pageSize=12&ReqCount=0&MyPK=" + fk_mapExt + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     alert(data);

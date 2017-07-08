@@ -117,7 +117,7 @@
         }
         //执行保存
         function Save() {
-            var fk_mapExt = GetQueryString("MyPK");
+            var fk_mapExt = getQueryStringByName("MyPK");
             var frmData = $("#cc").serialize();
             var keyOfEn = GetQueryString("KeyOfEn") || GetQueryString("RefNo");
             var fk_mapData = GetQueryString("FK_MapData");
@@ -144,14 +144,14 @@
 
         function TestData() {
 
-            var fk_mapExt = GetQueryString("MyPK");
+            var fk_mapExt = getQueryStringByName("MyPK");
             var keyOfEn = GetQueryString("RefNo");
             var fk_mapData = GetQueryString("FK_MapData");
 
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=PopVal_Init&pageIndex=1&pageSize=12&ReqCount=0&MyPK=" + fk_mapExt + "&m=" + Math.random(),
+                url: Handler + "?DoType=aa&pageIndex=1&pageSize=12&ReqCount=0&MyPK=" + fk_mapExt + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     alert(data);
@@ -500,7 +500,6 @@
 <input id="RB_PopValSelectModel_More" type="radio" name="PopValSelectModel" value="More"  /><label for="RB_PopValSelectModel_More">多选</label> 
 </fieldset>
 
-<input type="button" value="获得Json"  onclick="GetJson()" />
 <input type="button" value="保存"  onclick="Save()" />
 <input type="button" value="保存并关闭"  onclick="SaveAndClose()" />
 <input type="button" value="关闭"  onclick="windows.close();" />

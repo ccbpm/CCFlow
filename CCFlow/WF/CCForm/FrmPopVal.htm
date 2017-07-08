@@ -406,7 +406,7 @@
                             initMoreConSearch(pageSetData[0].PopValSearchCond);
                             $('#btnSearch').trigger('click');
                         }
-                        else if (dataArr.length > 0) {//TablePage 和TableOnly
+                        else if (dataArr!=undefined && dataArr.length > 0) {//TablePage 和TableOnly
                             var colencn = setDataArr[0].PopValColNames;
                             //设置表格的表头
                             var tableHeader = '';
@@ -665,8 +665,8 @@
                 PageSize: pageSize,
                 PageIndex: 1,
                 DivId: 'flowListDiv',
-                countUrl: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
-                listUrl: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData ,
+                countUrl: Handler + "?DoType=InitPopValTablePageCount&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+                listUrl: Handler + "?DoType=InitPopValTablePageList&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
                 RenderOverFun: function () {
                     //为CHECKBOX radio绑定事件
                     $('#flowListDiv div table tbody .ck_tbody').bind('change', checkBoxChange);

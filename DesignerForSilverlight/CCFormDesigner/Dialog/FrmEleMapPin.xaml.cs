@@ -79,6 +79,13 @@ namespace CCForm
                 return;
             }
 
+            //判断英文名称不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_MapPin_EnName.Text))
+            {
+                MessageBox.Show("英文名称 不能使用汉字！");
+                return;
+            }
+
             this.HisEle.Name = this.TB_MapPin_EnName.Text;
             this.HisEle.KeyName = this.TB_MapPin_CName.Text;
             this.HisEle.MyPK = Glo.FK_MapData + "_" + this.TB_MapPin_EnName.Text;

@@ -166,6 +166,13 @@ namespace CCForm
         }
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
+            //判断编号不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_EleID.Text))
+            {
+                MessageBox.Show("编号 不能使用汉字！");
+                return;
+            }
+
             ComboBoxItem item = (ComboBoxItem)this.DDL_EleType.SelectedItem;
             string eleType = item.Tag.ToString();
 

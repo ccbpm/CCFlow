@@ -62,6 +62,13 @@ namespace CCForm
             }
             #endregion 数据检查。
 
+            //判断英文字段不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_KeyOfEn.Text))
+            {
+                MessageBox.Show("英文字段 不能使用汉字！");
+                return;
+            }
+
             if (this.CB_IsHid.IsChecked == true)
             {
                 if (MessageBox.Show("隐藏字段只能在工具箱的隐藏区域才能找到。",

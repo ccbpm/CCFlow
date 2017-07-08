@@ -151,6 +151,13 @@ namespace BP.Controls
                     MessageBox.Show("请输入流程名称", "提示", MessageBoxButton.OK);
                     return;
                 }
+
+                //判断流程数据表不能包含汉字
+                if (!string.IsNullOrWhiteSpace(this.TB_PTable.Text) && BP.SL.Glo.ContainsChinese(this.TB_PTable.Text))
+                {
+                    MessageBox.Show("流程数据表 不能使用汉字！");
+                    return;
+                }
                
                     var flowSortID = (DDL_FlowSort.SelectedItem as BindableObject).GetValue("NO");
                     var DataStoreModel = this.DDL_DataStoreModel.SelectedIndex;

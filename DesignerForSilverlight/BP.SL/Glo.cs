@@ -173,5 +173,14 @@ namespace BP.SL
 
         }
 
+        /// <summary>
+        /// 判断指定字符串是否含有汉字
+        /// </summary>
+        /// <param name="str">要判断的字符串</param>
+        /// <returns></returns>
+        public static bool ContainsChinese(string str)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(str, @"[\u4e00-\u9fa5]+");
+        }
     }
 }

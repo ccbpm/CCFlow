@@ -80,6 +80,12 @@ namespace CCForm
                 MessageBox.Show("英文名不能为空。");
                 return;
             }
+            //判断英文名称不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_MicHot_EnName.Text))
+            {
+                MessageBox.Show("英文名称 不能使用汉字！");
+                return;
+            }
             if (string.IsNullOrEmpty(this.TB_MicHot_Path.Text.Trim()))
             {
                 this.TB_MicHot_Path.Text = "/DataUser/";

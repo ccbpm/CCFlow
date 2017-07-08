@@ -120,6 +120,12 @@ namespace CCForm
             }
             #endregion 数据检查。
 
+            //判断字段名称不能包含汉字
+            if(BP.SL.Glo.ContainsChinese(this.TB_KeyOfEn.Text))
+            {
+                MessageBox.Show("字段英文名 不能使用汉字！");
+                return;
+            }
 
             //直接保存到数据库里.
             CCFormSoapClient da = Glo.GetCCFormSoapClientServiceInstance();
@@ -212,7 +218,7 @@ namespace CCForm
             //this.tableEntity.TB_EnName.Text = "";
             //this.tableEntity.Show();
 
-            string url = Glo.BPMHost + "/WF/Comm/Sys/SFGuide.aspx?DoType=New&MyPK=" + Glo.FK_MapData+"&FromApp=SL";
+            string url = Glo.BPMHost + "/WF/Comm/Sys/SFGuide.htm?DoType=New&MyPK=" + Glo.FK_MapData+"&FromApp=SL";
 
             if (Glo.Platform == Platform.JFlow)
                 url = url.Replace(".aspx", ".jsp");

@@ -21,6 +21,19 @@ namespace CCForm
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
+            if(string.IsNullOrWhiteSpace(TB_CHName.Text) || string.IsNullOrWhiteSpace(TB_EnName.Text))
+            {
+                MessageBox.Show("物理表中/英文名称不能为空！");
+                return;
+            }
+
+            //判断物理表英文名称不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_EnName.Text))
+            {
+                MessageBox.Show("物理表英文名称 不能使用汉字！");
+                return;
+            }
+
             FF.CCFormSoapClient ff = Glo.GetCCFormSoapClientServiceInstance();
             ff.DoTypeAsync("SaveSFTable", this.TB_CHName.Text, this.TB_EnName.Text, null, null, null);
             ff.DoTypeCompleted += new EventHandler<FF.DoTypeCompletedEventArgs>(ff_DoTypeCompleted);

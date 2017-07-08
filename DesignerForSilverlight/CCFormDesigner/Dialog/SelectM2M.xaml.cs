@@ -40,7 +40,14 @@ namespace CCForm
                 return;
             }
             #endregion 数据检查。
-             
+
+
+            //判断编号不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_No.Text))
+            {
+                MessageBox.Show("编号 不能使用汉字！");
+                return;
+            }
 
             FF.CCFormSoapClient ff = Glo.GetCCFormSoapClientServiceInstance();
             ff.DoTypeAsync("NewM2M", Glo.FK_MapData, this.TB_No.Text, this.IsM2M.ToString(), this.IsM2M.ToString(), this.X.ToString(), this.Y.ToString());

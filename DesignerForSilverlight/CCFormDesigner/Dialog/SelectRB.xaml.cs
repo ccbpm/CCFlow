@@ -109,20 +109,27 @@ namespace CCForm
         {
 
             #region 数据检查。
-            if (string.IsNullOrEmpty(this.TB_Name.Text)
-               || string.IsNullOrEmpty(this.TB_No.Text))
+            if (string.IsNullOrEmpty(this.TB_KeyOfName.Text)
+               || string.IsNullOrEmpty(this.TB_KeyOfEn.Text))
             {
                 MessageBox.Show("您需要输入字段中英文名称", "Note", MessageBoxButton.OK);
                 return;
             }
-            if (this.TB_No.Text.Length >= 50)
+            if (this.TB_KeyOfEn.Text.Length >= 50)
             {
                 MessageBox.Show("英文名称太长,不能多于50个字符，并且必须是下划线或者英文字母。", "Note",
                     MessageBoxButton.OK);
                 return;
             }
             #endregion 数据检查。
-            
+
+            //判断字段英文名不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_KeyOfEn.Text))
+            {
+                MessageBox.Show("字段英文名 不能使用汉字！");
+                return;
+            }
+
             ListBoxItem lbi = this.listBox1.SelectedItem as ListBoxItem;
             if (lbi == null)
             {
@@ -276,6 +283,13 @@ namespace CCForm
                 MessageBox.Show("标签名称不能为空！");
                 return;
             }
+            //判断枚举编号不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_No.Text))
+            {
+                MessageBox.Show("枚举编号 不能使用汉字！");
+                return;
+            }
+
             FF.CCFormSoapClient da = Glo.GetCCFormSoapClientServiceInstance();
             da.SaveEnumAsync(this.TB_No.Text, this.TB_Name.Text, keys);
             da.SaveEnumCompleted += new EventHandler<SaveEnumCompletedEventArgs>(da_SaveEnumCompleted);

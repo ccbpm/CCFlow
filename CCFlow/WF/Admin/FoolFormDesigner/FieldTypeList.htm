@@ -105,6 +105,11 @@
                 return;
             }
 
+            if (ContainsChinese(no)) {
+                alert('字段英文名称 不能包含汉字！');
+                return;
+            }
+
             var fType = $('input[name="RB_FType"]:checked').val();
             $.ajax({
                 type: 'post',
@@ -133,6 +138,15 @@
                     }
                 }
             });
+        }
+
+        function ContainsChinese(str) {
+            ///<summary>判断指定字符串是否包含汉字</summary>
+            if (!str) {
+                return false;
+            }
+
+            return new RegExp("[\\u4E00-\\u9FFF]+", "g").test(str);
         }
     </script>
     <!--<base target="_self" /> -->

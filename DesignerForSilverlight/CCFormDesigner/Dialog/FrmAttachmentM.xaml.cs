@@ -44,6 +44,12 @@ namespace CCForm
                 return;
             }
 
+            //判断附件编号不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_No.Text))
+            {
+                MessageBox.Show("附件编号 不能使用汉字！");
+                return;
+            }
 
             #region 属性.
             string mypk = this.TB_No.Text.Trim();

@@ -80,10 +80,30 @@ namespace BP.Frm
         {
             string error = "";
             if (string.IsNullOrEmpty(this.TB_No.Text.Trim()))
-                error += "编号不能为空.";
+            {
+                MessageBox.Show("编号不能为空.");
+                return;
+            }
 
             if (string.IsNullOrEmpty(this.TB_Name.Text.Trim()))
-                error += "名称不能为空.";
+            {
+                MessageBox.Show("名称不能为空.");
+                return;
+            }
+            
+            //判断编号不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_No.Text))
+            {
+                MessageBox.Show("编号 不能使用汉字！");
+                return;
+            }
+
+            //判断表名称不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_PTable.Text))
+            {
+                MessageBox.Show("表名称 不能使用汉字！");
+                return;
+            }
 
             string strs = "";
             strs += "@EnName=BP.Sys.MapData@PKVal=" + this.TB_No.Text;

@@ -30,6 +30,12 @@ namespace CCForm
                 MessageBox.Show("图片英文名不能为空。");
                 return;
             }
+            //判断英文名称不能包含汉字
+            if (BP.SL.Glo.ContainsChinese(this.TB_En_Seal.Text))
+            {
+                MessageBox.Show("英文名称 不能使用汉字！");
+                return;
+            }
 
             BPImg img = Glo.currEle as BPImg;
             img.LinkURL = this.TB_LinkUrl.Text;

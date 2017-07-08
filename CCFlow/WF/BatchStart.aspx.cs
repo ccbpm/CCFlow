@@ -348,6 +348,8 @@ namespace CCFlow.WF
                 {
                     foreach (MapExt me in mes)
                     {
+                        if (!strs.Contains(me.AttrOfOper))
+                            continue;
                         switch (me.ExtType)
                         {
                             case MapExtXmlList.DDLFullCtrl: // 自动填充.

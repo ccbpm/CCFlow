@@ -2409,8 +2409,9 @@ namespace BP.WF
                     else
                     {
                         sql = fl.StartGuidePara2.Clone() as string;
-                        sql += " SELECT * FROM ('" + sql + "') T WHERE T.NO='" + sKey + "' ";
+                        
                     }
+                    sql = " SELECT * FROM (" + sql + ") T WHERE T.NO='" + sKey + "' ";
                     //替换变量
                     sql = sql.Replace("@WebUser.No", WebUser.No);
                     sql = sql.Replace("@WebUser.Name", WebUser.Name);

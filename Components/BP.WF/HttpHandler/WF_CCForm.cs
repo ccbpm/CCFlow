@@ -1084,7 +1084,7 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
-        /// 初始化PopVal 分页表格模式的Count
+        /// 初始化PopVal 分页表格模式的Count  杨玉慧
         /// </summary>
         /// <returns></returns>
         public string InitPopValTablePageCount()
@@ -1248,7 +1248,7 @@ namespace BP.WF.HttpHandler
 
         /// <summary>
         /// /// <summary>
-        /// 初始化PopVal分页表格的List
+        /// 初始化PopVal分页表格的List  杨玉慧
         /// </summary>
         /// <returns></returns>
         public string InitPopValTablePageList()

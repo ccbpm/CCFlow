@@ -119,8 +119,8 @@
         function Save() {
             var fk_mapExt = getQueryStringByName("MyPK");
             var frmData = $("#cc").serialize();
-            var keyOfEn = GetQueryString("KeyOfEn") || GetQueryString("RefNo");
-            var fk_mapData = GetQueryString("FK_MapData");
+            var keyOfEn = getQueryStringByName("KeyOfEn") || getQueryStringByName("RefNo");
+            var fk_mapData = getQueryStringByName("FK_MapData");
             $.ajax({
                 data:frmData,
                 type: 'post',
@@ -145,7 +145,7 @@
         function TestData() {
 
             var fk_mapExt = getQueryStringByName("MyPK");
-            var keyOfEn = GetQueryString("RefNo");
+            var keyOfEn = getQueryStringByName("RefNo");
             var fk_mapData = GetQueryString("FK_MapData");
 
             $.ajax({
@@ -161,8 +161,8 @@
 
         function GetJson() {
 
-            var fk_mapExt = GetQueryString("MyPK");
-            var keyOfEn = GetQueryString("RefNo");
+            var fk_mapExt = getQueryStringByName("MyPK");
+            var keyOfEn = getQueryStringByName("RefNo");
             var fk_mapData = GetQueryString("FK_MapData");
 
             $.ajax({
@@ -190,8 +190,8 @@
         });
         function InitPage() {
 
-            var fk_mapExt = GetQueryString("FK_MapExt");
-            var keyOfEn = GetQueryString("RefNo");
+            var fk_mapExt = getQueryStringByName("FK_MapExt");
+            var keyOfEn = getQueryStringByName("RefNo");
             var fk_mapData = GetQueryString("FK_MapData");
 
             $.ajax({

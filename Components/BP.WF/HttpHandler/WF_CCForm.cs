@@ -858,7 +858,7 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
-        /// 初始化PopVal的值
+        /// 初始化PopVal的值   除了分页表格模式之外的其他数据值
         /// </summary>
         /// <returns></returns>
         public string InitPopVal()
@@ -896,6 +896,43 @@ namespace BP.WF.HttpHandler
                 return BP.Tools.Json.ToJson(ds);
             }
 
+            if (me.PopValWorkModel == PopValWorkModel.Group)
+            {
+                /*
+                 *  分组的.
+                 */
+
+                string sqlObjs = me.PopValGroupSQL;
+                if (sqlObjs.Length > 10)
+                {
+                    sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                    sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                    sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+
+                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                    dt.TableName = "DTGroup";
+                    ds.Tables.Add(dt);
+                }
+
+                sqlObjs = me.PopValEntitySQL;
+                if (sqlObjs.Length > 10)
+                {
+                    sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                    sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                    sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+
+                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                    dt.TableName = "DTEntity";
+                    ds.Tables.Add(dt);
+                }
+                return BP.Tools.Json.ToJson(ds);
+
+            }
+
             if (me.PopValWorkModel == PopValWorkModel.TablePage)
             {
                 /* 分页的 */
@@ -906,66 +943,6 @@ namespace BP.WF.HttpHandler
 
                 //取出来查询条件.
                 string[] conds = me.PopValSearchCond.Split('$');
-
-                string countSQL = me.PopValTablePageSQLCount;
-
-                //固定参数.
-                countSQL = countSQL.Replace("@WebUser.No", BP.Web.WebUser.No);
-                countSQL = countSQL.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                countSQL = countSQL.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                countSQL = countSQL.Replace("@Key", key);
-                countSQL = this.DealExpByFromVals(countSQL);
-
-                //替换其他参数.
-                foreach (string cond in conds)
-                {
-                    if (cond == null || cond == "")
-                        continue;
-
-                    //参数.
-                    string para = cond.Substring(5, cond.IndexOf("#") - 5);
-                    string val = context.Request.QueryString[para];
-                    if (string.IsNullOrEmpty(val))
-                    {
-                        if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
-                            val = "all";
-                        else
-                            val = "";
-                    }
-
-                    if (val == "all")
-                    {
-                        countSQL = countSQL.Replace(para + "=@" + para, "1=1");
-                        countSQL = countSQL.Replace(para + "='@" + para + "'", "1=1");
-
-                        //找到para 前面表的别名   如 t.1=1 把t. 去掉
-                        int startIndex = 0;
-                        while (startIndex != -1 && startIndex < countSQL.Length)
-                        {
-                            int index = countSQL.IndexOf("1=1", startIndex + 1);
-                            if (index > 0 && countSQL.Substring(startIndex, index - startIndex).Trim().EndsWith("."))
-                            {
-                                int lastBlankIndex = countSQL.Substring(startIndex, index - startIndex).LastIndexOf(" ");
-
-
-                                countSQL = countSQL.Remove(lastBlankIndex + startIndex + 1, index - lastBlankIndex - 1);
-
-                                startIndex = (startIndex + lastBlankIndex) + 3;
-                            }
-                            else
-                            {
-                                startIndex = index;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //要执行两次替换有可能是，有引号.
-                        countSQL = countSQL.Replace("@" + para, val);
-                    }
-                }
-
-                string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
 
                 //pageSize
                 string pageSize = this.GetRequestVal("pageSize");
@@ -1041,6 +1018,163 @@ namespace BP.WF.HttpHandler
                 dt.TableName = "DTObjs";
                 ds.Tables.Add(dt);
 
+                //处理查询条件.
+                //$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Port_Dept WHERE No='@WebUser.No'
+                //$Para=XB#Label=性别#EnumKey=XB
+                //$Para=DTFrom#Label=注册日期从#DefVal=@Now-30
+                //$Para=DTTo#Label=到#DefVal=@Now
+
+
+                foreach (string cond in conds)
+                {
+                    if (string.IsNullOrEmpty(cond) == true)
+                        continue;
+
+                    string sql = null;
+                    if (cond.Contains("#ListSQL=") == true)
+                    {
+                        sql = cond.Substring(cond.IndexOf("ListSQL") + 8);
+                        sql = sql.Replace("@WebUser.No", WebUser.No);
+                        sql = sql.Replace("@WebUser.Name", WebUser.Name);
+                        sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                        sql = this.DealExpByFromVals(sql);
+                    }
+
+                    if (cond.Contains("#EnumKey=") == true)
+                    {
+                        string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 8);
+                        sql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + enumKey + "'";
+                    }
+
+                    //处理日期的默认值
+                    //DefVal=@Now-30
+                    //if (cond.Contains("@Now"))
+                    //{
+                    //    int nowIndex = cond.IndexOf(cond);
+                    //    if (cond.Trim().Length - nowIndex > 5)
+                    //    {
+                    //        char optStr = cond.Trim()[nowIndex + 5];
+                    //        int day = 0;
+                    //        if (int.TryParse(cond.Trim().Substring(nowIndex + 6), out day)) {
+                    //            cond = cond.Substring(0, nowIndex) + DateTime.Now.AddDays(-1 * day).ToString("yyyy-MM-dd HH:mm");
+                    //        }
+                    //    }
+                    //}
+
+                    if (sql == null)
+                        continue;
+
+                    //参数.
+                    string para = cond.Substring(5, cond.IndexOf("#") - 5);
+                    if (ds.Tables.Contains(para) == true)
+                        throw new Exception("@配置的查询,参数名有冲突不能命名为:" + para);
+
+                    //查询出来数据，就把他放入到dataset里面.
+                    DataTable dtPara = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dtPara.TableName = para;
+                    ds.Tables.Add(dtPara); //加入到参数集合.
+                }
+
+
+                return BP.Tools.Json.ToJson(ds);
+            }
+
+            //返回数据.
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        /// <summary>
+        /// 初始化PopVal 分页表格模式的Count
+        /// </summary>
+        /// <returns></returns>
+        public string InitPopValTablePageCount()
+        {
+            MapExt me = new MapExt();
+            me.MyPK = this.FK_MapExt;
+            me.Retrieve();
+
+            //数据对象，将要返回的.
+            DataSet ds = new DataSet();
+
+            //获得配置信息.
+            Hashtable ht = me.PopValToHashtable();
+            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
+
+            //增加到数据源.
+            ds.Tables.Add(dtcfg);
+
+            if (me.PopValWorkModel == PopValWorkModel.SelfUrl)
+                return "@SelfUrl" + me.PopValUrl;
+            if (me.PopValWorkModel == PopValWorkModel.TablePage)
+            {
+                /* 分页的 */
+                //key
+                string key = this.GetRequestVal("Key");
+                if (string.IsNullOrEmpty(key) == true)
+                    key = "";
+
+                //取出来查询条件.
+                string[] conds = me.PopValSearchCond.Split('$');
+
+                string countSQL = me.PopValTablePageSQLCount;
+
+                //固定参数.
+                countSQL = countSQL.Replace("@WebUser.No", BP.Web.WebUser.No);
+                countSQL = countSQL.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                countSQL = countSQL.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                countSQL = countSQL.Replace("@Key", key);
+                countSQL = this.DealExpByFromVals(countSQL);
+
+                //替换其他参数.
+                foreach (string cond in conds)
+                {
+                    if (cond == null || cond == "")
+                        continue;
+
+                    //参数.
+                    string para = cond.Substring(5, cond.IndexOf("#") - 5);
+                    string val = context.Request.QueryString[para];
+                    if (string.IsNullOrEmpty(val))
+                    {
+                        if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
+                            val = "all";
+                        else
+                            val = "";
+                    }
+
+                    if (val == "all")
+                    {
+                        countSQL = countSQL.Replace(para + "=@" + para, "1=1");
+                        countSQL = countSQL.Replace(para + "='@" + para + "'", "1=1");
+
+                        //找到para 前面表的别名   如 t.1=1 把t. 去掉
+                        int startIndex = 0;
+                        while (startIndex != -1 && startIndex < countSQL.Length)
+                        {
+                            int index = countSQL.IndexOf("1=1", startIndex + 1);
+                            if (index > 0 && countSQL.Substring(startIndex, index - startIndex).Trim().EndsWith("."))
+                            {
+                                int lastBlankIndex = countSQL.Substring(startIndex, index - startIndex).LastIndexOf(" ");
+
+
+                                countSQL = countSQL.Remove(lastBlankIndex + startIndex + 1, index - lastBlankIndex - 1);
+
+                                startIndex = (startIndex + lastBlankIndex) + 3;
+                            }
+                            else
+                            {
+                                startIndex = index;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //要执行两次替换有可能是，有引号.
+                        countSQL = countSQL.Replace("@" + para, val);
+                    }
+                }
+
+                string count = BP.DA.DBAccess.RunSQLReturnValInt(countSQL, 0).ToString();
                 DataTable dtCount = new DataTable("DTCout");
                 dtCount.TableName = "DTCout";
                 dtCount.Columns.Add("Count", typeof(int));
@@ -1108,43 +1242,178 @@ namespace BP.WF.HttpHandler
 
                 return BP.Tools.Json.ToJson(ds);
             }
+            //返回数据.
+            return BP.Tools.Json.ToJson(ds);
+        }
 
-            if (me.PopValWorkModel == PopValWorkModel.Group)
+        /// <summary>
+        /// /// <summary>
+        /// 初始化PopVal分页表格的List
+        /// </summary>
+        /// <returns></returns>
+        public string InitPopValTablePageList()
+        {
+            MapExt me = new MapExt();
+            me.MyPK = this.FK_MapExt;
+            me.Retrieve();
+
+            //数据对象，将要返回的.
+            DataSet ds = new DataSet();
+
+            //获得配置信息.
+            Hashtable ht = me.PopValToHashtable();
+            DataTable dtcfg = BP.Sys.PubClass.HashtableToDataTable(ht);
+
+            //增加到数据源.
+            ds.Tables.Add(dtcfg);
+
+            if (me.PopValWorkModel == PopValWorkModel.SelfUrl)
+                return "@SelfUrl" + me.PopValUrl;
+            if (me.PopValWorkModel == PopValWorkModel.TablePage)
             {
-                /*
-                 *  分组的.
-                 */
+                /* 分页的 */
+                //key
+                string key = this.GetRequestVal("Key");
+                if (string.IsNullOrEmpty(key) == true)
+                    key = "";
 
-                string sqlObjs = me.PopValGroupSQL;
-                if (sqlObjs.Length > 10)
+                //取出来查询条件.
+                string[] conds = me.PopValSearchCond.Split('$');
+
+                //pageSize
+                string pageSize = this.GetRequestVal("pageSize");
+                if (string.IsNullOrEmpty(pageSize))
+                    pageSize = "10";
+
+                //pageIndex
+                string pageIndex = this.GetRequestVal("pageIndex");
+                if (string.IsNullOrEmpty(pageIndex))
+                    pageIndex = "1";
+
+                string sqlObjs = me.PopValTablePageSQL;
+                sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
+                sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                sqlObjs = sqlObjs.Replace("@Key", key);
+
+                //三个固定参数.
+                sqlObjs = sqlObjs.Replace("@PageCount", ((int.Parse(pageIndex) - 1) * int.Parse(pageSize)).ToString());
+                sqlObjs = sqlObjs.Replace("@PageSize", pageSize);
+                sqlObjs = sqlObjs.Replace("@PageIndex", pageIndex);
+                sqlObjs = this.DealExpByFromVals(sqlObjs);
+
+                //替换其他参数.
+                foreach (string cond in conds)
                 {
-                    sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
-                    sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                    sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                    sqlObjs = this.DealExpByFromVals(sqlObjs);
+                    if (cond == null || cond == "")
+                        continue;
+
+                    //参数.
+                    string para = cond.Substring(5, cond.IndexOf("#") - 5);
+                    string val = context.Request.QueryString[para];
+                    if (string.IsNullOrEmpty(val))
+                    {
+                        if (cond.Contains("ListSQL") == true || cond.Contains("EnumKey") == true)
+                            val = "all";
+                        else
+                            val = "";
+                    }
+                    if (val == "all")
+                    {
+                        sqlObjs = sqlObjs.Replace(para + "=@" + para, "1=1");
+                        sqlObjs = sqlObjs.Replace(para + "='@" + para + "'", "1=1");
+
+                        int startIndex = 0;
+                        while (startIndex != -1 && startIndex < sqlObjs.Length)
+                        {
+                            int index = sqlObjs.IndexOf("1=1", startIndex + 1);
+                            if (index > 0 && sqlObjs.Substring(startIndex, index - startIndex).Trim().EndsWith("."))
+                            {
+                                int lastBlankIndex = sqlObjs.Substring(startIndex, index - startIndex).LastIndexOf(" ");
 
 
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
-                    dt.TableName = "DTGroup";
-                    ds.Tables.Add(dt);
+                                sqlObjs = sqlObjs.Remove(lastBlankIndex + startIndex + 1, index - lastBlankIndex - 1);
+
+                                startIndex = (startIndex + lastBlankIndex) + 3;
+                            }
+                            else
+                            {
+                                startIndex = index;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //要执行两次替换有可能是，有引号.
+                        sqlObjs = sqlObjs.Replace("@" + para, val);
+                    }
                 }
 
-                sqlObjs = me.PopValEntitySQL;
-                if (sqlObjs.Length > 10)
+
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
+                dt.TableName = "DTObjs";
+                ds.Tables.Add(dt);
+
+                //处理查询条件.
+                //$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Port_Dept WHERE No='@WebUser.No'
+                //$Para=XB#Label=性别#EnumKey=XB
+                //$Para=DTFrom#Label=注册日期从#DefVal=@Now-30
+                //$Para=DTTo#Label=到#DefVal=@Now
+
+
+                foreach (string cond in conds)
                 {
-                    sqlObjs = sqlObjs.Replace("@WebUser.No", BP.Web.WebUser.No);
-                    sqlObjs = sqlObjs.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-                    sqlObjs = sqlObjs.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                    sqlObjs = this.DealExpByFromVals(sqlObjs);
+                    if (string.IsNullOrEmpty(cond) == true)
+                        continue;
 
+                    string sql = null;
+                    if (cond.Contains("#ListSQL=") == true)
+                    {
+                        sql = cond.Substring(cond.IndexOf("ListSQL") + 8);
+                        sql = sql.Replace("@WebUser.No", WebUser.No);
+                        sql = sql.Replace("@WebUser.Name", WebUser.Name);
+                        sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                        sql = this.DealExpByFromVals(sql);
+                    }
 
-                    DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
-                    dt.TableName = "DTEntity";
-                    ds.Tables.Add(dt);
+                    if (cond.Contains("#EnumKey=") == true)
+                    {
+                        string enumKey = cond.Substring(cond.IndexOf("EnumKey") + 8);
+                        sql = "SELECT IntKey AS No, Lab as Name FROM Sys_Enum WHERE EnumKey='" + enumKey + "'";
+                    }
+
+                    //处理日期的默认值
+                    //DefVal=@Now-30
+                    //if (cond.Contains("@Now"))
+                    //{
+                    //    int nowIndex = cond.IndexOf(cond);
+                    //    if (cond.Trim().Length - nowIndex > 5)
+                    //    {
+                    //        char optStr = cond.Trim()[nowIndex + 5];
+                    //        int day = 0;
+                    //        if (int.TryParse(cond.Trim().Substring(nowIndex + 6), out day)) {
+                    //            cond = cond.Substring(0, nowIndex) + DateTime.Now.AddDays(-1 * day).ToString("yyyy-MM-dd HH:mm");
+                    //        }
+                    //    }
+                    //}
+
+                    if (sql == null)
+                        continue;
+
+                    //参数.
+                    string para = cond.Substring(5, cond.IndexOf("#") - 5);
+                    if (ds.Tables.Contains(para) == true)
+                        throw new Exception("@配置的查询,参数名有冲突不能命名为:" + para);
+
+                    //查询出来数据，就把他放入到dataset里面.
+                    DataTable dtPara = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dtPara.TableName = para;
+                    ds.Tables.Add(dtPara); //加入到参数集合.
                 }
+
+
                 return BP.Tools.Json.ToJson(ds);
             }
-
             //返回数据.
             return BP.Tools.Json.ToJson(ds);
         }

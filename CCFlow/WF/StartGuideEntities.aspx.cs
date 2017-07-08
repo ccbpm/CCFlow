@@ -161,7 +161,7 @@ namespace CCFlow.WF
                 this.Pub2.AddTR();
                 this.Pub2.AddTDIdx(idx);
 
-                string paras = url + "";
+                string paras = url + "&No=" + dr["No"];
                 //foreach (DataColumn dc in dt.Columns)
                 //{
                 //    string str = dr[dc.ColumnName] as string;

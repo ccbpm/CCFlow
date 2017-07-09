@@ -589,7 +589,13 @@ namespace BP.WF.HttpHandler
                     en.StartGuidePara2 = this.GetRequestVal("TB_BySQLOne2");  //列表语句.
                     en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLOne;
                 }
-
+                //多条模式
+                if (en.StartGuideWay == Template.StartGuideWay.BySQLMulti)
+                {
+                    en.StartGuidePara1 = this.GetRequestVal("TB_BySQLMulti1");  //查询语句.
+                    en.StartGuidePara2 = this.GetRequestVal("TB_BySQLMulti2");  //列表语句.
+                    en.StartGuideWay = BP.WF.Template.StartGuideWay.BySQLMulti;
+                }
                 //多条-子父流程-合卷审批.
                 if (en.StartGuideWay == Template.StartGuideWay.SubFlowGuide)
                 {

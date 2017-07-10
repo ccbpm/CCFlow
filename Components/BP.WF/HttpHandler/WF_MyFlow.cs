@@ -224,6 +224,7 @@ namespace BP.WF.HttpHandler
                 if (gwf.RetrieveFromDBSources() == 0)
                     return ("err@该流程ID{" + this.WorkID + "}不存在，或者已经被删除.");
             }
+
             #region 判断前置导航.
 
             if (this.currND.IsStartNode && this.IsCC == false && this.WorkID == 0)

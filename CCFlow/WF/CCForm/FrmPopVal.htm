@@ -547,7 +547,7 @@
             //$('#tree').css('display', 'block');
             $('#orgjstree').css('display', 'block');
            
-            var url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') ;
+            var url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + getQueryStringByName('FK_MapExt') ;
 
             //初始化Tree
             var jstreeOption = {
@@ -586,7 +586,7 @@
                         );
                         }
                         else {
-                            url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + GetQueryString('FK_MapExt') + '&ParentNo=' + node.id;
+                            url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + getQueryStringByName('FK_MapExt') + '&ParentNo=' + node.id;
                             $.ajax({
                                 type: 'post',
                                 async: true,
@@ -654,7 +654,7 @@
         }
         //分页table
         function initTableData() {
-            var fk_MapExt = GetQueryString("FK_MapExt");
+            var fk_MapExt = getQueryStringByName("FK_MapExt");
             var pageSize = $('#flowListDiv  .pagination-panel select').val();
             if (pageSize == "-1") {
                 pageSize = 10;

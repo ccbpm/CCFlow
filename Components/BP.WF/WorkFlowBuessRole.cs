@@ -363,7 +363,7 @@ namespace BP.WF
                         supposeBillNo = (lshIdx == 0 ? "" : supposeBillNo.Substring(0, lshIdx))
                                         + string.Empty.PadLeft(i, '_')
                                         +
-                                        (lshIdx + 6 + 1 < supposeBillNo.Length
+                                        (lshIdx + 6 < supposeBillNo.Length
                                              ? supposeBillNo.Substring(lshIdx + 6)
                                              : "");
                         //保存当前流程号所处位置，及流程号长度，以便之后使用替换成正确的流水号
@@ -387,7 +387,7 @@ namespace BP.WF
                         supposeBillNo = (kv.Key == 0 ? "" : supposeBillNo.Substring(0, kv.Key))
                                         + "1".PadLeft(kv.Value, '0')
                                         +
-                                        (kv.Key + kv.Value + 1 < supposeBillNo.Length
+                                        (kv.Key + kv.Value < supposeBillNo.Length
                                              ? supposeBillNo.Substring(kv.Key + kv.Value)
                                              : "");
                     }
@@ -447,7 +447,7 @@ namespace BP.WF
                         supposeBillNo = (kv.Key == 0 ? "" : supposeBillNo.Substring(0, kv.Key))
                                         + mlsh[kv.Key].ToString().PadLeft(kv.Value, '0')
                                         +
-                                        (kv.Key + kv.Value + 1 < supposeBillNo.Length
+                                        (kv.Key + kv.Value < supposeBillNo.Length
                                              ? supposeBillNo.Substring(kv.Key + kv.Value)
                                              : "");
                     }

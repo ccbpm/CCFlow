@@ -1001,7 +1001,7 @@ namespace CCFlow.WF.UC
 
             string appPath = BP.WF.Glo.CCFlowAppPath; //this.Request.ApplicationPath;
             this.Page.Title = "第" + this.currND.Step + "步:" + this.currND.Name;
-            #endregion 判断前置导航
+            #endregion 判断前置导航.
 
             #region 处理分合流的退回信息.
             if (this.WorkID != 0)

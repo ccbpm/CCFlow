@@ -906,6 +906,16 @@ namespace CCFormExcel2010
 				if (location == "=#NAME?") //若单元格配置了公式（函数），则有可能被识别为NAME
 					continue;
 				var range = Application.Names.Item(i).RefersToRange;
+				//Excel.Range range;
+				//try
+				//{
+				//	range = Application.Names.Item(i).RefersToRange;
+				//}
+				//catch
+				//{
+				//	continue;
+				//}
+
 				//var sheet = range.Worksheet.Name; //Sheet1
 				//var col = Application.Names.Item(i).RefersToRange.Column; //2
 				//var row = range.Row; //2

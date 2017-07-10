@@ -206,7 +206,7 @@ namespace CCFormExcel2010
 				{
 					for (var j = 1; j <= ary.GetLength(1); j++)
 					{
-						if (ary.GetValue(i, j) != null && !string.IsNullOrEmpty(ary.GetValue(i, j).ToString()))
+						if (ary.GetValue(i, j) != null && !string.IsNullOrEmpty(ary.GetValue(i, j).ToString().Trim()))
 							return false;
 					}
 				}

@@ -27,7 +27,7 @@ namespace CCFormExcel2010
 
 		private int _TableHeadHeight; //表头高度
 		private Dictionary<int, string> _columns; //表头（列绑定）信息：col:KeyOfEn
-		private string _PkColumnName; //主键列名
+		private string _PkColumnName; //主键列名 OID, MyPK, No
 		private Dictionary<int, string> _rowsConnection; //行绑定关系：rowidInExcel:rowPK
 		private Stack _operations; //操作序列
 
@@ -346,9 +346,8 @@ namespace CCFormExcel2010
 		/// 撤销新增行操作
 		/// </summary>
 		/// <param name="Idx"></param>
-		/// <param name=_PkColumnName></param>
 		/// <param name="range"></param>
-		private void UndoDeleteRow(int Idx, string oid, Excel.Range range = null)
+		private void UndoDeleteRow(int Idx, string colPk, Excel.Range range = null)
 		{
 			//更改newDataTalble中的Status: _newData.Select("OID={0}")[0][Idx or RowStatus]
 			_newData.Select(string.Format("OID='{0}'", _rowsConnection[Idx]))[0]["Idx"] = RowStatus.Origin.ToString();
@@ -361,7 +360,7 @@ namespace CCFormExcel2010
 				_rowsConnection[point] = _rowsConnection[point - 1];
 				point--;
 			} //循环结束时:point==Idx
-			_rowsConnection[Idx] = oid;
+            _rowsConnection[Idx] = colPk;
 
 			//更新子表区域
 			if (range != null)

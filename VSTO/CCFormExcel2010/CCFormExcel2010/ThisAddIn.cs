@@ -14,7 +14,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Diagnostics;
 
-
 namespace CCFormExcel2010
 {
 	public partial class ThisAddIn
@@ -729,7 +728,7 @@ namespace CCFormExcel2010
 			#region 获取子表
 
 			SubTable st;
-			if (_dictSubTables.ContainsKey(dt.TableName))
+			if (_dictSubTables.ContainsKey(dt.TableName)==true)
 			{
 				st = _dictSubTables[dt.TableName];
 				if (st.Data != _originData.Tables[st.Name]) //用于【保存成功后，更新最新数据源】
@@ -737,9 +736,9 @@ namespace CCFormExcel2010
 					st.OriginData = _originData.Tables[st.Name].Copy();
 					st.Data = _originData.Tables[st.Name].Copy();
 				}
-			}
-			else
-			{
+			}else
+            {
+            
 				Dictionary<int, string> htColumns = new Dictionary<int, string>();
 				int TableHeadHeight;
 				htColumns = GetAreaColumns(range, out TableHeadHeight);
@@ -752,8 +751,26 @@ namespace CCFormExcel2010
 						throw new Exception("检测到字段绑定异常：子表“" + dt.TableName + "”绑定了『不存在于原始数据表』的字段“" + col.Value + "”！");
 					}
 				}
-				st = new SubTable(range, dt, htColumns, TableHeadHeight, "OID"); //TODO: 暂定所有子表的主键字段都是“OID”
-				_dictSubTables.Add(dt.TableName, st);
+
+                st = null;
+
+                if (dt.Columns.Contains("OID") == true)
+                {
+                    st = new SubTable(range, dt, htColumns, TableHeadHeight, "OID"); //TODO: 暂定所有子表的主键字段都是“OID”
+                    _dictSubTables.Add(dt.TableName, st);
+                }
+
+                if (dt.Columns.Contains("MyPK") == true)
+                {
+                    st = new SubTable(range, dt, htColumns, TableHeadHeight, "MyPK"); //TODO: 暂定所有子表的主键字段都是“OID”
+                    _dictSubTables.Add(dt.TableName, st);
+                }
+
+                if (dt.Columns.Contains("No") == true)
+                {
+                    st = new SubTable(range, dt, htColumns, TableHeadHeight, "No"); //TODO: 暂定所有子表的主键字段都是“OID”
+                    _dictSubTables.Add(dt.TableName, st);
+                }
 			}
 
 			#endregion

@@ -347,7 +347,7 @@ namespace CCFormExcel2010
 		/// </summary>
 		/// <param name="Idx"></param>
 		/// <param name="range"></param>
-		private void UndoDeleteRow(int Idx, string colPk, Excel.Range range = null)
+		private void UndoDeleteRow(int Idx, string rowPk, Excel.Range range = null)
 		{
 			//更改newDataTalble中的Status: _newData.Select("OID={0}")[0][Idx or RowStatus]
 			_newData.Select(string.Format("OID='{0}'", _rowsConnection[Idx]))[0]["Idx"] = RowStatus.Origin.ToString();
@@ -360,7 +360,7 @@ namespace CCFormExcel2010
 				_rowsConnection[point] = _rowsConnection[point - 1];
 				point--;
 			} //循环结束时:point==Idx
-            _rowsConnection[Idx] = colPk;
+			_rowsConnection[Idx] = rowPk;
 
 			//更新子表区域
 			if (range != null)
@@ -388,7 +388,6 @@ namespace CCFormExcel2010
 					this.UndoDeleteRow(oper.Row, oper.RowPk, range);
 				else
 					this.UndoDeleteRow(oper.Row, oper.RowPk);
-
 			}
 		}
 

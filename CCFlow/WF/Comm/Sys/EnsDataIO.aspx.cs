@@ -113,7 +113,7 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageSession
         //btn.Text = "清空方式导入";
         LinkBtn btn = new LinkBtn(false, "Btn_Clear", "清空方式导入");
         btn.SetDataOption("iconCls", "'icon-delete'");
-        btn.Attributes["onclick"] = "return window.confirm('您确定要执行吗？ 如果执行现有的数据将会被清空，Excel中的数据导入进去。');";
+        btn.Attributes["onclick"] = "if(window.confirm('您确定要执行吗？ 如果执行现有的数据将会被清空，Excel中的数据导入进去。')){showpro(); return true;}else{return false;}";
         btn.Click += new EventHandler(btn_DataIO_Click);
         this.Pub1.Add(btn);
         
@@ -138,14 +138,14 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageSession
         //btn.Text = "为主键，执行更新方式导入。";
         btn = new LinkBtn(false, NamesOfBtn.Update, "执行更新方式导入");
         btn.Click += new EventHandler(btn_UpdateIO_Click);
-        btn.Attributes["onclick"] = "return window.confirm('您确定要执行吗？ 如果执行现有的数据将会按照主键更新。');";
+        btn.Attributes["onclick"] = "if(window.confirm('您确定要执行吗？ 如果执行现有的数据将会按照主键更新。')){showpro(); return true;}else{return false;}";
         this.Pub1.Add(btn);
         this.Pub1.AddSpace(1);
         //added by liuxc,2017-04-30
         btn = new LinkBtn(false, NamesOfBtn.Add, "执行跳过存在编号方式导入");
         btn.SetDataOption("iconCls", "'icon-add'");
         btn.Click += new EventHandler(btn_AddIO_Click);
-        btn.Attributes["onclick"] = "return window.confirm('您确定要执行吗？已存在主键的记录，将会跳过不进行更新。');";
+        btn.Attributes["onclick"] = "if(window.confirm('您确定要执行吗？已存在主键的记录，将会跳过不进行更新。')){showpro(); return true;}else{return false;}";
         this.Pub1.Add(btn);
         this.Pub1.AddBR();
         this.Pub1.AddBR();
@@ -170,7 +170,6 @@ public partial class CCFlow_Comm_Sys_EnsDataIO : BP.Web.WebPageSession
 
             if (System.IO.File.Exists(filePath)==false)
                 filePath = BP.Sys.SystemConfig.PathOfWebApp + "Temp" + "\\" + WebUser.No + "DTS.xlsx";
-
             DataTable dt = BP.DA.DBLoad.ReadExcelFileToDataTable(filePath, null);
           
             Entity en = ens.GetNewEntity;

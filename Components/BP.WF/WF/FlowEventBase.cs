@@ -404,6 +404,14 @@ namespace BP.WF
         {
             return null; 
         }
+        /// <summary>
+        /// 工作到达的时候
+        /// </summary>
+        /// <returns></returns>
+        public virtual string WorkArrive()
+        {
+            return null;
+        }
         #endregion 要求子类重写的方法(节点事件).
 
         #region 基类方法.
@@ -525,6 +533,8 @@ namespace BP.WF
                     return this.BeforeFlowDel();
                 case EventListOfNode.AfterFlowDel: // 删除后.
                     return this.AfterFlowDel();
+                case EventListOfNode.WorkArrive: // 工作到达时.
+                    return this.WorkArrive();
                 default:
                     throw new Exception("@没有判断的事件类型:" + eventType);
                     break;

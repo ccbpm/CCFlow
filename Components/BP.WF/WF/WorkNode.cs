@@ -6282,7 +6282,6 @@ namespace BP.WF
                 }
                 #endregion 设置流程的标记.
 
-
                 //执行时效考核.
                 Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
 
@@ -6353,6 +6352,14 @@ namespace BP.WF
                 }
                 #endregion 判断当前处理人员，可否处理下一步工作.
 
+                #region 处理节点到达事件..
+                //执行发送到达事件.
+                if (this.town != null)
+                {
+                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.WorkArrive,
+                        this.town.HisNode, this.rptGe, null, null);
+                }
+                #endregion 处理节点到达事件.
 
                 #region 处理发送成功后事件.
                 try
@@ -6369,6 +6376,7 @@ namespace BP.WF
                         }
                     }
 
+
                     //执行发送.
                     string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
                         this.HisNode, this.rptGe, null, this.HisMsgObjs);
@@ -6382,7 +6390,6 @@ namespace BP.WF
                     this.addMsg(SendReturnMsgFlag.SendSuccessMsgErr, ex.Message);
                 }
                 #endregion 处理发送成功后事件.
-
 
                 //返回这个对象.
                 return this.HisMsgObjs;
@@ -6979,8 +6986,8 @@ namespace BP.WF
         /// <param name="gwls">接受人</param>
         public void SendMsgToThem(GenerWorkerLists gwls)
         {
-            if (BP.WF.Glo.IsEnableSysMessage == false)
-                return;
+            //if (BP.WF.Glo.IsEnableSysMessage == false)
+            //    return;
 
             //求到达人员的IDs
             string toEmps="";
@@ -6988,6 +6995,8 @@ namespace BP.WF
             {
                 toEmps += gwl.FK_Emp + ",";
             }
+
+
 
             //处理工作到达事件.
             PushMsgs pms = this.town.HisNode.HisPushMsgs;

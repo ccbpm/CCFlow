@@ -69,7 +69,7 @@ namespace BP.WF.HttpHandler
             }
 
             string sql = "";
-            sql = "SELECT KeyOfEn, Name, Idx, GroupID, UIContralType, UIHeight, UIWidth, LGType FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'  ORDER BY IDX ";
+            sql = "SELECT KeyOfEn, Name, Idx, GroupID, UIContralType,MyDataType,LGType, UIHeight, UIWidth, LGType,UIIsEnable,UIIsInput,UIVisible,Colspan FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'  ORDER BY IDX ";
             DataTable dtMapAttr = DBAccess.RunSQLReturnTable(sql);
             dtMapAttr.TableName = "Sys_MapAttr";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -103,7 +103,77 @@ namespace BP.WF.HttpHandler
             }
             ds.Tables.Add(dtGroup);
 
+            sql = @"SELECT No
+      ,Name
+      ,FK_MapData
+      ,PTable
+      ,GroupField
+      ,RefPK
+      ,FEBD
+      ,Model
+      ,RowsOfList
+      ,IsEnableGroupField
+      ,IsShowSum
+      ,IsShowIdx
+      ,IsCopyNDData
+      ,IsHLDtl
+      ,IsReadonly
+      ,IsShowTitle
+      ,IsView
+      ,IsInsert
+      ,IsDelete
+      ,IsUpdate
+      ,IsEnablePass
+      ,IsEnableAthM
+      ,IsEnableM2M
+      ,IsEnableM2MM
+      ,WhenOverSize
+      ,DtlOpenType
+      ,DtlShowModel
+      ,X
+      ,Y
+      ,H
+      ,W
+      ,FrmW
+      ,FrmH
+      ,MTR
+      ,FilterSQLExp
+      ,GUID
+      ,FK_Node
+      ,IsExp
+      ,IsImp
+      ,IsEnableSelectImp
+      ,ImpSQLSearch
+      ,ImpSQLInit
+      ,ImpSQLFull
+      ,AtPara
+      ,SubThreadWorker
+      ,SubThreadWorkerText
+  FROM dbo.Sys_MapDtl where FK_MapData='" + this.FK_MapData + "'";
+            DataTable dtMapDtl = DBAccess.RunSQLReturnTable(sql);
+            dtMapDtl.TableName = "Sys_MapDtl";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                
+            }
+            ds.Tables.Add(dtMapDtl);
 
+            sql = @"SELECT MyPK
+      ,FK_MapData
+      ,Name
+      ,URL
+      ,W
+      ,H
+      ,IsAutoSize
+      ,GUID
+  FROM dbo.Sys_MapFrame where FK_MapData='" + this.FK_MapData + "'";
+            DataTable dtMapFrame = DBAccess.RunSQLReturnTable(sql);
+            dtMapFrame.TableName = "Sys_MapFrame";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                
+            }
+            ds.Tables.Add(dtMapFrame);
             //把dataet转化成json 对象.
             return BP.Tools.Json.ToJson(ds);
         }

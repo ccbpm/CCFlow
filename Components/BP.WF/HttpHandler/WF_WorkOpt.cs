@@ -178,6 +178,10 @@ namespace BP.WF.HttpHandler
                                 row["IsDoc"] = true;
                                 row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
                                 tkDoc = tk;
+
+                                //增加默认审核意见
+                                if (string.IsNullOrWhiteSpace(row["Msg"].ToString()) && wcDesc.FWCIsFullInfo)
+                                    row["Msg"] = wcDesc.FWCDefInfo;
                             }
                             else
                             {
@@ -331,6 +335,10 @@ namespace BP.WF.HttpHandler
 
                         if (row["Msg"] == DBNull.Value || string.IsNullOrWhiteSpace(row["Msg"] as string))
                             row["RDT"] = "";
+
+                        //增加默认审核意见
+                        if (string.IsNullOrWhiteSpace(row["Msg"].ToString()) && wcDesc.FWCIsFullInfo)
+                            row["Msg"] = wcDesc.FWCDefInfo;
                     }
                     else
                     {
@@ -345,6 +353,10 @@ namespace BP.WF.HttpHandler
                         row["EmpFromT"] = WebUser.Name;
                         row["T_NodeIndex"] = ++idx;
                         row["T_CheckIndex"] = ++noneEmpIdx;
+
+                        //增加默认审核意见
+                        if (string.IsNullOrWhiteSpace(row["Msg"].ToString()) && wcDesc.FWCIsFullInfo)
+                            row["Msg"] = wcDesc.FWCDefInfo;
 
                         tkDt.Rows.Add(row);
                     }
@@ -362,6 +374,10 @@ namespace BP.WF.HttpHandler
                     row["EmpFromT"] = WebUser.Name;
                     row["T_NodeIndex"] = ++idx;
                     row["T_CheckIndex"] = ++noneEmpIdx;
+
+                    //增加默认审核意见
+                    if (string.IsNullOrWhiteSpace(row["Msg"].ToString()) && wcDesc.FWCIsFullInfo)
+                        row["Msg"] = wcDesc.FWCDefInfo;
 
                     tkDt.Rows.Add(row);
                 }

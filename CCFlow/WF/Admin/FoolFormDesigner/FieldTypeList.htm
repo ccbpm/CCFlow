@@ -124,7 +124,7 @@
                     }
 
                     var url = data.replace('url@', '');
-                    window.location.href = url;
+                    window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
                     return;
 
 

@@ -843,7 +843,7 @@ namespace BP.Sys
 
                 int i = this.GetValIntByKey(MapAttrAttr.MaxLen);
                 if (i > 4000)
-                    i = 400;
+                    i = 4000;
                 if (i == 0)
                     return 50;
                 return i;

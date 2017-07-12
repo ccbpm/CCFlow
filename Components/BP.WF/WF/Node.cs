@@ -3021,7 +3021,7 @@ namespace BP.WF
                 attr.LGType = FieldTypeS.Normal;
                 attr.UIVisible = false;
                 attr.UIIsEnable = false;
-                attr.MaxLen = 400;
+                attr.MaxLen = 8000;
                 attr.MinLen = 0;
                 attr.Insert();
             }
@@ -3292,7 +3292,7 @@ namespace BP.WF
             attr.LGType = FieldTypeS.Normal;
             attr.UIVisible = false;
             attr.UIIsEnable = false;
-            attr.MaxLen = 400;
+            attr.MaxLen = 8000;
             attr.MinLen = 0;
             attr.Insert();
 

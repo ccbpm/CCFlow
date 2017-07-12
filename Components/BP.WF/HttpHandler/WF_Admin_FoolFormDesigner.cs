@@ -187,7 +187,7 @@ namespace BP.WF.HttpHandler
         {
             MapDtl md = new Sys.MapDtl();
             md.No = this.FK_MapDtl;
-            if (md.RetrieveFromDBSources() != 0)
+            if (md.RetrieveFromDBSources() == 0)
                 BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, md.Name, 100, 200);
             else
                 BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, this.FK_MapDtl, md.X, md.Y);

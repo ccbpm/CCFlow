@@ -28,8 +28,10 @@
         var fk_mapData = GetQueryString("FK_MapData");
         //明细表ID.
         var fk_mapDtl = GetQueryString("FK_MapDtl");
+        //所属表单id
+        var fk_node = GetQueryString("FK_Node");
 
-        var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl;
+        var url = 'MapDtlDe.htm?DoType=Edit&FK_MapData=' + fk_mapData + '&FK_MapDtl=' + fk_mapDtl + "&m=" + Math.random();
 
         $(function () {
             $("#F").attr("src", url);
@@ -38,15 +40,19 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=MapDefDtlFreeFrm_Init&FK_MapData=" + fk_mapData + "&FK_MapDtl=" + fk_mapDtl + "&m=" + Math.random(),
+                url: Handler + "?DoType=MapDefDtlFreeFrm_Init&FK_MapData=" + fk_mapData + "&FK_MapDtl=" + fk_mapDtl + "&FK_Node=" + fk_node + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
-                   // alert(data);
+                    // alert(data);
+
+                    if (data.indexOf("sln@") != -1) {
+                        var slnDtlNo = data.substr("sln@".length);
+                        location.href = "MapDefDtlFreeFrm.htm?FK_MapDtl=" + slnDtlNo + "&FK_MapData=Temp&t=" + Math.random();
+                    }
                 }
             });
 

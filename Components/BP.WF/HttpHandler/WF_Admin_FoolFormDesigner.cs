@@ -185,12 +185,52 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MapDefDtlFreeFrm_Init()
         {
-            MapDtl md = new Sys.MapDtl();
-            md.No = this.FK_MapDtl;
-            if (md.RetrieveFromDBSources() == 0)
-                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, md.Name, 100, 200);
+            MapDtl dtl = new MapDtl();
+
+            //如果传递来了节点信息, 就是说明了独立表单的节点方案处理, 现在就要做如下判断
+            if(this.FK_Node != 0)
+            {
+                dtl.No = this.FK_MapDtl + "_" + this.FK_Node;
+
+                if (dtl.RetrieveFromDBSources() == 0)
+                {
+                    // 开始复制它的属性.
+                    MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
+
+                    //让其直接保存.
+                    dtl.No = this.FK_MapDtl + "_" + this.FK_Node;
+                    dtl.FK_MapData = "Temp";
+                    dtl.DirectInsert(); //生成一个明细表属性的主表.
+
+                    //循环保存字段.
+                    int idx = 0;
+                    foreach (MapAttr item in attrs)
+                    {
+                        item.FK_MapData = this.FK_MapDtl + "_" + this.FK_Node;
+                        item.MyPK = item.FK_MapData + "_" + item.KeyOfEn;
+                        item.Save();
+                        idx++;
+                        item.Idx = idx;
+                        item.DirectUpdate();
+                    }
+
+                    MapData md = new MapData();
+                    md.No = "Temp";
+                    if (md.IsExits == false)
+                    {
+                        md.Name = "为权限方案设置的临时的数据";
+                        md.Insert();
+                    }
+                }
+
+                return "sln@" + dtl.No;
+            }
+
+            dtl.No = this.FK_MapDtl;
+            if (dtl.RetrieveFromDBSources() == 0)
+                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, dtl.Name, 100, 200);
             else
-                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, this.FK_MapDtl, md.X, md.Y);
+                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, this.FK_MapDtl, dtl.X, dtl.Y);
 
             return "创建成功.";
         }

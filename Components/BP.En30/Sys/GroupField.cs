@@ -22,6 +22,10 @@ namespace BP.Sys
         /// 流转自定义组件
         /// </summary>
         public const string FTC = "FTC";
+        /// <summary>
+        /// 按钮控件
+        /// </summary>
+        public const string Btn = "Btn";
     }
     /// <summary>
     /// GroupField

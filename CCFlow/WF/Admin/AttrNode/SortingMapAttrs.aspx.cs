@@ -124,6 +124,7 @@ namespace CCFlow.WF.Admin
         private GroupFields groups;
         private MapDtls dtls;
         private FrmAttachments athMents;
+        private FrmBtns btns;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -157,7 +158,7 @@ namespace CCFlow.WF.Admin
             qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
             qo.DoQuery();
 
-
+            btns = new FrmBtns(this.FK_MapData);
             athMents = new FrmAttachments(this.FK_MapData);
             dtls = new MapDtls(this.FK_MapData);
 
@@ -240,9 +241,33 @@ namespace CCFlow.WF.Admin
                         group.CtrlID = athMent.MyPK;
                         group.Insert();
 
+                        athMent.GroupID = group.OID;
+                        athMent.Update();
+
                         groups.AddEntity(group);
                     }
                 }
+
+                //未分组按钮自动创建一个
+                foreach (FrmBtn fbtn in btns)
+                {
+                    if (GetGroupID(fbtn.MyPK, groups) == 0)
+                    {
+                        group = new GroupField();
+                        group.Lab = fbtn.Text;
+                        group.EnName = fbtn.FK_MapData;
+                        group.CtrlType = GroupCtrlType.Btn;
+                        group.CtrlID = fbtn.MyPK;
+                        group.Insert();
+
+                        fbtn.GroupID = group.OID;
+                        fbtn.Update();
+
+                        groups.AddEntity(group);
+                    }
+                }
+
+                dtGroups = groups.ToDataTableField("dtGroups");
 
                 foreach (DataRow drGrp in dtGroups.Rows)
                 {
@@ -361,14 +386,29 @@ namespace CCFlow.WF.Admin
                     }
                     #endregion
 
+                    #region 按钮行
+                    List<FrmBtn> groupOfBtns = new List<FrmBtn>();
+                    foreach (FrmBtn fbtn in btns)
+                    {
+                        if (GetGroupID(fbtn.MyPK, groups).ToString() != drGrp["OID"].ToString())
+                            continue;
+                        groupOfBtns.Add(fbtn);
+                    }
+                    //此分组存在按钮
+                    if (groupOfBtns.Count > 0)
+                    {
+                        GroupAddBtn(groupOfBtns);
+                    }
+                    #endregion
+
                     //如果此分组下没有字段，则显示无字段消息
-                    if (rows_Attrs.Length == 0 && groupOfAthMents.Count == 0 && groupOfDtls.Count == 0)
+                    if (rows_Attrs.Length == 0 && groupOfAthMents.Count == 0 && groupOfDtls.Count == 0 && groupOfBtns.Count == 0)
                     {
                         #region 该分组下面没有任何字段
                         pub1.AddTR();
                         pub1.AddTDBegin("colspan='5' style='color:red'");
                         pub1.AddSpace(1);
-                        pub1.Add("@该分组下面没有任何字段");
+                        pub1.Add("@该分组下面没有任何字段或控件");
                         pub1.AddTDEnd();
                         pub1.AddTREnd();
                         #endregion 
@@ -398,7 +438,7 @@ namespace CCFlow.WF.Admin
                         ddl.ID = "DDL_Group_" + (row[MapAttrAttr.GroupID] ?? string.Empty) + "_" + row[MapAttrAttr.KeyOfEn];
                         ddl.Items.Add(new ListItem("请选择分组", ""));
 
-                        foreach (DataRow rowGroup in dtGroups.Rows)
+                        foreach (DataRow rowGroup in dtGroups.Select("CtrlType=''"))
                             ddl.Items.Add(new ListItem(rowGroup[GroupFieldAttr.Lab].ToString(), rowGroup[GroupFieldAttr.OID].ToString()));
 
                         ddl.AutoPostBack = true;
@@ -1022,6 +1062,7 @@ namespace CCFlow.WF.Admin
             MapData mapdata = null;
             MapDtl dtl = null;
             FrmAttachment athMent = null;
+            FrmBtn fbtn = null;
             List<string> keys = new List<string>();
             int targetIdx;
 
@@ -1251,6 +1292,55 @@ namespace CCFlow.WF.Admin
                     }
                     #endregion
                     break;
+                case "Btn":
+                    #region 按钮
+                    //检测所有的按钮，判断原有idx与现在idx是否匹配，不匹配的都进行更新，第一次进行排序时，将原有的idx都更新一遍
+                    foreach (Control ctrl in pub1.Controls)
+                    {
+                        tbtn = ctrl as LinkBtn;
+                        if (tbtn == null || !tbtn.ID.StartsWith("Btn_Btn")) continue;
+
+                        tids = new MoveBtnIds(ctrl.ID);
+                        if (!tids.Success || keys.Contains(tids.Key)) continue;
+
+                        keys.Add(tids.Key);
+
+                        fbtn = btns.GetEntityByKey(FrmBtnAttr.FK_MapData, FK_MapData, FrmBtnAttr.MyPK, tids.Key) as FrmBtn;
+                        if (fbtn == null)
+                            continue;
+                        if (tids.Idx == targetIdx)
+                        {
+                            //受影响的组索引号更改为当前移动组的索引号
+                            if (tids.OldIdx != ids.Idx)
+                            {
+                                //更新FrmBtn中的索引
+                                //fbtn.RowIdx = ids.Idx;
+                                fbtn.Update();
+                            }
+                        }
+                        else if (tids.Idx == ids.Idx)
+                        {
+                            //当前移动组的索引号改为受影响的组索引号
+                            if (tids.OldIdx != targetIdx)
+                            {
+                                //更新FrmBtn中的索引
+                                //    fbtn.RowIdx = targetIdx;
+                                fbtn.Update();
+                            }
+                        }
+                        else
+                        {
+                            //检索其余未受影响的组，将与之对应的索引号不一样的均更新
+                            if (tids.OldIdx != tids.Idx)
+                            {
+                                //更新FrmBtn中的索引
+                                //   fbtn.RowIdx = tids.Idx;
+                                fbtn.Update();
+                            }
+                        }
+                    }
+                    #endregion
+                    break;
             }
 
             //重新加载本页
@@ -1442,6 +1532,80 @@ namespace CCFlow.WF.Admin
                 //if (idx_Attr < groupOfAthMents.Count)
                 //{
                 //    btn = new LinkBtn(false, "Btn_AthMent_Down_" + athMents.Count + "_" + idx_Attr + "_" + athMent.RowIdx + "_0_" + athMent.NoOfObj, "下移");
+                //    btn.SetDataOption("iconCls", "'icon-down'");
+                //    btn.Click += btn_Click;
+                //    pub1.Add(btn);
+                //}
+
+                pub1.AddTDEnd();
+                pub1.AddTREnd();
+
+                #endregion
+
+                idx_Attr++;
+            }
+            pub1.AddTableEnd();
+
+            pub1.AddBR();
+            pub1.AddTDEnd();
+            pub1.AddTREnd();
+        }
+
+        /// <summary>
+        /// 给分组添加按钮
+        /// </summary>
+        /// <param name="groupOfBtns"></param>
+        private void GroupAddBtn(List<FrmBtn> groupOfBtns)
+        {
+            pub1.AddTR();
+            pub1.AddTDBegin("colspan='5'");
+            pub1.AddTable("class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'");
+
+            #region 标题行
+            pub1.AddTR();
+            pub1.AddTDGroupTitle("style='width:40px;text-align:center'", "序");
+            pub1.AddTDGroupTitle("style='width:100px;'", "按钮编号");
+            pub1.AddTDGroupTitle("style='width:160px;'", "按钮文本");
+            pub1.AddTDGroupTitle("style='width:120px;'", "按钮分组");
+            pub1.AddTDGroupTitle("排序");
+            pub1.AddTREnd();
+
+            #endregion
+
+            int idx_Attr = 1;
+            LinkBtn btn = null;
+            foreach (FrmBtn fbtn in groupOfBtns)
+            {
+                #region 多附件排序
+
+                pub1.AddTR();
+                pub1.AddTD("style='text-align:center'", idx_Attr.ToString());
+                pub1.AddTD(fbtn.MyPK);
+                pub1.AddTD(fbtn.Text);
+                //DDL ddl = new DDL();
+                //ddl.ID = "DDL_Btn_" + fbtn.GroupID + "_" + fbtn.MyPK;
+
+                //foreach (GroupField groupField in groups)
+                //    ddl.Items.Add(new ListItem(groupField.Lab, groupField.OID.ToString()));
+
+                //ddl.AutoPostBack = true;
+                //ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
+                //ddl.SetSelectItem(fbtn.GroupID);
+                //pub1.AddTD(ddl);
+                pub1.AddTD("&nbsp;");
+
+                pub1.AddTDBegin();
+
+                //if (idx_Attr > 1)
+                //{
+                //    btn = new LinkBtn(false, "Btn_Btn_Up_" + btns.Count + "_" + idx_Attr + "_" + fbtn.RowIdx + "_0_" + fbtn.MyPK, "上移");
+                //    btn.SetDataOption("iconCls", "'icon-up'");
+                //    btn.Click += btn_Click;
+                //    pub1.Add(btn);
+                //}
+                //if (idx_Attr < groupOfBtns.Count)
+                //{
+                //    btn = new LinkBtn(false, "Btn_Btn_Down_" + btns.Count + "_" + idx_Attr + "_" + fbtn.RowIdx + "_0_" + fbtn.MyPK, "下移");
                 //    btn.SetDataOption("iconCls", "'icon-down'");
                 //    btn.Click += btn_Click;
                 //    pub1.Add(btn);

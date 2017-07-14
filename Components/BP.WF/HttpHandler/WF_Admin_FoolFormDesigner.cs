@@ -196,6 +196,12 @@ namespace BP.WF.HttpHandler
                 {
                     // 开始复制它的属性.
                     MapAttrs attrs = new MapAttrs(this.FK_MapDtl);
+                    MapDtl odtl = new Sys.MapDtl(this.FK_MapDtl);
+                    //存储表要与原明细表一致
+                    if (string.IsNullOrWhiteSpace(odtl.PTable))
+                        dtl.PTable = odtl.No;
+                    else
+                        dtl.PTable = odtl.PTable;
 
                     //让其直接保存.
                     dtl.No = this.FK_MapDtl + "_" + this.FK_Node;

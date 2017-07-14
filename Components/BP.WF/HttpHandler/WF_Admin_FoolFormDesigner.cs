@@ -202,10 +202,39 @@ namespace BP.WF.HttpHandler
                     dtl.FK_MapData = "Temp";
                     dtl.DirectInsert(); //生成一个明细表属性的主表.
 
+                    //字段的分组也要一同复制
+                    Dictionary<int, int> groupids = new Dictionary<int, int>();
+
                     //循环保存字段.
                     int idx = 0;
                     foreach (MapAttr item in attrs)
                     {
+                        if(item.GroupID != 0)
+                        {
+                            if (groupids.ContainsKey(item.GroupID))
+                            {
+                                item.GroupID = groupids[item.GroupID];
+                            }
+                            else
+                            {
+                                GroupField gf = new Sys.GroupField();
+                                gf.OID = item.GroupID;
+
+                                if (gf.RetrieveFromDBSources() == 0)
+                                {
+                                    gf.Lab = "默认分组";
+                                }
+
+                                gf.EnName = dtl.No;
+                                gf.InsertAsNew();
+
+                                if (groupids.ContainsKey(item.GroupID) == false)
+                                    groupids.Add(item.GroupID, gf.OID);
+
+                                item.GroupID = gf.OID;
+                            }
+                        }
+
                         item.FK_MapData = this.FK_MapDtl + "_" + this.FK_Node;
                         item.MyPK = item.FK_MapData + "_" + item.KeyOfEn;
                         item.Save();

@@ -228,6 +228,9 @@ namespace BP.Sys.FrmUI
             //执行保存.
             attr.Save();
 
+            if (this.GetValStrByKey("GroupID") == "无")
+                this.SetValByKey("GroupID", "0");
+
             return base.beforeUpdateInsertAction();
         }
         #endregion

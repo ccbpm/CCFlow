@@ -26,6 +26,15 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
+        /// 获取隐藏字段
+        /// </summary>
+        /// <returns></returns>
+        public string Hiddenfielddata()
+        {
+            return BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>

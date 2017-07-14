@@ -95,14 +95,7 @@ namespace BP.WF.HttpHandler
             else
                 return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
         }
-        /// <summary>
-        /// 获取隐藏字段
-        /// </summary>
-        /// <returns></returns>
-        public string Hiddenfielddata()
-        {
-            return BP.Sys.CCFormAPI.DB_Hiddenfielddata(this.FK_MapData);
-        }
+        
         public string HiddenFieldDelete()
         {
             string records = getUTF8ToString("records");

@@ -30,7 +30,6 @@
         var enName = GetQueryString("EnName");
         var attrKey = GetQueryString("AttrKey");
         var nodeid = GetQueryString("NodeID");
-        var deptsubs = new Array(); //部门人员
         var nodedepts = new Array(); //节点绑定人员
         var currdepts = new Array(); //记录当前表格中绑定的人员列表集合
         var PAGESIZE = 10;  //默认每页显示条数
@@ -41,43 +40,18 @@
         $(function () {
             $("#treeDepts").tree({
                 checkbox: true,
+                cascadeCheck: false,
                 formatter: function (node) {
                     if (!node.attributes) {
                         return node.text;
                     }
 
-                    var root = $("#treeDepts").tree("getRoot");
-                    var rootselect = '';
-
-                    if (node.attributes.TType == "CDEPT") {
-                        if (root.id == node.id) {
-                            if (IndexOfArray(nodedepts, "No", node.attributes.No) == -1) {
-                                rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, true)' title='选择根节点部门'>[选择]</a>";
-                            }
-                            else {
-                                rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, false)' title='取消选择根节点部门'>[取消]</a>";
-                            }
-
-                            return node.text + rootselect;
+                    if (node.children.length > 0) {
+                        if (node.children.length == 1 && node.children[0].text == "loading...") {
+                            return node.text;
                         }
 
-                        return node.text;
-                    }
-
-                    var link = "<a href='javascript:void(0)' onclick='GetSubDepts(\"" + root.attributes.No + "\",\"" + node.attributes.No + "\")'>" + node.text + "</a>";
-
-                    if (root.id == node.id) {
-                        if (IndexOfArray(nodedepts, "No", node.attributes.No) == -1) {
-                            rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, true)' title='选择根节点部门'>[选择]</a>";
-                        }
-                        else {
-                            rootselect = "&nbsp;<a href='javascript:void(0)' onclick='CheckRootNode(this, false)' title='取消选择根节点部门'>[取消]</a>";
-                        }
-
-                        return link + rootselect;
-                    }
-                    else {
-                        return link;
+                        return node.text + "<input type='checkbox' id='cb_" + node.id + "' onchange='CheckAllChildren(this, \"" + node.id + "\")' />[" + node.children.length + "]";
                     }
                 },
                 onExpand: function (node) {
@@ -85,37 +59,14 @@
                         return;
                     }
 
-                    var root = $("#treeDepts").tree("getRoot");
-
-                    GetSubDepts(root.attributes.No, node.attributes.No);
+                    GetSubDepts(node);
                 },
-                onCascadeCheck: function (node, checked) {
+                onCheck: function (node, checked) {
                     if (!node.attributes || node.attributes.TType != "DEPT") {
                         return;
                     }
 
                     CheckNode(node, checked);
-                },
-                onCheck: function (node, checked) {
-                    if (typeof node.checked == typeof checked || !node.attributes || node.attributes.TType != "DEPT") {
-                        return;
-                    }
-                    alert(node.attributes.Name + "_" + node.checked + "_" + checked);
-                },
-                checkbox: function (node) {
-                    if (node.attributes && node.attributes.TType == "PDEPT") {
-                        return false;
-                    }
-
-                    if (node.text == "loading..." || node.children.length == 0) {
-                        return false;
-                    }
-
-                    if (node.attributes.ParentNo == 0 && node.attributes.TType == "DEPT") {
-                        return false;
-                    }
-
-                    return true;
                 }
             });
 
@@ -137,11 +88,29 @@
             GetNodeDepts();
         });
 
+        function CheckAllChildren(cb, nid) {
+            var children = $("#treeDepts").tree("getChildren", $("#treeDepts").tree("find", nid).target);
+
+            $.each(children, function () {
+                if (this.text == "loading..." || $("#treeDepts").tree("getParent", this.target).id != nid) {
+                    return true;
+                }
+
+                if (cb.checked) {
+                    $("#treeDepts").tree("check", this.target);
+                }
+                else {
+                    $("#treeDepts").tree("uncheck", this.target);
+                }
+            });
+        }
+
         function Init() {
             //获取组织结构根结点
             var param = {
-                DoType: "Dot2DotTreeDeptEmpModel_GetStructureTreeRoot",
-                parentrootid: "0"
+                DoType: "Dot2DotTreeDeptModel_GetStructureTreeRoot",
+                parentrootid: "0",
+                nodeid: nodeid
             };
 
             Handler_AjaxQueryData(param, function (data, scope) {
@@ -156,28 +125,16 @@
             }, this);
         }
 
-        function GetSubDepts(rootid, parentid) {
+        function GetSubDepts(cnode) {
             var param = {
                 DoType: "Dot2DotTreeDeptModel_GetSubDepts",
-                rootid: rootid,
-                parentid: parentid,
+                parentid: cnode.attributes.No,
                 nodeid: nodeid
             };
 
-            var node = $("#treeDepts").tree("find", "DEPT_" + parentid);
-
-            if (node.state == "closed") {
-                $("#treeDepts").tree("expand", node.target);
-            }
-
-            var children = $("#treeDepts").tree("getChildren", node.target);
+            var children = $("#treeDepts").tree("getChildren", cnode.target);
             if (children[0].text != "loading...") {
-                $("#treeDepts").tree("insert", {
-                    before: children[0].target,
-                    data: {
-                        text: "loading..."
-                    }
-                });
+                return;
             }
 
             Handler_AjaxQueryData(param, function (data, scope) {
@@ -187,29 +144,9 @@
                 }
 
                 var redata = eval('(' + data + ')');
-                deptsubs = redata.InnerData.Depts;
 
-                //更新部门人员中的选中状态
-                var idx = -1;
-
-                $.each(deptsubs, function () {
-                    idx = IndexOfArray(nodedepts, "No", this.No);
-
-                    if (this.Checked) {
-                        if (idx == -1) {
-                            this.Checked = false;
-                            SetDeptChecked(redata.InnerData.TreeData[0], this.No, false);
-                        }
-                    }
-                    else {
-                        if (idx != -1) {
-                            this.Checked = true;
-                            SetDeptChecked(redata.InnerData.TreeData[0], this.No, true);
-                        }
-                    }
-                });
-
-                $("#treeDepts").tree("loadData", redata.InnerData.TreeData);
+                $("#treeDepts").tree("remove", children[0].target);
+                $("#treeDepts").tree("append", { parent: cnode.target, data: redata });
             }, this);
         }
 
@@ -271,41 +208,12 @@
                 if (IndexOfArray(nodedepts, "No", currdept.No) == -1) {
                     nodedepts.push(currdept);
                 }
-
-                for (index in deptsubs) {
-                    if (deptsubs[index].No == currdept.No) {
-                        deptsubs[index].Checked = true;
-                    }
-                }
             }
             else {  //取消选中
                 var idx = IndexOfArray(nodedepts, "No", currdept.No);
 
                 if (idx != -1) {
                     nodedepts.splice(idx, 1);
-                }
-
-                for (index in deptsubs) {
-                    if (deptsubs[index].No == currdept.No) {
-                        deptsubs[index].Checked = false;
-                    }
-                }
-            }
-        }
-
-        function SetDeptChecked(node, deptNo, checked) {
-            if (!node.attributes) {
-                return;
-            }
-
-            if (node.attributes.TType == "DEPT" && node.attributes.No == deptNo) {
-                node.checked = checked;
-            }
-            else {
-                if (node.children) {
-                    $.each(node.children, function () {
-                        SetDeptChecked(this, deptNo, checked);
-                    });
                 }
             }
         }
@@ -395,20 +303,18 @@
 
             $.messager.confirm("提示", "您确定要删除所有已经选择的部门吗？", function (r) {
                 if (r) {
-                    nodedepts.splice(0, nodedepts.length);
-
-                    if ($("#sDepts").datagrid("getData").total > 0) {
-                        LoadDeptsInDataGrid(nodedepts, 1, opts.pageSize);
-                    }
-
                     //删除树中勾选项
-                    $.each(deptsubs, function () {
-                        node = $("#treeDepts").tree("find", "DEPT_" + this.No);
+                    while (nodedepts.length > 0) {
+                        node = $("#treeDepts").tree("find", "DEPT_" + nodedepts[0].No);
 
                         if (node && node.checked) {
                             $("#treeDepts").tree("uncheck", node.target);
                         }
-                    });
+                    }
+
+                    if ($("#sDepts").datagrid("getData").total > 0) {
+                        LoadDeptsInDataGrid(nodedepts, 1, opts.pageSize);
+                    }
                 }
             });
         }

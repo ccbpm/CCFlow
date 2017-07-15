@@ -30,7 +30,6 @@
         var enName = GetQueryString("EnName");
         var attrKey = GetQueryString("AttrKey");
         var nodeid = GetQueryString("NodeID");
-        var unitstations = new Array(); //单位岗位
         var nodestations = new Array(); //节点绑定岗位
         var currstations = new Array(); //记录当前表格中绑定的岗位列表集合
         var PAGESIZE = 10;  //默认每页显示条数
@@ -42,27 +41,8 @@
         $(function () {
             $("#treeUnits").tree({
                 checkbox: true,
-                formatter: function (node) {
-                    if (!node.attributes) {
-                        return node.text;
-                    }
-
-                    if (node.attributes.TType == "CUNIT" || node.attributes.TType == "CST" || node.attributes.TType == "S") {
-                        return node.text;
-                    }
-
-                    var root = $("#treeUnits").tree("getRoot");
-
-                    return "<a href='javascript:void(0)' onclick='GetSubUnits(\"" + root.attributes.No + "\",\"" + node.attributes.No + "\")'>" + node.text + "</a>";
-                },
                 onExpand: function (node) {
-                    if (node.attributes && (node.attributes.TType == "CUNIT" || node.attributes.TType == "CST")) {
-                        return;
-                    }
-
-                    var root = $("#treeUnits").tree("getRoot");
-
-                    GetSubUnits(root.attributes.No, node.attributes.No);
+                    GetSubUnits(node);
                 },
                 onCascadeCheck: function (node, checked) {
                     if (!node.attributes || node.attributes.TType != "S") {
@@ -79,7 +59,11 @@
                 },
                 checkbox: function (node) {
                     if (node.attributes && (node.attributes.TType == "UNITROOT" || node.attributes.TType == "UNIT" || node.attributes.TType == "STROOT" || node.attributes.TType == "ST")) {
-                        return false;
+                        if (node.children.length == 1 && node.children[0].text == "loading...") {
+                            return false;
+                        }
+
+                        return true;
                     }
 
                     if (node.text == "loading...") {
@@ -129,30 +113,18 @@
             }, this);
         }
 
-        function GetSubUnits(rootid, parentid) {
+        function GetSubUnits(cnode) {
             var param = {
                 DoType: "Dot2DotStationModel_GetSubUnits",
-                rootid: rootid,
-                parentid: parentid,
+                parentid: cnode.attributes.No,
                 nodeid: nodeid,
+                ttype: cnode.attributes.TType,
                 stype: isUnitModel ? "UNIT" : "ST"
             };
-
-            var rootStr = rootid == parentid ? "ROOT_" : "_";
-            var node = $("#treeUnits").tree("find", (isUnitModel ? ("UNIT" + rootStr) : ("ST" + rootStr)) + parentid);
-
-            if (node.state == "closed") {
-                $("#treeUnits").tree("expand", node.target);
-            }
-
-            var children = $("#treeUnits").tree("getChildren", node.target);
+            
+            var children = $("#treeUnits").tree("getChildren", cnode.target);
             if (children[0].text != "loading...") {
-                $("#treeUnits").tree("insert", {
-                    before: children[0].target,
-                    data: {
-                        text: "loading..."
-                    }
-                });
+                return;
             }
 
             Handler_AjaxQueryData(param, function (data, scope) {
@@ -162,29 +134,9 @@
                 }
 
                 var redata = eval('(' + data + ')');
-                unitstations = redata.InnerData.UnitStations;
 
-                //更新单位岗位中的选中状态
-                var idx = -1;
-
-                $.each(unitstations, function () {
-                    idx = IndexOfArray(nodestations, "No", this.No);
-
-                    if (this.Checked) {
-                        if (idx == -1) {
-                            this.Checked = false;
-                            SetStationChecked(redata.InnerData.TreeData[0], this.No, false);
-                        }
-                    }
-                    else {
-                        if (idx != -1) {
-                            this.Checked = true;
-                            SetStationChecked(redata.InnerData.TreeData[0], this.No, true);
-                        }
-                    }
-                });
-
-                $("#treeUnits").tree("loadData", redata.InnerData.TreeData);
+                $("#treeUnits").tree("remove", children[0].target);
+                $("#treeUnits").tree("append", { parent: cnode.target, data: redata });
             }, this);
         }
 
@@ -230,41 +182,12 @@
                 if (IndexOfArray(nodestations, "No", currstation.No) == -1) {
                     nodestations.push(currstation);
                 }
-
-                for (index in unitstations) {
-                    if (unitstations[index].No == currstation.No) {
-                        unitstations[index].Checked = true;
-                    }
-                }
             }
             else {  //取消选中
                 var idx = IndexOfArray(nodestations, "No", currstation.No);
 
                 if (idx != -1) {
                     nodestations.splice(idx, 1);
-                }
-
-                for (index in unitstations) {
-                    if (unitstations[index].No == currstation.No) {
-                        unitstations[index].Checked = false;
-                    }
-                }
-            }
-        }
-
-        function SetStationChecked(node, stationNo, checked) {
-            if (!node.attributes) {
-                return;
-            }
-
-            if (node.attributes.TType == "S" && node.attributes.No == stationNo) {
-                node.checked = checked;
-            }
-            else {
-                if (node.children) {
-                    $.each(node.children, function () {
-                        SetStationChecked(this, stationNo, checked);
-                    });
                 }
             }
         }
@@ -326,10 +249,10 @@
         function DeleteSelectedStations(deleteall) {
             var sstations = new Array();
             var opts = $("#sStations").datagrid("options");
+            var node;
 
             if (!deleteall) {
                 var idx;
-                var node;
 
                 sstations = $("#sStations").datagrid("getChecked");
 
@@ -354,20 +277,18 @@
 
             $.messager.confirm("提示", "您确定要删除所有已经选择的岗位吗？", function (r) {
                 if (r) {
-                    nodestations.splice(0, nodestations.length);
-
-                    if ($("#sStations").datagrid("getData").total > 0) {
-                        LoadStationsInDataGrid(nodestations, 1, opts.pageSize);
-                    }
-
                     //删除树中勾选项
-                    $.each(unitstations, function () {
-                        node = $("#treeUnits").tree("find", "S_" + this.UnitNo + "_" + this.No);
+                    while (nodestations.length > 0) {
+                        node = $("#treeUnits").tree("find", "S_" + nodestations[0].UnitNo + "_" + nodestations[0].No);
 
                         if (node && node.checked) {
                             $("#treeUnits").tree("uncheck", node.target);
                         }
-                    });
+                    }
+
+                    if ($("#sStations").datagrid("getData").total > 0) {
+                        LoadStationsInDataGrid(nodestations, 1, opts.pageSize);
+                    }
                 }
             });
         }

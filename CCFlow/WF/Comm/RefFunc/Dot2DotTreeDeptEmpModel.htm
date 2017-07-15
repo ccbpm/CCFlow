@@ -30,7 +30,6 @@
         var enName = GetQueryString("EnName");
         var attrKey = GetQueryString("AttrKey");
         var nodeid = GetQueryString("NodeID");
-        var deptemps = new Array(); //部门人员
         var nodeemps = new Array(); //节点绑定人员
         var curremps = new Array(); //记录当前表格中绑定的人员列表集合
         var PAGESIZE = 10;  //默认每页显示条数
@@ -41,27 +40,8 @@
         $(function () {
             $("#treeEmps").tree({
                 checkbox: true,
-                formatter: function (node) {
-                    if (!node.attributes) {
-                        return node.text;
-                    }
-
-                    if (node.attributes.TType == "CDEPT" || node.attributes.TType == "EMP") {
-                        return node.text;
-                    }
-
-                    var root = $("#treeEmps").tree("getRoot");
-
-                    return "<a href='javascript:void(0)' onclick='GetSubDepts(\"" + root.attributes.No + "\",\"" + node.attributes.No + "\")'>" + node.text + "</a>";
-                },
                 onExpand: function (node) {
-                    if (node.attributes && node.attributes.TType == "CDEPT") {  //只处理DEPT类型                    
-                        return;
-                    }
-
-                    var root = $("#treeEmps").tree("getRoot");
-
-                    GetSubDepts(root.attributes.No, node.attributes.No);
+                    GetSubDepts(node);
                 },
                 onCascadeCheck: function (node, checked) {
                     if (!node.attributes || node.attributes.TType != "EMP") {
@@ -78,7 +58,11 @@
                 },
                 checkbox: function (node) {
                     if (node.attributes && (node.attributes.TType == "PDEPT" || node.attributes.TType == "DEPT")) {
-                        return false;
+                        if (node.children.length == 1 && node.children[0].text == "loading...") {
+                            return false;
+                        }
+
+                        return true;
                     }
 
                     if (node.text == "loading...") {
@@ -113,7 +97,6 @@
             };
 
             Handler_AjaxQueryData(param, function (data, scope) {
-
                 if (data.indexOf("err@") != -1) {
                     alert(data);
                     return;
@@ -127,28 +110,16 @@
             }, this);
         }
 
-        function GetSubDepts(rootid, parentid) {
+        function GetSubDepts(cnode) {
             var param = {
                 DoType: "Dot2DotTreeDeptEmpModel_GetSubDepts",
-                rootid: rootid,
-                parentid: parentid,
+                parentid: cnode.attributes.No,
                 nodeid: nodeid
             };
 
-            var node = $("#treeEmps").tree("find", "DEPT_" + parentid);
-
-            if (node.state == "closed") {
-                $("#treeEmps").tree("expand", node.target);
-            }
-
-            var children = $("#treeEmps").tree("getChildren", node.target);
+            var children = $("#treeEmps").tree("getChildren", cnode.target);
             if (children[0].text != "loading...") {
-                $("#treeEmps").tree("insert", {
-                    before: children[0].target,
-                    data: {
-                        text: "loading..."
-                    }
-                });
+                return;
             }
 
             Handler_AjaxQueryData(param, function (data, scope) {
@@ -158,29 +129,9 @@
                 }
 
                 var redata = eval('(' + data + ')');
-                deptemps = redata.InnerData.DeptEmps;
 
-                //更新部门人员中的选中状态
-                var idx = -1;
-
-                $.each(deptemps, function () {
-                    idx = IndexOfArray(nodeemps, "No", this.No);
-
-                    if (this.Checked) {
-                        if (idx == -1) {
-                            this.Checked = false;
-                            SetEmpChecked(redata.InnerData.TreeData[0], this.No, false);
-                        }
-                    }
-                    else {
-                        if (idx != -1) {
-                            this.Checked = true;
-                            SetEmpChecked(redata.InnerData.TreeData[0], this.No, true);
-                        }
-                    }
-                });
-
-                $("#treeEmps").tree("loadData", redata.InnerData.TreeData);
+                $("#treeEmps").tree("remove", children[0].target);
+                $("#treeEmps").tree("append", { parent: cnode.target, data: redata });
             }, this);
         }
 
@@ -225,41 +176,12 @@
                 if (IndexOfArray(nodeemps, "No", curremp.No) == -1) {
                     nodeemps.push(curremp);
                 }
-
-                for (index in deptemps) {
-                    if (deptemps[index].No == curremp.No) {
-                        deptemps[index].Checked = true;
-                    }
-                }
             }
             else {  //取消选中
                 var idx = IndexOfArray(nodeemps, "No", curremp.No);
 
                 if (idx != -1) {
                     nodeemps.splice(idx, 1);
-                }
-
-                for (index in deptemps) {
-                    if (deptemps[index].No == curremp.No) {
-                        deptemps[index].Checked = false;
-                    }
-                }
-            }
-        }
-
-        function SetEmpChecked(node, empNo, checked) {
-            if (!node.attributes) {
-                return;
-            }
-
-            if (node.attributes.TType == "EMP" && node.attributes.No == empNo) {
-                node.checked = checked;
-            }
-            else {
-                if (node.children) {
-                    $.each(node.children, function () {
-                        SetEmpChecked(this, empNo, checked);
-                    });
                 }
             }
         }
@@ -321,10 +243,10 @@
         function DeleteSelectedEmps(deleteall) {
             var semps = new Array();
             var opts = $("#sEmps").datagrid("options");
+            var node;
 
             if (!deleteall) {
                 var idx;
-                var node;
 
                 semps = $("#sEmps").datagrid("getChecked");
 
@@ -349,20 +271,18 @@
 
             $.messager.confirm("提示", "您确定要删除所有已经选择的人员吗？", function (r) {
                 if (r) {
-                    nodeemps.splice(0, nodeemps.length);
-
-                    if ($("#sEmps").datagrid("getData").total > 0) {
-                        LoadEmpsInDataGrid(nodeemps, 1, opts.pageSize);
-                    }
-
                     //删除树中勾选项
-                    $.each(deptemps, function () {
-                        node = $("#treeEmps").tree("find", "EMP_" + this.DeptNo + "_" + this.No);
+                    while (nodeemps.length > 0) {
+                        node = $("#treeEmps").tree("find", "EMP_" + nodeemps[0].DeptNo + "_" + nodeemps[0].No);
 
                         if (node && node.checked) {
                             $("#treeEmps").tree("uncheck", node.target);
                         }
-                    });
+                    }
+
+                    if ($("#sEmps").datagrid("getData").total > 0) {
+                        LoadEmpsInDataGrid(nodeemps, 1, opts.pageSize);
+                    }
                 }
             });
         }
@@ -402,7 +322,7 @@
 
                     $("#save").linkbutton("enable");
 
-                    if (data.indexOf("err@") ==0) {
+                    if (data.indexOf("err@") != -1) {
                         alert(data);
                         return;
                     }
@@ -430,7 +350,6 @@
 
         function SavePart(param) {
             Handler_AjaxQueryData(param, function (data, scope) {
-
                 if (data.indexOf("err@") != -1) {
                     alert(data);
                     alert("保存过程中出现错误，已经保存部分数据，请手动刷新本页面，重新设置！");

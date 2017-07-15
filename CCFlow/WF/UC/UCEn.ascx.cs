@@ -4134,7 +4134,7 @@ namespace CCFlow.WF.UC
                             AddLoadFunction(m2m.NoOfObj, "blur", "SaveM2M");
 
                             // this.Add("<iframe ID='F" + m2m.NoOfObj + "'   Onblur=\"SaveM2M('" + m2m.NoOfObj + "');\"  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "'   scrolling=auto/></iframe>");
-                            this.Add("<iframe ID='F" + m2m.NoOfObj + "'  onload='" + m2m.NoOfObj + "load();'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "'   scrolling=auto/></iframe>");
+                            this.Add("<iframe ID='F" + m2m.NoOfObj + "'  onload='F" + m2m.NoOfObj + "load();'  src='" + src + "' frameborder=0 style='padding:0px;border:0px;'  leftMargin='0'  topMargin='0' width='" + m2m.W + "' height='" + m2m.H + "'   scrolling=auto/></iframe>");
 
                         }
                         else
@@ -4521,6 +4521,22 @@ namespace CCFlow.WF.UC
                     saveTo = saveTo + "\\" + athDBPK + "." + fu.FileName.Substring(fu.FileName.LastIndexOf('.') + 1);
                     fu.SaveAs(saveTo);
 
+                    //执行附件上传前事件，added by liuxc,2017-7-15
+                    string msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, this.HisEn, "@FK_FrmAttachment=" + frmAth.MyPK + "@FileFullName=" + saveTo);
+                    if(!string.IsNullOrEmpty(msg))
+                    {
+                        BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fu.FileName + "，" + msg);
+
+                        try
+                        {
+                            File.Delete(saveTo);
+                        }
+                        catch{}
+
+                        this.Alert("上传附件错误：" + msg, true);
+                        return;
+                    }
+
                     //转换html，added by liuxc,2017-03-01
                     if (new BP.Sys.FrmUI.FrmAttachmentExt(frmAth.MyPK).IsTurn2Html)
                         ConvertOfficeFileToHtml(saveTo);
@@ -4576,6 +4592,10 @@ namespace CCFlow.WF.UC
                     if (frmAth.SaveWay == 1)
                         BP.DA.DBAccess.SaveFileToDB(saveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
 
+                    //执行附件上传后事件，added by liuxc,2017-7-4
+                    msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, this.HisEn, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
+                    if (!string.IsNullOrEmpty(msg))
+                        BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
 
                     Button myBtnDel = this.GetButtonByID("Btn_Delete_" + athDBPK);
                     if (myBtnDel != null)

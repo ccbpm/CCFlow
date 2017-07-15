@@ -361,7 +361,7 @@ namespace BP.WF.HttpHandler
         protected override string DoDefaultMethod()
         {
             //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到.@原始URL:"+context.Request.RawUrl);
+            throw new Exception("@标记[" + this.DoType + "]，没有找到.@原始URL:" + context.Request.RawUrl);
         }
         #endregion 执行父类的重写方法.
 
@@ -577,7 +577,7 @@ namespace BP.WF.HttpHandler
                 md.DoEvent(FrmEventList.SaveAfter, en);
                 return "保存成功.";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
@@ -642,9 +642,9 @@ namespace BP.WF.HttpHandler
             #endregion 组织参数.
 
             //获得他的描述,与数据.
-            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData, mdtl, int.Parse( this.RefPKVal), strs);
+            DataSet ds = BP.WF.CCFormAPI.GenerDBForCCFormDtl(mdtl.FK_MapData, mdtl, int.Parse(this.RefPKVal), strs);
 
-            return BP.Tools.Json.DataSetToJson(ds,false);
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
         /// <summary>
         /// 执行从表的保存.
@@ -691,7 +691,7 @@ namespace BP.WF.HttpHandler
                 dtl.RetrieveFromDBSources();
             }
 
-          
+
 
             #region 给实体循环赋值/并保存.
             BP.En.Attrs attrs = dtl.EnMap.Attrs;
@@ -764,7 +764,7 @@ namespace BP.WF.HttpHandler
 
             //返回当前数据存储信息.
             return dtl.ToJson();
-             
+
         }
         /// <summary>
         /// 删除
@@ -1507,6 +1507,11 @@ namespace BP.WF.HttpHandler
             string attachPk = this.getUTF8ToString("AttachPK");
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
+            MapData mapData = new MapData(athDesc.FK_MapData);
+            string msg = null;
+            GEEntity en = new GEEntity(athDesc.FK_MapData);
+            en.PKVal = PKVal;
+            en.Retrieve();
 
             for (int i = 0; i < context.Request.Files.Count; i++)
             {
@@ -1515,9 +1520,6 @@ namespace BP.WF.HttpHandler
                 {
                     /*如果有变量*/
                     savePath = savePath.Replace("*", "@");
-                    GEEntity en = new GEEntity(athDesc.FK_MapData);
-                    en.PKVal = PKVal;
-                    en.Retrieve();
                     savePath = BP.WF.Glo.DealExp(savePath, en, null);
 
                     if (savePath.Contains("@") && this.FK_Node != 0)
@@ -1557,21 +1559,34 @@ namespace BP.WF.HttpHandler
                     throw new Exception("@创建路径出现错误，可能是没有权限或者路径配置有问题:" + context.Server.MapPath("~/" + savePath) + "===" + savePath + "@技术问题:" + ex.Message);
                 }
 
-
                 string exts = System.IO.Path.GetExtension(context.Request.Files[i].FileName).ToLower().Replace(".", "");
-
-
                 string guid = BP.DA.DBAccess.GenerGUID();
                 string fileName = context.Request.Files[i].FileName.Substring(0, context.Request.Files[i].FileName.LastIndexOf('.'));
                 string ext = System.IO.Path.GetExtension(context.Request.Files[i].FileName);
-                string realSaveTo = savePath + "/" + guid + "." + fileName + ext;
+                string realSaveTo = savePath + "\\" + guid + "." + fileName + ext;
 
                 realSaveTo = realSaveTo.Replace("~", "-");
                 realSaveTo = realSaveTo.Replace("'", "-");
                 realSaveTo = realSaveTo.Replace("*", "-");
 
-
                 context.Request.Files[i].SaveAs(realSaveTo);
+                
+                //执行附件上传前事件，added by liuxc,2017-7-15
+                msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + realSaveTo);
+                if (!string.IsNullOrEmpty(msg))
+                {
+                    BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + context.Request.Files[i].FileName + "，" + msg);
+
+                    try
+                    {
+                        File.Delete(realSaveTo);
+                    }
+                    catch { }
+
+                    //note:此处如何向前uploadify传递失败信息，有待研究
+                    //this.Alert("上传附件错误：" + msg, true);
+                    return;
+                }
 
                 FileInfo info = new FileInfo(realSaveTo);
 
@@ -1619,6 +1634,11 @@ namespace BP.WF.HttpHandler
                     //执行文件保存.
                     BP.DA.DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
                 }
+
+                //执行附件上传后事件，added by liuxc,2017-7-15
+                msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
+                if (!string.IsNullOrEmpty(msg))
+                    BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
             }
         }
 

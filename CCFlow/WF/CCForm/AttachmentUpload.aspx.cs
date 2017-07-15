@@ -164,7 +164,7 @@ namespace CCFlow.WF.CCForm
                 FrmAttachment dbAtt = new FrmAttachment();
                 dbAtt.MyPK = downDB.FK_FrmAttachment;
                 dbAtt.Retrieve();
-                
+
                 if (dbAtt.SaveWay == 0)
                 {
                     PubClass.DownloadFile(downDB.FileFullName, downDB.FileName);
@@ -563,12 +563,12 @@ namespace CCFlow.WF.CCForm
                         }
                         else if (DataType.IsImgExt(db.FileExts) || db.FileExts.ToUpper() == "PDF" || db.FileExts.ToUpper() == "CEB")
                         {
-                            this.Pub1.AddTDTDTitle(db.FileName,"<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK +
+                            this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK +
                                             "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                         }
                         else
                         {
-                            this.Pub1.AddTDTDTitle(db.FileName,"<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK +
+                            this.Pub1.AddTDTDTitle(db.FileName, "<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK +
                                             "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                         }
 
@@ -588,8 +588,8 @@ namespace CCFlow.WF.CCForm
                             {
                                 if (db.Rec.Equals(WebUser.No))
                                     this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
-                                else                              
-                                    this.Pub1.AddTD("");                                
+                                else
+                                    this.Pub1.AddTD("");
                             }
                             else
                             {
@@ -614,7 +614,7 @@ namespace CCFlow.WF.CCForm
                 {
                     this.Pub1.AddTR("style='border:0px;'");
 
-                    this.Pub1.AddTDTitleExt("style='width:50px;'","序号");
+                    this.Pub1.AddTDTitleExt("style='width:50px;'", "序号");
                     if (athDesc.Sort.Contains(","))
                     {
                         string sortColumn = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(0, athDesc.Sort.IndexOf("@")) : "类别";
@@ -698,7 +698,7 @@ namespace CCFlow.WF.CCForm
                         {
                             string op = null;
 
-                            #region 附件删除权限 
+                            #region 附件删除权限
                             //if (isDel == true)
                             //{
                             //    if (athDesc.IsDelete == true)
@@ -710,11 +710,11 @@ namespace CCFlow.WF.CCForm
                             //    }
 
                             //}
-                            #endregion 
+                            #endregion
 
                             if (athDesc.HisDeleteWay == AthDeleteWay.DelAll)//删除所有
                             {
-                                op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>"; 
+                                op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
                             }
                             else if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf)//删除自己上传的
                             {
@@ -1060,15 +1060,19 @@ namespace CCFlow.WF.CCForm
 
         protected void btn_Click(object sender, EventArgs e)
         {
+            //附件描述.
+            BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(this.FK_FrmAttachment);
+            MapData mapData = new MapData(athDesc.FK_MapData);
+            string msg = null;
+            GEEntity en = new GEEntity(athDesc.FK_MapData);
+            en.PKVal = this.PKVal;
+            en.Retrieve();
 
-
-            bool isIE=this.CheckBrowserIsIE();
+            bool isIE = this.CheckBrowserIsIE();
             try
             {
                 if (isIE == false)
                 {
-                    //附件描述.
-                    BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(this.FK_FrmAttachment);
                     System.Web.UI.WebControls.FileUpload fu = this.Pub1.FindControl("file") as System.Web.UI.WebControls.FileUpload;
                     if (fu.HasFile == false || fu.FileName.Length <= 2)
                     {
@@ -1091,7 +1095,7 @@ namespace CCFlow.WF.CCForm
                         }
                     }
 
-                    #region 保存到iis服务器. 
+                    #region 保存到iis服务器.
                     if (athDesc.SaveWay == 0)
                     {
                         /* 如果是保存到服务器上,把文件. */
@@ -1100,9 +1104,7 @@ namespace CCFlow.WF.CCForm
                         {
                             /*如果有变量*/
                             savePath = savePath.Replace("*", "@");
-                            GEEntity en = new GEEntity(athDesc.FK_MapData);
-                            en.PKVal = this.PKVal;
-                            en.Retrieve();
+
                             savePath = BP.WF.Glo.DealExp(savePath, en, null);
 
                             if (savePath.Contains("@") && this.FK_Node != 0)
@@ -1143,6 +1145,22 @@ namespace CCFlow.WF.CCForm
                         try
                         {
                             fu.SaveAs(realSaveTo);
+
+                            //执行附件上传前事件，added by liuxc,2017-7-15
+                            msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + saveTo);
+                            if (!string.IsNullOrEmpty(msg))
+                            {
+                                BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fu.FileName + "，" + msg);
+
+                                try
+                                {
+                                    File.Delete(saveTo);
+                                }
+                                catch { }
+
+                                this.Alert("上传附件错误：" + msg, true);
+                                return;
+                            }
 
                             //转换html，added by liuxc,2017-03-01
                             if (new BP.Sys.FrmUI.FrmAttachmentExt(athDesc.MyPK).IsTurn2Html)
@@ -1204,6 +1222,11 @@ namespace CCFlow.WF.CCForm
                         }
                         dbUpload.UploadGUID = guid;
                         dbUpload.Insert();
+
+                        //执行附件上传后事件，added by liuxc,2017-7-15
+                        msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
+                        if (!string.IsNullOrEmpty(msg))
+                            BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                     }
                     #endregion 保存到iis服务器.
 
@@ -1214,12 +1237,28 @@ namespace CCFlow.WF.CCForm
                         string guid = DBAccess.GenerGUID();
 
                         //把文件临时保存到一个位置.
-                        string temp = SystemConfig.PathOfTemp+""+guid+".tmp";
+                        string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
                         fu.SaveAs(temp);
+
+                        //执行附件上传前事件，added by liuxc,2017-7-15
+                        msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
+                        if (!string.IsNullOrEmpty(msg))
+                        {
+                            BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fu.FileName + "，" + msg);
+
+                            try
+                            {
+                                File.Delete(temp);
+                            }
+                            catch { }
+
+                            this.Alert("上传附件错误：" + msg, true);
+                            return;
+                        }
 
                         FileInfo info = new FileInfo(temp);
                         FrmAttachmentDB dbUpload = new FrmAttachmentDB();
-                        dbUpload.MyPK = BP.DA.DBAccess.GenerGUID(); 
+                        dbUpload.MyPK = BP.DA.DBAccess.GenerGUID();
                         dbUpload.NodeID = FK_Node.ToString();
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
                         dbUpload.FID = this.FID; //流程id.
@@ -1245,7 +1284,6 @@ namespace CCFlow.WF.CCForm
                         // dbUpload.FileFullName = saveTo;
                         dbUpload.FileName = fu.FileName;
                         dbUpload.FileSize = (float)info.Length;
-
                         dbUpload.RDT = DataType.CurrentDataTimess;
                         dbUpload.Rec = BP.Web.WebUser.No;
                         dbUpload.RecName = BP.Web.WebUser.Name;
@@ -1263,23 +1301,21 @@ namespace CCFlow.WF.CCForm
                                 dbUpload.Sort = strs[selectedIndex];
                             }
                         }
+
                         dbUpload.UploadGUID = guid;
-
                         dbUpload.FileFullName = athDesc.SaveTo + guid + "." + dbUpload.FileExts;
-
-
                         dbUpload.Insert();
-
 
                         if (athDesc.SaveWay == 1)
                         {
                             //把文件保存到指定的字段里.
                             dbUpload.SaveFileToDB("FileDB", temp);
                         }
+
                         if (athDesc.SaveWay == 2)
                         {
                             /*保存到fpt服务器上.*/
-                            FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
+                            FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
                                 SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
                             //判断目录是否存在.
@@ -1292,19 +1328,19 @@ namespace CCFlow.WF.CCForm
                             //把文件放上去.
                             ftpconn.PutFile(temp, guid + "." + dbUpload.FileExts);
                         }
-                        
+
+                        //执行附件上传后事件，added by liuxc,2017-7-15
+                        msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
+                        if (!string.IsNullOrEmpty(msg))
+                            BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                     }
                     #endregion 保存到数据库.
-
-                     
-
-
+                    
                     //this.Response.Redirect("AttachmentUpload.aspx?FK_FrmAttachment=" + this.FK_FrmAttachment + "&FK_Node=" + this.FK_Node + "&PKVal=" + this.PKVal, true);
                 }
 
-                if (isIE==true)
+                if (isIE == true)
                 {
-                    BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(this.FK_FrmAttachment);
                     if (athDesc.Sort.Contains(","))
                     {
                         string[] strs = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(athDesc.Sort.LastIndexOf("@") + 1).Split(',') : athDesc.Sort.Split(',');

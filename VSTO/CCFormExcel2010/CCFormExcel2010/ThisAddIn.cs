@@ -33,37 +33,26 @@ namespace CCFormExcel2010
 		/// 子表（[{(string)DtlName:(SubTable)Dtl},...]）
 		/// </summary>
 		private Dictionary<string, SubTable> _dictSubTables = new Dictionary<string, SubTable>(); //excel中的子表信息
+		
+        private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件.
 
-		private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件
-		private bool _isDebug = false; //是否是调试模式
-
+		private bool IsDebug = true; //是否是调试模式
+        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=CY_6502,IsEdit=1,IsPrint=0,WorkID=4039,FK_Flow=002,FK_Node=201,UserNo=fengshunsheng,FID=0,SID=syuseiywc0pa10plu3pz2za1,PWorkID=4070,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6502,IsCheckGuide=1,FK_CaiYangFangFa=007,e1m=0.4202273131695099,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
 		#endregion
-
-		// 定义一个任务窗体 
-		//internal Microsoft.Office.Tools.CustomTaskPane helpTaskPane;
 
 		#region 测试用代码
 		public Dictionary<string, string> InitTesterArgsString()
 		{
-			//bug:5063 : string argstr = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=CY_6501,IsEdit=1,IsPrint=0,WorkID=3401,FK_Flow=002,FK_Node=201,UserNo=anjian,FID=0,SID=wszt3a5umtgopiq5ytfgnhch,PWorkID=3397,PFlowNo=001,IsLoadData=1,CWorkID=0,IsRead=0,T=20170504103843,Paras=1,Frms=CY_6501,m=0.3036874175802582,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
-			//bug:5048 : string argstr = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_07,IsEdit=1,IsPrint=0,WorkID=3407,FK_Flow=003,FK_Node=301,UserNo=huangwei,FID=0,SID=kvd5cqxisomoj2qulbrtnfir,PWorkID=0,IsLoadData=1,CWorkID=0,PFlowNo=,Frms=FX_JNHBG_64_07,IsCheckGuide=1,m=0.4266074772275231,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
-			//bug:5014 : string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6505,IsEdit=0,IsPrint=0,WorkID=3205,CWorkID=,FK_Flow=002,FK_Node=201,IsLoadData=1,PWorkID=3206,PFlowNo=001,DoType=View,MyPK=1650369608,PNodeID=105,Frms=CY_6505,SID=v0pcuhoenqwplpd5r4kvihyp,UserNo=wangtao,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
-			//BP.LI.BZQX://“格式6”
-			//string argstr = "excelform://-fromccflow,App=Class,FK_MapData=BP.LI.BZQX,UseSheet=格式6,oid=112141,s=0.19068293080891674,SID=1pecqwilzeszdj3aoaxrqqdy,UserNo=anjian,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
-			//string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6505,IsEdit=1,IsPrint=0,WorkID=2872,FK_Flow=002,FK_Node=201,UserNo=wangtao,FID=0,SID=aifj1mvelcv0sviv1br0obrq,PWorkID=2873,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6505,IsCheckGuide=1,FK_CaiYangFangFa=003,WSUrl=http://localhost:38076/WF/CCForm/CCFormAPI.asmx";
-			//string argstr = "excelform://-fromccflow,App=FrmExcel,FK_MapData=CY_6501,IsEdit=0,IsPrint=0,WorkID=2528,FK_Flow=002,FK_Node=202,UserNo=anjian,FID=0,SID=4uiq32c4hzd1335re15dwd0d,PWorkID=2518,PFlowNo=001,IsLoadData=1,CWorkID=0,WSUrl=http://localhost:26508/WF/CCForm/CCFormAPI.asmx";
-			string argstr = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_19,IsEdit=1,IsPrint=0,WorkID=4258,FK_Flow=003,FK_Node=301,UserNo=duqinglian,FID=0,SID=abvccsv4syxcvnibwfn5mva0,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_19,IsCheckGuide=1,e1m=0.6905738965730419,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
+            string argstr = TestUrl; // "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=CY_6502,IsEdit=1,IsPrint=0,WorkID=4023,FK_Flow=002,FK_Node=201,UserNo=anjian,FID=0,SID=syuseiywc0pa10plu3pz2za1,PWorkID=4022,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6502,IsCheckGuide=1,FK_CaiYangFangFa=007,e1m=0.6117670658603235,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
 			string prefix = "-fromccflow,";
 			int beginidx = -1;
 			Dictionary<string, string> args = new Dictionary<string, string>();
-
 			beginidx = argstr.IndexOf(prefix);
-
-			if (beginidx == -1 || (beginidx + prefix.Length) == argstr.Length - 1)
-			{
-				args.Add("fromccflow", "false");
-				return args;
-			}
+            if (beginidx == -1 || (beginidx + prefix.Length) == argstr.Length - 1)
+            {
+                args.Add("fromccflow", "false");
+                return args;
+            }
 
 			beginidx = beginidx + prefix.Length;
 			argstr = argstr.Substring(beginidx);
@@ -100,14 +89,22 @@ namespace CCFormExcel2010
 			#region 获得外部参数, 这是通过外部传递过来的参数.
 			try
 			{
-				Dictionary<string, string> args = _isDebug ? InitTesterArgsString() : Glo.GetArguments();
+				Dictionary<string, string> args = null;
+
+                //生成参数. 
+                if (IsDebug == true)
+                    args = InitTesterArgsString();
+                else
+                    args =Glo.GetArguments();
+
 				//Dictionary<string, string> args = InitTesterArgsString();
 				if (args.ContainsKey("fromccflow"))
 				{
 					Glo.LoadSuccessful = args["fromccflow"] == "true";
 				}
+
 				//若插件没有加载成功：直接跳出
-				if (!Glo.LoadSuccessful)
+				if (Glo.LoadSuccessful==false)
 					return;
 
 				if (args.ContainsKey("App"))
@@ -196,8 +193,9 @@ namespace CCFormExcel2010
 
 		private void ThisAddIn_Startup(object sender, System.EventArgs e)
 		{
+
 #if DEBUG
-			this._isDebug = true;
+            this.IsDebug = true;
 			//MessageBox.Show(Application.Version);//14.0
 #endif
 
@@ -205,18 +203,20 @@ namespace CCFormExcel2010
 			GetArgs();
 
 			//若插件没有加载成功：直接跳出
-			if (!Glo.LoadSuccessful) return;
+			if (Glo.LoadSuccessful==false) 
+                return;
+
 
 			//Office版本判断
 			if (Application.Version == "12.0")
 			{
-				MessageBox.Show("检测到您正在使用Excel 2007，该版本与本CCFlow插件存在兼容性问题，请升级至2010或更新版本！");
+				MessageBox.Show("@检测到您正在使用Excel 2007，该版本与本CCFlow插件存在兼容性问题，请升级至2010或更新版本！","不兼容支持提示.");
 				Glo.LoadSuccessful = false;
 				return;
 			}
 			else if (Application.Version == "15.0")
 			{
-				MessageBox.Show("检测到您正在使用Excel 2013，但您当前安装的CCFlow插件为Excel 2010专版，继续使用可能会出现问题，推荐您安装Excel 2013专版插件。");
+				MessageBox.Show("@检测到您正在使用Excel 2013，但您当前安装的CCFlow插件为Excel 2010专版，继续使用可能会出现问题，推荐您安装Excel 2013专版插件。");
 			}
 
 			//// 测试当前数据.
@@ -567,7 +567,7 @@ namespace CCFormExcel2010
 				if (Glo.IsSaveFileOnly)
 				{
 					client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, null, null, null, bytes);
-					MessageBox.Show("保存成功！");
+					MessageBox.Show("保存成功！","ccform保存提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 				else
 				{
@@ -585,7 +585,7 @@ namespace CCFormExcel2010
 
 					//保存到服务器
 					client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
-					MessageBox.Show("保存成功！\n文档及表单数据已成功保存到服务器！");
+					MessageBox.Show("保存成功！\n文档及表单数据已成功保存到服务器！","ccform保存提示",  MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 
 				//获取新的子表数据，绑定行对应关系
@@ -665,12 +665,12 @@ namespace CCFormExcel2010
 				Excel.Worksheet wsheet = Application.Sheets.Add();
 				wsheet.Name = "MetaData";
 				//wsheet.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
-				wsheet.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetHidden;//TODO：测试期间不强制隐藏metadata
+                wsheet.Visible = IsDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetHidden;//TODO：测试期间不强制隐藏metadata
 				return false;
 			}
 
 			//ws.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
-			ws.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetHidden;//TODO：测试期间不强制隐藏metadata
+            ws.Visible = IsDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetHidden;//TODO：测试期间不强制隐藏metadata
 
 			//遍历命名区域.
 			foreach (Excel.Name name in Application.Names)
@@ -713,12 +713,12 @@ namespace CCFormExcel2010
 		{
 			#region 排除不是子表的情况
 
-			if (!_base.IsExistsName(dt.TableName)) //excel中不存在该子表区域时
+			if (_base.IsExistsName(dt.TableName)==false) //excel中不存在该子表区域时
 				return false;
 			var location = Application.Names.Item(dt.TableName).RefersToLocal;
-			if (!Regex.IsMatch(location, _base.regexRangeArea)) //excel中子表所在区域不是『区域』（是单个单元格）
+			if (Regex.IsMatch(location, _base.regexRangeArea)==false) //excel中子表所在区域不是『区域』（是单个单元格）
 				return false;
-			if (location.IndexOf("=MetaData!") > -1) //若是元数据list区域
+			if (location.IndexOf("=MetaData!") > -1) //若是元数据list区域.
 				return false;
 
 			#endregion

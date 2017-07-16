@@ -36,8 +36,8 @@ namespace CCFormExcel2010
 		
         private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件.
 
-		private bool IsDebug = true; //是否是调试模式
-        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=CY_6502,IsEdit=1,IsPrint=0,WorkID=4039,FK_Flow=002,FK_Node=201,UserNo=fengshunsheng,FID=0,SID=syuseiywc0pa10plu3pz2za1,PWorkID=4070,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6502,IsCheckGuide=1,FK_CaiYangFangFa=007,e1m=0.4202273131695099,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
+		private bool IsDebug = true; //是否是调试模式.
+        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_34A,IsEdit=1,IsPrint=0,WorkID=4081,FK_Flow=003,FK_Node=301,UserNo=huangwei,FID=0,SID=syuseiywc0pa10plu3pz2za1,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_34A,IsCheckGuide=1,e1m=0.8723531333298669,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
 		#endregion
 
 		#region 测试用代码
@@ -302,10 +302,27 @@ namespace CCFormExcel2010
 					MessageBox.Show("不允许同时打开多个表单（或重复打开表单）！\n若首次打开表单时遇此提示，请结束所有Excel进程后重试。\n\n后续不会记录任何操作，请关闭本文档。");
 				else
 					//MessageBox.Show("Excel表单出现错误，请联系您的系统管理员！\n错误信息：\n" + exp.Message + "\n@\n" + exp.StackTrace);
-					MessageBox.Show("Excel表单出现错误，请联系您的系统管理员！\n错误信息：\n" + exp.Message + "\n\n后续不会记录任何操作，请关闭本文档。");
+					MessageBox.Show("\n Excel表单出现错误，请联系您的系统管理员！\n错误信息：\n" + exp.Message + "\n\n后续不会记录任何操作，请关闭本文档。", "Excel表单配置错误", MessageBoxButtons.OK, MessageBoxIcon.Error );
 			}
 			#endregion 校验用户安全与下载文件.
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dtlName"></param>
+        /// <returns></returns>
+        public string GetDtlNameByTableName(string dtlNo)
+        {
+            DataTable dtl = _originData.Tables["Sys_MapDtl"];
+
+            foreach (DataRow dr in dtl.Rows)
+            {
+                if (dr["No"].ToString() == dtlNo)
+                    return dr["Name"].ToString();
+            }
+
+            return dtlNo;
+        }
 
 		/// <summary>
 		/// 填充数据
@@ -605,15 +622,13 @@ namespace CCFormExcel2010
 			}
 			catch (Exception exp)
 			{
-				MessageBox.Show("保存失败！！\n错误信息：" + exp.Message + "\n请联系您的系统管理员！");
+				MessageBox.Show("保存失败！！\n错误信息：" + exp.Message + "\n请联系您的系统管理员！", "错误",   MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
 		private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
 		{
-
 		}
-
 		/// <summary>
 		/// 设置启用的Sheet页
 		/// </summary>
@@ -742,15 +757,30 @@ namespace CCFormExcel2010
 				Dictionary<int, string> htColumns = new Dictionary<int, string>();
 				int TableHeadHeight;
 				htColumns = GetAreaColumns(range, out TableHeadHeight);
+
+                string errInfs = "";
 				foreach (KeyValuePair<int, string> col in htColumns)
 				{
-					if (!dt.Columns.Contains(col.Value)) //若数据源表不含此字段
+					if (dt.Columns.Contains(col.Value)==false) //若数据源表不含此字段
 					{
 						//则添加
 						//dr.Table.Columns.Add((string)col.Value);
-						throw new Exception("检测到字段绑定异常：子表“" + dt.TableName + "”绑定了『不存在于原始数据表』的字段“" + col.Value + "”！");
+                        errInfs += col.Value +",";
+						//throw new Exception("检测到字段绑定异常：子表“" + dt.TableName + "”绑定了『不存在于原始数据表』的字段“" + col.Value + "”！");
 					}
 				}
+
+                if (errInfs != "")
+                {
+                    //求出该子表的列名.
+                    string attrs = "";
+                    foreach (DataColumn dc in dt.Columns)
+                        attrs += "," + dc.ColumnName;
+                    attrs = attrs.Substring(1);
+
+                    throw new Exception("@检测到字段绑定异常：子表名:" + this.GetDtlNameByTableName(dt.TableName) + ",ID="+dt.TableName+". 绑定了『不存在于原始数据表』的字段[" + errInfs + "]！\t\n@该子表的字段集合是["+attrs+"]");
+                }
+
 
 				if (dt.Columns.Contains("OID") == true)
 				{
@@ -1406,7 +1436,10 @@ namespace CCFormExcel2010
 				{
 					if (string.IsNullOrEmpty(val))
 					{
-						MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”不能为空！\n单元格：" + range.Address);
+						MessageBox.Show("从表["+this.GetDtlNameByTableName(tableName)+"]字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”不能为空！\n单元格：" + range.Address,
+                            "ccform输入提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
+                        range.Activate();
 						return false;
 					}
 				}
@@ -1419,49 +1452,55 @@ namespace CCFormExcel2010
 					{
 						case BP.DA.DataType.AppInt: //整数类型
 							int i;
-							if (!int.TryParse(val, out i))
+							if (int.TryParse(val, out i)==false)
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“整数”！\r单元格：" + range.Address);
+								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“整数”！", "ccform输入检查",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                range.Activate();
 								return false;
 							}
 							break;
 						case BP.DA.DataType.AppFloat: //浮点型
 							float f;
-							if (!float.TryParse(val, out f))
+							if (float.TryParse(val, out f)==false)
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\r单元格：" + range.Address);
+                                MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                range.Activate();
 								return false;
 							}
 							break;
 						case BP.DA.DataType.AppDouble: //双精度型
 							double d;
-							if (!double.TryParse(val, out d))
+							if (double.TryParse(val, out d)==false)
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！\r单元格：" + range.Address);
+                                MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                range.Activate();
 								return false;
 							}
 							break;
 						case BP.DA.DataType.AppDate: //日期型
 							DateTime date;
-							if (!DateTime.TryParse(val, out date))
+							if (DateTime.TryParse(val, out date)==false)
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“日期”！\r单元格：" + range.Address);
+                                MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“日期”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                range.Activate();
 								return false;
 							}
 							break;
 						case BP.DA.DataType.AppDateTime: //时间型
 							DateTime time;
-							if (!DateTime.TryParse(val, out time))
+							if (DateTime.TryParse(val, out time)==false)
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“时间”！\r单元格：" + range.Address);
+								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“时间”！", "ccform输入检查",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                range.Activate();
 								return false;
 							}
 							break;
 						case BP.DA.DataType.AppMoney: //金额
 							float c;
-							if (!float.TryParse(val, out c))
+							if (float.TryParse(val, out c)==false)
 							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（金额）”！\r单元格：" + range.Address);
+                                MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（金额）”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                range.Activate();
 								return false;
 							}
 							break;

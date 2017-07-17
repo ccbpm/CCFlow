@@ -163,10 +163,10 @@ namespace CCFlow.WF.CCForm
 						if (dtl.IsReadonly) //从表是否只读
 							continue;
 
-						if (!dtl.IsDelete) //从表是否可删除行
+                        #region 执行删除操作.
+                        if (dtl.IsDelete==true) //从表是否可删除行
 						{
 							#region 根据原始数据,与当前数据求出已经删除的oids .
-
 							DataTable dtDtlOld = dsDtlsOld.Tables[dt.TableName]; //这里要用原始（打开excel时获取到的）表名『BP.XXX.YYYYY』
 							foreach (DataRow dr in dtDtlOld.Rows)
 							{
@@ -188,11 +188,13 @@ namespace CCFlow.WF.CCForm
 								if (isHave == false)
 									DBAccess.RunSQL("DELETE FROM " + dtl.PTable + " WHERE OID=" + oidOld);
 							}
-
 							#endregion 根据原始数据,与当前数据求出已经删除的oids .
-						}
+                        }
+                        #endregion 执行删除操作.
 
-						if (dtl.IsUpdate) //从表【是否可更新行】
+
+                        #region 执行更新操作.
+                        if (dtl.IsUpdate==true) //从表【是否可更新行】
 						{
 							//获取dtls
 							GEDtls daDtls = new GEDtls(dtl.No);
@@ -233,7 +235,6 @@ namespace CCFlow.WF.CCForm
 								daDtl.RDT = DataType.CurrentDataTime;
 
 								#region 从表保存前处理事件.
-
 								if (fes.Count > 0)
 								{
 									string msg = fes.DoEventNode(FrmEventListDtl.RowSaveBefore, mainEn);
@@ -251,10 +252,15 @@ namespace CCFlow.WF.CCForm
 								#endregion 从表保存前处理事件.
 
 								//执行保存.
-								if (daDtl.OID > 100)
-									daDtl.Update();
-								else if (dtl.IsInsert) //从表【是否可新增行】
-									daDtl.InsertAsOID(DBAccess.GenerOID("Dtl"));
+                                if (daDtl.OID > 100)
+                                {
+                                    daDtl.Update();
+                                }
+
+                                if (daDtl.OID <= 100 && dtl.IsInsert == true) //从表【是否可新增行】.
+                                {
+                                    daDtl.InsertAsOID(DBAccess.GenerOID("Dtl"));
+                                }
 
 								#region 从表保存后处理事件。
 
@@ -275,8 +281,9 @@ namespace CCFlow.WF.CCForm
 
 								#endregion 处理事件.
 							}
-						}
-					}
+                        }
+                        #endregion 执行更新操作.
+                    }
 				}
 			}
 			#endregion 保存从表结束
@@ -339,7 +346,7 @@ namespace CCFlow.WF.CCForm
 				if (frmEvent != null)
 					frmEvent.DoIt(FrmEventList.SaveAfter, wk, null);
 			}
-			#endregion 处理EntityMyPK 类型的实体保存。
+			#endregion 处理 EntityMyPK 类型的实体保存。
 
 			#region 处理 EntityOID 类型的实体保存。
 			if (pkType == "OID")

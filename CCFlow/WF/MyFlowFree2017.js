@@ -244,7 +244,6 @@ function WinOpen(url, winName) {
     return;
 }
 
-
 function DoDelSubFlow(fk_flow, workid) {
     if (window.confirm('您确定要终止进程吗？') == false)
         return;

@@ -331,6 +331,12 @@ namespace BP.WF
 			dt.TableName = "Sys_MapAttr";
 			myds.Tables.Add(dt);
 
+            //增加从表信息.
+            sql = "SELECT * FROM Sys_MapDtl WHERE FK_MapData='" + frmID + "' ";
+            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapDtl";
+            myds.Tables.Add(dt);
+
 
 			//主表的配置信息.
 			sql = "SELECT * FROM Sys_MapExt WHERE FK_MapData='" + frmID + "'";

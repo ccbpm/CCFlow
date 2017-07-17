@@ -111,16 +111,12 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string NewHidF()
         {
-            string fk_mapdataHid = this.GetRequestVal("v1");
-            string key = this.GetRequestVal("v2");
-            string myname = this.GetRequestVal("v3");
-            int dataType = int.Parse(this.GetRequestVal("v4"));
             MapAttr mdHid = new MapAttr();
-            mdHid.MyPK = fk_mapdataHid + "_" + key;
-            mdHid.FK_MapData = fk_mapdataHid;
-            mdHid.KeyOfEn = key;
-            mdHid.Name = myname;
-            mdHid.MyDataType = dataType;
+            mdHid.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            mdHid.FK_MapData = this.FK_MapData;
+            mdHid.KeyOfEn = this.KeyOfEn;
+            mdHid.Name = this.Name;
+            mdHid.MyDataType = this.GetValIntFromFrmByKey("FieldType");
             mdHid.HisEditType = EditType.Edit;
             mdHid.MaxLen = 100;
             mdHid.MinLen = 0;
@@ -254,7 +250,10 @@ namespace BP.WF.HttpHandler
             if (md.HisFrmType == BP.Sys.FrmType.VSTOForExcel)
             {
                 /* 自由表单 */
-                return "url@../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + this.FK_MapData;
+                return "url@FormDesigner.htm?FK_MapData=" + this.FK_MapData;
+
+               // return "url@../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + this.FK_MapData;
+                //return "url@./FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + this.FK_MapData;
             }
 
             return "err@没有判断的表单转入类型" + md.HisFrmType.ToString();

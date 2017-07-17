@@ -324,7 +324,7 @@ namespace BP.WF.HttpHandler
             {
                 string str = this.GetRequestVal("FK_MapData");
                 if (str == null || str == "" || str == "null")
-                    return null;
+                    str = this.GetRequestVal("FrmID"); 
                 return str;
             }
         }

@@ -1684,15 +1684,6 @@ namespace BP.Sys
 			#endregion 升级ccform控件.
 		}
 		/// <summary>
-		/// 导入
-		/// </summary>
-		/// <param name="ds"></param>
-		/// <returns></returns>
-		public static MapData ImpMapData(DataSet ds)
-		{
-			return ImpMapData(ds, true);
-		}
-		/// <summary>
 		/// 导入数据
 		/// </summary>
 		/// <param name="ds"></param>
@@ -1730,8 +1721,9 @@ namespace BP.Sys
 		/// <param name="ds">表单数据</param>
 		/// <param name="isSetReadonly">是否设置只读？</param>
 		/// <returns></returns>
-		public static MapData ImpMapData(string fk_mapdata, DataSet ds, bool isSetReadonly)
+		public static MapData ImpMapData(string fk_mapdata, DataSet ds, bool isSetReadonly=false)
 		{
+
 			#region 检查导入的数据是否完整.
 			string errMsg = "";
 			//if (ds.Tables[0].TableName != "Sys_MapData")

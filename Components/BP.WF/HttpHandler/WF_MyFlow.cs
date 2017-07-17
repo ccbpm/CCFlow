@@ -491,7 +491,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string InitToolBar()
         {
-            string tKey = DateTime.Now.ToString();
+            string tKey = DateTime.Now.ToString("yyyy-MM-dd - hh:mm:ss");
             string toolbar = "";
             try
             {

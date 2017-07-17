@@ -121,8 +121,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
 
-                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值(是否选中？0=否,1=是)", true, true, 0, 200, 20);
-
+                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值(是否选中？0=否,1=是)", true, false, 0, 200, 20);
 
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 800, 20, true);

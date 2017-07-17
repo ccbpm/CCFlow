@@ -6407,7 +6407,7 @@ namespace BP.WF
 
                 Node nd = new Node();
                 nd.NodeID = int.Parse(this.No + "01");
-                nd.Name = "开始节点";//  "开始节点"; 
+                nd.Name = "Start Node";//  "开始节点"; 
                 nd.Step = 1;
                 nd.FK_Flow = this.No;
                 nd.FlowName = this.Name;
@@ -6436,7 +6436,7 @@ namespace BP.WF
 
                 nd = new Node();
                 nd.NodeID = int.Parse(this.No + "02");
-                nd.Name = "节点2"; // "结束节点";
+                nd.Name = "Node 2"; // "结束节点";
                 nd.Step = 2;
                 nd.FK_Flow = this.No;
                 nd.FlowName = this.Name;
@@ -6458,7 +6458,6 @@ namespace BP.WF
                 select = new Template.Selector(nd.NodeID);
                 select.SelectorModel = Template.SelectorModel.GenerUserSelecter;
                 select.Update();
-
 
                 BP.Sys.MapData md = new BP.Sys.MapData();
                 md.No = "ND" + int.Parse(this.No) + "Rpt";

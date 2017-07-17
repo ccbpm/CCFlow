@@ -2598,8 +2598,8 @@ namespace BP.WF
                 map.AddTBString(NodeAttr.TurnToDealDoc, null, "发送后提示信息", true, false, 0, 1000, 10, true);
                 map.AddTBInt(NodeAttr.NodePosType, 0, "位置", false, false);
                 map.AddTBInt(NodeAttr.IsCCFlow, 0, "是否有流程完成条件", false, false);
-                map.AddTBString(NodeAttr.HisStas, null, "岗位", false, false, 0, 8000, 10);
-                map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 8000, 10);
+                map.AddTBString(NodeAttr.HisStas, null, "岗位", false, false, 0, 4000, 10);
+                map.AddTBString(NodeAttr.HisDeptStrs, null, "部门", false, false, 0, 4000, 10);
                 map.AddTBString(NodeAttr.HisToNDs, null, "转到的节点", false, false, 0, 400, 10);
                 map.AddTBString(NodeAttr.HisBillIDs, null, "单据IDs", false, false, 0, 300, 10);
                 //  map.AddTBString(NodeAttr.HisEmps, null, "HisEmps", false, false, 0, 3000, 10);

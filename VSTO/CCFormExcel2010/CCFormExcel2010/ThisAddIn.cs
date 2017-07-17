@@ -36,7 +36,7 @@ namespace CCFormExcel2010
         private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件.
 
 		private bool IsDebug = false; //是否是调试模式.
-        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=CY_6502,IsEdit=1,IsPrint=0,WorkID=4085,FK_Flow=002,FK_Node=201,UserNo=fengshunsheng,FID=0,SID=vzvuaviv2bt2ql0dpaf4liqw,PWorkID=4066,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6502,IsCheckGuide=1,FK_CaiYangFangFa=007,e1m=0.10324237762447774,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
+        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_34A,IsEdit=1,IsPrint=0,WorkID=4125,FK_Flow=003,FK_Node=301,UserNo=huangwei,FID=0,SID=eje1lpho1hounwbaetttzkzo,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_34A,IsCheckGuide=1,e1m=0.6205100742989008,WSUrl=http://localhost:8003/WF/CCForm/CCFormAPI.asmx";
 		#endregion
 
 		#region 测试用代码
@@ -236,7 +236,7 @@ namespace CCFormExcel2010
                         "更新提示",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                    if (result == DialogResult.OK)
+                    if (result == DialogResult.Yes)
                     {
                         System.Diagnostics.Process.Start(Glo.WSUrl.Substring(0, Glo.WSUrl.IndexOf("/WF")) + "/DataUser/FrmOfficeTemplate/Excel表单插件安装程序.zip");
                         Glo.LoadSuccessful = false;

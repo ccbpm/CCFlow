@@ -80,8 +80,8 @@
                         }
 
                         var isBatchStart = data[i].IsBatchStart;
-                        var searchUrl = '../WF/Rpt/Search.htm?RptNo=ND' + no + 'MyRpt&FK_Flow=' + no;
-                        var groupUrl = '../WF/Rpt/Group.htm?RptNo=ND' + no + 'MyRpt&FK_Flow=' + no;
+                        var searchUrl = '../WF/Rpt/Search.htm?RptNo=ND' + Number(no) + 'MyRpt&FK_Flow=' + no;
+                        var groupUrl = '../WF/Rpt/Group.htm?RptNo=ND' + Number(no) + 'MyRpt&FK_Flow=' + no;
                         var batchUrl = '../WF/BatchStart.htm?FK_Flow=' + no;
 
                         row += "\t\n<tr>";

@@ -324,7 +324,6 @@ namespace BP.Excel
 			System.Version fileVersion = fileAssembly.GetName().Version;
 			return fileVersion.ToString();
 		}
-
 	}
 
 	public enum ExcelType

@@ -6,7 +6,7 @@ using System.Text;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Microsoft.Office.Tools.Excel;
-using BP.Excel;
+using BP.VSTO;
 using System.Management;
 using System.Windows.Forms;
 using System.IO;
@@ -19,8 +19,7 @@ namespace CCFormExcel2010
 	public partial class ThisAddIn
 	{
 		#region 全局变量
-		private CCFormExcel2010.CCForm.CCFormAPISoapClient client;
-
+        private BP.VSTO.CCForm.CCFormAPISoapClient client;
 		/// <summary>
 		/// Excel表单基础功能类
 		/// </summary>
@@ -37,7 +36,7 @@ namespace CCFormExcel2010
         private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件.
 
 		private bool IsDebug = false; //是否是调试模式.
-        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_34A,IsEdit=1,IsPrint=0,WorkID=4081,FK_Flow=003,FK_Node=301,UserNo=huangwei,FID=0,SID=syuseiywc0pa10plu3pz2za1,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_34A,IsCheckGuide=1,e1m=0.8723531333298669,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
+        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=CY_6502,IsEdit=1,IsPrint=0,WorkID=4085,FK_Flow=002,FK_Node=201,UserNo=fengshunsheng,FID=0,SID=vzvuaviv2bt2ql0dpaf4liqw,PWorkID=4066,PFlowNo=001,IsLoadData=1,CWorkID=0,PNodeID=105,Frms=CY_6502,IsCheckGuide=1,FK_CaiYangFangFa=007,e1m=0.10324237762447774,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
 		#endregion
 
 		#region 测试用代码
@@ -65,14 +64,12 @@ namespace CCFormExcel2010
 			string[] ars = null;
 
 			args.Add("fromccflow", "true");
-
 			foreach (string arg in argsArr)
 			{
 				ars = arg.Split('=');
 
 				if (ars.Length == 1)
 					continue;
-
 				args.Add(ars[0], ars[1]);
 			}
 
@@ -210,13 +207,14 @@ namespace CCFormExcel2010
 			//Office版本判断
 			if (Application.Version == "12.0")
 			{
-				MessageBox.Show("@检测到您正在使用Excel 2007，该版本与本CCFlow插件存在兼容性问题，请升级至2010或更新版本！","不兼容支持提示.");
+				MessageBox.Show("@检测到您正在使用Excel 2007，该版本与本CCFlow插件存在兼容性问题，请升级至2010或更新版本！","不兼容支持提示.",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				Glo.LoadSuccessful = false;
 				return;
 			}
-			else if (Application.Version == "15.0")
+
+			if (Application.Version == "15.0")
 			{
-				MessageBox.Show("@检测到您正在使用Excel 2013，但您当前安装的CCFlow插件为Excel 2010专版，继续使用可能会出现问题，推荐您安装Excel 2013专版插件。");
+				MessageBox.Show("@检测到您正在使用Excel 2013，但您当前安装的CCFlow插件为Excel 2010专版，继续使用可能会出现问题，推荐您安装Excel 2013专版插件。", "插件版本提示",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 
 			//// 测试当前数据.
@@ -226,84 +224,68 @@ namespace CCFormExcel2010
 			_base = new ExcelFormBase(Application);
 
 			#region 校验用户安全与下载文件.
-			try
-			{
-				client = BP.Excel.Glo.GetCCFormAPISoapClient();
+            try
+            {
+                client = Glo.GetCCFormAPISoapClient();
 
-				//检查插件版本
-				var serverVersion = client.GetVstoExtensionVersion();
-				if (serverVersion != Glo.GetCurrentVersion())
-				{
-					MessageBox.Show("检测到有新版本插件！\n点击“确定”后自动下载新版安装包，请卸载旧版后安装新版插件。\n【详情参阅新版安装包中的操作手册】");
-					System.Diagnostics.Process.Start(Glo.WSUrl.Substring(0, Glo.WSUrl.IndexOf("/WF")) + "/DataUser/FrmOfficeTemplate/Excel表单插件安装程序.zip");
-					Glo.LoadSuccessful = false;
-					return;
-				}
+                //检查插件版本
+                var serverVersion = client.GetVstoExtensionVersion();
+                if (serverVersion != Glo.GetCurrentVersion())
+                {
+                    DialogResult result = MessageBox.Show("\t\n检测到有新版本插件！t\n当前版本为:[" + Glo.GetCurrentVersion() + "],最新版本为[" + serverVersion + "].  \t\n点击“确定”后自动下载新版安装包，请卸载旧版后安装新版插件。\t\n【详情参阅新版安装包中的操作手册】",
+                        "更新提示",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-				byte[] bytes = null;
-				var isExistDbFile = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, ref bytes);
+                    if (result == DialogResult.OK)
+                    {
+                        System.Diagnostics.Process.Start(Glo.WSUrl.Substring(0, Glo.WSUrl.IndexOf("/WF")) + "/DataUser/FrmOfficeTemplate/Excel表单插件安装程序.zip");
+                        Glo.LoadSuccessful = false;
+                        return;
+                    }
+                }
 
-				// 把这个byt 保存到本地.
-				if (System.IO.File.Exists(Glo.LocalFile) == true)
-					System.IO.File.Delete(Glo.LocalFile);
-				//写入文件.
-				BP.Excel.Glo.WriteFile(Glo.LocalFile, bytes);
+                byte[] bytes = null;
+                var isExistDbFile = client.GenerExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, ref bytes);
 
-				//打开文件
-				Globals.ThisAddIn.Application.Workbooks.Open(Glo.LocalFile, ReadOnly: Glo.IsReadonly);
+                // 把这个byt 保存到本地.
+                if (System.IO.File.Exists(Glo.LocalFile) == true)
+                    System.IO.File.Delete(Glo.LocalFile);
+                //写入文件.
+                BP.VSTO.Glo.WriteFile(Glo.LocalFile, bytes);
 
-				//如果是只读，则不再往下执行
-				if (Glo.IsReadonly)
-					return;
+                //打开文件
+                Globals.ThisAddIn.Application.Workbooks.Open(Glo.LocalFile, ReadOnly: Glo.IsReadonly);
 
-				//获得该表单的，物理数据.
-				_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, Glo.AtParas);
+                //如果是只读，则不再往下执行
+                if (Glo.IsReadonly)
+                    return;
 
-				//如果打开的是模板，则还需填充数据
-				if (isExistDbFile == false)
-				{
-					//设置启用的Sheet页
-					SetUseSheet();
+                //获得该表单的，物理数据.
+                _originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, Glo.AtParas);
 
-					//加载外键枚举数据.
-					SetMetaData(_originData);
+                //如果打开的是模板，则还需填充数据
+                if (isExistDbFile == false)
+                {
+                    //设置启用的Sheet页
+                    SetUseSheet();
 
-					//foreach (DataTable dt in _originData.Tables)
-					//{
-					//	if (dt.TableName == "MainTable")
-					//	{
-					//		//给主表赋值.
-					//		SetMainData(_originData.Tables["MainTable"]);
-					//		continue;
-					//	}
-
-					//	//给从表赋值.
-					//	SetDtlData(dt);
-					//}
-					FillData(_originData);
-				}
-				else //xTODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）//A:暂时不考虑这种情况，按数据库数据与Excel数据完全一致处理
-				{
-					////初始化_htSubTables数据
-					//foreach (DataTable dt in _originData.Tables)
-					//{
-					//	if (dt.TableName == "MainTable")
-					//		continue;
-					//	SetDtlData(dt);
-					//}
-					FillData(_originData);
-				}
-			}
-			catch (Exception exp)
-			{
-				Glo.LoadSuccessful = false;
-				if (exp.Message.IndexOf("another process") > -1)
-					//MessageBox.Show("不允许重复打开表单！\n若首次打开表单时遇此提示，请结束所有Excel进程后重试。");
-					MessageBox.Show("不允许同时打开多个表单（或重复打开表单）！\n若首次打开表单时遇此提示，请结束所有Excel进程后重试。\n\n后续不会记录任何操作，请关闭本文档。");
-				else
-					//MessageBox.Show("Excel表单出现错误，请联系您的系统管理员！\n错误信息：\n" + exp.Message + "\n@\n" + exp.StackTrace);
-					MessageBox.Show("\n Excel表单出现错误，请联系您的系统管理员！\n错误信息：\n" + exp.Message + "\n\n后续不会记录任何操作，请关闭本文档。", "Excel表单配置错误", MessageBoxButtons.OK, MessageBoxIcon.Error );
-			}
+                    //加载外键枚举数据.
+                    SetMetaData(_originData);
+                    FillData(_originData);
+                }
+                else //xTODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）//A:暂时不考虑这种情况，按数据库数据与Excel数据完全一致处理
+                {
+                    FillData(_originData);
+                }
+            }
+            catch (Exception exp)
+            {
+                Glo.LoadSuccessful = false;
+                if (exp.Message.IndexOf("another process") > -1)
+                    MessageBox.Show("不允许同时打开多个表单（或重复打开表单）！\n若首次打开表单时遇此提示，请结束所有Excel进程后重试。\n\n后续不会记录任何操作，请关闭本文档。", "装载错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    MessageBox.Show("\n Excel表单出现错误，请联系您的系统管理员！\n错误信息：\n" + exp.Message + "\n\n后续不会记录任何操作，请关闭本文档。", "Excel表单配置错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 			#endregion 校验用户安全与下载文件.
 		}
         /// <summary>
@@ -337,27 +319,13 @@ namespace CCFormExcel2010
 				if (dt.TableName == "MainTable")
 				{
 					//给主表赋值.
-					SetMainData(originData.Tables["MainTable"]);
+                    SetMainData(dt);
 					continue;
 				}
 
 				//给从表赋值.
 				SetDtlData(dt);
 			}
-			//else
-			//{
-			//	foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
-			//	{
-			//		var stnew = st.Value;
-			//		if (_originData.Tables.Contains(stnew.Name))
-			//		{
-			//			stnew.OriginData = _originData.Tables[stnew.Name].Copy();
-			//			stnew.Data = _originData.Tables[stnew.Name].Copy();
-			//			stnew.InitConnection();
-			//		}
-			//	}
-			//}
-
 			return true;
 		}
 
@@ -384,8 +352,18 @@ namespace CCFormExcel2010
 				var strBelongDtlName = _base.GetBelongDtlName(range);
 				if (strBelongDtlName == null) //单元格不属于某一命名区域
 				{
-					if (range.Name == null) //也不属于主表
-						return;
+
+
+                    try
+                    {
+                        if (range.Name == null) //也不属于主表
+                            return;
+                    }
+                    catch
+                    {
+                        return;
+                    }
+ 
 
 					//↓是主表字段
 					if (_base.IsValidList(range)) //是下拉
@@ -575,55 +553,56 @@ namespace CCFormExcel2010
 		void Application_WorkbookAfterSave(Excel.Workbook Wb, bool Success)
 		{
 			//若插件没有加载成功：直接跳出
-			if (!Glo.LoadSuccessful) return;
+			if (Glo.LoadSuccessful==false)
+                return;
 
 			//Excel文件流
 			byte[] bytes = Glo.ReadFile(Glo.LocalFile);
-			try
-			{
-				if (Glo.IsSaveFileOnly)
-				{
-					client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, null, null, null, bytes);
-					MessageBox.Show("保存成功！","ccform保存提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
-				else
-				{
-					//主表字段
-					//DataSet dsDtls = new DataSet();
-					string mainTableAtParas = GetMainData();//ref dsDtls);
-					if (string.IsNullOrEmpty(mainTableAtParas))
-						return;
+            try
+            {
+                if (Glo.IsSaveFileOnly)
+                {
+                    client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, null, null, null, bytes);
+                    MessageBox.Show("文件保存成功！", "ccform保存提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
 
-					//子表字段
-					DataSet dsDtlsOld = new DataSet();
-					DataSet dsDtlsNew = GetDtls(dsOld: dsDtlsOld);
-					if (dsDtlsNew == null)
-						return;
+                //主表字段
+                //DataSet dsDtls = new DataSet();
+                string mainTableAtParas = GetMainData();//ref dsDtls);
+                if (string.IsNullOrEmpty(mainTableAtParas))
+                    return;
 
-					//保存到服务器
-					client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
-					MessageBox.Show("保存成功！\n文档及表单数据已成功保存到服务器！","ccform保存提示",  MessageBoxButtons.OK, MessageBoxIcon.Information);
-				}
+                //子表字段
+                DataSet dsDtlsOld = new DataSet();
+                DataSet dsDtlsNew = GetDtls(dsOld: dsDtlsOld);
+                if (dsDtlsNew == null)
+                    return;
 
-				//获取新的子表数据，绑定行对应关系
-				_originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, Glo.AtParas);
-				////保存成功后用『新数据』替换『旧数据』
-				//foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
-				//{
-				//	var stnew = st.Value;
-				//	if (_originData.Tables.Contains(stnew.Name))
-				//	{
-				//		stnew.OriginData = _originData.Tables[stnew.Name].Copy();
-				//		stnew.Data = _originData.Tables[stnew.Name].Copy();
-				//		stnew.InitConnection();
-				//	}
-				//}
-				FillData(_originData);
-			}
-			catch (Exception exp)
-			{
-				MessageBox.Show("保存失败！！\n错误信息：" + exp.Message + "\n请联系您的系统管理员！", "错误",   MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
+                //保存到服务器
+                client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
+                MessageBox.Show("保存成功！\n文档及表单数据已成功保存到服务器！", "ccform保存提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                //获取新的子表数据，绑定行对应关系
+                _originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, Glo.AtParas);
+                ////保存成功后用『新数据』替换『旧数据』
+                //foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
+                //{
+                //	var stnew = st.Value;
+                //	if (_originData.Tables.Contains(stnew.Name))
+                //	{
+                //		stnew.OriginData = _originData.Tables[stnew.Name].Copy();
+                //		stnew.Data = _originData.Tables[stnew.Name].Copy();
+                //		stnew.InitConnection();
+                //	}
+                //}
+                FillData(_originData);
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show("保存失败！！\n错误信息：" + exp.Message + "\n请联系您的系统管理员！",
+                    "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 		}
 
 		private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
@@ -813,7 +792,6 @@ namespace CCFormExcel2010
 				//var rangeLastRow = range.Worksheet.get_Range(_base.ConvertInt2Letter(range.Column) + (range.Row + range.Rows.Count - 1), missing);
 				//var rangeLastRow = range.Worksheet.get_Range((range.Row + range.Rows.Count - 1), missing);//"$" + 
 				var rangeLastRow = range.Worksheet.get_Range("$" + (range.Row + range.Rows.Count - 1).ToString() + ":$" + (range.Row + range.Rows.Count - 1).ToString(), missing);
-
 
 				while (addRowsCount > 0)
 				{
@@ -1259,7 +1237,6 @@ namespace CCFormExcel2010
 			/// 级联【父级】序列（下拉）
 			/// </summary>
 			CascadeParentList
-
 		}
 
 		/// <summary>
@@ -1334,7 +1311,6 @@ namespace CCFormExcel2010
 			}
 			return type;
 		}
-
 		/// <summary>
 		/// 获取DataTable中的某一行某个字段的值
 		/// </summary>
@@ -1353,7 +1329,6 @@ namespace CCFormExcel2010
 				return null;
 			return drs[0][strSelectColumn].ToString();
 		}
-
 		/// <summary>
 		/// 【弃用】判断某个字段是否是枚举/外键类型
 		/// </summary>
@@ -1376,7 +1351,6 @@ namespace CCFormExcel2010
 			}
 			return false;
 		}
-
 		/// <summary>
 		/// 【弃用】判断某个字段是否是『有范围限制的外键』字段
 		/// </summary>

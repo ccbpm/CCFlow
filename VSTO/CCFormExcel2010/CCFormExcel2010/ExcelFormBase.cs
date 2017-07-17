@@ -51,7 +51,6 @@ namespace CCFormExcel2010
 		}
 
 		#region Cell相关
-
 		/// <summary>
 		/// 将整数转换为英文字母（e.g. 1->A,2->B，27->AA）
 		/// </summary>

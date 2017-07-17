@@ -197,9 +197,6 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="BP.DA\DataType.cs" />
-    <Compile Include="ExcelFormBase.cs" />
-    <Compile Include="Glo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -231,7 +228,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="SubTable.cs" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -260,6 +256,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\CCForm\CCFormAPI1.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\BP.VSTO\BP.VSTO.csproj">
+      <Project>{E0B62C3D-FE54-4230-8C2E-7ACDF53BF2C2}</Project>
+      <Name>BP.VSTO</Name>
+    </ProjectReference>
   </ItemGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

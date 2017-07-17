@@ -16,7 +16,6 @@ namespace CCFormExcel2010
 	public class SubTable
 	{
 		#region 成员
-
 		private string _name;
 		private Excel.Range _range; //子表区域
 		private int _Ro; //子表开始行数
@@ -30,7 +29,6 @@ namespace CCFormExcel2010
 		private string _PkColumnName; //主键列名 OID, MyPK, No
 		private Dictionary<int, string> _rowsConnection; //行绑定关系：rowidInExcel:rowPK
 		private Stack _operations; //操作序列
-
 		#endregion
 
 		#region 属性-Property

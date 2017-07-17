@@ -36,7 +36,7 @@ namespace CCFormExcel2010
 		
         private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件.
 
-		private bool IsDebug = true; //是否是调试模式.
+		private bool IsDebug = false; //是否是调试模式.
         public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_34A,IsEdit=1,IsPrint=0,WorkID=4081,FK_Flow=003,FK_Node=301,UserNo=huangwei,FID=0,SID=syuseiywc0pa10plu3pz2za1,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_34A,IsCheckGuide=1,e1m=0.8723531333298669,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
 		#endregion
 
@@ -766,7 +766,7 @@ namespace CCFormExcel2010
 						//则添加
 						//dr.Table.Columns.Add((string)col.Value);
                         errInfs += col.Value +",";
-						//throw new Exception("检测到字段绑定异常：子表“" + dt.TableName + "”绑定了『不存在于原始数据表』的字段“" + col.Value + "”！");
+						//throw new Exception("检测到字段绑定异常：子表“" + dt.TableName + "”绑定了『不存在于原始数据表』的字段:" + col.Value + "”！");
 					}
 				}
 
@@ -1384,37 +1384,36 @@ namespace CCFormExcel2010
 		/// <param name="strKeyOfEn">字段名（KeyOfEn）</param>
 		/// <param name="UiBindKey">ref关联外键区域的命名（return false时不改变值，return true时返回该字段的MyPk）</param>
 		/// <returns></returns>
-		public bool __abandon_IsLimitedFk(string tableName, string strKeyOfEn, ref string UiBindKey)
-		{
-			var strMapExtTableName = tableName == "MainTable" ? "Sys_MapExt" : "Sys_MapExt_For_" + tableName;
-			var strMapAttrTableName = tableName == "MainTable" ? "Sys_MapAttr" : "Sys_MapAttr_For_" + tableName;
-			if (_originData.Tables.Contains(strMapExtTableName))
-			{
-				foreach (DataRow dr in _originData.Tables[strMapExtTableName].Rows)
-				{
-					if ((dr["ExtType"].ToString() == "ActiveDDL" && dr["AttrsOfActive"].ToString() == strKeyOfEn) && //作为级联的下级
-						(dr["ExtType"].ToString() == "AutoFullDLL" && dr["AttrOfOper"].ToString() == strKeyOfEn) && //外键（e.g. 本部门的人员）
-						!string.IsNullOrEmpty(dr["Doc"].ToString()))
-					{
-						if (_originData.Tables.Contains(strMapAttrTableName))
-						{
-							var drs = _originData.Tables[strMapAttrTableName].Select("KeyOfEn='" + strKeyOfEn + "'");
-							if (drs.Length == 0)
-								UiBindKey = null;
-							else
-								UiBindKey = drs[0]["MyPK"].ToString();
-						}
-						else
-						{
-							UiBindKey = null;
-						}
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-
+        public bool __abandon_IsLimitedFk(string tableName, string strKeyOfEn, ref string UiBindKey)
+        {
+            var strMapExtTableName = tableName == "MainTable" ? "Sys_MapExt" : "Sys_MapExt_For_" + tableName;
+            var strMapAttrTableName = tableName == "MainTable" ? "Sys_MapAttr" : "Sys_MapAttr_For_" + tableName;
+            if (_originData.Tables.Contains(strMapExtTableName))
+            {
+                foreach (DataRow dr in _originData.Tables[strMapExtTableName].Rows)
+                {
+                    if ((dr["ExtType"].ToString() == "ActiveDDL" && dr["AttrsOfActive"].ToString() == strKeyOfEn) && //作为级联的下级
+                        (dr["ExtType"].ToString() == "AutoFullDLL" && dr["AttrOfOper"].ToString() == strKeyOfEn) && //外键（e.g. 本部门的人员）
+                        !string.IsNullOrEmpty(dr["Doc"].ToString()))
+                    {
+                        if (_originData.Tables.Contains(strMapAttrTableName))
+                        {
+                            var drs = _originData.Tables[strMapAttrTableName].Select("KeyOfEn='" + strKeyOfEn + "'");
+                            if (drs.Length == 0)
+                                UiBindKey = null;
+                            else
+                                UiBindKey = drs[0]["MyPK"].ToString();
+                        }
+                        else
+                        {
+                            UiBindKey = null;
+                        }
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 		/// <summary>
 		/// 验证数据合法性（2017-03-23：目前仅判断必填项；2017-03-24：增加数据类型判断）
 		/// </summary>
@@ -1423,107 +1422,101 @@ namespace CCFormExcel2010
 		/// <param name="range">区域</param>
 		/// <param name="val">输出值：该字段的保存值</param>
 		/// <returns>是否验证通过</returns>
-		public bool VaildData(string tableName, string keyOfEn, Excel.Range range, out string val)
-		{
-			var strMapAttrTableName = tableName == "MainTable" ? "Sys_MapAttr" : "Sys_MapAttr_For_" + tableName;
-			val = GetSaveValue(tableName, keyOfEn, range);
-			var dtAttr = _originData.Tables[strMapAttrTableName];
-			var drs = dtAttr.Select("KeyOfEn='" + keyOfEn + "'");
-			if (drs.Length == 1)
-			{
-				//必填验证
-				if (drs[0]["UIIsInput"].ToString() == "1")
-				{
-					if (string.IsNullOrEmpty(val))
-					{
-						MessageBox.Show("从表["+this.GetDtlNameByTableName(tableName)+"]字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”不能为空！\n单元格：" + range.Address,
-                            "ccform输入提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        public bool VaildData(string tableName, string keyOfEn, Excel.Range range, out string val)
+        {
+            var strMapAttrTableName = tableName == "MainTable" ? "Sys_MapAttr" : "Sys_MapAttr_For_" + tableName;
+            val = GetSaveValue(tableName, keyOfEn, range);
+            var dtAttr = _originData.Tables[strMapAttrTableName];
+            var dr = dtAttr.Select("KeyOfEn='" + keyOfEn + "'");
+            if (dr.Length != 1)
+                return true;
 
-                        range.Activate();
-						return false;
-					}
-				}
-				//数据类型验证
-				if (string.IsNullOrEmpty(val) == false && drs[0]["LGType"].ToString() == "0")
-				{
-					int myDataType = int.Parse(drs[0]["MyDataType"].ToString());
+            string name = dr[0]["Name"].ToString();
 
-					switch (myDataType)
-					{
-						case BP.DA.DataType.AppInt: //整数类型
-							int i;
-							if (int.TryParse(val, out i)==false)
-							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“整数”！", "ccform输入检查",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                range.Activate();
-								return false;
-							}
-							break;
-						case BP.DA.DataType.AppFloat: //浮点型
-							float f;
-							if (float.TryParse(val, out f)==false)
-							{
-                                MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                range.Activate();
-								return false;
-							}
-							break;
-						case BP.DA.DataType.AppDouble: //双精度型
-							double d;
-							if (double.TryParse(val, out d)==false)
-							{
-                                MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（整数或小数）”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                range.Activate();
-								return false;
-							}
-							break;
-						case BP.DA.DataType.AppDate: //日期型
-							DateTime date;
-							if (DateTime.TryParse(val, out date)==false)
-							{
-                                MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“日期”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                range.Activate();
-								return false;
-							}
-							break;
-						case BP.DA.DataType.AppDateTime: //时间型
-							DateTime time;
-							if (DateTime.TryParse(val, out time)==false)
-							{
-								MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“时间”！", "ccform输入检查",  MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                range.Activate();
-								return false;
-							}
-							break;
-						case BP.DA.DataType.AppMoney: //金额
-							float c;
-							if (float.TryParse(val, out c)==false)
-							{
-                                MessageBox.Show("字段“" + drs[0]["Name"] + "(" + drs[0]["KeyOfEn"] + ")”只能填入“数字（金额）”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                range.Activate();
-								return false;
-							}
-							break;
-						default:
-							break;
-					}
-				}
-			}
-			return true;
-		}
+            //必填验证
+            if (dr[0]["UIIsInput"].ToString() == "1")
+            {
+                if (string.IsNullOrEmpty(val))
+                {
+                    MessageBox.Show("从表[" + this.GetDtlNameByTableName(tableName) + "]字段:" + name + "(" + keyOfEn + ")”不能为空！\n单元格：" + range.Address,
+                        "ccform输入提示", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 
-		/*
-		//动态获取『有范围限制的外键字段』的区域填充数据
-		public DataTable GetAreaList()
-		{
-			//!获取数据成功后更新_originData
-			return null;
-		}*/
+                    range.Activate();
+                    return false;
+                }
+            }
 
+            //数据类型验证
+            if (string.IsNullOrEmpty(val) == false && dr[0]["LGType"].ToString() == "0")
+            {
+                //判断数据类型.
+                int myDataType = int.Parse(dr[0]["MyDataType"].ToString());
+
+                switch (myDataType)
+                {
+                    case BP.DA.DataType.AppInt: //整数类型.
+                        int i;
+                        if (int.TryParse(val, out i) == false)
+                        {
+                            MessageBox.Show("字段:" + name + "(" + keyOfEn + ") 只能填入“整数”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            range.Activate();
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppFloat: //浮点型
+                        float f;
+                        if (float.TryParse(val, out f) == false)
+                        {
+                            MessageBox.Show("字段:" + name + "(" + keyOfEn + ") 只能填入“数字（整数或小数）”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            range.Activate();
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppDouble: //双精度型
+                        double d;
+                        if (double.TryParse(val, out d) == false)
+                        {
+                            MessageBox.Show("字段:" + name + "(" + keyOfEn + ") 只能填入“数字（整数或小数）”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            range.Activate();
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppDate: //日期型
+                        DateTime date;
+                        if (DateTime.TryParse(val, out date) == false)
+                        {
+                            MessageBox.Show("字段:" + name + "(" + keyOfEn + ") 只能填入“日期”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            range.Activate();
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppDateTime: //时间型
+                        DateTime time;
+                        if (DateTime.TryParse(val, out time) == false)
+                        {
+                            MessageBox.Show("字段:" + name + "(" + keyOfEn + ") 只能填入“时间”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            range.Activate();
+                            return false;
+                        }
+                        break;
+                    case BP.DA.DataType.AppMoney: //金额
+                        float c;
+                        if (float.TryParse(val, out c) == false)
+                        {
+                            MessageBox.Show("字段:" + name + "(" + keyOfEn + ") 只能填入“数字（金额）”！", "ccform输入检查", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            range.Activate();
+                            return false;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return true;
+        }
 		#endregion
 
 		#region VSTO相关方法
-
 		/// <summary>
 		/// 获取子表区域中的表头（字段）信息
 		/// </summary>

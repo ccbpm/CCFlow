@@ -1709,7 +1709,7 @@ namespace BP.Sys
 			MapData md = new MapData();
 			md.No = fk_mapData;
 			if (md.IsExits)
-				throw new Exception("已经存在(" + fk_mapData + ")的数据。");
+				throw new Exception("@已经存在(" + fk_mapData + ")的表单ID，所以您不能导入。");
 
 			//导入.
 			return ImpMapData(fk_mapData, ds, isSetReadony);

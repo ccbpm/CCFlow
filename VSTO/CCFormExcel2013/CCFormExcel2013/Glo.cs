@@ -165,7 +165,7 @@ namespace BP.Excel
 		/// 得到 WebService 对象
 		/// </summary>
 		/// <returns></returns>
-		public static CCFormExcel2013.CCFormAPI.CCFormAPISoapClient GetCCFormAPISoapClient()
+		public static CCFormExcel2013.CCForm.CCFormAPISoapClient GetCCFormAPISoapClient()
 		{
 			TimeSpan ts = new TimeSpan(0, 5, 0);
 			var basicBinding = new BasicHttpBinding()
@@ -184,12 +184,12 @@ namespace BP.Excel
 
 			var endPoint = new EndpointAddress(url);
 			var ctor =
-				typeof(CCFormExcel2013.CCFormAPI.CCFormAPISoapClient).GetConstructor(
+				typeof(CCFormExcel2013.CCForm.CCFormAPISoapClient).GetConstructor(
 				new Type[] {
 					typeof(Binding),
 					typeof(EndpointAddress)
 				});
-			return (CCFormExcel2013.CCFormAPI.CCFormAPISoapClient)ctor.Invoke(
+			return (CCFormExcel2013.CCForm.CCFormAPISoapClient)ctor.Invoke(
 				new object[] { basicBinding, endPoint });
 		}
 

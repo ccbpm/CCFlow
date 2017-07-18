@@ -1626,8 +1626,8 @@ function InitDDLOperation(workNodeData, mapAttr, defVal) {
 
 //填充默认数据
 function ConvertDefVal(workNodeData, defVal, keyOfEn) {
-    //计算URL传过来的表单参数@TXB_Title=事件测试
 
+    //计算URL传过来的表单参数@TXB_Title=事件测试
     var pageParams = getQueryString();
     var pageParamObj = {};
     $.each(pageParams, function (i, pageParam) {
@@ -1659,87 +1659,11 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
     if (result != undefined && typeof (result) == 'string') {
         //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
     }
+
     //console.info(defVal+"=="+keyOfEn+"=="+result);
     return result = unescape(result);
 }
-
-//加载表单数据.
-function GenerWorkNode1() {
-    $.ajax({
-        type: 'post',
-        async: true,
-        data: pageData,
-        url: MyFlow + "?DoType=GenerWorkNode" + "&m=" + Math.random(),
-        dataType: 'html',
-        success: function (data) {
-            jsonStr = data;
-            var gengerWorkNode = {};
-            try {
-                var gengerWorkNode = JSON.parse(data);
-            }
-            catch (err) {
-                alert("GenerWorkNode转换JSON失败:" + data);
-                return;
-            }
-            ////显示父流程 链接
-            //if (gengerWorkNode.WF_GenerWorkFlow != null && gengerWorkNode.WF_GenerWorkFlow.length > 0 && (gengerWorkNode.WF_GenerWorkFlow[0].PWorkID != 0 || gengerWorkNode.WF_GenerWorkFlow[0].PWorkID2 != 0)) {
-            //    $('#btnShowPFlow').bind('click', function () {
-            //        var pworkid = 1;
-            //        var pfk_node = 1;
-            //        var pfk_flow = 1;
-            //        if (gengerWorkNode.WF_GenerWorkFlow[0].PWorkID != 0) {
-            //            pworkid = gengerWorkNode.WF_GenerWorkFlow[0].PWorkID;
-            //            pfk_flow = gengerWorkNode.WF_GenerWorkFlow[0].PFlowNo;
-            //            pfk_node = gengerWorkNode.WF_GenerWorkFlow[0].PNodeID;
-            //        } else {
-            //            pworkid = gengerWorkNode.WF_GenerWorkFlow[0].PWorkID2;
-            //            pfk_flow = gengerWorkNode.WF_GenerWorkFlow[0].PFlowNo2;
-            //            pfk_node = gengerWorkNode.WF_GenerWorkFlow[0].PNodeID2;
-            //        }
-
-            //        window.open("WorkOpt/FoolFrmTrack.htm?FK_Flow=" + pfk_flow + "&WorkID=" + pworkid + "&FK_Node=" + pfk_node);
-
-            //    });
-
-            //    $('#ShowPFlow').css('display', 'none');
-            //} else {
-            //    $('#ShowPFlow').css('display', 'none');
-            //}
-
-            ////如果为查看页面，只显示历史轨迹
-            //initTrackList(gengerWorkNode);
-            //if (pageData.DoType == 'View') {
-            //    $('#divCurrentForm').css('display', 'none');
-            //    return;
-            //}
-            ////是分流或者分合流  且是 退回状态 转到页面 WF\WorkOpt\DealSubThreadReturnToHL.html
-            //if ((gengerWorkNode.WF_Node[0].RunModel == 2 || gengerWorkNode.WF_Node[0].RunModel == 3) && gengerWorkNode.WF_GenerWorkFlow[0].WFState == 5) {
-            //    $('#')
-            //    var iframeHtml = "<iframe style='width:100%;' src='./WorkOpt/DealSubThreadReturnToHL.html?FK_Flow=" + pageData.FK_Flow + "&FK_Node=" + pageData.FK_Node + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "'></iframe>";
-            //    $('#topContentDiv').html(iframeHtml);
-            //    $('#header span').html("处理退回信息");
-            //    return;
-            //}
-            ////加签回复
-            //if (gengerWorkNode.WF_GenerWorkFlow[0].WFState == 11) {
-
-            //}
-
-            //解析表单
-            InitForm();
-            ///根据下拉框选定的值，绑定表单中哪个元素显示，哪些元素不显示
-            //showEleDependOnDRDLValue();
-            //
-            InitToNodeDDL();
-
-            Common.MaxLengthError();
-            // window.location.href = "#divCurrentForm";
-
-            //设置窗口大小
-
-        }
-    });
-}
+ 
 
 //获取表单数据
 function getFormData(isCotainTextArea, isCotainUrlParam) {
@@ -2281,8 +2205,6 @@ function GenerWorkNode() {
                 $('#CCForm').append(label);
             }
 
-
-
             //循环FrmBtn
             for (var i in flow_Data.Sys_FrmBtn) {
                 var frmBtn = flow_Data.Sys_FrmBtn[i];
@@ -2458,13 +2380,19 @@ function GenerWorkNode() {
 }
 
 var workNodeData = {};
+
 //升级表单元素 初始化文本框、日期、时间
 function figure_MapAttr_Template(mapAttr) {
+
     var eleHtml = '';
-    if (mapAttr.UIVisible == 1) {//是否显示
+    if (mapAttr.UIVisible == 1) { //是否显示
 
         var str = '';
         var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+
+        alert(defValue + '  key = ' + mapAttr.KeyOfEn);
+
+
 
         var isInOneRow = false; //是否占一整行
         var islabelIsInEle = false; //
@@ -2478,10 +2406,9 @@ function figure_MapAttr_Template(mapAttr) {
             } else {
                 //添加文本框 ，日期控件等
                 //AppString   
-                if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
-                    if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
-                        eleHtml +=
-                            "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
+                if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") { //不是外键
+                    if (mapAttr.UIContralType == "1") { //DDL 下拉列表框
+                        eleHtml +="<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                             (workNodeData, mapAttr, defValue) + "</select>";
                     } else {//文本区域
                         if (mapAttr.UIHeight <= 23) {
@@ -2593,17 +2520,20 @@ function figure_MapAttr_Template(mapAttr) {
             eleHtml +=
            mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
         }
-    } else {
+
+    }  // 可以显示的情况.
+
+    if (mapAttr.UIVisible == 0) { // 不显示.
         var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
         if (value == undefined) {
             value = '';
         } else {
             //value = value.toString().replace(/：/g, ':').replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
         }
-
         //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
         eleHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'></input>";
     }
+
     eleHtml = $('<div>' + eleHtml + '</div>');
     eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);

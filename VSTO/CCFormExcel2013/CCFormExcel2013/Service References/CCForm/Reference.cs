@@ -8,54 +8,40 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CCFormExcel2013.CCFormAPI {
+namespace CCFormExcel2013.CCForm {
     using System.Data;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CCFormAPI.CCFormAPISoap")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CCForm.CCFormAPISoap")]
     public interface CCFormAPISoap {
         
+        // CODEGEN: 参数“bytes”需要其他方案信息，使用参数模式无法捕获这些信息。特定特性为“System.Xml.Serialization.XmlElementAttribute”。
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenerExcelFile", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        CCFormExcel2013.CCFormAPI.GenerExcelFileResponse GenerExcelFile(CCFormExcel2013.CCFormAPI.GenerExcelFileRequest request);
-        
-        // CODEGEN: 正在生成消息协定，应为该操作具有多个返回值。
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenerExcelFile", ReplyAction="*")]
-        System.Threading.Tasks.Task<CCFormExcel2013.CCFormAPI.GenerExcelFileResponse> GenerExcelFileAsync(CCFormExcel2013.CCFormAPI.GenerExcelFileRequest request);
+        CCFormExcel2013.CCForm.GenerExcelFileResponse GenerExcelFile(CCFormExcel2013.CCForm.GenerExcelFileRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenerDBForVSTOExcelFrmModel", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, string pkValue, string atParas);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenerDBForVSTOExcelFrmModel", ReplyAction="*")]
-        System.Threading.Tasks.Task<System.Data.DataSet> GenerDBForVSTOExcelFrmModelAsync(string userNo, string sid, string frmID, string pkValue, string atParas);
-        
         // CODEGEN: 参数“byt”需要其他方案信息，使用参数模式无法捕获这些信息。特定特性为“System.Xml.Serialization.XmlElementAttribute”。
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SaveExcelFile", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        CCFormExcel2013.CCFormAPI.SaveExcelFileResponse SaveExcelFile(CCFormExcel2013.CCFormAPI.SaveExcelFileRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SaveExcelFile", ReplyAction="*")]
-        System.Threading.Tasks.Task<CCFormExcel2013.CCFormAPI.SaveExcelFileResponse> SaveExcelFileAsync(CCFormExcel2013.CCFormAPI.SaveExcelFileRequest request);
+        CCFormExcel2013.CCForm.SaveExcelFileResponse SaveExcelFile(CCFormExcel2013.CCForm.SaveExcelFileRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/MapExtGenerAcitviDDLDataTable", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Data.DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, string pkValue, string mapExtMyPK, string cheaneKey, string paras);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/MapExtGenerAcitviDDLDataTable", ReplyAction="*")]
-        System.Threading.Tasks.Task<System.Data.DataTable> MapExtGenerAcitviDDLDataTableAsync(string userNo, string sid, string pkValue, string mapExtMyPK, string cheaneKey, string paras);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetVstoExtensionVersion", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         string GetVstoExtensionVersion();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetVstoExtensionVersion", ReplyAction="*")]
-        System.Threading.Tasks.Task<string> GetVstoExtensionVersionAsync();
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="GenerExcelFile", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
     public partial class GenerExcelFileRequest {
         
@@ -89,6 +75,7 @@ namespace CCFormExcel2013.CCFormAPI {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="GenerExcelFileResponse", WrapperNamespace="http://tempuri.org/", IsWrapped=true)]
     public partial class GenerExcelFileResponse {
         
@@ -165,12 +152,12 @@ namespace CCFormExcel2013.CCFormAPI {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface CCFormAPISoapChannel : CCFormExcel2013.CCFormAPI.CCFormAPISoap, System.ServiceModel.IClientChannel {
+    public interface CCFormAPISoapChannel : CCFormExcel2013.CCForm.CCFormAPISoap, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class CCFormAPISoapClient : System.ServiceModel.ClientBase<CCFormExcel2013.CCFormAPI.CCFormAPISoap>, CCFormExcel2013.CCFormAPI.CCFormAPISoap {
+    public partial class CCFormAPISoapClient : System.ServiceModel.ClientBase<CCFormExcel2013.CCForm.CCFormAPISoap>, CCFormExcel2013.CCForm.CCFormAPISoap {
         
         public CCFormAPISoapClient() {
         }
@@ -192,41 +179,33 @@ namespace CCFormExcel2013.CCFormAPI {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        CCFormExcel2013.CCFormAPI.GenerExcelFileResponse CCFormExcel2013.CCFormAPI.CCFormAPISoap.GenerExcelFile(CCFormExcel2013.CCFormAPI.GenerExcelFileRequest request) {
+        CCFormExcel2013.CCForm.GenerExcelFileResponse CCFormExcel2013.CCForm.CCFormAPISoap.GenerExcelFile(CCFormExcel2013.CCForm.GenerExcelFileRequest request) {
             return base.Channel.GenerExcelFile(request);
         }
         
         public bool GenerExcelFile(string userNo, string sid, string frmID, string pkValue, ref byte[] bytes) {
-            CCFormExcel2013.CCFormAPI.GenerExcelFileRequest inValue = new CCFormExcel2013.CCFormAPI.GenerExcelFileRequest();
+            CCFormExcel2013.CCForm.GenerExcelFileRequest inValue = new CCFormExcel2013.CCForm.GenerExcelFileRequest();
             inValue.userNo = userNo;
             inValue.sid = sid;
             inValue.frmID = frmID;
             inValue.pkValue = pkValue;
             inValue.bytes = bytes;
-            CCFormExcel2013.CCFormAPI.GenerExcelFileResponse retVal = ((CCFormExcel2013.CCFormAPI.CCFormAPISoap)(this)).GenerExcelFile(inValue);
+            CCFormExcel2013.CCForm.GenerExcelFileResponse retVal = ((CCFormExcel2013.CCForm.CCFormAPISoap)(this)).GenerExcelFile(inValue);
             bytes = retVal.bytes;
             return retVal.GenerExcelFileResult;
-        }
-        
-        public System.Threading.Tasks.Task<CCFormExcel2013.CCFormAPI.GenerExcelFileResponse> GenerExcelFileAsync(CCFormExcel2013.CCFormAPI.GenerExcelFileRequest request) {
-            return base.Channel.GenerExcelFileAsync(request);
         }
         
         public System.Data.DataSet GenerDBForVSTOExcelFrmModel(string userNo, string sid, string frmID, string pkValue, string atParas) {
             return base.Channel.GenerDBForVSTOExcelFrmModel(userNo, sid, frmID, pkValue, atParas);
         }
         
-        public System.Threading.Tasks.Task<System.Data.DataSet> GenerDBForVSTOExcelFrmModelAsync(string userNo, string sid, string frmID, string pkValue, string atParas) {
-            return base.Channel.GenerDBForVSTOExcelFrmModelAsync(userNo, sid, frmID, pkValue, atParas);
-        }
-        
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        CCFormExcel2013.CCFormAPI.SaveExcelFileResponse CCFormExcel2013.CCFormAPI.CCFormAPISoap.SaveExcelFile(CCFormExcel2013.CCFormAPI.SaveExcelFileRequest request) {
+        CCFormExcel2013.CCForm.SaveExcelFileResponse CCFormExcel2013.CCForm.CCFormAPISoap.SaveExcelFile(CCFormExcel2013.CCForm.SaveExcelFileRequest request) {
             return base.Channel.SaveExcelFile(request);
         }
         
         public void SaveExcelFile(string userNo, string sid, string frmID, string pkValue, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt) {
-            CCFormExcel2013.CCFormAPI.SaveExcelFileRequest inValue = new CCFormExcel2013.CCFormAPI.SaveExcelFileRequest();
+            CCFormExcel2013.CCForm.SaveExcelFileRequest inValue = new CCFormExcel2013.CCForm.SaveExcelFileRequest();
             inValue.userNo = userNo;
             inValue.sid = sid;
             inValue.frmID = frmID;
@@ -235,41 +214,15 @@ namespace CCFormExcel2013.CCFormAPI {
             inValue.dsDtlsChange = dsDtlsChange;
             inValue.dsDtlsOld = dsDtlsOld;
             inValue.byt = byt;
-            CCFormExcel2013.CCFormAPI.SaveExcelFileResponse retVal = ((CCFormExcel2013.CCFormAPI.CCFormAPISoap)(this)).SaveExcelFile(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<CCFormExcel2013.CCFormAPI.SaveExcelFileResponse> CCFormExcel2013.CCFormAPI.CCFormAPISoap.SaveExcelFileAsync(CCFormExcel2013.CCFormAPI.SaveExcelFileRequest request) {
-            return base.Channel.SaveExcelFileAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<CCFormExcel2013.CCFormAPI.SaveExcelFileResponse> SaveExcelFileAsync(string userNo, string sid, string frmID, string pkValue, string mainTableAtParas, System.Data.DataSet dsDtlsChange, System.Data.DataSet dsDtlsOld, byte[] byt) {
-            CCFormExcel2013.CCFormAPI.SaveExcelFileRequest inValue = new CCFormExcel2013.CCFormAPI.SaveExcelFileRequest();
-            inValue.userNo = userNo;
-            inValue.sid = sid;
-            inValue.frmID = frmID;
-            inValue.pkValue = pkValue;
-            inValue.mainTableAtParas = mainTableAtParas;
-            inValue.dsDtlsChange = dsDtlsChange;
-            inValue.dsDtlsOld = dsDtlsOld;
-            inValue.byt = byt;
-            return ((CCFormExcel2013.CCFormAPI.CCFormAPISoap)(this)).SaveExcelFileAsync(inValue);
+            CCFormExcel2013.CCForm.SaveExcelFileResponse retVal = ((CCFormExcel2013.CCForm.CCFormAPISoap)(this)).SaveExcelFile(inValue);
         }
         
         public System.Data.DataTable MapExtGenerAcitviDDLDataTable(string userNo, string sid, string pkValue, string mapExtMyPK, string cheaneKey, string paras) {
             return base.Channel.MapExtGenerAcitviDDLDataTable(userNo, sid, pkValue, mapExtMyPK, cheaneKey, paras);
         }
         
-        public System.Threading.Tasks.Task<System.Data.DataTable> MapExtGenerAcitviDDLDataTableAsync(string userNo, string sid, string pkValue, string mapExtMyPK, string cheaneKey, string paras) {
-            return base.Channel.MapExtGenerAcitviDDLDataTableAsync(userNo, sid, pkValue, mapExtMyPK, cheaneKey, paras);
-        }
-        
         public string GetVstoExtensionVersion() {
             return base.Channel.GetVstoExtensionVersion();
-        }
-        
-        public System.Threading.Tasks.Task<string> GetVstoExtensionVersionAsync() {
-            return base.Channel.GetVstoExtensionVersionAsync();
         }
     }
 }

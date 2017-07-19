@@ -739,6 +739,10 @@ namespace BP.Sys
                     continue;
 
                 string shape = control["CCForm_Shape"].ToString();
+
+                if (control.Keys.Contains("CCForm_MyPK") == false)
+                    continue;
+
                 if (control["CCForm_MyPK"] == null)
                     continue;
 

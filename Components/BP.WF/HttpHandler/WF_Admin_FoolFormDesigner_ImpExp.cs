@@ -44,7 +44,11 @@ namespace BP.WF.HttpHandler
             }
 
             //加入表单库目录.
-            sql = "SELECT 'ND'+NO,NAME,PARENTNO FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            sql = "SELECT 'ND'||NO as No ,NAME,PARENTNO FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
+            else
+                sql = "SELECT 'ND'+NO,NAME,PARENTNO FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
+
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_FormTree";
             ds.Tables.Add(dt);

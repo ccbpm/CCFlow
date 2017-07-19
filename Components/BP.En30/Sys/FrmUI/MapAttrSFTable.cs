@@ -112,7 +112,7 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(MapAttrAttr.UIBindKey, null, "外键SFTable", true, true, 0, 100, 20);
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见", true, true);
-                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用", true, true);
+                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
 
                // map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
                // map.AddBoolean("IsEnableJS", false, "是否启用JS高级设置？", true, true); //参数字段.

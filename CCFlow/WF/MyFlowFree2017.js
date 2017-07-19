@@ -560,7 +560,7 @@ function initModal(modalType, toNode) {
                    + '<h4 class="modal-title" id="modalHeader">工作退回</h4>'
                + '</div>'
                + '<div class="modal-body">'
-                   + '<iframe style="width:100%;border:0px;height:500px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+                   + '<iframe style="width:100%;border:0px;height:400px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
                + '</div>'
            + '</div><!-- /.modal-content -->'
        + '</div><!-- /.modal-dialog -->'
@@ -1626,8 +1626,8 @@ function InitDDLOperation(workNodeData, mapAttr, defVal) {
 
 //填充默认数据
 function ConvertDefVal(workNodeData, defVal, keyOfEn) {
-
     //计算URL传过来的表单参数@TXB_Title=事件测试
+
     var pageParams = getQueryString();
     var pageParamObj = {};
     $.each(pageParams, function (i, pageParam) {
@@ -1659,11 +1659,14 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
     if (result != undefined && typeof (result) == 'string') {
         //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
     }
-
     //console.info(defVal+"=="+keyOfEn+"=="+result);
-    return result = unescape(result);
+
+    result = unescape(result);
+
+    if (result == 'null')
+        return "";
+    return result;
 }
- 
 
 //获取表单数据
 function getFormData(isCotainTextArea, isCotainUrlParam) {
@@ -2380,19 +2383,13 @@ function GenerWorkNode() {
 }
 
 var workNodeData = {};
-
 //升级表单元素 初始化文本框、日期、时间
 function figure_MapAttr_Template(mapAttr) {
-
     var eleHtml = '';
-    if (mapAttr.UIVisible == 1) { //是否显示
+    if (mapAttr.UIVisible == 1) {//是否显示
 
         var str = '';
         var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
-
-        alert(defValue + '  key = ' + mapAttr.KeyOfEn);
-
-
 
         var isInOneRow = false; //是否占一整行
         var islabelIsInEle = false; //
@@ -2406,9 +2403,10 @@ function figure_MapAttr_Template(mapAttr) {
             } else {
                 //添加文本框 ，日期控件等
                 //AppString   
-                if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") { //不是外键
-                    if (mapAttr.UIContralType == "1") { //DDL 下拉列表框
-                        eleHtml +="<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
+                if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
+                    if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
+                        eleHtml +=
+                            "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                             (workNodeData, mapAttr, defValue) + "</select>";
                     } else {//文本区域
                         if (mapAttr.UIHeight <= 23) {
@@ -2520,20 +2518,17 @@ function figure_MapAttr_Template(mapAttr) {
             eleHtml +=
            mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
         }
-
-    }  // 可以显示的情况.
-
-    if (mapAttr.UIVisible == 0) { // 不显示.
+    } else {
         var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
         if (value == undefined) {
             value = '';
         } else {
             //value = value.toString().replace(/：/g, ':').replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
         }
+
         //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
         eleHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'></input>";
     }
-
     eleHtml = $('<div>' + eleHtml + '</div>');
     eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);

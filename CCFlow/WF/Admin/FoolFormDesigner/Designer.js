@@ -84,17 +84,7 @@ function CopyFieldFromNode(mypk) {
         window.location.href = window.location.href;
     });
 }
-function GroupFieldNew() {
-
-    var url = 'GroupField.htm?FK_MapData=' + GetQueryString('FK_MapData') + "&RefOID=0&DoType=FunList";
-
-    OpenEasyUiDialog(url, "eudlgframe", '新建', 800, 500, "icon-property", true, null, null, null, function () {
-
-        window.location.href = window.location.href;
-
-    });
-
-}
+ 
 function ExpImp() {
 
     var url = "ExpImp.htm?FK_MapData=" + GetQueryString('FK_MapData') + "&DoType=FunList&FK_Flow=" +  GetQueryString('FK_Flow');
@@ -107,8 +97,6 @@ function ExpImp() {
 
 function GroupField(mypk, OID) {
 
-
-    // var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
     var url = "../../Comm/En.htm?EnsName=BP.Sys.GroupFields&PK=" + OID;
 
     OpenEasyUiDialog(url, "eudlgframe", '分组', 800, 500, "icon-property", true, null, null, null, function () {

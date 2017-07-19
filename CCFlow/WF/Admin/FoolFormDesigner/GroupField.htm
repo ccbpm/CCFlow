@@ -69,10 +69,12 @@
         function SaveBlank() {
 
             var name = $("#TB_Blank_Name").val();
+
             if (name == "") {
                 alert("分组名称不能为空.");
                 return;
             }
+
             var fk_mapData = GetQueryString("FK_MapData");
             var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
             var frmData = $("#cc").serialize();
@@ -81,6 +83,8 @@
             var gfID = GetQueryString("GroupField");
             if (gfID == null)
                 gfID = "0";
+
+             
 
             $.ajax({
                 data: frmData,

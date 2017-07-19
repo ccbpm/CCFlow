@@ -539,8 +539,9 @@
                     window.location.href = window.location.href;
                 });
             }
-            function GroupFieldNew(mypk) {
-                var url = 'GroupField.htm?FK_MapData=' + mypk + "&RefOID=0&DoType=FunList";
+            function GroupFieldNew() {
+
+                var url = 'GroupField.htm?FK_MapData=' + GetQueryString("FK_MapData");
 
                 OpenEasyUiDialog(url, "eudlgframe", '新建', 800, 500, "icon-property", true, null, null, null, function () {
                     window.location.href = window.location.href;
@@ -1013,89 +1014,6 @@
                         <div data-options="region:'center'" style="padding-top: 10px; padding-bottom: 10px; width: 100%; height: 570px; background-color: rgb(208, 208, 208);" title="" class="panel-body panel-body-noheader layout-body">
                             <div style="width: 700px;background-color:white;border:1px solid #666;padding:5px;margin:auto;" align="center">
                                 <table style="border:1px;padding:5px; padding-top:11px;width:98%;" id="contentTable">
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="4" class="GroupField" valign="top" style="height: 24px;align:left"><div style="text-align:left; float:left"><img src="./Style/Min.gif" alert="Min" id="Img1" border="0" />&nbsp;<a href="javascript:GroupField('ND102','445')">填写报销申请单</a></div> <div style="text-align:right; float:right">  <a href="javascript:AddField('ND102','445')" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-new',plain:true" group="" id="">
-                                                <span class="l-btn-left"></span>
-                                                </a>  
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="FDesc" nowrap="true">
-                                                <div>
-                                                    <a href="javascript:Up('ND102','ND102_DaXie','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id="">
-                                                    <span class="l-btn-left"></span>
-                                                    </a>
-                                                    <a href="javascript:Edit('ND102','ND102_DaXie','1','445');">大写</a>
-                                                    <a href="javascript:Down('ND102','ND102_DaXie','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id="">
-                                                        <span class="l-btn-left">
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td nowrap="" colspan="1">
-                                            <input name="ctl00$ContentPlaceHolder1$Pub1$TB_DaXie" type="text" id="ContentPlaceHolder1_Pub1_TB_DaXie" class="TBReadonly" width="100%" style="width:100%;height:100%;padding: 0px;margin: 0px;" /></td>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_FaQiRen','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"></span></a><a href="javascript:Edit('ND102','ND102_FaQiRen','1','445');">报销人</
-                                                a><a href="javascript:Down('ND102','ND102_FaQiRen','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"></span></a></div></td>
-                                            <td nowrap="" colspan="1"><input name="ctl00$ContentPlaceHolder1$Pub1$TB_FaQiRen" type="text" id="ContentPlaceHolder1_Pub1_TB_FaQiRen" class="TBReadonly" width="100%" style="width:100%;height:100%;padding: 0px;margin: 0px;" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_FaQiShiJian','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"></span></a><a href="javascript:Edit('ND102','ND102_FaQiShiJian','6','445');">发起时间</a><a href="javascript:Down('ND102','ND102_FaQiShiJian','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a></div></td>
-                                            <td nowrap="" colspan="1"><input name="ctl00$ContentPlaceHolder1$Pub1$ctl16" type="text" value="          " readonly="readonly" disabled="disabled" class="aspNetDisabled" /></td>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_GaiYaoShuoMing','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left">
-</span></a><a href="javascript:Edit('ND102','ND102_GaiYaoShuoMing','1','445');">概要说明</a><a href="javascript:Down('ND102','ND102_GaiYaoShuoMing','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left">
-</span></a></div></td>
-                                            <td nowrap="" colspan="1"><input name="ctl00$ContentPlaceHolder1$Pub1$TB_GaiYaoShuoMing" type="text" id="ContentPlaceHolder1_Pub1_TB_GaiYaoShuoMing" class="TBReadonly" width="100%" style="width:100%;height:100%;padding: 0px;margin: 0px;" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_HeJi','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"></span></a><a href="javascript:Edit('ND102','ND102_HeJi','8','445');">合计</a><a href="javascript:Down('ND102','ND102_HeJi','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a></div></td>
-                                            <td nowrap="" colspan="1"><input name="ctl00$ContentPlaceHolder1$Pub1$TB_HeJi" type="text" value="0.00" maxlength="14" size="12" id="ContentPlaceHolder1_Pub1_TB_HeJi" class="TBNum" width="100%" onkeypress="return VirtyNum(this);" onblur="this.value=VirtyMoney(this.value);" style="width:100%;height:100%;padding: 0px;margin: 0px;" /></td>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_PRI','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-left">&nbsp;</span></span></span></a><a href="javascript:EditEnum('ND102','PRI','ND102_PRI','PRI','445');">优先级</a><a href="javascript:Down('ND102','ND102_PRI','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a></div></td>
-                                            <td nowrap="" colspan="1">
-                                                <select name="ctl00$ContentPlaceHolder1$Pub1$DDL_PRI" id="ContentPlaceHolder1_Pub1_DDL_PRI" disabled="disabled" class="aspNetDisabled">
-                                                    <option value="0">低</option>
-                                                    <option value="1">中</option>
-                                                    <option selected="selected" value="2">高</option>
-
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_SuoZaiBuMen','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"></span></a><a href="javascript:Edit('ND102','ND102_SuoZaiBuMen','1','445');">所在部门</a><a href="javascript:Down('ND102','ND102_SuoZaiBuMen','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"></span></a></div></td>
-                                            <td nowrap="" colspan="1"><input name="ctl00$ContentPlaceHolder1$Pub1$TB_SuoZaiBuMen" type="text" id="ContentPlaceHolder1_Pub1_TB_SuoZaiBuMen" class="TBReadonly" width="100%" style="width:100%;height:100%;padding: 0px;margin: 0px;" /></td>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_BaoXiaoRenQianMing','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"></span></a><a href="javascript:Edit('ND102','ND102_BaoXiaoRenQianMing','1','445');">报销人签名</a><a href="javascript:Down('ND102','ND102_BaoXiaoRenQianMing','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"></span></a></div></td>
-                                            <td nowrap="" colspan="1"><input name="ctl00$ContentPlaceHolder1$Pub1$TB_BaoXiaoRenQianMing" type="text" id="ContentPlaceHolder1_Pub1_TB_BaoXiaoRenQianMing" class="TBReadonly" width="100%" style="width:100%;height:100%;padding: 0px;margin: 0px;" /></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4" class="GroupField" valign="top" style="height: 24px;align:left"><div style="text-align:left; float:left"><img src="./Style/Min.gif" alert="Min" id="Img2" border="0" />&nbsp;<a href="javascript:GroupField('ND102','446')">部门经理审批</a></div> <div style="text-align:right; float:right">  <a href="javascript:AddField('ND102','446')" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-new',plain:true" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-new">&nbsp;</span></span></span></a>  <a href="javascript:GFDoUp('446')" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-up',plain:true" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-up">&nbsp;</span></span></span></a> <a href="javascript:GFDoDown('446')" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-down',plain:true" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-down">&nbsp;</span></span></span></a></div></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_BM_Checker','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"></span></a><a href="javascript:Edit('ND102','ND102_BM_Checker','1','446');">审核人</a><a href="javascript:Down('ND102','ND102_BM_Checker','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"></span></a></div></td>
-                                            <td colspan="1"><img src="/DataUser/Siganture/admin.jpg" style="border:0px;Width:70px;" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" /></td>
-                                            <td colspan="2"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_BM_Note','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"></span></a><a href="javascript:Edit('ND102','ND102_BM_Note','1','446');">部门经理审批</a><a href="javascript:Down('ND102','ND102_BM_Note','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"></span></a></div></td>
-                                            <td colspan="3" width="100%" height="70px">
-                                                <span style="float:right" height="70px"><span id="ContentPlaceHolder1_Pub1_LabBM_Note"><a href="javascript:TBHelp('ContentPlaceHolder1_Pub1_TB_BM_Note','/','BM_Note','ND102')">默认值</a></span></span><br /><textarea name="ctl00$ContentPlaceHolder1$Pub1$TB_BM_Note" rows="2" cols="20" id="ContentPlaceHolder1_Pub1_TB_BM_Note" width="100%" style="width:100%;height:100%;padding: 0px;margin: 0px;"></textarea>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="FDesc" nowrap="true"><div><a href="javascript:Up('ND102','ND102_BM_RDT','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-left',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"></span></a><a href="javascript:Edit('ND102','ND102_BM_RDT','7','446');">审核时间</a><a href="javascript:Down('ND102','ND102_BM_RDT','1');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-right',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a></div></td>
-                                            <td nowrap="" colspan="1"><input name="ctl00$ContentPlaceHolder1$Pub1$ctl56" type="text" value="2017-07-08 10:05" readonly="readonly" disabled="disabled" class="aspNetDisabled" /></td>
-                                            <td>&nbsp;</td>
-                                            <td>&nbsp;</td>
-                                        </tr>
-                                        <tr id="2_10">
-                                            <td colspan="4" class="GroupField"><div style="text-align:left; float:left"><img src="./Style/Min.gif" alert="Min" id="Img99" border="0" /><a href="javascript:EditDtl('ND102','ND102Dtl1')">费用明细-属性</a></div>  <div style="text-align:left; float:left"></div><div style="text-align:right; float:right"><a href="javascript:document.getElementById('FND102Dtl1').contentWindow.AddF('ND102Dtl1');"><img src="../../Img/Btn/New.gif" border="0/" />插入列</a><a href="javascript:document.getElementById('FND102Dtl1').contentWindow.AddFGroup('ND102Dtl1');"><img src="../../Img/Btn/New.gif" border="0/" />插入列组</a><a href="javascript:document.getElementById('FND102Dtl1').contentWindow.CopyF('ND102Dtl1');"><img src="../../Img/Btn/Copy.gif" border="0/" />复制列</a>  <a href="javascript:GFDoUp('1994')" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-up',plain:true" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-up">&nbsp;</span></span></span></a> <a href="javascript:GFDoDown('1994')" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:'icon-down',plain:true" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-down">&nbsp;</span></span></span></a></div></td>
-                                        </tr>
-                                        <tr id="2_11">
-                                            <td colspan="4" id="TDND102Dtl1">
-                                                <iframe id="FND102Dtl1" frameborder="0" style="padding:0px;border:0px;width:100%;height:275px;" leftmargin="0" topmargin="0" src="MapDtlDe.htm?DoType=Edit&amp;FK_MapData=ND102&amp;FK_MapDtl=ND102Dtl1" scrolling="auto"></iframe>
-                                            </td>
-                                        </tr>
-                                    </tbody>
                                 </table>
                             </div>
                         </div>

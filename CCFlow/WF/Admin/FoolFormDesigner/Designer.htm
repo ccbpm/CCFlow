@@ -248,7 +248,7 @@
                                                     tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
                                                     //tbody.children
                                                     tbody.children(":last").append($("<td colspan=" + mapAttr.Colspan + "><select name='DDL_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
-                                                        '' + "</select></td>"));
+                                                        '<option value="' + mapAttr.KeyOfEn + '">' + mapAttr.Name + '</option>' + "</select></td>"));
                                                 } else {//文本区域
                                                     //先加LABEL
                                                     var tdLabel = $('<a></a>');
@@ -335,7 +335,7 @@
                                             tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
 
                                             if (mapAttr.UIContralType == 1) {//DDL
-                                                tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
+                                                tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + '<option value="' + mapAttr .KeyOfEn+ '">'+mapAttr.Name+'</option>' + "</select></td>"));
                                             }
                                             if (mapAttr.UIContralType == 3) {
                                                 //radioBtn 先不解析
@@ -420,7 +420,7 @@
                                             tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
 
                                             if (mapAttr.UIContralType == 1) {//DDL
-                                                tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
+                                                tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + '<option value="' + mapAttr.KeyOfEn + '">' + mapAttr.Name + '</option>' + "</select></td>"));
                                             }
                                         }
                                     } else {

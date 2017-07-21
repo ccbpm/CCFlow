@@ -493,6 +493,16 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "一键设置审核组件工作模式";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Node.png";
+                rm.ClassMethodName = this.ToString() + ".DoSetFWCModel()";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 第2个节点以后的节点表单都指向第2个节点表单.  \t\n  2, 结束节点都设置为只读模式. ";
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
                 #endregion 实验中的功能
 
                 #region 流程模版管理.
@@ -774,7 +784,6 @@ namespace BP.WF.Template
                 rm.Visable = false;
                 map.AddRefMethod(rm);
                 #endregion 流程监控.
-
 
                 //rm = new RefMethod();
                 //rm.Title = "执行流程数据表与业务表数据手工同步"; 
@@ -1661,6 +1670,36 @@ namespace BP.WF.Template
 
 
             base.afterInsertUpdateAction();
+        }
+        #endregion
+
+        #region 实验中的功能.
+        public string DoSetFWCModel()
+        {
+            Nodes nds = new Nodes(this.No);
+
+            foreach (Node nd in nds)
+            {
+                if (nd.IsStartNode)
+                    continue;
+
+                if (nd.IsEndNode == true)
+                {
+                    nd.FrmWorkCheckSta = FrmWorkCheckSta.Readonly;
+                    nd.NodeFrmID = "ND" + int.Parse(this.No) + "02";
+                    nd.Update();
+                    continue;
+                }
+
+
+                nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
+                nd.NodeFrmID = "ND" + int.Parse(this.No) + "02";
+                nd.Update();
+
+            }
+
+            return "设置成功...";
+
         }
         #endregion
     }

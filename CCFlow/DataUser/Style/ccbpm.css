@@ -4,7 +4,10 @@ body
    font-size: 14px;
    text-align:center;
 }
-
+a:link    {color:fff;}
+a:visited {color:fff;}
+a:hover   {color:fff;}
+a:active  {color:fff;}
 /* 按钮风格 */
 input[type="button"], input[type="submit"]
 {
@@ -146,17 +149,25 @@ td input
     border-width: 1px;
     border-color: #003366;
 }
- 
-
 caption
+{ 
+     height: 30px;
+    text-align: left;
+     font-size: 14px;
+    background: url('/DataUser/Style/Img/bg_list.jpg') no-repeat;
+    background-position:12px 6px;
+	border-bottom:1px #CCCCCC solid;
+	text-indent: 1.8em;
+	line-height:30px;
+}
+caption1
 {
     vertical-align: bottom;
     text-align: left;
-    height: 32px;
+    height: 30px;
     line-height: 20px;
     font-size: 14px;
-    background: url('/DataUser/Style/Img/TitleBG.png') repeat-x;
-    height: 30px;
+    background: url('/DataUser/Style/Img/bg_list.jpg') no-repeat;
     padding-left: 10px;
     font-family: 黑体;
     font-weight: bolder;

@@ -42,40 +42,82 @@
             });
         });
     </script>
+    <style>
+      body{
+	 margin:0;
+	 padding:0;
+	}
+	a:link    {color:000;}
+a:visited {color:000;}
+a:hover   {color:000;}
+a:active  {color:000;}
+	#left_name{
+	width: 200px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 14px;
+	font-family: 微软雅黑;
+	text-indent: 2.5em;
+	
+		}
+	#left_1{
+		
+		background:#f2f7ff;
+		text-align:left;
+		border-right: 1px solid #CCC;
+		
+		
+		}
+    #left_1 ul{
+     list-style:none;
+	 font-size:12px;
+	 margin:0;
+	 
+		}
+	#left_1 li{
+	background: url(../Img/dina2.png) no-repeat;
+	height:18px;
+	color:#044caf;
+     padding:10px 0 0px 56px;
+	 background-position:36px 8px;
+	 border-bottom:1px solid #CCC;
+	 margin:0 0 0 -40px;
+		}
+	#left_1 li:hover{
+		background:url(../Img/dina.png) no-repeat;
+		height:18px;
+		color:#044caf;
+     padding:10px 0 0px 56px;
+	 background-position:36px 8px;
+	 border-bottom:1px solid #CCC;
+	 margin:0 0 0 -40px;
+		}
+    </style>
     <base target="main" />
 </head>
 <body>
- <fieldset>
-    <legend>基础功能(新版)</legend>
-  <ul>
-  <li><a href="../Start.htm"><img src='./Img/Start.png' alt="我能发起的工作列表" style=" width:20px;" />发起</a></li>
-  <li><a href="../Todolist.htm"><img src='./Img/Todolist.png' style=" width:20px;" alt="等待我处理的工作" />待办(<label id="Todolist_EmpWorks" ></label>)</a></li>
-  <li><a href="../Runing.htm"><img src='./Img/Runing.png' style=" width:20px;" alt="我发起的，我参与的，我审核过的工作" />在途(<label id="Todolist_Runing" ></label>)</a></li>
-  </ul>
-  </fieldset>
+ <div id="left_1">
+    <div id="left_name" style="background:url(../Img/bg_left_1.jpg); ">基础功能</div>
+     <ul>
+        <li><a href="../Start.htm">
+         发起</a></li>
+        <li><a href="../Todolist.htm">待办(<label id="Todolist_EmpWorks" ></label>)</a></li>
+        <li><a href="../Runing.htm">在途(<label id="Todolist_Runing" ></label>)</a></li>
+      </ul>
 
- <fieldset>
-    <legend>共享任务(新版)</legend>
-  <ul>
-  <li><a href="../TaskPoolSharing.htm"><img src='./Img/TaskPoolShare.png' style=" width:20px;" alt="共享任务" />共享任务(<label id="Todolist_Sharing" ></label>)</a></li>
-  <li><a href="../TaskPoolApply.htm"><img src='./Img/TaskPoolApply.png' style=" width:20px;" alt="申请下来的任务" />申请下来的任务(<label id="Todolist_Apply" ></label>)</a></li>
-  </ul>
-  </fieldset>
-
-
- <fieldset>
-  <legend>流程查询(新版)</legend>
-  <ul>
-  <li><a href="../FlowSearch.htm">按流程查询</a></li>
-  <li><a href="../Search.htm">综合查询</a></li>
-  </ul>
-</fieldset>
-
-
-<fieldset>
-    <legend>流程高级功能</legend>
- <ul>
-  <li><a href="../Draft.htm">我的草稿(<label id="Todolist_Draft" ></label>)</a></li>
+    <div id="left_name" style="background:url(../Img/bg_left_2.jpg); ">共享任务</div>
+       <ul>
+        <li><a href="../TaskPoolSharing.htm">共享任务(<label id="Todolist_Sharing" ></label>)</a></li>
+        <li><a href="../TaskPoolApply.htm">申请下来的任务(<label id="Todolist_Apply" ></label>)</a></li>
+      </ul>
+    <div id="left_name" style="background:url(../Img/bg_left_3.jpg); ">流程查询</div>
+     <ul>
+      <li><a href="../FlowSearch.htm">按流程查询</a></li>
+      <li><a href="../Search.htm">综合查询</a></li>
+     </ul>
+    <div id="left_name" style="background:url(../Img/bg_left_4.jpg); ">流程高级功能</div>
+   <ul>
+    <li><a href="../Draft.htm">我的草稿(<label id="Todolist_Draft" ></label>)</a></li>
     <li><a href="../CC.htm">抄送</a></li>
     <li><a href="../Focus.htm">我的关注</a></li>
     <li><a href="../TodolistOfAuth.htm">授权待办</a></li>
@@ -83,8 +125,8 @@
     <li><a href="../GetTask.htm">取回审批</a></li>
     <li><a href="../HungUpList.htm">挂起的工作</a></li>
     <li><a href="../Messages.htm">消息列表</a></li>
- </ul>
-</fieldset>
+    </ul>
+</div>
 
 </body>
 </html>

@@ -467,7 +467,6 @@
                 window.close();
             } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
                 window.opener.returnWorkWindowClose("取消");
-
                 window.close();
             } else {
                 window.close();
@@ -483,7 +482,7 @@
                            + '<h4 class="modal-title">选择人员</h4>'
                        + '</div>'
                        + '<div class="modal-body">'
-                           + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                           + '<iframe style="width:100%;border:0px;height:600px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
                        + '</div>'
                    + '</div><!-- /.modal-content -->'
                + '</div><!-- /.modal-dialog -->'
@@ -492,7 +491,15 @@
             $('body').append($(selectEmpModalHtml));
 
             $('#BtnSelectEmps').bind('click', function () {
-                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random()+"&IsSelectMore=1");
+
+                var fk_node = GetQueryString("FK_Node");
+                //获得下拉框选择的FK_Node
+                //var toNode = this.document.getElementById('').selectval; // GetQueryString("ToNode");
+                var url = "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random() + "&IsSelectMore=1&FK_Node=" + fk_node;
+
+               // alert(url);
+
+                $('#iframeSelectEmpsForm').attr('src', url);
                 $('#selectEmpsModal').modal().show();
             });
         }
@@ -523,7 +530,7 @@
         <div style="margin: 20px auto;">
             请选择接受人：
             <input type="button" id="BtnSelectEmps" value='选择接受人' style="float: right; height: 27px;"/>
-            <textarea id="ToEmp" name="ToEmp" value='' style="height: 240px; resize: none;"></textarea>
+            <textarea id="ToEmp" name="ToEmp" value='' style="height: 80px; resize: none;"></textarea>
          </div>
     </div>
     <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">

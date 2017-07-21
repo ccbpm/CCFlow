@@ -736,6 +736,10 @@ namespace BP.WF
             {
                 return (FrmWorkCheckSta)this.GetValIntByKey(NodeAttr.FWCSta);
             }
+            set
+            {
+                this.SetValByKey(NodeAttr.FWCSta, (int)value);
+            }
         }
         /// <summary>
         /// 内部编号

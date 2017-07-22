@@ -509,7 +509,7 @@ namespace BP.Web
                     ge.CheckPhysicsTable(); //创建该字段.
                     return "OK";
                 }
-                
+
                 // 外部数据或者WS数据.
                 MapAttr myattr = new MapAttr();
                 myattr.MyPK = fk_mapData + "_" + fieldKey;
@@ -530,7 +530,7 @@ namespace BP.Web
                 myattr.Insert(); //执行保存.
 
                 //插入影子字段.
-                myattr.MyPK = fk_mapData + "_" + fieldKey+"T";
+                myattr.MyPK = fk_mapData + "_" + fieldKey + "T";
                 myattr.KeyOfEn = fieldKey + "T";
                 myattr.UIContralType = UIContralType.TB;
                 myattr.UIVisible = false;
@@ -541,33 +541,6 @@ namespace BP.Web
                 MapData mymd = new MapData(myattr.FK_MapData);
                 GEEntity myge = mymd.HisGEEn;
                 myge.CheckPhysicsTable(); //创建该字段.
-                
-
-#warning 被周朋删除.
-                ////判断此选中的数据源项是否是WebService数据源项，如果是，则增加一个attr.KeyOfEn + "Text"为名的隐藏字段
-                ////added by liuxc,2015.9.14
-                //if (isWS)
-                //{
-                //    attr = new MapAttr();
-                //    attr.MyPK = fk_mapData + "_" + fieldKey + "Text";
-                //    if (!attr.IsExits)
-                //    {
-                //        attr.FK_MapData = fk_mapData;
-                //        attr.KeyOfEn = fieldKey + "Text";
-                //        attr.Name = fieldName + "文本";
-                //        attr.MyDataType = DataType.AppString;
-
-                //        attr.X = float.Parse(x.ToString());
-                //        attr.Y = float.Parse(y.ToString());
-
-                //        attr.UIContralType = UIContralType.TB;
-                //        attr.LGType = FieldTypeS.Normal;
-
-                //        attr.UIVisible = false;
-                //        attr.HisEditType = EditType.Edit;
-                //        attr.Insert();
-                //    }
-                //}
 
                 return "OK";
             }
@@ -962,7 +935,7 @@ namespace BP.Web
                             }
                         }
 
-                        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet( mdfrmtem.No);
+                        DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet(mdfrmtem.No);
                         string file = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\Temp\\" + v1 + ".xml";
                         if (System.IO.File.Exists(file))
                             System.IO.File.Delete(file);
@@ -982,6 +955,7 @@ namespace BP.Web
                         string key = v2;
                         string name = v3;
                         int dataType = int.Parse(v4);
+
                         MapAttr mdHid = new MapAttr();
                         mdHid.MyPK = fk_mapdataHid + "_" + key;
                         mdHid.FK_MapData = fk_mapdataHid;
@@ -1049,7 +1023,7 @@ namespace BP.Web
                         if (fn.Retrieve(FrmNodeAttr.FK_Frm, fk_frm,
                             FrmNodeAttr.FK_Node, fk_Node) == 1)
                         {
-                           // fn.IsEdit = !isReadonly;
+                            // fn.IsEdit = !isReadonly;
                             fn.IsPrint = isPrint;
                             fn.FK_Flow = fk_flow;
                             fn.Update();
@@ -1060,7 +1034,7 @@ namespace BP.Web
                         fn.FK_Frm = fk_frm;
                         fn.FK_Flow = fk_flow;
                         fn.FK_Node = int.Parse(fk_Node);
-                   //     fn.IsEdit = !isReadonly;
+                        //     fn.IsEdit = !isReadonly;
                         fn.IsPrint = isPrint;
                         fn.Idx = 100;
                         fn.FK_Flow = fk_flow;
@@ -1277,7 +1251,7 @@ namespace BP.Web
 
             try
             {
-                this.ds =BP.Sys.CCFormAPI.GenerHisDataSet(fk_mapdata);
+                this.ds = BP.Sys.CCFormAPI.GenerHisDataSet(fk_mapdata);
                 if (this.ds == null || this.ds.Tables.Count <= 0)
                 {
                     MapData md = new MapData();
@@ -1322,7 +1296,7 @@ namespace BP.Web
             this.LetAdminLogin();
 
             MapData md = new MapData(fromMapData);
-            MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet( md.No), isSetReadonly);
+            MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet(md.No), isSetReadonly);
 
             // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
             if (fk_mapdata.Contains("ND") == true)
@@ -1376,7 +1350,7 @@ namespace BP.Web
             {
                 sqls = sqls.Replace("LEN(", "LENGTH(");
             }
-            else if(BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
+            else if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MSSQL)
             {
                 sqls = sqls.Replace("LENGTH(", "LEN(");
             }

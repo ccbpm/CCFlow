@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Data;
 using System.Web.Services.Description;
@@ -180,6 +181,28 @@ namespace BP.WF.HttpHandler
         #endregion
 
         /// <summary>
+        /// 仅允许含有汉字、数字、字母、下划线
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlyHSZX,""));</para>
+        /// <para>   输出：姓名_a12</para>
+        /// </summary>
+        public const string RegEx_Replace_OnlyHSZX = @"[^\w\u4e00-\u9fa5]";
+        /// <summary>
+        /// 仅允许含有数字、字母、下划线
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlySZX,""));</para>
+        /// <para>   输出：_a12</para>
+        /// </summary>
+        public const string RegEx_Replace_OnlySZX = @"[\u4e00-\u9fa5]|[^\w]";
+        /// <summary>
+        /// 匹配字符串开头为数字或下划线
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("_12_a1",RegEx_Replace_FirstXZ,""));</para>
+        /// <para>   输出：a1</para>
+        /// </summary>
+        public const string RegEx_Replace_FirstXZ = "^(_|[0-9])+";
+
+        /// <summary>
         /// 初始化
         /// </summary>
         /// <returns></returns>
@@ -291,17 +314,20 @@ namespace BP.WF.HttpHandler
             SFTable sftable = null;
             DataTable dt = null;
             StringBuilder s = null;
-
-
+            
             switch (this.DoType)
             {
                 case "ParseStringToPinyin": //转拼音方法.
                     string name = getUTF8ToString("name");
                     string flag = getUTF8ToString("flag");
+
+                    //仅允许含有汉字、数字、字母、下划线
+                    string newStr = Regex.Replace(name, RegEx_Replace_OnlyHSZX, "");
+
                     if (flag == "true")
-                        return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
+                        return BP.Sys.CCFormAPI.ParseStringToPinyinField(newStr, true);
                     else
-                        return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
+                        return BP.Sys.CCFormAPI.ParseStringToPinyinField(newStr, false);
                 case "sfguide_getinfo": //获取数据源字典表信息
                     if (string.IsNullOrWhiteSpace(sfno))
                         return "err@参数不正确";
@@ -1019,21 +1045,22 @@ namespace BP.WF.HttpHandler
         {
             string no = this.GetRequestVal("KeyOfEn");
             string name = this.GetRequestVal("Name");
-
+            string newNo = Regex.Replace(Regex.Replace(no, RegEx_Replace_OnlySZX, ""), RegEx_Replace_FirstXZ,"");
+            string newName = Regex.Replace(name, RegEx_Replace_OnlyHSZX, "");
             int fType = int.Parse(this.context.Request.QueryString["FType"]);
 
             MapAttrs attrs = new MapAttrs();
-            int i = attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, no);
+            int i = attrs.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, newNo);
             if (i != 0)
-                return "err@字段名：" + no + "已经存在.";
+                return "err@字段名：" + newNo + "已经存在.";
 
             //求出选择的字段类型.
             MapAttr attr = new MapAttr();
-            attr.Name = name;
-            attr.KeyOfEn = no;
+            attr.Name = newName;
+            attr.KeyOfEn = newNo;
             attr.FK_MapData = this.FK_MapData;
             attr.LGType = FieldTypeS.Normal;
-            attr.MyPK = this.FK_MapData + "_" + no;
+            attr.MyPK = this.FK_MapData + "_" + newNo;
             attr.GroupID = this.GroupField;
             attr.MyDataType = fType;
 
@@ -1053,7 +1080,7 @@ namespace BP.WF.HttpHandler
                 attr.MyDataType = DataType.AppString;
                 attr.UIContralType = UIContralType.TB;
                 attr.Insert();
-                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
                 //                return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
 
             }
@@ -1072,7 +1099,7 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
-                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
 
                 // return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
@@ -1090,7 +1117,7 @@ namespace BP.WF.HttpHandler
                 attr.UIContralType = UIContralType.TB;
                 attr.DefVal = "0.00";
                 attr.Insert();
-                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
                 //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
@@ -1109,7 +1136,7 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
-                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
                 //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
@@ -1127,7 +1154,7 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
-                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
                 //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
@@ -1144,7 +1171,7 @@ namespace BP.WF.HttpHandler
                 attr.MyDataType = DataType.AppDate;
                 attr.Insert();
 
-                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
                 //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDate + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
@@ -1161,7 +1188,7 @@ namespace BP.WF.HttpHandler
                 attr.MyDataType = DataType.AppDateTime;
                 attr.Insert();
 
-                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
                 //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDateTime + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
@@ -1179,7 +1206,7 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0";
                 attr.Insert();
 
-                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
+                return "url@/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
                 // return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 

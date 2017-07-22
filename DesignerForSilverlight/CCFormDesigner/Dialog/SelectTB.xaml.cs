@@ -134,6 +134,12 @@ namespace CCForm
         }
         void getKeyOfEn()
         {
+            string correct = Glo.GetCorrectFieldName(TB_Name.Text);
+            if (correct != TB_Name.Text)
+            {
+                TB_Name.Text = correct;
+            }
+
             if (!string.IsNullOrEmpty(this.TB_Name.Text) && this.TB_Name.Text.Length > 0)
             {
                 bool flag = (this.RB_qp.IsChecked == true) ? true : false;
@@ -169,9 +175,11 @@ namespace CCForm
             CCForm.Dialog.SelectInitField SF = new Dialog.SelectInitField();
             SF.Show();
         }
-
-       
-
+        //字段编号处理
+        private void TB_KeyOfEn_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TB_KeyOfEn.Text = Glo.GetCorrentFieldNo(TB_KeyOfEn.Text);
+        }
     }
 }
 

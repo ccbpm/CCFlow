@@ -22,7 +22,7 @@
             <sdk:Label Content="字段名称(不超过20字)" FontWeight="Bold" HorizontalAlignment="Left" Width="120" Margin="0 5 0 5" />
             <TextBox Name="TB_Name" Height="23" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="0 0 0 5" TextChanged="TB_Name_TextChanged" />
             <sdk:Label Content="英文字段(字母数字或下划线)" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" Width="145" Margin="0 15 0 5"/>
-            <TextBox Name="TB_KeyOfEn" Height="23" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="120" Margin="0 0 0 5"  />
+            <TextBox Name="TB_KeyOfEn" Height="23" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="120" Margin="0 0 0 5" TextChanged="TB_KeyOfEn_TextChanged"  />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton Name="RB_qp" Content="字段全拼" Margin="5 5 5 5"  Height="16" GroupName="f" IsChecked="True" />
                 <RadioButton Name="RB_jp" Content="字段简拼" Margin="5 5 5 5" Height="16"  GroupName="f" />

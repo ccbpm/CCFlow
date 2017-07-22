@@ -13,6 +13,7 @@ using System.Runtime.Serialization;
 using System.IO;
 using System.Reflection;
 using Silverlight;
+using System.Text.RegularExpressions;
 
 namespace CCForm
 {
@@ -460,6 +461,27 @@ namespace CCForm
 
         #endregion
 
+        /// <summary>
+        /// 仅允许含有汉字、数字、字母、下划线
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlyHSZX,""));</para>
+        /// <para>   输出：姓名_a12</para>
+        /// </summary>
+        public const string RegEx_Replace_OnlyHSZX = @"[^\w\u4e00-\u9fa5]";
+        /// <summary>
+        /// 仅允许含有数字、字母、下划线
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlySZX,""));</para>
+        /// <para>   输出：_a12</para>
+        /// </summary>
+        public const string RegEx_Replace_OnlySZX = @"[\u4e00-\u9fa5]|[^\w]";
+        /// <summary>
+        /// 匹配字符串开头为数字或下划线
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("_12_a1",RegEx_Replace_FirstXZ,""));</para>
+        /// <para>   输出：a1</para>
+        /// </summary>
+        public const string RegEx_Replace_FirstXZ = "^(_|[0-9])+";
         public static string CustomerNo;
         public static string AppCenterDBType1;
         public static Color BorderBrush = Color.FromArgb(255, 160, 171, 193);
@@ -596,8 +618,15 @@ namespace CCForm
                 return;
             }
 
+            //将非汉字/字母/数字/下划线的所有字符去掉
+            string newStr = string.Empty;
+            foreach (Match m in Regex.Matches(TB_Name.Trim(), "[0-9a-zA-Z_\u4e00-\u9fa5]{1,}"))
+            {
+                newStr += m.Value;
+            }
+
             CCFormSoapClient ff = Glo.GetCCFormSoapClientServiceInstance();
-            ff.ParseStringToPinyinAsync(TB_Name.Trim(), flag);
+            ff.ParseStringToPinyinAsync(newStr, flag);
             ff.ParseStringToPinyinCompleted += new EventHandler<FF.ParseStringToPinyinCompletedEventArgs>(
                 (object sender, FF.ParseStringToPinyinCompletedEventArgs e) =>
                 {
@@ -1033,6 +1062,25 @@ namespace CCForm
             Glo.WinOpenDialog(Glo.BPMHost + "/WF/Admin/FoolFormDesigner/Do.aspx?DoType=AddF&MyPK=" + Glo.FK_MapData);
         }
 
+        /// <summary>
+        /// 获取正确的字段名称，仅允许包含汉字、字母、数字、下划线
+        /// </summary>
+        /// <param name="text">原始名称</param>
+        /// <returns></returns>
+        public static string GetCorrectFieldName(string text)
+        {
+            return Regex.Replace(text, RegEx_Replace_OnlyHSZX, "");
+        }
+
+        /// <summary>
+        /// 获取正确的字段编号，仅允许包含字母、数字、下划线，且开头不允许是下划线与数字
+        /// </summary>
+        /// <param name="no">原始编号</param>
+        /// <returns></returns>
+        public static string GetCorrentFieldNo(string no)
+        {
+            return Regex.Replace(Regex.Replace(no, RegEx_Replace_OnlySZX, ""), RegEx_Replace_FirstXZ, "");
+        }
 
         #region 参数.
         private static string _AppCenterDBType = null;

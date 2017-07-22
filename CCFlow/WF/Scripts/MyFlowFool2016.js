@@ -1834,7 +1834,7 @@ function GenerWorkNode() {
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?DoType=GenerWorkNode"  + "&m=" + Math.random()+urlParam,
+        url: "MyFlow.ashx?DoType=GenerWorkNode"  + "&m=" + Math.random()+'&'+urlParam,
         dataType: 'html',
         success: function (data) {
             jsonStr = data;

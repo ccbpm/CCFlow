@@ -120,7 +120,6 @@
             });
         }
         function GroupFieldNew(mypk) {
-
             var url = 'GroupField.htm?FK_MapData=' + mypk + "&RefOID=0&DoType=FunList";
 
             OpenEasyUiDialog(url, "eudlgframe", '新建', 800, 500, "icon-property", true, null, null, null, function () {

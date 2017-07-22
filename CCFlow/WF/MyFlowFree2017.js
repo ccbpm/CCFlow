@@ -1660,12 +1660,7 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
         //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
     }
     //console.info(defVal+"=="+keyOfEn+"=="+result);
-
-    result = unescape(result);
-
-    if (result == 'null')
-        return "";
-    return result;
+    return result = unescape(result);
 }
 
 //获取表单数据

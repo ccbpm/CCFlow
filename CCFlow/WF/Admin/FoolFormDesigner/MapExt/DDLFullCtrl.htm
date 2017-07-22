@@ -10,6 +10,7 @@
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
+
         //页面启动函数.
         $(function () {
 
@@ -42,6 +43,14 @@
 
             $("#Msg").html("");
         });
+
+        //装载  模版.
+        function LoadTemplate() {
+
+            //打开方向条件.
+            var url = "../../SettingTemplate.htm?TemplateType=DDLFullCtrl";
+            WinOpen(url, 'ss');
+        }
     </script>
 </head>
 <body  >
@@ -59,7 +68,7 @@
 </tr>
 
 <tr>
-<td colspan="3"> 执行的SQL </td>
+<td colspan="3">执行的SQL </td>
 </tr>
 
 <tr> 
@@ -69,6 +78,7 @@
 
 <tr>
 <td colspan=3 >
+<input type="button" value="加载模版" onclick="LoadTemplate()" id="Btn_load" />
 <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
 <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
 

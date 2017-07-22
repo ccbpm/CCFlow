@@ -572,10 +572,11 @@ namespace CCFlow.WF.FlowFormTree
                     resultMsg = kj + "<a href='javascript:UnSend();'><img src='../../Img/Action/UnSend.png' border=0/>撤销本次发送</a>" + kp;
                 }
 
-                resultMsg = resultMsg.Replace("指定特定的处理人处理", "指定人员");
-                resultMsg = resultMsg.Replace("发手机短信提醒他(们)", "短信通知");
-                resultMsg = resultMsg.Replace("撤销本次发送", "撤销案件");
-                resultMsg = resultMsg.Replace("新建流程", "发起案件");
+                //resultMsg = resultMsg.Replace("指定特定的处理人处理", "指定人员");
+                //resultMsg = resultMsg.Replace("发手机短信提醒他(们)", "短信通知");
+                //resultMsg = resultMsg.Replace("撤销本次发送", "撤销案件");
+                //resultMsg = resultMsg.Replace("新建流程", "发起案件");
+
                 resultMsg = resultMsg.Replace("。", "");
                 resultMsg = resultMsg.Replace("，", "");
 

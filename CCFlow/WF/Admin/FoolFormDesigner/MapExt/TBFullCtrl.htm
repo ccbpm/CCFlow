@@ -43,6 +43,12 @@
 
             $("#Msg").html("");
         });
+
+        //装载模版.
+        function LoadTemplate() {
+            var url = "../../SettingTemplate.htm?TemplateType=TBFullCtrl";
+            WinOpen(url, 'ss');
+        }
     </script>
 </head>
 <body  >
@@ -78,11 +84,13 @@
 </tr>
 
 <tr> 
-<td  colspan="3" style="width:100%;"  > <textarea rows="4" name="TB_Doc" id="TB_Doc" > </textarea> </td>
+<td colspan="3" style="width:100%;"> <textarea rows="4" name="TB_Doc" id="TB_Doc" > </textarea> </td>
 </tr>
 
 <tr>
 <td colspan=3 >
+
+<input type="button" value="加载模版" onclick="LoadTemplate()" id="TBFullCtrl" />
 <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
 <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
 

@@ -51,6 +51,13 @@
 
             $("#Msg").html("");
         });
+        //装载模版.
+        function LoadTemplate() {
+
+            //打开方向条件.
+            var url = "../../SettingTemplate.htm?TemplateType=ActiveDDL";
+            WinOpen(url, 'ss');
+        }
     </script>
 </head>
 <body  >
@@ -85,6 +92,7 @@
 
 <tr>
 <td colspan=3 >
+<input type="button" value="装载模版" onclick="LoadTemplate()" id="Button1" />
 <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
 <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
 <a href="javascript:ShowHidden('sqlexp')"  >自动级联SQL帮助: </a>

@@ -18,7 +18,11 @@
             if (c == null || c.value.length == 0) return;
 
             $('#mainCond').layout('panel', 'center').panel('setTitle', c.text);
-            $('#context').attr('src', c.value + '.aspx?CondType=<%=this.CondType %>&FK_Flow=<%=this.FK_Flow %>&FK_MainNode=<%=FK_MainNode %>&FK_Node=<%=this.FK_Node %>&FK_Attr=<%=this.FK_Attr %>&DirType=<%=this.DirType %>&ToNodeID=<%=this.ToNodeId %>');
+
+            if (c.value == 'CondBySQL' || c.value == 'CondByUrl' || c.value == 'CondByPara')
+                $('#context').attr('src', c.value + '.htm?CondType=<%=this.CondType %>&FK_Flow=<%=this.FK_Flow %>&FK_MainNode=<%=FK_MainNode %>&FK_Node=<%=this.FK_Node %>&FK_Attr=<%=this.FK_Attr %>&DirType=<%=this.DirType %>&ToNodeID=<%=this.ToNodeId %>');
+            else
+                $('#context').attr('src', c.value + '.aspx?CondType=<%=this.CondType %>&FK_Flow=<%=this.FK_Flow %>&FK_MainNode=<%=FK_MainNode %>&FK_Node=<%=this.FK_Node %>&FK_Attr=<%=this.FK_Attr %>&DirType=<%=this.DirType %>&ToNodeID=<%=this.ToNodeId %>');
         }
 
         $(document).ready(function () {

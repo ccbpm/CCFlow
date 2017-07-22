@@ -111,6 +111,7 @@ functrees.push({
     Nodes: [
 			{ Type: "Node", Id: "BasicSetting2", ParentId: null, Name: "基础设置", Opened: true, IconCls: "icon-tree_folder",
 			    Nodes: [
+						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "SQL配置模版设置", IconCls: "icon-Config", Url: "../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates" },
 						{ Type: "Node", Id: "HolidaySetting", ParentId: "BasicSetting2", Name: "节假日设置", IconCls: "icon-Config", Url: "../../Comm/Sys/Holiday.htm" },
 						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "表结构", IconCls: "icon-Config", Url: "../../Comm/Sys/SystemClass.htm" },
 						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "二级管理员", IconCls: "icon-Config", Url: "../../Comm/Search.htm?EnsName=BP.WF.Port.AdminEmps" },

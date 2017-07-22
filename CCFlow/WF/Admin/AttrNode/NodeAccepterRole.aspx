@@ -349,6 +349,12 @@
                 $("#YC_18").show();
             }
         }
+
+        //装载模版.
+        function LoadTemplate() {
+            var url = "../SettingTemplate.htm?TemplateType=NodeAccepterRole";
+            WinOpen(url, 'ss');
+        }
     </script>
     <style type="text/css">
         li
@@ -681,8 +687,7 @@
                                     <div style="float: left">
                                         <asp:RadioButton ID="RB_BySQL" Text="按设置的SQL获取接受人计算" GroupName="xxx" runat="server" />
                                     </div>
-                                    <div style="float: right">
-                                        请在文本框里输入SQL.</div>
+                                    <div style="float: right">请在文本框里输入SQL.</div>
                                 </th>
                             </tr>
                             <tr id="YC_11">
@@ -691,6 +696,8 @@
                                     <ul>
                                         <li >该SQL是需要返回No,Name两个列，分别是人员编号,人员名称。</li>
                                         <li >该配置也适合于</li>
+                                        <li ><a href="javascript:LoadTemplate();" >我要从模版里选择一个设置.</a></li>
+
                                     </ul>
                                 </td>
                             </tr>

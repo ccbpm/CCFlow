@@ -42,6 +42,13 @@
 
             $("#Msg").html("");
         });
+
+        //装载模版.
+        function LoadTemplate() {
+            var url = "../../SettingTemplate.htm?TemplateType=AutoFullDLL";
+            WinOpen(url, 'ss');
+        }
+
     </script>
 </head>
 <body  >
@@ -67,6 +74,7 @@
 
 <tr>
 <td colspan="3" >
+<input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
 <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
 <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
 <a href="javascript:ShowHidden('sqlexp')"  >填充SQL帮助:</a>

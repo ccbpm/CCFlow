@@ -68,15 +68,36 @@
                         var newRow = "";
                         var en = data[i];
 
+                        var docs = en.Docs;
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+
                         newRow = "<tr ><td class=Idx>" + i + "</td>";
                         newRow += "<td>" + en.No + "</td>";
                         newRow += "<td>" + en.Name + "</td>";
-                        newRow += "<td style='' >" + en.Docs + "</td>";
+                        newRow += "<td style=''><input type=text name='" + en.No + "' id='" + en.No + "' value=\"" + docs + "\" style='width:100%;'> </td>";
+                        //  newRow += "<td ><a href=\"javascript:CopyIt('" + en.No + "')\" > 复制</td>";
                         newRow += "</tr>";
                         $("#Table1 tr:last").after(newRow);
                     }
                 }
             });
+        }
+
+        function CopyIt(tbid) {
+
+            //var tb = document.getElementById(tbid);
+            //tb.select(); // 选择对象
+            //document.execCommand("Copy"); // 执行浏览器复制命令
+            //   window.clipboardData.setData("Text", dosc);
+           // alert('复制成功.');
         }
 
         function OK() {
@@ -99,6 +120,7 @@
                 <th style="width:30px;" >编号</th>
                 <th style="width:100px;"  > 名称</th>
                 <th> 数据</th>
+               <!-- <th style="width:30px;" >复制</th>-->
             </tr>
         </table>
 

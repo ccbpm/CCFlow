@@ -77,7 +77,11 @@ namespace BP.Sys
 		/// <summary>
 		/// VSTOExccel模式.
 		/// </summary>
-		VSTOForExcel = 6
+		VSTOForExcel = 6,
+        /// <summary>
+        /// 实体类组件
+        /// </summary>
+        Entity
 	}
 	/// <summary>
 	/// 映射基础
@@ -2359,11 +2363,18 @@ namespace BP.Sys
 				}
 			}
 		}
-		protected override bool beforeInsert()
-		{
-			this.PTable = PubClass.DealToFieldOrTableNames(this.PTable);
-			return base.beforeInsert();
-		}
+        protected override bool beforeInsert()
+        {
+            if (this.HisFrmType == FrmType.Url || this.HisFrmType == FrmType.Entity)
+            {
+
+            }
+            else
+            {
+                this.PTable = PubClass.DealToFieldOrTableNames(this.PTable);
+            }
+            return base.beforeInsert();
+        }
 		/// <summary>
 		/// 设置Para 参数.
 		/// </summary>
@@ -2517,6 +2528,9 @@ namespace BP.Sys
 		}
 		protected override bool beforeUpdateInsertAction()
 		{
+            if (this.HisFrmType == FrmType.Url || this.HisFrmType == FrmType.Entity)
+                return base.beforeUpdateInsertAction();
+
 			this.PTable = PubClass.DealToFieldOrTableNames(this.PTable);
 			MapAttrs.Retrieve(MapAttrAttr.FK_MapData, PTable);
 

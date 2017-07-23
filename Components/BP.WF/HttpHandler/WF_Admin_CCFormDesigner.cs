@@ -192,6 +192,7 @@ namespace BP.WF.HttpHandler
                 case BP.Sys.FrmType.FoolForm:
                     break;
                 case BP.Sys.FrmType.Url:
+                case BP.Sys.FrmType.Entity:
                     md.Url = md.PTable;
                     break;
                 //如果是以下情况，导入模式
@@ -212,8 +213,12 @@ namespace BP.WF.HttpHandler
                 return "url@../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmExcels&PK=" + md.No;
             }
 
+            if (md.HisFrmType == BP.Sys.FrmType.Entity)
+                return "url@../../Comm/En.htm?EnsName=" + md.PTable;
+
             if (md.HisFrmType == BP.Sys.FrmType.FreeFrm)
                 return "url@FormDesigner.htm?FK_MapData=" + md.No;
+
 
             return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + md.No;
         }

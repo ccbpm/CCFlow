@@ -344,7 +344,6 @@ namespace BP.WF.HttpHandler
         #endregion HanderMapExt
 
 
-
         #region 执行父类的重写方法.
         /// <summary>
         /// 表单功能界面
@@ -395,6 +394,32 @@ namespace BP.WF.HttpHandler
                     url = md.Url + "?" + urlParas;
 
                 return "url@" + url;
+            }
+
+            if (md.HisFrmType == FrmType.Entity)
+            {
+                string no = this.GetRequestVal("NO");
+                string urlParas = "OID=" + this.RefOID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
+
+                BP.En.Entities ens = BP.En.ClassFactory.GetEns(md.Url);
+
+                BP.En.Entity en = ens.GetNewEntity;
+                if (en.IsOIDEntity == true)
+                {
+                    BP.En.EntityOID enOID = (BP.En.EntityOID)en;
+                    enOID.SetValByKey("OID", this.WorkID);
+
+                    if (en.RetrieveFromDBSources() == 0)
+                    {
+                        foreach (string key in context.Request.QueryString.Keys)
+                        {
+                            enOID.SetValByKey(key, context.Request.QueryString[key]);
+                        }
+                        enOID.SetValByKey("OID", this.WorkID);
+                        enOID.InsertAsOID(this.WorkID); 
+                    }
+                }
+                return "url@../Comm/En.htm?EnsName=" + md.PTable + "&PK=" + this.WorkID;
             }
 
             if (md.HisFrmType == FrmType.VSTOForExcel && this.GetRequestVal("IsFreeFrm") == null)

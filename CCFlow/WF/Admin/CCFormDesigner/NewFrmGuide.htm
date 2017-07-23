@@ -44,33 +44,39 @@
             GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", "local");
 
             var sort = GetQueryString("FK_FrmSort");
+
             //创建表单树.
             GenerBindEntities("DDL_FrmTree", "BP.WF.Template.SysFormTrees", sort);
 
             $("#Msg").html("");
-
             return;
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=NewFrmGuide_Init&No=" + no + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    data = data.replace('url@', '');
-                    window.location.href = data;
-                    return;
-                }
-            });
-
-            $("#Msg").html("");
         });
+
+        function FrmTypeChange() {
+
+            var frmType = $("#DDL_FrmType").val();
+
+            document.getElementById("PTableName").innerHTML = "存储表";
+            document.getElementById("PTableDesc").innerHTML = "数据要存储到那个表里？<br>默认与表单编号一致，指定的表名，必须是下划线或者字母开头，不能包含特殊字符，否则创建表失败。";
+
+            if (frmType == "7") {
+                document.getElementById("PTableName").innerHTML = "请输入实体类名";
+                document.getElementById("PTableDesc").innerHTML = "该实体必须是以BP.开头的并且从实体BP.En.Entities上继承下来的. <br>比如:BP.Demo.Resumes";
+            }
+
+            if (frmType == "3") {
+                document.getElementById("PTableName").innerHTML = "请输入URL";
+                document.getElementById("PTableDesc").innerHTML = "请输入嵌入式表单的URL.";
+            }
+
+            //              1:拿到select对象： var  myselect=document.getElementById("test");
+            //  2：拿到选中项的索引：var index=myselect.selectedIndex ;             // selectedIndex代表的是你所选中项的index
+            //  3:拿到选中项options的value：  myselect.options[index].value;
+            //  4:拿到选中项options的text：  myselect.options[index].text;
+
+            //   var frmType = document.getElementById("DDL_FrmType");
+        }
     </script>
 </head>
 <body >
@@ -82,7 +88,7 @@
 <tr>
 <td class="Idx" > 1 </td>
 <td > 创建的表单类型</td>
-<td> <select name="DDL_FrmType" id="DDL_FrmType" />  </td>
+<td> <select name="DDL_FrmType" id="DDL_FrmType"   onchange="FrmTypeChange()" />  </td>
 <td>根据自己的业务场景需要选择相应的表单类型. </td>
 </tr>
 
@@ -119,11 +125,14 @@
 
 <tr>
 <td class="Idx" > 6 </td>
-<td >存储表（对于嵌入式表单则输入URL）</td>
+<td > <div id="PTableName" >存储表:</div> </td>
 <td><input type="text" id="TB_PTable" name="TB_PTable" /> </td>
 <td > 
+
+<div id="PTableDesc" >
 数据要存储到那个表里？<br>
-默认与表单编号一致，指定的表名，必须是下划线或者字母开头，不能包含特殊字符，否则创建表失败。
+</div>
+
 </td>
 </tr>
 

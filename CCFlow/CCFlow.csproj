@@ -998,9 +998,7 @@
     <Content Include="WF\Admin\AttrNode\NodeAccepterRole.htm" />
     <Content Include="WF\Admin\AttrNode\NodeCCRole.aspx" />
     <Content Include="WF\Admin\AttrNode\NodeCCRole.htm" />
-    <Content Include="WF\Admin\AttrNode\NodeFromWorkModel.aspx" />
     <Content Include="WF\Admin\AttrNode\NodeFromWorkModel.htm" />
-    <Content Include="WF\Admin\AttrNode\NodeRunModel.htm" />
     <Content Include="WF\Admin\AttrNode\PushMessage.aspx" />
     <Content Include="WF\Admin\AttrNode\PushMessage.htm" />
     <Content Include="WF\Admin\AttrNode\PushMessageEntity.aspx" />
@@ -1726,9 +1724,6 @@
     <Content Include="WF\Admin\ClientBin\NodeIcon\销售.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\顾客.png" />
     <Content Include="WF\Admin\Cond.aspx" />
-    <Content Include="WF\Admin\CondByPara.aspx" />
-    <Content Include="WF\Admin\CondBySQL.aspx" />
-    <Content Include="WF\Admin\CondByUrl.aspx" />
     <Content Include="WF\Admin\CondDept.aspx" />
     <Content Include="WF\Admin\Condition.aspx" />
     <Content Include="WF\Admin\ConditionLine.aspx" />
@@ -1850,9 +1845,6 @@
     <Content Include="WF\Admin\SimulationRun.aspx" />
     <Content Include="WF\Admin\UC\Cond.ascx" />
     <Content Include="WF\Admin\UC\CondBar.ascx" />
-    <Content Include="WF\Admin\UC\CondByPara.ascx" />
-    <Content Include="WF\Admin\UC\CondBySQL.ascx" />
-    <Content Include="WF\Admin\UC\CondByUrl.ascx" />
     <Content Include="WF\Admin\UC\CondDepts.ascx" />
     <Content Include="WF\Admin\UC\CondExt.ascx" />
     <Content Include="WF\Admin\UC\CondStation.ascx" />
@@ -8290,13 +8282,6 @@
     <Compile Include="WF\Admin\AttrNode\NodeCCRole.aspx.designer.cs">
       <DependentUpon>NodeCCRole.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrNode\NodeFromWorkModel.aspx.cs">
-      <DependentUpon>NodeFromWorkModel.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\NodeFromWorkModel.aspx.designer.cs">
-      <DependentUpon>NodeFromWorkModel.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\AttrNode\PushMessage.aspx.cs">
       <DependentUpon>PushMessage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8367,27 +8352,6 @@
     </Compile>
     <Compile Include="WF\Admin\Cond.aspx.designer.cs">
       <DependentUpon>Cond.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CondByPara.aspx.cs">
-      <DependentUpon>CondByPara.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CondByPara.aspx.designer.cs">
-      <DependentUpon>CondByPara.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CondBySQL.aspx.cs">
-      <DependentUpon>CondBySQL.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CondBySQL.aspx.designer.cs">
-      <DependentUpon>CondBySQL.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CondByUrl.aspx.cs">
-      <DependentUpon>CondByUrl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CondByUrl.aspx.designer.cs">
-      <DependentUpon>CondByUrl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CondDept.aspx.cs">
       <DependentUpon>CondDept.aspx</DependentUpon>
@@ -8953,27 +8917,6 @@
     </Compile>
     <Compile Include="WF\Admin\UC\CondBar.ascx.designer.cs">
       <DependentUpon>CondBar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondByPara.ascx.cs">
-      <DependentUpon>CondByPara.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondByPara.ascx.designer.cs">
-      <DependentUpon>CondByPara.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondBySQL.ascx.cs">
-      <DependentUpon>CondBySQL.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondBySQL.ascx.designer.cs">
-      <DependentUpon>CondBySQL.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondByUrl.ascx.cs">
-      <DependentUpon>CondByUrl.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondByUrl.ascx.designer.cs">
-      <DependentUpon>CondByUrl.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\UC\CondDepts.ascx.cs">
       <DependentUpon>CondDepts.ascx</DependentUpon>

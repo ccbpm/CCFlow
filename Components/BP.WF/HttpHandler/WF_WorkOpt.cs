@@ -1079,8 +1079,6 @@ namespace BP.WF.HttpHandler
             wk.OID = this.WorkID;
             wk.Retrieve();
 
-
-
             Selector select = new Selector(toNodeID);
 
             //获得 部门与人员.

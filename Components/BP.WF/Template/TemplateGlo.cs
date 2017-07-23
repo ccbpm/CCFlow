@@ -18,6 +18,7 @@ namespace BP.WF.Template
         {
             //执行保存.
             BP.WF.Flow fl = new BP.WF.Flow();
+
             //修改类型为CCBPMN
             //fl.DType = string.IsNullOrEmpty(flowVer) ? 1 : Int32.Parse(flowVer);
 
@@ -33,17 +34,20 @@ namespace BP.WF.Template
             string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "\\WF\\Data\\Templete\\NewFlow.json";
             if (flowVer == "1")//CCBPM_DType.CCBPM
                 tempFile = BP.Sys.SystemConfig.PathOfWebApp + "\\WF\\Data\\Templete\\ccbpm.json";
+
             //将流程模版保存到数据库里.
             fl.SaveFileToDB("FlowJson", tempFile);
 
             //替换流程模板中的默认节点编号
             Flow fl_BPMN = new Flow(flowNo);
             string flowJson = fl_BPMN.FlowJson;
+
             //开始节点
             flowJson = flowJson.Replace("@UserTask01@", int.Parse(flowNo) + "01");
             //第二节点
             flowJson = flowJson.Replace("@UserTask02@", int.Parse(flowNo) + "02");
             fl_BPMN.FlowJson = flowJson;
+
             //创建连线
             Direction drToNode = new Direction();
             drToNode.FK_Flow = flowNo;

@@ -211,6 +211,7 @@
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner.cs" />
     <Compile Include="HttpHandler\WF_Comm_RefFunc.cs" />
+    <Compile Include="Template\SQLTemplate.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

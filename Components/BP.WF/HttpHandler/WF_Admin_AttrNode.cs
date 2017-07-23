@@ -23,6 +23,190 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 表单模式
+        /// <summary>
+        /// 表单模式
+        /// </summary>
+        /// <returns></returns>
+        public string NodeFromWorkModel_Init()
+        {
+            //数据容器.
+            DataSet ds = new DataSet();
+
+            // 当前节点信息.
+            Node nd = new Node(this.FK_Node);
+
+            nd.NodeFrmID = nd.NodeFrmID;
+           // nd.FormUrl = nd.FormUrl;
+
+            DataTable mydt = nd.ToDataTableField("WF_Node");
+            ds.Tables.Add(mydt);
+
+            BtnLabExtWebOffice mybtn = new BtnLabExtWebOffice(this.FK_Node);
+            DataTable mydt2 = mybtn.ToDataTableField("WF_BtnLabExtWebOffice");
+            ds.Tables.Add(mydt2);
+
+            BtnLab btn = new BtnLab(this.FK_Node);
+            DataTable dtBtn = btn.ToDataTableField("WF_BtnLab");
+            ds.Tables.Add(dtBtn);
+
+            //节点s
+            Nodes nds = new Nodes(nd.FK_Flow);
+
+            //节点s
+            ds.Tables.Add(nds.ToDataTableField("Nodes"));
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 表单模式
+        /// </summary>
+        /// <returns></returns>
+        public string NodeFromWorkModel_Save()
+        {
+            Node nd = new Node(this.FK_Node);
+
+            BP.Sys.MapData md = new BP.Sys.MapData("ND" + this.FK_Node);
+
+            //用户选择的表单类型.
+            string selectFModel = this.GetValFromFrmByKey("FrmS");
+
+            //使用ccbpm内置的节点表单
+            if (selectFModel =="DefFrm")
+            {
+                string frmModel = this.GetValFromFrmByKey("RB_Frm");
+                if (frmModel == "0")
+                {
+                    nd.FormType = NodeFormType.FreeForm;
+                    nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;
+                    md.Update();
+                }
+                else
+                {
+                    nd.FormType = NodeFormType.FixForm;
+                    nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm;
+                    md.Update();
+                }
+
+                string refFrm = this.GetValFromFrmByKey("RefFrm");
+
+                if (refFrm=="0")
+                {
+                    nd.NodeFrmID = "";
+                    nd.DirectUpdate();
+                }
+
+                if (refFrm=="1")
+                {
+                    nd.NodeFrmID = "ND" + this.GetValFromFrmByKey("DDL_Frm"); 
+                    nd.DirectUpdate();
+                }
+            }
+
+            //使用傻瓜轨迹表单模式.
+            if (selectFModel=="FoolTruck")
+            {
+                nd.FormType = NodeFormType.FoolTruck;
+                nd.DirectUpdate();
+
+                md.HisFrmType = BP.Sys.FrmType.FoolForm;  //同时更新表单表住表.
+                md.Update();
+            }
+
+            //使用嵌入式表单
+            if (selectFModel =="SelfForm")
+            {
+                nd.FormType = NodeFormType.SelfForm;
+                nd.FormUrl = this.GetValFromFrmByKey("TB_CustomURL") ;  
+                nd.DirectUpdate();
+
+                md.HisFrmType = BP.Sys.FrmType.Url;  //同时更新表单表住表.
+                md.Url = this.GetValFromFrmByKey("TB_CustomURL");  
+                md.Update();
+
+            }
+            //使用SDK表单
+            if ( selectFModel =="SDKForm" )
+            {
+                nd.FormType = NodeFormType.SDKForm;
+                nd.FormUrl = this.GetValFromFrmByKey("TB_FormURL");  
+                nd.DirectUpdate();
+
+                md.HisFrmType = BP.Sys.FrmType.Url;
+                md.Url = this.GetValFromFrmByKey("TB_FormURL");  
+                md.Update();
+
+            }
+            //绑定多表单
+            if (selectFModel =="SheetTree" )
+            {
+
+                string sheetTreeModel = this.GetValFromFrmByKey("SheetTreeModel");
+
+                if (sheetTreeModel == "0")
+                {
+                    nd.FormType = NodeFormType.SheetTree;
+                    nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
+                    md.Update();
+                }
+                else
+                {
+                    nd.FormType = NodeFormType.DisableIt;
+                    nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
+                    md.Update();
+                }
+            }
+
+            //如果公文表单选择了
+            if (selectFModel == "WebOffice" )
+            {
+                nd.FormType = NodeFormType.WebOffice;
+                nd.Update();
+
+                //按钮标签.
+                BtnLabExtWebOffice btn = new BtnLabExtWebOffice(this.FK_Node);
+
+                // tab 页工作风格.
+                string WebOfficeStyle = this.GetValFromFrmByKey("WebOfficeStyle");
+                if (WebOfficeStyle =="0")
+                    btn.WebOfficeWorkModel = WebOfficeWorkModel.FrmFirst;
+                else
+                    btn.WebOfficeWorkModel = WebOfficeWorkModel.WordFirst;
+
+
+                string WebOfficeFrmType = this.GetValFromFrmByKey("WebOfficeFrmType");
+                //表单工作模式.
+                if (WebOfficeFrmType=="0")
+                {
+                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FreeFrm;
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;  //同时更新表单表住表.
+                    md.Update();
+                }
+                else
+                {
+                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FoolForm;
+
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同时更新表单表住表.
+                    md.Update();
+                }
+
+                btn.Update();
+            }
+
+            return "保存成功...";
+        }
+        #endregion 表单模式
+
+
         #region 事件.
         public string Action_Init()
         {

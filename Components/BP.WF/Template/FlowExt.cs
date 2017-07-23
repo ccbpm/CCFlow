@@ -1683,23 +1683,27 @@ namespace BP.WF.Template
                 if (nd.IsStartNode)
                     continue;
 
+                BP.WF.Template.FrmNodeComponent fnd = new FrmNodeComponent(nd.NodeID);
+
                 if (nd.IsEndNode == true)
                 {
                     nd.FrmWorkCheckSta = FrmWorkCheckSta.Readonly;
                     nd.NodeFrmID = "ND" + int.Parse(this.No) + "02";
                     nd.Update();
+
+                    fnd.Update();
                     continue;
                 }
+
+                fnd.Update(); //不执行更新，会导致部分字段错误.
 
 
                 nd.FrmWorkCheckSta = FrmWorkCheckSta.Enable;
                 nd.NodeFrmID = "ND" + int.Parse(this.No) + "02";
                 nd.Update();
-
             }
 
             return "设置成功...";
-
         }
         #endregion
     }

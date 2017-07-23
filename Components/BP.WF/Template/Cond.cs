@@ -106,7 +106,10 @@ namespace BP.WF.Template
         /// 条件类型.
         /// </summary>
         public const string CondOrAnd = "CondOrAnd";
-
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public const string Note = "Note";
 
         #region 属性。
         /// <summary>
@@ -274,6 +277,20 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(CondAttr.FK_Flow, value);
+            }
+        }
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Note
+        {
+            get
+            {
+                return this.GetValStringByKey(CondAttr.Note);
+            }
+            set
+            {
+                this.SetValByKey(CondAttr.Note, value);
             }
         }
         /// <summary>
@@ -1063,13 +1080,13 @@ namespace BP.WF.Template
                 map.AddTBInt(CondAttr.PRI, 0, "计算优先级", true, true);
                 map.AddTBInt(CondAttr.CondOrAnd, 0, "方向条件类型", true, true);
 
+                map.AddTBString(CondAttr.Note, null, "备注", true, true, 0, 500, 20);
+
                 //参数 for wangrui add 2015.10.6. 条件为station,depts模式的时候，需要指定人员。
                 map.AddTBAtParas(2000);
 
-
                 //      map.AddDDLSysEnum(NodeAttr.CondOrAnd, 0, "方向条件类型",
                 //true, true, NodeAttr.CondOrAnd, "@0=And(条件集合中所有的都成立)@1=Or(条件集合中只有一个成立)");
-
 
                 this._enMap = map;
                 return this._enMap;

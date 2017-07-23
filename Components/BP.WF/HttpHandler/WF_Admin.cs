@@ -38,6 +38,244 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 方向条件URL
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByUrl_Init()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Url.ToString();
+
+            Cond cond = new Cond();
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
+            return cond.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondByUrl_Save()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Url.ToString();
+
+            string sql = this.GetRequestVal("TB_Docs");
+
+            Cond cond = new Cond();
+            cond.Delete(CondAttr.NodeID, fk_mainNode,
+              CondAttr.ToNodeID, toNodeID,
+              CondAttr.CondType, (int)CondType.Node);
+
+            cond.MyPK = mypk;
+            cond.HisDataFrom = ConnDataFrom.Url;
+
+            cond.NodeID = this.GetRequestValInt("FK_MainNode");
+            cond.FK_Node = this.GetRequestValInt("FK_MainNode");
+            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.OperatorValue = sql;
+            cond.Note = this.GetRequestVal("TB_Note"); //备注.
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.HisCondType = CondType.Node;
+            cond.Insert();
+
+            return "保存成功..";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondByUrl_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Url.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)CondType.Node);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion
+
+        #region 方向条件SQL
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondBySQL_Init()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
+
+            Cond cond = new Cond();
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
+            return cond.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondBySQL_Save()
+        {
+
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
+
+            string sql = this.GetRequestVal("TB_Docs");
+
+            Cond cond = new Cond();
+            cond.Delete(CondAttr.NodeID, fk_mainNode,
+              CondAttr.ToNodeID, toNodeID,
+              CondAttr.CondType, (int)CondType.Node);
+
+            cond.MyPK = mypk;
+            cond.HisDataFrom = ConnDataFrom.SQL;
+
+            cond.NodeID = this.GetRequestValInt("FK_MainNode");
+            cond.FK_Node = this.GetRequestValInt("FK_MainNode");
+            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.OperatorValue = sql;
+            cond.Note = this.GetRequestVal("TB_Note"); //备注.
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.HisCondType = CondType.Node; 
+            cond.Insert();
+
+            return "保存成功..";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondBySQL_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)CondType.Node);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion
+
+        #region 方向条件Para
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByPara_Init()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Paras.ToString();
+
+            Cond cond = new Cond();
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
+            return cond.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondByPara_Save()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Paras.ToString();
+
+            string sql = this.GetRequestVal("TB_Docs");
+
+            Cond cond = new Cond();
+            cond.Delete(CondAttr.NodeID, fk_mainNode,
+              CondAttr.ToNodeID, toNodeID,
+              CondAttr.CondType, (int)CondType.Node);
+
+            cond.MyPK = mypk;
+            cond.HisDataFrom = ConnDataFrom.Paras;
+
+            cond.NodeID = this.GetRequestValInt("FK_MainNode");
+            cond.FK_Node = this.GetRequestValInt("FK_MainNode");
+            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.OperatorValue = sql;
+            cond.Note = this.GetRequestVal("TB_Note"); //备注.
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.HisCondType = CondType.Node;
+            cond.Insert();
+
+            return "保存成功..";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondByPara_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.Paras.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)CondType.Node);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion
+
         #region 测试页面.
         /// <summary>
         /// 初始化界面.
@@ -342,7 +580,86 @@ namespace BP.WF.HttpHandler
 
             return "登录成功.";
         }
+        /// <summary>
+        /// 加载模版.
+        /// </summary>
+        /// <returns></returns>
+        public string SettingTemplate_Init()
+        {
+            //类型.
+            string templateType = this.GetRequestVal("TemplateType");
+            BP.WF.Template.SQLTemplates sqls = new SQLTemplates();
+            //sqls.Retrieve(BP.WF.Template.SQLTemplateAttr.SQLType, sqlType);
 
+            DataTable dt = null;
+            string sql = "";
+
+            #region 节点方向条件模版.
+            if (templateType == "CondBySQL")
+            {
+                /*方向条件, 节点方向条件.*/
+                sql = "SELECT MyPK,Note,OperatorValue FROM WF_Cond WHERE CondType=0 AND DataFrom=" + (int)ConnDataFrom.SQL;
+            }
+
+            if (templateType == "CondByUrl")
+            {
+                /*方向条件, 节点方向url条件.*/
+                sql = "SELECT MyPK,Note,OperatorValue FROM WF_Cond WHERE CondType=0 AND DataFrom=" + (int)ConnDataFrom.Url;
+            }
+
+            if (templateType == "CondByPara")
+            {
+                /*方向条件, 节点方向url条件.*/
+                sql = "SELECT MyPK,Note,OperatorValue FROM WF_Cond WHERE CondType=0 AND DataFrom=" + (int)ConnDataFrom.Paras;
+            }
+            #endregion 节点方向条件模版.
+
+            #region 表单扩展设置.
+            if (templateType == "DDLFullCtrl")
+                sql = "SELECT MyPK, '下拉框:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='DDLFullCtrl'";
+
+            if (templateType == "ActiveDDL")
+                sql = "SELECT MyPK, '下拉框:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='ActiveDDL'";
+
+            //显示过滤.
+            if (templateType == "AutoFullDLL")
+                sql = "SELECT MyPK, '下拉框:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='AutoFullDLL'";
+
+            //文本框自动填充..
+            if (templateType == "TBFullCtrl")
+                sql = "SELECT MyPK, '文本框:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='TBFullCtrl'";
+
+            //自动计算.
+            if (templateType == "AutoFull")
+                sql = "SELECT MyPK, 'ID:'+ a.AttrOfOper as Name,Doc FROM Sys_MapExt a  WHERE ExtType='AutoFull'";
+            #endregion 表单扩展设置.
+
+            #region 节点属性的模版.
+            //自动计算.
+            if (templateType == "NodeAccepterRole")
+                sql = "SELECT NodeID, FlowName +' - '+Name, a.DeliveryParas as Docs FROM WF_Node a WHERE  a.DeliveryWay=" + (int)DeliveryWay.BySQL;
+            #endregion 节点属性的模版.
+
+            if (sql == "")
+                return "err@没有涉及到的标记[" + templateType + "].";
+
+            dt = DBAccess.RunSQLReturnTable(sql);
+            string strs = "";
+            foreach (DataRow dr in dt.Rows)
+            {
+                BP.WF.Template.SQLTemplate en = new SQLTemplate();
+                en.No = dr[0].ToString();
+                en.Name = dr[1].ToString();
+                en.Docs = dr[2].ToString();
+
+                if (strs.Contains(en.Docs.Trim() + ";") == true)
+                    continue;
+                strs += en.Docs.Trim() + ";";
+                sqls.AddEntity(en);
+            }
+
+            return sqls.ToJson();
+        }
         #region 绑定流程表单
         /// <summary>
         /// 获取流程所有节点

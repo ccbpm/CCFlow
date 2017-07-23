@@ -52,7 +52,17 @@
                     //转json.
                     data = JSON.parse(data);
 
-                    document.getElementById("TB_Docs").value = data.OperatorValue;
+                    var docs = data.OperatorValue;
+                    docs = docs.replace("~", "'");
+                    docs = docs.replace("~", "'");
+                    docs = docs.replace("~", "'");
+                    docs = docs.replace("~", "'");
+                    docs = docs.replace("~", "'");
+                    docs = docs.replace("~", "'");
+                    docs = docs.replace("~", "'");
+
+
+                    document.getElementById("TB_Docs").value = docs;
                     document.getElementById("TB_Note").value = data.Note;
 
                 }

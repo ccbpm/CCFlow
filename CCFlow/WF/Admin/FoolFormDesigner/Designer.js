@@ -35,13 +35,6 @@ function Insert(mypk, IDX) {
 function AddF() {
     
     var url = 'FieldTypeList.htm?DoType=AddF&FK_MapData=' + GetQueryString('FK_MapData');
-
-//    OpenEasyUiDialog(url, "eudlgframe", '增加字段', 800, 500, "icon-edit", true, null, null, null, function () {
-//        window.location.href = window.location.href;
-//    });
-//    return;
-
-
     var h = 500;
     var w = 600;
     var l = (screen.width - w) / 2;
@@ -459,8 +452,6 @@ function NewAth() {
 function NewFrame(fk_mapdata) {
 
     var fk_mapdata = GetQueryString('FK_MapData');
-
-
     var val = prompt('请输入框架ID，要求表单唯一。', 'Frame1');
     if (val == null) {
         return;
@@ -504,10 +495,7 @@ function EditFrame(fk_mapdata, myPK) {
 function MapFrame() {
 
     var fk_mapdata = GetQueryString('FK_MapData');
-
-
     var url = 'MapFrame.htm?FK_MapData=' + GetQueryString('fk_mapdata');
-
     OpenEasyUiDialog(url, "eudlgframe", '框架', 800, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
     });

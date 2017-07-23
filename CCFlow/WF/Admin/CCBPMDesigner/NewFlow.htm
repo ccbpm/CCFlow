@@ -48,6 +48,7 @@
         }
 
         function getNewFlowInfo() {
+
             return {
                 flowName: $('#TB_FlowName').val(),
                 flowSort: $('#DDL_FlowSort').combotree('getValue'),
@@ -97,6 +98,18 @@
             </td>
             <td> 流程<font  color="gray">运行的数据表名称，默认为NDxxxRpt,xxx是流程编号。 </font></td>
         </tr>
+
+        <tr>
+        <td>默认表单模式</td>
+        <td> 
+          <select id="DDL_DefFrmModel" style="width:200px;">
+                    <option value="0">自由表单</option>
+                    <option value="1" selected="selected">傻瓜表单</option>
+                </select>
+         </td>
+         <td>可以在节点属性-表单方案里修改.</td>
+        </tr>
+
         <tr>
             <td nowarp="true"  width="20%;">
                 流程标记：
@@ -120,7 +133,6 @@
             </td>
              
              <td>
-
              <font  color="gray">
                 <ul>
                 <li>CCFlow为silverlight设计模式,采用旧版本的sl设计器。</li>
@@ -128,9 +140,10 @@
                 <li>BPMN为适应BPMN2.0规则模式.</li>
                 </ul>
                 </font>
-
              </td>
         </tr>
+
+     
     </table>
     </form>
 </body>

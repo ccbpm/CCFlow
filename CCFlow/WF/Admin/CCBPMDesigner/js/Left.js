@@ -75,14 +75,17 @@ function newFlow() {
 
     var currSort = $('#flowTree').tree('getSelected');
     var currSortId = "99";
-    if (currSort && currSort.attributes["ISPARENT"] != 0) {//edit by qin 2016/2/16
+    if (currSort && currSort.attributes["ISPARENT"] != 0) { //edit by qin 2016/2/16
         currSortId = $('#flowTree').tree('getSelected').id; //liuxc,20150323
     }
     var dgId = "iframDg";
     var url = "NewFlow.htm?sort=" + currSortId + "&s=" + Math.random();
     OpenEasyUiDialog(url, dgId, '新建流程', 600, 394, 'icon-new', true, function () {
+
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();
+
+       // alert(newFlowInfo);
 
         if (newFlowInfo.flowName == null || newFlowInfo.flowName.length == 0 || newFlowInfo.flowSort == null || newFlowInfo.flowSort.length == 0) {
             $.messager.alert('错误', '信息填写不完整', 'error');
@@ -91,8 +94,9 @@ function newFlow() {
         //传入参数
         var params = {
             action: "NewFlow",
-            paras: newFlowInfo.flowSort + ',' + newFlowInfo.flowName + ',' + newFlowInfo.dataStoreModel + ',' + newFlowInfo.pTable + ',' + newFlowInfo.flowCode + ',' + newFlowInfo.FlowVersion
+            paras: newFlowInfo.flowSort + ',' + newFlowInfo.flowName + ',' + newFlowInfo.dataStoreModel + ',' + newFlowInfo.pTable + ',' + newFlowInfo.flowCode + ',' + newFlowInfo.FlowVersion 
         };
+
         //访问服务
         ajaxService(params, function (data) {
 
@@ -112,7 +116,7 @@ function newFlow() {
                 parent: parentNode.target,
                 data: [{
                     id: flowNo,
-                    text: flowNo +'.'+ flowName,
+                    text: flowNo + '.' + flowName,
                     attributes: { ISPARENT: '0', TTYPE: 'FLOW', DTYPE: newFlowInfo.FlowVersion, MenuId: "mFlow", Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID" },
                     iconCls: 'icon-flow1',
                     checked: false
@@ -128,9 +132,12 @@ function newFlow() {
             //展开到指定节点
             $('#flowTree').tree('expandTo', $('#flowTree').tree('find', flowNo).target);
             $('#flowTree').tree('select', $('#flowTree').tree('find', flowName).target);
+
             //在右侧流程设计区域打开新建的流程
             RefreshFlowJson();
-            //OpenFlowToCanvas(nodeData, jdata.data.no, jdata.data.name);
+
+            //打开流程.
+            OpenFlowToCanvas(nodeData, jdata.data.no, jdata.data.name);
 
         }, this);
     }, null);

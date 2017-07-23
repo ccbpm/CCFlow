@@ -130,19 +130,19 @@ namespace BP.WF.Template
         /// <summary>
         /// 节点完成条件
         /// </summary>
-        Node,
+        Node=0,
         /// <summary>
         /// 流程条件
         /// </summary>
-        Flow,
+        Flow=1,
         /// <summary>
         /// 方向条件
         /// </summary>
-        Dir,
+        Dir=2,
         /// <summary>
         /// 启动子流程
         /// </summary>
-        SubFlow
+        SubFlow=3
     }
     /// <summary>
     /// 指定操作员方式

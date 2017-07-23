@@ -74,7 +74,7 @@ namespace BP.WF.HttpHandler
             Cond cond = new Cond();
             cond.Delete(CondAttr.NodeID, fk_mainNode,
               CondAttr.ToNodeID, toNodeID,
-              CondAttr.CondType, (int)CondType.Node);
+              CondAttr.CondType, (int)condTypeEnum);
 
             cond.MyPK = mypk;
             cond.HisDataFrom = ConnDataFrom.Url;
@@ -88,7 +88,7 @@ namespace BP.WF.HttpHandler
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
 
             cond.FK_Flow = this.FK_Flow;
-            cond.HisCondType = CondType.Node;
+            cond.HisCondType = condTypeEnum;
             cond.Insert();
 
             return "保存成功..";
@@ -108,7 +108,7 @@ namespace BP.WF.HttpHandler
             Cond deleteCond = new Cond();
             int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
                CondAttr.ToNodeID, toNodeID,
-               CondAttr.CondType, (int)CondType.Node);
+               CondAttr.CondType, (int)condTypeEnum);
 
             if (i == 1)
                 return "删除成功..";
@@ -154,7 +154,7 @@ namespace BP.WF.HttpHandler
             Cond cond = new Cond();
             cond.Delete(CondAttr.NodeID, fk_mainNode,
               CondAttr.ToNodeID, toNodeID,
-              CondAttr.CondType, (int)CondType.Node);
+              CondAttr.CondType, (int)condTypeEnum);
 
             cond.MyPK = mypk;
             cond.HisDataFrom = ConnDataFrom.SQL;
@@ -168,7 +168,7 @@ namespace BP.WF.HttpHandler
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
 
             cond.FK_Flow = this.FK_Flow;
-            cond.HisCondType = CondType.Node; 
+            cond.HisCondType = condTypeEnum; 
             cond.Insert();
 
             return "保存成功..";
@@ -188,7 +188,7 @@ namespace BP.WF.HttpHandler
             Cond deleteCond = new Cond();
             int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
                CondAttr.ToNodeID, toNodeID,
-               CondAttr.CondType, (int)CondType.Node);
+               CondAttr.CondType, (int)condTypeEnum);
 
             if (i == 1)
                 return "删除成功..";
@@ -233,7 +233,7 @@ namespace BP.WF.HttpHandler
             Cond cond = new Cond();
             cond.Delete(CondAttr.NodeID, fk_mainNode,
               CondAttr.ToNodeID, toNodeID,
-              CondAttr.CondType, (int)CondType.Node);
+              CondAttr.CondType, (int)condTypeEnum);
 
             cond.MyPK = mypk;
             cond.HisDataFrom = ConnDataFrom.Paras;
@@ -247,7 +247,7 @@ namespace BP.WF.HttpHandler
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
 
             cond.FK_Flow = this.FK_Flow;
-            cond.HisCondType = CondType.Node;
+            cond.HisCondType = condTypeEnum;
             cond.Insert();
 
             return "保存成功..";
@@ -267,7 +267,7 @@ namespace BP.WF.HttpHandler
             Cond deleteCond = new Cond();
             int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
                CondAttr.ToNodeID, toNodeID,
-               CondAttr.CondType, (int)CondType.Node);
+               CondAttr.CondType, (int)condTypeEnum);
 
             if (i == 1)
                 return "删除成功..";

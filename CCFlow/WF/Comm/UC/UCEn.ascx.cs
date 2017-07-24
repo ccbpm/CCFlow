@@ -1118,7 +1118,7 @@ namespace CCFlow.Web.Comm.UC
                 foreach (var de in dictGroups)
                 {
                     idxL1 = de.Value.IndexOf(',');
-                    idxL2 = de.Value.IndexOf('，');
+                    idxL2 = de.Value.IndexOf("，");
 
                     //去除有英文/中文括号内的内容，标题只显示括号之前的内容，防止标题过长
                     if (idxL1 > 0)

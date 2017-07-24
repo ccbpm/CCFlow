@@ -922,11 +922,26 @@ namespace BP.WF.HttpHandler
         }
         #endregion 退回到分流节点处理器.
 
+        public string DeleteFlowInstance_Init()
+        {
+            if (BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow,
+                this.WorkID, BP.Web.WebUser.No) == false)
+                return "err@您没有删除该流程的权限";
+            //获取节点中配置的流程删除规则
+            if(this.FK_Node != 0)
+            {
+                string sql = "SELECT wn.DelEnable FROM WF_Node wn WHERE wn.NodeID = " + this.FK_Node;
+                return DBAccess.RunSQLReturnValInt(sql) + "";
+            }
+
+            return "";
+        }
+
         public string DeleteFlowInstance_DoDelete()
         {
             if (BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow,
                 this.WorkID, BP.Web.WebUser.No) == false)
-                return "您没有删除该流程的权限.";
+                return "err@您没有删除该流程的权限.";
 
             string deleteWay = this.GetRequestVal("RB_DeleteWay");
             string doc = this.GetRequestVal("TB_Doc");
@@ -939,11 +954,11 @@ namespace BP.WF.HttpHandler
                 isDelSubFlow = true;
 
             //按照标记删除.
-            if (deleteWay == "0")
+            if (deleteWay == "1")
                 BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(this.FK_Flow, this.WorkID, doc, isDelSubFlow);
 
             //彻底删除.
-            if (deleteWay == "1")
+            if (deleteWay == "3")
                 BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID, isDelSubFlow);
 
             //彻底并放入到删除轨迹里.

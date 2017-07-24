@@ -634,8 +634,8 @@ namespace CCFlow.WF.UC
                     case DelWorkFlowRole.ByUser: //需要交互.
                     case DelWorkFlowRole.DeleteAndWriteToLog:
                     case DelWorkFlowRole.DeleteByFlag:
-                        string urlrDel = appPath + "WF/MyFlowInfo.aspx?DoType=DeleteFlow&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                        toolbar.Add("<input type=button  value='" + btnLab.DeleteLab + "' enable=true onclick=\"if(!confirm('您确定要" + btnLab.DeleteLab + "本次流程吗？')) return false; To('" + urlrDel + "'); \" />");
+                        string urlrDel = appPath + "WF/WorkOpt/DeleteFlowInstance.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                        toolbar.Add("<input type=button  value='" + btnLab.DeleteLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" />");
                         break;
                     case DelWorkFlowRole.DeleteReal: // 不需要交互，直接干净的删除.
                         toolbar.AddBtn("Btn_Delete", btnLab.DeleteLab);

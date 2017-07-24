@@ -754,6 +754,7 @@ namespace BP.WF.HttpHandler
             if (string.IsNullOrWhiteSpace(parentrootid))
                 throw new Exception("参数parentrootid不能为空");
 
+            CheckStationTypeIdxExists();
             bool isUnitModel = DBAccess.IsExitsTableCol("Port_Dept", "IsUnit");
 
             if (isUnitModel)
@@ -845,6 +846,7 @@ namespace BP.WF.HttpHandler
             string sql = string.Empty;
             DataTable dt = null;
             BP.WF.Template.NodeStations sts = new BP.WF.Template.NodeStations();
+            string sortField = CheckStationTypeIdxExists() ? "Idx" : "No";
 
             sts.Retrieve(BP.WF.Template.NodeStationAttr.FK_Node, int.Parse(nid));
 
@@ -852,7 +854,7 @@ namespace BP.WF.HttpHandler
             {
                 if (ttype == "STROOT")
                 {
-                    sql = "SELECT No,Name FROM Port_StationType ORDER BY Name ASC";
+                    sql = "SELECT No,Name FROM Port_StationType ORDER BY " + sortField + " ASC";
                     dt = DBAccess.RunSQLReturnTable(sql);
 
                     foreach (DataRow row in dt.Rows)
@@ -933,7 +935,7 @@ namespace BP.WF.HttpHandler
                         "SELECT ps.No,ps.Name,pst.No FK_StationType, pst.Name FK_StationTypeName,ps.FK_Unit,pd.Name FK_UnitName FROM Port_Station ps"
                         + " INNER JOIN Port_StationType pst ON pst.No = ps.FK_StationType"
                         + " INNER JOIN Port_Dept pd ON pd.No = ps.FK_Unit"
-                        + " WHERE ps.FK_Unit = '{0}' ORDER BY pst.No ASC,ps.Name ASC", parentid));
+                        + " WHERE ps.FK_Unit = '{0}' ORDER BY pst.{1} ASC,ps.Name ASC", parentid, sortField));
 
                 //增加岗位
                 foreach (DataRow st in dt.Rows)
@@ -972,20 +974,21 @@ namespace BP.WF.HttpHandler
             int pageidx = int.Parse(this.GetRequestVal("pageidx"));
             string st = this.GetRequestVal("stype");
             string sql = string.Empty;
+            string sortField = CheckStationTypeIdxExists() ? "Idx" : "No";
 
             if (st == "UNIT")
             {
                 sql = "SELECT ps.No,ps.Name,pd.No UnitNo,pd.Name UnitName FROM WF_NodeStation wns "
                              + "  INNER JOIN Port_Station ps ON ps.No = wns.FK_Station "
                              + "  INNER JOIN Port_Dept pd ON pd.No = ps.FK_Unit "
-                             + "WHERE wns.FK_Node = " + nid + " ORDER BY ps.Name";
+                             + "WHERE wns.FK_Node = " + nid + " ORDER BY ps.Name ASC";
             }
             else
             {
                 sql = "SELECT ps.No,ps.Name,pst.No UnitNo,pst.Name UnitName FROM WF_NodeStation wns "
                              + "  INNER JOIN Port_Station ps ON ps.No = wns.FK_Station "
                              + "  INNER JOIN Port_StationType pst ON pst.No = ps.FK_StationType "
-                             + "WHERE wns.FK_Node = " + nid + " ORDER BY ps.Name";
+                             + "WHERE wns.FK_Node = " + nid + " ORDER BY pst." + sortField + " ASC,ps.Name ASC";
             }
 
             dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
@@ -1026,6 +1029,33 @@ namespace BP.WF.HttpHandler
             return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
         }
         #endregion Dot2DotStationModel.htm（岗位选择）
+
+        #region Methods
+        /// <summary>
+        /// 判断Port_StationType表中是否含有Idx字段
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckStationTypeIdxExists()
+        {
+            if (DBAccess.IsExitsTableCol("Port_StationType", "Idx") == false)
+            {
+                if (DBAccess.IsView("Port_StationType") == false)
+                {
+                    BP.GPM.StationType st = new GPM.StationType();
+                    st.CheckPhysicsTable();
+
+                    DBAccess.RunSQL("UPDATE Port_StationType SET Idx = 1");
+                    return true;
+                }
+            }
+            else
+            {
+                return true;
+            }
+
+            return false;
+        }
+        #endregion
 
         #region 辅助实体定义
 

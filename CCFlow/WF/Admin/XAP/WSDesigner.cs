@@ -99,17 +99,35 @@ namespace CCFlow.WF.Admin.XAP
             }
             else
             {
-                //加入部门.
-                sql = "SELECT No,Name,ParentNo FROM Port_Dept ORDER BY No,Idx";
-                DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dtDept.TableName = "Port_Dept";
-                myds.Tables.Add(dtDept);
+                if (SystemConfig.CustomerNo == "XJTY")
+                {
+                    //加入部门.
+                    sql = "SELECT No,Name,ParentNo FROM Port_Dept where 1=2 ORDER BY No,Idx";
+                    DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dtDept.TableName = "Port_Dept";
+                    myds.Tables.Add(dtDept);
 
-                //加入人员.
-                sql = "SELECT No,Name,FK_Dept FROM Port_Emp ORDER BY No ";
-                DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                dtEmp.TableName = "Port_Emp";
-                myds.Tables.Add(dtEmp);
+                    //加入人员.
+                    sql = "SELECT No,Name,FK_Dept FROM Port_Emp where 1=2 ORDER BY No ";
+                    DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dtEmp.TableName = "Port_Emp";
+                    myds.Tables.Add(dtEmp);
+                }
+                else
+                {
+                    //加入部门.
+                    sql = "SELECT No,Name,ParentNo FROM Port_Dept ORDER BY No,Idx";
+                    DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dtDept.TableName = "Port_Dept";
+                    myds.Tables.Add(dtDept);
+
+                    //加入人员.
+                    sql = "SELECT No,Name,FK_Dept FROM Port_Emp ORDER BY No ";
+                    DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                    dtEmp.TableName = "Port_Emp";
+                    myds.Tables.Add(dtEmp);
+                }
+
             }
             return Connector.ToXml(myds);
         }

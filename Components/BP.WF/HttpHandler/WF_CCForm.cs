@@ -459,7 +459,7 @@ namespace BP.WF.HttpHandler
             if (BP.WF.Glo.IsBeta == true)
                 return "url@FrmFree.htm?1=2" + this.RequestParas;
             else
-                if (Glo.Plant.Equals("CCFlow"))
+                if (Glo.Plant == Plant.CCFlow)
                     return "url@Frm.aspx?1=2" + this.RequestParas;
                 else
                     return "url@FrmFree.htm?1=2" + this.RequestParas;

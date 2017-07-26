@@ -54,6 +54,15 @@
 
                 var html = '';
 
+                if (tks.length == 0) {
+                    html += '<tr style="background-color: #E2F6FB">';
+                    html += '<td>&nbsp;</td>';
+                    html += '</tr>';
+                    html += '<tr>';
+                    html += '<td style="word-wrap: break-word;line-height:30px;min-height:100px;">&nbsp;</td>';
+                    html += '</tr>';
+                }
+
                 $.each(tks, function () {
                     var subaths = GetSubAths(this.NodeID);
 

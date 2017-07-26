@@ -439,7 +439,7 @@ namespace CCFlow.WF.CCForm
 		public String GetVstoExtensionVersion()
 		{
 			//return BP.Sys.SystemConfig.AppSettings["VstoExtensionVersion"];//2017-05-02 14:53:02：不再在web.config中配置VSTO版本号
-			return "1.1.0.0";
+			return "1.1.0.2";
 		}
 	}
 }

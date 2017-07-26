@@ -15,12 +15,7 @@
         //页面启动函数.
         $(function () {
 
-            //初始化groupID.
-            var flowNo = GetQueryString("FK_Flow");
-            var nodeID = GetQueryString("FK_Node");
-
             var url = window.location.href;
-
             if (plant == "CCFlow") {
                 url = url.replace('.htm', '.aspx');
                 window.location.href = url;

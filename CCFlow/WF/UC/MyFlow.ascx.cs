@@ -846,7 +846,6 @@ namespace CCFlow.WF.UC
         public Flow currFlow = null;
         public Work currWK = null;
         private BP.WF.Node _currND = null;
-
         public BP.WF.Node currND
         {
             get
@@ -2031,7 +2030,7 @@ namespace CCFlow.WF.UC
                         WorkFlow wkf = new WorkFlow(this.FK_Flow, this.WorkID);
                         if (btn.ID == "Btn_KillSubFlow")
                         {
-                            this.ToMsg("删除流程信息:<hr>" + wkf.DoDeleteWorkFlowByReal(true), "info");
+                            this.ToMsg("@删除流程信息:<hr>" + wkf.DoDeleteWorkFlowByReal(true), "info");
                         }
                         else
                         {
@@ -2050,7 +2049,7 @@ namespace CCFlow.WF.UC
                 case "Btn_Del":
                     // 这是彻底删除的不需要交互。
                     string delMsg = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID, true);
-                    this.ToMsg("删除流程提示<hr>" + delMsg, "info");
+                    this.ToMsg("@删除流程提示<hr>" + delMsg, "info");
                     break;
                 case NamesOfBtn.Save:
                     this.Send(true);
@@ -2068,11 +2067,11 @@ namespace CCFlow.WF.UC
                     break;
                 case "Btn_WorkerList":
                     if (WorkID == 0)
-                        throw new Exception("没有指定当前的工作,不能查看工作者列表.");
+                        throw new Exception("@没有指定当前的工作,不能查看工作者列表.");
                     break;
                 case "Btn_PrintWorkRpt":
                     if (WorkID == 0)
-                        throw new Exception("没有指定当前的工作,不能打印工作报告.");
+                        throw new Exception("@没有指定当前的工作,不能打印工作报告.");
                     this.WinOpen("WFRpt.aspx?FK_Flow=" + this.FK_Flow + "&WorkID=" + WorkID, "工作报告", 800, 600);
                     break;
                 case NamesOfBtn.Send:
@@ -2080,7 +2079,7 @@ namespace CCFlow.WF.UC
                     break;
                 case "Btn_EndFlow":
                     if (WorkID == 0)
-                        throw new Exception("没有指定当前的工作,不能查看工作者列表.");
+                        throw new Exception("@没有指定当前的工作,不能查看工作者列表.");
                     string infoEnd = BP.WF.Dev2Interface.Flow_DoFlowOverByCoercion(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, "");
                     this.ToMsg("结束流程提示:<hr>" + infoEnd, "info");
                     break;
@@ -2093,6 +2092,7 @@ namespace CCFlow.WF.UC
             //    this.FlowMsg.AlertMsg_Warning("信息提示", ex.Message);
             //}
         }
+
         #region 按钮事件
         /// <summary>
         /// 保存工作

@@ -99,7 +99,7 @@ namespace CCFlow.WF.Admin.XAP
             }
             else
             {
-                if (SystemConfig.CustomerNo == "XJTY")
+                if (SystemConfig.CustomerName.Contains("天业") )
                 {
                     //加入部门.
                     sql = "SELECT No,Name,ParentNo FROM Port_Dept where 1=2 ORDER BY No,Idx";

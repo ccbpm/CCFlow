@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -303,7 +303,19 @@ namespace CCFlow.WF.Comm.RefFunc
 								}
 								else
 								{
-									ddl.BindEntities(attr.HisFKEns, attr.UIRefKeyValue, attr.UIRefKeyText, true);
+                                    if (attr.UIDDLShowType == DDLShowType.BindSQL)
+                                    {
+                                        string sql = attr.UIBindKey.Clone() as string;
+                                        sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+                                        sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                                        DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                                        ddl.BindSQL(sql, "No", "Name", val);  // (attr.HisFKEns, attr.UIRefKeyValue, attr.UIRefKeyText, true);
+
+                                    }
+                                    else
+                                    {
+                                        ddl.BindEntities(attr.HisFKEns, attr.UIRefKeyValue, attr.UIRefKeyText, true);
+                                    }
 								}
 							}
 							this.ucsys1.AddTD(ddl);

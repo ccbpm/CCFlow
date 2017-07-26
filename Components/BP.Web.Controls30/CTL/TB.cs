@@ -417,15 +417,13 @@ namespace BP.Web.Controls
                     if (this.ReadOnly == false)
                         this.Attributes["onfocus"] = "WdatePicker();";
 
-
                   //  this.Attributes["onfocus"] = "calendar();";
-
 
                     //this.Attributes["onmousedown"] = "javascript:ShowDateTime('" + appPath + "', this );";
                     //this.Attributes[""] = "javascript:ShowDateTime('" + appPath + "', this );";
                     break;
                 case TBType.DateTime:
-                    this.Columns = 16;
+                    this.Columns = 20;
                     if (this.Text == null || this.Text == null)
                         this.Text = DataType.CurrentDataTime;
 

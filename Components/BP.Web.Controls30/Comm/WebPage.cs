@@ -34,12 +34,21 @@ namespace BP.Web
     public class WebPage : PageBase
     {
         #region 属性
+        public string TurnToUTF8ToString(string text)
+        {
+            return HttpUtility.UrlDecode(text, System.Text.Encoding.UTF8);
+        }
         public string RequestParas
         {
             get
             {
                 string urlExt = "";
                 string rawUrl = this.Request.RawUrl;
+
+                //转化成text.
+                rawUrl = TurnToUTF8ToString(rawUrl);
+
+
                 rawUrl = "&" + rawUrl.Substring(rawUrl.IndexOf('?') + 1);
                 string[] paras = rawUrl.Split('&');
                 foreach (string para in paras)

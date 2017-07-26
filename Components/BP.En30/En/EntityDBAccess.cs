@@ -257,9 +257,9 @@ namespace BP.En
                 return 0;
             Attrs attrs = en.EnMap.Attrs;
             EntityDBAccess.fullDate(dt, en, attrs);
-            int i = dt.Rows.Count;
+            int num = dt.Rows.Count;
             dt.Dispose();
-            return i;
+            return num;
         }
 		/// <summary>
 		/// 查询

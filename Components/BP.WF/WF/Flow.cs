@@ -3041,28 +3041,20 @@ namespace BP.WF
             string fk_mapData = "ND" + int.Parse(this.No) + "Rpt";
             string flowId = int.Parse(this.No).ToString();
 
+            //生成该节点的 nds 比如  "'ND101','ND102','ND103'"
+            string ndsstrs = "";
+            foreach (BP.WF.Node nd in nds)
+            {
+                ndsstrs += "'ND" + nd.NodeID + "',";
+            }
+            ndsstrs = ndsstrs.Substring(0, ndsstrs.Length - 1);
+
             // 处理track表.
             Track.CreateOrRepairTrackTable(flowId);
 
             #region 插入字段。
-            string sql = "";
-            switch (SystemConfig.AppCenterDBType)
-            {
-                case DBType.Oracle:
-                case DBType.MSSQL:
-                    sql = "SELECT distinct  KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN ( SELECT 'ND' " + SystemConfig.AppCenterDBAddStringStr + " cast(NodeID as varchar(20)) FROM WF_Node WHERE FK_Flow='" + this.No + "')";
-                    break;
-                case DBType.Informix:
-                    sql = "SELECT distinct  KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN ( SELECT 'ND' " + SystemConfig.AppCenterDBAddStringStr + " cast(NodeID as varchar(20)) FROM WF_Node WHERE FK_Flow='" + this.No + "')";
-                    break;
-                case DBType.MySQL:
-                    //sql = "SELECT DISTINCT KeyOfEn FROM Sys_MapAttr  WHERE FK_MapData IN (SELECT X.No FROM ( SELECT CONCAT('ND',NodeID) AS No FROM WF_Node WHERE FK_Flow='" + this.No + "') AS X )";
-                    sql = "SELECT DISTINCT KeyOfEn FROM Sys_MapAttr  WHERE  exists  (SELECT X.No FROM ( SELECT CONCAT('ND',NodeID) AS No FROM WF_Node WHERE FK_Flow='" + this.No + "') AS X where sys_mapattr.fk_mapdata=x.no)";
-                    break;
-                default:
-                    sql = "SELECT distinct  KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN ( SELECT 'ND' " + SystemConfig.AppCenterDBAddStringStr + " cast(NodeID as varchar(20)) FROM WF_Node WHERE FK_Flow='" + this.No + "')";
-                    break;
-            }
+            string sql = "SELECT distinct KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN ("+ndsstrs+")";
+         
 
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
@@ -3075,38 +3067,31 @@ namespace BP.WF
                 string sql2 = "DELETE FROM Sys_MapAttr WHERE KeyOfEn NOT IN (" + sql + ") AND FK_MapData='" + fk_mapData + "' ";
                 DBAccess.RunSQL(sql2); // 删除不存在的字段.
             }
-
-            // 补充上没有字段。
-            switch (SystemConfig.AppCenterDBType)
-            {
-                case DBType.Oracle:
-                    sql = "SELECT MyPK, KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN ( SELECT 'ND' " + SystemConfig.AppCenterDBAddStringStr + " cast(NodeID as varchar(20)) FROM WF_Node WHERE FK_Flow='" + this.No + "')";
-                    break;
-                case DBType.MySQL:
-                    //sql = "SELECT MyPK, KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN (SELECT X.No FROM ( SELECT CONCAT('ND',NodeID) AS No FROM WF_Node WHERE FK_Flow='" + this.No + "') AS X )";
-                    sql = "SELECT MyPK, KeyOfEn FROM Sys_MapAttr WHERE EXISTS (SELECT X.No FROM ( SELECT CONCAT('ND',NodeID) AS No FROM WF_Node WHERE FK_Flow='" + this.No + "') AS X where Sys_MapAttr.FK_MapData = X.No)";
-                    break;
-                default:
-                    sql = "SELECT MyPK, KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN ( SELECT 'ND' " + SystemConfig.AppCenterDBAddStringStr + " cast(NodeID as varchar(20)) FROM WF_Node WHERE FK_Flow='" + this.No + "')";
-                    break;
-            }
-
+         
+            //所有节点表单字段的合集.
+            sql = "SELECT MyPK, KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            //求已经存在的字段集合。
             sql = "SELECT KeyOfEn FROM Sys_MapAttr WHERE FK_MapData='ND" + flowId + "Rpt'";
             DataTable dtExits = DBAccess.RunSQLReturnTable(sql);
             string pks = "@";
             foreach (DataRow dr in dtExits.Rows)
                 pks += dr[0] + "@";
 
+            //遍历 - 所有节点表单字段的合集
             foreach (DataRow dr in dt.Rows)
             {
-                string mypk = dr["MyPK"].ToString();
-                if (pks.Contains("@" + dr["KeyOfEn"].ToString() + "@"))
+                if (pks.Contains("@" + dr["KeyOfEn"].ToString() + "@") == true)
                     continue;
+
+                string mypk = dr["MyPK"].ToString();
 
                 pks += dr["KeyOfEn"].ToString() + "@";
 
+                //找到这个属性.
                 BP.Sys.MapAttr ma = new BP.Sys.MapAttr(mypk);
+
                 ma.MyPK = "ND" + flowId + "Rpt_" + ma.KeyOfEn;
                 ma.FK_MapData = "ND" + flowId + "Rpt";
                 ma.UIIsEnable = false;
@@ -3117,13 +3102,9 @@ namespace BP.WF
                     ma.DefVal = "";
                 }
 
-                try
-                {
+                // 如果不存在.
+                if (ma.IsExits == false)
                     ma.Insert();
-                }
-                catch
-                {
-                }
             }
 
             MapAttrs attrs = new MapAttrs(fk_mapData);
@@ -3152,7 +3133,6 @@ namespace BP.WF
                 switch (attr.KeyOfEn)
                 {
                     case StartWorkAttr.FK_Dept:
-                        //  attr.UIBindKey = "BP.Port.Depts";
                         attr.UIContralType = UIContralType.TB;
                         attr.LGType = FieldTypeS.Normal;
                         attr.UIVisible = true;
@@ -6850,7 +6830,6 @@ namespace BP.WF
         }
         #endregion
     }
-
     /// <summary>
     /// 流程集合
     /// </summary>
@@ -6984,8 +6963,6 @@ namespace BP.WF
             return list;
         }
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
-
-
     }
 }
 

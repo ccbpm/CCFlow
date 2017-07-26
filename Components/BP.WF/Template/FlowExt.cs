@@ -368,12 +368,13 @@ namespace BP.WF.Template
                 map.AddBoolean(FlowAttr.IsLoadPriData, false, "是否自动装载上一笔数据？", true, true, true);
 
                 //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
-                map.AddTBString(FlowAttr.SysType, null, "类型类型", false, false, 0, 100, 10, false);
+                map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 100, 10, false);
 
                 // add for 华夏银行.
                 map.AddDDLSysEnum(FlowAttr.FlowDeleteRole, (int)FlowDeleteRole.AdminOnly, "流程实例删除规则",
             true, true, FlowAttr.FlowDeleteRole,
-            "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");   
+            "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");
+
                 #endregion 基本属性。
 
                 //查询条件.
@@ -426,7 +427,6 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-             
 
                 rm = new RefMethod();
                 rm.Title = "流程事件&消息"; // "调用事件接口";
@@ -449,10 +449,6 @@ namespace BP.WF.Template
                 //rm.Icon = "../../WF/Img/Btn/DTS.gif";
                 //rm.ClassMethodName = this.ToString() + ".DoFlowFormTree()";
                 //map.AddRefMethod(rm);
-
-
-
-
 
                 #endregion 流程设置.
 
@@ -500,6 +496,23 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoSetFWCModel()";
                 rm.RefMethodType = RefMethodType.Func;
                 rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 第2个节点以后的节点表单都指向第2个节点表单.  \t\n  2, 结束节点都设置为只读模式. ";
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "删除NDxxxRpt表,多余字段.";
+                rm.ClassMethodName = this.ToString() + ".DoDeleteFields()";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 表NDxxxRpt是自动创建的.  \t\n  2, 在设置流程过程中有些多余的字段会生成到NDxxRpt表里. \t\n 3,这里是删除数据字段为null 并且是多余的字段.";
+                rm.GroupName = "实验中的功能";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "删除NDxxxRpt表,数据为null的多余字段.";
+                rm.ClassMethodName = this.ToString() + ".DoDeleteFieldsIsNull()";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.Warning = "您确定要设置审核组件模式吗？ \t\n 1, 表NDxxxRpt是自动创建的.  \t\n  2, 在设置流程过程中有些多余的字段会生成到NDxxxRpt表里. \t\n 3,这里是删除数据字段为null 并且是多余的字段.";
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
 
@@ -1674,6 +1687,26 @@ namespace BP.WF.Template
         #endregion
 
         #region 实验中的功能.
+        /// <summary>
+        /// 删除多余的字段.
+        /// </summary>
+        /// <returns></returns>
+        public string DoDeleteFields()
+        {
+            return "尚未完成.";
+        }
+        /// <summary>
+        /// 删除多余的字段.
+        /// </summary>
+        /// <returns></returns>
+        public string DoDeleteFieldsIsNull()
+        {
+            return "尚未完成.";
+        }
+        /// <summary>
+        /// 一件设置审核模式.
+        /// </summary>
+        /// <returns></returns>
         public string DoSetFWCModel()
         {
             Nodes nds = new Nodes(this.No);

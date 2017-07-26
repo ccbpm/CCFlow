@@ -44,7 +44,7 @@ namespace BP.Pub
 	/// <summary>
 	/// NDs
 	/// </summary>
-	public class NYs :SimpleNoNameFixs
+	public class NYs :BP.En.EntitiesNoName
 	{
 		/// <summary>
 		/// 年月集合

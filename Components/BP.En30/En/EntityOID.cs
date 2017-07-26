@@ -214,6 +214,9 @@ namespace BP.En
 		/// <returns></returns>
         protected override bool beforeInsert()
         {
+            if (this.OID == -999)
+                return base.beforeInsert();
+
             if (this.OID > 0)
                 throw new Exception("@[" + this.EnDesc + "], 实体已经被实例化 oid=[" + this.OID + "]，不能Insert.");
 
@@ -221,7 +224,6 @@ namespace BP.En
                 this.OID = -1;
             else
                 this.OID = BP.DA.DBAccess.GenerOID();
-
 
             return base.beforeInsert();
          
@@ -286,10 +288,20 @@ namespace BP.En
         }
         public void InsertAsOID(Int64 oid)
         {
-            this.SetValByKey("OID", oid);
             try
             {
+                //先设置一个标记值，为的是不让其在[beforeInsert]产生oid.
+                this.SetValByKey("OID", -999);
+
+                //调用方法.
+                this.beforeInsert();
+
+                //设置主键.
+                this.SetValByKey("OID", oid);
+
                 this.RunSQL(SqlBuilder.Insert(this));
+
+                this.afterInsert();
             }
             catch (Exception ex)
             {

@@ -401,12 +401,20 @@ namespace BP.WF.HttpHandler
                 string no = this.GetRequestVal("NO");
                 string urlParas = "OID=" + this.RefOID + "&NO=" + no + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&UserNo=" + WebUser.No + "&SID=" + this.SID;
 
-                BP.En.Entities ens = BP.En.ClassFactory.GetEns(md.Url);
+                BP.En.Entities ens = BP.En.ClassFactory.GetEns(md.PTable);
 
                 BP.En.Entity en = ens.GetNewEntity;
+
                 if (en.IsOIDEntity == true)
                 {
-                    BP.En.EntityOID enOID = (BP.En.EntityOID)en;
+                    BP.En.EntityOID enOID =null; 
+
+                    enOID = en as BP.En.EntityOID;
+                    if (enOID == null)
+                    {
+                        return "err@系统错误，无法将" + md.PTable + "转化成BP.En.EntityOID.";
+                    }
+
                     enOID.SetValByKey("OID", this.WorkID);
 
                     if (en.RetrieveFromDBSources() == 0)
@@ -416,7 +424,8 @@ namespace BP.WF.HttpHandler
                             enOID.SetValByKey(key, context.Request.QueryString[key]);
                         }
                         enOID.SetValByKey("OID", this.WorkID);
-                        enOID.InsertAsOID(this.WorkID); 
+
+                        enOID.InsertAsOID( this.WorkID );
                     }
                 }
                 return "url@../Comm/En.htm?EnsName=" + md.PTable + "&PK=" + this.WorkID;

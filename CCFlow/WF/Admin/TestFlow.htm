@@ -44,7 +44,7 @@
 
             var fk_flow = GetQueryString("FK_Flow");
             var doWhat = GetQueryString("DoWhat");
-            var userNo = GetQueryString("UserNo");
+            var userNo = getQueryStringByName("UserNo");
 
             //初始化表格.
             $.ajax({
@@ -53,7 +53,6 @@
                 url: Handler + "?DoType=" + doType + "&UserNo=" + userNo + "&DoWhat=" + doWhat + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
                     if (data.indexOf('err@') == 0) {
 
                         if (window.confirm(data) == true) {
@@ -82,13 +81,13 @@
                         newRow += "<td>" + emp.No + "</td>";
                         newRow += "<td>" + emp.Name + "</td>";
 
-                        var url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + emp.No + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/IE.gif' border=0 />AppACE</a>";
+                        var url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/IE.gif' border=0 />AppACE</a>";
                         newRow += "<td>" + url + "</td>";
 
-                        url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + emp.No + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/IE.gif' border=0 />经典</a>";
+                        url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/IE.gif' border=0 />经典</a>";
                         newRow += "<td>" + url + "</td>";
 
-                        url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + emp.No + "&FK_Flow=" + fk_flow + "&IsMobile=1'  ><img src='./../Img/IE.gif' border=0 />手机模式</a>";
+                        url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "&IsMobile=1'  ><img src='./../Img/IE.gif' border=0 />手机模式</a>";
                         newRow += "<td>" + url + "</td>";
 
                         newRow += "<td>" + emp.FK_DeptText + "</td>";

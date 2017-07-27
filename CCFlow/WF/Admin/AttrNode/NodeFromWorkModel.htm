@@ -202,12 +202,10 @@
         {
            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
            var frmData = $("#cc").serialize();
-           alert(frmData);
 
            var nodeID = GetQueryString("FK_Node");
 
            var url = Handler + "?DoType=NodeFromWorkModel_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Node=" + nodeID + "&m=" + Math.random();
-           alert(url);
 
            $.ajax({
                data: frmData,

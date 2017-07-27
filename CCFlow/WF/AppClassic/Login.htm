@@ -39,6 +39,10 @@
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(data);
 
+                    var userNo = document.getElementById("TB_UserNo").value;
+                    if (userNo == "")
+                        document.getElementById("TB_Pass").value = "";
+
                     $("#Msg").html("<font color=blue>ccbpm 欢迎登录...</font>");
                     return;
                 }

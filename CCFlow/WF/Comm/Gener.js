@@ -138,12 +138,12 @@ function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
 
 
 /* 绑定枚举值外键表.*/
-function GenerBindEntities(ctrlDDLId, ensName, selectVal) {
+function GenerBindEntities(ctrlDDLId, ensName, selectVal, filter) {
 
     $.ajax({
         type: 'post',
         async: true,
-        url: "/WF/Comm/Handler.ashx?DoType=EnsData&EnsName=" + ensName + "&m=" + Math.random(),
+        url: "/WF/Comm/Handler.ashx?DoType=EnsData&EnsName=" + ensName + "&Filter=" + filter + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
 

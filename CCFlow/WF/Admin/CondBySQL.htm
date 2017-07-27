@@ -166,25 +166,27 @@
 <body onkeypress="Esc();">
 
 <form id="cc" > 
-
-<table>
+<table  style="width:90%;">
 <tr>
-<td><textarea rows="1" cols="150" id="TB_Docs" name="TB_Docs" > </textarea> </td>
+<td style="width:20%;">要执行的SQL: </td>
+<td><textarea rows="4"  style="width:95%;" id="TB_Docs" name="TB_Docs" > </textarea> </td>
 </tr>
 
 <tr>
-<td>备注(不为空):&nbsp; <input type="text" value="" id="TB_Note" name="TB_Note"  style=" width:70%;" /></td>
+<td> 备注(不为空):</td>
+<td>
+<input type="text" value="" id="TB_Note" name="TB_Note"  style=" width:95%;" /></td>
 </tr>
 </table>
 
-   <input type="button" value="加载模版" onclick="LoadTemplate()"  />
+<input type="button" value="加载模版" onclick="LoadTemplate()"  />
    <input type="button" value="保存" onclick="Save()"  />
    <input type="button" value="删除" onclick="Delete()"  />
 
+   <div style=" text-align:left">
+   <h4> &nbsp; &nbsp; &nbsp; &nbsp;帮助</h4>
+   <ul>
 
-
-   <fieldset>
-   <legend>帮助 </legend>
    <ul>
    <li>在文本框里设置一个查询SQL，它返回一行一列。比如: SELECT COUNT(*) AS Num FROM MyTable WHERE NAME='@MyFieldName'。</li>
     <li>该SQL参数支持系统的表达式，什么是ccflow的表达式请查看说明书。</li>
@@ -192,8 +194,7 @@
    <li> 系统就会获取该返回的值把它转化为decimal类型</li>
    <li> 如果该值大于零，该条件就是成立的否则不成立。</li>
     </ul>
-
-   </fieldset>
+   </div>
 
  
 </form>

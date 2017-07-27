@@ -169,13 +169,15 @@
 
 <form id="cc" > 
 
-<table>
+<table  style=" width:95%;">
 <tr>
-<td><textarea rows="1" cols="150" id="TB_Docs" name="TB_Docs" > </textarea> </td>
+<td style="width:20%;">请输入参数</td>
+<td><textarea rows="1" cols="150" id="TB_Docs" name="TB_Docs" style=" width:95%;"  > </textarea> </td>
 </tr>
 
 <tr>
-<td>备注(不为空):&nbsp; <input type="text" value="" id="TB_Note" name="TB_Note"  style=" width:70%;" /></td>
+<td style="width:20%;">备注(不为空):</td>
+<td><input type="text" value="" id="TB_Note" name="TB_Note"  style=" width:95%;" /></td>
 </tr>
 </table>
 
@@ -183,21 +185,20 @@
    <input type="button" value="保存" onclick="Save()"  />
    <input type="button" value="删除" onclick="Delete()"  />
 
-
-   <fieldset>
-   <legend>帮助 </legend>
+   <div style=" text-align:left">
+   <h4> &nbsp; &nbsp; &nbsp; &nbsp;帮助</h4>
    <ul>
    <li>表达式格式：参数+空格+操作符+空格+值，仅支持一个表达式。格式如下：</li>
     <li>Emp = zhangsan</li>
-   <li> JinE = 30</li>
-   <li>JinE >= 30</li>
-   <li> JinE > 30</li>
-   <li> Way = '1'</li>
-   <li>Way != '1'</li>
-   <li> Name LIKE %li%</li>
-    </ul>
-   </fieldset>
+    <li> JinE = 30</li>
+    <li>JinE >= 30</li>
+    <li> JinE > 30</li>
+    <li> Way = '1'</li>
+    <li>Way != '1'</li>
+    <li> Name LIKE %li%</li>
+   </ul>
 
+   </div>
  
 </form>
 

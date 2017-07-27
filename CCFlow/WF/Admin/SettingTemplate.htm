@@ -61,6 +61,11 @@
                     }
 
                     data = JSON.parse(data);
+                    if (data.length == 0) {
+                        alert('该设置还没有模版.');
+                        window.close();
+                        return;
+                    }
 
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
@@ -83,6 +88,7 @@
                         newRow += "<td>" + en.No + "</td>";
                         newRow += "<td>" + en.Name + "</td>";
                         newRow += "<td style=''><input type=text name='" + en.No + "' id='" + en.No + "' value=\"" + docs + "\" style='width:96%;'> </td>";
+                        newRow += "<td><a href=\"javascript:CopyIt('" + en.No + "');\" >选择</a></td>";
                         newRow += "</tr>";
                         $("#Table1 tr:last").after(newRow);
                     }
@@ -90,18 +96,19 @@
             });
         }
 
+        //执行copy.
         function CopyIt(tbid) {
 
-            //var tb = document.getElementById(tbid);
-            //tb.select(); // 选择对象
+            var tb = document.getElementById(tbid);
+            tb.select(); //选择对象
+
             //document.execCommand("Copy"); // 执行浏览器复制命令
-            //   window.clipboardData.setData("Text", dosc);
-           // alert('复制成功.');
+            //window.clipboardData.setData("Text", tb.value);
+            //alert("已复制好，可贴粘.");
         }
 
         function OK() {
-
-            alert('返回值有两个 sql 与 name .');
+            alert('该功能为实现，请复制内容并copy到输入区域里。');
         }
         function Cancel() {
 
@@ -119,11 +126,11 @@
                 <th style="width:30px;" >编号</th>
                 <th style="width:100px;"  > 名称</th>
                 <th> 数据</th>
-               <!-- <th style="width:30px;" >复制</th>-->
+                <th style="width:30px;" >复制</th>
             </tr>
         </table>
 
-        <input type="button" value="确定"  onclick="OK()" />
+        <input type="button"  value="确定"  onclick="OK()" />
         <input type="button" value="取消"  onclick="Cancel()" />
    
     <div id="Msg"></div>

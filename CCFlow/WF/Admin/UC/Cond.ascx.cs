@@ -554,7 +554,7 @@ namespace CCFlow.WF.Admin
 
             if (val == "" && (oper != "=" || oper != "<>" || oper != "!="))
             {
-                this.Alert("您没有设置条件，请在值文本框中输入值。");
+                this.Alert("@您没有设置条件，请在值文本框中输入值。");
                 return;
             }
 
@@ -587,7 +587,6 @@ namespace CCFlow.WF.Admin
             qo.AddWhere(CondAttr.DataFrom, (int)ConnDataFrom.Form);
             qo.addAnd();
             qo.AddWhere(CondAttr.CondType, (int)this.HisCondType);
-
             if (this.ToNodeID != 0)
             {
                 qo.addAnd();

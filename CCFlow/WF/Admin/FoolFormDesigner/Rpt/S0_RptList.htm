@@ -45,21 +45,11 @@
         }
 
         //打开报表.
-        function OpenRpt(no,name,note){
-          var flowRptNo='';
-          var tmpFK_Flow=pageData.FK_Flow;
-
-//          while (tmpFK_Flow.indexOf('0')==0){
-//               tmpFK_Flow=tmpFK_Flow.substring(1,tmpFK_Flow.length);
-//            }
-
-             flowRptNo="ND"+ no +"Rpt";
-             flowRptNo=flowRptNo.replace('ND0',"ND"); 
-             flowRptNo=flowRptNo.replace('ND0',"ND"); 
-             flowRptNo=flowRptNo.replace('NDND',"ND"); 
-             flowRptNo=flowRptNo.replace('RptRpt',"Rpt"); 
-
-             window.location.href="../../../Rpt/OneFlow.htm?FK_Flow="+pageData.FK_Flow+"&FK_MapData="+flowRptNo+"&RptNo="+no;
+        function OpenRpt(no, name, note) {
+            //WinOpen("../../../Rpt/OneFlow.htm?FK_Flow=" + pageData.FK_Flow + "&FK_MapData=" + flowRptNo + "&RptNo=" + no);
+            var flowRptNo = '';
+            var tmpFK_Flow = pageData.FK_Flow;
+            window.location.href = "../../../Rpt/OneFlow.htm?FK_Flow=" + pageData.FK_Flow + "&FK_MapData=" + flowRptNo + "&RptNo=" + no;
         }
 
         function BindRptList(data){

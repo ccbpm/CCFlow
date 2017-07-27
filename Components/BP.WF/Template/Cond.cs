@@ -760,6 +760,42 @@ namespace BP.WF.Template
                     #endregion
                 }
 
+                if (this.HisDataFrom == ConnDataFrom.SQLTemplate)
+                {
+                    #region 按SQLTemplate 计算
+                    //this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.FK_Operator + ") 判断值:(" + this.OperatorValue.ToString() + ")";
+                    string fk_sqlTemplate = this.OperatorValueStr;
+                    SQLTemplate sqltemplate = new SQLTemplate();
+                    sqltemplate.No = fk_sqlTemplate;
+                    if (sqltemplate.RetrieveFromDBSources() == 0)
+                        throw new Exception("@配置的SQLTemplate编号为[" + sql + "]被删除了,判断条件丢失.");
+
+                    string sql = sqltemplate.Docs;
+                    sql = sql.Replace("~", "'");
+                    sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
+                    sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+                    sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+                    if (sql.Contains("@") == true)
+                    {
+                        /* 如果包含 @ */
+                        foreach (Attr attr in this.en.EnMap.Attrs)
+                        {
+                            sql = sql.Replace("@" + attr.Key, en.GetValStrByKey(attr.Key));
+                        }
+                    }
+
+                    int result = DBAccess.RunSQLReturnValInt(sql, -1);
+                    if (result <= 0)
+                        return false;
+
+                    if (result >= 1)
+                        return true;
+
+                    throw new Exception("@您设置的sql返回值，不符合ccflow的要求，必须是0或大于等于1。");
+                    #endregion
+                }
+
+
                 if (this.HisDataFrom == ConnDataFrom.Url)
                 {
                     #region URL 参数计算

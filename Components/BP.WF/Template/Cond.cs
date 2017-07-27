@@ -35,7 +35,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 按Url.
         /// </summary>
-        Url
+        Url,
+        /// <summary>
+        /// 按sql模版计算.
+        /// </summary>
+        SQLTemplate
     }
     /// <summary>
     /// 条件属性

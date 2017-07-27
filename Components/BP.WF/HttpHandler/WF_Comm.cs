@@ -41,7 +41,21 @@ namespace BP.WF.HttpHandler
         public string EnsData()
         {
             Entities ens = ClassFactory.GetEns(this.EnsName);
-            ens.RetrieveAll();
+
+            string filter = this.GetRequestVal("Filter");
+
+            if (filter == null || filter == "" || filter.Contains("=") == false)
+            {
+                ens.RetrieveAll();
+            }
+            else
+            {
+                QueryObject qo = new QueryObject(ens);
+                string[] strs = filter.Split('=');
+                qo.AddWhere(strs[0], strs[1]);
+                qo.DoQuery();
+            }
+
             return ens.ToJson();
         }
 

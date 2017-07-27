@@ -38,6 +38,23 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 初始化Init.
+        /// </summary>
+        /// <returns></returns>
+        public string Condition_Init()
+        {
+            string toNodeID = this.GetRequestVal("ToNodeId");
+            var cond = new Cond();
+            cond.Retrieve(CondAttr.NodeID, this.FK_Node, CondAttr.ToNodeID, toNodeID);
+
+            cond.Row.Add("HisDataFrom", cond.HisDataFrom.ToString());
+
+         //   cond.HisDataFrom
+            //CurrentCond = DataFrom[cond.HisDataFrom];
+            return cond.ToJson();
+        }
+
         #region 方向条件URL
         /// <summary>
         /// 初始化
@@ -116,6 +133,88 @@ namespace BP.WF.HttpHandler
             return "无可删除的数据.";
         }
         #endregion
+
+
+        #region 方向条件SQL 模版
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondBySQLTemplate_Init()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
+
+            Cond cond = new Cond();
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+
+            return cond.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondBySQLTemplate_Save()
+        {
+
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
+
+            string sql = this.GetRequestVal("TB_Docs");
+
+            Cond cond = new Cond();
+            cond.Delete(CondAttr.NodeID, fk_mainNode,
+              CondAttr.ToNodeID, toNodeID,
+              CondAttr.CondType, (int)condTypeEnum);
+
+            cond.MyPK = mypk;
+            cond.HisDataFrom = ConnDataFrom.SQL;
+
+            cond.NodeID = this.GetRequestValInt("FK_MainNode");
+            cond.FK_Node = this.GetRequestValInt("FK_MainNode");
+            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.OperatorValue = sql;
+            cond.Note = this.GetRequestVal("TB_Note"); //备注.
+
+            cond.FK_Flow = this.FK_Flow;
+            cond.HisCondType = condTypeEnum;
+            cond.Insert();
+
+            return "保存成功..";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondBySQLTemplate_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)condTypeEnum);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion 方向条件SQL 模版
+
 
         #region 方向条件SQL
         /// <summary>

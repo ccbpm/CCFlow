@@ -523,9 +523,9 @@ namespace BP.WF.HttpHandler
             if (dotype != null && dotype == "View")
                 return "";
 
-            //内容为空，取消保存
-            if (string.IsNullOrEmpty(doc.Trim()))
-                return "";
+            //内容为空，取消保存，20170727取消此处限制
+            //if (string.IsNullOrEmpty(doc.Trim()))
+            //    return "";
 
             string val = string.Empty;
             FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);

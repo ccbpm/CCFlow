@@ -107,9 +107,9 @@
                     }
                     //签名，日期
                     html += "<tr>";
-                    html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                    html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"
                                     + (wcDesc.SigantureEnabel == "0" ? GetUserSmallIcon(this.EmpFrom, this.EmpFromT) : GetUserSiganture(this.EmpFrom, this.EmpFromT))
-                                    + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;&nbsp;&nbsp;" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
+                                    + "&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
                     html += "</tr>";
                 });
 
@@ -118,15 +118,25 @@
                 if ($("#uploaddiv").length > 0) {
                     AddUploadify("uploaddiv");
                 }
+
+                if ($("#WorkCheck_Doc").length > 0) {
+                    if (wcDesc.FWCDefInfo && wcDesc.FWCDefInfo.length > 0) {
+                        SaveWorkCheck();
+                        //$("#WorkCheck_Doc").focus();
+                    }
+                }
             }, this);
         }
 
         function SaveWorkCheck() {
             var doc = $("#WorkCheck_Doc").val();
 
-            if (doc.length == 0) {
-                return;
-            }
+//            if (doc.length == 0) {
+//                if (wcDesc.FWCDefInfo && wcDesc.FWCDefInfo.length > 0) {
+//                    doc = wcDesc.FWCDefInfo;
+//                    $("#WorkCheck_Doc").val(doc);
+//                }
+//            }
 
             var param = {
                 DoType: "WorkCheck_Save",

@@ -768,7 +768,7 @@ namespace BP.WF.Template
                     SQLTemplate sqltemplate = new SQLTemplate();
                     sqltemplate.No = fk_sqlTemplate;
                     if (sqltemplate.RetrieveFromDBSources() == 0)
-                        throw new Exception("@配置的SQLTemplate编号为[" + sql + "]被删除了,判断条件丢失.");
+                        throw new Exception("@配置的SQLTemplate编号为[" + sqltemplate + "]被删除了,判断条件丢失.");
 
                     string sql = sqltemplate.Docs;
                     sql = sql.Replace("~", "'");

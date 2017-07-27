@@ -167,8 +167,7 @@ function ReturnValCCFormPopVal(ctrl, fk_mapExt, refEnPK, width, height, title) {
     var wfpreHref = GetLocalWFPreHref();
     url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&CtrlId=" + ctrl.id;
     //var v = window.showModalDialog(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
-    var v = window.open(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
-
+    var v = window.open(url, 'opp', 'dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; toolbar=no, menubar=no, scrollbars=yes, resizable=yes,location=no, status=no;top: 100px; left: 150px;');
     //if (v == null || v == '' || v == 'NaN') {
 
     //}

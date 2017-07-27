@@ -1725,7 +1725,6 @@
     <Content Include="WF\Admin\ClientBin\NodeIcon\顾客.png" />
     <Content Include="WF\Admin\Cond.aspx" />
     <Content Include="WF\Admin\CondDept.aspx" />
-    <Content Include="WF\Admin\Condition.aspx" />
     <Content Include="WF\Admin\ConditionLine.aspx" />
     <Content Include="WF\Admin\ConditionSubFlow.aspx" />
     <Content Include="WF\Admin\ConditionSubFlowDtl.aspx" />
@@ -8359,13 +8358,6 @@
     </Compile>
     <Compile Include="WF\Admin\CondDept.aspx.designer.cs">
       <DependentUpon>CondDept.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Condition.aspx.cs">
-      <DependentUpon>Condition.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Condition.aspx.designer.cs">
-      <DependentUpon>Condition.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Condition.Master.cs">
       <DependentUpon>Condition.Master</DependentUpon>

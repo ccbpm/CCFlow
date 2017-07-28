@@ -139,6 +139,24 @@ namespace CCFlow.WF.Admin.FlowNodeAttr {
         protected global::System.Web.UI.WebControls.TextBox TB_BySQL;
         
         /// <summary>
+        /// RB_BySQLTemplate 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton RB_BySQLTemplate;
+        
+        /// <summary>
+        /// DDL_SQLTemplate 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList DDL_SQLTemplate;
+        
+        /// <summary>
         /// RB_BySQLAsSubThreadEmpsAndData 控件。
         /// </summary>
         /// <remarks>

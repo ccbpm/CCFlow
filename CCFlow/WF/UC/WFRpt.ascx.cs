@@ -138,7 +138,6 @@ namespace CCFlow.WF.UC
         public BP.WF.Node currND = null;
         public void InitToolbar(bool isAskFor, string appPath)
         {
-            
             toolbar = this.ToolBar1;
             this.currND = new BP.WF.Node(this.FK_Node);
             BtnLab btnLab = new BtnLab(currND.NodeID);
@@ -228,9 +227,9 @@ namespace CCFlow.WF.UC
             if (fid > 0)
                 workid = fid;
 
-            string urlExt = "";
+            string urlExt="";
             DataTable ndrpt = DBAccess.RunSQLReturnTable("SELECT PFlowNo,PWorkID FROM " + fl.PTable + " WHERE OID=" + workid);
-            if (ndrpt.Rows.Count == 0)
+            if(ndrpt.Rows.Count==0)
                 urlExt = "&PFlowNo=0&PWorkID=0&IsToobar=0&IsHidden=true";
             else
                 urlExt = "&PFlowNo=" + ndrpt.Rows[0]["PFlowNo"] + "&PWorkID=" + ndrpt.Rows[0]["PWorkID"] + "&IsToobar=0&IsHidden=true";
@@ -238,6 +237,20 @@ namespace CCFlow.WF.UC
 
             if (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm)
             {
+                //if (nd.FormUrl.Contains("?"))
+                //    this.Response.Redirect(nd.FormUrl + "&WorkID=" + tk.WorkID + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
+                //else
+                //    this.Response.Redirect(nd.FormUrl + "?WorkID=" + tk.WorkID + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
+
+                //if (nd.HisFormType == NodeFormType.SDKForm)
+                //{
+                //    if (nd.FormUrl.Contains("?"))
+                //        this.Response.Redirect(nd.FormUrl + "&WorkID=" + tk.WorkID + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
+                //    else
+                //        this.Response.Redirect(nd.FormUrl + "?WorkID=" + tk.WorkID + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
+                //    return;
+                //}
+
                 //added by liuxc,2016-01-25
                 if (nd.FormUrl.Contains("?"))
                 {
@@ -255,7 +268,7 @@ namespace CCFlow.WF.UC
             {
                 GERpt rtp = nd.HisFlow.HisGERpt;
                 rtp.OID = workid;
-                if (rtp.RetrieveFromDBSources() == 0)
+                if (rtp.RetrieveFromDBSources()==0)
                 {
                     this.UCEn1.AddFieldSet("打开(" + nd.Name + ")错误");
                     this.UCEn1.AddH1("当前的节点数据已经被删除！！！<br> 造成此问题出现的原因如下。");
@@ -268,13 +281,6 @@ namespace CCFlow.WF.UC
                 wk.Row = rtp.Row;
             }
 
-            if (nd.HisFormType == NodeFormType.SheetTree)
-            {
-                Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?3=3" + this.RequestParas);
-                return;
-            }
-
-
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = wk.OID;
 
@@ -285,27 +291,34 @@ namespace CCFlow.WF.UC
                 this.UCEn1.AddFieldSetEnd();
                 return;
             }
-            this.InitToolbar(false, appPath);
+            this.InitToolbar(false,appPath);
             this.UCEn1.IsReadonly = true;
             Frms frms = nd.HisFrms;
-
-            #region 当只有 0 表单的时候.
             if (frms.Count == 0)
             {
                 if (nd.HisFormType == NodeFormType.FreeForm)
                 {
+                    //  BtnWord = btnLab.WebOfficeEnable + "";
+                    string url = "./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=1&IsReadonly=1";
+                    this.Response.Redirect(url, true);
+                    return;
+
                     MapData map = new MapData(nd.NodeFrmID);
                     /* 自由表单 */
                     Width = map.MaxRight + map.MaxLeft * 2 + 10 + "";
                     if (float.Parse(Width) < 500)
                         Width = "900";
-                    Height = map.MaxEnd + "";
+
+                    float height = map.MaxEnd +600 ;
+
+                    Height = height + "";
+
                     BtnLab btnLab = new BtnLab(FK_Node);
 
-                    //  BtnWord = btnLab.WebOfficeEnable + "";
+                 
 
                     this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + Height + "px' >");
-                    this.UCEn1.BindCCForm(wk, nd.NodeFrmID, true, 0, false); //, false, false, null);
+                    this.UCEn1.BindCCForm(wk, nd.NodeFrmID, true, 0,false); //, false, false, null);
                     this.UCEn1.Add("</div>");
                 }
 
@@ -313,7 +326,7 @@ namespace CCFlow.WF.UC
                 {
                     MapFrmFool map = new MapFrmFool(nd.NodeFrmID);
 
-                    this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight + "px;overflow-x:scroll;' >");
+                    this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight+ "px;overflow-x:scroll;' >");
                     /*傻瓜表单*/
                     this.UCEn1.IsReadonly = true;
                     this.UCEn1.BindColumn4(wk, nd.NodeFrmID); //, false, false, null);
@@ -322,7 +335,7 @@ namespace CCFlow.WF.UC
                     this.UCEn1.Add("</div>");
                 }
 
-                //增加判断是RTF打印时，才会显示打印模板，added by liuxc,2017-05-25
+               //增加判断是RTF打印时，才会显示打印模板，added by liuxc,2017-05-25
                 if (nd.HisPrintDocEnable == PrintDocEnable.PrintRTF)
                 {
                     BillTemplates bills = new BillTemplates();
@@ -340,122 +353,123 @@ namespace CCFlow.WF.UC
                                        "</a></p>");
                     }
                 }
-                return;
-            }
-            #endregion 当只有一个表单的时候.
-
-            #region 涉及到多个表单的情况.
-            /* 涉及到多个表单的情况...*/
-            if (nd.HisFormType != NodeFormType.DisableIt)
-            {
-                Frm myfrm = new Frm();
-                myfrm.No = "ND" + nd.NodeID;
-                myfrm.Name = wk.EnDesc;
-                myfrm.HisFrmType = (FrmType)(int)nd.HisFormType;
-
-                FrmNode fnNode = new FrmNode();
-                fnNode.FK_Frm = myfrm.No;
-                //  fnNode.IsEdit = true;
-                fnNode.IsPrint = false;
-                switch (nd.HisFormType)
-                {
-                    case NodeFormType.FixForm:
-                        fnNode.HisFrmType = FrmType.FoolForm;
-                        break;
-                    case NodeFormType.FreeForm:
-                        fnNode.HisFrmType = FrmType.FreeFrm;
-                        break;
-                    case NodeFormType.SelfForm:
-                        fnNode.HisFrmType = FrmType.Url;
-                        break;
-                    default:
-                        throw new Exception("出现了未判断的异常。");
-                }
-                myfrm.HisFrmNode = fnNode;
-                frms.AddEntity(myfrm, 0);
-            }
-
-            if (frms.Count == 1)
-            {
-                /* 如果禁用了节点表单，并且只有一个表单的情况。*/
-                Frm frm = (Frm)frms[0];
-                FrmNode fn = frm.HisFrmNode;
-
-                Width = frm.FrmW + "";
-                if (float.Parse(Width) < 500)
-                    Width = "900";
-
-                string src = "";
-                src = fn.FrmUrl + ".aspx?FK_MapData=" + frm.No + "&FID=" + fid + "&IsEdit=0&IsPrint=0&FK_Node=" + nd.NodeID + "&WorkID=" + workid + "&CWorkID=" + this.CWorkID;
-                this.UCEn1.Add("\t\n <DIV id='" + frm.No + "' style='width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left; background-color:white;margin:0;padding:0;' >");
-                this.UCEn1.Add("\t\n <iframe ID='F" + frm.No + "' src='" + src + "' frameborder=0  style='margin:0;padding:0;width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left;'  leftMargin='0'  topMargin='0'  /></iframe>");
-                this.UCEn1.Add("\t\n </DIV>");
             }
             else
             {
-                Frm frmFirst = null;
-                foreach (Frm frm in frms)
+                /* 涉及到多个表单的情况...*/
+                if (nd.HisFormType == NodeFormType.SheetTree)
                 {
-                    if (frmFirst == null)
-                        frmFirst = frm;
-
-                    if (frmFirst.FrmW < frm.FrmW)
-                        frmFirst = frm;
+                   // Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?WorkID=" + workid + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + "&FK_Node=" + nd.NodeID + "&CWorkID=" + this.CWorkID);
+                    Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?3=3"+this.RequestParas);
+                    return;
                 }
-                Width = frmFirst.FrmW + "";
-                if (float.Parse(Width) < 500)
-                    Width = "900";
-
-                #region 载入相关文件.
-                this.Page.RegisterClientScriptBlock("sg",
-   "<link href='./Style/Frm/Tab.css' rel='stylesheet' type='text/css' />");
-
-                this.Page.RegisterClientScriptBlock("s2g4",
-         "<script language='JavaScript' src='./Style/Frm/jquery.min.js' ></script>");
-
-                this.Page.RegisterClientScriptBlock("sdf24j",
-        "<script language='JavaScript' src='./Style/Frm/jquery.idTabs.min.js' ></script>");
-
-                this.Page.RegisterClientScriptBlock("sdsdf24j",
-        "<script language='JavaScript' src='./Style/Frm/TabClick.js' ></script>");
-                #endregion 载入相关文件.
-
-                this.UCEn1.Clear();
-                this.UCEn1.Add("<div  style='clear:both' ></div>"); //
-                this.UCEn1.Add("\t\n<div  id='usual2' class='usual' style='width:" + frmFirst.FrmW + "px;height:auto;margin:0 auto;background-color:white;'>");  //begain.
-
-                #region 输出标签.
-                this.UCEn1.Add("\t\n <ul  class='abc' style='background:red;border-color: #800000;border-width: 10px;' >");
-                foreach (Frm frm in frms)
+                else if (nd.HisFormType != NodeFormType.DisableIt)
                 {
+                    Frm myfrm = new Frm();
+                    myfrm.No = "ND" + nd.NodeID;
+                    myfrm.Name = wk.EnDesc;
+                    myfrm.HisFrmType = (FrmType)(int)nd.HisFormType;
+
+                    FrmNode fnNode = new FrmNode();
+                    fnNode.FK_Frm = myfrm.No;
+                  //  fnNode.IsEdit = true;
+                    fnNode.IsPrint = false;
+                    switch (nd.HisFormType)
+                    {
+                        case NodeFormType.FixForm:
+                            fnNode.HisFrmType = FrmType.FoolForm;
+                            break;
+                        case NodeFormType.FreeForm:
+                            fnNode.HisFrmType = FrmType.FreeFrm;
+                            break;
+                        case NodeFormType.SelfForm:
+                            fnNode.HisFrmType = FrmType.Url;
+                            break;
+                        default:
+                            throw new Exception("出现了未判断的异常。");
+                    }
+                    myfrm.HisFrmNode = fnNode;
+                    frms.AddEntity(myfrm, 0);
+                }
+                if (frms.Count == 1)
+                {
+                    /* 如果禁用了节点表单，并且只有一个表单的情况。*/
+                    Frm frm = (Frm)frms[0];
                     FrmNode fn = frm.HisFrmNode;
+
+                    Width = frm.FrmW + "";
+                    if (float.Parse(Width) < 500)
+                        Width = "900";
 
                     string src = "";
-                    src = fn.FrmUrl + ".htm?FK_MapData=" + frm.No + "&FID=" + fid + "&IsEdit=0&IsPrint=0&FK_Node=" + nd.NodeID + "&WorkID=" + workid + "&CWorkID=" + this.CWorkID + "&FK_Flow=" + this.FK_Flow;//edited by liuxc,2015-6-17
-                    this.UCEn1.Add("\t\n<li><a href=\"#" + frm.No + "\" onclick=\"TabClick('" + frm.No + "','" + src + "');\" >" + frm.Name + "</a></li>");
-                }
-                this.UCEn1.Add("\t\n </ul>");
-                #endregion 输出标签.
-
-                #region 输出表单 iframe 内容.
-                foreach (Frm frm in frms)
-                {
-                    FrmNode fn = frm.HisFrmNode;
-                    this.UCEn1.Add("\t\n <DIV id='" + frm.No + "' style='width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left;margin:0px;padding:0px;' >");
-                    string src = "loading.htm";
-                    this.UCEn1.Add("\t\n <iframe ID='F" + frm.No + "' src='" + src + "' frameborder=0  style='margin:0px;padding:0px;width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left;'  leftMargin='0'  topMargin='0'   /></iframe>");
+                    src = fn.FrmUrl + ".aspx?FK_MapData=" + frm.No + "&FID=" + fid + "&IsEdit=0&IsPrint=0&FK_Node=" + nd.NodeID + "&WorkID=" + workid + "&CWorkID=" + this.CWorkID;
+                    this.UCEn1.Add("\t\n <DIV id='" + frm.No + "' style='width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left; background-color:white;margin:0;padding:0;' >");
+                    this.UCEn1.Add("\t\n <iframe ID='F" + frm.No + "' src='" + src + "' frameborder=0  style='margin:0;padding:0;width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left;'  leftMargin='0'  topMargin='0'  /></iframe>");
                     this.UCEn1.Add("\t\n </DIV>");
                 }
-                #endregion 输出表单 iframe 内容.
+                else
+                {
+                    Frm frmFirst = null;
+                    foreach (Frm frm in frms)
+                    {
+                        if (frmFirst == null) frmFirst = frm;
 
-                this.UCEn1.Add("\t\n</div>"); // end  usual2
+                        if (frmFirst.FrmW < frm.FrmW)
+                            frmFirst = frm;
+                    }
+                    Width = frmFirst.FrmW + "";
+                    if (float.Parse(Width) < 500)
+                        Width = "900";
 
-                // 设置选择的默认值.
-                this.UCEn1.Add("\t\n<script type='text/javascript'>");
-                this.UCEn1.Add("\t\n  $(\"#usual2 ul\").idTabs(\"" + frms[0].No + "\");");
-                this.UCEn1.Add("\t\n</script>");
+                    #region 载入相关文件.
+                    this.Page.RegisterClientScriptBlock("sg",
+       "<link href='./Style/Frm/Tab.css' rel='stylesheet' type='text/css' />");
+
+                    this.Page.RegisterClientScriptBlock("s2g4",
+             "<script language='JavaScript' src='./Style/Frm/jquery.min.js' ></script>");
+
+                    this.Page.RegisterClientScriptBlock("sdf24j",
+            "<script language='JavaScript' src='./Style/Frm/jquery.idTabs.min.js' ></script>");
+
+                    this.Page.RegisterClientScriptBlock("sdsdf24j",
+            "<script language='JavaScript' src='./Style/Frm/TabClick.js' ></script>");
+                    #endregion 载入相关文件.
+
+                    this.UCEn1.Clear();
+                    this.UCEn1.Add("<div  style='clear:both' ></div>"); //
+                    this.UCEn1.Add("\t\n<div  id='usual2' class='usual' style='width:" + frmFirst.FrmW + "px;height:auto;margin:0 auto;background-color:white;'>");  //begain.
+
+                    #region 输出标签.
+                    this.UCEn1.Add("\t\n <ul  class='abc' style='background:red;border-color: #800000;border-width: 10px;' >");
+                    foreach (Frm frm in frms)
+                    {
+                        FrmNode fn = frm.HisFrmNode;
+                        string src = "";
+                        src = fn.FrmUrl + ".aspx?FK_MapData=" + frm.No + "&FID=" + fid + "&IsEdit=0&IsPrint=0&FK_Node=" + nd.NodeID + "&WorkID=" + workid + "&CWorkID=" + this.CWorkID + "&FK_Flow=" + this.FK_Flow;//edited by liuxc,2015-6-17
+                        this.UCEn1.Add("\t\n<li><a href=\"#" + frm.No + "\" onclick=\"TabClick('" + frm.No + "','" + src + "');\" >" + frm.Name + "</a></li>");
+                    }
+                    this.UCEn1.Add("\t\n </ul>");
+                    #endregion 输出标签.
+
+                    #region 输出表单 iframe 内容.
+                    foreach (Frm frm in frms)
+                    {
+                        FrmNode fn = frm.HisFrmNode;
+                        this.UCEn1.Add("\t\n <DIV id='" + frm.No + "' style='width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left;margin:0px;padding:0px;' >");
+                        string src = "loading.htm";
+                        this.UCEn1.Add("\t\n <iframe ID='F" + frm.No + "' src='" + src + "' frameborder=0  style='margin:0px;padding:0px;width:" + frm.FrmW + "px; height:" + frm.FrmH + "px;text-align: left;'  leftMargin='0'  topMargin='0'   /></iframe>");
+                        this.UCEn1.Add("\t\n </DIV>");
+                    }
+                    #endregion 输出表单 iframe 内容.
+
+                    this.UCEn1.Add("\t\n</div>"); // end  usual2
+
+                    // 设置选择的默认值.
+                    this.UCEn1.Add("\t\n<script type='text/javascript'>");
+                    this.UCEn1.Add("\t\n  $(\"#usual2 ul\").idTabs(\"" + frms[0].No + "\");");
+                    this.UCEn1.Add("\t\n</script>");
+                }
             }
-            #endregion 涉及到多个表单的情况.
         }
 
         public string CCID
@@ -674,6 +688,15 @@ namespace CCFlow.WF.UC
                 this.AddBR();
                 this.AddMsgOfInfo("退回信息：", rw.NoteHtml);
             }
+
+            //foreach (ShiftWork fw in fws)
+            //{
+            //    if (fw.FK_Node != nodeId)
+            //        continue;
+            //    this.AddBR();
+            //    this.AddMsgOfInfo("转发信息：", fw.NoteHtml);
+            //}
+
 
             string refstrs = "";
             if (en.IsEmpty)

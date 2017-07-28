@@ -45,11 +45,16 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
             {
                 //加载 06.按上一节点表单指定的字段值作为本步骤的接受人
                 bindDDL_5();
+
                 //加载 09.与指定节点处理人相同 
                 bindCBL();
-                
 
                 BP.WF.Node nd = new Node(this.NodeID);
+
+                BP.WF.Template.SQLTemplates sqlens=new SQLTemplates();
+                sqlens.Retrieve(SQLTemplateAttr.SQLType, 1);
+                BP.Web.Controls.Glo.DDL_BindEns(this.DDL_SQLTemplate, sqlens, nd.DeliveryParas);
+
 
                 //是否可以分配工作？
                 this.CB_IsSSS.Checked = nd.IsTask;
@@ -73,6 +78,10 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                     case DeliveryWay.BySQL: //按SQL
                         this.RB_BySQL.Checked = true;
                         this.TB_BySQL.Text = nd.DeliveryParas; // dt.Rows[0]["DeliveryParas"].ToString();
+                        break;
+                    case DeliveryWay.BySQLTemplate: //按SQLTemplate
+                        this.RB_BySQLTemplate.Checked = true;
+                        this.DDL_SQLTemplate.SelectedValue= nd.DeliveryParas; // dt.Rows[0]["DeliveryParas"].ToString();
                         break;
                     case DeliveryWay.ByBindEmp: //按绑定的人员.
                         this.RB_ByBindEmp.Checked = true;
@@ -232,7 +241,14 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 {
                     PageMessage = "设置的SQL不符合要求SQL=" + sql + ",其他信息：" + ex.Message;
                 }
+            }
 
+            if (this.RB_BySQLTemplate.Checked)
+            {
+                //按 RB_BySQLTemplate 
+                nd.HisDeliveryWay = DeliveryWay.BySQLTemplate;
+                nd.DeliveryParas = this.DDL_SQLTemplate.SelectedValue;
+                nd.DirectUpdate();
             }
 
             if (this.RB_ByBindEmp.Checked)

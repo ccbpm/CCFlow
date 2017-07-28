@@ -91,6 +91,7 @@
         
         //保存数据
         function saveRow(index) {
+
             pageData.saveRowCurrent.count = 1;
             pageData.saveRowCurrent.overCount = 0;
             //获取序号的值
@@ -263,6 +264,7 @@
 
         //行最后的保存按钮
         function saveTrRow(obj) {
+
             var  thisRowIndex = parseInt($($(obj).parent().parent().children()[0]).text()) - 1;
             saveRow(thisRowIndex);
             saveAll = false;
@@ -811,6 +813,7 @@
             isChange = val;
         }
         var isDelRowAlert=false;
+
         //从表全部数据保存 还有问题 需要调整
         function SaveAll(obj) {
 
@@ -819,6 +822,11 @@
                isDelRowAlert=false;
                return;
            }
+
+             if ( GetQueryString("IsReadonly")==1)
+                     return;
+       
+
 
             if (isChange==false) {
                 return;
@@ -992,7 +1000,7 @@
 	    }
 	</script>
 
-    <script>
+    <script type="text/javascript" >
     //将获取过来的URL参数转成URL中的参数形式  &
     function pageParamToUrl() {
         var paramUrlStr = '';

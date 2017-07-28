@@ -65,7 +65,9 @@ function SetHegiht() {
 $(window).resize(function () {
     //SetHegiht();
 });
+
 function SysCheckFrm() {
+
 }
 function Change() {
     var btn = document.getElementById('ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Save');
@@ -1822,12 +1824,20 @@ function SaveDtlAll() {
     return true;
 }
 
-//将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
+//将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单.
 function GenerFreeFrm() {
 
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
+
+
+    alert('dd');
+    //隐藏保存按钮.
+    if (href.indexOf('&IsReadonly=1') > 1 || href.indexOf('&IsEdit=0') > 1) {
+        document.getElementById("Btn_Save").style.display = "block";
+        alert('dd');
+    }
 
     $.ajax({
         type: 'post',
@@ -1835,10 +1845,12 @@ function GenerFreeFrm() {
         data: pageData,
         //url: "../MyFlow.ashx?DoType=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
         url: Handler + "?DoType=FrmFree_Init&m=" + Math.random() + "&" + urlParam,
-       // url:"Handler.ashx?DoType=FrmFree_Init&FK_MapData="+pageData.FK_MapData + "&m=" + Math.random(),
+        // url:"Handler.ashx?DoType=FrmFree_Init&FK_MapData="+pageData.FK_MapData + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
+
             jsonStr = data;
+
             var gengerWorkNode = {};
             var flow_Data;
             try {
@@ -1851,138 +1863,137 @@ function GenerFreeFrm() {
             }
 
             $('#CCForm').html('');
-                //循环MapAttr
+            //循环MapAttr
             for (var mapAtrrIndex in flow_Data.Sys_MapAttr) {
                 var mapAttr = flow_Data.Sys_MapAttr[mapAtrrIndex];
                 var eleHtml = figure_MapAttr_Template(mapAttr);
                 $('#CCForm').append(eleHtml);
             }
-                //循环FrmLab
-                for (var i in flow_Data.Sys_FrmLab) {
-                    var frmLab = flow_Data.Sys_FrmLab[i];
-                    var label = figure_Template_Label(frmLab);
-                    $('#CCForm').append(label);
-                }
-                //循环FrmRB
-                for (var i in flow_Data.Sys_FrmRB) {
-                    var frmLab = flow_Data.Sys_FrmRB[i];
-                    var label = figure_Template_Rb(frmLab);
-                    $('#CCForm').append(label);
-                }
+            //循环FrmLab
+            for (var i in flow_Data.Sys_FrmLab) {
+                var frmLab = flow_Data.Sys_FrmLab[i];
+                var label = figure_Template_Label(frmLab);
+                $('#CCForm').append(label);
+            }
+            //循环FrmRB
+            for (var i in flow_Data.Sys_FrmRB) {
+                var frmLab = flow_Data.Sys_FrmRB[i];
+                var label = figure_Template_Rb(frmLab);
+                $('#CCForm').append(label);
+            }
 
-                //循环FrmBtn
-                for (var i in flow_Data.Sys_FrmBtn) {
-                    var frmBtn = flow_Data.Sys_FrmBtn[i];
-                    var btn = figure_Template_Btn(frmBtn);
-                    $('#CCForm').append(btn);
-                }
+            //循环FrmBtn
+            for (var i in flow_Data.Sys_FrmBtn) {
+                var frmBtn = flow_Data.Sys_FrmBtn[i];
+                var btn = figure_Template_Btn(frmBtn);
+                $('#CCForm').append(btn);
+            }
 
-                //循环Image
-                for (var i in flow_Data.Sys_FrmImg) {
-                    var frmImg = flow_Data.Sys_FrmImg[i];
-                    var createdFigure = figure_Template_Image(frmImg);
-                    $('#CCForm').append(createdFigure);
-                }
+            //循环Image
+            for (var i in flow_Data.Sys_FrmImg) {
+                var frmImg = flow_Data.Sys_FrmImg[i];
+                var createdFigure = figure_Template_Image(frmImg);
+                $('#CCForm').append(createdFigure);
+            }
 
-                //循环 Link
-                for (var i in flow_Data.Sys_FrmLink) {
-                    var frmLink = flow_Data.Sys_FrmLink[i];
-                    var createdFigure = figure_Template_HyperLink(frmLink);
-                    $('#CCForm').append(createdFigure);
-                }
+            //循环 Link
+            for (var i in flow_Data.Sys_FrmLink) {
+                var frmLink = flow_Data.Sys_FrmLink[i];
+                var createdFigure = figure_Template_HyperLink(frmLink);
+                $('#CCForm').append(createdFigure);
+            }
 
-                //循环 图片附件
-                for (var i in flow_Data.Sys_FrmImgAth) {
-                    var frmImgAth = flow_Data.Sys_FrmImgAth[i];
-                    var createdFigure = figure_Template_ImageAth(frmImgAth);
-                    $('#CCForm').append(createdFigure);
-                }
-                //循环 附件
-                for (var i in flow_Data.Sys_FrmAttachment) {
-                    var frmAttachment = flow_Data.Sys_FrmAttachment[i];
-                    var createdFigure = figure_Template_Attachment(frmAttachment);
-                    $('#CCForm').append(createdFigure);
-                }
+            //循环 图片附件
+            for (var i in flow_Data.Sys_FrmImgAth) {
+                var frmImgAth = flow_Data.Sys_FrmImgAth[i];
+                var createdFigure = figure_Template_ImageAth(frmImgAth);
+                $('#CCForm').append(createdFigure);
+            }
+            //循环 附件
+            for (var i in flow_Data.Sys_FrmAttachment) {
+                var frmAttachment = flow_Data.Sys_FrmAttachment[i];
+                var createdFigure = figure_Template_Attachment(frmAttachment);
+                $('#CCForm').append(createdFigure);
+            }
 
-                //循环 从表
-                for (var i in flow_Data.Sys_MapDtl) {
-                    var frmMapDtl = flow_Data.Sys_MapDtl[i];
-                    var createdFigure = figure_Template_Dtl(frmMapDtl);
-                    $('#CCForm').append(createdFigure);
-                }
+            //循环 从表
+            for (var i in flow_Data.Sys_MapDtl) {
+                var frmMapDtl = flow_Data.Sys_MapDtl[i];
+                var createdFigure = figure_Template_Dtl(frmMapDtl);
+                $('#CCForm').append(createdFigure);
+            }
 
-                //循环线
-                for (var i in flow_Data.Sys_FrmLine) {
-                    var frmLine = flow_Data.Sys_FrmLine[i];
-                    var createdConnector = connector_Template_Line(frmLine);
-                    $('#CCForm').append(createdConnector);
-                }
+            //循环线
+            for (var i in flow_Data.Sys_FrmLine) {
+                var frmLine = flow_Data.Sys_FrmLine[i];
+                var createdConnector = connector_Template_Line(frmLine);
+                $('#CCForm').append(createdConnector);
+            }
 
-                //循环之前的提示信息
-                for (var i in flow_Data.AlertMsg) {
-                    var alertMsg = flow_Data.AlertMsg[i];
-                    var alertMsgEle = figure_Template_MsgAlert(alertMsg);
-                    $('#lastOptMsg').append(alertMsgEle);
-                }
-                //循环Sys_MapFrame
-                for (var i in flow_Data.Sys_MapFrame) {
-                    var frame = flow_Data.Sys_MapFrame[i];
-                    var alertMsgEle = figure_Template_IFrame(frame);
-                    $('#lastOptMsg').append(alertMsgEle);
-                }
-                
+            //循环之前的提示信息
+            for (var i in flow_Data.AlertMsg) {
+                var alertMsg = flow_Data.AlertMsg[i];
+                var alertMsgEle = figure_Template_MsgAlert(alertMsg);
+                $('#lastOptMsg').append(alertMsgEle);
+            }
+            //循环Sys_MapFrame
+            for (var i in flow_Data.Sys_MapFrame) {
+                var frame = flow_Data.Sys_MapFrame[i];
+                var alertMsgEle = figure_Template_IFrame(frame);
+                $('#lastOptMsg').append(alertMsgEle);
+            }
 
-                if (flow_Data["WF_Node"] != undefined && flow_Data["WF_Node"].length == 1) {
-                    //循环组件 轨迹图 审核组件 子流程 子线程
-                    $('#CCForm').append(figure_Template_FigureFlowChart(flow_Data["WF_Node"][0]));
-                    $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_Node"][0]));
-                    $('#CCForm').append(figure_Template_FigureSubFlowDtl(flow_Data["WF_Node"][0]));
-                    $('#CCForm').append(figure_Template_FigureThreadDtl(flow_Data["WF_Node"][0]));
-                }
 
-                if (flow_Data["Sys_MapData"] != undefined && flow_Data["Sys_MapData"].length == 1) {
-                    //初始化Sys_MapData
-                    var h = flow_Data.Sys_MapData[0].FrmH;
-                    var w = flow_Data.Sys_MapData[0].FrmW;
+            if (flow_Data["WF_Node"] != undefined && flow_Data["WF_Node"].length == 1) {
+                //循环组件 轨迹图 审核组件 子流程 子线程
+                $('#CCForm').append(figure_Template_FigureFlowChart(flow_Data["WF_Node"][0]));
+                $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_Node"][0]));
+                $('#CCForm').append(figure_Template_FigureSubFlowDtl(flow_Data["WF_Node"][0]));
+                $('#CCForm').append(figure_Template_FigureThreadDtl(flow_Data["WF_Node"][0]));
+            }
 
-                    $('#topContentDiv').height(h);
-                    $('#topContentDiv').width(w);
-                    $('.Bar').width(w + 15);
-                }
+            if (flow_Data["Sys_MapData"] != undefined && flow_Data["Sys_MapData"].length == 1) {
+                //初始化Sys_MapData
+                var h = flow_Data.Sys_MapData[0].FrmH;
+                var w = flow_Data.Sys_MapData[0].FrmW;
+
+                $('#topContentDiv').height(h);
+                $('#topContentDiv').width(w);
+                $('.Bar').width(w + 15);
+            }
 
             var marginLeft = $('#topContentDiv').css('margin-left');
             marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
             $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
             //原有的
-            
+
             //为 DISABLED 的 TEXTAREA 加TITLE 
-                var disabledTextAreas = $('#divCCForm textarea:disabled');
-                $.each(disabledTextAreas, function (i, obj) {
-                    $(obj).attr('title', $(obj).val());
-                })
+            var disabledTextAreas = $('#divCCForm textarea:disabled');
+            $.each(disabledTextAreas, function (i, obj) {
+                $(obj).attr('title', $(obj).val());
+            })
 
             //初始化提示信息
-                var alertMsgs = workNodeData.AlertMsg;
-                if (alertMsgs != undefined && alertMsgs.length > 0) {
-                    var alertMsgHtml = '';
-                    $.each(alertMsgs, function (i, alertMsg) {
-                        alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
-                    });
-                    $('#Message').html(alertMsgHtml);
-                }
+            var alertMsgs = workNodeData.AlertMsg;
+            if (alertMsgs != undefined && alertMsgs.length > 0) {
+                var alertMsgHtml = '';
+                $.each(alertMsgs, function (i, alertMsg) {
+                    alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
+                });
+                $('#Message').html(alertMsgHtml);
+            }
 
             //根据NAME 设置ID的值
-                var inputs = $('[name]');
-                $.each(inputs, function (i, obj) {
-                    if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
-                        $(obj).attr("id", $(obj).attr("name"));
-                    }
-                })
+            var inputs = $('[name]');
+            $.each(inputs, function (i, obj) {
+                if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
+                    $(obj).attr("id", $(obj).attr("name"));
+                }
+            })
 
-            
 
-            ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
-                var enName = workNodeData.Sys_MapData[0].No;
+            //// 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
+            var enName = workNodeData.Sys_MapData[0].No;
             try {
                 ////加载JS文件
                 //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
@@ -1998,7 +2009,7 @@ function GenerFreeFrm() {
 
             }
 
-                var jsSrc = '';
+            var jsSrc = '';
             try {
                 //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
                 //$('body').append($('<div>' + jsSrc + '</div>'));
@@ -2016,25 +2027,28 @@ function GenerFreeFrm() {
             InitToNodeDDL();
             Common.MaxLengthError();
 
-                //处理下拉框级联等扩展信息
-                AfterBindEn_DealMapExt();
+            //处理下拉框级联等扩展信息
+            AfterBindEn_DealMapExt();
 
-                //设置默认值
-                for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
-                    var mapAttr = workNodeData.Sys_MapAttr[j];
-                    //添加 label
-                    //如果是整行的需要添加  style='clear:both'
+            //设置默认值
+            for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
+                
+                var mapAttr = workNodeData.Sys_MapAttr[j];
+                
+                //添加 label
+                //如果是整行的需要添加  style='clear:both'
 
-
-                    var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
-                    if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
-                        $('#TB_' + mapAttr.KeyOfEn).val(defValue);
-                    }
+                var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+                    $('#TB_' + mapAttr.KeyOfEn).val(defValue);
                 }
-                showNoticeInfo();
 
-                showTbNoticeInfo();
-            
+            }
+
+            showNoticeInfo();
+
+            showTbNoticeInfo();
+
         }
     })
 }

@@ -45,12 +45,20 @@
             //与上一节点处理人员相同
             $("#RB6").hide();
             $("#YC_09").hide();
+
             //与指定节点处理人相同
             $("#RB8").hide();
             $("#YC_10").hide();
+
             //按设置的SQL获取接受人计算
             $("#RB2").hide();
             $("#YC_11").hide();
+
+            //按设置的SQLTemplate获取接受人计算
+            $("#RB2_").hide();
+            $("#YC_11_").hide();
+
+
             //按SQL确定子线程接受人与数据源
             $("#RB12").hide();
             $("#YC_12").hide();
@@ -72,6 +80,7 @@
             //按ccBPM的BPM模式处理
             $("#RB100").hide();
             $("#YC_18").hide();
+
             if (document.getElementById("<%=RB_ByStation.ClientID%>").checked) {
                 onclickSJ(1);
                 
@@ -145,6 +154,7 @@
                     iconCls: 'icon-reddot'
                 });
             }
+            
             if (document.getElementById("<%=RB_BySQL.ClientID%>").checked) {
                 onclickSJ(11);
                 $('#tt').tree('update', {
@@ -152,6 +162,15 @@
                     iconCls: 'icon-reddot'
                 });
             }
+
+            if (document.getElementById("<%=RB_BySQLTemplate.ClientID%>").checked) {
+                onclickSJ(99);
+                $('#tt').tree('update', {
+                    target: $('#tt').tree('find', "node_99").target,
+                    iconCls: 'icon-reddot'
+                });
+            }
+
             if (document.getElementById("<%=RB_BySQLAsSubThreadEmpsAndData.ClientID%>").checked) {
                 onclickSJ(12);
                 $('#tt').tree('update', {
@@ -237,6 +256,12 @@
             //按设置的SQL获取接受人计算
             $("#RB2").hide();
             $("#YC_11").hide();
+
+
+            //按设置的SQLTemplate获取接受人计算
+            $("#RB2_").hide();
+            $("#YC_11_").hide();
+
             //按SQL确定子线程接受人与数据源
             $("#RB12").hide();
             $("#YC_12").hide();
@@ -258,6 +283,7 @@
             //按ccBPM的BPM模式处理
             $("#RB100").hide();
             $("#YC_18").hide();
+
             if (runModel == 1) {
                 $("#RB0").show();
                 document.getElementById("<%=RB_ByStation.ClientID%>").checked = "checked";
@@ -308,11 +334,20 @@
                 document.getElementById("<%=RB_BySpecNodeEmp.ClientID%>").checked = "checked";
                 $("#YC_10").show();
             }
+            
             if (runModel == 11) {
                 $("#RB2").show();
                 document.getElementById("<%=RB_BySQL.ClientID%>").checked = "checked";
                 $("#YC_11").show();
             }
+
+            if (runModel == 99) {
+                $("#RB2_").show();
+                document.getElementById("<%=RB_BySQLTemplate.ClientID%>").checked = "checked";
+                $("#YC_11_").show();
+            }
+
+
             if (runModel == 12) {
                 $("#RB12").show();
                 document.getElementById("<%=RB_BySQLAsSubThreadEmpsAndData.ClientID%>").checked = "checked";
@@ -454,6 +489,11 @@
                                         <div>
                                             <a  class='l-link' onclick="onclickSJ(11)" href="#RB2"><span class="nav">按设置的SQL获取接受人计算</span></a></div>
                                     </li>
+                                     <li id="node_99">
+                                        <div>
+                                            <a  class='l-link' onclick="onclickSJ(99)" href="#RB2"><span class="nav">按设置的SQLTempate获取接受人计算</span></a></div>
+                                    </li>
+
                                     <li id="node_12">
                                         <div>
                                             <a  class='l-link' onclick="onclickSJ(12)" href="#RB12"><span class="nav">按SQL确定子线程接受人与数据源</span></a></div>
@@ -461,6 +501,8 @@
                                 </ul>
                             </li>
                         </ul>
+
+
                         <ul>
                             <li><span>其他方式</span>
                                 <ul>
@@ -701,6 +743,29 @@
                                     </ul>
                                 </td>
                             </tr>
+                            
+                            <!-- ===================================  03.按设置的SQLTemplate获取接受人计算 -->
+                            <tr id="RB2_">
+                                <th>
+                                    <div style="float: left">
+                                        <asp:RadioButton ID="RB_BySQLTemplate" Text="按设置的SQLTemplate获取接受人计算" GroupName="xxx" runat="server" />
+                                    </div>
+                                    <div style="float: right">请选择一个SQLTemplate</div>
+                                </th>
+                            </tr>
+                            <tr id="YC_11_">
+                                <td class="BigDoc">
+
+                                <br />
+                                  请选择一个SQLTemplate:  <asp:DropDownList ID="DDL_SQLTemplate" runat="server">
+                                    </asp:DropDownList>
+
+                                    <ul>
+                                        <li ><a href="javascript:WinOpen('../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates&SQLType=1');" >我要配置SQLTemplate</a></li>
+                                    </ul>
+                                </td>
+                            </tr>
+
                             <!-- ===================================  13.按SQL确定子线程接受人与数据源 -->
                             <tr id="RB12">
                                 <th>

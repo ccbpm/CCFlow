@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <NewDataSet>
   <Sys_GroupField>
-    <OID>291</OID>
+    <OID>2023</OID>
     <Lab>基础信息</Lab>
     <EnName>CCFrm_ZhuBiaoShiJianCeShi</EnName>
     <Idx>1</Idx>
@@ -24,7 +24,6 @@
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <KeyOfEn>OID</KeyOfEn>
     <Name>主键</Name>
-    <DefVal>0</DefVal>
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
@@ -46,6 +45,7 @@
     <Idx>1</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
+    <DefVal>0</DefVal>
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
@@ -58,14 +58,13 @@
     <IsEnableJS>0</IsEnableJS>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>291</GroupID>
+    <GroupID>2023</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>CCFrm_ZhuBiaoShiJianCeShi_DanJia</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <KeyOfEn>DanJia</KeyOfEn>
     <Name>单价</Name>
-    <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>8</MyDataType>
     <LGType>0</LGType>
@@ -87,6 +86,7 @@
     <Idx>2</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
+    <DefVal />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
@@ -99,14 +99,13 @@
     <IsEnableJS>0</IsEnableJS>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>291</GroupID>
+    <GroupID>2023</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>CCFrm_ZhuBiaoShiJianCeShi_ShuLiang</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <KeyOfEn>ShuLiang</KeyOfEn>
     <Name>数量</Name>
-    <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
@@ -128,6 +127,7 @@
     <Idx>3</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
+    <DefVal />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
@@ -140,14 +140,13 @@
     <IsEnableJS>0</IsEnableJS>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>291</GroupID>
+    <GroupID>2023</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>CCFrm_ZhuBiaoShiJianCeShi_JinE</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <KeyOfEn>JinE</KeyOfEn>
     <Name>金额</Name>
-    <DefVal>0</DefVal>
     <UIContralType>0</UIContralType>
     <MyDataType>8</MyDataType>
     <LGType>0</LGType>
@@ -169,6 +168,8 @@
     <Idx>4</Idx>
     <AtPara>@IsSum=0</AtPara>
     <GroupIDText>0</GroupIDText>
+    <Tip />
+    <DefVal>0</DefVal>
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
@@ -181,14 +182,13 @@
     <IsEnableJS>0</IsEnableJS>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>291</GroupID>
+    <GroupID>2023</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>CCFrm_ZhuBiaoShiJianCeShi_RDT</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <KeyOfEn>RDT</KeyOfEn>
     <Name>更新时间</Name>
-    <DefVal>@RDT</DefVal>
     <UIContralType>0</UIContralType>
     <MyDataType>7</MyDataType>
     <LGType>0</LGType>
@@ -210,6 +210,7 @@
     <Idx>5</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
+    <DefVal>@RDT</DefVal>
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
@@ -222,14 +223,13 @@
     <IsEnableJS>0</IsEnableJS>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>291</GroupID>
+    <GroupID>2023</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>CCFrm_ZhuBiaoShiJianCeShi_DJ</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <KeyOfEn>DJ</KeyOfEn>
     <Name>单价</Name>
-    <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
@@ -251,6 +251,7 @@
     <Idx>6</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
+    <DefVal />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
@@ -263,14 +264,13 @@
     <IsEnableJS>0</IsEnableJS>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>291</GroupID>
+    <GroupID>2023</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>CCFrm_ZhuBiaoShiJianCeShi_SL</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <KeyOfEn>SL</KeyOfEn>
     <Name>数量</Name>
-    <DefVal />
     <UIContralType>0</UIContralType>
     <MyDataType>2</MyDataType>
     <LGType>0</LGType>
@@ -292,6 +292,7 @@
     <Idx>7</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
+    <DefVal />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
@@ -304,14 +305,13 @@
     <IsEnableJS>0</IsEnableJS>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>291</GroupID>
+    <GroupID>2023</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>CCFrm_ZhuBiaoShiJianCeShi_JE</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <KeyOfEn>JE</KeyOfEn>
     <Name>金额</Name>
-    <DefVal>0</DefVal>
     <UIContralType>0</UIContralType>
     <MyDataType>8</MyDataType>
     <LGType>0</LGType>
@@ -333,6 +333,8 @@
     <Idx>8</Idx>
     <AtPara>@IsSum=0</AtPara>
     <GroupIDText>0</GroupIDText>
+    <Tip />
+    <DefVal>0</DefVal>
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
@@ -345,7 +347,7 @@
     <IsEnableJS>0</IsEnableJS>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>291</GroupID>
+    <GroupID>2023</GroupID>
   </Sys_MapAttr>
   <Sys_MapExt>
     <MyPK>AutoFull_CCFrm_ZhuBiaoShiJianCeShi_JinE</MyPK>
@@ -368,7 +370,7 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_FrmLab>
-    <MyPK>LB_1_CCFrm_ZhuBiaoShiJianCeShi</MyPK>
+    <MyPK>4972DBAC-D6BA-80CB-97D1-AAC39D89BB2E</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <Text>及时事件采用表单的Javascript计算.</Text>
     <X>62.5</X>
@@ -382,7 +384,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>LB_2_CCFrm_ZhuBiaoShiJianCeShi</MyPK>
+    <MyPK>4F1E0F9E-1D67-759D-0B42-482A3855340B</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <Text>单价</Text>
     <X>66</X>
@@ -396,7 +398,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>LB_3_CCFrm_ZhuBiaoShiJianCeShi</MyPK>
+    <MyPK>54BC64B0-F693-9885-78B6-E586AD69D630</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <Text>主表事件</Text>
     <X>348</X>
@@ -410,7 +412,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>LB_4_CCFrm_ZhuBiaoShiJianCeShi</MyPK>
+    <MyPK>7A8CA8E4-2203-D281-F7BE-23F84BA9DAC7</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <Text>数量</Text>
     <X>281</X>
@@ -424,7 +426,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>LB_5_CCFrm_ZhuBiaoShiJianCeShi</MyPK>
+    <MyPK>D60DD33E-658C-902F-9C00-C8BA4742C7EB</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <Text>金额</Text>
     <X>471</X>
@@ -438,7 +440,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>LB_6_CCFrm_ZhuBiaoShiJianCeShi</MyPK>
+    <MyPK>E1361122-DFD8-C8BD-182D-9BA03F811078</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <Text>数量</Text>
     <X>286</X>
@@ -452,7 +454,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>LB_7_CCFrm_ZhuBiaoShiJianCeShi</MyPK>
+    <MyPK>E352303E-BBB8-D8F5-DD09-4153813360B2</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <Text>单价</Text>
     <X>75</X>
@@ -466,7 +468,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>LB_8_CCFrm_ZhuBiaoShiJianCeShi</MyPK>
+    <MyPK>F30A56F1-8C28-938A-78C2-66405ECE522F</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <Text>事件实体类完成的功能，请查看Demo:&amp;nbsp;BP.Demo.FormEvent.CCFrm_ZhuBiaoShiJianCeShi</Text>
     <X>78.5</X>
@@ -480,7 +482,7 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>LB_9_CCFrm_ZhuBiaoShiJianCeShi</MyPK>
+    <MyPK>FD9A7FCB-4A1C-B0B2-C034-100353D514AA</MyPK>
     <FK_MapData>CCFrm_ZhuBiaoShiJianCeShi</FK_MapData>
     <Text>金额</Text>
     <X>467</X>

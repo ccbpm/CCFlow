@@ -343,7 +343,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion HanderMapExt
 
-
         #region 执行父类的重写方法.
         /// <summary>
         /// 表单功能界面

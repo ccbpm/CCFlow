@@ -175,7 +175,7 @@ namespace BP.WF.HttpHandler
               CondAttr.CondType, (int)condTypeEnum);
 
             cond.MyPK = mypk;
-            cond.HisDataFrom = ConnDataFrom.SQL;
+            cond.HisDataFrom = ConnDataFrom.SQLTemplate;
 
             cond.NodeID = this.GetRequestValInt("FK_MainNode");
             cond.FK_Node = this.GetRequestValInt("FK_MainNode");

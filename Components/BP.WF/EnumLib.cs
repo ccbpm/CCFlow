@@ -785,6 +785,10 @@ namespace BP.WF
         /// </summary>
         BySetDeptAsSubthread = 16,
         /// <summary>
+        /// 按SQL模版计算
+        /// </summary>
+        BySQLTemplate = 17,
+        /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
         ByCCFlowBPM = 100

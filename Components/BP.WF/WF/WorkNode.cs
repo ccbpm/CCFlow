@@ -6376,10 +6376,9 @@ namespace BP.WF
                         }
                     }
 
-
                     //执行发送.
                     string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
-                        this.HisNode, this.rptGe, null, this.HisMsgObjs);
+                        this.HisNode, this.rptGe,null,this.HisMsgObjs);
 
                     //string SendSuccess = this.HisNode.MapData.FrmEvents.DoEventNode(EventListOfNode.SendSuccess, this.HisWork);
                     if (sendSuccess != null)

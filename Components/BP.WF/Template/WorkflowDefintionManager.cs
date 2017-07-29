@@ -53,12 +53,12 @@ namespace BP.WF.Template
                     }
                     catch
                     {
-                       // enDir.Update();
+                        // enDir.Update();
                     }
                 }
                 #endregion 处理方向.
 
-               #region 保存节点
+                #region 保存节点
                 string[] nds = nodes.Split('~');
                 foreach (string nd in nds)
                 {
@@ -66,7 +66,7 @@ namespace BP.WF.Template
                         continue;
 
                     AtPara ap = new AtPara(nd);
-                    sql = "UPDATE WF_Node SET X=" + ap.GetValStrByKey("X") + ",Y=" + ap.GetValStrByKey("Y") + ", Name='"+ap.GetValStrByKey("Name")+"' WHERE NodeID="+ap.GetValIntByKey("NodeID");
+                    sql = "UPDATE WF_Node SET X=" + ap.GetValStrByKey("X") + ",Y=" + ap.GetValStrByKey("Y") + ", Name='" + ap.GetValStrByKey("Name") + "' WHERE NodeID=" + ap.GetValIntByKey("NodeID");
                     DBAccess.RunSQL(sql);
                 }
                 Flow.UpdateVer(fk_flow);
@@ -92,6 +92,10 @@ namespace BP.WF.Template
                     ln.Insert();
                 }
                 #endregion 处理标签。
+
+                //执行.
+                sql = "UPDATE WF_Flow SET flowjson = NULL WHERE No='"+fk_flow+"'";
+                DBAccess.RunSQL(sql);
 
                 // 备份文件
                 //f1.WriteToXml();

@@ -1696,7 +1696,7 @@ namespace BP.DA
         /// <summary>
         /// 
         /// </summary>
-        private static bool lockRunSQL = false;
+        public static bool lockRunSQL = false;
         /// <summary>
         /// 执行sql
         /// </summary>

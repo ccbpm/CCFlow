@@ -406,7 +406,7 @@ namespace BP.WF.HttpHandler
 
                 if (en.IsOIDEntity == true)
                 {
-                    BP.En.EntityOID enOID =null; 
+                    BP.En.EntityOID enOID = null;
 
                     enOID = en as BP.En.EntityOID;
                     if (enOID == null)
@@ -424,7 +424,7 @@ namespace BP.WF.HttpHandler
                         }
                         enOID.SetValByKey("OID", this.WorkID);
 
-                        enOID.InsertAsOID( this.WorkID );
+                        enOID.InsertAsOID(this.WorkID);
                     }
                 }
                 return "url@../Comm/En.htm?EnsName=" + md.PTable + "&PK=" + this.WorkID;
@@ -465,12 +465,19 @@ namespace BP.WF.HttpHandler
 
             //返回自由表单解析执行器.
             if (BP.WF.Glo.IsBeta == true)
-                return "url@FrmFree.htm?1=2" + this.RequestParas;
+            {
+                if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                    return "url@FrmFreeReadonly.htm?1=2" + this.RequestParas;
+                else
+                    return "url@FrmFree.htm?1=2" + this.RequestParas;
+            }
             else
+            {
                 if (Glo.Plant == Plant.CCFlow)
                     return "url@Frm.aspx?1=2" + this.RequestParas;
                 else
                     return "url@FrmFree.htm?1=2" + this.RequestParas;
+            }
         }
         /// <summary>
         /// 执行数据初始化

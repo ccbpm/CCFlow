@@ -158,16 +158,24 @@ namespace BP.WF
                 //重设默认值.
                 wk.ResetDefaultVal();
 
-                // 处理传递过来的参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                if (BP.Sys.SystemConfig.IsBSsystem == true)
                 {
-                    wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
-                }
+                    // 处理传递过来的参数。
+                    foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                    {
+                        if (string.IsNullOrEmpty(k) == true)
+                            continue;
 
-                // 处理传递过来的frm参数。
-                foreach (string k in System.Web.HttpContext.Current.Request.Form.AllKeys)
-                {
-                    wk.SetValByKey(k, System.Web.HttpContext.Current.Request.Form[k]);
+                        wk.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                    }
+
+                    // 处理传递过来的frm参数。
+                    foreach (string k in System.Web.HttpContext.Current.Request.Form.AllKeys)
+                    {
+                        if (string.IsNullOrEmpty(k) == true)
+                            continue;
+                        wk.SetValByKey(k, System.Web.HttpContext.Current.Request.Form[k]);
+                    }
                 }
 
                 // 执行表单事件..

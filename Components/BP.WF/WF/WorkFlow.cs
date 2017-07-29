@@ -1254,7 +1254,7 @@ namespace BP.WF
 
                 //更新流程注册信息.
                 ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Emps=" + dbstr + "Emps,MyNum=1 WHERE WorkID=" + dbstr + "WorkID ";
+                ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Emps=" + dbstr + "Emps,MyNum=1, ToDoEmps='' WHERE WorkID=" + dbstr + "WorkID ";
                 ps.Add("WFState", (int)WFState.Complete);
                 ps.Add("WFSta", (int)WFSta.Complete);
                 ps.Add("Emps", emps);

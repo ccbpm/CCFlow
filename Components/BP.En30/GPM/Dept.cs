@@ -33,7 +33,7 @@ namespace BP.GPM
         /// <summary>
         /// 全名
         /// </summary>
-        public  string NameOfPath
+        public string NameOfPath
         {
             get
             {
@@ -125,8 +125,8 @@ namespace BP.GPM
                 map.Java_SetEnType(EnType.Admin);
 
                 map.EnDesc = "部门"; //  实体的描述.
-                map.Java_SetDepositaryOfEntity( Depositary.Application); //实体map的存放位置.
-                map.Java_SetDepositaryOfMap( Depositary.Application);    // Map 的存放位置.
+                map.Java_SetDepositaryOfEntity(Depositary.Application); //实体map的存放位置.
+                map.Java_SetDepositaryOfMap(Depositary.Application);    // Map 的存放位置.
 
                 map.AddTBStringPK(DeptAttr.No, null, "编号", true, true, 1, 50, 20);
 
@@ -150,7 +150,7 @@ namespace BP.GPM
                 //是否是目录
                 map.AddTBInt(DeptAttr.IsDir, 0, "是否是目录", false, false);
 
-              //  map.AddDDLEntities(DeptAttr. null, "部门类型", new DeptTypes(), true);
+                //  map.AddDDLEntities(DeptAttr. null, "部门类型", new DeptTypes(), true);
 
                 this._enMap = map;
                 return this._enMap;

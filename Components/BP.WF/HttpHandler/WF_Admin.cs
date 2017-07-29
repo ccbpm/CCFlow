@@ -687,6 +687,8 @@ namespace BP.WF.HttpHandler
         {
             //类型.
             string templateType = this.GetRequestVal("TemplateType");
+            string condType = this.GetRequestVal("CondType");
+
             BP.WF.Template.SQLTemplates sqls = new SQLTemplates();
             //sqls.Retrieve(BP.WF.Template.SQLTemplateAttr.SQLType, sqlType);
 
@@ -697,19 +699,19 @@ namespace BP.WF.HttpHandler
             if (templateType == "CondBySQL")
             {
                 /*方向条件, 节点方向条件.*/
-                sql = "SELECT MyPK,Note,OperatorValue FROM WF_Cond WHERE CondType=0 AND DataFrom=" + (int)ConnDataFrom.SQL;
+                sql = "SELECT MyPK,Note,OperatorValue FROM WF_Cond WHERE CondType=" + condType + " AND DataFrom=" + (int)ConnDataFrom.SQL;
             }
 
             if (templateType == "CondByUrl")
             {
                 /*方向条件, 节点方向url条件.*/
-                sql = "SELECT MyPK,Note,OperatorValue FROM WF_Cond WHERE CondType=0 AND DataFrom=" + (int)ConnDataFrom.Url;
+                sql = "SELECT MyPK,Note,OperatorValue FROM WF_Cond WHERE CondType=" + condType + " AND DataFrom=" + (int)ConnDataFrom.Url;
             }
 
             if (templateType == "CondByPara")
             {
                 /*方向条件, 节点方向url条件.*/
-                sql = "SELECT MyPK,Note,OperatorValue FROM WF_Cond WHERE CondType=0 AND DataFrom=" + (int)ConnDataFrom.Paras;
+                sql = "SELECT MyPK,Note,OperatorValue FROM WF_Cond WHERE CondType=" + condType + " AND DataFrom=" + (int)ConnDataFrom.Paras;
             }
             #endregion 节点方向条件模版.
 
@@ -756,6 +758,7 @@ namespace BP.WF.HttpHandler
                 strs += en.Docs.Trim() + ";";
                 sqls.AddEntity(en);
             }
+
 
             return sqls.ToJson();
         }

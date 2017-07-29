@@ -958,19 +958,22 @@ namespace BP.WF.HttpHandler
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
                 aemp.No = WebUser.No;
+                aemp.RetrieveFromDBSources();
 
-                if (aemp.RetrieveFromDBSources() != 0 && aemp.UserType == 1 && !string.IsNullOrWhiteSpace(aemp.RootOfForm))
-                {
-                    DataRow rootRow = dtForm.Select("ParentNo IS NULL")[0];
-                    DataRow newRootRow = dtForm.Select("No='" + aemp.RootOfForm + "'")[0];
+                if (aemp.UserType != 1)
+                    return "err@您["+WebUser.No+"]已经不是二级管理员了.";
+                if (aemp.RootOfForm == "")
+                    return "err@没有给二级管理员[" + WebUser.No + "]设置表单树的权限...";
 
-                    newRootRow["ParentNo"] = null;
-                    DataTable newDt = dtForm.Clone();
-                    newDt.Rows.Add(newRootRow.ItemArray);
+                DataRow rootRow = dtForm.Select("ParentNo IS NULL")[0];
+                DataRow newRootRow = dtForm.Select("No='" + aemp.RootOfForm + "'")[0];
 
-                    GenerChildRows(dtForm, newDt, newRootRow);
-                    dtForm = newDt;
-                }
+                newRootRow["ParentNo"] = null;
+                DataTable newDt = dtForm.Clone();
+                newDt.Rows.Add(newRootRow.ItemArray);
+
+                GenerChildRows(dtForm, newDt, newRootRow);
+                dtForm = newDt;
             }
 
             return BP.Tools.Json.DataTableToJson(dtForm, false);

@@ -187,7 +187,7 @@ namespace CCFlow.WF.Admin.XAP
                     this.Response.Redirect("../FoolFormDesigner/Designer.htm?PK=" + this.PK + "&FK_Flow=" + ndF4.FK_Flow + "&FK_Node=" + nodeidF4, true);
                     break;
                 case "Dir": // 方向。
-                    this.Response.Redirect("../Admin/ConditionLine.aspx?CondType=" + this.Request.QueryString["CondType"] + "&FK_Flow=" + this.Request.QueryString["FK_Flow"] + "&FK_MainNode=" + this.Request.QueryString["FK_MainNode"] + "&FK_Node=" + this.Request.QueryString["FK_Node"] + "&FK_Attr=" + this.Request.QueryString["FK_Attr"] + "&DirType=" + this.Request.QueryString["DirType"] + "&ToNodeID=" + this.Request.QueryString["ToNodeID"], true);
+                    this.Response.Redirect("../Admin/ConditionLine.htm?CondType=" + this.Request.QueryString["CondType"] + "&FK_Flow=" + this.Request.QueryString["FK_Flow"] + "&FK_MainNode=" + this.Request.QueryString["FK_MainNode"] + "&FK_Node=" + this.Request.QueryString["FK_Node"] + "&FK_Attr=" + this.Request.QueryString["FK_Attr"] + "&DirType=" + this.Request.QueryString["DirType"] + "&ToNodeID=" + this.Request.QueryString["ToNodeID"], true);
                     break;
                 case "RunFlow": //运行流程
                     this.Response.Redirect("../Admin/StartFlow.aspx?FK_Flow=" + fk_flow + "&Lang=" + BP.Web.WebUser.SysLang, true);

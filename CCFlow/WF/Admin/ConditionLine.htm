@@ -66,7 +66,7 @@
 
                         var en = data[i];
 
-                        $("#list").append("<li> <div> <a id='a" + en.NodeID + "' href='javascript:void(0)' onclick=\"javascript:OpenCond('" + en.NodeID + "');\" ><span class='nav' >到达:" + en.Name + "</span></a></div></li>");
+                        $("#list").append("<li> <div> <a id='a" + en.NodeID + "' href='javascript:void(0)' onclick=\"javascript:OpenCond(this,'" + en.NodeID + "');\" ><span class='nav' >到达:" + en.Name + "</span></a></div></li>");
                     }
 
                     //增加方向条件设置.
@@ -75,12 +75,11 @@
             });
         });
 
-        function OpenCond(toNodeID) {
+        function OpenCond(ele, toNodeID) {
 
             var url = "Condition.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID + "&FK_Attr=" + GetQueryString("FK_Attr");
-            OpenUrlInRightFrame(this, url);
+            OpenUrlInRightFrame(ele, url);
         }
-
 
         function OpenPRI() {
 
@@ -88,16 +87,12 @@
             OpenUrlInRightFrame(this, url);
         }
 
-
         $(document).ready(function () {
 
-            var toNodeID = GetQueryString("ToNodeId");
+            var toNodeID = GetQueryString("ToNodeID");
             var li = $('ul.navlist').find("a[id='a" + toNodeID + "']");
 
-
-            li.text() = 'bold';
-
-            OpenCond(toNodeID);
+            OpenCond(li, toNodeID);
 
             //$('ul.navlist').find("a[id='a" + toNodeID + "']").click();
         });
@@ -120,6 +115,7 @@
                  });
 
                  $('#context').attr('src', url + '&s=' + Math.random());
+
              }
          }
     </script>

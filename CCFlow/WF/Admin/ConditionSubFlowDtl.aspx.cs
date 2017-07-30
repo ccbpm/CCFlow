@@ -44,7 +44,7 @@ namespace CCFlow.WF.Admin
         private Dictionary<ConnDataFrom, string> DataFrom = new Dictionary<ConnDataFrom, string>()
                                                                 {
                                                                     {ConnDataFrom.Depts, "CondDept"},
-                                                                    {ConnDataFrom.Form, "Cond"},
+                                                                    {ConnDataFrom.Form, "CondByFrm"},
                                                                     {ConnDataFrom.Paras, "CondByPara"},
                                                                     {ConnDataFrom.SQL, "CondBySQL"},
                                                                     {ConnDataFrom.Stas, "CondStation"},

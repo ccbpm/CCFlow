@@ -42,6 +42,7 @@
             };
 
             Handler_AjaxQueryData(param, function (data) {
+
                 if (data.indexOf('err@') != -1) {
                     alert(data);
                     return;
@@ -66,6 +67,7 @@
                 $.each(tks, function () {
                     var subaths = GetSubAths(this.NodeID);
 
+
                     if (wcDesc.FWCShowModel == 0) {
                         //表格模式
                         html += '<tr style="background-color: #E2F6FB">';
@@ -78,6 +80,7 @@
                         html += "<tr>";
                         html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
                     }
+
                     //审核意见
                     if (this.IsDoc) {
                         html += "<td>";
@@ -376,7 +379,7 @@
     </script>
 </head>
 <body style="margin: 0;">
-    <table id="tbTracks" style="padding: 0px; width: 90%;">
+    <table id="tbTracks" style="padding: 0px; width: 98%;">
     </table>
 </body>
 </html>

@@ -1660,7 +1660,12 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
         //result = result.replace(/｛/g, "{").replace(/｝/g, "}").replace(/：/g, ":").replace(/，/g, ",").replace(/【/g, "[").replace(/】/g, "]").replace(/；/g, ";").replace(/~/g, "'").replace(/‘/g, "'").replace(/‘/g, "'");
     }
     //console.info(defVal+"=="+keyOfEn+"=="+result);
-    return result = unescape(result);
+    var result = unescape(result);
+
+    if (result == "null")
+        result = "";
+
+    return result;
 }
 
 //获取表单数据
@@ -1760,10 +1765,10 @@ function Send() {
     //比填写检查
     //必填项和正则表达式检查
     var formCheckResult = true;
-    if (!checkBlanks()) {
+    if (checkBlanks()==false) {
         formCheckResult = false;
     }
-    if (!checkReg()) {
+    if (checkReg()==false) {
         formCheckResult = false;
     }
     if (!formCheckResult) {
@@ -2180,9 +2185,11 @@ function GenerWorkNode() {
                 workNodeData = flow_Data;
             }
             catch (err) {
+
                 alert("GenerWorkNode转换JSON失败:" + jsonStr);
                 return;
             }
+
             $('#CCForm').html('');
             //循环MapAttr
             for (var mapAtrrIndex in flow_Data.Sys_MapAttr) {
@@ -2435,7 +2442,7 @@ function figure_MapAttr_Template(mapAttr) {
                     }
                     eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
                 }
-                else if (mapAttr.MyDataType == 4) {// AppBoolean = 7
+                else if (mapAttr.MyDataType == 4) { // AppBoolean = 7
                     if (mapAttr.UIIsEnable == 1) {
 
                     } else {
@@ -2444,10 +2451,11 @@ function figure_MapAttr_Template(mapAttr) {
                     //CHECKBOX 默认值
                     var checkedStr = '';
                     if (checkedStr != "true" && checkedStr != '1') {
-                        checkedStr = ' checked="checked" '
+                        checkedStr = ' checked="checked" ';
                     }
                     checkedStr = ConvertDefVal(workNodeData, '', mapAttr.KeyOfEn);
-                    eleHtml += "<div><input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
+
+                    eleHtml += "<div><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
                     eleHtml += '<label class="labRb" for="CB_' + mapAttr.KeyOfEn + '">' + mapAttr.Name + '</label></div>';
                     //return eleHtml;
                 }

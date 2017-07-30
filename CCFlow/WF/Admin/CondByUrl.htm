@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>方向条件-按照SQL计算</title>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -159,7 +159,7 @@
         function LoadTemplate() {
 
             //打开方向条件.
-            var url = "SettingTemplate.htm?TemplateType=CondByUrl";
+            var url = "SettingTemplate.htm?TemplateType=CondByUrl&CondType=2&m=" + Math.random();
             WinOpen(url, 'ss');
         }
     </script>

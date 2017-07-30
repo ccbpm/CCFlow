@@ -22,7 +22,6 @@
         var fk_flow = GetQueryString('FK_Flow');
         var fk_node = GetQueryString('FK_Node');
 
-
         //页面启动函数.
         $(function () {
 
@@ -39,12 +38,13 @@
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             var sqlType = GetQueryString("TemplateType");
+            var condType = GetQueryString("CondType");
 
             //初始化表格.
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=SettingTemplate_Init&TemplateType=" + sqlType + "&m=" + Math.random(),
+                url: Handler + "?DoType=SettingTemplate_Init&TemplateType=" + sqlType + "&CondType=" + condType + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 

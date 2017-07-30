@@ -156,13 +156,11 @@
 	}
 
 	function Cond(nodeID, FK_Flow) {
-		var url = "../Cond.aspx?FK_MainNode=" + nodeID + '&FK_Node=' + nodeID + '&ToNodeID=' + nodeID + '&CondType=1&FK_Flow=' + FK_Flow;
+		var url = "../Cond.htm?FK_MainNode=" + nodeID + '&FK_Node=' + nodeID + '&ToNodeID=' + nodeID + '&CondType=1&FK_Flow=' + FK_Flow;
 		//  window.open(url, 'Cond', 'height=545, width=820, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
 
 		window.parent.addTab('Cond', '流程完成条件', url);
-
 	}
-	 
 
 	// 按钮权限配置.
 	function OpenButtonControl(nodeID) {

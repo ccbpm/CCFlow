@@ -58,7 +58,7 @@
                     var str = "";
                     switch (data.HisDataFrom) {
                         case "Form":
-                            str = "Cond";
+                            str = "CondByFrm";
                             break;
                         case "Stas":
                             str = "CondStation";
@@ -110,7 +110,7 @@
 
             var paras = 'CondType=' + condType + '&FK_Flow=' + fk_flow + '&FK_MainNode=' + fk_mainNode + '&FK_Node=' + fk_Node + '&FK_Attr=' + FK_Attr + '&DirType=' + dirType + '&ToNodeID=' + toNodeId;
 
-            if (c.value == 'CondBySQL' || c.value == 'CondBySQLTemplate' || c.value == 'CondByUrl' || c.value == 'CondByPara')
+            if (c.value == 'CondByFrm' || c.value == 'CondBySQL' || c.value == 'CondBySQLTemplate' || c.value == 'CondByUrl' || c.value == 'CondByPara')
                 $('#context').attr('src', c.value + '.htm?' + paras);
             else
                 $('#context').attr('src', c.value + '.aspx?' + paras);
@@ -120,14 +120,15 @@
 </head>
 <body class="easyui-layout"  topmargin="0" leftmargin="0"   style="font-size:smaller">
     <form id="form1" runat="server">
+
     <div data-options="region:'center',border:false,title:''">
         <div id="mainCond" class="easyui-layout" data-options="fit:true">
             <div data-options="region:'north',border:false" style="height:35px; padding:5px">
 
                &nbsp;&nbsp; <label for="">条件设置类型：</label>
 
-                <select id="cond" class="easyui-combobox" name="cond" data-options="onSelect:function(rec){ changeCond(rec); }">
-                    <option value="Cond">按表单条件计算</option>
+                <select id="cond"  name="cond" class="easyui-combobox" data-options="onSelect:function(rec){ changeCond(rec); }">
+                    <option value="CondByFrm">按表单条件计算</option>
                     <option value="CondStation">按指定操作员的岗位条件</option>
                     <option value="CondDept">按指定操作员的部门条件</option>
                     <option value="CondBySQL">按SQL条件计算</option>

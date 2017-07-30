@@ -55,10 +55,8 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 sqlens.Retrieve(SQLTemplateAttr.SQLType, 1);
                 BP.Web.Controls.Glo.DDL_BindEns(this.DDL_SQLTemplate, sqlens, nd.DeliveryParas);
 
-
                 //是否可以分配工作？
                 this.CB_IsSSS.Checked = nd.IsTask;
-
 
                 //是否启用自动记忆功能
                 this.CB_IsRememme.Checked = nd.IsRememberMe;

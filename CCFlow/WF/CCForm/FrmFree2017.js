@@ -70,7 +70,7 @@ function SysCheckFrm() {
 
 }
 function Change() {
-    var btn = document.getElementById('ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Save');
+    var btn = document.getElementById('Btn_Save');
     if (btn != null) {
         if (btn.value.valueOf('*') == -1)
             btn.value = btn.value + '*';
@@ -90,7 +90,7 @@ function KindEditerSync() {
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
 function ReqDDL(ddlID) {
-    var v = document.getElementById(longCtlID + 'DDL_' + ddlID).value;
+    var v = document.getElementById('DDL_' + ddlID).value;
     if (v == null) {
         alert('没有找到ID=' + ddlID + '的下拉框控件.');
     }
@@ -143,7 +143,7 @@ function ReqDtlBObj(dtlTable, DtlColumn, onValue) {
 }
 // 获取TB值
 function ReqTB(tbID) {
-    var v = document.getElementById(longCtlID + 'TB_' + tbID).value;
+    var v = document.getElementById('TB_' + tbID).value;
     if (v == null) {
         alert('没有找到ID=' + tbID + '的文本框控件.');
     }
@@ -151,7 +151,7 @@ function ReqTB(tbID) {
 }
 // 获取CheckBox值
 function ReqCB(cbID) {
-    var v = document.getElementById(longCtlID + 'CB_' + cbID).value;
+    var v = document.getElementById('CB_' + cbID).value;
     if (v == null) {
         alert('没有找到ID=' + cbID + '的 CheckBox （单选）控件.');
     }
@@ -169,7 +169,7 @@ function ReqAthFileName(athID) {
 
 /// 获取DDL Obj
 function ReqDDLObj(ddlID) {
-    var v = document.getElementById(longCtlID + 'DDL_' + ddlID);
+    var v = document.getElementById( 'DDL_' + ddlID);
     if (v == null) {
         alert('没有找到ID=' + ddlID + '的下拉框控件.');
     }
@@ -177,7 +177,7 @@ function ReqDDLObj(ddlID) {
 }
 // 获取TB Obj
 function ReqTBObj(tbID) {
-    var v = document.getElementById(longCtlID + 'TB_' + tbID);
+    var v = document.getElementById( 'TB_' + tbID);
     if (v == null) {
         alert('没有找到ID=' + tbID + '的文本框控件.');
     }
@@ -185,7 +185,7 @@ function ReqTBObj(tbID) {
 }
 // 获取CheckBox Obj值
 function ReqCBObj(cbID) {
-    var v = document.getElementById(longCtlID + 'CB_' + cbID);
+    var v = document.getElementById('CB_' + cbID);
     if (v == null) {
         alert('没有找到ID=' + cbID + '的单选控件(获取CheckBox)对象.');
     }
@@ -193,33 +193,14 @@ function ReqCBObj(cbID) {
 }
 // 设置值.
 function SetCtrlVal(ctrlID, val) {
-    document.getElementById(longCtlID + 'TB_' + ctrlID).value = val;
-    document.getElementById(longCtlID + 'DDL_' + ctrlID).value = val;
-    document.getElementById(longCtlID + 'CB_' + ctrlID).value = val;
+    document.getElementById( 'TB_' + ctrlID).value = val;
+    document.getElementById( 'DDL_' + ctrlID).value = val;
+    document.getElementById( 'CB_' + ctrlID).value = val;
 }
-//执行分支流程退回到分合流节点。
-function DoSubFlowReturn(fid, workid, fk_node) {
-    var url = 'ReturnWorkSubFlowToFHL.aspx?FID=' + fid + '&WorkID=' + workid + '&FK_Node=' + fk_node;
-    var v = WinShowModalDialog(url, 'df');
-    window.location.href = window.history.url;
-}
+ 
 function To(url) {
     //window.location.href = url;
     window.name = "dialogPage"; window.open(url, "dialogPage")
-}
-
-//退回，获取配置的退回信息的字段.
-function ReturnWork(url, field) {
-    var urlTemp;
-    if (field == '' || field == null) {
-        urlTemp = url;
-    }
-    else {
-        // alert(field);
-        //  alert(ReqTB(field));
-        urlTemp = url + '&Info=' + ReqTB(field);
-    }
-    window.name = "dialogPage"; window.open(urlTemp, "dialogPage")
 }
 
 function WinOpen(url, winName) {
@@ -227,36 +208,7 @@ function WinOpen(url, winName) {
     newWindow.focus();
     return;
 }
-
- 
-function Do(warning, url) {
-    if (window.confirm(warning) == false)
-        return;
-    window.location.href = url;
-}
-//设置底部工具栏
-function SetBottomTooBar() {
-    var form;
-    //窗口的可视高度 
-    var windowHeight = document.all ? document.getElementsByTagName("html")[0].offsetHeight : window.innerHeight;
-    var pageHeight = Math.max(windowHeight, document.getElementsByTagName("body")[0].scrollHeight);
-    form = document.getElementById('divCCForm');
-
-    //        if (form) {
-    //            if (pageHeight > 20) pageHeight = pageHeight - 20;
-    //            form.style.height = pageHeight + "px";
-    //        }
-    //设置toolbar
-    var toolBar = document.getElementById("bottomToolBar");
-    if (toolBar) {
-        document.getElementById("bottomToolBar").style.display = "";
-    }
-}
-
-window.onload = function () {
-    //  ResizeWindow();
-    SetBottomTooBar();
-};
+   
 
 //然浏览器最大化.
 function ResizeWindow() {
@@ -267,13 +219,7 @@ function ResizeWindow() {
         window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
     }
 }
-function OpenCC() {
-    var url = $("#CC_Url").val();
-    var v = window.showModalDialog(url, 'cc', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: 650px; dialogWidth: 850px; dialogTop: 100px; dialogLeft: 150px;');
-    if (v == '1')
-        return true;
-    return false;
-}
+ 
 
 var LODOP; //声明为全局变量 
 
@@ -429,25 +375,8 @@ function setAttachDisabled() {
         }
     })
 }
-
-//隐藏下方的功能按钮
-function setToobarUnVisible() {
-    //隐藏下方的功能按钮
-    $('#bottomToolBar').css('display', 'none');
-}
-
-//隐藏下方的功能按钮
-function setToobarDisiable() {
-    //隐藏下方的功能按钮
-    $('.Bar input').css('background', 'gray');
-    $('.Bar input').attr('disabled', 'disabled');
-}
-
-function setToobarEnable() {
-    //隐藏下方的功能按钮
-    $('#bottomToolBar input').css('background', '#2884fa');
-    $('#bottomToolBar input').removeAttr('disabled');
-}
+  
+   
 //设置表单元素不可用
 function setFormEleDisabled() {
     //文本框等设置为不可用
@@ -478,7 +407,7 @@ function Save() {
         type: 'post',
         async: true,
         data: getFormData(true, true),
-        url: "Handler.ashx?DoType=FrmFree_Save&OID=" + pageData.OID,
+        url: Handler+ "?DoType=FrmFree_Save&OID=" + pageData.OID,
         dataType: 'html',
         success: function (data) {
 
@@ -492,20 +421,7 @@ function Save() {
         }
     });
 }
- 
-//移交
-//子线程
-//子流程
-//{"IsSuccess":true,"Msg":null,"ErrMsg":null,"List":null,"Data":2}
-function getData(data, url, dataParam) {
-    var jsonStr = '{"IsSuccess":true,"Msg":null,"ErrMsg":null,"List":null,"Data":2}';
-    var data = JSON.parse(jsonStr);
-    if (data.IsSuccess != true) {
-        alert('返回参数失败，ErrMsg:' + data.ErrMsg + ";Msg:" + data.Msg + ";url:" + url);
-
-    }
-    return data;
-}
+  
 
 //FK_Flow=005&UserNo=zhwj&DoWhat=StartClassic&=&IsMobile=&FK_Node=501
 var pageData = {};
@@ -823,7 +739,6 @@ function InitForm() {
         setToobarUnVisible();
         setFormEleDisabled();
     }
-
 
     showNoticeInfo();
 
@@ -2032,9 +1947,9 @@ function GenerFreeFrm() {
 
             //设置默认值
             for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
-                
+
                 var mapAttr = workNodeData.Sys_MapAttr[j];
-                
+
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'
 

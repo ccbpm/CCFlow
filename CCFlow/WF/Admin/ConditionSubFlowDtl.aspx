@@ -18,7 +18,7 @@
             if (c == null || c.value.length == 0) return;
 
             $('#mainCond').layout('panel', 'center').panel('setTitle', c.text);
-            $('#context').attr('src', c.value + '.aspx?CondType=3&FK_Flow=<%=this.FK_Flow %>&FK_MainNode=<%=this.FK_Node %>&FK_Node=<%=this.FK_Node %>&FK_Attr=<%=this.FK_Attr %>&DirType=<%=this.DirType %>&ToFlow=<%=this.ToFlow %>');
+            $('#context').attr('src', c.value + '.htm?CondType=3&FK_Flow=<%=this.FK_Flow %>&FK_MainNode=<%=this.FK_Node %>&FK_Node=<%=this.FK_Node %>&FK_Attr=<%=this.FK_Attr %>&DirType=<%=this.DirType %>&ToFlow=<%=this.ToFlow %>');
         }
 
         $(document).ready(function () {
@@ -40,7 +40,7 @@
                 <label for="">
                     请选择条件设置类型：</label>
                 <select id="cond" class="easyui-combobox" name="cond" data-options="onSelect:function(rec){ changeCond(rec); }">
-                    <option value="Cond">表单条件</option>
+                    <option value="CondByFrm">表单条件</option>
                     <option value="CondStation">岗位条件</option>
                     <option value="CondDept">部门条件</option>
                     <option value="CondBySQL">SQL条件</option>

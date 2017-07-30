@@ -1723,12 +1723,9 @@
     <Content Include="WF\Admin\ClientBin\NodeIcon\采购.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\销售.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\顾客.png" />
-    <Content Include="WF\Admin\Cond.aspx" />
     <Content Include="WF\Admin\CondDept.aspx" />
-    <Content Include="WF\Admin\ConditionLine.aspx" />
     <Content Include="WF\Admin\ConditionSubFlow.aspx" />
     <Content Include="WF\Admin\ConditionSubFlowDtl.aspx" />
-    <Content Include="WF\Admin\CondPRI.aspx" />
     <Content Include="WF\Admin\CondStation.aspx" />
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\DoType.aspx" />
@@ -1842,10 +1839,8 @@
     <Content Include="WF\Admin\Pub.ascx" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
-    <Content Include="WF\Admin\UC\Cond.ascx" />
     <Content Include="WF\Admin\UC\CondBar.ascx" />
     <Content Include="WF\Admin\UC\CondDepts.ascx" />
-    <Content Include="WF\Admin\UC\CondExt.ascx" />
     <Content Include="WF\Admin\UC\CondStation.ascx" />
     <Content Include="WF\Admin\UC\Pub.ascx" />
     <Content Include="WF\Admin\XAP\Designer.aspx" />
@@ -8345,13 +8340,6 @@
     <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\Cond.aspx.cs">
-      <DependentUpon>Cond.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Cond.aspx.designer.cs">
-      <DependentUpon>Cond.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\CondDept.aspx.cs">
       <DependentUpon>CondDept.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8366,13 +8354,6 @@
     <Compile Include="WF\Admin\Condition.Master.designer.cs">
       <DependentUpon>Condition.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\ConditionLine.aspx.cs">
-      <DependentUpon>ConditionLine.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\ConditionLine.aspx.designer.cs">
-      <DependentUpon>ConditionLine.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\ConditionSubFlow.aspx.cs">
       <DependentUpon>ConditionSubFlow.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8386,13 +8367,6 @@
     </Compile>
     <Compile Include="WF\Admin\ConditionSubFlowDtl.aspx.designer.cs">
       <DependentUpon>ConditionSubFlowDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CondPRI.aspx.cs">
-      <DependentUpon>CondPRI.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CondPRI.aspx.designer.cs">
-      <DependentUpon>CondPRI.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\CondStation.aspx.cs">
       <DependentUpon>CondStation.aspx</DependentUpon>
@@ -8896,13 +8870,6 @@
     <Compile Include="WF\Admin\SimulationRun.aspx.designer.cs">
       <DependentUpon>SimulationRun.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\UC\Cond.ascx.cs">
-      <DependentUpon>Cond.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\UC\Cond.ascx.designer.cs">
-      <DependentUpon>Cond.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\UC\CondBar.ascx.cs">
       <DependentUpon>CondBar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8916,13 +8883,6 @@
     </Compile>
     <Compile Include="WF\Admin\UC\CondDepts.ascx.designer.cs">
       <DependentUpon>CondDepts.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondExt.ascx.cs">
-      <DependentUpon>CondExt.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondExt.ascx.designer.cs">
-      <DependentUpon>CondExt.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>

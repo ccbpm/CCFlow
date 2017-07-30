@@ -465,7 +465,7 @@ namespace BP
                     Glo.OpenDialog(Glo.BPMHost + url, "节点表单设计");
                     return;
                 case UrlFlag.Dir: // 方向条件。
-                    url = "/WF/Admin/ConditionLine.aspx?FK_Flow=" + fk_flow + "&FK_MainNode=" + node1 + "&FK_Node=" + node1 + "&ToNodeID=" + node2 + "&CondType=2&Lang=CH";
+                    url = "/WF/Admin/ConditionLine.htm?FK_Flow=" + fk_flow + "&FK_MainNode=" + node1 + "&FK_Node=" + node1 + "&ToNodeID=" + node2 + "&CondType=2&Lang=CH";
                     Glo.OpenDialog(Glo.BPMHost + url, "方向条件", 670, 1050);
                     break;
                 case UrlFlag.RunFlow: // 运行流程。

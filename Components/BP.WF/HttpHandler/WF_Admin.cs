@@ -47,13 +47,29 @@ namespace BP.WF.HttpHandler
             string toNodeID = this.GetRequestVal("ToNodeId");
             var cond = new Cond();
             cond.Retrieve(CondAttr.NodeID, this.FK_Node, CondAttr.ToNodeID, toNodeID);
-
             cond.Row.Add("HisDataFrom", cond.HisDataFrom.ToString());
 
-         //   cond.HisDataFrom
+            //   cond.HisDataFrom
             //CurrentCond = DataFrom[cond.HisDataFrom];
             return cond.ToJson();
         }
+
+        /// <summary>
+        /// 打开方向条件的初始化.
+        /// 到达的节点.
+        /// </summary>
+        /// <returns></returns>
+        public string ConditionLine_Init()
+        {
+            string sql = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node="+this.FK_Node;
+
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.Columns[0].ColumnName = "NodeID";
+            dt.Columns[1].ColumnName = "Name";
+
+            return BP.Tools.Json.DataTableToJson(dt, false);
+        }
+
 
         #region 方向条件URL
         /// <summary>
@@ -134,6 +150,246 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region 方向条件 Frm 模版
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByFrm_Init()
+        {
+            DataSet ds = new DataSet();
+
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+
+            Node nd = new Node(int.Parse(fk_mainNode));
+
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            //string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQLTemplate.ToString();
+
+            //增加条件集合.
+            Conds conds = new Conds();
+            conds.Retrieve(CondAttr.FK_Node, fk_mainNode, CondAttr.ToNodeID, toNodeID);
+            ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
+
+            //增加字段集合.
+            string sql = "SELECT KeyOfEn as No, KeyOfEn+' - '+Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
+            sql += " AND KeyOfEn Not IN('FID','MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID')";
+            sql += " AND MyDataType NOT IN (6,7) ";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sys_MapAttr";
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+
+            DataRow dr = dt.NewRow();
+            dr[0] = "all";
+            dr[1] = "请选择表单字段";
+            dt.Rows.Add(dr);
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
+        }
+
+        public string CondByFrm_InitField()
+        {
+            //定义数据容器.
+            DataSet ds = new DataSet();
+
+            //字段属性.
+            MapAttr attr = new MapAttr();
+            attr.MyPK = "ND" + int.Parse(this.FK_Flow) + "Rpt_" + this.KeyOfEn;
+            attr.Retrieve();
+
+            ds.Tables.Add(attr.ToDataTableField("Sys_MapAttr"));
+
+            if (attr.LGType == FieldTypeS.Enum)
+            {
+                SysEnums ses = new SysEnums(attr.UIBindKey);
+                ds.Tables.Add(ses.ToDataTableField("Enums"));
+            }
+
+
+            #region 增加操作符 number.
+            if (attr.IsNum)
+            {
+                DataTable dtOperNumber = new DataTable();
+                dtOperNumber.TableName = "Opers";
+                dtOperNumber.Columns.Add("No", typeof(string));
+                dtOperNumber.Columns.Add("Name", typeof(string));
+
+                 DataRow dr = dtOperNumber.NewRow();
+                dr["No"] = "dengyu";
+                dr["Name"] = "= 等于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "dayu";
+                dr["Name"] = " > 大于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "dayudengyu";
+                dr["Name"] = " >= 大于等于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "xiaoyu";
+                dr["Name"] = " < 小于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "xiaoyudengyu";
+                dr["Name"] = " <= 小于等于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "budengyu";
+                dr["Name"] = " != 不等于";
+                dtOperNumber.Rows.Add(dr);
+
+                ds.Tables.Add(dtOperNumber);
+            }
+            else
+            {
+                #region 增加操作符 string.
+                DataTable dtOper = new DataTable();
+                dtOper.TableName = "Opers";
+                dtOper.Columns.Add("No", typeof(string));
+                dtOper.Columns.Add("Name", typeof(string));
+
+                DataRow dr = dtOper.NewRow();
+                dr["No"] = "dengyu";
+                dr["Name"] = "= 等于";
+                dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "like";
+                dr["Name"] = " LIKE 包含";
+                dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "budengyu";
+                dr["Name"] = " != 不等于";
+                dtOper.Rows.Add(dr);
+                ds.Tables.Add(dtOper);
+                #endregion 增加操作符 string.
+            }
+            #endregion 增加操作符 number.
+
+            return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondByFrm_Save()
+        {
+            //定义变量.
+            string field = this.GetRequestVal("DDL_Fields");
+            field = "ND" + int.Parse(this.FK_Flow) + "Rpt_" + field;
+
+            int toNodeID = this.GetRequestValInt("ToNodeID");
+            int fk_Node = this.GetRequestValInt("FK_Node");
+            string oper = this.GetRequestVal("DDL_Operator");
+
+            string operVal = this.GetRequestVal("OperVal");
+
+            string saveType = this.GetRequestVal("SaveType"); //保存类型.
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+             
+            //把其他的条件都删除掉.
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE ( NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Form);
+
+            Cond cond = new Cond();
+            cond.HisDataFrom = ConnDataFrom.Form;
+            cond.NodeID = fk_Node;
+            cond.ToNodeID = toNodeID;
+
+            cond.FK_Node = this.FK_Node;
+            cond.FK_Operator = oper;
+            cond.OperatorValue = operVal; //操作值.
+
+            cond.FK_Attr = field; //字段属性.
+
+          //  cond.OperatorValueT = ""; // this.GetOperValText;
+            cond.FK_Flow = this.FK_Flow;
+            cond.HisCondType = condTypeEnum;
+
+            if (saveType == "AND")
+                cond.CondOrAnd = CondOrAnd.ByAnd;
+            else
+                cond.CondOrAnd = CondOrAnd.ByOr;
+
+            #region 方向条件，全部更新.
+            Conds conds = new Conds();
+            QueryObject qo = new QueryObject(conds);
+            qo.AddWhere(CondAttr.NodeID, this.FK_Node);
+            qo.addAnd();
+            qo.AddWhere(CondAttr.DataFrom, (int)ConnDataFrom.Form);
+            qo.addAnd();
+            qo.AddWhere(CondAttr.CondType, (int)condTypeEnum);
+            if (toNodeID != 0)
+            {
+                qo.addAnd();
+                qo.AddWhere(CondAttr.ToNodeID, toNodeID);
+            }
+            int num = qo.DoQuery();
+            foreach (Cond item in conds)
+            {
+                item.CondOrAnd = cond.CondOrAnd;
+                item.Update();
+            }
+            #endregion
+
+            /* 执行同步*/
+            string sqls = "UPDATE WF_Node SET IsCCFlow=0";
+            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NODEID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
+            BP.DA.DBAccess.RunSQLs(sqls);
+
+            string sql = "UPDATE WF_Cond SET DataFrom=" + (int)ConnDataFrom.Form + " WHERE NodeID=" + cond.NodeID + "  AND FK_Node=" + cond.FK_Node + " AND ToNodeID=" + toNodeID;
+            switch (condTypeEnum)
+            {
+                case CondType.Flow:
+                case CondType.Node:
+                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.Insert();
+                    BP.DA.DBAccess.RunSQL(sql);
+                    break;
+                case CondType.Dir:
+                    // cond.MyPK = cond.NodeID +"_"+ this.Request.QueryString["ToNodeID"]+"_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.ToNodeID = toNodeID;
+                    cond.Insert();
+                    BP.DA.DBAccess.RunSQL(sql);
+                    break;
+                case CondType.SubFlow: //启动子流程.
+                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.ToNodeID = toNodeID;
+                    cond.Insert();
+                    BP.DA.DBAccess.RunSQL(sql);
+                    break;
+                default:
+                    throw new Exception("未设计的情况。" + condTypeEnum.ToString());
+            }
+
+            return "保存成功!!";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondByFrm_Delete()
+        {
+            Cond deleteCond = new Cond();
+            deleteCond.MyPK = this.MyPK;
+            int i = deleteCond.Delete();
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion 方向条件 Frm 模版
 
         #region 方向条件SQL 模版
         /// <summary>
@@ -214,7 +470,6 @@ namespace BP.WF.HttpHandler
             return "无可删除的数据.";
         }
         #endregion 方向条件SQL 模版
-
 
         #region 方向条件SQL
         /// <summary>
@@ -661,6 +916,53 @@ namespace BP.WF.HttpHandler
         }
 
         #endregion 表单方案.
+
+
+        #region 方向优先级.
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondPRI_Init()
+        {
+            Conds cds = new Conds();
+            cds.Retrieve(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, 2, CondAttr.PRI);
+
+            foreach (Cond item in cds)
+            {
+                Node nd = new Node(item.ToNodeID);
+                item.Note = nd.Name;
+            }
+
+            return cds.ToJson();
+        }
+        public string CondPRI_Move()
+        {
+            switch (this.GetRequestVal("MoveType"))
+            {
+                case "Up":
+                    Cond up = new Cond(this.MyPK);
+                    up.DoUp(this.FK_Node);
+                    up.RetrieveFromDBSources();
+                    DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + up.PRI + " WHERE ToNodeID=" + up.ToNodeID);
+                    break;
+                case "Down":
+                    Cond down = new Cond(this.MyPK);
+                    down.DoDown(this.FK_Node);
+                    down.RetrieveFromDBSources();
+                    DBAccess.RunSQL("UPDATE WF_Cond SET PRI=" + down.PRI + " WHERE ToNodeID=" + down.ToNodeID);
+                    break;
+                default:
+                    break;
+            }
+
+
+            Conds cds = new Conds();
+            cds.Retrieve(CondAttr.FK_Node, this.FK_Node, CondAttr.CondType, 2, CondAttr.PRI);
+            return cds.ToJson();
+        }
+        #endregion 方向优先级.
+
 
         public string ReLoginSubmit()
         {

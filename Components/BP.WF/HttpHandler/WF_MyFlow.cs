@@ -993,20 +993,24 @@ namespace BP.WF.HttpHandler
             try
             {
                 DataSet ds = new DataSet();
-                if (this.DoType1.ToUpper() != "VIEW")
+
+                if (this.DoType1.ToUpper() == "VIEW")
+                {
+                    DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];
+                    ds.Tables.Add(trackDt.Copy());
+                }
+                else
                 {
                     ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
                         this.FID, BP.Web.WebUser.No);
 
-                    //获取WF_GenerWorkFlow
                     string sql = "";
-
-                    if (SystemConfig.AppCenterDBType== DBType.Oracle)
-                      sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,NVL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
-                    else if(SystemConfig.AppCenterDBType== DBType.MySQL)
-                      sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,IFNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,NVL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+                    else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,IFNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
                     else
-                      sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,ISNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+                        sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,ISNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
 
                     DataTable wf_generWorkFlowDt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     wf_generWorkFlowDt.TableName = "WF_GenerWorkFlow";
@@ -1029,18 +1033,10 @@ namespace BP.WF.HttpHandler
                         wf_generWorkFlowDt.Columns["WORKID"].ColumnName = "WorkID";
                     }
 
-
                     //把他转化小写,适应多个数据库.
                     wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
                     ds.Tables.Add(wf_generWorkFlowDt);
                 }
-
-                DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];
-
-
-                ds.Tables.Add(trackDt.Copy());
-
-                //ds.WriteXml(xml);
 
                 json = BP.Tools.Json.ToJson(ds);
                 //BP.DA.DataType.WriteFile("c:\\WorkNode.json", json);

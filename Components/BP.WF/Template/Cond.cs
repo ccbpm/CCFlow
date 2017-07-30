@@ -455,8 +455,17 @@ namespace BP.WF.Template
                 this.SetValByKey(CondAttr.FK_Attr, value);
 
                 BP.Sys.MapAttr attr = new BP.Sys.MapAttr(value);
+
+                if (attr.LGType == FieldTypeS.Enum)
+                {
+                    /*是一个枚举类型的*/
+                    SysEnum se = new SysEnum(attr.UIBindKey, this.OperatorValueInt);
+                    this.OperatorValueT = se.Lab;
+                }
+
                 this.SetValByKey(CondAttr.AttrKey, attr.KeyOfEn);
                 this.SetValByKey(CondAttr.AttrName, attr.Name);
+
             }
         }
         /// <summary>
@@ -507,7 +516,36 @@ namespace BP.WF.Template
             }
             set
             {
-                this.SetValByKey(CondAttr.FK_Operator, value);
+                string val = "";
+
+                switch (value)
+                {
+                    case "dengyu":
+                        val = "=";
+                        break;
+                    case "dayu":
+                        val = ">";
+                        break;
+                    case "dayudengyu":
+                        val = ">=";
+                        break;
+                    case "xiaoyu":
+                        val = "<";
+                        break;
+                    case "xiaoyudengyu":
+                        val = "<=";
+                        break;
+                    case "budengyu":
+                        val = "!=";
+                        break;
+                    case "like":
+                        val = " LIKE ";
+                        break;
+                    default:
+                        break;
+                }
+
+                this.SetValByKey(CondAttr.FK_Operator, val);
             }
         }
         /// <summary>

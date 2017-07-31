@@ -17,7 +17,7 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/commonYangYH.js"></script>
     <script type="text/javascript" src="../Scripts/Cookie.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.nav.js"></script>
-    <script type="text/javascript" src="FrmFree2017.js"></script>
+    <script type="text/javascript" src="FrmFreeReadonly.js"></script>
     <script type="text/javascript" src="MapExt2016.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
@@ -199,19 +199,12 @@
             initPageParam(); //初始化参数
 
             //构造表单.
-            GenerFreeFrm(); //表单数据.
-
-            $('[name=showCol]').bind('change', function (obj) {
-                if (obj.target.value == "8") {
-                    Col4To8();
-                } else {
-                    Col8To4();
-                }
-            });
-
+            GenerFreeFrmReadonly(); //表单数据.
+         
             if ($("#Message").html() == "") {
                 $(".Message").hide();
             }
+
             if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
                 //计算高度，展示滚动条
                 var height = $(parent.document.getElementById('MainFrames')).height() - 110;
@@ -266,20 +259,8 @@
                             <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="../../DataUser/PrintTools/install_lodop32.exe" />
                         </object>
                     </div>
-                    <!--头部功能按钮 发送、移交-->
-                    <div class="topBar" id="topBar">
-                        <!-- <uc3:ToolBar ID="ToolBar1" runat="server"/>-->
-                    </div>
-                    <!--flowInfo-->
-                    <div class="flowInfo" id="flowInfo">
-                        <!--<uc1:Pub ID="Pub1" runat="server"/>-->
-                    </div>
-
-                    <!--childThread-->
-                    <div class="childThread" id='childThread'>
-                        <!--<uc1:Pub ID="Pub3" runat="server"/>-->
-                    </div>
-                    <!--主表单--><!--<uc2:UCEn ID="UCEn1" runat="server"/>-->
+                    
+                    <!--主表单-->  
                     <div id="CCForm">
                         <br />
                         <img src='./../Img/Loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
@@ -297,72 +278,7 @@
             </div>
         </div>
     </div>
-    <!--杨玉慧加 暂时解决POP窗不好用的问题-->
-    <div class="modal fade" id="returnPopValModal">
-        <div class="modal-dialog" style="margin-left:auto;margin-right:auto;">
-            <div class="modal-content" style="border-radius: 0px;">
-                <div class="modal-header">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none; border: none; float: right;">×</button>
-                    <h4 class="modal-title">选择提出人</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframePopModalForm" name="iframePopModalForm"></iframe>
-                    <div style="text-align: right;">
-                        <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">取消</button>
-                        <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">确定</button>
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <!--下拉框选项提示信息-->
-    <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px; left: 304.98961639404297px; display: none;">
-        <div class="arrow" style="left: 50.22522522522522%;"></div>
-        <h3 class="popover-title"><span> title</span><span style="color: white; opacity: 1; float: right; cursor: pointer;" id="span_CloseNoticeInfo">×</span></h3>
-        <div class="popover-content">顶部的 Popover 中的一些内容</div>
-    </div>
-    <!--杨玉慧加  附件弹出窗口-->
-    <div class="modal fade" id="athModal">
-        <div class="modal-dialog">
-            <div class="modal-content" style="border-radius:0px;">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white;opacity:1; display:none;">×</button>
-                    <h4 class="modal-title">选择附件</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width:100%;border:0px;height:400px;" id="iframeAthForm" name="iframeAthForm"></iframe>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <!--杨玉慧加  中间导航-->
-    <iframe id="navIframe" style="display:none;"></iframe>
-    <div>
-        <iframe id="hisIframe" style="width:100%;display:none;"></iframe>
-    </div>
 
-
-    <!--杨玉慧加   提示信息弹出窗口-->
-    <div class="modal fade" id="msgModal" data-backdrop="static">
-        <div class="modal-dialog">
-            <div class="modal-content" style="border-radius:0px;">
-                <div class="modal-header">
-                    <button type="button" class="close" id="btnMsgModalOK1" aria-hidden="true" style="color:white;opacity:1; display:none;">×</button>
-                    <h4 class="modal-title">提示信息</h4>
-                </div>
-                <div class="modal-body" style="text-align:center;word-wrap:break-word;">
-                    <div style="width: 100%; border: 0px; height: 400px;" id="msgModalContent" name="iframePopModalForm"></div>
-                    <div style="text-align: right;">
-                        <button type="button" id="btnMsgModalOK" class="btn" data-dismiss="modal">确定</button>
-                    </div>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-      <div id="" >
-     <input type="button" value="Save" id="Btn_Save" onclick="Save()" />
-     </div>
 
 </body>
 </html>

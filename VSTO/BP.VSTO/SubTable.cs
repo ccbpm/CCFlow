@@ -91,7 +91,6 @@ namespace BP.VSTO
 			set { _originData = value; }
 		}
 
-
 		public bool IsInsertRow
 		{
 			get { return this._rangeRows < this.Range.Rows.Count; }
@@ -103,7 +102,6 @@ namespace BP.VSTO
 		#endregion
 
 		#region 方法
-
 		/// <summary>
 		/// 构造方法
 		/// </summary>

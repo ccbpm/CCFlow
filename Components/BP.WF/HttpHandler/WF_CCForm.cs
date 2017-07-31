@@ -463,20 +463,24 @@ namespace BP.WF.HttpHandler
 
             #endregion 判断是否是返回的URL.
 
+            //处理参数.
+            string paras = this.RequestParas;
+            paras = paras.Replace("&DoType=Frm_Init", "");
+
             //返回自由表单解析执行器.
             if (BP.WF.Glo.IsBeta == true)
             {
                 if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                    return "url@FrmFreeReadonly.htm?1=2" + this.RequestParas;
+                    return "url@FrmFreeReadonly.htm?1=2" + paras;
                 else
-                    return "url@FrmFree.htm?1=2" + this.RequestParas;
+                    return "url@FrmFree.htm?1=2" + paras;
             }
             else
             {
                 if (Glo.Plant == Plant.CCFlow)
-                    return "url@Frm.aspx?1=2" + this.RequestParas;
+                    return "url@Frm.aspx?1=2" + paras;
                 else
-                    return "url@FrmFree.htm?1=2" + this.RequestParas;
+                    return "url@FrmFree.htm?1=2" + paras;
             }
         }
         /// <summary>

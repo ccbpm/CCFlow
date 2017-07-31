@@ -469,7 +469,7 @@ namespace BP.WF.HttpHandler
                 //if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                 //    return "url@FrmFreeReadonly.htm?1=2" + this.RequestParas;
                 //else
-                    return "url@FrmFree.htm?1=2" + this.RequestParas;
+                return "url@FrmFree.htm?1=2" + this.RequestParas;
             }
             else
             {

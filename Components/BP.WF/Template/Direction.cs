@@ -2,6 +2,7 @@
 using System.Collections;
 using BP.DA;
 using BP.En;
+using BP.Port;
 using BP.WF.Template;
 
 namespace BP.WF.Template
@@ -151,6 +152,15 @@ namespace BP.WF.Template
                  * Dots 存储格式为: @x1,y1@x2,y2
                  */
                 map.AddTBString(NodeReturnAttr.Dots, null, "轨迹信息", true, true, 0, 300, 0, false);
+
+                //相关功能。
+                map.AttrsOfOneVSM.Add(new BP.WF.Template.DirectionStations(), new BP.WF.Port.Stations(),
+                    NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
+                    StationAttr.Name, StationAttr.No, "方向条件与岗位");
+
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeDepts(), new BP.WF.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
+                //DeptAttr.No, "节点部门", Dot2DotModel.TreeDept);
+
 
 				this._enMap=map;
 				return this._enMap;

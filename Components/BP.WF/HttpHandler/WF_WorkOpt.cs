@@ -98,6 +98,9 @@ namespace BP.WF.HttpHandler
                 int lastNodeId = 0;
                 foreach (BP.WF.Track tk in tks)
                 {
+                    if (tk.HisActionType == ActionType.FlowBBS)
+                        continue;
+
                     if (lastNodeId == 0)
                         lastNodeId = tk.NDFrom;
 
@@ -110,6 +113,7 @@ namespace BP.WF.HttpHandler
                     tk.Row.Add("T_NodeIndex", idx);
                     
                     nd = nds.GetEntityByKey(tk.NDFrom) as Node;
+
                     fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
                     //求出主键
                     long pkVal = this.WorkID;

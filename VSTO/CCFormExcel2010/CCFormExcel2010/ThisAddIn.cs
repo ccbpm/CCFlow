@@ -33,11 +33,13 @@ namespace CCFormExcel2010
         /// </summary>
         private Dictionary<string, SubTable> _dictSubTables = new Dictionary<string, SubTable>(); //excel中的子表信息
         private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件.
-        private bool IsDebug = false; //是否是调试模式.
-        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_34A,IsEdit=1,IsPrint=0,WorkID=4125,FK_Flow=003,FK_Node=301,UserNo=huangwei,FID=0,SID=eje1lpho1hounwbaetttzkzo,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_34A,IsCheckGuide=1,e1m=0.6205100742989008,WSUrl=http://localhost:8003/WF/CCForm/CCFormAPI.asmx";
         #endregion
 
+		private bool IsDebug = true; //是否是调试模式.
+        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_34A,IsEdit=1,IsPrint=0,WorkID=4348,FK_Flow=003,FK_Node=301,UserNo=duqinglian,FID=0,SID=sq4k1ffnr4ejfl51rnim5cyv,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_34A,IsCheckGuide=1,e1m=0.8281768751375614,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
+
         #region 测试用代码
+
         public Dictionary<string, string> InitTesterArgsString()
         {
             string argstr = TestUrl;
@@ -147,10 +149,8 @@ namespace CCFormExcel2010
                     //else
                     //	throw new Exception("缺少参数: FK_Flow");
 
-                    if (args.ContainsKey("FK_Node"))
-                        Glo.FK_Node = int.Parse(args["FK_Node"]);
-                    //else
-                    //	throw new Exception("缺少参数: FK_Node");
+					if (args.ContainsKey("FK_Node"))
+						Glo.FK_Node = int.Parse(args["FK_Node"]);
 
                     if (args.ContainsKey("PWorkID"))
                         Glo.PWorkID = int.Parse(args["PWorkID"]);
@@ -191,6 +191,7 @@ namespace CCFormExcel2010
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
+
 #if DEBUG
 			this.IsDebug = true;
 			//MessageBox.Show(Application.Version);//14.0
@@ -248,6 +249,7 @@ namespace CCFormExcel2010
                 // 把这个byt 保存到本地.
                 if (System.IO.File.Exists(Glo.LocalFile) == true)
                     System.IO.File.Delete(Glo.LocalFile);
+
                 //写入文件.
                 Glo.WriteFile(Glo.LocalFile, bytes);
 
@@ -269,6 +271,8 @@ namespace CCFormExcel2010
 
                     //加载外键枚举数据.
                     SetMetaData(_originData);
+
+                    // lll.lll.lllllkklkklkkkll
                     FillData(_originData);
                 }
                 else //xTODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）//A:暂时不考虑这种情况，按数据库数据与Excel数据完全一致处理
@@ -318,26 +322,13 @@ namespace CCFormExcel2010
                 if (dt.TableName == "MainTable")
                 {
                     //给主表赋值.
-                    SetMainData(dt);
+                    FillData_SetMainData(dt);
                     continue;
                 }
 
                 //给从表赋值.
-                SetDtlData(dt);
+                FillData_SetDtlData(dt);
             }
-            //else
-            //{
-            //	foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
-            //	{
-            //		var stnew = st.Value;
-            //		if (_originData.Tables.Contains(stnew.Name))
-            //		{
-            //			stnew.OriginData = _originData.Tables[stnew.Name].Copy();
-            //			stnew.Data = _originData.Tables[stnew.Name].Copy();
-            //			stnew.InitConnection();
-            //		}
-            //	}
-            //}
 
             return true;
         }
@@ -641,9 +632,7 @@ namespace CCFormExcel2010
             foreach (Excel.Name name in Application.Names)
             {
                 if (name.NameLocal.IndexOf(Glo.UseSheet + ".") == 0)
-                {
                     name.Name = name.NameLocal.Replace(Glo.UseSheet + ".", string.Empty);
-                }
             }
             return true;
         }
@@ -668,6 +657,7 @@ namespace CCFormExcel2010
             {
                 //MessageBox.Show("不存在Sheet页：MetaData");
                 //创建Sheet(MetaData):
+
                 Excel.Worksheet wsheet = Application.Sheets.Add();
                 wsheet.Name = "MetaData";
                 //wsheet.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
@@ -691,7 +681,7 @@ namespace CCFormExcel2010
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        public bool SetMainData(DataTable dt) //x尚未测试
+        public bool FillData_SetMainData(DataTable dt) //x尚未测试
         {
             //var r = false;
             foreach (DataColumn dc in dt.Columns)
@@ -700,30 +690,33 @@ namespace CCFormExcel2010
                 {
                     var range = Application.Names.Item(dc.ColumnName).RefersToRange;
                     var location = Application.Names.Item(dc.ColumnName).RefersToLocal; //=Sheet1!$B$2
-                    if (Regex.IsMatch(location, _base.regexRangeSingle)) //是单个单元格
+                    if (Regex.IsMatch(location, _base.regexRangeSingle) ==true) //是单个单元格
                     {
                         IgnoreNextOperation();
-                        range.Value2 = GetDisplayValue(tableName: "MainTable", keyOfEn: dc.ColumnName, value: dt.Rows[0][dc.ColumnName].ToString(), rangeCell: range);
+                        range.Value2 = GetDisplayValue(tableName: "MainTable", keyOfEn: dc.ColumnName,
+                        value: dt.Rows[0][dc.ColumnName].ToString(), rangeCell: range);
                     }
                 }
             }
             return true;
         }
-
         /// <summary>
         /// 填充子表数据
         /// </summary>
         /// <param name="dt">确保TableName为子表表名</param>
         /// <returns>是否填充成功</returns>
-        public bool SetDtlData(DataTable dt, bool isFill = true) //x尚未测试
+        public bool FillData_SetDtlData(DataTable dt, bool isFill = true) //x尚未测试
         {
             #region 排除不是子表的情况
 
             if (_base.IsExistsName(dt.TableName) == false) //excel中不存在该子表区域时
                 return false;
+
             var location = Application.Names.Item(dt.TableName).RefersToLocal;
+
             if (Regex.IsMatch(location, _base.regexRangeArea) == false) //excel中子表所在区域不是『区域』（是单个单元格）
                 return false;
+
             if (location.IndexOf("=MetaData!") > -1) //若是元数据list区域.
                 return false;
 

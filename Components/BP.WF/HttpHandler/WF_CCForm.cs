@@ -466,10 +466,10 @@ namespace BP.WF.HttpHandler
             //返回自由表单解析执行器.
             if (BP.WF.Glo.IsBeta == true)
             {
-                //if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                //    return "url@FrmFreeReadonly.htm?1=2" + this.RequestParas;
-                //else
-                return "url@FrmFree.htm?1=2" + this.RequestParas;
+                if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                    return "url@FrmFreeReadonly.htm?1=2" + this.RequestParas;
+                else
+                    return "url@FrmFree.htm?1=2" + this.RequestParas;
             }
             else
             {
@@ -568,6 +568,69 @@ namespace BP.WF.HttpHandler
                     MapDtls dtls = new MapDtls(this.EnsName);
                     en = BP.WF.Glo.DealPageLoadFull(en, me, attrs, dtls) as GEEntity;
                 }
+
+                //增加主表数据.
+                DataTable mainTable = en.ToDataTableField(md.No);
+                mainTable.TableName = "MainTable";
+
+                ds.Tables.Add(mainTable);
+                #endregion 把主表数据放入.
+
+                return BP.Tools.Json.DataSetToJson(ds, false);
+            }
+            catch (Exception ex)
+            {
+                GEEntity myen = new GEEntity(this.EnsName);
+                myen.CheckPhysicsTable();
+
+                BP.Sys.CCFormAPI.RepareCCForm(this.EnsName);
+                return "err@装载表单期间出现如下错误,ccform有自动诊断修复功能请在刷新一次，如果仍然存在请联系管理员. @" + ex.Message;
+            }
+        }
+        public string FrmFreeReadonly_Init()
+        {
+            try
+            {
+                MapData md = new MapData(this.EnsName);
+                DataSet ds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
+
+                #region 把主表数据放入.
+                string atParas = "";
+                //主表实体.
+                GEEntity en = new GEEntity(this.EnsName);
+
+                #region 求出 who is pk 值.
+                Int64 pk = this.RefOID;
+                if (pk == 0)
+                    pk = this.OID;
+                if (pk == 0)
+                    pk = this.WorkID;
+
+                if (this.FK_Node != 0 && string.IsNullOrEmpty(this.FK_Flow) == false)
+                {
+                    /*说明是流程调用它， 就要判断谁是表单的PK.*/
+                    FrmNode fn = new FrmNode(this.FK_Flow, this.FK_Node, this.FK_MapData);
+                    switch (fn.WhoIsPK)
+                    {
+                        case WhoIsPK.FID:
+                            pk = this.FID;
+                            if (pk == 0)
+                                throw new Exception("@没有接收到参数FID");
+                            break;
+                        case WhoIsPK.PWorkID: /*父流程ID*/
+                            pk = this.PWorkID;
+                            if (pk == 0)
+                                throw new Exception("@没有接收到参数PWorkID");
+                            break;
+                        case WhoIsPK.OID:
+                        default:
+                            break;
+                    }
+                }
+                #endregion  求who is PK.
+
+                en.OID = pk;
+                en.RetrieveFromDBSources();
 
                 //增加主表数据.
                 DataTable mainTable = en.ToDataTableField(md.No);

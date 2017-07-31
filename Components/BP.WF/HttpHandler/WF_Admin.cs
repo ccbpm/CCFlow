@@ -174,9 +174,22 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
 
             //增加字段集合.
-            string sql = "SELECT KeyOfEn as No, KeyOfEn+' - '+Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
-            sql += " AND KeyOfEn Not IN('FID','MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID')";
-            sql += " AND MyDataType NOT IN (6,7) ";
+            string sql = "";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                sql = "SELECT KeyOfEn as No, KeyOfEn||' - '||Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
+                sql += " AND KeyOfEn Not IN('FID','MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID')";
+                sql += " AND MyDataType NOT IN (6,7) ";
+            }
+            else
+            {
+                sql = "SELECT KeyOfEn as No, KeyOfEn+' - '+Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
+                sql += " AND KeyOfEn Not IN('FID','MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID')";
+                sql += " AND MyDataType NOT IN (6,7) ";
+            }
+
+
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapAttr";
             dt.Columns[0].ColumnName = "No";

@@ -1834,7 +1834,7 @@ function GenerWorkNode() {
         type: 'post',
         async: true,
         data: pageData,
-        url: "MyFlow.ashx?DoType=GenerWorkNode"  + "&m=" + Math.random()+'&'+urlParam,
+        url: "MyFlow.ashx?DoType=GenerWorkNode"  + "&m=" + Math.random()+urlParam,
         dataType: 'html',
         success: function (data) {
             jsonStr = data;
@@ -2038,16 +2038,6 @@ function execSend(toNode) {
             }
             else {
                 OptSuc(data);
-                if (opener != null && opener.window != null && opener.window.parent != null && opener.window.parent.refSubSubFlowIframe != null && typeof (opener.window.parent.refSubSubFlowIframe) == "function") {
-                    opener.window.parent.refSubSubFlowIframe();
-                }
-                //if (window.opener != null && window.opener != undefined && window.opener)
-                //    $('#Message').html(data);
-                //$('.Message').show();
-                ////发送成功时
-                //setAttachDisabled();
-                //setToobarUnVisible();
-                //setFormEleDisabled();
             }
         }
     });
@@ -2074,30 +2064,13 @@ $(function () {
 
 //发送 退回 移交等执行成功后转到  指定页面
 function OptSuc(msg) {
-    // window.location.href = "/WF/MyFlowInfo.aspx";
     $('.Message').hide();
     if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
         $('#returnWorkModal').modal().hide()
     }
-    msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
-
-    $("#msgModalContent").html(msg.replace(/@/g, '<br/>'));
-    var trackA = $('#msgModalContent a:contains("工作轨迹")');
-    var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
-    trackA.remove();
-    trackImg.remove();
-
+    $("#msgModalContent").html(msg);
     //如果是申请页面
-    if ($('.navbars').css('display') == "none") {
-        $('#CCForm').html($('#msgModalContent').html());
-        setToobarUnVisible();
-    } else {
-        $("#msgModal").modal().show();
-        if (window.opener != null) {
-            //刷新父窗口
-            window.opener.location.reload();
-        }
-    }
+    $("#msgModal").modal().show();
 }
 //移交
 //初始化发送节点下拉框

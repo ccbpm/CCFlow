@@ -2202,7 +2202,6 @@ function OptSuc(msg) {
 
     //如果是申请页面
     if ($('.navbars').css('display') == "none") {
-        $("#msgModalContent").append("<a href='/ITILFlow/MainPage.html'>返回流程工作台</a>");
         $('#CCForm').html($('#msgModalContent').html());
         setToobarUnVisible();
     } else {

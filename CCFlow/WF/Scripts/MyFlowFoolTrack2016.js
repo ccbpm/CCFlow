@@ -2333,9 +2333,6 @@ function Send() {
             }
             else {
                 OptSuc(data);
-                if (opener != null && opener.window != null && opener.window.parent != null && opener.window.parent.refSubSubFlowIframe != null && typeof (opener.window.parent.refSubSubFlowIframe) == "function") {
-                    opener.window.parent.refSubSubFlowIframe();
-                }
                 //if (window.opener != null && window.opener != undefined && window.opener)
                 //    $('#Message').html(data);
                 //$('.Message').show();
@@ -2376,39 +2373,8 @@ function OptSuc(msg) {
         $('#returnWorkModal').modal().hide();
         $('.in').remove();
     }
-    msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
-    msg = msg.replace('下一步工作您仍然可以处理，点击这里现在处理。.', '');
-    msg = msg.replace('下一步工作您仍然可以处理，点击这里现在处理', '');
-    //msg = msg.replace('</a>。@.', '</a>');
-    var msgArr = msg.split('</a>。@下一步');
-    if (msgArr.length > 1) {
-        msg = msgArr[0] + "</a>下一步" + msgArr[1];
-    }
-
-    msgArr = msg.split('</a>.@');
-    if (msgArr.length > 1) {
-        msg = msgArr[0] + "</a>" + msgArr[1];
-    }
-
-
-    $("#msgModalContent").html(msg.replace(/@/g, '<br/>'));
-    var trackA = $('#msgModalContent a:contains("工作轨迹")');
-    var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
-    trackA.remove();
-    trackImg.remove();
-
-    //如果是申请页面
-    if ($('.navbars').css('display') == "none") {
-        $('#CCForm').html($('#msgModalContent').html());
-        setToobarUnVisible();
-        $("#msgModal").modal().show();
-    } else {
-        $("#msgModal").modal().show();
-        if (window.opener != null) {
-            //刷新父窗口
-            window.opener.location.reload();
-        }
-    }
+    $("#msgModalContent").html(msg);
+    $("#msgModal").modal().show();
 }
 //移交
 //初始化发送节点下拉框

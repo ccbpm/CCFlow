@@ -79,10 +79,10 @@
 
         }
 
-        function DtlOpt(workId, fk_mapdtl, FID) {
+        function DtlOpt(workId, fk_mapdtl, FID, fk_node) {
             var url = 'DtlOpt.aspx?WorkID=' + workId + '&FK_MapDtl=' + fk_mapdtl + '&FID=' + FID;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = 'Dtl.aspx?EnsName=' + fk_mapdtl + '&RefPKVal=' + workId;
+            window.location.href = 'Dtl.aspx?EnsName=' + fk_mapdtl + '&RefPKVal=' + workId + '&FID=' + FID + '&FK_Node=' + fk_node;
         }
     </script>
     <%-- <style type="text/css">

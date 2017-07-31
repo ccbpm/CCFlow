@@ -106,7 +106,18 @@ namespace CCFlow.WF.CCForm
             if (this.Request.QueryString["Flag"] == "ExpData")
             {
                 GEDtls dtls = new GEDtls(this.FK_MapDtl);
-                dtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
+
+                switch(dtl.DtlOpenType)
+                {
+                    case DtlOpenType.ForEmp:
+                    case DtlOpenType.ForWorkID:
+                        dtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
+                        break;
+                    case DtlOpenType.ForFID:
+                        dtls.Retrieve(GEDtlAttr.FID, this.WorkID);
+                        break;
+                }
+
                 this.ExportDGToExcelV2(dtls, dtl.No + ".xls");
                 this.WinClose();
                 return;

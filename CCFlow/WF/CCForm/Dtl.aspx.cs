@@ -330,7 +330,7 @@ namespace CCFlow.WF.CCForm
                 }
                 else
                 {
-                    this.Pub1.Add("<TD class='Idx' ><img src='../Img/Btn/Table.gif' onclick=\"return DtlOpt('" + this.RefPKVal + "','" + this.EnsName + "','" + this.FID + "');\" border=0/></TD>");
+                    this.Pub1.Add("<TD class='Idx' ><img src='../Img/Btn/Table.gif' onclick=\"return DtlOpt('" + this.RefPKVal + "','" + this.EnsName + "','" + this.FID + "', " + this.FK_Node + ");\" border=0/></TD>");
                     numOfCol++;
                 }
 

@@ -466,9 +466,9 @@ namespace BP.WF.HttpHandler
             //返回自由表单解析执行器.
             if (BP.WF.Glo.IsBeta == true)
             {
-                if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                    return "url@FrmFreeReadonly.htm?1=2" + this.RequestParas;
-                else
+                //if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                //    return "url@FrmFreeReadonly.htm?1=2" + this.RequestParas;
+                //else
                     return "url@FrmFree.htm?1=2" + this.RequestParas;
             }
             else

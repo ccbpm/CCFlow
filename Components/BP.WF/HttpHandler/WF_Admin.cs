@@ -551,6 +551,114 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region 按照部门条件计算》
+        /// <summary>
+        /// 按照部门条件计算.
+        /// </summary>
+        /// <returns></returns>
+        public string CondByDept_Init()
+        {
+            CondType condType = (CondType)this.GetRequestValInt("CondType");
+            string mypk = this.GetRequestValInt("FK_MainNode") + "_" + this.GetRequestValInt("ToNodeID") + "_" + condType.ToString() + "_" + ConnDataFrom.Depts.ToString();
+
+            Cond cond = new Cond();
+            cond.MyPK = mypk;
+            if (cond.RetrieveFromDBSources() == 0)
+            {
+                cond.Row.Add("Nums", 0);
+                cond.SpecOperPara = "";
+            }
+            else
+            {
+                string[] strs = cond.OperatorValue.ToString().Split('@');
+                cond.Row.Add("Nums", strs.Length);
+
+                if (cond.SpecOperPara == "")
+                    cond.SpecOperPara = "";
+            }
+            return cond.ToJson();
+        }
+        public string CondByDept_Save()
+        {
+            CondType condType = (CondType)this.GetRequestValInt("CondType");
+
+            Cond cond = new Cond();
+            cond.Delete(CondAttr.NodeID, this.GetRequestValInt("FK_MainNode"),
+               CondAttr.ToNodeID, this.GetRequestValInt("ToNodeID"),
+               CondAttr.CondType, (int)condType);
+
+
+            string mypk = this.GetRequestValInt("FK_MainNode") + "_" + this.GetRequestValInt("ToNodeID") + "_" + condType.ToString() + "_" + ConnDataFrom.Depts.ToString();
+            cond.MyPK = mypk;
+
+            if (cond.RetrieveFromDBSources() == 0)
+            {
+                cond.HisDataFrom = ConnDataFrom.Depts;
+                cond.NodeID = this.GetRequestValInt("FK_MainNode");
+                cond.FK_Flow = this.FK_Flow;
+                cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+                cond.Insert();
+            }
+
+            string val = "";
+
+            //Depts sts = new Depts();
+            //sts.RetrieveAllFromDBSource();
+            //foreach (Dept st in sts)
+            //{
+            //    if (this.Pub1.IsExit("CB_" + st.No) == false)
+            //        continue;
+            //    if (this.Pub1.GetCBByID("CB_" + st.No).Checked)
+            //        val += "@" + st.No;
+            //}
+
+            if (val == "")
+                cond.Delete();
+
+            val += "@";
+            cond.OperatorValue = val;
+            cond.FK_Flow = this.FK_Flow;
+            cond.HisCondType = condType;
+            cond.FK_Node = this.FK_Node;
+            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+
+            #region //获取“指定的操作员”设置，added by liuxc,2015-10-7
+
+            int specOperWay = this.GetRequestValInt("DDL_SpecOperWay");
+            cond.SpecOperWay = (SpecOperWay)specOperWay;
+
+            if (cond.SpecOperWay != SpecOperWay.CurrOper)
+            {
+                cond.SpecOperPara = this.GetRequestVal("TB_SpecOperPara"); // Pub1.GetTBByID("TB_" + CondAttr.SpecOperPara).Text;
+            }
+            else
+            {
+                cond.SpecOperPara = string.Empty;
+            }
+            #endregion
+
+            switch (condType)
+            {
+                case CondType.Flow:
+                case CondType.Node:
+                    cond.Update();
+                    break;
+                case CondType.Dir:
+                    cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+                    cond.Update();
+                    break;
+                case CondType.SubFlow:
+                    cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+                    cond.Update();
+                    break;
+                default:
+                    throw new Exception("未设计的情况。");
+            }
+
+            return "保存成功!!";
+        }
+        #endregion
+
         #region 方向条件Para
         /// <summary>
         /// 初始化

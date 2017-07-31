@@ -103,7 +103,9 @@ function InitPage() {
                 doc = "<img src='../../Img/TolistSta/" + dotColor + ".png' />" + track.NDFromT + "     -  " + timeBase + track.ActionTypeText;
 
                 var at = track.ActionType;
+                
                 if (at == ActionType.Forward || at == ActionType.ForwardAskfor || at == ActionType.WorkCheck || at == ActionType.Order
+                    || at == ActionType.SubFlowForward    //分流节点也显示表单
                     || at == ActionType.FlowOver    //added by liuxc,2014-12-3,正常结束结点也显示表单
                     || at == ActionType.Skip)   //added by liuxc,2015-7-13,自动跳转的也显示表单
                 {

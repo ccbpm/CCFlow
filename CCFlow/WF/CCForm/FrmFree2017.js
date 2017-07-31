@@ -401,7 +401,7 @@ function Save() {
         return;
     }
 
-    setToobarDisiable();
+   // setToobarDisiable();
 
     $.ajax({
         type: 'post',
@@ -1415,7 +1415,7 @@ $(function () {
     });
 
     setAttachDisabled();
-    setToobarDisiable();
+    //setToobarDisiable();
     setFormEleDisabled();
 
     $('#btnMsgModalOK1').bind('click', function () {
@@ -1746,8 +1746,6 @@ function GenerFreeFrm() {
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
 
-
-    alert('dd');
     //隐藏保存按钮.
     if (href.indexOf('&IsReadonly=1') > 1 || href.indexOf('&IsEdit=0') > 1) {
         document.getElementById("Btn_Save").style.display = "block";

@@ -9,13 +9,14 @@
     <script type="text/javascript" language="javascript" >
         //页面启动函数.
         $(function () {
-        
+
             $("#Msg").html("<img src=../Img/loading.gif />正在加载,请稍后......");
 
             var name, value;
             var str = location.href; //取得整个地址栏
-            var num = str.indexOf("?")
+            var num = str.indexOf("?");
             str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
+            str = str.replace('DoType=Frm_Init', '');
 
             var url = Handler + "?DoType=Frm_Init&" + str + "&e1m=" + Math.random();
 

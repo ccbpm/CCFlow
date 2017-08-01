@@ -501,8 +501,8 @@ function initBar() {
     // 为啥要注释 else MyFlow = "MyFlow.do";
     if (plant == "CCFlow")
         MyFlow = "MyFlow.ashx";
-    else
-        MyFlow = "MyFlow.do";
+    //else
+        //MyFlow = "MyFlow.do";
 
     var url = MyFlow + "?DoType=InitToolBar&m=" + Math.random();
 

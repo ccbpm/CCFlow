@@ -16,8 +16,8 @@
 
   <OneWork1 No="LogOfTable" CH="流程日志(表格)"   UrlCCFlow="LogOfTable.aspx" UrlJFlow="LogOfTable.htm" />
   <OneWork1 No="CH" CH="节点时限"  UrlCCFlow="CH.aspx" UrlJFlow="CH.htm" />
-  <OneWork No="FlowBBS" CH="评论"   UrlCCFlow="FlowBBS.htm" UrlJFlow="FlowBBS.htm"  />
-  <OneWork No="Ath" CH="流程附件" UrlCCFlow="Ath.htm" UrlJFlow="Ath.htm"/>
+  <OneWork1 No="FlowBBS" CH="评论"   UrlCCFlow="FlowBBS.htm" UrlJFlow="FlowBBS.htm"  />
+  <OneWork1 No="Ath" CH="流程附件" UrlCCFlow="Ath.htm" UrlJFlow="Ath.htm"/>
   <OneWork No="OP" CH="操作" UrlCCFlow="OP.htm" UrlJFlow="OP.htm"/>
 
   <OneWork1 No="TrackTime" CH="时间点日志" />

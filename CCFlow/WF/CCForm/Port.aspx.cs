@@ -87,7 +87,6 @@ namespace CCFlow.WF.CCForm
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
             #region 安全性校验.
             if (this.UserNo == null || this.SID == null || this.DoWhat == null || this.FrmID == null)
             {
@@ -137,7 +136,7 @@ namespace CCFlow.WF.CCForm
             switch (this.DoWhat)
             {
                 case "Frm": //如果是调用Frm的查看界面.
-                    url = "Frm.aspx?FK_MapData=" + this.FrmID + "&OID=" + this.OID + paras;
+                    url = "Frm.htm?FK_MapData=" + this.FrmID + "&OID=" + this.OID + paras;
                     break;
                 case "Search": //调用查询界面.
                     url = "../Comm/Search.htm?EnsName=" + this.FrmID +  paras;

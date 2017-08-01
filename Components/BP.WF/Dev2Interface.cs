@@ -2291,7 +2291,16 @@ namespace BP.WF
                     {
                         /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
                         sql = "SELECT a.FK_Node AS No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND a.FID=" + fid + " AND a.WorkID=" + workid + " AND a.FK_Node!=" + fk_node + " AND a.IsPass=1 ORDER BY RDT DESC ";
-                        return DBAccess.RunSQLReturnTable(sql);
+                        dt= DBAccess.RunSQLReturnTable(sql);
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        {
+                            dt.Columns["NO"].ColumnName = "No";
+                            dt.Columns["NAME"].ColumnName = "Name";
+                            dt.Columns["REC"].ColumnName = "Rec";
+                            dt.Columns["RECNAME"].ColumnName = "RecName";
+                            dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
+                        }
+                        return dt;
                     }
 
                     if (nd.TodolistModel == TodolistModel.Order)
@@ -2299,26 +2308,56 @@ namespace BP.WF
                     else
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " ORDER BY a.RDT DESC";
 
-                    return DBAccess.RunSQLReturnTable(sql);
+                    dt= DBAccess.RunSQLReturnTable(sql);
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    {
+                        dt.Columns["NO"].ColumnName = "No";
+                        dt.Columns["NAME"].ColumnName = "Name";
+                        dt.Columns["REC"].ColumnName = "Rec";
+                        dt.Columns["RECNAME"].ColumnName = "RecName";
+                        dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
+                    }
+                    return dt;
                 case ReturnRole.ReturnPreviousNode:
                     WorkNode mywnP = wn.GetPreviousWorkNode();
-                    
+
                     if (nd.IsHL || nd.IsFLHL)
                     {
                         /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
                         sql = "SELECT a.FK_Node AS No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND a.FID=" + fid + " AND a.WorkID=" + workid + " AND a.FK_Node=" + mywnP.HisNode.NodeID + " AND a.IsPass=1 ORDER BY RDT DESC ";
-                        return DBAccess.RunSQLReturnTable(sql);
+
+                        dt= DBAccess.RunSQLReturnTable(sql);
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        {
+                            dt.Columns["NO"].ColumnName = "No";
+                            dt.Columns["NAME"].ColumnName = "Name";
+                            dt.Columns["REC"].ColumnName = "Rec";
+                            dt.Columns["RECNAME"].ColumnName = "RecName";
+                            dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
+                        }
+                        return dt;
                     }
 
                     if (nd.TodolistModel == TodolistModel.Order)
                     {
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node=" + mywnP.HisNode.NodeID + ") OR (a.FK_Node=" + mywnP.HisNode.NodeID + " AND a.IsPass <0)  ORDER BY a.RDT DESC";
-                        return DBAccess.RunSQLReturnTable(sql);
+                        dt= DBAccess.RunSQLReturnTable(sql);
+                        
                     }
                     else
                     {
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node=" + mywnP.HisNode.NodeID + " ORDER BY a.RDT DESC ";
                         DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        {
+                            dt.Columns["NO"].ColumnName = "No";
+                            dt.Columns["NAME"].ColumnName = "Name";
+                            dt.Columns["REC"].ColumnName = "Rec";
+                            dt.Columns["RECNAME"].ColumnName = "RecName";
+                            dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
+                        }
+
                         if (mydt.Rows.Count != 0)
                             return mydt;
 
@@ -2332,9 +2371,19 @@ namespace BP.WF
                         else
                             throw new Exception("获取上一步节点，未涉及的数据库类型");
 
-                        return DBAccess.RunSQLReturnTable(sql);
-                    }
+                        dt= DBAccess.RunSQLReturnTable(sql);
 
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        {
+                            dt.Columns["NO"].ColumnName = "No";
+                            dt.Columns["NAME"].ColumnName = "Name";
+                            dt.Columns["REC"].ColumnName = "Rec";
+                            dt.Columns["RECNAME"].ColumnName = "RecName";
+                            dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
+                        }
+                        return dt;
+                    }
+                    break;
                 case ReturnRole.ReturnSpecifiedNodes: //退回指定的节点。
                     if (wns.Count == 0)
                         wns.GenerByWorkID(wn.HisNode.HisFlow, workid);
@@ -2393,6 +2442,15 @@ namespace BP.WF
                     break;
                 default:
                     throw new Exception("@没有判断的退回类型。");
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["REC"].ColumnName = "Rec";
+                dt.Columns["RECNAME"].ColumnName = "RecName";
+                dt.Columns["ISBACKTRACKING"].ColumnName = "IsBackTracking";
             }
 
             if (dt.Rows.Count == 0)

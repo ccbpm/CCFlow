@@ -272,6 +272,7 @@ namespace BP.En
                         }
                         continue;
                     case "@WebUser.FK_DeptNameOfFull":
+                    case "@WebUser.FK_DeptFullName":
                         if (attr.UIIsReadonly == true)
                         {
                             this.SetValByKey(attr.Key, Web.WebUser.FK_DeptNameOfFull);

@@ -33,13 +33,11 @@ namespace CCFormExcel2010
         /// </summary>
         private Dictionary<string, SubTable> _dictSubTables = new Dictionary<string, SubTable>(); //excel中的子表信息
         private bool _ignoreOneTime = false; //用于【在代码中修改了值】时，忽略一次【SheetChange】事件.
+        private bool IsDebug = false; //是否是调试模式.
+        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_34A,IsEdit=1,IsPrint=0,WorkID=4415,FK_Flow=003,FK_Node=301,UserNo=huangwei,FID=0,SID=0dqhkuiavcbgygu5q0fa2d41,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_34A,IsCheckGuide=1,e1m=0.30355243844447577,WSUrl=http://localhost:8003/WF/CCForm/CCFormAPI.asmx";
         #endregion
 
-		private bool IsDebug = true; //是否是调试模式.
-        public string TestUrl = "excelform://-fromccflow,App=FrmExcel,DoType=Frm_Init,FK_MapData=FX_JNHBG_64_34A,IsEdit=1,IsPrint=0,WorkID=4348,FK_Flow=003,FK_Node=301,UserNo=duqinglian,FID=0,SID=sq4k1ffnr4ejfl51rnim5cyv,PWorkID=0,IsLoadData=1,PFlowNo=,Frms=FX_JNHBG_64_34A,IsCheckGuide=1,e1m=0.8281768751375614,WSUrl=http://localhost:28048/WF/CCForm/CCFormAPI.asmx";
-
         #region 测试用代码
-
         public Dictionary<string, string> InitTesterArgsString()
         {
             string argstr = TestUrl;
@@ -149,8 +147,10 @@ namespace CCFormExcel2010
                     //else
                     //	throw new Exception("缺少参数: FK_Flow");
 
-					if (args.ContainsKey("FK_Node"))
-						Glo.FK_Node = int.Parse(args["FK_Node"]);
+                    if (args.ContainsKey("FK_Node"))
+                        Glo.FK_Node = int.Parse(args["FK_Node"]);
+                    //else
+                    //	throw new Exception("缺少参数: FK_Node");
 
                     if (args.ContainsKey("PWorkID"))
                         Glo.PWorkID = int.Parse(args["PWorkID"]);
@@ -168,7 +168,7 @@ namespace CCFormExcel2010
                         throw new Exception("缺少参数: MyPK");
 
                     if (args.ContainsKey("UseSheet"))
-                        Glo.UseSheet = args["UseSheet"];
+                        Glo.UseSheet = Uri.UnescapeDataString(args["UseSheet"]);
                 }
                 else
                     throw new Exception("缺少参数: FK_MapData/EnName");
@@ -191,7 +191,6 @@ namespace CCFormExcel2010
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-
 #if DEBUG
 			this.IsDebug = true;
 			//MessageBox.Show(Application.Version);//14.0
@@ -249,7 +248,6 @@ namespace CCFormExcel2010
                 // 把这个byt 保存到本地.
                 if (System.IO.File.Exists(Glo.LocalFile) == true)
                     System.IO.File.Delete(Glo.LocalFile);
-
                 //写入文件.
                 Glo.WriteFile(Glo.LocalFile, bytes);
 
@@ -271,8 +269,6 @@ namespace CCFormExcel2010
 
                     //加载外键枚举数据.
                     SetMetaData(_originData);
-
-                    // lll.lll.lllllkklkklkkkll
                     FillData(_originData);
                 }
                 else //xTODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）//A:暂时不考虑这种情况，按数据库数据与Excel数据完全一致处理
@@ -322,13 +318,26 @@ namespace CCFormExcel2010
                 if (dt.TableName == "MainTable")
                 {
                     //给主表赋值.
-                    FillData_SetMainData(dt);
+                    SetMainData(dt);
                     continue;
                 }
 
                 //给从表赋值.
-                FillData_SetDtlData(dt);
+                SetDtlData(dt);
             }
+            //else
+            //{
+            //	foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
+            //	{
+            //		var stnew = st.Value;
+            //		if (_originData.Tables.Contains(stnew.Name))
+            //		{
+            //			stnew.OriginData = _originData.Tables[stnew.Name].Copy();
+            //			stnew.Data = _originData.Tables[stnew.Name].Copy();
+            //			stnew.InitConnection();
+            //		}
+            //	}
+            //}
 
             return true;
         }
@@ -477,50 +486,59 @@ namespace CCFormExcel2010
             {
                 if (Regex.IsMatch(range.Address, _base.regexAddressRows)) //若是针对『整行』的操作
                 {
+                    //MessageBox.Show(range.ID);
                     //监听“插入行”“删除行”操作
                     //判断操作行数
                     //x判断各子表Range是否有变化:已保存到SubTable中的range会实时变化
-                    foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
-                    {
-                        if (_base.IsIntersect(range, st.Value.Range)) //!若插入/删除的行在子表中，则此时SubTable.Range已经变化
-                        {
-                            if (range.Rows.Count > 1) //若是针对多行操作，不允许同时删除多行
-                            {
-                                IgnoreNextOperation();
-                                Application.Undo();
-                                return;
-                            }
+                    //var haveChange = false;
+                    //foreach (KeyValuePair<string, SubTable> st in _dictSubTables)
+                    //{
+                    //    if (_base.IsRowInRange(range.Row, range.Row + range.Rows.Count - 1, st.Value.Range.Row, st.Value.Range.Row + st.Value.RangeRows - 1)) //_base.IsIntersect(range, st.Value.Range)!若插入/删除的行在子表中，则此时SubTable.Range已经变化
+                    //    {
+                    //        if (range.Rows.Count > 1) //若是针对多行操作，不允许同时删除多行
+                    //        {
+                    //            IgnoreNextOperation();
+                    //            Application.Undo();
+                    //            return;
+                    //        }
 
-                            if (st.Value.IsInsertRow)//如果是插入行
-                            {
-                                st.Value.InsertRow(range.Row);
-                            }
-                            else if (st.Value.IsDeteteRow) //如果是删除行
-                            {
-                                st.Value.DeleteRow(range.Row);
-                            }
+                    //        if (st.Value.IsInsertRow)//如果是插入行
+                    //        {
+                    //            st.Value.InsertRow(range.Row);
+                    //            haveChange = true;
+                    //        }
+                    //        else if (st.Value.IsDeteteRow) //如果是删除行
+                    //        {
+                    //            st.Value.DeleteRow(range.Row);
+                    //            haveChange = true;
+                    //        }
 
-                            //如果是插入行（删除行操作的撤销？）
-                            //1.set Connection
-                            //2.处理新行的下拉字段
-                            //2.1级联子级字段
-                            //2.1.1下方字段的 list area's name 更改 
-                            //2.1.2下方字段的 Validation.f1 更改
-                            //2.1.3本行字段的 list area 填充、命名
-                            //2.1.4本行字段的 Validation 设置
-                            //2.2不是级联子级的下拉类型字段
-                            //2.2.1本行字段的 Validation 设置
-                            //如果是删除行（插入行操作的撤销？）
-                        }
+                    //        //如果是插入行（删除行操作的撤销？）
+                    //        //1.set Connection
+                    //        //2.处理新行的下拉字段
+                    //        //2.1级联子级字段
+                    //        //2.1.1下方字段的 list area's name 更改 
+                    //        //2.1.2下方字段的 Validation.f1 更改
+                    //        //2.1.3本行字段的 list area 填充、命名
+                    //        //2.1.4本行字段的 Validation 设置
+                    //        //2.2不是级联子级的下拉类型字段
+                    //        //2.2.1本行字段的 Validation 设置
+                    //        //如果是删除行（插入行操作的撤销？）
+                    //    }
 
-                        st.Value.RefreshConnection();
-                    }
+                    //    st.Value.RefreshConnection();
+                    //}
 
-                    //↓插入/删除的行不在任何子表中的情况
-                    //TODO: 受影响的子表行数顺延（）
-                    //if()
-                    IgnoreNextOperation();
-                    Application.Undo();
+                    ////↓插入/删除的行不在任何子表中的情况
+                    ////TODO: 受影响的子表行数顺延（）
+                    ////if()
+
+                    //if (!haveChange)
+                    //{
+                    //    IgnoreNextOperation();
+                    //    Application.Undo();
+                    //}
+
                     return;//暂时不做处理
                 }
                 else if (Regex.IsMatch(range.Address, _base.regexAddressColumns)) //若是对『整列』的操作
@@ -632,7 +650,9 @@ namespace CCFormExcel2010
             foreach (Excel.Name name in Application.Names)
             {
                 if (name.NameLocal.IndexOf(Glo.UseSheet + ".") == 0)
+                {
                     name.Name = name.NameLocal.Replace(Glo.UseSheet + ".", string.Empty);
+                }
             }
             return true;
         }
@@ -657,7 +677,6 @@ namespace CCFormExcel2010
             {
                 //MessageBox.Show("不存在Sheet页：MetaData");
                 //创建Sheet(MetaData):
-
                 Excel.Worksheet wsheet = Application.Sheets.Add();
                 wsheet.Name = "MetaData";
                 //wsheet.Visible = _isDebug ? Excel.XlSheetVisibility.xlSheetVisible : Excel.XlSheetVisibility.xlSheetVeryHidden;
@@ -681,7 +700,7 @@ namespace CCFormExcel2010
         /// </summary>
         /// <param name="dt"></param>
         /// <returns></returns>
-        public bool FillData_SetMainData(DataTable dt) //x尚未测试
+        public bool SetMainData(DataTable dt) //x尚未测试
         {
             //var r = false;
             foreach (DataColumn dc in dt.Columns)
@@ -690,39 +709,42 @@ namespace CCFormExcel2010
                 {
                     var range = Application.Names.Item(dc.ColumnName).RefersToRange;
                     var location = Application.Names.Item(dc.ColumnName).RefersToLocal; //=Sheet1!$B$2
-                    if (Regex.IsMatch(location, _base.regexRangeSingle) ==true) //是单个单元格
+                    if (Regex.IsMatch(location, _base.regexRangeSingle)) //是单个单元格
                     {
                         IgnoreNextOperation();
-                        range.Value2 = GetDisplayValue(tableName: "MainTable", keyOfEn: dc.ColumnName,
-                        value: dt.Rows[0][dc.ColumnName].ToString(), rangeCell: range);
+                        range.Value2 = GetDisplayValue(tableName: "MainTable", keyOfEn: dc.ColumnName, value: dt.Rows[0][dc.ColumnName].ToString(), rangeCell: range);
                     }
                 }
             }
             return true;
         }
+
         /// <summary>
         /// 填充子表数据
         /// </summary>
         /// <param name="dt">确保TableName为子表表名</param>
         /// <returns>是否填充成功</returns>
-        public bool FillData_SetDtlData(DataTable dt, bool isFill = true) //x尚未测试
+        public bool SetDtlData(DataTable dt, bool isFill = true) //x尚未测试
         {
             #region 排除不是子表的情况
 
             if (_base.IsExistsName(dt.TableName) == false) //excel中不存在该子表区域时
                 return false;
-
             var location = Application.Names.Item(dt.TableName).RefersToLocal;
-
             if (Regex.IsMatch(location, _base.regexRangeArea) == false) //excel中子表所在区域不是『区域』（是单个单元格）
                 return false;
-
             if (location.IndexOf("=MetaData!") > -1) //若是元数据list区域.
                 return false;
 
             #endregion
 
             var range = Application.Names.Item(dt.TableName).RefersToRange;
+            //排序
+            if (dt.Columns.Contains("Idx"))
+            {
+                dt.DefaultView.Sort = "Idx ASC";
+                dt = dt.DefaultView.ToTable();
+            }
 
             #region 获取子表
 
@@ -732,8 +754,9 @@ namespace CCFormExcel2010
                 st = _dictSubTables[dt.TableName];
                 if (st.Data != _originData.Tables[st.Name]) //用于【保存成功后，更新最新数据源】
                 {
-                    st.OriginData = _originData.Tables[st.Name].Copy();
-                    st.Data = _originData.Tables[st.Name].Copy();
+                    //st.OriginData = _originData.Tables[st.Name].Copy();
+                    //st.Data = _originData.Tables[st.Name].Copy();
+                    st.RefreshData(_originData.Tables[st.Name].Copy(), range);
                 }
             }
             else
@@ -750,7 +773,7 @@ namespace CCFormExcel2010
                         //则添加
                         //dr.Table.Columns.Add((string)col.Value);
                         errInfs += col.Value + ",";
-                        //throw new Exception("检测到字段绑定异常：子表“" + dt.TableName + "”绑定了『不存在于原始数据表』的字段:" + col.Value + "”！");
+                        //throw new Exception("检测到字段绑定异常：子表“" + dt.TableName + "”绑定了『不存在于原始数据表』的字段“" + col.Value + "”！");
                     }
                 }
 
@@ -814,6 +837,18 @@ namespace CCFormExcel2010
                     addRowsCount--;
                 }
             }
+
+            //清空明细表数据
+            for (var r = range.Row + st.TableHeadHeight + dt.Rows.Count; r < range.Row + range.Rows.Count; r++)
+            {
+                for (var c = range.Column; c < range.Column + range.Columns.Count; c++)
+                {
+                    range.Worksheet.Cells[r, c].Value2 = string.Empty;
+                }
+                //如果区域内每行第一个单元格存在ID，则清空
+                range.Worksheet.Cells[r, range.Column].ID = string.Empty;
+            }
+
             Application.CutCopyMode = 0; //离开复制模式
 
             #endregion
@@ -903,7 +938,11 @@ namespace CCFormExcel2010
                             rangeCell, fieldType: ftype, listName: strListName);
 
                         //设置关联
-                        st.SetConnection(intRangeColumn, r);
+                        //st.SetConnection(intRangeColumn, r);
+                        //设置区域中每行的第一个单元格的ID，记录为主键值【OID/MyPK/No等】
+                        var id = range.Worksheet.Cells[intRangeColumn, range.Column].ID;
+                        if (string.IsNullOrWhiteSpace(id) || Equals(id, st.Data.Rows[r][st.PKColumnName].ToString()) == false)
+                            range.Worksheet.Cells[intRangeColumn, range.Column].ID = st.Data.Rows[r][st.PKColumnName].ToString();
                     }
 
                     #endregion
@@ -1033,103 +1072,94 @@ namespace CCFormExcel2010
         public DataTable GetDtl(SubTable st)
         {
             //删除『已标记为删除的行』
-            foreach (DataRow dr1 in st.Data.Rows)
-            {
-                if (Equals(dr1["Idx"], RowStatus.Deleted.ToString()))
-                    st.Data.Rows.Remove(dr1);
-                //else if (dr["Idx"] == RowStatus.New.ToString()) //此时还没有dr["Idx"]="new"的行
-                //	dr["OID"] = "0";
-            }
+            //foreach (DataRow dr1 in st.Data.GetErrors())
+            //{
+            //    if (Equals(dr1.GetColumnError("Idx"), RowStatus.Deleted.ToString()))
+            //        st.Data.Rows.Remove(dr1);
+            //}
+
+            //foreach (DataRow dr1 in st.Data.Rows)
+            //{
+            //    if (Equals(dr1.GetColumnError("Idx"), RowStatus.Deleted.ToString()))
+            //        st.Data.Rows.Remove(dr1);
+            //    //else if (dr["Idx"] == RowStatus.New.ToString()) //此时还没有dr["Idx"]="new"的行
+            //    //	dr["OID"] = "0";
+            //}
 
             //遍历单元格的行
+            DataTable dt = st.Data.Clone();
             DataRow dr;
-            for (var r = st.Range.Row + st.TableHeadHeight; r < st.Range.Row + st.Range.Rows.Count; r++)
-            {
-                var bindOid = st.GetOidByRowid(r);
+            int beginRowIdx = st.Range.Row + st.TableHeadHeight;
 
+            for (var r = beginRowIdx; r < st.Range.Row + st.Range.Rows.Count; r++)
+            {
                 #region 判断是否是空行
                 var rangeRow = st.Range.Worksheet.get_Range(_base.ConvertInt2Letter(st.Range.Column) + r,
                     _base.ConvertInt2Letter(st.Range.Column + st.Range.Columns.Count - 1) + r);
-                if (_base.IsEmpty(rangeRow))//if (string.IsNullOrEmpty(rangeRow.Value2.ToString()))
+                if (_base.IsEmpty(rangeRow))
                 {
-                    // 如果是空行，判断是否有绑定字段，若有，则删除
-                    if (!string.IsNullOrEmpty(bindOid))
-                    {
-                        var drs = st.Data.Select(string.Format("OID='{0}'", bindOid));
-                        if (drs.Length == 1)
-                            st.Data.Rows.Remove(drs[0]);
-                    }
                     continue;
                 }
                 #endregion
 
-                #region 有关联的行//即：修改行的情况
+                var bindOid = st.GetOidByRowid(r);
+                DataRow newRow = null;
 
                 if (!string.IsNullOrEmpty(bindOid)) //『整行删除又填入数据』时作为修改处理
                 {
-                    var drs = st.Data.Select(string.Format("OID='{0}'", bindOid)); //!注意插入行时不能设置Idx="new"的关联信息
+                    var drs = st.Data.Select(string.Format("{1}='{0}'", bindOid, st.PKColumnName)); //!注意插入行时不能设置Idx="new"的关联信息
                     if (drs.Length == 1)
                     {
-                        var i = st.Data.Rows.IndexOf(drs[0]);
-                        //保存关联行号
-                        st.Data.Rows[i]["Idx"] = r;
-                        //保存所有字段
-                        foreach (KeyValuePair<int, string> col in st.Columns)
-                        {
-                            //xif (col.Key == "TableHeadHeight") continue;
-
-                            var rangeCell = st.Range.Worksheet.get_Range(_base.ConvertInt2Letter(col.Key) + r, missing);
-                            //st.Data.Rows[i][(string)col.Value] = GetSaveValue(st.Data.TableName, (string)col.Value, rangeCell);
-                            string val;
-                            if (VaildData(st.Data.TableName, col.Value, rangeCell, out val))
-                            {
-                                if (string.IsNullOrEmpty(val))
-                                    st.Data.Rows[i][col.Value] = DBNull.Value;
-                                else
-                                    st.Data.Rows[i][col.Value] = val;
-                            }
-                            else
-                                return null;
-                        }
+                        newRow = dt.Rows.Add(drs[0].ItemArray);
+                        //此处要判断此行上面的行中，是否已经存在相同的OID主键值，此种情况是由于复制造成的，复制时，ID一同复制，造成有2个相同ID的单元格
+                        //如果具有相同主键行，则标记此行为新建行
+                        if (st.GetSameRowBeforeCurrentRowByPkValue(bindOid, r) > 0)
+                            newRow[st.PKColumnName] = 0;
                     }
-                    continue;
+                    else
+                    {
+                        newRow = dt.NewRow();
+                    }
                 }
-                #endregion
-
-                #region 无关联的行//即：新增行的情况
                 else
                 {
-                    dr = st.Data.NewRow();
-                    //保存关联行号
-                    dr["Idx"] = r;
-                    //保存所有字段
-                    foreach (KeyValuePair<int, string> col in st.Columns)
-                    {
-                        //xif (col.Key == "TableHeadHeight") continue;
-                        var rangeCell = st.Range.Worksheet.get_Range(_base.ConvertInt2Letter(col.Key) + r, missing);
-                        //dr[(string)col.Value] = GetSaveValue(st.Data.TableName, (string)col.Value, rangeCell);
-                        string val;
-                        if (VaildData(st.Data.TableName, col.Value, rangeCell, out val))
-                        {
-                            dr[col.Value] = val;
-                        }
-                        else
-                        {
-                            //数据验证不通过时，删除所有新行，避免下一次保存时重复插入新行
-                            var drs = st.Data.Select("OID=0");
-                            foreach (DataRow dr1 in drs)
-                            {
-                                st.Data.Rows.Remove(dr1);
-                            }
-                            return null;
-                        }
-                    }
-                    dr["OID"] = 0; //标记为新建行
-                    st.Data.Rows.Add(dr);
+                    newRow = dt.NewRow();
                 }
-                #endregion
+
+                //保存关联行号
+                newRow["Idx"] = beginRowIdx++;
+                //保存所有字段
+                foreach (KeyValuePair<int, string> col in st.Columns)
+                {
+                    var rangeCell = st.Range.Worksheet.get_Range(_base.ConvertInt2Letter(col.Key) + r, missing);
+                    string val;
+
+                    if (VaildData(st.Data.TableName, col.Value, rangeCell, out val))
+                    {
+                        newRow[col.Value] = val;
+                    }
+                    else
+                    {
+                        //数据验证不通过时，删除所有新行，避免下一次保存时重复插入新行
+                        var drs = st.Data.Select(string.Format("{0}='0'", st.PKColumnName));
+
+                        foreach (DataRow dr1 in drs)
+                        {
+                            st.Data.Rows.Remove(dr1);
+                        }
+
+                        return null;
+                    }
+                }
+
+                if (newRow[st.PKColumnName] == DBNull.Value)
+                {
+                    newRow[st.PKColumnName] = 0; //标记为新建行
+                    dt.Rows.Add(newRow);
+                }
             }
-            return st.Data;
+
+            return dt;
         }
 
         #region 表单数据相关方法

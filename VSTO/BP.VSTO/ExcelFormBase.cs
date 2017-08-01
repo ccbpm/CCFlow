@@ -124,13 +124,26 @@ namespace BP.VSTO
 			}
 		}
 
-		/// <summary>
-		/// 判断两个区域是否有交集
-		/// </summary>
-		/// <param name="range1"></param>
-		/// <param name="range2"></param>
-		/// <returns></returns>
-		public bool IsIntersect(Excel.Range range1, Excel.Range range2)
+        /// <summary>
+        /// 判断指定行是否包含在指定行范围内
+        /// </summary>
+        /// <param name="rowBegin">开始行号</param>
+        /// <param name="rowEnd">结束行号</param>
+        /// <param name="rangeRowBegin">行范围开始行号</param>
+        /// <param name="rangeRowEnd">行范围结束行号</param>
+        /// <returns></returns>
+        public bool IsRowInRange(int rowBegin, int rowEnd, int rangeRowBegin, int rangeRowEnd)
+        {
+            return rowBegin >= rangeRowBegin && rowEnd <= rangeRowEnd;
+        }
+
+        /// <summary>
+        /// 判断两个区域是否有交集
+        /// </summary>
+        /// <param name="range1"></param>
+        /// <param name="range2"></param>
+        /// <returns></returns>
+        public bool IsIntersect(Excel.Range range1, Excel.Range range2)
 		{
 			var isRowIntersect = false;
 			for (var r1 = range1.Row; r1 < range1.Row + range1.Rows.Count; r1++)
@@ -361,6 +374,42 @@ namespace BP.VSTO
 			return count;
 		}
 
-		#endregion
-	}
+        #endregion
+
+        /// <summary>
+        /// 获取单元格的显示名称，格式如A1,B2
+        /// </summary>
+        /// <param name="columnIdx">单元格列号</param>
+        /// <param name="rowIdx">单元格行号</param>
+        /// <returns></returns>
+        public static string GetCellName(int columnIdx, int rowIdx)
+        {
+            int[] maxs = new[] { 26, 26 * 26 + 26, 26 * 26 * 26 + (26 * 26 + 26) + 26 };
+            int col = columnIdx;
+            int row = rowIdx;
+
+            if (col > maxs[2])
+                throw new Exception("列序号不正确，超出最大值");
+
+            int alphaCount = 1;
+
+            foreach (int m in maxs)
+            {
+                if (m < col)
+                    alphaCount++;
+            }
+
+            switch (alphaCount)
+            {
+                case 1:
+                    return (char)(col + 64) + "" + row;
+                case 2:
+                    return (char)((col / 26) + 64) + "" + (char)((col % 26) + 64) + row;
+                case 3:
+                    return (char)((col / 26 / 26) + 64) + "" + (char)(((col - col / 26 / 26 * 26 * 26) / 26) + 64) + "" + (char)((col % 26) + 64) + row;
+            }
+
+            return "Unkown";
+        }
+    }
 }

@@ -140,7 +140,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 通用的人员选择器.
         /// </summary>
-        GenerUserSelecter
+        GenerUserSelecter,
+        /// <summary>
+        /// 按部门与岗位的交集
+        /// </summary>
+        DeptAndStation
     }
     /// <summary>
     /// Selector属性
@@ -363,7 +367,6 @@ namespace BP.WF.Template
 
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
 
-
                 map.AddTBIntPK(SelectorAttr.NodeID, 0, "NodeID", true, true);
                 map.AddTBString(SelectorAttr.Name, null, "节点名称", true, true, 0, 100, 100);
 
@@ -371,7 +374,7 @@ namespace BP.WF.Template
                 SelectorAttr.SelectorDBShowWay, "@0=表格显示@1=树形显示");
 
                 map.AddDDLSysEnum(SelectorAttr.SelectorModel, 5, "窗口模式", true, true, SelectorAttr.SelectorModel,
-                    "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=自定义Url@5=使用通用人员选择器");
+                    "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=自定义Url@5=使用通用人员选择器@6=部门与岗位的交集");
 
                 map.AddDDLSysEnum(SelectorAttr.AccepterDBSort, 0, "选择的数据类别", true, true,
               SelectorAttr.AccepterDBSort, "@0=人员@1=部门@2=岗位@3=权限组");
@@ -394,10 +397,10 @@ namespace BP.WF.Template
                     DeptAttr.Name, DeptAttr.No, "节点岗位");
 
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeDepts(), new BP.WF.Port.Depts(), NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
-                DeptAttr.No, "节点部门", Dot2DotModel.TreeDept);
+                DeptAttr.No, "节点部门", Dot2DotModel.Default);
 
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeEmps(), new BP.WF.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,
-                    DeptAttr.No, "接受人员", Dot2DotModel.TreeDeptEmp);
+                    DeptAttr.No, "接受人员", Dot2DotModel.Default);
 
 
                 this._enMap = map;
@@ -478,6 +481,7 @@ namespace BP.WF.Template
 
                 DataTable dtDef = BP.DA.DBAccess.RunSQLReturnTable(sqlDB);
                 dtDef.TableName = "DefaultSelected";
+
                 ds.Tables.Add(dtDef);
             }
 
@@ -519,13 +523,28 @@ namespace BP.WF.Template
             string sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b WHERE a.No=b.FK_Dept AND B.FK_Node="+nodeID;
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+            }
             ds.Tables.Add(dt);
+
 
             //人员.
             sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeDept b WHERE a.FK_Dept=b.FK_Dept AND B.FK_Node=" + nodeID;
              DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
-             dtEmp.TableName = "Emps";
              ds.Tables.Add(dtEmp);
+
+             if (SystemConfig.AppCenterDBType == DBType.Oracle)
+             {
+                 dt.Columns["NO"].ColumnName = "No";
+                 dt.Columns["NAME"].ColumnName = "Name";
+                 dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+             }
+
+             dtEmp.TableName = "Emps";
              return ds;
         }
 

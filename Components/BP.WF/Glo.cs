@@ -190,6 +190,8 @@ namespace BP.WF
             string msg = "";
             try
             {
+                //删除枚举.
+                DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='SelectorModel'");
 
                 //SysEnum se = new SysEnum("FrmType", 1);//NOTE:此处升级时报错，2017-06-13，liuxc
 

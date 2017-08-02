@@ -393,10 +393,10 @@ namespace BP.GPM
 
                  map.AddSearchAttr(EmpAttr.FK_Dept);
 
-                ////#region 增加点对多属性
-                ////他的部门权限
-                //map.AttrsOfOneVSM.Add(new EmpDepts(), new Depts(), EmpDeptAttr.FK_Emp, EmpDeptAttr.FK_Dept,
-                //    DeptAttr.Name, DeptAttr.No, "部门权限");
+                 //#region 增加点对多属性
+                 //他的部门权限
+                 map.AttrsOfOneVSM.Add(new DeptEmps(), new Depts(), DeptEmpAttr.FK_Emp, DeptEmpAttr.FK_Dept,
+                     DeptAttr.Name, DeptAttr.No, "部门权限", Dot2DotModel.TreeDept);
 
                 //map.AttrsOfOneVSM.Add(new EmpStations(), new Stations(), EmpStationAttr.FK_Emp, EmpStationAttr.FK_Station,
                 //    DeptAttr.Name, DeptAttr.No, "岗位权限");

@@ -175,7 +175,6 @@ namespace BP.WF.HttpHandler
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
         }
-
         /// <summary>
         /// 获取指定部门下一级子部门及人员列表
         /// </summary>

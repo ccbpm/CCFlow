@@ -820,6 +820,13 @@ namespace BP.WF.Template
                     sql = sql.Replace("@WebUser.No", BP.Web.WebUser.No);
                     sql = sql.Replace("@WebUser.Name", BP.Web.WebUser.Name);
                     sql = sql.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                    if (en.IsOIDEntity == true)
+                    {
+                        sql = sql.Replace("@WorkID", en.GetValStrByKey("OID"));
+                        sql = sql.Replace("@OID", en.GetValStrByKey("OID"));
+                    }
+
                     if (sql.Contains("@") == true)
                     {
                         /* 如果包含 @ */

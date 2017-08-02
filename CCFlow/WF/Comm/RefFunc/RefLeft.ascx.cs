@@ -271,7 +271,7 @@ namespace CCFlow.WF.Comm.RefFunc
                     desc = en.EnDesc;
             }
 
-            //edited by liuxc,2016-3-3,修改左侧功能列表导航的表现形式，RefMethod中增加分组的概念，2016-3-7修改完成
+            //edited by liuxc,2016-3-3,修改左侧功能列表导航的表现形式，RefMethod中增加分组的概念，2016-3-7修改完成.
             Dictionary<string, List<LeftMenuItem>> dictDefs = new Dictionary<string, List<LeftMenuItem>>();
 
             //AddUL("class='navlist'");
@@ -296,7 +296,15 @@ namespace CCFlow.WF.Comm.RefFunc
                     if (enMM.HisUAC.IsView == false)
                         continue;
 
-                    string url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
+                    //判断模式.
+                    string url = "";
+                    if (vsM.Dot2DotModel == Dot2DotModel.TreeDept)
+                        url = "Dot2DotTreeDeptModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
+                    else if (vsM.Dot2DotModel == Dot2DotModel.TreeDeptEmp)
+                        url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
+                    else
+                        url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
+
                     try
                     {
                         sql = "SELECT COUNT(*) as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "='" + en.PKVal + "'";

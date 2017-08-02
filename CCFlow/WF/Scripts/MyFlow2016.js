@@ -2187,6 +2187,9 @@ $(function () {
 
 //发送 退回 移交等执行成功后转到  指定页面
 function OptSuc(msg) {
+
+  //  alert(msg);
+
     // window.location.href = "/WF/MyFlowInfo.aspx";
     $('.Message').hide();
     if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {

@@ -6685,7 +6685,7 @@ namespace BP.WF
             //设置引擎表.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
-            if (gwf.RetrieveFromDBSources() == 1 && (gwf.WFState == WFState.Draft || gwf.WFState == WFState.Blank))
+            if (gwf.RetrieveFromDBSources() == 1 && (gwf.WFState == WFState.Draft || gwf.WFState == WFState.Blank || gwf.WFState == WFState.Runing))
             {
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
                     throw new Exception("@设置待办错误，只有在开始节点时才能设置待办，现在的节点是:" + gwf.NodeName);

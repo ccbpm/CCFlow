@@ -2819,9 +2819,9 @@ namespace CCForm
                     {
                         string url1 = null;
                         if (Glo.IsDtlFrm == false)
-                            url1 = Glo.BPMHost + "/WF/CCForm/Frm.aspx?FK_MapData=" + Glo.FK_MapData + "&IsTest=1&WorkID=0&FK_Node=" + Glo.FK_Node + "&sd=s" + Glo.TimeKey;
+                            url1 = Glo.BPMHost + "/WF/CCForm/Frm.htm?FK_MapData=" + Glo.FK_MapData + "&IsTest=1&WorkID=0&FK_Node=" + Glo.FK_Node + "&sd=s" + Glo.TimeKey;
                         else
-                            url1 = Glo.BPMHost + "/WF/CCForm/FrmCard.aspx?EnsName=" + Glo.FK_MapData + "&RefPKVal=0&OID=0" + Glo.TimeKey;
+                            url1 = Glo.BPMHost + "/WF/CCForm/FrmCard.htm?EnsName=" + Glo.FK_MapData + "&RefPKVal=0&OID=0" + Glo.TimeKey;
 
                         Glo.WinOpen(url1, (int)Glo.HisMapData.FrmH, (int)Glo.HisMapData.FrmW);
                     }
@@ -4325,9 +4325,9 @@ namespace CCForm
                     {
                         string url1 = null;
                         if (Glo.IsDtlFrm == false)
-                            url1 = Glo.BPMHost + "/WF/CCForm/Frm.aspx?FK_MapData=" + Glo.FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=" + Glo.FK_Node + "&s=2" + Glo.TimeKey;
+                            url1 = Glo.BPMHost + "/WF/CCForm/Frm.htm?FK_MapData=" + Glo.FK_MapData + "&FrmType=FreeFrm&IsTest=1&WorkID=0&FK_Node=" + Glo.FK_Node + "&s=2" + Glo.TimeKey;
                         else
-                            url1 = Glo.BPMHost + "/WF/CCForm/FrmCard.aspx?EnsName=" + Glo.FK_MapData + "&FrmType=FreeFrm&RefPKVal=0&OID=0" + Glo.TimeKey;
+                            url1 = Glo.BPMHost + "/WF/CCForm/FrmCard.htm?EnsName=" + Glo.FK_MapData + "&FrmType=FreeFrm&RefPKVal=0&OID=0" + Glo.TimeKey;
 
                         Glo.WinOpen(url1, (int)Glo.HisMapData.FrmH, (int)Glo.HisMapData.FrmW);
 
@@ -4713,7 +4713,7 @@ namespace CCForm
                     BPDtl dtlFrm = Glo.currEle as BPDtl;
                     if (dtlFrm != null)
                     {
-                        string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/CCForm/Frm.aspx?FK_MapData=" + dtlFrm.Name
+                        string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + dtlFrm.Name
                             + "&FK_Node=" + Glo.FK_Node + "&UserNo=" + Glo.UserNo + "&SID=" + Glo.SID + "&S=2" + Glo.TimeKey;
 
                         if (Glo.Platform == Platform.JFlow)

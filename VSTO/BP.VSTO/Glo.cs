@@ -320,7 +320,7 @@ namespace BP.VSTO
 		/// <returns></returns>
 		public static string GetCurrentVersion()
 		{
-			System.Reflection.Assembly fileAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+            System.Reflection.Assembly fileAssembly = System.Reflection.Assembly.GetCallingAssembly();
 			System.Version fileVersion = fileAssembly.GetName().Version;
 			return fileVersion.ToString();
 		}

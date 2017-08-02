@@ -423,6 +423,8 @@ namespace BP.WF.Template
                     return ByEmp(nodeid);
                 case Template.SelectorModel.Station:
                     return ByStation(nodeid);
+                case Template.SelectorModel.DeptAndStation:
+                    return ByStation(nodeid);
                 case Template.SelectorModel.SQL:
                     return BySQL(nodeid, en);
                 default:
@@ -571,7 +573,25 @@ namespace BP.WF.Template
             ds.Tables.Add(dtEmp);
             return ds;
         }
+        private DataSet DeptAndStation(int nodeID)
+        {
+            // 定义数据容器.
+            DataSet ds = new DataSet();
 
+            //部门.
+            string sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_EmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Depts";
+            ds.Tables.Add(dt);
+
+            //人员.
+            sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
+            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp.TableName = "Emps";
+            ds.Tables.Add(dtEmp);
+            return ds;
+        }
+        
         /// <summary>
         /// 按照Station获取部门人员树.
         /// </summary>

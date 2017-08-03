@@ -80,7 +80,7 @@ namespace BP.WF.Template
 
                 map.AddTBStringPK(SQLTemplateAttr.No, null, "编号", true, true, 3, 3, 3);
                 map.AddDDLSysEnum(SQLTemplateAttr.SQLType, 0, "模版SQL类型", true, true, SQLTemplateAttr.SQLType,
-                    "@0=方向条件@1=接受人规则@2=下拉框数据过滤@3=级联下拉框@4=PopVal开窗返回值");
+                    "@0=方向条件@1=接受人规则@2=下拉框数据过滤@3=级联下拉框@4=PopVal开窗返回值@5=人员选择器人员选择范围");
 
                 map.AddTBString(SQLTemplateAttr.Name, null, "SQL说明", true, false, 0, 200, 20,true);
 

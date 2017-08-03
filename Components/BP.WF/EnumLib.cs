@@ -6,6 +6,107 @@ using System.Text;
 namespace BP.WF
 {
     /// <summary>
+    /// 方向条件控制规则
+    /// </summary>
+    public enum CondModel
+    {
+        /// <summary>
+        /// 按照用户设置的方向条件计算
+        /// </summary>
+        ByLineCond,
+        /// <summary>
+        /// 按照用户选择计算
+        /// </summary>
+        ByUserSelected,
+        /// <summary>
+        /// 发送按钮旁下拉框选择
+        /// </summary>
+        SendButtonSileSelect
+    }
+    /// <summary>
+    /// 关系类型
+    /// </summary>
+    public enum CondOrAnd
+    {
+        /// <summary>
+        /// 关系集合里面的所有条件都成立.
+        /// </summary>
+        ByAnd,
+        /// <summary>
+        /// 关系集合里的只有一个条件成立.
+        /// </summary>
+        ByOr
+    }
+    /// <summary>
+    /// 待办工作超时处理方式
+    /// </summary>
+    public enum OutTimeDeal
+    {
+        /// <summary>
+        /// 不处理
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// 自动的转向下一步骤
+        /// </summary>
+        AutoTurntoNextStep = 1,
+        /// <summary>
+        /// 自动跳转到指定的点
+        /// </summary>
+        AutoJumpToSpecNode = 2,
+        /// <summary>
+        /// 自动移交到指定的人员
+        /// </summary>
+        AutoShiftToSpecUser = 3,
+        /// <summary>
+        /// 向指定的人员发送消息
+        /// </summary>
+        SendMsgToSpecUser = 4,
+        /// <summary>
+        /// 删除流程
+        /// </summary>
+        DeleteFlow = 5,
+        /// <summary>
+        /// 执行SQL
+        /// </summary>
+        RunSQL = 6
+    }
+    public enum SelectorModel
+    {
+        /// <summary>
+        /// 岗位
+        /// </summary>
+        Station,
+        /// <summary>
+        /// 部门
+        /// </summary>
+        Dept,
+        /// <summary>
+        /// 操作员
+        /// </summary>
+        Emp,
+        /// <summary>
+        /// SQL
+        /// </summary>
+        SQL,
+        /// <summary>
+        /// SQL模版计算
+        /// </summary>
+        SQLTemplate,
+        /// <summary>
+        /// 通用的人员选择器.
+        /// </summary>
+        GenerUserSelecter,
+        /// <summary>
+        /// 按部门与岗位的交集
+        /// </summary>
+        DeptAndStation,
+        /// <summary>
+        /// 自定义链接
+        /// </summary>
+        Url
+    }
+    /// <summary>
     /// 设计器类型
     /// </summary>
     public enum CCBPM_DType

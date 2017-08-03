@@ -247,7 +247,7 @@ namespace BP.WF.HttpHandler
 
             int val = this.GetRequestValInt("RB_OutTimeDeal");
 
-            var deal = (BP.WF.Template.OutTimeDeal)val;
+            var deal = (BP.WF.OutTimeDeal)val;
 
             nd.HisOutTimeDeal = deal;
 

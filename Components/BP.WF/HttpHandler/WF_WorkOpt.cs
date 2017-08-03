@@ -1058,18 +1058,25 @@ namespace BP.WF.HttpHandler
         }
 
         #region 选择接受人.
-        /// <summary>
-        /// 初始化接受人.
-        /// </summary>
-        /// <returns></returns>
-        public string AccepterInit()
+        public string AccepterInit_bak()
         {
+            //当前节点ID.
+            Node nd = new Node(this.FK_Node);
+
             int toNodeID = 0;
             if (this.GetValFromFrmByKey("ToNode") != "0")
                 toNodeID = this.GetValIntFromFrmByKey("ToNode");
 
+            if (toNodeID == 0)
+            {
+                Nodes nds = nd.HisToNodes;
+                if (nds.Count == 1)
+                    toNodeID = nds[0].GetValIntByKey("NodeID");
+                else
+                    return "err@参数错误,必须传递来到达的节点ID.";
+            }
+
             //当前节点.
-            Node nd = new Node(this.FK_Node);
 
             //到达的节点, 用户生成到达节点的下拉框.
             Nodes toNodes = nd.HisToNodes;
@@ -1077,7 +1084,6 @@ namespace BP.WF.HttpHandler
             dtNodes.TableName = "Nodes";
             dtNodes.Columns.Add(new DataColumn("No", typeof(string)));
             dtNodes.Columns.Add(new DataColumn("Name", typeof(string)));
-            dtNodes.Columns.Add(new DataColumn("SelectorDBShowWay", typeof(string)));
             dtNodes.Columns.Add(new DataColumn("SelectorModel", typeof(string)));
             foreach (Node item in toNodes)
             {
@@ -1085,7 +1091,6 @@ namespace BP.WF.HttpHandler
                 Selector selectItem = new Selector(item.NodeID);
                 dr["No"] = item.NodeID;
                 dr["Name"] = item.Name;
-                dr["SelectorDBShowWay"] = selectItem.SelectorDBShowWay;
                 dr["SelectorModel"] = selectItem.SelectorModel;
                 dtNodes.Rows.Add(dr);
             }
@@ -1107,7 +1112,79 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtNodes);
 
             //返回json.
-            return BP.Tools.Json.DataSetToJson(ds,false);
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+        /// <summary>
+        /// 初始化接受人.
+        /// </summary>
+        /// <returns></returns>
+        public string AccepterInit()
+        {
+            //当前节点ID.
+            Node nd = new Node(this.FK_Node);
+
+            int toNodeID = 0;
+            if (this.GetValFromFrmByKey("ToNode") != "0")
+                toNodeID = this.GetValIntFromFrmByKey("ToNode");
+
+            if (toNodeID == 0)
+            {
+                Nodes nds = nd.HisToNodes;
+                if (nds.Count == 1)
+                    toNodeID = nds[0].GetValIntByKey("NodeID");
+                else
+                    return "err@参数错误,必须传递来到达的节点ID.";
+            }
+
+            Work wk = nd.HisWork;
+            wk.OID = this.WorkID;
+            wk.Retrieve();
+
+            Selector select = new Selector(toNodeID);
+
+            //获得 部门与人员.
+            DataSet ds = select.GenerDataSet(toNodeID, wk);
+
+            #region 计算上一次选择的结果, 并把结果返回过去.
+            string sql = "";
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No", typeof(string));
+            dt.TableName = "Selected";
+            if (select.IsAutoLoadEmps)
+            {
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT  top 1 Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID";
+
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT  Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND ROWNUM =1  ORDER BY WorkID ";
+
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = "SELECT  Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID ";
+
+                string tag = DBAccess.RunSQLReturnStringIsNull(sql, "");
+
+                string[] strs = tag.Split(';');
+                foreach (string str in strs)
+                {
+                    if (string.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    string[] emp = str.Split(';');
+                    if (emp.Length != 2)
+                        continue;
+
+                    DataRow dr = dt.NewRow();
+                    dr[0] = emp[1];
+                    dt.Rows.Add(dr);
+                }
+            }
+
+            //增加一个tabel.
+            ds.Tables.Add(dt);
+            #endregion 计算上一次选择的结果, 并把结果返回过去.
+
+            //返回json.
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
         /// <summary>
         /// 保存.

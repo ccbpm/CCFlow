@@ -6325,14 +6325,14 @@ namespace BP.WF
             nd.Step = idx;
 
             //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-            nd.CondModel = Template.CondModel.ByLineCond; //默认的发送方向.
+            nd.CondModel = CondModel.ByLineCond; //默认的发送方向.
             nd.HisDeliveryWay = DeliveryWay.BySelected;   //上一步发送人来选择.
             nd.Insert();
             nd.CreateMap();
 
             //通用的人员选择器.
             BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
-            select.SelectorModel = Template.SelectorModel.GenerUserSelecter;
+            select.SelectorModel = SelectorModel.GenerUserSelecter;
             select.Update();
 
             return nd;
@@ -6401,7 +6401,7 @@ namespace BP.WF
 
 
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-                nd.CondModel = Template.CondModel.SendButtonSileSelect; //默认的发送方向.
+                nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
 
                 nd.Insert();
@@ -6411,7 +6411,7 @@ namespace BP.WF
 
                 //通用的人员选择器.
                 BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
-                select.SelectorModel = Template.SelectorModel.GenerUserSelecter;
+                select.SelectorModel = SelectorModel.GenerUserSelecter;
                 select.Update();
 
 
@@ -6429,7 +6429,7 @@ namespace BP.WF
                 nd.ICON = "审核";
 
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
-                nd.CondModel = Template.CondModel.SendButtonSileSelect; //默认的发送方向.
+                nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
 
                 nd.Insert();
@@ -6438,7 +6438,7 @@ namespace BP.WF
 
                 //通用的人员选择器.
                 select = new Template.Selector(nd.NodeID);
-                select.SelectorModel = Template.SelectorModel.GenerUserSelecter;
+                select.SelectorModel = SelectorModel.GenerUserSelecter;
                 select.Update();
 
                 BP.Sys.MapData md = new BP.Sys.MapData();

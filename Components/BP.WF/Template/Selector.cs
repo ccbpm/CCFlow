@@ -10,143 +10,6 @@ using BP.Web;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 方向条件控制规则
-    /// </summary>
-    public enum CondModel
-    {
-        /// <summary>
-        /// 按照用户设置的方向条件计算
-        /// </summary>
-        ByLineCond,
-        /// <summary>
-        /// 按照用户选择计算
-        /// </summary>
-        ByUserSelected,
-        /// <summary>
-        /// 发送按钮旁下拉框选择
-        /// </summary>
-        SendButtonSileSelect
-    }
-    /// <summary>
-    /// 关系类型
-    /// </summary>
-    public enum CondOrAnd
-    {
-        /// <summary>
-        /// 关系集合里面的所有条件都成立.
-        /// </summary>
-        ByAnd,
-        /// <summary>
-        /// 关系集合里的只有一个条件成立.
-        /// </summary>
-        ByOr
-    }
-    /// <summary>
-    /// 待办工作超时处理方式
-    /// </summary>
-    public enum OutTimeDeal
-    {
-        /// <summary>
-        /// 不处理
-        /// </summary>
-        None = 0,
-        /// <summary>
-        /// 自动的转向下一步骤
-        /// </summary>
-        AutoTurntoNextStep=1,
-        /// <summary>
-        /// 自动跳转到指定的点
-        /// </summary>
-        AutoJumpToSpecNode=2,
-        /// <summary>
-        /// 自动移交到指定的人员
-        /// </summary>
-        AutoShiftToSpecUser=3,
-        /// <summary>
-        /// 向指定的人员发送消息
-        /// </summary>
-        SendMsgToSpecUser=4,
-        /// <summary>
-        /// 删除流程
-        /// </summary>
-        DeleteFlow=5,
-        /// <summary>
-        /// 执行SQL
-        /// </summary>
-        RunSQL=6
-        ///// <summary>
-        ///// 到达指定的日期，仍未处理，自动向下发送.
-        ///// </summary>
-        //WhenToSpecDataAutoSend
-    }
-    /// <summary>
-    /// 选择的数据类别
-    /// </summary>
-    public enum AccepterDBSort
-    {
-        /// <summary>
-        /// 人员
-        /// </summary>
-        Emp,
-        /// <summary>
-        /// 部门
-        /// </summary>
-        Dept,
-        /// <summary>
-        /// 岗位
-        /// </summary>
-        Station,
-        /// <summary>
-        /// 权限组
-        /// </summary>
-        Group
-    }
-    /// <summary>
-    /// 显示方式
-    /// </summary>
-    public enum SelectorDBShowWay
-    {
-        /// <summary>
-        /// 表格
-        /// </summary>
-        Table,
-        /// <summary>
-        /// 树
-        /// </summary>
-        Tree
-    }
-    public enum SelectorModel
-    {
-        /// <summary>
-        /// 表格
-        /// </summary>
-        Station,
-        /// <summary>
-        /// 树
-        /// </summary>
-        Dept,
-        /// <summary>
-        /// 操作员
-        /// </summary>
-        Emp,
-        /// <summary>
-        /// SQL
-        /// </summary>
-        SQL,
-        /// <summary>
-        /// 自定义链接
-        /// </summary>
-        Url,
-        /// <summary>
-        /// 通用的人员选择器.
-        /// </summary>
-        GenerUserSelecter,
-        /// <summary>
-        /// 按部门与岗位的交集
-        /// </summary>
-        DeptAndStation
-    }
-    /// <summary>
     /// Selector属性
     /// </summary>
     public class SelectorAttr : EntityNoNameAttr
@@ -178,11 +41,12 @@ namespace BP.WF.Template
         /// <summary>
         /// 数据显示方式(表格与树)
         /// </summary>
-        public const string SelectorDBShowWay = "SelectorDBShowWay";
+        public const string FK_SQLTemplate = "FK_SQLTemplate";
         /// <summary>
-        /// 选择的数据类别
+        /// 是否自动装载上一笔加载的数据
         /// </summary>
-        public const string AccepterDBSort = "AccepterDBSort";
+        public const string IsAutoLoadEmps = "IsAutoLoadEmps";
+
     }
     /// <summary>
     /// 选择器
@@ -198,20 +62,6 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 显示方式
-        /// </summary>
-        public SelectorDBShowWay SelectorDBShowWay
-        {
-            get
-            {
-                return (SelectorDBShowWay)this.GetValIntByKey(SelectorAttr.SelectorDBShowWay);
-            }
-            set
-            {
-                this.SetValByKey(SelectorAttr.SelectorDBShowWay, (int)value);
-            }
-        }
-        /// <summary>
         /// 选择模式
         /// </summary>
         public SelectorModel SelectorModel
@@ -223,20 +73,6 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(SelectorAttr.SelectorModel, (int)value);
-            }
-        }
-        /// <summary>
-        /// 选择的数据类型
-        /// </summary>
-        public AccepterDBSort AccepterDBSort
-        {
-            get
-            {
-                return (AccepterDBSort)this.GetValIntByKey(SelectorAttr.AccepterDBSort);
-            }
-            set
-            {
-                this.SetValByKey(SelectorAttr.AccepterDBSort, (int)value);
             }
         }
         /// <summary>
@@ -303,7 +139,20 @@ namespace BP.WF.Template
                 this.SetValByKey(SelectorAttr.SelectorP3, value);
             }
         }
-
+        /// <summary>
+        /// 是否自动装载上一笔加载的数据
+        /// </summary>
+        public bool IsAutoLoadEmps
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SelectorAttr.IsAutoLoadEmps);
+            }
+            set
+            {
+                this.SetValByKey(SelectorAttr.IsAutoLoadEmps, value);
+            }
+        }
         /// <summary>
         /// 节点ID
         /// </summary>
@@ -370,14 +219,17 @@ namespace BP.WF.Template
                 map.AddTBIntPK(SelectorAttr.NodeID, 0, "NodeID", true, true);
                 map.AddTBString(SelectorAttr.Name, null, "节点名称", true, true, 0, 100, 100);
 
-                map.AddDDLSysEnum(SelectorAttr.SelectorDBShowWay, 0, "数据显示方式", true, true,
-                SelectorAttr.SelectorDBShowWay, "@0=表格显示@1=树形显示");
+                map.AddDDLSysEnum(SelectorAttr.SelectorModel, 5, "显示方式", true, true, SelectorAttr.SelectorModel,
+                    "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=按SQL模版计算@5=使用通用人员选择器@6=部门与岗位的交集@7=自定义Url");
 
-                map.AddDDLSysEnum(SelectorAttr.SelectorModel, 5, "窗口模式", true, true, SelectorAttr.SelectorModel,
-                    "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=自定义Url@5=使用通用人员选择器@6=部门与岗位的交集");
+                map.AddDDLSQL(SelectorAttr.FK_SQLTemplate, null, "SQL模版",
+                    "SELECT No,Name FROM WF_SQLTemplate WHERE SQLType=5", true);
 
-                map.AddDDLSysEnum(SelectorAttr.AccepterDBSort, 0, "选择的数据类别", true, true,
-              SelectorAttr.AccepterDBSort, "@0=人员@1=部门@2=岗位@3=权限组");
+                map.AddBoolean(SelectorAttr.IsAutoLoadEmps, true, "是否自动加载上一次选择的人员？", true, true, true);
+
+
+              //  map.AddDDLSysEnum(SelectorAttr.AccepterDBSort, 0, "选择的数据类别", true, true,
+              //SelectorAttr.AccepterDBSort, "@0=人员@1=部门@2=岗位@3=权限组");
 
 
                 map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数:可以为空,比如:SELECT No,Name,ParentNo FROM  Port_Dept", true, false, true);
@@ -386,10 +238,8 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(SelectorAttr.SelectorP3, null, "默认选择的数据源:比如:SELECT FK_Emp FROM  WF_GenerWorkerList WHERE FK_Node=102 AND WorkID=@WorkID", true, false, true);
                 map.AddTBStringDoc(SelectorAttr.SelectorP4, null, "强制选择的数据源:比如:SELECT FK_Emp FROM  WF_GenerWorkerList WHERE FK_Node=102 AND WorkID=@WorkID", true, false, true);
 
-
                 //map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数,可以为空", true, false, true);
                 //map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源", true, false, true);
-
 
                 // 相关功能。
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
@@ -418,19 +268,19 @@ namespace BP.WF.Template
             DataSet ds = null;
             switch (this.SelectorModel)
             {
-                case Template.SelectorModel.Dept:
+                case SelectorModel.Dept:
                     ds = ByDept(nodeid);
                     break;
-                case Template.SelectorModel.Emp:
+                case SelectorModel.Emp:
                     ds = ByEmp(nodeid);
                     break;
-                case Template.SelectorModel.Station:
+                case SelectorModel.Station:
                     ds = ByStation(nodeid);
                     break;
-                case Template.SelectorModel.DeptAndStation:
+                case SelectorModel.DeptAndStation:
                     ds = ByStation(nodeid);
                     break;
-                case Template.SelectorModel.SQL:
+                case SelectorModel.SQL:
                     ds = BySQL(nodeid, en);
                     break;
                 default:
@@ -550,34 +400,18 @@ namespace BP.WF.Template
             DataSet ds = new DataSet();
 
             //部门.
-            string sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b WHERE a.No=b.FK_Dept AND B.FK_Node="+nodeID;
+            string sql = "SELECT distinct a.No,a.Name, a.ParentNo FROM Port_Dept a,  WF_NodeDept b WHERE a.No=b.FK_Dept AND B.FK_Node=" + nodeID;
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
-            }
             ds.Tables.Add(dt);
 
-
             //人员.
-            sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeDept b WHERE a.FK_Dept=b.FK_Dept AND B.FK_Node=" + nodeID;
-             DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
-             ds.Tables.Add(dtEmp);
-
-             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-             {
-                 dt.Columns["NO"].ColumnName = "No";
-                 dt.Columns["NAME"].ColumnName = "Name";
-                 dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
-             }
-
-             dtEmp.TableName = "Emps";
-             return ds;
+            sql = "SELECT distinct a.No, a.Name, a.FK_Dept FROM Port_Emp a, WF_NodeDept b WHERE a.FK_Dept=b.FK_Dept AND B.FK_Node=" + nodeID;
+            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            ds.Tables.Add(dtEmp);
+            dtEmp.TableName = "Emps";
+            return ds;
         }
-
         /// <summary>
         /// 按照Emp获取部门人员树.
         /// </summary>
@@ -607,13 +441,24 @@ namespace BP.WF.Template
             DataSet ds = new DataSet();
 
             //部门.
-            string sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_EmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
+            string sql = "";
+
+            if (SystemConfig.OSModel == OSModel.OneOne)
+                sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_EmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
+            else
+                sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
+
+
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
             ds.Tables.Add(dt);
 
             //人员.
-            sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
+            if (SystemConfig.OSModel == OSModel.OneOne)
+                sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
+            else
+                sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
+
             DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtEmp.TableName = "Emps";
             ds.Tables.Add(dtEmp);
@@ -644,8 +489,6 @@ namespace BP.WF.Template
             ds.Tables.Add(dtEmp);
             return ds;
         }
-
-
     }
     /// <summary>
     /// Accpter

@@ -319,6 +319,16 @@ namespace CCFlow.WF.CCForm
                         dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
                     }
                 }
+                else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
+                {
+                    /* 继承模式 */
+                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                    qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                    qo.addOr();
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(this.PKVal));
+                    qo.addOrderBy("RDT");
+                    qo.DoQuery();
+                }
                 else
                 {
                     int num = 0;
@@ -814,9 +824,10 @@ namespace CCFlow.WF.CCForm
                 foreach (FrmAttachmentDB db in dbs)
                 {
                     string copyToPath = tempPath;
-                    if (!File.Exists(db.FileFullName)) continue;
+                    if (File.Exists(db.FileFullName) == false)
+                        continue;
 
-                    if (!string.IsNullOrEmpty(db.Sort))
+                    if (string.IsNullOrEmpty(db.Sort) == false)
                     {
                         copyToPath = tempPath + "//" + db.Sort;
                         if (System.IO.Directory.Exists(copyToPath) == false)
@@ -837,6 +848,7 @@ namespace CCFlow.WF.CCForm
                     hLink.Text = "如果没有弹出下载文件，请点击此处进行下载。";
                     hLink.NavigateUrl = HttpContext.Current.Request.ApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
                 }
+
                 //BP.PubClass.DownloadFile(zipFile, this.WorkID + ".zip");
             }
             catch (Exception ex)
@@ -940,6 +952,7 @@ namespace CCFlow.WF.CCForm
                     this.Pub1.Add("</div>");
                     this.Pub1.Add(uploadJS.ToString());
                 #endregion
+
                     if (athDesc.IsNote)
                     {
                         TextBox tb = new TextBox();
@@ -996,8 +1009,6 @@ namespace CCFlow.WF.CCForm
                 this.Pub1.AddTREnd();
             }
         }
-
-
 
         private string GetRealPath(string fileFullName)
         {
@@ -1229,7 +1240,6 @@ namespace CCFlow.WF.CCForm
                             BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                     }
                     #endregion 保存到iis服务器.
-
 
                     #region 保存到数据库 / FTP服务器上.
                     if (athDesc.SaveWay == 1 || athDesc.SaveWay == 2)

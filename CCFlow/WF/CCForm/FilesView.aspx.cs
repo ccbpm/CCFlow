@@ -470,6 +470,28 @@ namespace CCFlow.WF.CCForm
                     qo.DoQuery();
                 }
             }
+            else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
+            {
+                /* 按照workid 计算. */
+                int num = dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachment,
+                    FrmAttachmentDBAttr.RefPKVal, this.PKVal, "rdt");
+                if (num == 0 && this.IsCC == "1")
+                {
+                    CCList cc = new CCList();
+                    int nnn = cc.Retrieve(CCListAttr.FK_Node, this.FK_Node, CCListAttr.WorkID, this.WorkID, CCListAttr.CCTo, WebUser.No);
+                    if (cc.FK_Node != 0)
+                    {
+                        this._fk_node = cc.FK_Node;
+
+                        dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachmentExt,
+                            FrmAttachmentDBAttr.FK_MapData, "ND" + cc.FK_Node, FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
+
+                        //重新设置文件描述。
+                        athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.NoOfObj, "DocMultiAth");
+                    }
+                }
+
+            }
             else
             {
 

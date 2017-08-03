@@ -49,7 +49,7 @@
     <StartGuidePara3 />
     <CFlowWay>0</CFlowWay>
     <CFlowPara />
-    <Ver>2017-08-02 12:02:49</Ver>
+    <Ver>2017-08-03 22:09:47</Ver>
     <DType>0</DType>
     <AtPara />
     <DTSWay>0</DTSWay>
@@ -834,8 +834,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@18503@18504@18505@18506@18508</GroupStaNDs>
-    <X>308</X>
-    <Y>193</Y>
+    <X>313</X>
+    <Y>204</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
@@ -1025,8 +1025,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@18503@18504@18505@18506@18508</GroupStaNDs>
-    <X>432</X>
-    <Y>196</Y>
+    <X>571</X>
+    <Y>208</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
@@ -1216,8 +1216,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@18503@18504@18505@18506@18508</GroupStaNDs>
-    <X>558</X>
-    <Y>193</Y>
+    <X>685</X>
+    <Y>207</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
@@ -1407,8 +1407,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@18507</GroupStaNDs>
-    <X>676</X>
-    <Y>192</Y>
+    <X>435</X>
+    <Y>204</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
@@ -1598,8 +1598,8 @@
     <PTable />
     <ShowSheets />
     <GroupStaNDs>@18503@18504@18505@18506@18508</GroupStaNDs>
-    <X>822</X>
-    <Y>184</Y>
+    <X>824</X>
+    <Y>202</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />

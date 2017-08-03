@@ -27,7 +27,6 @@
             if (!workid || workid == "0") {
                 workid = GetQueryString("OID");
             }
-
             InitPage();
         });
 
@@ -85,9 +84,8 @@
                     if (this.IsDoc) {
                         html += "<td>";
                         html += "<div style='float:left'>" + wcDesc.FWCOpLabel + "</div>";
-                        //html += "<div style='float:left'><a href=\"javascript:TBHelp('ND" + nodeid + "')\"><img src='../Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>";
-                        html += "<div style='float:left'></div>";
-
+                        html += "<div style='float:left'><a href=\"javascript:TBHelp('ND" + nodeid + "')\"><img src='../Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>";
+                        //html += "<div style='float:left'></div>";
 
                         if (wcDesc.FWCAth == 1) {
                             html += "<div style='float:right' id='uploaddiv' onmouseover='UploadFileChange(this)'></div>";
@@ -99,7 +97,7 @@
                         html += "</td>";
                     }
                     else {
-                        html += '<td style="word-wrap: break-word;line-height:30px;">' + this.Msg + '</td>';
+                        html += '<td style="word-wrap: break-word;line-height:30px;"><font color=green>' + this.Msg + '</font></td>';
                     }
 
                     html += '</tr>';
@@ -132,6 +130,7 @@
                 }
             }, this);
         }
+
 
         function SaveWorkCheck() {
             var doc = $("#WorkCheck_Doc").val();
@@ -191,6 +190,7 @@
         }
 
         function TBHelp(enName) {
+
             var explorer = window.navigator.userAgent;
             var str = "";
             var url = "../Comm/HelperOfTBEUI.aspx?EnsName=" + enName + "&AttrKey=WorkCheck_Doc&WordsSort=0" + "&FK_MapData=" + enName + "&id=WorkCheck_Doc";

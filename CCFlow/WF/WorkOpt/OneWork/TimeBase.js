@@ -103,7 +103,7 @@ function InitPage() {
                 doc = "<img src='../../Img/TolistSta/" + dotColor + ".png' />" + track.NDFromT + "     -  " + timeBase + track.ActionTypeText;
 
                 var at = track.ActionType;
-                
+
                 if (at == ActionType.Forward || at == ActionType.ForwardAskfor || at == ActionType.WorkCheck || at == ActionType.Order
                     || at == ActionType.SubFlowForward    //分流节点也显示表单
                     || at == ActionType.FlowOver    //added by liuxc,2014-12-3,正常结束结点也显示表单
@@ -137,9 +137,19 @@ function InitPage() {
 
                     //   doc += "<p>到达时间：" + toTime.ToString("yy年MM月dd日HH:mm") + " 用时：" + DataType.GetSpanTime(toTime, dtt) + "</p>";
 
-                    toTime = tracks[idx - 1]["RDT"];
+                    var toTime = tracks[idx - 1]["RDT"];
+
+                    var toTimeDot = toTime.replace(/\-/g, "/");
+                    toTimeDot = new Date(toTimeDot);
+
+
+                    //当前发生日期.
+                    var timeDot = tracks[idx]["RDT"].replace(/\-/g, "/");
+                    timeDot = new Date(timeDot);
+
                     //var toTime = track
-                    doc += "<p>到达时间：" + toTime + " 用时：xxxx </p>";
+                    // doc += "<p>到达时间：" + toTime + " 用时：xxxx </p>";
+                    doc += "<p>到达时间：" + toTime + "</p>";
                 }
 
 

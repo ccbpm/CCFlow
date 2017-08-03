@@ -4,8 +4,18 @@
     <title>驰骋工作流</title>
     <!-- 引用通用的js文件. -->
     <script type="text/javascript"   src="../../Scripts/config.js" ></script>
+    <script type="text/javascript"   src="../../Scripts/QueryString.js" ></script>
+
     <script type="text/javascript" language="javascript" >
         function Load() {
+
+            var v = GetQueryString("T");
+            if (v != null) {
+                //var fk_mapadta = this.GetQueryString("FK_MapData");
+                //var pk = this.GetQueryString("PK");
+                window.location.href = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&PK=" + GetQueryString("FK_MapData") + "_" + GetQueryString("Ath");
+                return;
+            }
 
             var url = window.location.href;
             if (plant == "CCFlow") {

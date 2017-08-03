@@ -415,24 +415,52 @@ namespace BP.WF.Template
         /// <returns></returns>
         public System.Data.DataSet GenerDataSet(int nodeid, Entity en)
         {
+            DataSet ds = null;
             switch (this.SelectorModel)
             {
                 case Template.SelectorModel.Dept:
-                    return ByDept(nodeid);
+                    ds = ByDept(nodeid);
+                    break;
                 case Template.SelectorModel.Emp:
-                    return ByEmp(nodeid);
+                    ds = ByEmp(nodeid);
+                    break;
                 case Template.SelectorModel.Station:
-                    return ByStation(nodeid);
+                    ds = ByStation(nodeid);
+                    break;
                 case Template.SelectorModel.DeptAndStation:
-                    return ByStation(nodeid);
+                    ds = ByStation(nodeid);
+                    break;
                 case Template.SelectorModel.SQL:
-                    return BySQL(nodeid, en);
+                    ds = BySQL(nodeid, en);
+                    break;
                 default:
-                    DataSet ds= new DataSet();
-                    return ds;
+                    throw new Exception("@错误.");
                     break;
             }
-            return null;
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                foreach (DataTable dt in ds.Tables)
+                {
+                    for (int i = 0; i < dt.Columns.Count; i++)
+                    {
+                        if (dt.Columns[i].ColumnName == "NO")
+                            dt.Columns[i].ColumnName = "No";
+
+                        if (dt.Columns[i].ColumnName == "NAME")
+                            dt.Columns[i].ColumnName = "Name";
+
+                        if (dt.Columns[i].ColumnName == "PARENTNO")
+                            dt.Columns[i].ColumnName = "ParentNo";
+
+                        if (dt.Columns[i].ColumnName == "FK_DEPT")
+                            dt.Columns[i].ColumnName = "FK_Dept";
+                    }
+                }
+            }
+
+
+            return ds;
         }
         /// <summary>
         /// 按照SQL计算.

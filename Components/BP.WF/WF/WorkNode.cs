@@ -7895,10 +7895,8 @@ namespace BP.WF
 
             string sql = "";
 
-            //根据当前节点获取上一个节点，不用管那个人发送的
-            sql = "SELECT NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE WorkID=" + this.WorkID
-                                                                                        + " AND NDTo='" + this.HisNode.NodeID
-                                                                                        + "' AND ActionType=1 ORDER BY RDT DESC";
+            string truckTable = "ND" + int.Parse(this.HisNode.FK_Flow) + "Track";
+            sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID + " AND NDTo='" + this.HisNode.NodeID + "' AND (ActionType=1 OR ActionType=" + (int)ActionType.Skip + ") ORDER BY RDT DESC";
             int nodeid = DBAccess.RunSQLReturnValInt(sql, 0);
             if (nodeid == 0)
             {
@@ -7906,20 +7904,22 @@ namespace BP.WF
                 {
                     case RunModel.HL:
                     case RunModel.FHL:
-                        sql = "SELECT NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE WorkID=" + this.WorkID
+                        sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID
                                                                                        + " ORDER BY RDT DESC";
                         break;
                     case RunModel.SubThread:
-                        sql = "SELECT NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE WorkID=" + this.WorkID
+                        sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.WorkID
                                                                                        + " AND NDTo=" + this.HisNode.NodeID + " "
                                                                                        + " AND ActionType=" + (int)ActionType.SubFlowForward + " ORDER BY RDT DESC";
-                        if(DBAccess.RunSQLReturnCOUNT(sql)==0)
-                            sql = "SELECT NDFrom FROM ND" + int.Parse(this.HisNode.FK_Flow) + "Track WHERE WorkID=" + this.HisWork.FID
+                        if (DBAccess.RunSQLReturnCOUNT(sql) == 0)
+                            sql = "SELECT NDFrom FROM " + truckTable + " WHERE WorkID=" + this.HisWork.FID
                                                                                       + " AND NDTo=" + this.HisNode.NodeID + " "
                                                                                       + " AND ActionType=" + (int)ActionType.SubFlowForward + " ORDER BY RDT DESC";
 
                         break;
                     default:
+                        throw new Exception("err@没有判断的类型:"+this.HisNode.HisRunModel);
+                        //根据当前节点获取上一个节点，不用管那个人发送的
                         break;
                 }
                 nodeid = DBAccess.RunSQLReturnValInt(sql, 0);

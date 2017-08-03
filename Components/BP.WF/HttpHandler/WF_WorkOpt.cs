@@ -1107,7 +1107,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtNodes);
 
             //返回json.
-            return BP.Tools.FormatToJson.ToJson(ds);
+            return BP.Tools.Json.DataSetToJson(ds,false);
         }
         /// <summary>
         /// 保存.
@@ -1197,14 +1197,15 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string DoReturnWork()
         {
-            int toNodeID = int.Parse(this.GetRequestVal("ReturnToNode"));
+            string[] vals = this.GetRequestVal("ReturnToNode").Split('@');
+
+            int toNodeID = int.Parse(vals[0]);
             string reMesage = this.GetRequestVal("ReturnInfo");
 
             bool isBackBoolen = false;
             string isBack = this.GetRequestVal("IsBack");
             if (isBack == "1")
                 isBackBoolen = true;
-
 
             return BP.WF.Dev2Interface.Node_ReturnWork(this.FK_Flow, this.WorkID, this.FID, this.FK_Node, toNodeID, reMesage, isBackBoolen);
         }

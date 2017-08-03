@@ -339,11 +339,22 @@ namespace BP.WF
 
             return "工作已经被您撤销到:" + cancelToNode.Name;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string DoUnSend()
+        {
+            string str = DoUnSendIt();
 
+            //删除自己审核的信息.
+
+            return str;
+        }
         /// <summary>
         /// 执行撤消
         /// </summary>
-        public string DoUnSend()
+        private string DoUnSendIt()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             if (gwf.FID != 0)
@@ -367,10 +378,7 @@ namespace BP.WF
                  */
 
                 return DoUnSendInFeiLiuHeiliu(gwf);
-
             }
-
-
 
 
             // 如果停留的节点是分合流。

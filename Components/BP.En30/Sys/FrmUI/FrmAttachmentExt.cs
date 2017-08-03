@@ -313,7 +313,7 @@ namespace BP.Sys.FrmUI
             }
         }
         /// <summary>
-        /// 附件编号
+        /// 附件标识
         /// </summary>
         public string NoOfObj
         {
@@ -779,7 +779,7 @@ namespace BP.Sys.FrmUI
 
                 #region 基本属性。
                 map.AddTBString(FrmAttachmentAttr.FK_MapData, null, "表单ID", true, true, 1, 100, 20);
-                map.AddTBString(FrmAttachmentAttr.NoOfObj, null, "附件编号", true, true, 0, 50, 20);
+                map.AddTBString(FrmAttachmentAttr.NoOfObj, null, "附件标识", true, true, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentAttr.FK_Node, 0, "节点控制(对sln有效)", false, false);
 
                 //for渔业厅增加.
@@ -818,14 +818,17 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(FrmAttachmentAttr.UploadType, 0, "上传类型", true, false,
                     FrmAttachmentAttr.CtrlWay, "@0=单个@1=多个@2=指定");
 
-                //对于父子流程有效.
-                 //map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", true, false);
-                map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式", true, true, FrmAttachmentAttr.CtrlWay+"Ath", 
-                    "@0=PK-主键@1=FID-流程ID@2=ParentID-父流程ID@3=仅能查看自己上传的数据");
-
                 map.AddDDLSysEnum(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式", true, true, FrmAttachmentAttr.CtrlWay, 
                     "@0=继承模式@1=协作模式");
 
+                //对于父子流程有效.
+                //map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", true, false);
+                map.AddDDLSysEnum(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式", true, true, FrmAttachmentAttr.CtrlWay + "Ath",
+                    "@0=PK-主键@1=FID-流程ID@2=ParentID-父流程ID@3=仅能查看自己上传的附件@4=按照WorkID计算(对流程节点表单有效)");
+
+                //map.AddDDLSysEnum(FrmAttachmentAttr.DataRef, 0, "数据引用", true, true, FrmAttachmentAttr.DataRef,
+                //    "@0=当前组件ID@1=指定的组件ID");
+                map.AddTBString(FrmAttachmentAttr.DataRefNoOfObj, null, "对应附件标识(对WorkID权限模式有效)", true, false, 0, 150, 20);
                 #endregion 权限控制。
 
                 #region WebOffice控制方式。

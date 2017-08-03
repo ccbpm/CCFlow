@@ -53,7 +53,11 @@ namespace BP.Sys
         /// <summary>
         /// 仅仅查看自己的
         /// </summary>
-        MySelfOnly
+        MySelfOnly,
+        /// <summary>
+        /// 工作ID,对流程有效.
+        /// </summary>
+        WorkID
     }
     /// <summary>
     /// 附件上传类型
@@ -268,6 +272,14 @@ namespace BP.Sys
         /// 附件删除方式
         /// </summary>
         public const string DeleteWay = "DeleteWay";
+
+        #region 数据引用.
+        /// <summary>
+        /// 数据引用
+        /// </summary>
+        public const string DataRefNoOfObj = "DataRefNoOfObj";
+        #endregion 数据引用.
+
 
         #region weboffice属性。
         /// <summary>
@@ -631,6 +643,9 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentAttr.Exts, value);
             }
         }
+        /// <summary>
+        /// 保存到
+        /// </summary>
         public string SaveTo
         {
             get
@@ -643,6 +658,23 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmAttachmentAttr.SaveTo, value);
+            }
+        }
+        /// <summary>
+        /// 数据关联组件ID
+        /// </summary>
+        public string DataRefNoOfObj
+        {
+            get
+            {
+                string str= this.GetValStringByKey(FrmAttachmentAttr.DataRefNoOfObj);
+                if (str == "")
+                    str = this.NoOfObj;
+                return str;
+            }
+            set
+            {
+                this.SetValByKey(FrmAttachmentAttr.DataRefNoOfObj, value);
             }
         }
         /// <summary>
@@ -1145,6 +1177,10 @@ namespace BP.Sys
                 map.AddTBInt(FrmAttachmentAttr.CtrlWay, 0, "控制呈现控制方式0=PK,1=FID,2=ParentID", false, false);
                 map.AddTBInt(FrmAttachmentAttr.AthUploadWay, 0, "控制上传控制方式0=继承模式,1=协作模式.", false, false);
 
+                //数据引用，如果为空就引用当前的.
+                map.AddTBString(FrmAttachmentAttr.DataRefNoOfObj, null, "数据引用组件ID", true, false, 0, 150, 20, true, null);
+
+
                 #region WebOffice控制方式
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableWF, true, "是否启用weboffice", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsWoEnableSave, true, "是否启用保存", true, true);
@@ -1193,8 +1229,8 @@ namespace BP.Sys
         }
         protected override bool beforeInsert()
         {
-            this.IsWoEnableWF = true;
 
+            this.IsWoEnableWF = true;
             this.IsWoEnableSave = false;
             this.IsWoEnableReadonly = false;
             this.IsWoEnableRevise = false;
@@ -1208,6 +1244,10 @@ namespace BP.Sys
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj;
             else
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
+            
+            //对于流程类的多附件，默认按照WorkID控制. add 2017.08.03  by zhoupeng.
+            if (this.FK_Node != 0)
+                this.HisCtrlWay = AthCtrlWay.WorkID;
 
             return base.beforeInsert();
         }

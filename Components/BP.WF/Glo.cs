@@ -191,7 +191,7 @@ namespace BP.WF
             try
             {
                 //删除枚举.
-                DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey='SelectorModel'");
+                DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey IN ('SelectorModel','CtrlWayAth')");
 
                 //SysEnum se = new SysEnum("FrmType", 1);//NOTE:此处升级时报错，2017-06-13，liuxc
 

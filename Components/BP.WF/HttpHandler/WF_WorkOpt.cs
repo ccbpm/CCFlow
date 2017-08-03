@@ -1198,7 +1198,6 @@ namespace BP.WF.HttpHandler
         public string DoReturnWork()
         {
             string[] vals = this.GetRequestVal("ReturnToNode").Split('@');
-
             int toNodeID = int.Parse(vals[0]);
             string reMesage = this.GetRequestVal("ReturnInfo");
 

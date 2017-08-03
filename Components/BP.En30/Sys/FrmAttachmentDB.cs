@@ -15,6 +15,10 @@ namespace BP.Sys
         /// </summary>
         public const string FK_FrmAttachment = "FK_FrmAttachment";
         /// <summary>
+        /// 附件标识
+        /// </summary>
+        public const string NoOfObj = "NoOfObj";
+        /// <summary>
         /// 主表
         /// </summary>
         public const string FK_MapData = "FK_MapData";
@@ -207,6 +211,10 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmAttachmentDBAttr.FK_FrmAttachment, value);
+
+                //给标记赋值.
+                string[] val = value.Split('_');
+                this.SetValByKey(FrmAttachmentDBAttr.NoOfObj, val[1]);
             }
         }
         /// <summary>
@@ -408,7 +416,9 @@ namespace BP.Sys
                 map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
                 map.AddTBString(FrmAttachmentDBAttr.FK_MapData, null,"FK_MapData", true, false, 1, 100, 20);
-                map.AddTBString(FrmAttachmentDBAttr.FK_FrmAttachment, null, "附件编号", true, false, 1, 500, 20);
+                map.AddTBString(FrmAttachmentDBAttr.FK_FrmAttachment, null, "附件主键", true, false, 1, 500, 20);
+                map.AddTBString(FrmAttachmentDBAttr.NoOfObj, null, "附件标识", true, false, 0, 50, 20);
+
                 map.AddTBString(FrmAttachmentDBAttr.RefPKVal, null, "实体主键", true, false, 0, 50, 20);
                 map.AddTBInt(FrmAttachmentDBAttr.FID, 0, "FID", true, false);
 

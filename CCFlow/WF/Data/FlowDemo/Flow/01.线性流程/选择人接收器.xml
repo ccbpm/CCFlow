@@ -49,7 +49,7 @@
     <StartGuidePara3 />
     <CFlowWay>0</CFlowWay>
     <CFlowPara />
-    <Ver>2017-08-02 11:38:09</Ver>
+    <Ver>2017-08-02 12:02:49</Ver>
     <DType>0</DType>
     <AtPara />
     <DTSWay>0</DTSWay>
@@ -255,7 +255,7 @@
     <IsCCFlow>0</IsCCFlow>
     <HisStas>@02@03@04@05@06</HisStas>
     <HisDeptStrs>@02@03@04@05@06</HisDeptStrs>
-    <HisToNDs>@18502@18503@18504@18505@18506@18507</HisToNDs>
+    <HisToNDs>@18502@18503@18504@18505@18506@18507@18508</HisToNDs>
     <HisBillIDs />
     <HisSubFlows />
     <PTable />
@@ -642,7 +642,7 @@
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs>@18503@18504@18505@18506@18507@18508</GroupStaNDs>
+    <GroupStaNDs>@18503@18504@18505@18506@18508</GroupStaNDs>
     <X>192</X>
     <Y>199</Y>
     <AtPara />
@@ -833,7 +833,7 @@
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs>@18503@18504@18505@18506@18507@18508</GroupStaNDs>
+    <GroupStaNDs>@18503@18504@18505@18506@18508</GroupStaNDs>
     <X>308</X>
     <Y>193</Y>
     <AtPara />
@@ -1024,7 +1024,7 @@
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs>@18503@18504@18505@18506@18507@18508</GroupStaNDs>
+    <GroupStaNDs>@18503@18504@18505@18506@18508</GroupStaNDs>
     <X>432</X>
     <Y>196</Y>
     <AtPara />
@@ -1215,7 +1215,7 @@
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs>@18503@18504@18505@18506@18507@18508</GroupStaNDs>
+    <GroupStaNDs>@18503@18504@18505@18506@18508</GroupStaNDs>
     <X>558</X>
     <Y>193</Y>
     <AtPara />
@@ -1399,14 +1399,14 @@
     <TurnToDealDoc />
     <NodePosType>2</NodePosType>
     <IsCCFlow>0</IsCCFlow>
-    <HisStas />
-    <HisDeptStrs />
+    <HisStas>@01@02@03@04@05@06</HisStas>
+    <HisDeptStrs>@01@02@03@04@05@06@2@3</HisDeptStrs>
     <HisToNDs />
     <HisBillIDs />
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs>@18503@18504@18505@18506@18507@18508</GroupStaNDs>
+    <GroupStaNDs>@18507</GroupStaNDs>
     <X>676</X>
     <Y>192</Y>
     <AtPara />
@@ -1588,7 +1588,7 @@
     <FormUrl>http://</FormUrl>
     <TurnToDeal>0</TurnToDeal>
     <TurnToDealDoc />
-    <NodePosType>1</NodePosType>
+    <NodePosType>2</NodePosType>
     <IsCCFlow>0</IsCCFlow>
     <HisStas />
     <HisDeptStrs />
@@ -1597,9 +1597,9 @@
     <HisSubFlows />
     <PTable />
     <ShowSheets />
-    <GroupStaNDs />
-    <X>813</X>
-    <Y>188</Y>
+    <GroupStaNDs>@18503@18504@18505@18506@18508</GroupStaNDs>
+    <X>822</X>
+    <Y>184</Y>
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
@@ -2292,7 +2292,7 @@
   </Sys_MapData>
   <Sys_MapData>
     <No>ND18508</No>
-    <Name>新建节点 1</Name>
+    <Name>使用通用的人员选择器</Name>
     <FormEventEntity />
     <EnPK />
     <PTable>ND18508</PTable>
@@ -2388,7 +2388,7 @@
     <DesignerContact />
     <Idx>100</Idx>
     <GUID />
-    <Ver>2017-08-02 11:30:36</Ver>
+    <Ver>2017-08-02 12:03:25</Ver>
     <DesignerTool />
     <AtPara>@IsHaveCA=0</AtPara>
     <OfficeOpenLab>打开本地</OfficeOpenLab>

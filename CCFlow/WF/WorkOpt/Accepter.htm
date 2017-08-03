@@ -148,7 +148,7 @@
 
         function dtTable() {
 
-            if ( pageUrlParam.toNode == 0) {
+            if (pageUrlParam.toNode == 0) {
                 if (firstLoad) {
                     toNode = 0;
                 } else {
@@ -158,6 +158,7 @@
                 $("#searchS").css('display', 'none');
                 toNode = pageUrlParam.toNode;
             }
+
             $.ajax({
                 type: 'post',
                 async: true,
@@ -166,6 +167,7 @@
                 dataType: 'html',
                 data: { ToNode: toNode },
                 success: function (data) {
+
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
@@ -207,7 +209,6 @@
 
                         $("#searchS1").html("");
                         $("#searchS1").html(html);
-
 
                         if (pageUrlParam.toNode == 0) {
                             $("#searchS1 option:nth(0)").attr("selected", "selected");

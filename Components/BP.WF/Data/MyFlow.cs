@@ -721,7 +721,7 @@ namespace BP.WF.Data
                 map.AddTBIntPK(MyFlowAttr.WorkID, 0, "WorkID", false, false);
                 map.AddTBInt(MyFlowAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
-                map.AddTBString(MyFlowAttr.Title, null, "流程标题", true, false, 0, 100, 10, true);
+                map.AddTBString(MyFlowAttr.Title, null, "流程标题", true, false, 0, 100, 150, true);
                 map.AddDDLEntities(MyFlowAttr.FK_Flow, null, "流程名称", new Flows(), false);
                 map.AddTBInt(MyFlowAttr.FK_Node, 0, "节点编号", false, false);
                 //map.AddDDLEntities(MyFlowAttr.FK_Dept, null, "发起人部门", new BP.Port.Depts(), false);
@@ -733,8 +733,8 @@ namespace BP.WF.Data
                 map.AddDDLSysEnum(MyFlowAttr.WFSta, 0, "状态", true, false, MyFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
                 map.AddDDLSysEnum(MyFlowAttr.WFState, 0, "流程状态", true, false, MyFlowAttr.WFState);
                 map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
-                map.AddTBString(MyFlowAttr.NodeName, null, "当前节点", true, false, 0, 100, 10, true);
-                map.AddTBString(MyStartFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 10, true);
+                map.AddTBString(MyFlowAttr.NodeName, null, "当前节点", true, false, 0, 100, 100, true);
+                map.AddTBString(MyStartFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 100, true);
 
                 map.AddTBString(MyFlowAttr.Emps, null, "参与人", true, false, 0, 4000, 10, true);
                 map.AddTBStringDoc(MyFlowAttr.FlowNote, null, "备注", true, false, true);

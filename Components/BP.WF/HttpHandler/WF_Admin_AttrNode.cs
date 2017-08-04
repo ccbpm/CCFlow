@@ -37,7 +37,7 @@ namespace BP.WF.HttpHandler
             Node nd = new Node(this.FK_Node);
 
             nd.NodeFrmID = nd.NodeFrmID;
-           // nd.FormUrl = nd.FormUrl;
+            // nd.FormUrl = nd.FormUrl;
 
             DataTable mydt = nd.ToDataTableField("WF_Node");
             ds.Tables.Add(mydt);
@@ -72,7 +72,7 @@ namespace BP.WF.HttpHandler
             string selectFModel = this.GetValFromFrmByKey("FrmS");
 
             //使用ccbpm内置的节点表单
-            if (selectFModel =="DefFrm")
+            if (selectFModel == "DefFrm")
             {
                 string frmModel = this.GetValFromFrmByKey("RB_Frm");
                 if (frmModel == "0")
@@ -94,21 +94,21 @@ namespace BP.WF.HttpHandler
 
                 string refFrm = this.GetValFromFrmByKey("RefFrm");
 
-                if (refFrm=="0")
+                if (refFrm == "0")
                 {
                     nd.NodeFrmID = "";
                     nd.DirectUpdate();
                 }
 
-                if (refFrm=="1")
+                if (refFrm == "1")
                 {
-                    nd.NodeFrmID = "ND" + this.GetValFromFrmByKey("DDL_Frm"); 
+                    nd.NodeFrmID = "ND" + this.GetValFromFrmByKey("DDL_Frm");
                     nd.DirectUpdate();
                 }
             }
 
             //使用傻瓜轨迹表单模式.
-            if (selectFModel=="FoolTruck")
+            if (selectFModel == "FoolTruck")
             {
                 nd.FormType = NodeFormType.FoolTruck;
                 nd.DirectUpdate();
@@ -118,31 +118,31 @@ namespace BP.WF.HttpHandler
             }
 
             //使用嵌入式表单
-            if (selectFModel =="SelfForm")
+            if (selectFModel == "SelfForm")
             {
                 nd.FormType = NodeFormType.SelfForm;
-                nd.FormUrl = this.GetValFromFrmByKey("TB_CustomURL") ;  
+                nd.FormUrl = this.GetValFromFrmByKey("TB_CustomURL");
                 nd.DirectUpdate();
 
                 md.HisFrmType = BP.Sys.FrmType.Url;  //同时更新表单表住表.
-                md.Url = this.GetValFromFrmByKey("TB_CustomURL");  
+                md.Url = this.GetValFromFrmByKey("TB_CustomURL");
                 md.Update();
 
             }
             //使用SDK表单
-            if ( selectFModel =="SDKForm" )
+            if (selectFModel == "SDKForm")
             {
                 nd.FormType = NodeFormType.SDKForm;
-                nd.FormUrl = this.GetValFromFrmByKey("TB_FormURL");  
+                nd.FormUrl = this.GetValFromFrmByKey("TB_FormURL");
                 nd.DirectUpdate();
 
                 md.HisFrmType = BP.Sys.FrmType.Url;
-                md.Url = this.GetValFromFrmByKey("TB_FormURL");  
+                md.Url = this.GetValFromFrmByKey("TB_FormURL");
                 md.Update();
 
             }
             //绑定多表单
-            if (selectFModel =="SheetTree" )
+            if (selectFModel == "SheetTree")
             {
 
                 string sheetTreeModel = this.GetValFromFrmByKey("SheetTreeModel");
@@ -166,7 +166,7 @@ namespace BP.WF.HttpHandler
             }
 
             //如果公文表单选择了
-            if (selectFModel == "WebOffice" )
+            if (selectFModel == "WebOffice")
             {
                 nd.FormType = NodeFormType.WebOffice;
                 nd.Update();
@@ -176,7 +176,7 @@ namespace BP.WF.HttpHandler
 
                 // tab 页工作风格.
                 string WebOfficeStyle = this.GetValFromFrmByKey("WebOfficeStyle");
-                if (WebOfficeStyle =="0")
+                if (WebOfficeStyle == "0")
                     btn.WebOfficeWorkModel = WebOfficeWorkModel.FrmFirst;
                 else
                     btn.WebOfficeWorkModel = WebOfficeWorkModel.WordFirst;
@@ -184,7 +184,7 @@ namespace BP.WF.HttpHandler
 
                 string WebOfficeFrmType = this.GetValFromFrmByKey("WebOfficeFrmType");
                 //表单工作模式.
-                if (WebOfficeFrmType=="0")
+                if (WebOfficeFrmType == "0")
                 {
                     btn.WebOfficeFrmModel = BP.Sys.FrmType.FreeFrm;
 
@@ -239,7 +239,7 @@ namespace BP.WF.HttpHandler
             dtNode.TableName = "Node";
             ds.Tables.Add(dtNode);
 
-            return BP.Tools.Json.DataSetToJson(ds, false); 
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
         public string CHOvertimeRole_Save()
         {
@@ -314,7 +314,7 @@ namespace BP.WF.HttpHandler
 
             return "保存成功...";
         }
-        
+
         #endregion 多人处理规则.
 
         #region 考核规则.
@@ -334,7 +334,7 @@ namespace BP.WF.HttpHandler
 
             nd.TimeLimit = this.GetRequestValInt("TB_TimeLimit");
             nd.WarningDay = this.GetRequestValInt("TB_WarningDay");
-            nd.TCent = this.GetRequestValInt("TB_TCent");
+            nd.TCent = this.GetRequestValFloat("TB_TCent");
 
             nd.TWay = (BP.DA.TWay)this.GetRequestValInt("DDL_TWay");  //节假日计算方式.
 
@@ -452,7 +452,7 @@ namespace BP.WF.HttpHandler
             ht.Add(NodeAttr.TurnToDeal, (int)nd.HisTurnToDeal);
             ht.Add(NodeAttr.TurnToDealDoc, nd.TurnToDealDoc);
 
-            return BP.Tools.Json.ToJsonEntityModel(ht); 
+            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
         #endregion
 
@@ -669,7 +669,7 @@ namespace BP.WF.HttpHandler
             foreach (BP.WF.Node nd in nds)
             {
                 string cb = this.GetRequestVal("CB_" + nd.NodeID);
-                if (cb == null||cb=="")
+                if (cb == null || cb == "")
                     continue;
 
                 NodeCancel nr = new NodeCancel();
@@ -732,6 +732,115 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region 表单检查(CheckFrm.htm)
+        public string CheckFrm_Init()
+        {
+            if (string.IsNullOrWhiteSpace(this.FK_MapData))
+                return "err@参数FK_MapData不能为空！";
+
+            MapData md = new MapData(this.FK_MapData);
+            return md.Name;
+        }
+
+        public string CheckFrm_Check()
+        {
+            if (BP.Web.WebUser.No != "admin")
+                return "err@只有管理员有权限进行此项操作！";
+
+            if (string.IsNullOrWhiteSpace(this.FK_MapData))
+                return "err@参数FK_MapData不能为空！";
+
+            string msg = string.Empty;
+
+            //1.检查字段扩展设置
+            MapExts mes = new MapExts(this.FK_MapData);
+            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            MapDtls dtls = new MapDtls(this.FK_MapData);
+            Entity en = null;
+            string fieldMsg = string.Empty;
+
+            //1.1主表
+            foreach (MapExt me in mes)
+            {
+                if (!string.IsNullOrWhiteSpace(me.AttrOfOper))
+                {
+                    en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, me.AttrOfOper);
+
+                    if (en != null && !string.IsNullOrWhiteSpace(me.AttrsOfActive))
+                        en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, me.AttrsOfActive);
+                }
+
+                if (en == null)
+                {
+                    me.DirectDelete();
+                    msg += "删除扩展设置中MyPK=" + me.PKVal + "的设置项；<br />";
+                }
+            }
+
+            //1.2明细表
+            foreach (MapDtl dtl in dtls)
+            {
+                mes = new MapExts(dtl.No);
+                attrs = new MapAttrs(dtl.No);
+
+                foreach (MapExt me in mes)
+                {
+                    if (!string.IsNullOrWhiteSpace(me.AttrOfOper))
+                    {
+                        en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, me.AttrOfOper);
+
+                        if (en != null && !string.IsNullOrWhiteSpace(me.AttrsOfActive))
+                            en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, me.AttrsOfActive);
+                    }
+
+                    if (en == null)
+                    {
+                        me.DirectDelete();
+                        msg += "删除扩展设置中MyPK=" + me.PKVal + "的设置项；<br />";
+                    }
+                }
+            }
+
+            //2.检查字段权限
+            FrmFields ffs = new FrmFields();
+            ffs.Retrieve(FrmFieldAttr.FK_MapData, this.FK_MapData);
+
+            //2.1主表
+            foreach (FrmField ff in ffs)
+            {
+                en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ff.KeyOfEn);
+
+                if (en == null)
+                {
+                    ff.DirectDelete();
+                    msg += "删除字段权限中MyPK=" + ff.PKVal + "的设置项；<br />";
+                }
+            }
+
+            //2.2明细表
+            foreach (MapDtl dtl in dtls)
+            {
+                ffs = new FrmFields();
+                ffs.Retrieve(FrmFieldAttr.FK_MapData, dtl.No);
+                attrs = new MapAttrs(dtl.No);
+
+                foreach (FrmField ff in ffs)
+                {
+                    en = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, ff.KeyOfEn);
+
+                    if (en == null)
+                    {
+                        ff.DirectDelete();
+                        msg += "删除字段权限中MyPK=" + ff.PKVal + "的设置项；<br />";
+                    }
+                }
+            }
+
+            msg += "检查完成！";
+
+            return msg;
+        }
+        #endregion
 
         #region 消息事件
         public string PushMessage_Init()

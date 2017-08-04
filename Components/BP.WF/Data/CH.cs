@@ -148,6 +148,10 @@ namespace BP.WF.Data
         /// 应完成日期
         /// </summary>
         public const string SDT = "SDT";
+        /// <summary>
+        /// 总扣分
+        /// </summary>
+        public const string Points = "Points";
         #endregion
     }
 	/// <summary>
@@ -506,6 +510,20 @@ namespace BP.WF.Data
                 this.SetValByKey(CHAttr.FK_NodeT, value);
             }
         }
+        /// <summary>
+        /// 总扣分
+        /// </summary>
+        public float Points
+        {
+            get
+            {
+                return this.GetValFloatByKey(CHAttr.Points);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.Points, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -589,6 +607,7 @@ namespace BP.WF.Data
                 map.AddTBFloat(CHAttr.OverDays, 0, "逾期天", false, true);
                 map.AddTBInt(CHAttr.CHSta, 0, "状态", true, true);
                 map.AddTBInt(CHAttr.WeekNum, 0, "第几周", false, true);
+                map.AddTBFloat(CHAttr.Points, 0, "总扣分", true, true);
                 map.AddTBIntMyNum();
                 #endregion 计算属性.
 

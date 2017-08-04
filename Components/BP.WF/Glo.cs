@@ -4209,11 +4209,13 @@ namespace BP.WF
             {
                 /* 正常完成 */
                 ch.CHSta = CHSta.AnQi; //按期完成.
+                ch.Points = 0;
             }
             else
             {
                 /*逾期完成.*/
-                ch.CHSta = CHSta.YuQi; //按期完成.
+                ch.CHSta = CHSta.YuQi; //逾期完成.
+                ch.Points = float.Parse((ch.OverDays * nd.TCent).ToString("0.00"));
             }
             #endregion 求计算属性.
 

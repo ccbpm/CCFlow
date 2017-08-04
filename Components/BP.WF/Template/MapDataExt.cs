@@ -1094,7 +1094,14 @@ namespace BP.WF.Template
                 rm.Icon = "../../WF/Img/ReName.png";
                 map.AddRefMethod(rm);
 
-
+                rm = new RefMethod();
+                rm.Title = "检查表单";
+                rm.ClassMethodName = this.ToString() + ".DoCheckFrm";
+                rm.Icon = "../../WF/Img/check.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
                 #endregion 方法 - 基本功能.
 
 
@@ -1267,6 +1274,16 @@ namespace BP.WF.Template
                 item.Save();
             }
             return "执行成功";
+        }
+
+        /// <summary>
+        /// 检查表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoCheckFrm()
+        {
+            return "../../Admin/AttrNode/CheckFrm.htm?FK_MapData=" +
+                   this.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff");
         }
       
         /// <summary>

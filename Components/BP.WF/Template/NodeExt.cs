@@ -497,6 +497,9 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.AskforLab, "http://ccbpm.mydoc.io/?v=5404&t=16258");
 
+                map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.HuiQianRole, false, "是否启用", true, true);
+
                 // add by 周朋 2014-11-21. 让用户可以自己定义流转.
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TCEnable, false, "是否启用", true, true);
@@ -1317,6 +1320,13 @@ namespace BP.WF.Template
             else
             {
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
+            }
+
+            //如果启动了会签,并且是抢办模式,强制设置为队列模式.
+            if (this.GetValIntByKey(BtnAttr.HuiQianRole) != 0)
+            {
+                if (nd.TodolistModel == TodolistModel.QiangBan)
+                    DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=1 WHERE NodeID=" + this.NodeID);
             }
             #endregion 处理节点数据.
 

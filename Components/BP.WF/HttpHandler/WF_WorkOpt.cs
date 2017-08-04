@@ -28,6 +28,99 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        #region 会签.
+        /// <summary>
+        /// 会签
+        /// </summary>
+        /// <returns></returns>
+        public string HuiQian_Init()
+        {
+            GenerWorkerLists ens = new GenerWorkerLists(this.WorkID,this.FK_Node);
+            return ens.ToJson();
+        }
+        /// <summary>
+        /// 移除
+        /// </summary>
+        /// <returns></returns>
+        public string HuiQian_Delete()
+        {
+            string emp = this.GetRequestVal("FK_Emp");
+            if (this.FK_Emp == WebUser.No)
+                return "err@您不能移除您自己";
+
+            GenerWorkerList gwlOfMe = new GenerWorkerList();
+            gwlOfMe.Delete(GenerWorkerListAttr.FK_Emp, this.FK_Emp,
+                GenerWorkerListAttr.WorkID, this.WorkID,
+                GenerWorkerListAttr.FK_Node, this.FK_Node);
+
+            return "移除成功.";
+        }
+        /// <summary>
+        /// 增加审核人员
+        /// </summary>
+        /// <returns></returns>
+        public string HuiQian_AddEmps()
+        {
+            #region 求人员集合.
+            Emps emps = new Emps();
+            string toEmpStrs = this.GetRequestVal("AddEmps");
+            toEmpStrs = toEmpStrs.Replace(",", ";");
+            string[] toEmps = toEmpStrs.Split(';');
+            string infos = "";
+            foreach (string empStr in toEmps)
+            {
+                if (string.IsNullOrEmpty(empStr) == true)
+                    continue;
+
+                Emp emp = new Emp();
+                emp.No = empStr;
+                if (emp.RetrieveFromDBSources() == 0)
+                {
+                    infos += "\t\n@人员[" + empStr + "]不存在.";
+                    continue;
+                }
+                emps.AddEntity(emp);
+            }
+
+            if (infos != "")
+                return "err@" + infos;
+
+            if (emps.Count == 0)
+                return "err@您没有选择人员.";
+            #endregion 求人员集合.
+
+            GenerWorkerList gwlOfMe = new GenerWorkerList();
+            int i = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
+                 GenerWorkerListAttr.WorkID, this.WorkID,
+                 GenerWorkerListAttr.FK_Node, this.FK_Node);
+
+            if (i == 0)
+                return "err@没有查询到当前人员的工作列表数据.";
+
+            //遍历人员集合.
+            foreach (Emp item in emps)
+            {
+                i = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, item.No,
+              GenerWorkerListAttr.WorkID, this.WorkID,
+              GenerWorkerListAttr.FK_Node, this.FK_Node);
+
+                if (i == 1)
+                    continue;
+
+                gwlOfMe.FK_Emp = item.No;
+                gwlOfMe.FK_EmpText = item.Name;
+                gwlOfMe.IsPassInt = 0;
+                gwlOfMe.Insert(); //插入作为待办.
+                infos += "\t\n@" + item.No + "  " + item.Name;
+            }
+
+            if (infos == "")
+                return "err@您输入的人员编号已经存在会签队列了.";
+
+            return "如下人员加入了会签队列:" + infos;
+        }
+        #endregion
+
 
         #region 审核组件.
         /// <summary>

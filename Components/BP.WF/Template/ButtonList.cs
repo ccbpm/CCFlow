@@ -169,6 +169,16 @@ namespace BP.WF.Template
         /// 加签标签
         /// </summary>
         public const string AskforEnable = "AskforEnable";
+
+        /// <summary>
+        /// 会签标签
+        /// </summary>
+        public const string HuiQianLab = "HuiQianLab";
+        /// <summary>
+        /// 会签规则
+        /// </summary>
+        public const string HuiQianRole = "HuiQianRole";
+
         /// <summary>
         /// 流转自定义 TransferCustomLab
         /// </summary>

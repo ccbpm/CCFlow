@@ -526,11 +526,20 @@ function initBar() {
                 $('[name=Shift]').unbind('click');
                 $('[name=Shift]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
             }
+
             if ($('[name=Askfor]').length > 0) {
                 $('[name=Askfor]').attr('onclick', '');
                 $('[name=Askfor]').unbind('click');
                 $('[name=Askfor]').bind('click', function () { initModal("askfor"); $('#returnWorkModal').modal().show(); });
             }
+
+            if ($('[name=HuiQian]').length > 0) {
+                $('[name=HuiQian]').attr('onclick', '');
+                $('[name=HuiQian]').unbind('click');
+                $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
+            }
+
+
             if ($('[name=SelectAccepter]').length > 0) {
                 $('[name=SelectAccepter]').attr('onclick', '');
                 $('[name=SelectAccepter]').unbind('click');
@@ -587,6 +596,10 @@ function initModal(modalType, toNode) {
             case "askfor":
                 $('#modalHeader').text("加签");
                 modalIframeSrc = "./WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "HuiQian":
+                $('#modalHeader').text("会签");
+                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "accepter":
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");
@@ -684,6 +697,12 @@ function Save() {
 
 //退回工作
 function returnWorkWindowClose(data) {
+
+    if (data == "" || data == "取消") {
+        $('#returnWorkModal').modal('hide');
+        return;
+    }
+
     $('#returnWorkModal').modal('hide');
     //通过下发送按钮旁的下拉框选择下一个节点
     if (data.indexOf('SaveOK@') == 0) {

@@ -15,7 +15,7 @@ namespace BP.Demo.FlowEvent
     /// <summary>
     /// 报销流程001
     /// </summary>
-    public class F025:BP.Sys.EventBase
+    public class F025 : BP.Sys.EventBase
     {
         #region 属性.
         #endregion 属性.
@@ -43,7 +43,7 @@ namespace BP.Demo.FlowEvent
                 case 2501: //填写报销申请单节点.
                     switch (this.EventType)
                     {
-                            case EventListOfNode.FrmLoadBefore: //表单保存后事件.
+                        case EventListOfNode.FrmLoadBefore: //表单保存后事件.
                             this.ND2501_FrmLoadBefore();
                             break;
                         case EventListOfNode.SendWhen: //发送前.
@@ -57,20 +57,20 @@ namespace BP.Demo.FlowEvent
                     break;
             }
         }
-          /// <summary>
+        /// <summary>
         /// 装载前事件
         /// 方法命名规则为:ND+节点名_事件名.
         /// </summary>
         public void ND2501_FrmLoadBefore()
         {
             // 求余额. 
-            int dtlOID=this.GetValInt("ItemNo");
-            int Totalmoney=this.GetValInt("Totalmoney");
+            int dtlOID = this.GetValInt("ItemNo");
+            int Totalmoney = this.GetValInt("Totalmoney");
 
-            string sql="select sum(BXJE) as Num from ND25Rpt WHERE ItemNo='"+dtlOID+"' AND WFState!=0";
-            decimal bxjeSum=BP.DA.DBAccess.RunSQLReturnValDecimal(sql,0,1);
-                  
-            decimal ye=Totalmoney-bxjeSum;
+            string sql = "select sum(BXJE) as Num from ND25Rpt WHERE ItemNo='" + dtlOID + "' AND WFState!=0";
+            decimal bxjeSum = BP.DA.DBAccess.RunSQLReturnValDecimal(sql, 0, 1);
+
+            decimal ye = Totalmoney - bxjeSum;
 
             /*求出余额后，需要做两个操作.*/
 
@@ -87,7 +87,7 @@ namespace BP.Demo.FlowEvent
         /// </summary>
         public void ND2501_SendWhen()
         {
-            throw new　 Exception("@您报销金额已经超过了预算。");
+            throw new Exception("@您报销金额已经超过了预算。");
         }
     }
 }

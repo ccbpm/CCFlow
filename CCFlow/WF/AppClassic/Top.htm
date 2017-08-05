@@ -1,6 +1,6 @@
 ﻿<html>
 <head>
-   <title>菜单</title>
+    <title>菜单</title>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
@@ -8,11 +8,10 @@
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
@@ -39,22 +38,91 @@
             });
         });
     </script>
+    <style type="text/css">
+        *
+        {
+            margin: 0;
+            padding: 0;
+        }
+        body
+        {
+            overflow: hidden;
+        }
+        table
+        {
+            border: 0;
+        }
+        /*头部*/
+        #top
+        {
+            background: url(img/logo_bg2.jpg);
+            height: 80px;
+            width: 100%; /* [disabled]position: absolute; */
+        }
+        #top_left
+        {
+            width: 664px;
+            height: 64px; /* [disabled]background: url(images/logo_bg.png); */
+            float: left;
+        }
+        #logo
+        {
+            background: url(./Img/ICON.png);
+            width: 500px;
+            height: 50px;
+            float: left;
+            margin: 12px 0 0 32px;
+        }
+        #top_right
+        {
+            /* [disabled]width: 500px; */
+            color: #FFF;
+            position: absolute;
+            z-index: 2;
+            right: 40px;
+        }
+        
+        #top_right ul
+        {
+            /* [disabled]width: 500px; */
+            margin: 30px 0 0 0;
+        }
+        #top_right li
+        {
+            float: left; /* [disabled]padding: 0 0 0 22px; */
+            margin: 0 6px 0 6px;
+        }
+    </style>
     <base target="main" />
 </head>
-<body >
+<body>
 
-<div style=" float:left">
- <img src='./Img/ICON.png' border="0" style="height:100%; width:auto;float:left"  alt="驰骋工作流引擎" />  
- </div>
-
-
-<div style=" float:right; vertical-align:middle; margin:20px;"> 
+        <div id="top">
+        <div id="top_left">
+            <span id="logo"></span>
+        </div>
+    <!--<div style=" float:right; vertical-align:middle; margin:20px;"> 
  
- <a href="Login.htm?DoType=Out" target="_parent" ><img src="../Img/Exit.png" alt="退出" /></a>
+ <a href="Login.htm?DoType=Out" target=_parent" ><img src="../Img/Exit.png" alt="退出" /></a>
  您好:<label id="UserNo" />|<label id="UserName" /> 部门: <div id="FK_Dept" />
 
-</div>
- 
-
+</div>-->
+    <div id="top_right">
+        <ul>
+            <li>
+                <p style="color: #000; font-size: 22px; font-family: 微软雅黑;">
+                    您好!</p>
+            </li>
+            <li>
+                <p style="color: #5176a9; font-size: 16px; font-weight: bold; line-height: 32px;">
+                    <label id="UserName" />
+                </p>
+            </li>
+            <li style="width: 86px; height: 30px; margin: 0 0 0 10px;"><a href="Login.htm?DoType=Out"
+                target="_parent">
+                <img src="img/Exit.jpg" /></a> </li>
+        </ul>
+    </div>
+    </div>
 </body>
 </html>

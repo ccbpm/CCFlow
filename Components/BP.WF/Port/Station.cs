@@ -61,9 +61,9 @@ namespace BP.WF.Port
                 map.Java_SetEnType(EnType.Admin);
              
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
-                map.Java_SetCodeStruct("2");; // 最大级别是7.
+                map.Java_SetCodeStruct("4");; // 最大级别是7.
 
-                map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 2, 2, 2);
+                map.AddTBStringPK(StationAttr.No, null, "编号", true, true, 4, 4, 36);
                 map.AddTBString(StationAttr.Name, null, "名称", true, false, 2, 50, 250);
                 map.AddDDLEntities(StationAttr.FK_StationType, null, "岗位类型", new StationTypes(), true);
 

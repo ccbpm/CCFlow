@@ -35,7 +35,16 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQian_Init()
         {
-            GenerWorkerLists ens = new GenerWorkerLists(this.WorkID,this.FK_Node);
+            GenerWorkerLists ens = new GenerWorkerLists(this.WorkID, this.FK_Node);
+            foreach (GenerWorkerList item in ens)
+            {
+                if (item.FK_Emp == BP.Web.WebUser.No)
+                {
+                    item.FK_EmpText = "<img src='../Img/zhuichiren.png' border=0 />" + item.FK_EmpText;
+                    item.IsPassInt = 100;
+                    break; //标记为主持人.
+                }
+            }
             return ens.ToJson();
         }
         /// <summary>
@@ -61,6 +70,19 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQian_AddEmps()
         {
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                return "err@你不是会签主持人，您不能执行该操作。";
+
+            GenerWorkerList gwlOfMe = new GenerWorkerList();
+            int num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
+                 GenerWorkerListAttr.WorkID, this.WorkID,
+                 GenerWorkerListAttr.FK_Node, this.FK_Node);
+
+            if (num == 0)
+                return "err@没有查询到当前人员的工作列表数据.";
+
+
             #region 求人员集合.
             Emps emps = new Emps();
             string toEmpStrs = this.GetRequestVal("AddEmps");
@@ -76,37 +98,44 @@ namespace BP.WF.HttpHandler
                 emp.No = empStr;
                 if (emp.RetrieveFromDBSources() == 0)
                 {
-                    infos += "\t\n@人员[" + empStr + "]不存在.";
-                    continue;
+                    int i = emp.Retrieve("Name", empStr);
+                    if (i == 0)
+                        infos += "\t\n 人员编号或者名称[" + empStr + "]不存在.";
+
+                    if (i == 1)
+                        emps.AddEntity(emp);
+
+                    if (i > 1)
+                    {
+                        infos += "\t\n@人员名称[" + empStr + "]重复.";
+
+                        string sql = "SELECT No,Name FROM Port_Emp WHERE Name like '%" + empStr + "%'";
+                        DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                        foreach (DataRow dr in dt.Rows)
+                            infos += "@" + dr[0].ToString() + " , " + dr[1].ToString() + "";
+                        continue;
+                    }
                 }
+
+                //查查是否存在队列里？
+                num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
+                GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
+                if (num == 1)
+                    continue;
+
                 emps.AddEntity(emp);
             }
 
-            if (infos != "")
-                return "err@" + infos;
+            if (infos != "" && emps.Count != 0)
+                return "info@" + infos;
 
             if (emps.Count == 0)
-                return "err@您没有选择人员.";
+                return "info@您没有选择人员.";
             #endregion 求人员集合.
-
-            GenerWorkerList gwlOfMe = new GenerWorkerList();
-            int i = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
-                 GenerWorkerListAttr.WorkID, this.WorkID,
-                 GenerWorkerListAttr.FK_Node, this.FK_Node);
-
-            if (i == 0)
-                return "err@没有查询到当前人员的工作列表数据.";
 
             //遍历人员集合.
             foreach (Emp item in emps)
             {
-                i = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, item.No,
-              GenerWorkerListAttr.WorkID, this.WorkID,
-              GenerWorkerListAttr.FK_Node, this.FK_Node);
-
-                if (i == 1)
-                    continue;
-
                 gwlOfMe.FK_Emp = item.No;
                 gwlOfMe.FK_EmpText = item.Name;
                 gwlOfMe.IsPassInt = 0;
@@ -117,7 +146,7 @@ namespace BP.WF.HttpHandler
             if (infos == "")
                 return "err@您输入的人员编号已经存在会签队列了.";
 
-            return "如下人员加入了会签队列:" + infos;
+            return "info@如下人员加入了会签队列:" + infos;
         }
         #endregion
 
@@ -1215,18 +1244,14 @@ namespace BP.WF.HttpHandler
         {
             //当前节点ID.
             Node nd = new Node(this.FK_Node);
-
-            int toNodeID = 0;
-            if (this.GetValFromFrmByKey("ToNode") != "0")
-                toNodeID = this.GetValIntFromFrmByKey("ToNode");
-
+            int toNodeID = this.GetRequestValInt("ToNode");
             if (toNodeID == 0)
             {
                 Nodes nds = nd.HisToNodes;
                 if (nds.Count == 1)
                     toNodeID = nds[0].GetValIntByKey("NodeID");
                 else
-                    return "err@参数错误,必须传递来到达的节点ID.";
+                    return "err@参数错误,必须传递来到达的节点ID ToNode .";
             }
 
             Work wk = nd.HisWork;
@@ -1245,14 +1270,12 @@ namespace BP.WF.HttpHandler
             dt.TableName = "Selected";
             if (select.IsAutoLoadEmps)
             {
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT  top 1 Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID";
-
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT  Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND ROWNUM =1  ORDER BY WorkID ";
-
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT  Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID ";
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT  top 1 Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC";
+                else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT  Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND ROWNUM =1  ORDER BY WorkID DESC ";
+                else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = "SELECT  Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID  DESC";
 
                 string tag = DBAccess.RunSQLReturnStringIsNull(sql, "");
 
@@ -1262,17 +1285,17 @@ namespace BP.WF.HttpHandler
                     if (string.IsNullOrEmpty(str) == true)
                         continue;
 
-                    string[] emp = str.Split(';');
+                    string[] emp = str.Split(',');
                     if (emp.Length != 2)
                         continue;
 
                     DataRow dr = dt.NewRow();
-                    dr[0] = emp[1];
+                    dr[0] = emp[0];
                     dt.Rows.Add(dr);
                 }
             }
 
-            //增加一个tabel.
+            //增加一个table.
             ds.Tables.Add(dt);
             #endregion 计算上一次选择的结果, 并把结果返回过去.
 
@@ -1318,7 +1341,7 @@ namespace BP.WF.HttpHandler
         /// 执行保存并发送.
         /// </summary>
         /// <returns>返回发送的结果.</returns>
-        public string AccepterSend()
+        public string Accepter_Send()
         {
             try
             {

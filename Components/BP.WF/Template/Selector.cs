@@ -189,11 +189,11 @@ namespace BP.WF.Template
 
         #region 构造方法
         /// <summary>
-        /// Accpter
+        /// 接受人选择器
         /// </summary>
         public Selector() { }
         /// <summary>
-        /// 
+        /// 接受人选择器
         /// </summary>
         /// <param name="nodeid"></param>
         public Selector(int nodeid)
@@ -284,7 +284,7 @@ namespace BP.WF.Template
                     ds = BySQL(nodeid, en);
                     break;
                 default:
-                    throw new Exception("@错误.");
+                    throw new Exception("@错误:没有判断的选择类型:"+this.SelectorModel);
                     break;
             }
 

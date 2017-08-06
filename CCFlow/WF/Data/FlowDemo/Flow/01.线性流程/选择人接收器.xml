@@ -457,6 +457,9 @@
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
+    <FK_SQLTemplate />
+    <FK_SQLTemplateText />
+    <IsAutoLoadEmps>1</IsAutoLoadEmps>
   </WF_Node>
   <WF_Node>
     <NodeID>18503</NodeID>
@@ -548,7 +551,7 @@
     <SFShowCtrl>0</SFShowCtrl>
     <SFOpenType>0</SFOpenType>
     <SelectorDBShowWay>0</SelectorDBShowWay>
-    <SelectorModel>5</SelectorModel>
+    <SelectorModel>1</SelectorModel>
     <AccepterDBSort>0</AccepterDBSort>
     <SelectorP1 />
     <SelectorP2 />
@@ -648,6 +651,9 @@
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
+    <FK_SQLTemplate>无</FK_SQLTemplate>
+    <FK_SQLTemplateText />
+    <IsAutoLoadEmps>1</IsAutoLoadEmps>
   </WF_Node>
   <WF_Node>
     <NodeID>18504</NodeID>
@@ -739,7 +745,7 @@
     <SFShowCtrl>0</SFShowCtrl>
     <SFOpenType>0</SFOpenType>
     <SelectorDBShowWay>0</SelectorDBShowWay>
-    <SelectorModel>5</SelectorModel>
+    <SelectorModel>2</SelectorModel>
     <AccepterDBSort>0</AccepterDBSort>
     <SelectorP1 />
     <SelectorP2 />
@@ -839,6 +845,9 @@
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
+    <FK_SQLTemplate>无</FK_SQLTemplate>
+    <FK_SQLTemplateText />
+    <IsAutoLoadEmps>1</IsAutoLoadEmps>
   </WF_Node>
   <WF_Node>
     <NodeID>18505</NodeID>
@@ -1121,9 +1130,9 @@
     <SFShowCtrl>0</SFShowCtrl>
     <SFOpenType>0</SFOpenType>
     <SelectorDBShowWay>0</SelectorDBShowWay>
-    <SelectorModel>5</SelectorModel>
+    <SelectorModel>4</SelectorModel>
     <AccepterDBSort>0</AccepterDBSort>
-    <SelectorP1 />
+    <SelectorP1>/SDKFlowDemo/DemoEmpSelecter.htm</SelectorP1>
     <SelectorP2 />
     <SelectorP3 />
     <SelectorP4 />
@@ -1221,6 +1230,9 @@
     <AtPara />
     <DocLeftWord />
     <DocRightWord />
+    <FK_SQLTemplate>无</FK_SQLTemplate>
+    <FK_SQLTemplateText />
+    <IsAutoLoadEmps>1</IsAutoLoadEmps>
   </WF_Node>
   <WF_Node>
     <NodeID>18507</NodeID>

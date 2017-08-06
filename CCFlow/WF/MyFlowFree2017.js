@@ -50,6 +50,7 @@ function OpenAccepter() {
 }
 
 function SetHegiht() {
+
     var screenHeight = document.documentElement.clientHeight;
 
     var messageHeight = $('#Message').height();
@@ -2411,6 +2412,7 @@ function GenerWorkNode() {
 var workNodeData = {};
 //升级表单元素 初始化文本框、日期、时间
 function figure_MapAttr_Template(mapAttr) {
+
     var eleHtml = '';
     if (mapAttr.UIVisible == 1) {//是否显示
 
@@ -2558,7 +2560,7 @@ function figure_MapAttr_Template(mapAttr) {
     }
     eleHtml = $('<div>' + eleHtml + '</div>');
     eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
-    eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
+    eleHtml.css('position', 'absolute').css('top', mapAttr.Y - 10).css('left', mapAttr.X);
 
     if (mapAttr.UIIsEnable == "0") {
         enableAttr = eleHtml.find('[name=TB_' + mapAttr.KeyOfEn + ']').attr('disabled', true);

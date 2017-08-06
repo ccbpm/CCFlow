@@ -75,7 +75,7 @@ namespace BP.Port
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetDepositaryOfEntity( Depositary.Application);
 
-                map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 1, 20, 100);
+                map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 4, 4, 4);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 100, 100);
 
                 

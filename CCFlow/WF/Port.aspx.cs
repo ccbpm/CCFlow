@@ -248,7 +248,12 @@ namespace BP.Web.Port
                     switch (sms.MsgType)
                     {
                         case SMSMsgType.SendSuccess: // 发送成功的提示.
-                            this.Response.Redirect("MyFlow.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);
+
+                            if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(ap.GetValStrByKey("FK_Flow"),
+                                ap.GetValIntByKey("FK_Node"), ap.GetValInt64ByKey("WorkID"), WebUser.No) == true)
+                                this.Response.Redirect("MyFlow.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);
+                            else
+                                this.Response.Redirect("WFRpt.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);
                             return;
                         default: //其他的情况都是查看工作报告.
                             this.Response.Redirect("WFRpt.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras, true);

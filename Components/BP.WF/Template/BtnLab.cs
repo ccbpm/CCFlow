@@ -141,30 +141,6 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 选择接受人
-        /// </summary>
-        public string SelectAccepterLab11
-        {
-            get
-            {
-                return this.GetValStringByKey(BtnAttr.SelectAccepterLab);
-            }
-        }
-        /// <summary>
-        /// 选择接受人类型
-        /// </summary>
-        public int SelectAccepterEnable11
-        {
-            get
-            {
-                return this.GetValIntByKey(BtnAttr.SelectAccepterEnable);
-            }
-            set
-            {
-                this.SetValByKey(BtnAttr.SelectAccepterEnable, value);
-            }
-        }
-        /// <summary>
         /// 保存
         /// </summary>
         public string SaveLab
@@ -1022,9 +998,9 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.TrackLab, "轨迹", "轨迹按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.TrackEnable, true, "是否启用", true, true);
 
-                map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "方式",
-          true, true, BtnAttr.SelectAccepterEnable);
+          //      map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
+          //      map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "方式",
+          //true, true, BtnAttr.SelectAccepterEnable);
 
                 // map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 //map.AddTBString(BtnAttr.OptLab, "选项", "选项按钮标签", true, false, 0, 50, 10);

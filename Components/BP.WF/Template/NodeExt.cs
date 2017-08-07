@@ -476,10 +476,10 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.HungEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.HungLab, "http://ccbpm.mydoc.io/?v=5404&t=16267"); //增加帮助.
 
-                map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "工作方式",
-          true, true, BtnAttr.SelectAccepterEnable);
-                map.SetHelperUrl(BtnAttr.SelectAccepterLab, "http://ccbpm.mydoc.io/?v=5404&t=16256"); //增加帮助
+          //      map.AddTBString(BtnAttr.SelectAccepterLab, "接受人", "接受人按钮标签", true, false, 0, 50, 10);
+          //      map.AddDDLSysEnum(BtnAttr.SelectAccepterEnable, 0, "工作方式",
+          //true, true, BtnAttr.SelectAccepterEnable);
+          //      map.SetHelperUrl(BtnAttr.SelectAccepterLab, "http://ccbpm.mydoc.io/?v=5404&t=16256"); //增加帮助
 
 
                 map.AddTBString(BtnAttr.SearchLab, "查询", "查询按钮标签", true, false, 0, 50, 10);
@@ -1332,11 +1332,7 @@ namespace BP.WF.Template
 
 
             //如果启用了在发送前打开, 当前节点的方向条件控制模式，是否是在下拉框边选择.?
-            if (this.GetValIntByKey(BtnAttr.SelectAccepterEnable) != 0 && nd.CondModel == CondModel.SendButtonSileSelect)
-                this.SetValByKey(BtnAttr.SelectAccepterEnable, 0); //禁用他.
-        
-            //如果启用了在发送前打开, 就判断到达的节点集合是否有按照上一步选择的？， 没有就自动关闭掉。
-            if (this.GetValIntByKey(BtnAttr.SelectAccepterEnable) != 0)
+            if (nd.CondModel != CondModel.SendButtonSileSelect)
             {
                 /*如果是启用了按钮，就检查当前节点到达的节点是否有【按照选择接受人】的方式确定接收人的范围. */
                 Nodes nds = nd.HisToNodes;
@@ -1352,7 +1348,7 @@ namespace BP.WF.Template
 
                 // 如果没有选择人接收器.
                 if (isHaveBySeleced == false)
-                    this.SetValByKey(BtnAttr.SelectAccepterEnable, 0); //禁用他.
+                    this.SetValByKey(NodeAttr.CondModel, (int)CondModel.SendButtonSileSelect); //禁用他.
             }
             #endregion 处理节点数据.
 

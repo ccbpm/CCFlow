@@ -126,14 +126,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string EndFlowEnable = "EndFlowEnable";
         /// <summary>
-        /// 选择接受人
-        /// </summary>
-        public const string SelectAccepterLab = "SelectAccepterLab";
-        /// <summary>
-        /// SelectAccepterEnable
-        /// </summary>
-        public const string SelectAccepterEnable = "SelectAccepterEnable";
-        /// <summary>
         /// 发送按钮
         /// </summary>
         public const string SendJS = "SendJS";

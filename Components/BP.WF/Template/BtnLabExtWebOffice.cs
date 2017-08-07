@@ -119,26 +119,6 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 选择接受人
-        /// </summary>
-        public string SelectAccepterLab
-        {
-            get
-            {
-                return this.GetValStringByKey(BtnAttr.SelectAccepterLab);
-            }
-        }
-        /// <summary>
-        /// 选择接受人类型
-        /// </summary>
-        public int SelectAccepterEnable
-        {
-            get
-            {
-                return this.GetValIntByKey(BtnAttr.SelectAccepterEnable);
-            }
-        }
-        /// <summary>
         /// 保存
         /// </summary>
         public string SaveLab

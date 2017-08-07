@@ -143,7 +143,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 选择接受人
         /// </summary>
-        public string SelectAccepterLab
+        public string SelectAccepterLab11
         {
             get
             {
@@ -153,7 +153,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 选择接受人类型
         /// </summary>
-        public int SelectAccepterEnable
+        public int SelectAccepterEnable11
         {
             get
             {

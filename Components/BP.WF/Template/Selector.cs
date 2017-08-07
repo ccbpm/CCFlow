@@ -278,7 +278,7 @@ namespace BP.WF.Template
                     ds = ByStation(nodeid);
                     break;
                 case SelectorModel.DeptAndStation:
-                    ds = ByStation(nodeid);
+                    ds = DeptAndStation(nodeid);
                     break;
                 case SelectorModel.SQL:
                     ds = BySQL(nodeid, en);
@@ -442,12 +442,10 @@ namespace BP.WF.Template
 
             //部门.
             string sql = "";
-
             if (SystemConfig.OSModel == OSModel.OneOne)
                 sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_EmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
             else
                 sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
-
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Depts";
@@ -475,18 +473,38 @@ namespace BP.WF.Template
             // 定义数据容器.
             DataSet ds = new DataSet();
 
-            //部门.
-            string sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_EmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Depts";
-            ds.Tables.Add(dt);
+            if (SystemConfig.OSModel == OSModel.OneOne)
+            {
+                //部门.
+                string sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_EmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "Depts";
+                ds.Tables.Add(dt);
 
 
-            //人员.
-            sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
-            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dtEmp.TableName = "Emps";
-            ds.Tables.Add(dtEmp);
+                //人员.
+                sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_EmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
+                DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dtEmp.TableName = "Emps";
+                ds.Tables.Add(dtEmp);
+            }
+
+            if (SystemConfig.OSModel == OSModel.OneMore)
+            {
+                //部门.
+                string sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID;
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dt.TableName = "Depts";
+                ds.Tables.Add(dt);
+
+                //人员.
+                sql = "SELECT distinct a.No,a.Name, a.FK_Dept FROM Port_Emp a,  WF_NodeStation b, Port_DeptEmpStation c WHERE a.No=c.FK_Emp AND B.FK_Station=C.FK_Station AND b.FK_Node=" + nodeID;
+                DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                dtEmp.TableName = "Emps";
+                ds.Tables.Add(dtEmp);
+            }
+
+
             return ds;
         }
     }

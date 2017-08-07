@@ -1044,6 +1044,9 @@ namespace BP.WF
             if (this.JumpToNode != null)
                 return this.JumpToNode;
 
+            if (this.HisNode.HisToNodes.Count == 1)
+                return (Node)this.HisNode.HisToNodes[0];
+
             // 判断是否有用户选择的节点.
             if (this.HisNode.CondModel == CondModel.ByUserSelected)
             {
@@ -1910,6 +1913,9 @@ namespace BP.WF
                 return myNodesTo;
             }
 
+            if (this.HisNode.HisToNodes.Count == 1)
+                return this.HisNode.HisToNodes;
+
             if (this.HisNode.CondModel == CondModel.ByUserSelected)
             {
                 // 获取用户选择的节点.
@@ -1930,7 +1936,6 @@ namespace BP.WF
                 //设置他为空,以防止下一次发送出现错误.
                 this.HisGenerWorkFlow.Paras_ToNodes = "";
             }
-
 
             Nodes toNodes = this.HisNode.HisToNodes;
 

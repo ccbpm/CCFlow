@@ -471,12 +471,14 @@ namespace BP.WF
         /// <returns>返回找到的节点</returns>
         public static Node RequestNextNode(Node currNode, Int64 workid, GenerWorkFlow currWorkFlow, GERpt enPara = null)
         {
+            if (currNode.HisToNodes.Count == 1)
+                return (Node)currNode.HisToNodes[0];
+
             // 判断是否有用户选择的节点。
             if (currNode.CondModel == CondModel.ByUserSelected)
             {
                 if (currWorkFlow == null)
                     throw new Exception("@参数错误:currWorkFlow");
-
                 // 获取用户选择的节点.
                 string nodes = currWorkFlow.Paras_ToNodes;
                 if (string.IsNullOrEmpty(nodes))
@@ -728,11 +730,10 @@ namespace BP.WF
                     {
                         if (toNode.HisDeliveryWay == DeliveryWay.BySelected)
                         {
-                            BtnLab btn = new BtnLab(currNode.NodeID);
-                            if (btn.SelectAccepterEnable != 2)
+                            if (currNode.CondModel != CondModel.SendButtonSileSelect)
                             {
-                                btn.SelectAccepterEnable = 2;
-                                btn.Update();
+                                currNode.CondModel = CondModel.SendButtonSileSelect;
+                                currNode.Update();
                                 throw new Exception("@下一个节点的接收人规则是按照上一步发送人员选择器选择的，但是在当前节点您没有启接收人选择器，系统已经自动做了设置，请关闭当前窗口重新打开重试。");
                             }
 

@@ -526,16 +526,7 @@ namespace BP.WF.HttpHandler
                     {
                         if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group && isAskFor == false)
                         {
-                            /*如果启用了发送按钮.*/
-                            if (btnLab.SelectAccepterEnable == 2)
-                            {
-                                /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                                toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"javascript:OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "');" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false;this.disabled=true;\" />";
-                            }
-                            else
-                            {
-                                toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
-                            }
+                            toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
                         }
                     }
 
@@ -564,15 +555,9 @@ namespace BP.WF.HttpHandler
                             /*如果启用了发送按钮.
                              * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
                              */
-                            if (btnLab.SelectAccepterEnable == 2)
-                            {
-                                /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                                toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if (OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; Send(); \" />";
-                            }
-                            else
-                            {
+                       
                                 toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();Send();\" />";
-                            }
+                             
                         }
                     }
 
@@ -692,18 +677,6 @@ namespace BP.WF.HttpHandler
                 if (btnLab.TrackEnable && isAskFor == false)
                     toolbar += "<input type=button name='Track'  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
 
-                switch (btnLab.SelectAccepterEnable)
-                {
-                    case 1:
-                        if (isAskFor == false)
-                            toolbar += "<input type=button name='SelectAccepter'  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Accepter.htm?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />";
-                        break;
-                    case 2:
-                        //  toolbar.Add("<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Accepter.htm?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />");
-                        break;
-                    default:
-                        break;
-                }
 
                 if (btnLab.SearchEnable && isAskFor == false)
                     toolbar += "<input type=button name='Search'  value='" + btnLab.SearchLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Rpt/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "','dsd0'); \" />";
@@ -960,11 +933,13 @@ namespace BP.WF.HttpHandler
                         return "url@./WorkOpt/ToNodes.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
                     }
 
-                    BtnLab btn = new BtnLab(this.FK_Node);
-                    btn.SelectAccepterEnable = 2;
-                    btn.Update();
+                    if (this.currND.CondModel != CondModel.SendButtonSileSelect)
+                    {
+                        currND.CondModel = CondModel.SendButtonSileSelect;
+                        currND.Update();
+                    }
 
-                    return "err@下一个节点的接收人规则是，当前节点选择来选择，在当前节点属性里您没有启动接受人按钮，系统自动帮助您启动了，请关闭窗口重新打开。";
+                    return "err@下一个节点的接收人规则是，当前节点选择来选择，在当前节点属性里您没有启动接受人按钮，系统自动帮助您启动了，请关闭窗口重新打开。"+ex.Message;
                 }
 
                 //绑定独立表单，表单自定义方案验证错误弹出窗口进行提示

@@ -45,6 +45,11 @@ namespace BP.WF.HttpHandler
                     break; //标记为主持人.
                 }
             }
+
+            //找到历史记录, 并把历史记录 ，加入到选择框里.
+            string sql = "SELECT * ";
+
+
             return ens.ToJson();
         }
         /// <summary>
@@ -121,8 +126,10 @@ namespace BP.WF.HttpHandler
                 num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
                 GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
                 if (num == 1)
+                {
+                    infos += "\t\n@人员[" + empStr + "]已经在队列里.";
                     continue;
-
+                }
                 emps.AddEntity(emp);
             }
 
@@ -130,8 +137,16 @@ namespace BP.WF.HttpHandler
                 return "info@" + infos;
 
             if (emps.Count == 0)
-                return "info@您没有选择人员.";
+                return "info@您没有选择人员, 执行信息:" + infos;
+
             #endregion 求人员集合.
+
+            GenerWorkerLists gwls = new GenerWorkerLists();
+
+            //查询出来其他列的数据.
+            gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
+                GenerWorkerListAttr.WorkID, this.WorkID,
+                GenerWorkerListAttr.FK_Node, this.FK_Node);
 
             //遍历人员集合.
             foreach (Emp item in emps)
@@ -141,12 +156,13 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.IsPassInt = 0;
                 gwlOfMe.Insert(); //插入作为待办.
                 infos += "\t\n@" + item.No + "  " + item.Name;
+
+                gwlOfMe.Retrieve();
+
+                gwls.AddEntity(item);
             }
 
-            if (infos == "")
-                return "err@您输入的人员编号已经存在会签队列了.";
-
-            return "info@如下人员加入了会签队列:" + infos;
+            return gwls.ToJson();
         }
         #endregion
 
@@ -1141,8 +1157,6 @@ namespace BP.WF.HttpHandler
         /// <returns>执行信息</returns>
         public string Askfor()
         {
-
-
             Int64 workID = int.Parse(this.GetRequestVal("WorkID")); //工作ID
             string toEmp = this.GetRequestVal("ToEmp"); //让谁加签?
             string note = this.GetRequestVal("Note"); //原因.
@@ -1171,12 +1185,26 @@ namespace BP.WF.HttpHandler
             dtDept.TableName = "Depts";
             ds.Tables.Add(dtDept);
 
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtDept.Columns[0].ColumnName = "No";
+                dtDept.Columns[1].ColumnName = "Name";
+                dtDept.Columns[2].ColumnName = "ParentNo";
+            }
+
             sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "'";
             DataTable dtEmps = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtEmps.TableName = "Emps";
             ds.Tables.Add(dtEmps);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtEmps.Columns[0].ColumnName = "No";
+                dtEmps.Columns[1].ColumnName = "Name";
+                dtEmps.Columns[2].ColumnName = "FK_Dept";
+            }
 
-            return BP.Tools.FormatToJson.ToJson(ds);
+            //转化为 json 
+            return BP.Tools.Json.DataSetToJson(ds,false);
         }
 
         #region 选择接受人.

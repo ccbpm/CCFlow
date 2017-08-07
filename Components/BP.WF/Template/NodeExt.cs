@@ -46,6 +46,7 @@ namespace BP.WF.Template
         #endregion
 
         #region 属性.
+        
         /// <summary>
         /// 超时处理方式
         /// </summary>
@@ -1328,6 +1329,31 @@ namespace BP.WF.Template
                 if (nd.TodolistModel == TodolistModel.QiangBan)
                     DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=1 WHERE NodeID=" + this.NodeID);
             }
+
+
+            //如果启用了在发送前打开, 当前节点的方向条件控制模式，是否是在下拉框边选择.?
+            if (this.GetValIntByKey(BtnAttr.SelectAccepterEnable) != 0 && nd.CondModel == CondModel.SendButtonSileSelect)
+                this.SetValByKey(BtnAttr.SelectAccepterEnable, 0); //禁用他.
+        
+            //如果启用了在发送前打开, 就判断到达的节点集合是否有按照上一步选择的？， 没有就自动关闭掉。
+            if (this.GetValIntByKey(BtnAttr.SelectAccepterEnable) != 0)
+            {
+                /*如果是启用了按钮，就检查当前节点到达的节点是否有【按照选择接受人】的方式确定接收人的范围. */
+                Nodes nds = nd.HisToNodes;
+                bool isHaveBySeleced = false;
+                foreach (Node mynd in nds)
+                {
+                    if (mynd.HisDeliveryWay == DeliveryWay.BySelected)
+                    {
+                        isHaveBySeleced = true;
+                        break;
+                    }
+                }
+
+                // 如果没有选择人接收器.
+                if (isHaveBySeleced == false)
+                    this.SetValByKey(BtnAttr.SelectAccepterEnable, 0); //禁用他.
+            }
             #endregion 处理节点数据.
 
             #region 处理消息参数字段.
@@ -1345,7 +1371,7 @@ namespace BP.WF.Template
             //this.SetPara(NodeAttr.MsgSMSDoc, this.GetValStrByKey(NodeAttr.MsgSMSDoc));
             #endregion
 
-            ////创建审核组件附件
+            #region 创建审核组件附件
             FrmAttachment workCheckAth = new FrmAttachment();
             bool isHave = workCheckAth.RetrieveByAttr(FrmAttachmentAttr.MyPK, this.NodeID + "_FrmWorkCheck");
             //不包含审核组件
@@ -1374,7 +1400,9 @@ namespace BP.WF.Template
                 workCheckAth.Name = "审核组件";
                 workCheckAth.SetValByKey("AtPara", "@IsWoEnablePageset=1@IsWoEnablePrint=1@IsWoEnableViewModel=1@IsWoEnableReadonly=0@IsWoEnableSave=1@IsWoEnableWF=1@IsWoEnableProperty=1@IsWoEnableRevise=1@IsWoEnableIntoKeepMarkModel=1@FastKeyIsEnable=0@IsWoEnableViewKeepMark=1@FastKeyGenerRole=@IsWoEnableTemplete=1");
                 workCheckAth.Insert();
-            }   
+            }
+            #endregion 创建审核组件附件
+
 
             //清除所有的缓存.
             BP.DA.CashEntity.DCash.Clear();

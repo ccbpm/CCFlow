@@ -965,23 +965,9 @@ namespace CCFlow.WF
 #warning 刘文辉 保存收件人后调用发送按钮
 
             BtnLab nd = new BtnLab(this.FK_Node);
-            if (nd.SelectAccepterEnable == 1)
-            {
-                if (this.Request.QueryString["IsEUI"] == null)
-                {
-                    /*如果是1不说明直接关闭它.*/
-                    this.WinClose("ok");
-                    //ScriptManager.RegisterStartupScript(this.Page, typeof(Page), "", "this.close();", true);
-                }
-                else
-                {
-                    PubClass.ResponseWriteScript("window.parent.$('windowIfrem').window('close');");
-                }
-            }
-            else
-            {
+            
                 ScriptManager.RegisterStartupScript(this.Page, typeof(Page), "", "send();", true);
-            }
+             
         }
 
         public void DoSend()

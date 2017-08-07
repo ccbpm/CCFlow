@@ -46,7 +46,7 @@
         };
         $('#Message').val(param.Message);
         //初始化人员选择窗口
-        var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 80%;margin: 40px auto;">' +
+        var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 90%;margin: 10px auto;">' +
            '<div class="modal-dialog" style="margin: 0px;">'
                + '<div class="modal-content" style="border-radius:0px;width:700px;">'
                   + '<div class="modal-header">'
@@ -54,7 +54,7 @@
                        + '<h4 class="modal-title">选择移交人</h4>'
                    + '</div>'
                    + '<div class="modal-body">'
-                       + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                       + '<iframe style="width:100%;border:0px;height:800px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
                    + '</div>'
                + '</div><!-- /.modal-content -->'
            + '</div><!-- /.modal-dialog -->'
@@ -75,7 +75,7 @@
     //确定  执行移交操作
     function ReturnWork() {
         //WorkID, this.FID, this.FK_Node
-        var empNos = frames["iframeSelectEmpsForm"].window.returnVal.NO;
+        var empNos = frames["iframeSelectEmpsForm"].window.returnVal.No;
         $.ajax({
             type: 'post',
             async: true,
@@ -104,12 +104,13 @@
     }
     //设置选中的人员
     function selectEmpsWindowClose(data) {
+
         $('#selectEmpsModal').modal('hide');
         if (data == '取消') {
             return;
-        } else {
-            $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
         }
+
+        $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
     }
     </script>
 

@@ -157,6 +157,12 @@
                     var emps = data.Emps;
                     var selected = data.Selected;
 
+                    if (emps.length == 0) {
+                        alert('当前节点设置的接收人范围为空,请联系管理员配置接收人范围.');
+                        return;
+                    }
+
+
                     var html = "<table border=0 width='98%' > ";
                     $.each(depts, function (i, dept) {
 
@@ -176,7 +182,7 @@
 
 
                                 if (isSele == true)
-                                    html += "&nbsp;&nbsp;<label><input  type='checkbox' checked=true id='" + emp.No + "' /> " + emp.No + " " + emp.Name + "</label>";
+                                    html += "&nbsp;&nbsp;<label><input  type='checkbox' checked=true id='" + emp.No + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
                                 else
                                     html += "&nbsp;&nbsp;<label><input  type='checkbox'  id='" + emp.No + "' /> " + emp.No + " " + emp.Name + "</label>";
                             }
@@ -305,9 +311,9 @@
             $('#selectEmpsModal').modal('hide');
             if (data == '取消') {
                 return;
-            } else {
-                $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
             }
+
+            $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
         }
     </script>
 </head>

@@ -318,20 +318,7 @@ namespace CCFlow.WF.SheetTree
                 }
                 toolCount++;
             }
-            //接收人
-            if (btnLab.SelectAccepterEnable == 1)
-            {
-                //超出范围增加到菜单里面
-                if (toolCount > alowToolCount)
-                {
-                    extMenuHTML += "<div data-options=\"plain:true,iconCls:'icon-person'\" onclick=\"EventFactory('selectaccepter')\">" + btnLab.SelectAccepterLab + "</div>";
-                }
-                else
-                {
-                    toolsDefault += "<a id=\"SelectAccepter\" href=\"#\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-person'\" onclick=\"EventFactory('selectaccepter')\">" + btnLab.SelectAccepterLab + "</a>";
-                }
-                toolCount++;
-            }
+           
             //查询
             if (btnLab.SearchEnable)
             {

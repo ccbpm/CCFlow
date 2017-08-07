@@ -38,7 +38,7 @@
         function SelectEmps() {
             GetSelectedEmpsReturnVal();
             //No  是返回到别的页面的值
-            if (returnVal.NO == undefined || returnVal.NO == '') {
+            if (returnVal.No == undefined || returnVal.No == '') {
                 alert("未选择人员");
             } else {
                 window.parent.selectEmpsWindowClose("确定");
@@ -76,43 +76,43 @@
                 data = eval('(' + data + ')');
                 var fk_dept = fk_dept2;//pageData.FK_Dept;
                 var parentNo = undefined;
-                var fkDeptObj = $.grep(data.DEPTS, function (value) {
-                    return value.NO == fk_dept;
+                var fkDeptObj = $.grep(data.Depts, function (value) {
+                    return value.No == fk_dept;
                 });
                 if (fkDeptObj != undefined && fkDeptObj.length == 1) {
-                    parentNo = fkDeptObj[0].PARENTNO;
+                    parentNo = fkDeptObj[0].ParentNo;
                 }
                 pageData.FK_Dept = parentNo;
                 //本节点
                 var instance = $('#orgjstree').jstree(true);
-                var depts = $.grep(data.DEPTS, function (value) {
-                    return value.PARENTNO == parentNo;
+                var depts = $.grep(data.Depts, function (value) {
+                    return value.ParentNo == parentNo;
                 })
 
                 //if (instance.)
                 //子部门
-                var childDepts = $.grep(data.DEPTS, function (value) {
-                    return value.PARENTNO == fk_dept;
+                var childDepts = $.grep(data.Depts, function (value) {
+                    return value.ParentNo == fk_dept;
                 })
                 //人员
-                var emps = data.EMPS;
+                var emps = data.Emps;
 
                 var itemArr = [];
                 $.each(depts, function (i, dept) {
                     var deptNode = {
-                        "text": dept.NAME,
-                        "id": dept.NO,
+                        "text": dept.Name,
+                        "id": dept.No,
                         "children": true,
                         "data": dept
                     };
 
-                    if (dept.NO == fk_dept) {//是本部门时加载子部门和人员
+                    if (dept.No == fk_dept) {  //是本部门时加载子部门和人员
                         var children = [];
                         if (childDepts.length > 0) {
                             $.each(childDepts, function (i, childDept) {
                                 var childDeptNode = {
-                                    "text": childDept.NAME,
-                                    "id": childDept.NO,
+                                    "text": childDept.Name,
+                                    "id": childDept.No,
                                     "children": true,
                                     "data": childDept
                                 };
@@ -123,8 +123,8 @@
                         if (emps.length > 0) {
                             $.each(emps, function (i, emp) {
                                 var empNode = {
-                                    "text": emp.NAME,
-                                    "id": emp.NO,
+                                    "text": emp.Name,
+                                    "id": emp.No,
                                     "children": false,
                                     "data": emp,
                                     "icon": "jstree-file"
@@ -255,7 +255,10 @@
     </script>
 </head>
 <body>
+ <input type="button" onclick="Close()" value="取消"/>
+    <input type="button" onclick="SelectEmps()" value="确定" />
     <input type="button" value="上一级" id="toPrevDept" />
+
     <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default">
     </div>
     <input type="button" onclick="Close()" value="取消"/>

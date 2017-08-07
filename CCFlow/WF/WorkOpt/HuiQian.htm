@@ -69,7 +69,7 @@
             //$("section").show();
             $(".Msg").hide();
 
-            //开始加载数据.
+            // 初始化人员.   //开始加载数据.
             $.ajax({
                 type: 'post',
                 async: true,
@@ -84,42 +84,45 @@
                     }
 
                     var gwls = JSON.parse(data);
-
-                    for (var i = 0; i < gwls.length; i++) {
-
-                        var gwl = gwls[i];
-
-                        var row = "";
-                        row += "<tr>";
-                        row += "<td>" + i + "</td>";
-                        row += "<td>" + gwl.FK_Emp + "</td>";
-
-                        row += "<td>" + gwl.FK_EmpText + "</td>";
-
-                        if (gwl.IsPass == 0) {
-                            row += "<td>未审批</td>";
-                            row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "');\" >移除</a></td>";
-                        }
-
-                        //当前是主持人
-                        if (gwl.IsPass == 100) {
-                            row += "<td>未审批</td>";
-                            row += "<td></td>";
-                        }
-
-                        if (gwl.IsPass == 1) {
-                            row += "<td>已审批</td>";
-                            row += "<td></td>";
-                        }
-
-                        row += "</tr>";
-
-                        $("#Table1 tr:last").after(row);
-                    }
+                    BindTable(gwls);
                 }
             });
-
         });
+
+        function BindTable(gwls) {
+
+            for (var i = 0; i < gwls.length; i++) {
+
+                var gwl = gwls[i];
+
+                var row = "";
+                row += "<tr>";
+                row += "<td>" + i + "</td>";
+                row += "<td>" + gwl.FK_Emp + "</td>";
+
+                row += "<td>" + gwl.FK_EmpText + "</td>";
+
+                if (gwl.IsPass == 0) {
+                    row += "<td>未审批</td>";
+                    row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "');\" >移除</a></td>";
+                }
+
+                //当前是主持人
+                if (gwl.IsPass == 100) {
+                    row += "<td>未审批</td>";
+                    row += "<td></td>";
+                }
+
+                if (gwl.IsPass == 1) {
+                    row += "<td>已审批</td>";
+                    row += "<td></td>";
+                }
+
+                row += "</tr>";
+
+                $("#Table1 tr:last").after(row);
+            }
+        }
 
         function DeleteIt(empNo) {
 
@@ -133,7 +136,7 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    if (data.indexOf('err@') == 0) {
+                    if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
                         alert(data);
                         return;
                     }
@@ -172,21 +175,15 @@
                     }
 
                     if (data.indexOf('info@') == 0) {
-
                         $(".Msg").show();
                         $(".Msg").html(data);
                         return;
                     }
 
-                    alert(data);
-                    Close();
-                    return;
+                    var gwls = JSON.parse(data);
+                    BindTable(gwls);
 
-                    //                    if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                    //                        window.parent.returnWorkWindowClose(data);
-                    //                    } else {
-                    //                        $('body').append($('<div>' + data + '</div>'));
-                    //                    }
+                    return;
                 }
             });
             $(".foot").hide();
@@ -203,12 +200,18 @@
         }
         //设置选中的人员
         function selectEmpsWindowClose(data) {
+
             $('#selectEmpsModal').modal('hide');
             if (data == '取消') {
                 return;
-            } else {
-                $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
             }
+
+           // alert(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+            //alert(data);
+          //  alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
+           // alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
+
+            $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
     </script>
 

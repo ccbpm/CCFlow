@@ -2526,17 +2526,18 @@ function figure_MapAttr_Template(mapAttr) {
         } else {
             //展示附件信息  FREE 不需要
             return;
-            var atParamObj = AtParaToJson(mapAttr.AtPara);
-            if (atParamObj.AthRefObj != undefined) {//扩展设置为附件展示
-                eleHtml += "<input type='hidden' class='tbAth' data-target='" + mapAttr.AtPara + "' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' >" + "</input>";
-                defValue = defValue != undefined && defValue != '' ? defValue : '&nbsp;';
-                if (defValue.indexOf('@AthCount=') == 0) {
-                    defValue = "附件" + "<span class='badge'>" + defValue.substring('@AthCount='.length, defValue.length) + "</span>个";
-                } else {
-                    defValue = defValue;
-                }
-                eleHtml += "<div class='divAth' data-target='" + mapAttr.KeyOfEn + "'  id='DIV_" + mapAttr.KeyOfEn + "'>" + defValue + "</div>";
-            }
+
+            //            var atParamObj = AtParaToJson(mapAttr.AtPara);
+            //            if (atParamObj.AthRefObj != undefined) {//扩展设置为附件展示
+            //                eleHtml += "<input type='hidden' class='tbAth' data-target='" + mapAttr.AtPara + "' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' >" + "</input>";
+            //                defValue = defValue != undefined && defValue != '' ? defValue : '&nbsp;';
+            //                if (defValue.indexOf('@AthCount=') == 0) {
+            //                    defValue = "附件" + "<span class='badge'>" + defValue.substring('@AthCount='.length, defValue.length) + "</span>个";
+            //                } else {
+            //                    defValue = defValue;
+            //                }
+            //                eleHtml += "<div class='divAth' data-target='" + mapAttr.KeyOfEn + "'  id='DIV_" + mapAttr.KeyOfEn + "'>" + defValue + "</div>";
+            //            }
         }
 
         if (!islabelIsInEle) {

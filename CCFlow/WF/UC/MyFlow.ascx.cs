@@ -372,39 +372,21 @@ namespace CCFlow.WF.UC
                 {
                     if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group && isAskFor == false)
                     {
-                        /*如果启用了发送按钮.*/
-                        if (btnLab.SelectAccepterEnable == 2)
+                        toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
+                        this.Btn_Send.UseSubmitBehavior = false;
+                        if (btnLab.SendJS.Trim().Length > 2)
                         {
-                            /*如果启用了选择人窗口的模式是在发送前打开.*/
-                            toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"javascript:OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')\" />");
-                            toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
-                            Btn_Send.Style.Add("display", "none");
-                            this.Btn_Send.UseSubmitBehavior = false;
-
-                            if (this.currND.HisFormType == NodeFormType.DisableIt)
-                                this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
-                            else
-                                this.Btn_Send.OnClientClick = btnLab.SendJS + "if( SendSelfFrom()==false) return false;this.disabled=true;"; //this.disabled='disabled'; return true;";
-                            this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
+                            this.Btn_Send.OnClientClick = btnLab.SendJS + ";if(SendSelfFrom()==false) return false;this.disabled=true;"; //this.disabled='disabled'; return true;";
                         }
                         else
                         {
-                            toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                             this.Btn_Send.UseSubmitBehavior = false;
-                            if (btnLab.SendJS.Trim().Length > 2)
-                            {
-                                this.Btn_Send.OnClientClick = btnLab.SendJS + ";if(SendSelfFrom()==false) return false;this.disabled=true;"; //this.disabled='disabled'; return true;";
-                            }
+                            if (this.currND.HisFormType == NodeFormType.DisableIt)
+                                this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
                             else
-                            {
-                                this.Btn_Send.UseSubmitBehavior = false;
-                                if (this.currND.HisFormType == NodeFormType.DisableIt)
-                                    this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
-                                else
-                                    this.Btn_Send.OnClientClick = "if(SendSelfFrom()==false) return false;this.disabled=true;"; //this.disabled='disabled'; return true;";
-                            }
-                            this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
+                                this.Btn_Send.OnClientClick = "if(SendSelfFrom()==false) return false;this.disabled=true;"; //this.disabled='disabled'; return true;";
                         }
+                        this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                     }
                 }
 
@@ -510,39 +492,21 @@ namespace CCFlow.WF.UC
                             /*如果启用了发送按钮.
                              * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
                              */
-                            if (btnLab.SelectAccepterEnable == 2)
+                            toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
+                            this.Btn_Send.UseSubmitBehavior = false;
+                            if (btnLab.SendJS.Trim().Length > 2)
                             {
-                                /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                                toolbar.Add("<input type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"if(SysCheckFrm()==false) return false;KindEditerSync();if ( OpenSelectAccepter('" + this.FK_Flow + "','" + this.FK_Node + "','" + this.WorkID + "','" + this.FID + "')==false) return false; \" />");
-                                toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
-                                Btn_Send.Style.Add("display", "none");
-                                this.Btn_Send.UseSubmitBehavior = false;
-
-                                if (this.currND.HisFormType == NodeFormType.DisableIt)
-                                    this.Btn_Send.OnClientClick = btnLab.SendJS + "this.disabled=true;"; //this.disabled='disabled'; return true;";
-                                else
-                                    this.Btn_Send.OnClientClick = btnLab.SendJS + "if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
-                                //   this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
-                                this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
+                                this.Btn_Send.OnClientClick = btnLab.SendJS + ";if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
                             }
                             else
                             {
-                                toolbar.AddBtn(NamesOfBtn.Send, btnLab.SendLab);
                                 this.Btn_Send.UseSubmitBehavior = false;
-                                if (btnLab.SendJS.Trim().Length > 2)
-                                {
-                                    this.Btn_Send.OnClientClick = btnLab.SendJS + ";if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
-                                }
+                                if (this.currND.HisFormType == NodeFormType.DisableIt)
+                                    this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
                                 else
-                                {
-                                    this.Btn_Send.UseSubmitBehavior = false;
-                                    if (this.currND.HisFormType == NodeFormType.DisableIt)
-                                        this.Btn_Send.OnClientClick = "this.disabled=true;"; //this.disabled='disabled'; return true;";
-                                    else
-                                        this.Btn_Send.OnClientClick = "if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
-                                }
-                                this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
+                                    this.Btn_Send.OnClientClick = "if(SysCheckFrm()==false) return false;this.disabled=true;if(SaveDtlAll() == false) { this.disabled = false; return false;  } KindEditerSync();"; //this.disabled='disabled'; return true;";
                             }
+                            this.Btn_Send.Click += new System.EventHandler(ToolBar1_ButtonClick);
                         }
                     }
                 }
@@ -695,19 +659,6 @@ namespace CCFlow.WF.UC
 
             //if (btnLab.OptEnable)
             //    toolbar.Add("<input type=button  value='" + btnLab.OptLab + "' onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Home.aspx?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "','opt'); \"  />");
-
-            switch (btnLab.SelectAccepterEnable)
-            {
-                case 1:
-                    if (isAskFor == false)
-                        toolbar.Add("<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/Accepter.htm?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />");
-                    break;
-                case 2:
-                    //  toolbar.Add("<input type=button  value='" + btnLab.SelectAccepterLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Accepter.aspx?WorkID=" + this.WorkID + "&FK_Node=" + currND.NodeID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','dds'); \" />");
-                    break;
-                default:
-                    break;
-            }
 
             if (btnLab.SearchEnable && isAskFor == false)
                 toolbar.Add("<input type=button  value='" + btnLab.SearchLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Rpt/Search.aspx?EnsName=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "','dsd0'); \" />");
@@ -2401,9 +2352,14 @@ namespace CCFlow.WF.UC
                         this.Response.Redirect("./WorkOpt/ToNodes.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID, true);
                         return;   
                     }
-                    BtnLab btn = new BtnLab(this.FK_Node);
-                    btn.SelectAccepterEnable = 2;
-                    btn.Update();
+
+                    if (this.currND.CondModel != CondModel.SendButtonSileSelect)
+                    {
+                        currND.CondModel = CondModel.SendButtonSileSelect;
+                        currND.Update();
+                    }
+
+
                     this.FlowMsg.AddFieldSetGreen("错误");
                     this.FlowMsg.Add(exSend.Message.Replace("@@", "@").Replace("@", "<BR>@") + "<br>系统已经自动的设置为打开了,请您在重试一次.");
                     this.FlowMsg.AddFieldSetEnd();

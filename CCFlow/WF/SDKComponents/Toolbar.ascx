@@ -452,11 +452,7 @@
    { %>
 <input type="button" onclick="ShowUrl(this)" id="Btn_Return" name="Btn_Return" value='<%= btn.ReturnLab %>' />
 <% } %>
-<!-- 接受人-->
-<% if (btn.SelectAccepterEnable != 0 && workState != WFState.Complete && workState != WFState.Fix && workState != WFState.HungUp)
-   { %>
-<input type="button" onclick="ShowUrl(this)" id="Btn_SelectAccepter" value='<%= btn.SelectAccepterLab %>' />
-<% } %>
+ 
 <!-- 移交-->
 <% if (btn.ShiftEnable == true && workState != WFState.Complete && workState != WFState.Fix && workState != WFState.HungUp)
    { %>

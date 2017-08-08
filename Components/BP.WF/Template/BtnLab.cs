@@ -34,6 +34,7 @@ namespace BP.WF.Template
     /// </summary>
     public class BtnLab : Entity
     {
+       
         /// <summary>
         /// 访问控制
         /// </summary>

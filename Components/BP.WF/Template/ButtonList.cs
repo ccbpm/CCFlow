@@ -231,6 +231,8 @@ namespace BP.WF.Template
         /// </summary>
         public const string AllotEnable = "AllotEnable";
 
+        public const string SelectAccepterLab = "SelectAccepterLab";
+        public const string SelectAccepterEnable = "SelectAccepterEnable";
 
 
         #region 公文属性

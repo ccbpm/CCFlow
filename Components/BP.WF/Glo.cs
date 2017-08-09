@@ -4079,7 +4079,7 @@ namespace BP.WF
                         ps.SQL = "SELECT TOP 1 RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node  ORDER BY RDT DESC";
                         break;
                     case DBType.Oracle:
-                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM 1 ORDER BY RDT DESC ";
+                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM = 1 ORDER BY RDT DESC ";
                         break;
                     case DBType.MySQL:
                         ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";

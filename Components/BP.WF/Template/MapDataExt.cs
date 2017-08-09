@@ -952,7 +952,7 @@ namespace BP.WF.Template
                 map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 500, 20);
 
                 //表单的运行类型.
-                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",true, true, MapDataAttr.FrmType);
+                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",true, false, MapDataAttr.FrmType);
 
                 map.AddTBString(MapDataAttr.Url, null, "URL连接(对嵌入式表单有效)", true, false, 0, 500, 20, true);
                 //数据源.

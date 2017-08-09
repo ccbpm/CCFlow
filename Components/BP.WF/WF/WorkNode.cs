@@ -5044,7 +5044,7 @@ namespace BP.WF
             #region  判断自己是否是组长？如果是组长，就让返回false, 让其运动到最后一个节点，因为组长同意了，就全部同意了。
             if (this.HisNode.TeamLeaderConfirmRole == TeamLeaderConfirmRole.ByDeptFieldLeader)
             {
-                string sql = "SELECT COUNT(No) AS num FROM Port_Dept WHERE No='" + WebUser.FK_Dept + "' AND Leader='" + WebUser.No + "'";
+                string sql = "SELECT COUNT(No) AS num FROM Port_Dept WHERE Leader='" + WebUser.No + "'";
                 if (BP.DA.DBAccess.RunSQLReturnValInt(sql, 0) == 1)
                     return false;
             }

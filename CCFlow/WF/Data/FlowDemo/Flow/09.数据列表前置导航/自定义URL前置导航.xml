@@ -54,7 +54,7 @@
     <StartLimitAlert />
     <StartLimitWhen>0</StartLimitWhen>
     <StartGuideWay>10</StartGuideWay>
-    <StartGuidePara1>../SDKFlowDemo/TestCase/StartGuideSelfUrl.aspx</StartGuidePara1>
+    <StartGuidePara1>../SDKFlowDemo/TestCase/StartGuideSelfUrl.htm</StartGuidePara1>
     <StartGuidePara2 />
     <StartGuidePara3 />
     <IsResetData>0</IsResetData>

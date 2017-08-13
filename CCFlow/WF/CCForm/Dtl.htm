@@ -59,7 +59,7 @@
                 contentType: "application/json; charset=utf-8",
                 url: Handler, //要访问的后台地址
                 data: param, //要发送的数据
-                async: true,
+                async: false,
                 cache: false,
                 complete: function () { }, //AJAX请求完成时隐藏loading提示
                 error: function (XMLHttpRequest, errorThrown) {
@@ -817,31 +817,35 @@
         //从表全部数据保存 还有问题 需要调整
         function SaveAll(obj) {
 
-           if (isDelRowAlert==true)
-           {
-               isDelRowAlert=false;
-               return;
-           }
+            if (isDelRowAlert==true)
+            {
+                isDelRowAlert=false;
+                return;
+            }
 
-             if ( GetQueryString("IsReadonly")==1)
-                     return;
-       
-
+            if ( GetQueryString("IsReadonly")==1)
+                    return;
 
             if (isChange==false) {
                 return;
             }
+
             //循环表格
             var trs = $('.table.wupop tbody tr');
             $.each(trs, function (i,obj) {
+
                 var sn=$($(obj).children()[0]).text();
                 if (isNaN(sn)) {
                     return;
-                } else {
+                }  
+
+            //alert('sn:'+sn);
+                 
                     needSaveCount = trs.length;
                     saveAll = true;
                     $('#Msg').show();
                     $('#ContentDtlDiv').hide();
+
                     //让界面的值=DAT 的值
                     setTrDataByData(i);
                     var index = i;
@@ -851,19 +855,28 @@
                     rowData.FK_MapDtl = GetQueryString("EnsName");
                     //row.FK_MapData = "ND101";
                     rowData.RefPKVal = GetQueryString("RefPKVal");
-                    //alert(rowData.OID)
+
                     var dbDataRow = $.grep(pageData.DBDtl, function (val) { return val.OID == rowData.OID; });
+
                     if (rowData.OID != 0 && dbDataRow.length == 1 && JSON.stringify(dbDataRow[0].RowData) == JSON.stringify(trData)) {
                         //值未改变，无需存盘
                         alerdaySaveCount++;
                         return;
-                    } else if (rowData.OID == 0) {
+                    }
+                    
+                    if (rowData.OID != 0) {
+                        AjaxServiceGener(rowData, SaveRowAfter, this);
+                        return;
+                    }
+
+                    //开始执行存盘.
                         var isEdit = false;
                         for (var pro in workNodeData.Blank[0]) {
                             if (rowData[pro] != undefined && rowData[pro] != workNodeData.Blank[0][pro]) {
                                 isEdit = true;
                             }
                         }
+
                         if (isEdit) {//改变了，入库
                             AjaxServiceGener(rowData, SaveRowAfter, this);
                         }
@@ -872,11 +885,7 @@
                             alerdaySaveCount++;
                             return;
                         }
-                    } else {
-                        AjaxServiceGener(rowData, SaveRowAfter, this);
-                    }
-                }
-            });
+            });  //循环表格
 
             if (!saveAll || (saveAll && alerdaySaveCount == needSaveCount)) {//保存所有数据
                 $('#Msg').hide();

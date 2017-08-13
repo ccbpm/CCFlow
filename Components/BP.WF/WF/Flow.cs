@@ -6715,7 +6715,6 @@ namespace BP.WF
             Node.CheckFlow(this);
             return base.beforeUpdate();
         }
-
         /// <summary>
         /// 更新版本号
         /// </summary>

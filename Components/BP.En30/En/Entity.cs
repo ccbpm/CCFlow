@@ -4769,6 +4769,17 @@ namespace BP.En
 			qo.addOrderBy(orderBy);
 			return qo.DoQuery();
 		}
+        public int Retrieve(string key, object val, string key2, object val2, string key3, object val3,string orderBy)
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere(key, val);
+            qo.addAnd();
+            qo.AddWhere(key2, val2);
+            qo.addAnd();
+            qo.AddWhere(key3, val3);
+            qo.addOrderBy(orderBy);
+            return qo.DoQuery();
+        }
 		/// <summary>
 		/// 查询全部
 		/// </summary>

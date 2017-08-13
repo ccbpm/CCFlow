@@ -604,7 +604,6 @@ namespace BP.WF
             //更新版本号.
             Flow.UpdateVer(this.FK_Flow);
 
-
             #region  //获得 NEE 实体.
             //if (string.IsNullOrEmpty(this.NodeMark) == false)
             //{

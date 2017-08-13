@@ -7000,8 +7000,6 @@ namespace BP.WF
                 toEmps += gwl.FK_Emp + ",";
             }
 
-
-
             //处理工作到达事件.
             PushMsgs pms = this.town.HisNode.HisPushMsgs;
             foreach (PushMsg pm in pms)

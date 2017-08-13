@@ -541,7 +541,8 @@ namespace BP.WF.HttpHandler
                         node.DirectUpdate();
                     }
                 }
-                else if (figure["CCBPM_Shape"].ToString() == "Text")
+                
+                if (figure["CCBPM_Shape"].ToString() == "Text")
                 {
                     //流程标签处理.
                     JsonData primitives = figure["primitives"][0];

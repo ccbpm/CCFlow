@@ -887,7 +887,10 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValIntByKey(MapAttrAttr.GroupID);
+                string str= this.GetValStringByKey(MapAttrAttr.GroupID);
+                if (str == "无")
+                    return 0;
+                return int.Parse(str);
             }
             set
             {
@@ -1402,7 +1405,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.ColSpan, 1, "单元格数量", true, false);
 
                 //显示的分组.
-                map.AddTBInt(MapAttrAttr.GroupID, 0, "显示的分组", true, false);
+                map.AddTBString(MapAttrAttr.GroupID, null, "显示的分组", true, false, 0, 100, 20);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
 
                 //参数属性.
@@ -1551,7 +1554,7 @@ namespace BP.Sys
 
             //added by liuxc,2016-12-2
             //判断当前属性是否有分组，没有分组，则自动创建一个分组，并关联
-            if (this.GroupID == 0)
+            if (this.GroupID.ToString() == "0")
             {
                 //查找分组，查找到的第一个分组，关联当前属性
                 GroupField group = new GroupField();
@@ -1562,7 +1565,7 @@ namespace BP.Sys
                 else
                 {
                     group.EnName = this.FK_MapData;
-                    group.Lab ="基础信息";
+                    group.Lab = "基础信息";
                     group.Idx = 1;
                     group.Insert();
 

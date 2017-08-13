@@ -635,6 +635,7 @@ namespace BP.WF
 						wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
 				}
 			}
+
 			#region 加载从表表单模版信息.
 
             DataTable Sys_MapDtl = dtl.ToDataTableField("Sys_MapDtl");
@@ -776,6 +777,9 @@ namespace BP.WF
 				qo.addAnd();
 				qo.AddWhere(strs[0], strs[1]);
 			}
+
+            //增加排序.
+        //    qo.addOrderByDesc( dtls.GetNewEntity.PKField );
 
 			//从表
 			DataTable dtDtl = qo.DoQueryToTable();

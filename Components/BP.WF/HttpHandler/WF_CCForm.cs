@@ -1772,5 +1772,46 @@ namespace BP.WF.HttpHandler
                 return "true";
             return "false";
         }
+
+        /// <summary>
+        /// 表单处理加载
+        /// </summary>
+        /// <returns></returns>
+        public string FrmSingle_Init()
+        {
+            if (string.IsNullOrWhiteSpace(this.FK_MapData))
+                throw new Exception("FK_MapData参数不能为空");
+
+            MapData md = new MapData();
+            md.No = this.FK_MapData;
+
+            if (md.RetrieveFromDBSources() == 0)
+                throw new Exception("未检索到FK_MapData=" + this.FK_MapData + "的表单，请核对参数");
+
+            int minOID = 10000000;//最小OID设置为一千万
+            int oid = this.OID;
+            Hashtable ht = new Hashtable();
+            GEEntity en = md.HisGEEn;
+
+            if (oid == 0)
+                oid = minOID;
+
+            en.OID = oid;
+
+            if(en.RetrieveFromDBSources() == 0)
+            {
+                ht.Add("IsExist", 0);
+            }
+            else
+            {
+                ht.Add("IsExist", 1);
+            }
+
+            ht.Add("OID", oid);
+            ht.Add("UserNo", WebUser.No);
+            ht.Add("SID", WebUser.SID);
+
+            return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
     }
 }

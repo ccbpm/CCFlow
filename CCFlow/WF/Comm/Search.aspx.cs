@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Data;
@@ -23,11 +23,11 @@ using NPOI.SS.UserModel;
 namespace CCFlow.Web.Comm
 {
     /// <summary>
-    /// ²éÑ¯Í¨ÓÃ½çÃæ
+    /// æŸ¥è¯¢é€šç”¨ç•Œé¢
     /// </summary>
     public partial class Search : BP.Web.WebPage
     {
-        #region ÊôĞÔ.
+        #region å±æ€§.
         public int PageIdxOfSeach
         {
             get
@@ -69,7 +69,7 @@ namespace CCFlow.Web.Comm
                 if (str == null)
                     str = this.Request.QueryString["EnsName"];
                 if (str == null)
-                    throw new Exception("ÀàÃûÎŞĞ§¡£");
+                    throw new Exception("ç±»åæ— æ•ˆã€‚");
                 return str;
             }
         }
@@ -88,7 +88,7 @@ namespace CCFlow.Web.Comm
             }
         }
         /// <summary>
-        /// ÏÔÊ¾·½Ê½.
+        /// æ˜¾ç¤ºæ–¹å¼.
         /// </summary>
         public ShowWay ShowWay
         {
@@ -134,7 +134,7 @@ namespace CCFlow.Web.Comm
         }
 
         /// <summary>
-        /// µ±Ç°Ñ¡Ôñde En
+        /// å½“å‰é€‰æ‹©de En
         /// </summary>
         public Entity CurrentSelectEnDa
         {
@@ -173,7 +173,7 @@ namespace CCFlow.Web.Comm
             }
         }
         /// <summary>
-        /// ÅÅĞò×Ö¶Î
+        /// æ’åºå­—æ®µ
         /// </summary>
         public string SortBy
         {
@@ -183,7 +183,7 @@ namespace CCFlow.Web.Comm
             }
         }
         /// <summary>
-        /// ÅÅĞò·½Ê½£¬ASC/DESC
+        /// æ’åºæ–¹å¼ï¼ŒASC/DESC
         /// </summary>
         public string SortType
         {
@@ -194,7 +194,7 @@ namespace CCFlow.Web.Comm
             }
         }
         /// <summary>
-        /// URLÖĞ¹ØÓÚÅÅĞòµÄÆ´½Ó×Ö·û´®
+        /// URLä¸­å…³äºæ’åºçš„æ‹¼æ¥å­—ç¬¦ä¸²
         /// </summary>
         public string SortString
         {
@@ -203,14 +203,14 @@ namespace CCFlow.Web.Comm
                 return "&SortBy=" + SortBy + "&SortType=" + SortType;
             }
         }
-        #endregion ÊôĞÔ.
+        #endregion å±æ€§.
 
-        #region ×°ÔØ·½·¨. Page_Load
+        #region è£…è½½æ–¹æ³•. Page_Load
         protected void Page_Load(object sender, System.EventArgs e)
         {
             UAC uac = this.HisEn.HisUAC;
             if (uac.IsView == false)
-                throw new Exception("ÄúÃ»ÓĞ²é¿´[" + this.HisEn.EnDesc + "]Êı¾İµÄÈ¨ÏŞ.");
+                throw new Exception("æ‚¨æ²¡æœ‰æŸ¥çœ‹[" + this.HisEn.EnDesc + "]æ•°æ®çš„æƒé™.");
 
             if (this.IsReadonly)
             {
@@ -227,13 +227,13 @@ namespace CCFlow.Web.Comm
             Entity en = this.HisEn;
             UIConfig cfg = new UIConfig(en);
 
-            // edit by stone : Ôö¼ÓÁËÊµÊ©µÄ»ñÈ¡map, ¿ÉÒÔÈÃÓÃ»§¶¯Ì¬µÄÉèÖÃ²éÑ¯Ìõ¼ş.
+            // edit by stone : å¢åŠ äº†å®æ–½çš„è·å–map, å¯ä»¥è®©ç”¨æˆ·åŠ¨æ€çš„è®¾ç½®æŸ¥è¯¢æ¡ä»¶.
             Map map = en.EnMapInTime;
             this.ShowWay = ShowWay.Dtl;
             if (uac.IsView == false)
-                throw new Exception("@¶Ô²»Æğ£¬ÄúÃ»ÓĞ²é¿´µÄÈ¨ÏŞ£¡");
+                throw new Exception("@å¯¹ä¸èµ·ï¼Œæ‚¨æ²¡æœ‰æŸ¥çœ‹çš„æƒé™ï¼");
 
-            #region ÉèÖÃtoolbar2 µÄ contral  ÉèÖÃ²éÑ°¹¦ÄÜ.
+            #region è®¾ç½®toolbar2 çš„ contral  è®¾ç½®æŸ¥å¯»åŠŸèƒ½.
             this.ToolBar1.InitByMapV2(map, 1);
 
             bool isEdit = true;
@@ -244,29 +244,29 @@ namespace CCFlow.Web.Comm
 
             string js = "ShowEn('./RefFunc/UIEn.aspx?EnsName=" + this.EnsName + "&inlayer=1','cd','" + cfg.WinCardH + "' , '" + cfg.WinCardW + "');";
             if (isEdit)
-                this.ToolBar1.AddLinkBtn(NamesOfBtn.New, "ĞÂ½¨", js);
+                this.ToolBar1.AddLinkBtn(NamesOfBtn.New, "æ–°å»º", js);
 
             js = "OpenAttrs('" + this.EnsName + "');";
 
             if (WebUser.No == "admin")
-                this.ToolBar1.AddLinkBtn(NamesOfBtn.Setting, "ÉèÖÃ", js);
+                this.ToolBar1.AddLinkBtn(NamesOfBtn.Setting, "è®¾ç½®", js);
 
             if (uac.IsExp)
             {
                 js = "DoExp();";
-                this.ToolBar1.AddLinkBtn(NamesOfBtn.Excel, "µ¼³ö", js);
+                this.ToolBar1.AddLinkBtn(NamesOfBtn.Excel, "å¯¼å‡º", js);
             }
 
             if (uac.IsImp)
             {
-                js = "OpenDialogAndCloseRefresh('./Sys/EnsDataIO.aspx?EnsName=" + this.EnsName + "&Step=1&t=' + Math.random(), 'µ¼ÈëÊı¾İ', 720, 500, 'icon-insert');";
-                this.ToolBar1.AddLinkBtn("Btn_Import", "µ¼Èë", js);
+                js = "OpenDialogAndCloseRefresh('./Sys/EnsDataIO.aspx?EnsName=" + this.EnsName + "&Step=1&t=' + Math.random(), 'å¯¼å…¥æ•°æ®', 720, 500, 'icon-insert');";
+                this.ToolBar1.AddLinkBtn("Btn_Import", "å¯¼å…¥", js);
                 this.ToolBar1.GetLinkBtnByID("Btn_Import").SetDataOption("iconCls", "'icon-insert'");
             }
 
             #endregion
 
-            #region ÉèÖÃÑ¡ÔñµÄ Ä¬ÈÏÖµ
+            #region è®¾ç½®é€‰æ‹©çš„ é»˜è®¤å€¼
             AttrSearchs searchs = map.SearchAttrs;
             bool isChange = false;
             foreach (AttrSearch attr in searchs)
@@ -289,7 +289,7 @@ namespace CCFlow.Web.Comm
 
             if (isChange == true)
             {
-                /*Èç¹ûÊÇ±£´æÁË*/
+                /*å¦‚æœæ˜¯ä¿å­˜äº†*/
                 this.ToolBar1.SaveSearchState(this.EnsName, null);
             }
             #endregion
@@ -298,12 +298,12 @@ namespace CCFlow.Web.Comm
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Search).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
             // this.Label1.Text = this.GenerCaption(this.HisEn.EnMap.EnDesc + "" + this.HisEn.EnMap.TitleExt);
 
-            //ÁÙÊ±ÎÄ¼şÃû
-            this.expFileName.Value = this.HisEns.GetNewEntity.EnDesc + "Êı¾İµ¼³ö" + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
+            //ä¸´æ—¶æ–‡ä»¶å
+            this.expFileName.Value = this.HisEns.GetNewEntity.EnDesc + "æ•°æ®å¯¼å‡º" + "_" + BP.DA.DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
         }
-        #endregion ×°ÔØ·½·¨. Page_Load
+        #endregion è£…è½½æ–¹æ³•. Page_Load
 
-        #region ·½·¨
+        #region æ–¹æ³•
         public Entities SetDGData()
         {
             return this.SetDGData(this.PageIdx);
@@ -320,12 +320,12 @@ namespace CCFlow.Web.Comm
             {
                 if (en.HisUAC.IsExp == false)
                 {
-                    this.WinCloseWithMsg("ÄúÃ»ÓĞÊı¾İµ¼³öÈ¨ÏŞ£¬ÇëÁªÏµ¹ÜÀíÔ±½â¾ö£¡");
+                    this.WinCloseWithMsg("æ‚¨æ²¡æœ‰æ•°æ®å¯¼å‡ºæƒé™ï¼Œè¯·è”ç³»ç®¡ç†å‘˜è§£å†³ï¼");
                     return null;
                 }
 
-                #region //µ¼³öµ½excel
-                string name = en.EnDesc + "Êı¾İµ¼³ö" + "_" + DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
+                #region //å¯¼å‡ºåˆ°excel
+                string name = en.EnDesc + "æ•°æ®å¯¼å‡º" + "_" + DataType.CurrentDataCNOfLong + "_" + WebUser.Name + ".xls";
                 string filepath = BP.Sys.SystemConfig.PathOfTemp;
                 string filename = null;
                 long len = 0;
@@ -354,7 +354,7 @@ namespace CCFlow.Web.Comm
                     UIConfig cfg = new UIConfig(en);
                     float charWidth = 0;
 
-                    //ÁĞ±êÌâµ¥Ôª¸ñÑùÊ½Éè¶¨
+                    //åˆ—æ ‡é¢˜å•å…ƒæ ¼æ ·å¼è®¾å®š
                     ICellStyle titleStyle = wb.CreateCellStyle();
                     titleStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
                     titleStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
@@ -365,7 +365,7 @@ namespace CCFlow.Web.Comm
                     font.IsBold = true;
                     titleStyle.SetFont(font);
 
-                    //ÎÄ¼ş±êÌâµ¥Ôª¸ñÑùÊ½Éè¶¨
+                    //æ–‡ä»¶æ ‡é¢˜å•å…ƒæ ¼æ ·å¼è®¾å®š
                     ICellStyle headerStyle = wb.CreateCellStyle();
                     headerStyle.Alignment = HorizontalAlignment.Center;
                     headerStyle.VerticalAlignment = VerticalAlignment.Center;
@@ -374,12 +374,12 @@ namespace CCFlow.Web.Comm
                     font.IsBold = true;
                     headerStyle.SetFont(font);
 
-                    //ÖÆ±íÈËµ¥Ôª¸ñÑùÊ½Éè¶¨
+                    //åˆ¶è¡¨äººå•å…ƒæ ¼æ ·å¼è®¾å®š
                     ICellStyle userStyle = wb.CreateCellStyle();
                     userStyle.Alignment = HorizontalAlignment.Right;
                     userStyle.VerticalAlignment = VerticalAlignment.Center;
 
-                    //µ¥Ôª¸ñÑùÊ½Éè¶¨
+                    //å•å…ƒæ ¼æ ·å¼è®¾å®š
                     ICellStyle cellStyle = wb.CreateCellStyle();
                     cellStyle.BorderTop = NPOI.SS.UserModel.BorderStyle.Thin;
                     cellStyle.BorderBottom = NPOI.SS.UserModel.BorderStyle.Thin;
@@ -387,17 +387,17 @@ namespace CCFlow.Web.Comm
                     cellStyle.BorderRight = NPOI.SS.UserModel.BorderStyle.Thin;
                     cellStyle.VerticalAlignment = VerticalAlignment.Center;
 
-                    //ÈÕÆÚµ¥Ôª¸ñÑùÊ½Éè¶¨
+                    //æ—¥æœŸå•å…ƒæ ¼æ ·å¼è®¾å®š
                     ICellStyle dateCellStyle = wb.CreateCellStyle();
                     dateCellStyle.CloneStyleFrom(cellStyle);
                     dateCellStyle.DataFormat = fmt.GetFormat("yyyy-m-d;@");
 
-                    //ÈÕÆÚÊ±¼äµ¥Ôª¸ñÑùÊ½Éè¶¨
+                    //æ—¥æœŸæ—¶é—´å•å…ƒæ ¼æ ·å¼è®¾å®š
                     ICellStyle timeCellStyle = wb.CreateCellStyle();
                     timeCellStyle.CloneStyleFrom(cellStyle);
                     timeCellStyle.DataFormat = fmt.GetFormat("yyyy-m-d h:mm;@");
 
-                    //Ò»¸ö×Ö·ûµÄÏñËØ¿í¶È£¬ÒÔArial£¬10°õ£¬i½øĞĞ²âËã
+                    //ä¸€ä¸ªå­—ç¬¦çš„åƒç´ å®½åº¦ï¼Œä»¥Arialï¼Œ10ç£…ï¼Œiè¿›è¡Œæµ‹ç®—
                     using (Bitmap bmp = new Bitmap(10, 10))
                     {
                         using (Graphics g = Graphics.FromImage(bmp))
@@ -406,7 +406,7 @@ namespace CCFlow.Web.Comm
                         }
                     }
 
-                    //ÒªÏÔÊ¾µÄÁĞ
+                    //è¦æ˜¾ç¤ºçš„åˆ—
                     if (cfg.ShowColumns.Length == 0)
                     {
                         selectedAttrs = attrs;
@@ -432,7 +432,7 @@ namespace CCFlow.Web.Comm
                                 selectedAttrs.Add(attr);
                         }
                     }
-                    //Êä³öÁĞ±êÌâÍ·
+                    //è¾“å‡ºåˆ—æ ‡é¢˜å¤´
                     row.HeightInPoints = 20;
 
                     foreach (Attr attr in selectedAttrs)
@@ -451,21 +451,21 @@ namespace CCFlow.Web.Comm
                         frow.CreateCell(c - 1);
                         lrow.CreateCell(c - 1);
                     }
-                    //Êä³öÎÄ¼ş±êÌâÍ·
+                    //è¾“å‡ºæ–‡ä»¶æ ‡é¢˜å¤´
                     sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 0, 0, c - 1));
                     cell = frow.GetCell(0);
                     cell.SetCellValue(en.EnDesc);
                     cell.CellStyle = headerStyle;
                     frow.HeightInPoints = 26;
-                    //Êä³öÖÆ±íÈË
+                    //è¾“å‡ºåˆ¶è¡¨äºº
                     sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(2 + dt.Rows.Count, 2 + dt.Rows.Count, 0, c - 1));
                     cell = lrow.GetCell(0);
-                    cell.SetCellValue("ÖÆ±íÈË£º" + WebUser.Name);
+                    cell.SetCellValue("åˆ¶è¡¨äººï¼š" + WebUser.Name);
                     cell.CellStyle = userStyle;
                     lrow.HeightInPoints = 20;
 
                     r = 2;
-                    //Êä³ö²éÑ¯½á¹û
+                    //è¾“å‡ºæŸ¥è¯¢ç»“æœ
                     foreach (DataRow dr in dt.Rows)
                     {
                         row = sheet.CreateRow(r++);
@@ -493,7 +493,7 @@ namespace CCFlow.Web.Comm
                                 {
                                     case DataType.AppBoolean:
                                         cell.CellStyle = cellStyle;
-                                        cell.SetCellValue(dr[attr.Key].Equals(1) ? "ÊÇ" : "·ñ");
+                                        cell.SetCellValue(dr[attr.Key].Equals(1) ? "æ˜¯" : "å¦");
                                         break;
                                     case DataType.AppDate:
                                         cell.SetCellValue(dr[attr.Key] as string);
@@ -527,14 +527,14 @@ namespace CCFlow.Web.Comm
 
                 if (!"firefox".Contains(Request.Browser.Browser.ToLower()))
                     name = HttpUtility.UrlEncode(name);
-                //µ¯³öÏÂÔØ
+                //å¼¹å‡ºä¸‹è½½
                 Response.AddHeader("Content-Length", len.ToString());
                 Response.ContentType = "application/octet-stream";
                 Response.AddHeader("Content-Disposition", "attachment; filename=" + name);
                 Response.WriteFile(filename);
                 Response.End();
                 Response.Close();
-                #endregion //µ¼³öµ½excel
+                #endregion //å¯¼å‡ºåˆ°excel
 
                 return null;
             }
@@ -546,7 +546,7 @@ namespace CCFlow.Web.Comm
                 maxPageNum = this.UCSys2.BindPageIdx(qo.GetCount(),
                     SystemConfig.PageSize, pageIdx, "Search.aspx?EnsName=" + this.EnsName + SortString);
                 if (maxPageNum > 1)
-                    this.UCSys2.Add("·­Ò³¼ü:¡û ¡ú PageUp PageDown");
+                    this.UCSys2.Add("ç¿»é¡µé”®:â† â†’ PageUp PageDown");
             }
             catch
             {
@@ -629,7 +629,7 @@ namespace CCFlow.Web.Comm
             //  this.UCSys3.Add("\t\n  alert(event.keyCode); ");
             if (this.PageIdx == 1)
             {
-                this.UCSys1.Add("\t\n if (event.keyCode == 37 || event.keyCode == 33) alert('ÒÑ¾­ÊÇµÚÒ»Ò³');");
+                this.UCSys1.Add("\t\n if (event.keyCode == 37 || event.keyCode == 33) alert('å·²ç»æ˜¯ç¬¬ä¸€é¡µ');");
             }
             else
             {
@@ -639,7 +639,7 @@ namespace CCFlow.Web.Comm
 
             if (this.PageIdx == maxPageNum)
             {
-                this.UCSys1.Add("\t\n if (event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 34) alert('ÒÑ¾­ÊÇ×îºóÒ»Ò³');");
+                this.UCSys1.Add("\t\n if (event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 34) alert('å·²ç»æ˜¯æœ€åä¸€é¡µ');");
             }
             else
             {
@@ -652,7 +652,7 @@ namespace CCFlow.Web.Comm
             return ens;
         }
 
-        #region Web ´°ÌåÉè¼ÆÆ÷Éú³ÉµÄ´úÂë
+        #region Web çª—ä½“è®¾è®¡å™¨ç”Ÿæˆçš„ä»£ç 
         override protected void OnInit(EventArgs e)
         {
             InitializeComponent();
@@ -660,8 +660,8 @@ namespace CCFlow.Web.Comm
         }
 
         /// <summary>
-        /// Éè¼ÆÆ÷Ö§³ÖËùĞèµÄ·½·¨ - ²»ÒªÊ¹ÓÃ´úÂë±à¼­Æ÷ĞŞ¸Ä
-        /// ´Ë·½·¨µÄÄÚÈİ¡£
+        /// è®¾è®¡å™¨æ”¯æŒæ‰€éœ€çš„æ–¹æ³• - ä¸è¦ä½¿ç”¨ä»£ç ç¼–è¾‘å™¨ä¿®æ”¹
+        /// æ­¤æ–¹æ³•çš„å†…å®¹ã€‚
         /// </summary>
         private void InitializeComponent()
         {
@@ -670,7 +670,7 @@ namespace CCFlow.Web.Comm
 
         #endregion
 
-        #region ÊÂ¼ş.
+        #region äº‹ä»¶.
         private void ToolBar1_ButtonClick(object sender, System.EventArgs e)
         {
             try
@@ -678,10 +678,10 @@ namespace CCFlow.Web.Comm
                 var btn = sender as LinkBtn;
                 switch (btn.ID)
                 {
-                    case NamesOfBtn.Insert: //Êı¾İµ¼³ö
+                    case NamesOfBtn.Insert: //æ•°æ®å¯¼å‡º
                         this.Response.Redirect("UIEn.aspx?EnName=" + this.HisEn.ToString(), true);
                         return;
-                    case NamesOfBtn.Excel: //Êı¾İµ¼³ö
+                    case NamesOfBtn.Excel: //æ•°æ®å¯¼å‡º
                         Entities ens = this.HisEns;
                         Entity en = ens.GetNewEntity;
                         QueryObject qo = new QueryObject(ens);
@@ -701,12 +701,12 @@ namespace CCFlow.Web.Comm
                             }
                             catch
                             {
-                                throw new Exception("Êı¾İÃ»ÓĞÕıÈ·µ¼³ö¿ÉÄÜµÄÔ­ÒòÖ®Ò»ÊÇ:ÏµÍ³¹ÜÀíÔ±Ã»ÕıÈ·µÄ°²×°Excel×é¼ş£¬ÇëÍ¨ÖªËû£¬²Î¿¼°²×°ËµÃ÷Êé½â¾ö¡£@ÏµÍ³Òì³£ĞÅÏ¢£º" + ex.Message);
+                                throw new Exception("æ•°æ®æ²¡æœ‰æ­£ç¡®å¯¼å‡ºå¯èƒ½çš„åŸå› ä¹‹ä¸€æ˜¯:ç³»ç»Ÿç®¡ç†å‘˜æ²¡æ­£ç¡®çš„å®‰è£…Excelç»„ä»¶ï¼Œè¯·é€šçŸ¥ä»–ï¼Œå‚è€ƒå®‰è£…è¯´æ˜ä¹¦è§£å†³ã€‚@ç³»ç»Ÿå¼‚å¸¸ä¿¡æ¯ï¼š" + ex.Message);
                             }
                         }
                         this.SetDGData();
                         return;
-                    case NamesOfBtn.Excel_S: //Êı¾İµ¼³ö.
+                    case NamesOfBtn.Excel_S: //æ•°æ®å¯¼å‡º.
                         Entities ens1 = this.SetDGData();
                         try
                         {
@@ -714,13 +714,13 @@ namespace CCFlow.Web.Comm
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("Êı¾İÃ»ÓĞÕıÈ·µ¼³ö¿ÉÄÜµÄÔ­ÒòÖ®Ò»ÊÇ:ÏµÍ³¹ÜÀíÔ±Ã»ÕıÈ·µÄ°²×°Excel×é¼ş£¬ÇëÍ¨ÖªËû£¬²Î¿¼°²×°ËµÃ÷Êé½â¾ö¡£@ÏµÍ³Òì³£ĞÅÏ¢£º" + ex.Message);
+                            throw new Exception("æ•°æ®æ²¡æœ‰æ­£ç¡®å¯¼å‡ºå¯èƒ½çš„åŸå› ä¹‹ä¸€æ˜¯:ç³»ç»Ÿç®¡ç†å‘˜æ²¡æ­£ç¡®çš„å®‰è£…Excelç»„ä»¶ï¼Œè¯·é€šçŸ¥ä»–ï¼Œå‚è€ƒå®‰è£…è¯´æ˜ä¹¦è§£å†³ã€‚@ç³»ç»Ÿå¼‚å¸¸ä¿¡æ¯ï¼š" + ex.Message);
                         }
                         this.SetDGData();
                         return;
-                    case NamesOfBtn.Xml: //Êı¾İµ¼³ö
+                    case NamesOfBtn.Xml: //æ•°æ®å¯¼å‡º
                         return;
-                    case "Btn_Print":  //Êı¾İµ¼³ö.
+                    case "Btn_Print":  //æ•°æ®å¯¼å‡º.
                         return;
                     default:
                         this.PageIdx = 1;
@@ -743,6 +743,6 @@ namespace CCFlow.Web.Comm
             this.SetDGData();
             return false;
         }
-        #endregion ÊÂ¼ş.
+        #endregion äº‹ä»¶.
     }
 }

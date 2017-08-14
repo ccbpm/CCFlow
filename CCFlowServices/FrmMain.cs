@@ -431,7 +431,9 @@ namespace SMSServices
         private void DoOverDueFlow()
         {
             //特殊处理天津的需求.
-            DoTianJinSpecFunc();
+            if (SystemConfig.CustomerNo =="" )
+               DoTianJinSpecFunc();
+
 
             #region 找到要逾期的数据.
             DataTable generTab = null;
@@ -468,12 +470,19 @@ namespace SMSServices
                         case OutTimeDeal.AutoJumpToSpecNode: //跳转到指定的节点.
                             try
                             {
+                                if (doOutTime.Contains(",") == false)
+                                    throw new Exception("@系统设置错误，不符合设置规范,格式为: NodeID,EmpNo  现在设置的为:"+doOutTime);
+
                                 string[] jumps = doOutTime.Split(',');
 
                                 string jumpNode = jumps[0];
                                 string jumpEmp = jumps[1];
 
-                                Emp emp = new Emp(jumpEmp);
+                                Emp emp = new Emp();
+                                emp.No = jumpEmp;
+                                if (emp.RetrieveFromDBSources() == 0)
+                                    throw new Exception("@设置的跳转人员:"+jumpEmp+"已经不存在.");
+
                                 if (string.IsNullOrEmpty(emp.No))
                                 {
                                     msg = "流程: '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
@@ -642,7 +651,7 @@ namespace SMSServices
             #region 自动启动流程
             foreach (BP.WF.Flow fl in fls)
             {
-                if (  fl.HisFlowRunWay == BP.WF.FlowRunWay.HandWork)
+                if (fl.HisFlowRunWay == BP.WF.FlowRunWay.HandWork)
                     continue;
 
                 if (DateTime.Now.ToString("HH:mm") == fl.Tag)

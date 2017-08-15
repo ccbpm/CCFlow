@@ -81,7 +81,7 @@ namespace BP.WF.HttpHandler
             //ds.ReadXml(path);
             ds.ReadXml(this.context.Request.Files[0].InputStream);
             //执行装载.
-            MapData.ImpMapData(fk_mapData, ds, true);
+            MapData.ImpMapData(fk_mapData, ds);
 
             if (fk_mapData.Contains("ND"))
             {
@@ -118,7 +118,7 @@ namespace BP.WF.HttpHandler
 
             MapData md = new MapData(fromMapData);
 
-            MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet(md.No), isSetReadonly);
+            MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet(md.No));
 
             // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
             if (fk_mapdata.Contains("ND") == true)

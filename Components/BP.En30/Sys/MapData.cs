@@ -1693,7 +1693,7 @@ namespace BP.Sys
 		/// <param name="ds"></param>
 		/// <param name="isSetReadony"></param>
 		/// <returns></returns>
-		public static MapData ImpMapData(DataSet ds, bool isSetReadony)
+		public static MapData ImpMapData(DataSet ds)
 		{
 			string errMsg = "";
 			if (ds.Tables.Contains("WF_Flow") == true)
@@ -1716,7 +1716,7 @@ namespace BP.Sys
 				throw new Exception("@已经存在(" + fk_mapData + ")的表单ID，所以您不能导入。");
 
 			//导入.
-			return ImpMapData(fk_mapData, ds, isSetReadony);
+			return ImpMapData(fk_mapData, ds);
 		}
 		/// <summary>
 		/// 导入表单
@@ -1725,7 +1725,7 @@ namespace BP.Sys
 		/// <param name="ds">表单数据</param>
 		/// <param name="isSetReadonly">是否设置只读？</param>
 		/// <returns></returns>
-		public static MapData ImpMapData(string fk_mapdata, DataSet ds, bool isSetReadonly=false)
+		public static MapData ImpMapData(string fk_mapdata, DataSet ds)
 		{
 
 			#region 检查导入的数据是否完整.
@@ -1811,12 +1811,7 @@ namespace BP.Sys
 
 								dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
-							if (isSetReadonly)
-							{
-								dtl.IsInsert = false;
-								dtl.IsUpdate = false;
-								dtl.IsDelete = false;
-							}
+						 
 
 							dtl.Insert();
 						}
@@ -1874,8 +1869,7 @@ namespace BP.Sys
 
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
-							if (isSetReadonly == true)
-								en.IsEnable = false;
+					 
 
 
 							en.MyPK = "Btn_" + idx + "_" + fk_mapdata;
@@ -1954,8 +1948,7 @@ namespace BP.Sys
 
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
-							if (isSetReadonly == true)
-								en.IsEnable = false;
+						 
 
 							en.Insert();
 						}
@@ -2037,12 +2030,7 @@ namespace BP.Sys
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
 							en.MyPK = "Ath_" + idx + "_" + fk_mapdata;
-							if (isSetReadonly == true)
-							{
-								// en.IsDeleteInt = 0;
-								en.HisDeleteWay = AthDeleteWay.None;
-								en.IsUpload = false;
-							}
+							 
 
 							try
 							{
@@ -2066,12 +2054,7 @@ namespace BP.Sys
 
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
-							//   en.NoOfObj = "M2M_" + idx + "_" + fk_mapdata;
-							if (isSetReadonly == true)
-							{
-								en.IsDelete = false;
-								en.IsInsert = false;
-							}
+						 
 							try
 							{
 								en.Insert();
@@ -2131,32 +2114,7 @@ namespace BP.Sys
 
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
-
-							if (isSetReadonly == true)
-							{
-								if (en.DefValReal != null
-									&& (en.DefValReal.Contains("@WebUser.")
-									|| en.DefValReal.Contains("@RDT")))
-									en.DefValReal = "";
-
-								switch (en.UIContralType)
-								{
-									case UIContralType.DDL:
-										en.UIIsEnable = false;
-										break;
-									case UIContralType.TB:
-										en.UIIsEnable = false;
-										break;
-									case UIContralType.RadioBtn:
-										en.UIIsEnable = false;
-										break;
-									case UIContralType.CheckBok:
-										en.UIIsEnable = false;
-										break;
-									default:
-										break;
-								}
-							}
+							 
 							en.MyPK = en.FK_MapData + "_" + en.KeyOfEn;
 
 							//直接插入.

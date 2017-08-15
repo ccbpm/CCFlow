@@ -180,6 +180,7 @@
     <Compile Include="Sys\Contrast.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sys\EnumLib.cs" />
     <Compile Include="Sys\EnVer.cs" />
     <Compile Include="Sys\EnVerDtl.cs" />
     <Compile Include="Sys\ExcelField.cs" />

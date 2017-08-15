@@ -6455,7 +6455,7 @@ namespace BP.WF
                     ds.ReadXml(file);
 
                     string nodeID = "ND" + int.Parse(this.No + "01");
-                    BP.Sys.MapData.ImpMapData(nodeID, ds, false);
+                    BP.Sys.MapData.ImpMapData(nodeID, ds);
                 }
                 else
                 {

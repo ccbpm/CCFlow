@@ -1071,7 +1071,7 @@ namespace BP.Sys
         /// <param name="isSetReadonly">是否把空间设置只读？</param>
         public static void ImpFrmTemplate(string toFrmID, DataSet fromds, bool isSetReadonly)
         {
-            MapData.ImpMapData(toFrmID, fromds, isSetReadonly);
+            MapData.ImpMapData(toFrmID, fromds);
         }
         /// <summary>
         /// 获得表单模版dataSet格式.

@@ -626,26 +626,8 @@ namespace BP.WF.HttpHandler
 
                 if (btnLab.DeleteEnable != 0 && isAskFor == false)
                 {
-                    /*流程删除规则 */
-                    switch (this.currND.HisDelWorkFlowRole)
-                    {
-                        case DelWorkFlowRole.None: /*不删除*/
-                            break;
-                        case DelWorkFlowRole.ByUser: //需要交互.
-                        case DelWorkFlowRole.DeleteAndWriteToLog:
-                        case DelWorkFlowRole.DeleteByFlag:
-                        case DelWorkFlowRole.DeleteReal: // 不需要交互，直接干净的删除.
-                            string urlrDel = appPath + "WF/MyFlowInfo.htm?DoType=DeleteFlow&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                            toolbar += "<input name='Delete' type=button  value='" + btnLab.DeleteLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" />";
-                            break;
-                        //case DelWorkFlowRole.DeleteReal: // 不需要交互，直接干净的删除.
-                        //    toolbar.AddBtn("Btn_Delete", btnLab.DeleteLab);
-                        //    this.Btn_Delete.OnClientClick = "return confirm('将要执行删除流程，您确认吗?')";
-                        //    this.Btn_Delete.Click += new System.EventHandler(ToolBar1_ButtonClick);
-                        //    break;
-                        default:
-                            break;
-                    }
+                    string urlrDel = appPath + "WF/MyFlowInfo.htm?DoType=DeleteFlow&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<input name='Delete' type=button  value='" + btnLab.DeleteLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" />";
                 }
 
                 if (btnLab.EndFlowEnable && this.currND.IsStartNode == false && isAskFor == false)

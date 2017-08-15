@@ -1208,67 +1208,11 @@ namespace BP.WF.HttpHandler
         }
 
         #region 选择接受人.
-        public string AccepterInit_bak()
-        {
-            //当前节点ID.
-            Node nd = new Node(this.FK_Node);
-
-            int toNodeID = 0;
-            if (this.GetValFromFrmByKey("ToNode") != "0")
-                toNodeID = this.GetValIntFromFrmByKey("ToNode");
-
-            if (toNodeID == 0)
-            {
-                Nodes nds = nd.HisToNodes;
-                if (nds.Count == 1)
-                    toNodeID = nds[0].GetValIntByKey("NodeID");
-                else
-                    return "err@参数错误,必须传递来到达的节点ID.";
-            }
-
-            //当前节点.
-
-            //到达的节点, 用户生成到达节点的下拉框.
-            Nodes toNodes = nd.HisToNodes;
-            DataTable dtNodes = new DataTable();
-            dtNodes.TableName = "Nodes";
-            dtNodes.Columns.Add(new DataColumn("No", typeof(string)));
-            dtNodes.Columns.Add(new DataColumn("Name", typeof(string)));
-            dtNodes.Columns.Add(new DataColumn("SelectorModel", typeof(string)));
-            foreach (Node item in toNodes)
-            {
-                DataRow dr = dtNodes.NewRow();
-                Selector selectItem = new Selector(item.NodeID);
-                dr["No"] = item.NodeID;
-                dr["Name"] = item.Name;
-                dr["SelectorModel"] = selectItem.SelectorModel;
-                dtNodes.Rows.Add(dr);
-            }
-
-            //求到达的节点.
-            if (toNodeID == 0)
-                toNodeID = toNodes[0].GetValIntByKey("NodeID");   //取第一个.
-
-            Work wk = nd.HisWork;
-            wk.OID = this.WorkID;
-            wk.Retrieve();
-
-            Selector select = new Selector(toNodeID);
-
-            //获得 部门与人员.
-            DataSet ds = select.GenerDataSet(toNodeID, wk);
-
-            //加入到到达节点的列表.
-            ds.Tables.Add(dtNodes);
-
-            //返回json.
-            return BP.Tools.Json.DataSetToJson(ds, false);
-        }
         /// <summary>
         /// 初始化接受人.
         /// </summary>
         /// <returns></returns>
-        public string AccepterInit()
+        public string Accepter_Init()
         {
             //当前节点ID.
             Node nd = new Node(this.FK_Node);
@@ -1334,7 +1278,7 @@ namespace BP.WF.HttpHandler
         /// 保存.
         /// </summary>
         /// <returns></returns>
-        public string AccepterSave()
+        public string Accepter_Save()
         {
             try
             {
@@ -1364,7 +1308,6 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-
         /// <summary>
         /// 执行保存并发送.
         /// </summary>

@@ -264,7 +264,7 @@ namespace BP.WF.Template
                         throw new Exception("流程设计错误:您设置的节点(" + town.HisNode.Name + ")的接收方式为按指定的节点岗位投递，但是您没有在访问规则设置中设置节点编号。");
 
                     ps = new Paras();
-                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsPass=1 AND IsEnable=1 ";
+                    ps.SQL = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE WorkID=" + dbStr + "OID AND FK_Node=" + dbStr + "FK_Node AND IsEnable=1 ";
                     ps.Add("FK_Node", int.Parse(nd));
                     if (this.currWn.HisNode.HisRunModel == RunModel.SubThread)
                         ps.Add("OID", this.currWn.HisWork.FID);

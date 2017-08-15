@@ -2335,7 +2335,7 @@ namespace BP.Sys
 				attr.HisEditType = BP.En.EditType.UnDel;
 				attr.KeyOfEn = "RDT";
 				attr.Name = "更新时间";
-
+                attr.GroupID = 0;
 				attr.MyDataType = BP.DA.DataType.AppDateTime;
 				attr.UIContralType = UIContralType.TB;
 				attr.LGType = FieldTypeS.Normal;

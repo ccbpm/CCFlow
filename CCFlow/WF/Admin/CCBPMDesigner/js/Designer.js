@@ -307,7 +307,7 @@ function NodeProperty_Funs(item) {
     switch (item.name) {
         case "NodeProperty": //节点属性.
             url = "../../Comm/En.htm?EnsName=BP.WF.Template.NodeExts&PK=" + FK_Node + "&Lang=CH";
-           // alert(url);
+            // alert(url);
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "PO", "节点属性" + FK_Node, url, item.iconCls);
             } else {
@@ -358,7 +358,7 @@ function NodeProperty_Funs(item) {
             var changeNode = new ChangeNodeManager(figureId);
             changeNode.NodeSubThread();
             break;
-     
+
         case "NodeAccepterRole": // 工作处理人. NodeFromWorkModel
             url = "../AttrNode/NodeAccepterRole.htm?FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {
@@ -369,9 +369,9 @@ function NodeProperty_Funs(item) {
             break;
         case "BindStations":  //绑定岗位.
             url = "../XAP/DoPort.htm?DoType=StaDefNew&PK=" + FK_Node + "&Lang=CH";
-            WinOpenIt(url, 500, 400 );
+            WinOpenIt(url, 500, 400);
             break;
-           // Glo.OpenDialog(Glo.BPMHost + url, "执行", 500, 400);
+        // Glo.OpenDialog(Glo.BPMHost + url, "执行", 500, 400); 
         case "NodeCCRole": // 抄送人规则.
             url = "../AttrNode/NodeCCRole.htm?FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {
@@ -452,7 +452,7 @@ function NodeProperty_Funs(item) {
                 alert("请选择\"设计节点表单(H5测试版)\"");
             break;
             url = "../CCFormDesigner/CCFormDesignerSL.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + FK_Node + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID;
-            if (window.parent && 1==3) {
+            if (window.parent && 1 == 3) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "自由表单" + FK_Node, url, item.iconCls);
             } else {
                 WinOpen(url);
@@ -479,7 +479,11 @@ function NodeProperty_Funs(item) {
             cmdDelFig.execute();
             draw();
             break;
+        default:
+            alert('没有处理的菜单ID:' + item.name);
+            break;
     }
+
     $('#nodeMenu').menu('hide');
 }
 

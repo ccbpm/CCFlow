@@ -1665,7 +1665,7 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
                 DataSet ds = new DataSet();
                 ds.ReadXml(filepath);
 
-                MapData md = MapData.ImpMapData(ds,false);
+                MapData md = MapData.ImpMapData(ds);
                 md.FK_FrmSort = fk_frmSort;
                 md.Update();
                 return null;

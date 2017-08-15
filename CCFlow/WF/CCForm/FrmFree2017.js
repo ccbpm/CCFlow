@@ -498,7 +498,7 @@ function initGroup(workNodeData, groupFiled) {
             break;
         case "Dtl":
             //WF/CCForm/Dtl.aspx?EnsName=ND501Dtl1&RefPKVal=0&PageIdx=1
-            var src = "/WF/CCForm/Dtl.htm?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.OID + "&PageIdx=1";
+            var src = "Dtl.htm?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.OID + "&PageIdx=1";
             src += "&r=q" + paras;
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
@@ -510,20 +510,19 @@ function initGroup(workNodeData, groupFiled) {
                     continue;
                 var src = "";
                 if (pageData.IsReadonly)
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+                    src = "AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
                 else
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
+                    src = "AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
 
                 groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             }
             break;
         case "FWC": //审核组件.
-            var src = "/WF/WorkOpt/WorkCheck.htm?s=2";
+            var src = "../WorkOpt/WorkCheck.htm?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.OID;
             }
-
 
             if (workNodeData.WF_Node.length > 0 && workNodeData.WF_Node[0].FWCSTA == 1) {
                 paras += "&DoType=View";
@@ -532,7 +531,7 @@ function initGroup(workNodeData, groupFiled) {
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "SubFlow": //子流程..
-            var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
+            var src = "../WorkOpt/SubFlow.htm?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.OID;
@@ -545,7 +544,7 @@ function initGroup(workNodeData, groupFiled) {
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "Track": //轨迹图.
-            var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
+            var src = "../WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
             //var paras = pageParamToUrl();
             //if (paras.indexOf('OID') < 0) {
             //    paras += "&OID=" + pageData.OID;
@@ -559,7 +558,7 @@ function initGroup(workNodeData, groupFiled) {
 
             break;
         case "Thread": //子线程.
-            var src = "/WF/WorkOpt/Thread.aspx?s=2";
+            var src = "../WorkOpt/Thread.htm?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.OID;
@@ -568,7 +567,7 @@ function initGroup(workNodeData, groupFiled) {
             groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             break;
         case "FTC": //流转自定义.  有问题
-            var src = "/WF/WorkOpt/FTC.aspx?s=2";
+            var src = "../WorkOpt/FTC.aspx?s=2";
             var paras = pageParamToUrl();
             if (paras.indexOf('OID') < 0) {
                 paras += "&OID=" + pageData.OID;
@@ -690,9 +689,9 @@ function InitForm() {
             ath = ath[0];
             var src = "";
             if (pageData.IsReadonly)
-                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+                src = "AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
             else
-                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+                src = "AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
             $('#iframeAthForm').attr('src', src);
             atParamObj["tbId"] = tbId;
             atParamObj["divId"] = divId;
@@ -822,8 +821,8 @@ function InitMapAttr(mapAttrData, workNodeData) {
             }
 
             var eleHtml = '';
-            var isInOneRow = false;//是否占一整行
-            var islabelIsInEle = false;//
+            var isInOneRow = false; //是否占一整行
+            var islabelIsInEle = false; //
 
             eleHtml += '';
 
@@ -850,7 +849,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                 break;
                         }
                         if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
-                            eleHtml += 
+                            eleHtml +=
                                 "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                                 (workNodeData, mapAttr, defValue) + "</select>";
                         } else {//文本区域
@@ -880,7 +879,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" ;
+                    eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                 }
                 else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                     var enableAttr = '';
@@ -890,7 +889,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml +=  "<input maxlength=" + mapAttr.MaxLen / 2 + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+                    eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
                 }
                 else if (mapAttr.MyDataType == 4) {// AppBoolean = 7
                     if (mapAttr.UIIsEnable == 1) {
@@ -904,8 +903,8 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         checkedStr = ' checked="checked" '
                     }
                     checkedStr = ConvertDefVal(workNodeData, '', mapAttr.KeyOfEn);
-                    eleHtml +=  "<div><input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_"+mapAttr.KeyOfEn+"' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>" ;
-                    eleHtml += '<label class="labRb" for="CB_'+mapAttr.KeyOfEn+'">'+mapAttr.Name+'</label></div>';
+                    eleHtml += "<div><input " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
+                    eleHtml += '<label class="labRb" for="CB_' + mapAttr.KeyOfEn + '">' + mapAttr.Name + '</label></div>';
                     return eleHtml;
                 }
 
@@ -917,7 +916,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         colsm = 10;
                     }
                     if (mapAttr.UIContralType == 1) {//DDL
-                        eleHtml += 
+                        eleHtml +=
                                 "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                         //eleHtml += "</div>";
                     }
@@ -932,7 +931,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                 return value.EnumKey == mapAttr.UIBindKey;
                             });
 
-                            var rbShowModel = 0;//RBShowModel=0时横着显示RBShowModel=1时竖着显示
+                            var rbShowModel = 0; //RBShowModel=0时横着显示RBShowModel=1时竖着显示
                             var showModelindex = mapAttr.AtPara.indexOf('@RBShowModel=');
                             if (showModelindex >= 0) {//@RBShowModel=0
                                 rbShowModel = mapAttr.AtPara.substring('@RBShowModel='.length, '@RBShowModel='.length + 1);
@@ -959,7 +958,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" ;
+                    eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                 }
                 //AppMoney  AppRate
                 if (mapAttr.MyDataType == 8) {
@@ -969,7 +968,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml +=  "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>" ;
+                    eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                 }
 
                 if (mapAttr.LGType == 2) {
@@ -980,7 +979,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         smCol = 8;
                     }
 
-                    eleHtml += 
+                    eleHtml +=
                                 "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                 }
             } else {
@@ -1009,7 +1008,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                 }
             }
 
-            if (!islabelIsInEle) {
+            if (islabelIsInEle == false) {
                 eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
                 (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
                 + "</div>" + eleHtml;

@@ -20,7 +20,7 @@
     1. 初始化的标记是 ?DoType=AccepterInit&FK_Node=xxxx&ToNode=0&WorkID=xxxxx.  参数: WorkID
        返回的是 节点列表 Nodes, 部门列表 Depts, 人员列表 Emps
 
-    2, 用户选择一个节点，标记是 DoType=AccepterSave&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi.
+    2, 用户选择一个节点，标记是 DoType=Accepter_Save&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi.
        返回的是: 保存结果.
     -->
     <style type="text/css">
@@ -125,10 +125,10 @@
         $(function () {
 
             if (doType == null || doType == "")
-                doType = "AccepterSave";
+                doType = "Accepter_Save";
 
-            doType = "AccepterSave";
-            if (doType == "AccepterSend") {
+            doType = "Accepter_Save";
+            if (doType == "Accepter_Send") {
                 $("#btnOk").text('发送');
             } else {
                 $("#btnOk").text('保存');
@@ -408,10 +408,10 @@
             }
         }
 
-        //确定【选择接收人并发送】 / 保存.  AccepterSave AccepterSend
+        //确定【选择接收人并发送】 / 保存.  Accepter_Save Accepter_Send
         function SendNode() {
 
-            //AccepterSave&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi
+            //Accepter_Save&FK_Node=xxx&WorkID=xxx&ToNode=xxxx&SelectEmps=zhangsan,lisi
 
             var empNos = getSelectEmps();
             if (empNos == '' || empNos == null) {
@@ -437,8 +437,8 @@
                         alert(data);
                         return;
                     }
-                    
-                    if ("AccepterSave" == doType) {
+
+                    if ("Accepter_Save" == doType) {
                         if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                             window.parent.returnWorkWindowClose(data);
                         } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
@@ -540,7 +540,7 @@
          </div>
     </div>
     <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
-        <!--<button id="btnSaveAndClose" class="btn btn-info" onclick="SendNode('AccepterSave')">确定</button>-->
+        <!--<button id="btnSaveAndClose" class="btn btn-info" onclick="SendNode('Accepter_Save')">确定</button>-->
         <button id="btnOk" class="btn btn-info" onclick="SendNode()" >发送</button>
         <button id="btnCancel" class="btn btn-info" onclick="Close()">取消</button>
     </div>

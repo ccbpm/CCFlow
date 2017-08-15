@@ -59,7 +59,7 @@ namespace CCFlow.WF.MapDef
                     break;
                 case "Imp":
                     MapData mdForm = new MapData(this.FromMap);
-                    MapData.ImpMapData(this.FK_MapData,BP.Sys.CCFormAPI.GenerHisDataSet( mdForm.No), true);
+                    MapData.ImpMapData(this.FK_MapData,BP.Sys.CCFormAPI.GenerHisDataSet( mdForm.No));
                     this.WinClose();
                     return;
                 case "Share":
@@ -267,7 +267,7 @@ namespace CCFlow.WF.MapDef
                 {
                     DataSet ds = new DataSet();
                     ds.ReadXml(file);
-                    BP.Sys.MapData.ImpMapData(this.FK_MapData, ds, true);
+                    BP.Sys.MapData.ImpMapData(this.FK_MapData, ds);
                     this.WinClose();
                 }
                 catch (Exception ex)

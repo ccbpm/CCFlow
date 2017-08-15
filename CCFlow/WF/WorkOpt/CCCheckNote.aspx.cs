@@ -56,7 +56,6 @@ namespace CCFlow.WF.WorkOpt
 
         protected void Btn_OK_Click(object sender, EventArgs e)
         {
-
             FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
 
             BP.WF.Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID,

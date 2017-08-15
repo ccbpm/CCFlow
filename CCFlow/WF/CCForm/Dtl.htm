@@ -949,27 +949,6 @@
 	            updateTableSn(tr);
 	            tr.remove();
 	        }
-
-	        //parent.window.confirm('删除确认', '确定要删除吗?', function (r) {
-	        //    //$.messager.confirm('删除确认', '确定要删除吗?', function (r) {
-	        //    if (r) {
-	        //        var rowData = $(index).parent().parent().data().data;
-	        //        var rowCurrentIndex = parseInt($($(index).parent().parent().children()[0]).text()) - 1;
-	        //        pageData.currentRowIndex = rowCurrentIndex;
-	        //        if (rowData.OID > 0) {
-	        //            rowData.DoType = "Dtl_DeleteRow";
-	        //            rowData.FK_MapDtl = GetQueryString("EnsName");
-	        //            //row.FK_MapData = "ND101";
-	        //            rowData.RefPKVal = GetQueryString("RefPKVal");
-	        //            currentRowIndex = -1;
-	        //            AjaxServiceGener(rowData, deleteRowAfter, this);
-	        //        } else { //移除  新增的 尚未入库
-	        //            var tr=$(index).parent().parent();
-	        //            updateTableSn(tr);
-	        //            tr.remove();
-	        //        }
-	        //    } 
-	        //});
 	    }
 
 	    function deleteRowAfter(data) {

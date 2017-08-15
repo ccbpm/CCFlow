@@ -2291,13 +2291,11 @@ function GenerWorkNode() {
                 $('#lastOptMsg').append($('<hr/>'));
             }
 
-
-
             if (flow_Data.AlertMsg.length == 0) {
                 $('#lastOptMsg').hide();
             }
 
-            //   alert(data);
+            // alert(data);
             //循环Sys_MapFrame
             //            for (var i in flow_Data.Sys_MapFrame) {
             //                var frame = flow_Data.Sys_MapFrame[i];

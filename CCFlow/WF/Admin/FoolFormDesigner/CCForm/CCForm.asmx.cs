@@ -606,7 +606,7 @@ namespace BP.Web
                 string file = "\\Temp\\" + fk_mapData + ".xml";
                 UploadFile(fileByte, file);
                 string path = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + file;
-                this.LoadFrmTempleteFile(path, fk_mapData, isClear, true);
+                this.LoadFrmTempleteFile(path, fk_mapData, isClear);
                 return null;
             }
             catch (Exception ex)
@@ -624,13 +624,13 @@ namespace BP.Web
         /// <param name="isSetReadonly">是否设置的只读？</param>
         /// <returns>导入结果</returns>
         [WebMethod]
-        public string LoadFrmTempleteFile(string file, string fk_mapData, bool isClear, bool isSetReadonly)
+        public string LoadFrmTempleteFile(string file, string fk_mapData, bool isClear)
         {
             try
             {
                 DataSet ds = new DataSet();
                 ds.ReadXml(file);
-                MapData.ImpMapData(fk_mapData, ds, isSetReadonly);
+                MapData.ImpMapData(fk_mapData, ds);
                 if (fk_mapData.Contains("ND"))
                 {
                     /* 判断是否是节点表单 */
@@ -948,7 +948,7 @@ namespace BP.Web
                         DataSet dsImp = new DataSet();
                         string fileImp = System.Web.HttpContext.Current.Request.PhysicalApplicationPath + "\\Temp\\" + v1 + ".xml";
                         dsImp.ReadXml(fileImp); //读取文件.
-                        MapData.ImpMapData(v1, dsImp, true);
+                        MapData.ImpMapData(v1, dsImp);
                         return null;
                     case "NewHidF":
                         string fk_mapdataHid = v1;
@@ -1195,7 +1195,7 @@ namespace BP.Web
                         /*下载文件到指定的目录: */
                         string tempFile = BP.Sys.SystemConfig.PathOfTemp + "\\" + v2 + ".xml";
                         conn.GetFile(v1, tempFile, false, FileAttributes.Archive, FtpSupport.FtpTransferType.Ascii);
-                        return this.LoadFrmTempleteFile(tempFile, v2, true, true);
+                        return this.LoadFrmTempleteFile(tempFile, v2, true);
                     default:
                         return null;
                 }
@@ -1296,7 +1296,7 @@ namespace BP.Web
             this.LetAdminLogin();
 
             MapData md = new MapData(fromMapData);
-            MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet(md.No), isSetReadonly);
+            MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet(md.No));
 
             // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
             if (fk_mapdata.Contains("ND") == true)

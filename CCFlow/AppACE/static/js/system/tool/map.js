@@ -81,6 +81,6 @@ $(function() {
 		map.centerAndZoom(point, 12);
 		var marker = new BMap.Marker(point);  // 创建标注
 		map.addOverlay(marker);              // 将标注添加到地图中
-		var label = new BMap.Label("京缘网络有限公司",{offset:new BMap.Size(20,-10)});
+		var label = new BMap.Label("驰骋工作流引擎",{offset:new BMap.Size(20,-10)});
 		marker.setLabel(label);
 	}

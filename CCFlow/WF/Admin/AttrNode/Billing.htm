@@ -28,6 +28,10 @@
 
             var fk_node = GetQueryString("FK_Node");
 
+            //设定枚举值下拉框.
+            GenerBindEnumKey("DDL_BillFileType", "BillFileType", 0);
+            GenerBindEnumKey("DDL_BillFileType", "BillOpenModel", 0);
+
             //初始化表格.
             $.ajax({
                 type: 'post',
@@ -40,6 +44,7 @@
                         alert(data);
                         return;
                     }
+
 
                     data = JSON.parse(data);
 

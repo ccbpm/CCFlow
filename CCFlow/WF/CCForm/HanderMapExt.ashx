@@ -1,19 +1,11 @@
 ﻿<%@ WebHandler Language="C#" Class="Handler" %>
 using System;
-using System.IO;
-using System.Web; 
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.HtmlControls;
 using System.Web;
 using System.Data;
-using System.Data.SqlClient;
 using System.Text;
 using BP.Web;
-using System.Configuration;
 using System.Web.SessionState;
 using BP.DA;
-using BP.Web;
 using BP.WF;
 using BP.Sys;
 using BP.En;
@@ -56,7 +48,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
         dealSQL = sql;
         return sql;
     }
-    
+
     public void ProcessRequest(HttpContext context)
     {
         string fk_mapExt = context.Request.QueryString["FK_MapExt"].ToString();
@@ -95,7 +87,7 @@ public class Handler : IHttpHandler, IRequiresSessionState
                         // 获取填充 ctrl 值的信息.
                         sql = this.DealSQL(me.DocOfSQLDeal, key);
                         System.Web.HttpContext.Current.Session["DtlKey"] = key;
-                        sql = sql.Replace("%","");
+                        sql = sql.Replace("%", "");
                         dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                         context.Response.Write(JSONTODT(dt));
                         break;
@@ -255,17 +247,28 @@ public class Handler : IHttpHandler, IRequiresSessionState
             /*如果数据库不区分大小写, 就要按用户输入的sql进行二次处理。*/
             string mysql = dealSQL.Trim();
             mysql = mysql.Substring(6, mysql.ToLower().IndexOf("from") - 6);
-            mysql = mysql.Replace(",", " ");
-            string[] strs = mysql.Split(' ');
+            mysql = mysql.Replace(",", "|");
+            string[] strs = mysql.Split('|');
+            string[] pstr = null;
+            string ns = null;
+
             foreach (string s in strs)
             {
                 if (string.IsNullOrEmpty(s))
                     continue;
+                //处理ORACLE中获取字段使用别名的情况，使用别名的字段，取别名
+                ns = s.Trim();
+                pstr = ns.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                if (pstr.Length > 1)
+                {
+                    ns = pstr[pstr.Length - 1].Replace("\"", "");
+                }
+
                 foreach (DataColumn dc in dt.Columns)
                 {
-                    if (dc.ColumnName.ToLower() == s.ToLower())
+                    if (dc.ColumnName.ToLower() == ns.ToLower())
                     {
-                        dc.ColumnName = s;
+                        dc.ColumnName = ns;
                         break;
                     }
                 }

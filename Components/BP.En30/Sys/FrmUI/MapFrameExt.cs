@@ -9,23 +9,45 @@ namespace BP.Sys.FrmUI
     /// <summary>
     /// 框架
     /// </summary>
-    public class IFrame : EntityMyPK
+    public class MapFrameExt : EntityMyPK
     {
         #region 属性
+        /// <summary>
+        /// 连接
+        /// </summary>
+        public string Url
+        {
+            get
+            {
+                return this.GetValStrByKey("Tag1");
+            }
+        }
         #endregion
 
         #region 构造方法
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.IsUpdate = true;
+                uac.IsDelete = false;
+                uac.IsInsert = false;
+                return uac;
+            }
+        }
         /// <summary>
         /// 框架
         /// </summary>
-        public IFrame()
+        public MapFrameExt()
         {
+
         }
         /// <summary>
         /// 框架
         /// </summary>
         /// <param name="mypk"></param>
-        public IFrame(string mypk)
+        public MapFrameExt(string mypk)
         {
             this.MyPK = mypk;
             this.Retrieve();
@@ -46,23 +68,9 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
-                map.AddTBString(FrmBtnAttr.FK_MapData, null, "表单ID", true, false, 1, 100, 20);
-                map.AddTBString(FrmBtnAttr.Text, null, "标签", true, false, 0, 3900, 20);
-
-                map.AddTBInt(FrmBtnAttr.IsView, 0, "是否可见", false, false);
-                map.AddTBInt(FrmBtnAttr.IsEnable, 0, "是否起用", false, false);
-
-                map.AddTBInt(FrmBtnAttr.UAC, 0, "控制类型", false, false);
-                map.AddTBString(FrmBtnAttr.UACContext, null, "控制内容", true, false, 0, 3900, 20);
-
-                map.AddTBInt(FrmBtnAttr.EventType, 0, "事件类型", false, false);
-                map.AddTBString(FrmBtnAttr.EventContext, null, "事件内容", true, false, 0, 3900, 20);
-
-                map.AddTBString(FrmBtnAttr.MsgOK, null, "运行成功提示", true, false, 0, 500, 20);
-                map.AddTBString(FrmBtnAttr.MsgErr, null, "运行失败提示", true, false, 0, 500, 20);
-
-                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
-
+                map.AddTBString(FrmEleAttr.FK_MapData, null, "表单ID", true, true, 1, 100, 20);
+                map.AddTBString(FrmEleAttr.URL, null, "URL(支持ccbpm的表达式)", true, false, 0, 3900, 20, true);
+                map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
                 //显示的分组.
                 map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
@@ -77,13 +85,13 @@ namespace BP.Sys.FrmUI
     /// <summary>
     /// 框架s
     /// </summary>
-    public class IFrames : EntitiesMyPK
+    public class MapFrameExts : EntitiesMyPK
     {
         #region 构造
         /// <summary>
         /// 框架s
         /// </summary>
-        public IFrames()
+        public MapFrameExts()
         {
         }
         /// <summary>
@@ -93,7 +101,7 @@ namespace BP.Sys.FrmUI
         {
             get
             {
-                return new IFrame();
+                return new MapFrameExt();
             }
         }
         #endregion
@@ -103,20 +111,20 @@ namespace BP.Sys.FrmUI
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<IFrame> ToJavaList()
+        public System.Collections.Generic.IList<MapFrameExt> ToJavaList()
         {
-            return (System.Collections.Generic.IList<IFrame>)this;
+            return (System.Collections.Generic.IList<MapFrameExt>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<IFrame> Tolist()
+        public System.Collections.Generic.List<MapFrameExt> Tolist()
         {
-            System.Collections.Generic.List<IFrame> list = new System.Collections.Generic.List<IFrame>();
+            System.Collections.Generic.List<MapFrameExt> list = new System.Collections.Generic.List<MapFrameExt>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((IFrame)this[i]);
+                list.Add((MapFrameExt)this[i]);
             }
             return list;
         }

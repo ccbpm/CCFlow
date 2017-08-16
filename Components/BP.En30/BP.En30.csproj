@@ -196,7 +196,10 @@
     <Compile Include="Sys\FrmUI\MapAttrSFTable.cs" />
     <Compile Include="Sys\FrmUI\SFTableClass.cs" />
     <Compile Include="Sys\FrmUI\SFTable.cs" />
-    <Compile Include="Sys\FrmUI\IFrame.cs" />
+    <Compile Include="Sys\FrmUI\MapFrameExt.cs" />
+    <Compile Include="Sys\MapFrame.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Sys\ToolbarExcel.cs" />
     <Compile Include="Sys\ToolbarExcelSln.cs" />
     <Compile Include="Sys\GEEntityExcelFrm.cs" />
@@ -409,7 +412,6 @@
     <Compile Include="Sys\MapDtl.cs" />
     <Compile Include="Sys\GEEntity.cs" />
     <Compile Include="Sys\MapExtXml.cs" />
-    <Compile Include="Sys\MapFrame.cs" />
     <Compile Include="Sys\MapExt.cs" />
     <Compile Include="Sys\MapM2M.cs" />
     <Compile Include="Sys\InputCheckXml.cs" />

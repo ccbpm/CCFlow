@@ -23,23 +23,24 @@ namespace BP.Sys
         /// <param name="y">位置</param>
         /// <param name="h">高度</param>
         /// <param name="w">宽度</param>
-        public static void SaveFrmEle(string fk_mapdata,string eleType, string ctrlID, float x, float y, float h, float w)
+        public static void SaveFrmEle(string fk_mapdata, string eleType, string ctrlID, float x, float y, float h, float w)
         {
             FrmEle en = new FrmEle();
 
             en.EleType = eleType;
             en.FK_MapData = fk_mapdata;
             en.EleID = ctrlID;
-
-            en.MyPK = fk_mapdata + "_" + ctrlID;
-            if (en.RetrieveFromDBSources() == 0)
-                en.Insert();
-
+            
+            int i = en.Retrieve(FrmEleAttr.FK_MapData, fk_mapdata, FrmEleAttr.EleID, ctrlID);
             en.X = x;
             en.Y = y;
             en.W = w;
             en.H = h;
-            en.Update();
+
+            if (i == 0)
+                en.Insert();
+            else
+                en.Update();
         }
         /// <summary>
         /// 保存一个rb

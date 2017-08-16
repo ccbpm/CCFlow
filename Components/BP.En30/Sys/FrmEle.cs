@@ -34,6 +34,11 @@ namespace BP.Sys
         /// </summary>
         public const string AtPara = "AtPara";
         /// <summary>
+        /// 连接
+        /// </summary>
+        public const string URL = "URL";
+
+        /// <summary>
         /// X
         /// </summary>
         public const string X = "X";

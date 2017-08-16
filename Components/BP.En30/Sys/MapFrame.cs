@@ -18,7 +18,13 @@ namespace BP.Sys
         /// URL
         /// </summary>
         public const string URL = "URL";
+        /// <summary>
+        /// 高度
+        /// </summary>
         public const string H = "H";
+        /// <summary>
+        /// 宽度
+        /// </summary>
         public const string W = "W";
         /// <summary>
         /// 是否可以自适应大小
@@ -178,7 +184,7 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_MapFrame", "框架");
+                Map map = new Map("Sys_FrmEle", "框架");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
@@ -186,12 +192,18 @@ namespace BP.Sys
                 map.AddMyPK();
                 map.AddTBString(MapFrameAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
                 map.AddTBString(MapFrameAttr.Name, null, "名称", true, false, 0, 200, 20,true);
-                map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20,true);
+                map.AddTBString(MapFrameAttr.URL, null, "URL", true, false, 0, 3000, 20, true);
 
-                map.AddTBString(MapFrameAttr.W, null, "宽度", true, false, 0, 20, 20);
-                map.AddTBString(MapFrameAttr.H, null, "高度", true, false, 0, 20, 20);
+                map.AddTBString(FrmEleAttr.Y, null, "Y", true, false, 0, 20, 20);
+                map.AddTBString(FrmEleAttr.X, null, "x", true, false, 0, 20, 20);
+
+                map.AddTBString(FrmEleAttr.W, null, "宽度", true, false, 0, 20, 20);
+                map.AddTBString(FrmEleAttr.H, null, "高度", true, false, 0, 20, 20);
 
                 map.AddBoolean(MapFrameAttr.IsAutoSize, true, "是否自动设置大小", false, false);
+
+                map.AddTBString(FrmEleAttr.EleType, null, "类型", false, false, 0, 50, 20, true);
+
                // map.AddTBInt(MapFrameAttr.RowIdx, 99, "位置", false, false);
                // map.AddTBInt(MapFrameAttr.GroupID, 0, "GroupID", false, false);
 
@@ -247,7 +259,7 @@ namespace BP.Sys
         /// <param name="fk_mapdata">s</param>
         public MapFrames(string fk_mapdata)
         {
-            this.Retrieve(MapFrameAttr.FK_MapData, fk_mapdata);
+            this.Retrieve(MapFrameAttr.FK_MapData, fk_mapdata, FrmEleAttr.EleType, "iFrame");
         }
         /// <summary>
         /// 得到它的 Entity

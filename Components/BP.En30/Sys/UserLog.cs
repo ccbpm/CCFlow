@@ -30,7 +30,6 @@ namespace BP.Sys
         /// IP地址
         /// </summary>
         public const string IP = "IP";
-
     }
 	/// <summary>
 	/// 用户日志

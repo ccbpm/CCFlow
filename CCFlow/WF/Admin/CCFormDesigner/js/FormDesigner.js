@@ -315,8 +315,8 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'iFrame') {
-        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.iFrames&PK=' + figure.CCForm_MyPK;
-        CCForm_ShowDialog(url, '框架');
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapFrameExts&PK=' + CCForm_FK_MapData + "_iFrame_" + figure.CCForm_MyPK;
+        CCForm_ShowDialog(url, '框架',500,200);
         return;
     }
 
@@ -476,13 +476,19 @@ function Show_HidenField_Panel() {
     }, this);
 }
 //打开窗体
-function CCForm_ShowDialog(url, title) {
+function CCForm_ShowDialog(url, title, w, h) {
+
+    if (w == undefined)
+        w = 860;
+
+    if (h == undefined)
+        h = 560;
 
     if (plant == 'JFlow') {
         url = url.replace('.aspx', '.jsp');
-        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, 860, 560, 'icon-library', false);
+        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false);
     } else {
-        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, 860, 560, 'icon-library', false);
+        OpenEasyUiDialog(url, 'CCForm_ShowDialog', title, w, h, 'icon-library', false);
     }
 }
 

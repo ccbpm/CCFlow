@@ -1845,11 +1845,12 @@ function GenerFreeFrm() {
                 var alertMsgEle = figure_Template_MsgAlert(alertMsg);
                 $('#lastOptMsg').append(alertMsgEle);
             }
+
             //循环Sys_MapFrame
             for (var i in flow_Data.Sys_MapFrame) {
                 var frame = flow_Data.Sys_MapFrame[i];
                 var alertMsgEle = figure_Template_IFrame(frame);
-                $('#lastOptMsg').append(alertMsgEle);
+                $('#CCForm').append(alertMsgEle);
             }
 
 
@@ -1963,16 +1964,17 @@ function GenerFreeFrm() {
 }
 
 var workNodeData = {};
+
 //升级表单元素 初始化文本框、日期、时间
-function figure_MapAttr_Template( mapAttr) {
+function figure_MapAttr_Template(mapAttr) {
     var eleHtml = '';
-    if (mapAttr.UIVisible==1) {//是否显示
+    if (mapAttr.UIVisible == 1) {//是否显示
 
         var str = '';
         var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
-        var isInOneRow = false;//是否占一整行
-        var islabelIsInEle = false;//
+        var isInOneRow = false; //是否占一整行
+        var islabelIsInEle = false; //
 
         eleHtml += '';
 
@@ -2075,9 +2077,10 @@ function figure_MapAttr_Template( mapAttr) {
                     eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                 }
             }
-        } else {
-            //展示附件信息  FREE 不需要
-            return;
+        }
+
+        if (mapAttr.UIContralType == 6) {
+
             var atParamObj = AtParaToJson(mapAttr.AtPara);
             if (atParamObj.AthRefObj != undefined) {//扩展设置为附件展示
                 eleHtml += "<input type='hidden' class='tbAth' data-target='" + mapAttr.AtPara + "' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' >" + "</input>";
@@ -2091,7 +2094,7 @@ function figure_MapAttr_Template( mapAttr) {
             }
         }
 
-        if (!islabelIsInEle) {
+        if (islabelIsInEle == false) {
             //eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
             //(mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
             //+ "</div>" + eleHtml;
@@ -2099,7 +2102,9 @@ function figure_MapAttr_Template( mapAttr) {
             eleHtml +=
            mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
         }
+
     } else {
+
         var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
         if (value == undefined) {
             value = '';
@@ -2339,6 +2344,7 @@ var DtlsCount = " + dtlsCount + "; //应该加载的明细表数量
 
 //初始化从表
 function figure_Template_Dtl(frmDtl) {
+
     var eleHtml = $("<DIV id='Fd" + frmDtl.No + "' style='position:absolute; left:" + frmDtl.X + "px; top:" + frmDtl.Y + "px; width:" + frmDtl.W + "px; height:" + frmDtl.H + "px;text-align: left;' >");
     var  paras = this.pageData;
     var strs = "";
@@ -2349,21 +2355,6 @@ function figure_Template_Dtl(frmDtl) {
             strs += "&" + str + "=" + paras[str];
     }
     var src = "";
-    ////switch (frmDtl.DtlShowModel) {
-    ////    case "0"://Table
-    ////        if (pageData.IsReadOnly) {
-    ////            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
-    ////        } else {
-    ////            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
-    ////        }
-    ////        break;
-    ////    case "1"://
-    ////        if (pageData.IsReadOnly)
-    ////            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
-    ////        else
-    ////            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
-    ////        break;
-    ////}
 
     if (frmDtl.DtlShowModel == "0") {
         if (pageData.IsReadOnly) {
@@ -2377,7 +2368,6 @@ function figure_Template_Dtl(frmDtl) {
             src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         else
             src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
-
     }
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='F" + frmDtl.No + "' src='" + src +
@@ -2549,13 +2539,42 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
 
 //初始化框架
 function figure_Template_IFrame(fram) {
-    var eleHtml = '';
-    var src = dealWithUrl(fram.src) + "IsReadOnly=0";
-    eleHtml = $('<div id="iframe' + fram.MyPK + '">' + '</div>');
-    var iframe = $(+ "<iframe  style='width:" + fram.W + "px; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='no'></iframe>");
 
-    eleHtml.css('position', 'absolute').css('top', fram.Y).css('left', fram.X).css('width', fram.W).css('height', fram.H);
-    return frameHtml;
+    var eleHtml = $("<DIV id='Fd" + fram.MyPK + "' style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;' >");
+    var paras = this.pageData;
+    var strs = "";
+    for (var str in paras) {
+        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+            continue
+        else
+            strs += "&" + str + "=" + paras[str];
+    }
+
+    var src = dealWithUrl(fram.URL) + "&IsReadOnly=0";
+    alert(src);
+
+    var eleIframe = '<iframe></iframe>';
+    eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + src +
+                 "' frameborder=0  style='position:absolute;width:" + fram.W + "px; height:" + fram.H +
+                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+
+    eleHtml.append(eleIframe);
+
+    alert(eleHtml);
+
+    return eleHtml;
+
+//    var eleHtml = $("<DIV id='iframe" + fram.MyPK + "'  style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;' >");
+
+//    var src = dealWithUrl(fram.URL) + "&IsReadOnly=0";
+
+//    var iframe = $("<iframe  style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='yes'></iframe>");
+
+//    alert(iframe);
+
+//    eleHtml.append(iframe);
+
+//    return eleHtml;
 }
 
 function figure_Template_MsgAlert(msgAlert) {
@@ -2568,7 +2587,12 @@ function figure_Template_MsgAlert(msgAlert) {
 
 //处理URL，MainTable URL 参数 替换问题
 function dealWithUrl(src) {
-    var src = fram.URL.replace(new RegExp(/(：)/g), ':');
+    var src = src.replace(new RegExp(/(：)/g), ':');
+
+    //替换
+    src = src.replace('@OID', pageData.OID);
+    src = src.replace('@WorkID', pageData.OID);
+
     var params = '&FID=' + pageData.FID;
     params += '&WorkID=' + pageData.OID;
     if (src.indexOf("?") > 0) {
@@ -2622,6 +2646,7 @@ function dealWithUrl(src) {
     else {
         src += "?q=1";
     }
+
     return src;
 }
 

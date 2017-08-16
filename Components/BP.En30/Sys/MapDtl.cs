@@ -230,7 +230,7 @@ namespace BP.Sys
         {
             get
             {
-                string str= this.GetValStrByKey(MapDtlAttr.RefPK);
+                string str = this.GetValStrByKey(MapDtlAttr.RefPK);
                 if (string.IsNullOrEmpty(str))
                     return "RefPK";
                 return str;

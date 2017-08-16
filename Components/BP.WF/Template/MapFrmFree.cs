@@ -15,6 +15,32 @@ namespace BP.WF.Template
     public class MapFrmFreeAttr : MapDataAttr
     {
         public const string TemplaterVer = "TemplaterVer";
+        /// <summary>
+        /// 保存标签
+        /// </summary>
+        public const string BtnSaveLab = "BtnSaveLab";
+        /// <summary>
+        /// 保存是否启用
+        /// </summary>
+        public const string BtnSaveEnable = "BtnSaveEnable";
+
+        /// <summary>
+        /// 删除标签
+        /// </summary>
+        public const string BtnDelLab = "BtnDelLab";
+        /// <summary>
+        /// 删除是否启用
+        /// </summary>
+        public const string BtnDelEnable = "BtnDelEnable";
+
+        /// <summary>
+        /// 打印标签
+        /// </summary>
+        public const string BtnPrintLab = "BtnPrintLab";
+        /// <summary>
+        /// 打印是否启用
+        /// </summary>
+        public const string BtnPrintEnable = "BtnPrintEnable";
     }
     /// <summary>
     /// 自由表单属性
@@ -203,7 +229,6 @@ namespace BP.WF.Template
                 map.AddTBString(MapFrmFreeAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
                 map.AddTBString(MapFrmFreeAttr.Ver, null, "版本号", true, true, 0, 30, 20);
                 map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
-
                 map.AddTBStringDoc(MapFrmFreeAttr.Note, null, "备注", true, false, true);
 
                 //增加参数字段.
@@ -218,24 +243,6 @@ namespace BP.WF.Template
 
                 #region 方法 - 基本功能.
                 RefMethod rm = new RefMethod();
-
-              //  rm = new RefMethod();
-              //  rm.Title = "启动自由表单设计器(SL)";
-              //  rm.ClassMethodName = this.ToString() + ".DoDesignerSL";
-              ////  rm.Icon = ../../Img/FileType/xlsx.gif";
-              //  rm.Visable = true;
-              //  rm.Target = "_blank";
-              //  rm.RefMethodType = RefMethodType.LinkeWinOpen;
-              //  map.AddRefMethod(rm);
-
-              //  rm = new RefMethod();
-              //  rm.Title = "启动自由表单设计器(H5)";
-              //  rm.ClassMethodName = this.ToString() + ".DoDesignerH5";
-              //  //  rm.Icon = ../../Img/FileType/xlsx.gif";
-              //  rm.Visable = true;
-              //  rm.Target = "_blank";
-              //  rm.RefMethodType = RefMethodType.LinkeWinOpen;
-              //  map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "启动傻瓜表单设计器";

@@ -190,6 +190,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Template\BillType.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Template\Direction.cs" />
     <Compile Include="Template\FlowSort.cs" />
     <Compile Include="Template\FrmNodeExt.cs" />
@@ -284,7 +287,6 @@
     <Compile Include="Template\Bill.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Template\BillType.cs" />
     <Compile Include="DTS\LoadTemplete.cs">
       <SubType>Code</SubType>
     </Compile>

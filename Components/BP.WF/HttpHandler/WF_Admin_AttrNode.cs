@@ -23,6 +23,31 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region  单据模版维护
+        public string Bill_Init()
+        {
+            //增加上单据模版集合.
+            BillTemplates bills = new BillTemplates();
+            bills.Retrieve(BillTemplateAttr.NodeID, this.FK_Node);
+            return bills.ToJson();
+
+            //DataSet ds = new DataSet();
+            //DataTable dt = bills.ToDataTableField("WF_BillTemplate");
+            //ds.Tables.Add(dt);
+            ////传递来的变量.
+            //string fk_template = this.GetRequestVal("FK_BillTemplate");
+            //return BP.Tools.Json.DataSetToJson(ds);
+        }
+        public string Bill_Save()
+        {
+            return "保存成功.";
+        }
+        public string Bill_Delete()
+        {
+            return "删除成功.";
+        }
+        #endregion
+
         #region 表单模式
         /// <summary>
         /// 表单模式
@@ -206,14 +231,12 @@ namespace BP.WF.HttpHandler
         }
         #endregion 表单模式
 
-
         #region 事件.
         public string Action_Init()
         {
             return "";
         }
         #endregion 事件.
-
 
         #region 考核超时规则.
         /// <summary>
@@ -595,26 +618,24 @@ namespace BP.WF.HttpHandler
         #region 发送阻塞模式
         public string BlockModel_Init()
         {
-
             BP.WF.Node nd = new BP.WF.Node();
             nd.NodeID = this.FK_Node;
             nd.RetrieveFromDBSources();
-
             return nd.ToJson();
         }
         public string BlockModel_Save()
         {
             BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            
             nd.BlockAlert = this.GetRequestVal("TB_Alert"); //提示信息.
+
             int val = this.GetRequestValInt("RB_BlockModel");
             nd.SetValByKey(BP.WF.Template.NodeAttr.BlockModel, val);
             if (nd.BlockModel == BP.WF.BlockModel.None)
                 nd.BlockModel = BP.WF.BlockModel.None;
 
             if (nd.BlockModel == BP.WF.BlockModel.CurrNodeAll)
-            {
                 nd.BlockModel = BP.WF.BlockModel.CurrNodeAll;
-            }
 
             if (nd.BlockModel == BP.WF.BlockModel.SpecSubFlow)
             {

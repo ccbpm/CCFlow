@@ -39,6 +39,9 @@ namespace BP.WF.Template
     /// </summary>
     public class BillTemplateAttr:BP.En.EntityNoNameAttr
     {
+        /// <summary>
+        /// 路径
+        /// </summary>
         public const string TempFilePath = "TempFilePath";
         /// <summary>
         /// NodeID

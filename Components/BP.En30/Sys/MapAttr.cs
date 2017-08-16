@@ -1573,6 +1573,12 @@ namespace BP.Sys
                 }
             }
 
+            if (this.LGType == FieldTypeS.Enum && this.UIContralType == En.UIContralType.RadioBtn)
+            {
+                string sql = "UPDATE Sys_FrmRB SET UIIsEnable=" + this.GetValIntByKey(MapAttrAttr.UIIsEnable) + " WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "'";
+                DBAccess.RunSQL(sql);
+            }
+
             return base.beforeUpdateInsertAction();
         }
         protected override bool beforeUpdate()

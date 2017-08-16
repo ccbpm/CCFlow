@@ -1000,18 +1000,17 @@ namespace BP.WF.HttpHandler
 
                     //把他转化小写,适应多个数据库.
                     wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
+
                     ds.Tables.Add(wf_generWorkFlowDt);
                 }
 
-                json = BP.Tools.Json.ToJson(ds);
-                //BP.DA.DataType.WriteFile("c:\\WorkNode.json", json);
+                return BP.Tools.Json.ToJson(ds);
             }
             catch (Exception ex)
             {
                 BP.DA.Log.DefaultLogWriteLineError(ex);
-                json = "err@" + ex.Message;
+                return "err@" + ex.Message;
             }
-            return json;
         }
     }
 }

@@ -232,6 +232,8 @@ namespace BP.Sys
                 map.AddTBString(FrmRBAttr.Lab, null, "标签", true, false, 0, 90, 20);
                 map.AddTBInt(FrmRBAttr.IntKey, 0, "IntKey", true, false);
 
+                map.AddTBInt(MapAttrAttr.UIIsEnable, 0, "是否启用", true, false);
+
                 map.AddTBFloat(FrmRBAttr.X, 5, "X", true, false);
                 map.AddTBFloat(FrmRBAttr.Y, 5, "Y", false, false);
 

@@ -6647,12 +6647,9 @@ namespace BP.WF
             {
                 ///删除垃圾数据.
                 this.DoDelete();
-
                 //提示错误.
                 throw new Exception("创建流程错误:" + ex.Message);
             }
-
-
         }
 
         /// <summary>

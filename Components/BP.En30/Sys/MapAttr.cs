@@ -888,7 +888,7 @@ namespace BP.Sys
             get
             {
                 string str= this.GetValStringByKey(MapAttrAttr.GroupID);
-                if (str == "无")
+                if (str == "无" || str=="")
                     return 0;
                 return int.Parse(str);
             }

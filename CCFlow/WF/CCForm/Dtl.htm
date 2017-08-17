@@ -677,8 +677,7 @@
                         else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
                             var enableAttr = '';
                             if (mapAttr.UIIsEnable == 1) {
-                                enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
-                                //enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+                                enableAttr = 'onfocus="' + 'WdatePicker({dateFmt:' + '\'yyyy-MM-dd HH:mm\'});SetChange(false);"' + ' readonly="readonly" onchange="SetChange(true);" class="Wdate" style="width:85px;border-width:0px;"';
                             } else {
                                 enableAttr = "disabled='disabled'";
                             }

@@ -283,6 +283,9 @@ namespace BP.WF.Template
                 case SelectorModel.SQL:
                     ds = BySQL(nodeid, en);
                     break;
+                case SelectorModel.GenerUserSelecter:
+                    ds = ByGenerUserSelecter();
+                    break;
                 default:
                     throw new Exception("@错误:没有判断的选择类型:"+this.SelectorModel);
                     break;
@@ -309,6 +312,28 @@ namespace BP.WF.Template
                 }
             }
 
+
+            return ds;
+        }
+        /// <summary>
+        /// 通用
+        /// </summary>
+        /// <returns></returns>
+        private DataSet ByGenerUserSelecter()
+        {
+            DataSet ds = new DataSet();
+
+            //部门
+            string sql = "SELECT distinct No,Name, ParentNo FROM Port_Dept";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Depts";
+            ds.Tables.Add(dt);
+
+            //人员.
+            sql = "SELECT distinct No, Name, FK_Dept FROM Port_Emp ";
+            DataTable dtEmp = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dtEmp.TableName = "Emps";
+            ds.Tables.Add(dtEmp);
 
             return ds;
         }

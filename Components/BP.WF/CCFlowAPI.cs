@@ -212,7 +212,7 @@ namespace BP.WF
                     if (lgType != "2")
                         continue;
 
-                    string UIIsEnable = dr["UIIsEnable"].ToString();
+                    string UIIsEnable = dr["UIVisible"].ToString();
                     if (UIIsEnable == "0")
                         continue;
 

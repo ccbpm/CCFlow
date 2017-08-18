@@ -184,7 +184,7 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("Sys_FrmEle", "框架");
+                Map map = new Map("Sys_MapFrame", "框架");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);

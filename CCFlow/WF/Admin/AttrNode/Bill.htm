@@ -10,7 +10,7 @@
 
             var url = window.location.href;
             if (plant == "CCFlow") {
-                url = url.replace('Bill.htm', 'Billing.htm');
+                url = url.replace('Bill.htm', 'Billing.htm').replace('NodeID', 'FK_Node');
                 window.location.href = url;
                 return;
             } else {

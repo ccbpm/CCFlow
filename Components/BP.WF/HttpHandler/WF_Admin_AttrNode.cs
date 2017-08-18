@@ -40,11 +40,54 @@ namespace BP.WF.HttpHandler
         }
         public string Bill_Save()
         {
+            BillTemplate bt = new BillTemplate();
+            //上传附件
+            string filepath = "";
+            if (HttpContext.Current.Request.Files.Count > 0)
+            {
+                HttpPostedFile file = HttpContext.Current.Request.Files[0];
+                filepath = HttpContext.Current.Server.MapPath("\\DataUser\\CyclostyleFile\\" + file.FileName);
+                file.SaveAs(filepath);
+            }
+
+            bt.NodeID = this.FK_Node;
+            bt.No = this.GetRequestVal("TB_No");
+            if (string.IsNullOrEmpty(bt.No))
+            {
+                bt.No = DA.DBAccess.GenerOID().ToString(); 
+            }
+            bt.Name = this.GetRequestVal("TB_Name");
+            bt.TempFilePath = filepath;
+            bt.HisBillFileType = (BillFileType)Convert.ToInt32(this.GetRequestVal("DDL_BillFileType"));
+            bt.BillOpenModel = (BillOpenModel)Convert.ToInt32(this.GetRequestVal("DDL_BillOpenModel"));
+
+            bt.Save();
+            
             return "保存成功.";
         }
         public string Bill_Delete()
         {
+            BillTemplate bt = new BillTemplate();
+            bt.No = this.GetRequestVal("FK_BillTemplate");
+            bt.Delete();
+
             return "删除成功.";
+        }
+        public void Bill_Download()
+        {
+            string no = context.Request["No"].ToString();
+            string sql = "select TempFilePath from WF_BillTemplate where No = '" + no + "'";
+            string MyFilePath = BP.DA.DBAccess.RunSQLReturnVal(sql).ToString();   
+            HttpResponse response = context.Response;
+
+            response.Clear();
+            response.Buffer = true;
+            response.Charset = "utf-8";
+            response.AppendHeader("Content-Disposition", string.Format("attachment;filename={0}", MyFilePath.Substring(MyFilePath.LastIndexOf('\\') + 1)));
+            response.ContentEncoding = System.Text.Encoding.UTF8;
+            //response.ContentType = "application/ms-excel";
+            response.BinaryWrite(System.IO.File.ReadAllBytes(MyFilePath));
+            response.End();
         }
         #endregion
 

@@ -40,9 +40,9 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(tps.ToDataTableField("StationTypes"));
 
             //岗位.
-            BP.Port.Stations sts = new Stations();
+            BP.GPM.Stations sts = new BP.GPM.Stations();
             sts.RetrieveAll();
-            ds.Tables.Add(tps.ToDataTableField("Stations"));
+            ds.Tables.Add(sts.ToDataTableField("Stations"));
 
 
             //取有可能存盘的数据.
@@ -54,7 +54,7 @@ namespace BP.WF.HttpHandler
             cond.RetrieveFromDBSources();
             ds.Tables.Add(cond.ToDataTableField("Cond"));
 
-            return BP.Tools.Json.DataSetToJson(ds);
+            return BP.Tools.Json.DataSetToJson(ds,false);
 
 
         }
@@ -632,6 +632,114 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns></returns>
         public string CondBySQL_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)condTypeEnum);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion
+
+        #region 方向条件岗位
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByStation_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //岗位类型.
+            BP.GPM.StationTypes tps = new BP.GPM.StationTypes();
+            tps.RetrieveAll();
+            ds.Tables.Add(tps.ToDataTableField("StationTypes"));
+
+            //岗位.
+            BP.GPM.Stations sts = new BP.GPM.Stations();
+            sts.RetrieveAll();
+            ds.Tables.Add(sts.ToDataTableField("Stations"));
+
+
+            //取有可能存盘的数据.
+            int FK_MainNode = this.GetRequestValInt("FK_MainNode");
+            int ToNodeID = this.GetRequestValInt("ToNodeID");
+            Cond cond = new Cond();
+            string mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + ConnDataFrom.Stas.ToString();
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
+            ds.Tables.Add(cond.ToDataTableField("Cond"));
+
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string CondByStation_Save()
+        {
+
+            int FK_MainNode = this.GetRequestValInt("FK_MainNode");
+            int ToNodeID = this.GetRequestValInt("ToNodeID");
+            CondType HisCondType = CondType.Dir;
+
+            Cond cond = new Cond();
+            cond.Delete(CondAttr.NodeID, FK_MainNode,
+              CondAttr.ToNodeID, ToNodeID,
+              CondAttr.CondType, (int)HisCondType);
+
+            string mypk = FK_MainNode + "_" + ToNodeID + "_Dir_" + ConnDataFrom.Stas.ToString();
+
+            // 删除岗位条件.
+            cond.MyPK = mypk;
+            if (cond.RetrieveFromDBSources() == 0)
+            {
+                cond.HisDataFrom = ConnDataFrom.Stas;
+                cond.NodeID = FK_MainNode;
+                cond.FK_Flow = this.FK_Flow;
+                cond.ToNodeID = ToNodeID;
+                cond.Insert();
+            }
+
+            string val = this.GetRequestVal("emps").Replace(",", "@");
+            cond.OperatorValue = val;
+            cond.SpecOperWay = (SpecOperWay)this.GetRequestValInt("DDL_SpecOperWay");
+            if (cond.SpecOperWay != SpecOperWay.CurrOper)
+            {
+                cond.SpecOperPara = this.GetRequestVal("TB_SpecOperPara");
+            }
+            else
+            {
+                cond.SpecOperPara = string.Empty;
+            }
+            cond.HisDataFrom = ConnDataFrom.Stas;
+            cond.FK_Flow = this.FK_Flow;
+            cond.HisCondType = CondType.Dir;
+            cond.FK_Node = FK_MainNode;
+
+            
+
+            cond.ToNodeID = ToNodeID;
+            cond.Update();
+
+
+            return "保存成功..";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondByStation_Delete()
         {
             string fk_mainNode = this.GetRequestVal("FK_MainNode");
             string toNodeID = this.GetRequestVal("ToNodeID");

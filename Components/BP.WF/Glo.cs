@@ -1289,7 +1289,7 @@ namespace BP.WF
             tmp = DBAccess.RunSQLReturnString(tmp);
             if (string.IsNullOrEmpty(tmp))
             {
-                tmp = "INSERT INTO Sys_FormTree(No,Name,ParentNo,TreeNo,Idx,IsDir) values('001','表单树',0,'',0,0)";
+                tmp = "INSERT INTO Sys_FormTree(No,Name,ParentNo,Idx,IsDir) values('001','表单树',0,0,0)";
                 DBAccess.RunSQLReturnString(tmp);
             }
 

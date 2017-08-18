@@ -1,37 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
-using System.Data;
 using System.Web.Services.Description;
 using System.Xml.Schema;
-
 using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Data;
 using System.IO;
 using System.Web;
-using BP.Sys;
 using BP.DA;
 using BP.Port;
 using BP.En;
 using BP.Tools;
-
-using System.Text;
-using System.IO;
-using System.Collections.Generic;
-using System.Collections;
-using System.Data;
-using System.Web;
 using BP.WF;
 using BP.Web;
 using BP.Sys;
-using BP.DA;
-using BP.En;
 using BP.WF.Template;
 
 namespace BP.WF.HttpHandler

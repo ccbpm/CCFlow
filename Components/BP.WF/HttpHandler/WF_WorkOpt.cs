@@ -1232,6 +1232,11 @@ namespace BP.WF.HttpHandler
 
             Selector select = new Selector(toNodeID);
 
+            if (select.SelectorModel == SelectorModel.GenerUserSelecter)
+            {
+                return "url@GenerUserSelecter";
+            }
+
             //获得 部门与人员.
             DataSet ds = select.GenerDataSet(toNodeID, wk);
 

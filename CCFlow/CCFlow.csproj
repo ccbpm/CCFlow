@@ -1841,7 +1841,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx" />
     <Content Include="WF\Admin\Img\DesignRpt.png" />
     <Content Include="WF\Admin\Img\PK.png" />
-    <Content Include="WF\Admin\Info.aspx" />
     <Content Include="WF\Admin\Pub.ascx" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
@@ -9263,13 +9262,6 @@
     </Compile>
     <Compile Include="WF\Admin\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Info.aspx.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Info.aspx.designer.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>

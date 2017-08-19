@@ -182,7 +182,7 @@ namespace BP.WF.HttpHandler
                                     // dr[1] = ss[1];
                                     dt1.Rows.Add(dr);
                                 }
-                                return JSONTODT(dt);
+                                return JSONTODT(dt1);
                             }
                             return "";
                             break;
@@ -274,17 +274,28 @@ namespace BP.WF.HttpHandler
                 /*如果数据库不区分大小写, 就要按用户输入的sql进行二次处理。*/
                 string mysql = dealSQL.Trim();
                 mysql = mysql.Substring(6, mysql.ToLower().IndexOf("from") - 6);
-                mysql = mysql.Replace(",", " ");
-                string[] strs = mysql.Split(' ');
+                mysql = mysql.Replace(",", "|");
+                string[] strs = mysql.Split('|');
+                string[] pstr = null;
+                string ns = null;
+
                 foreach (string s in strs)
                 {
                     if (string.IsNullOrEmpty(s))
                         continue;
+                    //处理ORACLE中获取字段使用别名的情况，使用别名的字段，取别名
+                    ns = s.Trim();
+                    pstr = ns.Split(" ".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    if (pstr.Length > 1)
+                    {
+                        ns = pstr[pstr.Length - 1].Replace("\"", "");
+                    }
+
                     foreach (DataColumn dc in dt.Columns)
                     {
-                        if (dc.ColumnName.ToLower() == s.ToLower())
+                        if (dc.ColumnName.ToLower() == ns.ToLower())
                         {
-                            dc.ColumnName = s;
+                            dc.ColumnName = ns;
                             break;
                         }
                     }
@@ -308,10 +319,11 @@ namespace BP.WF.HttpHandler
             }
 
             StringBuilder JsonString = new StringBuilder();
+            JsonString.Append("{ ");
+            JsonString.Append("\"Head\":[ ");
+
             if (dt != null && dt.Rows.Count > 0)
             {
-                JsonString.Append("{ ");
-                JsonString.Append("\"Head\":[ ");
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     JsonString.Append("{ ");
@@ -337,13 +349,11 @@ namespace BP.WF.HttpHandler
                         JsonString.Append("}, ");
                     }
                 }
-                JsonString.Append("]}");
-                return JsonString.ToString();
             }
-            else
-            {
-                return null;
-            }
+
+            JsonString.Append("]}");
+
+            return JsonString.ToString();
         }
         #endregion HanderMapExt
 

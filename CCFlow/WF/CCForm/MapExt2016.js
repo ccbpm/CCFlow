@@ -10,7 +10,7 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
     var autoNodes = $("#divinfo").children("div");
     if (myKeyCode == 38) {
         if (highlightindex != -1) {
-            autoNodes.eq(highlightindex).css("background-color", "Silver");
+            autoNodes.eq(highlightindex).css("background-color", "white");
             autoNodes.eq(highlightindex).css("color", "Black");
             if (highlightindex == 0) {
                 highlightindex = autoNodes.length - 1;
@@ -22,12 +22,12 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
         else {
             highlightindex = autoNodes.length - 1;
         }
-        autoNodes.eq(highlightindex).css("background-color", "blue");
+        autoNodes.eq(highlightindex).css("background-color", "rgb(40, 132, 250)");
         autoNodes.eq(highlightindex).css("color", "white");
     }
     else if (myKeyCode == 40) {
         if (highlightindex != -1) {
-            autoNodes.eq(highlightindex).css("background-color", "Silver");
+            autoNodes.eq(highlightindex).css("background-color", "white");
             autoNodes.eq(highlightindex).css("color", "black");
             highlightindex++;
         }
@@ -36,11 +36,11 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
         }
 
         if (highlightindex == autoNodes.length) {
-            autoNodes.eq(autoNodes.length).css("background-color", "Silver");
+            autoNodes.eq(autoNodes.length).css("background-color", "white");
             autoNodes.eq(autoNodes.length).css("color", "black");
             highlightindex = 0;
         }
-        autoNodes.eq(highlightindex).css("background-color", "blue");
+        autoNodes.eq(highlightindex).css("background-color", "rgb(40, 132, 250)");
         autoNodes.eq(highlightindex).css("color", "white");
     }
     else if (myKeyCode == 13) {
@@ -49,7 +49,7 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
             //获得选中的那个的文本值
             var textInputText = autoNodes.eq(highlightindex).text();
             var strs = textInputText.split('|');
-            autoNodes.eq(highlightindex).css("background-color", "Silver");
+            autoNodes.eq(highlightindex).css("background-color", "white");
             $("#" + tbid).val(strs[0]);
             $("#divinfo").hide();
             oldValue = strs[0];
@@ -80,6 +80,13 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
                         $.each(dataObj.Head, function (idx, item) {
                             $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + item.No + "','" + tbid + "','" + fk_mapExt + "');\" value='" + item.No + "'>" + item.No + '|' + item.Name + "</div>");
                         });
+
+                        if (dataObj.Head.length == 0) {
+                            $("#divinfo").hide();
+                        }
+                    }
+                    else {
+                        $("#divinfo").hide();
                     }
                 },
                 complete: function (XMLHttpRequest, textStatus) {
@@ -157,14 +164,12 @@ function openDiv(e, tbID) {
 function getoffset(e) {
     var t = e.offsetTop;
     var l = e.offsetLeft;
-    //top
     while (e = e.offsetParent) {
-        t += e.offsetTop;
-        if (t > 0)
+        if (e.id == 'divCCForm') {
             break;
-    }
-    //left
-    while (e = e.offsetParent) {
+        }
+
+        t += e.offsetTop;
         l += e.offsetLeft;
     }
     var rec = new Array(1);
@@ -757,7 +762,7 @@ function FullCtrl(e, ctrlIdBefore, fk_mapExt) {
     });
 }
 
-var itemStyle = 'padding:2px;color: #000000;background-color:Silver;width:100%;border-style: none double double none;border-width: 1px;';
+var itemStyle = 'padding:2px;color: #000000;background-color:white;width:100%;border-bottom: 1px solid #336699;';
 var itemStyleOfS = 'padding:2px;color: #000000;background-color:green;width:100%';
 function ItemClick(sender, val, tbid, fk_mapExt) {
 
@@ -774,16 +779,16 @@ function ItemClick(sender, val, tbid, fk_mapExt) {
 
 function MyOver(sender) {
     if (highlightindex != -1) {
-        $("#divinfo").children("div").eq(highlightindex).css("background-color", "Silver");
+        $("#divinfo").children("div").eq(highlightindex).css("background-color", "white");
     }
 
     highlightindex = $(sender).attr("name");
-    $(sender).css("background-color", "blue");
+    $(sender).css("background-color", "rgb(40, 132, 250)");
     $(sender).css("color", "white");
 }
 
 function MyOut(sender) {
-    $(sender).css("background-color", "Silver");
+    $(sender).css("background-color", "white");
     $(sender).css("color", "black");
 }
 

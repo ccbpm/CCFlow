@@ -96,7 +96,7 @@ function Change() {
             btn.value = btn.value + '*';
     }
 }
-var longCtlID = 'ContentPlaceHolder1_MyFlowUC1_MyFlow1_UCEn1_';
+var longCtlID = '';
 function KindEditerSync() {
     try {
         if (editor1 != null) {
@@ -209,9 +209,20 @@ function ReqCBObj(cbID) {
 }
 // 设置值.
 function SetCtrlVal(ctrlID, val) {
-    document.getElementById(longCtlID + 'TB_' + ctrlID).value = val;
-    document.getElementById(longCtlID + 'DDL_' + ctrlID).value = val;
-    document.getElementById(longCtlID + 'CB_' + ctrlID).value = val;
+    var ctrl = document.getElementById(longCtlID + 'TB_' + ctrlID);
+    if (ctrl) {
+        ctrl.value = val;
+    }
+
+    ctrl = document.getElementById(longCtlID + 'DDL_' + ctrlID);
+    if (ctrl) {
+        ctrl.value = val;
+    }
+
+    ctrl = document.getElementById(longCtlID + 'CB_' + ctrlID);
+    if (ctrl) {
+        ctrl.value = val;
+    }
 }
 
 //执行分支流程退回到分合流节点。
@@ -1480,7 +1491,7 @@ function AfterBindEn_DealMapExt() {
                             continue;
                         }
 
-                        var myCtl = str.Split(':');
+                        var myCtl = str.split(':');
                         var ctlID = myCtl[0];
                         var ddlC1 = $("#DDL_" + ctlID);
                         if (ddlC1 == null) {
@@ -1493,8 +1504,8 @@ function AfterBindEn_DealMapExt() {
                             continue;
 
                         //获取要填充 ddll 的SQL.
-                        var sql = myCtl[1].Replace("~", "'");
-                        sql = sql.Replace("@Key", txt);
+                        var sql = myCtl[1].replace(/~/g, "'");
+                        sql = sql.replace("@Key", txt);
                         //sql = BP.WF.Glo.DealExp(sql, en, null);  怎么办
 
                         //try
@@ -1573,8 +1584,8 @@ function AfterBindEn_DealMapExt() {
                         if (ddlOper.val() == "")
                             continue;
 
-                        var sql = myCtl[1].Replace("~", "'");
-                        sql = sql.Replace("@Key", ddlOper.val());
+                        var sql = myCtl[1].replace(/~/g, "'");
+                        sql = sql.replace("@Key", ddlOper.val());
 
                         //需要执行SQL语句
                         //sql = BP.WF.Glo.DealExp(sql, en, null);
@@ -2614,7 +2625,7 @@ function figure_Template_Btn(frmBtn) {
     var btnHtml = $('<input type="button" value="">');
     btnHtml.val(frmBtn.Text).width(frmBtn.W).height(frmBtn.H).addClass('btn');
     var doc = frmBtn.EventContext;
-    doc = doc.replace("~", "'");
+    doc = doc.replace(/~/g, "'");
     var eventType = frmBtn.EventType;
     if (eventType == 0) {//禁用
         btnHtml.attr('disabled', 'disabled').css('background', 'gray');

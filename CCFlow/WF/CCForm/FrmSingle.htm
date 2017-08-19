@@ -55,7 +55,25 @@
 
                 oid = mdinfo.OID;
 
-                document.getElementById("frmMain").src = "./Frm.aspx?FK_MapData=" + mapdata + "&IsEdit=" + isEdit + "&IsPrint=" + isPrint + "&OID=" + oid + "&UserNo=" + mdinfo.UserNo + "&SID=" + mdinfo.SID + "&IsLoadData=" + isLoadData + "&m=" + Math.random();
+                var url = "./Frm.aspx?FK_MapData=" + mapdata + "&IsEdit=" + isEdit + "&IsPrint=" + isPrint + "&OID=" + oid + "&UserNo=" + mdinfo.UserNo + "&SID=" + mdinfo.SID + "&IsLoadData=" + isLoadData;
+                var se = location.search.substr(1).split('&');
+                var passed = "fk_mapdata=isedit=isprint=oid=userno=sid=isloaddata=m=";
+                var si;
+
+                for (var i = 0; i < se.length; i++) {
+                    si = se[i].split('=');
+                    if (si.length < 2) {
+                        continue;
+                    }
+
+                    if (passed.indexOf(si[0].toLowerCase() + '=') == -1) {
+                        url += '&' + se[i];
+                    }
+                }
+
+                url += "&m=" + Math.random();
+
+                document.getElementById("frmMain").src = url;
             }, this);
         });
 
@@ -63,6 +81,7 @@
             var win = document.getElementById("frmMain").contentWindow;
 
             if (win && win.SaveDtlData) {
+                win.isChange = true;
                 win.SaveDtlData();
             }
             else {

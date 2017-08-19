@@ -9,7 +9,6 @@
 
 namespace CCFlow.WF.Admin {
     
-    
     public partial class WF_Admin_CondDept {
         
         /// <summary>

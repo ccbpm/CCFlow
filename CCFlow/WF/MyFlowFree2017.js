@@ -913,6 +913,7 @@ function InitForm() {
 
     //开始解析表单字段
     var mapAttrsHtml = InitMapAttr(workNodeData.Sys_MapAttr, workNodeData);
+
     $('#divCCForm').html(mapAttrsHtml);
 
     //设置位置和大小
@@ -1261,11 +1262,11 @@ function InitMapAttr(mapAttrData, workNodeData) {
 
                             var rbShowModel = 0; //RBShowModel=0时横着显示RBShowModel=1时竖着显示
                             var showModelindex = mapAttr.AtPara.indexOf('@RBShowModel=');
-                            if (showModelindex >= 0) {//@RBShowModel=0
+                            if (showModelindex >= 0) { //@RBShowModel=0
                                 rbShowModel = mapAttr.AtPara.substring('@RBShowModel='.length, '@RBShowModel='.length + 1);
                             }
                             $.each(enums, function (i, obj) {
-                                operations += "<input id='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' type='radio' " + (obj.IntKey == defValue ? " checked='checked' " : "") + "  name='RB_" + mapAttr.KeyOfEn + "' value='" + obj.IntKey + "'/><label for='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' class='labRb'>" + obj.Lab + "</label>" + (rbShowModel == "1" ? "</br>" : '');
+                                operations += "<input  id='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' type='radio' " + (obj.IntKey == defValue ? " checked='checked' " : "") + "  name='RB_" + mapAttr.KeyOfEn + "' value='" + obj.IntKey + "'/><label for='RB_" + mapAttr.KeyOfEn + obj.IntKey + "' class='labRb'>" + obj.Lab + "</label>" + (rbShowModel == "1" ? "</br>" : '');
                             });
                         }
 
@@ -2630,6 +2631,7 @@ function figure_Template_Btn(frmBtn) {
 
 //初始化单选按钮
 function figure_Template_Rb(frmRb) {
+
     var eleHtml = '<div></div>';
     eleHtml = $(eleHtml);
     var childRbEle = $('<input id="RB_ChuLiFangShi2" type="radio"/>');
@@ -2637,8 +2639,10 @@ function figure_Template_Rb(frmRb) {
     childLabEle.html(frmRb.Lab).attr('for', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
 
     childRbEle.val(frmRb.IntKey).attr('id', 'RB_' + frmRb.KeyOfEn + frmRb.IntKey).attr('name', 'RB_' + frmRb.KeyOfEn);
-    if (frmRb.UIIsEnable == false)
+
+     if (frmRb.UIIsEnable == false)
         childRbEle.attr('disabled', 'disabled');
+
     var defVal = ConvertDefVal(workNodeData, '', frmRb.KeyOfEn);
     if (defVal == frmRb.IntKey) {
         childRbEle.attr("checked", "checked");

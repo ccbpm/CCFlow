@@ -144,6 +144,11 @@
                         return;
                     }
 
+                    if (data.indexOf('url@') == 0) {
+                        alert("请修改节点的人员范围选择方式，通用人员选择器没有实现.");
+                        return;
+                    }
+
                     try {
                         data = eval('(' + data + ')');
                     }

@@ -168,19 +168,23 @@ namespace BP.WF.HttpHandler
                             DataTable dt1 = new DataTable("Head");
                             dt1.Columns.Add("DDL", typeof(string));
                             //    dt1.Columns.Add("SQL", typeof(string));
-                            string[] strs = me.Tag.Split('$');
-                            foreach (string str in strs)
+                            if (string.IsNullOrEmpty(me.Tag) == false)
                             {
-                                if (str == "" || str == null)
-                                    continue;
+                                string[] strs = me.Tag.Split('$');
+                                foreach (string str in strs)
+                                {
+                                    if (str == "" || str == null)
+                                        continue;
 
-                                string[] ss = str.Split(':');
-                                DataRow dr = dt1.NewRow();
-                                dr[0] = ss[0];
-                                // dr[1] = ss[1];
-                                dt1.Rows.Add(dr);
+                                    string[] ss = str.Split(':');
+                                    DataRow dr = dt1.NewRow();
+                                    dr[0] = ss[0];
+                                    // dr[1] = ss[1];
+                                    dt1.Rows.Add(dr);
+                                }
+                                return JSONTODT(dt);
                             }
-                            return JSONTODT(dt);
+                            return "";
                             break;
                         case "ReqDDLFullListDB":
                             /* 获取要个性化填充的下拉框的值. 根据已经传递过来的 ddl id. */

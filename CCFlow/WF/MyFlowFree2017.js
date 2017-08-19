@@ -1364,6 +1364,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
 function AfterBindEn_DealMapExt() {
     var workNode = JSON.parse(jsonStr);
     var mapExtArr = workNode.Sys_MapExt;
+    
     for (var i = 0; i < mapExtArr.length; i++) {
         var mapExt = mapExtArr[i];
         switch (mapExt.ExtType) {
@@ -1462,16 +1463,15 @@ function AfterBindEn_DealMapExt() {
                 //        ddl.attr(mapExt.Tag2, mapExt.Tag1 + "(this);");
                 //}
                 break;
-            case "TBFullCtrl": //自动填充  先不做
-                break;
+            case "TBFullCtrl": //自动填充
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
                 if (tbAuto == null)
                     continue;
 
                 tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + mapExt.MyPK + "\');");
+                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'TB_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\');");
                 tbAuto.attr("AUTOCOMPLETE", "OFF");
-                if (me.Tag != "") {
+                if (mapExt.Tag != "") {
                     /* 处理下拉框的选择范围的问题 */
                     var strs = mapExt.Tag.split('$');
                     for (var str in strs) {

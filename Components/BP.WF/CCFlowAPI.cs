@@ -201,6 +201,15 @@ namespace BP.WF
                 DataTable dt = null;
                 #endregion
 
+                #region 图片附件
+                FrmImgAthDBs imgAthDBs = new FrmImgAthDBs(nd.NodeFrmID, workID.ToString());
+                if (imgAthDBs != null && imgAthDBs.Count > 0)
+                {
+                    DataTable dt_ImgAth = imgAthDBs.ToDataTableField("Sys_FrmImgAthDB");
+                    myds.Tables.Add(dt_ImgAth);
+                }
+                #endregion
+
                 #region 把外键表加入DataSet
                 DataTable dtMapAttr = myds.Tables["Sys_MapAttr"] ;
 

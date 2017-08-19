@@ -342,6 +342,10 @@
                 return;
             }
 
+            if (plant == "JFlow") {
+                document.getElementById("BtnSL").style.display = "none";
+            }
+
             $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在为登录做准备.</font>");
 
             document.getElementById("Btn_Login").disabled = 'disabled';
@@ -365,13 +369,13 @@
 
                     if (data.indexOf('url@') == 0) {
                         var url = data.replace('url@', '');
-                       window.location.href = url;
-                       return;
-                   }
+                        window.location.href = url;
+                        return;
+                    }
 
-                   document.getElementById("Btn_Login").disabled = false;
+                    document.getElementById("Btn_Login").disabled = false;
 
-                   $("#Msg").html("<font color=green>"+data+"</font>");
+                    $("#Msg").html("<font color=green>" + data + "</font>");
 
                 }
             });
@@ -395,7 +399,7 @@
 			</div>
 
              <div>
-              <input type="button" value="Silverlight版" onclick="javascript:window.location.href='../XAP/Designer.htm'"/>
+              <input type="button" id="BtnSL" value="Silverlight版" onclick="javascript:window.location.href='../XAP/Designer.htm'"/>
 			</div>
 
 

@@ -110,10 +110,12 @@
 
             var paras = 'CondType=' + condType + '&FK_Flow=' + fk_flow + '&FK_MainNode=' + fk_mainNode + '&FK_Node=' + fk_Node + '&FK_Attr=' + FK_Attr + '&DirType=' + dirType + '&ToNodeID=' + toNodeId;
 
-            if (c.value == 'CondByFrm' || c.value == 'CondBySQL' || c.value == 'CondBySQLTemplate' || c.value == 'CondByUrl' || c.value == 'CondByPara')
-                $('#context').attr('src', c.value + '.htm?' + paras);
-            else
-                $('#context').attr('src', c.value + '.aspx?' + paras);
+            $('#context').attr('src', c.value + '.htm?' + paras);
+
+//            if (c.value == 'CondByFrm' || c.value == 'CondBySQL' || c.value == 'CondBySQLTemplate' || c.value == 'CondByUrl' || c.value == 'CondByPara')
+//                $('#context').attr('src', c.value + '.htm?' + paras);
+//            else
+//                $('#context').attr('src', c.value + '.aspx?' + paras);
         }
     </script>
     <base target="_self" />

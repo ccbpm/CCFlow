@@ -61,17 +61,17 @@
 
             $("#container").html('');
             src = src.replace(/http\:\/\/([\w\W]*?)\//g, "");
-            $.fn.bitmapCutter({
-                src: src,
-                renderTo: '#container',
-                holderSize: { width: 420, height: 400 },
-                cutterSize: { width: cutW, height: cutH },
-                onGenerated: function (newSrc) {//裁完并保存后返回保存后图片地址
-                    document.getElementById('ContentPlaceHolder1_newImgUrl').value = newSrc;
-                },
-                rotateAngle: 90,
-                lang: { clockwise: '顺时针旋转{0}度.' }
-            });
+//            $.fn.bitmapCutter({
+//                src: src,
+//                renderTo: '#container',
+//                holderSize: { width: 420, height: 400 },
+//                cutterSize: { width: cutW, height: cutH },
+//                onGenerated: function (newSrc) {//裁完并保存后返回保存后图片地址
+//                    document.getElementById('ContentPlaceHolder1_newImgUrl').value = newSrc;
+//                },
+//                rotateAngle: 90,
+//                lang: { clockwise: '顺时针旋转{0}度.' }
+//            });
         }
         function imageSave() {
             document.getElementById("<%=btnImageSave.ClientID %>").click();

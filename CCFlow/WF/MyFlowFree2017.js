@@ -503,7 +503,7 @@ function initBar() {
     if (plant == "CCFlow")
         MyFlow = "MyFlow.ashx";
     //else
-        //MyFlow = "MyFlow.do";
+    //MyFlow = "MyFlow.do";
 
     var url = MyFlow + "?DoType=InitToolBar&m=" + Math.random();
 
@@ -606,7 +606,7 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
-            //发送选择接收节点和接收人 
+            //发送选择接收节点和接收人   
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
@@ -836,7 +836,7 @@ function initGroup(workNodeData, groupFiled) {
                     continue;
                 var src = "";
                 if (pageData.IsReadonly)
-                    src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&"+ "Version=" + load.Version;
+                    src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1&" + "Version=" + load.Version;
                 else
                     src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&Version=" + load.Version;
 
@@ -1383,45 +1383,45 @@ function AfterBindEn_DealMapExt() {
                     popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                 }
                 switch (popWorkModelStr) {
-                    /// <summary> 
-                    /// 自定义URL 
-                    /// </summary> 
-                    //SelfUrl =1, 
+                    /// <summary>   
+                    /// 自定义URL   
+                    /// </summary>   
+                    //SelfUrl =1,   
                     case "1":
                         icon = "glyphicon glyphicon-th";
                         break;
-                    /// <summary> 
-                    /// 表格模式 
-                    /// </summary> 
-                    // TableOnly, 
+                    /// <summary>   
+                    /// 表格模式   
+                    /// </summary>   
+                    // TableOnly,   
                     case "2":
                         icon = "glyphicon glyphicon-list";
                         break;
-                    /// <summary> 
-                    /// 表格分页模式 
-                    /// </summary> 
-                    //TablePage, 
+                    /// <summary>   
+                    /// 表格分页模式   
+                    /// </summary>   
+                    //TablePage,   
                     case "3":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary> 
-                    /// 分组模式 
-                    /// </summary> 
-                    // Group, 
+                    /// <summary>   
+                    /// 分组模式   
+                    /// </summary>   
+                    // Group,   
                     case "4":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary> 
-                    /// 树展现模式 
-                    /// </summary> 
-                    // Tree, 
+                    /// <summary>   
+                    /// 树展现模式   
+                    /// </summary>   
+                    // Tree,   
                     case "5":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
-                    /// <summary> 
-                    /// 双实体树 
-                    /// </summary> 
-                    // TreeDouble 
+                    /// <summary>   
+                    /// 双实体树   
+                    /// </summary>   
+                    // TreeDouble   
                     case "6":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
@@ -1716,7 +1716,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     var checkboxEles = $('#divCCForm input[type=checkbox]');
     $.each(checkboxEles, function (i, ele) {
         ele = $(ele);
-        if (ele.attr ('name')!=undefined && ele.attr('name').indexOf('CB_') == 0) {
+        if (ele.attr('name') != undefined && ele.attr('name').indexOf('CB_') == 0) {
             if ($('#' + ele.attr('id') + ':checked').length == 1) {
                 ele = ele.attr('name') + '=1';
             } else {
@@ -1746,11 +1746,11 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框 
+            //下拉框   
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
-            //文本区域 
+            //文本区域   
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -1791,10 +1791,10 @@ function Send() {
     //比填写检查
     //必填项和正则表达式检查
     var formCheckResult = true;
-    if (checkBlanks()==false) {
+    if (checkBlanks() == false) {
         formCheckResult = false;
     }
-    if (checkReg()==false) {
+    if (checkReg() == false) {
         formCheckResult = false;
     }
     if (!formCheckResult) {
@@ -2571,7 +2571,7 @@ function figure_MapAttr_Template(mapAttr) {
 
 //将#FF000000 转换成 #FF0000
 function TranColorToHtmlColor(color) {
-    if (color!=undefined && color.indexOf('#') == 0 && color.length == 9) {
+    if (color != undefined && color.indexOf('#') == 0 && color.length == 9) {
         color = color.substring(0, 7);
     }
     return color;
@@ -2580,15 +2580,15 @@ function TranColorToHtmlColor(color) {
 //FontStyle, FontWeight, IsBold, IsItalic
 //fontStyle font-size:19;font-family:"Portable User Interface";font-weight:bolder;color:#FF0051; 为H5设计的，不用解析后面3个
 function analysisFontStyle(ele, fontStyle, isBold, isItalic) {
-    if (fontStyle!=undefined && fontStyle.indexOf(':') > 0) {
+    if (fontStyle != undefined && fontStyle.indexOf(':') > 0) {
         var fontStyleArr = fontStyle.split(';');
-        $.each(fontStyleArr, function (i,fontStyleObj) {
-            ele.css(fontStyleObj.split(':')[0],TranColorToHtmlColor(fontStyleObj.split(':')[1]));
+        $.each(fontStyleArr, function (i, fontStyleObj) {
+            ele.css(fontStyleObj.split(':')[0], TranColorToHtmlColor(fontStyleObj.split(':')[1]));
         });
     }
     else {
         if (isBold == 1) {
-            ele.css('font-weight','bold');
+            ele.css('font-weight', 'bold');
         }
         if (isItalic == 1) {
             ele.css('font-style', 'italic')
@@ -2731,9 +2731,51 @@ function figure_Template_Image(frmImage) {
     return eleHtml;
 }
 
-//初始化 IMAGE附件   L4418  问下周总
+function ImgAth(url, athMyPK) {
+    var v = window.showModalDialog(url, 'ddf', 'dialogHeight: 650px; dialogWidth: 950px;center: yes; help: no');
+    if (v == null)
+        return;
+    document.getElementById('Img' + athMyPK).setAttribute('src', v);
+}
+
+//初始化 IMAGE附件
 function figure_Template_ImageAth(frmImageAth) {
-    return "";
+    var isEdit = frmImageAth.IsEdit;
+    var eleHtml = $("<div></div>");
+    var img = $("<img/>");
+
+    var imgSrc = "/WF/Data/Img/LogH.PNG";
+    //获取数据
+    if (workNodeData.Sys_FrmImgAthDB) {
+        $.each(workNodeData.Sys_FrmImgAthDB, function (i, obj) {
+            if (obj.FK_FrmImgAth == frmImageAth.MyPK) {
+                imgSrc = obj.FileFullName;
+            }
+        });
+    }    
+    //设计属性
+    img.attr('id', 'Img' + frmImageAth.MyPK).attr('name', 'Img' + frmImageAth.MyPK);
+    img.attr("src", imgSrc).attr('onerror', "this.src='/WF/Data/Img/LogH.PNG'");
+    img.css('width', frmImageAth.W).css('height', frmImageAth.H).css('padding', "0px").css('margin', "0px").css('border-width', "0px");
+    //不可编辑
+    if (isEdit == "1") {
+        var fieldSet = $("<fieldset></fieldset>");
+        var length = $("<legend></legend>");
+        var a = $("<a></a>");
+        var url = "/WF/CCForm/ImgAth.aspx?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=ND" + pageData.FK_Node + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
+
+        a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
+        length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');
+        
+        fieldSet.append(length);
+        length.append(a);        
+        fieldSet.append(img);
+        eleHtml.append(fieldSet);
+    } else {
+        eleHtml.append(img);
+    }
+    eleHtml.css('position', 'absolute').css('top', frmImageAth.Y).css('left', frmImageAth.X);
+    return eleHtml;
 }
 
 //初始化 附件
@@ -2913,7 +2955,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
         $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
     }
     src += "&r=q" + paras;
-    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe style='width:100%;height:"+h+"px;' id='FFWC" + wf_node.NodeID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe style='width:100%;height:" + h + "px;' id='FFWC" + wf_node.NodeID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
 
@@ -3106,7 +3148,7 @@ $(function () {
         //$('#topContentDiv').height(height);
 
         $(window).resize(function () {
-            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");;
+            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
         });
     }
     else {//新加
@@ -3115,10 +3157,10 @@ $(function () {
         // $('#topContentDiv').height(height);
 
         $(window).resize(function () {
-            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");;
+            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
         });
     }
-    
+
     $('#btnCloseMsg').bind('click', function () {
         $('.Message').hide();
     });

@@ -3,7 +3,6 @@ var oldValue = "";
 var oid;
 var highlightindex = -1;
 function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
-
     openDiv(sender, tbid);
     var myEvent = window.event || arguments[0];
     var myKeyCode = myEvent.keyCode;
@@ -122,7 +121,6 @@ function FullIt(oldValue, tbid, fk_mapExt) {
 }
 //打开div.
 function openDiv_bak(e, tbID) {
-
     //alert(document.getElementById("divinfo").style.display);
     if (document.getElementById("divinfo").style.display == "none") {
         var txtObject = document.getElementById(tbID);
@@ -159,8 +157,14 @@ function openDiv(e, tbID) {
 function getoffset(e) {
     var t = e.offsetTop;
     var l = e.offsetLeft;
+    //top
     while (e = e.offsetParent) {
         t += e.offsetTop;
+        if (t > 0)
+            break;
+    }
+    //left
+    while (e = e.offsetParent) {
         l += e.offsetLeft;
     }
     var rec = new Array(1);

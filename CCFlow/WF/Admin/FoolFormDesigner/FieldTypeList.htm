@@ -114,7 +114,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=FieldTypeSelect&Name=" + encodeURIComponent(name) + "&FType=" + fType + "&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + no + "&GroupField=" + groupID + "&m=" + Math.random(),
+                url: Handler + "?DoType=FieldTypeSelect_Create&Name=" + encodeURIComponent(name) + "&FType=" + fType + "&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + no + "&GroupField=" + groupID + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -126,7 +126,6 @@
                     var url = data.replace('url@', '');
                     window.location.href = url + "&inlayer=" + GetQueryString("inlayer");
                     return;
-
 
                     if (confirm('创建成功,您还要继续创建吗？') == true) {
                         var url = data.replace('url@', '');

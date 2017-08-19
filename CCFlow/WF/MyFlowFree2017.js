@@ -1547,15 +1547,14 @@ function AfterBindEn_DealMapExt() {
             case "AutoFullDLL": // 自动填充下拉框.
                 continue; //已经处理了。
             case "DDLFullCtrl": // 自动填充其他的控件..  先不做
-                break;
                 var ddlOper = $("#DDL_" + mapExt.AttrOfOper);
                 if (ddlOper == null)
                     continue;
 
                 ddlOper.attr("onchange", "Change('" + workNode.Sys_MapData[0].No + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
-                if (me.Tag != "") {
+                if (mapExt.Tag != "") {
                     /* 下拉框填充范围. */
-                    var strs = me.Tag.split('$');
+                    var strs = mapExt.Tag.split('$');
                     for (var k = 0; k < strs.length; k++) {
                         var str = strs[k];
                         if (str == "")
@@ -1597,11 +1596,11 @@ function AfterBindEn_DealMapExt() {
                         //    }
                         //}
 
-                        var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5'}];
+                        //var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5'}];
                         var operations = '';
-                        $.each(items, function (i, item) {
-                            operations += "<option  value='" + item.No + "'>" + item.Name + "</option>";
-                        });
+//                        $.each(items, function (i, item) {
+//                            operations += "<option  value='" + item.No + "'>" + item.Name + "</option>";
+//                        });
                         ddlC1.children().remove();
                         ddlC1.html(operations);
                         //ddlC1.SetSelectItem(valC1);

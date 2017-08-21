@@ -963,6 +963,92 @@ namespace BP.Sys
             return "没有涉及到的连接测试类型...";
         }
         /// <summary>
+        /// 获取所有数据表，不包括视图
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetAllTablesWithoutViews()
+        {
+            var sql = new StringBuilder();
+            var dbType = this.DBSrcType;
+            if (dbType == Sys.DBSrcType.Localhost)
+            {
+                switch (SystemConfig.AppCenterDBType)
+                {
+                    case DBType.MSSQL:
+                        dbType = Sys.DBSrcType.SQLServer;
+                        break;
+                    case DBType.Oracle:
+                        dbType = Sys.DBSrcType.Oracle;
+                        break;
+                    case DBType.MySQL:
+                        dbType = Sys.DBSrcType.MySQL;
+                        break;
+                    case DBType.Informix:
+                        dbType = Sys.DBSrcType.Informix;
+                        break;
+                    default:
+                        throw new Exception("没有涉及到的连接测试类型...");
+                }
+            }
+
+            switch (dbType)
+            {
+                case Sys.DBSrcType.SQLServer:
+                    sql.AppendLine("SELECT NAME AS No,");
+                    sql.AppendLine("       NAME");
+                    sql.AppendLine("FROM   sysobjects");
+                    sql.AppendLine("WHERE  xtype = 'U'");
+                    sql.AppendLine("ORDER BY");
+                    sql.AppendLine("       Name");
+                    break;
+                case Sys.DBSrcType.Oracle:
+                    sql.AppendLine("SELECT uo.OBJECT_NAME No,");
+                    sql.AppendLine("       uo.OBJECT_NAME Name");
+                    sql.AppendLine("  FROM user_objects uo");
+                    sql.AppendLine(" WHERE uo.OBJECT_TYPE = 'TABLE'");
+                    sql.AppendLine(" ORDER BY uo.OBJECT_NAME");
+                    break;
+                case Sys.DBSrcType.MySQL:
+                    sql.AppendLine("SELECT ");
+                    sql.AppendLine("    table_name No,");
+                    sql.AppendLine("    table_name Name");
+                    sql.AppendLine("FROM");
+                    sql.AppendLine("    information_schema.tables");
+                    sql.AppendLine("WHERE");
+                    sql.AppendLine(string.Format("    table_schema = '{0}'", this.DBSrcType == Sys.DBSrcType.Localhost ? DBAccess.GetAppCenterDBConn.Database : this.DBName));
+                    sql.AppendLine("        AND table_type = 'BASE TABLE'");
+                    sql.AppendLine("ORDER BY table_name;");
+                    break;
+                case Sys.DBSrcType.Informix:
+                    sql.AppendLine("");
+                    break;
+                default:
+                    break;
+            }
+
+            DataTable allTables = null;
+            if (this.No == "local")
+            {
+                allTables = DBAccess.RunSQLReturnTable(sql.ToString());
+            }
+            else
+            {
+                var dsn = GetDSN();
+                var conn = GetConnection(dsn);
+                try
+                {
+                    conn.Open();
+                    allTables = RunSQLReturnTable(sql.ToString(), conn, dsn, CommandType.Text);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("@失败:" + ex.Message + " dns:" + dsn);
+                }
+            }
+
+            return allTables;
+        }
+        /// <summary>
         /// 获得数据列表.
         /// </summary>
         /// <returns></returns>

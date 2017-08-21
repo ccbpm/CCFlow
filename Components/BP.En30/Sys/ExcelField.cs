@@ -106,6 +106,11 @@ namespace BP.Sys
         /// </summary>
         public const string SkipIsNull = "SkipIsNull";
 
+        /// <summary>
+        /// 同步到字段
+        /// </summary>
+        public const string SyncToField = "SyncToField";
+
     }
 
     /// <summary>
@@ -215,7 +220,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(ExcelFieldAttr.DataType, value);
+                this.SetValByKey(ExcelFieldAttr.DataType, (int)value);
             }
         }
 
@@ -384,6 +389,21 @@ namespace BP.Sys
             }
         }
 
+        /// <summary>
+        /// 获取或设置同步到字段
+        /// </summary>
+        public string SyncToField
+        {
+            get
+            {
+                return this.GetValStrByKey(ExcelFieldAttr.SyncToField);
+            }
+            set
+            {
+                this.SetValByKey(ExcelFieldAttr.SyncToField, value);
+            }
+        }
+
         #endregion 属性
 
         #region 构造方法
@@ -438,6 +458,7 @@ namespace BP.Sys
                 map.AddTBString(ExcelFieldAttr.ConfirmCellValue, null, "对应单元格值", true, false, 1, 200, 100);
                 map.AddTBInt(ExcelFieldAttr.ConfirmRepeatIndex, 0, "对应单元格值重复选定次序", true, false);
                 map.AddBoolean(ExcelFieldAttr.SkipIsNull, false, "不计非空", true, true);
+                map.AddTBString(ExcelFieldAttr.SyncToField, null, "同步到字段", true, false, 1, 100, 100);
 
                 this._enMap = map;
                 return this._enMap;

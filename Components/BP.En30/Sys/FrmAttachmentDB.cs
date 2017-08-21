@@ -115,7 +115,7 @@ namespace BP.Sys
             get
             {
                 string str = this.GetValStringByKey(FrmAttachmentDBAttr.RDT);
-                return str.Substring(5,11);
+                return str.Substring(5, 11);
             }
             set
             {
@@ -137,7 +137,7 @@ namespace BP.Sys
                 str = str.Replace("~", "-");
                 str = str.Replace("'", "-");
                 str = str.Replace("*", "-");
-                str = str.Replace("/","\\");
+                str = str.Replace("/", "\\");
                 this.SetValByKey(FrmAttachmentDBAttr.FileFullName, str);
             }
         }
@@ -196,7 +196,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(FrmAttachmentDBAttr.FileExts, value.Replace(".",""));
+                this.SetValByKey(FrmAttachmentDBAttr.FileExts, value.Replace(".", ""));
             }
         }
         /// <summary>
@@ -312,7 +312,7 @@ namespace BP.Sys
             }
             set
             {
-                this.SetValByKey(FrmAttachmentDBAttr.FileSize, value/1024);
+                this.SetValByKey(FrmAttachmentDBAttr.FileSize, value / 1024);
             }
         }
         /// <summary>
@@ -412,10 +412,10 @@ namespace BP.Sys
                 Map map = new Map("Sys_FrmAttachmentDB", "附件数据存储");
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
-                map.AddTBString(FrmAttachmentDBAttr.FK_MapData, null,"FK_MapData", true, false, 1, 100, 20);
+                map.AddTBString(FrmAttachmentDBAttr.FK_MapData, null, "FK_MapData", true, false, 1, 100, 20);
                 map.AddTBString(FrmAttachmentDBAttr.FK_FrmAttachment, null, "附件主键", true, false, 1, 500, 20);
                 map.AddTBString(FrmAttachmentDBAttr.NoOfObj, null, "附件标识", true, false, 0, 50, 20);
 
@@ -425,7 +425,7 @@ namespace BP.Sys
 
                 map.AddTBString(FrmAttachmentDBAttr.Sort, null, "类别", true, false, 0, 200, 20);
                 map.AddTBString(FrmAttachmentDBAttr.FileFullName, null, "文件路径", true, false, 0, 700, 20);
-                map.AddTBString(FrmAttachmentDBAttr.FileName, null,"名称", true, false, 0, 500, 20);
+                map.AddTBString(FrmAttachmentDBAttr.FileName, null, "名称", true, false, 0, 500, 20);
                 map.AddTBString(FrmAttachmentDBAttr.FileExts, null, "扩展", true, false, 0, 50, 20);
                 map.AddTBFloat(FrmAttachmentDBAttr.FileSize, 0, "文件大小", true, false);
 
@@ -456,6 +456,39 @@ namespace BP.Sys
         {
             return base.beforeInsert();
         }
+
+        protected override void afterDelete()
+        {
+            //判断删除excel数据提取的数据
+            if (string.IsNullOrWhiteSpace(this.FK_FrmAttachment))
+                return;
+
+            FrmAttachment ath = new FrmAttachment(this.FK_FrmAttachment);
+            string fkefs = ath.GetParaString("FK_ExcelFile", null);
+            if (string.IsNullOrWhiteSpace(fkefs) == false)
+            {
+                string[] efarr = fkefs.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                ExcelFile ef = null;
+                ExcelTables ets = null;
+                foreach (string fk_ef in efarr)
+                {
+                    ef = new ExcelFile();
+                    ef.No = fk_ef;
+
+                    if (ef.RetrieveFromDBSources() > 0)
+                    {
+                        ets = new ExcelTables(fk_ef);
+                        foreach (ExcelTable et in ets)
+                        {
+                            if (DBAccess.IsExitsObject(et.No))
+                                DBAccess.RunSQL(string.Format("DELETE FROM {0} WHERE FK_FrmAttachmentDB = '{1}'", et.No, this.MyPK));
+                        }
+                    }
+                }
+            }
+
+            base.afterDelete();
+        }
         #endregion
     }
     /// <summary>
@@ -474,9 +507,9 @@ namespace BP.Sys
         /// 附件数据存储s
         /// </summary>
         /// <param name="fk_mapdata">s</param>
-        public FrmAttachmentDBs(string fk_mapdata,string pkval)
+        public FrmAttachmentDBs(string fk_mapdata, string pkval)
         {
-            this.Retrieve(FrmAttachmentDBAttr.FK_MapData, fk_mapdata, 
+            this.Retrieve(FrmAttachmentDBAttr.FK_MapData, fk_mapdata,
                 FrmAttachmentDBAttr.RefPKVal, pkval);
         }
         /// <summary>

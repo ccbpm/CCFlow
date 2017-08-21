@@ -31,6 +31,10 @@ namespace BP.Sys
         /// </summary>
         public const string Note = "Note";
 
+        /// <summary>
+        /// 同步到表
+        /// </summary>
+        public const string SyncToTable = "SyncToTable";
     }
 
     /// <summary>
@@ -84,6 +88,21 @@ namespace BP.Sys
             }
         }
 
+        /// <summary>
+        /// 获取或设置同步到表
+        /// </summary>
+        public string SyncToTable
+        {
+            get
+            {
+                return this.GetValStrByKey(ExcelTableAttr.SyncToTable);
+            }
+            set
+            {
+                this.SetValByKey(ExcelTableAttr.SyncToTable, value);
+            }
+        }
+
         #endregion 属性
 
         #region 构造方法
@@ -123,6 +142,7 @@ namespace BP.Sys
                 map.AddDDLEntities(ExcelTableAttr.FK_ExcelFile, null, "Excel模板", new ExcelFiles(), true);
                 map.AddBoolean(ExcelTableAttr.IsDtl, false, "是否明细表", true, false);
                 map.AddTBStringDoc(ExcelTableAttr.Note, null, "数据表说明", true, false, true);
+                map.AddTBString(ExcelTableAttr.SyncToTable, null, "同步到表", true, false, 1, 100, 100);
 
                 this._enMap = map;
                 return this._enMap;

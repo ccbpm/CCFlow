@@ -997,7 +997,7 @@ namespace BP.DA
         {
             try
             {
-                String _Temp = null;
+                String _Temp = "";
                 for (int i = 0; i < str.Length; i++)
                 {
                     _Temp = _Temp + BP.DA.DataType.ParseStringToPinyin(str.Substring(i, 1));

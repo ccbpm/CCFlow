@@ -166,7 +166,9 @@ namespace CCFlow.WF.Comm.Sys
             pub1.AddTD("不能为空,中文描述.比如:ERP数据源.");
             pub1.AddTREnd();
 
-            switch ((DBSrcType)srcType)
+            DBSrcType type = (DBSrcType)srcType;
+
+            switch (type)
             {
                 case DBSrcType.SQLServer:
                 case DBSrcType.Oracle:
@@ -232,6 +234,7 @@ namespace CCFlow.WF.Comm.Sys
                     pub1.AddTREnd();
                     break;
                 case DBSrcType.WebServices:
+                case DBSrcType.Dubbo:
                     //WebService地址
                     pub1.AddTR();
                     pub1.AddTDGroupTitle("WebService地址(Url)：");
@@ -249,10 +252,9 @@ namespace CCFlow.WF.Comm.Sys
                     this.pub1.AddTD();
                     this.pub1.AddTD("colspan=2", "必须是全部路径,在发布到生产环境的时候注意修改.");
                     this.pub1.AddTREnd();
-
                     break;
                 default:
-                    throw new Exception("未涉及的数据源类型！");
+                    throw new Exception("未涉及的数据源类型！" + type.ToString());
             }
 
             pub1.AddTableEnd();
@@ -393,6 +395,7 @@ namespace CCFlow.WF.Comm.Sys
                     src.Password = this.pub1.GetTBByID("TB_" + SFDBSrcAttr.Password).Text;
                     break;
                 case DBSrcType.WebServices:
+                case DBSrcType.Dubbo:
                     src.DBName = string.Empty;
                     src.IP = this.pub1.GetTBByID("TB_" + SFDBSrcAttr.IP).Text;
                     src.UserID = string.Empty;

@@ -1,44 +1,56 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
-    <title></title>
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <title>消息实体</title>
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../../Scripts/config.js" type="text/javascript"></script>
-     <script type="text/javascript" src="../../Comm/Gener.js"></script>
-     <base target="_self" /> 
-    <link href="../../Comm/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <base target="_self" />
+    <script type="text/javascript">
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+        function WinOpen(url, name) {
+            window.open(url, name, 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+            //window.open(url, 'xx');
+        }
+        /*隐藏与显示.*/
+        function ShowHidden(ctrlID) {
 
-    <script language="javascript" type="text/javascript" >
-
+            var ctrl = document.getElementById(ctrlID);
+            if (ctrl.style.display == "block") {
+                ctrl.style.display = 'none';
+            } else {
+                ctrl.style.display = 'block';
+            }
+        }
+    </script>
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
-            var fk_mapData = GetQueryString("FK_Event");
-            var mypk = GetQueryString("MyPK");
 
-            var fk_node = GetQueryString("FK_Node");
-            alert(fk_node);
-            $("#Msg").html("正在加载,请稍后......");
-            $("#TB_STXX").html(fk_mapData + "-消息实体");
             InitPage();
 
-            $("#Msg").html("");
         });
-
+        
         //初始化数据.
         function InitPage() {
-            var fk_node = GetQueryString("FK_Node");
-            //GenerBindEnumKey("DDL_Email", "Email");
-           // GenerBindEnumKey("DDL_SMS_Fields","BP.WF.SMSAttr");
+            // 设置标签
+            $("#eventtype").html(GetQueryString("FK_Event"));
+            $("label[for='RB_Email_1']").html(_GetText(GetQueryString("FK_Event")));
+            $("label[for='RB_SMS_1']").html(_GetText(GetQueryString("FK_Event")));
 
-            //初始化表格.
+            //初始化 01 02 03
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=PushMessageEntity_Init&FK_Node=" +fk_node+"&m=" +Math.random(),
+                url: Handler + "?DoType=PushMsgEntity_Init&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event=" + GetQueryString("FK_Event") + "&MyPK=" + GetQueryString("MyPK")||"" + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -46,163 +58,261 @@
                         alert(data);
                         return;
                     }
+
                     data = JSON.parse(data);
-                      return;
+                    var frmfields = data.FrmFields;
+                    var nodes = data.Nodes;
+                    var en = data.PushMsgEntity[0];
+
+                    //01.填充下拉
+                    for (var i = 0, len = frmfields.length; i < len; i++) {
+                        var f = frmfields[i];
+                        var oVal = f.KeyOfEn;
+                        var oText = f.KeyOfEn + "  ; " + f.Name;
+                        $("#DDL_SMS_Fields").append("<option value='" + oVal + "' >" + oText + "</option>");
+                        $("#DDL_Email_Fields").append("<option value='" + oVal + "' >" + oText + "</option>");
                     }
+                    //02.节点列表
+                    for (i = 0, len = nodes.length; i < len; i++) {
+                        var n = nodes[i];
+                        $("#SMS_Nodes").append("<input id='CB_SMS_" + n.NodeID + "' type='checkbox' name='CB_SMS_" + n.NodeID + "' /><label>" + n.Name + "</label>");
+                        $("#Email_Nodes").append("<input id='CB_Email_" + n.NodeID + "' type='checkbox' name='CB_Email_" + n.NodeID + "' /><label>" + n.Name + "</label>");
+                    }
+
+                    //03.实体初始化 （如果有）
+                    if (en.MyPK != "") {
+                        $("input:radio[name='RB_SMS']").eq(en.SMSPushWay).attr("checked", true);
+                        $("input:radio[name='RB_Email']").eq(en.MailPushWay).attr("checked", true);
+                        $("#DDL_SMS_Fields").val(en.SMSField);
+                        $("#DDL_Email_Fields").val(en.MailAddress);
+                        var smsnodes = en.SMSNodes;
+                        var mailnodes = en.MailNodes;
+                        if (smsnodes != "") {
+                            var ns = smsnodes.split(",");
+                            for (i = 0, len = ns.length; i < len; i++) {
+                                if (ns[i] != "") {
+                                    document.getElementById("CB_SMS_" + ns[i]).checked = true;
+                                }
+                            }
+                        }
+                        if (mailnodes != "") {
+                            var ns = mailnodes.split(",");
+                            for (i = 0, len = ns.length; i < len; i++) {
+                                if (ns[i] != "") {
+                                    document.getElementById("CB_Email_" + ns[i]).checked = true;
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        $("#DDL_SMS_Fields option:first").attr("selected", "selected");
+                        $("#DDL_Email_Fields option:first").attr("selected", "selected");
+                    }
+
+                }
             });
-          }
-          function Save() {
-              //保存
-              $("#Msg").html("正在保存,请稍后......");             
-             // var checkBoxIDs = GenerCheckIDs();
-             var frmData = $("#cc").serialize();
-              $.ajax({
-                  type: 'post',
-                  async: true,
-                  url: Handler + "?DoType=PushMessageEntity_Save&m=" + Math.random(),
-                  dataType: 'html',
-                  success: function (data) {
+        }
 
-                      if (data.indexOf('err@') == 0) {
-                          alert(data);
-                          return;
-                      }
-                      data = JSON.parse(data);
-                      window.location.href = 'PushMessage.aspx?FK_Node=' + fk_node + '&FK_Event=' + fk_mapData + '&MyPK=' + mypk;
-                      return;
-                  }
-              });
-          }
-          function Btn_Back_Click() {
-              window.location.href = 'PushMessage.htm?FK_Node=' + fk_node + '&FK_Event=' + fk_event + '&MyPK=' + mypk;
-          
-          }
-     </script>
-</head>
-<body>
-<form id="cc">
-<table style="width:100%">
-<caption > <div style=" float:left" id='TB_STXX'></div> 
-  <div style="float:right"> <a href="http://ccbpm.mydoc.io"  target="_blank" >帮助</a> </div> </caption>
-  </table>
+        //页面初始化调用
+        function _GetText(EventListOfNode) {
 
-  <fieldset> 
-<legend>启用短信设置</legend>
+            var ret = { "WorkArrive": "发送给当前节点的所有处理人",
+                        "SendSuccess": "发送给下一个节点的所有接受人",
+                        "ReturnAfter": "发送给被退回的节点处理人",
+                        "UndoneAfter": "撤销工作后通知的节点接受人",
+                        "FlowOverAfter": "流程结束通知的所有流程的参与人",
+                        "AfterFlowDel": "流程删除后通知所有流程的参与人"
+            };
+            return ret[EventListOfNode];
+        }
 
-   <table style="width:100%;" >
-   <tr>
-   <td colspan="2">
-   <input type="radio" id="RB_SMS_0" name="RB_SMS" value="" />不发送</td>
-   </tr>
-    
-    <tr>
-     <td colspan="2">
-     <input type="radio" id="RB_SMS_1" name="RB_SMS" value="" />本节点的接受人</td>
-   </tr>
-
-   <tr>
-    <td style="width:200px;" >
-   <input type="radio" id="RB_SMS_2" name="RB_SMS" value="" />表单上的字段作为接受对象</td>
-   <td> 
-   <select name="DDL_SMS_Fields" id="DDL_SMS_Fields" > 
-   </select>(手机号/微信号/丁丁号/CCIM人员ID) </td>
-   </tr>
-
-   <tr>
-    <td>
-    <input type="radio" id="RB_SMS_3" name="RB_SMS" value="" />其他节点的处理人</td>
-    <td>
-        <uc1:Pub ID="Pub1" runat="server" />
-       </td>
-   </tr>
-
-   <tr>
-   <td colspan=2> <fieldset style=" border:0px;">
-           <legend><a href="javascript:ShowHidden('sms')">短信发送内容模版:</a></legend>
+        function Btn_Save_Click() {
+            var para = "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event=" + GetQueryString("FK_Event") + "&m=" + Math.random();
+            if (GetQueryString("MyPK") != null) {
+                para += "&MyPK=" + GetQueryString("MyPK");
+            }
             
-            <div id="sms" style="display:none;color:Gray">
-            <ul>
-             <li>cc会根据不同的事件设置不同的信息模版。</li>
-             <li>这些模版都是标准的提示，如果您要需要个性化的提示请修改该模版。</li>
-             <li>该参数支持cc表达式。</li>
-             <li>您可以使用@符号来编写您所需要的内容。</li>
-             <li>对于信息提示有两个系统参数分别是{Title}流程标题， {URL} 打开流程的连接。</li>
-             <li>cc在生成消息的时候会根据模版把信息替换下来，发送给用户。</li>
-             <li>最新格式的cc字段表达式为: <font color="red"> @+字段名+分号</font> 比如 @QingJiaLeiXing; </li>
-            </ul>
-            </div>
- </fieldset>
+            var formData = new FormData($("#cc")[0]);
+            $.ajax({
+                url: Handler + "?DoType=PushMsg_Save" + para,
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data); 
+                    //window.location.href = "PushMessageEntity.htm?" + para;
+                    window.history.back();
+                    //return;
+                }
+            });
+        }
 
-<textarea id="TB_SMS"  name="" cols="95%" rows="3"></textarea>
- </td>
-   </tr>
-      </table>
-   </fieldset>
-
-
- 
-<!--------   邮件提醒.   -------------------------->
-<fieldset> 
-<legend>启用邮件提醒</legend>
-<table style="width:100%;" >
-<tr>
-<td colspan="2" >
-<input type="radio" id = "RB_Email_0" name ="RB_Email" />不发送</td>
-</tr>
-<tr>
-<td colspan="2"> 
-<input type = "radio" id="RB_Email_1" name = "RB_Email" />本节点的接受人</td>
-</tr>
-<tr>
-<td style="width:400px;">
-<input type = "radio" id = "RB_Email_2" name = "RB_Email" />表单上的字段作为邮件</td>
-<td>选择一个字段:
-<select name = "" id="DDL_Email"></select></td>
-</tr>
-   <tr>
-    <td colspan="2">
-    <input type = "radio" id = "RB_Email_3" name = "RB_Email" />其他节点的处理人</td>
-    <td>
-        <uc1:Pub ID="Pub2" runat="server" />
-       </td>
-   </tr>
-<tr>
-  <td> 
-            <fieldset style="border:0px;">
-            <legend style="width:200px;"><a href="javascript:ShowHidden('titeemail')">邮件标题模版:</a></legend>
-            <div id="titeemail" style="display:none;color:Gray">
-            <ul>
-             <li>该参数支持cc表达式。</li>
-             <li>您可以使用@符号来编写您所需要的内容。</li>
-             <li>最新格式的cc字段表达式为:<font color="rad"> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
-            </ul>
-            </div>
-            </fieldset>
-   </td>
-   <td> 
-   <textarea name = "TB_Email" id = "TB_Email_Title" cols = "500px" rows = ""></textarea></td>
-</tr>
-<tr>
-<td> 
-
-<fieldset style=" border:0px;">
-           <legend><a href="javascript:ShowHidden('st2ate')">邮件内容模版:</a></legend>
-            <div id="st2ate" style="display:none;color:Gray" >
-            <ul>
-             <li>该参数支持cc表达式。</li>
-             <li>您可以使用@符号来编写您所需要的内容。</li>
-             <li>最新格式的cc字段表达式为:<font color=red> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
-            </ul>
-            </div>
- </fieldset>
-  </td>
-<td>
-<textarea name  = "" id = "TB_Email_Doc" cols = "500px" rows = "3"></textarea></td>
-</tr>
-</table>
-</fieldset>
-<input type = "button" value = "保存" onclick="Save()" />
-<input type = "button" value = "返回" onclick="Btn_Back_Click" />
-</form>
+        function Btn_Back_Click() {
+            window.location.href = history.back();
+        }
+    </script>
+</head>
+<body onkeypress="Esc();" style="font-size: smaller">
+    <form id="cc">
+    <div>
+        <table style="width: 100%">
+            <caption>
+                <div style="float: left">
+                    <span id="eventtype"></span> - 消息实体</div>
+                <div style="float: right">
+                    <a href="http://ccbpm.mydoc.io" target="_blank">帮助</a>
+                </span>
+            </caption>
+            <tr>
+                <td>
+                    <fieldset>
+                        <legend>启用短信设置</legend>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td colspan="2">
+                                    <input id="RB_SMS_0" type="radio" name="RB_SMS" value="0"
+                                        checked="checked" /><label for="RB_SMS_0">不发送</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input id="RB_SMS_1" type="radio" name="RB_SMS" value="1" /><label
+                                        for="RB_SMS_1"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 200px;">
+                                    <input id="RB_SMS_2" type="radio" name="RB_SMS" value="2" /><label
+                                        for="RB_SMS_2">表单上的字段作为接受对象</label>
+                                </td>
+                                <td>
+                                    <select name="DDL_SMS_Fields" id="DDL_SMS_Fields" class="frmfields">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input id="RB_SMS_3" type="radio" name="RB_SMS" value="3" /><label for="RB_SMS_3">其他节点的处理人</label>
+                                </td>
+                                <td id="SMS_Nodes">
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <fieldset style="border: 0px;">
+                                        <legend><a href="javascript:ShowHidden('sms')">短信发送内容模版:</a></legend>
+                                        <div id="sms" style="display: none; color: Gray">
+                                            <ul>
+                                                <li>cc会根据不同的事件设置不同的信息模版。</li>
+                                                <li>这些模版都是标准的提示，如果您要需要个性化的提示请修改该模版。</li>
+                                                <li>该参数支持cc表达式。</li>
+                                                <li>您可以使用@符号来编写您所需要的内容。</li>
+                                                <li>对于信息提示有两个系统参数分别是{Title}流程标题， {URL} 打开流程的连接。</li>
+                                                <li>cc在生成消息的时候会根据模版把信息替换下来，发送给用户。</li>
+                                                <li>最新格式的cc字段表达式为: <font color="red">@+字段名+分号</font> 比如 @QingJiaLeiXing; </li>
+                                            </ul>
+                                        </div>
+                                    </fieldset>
+                                    <textarea name="TB_SMS" rows="3" cols="20" id="TB_SMS"
+                                        style="width: 95%;">
+有新工作{{Title}}需要您处理, 发送人:@WebUser.No, @WebUser.Name,打开{Url} .</textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <!--------   邮件提醒.   -------------------------->
+                    <fieldset>
+                        <legend>启用邮件提醒</legend>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td colspan="2">
+                                    <input id="RB_Email_0" type="radio" name="RB_Email"
+                                        value="0" checked="checked" /><label for="RB_Email_0">不发送</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <input id="RB_Email_1" type="radio" name="RB_Email"
+                                        value="1" /><label for="RB_Email_1"></label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input id="RB_Email_2" type="radio" name="RB_Email"
+                                        value="2" /><label for="RB_Email_2">表单上的字段作为邮件</label>
+                                </td>
+                                <td>
+                                    选择一个字段:<select name="DDL_Email_Fields" id="DDL_Email_Fields" class="frmfields">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input id="RB_Email_3" type="radio" name="RB_Email"
+                                        value="3" /><label for="RB_Email_3">其他节点的处理人</label>
+                                </td>
+                                <td id="Email_Nodes">
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 200px;">
+                                    <fieldset style="border: 0px;">
+                                        <legend><a href="javascript:ShowHidden('titeemail')">邮件标题模版:</a></legend>
+                                        <div id="titeemail" style="display: none; color: Gray">
+                                            <ul>
+                                                <li>该参数支持cc表达式。</li>
+                                                <li>您可以使用@符号来编写您所需要的内容。</li>
+                                                <li>最新格式的cc字段表达式为:<font color="red"> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
+                                            </ul>
+                                        </div>
+                                    </fieldset>
+                                </td>
+                                <td>
+                                    <input name="TB_Email_Title" type="text" value="新工作{{Title}},发送人@WebUser.No,@WebUser.Name"
+                                        id="TB_Email_Title" style="width: 500px;" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <fieldset style="border: 0px;">
+                                        <legend><a href="javascript:ShowHidden('st2ate')">邮件内容模版:</a></legend>
+                                        <div id="st2ate" style="display: none; color: Gray">
+                                            <ul>
+                                                <li>该参数支持cc表达式。</li>
+                                                <li>您可以使用@符号来编写您所需要的内容。</li>
+                                                <li>最新格式的cc字段表达式为:<font color="red"> @+字段名+分号</font>比如 @QingJiaLeiXing; </li>
+                                            </ul>
+                                        </div>
+                                    </fieldset>
+                                </td>
+                                <td>
+                                    <textarea name="TB_Email_Doc" rows="3" cols="20" id="TB_Email_Doc"
+                                        style="width: 500px;">
+	
+您好:	
+    有新工作{{Title}}需要您处理, 点击这里打开工作报告{Url} .	
+致! 	
+    @WebUser.No, @WebUser.Name	
+    @RDT</textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <input type="submit" name="Btn_Save" value="保存" id="Btn_Save" onclick="Btn_Save_Click();"/>
+                    <input type="submit" name="Btn_Back" value="返回" id="Btn_Back" onclick="Btn_Back_Click();"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
 </body>
 </html>

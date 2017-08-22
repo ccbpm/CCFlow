@@ -91,6 +91,129 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region  节点消息
+        public string PushMsg_Init()
+        {
+            //增加上单据模版集合.
+            int nodeID = this.GetRequestValInt("FK_Node");
+            BP.WF.Template.PushMsgs ens = new BP.WF.Template.PushMsgs(nodeID);
+            return ens.ToJson();
+        }
+        public string PushMsg_Save()
+        {
+            BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
+            msg.MyPK = HttpContext.Current.Request.QueryString["MyPK"];
+            msg.RetrieveFromDBSources();
+
+            msg.FK_Event = this.FK_Event;
+            msg.FK_Node = this.FK_Node;
+
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
+
+            #region 求出来选择的节点.
+            string nodesOfSMS = "";
+            string nodesOfEmail = "";
+            foreach (BP.WF.Node mynd in nds)
+            {
+                foreach (string key in HttpContext.Current.Request.Params.AllKeys)
+                {
+                    if (key.Contains("CB_SMS_" + mynd.NodeID)
+                        && nodesOfSMS.Contains(mynd.NodeID + "") == false)
+                        nodesOfSMS += mynd.NodeID + ",";
+
+                    if (key.Contains("CB_Email_" + mynd.NodeID)
+                        && nodesOfEmail.Contains(mynd.NodeID + "") == false)
+                        nodesOfEmail += mynd.NodeID + ",";
+                }
+            }
+
+            //节点.
+            msg.MailNodes = nodesOfEmail;
+            msg.SMSNodes = nodesOfSMS;
+            #endregion 求出来选择的节点.
+
+            #region 短信保存.
+            //短信推送方式。
+            msg.SMSPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_SMS"].ToString().Replace("RB_SMS_", ""));
+
+            //短信手机字段.
+            msg.SMSField = HttpContext.Current.Request["DDL_SMS_Fields"].ToString();
+            //替换变量
+            string smsstr = HttpContext.Current.Request["TB_SMS"].ToString();
+            //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
+            //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
+
+            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
+            // smsstr = smsstr.Replace("@RDT",);
+            //短信内容模版.
+            msg.SMSDoc_Real = smsstr;
+            #endregion 短信保存.
+
+            #region 邮件保存.
+            //邮件.
+            msg.MailPushWay = Convert.ToInt32(HttpContext.Current.Request["RB_Email"].ToString().Replace("RB_Email_", "")); ;
+
+            //邮件标题与内容.
+            msg.MailTitle_Real = HttpContext.Current.Request["TB_Email_Title"].ToString();
+            msg.MailDoc_Real = HttpContext.Current.Request["TB_Email_Doc"].ToString();
+
+            //邮件地址.
+            msg.MailAddress = HttpContext.Current.Request["DDL_Email_Fields"].ToString(); ;
+
+            #endregion 邮件保存.
+
+            //保存.
+            if (string.IsNullOrEmpty(msg.MyPK) == true)
+            {
+                msg.MyPK = BP.DA.DBAccess.GenerGUID();
+                msg.Insert();
+            }
+            else
+            {
+                msg.Update();
+            }
+
+            return "保存成功.."; 
+        }
+        public string PushMsg_Delete()
+        {
+            PushMsg pm = new PushMsg();
+            pm.MyPK = this.GetRequestVal("MyPK");
+            pm.Delete();
+
+            return "删除成功.";
+        }
+        public string PushMsgEntity_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //字段下拉框.
+            //select * from Sys_MapAttr where FK_MapData='ND102' and LGType = 0 AND MyDataType =1
+
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
+            attrs.Retrieve(BP.Sys.MapAttrAttr.FK_MapData, "ND" + this.FK_Node, "LGType", 0, "MyDataType", 1);
+            ds.Tables.Add(attrs.ToDataTableField("FrmFields"));
+
+            //节点 
+            //TODO 数据太多优化一下
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
+            ds.Tables.Add(nds.ToDataTableField("Nodes"));
+
+            //mypk
+            BP.WF.Template.PushMsg msg = new BP.WF.Template.PushMsg();
+            msg.MyPK = this.MyPK;
+            msg.RetrieveFromDBSources();
+            ds.Tables.Add(msg.ToDataTableField("PushMsgEntity"));
+
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+        
+
+        #endregion
+
         #region 表单模式
         /// <summary>
         /// 表单模式
@@ -131,6 +254,190 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <returns></returns>
         public string NodeFromWorkModel_Save()
+        {
+            Node nd = new Node(this.FK_Node);
+
+            BP.Sys.MapData md = new BP.Sys.MapData("ND" + this.FK_Node);
+
+            //用户选择的表单类型.
+            string selectFModel = this.GetValFromFrmByKey("FrmS");
+
+            //使用ccbpm内置的节点表单
+            if (selectFModel == "DefFrm")
+            {
+                string frmModel = this.GetValFromFrmByKey("RB_Frm");
+                if (frmModel == "0")
+                {
+                    nd.FormType = NodeFormType.FreeForm;
+                    nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;
+                    md.Update();
+                }
+                else
+                {
+                    nd.FormType = NodeFormType.FixForm;
+                    nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm;
+                    md.Update();
+                }
+
+                string refFrm = this.GetValFromFrmByKey("RefFrm");
+
+                if (refFrm == "0")
+                {
+                    nd.NodeFrmID = "";
+                    nd.DirectUpdate();
+                }
+
+                if (refFrm == "1")
+                {
+                    nd.NodeFrmID = "ND" + this.GetValFromFrmByKey("DDL_Frm");
+                    nd.DirectUpdate();
+                }
+            }
+
+            //使用傻瓜轨迹表单模式.
+            if (selectFModel == "FoolTruck")
+            {
+                nd.FormType = NodeFormType.FoolTruck;
+                nd.DirectUpdate();
+
+                md.HisFrmType = BP.Sys.FrmType.FoolForm;  //同时更新表单表住表.
+                md.Update();
+            }
+
+            //使用嵌入式表单
+            if (selectFModel == "SelfForm")
+            {
+                nd.FormType = NodeFormType.SelfForm;
+                nd.FormUrl = this.GetValFromFrmByKey("TB_CustomURL");
+                nd.DirectUpdate();
+
+                md.HisFrmType = BP.Sys.FrmType.Url;  //同时更新表单表住表.
+                md.Url = this.GetValFromFrmByKey("TB_CustomURL");
+                md.Update();
+
+            }
+            //使用SDK表单
+            if (selectFModel == "SDKForm")
+            {
+                nd.FormType = NodeFormType.SDKForm;
+                nd.FormUrl = this.GetValFromFrmByKey("TB_FormURL");
+                nd.DirectUpdate();
+
+                md.HisFrmType = BP.Sys.FrmType.Url;
+                md.Url = this.GetValFromFrmByKey("TB_FormURL");
+                md.Update();
+
+            }
+            //绑定多表单
+            if (selectFModel == "SheetTree")
+            {
+
+                string sheetTreeModel = this.GetValFromFrmByKey("SheetTreeModel");
+
+                if (sheetTreeModel == "0")
+                {
+                    nd.FormType = NodeFormType.SheetTree;
+                    nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
+                    md.Update();
+                }
+                else
+                {
+                    nd.FormType = NodeFormType.DisableIt;
+                    nd.DirectUpdate();
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm; //同时更新表单表住表.
+                    md.Update();
+                }
+            }
+
+            //如果公文表单选择了
+            if (selectFModel == "WebOffice")
+            {
+                nd.FormType = NodeFormType.WebOffice;
+                nd.Update();
+
+                //按钮标签.
+                BtnLabExtWebOffice btn = new BtnLabExtWebOffice(this.FK_Node);
+
+                // tab 页工作风格.
+                string WebOfficeStyle = this.GetValFromFrmByKey("WebOfficeStyle");
+                if (WebOfficeStyle == "0")
+                    btn.WebOfficeWorkModel = WebOfficeWorkModel.FrmFirst;
+                else
+                    btn.WebOfficeWorkModel = WebOfficeWorkModel.WordFirst;
+
+
+                string WebOfficeFrmType = this.GetValFromFrmByKey("WebOfficeFrmType");
+                //表单工作模式.
+                if (WebOfficeFrmType == "0")
+                {
+                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FreeFrm;
+
+                    md.HisFrmType = BP.Sys.FrmType.FreeFrm;  //同时更新表单表住表.
+                    md.Update();
+                }
+                else
+                {
+                    btn.WebOfficeFrmModel = BP.Sys.FrmType.FoolForm;
+
+                    md.HisFrmType = BP.Sys.FrmType.FoolForm; //同时更新表单表住表.
+                    md.Update();
+                }
+
+                btn.Update();
+            }
+
+            return "保存成功...";
+        }
+        #endregion 表单模式
+
+        #region 手机表单字段排序
+
+        public string SortingMapAttrs_Init()
+        {
+            MapDatas mapdatas;
+            MapAttrs attrs;
+            GroupFields groups;
+            MapDtls dtls;
+            FrmAttachments athMents;
+            FrmBtns btns;
+
+            #region 获取数据
+            mapdatas = new MapDatas();
+            QueryObject qo = new QueryObject(mapdatas);
+            qo.AddWhere(MapDataAttr.No, "Like", FK_MapData + "%");
+            qo.addOrderBy(MapDataAttr.Idx);
+            qo.DoQuery();
+
+            attrs = new MapAttrs();
+            qo = new QueryObject(attrs);
+            qo.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);
+            qo.addAnd();
+            qo.AddWhere(MapAttrAttr.UIVisible, true);
+            qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
+            qo.DoQuery();
+
+            btns = new FrmBtns(this.FK_MapData);
+            athMents = new FrmAttachments(this.FK_MapData);
+            dtls = new MapDtls(this.FK_MapData);
+
+            groups = new GroupFields();
+            qo = new QueryObject(groups);
+            qo.AddWhere(GroupFieldAttr.EnName, FK_MapData);
+            qo.addOrderBy(GroupFieldAttr.Idx);
+            qo.DoQuery();
+            #endregion
+
+            return BP.Tools.Json.ToJson("");
+        }
+
+        public string SortingMapAttrs_Save()
         {
             Node nd = new Node(this.FK_Node);
 

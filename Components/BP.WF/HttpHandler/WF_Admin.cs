@@ -759,35 +759,36 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        #region 按照部门条件计算》
+        #region 按照部门条件计算CondByDept_Delete
         /// <summary>
         /// 按照部门条件计算.
         /// </summary>
         /// <returns></returns>
         public string CondByDept_Init()
         {
-            CondType condType = (CondType)this.GetRequestValInt("CondType");
-            string mypk = this.GetRequestValInt("FK_MainNode") + "_" + this.GetRequestValInt("ToNodeID") + "_" + condType.ToString() + "_" + ConnDataFrom.Depts.ToString();
+            DataSet ds = new DataSet();
 
-            Cond cond = new Cond();
-            cond.MyPK = mypk;
-            if (cond.RetrieveFromDBSources() == 0)
-            {
-                cond.Row.Add("Nums", 0);
-                cond.SpecOperPara = "";
-            }
-            else
-            {
-                string[] strs = cond.OperatorValue.ToString().Split('@');
-                cond.Row.Add("Nums", strs.Length);
+            //部门
+            Depts depts = new Depts();
+            depts.RetrieveAllFromDBSource();
+            ds.Tables.Add(depts.ToDataTableField("Depts"));
 
-                if (cond.SpecOperPara == "")
-                    cond.SpecOperPara = "";
-            }
-            return cond.ToJson();
+            //取有可能存盘的数据.
+            //int FK_MainNode = this.GetRequestValInt("FK_MainNode");
+            //int ToNodeID = this.GetRequestValInt("ToNodeID");
+            Cond cond = new Cond(); 
+            //CondType condType = (CondType)this.GetRequestValInt("CondType");
+            //string mypk = this.GetRequestValInt("FK_MainNode") + "_" + this.GetRequestValInt("ToNodeID") + "_" + condType.ToString() + "_" + ConnDataFrom.Depts.ToString();
+            cond.MyPK = this.GetRequestVal("MyPK"); ;
+            cond.RetrieveFromDBSources();
+            ds.Tables.Add(cond.ToDataTableField("Cond"));
+
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
         public string CondByDept_Save()
         {
+            int FK_MainNode = this.GetRequestValInt("FK_MainNode");
+            int ToNodeID = this.GetRequestValInt("ToNodeID");
             CondType condType = (CondType)this.GetRequestValInt("CondType");
 
             Cond cond = new Cond();
@@ -808,63 +809,66 @@ namespace BP.WF.HttpHandler
                 cond.Insert();
             }
 
-            string val = "";
-
-            //Depts sts = new Depts();
-            //sts.RetrieveAllFromDBSource();
-            //foreach (Dept st in sts)
-            //{
-            //    if (this.Pub1.IsExit("CB_" + st.No) == false)
-            //        continue;
-            //    if (this.Pub1.GetCBByID("CB_" + st.No).Checked)
-            //        val += "@" + st.No;
-            //}
-
-            if (val == "")
-                cond.Delete();
-
-            val += "@";
+            string val = this.GetRequestVal("depts").Replace(",", "@");
             cond.OperatorValue = val;
-            cond.FK_Flow = this.FK_Flow;
-            cond.HisCondType = condType;
-            cond.FK_Node = this.FK_Node;
-            cond.ToNodeID = this.GetRequestValInt("ToNodeID");
-
-            #region //获取“指定的操作员”设置，added by liuxc,2015-10-7
-
-            int specOperWay = this.GetRequestValInt("DDL_SpecOperWay");
-            cond.SpecOperWay = (SpecOperWay)specOperWay;
-
+            cond.SpecOperWay = (SpecOperWay)this.GetRequestValInt("DDL_SpecOperWay");
             if (cond.SpecOperWay != SpecOperWay.CurrOper)
             {
-                cond.SpecOperPara = this.GetRequestVal("TB_SpecOperPara"); // Pub1.GetTBByID("TB_" + CondAttr.SpecOperPara).Text;
+                cond.SpecOperPara = this.GetRequestVal("TB_SpecOperPara");
             }
             else
             {
                 cond.SpecOperPara = string.Empty;
             }
-            #endregion
+            cond.HisDataFrom = ConnDataFrom.Stas;
+            cond.FK_Flow = this.FK_Flow;
+            cond.HisCondType = CondType.Dir;
+            cond.FK_Node = FK_MainNode;
 
-            switch (condType)
-            {
-                case CondType.Flow:
-                case CondType.Node:
-                    cond.Update();
-                    break;
-                case CondType.Dir:
-                    cond.ToNodeID = this.GetRequestValInt("ToNodeID");
-                    cond.Update();
-                    break;
-                case CondType.SubFlow:
-                    cond.ToNodeID = this.GetRequestValInt("ToNodeID");
-                    cond.Update();
-                    break;
-                default:
-                    throw new Exception("未设计的情况。");
-            }
+
+
+            cond.ToNodeID = ToNodeID;
+            cond.Update();
+
+            //switch (condType)
+            //{
+            //    case CondType.Flow:
+            //    case CondType.Node:
+            //        cond.Update();
+            //        break;
+            //    case CondType.Dir:
+            //        cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+            //        cond.Update();
+            //        break;
+            //    case CondType.SubFlow:
+            //        cond.ToNodeID = this.GetRequestValInt("ToNodeID");
+            //        cond.Update();
+            //        break;
+            //    default:
+            //        throw new Exception("未设计的情况。");
+            //}
 
             return "保存成功!!";
         }
+        public string CondByDept_Delete()
+        {
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            string mypk = fk_mainNode + "_" + toNodeID + "_" + condTypeEnum + "_" + ConnDataFrom.SQL.ToString();
+
+            Cond deleteCond = new Cond();
+            int i = deleteCond.Delete(CondAttr.NodeID, fk_mainNode,
+               CondAttr.ToNodeID, toNodeID,
+               CondAttr.CondType, (int)condTypeEnum);
+
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+
         #endregion
 
         #region 方向条件Para

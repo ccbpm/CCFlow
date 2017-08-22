@@ -1253,7 +1253,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoBill()
         {
-            return "../../Admin/AttrNode/Bill.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
+            return "../../Admin/AttrNode/Bill.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
         }
         /// <summary>
         /// 设置

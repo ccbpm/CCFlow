@@ -1,39 +1,39 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8" />
-    <title>方向条件-按照岗位计算</title>
-    <!-- 于庆海 -->
-    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>方向条件-按照部门计算</title>
     <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <!-- 引用通用的js文件. -->
-    <script type="text/javascript" src="../Comm/Gener.js"></script>
-    <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script src="../Comm/JScript.js" type="text/javascript"></script>
-    <script type="text/javascript" language="javascript">
-        //页面启动函数.
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //初始化页面函数.....
         $(function () {
 
-            $("#Msg").html("正在加载,请稍后......");
-
-            InitPage();
-
-            $("#Msg").html("");
-        });
-        //初始化数据.
-        function InitPage() {
-
-            var fk_node = GetQueryString("FK_Node");
+            var condType = GetQueryString("CondType");
+            var fk_flow = GetQueryString("FK_Flow");
+            var fk_mainNode = GetQueryString("FK_MainNode");
+            var fk_Node = GetQueryString("FK_Node");
+            var toNodeID = GetQueryString("ToNodeID");
             var param = location.href.split("?")[1];
-
 
             //初始化表格.
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CondByStation_Init&FK_Node=" + fk_node + "&m=" + Math.random() + "&" + param,
+                url: Handler + "?DoType=CondByDept_Init&FK_Node=" + fk_Node + "&m=" + Math.random() + "&" + param,
                 dataType: 'html',
                 success: function (data) {
 
@@ -44,45 +44,27 @@
 
                     data = JSON.parse(data);
 
-                    var fk_CondStationTemplate = GetQueryString("FK_CondStationTemplate");
-                    var currCondStation = null;
 
-                    //生成岗位列表.
+                    //生成部门列表.
                     //bgein
-                    var types = data.StationTypes;
-                    var sts = data.Stations;
-                    var cond = data.Cond[0].OperatorValue;
-                    for (var i = 0, len = types.length; i < len; i++) {
-                        var typeno = types[i].No;
-
-                        var curstas = [];
-                        var ids = "";
-                        for (var j = 0, jlen = sts.length; j < jlen; j++) {
-                            if (sts[j].FK_StationType == typeno) {
-                                curstas.push(sts[j]);
-                                ids += "CB_" + sts[j].No + ",";
-                            }
+                    var depts = data.Depts;
+                    var cond = data.Cond[0]; 
+                    $("#t1").append("<td colspan=3 class='GroupTitle' >部门选择</td>");
+                    for (var i = 0, len = depts.length; i < len; i++) {                        
+                        var td = "<td><input type='checkbox' id='dept_CB_" + depts[i].No + "' name='dept_CB_" + depts[i].No + "'/><lable>" + depts[i].Name + "</lable></td>";
+                        if (i % 3 == 0) {
+                            $("#t1").append("<tr></tr>");
                         }
-
-                        var title = "<tr><td colspan='3' class='GroupTitle'><input id='CB_type_" + typeno + "' type='checkbox' name='CB_type_" + typeno + "' onclick=\"SetSelected(this,'" + ids + "')\"/><label>" + types[i].Name + "</label></td></tr>";
-                        $("#t1").append(title);
-
-                        for (var k = 0, klen = curstas.length; k < klen; k++) {
-                            var td = "<td><input type='checkbox' id='emp_CB_" + curstas[k].No + "' name='emp_CB_" + curstas[k].No + "'/><lable>" + curstas[k].Name + "</lable></td>";
-                            if (k % 3 == 0) {
-                                $("#t1").append("<tr></tr>");
-                            }
-                            $("#t1 tr:last").append(td);
-                        }
+                        $("#t1 tr:last").append(td);
                     }
 
-                    var emps = cond.split("@");
-                    for (i = 0, len = emps.length; i < len; i++) {
-                        if (emps[i] == "") continue;
-                        document.getElementById("emp_CB_" + emps[i]).checked = true;
+                    var initDepts = cond.OperatorValue.split("@");
+                    for (i = 0, len = initDepts.length; i < len; i++) {
+                        if (initDepts[i] == "") continue;
+                        document.getElementById("dept_CB_" + initDepts[i]).checked = true;
                     }
                     //TODO 条件参数
-                    var atpara = data.Cond[0].AtPara;
+                    var atpara = cond.AtPara;
                     if (atpara != "") {
                         var initDDL_SpecOperWay = atpara.split("@")[1].split("=")[1];
                         document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
@@ -93,7 +75,7 @@
                         if (initDDL_SpecOperWay != 0) {
                             document.getElementById("TB_SpecOperPara").disabled = "";
                         }
-                        document.getElementById("initTB_SpecOperPara").value = initTB_SpecOperPara; 
+                        document.getElementById("initTB_SpecOperPara").value = initTB_SpecOperPara;
                         $("#span" + initDDL_SpecOperWay).css("display", "inline-block");
                         $("#span" + initDDL_SpecOperWay).siblings().css("display", "none");
                     }
@@ -101,49 +83,21 @@
 
                     //end
 
-                    //调用公共类库的方法:执行批量主表赋值
-                    if (currCondStation != null)
-                        GenerFullAllCtrlsVal(currCondStation);
+                    
                 }
             });
-        }
+        });
 
-        function Btn_Delete_Click() {
-
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-
-            var param = location.href.split("?")[1];
-            $.ajax({
-                data:'',
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondByStation_Delete&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&" + param,
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
-        }
-
-        //ajax 提交
+        //执行保存..CondByDept_Save
         function Btn_Save_Click() {
 
             var param = location.href.split("?")[1];
-            //var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
             //获取所有选中的checkbox
-            var emps = ",";
+            var depts = ",";
             $("input[type='checkbox']").each(function () {
 
-                if (this.checked && this.name.indexOf("emp_CB_") == 0) {
-                    emps += this.name.replace("emp_CB_","") + ",";
+                if (this.checked && this.name.indexOf("dept_CB_") == 0) {
+                    depts += this.name.replace("dept_CB_", "") + ",";
                 }
             });
 
@@ -153,7 +107,7 @@
                 data: frmData,
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CondByStation_Save" + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&emps=" + emps + "&" + param,
+                url: Handler + "?DoType=CondByDept_Save" + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&depts=" + depts + "&" + param,
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf('err@') >= 0) {
@@ -161,6 +115,32 @@
                         return;
                     }
                     alert(data);
+                    window.location.href = window.location.href;
+                    return;
+                }
+            });
+        }
+
+        //执行删除..
+        function Btn_Delete_Click() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var param = location.href.split("?")[1];
+            $.ajax({
+                data: '',
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=CondByDept_Delete&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&" + param,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        return;
+                    }
+
                     window.location.href = window.location.href;
                     return;
                 }
@@ -224,8 +204,8 @@
          }
     </style>
 </head>
-<body>
-    <form action="/" method="post" id="cc">
+<body onkeypress="Esc();">
+    <form id="cc">
     <div>
         <table id="t1" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 100%">
         </table>

@@ -1352,7 +1352,7 @@ namespace BP.Sys
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "属性", true, true, 1, 200, 20);
 
                 map.AddTBString(MapAttrAttr.Name, null, "描述", true, false, 0, 200, 20);
-                map.AddTBString(MapAttrAttr.DefVal, null, "默认值", false, false, 0, 4000, 20);
+                map.AddTBString(MapAttrAttr.DefVal, null, "默认值", false, false, 0, 400, 20);
 
              //   map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "空件类型", true, false, MapAttrAttr.UIContralType, "@0=文本框@1=下拉框");
              //   map.AddDDLSysEnum(MapAttrAttr.MyDataType, 0, "数据类型", true, false, MapAttrAttr.MyDataType,

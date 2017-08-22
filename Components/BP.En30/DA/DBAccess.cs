@@ -237,7 +237,7 @@ namespace BP.DA
             if (byteFile == null)
                 return null;
 
-            System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
+            //System.Text.UnicodeEncoding converter = new System.Text.UnicodeEncoding();
             //return converter.GetString(byteFile);
             return System.Text.Encoding.UTF8.GetString(byteFile);
         }
@@ -363,7 +363,7 @@ namespace BP.DA
                     if (BP.DA.DBAccess.IsExitsTableCol(tableName, fileSaveField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + fileSaveField + " LONGBLOB NULL ";
+                        string sql = "ALTER TABLE " + tableName + " ADD " + fileSaveField + " LONGBLOB NULL ";
                         BP.DA.DBAccess.RunSQL(sql);
                     }
                     throw new Exception("@缺少此字段,有可能系统自动修复." + ex.Message);
@@ -375,7 +375,7 @@ namespace BP.DA
                     if (dr[0] == null || string.IsNullOrEmpty(dr[0].ToString()))
                         return null;
 
-                    byteFile = (byte[])dr[0];
+                    byteFile = System.Text.Encoding.Default.GetBytes(dr[0].ToString());
                 }
 
                 return byteFile;

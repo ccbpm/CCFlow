@@ -109,7 +109,7 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
 
                 #region 基本信息.
-                map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 300, 20);
+                map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
 
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
@@ -130,7 +130,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddBoolean("ExtIsSum", false, "是否显示合计(对从表有效)", true, true);
 
-                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 4000, 20, true);
+                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
                 #endregion 基本信息.
 
                 #region 傻瓜表单。

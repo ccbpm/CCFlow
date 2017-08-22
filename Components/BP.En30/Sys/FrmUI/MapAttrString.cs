@@ -95,7 +95,7 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
 
                 #region 基本信息.
-                map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 300, 20);
+                map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
 
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
@@ -107,7 +107,7 @@ namespace BP.Sys.FrmUI
                 //显示的分组.
                 map.AddDDLSQL("ExtDefVal", "0", "系统默认值", sql, true);
 
-                map.AddTBString(MapAttrAttr.DefVal, null, "默认值表达式", true, false, 0, 3000, 20);
+                map.AddTBString(MapAttrAttr.DefVal, null, "默认值表达式", true, false, 0, 400, 20);
 
                 map.AddTBFloat(MapAttrAttr.MinLen, 0, "最小长度", true, false);
                 map.AddTBFloat(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
@@ -122,7 +122,7 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
                 map.AddBoolean("IsRichText", false, "是否大块文本？", true, true);
                 map.AddBoolean("IsSupperText", false, "是否富文本？", true, true);
-                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 500, 20,true);
+                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
 
                 #endregion 基本信息.
 

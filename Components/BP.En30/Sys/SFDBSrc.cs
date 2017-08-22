@@ -46,9 +46,9 @@ namespace BP.Sys
         /// </summary>
         WebServices = 100,
         /// <summary>
-        /// 海尔的double服务.
+        /// 海尔的Dubbo服务.
         /// </summary>
-        Double=200
+        Dubbo=50
     }
     /// <summary>
     /// 数据源

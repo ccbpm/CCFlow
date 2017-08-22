@@ -95,7 +95,7 @@ namespace BP.Sys.FrmUI
                 map.Java_SetEnType(EnType.Sys);
 
                 #region 基本信息.
-                map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 300, 20);
+                map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
 
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);

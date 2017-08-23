@@ -688,13 +688,57 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                     if (fileName.IndexOf(".") != -1)
                         ext = fileName.Substring(fileName.LastIndexOf(".") + 1);
 
+                    string reldir = path;
+                    if (reldir.Length > SystemConfig.PathOfDataUser.Length)
+                        reldir =
+                            reldir.Substring(reldir.ToLower().IndexOf(@"\datauser\") + @"\datauser\".Length).Replace(
+                                @"\", "/");
+                    else
+                        reldir = "";
+
+                    if (reldir.Length > 0 && Equals(reldir[0], '/') == true)
+                        reldir = reldir.Substring(1);
+
+                    if (reldir.Length > 0 && Equals(reldir[reldir.Length - 1], '/') == false)
+                        reldir += "/";
+
                     en.SetValByKey("MyFileExt", ext);
                     en.SetValByKey("MyFileName", fileName);
-                    en.SetValByKey("WebPath", "//DataUser//"+ path + en.PKVal + "." + ext);
+                    en.SetValByKey("WebPath", "/DataUser/"+ reldir + en.PKVal + "." + ext);
 
-                    string fullFile = path + "/" + en.PKVal + "." + ext;
+                    string fullFile = path + @"\" + en.PKVal + "." + ext;
 
-                    file.PostedFile.SaveAs(fullFile);
+                    //检测是否已经存在此文件
+                    string tmpFile = path + @"\" + en.PKVal + ".tmp";
+                    if (System.IO.File.Exists(fullFile))
+                    {
+                        System.IO.FileInfo fi = new System.IO.FileInfo(fullFile);
+                        if (fi.IsReadOnly)
+                            fi.IsReadOnly = false;
+
+                        System.IO.File.Copy(fullFile, tmpFile, true);
+                        System.IO.File.Delete(fullFile);
+                    }
+
+                    try
+                    {
+                        file.PostedFile.SaveAs(fullFile);
+
+                        try
+                        {
+                            if (System.IO.File.Exists(tmpFile))
+                                System.IO.File.Delete(tmpFile);
+                        }
+                        catch { }
+                    }
+                    catch (Exception ex0)
+                    {
+                        if (System.IO.File.Exists(tmpFile))
+                            System.IO.File.Move(tmpFile, fullFile);
+
+                        throw ex0;
+                    }
+
                     file.PostedFile.InputStream.Close();
                     file.PostedFile.InputStream.Dispose();
                     file.Dispose();

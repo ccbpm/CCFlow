@@ -2699,7 +2699,7 @@ function figure_Template_Image(frmImage) {
         //数据来源为本地.
         var imgSrc = '';
         if (frmImage.ImgSrcType == 0) {
-            if (frmImage.ImgPath.indexOf(";") < 0)
+            if (frmImage.ImgPath && frmImage.ImgPath.indexOf(";") < 0)
                 imgSrc = frmImage.ImgPath;
             else
                 imgSrc = frmImage.ImgPath;
@@ -2708,7 +2708,7 @@ function figure_Template_Image(frmImage) {
         //数据来源为指定路径.
         if (frmImage.ImgSrcType == 1) {
             //图片路径不为默认值
-            if (frmImage.ImgURL.indexOf(";") < 0)
+            if (frmImage.ImgURL && frmImage.ImgURL.indexOf(";") < 0)
                 imgSrc = frmImage.ImgURL;
             else
                 imgSrc = frmImage.ImgURL;

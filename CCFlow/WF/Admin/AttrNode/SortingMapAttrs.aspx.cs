@@ -191,10 +191,11 @@ namespace CCFlow.WF.Admin
 
             if (mapdata != null)
             {
+                #region 一、面板1、 分组数据+未分组数据
                 pub1.AddEasyUiPanelInfoBegin(mapdata.Name + "[" + mapdata.No + "]字段排序", padding: 5);
                 pub1.AddTable("class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'");
 
-                #region 标题行
+                #region 标题行常量
 
                 pub1.AddTR();
                 pub1.AddTDGroupTitle("style='width:40px;text-align:center'", "序");
@@ -206,6 +207,7 @@ namespace CCFlow.WF.Admin
 
                 #endregion
 
+                #region A、构建数据dtNoGroupAttrs，这个放在前面
                 //检索全部字段，查找出没有分组或分组信息不正确的字段，存入“无分组”集合
                 dtNoGroupAttrs = dt_Attr.Clone();
 
@@ -214,7 +216,11 @@ namespace CCFlow.WF.Admin
                     if (IsExistInDataRowArray(dtGroups.Rows, GroupFieldAttr.OID, dr[MapAttrAttr.GroupID]) == false)
                         dtNoGroupAttrs.Rows.Add(dr.ItemArray);
                 }
-                //未分组明细表,自动创建一个
+                #endregion
+
+                #region B、构建数据dtGroups，这个放在后面(！！涉及更新数据库)
+                #region 如果没有，则创建分组（1.明细2.多附件3.按钮）
+                //01、未分组明细表,自动创建一个
                 foreach (MapDtl mapDtl in dtls)
                 {
                     if (GetGroupID(mapDtl.No, groups) == 0)
@@ -229,7 +235,7 @@ namespace CCFlow.WF.Admin
                         groups.AddEntity(group);
                     }
                 }
-                //未分组多附件自动分配一个
+                //02、未分组多附件自动分配一个
                 foreach (FrmAttachment athMent in athMents)
                 {
                     if (GetGroupID(athMent.MyPK, groups) == 0)
@@ -248,7 +254,7 @@ namespace CCFlow.WF.Admin
                     }
                 }
 
-                //未分组按钮自动创建一个
+                //03、未分组按钮自动创建一个
                 foreach (FrmBtn fbtn in btns)
                 {
                     if (GetGroupID(fbtn.MyPK, groups) == 0)
@@ -266,15 +272,14 @@ namespace CCFlow.WF.Admin
                         groups.AddEntity(group);
                     }
                 }
+                #endregion
 
                 dtGroups = groups.ToDataTableField("dtGroups");
+                #endregion
 
                 foreach (DataRow drGrp in dtGroups.Rows)
                 {
-                    //分组中的字段
-                    rows_Attrs = dt_Attr.Select(string.Format("FK_MapData = '{0}' AND GroupID = {1}", FK_MapData, drGrp["OID"]));
-
-                    #region 分组行
+                    #region 01、当前分组标题行tr
 
                     pub1.AddTR();
                     pub1.AddTDBegin("colspan='5' class='GroupTitle'");
@@ -303,11 +308,15 @@ namespace CCFlow.WF.Admin
 
                     #endregion
 
+                    #region 02、当前分组每个字段一行（循环）
+                    //分组中的字段
+                    rows_Attrs = dt_Attr.Select(string.Format("FK_MapData = '{0}' AND GroupID = {1}", FK_MapData, drGrp["OID"]));
+
                     idx_Attr = 1;
 
                     foreach (DataRow row in rows_Attrs)
                     {
-                        #region 字段行
+                        #region 字段行tr
 
                         ddl = new DDL();
                         ddl.ID = "DDL_Group_" + drGrp[GroupFieldAttr.OID] + "_" + row[MapAttrAttr.KeyOfEn];
@@ -353,8 +362,10 @@ namespace CCFlow.WF.Admin
 
                         idx_Attr++;
                     }
+                    #endregion
 
-                    #region 多附件行
+                    #region 03、当前分组多附件行（循环）
+                    #region 03-1.先构建数据
                     List<FrmAttachment> groupOfAthMents = new List<FrmAttachment>();
                     foreach (FrmAttachment athMent in athMents)
                     {
@@ -364,14 +375,17 @@ namespace CCFlow.WF.Admin
                             continue;
                         groupOfAthMents.Add(athMent);
                     }
+                    #endregion
+                    #region 03-2 构建行tr
                     //此分组存在多附件
                     if (groupOfAthMents.Count > 0)
                     {
                         GroupAddAthMent(groupOfAthMents);
                     }
                     #endregion
+                    #endregion
 
-                    #region 明细表行
+                    #region 04、明细表行
                     List<MapDtl> groupOfDtls = new List<MapDtl>();
                     foreach (MapDtl mapDtl in dtls)
                     {
@@ -386,7 +400,7 @@ namespace CCFlow.WF.Admin
                     }
                     #endregion
 
-                    #region 按钮行
+                    #region 05、按钮行
                     List<FrmBtn> groupOfBtns = new List<FrmBtn>();
                     foreach (FrmBtn fbtn in btns)
                     {
@@ -401,7 +415,7 @@ namespace CCFlow.WF.Admin
                     }
                     #endregion
 
-                    //如果此分组下没有字段，则显示无字段消息
+                    #region 00、如果此分组下没有字段，则显示无字段消息
                     if (rows_Attrs.Length == 0 && groupOfAthMents.Count == 0 && groupOfDtls.Count == 0 && groupOfBtns.Count == 0)
                     {
                         #region 该分组下面没有任何字段
@@ -411,8 +425,10 @@ namespace CCFlow.WF.Admin
                         pub1.Add("@该分组下面没有任何字段或控件");
                         pub1.AddTDEnd();
                         pub1.AddTREnd();
-                        #endregion 
+                        #endregion
                     }
+                    #endregion
+
                     gidx++;
                 }
 
@@ -460,9 +476,10 @@ namespace CCFlow.WF.Admin
 
                 pub1.AddTableEnd();
                 pub1.AddEasyUiPanelInfoEnd();
-                pub1.AddBR();
+                pub1.AddBR(); 
+                #endregion
 
-                #region //检测是否含有明细表，与分组不对应的明细表做排序
+                #region 二、面板2、检测是否含有明细表，与分组不对应的明细表做排序
                 if (dtls.Count < 0)
                 {
                     pub1.AddEasyUiPanelInfoBegin("未分组明细表排序", padding: 5);
@@ -526,7 +543,7 @@ namespace CCFlow.WF.Admin
                 }
                 #endregion
 
-                #region //如果是明细表的字段排序，则增加“返回”按钮；否则增加“复制排序”按钮,2016-03-21
+                #region 三、其他。如果是明细表的字段排序，则增加“返回”按钮；否则增加“复制排序”按钮,2016-03-21
 
                 MapDtl tdtl = new MapDtl();
                 tdtl.No = FK_MapData;

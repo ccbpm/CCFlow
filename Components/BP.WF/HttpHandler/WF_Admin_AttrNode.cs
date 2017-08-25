@@ -398,6 +398,7 @@ namespace BP.WF.HttpHandler
         #endregion 表单模式
 
         #region 手机表单字段排序
+        #region SortingMapAttrs_Init
 
         public string SortingMapAttrs_Init()
         {
@@ -407,6 +408,8 @@ namespace BP.WF.HttpHandler
             MapDtls dtls;
             FrmAttachments athMents;
             FrmBtns btns;
+
+            Nodes nodes = null;
 
             #region 获取数据
             mapdatas = new MapDatas();
@@ -434,9 +437,262 @@ namespace BP.WF.HttpHandler
             qo.DoQuery();
             #endregion
 
-            return BP.Tools.Json.ToJson("");
+
+            DataSet ds = new DataSet();
+
+            _BindData4SortingMapAttrs_Init(mapdatas,
+            attrs,
+            groups,
+            dtls,
+            athMents,
+            btns,
+            nodes,
+            ds);
+
+
+
+
+            //string s = "";
+
+            return BP.Tools.Json.ToJson(ds);
         }
 
+        private void _BindData4SortingMapAttrs_Init(MapDatas mapdatas,
+            MapAttrs attrs,
+            GroupFields groups,
+            MapDtls dtls,
+            FrmAttachments athMents,
+            FrmBtns btns,
+            Nodes nodes,
+            DataSet ds)
+        {
+            MapData mapdata = mapdatas.GetEntityByKey(FK_MapData) as MapData;
+            DataTable dtAttrs = attrs.ToDataTableField("dtAttrs");
+            DataTable dtDtls = dtls.ToDataTableField("dtDtls");
+            DataTable dtGroups = groups.ToDataTableField("dtGroups");
+            DataTable dtNoGroupAttrs = null;
+            DataRow[] rows_Attrs = null;
+            //LinkBtn btn = null;
+            //DDL ddl = null;
+            int idx_Attr = 1;
+            int gidx = 1;
+            GroupField group = null;
+
+            if (mapdata != null)
+            {
+                #region 一、面板1、 分组数据+未分组数据
+                //pub1.AddEasyUiPanelInfoBegin(mapdata.Name + "[" + mapdata.No + "]字段排序", padding: 5);
+                //pub1.AddTable("class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'");
+
+                #region 标题行常量
+
+                //pub1.AddTR();
+                //pub1.AddTDGroupTitle("style='width:40px;text-align:center'", "序");
+                //pub1.AddTDGroupTitle("style='width:100px;'", "字段名称");
+                //pub1.AddTDGroupTitle("style='width:160px;'", "中文描述");
+                //pub1.AddTDGroupTitle("style='width:160px;'", "字段分组");
+                //pub1.AddTDGroupTitle("字段排序");
+                //pub1.AddTREnd();
+
+                #endregion
+
+                #region A、构建数据dtNoGroupAttrs，这个放在前面
+                //检索全部字段，查找出没有分组或分组信息不正确的字段，存入“无分组”集合
+                dtNoGroupAttrs = dtAttrs.Clone();
+
+                foreach (DataRow dr in dtAttrs.Rows)
+                {
+                    if (IsExistInDataRowArray(dtGroups.Rows, GroupFieldAttr.OID, dr[MapAttrAttr.GroupID]) == false)
+                        dtNoGroupAttrs.Rows.Add(dr.ItemArray);
+                }
+                #endregion
+
+                #region B、构建数据dtGroups，这个放在后面(！！涉及更新数据库)
+                #region 如果没有，则创建分组（1.明细2.多附件3.按钮）
+                //01、未分组明细表,自动创建一个
+                foreach (MapDtl mapDtl in dtls)
+                {
+                    if (GetGroupID(mapDtl.No, groups) == 0)
+                    {
+                        group = new GroupField();
+                        group.Lab = mapDtl.Name;
+                        group.EnName = mapDtl.FK_MapData;
+                        group.CtrlType = GroupCtrlType.Dtl;
+                        group.CtrlID = mapDtl.No;
+                        group.Insert();
+
+                        groups.AddEntity(group);
+                    }
+                }
+                //02、未分组多附件自动分配一个
+                foreach (FrmAttachment athMent in athMents)
+                {
+                    if (GetGroupID(athMent.MyPK, groups) == 0)
+                    {
+                        group = new GroupField();
+                        group.Lab = athMent.Name;
+                        group.EnName = athMent.FK_MapData;
+                        group.CtrlType = GroupCtrlType.Ath;
+                        group.CtrlID = athMent.MyPK;
+                        group.Insert();
+
+                        athMent.GroupID = group.OID;
+                        athMent.Update();
+
+                        groups.AddEntity(group);
+                    }
+                }
+
+                //03、未分组按钮自动创建一个
+                foreach (FrmBtn fbtn in btns)
+                {
+                    if (GetGroupID(fbtn.MyPK, groups) == 0)
+                    {
+                        group = new GroupField();
+                        group.Lab = fbtn.Text;
+                        group.EnName = fbtn.FK_MapData;
+                        group.CtrlType = GroupCtrlType.Btn;
+                        group.CtrlID = fbtn.MyPK;
+                        group.Insert();
+
+                        fbtn.GroupID = group.OID;
+                        fbtn.Update();
+
+                        groups.AddEntity(group);
+                    }
+                }
+                #endregion
+
+                dtGroups = groups.ToDataTableField("dtGroups");
+                #endregion
+
+                
+                #endregion
+
+
+                #region 三、其他。如果是明细表的字段排序，则增加“返回”按钮；否则增加“复制排序”按钮,2016-03-21
+
+                MapDtl tdtl = new MapDtl();
+                tdtl.No = FK_MapData;
+                if (tdtl.RetrieveFromDBSources() == 1)
+                {
+                    //pub1.Add(
+                    //        string.Format(
+                    //            "<a href='{0}' target='_self' class='easyui-linkbutton' data-options=\"iconCls:'icon-back'\">返回</a>",
+                    //            Request.Path + "?FK_Flow=" + (FK_Flow ??
+                    //                                          string.Empty) +
+                    //            "&FK_MapData=" + tdtl.FK_MapData +
+                    //            "&t=" +
+                    //            DateTime.Now.ToString("yyyyMMddHHmmssffffff")));
+                }
+                else
+                {
+                    //btn = new LinkBtn(false, "Btn_ResetAttr_Idx", "重置顺序");
+                    //btn.SetDataOption("iconCls", "'icon-reset'");
+                    //btn.Click += btnReSet_Click;
+                    //pub1.Add(btn);
+                    //pub1.Add("<a href='javascript:void(0)' onclick=\"Form_View('" + this.FK_MapData + "','" + this.FK_Flow + "');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-search'\">预览</a>");
+                    //pub1.Add("<a href='javascript:void(0)' onclick=\"$('#nodes').dialog('open');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-copy'\">复制排序</a>");
+                    //pub1.Add("&nbsp;<a href='javascript:void(0)' onclick=\"GroupFieldNew('" + this.FK_MapData + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-addfolder'\">新建分组</a>");
+                    //pub1.AddBR();
+                    //pub1.AddBR();
+
+                    //pub1.Add(
+                    //    "<div id='nodes' class='easyui-dialog' data-options=\"title:'选择复制到节点（多选）:',closed:true,buttons:'#btns'\" style='width:280px;height:340px'>");
+
+                    //ListBox lb = new ListBox();
+                    //lb.Style.Add("width", "100%");
+                    //lb.Style.Add("Height", "100%");
+                    //lb.SelectionMode = ListSelectionMode.Multiple;
+                    //lb.BorderStyle = BorderStyle.None;
+                    //lb.ID = "lbNodes";
+
+                    nodes = new Nodes();
+                    nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
+
+                    if (nodes.Count == 0)
+                    {
+                        string nodeid = FK_MapData.Replace("ND", "");
+                        string flowno = string.Empty;
+
+                        if (nodeid.Length > 2)
+                        {
+                            flowno = nodeid.Substring(0, nodeid.Length - 2).PadLeft(3, '0');
+                            nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, flowno, BP.WF.Template.NodeAttr.Step);
+                        }
+                    }
+
+                    //ListItem item = null;
+
+                    //foreach (BP.WF.Node node in nodes)
+                    //{
+                    //    item = new ListItem(string.Format("({0}){1}", node.NodeID, node.Name),
+                    //                              node.NodeID.ToString());
+
+                    //    if ("ND" + node.NodeID == FK_MapData)
+                    //        item.Attributes.Add("disabled", "disabled");
+
+                    //    lb.Items.Add(item);
+                    //}
+
+                    //pub1.Add(lb);
+                    //pub1.AddDivEnd();
+
+                    //pub1.Add("<div id='btns'>");
+
+                    //LinkBtn lbtn = new LinkBtn(false, NamesOfBtn.Copy, "复制");
+                    //lbtn.OnClientClick = "var v = $('#" + lb.ClientID + "').val(); if(!v) { alert('请选择将此排序复制到的节点！'); return false; } else { $('#" + hidCopyNodes.ClientID + "').val(v); return true; }";
+                    //lbtn.Click += new EventHandler(lbtn_Click);
+                    //pub1.Add(lbtn);
+                    //lbtn = new LinkBtn(false, NamesOfBtn.Cancel, "取消");
+                    //lbtn.OnClientClick = "$('#nodes').dialog('close');";
+                    //pub1.Add(lbtn);
+
+                    //pub1.AddDivEnd();
+                }
+                #endregion
+
+
+                ds.Tables.Add(mapdatas.ToDataTableField("mapdatas"));
+                dtGroups.TableName = "dtGroups";
+                ds.Tables.Add(dtGroups);
+                dtNoGroupAttrs.TableName = "dtNoGroupAttrs";
+                ds.Tables.Add(dtNoGroupAttrs);
+                dtAttrs.TableName = "dtAttrs";
+                ds.Tables.Add(dtAttrs);
+                dtDtls.TableName = "dtDtls";
+                ds.Tables.Add(dtDtls);
+                ds.Tables.Add(athMents.ToDataTableField("athMents"));
+                ds.Tables.Add(btns.ToDataTableField("btns"));
+                ds.Tables.Add(nodes.ToDataTableField("nodes"));
+            }
+        }
+
+        /// <summary>
+        /// 判断在DataRow数组中，是否存在指定列指定值的行
+        /// </summary>
+        /// <param name="rows">DataRow数组</param>
+        /// <param name="field">指定列名</param>
+        /// <param name="value">指定值</param>
+        /// <returns></returns>
+        private bool IsExistInDataRowArray(DataRowCollection rows, string field, object value)
+        {
+            foreach (DataRow row in rows)
+            {
+                if (Equals(row[field], value))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private int GetGroupID(string ctrlID, GroupFields gfs)
+        {
+            GroupField gf = gfs.GetEntityByKey(GroupFieldAttr.CtrlID, ctrlID) as GroupField;
+            return gf == null ? 0 : gf.OID;
+        }
+
+        #endregion
         public string SortingMapAttrs_Save()
         {
             Node nd = new Node(this.FK_Node);

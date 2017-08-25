@@ -381,7 +381,7 @@ namespace CCFlow.WF.Comm.RefFunc
                     if (myurl == null)
                         continue;
 
-                    myurl += InLayer;
+                    myurl += (func.RefMethodType == RefMethodType.RightFrameOpen ? InLayer : "");
                     int h = func.Height;
 
                     if (func.RefMethodType == RefMethodType.RightFrameOpen)

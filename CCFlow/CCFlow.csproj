@@ -1005,7 +1005,6 @@
     <Content Include="WF\Admin\AttrNode\NodeCCRole.aspx" />
     <Content Include="WF\Admin\AttrNode\NodeCCRole.htm" />
     <Content Include="WF\Admin\AttrNode\NodeFromWorkModel.htm" />
-    <Content Include="WF\Admin\AttrNode\PushMessage.aspx" />
     <Content Include="WF\Admin\AttrNode\PushMessage.htm" />
     <Content Include="WF\Admin\AttrNode\PushMessageEntity.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
@@ -1732,7 +1731,6 @@
     <Content Include="WF\Admin\CondDept.aspx" />
     <Content Include="WF\Admin\ConditionSubFlow.aspx" />
     <Content Include="WF\Admin\ConditionSubFlowDtl.aspx" />
-    <Content Include="WF\Admin\CondStation.aspx" />
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\DoType.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
@@ -2551,7 +2549,6 @@
     <Content Include="WF\Comm\Sys\Img\View.png" />
     <Content Include="WF\Comm\Sys\Img\WS.png" />
     <Content Include="WF\Comm\Sys\Pub.ascx" />
-    <Content Include="WF\Comm\Sys\SFDBSrcNewGuide.aspx" />
     <Content Include="WF\Comm\Sys\SFGuide.aspx" />
     <Content Include="WF\Comm\Sys\SFGuide.htm" />
     <Content Include="WF\Comm\Sys\SFTableList.aspx" />
@@ -8690,13 +8687,6 @@
     <Compile Include="WF\Admin\AttrNode\NodeCCRole.aspx.designer.cs">
       <DependentUpon>NodeCCRole.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\AttrNode\PushMessage.aspx.cs">
-      <DependentUpon>PushMessage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\PushMessage.aspx.designer.cs">
-      <DependentUpon>PushMessage.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\AttrNode\PushMessageEntity.aspx.cs">
       <DependentUpon>PushMessageEntity.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8781,13 +8771,6 @@
     </Compile>
     <Compile Include="WF\Admin\ConditionSubFlowDtl.aspx.designer.cs">
       <DependentUpon>ConditionSubFlowDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CondStation.aspx.cs">
-      <DependentUpon>CondStation.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CondStation.aspx.designer.cs">
-      <DependentUpon>CondStation.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\DoPort.aspx.cs">
       <DependentUpon>DoPort.aspx</DependentUpon>
@@ -9293,6 +9276,7 @@
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.designer.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>
@@ -10052,13 +10036,6 @@
     </Compile>
     <Compile Include="WF\Comm\Sys\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SFDBSrcNewGuide.aspx.cs">
-      <DependentUpon>SFDBSrcNewGuide.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SFDBSrcNewGuide.aspx.designer.cs">
-      <DependentUpon>SFDBSrcNewGuide.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Sys\SFGuide.aspx.cs">
       <DependentUpon>SFGuide.aspx</DependentUpon>

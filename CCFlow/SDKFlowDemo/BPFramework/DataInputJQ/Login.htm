@@ -5,8 +5,8 @@
     <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="/WF/Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+
     <link href="/DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-    <link href="/DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
 
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
@@ -17,11 +17,25 @@
         $(function () {
 
             $("#Msg").html("");
+
         });
 
         function Login() {
 
             $("#Msg").html("正在验证请稍候....");
+
+            var ctrlUserNo = document.getElementById("TB_UserNo");
+            if (ctrlUserNo.value == "") {
+                alert('请输入用户名');
+                return;
+            }
+
+            var ctrlPass = document.getElementById("TB_Pass");
+            if (ctrlPass.value == "") {
+                alert('请输入密码');
+                return;
+            }
+
 
             var frmData = $("#cc").serialize();
 
@@ -52,15 +66,16 @@
 <div id="Msg"></div>
 
 <center>
-<table  style=" text-align:center" >
+<table  style=" text-align:center; " >
+<caption>请您登录</caption>
 <tr>
 <td> 用户名</td>
-<td> <input type=text  id="TB_UserNo" name="TB_UserNo" /> </td>
+<td> <input type=text  id="TB_UserNo" name="TB_UserNo" style="width:80%;" /> </td>
 </tr>
 
 <tr>
 <td> 密码</td>
-<td> <input type=text  id="TB_Pass" name="TB_Pass" /> </td>
+<td> <input type=text  id="TB_Pass" name="TB_Pass"  style="width:80%;"  /> </td>
 </tr>
 
 <tr>

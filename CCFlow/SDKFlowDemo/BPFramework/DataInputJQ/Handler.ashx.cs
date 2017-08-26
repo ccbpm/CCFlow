@@ -60,7 +60,10 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
 
             try
             {
-                switch (this.DoType)
+
+                string doType = context.Request.QueryString["DoType"];
+
+                switch (doType)
                 {
                     case "StudentV1_Save":
                         msg = StudentV1_Save();
@@ -126,7 +129,6 @@ namespace CCFlow.SDKFlowDemo.BPFramework.DataInputJQ
 
             return "保存成功...";
         }
-
 
         #region 学生列表的操作.
         /// <summary>

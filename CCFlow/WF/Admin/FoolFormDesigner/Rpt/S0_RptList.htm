@@ -13,6 +13,16 @@
         var initData = {};
         var pageData = {};
         $(function () {
+
+
+        var myRpt = "ND"+ parseInt(GetQueryString("FK_Flow")) +"MyRpt";
+
+        window.location.href='../../../Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&No='+myRpt;
+        return;
+
+
+
+
             pageData = {
                 FK_Flow: GetQueryString("FK_Flow"),
             };

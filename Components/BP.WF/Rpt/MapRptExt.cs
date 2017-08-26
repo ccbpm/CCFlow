@@ -540,10 +540,10 @@ namespace BP.WF.Rpt
                 map.Java_SetCodeStruct("4");;
 
                 map.AddTBStringPK(MapRptExtAttr.No, null, "编号", true, false, 1, 200, 20);
-                map.AddTBString(MapRptExtAttr.Name, null, "描述", true, false, 0, 500, 20);
+                map.AddTBString(MapRptExtAttr.Name, null, "名称", true, false, 0, 500, 20);
            //     map.AddTBString(MapRptExtAttr.SearchKeys, null, "查询键", true, false, 0, 500, 20);
-                map.AddTBString(MapRptExtAttr.PTable, null, "物理表", true, false, 0, 500, 20);
-                map.AddTBString(MapRptExtAttr.FK_Flow, null, "流程编号", true, false, 0, 3, 3);
+                map.AddTBString(MapRptExtAttr.PTable, null, "物理表", true, true, 0, 500, 20);
+                map.AddTBString(MapRptExtAttr.FK_Flow, null, "流程编号", true, true, 0, 3, 3);
 
               //Tag
               // map.AddTBString(MapRptExtAttr.Tag, null, "Tag", true, false, 0, 500, 20);
@@ -551,7 +551,7 @@ namespace BP.WF.Rpt
               //  map.AddTBInt(MapRptExtAttr.IsSearchKey, 0, "是否需要关键字查询", true, false);
               //   map.AddTBInt(MapRptExtAttr.DTSearchWay, 0, "时间查询方式", true, false);
               //   map.AddTBString(MapRptExtAttr.DTSearchKey, null, "时间查询字段", true, false, 0, 200, 20);
-                map.AddTBString(MapRptExtAttr.Note, null, "备注", true, false, 0, 500, 20);
+                map.AddTBString(MapRptExtAttr.Note, null, "备注", true, false, 0, 500, 20,true);
 
                 #region 权限控制. 2014-12-18
                 map.AddTBInt(MapRptExtAttr.RightViewWay, 0, "报表查看权限控制方式", true, false);
@@ -573,16 +573,15 @@ namespace BP.WF.Rpt
 
                 rm = new RefMethod();
                 rm.Title = "设置显示的列";
-                rm.Icon = "/WF/Img/Guide.png";
+                rm.Icon = "../../WF/Img/Guide.png";
                 rm.ClassMethodName = this.ToString() + ".DoS2_ColsChose()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "设置显示列次序";
-                rm.Icon = "/WF/Img/Guide.png";
+                rm.Icon = "../../WF/Img/Guide.png";
                 rm.ClassMethodName = this.ToString() + ".DoS4_ColsOrder()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
@@ -590,7 +589,7 @@ namespace BP.WF.Rpt
 
                 rm = new RefMethod();
                 rm.Title = "设置查询条件";
-                rm.Icon = "/WF/Img/Guide.png";
+                rm.Icon = "../../WF/Img/Guide.png";
                 rm.ClassMethodName = this.ToString() + ".DoS5_SearchCond()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
@@ -599,7 +598,7 @@ namespace BP.WF.Rpt
                 
                 rm = new RefMethod();
                 rm.Title = "设置导出模板";
-                rm.Icon = "/WF/Img/Guide.png";
+                rm.Icon = "../../WF/Img/Guide.png";
                 rm.ClassMethodName = this.ToString() + ".DoS8_RptExportTemplate()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "报表设计";
@@ -608,15 +607,14 @@ namespace BP.WF.Rpt
 
                 rm = new RefMethod();
                 rm.Title = "恢复设置";
-                rm.Icon = "/WF/Img/Guide.png";
+                rm.Icon = "../../WF/Img/Guide.png";
+                rm.Warning = "您确定要执行吗?";
                 rm.ClassMethodName = this.ToString() + ".DoReset()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.Func;
                 rm.GroupName = "报表设计";
                 map.AddRefMethod(rm);
 
                 #endregion 报表设计.
-
-
 
                 #region 查询与分析.
                 rm = new RefMethod();
@@ -641,7 +639,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
                 rm.ClassMethodName = this.ToString() + ".DoGroup()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Icon = "/WF/Img/Group.gif";
+                rm.Icon = "../../WF/Img/Group.gif";
                 rm.GroupName = "查询与分析";
                 map.AddRefMethod(rm);
 
@@ -717,7 +715,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch()
         {
-            return "WF/Rpt/Search.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "../../Rpt/Search.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 高级查询
@@ -725,7 +723,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearchAdv()
         {
-            return "WF/Rpt/SearchAdv.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "../../Rpt/SearchAdv.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 高级分析
@@ -733,7 +731,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoGroup()
         {
-            return "WF/Rpt/Group.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "../../Rpt/Group.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 交叉分析
@@ -741,7 +739,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoD3()
         {
-            return "WF/Rpt/D3.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "../../Rpt/D3.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 对比分析
@@ -749,15 +747,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoContrast()
         {
-            return "WF/Rpt/Contrast.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
-        }
-        /// <summary>
-        /// 重新设置.
-        /// </summary>
-        /// <returns></returns>
-        public string DoReset()
-        {
-            return "";
+            return "../../Rpt/Contrast.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         #endregion
 
@@ -775,13 +765,13 @@ namespace BP.WF.Rpt
         }
         protected override bool beforeInsert()
         {
-            this.ResetIt();
+            this.DoReset();
             return base.beforeInsert();
         }
         /// <summary>
         /// 重置设置.
         /// </summary>
-        public void ResetIt()
+        public void DoReset()
         {
             MapData md = new MapData(this.No);
             md.RptIsSearchKey = true;
@@ -794,7 +784,7 @@ namespace BP.WF.Rpt
             this.Update();
 
             string keys = "'OID','FK_Dept','FlowStarter','WFState','Title','FlowStartRDT','FlowEmps','FlowDaySpan','FlowEnder','FlowEnderRDT','FK_NY','FlowEndNode','WFSta'";
-            MapAttrs attrs = new MapAttrs("ND"+int.Parse(this.FK_Flow)+"Rpt" );
+            MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.FK_Flow) + "Rpt");
 
             attrs.Delete(MapAttrAttr.FK_MapData, this.No); // 删除已经有的字段。
             foreach (MapAttr attr in attrs)

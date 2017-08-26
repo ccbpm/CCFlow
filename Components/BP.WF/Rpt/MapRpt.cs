@@ -567,7 +567,6 @@ namespace BP.WF.Rpt
 
                 map.AddTBStringPK(MapRptAttr.No, null, "编号", true, false, 1, 200, 20);
                 map.AddTBString(MapRptAttr.Name, null, "描述", true, false, 0, 500, 20);
-                //     map.AddTBString(MapRptAttr.SearchKeys, null, "查询键", true, false, 0, 500, 20);
                 map.AddTBString(MapRptAttr.PTable, null, "物理表", true, false, 0, 500, 20);
                 map.AddTBString(MapRptAttr.FK_Flow, null, "流程编号", true, false, 0, 3, 3);
 

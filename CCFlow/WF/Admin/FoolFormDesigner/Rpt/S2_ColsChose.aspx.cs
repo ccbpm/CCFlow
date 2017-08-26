@@ -117,13 +117,13 @@ namespace CCFlow.WF.MapDef.Rpt
                         isBr = 0;
                 }
 
-                if (isBr==1)
+                if (isBr == 1)
                 {
                     Pub2.AddTD();
                     Pub2.AddTD();
                     Pub2.AddTREnd();
                 }
-                if (isBr ==2)
+                if (isBr == 2)
                 {
                     Pub2.AddTD();
                     Pub2.AddTREnd();

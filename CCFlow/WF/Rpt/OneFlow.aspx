@@ -53,7 +53,7 @@
                             <div>
                                 <%--<a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S1_Edit.htm?FK_MapData=<%=this.FK_MapData%>&FK_Flow=<%=this.FK_Flow%>&RptNo=<%=this.RptNo%>')">
                                     <span class="nav">1. 基本信息</span></a>--%>
-                                    <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S1_Edit.htm?FK_Flow=<%=this.FK_Flow%>&No=<%=this.RptNo%>')">
+                                    <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, '../Admin/FoolFormDesigner/Rpt/S1Edit.htm?FK_Flow=<%=this.FK_Flow%>&No=<%=this.RptNo%>')">
                                     <span class="nav">1. 基本信息</span></a></div>
                         </li>
                         <li>
@@ -97,7 +97,27 @@
                 </div>
                 
                 <%} %>
+
+
                 <div class="easyui-panel" title="报表查看" data-options="collapsible:true,border:false" style="height: auto">
+                    <ul class="navlist">
+                        <li>
+                            <div>
+                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, './MyStartFlow.htm?FK_Flow=<%=this.FK_Flow %>&RptNo=<%= this.RptNo%>')">
+                                    <span>我发起的流程</span></a></div>
+                        </li>
+                        <li>
+                            <div>
+                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, './MyStartFlow.htm?FK_Flow=<%=this.FK_Flow %>&RptNo=<%= this.RptNo%>')">
+                                    <span>部门发起的流程</span></a></div>
+                        </li>
+                        
+                    </ul>
+                </div>
+
+
+
+             <%--   <div class="easyui-panel" title="报表查看" data-options="collapsible:true,border:false" style="height: auto">
                     <ul class="navlist">
                         <li>
                             <div>
@@ -125,7 +145,9 @@
                                     <span>5. 对比分析</span></a></div>
                         </li>
                     </ul>
-                </div>
+                </div>--%>
+
+
             </div>
             <div data-options="region:'center',noheader:true" style="overflow-y: hidden">
                 <iframe id="context" scrolling="auto" frameborder="0" src=""

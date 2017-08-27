@@ -12,24 +12,36 @@
         //页面启动函数.
         var initData = {};
         var pageData = {};
+
         $(function () {
 
+        //我发起的流程.
+        var myStartFlows=document.getElementById("MyStartFlows");
+        myStartFlows.innerHTML="<a href=\"javascript:WinOpen('../../../Comm/En.htm?EnsName=BP.WF.Rpt.MyStartFlows&No="+GetQueryString("FK_Flow")+"');\" >执行定义报表</a>";
+
+        //部门发起的流程.
+        var myDeptFlows=document.getElementById("MyDeptFlows");
+        myDeptFlows.innerHTML="<a href=\"javascript:WinOpen('../../../Comm/En.htm?EnsName=BP.WF.Rpt.MyDeptFlows&No="+GetQueryString("FK_Flow")+"');\" >执行定义报表</a>";
+        return;
 
         var myRpt = "ND"+ parseInt(GetQueryString("FK_Flow")) +"MyRpt";
-
         window.location.href='../../../Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&No='+myRpt;
         return;
 
+          //  InitTable();
+        });
 
+        function Open()
+        {
+          WinOpen(url);
+        }
 
+        function InitTable() {
 
             pageData = {
                 FK_Flow: GetQueryString("FK_Flow"),
             };
-            InitTable();
-        });
 
-        function InitTable(){
         $.ajax({
                 type: 'post',
                 async: true,
@@ -59,7 +71,7 @@
             //WinOpen("../../../Rpt/OneFlow.htm?FK_Flow=" + pageData.FK_Flow + "&FK_MapData=" + flowRptNo + "&RptNo=" + no);
             var flowRptNo = '';
             var tmpFK_Flow = pageData.FK_Flow;
-            window.location.href = "../../../Rpt/OneFlow.htm?FK_Flow=" + pageData.FK_Flow + "&FK_MapData=" + flowRptNo + "&RptNo=" + no;
+            window.location.href = "../../FoolFormDesigner/Rpt/S0_RptList.htm?FK_Flow=" + pageData.FK_Flow + "&FK_MapData=" + flowRptNo + "&RptNo=" + no;
         }
 
         function BindRptList(data){
@@ -118,6 +130,53 @@
     </script>
 </head>
 <body>
+
+<table  style="width:95%;">
+<tr> 
+<td  style="width:30%;">
+<fieldset>
+<legend> 流程报表定义说明</legend>
+<ul>
+<li>一个流程有三种报表，分别是:我发起的流程， 本部门发起的流程，高级查询。</li>
+<li>每个报表都对应：查询组件、分析组件、高级查询组件、对比分析组件、交叉报表组件.</li>
+<li>每一种报表都有自己的控制权限、查询条件、显示内容的自定义。</li>
+<li>点击左边进行为每一种报表定义权限。</li>
+</ul>
+</fieldset>
+</td>
+
+<td  valign=top >
+
+<fieldset>
+<legend>我的发起的流程</legend>
+<ul>
+<li>该报表仅仅显示我发起的流程.</li>
+<li>你可以在报表定义工具里定义查询方式、显示内容.</li>
+<li><div id="MyStartFlows"></div></li>
+</ul>
+</fieldset>
+
+
+
+<fieldset>
+<legend>我部门发起的流程</legend>
+<ul>
+<li>该报表仅仅显示我部门发起的流程.</li>
+<li>你可以在报表定义工具里定义查询方式、显示内容.</li>
+<li><div id="MyDeptFlows"></div></li>
+</ul>
+</fieldset>
+
+
+
+</td>
+
+</tr>
+</table>
+<!--
+<div id="html" ></div>
+
+
      <div id="Fields">
         <table style="width:100%;">
             <thead>
@@ -133,6 +192,6 @@
             <tbody></tbody>
         </table>
         <div><input  value="新建报表" type="button" onclick="NewOrEditRpt('')"/></div>
-    </div>
+    </div>-->
 </body>
 </html>

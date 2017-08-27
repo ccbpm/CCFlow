@@ -5,7 +5,7 @@
     <script type="text/javascript">
         function OpenRpt(flowNo) {
             window.parent.closeTab('设计报表');
-            window.parent.addTab('OpenRpt', '设计报表', '../../Rpt/OneFlow.htm?FK_MapData=ND' + flowNo + 'Rpt&FK_Flow=' + flowNo, '');
+            window.parent.addTab('OpenRpt', '设计报表', '..../../FoolFormDesigner/OneFlow.htm?FK_MapData=ND' + flowNo + 'Rpt&FK_Flow=' + flowNo, '');
         }
         function FlowAttr(flowNo) {
             window.parent.closeTab('流程属性');

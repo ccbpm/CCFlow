@@ -292,7 +292,7 @@ namespace CCFlow.WF
             }
 
             Flow fl = new Flow(this.FK_Flow);
-            string url = "MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
+            string url = "MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
 
             //必要的系统约定参数.
             switch (fl.StartGuideWay)

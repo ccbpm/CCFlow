@@ -59,6 +59,8 @@
                         newRow = "<tr ><td class=Idx>" + i + "</td>";
                         newRow += "<td>" + data[i].No + "</td>";
                         newRow += "<td>" + data[i].Name + "</td>";
+                        newRow += "<td>" + data[i].QRModelText + "</td>";
+
                         newRow += "<td><a href='" + Handler + "?DoType=Bill_Download&No=" + data[i].No + "'>" + data[i].TempFilePath + "</td>";
 
                         newRow += "<td>";
@@ -108,36 +110,25 @@
             var url = "Billing.htm?FK_BillTemplate=" + no + "&FK_Node=" + GetQueryString("FK_Node");
             window.location.href = url;
         }
-        //ajax 提交
-        function Btn_Save_Click2() {
-
-            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-            var frmData = $("#cc").serialize();
-            //alert(frmData); 
-
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Bill_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') >= 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                    window.location.href = window.location.href;
-                    return;
-                }
-            });
-        }
 
         function Btn_Save_Click() {
 
             var formData = new FormData($("#cc")[0]);
+
+            var name = document.getElementById("TB_Name").value;
+            if (name == "") {
+                alert('请输入报表名称');
+                return;
+            }
+
+//            var file = document.getElementById("bill").value;
+//            if (file == "") {
+//                alert('请选择文件');
+//                return;
+//            }
+
             $.ajax({
-                url: Handler + "?DoType=Bill_Save&CheckBoxIDs=" + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+                url: Handler + "?DoType=Bill_Save&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
                 type: 'POST',
                 data: formData,
                 async: false,
@@ -166,35 +157,31 @@
 <body>
     <div style="margin: 8px;">
         <form id="cc" enctype="multipart/form-data" method="post">
-        <table style="width: 60%;">
-            <caption>
-                单据模版
-            </caption>
+        <table style="width: 100%;">
+             <caption> 单据模版</caption> 
             <tr>
-                <td>
-                    编号
+                <td  style=" width:15%; ">
+                    编号(自动生成)
                 </td>
                 <td>
-                    <input type="text" id="TB_No" name="TB_No" readonly="1" />
+                    <input type="text" id="TB_No" name="TB_No" readonly="1"  style=" width:60%;"  />
+                </td>
+                <td style=" width:15%; " >
+                    模版名称
+                </td>
+                <td>
+                    <input type="text" id="TB_Name" name="TB_Name"  style=" width:80%;"   />
                 </td>
             </tr>
+
+
             <tr>
-                <td>
-                    名称
+                <td >
+                   生成模版类型
                 </td>
                 <td>
-                    <input type="text" id="TB_Name" name="TB_Name" />
+                    <select id="DDL_BillFileType" name="DDL_BillFileType"  style=" width:60%;"  />
                 </td>
-            </tr>
-            <tr>
-                <td>
-                    类型
-                </td>
-                <td>
-                    <select id="DDL_BillFileType" name="DDL_BillFileType" />
-                </td>
-            </tr>
-            <tr>
                 <td>
                     打开方式
                 </td>
@@ -202,16 +189,29 @@
                     <select id="DDL_BillOpenModel" name="DDL_BillOpenModel" />
                 </td>
             </tr>
-            <tr>
+
+             <tr>
                 <td>
-                    文件
+                    是否加载二维码
                 </td>
                 <td>
-                    <input type="file" name="bill" />
+                    <select id="DDL_QRModel" name="DDL_QRModel"   style=" width:60%;"  >
+                    <option value="0">不加载二维码 </option>
+                    <option value="1">加载二维码 </option>
+                    </select>
+
+                </td>
+                <td>
+                    模版文件:<br>符合规范的rtf格式文件.
+                </td>
+                <td>
+                    <input type="file" name="bill"  style=" width:60%;"  />
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+             <td>
+                </td>
+                <td colspan="3">
                     <input type="button" id="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
                     <input type="button" id="Btn_New" runat="server" value="新建" onclick="Btn_New_Click()" />
                 </td>
@@ -223,19 +223,22 @@
                 单据模版列表
             </caption>
             <tr>
-                <th>
-                    序号
+                <th style="width:3%;">
+                    序
                 </th>
-                <th>
+                <th  style="width:10%;">
                     编号
                 </th>
                 <th>
                     名称
                 </th>
-                <th>
+                 <th>
+                    二维码生成方式
+                </th>
+                <th style="width:50%;">
                     路径
                 </th>
-                <th>
+                <th  style="width:8%;">
                     操作
                 </th>
             </tr>

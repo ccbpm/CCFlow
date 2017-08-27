@@ -145,7 +145,7 @@
                     for (var i = 0; i < data.length; i++) {
 
                         if (groupBy == "ByNode") {
-                            if (str.indexOf('@'+data[i].NodeName) == -1)
+                            if (str.indexOf('@' + data[i].NodeName) == -1)
                                 str += "@" + data[i].NodeName;
                         }
 
@@ -218,7 +218,7 @@
 
                                     if (paras.indexOf('@') < 0) {
                                         break;
-                                    } 
+                                    }
                                 }
                                 paras = "1" + paras;
                             }
@@ -261,8 +261,13 @@
                             newRow += "<td>" + work.RDT + "</td>"; //发起时间
                             newRow += "<td>" + work.ADT + "</td>"; //接受时间
                             newRow += "<td>" + work.SDT + "</td>"; //应完成时间
+
+                            //为天业解决开始节点撤销回来后，就是逾期状态.
+                            var len = nodeID.toString().length;
+                            var entStr = nodeID.toString().substr(len - 2);
+
                             //判断流程是否逾期
-                            if (cdt > work.SDT && work.WFState == 2)
+                            if (cdt > work.SDT && work.WFState == 2 && entStr!="01" )
                                 newRow += "<td><img src='./Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
                             else
                                 newRow += "<td><img src='./Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";

@@ -144,13 +144,16 @@ namespace CCFlow.WF.WorkOpt
             string path;
             try
             {
+#region 单据变量.
+                   Bill bill = new Bill();
+                bill.MyPK = wk.FID + "_" + wk.OID + "_" + nd.NodeID + "_" + func.No;
+              
+#endregion
+
                 #region 生成单据
                 rtf.HisEns.Clear();
                 rtf.EnsDataDtls.Clear();
-                if (func.NodeID == 0)
-                {
-                }
-                else
+                if (func.NodeID != 0)
                 {
                     //把流程主表数据放入里面去.
                     GEEntity ndxxRpt = new GEEntity("ND" + int.Parse(nd.FK_Flow) + "Rpt");
@@ -158,8 +161,10 @@ namespace CCFlow.WF.WorkOpt
                     ndxxRpt.Retrieve();
                     ndxxRpt.Copy(wk);
 
-                    //把数据赋值给wk.
-                    wk.Row = ndxxRpt.Row;
+                    //把数据赋值给wk. 有可能用户还没有执行流程检查，字段没有同步到 NDxxxRpt.
+                    if (ndxxRpt.Row.Count > wk.Row.Count)
+                         wk.Row = ndxxRpt.Row;
+
                     rtf.HisGEEntity = wk;
 
                     //加入他的明细表.
@@ -193,11 +198,11 @@ namespace CCFlow.WF.WorkOpt
                 if (func.HisBillFileType == BillFileType.PDF)
                 {
                     billUrl = billUrl.Replace(".doc", ".pdf");
-                    billInfo += "<img src='/WF/Img/FileType/PDF.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
+                    billInfo += "<img src='../Img/FileType/PDF.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
                 }
                 else
                 {
-                    billInfo += "<img src='/WF/Img/FileType/doc.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
+                    billInfo += "<img src='../Img/FileType/doc.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
                 }
 
                 path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
@@ -205,8 +210,14 @@ namespace CCFlow.WF.WorkOpt
                 if (System.IO.Directory.Exists(path) == false)
                     System.IO.Directory.CreateDirectory(path);
 
-                rtf.MakeDoc(func.TempFilePath + ".rtf",
-                    path, file, func.ReplaceVal, false);
+                string tempFile = func.TempFilePath;
+                if (tempFile.Contains(".rtf") == false)
+                    tempFile = tempFile + ".rtf";
+
+                //用于扫描打印.
+                string qrUrl = SystemConfig.HostURL + "WF/WorkOpt/PrintDocQRGuide.htm?MyPK=" + bill.MyPK;
+                rtf.MakeDoc(tempFile,
+                    path, file, func.ReplaceVal, false, qrUrl);
                 #endregion
 
                 #region 转化成pdf.
@@ -226,9 +237,8 @@ namespace CCFlow.WF.WorkOpt
                 }
                 #endregion
 
-                #region 保存单据
-                Bill bill = new Bill();
-                bill.MyPK = wk.FID + "_" + wk.OID + "_" + nd.NodeID + "_" + func.No;
+                #region 保存单据.
+
                 bill.FID = wk.FID;
                 bill.WorkID = wk.OID;
                 bill.FK_Node = wk.NodeID;
@@ -245,6 +255,7 @@ namespace CCFlow.WF.WorkOpt
                 bill.StartDT = rtf.HisGEEntity.GetValStrByKey("RDT");
                 bill.Title = rtf.HisGEEntity.GetValStrByKey("Title");
                 bill.FK_Dept = rtf.HisGEEntity.GetValStrByKey("FK_Dept");
+
                 try
                 {
                     bill.Save();

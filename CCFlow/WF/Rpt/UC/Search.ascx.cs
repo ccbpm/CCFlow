@@ -96,11 +96,10 @@ namespace CCFlow.WF.Rpt
             //初始化查询工具栏.
             this.ToolBar1.InitToolbarOfMapRpt(fl, currMapRpt, this.RptNo, en, 1);
 
-
             //增加发起.
             if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, BP.Web.WebUser.No) == true)
             {
-                string str = "<div style='float:right'><a href=\"javascript:WinOpen('/WF/MyFlow.aspx?FK_Flow=" + this.FK_Flow + "','df');\" ><img src='/WF/Img/Start.png' width='12px' border=0/>&nbsp;发起</a></div>";
+                string str = "<div style='float:right'><a href=\"javascript:WinOpen('../MyFlow.htm?FK_Flow=" + this.FK_Flow + "','df');\" ><img src='/WF/Img/Start.png' width='12px' border=0/>&nbsp;发起</a></div>";
                 this.ToolBar1.Add(str);
             }
 
@@ -136,8 +135,6 @@ namespace CCFlow.WF.Rpt
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.ExportByTemplate).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 
             #endregion 处理查询权限
-
-
 
             //处理按钮.
             this.SetDGData();

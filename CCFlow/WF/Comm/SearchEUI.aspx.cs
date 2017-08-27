@@ -159,13 +159,6 @@ namespace CCFlow.WF.Comm
             Entity en = GetEntityByEnName(EnsName);
             Entities ens = en.GetNewEntities;
 
-            //string GetDelOid=getUTF8ToString("GetDelOid");
-            //if (!string.IsNullOrEmpty(GetDelOid))
-            //{
-            //    en.Delete(en.PKField, GetDelOid);
-            //}
-
-
             //总行数
             int RowCount = 0;
             try

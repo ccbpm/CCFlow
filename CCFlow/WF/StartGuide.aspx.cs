@@ -112,7 +112,7 @@ namespace CCFlow.WF
                 case StartGuideWay.ByHistoryUrl: //历史数据.
                     if (dt.Rows.Count == 0)
                     {
-                        string url = "MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
+                        string url = "MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
                         this.Response.Redirect(url, true);
                         //this.BindTableOne(dt);
                     }
@@ -167,7 +167,7 @@ namespace CCFlow.WF
 
             Flow fl=new Flow(this.FK_Flow);
 
-            string url = "MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
+            string url = "MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
             // 输出数据.
             int idx = 0;
             foreach (DataRow dr in dt.Rows)
@@ -327,7 +327,7 @@ namespace CCFlow.WF
             cWorkID = cWorkID.Substring(0, cWorkID.Length - 1);
 
             Flow fl = new Flow(this.FK_Flow);
-            string url = "MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
+            string url = "MyFlow.htm?FK_Flow=" + this.FK_Flow + "&FK_Node=" + int.Parse(this.FK_Flow) + "01&WorkID=0&IsCheckGuide=1";
 
             //必要的系统约定参数.
             switch (fl.StartGuideWay)

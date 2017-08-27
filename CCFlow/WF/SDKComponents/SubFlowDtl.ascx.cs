@@ -126,7 +126,7 @@ namespace CCFlow.WF.SDKComponents
                 BP.WF.Flow fl = new Flow(str);
 
                 if (sf.SFSta == FrmSubFlowSta.Enable && this.DoType!="View")
-                    html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.aspx?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + nd.FK_Flow + "&PFID=" + this.FID + "')\"  >" + sf.SFCaption + "</a>]</style>";
+                    html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div> <div style='float:right'>[<a href=\"javascript:OpenIt('../MyFlow.htm?FK_Flow=" + fl.No + "&PWorkID=" + this.WorkID + "&PNodeID=" + sf.NodeID + "&PFlowNo=" + nd.FK_Flow + "&PFID=" + this.FID + "')\"  >" + sf.SFCaption + "</a>]</style>";
 
                 if (sf.SFSta == FrmSubFlowSta.Readonly || this.DoType == "View")
                     html = "<div style='float:left'><img src='../Img/Max.gif' />&nbsp;" + fl.Name + "</div></style>";
@@ -157,7 +157,7 @@ namespace CCFlow.WF.SDKComponents
                     if (item.TodoEmps.Contains("" + WebUser.No + "," + WebUser.Name + ";") == true)
                     {
                         this.AddTD("style='word-break:break-all;' title='" + item.Title + "'",
-                            "<a href=\"javascript:OpenIt('../MyFlow.aspx?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&IsCheckGuide=1&Frms="+item.Paras_Frms+"&FK_Node="+item.FK_Node+"&PNodeID="+item.PNodeID+"&PWorkID="+item.PWorkID+"')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
+                            "<a href=\"javascript:OpenIt('../MyFlow.htm?WorkID=" + item.WorkID + "&FK_Flow=" + item.FK_Flow + "&IsCheckGuide=1&Frms="+item.Paras_Frms+"&FK_Node="+item.FK_Node+"&PNodeID="+item.PNodeID+"&PWorkID="+item.PWorkID+"')\" ><img src='../Img/Dot.png' width='9px' />&nbsp;" + item.Title + "</a>");
                     }
                     else
                     {

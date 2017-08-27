@@ -102,6 +102,7 @@
         function WinOpenStartFlow(flowNo) {
 
             var url = "MyFlow.htm?FK_Flow=" + flowNo;
+
             var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
             newWindow.focus();
             return;
@@ -112,7 +113,9 @@
 
             var intFlowNo = flowNo;
 
-            var url = "./Rpt/Search.htm?RptNo=ND" +Number( flowNo) +"MyRpt&FK_Flow="+flowNo;
+           // var url = "./Rpt/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
+            var url = "./Rpt/OneFlow.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
+
             var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
             newWindow.focus();
             return;

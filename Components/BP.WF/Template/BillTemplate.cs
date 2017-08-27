@@ -7,6 +7,20 @@ using BP.WF;
 namespace BP.WF.Template
 {
     /// <summary>
+    /// 二维码生成方式
+    /// </summary>
+    public enum QRModel
+    {
+        /// <summary>
+        /// 不生成
+        /// </summary>
+        None,
+        /// <summary>
+        /// 生成
+        /// </summary>
+        Gener
+    }
+    /// <summary>
     /// 生成的类型
     /// </summary>
     public enum BillFileType
@@ -48,10 +62,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string NodeID = "NodeID";
         /// <summary>
-        /// 是否需要送达
-        /// </summary>
-        public const string IsNeedSend = "IsNeedSend";
-        /// <summary>
         /// 为生成单据使用
         /// </summary>
         public const string IDX = "IDX";
@@ -71,6 +81,10 @@ namespace BP.WF.Template
         /// 是否生成PDF
         /// </summary>
         public const string BillFileType = "BillFileType";
+        /// <summary>
+        /// 二维码生成方式
+        /// </summary>
+        public const string QRModel = "QRModel";
         /// <summary>
         /// 文件打开方式
         /// </summary>
@@ -155,6 +169,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 二维码生成方式
+        /// </summary>
+        public QRModel QRModel
+        {
+            get
+            {
+                return (QRModel)this.GetValIntByKey(BillTemplateAttr.QRModel);
+            }
+            set
+            {
+                this.SetValByKey(BillTemplateAttr.QRModel, (int)value);
+            }
+        }
+        /// <summary>
         /// 生成的单据打开方式
         /// </summary>
         public BillOpenModel BillOpenModel
@@ -210,16 +238,6 @@ namespace BP.WF.Template
                 this.SetValByKey(BillTemplateAttr.NodeID, value);
             }
         }
-        /// <summary>
-        /// 是否需要送达
-        /// </summary>
-        public bool IsNeedSend_del
-        {
-            get
-            {
-                return this.GetValBooleanByKey(BillTemplateAttr.IsNeedSend); 
-            }
-        }
         #endregion
 
         #region 构造函数
@@ -253,6 +271,9 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(BillTemplateAttr.BillOpenModel, 0, "生成的文件打开方式", true, false,
                     "BillOpenModel", "@0=下载本地@1=在线WebOffice打开");
+
+                map.AddDDLSysEnum(BillTemplateAttr.QRModel, 0, "二维码生成方式", true, false,
+                   BillTemplateAttr.QRModel, "@0=不生成@1=生成二维码");
 
                 map.AddTBString(BillTemplateAttr.FK_BillType, null, "单据类型", true, false, 0, 4, 4);
 

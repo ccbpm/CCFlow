@@ -81,10 +81,20 @@ namespace BP.WF.HttpHandler
             //获得能否发起的流程.
             DataTable dtStart = DBAccess.RunSQLReturnTable("SELECT No,Name, FK_FlowSort FROM WF_Flow ORDER BY FK_FlowSort,Idx");
             dtStart.TableName = "Start";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtStart.Columns["NO"].ColumnName = "No";
+                dtStart.Columns["NAME"].ColumnName = "Name";
+                dtStart.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+            }
+
             ds.Tables.Add(dtStart);
 
+
+
             //返回组合
-            return BP.Tools.Json.DataSetToJson(ds, false);
+            return BP.Tools.Json.DataSetToJson(ds,false);
         }
         #region 获得列表.
         /// <summary>

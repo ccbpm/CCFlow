@@ -325,6 +325,47 @@ namespace BP.Pub
             return pict.ToString();
         }
         /// <summary>
+        /// 获取ICON图片的数据。
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string GetValueImgStrsOfQR(string billUrl)
+        {
+            /*说明是图片文件.*/
+            string path = SystemConfig.PathOfTemp + Guid.NewGuid() + ".png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
+
+            #region 生成二维码.
+            ThoughtWorks.QRCode.Codec.QRCodeEncoder qrc = new ThoughtWorks.QRCode.Codec.QRCodeEncoder();
+            qrc.QRCodeEncodeMode = ThoughtWorks.QRCode.Codec.QRCodeEncoder.ENCODE_MODE.BYTE;
+            qrc.QRCodeScale = 4;
+            qrc.QRCodeVersion = 7;
+            qrc.QRCodeErrorCorrect = ThoughtWorks.QRCode.Codec.QRCodeEncoder.ERROR_CORRECTION.M;
+            System.Drawing.Bitmap btm = qrc.Encode(billUrl, System.Text.Encoding.UTF8);
+            btm.Save(path);
+            #endregion
+
+            //定义rtf中图片字符串
+            StringBuilder pict = new StringBuilder();
+            //获取要插入的图片
+            System.Drawing.Image img = System.Drawing.Image.FromFile(path);
+
+            //将要插入的图片转换为16进制字符串.
+            string imgHexString;
+            imgHexString = GetImgHexString(img, System.Drawing.Imaging.ImageFormat.Png);
+
+            //生成rtf中图片字符串
+            pict.AppendLine();
+            pict.Append(@"{\pict");
+            pict.Append(@"\jpegblip");
+            pict.Append(@"\picscalex100");
+            pict.Append(@"\picscaley100");
+            pict.Append(@"\picwgoal" + img.Size.Width * 15);
+            pict.Append(@"\pichgoal" + img.Size.Height * 15);
+            pict.Append(imgHexString + "}");
+            pict.AppendLine();
+            return pict.ToString();
+        }
+        /// <summary>
         /// 获取M2M数据并输出
         /// </summary>
         /// <param name="key"></param>
@@ -937,7 +978,8 @@ namespace BP.Pub
         /// <param name="path">生成路径</param>
         /// <param name="file">生成文件</param>
         /// <param name="isOpen">是否用IE打开？</param>
-        public void MakeDoc(string cfile, string path, string file, string replaceVals, bool isOpen)
+        /// <param name="isOpen">要打开的url用于生成二维码</param>
+        public void MakeDoc(string cfile, string path, string file, string replaceVals, bool isOpen, string billUrl=null)
         {
             string str = Cash.GetBillStr(cfile, false).Substring(0);
             if (this.HisEns.Count == 0)
@@ -973,6 +1015,7 @@ namespace BP.Pub
                 {
                     if (para == null || para == "")
                         continue;
+
                     try
                     {
                         if (para.Contains("ImgAth"))
@@ -981,6 +1024,8 @@ namespace BP.Pub
                             str = str.Replace("<" + para + ">", this.GetValueByKey(para));
                         else if (para.Contains("Img@AppPath"))
                             str = str.Replace("<" + para + ">", this.GetValueImgStrs(para));
+                        else if (para.Contains("Img@QR"))
+                            str = str.Replace("<" + para + ">", this.GetValueImgStrsOfQR(billUrl));
                         else if (para.Contains(".BPPaint"))
                             str = str.Replace("<" + para + ">", this.GetValueBPPaintStrs(para));
                         else if (para.Contains(".M2M"))
@@ -1013,11 +1058,16 @@ namespace BP.Pub
                         else if (para.Contains(".") == true)
                             continue; /*有可能是明细表数据.*/
                         else
-                            str = str.Replace("<" + para + ">", this.GetCode(this.GetValueByKey(para).Replace("\\", "\\\\")));
+                        {
+                            string val = this.GetValueByKey(para);
+                            val = val.Replace("\\", "\\\\");
+                            val = this.GetCode(val);
+                            str = str.Replace("<" + para + ">", val);
+                        }
                     }
                     catch (Exception ex)
                     {
-                        error += "替换主表标记取参数[" + para + "]出现错误：有以下情况导致此错误;1你用Text取值时间，此属性不是外键。2,类无此属性。3,该字段是明细表字段但是丢失了明细表标记.<br>更详细的信息：<br>" + ex.Message;
+                        error += "@替换主表标记取参数[" + para + "]出现错误：有以下情况导致此错误;1你用Text取值时间，此属性不是外键。2,类无此属性。3,该字段是明细表字段但是丢失了明细表标记.<br>更详细的信息：<br>" + ex.Message;
                         if (SystemConfig.IsDebug)
                             throw new Exception(error);
                         Log.DebugWriteError(error);

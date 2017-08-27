@@ -41,6 +41,7 @@ namespace BP.WF.HttpHandler
         public string Bill_Save()
         {
             BillTemplate bt = new BillTemplate();
+
             //上传附件
             string filepath = "";
             if (HttpContext.Current.Request.Files.Count > 0)
@@ -57,9 +58,11 @@ namespace BP.WF.HttpHandler
                 bt.No = DA.DBAccess.GenerOID().ToString(); 
             }
             bt.Name = this.GetRequestVal("TB_Name");
+
             bt.TempFilePath = filepath;
-            bt.HisBillFileType = (BillFileType)Convert.ToInt32(this.GetRequestVal("DDL_BillFileType"));
-            bt.BillOpenModel = (BillOpenModel)Convert.ToInt32(this.GetRequestVal("DDL_BillOpenModel"));
+            bt.HisBillFileType = (BillFileType)this.GetRequestValInt("DDL_BillFileType");
+            bt.BillOpenModel = (BillOpenModel)this.GetRequestValInt("DDL_BillOpenModel");
+            bt.QRModel = (QRModel)this.GetRequestValInt("DDL_BillOpenModel");
 
             bt.Save();
             

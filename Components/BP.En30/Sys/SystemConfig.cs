@@ -476,6 +476,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 网站地址用于生成url, 支持cs程序调用ws程序.
+        /// </summary>
+        public static string HostURL
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(SystemConfig.AppSettings["HostURL"]))
+                {
+                    return SystemConfig.AppSettings["HostURL"];
+                }
+                return "http:/127.0.0.1/";
+            }
+        }
+        /// <summary>
         /// WebApp Path.
         /// </summary>
         public static string PathOfWebApp

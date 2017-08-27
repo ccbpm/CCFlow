@@ -83,9 +83,6 @@ namespace BP.DA
                     Attr attrN = new Attr();
                     attrN.Key = perKey + "." + attr.Key;
 
-                    //attrN.Key = attrN.Key.Replace("\\f2","");
-                    //attrN.Key = attrN.Key.Replace("\\f3", "");
-
                     if (attr.IsRefAttr)
                     {
                         attrN.Field = perKey + "." + attr.Key + "Text";

@@ -950,7 +950,7 @@ namespace BP.Sys
                     if (SystemConfig.IsBSsystem == false)
                     {
                         /*在cs模式下它的baseurl 从web.config中获取.*/
-                        string cfgBaseUrl = SystemConfig.AppSettings["HostURL"];
+                        string cfgBaseUrl = SystemConfig.HostURL;
                         if (string.IsNullOrEmpty(cfgBaseUrl))
                         {
                             string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";
@@ -1006,7 +1006,7 @@ namespace BP.Sys
                         }
                         else
                         {
-                            string cfgBaseUrl = SystemConfig.AppSettings["HostURL"];
+                            string cfgBaseUrl =  SystemConfig.HostURL;
                             if (string.IsNullOrEmpty(cfgBaseUrl))
                             {
                                 string err = "调用url失败:没有在web.config中配置BaseUrl,导致url事件不能被执行.";

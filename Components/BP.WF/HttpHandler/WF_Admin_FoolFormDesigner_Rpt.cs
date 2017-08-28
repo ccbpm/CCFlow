@@ -82,7 +82,7 @@ namespace BP.WF.HttpHandler
 
             //所有的字段.
             string fk_mapdata = "ND"+int.Parse(this.FK_Flow)+"Rpt";
-            MapAttrs mattrs = new MapAttrs(this.FK_MapData);
+            MapAttrs mattrs = new MapAttrs(fk_mapdata);
             ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
 
             //选择的字段,就是报表的字段.

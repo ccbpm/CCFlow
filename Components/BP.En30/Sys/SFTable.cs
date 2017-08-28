@@ -874,30 +874,39 @@ namespace BP.Sys
 
         protected override void afterInsert()
         {
-            if (this.SrcType == Sys.SrcType.TableOrView)
+            try
             {
-                //暂时这样处理
-                string sql = "CREATE VIEW " + this.No + " (";
-                sql += "[No],";
-                sql += "[Name]";
-                sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
-                sql += " AS ";
-                sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
+                if (this.SrcType == Sys.SrcType.TableOrView)
+                {
+                    //暂时这样处理
+                    string sql = "CREATE VIEW " + this.No + " (";
+                    sql += "[No],";
+                    sql += "[Name]";
+                    sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
+                    sql += " AS ";
+                    sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
 
-                this.RunSQL(sql);
+                    this.RunSQL(sql);
+                }
+
+                if (this.SrcType == Sys.SrcType.SQL)
+                {
+                    //暂时这样处理
+                    string sql = "CREATE VIEW " + this.No + " (";
+                    sql += "[No],";
+                    sql += "[Name]";
+                    sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
+                    sql += " AS ";
+                    sql += this.SelectStatement;
+
+                    this.RunSQL(sql);
+                }
             }
-
-            if (this.SrcType == Sys.SrcType.SQL)
+            catch (Exception ex)
             {
-                //暂时这样处理
-                string sql = "CREATE VIEW " + this.No + " (";
-                sql += "[No],";
-                sql += "[Name]";
-                sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
-                sql += " AS ";
-                sql += this.SelectStatement;
-
-                this.RunSQL(sql);
+                //创建视图失败时，删除此记录，并提示错误
+                this.DirectDelete();
+                throw ex;
             }
 
             base.afterInsert();

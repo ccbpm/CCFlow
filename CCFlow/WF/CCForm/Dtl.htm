@@ -25,6 +25,7 @@
         var hjl = new Array(); //合计列名称集合
         var mapExt;  //mapExt扩展
         var isEditable;
+        var ensName = GetQueryString("EnsName");
 
         //页面数据
         var pageData = {
@@ -48,6 +49,17 @@
 
         //页面启动函数.
         $(function () {
+             try {
+                //加载JS文件
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.src = "../../DataUser/JSLibData/" + ensName + ".js";
+                var tmp = document.getElementsByTagName('script')[0];
+                tmp.parentNode.insertBefore(s, tmp);
+            }
+            catch (err) {
+            }
+
             InitPage();
         });
 
@@ -273,9 +285,6 @@
 
         //初始化数据.
         function InitPage() {
-
-            var ensName = GetQueryString("EnsName");
-
             var refPKVal = GetQueryString("RefPKVal");
             if (refPKVal == null) {
                 alert('错误没有找到关联的主键.');
@@ -1087,6 +1096,17 @@
                     }
                     break;
                 case "InputCheck"://输入检查
+                    if (mapExt.AttrOfOper.length == 0 || mapExt.Tag1.length == 0 || mapExt.Tag2.length == 0) {
+                        continue;
+                    }
+                    //判断是否已经增加了函数
+                    var ctrl = $(tr).find('[name$=' + mapExt.AttrOfOper + ']');
+                    var changeEvent = ctrl.attr(mapExt.Tag2);
+                    if (changeEvent.indexOf(mapExt.Tag1 + '(') != -1) {
+                        continue;
+                    }
+
+                    ctrl.attr(mapExt.Tag2, changeEvent + mapExt.Tag1 + '(this);');
                     break;
                 case "TBFullCtrl"://自动填充  先不做
                     break;

@@ -147,6 +147,7 @@ namespace BP.WF.HttpHandler
                     attr.KeyOfEn == "WFSta")
                 {
                     attr.FK_MapData = rptNo;
+                    attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
                     attr.DirectInsert();
                     continue;
                 }

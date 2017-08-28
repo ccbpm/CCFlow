@@ -70,7 +70,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-        #region 报表设计器.
+        #region 报表设计器. - 第2步选择列.
         /// <summary>
         /// 初始化方法
         /// </summary>
@@ -81,6 +81,7 @@ namespace BP.WF.HttpHandler
             string rptNo = this.GetRequestVal("RptNo");
 
             //所有的字段.
+            string fk_mapdata = "ND"+int.Parse(this.FK_Flow)+"Rpt";
             MapAttrs mattrs = new MapAttrs(this.FK_MapData);
             ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
 
@@ -108,6 +109,32 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+
+        #region 报表设计器. - 第3步设置列的顺序.
+        /// <summary>
+        /// 初始化方法
+        /// </summary>
+        /// <returns></returns>
+        public string S3ColsLabel_Init()
+        {
+            string rptNo = this.GetRequestVal("RptNo");
+
+            //选择的字段,就是报表的字段.
+            MapAttrs mattrsOfRpt = new MapAttrs(rptNo);
+            return mattrsOfRpt.ToJson();
+        }
+        /// <summary>
+        /// 保存列的顺序名称.
+        /// </summary>
+        /// <returns></returns>
+        public string S3ColsLabel_Save()
+        {
+            string orders = this.GetRequestVal("Orders");
+            //格式为  @KeyOfEn,Lable,idx  比如： @DianHua,电话,1@Addr,地址,2
+
+            return "保存成功..";
+        }
+        #endregion
 
         /// <summary>
         /// 获得流程报表列表

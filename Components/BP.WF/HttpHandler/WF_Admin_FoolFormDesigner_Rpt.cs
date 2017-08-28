@@ -77,7 +77,29 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string S2ColsChose_Init()
         {
-            return "";
+            DataSet ds = new DataSet();
+            string rptNo = this.GetRequestVal("RptNo");
+
+            //所有的字段.
+            MapAttrs mattrs = new MapAttrs(this.FK_MapData);
+            ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
+
+            //选择的字段,就是报表的字段.
+            MapAttrs mattrsOfRpt = new MapAttrs(rptNo);
+            ds.Tables.Add(mattrsOfRpt.ToDataTableField("Sys_MapAttrOfSelected"));
+
+            //系统字段.
+            MapAttrs mattrsOfSystem = new MapAttrs();
+            var sysFields = BP.WF.Glo.FlowFields;
+            foreach (MapAttr item in mattrs)
+            {
+                if (sysFields.Contains(item.KeyOfEn))
+                    mattrsOfSystem.AddEntity(item);
+            }
+            ds.Tables.Add(mattrsOfSystem.ToDataTableField("Sys_MapAttrOfSystem"));
+
+            //返回.
+            return BP.Tools.Json.DataSetToJson(ds, false) ;
         }
         public string S2ColsChose_Save()
         {

@@ -116,6 +116,10 @@ namespace BP.Sys
         /// </summary>
         public const string UIIsEnable = "UIIsEnable";
         /// <summary>
+        /// 是否多选，只对DLL字段有效
+        /// </summary>
+        public const string UIIsMultiple = "UIIsMultiple";
+        /// <summary>
         /// 关联的表的Key
         /// </summary>
         public const string UIRefKey = "UIRefKey";
@@ -305,6 +309,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapAttrAttr.UIIsInput, value);
+            }
+        }
+        /// <summary>
+        /// 是否是多选，只对DLL字段有效
+        /// </summary>
+        public bool UIIsMultiple
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapAttrAttr.UIIsMultiple, false);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.UIIsMultiple, value);
             }
         }
         /// <summary>
@@ -1405,7 +1423,7 @@ namespace BP.Sys
                 map.AddTBInt(MapAttrAttr.ColSpan, 1, "单元格数量", true, false);
 
                 //显示的分组.
-                map.AddTBString(MapAttrAttr.GroupID, null, "显示的分组", true, false, 0, 100, 20);
+                map.AddTBInt(MapAttrAttr.GroupID, 0, "显示的分组", true, false);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
 
                 //参数属性.

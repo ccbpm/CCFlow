@@ -35,11 +35,11 @@
                         alert(data);
                         return;
                     }
-                    var jsData = JSON.parse(data);
 
-                    $('#TB_No').val(jsData.No);
-                    $('#TB_Name').val(jsData.Name);
-                    $('#TB_Note').val(jsData.Name);
+                    var jsData = JSON.parse(data);
+                    var Sys_MapAttrOfAll = jsData["Sys_MapAttrOfAll"]; //所有的列.
+                    var Sys_MapAttrOfSelected = jsData["Sys_MapAttrOfSelected"]; //已经选择的列.
+                    var Sys_MapAttrOfMastSelected = jsData["Sys_MapAttrOfMastSelected"]; //必须选择的列.
 
                 }
             });

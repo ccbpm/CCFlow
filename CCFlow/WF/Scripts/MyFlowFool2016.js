@@ -763,16 +763,20 @@ function initGroup(workNodeData, groupFiled) {
             var urlParam = href.substring(href.indexOf('?') + 1, href.length);
             urlParam = '&' + urlParam;
             urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
-            if (frmDtl.DtlShowModel == "0") {
-                if (pageData.IsReadOnly) {
-                    src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + urlParam + "&Version=" + load.Version;
-                } else {
-                    src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + urlParam + "&Version=" + load.Version;
+            var frmDtl = $.grep(workNodeData.Sys_MapDtl, function (val) { return val.No == groupFiled["EnName"] });
+            if (frmDtl.length > 0) {
+                frmDtl = frmDtl[0];
+                if (frmDtl.DtlShowModel == "0") {
+                    if (pageData.IsReadOnly) {
+                        src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + urlParam + "&Version=" + load.Version;
+                    } else {
+                        src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + urlParam + "&Version=" + load.Version;
+                    }
                 }
-            }
-            //var src = "/WF/CCForm/Dtl.htm?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
-            //src += "&r=q" + paras;
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+                //var src = "/WF/CCForm/Dtl.htm?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.WorkID + "&PageIdx=1";
+                //src += "&r=q" + paras;
+                groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+            }else
             break;
         case "Ath": //增加附件.
             break;
@@ -1287,8 +1291,15 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                 break;
                         }
                         if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
+                            //多选下拉框
+                            var isMultiSele = "";
+                            var isMultiSeleClass = "";
+                            if (mapAttr.UIIsMultiple == undefined || mapAttr.UIIsMultiple == 0) {
+                                isMultiSele = ' multiple data-live-search="false" ';
+                                isMultiSeleClass = " selectpicker show-tick  ";
+                            }
                             eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">1' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
+                                "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                                 (workNodeData, mapAttr, defValue) + "</select>";
                             eleHtml += '</div>';
                         } else {//文本区域
@@ -1374,8 +1385,15 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         colsm = 10;
                     }
                     if (mapAttr.UIContralType == 1) {//DDL
+                        //多选下拉框
+                        var isMultiSele = "";
+                        var isMultiSeleClass = "";
+                        if (mapAttr.UIIsMultiple == undefined || mapAttr.UIIsMultiple == 0) {
+                            isMultiSele = ' multiple data-live-search="false" ';
+                            isMultiSeleClass = " selectpicker show-tick  ";
+                        }
                         eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                         eleHtml += '</div>';
                         //eleHtml += "</div>";
                     }
@@ -1442,9 +1460,15 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         mdCol = 4;
                         smCol = 8;
                     }
-
+                    //多选下拉框
+                    var isMultiSele = "";
+                    var isMultiSeleClass = "";
+                    if (mapAttr.UIIsMultiple == undefined || mapAttr.UIIsMultiple == 0) {
+                        isMultiSele = ' multiple data-live-search="false" ';
+                        isMultiSeleClass = " selectpicker show-tick  ";
+                    }
                     eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
 
                     eleHtml += '</div>';
                 }
@@ -1802,10 +1826,10 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
     });
 
     var result = defVal;
-
+    
     //通过MAINTABLE返回的参数
     for (var ele in workNodeData.MainTable[0]) {
-        if (keyOfEn == ele && workNodeData.MainTable[0] != '') {
+        if (keyOfEn == ele && workNodeData.MainTable[0][ele] != '') {
             result = workNodeData.MainTable[0][ele];
             break;
         }
@@ -1898,6 +1922,14 @@ function GenerWorkNode() {
 
             Common.MaxLengthError();
             // window.location.href = "#divCurrentForm";
+
+            //初始化复选下拉框 
+            var selectPicker = $('.selectpicker');
+            $.each(selectPicker, function ( i,selectObj) {
+                var defVal = $(selectObj).attr('data-val');
+                var defValArr = defVal.split(',');
+                $(selectObj).selectpicker('val', defValArr);
+            });
         }
     });
 }
@@ -1943,6 +1975,14 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 //下拉框
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+
+                //对于复选下拉框获取值得方法
+                if ($('[data-id=' + name + ']').length > 0) {
+                    var val = $(disabledEle).val().join(',');
+                    formArrResult.push(name + '=' + val);
+                } else {
+                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+                }
                 break;
                 //文本区域
             case "TEXTAREA":
@@ -1978,7 +2018,29 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     if (formss != '')
         dataArr.push(formss);
     var formData = dataArr.join('&');
-    return formData;
+
+
+    //为了复选框  合并一下值  复选框的值以  ，号分割
+    //用& 符号截取数据
+    var formDataArr = formData.split('&');
+    var formDataResultObj = {};
+    $.each(formDataArr, function (i, formDataObj) {
+        //计算出等号的INDEX
+        var indexOfEqual = formDataObj.indexOf('=');
+        var objectKey = formDataObj.substr(0,indexOfEqual);
+        var objectValue = formDataObj.substr(indexOfEqual+1);
+        if (formDataResultObj[objectKey] == undefined) {
+            formDataResultObj[objectKey] = objectValue;
+        } else {
+            formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
+        }
+    });
+
+    var formdataResultStr = '';
+    for (var ele in formDataResultObj) {
+        formdataResultStr =formdataResultStr+ ele + '=' + formDataResultObj[ele] + '&';
+    }
+    return formdataResultStr;
 }
 //发送
 function Send() {

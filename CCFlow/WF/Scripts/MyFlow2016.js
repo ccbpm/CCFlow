@@ -4,7 +4,6 @@
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
         FormOnLoadCheckIsNull();
     }
-
 });
 
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.
@@ -1392,9 +1391,16 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                 break;
                         }
                         if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
+                            //多选下拉框
+                            var isMultiSele = "";
+                            var isMultiSeleClass = "";
+                            if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                                isMultiSele = ' multiple data-live-search="false" ';
+                                isMultiSeleClass = " selectpicker show-tick form-control ";
+                            }
                             eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">1' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
-                                (workNodeData, mapAttr, defValue) + "</select>";
+                                   "<select" + isMultiSele + " class=" + isMultiSeleClass + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
+                                    (workNodeData, mapAttr, defValue) + "</select>";
                             eleHtml += '</div>';
                         } else {//文本区域
                             if (mapAttr.UIHeight <= 23) {
@@ -1477,8 +1483,16 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         colsm = 10;
                     }
                     if (mapAttr.UIContralType == 1) {//DDL
+                        //下拉框设置成多选
+                        var isMultiSele = "";
+                        var isMultiSeleClass = "";
+                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                            isMultiSele = ' multiple data-live-search="false" ';
+                            isMultiSeleClass = " selectpicker show-tick form-control ";
+                        }
+
                         eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                "<select class='"+isMultiSeleClass+"' "+isMultiSele+" name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                         eleHtml += '</div>';
                         //eleHtml += "</div>";
                     }
@@ -1546,8 +1560,16 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         smCol = 8;
                     }
 
+                    //选择框多选
+                    var isMultiSele = "";
+                    var isMultiSeleClass = "";
+                    if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                        isMultiSele = ' multiple data-live-search="false" ';
+                        isMultiSeleClass = " selectpicker show-tick form-control ";
+                    }
+
                     eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                "<select class='"+isMultiSeleClass+"' "+isMultiSele+" name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
 
                     eleHtml += '</div>';
                 }

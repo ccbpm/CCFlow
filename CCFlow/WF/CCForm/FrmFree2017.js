@@ -849,8 +849,16 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                 break;
                         }
                         if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
+                            //多选下拉框
+                            var isMultiSele = "";
+                            var isMultiSeleClass = "";
+                            if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                                isMultiSele = ' multiple data-live-search="false" ';
+                                isMultiSeleClass = " selectpicker show-tick form-control ";
+                            }
+
                             eleHtml +=
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
+                                    "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                                 (workNodeData, mapAttr, defValue) + "</select>";
                         } else {//文本区域
                             if (mapAttr.UIHeight <= 23) {
@@ -916,8 +924,16 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         colsm = 10;
                     }
                     if (mapAttr.UIContralType == 1) {//DDL
+                        //多选下拉框
+                        var isMultiSele = "";
+                        var isMultiSeleClass = "";
+                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                            isMultiSele = ' multiple data-live-search="false" ';
+                            isMultiSeleClass = " selectpicker show-tick form-control ";
+                        }
+
                         eleHtml +=
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                         //eleHtml += "</div>";
                     }
 
@@ -979,8 +995,16 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         smCol = 8;
                     }
 
+                    //多选下拉框
+                    var isMultiSele = "";
+                    var isMultiSeleClass = "";
+                    if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                        isMultiSele = ' multiple data-live-search="false" ';
+                        isMultiSeleClass = " selectpicker show-tick form-control ";
+                    }
+
                     eleHtml +=
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                            "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                 }
             } else {
                 //展示附件信息
@@ -1365,6 +1389,14 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                 //下拉框
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+
+                //对于复选下拉框获取值得方法
+                if ($('[data-id=' + name + ']').length > 0) {
+                    var val = $(disabledEle).val().join(',');
+                    formArrResult.push(name + '=' + val);
+                } else {
+                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+                }
                 break;
                 //文本区域
             case "TEXTAREA":
@@ -1400,8 +1432,30 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     if (formss != '')
         dataArr.push(formss);
     var formData = dataArr.join('&');
-    return formData;
-} 
+
+
+    //为了复选框  合并一下值  复选框的值以  ，号分割
+    //用& 符号截取数据
+    var formDataArr = formData.split('&');
+    var formDataResultObj = {};
+    $.each(formDataArr, function (i, formDataObj) {
+        //计算出等号的INDEX
+        var indexOfEqual = formDataObj.indexOf('=');
+        var objectKey = formDataObj.substr(0, indexOfEqual);
+        var objectValue = formDataObj.substr(indexOfEqual + 1);
+        if (formDataResultObj[objectKey] == undefined) {
+            formDataResultObj[objectKey] = objectValue;
+        } else {
+            formDataResultObj[objectKey] = formDataResultObj[objectKey] + ',' + objectValue;
+        }
+    });
+
+    var formdataResultStr = '';
+    for (var ele in formDataResultObj) {
+        formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
+    }
+    return formdataResultStr;
+}
 
 $(function () {
     $('#btnMsgModalOK').bind('click', function () {
@@ -1959,6 +2013,14 @@ function GenerFreeFrm() {
 
             showTbNoticeInfo();
 
+
+            //初始化复选下拉框 
+            var selectPicker = $('.selectpicker');
+            $.each(selectPicker, function (i, selectObj) {
+                var defVal = $(selectObj).attr('data-val');
+                var defValArr = defVal.split(',');
+                $(selectObj).selectpicker('val', defValArr);
+            });
         }
     })
 }
@@ -1981,14 +2043,31 @@ function figure_MapAttr_Template(mapAttr) {
         if (mapAttr.UIContralType != 6) {
 
             if (mapAttr.LGType == 2) {
-                eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                //多选下拉框
+                var isMultiSele = "";
+                var isMultiSeleClass = "";
+                if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                    isMultiSele = ' multiple data-live-search="false" ';
+                    isMultiSeleClass = " selectpicker show-tick form-control ";
+                }
+
+                eleHtml +=
+                        "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
             } else {
                 //添加文本框 ，日期控件等
                 //AppString   
                 if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                     if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
+                        //多选下拉框
+                        var isMultiSele = "";
+                        var isMultiSeleClass = "";
+                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                            isMultiSele = ' multiple data-live-search="false" ';
+                            isMultiSeleClass = " selectpicker show-tick form-control ";
+                        }
+
                         eleHtml +=
-                            "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
+                                "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                             (workNodeData, mapAttr, defValue) + "</select>";
                     } else {//文本区域
                         if (mapAttr.UIHeight <= 23) {
@@ -2041,8 +2120,16 @@ function figure_MapAttr_Template(mapAttr) {
 
                 if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
                     if (mapAttr.UIContralType == 1) {//DDL
+                        //多选下拉框
+                        var isMultiSele = "";
+                        var isMultiSeleClass = "";
+                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                            isMultiSele = ' multiple data-live-search="false" ';
+                            isMultiSeleClass = " selectpicker show-tick form-control ";
+                        }
+
                         eleHtml +=
-                                "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                     }
                 }
 

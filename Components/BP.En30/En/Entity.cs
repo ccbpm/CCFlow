@@ -5010,40 +5010,51 @@ namespace BP.En
 		/// 把当前实体集合的数据库转换成Table。
 		/// </summary>
 		/// <returns>DataTable</returns>
-		public DataTable ToDataTableField(string tableName = "dt")
-		{
-			DataTable dt = this.ToEmptyTableField();
+        public DataTable ToDataTableField(string tableName = "dt")
+        {
+            DataTable dt = this.ToEmptyTableField();
 
-			Entity en = this.GetNewEntity;
-			Attrs attrs = en.EnMap.Attrs;
+            Entity en = this.GetNewEntity;
+            Attrs attrs = en.EnMap.Attrs;
 
-			dt.TableName = tableName;
-			foreach (Entity myen in this)
-			{
-				DataRow dr = dt.NewRow();
-				foreach (Attr attr in attrs)
-				{
-					if (attr.MyDataType == DataType.AppBoolean)
-					{
-						if (myen.GetValIntByKey(attr.Key) == 1)
-							dr[attr.Key] = "1";
-						else
-							dr[attr.Key] = "0";
-						continue;
-					}
+            dt.TableName = tableName;
 
-					/*如果是外键 就要去掉左右空格。
-					 *  */
-					if (attr.MyFieldType == FieldType.FK
-						|| attr.MyFieldType == FieldType.PKFK)
-						dr[attr.Key] = myen.GetValByKey(attr.Key).ToString().Trim();
-					else
-						dr[attr.Key] = myen.GetValByKey(attr.Key);
-				}
-				dt.Rows.Add(dr);
-			}
-			return dt;
-		}
+            for (int i = 0; i < this.Count; i++)
+            {
+                Entity myen = this[i];
+                DataRow dr = dt.NewRow();
+                foreach (Attr attr in attrs)
+                {
+                    if (attr.MyDataType == DataType.AppBoolean)
+                    {
+                        if (myen.GetValIntByKey(attr.Key) == 1)
+                            dr[attr.Key] = "1";
+                        else
+                            dr[attr.Key] = "0";
+                        continue;
+                    }
+
+                    var val = myen.GetValByKey(attr.Key);
+                    if (val == null)
+                        continue;
+
+                    /*如果是外键 就要去掉左右空格。
+                     *  */
+                    if (attr.MyFieldType == FieldType.FK
+                        || attr.MyFieldType == FieldType.PKFK)
+                        dr[attr.Key] = val.ToString().Trim();
+                    else
+                        dr[attr.Key] = val;
+                }
+                dt.Rows.Add(dr);
+            }
+
+
+            //foreach (Entity myen in this)
+            //{
+            //}
+            return dt;
+        }
 		public DataTable ToDataTableDesc()
 		{
 			DataTable dt = this.ToEmptyTableDesc();

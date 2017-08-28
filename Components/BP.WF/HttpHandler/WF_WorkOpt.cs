@@ -159,7 +159,7 @@ namespace BP.WF.HttpHandler
 
                 gwlOfMe.Retrieve();
 
-                gwls.AddEntity(item);
+                gwls.AddEntity(gwlOfMe);
             }
 
             return gwls.ToJson();

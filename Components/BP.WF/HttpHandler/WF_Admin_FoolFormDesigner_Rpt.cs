@@ -131,6 +131,28 @@ namespace BP.WF.HttpHandler
         {
             string orders = this.GetRequestVal("Orders");
             //格式为  @KeyOfEn,Lable,idx  比如： @DianHua,电话,1@Addr,地址,2
+            
+            string rptNo=this.GetRequestVal("RptNo");
+
+            string[] strs = orders.Split('@');
+            foreach (string item in strs)
+            {
+                if (string.IsNullOrEmpty(item)==true)
+                    continue;
+
+                string[] vals=item.Split(',');
+
+                string mypk = rptNo + "_" + vals[0];
+
+                MapAttr attr = new MapAttr();
+                attr.MyPK = mypk;
+                attr.Retrieve();
+
+                attr.Name = vals[1];
+                attr.Idx = int.Parse(vals[2]);
+
+                attr.Update(); //执行更新.
+            }
 
             return "保存成功..";
         }

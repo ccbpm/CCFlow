@@ -142,7 +142,7 @@ function figure_NodeFHL(x, y) {
     //Image
     var url = figureSetsURL + "/Nodes/nodeFHL_big.png";
 
-    var ifig = new ImageFrame(url, x, y, true, 110, 48);
+    var ifig = new ImageFrame(url, x, y, true, 90, 35);
     ifig.debug = true;
     f.addPrimitive(ifig);
 
@@ -182,7 +182,7 @@ function figure_NodeSubThread(x, y) {
     //Image
     var url = figureSetsURL + "/Nodes/nodeSubThread_big.png";
 
-    var ifig = new ImageFrame(url, x, y, true, 110, 48);
+    var ifig = new ImageFrame(url, x, y, true, 90, 35);
     ifig.debug = true;
     f.addPrimitive(ifig);
 

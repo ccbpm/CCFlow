@@ -691,7 +691,7 @@ function figure_Node_Template(nodeId, name, x, y, NodeWorkType) {
             break;
     }
 
-    var ifig = new ImageFrame(url, x, y, true, 110, 48);
+    var ifig = new ImageFrame(url, x, y, true, 90, 35);
     ifig.debug = true;
     f.addPrimitive(ifig);
 

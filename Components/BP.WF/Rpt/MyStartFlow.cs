@@ -603,7 +603,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoS2_ColsChose()
         {
-            string url = "/WF/Admin/FoolFormDesigner/Rpt/S2_ColsChose.aspx?FK_MapData="+this.FK_Rpt+"MyRpt&FK_Flow=" + this.No + "&RptNo="+this.FK_Rpt;
+            string url = "/WF/Admin/FoolFormDesigner/Rpt/S2ColsChose.htm?FK_MapData="+this.FK_Rpt+"MyRpt&FK_Flow=" + this.No + "&RptNo="+this.FK_Rpt;
             return url;
         }
         /// <summary>

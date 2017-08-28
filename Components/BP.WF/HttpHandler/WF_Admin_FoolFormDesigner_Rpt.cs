@@ -70,36 +70,19 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-        #region 报表编辑.
+        #region 报表设计器.
         /// <summary>
         /// 初始化方法
         /// </summary>
         /// <returns></returns>
-        public string S1Edit_Init()
+        public string S2ColsChose_Init()
         {
-            string no = this.GetRequestVal("No");
-            BP.WF.Rpt.MapRpt ens = new BP.WF.Rpt.MapRpt();
-            ens.Retrieve(BP.WF.Rpt.MapRptAttr.No, no);
-            if (ens == null)
-            {
-                BP.WF.Rpt.MapRpt en = new BP.WF.Rpt.MapRpt();
-                en.No = "ND" + int.Parse(this.FK_Flow) + "MyRpt";
-                en.Name = "流程报表默认";
-                en.FK_Flow = this.FK_Flow;
-                en.Insert();
-                ens.Retrieve(BP.WF.Rpt.MapRptAttr.No, no);
-            }
-            return ens.ToJson();
+            return "";
         }
-        public string S1Edit_Save()
+        public string S2ColsChose_Save()
         {
-            string no = this.GetRequestVal("No");
-            BP.WF.Rpt.MapRpt rpt = new BP.WF.Rpt.MapRpt();
-            rpt.Retrieve(BP.WF.Rpt.MapRptAttr.No, no);
-            rpt.Name = this.GetRequestVal("TB_Name");
-            rpt.Note = this.GetRequestVal("TB_Note");
-            rpt.Update();
-            return "保存成功.";
+
+            return "保存成功..";
         }
         #endregion
 

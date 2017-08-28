@@ -289,7 +289,6 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_SelectAccper", "选择接受/抄送人信息");
-                 
                 map.AddMyPK();
 
                 map.AddTBInt(SelectAccperAttr.FK_Node, 0, "接受人节点", true, false);

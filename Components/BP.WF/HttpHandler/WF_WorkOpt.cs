@@ -28,6 +28,34 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        #region 通用人员选择器.
+        /// <summary>
+        /// 通用人员选择器Init
+        /// </summary>
+        /// <returns></returns>
+        public string AccepterOfGener_Init()
+        {
+            /* 获得上一次发送的人员列表. */
+            int toNodeID = this.GetRequestValInt("ToNode");
+
+            //获得最近的一个workid.
+            string trackTable = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            string sql = "";
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                sql = "SELECT TOP 1 EmpTo FROM " + trackTable + " WHERE NDTo=" + toNodeID + " AND ActionType=1 AND EmpFrom='" + WebUser.No + "' ORDER BY RDT ";
+            else
+                sql = "SELECT EmpTo FROM  " + trackTable + " WHERE NDTo=" + toNodeID + " AND ActionType=1 AND EmpFrom='" + WebUser.No + "' AND ROWNUM=0 ORDER BY RDT ";
+
+            string  empTo = DBAccess.RunSQLReturnStringIsNull(sql,null);
+
+            //查询出来,已经选择的人员.
+            SelectAccpers sas = new SelectAccpers();
+            sas.Retrieve(SelectAccperAttr.FK_Node, this.FK_Node, SelectAccperAttr.WorkID,this.WorkID);
+            return sas.ToJson();
+        }
+        #endregion
+
         #region 会签.
         /// <summary>
         /// 会签
@@ -48,7 +76,6 @@ namespace BP.WF.HttpHandler
 
             //找到历史记录, 并把历史记录 ，加入到选择框里.
             string sql = "SELECT * ";
-
 
             return ens.ToJson();
         }
@@ -1234,7 +1261,7 @@ namespace BP.WF.HttpHandler
 
             if (select.SelectorModel == SelectorModel.GenerUserSelecter)
             {
-                return "url@GenerUserSelecter";
+                return "url@AccepterOfGener.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node;
             }
 
             //获得 部门与人员.

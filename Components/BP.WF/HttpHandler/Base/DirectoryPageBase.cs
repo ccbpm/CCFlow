@@ -526,7 +526,19 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-
+        /// <summary>
+        /// 页面Index.
+        /// </summary>
+        public int PageIdx
+        {
+            get
+            {
+                string str = context.Request.QueryString["PageIdx"];
+                if (str == null || str == "")
+                    return 1;
+                return int.Parse(str);
+            }
+        }
         /// <summary>
         /// 字段属性编号
         /// </summary>

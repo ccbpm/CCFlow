@@ -62,14 +62,27 @@ namespace BP.WF.HttpHandler
             DataTable dtAttrs = attrs.ToDataTableField("Sys_MapAttr");
             ds.Tables.Add(dtAttrs);
 
-
             //数据.
             GEEntitys ges = new GEEntitys(fk_mapdata);
-            QueryObject qo = new QueryObject(ges);
-            DataTable dt = qo.DoQueryToTable();
-            dt.TableName = "dt";
-            ds.Tables.Add(dt);
 
+            //设置查询条件.
+            QueryObject qo = new QueryObject(ges);
+            qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+
+            //查询.
+            // qo.DoQuery(BP.WF.Data.GERptAttr.OID, 15, this.PageIdx);
+
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+            {
+                DataTable dt = qo.DoQueryToTable();
+                dt.TableName = "dt";
+                ds.Tables.Add(dt);
+            }
+            else
+            {
+                qo.DoQuery();
+                ds.Tables.Add(ges.ToDataTableField("dt"));
+            }
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
 

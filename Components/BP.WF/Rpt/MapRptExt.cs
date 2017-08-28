@@ -715,7 +715,8 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch()
         {
-            return "../../Rpt/Search.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            //return "../../Rpt/Search.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
+            return "../../Rpt/MyStartFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
         }
         /// <summary>
         /// 高级查询

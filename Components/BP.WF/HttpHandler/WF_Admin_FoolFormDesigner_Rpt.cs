@@ -155,6 +155,7 @@ namespace BP.WF.HttpHandler
                 if (fields.Contains("," + attr.KeyOfEn + ",") == true)
                 {
                     attr.FK_MapData = rptNo;
+                    attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
                     attr.DirectInsert();
                 }
             }

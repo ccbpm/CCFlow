@@ -612,7 +612,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoS4_ColsOrder()
         {
-            string url = "/WF/Admin/FoolFormDesigner/Rpt/S3_ColsLabel.aspx?FK_MapData="+this.FK_Rpt+"MyRpt&FK_Flow=" + this.No + "&RptNo="+this.FK_Rpt;
+            string url = "/WF/Admin/FoolFormDesigner/Rpt/S3ColsLabel.htm?FK_MapData="+this.FK_Rpt+"MyRpt&FK_Flow=" + this.No + "&RptNo="+this.FK_Rpt;
             return url;
         }
         /// <summary>
@@ -621,7 +621,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoS5_SearchCond()
         {
-            string url = "/WF/Admin/FoolFormDesigner/Rpt/S5_SearchCond.aspx?FK_MapData="+this.FK_Rpt+"&FK_Flow=" + this.No + "&RptNo="+this.FK_Rpt;
+            string url = "/WF/Admin/FoolFormDesigner/Rpt/S5SearchCond.htm?FK_MapData="+this.FK_Rpt+"&FK_Flow=" + this.No + "&RptNo="+this.FK_Rpt;
             return url;
         }
         /// <summary>

@@ -1,11 +1,17 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
-     <script type="text/javascript" src="../../../Scripts/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="../../../Scripts/QueryString2016.js"></script>
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <title>2. 设置报表显示列</title>
+    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/WF/Comm/Gener.js"></script>
+
     <script language="javascript" type="text/javascript" >
 
         //页面启动函数.
@@ -40,21 +46,85 @@
                     var Sys_MapAttrOfAll = jsData["Sys_MapAttrOfAll"]; //所有的列.
                     var Sys_MapAttrOfSelected = jsData["Sys_MapAttrOfSelected"]; //已经选择的列.
                     var Sys_MapAttrOfSystem = jsData["Sys_MapAttrOfSystem"]; //系统字段.
+
+                    var tsysAppend = "",
+                        tallAppend = "";
+
+                    //1.列出系统字段（过滤掉必选字段）
+                    $.grep(Sys_MapAttrOfSystem, function (item) {
+                        return item.KeyOfEn == "WFSta" || item.KeyOfEn == "Title" || item.KeyOfEn == "OID";
+                    }, true).forEach(function (item, index) {
+
+                        if (index % 3 == 0) {
+                            tsysAppend += "<tr>";
+                        }
+
+                        tsysAppend += "<td nowrap style='width: 33%'>";
+                        var flag = false;
+                        for (var i = 0, length = Sys_MapAttrOfSelected.length; i < length; i++) {
+                            if (item.KeyOfEn == Sys_MapAttrOfSelected[i].KeyOfEn && item.Name == Sys_MapAttrOfSelected[i].Name) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        tsysAppend += "<input id='" + item.KeyOfEn + "' type='checkbox' name='" + item.KeyOfEn + "' " + (flag ? "checked = 'checked'" : "") + " />";
+                        tsysAppend += "<label for='" + item.KeyOfEn + "'>" + item.Name + "(" + item.KeyOfEn + ")</label>";
+                        tsysAppend += "</td>";
+
+                        if (index % 3 == 2) {
+                            tsysAppend += "</tr>";
+                        }
+                    });
+                    $("#tsys").append(tsysAppend);
+
+                    //2.列出业务字段
+                    $.grep(Sys_MapAttrOfAll, function (item) {
+                        var flag = false;
+                        for (var i = 0, length = Sys_MapAttrOfSystem.length; i < length; i++) {
+                            if (item.KeyOfEn == Sys_MapAttrOfSystem[i].KeyOfEn && item.Name == Sys_MapAttrOfSystem[i].Name) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        return flag;
+                    }, true).forEach(function (item, index) {
+
+                        if (index % 3 == 0) {
+                            tallAppend += "<tr>";
+                        }
+
+                        tallAppend += "<td nowrap style='width: 33%'>";
+                        var flag = false;
+                        for (var i = 0, length = Sys_MapAttrOfSelected.length; i < length; i++) {
+                            if (item.KeyOfEn == Sys_MapAttrOfSelected[i].KeyOfEn && item.Name == Sys_MapAttrOfSelected[i].Name) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        tallAppend += "<input id='" + item.KeyOfEn + "' type='checkbox' name='" + item.KeyOfEn + "' " + (flag ? " checked = 'checked'" : "") + "  />";
+                        tallAppend += "<label for='" + item.KeyOfEn + "'>" + item.Name + "(" + item.KeyOfEn + ")</label>";
+                        tallAppend += "</td>";
+
+                        if (index % 3 == 2) {
+                            tallAppend += "</tr>";
+                        }
+                    });
+                    $("#tall").append(tallAppend);
+
                 }
             });
         }
 
         function Save() {
-            var fk_flow = GetQueryString("FK_Flow");
+            var FK_Flow = GetQueryString("FK_Flow");
+            var RptNo = GetQueryString("RptNo");
 
-//            var no = $('#TB_No').val();
-//            var name = $('#TB_Name').val();
-//            var note = $('#TB_Note').val();
+            var checkBoxIDs = GenerCheckIDs(); 
 
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=S2ColsChose_Save&No=" + no + "&Name=" + name + "&Note=" + note + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+                url: Handler + "?DoType=S2ColsChose_Save&RptNo=" + RptNo + "&Fields=" + checkBoxIDs + "&FK_Flow=" + FK_Flow + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -63,7 +133,7 @@
                         //刷新父窗口
                         window.opener.location.reload();
                     }
-                    window.close();
+                    //window.close();
                 }
             });
         }
@@ -74,43 +144,47 @@
     </script>
     <base target="_self" /> 
 </head>
-<body onkeypress="Esc()" >
+<body class="easyui-layout">
+    <form id="form1" method="post">
+    <div data-options="region:'center',title:'2. 设置报表显示列',border:false" style="padding: 5px;
+        height: auto">
 
-<form name='cc' id='cc'>
-  <table class='Table' cellpadding='0' cellspacing='0' style='width: 60%;'>
-  <caption>报表属性编辑</caption>
-        <tr>
-            <td style=" width:30%;" >
-                编号:
-            </td>
-            <td>
-                <input type="text" id="TB_No" /><br />默认报表编号为:ND**MyRpt ,建议报表编号向后推：如ND20MyRpt1，ND20MyRpt2
-            </td>
-        </tr>
-        <tr>
-            <td >
-                名称:
-            </td>
-            <td>
-                <input type="text" id="TB_Name"/>
-            </td>
-        </tr>
-        <tr>
-            <td >
-                备注:
-            </td>
-            <td>
-                <input type="text" id="TB_Note"/>
-            </td>
-        </tr>
-    </table>
+        <table id="tsys" class='Table' cellpadding='2' cellspacing='2'>
+            <tr>
+                <td class='GroupTitle' colspan="3">
+                    系统字段
+                </td>
+            </tr>
+            <tr>
+                <td nowrap style='width: 33%'>
+                        <input id="OID" type="checkbox" name="OID"
+                            checked="checked" disabled="disabled" /><label for="OID">WorkID(OID)</label>
+                </td>
+                <td nowrap style='width: 33%'>
+                        <input id="Title" type="checkbox" name="Title"
+                            checked="checked" disabled="disabled" /><label for="Title">标题(Title)</label>
+                </td>
+                <td nowrap style='width: 33%'>
+                        <input id="WFSta" type="checkbox" name="WFSta"
+                            checked="checked" disabled="disabled" /><label for="WFSta">状态(WFSta)</label>
+                </td>
+            </tr>
+        </table>
+        <br />        <table id="tall" class='Table' cellpadding='2' cellspacing='2'>
+            <tr>
+                <td class='GroupTitle' colspan="3">
+                    业务字段
+                </td>
+            </tr>
+            
+        </table>
+        <br />
+        <a id="ContentPlaceHolder1_Btn_Save1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;" href="javascript:Save()">保存</a>
+    <a id="ContentPlaceHolder1_Btn_SaveAndNext1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$Btn_SaveAndNext1&#39;,&#39;&#39;)">保存并设置显示列次序</a>
+    <a id="ContentPlaceHolder1_Btn_Cancel1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-undo&#39;" href="javascript:__doPostBack(&#39;ctl00$ContentPlaceHolder1$Btn_Cancel1&#39;,&#39;&#39;)">取消</a>
     <br />
-
-    <input type="button" id="Btn_Save" name="Btn_Save" value="保存" onclick="Save()" />
-    <!--<input type="button" id="Button1" name="Btn_Save" value="保存并设置显示列" onclick="SaveAndNext()" />-->
-    <input type="button" id="Button2" name="Btn_Save" value="取消" onclick="Cancel()" />
-
-</form>
-
+    <br />
+    </div>
+    </form>
 </body>
 </html>

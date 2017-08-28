@@ -144,8 +144,13 @@
                         return;
                     }
 
+                    alert(window.location.href);
+
                     if (data.indexOf('url@') == 0) {
-                        alert("请修改节点的人员范围选择方式，通用人员选择器没有实现.");
+
+                        var url = data.replace('url@', '');
+                        window.location.href = url + "&ToNode=" + GetQueryString("ToNode");
+                        //alert("请修改节点的人员范围选择方式，通用人员选择器没有实现.");
                         return;
                     }
 

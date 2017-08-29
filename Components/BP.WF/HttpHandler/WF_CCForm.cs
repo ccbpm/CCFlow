@@ -803,6 +803,9 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Dtl_SaveRow()
         {
+            if (this.RefPKVal  == "0" || this.RefPKVal=="")
+                return "err@从表保存[Dtl_SaveRow],失败没有接收到refpk的值";
+
             //从表.
             MapDtl mdtl = new MapDtl(this.FK_MapDtl);
 
@@ -815,8 +818,6 @@ namespace BP.WF.HttpHandler
                 dtl.RetrieveFromDBSources();
             }
 
-
-
             #region 给实体循环赋值/并保存.
             BP.En.Attrs attrs = dtl.EnMap.Attrs;
             foreach (BP.En.Attr attr in attrs)
@@ -826,8 +827,6 @@ namespace BP.WF.HttpHandler
 
             //关联主赋值.
             dtl.RefPK = this.RefPKVal;
-
-
 
             #region 从表保存前处理事件.
             //获得主表事件.
@@ -854,7 +853,8 @@ namespace BP.WF.HttpHandler
             #endregion 从表保存前处理事件.
 
 
-
+            //一直找不到refpk  值为null .
+            dtl.RefPK = this.RefPKVal;
             if (dtl.OID == 0)
             {
                 //dtl.OID = DBAccess.GenerOID();

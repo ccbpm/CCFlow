@@ -187,7 +187,7 @@
     <Compile Include="Port\AdminEmp.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\MapRptExt.cs" />
-    <Compile Include="Rpt\MyStartFlow.cs" />
+    <Compile Include="Rpt\RptDfine.cs" />
     <Compile Include="Service References\CCInterface\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

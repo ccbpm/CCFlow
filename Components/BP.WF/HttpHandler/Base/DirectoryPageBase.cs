@@ -587,7 +587,7 @@ namespace BP.WF.HttpHandler
             {
                 string str = this.context.Request.QueryString["RefPKVal"];
                 if (str == null)
-                    return "1";
+                    return "0";
                 return str;
             }
         }

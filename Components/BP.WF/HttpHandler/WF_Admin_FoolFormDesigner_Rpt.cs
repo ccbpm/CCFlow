@@ -232,7 +232,7 @@ namespace BP.WF.HttpHandler
             MapData md = new MapData();
             md.No = rptNo;
             md.RetrieveFromDBSources();
-            ds.Tables.Add(md.ToDataTableField());
+            ds.Tables.Add(md.ToDataTableField("Main"));
 
             //查询出来枚举与外键类型的字段集合.
             MapAttrs attrs = new MapAttrs();

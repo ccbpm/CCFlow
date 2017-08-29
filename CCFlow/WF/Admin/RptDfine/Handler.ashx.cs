@@ -10,7 +10,6 @@ namespace CCFlow.WF.Admin.FoolFormDesigner.Rpt
     /// </summary>
     public class Handler : BP.WF.HttpHandler.HttpHandlerBase
     {
-
         /// <summary>
         /// 获取 “Handler业务处理类”的Type
         /// </summary>
@@ -18,10 +17,8 @@ namespace CCFlow.WF.Admin.FoolFormDesigner.Rpt
         {
             get
             {
-                return typeof(BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_Rpt);
+                return typeof(BP.WF.HttpHandler.WF_Admin_RptDfine);
             }
         }
-
-         
     }
 }

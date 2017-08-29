@@ -7,14 +7,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>设置报表导出模板</title>
-    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
-    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
-    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <style type="text/css">
         .tdhover
         {

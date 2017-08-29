@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true"
     CodeBehind="Frm_ColsChose.aspx.cs" Inherits="CCFlow.WF.MapDef.Rpt.Frm_ColsChose" %>
 
-<%@ Register Src="../Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
+<%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style type="text/css">
         #top

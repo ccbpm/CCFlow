@@ -577,13 +577,13 @@ namespace BP.WF.Data
                 map.AddTBString(CHAttr.Title, null, "标题", false, false, 0, 900, 5);
 
                 map.AddTBString(CHAttr.FK_Flow, null, "流程", false, false, 3, 3, 3);
-                map.AddTBString(CHAttr.FK_FlowT, null, "流程名称", true, true, 0, 50, 5);
+                map.AddTBString(CHAttr.FK_FlowT, null, "流程名称", true, true, 0, 200, 5);
 
                 map.AddTBInt(CHAttr.FK_Node, 0, "节点", false, false);
-                map.AddTBString(CHAttr.FK_NodeT, null, "节点名称", true, true, 0, 50, 5);
+                map.AddTBString(CHAttr.FK_NodeT, null, "节点名称", true, true, 0, 200, 5);
 
                 map.AddTBString(CHAttr.FK_Emp, null, "当事人", true, true, 0, 30, 3);
-                map.AddTBString(CHAttr.FK_EmpT, null, "当事人名称", true, true, 0, 50, 5);
+                map.AddTBString(CHAttr.FK_EmpT, null, "当事人名称", true, true, 0, 200, 5);
 
                 //为邓州增加的属性. 解决多人处理一个节点的工作的问题.
                 map.AddTBString(CHAttr.GroupEmps, null, "相关当事人", true, true, 0, 400, 3);
@@ -596,7 +596,7 @@ namespace BP.WF.Data
                 map.AddTBString(CHAttr.SDT, null, "应完成日期", true, true, 0, 50, 5);
 
                 map.AddTBString(CHAttr.FK_Dept, null, "隶属部门", true, true, 0, 50, 5);
-                map.AddTBString(CHAttr.FK_DeptT, null, "部门名称", true, true, 0, 50, 5);
+                map.AddTBString(CHAttr.FK_DeptT, null, "部门名称", true, true, 0, 500, 5);
                 map.AddTBString(CHAttr.FK_NY, null, "隶属月份", true, true, 0, 10, 10);
                 #endregion 基本属性.
 

@@ -83,6 +83,7 @@ namespace BP.WF
                     sa.FK_Emp = no;
                     sa.EmpName = name;
                     sa.FK_Node = item.NodeID;
+
                     sa.WorkID = workid;
                     sa.Info = "无";
                     sa.AccType = 0;
@@ -104,6 +105,7 @@ namespace BP.WF
 
                     sa.FK_Emp = WebUser.No;
                     sa.FK_Node = item.NodeID;
+
                     sa.WorkID = workid;
                     sa.Info = "无";
                     sa.AccType = 0;
@@ -129,6 +131,7 @@ namespace BP.WF
                     {
                         sa.FK_Emp = ne.FK_Emp;
                         sa.FK_Node = item.NodeID;
+
                         sa.WorkID = workid;
                         sa.Info = "无";
                         sa.AccType = 0;
@@ -193,6 +196,7 @@ namespace BP.WF
                         Emp emp = new Emp(dr[0].ToString());
                         sa.FK_Emp = emp.No;
                         sa.FK_Node = item.NodeID;
+
                         sa.WorkID = workid;
                         sa.Info = "无";
                         sa.AccType = 0;
@@ -275,6 +279,7 @@ namespace BP.WF
                         Emp emp = new Emp(dr[0].ToString());
                         sa.FK_Emp = emp.No;
                         sa.FK_Node = item.NodeID;
+
                         sa.WorkID = workid;
                         sa.Info = "无";
                         sa.AccType = 0;

@@ -105,6 +105,7 @@ namespace BP.WF.Template
                 this.SetValByKey(SelectAccperAttr.FK_Node, value);
             }
         }
+       
         /// <summary>
         /// 到人员
         /// </summary>
@@ -292,6 +293,7 @@ namespace BP.WF.Template
                 map.AddMyPK();
 
                 map.AddTBInt(SelectAccperAttr.FK_Node, 0, "接受人节点", true, false);
+                
                 map.AddTBInt(SelectAccperAttr.WorkID, 0, "WorkID", true, false);
                 map.AddTBString(SelectAccperAttr.FK_Emp, null, "FK_Emp", true, false, 0, 20, 10);
                 map.AddTBString(SelectAccperAttr.EmpName, null, "EmpName", true, false, 0, 20, 10);

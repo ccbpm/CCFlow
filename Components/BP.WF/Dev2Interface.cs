@@ -4852,6 +4852,7 @@ namespace BP.WF
                     sa.FK_Emp = ccs[i].Trim();
                     sa.EmpName = ccNames[i].Trim();
                     sa.FK_Node = nodeid;
+
                     sa.WorkID = workid;
                     sa.AccType = 1;
                     sa.Idx = cidx;
@@ -7246,17 +7247,18 @@ namespace BP.WF
         /// 增加下一步骤的接受人(用于当前步骤向下一步骤发送时增加接受人)
         /// </summary>
         /// <param name="workID">工作ID</param>
-        /// <param name="formNodeID">节点ID</param>
+        /// <param name="toNodeID">到达的节点ID</param>
         /// <param name="emps">如果多个就用逗号分开</param>
         /// <param name="Del_Selected">是否删除历史选择</param>
-        public static void Node_AddNextStepAccepters(Int64 workID, int formNodeID, string emps, bool Del_Selected = true)
+        public static void Node_AddNextStepAccepters(Int64 workID,  int toNodeID, string emps, bool del_Selected = true)
         {
             SelectAccper sa = new SelectAccper();
             //删除历史选择
-            if (Del_Selected == true)
+            if (del_Selected == true)
             {
-                sa.Delete(SelectAccperAttr.FK_Node, formNodeID, SelectAccperAttr.WorkID, workID);
+                sa.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, workID);
             }
+
             emps = emps.Replace(" ", "");
             emps = emps.Replace(";", ",");
             emps = emps.Replace("@", ",");
@@ -7267,7 +7269,7 @@ namespace BP.WF
             {
                 if (string.IsNullOrEmpty(emp))
                     continue;
-                sa.MyPK = formNodeID + "_" + workID + "_" + emp;
+                sa.MyPK = toNodeID + "_" + workID + "_" + emp;
 
                 empEn.No = emp;
                 int i = empEn.RetrieveFromDBSources();
@@ -7277,7 +7279,8 @@ namespace BP.WF
                 sa.FK_Emp = emp;
                 sa.EmpName = empEn.Name;
 
-                sa.FK_Node = formNodeID;
+                sa.FK_Node = toNodeID;
+
                 sa.WorkID = workID;
                 sa.Insert();
             }
@@ -7302,6 +7305,7 @@ namespace BP.WF
             sa.FK_Emp = emp;
             sa.EmpName = empEn.Name;
             sa.FK_Node = formNodeID;
+
             sa.WorkID = workID;
             sa.Insert();
         }
@@ -7923,7 +7927,7 @@ namespace BP.WF
             ps.Add("FK_Node", nodeID);
             ps.Add("FK_Emp", empNo);
             if (DBAccess.RunSQL(ps) == 0)
-                throw new Exception("@设置的工作不存在，或者当前的登陆人员已经改变。");
+                throw new Exception("设置的工作不存在，或者当前的登陆人员[" + empNo + "]已经改变，请重新登录。");
 
             // 判断当前节点的已读回执.
             if (nd.ReadReceipts == ReadReceipts.None)
@@ -8687,6 +8691,7 @@ namespace BP.WF
                 en.MyPK = nodeID + "_" + workid + "_" + str;
                 en.FK_Emp = str;
                 en.FK_Node = nodeID;
+
                 en.WorkID = workid;
                 en.Rec = WebUser.No;
                 en.IsRemember = isNextTime;

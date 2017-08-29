@@ -32,7 +32,6 @@ namespace BP.En
     abstract public class EntityNoName : EntityNo
     {
         #region 属性
-
         /// <summary>
         /// 名称
         /// </summary>
@@ -112,6 +111,8 @@ namespace BP.En
             return base.beforeUpdate();
         }
         #endregion
+
+       
     }
 	/// <summary>
     /// 具有编号名称的基类实体s

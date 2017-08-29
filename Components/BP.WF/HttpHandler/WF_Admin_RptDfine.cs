@@ -280,6 +280,10 @@ namespace BP.WF.HttpHandler
                 return  this.GetRequestVal("RptNo");
             }
         }
+        /// <summary>
+        /// 查询条件保存.
+        /// </summary>
+        /// <returns></returns>
         public string S5SearchCond_Save()
         {
             MapData md = new MapData();
@@ -288,7 +292,6 @@ namespace BP.WF.HttpHandler
 
             //报表编号.
             string fields = this.GetRequestVal("Fields");
-
             md.RptSearchKeys = fields + "*";
 
             string IsSearchKey = this.GetRequestVal("IsSearchKey");
@@ -305,7 +308,6 @@ namespace BP.WF.HttpHandler
             string DTSearchKey = this.GetRequestVal("DTSearchKey");
             md.RptDTSearchKey = DTSearchKey;
             md.Update();
-
 
             Cash.Map_Cash.Remove(this.RptNo);
             return "保存成功.";

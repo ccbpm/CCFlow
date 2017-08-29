@@ -47,7 +47,17 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-        #region xxx 界面 .
+        #region OrderOfDept 部门顺序调整 .
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public string OrderOfDept_Init()
+        {
+            string sql = "SELECT No,Name, ParentNo, Idx FROM Port_Dept";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            return "";
+        }
         #endregion xxx 界面方法.
 
     }

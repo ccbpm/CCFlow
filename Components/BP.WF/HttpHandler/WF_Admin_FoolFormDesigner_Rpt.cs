@@ -54,6 +54,12 @@ namespace BP.WF.HttpHandler
                     case "S0_OneRpt_Init": //获得单个流程报表的初始化信息
                         msg = this.S0_OneRpt_Init();
                         break;
+                    case "S3ColsLabel_Init": //顺序加载
+                        msg = this.S3ColsLabel_Init();
+                        break;
+                    case "S3ColsLabel_Save": //顺序保存
+                        msg = this.S3ColsLabel_Save();
+                        break;
                     default:
                         msg = "err@没有判断的执行类型：" + this.DoType;
                         break;

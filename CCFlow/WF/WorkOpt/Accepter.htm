@@ -135,22 +135,24 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Accepter_Init&FK_Node=" + GetQueryString("FK_Node") + "&ToNode=" + GetQueryString("ToNode") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
+                url: Handler + "?DoType=Accepter_Init&FK_Node=" + GetQueryString("FK_Node") + "&ToNode=" + GetQueryString("ToNode") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
+                    if (data.indexOf('info@') == 0) {
+                        alert(data);
+                        Close();
+                        return;
+                    }
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
 
-                    alert(window.location.href);
-
                     if (data.indexOf('url@') == 0) {
-
                         var url = data.replace('url@', '');
                         window.location.href = url + "&ToNode=" + GetQueryString("ToNode");
-                        //alert("请修改节点的人员范围选择方式，通用人员选择器没有实现.");
                         return;
                     }
 

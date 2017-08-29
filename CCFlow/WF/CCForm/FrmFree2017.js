@@ -1,4 +1,165 @@
-﻿$(function () {
+﻿
+function InitForm() {
+    var workNodeData = JSON.parse(jsonStr);
+    var CCFormHtml = '';
+
+    //开始解析表单字段
+    var mapAttrsHtml = InitMapAttr(workNodeData.Sys_MapAttr, workNodeData);
+    $('#divCCForm').html(mapAttrsHtml);
+
+    //设置位置和大小
+    $.each(workNodeData.Sys_MapAttr, function (i, obj) {
+        var ele = $('[name$=' + obj.KeyOfEn + ']');
+        if (ele.length == 1) {
+            $(ele).css('left', obj.X);
+            $(ele).css('top', obj.Y);
+            $(ele).css('position', 'absolute');
+            $(ele).css('width', obj.UIWidth);
+            $(ele).css('width', obj.UIHeight);
+        }
+    })
+
+    //为 DISABLED 的 TEXTAREA 加TITLE 
+    var disabledTextAreas = $('#divCCForm textarea:disabled');
+    $.each(disabledTextAreas, function (i, obj) {
+        $(obj).attr('title', $(obj).val());
+    })
+
+    //初始化提示信息
+    var alertMsgs = workNodeData.AlertMsg;
+    if (alertMsgs != undefined && alertMsgs.length > 0) {
+        var alertMsgHtml = '';
+        $.each(alertMsgs, function (i, alertMsg) {
+            alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
+        });
+        $('#Message').html(alertMsgHtml);
+    }
+
+    //根据NAME 设置ID的值
+    var inputs = $('[name]');
+    $.each(inputs, function (i, obj) {
+        if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
+            $(obj).attr("id", $(obj).attr("name"));
+        }
+    })
+
+    ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
+    var enName = workNodeData.Sys_MapData[0].No;
+    try {
+        ////加载JS文件
+        //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
+        //$('body').append($('<div>' + jsSrc + '</div>'));
+
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+    }
+    catch (err) {
+
+    }
+
+    var jsSrc = '';
+    try {
+        //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
+        //$('body').append($('<div>' + jsSrc + '</div>'));
+
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
+        var tmp = document.getElementsByTagName('script')[0];
+        tmp.parentNode.insertBefore(s, tmp);
+    }
+    catch (err) {
+
+    }
+
+    //处理下拉框级联等扩展信息
+    AfterBindEn_DealMapExt();
+
+    //设置默认值
+    for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
+        var mapAttr = workNodeData.Sys_MapAttr[j];
+        //添加 label
+        //如果是整行的需要添加  style='clear:both'
+
+
+        var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
+        if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+            $('#TB_' + mapAttr.KeyOfEn).val(defValue);
+        }
+    }
+    //绑定扩展附件
+    $('.divAth').bind('click', function (obj) {
+        var keyOfEn = $(obj.target).data().target;
+        var tbObj = $('#TB_' + keyOfEn);
+        var divObj = $(obj.target);
+        var atParamObj = AtParaToJson(tbObj.data().target);
+        var athRefObj = atParamObj.AthRefObj;
+        var divId = 'DIV_' + keyOfEn;
+        var tbId = 'TB_' + keyOfEn;
+        var ath = $.grep(workNodeData.Sys_FrmAttachment, function (value) {
+            return value.MyPK == athRefObj;
+        })
+        if (ath.length > 0) {
+            ath = ath[0];
+            var src = "";
+            if (pageData.IsReadonly)
+                src = "AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+            else
+                src = "AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+            $('#iframeAthForm').attr('src', src);
+            atParamObj["tbId"] = tbId;
+            atParamObj["divId"] = divId;
+            $('#iframeAthForm').data(atParamObj);
+            $('#athModal .modal-title').text("上传附件：" + $(obj.target).parent().prev().children('label').text());
+            $('#athModal').modal().show();
+        }
+    });
+    //绑定分组的按钮事件  如果不是字段分组就变成可以折叠的
+    $('.group').bind('click', function (obj) {
+        //阻止事件冒泡
+        /*if (event.target != this) {
+        return;
+        }*/
+        var display = '';
+        var targetDiv = this;
+        var state = $(targetDiv).find('.state');
+
+        var stateText = state.text();
+        if (stateText == "-") {
+            display = 'none';
+            state.text('+');
+        } else {
+            display = 'block';
+            state.text('-');
+        }
+
+        var div = $('#' + $(targetDiv).data().target).css('display', display);
+    });
+
+    //刷新子流程的IFRAME
+    $('.reloadIframe').bind('click', function (obj) {
+        var targetDiv = $(obj.target).parent();
+        var iframe = $('#' + $(targetDiv).data().target).children('iframe');
+        //iframe[0].contentWindow.location.reload();
+        iframe[0].contentWindow.location.href = iframe[0].src;
+    })
+
+    //如果是IsReadOnly，就表示是查看页面，不是处理页面
+    if (pageData.IsReadOnly != undefined && pageData.IsReadOnly == "1") {
+        setAttachDisabled();
+        setToobarUnVisible();
+        setFormEleDisabled();
+    }
+
+    showNoticeInfo();
+
+    showTbNoticeInfo();
+}
+
+$(function () {
     SetHegiht();
     //打开表单检查正则表达式
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
@@ -582,165 +743,6 @@ function initGroup(workNodeData, groupFiled) {
 }
 
 
-function InitForm() {
-    var workNodeData = JSON.parse(jsonStr);
-    var CCFormHtml = '';
-    
-    //开始解析表单字段
-    var mapAttrsHtml = InitMapAttr(workNodeData.Sys_MapAttr, workNodeData);
-    $('#divCCForm').html(mapAttrsHtml);
-
-    //设置位置和大小
-    $.each(workNodeData.Sys_MapAttr, function (i, obj) {
-        var ele = $('[name$=' + obj.KeyOfEn + ']');
-        if (ele.length == 1) {
-            $(ele).css('left', obj.X);
-            $(ele).css('top', obj.Y);
-            $(ele).css('position', 'absolute');
-            $(ele).css('width', obj.UIWidth);
-            $(ele).css('width', obj.UIHeight);
-        }
-    })
-
-    //为 DISABLED 的 TEXTAREA 加TITLE 
-    var disabledTextAreas = $('#divCCForm textarea:disabled');
-    $.each(disabledTextAreas, function (i, obj) {
-        $(obj).attr('title', $(obj).val());
-    })
-
-    //初始化提示信息
-    var alertMsgs = workNodeData.AlertMsg;
-    if (alertMsgs != undefined && alertMsgs.length > 0) {
-        var alertMsgHtml = '';
-        $.each(alertMsgs, function (i, alertMsg) {
-            alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
-        });
-        $('#Message').html(alertMsgHtml);
-    }
-
-    //根据NAME 设置ID的值
-    var inputs = $('[name]');
-    $.each(inputs, function (i, obj) {
-        if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
-            $(obj).attr("id", $(obj).attr("name"));
-        }
-    })
-
-    ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
-    var enName = workNodeData.Sys_MapData[0].No;
-    try {
-        ////加载JS文件
-        //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
-        //$('body').append($('<div>' + jsSrc + '</div>'));
-
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
-    }
-    catch (err) {
-
-    }
-
-    var jsSrc = '';
-    try {
-        //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + ".js' ></script>";
-        //$('body').append($('<div>' + jsSrc + '</div>'));
-
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
-        var tmp = document.getElementsByTagName('script')[0];
-        tmp.parentNode.insertBefore(s, tmp);
-    }
-    catch (err) {
-
-    }
-
-    //处理下拉框级联等扩展信息
-    AfterBindEn_DealMapExt();
-
-    //设置默认值
-    for (var j = 0; j < workNodeData.Sys_MapAttr.length; j++) {
-        var mapAttr = workNodeData.Sys_MapAttr[j];
-        //添加 label
-        //如果是整行的需要添加  style='clear:both'
-
-
-        var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
-        if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
-            $('#TB_' + mapAttr.KeyOfEn).val(defValue);
-        }
-    }
-    //绑定扩展附件
-    $('.divAth').bind('click', function (obj) {
-        var keyOfEn = $(obj.target).data().target;
-        var tbObj = $('#TB_' + keyOfEn);
-        var divObj = $(obj.target);
-        var atParamObj = AtParaToJson(tbObj.data().target);
-        var athRefObj = atParamObj.AthRefObj;
-        var divId = 'DIV_' + keyOfEn;
-        var tbId = 'TB_' + keyOfEn;
-        var ath = $.grep(workNodeData.Sys_FrmAttachment, function (value) {
-            return value.MyPK == athRefObj;
-        })
-        if (ath.length > 0) {
-            ath = ath[0];
-            var src = "";
-            if (pageData.IsReadonly)
-                src = "AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
-            else
-                src = "AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
-            $('#iframeAthForm').attr('src', src);
-            atParamObj["tbId"] = tbId;
-            atParamObj["divId"] = divId;
-            $('#iframeAthForm').data(atParamObj);
-            $('#athModal .modal-title').text("上传附件：" + $(obj.target).parent().prev().children('label').text());
-            $('#athModal').modal().show();
-        }
-    });
-    //绑定分组的按钮事件  如果不是字段分组就变成可以折叠的
-    $('.group').bind('click', function (obj) {
-        //阻止事件冒泡
-        /*if (event.target != this) {
-            return;
-        }*/
-        var display = '';
-        var targetDiv = this;
-        var state = $(targetDiv).find('.state');
-
-        var stateText = state.text();
-        if (stateText == "-") {
-            display = 'none';
-            state.text('+');
-        } else {
-            display = 'block';
-            state.text('-');
-        }
-
-        var div = $('#' + $(targetDiv).data().target).css('display', display);
-    });
-
-    //刷新子流程的IFRAME
-    $('.reloadIframe').bind('click', function (obj) {
-        var targetDiv = $(obj.target).parent();
-        var iframe = $('#' + $(targetDiv).data().target).children('iframe');
-        //iframe[0].contentWindow.location.reload();
-        iframe[0].contentWindow.location.href = iframe[0].src;
-    })
-
-    //如果是IsReadOnly，就表示是查看页面，不是处理页面
-    if (pageData.IsReadOnly != undefined && pageData.IsReadOnly == "1") {
-        setAttachDisabled();
-        setToobarUnVisible();
-        setFormEleDisabled();
-    }
-
-    showNoticeInfo();
-
-    showTbNoticeInfo();
-}
 
 //刷新子流程
 function refSubSubFlowIframe() {
@@ -2029,8 +2031,9 @@ var workNodeData = {};
 
 //升级表单元素 初始化文本框、日期、时间
 function figure_MapAttr_Template(mapAttr) {
+
     var eleHtml = '';
-    if (mapAttr.UIVisible == 1) {//是否显示
+    if (mapAttr.UIVisible == 1) { //是否显示.
 
         var str = '';
         var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
@@ -2069,16 +2072,21 @@ function figure_MapAttr_Template(mapAttr) {
                         eleHtml +=
                                 "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                             (workNodeData, mapAttr, defValue) + "</select>";
-                    } else {//文本区域
-                        if (mapAttr.UIHeight <= 23) {
-                            eleHtml +=
-                                "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                            ;
-                        }
-                        else {
-                            eleHtml +=
-                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                            ;
+                    } else { //文本区域
+
+                        // 判断是否是超大文本.
+                        var para = mapAttr.AtPara;
+                        if (para.indexOf('IsSupperText=1') > 0) {
+
+                            alert('富文本没有解析:' + para);
+
+                        } else {
+                            if (mapAttr.UIHeight <= 23) {
+                                eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
+                            }
+                            else {
+                                eleHtml += "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
+                            }
                         }
                     }
                 } //AppDate

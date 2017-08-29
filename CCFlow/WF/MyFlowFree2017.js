@@ -1200,16 +1200,21 @@ function InitMapAttr(mapAttrData, workNodeData) {
                             eleHtml +=
                                     "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                                 (workNodeData, mapAttr, defValue) + "</select>";
-                        } else {//文本区域
-                            if (mapAttr.UIHeight <= 23) {
-                                eleHtml +=
-                                    "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                                    ;
-                            }
-                            else {
-                                eleHtml +=
-                                    "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                                ;
+                        } else { //文本区域
+
+                            // 判断是否是超大文本.
+                            var para = mapAttr.AtPara;
+                            if (para.indexOf('IsSupperText=1') > 0) {
+
+                                alert('富文本没有解析:'+para);
+
+                            } else {
+                                if (mapAttr.UIHeight <= 23) {
+                                    eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
+                                }
+                                else {
+                                    eleHtml += "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
+                                }
                             }
                         }
                     } else if (mapAttr.ColSpan == "4" || (mapAttr.ColSpan == "3" && mapAttr.UIHeight > 23)) {//大文本区域  且占一整行

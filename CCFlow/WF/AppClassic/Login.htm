@@ -76,6 +76,22 @@
                 }
             });
         }
+
+
+        function KeyDownUserNo(event) {
+
+            if (event.keyCode == 13) {
+                var ctrl = document.getElementById("TB_Pass");
+                ctrl.focus();
+            }
+        }
+        function KeyDownUserPass(event) {
+            if (event.keyCode == 13) {
+                var ctrl = document.getElementById("btn_login");
+                ctrl.focus();
+            }
+        }
+
     </script>
 
 </head>
@@ -92,16 +108,16 @@
     <table style="border:0px; width:100%;  border-color:White" >
     <tr style="border:0px;border-color:White"  >
     <td style="border:0px;border-color:White; padding-left:20px;" >用户名</td>
-    <td style="border:0px;border-color:White;width:80%;"><input type="text" id="TB_UserNo" name="TB_UserNo"  style="width:80%;" /> </td>
+    <td style="border:0px;border-color:White;width:80%;"><input type="text" id="TB_UserNo" name="TB_UserNo"   onkeydown="KeyDownUserNo(event)"  style="width:80%;" /> </td>
     </tr>
     <tr style="border:0px;border-color:White"   >
     <td style="border:0px;border-color:White;padding-left:20px;"   > 密&nbsp;&nbsp;码</td>
-    <td style="border:0px;border-color:White;width:80%;"><input type="password" id="TB_Pass" name="TB_Pass"  style="width:80%;" /> </td>
+    <td style="border:0px;border-color:White;width:80%;"><input type="password" id="TB_Pass" name="TB_Pass" onkeydown="KeyDownUserPass(event)"   style="width:80%;" /> </td>
     </tr>
 
     <tr>
     <td style="border:0px;border-color:White;width:80%;" ></td>
-    <td colspan=1 style="border:0px;border-color:White;width:80%;" > <input type="button" value="登录" onclick="Login_Submit()" />
+    <td colspan=1 style="border:0px;border-color:White;width:80%;" > <input type="button" value="登录" id="btn_login" onclick="Login_Submit()" />
     <font color="gray" > 默认密码为:123</font></td>
 </tr>
     </table>

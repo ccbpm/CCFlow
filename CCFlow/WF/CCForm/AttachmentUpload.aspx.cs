@@ -745,7 +745,7 @@ namespace CCFlow.WF.CCForm
                     this.Pub1.AddTD("0");
                     if (athDesc.Sort.Contains(","))
                         this.Pub1.AddTD("&nbsp&nbsp");
-                    this.Pub1.AddTD("style='width:100px'", "<span style='color:red;' >您还未上传任何附件，请点击下方按钮上传附件</span>");
+                    this.Pub1.AddTD("style='width:100px'", "<span style='color:red;' >请点击下方按钮上传附件</span>");
                     this.Pub1.AddTD("&nbsp&nbsp");
                     this.Pub1.AddTD("&nbsp&nbsp");
                     this.Pub1.AddTD("&nbsp&nbsp");

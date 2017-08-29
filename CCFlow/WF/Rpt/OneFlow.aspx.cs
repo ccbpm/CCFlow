@@ -53,7 +53,6 @@ namespace CCFlow.WF.Rpt
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
             //Title = "报表设计：" + fl.Name;
             var fl = new Flow(FK_Flow);
             BP.WF.Rpt.MapRpt rpt = new BP.WF.Rpt.MapRpt(RptNo);

@@ -42,8 +42,8 @@
 
                     var jsData = JSON.parse(data);
                     var md = jsData["Main"][0]; //主表数据.
-                    var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列
-                    var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表..
+                    var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
+                    var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表.
 
                     //关键字查询.
                     document.getElementById("CB_Key").checked = md.RptIsSearchKey;

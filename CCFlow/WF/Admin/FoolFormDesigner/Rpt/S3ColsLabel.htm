@@ -6,6 +6,50 @@
     <script type="text/javascript" src="../../../Scripts/QueryString2016.js"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("table tr:gt(0)").hover(
+                function () { $(this).addClass("tr_hover"); },
+                function () { $(this).removeClass("tr_hover"); });
+        });
+
+        //上移
+        function up(obj, idxTBColumnIdx) {
+            var objParentTR = $(obj).parent().parent();
+            var prevTR = objParentTR.prev();
+            var currTrId;
+            var prevTrId;
+            if (prevTR.length > 0 && !isNaN(prevTR.children(":eq(0)").text())) {
+                prevTR.insertAfter(objParentTR);
+                currTrId = Number(objParentTR.children(":eq(0)").text());
+                prevTrId = Number(prevTR.children(":eq(0)").text());
+                objParentTR.children(":eq(0)").text(prevTrId);
+                prevTR.children(":eq(0)").text(currTrId);
+                objParentTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(prevTrId);
+                prevTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(currTrId);
+            } else {
+                return;
+            }
+        }
+        //下移
+        function down(obj, idxTBColumnIdx) {
+            var objParentTR = $(obj).parent().parent();
+            var nextTR = objParentTR.next();
+            var currTrId;
+            var nextTrId;
+            if (nextTR.length > 0 && !isNaN(nextTR.children(":eq(0)").text())) {
+                nextTR.insertBefore(objParentTR);
+                currTrId = Number(objParentTR.children(":eq(0)").text());
+                nextTrId = Number(nextTR.children(":eq(0)").text());
+                objParentTR.children(":eq(0)").text(nextTrId);
+                nextTR.children(":eq(0)").text(currTrId);
+                objParentTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(nextTrId);
+                nextTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(currTrId);
+            } else {
+                return;
+            }
+        }
+    </script>
     <script language="javascript" type="text/javascript" >
 
         //页面启动函数.
@@ -35,12 +79,12 @@
                         alert(data);
                         return;
                     }
-
-                    var jsData = JSON.parse(data);
-                    var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
+                    alert(data);
+                    //var jsData = JSON.parse(data);
+                    //var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
 
                     //输出列.
-                   
+
                 }
             });
         }

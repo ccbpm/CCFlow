@@ -74,31 +74,53 @@
                 url: Handler + "?DoType=S3ColsLabel_Init&RptNo=" + rptNo + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
+                    
                     if (data.indexOf("@") == 0) {
                         alert(data);
                         return;
                     }
-                    alert(data);
-                    //var jsData = JSON.parse(data);
+                    var jsData = JSON.parse(data);
                     //var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
-
+                    //console.info(Sys_MapAttr);
                     //输出列.
-
+                    for (var i = 1; i <= jsData.length; i++) {
+                        var str = "<tr>";
+                        str += "<td class='Idx' nowrap>" + i + "</td>";
+                        str += "<td  nowrap >" + jsData[i].KeyOfEn + "</td>";
+                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + jsData[i].KeyOfEn + "\" /></td>";
+                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "_Idx\" type=\"text\" value=\"" + i + "\" id=\"TB_" + jsData[i].KeyOfEn + "_Idx\" /></td>";
+                        str += "<td style='text-align:center' nowrap ><a href='javascript:void(0)' onclick='up(this, 3)' class='easyui-linkbutton' data-options=\"iconCls:'icon-up'\">up</a>&nbsp;<a href='javascript:void(0)' onclick='down(this, 3)' class='easyui-linkbutton' data-options=\"iconCls:'icon-down'\">down</a>";
+                        str += "</td>";
+                        str += "</tr>";
+                        $("table").append(str);
+                    }
                 }
             });
         }
 
-        function Save() {
+        function Btn_Save_Click() {
 
             var fk_flow = GetQueryString("FK_Flow");
             var rptNo = GetQueryString("RptNo");
 
+            var str = "";
+            var i = 0;
+            //获取数据列表
+            $("#table1").find("tr").each(function () {
+                var tdArr = $(this).children();
+                if (i > 0) {//第一是标题
+                    var history_income_type = tdArr.eq(2).find('input').val();
+                    var history_income_money = tdArr.eq(3).find('input').val();
+                    str = str + "@" + tdArr.eq(1).html() + "," + tdArr.eq(2).find('input').val() + "," + tdArr.eq(3).find('input').val();
+                }
+                i++;
+            });
             $.ajax({
                 type: 'post',
                 async: true,
                 url: Handler + "?DoType=S3ColsLabel_Save&FK_Flow=" + fk_flow + "&RptNo=" + rptNo + "&m=" + Math.random(),
                 dataType: 'html',
+                data:{'Orders':str},
                 success: function (data) {
 
                     alert(data)
@@ -119,40 +141,27 @@
 </head>
 <body onkeypress="Esc()" >
 
-<form name='cc' id='cc'>
+<form method="post" action="./S3_ColsLabel.aspx?FK_MapData=ND1MyRpt&amp;RptNo=ND1MyRpt&amp;FK_Flow=001&amp;s=20170828170755076486" id="form1">
 
-  <table class='Table' cellpadding='0' cellspacing='0' style='width: 60%;'>
-  <caption>报表属性编辑</caption>
-        <tr>
-            <td style=" width:30%;" >
-                编号:
-            </td>
-            <td>
-                <input type="text" id="TB_No" /><br />默认报表编号为:ND**MyRpt ,建议报表编号向后推：如ND20MyRpt1，ND20MyRpt2
-            </td>
-        </tr>
-        <tr>
-            <td >
-                名称:
-            </td>
-            <td>
-                <input type="text" id="TB_Name"/>
-            </td>
-        </tr>
-        <tr>
-            <td >
-                备注:
-            </td>
-            <td>
-                <input type="text" id="TB_Note"/>
-            </td>
-        </tr>
-    </table>
+  <div data-options="region:'center',title:'3. 设置报表显示列次序',border:false" style="padding:5px;height:auto">
+        
+    <Table id="table1" class='Table' border='1' cellspacing='0' cellpadding='0' style='width:100%' >
+        <TR>
+        <TD class='GroupTitle' style='text-align:center;width:50px' >序</TD>
+        <TD class='GroupTitle' nowrap>字段</TD>
+        <TD class='GroupTitle' nowrap>标签</TD>
+        <TD class='GroupTitle' nowrap>显示顺序号</TD>
+        <TD class='GroupTitle' style='text-align:center;width:100px' >调整</TD>
+        </TR>
+    </Table>
+    <br />
+    <a id="ContentPlaceHolder1_Btn_Save1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;" href="javascript:Btn_Save_Click()">保存</a>
+    <a id="ContentPlaceHolder1_Btn_Cancel1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-undo&#39;" href="javascript:Cancel()">取消</a>
+
+    <br />
     <br />
 
-    <input type="button" id="Btn_Save" name="Btn_Save" value="保存" onclick="Save()" />
-
+  </div>
 </form>
-
 </body>
 </html>

@@ -273,9 +273,41 @@ namespace BP.WF.HttpHandler
             //返回数据.
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
+        public string RptNo
+        {
+            get
+            {
+                return  this.GetRequestVal("RptNo");
+            }
+        }
         public string S5SearchCond_Save()
         {
+            MapData md = new MapData();
+            md.No = this.RptNo;
+            md.RetrieveFromDBSources();
 
+            //报表编号.
+            string fields = this.GetRequestVal("Fields");
+
+            md.RptSearchKeys = fields + "*";
+
+            string IsSearchKey = this.GetRequestVal("IsSearchKey");
+            if (IsSearchKey == "0")
+                md.RptIsSearchKey = false;
+            else
+                md.RptIsSearchKey = true;
+
+            //查询方式.
+            int DTSearchWay = this.GetRequestValInt("DTSearchWay");
+            md.RptDTSearchWay = (DTSearchWay)DTSearchWay;
+
+            //日期字段.
+            string DTSearchKey = this.GetRequestVal("DTSearchKey");
+            md.RptDTSearchKey = DTSearchKey;
+            md.Update();
+
+
+            Cash.Map_Cash.Remove(this.RptNo);
             return "保存成功.";
         }
         #endregion

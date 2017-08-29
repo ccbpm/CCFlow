@@ -216,7 +216,61 @@ namespace BP.WF.HttpHandler
         #region 报表设计器 - 第4步骤.
         public string S5SearchCond_Init()
         {
-            return "";
+            //报表编号.
+            string rptNo = this.GetRequestVal("RptNo");
+
+            //定义容器.
+            DataSet ds = new DataSet();
+
+            //主表数据.
+            MapData md = new MapData();
+            md.No = rptNo;
+            md.RetrieveFromDBSources();
+            ds.Tables.Add(md.ToDataTableField());
+
+            //查询出来枚举与外键类型的字段集合.
+            MapAttrs attrs = new MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
+
+            #region 检查是否有日期字段.
+            bool isHave = false;
+            foreach (MapAttr mattr in attrs)
+            {
+                if (mattr.UIVisible == false)
+                    continue;
+
+                if (mattr.MyDataType == DataType.AppDate || mattr.MyDataType == DataType.AppDateTime)
+                {
+                    isHave = true;
+                    break;
+                }
+            }
+
+            if (isHave == true)
+            {
+                DataTable dt = new DataTable();
+                MapAttrs dtAttrs = new MapAttrs();
+                foreach (MapAttr mattr in attrs)
+                {
+                    if (mattr.MyDataType == DataType.AppDate || mattr.MyDataType == DataType.AppDateTime)
+                    {
+                        if (mattr.UIVisible == false)
+                            continue;
+                        dtAttrs.AddEntity(mattr);
+                    }
+                }
+                ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttrOfDate"));
+            }
+            #endregion
+
+            //返回数据.
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+        public string S5SearchCond_Save()
+        {
+
+            return "保存成功.";
         }
         #endregion
 

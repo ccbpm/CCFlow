@@ -358,10 +358,16 @@ namespace BP.WF.HttpHandler
         {
             //让admin登录
             if (string.IsNullOrEmpty(BP.Web.WebUser.NoOfRel))
-                return "url@Login.htm?DoType=Logout";
+            {
+                string userNo = this.GetRequestVal("UserNo");
+                string sid = this.GetRequestVal("SID");
+                BP.WF.Dev2Interface.Port_Login(userNo, sid);
+
+                return "url@Login.htm?DoType=Logout&Err=UserNoIsNull";
+            }
 
             if (BP.Web.WebUser.IsAdmin == false)
-                return "url@Login.htm?DoType=Logout";
+                return "url@Login.htm?DoType=Logout&Err=NoAdminUsers";
 
             //如果没有流程表，就执行安装.
             if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == false)

@@ -194,7 +194,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoColsChoseOf_MyStartFlow()
         {
-            string url = "../../Admin/FoolFormDesigner/Rpt/S2ColsChose.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            string url = "../../Admin/RptDfine/S2ColsChose.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
             return url;
         }
         /// <summary>
@@ -203,7 +203,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoColsOrder_MyStartFlow()
         {
-            string url = "../../Admin/FoolFormDesigner/Rpt/S3ColsLabel.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            string url = "../../Admin/RptDfine/S3ColsLabel.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
             return url;
         }       
         /// <summary>
@@ -212,7 +212,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearchCond_MyStartFlow()
         {
-            string url = "../../Admin/FoolFormDesigner/Rpt/S5SearchCond.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            string url = "../../Admin/RptDfine/S5SearchCond.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
             return url;
         }
         /// <summary>
@@ -221,7 +221,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoRptExportTemplate_MyStartFlow()
         {
-            string url = "../../Admin/FoolFormDesigner/Rpt/S8_RptExportTemplate.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            string url = "../../Admin/RptDfine/S8_RptExportTemplate.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
             return url;
         }
         /// <summary>
@@ -257,7 +257,6 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyStartFlow()
         {
-            //return "../../Rpt/Search.aspx?FK_MapData=" + this.No + "&FK_Flow=" + this.FK_Flow + "&RptNo=" + this.No;
             return "../../Rpt/MyStartFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No + "&RptNo=ND" + this.No+"MyRpt";
         }
         #endregion

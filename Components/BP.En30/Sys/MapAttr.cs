@@ -1400,6 +1400,7 @@ namespace BP.Sys
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsLine, false, "是否单独栏显示", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填字段", true, true);
+                map.AddBoolean(MapAttrAttr.UIIsMultiple, false, "是否可以多选", true, true);
 
                // map.AddTBString(MapAttrAttr.AutoFullDoc, null, "自动填写内容", false, false, 0, 500, 20);
                //// map.AddDDLSysEnum(MapAttrAttr.AutoFullWay, 0, "自动填写方式", true, false, MapAttrAttr.AutoFullWay,

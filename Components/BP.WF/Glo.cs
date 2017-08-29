@@ -1919,9 +1919,11 @@ namespace BP.WF
             }
             FlowEventBase myen = Htable_FlowFEE[enName] as FlowEventBase;
             if (myen == null)
+            {
                 //throw new Exception("@根据类名称获取流程事件实体实例出现错误:" + enName + ",没有找到该类的实体.");
                 BP.DA.Log.DefaultLogWriteLineError("@根据类名称获取流程事件实体实例出现错误:" + enName + ",没有找到该类的实体.");
                 return null;
+            }
             return myen;
         }
         /// <summary>

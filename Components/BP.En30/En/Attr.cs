@@ -826,6 +826,19 @@ namespace BP.En
                 this._UIVisible = value;
             }
         }
+        private bool _UIIsMultiple = false;
+        public bool UIIsMultiple
+        {
+            get
+            {
+                return this.UIIsMultiple;
+            }
+            set
+            {
+                this.UIIsMultiple = value;
+            }
+        }
+
         /// <summary>
         /// 是否单行显示
         /// </summary>

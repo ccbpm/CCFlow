@@ -395,7 +395,9 @@
      <script type="text/javascript">
          function OpenRpt(flowNo) {
              window.parent.closeTab('设计报表');
-             window.parent.addTab('OpenRpt', '设计报表', '../../Rpt/OneFlow.htm?FK_MapData=ND' + flowNo + 'Rpt&FK_Flow=' + flowNo, '');
+
+             window.parent.addTab('OpenRpt', '设计报表', './FoolFormDesigner/S0_RptList.htm&FK_Flow=' + flowNo, '');
+           //  window.parent.addTab('OpenRpt', '设计报表', '../../Rpt/OneFlow.htm?FK_MapData=ND' + flowNo + 'Rpt&FK_Flow=' + flowNo, '');
              //WinOpen('../../Rpt/OneFlow.htm?FK_MapData=ND' + flowNo + 'Rpt&FK_Flow=' + flowNo, 'csd');
          }
          function FlowAttr(flowNo) {

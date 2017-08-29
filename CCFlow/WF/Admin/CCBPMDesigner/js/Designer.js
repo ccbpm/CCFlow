@@ -218,7 +218,7 @@ function FlowProperty() {
     }
 }
 //报表设计
-function DesignMyRpt() {
+function DesignMyRptNew() {
     var flowId = Number(CCBPM_Data_FK_Flow);
     flowId = String(flowId);
     url = "../FoolFormDesigner/Rpt/S0_RptList.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
@@ -229,8 +229,8 @@ function DesignMyRpt() {
     }
 }
 
-//流程属性
-function DesignMyRptNew() {
+//报表设计
+function DesignMyRpt() {
 
     var flowId = Number(CCBPM_Data_FK_Flow);
     flowId = String(flowId);

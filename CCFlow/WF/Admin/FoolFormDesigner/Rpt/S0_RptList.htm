@@ -13,9 +13,13 @@
         var initData = {};
         var pageData = {};
 
-        $(function () {
+        $(function () { 
+        
+        window.location.href='../../../Comm/En.htm?EnsName=BP.WF.Rpt.RptDfines&No='+GetQueryString("FK_Flow");
+        return;
 
-        //我发起的流程.
+
+         //我发起的流程.
         var myStartFlows=document.getElementById("MyStartFlows");
         myStartFlows.innerHTML="<a href=\"javascript:WinOpen('../../../Comm/En.htm?EnsName=BP.WF.Rpt.MyStartFlows&No="+GetQueryString("FK_Flow")+"');\" >执行定义报表</a>";
 
@@ -153,6 +157,18 @@
 <li>该报表仅仅显示我发起的流程.</li>
 <li>你可以在报表定义工具里定义查询方式、显示内容.</li>
 <li><div id="MyStartFlows"></div></li>
+<li>默认所有人都有权限.</li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend>我参与的</legend>
+<ul>
+<li>该报表仅仅显示我发起的流程.</li>
+<li>你可以在报表定义工具里定义查询方式、显示内容.</li>
+<li><div id="Div1"></div></li>
+<li>默认所有人都有权限.</li>
 </ul>
 </fieldset>
 
@@ -164,9 +180,21 @@
 <li>该报表仅仅显示我部门发起的流程.</li>
 <li>你可以在报表定义工具里定义查询方式、显示内容.</li>
 <li><div id="MyDeptFlows"></div></li>
+<li>定义权限.</li>
 </ul>
 </fieldset>
 
+
+
+<fieldset>
+<legend>所有部门发起的</legend>
+<ul>
+<li>可以查询所有部门发起的流程.</li>
+<li>你可以在报表定义工具里定义查询方式、显示内容.</li>
+<li><div id="Div2"></div></li>
+<li>定义权限.</li>
+</ul>
+</fieldset>
 
 
 </td>

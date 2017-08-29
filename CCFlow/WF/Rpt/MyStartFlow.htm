@@ -50,10 +50,8 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    alert(data);
-
-
-                    if (data.indexOf('err@') == 0) {
+                    if (data.indexOf('err@')==0)
+                     {
                         alert(data);
                         return;
                     }
@@ -103,17 +101,21 @@
     </script>
 </head>
 <body onkeypress="Esc()" class="easyui-layout">
+
     <div data-options="region:'center'" title="流程查询">
 
-    <div id="Toolbar"> 关键字: <input type=text id="Keys" /> <input type="button"  id="Btn_Search"  onclick="Search()" value="查询" /> <input type="button"  id="Btn_ExpToExcel"  onclick="ExpToExcel()" value="导出Excel" />  </div>
-
+    <div id="Toolbar"> 关键字: <input type="text" id="TB_Keys" name="TB_Keys" /> <input type="button"  id="Btn_Search"  onclick="Search()" value="查询" /> <input type="button"  id="Btn_ExpToExcel"  onclick="ExpToExcel()" value="导出Excel" />  </div>
         <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
         <tr>
         <td></td>
         </tr>
         </table>
     </div>
-    <div id="Msg">
+    <div id="Msg" />
+
+
     </div>
+
+
 </body>
 </html>

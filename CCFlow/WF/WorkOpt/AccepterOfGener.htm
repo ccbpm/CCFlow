@@ -100,7 +100,7 @@
                 row += "<td>" + i + "</td>";
                 row += "<td>" + sa.FK_Emp + "</td>";
                 row += "<td>" + sa.EmpName + "</td>";
-                row += "<td><a href=\"javascript:DeleteIt(this,'" + sa.FK_Emp + "','"+sa.EmpName+"');\" >移除</a></td>";
+                row += "<td><a href=\"javascript:DeleteIt("+i+",'" + sa.FK_Emp + "','"+sa.EmpName+"');\" >移除</a></td>";
                 row += "</tr>";
 
                 $("#Table1 tbody").append(row);
@@ -141,9 +141,12 @@
                         return;
                     }
 
-                    alert(data);
+                    //alert(data);
+
+                    delRow(row); //清空单个table tbody
 
                     // 把返回的结果，重新绑定.
+
                     var sas = JSON.parse(data);
                     BindTable(sas);
                 }
@@ -271,14 +274,10 @@
             }
         }
 
-        //删除行
-        function delRow(obj) {
-            var tr = this.getRowObj(obj);
-            if (tr != null) {
-                tr.parentNode.removeChild(tr);
-            } else {
-                throw new Error("the given object is not contained by the table");
-            }
+        //删除当前行
+        function delRow(nowTr) {
+            $(nowTr).parents("tr").remove();
+            $("#Table1 tbody tr:eq(" + nowTr + ")").remove();
         }
          
 </script> 

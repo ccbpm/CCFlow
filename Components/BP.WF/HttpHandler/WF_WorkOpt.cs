@@ -39,18 +39,30 @@ namespace BP.WF.HttpHandler
             /* 获得上一次发送的人员列表. */
             int toNodeID = this.GetRequestValInt("ToNode");
 
-            ////获得最近的一个workid.
-            //string trackTable = "ND" + int.Parse(this.FK_Flow) + "Rpt";
-            //string sql = "";
-            //if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-            //    sql = "SELECT TOP 1 EmpTo FROM " + trackTable + " WHERE NDTo=" + toNodeID + " AND ActionType=1 AND EmpFrom='" + WebUser.No + "' ORDER BY RDT ";
-            //else
-            //    sql = "SELECT EmpTo FROM  " + trackTable + " WHERE NDTo=" + toNodeID + " AND ActionType=1 AND EmpFrom='" + WebUser.No + "' AND ROWNUM=0 ORDER BY RDT ";
-            //string  empTo = DBAccess.RunSQLReturnStringIsNull(sql,null);
-
             //查询出来,已经选择的人员.
             SelectAccpers sas = new SelectAccpers();
-            sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID,SelectAccperAttr.WorkID, this.WorkID);
+            int i = sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
+            if (i == 0)
+            {
+                //获得最近的一个workid.
+                string trackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
+                string sql = "";
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 1 Tag,EmpTo FROM " + trackTable + " WHERE NDTo=" + toNodeID + " AND ActionType=1 AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID desc  ";
+                else
+                    sql = "SELECT Tag,EmpTo FROM  " + trackTable + " WHERE NDTo=" + toNodeID + " AND ActionType=1 AND EmpFrom='" + WebUser.No + "' AND ROWNUM=0 ORDER BY  WorkID desc ";
+
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count != 0)
+                {
+                    string emps = dt.Rows[0]["Tag"].ToString();
+                    if (emps == "" || emps == null)
+                        emps = dt.Rows[0]["EmpTo"].ToString();
+                    BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
+                    sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
+                }
+            }
+
             return sas.ToJson();
         }
         /// <summary>
@@ -59,19 +71,24 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AccepterOfGener_AddEmps()
         {
-            //到达的节点ID.
-            int toNodeID = this.GetRequestValInt("ToNode");
-            string emps = this.GetRequestVal("AddEmps");
+            try
+            {
+                //到达的节点ID.
+                int toNodeID = this.GetRequestValInt("ToNode");
+                string emps = this.GetRequestVal("AddEmps");
 
+                //增加到里面去.
+                BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
 
-
-            //增加到里面去.
-            BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
-
-            //查询出来,已经选择的人员.
-            SelectAccpers sas = new SelectAccpers();
-            sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
-            return sas.ToJson();
+                //查询出来,已经选择的人员.
+                SelectAccpers sas = new SelectAccpers();
+                sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
+                return sas.ToJson();
+            }
+            catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
         /// <summary>
         /// 删除.
@@ -1292,18 +1309,21 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Accepter_Init()
         {
+            /*如果是协作模式, 就要检查当前是否主持人, 当前是否是会签模式. */
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.FK_Node != this.FK_Node)
+                return "err@当前流程已经运动到[" + gwf.NodeName + "]上,当前处理人员为[" + gwf.TodoEmps + "]";
+
+            //bool isCandoCurrWork = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
+            //if (isCandoCurrWork == false)
+            //    return "err@您没有处理当前工作的权限,当前";
+
             //当前节点ID.
             Node nd = new Node(this.FK_Node);
 
             //判断当前是否是协作模式.
             if (nd.TodolistModel == TodolistModel.Teamup)
             {
-                /*如果是协作模式, 就要检查当前是否主持人, 当前是否是会签模式. */
-                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-
-                if (gwf.FK_Node != this.FK_Node)
-                    return "err@当前流程已经运动到["+gwf.NodeName+"]上,当前处理人员为["+gwf.TodoEmps+"]";
-
                 if (gwf.TodoEmps.Contains(WebUser.No + ","))
                 {
                     /*说明我是主持人之一, 我就可以选择接受人,发送到下一个节点上去.*/
@@ -1333,7 +1353,7 @@ namespace BP.WF.HttpHandler
             Selector select = new Selector(toNodeID);
 
             if (select.SelectorModel == SelectorModel.GenerUserSelecter)
-                return "url@AccepterOfGener.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node+"&FK_Flow="+this.FK_Flow+"&ToNode="+toNodeID;
+                return "url@AccepterOfGener.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID;
 
             //获得 部门与人员.
             DataSet ds = select.GenerDataSet(toNodeID, wk);

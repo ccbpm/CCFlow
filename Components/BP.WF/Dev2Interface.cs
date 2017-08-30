@@ -7269,6 +7269,7 @@ namespace BP.WF
             {
                 if (string.IsNullOrEmpty(emp))
                     continue;
+
                 sa.MyPK = toNodeID + "_" + workID + "_" + emp;
 
                 empEn.No = emp;

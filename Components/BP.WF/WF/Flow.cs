@@ -753,6 +753,7 @@ namespace BP.WF
                             rpt.FlowEmps = "@" + emp.No + "," + emp.Name;
 
                         rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
+                        rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
                         rpt.FK_Dept = emp.FK_Dept;
                         rpt.FlowEnder = emp.No;
                         rpt.FlowEndNode = this.StartNodeID;
@@ -793,6 +794,18 @@ namespace BP.WF
                     //调用 OnCreateWorkID的方法.  add by zhoupeng 2016.12.4 for LIMS.
                     this.DoFlowEventEntity(EventListOfNode.FlowOnCreateWorkID, nd, wk, null);
 
+                }
+
+                if (wk.OID != 0)
+                {
+                    rpt.OID = wk.OID;
+                    rpt.FID = 0;
+                    rpt.FlowStartRDT = BP.DA.DataType.CurrentDataTime;
+                    rpt.FlowEnderRDT = BP.DA.DataType.CurrentDataTime;
+                    rpt.MyNum = 1;
+
+                    //在发送的时候有更新.
+                    //   rpt.DirectUpdate();
                 }
             }
             catch (Exception ex)

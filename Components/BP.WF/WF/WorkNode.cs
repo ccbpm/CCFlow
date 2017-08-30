@@ -5697,9 +5697,6 @@ namespace BP.WF
             {
                 if (this.DealOradeNode() == true)
                 {
-                    //if (this._transferCustom != null)
-                    //    _transferCustom.Delete();
-
                     //执行时效考核.
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                     return this.HisMsgObjs;
@@ -6786,6 +6783,10 @@ namespace BP.WF
                 wl.Update();
             }
             #endregion
+
+            this.rptGe.FlowStartRDT = DataType.CurrentDataTime;
+            this.rptGe.FlowEnderRDT = DataType.CurrentDataTime;
+
         }
 
         /// <summary>

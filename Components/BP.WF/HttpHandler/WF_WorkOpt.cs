@@ -131,20 +131,28 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQian_Init()
         {
+            //要找到主持人.
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
+            //查询出来集合.
             GenerWorkerLists ens = new GenerWorkerLists(this.WorkID, this.FK_Node);
             foreach (GenerWorkerList item in ens)
             {
-                if (item.FK_Emp == BP.Web.WebUser.No)
+                if (gwf.TodoEmps.Contains(item.FK_Emp + ",") == true)
                 {
                     item.FK_EmpText = "<img src='../Img/zhuichiren.png' border=0 />" + item.FK_EmpText;
+                    item.FK_EmpText = item.FK_EmpText;
                     item.IsPassInt = 100;
-                    break; //标记为主持人.
+                    continue;
+                }
+
+                //标记为自己.
+                if (item.FK_Emp == BP.Web.WebUser.No)
+                {
+                    item.FK_EmpText = "" + item.FK_EmpText;
+                    item.IsPassInt = 99;
                 }
             }
-
-            //找到历史记录, 并把历史记录 ，加入到选择框里.
-            string sql = "SELECT * ";
-
             return ens.ToJson();
         }
         /// <summary>
@@ -157,6 +165,12 @@ namespace BP.WF.HttpHandler
             if (this.FK_Emp == WebUser.No)
                 return "err@您不能移除您自己";
 
+            //要找到主持人.
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + ",") == false)
+                return "err@您不是主持人，您不能删除。";
+
+            //删除该数据.
             GenerWorkerList gwlOfMe = new GenerWorkerList();
             gwlOfMe.Delete(GenerWorkerListAttr.FK_Emp, this.FK_Emp,
                 GenerWorkerListAttr.WorkID, this.WorkID,

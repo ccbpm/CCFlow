@@ -1735,6 +1735,8 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
 
 //获取表单数据
 function getFormData(isCotainTextArea, isCotainUrlParam) {
+    //调用serialize之前把 KindEditor 数据放进去  
+    $('#editor_id').val(editor.html());
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
@@ -2467,7 +2469,6 @@ function GenerWorkNode() {
                 var defValArr = defVal.split(',');
                 $(selectObj).selectpicker('val', defValArr);
             });
-
         }
     })
 }
@@ -2524,9 +2525,11 @@ function figure_MapAttr_Template(mapAttr) {
                             ;
                         }
                         else {
-                            eleHtml +=
+                            /*eleHtml +=
                                 "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                            ;
+                            ;*/
+
+                            eleHtml += "<textarea id='editor_id' name='TB_" + mapAttr.KeyOfEn + "' style='width:600px;height:" + mapAttr.UIHeight + "px;'>" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "</textarea>";
                         }
                     }
                 } //AppDate
@@ -3208,7 +3211,6 @@ var jsonStr = '';
 
 //从MyFlowFree2017.htm 中拿过过的
 $(function () {
-
     var frm = document.forms["divCCForm"];
 
     if (plant == "CCFlow")
@@ -3218,9 +3220,9 @@ $(function () {
 
     initPageParam(); //初始化参数
 
-    initBar(); //工具栏.
+    initBar(); //工具栏.ajax
 
-    GenerWorkNode(); //表单数据.
+    GenerWorkNode(); //表单数据.ajax
 
     $('[name=showCol]').bind('change', function (obj) {
         if (obj.target.value == "8") {
@@ -3254,4 +3256,5 @@ $(function () {
     $('#btnCloseMsg').bind('click', function () {
         $('.Message').hide();
     });
+
 })

@@ -79,22 +79,7 @@ namespace BP.Sys.FrmUI
                 this.SetPara(FrmAttachmentAttr.UploadFileNumCheck, (int)value);
             }
         }
-        /// <summary>
-        /// 保存方式
-        /// 0 =文件方式保存。
-        /// 1 = 保存到数据库.
-        /// </summary>
-        public int SaveWay
-        {
-            get
-            {
-                return this.GetParaInt(FrmAttachmentAttr.SaveWay);
-            }
-            set
-            {
-                this.SetPara(FrmAttachmentAttr.SaveWay, value);
-            }
-        }
+       
         #endregion 参数属性.
 
         #region 属性
@@ -788,9 +773,14 @@ namespace BP.Sys.FrmUI
 
                 map.AddTBString(FrmAttachmentAttr.Name, null, "附件名称", true, false, 0, 50, 20,true);
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "文件格式(*.*,*.doc)", true, false, 0, 50, 20, true, null);
-                
+
+                //for tianye group 
+                map.AddDDLSysEnum(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", true, true, FrmAttachmentAttr.AthSaveWay,
+                  "@0=保存到IIS服务器@1=保存到数据库@2=ftp服务器");
+
                 map.AddTBString(FrmAttachmentAttr.SaveTo, null, "保存到", true, false, 0, 150, 20,true,null);
-                map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(可为空)", true, false, 0, 500, 20, true, null);
+
+                map.AddTBString(FrmAttachmentAttr.Sort, null, "类别(比如:生产类,文件类)", true, false, 0, 500, 20, true, null);
                 map.AddBoolean(FrmAttachmentAttr.IsTurn2Html, false, "是否转换成html(方便手机浏览)", true, true,true);
 
                 //位置.
@@ -879,12 +869,35 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "测试FTP服务器";
+                rm.ClassMethodName = this.ToString() + ".DoTestFTPHost";
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
 
+        /// <summary>
+        /// 测试连接
+        /// </summary>
+        /// <returns></returns>
+        public string DoTestFTPHost()
+        {
+            try
+            {
+                FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection();
+                conn.Connect(SystemConfig.FTPServerIP,SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+                return "连接成功.";
+            }
+            catch(Exception ex)
+            {
+                return "err@连接失败:"+ex.Message;
+            }
+        }
         /// <summary>
         /// 固定模式类别设置
         /// </summary>

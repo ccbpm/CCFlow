@@ -85,7 +85,7 @@ namespace BP.Sys
         /// <summary>
         /// 保存方式
         /// </summary>
-        public const string SaveWay = "SaveWay";
+        public const string AthSaveWay = "AthSaveWay";
     }
     /// <summary>
     /// 附件数据存储
@@ -343,15 +343,15 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentDBAttr.Idx, value);
             }
         }
-        public int SaveWay
+        public AthSaveWay AthSaveWay
         {
             get
             {
-                return this.GetValIntByKey(FrmAttachmentDBAttr.SaveWay);
+                return (AthSaveWay)this.GetValIntByKey(FrmAttachmentDBAttr.AthSaveWay);
             }
             set
             {
-                this.SetValByKey(FrmAttachmentDBAttr.SaveWay, value);
+                this.SetValByKey(FrmAttachmentDBAttr.AthSaveWay, (int)value);
             }
         }
         /// <summary>
@@ -375,7 +375,6 @@ namespace BP.Sys
         {
             get
             {
-
                 if (this.MyPK.Contains("_") && this.MyPK.Length < 32)
                     return AttachmentUploadType.Single;
                 else
@@ -448,6 +447,21 @@ namespace BP.Sys
                 return this._enMap;
             }
         }
+        /// <summary>
+        /// 生成文件.
+        /// </summary>
+        /// <returns></returns>
+        public string MakeFullFileFromFtp()
+        {
+            string tempFile =  SystemConfig.PathOfTemp +System.Guid.NewGuid()+"."+this.FileExts;
+            FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
+                SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword  );
+
+            conn.GetFile(this.FileFullName, tempFile, false, System.IO.FileAttributes.ReadOnly);
+            
+            return tempFile;
+        }
+
         /// <summary>
         /// 重写
         /// </summary>

@@ -5,6 +5,24 @@ using BP.En;
 namespace BP.Sys
 {
     /// <summary>
+    /// 文件保存方式
+    /// </summary>
+    public enum AthSaveWay
+    {
+        /// <summary>
+        /// IIS服务器
+        /// </summary>
+        IISServer,
+        /// <summary>
+        /// 保存到数据库
+        /// </summary>
+        DB,
+        /// <summary>
+        /// ftp
+        /// </summary>
+        FTPServer
+    }
+    /// <summary>
     /// 运行模式
     /// </summary>
     public enum AthRunModel
@@ -205,7 +223,7 @@ namespace BP.Sys
         /// <summary>
         /// 数据存储方式
         /// </summary>
-        public const string SaveWay = "SaveWay";
+        public const string AthSaveWay = "AthSaveWay";
         /// <summary>
         /// 保存到
         /// </summary>
@@ -414,15 +432,15 @@ namespace BP.Sys
         /// 1 = 保存到数据库.
         /// 2 = ftp服务器.
         /// </summary>
-        public int SaveWay
+        public AthSaveWay AthSaveWay
         {
             get
             {
-                return this.GetParaInt(FrmAttachmentAttr.SaveWay);
+                return (AthSaveWay)this.GetValIntByKey(FrmAttachmentAttr.AthSaveWay);
             }
             set
             {
-                this.SetPara(FrmAttachmentAttr.SaveWay, value);
+                this.SetPara(FrmAttachmentAttr.AthSaveWay, (int)value);
             }
         }
         #endregion 参数属性.
@@ -650,10 +668,23 @@ namespace BP.Sys
         {
             get
             {
-                string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
-                if (s == "" || s == null)
-                    s = SystemConfig.PathOfDataUser + @"\UploadFile\" + this.FK_MapData + "\\";
-                return s;
+                if (this.AthSaveWay == Sys.AthSaveWay.IISServer)
+                {
+                    string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
+                    if (s == "" || s == null)
+                        s = SystemConfig.PathOfDataUser + @"\UploadFile\" + this.FK_MapData + "\\";
+                    return s;
+                }
+
+                if (this.AthSaveWay == Sys.AthSaveWay.FTPServer)
+                {
+                    string s = this.GetValStringByKey(FrmAttachmentAttr.SaveTo);
+                    if (s == "" || s == null)
+                        s =   @"//"+ this.FK_MapData + "//";
+                    return s;
+                }
+
+                return this.FK_MapData;
             }
             set
             {
@@ -1149,6 +1180,10 @@ namespace BP.Sys
 
                 //for渔业厅增加.
                 map.AddTBInt(FrmAttachmentAttr.AthRunModel, 0, "运行模式", false, false);
+                map.AddTBInt(FrmAttachmentAttr.AthSaveWay, 0, "保存方式", false, false);
+
+
+                
 
                 map.AddTBString(FrmAttachmentAttr.Name, null, "名称", true, false, 0, 50, 20);
                 map.AddTBString(FrmAttachmentAttr.Exts, null, "要求上传的格式", true, false, 0, 50, 20);

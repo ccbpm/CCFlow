@@ -106,6 +106,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FtpSupport">
+      <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
+    </Reference>
     <Reference Include="IBM.Data.Informix">
       <HintPath>..\..\RefDLL\IBM.Data.Informix.dll</HintPath>
     </Reference>

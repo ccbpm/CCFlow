@@ -1080,6 +1080,7 @@ namespace BP.WF.Template
                 {
                     /*
                      * 排除了接受人分组的情况, 因为如果有了分组，就破坏了分组的结构了.
+                     * 
                      */
                     //复制表结构
                     DataTable dt = re_dt.Clone();

@@ -1594,13 +1594,13 @@ namespace BP.WF.HttpHandler
             dbUpload.FileExts = info.Extension;
 
             #region 处理文件路径，如果是保存到数据库，就存储pk.
-            if (frmAth.SaveWay == 0)
+            if (frmAth.AthSaveWay == AthSaveWay.IISServer)
             {
                 //文件方式保存
                 dbUpload.FileFullName = saveTo;
             }
 
-            if (frmAth.SaveWay == 1)
+            if (frmAth.AthSaveWay == AthSaveWay.DB)
             {
                 //保存到数据库
                 dbUpload.FileFullName = dbUpload.MyPK;
@@ -1617,12 +1617,11 @@ namespace BP.WF.HttpHandler
             dbUpload.NodeID = fk_node.ToString();
             dbUpload.Save();
 
-            if (frmAth.SaveWay == 1)
+            if (frmAth.AthSaveWay == AthSaveWay.DB)
             {
                 //执行文件保存.
                 BP.DA.DBAccess.SaveFileToDB(saveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
             }
-
         }
 
         //多附件上传方法
@@ -1724,13 +1723,13 @@ namespace BP.WF.HttpHandler
                 dbUpload.FileExts = info.Extension;
 
                 #region 处理文件路径，如果是保存到数据库，就存储pk.
-                if (athDesc.SaveWay == 0)
+                if (athDesc.AthSaveWay == AthSaveWay.IISServer)
                 {
                     //文件方式保存
                     dbUpload.FileFullName = realSaveTo;
                 }
 
-                if (athDesc.SaveWay == 1)
+                if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
                 {
                     //保存到数据库
                     dbUpload.FileFullName = dbUpload.MyPK;
@@ -1754,7 +1753,7 @@ namespace BP.WF.HttpHandler
                 dbUpload.UploadGUID = guid;
                 dbUpload.Insert();
 
-                if (athDesc.SaveWay == 1)
+                if (athDesc.AthSaveWay == AthSaveWay.DB)
                 {
                     //执行文件保存.
                     BP.DA.DBAccess.SaveFileToDB(realSaveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");

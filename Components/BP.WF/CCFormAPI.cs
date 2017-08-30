@@ -701,7 +701,7 @@ namespace BP.WF
 
                     DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
 
-                    dt.TableName = mypk;
+                    dt.TableName = uiBindKey;
 
                     dt.Columns[0].ColumnName = "No";
                     dt.Columns[1].ColumnName = "Name";

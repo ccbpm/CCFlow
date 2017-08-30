@@ -1843,6 +1843,10 @@ namespace CCFlow.WF.Comm.UC
             isRefFunc = true;
 
             int pageidx = this.PageIdx - 1;
+            //重新查询时，置为第1页
+            if (IsPostBack)
+                pageidx = 0;
+
             int idx = SystemConfig.PageSize * pageidx;
             bool is1 = false;
 

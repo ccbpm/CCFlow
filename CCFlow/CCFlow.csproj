@@ -3282,18 +3282,14 @@
     <Content Include="WF\PrintWorkNode.aspx" />
     <Content Include="WF\Pub.ascx" />
     <Content Include="WF\Rpt\Attachment.aspx" />
-    <Content Include="WF\Rpt\Bill.aspx" />
     <Content Include="WF\Rpt\Contrast.aspx" />
     <Content Include="WF\Rpt\ContrastSingle.aspx" />
     <Content Include="WF\Rpt\D3.aspx" />
     <Content Include="WF\Rpt\EasySearch.Master" />
-    <Content Include="WF\Rpt\EasySearchDeptFlow.aspx" />
-    <Content Include="WF\Rpt\EasySearchEtcFlow.aspx" />
     <Content Include="WF\Rpt\EasySearchMyFlow.aspx" />
     <Content Include="WF\Rpt\Group.aspx" />
     <Content Include="WF\Rpt\GroupDtl.aspx" />
     <Content Include="WF\Rpt\MasterPage.master" />
-    <Content Include="WF\Rpt\OneFlow.aspx" />
     <Content Include="WF\Rpt\RptDoc.aspx" />
     <Content Include="WF\Rpt\Search.aspx" />
     <Content Include="WF\Rpt\SearchAdv.aspx" />
@@ -9212,7 +9208,6 @@
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.designer.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>
@@ -10274,13 +10269,6 @@
     <Compile Include="WF\Rpt\Attachment.aspx.designer.cs">
       <DependentUpon>Attachment.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\Bill.aspx.cs">
-      <DependentUpon>Bill.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Rpt\Bill.aspx.designer.cs">
-      <DependentUpon>Bill.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Rpt\Contrast.aspx.cs">
       <DependentUpon>Contrast.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10309,20 +10297,6 @@
     <Compile Include="WF\Rpt\EasySearch.Master.designer.cs">
       <DependentUpon>EasySearch.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\EasySearchDeptFlow.aspx.cs">
-      <DependentUpon>EasySearchDeptFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Rpt\EasySearchDeptFlow.aspx.designer.cs">
-      <DependentUpon>EasySearchDeptFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Rpt\EasySearchEtcFlow.aspx.cs">
-      <DependentUpon>EasySearchEtcFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Rpt\EasySearchEtcFlow.aspx.designer.cs">
-      <DependentUpon>EasySearchEtcFlow.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Rpt\EasySearchMyFlow.aspx.cs">
       <DependentUpon>EasySearchMyFlow.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10350,13 +10324,6 @@
     </Compile>
     <Compile Include="WF\Rpt\MasterPage.master.designer.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Rpt\OneFlow.aspx.cs">
-      <DependentUpon>OneFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Rpt\OneFlow.aspx.designer.cs">
-      <DependentUpon>OneFlow.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Rpt\RptDoc.aspx.cs">
       <DependentUpon>RptDoc.aspx</DependentUpon>

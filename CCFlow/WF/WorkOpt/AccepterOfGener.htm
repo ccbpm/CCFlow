@@ -103,7 +103,7 @@
                 row += "<td><a href=\"javascript:DeleteIt(this,'" + sa.FK_Emp + "','"+sa.EmpName+"');\" >移除</a></td>";
                 row += "</tr>";
 
-                $("#Table1 tr:last").after(row);
+                $("#Table1 tbody").append(row);
             }
         }
 
@@ -111,14 +111,16 @@
         function ClearTable() {
 
             var table = $("#Table1");
-            var trArr = table.children;
+            var tbody = $("#Table1 tbody");
+            var trArr = $("#Table1 tbody tr");
             for (var i = 0; i < trArr.length; i++) {
 
                 var tr = trArr[i];
+                console.info(tr.id);
                 if (tr.id == "title")
                     continue;
 
-                table.remove(tr);
+                tbody.empty();
             }
         }
 
@@ -162,7 +164,7 @@
                 type: 'post',
                 async: true,
                 data: { FK_Flow: param.FK_Flow, WorkID: param.WorkID, FID: param.FID, FK_Node: param.FK_Node },
-                url: Handler + "?DoType=AccepterOfGener_AddEmps&FK_Flow=" + param.FK_Flow + "&WorkID=" + param.WorkID + "&ToNode="+GetQueryString("ToNode") +"&FID=" + param.FID + "&FK_Node=" + param.FK_Node + "&m=" + Math.random() + "&AddEmps=" + emps,
+                url: Handler + "?DoType=AccepterOfGener_AddEmps&FK_Flow=" + param.FK_Flow + "&WorkID=" + param.WorkID + "&ToNode=" + GetQueryString("ToNode") + "&FID=" + param.FID + "&FK_Node=" + param.FK_Node + "&m=" + Math.random() + "&AddEmps=" + emps,
                 dataType: 'html',
                 success: function (data) {
 
@@ -176,11 +178,11 @@
                         $(".Msg").html(data);
                         return;
                     }
-
+                    ClearTable();
                     var gwls = JSON.parse(data);
                     BindTable(gwls);
 
-                    document.getElementById("TB_Emps").value=""; 
+                    document.getElementById("TB_Emps").value = "";
                     return;
                 }
             });
@@ -285,12 +287,16 @@
 <body>
     <table id="Table1" style=" width:80%; ">
     <caption>下一步接受人员列表</caption>
-    <tr id="title">
-     <th style="width:19px;" >序</th>
-     <th>编号 </th>
-    <th>名称</th>
-    <th>操作</th>
-    </tr>
+    <thead>
+        <tr id="title">
+         <th style="width:19px;" >序</th>
+         <th>编号 </th>
+        <th>名称</th>
+        <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
     </table>
 
     <br />

@@ -1183,16 +1183,12 @@ namespace BP.En
                             
                             if (this._sql == "" || this._sql == null)
                             {
-                                if (top == 0)
-                                    sql = " SELECT top " + pageSize + "  [" + this.En.PKField + "] FROM " + map.PhysicsTable + " " + this._orderBy;
-                                else
+                                //此处去掉原有的第1页时用top pagesize的写法，会导致第1页数据查询出来的不准确，统一都用下面的写法，edited by liuxc,2017-8-30
+                                //此处查询数据，除第1页外，有可能会造排序不正确，但每一页的数据是准确的，限于原有写法，没法改动此处逻辑解决这个问题
                                     sql = " SELECT  [" + this.En.PKField + "] FROM " + map.PhysicsTable + " " + this._orderBy;
                             }
                             else
                             {
-                                if (top == 0)
-                                    sql = "SELECT TOP " + pageSize + " [" + this.En.PKField + "] FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy;
-                                else
                                     sql = "SELECT  [" + this.En.PKField + "] FROM " + map.PhysicsTable + " WHERE " + this._sql + " " + this._orderBy;
                             }
 

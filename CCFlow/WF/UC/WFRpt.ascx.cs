@@ -299,7 +299,7 @@ namespace CCFlow.WF.UC
                 if (nd.HisFormType == NodeFormType.FreeForm)
                 {
                     //  BtnWord = btnLab.WebOfficeEnable + "";
-                    string url = "./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+                    string url = appPath+ "/WF/CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
                     this.Response.Redirect(url, true);
                     return;
 

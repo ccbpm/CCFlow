@@ -652,7 +652,8 @@ namespace BP.WF.HttpHandler
 
                     if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintHtml)
                     {
-                        toolbar += "<input type=button  name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"printFrom(); \" />";
+                        string urlr = appPath + "CCForm/FrmFreeReadonly.htm?FK_MapData=ND" + this.FK_Node + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsPrint=1";
+                        toolbar += "<input type=button  name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"printFrom('" + urlr + "'); \" />";
                     }
                 }
 

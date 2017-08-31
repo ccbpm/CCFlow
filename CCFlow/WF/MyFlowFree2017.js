@@ -339,8 +339,8 @@ function OpenCC() {
 
 var LODOP; //声明为全局变量 
 
-function printFrom() {
-    var url = $("#PrintFrom_Url").val();
+function printFrom(url) {
+    var url =url;
     LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
     LODOP.PRINT_INIT("打印表单");
 

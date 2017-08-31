@@ -83,9 +83,9 @@
                     //var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
                     //console.info(Sys_MapAttr);
                     //输出列.
-                    for (var i = 1; i <= jsData.length; i++) {
+                    for (var i = 0; i < jsData.length; i++) {
                         var str = "<tr>";
-                        str += "<td class='Idx' nowrap>" + i + "</td>";
+                        str += "<td class='Idx' nowrap>" + (i + 1) + "</td>";
                         str += "<td  nowrap >" + jsData[i].KeyOfEn + "</td>";
                         str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + jsData[i].KeyOfEn + "\" /></td>";
                         str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "_Idx\" type=\"text\" value=\"" + i + "\" id=\"TB_" + jsData[i].KeyOfEn + "_Idx\" /></td>";

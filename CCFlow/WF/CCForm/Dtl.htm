@@ -19,6 +19,7 @@
 
     <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
     <script type="text/javascript" src="MapExt2016.js"></script>
+    <script src="../Comm/JS/TBHelpDiv.js"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript" >
 
@@ -1017,7 +1018,7 @@
                 case "PopVal"://PopVal窗返回值
                     var tb = $(tr).find('[name$=' + mapExt.AttrOfOper + ']');
                     tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
-                    tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
+                    tb.attr("ondblclick", "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
 
                     tb.attr('readonly', 'true');
                     tb.attr('disabled', 'true');
@@ -1074,6 +1075,8 @@
                         default:
                             break;
                     }
+                    tb.width(tb.width() - 40);
+                    tb.height('auto');
                     var eleHtml = ' <div class="input-group form_tree" style="width:'+tb.width()+'px;height:'+tb.width()+'px">' + tb.parent().html() +
                     '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                     tb.parent().html(eleHtml);
@@ -1101,6 +1104,11 @@
                     }
                     //判断是否已经增加了函数
                     var ctrl = $(tr).find('[name$=' + mapExt.AttrOfOper + ']');
+
+                    if (ctrl.length == 0) {
+                        continue;
+                    }
+
                     var changeEvent = ctrl.attr(mapExt.Tag2);
                     if (changeEvent.indexOf(mapExt.Tag1 + '(') != -1) {
                         continue;

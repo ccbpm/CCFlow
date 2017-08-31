@@ -243,7 +243,7 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
 
 
 
-    ctrl = $('#' + ctrl);
+    //ctrl = $('#' + ctrl);
     var wfpreHref = GetLocalWFPreHref();
     url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape( getFormData(false,false))+"&m="+Math.random();
 

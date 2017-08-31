@@ -440,11 +440,11 @@ namespace CCFlow.WF.CCForm
                     FrmAttachment dbAtt = new FrmAttachment();
                     dbAtt.MyPK = dbDown.FK_FrmAttachment;
 
-                    if (dbAtt.SaveWay == 0)
+                    if (dbAtt.AthSaveWay  == AthSaveWay.IISServer)
                     {
                         PubClass.DownloadFile(dbDown.FileFullName, dbDown.FileName);
                     }
-                    else if (dbAtt.SaveWay == 2)
+                    else if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
                     {
                         PubClass.DownloadHttpFile(dbDown.FileFullName, dbDown.FileName);
                     }

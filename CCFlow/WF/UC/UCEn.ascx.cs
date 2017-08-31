@@ -4555,13 +4555,13 @@ namespace CCFlow.WF.UC
                     dbUpload.FileExts = info.Extension;
 
                     #region 处理文件路径，如果是保存到数据库，就存储pk.
-                    if (frmAth.SaveWay == 0)
+                    if (frmAth.AthSaveWay == AthSaveWay.IISServer)
                     {
                         //文件方式保存
                         dbUpload.FileFullName = saveTo;
                     }
 
-                    if (frmAth.SaveWay == 1)
+                    if (frmAth.AthSaveWay == AthSaveWay.DB)
                     {
                         //保存到数据库
                         dbUpload.FileFullName = dbUpload.MyPK;
@@ -4589,7 +4589,7 @@ namespace CCFlow.WF.UC
                     dbUpload.Save();
 
                     // 执行文件保存到数据库.
-                    if (frmAth.SaveWay == 1)
+                    if (frmAth.AthSaveWay == AthSaveWay.DB)
                         BP.DA.DBAccess.SaveFileToDB(saveTo, dbUpload.EnMap.PhysicsTable, "MyPK", dbUpload.MyPK, "FDB");
 
                     //执行附件上传后事件，added by liuxc,2017-7-4

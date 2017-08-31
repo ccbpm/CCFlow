@@ -2750,6 +2750,9 @@ function figure_Template_Rb(frmRb) {
 function figure_Template_HyperLink(frmLin) {
     //URL @ 变量替换
     var url = frmLin.URL;
+    
+    //var en = workNodeData.MainTable[0];
+    
     $.each(workNodeData.Sys_MapAttr, function (i, obj) {
         if (url.indexOf('@' + obj.KeyOfEn) > 0) {
             //替换

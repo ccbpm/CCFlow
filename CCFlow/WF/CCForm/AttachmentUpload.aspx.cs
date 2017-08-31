@@ -159,20 +159,27 @@ namespace CCFlow.WF.CCForm
                 downDB.MyPK = this.DelPKVal == null ? this.MyPK : this.DelPKVal;
                 downDB.Retrieve();
 
-                string downpath = GetRealPath(downDB.FileFullName);
-
                 FrmAttachment dbAtt = new FrmAttachment();
                 dbAtt.MyPK = downDB.FK_FrmAttachment;
                 dbAtt.Retrieve();
 
-                if (dbAtt.SaveWay == 0)
+               // string downpath = GetRealPath(downDB.FileFullName);
+
+                if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
                 {
                     PubClass.DownloadFile(downDB.FileFullName, downDB.FileName);
                 }
-                else if (dbAtt.SaveWay == 2)
+
+                if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
+                {
+                    PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
+                }
+
+                if (dbAtt.AthSaveWay  == AthSaveWay.DB)
                 {
                     PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
                 }
+
                 this.WinClose();
                 return;
             }
@@ -1107,7 +1114,7 @@ namespace CCFlow.WF.CCForm
                     }
 
                     #region 保存到iis服务器.
-                    if (athDesc.SaveWay == 0)
+                    if (athDesc.AthSaveWay == AthSaveWay.IISServer)
                     {
                         /* 如果是保存到服务器上,把文件. */
                         string savePath = athDesc.SaveTo;
@@ -1189,7 +1196,7 @@ namespace CCFlow.WF.CCForm
                         dbUpload.NodeID = FK_Node.ToString();
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
                         dbUpload.FID = this.FID; //流程id.
-                        dbUpload.SaveWay = athDesc.SaveWay; //设置保存方式,以方便前台读取.
+                        dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台读取.
 
                         if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                         {
@@ -1242,7 +1249,7 @@ namespace CCFlow.WF.CCForm
                     #endregion 保存到iis服务器.
 
                     #region 保存到数据库 / FTP服务器上.
-                    if (athDesc.SaveWay == 1 || athDesc.SaveWay == 2)
+                    if (athDesc.AthSaveWay == AthSaveWay.DB || athDesc.AthSaveWay  == AthSaveWay.FTPServer)
                     {
                         string guid = DBAccess.GenerGUID();
 
@@ -1252,7 +1259,7 @@ namespace CCFlow.WF.CCForm
 
                         //执行附件上传前事件，added by liuxc,2017-7-15
                         msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
-                        if (!string.IsNullOrEmpty(msg))
+                        if (string.IsNullOrEmpty(msg)==false)
                         {
                             BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fu.FileName + "，" + msg);
 
@@ -1260,7 +1267,9 @@ namespace CCFlow.WF.CCForm
                             {
                                 File.Delete(temp);
                             }
-                            catch { }
+                            catch 
+                            {
+                            }
 
                             this.Alert("上传附件错误：" + msg, true);
                             return;
@@ -1289,7 +1298,7 @@ namespace CCFlow.WF.CCForm
 
                         dbUpload.FK_MapData = athDesc.FK_MapData;
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
-                        dbUpload.SaveWay = athDesc.SaveWay; //设置保存方式,以方便前台展示读取.
+                        dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
                         dbUpload.FileExts = info.Extension;
                         // dbUpload.FileFullName = saveTo;
                         dbUpload.FileName = fu.FileName;
@@ -1313,20 +1322,21 @@ namespace CCFlow.WF.CCForm
                         }
 
                         dbUpload.UploadGUID = guid;
-                        dbUpload.FileFullName = athDesc.SaveTo + guid + "." + dbUpload.FileExts;
-                        dbUpload.Insert();
+                       
 
-                        if (athDesc.SaveWay == 1)
+                        if (athDesc.AthSaveWay  == AthSaveWay.DB)
                         {
                             //把文件保存到指定的字段里.
                             dbUpload.SaveFileToDB("FileDB", temp);
                         }
 
-                        if (athDesc.SaveWay == 2)
+                        if (athDesc.AthSaveWay == AthSaveWay.FTPServer)
                         {
                             /*保存到fpt服务器上.*/
                             FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
                                 SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+
+
 
                             //判断目录是否存在.
                             if (ftpconn.DirectoryExist(athDesc.SaveTo) == false)
@@ -1337,7 +1347,14 @@ namespace CCFlow.WF.CCForm
 
                             //把文件放上去.
                             ftpconn.PutFile(temp, guid + "." + dbUpload.FileExts);
+                            ftpconn.Close();
+
+                            //设置路径.
+                            dbUpload.FileFullName = athDesc.SaveTo+"//"+ guid + "." + dbUpload.FileExts;
                         }
+
+                        dbUpload.Insert();
+
 
                         //执行附件上传后事件，added by liuxc,2017-7-15
                         msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
@@ -1392,6 +1409,8 @@ namespace CCFlow.WF.CCForm
             }
             catch (Exception ex)
             {
+
+                throw ex;
                 BP.Sys.Glo.WriteLineError(ex.ToString());
             }
 

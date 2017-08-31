@@ -155,11 +155,11 @@ namespace CCFlow.WF.MapDef
             this.Pub1.AddTD("文件数据存储方式");
 
             DDL ddl = new DDL();
-            ddl.ID = "DDL_" + FrmAttachmentAttr.SaveWay;
+            ddl.ID = "DDL_" + FrmAttachmentAttr.AthSaveWay;
             ddl.Items.Add(new ListItem("按文件方式保存", "0"));
             ddl.Items.Add(new ListItem("保存到数据库", "1"));
             ddl.Items.Add(new ListItem("保存ftp服务器", "2"));
-            ddl.SetSelectItem(ath.SaveWay);
+            ddl.SetSelectItem((int)ath.AthSaveWay);
             this.Pub1.AddTD(ddl);
             this.Pub1.AddTD("上传的附件如何保存?");
             this.Pub1.AddTREnd();
@@ -620,7 +620,7 @@ namespace CCFlow.WF.MapDef
                 ath.AthUploadWay = (AthUploadWay)this.Pub1.GetDDLByID("DDL_AthUploadWay").SelectedItemIntVal;
                 ath.FileShowWay = (FileShowWay)this.Pub1.GetDDLByID("DDL_FileShowWay").SelectedItemIntVal; //文件展现方式.
                 ath.UploadCtrl = this.Pub1.GetDDLByID("DDL_UploadCtrl").SelectedItemIntVal; //使用的附件上传工具.
-                ath.SaveWay = this.Pub1.GetDDLByID("DDL_" + FrmAttachmentAttr.SaveWay).SelectedItemIntVal; //保存方式.
+                ath.AthSaveWay = (AthSaveWay)this.Pub1.GetDDLByID("DDL_" + FrmAttachmentAttr.AthSaveWay).SelectedItemIntVal; //保存方式.
                 ath.IsHeLiuHuiZong = this.Pub1.GetCBByID("CB_" + FrmAttachmentAttr.IsHeLiuHuiZong).Checked; //是否是合流节点汇总.
                 ath.IsToHeLiuHZ = this.Pub1.GetCBByID("CB_" + FrmAttachmentAttr.IsToHeLiuHZ).Checked; //是否汇总到合流节点..
             }

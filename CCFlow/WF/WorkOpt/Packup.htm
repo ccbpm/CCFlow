@@ -20,6 +20,8 @@
                 dataType: 'html',
                 success: function (data) {
 
+                    alert(data);
+
                     if (data.indexOf('err@') == 0) {
                         document.getElementById("Msg").innerHTML = data;
                         return;
@@ -53,7 +55,7 @@
  <legend>提示 </legend>
  
  
- <div id="Msg"> </div>
+ <div id="Msg">正在加载请稍候... </div>
 
  </fieldset>
 

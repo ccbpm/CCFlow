@@ -844,8 +844,10 @@ namespace CCFlow.WF.CCForm
                     copyToPath = copyToPath + "//" + db.FileName;
                     File.Copy(db.FileFullName, copyToPath, true);
                 }
+
                 //执行压缩
                 (new FastZip()).CreateZip(zipFile, tempPath, true, "");
+
                 //删除临时文件夹
                 System.IO.Directory.Delete(tempPath, true);
                 //显示出下载超链接

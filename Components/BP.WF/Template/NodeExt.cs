@@ -542,6 +542,9 @@ namespace BP.WF.Template
                 map.AddTBString(BtnAttr.ConfirmLab, "确认", "确认按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ConfirmEnable, false, "是否启用", true, true);
 
+                // add 2017.9.1 for 天业集团.
+                map.AddTBString(BtnAttr.PackupLab, "打包下载", "打包下载按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.PackupEnable, false, "是否启用", true, true);
 
                 //map.AddBoolean(BtnAttr.SelectAccepterEnable, false, "是否启用", true, true);
                 #endregion  功能按钮状态

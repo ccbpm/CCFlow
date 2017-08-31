@@ -105,6 +105,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\RefDLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -132,6 +135,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="ThoughtWorks.QRCode, Version=1.0.2774.19990, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CCFormAPI.cs" />
@@ -158,6 +165,7 @@
     <Compile Include="DTS\DocFieldAddLengthTo1000.cs" />
     <Compile Include="CCFlowAPI.cs" />
     <Compile Include="DTS\ResetSortMapAttr.cs" />
+    <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -186,6 +194,7 @@
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />
+    <Compile Include="Rpt\MakeForm2Html.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\MapRptExt.cs" />
     <Compile Include="Rpt\RptDfine.cs" />
@@ -230,9 +239,6 @@
     <Compile Include="DTS\LoadNDxxRpt2GernerWorkFlow.cs" />
     <Compile Include="DTS\UpdateCCFlow.cs" />
     <Compile Include="DTS\GenerCH.cs" />
-    <Compile Include="Glo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CCFlowPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

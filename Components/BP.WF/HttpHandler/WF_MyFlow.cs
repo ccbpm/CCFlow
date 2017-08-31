@@ -555,9 +555,7 @@ namespace BP.WF.HttpHandler
                             /*如果启用了发送按钮.
                              * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
                              */
-                       
-                                toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();Send();\" />";
-                             
+                            toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();Send();\" />";
                         }
                     }
 
@@ -738,9 +736,6 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input name='Allot' type=button  value='" + btnLab.AllotLab + "' enable=true onclick=\"To('" + urlAllot + "'); \" />";
                 }
 
-                //    toolbar += "<input type=button name='Allot' value='" + btnLab.AllotLab + "' enable=true onclick=\"AllotBtn(this,'" + this.WorkID + "'); \" />";
-                //}
-
                 /* 确认 */
                 if (btnLab.ConfirmEnable == true)
                 {
@@ -748,6 +743,13 @@ namespace BP.WF.HttpHandler
                         toolbar += "<input type=button  value='取消确认' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" />";
                     else
                         toolbar += "<input type=button name='Confirm' value='" + btnLab.ConfirmLab + "' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" />";
+                }
+
+                /* 打包下载 */
+                if (btnLab.PackupEnable == true)
+                {
+                    string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow ;
+                    toolbar += "<input type=button name='PackupLab'  value='" + btnLab.PackupLab + "' enable=true onclick=\"javascript:WinOpen('" + packUrl + "','xxx'); \" />";
                 }
                 #endregion
 

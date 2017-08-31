@@ -223,6 +223,15 @@ namespace BP.WF.Template
         public const string ConfirmEnable = "ConfirmEnable";
 
         /// <summary>
+        /// 打包下载
+        /// </summary>
+        public const string PackupLab = "PackupLab";
+        /// <summary>
+        /// 是否启用打包下载
+        /// </summary>
+        public const string PackupEnable = "PackupEnable";
+
+        /// <summary>
         /// 分配
         /// </summary>
         public const string AllotLab = "AllotLab";

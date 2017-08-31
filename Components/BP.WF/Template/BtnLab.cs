@@ -589,7 +589,6 @@ namespace BP.WF.Template
             }
         }
 
-
         /// <summary>
         /// 确认 是否可用
         /// </summary>
@@ -610,6 +609,28 @@ namespace BP.WF.Template
                 return this.GetValStringByKey(BtnAttr.ConfirmLab);
             }
         }
+
+        /// <summary>
+        /// 打包下载 是否可用
+        /// </summary>
+        public bool PackupEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PackupEnable);
+            }
+        }
+        /// <summary>
+        /// 打包下载 标签
+        /// </summary>
+        public string PackupLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.PackupLab);
+            }
+        }
+
         /// <summary>
         /// 批量处理是否可用
         /// </summary>
@@ -1076,6 +1097,10 @@ namespace BP.WF.Template
                 // add 2017.5.4 确认就是告诉发送人，我接受这件工作了.
                 map.AddTBString(BtnAttr.ConfirmLab, "确认", "确认按钮标签", true, false, 0, 50, 10);
                 map.AddBoolean(BtnAttr.ConfirmEnable, false, "是否启用", true, true);
+
+                // add 2017.9.1 for 天业集团.
+                map.AddTBString(BtnAttr.PackupLab, "打包下载", "打包下载按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.PackupEnable, false, "是否启用", true, true);
 
 
                 #region 公文按钮

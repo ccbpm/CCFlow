@@ -28,6 +28,24 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        /// <summary>
+        /// 打包下载
+        /// </summary>
+        /// <returns></returns>
+        public string Packup_Init()
+        {
+            try
+            {
+                Node nd = new Node(this.FK_Node);
+                Work wk = nd.HisWork;
+                string url = BP.WF.Glo.MakeHtmlDocumentOfFreeFrm(wk.NodeFrmID, this.WorkID, true,this.FK_Flow);
+                return "url@" + url;
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
 
         #region 通用人员选择器.
         /// <summary>
@@ -274,7 +292,6 @@ namespace BP.WF.HttpHandler
             return gwls.ToJson();
         }
         #endregion
-
 
         #region 审核组件.
         /// <summary>

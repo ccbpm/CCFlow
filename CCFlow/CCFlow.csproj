@@ -7796,6 +7796,9 @@
     <Content Include="WF\WorkOpt\OneWork\OneWork.master" />
     <Content Include="WF\WorkOpt\OneWork\OP.aspx" />
     <Content Include="WF\WorkOpt\OneWork\OP.htm" />
+    <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
+    <Content Include="WF\WorkOpt\OneWork\TimeBase.htm" />
+    <Content Include="WF\WorkOpt\OneWork\TimeBase.js" />
     <Content Include="WF\WorkOpt\OneWork\TrackUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruakUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruckOnly.aspx" />

@@ -130,28 +130,18 @@ function InitPage() {
                     doc += "<p>发送到节点：" + track.NDToT + "</p>";
                 }
 
-
                 //增加两列，到达时间、用时 added by liuxc,2014-12-4
                 if (idx > 1) {
-                    // var toTime = Convert.ToDateTime(tracks[idx - 1 - 1]["RDT"].ToString());
-
-                    //   doc += "<p>到达时间：" + toTime.ToString("yy年MM月dd日HH:mm") + " 用时：" + DataType.GetSpanTime(toTime, dtt) + "</p>";
-
-                    var toTime = tracks[idx - 1]["RDT"];
-
+                    var toTime = tracks[idx - 1 - 1]["RDT"];
                     var toTimeDot = toTime.replace(/\-/g, "/");
                     toTimeDot = new Date(toTimeDot);
 
-
                     //当前发生日期.
-                    var timeDot = tracks[idx]["RDT"].replace(/\-/g, "/");
+                    var timeDot = tracks[i]["RDT"].replace(/\-/g, "/");
                     timeDot = new Date(timeDot);
 
-                    //var toTime = track
-                    // doc += "<p>到达时间：" + toTime + " 用时：xxxx </p>";
-                    doc += "<p>到达时间：" + toTime + "</p>";
+                    doc += "<p>到达时间：" + toTime + " 用时：" + GetSpanTime(toTimeDot, timeDot) + "</p>";
                 }
-
 
                 // 删除信息.
                 var tag = track.Tag;
@@ -184,6 +174,38 @@ function InitPage() {
     });
 }
 
+function GetSpanTime(date1, date2) {
+    ///<summary>计算date2-date1的时间差，返回使用“x天x小时x分x秒”形式的字符串表示</summary>
+    var date3 = date2.getTime() - date1.getTime();  //时间差秒
+    var str = '';
+    //计算出相差天数
+    var days = Math.floor(date3 / (24 * 3600 * 1000));
+    if (days > 0) {
+        str += days + '天';
+    }
+
+    //计算出小时数
+    var leave1 = date3 % (24 * 3600 * 1000);   //计算天数后剩余的毫秒数
+    var hours = Math.floor(leave1 / (3600 * 1000));
+    if (hours > 0) {
+        str += hours + '小时';
+    }
+
+    //计算相差分钟数
+    var leave2 = leave1 % (3600 * 1000);         //计算小时数后剩余的毫秒数
+    var minutes = Math.floor(leave2 / (60 * 1000));
+    if (minutes > 0) {
+        str += minutes + '分';
+    }
+
+    if (str.length == 0) {
+        var leave3 = leave2 % (60 * 1000);
+        var seconds = Math.floor(leave3 / 1000);
+        str += seconds + '秒';
+    }
+
+    return str;
+}
 
 /**Begin - Form Controls ***************/
 var ActionType = {

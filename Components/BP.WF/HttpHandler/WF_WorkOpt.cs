@@ -38,8 +38,7 @@ namespace BP.WF.HttpHandler
             {
                 Node nd = new Node(this.FK_Node);
                 Work wk = nd.HisWork;
-                string url = BP.WF.Glo.MakeHtmlDocumentOfFreeFrm(wk.NodeFrmID, this.WorkID, true,this.FK_Flow);
-                return "url@" + url;
+                return BP.WF.Glo.MakeHtmlDocumentOfFreeFrm(wk.NodeFrmID, this.WorkID,this.FK_Flow);
             }
             catch (Exception ex)
             {

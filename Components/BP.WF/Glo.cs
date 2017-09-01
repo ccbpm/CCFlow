@@ -4563,9 +4563,9 @@ namespace BP.WF
         /// <param name="frmID"></param>
         /// <param name="oid"></param>
         /// <returns></returns>
-        public static string MakeHtmlDocumentOfFreeFrm(string frmID, Int64 workid, bool isReturnZipFileUrl, string flowNo = null)
+        public static string MakeHtmlDocumentOfFreeFrm(string frmID, Int64 workid, string flowNo = null)
         {
-          return MakeForm2Html.MakeHtmlDocumentOfFreeFrm(frmID, workid,isReturnZipFileUrl, flowNo);
+          return MakeForm2Html.MakeHtmlDocumentOfFreeFrm(frmID, workid, flowNo);
         }
         /// <summary>
         /// 生成流程实例文件包
@@ -4715,7 +4715,7 @@ namespace BP.WF
         public static void MakeInstancePacketOfZip(string frmID, Int64 workid, bool isReturnZipFileUrl, string flowNo = null)
         {
             //首先要生成报表文件.
-            MakeHtmlDocumentOfFreeFrm(frmID, workid, isReturnZipFileUrl, flowNo);
+              MakeHtmlDocumentOfFreeFrm(frmID, workid, flowNo);
         }
         /// <summary>
         /// 获得一个表单的动态附件字段

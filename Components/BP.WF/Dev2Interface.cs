@@ -7283,7 +7283,8 @@ namespace BP.WF
                 sa.FK_Node = toNodeID;
 
                 sa.WorkID = workID;
-                sa.Insert();
+                if (sa.IsExits == false)
+                    sa.Insert();
             }
         }
         /// <summary>

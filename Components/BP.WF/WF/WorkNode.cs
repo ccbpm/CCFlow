@@ -6647,10 +6647,10 @@ namespace BP.WF
             if (string.IsNullOrEmpty(rptGe.BillNo))
             {
                 //处理单据编号.
-                string billNo = this.HisFlow.BillNoFormat.Clone() as string;
-                if (string.IsNullOrEmpty(billNo) == false)
+                string billNoTemplate = this.HisFlow.BillNoFormat.Clone() as string;
+                if (string.IsNullOrEmpty(billNoTemplate) == false)
                 {
-                    billNo = BP.WF.WorkFlowBuessRole.GenerBillNo(billNo, this.WorkID, this.rptGe, this.HisFlow.PTable);
+                   string billNo = BP.WF.WorkFlowBuessRole.GenerBillNo(billNoTemplate, this.WorkID, this.rptGe, this.HisFlow.PTable);
                     gwf.BillNo = billNo;
                     this.rptGe.BillNo = billNo;
                 }

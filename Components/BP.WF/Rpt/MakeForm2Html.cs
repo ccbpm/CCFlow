@@ -28,7 +28,7 @@ namespace BP.WF
     public class MakeForm2Html
     {
         public static string CCFlowAppPath = "/";
-        public static string MakeHtmlDocumentOfFreeFrm(string frmID, Int64 workid, bool isReturnZipFileUrl, string flowNo = null)
+        public static string MakeHtmlDocumentOfFreeFrm(string frmID, Int64 workid, string flowNo = null)
         {
             #region 准备目录文件.
             string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\";
@@ -795,15 +795,62 @@ namespace BP.WF
             (new FastZip()).CreateZip(zipFile, path, true, "");
             #endregion 把所有的文件做成一个zip文件.
 
-            if (isReturnZipFileUrl == true)
-            {
-                return SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + ".zip";
-            }
-            else
-            {
-                return billUrl;
-            }
+            //生成pdf文件
+            string pdfFile = path + "\\..\\" + workid + ".pdf";
+            string htmFile = path + "\\" + workid + ".htm";
+            Html2Pdf(htmFile, pdfFile);
+
+
+            DataTable dtReturn = new DataTable();
+            dtReturn.Columns.Add("No", typeof(string));
+            dtReturn.Columns.Add("Name", typeof(string));
+
+            DataRow drReturn = dtReturn.NewRow();
+            drReturn["No"] = "htm";
+            drReturn["Name"] = billUrl;
+            dtReturn.Rows.Add(drReturn);
+
+            drReturn = dtReturn.NewRow();
+            drReturn["No"] = "zip";
+            drReturn["Name"] = SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + ".zip";
+            dtReturn.Rows.Add(drReturn);
+
+            drReturn = dtReturn.NewRow();
+            drReturn["No"] = "pdf";
+            drReturn["Name"] = SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + ".pdf";
+            dtReturn.Rows.Add(drReturn);
+
+            return BP.Tools.Json.DataTableToJson(dtReturn,false);
+        }
+
+        public static void Html2Pdf(string billUrl, string pdf)
+        {
+            //因为Web 是多线程环境，避免甲产生的文件被乙下载去，所以档名都用唯一
+
+            string pdfFileExe = SystemConfig.PathOfDataUser + "\\ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
+
+            string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
+
+           billUrl = "http://localhost:30362/DataUser/InstancePacketOfData/ND18901/234/index.htm";
+
+            //执行wkhtmltopdf.exe
+            //Process p = System.Diagnostics.Process.Start(pdfFileExe, @"http://msdn.microsoft.com/zh-cn D:\" + fileNameWithOutExtention + ".pdf");
+            Process p = System.Diagnostics.Process.Start(pdfFileExe, billUrl+" "+pdf);
+
+            //若不加这一行，程序就会马上执行下一句而抓不到文件发生意外：System.IO.FileNotFoundException: 找不到文件 ''。
+            p.WaitForExit();
+
+            ////把文件读进文件流
+            //FileStream fs = new FileStream(pdf, FileMode.Open);
+            //byte[] file = new byte[fs.Length];
+            //fs.Read(file, 0, file.Length);
+            //fs.Close();
+
+            //Response给客户端下载
+            //Response.Clear();
+            //Response.AddHeader("content-disposition", "attachment; filename=" + fileNameWithOutExtention + ".pdf");//强制下载
+            //Response.ContentType = "application/octet-stream";
+            //Response.BinaryWrite(file);
         }
     }
-
 }

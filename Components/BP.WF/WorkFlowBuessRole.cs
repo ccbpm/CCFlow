@@ -375,7 +375,8 @@ namespace BP.WF
                 sql = "SELECT BillNo FROM " + flowPTable + " WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]") 
                     + "'" + (flowPTable.ToLower() == "wf_generworkflow" || System.Text.RegularExpressions.Regex.IsMatch(flowPTable.ToLower(),@"^nd+[\d]+rpt$")  ? " AND WFState >1" : "")
                     + (flowPTable.ToLower() == "wf_generworkflow" ? (" AND WorkID <> " + workid) : (" AND OID <> " + workid))
-                    + " ORDER BY BillNo DESC";
+                    + " ORDER BY BillNo DESC ";
+
                 string maxBillNo = DBAccess.RunSQLReturnString(sql);
                 int ilsh = 0;
 

@@ -373,9 +373,8 @@ namespace BP.WF
 
                 //数据库中查找符合的单据号集合,NOTE:此处需要注意，在LIKE中带有左广方括号时，要使用一对广播号将其转义
                 sql = "SELECT BillNo FROM " + flowPTable + " WHERE BillNo LIKE '" + supposeBillNo.Replace("[", "[[]") 
-                    + "'" + (flowPTable.ToLower() == "wf_generworkflow" || System.Text.RegularExpressions.Regex.IsMatch(flowPTable.ToLower(),@"^nd+[\d]+rpt$")  ? " AND WFState >1" : "")
-                    + (flowPTable.ToLower() == "wf_generworkflow" ? (" AND WorkID <> " + workid) : (" AND OID <> " + workid))
-                    + " ORDER BY BillNo DESC ";
+                    + "'" + (flowPTable.ToLower() == "wf_generworkflow" ? (" AND WorkID <> " + workid) : (" AND OID <> " + workid))
+                    + " ORDER BY BillNo DESC";
 
                 string maxBillNo = DBAccess.RunSQLReturnString(sql);
                 int ilsh = 0;

@@ -2291,7 +2291,7 @@ function GenerWorkNode() {
 
             $('#CCForm').html('');
             //循环MapAttr
-            document.KE_MapAttr = []; //待KE渲染的字段存在这里
+            document.KE_MapAttr = []; //待KE渲染的字段存在这里,figure_MapAttr_Template会填充该数值
             for (var mapAtrrIndex in flow_Data.Sys_MapAttr) {
                 var mapAttr = flow_Data.Sys_MapAttr[mapAtrrIndex];
                 var eleHtml = figure_MapAttr_Template(mapAttr);
@@ -2497,7 +2497,7 @@ function GenerWorkNode() {
                 window.editor = undefined;
                 document.KE_MapAttr.forEach(function (item) {
                     if (item.UIIsEnable == true) {
-                        window.editor = K.create("textarea[name='TB_" + item.KeyOfEn + "']", { items: btns, minWidth: '500px' });
+                        window.editor = K.create("textarea[name='TB_" + item.KeyOfEn + "']", { items: btns, resizeType: 0, minWidth: '500px' });
                     } else {
                         K.create("textarea[name='TB_" + item.KeyOfEn + "']", { items: [], resizeType: 0, minWidth: '500px', minHeight: '80px', height: item.UIHight + 'px' }).readonly();
                     }
@@ -2553,8 +2553,8 @@ function figure_MapAttr_Template(mapAttr) {
                         eleHtml +=
                             "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                             (workNodeData, mapAttr, defValue) + "</select>";
-                    } else {//文本区域
-                        if (mapAttr.UIHeight <= 23) {
+                    } else { //文本区域
+                        if (mapAttr.UIHeight <= 23 ) {
                             eleHtml +=
                                 "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                             ;
@@ -2563,9 +2563,14 @@ function figure_MapAttr_Template(mapAttr) {
                             /*eleHtml +=
                                 "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                             ;*/
-                            //改用KindEditor
-                            document.KE_MapAttr.push(mapAttr);
-                            eleHtml += "<textarea name='TB_" + mapAttr.KeyOfEn + "' style='width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;'>" + defValue + "</textarea>";
+                            //如果是富文本就使用KindEditor
+                            if (mapAttr.AtPara.indexOf("@IsRichText=1") != -1) {
+                                document.KE_MapAttr.push(mapAttr);
+                                eleHtml += "<textarea name='TB_" + mapAttr.KeyOfEn + "' style='width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;'>" + defValue + "</textarea>";
+                            } else {
+                                eleHtml +=
+                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                            }
                         }
                     }
                 } //AppDate

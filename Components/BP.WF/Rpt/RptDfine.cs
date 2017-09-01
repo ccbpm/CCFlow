@@ -26,7 +26,6 @@ namespace BP.WF.Rpt
         /// 流程编号
         /// </summary>
         public const string FK_Flow = "FK_Flow";
-     
     }
     /// <summary>
     /// 报表定义
@@ -128,7 +127,7 @@ namespace BP.WF.Rpt
                 RefMethod rm = new RefMethod();
                 rm = new RefMethod();
                 rm.Title = "设置显示的列";
-                rm.Icon = "../../WF/Img/Guide.png";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "我发起的流程";
@@ -136,7 +135,7 @@ namespace BP.WF.Rpt
 
                 rm = new RefMethod();
                 rm.Title = "设置显示列次序";
-                rm.Icon = "../../WF/Img/Guide.png";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsOrder_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "我发起的流程";
@@ -144,7 +143,7 @@ namespace BP.WF.Rpt
 
                 rm = new RefMethod();
                 rm.Title = "设置查询条件";
-                rm.Icon = "../../WF/Img/Guide.png";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearchCond_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "我发起的流程";
@@ -171,7 +170,7 @@ namespace BP.WF.Rpt
 
                 rm = new RefMethod();
                 rm.Title = "恢复设置";
-                rm.Icon = "../../WF/Img/Guide.png";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/Reset.png";
                 rm.Warning = "您确定要执行吗?";
                 rm.ClassMethodName = this.ToString() + ".DoReset_MyStartFlow()";
                 rm.RefMethodType = RefMethodType.Func;

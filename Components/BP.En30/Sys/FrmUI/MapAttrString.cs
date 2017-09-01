@@ -113,15 +113,14 @@ namespace BP.Sys.FrmUI
                 map.AddTBFloat(MapAttrAttr.MaxLen, 50, "最大长度", true, false);
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);
-                //map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", false, false);
-                map.AddTBFloat("ExtRows", 1, "文本框行数(决定高度)", true, false);
-
+                map.AddTBFloat(MapAttrAttr.UIHeight, 23, "高度", true, false);
+                //map.AddTBFloat("ExtRows", 1, "文本框行数(决定高度)", true, false);
 
                 map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否可编辑？", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-                map.AddBoolean("IsRichText", false, "是否大块文本？", true, true);
-                map.AddBoolean("IsSupperText", false, "是否富文本？", true, true);
+                map.AddBoolean(MapAttrAttr.IsRichText, false, "是否富文本？", true, true);
+                map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true,true);
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
 
                 #endregion 基本信息.
@@ -207,10 +206,10 @@ namespace BP.Sys.FrmUI
             attr.RetrieveFromDBSources();
 
             //高度.
-            attr.UIHeightInt = this.GetValIntByKey("ExtRows") * 23;
+          //  attr.UIHeightInt = this.GetValIntByKey("ExtRows") * 23;
 
-            attr.IsRichText = this.GetValBooleanByKey("IsRichText"); //是否是富文本？
-            attr.IsSupperText = this.GetValBooleanByKey("IsSupperText"); //是否是大块文本？
+            attr.IsRichText = this.GetValBooleanByKey(MapAttrAttr.IsRichText); //是否是富文本？
+            attr.IsSupperText = this.GetValBooleanByKey(MapAttrAttr.IsSupperText); //是否是大块文本？
 
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");

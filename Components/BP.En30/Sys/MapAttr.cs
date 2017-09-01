@@ -228,6 +228,10 @@ namespace BP.Sys
         /// 数值字段是否合计
         /// </summary>
         public const string IsSum = "IsSum";
+
+        public const string IsSupperText = "IsSupperText";
+        public const string IsRichText = "IsRichText";
+
     }
     /// <summary>
     /// 实体属性
@@ -242,11 +246,11 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen("IsSupperText",false);
+                return this.GetParaBoolen(MapAttrAttr.IsSupperText, false);
             }
             set
             {
-                this.SetPara("IsSupperText", value);
+                this.SetPara(MapAttrAttr.IsSupperText, value);
             }
         }
         /// <summary>
@@ -256,11 +260,11 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen("IsRichText",false);
+                return this.GetParaBoolen(MapAttrAttr.IsRichText, false);
             }
             set
             {
-                this.SetPara("IsRichText", value);
+                this.SetPara(MapAttrAttr.IsRichText, value);
             }
         }
         /// <summary>

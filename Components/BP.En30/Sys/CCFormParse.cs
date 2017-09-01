@@ -143,10 +143,11 @@ namespace BP.Sys
             attr.FK_MapData = fk_mapdata;
             attr.KeyOfEn = fieldID;
             attr.MyPK = fk_mapdata + "_" + fieldID;
+            attr.RetrieveFromDBSources();
 
             //执行一次查询,以防止其他的属性更新错误.
-            if (pks.Contains("@" + attr.KeyOfEn + "@") == true)
-                attr.RetrieveFromDBSources();
+            //if (pks.Contains("@" + attr.KeyOfEn + "@") == true)
+            //    attr.RetrieveFromDBSources();
 
             switch (shape)
             {

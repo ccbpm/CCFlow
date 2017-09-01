@@ -576,7 +576,7 @@ namespace CCFlow.WF.Comm.UC
                     if (dw == DTSearchWay.ByDate)
                         dtFrom = "1900-01-01";
                     else
-                        dtFrom = "1900-01-01 01:01";
+                        dtFrom = "1900-01-01 00:00";
                 }
 
                 if (string.IsNullOrEmpty(dtTo) == true)
@@ -584,7 +584,7 @@ namespace CCFlow.WF.Comm.UC
                     if (dw == DTSearchWay.ByDate)
                         dtTo = "2999-01-01";
                     else
-                        dtTo = "2999-01-01 01:01";
+                        dtTo = "2999-01-01 00:00";
                 }
 
 
@@ -592,9 +592,9 @@ namespace CCFlow.WF.Comm.UC
                 {
                     qo.addAnd();
                     qo.addLeftBracket();
-                    qo.SQL = dtKey + " >= '" + dtFrom + " 01:01'";
+                    qo.SQL = dtKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
-                    qo.SQL = dtKey + " <= '" + dtTo + " 23:59'";
+                    qo.SQL = dtKey + " <= '" + dtTo + "'";
                     qo.addRightBracket();
                 }
 
@@ -602,9 +602,9 @@ namespace CCFlow.WF.Comm.UC
                 {
                     qo.addAnd();
                     qo.addLeftBracket();
-                    qo.SQL = dtKey + " >= '" + dtFrom + "'";
+                    qo.SQL = dtKey + " >= '" + dtFrom + " 00:00'";
                     qo.addAnd();
-                    qo.SQL = dtKey + " <= '" + dtTo + "'";
+                    qo.SQL = dtKey + " <= '" + dtTo + " 23:59'";
                     qo.addRightBracket();
                 }
 

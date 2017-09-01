@@ -1750,7 +1750,9 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
 //获取表单数据
 function getFormData(isCotainTextArea, isCotainUrlParam) {
     //KindEditor 1:调用serialize之前把 KindEditor 数据放进去  
-    $("textarea[name='" + editor.srcElement.attr("name") + "']").val(editor.html());
+    if (editor) {
+        $("textarea[name='" + editor.srcElement.attr("name") + "']").val(editor.html());
+    }
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
@@ -2486,13 +2488,18 @@ function GenerWorkNode() {
                 $(selectObj).selectpicker('val', defValArr);
             });
 
+            var btns = [
+						'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+						'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+						'insertunorderedlist', '|', 'emoticons', 'image', 'link'];
+
             KindEditor.ready(function (K) {
 
                 document.KE_MapAttr.forEach(function (item) {
                     if (item.UIIsEnable == true) {
-                        window.editor = K.create("textarea[name='TB_" + item.KeyOfEn + "']", {minWidth:'500px'});
+                        window.editor = K.create("textarea[name='TB_" + item.KeyOfEn + "']", { items: btns, minWidth: '500px' });
                     } else {
-                        K.create("textarea[name='TB_" + item.KeyOfEn + "']", { items: [], resizeType: 0, minWidth: '500px', minHeight: '80px', height: item.UIHight+'px' }).readonly();
+                        K.create("textarea[name='TB_" + item.KeyOfEn + "']", { items:[], resizeType: 0, minWidth: '500px', minHeight: '80px', height: item.UIHight + 'px' }).readonly();
                     }
                 });
                 console.log(new Date().toLocaleTimeString() + "：创建KindEdetor编辑器是否成功？" + (editor != undefined));

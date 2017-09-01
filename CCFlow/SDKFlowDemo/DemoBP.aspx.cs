@@ -209,9 +209,97 @@ public partial class SDKFlowDemo_DemoEntity : System.Web.UI.Page
       //  string byt = BP.DA.DBAccess.GetBigTextFromDB(saveToFile, "WF_Flow", "No", "001", "FlowJson"); 
         // FlowJson是一个已经存在的img字段, 系统就会生成一个 temp文件在指定的路径下. 返回的是一个byt 类型的数据流.
         #endregion 向数据库存储文件.
-
     }
-   
+    public void EntitiesDemo()
+    {
+        //查询所有的实体，并输出.
+        Students stus = new Students();
+        stus.RetrieveAll();
+
+        string strs = "";
+        foreach (Student stu in stus)
+        {
+            strs += "<hr>";
+            strs += "<br>编号:" + stu.No + " 名称:" + stu.Name + " 地址:" + stu.Addr + " 性别:" + stu.XB + " 性别Text:" + stu.XBText;
+        }
+        this.Response.Write(strs);
+
+
+        //按照条件查询
+        Students stus1 = new Students();
+        stus1.Retrieve(StudentAttr.FK_BanJi, "01"); //查询所有班级编号 = 01 的学生.
+
+        strs = "";
+        foreach (Student stu in stus1)
+        {
+            strs += "<hr>";
+            strs += "<br>编号:" + stu.No + " 名称:" + stu.Name + " 地址:" + stu.Addr;
+        }
+        this.Response.Write(strs);
+
+
+        //按照条件查询
+        Students stus2 = new Students();
+        stus2.Retrieve(StudentAttr.FK_BanJi, "01", StudentAttr.XB, 0); //查询所有班级编号 = 01 的学生 and XB = 0 
+
+        strs = "";
+        foreach (Student stu in stus2)
+        {
+            strs += "<hr>";
+            strs += "<br>编号:" + stu.No + " 名称:" + stu.Name + " 地址:" + stu.Addr;
+        }
+        this.Response.Write(strs);
+
+
+        //多条件查询.
+        Students stus3 = new Students();
+        BP.En.QueryObject qo = new QueryObject(stus3);
+        qo.AddWhere(StudentAttr.FK_BanJi, "01");
+        qo.addAnd();
+        qo.AddWhere(StudentAttr.XB, 0);
+        qo.addAnd();
+        qo.AddWhere(StudentAttr.ZZMM, "0");
+        int num = qo.DoQuery();
+        strs = "一共查询到{" + num + "}条数据.";
+        foreach (Student stu in stus3)
+        {
+            strs += "<hr>";
+            strs += "<br>编号:" + stu.No + " 名称:" + stu.Name + " 地址:" + stu.Addr + " 班级:" + stu.FK_BanJiText;
+        }
+        this.Response.Write(strs);
+
+        //按照sql查询.
+        string sql = "SELECT * FROM Demo_Student WHERE FK_BanJi='01' AND XB=0 AND ZZMM=0 ";
+        DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+    }
+
+    public void EntityDemo()
+    {
+        Student stu = new Student();
+        stu.No = "9000";
+        stu.Name = "周朋";
+        stu.Addr = "shandong.jinan";
+        stu.Tel = "186601434343";
+
+        if (stu.IsExits == true)
+            stu.Update();
+        else
+            stu.Insert();
+
+        //执行Update.
+        Student stu1 = new Student();
+        stu1.No = "9000";
+        stu1.Retrieve();
+
+        stu1.Name = "李四";
+        stu1.Addr = "山东菏泽.";
+        stu1.Update();
+
+        //直接 delete .
+        Student stu2 = new Student();
+        stu2.No = "9000";
+        stu2.Delete();
+    }
     /// <summary>
     /// Entity 的基本应用.
     /// </summary>

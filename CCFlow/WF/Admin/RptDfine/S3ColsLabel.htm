@@ -2,6 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
+    
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+
      <script type="text/javascript" src="../../Scripts/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
@@ -87,8 +91,8 @@
                         var str = "<tr>";
                         str += "<td class='Idx' nowrap>" + (i + 1) + "</td>";
                         str += "<td  nowrap >" + jsData[i].KeyOfEn + "</td>";
-                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + jsData[i].KeyOfEn + "\" /></td>";
-                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "_Idx\" type=\"text\" value=\"" + i + "\" id=\"TB_" + jsData[i].KeyOfEn + "_Idx\" /></td>";
+                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + jsData[i].KeyOfEn + "\"  style='width:130px;' /></td>";
+                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "_Idx\" type=\"text\" value=\"" + i + "\" id=\"TB_" + jsData[i].KeyOfEn + "_Idx\" style='width:30px;' /></td>";
                         str += "<td style='text-align:center' nowrap ><a href='javascript:void(0)' onclick='up(this, 3)' class='easyui-linkbutton' data-options=\"iconCls:'icon-up'\">up</a>&nbsp;<a href='javascript:void(0)' onclick='down(this, 3)' class='easyui-linkbutton' data-options=\"iconCls:'icon-down'\">down</a>";
                         str += "</td>";
                         str += "</tr>";
@@ -139,7 +143,7 @@
     </script>
     <base target="_self" /> 
 </head>
-<body onkeypress="Esc()" >
+<body onkeypress="Esc()" class="easyui-layout" >
 
 <form method="post" action="./S3_ColsLabel.aspx?FK_MapData=ND1MyRpt&amp;RptNo=ND1MyRpt&amp;FK_Flow=001&amp;s=20170828170755076486" id="form1">
 

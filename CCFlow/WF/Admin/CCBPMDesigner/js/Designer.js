@@ -217,24 +217,25 @@ function FlowProperty() {
         WinOpen(url);
     }
 }
-//报表设计
-function DesignMyRptNew() {
-    var flowId = Number(CCBPM_Data_FK_Flow);
-    flowId = String(flowId);
-    url = "../RptDfine/S0_RptList.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
-    if (window.parent) {
-        window.parent.addTab(CCBPM_Data_FK_Flow + "DESIGNRPT", "报表设计" + CCBPM_Data_FK_Flow, url);
-    } else {
-        WinOpen(url);
-    }
-}
+
+////报表设计
+//function DesignMyRptNew() {
+//    var flowId = Number(CCBPM_Data_FK_Flow);
+//    flowId = String(flowId);
+//    url = "../RptDfine/S0_RptList.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
+//    if (window.parent) {
+//        window.parent.addTab(CCBPM_Data_FK_Flow + "DESIGNRPT", "报表设计" + CCBPM_Data_FK_Flow, url);
+//    } else {
+//        WinOpen(url);
+//    }
+//}
 
 //报表设计
 function DesignMyRpt() {
 
     var flowId = Number(CCBPM_Data_FK_Flow);
     flowId = String(flowId);
-    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Rpt.MapRptExts&PK=ND" + flowId + "MyRpt&Lang=CH";
+    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Rpt.MapRptExts&PK=ND" + flowId + "MyRpt&Lang=CH&SID=" + GetQueryString('SID') + "&UserNo=" + GetQueryString('UserNo');
     if (window.parent) {
         window.parent.addTab(CCBPM_Data_FK_Flow + "Rpt", "设计报表" + CCBPM_Data_FK_Flow, url);
     } else {

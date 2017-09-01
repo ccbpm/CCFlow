@@ -94,3 +94,11 @@
 .icon-large-chart{
 	background:url('icons/large_chart.png') no-repeat center center;
 }
+.icon-up
+{
+    background: url('icons/up.gif') no-repeat;
+}
+.icon-down
+{
+    background: url('icons/down.gif') no-repeat;
+}

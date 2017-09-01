@@ -3632,6 +3632,7 @@
     <Content Include="WF\Scripts\easyUI145\themes\icons\cancel.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\clear.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\cut.png" />
+    <Content Include="WF\Scripts\easyUI145\themes\icons\down.gif" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\edit_add.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\edit_remove.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\filesave.png" />
@@ -3658,6 +3659,7 @@
     <Content Include="WF\Scripts\easyUI145\themes\icons\sum.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\tip.png" />
     <Content Include="WF\Scripts\easyUI145\themes\icons\undo.png" />
+    <Content Include="WF\Scripts\easyUI145\themes\icons\up.gif" />
     <Content Include="WF\Scripts\easyUI145\themes\material\accordion.css" />
     <Content Include="WF\Scripts\easyUI145\themes\material\calendar.css" />
     <Content Include="WF\Scripts\easyUI145\themes\material\combo.css" />

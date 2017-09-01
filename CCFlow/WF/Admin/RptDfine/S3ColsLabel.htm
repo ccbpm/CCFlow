@@ -2,7 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
-     <script type="text/javascript" src="../../Scripts/jquery-1.7.2.min.js"></script>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <script src="../../Scripts/easyUI145/jquery.min.js"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script src="../../Scripts/config.js" type="text/javascript"></script>
@@ -50,21 +53,16 @@
             }
         }
     </script>
-    <script language="javascript" type="text/javascript" >
+    <script language="javascript" type="text/javascript">
 
         //页面启动函数.
         $(function () {
-
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
-
             InitPage();
-
             $("#Msg").html("");
-
         });
 
         function InitPage() {
-
             var rptNo = unescape(GetQueryString("RptNo"));
             var flowNo = unescape(GetQueryString("FK_Flow"));
 
@@ -74,7 +72,6 @@
                 url: Handler + "?DoType=S3ColsLabel_Init&RptNo=" + rptNo + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    
                     if (data.indexOf("@") == 0) {
                         alert(data);
                         return;
@@ -87,13 +84,20 @@
                         var str = "<tr>";
                         str += "<td class='Idx' nowrap>" + (i + 1) + "</td>";
                         str += "<td  nowrap >" + jsData[i].KeyOfEn + "</td>";
-                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + jsData[i].KeyOfEn + "\" /></td>";
-                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "_Idx\" type=\"text\" value=\"" + i + "\" id=\"TB_" + jsData[i].KeyOfEn + "_Idx\" /></td>";
-                        str += "<td style='text-align:center' nowrap ><a href='javascript:void(0)' onclick='up(this, 3)' class='easyui-linkbutton' data-options=\"iconCls:'icon-up'\">up</a>&nbsp;<a href='javascript:void(0)' onclick='down(this, 3)' class='easyui-linkbutton' data-options=\"iconCls:'icon-down'\">down</a>";
+                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + jsData[i].KeyOfEn + "\"   style='width:130px;' /></td>";
+                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "_Idx\" type=\"text\" value=\"" + (i + 1) + "\" id=\"TB_" + jsData[i].KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
+                        str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a>";
                         str += "</td>";
                         str += "</tr>";
                         $("table").append(str);
                     }
+
+                    $(".up").linkbutton({
+                        iconCls: 'icon-up'
+                    });
+                    $(".down").linkbutton({
+                        iconCls: 'icon-down'
+                    });
                 }
             });
         }
@@ -102,9 +106,9 @@
 
             var fk_flow = GetQueryString("FK_Flow");
             var rptNo = GetQueryString("RptNo");
-
             var str = "";
             var i = 0;
+
             //获取数据列表
             $("#table1").find("tr").each(function () {
                 var tdArr = $(this).children();
@@ -115,19 +119,20 @@
                 }
                 i++;
             });
+
             $.ajax({
                 type: 'post',
                 async: true,
                 url: Handler + "?DoType=S3ColsLabel_Save&FK_Flow=" + fk_flow + "&RptNo=" + rptNo + "&m=" + Math.random(),
                 dataType: 'html',
-                data:{'Orders':str},
+                data: { 'Orders': str },
                 success: function (data) {
-
                     alert(data)
                     if (window.opener != null) {
                         //刷新父窗口
                         window.opener.location.reload();
                     }
+
                     window.close();
                 }
             });
@@ -137,31 +142,24 @@
             window.close();
         }
     </script>
-    <base target="_self" /> 
+    <base target="_self" />
 </head>
-<body onkeypress="Esc()" >
-
-<form method="post" action="./S3_ColsLabel.aspx?FK_MapData=ND1MyRpt&amp;RptNo=ND1MyRpt&amp;FK_Flow=001&amp;s=20170828170755076486" id="form1">
-
-  <div data-options="region:'center',title:'3. 设置报表显示列次序',border:false" style="padding:5px;height:auto">
-        
-    <Table id="table1" class='Table' border='1' cellspacing='0' cellpadding='0' style='width:100%' >
-        <TR>
-        <TD class='GroupTitle' style='text-align:center;width:50px' >序</TD>
-        <TD class='GroupTitle' nowrap>字段</TD>
-        <TD class='GroupTitle' nowrap>标签</TD>
-        <TD class='GroupTitle' nowrap>显示顺序号</TD>
-        <TD class='GroupTitle' style='text-align:center;width:100px' >调整</TD>
-        </TR>
-    </Table>
-    <br />
-    <a id="ContentPlaceHolder1_Btn_Save1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;" href="javascript:Btn_Save_Click()">保存</a>
-    <a id="ContentPlaceHolder1_Btn_Cancel1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-undo&#39;" href="javascript:Cancel()">取消</a>
-
-    <br />
-    <br />
-
-  </div>
-</form>
+<body class="easyui-layout">
+    <div data-options="region:'center',title:'3. 设置报表显示列次序',border:false" style="padding:5px;height:auto">
+        <Table id="table1" class='Table' border='1' cellspacing='0' cellpadding='0' style='width:100%'>
+            <TR>
+                <TD class='GroupTitle' style='text-align:center;width:50px'>序</TD>
+                <TD class='GroupTitle'>字段</TD>
+                <TD class='GroupTitle'>标签</TD>
+                <TD class='GroupTitle'>显示顺序号</TD>
+                <TD class='GroupTitle'>调整</TD>
+            </TR>
+        </Table>
+        <br />
+        <a id="ContentPlaceHolder1_Btn_Save1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;" href="javascript:Btn_Save_Click()">保存</a>
+        <a id="ContentPlaceHolder1_Btn_Cancel1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-undo&#39;" href="javascript:Cancel()">取消</a>
+        <br />
+        <br />
+    </div>
 </body>
 </html>

@@ -525,8 +525,11 @@ function initBar() {
         url: url,
         dataType: 'html',
         success: function (data) {
+            
             var barHtml = data;
+            
             $('.Bar').html(barHtml);
+
             if ($('[name=Return]').length > 0) {
                 $('[name=Return]').attr('onclick', '');
                 $('[name=Return]').unbind('click');
@@ -551,6 +554,11 @@ function initBar() {
                 $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
             }
 
+            if ($('[name=PackUp]').length > 0) {
+                $('[name=PackUp]').attr('onclick', '');
+                $('[name=PackUp]').unbind('click');
+                $('[name=PackUp]').bind('click', function () { initModal("PackUp"); $('#returnWorkModal').modal().show(); });
+            }
 
             if ($('[name=SelectAccepter]').length > 0) {
                 $('[name=SelectAccepter]').attr('onclick', '');
@@ -573,6 +581,7 @@ function initBar() {
 
 //初始化退回、移交、加签窗口
 function initModal(modalType, toNode) {
+
     //初始化退回窗口的SRC
     var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
        '<div class="modal-dialog">'
@@ -613,10 +622,15 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("会签");
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
+            case "PackUp":
+                $('#modalHeader').text("打包下载/打印");
+                modalIframeSrc = "./WorkOpt/Packup.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
             case "accepter":
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
+            
             //发送选择接收节点和接收人   
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);

@@ -147,8 +147,11 @@
                         return;
                     }
 
-                    alert(data);
-                    Close();
+                    delRow(row); //清空单个table tbody
+
+                    // 把返回的结果，重新绑定.
+                    var sas = JSON.parse(data);
+                    BindTable(sas);
                     return;
                 }
             });

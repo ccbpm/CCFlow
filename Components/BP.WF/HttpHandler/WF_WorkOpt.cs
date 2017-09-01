@@ -94,7 +94,7 @@ namespace BP.WF.HttpHandler
                 int toNodeID = this.GetRequestValInt("ToNode");
                 string emps = this.GetRequestVal("AddEmps");
 
-                //增加到里面去.
+                //增加到里面去.s
                 BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
 
                 //查询出来,已经选择的人员.
@@ -102,9 +102,12 @@ namespace BP.WF.HttpHandler
                 sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
                 return sas.ToJson();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return "err@" + ex.Message;
+                if (ex.Message.Contains("INSERT") == true)
+                    return "err@人员名称重复,导致部分人员插入失败.";
+
+                return "err@"+ex.Message;
             }
         }
         /// <summary>
@@ -113,7 +116,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AccepterOfGener_Delete()
         {
-            BP.DA.DBAccess.RunSQL("DELETE FROM wf_selectaccper where workid="+this.WorkID);
+            //删除指定的人员.
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_SelectAccper WHERE WorkID="+this.WorkID+" AND FK_Emp='"+this.FK_Emp+"'");
 
             int toNodeID = this.GetRequestValInt("ToNode");
 
@@ -132,7 +136,9 @@ namespace BP.WF.HttpHandler
             {
                 int toNodeID = this.GetRequestValInt("ToNode");
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, null);
-                return objs.ToMsgOfHtml();
+                string strs= objs.ToMsgOfHtml();
+                strs = strs.Replace("@", "<br>@");
+                return strs;
             }
             catch(Exception ex)
             {
@@ -193,7 +199,7 @@ namespace BP.WF.HttpHandler
                 GenerWorkerListAttr.WorkID, this.WorkID,
                 GenerWorkerListAttr.FK_Node, this.FK_Node);
 
-            return "移除成功.";
+            return HuiQian_Init();
         }
         /// <summary>
         /// 增加审核人员

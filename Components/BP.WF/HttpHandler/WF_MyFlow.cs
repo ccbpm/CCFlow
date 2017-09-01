@@ -749,8 +749,16 @@ namespace BP.WF.HttpHandler
                 if (btnLab.PackupEnable == true)
                 {
                     string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow ;
-                    toolbar += "<input type=button name='PackupLab'  value='" + btnLab.PackupLab + "' enable=true onclick=\"javascript:WinOpen('" + packUrl + "','xxx'); \" />";
+                    toolbar += "<input type=button name='PackUp'  value='" + btnLab.PackupLab + "' enable=true/>";
                 }
+
+                //if (btnLab.HuiQianRole && HisGenerWorkFlow != null && HisGenerWorkFlow.WFState != WFState.Askfor)
+                //{
+                //    /*会签 */
+                //    string urlr3 = appPath + "WF/WorkOpt/HuiQian.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                //    toolbar += "<input type=button name='HuiQian'  value='" + btnLab.HuiQianLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
+                //}
+
                 #endregion
 
                 //加载自定义的button.

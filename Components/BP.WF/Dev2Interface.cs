@@ -7255,9 +7255,7 @@ namespace BP.WF
             SelectAccper sa = new SelectAccper();
             //删除历史选择
             if (del_Selected == true)
-            {
                 sa.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, workID);
-            }
 
             emps = emps.Replace(" ", "");
             emps = emps.Replace(";", ",");
@@ -7281,7 +7279,6 @@ namespace BP.WF
                 sa.EmpName = empEn.Name;
 
                 sa.FK_Node = toNodeID;
-
                 sa.WorkID = workID;
                 if (sa.IsExits == false)
                     sa.Insert();

@@ -3,6 +3,7 @@
 <head>
     <title>打包下载</title>
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
     <!-- 导入配置文件. -->
@@ -20,21 +21,51 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    alert(data);
-
                     if (data.indexOf('err@') == 0) {
                         document.getElementById("Msg").innerHTML = data;
                         return;
                     }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;
-                        return;
+
+                    var urls = JSON.parse(data);
+
+                    var html = "";
+                    for (var i = 0; i < urls.length; i++) {
+
+                        var url = urls[i];
+
+                        if (url.No == "htm") {
+                            html += "<fieldset>";
+                            html += "<legend>html在线预览打印</legend>";
+                            html += "<ul>";
+                            html += "<li>系统把整个表单生成了一个静态的html文件.</li>";
+                            html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/htm.gif' />进行在线预览</a></li>";
+                            html += "</ul>";
+                            html += "</fieldset>";
+                        }
+
+                        if (url.No == "pdf") {
+                            html += "<fieldset>";
+                            html += "<legend>pdf 在线打印与预览</legend>";
+                            html += "<ul>";
+                            html += "<li>系统把整个表单生成了一个pdf文件.</li>";
+                            html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/pdf.gif' />进行下载与在线预览</a></li>";
+                            html += "</ul>";
+                            html += "</fieldset>";
+                        }
+
+                        if (url.No == "zip") {
+                            html += "<fieldset>";
+                            html += "<legend>zip 在线打印与预览</legend>";
+                            html += "<ul>";
+                            html += "<li>系统把整个表单生成了一个zip文件,这个文件里包括了,表单的附件，二维码等信息.</li>";
+                            html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/Zip.gif' />进行打包下载</a></li>";
+                            html += "</ul>";
+                            html += "</fieldset>";
+                        }
                     }
 
-                    alert(data);
-                    window.close();
+                    document.getElementById("Msg").innerHTML = html;
                 }
             });
         });
@@ -51,13 +82,7 @@
 </head>
 <body>
  
- <fieldset>
- <legend>提示 </legend>
- 
- 
  <div id="Msg">正在加载请稍候... </div>
-
- </fieldset>
 
 </body>
 </html>

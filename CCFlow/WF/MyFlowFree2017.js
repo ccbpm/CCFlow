@@ -1,4 +1,4 @@
-﻿$(function () {
+$(function () {
     SetHegiht();
     //打开表单检查正则表达式
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
@@ -13,7 +13,7 @@ function SaveSelfFrom() {
     // 不支持火狐浏览器。
     var frm = document.getElementById('SelfForm');
     if (frm == null) {
-        alert('系统错误.'); 
+        alert('系统错误.');
     }
     //执行保存.
     return frm.contentWindow.Save();
@@ -1735,6 +1735,8 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
 
 //获取表单数据
 function getFormData(isCotainTextArea, isCotainUrlParam) {
+    //KindEditor 1:调用serialize之前把 KindEditor 数据放进去  
+    $("textarea[name='" + editor.srcElement.attr("name") + "']").val(editor.html());
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
@@ -2273,11 +2275,13 @@ function GenerWorkNode() {
 
             $('#CCForm').html('');
             //循环MapAttr
+            document.KE_MapAttr = []; //待KE渲染的字段存在这里
             for (var mapAtrrIndex in flow_Data.Sys_MapAttr) {
                 var mapAttr = flow_Data.Sys_MapAttr[mapAtrrIndex];
                 var eleHtml = figure_MapAttr_Template(mapAttr);
                 $('#CCForm').append(eleHtml);
             }
+
             //循环FrmLab
             for (var i in flow_Data.Sys_FrmLab) {
                 var frmLab = flow_Data.Sys_FrmLab[i];
@@ -2468,6 +2472,17 @@ function GenerWorkNode() {
                 $(selectObj).selectpicker('val', defValArr);
             });
 
+            KindEditor.ready(function (K) {
+
+                document.KE_MapAttr.forEach(function (item) {
+                    if (item.UIIsEnable == true) {
+                        window.editor = K.create("textarea[name='TB_" + item.KeyOfEn + "']", {minWidth:'500px'});
+                    } else {
+                        K.create("textarea[name='TB_" + item.KeyOfEn + "']", { items: [], resizeType: 0, minWidth: '500px', minHeight: '80px', height: item.UIHight+'px' }).readonly();
+                    }
+                });
+                console.log(new Date().toLocaleTimeString() + "：创建KindEdetor编辑器是否成功？" + (editor != undefined));
+            });
         }
     })
 }
@@ -2524,9 +2539,12 @@ function figure_MapAttr_Template(mapAttr) {
                             ;
                         }
                         else {
-                            eleHtml +=
+                            /*eleHtml +=
                                 "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                            ;
+                            ;*/
+                            //改用KindEditor
+                            document.KE_MapAttr.push(mapAttr);
+                            eleHtml += "<textarea name='TB_" + mapAttr.KeyOfEn + "' style='width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;'>" + defValue + "</textarea>";
                         }
                     }
                 } //AppDate
@@ -3208,8 +3226,7 @@ var jsonStr = '';
 
 //从MyFlowFree2017.htm 中拿过过的
 $(function () {
-
-    var frm = document.forms["divCCForm"];
+    var frm = document.forms["divCCForm"]; 
 
     if (plant == "CCFlow")
         frm.action = "MyFlow.ashx?method=login";
@@ -3218,9 +3235,9 @@ $(function () {
 
     initPageParam(); //初始化参数
 
-    initBar(); //工具栏.
+    initBar(); //工具栏.ajax
 
-    GenerWorkNode(); //表单数据.
+    GenerWorkNode(); //表单数据.ajax
 
     $('[name=showCol]').bind('change', function (obj) {
         if (obj.target.value == "8") {

@@ -1218,9 +1218,9 @@ function InitMapAttr(mapAttrData, workNodeData) {
 
                             // 判断是否是超大文本.
                             var para = mapAttr.AtPara;
-                            if (para.indexOf('IsSupperText=1') > 0) {
+                            if ( 1==2 && para.indexOf('IsSupperText=1') > 0) {
 
-                                alert('富文本没有解析:'+para);
+                                alert('富文本没有解析:' + para);
 
                             } else {
                                 if (mapAttr.UIHeight <= 23) {

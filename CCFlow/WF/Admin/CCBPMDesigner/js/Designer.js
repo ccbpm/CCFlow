@@ -218,17 +218,17 @@ function FlowProperty() {
     }
 }
 
-////报表设计
-//function DesignMyRptNew() {
-//    var flowId = Number(CCBPM_Data_FK_Flow);
-//    flowId = String(flowId);
-//    url = "../RptDfine/S0_RptList.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
-//    if (window.parent) {
-//        window.parent.addTab(CCBPM_Data_FK_Flow + "DESIGNRPT", "报表设计" + CCBPM_Data_FK_Flow, url);
-//    } else {
-//        WinOpen(url);
-//    }
-//}
+//报表设计
+function DesignMyRptNew() {
+    var flowId = Number(CCBPM_Data_FK_Flow);
+    flowId = String(flowId);
+    url = "../RptDfine/S0_RptList.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
+    if (window.parent) {
+        window.parent.addTab(CCBPM_Data_FK_Flow + "DESIGNRPT", "报表设计" + CCBPM_Data_FK_Flow, url);
+    } else {
+        WinOpen(url);
+    }
+}
 
 //报表设计
 function DesignMyRpt() {

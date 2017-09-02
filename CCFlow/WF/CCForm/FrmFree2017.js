@@ -2076,7 +2076,7 @@ function figure_MapAttr_Template(mapAttr) {
 
                         // 判断是否是超大文本.
                         var para = mapAttr.AtPara;
-                        if (para.indexOf('IsSupperText=1') > 0) {
+                        if ( 1==2 && para.indexOf('IsSupperText=1') > 0) {
 
                             alert('富文本没有解析:' + para);
 

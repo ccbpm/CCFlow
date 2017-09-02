@@ -194,9 +194,11 @@
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />
+    <Compile Include="Rpt\db\MapRpt.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Rpt\MakeForm2Html.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
-    <Compile Include="Rpt\MapRptExt.cs" />
     <Compile Include="Rpt\RptDfine.cs" />
     <Compile Include="Service References\CCInterface\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -354,7 +356,6 @@
     <Compile Include="Template\FlowAttr.cs" />
     <Compile Include="Template\NodeAttr.cs" />
     <Compile Include="Rpt\RptDept.cs" />
-    <Compile Include="Rpt\MapRpt.cs" />
     <Compile Include="Rpt\RptStation.cs" />
     <Compile Include="Rpt\RptEmp.cs" />
     <Compile Include="Template\WorkflowDefintionManager.cs" />

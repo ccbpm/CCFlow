@@ -26,66 +26,54 @@ namespace BP.WF.Rpt
         /// 流程编号
         /// </summary>
         public const string FK_Flow = "FK_Flow";
+        /// <summary>
+        /// 部门查询权限控制规则
+        /// </summary>
+        public const string MyDeptRole = "MyDeptRole";
     }
     /// <summary>
     /// 报表定义
     /// </summary>
     public class RptDfine : EntityNoName
     {
+
         #region 属性
         /// <summary>
-        /// 物理表
+        /// 本部门流程查询权限定义
         /// </summary>
-        public string PTable
+        public int MyDeptRole
         {
             get
             {
-                string s = this.GetValStrByKey(RptDfineAttr.PTable);
-                if (s == "" || s == null)
-                    return this.No;
-                return s;
+                return this.GetValIntByKey(RptDfineAttr.MyDeptRole);
             }
             set
             {
-                this.SetValByKey(RptDfineAttr.PTable, value);
-            }
-        }
-        /// <summary>
-        /// 备注
-        /// </summary>
-        public string Note
-        {
-            get
-            {
-                return this.GetValStrByKey(RptDfineAttr.Note);
-            }
-            set
-            {
-                this.SetValByKey(RptDfineAttr.Note, value);
-            }
-        }
-        public Entities _HisEns = null;
-        public new Entities HisEns
-        {
-            get
-            {
-                if (_HisEns == null)
-                {
-                    _HisEns = BP.En.ClassFactory.GetEns(this.No);
-                }
-                return _HisEns;
-            }
-        }
-        public Entity HisEn
-        {
-            get
-            {
-                return this.HisEns.GetNewEntity;
+                this.SetValByKey(RptDfineAttr.MyDeptRole, value);
             }
         }
         #endregion
 
         #region 构造方法
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                if (BP.Web.WebUser.IsAdmin)
+                {
+                    uac.IsUpdate = true;
+                    uac.IsDelete = false;
+                    uac.IsView = true;
+                    uac.IsInsert = false;
+                }
+                else
+                {
+                    uac.IsView = false;
+                }
+                return uac;
+            }
+        }
         /// <summary>
         /// 报表定义
         /// </summary>
@@ -118,10 +106,24 @@ namespace BP.WF.Rpt
 
                 #region 基本属性.
                 map.AddTBStringPK(RptDfineAttr.No, null, "编号", true, false, 1, 200, 20);
-                map.AddTBString(RptDfineAttr.Name, null, "描述", true, false, 0, 500, 20);
-                map.AddTBString(RptDfineAttr.PTable, null, "物理表", true, false, 0, 500, 20);
-                map.AddTBString(RptDfineAttr.Note, null, "备注", true, false, 0, 500, 20);
+                map.AddTBString(RptDfineAttr.Name, null, "流程名称", true, false, 0, 500, 20);
+
+                map.AddDDLSysEnum(RptDfineAttr.MyDeptRole, 0, "本部门发起的流程", true,
+                    true, RptDfineAttr.MyDeptRole,
+                    "@0=仅部门领导可以查看@1=部门下所有的人都可以查看@2=本部门里指定岗位的人可以查看", true);
+                
+                //map.AddTBString(RptDfineAttr.PTable, null, "物理表", true, false, 0, 500, 20);
+                //map.AddTBString(RptDfineAttr.Note, null, "备注", true, false, 0, 500, 20);
                 #endregion 基本属性.
+
+                #region 绑定的关联关系.
+                map.AttrsOfOneVSM.Add(new RptStations(), new Stations(), RptStationAttr.FK_Rpt, RptStationAttr.FK_Station,
+                DeptAttr.Name, DeptAttr.No, "岗位权限");
+                map.AttrsOfOneVSM.Add(new RptDepts(), new Depts(), RptDeptAttr.FK_Rpt, RptDeptAttr.FK_Dept,
+                    DeptAttr.Name, DeptAttr.No, "部门权限");
+                map.AttrsOfOneVSM.Add(new RptEmps(), new Emps(), RptEmpAttr.FK_Rpt, RptEmpAttr.FK_Emp,
+                 DeptAttr.Name, DeptAttr.No, "人员权限");
+                #endregion
 
                 #region 我发起的流程.
                 RefMethod rm = new RefMethod();
@@ -149,7 +151,6 @@ namespace BP.WF.Rpt
                 rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "设置导出模板";
                 rm.Icon = "../../WF/Img/Guide.png";
@@ -157,7 +158,6 @@ namespace BP.WF.Rpt
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "执行查询";
@@ -167,22 +167,230 @@ namespace BP.WF.Rpt
                 rm.GroupName = "我发起的流程";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "恢复设置";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/Reset.png";
+                rm.Warning = "您确定要执行吗?如果确定，以前配置将清空。";
+                rm.ClassMethodName = this.ToString() + ".DoReset_MyStartFlow()";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.GroupName = "我发起的流程";
+                map.AddRefMethod(rm);
+                #endregion 我发起的流程.
+
+                #region 我参与的流程.
+                rm = new RefMethod();
+                rm.Title = "设置显示的列";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
+                rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_MyJoinFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "我参与的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置显示列次序";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
+                rm.ClassMethodName = this.ToString() + ".DoColsOrder_MyJoinFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "我参与的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置查询条件";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
+                rm.ClassMethodName = this.ToString() + ".DoSearchCond_MyJoinFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "我参与的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置导出模板";
+                rm.Icon = "../../WF/Img/Guide.png";
+                rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_MyJoinFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "我参与的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "执行查询";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
+                rm.ClassMethodName = this.ToString() + ".DoSearch_MyJoinFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "我参与的流程";
+                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "恢复设置";
                 rm.Icon = "../../WF/Admin/RptDfine/Img/Reset.png";
                 rm.Warning = "您确定要执行吗?";
-                rm.ClassMethodName = this.ToString() + ".DoReset_MyStartFlow()";
+                rm.ClassMethodName = this.ToString() + ".DoReset_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.Func;
-                rm.GroupName = "我发起的流程";
+                rm.GroupName = "我参与的流程";
                 map.AddRefMethod(rm);
-
                 #endregion 我发起的流程.
 
+                #region 我参与的流程.
+                rm = new RefMethod();
+                rm.Title = "设置显示的列";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
+                rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_MyDeptFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置显示列次序";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
+                rm.ClassMethodName = this.ToString() + ".DoColsOrder_MyDeptFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置查询条件";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
+                rm.ClassMethodName = this.ToString() + ".DoSearchCond_MyDeptFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置导出模板";
+                rm.Icon = "../../WF/Img/Guide.png";
+                rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_MyDeptFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "执行查询";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
+                rm.ClassMethodName = this.ToString() + ".DoSearch_MyDeptFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "恢复设置";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/Reset.png";
+                rm.Warning = "您确定要执行吗?";
+                rm.ClassMethodName = this.ToString() + ".DoReset_MyDeptFlow()";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+                #endregion 我发起的流程.
 
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        #endregion
+
+        #region 通用方法.
+        /// <summary>
+        /// 选择的列
+        /// </summary>
+        /// <param name="rptMark"></param>
+        /// <returns></returns>
+        public string DoColsChose(string rptMark)
+        {
+            return "../../Admin/RptDfine/S2ColsChose.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) +"Rpt"+ rptMark ;
+        }
+        /// <summary>
+        /// 列的次序
+        /// </summary>
+        /// <param name="rptMark"></param>
+        /// <returns></returns>
+        public string DoColsOrder(string rptMark)
+        {
+            return "../../Admin/RptDfine/S3ColsLabel.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) +"Rpt"+ rptMark ;
+        }
+        /// <summary>
+        /// 查询条件设置
+        /// </summary>
+        /// <param name="rptMark"></param>
+        /// <returns></returns>
+        public string DoSearchCond(string rptMark)
+        {
+            return "../../Admin/RptDfine/S5SearchCond.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) +"Rpt" + rptMark ;
+        }
+        /// <summary>
+        /// 导出模版设置
+        /// </summary>
+        /// <param name="rptMark"></param>
+        /// <returns></returns>
+        public string DoRptExportTemplate(string rptMark)
+        {
+            return "../../Admin/RptDfine/S8_RptExportTemplate.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No)+"Rpt" + rptMark;
+        }
+        /// <summary>
+        /// 重置设置.
+        /// </summary>
+        public string DoReset(string rptMark, string rptName)
+        {
+            MapData md = new MapData();
+            md.No = "ND" + int.Parse(this.No) +"Rpt"+ rptMark;
+            if (md.RetrieveFromDBSources() == 0)
+            {
+                md.Name = rptName;
+                md.Insert();
+            }
+
+            md.RptIsSearchKey = true; //按关键查询.
+            md.RptDTSearchWay = DTSearchWay.None; //按日期查询.
+            md.RptDTSearchKey = "";
+            md.RptSearchKeys = "*FK_Dept*WFSta*FK_NY*"; //查询条件.
+
+            Flow fl = new Flow(this.No);
+            md.PTable = fl.PTable;
+            md.Update();
+
+            string keys = "'OID','FK_Dept','FlowStarter','WFState','Title','FlowStartRDT','FlowEmps','FlowDaySpan','FlowEnder','FlowEnderRDT','FK_NY','FlowEndNode','WFSta'";
+
+            //查询出来所有的字段.
+            MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.No) + "Rpt");
+            attrs.Delete(MapAttrAttr.FK_MapData, md.No); // 删除已经有的字段。
+            foreach (MapAttr attr in attrs)
+            {
+                if (keys.Contains("'" + attr.KeyOfEn + "'") == false)
+                    continue;
+                attr.FK_MapData = md.No;
+
+
+                #region 判断特殊的字段.
+                switch (attr.KeyOfEn)
+                {
+                    case StartWorkAttr.FK_Dept:
+                        attr.UIBindKey = "BP.Port.Depts";
+                        attr.UIContralType = UIContralType.DDL;
+                        attr.LGType = FieldTypeS.FK;
+                        attr.UIVisible = true;
+                       // attr.GroupID = groupID;// gfs[0].GetValIntByKey("OID");
+                        attr.UIIsEnable = false;
+                        attr.DefVal = "";
+                        attr.MaxLen = 100;
+                        attr.Update();
+                        break;
+                    case "FK_NY":
+                        attr.UIBindKey = "BP.Pub.NYs";
+                        attr.UIContralType = UIContralType.DDL;
+                        attr.LGType = FieldTypeS.FK;
+                        attr.UIVisible = true;
+                        attr.UIIsEnable = false;
+                        //attr.GroupID = groupID;
+                        attr.Update();
+                        break;
+                    case "FK_Emp":
+                        break;
+                    default:
+                        break;
+                }
+                #endregion
+
+
+                attr.Insert();
+            }
+
+            return rptMark + "重置成功...";
         }
         #endregion
 
@@ -193,8 +401,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoColsChoseOf_MyStartFlow()
         {
-            string url = "../../Admin/RptDfine/S2ColsChose.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
-            return url;
+            return this.DoColsChose("My");
         }
         /// <summary>
         /// 列的次序
@@ -202,17 +409,15 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoColsOrder_MyStartFlow()
         {
-            string url = "../../Admin/RptDfine/S3ColsLabel.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
-            return url;
-        }       
+            return DoColsOrder("My");
+        }
         /// <summary>
         /// 查询条件
         /// </summary>
         /// <returns></returns>
         public string DoSearchCond_MyStartFlow()
         {
-            string url = "../../Admin/RptDfine/S5SearchCond.htm?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
-            return url;
+            return DoSearchCond("My");
         }
         /// <summary>
         /// 导出模版.
@@ -220,45 +425,127 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoRptExportTemplate_MyStartFlow()
         {
-            string url = "../../Admin/RptDfine/S8_RptExportTemplate.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
-            return url;
+            return DoRptExportTemplate("My");
         }
         /// <summary>
-        /// 重置设置.
+        /// 重置
         /// </summary>
-        public void DoReset_MyStartFlow()
+        /// <returns></returns>
+        public string DoReset_MyStartFlow()
         {
-            MapData md = new MapData("ND" + int.Parse(this.No) + "MyRpt");
-            md.RptIsSearchKey = true;
-            md.RptDTSearchWay = DTSearchWay.None;
-            md.RptDTSearchKey = "";
-            md.RptSearchKeys = "*FK_Dept*WFSta*FK_NY*";
-
-            Flow fl = new Flow(this.No);
-            this.PTable = fl.PTable;
-            this.Update();
-
-            string keys = "'OID','FK_Dept','FlowStarter','WFState','Title','FlowStartRDT','FlowEmps','FlowDaySpan','FlowEnder','FlowEnderRDT','FK_NY','FlowEndNode','WFSta'";
-            MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.No) + "Rpt");
-
-            attrs.Delete(MapAttrAttr.FK_MapData, this.No); // 删除已经有的字段。
-            foreach (MapAttr attr in attrs)
-            {
-                if (keys.Contains("'" + attr.KeyOfEn + "'") == false)
-                    continue;
-                attr.FK_MapData = this.No;
-                attr.Insert();
-            }
+            return DoReset("My","我发起的流程");
         }
         /// <summary>
-        /// 设置选择的列
+        /// 查询
         /// </summary>
         /// <returns></returns>
         public string DoSearch_MyStartFlow()
         {
-            return "../../Rpt/MyStartFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
+            return "../../Rpt/MyStartFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No ;
         }
         #endregion
+
+        #region 我参与的流程
+        /// <summary>
+        /// 设置选择的列
+        /// </summary>
+        /// <returns></returns>
+        public string DoColsChoseOf_MyJoinFlow()
+        {
+            return this.DoColsChose("MyJoin");
+        }
+        /// <summary>
+        /// 列的次序
+        /// </summary>
+        /// <returns></returns>
+        public string DoColsOrder_MyJoinFlow()
+        {
+            return DoColsOrder("MyJoin");
+        }
+        /// <summary>
+        /// 查询条件
+        /// </summary>
+        /// <returns></returns>
+        public string DoSearchCond_MyJoinFlow()
+        {
+            return DoSearchCond("MyJoin");
+        }
+        /// <summary>
+        /// 导出模版.
+        /// </summary>
+        /// <returns></returns>
+        public string DoRptExportTemplate_MyJoinFlow()
+        {
+            return DoRptExportTemplate("MyJoin");
+        }
+        /// <summary>
+        /// 重置
+        /// </summary>
+        /// <returns></returns>
+        public string DoReset_MyJoinFlow()
+        {
+            return DoReset("MyJoin","我参与的流程");
+        }
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <returns></returns>
+        public string DoSearch_MyJoinFlow()
+        {
+            return "../../Rpt/MyJoinFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
+        }
+        #endregion 我参与的流程
+
+        #region 本部门发起的流程
+        /// <summary>
+        /// 设置选择的列
+        /// </summary>
+        /// <returns></returns>
+        public string DoColsChoseOf_MyDeptFlow()
+        {
+            return this.DoColsChose("MyDept");
+        }
+        /// <summary>
+        /// 列的次序
+        /// </summary>
+        /// <returns></returns>
+        public string DoColsOrder_MyDeptFlow()
+        {
+            return DoColsOrder("MyDept");
+        }
+        /// <summary>
+        /// 查询条件
+        /// </summary>
+        /// <returns></returns>
+        public string DoSearchCond_MyDeptFlow()
+        {
+            return DoSearchCond("MyDept");
+        }
+        /// <summary>
+        /// 导出模版.
+        /// </summary>
+        /// <returns></returns>
+        public string DoRptExportTemplate_MyDeptFlow()
+        {
+            return DoRptExportTemplate("MyDept");
+        }
+        /// <summary>
+        /// 重置
+        /// </summary>
+        /// <returns></returns>
+        public string DoReset_MyDeptFlow()
+        {
+            return DoReset("MyDept", "本部门发起的流程");
+        }
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <returns></returns>
+        public string DoSearch_MyDeptFlow()
+        {
+            return "../../Rpt/MyDeptFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
+        }
+        #endregion 本部门发起的流程
 
     }
     /// <summary>

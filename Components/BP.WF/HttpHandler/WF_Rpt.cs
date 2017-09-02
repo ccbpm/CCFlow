@@ -10,6 +10,7 @@ using BP.Web;
 using BP.Port;
 using BP.En;
 using BP.WF;
+using BP.WF.Rpt;
 using BP.WF.Template;
 
 namespace BP.WF.HttpHandler
@@ -38,11 +39,45 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             ht.Add("MyStartFlow", "我发起的流程");
             ht.Add("MyJoinFlow", "我参与的流程");
-            ht.Add("MyDeptFlow", "我本部门发起的流程");
-            ht.Add("MySubDeptFlow", "我本部门与子部门发起的流程");
-            ht.Add("AdvFlowsSearch", "高级查询");
 
-            return BP.Tools.Json.ToJson(ht);
+            RptDfine rd = new RptDfine(this.FK_Flow);
+
+            #region 增加本部门发起流程的查询.
+            if (rd.MyDeptRole == 0)
+            {
+                /*如果仅仅部门领导可以查看: 检查当前人是否是部门领导人.*/
+                if (DBAccess.IsExitsTableCol("Port_Dept", "Leader") == true)
+                {
+                    string sql = "SELECT Leader FROM Port_Dept WHERE No='" + BP.Web.WebUser.FK_Dept + "'";
+                    string strs = DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    if (strs != null && strs.Contains(BP.Web.WebUser.No) == true)
+                    {
+                        ht.Add("MyDeptFlow", "我本部门发起的流程");
+                    }
+                }
+            }
+
+            if (rd.MyDeptRole == 1)
+            {
+                /*如果部门下所有的人都可以查看: */
+                ht.Add("MyDeptFlow", "我本部门发起的流程");
+            }
+
+            if (rd.MyDeptRole == 2)
+            {
+                /*如果部门下所有的人都可以查看: */
+                ht.Add("MyDeptFlow", "我本部门发起的流程");
+            }
+
+            #endregion 增加本部门发起流程的查询.
+
+
+
+            //   ht.Add("MyDeptFlow", "我本部门发起的流程");
+            //  ht.Add("MySubDeptFlow", "我本部门与子部门发起的流程");
+            // ht.Add("AdvFlowsSearch", "高级查询");
+
+            return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
         }
         #endregion 
 

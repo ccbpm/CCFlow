@@ -448,17 +448,22 @@ namespace BP.Tools
             strs = TranJsonStr(strs);
             return strs;
         }
-        public static string ToJsonEntitiesNoNameModel(Hashtable ht)
+        public static string ToJsonEntitiesNoNameMode(Hashtable ht)
         {
-            string strs = "{";
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+
             foreach (string key in ht.Keys)
             {
-                strs += "\"" + key + "\":\"" + ht[key] + "\",";
+                DataRow dr = dt.NewRow();
+                dr["No"] = key;
+                dr["Name"] = ht[key];
+                dt.Rows.Add(dr);
+
             }
-            strs += "\"OutEnd\":\"无效参数请忽略\"";
-            strs += "}";
-            strs = TranJsonStr(strs);
-            return strs;
+
+            return BP.Tools.Json.DataTableToJson(dt, false);
         }
         /// <summary>
         /// 转化成Json.

@@ -37,10 +37,11 @@ namespace BP.WF
 
             path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\" + workid;
             if (System.IO.Directory.Exists(path) == false)
+            {
                 System.IO.Directory.CreateDirectory(path);
+            }
             else
             {
-
                 try
                 {
                     System.IO.Directory.Delete(path, true);
@@ -776,8 +777,6 @@ namespace BP.WF
             }
             #endregion 输出附件.
 
-
-
             #region 替换模版文件..
             string docs = BP.DA.DataType.ReadTextFile(SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\index.htm");
             docs = docs.Replace("@Docs", sb.ToString());
@@ -788,7 +787,6 @@ namespace BP.WF
             string indexFile = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\" + frmID + "\\" + workid + "\\index.htm";
             BP.DA.DataType.WriteFile(indexFile, docs);
             #endregion 替换模版文件..
-
 
             #region 把所有的文件做成一个zip文件.
             string zipFile = path + "\\..\\" + workid + ".zip";
@@ -801,26 +799,12 @@ namespace BP.WF
             Html2Pdf(htmFile, pdfFile);
 
 
-            DataTable dtReturn = new DataTable();
-            dtReturn.Columns.Add("No", typeof(string));
-            dtReturn.Columns.Add("Name", typeof(string));
+            Hashtable ht = new Hashtable();
+            ht.Add("htm", billUrl);
+            ht.Add("zip", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + ".zip");
+            ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + ".pdf");
+            return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
 
-            DataRow drReturn = dtReturn.NewRow();
-            drReturn["No"] = "htm";
-            drReturn["Name"] = billUrl;
-            dtReturn.Rows.Add(drReturn);
-
-            drReturn = dtReturn.NewRow();
-            drReturn["No"] = "zip";
-            drReturn["Name"] = SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + ".zip";
-            dtReturn.Rows.Add(drReturn);
-
-            drReturn = dtReturn.NewRow();
-            drReturn["No"] = "pdf";
-            drReturn["Name"] = SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + ".pdf";
-            dtReturn.Rows.Add(drReturn);
-
-            return BP.Tools.Json.DataTableToJson(dtReturn,false);
         }
 
         public static void Html2Pdf(string billUrl, string pdf)

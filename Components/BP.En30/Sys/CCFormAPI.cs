@@ -585,12 +585,14 @@ namespace BP.Sys
         /// <param name="jsonStrOfH5Frm"></param>
         public static void SaveFrm(string fk_mapdata, string jsonStrOfH5Frm)
         {
-            //BP.DA.DataType.WriteFile("D:\\AAAAAA.JSON", jsonStrOfH5Frm);
+            
+            // BP.DA.DataType.WriteFile("D:\\AAAAAA.JSON", jsonStrOfH5Frm);
             //return;
 
             JsonData jd = JsonMapper.ToObject(jsonStrOfH5Frm);
             if (jd.IsObject == false)
-                throw new Exception("error:表单格式不正确，保存失败。");
+                throw new Exception("err@表单格式不正确，保存失败。");
+
 
             JsonData form_MapData = jd["c"];
 
@@ -608,7 +610,7 @@ namespace BP.Sys
             SaveFrm(fk_mapdata, jd);
         }
         /// <summary>
-        /// 将表单设计串格式化为Json
+        /// 将表单设计串格式化为Json.
         /// </summary>
         /// <param name="formData"></param>
         /// <returns></returns>
@@ -1202,14 +1204,7 @@ namespace BP.Sys
             listNames.Add("Sys_FrmImgAth");
             sql = "@SELECT * FROM Sys_FrmImgAth WHERE " + where;
             sqls += sql;
-
-            //// sqls.Replace(";", ";" + Environment.NewLine);
-            // DataSet ds = DA.DBAccess.RunSQLReturnDataSet(sqls);
-            // if (ds != null && ds.Tables.Count == listNames.Count)
-            //     for (int i = 0; i < listNames.Count; i++)
-            //     {
-            //         ds.Tables[i].TableName = listNames[i];
-            //     }
+        
 
             string[] strs = sqls.Split('@');
             DataSet ds = new DataSet();

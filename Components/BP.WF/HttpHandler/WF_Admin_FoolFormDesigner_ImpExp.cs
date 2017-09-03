@@ -37,15 +37,22 @@ namespace BP.WF.HttpHandler
             if (this.FK_Flow != null)
             {
                 //加入节点表单. 如果没有流程参数.
-                sql = "SELECT NODEID, NAME  FROM WF_Node WHERE FK_Flow='" + this.FK_Flow + "' ORDER BY NODEID ";
+                sql = "SELECT NodeID, Name  FROM WF_Node WHERE FK_Flow='" + this.FK_Flow + "' ORDER BY NODEID ";
                 dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "WF_Node";
+
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    dt.Columns["NODEID"].ColumnName = "NodeID";
+                    dt.Columns["NAME"].ColumnName = "Name";
+                }
+
                 ds.Tables.Add(dt);
             }
 
             //加入表单库目录.
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            sql = "SELECT 'ND'||NO as No ,NAME,PARENTNO FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
+                sql = "SELECT 'ND'||NO as No ,NAME,PARENTNO FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
             else
                 sql = "SELECT 'ND'+NO,NAME,PARENTNO FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
 
@@ -71,35 +78,33 @@ namespace BP.WF.HttpHandler
         /// <returns>执行结果</returns>
         public string Imp_LoadFrmTempleteFromLocalFile()
         {
-            if (this.context.Request.Files.Count == 0) {
-                return "请上传导入的模板文件.";
-            }
-
-            string fk_mapData = this.FK_MapData;
-            //读取上传的XML 文件.
-            DataSet ds = new DataSet();
-            //ds.ReadXml(path);
-            ds.ReadXml(this.context.Request.Files[0].InputStream);
-            //执行装载.
-            MapData.ImpMapData(fk_mapData, ds);
-
-            if (fk_mapData.Contains("ND"))
+            try
             {
-                /* 判断是否是节点表单 */
-                int nodeID = 0;
-                try
+                if (this.context.Request.Files.Count == 0)
+                    return "err@请上传导入的模板文件.";
+
+                string fk_mapData = this.FK_MapData;
+            
+                //读取上传的XML 文件.
+                DataSet ds = new DataSet();
+                //ds.ReadXml(path);
+                ds.ReadXml(this.context.Request.Files[0].InputStream);
+
+                //执行装载.
+                MapData.ImpMapData(fk_mapData, ds);
+
+                if (this.FK_Node != 0)
                 {
-                    nodeID = int.Parse(fk_mapData.Replace("ND", ""));
-                }
-                catch
-                {
-                    return "执行成功.";
+                    Node nd = new Node(this.FK_Node);
+                    nd.RepareMap();
                 }
 
-                Node nd = new Node(nodeID);
-                nd.RepareMap();
+                return "执行成功.";
             }
-            return "执行成功.";
+            catch (Exception ex)
+            {
+                return "err@导入失败:" + ex.Message;
+            }
         }
         /// <summary>
         /// 从节点上Copy
@@ -114,11 +119,13 @@ namespace BP.WF.HttpHandler
             string fromMapData = this.FromMapData;
             string fk_mapdata = this.FK_MapData;
             bool isClear = this.IsClear;
-            bool isSetReadonly = this.IsSetReadonly;
 
             MapData md = new MapData(fromMapData);
-
             MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet(md.No));
+
+            //设置为只读模式.
+            if (this.IsSetReadonly == true)
+                MapData.SetFrmIsReadonly(fk_mapdata);
 
             // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
             if (fk_mapdata.Contains("ND") == true)
@@ -127,6 +134,7 @@ namespace BP.WF.HttpHandler
                 Node nd = new Node(int.Parse(fk_node));
                 nd.RepareMap();
             }
+
             return "执行成功.";
         }
 

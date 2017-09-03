@@ -34,7 +34,7 @@ namespace BP.WF.HttpHandler
         /// 功能列表
         /// </summary>
         /// <returns></returns>
-        public string OneFlow_Init()
+        public string Default_Init()
         {
             Hashtable ht = new Hashtable();
             ht.Add("MyStartFlow", "我发起的流程");

@@ -1718,6 +1718,37 @@ namespace BP.Sys
 			//导入.
 			return ImpMapData(fk_mapData, ds);
 		}
+        /// <summary>
+        /// 设置表单为只读属性
+        /// </summary>
+        /// <param name="fk_mapdata">表单ID</param>
+        public static void SetFrmIsReadonly(string fk_mapdata)
+        {
+            MapAttrs attrs = new MapAttrs(fk_mapdata);
+
+            foreach (MapAttr attr in attrs)
+            {
+                if (attr.UIIsEnable == false)
+                {
+                    attr.UIIsEnable = true;
+                    attr.Update();
+                    continue;
+                }
+
+                //if (attr.LGType == FieldTypeS.Enum || attr.LGType== FieldTypeS.FK )
+                //{
+                //    if (attr.UIIsEnable == false)
+                //    {
+                //        attr.UIIsEnable = true;
+                //        attr.Update();
+                //        continue;
+                //    }
+                //}
+                //if (attr.LGType == FieldTypeS.Enum)
+                //{
+                //}
+            }
+        }
 		/// <summary>
 		/// 导入表单
 		/// </summary>
@@ -1905,7 +1936,6 @@ namespace BP.Sys
 								object val = dr[dc.ColumnName] as object;
 								if (val == null)
 									continue;
-
 
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}

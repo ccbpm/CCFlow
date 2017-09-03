@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -73,6 +74,28 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
         #endregion
+
+
+        #region 功能列表
+        /// <summary>
+        /// 功能列表
+        /// </summary>
+        /// <returns></returns>
+        public string Default_Init()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("MyStartFlow", "我发起的流程");
+            ht.Add("MyJoinFlow", "我参与的流程");
+
+
+
+            //   ht.Add("MyDeptFlow", "我本部门发起的流程");
+            //  ht.Add("MySubDeptFlow", "我本部门与子部门发起的流程");
+            // ht.Add("AdvFlowsSearch", "高级查询");
+
+            return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
+        }
+        #endregion 
 
         #region 执行父类的重写方法.
         /// <summary>

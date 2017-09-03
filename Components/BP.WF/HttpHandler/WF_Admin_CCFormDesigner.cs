@@ -324,9 +324,7 @@ namespace BP.WF.HttpHandler
 + " union select '子线程' Name, 'ThreadDtl' No,FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W W from WF_Node where nodeid=" + this.FK_Node
 + " union select '流转自定义' Name,'FrmTransferCustom' No,FTCSta Sta,FTC_X X,FTC_Y Y,FTC_H H,FTC_W  W FROM WF_Node  where nodeid=" + this.FK_Node + ";";
                 ;
-
                 DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
-
 
 
                 ////用列名称进行比对 重新设置
@@ -334,7 +332,7 @@ namespace BP.WF.HttpHandler
                 mapAttrCols = "MyPK,FK_MapData,KeyOfEn,Name,DefVal,UIContralType,MyDataType,LGType,UIWidth,UIHeight,UIBindKey,UIRefKey,UIRefKeyText,UIVisible,UIIsEnable,UIIsLine,UIIsInput,Idx,IsSigan,X,Y,GUID,Tag,EditType,AtPara,ExtDefVal,ExtDefValText,MinLen,MaxLen,ExtRows,IsRichText,IsSupperText,Tip,ColSpan,ColSpanText,GroupID,GroupIDText";
                 frmBtnCols = "MyPK,FK_MapData,Text,X,Y,IsView,IsEnable,BtnType,UAC,UACContext,EventType,EventContext,MsgOK,MsgErr,GUID,GroupID";
                 frmRbCols = "MyPK,FK_MapData,KeyOfEn,EnumKey,Lab,IntKey,X,Y,GUID,Script,FieldsCfg,Tip";
-                frmLabCols = " MyPK,FK_MapData,Text,X,Y,FontSize,FontColor,FontName,FontStyle,FontWeight,IsBold,IsItalic,GUID";
+                frmLabCols = "MyPK,FK_MapData,Text,X,Y,FontSize,FontColor,FontName,FontStyle,FontWeight,IsBold,IsItalic,GUID";
                 sys_FrmLinkCols = "MyPK,FK_MapData,Text,URL,Target,X,Y,FontSize,FontColor,FontName,FontStyle,IsBold,IsItalic,GUID";
                 sys_FrmImgCols = "MyPK,FK_MapData,ImgAppType,X,Y,H,W,ImgURL,ImgPath,LinkURL,LinkTarget,GUID,Tag0,SrcType,IsEdit,Name,EnPK,ImgSrcType";
                 sys_FrmImgAthCols = "MyPK,FK_MapData,CtrlID,X,Y,H,W,IsEdit,GUID,Name,IsRequired";
@@ -353,6 +351,7 @@ namespace BP.WF.HttpHandler
                 tableCols[2] = frmRbCols;
                 ds.Tables[3].TableName = "Sys_FrmLab";
                 tableCols[3] = frmLabCols;
+
                 ds.Tables[4].TableName = "Sys_FrmLink";
                 tableCols[4] = sys_FrmLineCols;
                 ds.Tables[5].TableName = "Sys_FrmImg";
@@ -392,6 +391,8 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 #endregion 解决oracle大小写问题.
+
+                ds.WriteXml("c:\\aaaa.xml", XmlWriteMode.DiffGram);
 
                 return BP.Tools.Json.ToJson(ds);
             }

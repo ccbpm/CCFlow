@@ -107,13 +107,9 @@
         }
 
         function Imp() {
-
             var url = "../../Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0&FK_Flow=";
-            // window.open(url, 'exp');
-            CCForm_ShowDialog(url, '导入表单');
-
-            //OpenEasyUiDialog(url,"frm",'表单导入',400,600,"icon-edit",false, null,null,
-            //window.location.href = window.location.href;
+            CCForm_ShowDialog(url, '导入表单', 600, 400);
+            // window.location.href = window.location.href;
             return;
         }
 

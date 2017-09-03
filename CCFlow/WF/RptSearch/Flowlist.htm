@@ -92,7 +92,6 @@
     </style>
     <script language="javascript" type="text/javascript" >
 
-
         //发起时打开窗口
         function WinOpenStartFlow(flowNo) {
 
@@ -109,17 +108,8 @@
             var intFlowNo = flowNo;
 
             // var url = "./Rpt/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
-            var url = "../RptDfine/OneFlow.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
+            var url = "../RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
 
-            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
-            newWindow.focus();
-            return;
-        }
-
-        //批量发起.
-        function WinOpenBatch(flowNo) {
-
-            var url = "../BatchStart.htm?FK_Flow=" + flowNo;
             var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
             newWindow.focus();
             return;

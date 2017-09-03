@@ -3,18 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>流程查询</title>
-
+    <title>单个流程查询</title>
     <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
-
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js" type="text/javascript"></script>
-
-    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <base target="_self" />
     <script type="text/javascript">
 
@@ -33,7 +29,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=OneFlow_Init&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+                url: Handler + "?DoType=Default_Init&FK_Flow=" + fk_flow + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -82,25 +78,29 @@
                 $('#context').attr('src', url + '&s=' + Math.random());
             }
         }
-
-        $(function () {
-
-            $('#starthref').click();
-            $('#context').attr('src', 'MyStartFlow.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&s=' + Math.random());
-
-        });
     </script>
 </head>
-<body class="easyui-layout">
+<body class="easyui-layout" onkeypress="Esc();">
     <form id="form1" runat="server">
+
+    <div class="easyui-layout" region="north" split="true" style=" height:50px; background-image:url(./Img/BJ.png)" >
+	 <div style="text-align:left">
+     
+     <div style="font-size:20px; font-color:white;  vertical-align:middle" >
+       <font color="white">单个流程查询</font>
+     </div>
+
+    </div>
+	</div>
+
+
     <div data-options="region:'center',border:false">
         <div class="easyui-layout" data-options="fit:true">
             <div data-options="region:'west',split:true" style="width: 200px;">
 
-                <div class="easyui-panel" title="报表查看" data-options="collapsible:true,border:false" style="height: auto">
+                <div class="easyui-panel" title="流程查询" data-options="collapsible:true,border:false" style="height: auto">
                 <label id="menuList" />
                 </div>
-
 
             </div>
             <div data-options="region:'center',noheader:true" style="overflow-y: hidden">

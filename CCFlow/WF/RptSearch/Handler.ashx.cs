@@ -11,7 +11,7 @@ namespace CCFlow.WF.RptSearch
     public class Handler : BP.WF.HttpHandler.HttpHandlerBase
     {
         /// <summary>
-        /// 返回子类
+        /// 返回子类 
         /// </summary>
         public override Type CtrlType
         {

@@ -17,7 +17,7 @@ namespace CCFlow.WF.Comm.Sys
         {
             get
             {
-                return typeof(BP.WF.HttpHandler.WF_Admin_FoolFormDesigner);
+                return typeof(BP.WF.HttpHandler.WF_Comm_Sys);
             }
         }
     }

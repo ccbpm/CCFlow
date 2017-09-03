@@ -301,37 +301,7 @@
     </style>
 </head>
 <body>
-    <div id="ShowPFlow" style="display: none;">
-        <button id="btnShowPFlow" value="查看父流程信息" style="float: left;">
-            查看父流程信息</button>
-    </div>
-    <!--之前返回的信息-->
-    <div id="lastOptMsg">
-    </div>
-    <div class="modal fade" id="MessageDiv">
-        <div class="modal-dialog" style="margin-left: auto; margin-right: auto; width: 800px;">
-            <div class="modal-content" style="border-radius: 0px;">
-                <div class="modal-header">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;
-                        border: none; float: right;">
-                        ×</button>
-                    <h4 class="modal-title">
-                        错误提示</h4>
-                </div>
-                <div class="modal-body">
-                    <div id='Message'>
-                    </div>
-                    <div style="text-align: right;">
-                        <button type="button" class="btn" data-dismiss="modal">
-                            确定</button>
-                    </div>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+   
     <div id="divCurrentForm" style="position: relative;">
         <!--底部功能按钮 发送、移交-->
         <div id="topToolBar" style="padding: 3px 3px; margin: 0px auto; text-align: left;"
@@ -466,6 +436,39 @@
                     </div>
                     <div style="text-align: right;">
                         <button type="button" id="btnMsgModalOK" class="btn" data-dismiss="modal">
+                            确定</button>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+     <div id="ShowPFlow" style="display: none;">
+        <button id="btnShowPFlow" value="查看父流程信息" style="float: left;">查看父流程信息</button>
+    </div>
+    <!--之前返回的信息-->
+    <div id="lastOptMsg">
+    </div>
+
+    <div class="modal fade" id="MessageDiv">
+        <div class="modal-dialog" style="margin-left: auto; margin-right: auto; width: 800px;">
+            <div class="modal-content" style="border-radius: 0px;">
+                <div class="modal-header">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;
+                        border: none; float: right;">
+                        ×</button>
+                    <h4 class="modal-title">
+                        错误提示</h4>
+                </div>
+                <div class="modal-body">
+                    <div id='Message'>
+                    </div>
+                    <div style="text-align: right;">
+                        <button type="button" class="btn" data-dismiss="modal">
                             确定</button>
                     </div>
                 </div>

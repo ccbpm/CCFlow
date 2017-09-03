@@ -20,7 +20,7 @@ namespace CCFlow.WF.Rpt
         {
             get
             {
-                return typeof(BP.WF.HttpHandler.WF_Rpt);
+                return typeof(BP.WF.HttpHandler.WF_RptDfine);
             }
         }
     }

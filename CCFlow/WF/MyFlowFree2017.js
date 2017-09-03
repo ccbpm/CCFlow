@@ -27,28 +27,6 @@ function SendSelfFrom() {
     return true;
 }
 
-var winSelectAccepter = null;
-// 打开选择人接收器.
-function OpenSelectAccepter(flowNo, nodeid, workid, fid) {
-    var url = "./WorkOpt/Accepter.htm?WorkID=" + workid + "&FK_Node=" + nodeid + "&FK_Flow=" + flowNo + "&FID=" + fid + "&type=2";
-    if (winSelectAccepter == null)
-        winSelectAccepter = window.open(url, winSelectAccepter, 'height=600, width=600,scrollbars=yes');
-    else
-        winSelectAccepter.focus(); // (0, 0);
-    return false;
-}
-
-function OpenAccepter() {
-
-    var url = './CCForm/FrmPopVal.htm?FK_MapExt=' + popNameInXML + '&CtrlVal=' + ctrl.value;
-    var v = window.showModalDialog(url, 'opp', 'dialogHeight: 550px; dialogWidth: 650px; dialogTop: 100px; dialogLeft: 150px; center: yes; help: no');
-    if (v == null || v == '' || v == 'NaN') {
-        return;
-    }
-    ctrl.value = v;
-    return;
-}
-
 function SetHegiht() {
 
     var screenHeight = document.documentElement.clientHeight;
@@ -405,65 +383,6 @@ function ConfirmBtn(btn, workid) {
     });
 }
 
-function ReturnVal(ctrl, url, winName) {
-    if (url == "")
-        return;
-    //update by dgq 2013-4-12 判断有没有？
-    if (ctrl && ctrl.value != "") {
-        if (url.indexOf('?') > 0)
-            url = url + '&CtrlVal=' + ctrl.value;
-        else
-            url = url + '?CtrlVal=' + ctrl.value;
-    }
-    //修改标题控制不进行保存
-    if (typeof self.parent.TabFormExists != 'undefined') {
-        var bExists = self.parent.TabFormExists();
-        if (bExists) {
-            self.parent.ChangTabFormTitleRemove();
-        }
-    }
-
-    //杨玉慧 用#控件类型#id  来作为变量绑定  如 Method=#DRDL_DealWithMethod
-
-    while (url.indexOf('#') > 0) {
-        var startIndex = url.indexOf('#');
-        //获取#号后面的& 符号的位置
-        var endIndex = url.indexOf('&', startIndex);
-        if (endIndex < 0) {
-            SetBottomTooBar
-            endIndex = url.length;
-        }
-        var paramId = url.substring(startIndex + 1, endIndex);
-        var value = $("[id$=_'" + paramId + "']").val();
-        url = url.replace('#' + paramId, value);
-    }
-
-
-    //杨玉慧 模态框 先用这个
-    $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().prev().text());
-
-    $('#iframePopModalForm').attr("src", url);
-    $('#btnPopValOK').unbind('click');
-    $('#btnPopValOK').bind('click', function () {
-        var retrunVal = frames["iframePopModalForm"].window.returnValue;
-        if (retrunVal == undefined)
-            retrunVal = "";
-        var txtId = ctrl.id;
-        ctrl.value = retrunVal;
-        if ($('#' + txtId + "_ReValue").length > 0) {
-            $('#' + txtId + "_ReValue").val(retrunVal);
-        }
-    });
-    $('#returnPopValModal').modal().show();
-    //修改标题，失去焦点时进行保存
-    if (typeof self.parent.TabFormExists != 'undefined') {
-        var bExists = self.parent.TabFormExists();
-        if (bExists) {
-            self.parent.ChangTabFormTitle();
-        }
-    }
-    return;
-}
 //然浏览器最大化.
 function ResizeWindow() {
     //if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen
@@ -643,10 +562,6 @@ function initModal(modalType, toNode) {
     $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
 }
 
-//退回操作  显示退回窗口
-function showReturnWorkModel() {
-    $('#returnWorkModal').modal().show();
-}
 //设置附件为只读
 function setAttachDisabled() {
     //附件设置
@@ -713,6 +628,7 @@ function Save() {
             $.each(dtls, function (i, dtl) {
                 $(dtl).attr('src', $(dtl).attr('src'));
             });
+
             if (data.indexOf('保存成功') != 0 || data.indexOf('err@') == 0) {
                 $('#Message').html(data.substring(4, data.length));
                 $('#MessageDiv').modal().show();
@@ -959,15 +875,15 @@ function InitForm() {
         $(obj).attr('title', $(obj).val());
     })
 
-    //初始化提示信息
-    var alertMsgs = workNodeData.AlertMsg;
-    if (alertMsgs != undefined && alertMsgs.length > 0) {
-        var alertMsgHtml = '';
-        $.each(alertMsgs, function (i, alertMsg) {
-            alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
-        });
-        $('#Message').html(alertMsgHtml);
-    }
+//    //初始化提示信息
+//    var alertMsgs = workNodeData.AlertMsg;
+//    if (alertMsgs != undefined && alertMsgs.length > 0) {
+//        var alertMsgHtml = '';
+//        $.each(alertMsgs, function (i, alertMsg) {
+//            alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
+//        });
+//        $('#Message').html(alertMsgHtml);
+//    }
 
     //根据NAME 设置ID的值
     var inputs = $('[name]');
@@ -2218,7 +2134,6 @@ function checkBlanks() {
         }
     });
 
-
     return checkBlankResult;
 }
 
@@ -2282,9 +2197,8 @@ function GenerWorkNode() {
 
                 flow_Data = JSON.parse(data);
                 workNodeData = flow_Data;
-            }
-            catch (err) {
 
+            } catch (err) {
                 alert("GenerWorkNode转换JSON失败:" + jsonStr);
                 return;
             }
@@ -2359,16 +2273,17 @@ function GenerWorkNode() {
                 $('#CCForm').append(createdConnector);
             }
 
-            //循环之前的提示信息
+            //循环之前的提示信息.
+            var info = "";
             for (var i in flow_Data.AlertMsg) {
                 var alertMsg = flow_Data.AlertMsg[i];
                 var alertMsgEle = figure_Template_MsgAlert(alertMsg, i);
-                $('#lastOptMsg').append(alertMsgEle);
-                $('#lastOptMsg').append($('<hr/>'));
+                $('#Message').append(alertMsgEle);
+                $('#Message').append($('<hr/>'));
             }
 
-            if (flow_Data.AlertMsg.length == 0) {
-                $('#lastOptMsg').hide();
+            if (flow_Data.AlertMsg.length != 0) {
+                $('#MessageDiv').modal().show();
             }
 
             // alert(data);
@@ -2406,15 +2321,23 @@ function GenerWorkNode() {
                 $(obj).attr('title', $(obj).val());
             })
 
-            //初始化提示信息
-            var alertMsgs = workNodeData.AlertMsg;
-            if (alertMsgs != undefined && alertMsgs.length > 0) {
-                var alertMsgHtml = '';
-                $.each(alertMsgs, function (i, alertMsg) {
-                    alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
-                });
-                $('#Message').html(alertMsgHtml);
-            }
+            //            //初始化提示信息
+            //            var alertMsgs = workNodeData.AlertMsg;
+
+            //            if (alertMsgs != undefined && alertMsgs.length > 0) {
+
+            //                var alertMsgHtml = '';
+
+            //                $.each(alertMsgs, function (i, msg) {
+            //                    alertMsgHtml += "@退回标题：" + msg.Title + "退回信息：" + msg.Msg + "</br>";
+            //                });
+
+            //                $('#Message').html(alertMsgHtml);
+
+            //                alert(alertMsgs);
+            //            }
+
+            //alert(alertMsgs);
 
             //根据NAME 设置ID的值
             var inputs = $('[name]');

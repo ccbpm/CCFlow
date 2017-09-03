@@ -1,5 +1,5 @@
-﻿<%@ Page Title="关键字查询" Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_KeySearch" Codebehind="KeySearch.aspx.cs" %>
-<%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
+﻿<%@ Page Title="关键字查询" Language="C#" MasterPageFile="../WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_KeySearch" Codebehind="KeySearch.aspx.cs" %>
+<%@ Register src="../Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 <script type="text/javascript">
     function OpenIt(fk_flow, fk_node, workid) {

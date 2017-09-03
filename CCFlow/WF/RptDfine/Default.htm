@@ -41,19 +41,24 @@
                         alert(data);
                         return;
                     }
-                    return;
+
                     //转json.
                     data = JSON.parse(data);
 
-                    // 这个数据里与 No,Name 两个列. No+就是文件名，Name 就是标签, 循环出来菜单就可以了.
-
-                    var sys_mapattr = data["Sys_MapAttr"];
-
+                    var html = "<ul class='navlist'>";
                     //增加处理.
-                    for (var i = 0; i < wf_Conds.length; i++) {
-                        var cond = wf_Conds[i];
-                        $("#Table1 tr:last").after(newRow);
+                    for (var i = 0; i < data.length; i++) {
+                        var menu = data[i];
+
+                        html += "<li>";
+                        html += "<div>";
+                        html += "<a href='javascript:void(0)' onclick=\"OpenUrlInRightFrame(this, '" + menu.No + ".htm?FK_Flow=" + fk_flow + "');\" >";
+                        html += "<span>" + menu.Name + "</span></a>";
+                        html += "</div>";
+                        html += "</li>";
                     }
+                    html += "</ul>";
+                    document.getElementById("menuList").innerHTML = html;
                 }
             });
         });
@@ -79,7 +84,10 @@
         }
 
         $(function () {
+
             $('#starthref').click();
+            $('#context').attr('src', 'MyStartFlow.htm?FK_Flow=' + GetQueryString("FK_Flow") + '&s=' + Math.random());
+
         });
     </script>
 </head>
@@ -90,26 +98,13 @@
             <div data-options="region:'west',split:true" style="width: 200px;">
 
                 <div class="easyui-panel" title="报表查看" data-options="collapsible:true,border:false" style="height: auto">
-                    <ul class="navlist">
-                        <li>
-                            <div>
-                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, './MyStartFlow.htm?FK_Flow=001')">
-                                    <span>我发起的流程</span></a></div>
-                        </li>
-                        <li>
-                            <div>
-                                <a href="javascript:void(0)" onclick="OpenUrlInRightFrame(this, './MyJoinFlow.htm?FK_Flow=001')">
-                                    <span>我参与的流程</span></a></div>
-                        </li>
-                        
-                    </ul>
+                <label id="menuList" />
                 </div>
 
 
             </div>
             <div data-options="region:'center',noheader:true" style="overflow-y: hidden">
-                <iframe id="context" scrolling="auto" frameborder="0" src=""
-                    style="width: 100%; height: 100%;"></iframe>
+                <iframe id="context" scrolling="auto" frameborder="0" src="" style="width: 100%; height: 100%;"></iframe>
             </div>
         </div>
     </div>

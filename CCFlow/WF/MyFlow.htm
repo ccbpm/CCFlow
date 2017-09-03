@@ -18,6 +18,7 @@
 
             $("#Msg").html("<br><center><img src=./Img/loading.gif />正在加载,请稍后......</center>");
 
+
             var name, value;
             var str = location.href; //取得整个地址栏
             var num = str.indexOf("?")
@@ -33,7 +34,7 @@
                 dataType: 'html',
                 success: function (data) {
 
-                  //  alert(data);
+                    //  alert(data);
 
                     if (data.indexOf('err@') == 0) {
                         $("#Msg").html("<font color=red>" + data + "</font>");

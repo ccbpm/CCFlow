@@ -156,7 +156,8 @@ namespace CCFlow.WF.Admin.XAP
                 case "WFRpt": // 报表设计.r
                     //杨玉慧 点击报表设计改成打开该流程的报表列表
                     //this.Response.Redirect("../../Rpt/OneFlow.htm?FK_MapData=ND" + int.Parse(this.PK) + "Rpt&FK_Flow=" + this.PK, true);
-                    this.Response.Redirect("../FoolFormDesigner/Rpt/S0_RptList.htm?FK_Flow=" + this.PK, true);
+                    string rptUrl = "../../Comm/En.htm?EnsName=BP.WF.Rpt.RptDfines&No="+this.PK;
+                    this.Response.Redirect(rptUrl, true);
                     break;
                 case "MapDef": //表单定义.
                     int nodeid = int.Parse(this.PK.Replace("ND", ""));

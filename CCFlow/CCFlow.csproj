@@ -2909,8 +2909,6 @@
     <Content Include="WF\Img\AttachmentM.png" />
     <Content Include="WF\Img\Author.gif" />
     <Content Include="WF\Img\Book.gif" />
-    <Content Include="WF\Img\btlogin.png" />
-    <Content Include="WF\Img\Btn.jpg" />
     <Content Include="WF\Img\Btn\Add.gif" />
     <Content Include="WF\Img\Btn\Adjunct.gif" />
     <Content Include="WF\Img\Btn\AllotTask.gif" />
@@ -9213,6 +9211,7 @@
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.designer.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>

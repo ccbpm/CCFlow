@@ -888,7 +888,6 @@ namespace BP.WF.HttpHandler
 
             //返回当前数据存储信息.
             return dtl.ToJson();
-
         }
         /// <summary>
         /// 删除

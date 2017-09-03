@@ -18,13 +18,13 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class WF_Rpt : DirectoryPageBase
+    public class WF_RptDfine : DirectoryPageBase
     {
         /// <summary>
         /// 页面功能实体
         /// </summary>
         /// <param name="mycontext"></param>
-        public WF_Rpt(HttpContext mycontext)
+        public WF_RptDfine(HttpContext mycontext)
         {
             this.context = mycontext;
         }

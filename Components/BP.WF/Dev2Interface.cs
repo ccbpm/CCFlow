@@ -1839,21 +1839,34 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_TongJi_FlowComplete()
         {
+
+            DataTable dt = null;
             if (Glo.IsDeleteGenerWorkFlow == false)
             {
                 /* 如果不是删除流程注册表. */
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + " GROUP BY T.FK_Flow,T.FlowName";
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+                dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
             }
             else
             {
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM V_FlowData T WHERE T.FlowEmps LIKE '%@" + WebUser.No + "@%'  AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + "   GROUP BY T.FK_Flow,T.FlowName";
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
+                dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
             }
+
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["NUM"].ColumnName = "Num";
+            }
+
+            return dt;
+
         }
         /// <summary>
         /// 获取已经完成流程
@@ -2631,7 +2644,15 @@ namespace BP.WF
                 ps.SQL = "SELECT a.FK_Flow,a.FlowName, Count(a.WorkID) as Num FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID AND B.FK_Emp=" + dbStr + "FK_Emp AND B.IsEnable=1 AND  (B.IsPass=1 or B.IsPass < 0)  GROUP BY A.FK_Flow, A.FlowName";
                 ps.Add("FK_Emp", WebUser.No);
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+
+            DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["NUM"].ColumnName = "Num";
+            }
+            return dt;
         }
         /// <summary>
         /// 统计流程状态

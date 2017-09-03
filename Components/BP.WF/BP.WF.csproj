@@ -175,7 +175,8 @@
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_ImpExp.cs" />
     <Compile Include="HttpHandler\WF_Admin_Port.cs" />
     <Compile Include="HttpHandler\WF_Admin_RptDfine.cs" />
-    <Compile Include="HttpHandler\WF_Rpt.cs" />
+    <Compile Include="HttpHandler\WF_RptDfine.cs" />
+    <Compile Include="HttpHandler\WF_RptSearch.cs" />
     <Compile Include="HttpHandler\WF_Template.cs" />
     <Compile Include="HttpHandler\WF_CCForm.cs" />
     <Compile Include="HttpHandler\WF_Admin_CCFormDesigner_DialogCtr.cs" />

@@ -270,6 +270,7 @@ namespace BP.WF
                 #region 处理流程-消息提示.
                 DataTable dtAlert = new DataTable();
                 dtAlert.TableName = "AlertMsg";
+
                 dtAlert.Columns.Add("Title", typeof(string));
                 dtAlert.Columns.Add("Msg", typeof(string));
                 dtAlert.Columns.Add("URL", typeof(string));
@@ -322,6 +323,7 @@ namespace BP.WF
                         rws.Retrieve(ReturnWorkAttr.ReturnToNode, fk_node,
                             ReturnWorkAttr.WorkID, workID,
                             ReturnWorkAttr.RDT);
+
                         if (rws.Count != 0)
                         {
                             string msgInfo = "";
@@ -353,13 +355,13 @@ namespace BP.WF
                                 drMsg["Msg"] = str;
                                 dtAlert.Rows.Add(drMsg);
                             }
-                            else
-                            {
-                                DataRow drMsg = dtAlert.NewRow();
-                                drMsg["Title"] = "退回信息";
-                                drMsg["Msg"] = msgInfo;
-                                dtAlert.Rows.Add(drMsg);
-                            }
+                            //else
+                            //{
+                            //    DataRow drMsg = dtAlert.NewRow();
+                            //    drMsg["Title"] = "退回信息";
+                            //    drMsg["Msg"] = msgInfo;
+                            //    dtAlert.Rows.Add(drMsg);
+                            //}
                             //gwf.WFState = WFState.Runing;
                             //gwf.DirectUpdate();
                         }

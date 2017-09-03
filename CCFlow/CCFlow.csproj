@@ -14,7 +14,8 @@
     <RootNamespace>CCFlow</RootNamespace>
     <AssemblyName>CCFlow</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <SilverlightApplicationList>{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}|..\DesignerForSilverlight\CCFlowDesigner\CCFlowDesigner.csproj|WF\Admin\ClientBin|False,{83D53118-9A8D-4970-9A88-A2909B13FF64}|..\DesignerForSilverlight\CCFormDesigner\CCFormDesigner.csproj|WF\Admin\ClientBin|False</SilverlightApplicationList>
+    <SilverlightApplicationList>
+    </SilverlightApplicationList>
     <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -132,122 +133,259 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="ThoughtWorks.QRCode">
+      <HintPath>..\RefDLL\ThoughtWorks.QRCode.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AppACE\assets\avatars\avatar.png" />
-    <Content Include="AppACE\assets\avatars\avatar1.png" />
-    <Content Include="AppACE\assets\avatars\avatar2.png" />
-    <Content Include="AppACE\assets\avatars\avatar3.png" />
-    <Content Include="AppACE\assets\avatars\avatar4.png" />
-    <Content Include="AppACE\assets\avatars\avatar5.png" />
-    <Content Include="AppACE\assets\avatars\profile-pic.jpg" />
-    <Content Include="AppACE\assets\avatars\user.jpg" />
-    <Content Include="AppACE\assets\css\ace-ie.min.css" />
-    <Content Include="AppACE\assets\css\ace-rtl.min.css" />
-    <Content Include="AppACE\assets\css\ace-skins.min.css" />
-    <Content Include="AppACE\assets\css\ace.min.css" />
-    <Content Include="AppACE\assets\css\bootstrap-editable.css" />
-    <Content Include="AppACE\assets\css\bootstrap-timepicker.css" />
-    <Content Include="AppACE\assets\css\bootstrap.min.css" />
-    <Content Include="AppACE\assets\css\chosen.css" />
-    <Content Include="AppACE\assets\css\colorbox.css" />
-    <Content Include="AppACE\assets\css\colorpicker.css" />
-    <Content Include="AppACE\assets\css\datepicker.css" />
-    <Content Include="AppACE\assets\css\daterangepicker.css" />
-    <Content Include="AppACE\assets\css\dropzone.css" />
-    <Content Include="AppACE\assets\css\font-awesome-ie7.min.css" />
-    <Content Include="AppACE\assets\css\font-awesome.min.css" />
-    <Content Include="AppACE\assets\css\fullcalendar.css" />
-    <Content Include="AppACE\assets\css\images\loading.gif" />
-    <Content Include="AppACE\assets\css\jquery-ui-1.10.3.custom.min.css" />
-    <Content Include="AppACE\assets\css\jquery-ui-1.10.3.full.min.css" />
-    <Content Include="AppACE\assets\css\jquery.gritter.css" />
-    <Content Include="AppACE\assets\css\select2.css" />
-    <Content Include="AppACE\assets\css\ui.jqgrid.css" />
-    <Content Include="AppACE\assets\images\gallery\image-1.jpg" />
-    <Content Include="AppACE\assets\images\gallery\image-2.jpg" />
-    <Content Include="AppACE\assets\images\gallery\image-3.jpg" />
-    <Content Include="AppACE\assets\images\gallery\image-4.jpg" />
-    <Content Include="AppACE\assets\images\gallery\image-5.jpg" />
-    <Content Include="AppACE\assets\images\gallery\image-6.jpg" />
-    <Content Include="AppACE\assets\images\gallery\thumb-1.jpg" />
-    <Content Include="AppACE\assets\images\gallery\thumb-2.jpg" />
-    <Content Include="AppACE\assets\images\gallery\thumb-3.jpg" />
-    <Content Include="AppACE\assets\images\gallery\thumb-4.jpg" />
-    <Content Include="AppACE\assets\images\gallery\thumb-5.jpg" />
-    <Content Include="AppACE\assets\images\gallery\thumb-6.jpg" />
-    <Content Include="AppACE\assets\js\ace-elements.min.js" />
-    <Content Include="AppACE\assets\js\ace-extra.min.js" />
-    <Content Include="AppACE\assets\js\ace.min.js" />
-    <Content Include="AppACE\assets\js\additional-methods.min.js" />
-    <Content Include="AppACE\assets\js\bootbox.min.js" />
-    <Content Include="AppACE\assets\js\bootstrap-colorpicker.min.js" />
-    <Content Include="AppACE\assets\js\bootstrap-tag.min.js" />
-    <Content Include="AppACE\assets\js\bootstrap-wysiwyg.min.js" />
-    <Content Include="AppACE\assets\js\bootstrap.min.js" />
-    <Content Include="AppACE\assets\js\chosen.jquery.min.js" />
-    <Content Include="AppACE\assets\js\date-time\bootstrap-datepicker.min.js" />
-    <Content Include="AppACE\assets\js\date-time\bootstrap-timepicker.min.js" />
-    <Content Include="AppACE\assets\js\date-time\daterangepicker.min.js" />
-    <Content Include="AppACE\assets\js\date-time\moment.min.js" />
-    <Content Include="AppACE\assets\js\dropzone.min.js" />
-    <Content Include="AppACE\assets\js\excanvas.min.js" />
-    <Content Include="AppACE\assets\js\flot\jquery.flot.min.js" />
-    <Content Include="AppACE\assets\js\flot\jquery.flot.pie.min.js" />
-    <Content Include="AppACE\assets\js\flot\jquery.flot.resize.min.js" />
-    <Content Include="AppACE\assets\js\fuelux\data\fuelux.tree-sampledata.js" />
-    <Content Include="AppACE\assets\js\fuelux\fuelux.spinner.min.js" />
-    <Content Include="AppACE\assets\js\fuelux\fuelux.tree.min.js" />
-    <Content Include="AppACE\assets\js\fuelux\fuelux.wizard.min.js" />
-    <Content Include="AppACE\assets\js\fullcalendar.min.js" />
-    <Content Include="AppACE\assets\js\html5shiv.js" />
-    <Content Include="AppACE\assets\js\jqGrid\i18n\grid.locale-en.js" />
-    <Content Include="AppACE\assets\js\jqGrid\jquery.jqGrid.min.js" />
-    <Content Include="AppACE\assets\js\jquery-1.10.2.min.js" />
-    <Content Include="AppACE\assets\js\jquery-2.0.3.min.js" />
-    <Content Include="AppACE\assets\js\jquery-ui-1.10.3.custom.min.js" />
-    <Content Include="AppACE\assets\js\jquery-ui-1.10.3.full.min.js" />
-    <Content Include="AppACE\assets\js\jquery.autosize.min.js" />
-    <Content Include="AppACE\assets\js\jquery.colorbox-min.js" />
-    <Content Include="AppACE\assets\js\jquery.dataTables.bootstrap.js" />
-    <Content Include="AppACE\assets\js\jquery.dataTables.min.js" />
-    <Content Include="AppACE\assets\js\jquery.easy-pie-chart.min.js" />
-    <Content Include="AppACE\assets\js\jquery.gritter.min.js" />
-    <Content Include="AppACE\assets\js\jquery.hotkeys.min.js" />
-    <Content Include="AppACE\assets\js\jquery.inputlimiter.1.3.1.min.js" />
-    <Content Include="AppACE\assets\js\jquery.knob.min.js" />
-    <Content Include="AppACE\assets\js\jquery.maskedinput.min.js" />
-    <Content Include="AppACE\assets\js\jquery.mobile.custom.min.js" />
-    <Content Include="AppACE\assets\js\jquery.nestable.min.js" />
-    <Content Include="AppACE\assets\js\jquery.slimscroll.min.js" />
-    <Content Include="AppACE\assets\js\jquery.sparkline.min.js" />
-    <Content Include="AppACE\assets\js\jquery.ui.touch-punch.min.js" />
-    <Content Include="AppACE\assets\js\jquery.validate.min.js" />
-    <Content Include="AppACE\assets\js\markdown\bootstrap-markdown.min.js" />
-    <Content Include="AppACE\assets\js\markdown\markdown.min.js" />
-    <Content Include="AppACE\assets\js\respond.min.js" />
-    <Content Include="AppACE\assets\js\select2.min.js" />
-    <Content Include="AppACE\assets\js\typeahead-bs2.min.js" />
-    <Content Include="AppACE\assets\js\x-editable\ace-editable.min.js" />
-    <Content Include="AppACE\assets\js\x-editable\bootstrap-editable.min.js" />
-    <Content Include="AppACE\Batch.htm" />
     <Content Include="AppACE\Blank.htm" />
-    <Content Include="AppACE\blank.html" />
-    <Content Include="AppACE\Calendar.htm" />
-    <Content Include="AppACE\cc.htm" />
-    <Content Include="AppACE\Draft.htm" />
-    <Content Include="AppACE\FlowCH.htm" />
-    <Content Include="AppACE\FlowRpt.htm" />
-    <Content Include="AppACE\Focus.htm" />
-    <Content Include="AppACE\GetTask.htm" />
+    <Content Include="AppACE\Login.htm" />
+    <Content Include="AppACE\Runing.htm" />
+    <Content Include="AppACE\Search.htm" />
+    <Content Include="AppACE\Start.htm" />
     <Content Include="AppACE\Home.htm" />
-    <Content Include="AppACE\Home.js" />
+    <Content Include="AppACE\Todolist.htm" />
+    <Content Include="AppACE\Setting.htm" />
+    <Content Include="AppACE\Focus.htm" />
+    <Content Include="AppACE\TodolistOfAuto.htm" />
+    <Content Include="AppACE\TaskPoolSharing.htm" />
+    <Content Include="AppACE\GetTask.htm" />
+    <Content Include="AppACE\Calendar.htm" />
     <Content Include="AppACE\HungUpList.htm" />
-    <Content Include="AppACE\login.htm" />
-    <Content Include="AppACE\runing.htm" />
-    <Content Include="AppACE\search.htm" />
-    <Content Include="AppACE\setting.htm" />
-    <Content Include="AppACE\start.htm" />
+    <Content Include="AppACE\FlowCH.htm" />
+    <Content Include="clientaccesspolicy.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="DataUser\InstancePacketOfData\Template\index.htm" />
+    <Content Include="DataUser\InstancePacketOfData\Template\icon.png" />
+    <Content Include="DataUser\Style\ccbpm.css" />
+    <Content Include="DataUser\Style\dtl.css" />
+    <Content Include="DataUser\XML\Menu.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentV1.htm" />
+    <Content Include="SDKFlowDemo\Default.htm" />
+    <Content Include="SDKFlowDemo\DemoEmpSelecter.htm" />
+    <Content Include="SDKFlowDemo\readme.txt" />
+    <Content Include="SDKFlowDemo\GuestApp\Home.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Login.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Runing.aspx" />
+    <Content Include="SDKFlowDemo\SDK\SDKComponents\F159\S15901.aspx" />
+    <Content Include="SDKFlowDemo\SDK\SDKComponents\F160\S16001.aspx" />
+    <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrl.htm" />
+    <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrlEntity.aspx" />
+    <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrl.aspx" />
+    <Content Include="SDKFlowDemo\UnitTesting\Testing.aspx" />
+    <Content Include="Service References\CloundWS\configuration.svcinfo" />
+    <Content Include="Service References\CloundWS\configuration91.svcinfo" />
+    <Content Include="Service References\CloundWS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Service References\CloundWS\WS.disco" />
+    <Content Include="crossdomain.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="DataUser\AppCoder\CCFlowWebService.asmx" />
+    <Content Include="DataUser\AppCoder\DataInterface.asmx" />
+    <Content Include="DataUser\AppCoder\FrmEventHandle.aspx" />
+    <Content Include="DataUser\Do.aspx" />
+    <Content Include="DataUser\Event.asmx" />
+    <Content Include="DataUser\IndustrialAutomationWorkflowAPI.asmx" />
+    <Content Include="DataUser\PortalInterface.asmx" />
+    <Content Include="Default.aspx" />
+    <Content Include="Default.htm" />
+    <Content Include="Global.asax" />
+    <Content Include="SDKFlowDemo\App\DictList.aspx" />
+    <Content Include="SDKFlowDemo\App\DictList.htm" />
+    <Content Include="SDKFlowDemo\App\DictListWelcome.htm" />
+    <Content Include="SDKFlowDemo\App\Port\Bottom.aspx" />
+    <Content Include="SDKFlowDemo\App\Port\CSS\base.css" />
+    <Content Include="SDKFlowDemo\App\Port\CSS\basic.css" />
+    <Content Include="SDKFlowDemo\App\Port\CSS\bg_top.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\CSS\bg_top2.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\CSS\common.css" />
+    <Content Include="SDKFlowDemo\App\Port\CSS\sz.png" />
+    <Content Include="SDKFlowDemo\App\Port\Default.aspx" />
+    <Content Include="SDKFlowDemo\App\Port\Img\bgimage.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\bgimage01.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\bg_top.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\BJ.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\btlogin.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\denglu.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\dl.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Key.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\li1.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\li2.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\li3.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\li4.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\li5.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\login.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\login1.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\LoginBJ.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Batch.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bbtj.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bbtj.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bjcx.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bjtj.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bjzltj.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bmwh.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\CC.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\CC.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\dbjtj.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Down.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Emps.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Emps.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\EmpWorks.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\EmpWorks.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\FuncBar.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\GetTask.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\GetTask.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gncx.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gncx.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gnlb.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gnlb.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\grxx.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gwwh.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\HungUp.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\HungUp.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\jdown.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\jtop.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\lccx.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\lxba.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\mun_6.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\mun_8.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\pcl.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\pxlb.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Rili.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Ruing.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Ruing.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\rywh.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\scxx.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Search.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Search.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\SearchKey.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Setting.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Setting.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Sharing.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\shouqi.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\shouqi.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\sjlxsp.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\sjys.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\splc.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\spxm.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\ssba.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Start.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Start.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Switch.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\top.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xmba.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xtdh.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xtsz.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xtwh.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xzdq.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xzlc.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xzsj.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xztj.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\ysba.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zbph.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zhankai.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zhankai.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zzwh.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zzwh.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\repeatimage.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\text.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\tm2.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\top.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\TopLeft.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\TopRight.png" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Top\bottom.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Top\cz.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Top\dl.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Top\dy.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Top\Exit.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Top\Head_bg.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Img\Top\top_line.jpg" />
+    <Content Include="SDKFlowDemo\App\Port\Left.aspx" />
+    <Content Include="SDKFlowDemo\App\Port\Login.aspx" />
+    <Content Include="SDKFlowDemo\App\Port\SysManager.aspx" />
+    <Content Include="SDKFlowDemo\App\Port\Top.aspx" />
+    <Content Include="SDKFlowDemo\App\Port\Welcome.aspx" />
+    <Content Include="SDKFlowDemo\AuthorDemo.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell2D.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell3DLeft.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell3DTop.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithRequest.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithUserContral.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInput\HTMLPage1.htm" />
+    <Content Include="SDKFlowDemo\BPFramework\EasyUI\DemoUserListExt.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\EasyUI\DeptEmpTree.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\Output\DemoJZOut.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\Output\DemoTurnPage.aspx" />
+    <Content Include="SDKFlowDemo\BPFramework\Output\DemoUserList.aspx" />
+    <Content Include="SDKFlowDemo\ccflow.js" />
+    <Content Include="SDKFlowDemo\CCFormTester.asmx" />
+    <Content Include="SDKFlowDemo\Comm\Track.ascx" />
+    <Content Include="SDKFlowDemo\Comm\Track.aspx" />
+    <Content Include="SDKFlowDemo\DemoBatchUrl.aspx" />
+    <Content Include="SDKFlowDemo\DemoBP.aspx" />
+    <Content Include="SDKFlowDemo\DemoComm.htm" />
+    <Content Include="SDKFlowDemo\Do.aspx" />
+    <Content Include="SDKFlowDemo\DoUrl.aspx" />
+    <Content Include="SDKFlowDemo\FrmEventND8601.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Bottom.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Default.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Left.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Search.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Start.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Todolist.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Top.aspx" />
+    <Content Include="SDKFlowDemo\GuestApp\Welcome.aspx" />
+    <Content Include="SDKFlowDemo\GuestFlow\Login.aspx" />
+    <Content Include="SDKFlowDemo\LitJSON\help.htm" />
+    <Content Include="SDKFlowDemo\MyForm.aspx" />
+    <Content Include="SDKFlowDemo\PopSelectVal.aspx" />
+    <Content Include="SDKFlowDemo\Pub.ascx" />
+    <Content Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx" />
+    <Content Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx" />
+    <Content Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx" />
+    <Content Include="SDKFlowDemo\QingJia\S4_RenShi.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F018\Apply.ascx" />
+    <Content Include="SDKFlowDemo\SDK\F018\S018.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F110\QingJia.ascx" />
+    <Content Include="SDKFlowDemo\SDK\F110\S11001.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F111\DocRelease.ascx" />
+    <Content Include="SDKFlowDemo\SDK\F111\S11101.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F114\S11401.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F114\S11402.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F114\S11403.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F115\S11501.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F116\S11601.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F118\S11801.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F129\S12901.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F131\S131.aspx" />
+    <Content Include="SDKFlowDemo\SDK\F137\QingJia.aspx" />
+    <Content Include="SDKFlowDemo\SDK\Info.aspx" />
+    <Content Include="SDKFlowDemo\SDK\Readme.txt" />
+    <Content Include="SDKFlowDemo\TestCase\BatchSelfFrm.aspx" />
+    <Content Include="SDKFlowDemo\TestCase\iframePage.aspx" />
+    <Content Include="SDKFlowDemo\TestCond.aspx" />
+    <Content Include="SDKFlowDemo\TestCondOfFlowOver.aspx" />
+    <Content Include="SDKFlowDemo\App\Port\WinOpen.Master" />
+    <Content Include="SDKFlowDemo\Comm\Site.Master" />
+    <Content Include="SDKFlowDemo\GuestApp\Site.Master" />
+    <Content Include="SDKFlowDemo\QingJia\Site1.Master" />
+    <Content Include="SDKFlowDemo\SDK\F018\Serv18.ashx" />
+    <Content Include="SDKFlowDemo\SDK\F114\Serv.ashx" />
+    <Content Include="SDKFlowDemo\SDK\F115\Serv.ashx" />
+    <Content Include="SDKFlowDemo\SDK\F116\Serv.ashx" />
+    <Content Include="SDKFlowDemo\SDK\F118\Serv.ashx" />
+    <Content Include="SDKFlowDemo\SDK\Site.Master" />
+    <Content Include="SDKFlowDemo\WinOpen.master" />
+    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Handler.ashx" />
     <Content Include="AppACE\static\css\system\ace\ace-ie.min.css" />
     <Content Include="AppACE\static\css\system\ace\ace-responsive.min.css" />
     <Content Include="AppACE\static\css\system\ace\ace-rtl.min.css" />
@@ -263,6 +401,8 @@
     <Content Include="AppACE\static\css\system\bootstrap\bootstrap-datetimepicker.min.css" />
     <Content Include="AppACE\static\css\system\bootstrap\bootstrap-responsive.min.css" />
     <Content Include="AppACE\static\css\system\bootstrap\bootstrap.min.css" />
+    <Content Include="AppACE\static\css\system\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="AppACE\static\css\system\font\fontawesome-webfont.svg" />
     <Content Include="AppACE\static\css\system\jquery\datepicker.css" />
     <Content Include="AppACE\static\css\system\jquery\jquery-ui.min.css" />
     <Content Include="AppACE\static\css\system\jquery\ui.jqgrid.css" />
@@ -647,6 +787,7 @@
     <Content Include="AppACE\static\plugins\ueditor\third-party\snapscreen\UEditorSnapscreen.exe" />
     <Content Include="AppACE\static\plugins\ueditor\third-party\SyntaxHighlighter\shCore.js" />
     <Content Include="AppACE\static\plugins\ueditor\third-party\SyntaxHighlighter\shCoreDefault.css" />
+    <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.svg" />
     <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\video-js.css" />
     <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\video-js.min.css" />
     <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\video-js.swf" />
@@ -706,283 +847,141 @@
     <Content Include="AppACE\static\plugins\zTree\3.5\jquery.ztree.excheck-3.5.js" />
     <Content Include="AppACE\static\plugins\zTree\3.5\jquery.ztree.excheck-3.5.min.js" />
     <Content Include="AppACE\static\plugins\zTree\3.5\zTreeStyle.css" />
-    <Content Include="AppACE\TaskPoolSharing.htm" />
-    <Content Include="AppACE\todolist.htm" />
-    <Content Include="AppACE\TodolistOfAuto.htm" />
-    <Content Include="AppACE\Welcome.htm" />
-    <Content Include="AppSimple\CC.aspx" />
-    <Content Include="AppSimple\Complete.aspx" />
-    <Content Include="AppSimple\Default.aspx" />
-    <Content Include="AppSimple\Do.aspx" />
-    <Content Include="AppSimple\Help.aspx" />
-    <Content Include="AppSimple\Info.aspx" />
-    <Content Include="AppSimple\Left.aspx" />
-    <Content Include="AppSimple\Login.aspx" />
-    <Content Include="AppSimple\Readme.txt" />
-    <Content Include="AppSimple\Runing.aspx" />
-    <Content Include="AppSimple\Search.aspx" />
-    <Content Include="AppSimple\Start.aspx" />
-    <Content Include="AppSimple\ToDoList.aspx" />
-    <Content Include="AppSimple\Top.aspx" />
-    <Content Include="clientaccesspolicy.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="DataUser\XML\Menu.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ1\Student.htm" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ1\StudentList.htm" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Student.htm" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\StudentList.htm" />
-    <Content Include="SDKFlowDemo\Default.htm" />
-    <Content Include="SDKFlowDemo\readme.txt" />
-    <Content Include="SDKFlowDemo\GuestApp\Home.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Login.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Runing.aspx" />
-    <Content Include="SDKFlowDemo\SDK\SDKComponents\F159\S15901.aspx" />
-    <Content Include="SDKFlowDemo\SDK\SDKComponents\F160\S16001.aspx" />
-    <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrlEntity.aspx" />
-    <Content Include="SDKFlowDemo\TestCase\StartGuideSelfUrl.aspx" />
-    <Content Include="SDKFlowDemo\UnitTesting\Testing.aspx" />
-    <Content Include="Service References\CloundWS\configuration.svcinfo" />
-    <Content Include="Service References\CloundWS\configuration91.svcinfo" />
-    <Content Include="Service References\CloundWS\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference1.cs</LastGenOutput>
-    </Content>
-    <Content Include="Service References\CloundWS\WS.disco" />
-    <Content Include="crossdomain.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="DataUser\AppCoder\CCFlowWebService.asmx" />
-    <Content Include="DataUser\AppCoder\DataInterface.asmx" />
-    <Content Include="DataUser\AppCoder\FrmEventHandle.aspx" />
-    <Content Include="DataUser\Do.aspx" />
-    <Content Include="DataUser\Event.asmx" />
-    <Content Include="DataUser\IndustrialAutomationWorkflowAPI.asmx" />
-    <Content Include="DataUser\PortalInterface.asmx" />
-    <Content Include="Default.aspx" />
-    <Content Include="Default.htm" />
-    <Content Include="Global.asax" />
-    <Content Include="SDKFlowDemo\App\DictList.aspx" />
-    <Content Include="SDKFlowDemo\App\DictList.htm" />
-    <Content Include="SDKFlowDemo\App\DictListWelcome.htm" />
-    <Content Include="SDKFlowDemo\App\Port\Bottom.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\base.css" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\basic.css" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\bg_top.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\bg_top2.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\common.css" />
-    <Content Include="SDKFlowDemo\App\Port\CSS\sz.png" />
-    <Content Include="SDKFlowDemo\App\Port\Default.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\Img\bgimage.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\bgimage01.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\bg_top.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\BJ.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\btlogin.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\denglu.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\dl.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Key.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li1.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li2.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li3.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li4.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\li5.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\login.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\login1.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\LoginBJ.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Batch.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bbtj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bbtj.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bjcx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bjtj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bjzltj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\bmwh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\CC.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\CC.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\dbjtj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Down.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Emps.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Emps.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\EmpWorks.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\EmpWorks.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\FuncBar.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\GetTask.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\GetTask.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gncx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gncx.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gnlb.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gnlb.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\grxx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\gwwh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\HungUp.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\HungUp.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\jdown.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\jtop.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\lccx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\lxba.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\mun_6.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\mun_8.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\pcl.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\pxlb.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Rili.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Ruing.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Ruing.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\rywh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\scxx.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Search.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Search.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\SearchKey.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Setting.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Setting.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Sharing.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\shouqi.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\shouqi.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\sjlxsp.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\sjys.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\splc.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\spxm.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\ssba.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Start.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Start.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\Switch.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\top.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xmba.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xtdh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xtsz.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xtwh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xzdq.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xzlc.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xzsj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\xztj.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\ysba.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zbph.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zhankai.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zhankai.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zzwh.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Menu\zzwh.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\repeatimage.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\text.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\tm2.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\top.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\TopLeft.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\TopRight.png" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\bottom.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\cz.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\dl.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\dy.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\Exit.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\Head_bg.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Img\Top\top_line.jpg" />
-    <Content Include="SDKFlowDemo\App\Port\Left.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\Login.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\SysManager.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\Top.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\Welcome.aspx" />
-    <Content Include="SDKFlowDemo\AuthorDemo.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\Chart\DemoEmps.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell2D.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell3DLeft.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\Cell3DTop.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithRequest.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\DemoRegUserWithUserContral.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInput\HTMLPage1.htm" />
-    <Content Include="SDKFlowDemo\BPFramework\EasyUI\DemoUserListExt.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\EasyUI\DeptEmpTree.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\Output\DemoJZOut.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\Output\DemoTurnPage.aspx" />
-    <Content Include="SDKFlowDemo\BPFramework\Output\DemoUserList.aspx" />
-    <Content Include="SDKFlowDemo\ccflow.js" />
-    <Content Include="SDKFlowDemo\CCFormTester.asmx" />
-    <Content Include="SDKFlowDemo\Comm\Track.ascx" />
-    <Content Include="SDKFlowDemo\Comm\Track.aspx" />
-    <Content Include="SDKFlowDemo\DemoBatchUrl.aspx" />
-    <Content Include="SDKFlowDemo\DemoBP.aspx" />
-    <Content Include="SDKFlowDemo\DemoComm.htm" />
-    <Content Include="SDKFlowDemo\Do.aspx" />
-    <Content Include="SDKFlowDemo\DoUrl.aspx" />
-    <Content Include="SDKFlowDemo\FrmEventND8601.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Bottom.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Default.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Left.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Search.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Start.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Todolist.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Top.aspx" />
-    <Content Include="SDKFlowDemo\GuestApp\Welcome.aspx" />
-    <Content Include="SDKFlowDemo\GuestFlow\Login.aspx" />
-    <Content Include="SDKFlowDemo\LitJSON\help.htm" />
-    <Content Include="SDKFlowDemo\MyForm.aspx" />
-    <Content Include="SDKFlowDemo\PopSelectVal.aspx" />
-    <Content Include="SDKFlowDemo\Pub.ascx" />
-    <Content Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx" />
-    <Content Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx" />
-    <Content Include="SDKFlowDemo\QingJia\S3_ZongJingLiShenpi.aspx" />
-    <Content Include="SDKFlowDemo\QingJia\S4_RenShi.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F018\Apply.ascx" />
-    <Content Include="SDKFlowDemo\SDK\F018\S018.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F110\QingJia.ascx" />
-    <Content Include="SDKFlowDemo\SDK\F110\S11001.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F111\DocRelease.ascx" />
-    <Content Include="SDKFlowDemo\SDK\F111\S11101.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F114\S11401.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F114\S11402.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F114\S11403.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F115\S11501.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F116\S11601.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F118\S11801.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F129\S12901.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F131\S131.aspx" />
-    <Content Include="SDKFlowDemo\SDK\F137\QingJia.aspx" />
-    <Content Include="SDKFlowDemo\SDK\Info.aspx" />
-    <Content Include="SDKFlowDemo\SDK\Readme.txt" />
-    <Content Include="SDKFlowDemo\TestCase\BatchSelfFrm.aspx" />
-    <Content Include="SDKFlowDemo\TestCase\iframePage.aspx" />
-    <Content Include="SDKFlowDemo\TestCond.aspx" />
-    <Content Include="SDKFlowDemo\TestCondOfFlowOver.aspx" />
-    <Content Include="SDKFlowDemo\App\Port\WinOpen.Master" />
-    <Content Include="SDKFlowDemo\Comm\Site.Master" />
-    <Content Include="SDKFlowDemo\GuestApp\Site.Master" />
-    <Content Include="SDKFlowDemo\QingJia\Site1.Master" />
-    <Content Include="SDKFlowDemo\SDK\F018\Serv18.ashx" />
-    <Content Include="SDKFlowDemo\SDK\F114\Serv.ashx" />
-    <Content Include="SDKFlowDemo\SDK\F115\Serv.ashx" />
-    <Content Include="SDKFlowDemo\SDK\F116\Serv.ashx" />
-    <Content Include="SDKFlowDemo\SDK\F118\Serv.ashx" />
-    <Content Include="SDKFlowDemo\SDK\Site.Master" />
-    <Content Include="SDKFlowDemo\WinOpen.master" />
-    <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Handler.ashx" />
-    <Content Include="WF\Activex\ffactivex-setup-r39.exe" />
-    <Content Include="WF\Activex\GDCASign\readme.txt" />
-    <Content Include="WF\Activex\grbsctl5.cab" />
-    <Content Include="WF\Activex\grbsctl5.exe" />
-    <Content Include="WF\Activex\HWPostil.ocx" />
-    <Content Include="WF\Activex\Sign\Loadwebsign.js" />
-    <Content Include="WF\Activex\Sign\main.js" />
-    <Content Include="WF\Activex\Sign\Setup.exe" />
-    <Content Include="WF\Activex\Sign\WebSign.dll" />
-    <Content Include="WF\Activex\Silverlight.exe" />
-    <Content Include="WF\Activex\WebOffice.cab" />
-    <Content Include="WF\Activex\WebOffice.exe" />
-    <Content Include="WF\Activex\WebOffice6.cab" />
+    <Content Include="Silverlight.js" />
     <Content Include="WF\Admin\AttrFlow\AddOneFrmToNodes.htm" />
     <Content Include="WF\Admin\AttrFlow\API.htm" />
     <Content Include="WF\Admin\AttrFlow\APICode.htm" />
-    <Content Include="WF\Admin\AttrFlow\APICodeFEE.htm" />
     <Content Include="WF\Admin\AttrFlow\AutoStart.htm" />
     <Content Include="WF\Admin\AttrFlow\CheckFlow.htm" />
     <Content Include="WF\Admin\AttrFlow\DTSBTable.htm" />
+<<<<<<< .mine
+    <Content Include="WF\Admin\AttrFlow\Exp.htm" />
+=======
     <Content Include="WF\Admin\AttrFlow\DTSBTableExt.htm" />
     <Content Include="WF\Admin\AttrFlow\Exp.htm" />
+>>>>>>> .r3245
     <Content Include="WF\Admin\AttrFlow\FlowFields.htm" />
+    <Content Include="WF\Admin\AttrFlow\Imp.htm" />
+    <Content Include="WF\Admin\Port\OrderOfDept.htm" />
+    <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
+    <Content Include="WF\Admin\RptDfine\DeptPower.aspx" />
+    <Content Include="WF\Admin\RptDfine\Do.aspx" />
+    <Content Include="WF\Admin\RptDfine\Frm_ColsChose.aspx" />
+    <Content Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx" />
+    <Content Include="WF\Admin\RptDfine\Pub.ascx" />
+    <Content Include="WF\Admin\RptDfine\S0_RptList.htm" />
+    <Content Include="WF\Admin\RptDfine\S2ColsChose.htm" />
+    <Content Include="WF\Admin\RptDfine\S3ColsLabel.htm" />
+    <Content Include="WF\Admin\RptDfine\S5SearchCond.htm" />
+    <Content Include="WF\Admin\RptDfine\S5_SearchCond.aspx" />
+    <Content Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\AttrFlow\StartGuide.htm" />
     <Content Include="WF\Admin\AttrFlow\Limit.htm" />
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
+    <Content Include="WF\Admin\AttrFlow\APICodeFEE.htm" />
+    <Content Include="WF\Admin\AttrFlow\DTSBTableExt.htm" />
+    <Content Include="WF\Admin\CondBySQL.htm" />
+    <Content Include="WF\Admin\Condition.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Designer.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Designer.js" />
+    <Content Include="WF\Admin\FoolFormDesigner\ExpImp.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\GuideSFTableAttr.htm" />
+    <Content Include="WF\Admin\TestFlow.htm" />
+    <Content Include="WF\Admin\SettingTemplate.htm" />
+    <Content Include="WF\Admin\CondByUrl.htm" />
+    <Content Include="WF\Admin\CondByPara.htm" />
+    <Content Include="WF\Admin\CondBySQLTemplate.htm" />
+    <Content Include="WF\Admin\CondByFrm.htm" />
+    <Content Include="WF\Admin\CondPRI.htm" />
+    <Content Include="WF\Admin\ConditionLine.htm" />
+    <Content Include="WF\AppClassic\Home.htm" />
+    <Content Include="WF\AppClassic\Img\Exit.jpg" />
+    <Content Include="WF\AppClassic\Img\Bar1.png" />
+    <Content Include="WF\AppClassic\Img\Bar2.png" />
+    <Content Include="WF\AppClassic\Img\Bar3.png" />
+    <Content Include="WF\AppClassic\Img\Bar4.png" />
+    <Content Include="WF\AppClassic\Img\icon_4.png" />
+    <Content Include="WF\AppClassic\Img\logo_bg2.jpg" />
+    <Content Include="WF\AppClassic\Img\Start.png" />
+    <Content Include="WF\AppClassic\Img\Todolist.png" />
+    <Content Include="WF\AppClassic\Img\Key.png" />
+    <Content Include="WF\AppClassic\Img\ICON.png" />
+    <Content Include="WF\AppClassic\Left.htm" />
+    <Content Include="WF\AppClassic\Top.htm" />
+    <Content Include="WF\AppClassic\Welcome.htm" />
+    <Content Include="WF\AppClassic\Login.htm" />
+    <Content Include="WF\CCForm\FrmFree2017.js" />
+    <Content Include="WF\CCForm\FrmFreeReadonly.htm" />
+    <Content Include="WF\CCForm\FrmFreeReadonly.js" />
+    <Content Include="WF\CCForm\DtlReadonly.htm" />
+    <Content Include="WF\Data\Install\DemoData.xml" />
+    <Content Include="WF\Data\Install\Informix.sql" />
+    <Content Include="WF\Data\Install\SQLScript\InitPublicData.sql" />
+    <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
+    <Content Include="WF\Data\Install\SQLScript\InitView_Ora.sql" />
+    <Content Include="WF\Data\Install\SQLScript\InitView_SQL.sql" />
+    <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_BPM.sql" />
+    <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_WorkFlow.sql" />
+    <Content Include="WF\Data\Install\V_KM_DocTree.sql" />
+    <Content Include="WF\Data\XML\AdminTools.xml" />
+    <Content Include="WF\Data\XML\BPMMenu.xml" />
+    <Content Include="WF\Data\XML\CCForm.xml" />
+    <Content Include="WF\Data\XML\DBUrl.xml" />
+    <Content Include="WF\Data\XML\DefVal.xml" />
+    <Content Include="WF\Data\XML\Designer.xml" />
+    <Content Include="WF\Data\XML\Ens\ActiveAttr.xml" />
+    <Content Include="WF\Data\XML\Ens\AttrDesc.xml" />
+    <Content Include="WF\Data\XML\Ens\ConfigEns.xml" />
+    <Content Include="WF\Data\XML\Ens\EnsAppXml\GE.xml" />
+    <Content Include="WF\Data\XML\Ens\EnsAppXml\WF.xml" />
+    <Content Include="WF\Data\XML\Ens\GlobalKeyVal.xml" />
+    <Content Include="WF\Data\XML\Ens\Search.xml" />
+    <Content Include="WF\Data\XML\EnumInfo.xml" />
+    <Content Include="WF\Data\XML\Enum\Map.xml" />
+    <Content Include="WF\Data\XML\Enum\WFV4.xml" />
+    <Content Include="WF\Data\XML\EventList.xml" />
+    <Content Include="WF\Data\XML\FeatureSet.xml" />
+    <Content Include="WF\Data\XML\FrmEle.xml" />
+    <Content Include="WF\Data\XML\MapExt.xml" />
+    <Content Include="WF\Data\XML\Menu.xml" />
+    <Content Include="WF\Data\XML\OnlineHepler\CCFlow.xml" />
+    <Content Include="WF\Data\XML\RegularExpression.xml" />
+    <Content Include="WF\Data\XML\SQLList.xml" />
+    <Content Include="WF\Data\XML\SysDataType.xml" />
+    <Content Include="WF\Data\XML\TaoHong.xml" />
+    <Content Include="WF\Data\XML\UserTools.xml" />
+    <Content Include="WF\Data\XML\WebConfigDesc.xml" />
+    <Content Include="WF\Data\XML\WFAdmin.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="WF\Data\XML\XmlDB.xml" />
+    <Content Include="WF\Img\Runing.png" />
+    <Content Include="WF\MyFlowFree2017.js" />
+    <Content Include="WF\RptDfine\MyStartFlow.htm" />
+    <Content Include="WF\RptDfine\MyDeptFlow.htm" />
+    <Content Include="WF\RptDfine\MyJoinFlow.htm" />
+    <Content Include="WF\RptDfine\Default.htm" />
+    <Content Include="WF\RptDfine\Single.Master" />
+    <Content Include="WF\RptDfine\SiteEUI.Master" />
+    <Content Include="WF\RptSearch\Default.htm" />
+    <Content Include="WF\RptSearch\Flowlist.htm" />
+    <Content Include="WF\RptSearch\KeySearch.aspx" />
+    <Content Include="WF\RptSearch\KeySearch.htm" />
+    <Content Include="WF\RptSearch\Left.htm" />
+    <Content Include="WF\RptSearch\DistributedOfMy.htm" />
+    <Content Include="WF\StartGuideEntities.htm" />
+    <Content Include="WF\Tools.htm" />
+    <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
+    <Content Include="WF\WorkOpt\OneWork\TimeBase.htm" />
+    <Content Include="WF\WorkOpt\OneWork\TimeBase.js" />
+    <Content Include="WF\WorkOpt\Packup.htm" />
+    <Content Include="WF\WorkOpt\PrintDocQRGuide.htm" />
+    <Content Include="WF\WorkOpt\Rollback.htm" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
-    <Content Include="WF\Admin\AttrFlow\Imp.htm" />
     <Content Include="WF\Admin\AttrNode\Action.aspx" />
-    <Content Include="WF\Admin\AttrNode\Action.htm" />
     <Content Include="WF\Admin\AttrNode\ActionEvent.aspx" />
+<<<<<<< .mine
+=======
     <Content Include="WF\Admin\AttrNode\ActionIng.htm" />
     <Content Include="WF\Admin\AttrNode\BatchStartFields.htm" />
     <Content Include="WF\Admin\AttrNode\Bill.htm" />
@@ -992,6 +991,7 @@
     <Content Include="WF\Admin\AttrNode\CheckFrm.htm" />
     <Content Include="WF\Admin\AttrNode\CHOvertimeRole.htm" />
     <Content Include="WF\Admin\AttrNode\CHRole.htm" />
+>>>>>>> .r3245
     <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
     <Content Include="WF\Admin\AttrNode\Img\Doc.png" />
     <Content Include="WF\Admin\AttrNode\Img\FreeFrm.png" />
@@ -1000,21 +1000,18 @@
     <Content Include="WF\Admin\AttrNode\Img\Tab.png" />
     <Content Include="WF\Admin\AttrNode\Img\Tree.png" />
     <Content Include="WF\Admin\AttrNode\NodeAccepterRole.aspx" />
-    <Content Include="WF\Admin\AttrNode\NodeAccepterRole.htm" />
     <Content Include="WF\Admin\AttrNode\NodeCCRole.aspx" />
+<<<<<<< .mine
+=======
     <Content Include="WF\Admin\AttrNode\NodeCCRole.htm" />
     <Content Include="WF\Admin\AttrNode\NodeFromWorkModel.htm" />
     <Content Include="WF\Admin\AttrNode\PushMessage.htm" />
+>>>>>>> .r3245
     <Content Include="WF\Admin\AttrNode\PushMessageEntity.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
-    <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.htm" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
-    <Content Include="WF\Admin\AttrNode\SortingMapAttrs.htm" />
-    <Content Include="WF\Admin\AttrNode\PushMessageEntity.htm" />
-    <Content Include="WF\Admin\AttrNode\TurnTo.htm" />
-    <Content Include="WF\Admin\AttrNode\TurnToDeal.htm" />
-    <Content Include="WF\Admin\BindFrms.htm" />
+    <Content Include="WF\Admin\BindFrmsDtl.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\content-background.jpg" />
@@ -1143,7 +1140,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\DesignerSL.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Flows.aspx" />
-    <Content Include="WF\Admin\CCBPMDesigner\Flows.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\BusinessRuleTask.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\BusinessRuleTaskBig.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Activity\ManualTask.png" />
@@ -1176,70 +1172,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\Icons\iconsmal.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Max.png" />
     <Content Include="WF\Admin\CCBPMDesigner\Icons\Min.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\API.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\App.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\arrow.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\AutoStart.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\bg.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\BlockModel.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\CH.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Contrast.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\D3.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\DBSrc.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\DBSrcTable.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\DBSrcTree.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\DesignRpt.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\DTS.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Enum.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\field.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Flow.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\FlowCloud.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\FlowPrivate.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\FlowPublic.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\flows.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\FlowTree.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Form.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\FormCloud.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\FormTree.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\FuncFolder.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\FuncFolder1.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Group.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Grow.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\index.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\limit.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\log.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\AddNode.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\AdvFunc.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\CC.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\CheckFlow.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\Cond.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\Designer.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\Form.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\Group.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\Line.gif" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\Listion.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\property.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\RunFlow.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\Sender.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\SubFlows.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Menu\text.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Monitor.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\NewFlow.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Node.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\overtime.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\OvertimeRole.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\process.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\RptOrder.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Script.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Search.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\SearchKey.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\SQL.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\StartGuide.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\Turnto.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\URL.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\warning.png" />
-    <Content Include="WF\Admin\CCBPMDesigner\Img\welcome.jpg" />
     <Content Include="WF\Admin\CCBPMDesigner\js\CCBPMDesignerData.js" />
     <Content Include="WF\Admin\CCBPMDesigner\js\ChangeNodeEventFactory.js" />
     <Content Include="WF\Admin\CCBPMDesigner\js\Designer.js" />
@@ -1359,15 +1291,6 @@
     <Content Include="WF\Admin\CCBPMDesigner\lib\util.js" />
     <Content Include="WF\Admin\CCBPMDesigner\Login.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\NewFlow.htm" />
-    <Content Include="WF\Admin\CCBPMDesigner\normalize\css\demo.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\normalize\css\ns-default.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\normalize\css\ns-style-bar.css" />
-    <Content Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.svg" />
-    <Content Include="WF\Admin\CCBPMDesigner\normalize\fonts\readme.txt" />
-    <Content Include="WF\Admin\CCBPMDesigner\normalize\js\classie.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\normalize\js\modernizr.custom.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\normalize\js\notificationFx.js" />
-    <Content Include="WF\Admin\CCBPMDesigner\normalize\readme.txt" />
     <Content Include="WF\Admin\CCBPMDesigner\SearchFlow.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\SelectNodeIcon.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\Welcome.htm" />
@@ -1534,6 +1457,8 @@
     <Content Include="WF\Admin\CCFormDesigner\assets\javascript\jquery-1.11.0.min.js" />
     <Content Include="WF\Admin\CCFormDesigner\assets\javascript\json2.js" />
     <Content Include="WF\Admin\CCFormDesigner\BasicData.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\CCFormDesignerSL.htm" />
+    <Content Include="WF\Admin\CCFormDesigner\GoToFrmDesigner.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Exp.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmEnumeration.htm" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\FrmHiddenField.htm" />
@@ -1544,7 +1469,6 @@
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\PublicNoNameCtrlCreate.htm" />
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Designer.htm" />
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Excel.js" />
-    <Content Include="WF\Admin\CCFormDesigner\FiledsList.htm" />
     <Content Include="WF\Admin\CCFormDesigner\FormDesigner.htm" />
     <Content Include="WF\Admin\CCFormDesigner\Img\CH.png" />
     <Content Include="WF\Admin\CCFormDesigner\Img\DBSrc.png" />
@@ -1606,7 +1530,6 @@
     <Content Include="WF\Admin\CCFormDesigner\Img\userCur.cur" />
     <Content Include="WF\Admin\CCFormDesigner\Img\wordForm.jpg" />
     <Content Include="WF\Admin\CCFormDesigner\Img\ziyouForm.png" />
-    <Content Include="WF\Admin\CCFormDesigner\js\config.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\Controls.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\ControlsPropertys.js" />
     <Content Include="WF\Admin\CCFormDesigner\js\Default.js" />
@@ -1664,6 +1587,7 @@
     <Content Include="WF\Admin\CCFormDesigner\lib\style.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\text.js" />
     <Content Include="WF\Admin\CCFormDesigner\lib\util.js" />
+    <Content Include="WF\Admin\CCFormDesigner\NewFrmGuide.htm" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\demo.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-default.css" />
     <Content Include="WF\Admin\CCFormDesigner\normalize\css\ns-style-bar.css" />
@@ -1734,11 +1658,10 @@
     <Content Include="WF\Admin\DoType.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Attachment.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\Attachment.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\Attachment11.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\CCForm.asmx" />
     <Content Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\Designer.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditEnum.aspx" />
@@ -1746,6 +1669,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\EditF.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EditF.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral.htm" />
+    <Content Include="WF\Admin\FoolFormDesigner\EditFieldGuide.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditSQL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EditSQL.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditTable.aspx" />
@@ -1775,7 +1699,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Imp.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapDef.js" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.htm" />
@@ -1821,8 +1744,11 @@
     <Content Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx" />
     <Content Include="WF\Admin\Img\DesignRpt.png" />
     <Content Include="WF\Admin\Img\PK.png" />
+<<<<<<< .mine
+=======
     <Content Include="WF\Admin\Port\OrderOfDept.htm" />
     <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
+>>>>>>> .r3245
     <Content Include="WF\Admin\Pub.ascx" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\RptDfine\DeptPower.aspx" />
@@ -1837,38 +1763,51 @@
     <Content Include="WF\Admin\RptDfine\S5_SearchCond.aspx" />
     <Content Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
+<<<<<<< .mine
+    <Content Include="WF\Admin\BindFrms.htm" />
+=======
+>>>>>>> .r3245
     <Content Include="WF\Admin\UC\CondBar.ascx" />
     <Content Include="WF\Admin\UC\CondDepts.ascx" />
     <Content Include="WF\Admin\UC\CondStation.ascx" />
     <Content Include="WF\Admin\UC\Pub.ascx" />
+    <Content Include="WF\Admin\XAP\DoPort.htm" />
     <Content Include="WF\Admin\XAP\Designer.aspx" />
     <Content Include="WF\Admin\XAP\DoPort.aspx" />
     <Content Include="WF\Admin\XAP\WebService.asmx" />
-    <Content Include="WF\AppClassic\Home.htm" />
-    <Content Include="WF\AppClassic\Left.htm" />
-    <Content Include="WF\AppClassic\Login.htm" />
-    <Content Include="WF\AppClassic\Top.htm" />
-    <Content Include="WF\AppClassic\Welcome.htm" />
+    <Content Include="WF\Admin\XAP\Designer.htm" />
+    <Content Include="AppSimple\CC.aspx" />
+    <Content Include="AppSimple\Complete.aspx" />
+    <Content Include="AppSimple\Default.aspx" />
+    <Content Include="AppSimple\Do.aspx" />
+    <Content Include="AppSimple\Help.aspx" />
+    <Content Include="AppSimple\Info.aspx" />
+    <Content Include="AppSimple\Left.aspx" />
+    <Content Include="AppSimple\Login.aspx" />
+    <Content Include="AppSimple\Readme.txt" />
+    <Content Include="AppSimple\Runing.aspx" />
+    <Content Include="AppSimple\Search.aspx" />
+    <Content Include="AppSimple\Start.aspx" />
+    <Content Include="AppSimple\ToDoList.aspx" />
+    <Content Include="AppSimple\Top.aspx" />
     <Content Include="WF\AutoTodolist.aspx" />
     <Content Include="WF\AutoTodolist.htm" />
     <Content Include="WF\Batch.aspx" />
-    <Content Include="WF\Batch.htm" />
     <Content Include="WF\BatchSelfDeal.aspx" />
     <Content Include="WF\BatchStart.aspx" />
-    <Content Include="WF\BatchStart.htm" />
     <Content Include="WF\BatchStartGroup.aspx" />
     <Content Include="WF\CC.aspx" />
     <Content Include="WF\CC.htm" />
     <Content Include="WF\CCForm\AttachmentFix.htm" />
     <Content Include="WF\CCForm\AttachmentUpload.aspx" />
-    <Content Include="WF\CCForm\AttachmentUpload.htm" />
     <Content Include="WF\CCForm\AttachmentUploadImg.aspx" />
+    <Content Include="WF\CCForm\Dtl.css" />
+    <Content Include="WF\CCForm\Frm.htm" />
     <Content Include="WF\CCForm\BPPaint.aspx" />
     <Content Include="WF\CCForm\CCFormAPI.asmx" />
     <Content Include="WF\CCForm\Do.aspx" />
     <Content Include="WF\CCForm\DocMainAth.aspx" />
     <Content Include="WF\CCForm\Dtl.aspx" />
-    <Content Include="WF\CCForm\Dtl.css" />
     <Content Include="WF\CCForm\Dtl.htm" />
     <Content Include="WF\CCForm\DtlCard.aspx" />
     <Content Include="WF\CCForm\DtlOpSelectItems.aspx" />
@@ -1877,18 +1816,20 @@
     <Content Include="WF\CCForm\FilesView.aspx" />
     <Content Include="WF\CCForm\FileUpload.aspx" />
     <Content Include="WF\CCForm\Frm.aspx" />
-    <Content Include="WF\CCForm\Frm.htm" />
     <Content Include="WF\CCForm\FrmDtl.aspx" />
     <Content Include="WF\CCForm\FrmExcel.aspx" />
     <Content Include="WF\CCForm\FrmFix.aspx" />
     <Content Include="WF\CCForm\FrmFool.htm" />
     <Content Include="WF\CCForm\FrmFree.htm" />
-    <Content Include="WF\CCForm\FrmFree2017.js" />
     <Content Include="WF\CCForm\FrmPopVal.aspx" />
     <Content Include="WF\CCForm\FrmPopVal.htm" />
     <Content Include="WF\CCForm\FrmPopValDir.aspx" />
     <Content Include="WF\CCForm\FrmReturnValTBFullCtrl.aspx" />
+<<<<<<< .mine
+    <Content Include="WF\CCForm\FrmVSTO.aspx" />
+=======
     <Content Include="WF\CCForm\FrmSingle.htm" />
+>>>>>>> .r3245
     <Content Include="WF\CCForm\FrmWord.aspx" />
     <Content Include="WF\CCForm\ImgAth.aspx" />
     <Content Include="WF\CCForm\ImgAth\ajaxfileupload.js" />
@@ -1917,6 +1858,7 @@
     <Content Include="WF\CCForm\SLFrm.aspx" />
     <Content Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx" />
     <Content Include="WF\CCForm\UploadFile.aspx" />
+    <Content Include="WF\Comm\MethodLink.htm" />
     <Content Include="WF\Comm\Batch.aspx" />
     <Content Include="WF\Comm\Charts\css\prettify.css" />
     <Content Include="WF\Comm\Charts\css\Style.css" />
@@ -2443,7 +2385,6 @@
     <Content Include="WF\Comm\RefFunc\Dot2Dot.aspx" />
     <Content Include="WF\Comm\RefFunc\Dot2DotSearch.htm" />
     <Content Include="WF\Comm\RefFunc\Dot2DotSingle.aspx" />
-    <Content Include="WF\Comm\RefFunc\Dot2DotStationModel.htm" />
     <Content Include="WF\Comm\RefFunc\Dot2DotTreeDeptEmpModel.htm" />
     <Content Include="WF\Comm\RefFunc\Dot2DotTreeDeptModel.htm" />
     <Content Include="WF\Comm\RefFunc\Dtl.ascx" />
@@ -2564,272 +2505,7 @@
     <Content Include="WF\Comm\UC\UCSys.ascx" />
     <Content Include="WF\Comm\UC\UIEn.ascx" />
     <Content Include="WF\Comm\UIEn.aspx" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\01.日常办公\会议室使用申请流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\01.日常办公\公务接待.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\01.日常办公\月会议题申报.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\01.日常办公\用车申请流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\01.日常办公\请假流程-审核组件.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\01.日常办公\请假流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\01.日常办公\财务报销.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\01.日常办公\院务会议题申报.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\%28人力%29出差申请流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\内部晋升及招聘费申请流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\出差申请流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\员工平行调动申请流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\员工异动申请流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\员工晋升审批流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\员工晋升转正申请表.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\员工账户调动申请流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\员工降职审批流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\年休假请假流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\招聘配置申请表.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\窗口专职人员考核.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\解除劳动关系申请工作流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\02.人事管理\请假流程-按岗位控制走向.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\03.业务流程\固定资产报废申请流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\03.业务流程\成本费用预算外审批流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\03.业务流程\编外人员工资审核流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\03.业务流程\行政固定资产费申请表.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\03.业务流程\计算机及其相关设备报废审批流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\03.业务流程\计算机及其相关设备报废汇总.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\03.业务流程\计算机及其相关设备采购审批流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\03.业务流程\计算机及其相关设备采购汇总.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\03.业务流程\财务标准外审批流程.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\04.政府机关\01.国土资源\省级项目立项审批.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\04.政府机关\01.国土资源\省级项目验收审批.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\04.政府机关\01.国土资源\耕地保护公文%28旧%29.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\04.政府机关\01.国土资源\耕地保护公文.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\04.政府机关\城乡居民基本养老保险缴费信息.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\04.政府机关\孤儿身份认定.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\04.政府机关\特困供养人员%28五保%29审批.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\一次性用药申请.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\临床大量用血审批.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\急用一次性添加医用耗材申报.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\新增医用耗材申报.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\特殊级抗菌药物使用审批.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\贵重药品审批.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\重大手术审批.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\院外转诊审批.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\非计划二次手术申报.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\05.医疗健康\非计划再次手术%28手术室用%29.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\91.行政公文\公文发文.xml" />
-    <Content Include="WF\Data\FlowDemo\FlowBuess\91.行政公文\公文流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\01.多人处理\多人处理规则.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\01.多人处理\多人待办工作处理模式.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\01.多人处理\多部门联合审批%28协作模式%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\01.多人处理\特别控件特别用户权限-附件类.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\04.外部用户流程\学生请假流程%28Guest流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\共享任务测试.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\批量发起,批量审核.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\批量发起-分组审核-启动父流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\批量发起-分组审核父流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\接受人自定义.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\线性循环流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\自由流程-子流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\自由流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\表单数据copy测试案例.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\请假流程%28傻瓜表单模式%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\请假流程%28审核组件%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\请假流程%28按岗位控制走向%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\01.线性流程\财务报销演示.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\一人多子线程模式%28批次维度任务模式%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\两个子线程分合流.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\两段分合流子线程集合不一致.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\以SQL做为子线程的数据源与接受人.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\以明细表做接受人与数据源.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\会议通知流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\具有两段同表单分合流Demo.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\具有两段同表单分合流并且汇总明细表Demo.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\具有质量考核的同表单流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\同表单分合流%28二%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\子线程可以查看分流点明细表.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\工作计划%28具有明细表汇总%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\月销售总结%28同表单分合流%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\煤矿安检流程%28从表分流%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\02.同表单分合流\独立表单数据汇总.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\03.异表单分合流\新航线考察流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\03.异表单分合流\订单流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\03.异表单分合流\部门年计划流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\01.经典调用方式\催款流程%28子流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\01.经典调用方式\施工流程%28子流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\01.经典调用方式\节点发送阻塞测试.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\01.经典调用方式\项目管理%28父流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\主流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\子流程1.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\子流程2.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\孙子流程1.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\03.递归子流程\孙子流程2.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\子流程A.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\04.父子流程\父流程%28自动发起子流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\01.请假流程Demo\请假流程%28SDK模式%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\01.请假流程Demo\请假流程%28审批组件模式%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\01.请假流程Demo\请假流程%28自定义表单%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\02.通讯基站工单流程\网优-子子流程%28设备维护%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\02.通讯基站工单流程\网优-子流程%28市局%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\02.通讯基站工单流程\网优-父流程%28省局监控分合流子流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\03.SDK表单通用组件\审核组件FrmCheck.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\03.SDK表单通用组件\工具栏组件Toolbar.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\同表单分合流%28子流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\05.SDK流程\同表单分合流.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\06.压力与速度测试\最简单的3节点%28覆盖模式%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\06.压力与速度测试\最简单的3节点%28轨迹模式%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\01.跳转\跳转1-处理人就是提交人1-1.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\01.跳转\跳转1-处理人就是提交人1-2.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\01.跳转\跳转1-处理人就是提交人1-3.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\01.跳转\跳转2-处理人出现过.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\发送前下拉框选择%28傻瓜表单%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\发送前下拉框选择%28自由表单%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\测试方向条件-开发者参数.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\测试方向条件-按SQL.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\测试方向条件-按URL.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\测试方向条件-部门方向条件.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\02.方向条件\节点手工方向选择.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\03.业务表数据同步\人员入职申请单.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\03.业务表数据同步\人员部门岗位变更.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\公文接受人模式.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\工业自动化流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\常用接收人规则测试流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\找人规则%28找领导%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\按轨迹退回.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\测试表单字段类型流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\节点属性-超时处理.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\07.单元测试-用例流程\阅读回执-请假流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\Excel表单-请假流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\Word表单-请假流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\傻瓜表单工作模式.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\嵌入式表单流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\自由表单-审核组件-请假流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\01.单表单\请假流程%28轨迹模式%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\Office类型表单权限控制demo.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\以表单字段为条件启用禁用独立表单.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\动态绑定多表单流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\树形表单-立项申请.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\树形表单-项目验收.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\02.树形表单\树形表单的附件权限.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\03.多表单\建筑资质申请%28多表单流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\04.公文\公文发文.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\04.公文\公文收文.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\04.公文\公文流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\08.表单解决方案\请假流程%28数据合并模式%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\09.数据列表前置导航\01.子父流程-前置导航-合卷审批模式\分段项目申请%28子流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\09.数据列表前置导航\01.子父流程-前置导航-合卷审批模式\总承包项目合卷审批%28父流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\09.数据列表前置导航\导航测试-立项流程.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\09.数据列表前置导航\导航测试-项目单条验收%28子流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\09.数据列表前置导航\导航测试-项目合并验收%28父流程%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\09.数据列表前置导航\简单导航-单条模式.xml" />
-    <Content Include="WF\Data\FlowDemo\Flow\09.数据列表前置导航\自定义URL前置导航.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\01.表单元素\01.表单元素.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\01.表单元素\02.基础功能.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\01.表单元素\03.主从表基础功能.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\01.表单元素\04.一对多.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\01.表单元素\05.增加操作员申请单.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\01.表单元素\06.从表功能展示.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\01.表单元素\07.表单控件风格.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\01.企业基本情况.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\02.企业简介.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\03.企业组织机构框图.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\04.企业经理简历.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\05.企业技术负责人简历.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\06.企业财务负责人简历.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\07.企业经营负责人简历.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\08.工程技术和经济管理人员名单.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\09.企业注册建造师名单.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\10.企业自有的主要机械设备.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\11.企业代表工程业绩一览表.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\12.企业代表工程情况.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\13.审批承办信息填写.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\02.企业资质申请表单\14.企业法定代表人声明.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\03.经典表单\企业困难%28问题%29登记表.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\03.经典表单\工业设计和创意需求登记表.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\03.经典表单\新建工程%28一对多多的应用%29.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\04.航空考察\开行考察工作单-安全保卫部.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\04.航空考察\开行考察工作单-配餐部.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\04.航空考察\开行考察工作单-飞行部.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\05.项目立项\审批公文.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\05.项目立项\立项申请书.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\05.项目立项\计划信息.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\06.项目验收\竣工验收申请.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\06.项目验收\项目验收信息.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\06.项目验收\验收项目.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\07.测试案例\从表多附件权限控制.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\08.表单类型\Excel表单Demo.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\08.表单类型\Word表单Demo.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\08.表单类型\傻瓜表单.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\08.表单类型\自定义表单.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\09.数据汇总演示\会签意见汇总.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\09.数据汇总演示\项目会签.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\09.数据汇总演示\项目登记.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\10.动态表单树\A类型业务申请单.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\10.动态表单树\B类型业务申请单.xml" />
-    <Content Include="WF\Data\FlowDemo\Form\10.动态表单树\C类型业务申请单.xml" />
-    <Content Include="WF\Data\FlowFields.txt" />
-    <Content Include="WF\Data\HelpDesc\InitScript.txt" />
-    <Content Include="WF\Data\HelpDesc\MapExt_CH.txt" />
-    <Content Include="WF\Data\HelpDesc\MapExt_EN.txt" />
-    <Content Include="WF\Data\Img\LogBig.PNG" />
-    <Content Include="WF\Data\Img\LogH-del.PNG" />
-    <Content Include="WF\Data\Img\LogH.PNG" />
-    <Content Include="WF\Data\Img\LogHss.PNG" />
-    <Content Include="WF\Data\ImpTableField.txt" />
-    <Content Include="WF\Data\Install\DemoData.xml" />
-    <Content Include="WF\Data\Install\Informix.sql" />
-    <Content Include="WF\Data\Install\SQLScript\InitPublicData.sql" />
-    <Content Include="WF\Data\Install\SQLScript\InitView_MySQL.sql" />
-    <Content Include="WF\Data\Install\SQLScript\InitView_Ora.sql" />
-    <Content Include="WF\Data\Install\SQLScript\InitView_SQL.sql" />
-    <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_BPM.sql" />
-    <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_WorkFlow.sql" />
-    <Content Include="WF\Data\Install\V_KM_DocTree.sql" />
-    <Content Include="WF\Data\JSLib\onblur\01.校验手机号码.js" />
-    <Content Include="WF\Data\JSLib\onblur\02.校验用户姓名：只能输入1-30个以字母开头的字串.js" />
-    <Content Include="WF\Data\JSLib\onblur\04.校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-” .js" />
-    <Content Include="WF\Data\JSLib\onblur\05.校验密码：只能输入6-20个字母、数字、下划线.js" />
-    <Content Include="WF\Data\JSLib\onblur\06.校验登录名：只能输入5-20个以字母开头、可带数字、“_”、“.”的字串.js" />
-    <Content Include="WF\Data\JSLib\onblur\07.校验邮政编码.js" />
-    <Content Include="WF\Data\JSLib\onblur\08.校验Email.js" />
-    <Content Include="WF\Data\JSLib\onchange\readme.txt" />
-    <Content Include="WF\Data\JSLib\ondblclick\readme.txt" />
-    <Content Include="WF\Data\JSLib\onkeypress\01.只能输入0-9 .js" />
-    <Content Include="WF\Data\JSLib\onkeyup\readme.txt" />
-    <Content Include="WF\Data\SysFields.txt" />
-    <Content Include="WF\Data\Sys\FieldKeys.txt" />
-    <Content Include="WF\Data\Templete\SysFields.txt" />
-    <Content Include="WF\Data\UpdataCCFlowVer.sql" />
-    <Content Include="WF\Data\XML\AdminTools.xml" />
-    <Content Include="WF\Data\XML\BPMMenu.xml" />
-    <Content Include="WF\Data\XML\CCForm.xml" />
-    <Content Include="WF\Data\XML\DBUrl.xml" />
-    <Content Include="WF\Data\XML\DefVal.xml" />
-    <Content Include="WF\Data\XML\Designer.xml" />
-    <Content Include="WF\Data\XML\Ens\ActiveAttr.xml" />
-    <Content Include="WF\Data\XML\Ens\AttrDesc.xml" />
-    <Content Include="WF\Data\XML\Ens\ConfigEns.xml" />
-    <Content Include="WF\Data\XML\Ens\EnsAppXml\GE.xml" />
-    <Content Include="WF\Data\XML\Ens\EnsAppXml\WF.xml" />
-    <Content Include="WF\Data\XML\Ens\GlobalKeyVal.xml" />
-    <Content Include="WF\Data\XML\Ens\Search.xml" />
-    <Content Include="WF\Data\XML\EnumInfo.xml" />
-    <Content Include="WF\Data\XML\Enum\Map.xml" />
-    <Content Include="WF\Data\XML\Enum\WFV4.xml" />
-    <Content Include="WF\Data\XML\EventList.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="WF\Data\XML\FeatureSet.xml" />
-    <Content Include="WF\Data\XML\FrmEle.xml" />
-    <Content Include="WF\Data\XML\MapExt.xml" />
-    <Content Include="WF\Data\XML\Menu.xml" />
-    <Content Include="WF\Data\XML\OnlineHepler\CCFlow.xml" />
-    <Content Include="WF\Data\XML\RegularExpression.xml" />
-    <Content Include="WF\Data\XML\SDK.xml" />
-    <Content Include="WF\Data\XML\SQLList.xml" />
-    <Content Include="WF\Data\XML\SysDataType.xml" />
-    <Content Include="WF\Data\XML\TaoHong.xml" />
-    <Content Include="WF\Data\XML\UserTools.xml" />
-    <Content Include="WF\Data\XML\WebConfigDesc.xml" />
-    <Content Include="WF\Data\XML\WFAdmin.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="WF\Data\XML\XmlDB.xml" />
+    <Content Include="WF\Comm\Sys\Holiday.htm" />
     <Content Include="WF\Do.aspx" />
     <Content Include="WF\Draft.htm" />
     <Content Include="WF\ErrorPage.aspx" />
@@ -2856,10 +2532,6 @@
     <Content Include="WF\FlowFormTree\Images\Menu\user1.png" />
     <Content Include="WF\FlowFormTree\Images\Menu\window.png" />
     <Content Include="WF\FlowRpt.aspx" />
-    <Content Include="WF\FlowRpt.htm" />
-    <Content Include="WF\FlowSearch.aspx" />
-    <Content Include="WF\FlowSearchDtl.aspx" />
-    <Content Include="WF\FlowSearchMyWork.aspx" />
     <Content Include="WF\Focus.aspx" />
     <Content Include="WF\Focus.htm" />
     <Content Include="WF\GetTask.aspx" />
@@ -2909,6 +2581,8 @@
     <Content Include="WF\Img\AttachmentM.png" />
     <Content Include="WF\Img\Author.gif" />
     <Content Include="WF\Img\Book.gif" />
+<<<<<<< .mine
+=======
     <Content Include="WF\Img\Btn\Add.gif" />
     <Content Include="WF\Img\Btn\Adjunct.gif" />
     <Content Include="WF\Img\Btn\AllotTask.gif" />
@@ -3049,6 +2723,7 @@
     <Content Include="WF\Img\Btn\WorkFlowOp.gif" />
     <Content Include="WF\Img\Btn\WorksExport.gif" />
     <Content Include="WF\Img\Btn\Xml.gif" />
+>>>>>>> .r3245
     <Content Include="WF\Img\CC.png" />
     <Content Include="WF\Img\ccbpm.ico" />
     <Content Include="WF\Img\ccflow.jpg" />
@@ -3173,7 +2848,7 @@
     <Content Include="WF\Img\Help.png" />
     <Content Include="WF\Img\Home.gif" />
     <Content Include="WF\Img\Icon.png" />
-    <Content Include="WF\Img\ie.gif" />
+    <Content Include="WF\Img\IE.gif" />
     <Content Include="WF\Img\info.png" />
     <Content Include="WF\Img\li_q_1.gif" />
     <Content Include="WF\Img\li_q_2.gif" />
@@ -3258,27 +2933,40 @@
     <Content Include="WF\Img\WFState\Save.png" />
     <Content Include="WF\Img\WorkRpt.gif" />
     <Content Include="WF\Img\yaoshi.jpg" />
-    <Content Include="WF\KeySearch.aspx" />
-    <Content Include="WF\KeySearch.htm" />
     <Content Include="WF\Loading.htm" />
     <Content Include="WF\Login.htm" />
-    <Content Include="WF\Messages.aspx" />
-    <Content Include="WF\Messages.htm" />
-    <Content Include="WF\MessagesReplay.aspx" />
     <Content Include="WF\MyFlow.aspx" />
     <Content Include="WF\MyFlow.htm" />
-    <Content Include="WF\MyFlowFool.htm" />
-    <Content Include="WF\MyFlowFoolTruck.htm" />
     <Content Include="WF\MyFlowFree.htm" />
-    <Content Include="WF\MyFlowFree2017.js" />
     <Content Include="WF\MyFlowInfo.aspx" />
     <Content Include="WF\MyFlowView.aspx" />
-    <Content Include="WF\MyFlowWord.htm" />
     <Content Include="WF\Port.aspx" />
     <Content Include="WF\PortDemo.htm" />
     <Content Include="WF\PrintSample.aspx" />
     <Content Include="WF\PrintWorkNode.aspx" />
     <Content Include="WF\Pub.ascx" />
+<<<<<<< .mine
+    <Content Include="WF\RptDfine\Attachment.aspx" />
+    <Content Include="WF\RptDfine\Contrast.aspx" />
+    <Content Include="WF\RptDfine\ContrastSingle.aspx" />
+    <Content Include="WF\RptDfine\D3.aspx" />
+    <Content Include="WF\RptDfine\Group.aspx" />
+    <Content Include="WF\RptDfine\GroupDtl.aspx" />
+    <Content Include="WF\RptDfine\MasterPage.master" />
+    <Content Include="WF\RptDfine\RptDoc.aspx" />
+    <Content Include="WF\RptDfine\Search.aspx" />
+    <Content Include="WF\RptDfine\SearchAdv.aspx" />
+    <Content Include="WF\RptDfine\SearchEUI.aspx" />
+    <Content Include="WF\RptDfine\SearchEUIReadOnly.aspx" />
+    <Content Include="WF\RptDfine\SelectMVals.aspx" />
+    <Content Include="WF\RptDfine\UC\Contrast.ascx" />
+    <Content Include="WF\RptDfine\UC\D3.ascx" />
+    <Content Include="WF\RptDfine\UC\Group.ascx" />
+    <Content Include="WF\RptDfine\UC\Search.ascx" />
+    <Content Include="WF\RptDfine\UC\SearchAdv.ascx" />
+    <Content Include="WF\RptDfine\UC\SearchAdv.ascx" />
+    <Content Include="WF\RptDfine\UC\ToolBar.ascx" />
+=======
     <Content Include="WF\Rpt\Attachment.aspx" />
     <Content Include="WF\Rpt\Contrast.aspx" />
     <Content Include="WF\Rpt\ContrastSingle.aspx" />
@@ -3303,6 +2991,7 @@
     <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
     <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
     <Content Include="WF\Rpt\UC\ToolBar.ascx" />
+>>>>>>> .r3245
     <Content Include="WF\Runing.htm" />
     <Content Include="WF\Scripts\bootstrap\css\bootstrap.css" />
     <Content Include="WF\Scripts\bootstrap\css\bootstrap.min.css" />
@@ -7584,14 +7273,11 @@
     <Content Include="WF\SDKComponents\TrackChart.ascx" />
     <Content Include="WF\SDKComponents\TrackList.ascx" />
     <Content Include="WF\SDKComponents\TruakOnly.ascx" />
-    <Content Include="WF\Search.aspx" />
-    <Content Include="WF\Search.htm" />
+    <Content Include="WF\RptSearch\Search.htm" />
     <Content Include="WF\SendOverClose.htm" />
     <Content Include="WF\Start.htm" />
     <Content Include="WF\StartGuide.aspx" />
-    <Content Include="WF\StartGuide.htm" />
     <Content Include="WF\StartGuideEntities.aspx" />
-    <Content Include="WF\StartGuideEntities.htm" />
     <Content Include="WF\Style\BlankTitle.JPG" />
     <Content Include="WF\Style\Frm\jquery.idTabs.min.js" />
     <Content Include="WF\Style\Frm\jquery.min.js" />
@@ -7712,7 +7398,6 @@
     <Content Include="WF\Style\Verify.js" />
     <Content Include="WF\Todolist.htm" />
     <Content Include="WF\Tools.aspx" />
-    <Content Include="WF\Tools.htm" />
     <Content Include="WF\ToolsSet.aspx" />
     <Content Include="WF\UC\ChangeDept.ascx" />
     <Content Include="WF\UC\Msg.ascx" />
@@ -7732,13 +7417,10 @@
     <Content Include="WF\WebOffice\OfficeView.aspx" />
     <Content Include="WF\WebOffice\TempLate.aspx" />
     <Content Include="WF\WFRpt.aspx" />
-    <Content Include="WF\WFRpt.htm" />
     <Content Include="WF\WorkOpt\Accepter.aspx" />
     <Content Include="WF\WorkOpt\Accepter.htm" />
     <Content Include="WF\WorkOpt\AccepterAdv.aspx" />
-    <Content Include="WF\WorkOpt\Allot.htm" />
     <Content Include="WF\WorkOpt\AllotTask.aspx" />
-    <Content Include="WF\WorkOpt\AllotTask.htm" />
     <Content Include="WF\WorkOpt\Askfor.aspx" />
     <Content Include="WF\WorkOpt\Askfor.htm" />
     <Content Include="WF\WorkOpt\AskForRe.aspx" />
@@ -7747,7 +7429,6 @@
     <Content Include="WF\WorkOpt\CC.htm" />
     <Content Include="WF\WorkOpt\CCCheckNote.aspx" />
     <Content Include="WF\WorkOpt\CCFlowAPI.asmx" />
-    <Content Include="WF\WorkOpt\ChartTrackV2.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx" />
     <Content Include="WF\WorkOpt\DealSubThreadReturnToHL.htm" />
     <Content Include="WF\WorkOpt\DeleteFlowInstance.htm" />
@@ -7767,11 +7448,12 @@
     <Content Include="WF\WorkOpt\OneWork\CH.aspx" />
     <Content Include="WF\WorkOpt\OneWork\CH.htm" />
     <Content Include="WF\WorkOpt\OneWork\Chart.htm" />
+    <Content Include="WF\WorkOpt\OneWork\FlowBBS.htm" />
+    <Content Include="WF\WorkOpt\OneWork\FlowBBSReplay.htm" />
+    <Content Include="WF\WorkOpt\OneWork\LogOfTable.aspx" />
     <Content Include="WF\WorkOpt\OneWork\css\demo.css" />
     <Content Include="WF\WorkOpt\OneWork\css\demo.js" />
     <Content Include="WF\WorkOpt\OneWork\css\style.css" />
-    <Content Include="WF\WorkOpt\OneWork\FlowBBS.htm" />
-    <Content Include="WF\WorkOpt\OneWork\FlowBBSReplay.htm" />
     <Content Include="WF\WorkOpt\OneWork\Handler.ashx" />
     <Content Include="WF\WorkOpt\OneWork\Img\log\circle - 副本.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\log\circle.png" />
@@ -7789,7 +7471,6 @@
     <Content Include="WF\WorkOpt\OneWork\Img\WEIBO.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\WIFI.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\时间轴.png" />
-    <Content Include="WF\WorkOpt\OneWork\LogOfTable.aspx" />
     <Content Include="WF\WorkOpt\OneWork\LogOfTable.htm" />
     <Content Include="WF\WorkOpt\OneWork\NDRpt.aspx" />
     <Content Include="WF\WorkOpt\OneWork\OneWork.htm" />
@@ -7805,7 +7486,6 @@
     <Content Include="WF\WorkOpt\Press.htm" />
     <Content Include="WF\WorkOpt\PRI.aspx" />
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
-    <Content Include="WF\WorkOpt\PrintDoc.htm" />
     <Content Include="WF\WorkOpt\ReturnWork.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.htm" />
     <Content Include="WF\WorkOpt\SelectEmps.aspx" />
@@ -7817,18 +7497,13 @@
     <Content Include="WF\WorkOpt\StartGuide.htm" />
     <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
     <Content Include="WF\WorkOpt\StartGuideFrms.aspx" />
-    <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
     <Content Include="WF\WorkOpt\StopFlow.aspx" />
     <Content Include="WF\WorkOpt\SubFlow.aspx" />
-    <Content Include="WF\WorkOpt\SubFlow.htm" />
     <Content Include="WF\WorkOpt\Thread.aspx" />
-    <Content Include="WF\WorkOpt\Thread.htm" />
     <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
     <Content Include="WF\WorkOpt\ToNodes.aspx" />
-    <Content Include="WF\WorkOpt\ToNodes.htm" />
     <Content Include="WF\WorkOpt\Track.aspx" />
     <Content Include="WF\WorkOpt\TransferCustom.aspx" />
-    <Content Include="WF\WorkOpt\TransferCustom.htm" />
     <Content Include="WF\WorkOpt\TransferCustomSimple.aspx" />
     <Content Include="WF\WorkOpt\UnPassDtl.aspx" />
     <Content Include="WF\WorkOpt\UnSend.aspx" />
@@ -7836,17 +7511,30 @@
     <Content Include="WF\WorkOpt\WebOffice.aspx" />
     <Content Include="WF\WorkOpt\WinOpen.master" />
     <Content Include="WF\WorkOpt\WorkCheck.aspx" />
+    <Content Include="WF\WorkOpt\WorkCheck.htm" />
     <Content Include="WF\WorkOpt\WorkCheckAth.aspx" />
-    <None Include="AppACE\assets\avatars\Thumbs.db" />
-    <None Include="AppACE\assets\css\images\Thumbs.db" />
-    <None Include="AppACE\assets\font\fontawesome-webfont.woff" />
     <Content Include="AppACE\Handler.ashx" />
+    <Content Include="WF\MyFlowFool.htm" />
+    <Content Include="WF\WFRpt.htm" />
+    <Content Include="WF\StartGuide.htm" />
+    <Content Include="WF\MyFlowWord.htm" />
+    <Content Include="WF\WorkOpt\AllotTask.htm" />
+    <Content Include="WF\WorkOpt\Allot.htm" />
+    <Content Include="WF\MyFlowFoolTruck.htm" />
+    <Content Include="WF\WorkOpt\FlowSkip.htm" />
+    <Content Include="WF\TodolistOfAuth.htm" />
+    <Content Include="WF\TaskPoolSharing.htm" />
+    <Content Include="WF\TaskPoolApply.htm" />
+    <Content Include="WF\WorkOpt\WorkCheckIng.htm" />
+    <Content Include="WF\WorkOpt\AccepterBak.htm" />
+    <Content Include="WF\WorkOpt\AccepterGener.htm" />
+    <Content Include="WF\WorkOpt\HuiQian.htm" />
+    <Content Include="WF\WorkOpt\AccepterOfGener.htm" />
+    <None Include="Service References\CloundWS\WS.wsdl" />
     <None Include="AppACE\static\css\system\fonts\glyphicons-halflings-regular.eot" />
-    <None Include="AppACE\static\css\system\fonts\glyphicons-halflings-regular.svg" />
     <None Include="AppACE\static\css\system\fonts\glyphicons-halflings-regular.ttf" />
     <None Include="AppACE\static\css\system\fonts\glyphicons-halflings-regular.woff" />
     <None Include="AppACE\static\css\system\font\fontawesome-webfont.eot" />
-    <None Include="AppACE\static\css\system\font\fontawesome-webfont.svg" />
     <None Include="AppACE\static\css\system\font\fontawesome-webfont.ttf" />
     <None Include="AppACE\static\css\system\font\fontawesome-webfont.woff" />
     <None Include="AppACE\static\css\system\font\FontAwesome.otf" />
@@ -7854,39 +7542,40 @@
     <None Include="AppACE\static\plugins\ueditor\jsp\controller.jsp" />
     <None Include="AppACE\static\plugins\ueditor\third-party\jquery-1.10.2.min.map" />
     <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.eot" />
-    <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.svg" />
     <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.ttf" />
     <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.woff" />
-    <Content Include="AppSimple\SiteMenu.Master" />
-    <None Include="Service References\CloundWS\WS.wsdl" />
-    <None Include="web.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\lib\sets\svg.ashx" />
     <Content Include="WF\Admin\AttrNode\Handler.ashx" />
+<<<<<<< .mine
+=======
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
     <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.woff" />
+>>>>>>> .r3245
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
-    <Content Include="WF\Admin\CCFormDesigner\CCFromHandler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx" />
+    <Content Include="web.ty.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="web.ty.Debug.config">
+      <DependentUpon>web.ty.config</DependentUpon>
+    </Content>
+    <Content Include="web.ty.Release.config">
+      <DependentUpon>web.ty.config</DependentUpon>
+    </Content>
+    <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
+    <Content Include="WF\Admin\RptDfine\Handler.ashx" />
+    <Content Include="WF\Admin\RptDfine\RptGuide.Master" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
     <Content Include="WF\Admin\Condition.Master" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
-    <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\MasterPage.master" />
@@ -7896,26 +7585,34 @@
     <Content Include="WF\Admin\WinOpen.master" />
     <Content Include="WF\Admin\XAP\WebClientDownloadHandler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
-    <Content Include="WF\CCForm\HanderMapExt.ashx" />
+    <Content Include="AppSimple\SiteMenu.Master" />
     <Content Include="WF\CCForm\Handler.ashx" />
+    <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
     <Content Include="WF\AppClassic\Handler.ashx" />
+<<<<<<< .mine
+    <Content Include="WF\CCForm\HanderMapExt.ashx" />
+    <Content Include="WF\Admin\Port\Handler.ashx" />
+=======
     <Content Include="WF\Admin\Port\Handler.ashx" />
     <Content Include="WF\Admin\RptDfine\Handler.ashx" />
     <Content Include="WF\Admin\RptDfine\RptGuide.Master" />
+>>>>>>> .r3245
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\CCForm\WinOpen.master" />
     <Content Include="WF\Comm\Handler.ashx" />
     <None Include="WF\Comm\JS\Calendar\jquery.bitmapcutter.js.bak" />
     <Content Include="WF\Comm\MasterPage.master" />
     <None Include="WF\Comm\Style\Img\Tabs\Thumbs.db" />
+    <Content Include="WF\Comm\Sys\FuncLib.htm" />
+    <Content Include="WF\Comm\Sys\EnumList.htm" />
+    <Content Include="WF\Handler.ashx" />
     <None Include="WF\Data\Install\License_CH.rtf" />
     <None Include="WF\Data\Install\License_EH.rtf" />
-    <None Include="WF\Data\Templete\ccbpm.json" />
-    <None Include="WF\Data\Templete\NewFlow.json" />
-    <Content Include="WF\Handler.ashx" />
     <None Include="WF\Img\Arr\Thumbs.db" />
     <None Include="WF\Img\FileType\Thumbs.db" />
     <Content Include="WF\MyFlow.ashx" />
+    <Content Include="WF\RptDfine\Handler.ashx" />
+    <Content Include="WF\RptSearch\Handler.ashx" />
     <None Include="WF\Scripts\bootstrap\css\bootstrap.css.map" />
     <None Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.eot" />
     <None Include="WF\Scripts\bootstrap\fonts\fontawesome-webfont.ttf" />
@@ -7937,108 +7634,20 @@
     <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-32x32.psd" />
     <Content Include="WF\WinOpen.master" />
     <Content Include="WF\WinOpenEUI.Master" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppACE\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\CC.aspx.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\CC.aspx.designer.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Complete.aspx.cs">
-      <DependentUpon>Complete.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Complete.aspx.designer.cs">
-      <DependentUpon>Complete.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Do.aspx.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Do.aspx.designer.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Help.aspx.cs">
-      <DependentUpon>Help.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Help.aspx.designer.cs">
-      <DependentUpon>Help.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Info.aspx.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Info.aspx.designer.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Left.aspx.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Left.aspx.designer.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Runing.aspx.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Runing.aspx.designer.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\SiteMenu.Master.cs">
-      <DependentUpon>SiteMenu.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\SiteMenu.Master.designer.cs">
-      <DependentUpon>SiteMenu.Master</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Start.aspx.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Start.aspx.designer.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\ToDoList.aspx.cs">
-      <DependentUpon>ToDoList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\ToDoList.aspx.designer.cs">
-      <DependentUpon>ToDoList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Top.aspx.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Top.aspx.designer.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
     </Compile>
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.designer.cs">
       <DependentUpon>FrmEventHandle.aspx</DependentUpon>
@@ -8641,8 +8250,71 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
     <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Port\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\DeptPower.aspx.cs">
+      <DependentUpon>DeptPower.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\DeptPower.aspx.designer.cs">
+      <DependentUpon>DeptPower.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\Do.aspx.cs">
+      <DependentUpon>Do.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\Do.aspx.designer.cs">
+      <DependentUpon>Do.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\Frm_ColsChose.aspx.cs">
+      <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\Frm_ColsChose.aspx.designer.cs">
+      <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx.cs">
+      <DependentUpon>Frm_ColsLabel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx.designer.cs">
+      <DependentUpon>Frm_ColsLabel.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\Pub.ascx.cs">
+      <DependentUpon>Pub.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\Pub.ascx.designer.cs">
+      <DependentUpon>Pub.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\RptGuide.Master.cs">
+      <DependentUpon>RptGuide.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\RptGuide.Master.designer.cs">
+      <DependentUpon>RptGuide.Master</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\S5_SearchCond.aspx.cs">
+      <DependentUpon>S5_SearchCond.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\S5_SearchCond.aspx.designer.cs">
+      <DependentUpon>S5_SearchCond.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx.cs">
+      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx.designer.cs">
+      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\Action.aspx.cs">
       <DependentUpon>Action.aspx</DependentUpon>
@@ -8805,13 +8477,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx.designer.cs">
       <DependentUpon>CopyFieldFromNode.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Designer.aspx.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Designer.aspx.designer.cs">
-      <DependentUpon>Designer.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>
@@ -9119,9 +8784,12 @@
     <Compile Include="WF\Admin\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
+<<<<<<< .mine
+=======
     <Compile Include="WF\Admin\Port\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
+>>>>>>> .r3245
     <Compile Include="WF\Admin\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9136,6 +8804,8 @@
     <Compile Include="WF\Admin\RptDfine\DeptPower.aspx.designer.cs">
       <DependentUpon>DeptPower.aspx</DependentUpon>
     </Compile>
+<<<<<<< .mine
+=======
     <Compile Include="WF\Admin\RptDfine\Do.aspx.cs">
       <DependentUpon>Do.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9143,6 +8813,7 @@
     <Compile Include="WF\Admin\RptDfine\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
+>>>>>>> .r3245
     <Compile Include="WF\Admin\RptDfine\Frm_ColsChose.aspx.cs">
       <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9150,6 +8821,8 @@
     <Compile Include="WF\Admin\RptDfine\Frm_ColsChose.aspx.designer.cs">
       <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
     </Compile>
+<<<<<<< .mine
+=======
     <Compile Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx.cs">
       <DependentUpon>Frm_ColsLabel.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9174,6 +8847,7 @@
     <Compile Include="WF\Admin\RptDfine\RptGuide.Master.designer.cs">
       <DependentUpon>RptGuide.Master</DependentUpon>
     </Compile>
+>>>>>>> .r3245
     <Compile Include="WF\Admin\RptDfine\S5_SearchCond.aspx.cs">
       <DependentUpon>S5_SearchCond.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9249,6 +8923,104 @@
     </Compile>
     <Compile Include="WF\AppClassic\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\CC.aspx.cs">
+      <DependentUpon>CC.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\CC.aspx.designer.cs">
+      <DependentUpon>CC.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Complete.aspx.cs">
+      <DependentUpon>Complete.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Complete.aspx.designer.cs">
+      <DependentUpon>Complete.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Do.aspx.cs">
+      <DependentUpon>Do.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Do.aspx.designer.cs">
+      <DependentUpon>Do.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Help.aspx.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Help.aspx.designer.cs">
+      <DependentUpon>Help.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Info.aspx.cs">
+      <DependentUpon>Info.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Info.aspx.designer.cs">
+      <DependentUpon>Info.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Left.aspx.cs">
+      <DependentUpon>Left.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Left.aspx.designer.cs">
+      <DependentUpon>Left.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Runing.aspx.cs">
+      <DependentUpon>Runing.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Runing.aspx.designer.cs">
+      <DependentUpon>Runing.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Search.aspx.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Search.aspx.designer.cs">
+      <DependentUpon>Search.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\SiteMenu.Master.cs">
+      <DependentUpon>SiteMenu.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\SiteMenu.Master.designer.cs">
+      <DependentUpon>SiteMenu.Master</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Start.aspx.cs">
+      <DependentUpon>Start.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Start.aspx.designer.cs">
+      <DependentUpon>Start.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\ToDoList.aspx.cs">
+      <DependentUpon>ToDoList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\ToDoList.aspx.designer.cs">
+      <DependentUpon>ToDoList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppSimple\Top.aspx.cs">
+      <DependentUpon>Top.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppSimple\Top.aspx.designer.cs">
+      <DependentUpon>Top.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\AutoTodolist.aspx.cs">
       <DependentUpon>AutoTodolist.aspx</DependentUpon>
@@ -9428,6 +9200,13 @@
     </Compile>
     <Compile Include="WF\CCForm\FrmReturnValTBFullCtrl.aspx.designer.cs">
       <DependentUpon>FrmReturnValTBFullCtrl.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\CCForm\FrmVSTO.aspx.cs">
+      <DependentUpon>FrmVSTO.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\CCForm\FrmVSTO.aspx.designer.cs">
+      <DependentUpon>FrmVSTO.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\FrmWord.aspx.cs">
       <DependentUpon>FrmWord.aspx</DependentUpon>
@@ -10155,27 +9934,6 @@
     <Compile Include="WF\FlowRpt.aspx.designer.cs">
       <DependentUpon>FlowRpt.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\FlowSearch.aspx.cs">
-      <DependentUpon>FlowSearch.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowSearch.aspx.designer.cs">
-      <DependentUpon>FlowSearch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FlowSearchDtl.aspx.cs">
-      <DependentUpon>FlowSearchDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowSearchDtl.aspx.designer.cs">
-      <DependentUpon>FlowSearchDtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FlowSearchMyWork.aspx.cs">
-      <DependentUpon>FlowSearchMyWork.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowSearchMyWork.aspx.designer.cs">
-      <DependentUpon>FlowSearchMyWork.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Focus.aspx.cs">
       <DependentUpon>Focus.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10193,26 +9951,8 @@
     <Compile Include="WF\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\KeySearch.aspx.cs">
-      <DependentUpon>KeySearch.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\KeySearch.aspx.designer.cs">
-      <DependentUpon>KeySearch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Messages.aspx.cs">
-      <DependentUpon>Messages.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Messages.aspx.designer.cs">
-      <DependentUpon>Messages.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\MessagesReplay.aspx.cs">
-      <DependentUpon>MessagesReplay.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\MessagesReplay.aspx.designer.cs">
-      <DependentUpon>MessagesReplay.aspx</DependentUpon>
+    <Compile Include="WF\RptSearch\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\MyFlow.ashx.cs">
       <DependentUpon>MyFlow.ashx</DependentUpon>
@@ -10266,34 +10006,41 @@
     <Compile Include="WF\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\Attachment.aspx.cs">
+    <Compile Include="WF\RptDfine\Attachment.aspx.cs">
       <DependentUpon>Attachment.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\Attachment.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\Attachment.aspx.designer.cs">
       <DependentUpon>Attachment.aspx</DependentUpon>
     </Compile>
+<<<<<<< .mine
+    <Compile Include="WF\RptDfine\Contrast.aspx.cs">
+=======
     <Compile Include="WF\Rpt\Contrast.aspx.cs">
+>>>>>>> .r3245
       <DependentUpon>Contrast.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\Contrast.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\Contrast.aspx.designer.cs">
       <DependentUpon>Contrast.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\ContrastSingle.aspx.cs">
+    <Compile Include="WF\RptDfine\ContrastSingle.aspx.cs">
       <DependentUpon>ContrastSingle.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\ContrastSingle.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\ContrastSingle.aspx.designer.cs">
       <DependentUpon>ContrastSingle.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\D3.aspx.cs">
+    <Compile Include="WF\RptDfine\D3.aspx.cs">
       <DependentUpon>D3.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\D3.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\D3.aspx.designer.cs">
       <DependentUpon>D3.aspx</DependentUpon>
     </Compile>
+<<<<<<< .mine
+    <Compile Include="WF\RptDfine\Group.aspx.cs">
+=======
     <Compile Include="WF\Rpt\EasySearch.Master.cs">
       <DependentUpon>EasySearch.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10309,123 +10056,138 @@
       <DependentUpon>EasySearchMyFlow.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Rpt\Group.aspx.cs">
+>>>>>>> .r3245
       <DependentUpon>Group.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\Group.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\Group.aspx.designer.cs">
       <DependentUpon>Group.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\GroupDtl.aspx.cs">
+    <Compile Include="WF\RptDfine\GroupDtl.aspx.cs">
       <DependentUpon>GroupDtl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\GroupDtl.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\GroupDtl.aspx.designer.cs">
       <DependentUpon>GroupDtl.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\MasterPage.master.cs">
+    <Compile Include="WF\RptDfine\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\RptDfine\MasterPage.master.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\MasterPage.master.designer.cs">
+    <Compile Include="WF\RptDfine\MasterPage.master.designer.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
     </Compile>
+<<<<<<< .mine
+    <Compile Include="WF\RptDfine\RptDoc.aspx.cs">
+=======
     <Compile Include="WF\Rpt\RptDoc.aspx.cs">
+>>>>>>> .r3245
       <DependentUpon>RptDoc.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\RptDoc.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\RptDoc.aspx.designer.cs">
       <DependentUpon>RptDoc.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\Search.aspx.cs">
+    <Compile Include="WF\RptDfine\Search.aspx.cs">
       <DependentUpon>Search.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\Search.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\Search.aspx.designer.cs">
       <DependentUpon>Search.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\SearchAdv.aspx.cs">
+    <Compile Include="WF\RptDfine\SearchAdv.aspx.cs">
       <DependentUpon>SearchAdv.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\SearchAdv.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\SearchAdv.aspx.designer.cs">
       <DependentUpon>SearchAdv.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\SearchEUI.aspx.cs">
+    <Compile Include="WF\RptDfine\SearchEUI.aspx.cs">
       <DependentUpon>SearchEUI.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\SearchEUI.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\SearchEUI.aspx.designer.cs">
       <DependentUpon>SearchEUI.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\SearchEUIReadOnly.aspx.cs">
+    <Compile Include="WF\RptDfine\SearchEUIReadOnly.aspx.cs">
       <DependentUpon>SearchEUIReadOnly.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\SearchEUIReadOnly.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\SearchEUIReadOnly.aspx.designer.cs">
       <DependentUpon>SearchEUIReadOnly.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\SelectMVals.aspx.cs">
+    <Compile Include="WF\RptDfine\SelectMVals.aspx.cs">
       <DependentUpon>SelectMVals.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\SelectMVals.aspx.designer.cs">
+    <Compile Include="WF\RptDfine\SelectMVals.aspx.designer.cs">
       <DependentUpon>SelectMVals.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\Single.Master.cs">
+    <Compile Include="WF\RptDfine\Single.Master.cs">
       <DependentUpon>Single.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\Single.Master.designer.cs">
+    <Compile Include="WF\RptDfine\Single.Master.designer.cs">
       <DependentUpon>Single.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\SiteEUI.Master.cs">
+    <Compile Include="WF\RptDfine\SiteEUI.Master.cs">
       <DependentUpon>SiteEUI.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\SiteEUI.Master.designer.cs">
+    <Compile Include="WF\RptDfine\SiteEUI.Master.designer.cs">
       <DependentUpon>SiteEUI.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\UC\Contrast.ascx.cs">
+    <Compile Include="WF\RptDfine\UC\Contrast.ascx.cs">
       <DependentUpon>Contrast.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\UC\Contrast.ascx.designer.cs">
+    <Compile Include="WF\RptDfine\UC\Contrast.ascx.designer.cs">
       <DependentUpon>Contrast.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\UC\D3.ascx.cs">
+    <Compile Include="WF\RptDfine\UC\D3.ascx.cs">
       <DependentUpon>D3.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\UC\D3.ascx.designer.cs">
+    <Compile Include="WF\RptDfine\UC\D3.ascx.designer.cs">
       <DependentUpon>D3.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\UC\Group.ascx.cs">
+    <Compile Include="WF\RptDfine\UC\Group.ascx.cs">
       <DependentUpon>Group.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\UC\Group.ascx.designer.cs">
+    <Compile Include="WF\RptDfine\UC\Group.ascx.designer.cs">
       <DependentUpon>Group.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\UC\Search.ascx.cs">
+    <Compile Include="WF\RptDfine\UC\Search.ascx.cs">
       <DependentUpon>Search.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\UC\Search.ascx.designer.cs">
+    <Compile Include="WF\RptDfine\UC\Search.ascx.designer.cs">
       <DependentUpon>Search.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\UC\SearchAdv.ascx.cs">
+    <Compile Include="WF\RptDfine\UC\SearchAdv.ascx.cs">
       <DependentUpon>SearchAdv.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\UC\SearchAdv.ascx.designer.cs">
+    <Compile Include="WF\RptDfine\UC\SearchAdv.ascx.designer.cs">
       <DependentUpon>SearchAdv.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Rpt\UC\ToolBar.ascx.cs">
+    <Compile Include="WF\RptDfine\UC\ToolBar.ascx.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WF\Rpt\UC\ToolBar.ascx.designer.cs">
+    <Compile Include="WF\RptDfine\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\RptSearch\KeySearch.aspx.cs">
+      <DependentUpon>KeySearch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WF\RptSearch\KeySearch.aspx.designer.cs">
+      <DependentUpon>KeySearch.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\SDKComponents\AccepterCCerSelecter.ascx.cs">
       <DependentUpon>AccepterCCerSelecter.ascx</DependentUpon>
@@ -10538,13 +10300,6 @@
     </Compile>
     <Compile Include="WF\SDKComponents\TruakOnly.ascx.designer.cs">
       <DependentUpon>TruakOnly.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\StartGuide.aspx.cs">
       <DependentUpon>StartGuide.aspx</DependentUpon>
@@ -10755,13 +10510,6 @@
     <Compile Include="WF\WorkOpt\CCFlowAPI.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WF\WorkOpt\ChartTrackV2.aspx.cs">
-      <DependentUpon>ChartTrackV2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ChartTrackV2.aspx.designer.cs">
-      <DependentUpon>ChartTrackV2.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\DealSubThreadReturnToHL.aspx.cs">
       <DependentUpon>DealSubThreadReturnToHL.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10838,15 +10586,15 @@
     <Compile Include="WF\WorkOpt\OneWork\CH.aspx.designer.cs">
       <DependentUpon>CH.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\OneWork\LogOfTable.aspx.cs">
       <DependentUpon>LogOfTable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\LogOfTable.aspx.designer.cs">
       <DependentUpon>LogOfTable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\WorkOpt\OneWork\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\NDRpt.aspx.cs">
       <DependentUpon>NDRpt.aspx</DependentUpon>
@@ -11050,8 +10798,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bin\" />
+    <Folder Include="DataUser\InstancePacketOfData\Template\ND18801\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
+    <Folder Include="WF\Admin\RptDfine\Img\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -11092,7 +10842,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>33800</DevelopmentServerPort>
+          <DevelopmentServerPort>30362</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

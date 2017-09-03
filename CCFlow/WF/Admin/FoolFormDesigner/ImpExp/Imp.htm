@@ -45,24 +45,22 @@
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
-        console.log(window.parent)
+
+        console.log(window.parent);
+
         //页面启动函数.
         var frmID = GetQueryString("FK_MapData");
-        var fk_flow = GetQueryString("FK_Flow");
-        var fk_node = GetQueryString("FK_Node");
+        var flowNo = GetQueryString("FK_Flow");
+        var nodeID = GetQueryString("FK_Node");
+
         $(function () {
-            if (fk_node == null) {//如果当前不是节点表单 就隐藏节点表单导入
-                //$('#divUlNodeFrmImp').hide();
+
+            if (flowNo == null) {
+                //如果当前不是节点表单 就隐藏节点表单导入
+                // $('#divUlNodeFrmImp').hide();
             }
+
             $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
-
-
-            var flowNo = frmID.substr(2, frmID.length - 4);
-            if (flowNo > 10 && flowNo < 100) {
-                flowNo = '0' + flowNo;
-            } else if (flowNo < 10) {
-                flowNo = '00' + flowNo;
-            }
 
             /*
             *  首先要把初始化控件的代码写入到这里,不然会导致界面的批量赋值失败.
@@ -71,7 +69,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Imp_Init&FK_MapData=" + frmID + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
+                url: Handler + "?DoType=Imp_Init&FK_MapData=" + frmID + "&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (db) {
 
@@ -83,17 +81,19 @@
                     db = JSON.parse(db);
 
                     //节点表单.
-                    var WF_Node = db["WF_Node"];
+                    var nodes = db["WF_Node"];
                     var ulHtml = '';
-                    for (var i = 0; i < WF_Node.length; i++) {
-                        var node = WF_Node[i];
-                        ulHtml += '<li><input id="nd' + node.NODEID + '" type="radio" name="node" class="btn btn-default" data-nodeid=' + node.NODEID + '><label for="nd' + node.NODEID + '">ID:' + node.NODEID + ' - ' + node.NAME + '<label/></li>'
+                    for (var i = 0; i < nodes.length; i++) {
+                        var node = nodes[i];
+
+                        if (node.NodeID == nodeID)
+                            continue;
+                        ulHtml += '<li><input id="nd' + node.NodeID + '" type="radio" name="node" class="btn btn-default" data-nodeid=' + node.NodeID + '><label for="nd' + node.NodeID + '">ID:' + node.NodeID + ' - ' + node.Name + '<label/></li>'
                     }
 
                     $('#ulNodeFrmImp').html(ulHtml);
                 }
             });
-
 
             //加载完成.
             $("#Msg").html("");
@@ -114,7 +114,8 @@
             }
         }
 
-        function saveCopyFromFrmNode() {
+        //从一个节点导入.
+        function CopyFromNodeFrm() {
             var nodeId = $('#ulNodeFrmImp input:checked').data().nodeid;
             $.ajax({
                 type: 'post',
@@ -122,22 +123,28 @@
                 url: Handler + "?DoType=Imp_CopyFrm&FK_MapData=" + frmID + "&FromMapData=ND" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    alert(data)
-                    if (responseStr.indexOf("执行成功") != -1) {
-                        window.parent[0].Reload();
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
                     }
+
+                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+                    window.parent.location.href = window.parent.location.href;
+
                 }
             });
         }
 
 
-        function saveImpFromLocalXML() {
+        function SaveImpFromLocalXML() {
+
             var formData = new FormData();
             var name = $("input").val();
             formData.append("file", $("#localXmlFile")[0].files[0]);
             formData.append("name", name);
             $.ajax({
-                url: Handler + "?DoType=Imp_LoadFrmTempleteFromLocalFile&FK_MapData=" + frmID + "&m=" + Math.random(),
+                url: Handler + "?DoType=Imp_LoadFrmTempleteFromLocalFile&FK_MapData=" + frmID + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
                 type: 'POST',
                 data: formData,
                 // 告诉jQuery不要去处理发送的数据
@@ -147,20 +154,19 @@
                 beforeSend: function () {
 
                 },
-                success: function (responseStr) {
-                    alert(responseStr);
-                    console.log(window.parent)
-                    if (responseStr.indexOf("执行成功") != -1) {
-                        window.parent[0].Reload();
+                success: function (data) {
+
+                    if (data.indexOf('err@')==0) {
+                        alert(data);
+                        return;
                     }
-                    //if (responseStr.status === 0) {
-                    //    console.log("成功" + responseStr);
-                    //} else {
-                    //    console.log("失败");
-                    //}
+
+                    alert(data +'\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+                    window.parent.location.href = window.parent.location.href;
                 },
-                error: function (responseStr) {
-                    alert("error" + responseStr);
+                error: function (data) {
+                    alert("系统错误:" + data);
+                    return;
                 }
             });
         }
@@ -179,10 +185,9 @@
             <ul>
             <li>选择的模版文件必须是本机导出的，格式为 .xml 的文件. </li>
             </ul>
-
                  <label style="padding-left:8px;"></label><br /><br />
                 <input type="file" id="localXmlFile" name="localXmlFile" />
-                 <input type="button" value="模板导入" onclick="saveImpFromLocalXML()" />
+                 <input type="button" value="模板导入" onclick="SaveImpFromLocalXML()" />
             </fieldset>
 
             </div>
@@ -196,13 +201,12 @@
                 <ul id="ulNodeFrmImp"></ul>
                 <hr />
 
-                <input type="checkbox" checked="checked" id="ckClear" name="IsClear" disabled=true /> <label for="ckClear">是否清除现在已有的元素</label>
-                <input type="checkbox" checked="checked" id="ckReadOnly" name="IsSetReadonly" disabled=true /><label for="ckReadOnly">是否只读</label>
-                <input type="button" value="从节点表单导入" onclick="saveCopyFromFrmNode()" id="copyFromFrmNodeSave" />
-
+                <input type="checkbox" checked="checked" id="ckClear" name="IsClear" disabled="true" /> <label for="ckClear">是否清除现在已有的元素</label>
+                <input type="checkbox" checked="checked" id="ckReadOnly" name="IsSetReadonly" /><label for="ckReadOnly">是否只读</label>
+                <input type="button" value="执行从节点表单导入22" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
             </fieldset>
-
         </div>
+
         <div title="从表单库导入" style="padding:15px; text-align:left">
 
         <fieldset>
@@ -212,7 +216,8 @@
         <li> 2，执行表单的导入。 </li>
         </ul>
         </fieldset>
-            <!--<input type="button" class="btn btn-default" value="进入templete.ccflow.org执行导入" /><br /><br />
+
+          <!--<input type="button" class="btn btn-default" value="进入templete.ccflow.org执行导入" /><br /><br />
             <label style="padding-left:8px;">ccflow为您提供丰富的表单共享模板，您可以轻松的创建您的BPM系统</label>
 -->
         </div>

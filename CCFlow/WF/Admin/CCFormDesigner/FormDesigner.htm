@@ -71,7 +71,7 @@
     <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
      <script src="../../Scripts/config.js" type="text/javascript" > </script>
-
+     <script src="../../Scripts/QueryString.js" type="text/javascript" > </script>
     <script src="js/FormDesignerService.js" type="text/javascript"></script>
     <script src="js/FormDesigner.js" type="text/javascript"></script>
     <!--[if IE]>
@@ -107,9 +107,8 @@
         }
 
         function Imp() {
-            var url = "../../Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0&FK_Flow=";
+            var url = "../../Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
             CCForm_ShowDialog(url, '导入表单', 600, 400);
-            // window.location.href = window.location.href;
             return;
         }
 

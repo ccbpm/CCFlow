@@ -622,7 +622,9 @@ function Conver_CCForm_V1ToV2() {
 
         //循环FrmLab
         for (var i in flow_Data.Sys_FrmLab) {
+
             var frmLab = flow_Data.Sys_FrmLab[i];
+
             var createdFigure = figure_Template_Label(frmLab);
             //move it into position
             //createdFigure.transform(Matrix.translationMatrix(frmLab.X - createdFigure.rotationCoords[0].x, frmLab.Y - createdFigure.rotationCoords[0].y))
@@ -833,11 +835,11 @@ function figure_MapAttr_Template(mapAttr) {
 function figure_Template_Label(frmLab) {
 
     var f = new Figure('Label');
-    //ccform Property
     f.CCForm_Shape = "Label";
-    //f.style.fillStyle = FigureDefaults.fillStyle;
 
     f.CCForm_MyPK = frmLab.MyPK;
+
+
     f.name = "Label";
     var x = frmLab.X;
     var y = frmLab.Y;

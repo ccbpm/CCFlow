@@ -1376,13 +1376,13 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         switch (disabledEle.tagName.toUpperCase()) {
             case "INPUT":
                 switch (disabledEle.type.toUpperCase()) {
-                    case "CHECKBOX"://复选框
+                    case "CHECKBOX": //复选框
                         formArrResult.push(name + '=' + $(disabledEle).is(':checked') ? 1 : 0);
                         break;
-                    case "TEXT"://文本框
+                    case "TEXT": //文本框
                         formArrResult.push(name + '=' + $(disabledEle).val());
                         break;
-                    case "RADIO"://单选钮
+                    case "RADIO": //单选钮
                         var eleResult = name + '=' + $('[name="' + name + ':checked"]').val();
                         if (!$.inArray(formArrResult, eleResult)) {
                             formArrResult.push();
@@ -1390,19 +1390,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-                //下拉框
+            //下拉框 
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-
-                //对于复选下拉框获取值得方法
-                if ($('[data-id=' + name + ']').length > 0) {
-                    var val = $(disabledEle).val().join(',');
-                    formArrResult.push(name + '=' + val);
-                } else {
-                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-                }
                 break;
-                //文本区域
+
+            //对于复选下拉框获取值得方法 
+//                if ($('[data-id=' + name + ']').length > 0) {
+//                    var val = $(disabledEle).val().join(',');
+//                    formArrResult.push(name + '=' + val);
+//                } else {
+//                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+//                }
+//                break;
+            //文本区域 
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;

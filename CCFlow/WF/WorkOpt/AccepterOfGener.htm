@@ -139,7 +139,6 @@
                 }
             });
         }
- 
 
         //确定  执行下一步接受人员列表操作
         function AddEmps() {
@@ -153,8 +152,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                data: { FK_Flow: param.FK_Flow, WorkID: param.WorkID, FID: param.FID, FK_Node: param.FK_Node },
-                url: Handler + "?DoType=AccepterOfGener_AddEmps&FK_Flow=" + param.FK_Flow + "&WorkID=" + param.WorkID + "&ToNode=" + GetQueryString("ToNode") + "&FID=" + param.FID + "&FK_Node=" + param.FK_Node + "&m=" + Math.random() + "&AddEmps=" + emps,
+                url: Handler + "?DoType=AccepterOfGener_AddEmps&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&ToNode=" + GetQueryString("ToNode") + "&FID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&AddEmps=" + emps,
                 dataType: 'html',
                 success: function (data) {
 
@@ -281,7 +279,7 @@
 </head>
 <body>
     <table id="Table1" style=" width:80%; ">
-    <caption>下一步接受人员列表</caption>
+   <!-- <caption>下一步接受人员列表</caption>-->
     <thead>
         <tr id="title">
          <th style="width:19px;" >序</th>

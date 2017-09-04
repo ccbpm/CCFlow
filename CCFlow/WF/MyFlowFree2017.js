@@ -1681,13 +1681,13 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         switch (disabledEle.tagName.toUpperCase()) {
             case "INPUT":
                 switch (disabledEle.type.toUpperCase()) {
-                    case "CHECKBOX"://复选框
+                    case "CHECKBOX": //复选框
                         formArrResult.push(name + '=' + $(disabledEle).is(':checked') ? 1 : 0);
                         break;
-                    case "TEXT"://文本框
+                    case "TEXT": //文本框
                         formArrResult.push(name + '=' + $(disabledEle).val());
                         break;
-                    case "RADIO"://单选钮
+                    case "RADIO": //单选钮
                         var eleResult = name + '=' + $('[name="' + name + ':checked"]').val();
                         if (!$.inArray(formArrResult, eleResult)) {
                             formArrResult.push();
@@ -1695,19 +1695,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-                //下拉框
+            //下拉框 
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-
-                //对于复选下拉框获取值得方法
-                if ($('[data-id=' + name + ']').length > 0) {
-                    var val = $(disabledEle).val().join(',');
-                    formArrResult.push(name + '=' + val);
-                } else {
-                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-                }
                 break;
-                //文本区域
+                //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+                //对于复选下拉框获取值得方法
+//                if ($('[data-id=' + name + ']').length > 0) {
+//                    var val = $(disabledEle).val().join(',');
+//                    formArrResult.push(name + '=' + val);
+//                } else {
+//                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
+//                }
+               // break;
+            //文本区域 
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -2526,15 +2527,17 @@ function figure_MapAttr_Template(mapAttr) {
                 if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
                     if (mapAttr.UIContralType == 1) {//DDL
                         //多选下拉框
-                        var isMultiSele = "";
-                        var isMultiSeleClass = "";
-//                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-//                            isMultiSele = ' multiple data-live-search="false" ';
-//                            isMultiSeleClass = " selectpicker show-tick form-control ";
-//                        }
+                     
+                        //                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                        //                            isMultiSele = ' multiple data-live-search="false" ';
+                        //                            isMultiSeleClass = " selectpicker show-tick form-control ";
+                        //                        }
 
-                        eleHtml +=
-                                "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                        //alert('ss');
+                        //eleHtml +="<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+
+                        eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+
                     }
                 }
 
@@ -2606,7 +2609,7 @@ function figure_MapAttr_Template(mapAttr) {
     }
 
 
-    alert(eleHtml);
+   // alert(eleHtml);
 
     eleHtml = $('<div>' + eleHtml + '</div>');
     eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);

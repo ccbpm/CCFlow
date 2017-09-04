@@ -210,6 +210,7 @@ function Designer_ShowMsg(msg, callBack) {
 
 //流程属性
 function FlowProperty() {
+
     url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PK=" + CCBPM_Data_FK_Flow + "&Lang=CH";
     if (window.parent) {
         window.parent.addTab(CCBPM_Data_FK_Flow + "PO", "流程属性" + CCBPM_Data_FK_Flow, url);

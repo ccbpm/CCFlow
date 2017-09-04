@@ -347,13 +347,17 @@ function DeleteFlow() {
 }
  
 
-//流程属性
+//流程属性,树上的.
 function FlowProperty() {
+
     var currFlow = $('#flowTree').tree('getSelected');
-    if (currFlow == null || currFlow.attributes.ISPARENT != '0') return;
+    if (currFlow == null || currFlow.attributes.ISPARENT != '0')
+        return;
+
+    var userNo = GetQueryString("");
 
     var fk_flow = currFlow.id;
-    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Flow&PK=" + fk_flow + "&Lang=CH";
+    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PK=" + fk_flow + "&Lang=CH&UserNo="+GetQu;
     addTab(currFlow + "PO", "流程属性" + fk_flow, url);
     //WinOpen(url);
 }

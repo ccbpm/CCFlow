@@ -367,17 +367,7 @@ function DeleteFlow() {
         }, this);
     });
 }
-
-//流程属性
-function FlowProperty() {
-    var currFlow = $('#flowTree').tree('getSelected');
-    if (currFlow == null || currFlow.attributes.ISPARENT != '0') return;
-
-    var fk_flow = currFlow.id;
-    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Flow&PK=" + fk_flow + "&Lang=CH";
-    addTab(currFlow + "PO", "流程属性" + fk_flow, url);
-    //WinOpen(url);
-}
+ 
 
 //新建表单
 function newFrm() {

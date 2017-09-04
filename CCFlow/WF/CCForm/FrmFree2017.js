@@ -2435,6 +2435,8 @@ function addLoadFunction(id, eventName, method) {
     return $(js);
 }
 var appPath = "/";
+if (plant == "JFlow")
+    appPath = "./../../";
 var DtlsCount = " + dtlsCount + "; //应该加载的明细表数量
 
 //初始化从表

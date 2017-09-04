@@ -2277,7 +2277,6 @@ namespace BP.En
                         }
                     }
 
-                    err = "字段:" + attr.Key + ",名称:" + attr.Desc;
                     switch (attr.MyDataType)
                     {
                         case DataType.AppString:
@@ -2287,6 +2286,8 @@ namespace BP.En
                             ps.Add(attr.Key, en.GetValIntByKey(attr.Key));
                             break;
                         case DataType.AppInt:
+                            err = "字段:" + attr.Key + ",名称:" + attr.Desc + " val:" + en.GetValByKey(attr.Key);
+
                             if (attr.Key == "MyPK") //特殊判断解决truck 是64位的int类型的数值问题.
                             {
                                 ps.Add(attr.Key, en.GetValInt64ByKey(attr.Key));
@@ -2309,7 +2310,10 @@ namespace BP.En
                             break;
                         case DataType.AppFloat:
                         case DataType.AppDouble:
+
                             string str1 = en.GetValStrByKey(attr.Key).ToString();
+                            err = "字段:" + attr.Key + ",名称:" + attr.Desc +" val:"+str1;
+
                             if (string.IsNullOrEmpty(str1))
                             {
                                 if (IsEnableNull)
@@ -2351,7 +2355,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                throw new Exception("生成参数期间错误:" + err + " 错误信息:" + ex.Message);
+                throw new Exception("生成参数期间错误:" + err + "@截获信息:" + err + " 错误信息:" + ex.Message);
             }
 
             if (keys != null)

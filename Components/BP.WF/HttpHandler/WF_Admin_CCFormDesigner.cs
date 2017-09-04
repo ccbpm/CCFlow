@@ -391,9 +391,7 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 #endregion 解决oracle大小写问题.
-
-                ds.WriteXml("c:\\aaaa.xml", XmlWriteMode.DiffGram);
-
+              //  ds.WriteXml("c:\\aaaa.xml", XmlWriteMode.DiffGram);
                 return BP.Tools.Json.ToJson(ds);
             }
             catch (Exception ex)

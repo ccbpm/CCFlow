@@ -324,11 +324,15 @@
                 success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>"+data+"</font>");
+                        $("#Msg").html("<font color=red>" + data + "</font>");
                         return;
                     }
 
-                    window.location.href = 'Default.htm?' + data;
+                    if (data.indexOf('url@') == 0) {
+                        window.location.href = data.replace('url@', '');
+                        return;
+                    }
+                    alert(data);
                 }
             });
         }

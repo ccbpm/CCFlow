@@ -12,7 +12,7 @@
     <style type="text/css">
         .style1
         {
-            width: 169px;
+            width: 100px;
         }
     </style>
 </asp:Content>
@@ -30,7 +30,7 @@
         BP.WF.Template.CCEmps nEmps = new BP.WF.Template.CCEmps();
         nEmps.Retrieve(BP.WF.Template.CCEmpAttr.FK_Node, this.FK_Node);
     %>
-    <table style="width: 100%;">
+    <table style="width: 80%;">
         <tr>
             <th colspan="2">
                 基本设置

@@ -53,14 +53,15 @@
                 url: Handler + "?DoType=" + doType + "&UserNo=" + userNo + "&DoWhat=" + doWhat + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
                     if (data.indexOf('err@') == 0) {
+
+                        document.getElementById("Msg").innerHTML = data;
 
                         if (window.confirm(data) == true) {
                             window.location.href = './AttrNode/NodeAccepterRole.htm?FK_Node=' + fk_flow + '01';
-                        } else {
-                            window.close();
+                            return;
                         }
-                        return;
                     }
 
                     if (data.indexOf('url@') == 0) {
@@ -82,7 +83,7 @@
                         newRow += "<td>" + emp.Name + "</td>";
 
                         var url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />AppACE</a>";
-                        newRow += "<td>" + url + "</td>";
+                        //  newRow += "<td>" + url + "</td>";
 
                         url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />经典</a>";
                         newRow += "<td>" + url + "</td>";
@@ -132,7 +133,7 @@
                 <th> 序 </th>
                 <th> 编号</th>
                 <th> 名称</th>
-                <th> ACE模式</th>
+              <!--  <th> ACE模式</th>-->
                 <th> 经典模式</th>
                 <th> 手机模式</th>
                 <th> 所在部门</th>

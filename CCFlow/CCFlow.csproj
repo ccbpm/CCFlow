@@ -964,7 +964,6 @@
     <Content Include="WF\RptSearch\KeySearch.htm" />
     <Content Include="WF\RptSearch\Left.htm" />
     <Content Include="WF\RptSearch\DistributedOfMy.htm" />
-    <Content Include="WF\RptSearch\副本 Default.htm" />
     <Content Include="WF\StartGuideEntities.htm" />
     <Content Include="WF\Tools.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
@@ -2763,7 +2762,6 @@
     <Content Include="WF\RptDfine\D3.aspx" />
     <Content Include="WF\RptDfine\Group.aspx" />
     <Content Include="WF\RptDfine\GroupDtl.aspx" />
-    <Content Include="WF\RptDfine\MasterPage.master" />
     <Content Include="WF\RptDfine\RptDoc.aspx" />
     <Content Include="WF\RptDfine\Search.aspx" />
     <Content Include="WF\RptDfine\SearchAdv.aspx" />
@@ -9339,13 +9337,6 @@
     </Compile>
     <Compile Include="WF\RptDfine\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptDfine\MasterPage.master.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptDfine\MasterPage.master.designer.cs">
-      <DependentUpon>MasterPage.master</DependentUpon>
     </Compile>
     <Compile Include="WF\RptDfine\RptDoc.aspx.cs">
       <DependentUpon>RptDoc.aspx</DependentUpon>

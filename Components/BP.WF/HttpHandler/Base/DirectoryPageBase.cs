@@ -102,6 +102,9 @@ namespace BP.WF.HttpHandler
             if (val == null)
                 val = context.Request.Form[key];
 
+            if (val == null)
+                return null;
+
             return HttpUtility.UrlDecode(val, System.Text.Encoding.UTF8);
         }
         /// <summary>

@@ -2288,7 +2288,9 @@ namespace BP.En
                             break;
                         case DataType.AppInt:
                             if (attr.Key == "MyPK") //特殊判断解决truck 是64位的int类型的数值问题.
+                            {
                                 ps.Add(attr.Key, en.GetValInt64ByKey(attr.Key));
+                            }
                             else
                             {
                                 if (IsEnableNull)

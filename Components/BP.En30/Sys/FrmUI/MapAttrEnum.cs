@@ -125,7 +125,6 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用", true, true);
 
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填项？", true, true);
-                map.AddBoolean(MapAttrAttr.UIIsMultiple, false, "是否可以多选", true, true);
 
                 map.AddBoolean("IsEnableJS", false, "是否启用JS高级设置？", true, true); //参数字段.
                 #endregion 基本信息.

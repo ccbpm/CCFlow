@@ -362,12 +362,8 @@ namespace BP.WF.HttpHandler
                 if (string.IsNullOrEmpty(BP.Web.WebUser.NoOfRel) == true)
                 {
                     string userNo = this.GetRequestVal("UserNo");
-                    if (string.IsNullOrEmpty(userNo) == true)
-                        return "url@Login.htm?DoType=Logout&Err=UserNoIsNull&UserNo="+userNo;
-
                     string sid = this.GetRequestVal("SID");
                     BP.WF.Dev2Interface.Port_Login(userNo, sid);
-                    //  return "url@Login.htm?DoType=Logout&Err=UserNoIsNull";
                 }
 
                 if (BP.Web.WebUser.IsAdmin == false)

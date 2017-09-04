@@ -26,7 +26,6 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -854,12 +853,7 @@
     <Content Include="WF\Admin\AttrFlow\AutoStart.htm" />
     <Content Include="WF\Admin\AttrFlow\CheckFlow.htm" />
     <Content Include="WF\Admin\AttrFlow\DTSBTable.htm" />
-<<<<<<< .mine
     <Content Include="WF\Admin\AttrFlow\Exp.htm" />
-=======
-    <Content Include="WF\Admin\AttrFlow\DTSBTableExt.htm" />
-    <Content Include="WF\Admin\AttrFlow\Exp.htm" />
->>>>>>> .r3245
     <Content Include="WF\Admin\AttrFlow\FlowFields.htm" />
     <Content Include="WF\Admin\AttrFlow\Imp.htm" />
     <Content Include="WF\Admin\Port\OrderOfDept.htm" />
@@ -914,6 +908,7 @@
     <Content Include="WF\CCForm\FrmFreeReadonly.htm" />
     <Content Include="WF\CCForm\FrmFreeReadonly.js" />
     <Content Include="WF\CCForm\DtlReadonly.htm" />
+    <Content Include="WF\Comm\Sys\SFDBSrcNewGuide.htm" />
     <Content Include="WF\Data\Install\DemoData.xml" />
     <Content Include="WF\Data\Install\Informix.sql" />
     <Content Include="WF\Data\Install\SQLScript\InitPublicData.sql" />
@@ -969,6 +964,7 @@
     <Content Include="WF\RptSearch\KeySearch.htm" />
     <Content Include="WF\RptSearch\Left.htm" />
     <Content Include="WF\RptSearch\DistributedOfMy.htm" />
+    <Content Include="WF\RptSearch\副本 Default.htm" />
     <Content Include="WF\StartGuideEntities.htm" />
     <Content Include="WF\Tools.htm" />
     <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
@@ -980,18 +976,6 @@
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
     <Content Include="WF\Admin\AttrNode\Action.aspx" />
     <Content Include="WF\Admin\AttrNode\ActionEvent.aspx" />
-<<<<<<< .mine
-=======
-    <Content Include="WF\Admin\AttrNode\ActionIng.htm" />
-    <Content Include="WF\Admin\AttrNode\BatchStartFields.htm" />
-    <Content Include="WF\Admin\AttrNode\Bill.htm" />
-    <Content Include="WF\Admin\AttrNode\BlockModel.htm" />
-    <Content Include="WF\Admin\AttrNode\CanCancelNodes.htm" />
-    <Content Include="WF\Admin\AttrNode\CanReturnNodes.htm" />
-    <Content Include="WF\Admin\AttrNode\CheckFrm.htm" />
-    <Content Include="WF\Admin\AttrNode\CHOvertimeRole.htm" />
-    <Content Include="WF\Admin\AttrNode\CHRole.htm" />
->>>>>>> .r3245
     <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
     <Content Include="WF\Admin\AttrNode\Img\Doc.png" />
     <Content Include="WF\Admin\AttrNode\Img\FreeFrm.png" />
@@ -1001,12 +985,6 @@
     <Content Include="WF\Admin\AttrNode\Img\Tree.png" />
     <Content Include="WF\Admin\AttrNode\NodeAccepterRole.aspx" />
     <Content Include="WF\Admin\AttrNode\NodeCCRole.aspx" />
-<<<<<<< .mine
-=======
-    <Content Include="WF\Admin\AttrNode\NodeCCRole.htm" />
-    <Content Include="WF\Admin\AttrNode\NodeFromWorkModel.htm" />
-    <Content Include="WF\Admin\AttrNode\PushMessage.htm" />
->>>>>>> .r3245
     <Content Include="WF\Admin\AttrNode\PushMessageEntity.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
@@ -1744,29 +1722,10 @@
     <Content Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx" />
     <Content Include="WF\Admin\Img\DesignRpt.png" />
     <Content Include="WF\Admin\Img\PK.png" />
-<<<<<<< .mine
-=======
-    <Content Include="WF\Admin\Port\OrderOfDept.htm" />
-    <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
->>>>>>> .r3245
     <Content Include="WF\Admin\Pub.ascx" />
     <Content Include="WF\Admin\ReLogin.htm" />
-    <Content Include="WF\Admin\RptDfine\DeptPower.aspx" />
-    <Content Include="WF\Admin\RptDfine\Do.aspx" />
-    <Content Include="WF\Admin\RptDfine\Frm_ColsChose.aspx" />
-    <Content Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx" />
-    <Content Include="WF\Admin\RptDfine\Pub.ascx" />
-    <Content Include="WF\Admin\RptDfine\S0_RptList.htm" />
-    <Content Include="WF\Admin\RptDfine\S2ColsChose.htm" />
-    <Content Include="WF\Admin\RptDfine\S3ColsLabel.htm" />
-    <Content Include="WF\Admin\RptDfine\S5SearchCond.htm" />
-    <Content Include="WF\Admin\RptDfine\S5_SearchCond.aspx" />
-    <Content Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
-<<<<<<< .mine
     <Content Include="WF\Admin\BindFrms.htm" />
-=======
->>>>>>> .r3245
     <Content Include="WF\Admin\UC\CondBar.ascx" />
     <Content Include="WF\Admin\UC\CondDepts.ascx" />
     <Content Include="WF\Admin\UC\CondStation.ascx" />
@@ -1825,11 +1784,7 @@
     <Content Include="WF\CCForm\FrmPopVal.htm" />
     <Content Include="WF\CCForm\FrmPopValDir.aspx" />
     <Content Include="WF\CCForm\FrmReturnValTBFullCtrl.aspx" />
-<<<<<<< .mine
     <Content Include="WF\CCForm\FrmVSTO.aspx" />
-=======
-    <Content Include="WF\CCForm\FrmSingle.htm" />
->>>>>>> .r3245
     <Content Include="WF\CCForm\FrmWord.aspx" />
     <Content Include="WF\CCForm\ImgAth.aspx" />
     <Content Include="WF\CCForm\ImgAth\ajaxfileupload.js" />
@@ -2581,149 +2536,6 @@
     <Content Include="WF\Img\AttachmentM.png" />
     <Content Include="WF\Img\Author.gif" />
     <Content Include="WF\Img\Book.gif" />
-<<<<<<< .mine
-=======
-    <Content Include="WF\Img\Btn\Add.gif" />
-    <Content Include="WF\Img\Btn\Adjunct.gif" />
-    <Content Include="WF\Img\Btn\AllotTask.gif" />
-    <Content Include="WF\Img\Btn\Apply.gif" />
-    <Content Include="WF\Img\Btn\Authorize.gif" />
-    <Content Include="WF\Img\Btn\Back.gif" />
-    <Content Include="WF\Img\Btn\Back.png" />
-    <Content Include="WF\Img\Btn\Balance.GIF" />
-    <Content Include="WF\Img\Btn\Balance.JPG" />
-    <Content Include="WF\Img\Btn\Book.gif" />
-    <Content Include="WF\Img\Btn\Cancel.gif" />
-    <Content Include="WF\Img\Btn\Card.gif" />
-    <Content Include="WF\Img\Btn\CC.gif" />
-    <Content Include="WF\Img\Btn\CH.gif" />
-    <Content Include="WF\Img\Btn\Chart.gif" />
-    <Content Include="WF\Img\Btn\ChoseChart.gif" />
-    <Content Include="WF\Img\Btn\ChoseCol.gif" />
-    <Content Include="WF\Img\Btn\ChoseCols.gif" />
-    <Content Include="WF\Img\Btn\ChoseD.gif" />
-    <Content Include="WF\Img\Btn\ChoseField.gif" />
-    <Content Include="WF\Img\Btn\ChoseNum.gif" />
-    <Content Include="WF\Img\Btn\Clear.GIF" />
-    <Content Include="WF\Img\Btn\Close.gif" />
-    <Content Include="WF\Img\Btn\ComeBackFlow.gif" />
-    <Content Include="WF\Img\Btn\Comm.gif" />
-    <Content Include="WF\Img\Btn\Confirm.gif" />
-    <Content Include="WF\Img\Btn\Copy.GIF" />
-    <Content Include="WF\Img\Btn\CycleEvent.gif" />
-    <Content Include="WF\Img\Btn\DataCheck.gif" />
-    <Content Include="WF\Img\Btn\DataGroup.gif" />
-    <Content Include="WF\Img\Btn\DataIO.gif" />
-    <Content Include="WF\Img\Btn\Default.gif" />
-    <Content Include="WF\Img\Btn\Delete.gif" />
-    <Content Include="WF\Img\Btn\DeleteFlowByFlag.gif" />
-    <Content Include="WF\Img\Btn\DeleteWFByRealReal.gif" />
-    <Content Include="WF\Img\Btn\Do.gif" />
-    <Content Include="WF\Img\Btn\DoInitData.gif" />
-    <Content Include="WF\Img\Btn\Down.gif" />
-    <Content Include="WF\Img\Btn\Dtl.gif" />
-    <Content Include="WF\Img\Btn\DTS.gif" />
-    <Content Include="WF\Img\Btn\Edit.gif" />
-    <Content Include="WF\Img\Btn\EnList.gif" />
-    <Content Include="WF\Img\Btn\Error.gif" />
-    <Content Include="WF\Img\Btn\error.png" />
-    <Content Include="WF\Img\Btn\Excel.gif" />
-    <Content Include="WF\Img\Btn\Excel_S.gif" />
-    <Content Include="WF\Img\Btn\Export.gif" />
-    <Content Include="WF\Img\Btn\ExportToExcel.gif" />
-    <Content Include="WF\Img\Btn\ExportToXml.gif" />
-    <Content Include="WF\Img\Btn\FileManager.gif" />
-    <Content Include="WF\Img\Btn\find2.gif" />
-    <Content Include="WF\Img\Btn\Forward.gif" />
-    <Content Include="WF\Img\Btn\Global.gif" />
-    <Content Include="WF\Img\Btn\Go.gif" />
-    <Content Include="WF\Img\Btn\HandUp1.gif" />
-    <Content Include="WF\Img\Btn\Help.gif" />
-    <Content Include="WF\Img\Btn\HigherUp.gif" />
-    <Content Include="WF\Img\Btn\Home.gif" />
-    <Content Include="WF\Img\Btn\icon7.gif" />
-    <Content Include="WF\Img\Btn\ic_pin.png" />
-    <Content Include="WF\Img\Btn\ic_pindisabled.png" />
-    <Content Include="WF\Img\Btn\Insert.gif" />
-    <Content Include="WF\Img\Btn\Left.gif" />
-    <Content Include="WF\Img\Btn\Left1.gif" />
-    <Content Include="WF\Img\Btn\Lock.png" />
-    <Content Include="WF\Img\Btn\LogOut.gif" />
-    <Content Include="WF\Img\Btn\MarkedAsDelete.gif" />
-    <Content Include="WF\Img\Btn\MarkedAsRead.gif" />
-    <Content Include="WF\Img\Btn\Messagers.gif" />
-    <Content Include="WF\Img\Btn\microphonedisabled.png" />
-    <Content Include="WF\Img\Btn\microphonehot.png" />
-    <Content Include="WF\Img\Btn\My.gif" />
-    <Content Include="WF\Img\Btn\New.gif" />
-    <Content Include="WF\Img\Btn\Next.gif" />
-    <Content Include="WF\Img\Btn\NextWork.gif" />
-    <Content Include="WF\Img\Btn\NextWorkFlow.gif" />
-    <Content Include="WF\Img\Btn\offline.gif" />
-    <Content Include="WF\Img\Btn\online.gif" />
-    <Content Include="WF\Img\Btn\OnlineUsers.gif" />
-    <Content Include="WF\Img\Btn\open.gif" />
-    <Content Include="WF\Img\Btn\Operator.gif" />
-    <Content Include="WF\Img\Btn\Option.gif" />
-    <Content Include="WF\Img\Btn\Pause.gif" />
-    <Content Include="WF\Img\Btn\Personal.gif" />
-    <Content Include="WF\Img\Btn\Previous.gif" />
-    <Content Include="WF\Img\Btn\PreviousWork.gif" />
-    <Content Include="WF\Img\Btn\PreviousWorkFlow.gif" />
-    <Content Include="WF\Img\Btn\PreviousWorks.gif" />
-    <Content Include="WF\Img\Btn\PreviousWork_del.gif" />
-    <Content Include="WF\Img\Btn\Print.gif" />
-    <Content Include="WF\Img\Btn\PrintWorkRpt.gif" />
-    <Content Include="WF\Img\Btn\PutOn.gif" />
-    <Content Include="WF\Img\Btn\PutOn1.gif" />
-    <Content Include="WF\Img\Btn\PutOn2.gif" />
-    <Content Include="WF\Img\Btn\Refurbish.gif" />
-    <Content Include="WF\Img\Btn\Refurbish1.gif" />
-    <Content Include="WF\Img\Btn\Reomve.gif" />
-    <Content Include="WF\Img\Btn\Reomve1.gif" />
-    <Content Include="WF\Img\Btn\Reply.gif" />
-    <Content Include="WF\Img\Btn\ReturnWork.gif" />
-    <Content Include="WF\Img\Btn\Right.gif" />
-    <Content Include="WF\Img\Btn\Right1.gif" />
-    <Content Include="WF\Img\Btn\Rpt.gif" />
-    <Content Include="WF\Img\Btn\RptDept.gif" />
-    <Content Include="WF\Img\Btn\RptMy.gif" />
-    <Content Include="WF\Img\Btn\RptSH.gif" />
-    <Content Include="WF\Img\Btn\RptTeam.gif" />
-    <Content Include="WF\Img\Btn\RptXJ.gif" />
-    <Content Include="WF\Img\Btn\Save.gif" />
-    <Content Include="WF\Img\Btn\SaveAndClose.gif" />
-    <Content Include="WF\Img\Btn\SaveAndNew.gif" />
-    <Content Include="WF\Img\Btn\SaveAsDraft.gif" />
-    <Content Include="WF\Img\Btn\SaveCurrentWork.gif" />
-    <Content Include="WF\Img\Btn\SaveNewWork.gif" />
-    <Content Include="WF\Img\Btn\SaveToAppDefaultValues.gif" />
-    <Content Include="WF\Img\Btn\SaveToMyDefaultValues.gif" />
-    <Content Include="WF\Img\Btn\Search.gif" />
-    <Content Include="WF\Img\Btn\SelectAll.gif" />
-    <Content Include="WF\Img\Btn\Selected.gif" />
-    <Content Include="WF\Img\Btn\SelectNone.gif" />
-    <Content Include="WF\Img\Btn\Send.gif" />
-    <Content Include="WF\Img\Btn\SendOK.GIF" />
-    <Content Include="WF\Img\Btn\Server.GIF" />
-    <Content Include="WF\Img\Btn\SignIn.gif" />
-    <Content Include="WF\Img\Btn\Start.GIF" />
-    <Content Include="WF\Img\Btn\Start1.GIF" />
-    <Content Include="WF\Img\Btn\Statistic.gif" />
-    <Content Include="WF\Img\Btn\StopWorkFlow.gif" />
-    <Content Include="WF\Img\Btn\Submit.gif" />
-    <Content Include="WF\Img\Btn\Table.gif" />
-    <Content Include="WF\Img\Btn\TurnToNode.gif" />
-    <Content Include="WF\Img\Btn\UnDo.gif" />
-    <Content Include="WF\Img\Btn\Up.GIF" />
-    <Content Include="WF\Img\Btn\Update.gif" />
-    <Content Include="WF\Img\Btn\View.gif" />
-    <Content Include="WF\Img\Btn\Word.gif" />
-    <Content Include="WF\Img\Btn\WorkerList.gif" />
-    <Content Include="WF\Img\Btn\WorkFlowOp.gif" />
-    <Content Include="WF\Img\Btn\WorksExport.gif" />
-    <Content Include="WF\Img\Btn\Xml.gif" />
->>>>>>> .r3245
     <Content Include="WF\Img\CC.png" />
     <Content Include="WF\Img\ccbpm.ico" />
     <Content Include="WF\Img\ccflow.jpg" />
@@ -2945,7 +2757,6 @@
     <Content Include="WF\PrintSample.aspx" />
     <Content Include="WF\PrintWorkNode.aspx" />
     <Content Include="WF\Pub.ascx" />
-<<<<<<< .mine
     <Content Include="WF\RptDfine\Attachment.aspx" />
     <Content Include="WF\RptDfine\Contrast.aspx" />
     <Content Include="WF\RptDfine\ContrastSingle.aspx" />
@@ -2966,32 +2777,6 @@
     <Content Include="WF\RptDfine\UC\SearchAdv.ascx" />
     <Content Include="WF\RptDfine\UC\SearchAdv.ascx" />
     <Content Include="WF\RptDfine\UC\ToolBar.ascx" />
-=======
-    <Content Include="WF\Rpt\Attachment.aspx" />
-    <Content Include="WF\Rpt\Contrast.aspx" />
-    <Content Include="WF\Rpt\ContrastSingle.aspx" />
-    <Content Include="WF\Rpt\D3.aspx" />
-    <Content Include="WF\Rpt\EasySearch.Master" />
-    <Content Include="WF\Rpt\EasySearchMyFlow.aspx" />
-    <Content Include="WF\Rpt\Group.aspx" />
-    <Content Include="WF\Rpt\GroupDtl.aspx" />
-    <Content Include="WF\Rpt\MasterPage.master" />
-    <Content Include="WF\Rpt\RptDoc.aspx" />
-    <Content Include="WF\Rpt\Search.aspx" />
-    <Content Include="WF\Rpt\SearchAdv.aspx" />
-    <Content Include="WF\Rpt\SearchEUI.aspx" />
-    <Content Include="WF\Rpt\SearchEUIReadOnly.aspx" />
-    <Content Include="WF\Rpt\SelectMVals.aspx" />
-    <Content Include="WF\Rpt\Single.Master" />
-    <Content Include="WF\Rpt\SiteEUI.Master" />
-    <Content Include="WF\Rpt\UC\Contrast.ascx" />
-    <Content Include="WF\Rpt\UC\D3.ascx" />
-    <Content Include="WF\Rpt\UC\Group.ascx" />
-    <Content Include="WF\Rpt\UC\Search.ascx" />
-    <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
-    <Content Include="WF\Rpt\UC\SearchAdv.ascx" />
-    <Content Include="WF\Rpt\UC\ToolBar.ascx" />
->>>>>>> .r3245
     <Content Include="WF\Runing.htm" />
     <Content Include="WF\Scripts\bootstrap\css\bootstrap.css" />
     <Content Include="WF\Scripts\bootstrap\css\bootstrap.min.css" />
@@ -3041,413 +2826,6 @@
     <Content Include="WF\Scripts\Cookie.js" />
     <Content Include="WF\Scripts\CreateControl.js" />
     <Content Include="WF\Scripts\designer.utility.js" />
-    <Content Include="WF\Scripts\easyUI145\easyloader.js" />
-    <Content Include="WF\Scripts\easyUI145\jquery.easyui.min.js" />
-    <Content Include="WF\Scripts\easyUI145\jquery.easyui.mobile.js" />
-    <Content Include="WF\Scripts\easyUI145\jquery.min.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-af.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-am.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-ar.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-bg.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-ca.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-cs.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-cz.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-da.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-de.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-el.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-en.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-es.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-fr.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-it.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-jp.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-ko.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-nl.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-pl.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-pt_BR.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-ru.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-sv_SE.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-tr.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-zh_CN.js" />
-    <Content Include="WF\Scripts\easyUI145\locale\easyui-lang-zh_TW.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.accordion.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.calendar.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.combo.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.combobox.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.combogrid.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.combotree.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.datagrid.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.datalist.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.datebox.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.datetimebox.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.datetimespinner.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.dialog.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.draggable.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.droppable.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.filebox.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.form.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.layout.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.linkbutton.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.menu.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.menubutton.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.messager.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.mobile.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.numberbox.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.numberspinner.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.pagination.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.panel.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.parser.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.progressbar.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.propertygrid.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.resizable.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.searchbox.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.slider.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.spinner.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.splitbutton.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.switchbutton.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.tabs.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.textbox.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.timespinner.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.tooltip.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.tree.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.treegrid.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.validatebox.js" />
-    <Content Include="WF\Scripts\easyUI145\plugins\jquery.window.js" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\accordion.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\calendar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\combo.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\combobox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\datagrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\datalist.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\datebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\dialog.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\easyui.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\filebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\accordion_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\blank.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\calendar_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\combo_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\datagrid_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\datebox_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\layout_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\linkbutton_bg.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\loading.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\menu_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\messager_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\pagination_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\panel_tools.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\searchbox_button.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\slider_handle.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\spinner_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\tabs_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\tree_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\images\validatebox_warning.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\layout.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\linkbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\menu.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\menubutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\messager.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\numberbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\pagination.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\panel.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\progressbar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\propertygrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\searchbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\slider.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\spinner.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\splitbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\switchbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\tabs.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\textbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\tooltip.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\tree.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\validatebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\black\window.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\accordion.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\calendar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\combo.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\combobox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\datagrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\datalist.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\datebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\dialog.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\easyui.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\filebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\accordion_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\blank.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\calendar_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\combo_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\datagrid_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\datebox_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\layout_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\linkbutton_bg.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\loading.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\menu_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\messager_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\pagination_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\panel_tools.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\searchbox_button.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\slider_handle.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\spinner_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\tabs_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\tree_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\images\validatebox_warning.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\layout.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\linkbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\menu.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\menubutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\messager.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\numberbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\pagination.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\panel.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\progressbar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\propertygrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\searchbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\slider.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\spinner.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\splitbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\switchbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\tabs.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\textbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\tooltip.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\tree.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\validatebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\bootstrap\window.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\color.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\accordion.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\calendar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\combo.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\combobox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\datagrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\datalist.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\datebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\dialog.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\easyui.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\filebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\accordion_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\blank.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\calendar_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\combo_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\datagrid_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\datebox_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\layout_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\linkbutton_bg.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\loading.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\menu_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\messager_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\pagination_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\panel_tools.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\searchbox_button.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\slider_handle.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\spinner_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\tabs_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\tree_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\images\validatebox_warning.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\layout.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\linkbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\menu.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\menubutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\messager.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\numberbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\pagination.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\panel.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\progressbar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\propertygrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\searchbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\slider.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\spinner.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\splitbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\switchbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\tabs.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\textbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\tooltip.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\tree.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\validatebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\default\window.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\accordion.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\calendar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\combo.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\combobox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\datagrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\datalist.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\datebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\dialog.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\easyui.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\filebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\accordion_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\blank.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\calendar_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\combo_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\datagrid_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\datebox_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\layout_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\linkbutton_bg.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\loading.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\menu_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\messager_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\pagination_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\panel_tools.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\searchbox_button.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\slider_handle.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\spinner_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\tabs_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\tree_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\images\validatebox_warning.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\layout.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\linkbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\menu.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\menubutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\messager.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\numberbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\pagination.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\panel.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\progressbar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\propertygrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\searchbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\slider.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\spinner.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\splitbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\switchbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\tabs.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\textbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\tooltip.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\tree.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\validatebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\gray\window.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\icon.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\back.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\blank.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\cancel.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\clear.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\cut.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\down.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\edit_add.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\edit_remove.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\filesave.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\filter.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\help.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\large_chart.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\large_clipart.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\large_picture.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\large_shapes.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\large_smartart.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\lock.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\man.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\mini_add.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\mini_edit.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\mini_refresh.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\more.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\no.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\ok.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\pencil.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\print.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\redo.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\reload.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\search.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\sum.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\tip.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\undo.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\icons\up.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\accordion.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\calendar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\combo.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\combobox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\datagrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\datalist.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\datebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\dialog.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\easyui.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\filebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\accordion_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\blank.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\calendar_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\combo_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\datagrid_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\datebox_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\layout_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\linkbutton_bg.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\loading.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\menu_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\messager_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\pagination_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\panel_tools.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\searchbox_button.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\slider_handle.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\spinner_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\tabs_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\tree_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\validatebox_warning.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\layout.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\linkbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\menu.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\menubutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\messager.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\numberbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\pagination.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\panel.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\progressbar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\propertygrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\searchbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\slider.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\spinner.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\splitbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\switchbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\tabs.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\textbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\tooltip.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\tree.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\validatebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\window.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\accordion.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\calendar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\combo.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\combobox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\datagrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\datalist.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\datebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\dialog.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\easyui.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\filebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\accordion_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\blank.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\calendar_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\combo_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\datagrid_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\datebox_arrow.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\layout_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\linkbutton_bg.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\loading.gif" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\menu_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\messager_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\pagination_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\panel_tools.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\searchbox_button.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\slider_handle.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\spinner_arrows.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\tabs_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\tree_icons.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\images\validatebox_warning.png" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\layout.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\linkbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\menu.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\menubutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\messager.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\numberbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\pagination.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\panel.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\progressbar.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\propertygrid.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\searchbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\slider.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\spinner.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\splitbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\switchbutton.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\tabs.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\textbox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\tooltip.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\tree.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\validatebox.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\metro\window.css" />
-    <Content Include="WF\Scripts\easyUI145\themes\mobile.css" />
     <Content Include="WF\Scripts\easyUI15\easyloader.js" />
     <Content Include="WF\Scripts\easyUI15\jquery.easyui.min.js" />
     <Content Include="WF\Scripts\easyUI15\jquery.easyui.mobile.js" />
@@ -7477,9 +6855,6 @@
     <Content Include="WF\WorkOpt\OneWork\OneWork.master" />
     <Content Include="WF\WorkOpt\OneWork\OP.aspx" />
     <Content Include="WF\WorkOpt\OneWork\OP.htm" />
-    <Content Include="WF\WorkOpt\OneWork\TimeBase.css" />
-    <Content Include="WF\WorkOpt\OneWork\TimeBase.htm" />
-    <Content Include="WF\WorkOpt\OneWork\TimeBase.js" />
     <Content Include="WF\WorkOpt\OneWork\TrackUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruakUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruckOnly.aspx" />
@@ -7548,25 +6923,17 @@
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\lib\sets\svg.ashx" />
     <Content Include="WF\Admin\AttrNode\Handler.ashx" />
-<<<<<<< .mine
-=======
-    <Content Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
-    <Content Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
-    <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.eot" />
-    <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.ttf" />
-    <None Include="WF\Admin\CCBPMDesigner\normalize\fonts\linecons\linecons.woff" />
->>>>>>> .r3245
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx" />
-    <Content Include="web.ty.config">
+    <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="web.ty.Debug.config">
-      <DependentUpon>web.ty.config</DependentUpon>
+    <Content Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
     </Content>
-    <Content Include="web.ty.Release.config">
-      <DependentUpon>web.ty.config</DependentUpon>
+    <Content Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
     </Content>
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <Content Include="WF\Admin\RptDfine\Handler.ashx" />
@@ -7589,14 +6956,8 @@
     <Content Include="WF\CCForm\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
     <Content Include="WF\AppClassic\Handler.ashx" />
-<<<<<<< .mine
     <Content Include="WF\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Admin\Port\Handler.ashx" />
-=======
-    <Content Include="WF\Admin\Port\Handler.ashx" />
-    <Content Include="WF\Admin\RptDfine\Handler.ashx" />
-    <Content Include="WF\Admin\RptDfine\RptGuide.Master" />
->>>>>>> .r3245
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\CCForm\WinOpen.master" />
     <Content Include="WF\Comm\Handler.ashx" />
@@ -7623,7 +6984,6 @@
     <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <None Include="WF\Scripts\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="WF\Scripts\easyUI145\themes\material\images\Thumbs.db" />
     <None Include="WF\Scripts\easyUI\themes\gray\images\Thumbs.db" />
     <None Include="WF\Scripts\jBox\LGPL-LICENSE" />
     <None Include="WF\Scripts\jBox\MIT-LICENSE" />
@@ -7634,15 +6994,15 @@
     <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-32x32.psd" />
     <Content Include="WF\WinOpen.master" />
     <Content Include="WF\WinOpenEUI.Master" />
-    <Content Include="web.config">
+    <Content Include="web.cc.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
+    <Content Include="web.cc.Debug.config">
+      <DependentUpon>web.cc.config</DependentUpon>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
+    <Content Include="web.cc.Release.config">
+      <DependentUpon>web.cc.config</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -8784,83 +8144,12 @@
     <Compile Include="WF\Admin\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-<<<<<<< .mine
-=======
-    <Compile Include="WF\Admin\Port\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
->>>>>>> .r3245
     <Compile Include="WF\Admin\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\DeptPower.aspx.cs">
-      <DependentUpon>DeptPower.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\DeptPower.aspx.designer.cs">
-      <DependentUpon>DeptPower.aspx</DependentUpon>
-    </Compile>
-<<<<<<< .mine
-=======
-    <Compile Include="WF\Admin\RptDfine\Do.aspx.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Do.aspx.designer.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
->>>>>>> .r3245
-    <Compile Include="WF\Admin\RptDfine\Frm_ColsChose.aspx.cs">
-      <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Frm_ColsChose.aspx.designer.cs">
-      <DependentUpon>Frm_ColsChose.aspx</DependentUpon>
-    </Compile>
-<<<<<<< .mine
-=======
-    <Compile Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx.cs">
-      <DependentUpon>Frm_ColsLabel.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Frm_ColsLabel.aspx.designer.cs">
-      <DependentUpon>Frm_ColsLabel.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Pub.ascx.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\Pub.ascx.designer.cs">
-      <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\RptGuide.Master.cs">
-      <DependentUpon>RptGuide.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\RptGuide.Master.designer.cs">
-      <DependentUpon>RptGuide.Master</DependentUpon>
-    </Compile>
->>>>>>> .r3245
-    <Compile Include="WF\Admin\RptDfine\S5_SearchCond.aspx.cs">
-      <DependentUpon>S5_SearchCond.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\S5_SearchCond.aspx.designer.cs">
-      <DependentUpon>S5_SearchCond.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx.cs">
-      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx.designer.cs">
-      <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\SimulationRun.aspx.cs">
       <DependentUpon>SimulationRun.aspx</DependentUpon>
@@ -10013,11 +9302,7 @@
     <Compile Include="WF\RptDfine\Attachment.aspx.designer.cs">
       <DependentUpon>Attachment.aspx</DependentUpon>
     </Compile>
-<<<<<<< .mine
     <Compile Include="WF\RptDfine\Contrast.aspx.cs">
-=======
-    <Compile Include="WF\Rpt\Contrast.aspx.cs">
->>>>>>> .r3245
       <DependentUpon>Contrast.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -10038,25 +9323,7 @@
     <Compile Include="WF\RptDfine\D3.aspx.designer.cs">
       <DependentUpon>D3.aspx</DependentUpon>
     </Compile>
-<<<<<<< .mine
     <Compile Include="WF\RptDfine\Group.aspx.cs">
-=======
-    <Compile Include="WF\Rpt\EasySearch.Master.cs">
-      <DependentUpon>EasySearch.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Rpt\EasySearch.Master.designer.cs">
-      <DependentUpon>EasySearch.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Rpt\EasySearchMyFlow.aspx.cs">
-      <DependentUpon>EasySearchMyFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Rpt\EasySearchMyFlow.aspx.designer.cs">
-      <DependentUpon>EasySearchMyFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Rpt\Group.aspx.cs">
->>>>>>> .r3245
       <DependentUpon>Group.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -10080,11 +9347,7 @@
     <Compile Include="WF\RptDfine\MasterPage.master.designer.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
     </Compile>
-<<<<<<< .mine
     <Compile Include="WF\RptDfine\RptDoc.aspx.cs">
-=======
-    <Compile Include="WF\Rpt\RptDoc.aspx.cs">
->>>>>>> .r3245
       <DependentUpon>RptDoc.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -10802,6 +10065,8 @@
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="WF\Admin\RptDfine\Img\" />
+    <Folder Include="WF\RptDfine\Img\" />
+    <Folder Include="WF\RptSearch\Img\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

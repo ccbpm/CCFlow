@@ -115,8 +115,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 按照岗位的方向条件.
 
-
-
         /// <summary>
         /// 页面功能实体
         /// </summary>
@@ -971,8 +969,41 @@ namespace BP.WF.HttpHandler
                 return "url@../MyFlow.htm?FK_Flow=" + this.FK_Flow;
             }
 
-            Flow fl = new Flow(this.FK_Flow);
-            //    fl.DoCheck();
+            FlowExt fl = new FlowExt(this.FK_Flow);
+            
+            /* 检查是否设置了测试人员，如果设置了就按照测试人员身份进入
+             * 设置测试人员的目的是太多了人员影响测试效率.
+             * */
+            if (fl.Tester.Length > 2)
+            {
+                // 构造人员表.
+                DataTable dtEmps = new DataTable();
+                dtEmps.Columns.Add("No");
+                dtEmps.Columns.Add("Name");
+                dtEmps.Columns.Add("FK_DeptText");
+
+                string[] strs = fl.Tester.Split(',');
+                foreach (string str in strs)
+                {
+                    if (string.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    Emp emp = new Emp();
+                    emp.SetValByKey("No", str);
+                    int i = emp.RetrieveFromDBSources();
+                    if (i == 0)
+                        continue;
+
+                    DataRow dr = dtEmps.NewRow();
+                    dr["No"] = emp.No;
+                    dr["Name"] = emp.Name;
+                    dr["FK_DeptText"] = emp.FK_DeptText;
+                    dtEmps.Rows.Add(dr);
+                }
+                return BP.Tools.Json.DataTableToJson(dtEmps, false);
+            }
+
+            //fl.DoCheck();
 
             int nodeid = int.Parse(this.FK_Flow + "01");
             DataTable dt = null;
@@ -982,7 +1013,6 @@ namespace BP.WF.HttpHandler
             if (nd.IsGuestNode)
             {
                 /*如果是guest节点，就让其跳转到 guest登录界面，让其发起流程。*/
-
                 //这个地址需要配置.
                 return "url@/SDKFlowDemo/GuestApp/Login.aspx?FK_Flow=" + this.FK_Flow;
             }
@@ -1065,11 +1095,14 @@ namespace BP.WF.HttpHandler
                 if (dt.Rows.Count == 0)
                     return "err@您按照:" + nd.HisDeliveryWay + "的方式设置的开始节点的访问规则，但是开始节点没有人员。";
 
+                if (dt.Rows.Count > 300)
+                    return "err@可以发起开始节点的人员太多，会导致系统崩溃变慢，您需要在流程属性里设置可以发起的测试用户.";
+
                 // 构造人员表.
-                DataTable dtEmps = new DataTable();
-                dtEmps.Columns.Add("No");
-                dtEmps.Columns.Add("Name");
-                dtEmps.Columns.Add("FK_DeptText");
+                DataTable dtMyEmps = new DataTable();
+                dtMyEmps.Columns.Add("No");
+                dtMyEmps.Columns.Add("Name");
+                dtMyEmps.Columns.Add("FK_DeptText");
 
                 //处理发起人数据.
                 string emps = "";
@@ -1082,23 +1115,25 @@ namespace BP.WF.HttpHandler
                     emps += "," + myemp + ",";
                     BP.Port.Emp emp = new Emp(myemp);
 
-                    DataRow drNew = dtEmps.NewRow();
+                    DataRow drNew = dtMyEmps.NewRow();
 
                     drNew["No"] = emp.No;
                     drNew["Name"] = emp.Name;
                     drNew["FK_DeptText"] = emp.FK_DeptText;
 
-                    dtEmps.Rows.Add(drNew);
+                    dtMyEmps.Rows.Add(drNew);
                 }
                
                 //返回数据源.
-                return BP.Tools.Json.DataTableToJson(dtEmps, false);
+                return BP.Tools.Json.DataTableToJson(dtMyEmps, false);
             }
             catch (Exception ex)
             {
                 return "err@<h2>您没有正确的设置开始节点的访问规则，这样导致没有可启动的人员，<a href='http://bbs.ccflow.org/showtopic-4103.aspx' target=_blank ><font color=red>点击这查看解决办法</font>.</a>。</h2> 系统错误提示:" + ex.Message + "<br><h3>也有可能你你切换了OSModel导致的，什么是OSModel,请查看在线帮助文档 <a href='http://ccbpm.mydoc.io' target=_blank>http://ccbpm.mydoc.io</a>  .</h3>";
             }
         }
+
+     
         /// <summary>
         /// 转到指定的url.
         /// </summary>

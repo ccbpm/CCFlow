@@ -319,7 +319,7 @@ namespace BP.WF.HttpHandler
             bool isExitTb_doc = true;
             DataSet ds = new DataSet();
             DataRow row = null;
-            string dotype = getUTF8ToString("ShowType");
+            string dotype = this.GetRequestVal("ShowType");
             Dictionary<int, DataTable> nodeEmps = new Dictionary<int, DataTable>(); //节点id，接收人列表
             FrmWorkCheck fwc = null;
             DataTable dt = null;
@@ -789,9 +789,9 @@ namespace BP.WF.HttpHandler
         {
             // 审核信息.
             string msg = "";
-            string dotype = getUTF8ToString("ShowType");
-            string doc = getUTF8ToString("Doc");
-            bool isCC = getUTF8ToString("IsCC") == "1";
+            string dotype = GetRequestVal("ShowType");
+            string doc = GetRequestVal("Doc");
+            bool isCC = GetRequestVal("IsCC") == "1";
             //查看时取消保存
             if (dotype != null && dotype == "View")
                 return "";
@@ -855,7 +855,7 @@ namespace BP.WF.HttpHandler
                     //判断是否审核组件中“协作模式下操作员显示顺序”设置为“按照接受人员列表先后顺序(官职大小)”，删除原有的空审核信息
                     if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter)
                     {
-                        sql = "DELETE ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
+                        sql = "DELETE FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
                               " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + this.FK_Node +
                               " AND NDTo = " + this.FK_Node + " AND EmpFrom = '" + WebUser.No + "' AND (Msg='' OR Msg IS NULL)";
                         DBAccess.RunSQL(sql);

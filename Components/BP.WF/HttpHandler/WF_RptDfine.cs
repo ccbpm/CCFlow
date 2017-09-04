@@ -79,7 +79,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
         }
-        #endregion 
+        #endregion
 
         #region 执行父类的重写方法.
         /// <summary>
@@ -107,7 +107,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string MyStartFlow_Init()
         {
-            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "MyRpt";
+            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "RptMy";
 
             DataSet ds = new DataSet();
 
@@ -140,5 +140,71 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
 
+        public string MyDeptFlow_Init()
+        {
+            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "RptMyDept";
+
+            DataSet ds = new DataSet();
+
+            //字段描述.
+            MapAttrs attrs = new MapAttrs(fk_mapdata);
+            DataTable dtAttrs = attrs.ToDataTableField("Sys_MapAttr");
+            ds.Tables.Add(dtAttrs);
+
+            //数据.
+            GEEntitys ges = new GEEntitys(fk_mapdata);
+
+            //设置查询条件.
+            QueryObject qo = new QueryObject(ges);
+            qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+
+            //查询.
+            // qo.DoQuery(BP.WF.Data.GERptAttr.OID, 15, this.PageIdx);
+
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+            {
+                DataTable dt = qo.DoQueryToTable();
+                dt.TableName = "dt";
+                ds.Tables.Add(dt);
+            }
+            else
+            {
+                qo.DoQuery();
+                ds.Tables.Add(ges.ToDataTableField("dt"));
+            }
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
+
+        public string MyJoinFlow_Init()
+        {
+            string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "RptMyJoin";
+
+            DataSet ds = new DataSet();
+
+            //字段描述.
+            MapAttrs attrs = new MapAttrs(fk_mapdata);
+            DataTable dtAttrs = attrs.ToDataTableField("Sys_MapAttr");
+            ds.Tables.Add(dtAttrs);
+
+            //数据.
+            GEEntitys ges = new GEEntitys(fk_mapdata);
+
+            //设置查询条件.
+            QueryObject qo = new QueryObject(ges);
+            qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
+
+            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+            {
+                DataTable dt = qo.DoQueryToTable();
+                dt.TableName = "dt";
+                ds.Tables.Add(dt);
+            }
+            else
+            {
+                qo.DoQuery();
+                ds.Tables.Add(ges.ToDataTableField("dt"));
+            }
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
     }
 }

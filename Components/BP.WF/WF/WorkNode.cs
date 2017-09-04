@@ -1043,9 +1043,9 @@ namespace BP.WF
             //如果要是跳转到的节点，自动跳转规则规则就会失效。
             if (this.JumpToNode != null)
                 return this.JumpToNode;
-
-            if (this.HisNode.HisToNodes.Count == 1)
-                return (Node)this.HisNode.HisToNodes[0];
+            // 被zhoupeng注释，因为有可能遇到跳转.
+            //if (this.HisNode.HisToNodes.Count == 1)
+            //    return (Node)this.HisNode.HisToNodes[0];
 
             // 判断是否有用户选择的节点.
             if (this.HisNode.CondModel == CondModel.ByUserSelected)

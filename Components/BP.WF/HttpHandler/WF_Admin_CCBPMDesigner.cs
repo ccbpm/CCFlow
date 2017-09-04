@@ -356,44 +356,53 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Default_Init()
         {
-            //让admin登录
-            if (string.IsNullOrEmpty(BP.Web.WebUser.NoOfRel))
-            {
-                string userNo = this.GetRequestVal("UserNo");
-                string sid = this.GetRequestVal("SID");
-                BP.WF.Dev2Interface.Port_Login(userNo, sid);
-
-                return "url@Login.htm?DoType=Logout&Err=UserNoIsNull";
-            }
-
-            if (BP.Web.WebUser.IsAdmin == false)
-                return "url@Login.htm?DoType=Logout&Err=NoAdminUsers";
-
-            //如果没有流程表，就执行安装.
-            if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == false)
-                return "url@../DBInstall.htm";
-
-            Hashtable ht = new Hashtable();
-            if (BP.WF.Glo.OSModel == OSModel.OneOne)
-                ht.Add("OSModel", "0");
-            else
-                ht.Add("OSModel", "1");
-
             try
             {
-                // 执行升级
-                string str = BP.WF.Glo.UpdataCCFlowVer();
-                if (str == null)
-                    str = "";
-                ht.Add("Msg", str);
+                //如果登录信息丢失了,就让其重新登录一次.
+                if (string.IsNullOrEmpty(BP.Web.WebUser.NoOfRel) == true)
+                {
+                    string userNo = this.GetRequestVal("UserNo");
+                    if (string.IsNullOrEmpty(userNo) == true)
+                        return "url@Login.htm?DoType=Logout&Err=UserNoIsNull&UserNo="+userNo;
+
+                    string sid = this.GetRequestVal("SID");
+                    BP.WF.Dev2Interface.Port_Login(userNo, sid);
+                    //  return "url@Login.htm?DoType=Logout&Err=UserNoIsNull";
+                }
+
+                if (BP.Web.WebUser.IsAdmin == false)
+                    return "url@Login.htm?DoType=Logout&Err=NoAdminUsers";
+
+                //如果没有流程表，就执行安装.
+                if (BP.DA.DBAccess.IsExitsObject("WF_Flow") == false)
+                    return "url@../DBInstall.htm";
+
+                Hashtable ht = new Hashtable();
+                if (BP.WF.Glo.OSModel == OSModel.OneOne)
+                    ht.Add("OSModel", "0");
+                else
+                    ht.Add("OSModel", "1");
+
+                try
+                {
+                    // 执行升级
+                    string str = BP.WF.Glo.UpdataCCFlowVer();
+                    if (str == null)
+                        str = "";
+                    ht.Add("Msg", str);
+                }
+                catch (Exception ex)
+                {
+                    return "err@" + ex.Message;
+                }
+
+                //生成Json.
+                return BP.Tools.Json.ToJsonEntityModel(ht);
             }
             catch (Exception ex)
             {
-                return "err@" + ex.Message;
+                return "err@初始化界面期间出现如下错误:" + ex.Message;
             }
-
-            //生成Json.
-            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
         #endregion
 
@@ -457,7 +466,7 @@ namespace BP.WF.HttpHandler
 
             //让其登录.
             BP.WF.Dev2Interface.Port_Login(emp.No);
-            return "SID=" + emp.SID + "&UserNo=" + emp.No;
+            return "url@Default.htm?SID=" + emp.SID + "&UserNo=" + emp.No;
         }
         #endregion 登录窗口.
 

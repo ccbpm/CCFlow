@@ -441,7 +441,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyStartFlow()
         {
-            return "../../Rpt/MyStartFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No ;
+            return "../../RptDfine/MyStartFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
         }
         #endregion
 
@@ -492,7 +492,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyJoinFlow()
         {
-            return "../../Rpt/MyJoinFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
+            return "../../RptDfine/MyJoinFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
         }
         #endregion 我参与的流程
 
@@ -543,7 +543,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyDeptFlow()
         {
-            return "../../Rpt/MyDeptFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
+            return "../../RptDfine/MyDeptFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
         }
         #endregion 本部门发起的流程
 

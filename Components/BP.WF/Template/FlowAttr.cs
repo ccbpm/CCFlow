@@ -255,7 +255,6 @@ namespace BP.WF.Template
         /// 系统类别（第2级流程树节点编号）
         /// </summary>
         public const string SysType = "SysType";
-
         #endregion 开始节点数据导入规则.
 
         #region 父子流程
@@ -354,6 +353,10 @@ namespace BP.WF.Template
         #endregion 权限组.
 
         public const string FlowJson = "FlowJson";
+        /// <summary>
+        /// 流程发起测试人
+        /// </summary>
+        public const string Tester = "Tester";
     }
     /// <summary>
     /// 草稿规则

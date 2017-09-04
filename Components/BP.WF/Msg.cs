@@ -223,8 +223,6 @@ namespace BP.WF
         /// </summary>
         public Msg() { }
 
-
-
         /// <summary>
         /// 信息
         /// </summary>

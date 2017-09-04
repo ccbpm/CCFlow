@@ -235,6 +235,20 @@ namespace BP.WF.Template
                 this.SetValByKey(FlowAttr.BillNoFormat, value);
             }
         }
+        /// <summary>
+        /// 测试人员
+        /// </summary>
+        public string Tester
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.Tester);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.Tester, value);
+            }
+        }
         #endregion 属性.
 
         #region 构造方法
@@ -352,6 +366,12 @@ namespace BP.WF.Template
                 map.AddTBString(FlowAttr.PTable, null, "流程数据存储表", true, false, 0, 30, 10);
                 map.SetHelperUrl(FlowAttr.PTable, "http://ccbpm.mydoc.io/?v=5404&t=17897");
 
+                // add for 华夏银行.
+                map.AddDDLSysEnum(FlowAttr.FlowDeleteRole, (int)FlowDeleteRole.AdminOnly, "流程实例删除规则",
+            true, true, FlowAttr.FlowDeleteRole,
+            "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");
+
+
                 //add 2013-05-22.
                 map.AddTBString(FlowAttr.HistoryFields, null, "历史查看字段", true, false, 0, 500, 10, true);
                 //map.SetHelperBaidu(FlowAttr.HistoryFields, "ccflow 历史查看字段");
@@ -370,11 +390,8 @@ namespace BP.WF.Template
                 //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
                 map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 100, 10, false);
 
-                // add for 华夏银行.
-                map.AddDDLSysEnum(FlowAttr.FlowDeleteRole, (int)FlowDeleteRole.AdminOnly, "流程实例删除规则",
-            true, true, FlowAttr.FlowDeleteRole,
-            "@0=超级管理员可以删除@1=分级管理员可以删除@2=发起人可以删除@3=节点启动删除按钮的操作员");
 
+                map.AddTBString(FlowAttr.Tester, null, "设置流程发起测试人", true, false, 0, 300, 10, true);
                 #endregion 基本属性。
 
                 //查询条件.

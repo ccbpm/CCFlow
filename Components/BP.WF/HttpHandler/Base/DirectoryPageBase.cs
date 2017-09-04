@@ -94,11 +94,13 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="param">参数名</param>
         /// <returns></returns>
-        public string GetRequestVal(string param)
+        public string GetRequestVal(string key)
         {
-            string val = context.Request[param];
+            string val = context.Request[key];
             if (val == null)
-                val = context.Request.QueryString[param];
+                val = context.Request.QueryString[key];
+            if (val == null)
+                val = context.Request.Form[key];
 
             return HttpUtility.UrlDecode(val, System.Text.Encoding.UTF8);
         }

@@ -150,5 +150,37 @@ namespace BP.WF.HttpHandler
         #region xxx 界面 .
         #endregion xxx 界面方法.
 
+        #region KeySearch.htm
+        /// <summary>
+        /// 功能列表
+        /// </summary>
+        /// <returns></returns>
+        public string KeySearch_Query()
+        {
+            string type = this.GetRequestVal("type");
+            string keywords = this.GetRequestVal("TB_KeyWords");
+            int myselft = this.GetRequestValInt("CHK_Myself");
+            string sql = "";
+
+            switch (type) {
+                case "ByWorkID":
+                    if (myselft == 1)
+                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords + " AND Emps LIKE '@%" + WebUser.No + "%'"; 
+                    else
+                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
+                    break;
+
+                case "ByTitle":
+                    if (myselft == 1)
+                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%' AND Emps LIKE '@%" + WebUser.No + "%'";
+                    else
+                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%'";
+                    break;
+            }
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion 
+
     }
 }

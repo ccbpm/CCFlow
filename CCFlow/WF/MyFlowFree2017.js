@@ -543,6 +543,8 @@ function initModal(modalType, toNode) {
                 break;
             case "PackUp":
                 $('#modalHeader').text("打包下载/打印");
+                var url = "./WorkOpt/Packup.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+               // alert(url);
                 modalIframeSrc = "./WorkOpt/Packup.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "accepter":

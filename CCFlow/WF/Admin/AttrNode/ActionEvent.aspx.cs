@@ -47,7 +47,6 @@ namespace CCFlow.WF.Admin
                 return "ND" + this.Request.QueryString["NodeID"];
             }
         }
-
         public string FK_Flow
         {
             get
@@ -55,14 +54,7 @@ namespace CCFlow.WF.Admin
                 return this.Request.QueryString["FK_Flow"];
             }
         }
-        //事件类型，Node/Flow/Frm
-        public string ShowType
-        {
-            get
-            {
-                return this.Request.QueryString["ShowType"];
-            }
-        }
+       
         #endregion
 
         #region 通用方法.

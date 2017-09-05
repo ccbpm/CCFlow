@@ -17,7 +17,7 @@
                 type: 'post',
                 async: true,
                 data: null,
-                url: Handler + "?DoType=Packup_Init&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
+                url: Handler + "?DoType=Packup_Init&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -26,9 +26,7 @@
                         return;
                     }
 
-
                     var urls = JSON.parse(data);
-
                     var html = "";
                     for (var i = 0; i < urls.length; i++) {
 
@@ -82,7 +80,7 @@
 </head>
 <body>
  
- <div id="Msg">正在加载请稍候... </div>
+ <div id="Msg"><img src='../Img/loading.gif' />正在加载请稍候... </div>
 
 </body>
 </html>

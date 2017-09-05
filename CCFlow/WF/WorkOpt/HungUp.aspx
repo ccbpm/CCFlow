@@ -21,7 +21,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
 
- <table style="text-align:left; width:100%">
+ <table style="text-align:left;width:100%; border:1px; " >
 <caption>您好:<%=BP.WF.Glo.GenerUserImgSmallerHtml(BP.Web.WebUser.No,BP.Web.WebUser.Name) %>  -  工作挂起与取消</caption>
 <tr>
 <td  style=" text-align:center">

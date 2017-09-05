@@ -708,9 +708,9 @@ namespace BP.WF.HttpHandler
                 if (string.IsNullOrEmpty(dtTo) == true)
                 {
                     if (md.RptDTSearchWay == DTSearchWay.ByDate)
-                        dtFrom = "2999-01-01";
+                        dtTo = "2999-01-01";
                     else
-                        dtFrom = "2999-01-01 00:00";
+                        dtTo = "2999-12-31 23:59";
                 }
 
                 if (md.RptDTSearchWay == DTSearchWay.ByDate)
@@ -746,46 +746,7 @@ namespace BP.WF.HttpHandler
 
             return dt;
         }
-        #endregion MyStartFlow.htm 我发起的流程
-
-        /// <summary>
-        /// 我的流程查询.
-        /// </summary>
-        /// <returns></returns>
-        //public string MyStartFlow_Init()
-        //{
-        //    string fk_mapdata = "ND" + int.Parse(this.FK_Flow) + "RptMy";
-
-        //    DataSet ds = new DataSet();
-
-        //    //字段描述.
-        //    MapAttrs attrs = new MapAttrs(fk_mapdata);
-        //    DataTable dtAttrs = attrs.ToDataTableField("Sys_MapAttr");
-        //    ds.Tables.Add(dtAttrs);
-
-        //    //数据.
-        //    GEEntitys ges = new GEEntitys(fk_mapdata);
-
-        //    //设置查询条件.
-        //    QueryObject qo = new QueryObject(ges);
-        //    qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
-
-        //    //查询.
-        //    // qo.DoQuery(BP.WF.Data.GERptAttr.OID, 15, this.PageIdx);
-
-        //    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-        //    {
-        //        DataTable dt = qo.DoQueryToTable();
-        //        dt.TableName = "dt";
-        //        ds.Tables.Add(dt);
-        //    }
-        //    else
-        //    {
-        //        qo.DoQuery();
-        //        ds.Tables.Add(ges.ToDataTableField("dt"));
-        //    }
-        //    return BP.Tools.Json.DataSetToJson(ds, false);
-        //}
+        #endregion MyStartFlow.htm 我发起的流程        
 
         public string MyDeptFlow_Init()
         {

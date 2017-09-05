@@ -5894,6 +5894,7 @@ namespace BP.WF
 
                     //计算从发送到现在的天数.
                     this.rptGe.FlowDaySpan = DataType.GeTimeLimits(this.HisGenerWorkFlow.RDT);
+                    Int64 fid = this.rptGe.FID;
                     this.rptGe.Update();
                     #endregion 第二步: 5*5 的方式处理不同的发送情况.
                 }

@@ -309,8 +309,6 @@ namespace BP.Sys.XML
 
                 if (lin.IndexOf("=") == 0 || sr.EndOfStream)
                 {
-
-
                     /* 约定的行记录, 开始以 = 开始就认为是一个新的记录。 */
                     // 处理表结构。
                     foreach (string ojbkey in ht.Keys)

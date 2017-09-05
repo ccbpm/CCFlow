@@ -60,6 +60,13 @@ namespace BP.WF
                 //获得表单模版.
                 DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
 
+                //把流程信息表发送过去.
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                gwf.WorkID = workID;
+                gwf.RetrieveFromDBSources();
+
+
+
                 //加入WF_Node.
                 DataTable WF_Node = nd.ToDataTableField("WF_Node");
                 myds.Tables.Add(WF_Node);
@@ -110,31 +117,36 @@ namespace BP.WF
                 //增加转向下拉框数据.
                 if (nd.CondModel == CondModel.SendButtonSileSelect)
                 {
-                    /*如果当前节点，是可以显示下拉框的.*/
-                    Nodes nds = nd.HisToNodes;
-
-                    DataTable dtToNDs = new DataTable();
-                    dtToNDs.TableName = "ToNodes";
-                    dtToNDs.Columns.Add("No",typeof(string));
-                    dtToNDs.Columns.Add("Name", typeof(string));
-                    dtToNDs.Columns.Add("IsSelectEmps", typeof(string));
-
-                    foreach (Node item in nds)
+                    if (gwf.TodoEmps.Contains(WebUser.No + ",") == true)
                     {
-                        DataRow dr = dtToNDs.NewRow();
-                        dr["No"] = item.NodeID;
-                        dr["Name"] = item.Name;
-                        //if (item.hissel
+                        /*如果当前不是主持人,如果不是主持人，就不让他显示下拉框了.*/
 
-                        if (item.HisDeliveryWay == DeliveryWay.BySelected)
-                            dr["IsSelectEmps"] = "1";
-                        else
-                            dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
-                        dtToNDs.Rows.Add(dr);
+                        /*如果当前节点，是可以显示下拉框的.*/
+                        Nodes nds = nd.HisToNodes;
+
+                        DataTable dtToNDs = new DataTable();
+                        dtToNDs.TableName = "ToNodes";
+                        dtToNDs.Columns.Add("No", typeof(string));
+                        dtToNDs.Columns.Add("Name", typeof(string));
+                        dtToNDs.Columns.Add("IsSelectEmps", typeof(string));
+
+                        foreach (Node item in nds)
+                        {
+                            DataRow dr = dtToNDs.NewRow();
+                            dr["No"] = item.NodeID;
+                            dr["Name"] = item.Name;
+                            //if (item.hissel
+
+                            if (item.HisDeliveryWay == DeliveryWay.BySelected)
+                                dr["IsSelectEmps"] = "1";
+                            else
+                                dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
+                            dtToNDs.Rows.Add(dr);
+                        }
+
+                        //增加一个下拉框, 对方判断是否有这个数据.
+                        myds.Tables.Add(dtToNDs);
                     }
-
-                    //增加一个下拉框, 对方判断是否有这个数据.
-                    myds.Tables.Add(dtToNDs);
                 }
 
 
@@ -259,13 +271,7 @@ namespace BP.WF
                 }
                 #endregion End把外键表加入DataSet
 
-                #region 把流程信息放入里面.
-                //把流程信息表发送过去.
-                GenerWorkFlow gwf = new GenerWorkFlow();
-                gwf.WorkID = workID;
-                gwf.RetrieveFromDBSources();
-                
-                #endregion 把流程信息放入里面.
+              
 
                 #region 处理流程-消息提示.
                 DataTable dtAlert = new DataTable();

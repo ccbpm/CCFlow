@@ -952,6 +952,7 @@
     <Content Include="WF\Data\XML\XmlDB.xml" />
     <Content Include="WF\Img\Runing.png" />
     <Content Include="WF\MyFlowFree2017.js" />
+    <Content Include="WF\RptDfine\Flowlist.htm" />
     <Content Include="WF\RptDfine\MyStartFlow.htm" />
     <Content Include="WF\RptDfine\MyDeptFlow.htm" />
     <Content Include="WF\RptDfine\MyJoinFlow.htm" />
@@ -959,8 +960,6 @@
     <Content Include="WF\RptDfine\Single.Master" />
     <Content Include="WF\RptDfine\SiteEUI.Master" />
     <Content Include="WF\RptSearch\Default.htm" />
-    <Content Include="WF\RptSearch\Flowlist.htm" />
-    <Content Include="WF\RptSearch\KeySearch.aspx" />
     <Content Include="WF\RptSearch\KeySearch.htm" />
     <Content Include="WF\RptSearch\Left.htm" />
     <Content Include="WF\RptSearch\DistributedOfMy.htm" />
@@ -1713,7 +1712,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Style\Max.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\Min.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\SysDataType.xml" />
-    <Content Include="WF\Admin\FoolFormDesigner\Style\XmlDB-del.xml" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\XmlDB.xml" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.htm" />
@@ -6899,7 +6897,6 @@
     <Content Include="WF\TaskPoolSharing.htm" />
     <Content Include="WF\TaskPoolApply.htm" />
     <Content Include="WF\WorkOpt\WorkCheckIng.htm" />
-    <Content Include="WF\WorkOpt\AccepterBak.htm" />
     <Content Include="WF\WorkOpt\AccepterGener.htm" />
     <Content Include="WF\WorkOpt\HuiQian.htm" />
     <Content Include="WF\WorkOpt\AccepterOfGener.htm" />
@@ -6924,14 +6921,14 @@
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx" />
-    <Content Include="web.config">
+    <Content Include="web.ty.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
+    <Content Include="web.ty.Debug.config">
+      <DependentUpon>web.ty.config</DependentUpon>
     </Content>
-    <Content Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
+    <Content Include="web.ty.Release.config">
+      <DependentUpon>web.ty.config</DependentUpon>
     </Content>
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <Content Include="WF\Admin\RptDfine\Handler.ashx" />
@@ -6992,15 +6989,15 @@
     <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-32x32.psd" />
     <Content Include="WF\WinOpen.master" />
     <Content Include="WF\WinOpenEUI.Master" />
-    <Content Include="web.cc.config">
+    <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="web.cc.Debug.config">
-      <DependentUpon>web.cc.config</DependentUpon>
+    <Content Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="web.cc.Release.config">
-      <DependentUpon>web.cc.config</DependentUpon>
+    <Content Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -9435,13 +9432,6 @@
     </Compile>
     <Compile Include="WF\RptDfine\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\RptSearch\KeySearch.aspx.cs">
-      <DependentUpon>KeySearch.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptSearch\KeySearch.aspx.designer.cs">
-      <DependentUpon>KeySearch.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\SDKComponents\AccepterCCerSelecter.ascx.cs">
       <DependentUpon>AccepterCCerSelecter.ascx</DependentUpon>

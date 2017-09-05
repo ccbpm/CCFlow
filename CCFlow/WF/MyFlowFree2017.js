@@ -4,7 +4,7 @@ $(function () {
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
         FormOnLoadCheckIsNull();
     }
-
+   
 });
 
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.
@@ -13,7 +13,7 @@ function SaveSelfFrom() {
     // 不支持火狐浏览器。
     var frm = document.getElementById('SelfForm');
     if (frm == null) {
-        alert('系统错误.');
+        alert('系统错误,没有找到SelfForm的ID.');
     }
     //执行保存.
     return frm.contentWindow.Save();
@@ -1793,6 +1793,7 @@ function Send() {
             toNode = selectToNode.No;
         }
     }
+
     execSend(toNode);
 }
 
@@ -1821,20 +1822,21 @@ function execSend(toNode) {
                 window.location.href = url;
                 return;
             }
-            else {
 
-                OptSuc(data);
-                if (opener != null && opener.window != null && opener.window.parent != null && opener.window.parent.refSubSubFlowIframe != null && typeof (opener.window.parent.refSubSubFlowIframe) == "function") {
-                    opener.window.parent.refSubSubFlowIframe();
-                }
-                //if (window.opener != null && window.opener != undefined && window.opener)
-                //    $('#Message').html(data);
-                //$('#MessageDiv').modal().show();
-                ////发送成功时
-                //setAttachDisabled();
-                //setToobarUnVisible();
-                //setFormEleDisabled();
+            OptSuc(data);
+          //  $('#Message').html(data);
+           // $('#MessageDiv').modal().show();
+
+            if (opener != null && opener.window != null && opener.window.parent != null && opener.window.parent.refSubSubFlowIframe != null && typeof (opener.window.parent.refSubSubFlowIframe) == "function") {
+                opener.window.parent.refSubSubFlowIframe();
             }
+            //if (window.opener != null && window.opener != undefined && window.opener)
+            //    $('#Message').html(data);
+            //$('#MessageDiv').modal().show();
+            ////发送成功时
+            //setAttachDisabled();
+            //setToobarUnVisible();
+            //setFormEleDisabled();
         }
     });
 }
@@ -1877,8 +1879,10 @@ function OptSuc(msg) {
 }
 //移交
 //初始化发送节点下拉框
-function InitToNodeDDL() {
-    var workNode = JSON.parse(jsonStr);
+function InitToNodeDDL(workNode) {
+
+    //  var workNode = JSON.parse(jsonStr);
+
     if (workNode.ToNodes != undefined && workNode.ToNodes.length > 0) {
         // $('[value=发送]').
         var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
@@ -2372,7 +2376,7 @@ function GenerWorkNode() {
 
             }
 
-            InitToNodeDDL();
+            InitToNodeDDL(flow_Data);
             Common.MaxLengthError();
 
             //处理下拉框级联等扩展信息

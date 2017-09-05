@@ -70,6 +70,12 @@
 
                     if (data.indexOf('err@') == 0) {
                         alert(data);
+                        window.parent.close();
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        window.location.href = data.replace('url@', '');
                         return;
                     }
 
@@ -186,10 +192,13 @@
             var emps = this.document.getElementById("TB_Emps").value;
             this.AddEmps();
 
+            var url = Handler + "?DoType=AccepterOfGener_Send&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&ToNode=" + GetQueryString("ToNode");
+            //alert(url);
+
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=AccepterOfGener_Send&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&ToNode=" + GetQueryString("ToNode"),
+                url:url,
                 dataType: 'html',
                 success: function (data) {
 
@@ -200,9 +209,7 @@
                     }
 
                     data = data.replace('@', '<br/>@');
-
                     data+=" <center><input type='button' value='    关    闭    ' onclick='Close();'  /></center>";
-
 
                     $(".Msg").show();
                     $(".Msg").html(data);
@@ -303,7 +310,7 @@
         <input type="text" id="TB_Emps" name="TB_Emps" value='' style=" width:400px; "/> 
          <input type="button" id="BtnSelectEmps" value='选择人员'/>
          <br />
-         <input type="button" value="增加下一步接受人员列表人" id="Btn_AddEmps" onclick="AddEmps();"/>
+         <input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps();"/>
          <input type="button" value="执行发送" onclick="Send();" id="Btn_Send"/>
          <input type="button" value="关闭" onclick="CloseModel();" id="Btn_Close" />
     </div>

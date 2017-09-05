@@ -50,14 +50,20 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dt);
             }
 
-            //加入表单库目录.
+            #region 加入表单库目录.
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                sql = "SELECT 'ND'||NO as No ,NAME,PARENTNO FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
+                sql = "SELECT 'ND'||NO as No ,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
             else
-                sql = "SELECT 'ND'+NO,NAME,PARENTNO FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
+                sql = "SELECT 'ND'+No,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
 
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_FormTree";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+            }
             ds.Tables.Add(dt);
 
             //加入表单
@@ -65,10 +71,17 @@ namespace BP.WF.HttpHandler
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_MapData";
             ds.Tables.Add(dt);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["FK_FORMTREE"].ColumnName = "FK_FormTree";
+            }
+            #endregion 加入表单库目录.
 
+            //加入系统表.
             return BP.Tools.Json.ToJson(ds);
         }
-
         /// <summary>
         /// 从本机装载表单模版
         /// </summary>
@@ -117,27 +130,25 @@ namespace BP.WF.HttpHandler
         public string Imp_CopyFrm()
         {
             string fromMapData = this.FromMapData;
-            string fk_mapdata = this.FK_MapData;
             bool isClear = this.IsClear;
 
             MapData md = new MapData(fromMapData);
-            MapData.ImpMapData(fk_mapdata, BP.Sys.CCFormAPI.GenerHisDataSet(md.No));
+
+            MapData.ImpMapData(this.FK_MapData, BP.Sys.CCFormAPI.GenerHisDataSet(md.No));
 
             //设置为只读模式.
             if (this.IsSetReadonly == true)
-                MapData.SetFrmIsReadonly(fk_mapdata);
+                MapData.SetFrmIsReadonly(this.FK_MapData);
 
             // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
-            if (fk_mapdata.Contains("ND") == true)
+            if (this.FK_MapData.Contains("ND") == true)
             {
-                string fk_node = fk_mapdata.Replace("ND", "");
+                string fk_node = this.FK_MapData.Replace("ND", "");
                 Node nd = new Node(int.Parse(fk_node));
                 nd.RepareMap();
             }
-
             return "执行成功.";
         }
-
         #endregion
 
 

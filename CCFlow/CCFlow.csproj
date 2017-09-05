@@ -157,6 +157,7 @@
     </Content>
     <Content Include="DataUser\InstancePacketOfData\Template\index.htm" />
     <Content Include="DataUser\InstancePacketOfData\Template\icon.png" />
+    <Content Include="DataUser\InstancePacketOfData\Template\ShuiYin.png" />
     <Content Include="DataUser\Style\ccbpm.css" />
     <Content Include="DataUser\Style\dtl.css" />
     <Content Include="DataUser\XML\Menu.xml">
@@ -952,6 +953,7 @@
     <Content Include="WF\Data\XML\XmlDB.xml" />
     <Content Include="WF\Img\Runing.png" />
     <Content Include="WF\MyFlowFree2017.js" />
+    <Content Include="WF\RptDfine\Flowlist.htm" />
     <Content Include="WF\RptDfine\MyStartFlow.htm" />
     <Content Include="WF\RptDfine\MyDeptFlow.htm" />
     <Content Include="WF\RptDfine\MyJoinFlow.htm" />
@@ -959,8 +961,6 @@
     <Content Include="WF\RptDfine\Single.Master" />
     <Content Include="WF\RptDfine\SiteEUI.Master" />
     <Content Include="WF\RptSearch\Default.htm" />
-    <Content Include="WF\RptSearch\Flowlist.htm" />
-    <Content Include="WF\RptSearch\KeySearch.aspx" />
     <Content Include="WF\RptSearch\KeySearch.htm" />
     <Content Include="WF\RptSearch\Left.htm" />
     <Content Include="WF\RptSearch\DistributedOfMy.htm" />
@@ -1628,9 +1628,6 @@
     <Content Include="WF\Admin\ClientBin\NodeIcon\采购.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\销售.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\顾客.png" />
-    <Content Include="WF\Admin\CondDept.aspx" />
-    <Content Include="WF\Admin\ConditionSubFlow.aspx" />
-    <Content Include="WF\Admin\ConditionSubFlowDtl.aspx" />
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\DoType.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
@@ -1713,7 +1710,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Style\Max.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\Min.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\SysDataType.xml" />
-    <Content Include="WF\Admin\FoolFormDesigner\Style\XmlDB-del.xml" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\XmlDB.xml" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.htm" />
@@ -6899,7 +6895,6 @@
     <Content Include="WF\TaskPoolSharing.htm" />
     <Content Include="WF\TaskPoolApply.htm" />
     <Content Include="WF\WorkOpt\WorkCheckIng.htm" />
-    <Content Include="WF\WorkOpt\AccepterBak.htm" />
     <Content Include="WF\WorkOpt\AccepterGener.htm" />
     <Content Include="WF\WorkOpt\HuiQian.htm" />
     <Content Include="WF\WorkOpt\AccepterOfGener.htm" />
@@ -6924,14 +6919,14 @@
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx" />
-    <Content Include="web.config">
+    <Content Include="web.ty.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
+    <Content Include="web.ty.Debug.config">
+      <DependentUpon>web.ty.config</DependentUpon>
     </Content>
-    <Content Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
+    <Content Include="web.ty.Release.config">
+      <DependentUpon>web.ty.config</DependentUpon>
     </Content>
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <Content Include="WF\Admin\RptDfine\Handler.ashx" />
@@ -6939,7 +6934,6 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
-    <Content Include="WF\Admin\Condition.Master" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Handler.ashx" />
@@ -6992,15 +6986,15 @@
     <None Include="WF\Scripts\jquery\themes\icons\icon-dortmund\dortmund-32x32.psd" />
     <Content Include="WF\WinOpen.master" />
     <Content Include="WF\WinOpenEUI.Master" />
-    <Content Include="web.cc.config">
+    <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="web.cc.Debug.config">
-      <DependentUpon>web.cc.config</DependentUpon>
+    <Content Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="web.cc.Release.config">
-      <DependentUpon>web.cc.config</DependentUpon>
+    <Content Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -7761,34 +7755,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CondDept.aspx.cs">
-      <DependentUpon>CondDept.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CondDept.aspx.designer.cs">
-      <DependentUpon>CondDept.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Condition.Master.cs">
-      <DependentUpon>Condition.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Condition.Master.designer.cs">
-      <DependentUpon>Condition.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\ConditionSubFlow.aspx.cs">
-      <DependentUpon>ConditionSubFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\ConditionSubFlow.aspx.designer.cs">
-      <DependentUpon>ConditionSubFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\ConditionSubFlowDtl.aspx.cs">
-      <DependentUpon>ConditionSubFlowDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\ConditionSubFlowDtl.aspx.designer.cs">
-      <DependentUpon>ConditionSubFlowDtl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\DoPort.aspx.cs">
       <DependentUpon>DoPort.aspx</DependentUpon>
@@ -9436,13 +9402,6 @@
     <Compile Include="WF\RptDfine\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\RptSearch\KeySearch.aspx.cs">
-      <DependentUpon>KeySearch.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\RptSearch\KeySearch.aspx.designer.cs">
-      <DependentUpon>KeySearch.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\SDKComponents\AccepterCCerSelecter.ascx.cs">
       <DependentUpon>AccepterCCerSelecter.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -10052,7 +10011,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bin\" />
-    <Folder Include="DataUser\InstancePacketOfData\Template\ND18801\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="WF\Admin\RptDfine\Img\" />

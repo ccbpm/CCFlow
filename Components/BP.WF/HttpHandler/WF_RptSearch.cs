@@ -117,38 +117,41 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-        public string Flowlist_Init()
-        {
-            DataSet ds = new DataSet();
-
-            string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY ParentNo, Idx";
-            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Sort";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
-            }
-            ds.Tables.Add(dt);
-
-
-            sql = "SELECT No,Name,FK_FlowSort FROM WF_Flow ORDER BY FK_FlowSort, Idx";
-            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Flows";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dt.Columns["NO"].ColumnName = "No";
-                dt.Columns["NAME"].ColumnName = "Name";
-                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
-            }
-            ds.Tables.Add(dt);
-
-            return BP.Tools.Json.DataSetToJson(ds, false);
-        }
-
+       
         #region xxx 界面 .
         #endregion xxx 界面方法.
+
+        #region KeySearch.htm
+        /// <summary>
+        /// 功能列表
+        /// </summary>
+        /// <returns></returns>
+        public string KeySearch_Query()
+        {
+            string type = this.GetRequestVal("type");
+            string keywords = this.GetRequestVal("TB_KeyWords");
+            int myselft = this.GetRequestValInt("CHK_Myself");
+            string sql = "";
+
+            switch (type) {
+                case "ByWorkID":
+                    if (myselft == 1)
+                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords + " AND Emps LIKE '@%" + WebUser.No + "%'"; 
+                    else
+                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
+                    break;
+
+                case "ByTitle":
+                    if (myselft == 1)
+                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%' AND Emps LIKE '@%" + WebUser.No + "%'";
+                    else
+                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%'";
+                    break;
+            }
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion 
 
     }
 }

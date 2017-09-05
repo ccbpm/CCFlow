@@ -80,7 +80,7 @@
 
                     db = JSON.parse(db);
 
-                    //节点表单.
+                    //02.节点表单.
                     var nodes = db["WF_Node"];
                     var ulHtml = '';
                     for (var i = 0; i < nodes.length; i++) {
@@ -92,6 +92,52 @@
                     }
 
                     $('#ulNodeFrmImp').html(ulHtml);
+
+                    //03.表单库
+                    var treedata = db["Sys_FormTree"],
+                        rootdata = $.grep(treedata, function (item) {
+                            return item.PARENTNO == "0";
+                        })[0];
+
+                    //构建树节点数据
+                    var root = {};
+                    root.text = rootdata.NAME;
+                    root.state = "open";
+                    root.children = [];
+                    $.grep(treedata, function (item) {
+                        //选出一级节点
+                        return item.PARENTNO == "1";
+                    }).forEach(function (folder) {
+                        //构建node开始
+                        var node = {};
+                        node.text = folder.NAME;
+                        node.state = "closed";
+                        node.children = [];
+                        $.grep(db["Sys_MapData"], function (map) {
+                            //选出当前节点的二级节点
+                            return 'ND' + map.FK_FormTree == folder.Column1;
+
+                        }).forEach(function (frm) {
+                            node.children.push({
+                                text: frm.Name,
+                                id:frm.No
+                            });
+                        });
+                        //构建node结束
+                        root.children.push(node);
+                    });
+
+                    $('#ulLib').tree({
+                        data: [root],
+                        onSelect: function (node) {
+                            if (node.children == undefined) {
+                                btnFrmLib.disabled= "";
+                                selFrmNode.value = node.id;
+                            }else{
+                                btnFrmLib.disabled= "disabled";                            
+                            }
+                        } 
+                    });
                 }
             });
 
@@ -170,12 +216,34 @@
                 }
             });
         }
+
+        function SaveImpFromLib() {
+
+            var nodeId = selFrmNode.value;
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Imp_CopyFrm&FK_MapData=" + frmID + "&FromMapData=" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+                    window.parent.location.href = window.parent.location.href;
+
+                }
+            });
+        }
     </script>
 </head>
 <body>
     <form id="formCC" method="post" enctype="multipart/form-data">
     <div id="Msg"> </div>
-    <div id="tt" class="easyui-tabs" style="width:100%;height:300px;padding:0px;">
+    <div id="tt" class="easyui-tabs" style="width:100%;height:auto;padding:0px;">
         <div title="从本机导入" style="">
             <div style="text-align:left;padding:15px;">
 
@@ -207,21 +275,12 @@
             </fieldset>
         </div>
 
-        <div title="从表单库导入" style="padding:15px; text-align:left">
-
-        <fieldset>
-        <legend>在施工中，敬请期待.</legend>
-        <ul>
-        <li> 1，选择表单库的一个表单。 </li>
-        <li> 2，执行表单的导入。 </li>
-        </ul>
-        </fieldset>
-
-          <!--<input type="button" class="btn btn-default" value="进入templete.ccflow.org执行导入" /><br /><br />
-            <label style="padding-left:8px;">ccflow为您提供丰富的表单共享模板，您可以轻松的创建您的BPM系统</label>
--->
+        <div title="从表单库导入" id="divUlFrmTreeImp" style="padding:15px; text-align:left">        
+          <ul id="ulLib" style="height:auto;"></ul>
+          <input type="hidden" value="" id="selFrmNode" name="selFrmNode" />
+          <input type="button" value="表单库导入" id="btnFrmLib" onclick="SaveImpFromLib()" style="margin:25px;" disabled="disabled"/>
         </div>
-
+s
         <div title="从外部数据源导入" style="padding:15px; text-align:left">
 
           <fieldset>

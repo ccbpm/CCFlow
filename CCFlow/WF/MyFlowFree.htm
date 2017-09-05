@@ -82,7 +82,7 @@
                 load.LoadJs('CCForm/MapExt2016.js', undefined, function () {
                     load.LoadJs('Comm/Gener.js', undefined, function () {
                         load.LoadJs('MyFlowFree2017.js', undefined, function () {
-                            //此处需做一次 KindEditor.ready 方法，否则获取节点ajax回调中的该方法中执行KindEditor.ready后，不会执行 function (K)
+                            //此处需做一次 KindEditor.ready 方法，否则GenerWorkNode 函数的ajax回调函数中的该方法中执行KindEditor.ready后，不会执行 function (K)
                             //试出来的，原因不明
                             KindEditor.ready(function (K) {
                                 console.log(new Date().toLocaleTimeString() + ":KindEditor.ready 来过。MyFlowFree2017.js onload触发");
@@ -301,7 +301,6 @@
     </style>
 </head>
 <body>
-   
     <div id="divCurrentForm" style="position: relative;">
         <!--底部功能按钮 发送、移交-->
         <div id="topToolBar" style="padding: 3px 3px; margin: 0px auto; text-align: left;"

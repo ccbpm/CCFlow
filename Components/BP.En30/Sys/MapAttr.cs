@@ -116,10 +116,6 @@ namespace BP.Sys
         /// </summary>
         public const string UIIsEnable = "UIIsEnable";
         /// <summary>
-        /// 是否多选，只对DLL字段有效
-        /// </summary>
-        public const string UIIsMultiple = "UIIsMultiple";
-        /// <summary>
         /// 关联的表的Key
         /// </summary>
         public const string UIRefKey = "UIRefKey";
@@ -315,20 +311,7 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.UIIsInput, value);
             }
         }
-        /// <summary>
-        /// 是否是多选，只对DLL字段有效
-        /// </summary>
-        public bool UIIsMultiple
-        {
-            get
-            {
-                return this.GetValBooleanByKey(MapAttrAttr.UIIsMultiple, false);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.UIIsMultiple, value);
-            }
-        }
+       
         /// <summary>
         /// 是否启用高级JS设置
         /// </summary>
@@ -1404,7 +1387,6 @@ namespace BP.Sys
                 map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsLine, false, "是否单独栏显示", true, true);
                 map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填字段", true, true);
-                map.AddBoolean(MapAttrAttr.UIIsMultiple, false, "是否可以多选", true, true);
 
                // map.AddTBString(MapAttrAttr.AutoFullDoc, null, "自动填写内容", false, false, 0, 500, 20);
                //// map.AddDDLSysEnum(MapAttrAttr.AutoFullWay, 0, "自动填写方式", true, false, MapAttrAttr.AutoFullWay,

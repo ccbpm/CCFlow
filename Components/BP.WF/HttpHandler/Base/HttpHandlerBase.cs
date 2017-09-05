@@ -6,17 +6,8 @@ using System.Web.SessionState;
 
 namespace BP.WF.HttpHandler
 {
-    abstract public class HttpHandlerBase : IHttpHandler, IRequiresSessionState
+    abstract public class HttpHandlerBase : IHttpHandler, IRequiresSessionState, IReadOnlySessionState
     {
-        /// <summary>
-        /// 公共方法获取值
-        /// </summary>
-        /// <param name="param">参数名</param>
-        /// <returns></returns>
-        public string getUTF8ToString(string param)
-        {
-            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
-        }
         /// <summary>
         /// 获取 “Handler业务处理类”的Type
         /// <para></para>

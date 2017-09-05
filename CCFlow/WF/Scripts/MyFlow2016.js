@@ -1394,10 +1394,10 @@ function InitMapAttr(mapAttrData, workNodeData) {
                             //多选下拉框
                             var isMultiSele = "";
                             var isMultiSeleClass = "";
-                            if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-                                isMultiSele = ' multiple data-live-search="false" ';
-                                isMultiSeleClass = " selectpicker show-tick form-control ";
-                            }
+//                            if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+//                                isMultiSele = ' multiple data-live-search="false" ';
+//                                isMultiSeleClass = " selectpicker show-tick form-control ";
+//                            }
                             eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">1' +
                                    "<select" + isMultiSele + " class=" + isMultiSeleClass + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                                     (workNodeData, mapAttr, defValue) + "</select>";
@@ -1486,10 +1486,10 @@ function InitMapAttr(mapAttrData, workNodeData) {
                         //下拉框设置成多选
                         var isMultiSele = "";
                         var isMultiSeleClass = "";
-                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-                            isMultiSele = ' multiple data-live-search="false" ';
-                            isMultiSeleClass = " selectpicker show-tick form-control ";
-                        }
+//                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+//                            isMultiSele = ' multiple data-live-search="false" ';
+//                            isMultiSeleClass = " selectpicker show-tick form-control ";
+//                        }
 
                         eleHtml += '<div class="col-lg-' + colMd + ' col-md-' + colMd + ' col-sm-' + colsm + '">' +
                                 "<select class='"+isMultiSeleClass+"' "+isMultiSele+" name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
@@ -1563,10 +1563,10 @@ function InitMapAttr(mapAttrData, workNodeData) {
                     //选择框多选
                     var isMultiSele = "";
                     var isMultiSeleClass = "";
-                    if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-                        isMultiSele = ' multiple data-live-search="false" ';
-                        isMultiSeleClass = " selectpicker show-tick form-control ";
-                    }
+//                    if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+//                        isMultiSele = ' multiple data-live-search="false" ';
+//                        isMultiSeleClass = " selectpicker show-tick form-control ";
+//                    }
 
                     eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
                                 "<select class='"+isMultiSeleClass+"' "+isMultiSele+" name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";

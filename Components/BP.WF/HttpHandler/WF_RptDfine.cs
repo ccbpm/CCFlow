@@ -29,6 +29,37 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        /// <summary>
+        /// 流程列表
+        /// </summary>
+        /// <returns></returns>
+        public string Flowlist_Init()
+        {
+            DataSet ds = new DataSet();
+            string sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY ParentNo, Idx";
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Sort";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+            }
+            ds.Tables.Add(dt);
+
+            sql = "SELECT No,Name,FK_FlowSort FROM WF_Flow ORDER BY FK_FlowSort, Idx";
+            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Flows";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+            }
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.DataSetToJson(ds, false);
+        }
 
         # region 属性
         public string RptNo

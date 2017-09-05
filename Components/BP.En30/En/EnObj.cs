@@ -768,16 +768,16 @@ namespace BP.En
         {
             return Int64.Parse(this.GetValStringByKey(key,"0"));
         }
-        public int GetValIntByKey(string key, int IsZeroAs)
+
+        public int GetValIntByKey(string key, int isNullAsVal)
         {
-            int i = this.GetValIntByKey(key);
-            if (i == 0)
-                i = IsZeroAs;
-            return i;
-        }
-        public int GetValIntByKey11(string key)
-        {
-            return int.Parse(this.GetValStrByKey(key));
+            string str = this.GetValStrByKey(key);
+            if (str == null || str == "" || str == "null")
+                return isNullAsVal;
+
+            if (DataType.IsNumStr(str)==false)
+                return isNullAsVal;
+            return int.Parse(str);
         }
         /// <summary>
         /// 根据key 得到int val
@@ -798,6 +798,9 @@ namespace BP.En
                 //    throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStringByKey(key) + "]转换为int类型.错误信息：" + ex.Message + "@请检查是否在存储枚举类型时，您在SetValbyKey中没有转换。正确做法是:this.SetValByKey( Key ,(int)value)  ");
 
                 string v = this.GetValStrByKey(key).ToLower();
+                if (v == "null")
+                    return 0;
+
                 if (v == "true")
                 {
                     this.SetValByKey(key, 1);

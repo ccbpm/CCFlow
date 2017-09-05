@@ -225,12 +225,8 @@ namespace BP.WF.Template
                 map.AddDDLSQL(SelectorAttr.FK_SQLTemplate, null, "SQL模版",
                     "SELECT No,Name FROM WF_SQLTemplate WHERE SQLType=5", true);
 
-                map.AddBoolean(SelectorAttr.IsAutoLoadEmps, true, "是否自动加载上一次选择的人员？", true, true, true);
-
-
-              //  map.AddDDLSysEnum(SelectorAttr.AccepterDBSort, 0, "选择的数据类别", true, true,
-              //SelectorAttr.AccepterDBSort, "@0=人员@1=部门@2=岗位@3=权限组");
-
+                map.AddBoolean(SelectorAttr.IsAutoLoadEmps, true, "是否自动加载上一次选择的人员？", true, true);
+                 
 
                 map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数:可以为空,比如:SELECT No,Name,ParentNo FROM  Port_Dept", true, false, true);
                 map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源:比如:SELECT No,Name,FK_Dept FROM  Port_Emp", true, false, true);

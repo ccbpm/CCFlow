@@ -1,31 +1,137 @@
-﻿<head>
-    <meta charset="UTF-8"/>
-    <title>驰骋工作流</title>
-    <script type="text/javascript" src="../Scripts/config.js"></script>
-    <script type="text/javascript" language="javascript" >
-        //页面启动函数.
-        function ToURL() {
-
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <title>驰骋工作流引擎ccbpm6 </title>
+    <script language="JavaScript" src="/WF/Comm/JScript.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        function OpenIt(fk_flow, fk_node, workid) {
+            var url = '../WFRpt.aspx?WorkID=' + workid + '&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node;
+            var newWindow = window.open(url, 'card', 'width=700,top=50,left=50,height=500,scrollbars=yes,resizable=yes,toolbar=false,location=false');
+            newWindow.focus();
+            return;
+        }
+    </script>
+    <base target="_self" />
+    <script type="text/javascript">
+        function RSize() {
+            if (document.body.scrollWidth > (window.screen.availWidth - 100)) {
+                window.dialogWidth = (window.screen.availWidth - 100).toString() + "px"
             } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
+                window.dialogWidth = (document.body.scrollWidth + 50).toString() + "px"
+            }
+
+            if (document.body.scrollHeight > (window.screen.availHeight - 70)) {
+                window.dialogHeight = (window.screen.availHeight - 50).toString() + "px"
+            } else {
+                window.dialogHeight = (document.body.scrollHeight + 115).toString() + "px"
+            }
+            window.dialogLeft = ((window.screen.availWidth - document.body.clientWidth) / 2).toString() + "px"
+            window.dialogTop = ((window.screen.availHeight - document.body.clientHeight) / 2).toString() + "px"
+        }
+
+        function NoSubmit(ev) {
+            if (window.event.srcElement.tagName == "TEXTAREA")
+                return true;
+
+            if (ev.keyCode == 13) {
+                window.event.keyCode = 9;
+                ev.keyCode = 9;
+                return true;
+            }
+            return true;
+        }
+
+        function Btn_Click() {
+
+            if (TB_KeyWords.value == "") {
                 return;
             }
+
+            if (event.srcElement.id == "Btn_ByWorkID") {
+                var g = /^[1-9]*[1-9][0-9]*$/;
+                if (!(g.test(TB_KeyWords.value))) {
+                    alert("您输入的不是一个workid");
+                    return;
+                }
+            }
+            
+            var frmData = $("#cc").serialize();
+
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=KeySearch_Query&type=" + event.srcElement.name + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    //转化成json.
+                    data = JSON.parse(data);
+                    if (data.length > 0) {
+
+                        var tableHtml = "<table class='Table'>",
+                            statusArr = ["未完成", "已完成", "其他"],
+                            tr = "";
+                        tableHtml += "<tr><th>Idx</th><th>流程</th><th>标题</th><th>发起人</th><th>发起日期</th><th>状态</th><th>参与人</th></tr>";
+
+                        data.forEach(function (item, index) {
+                            tr = "";
+                            tr += "<td>" + (index + 1) + "</td>";
+                            tr += "<td>" + item.FlowName + "</td>";
+                            tr += "<td><a href=\"javascript:OpenIt('" + item.FK_Flow + "','" + item.FK_Node + "','" + item.WorkID + "');\" >" + item.Title + "</a></td>";
+                            tr += "<td>" + item.Starter + "</td>";
+                            tr += "<td>" + item.RDT + "</td>";
+                            tr += "<td>" + statusArr[item.WFSta] + "</td>";
+                            tr += "\n<td class='BigDoc' valign=top>" + item.Emps + "</td>";
+                            tr += "</tr>";
+                            tableHtml += tr;
+                        });
+                        tableHtml += "</table>";
+                        document.getElementById("result").innerHTML = tableHtml;
+                    } else {
+                        document.getElementById("result").innerHTML = "<h3>&nbsp;&nbsp;竟然没有查出任何东西，真不思议。</h3>";
+                    }
+
+                }
+            });
         }
     </script>
 </head>
-<body  onload="ToURL()" >
+<body topmargin="0" leftmargin="0" onkeypress="NoSubmit(event);" class="easyui-layout">
+    <form id="cc" onkeypress="NoSubmit(event);">
+    <div id="mainPanel" region="center" border="true" border="false" class="mainPanel">
+        <table width="100%" border="0">
+            <caption class="CaptionMsgLong">
+                全文检索</caption>
+            <tr>
+                <td style="text-align: center">
+                    </br></br> <b>&nbsp;输入任何关键字:</b><input name="TB_KeyWords"
+                        type="text" id="TB_KeyWords" style="border-color: AliceBlue;
+                        border-style: Inset; font-size: Large; font-weight: bold; width: 259px;" />
+                    <span style="color: #0033CC; font-weight: bold;">
+                        <input id="CHK_Myself" type="checkbox" name="CHK_Myself" value="1"/><label
+                            for="CHK_Myself">仅查询我参与的流程</label></span>
+                    <br />
+                    &nbsp;<input type="button" value="按工作ID查" id="Btn_ByWorkID" name="ByWorkID" onclick="Btn_Click();"/>
+                    <input type="button" value="按流程标题字段关键字查" id="Btn_ByTitle" name="ByTitle" onclick="Btn_Click();"/>
+                    </br>
+                </td>
+            </tr>
+        </table>
+        <div id="result">
+        </div>
 
-<form id="cc">
-
-<br />
-<center> <img src='../Img/loading.gif' alt="" />正在加载，请稍后。。。 </center>
-</form>
-
+    </div>
+    </form>
 </body>
 </html>

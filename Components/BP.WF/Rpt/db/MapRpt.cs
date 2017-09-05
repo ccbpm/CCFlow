@@ -658,7 +658,6 @@ namespace BP.WF.Rpt
             return base.beforeDelete();
         }
         #endregion 其他方法.
-
     }
     /// <summary>
     /// 报表设计s

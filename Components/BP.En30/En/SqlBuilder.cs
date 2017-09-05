@@ -2276,8 +2276,6 @@ namespace BP.En
                                 continue;
                         }
                     }
-
-                    err = "字段:" + attr.Key + ",名称:" + attr.Desc;
                     switch (attr.MyDataType)
                     {
                         case DataType.AppString:
@@ -2287,38 +2285,28 @@ namespace BP.En
                             ps.Add(attr.Key, en.GetValIntByKey(attr.Key));
                             break;
                         case DataType.AppInt:
-                            if (attr.Key == "MyPK") //特殊判断解决truck 是64位的int类型的数值问题.
+                            if (attr.Key == "MyPK") //特殊判断解决 truck 是64位的int类型的数值问题.
+                            {
                                 ps.Add(attr.Key, en.GetValInt64ByKey(attr.Key));
+                            }
                             else
                             {
-                                if (IsEnableNull)
+                                if (en.Row[attr.Key] == DBNull.Value)
                                 {
-                                    string s = en.GetValStrByKey(attr.Key).ToString();
-                                    if (string.IsNullOrEmpty(s))
-                                        ps.AddDBNull(attr.Key); //, DBNull.Value);
-                                    else
-                                        ps.Add(attr.Key, int.Parse(s));
+                                    ps.Add(attr.Key, int.Parse(attr.DefaultValOfReal));
+                                    continue;
                                 }
+
+                                string strInt = en.Row[attr.Key].ToString();
+                                if (strInt == null || strInt == "" || strInt == "null")
+                                    ps.Add(attr.Key, int.Parse(attr.DefaultValOfReal));
                                 else
-                                {
-                                    ps.Add(attr.Key, en.GetValIntByKey(attr.Key));
-                                }
+                                    ps.Add(attr.Key, int.Parse(strInt));
                             }
                             break;
                         case DataType.AppFloat:
                         case DataType.AppDouble:
-                            string str1 = en.GetValStrByKey(attr.Key).ToString();
-                            if (string.IsNullOrEmpty(str1))
-                            {
-                                if (IsEnableNull)
-                                    ps.Add(attr.Key, DBNull.Value);
-                                else
-                                    ps.Add(attr.Key, 0);
-                            }
-                            else
-                            {
-                                ps.Add(attr.Key, decimal.Parse(str1));
-                            }
+                            ps.Add(attr.Key, en.GetValFloatByKey(attr.Key, 0));
                             break;
                         case DataType.AppMoney:
                             string str = en.GetValStrByKey(attr.Key) as string;
@@ -2349,7 +2337,7 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                throw new Exception("生成参数期间错误:" + err + " 错误信息:" + ex.Message);
+                throw new Exception("生成参数期间错误:" + err + "@截获信息:" + err + " 错误信息:" + ex.Message);
             }
 
             if (keys != null)

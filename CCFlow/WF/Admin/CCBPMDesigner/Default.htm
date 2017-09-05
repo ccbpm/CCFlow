@@ -19,6 +19,7 @@
     <script src="lib/browserReady.js" type="text/javascript"></script>
     <script src="js/CCBPMDesignerData.js" type="text/javascript"></script>
     <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="js/FuncTrees.js" type="text/javascript"></script>
     <script src="js/Left.js" type="text/javascript"></script>
     <style type="text/css">
@@ -201,7 +202,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Default_Init&m=" + Math.random(),
+                url: Handler + "?DoType=Default_Init&m=" + Math.random()+"&SID="+GetQueryString("SID")+"&UserNo="+GetQueryString("UserNo"),
                 dataType: 'html',
                 success: function (data) {
 

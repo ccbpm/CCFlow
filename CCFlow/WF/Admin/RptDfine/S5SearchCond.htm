@@ -10,6 +10,7 @@
     <script src="/WF/Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
     <script type="text/javascript" src="/WF/Scripts/QueryString2016.js"></script>
     <script src="/WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js"></script>
     <script language="javascript" type="text/javascript" >
 
         //页面启动函数.
@@ -49,19 +50,25 @@
                     document.getElementById("CB_Key").checked = md.RptIsSearchKey;
 
                     //绑定外键字段.
-                    for (var i = 0, length = Sys_MapAttr.length; i < length; i++) {
-
+                    for (var i = 0, length = Sys_MapAttr.length; i < length; i++) {                        
                         var attr = Sys_MapAttr[i],
                             flag = false;
+
+                        if (attr.UIContralType != 1) {
+                            continue;
+                        }
+
                         if (md.RptSearchKeys) {
                             flag = md.RptSearchKeys.indexOf("*" + attr.KeyOfEn + "*") != -1;
                         }
                         $("#FKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
                     }
 
+                    $("#DDL_DTSearchWay").val(md.RptDTSearchWay);
+
                     //绑定日期下拉框.
                     if (Sys_MapAttrOfDate != null) {
-                        GenerBindDDL("DDL_DTSearchKey", Sys_MapAttrOfDate, "KeyOfEn", "Name", Sys_MapData.RptDTSearchKey);
+                        GenerBindDDL("DDL_DTSearchKey", Sys_MapAttrOfDate, "KeyOfEn", "Name", md.RptDTSearchKey);
                     }
 
                     return;
@@ -77,7 +84,7 @@
                 DTSearchWay = document.getElementById("DDL_DTSearchWay").value,
                 DTSearchKey = document.getElementById("DDL_DTSearchKey").value,
                 Fields = "";
-
+            alert(DTSearchWay);
             var oChecks = document.getElementById("FKeys").getElementsByTagName("input");
             for (var i = 0, len = oChecks.length; i < len; i++) {
                 var item = oChecks[i];

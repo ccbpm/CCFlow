@@ -10,6 +10,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using BP.Web.Controls;
 
 namespace BP.WF.HttpHandler
 {
@@ -222,7 +223,7 @@ namespace BP.WF.HttpHandler
 
             //查询出来枚举与外键类型的字段集合.
             MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo);
             ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
 
             #region 检查是否有日期字段.
@@ -231,7 +232,7 @@ namespace BP.WF.HttpHandler
             {
                 if (mattr.UIVisible == false)
                     continue;
-
+                
                 if (mattr.MyDataType == DataType.AppDate || mattr.MyDataType == DataType.AppDateTime)
                 {
                     isHave = true;
@@ -252,7 +253,7 @@ namespace BP.WF.HttpHandler
                         dtAttrs.AddEntity(mattr);
                     }
                 }
-                ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttrOfDate"));
+                ds.Tables.Add(dtAttrs.ToDataTableField("Sys_MapAttrOfDate"));
             }
             #endregion
 
@@ -293,7 +294,7 @@ namespace BP.WF.HttpHandler
             //日期字段.
             string DTSearchKey = this.GetRequestVal("DTSearchKey");
             md.RptDTSearchKey = DTSearchKey;
-            md.Update();
+            md.Save();
 
             Cash.Map_Cash.Remove(this.RptNo);
             return "保存成功.";

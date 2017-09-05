@@ -441,7 +441,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyStartFlow()
         {
-            return "../../RptDfine/MyStartFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
+            return "../../RptDfine/MyStartFlow.htm?RptNo=ND" + int.Parse(this.No) + "RptMy&FK_MapData=" + this.No + "&FK_Flow=" + this.No;
         }
         #endregion
 

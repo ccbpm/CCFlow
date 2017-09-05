@@ -8,104 +8,420 @@
     <link href="../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script language="javascript" type="text/javascript">
-        var fk_flow = GetQueryString('FK_Flow');
-
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
+    <script src="../Comm/Gener.js"></script>
+    <style type="text/css">
+        .conditions{
+            line-height:35px;
         }
 
-        $(function () {
+        .conditions input[type='text']{
+            line-height:30px;
+        }
 
-            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+        .conditions.hide {
+            display: none;
+        }
 
-            InitPage();
+        .conditions .con-span {
+            display: inline-block;
+            width: 70px;
+        }
+    </style>
+    <script type="text/javascript">
+        var sinfo;
+        var filterCtrls = new Array();
+        var rptNo = GetQueryString("RptNo");
+        var fk_flow = GetQueryString("FK_Flow");
+        var md;
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        var refidx = 0;
 
-            $("#Msg").html("");
+        buttons.splice(1, 0, {
+            text: '清空',
+            handler: function (target) {
+                $(target).datebox('clear');
+                $(target).datebox('hidePanel');
+            }
         });
 
-        //初始化数据.
-        function InitPage() {
-            if (!fk_flow)
-                fk_flow = "001";
+        $(function () {
+            var param = {
+                DoType: "MyStartFlow_Init",
+                RptNo: rptNo,
+                FK_Flow: fk_flow,
+                pageSize: $("#dg").datagrid("options").pageSize
+            };
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=MyStartFlow_Init&FK_Flow=" + fk_flow + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            Handler_AjaxQueryData(param, function (data) {
+                if (data.indexOf("err@") != -1) {
+                    $.messager.alert("错误", data, "icon-error");
+                    return;
+                }
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
+                var d = sinfo = eval("(" + data + ")");
+                md = d.SYS_MAPDATA[0];
+
+                if (md.RPTISSEARCHKEY) {
+                    $("#tb_main").prepend('<span class="con-span">关键字: </span><input type="text" id="tb_key" style="width:166px;" />');
+                    $("#tb_key").textbox().textbox("setText", md.T_SEARCHKEY);
+                }
+
+                if (md.RPTDTSEARCHWAY != 0) {
+                    $("#btn_search").before('<span class="con-span">' + md.T_DATELABEL + '从: </span><input type="text" id="tb_dtFrom" style="width:166px;" />');
+                    $("#tb_dtFrom").after('<span class="con-span">到: </span><input type="text" id="tb_dtTo" style="width:166px;" />');
+
+                    if (md.RPTDTSEARCHWAY == 1) {
+                        $("#tb_dtFrom").datebox({ buttons: buttons }).datebox("setValue", md.T_DTFROM);
+                        $("#tb_dtTo").datebox({ buttons: buttons }).datebox("setValue", md.T_DTTO);
                     }
-
-                    data = JSON.parse(data);
-
-                    var attrs = data["Sys_MapAttr"];
-                    var dt = data["dt"];
-
-                    //输出列..
-                    var newRow = "";
-                    newRow = "<tr ><th class=Idx>序</th>";
-                    for (var i = 0; i < attrs.length; i++) {
-                        var attr = attrs[i];
-                        newRow += "<th>" + attr.Name + "</th>";
-                    }
-                    newRow += "</tr>";
-                    $("#Table1 tr:last").after(newRow);
-
-
-                    //输出数据.
-                    newRow = "";
-                    for (var i = 0; i < dt.length; i++) {
-                        var row = dt[i];
-                        newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        for (var num = 0; num < attrs.length; num++) {
-                            var attr = attrs[num];
-                            newRow += "<td>" + row[attr.KeyOfEn] + "</td>";
-                        }
-                        newRow += "</tr>";
-                        $("#Table1 tr:last").after(newRow);
+                    else {
+                        $("#tb_dtFrom").datetimebox({ buttons: buttons }).datetimebox("setValue", md.T_DTFROM);
+                        $("#tb_dtTo").datetimebox({ buttons: buttons }).datetimebox("setValue", md.T_DTTO);
                     }
                 }
 
+                $("#btn_search").css("visibility", "visible");
+                $("#btn_reset").css("visibility", "visible");
+
+                $("#btn_search").after('&nbsp;&nbsp;<a href="javascript:void(0)" iconCls="icon-excel" id="btn_export">导出</a>');
+                $("#btn_export").linkbutton();
+
+                if (d.FILTERCTRLS.length > 0) {
+                    $("#tb_main").append('<a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
+                    $("#btn_more").linkbutton();
+
+                    $(".more").click(function () {
+                        $(this).closest(".conditions").siblings().toggleClass("hide");
+                        $("#dg").datagrid("resize");
+                    });
+
+                    //filters
+                    var ctrl;
+                    var fcId;
+                    $.each(d.FILTERCTRLS, function (idx, c) {
+                        ctrl = '<span class="con-span">' + c.NAME + ': </span>';
+
+                        switch (c.TYPE) {
+                            case "date":
+                                fcId = "D_" + c.ID;
+                                ctrl += '<input type="text" id="' + fcId + '" style="width:166px;" />';
+                                $("#filters").append(ctrl);
+                                $("#" + fcId).datebox({ buttons: buttons }).datebox("setValue", c.DEFAULTVALUE);
+                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                break;
+                            case "datetime":
+                                fcId = "DT_" + c.ID;
+                                ctrl += '<input type="text" id="' + fcId + '" style="width:166px;" />';
+                                $("#filters").append(ctrl);
+                                $("#" + fcId).datetimebox().datetimebox("setValue", c.DEFAULTVALUE);
+                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                break;
+                            case "text":
+                                fcId = "TB_" + c.ID;
+                                ctrl += '<input type="text" id="' + fcId + '" style="width:166px;" />';
+                                $("#filters").append(ctrl);
+                                $("#" + fcId).textbox({
+                                    icons: [{
+                                        iconCls: 'icon-clear',
+                                        handler: function (e) {
+                                            $(e.data.target).textbox('clear');
+                                        }
+                                    }]
+                                }).textbox("setText", c.DEFAULTVALUE);
+                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                break;
+                            case "combo":
+                                fcId = "DDL_" + c.ID;
+                                ctrl += '<select id="' + fcId + '" style="width:166px;">';
+
+                                $.each(d[c.ID.toUpperCase()], function (idx1, item) {
+                                    ctrl += '<option value="' + item[c.VALUEFIELD.toUpperCase()] + '">' + item[c.TEXTFIELD.toUpperCase()] + '</option>';
+                                });
+
+                                ctrl += '</select>';
+                                $("#filters").append(ctrl);
+                                $("#" + fcId).combobox({
+                                    multiple: true,
+                                    onSelect: function (d) {
+                                        var cmb = $(this);
+                                        var vals = cmb.combobox('getValues');
+
+                                        if (d.value == "all") {
+                                            $.each(vals, function (idx2, val) {
+                                                if (val == "all") {
+                                                    return true;
+                                                }
+
+                                                cmb.combobox("unselect", val);
+                                            });
+                                        }
+                                        else {
+                                            cmb.combobox("unselect", "all");
+                                        }
+                                    }
+                                });
+
+                                if (c.DEFAULTVALUE) {
+                                    if (c.DEFAULTVALUE.indexOf('..') != -1) {
+                                        var vals = [];
+                                        $.each(d[c.ID.toUpperCase()], function (idx1, item) {
+                                            if (c.DEFAULTVALUE.indexOf('.' + item[c.VALUEFIELD.toUpperCase()] + '.') != -1) {
+                                                vals.push(item[c.VALUEFIELD.toUpperCase()]);
+                                            }
+                                        });
+
+                                        $("#" + fcId).combobox("setValues", vals);
+                                    }
+                                    else {
+                                        $("#" + fcId).combobox("setValue", c.DEFAULTVALUE);
+                                    }
+                                }
+
+                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                break;
+                            case "combotree":
+                                fcId = "DDL_" + c.ID;
+                                ctrl += '<select id="' + fcId + '" style="width:166px;"></select>';
+                                $("#filters").append(ctrl);
+                                $("#" + fcId).combotree({
+                                    checkbox: true,
+                                    multiple: true,
+                                    data: d[c.ID.toUpperCase()]
+                                });
+
+                                if (c.DEFAULTVALUE) {
+                                    if (c.DEFAULTVALUE.indexOf('..') != -1) {
+                                        var vals = [];
+                                        $.each(d[c.ID.toUpperCase()], function (idx1, item) {
+                                            if (c.DEFAULTVALUE.indexOf('.' + item[c.VALUEFIELD.toUpperCase()] + '.') != -1) {
+                                                vals.push(item[c.VALUEFIELD.toUpperCase()]);
+                                            }
+                                        });
+
+                                        $("#" + fcId).combotree("setValues", vals);
+                                    }
+                                    else {
+                                        $("#" + fcId).combotree("setValue", c.DEFAULTVALUE);
+                                    }
+                                }
+
+                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                break;
+                            case "checkbox":
+                                fcId = "CB_" + c.ID;
+                                ctrl += '<input id="' + fcId + '" type="checkbox" />';
+                                $("#filters").append(ctrl);
+                                $("#" + fcId)[0].checked = c.DEFAULTVALUE;
+                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                }
+
+                //形成数据
+                var cols = [];
+
+                //增加列
+                $.each(d.SYS_MAPATTR, function (idx, c) {
+                    cols.push({
+                        title: c.NAME,
+                        field: c.NO.toUpperCase(),
+                        width: c.WIDTH
+                    });
+                });
+
+                $("#dg").datagrid({ columns: [cols], resizable: true });
+                LoadData(d.MAINDATA, md.T_TOTAL, $("#dg").datagrid("options").pageSize, 1);
+
+                //btn events
+                $("#btn_search").linkbutton({
+                    onClick: function () {
+                        Search($("#dg").datagrid("options").pageSize, 1);
+                    }
+                });
+            }, this);
+        });
+
+        function Edit(rowIndex, rowData) {
+            var url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=" + ensName + "&" + sinfo.PKField + "=" + rowData[sinfo.PKField] + "&inlayer=1&t=" + Math.random();
+            OpenDialogAndCloseRefresh(url, "编辑", sinfo.Config.WinCardW, sinfo.Config.WinCardH, "icon-edit");
+        }
+
+        function Search(pageSize, pageIdx) {
+            var key = "";
+            var mvals = "";
+            var vals = "";
+            var val;
+            var dtFrom = "";
+            var dtTo = "";
+
+            if ($("#tb_key").length > 0) {
+                key = $("#tb_key").textbox("getText");
+            }
+
+            if ($("#tb_dtFrom").length > 0) {
+                dtFrom = $("#tb_dtFrom").textbox("getText");
+                dtTo = $("#tb_dtTo").textbox("getText");
+            }
+
+            $.each(filterCtrls, function () {
+                switch (this.type) {
+                    case "date":
+                        val = $("#" + this.id).datebox("getValue");
+
+                        if (val.length > 0) {
+                            vals += "@" + this.id + "=" + val;
+                        }
+                        break;
+                    case "datetime":
+                        val = $("#" + this.id).datetimebox("getValue");
+
+                        if (val.length > 0) {
+                            vals += "@" + this.id + "=" + val;
+                        }
+                        break;
+                    case "text":
+                        val = $("#" + this.id).textbox("getText");
+
+                        if (val.length > 0) {
+                            vals += "@" + this.id + "=" + val;
+                        }
+                        break;
+                    case "combo":
+                    case "combotree":
+                        val = $("#" + this.id).combobox("getValues");
+
+                        if (val.length > 1) {
+                            mvals += "@" + this.id.substr("DDL_".length) + "=" + JoinMVals(val);
+                            vals += "@" + this.id + "=mvals";
+                        }
+
+                        if (val.length == 1) {
+                            vals += "@" + this.id + "=" + val[0];
+                        }
+                        break;
+                    case "checkbox":
+                        val = $("#" + this.id)[0].checked ? 1 : 0;
+                        vals += "@" + this.id + "=" + val;
+                        break;
+                }
+            });
+
+            var param = {
+                DoType: "MyStartFlow_Search",
+                FK_Flow: fk_flow,
+                RptNo: rptNo,
+                key: key,
+                dtFrom: dtFrom,
+                dtTo: dtTo,
+                mvals: mvals,
+                vals: vals,
+                pageSize: pageSize,
+                pageIdx: pageIdx
+            };
+
+            Handler_AjaxQueryData(param, function (data) {
+                if (data.indexOf("err@") != -1) {
+                    $.messager.alert("错误", data, "icon-error");
+                    return;
+                }
+
+                var d = eval("(" + data + ")");
+
+                LoadData(d.MAINDATA, d.SYS_MAPDATA[0].T_TOTAL, pageSize, pageIdx);
+            }, this);
+        }
+
+        function LoadData(data, total, pageSize, pageIdx) {
+            $("#dg").datagrid({
+                pageSize: pageSize,
+                pageNumber: pageIdx
+            });
+
+            $("#dg").datagrid("loadData", data);
+
+            var pager = $("#dg").datagrid("getPager");
+
+            pager.pagination({
+                showRefresh: false,
+                total: total,
+                pageSize: pageSize,
+                pageNumber: pageIdx,
+                onSelectPage: function (pageNum, pageSize) {
+                    Search(pageSize, pageNum);
+                }
             });
         }
 
-        function Search() {
+        function JoinMVals(mvals) {
+            var j = "";
 
-            alert('第2期开发');
-            return;
+            $.each(mvals, function () {
+                j += "." + this + ".";
+            });
+
+            return j;
         }
-        function ExpToExcel() {
-            alert('第2期开发');
-            return;
+
+        function Reset() {
+            if (md.RPTISSEARCHKEY) {
+                $("#tb_key").textbox("clear");
+            }
+
+            if (md.RPTDTSEARCHWAY != 0) {
+                $("#tb_dtFrom").datebox("clear");
+                $("#tb_dtTo").datebox("clear");
+            }
+
+            $.each(filterCtrls, function () {
+                switch (this.type) {
+                    case "date":
+                        $("#" + this.id).datebox("clear");
+                        break;
+                    case "datetime":
+                        $("#" + this.id).datetimebox("clear");
+                        break;
+                    case "text":
+                        $("#" + this.id).textbox("clear");
+                        break;
+                    case "combo":
+                    case "combotree":
+                        $("#" + this.id).combobox("setValue", "all");
+                        break;
+                    case "checkbox":
+                        $("#" + this.id)[0].checked = false;
+                        break;
+                }
+            });
+        }
+
+        function closeDlg() {
+            $("#eudlg").dialog("close");
         }
     </script>
 </head>
-<body onkeypress="Esc()" class="easyui-layout">
-
-    <div data-options="region:'center'" title="流程查询">
-
-        <div id="Toolbar"> 关键字: <input type="text" id="TB_Keys" name="TB_Keys" /> <input type="button" id="Btn_Search" onclick="Search()" value="查询" /> <input type="button" id="Btn_ExpToExcel" onclick="ExpToExcel()" value="导出Excel" />  </div>
-        <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
-            <tr>
-                <td></td>
-            </tr>
-        </table>
+<body class="easyui-layout">
+    <div data-options="region:'center',border:false">
+        <table class="easyui-datagrid" id="dg" title=" " data-options="pageSize:15,pageList:[15,30,50,100],toolbar:'#tb',fit:true,pagination:true,rownumbers:true"></table>
     </div>
-    <div id="Msg" />
+    <div id="tb" style="padding: 0 15px;">
+        <div class="conditions" id="tb_main">
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-search" data-options="selected:true"
+               id="btn_search" style="visibility: hidden">查询</a> <a href="javascript:void(0)" class="easyui-linkbutton"
+                                                                    iconcls="icon-reload" id="btn_reset" style="visibility: hidden" onclick="Reset()">重置</a>
+        </div>
+        <div class="conditions hide" id="filters">
+        </div>
     </div>
-
+    <!--<div id="Msg">
+    </div>-->
 </body>
 </html>

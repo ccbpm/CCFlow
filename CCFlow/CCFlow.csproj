@@ -157,6 +157,7 @@
     </Content>
     <Content Include="DataUser\InstancePacketOfData\Template\index.htm" />
     <Content Include="DataUser\InstancePacketOfData\Template\icon.png" />
+    <Content Include="DataUser\InstancePacketOfData\Template\ShuiYin.png" />
     <Content Include="DataUser\Style\ccbpm.css" />
     <Content Include="DataUser\Style\dtl.css" />
     <Content Include="DataUser\XML\Menu.xml">
@@ -1627,9 +1628,6 @@
     <Content Include="WF\Admin\ClientBin\NodeIcon\采购.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\销售.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\顾客.png" />
-    <Content Include="WF\Admin\CondDept.aspx" />
-    <Content Include="WF\Admin\ConditionSubFlow.aspx" />
-    <Content Include="WF\Admin\ConditionSubFlowDtl.aspx" />
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\DoType.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
@@ -6936,7 +6934,6 @@
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.eot" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.ttf" />
     <None Include="WF\Admin\CCFormDesigner\normalize\fonts\linecons\linecons.woff" />
-    <Content Include="WF\Admin\Condition.Master" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\Handler.ashx" />
@@ -7758,34 +7755,6 @@
     </Compile>
     <Compile Include="WF\Admin\CCFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\CondDept.aspx.cs">
-      <DependentUpon>CondDept.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\CondDept.aspx.designer.cs">
-      <DependentUpon>CondDept.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\Condition.Master.cs">
-      <DependentUpon>Condition.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\Condition.Master.designer.cs">
-      <DependentUpon>Condition.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\ConditionSubFlow.aspx.cs">
-      <DependentUpon>ConditionSubFlow.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\ConditionSubFlow.aspx.designer.cs">
-      <DependentUpon>ConditionSubFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\ConditionSubFlowDtl.aspx.cs">
-      <DependentUpon>ConditionSubFlowDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\ConditionSubFlowDtl.aspx.designer.cs">
-      <DependentUpon>ConditionSubFlowDtl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\DoPort.aspx.cs">
       <DependentUpon>DoPort.aspx</DependentUpon>
@@ -10042,7 +10011,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bin\" />
-    <Folder Include="DataUser\InstancePacketOfData\Template\ND18801\" />
     <Folder Include="DataUser\OrgData\" />
     <Folder Include="DataUser\TempleteExpEns\" />
     <Folder Include="WF\Admin\RptDfine\Img\" />

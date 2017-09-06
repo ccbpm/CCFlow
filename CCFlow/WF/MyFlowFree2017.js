@@ -444,9 +444,9 @@ function initBar() {
         url: url,
         dataType: 'html',
         success: function (data) {
-            
+
             var barHtml = data;
-            
+
             $('.Bar').html(barHtml);
 
             if ($('[name=Return]').length > 0) {
@@ -482,7 +482,12 @@ function initBar() {
             if ($('[name=SelectAccepter]').length > 0) {
                 $('[name=SelectAccepter]').attr('onclick', '');
                 $('[name=SelectAccepter]').unbind('click');
-                $('[name=SelectAccepter]').bind('click', function () { initModal("accepter"); $('#returnWorkModal').modal().show(); });
+                $('[name=SelectAccepter]').bind('click', function () {
+
+                  
+                    initModal("accepter");
+                    $('#returnWorkModal').modal().show();
+                });
             }
             if ($('[name=Delete]').length > 0) {
                 var onclickFun = $('[name=Delete]').attr('onclick');
@@ -1779,10 +1784,12 @@ function Send() {
     if (checkReg() == false) {
         formCheckResult = false;
     }
-    if (!formCheckResult) {
-        //alert("表单填写不正常，请检查！！！");
+
+    if (formCheckResult==false) {
+        alert("发送错误:请检查字段边框变红颜色的是否填写完整？");
         return;
     }
+
     var toNode = 0;
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {

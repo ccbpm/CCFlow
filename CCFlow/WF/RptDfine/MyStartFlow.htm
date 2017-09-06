@@ -14,14 +14,14 @@
     <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
     <script src="../Scripts/CommonUnite.js" type="text/javascript"></script>
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
-    <script src="../Comm/Gener.js"></script>
+    <script src="../Comm/Gener.js" type="text/jscript"></script>
     <style type="text/css">
-        .conditions {
-            line-height: 35px;
+        .conditions{
+            line-height:35px;
         }
 
-        .conditions input[type='text'] {
-            line-height: 30px;
+        .conditions input[type='text']{
+            line-height:30px;
         }
 
         .conditions.hide {
@@ -31,20 +31,11 @@
         .conditions .con-span {
             display: inline-block;
             width: 70px;
-            margin-left:5px;
-        }
-
-        .menu_sep{
-            height:100%;
-            border-left:1px solid #ccc;
-            width:1px;
-            margin-left:5px;
-            margin-right:5px;
         }
     </style>
     <script type="text/javascript">
         var sinfo;
-        var filterCtrls = new Array();
+        var FilterCtrls = new Array();
         var rptNo = GetQueryString("RptNo");
         var fk_flow = GetQueryString("FK_Flow");
         var md;
@@ -64,49 +55,46 @@
                 DoType: "MyStartFlow_Init",
                 RptNo: rptNo,
                 FK_Flow: fk_flow,
-                pageSize: $("#dg").datagrid("options").pageSize
+                PageSize: $("#dg").datagrid("options").PageSize
             };
 
             Handler_AjaxQueryData(param, function (data) {
+
                 if (data.indexOf("err@") != -1) {
                     $.messager.alert("错误", data, "icon-error");
                     return;
                 }
 
                 var d = sinfo = eval("(" + data + ")");
-                md = d.SYS_MAPDATA[0];
+                md = d.Sys_MapData[0];
 
-                if (md.RPTISSEARCHKEY) {
+                if (md.RptIsSearchKey) {
                     $("#tb_main").prepend('<span class="con-span">关键字: </span><input type="text" id="tb_key" style="width:166px;" />');
-                    $("#tb_key").textbox().textbox("setText", md.T_SEARCHKEY);
+                    $("#tb_key").textbox().textbox("setText", md.T_SearchKey);
                 }
 
-                if (md.RPTDTSEARCHWAY && md.RPTDTSEARCHWAY != 0) {
-                    $("#btn_search").before('<span class="con-span">' + md.T_DATELABEL + '从: </span><input type="text" id="tb_dtFrom" style="width:166px;" />');
+                if (md.RptDTSearchWay != 0) {
+                    $("#btn_search").before('<span class="con-span">' + md.T_DateLabel + '从: </span><input type="text" id="tb_dtFrom" style="width:166px;" />');
                     $("#tb_dtFrom").after('<span class="con-span">到: </span><input type="text" id="tb_dtTo" style="width:166px;" />');
 
-                    if (md.RPTDTSEARCHWAY == 1) {
-                        $("#tb_dtFrom").datebox({ buttons: buttons }).datebox("setValue", md.T_DTFROM);
-                        $("#tb_dtTo").datebox({ buttons: buttons }).datebox("setValue", md.T_DTTO);
+                    if (md.RptDTSearchWay == 1) {
+                        $("#tb_dtFrom").datebox({ buttons: buttons }).datebox("setValue", md.T_DTFrom);
+                        $("#tb_dtTo").datebox({ buttons: buttons }).datebox("setValue", md.T_DTTo);
                     }
                     else {
-                        $("#tb_dtFrom").datetimebox({ buttons: buttons }).datetimebox("setValue", md.T_DTFROM);
-                        $("#tb_dtTo").datetimebox({ buttons: buttons }).datetimebox("setValue", md.T_DTTO);
+                        $("#tb_dtFrom").datetimebox({ buttons: buttons }).datetimebox("setValue", md.T_DTFrom);
+                        $("#tb_dtTo").datetimebox({ buttons: buttons }).datetimebox("setValue", md.T_DTTo);
                     }
                 }
 
                 $("#btn_search").css("visibility", "visible");
                 $("#btn_reset").css("visibility", "visible");
 
-                $("#btn_open").after('&nbsp;&nbsp;<a href="javascript:void(0)" iconCls="icon-excel" id="btn_export">导出</a>');
-                $("#btn_export").linkbutton({
-                    onClick: function () {
-                        window.open('../Do.aspx?ActionType=DownMyStartFlowExcel&RptNo=' + rptNo + '&FK_Flow=' + fk_flow, '_blank');
-                    }
-                });
+                $("#btn_search").after('&nbsp;&nbsp;<a href="javascript:void(0)" iconCls="icon-excel" id="btn_export">导出</a>');
+                $("#btn_export").linkbutton();
 
-                if (d.FILTERCTRLS.length > 0) {
-                    $("#tb_main").append('<span class="menu_sep"></span><a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
+                if (d.FilterCtrls.length > 0) {
+                    $("#tb_main").append('<a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
                     $("#btn_more").linkbutton();
 
                     $(".more").click(function () {
@@ -117,23 +105,23 @@
                     //filters
                     var ctrl;
                     var fcId;
-                    $.each(d.FILTERCTRLS, function (idx, c) {
-                        ctrl = '<span class="con-span">' + c.NAME + ': </span>';
+                    $.each(d.FilterCtrls, function (idx, c) {
+                        ctrl = '<span class="con-span">' + c.Name + ': </span>';
 
-                        switch (c.TYPE) {
+                        switch (c.Type) {
                             case "date":
                                 fcId = "D_" + c.ID;
                                 ctrl += '<input type="text" id="' + fcId + '" style="width:166px;" />';
                                 $("#filters").append(ctrl);
-                                $("#" + fcId).datebox({ buttons: buttons }).datebox("setValue", c.DEFAULTVALUE);
-                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                $("#" + fcId).datebox({ buttons: buttons }).datebox("setValue", c.DefaultValue);
+                                FilterCtrls.push({ type: c.Type, id: fcId });
                                 break;
                             case "datetime":
                                 fcId = "DT_" + c.ID;
                                 ctrl += '<input type="text" id="' + fcId + '" style="width:166px;" />';
                                 $("#filters").append(ctrl);
-                                $("#" + fcId).datetimebox().datetimebox("setValue", c.DEFAULTVALUE);
-                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                $("#" + fcId).datetimebox().datetimebox("setValue", c.DefaultValue);
+                                FilterCtrls.push({ type: c.Type, id: fcId });
                                 break;
                             case "text":
                                 fcId = "TB_" + c.ID;
@@ -146,15 +134,15 @@
                                             $(e.data.target).textbox('clear');
                                         }
                                     }]
-                                }).textbox("setText", c.DEFAULTVALUE);
-                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                }).textbox("setText", c.DefaultValue);
+                                FilterCtrls.push({ type: c.Type, id: fcId });
                                 break;
                             case "combo":
                                 fcId = "DDL_" + c.ID;
                                 ctrl += '<select id="' + fcId + '" style="width:166px;">';
 
                                 $.each(d[c.ID.toUpperCase()], function (idx1, item) {
-                                    ctrl += '<option value="' + item[c.VALUEFIELD.toUpperCase()] + '">' + item[c.TEXTFIELD.toUpperCase()] + '</option>';
+                                    ctrl += '<option value="' + item[c.ValueField.toUpperCase()] + '">' + item[c.TEXTFIELD.toUpperCase()] + '</option>';
                                 });
 
                                 ctrl += '</select>';
@@ -180,23 +168,23 @@
                                     }
                                 });
 
-                                if (c.DEFAULTVALUE) {
-                                    if (c.DEFAULTVALUE.indexOf('..') != -1) {
+                                if (c.DefaultValue) {
+                                    if (c.DefaultValue.indexOf('..') != -1) {
                                         var vals = [];
                                         $.each(d[c.ID.toUpperCase()], function (idx1, item) {
-                                            if (c.DEFAULTVALUE.indexOf('.' + item[c.VALUEFIELD.toUpperCase()] + '.') != -1) {
-                                                vals.push(item[c.VALUEFIELD.toUpperCase()]);
+                                            if (c.DefaultValue.indexOf('.' + item[c.ValueField.toUpperCase()] + '.') != -1) {
+                                                vals.push(item[c.ValueField.toUpperCase()]);
                                             }
                                         });
 
                                         $("#" + fcId).combobox("setValues", vals);
                                     }
                                     else {
-                                        $("#" + fcId).combobox("setValue", c.DEFAULTVALUE);
+                                        $("#" + fcId).combobox("setValue", c.DefaultValue);
                                     }
                                 }
 
-                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                FilterCtrls.push({ type: c.Type, id: fcId });
                                 break;
                             case "combotree":
                                 fcId = "DDL_" + c.ID;
@@ -208,30 +196,30 @@
                                     data: d[c.ID.toUpperCase()]
                                 });
 
-                                if (c.DEFAULTVALUE) {
-                                    if (c.DEFAULTVALUE.indexOf('..') != -1) {
+                                if (c.DefaultValue) {
+                                    if (c.DefaultValue.indexOf('..') != -1) {
                                         var vals = [];
                                         $.each(d[c.ID.toUpperCase()], function (idx1, item) {
-                                            if (c.DEFAULTVALUE.indexOf('.' + item[c.VALUEFIELD.toUpperCase()] + '.') != -1) {
-                                                vals.push(item[c.VALUEFIELD.toUpperCase()]);
+                                            if (c.DefaultValue.indexOf('.' + item[c.ValueField.toUpperCase()] + '.') != -1) {
+                                                vals.push(item[c.ValueField.toUpperCase()]);
                                             }
                                         });
 
                                         $("#" + fcId).combotree("setValues", vals);
                                     }
                                     else {
-                                        $("#" + fcId).combotree("setValue", c.DEFAULTVALUE);
+                                        $("#" + fcId).combotree("setValue", c.DefaultValue);
                                     }
                                 }
 
-                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                FilterCtrls.push({ type: c.Type, id: fcId });
                                 break;
                             case "checkbox":
                                 fcId = "CB_" + c.ID;
                                 ctrl += '<input id="' + fcId + '" type="checkbox" />';
                                 $("#filters").append(ctrl);
-                                $("#" + fcId)[0].checked = c.DEFAULTVALUE;
-                                filterCtrls.push({ type: c.TYPE, id: fcId });
+                                $("#" + fcId)[0].checked = c.DefaultValue;
+                                FilterCtrls.push({ type: c.Type, id: fcId });
                                 break;
                             default:
                                 break;
@@ -252,18 +240,23 @@
                 });
 
                 $("#dg").datagrid({ columns: [cols], resizable: true });
-                LoadData(d.MAINDATA, md.T_TOTAL, $("#dg").datagrid("options").pageSize, 1);
+                LoadData(d.MainData, md.T_total, $("#dg").datagrid("options").PageSize, 1);
 
                 //btn events
                 $("#btn_search").linkbutton({
                     onClick: function () {
-                        Search($("#dg").datagrid("options").pageSize, 1);
+                        Search($("#dg").datagrid("options").PageSize, 1);
                     }
                 });
             }, this);
         });
 
-        function Search(pageSize, pageIdx) {
+        function Edit(rowIndex, rowData) {
+            var url = "/WF/Comm/En.htm?EnsName=" + ensName + "&" + sinfo.PKField + "=" + rowData[sinfo.PKField] + "&inlayer=1&t=" + Math.random();
+            OpenDialogAndCloseRefresh(url, "编辑", sinfo.Config.WinCardW, sinfo.Config.WinCardH, "icon-edit");
+        }
+
+        function Search(PageSize, PageIdx) {
             var key = "";
             var mvals = "";
             var vals = "";
@@ -280,8 +273,8 @@
                 dtTo = $("#tb_dtTo").textbox("getText");
             }
 
-            $.each(filterCtrls, function () {
-                switch (this.type) {
+            $.each(FilterCtrls, function () {
+                switch (this.Type) {
                     case "date":
                         val = $("#" + this.id).datebox("getValue");
 
@@ -332,8 +325,8 @@
                 dtTo: dtTo,
                 mvals: mvals,
                 vals: vals,
-                pageSize: pageSize,
-                pageIdx: pageIdx
+                PageSize: PageSize,
+                PageIdx: PageIdx
             };
 
             Handler_AjaxQueryData(param, function (data) {
@@ -344,14 +337,14 @@
 
                 var d = eval("(" + data + ")");
 
-                LoadData(d.MAINDATA, d.SYS_MAPDATA[0].T_TOTAL, pageSize, pageIdx);
+                LoadData(d.MainData, d.Sys_MapData[0].T_total, PageSize, PageIdx);
             }, this);
         }
 
-        function LoadData(data, total, pageSize, pageIdx) {
+        function LoadData(data, total, PageSize, PageIdx) {
             $("#dg").datagrid({
-                pageSize: pageSize,
-                pageNumber: pageIdx
+                PageSize: PageSize,
+                pageNumber: PageIdx
             });
 
             $("#dg").datagrid("loadData", data);
@@ -361,10 +354,10 @@
             pager.pagination({
                 showRefresh: false,
                 total: total,
-                pageSize: pageSize,
-                pageNumber: pageIdx,
-                onSelectPage: function (pageNum, pageSize) {
-                    Search(pageSize, pageNum);
+                PageSize: PageSize,
+                pageNumber: PageIdx,
+                onSelectPage: function (pageNum, PageSize) {
+                    Search(PageSize, pageNum);
                 }
             });
         }
@@ -380,17 +373,17 @@
         }
 
         function Reset() {
-            if (md.RPTISSEARCHKEY) {
+            if (md.RptIsSearchKey) {
                 $("#tb_key").textbox("clear");
             }
 
-            if (md.RPTDTSEARCHWAY != 0) {
+            if (md.RptDTSearchWay != 0) {
                 $("#tb_dtFrom").datebox("clear");
                 $("#tb_dtTo").datebox("clear");
             }
 
-            $.each(filterCtrls, function () {
-                switch (this.type) {
+            $.each(FilterCtrls, function () {
+                switch (this.Type) {
                     case "date":
                         $("#" + this.id).datebox("clear");
                         break;
@@ -411,15 +404,6 @@
             });
         }
 
-        function ViewFlow(rowIndex, rowData) {
-            if (!rowData) {
-                rowData = $('#dg').datagrid('getSelected');
-                if (!rowData) return;
-            }
-
-            OpenEasyUiDialog('../WorkOpt/OneWork/OneWork.htm?currTab=Truck&WorkId=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FID=' + rowData.FID + '&t=' + Math.random(), 'eudlgframe', '流程轨迹', 1000, 618);
-        }
-
         function closeDlg() {
             $("#eudlg").dialog("close");
         }
@@ -427,14 +411,13 @@
 </head>
 <body class="easyui-layout">
     <div data-options="region:'center',border:false">
-        <table class="easyui-datagrid" id="dg" title="我发起的流程" data-options="pageSize:15,pageList:[15,30,50,100],toolbar:'#tb',fit:true,pagination:true,rownumbers:true,singleSelect:true,onDblClickRow:ViewFlow"></table>
+        <table class="easyui-datagrid" id="dg" title=" " data-options="PageSize:15,pageList:[15,30,50,100],toolbar:'#tb',fit:true,pagination:true,rownumbers:true"></table>
     </div>
     <div id="tb" style="padding: 0 15px;">
         <div class="conditions" id="tb_main">
-            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-search"
-               id="btn_search" style="visibility: hidden; margin-left:5px;">查询</a> <a href="javascript:void(0)" class="easyui-linkbutton"
-               iconcls="icon-reset" id="btn_reset" style="visibility: hidden" onclick="Reset()">重置</a><span class="menu_sep"></span><a href="javascript:void(0)"
-               class="easyui-linkbutton" iconcls="icon-open" id="btn_open" onclick="ViewFlow()">查看</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-search" data-options="selected:true"
+               id="btn_search" style="visibility: hidden">查询</a> <a href="javascript:void(0)" class="easyui-linkbutton"
+                                                                    iconcls="icon-reload" id="btn_reset" style="visibility: hidden" onclick="Reset()">重置</a>
         </div>
         <div class="conditions hide" id="filters">
         </div>

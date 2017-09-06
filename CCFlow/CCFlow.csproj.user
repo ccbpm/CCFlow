@@ -24,12 +24,6 @@
           </StartWorkingDirectory>
           <EnableENC>False</EnableENC>
           <AlwaysStartWebServerOnDebug>True</AlwaysStartWebServerOnDebug>
-          <ProjectOutputReferences>
-            <Ref Project="{F55B885C-F362-4F08-BCAA-9CDEFE4A42AC}" Folder="WF\Admin\ClientBin">
-            </Ref>
-            <Ref Project="{83D53118-9A8D-4970-9A88-A2909B13FF64}" Folder="WF\Admin\ClientBin">
-            </Ref>
-          </ProjectOutputReferences>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

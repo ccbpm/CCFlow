@@ -336,8 +336,8 @@ namespace BP.Web.WF
         /// </summary>
         public void DownMyStartFlowExcel()
         {
-            string rptNo = Request.QueryString["RptNo"];
             string rptmd = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            string rptNo = rptmd + "My";
             UserRegedit ur = new UserRegedit();
             ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
             ur.RetrieveFromDBSources();

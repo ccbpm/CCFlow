@@ -26,6 +26,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -8139,7 +8140,6 @@
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.designer.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>

@@ -446,7 +446,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(ges.ToDataTableField("MainData"));
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
-            return BP.Tools.Json.DataSetToJson(ds, true);
+            return BP.Tools.Json.DataSetToJson(ds,false);
         }
         
         /// <summary>

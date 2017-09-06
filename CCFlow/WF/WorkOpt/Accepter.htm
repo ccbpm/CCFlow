@@ -139,6 +139,7 @@
                 dataType: 'html',
                 success: function (data) {
 
+
                     if (data.indexOf('info@') == 0) {
                         alert(data);
                         Close();
@@ -175,6 +176,8 @@
                         return;
                     }
 
+                    //是否是单选？
+                    var isSimplate = data.Selector[0].IsSimpleSelector;
 
                     var html = "<table border=0 width='98%' > ";
                     $.each(depts, function (i, dept) {
@@ -193,11 +196,22 @@
                                         isSele = true;
                                 });
 
+                                //多选.
+                                if (isSimplate == "0") {
+                                    if (isSele == true)
+                                        html += "&nbsp;&nbsp;<label><input  type='checkbox' checked=true id='" + emp.No + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
+                                    else
+                                        html += "&nbsp;&nbsp;<label><input  type='checkbox'  id='" + emp.No + "' /> " + emp.No + " " + emp.Name + "</label>";
+                                }
 
-                                if (isSele == true)
-                                    html += "&nbsp;&nbsp;<label><input  type='checkbox' checked=true id='" + emp.No + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
-                                else
-                                    html += "&nbsp;&nbsp;<label><input  type='checkbox'  id='" + emp.No + "' /> " + emp.No + " " + emp.Name + "</label>";
+                                //单选.
+                                if (isSimplate == "1") {
+                                    if (isSele == true)
+                                        html += "&nbsp;&nbsp;<label><input name='emps'  type='radio' checked=true id='" + emp.No + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
+                                    else
+                                        html += "&nbsp;&nbsp;<label><input name='emps'  type='radio'  id='" + emp.No + "' /> " + emp.No + " " + emp.Name + "</label>";
+                                }
+
                             }
                         });
 

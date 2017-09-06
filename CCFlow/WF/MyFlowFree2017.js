@@ -610,16 +610,20 @@ function setFormEleDisabled() {
 function Save() {
     //必填项和正则表达式检查
     var formCheckResult = true;
-    if (!checkBlanks()) {
+
+    if (checkBlanks()==false) {
         formCheckResult = false;
     }
-    if (!checkReg()) {
+
+    if (checkReg()==false) {
         formCheckResult = false;
     }
-    if (!formCheckResult) {
+
+    if (formCheckResult==false) {
         //alert("请检查表单必填项和正则表达式");
-        return;
+        return false;
     }
+
     setToobarDisiable();
 
     $.ajax({
@@ -1795,7 +1799,11 @@ function Send() {
     if ($('#DDL_ToNode').length > 0) {
         var selectToNode = $('#DDL_ToNode  option:selected').data();
         if (selectToNode.IsSelectEmps == "1") {//跳到选择接收人窗口
+
+            Save();
+
             initModal("sendAccepter", selectToNode);
+
             $('#returnWorkModal').modal().show();
             return false;
         } else {

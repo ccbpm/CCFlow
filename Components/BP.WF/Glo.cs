@@ -4558,26 +4558,6 @@ namespace BP.WF
 
         #region 其他方法。
         /// <summary>
-        /// 根据表生成一个文件
-        /// </summary>
-        /// <param name="frmID"></param>
-        /// <param name="oid"></param>
-        /// <returns></returns>
-        public static string MakeHtmlDocumentOfFreeFrm(string frmID, Int64 workid, string flowNo = null)
-        {
-          return MakeForm2Html.MakeHtmlDocumentOfFreeFrm(frmID, workid, flowNo);
-        }
-        /// <summary>
-        /// 生成一个可以归档的文件包
-        /// </summary>
-        /// <param name="flowNo">流程编号</param>
-        /// <param name="workid">工作ID</param>
-        public static void MakeInstancePacketOfZip(string frmID, Int64 workid, bool isReturnZipFileUrl, string flowNo = null)
-        {
-            //首先要生成报表文件.
-              MakeHtmlDocumentOfFreeFrm(frmID, workid, flowNo);
-        }
-        /// <summary>
         /// 获得一个表单的动态附件字段
         /// </summary>
         /// <param name="exts">扩展</param>

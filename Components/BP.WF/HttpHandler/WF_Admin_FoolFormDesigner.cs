@@ -305,8 +305,8 @@ namespace BP.WF.HttpHandler
             switch (this.DoType)
             {
                 case "ParseStringToPinyin": //转拼音方法.
-                    string name = getUTF8ToString("name");
-                    string flag = getUTF8ToString("flag");
+                    string name = GetRequestVal("name");
+                    string flag = GetRequestVal("flag");
 
                     //仅允许含有汉字、数字、字母、下划线
                     string newStr = Regex.Replace(name, RegEx_Replace_OnlyHSZX, "");

@@ -117,7 +117,7 @@ namespace BP.WF
                 //增加转向下拉框数据.
                 if (nd.CondModel == CondModel.SendButtonSileSelect)
                 {
-                    if (gwf.TodoEmps.Contains(WebUser.No + ",") == true)
+                    if (nd.IsStartNode==true || gwf.TodoEmps.Contains(WebUser.No + ",") == true )
                     {
                         /*如果当前不是主持人,如果不是主持人，就不让他显示下拉框了.*/
 

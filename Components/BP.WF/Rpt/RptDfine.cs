@@ -338,23 +338,26 @@ namespace BP.WF.Rpt
             md.RptIsSearchKey = true; //按关键查询.
             md.RptDTSearchWay = DTSearchWay.None; //按日期查询.
             md.RptDTSearchKey = "";
-            md.RptSearchKeys = "*FK_Dept*WFSta*FK_NY*"; //查询条件.
+
+            if (rptMark=="My")
+            md.RptSearchKeys = "*WFSta*FK_NY*"; //查询条件.
+            else
+                md.RptSearchKeys = "*FK_Dept*WFSta*FK_NY*"; //查询条件.
 
             Flow fl = new Flow(this.No);
             md.PTable = fl.PTable;
             md.Update();
 
-            string keys = "'OID','FK_Dept','FlowStarter','WFState','Title','FlowStartRDT','FlowEmps','FlowDaySpan','FlowEnder','FlowEnderRDT','FK_NY','FlowEndNode','WFSta'";
+            string keys = ",OID,FK_Dept,FlowStarter,WFState,Title,FlowStarter,FlowStartRDT,FlowEmps,FlowDaySpan,FlowEnder,FlowEnderRDT,FK_NY,FlowEndNode,WFSta,";
 
             //查询出来所有的字段.
             MapAttrs attrs = new MapAttrs("ND" + int.Parse(this.No) + "Rpt");
             attrs.Delete(MapAttrAttr.FK_MapData, md.No); // 删除已经有的字段。
             foreach (MapAttr attr in attrs)
             {
-                if (keys.Contains("'" + attr.KeyOfEn + "'") == false)
+                if (keys.Contains("," + attr.KeyOfEn + ",") == false)
                     continue;
                 attr.FK_MapData = md.No;
-
 
                 #region 判断特殊的字段.
                 switch (attr.KeyOfEn)
@@ -385,7 +388,6 @@ namespace BP.WF.Rpt
                         break;
                 }
                 #endregion
-
 
                 attr.Insert();
             }

@@ -187,7 +187,7 @@ namespace BP.WF.HttpHandler
         /// <returns>返回转换后的拼音</returns>
         public string FrmTextBox_ParseStringToPinyin()
         {
-            string name = getUTF8ToString("name");
+            string name = GetRequestVal("name");
             string flag = this.GetRequestVal("flag");
 
             if (flag == "true")

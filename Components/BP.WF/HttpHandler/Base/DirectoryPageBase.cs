@@ -49,15 +49,6 @@ namespace BP.WF.HttpHandler
             return val;
         }
         /// <summary>
-        /// 公共方法获取值
-        /// </summary>
-        /// <param name="param">参数名</param>
-        /// <returns></returns>
-        public string getUTF8ToString(string param)
-        {
-            return HttpUtility.UrlDecode(context.Request[param], System.Text.Encoding.UTF8);
-        }
-        /// <summary>
         /// 执行方法
         /// </summary>
         /// <param name="obj">对象名</param>

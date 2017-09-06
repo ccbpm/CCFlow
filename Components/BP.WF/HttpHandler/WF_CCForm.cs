@@ -1627,7 +1627,7 @@ namespace BP.WF.HttpHandler
         public void MoreAttach()
         {
             string PKVal = this.GetRequestVal("PKVal");
-            string attachPk = this.getUTF8ToString("AttachPK");
+            string attachPk = this.GetRequestVal("AttachPK");
             // 多附件描述.
             BP.Sys.FrmAttachment athDesc = new BP.Sys.FrmAttachment(attachPk);
             MapData mapData = new MapData(athDesc.FK_MapData);

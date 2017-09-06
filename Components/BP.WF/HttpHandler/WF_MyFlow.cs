@@ -571,7 +571,8 @@ namespace BP.WF.HttpHandler
                         toolbar += "<input name='Save' type=button value='" + btnLab.SaveLab + "' enable=true onclick=\"SaveSelfFrom();\" />";
                     }
                 }
-                else
+
+                if (this.currND.HisFormType != NodeFormType.SelfForm)
                 {
                     /*启用了其他的表单.*/
                     if (currND.IsEndNode)
@@ -605,7 +606,7 @@ namespace BP.WF.HttpHandler
                 {
                     /*审核*/
                     string urlr1 = "./WorkOpt/WorkCheck.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input type=button  value='" + btnLab.WorkCheckLab + "' enable=true onclick=\"WinOpen('" + urlr1 + "','dsdd'); \" />";
+                    toolbar += "<input id='Btn_WorkCheck' type=button  value='" + btnLab.WorkCheckLab + "' enable=true onclick=\"WinOpen('" + urlr1 + "','dsdd'); \" />";
                 }
 
                 if (btnLab.ThreadEnable)

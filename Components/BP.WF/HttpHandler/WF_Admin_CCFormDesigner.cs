@@ -88,8 +88,8 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ParseStringToPinyin()
         {
-            string name = getUTF8ToString("name");
-            string flag = getUTF8ToString("flag");
+            string name = GetRequestVal("name");
+            string flag = GetRequestVal("flag");
             if (flag == "true")
                 return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
             else
@@ -98,8 +98,8 @@ namespace BP.WF.HttpHandler
         
         public string HiddenFieldDelete()
         {
-            string records = getUTF8ToString("records");
-            string FK_MapData = getUTF8ToString("FK_MapData");
+            string records = GetRequestVal("records");
+            string FK_MapData = GetRequestVal("FK_MapData");
             MapAttr mapAttrs = new MapAttr();
             int result = mapAttrs.Delete(MapAttrAttr.KeyOfEn, records, MapAttrAttr.FK_MapData, FK_MapData);
             return result.ToString();

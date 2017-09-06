@@ -60,17 +60,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
-
-        # region 属性
-        public string RptNo
-        {
-            get
-            {
-                return this.getUTF8ToString("RptNo");
-            }
-        }
-        #endregion
-
+   
         #region 功能列表
         /// <summary>
         /// 功能列表
@@ -146,47 +136,56 @@ namespace BP.WF.HttpHandler
         #region MyStartFlow.htm 我发起的流程
         public string MyStartFlow_Init()
         {
-            if (string.IsNullOrWhiteSpace(this.RptNo))
-                return "err@参数RptNo不能为空";
+            //if (string.IsNullOrWhiteSpace(this.RptNo))
+            //    return "err@参数RptNo不能为空";
+            //   BP.WF.Data.MyDeptEmp 
 
             if (string.IsNullOrWhiteSpace(this.FK_Flow))
                 return "err@参数FK_Flow不能为空";
 
-            string pageSize = getUTF8ToString("pageSize");
+            string PageSize = GetRequestVal("PageSize");
             string fcid = string.Empty;
             DataSet ds = new DataSet();
             Dictionary<string, string> vals = null;
-            string rptmd = "ND" + int.Parse(this.FK_Flow) + "Rpt";
-            MapAttr ar = null;
+            string rptNo = "ND" + int.Parse(this.FK_Flow) + "RptMy";
 
             //报表信息，包含是否显示关键字查询RptIsSearchKey，过滤条件枚举/下拉字段RptSearchKeys，时间段查询方式RptDTSearchWay，时间字段RptDTSearchKey
             MapData md = new MapData();
-            md.No = this.RptNo;
-            if (md.RetrieveFromDBSources() == 0)
-                md.Save();
+            md.No = rptNo;
+            int i = md.RetrieveFromDBSources();
+            if (i == 0)
+            {
+                /*如果没有找到，就让其重置一下.*/
+                BP.WF.Rpt.RptDfine rd = new RptDfine(this.FK_Flow);
+                rd.DoReset("My", "我发起的流程");
+                md.RetrieveFromDBSources();
+            }
+            //  if (BP.WF.Data.rep
+
+            MapAttr ar = null;
 
             string cfgfix = "_SearchAttrs";
             UserRegedit ur = new UserRegedit();
             ur.AutoMyPK = false;
-            ur.MyPK = WebUser.No + RptNo + cfgfix;
+            ur.MyPK = WebUser.No + rptNo + cfgfix;
 
             if (ur.RetrieveFromDBSources() == 0)
             {
-                ur.MyPK = WebUser.No + RptNo + cfgfix;
+                ur.MyPK = WebUser.No + rptNo + cfgfix;
                 ur.FK_Emp = WebUser.No;
-                ur.CfgKey = RptNo + cfgfix;
+                ur.CfgKey = rptNo + cfgfix;
                 ur.Insert();
             }
 
             vals = ur.GetVals();
             md.SetPara("T_SearchKey", ur.SearchKey);
 
-            if(md.RptDTSearchWay != DTSearchWay.None)
+            if (md.RptDTSearchWay != DTSearchWay.None)
             {
-                ar = new MapAttr(rptmd, md.RptDTSearchKey);
+                ar = new MapAttr(rptNo, md.RptDTSearchKey);
                 md.SetPara("T_DateLabel", ar.Name);
 
-                if(md.RptDTSearchWay == DTSearchWay.ByDate)
+                if (md.RptDTSearchWay == DTSearchWay.ByDate)
                 {
                     md.SetPara("T_DTFrom", ur.GetValStringByKey(UserRegeditAttr.DTFrom));
                     md.SetPara("T_DTTo", ur.GetValStringByKey(UserRegeditAttr.DTTo));
@@ -206,7 +205,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("Width", typeof(int));
 
             MapAttrs attrs = new MapAttrs();
-            attrs.Retrieve(MapAttrAttr.FK_MapData, RptNo, MapAttrAttr.Idx);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, rptNo, MapAttrAttr.Idx);
 
             foreach (MapAttr attr in attrs)
             {
@@ -225,7 +224,7 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region //增加枚举/外键字段信息
-            attrs = new MapAttrs(rptmd);
+            attrs = new MapAttrs(rptNo);
             dt = new DataTable("FilterCtrls");
             dt.Columns.Add("Id", typeof(string));
             dt.Columns.Add("Name", typeof(string));
@@ -400,31 +399,32 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region //增加第一页数据
-            GEEntitys ges = new GEEntitys(rptmd);
+            GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
             qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             md.SetPara("T_total", qo.GetCount());
-            qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), 1);
+            qo.DoQuery("OID", string.IsNullOrWhiteSpace(PageSize) ? SystemConfig.PageSize : int.Parse(PageSize), 1);
             ds.Tables.Add(ges.ToDataTableField("MainData"));
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
             #endregion
 
-            return BP.Tools.Json.DataSetToJson(ds, true);
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
 
         public string MyStartFlow_Search()
         {
-            string vals = getUTF8ToString("vals");
-            string searchKey = getUTF8ToString("key");
-            string dtFrom = getUTF8ToString("dtFrom");
-            string dtTo = getUTF8ToString("dtTo");
-            string mvals = getUTF8ToString("mvals");
-            string pagesize = getUTF8ToString("pageSize");
-            int pageidx = int.Parse(getUTF8ToString("pageIdx"));
-            string rptmd = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            string vals = this.GetRequestVal("vals");
+            string searchKey = GetRequestVal("key");
+            string dtFrom = GetRequestVal("dtFrom");
+            string dtTo = GetRequestVal("dtTo");
+            string mvals = GetRequestVal("mvals");
+            string PageSize = GetRequestVal("PageSize");
+            int PageIdx = int.Parse(GetRequestVal("PageIdx"));
+
+            string rptNo = "ND" + int.Parse(this.FK_Flow) + "RptMy";
             UserRegedit ur = new UserRegedit();
-            ur.MyPK = WebUser.No + RptNo + "_SearchAttrs";
+            ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
             ur.RetrieveFromDBSources();
 
             ur.SearchKey = searchKey;
@@ -435,14 +435,14 @@ namespace BP.WF.HttpHandler
             ur.Update();
 
             DataSet ds = new DataSet();
-            MapData md = new MapData(RptNo);
-            MapAttrs attrs = new MapAttrs(rptmd);
-            GEEntitys ges = new GEEntitys(rptmd);
+            MapData md = new MapData(rptNo);
+            MapAttrs attrs = new MapAttrs(rptNo);
+            GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
             qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             md.SetPara("T_total", qo.GetCount());
-            qo.DoQuery("OID", string.IsNullOrWhiteSpace(pagesize) ? SystemConfig.PageSize : int.Parse(pagesize), pageidx);
+            qo.DoQuery("OID", string.IsNullOrWhiteSpace(PageSize) ? SystemConfig.PageSize : int.Parse(PageSize), PageIdx);
             ds.Tables.Add(ges.ToDataTableField("MainData"));
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
@@ -781,6 +781,7 @@ namespace BP.WF.HttpHandler
                 qo.DoQuery();
                 ds.Tables.Add(ges.ToDataTableField("dt"));
             }
+
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
 

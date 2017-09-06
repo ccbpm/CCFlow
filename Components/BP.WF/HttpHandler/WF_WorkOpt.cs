@@ -38,7 +38,7 @@ namespace BP.WF.HttpHandler
             {
                 Node nd = new Node(this.FK_Node);
                 Work wk = nd.HisWork;
-                return BP.WF.Glo.MakeHtmlDocumentOfFreeFrm(wk.NodeFrmID, this.WorkID,this.FK_Flow);
+                return BP.WF.MakeForm2Html.MakeHtmlDocumentOfFreeFrm(wk.NodeFrmID, this.WorkID,this.FK_Flow,null);
             }
             catch (Exception ex)
             {
@@ -810,19 +810,19 @@ namespace BP.WF.HttpHandler
                 {
                     if (attr.UIContralType == UIContralType.TB)
                     {
-                        val = getUTF8ToString("TB_" + attr.Key);
+                        val = GetRequestVal("TB_" + attr.Key);
 
                         msg += attr.Key + "=" + val + ";";
                     }
                     else if (attr.UIContralType == UIContralType.CheckBok)
                     {
-                        val = getUTF8ToString("CB_" + attr.Key);
+                        val = GetRequestVal("CB_" + attr.Key);
 
                         msg += attr.Key + "=" + Convert.ToInt32(val) + ";";
                     }
                     else if (attr.UIContralType == UIContralType.DDL)
                     {
-                        val = getUTF8ToString("DDL_" + attr.Key);
+                        val = GetRequestVal("DDL_" + attr.Key);
 
                         msg += attr.Key + "=" + val + ";";
                     }

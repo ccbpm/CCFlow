@@ -108,8 +108,8 @@ namespace BP.Web.WF
                         this.WinClose("ss");
                         break;
                     case "PutOne": //把任务放入任务池.
-                          Int64 workid42 = Int64.Parse(this.Request.QueryString["WorkID"]);
-                          BP.WF.Dev2Interface.Node_TaskPoolPutOne(workid42);
+                        Int64 workid42 = Int64.Parse(this.Request.QueryString["WorkID"]);
+                        BP.WF.Dev2Interface.Node_TaskPoolPutOne(workid42);
                         this.WinClose("ss");
                         break;
                     case "DoAppTask": // 申请任务.
@@ -144,7 +144,7 @@ namespace BP.Web.WF
                     case "DelSubFlow": //删除进程。
                         try
                         {
-                            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID,"手工删除");
+                            BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
                             this.WinClose();
                         }
                         catch (Exception ex)
@@ -196,7 +196,7 @@ namespace BP.Web.WF
                         ep.DoUp();
 
                         BP.WF.Port.WFEmps emps111 = new BP.WF.Port.WFEmps();
-                      //  emps111.RemoveCash();
+                        //  emps111.RemoveCash();
                         emps111.RetrieveAll();
                         this.WinClose();
                         break;
@@ -205,26 +205,26 @@ namespace BP.Web.WF
                         ep1.DoDown();
 
                         BP.WF.Port.WFEmps emps11441 = new BP.WF.Port.WFEmps();
-                      //  emps11441.RemoveCash();
+                        //  emps11441.RemoveCash();
                         emps11441.RetrieveAll();
                         this.WinClose();
                         break;
 
                     case "Track": //通过一个串来打开一个工作.
-                         string mySid = this.Request.QueryString["SID"];
-                         string[] mystrs = mySid.Split('_');
+                        string mySid = this.Request.QueryString["SID"];
+                        string[] mystrs = mySid.Split('_');
 
-                         Int64  myWorkID = int.Parse(mystrs[1]);
-                         string fk_emp = mystrs[0];
-                         int fk_node = int.Parse(mystrs[2]);
-                         Node mynd = new Node();
-                         mynd.NodeID = fk_node;
-                         mynd.RetrieveFromDBSources();
+                        Int64 myWorkID = int.Parse(mystrs[1]);
+                        string fk_emp = mystrs[0];
+                        int fk_node = int.Parse(mystrs[2]);
+                        Node mynd = new Node();
+                        mynd.NodeID = fk_node;
+                        mynd.RetrieveFromDBSources();
 
-                         string fk_flow = mynd.FK_Flow;
-                         string myurl = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Node=" + mynd.NodeID + "&WorkID=" + myWorkID + "&FK_Flow=" + fk_flow;
-                         Web.WebUser.SignInOfGener( new BP.Port.Emp(fk_emp));
-                         this.Response.Write("<script> window.location.href='" + myurl + "'</script> *^_^*  <br><br>正在进入系统请稍后，如果长时间没有反应，请<a href='" + myurl + "'>点这里进入。</a>");
+                        string fk_flow = mynd.FK_Flow;
+                        string myurl = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Node=" + mynd.NodeID + "&WorkID=" + myWorkID + "&FK_Flow=" + fk_flow;
+                        Web.WebUser.SignInOfGener(new BP.Port.Emp(fk_emp));
+                        this.Response.Write("<script> window.location.href='" + myurl + "'</script> *^_^*  <br><br>正在进入系统请稍后，如果长时间没有反应，请<a href='" + myurl + "'>点这里进入。</a>");
                         return;
                     case "OF": //通过一个串来打开一个工作.
                         string sid = this.Request.QueryString["SID"];
@@ -242,7 +242,7 @@ namespace BP.Web.WF
 
                         BP.Port.Emp empOF = new BP.Port.Emp(wl.FK_Emp);
                         Web.WebUser.SignInOfGener(empOF);
-                        string u = "MyFlow.aspx?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID+"&FK_Node="+wl.FK_Node+"&FID="+wl.FID;
+                        string u = "MyFlow.aspx?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID;
                         this.Response.Write("<script> window.location.href='" + u + "'</script> *^_^*  <br><br>正在进入系统请稍后，如果长时间没有反应，请<a href='" + u + "'>点这里进入。</a>");
                         return;
                     case "ExitAuth":
@@ -307,10 +307,12 @@ namespace BP.Web.WF
                         //调用DoDeleteWorkFlowByReal方法
                         WorkFlow wf = new WorkFlow(new Flow(fk_flowDel), workid);
                         wf.DoDeleteWorkFlowByReal(true);
-                      //  Glo.ToMsg("流程删除成功");
+                        //  Glo.ToMsg("流程删除成功");
                         BP.WF.Glo.ToMsg("流程删除成功");
 
                         //this.ToWFMsgPage("流程删除成功");
+                        break;
+                    case "DownMyStartFlowExcel":    //下载我发起的流程查询结果，转到下面的逻辑，不放在此try..catch..中
                         break;
                     default:
                         throw new Exception("ActionType error" + this.ActionType);
@@ -320,6 +322,137 @@ namespace BP.Web.WF
             {
                 this.ToErrorPage("执行其间如下异常：<BR>" + ex.Message);
             }
+            //此处之所以再加一个switch，是因为在下载文件逻辑中，调用Response.End()方法，如果此方法放在try..catch..中，会报线程中止异常
+            switch (this.ActionType)
+            {
+                case "DownMyStartFlowExcel":
+                    DownMyStartFlowExcel();
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 导出“我发起的流程”查询结果到Excel文件，/WF/RptDfine/MyStartFlow.htm中的“导出”功能调用
+        /// </summary>
+        public void DownMyStartFlowExcel()
+        {
+            string rptNo = Request.QueryString["RptNo"];
+            string rptmd = "ND" + int.Parse(this.FK_Flow) + "Rpt";
+            UserRegedit ur = new UserRegedit();
+            ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+            MapAttrs cattrs = new MapAttrs(rptNo);
+            MapData md = new MapData(rptNo);
+            MapAttrs attrs = new MapAttrs(rptmd);
+            GEEntitys ges = new GEEntitys(rptmd);
+            QueryObject qo = new QueryObject(ges);
+            qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+            qo = new BP.WF.HttpHandler.WF_RptDfine(HttpContext.Current).InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
+
+            DataTable dt = qo.DoQueryToTable();
+            DataTable myDT = new DataTable();
+
+            foreach (MapAttr attr in cattrs)
+            {
+                if (attr.KeyOfEn == "MyNum")
+                    continue;
+
+                Type t = null;
+
+                switch (attr.LGType)
+                {
+                    case FieldTypeS.Normal:
+                        switch (attr.MyDataType)
+                        {
+                            case BP.DA.DataType.AppInt:
+                                t = typeof(int);
+                                break;
+                            case BP.DA.DataType.AppFloat:
+                            case BP.DA.DataType.AppDouble:
+                            case BP.DA.DataType.AppMoney:
+                                t = typeof(double);
+                                break;
+                            default:
+                                t = typeof(string);
+                                break;
+                        }
+                        break;
+                    default:
+                        t = typeof(string);
+                        break;
+                }
+
+                myDT.Columns.Add(new DataColumn(attr.Name, t));
+                myDT.Columns[attr.Name].ExtendedProperties.Add("width", attr.UIWidthInt);
+
+                if (attr.IsNum && attr.LGType == FieldTypeS.Normal && "OID,FID,PWorkID,FlowEndNode,PNodeID".IndexOf(attr.KeyOfEn) == -1)
+                    myDT.Columns[attr.Name].ExtendedProperties.Add("sum", attr.IsSum);
+            }
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                DataRow myDR = myDT.NewRow();
+
+                foreach (MapAttr attr in cattrs)
+                {
+                    if (attr.KeyOfEn == "MyNum")
+                        continue;
+
+                    switch (attr.LGType)
+                    {
+                        case FieldTypeS.Normal:
+                            switch (attr.MyDataType)
+                            {
+                                case BP.DA.DataType.AppString:
+                                case BP.DA.DataType.AppDate:
+                                case BP.DA.DataType.AppDateTime:
+                                case BP.DA.DataType.AppInt:
+                                case BP.DA.DataType.AppFloat:
+                                case BP.DA.DataType.AppDouble:
+                                case BP.DA.DataType.AppMoney:
+                                    myDR[attr.Name] = dr[attr.Field];
+                                    break;
+                                case BP.DA.DataType.AppBoolean:
+                                    if (dr[attr.Field].ToString() == "0")
+                                        myDR[attr.Name] = "否";
+                                    else
+                                        myDR[attr.Name] = "是";
+                                    break;
+                            }
+                            break;
+                        case FieldTypeS.Enum:
+                            SysEnum sem = new SysEnum();
+                            sem.Retrieve(SysEnumAttr.EnumKey, attr.KeyOfEn, SysEnumAttr.IntKey, dr[attr.Field]);
+                            myDR[attr.Name] = sem.Lab;
+                            break;
+                        case FieldTypeS.FK:
+                            string tabName = attr.UIBindKey;
+                            if (attr.KeyOfEn == "FK_NY")
+                            {
+                                tabName = "Pub_NY";
+                            }
+                            else if (attr.KeyOfEn == "FK_Dept")
+                            {
+                                tabName = "Port_Dept";
+                            }
+                            DataTable drDt = BP.DA.DBAccess.RunSQLReturnTable("SELECT * FROM " + tabName + " WHERE NO='" + dr[attr.Field] + "'");
+                            if (drDt.Rows.Count > 0)
+                                myDR[attr.Name] = drDt.Rows[0]["NAME"].ToString();
+                            break;
+                        case FieldTypeS.WinOpen:
+                            break;
+                    }
+                }
+
+                myDT.Rows.Add(myDR);
+            }
+
+            Flow flow = new Flow(this.FK_Flow);
+            string name = "我发起的流程（" + flow.Name + "）";
+            string filename = Request.PhysicalApplicationPath + @"\Temp\" + name + "_" + DateTime.Today.ToString("yyyy年MM月dd日") + ".xls";
+            CCFlow.WF.Comm.Utilities.NpoiFuncs.DataTableToExcel(myDT, filename, name,
+                                                                BP.Web.WebUser.Name, true, true, true);
         }
 
         #region Web 窗体设计器生成的代码

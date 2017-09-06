@@ -162,7 +162,8 @@ namespace BP.WF.HttpHandler
             //报表信息，包含是否显示关键字查询RptIsSearchKey，过滤条件枚举/下拉字段RptSearchKeys，时间段查询方式RptDTSearchWay，时间字段RptDTSearchKey
             MapData md = new MapData();
             md.No = this.RptNo;
-            md.RetrieveFromDBSources();
+            if (md.RetrieveFromDBSources() == 0)
+                md.Save();
 
             string cfgfix = "_SearchAttrs";
             UserRegedit ur = new UserRegedit();
@@ -447,13 +448,13 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, true);
         }
-
+        
         /// <summary>
         /// 初始化QueryObject
         /// </summary>
         /// <param name="qo"></param>
         /// <returns></returns>
-        private QueryObject InitQueryObject(QueryObject qo, MapData md, Attrs attrs, MapAttrs rptAttrs, UserRegedit ur)
+        public QueryObject InitQueryObject(QueryObject qo, MapData md, Attrs attrs, MapAttrs rptAttrs, UserRegedit ur)
         {
             Dictionary<string, string> kvs = null;
             List<string> keys = new List<string>();

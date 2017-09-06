@@ -16,12 +16,12 @@
     <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script src="../Comm/Gener.js"></script>
     <style type="text/css">
-        .conditions{
-            line-height:35px;
+        .conditions {
+            line-height: 35px;
         }
 
-        .conditions input[type='text']{
-            line-height:30px;
+        .conditions input[type='text'] {
+            line-height: 30px;
         }
 
         .conditions.hide {
@@ -31,6 +31,15 @@
         .conditions .con-span {
             display: inline-block;
             width: 70px;
+            margin-left:5px;
+        }
+
+        .menu_sep{
+            height:100%;
+            border-left:1px solid #ccc;
+            width:1px;
+            margin-left:5px;
+            margin-right:5px;
         }
     </style>
     <script type="text/javascript">
@@ -72,7 +81,7 @@
                     $("#tb_key").textbox().textbox("setText", md.T_SEARCHKEY);
                 }
 
-                if (md.RPTDTSEARCHWAY != 0) {
+                if (md.RPTDTSEARCHWAY && md.RPTDTSEARCHWAY != 0) {
                     $("#btn_search").before('<span class="con-span">' + md.T_DATELABEL + '从: </span><input type="text" id="tb_dtFrom" style="width:166px;" />');
                     $("#tb_dtFrom").after('<span class="con-span">到: </span><input type="text" id="tb_dtTo" style="width:166px;" />');
 
@@ -89,11 +98,15 @@
                 $("#btn_search").css("visibility", "visible");
                 $("#btn_reset").css("visibility", "visible");
 
-                $("#btn_search").after('&nbsp;&nbsp;<a href="javascript:void(0)" iconCls="icon-excel" id="btn_export">导出</a>');
-                $("#btn_export").linkbutton();
+                $("#btn_open").after('&nbsp;&nbsp;<a href="javascript:void(0)" iconCls="icon-excel" id="btn_export">导出</a>');
+                $("#btn_export").linkbutton({
+                    onClick: function () {
+                        window.open('../Do.aspx?ActionType=DownMyStartFlowExcel&RptNo=' + rptNo + '&FK_Flow=' + fk_flow, '_blank');
+                    }
+                });
 
                 if (d.FILTERCTRLS.length > 0) {
-                    $("#tb_main").append('<a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
+                    $("#tb_main").append('<span class="menu_sep"></span><a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
                     $("#btn_more").linkbutton();
 
                     $(".more").click(function () {
@@ -250,11 +263,6 @@
             }, this);
         });
 
-        function Edit(rowIndex, rowData) {
-            var url = "/WF/Comm/RefFunc/UIEn.aspx?EnsName=" + ensName + "&" + sinfo.PKField + "=" + rowData[sinfo.PKField] + "&inlayer=1&t=" + Math.random();
-            OpenDialogAndCloseRefresh(url, "编辑", sinfo.Config.WinCardW, sinfo.Config.WinCardH, "icon-edit");
-        }
-
         function Search(pageSize, pageIdx) {
             var key = "";
             var mvals = "";
@@ -403,6 +411,15 @@
             });
         }
 
+        function ViewFlow(rowIndex, rowData) {
+            if (!rowData) {
+                rowData = $('#dg').datagrid('getSelected');
+                if (!rowData) return;
+            }
+
+            OpenEasyUiDialog('../WorkOpt/OneWork/OneWork.htm?currTab=Truck&WorkId=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FID=' + rowData.FID + '&t=' + Math.random(), 'eudlgframe', '流程轨迹', 1000, 618);
+        }
+
         function closeDlg() {
             $("#eudlg").dialog("close");
         }
@@ -410,13 +427,14 @@
 </head>
 <body class="easyui-layout">
     <div data-options="region:'center',border:false">
-        <table class="easyui-datagrid" id="dg" title=" " data-options="pageSize:15,pageList:[15,30,50,100],toolbar:'#tb',fit:true,pagination:true,rownumbers:true"></table>
+        <table class="easyui-datagrid" id="dg" title="我发起的流程" data-options="pageSize:15,pageList:[15,30,50,100],toolbar:'#tb',fit:true,pagination:true,rownumbers:true,singleSelect:true,onDblClickRow:ViewFlow"></table>
     </div>
     <div id="tb" style="padding: 0 15px;">
         <div class="conditions" id="tb_main">
-            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-search" data-options="selected:true"
-               id="btn_search" style="visibility: hidden">查询</a> <a href="javascript:void(0)" class="easyui-linkbutton"
-                                                                    iconcls="icon-reload" id="btn_reset" style="visibility: hidden" onclick="Reset()">重置</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-search"
+               id="btn_search" style="visibility: hidden; margin-left:5px;">查询</a> <a href="javascript:void(0)" class="easyui-linkbutton"
+               iconcls="icon-reset" id="btn_reset" style="visibility: hidden" onclick="Reset()">重置</a><span class="menu_sep"></span><a href="javascript:void(0)"
+               class="easyui-linkbutton" iconcls="icon-open" id="btn_open" onclick="ViewFlow()">查看</a>
         </div>
         <div class="conditions hide" id="filters">
         </div>

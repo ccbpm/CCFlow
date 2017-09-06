@@ -102,3 +102,23 @@
 {
     background: url('icons/down.gif') no-repeat;
 }
+.icon-excel
+{
+    background: url('icons/excel.gif') no-repeat;
+}
+.icon-sheet
+{
+    background: url('icons/sheet.png') no-repeat;
+}
+.icon-open
+{
+    background: url('icons/open.png') no-repeat;
+}
+.icon-table
+{
+    background: url('icons/table.png') no-repeat;
+}
+.icon-reset
+{
+    background: url('icons/reset.png') no-repeat;
+}

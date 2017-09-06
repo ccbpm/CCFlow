@@ -437,12 +437,14 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             MapData md = new MapData(rptNo);
             MapAttrs attrs = new MapAttrs(rptNo);
+
             GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
             qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             md.SetPara("T_total", qo.GetCount());
             qo.DoQuery("OID", string.IsNullOrWhiteSpace(PageSize) ? SystemConfig.PageSize : int.Parse(PageSize), PageIdx);
+
             ds.Tables.Add(ges.ToDataTableField("MainData"));
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 

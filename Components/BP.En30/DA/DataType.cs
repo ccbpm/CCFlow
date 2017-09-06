@@ -615,7 +615,7 @@ namespace BP.DA
         /// <returns>内容</returns>
         public static string ReadTextFile(string file)
         {
-            System.IO.StreamReader read = new System.IO.StreamReader(file, System.Text.Encoding.Default); // 文件流.
+            System.IO.StreamReader read = new System.IO.StreamReader(file, System.Text.Encoding.UTF8); // 文件流.
             string doc = read.ReadToEnd();  //读取完毕。
             read.Close(); // 关闭。
             return doc;

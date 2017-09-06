@@ -7283,26 +7283,35 @@ namespace BP.WF
             emps = emps.Replace("@", ",");
             string[] strs = emps.Split(',');
 
-            Emp empEn = new Emp();
+            bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
+            string sql = "";
             foreach (string emp in strs)
             {
                 if (string.IsNullOrEmpty(emp))
                     continue;
 
-                sa.MyPK = toNodeID + "_" + workID + "_" + emp;
+                if (isPinYin == true)
+                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + emp + "' OR NAME ='" + emp + "'  OR PinYin LIKE '%," + emp + ",%'";
+                else
+                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + emp + "' OR NAME ='" + emp + "'";
 
-                empEn.No = emp;
-                int i = empEn.RetrieveFromDBSources();
-                if (i == 0)
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count > 12 || dt.Rows.Count == 0)
                     continue;
+                foreach (DataRow dr in dt.Rows)
+                {
+                    string empNo = dr[0].ToString();
+                    string empName = dr[1].ToString();
 
-                sa.FK_Emp = emp;
-                sa.EmpName = empEn.Name;
+                    sa.MyPK = toNodeID + "_" + workID + "_" + empNo;
+                    sa.FK_Emp = empNo;
+                    sa.EmpName = empName;
 
-                sa.FK_Node = toNodeID;
-                sa.WorkID = workID;
-                if (sa.IsExits == false)
-                    sa.Insert();
+                    sa.FK_Node = toNodeID;
+                    sa.WorkID = workID;
+                    if (sa.IsExits == false)
+                        sa.Insert();
+                }
             }
         }
         /// <summary>

@@ -46,7 +46,10 @@ namespace BP.WF.Template
         /// 是否自动装载上一笔加载的数据
         /// </summary>
         public const string IsAutoLoadEmps = "IsAutoLoadEmps";
-
+        /// <summary>
+        /// 是否单项选择？
+        /// </summary>
+        public const string IsSimpleSelector = "IsSimpleSelector";
     }
     /// <summary>
     /// 选择器
@@ -61,6 +64,7 @@ namespace BP.WF.Template
                 return "NodeID";
             }
         }
+        
         /// <summary>
         /// 选择模式
         /// </summary>
@@ -154,6 +158,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 是否单选？
+        /// </summary>
+        public bool IsSimpleSelector
+        {
+            get
+            {
+                return this.GetValBooleanByKey(SelectorAttr.IsSimpleSelector);
+            }
+            set
+            {
+                this.SetValByKey(SelectorAttr.IsSimpleSelector, value);
+            }
+        }
+        /// <summary>
         /// 节点ID
         /// </summary>
         public int NodeID
@@ -222,11 +240,15 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(SelectorAttr.SelectorModel, 5, "显示方式", true, true, SelectorAttr.SelectorModel,
                     "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=按SQL模版计算@5=使用通用人员选择器@6=部门与岗位的交集@7=自定义Url");
 
-                map.AddDDLSQL(SelectorAttr.FK_SQLTemplate, null, "SQL模版",
-                    "SELECT No,Name FROM WF_SQLTemplate WHERE SQLType=5", true);
+                map.AddDDLSQL(SelectorAttr.FK_SQLTemplate, null, "SQL模版","SELECT No,Name FROM WF_SQLTemplate WHERE SQLType=5", true);
 
                 map.AddBoolean(SelectorAttr.IsAutoLoadEmps, true, "是否自动加载上一次选择的人员？", true, true);
-                 
+                map.AddBoolean(SelectorAttr.IsSimpleSelector, false, "是否单项选择(只能选择一个人)？", true, true);
+
+
+           //     map.AddDDLSysEnum(SelectorAttr.IsMinuesAutoLoadEmps, 5, "接收人选择方式", true, true, SelectorAttr.SelectorModel,
+             //   "@0=按岗位@1=按部门@2=按人员@3=按SQL@4=按SQL模版计算@5=使用通用人员选择器@6=部门与岗位的交集@7=自定义Url");
+
 
                 map.AddTBStringDoc(SelectorAttr.SelectorP1, null, "分组参数:可以为空,比如:SELECT No,Name,ParentNo FROM  Port_Dept", true, false, true);
                 map.AddTBStringDoc(SelectorAttr.SelectorP2, null, "操作员数据源:比如:SELECT No,Name,FK_Dept FROM  Port_Emp", true, false, true);
@@ -307,7 +329,8 @@ namespace BP.WF.Template
                     }
                 }
             }
-
+            
+            ds.Tables.Add(this.ToDataTableField("Selector"));
 
             return ds;
         }

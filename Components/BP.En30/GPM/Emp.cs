@@ -56,6 +56,10 @@ namespace BP.GPM
         /// 领导
         /// </summary>
         public const string Leader = "Leader";
+        /// <summary>
+        /// 拼音
+        /// </summary>
+        public const string PinYin = "PinYin";
         #endregion
 
         /// <summary>
@@ -120,6 +124,20 @@ namespace BP.GPM
             set
             {
                 this.SetValByKey(EmpAttr.EmpNo, value);
+            }
+        }
+        /// <summary>
+        /// 拼音
+        /// </summary>
+        public string PinYin
+        {
+            get
+            {
+                return this.GetValStrByKey(EmpAttr.PinYin);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.PinYin, value);
             }
         }
         /// <summary>
@@ -388,6 +406,9 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.StaDesc, null, "岗位描述", true, false, 0, 300, 132);
                 map.AddTBInt(EmpAttr.NumOfDept, 0, "部门数量", true, false);
 
+                map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 150, 132);
+
+
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段
 
@@ -416,6 +437,12 @@ namespace BP.GPM
 
         protected override bool beforeUpdateInsertAction()
         {
+            //增加拼音，以方便查找.
+            string pinyinQP = BP.DA.DataType.ParseStringToPinyin(this.Name);
+            string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(this.Name);
+            this.PinYin = "," + pinyinQP + "," + pinyinJX + ",";
+
+
             DeptEmpStations des = new DeptEmpStations();
             des.Retrieve(DeptEmpStationAttr.FK_Emp, this.No);
 

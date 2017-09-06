@@ -10,6 +10,7 @@ using BP.Web;
 
 namespace BP.DTS
 {
+    
     /// <summary>
     /// 从webservice中获取数据.
     /// </summary>
@@ -40,8 +41,6 @@ namespace BP.DTS
         {
             string sql = "";
             string sql2 = "";
-
-            Log.DebugWriteInfo("ssssssssssssssssssss");
 
             ArrayList al = ClassFactory.GetObjects("BP.En.Entity");
             foreach (object obj in al)

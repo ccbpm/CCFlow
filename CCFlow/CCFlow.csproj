@@ -919,6 +919,7 @@
     <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_BPM.sql" />
     <Content Include="WF\Data\Install\SQLScript\Port_Inc_CH_WorkFlow.sql" />
     <Content Include="WF\Data\Install\V_KM_DocTree.sql" />
+    <Content Include="WF\Data\UpdataCCFlowVer.sql" />
     <Content Include="WF\Data\XML\AdminTools.xml" />
     <Content Include="WF\Data\XML\BPMMenu.xml" />
     <Content Include="WF\Data\XML\CCForm.xml" />

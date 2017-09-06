@@ -94,12 +94,25 @@ namespace BP.WF.HttpHandler
                 int toNodeID = this.GetRequestValInt("ToNode");
                 string emps = this.GetRequestVal("AddEmps");
 
+                SelectAccpers sas = new SelectAccpers();
+                //接受人选择器.
+                Selector sr = new Selector(toNodeID);
+                if (sr.IsSimpleSelector == true)
+                    sas.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
+
                 //增加到里面去.s
                 BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
 
                 //查询出来,已经选择的人员.
-                SelectAccpers sas = new SelectAccpers();
                 sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
+
+                //接受人选择器.
+                if (sr.IsSimpleSelector == true)
+                {
+                    if (sas.Count != 1)
+                        return "err@您只能选择一个接受人,现在有[" + sas.Count + "]个，请您删除一个然后增加.";
+                }
+
                 return sas.ToJson();
             }
             catch (Exception ex)
@@ -107,7 +120,7 @@ namespace BP.WF.HttpHandler
                 if (ex.Message.Contains("INSERT") == true)
                     return "err@人员名称重复,导致部分人员插入失败.";
 
-                return "err@"+ex.Message;
+                return "err@" + ex.Message;
             }
         }
         /// <summary>
@@ -135,6 +148,19 @@ namespace BP.WF.HttpHandler
             try
             {
                 int toNodeID = this.GetRequestValInt("ToNode");
+
+                /* 仅仅设置一个,检查压入的人员个数.*/
+                string sql = "SELECT count(WorkID) as Num FROM WF_SelectAccper WHERE FK_Node=" + toNodeID + " AND WorkID=" + this.WorkID + " AND AccType=0";
+                int num = DBAccess.RunSQLReturnValInt(sql, 0);
+                if (num == 0)
+                    return "err@请设置选择的人员.";
+                Selector sr = new Selector(toNodeID);
+                if (sr.IsSimpleSelector == true)
+                {
+                    if (num != 1)
+                        return "err@您只能选择一个接受人.";
+                }
+
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, null);
                 string strs= objs.ToMsgOfHtml();
                 strs = strs.Replace("@", "<br>@");
@@ -209,7 +235,7 @@ namespace BP.WF.HttpHandler
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
-                return "err@你不是会签主持人，您不能执行该操作。";
+                return "err@您不是会签主持人，您不能执行该操作。";
 
             GenerWorkerList gwlOfMe = new GenerWorkerList();
             int num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
@@ -219,6 +245,9 @@ namespace BP.WF.HttpHandler
             if (num == 0)
                 return "err@没有查询到当前人员的工作列表数据.";
 
+            //是否有拼音字段？
+            bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
+            string sql = "";
 
             #region 求人员集合.
             Emps emps = new Emps();
@@ -231,38 +260,33 @@ namespace BP.WF.HttpHandler
                 if (string.IsNullOrEmpty(empStr) == true)
                     continue;
 
-                Emp emp = new Emp();
-                emp.No = empStr;
-                if (emp.RetrieveFromDBSources() == 0)
+                if (isPinYin == true)
+                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%'";
+                else
+                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'";
+
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count > 12 || dt.Rows.Count == 0)
+                    continue;
+
+                foreach (DataRow dr in dt.Rows)
                 {
-                    int i = emp.Retrieve("Name", empStr);
-                    if (i == 0)
-                        infos += "\t\n 人员编号或者名称[" + empStr + "]不存在.";
+                    string empNo = dr[0].ToString();
+                    string empName = dr[1].ToString();
 
-                    if (i == 1)
-                        emps.AddEntity(emp);
+                    //查查是否存在队列里？
+                    num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, empNo,
+                    GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
 
-                    if (i > 1)
+                    if (num == 1)
                     {
-                        infos += "\t\n@人员名称[" + empStr + "]重复.";
-
-                        string sql = "SELECT No,Name FROM Port_Emp WHERE Name like '%" + empStr + "%'";
-                        DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                        foreach (DataRow dr in dt.Rows)
-                            infos += "@" + dr[0].ToString() + " , " + dr[1].ToString() + "";
+                        infos += "\t\n@人员[" + empStr + "]已经在队列里.";
                         continue;
                     }
-                }
 
-                //查查是否存在队列里？
-                num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, emp.No,
-                GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, this.FK_Node);
-                if (num == 1)
-                {
-                    infos += "\t\n@人员[" + empStr + "]已经在队列里.";
-                    continue;
+                    //增加到队列里面.
+                    emps.AddEntity( new Emp(empNo));
                 }
-                emps.AddEntity(emp);
             }
 
             if (infos != "" && emps.Count != 0)
@@ -270,7 +294,6 @@ namespace BP.WF.HttpHandler
 
             if (emps.Count == 0)
                 return "info@您没有选择人员, 执行信息:" + infos;
-
             #endregion 求人员集合.
 
             GenerWorkerLists gwls = new GenerWorkerLists();
@@ -286,6 +309,9 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.FK_Emp = item.No;
                 gwlOfMe.FK_EmpText = item.Name;
                 gwlOfMe.IsPassInt = 0;
+                gwlOfMe.FK_Dept = item.FK_Dept;
+              //  gwlOfMe.FK_DeptT = item.FK_DeptText;
+
                 gwlOfMe.Insert(); //插入作为待办.
                 infos += "\t\n@" + item.No + "  " + item.Name;
 
@@ -1350,10 +1376,6 @@ namespace BP.WF.HttpHandler
             if (gwf.FK_Node != this.FK_Node)
                 return "err@当前流程已经运动到[" + gwf.NodeName + "]上,当前处理人员为[" + gwf.TodoEmps + "]";
 
-            //bool isCandoCurrWork = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
-            //if (isCandoCurrWork == false)
-            //    return "err@您没有处理当前工作的权限,当前";
-
             //当前节点ID.
             Node nd = new Node(this.FK_Node);
 
@@ -1429,6 +1451,9 @@ namespace BP.WF.HttpHandler
             //增加一个table.
             ds.Tables.Add(dt);
             #endregion 计算上一次选择的结果, 并把结果返回过去.
+
+
+
 
             //返回json.
             return BP.Tools.Json.DataSetToJson(ds, false);

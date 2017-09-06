@@ -52,9 +52,9 @@ namespace BP.WF.HttpHandler
 
             #region 加入表单库目录.
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                sql = "SELECT 'ND'||NO as No ,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
+                sql = "SELECT NO as No ,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
             else
-                sql = "SELECT 'ND'+No,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
+                sql = "SELECT No,Name,ParentNo FROM Sys_FormTree ORDER BY  PARENTNO, IDX ";
 
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Sys_FormTree";

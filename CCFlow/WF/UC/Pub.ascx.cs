@@ -123,7 +123,7 @@ namespace CCFlow.WF.UC
                     continue;
 
                 this.AddBR();
-                this.AddMsgOfInfo("退回信息：", rw.NoteHtml);
+                this.AddMsgOfInfo("退回信息：", rw.BeiZhuHtml);
             }
 
             //foreach (ShiftWork fw in fws)

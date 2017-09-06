@@ -703,7 +703,7 @@ namespace CCFlow.WF
                             foreach (BP.WF.ReturnWork rw in rws)
                             {
                                 msgInfo += "<fieldset width='100%' ><legend>&nbsp; 来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='" + appPath + "DataUser/ReturnLog/" + this.FK_Flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a></legend>";
-                                msgInfo += rw.NoteHtml;
+                                msgInfo += rw.BeiZhuHtml;
                                 msgInfo += "</fieldset>";
                             }
                             msgInfo += "<br>" + currND.ReturnAlert;
@@ -834,7 +834,7 @@ namespace CCFlow.WF
 
                         BP.WF.ReturnWork rw = new ReturnWork();
                         rw.Retrieve(ReturnWorkAttr.WorkID, this.WorkID, ReturnWorkAttr.ReturnToNode, nd.NodeID);
-                        this.UCEn1.Add(rw.NoteHtml);
+                        this.UCEn1.Add(rw.BeiZhuHtml);
                         this.UCEn1.AddHR();
                         //this.UCEn1.addb
                         TextBox tb = new TextBox();

@@ -32,25 +32,32 @@ namespace BP.WF
         {
             #region 准备目录文件.
             string path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\";
-            if (System.IO.Directory.Exists(path) == false)
-                System.IO.Directory.CreateDirectory(path);
-
-            path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\" + workid;
-            if (System.IO.Directory.Exists(path) == false)
+            try
             {
-                System.IO.Directory.CreateDirectory(path);
+                path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\";
+                if (System.IO.Directory.Exists(path) == false)
+                    System.IO.Directory.CreateDirectory(path);
+
+                path = SystemConfig.PathOfDataUser + "InstancePacketOfData\\" + frmID + "\\" + workid;
+                if (System.IO.Directory.Exists(path) == false)
+                {
+                    System.IO.Directory.CreateDirectory(path);
+                }
+                else
+                {
+                    try
+                    {
+                        System.IO.Directory.Delete(path, true);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                    System.IO.Directory.CreateDirectory(path);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                try
-                {
-                    System.IO.Directory.Delete(path, true);
-                }
-                catch (Exception ex)
-                {
-
-                }
-                System.IO.Directory.CreateDirectory(path);
+                return "err@读写文件出现权限问题，请联系管理员解决。" + ex.Message;
             }
 
             //把模版文件copy过去.
@@ -303,12 +310,12 @@ namespace BP.WF
                     // 由于火狐 不支持onerror 所以 判断图片是否存在
                     imgSrc = "icon.png";
 
-                    sb.Append("\t\n<DIV id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
+                    sb.Append("\t\n<div id=" + img.MyPK + " style='position:absolute;left:" + x + "px;top:" + y + "px;text-align:left;vertical-align:top' >");
                     if (string.IsNullOrEmpty(img.LinkURL) == false)
                         sb.Append("\t\n<a href='" + img.LinkURL + "' target=" + img.LinkTarget + " ><img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' /></a>");
                     else
                         sb.Append("\t\n<img src='" + imgSrc + "'  onerror=\"this.src='/DataUser/ICON/CCFlow/LogBig.png'\"  style='padding: 0px;margin: 0px;border-width: 0px;width:" + img.W + "px;height:" + img.H + "px;' />");
-                    sb.Append("\t\n</DIV>");
+                    sb.Append("\t\n</div>");
                     continue;
                 }
                 #endregion 图片类型
@@ -634,21 +641,26 @@ namespace BP.WF
                     sb.Append("<DIV id='DIVWC" + fwc.No + "' style='position:absolute; left:" + x + "px; top:" + fwc.FWC_Y + "px; width:" + fwc.FWC_W + "px; height:" + fwc.FWC_H + "px;text-align: left;' >");
                     sb.Append("<span>");
 
-                    sb.Append("<table>");
+                    sb.Append("<table   style='border: 1px outset #C0C0C0;padding: inherit; margin: 0;border-collapse:collapse;width:100%;' >");
                     #region 生成审核信息.
                     if (flowNo != null)
                     {
-                        string sql = "SELECT * FROM ND" + int.Parse(flowNo) + "Truck WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER RDT ";
+                        string sql = "SELECT * FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
                         foreach (DataRow dr in dt.Rows)
                         {
                             sb.Append("<tr>");
-                            sb.Append("<td>" + dr["NDFromT"] + "</td>");
+                            sb.Append("<td valign=middle style='border-style: solid;padding: 4px;text-align: left;color: #333333;font-size: 12px;border-width: 1px;border-color: #C2D5E3;' >" + dr["NDFromT"] + "</td>");
 
-                            string msg = dr["Msg"].ToString();
+                            sb.Append("<br><br>");
+
+                            string msg = "<font color=green>" + dr["Msg"].ToString() + "</font>";
+
                             msg += "<br>";
-                            msg += "审核人:" + dr["NDFromT"] + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;审核日期:" + dr["RDT"].ToString();
-                            sb.Append("<td colspan=3>" + msg + "</td>");
+                            msg += "<br>";
+                            msg += "审核人:" + dr["EmpFromT"] + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;审核日期:" + dr["RDT"].ToString();
+
+                            sb.Append("<td colspan=3 valign=middle style='border-style: solid;padding: 4px;text-align: left;color: #333333;font-size: 12px;border-width: 1px;border-color: #C2D5E3;' >" + msg + "</td>");
                             sb.Append("</tr>");
                         }
                     }
@@ -784,20 +796,42 @@ namespace BP.WF
             docs = docs.Replace("@Width", mapData.FrmW.ToString());
             docs = docs.Replace("@Height", mapData.FrmH.ToString());
 
+            if (flowNo != null)
+            {
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                gwf.WorkID = workid;
+                gwf.RetrieveFromDBSources();
+
+                docs = docs.Replace("@Title", gwf.Title);
+            }
+
+
             string indexFile = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\" + frmID + "\\" + workid + "\\index.htm";
             BP.DA.DataType.WriteFile(indexFile, docs);
             #endregion 替换模版文件..
 
             #region 把所有的文件做成一个zip文件.
             string zipFile = path + "\\..\\" + workid + ".zip";
-            (new FastZip()).CreateZip(zipFile, path, true, "");
+            try
+            {
+                (new FastZip()).CreateZip(zipFile, path, true, "");
+            }
+            catch (Exception ex)
+            {
+                return "err@生成zip文件遇到权限问题:" + ex.Message;
+            }
             #endregion 把所有的文件做成一个zip文件.
 
             //生成pdf文件
             string pdfFile = path + "\\..\\" + workid + ".pdf";
-            string htmFile = path + "\\" + workid + ".htm";
-            Html2Pdf(htmFile, pdfFile);
-
+            try
+            {
+                Html2Pdf(billUrl, pdfFile);
+            }
+            catch (Exception ex)
+            {
+                return "err@生成pdf文件遇到权限问题:" + ex.Message;
+            }
 
             Hashtable ht = new Hashtable();
             ht.Add("htm", billUrl);
@@ -807,19 +841,16 @@ namespace BP.WF
 
         }
 
-        public static void Html2Pdf(string billUrl, string pdf)
+        public static void Html2Pdf(string htmFile, string pdf)
         {
             //因为Web 是多线程环境，避免甲产生的文件被乙下载去，所以档名都用唯一
 
             string pdfFileExe = SystemConfig.PathOfDataUser + "\\ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
-
             string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
-
-           billUrl = "http://localhost:30362/DataUser/InstancePacketOfData/ND18901/234/index.htm";
 
             //执行wkhtmltopdf.exe
             //Process p = System.Diagnostics.Process.Start(pdfFileExe, @"http://msdn.microsoft.com/zh-cn D:\" + fileNameWithOutExtention + ".pdf");
-            Process p = System.Diagnostics.Process.Start(pdfFileExe, billUrl+" "+pdf);
+            Process p = System.Diagnostics.Process.Start(pdfFileExe, htmFile + " " + pdf);
 
             //若不加这一行，程序就会马上执行下一句而抓不到文件发生意外：System.IO.FileNotFoundException: 找不到文件 ''。
             p.WaitForExit();

@@ -337,7 +337,7 @@ namespace BP.WF
                             {
                                 DataRow drMsg = dtAlert.NewRow();
                                 drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
-                                drMsg["Msg"] = rw.NoteHtml;
+                                drMsg["Msg"] = rw.BeiZhuHtml;
                                 dtAlert.Rows.Add(drMsg);
                             }
 

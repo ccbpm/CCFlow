@@ -1228,7 +1228,7 @@ namespace BP.WF.Template
 
                 rw.ReturnToNode = currWl.FK_Node;
                 rw.ReturnToEmp = currWl.FK_Emp;
-                rw.Note = note;
+                rw.BeiZhu = note;
                 rw.RDT = DataType.CurrentDataTime;
                 rw.IsBackTracking = false;
                 rw.MyPK = BP.DA.DBAccess.GenerGUID();

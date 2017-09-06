@@ -24,7 +24,7 @@ namespace BP.WF
 		/// <summary>
 		/// 退回原因
 		/// </summary>
-		public const  string Note="Note";
+		public const  string BeiZhu="BeiZhu";
         /// <summary>
         /// 退回日期
         /// </summary>
@@ -157,22 +157,22 @@ namespace BP.WF
                 SetValByKey(ReturnWorkAttr.ReturnToEmp, value);
             }
         }
-        public string Note
+        public string BeiZhu
         {
             get
             {
-                return this.GetValStringByKey(ReturnWorkAttr.Note);
+                return this.GetValStringByKey(ReturnWorkAttr.BeiZhu);
             }
             set
             {
-                SetValByKey(ReturnWorkAttr.Note, value);
+                SetValByKey(ReturnWorkAttr.BeiZhu, value);
             }
         }
-        public string NoteHtml
+        public string BeiZhuHtml
         {
             get
             {
-                return this.GetValHtmlStringByKey(ReturnWorkAttr.Note);
+                return this.GetValHtmlStringByKey(ReturnWorkAttr.BeiZhu);
             }
         }
         /// <summary>
@@ -235,7 +235,7 @@ namespace BP.WF
                 map.AddTBInt(ReturnWorkAttr.ReturnToNode, 0, "ReturnToNode", true, true);
                 map.AddTBString(ReturnWorkAttr.ReturnToEmp, null, "退回给", true, true, 0, 4000, 10);
 
-                map.AddTBString(ReturnWorkAttr.Note, "", "退回原因", true, true, 0, 4000, 10);
+                map.AddTBString(ReturnWorkAttr.BeiZhu, null, "退回原因", true, true, 0, 4000, 10);
                 map.AddTBDateTime(ReturnWorkAttr.RDT, null, "退回日期", true, true);
 
                 map.AddTBInt(ReturnWorkAttr.IsBackTracking, 0, "是否要原路返回?", true, true);

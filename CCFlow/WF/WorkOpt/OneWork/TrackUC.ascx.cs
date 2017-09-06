@@ -764,7 +764,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
 
                 this.AddBR();
 
-                AddEasyUiPanelInfo("退回信息", rw.NoteHtml);
+                AddEasyUiPanelInfo("退回信息", rw.BeiZhuHtml);
             }
 
             //foreach (ShiftWork fw in fws)

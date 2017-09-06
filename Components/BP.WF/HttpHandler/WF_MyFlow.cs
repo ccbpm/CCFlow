@@ -492,17 +492,20 @@ namespace BP.WF.HttpHandler
         public string InitToolBar()
         {
             #region 处理是否是加签，或者是否是会签模式，.
-            bool isAskForOrHuiQian=false;
-            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            if (gwf.WFState == WFState.Askfor)
+            bool isAskForOrHuiQian = false;
+            if (this.FK_Node.ToString().EndsWith("01") == false)
             {
-                isAskForOrHuiQian = true;
-            }
-            else
-            {
-                /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮. */
-                if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                if (gwf.WFState == WFState.Askfor)
+                {
                     isAskForOrHuiQian = true;
+                }
+                else
+                {
+                    /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮. */
+                    if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                        isAskForOrHuiQian = true;
+                }
             }
             #endregion 处理是否是加签，或者是否是会签模式，.
 

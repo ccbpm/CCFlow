@@ -96,26 +96,26 @@
                     //03.表单库
                     var treedata = db["Sys_FormTree"],
                         rootdata = $.grep(treedata, function (item) {
-                            return item.PARENTNO == "0";
+                            return item.ParentNo == "0";
                         })[0];
 
                     //构建树节点数据
                     var root = {};
-                    root.text = rootdata.NAME;
+                    root.text = rootdata.Name;
                     root.state = "open";
                     root.children = [];
                     $.grep(treedata, function (item) {
                         //选出一级节点
-                        return item.PARENTNO == "1";
+                        return item.ParentNo == "1";
                     }).forEach(function (folder) {
                         //构建node开始
                         var node = {};
-                        node.text = folder.NAME;
+                        node.text = folder.Name;
                         node.state = "closed";
                         node.children = [];
                         $.grep(db["Sys_MapData"], function (map) {
                             //选出当前节点的二级节点
-                            return 'ND' + map.FK_FormTree == folder.Column1;
+                            return map.FK_FormTree == folder.No;
 
                         }).forEach(function (frm) {
                             node.children.push({

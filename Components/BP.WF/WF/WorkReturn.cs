@@ -257,7 +257,7 @@ namespace BP.WF
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = this.ReturnToEmp; //退回给。
-            rw.Note = Msg;
+            rw.BeiZhu = Msg;
 
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
             rw.Insert();
@@ -605,7 +605,7 @@ namespace BP.WF
             rw.ReturnToEmp = toEmp; //退回给。
 
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
-            rw.Note = Msg;
+            rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
             rw.Insert();
 
@@ -682,7 +682,7 @@ namespace BP.WF
             rw.ReturnToEmp = toEmp; //退回给。
 
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
-            rw.Note = Msg;
+            rw.BeiZhu = Msg;
             rw.IsBackTracking = this.IsBackTrack;
             rw.Insert();
 
@@ -830,7 +830,7 @@ namespace BP.WF
 
             rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
             rw.ReturnToEmp = gwl.FK_Emp; //退回给。
-            rw.Note = Msg;
+            rw.BeiZhu = Msg;
             //杨玉慧 
             Emp emp = new Emp(rw.ReturnToEmp);
             //更新待办人员
@@ -964,7 +964,7 @@ namespace BP.WF
             string file = filePath + "\\" + rw.MyPK;
             infoLog = "\r\n退回人:" + WebUser.No + "," + WebUser.Name + " \r\n退回节点:" + fromND.Name + " \r\n退回到:" + toND.Name;
             infoLog += "\r\n退回时间:" + DataType.CurrentDataTime;
-            infoLog += "\r\n原因:" + rw.Note;
+            infoLog += "\r\n原因:" + rw.BeiZhu;
 
             ReorderLog(fromND, toND);
             DataType.WriteFile(file + ".txt", infoLog);
@@ -1202,7 +1202,7 @@ namespace BP.WF
             rw.ReturnNode = this.HisNode.NodeID;
             rw.ReturnNodeName = this.HisNode.Name;
             rw.ReturnToEmp = FK_Emp;
-            rw.Note = msg;
+            rw.BeiZhu = msg;
             try
             {
                 rw.MyPK = rw.ReturnToNode + "_" + rw.WorkID + "_" + DateTime.Now.ToString("yyyyMMddhhmmss");

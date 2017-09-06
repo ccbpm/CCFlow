@@ -2988,63 +2988,7 @@ namespace BP.WF
                 }
             }
         }
-        /// <summary>
-        /// 产生所有节点视图
-        /// </summary>
-        /// <param name="nds"></param>
-        private void CheckRptViewDel(Nodes nds)
-        {
-            if (this.HisDataStoreModel == DataStoreModel.SpecTable)
-                return;
-
-            string viewName = "V" + this.No;
-            string sql = "CREATE VIEW " + viewName + " ";
-            sql += "/* CCFlow Auto Create :" + this.Name + " Date:" + DateTime.Now.ToString("yyyy-MM-dd") + " */ ";
-            sql += "\r\n (MyPK,FK_Node,OID,FID,RDT,FK_NY,CDT,Rec,Emps,FK_Dept,MyNum) AS ";
-            bool is1 = false;
-            foreach (Node nd in nds)
-            {
-                //  nd.HisWork.CheckPhysicsTable();
-                if (is1 == false)
-                    is1 = true;
-                else
-                    sql += "\r\n UNION ";
-
-                switch (SystemConfig.AppCenterDBType)
-                {
-                    case DBType.Oracle:
-                    case DBType.Informix:
-                        sql += "\r\n SELECT '" + nd.NodeID + "' || '_'|| OID||'_'|| FID  AS MyPK, '" + nd.NodeID + "' AS FK_Node,OID,FID,RDT,SUBSTR(RDT,1,7) AS FK_NY,CDT,Rec,Emps,FK_Dept, 1 AS MyNum FROM ND" + nd.NodeID + " ";
-                        break;
-                    case DBType.MySQL:
-                        sql += "\r\n SELECT '" + nd.NodeID + "'+'_'+CHAR(OID)  +'_'+CHAR(FID)  AS MyPK, '" + nd.NodeID + "' AS FK_Node,OID,FID,RDT," + BP.Sys.SystemConfig.AppCenterDBSubstringStr + "(RDT,1,7) AS FK_NY,CDT,Rec,Emps,FK_Dept, 1 AS MyNum FROM ND" + nd.NodeID + " ";
-                        break;
-                    default:
-                        sql += "\r\n SELECT '" + nd.NodeID + "'+'_'+CAST(OID AS varchar(10)) +'_'+CAST(FID AS VARCHAR(10)) AS MyPK, '" + nd.NodeID + "' AS FK_Node,OID,FID,RDT," + BP.Sys.SystemConfig.AppCenterDBSubstringStr + "(RDT,1,7) AS FK_NY,CDT,Rec,Emps,FK_Dept, 1 AS MyNum FROM ND" + nd.NodeID + " ";
-                        break;
-                }
-            }
-            if (SystemConfig.AppCenterDBType != DBType.Informix)
-                sql += "\r\n GO ";
-
-            try
-            {
-                if (DBAccess.IsExitsObject(viewName) == true)
-                    DBAccess.RunSQL("DROP VIEW " + viewName);
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                DBAccess.RunSQL(sql);
-            }
-            catch (Exception ex)
-            {
-                BP.DA.Log.DefaultLogWriteLineError(ex.Message);
-            }
-        }
+        
         /// <summary>
         /// 检查数据报表.
         /// </summary>
@@ -3067,7 +3011,6 @@ namespace BP.WF
 
             #region 插入字段。
             string sql = "SELECT distinct KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN ("+ndsstrs+")";
-         
 
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
@@ -4336,18 +4279,9 @@ namespace BP.WF
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
 
-                //   rm = new RefMethod();
-                //rm.Title = this.ToE("ViewDef", "视图定义"); //"视图定义";
-                //rm.Icon = "/WF/Img/Btn/View.gif";
-                //rm.ClassMethodName = this.ToString() + ".DoDRpt";
-                //map.AddRefMethod(rm);
+             
 
-                rm = new RefMethod();
-                rm.Title = "报表运行"; // "报表运行";
-                rm.Icon = "../../WF/Img/Btn/View.gif";
-                rm.ClassMethodName = this.ToString() + ".DoOpenRpt()";
-                //rm.Icon = "/WF/Img/Btn/Table.gif";
-                map.AddRefMethod(rm);
+               
 
                 //rm = new RefMethod();
                 //rm.Title = this.ToE("FlowDataOut", "数据转出定义");  //"数据转出定义";
@@ -4373,35 +4307,6 @@ namespace BP.WF
         #endregion
 
         #region  公共方法
-        /// <summary>
-        /// 设计数据转出
-        /// </summary>
-        /// <returns></returns>
-        public string DoExp()
-        {
-            this.DoCheck();
-            return "../../WF/Admin/Exp.aspx?CondType=0&FK_Flow=" + this.No;
-            //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Admin/Exp.aspx?CondType=0&FK_Flow=" + this.No, "单据", "cdsn", 800, 500, 210, 300);
-            //return null;
-        }
-        /// <summary>
-        /// 定义报表
-        /// </summary>
-        /// <returns></returns>
-        public string DoDRpt()
-        {
-            this.DoCheck();
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Admin/WFRpt.aspx?CondType=0&FK_Flow=" + this.No, "单据", "cdsn", 800, 500, 210, 300);
-            return null;
-        }
-        /// <summary>
-        /// 运行报表
-        /// </summary>
-        /// <returns></returns>
-        public string DoOpenRpt()
-        {
-            return null;
-        }
         public string DoDelData()
         {
             #region 删除独立表单的数据.
@@ -4498,7 +4403,7 @@ namespace BP.WF
         /// <param name="fk_flowSort">流程类别</param>
         /// <param name="path">流程名称</param>
         /// <returns></returns>
-        public static Flow DoLoadFlowTemplate(string fk_flowSort, string path, ImpFlowTempleteModel model, string SpecialFlowNo="")
+        public static Flow DoLoadFlowTemplate(string fk_flowSort, string path, ImpFlowTempleteModel model, string SpecialFlowNo = "")
         {
             FileInfo info = new FileInfo(path);
             DataSet ds = new DataSet();
@@ -4509,7 +4414,7 @@ namespace BP.WF
             }
             catch (Exception ex)
             {
-                throw new Exception("@导入流程路径:" +path + "出错：" + ex.Message);
+                throw new Exception("@导入流程路径:" + path + "出错：" + ex.Message);
             }
 
 
@@ -5175,7 +5080,6 @@ namespace BP.WF
                                 string val = dr[dc.ColumnName] as string;
                                 if (val == null)
                                     continue;
-
                                 switch (dc.ColumnName.ToLower())
                                 {
                                     case "fk_node":
@@ -5198,7 +5102,6 @@ namespace BP.WF
                         foreach (DataRow dr in dt.Rows)
                         {
                             BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
-
                             BP.WF.Template.CC cc = new CC(); // 抄送相关的信息.
                             BP.WF.Template.FrmWorkCheck fwc = new FrmWorkCheck();
 
@@ -5265,7 +5168,6 @@ namespace BP.WF
                             {
                                 throw new Exception("@导入节点:FlowName:" + nd.FlowName + " nodeID: " + nd.NodeID + " , " + nd.Name + " 错误:" + ex.Message);
                             }
-
                             //删除mapdata.
                         }
 
@@ -5808,7 +5710,6 @@ namespace BP.WF
 
             infoErr = "@执行期间出现如下非致命的错误：\t\r" + infoErr + "@ " + infoTable;
             throw new Exception(infoErr);
-
         }
         public Node DoNewNode(int x, int y)
         {
@@ -5821,7 +5722,7 @@ namespace BP.WF
             {
                 string strID = this.No + idx.ToString().PadLeft(2, '0');
                 nd.NodeID = int.Parse(strID);
-                if (nd.IsExits==false)
+                if (nd.IsExits == false)
                     break;
                 idx++;
             }
@@ -5924,8 +5825,6 @@ namespace BP.WF
                 BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
                 select.SelectorModel = SelectorModel.GenerUserSelecter;
                 select.Update();
-
-
 
                 nd = new Node();
                 nd.NodeID = int.Parse(this.No + "02");
@@ -6147,8 +6046,7 @@ namespace BP.WF
                     #endregion
                 }
 
-                //写入权限.
-                WritToGPM(flowSort);
+               
 
                 this.DoCheck_CheckRpt(this.HisNodes);
                 //  Flow.RepareV_FlowData_View();
@@ -6161,50 +6059,6 @@ namespace BP.WF
                 //提示错误.
                 throw new Exception("创建流程错误:" + ex.Message);
             }
-        }
-
-        /// <summary>
-        /// 写入权限
-        /// </summary>
-        /// <param name="flowSort"></param>
-        public void WritToGPM(string flowSort)
-        {
-
-            return;
-
-            #region 写入权限管理
-            if (Glo.OSModel == OSModel.OneMore)
-            {
-                string sql = "";
-
-                try
-                {
-                    sql = "DELETE FROM GPM_Menu WHERE FK_App='" + SystemConfig.SysNo + "' AND Flag='Flow" + this.No + "'";
-                    DBAccess.RunSQL(sql);
-                }
-                catch
-                {
-                }
-
-                // 开始组织发起流程的数据.
-                // 取得该流程的目录编号.
-                sql = "SELECT No FROM GPM_Menu WHERE Flag='FlowSort" + flowSort + "' AND FK_App='" + BP.Sys.SystemConfig.SysNo + "'";
-                string parentNoOfMenu = DBAccess.RunSQLReturnStringIsNull(sql, null);
-                if (parentNoOfMenu == null)
-                    throw new Exception("@没有找到该流程的(" + BP.Sys.SystemConfig.SysNo + ")目录在GPM系统中,请重新新建此目录。");
-
-                // 取得该功能的主键编号.
-                string treeNo = DBAccess.GenerOID("BP.GPM.Menu").ToString();
-
-                // 插入流程名称.
-                string url = "../../MyFlow.htm?FK_Flow=" + this.No + "&FK_Node=" + int.Parse(this.No) + "01";
-
-                sql = "INSERT INTO GPM_Menu(No,Name,ParentNo,IsDir,MenuType,FK_App,IsEnable,Flag,Url)";
-                sql += " VALUES('{0}','{1}','{2}',{3},{4},'{5}',{6},'{7}','{8}')";
-                sql = string.Format(sql, treeNo, this.Name, parentNoOfMenu, 0, 4, SystemConfig.SysNo, 1, "Flow" + this.No, url);
-                DBAccess.RunSQL(sql);
-            }
-            #endregion
         }
         /// <summary>
         /// 检查报表
@@ -6320,20 +6174,6 @@ namespace BP.WF
             // 执行录制的sql scripts.
             DBAccess.RunSQLs(sql);
             this.Delete(); //删除需要移除缓存.
-
-            // Flow.RepareV_FlowData_View();
-
-            ////删除权限管理
-            //if (BP.WF.Glo.OSModel == OSModel.OneMore)
-            //{
-            //    try
-            //    {
-            //        DBAccess.RunSQL("DELETE FROM GPM_Menu WHERE Flag='Flow" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
-            //    }
-            //    catch
-            //    {
-            //    }
-            //}
         }
         #endregion
     }

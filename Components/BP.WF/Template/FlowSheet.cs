@@ -492,13 +492,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                // rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "设计报表"; // "报表运行";
-                rm.Icon = "../../WF/Img/Btn/Rpt.gif";
-                rm.ClassMethodName = this.ToString() + ".DoOpenRpt()";
-                rm.RefMethodType = RefMethodType.LinkeWinOpen;
-                map.AddRefMethod(rm);
+ 
 
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/Delete.gif";
@@ -652,26 +646,7 @@ namespace BP.WF.Template
                 //  map.AddRefMethod(rm);
 
 
-                //rm = new RefMethod();
-                //rm.Title = "设置自动发起"; // "报表运行";
-                //rm.Icon = "/WF/Img/Btn/View.gif";
-                //rm.ClassMethodName = this.ToString() + ".DoOpenRpt()";
-                ////rm.Icon = "/WF/Img/Btn/Table.gif"; 
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = this.ToE("Event", "事件"); // "报表运行";
-                //rm.Icon = "/WF/Img/Btn/View.gif";
-                //rm.ClassMethodName = this.ToString() + ".DoOpenRpt()";
-                ////rm.Icon = "/WF/Img/Btn/Table.gif";
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = this.ToE("FlowSheetDataOut", "数据转出定义");  //"数据转出定义";
-                ////  rm.Icon = "/WF/Img/Btn/Table.gif";
-                //rm.ToolTip = "在流程完成时间，流程数据转储存到其它系统中应用。";
-                //rm.ClassMethodName = this.ToString() + ".DoExp";
-                //map.AddRefMethod(rm);
+               
 
                 this._enMap = map;
                 return this._enMap;
@@ -859,7 +834,7 @@ namespace BP.WF.Template
 
                 rw.ReturnToNode = currWl.FK_Node;
                 rw.ReturnToEmp = currWl.FK_Emp;
-                rw.Note = note;
+                rw.BeiZhu = note;
                 rw.RDT = DataType.CurrentDataTime;
                 rw.IsBackTracking = false;
                 rw.MyPK = BP.DA.DBAccess.GenerGUID();
@@ -1126,52 +1101,6 @@ namespace BP.WF.Template
             fl.No = this.No;
             fl.RetrieveFromDBSources();
             return fl.DoDelData();
-        }
-        /// <summary>
-        /// 设计数据转出
-        /// </summary>
-        /// <returns></returns>
-        public string DoExp()
-        {
-            Flow fl = new Flow();
-            fl.No = this.No;
-            fl.RetrieveFromDBSources();
-            return fl.DoExp();
-        }
-        /// <summary>
-        /// 定义报表
-        /// </summary>
-        /// <returns></returns>
-        public string DoDRpt()
-        {
-            Flow fl = new Flow();
-            fl.No = this.No;
-            fl.RetrieveFromDBSources();
-            return fl.DoDRpt();
-        }
-        /// <summary>
-        /// 运行报表
-        /// </summary>
-        /// <returns></returns>
-        public string DoOpenRpt()
-        {
-            return "../../Rpt/OneFlow.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +
-                   int.Parse(this.No) + "Rpt";
-        }
-        /// <summary>
-        /// 更新之后的事情，也要更新缓存。
-        /// </summary>
-        protected override void afterUpdate()
-        {
-            // Flow fl = new Flow();
-            // fl.No = this.No;
-            // fl.RetrieveFromDBSources();
-            //fl.Update();
-
-            if ( BP.WF.Glo.OSModel == OSModel.OneMore)
-            {
-               // DBAccess.RunSQL("UPDATE  GPM_Menu SET Name='" + this.Name + "' WHERE Flag='Flow" + this.No + "' AND FK_App='" + SystemConfig.SysNo + "'");
-            }
         }
         protected override bool beforeUpdate()
         {

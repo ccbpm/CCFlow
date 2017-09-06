@@ -46,7 +46,8 @@
                     var Sys_MapAttrOfAll = jsData["Sys_MapAttrOfAll"]; //所有的列.
                     var Sys_MapAttrOfSelected = jsData["Sys_MapAttrOfSelected"]; //已经选择的列.
                     var Sys_MapAttrOfSystem = jsData["Sys_MapAttrOfSystem"]; //系统字段.
-
+                    var rptMark = rptNo.substr(('ND' + parseInt(flowNo) + 'Rpt').length);
+                    var dis = ' disabled="disabled"';
                     var tsysAppend = "",
                         tallAppend = "";
 
@@ -61,13 +62,33 @@
 
                         tsysAppend += "<td nowrap style='width: 33%'>";
                         var flag = false;
+                        var disstr = '';
+
+                        switch (rptMark) {
+                            case "My":
+                                if (item.KeyOfEn == "FlowStarter") {
+                                    flag = true;
+                                    disstr = dis;
+                                }
+                                break;
+                            case "MyDept":
+                                if (item.KeyOfEn == "FK_Dept") {
+                                    flag = true;
+                                    disstr = dis;
+                                }
+                                break;
+                            case "MyJoin":
+
+                                break;
+                        }
+
                         for (var i = 0, length = Sys_MapAttrOfSelected.length; i < length; i++) {
                             if (item.KeyOfEn == Sys_MapAttrOfSelected[i].KeyOfEn && item.Name == Sys_MapAttrOfSelected[i].Name) {
                                 flag = true;
                                 break;
                             }
                         }
-                        tsysAppend += "<input id='" + item.KeyOfEn + "' type='checkbox' name='" + item.KeyOfEn + "' " + (flag ? "checked = 'checked'" : "") + " />";
+                        tsysAppend += "<input id='" + item.KeyOfEn + "' type='checkbox' name='" + item.KeyOfEn + "' " + (flag ? "checked = 'checked'" : "") + disstr + " />";
                         tsysAppend += "<label for='" + item.KeyOfEn + "'>" + item.Name + "(" + item.KeyOfEn + ")</label>";
                         tsysAppend += "</td>";
 

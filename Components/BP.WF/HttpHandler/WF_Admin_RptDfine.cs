@@ -78,6 +78,31 @@ namespace BP.WF.HttpHandler
             MapAttrs mattrs = new MapAttrs(fk_mapdata);
             ds.Tables.Add(mattrs.ToDataTableField("Sys_MapAttrOfAll"));
 
+            //判断rptNo是否存在于mapdata中
+            MapData md = new MapData();
+            md.No = rptNo;
+            if(md.RetrieveFromDBSources() == 0)
+            {
+                Rpt.RptDfine rd = new Rpt.RptDfine(this.FK_Flow);
+                     
+                switch(rptNo.Substring(fk_mapdata.Length))
+                {
+                    case "My":
+                        rd.DoReset_MyStartFlow();
+                        break;
+                    case "MyDept":
+                        rd.DoReset_MyDeptFlow();
+                        break;
+                    case "MyJoin":
+                        rd.DoReset_MyJoinFlow();
+                        break;
+                    default:
+                        throw new Exception("@未涉及的rptMark类型");
+                }
+
+                md.RetrieveFromDBSources();
+            }
+
             //选择的字段,就是报表的字段.
             MapAttrs mattrsOfRpt = new MapAttrs(rptNo);
             ds.Tables.Add(mattrsOfRpt.ToDataTableField("Sys_MapAttrOfSelected"));
@@ -167,6 +192,31 @@ namespace BP.WF.HttpHandler
         {
             string rptNo = this.GetRequestVal("RptNo");
 
+            //判断rptNo是否存在于mapdata中
+            MapData md = new MapData();
+            md.No = rptNo;
+            if (md.RetrieveFromDBSources() == 0)
+            {
+                Rpt.RptDfine rd = new Rpt.RptDfine(this.FK_Flow);
+
+                switch (rptNo.Substring(("ND" + int.Parse(this.FK_Flow) + "Rpt").Length))
+                {
+                    case "My":
+                        rd.DoReset_MyStartFlow();
+                        break;
+                    case "MyDept":
+                        rd.DoReset_MyDeptFlow();
+                        break;
+                    case "MyJoin":
+                        rd.DoReset_MyJoinFlow();
+                        break;
+                    default:
+                        throw new Exception("@未涉及的rptMark类型");
+                }
+
+                md.RetrieveFromDBSources();
+            }
+
             //选择的字段,就是报表的字段.
             MapAttrs mattrsOfRpt = new MapAttrs(rptNo);
             return mattrsOfRpt.ToJson();
@@ -214,11 +264,32 @@ namespace BP.WF.HttpHandler
 
             //定义容器.
             DataSet ds = new DataSet();
-
-            //主表数据.
+            
+            //判断rptNo是否存在于mapdata中
             MapData md = new MapData();
             md.No = rptNo;
-            md.RetrieveFromDBSources();
+            if (md.RetrieveFromDBSources() == 0)
+            {
+                Rpt.RptDfine rd = new Rpt.RptDfine(this.FK_Flow);
+
+                switch (rptNo.Substring(("ND" + int.Parse(this.FK_Flow) + "Rpt").Length))
+                {
+                    case "My":
+                        rd.DoReset_MyStartFlow();
+                        break;
+                    case "MyDept":
+                        rd.DoReset_MyDeptFlow();
+                        break;
+                    case "MyJoin":
+                        rd.DoReset_MyJoinFlow();
+                        break;
+                    default:
+                        throw new Exception("@未涉及的rptMark类型");
+                }
+
+                md.RetrieveFromDBSources();
+            }
+
             ds.Tables.Add(md.ToDataTableField("Main"));
 
             //查询出来枚举与外键类型的字段集合.

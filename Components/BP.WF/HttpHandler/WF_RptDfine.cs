@@ -60,7 +60,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
-   
+
         #region 功能列表
         /// <summary>
         /// 功能列表
@@ -136,14 +136,10 @@ namespace BP.WF.HttpHandler
         #region MyStartFlow.htm 我发起的流程
         public string MyStartFlow_Init()
         {
-            //if (string.IsNullOrWhiteSpace(this.RptNo))
-            //    return "err@参数RptNo不能为空";
-            //   BP.WF.Data.MyDeptEmp 
-
             if (string.IsNullOrWhiteSpace(this.FK_Flow))
                 return "err@参数FK_Flow不能为空";
 
-            string PageSize = GetRequestVal("PageSize");
+            string pageSize = GetRequestVal("pageSize");
             string fcid = string.Empty;
             DataSet ds = new DataSet();
             Dictionary<string, string> vals = null;
@@ -160,7 +156,6 @@ namespace BP.WF.HttpHandler
                 rd.DoReset("My", "我发起的流程");
                 md.RetrieveFromDBSources();
             }
-            //  if (BP.WF.Data.rep
 
             MapAttr ar = null;
 
@@ -404,7 +399,7 @@ namespace BP.WF.HttpHandler
             qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             md.SetPara("T_total", qo.GetCount());
-            qo.DoQuery("OID", string.IsNullOrWhiteSpace(PageSize) ? SystemConfig.PageSize : int.Parse(PageSize), 1);
+            qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), 1);
             ds.Tables.Add(ges.ToDataTableField("MainData"));
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
             #endregion
@@ -419,8 +414,8 @@ namespace BP.WF.HttpHandler
             string dtFrom = GetRequestVal("dtFrom");
             string dtTo = GetRequestVal("dtTo");
             string mvals = GetRequestVal("mvals");
-            string PageSize = GetRequestVal("PageSize");
-            int PageIdx = int.Parse(GetRequestVal("PageIdx"));
+            string pageSize = GetRequestVal("pageSize");
+            int pageIdx = int.Parse(GetRequestVal("pageIdx"));
 
             string rptNo = "ND" + int.Parse(this.FK_Flow) + "RptMy";
             UserRegedit ur = new UserRegedit();
@@ -442,13 +437,13 @@ namespace BP.WF.HttpHandler
             qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             md.SetPara("T_total", qo.GetCount());
-            qo.DoQuery("OID", string.IsNullOrWhiteSpace(PageSize) ? SystemConfig.PageSize : int.Parse(PageSize), PageIdx);
+            qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), pageIdx);
             ds.Tables.Add(ges.ToDataTableField("MainData"));
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
-            return BP.Tools.Json.DataSetToJson(ds,false);
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
-        
+
         /// <summary>
         /// 初始化QueryObject
         /// </summary>

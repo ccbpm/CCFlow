@@ -1855,6 +1855,21 @@ namespace BP.WF
             
         }
         /// <summary>
+        /// 获取某一个人某个流程已完成的工作
+        /// </summary>
+        /// <param name="userNo"></param>
+        /// <returns></returns>
+        public static DataTable DB_FlowComplete(string userNo,string flowNo)
+        {
+
+            /* 如果不是删除流程注册表. */
+            Paras ps = new Paras();
+            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + userNo + "@%' AND T.FK_Flow='" + flowNo + "' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
+            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+
+        }
+        /// <summary>
         /// 获取已经完成
         /// </summary>
         /// <returns></returns>

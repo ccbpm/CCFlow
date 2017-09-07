@@ -176,6 +176,9 @@ namespace BP.WF.HttpHandler
                 if (this.SearchType == "MyJoin")
                     rd.DoReset(this.SearchType, "我参与的流程");
 
+                if (this.SearchType == "Admin")
+                    rd.DoReset(this.SearchType, "超级查询");
+
                 md.RetrieveFromDBSources();
             }
 
@@ -453,7 +456,7 @@ namespace BP.WF.HttpHandler
             string pageSize = GetRequestVal("pageSize");
             int pageIdx = int.Parse(GetRequestVal("pageIdx"));
 
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "RptMy";
+            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt"+this.SearchType;
             UserRegedit ur = new UserRegedit();
             ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
             ur.RetrieveFromDBSources();
@@ -470,7 +473,22 @@ namespace BP.WF.HttpHandler
             MapAttrs attrs = new MapAttrs(rptNo);
             GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
-            qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+
+            switch (this.SearchType)
+            {
+                case "My": //我发起的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+                    break;
+                case "MyJoin": //我参与的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
+                    break;
+                case "Admin":
+                    break;
+                default:
+                    return "err@" + this.SearchType + "标记错误.";
+            }
+
+
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             md.SetPara("T_total", qo.GetCount());
             qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), pageIdx);

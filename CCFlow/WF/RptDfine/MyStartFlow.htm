@@ -75,7 +75,7 @@
                 var d = sinfo = eval("(" + data + ")");
                 md = d.Sys_MapData[0];
 
-                if (md.RptIsSearchKey) {
+                if (md.RptIsSearchKey == "1") {
                     $("#tb_main").prepend('<span class="con-span">关键字: </span><input type="text" id="tb_key" style="width:166px;" />');
                     $("#tb_key").textbox().textbox("setText", md.T_SearchKey);
                 }
@@ -89,15 +89,18 @@
                         $("#tb_dtTo").datebox({ buttons: buttons }).datebox("setValue", md.T_DTTo);
                     }
                     else {
-                        $("#tb_dtFrom").datetimebox({ buttons: buttons }).datetimebox("setValue", md.T_DTFrom);
-                        $("#tb_dtTo").datetimebox({ buttons: buttons }).datetimebox("setValue", md.T_DTTo);
+                        $("#tb_dtFrom").datetimebox().datetimebox("setValue", md.T_DTFrom);
+                        $("#tb_dtTo").datetimebox().datetimebox("setValue", md.T_DTTo);
                     }
                 }
 
-                $("#btn_search").css("visibility", "visible");
-                $("#btn_reset").css("visibility", "visible");
+                $("#btn_search").show();
+                $("#btn_export").show();
 
-                $("#btn_open").after('&nbsp;&nbsp;<a href="javascript:void(0)" iconCls="icon-excel" id="btn_export">导出</a>');
+                if (md.RptIsSearchKey == "1" || (md.RptDTSearchWay && md.RptDTSearchWay != 0) || d.FilterCtrls.length > 0) {
+                    $("#btn_reset").show();
+                }
+
                 $("#btn_export").linkbutton({
                     onClick: function () {
                         window.open('../Do.aspx?ActionType=DownMyStartFlowExcel&FK_Flow=' + fk_flow, '_blank');
@@ -105,7 +108,7 @@
                 });
 
                 if (d.FilterCtrls.length > 0) {
-                    $("#tb_main").append('<span class="menu_sep"></span><a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
+                    $("#btn_reset").after('<span class="menu_sep"></span><a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
                     $("#btn_more").linkbutton();
 
                     $(".more").click(function () {
@@ -248,6 +251,12 @@
                         field: c.No,
                         width: c.Width
                     });
+
+                    if (c.No == "Title") {
+                        cols[cols.length - 1].formatter = function (value, row, index) {
+                            return '<a href="javascript:void(0)" onclick="ViewFlow(' + index + ')">' + value + '</a>';
+                        }
+                    }
                 });
 
                 $("#dg").datagrid({ columns: [cols], resizable: true });
@@ -410,12 +419,13 @@
         }
 
         function ViewFlow(rowIndex, rowData) {
-            if (!rowData) {
+            if (!rowData && typeof rowIndex != 'undefined') {
+                $('#dg').datagrid('selectRow', rowIndex);
                 rowData = $('#dg').datagrid('getSelected');
                 if (!rowData) return;
             }
 
-            OpenEasyUiDialog('../WorkOpt/OneWork/OneWork.htm?currTab=Truck&WorkId=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FID=' + rowData.FID + '&t=' + Math.random(), 'eudlgframe', '流程轨迹', 1000, 618);
+            OpenEasyUiDialog('../WorkOpt/OneWork/OneWork.htm?currTab=Truck&WorkId=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FID=' + (rowData.FID?rowData.FID:0) + '&t=' + Math.random(), 'eudlgframe', '流程轨迹', 1000, 618);
         }
 
         function closeDlg() {
@@ -430,9 +440,8 @@
     <div id="tb" style="padding: 0 15px;">
         <div class="conditions" id="tb_main">
             <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-search"
-               id="btn_search" style="visibility: hidden; margin-left:5px;">查询</a> <a href="javascript:void(0)" class="easyui-linkbutton"
-               iconcls="icon-reset" id="btn_reset" style="visibility: hidden" onclick="Reset()">重置</a><span class="menu_sep"></span><a href="javascript:void(0)"
-               class="easyui-linkbutton" iconcls="icon-open" id="btn_open" onclick="ViewFlow()">查看</a>
+               id="btn_search" style="display:none; margin-left:5px;">查询</a> <a href="javascript:void(0)" class="easyui-linkbutton"
+               iconcls="icon-reset" id="btn_reset" style="display:none;" onclick="Reset()">重置</a><span class="menu_sep"></span><a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-excel" id="btn_export" style="display:none;">导出</a>
         </div>
         <div class="conditions hide" id="filters">
         </div>

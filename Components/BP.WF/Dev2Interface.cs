@@ -180,21 +180,20 @@ namespace BP.WF
         {
             get
             {
-                if (Glo.IsDeleteGenerWorkFlow == false)
-                {
+              
                     /* 如果不是删除流程注册表. */
                     Paras ps = new Paras();
                     string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                     ps.SQL = "SELECT count(WorkID) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND WFState=" + (int)WFState.Complete;
                     return BP.DA.DBAccess.RunSQLReturnValInt(ps, 0);
-                }
-                else
-                {
-                    Paras ps = new Paras();
-                    string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                    ps.SQL = "SELECT count(*) Num FROM V_FlowData WHERE FlowEmps LIKE '%@" + WebUser.No + "%' AND FID=0 AND WFState=" + (int)WFState.Complete;
-                    return BP.DA.DBAccess.RunSQLReturnValInt(ps, 0);
-                }
+                //}
+                //else
+                //{
+                //    Paras ps = new Paras();
+                //    string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                //    ps.SQL = "SELECT count(*) Num FROM V_FlowData WHERE FlowEmps LIKE '%@" + WebUser.No + "%' AND FID=0 AND WFState=" + (int)WFState.Complete;
+                //    return BP.DA.DBAccess.RunSQLReturnValInt(ps, 0);
+                //}
             }
         }
         /// <summary>
@@ -1710,22 +1709,13 @@ namespace BP.WF
         /// <returns>具有FlowNo,FlowName,Num三个列的指定人员的待办列表</returns>
         public static DataTable DB_FlowCompleteGroup(string userNo)
         {
-            if (Glo.IsDeleteGenerWorkFlow == false)
-            {
+           
                 /* 如果不是删除流程注册表. */
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 ps.SQL = "SELECT FK_Flow as No,FlowName,COUNT(*) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + userNo + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " GROUP BY FK_Flow,FlowName";
                 return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
-            else
-            {
-                throw new Exception("未实现..");
-                //Paras ps = new Paras();
-                //string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                //ps.SQL = "SELECT * FROM V_FlowData WHERE FlowEmps LIKE '%@" + userNo + "%' AND FID=0 AND WFState=" + (int)WFState.Complete;
-                //return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
+ 
         }
 
         /// <summary>
@@ -1738,8 +1728,7 @@ namespace BP.WF
         /// <returns>用户编号</returns>
         public static DataTable DB_FlowComplete(string userNo, string flowNo, int pageSize, int pageIdx)
         {
-            if (Glo.IsDeleteGenerWorkFlow == false)
-            {
+            
                 /* 如果不是删除流程注册表. */
                 GenerWorkFlows ens = new GenerWorkFlows();
                 QueryObject qo = new QueryObject(ens);
@@ -1758,15 +1747,7 @@ namespace BP.WF
                 qo.DoQuery(GenerWorkFlowAttr.WorkID, pageSize, pageIdx, GenerWorkFlowAttr.RDT, true);
                 /**小周鹏修改-----------------------------END**/
                 return ens.ToDataTableField();
-            }
-            else
-            {
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT *,FlowEndNode FK_Node FROM V_FlowData WHERE FlowEmps LIKE '%@" + userNo + "%' AND   FID=0 AND WFState=" + (int)WFState.Complete;
-
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
+           
         }
         /// <summary>
         /// 查询指定流程中已完成的流程
@@ -1779,8 +1760,7 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FlowComplete(string userNo, int pageCount, int pageSize, int pageIdx, string strFlow)
         {
-            if (Glo.IsDeleteGenerWorkFlow == false)
-            {
+           
                 /* 如果不是删除流程注册表. */
                 GenerWorkFlows ens = new GenerWorkFlows();
                 QueryObject qo = new QueryObject(ens);
@@ -1793,14 +1773,7 @@ namespace BP.WF
                 qo.AddWhere(GenerWorkFlowAttr.FK_Flow, strFlow);
                 qo.DoQuery(GenerWorkFlowAttr.WorkID, pageSize, pageIdx);
                 return ens.ToDataTableField();
-            }
-            else
-            {
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT *,FlowEndNode FK_Node FROM V_FlowData WHERE FK_Flow='" + strFlow + "' AND FlowEmps LIKE '%@" + userNo + "%' AND FID=0 AND WFState=" + (int)WFState.Complete;
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
+          
         }
         /// <summary>
         /// 查询指定流程中已完成的公告流程
@@ -1812,8 +1785,7 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FlowComplete(string strFlow, int pageSize, int pageIdx)
         {
-            if (Glo.IsDeleteGenerWorkFlow == false)
-            {
+            
                 /* 如果不是删除流程注册表. */
                 GenerWorkFlows ens = new GenerWorkFlows();
                 QueryObject qo = new QueryObject(ens);
@@ -1824,14 +1796,7 @@ namespace BP.WF
                 qo.AddWhere(GenerWorkFlowAttr.FK_Flow, strFlow);
                 qo.DoQuery(GenerWorkFlowAttr.WorkID, pageSize, pageIdx);
                 return ens.ToDataTableField();
-            }
-            else
-            {
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT *,FlowEndNode FK_Node FROM V_FlowData WHERE FK_Flow='" + strFlow + "' AND FID=0 AND WFState=" + (int)WFState.Complete;
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
+           
         }
         /// <summary>
         /// 获取已经完成流程
@@ -1841,21 +1806,13 @@ namespace BP.WF
         {
 
             DataTable dt = null;
-            if (Glo.IsDeleteGenerWorkFlow == false)
-            {
+          
                 /* 如果不是删除流程注册表. */
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + " GROUP BY T.FK_Flow,T.FlowName";
                 dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
-            else
-            {
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM V_FlowData T WHERE T.FlowEmps LIKE '%@" + WebUser.No + "@%'  AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + "   GROUP BY T.FK_Flow,T.FlowName";
-                dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
+            
 
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -1874,21 +1831,13 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FlowComplete()
         {
-            if (Glo.IsDeleteGenerWorkFlow == false)
-            {
+           
                 /* 如果不是删除流程注册表. */
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
                 return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
-            else
-            {
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM V_FlowData T WHERE T.FlowEmps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY RDT DESC";
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
+            
         }
         /// <summary>
         /// 获取某一个人已完成的工作
@@ -1897,21 +1846,13 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FlowComplete(string userNo)
         {
-            if (Glo.IsDeleteGenerWorkFlow == false)
-            {
+           
                 /* 如果不是删除流程注册表. */
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
                 ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + userNo + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
                 return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
-            else
-            {
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM V_FlowData T WHERE T.FlowEmps LIKE '%@" + userNo + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY RDT DESC";
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
+            
         }
         /// <summary>
         /// 获取已经完成
@@ -1956,8 +1897,7 @@ namespace BP.WF
         }
         public static DataTable DB_FlowComplete2(string fk_flow, string title)
         {
-            if (Glo.IsDeleteGenerWorkFlow == false)
-            {
+           
                 /* 如果不是删除流程注册表. */
                 Paras ps = new Paras();
                 string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -1976,27 +1916,7 @@ namespace BP.WF
                         ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
                 }
                 return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
-            else
-            {
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                if (string.IsNullOrEmpty(fk_flow))
-                {
-                    if (string.IsNullOrEmpty(title))
-                        ps.SQL = "SELECT 'RUNNING' AS Type,* FROM V_FlowData WHERE FlowEmps LIKE '%@" + WebUser.No + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow!='010' order by RDT desc";
-                    else
-                        ps.SQL = "SELECT 'RUNNING' AS Type,* FROM V_FlowData WHERE FlowEmps LIKE '%@" + WebUser.No + "%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow!='010' order by RDT desc";
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(title))
-                        ps.SQL = "SELECT 'RUNNING' AS Type,* FROM V_FlowData WHERE FlowEmps LIKE '%@" + WebUser.No + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
-                    else
-                        ps.SQL = "SELECT 'RUNNING' AS Type,* FROM V_FlowData WHERE FlowEmps LIKE '%@" + WebUser.No + "%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
-                }
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            }
+           
         }
 
         public static DataTable DB_FlowCompleteAndCC2(string fk_flow, string title)

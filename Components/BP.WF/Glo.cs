@@ -3624,16 +3624,16 @@ namespace BP.WF
                 return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableZhiDu", false);
             }
         }
-        /// <summary>
-        /// 是否删除流程注册表数据？
-        /// </summary>
-        public static bool IsDeleteGenerWorkFlow
-        {
-            get
-            {
-                return BP.Sys.SystemConfig.GetValByKeyBoolen("IsDeleteGenerWorkFlow", false);
-            }
-        }
+        ///// <summary>
+        ///// 是否删除流程注册表数据？
+        ///// </summary>
+        //public static bool IsDeleteGenerWorkFlow
+        //{
+        //    get
+        //    {
+        //        return BP.Sys.SystemConfig.GetValByKeyBoolen("IsDeleteGenerWorkFlow", false);
+        //    }
+        //}
         /// <summary>
         /// 是否检查表单树字段填写是否为空
         /// </summary>

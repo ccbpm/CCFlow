@@ -21,6 +21,19 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_RptDfine : DirectoryPageBase
     {
+        #region 属性.
+        /// <summary>
+        /// 查询类型
+        /// </summary>
+        public string SearchType
+        {
+            get
+            {
+                return this.GetRequestVal("SearchType");
+            }
+        }
+        #endregion 属性.
+
         /// <summary>
         /// 页面功能实体
         /// </summary>
@@ -69,8 +82,8 @@ namespace BP.WF.HttpHandler
         public string Default_Init()
         {
             Hashtable ht = new Hashtable();
-            ht.Add("MyStartFlow", "我发起的流程");
-            ht.Add("MyJoinFlow", "我参与的流程");
+            ht.Add("My", "我发起的流程");
+            ht.Add("MyJoin", "我参与的流程");
 
             RptDfine rd = new RptDfine(this.FK_Flow);
 
@@ -103,7 +116,10 @@ namespace BP.WF.HttpHandler
 
             #endregion 增加本部门发起流程的查询.
 
-
+            if (BP.Web.WebUser.IsAdmin)
+            {
+                ht.Add("Admin", "高级查询");
+            }
 
             //   ht.Add("MyDeptFlow", "我本部门发起的流程");
             //  ht.Add("MySubDeptFlow", "我本部门与子部门发起的流程");
@@ -134,7 +150,7 @@ namespace BP.WF.HttpHandler
         #endregion 执行父类的重写方法.
 
         #region MyStartFlow.htm 我发起的流程
-        public string MyStartFlow_Init()
+        public string FlowSearch_Init()
         {
             if (string.IsNullOrWhiteSpace(this.FK_Flow))
                 return "err@参数FK_Flow不能为空";
@@ -153,7 +169,13 @@ namespace BP.WF.HttpHandler
             {
                 /*如果没有找到，就让其重置一下.*/
                 BP.WF.Rpt.RptDfine rd = new RptDfine(this.FK_Flow);
-                rd.DoReset("My", "我发起的流程");
+
+                if (this.SearchType == "My")
+                    rd.DoReset(this.SearchType, "我发起的流程");
+
+                if (this.SearchType == "MyJoin")
+                    rd.DoReset(this.SearchType, "我参与的流程");
+
                 md.RetrieveFromDBSources();
             }
 
@@ -396,7 +418,21 @@ namespace BP.WF.HttpHandler
             #region //增加第一页数据
             GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
-            qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+            
+            switch (this.SearchType)
+            {
+                case "My": //我发起的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+                    break;
+                case "MyJoin": //我参与的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
+                    break;
+                case "Admin":
+                    break;
+                default:
+                    return "err@" + this.SearchType + "标记错误.";
+            }
+
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
             md.SetPara("T_total", qo.GetCount());
             qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), 1);
@@ -407,7 +443,7 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
 
-        public string MyStartFlow_Search()
+        public string FlowSearch_Done()
         {
             string vals = this.GetRequestVal("vals");
             string searchKey = GetRequestVal("key");

@@ -82,7 +82,6 @@ namespace BP.Demo.BPFramework
 
 				Map map = new Map("Demo_BanJi","班级");
 
-               // map.EnDBUrl = new DBUrl(DBUrlType.DBAccessOfOracle1);
 
 				#region 基本属性 
 				map.DepositaryOfEntity=Depositary.None;  //实体村放位置.
@@ -94,7 +93,6 @@ namespace BP.Demo.BPFramework
 				#region 字段 
                 map.AddTBStringPK(BanJiAttr.No, null, "编号", true, true, 3, 3, 3);
 				map.AddTBString(BanJiAttr.Name,null,"名称",true,false,0,50,200);
-
                 map.AddTBString(BanJiAttr.BZR, null, "班主任", true, false, 0, 50, 200);
 				#endregion
 

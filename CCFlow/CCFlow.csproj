@@ -26,7 +26,6 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -956,9 +955,6 @@
     <Content Include="WF\Img\Runing.png" />
     <Content Include="WF\MyFlowFree2017.js" />
     <Content Include="WF\RptDfine\Flowlist.htm" />
-    <Content Include="C:\Users\Administrator\Desktop\MyStartFlow.htm">
-      <Link>WF\RptDfine\MyStartFlow.htm</Link>
-    </Content>
     <Content Include="WF\RptDfine\FlowSearch.htm" />
     <Content Include="WF\RptDfine\Default.htm" />
     <Content Include="WF\RptDfine\Single.Master" />
@@ -6628,7 +6624,6 @@
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shCoreEclipse.css" />
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shThemeDefault.css" />
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shThemeEclipse.css" />
-    <Content Include="WF\SDKComponents\AccepterCCerSelecter.ascx" />
     <Content Include="WF\SDKComponents\AccSite.Master" />
     <Content Include="WF\SDKComponents\Base\SDKBase.aspx" />
     <Content Include="WF\SDKComponents\Base\SDKData.js" />
@@ -6792,9 +6787,7 @@
     <Content Include="WF\WebOffice\OfficeView.aspx" />
     <Content Include="WF\WebOffice\TempLate.aspx" />
     <Content Include="WF\WFRpt.aspx" />
-    <Content Include="WF\WorkOpt\Accepter.aspx" />
     <Content Include="WF\WorkOpt\Accepter.htm" />
-    <Content Include="WF\WorkOpt\AccepterAdv.aspx" />
     <Content Include="WF\WorkOpt\AllotTask.aspx" />
     <Content Include="WF\WorkOpt\Askfor.aspx" />
     <Content Include="WF\WorkOpt\Askfor.htm" />
@@ -6810,13 +6803,11 @@
     <Content Include="WF\WorkOpt\DTC.aspx" />
     <Content Include="WF\WorkOpt\FHLFlow.aspx" />
     <Content Include="WF\WorkOpt\FoolFrmTrack.htm" />
-    <Content Include="WF\WorkOpt\Forward.aspx" />
     <Content Include="WF\WorkOpt\Forward.htm" />
     <Content Include="WF\WorkOpt\FTC.aspx" />
     <Content Include="WF\WorkOpt\GridData.ashx" />
     <Content Include="WF\WorkOpt\GridEdit.aspx" />
     <Content Include="WF\WorkOpt\Handler.ashx" />
-    <Content Include="WF\WorkOpt\Home.aspx" />
     <Content Include="WF\WorkOpt\HungUp.aspx" />
     <Content Include="WF\WorkOpt\OneWork\Ath.aspx" />
     <Content Include="WF\WorkOpt\OneWork\Ath.htm" />
@@ -6858,46 +6849,35 @@
     <Content Include="WF\WorkOpt\Press.htm" />
     <Content Include="WF\WorkOpt\PRI.aspx" />
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
-    <Content Include="WF\WorkOpt\ReturnWork.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.htm" />
-    <Content Include="WF\WorkOpt\SelectEmps.aspx" />
     <Content Include="WF\WorkOpt\SelectEmps.htm" />
     <Content Include="WF\WorkOpt\SelectNode.aspx" />
     <Content Include="WF\WorkOpt\SelectUser.aspx" />
-    <Content Include="WF\WorkOpt\ServAccepter.ashx" />
-    <Content Include="WF\WorkOpt\SilverlightUploadService.asmx" />
     <Content Include="WF\WorkOpt\StartGuide.htm" />
     <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
-    <Content Include="WF\WorkOpt\StartGuideFrms.aspx" />
+    <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
     <Content Include="WF\WorkOpt\StopFlow.aspx" />
     <Content Include="WF\WorkOpt\SubFlow.aspx" />
-    <Content Include="WF\WorkOpt\Thread.aspx" />
     <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
     <Content Include="WF\WorkOpt\ToNodes.aspx" />
-    <Content Include="WF\WorkOpt\Track.aspx" />
     <Content Include="WF\WorkOpt\TransferCustom.aspx" />
     <Content Include="WF\WorkOpt\TransferCustomSimple.aspx" />
-    <Content Include="WF\WorkOpt\UnPassDtl.aspx" />
     <Content Include="WF\WorkOpt\UnSend.aspx" />
     <Content Include="WF\WorkOpt\ViewWorkNodeFrm.htm" />
     <Content Include="WF\WorkOpt\WebOffice.aspx" />
     <Content Include="WF\WorkOpt\WinOpen.master" />
-    <Content Include="WF\WorkOpt\WorkCheck.aspx" />
     <Content Include="WF\WorkOpt\WorkCheck.htm" />
-    <Content Include="WF\WorkOpt\WorkCheckAth.aspx" />
     <Content Include="AppACE\Handler.ashx" />
     <Content Include="WF\MyFlowFool.htm" />
     <Content Include="WF\WFRpt.htm" />
     <Content Include="WF\StartGuide.htm" />
     <Content Include="WF\MyFlowWord.htm" />
     <Content Include="WF\WorkOpt\AllotTask.htm" />
-    <Content Include="WF\WorkOpt\Allot.htm" />
     <Content Include="WF\MyFlowFoolTruck.htm" />
     <Content Include="WF\WorkOpt\FlowSkip.htm" />
     <Content Include="WF\TodolistOfAuth.htm" />
     <Content Include="WF\TaskPoolSharing.htm" />
     <Content Include="WF\TaskPoolApply.htm" />
-    <Content Include="WF\WorkOpt\WorkCheckIng.htm" />
     <Content Include="WF\WorkOpt\AccepterGener.htm" />
     <Content Include="WF\WorkOpt\HuiQian.htm" />
     <Content Include="WF\WorkOpt\AccepterOfGener.htm" />
@@ -6951,7 +6931,6 @@
     <Content Include="WF\CCForm\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
     <Content Include="WF\AppClassic\Handler.ashx" />
-    <Content Include="WF\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Admin\Port\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\CCForm\WinOpen.master" />
@@ -8141,6 +8120,7 @@
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\UC\CondStation.ascx.designer.cs">
       <DependentUpon>CondStation.ascx</DependentUpon>
@@ -9404,13 +9384,6 @@
     <Compile Include="WF\RptDfine\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\SDKComponents\AccepterCCerSelecter.ascx.cs">
-      <DependentUpon>AccepterCCerSelecter.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\AccepterCCerSelecter.ascx.designer.cs">
-      <DependentUpon>AccepterCCerSelecter.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\SDKComponents\AccSite.Master.cs">
       <DependentUpon>AccSite.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9673,20 +9646,6 @@
     <Compile Include="WF\WinOpenEUI.Master.designer.cs">
       <DependentUpon>WinOpenEUI.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\Accepter.aspx.cs">
-      <DependentUpon>Accepter.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Accepter.aspx.designer.cs">
-      <DependentUpon>Accepter.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\AccepterAdv.aspx.cs">
-      <DependentUpon>AccepterAdv.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\AccepterAdv.aspx.designer.cs">
-      <DependentUpon>AccepterAdv.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\AllotTask.aspx.cs">
       <DependentUpon>AllotTask.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9746,13 +9705,6 @@
     <Compile Include="WF\WorkOpt\FHLFlow.aspx.designer.cs">
       <DependentUpon>FHLFlow.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\Forward.aspx.cs">
-      <DependentUpon>Forward.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Forward.aspx.designer.cs">
-      <DependentUpon>Forward.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\FTC.aspx.cs">
       <DependentUpon>FTC.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9772,13 +9724,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Home.aspx.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Home.aspx.designer.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\HungUp.aspx.cs">
       <DependentUpon>HungUp.aspx</DependentUpon>
@@ -9867,20 +9812,6 @@
     <Compile Include="WF\WorkOpt\PrintDoc.aspx.designer.cs">
       <DependentUpon>PrintDoc.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\ReturnWork.aspx.cs">
-      <DependentUpon>ReturnWork.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ReturnWork.aspx.designer.cs">
-      <DependentUpon>ReturnWork.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SelectEmps.aspx.cs">
-      <DependentUpon>SelectEmps.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SelectEmps.aspx.designer.cs">
-      <DependentUpon>SelectEmps.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\SelectNode.aspx.cs">
       <DependentUpon>SelectNode.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9894,20 +9825,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\SelectUser.aspx.designer.cs">
       <DependentUpon>SelectUser.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ServAccepter.ashx.cs">
-      <DependentUpon>ServAccepter.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SilverlightUploadService.asmx.cs">
-      <DependentUpon>SilverlightUploadService.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\StartGuideFrms.aspx.cs">
-      <DependentUpon>StartGuideFrms.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\StartGuideFrms.aspx.designer.cs">
-      <DependentUpon>StartGuideFrms.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\StopFlow.aspx.cs">
       <DependentUpon>StopFlow.aspx</DependentUpon>
@@ -9923,13 +9840,6 @@
     <Compile Include="WF\WorkOpt\SubFlow.aspx.designer.cs">
       <DependentUpon>SubFlow.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\Thread.aspx.cs">
-      <DependentUpon>Thread.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Thread.aspx.designer.cs">
-      <DependentUpon>Thread.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\ThreadDtl.aspx.cs">
       <DependentUpon>ThreadDtl.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9944,13 +9854,6 @@
     <Compile Include="WF\WorkOpt\ToNodes.aspx.designer.cs">
       <DependentUpon>ToNodes.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\Track.aspx.cs">
-      <DependentUpon>Track.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Track.aspx.designer.cs">
-      <DependentUpon>Track.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\TransferCustom.aspx.cs">
       <DependentUpon>TransferCustom.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9964,13 +9867,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\TransferCustomSimple.aspx.designer.cs">
       <DependentUpon>TransferCustomSimple.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\UnPassDtl.aspx.cs">
-      <DependentUpon>UnPassDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\UnPassDtl.aspx.designer.cs">
-      <DependentUpon>UnPassDtl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\UnSend.aspx.cs">
       <DependentUpon>UnSend.aspx</DependentUpon>
@@ -9992,20 +9888,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\WinOpen.master.designer.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WorkCheck.aspx.cs">
-      <DependentUpon>WorkCheck.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WorkCheck.aspx.designer.cs">
-      <DependentUpon>WorkCheck.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WorkCheckAth.aspx.cs">
-      <DependentUpon>WorkCheckAth.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WorkCheckAth.aspx.designer.cs">
-      <DependentUpon>WorkCheckAth.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

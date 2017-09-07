@@ -1523,7 +1523,7 @@ function AfterBindEn_DealMapExt() {
                     continue;
 
                 ddlOper.attr("onchange", "Change('" + workNode.Sys_MapData[0].No + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
-                if (mapExt.Tag != "") {
+                if (mapExt.Tag!=null  && mapExt.Tag != "") {
                     /* 下拉框填充范围. */
                     var strs = mapExt.Tag.split('$');
                     for (var k = 0; k < strs.length; k++) {

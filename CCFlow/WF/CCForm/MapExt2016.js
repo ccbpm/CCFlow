@@ -390,12 +390,14 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
 
     GenerPageKVs();
     var url = GetLocalWFPreHref();
-    var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
+    
+    // alert(url);
+    //var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "KVs": kvs };
+
     $.ajax({
         type: "get",
 
-        url: Handler + "?DoType=HandlerMapExt&KVs="+kvs,
-        data: json_data,
+        url: Handler + "?DoType=HandlerMapExt&KVs=" + kvs + "&Key=" + e + "&FK_MapExt=" + fk_mapExt,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
         },

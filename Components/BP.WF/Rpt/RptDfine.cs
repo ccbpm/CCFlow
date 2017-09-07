@@ -504,7 +504,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyStartFlow()
         {
-            return "../../RptDfine/FlowSearch.htm?SearchType=MyStart&FK_Flow=" + this.No;
+            return "../../RptDfine/FlowSearch.htm?SearchType=My&FK_Flow=" + this.No;
         }
         #endregion
 

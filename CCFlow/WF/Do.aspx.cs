@@ -312,7 +312,7 @@ namespace BP.Web.WF
 
                         //this.ToWFMsgPage("流程删除成功");
                         break;
-                    case "DownMyStartFlowExcel":    //下载我发起的流程查询结果，转到下面的逻辑，不放在此try..catch..中
+                    case "DownFlowSearchExcel":    //下载流程查询结果，转到下面的逻辑，不放在此try..catch..中
                         break;
                     default:
                         throw new Exception("ActionType error" + this.ActionType);
@@ -325,7 +325,7 @@ namespace BP.Web.WF
             //此处之所以再加一个switch，是因为在下载文件逻辑中，调用Response.End()方法，如果此方法放在try..catch..中，会报线程中止异常
             switch (this.ActionType)
             {
-                case "DownMyStartFlowExcel":
+                case "DownFlowSearchExcel":
                     DownMyStartFlowExcel();
                     break;
             }
@@ -337,23 +337,47 @@ namespace BP.Web.WF
         public void DownMyStartFlowExcel()
         {
             string rptmd = "ND" + int.Parse(this.FK_Flow) + "Rpt";
-            string rptNo = rptmd + "My";
+            string searchType = Request.QueryString["SearchType"];
+            string rptNo = rptmd + searchType;
+
+            if (string.IsNullOrWhiteSpace(this.FK_Flow))
+                throw new Exception("@参数FK_Flow不能为空");
+
+            if (string.IsNullOrWhiteSpace(searchType))
+                searchType = "My";
+
             UserRegedit ur = new UserRegedit();
             ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
             ur.RetrieveFromDBSources();
-
-            MapAttrs cattrs = new MapAttrs(rptNo);
+            
             MapData md = new MapData(rptNo);
-            MapAttrs attrs = new MapAttrs(rptmd);
-            GEEntitys ges = new GEEntitys(rptmd);
+            MapAttrs attrs = new MapAttrs(rptNo);
+            GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
-            qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+
+            switch (searchType)
+            {
+                case "My": //我发起的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
+                    break;
+                case "MyDept": //我部门发起的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FK_Dept, WebUser.FK_Dept);
+                    break;
+                case "MyJoin": //我参与的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
+                    break;
+                case "Adminer":
+                    break;
+                default:
+                    throw new Exception("err@" + searchType + "标记错误.");
+            }
+            
             qo = new BP.WF.HttpHandler.WF_RptDfine(HttpContext.Current).InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
 
             DataTable dt = qo.DoQueryToTable();
             DataTable myDT = new DataTable();
 
-            foreach (MapAttr attr in cattrs)
+            foreach (MapAttr attr in attrs)
             {
                 if (attr.KeyOfEn == "MyNum")
                     continue;
@@ -394,7 +418,7 @@ namespace BP.Web.WF
             {
                 DataRow myDR = myDT.NewRow();
 
-                foreach (MapAttr attr in cattrs)
+                foreach (MapAttr attr in attrs)
                 {
                     if (attr.KeyOfEn == "MyNum")
                         continue;
@@ -449,7 +473,27 @@ namespace BP.Web.WF
             }
 
             Flow flow = new Flow(this.FK_Flow);
-            string name = "我发起的流程（" + flow.Name + "）";
+            string name = string.Empty;
+
+            switch(searchType)
+            {
+                case "My": //我发起的.
+                    name = "我发起的流程";
+                    break;
+                case "MyDept": //我部门发起的.
+                    name = "部门发起的流程";
+                    break;
+                case "MyJoin": //我参与的.
+                    name = "我参与的流程";
+                    break;
+                case "Adminer":
+                    name = "高级查询";
+                    break;
+                default:
+                    break;
+            }
+
+            name += "（" + flow.Name + "）";
             string filename = Request.PhysicalApplicationPath + @"\Temp\" + name + "_" + DateTime.Today.ToString("yyyy年MM月dd日") + ".xls";
             CCFlow.WF.Comm.Utilities.NpoiFuncs.DataTableToExcel(myDT, filename, name,
                                                                 BP.Web.WebUser.Name, true, true, true);

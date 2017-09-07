@@ -46,6 +46,7 @@
         var sinfo;
         var FilterCtrls = new Array();
         var fk_flow = GetQueryString("FK_Flow");
+        var searchType = GetQueryString("SearchType");
         var md;
         var buttons = $.extend([], $.fn.datebox.defaults.buttons);
         var refidx = 0;
@@ -59,9 +60,24 @@
         });
 
         $(function () {
+            switch (searchType) {
+                case "My":
+                    $("#dg").datagrid({ title: '我发起的流程' });
+                    break;
+                case "MyJoin":
+                    $("#dg").datagrid({ title: '我参与的流程' });
+                    break;
+                case "MyDept":
+                    $("#dg").datagrid({ title: '部门发起的流程' });
+                    break;
+                case "Adminer":
+                    $("#dg").datagrid({ title: '高级查询' });
+                    break;
+            }
+
             var param = {
                 DoType: "FlowSearch_Init",
-                SearchType:  GetQueryString("SearchType"),
+                SearchType:  searchType,
                 FK_Flow: fk_flow,
                 pageSize: $("#dg").datagrid("options").pageSize
             };
@@ -104,7 +120,7 @@
 
                 $("#btn_export").linkbutton({
                     onClick: function () {
-                        window.open('../Do.aspx?ActionType=DownMyStartFlowExcel&FK_Flow=' + fk_flow, '_blank');
+                        window.open('../Do.aspx?ActionType=DownFlowSearchExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
                     }
                 });
 
@@ -334,7 +350,7 @@
 
             var param = {
                 DoType: "FlowSearch_Done",
-                SearchType: "My",
+                SearchType: GetQueryString("SearchType"),
                 FK_Flow: fk_flow,
                 key: key,
                 dtFrom: dtFrom,
@@ -427,7 +443,7 @@
                 if (!rowData) return;
             }
 
-            OpenEasyUiDialog('../WorkOpt/OneWork/OneWork.htm?currTab=Truck&WorkId=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FID=' + (rowData.FID?rowData.FID:0) + '&t=' + Math.random(), 'eudlgframe', '流程轨迹', 1000, 618);
+            OpenEasyUiDialog('../WorkOpt/OneWork/OneWork.htm?currTab=Truck&WorkID=' + rowData.OID + '&FK_Flow=' + fk_flow + '&FID=' + (rowData.FID?rowData.FID:0) + '&t=' + Math.random(), 'eudlgframe', '流程轨迹', 1000, 618);
         }
 
         function closeDlg() {

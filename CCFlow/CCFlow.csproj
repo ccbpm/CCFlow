@@ -956,9 +956,10 @@
     <Content Include="WF\Img\Runing.png" />
     <Content Include="WF\MyFlowFree2017.js" />
     <Content Include="WF\RptDfine\Flowlist.htm" />
-    <Content Include="WF\RptDfine\MyStartFlow.htm" />
-    <Content Include="WF\RptDfine\MyDeptFlow.htm" />
-    <Content Include="WF\RptDfine\MyJoinFlow.htm" />
+    <Content Include="C:\Users\Administrator\Desktop\MyStartFlow.htm">
+      <Link>WF\RptDfine\MyStartFlow.htm</Link>
+    </Content>
+    <Content Include="WF\RptDfine\FlowSearch.htm" />
     <Content Include="WF\RptDfine\Default.htm" />
     <Content Include="WF\RptDfine\Single.Master" />
     <Content Include="WF\RptDfine\SiteEUI.Master" />

@@ -96,6 +96,9 @@ namespace BP.WF.HttpHandler
                     case "MyJoin":
                         rd.DoReset_MyJoinFlow();
                         break;
+                    case "Adminer":
+                        rd.DoReset_AdminerFlow();
+                        break;
                     default:
                         throw new Exception("@未涉及的rptMark类型");
                 }
@@ -210,6 +213,9 @@ namespace BP.WF.HttpHandler
                     case "MyJoin":
                         rd.DoReset_MyJoinFlow();
                         break;
+                    case "Adminer":
+                        rd.DoReset_AdminerFlow();
+                        break;
                     default:
                         throw new Exception("@未涉及的rptMark类型");
                 }
@@ -282,6 +288,9 @@ namespace BP.WF.HttpHandler
                         break;
                     case "MyJoin":
                         rd.DoReset_MyJoinFlow();
+                        break;
+                    case "Adminer":
+                        rd.DoReset_AdminerFlow();
                         break;
                     default:
                         throw new Exception("@未涉及的rptMark类型");

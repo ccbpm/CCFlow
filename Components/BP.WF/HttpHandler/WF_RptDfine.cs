@@ -152,7 +152,7 @@ namespace BP.WF.HttpHandler
             string fcid = string.Empty;
             DataSet ds = new DataSet();
             Dictionary<string, string> vals = null;
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt"+this.SearchType;
+            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
 
             //报表信息，包含是否显示关键字查询RptIsSearchKey，过滤条件枚举/下拉字段RptSearchKeys，时间段查询方式RptDTSearchWay，时间字段RptDTSearchKey
             MapData md = new MapData();
@@ -413,7 +413,7 @@ namespace BP.WF.HttpHandler
             #region //增加第一页数据
             GEEntitys ges = new GEEntitys(rptNo);
             QueryObject qo = new QueryObject(ges);
-            
+
             switch (this.SearchType)
             {
                 case "My": //我发起的.
@@ -451,7 +451,7 @@ namespace BP.WF.HttpHandler
             string pageSize = GetRequestVal("pageSize");
             int pageIdx = int.Parse(GetRequestVal("pageIdx"));
 
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt"+this.SearchType;
+            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt" + this.SearchType;
             UserRegedit ur = new UserRegedit();
             ur.MyPK = WebUser.No + rptNo + "_SearchAttrs";
             ur.RetrieveFromDBSources();
@@ -510,7 +510,9 @@ namespace BP.WF.HttpHandler
             string val = null;
 
             kvs = ur.GetVals();
-            qo.addAnd();
+
+            if (this.SearchType != "Adminer")
+                qo.addAnd();
 
             #region 关键字查询
             if (md.RptIsSearchKey)

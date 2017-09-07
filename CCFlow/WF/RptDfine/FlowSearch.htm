@@ -61,7 +61,7 @@
         $(function () {
             var param = {
                 DoType: "FlowSearch_Init",
-                SearchType:  "My",
+                SearchType:  GetQueryString("SearchType"),
                 FK_Flow: fk_flow,
                 pageSize: $("#dg").datagrid("options").pageSize
             };

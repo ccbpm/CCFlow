@@ -553,7 +553,7 @@ namespace CCFlow.WF.UC
             if (btnLab.ReturnEnable && isAskFor == false && this.currND.IsStartNode == false)
             {
                 /*如果没有焦点字段*/
-                string urlr = appPath + "WF/WorkOpt/ReturnWork.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                string urlr = appPath + "WF/WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                 toolbar.Add("<input type=button  value='" + btnLab.ReturnLab + "' enable=true onclick=\"ReturnWork('" + urlr + "','" + btnLab.ReturnField + "'); \" />");
             }
 
@@ -939,7 +939,7 @@ namespace CCFlow.WF.UC
                         this.Response.Redirect(this.currFlow.StartGuidePara1 + this.RequestParas + "&WorkID=" +workid,true);
                         break;
                     case StartGuideWay.ByFrms: //选择表单.
-                        this.Response.Redirect("./WorkOpt/StartGuideFrms.aspx?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
+                        this.Response.Redirect("./WorkOpt/StartGuideFrms.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid, true);
                         break;
                     default:
                         break;
@@ -2486,7 +2486,7 @@ namespace CCFlow.WF.UC
             wk = (Work)this.UCEn1.Copy(wk);
 
             string msg = BP.WF.Glo.DealExp(nd.FocusField, wk, null);
-            this.Response.Redirect("./WorkOpt/ReturnWork.aspx?FK_Node=" + this.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&Info=" + msg, true);
+            this.Response.Redirect("./WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&Info=" + msg, true);
             return;
         }
         public void DoShift()
@@ -2508,7 +2508,7 @@ namespace CCFlow.WF.UC
                 msg = BP.WF.Glo.DealExp(nd.FocusField, wk, null);
                 // wk.Update(nd.FocusField, msg);
             }
-            string url = "./WorkOpt/Forward.aspx?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + msg;
+            string url = "./WorkOpt/Forward.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + msg;
             this.Response.Redirect(url, true);
         }
         #endregion

@@ -283,7 +283,7 @@ namespace BP.Web.WF
                         this.WinClose();
                         return;
                     case "UnSend": //Ö´ÐÐ³·Ïû·¢ËÍ¡£
-                        this.Response.Redirect("./WorkOpt/UnSend.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow, false);
+                        this.Response.Redirect("./WorkOpt/UnSend.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow, false);
                         return;
                     case "SetBillState":
                         break;

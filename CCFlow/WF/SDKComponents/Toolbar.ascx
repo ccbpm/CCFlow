@@ -177,8 +177,8 @@
         var btnID = obj.id;
 
          if (btnID == 'Btn_Return') {
-             //OpenUrl('ReturnMsg', '退回', '/WF/WorkOpt/ReturnWork.aspx?1=2', 500, 350);
-             OpenUrlLocation('/WF/WorkOpt/ReturnWork.aspx?1=2');
+             //OpenUrl('ReturnMsg', '退回', '/WF/WorkOpt/ReturnWork.htm?1=2', 500, 350);
+             OpenUrlLocation('/WF/WorkOpt/ReturnWork.htm?1=2');
              return;
          }
 
@@ -195,13 +195,13 @@
 
          if (btnID == 'Btn_Askfor') {
             // OpenUrl('AskforMsg', '加签', '/WF/WorkOpt/AskFor.aspx?1=2', 600, 400);
-             OpenUrlLocation( '/WF/WorkOpt/AskFor.aspx?1=2');
+             OpenUrlLocation( '/WF/WorkOpt/AskFor.htm?1=2');
              return;
          }
 
          if (btnID == 'Btn_Shift') {
              //OpenUrl('ShiftMsg', '移交', '/WF/WorkOpt/Forward.aspx?1=2', 600, 450);
-             OpenUrlLocation('/WF/WorkOpt/Forward.aspx?1=2');
+             OpenUrlLocation('/WF/WorkOpt/Forward.htm?1=2');
              return;
          }
 

@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_JumpCheck" Codebehind="GetTask.aspx.cs" %>
 <%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-	<script language="JavaScript" src="./../Comm/JScript.js"></script>
+	<script language="JavaScript" src="./Comm/JScript.js"></script>
    <script   type="text/javascript">
        function Tackback(fk_flow, fk_node, toNode, workid) {
            if (window.confirm('您确定要执行取回操作吗？') == false)

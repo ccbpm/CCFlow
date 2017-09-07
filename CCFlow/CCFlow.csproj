@@ -2477,7 +2477,6 @@
     <Content Include="WF\FlowFormTree\Images\Menu\sysset.png" />
     <Content Include="WF\FlowFormTree\Images\Menu\user1.png" />
     <Content Include="WF\FlowFormTree\Images\Menu\window.png" />
-    <Content Include="WF\FlowRpt.aspx" />
     <Content Include="WF\Focus.aspx" />
     <Content Include="WF\Focus.htm" />
     <Content Include="WF\GetTask.aspx" />
@@ -9137,13 +9136,6 @@
     </Compile>
     <Compile Include="WF\FlowFormTree\FlowFormTreeView.aspx.designer.cs">
       <DependentUpon>FlowFormTreeView.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\FlowRpt.aspx.cs">
-      <DependentUpon>FlowRpt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowRpt.aspx.designer.cs">
-      <DependentUpon>FlowRpt.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Focus.aspx.cs">
       <DependentUpon>Focus.aspx</DependentUpon>

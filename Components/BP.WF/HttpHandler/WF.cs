@@ -29,6 +29,60 @@ namespace BP.WF.HttpHandler
             return base.DoDefaultMethod();
         }
 
+        #region 我的关注流程.
+        /// <summary>
+        /// 我的关注流程
+        /// </summary>
+        /// <returns></returns>
+        public string Focus_Init()
+        {
+            string flowNo = this.GetRequestVal("FK_Flow");
+
+            int idx = 0;
+            //获得关注的数据.
+            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_Focus(flowNo, BP.Web.WebUser.No);
+            SysEnums stas = new SysEnums("WFSta");
+            string[] tempArr;
+            foreach (System.Data.DataRow dr in dt.Rows)
+            {
+                int wfsta = int.Parse(dr["WFSta"].ToString());
+                //edit by liuxc,2016-10-22,修复状态显示不正确问题
+                string wfstaT = (stas.GetEntityByKey(SysEnumAttr.IntKey, wfsta) as SysEnum).Lab;
+                string currEmp = string.Empty;
+
+                if (wfsta != (int)BP.WF.WFSta.Complete)
+                {
+                    //edit by liuxc,2016-10-24,未完成时，处理当前处理人，只显示处理人姓名
+                    foreach (string emp in dr["ToDoEmps"].ToString().Split(';'))
+                    {
+                        tempArr = emp.Split(',');
+
+                        currEmp += tempArr.Length > 1 ? tempArr[1] : tempArr[0] + ",";
+                    }
+
+                    currEmp = currEmp.TrimEnd(',');
+
+                    //currEmp = dr["ToDoEmps"].ToString();
+                    //currEmp = currEmp.TrimEnd(';');
+                }
+                dr["ToDoEmps"] = currEmp;
+                dr["FlowNote"] = wfstaT;
+                dr["AtPara"] = (wfsta == (int)BP.WF.WFSta.Complete ? dr["Sender"].ToString().TrimStart('(').TrimEnd(')').Split(',')[1] : "");
+            }
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "";
+                dt.Columns["NAME"].ColumnName = "";
+                dt.Columns[""].ColumnName = "";
+                dt.Columns[""].ColumnName = "";
+                dt.Columns[""].ColumnName = "";
+            }
+
+            return BP.Tools.Json.DataTableToJson(dt, false);
+        }
+        #endregion 我的关注.
+
         /// <summary>
         /// 方法
         /// </summary>

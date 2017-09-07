@@ -1724,30 +1724,56 @@ namespace BP.Sys
         /// <param name="fk_mapdata">表单ID</param>
         public static void SetFrmIsReadonly(string fk_mapdata)
         {
+            //把主表字段设置为只读.
             MapAttrs attrs = new MapAttrs(fk_mapdata);
-
             foreach (MapAttr attr in attrs)
             {
-                if (attr.UIIsEnable == false)
+                if (attr.UIIsEnable == true)
                 {
-                    attr.UIIsEnable = true;
+                    attr.UIIsEnable = false;
                     attr.Update();
                     continue;
                 }
-
-                //if (attr.LGType == FieldTypeS.Enum || attr.LGType== FieldTypeS.FK )
-                //{
-                //    if (attr.UIIsEnable == false)
-                //    {
-                //        attr.UIIsEnable = true;
-                //        attr.Update();
-                //        continue;
-                //    }
-                //}
-                //if (attr.LGType == FieldTypeS.Enum)
-                //{
-                //}
             }
+
+            //把从表字段设置为只读.
+            MapDtls dtls = new MapDtls(fk_mapdata);
+            foreach (MapDtl dtl in dtls)
+            {
+                dtl.IsInsert = false;
+                dtl.IsUpdate = false;
+                dtl.IsDelete = false;
+                dtl.Update();
+
+                attrs = new MapAttrs(dtl.No);
+                foreach (MapAttr attr in attrs)
+                {
+                    if (attr.UIIsEnable == true)
+                    {
+                        attr.UIIsEnable = false;
+                        attr.Update();
+                        continue;
+                    }
+                }
+            }
+
+            //把附件设置为只读.
+            FrmAttachments aths = new FrmAttachments(fk_mapdata);
+            foreach (FrmAttachment item in aths)
+            {
+                item.IsUpload = false;
+                item.HisDeleteWay = AthDeleteWay.DelSelf;
+
+                //如果是从开始节点表单导入的,就默认为, 按照workid继承的模式.
+                if (fk_mapdata.IndexOf("ND") == 0)
+                {
+                    item.HisCtrlWay = AthCtrlWay.WorkID;
+                    item.DataRefNoOfObj = "AttachM1";
+                }
+                item.Update();
+            }
+            
+
         }
 		/// <summary>
 		/// 导入表单

@@ -822,8 +822,9 @@ namespace BP.WF.Data
                 rm.Title = "回滚";
                 rm.IsForEns = false;
                 rm.ClassMethodName = this.ToString() + ".DoComeBack";
-                rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
-                rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 300, 100);
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+               rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
+               rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 300, 100);
                 map.AddRefMethod(rm);
                 #endregion 旧版本.
 
@@ -909,6 +910,7 @@ namespace BP.WF.Data
         /// <returns></returns>
         public string Rollback()
         {
+
             return "../../WorkOpt/Rollback.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
         }
         /// <summary>

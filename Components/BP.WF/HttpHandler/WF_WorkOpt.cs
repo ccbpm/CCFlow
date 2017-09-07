@@ -1380,7 +1380,7 @@ namespace BP.WF.HttpHandler
             Node nd = new Node(this.FK_Node);
 
             //判断当前是否是协作模式.
-            if (nd.TodolistModel == TodolistModel.Teamup)
+            if (nd.TodolistModel == TodolistModel.Teamup && nd.IsStartNode==false)
             {
                 if (gwf.TodoEmps.Contains(WebUser.No + ","))
                 {
@@ -1451,9 +1451,6 @@ namespace BP.WF.HttpHandler
             //增加一个table.
             ds.Tables.Add(dt);
             #endregion 计算上一次选择的结果, 并把结果返回过去.
-
-
-
 
             //返回json.
             return BP.Tools.Json.DataSetToJson(ds, false);

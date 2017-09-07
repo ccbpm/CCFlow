@@ -97,7 +97,7 @@ namespace BP.WF.HttpHandler
                     string strs = DBAccess.RunSQLReturnStringIsNull(sql, null);
                     if (strs != null && strs.Contains(BP.Web.WebUser.No) == true)
                     {
-                        ht.Add("MyDeptFlow", "我本部门发起的流程");
+                        ht.Add("MyDept", "我本部门发起的流程");
                     }
                 }
             }
@@ -105,25 +105,18 @@ namespace BP.WF.HttpHandler
             if (rd.MyDeptRole == 1)
             {
                 /*如果部门下所有的人都可以查看: */
-                ht.Add("MyDeptFlow", "我本部门发起的流程");
+                ht.Add("MyDept", "我本部门发起的流程");
             }
 
             if (rd.MyDeptRole == 2)
             {
                 /*如果部门下所有的人都可以查看: */
-                ht.Add("MyDeptFlow", "我本部门发起的流程");
+                ht.Add("MyDept", "我本部门发起的流程");
             }
-
             #endregion 增加本部门发起流程的查询.
 
             if (BP.Web.WebUser.IsAdmin)
-            {
-                ht.Add("Admin", "高级查询");
-            }
-
-            //   ht.Add("MyDeptFlow", "我本部门发起的流程");
-            //  ht.Add("MySubDeptFlow", "我本部门与子部门发起的流程");
-            // ht.Add("AdvFlowsSearch", "高级查询");
+                ht.Add("Adminer", "高级查询");
 
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
         }
@@ -159,13 +152,12 @@ namespace BP.WF.HttpHandler
             string fcid = string.Empty;
             DataSet ds = new DataSet();
             Dictionary<string, string> vals = null;
-            string rptNo = "ND" + int.Parse(this.FK_Flow) + "RptMy";
+            string rptNo = "ND" + int.Parse(this.FK_Flow) + "Rpt"+this.SearchType;
 
             //报表信息，包含是否显示关键字查询RptIsSearchKey，过滤条件枚举/下拉字段RptSearchKeys，时间段查询方式RptDTSearchWay，时间字段RptDTSearchKey
             MapData md = new MapData();
             md.No = rptNo;
-            int i = md.RetrieveFromDBSources();
-            if (i == 0)
+            if (md.RetrieveFromDBSources() == 0)
             {
                 /*如果没有找到，就让其重置一下.*/
                 BP.WF.Rpt.RptDfine rd = new RptDfine(this.FK_Flow);
@@ -176,8 +168,8 @@ namespace BP.WF.HttpHandler
                 if (this.SearchType == "MyJoin")
                     rd.DoReset(this.SearchType, "我参与的流程");
 
-                if (this.SearchType == "Admin")
-                    rd.DoReset(this.SearchType, "超级查询");
+                if (this.SearchType == "Adminer")
+                    rd.DoReset(this.SearchType, "高级查询");
 
                 md.RetrieveFromDBSources();
             }
@@ -427,10 +419,13 @@ namespace BP.WF.HttpHandler
                 case "My": //我发起的.
                     qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
                     break;
+                case "MyDept": //我部门发起的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FK_Dept, WebUser.FK_Dept);
+                    break;
                 case "MyJoin": //我参与的.
                     qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
                     break;
-                case "Admin":
+                case "Adminer":
                     break;
                 default:
                     return "err@" + this.SearchType + "标记错误.";
@@ -479,10 +474,13 @@ namespace BP.WF.HttpHandler
                 case "My": //我发起的.
                     qo.AddWhere(BP.WF.Data.GERptAttr.FlowStarter, WebUser.No);
                     break;
+                case "MyDept": //我部门发起的.
+                    qo.AddWhere(BP.WF.Data.GERptAttr.FK_Dept, WebUser.FK_Dept);
+                    break;
                 case "MyJoin": //我参与的.
                     qo.AddWhere(BP.WF.Data.GERptAttr.FlowEmps, " LIKE ", "%" + WebUser.No + "%");
                     break;
-                case "Admin":
+                case "Adminer":
                     break;
                 default:
                     return "err@" + this.SearchType + "标记错误.";

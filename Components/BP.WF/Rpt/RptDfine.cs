@@ -228,7 +228,7 @@ namespace BP.WF.Rpt
                 map.AddRefMethod(rm);
                 #endregion 我发起的流程.
 
-                #region 我参与的流程.
+                #region 我部门发起的流程.
                 rm = new RefMethod();
                 rm.Title = "设置显示的列";
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
@@ -277,7 +277,58 @@ namespace BP.WF.Rpt
                 rm.RefMethodType = RefMethodType.Func;
                 rm.GroupName = "本部门发起的流程";
                 map.AddRefMethod(rm);
-                #endregion 我发起的流程.
+                #endregion 我部门发起的流程.
+
+                #region 高级查询.
+                rm = new RefMethod();
+                rm.Title = "设置显示的列";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
+                rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_AdminerFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置显示列次序";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
+                rm.ClassMethodName = this.ToString() + ".DoColsOrder_AdminerFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置查询条件";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
+                rm.ClassMethodName = this.ToString() + ".DoSearchCond_AdminerFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "设置导出模板";
+                rm.Icon = "../../WF/Img/Guide.png";
+                rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_AdminerFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "执行查询";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
+                rm.ClassMethodName = this.ToString() + ".DoSearch_AdminerFlow()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "恢复设置";
+                rm.Icon = "../../WF/Admin/RptDfine/Img/Reset.png";
+                rm.Warning = "您确定要执行吗?";
+                rm.ClassMethodName = this.ToString() + ".DoReset_AdminerFlow()";
+                rm.RefMethodType = RefMethodType.Func;
+                rm.GroupName = "本部门发起的流程";
+                map.AddRefMethod(rm);
+                #endregion 高级查询.
 
                 this._enMap = map;
                 return this._enMap;
@@ -328,7 +379,7 @@ namespace BP.WF.Rpt
         public string DoReset(string rptMark, string rptName)
         {
             MapData md = new MapData();
-            md.No = "ND" + int.Parse(this.No) +"Rpt"+ rptMark;
+            md.No = "ND" + int.Parse(this.No) + "Rpt" + rptMark;
             if (md.RetrieveFromDBSources() == 0)
             {
                 md.Name = rptName;
@@ -339,10 +390,20 @@ namespace BP.WF.Rpt
             md.RptDTSearchWay = DTSearchWay.None; //按日期查询.
             md.RptDTSearchKey = "";
 
-            if (rptMark=="My")
-            md.RptSearchKeys = "*WFSta*FK_NY*"; //查询条件.
-            else
-                md.RptSearchKeys = "*FK_Dept*WFSta*FK_NY*"; //查询条件.
+            //设置查询条件.
+            switch (rptMark)
+            {
+                case "My":
+                case "MyJoin":
+                case "MyDept":
+                    md.RptSearchKeys = "*WFSta*FK_NY*"; //查询条件.
+                    break;
+                case "Adminer":
+                    md.RptSearchKeys = "*WFSta*FK_NY*"; //查询条件.
+                    break;
+                default:
+                    break;
+            }
 
             Flow fl = new Flow(this.No);
             md.PTable = fl.PTable;
@@ -367,7 +428,7 @@ namespace BP.WF.Rpt
                         attr.UIContralType = UIContralType.DDL;
                         attr.LGType = FieldTypeS.FK;
                         attr.UIVisible = true;
-                       // attr.GroupID = groupID;// gfs[0].GetValIntByKey("OID");
+                        // attr.GroupID = groupID;// gfs[0].GetValIntByKey("OID");
                         attr.UIIsEnable = false;
                         attr.DefVal = "";
                         attr.MaxLen = 100;
@@ -443,7 +504,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyStartFlow()
         {
-            return "../../RptDfine/MyStartFlow.htm?RptNo=ND" + int.Parse(this.No) + "RptMy&FK_MapData=" + this.No + "&FK_Flow=" + this.No;
+            return "../../RptDfine/FlowSearch.htm?SearchType=MyStart&FK_Flow=" + this.No;
         }
         #endregion
 
@@ -494,7 +555,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyJoinFlow()
         {
-            return "../../RptDfine/MyJoinFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
+            return "../../RptDfine/FlowSearch.htm?SearchType=MyJoin&FK_Flow=" + this.No;
         }
         #endregion 我参与的流程
 
@@ -545,9 +606,61 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoSearch_MyDeptFlow()
         {
-            return "../../RptDfine/MyDeptFlow.htm?FK_MapData=" + this.No + "&FK_Flow=" + this.No;
+            return "../../RptDfine/FlowSearch.htm?SearchType=MyDept&FK_Flow=" + this.No;
         }
         #endregion 本部门发起的流程
+
+
+        #region 高级查询
+        /// <summary>
+        /// 设置选择的列
+        /// </summary>
+        /// <returns></returns>
+        public string DoColsChoseOf_AdminerFlow()
+        {
+            return this.DoColsChose("Adminer");
+        }
+        /// <summary>
+        /// 列的次序
+        /// </summary>
+        /// <returns></returns>
+        public string DoColsOrder_AdminerFlow()
+        {
+            return DoColsOrder("Adminer");
+        }
+        /// <summary>
+        /// 查询条件
+        /// </summary>
+        /// <returns></returns>
+        public string DoSearchCond_AdminerFlow()
+        {
+            return DoSearchCond("Adminer");
+        }
+        /// <summary>
+        /// 导出模版.
+        /// </summary>
+        /// <returns></returns>
+        public string DoRptExportTemplate_AdminerFlow()
+        {
+            return DoRptExportTemplate("Adminer");
+        }
+        /// <summary>
+        /// 重置
+        /// </summary>
+        /// <returns></returns>
+        public string DoReset_AdminerFlow()
+        {
+            return DoReset("Adminer", "本部门发起的流程");
+        }
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <returns></returns>
+        public string DoSearch_AdminerFlow()
+        {
+            return "../../RptDfine/FlowSearch.htm?SearchType=Adminer&FK_Flow=" + this.No;
+        }
+        #endregion 高级查询
 
     }
     /// <summary>

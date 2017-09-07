@@ -1224,43 +1224,14 @@ namespace BP.WF
             ps.Add(GenerFHAttr.FID, this.WorkID);
             DBAccess.RunSQL(ps);
 
-            if (Glo.IsDeleteGenerWorkFlow == true)
-            {
+          
                 // 是否删除流程注册表的数据？
                 ps = new Paras();
                 ps.SQL = "DELETE FROM WF_GenerWorkFlow WHERE WorkID=" + dbstr + "WorkID1 OR FID=" + dbstr + "WorkID2 ";
                 ps.Add("WorkID1", this.WorkID);
                 ps.Add("WorkID2", this.WorkID);
                 DBAccess.RunSQL(ps);
-            }
-            else
-            {
-                //求出参与人,以方便已经完成的工作查询.
-                ps = new Paras();
-                ps.SQL = "SELECT EmpFrom FROM ND" + int.Parse(this._HisFlow.No) + "Track WHERE WorkID=" + dbstr + "WorkID OR FID=" + dbstr + "FID ";
-                ps.Add("WorkID", this.WorkID);
-                ps.Add("FID", this.WorkID);
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-                string emps = "@";
-                foreach (DataRow dr in dt.Rows)
-                {
-                    if (emps.Contains("@" + dr[0].ToString() + "@") == true)
-                        continue;
-                    emps += dr[0].ToString() + "@";
-                }
-                //追加当前操作人
-                if (emps.Contains("@" + WebUser.No + "@") == false)
-                    emps += WebUser.No + "@";
-
-                //更新流程注册信息.
-                ps = new Paras();
-                ps.SQL = "UPDATE WF_GenerWorkFlow SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta,Emps=" + dbstr + "Emps,MyNum=1, ToDoEmps='' WHERE WorkID=" + dbstr + "WorkID ";
-                ps.Add("WFState", (int)WFState.Complete);
-                ps.Add("WFSta", (int)WFSta.Complete);
-                ps.Add("Emps", emps);
-                ps.Add("WorkID", this.WorkID);
-                DBAccess.RunSQL(ps);
-            }
+            
 
             // 删除子线程产生的 流程注册信息.
             if (this.FID == 0)

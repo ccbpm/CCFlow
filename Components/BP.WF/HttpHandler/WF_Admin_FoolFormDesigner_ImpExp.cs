@@ -79,6 +79,12 @@ namespace BP.WF.HttpHandler
             }
             #endregion 加入表单库目录.
 
+            #region 数据源
+            BP.Sys.SFDBSrcs ens = new BP.Sys.SFDBSrcs();
+            ens.RetrieveAll();
+            ds.Tables.Add(ens.ToDataTableField("SFDBSrcs"));
+            #endregion
+
             //加入系统表.
             return BP.Tools.Json.ToJson(ds);
         }
@@ -149,6 +155,49 @@ namespace BP.WF.HttpHandler
             }
             return "执行成功.";
         }
+
+        public string Imp_Src_Step2()
+        {
+            DataSet ds = new DataSet();
+            SFDBSrc src = new SFDBSrc(this.GetRequestVal("FK_SFDBSrc"));
+
+            DataTable dt = src.GetTables();
+            dt.TableName = "tables";
+            ds.Tables.Add(dt);
+
+            if (!String.IsNullOrEmpty(this.GetRequestVal("STable")))
+            {
+                DataTable tableColumns = src.GetColumns(this.GetRequestVal("STable"));
+                tableColumns.TableName = "tableColumns";
+                ds.Tables.Add(tableColumns); 
+            }
+
+            //加入系统表.
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        /// <summary>
+        /// 获取表字段
+        /// </summary>
+        /// <returns></returns>
+        public string Step2_GetColumns()
+        {
+            DataSet ds = new DataSet();
+            SFDBSrc src = new SFDBSrc(this.GetRequestVal("FK_SFDBSrc"));
+
+            DataTable dt = src.GetTables();
+            dt.TableName = "tables";
+            ds.Tables.Add(dt);
+
+            DataTable tableColumns = src.GetColumns(this.GetRequestVal("STable"));
+            tableColumns.TableName = "tableColumns";
+            ds.Tables.Add(tableColumns);
+
+            //加入系统表.
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+
         #endregion
 
 

@@ -277,7 +277,6 @@ namespace BP.Demo.BPFramework
                 //外键字段.
                 map.AddDDLEntities(StudentAttr.FK_BanJi, null, "班级", new BP.Demo.BPFramework.BanJis(), true);
 
-
                 //增加checkbox属性.
                 map.AddBoolean(StudentAttr.IsDuShengZi, false, "是否是独生子？", true, true);
                 map.AddBoolean(StudentAttr.IsJiBing, false, "是否有重大疾病？", true, true);
@@ -295,10 +294,13 @@ namespace BP.Demo.BPFramework
                 //设置查询条件。
                 map.AddSearchAttr(StudentAttr.XB);
                 map.AddSearchAttr(StudentAttr.FK_BanJi);
+                map.AddSearchAttr(StudentAttr.ZZMM);
+
 
                 //多对多的映射.
                 map.AttrsOfOneVSM.Add(new StudentKeMus(), new KeMus(), StudentKeMuAttr.FK_Student,
                   StudentKeMuAttr.FK_KeMu, KeMuAttr.Name, KeMuAttr.No, "学习的科目");
+
 
                 //明细表映射.
                 map.AddDtl(new Resumes(), ResumeAttr.FK_Student);
@@ -340,7 +342,6 @@ namespace BP.Demo.BPFramework
 
             return base.beforeUpdateInsertAction();
         }
-
           
         #endregion 重写基类方法
 
@@ -361,6 +362,7 @@ namespace BP.Demo.BPFramework
         /// <returns></returns>
         public string DoZhuXiao()
         {
+
             return "学号:" + this.No + ",姓名:" + this.Name + ",已经注销.";
         }
         /// <summary>

@@ -142,7 +142,7 @@ namespace BP.Demo
                 map.AddTBString(ResumeAttr.FK_Student, null, "学生编号", false, false, 0, 10, 10);
                 map.AddTBString(ResumeAttr.NianYue, null, "年月", true, false, 0, 200, 50);
                 map.AddTBString(ResumeAttr.GongZuoDanWei, null, "工作单位", true, false, 0, 200, 70);
-                map.AddTBString(ResumeAttr.ZhengMingRen, "", "证明人", true, false, 0, 200, 50);
+                map.AddTBString(ResumeAttr.ZhengMingRen, "", "证明人", true, false, 1, 200, 50);
                 map.AddTBString(ResumeAttr.BeiZhu, null, "备注", true, false, 0, 200, 150);
                 map.AddTBString("QT", null, "其他", true, false, 0, 200, 150);
 
@@ -151,6 +151,14 @@ namespace BP.Demo
             }
         }
         #endregion
+
+        protected override bool beforeUpdateInsertAction()
+        {
+            if (this.ZhengMingRen.Length == 0)
+                throw new Exception("@证明人信息不能为空.");
+
+            return base.beforeUpdateInsertAction();
+        }
 
         public override UAC HisUAC
         {

@@ -954,8 +954,7 @@ namespace BP.UnitTesting.SendCase
             //检查主线程.
             sql = "SELECT * FROM WF_GenerWorkFlow WHERE WorkID=" + workid;
             dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 0 && Glo.IsDeleteGenerWorkFlow==true)
-                throw new Exception("@流程结束了，引擎表的数据没有删除。");
+            
 
             sql = "SELECT * FROM WF_GenerWorkerlist WHERE WorkID=" + workid;
             dt = DBAccess.RunSQLReturnTable(sql);
@@ -965,8 +964,6 @@ namespace BP.UnitTesting.SendCase
             //检查子线程.
             sql = "SELECT * FROM WF_GenerWorkFlow WHERE FID=" + workid;
             dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count != 0 && Glo.IsDeleteGenerWorkFlow == true )
-                throw new Exception("@流程结束了，子线程引擎表的数据没有删除。");
 
             sql = "SELECT * FROM WF_GenerWorkerlist WHERE FID=" + workid;
             dt = DBAccess.RunSQLReturnTable(sql);

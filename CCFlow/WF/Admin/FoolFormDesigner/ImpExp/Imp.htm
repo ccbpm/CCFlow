@@ -1,10 +1,10 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <!--<link  href="./../Style/Table0.css" rel="stylesheet" type="text/css" />-->
 
     <link href="../../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    
+    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .style1
         {
@@ -46,7 +46,13 @@
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
 
-        console.log(window.parent);
+        //console.log(window.parent);
+
+        function CheckAll(checked) {
+            $.each($(":checkbox"), function () {
+                this.checked = checked;
+            });
+        }
 
         //页面启动函数.
         var frmID = GetQueryString("FK_MapData");
@@ -120,7 +126,7 @@
                         }).forEach(function (frm) {
                             node.children.push({
                                 text: frm.Name,
-                                id:frm.No
+                                id: frm.No
                             });
                         });
                         //构建node结束
@@ -131,19 +137,149 @@
                         data: [root],
                         onSelect: function (node) {
                             if (node.children == undefined) {
-                                btnFrmLib.disabled= "";
+                                btnFrmLib.disabled = "";
                                 selFrmNode.value = node.id;
-                            }else{
-                                btnFrmLib.disabled= "disabled";                            
+                            } else {
+                                btnFrmLib.disabled = "disabled";
                             }
-                        } 
+                        }
                     });
+
+                    //04.从数据源导入
+                    var srcdata = db["SFDBSrcs"],
+                        tableHtml = "",
+                        ul = "";
+
+                    tableHtml += "<table class='Table' cellSpacing='0' cellPadding='0'  border='0' style='width:100%'>";
+                    tableHtml += "<tr><td class='GroupTitle'>第1步：请选择数据源</td></tr>";
+                    tableHtml += "<tr><td valign='top' nowrap>";
+                    tableHtml += "<ul class='navlist'>";
+                    srcdata.forEach(function (item) {
+                        tableHtml += "<li><div><a href='javascript:Step2(\"" + item.No + "\")'><span class='nav'>" + item.No + "  -  " + item.Name + "</span></a></div></li>";
+                    });
+					tableHtml += "</ul>";
+                    tableHtml += "</td></tr>";
+                    tableHtml += "</table>";
+                    srclayout.innerHTML = tableHtml;
                 }
             });
 
             //加载完成.
             $("#Msg").html("");
         });
+    </script>
+
+    <script type="text/javascript">
+        function Step2(srcName) {
+			SelSrcName.value = srcName;
+
+            $.ajax({
+                type: 'GET',
+                async: true,
+                url: Handler + "?DoType=Imp_Src_Step2&FK_MapData=" + frmID + "&FK_SFDBSrc=" + srcName + "&STable=" + GetQueryString("STable"),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    //转化成json.
+                    data = JSON.parse(data);
+                    srclayout.innerHTML = "";
+                    if (data) {
+                        $('#srclayout').layout({
+                            height:700,
+                            fit: true
+                        });
+                        //1、左侧列表
+                        $('#srclayout').layout('add',{
+                                                region: 'west',
+                                                width:200,
+                                                title: '选择 ' + srcName + ' 数据表/视图',
+                                                split: true,                                           
+                                            });
+                        var table = data.tables,
+                            ul = '<ul>';
+                        table.forEach(function(item){
+                                    //var url = "?FK_MapData=" + frmID + "&FK_SFDBSrc=" + srcName + "&STable=" + item["No"];
+                                    if (item["No"] == GetQueryString("STable"))
+                                        ul += "<li><font color=red><b>" + item["Name"] + "</font></b></li>";
+                                    else
+                                        ul += "<li><a href=\"javascript:GetColumns('" + item["No"] + "')\" >" + item["Name"] + "</a></li>";
+                                });
+                                
+                        ul += '</ul>';
+                        $('#srclayout').layout('panel','west').append(ul);
+
+                        //2、右侧
+                        $('#srclayout').layout('add',{
+                                                region: 'center',
+                                                title: '第2步：请选择要导入的数据列（ ' + GetQueryString("STable") + ' ）',
+                                                style:'padding:5px;'                                              
+                                            });
+                        //填数据
+                        var tableColumns = data.tableColumns;
+                        if (tableColumns) {
+
+                            GeneColumns(tableColumns);                        
+                        }
+
+					}
+                }
+            });
+        }
+
+        function GetColumns(table){
+            $.ajax({
+                type: 'GET',
+                async: true,
+                url: Handler + "?DoType=Step2_GetColumns&FK_SFDBSrc=" + SelSrcName.value + "&STable=" + table,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    //转化成json.
+                    data = JSON.parse(data);
+                    GeneColumns(data.tableColumns);
+                }
+            });
+        }
+
+        function GeneColumns(tableColumns){
+            
+            var tr = "",
+                            tableHtml = "<table class='Table' cellpadding='2' cellspacing='2'>";
+                        tr += "<tr>";
+                        tr += "<td class='GroupTitle' nowrap=''>序</td>";
+                        tr += "<td class='GroupTitle' style='width:40px;text-align:center'><input id='CB_CheckAll' type='checkbox' name='CB_CheckAll' onclick='CheckAll(this.checked);'></td>";
+                        tr += "<td class='GroupTitle' nowrap=''>中文描述</td>";
+                        tr += "<td class='GroupTitle' style='width:80px;text-align:center'>类型</td>";
+                        tr += "<td class='GroupTitle' style='width:50px;text-align:center'>最大长度</td>";
+                        tr += "</tr>";
+
+                        tableHtml += tr;
+                        tableColumns.forEach(function (item,index) {
+
+                            tr = "";
+                            tr += "<tr>";
+                            tr += "<td nowrap=''>" + item.colid + "</td>";
+                            tr += "<td><input id='CB_" + item.colid + "' type='checkbox' name='CB_" + item.colid + "' disabled='disabled'><label for='CB_" + item.colid + "'>" + item.Name + "</label></td>";
+                            tr += "<td nowrap=''>" + item.Name + "</td>";
+                            tr += "<td nowrap=''>" + item.DBType + "</td>";
+                            tr += "<td class='TDNum'>" + item.DBLength + "</td>";
+                            tr += "</tr>";
+                            tableHtml += tr;
+                        });
+                        tableHtml += "</table>";
+                        $('#srclayout').layout('panel','center').html("");
+                        $('#srclayout').layout('panel','center').append(tableHtml);
+        }
     </script>
 
     <script type="text/javascript" >
@@ -182,7 +318,7 @@
             });
         }
 
-
+        //从xml文件导入
         function SaveImpFromLocalXML() {
 
             var formData = new FormData();
@@ -217,6 +353,7 @@
             });
         }
 
+        //从表单库导入
         function SaveImpFromLib() {
 
             var nodeId = selFrmNode.value;
@@ -274,60 +411,24 @@
                 <input type="button" value="执行从节点表单导入22" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
             </fieldset>
         </div>
-
         <div title="从表单库导入" id="divUlFrmTreeImp" style="padding:15px; text-align:left">        
           <ul id="ulLib" style="height:auto;"></ul>
           <input type="hidden" value="" id="selFrmNode" name="selFrmNode" />
           <input type="button" value="表单库导入" id="btnFrmLib" onclick="SaveImpFromLib()" style="margin:25px;" disabled="disabled"/>
-        </div>
-s
-        <div title="从外部数据源导入" style="padding:15px; text-align:left">
+        </div>s
+        <div title="从外部数据源导入" style="padding:15px; text-align:left">            
+            <div class="easyui-layout" style="height:500px;">
+                <div id="divSrcImp" data-options="region:'center',title:'导入字段生成表单'" style="padding: 5px;">
+                    <div id="srclayout">
+                    </div>
+                    <input type="hidden" id="SelSrcName" name="SelSrcName" value=" " />
+                    <input type="hidden" id="SelColumn" name="SelColumn" value=" " />
+                </div>
+            </div>
 
-          <fieldset>
-        <legend>在施工中，敬请期待.</legend>
-        <ul>
-        <li> 1，选择表单库的一个表单。 </li>
-        <li> 2，执行表单的导入。 </li>
-        </ul>
-        </fieldset>
-
-        <!--    <label style="padding-left:8px;">操作提示：制定内外部数据源中的一个已经设计好的表，把字段信息导入该表单中</label><br /><br />
-            <input type="button" class="btn btn-default" value="进入导入数据表字段向导" />-->
         </div>
     </div>
 </form>
-    <!--<ul id="myTab" class="nav nav-tabs">
-        <li class="active">
-            <a href="#localImp" data-toggle="tab">从本机导入</a>
-        </li>
-        <li><a href="#nodeFrmImp" data-toggle="tab">从节点表单导入</a></li>
-        <li><a href="#frmClassImp" data-toggle="tab">从表单库导入</a></li>
-        <li><a href="#outDataSourceImp" data-toggle="tab">从外部数据源导入</a></li>
-    </ul>
-    <div id="" class="tab-content">
-        <!--从本机导入-->
-        <!--<div class="tab-pane fade in active" id="localImp">
-            <input type="button" class="btn btn-default" value="进入templete.ccflow.org执行导入" />
-        </div>-->
-        <!--从节点表单导入-->
-        <!--<div class="tab-pane fade in" id="nodeFrmImp">
-            选择表单模板文件(*.xml),然后按确定按钮
-            <input type="file" />
-        </div>-->
-        <!--从表单库导入-->
-        <!--<div class="tab-pane fade in" id="frmClassImp">
-            <ul class="nav nav-pills nav-stacked">
-                <li role="presentation"><a href="#">Step1 节点1</a></li>
-                <li role="presentation" class="active"><a href="#">Step2 节点2</a></li>
-                <li role="presentation"><a href="#">Step3 节点3</a></li>
-            </ul>
-        </div>-->
-        <!--从外部数据源导入-->
-        <!--<div class="tab-pane fade in" id="outDataSourceImp">
-            <label>操作提示：制定内外部数据源中的一个已经设计好的表，把字段信息导入该表单中</label>
-            <input type="button" class="btn btn-default"value="进入导入数据表字段向导"/>
-        </div>
-    </div>-->
 </body>
 </html>
  

@@ -229,8 +229,7 @@ namespace BP.UnitTesting
             gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
 
-            if (BP.WF.Glo.IsDeleteGenerWorkFlow == true && gwf.RetrieveFromDBSources() != 0)
-                throw new Exception("@ 流程结束后 WF_GenerWorkFlow 没有删除. ");
+           
 
             sql = "SELECT * FROM wf_GenerWorkerList WHERE WORKID=" + workid;
             dt = DBAccess.RunSQLReturnTable(sql);

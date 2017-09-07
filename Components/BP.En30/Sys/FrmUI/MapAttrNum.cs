@@ -117,7 +117,7 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(MapAttrAttr.MyDataType, 2, "数据类型", true, false);
 
-                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, true, 0, 200, 20);
+                map.AddTBString(MapAttrAttr.DefVal, "0", "默认值", true, false, 0, 200, 20);
 
 
                 map.AddTBFloat(MapAttrAttr.UIWidth, 100, "宽度", true, false);

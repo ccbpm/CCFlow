@@ -818,7 +818,7 @@ namespace BP.Sys.FrmUI
 
                 //map.AddDDLSysEnum(FrmAttachmentAttr.DataRef, 0, "数据引用", true, true, FrmAttachmentAttr.DataRef,
                 //    "@0=当前组件ID@1=指定的组件ID");
-                map.AddTBString(FrmAttachmentAttr.DataRefNoOfObj, null, "对应附件标识(对WorkID权限模式有效)", true, false, 0, 150, 20);
+                map.AddTBString(FrmAttachmentAttr.DataRefNoOfObj, "AttachM1", "对应附件标识(对WorkID权限模式有效)", true, false, 0, 150, 20);
                 #endregion 权限控制。
 
                 #region WebOffice控制方式。

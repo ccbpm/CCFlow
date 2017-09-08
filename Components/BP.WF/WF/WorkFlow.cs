@@ -1224,13 +1224,16 @@ namespace BP.WF
             ps.Add(GenerFHAttr.FID, this.WorkID);
             DBAccess.RunSQL(ps);
 
-          
+
+            if (1 == 2)
+            {
                 // 是否删除流程注册表的数据？
                 ps = new Paras();
                 ps.SQL = "DELETE FROM WF_GenerWorkFlow WHERE WorkID=" + dbstr + "WorkID1 OR FID=" + dbstr + "WorkID2 ";
                 ps.Add("WorkID1", this.WorkID);
                 ps.Add("WorkID2", this.WorkID);
                 DBAccess.RunSQL(ps);
+            }
             
 
             // 删除子线程产生的 流程注册信息.

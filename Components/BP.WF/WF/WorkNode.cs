@@ -7122,7 +7122,6 @@ namespace BP.WF
                 /* 如果流程完成 */
              //   CCWork cc = new CCWork(this);
                 // 在流程完成锁前处理消息收听，否则WF_GenerWorkerlist就删除了。
-              
 
                 if (this.HisGenerWorkFlow.TransferCustomType == TransferCustomType.ByCCBPMDefine)
                 {

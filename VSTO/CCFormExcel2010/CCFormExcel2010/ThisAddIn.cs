@@ -173,6 +173,11 @@ namespace CCFormExcel2010
                 else
                     throw new Exception("缺少参数: FK_MapData/EnName");
 
+                if (args.ContainsKey("IsAutoTesting"))
+                    Glo.IsAutoTesting = string.IsNullOrWhiteSpace(args["IsAutoTesting"])
+                                            ? false
+                                            : args["IsAutoTesting"] == "1";
+
                 if (args.ContainsKey("WSUrl"))
                     Glo.WSUrl = args["WSUrl"];
                 else
@@ -274,6 +279,13 @@ namespace CCFormExcel2010
                 else //xTODO: 如果打开的是DBFile二进制流，是否还执行填充操作？（表单数据是否有可能被修改？）//A:暂时不考虑这种情况，按数据库数据与Excel数据完全一致处理
                 {
                     FillData(_originData);
+                }
+
+                //增加自动测试逻辑，2017-9-8
+                if (Glo.IsAutoTesting)
+                {
+                    Globals.ThisAddIn.Application.ActiveWorkbook.Save();
+                    Globals.ThisAddIn.Application.Quit();
                 }
             }
             catch (Exception exp)
@@ -579,7 +591,7 @@ namespace CCFormExcel2010
             byte[] bytes = Glo.ReadFile(Glo.LocalFile);
             try
             {
-                if (Glo.IsSaveFileOnly)
+                if (Glo.IsSaveFileOnly && Glo.IsAutoTesting == false)
                 {
                     client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, null, null, null, bytes);
                     MessageBox.Show("文件保存成功！", "ccform保存提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -600,7 +612,9 @@ namespace CCFormExcel2010
 
                 //保存到服务器
                 client.SaveExcelFile(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, mainTableAtParas, dsDtlsNew, dsDtlsOld, bytes); //?能否返回保存结果（成功/失败）？A:暂不考虑@2017-03-01
-                MessageBox.Show("保存成功！\n文档及表单数据已成功保存到服务器！", "ccform保存提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (Glo.IsAutoTesting == false)
+                    MessageBox.Show("保存成功！\n文档及表单数据已成功保存到服务器！", "ccform保存提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 //获取新的子表数据，绑定行对应关系
                 _originData = client.GenerDBForVSTOExcelFrmModel(Glo.UserNo, Glo.SID, Glo.FrmID, Glo.pkValue, Glo.AtParas);

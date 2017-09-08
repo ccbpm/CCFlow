@@ -94,6 +94,10 @@ namespace BP.VSTO
 		public static string WSUrl = "";
 		
 		public static string App = "";
+        /// <summary>
+        /// 是否是自动测试模式，如果是，则VSTO加载完数据后，自动保存，然后关闭应用程序
+        /// </summary>
+        public static bool IsAutoTesting = false;
 
 		#endregion
 		

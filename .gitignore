@@ -240,6 +240,10 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/CCFlow/DataUser/FlowDesc/194.测试控件流程2/19401.开始节点.xml
-/CCFlow/DataUser/JSLibData/ND19401Dtl1.js
-/CCFlow/DataUser/FlowDesc/194.测试控件流程2
+/CCFlow/DataUser/JSLibData
+/CCFlow/DataUser/FlowDesc
+/CCFlow/DataUser/UploadFile
+/CCFlow/DataUser/Temp
+/VSTO/CCFormExcel2013/.vs
+/VSTO/CCFormExcel2010/CCFormExcel2010/Published
+/VSTO/CCFormExcel2013/CCFormExcel2013/Published

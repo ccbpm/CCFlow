@@ -26,6 +26,24 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+        /// <summary>
+        /// 获得工作节点
+        /// </summary>
+        /// <returns></returns>
+        public string GenerWorkNode()
+        {
+            WF_MyFlow en = new WF_MyFlow(this.context);
+            return en.GenerWorkNode();
+        }
+        /// <summary>
+        /// 获得toolbar
+        /// </summary>
+        /// <returns></returns>
+        public string InitToolBar()
+        {
+            WF_MyFlow en = new WF_MyFlow(this.context);
+            return en.InitToolBar();
+        }
 
         #region 执行父类的重写方法.
         /// <summary>

@@ -431,7 +431,7 @@ namespace BP.WF.HttpHandler
             myurl = myurl.Replace("&DoWhat=StartClassic", "");
             return "url@" + myurl;
         }
-        public string MyFlow_Init_DealUrl(BP.WF.Node currND, Work currWK, string url = null)
+        private string MyFlow_Init_DealUrl(BP.WF.Node currND, Work currWK, string url = null)
         {
             if (url == null)
                 url = currND.FormUrl;

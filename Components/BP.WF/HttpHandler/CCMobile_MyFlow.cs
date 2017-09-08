@@ -44,6 +44,16 @@ namespace BP.WF.HttpHandler
             WF_MyFlow en = new WF_MyFlow(this.context);
             return en.InitToolBar();
         }
+        public string MyFlow_Init()
+        {
+            WF_MyFlow en = new WF_MyFlow(this.context);
+            return en.MyFlow_Init();
+        }
+        public string Save()
+        {
+            WF_MyFlow en = new WF_MyFlow(this.context);
+            return en.Save();
+        }
 
         #region 执行父类的重写方法.
         /// <summary>

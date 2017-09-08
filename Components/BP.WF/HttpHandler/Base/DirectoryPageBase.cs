@@ -403,7 +403,10 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                return this.GetRequestValInt("FK_Node");
+                int nodeID = this.GetRequestValInt("FK_Node");
+                if (nodeID == 0)
+                    nodeID = this.GetRequestValInt("NodeID");
+                return nodeID;
             }
         }
         public Int64 FID

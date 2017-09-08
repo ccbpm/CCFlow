@@ -26,7 +26,6 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -138,21 +137,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AppACE\Blank.htm" />
-    <Content Include="AppACE\Login.htm" />
-    <Content Include="AppACE\Runing.htm" />
-    <Content Include="AppACE\Search.htm" />
-    <Content Include="AppACE\Start.htm" />
-    <Content Include="AppACE\Home.htm" />
-    <Content Include="AppACE\Todolist.htm" />
-    <Content Include="AppACE\Setting.htm" />
-    <Content Include="AppACE\Focus.htm" />
-    <Content Include="AppACE\TodolistOfAuto.htm" />
-    <Content Include="AppACE\TaskPoolSharing.htm" />
-    <Content Include="AppACE\GetTask.htm" />
-    <Content Include="AppACE\Calendar.htm" />
-    <Content Include="AppACE\HungUpList.htm" />
-    <Content Include="AppACE\FlowCH.htm" />
     <Content Include="clientaccesspolicy.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -387,468 +371,6 @@
     <Content Include="SDKFlowDemo\SDK\Site.Master" />
     <Content Include="SDKFlowDemo\WinOpen.master" />
     <Content Include="SDKFlowDemo\BPFramework\DataInputJQ\Handler.ashx" />
-    <Content Include="AppACE\static\css\system\ace\ace-ie.min.css" />
-    <Content Include="AppACE\static\css\system\ace\ace-responsive.min.css" />
-    <Content Include="AppACE\static\css\system\ace\ace-rtl.min.css" />
-    <Content Include="AppACE\static\css\system\ace\ace-skins.min.css" />
-    <Content Include="AppACE\static\css\system\ace\ace-skins.min.org.css" />
-    <Content Include="AppACE\static\css\system\ace\ace.min.css" />
-    <Content Include="AppACE\static\css\system\ace\camera.css" />
-    <Content Include="AppACE\static\css\system\ace\chosen.css" />
-    <Content Include="AppACE\static\css\system\ace\font-awesome-ie7.css" />
-    <Content Include="AppACE\static\css\system\ace\font-awesome-ie7.min.css" />
-    <Content Include="AppACE\static\css\system\ace\font-awesome.css" />
-    <Content Include="AppACE\static\css\system\ace\font-awesome.min.css" />
-    <Content Include="AppACE\static\css\system\bootstrap\bootstrap-datetimepicker.min.css" />
-    <Content Include="AppACE\static\css\system\bootstrap\bootstrap-responsive.min.css" />
-    <Content Include="AppACE\static\css\system\bootstrap\bootstrap.min.css" />
-    <Content Include="AppACE\static\css\system\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="AppACE\static\css\system\font\fontawesome-webfont.svg" />
-    <Content Include="AppACE\static\css\system\jquery\datepicker.css" />
-    <Content Include="AppACE\static\css\system\jquery\jquery-ui.min.css" />
-    <Content Include="AppACE\static\css\system\jquery\ui.jqgrid.css" />
-    <Content Include="AppACE\static\css\system\system\basic.css" />
-    <Content Include="AppACE\static\css\system\system\images\base_z.png" />
-    <Content Include="AppACE\static\css\system\system\images\bg_mobile_foot_default.png" />
-    <Content Include="AppACE\static\css\system\system\images\bg_mobile_head_default.png" />
-    <Content Include="AppACE\static\css\system\system\images\index_z.png" />
-    <Content Include="AppACE\static\css\system\system\images\join.gif" />
-    <Content Include="AppACE\static\css\system\system\images\joinbottom.gif" />
-    <Content Include="AppACE\static\css\system\system\images\loginbg.jpg" />
-    <Content Include="AppACE\static\css\system\system\images\visiHot.png" />
-    <Content Include="AppACE\static\css\system\system\index.css" />
-    <Content Include="AppACE\static\css\system\system\login.css" />
-    <Content Include="AppACE\static\css\system\system\weixin.css" />
-    <Content Include="AppACE\static\images\system\2qrcodeDefault.png" />
-    <Content Include="AppACE\static\images\system\indexadv.png" />
-    <Content Include="AppACE\static\images\system\indexadv_mob.png" />
-    <Content Include="AppACE\static\images\system\loading.gif" />
-    <Content Include="AppACE\static\images\system\noAuthLockIcon.png" />
-    <Content Include="AppACE\static\images\system\user\hpic0.jpg" />
-    <Content Include="AppACE\static\images\system\user\hpic1.jpg" />
-    <Content Include="AppACE\static\images\system\user\hpic2.jpg" />
-    <Content Include="AppACE\static\images\system\user\hpic3.jpg" />
-    <Content Include="AppACE\static\images\system\user\hpic4.jpg" />
-    <Content Include="AppACE\static\js\ace\ace-elements.min.js" />
-    <Content Include="AppACE\static\js\ace\ace-extra.min.js" />
-    <Content Include="AppACE\static\js\ace\ace.min.js" />
-    <Content Include="AppACE\static\js\ace\html5shiv.js" />
-    <Content Include="AppACE\static\js\ace\respond.min.js" />
-    <Content Include="AppACE\static\js\ace\typeahead-bs2.min.js" />
-    <Content Include="AppACE\static\js\bootstrap\bootstrap-datepicker.min.js" />
-    <Content Include="AppACE\static\js\bootstrap\bootstrap-datetimepicker.js" />
-    <Content Include="AppACE\static\js\bootstrap\bootstrap-datetimepicker.min.js" />
-    <Content Include="AppACE\static\js\bootstrap\bootstrap-timepicker.min.js" />
-    <Content Include="AppACE\static\js\bootstrap\bootstrap.min.js" />
-    <Content Include="AppACE\static\js\bootstrap\locales\bootstrap-datetimepicker.ja.js" />
-    <Content Include="AppACE\static\js\bootstrap\locales\bootstrap-datetimepicker.zh-CN.js" />
-    <Content Include="AppACE\static\js\bootstrap\locales\bootstrap-datetimepicker.zh-TW.js" />
-    <Content Include="AppACE\static\js\jquery\chosen.jquery.min.cn.js" />
-    <Content Include="AppACE\static\js\jquery\chosen.jquery.min.js" />
-    <Content Include="AppACE\static\js\jquery\flot\jquery.flot.min.js" />
-    <Content Include="AppACE\static\js\jquery\flot\jquery.flot.pie.min.js" />
-    <Content Include="AppACE\static\js\jquery\flot\jquery.flot.resize.min.js" />
-    <Content Include="AppACE\static\js\jquery\i18n\grid.locale-en.js" />
-    <Content Include="AppACE\static\js\jquery\jquery-1.10.2.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery-1.7.2.js" />
-    <Content Include="AppACE\static\js\jquery\jquery-1.8.2.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery-2.0.3.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery-form.js" />
-    <Content Include="AppACE\static\js\jquery\jquery-ui.js" />
-    <Content Include="AppACE\static\js\jquery\jquery-ui.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.cookie.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.easy-pie-chart.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.ie.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.jqGrid.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.md5.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.mobile-1.4.5.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.mobile.custom.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.qrcode.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.slimscroll.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.sparkline.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.tips.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.ui.touch-punch.min.js" />
-    <Content Include="AppACE\static\js\jquery\jquery.validate.min.js" />
-    <Content Include="AppACE\static\js\system\account\account.js" />
-    <Content Include="AppACE\static\js\system\dict\dataDict.js" />
-    <Content Include="AppACE\static\js\system\dict\sysDict.js" />
-    <Content Include="AppACE\static\js\system\index\index.js" />
-    <Content Include="AppACE\static\js\system\jy\jy.main.js" />
-    <Content Include="AppACE\static\js\system\login\login.js" />
-    <Content Include="AppACE\static\js\system\log\loginLog.js" />
-    <Content Include="AppACE\static\js\system\log\optLog.js" />
-    <Content Include="AppACE\static\js\system\org\position.js" />
-    <Content Include="AppACE\static\js\system\org\role.js" />
-    <Content Include="AppACE\static\js\system\resources\resources.js" />
-    <Content Include="AppACE\static\js\system\task\log.js" />
-    <Content Include="AppACE\static\js\system\task\scheduleJob.js" />
-    <Content Include="AppACE\static\js\system\tool\echarts.js" />
-    <Content Include="AppACE\static\js\system\tool\email.js" />
-    <Content Include="AppACE\static\js\system\tool\interfaceTest.js" />
-    <Content Include="AppACE\static\js\system\tool\map.js" />
-    <Content Include="AppACE\static\js\system\tool\qrcode.js" />
-    <Content Include="AppACE\static\js\system\weixin\config\config.js" />
-    <Content Include="AppACE\static\js\system\weixin\menu\menu.js" />
-    <Content Include="AppACE\static\js\system\weixin\user\follower.js" />
-    <Content Include="AppACE\static\js\system\workflow\instance\hisInstance.js" />
-    <Content Include="AppACE\static\js\system\workflow\instance\proInstance.js" />
-    <Content Include="AppACE\static\js\system\workflow\model\model.js" />
-    <Content Include="AppACE\static\js\system\workflow\online\apply.js" />
-    <Content Include="AppACE\static\js\system\workflow\online\his.js" />
-    <Content Include="AppACE\static\js\system\workflow\online\myTask-sign.js" />
-    <Content Include="AppACE\static\js\system\workflow\online\myTask-todo.js" />
-    <Content Include="AppACE\static\js\system\workflow\online\run.js" />
-    <Content Include="AppACE\static\js\system\workflow\process\process.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\bar.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\chord.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\eventRiver.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\force.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\funnel.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\gauge.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\heatmap.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\k.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\line.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\map.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\pie.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\radar.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\scatter.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\tree.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\treemap.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\venn.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\chart\wordCloud.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\echarts-all.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\echarts.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\esl\css.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\esl\esl.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\esl\js.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\blue.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\dark.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\default.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\gray.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\green.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\helianthus.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\infographic.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\macarons.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\macarons2.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\mint.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\red.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\roma.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\sakura.js" />
-    <Content Include="AppACE\static\plugins\echarts\2.2.7\theme\shine.js" />
-    <Content Include="AppACE\static\plugins\layer\3.0\layer.js" />
-    <Content Include="AppACE\static\plugins\layer\3.0\skin\default\icon-ext.png" />
-    <Content Include="AppACE\static\plugins\layer\3.0\skin\default\icon.png" />
-    <Content Include="AppACE\static\plugins\layer\3.0\skin\default\layer.css" />
-    <Content Include="AppACE\static\plugins\layer\3.0\skin\default\loading-0.gif" />
-    <Content Include="AppACE\static\plugins\layer\3.0\skin\default\loading-1.gif" />
-    <Content Include="AppACE\static\plugins\layer\3.0\skin\default\loading-2.gif" />
-    <Content Include="AppACE\static\plugins\tabs\css\tab-control.min.css" />
-    <Content Include="AppACE\static\plugins\tabs\img\tab-control_tab-find_form.png" />
-    <Content Include="AppACE\static\plugins\tabs\img\tab-control_tab-find_li.png" />
-    <Content Include="AppACE\static\plugins\tabs\img\tab-control_tab_input.png" />
-    <Content Include="AppACE\static\plugins\tabs\img\tab-control_tab_li.png" />
-    <Content Include="AppACE\static\plugins\tabs\js\tab-control.min.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\anchor\anchor.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\attachment.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\attachment.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\attachment.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_chm.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_default.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_doc.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_exe.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_jpg.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_mp3.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_mv.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_pdf.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_ppt.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_psd.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_rar.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_txt.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\fileTypeImages\icon_xls.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\alignicon.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\alignicon.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\bg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\file-icons.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\file-icons.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\icons.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\icons.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\image.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\progress.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\success.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\attachment\images\success.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\background\background.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\background\background.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\background\background.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\background\images\bg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\background\images\success.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\chart.config.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\charts.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\charts.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\charts.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\images\charts0.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\images\charts1.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\images\charts2.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\images\charts3.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\images\charts4.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\charts\images\charts5.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\emotion.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\emotion.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\emotion.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\images\0.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\images\bface.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\images\cface.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\images\fface.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\images\jxface2.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\images\neweditor-tab-bg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\images\tface.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\images\wface.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\emotion\images\yface.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\gmap\gmap.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\help\help.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\help\help.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\help\help.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\image.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\image.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\image.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\images\alignicon.jpg" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\images\bg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\images\icons.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\images\icons.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\images\image.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\images\progress.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\images\success.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\image\images\success.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\insertframe\insertframe.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\internal.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\link\link.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\map\map.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\map\show.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\music\music.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\music\music.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\music\music.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\preview\preview.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\addimg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\brush.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\delimg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\delimgH.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\empty.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\emptyH.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\eraser.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\redo.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\redoH.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\scale.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\scaleH.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\size.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\undo.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\images\undoH.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\scrawl.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\scrawl.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\scrawl\scrawl.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\searchreplace\searchreplace.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\searchreplace\searchreplace.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\snapscreen\snapscreen.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\spechars\spechars.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\spechars\spechars.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\table\dragicon.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\table\edittable.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\table\edittable.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\table\edittable.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\table\edittd.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\table\edittip.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\config.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\images\bg.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\images\pre0.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\images\pre1.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\images\pre2.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\images\pre3.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\images\pre4.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\template.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\template.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\template\template.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\bg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\center_focus.jpg" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\file-icons.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\file-icons.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\icons.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\icons.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\image.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\left_focus.jpg" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\none_focus.jpg" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\progress.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\right_focus.jpg" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\success.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\images\success.png" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\video.css" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\video.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\video\video.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\webapp\webapp.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\wordimage\fClipboard_ueditor.swf" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\wordimage\imageUploader.swf" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\wordimage\tangram.js" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\wordimage\wordimage.html" />
-    <Content Include="AppACE\static\plugins\ueditor\dialogs\wordimage\wordimage.js" />
-    <Content Include="AppACE\static\plugins\ueditor\index.html" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\en.js" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\addimage.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\alldeletebtnhoverskin.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\alldeletebtnupskin.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\background.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\button.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\copy.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\deletedisable.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\deleteenable.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\listbackground.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\localimage.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\music.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\rotateleftdisable.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\rotateleftenable.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\rotaterightdisable.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\rotaterightenable.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\en\images\upload.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\zh-cn\images\copy.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\zh-cn\images\localimage.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\zh-cn\images\music.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\zh-cn\images\upload.png" />
-    <Content Include="AppACE\static\plugins\ueditor\lang\zh-cn\zh-cn.js" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\css\ueditor.css" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\css\ueditor.min.css" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\dialogbase.css" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\anchor.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\arrow.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\arrow_down.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\arrow_up.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\button-bg.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\cancelbutton.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\charts.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\cursor_h.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\cursor_h.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\cursor_v.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\cursor_v.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\dialog-title-bg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\filescan.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\highlighted.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\icons-all.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\icons.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\icons.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\loaderror.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\loading.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\lock.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\neweditor-tab-bg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\pagebreak.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\scale.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\sortable.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\spacer.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\sparator_v.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\table-cell-align.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\tangram-colorpicker.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\toolbar_bg.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\unhighlighted.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\upload.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\videologo.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\word.gif" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\default\images\wordpaste.png" />
-    <Content Include="AppACE\static\plugins\ueditor\themes\iframe.css" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\codemirror\codemirror.css" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\codemirror\codemirror.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\adapters\mootools-adapter.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\adapters\mootools-adapter.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\adapters\prototype-adapter.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\adapters\prototype-adapter.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\adapters\standalone-framework.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\adapters\standalone-framework.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\highcharts-more.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\highcharts-more.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\highcharts.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\highcharts.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\annotations.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\annotations.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\canvas-tools.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\canvas-tools.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\data.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\data.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\drilldown.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\drilldown.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\exporting.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\exporting.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\funnel.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\funnel.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\heatmap.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\heatmap.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\map.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\map.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\no-data-to-display.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\modules\no-data-to-display.src.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\themes\dark-blue.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\themes\dark-green.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\themes\gray.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\themes\grid.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\highcharts\themes\skies.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\jquery-1.10.2.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\jquery-1.10.2.min.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\snapscreen\UEditorSnapscreen.exe" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\SyntaxHighlighter\shCore.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\SyntaxHighlighter\shCoreDefault.css" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.svg" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\video-js.css" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\video-js.min.css" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\video-js.swf" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\video.dev.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\video-js\video.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\Uploader.swf" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.css" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.custom.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.custom.min.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.flashonly.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.flashonly.min.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.html5only.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.html5only.min.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.min.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.withoutimage.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\webuploader\webuploader.withoutimage.min.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\zeroclipboard\ZeroClipboard.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\zeroclipboard\ZeroClipboard.min.js" />
-    <Content Include="AppACE\static\plugins\ueditor\third-party\zeroclipboard\ZeroClipboard.swf" />
-    <Content Include="AppACE\static\plugins\ueditor\ueditor.all.js" />
-    <Content Include="AppACE\static\plugins\ueditor\ueditor.all.min.js" />
-    <Content Include="AppACE\static\plugins\ueditor\ueditor.config.js" />
-    <Content Include="AppACE\static\plugins\ueditor\ueditor.parse.js" />
-    <Content Include="AppACE\static\plugins\ueditor\ueditor.parse.min.js" />
-    <Content Include="AppACE\static\plugins\webuploader\css\webuploader.css" />
-    <Content Include="AppACE\static\plugins\webuploader\image-upload\bg.png" />
-    <Content Include="AppACE\static\plugins\webuploader\image-upload\expressInstall.swf" />
-    <Content Include="AppACE\static\plugins\webuploader\image-upload\icons.png" />
-    <Content Include="AppACE\static\plugins\webuploader\image-upload\image.png" />
-    <Content Include="AppACE\static\plugins\webuploader\image-upload\index.html" />
-    <Content Include="AppACE\static\plugins\webuploader\image-upload\progress.png" />
-    <Content Include="AppACE\static\plugins\webuploader\image-upload\style.css" />
-    <Content Include="AppACE\static\plugins\webuploader\image-upload\success.png" />
-    <Content Include="AppACE\static\plugins\webuploader\js\upload.js" />
-    <Content Include="AppACE\static\plugins\webuploader\js\Uploader.swf" />
-    <Content Include="AppACE\static\plugins\webuploader\js\webuploader.js" />
-    <Content Include="AppACE\static\plugins\webuploader\js\webuploader.min.js" />
-    <Content Include="AppACE\static\plugins\webuploader\js\webuploader.nolog.js" />
-    <Content Include="AppACE\static\plugins\webuploader\js\webuploader.nolog.min.js" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\1_close.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\1_open.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\2.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\3.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\4.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\5.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\6.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\7.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\8.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\diy\9.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\line_conn.gif" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\loading.gif" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\zTreeStandard.gif" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\img\zTreeStandard.png" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\jquery.ztree.core-3.5.js" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\jquery.ztree.core-3.5.min.js" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\jquery.ztree.excheck-3.5.js" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\jquery.ztree.excheck-3.5.min.js" />
-    <Content Include="AppACE\static\plugins\zTree\3.5\zTreeStyle.css" />
-    <Content Include="Silverlight.js" />
     <Content Include="WF\Admin\AttrFlow\AddOneFrmToNodes.htm" />
     <Content Include="WF\Admin\AttrFlow\API.htm" />
     <Content Include="WF\Admin\AttrFlow\APICode.htm" />
@@ -890,6 +412,7 @@
     <Content Include="WF\Admin\CondByFrm.htm" />
     <Content Include="WF\Admin\CondPRI.htm" />
     <Content Include="WF\Admin\ConditionLine.htm" />
+    <Content Include="WF\Admin\UC\Pub.ascx" />
     <Content Include="WF\AppClassic\Home.htm" />
     <Content Include="WF\AppClassic\Img\Exit.jpg" />
     <Content Include="WF\AppClassic\Img\Bar1.png" />
@@ -956,9 +479,6 @@
     <Content Include="WF\Img\Runing.png" />
     <Content Include="WF\MyFlowFree2017.js" />
     <Content Include="WF\RptDfine\Flowlist.htm" />
-    <Content Include="C:\Users\Administrator\Desktop\MyStartFlow.htm">
-      <Link>WF\RptDfine\MyStartFlow.htm</Link>
-    </Content>
     <Content Include="WF\RptDfine\FlowSearch.htm" />
     <Content Include="WF\RptDfine\Default.htm" />
     <Content Include="WF\RptDfine\Single.Master" />
@@ -1724,29 +1244,11 @@
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
     <Content Include="WF\Admin\BindFrms.htm" />
-    <Content Include="WF\Admin\UC\CondBar.ascx" />
-    <Content Include="WF\Admin\UC\CondDepts.ascx" />
-    <Content Include="WF\Admin\UC\CondStation.ascx" />
-    <Content Include="WF\Admin\UC\Pub.ascx" />
     <Content Include="WF\Admin\XAP\DoPort.htm" />
     <Content Include="WF\Admin\XAP\Designer.aspx" />
     <Content Include="WF\Admin\XAP\DoPort.aspx" />
     <Content Include="WF\Admin\XAP\WebService.asmx" />
     <Content Include="WF\Admin\XAP\Designer.htm" />
-    <Content Include="AppSimple\CC.aspx" />
-    <Content Include="AppSimple\Complete.aspx" />
-    <Content Include="AppSimple\Default.aspx" />
-    <Content Include="AppSimple\Do.aspx" />
-    <Content Include="AppSimple\Help.aspx" />
-    <Content Include="AppSimple\Info.aspx" />
-    <Content Include="AppSimple\Left.aspx" />
-    <Content Include="AppSimple\Login.aspx" />
-    <Content Include="AppSimple\Readme.txt" />
-    <Content Include="AppSimple\Runing.aspx" />
-    <Content Include="AppSimple\Search.aspx" />
-    <Content Include="AppSimple\Start.aspx" />
-    <Content Include="AppSimple\ToDoList.aspx" />
-    <Content Include="AppSimple\Top.aspx" />
     <Content Include="WF\AutoTodolist.aspx" />
     <Content Include="WF\AutoTodolist.htm" />
     <Content Include="WF\Batch.aspx" />
@@ -2484,7 +1986,6 @@
     <Content Include="WF\FlowFormTree\Images\Menu\sysset.png" />
     <Content Include="WF\FlowFormTree\Images\Menu\user1.png" />
     <Content Include="WF\FlowFormTree\Images\Menu\window.png" />
-    <Content Include="WF\FlowRpt.aspx" />
     <Content Include="WF\Focus.aspx" />
     <Content Include="WF\Focus.htm" />
     <Content Include="WF\GetTask.aspx" />
@@ -6628,7 +6129,6 @@
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shCoreEclipse.css" />
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shThemeDefault.css" />
     <Content Include="WF\Scripts\SyntaxHighlighter\Styles\shThemeEclipse.css" />
-    <Content Include="WF\SDKComponents\AccepterCCerSelecter.ascx" />
     <Content Include="WF\SDKComponents\AccSite.Master" />
     <Content Include="WF\SDKComponents\Base\SDKBase.aspx" />
     <Content Include="WF\SDKComponents\Base\SDKData.js" />
@@ -6792,9 +6292,7 @@
     <Content Include="WF\WebOffice\OfficeView.aspx" />
     <Content Include="WF\WebOffice\TempLate.aspx" />
     <Content Include="WF\WFRpt.aspx" />
-    <Content Include="WF\WorkOpt\Accepter.aspx" />
     <Content Include="WF\WorkOpt\Accepter.htm" />
-    <Content Include="WF\WorkOpt\AccepterAdv.aspx" />
     <Content Include="WF\WorkOpt\AllotTask.aspx" />
     <Content Include="WF\WorkOpt\Askfor.aspx" />
     <Content Include="WF\WorkOpt\Askfor.htm" />
@@ -6810,13 +6308,11 @@
     <Content Include="WF\WorkOpt\DTC.aspx" />
     <Content Include="WF\WorkOpt\FHLFlow.aspx" />
     <Content Include="WF\WorkOpt\FoolFrmTrack.htm" />
-    <Content Include="WF\WorkOpt\Forward.aspx" />
     <Content Include="WF\WorkOpt\Forward.htm" />
     <Content Include="WF\WorkOpt\FTC.aspx" />
     <Content Include="WF\WorkOpt\GridData.ashx" />
     <Content Include="WF\WorkOpt\GridEdit.aspx" />
     <Content Include="WF\WorkOpt\Handler.ashx" />
-    <Content Include="WF\WorkOpt\Home.aspx" />
     <Content Include="WF\WorkOpt\HungUp.aspx" />
     <Content Include="WF\WorkOpt\OneWork\Ath.aspx" />
     <Content Include="WF\WorkOpt\OneWork\Ath.htm" />
@@ -6856,65 +6352,40 @@
     <Content Include="WF\WorkOpt\OneWork\TruakUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruckOnly.aspx" />
     <Content Include="WF\WorkOpt\Press.htm" />
-    <Content Include="WF\WorkOpt\PRI.aspx" />
     <Content Include="WF\WorkOpt\PrintDoc.aspx" />
-    <Content Include="WF\WorkOpt\ReturnWork.aspx" />
     <Content Include="WF\WorkOpt\ReturnWork.htm" />
-    <Content Include="WF\WorkOpt\SelectEmps.aspx" />
     <Content Include="WF\WorkOpt\SelectEmps.htm" />
     <Content Include="WF\WorkOpt\SelectNode.aspx" />
     <Content Include="WF\WorkOpt\SelectUser.aspx" />
-    <Content Include="WF\WorkOpt\ServAccepter.ashx" />
-    <Content Include="WF\WorkOpt\SilverlightUploadService.asmx" />
     <Content Include="WF\WorkOpt\StartGuide.htm" />
     <Content Include="WF\WorkOpt\StartGuideEntities.htm" />
-    <Content Include="WF\WorkOpt\StartGuideFrms.aspx" />
+    <Content Include="WF\WorkOpt\StartGuideFrms.htm" />
     <Content Include="WF\WorkOpt\StopFlow.aspx" />
     <Content Include="WF\WorkOpt\SubFlow.aspx" />
-    <Content Include="WF\WorkOpt\Thread.aspx" />
     <Content Include="WF\WorkOpt\ThreadDtl.aspx" />
     <Content Include="WF\WorkOpt\ToNodes.aspx" />
-    <Content Include="WF\WorkOpt\Track.aspx" />
     <Content Include="WF\WorkOpt\TransferCustom.aspx" />
     <Content Include="WF\WorkOpt\TransferCustomSimple.aspx" />
-    <Content Include="WF\WorkOpt\UnPassDtl.aspx" />
     <Content Include="WF\WorkOpt\UnSend.aspx" />
     <Content Include="WF\WorkOpt\ViewWorkNodeFrm.htm" />
     <Content Include="WF\WorkOpt\WebOffice.aspx" />
     <Content Include="WF\WorkOpt\WinOpen.master" />
-    <Content Include="WF\WorkOpt\WorkCheck.aspx" />
     <Content Include="WF\WorkOpt\WorkCheck.htm" />
-    <Content Include="WF\WorkOpt\WorkCheckAth.aspx" />
-    <Content Include="AppACE\Handler.ashx" />
     <Content Include="WF\MyFlowFool.htm" />
     <Content Include="WF\WFRpt.htm" />
     <Content Include="WF\StartGuide.htm" />
     <Content Include="WF\MyFlowWord.htm" />
     <Content Include="WF\WorkOpt\AllotTask.htm" />
-    <Content Include="WF\WorkOpt\Allot.htm" />
     <Content Include="WF\MyFlowFoolTruck.htm" />
     <Content Include="WF\WorkOpt\FlowSkip.htm" />
     <Content Include="WF\TodolistOfAuth.htm" />
     <Content Include="WF\TaskPoolSharing.htm" />
     <Content Include="WF\TaskPoolApply.htm" />
-    <Content Include="WF\WorkOpt\WorkCheckIng.htm" />
     <Content Include="WF\WorkOpt\AccepterGener.htm" />
     <Content Include="WF\WorkOpt\HuiQian.htm" />
     <Content Include="WF\WorkOpt\AccepterOfGener.htm" />
+    <Content Include="WF\WorkOpt\StopFlow.htm" />
     <None Include="Service References\CloundWS\WS.wsdl" />
-    <None Include="AppACE\static\css\system\fonts\glyphicons-halflings-regular.eot" />
-    <None Include="AppACE\static\css\system\fonts\glyphicons-halflings-regular.ttf" />
-    <None Include="AppACE\static\css\system\fonts\glyphicons-halflings-regular.woff" />
-    <None Include="AppACE\static\css\system\font\fontawesome-webfont.eot" />
-    <None Include="AppACE\static\css\system\font\fontawesome-webfont.ttf" />
-    <None Include="AppACE\static\css\system\font\fontawesome-webfont.woff" />
-    <None Include="AppACE\static\css\system\font\FontAwesome.otf" />
-    <None Include="AppACE\static\plugins\ueditor\jsp\config.json" />
-    <None Include="AppACE\static\plugins\ueditor\jsp\controller.jsp" />
-    <None Include="AppACE\static\plugins\ueditor\third-party\jquery-1.10.2.min.map" />
-    <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.eot" />
-    <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.ttf" />
-    <None Include="AppACE\static\plugins\ueditor\third-party\video-js\font\vjs.woff" />
     <Content Include="WF\Admin\AttrFlow\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCBPMDesigner\lib\sets\svg.ashx" />
@@ -6947,11 +6418,9 @@
     <Content Include="WF\Admin\WinOpen.master" />
     <Content Include="WF\Admin\XAP\WebClientDownloadHandler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx" />
-    <Content Include="AppSimple\SiteMenu.Master" />
     <Content Include="WF\CCForm\Handler.ashx" />
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
     <Content Include="WF\AppClassic\Handler.ashx" />
-    <Content Include="WF\CCForm\HanderMapExt.ashx" />
     <Content Include="WF\Admin\Port\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\CCForm\WinOpen.master" />
@@ -7001,9 +6470,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppACE\Handler.ashx.cs">
-      <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.designer.cs">
       <DependentUpon>FrmEventHandle.aspx</DependentUpon>
     </Compile>
@@ -8125,26 +7591,6 @@
     <Compile Include="WF\Admin\SimulationRun.aspx.designer.cs">
       <DependentUpon>SimulationRun.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\UC\CondBar.ascx.cs">
-      <DependentUpon>CondBar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondBar.ascx.designer.cs">
-      <DependentUpon>CondBar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondDepts.ascx.cs">
-      <DependentUpon>CondDepts.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondDepts.ascx.designer.cs">
-      <DependentUpon>CondDepts.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondStation.ascx.cs">
-      <DependentUpon>CondStation.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\UC\CondStation.ascx.designer.cs">
-      <DependentUpon>CondStation.ascx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\UC\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8178,104 +7624,6 @@
     </Compile>
     <Compile Include="WF\AppClassic\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\CC.aspx.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\CC.aspx.designer.cs">
-      <DependentUpon>CC.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Complete.aspx.cs">
-      <DependentUpon>Complete.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Complete.aspx.designer.cs">
-      <DependentUpon>Complete.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Do.aspx.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Do.aspx.designer.cs">
-      <DependentUpon>Do.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Help.aspx.cs">
-      <DependentUpon>Help.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Help.aspx.designer.cs">
-      <DependentUpon>Help.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Info.aspx.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Info.aspx.designer.cs">
-      <DependentUpon>Info.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Left.aspx.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Left.aspx.designer.cs">
-      <DependentUpon>Left.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Login.aspx.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Login.aspx.designer.cs">
-      <DependentUpon>Login.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Runing.aspx.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Runing.aspx.designer.cs">
-      <DependentUpon>Runing.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Search.aspx.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Search.aspx.designer.cs">
-      <DependentUpon>Search.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\SiteMenu.Master.cs">
-      <DependentUpon>SiteMenu.Master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\SiteMenu.Master.designer.cs">
-      <DependentUpon>SiteMenu.Master</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Start.aspx.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Start.aspx.designer.cs">
-      <DependentUpon>Start.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\ToDoList.aspx.cs">
-      <DependentUpon>ToDoList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\ToDoList.aspx.designer.cs">
-      <DependentUpon>ToDoList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="AppSimple\Top.aspx.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="AppSimple\Top.aspx.designer.cs">
-      <DependentUpon>Top.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\AutoTodolist.aspx.cs">
       <DependentUpon>AutoTodolist.aspx</DependentUpon>
@@ -9182,13 +8530,6 @@
     <Compile Include="WF\FlowFormTree\FlowFormTreeView.aspx.designer.cs">
       <DependentUpon>FlowFormTreeView.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\FlowRpt.aspx.cs">
-      <DependentUpon>FlowRpt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\FlowRpt.aspx.designer.cs">
-      <DependentUpon>FlowRpt.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Focus.aspx.cs">
       <DependentUpon>Focus.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9403,13 +8744,6 @@
     </Compile>
     <Compile Include="WF\RptDfine\UC\ToolBar.ascx.designer.cs">
       <DependentUpon>ToolBar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\SDKComponents\AccepterCCerSelecter.ascx.cs">
-      <DependentUpon>AccepterCCerSelecter.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\SDKComponents\AccepterCCerSelecter.ascx.designer.cs">
-      <DependentUpon>AccepterCCerSelecter.ascx</DependentUpon>
     </Compile>
     <Compile Include="WF\SDKComponents\AccSite.Master.cs">
       <DependentUpon>AccSite.Master</DependentUpon>
@@ -9673,20 +9007,6 @@
     <Compile Include="WF\WinOpenEUI.Master.designer.cs">
       <DependentUpon>WinOpenEUI.Master</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\Accepter.aspx.cs">
-      <DependentUpon>Accepter.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Accepter.aspx.designer.cs">
-      <DependentUpon>Accepter.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\AccepterAdv.aspx.cs">
-      <DependentUpon>AccepterAdv.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\AccepterAdv.aspx.designer.cs">
-      <DependentUpon>AccepterAdv.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\AllotTask.aspx.cs">
       <DependentUpon>AllotTask.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9746,13 +9066,6 @@
     <Compile Include="WF\WorkOpt\FHLFlow.aspx.designer.cs">
       <DependentUpon>FHLFlow.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\Forward.aspx.cs">
-      <DependentUpon>Forward.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Forward.aspx.designer.cs">
-      <DependentUpon>Forward.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\FTC.aspx.cs">
       <DependentUpon>FTC.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9772,13 +9085,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Home.aspx.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Home.aspx.designer.cs">
-      <DependentUpon>Home.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\HungUp.aspx.cs">
       <DependentUpon>HungUp.aspx</DependentUpon>
@@ -9853,33 +9159,12 @@
     <Compile Include="WF\WorkOpt\OneWork\TruckOnly.aspx.designer.cs">
       <DependentUpon>TruckOnly.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\PRI.aspx.cs">
-      <DependentUpon>PRI.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\PRI.aspx.designer.cs">
-      <DependentUpon>PRI.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\PrintDoc.aspx.cs">
       <DependentUpon>PrintDoc.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\WorkOpt\PrintDoc.aspx.designer.cs">
       <DependentUpon>PrintDoc.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ReturnWork.aspx.cs">
-      <DependentUpon>ReturnWork.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\ReturnWork.aspx.designer.cs">
-      <DependentUpon>ReturnWork.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SelectEmps.aspx.cs">
-      <DependentUpon>SelectEmps.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SelectEmps.aspx.designer.cs">
-      <DependentUpon>SelectEmps.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\SelectNode.aspx.cs">
       <DependentUpon>SelectNode.aspx</DependentUpon>
@@ -9895,20 +9180,6 @@
     <Compile Include="WF\WorkOpt\SelectUser.aspx.designer.cs">
       <DependentUpon>SelectUser.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\ServAccepter.ashx.cs">
-      <DependentUpon>ServAccepter.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\SilverlightUploadService.asmx.cs">
-      <DependentUpon>SilverlightUploadService.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\StartGuideFrms.aspx.cs">
-      <DependentUpon>StartGuideFrms.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\StartGuideFrms.aspx.designer.cs">
-      <DependentUpon>StartGuideFrms.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\StopFlow.aspx.cs">
       <DependentUpon>StopFlow.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9922,13 +9193,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\SubFlow.aspx.designer.cs">
       <DependentUpon>SubFlow.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Thread.aspx.cs">
-      <DependentUpon>Thread.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Thread.aspx.designer.cs">
-      <DependentUpon>Thread.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\ThreadDtl.aspx.cs">
       <DependentUpon>ThreadDtl.aspx</DependentUpon>
@@ -9944,13 +9208,6 @@
     <Compile Include="WF\WorkOpt\ToNodes.aspx.designer.cs">
       <DependentUpon>ToNodes.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\Track.aspx.cs">
-      <DependentUpon>Track.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\Track.aspx.designer.cs">
-      <DependentUpon>Track.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\TransferCustom.aspx.cs">
       <DependentUpon>TransferCustom.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9964,13 +9221,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\TransferCustomSimple.aspx.designer.cs">
       <DependentUpon>TransferCustomSimple.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\UnPassDtl.aspx.cs">
-      <DependentUpon>UnPassDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\UnPassDtl.aspx.designer.cs">
-      <DependentUpon>UnPassDtl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\UnSend.aspx.cs">
       <DependentUpon>UnSend.aspx</DependentUpon>
@@ -9992,20 +9242,6 @@
     </Compile>
     <Compile Include="WF\WorkOpt\WinOpen.master.designer.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WorkCheck.aspx.cs">
-      <DependentUpon>WorkCheck.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WorkCheck.aspx.designer.cs">
-      <DependentUpon>WorkCheck.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WorkCheckAth.aspx.cs">
-      <DependentUpon>WorkCheckAth.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\WorkCheckAth.aspx.designer.cs">
-      <DependentUpon>WorkCheckAth.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

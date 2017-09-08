@@ -185,6 +185,7 @@ namespace CCFlow.WF.Admin
             DataRow[] rows_Attrs = null;
             LinkBtn btn = null;
             DDL ddl = null;
+            CheckBox cb = null;
             int idx_Attr = 1;
             int gidx = 1;
             GroupField group = null;
@@ -203,6 +204,7 @@ namespace CCFlow.WF.Admin
                 pub1.AddTDGroupTitle("style='width:160px;'", "中文描述");
                 pub1.AddTDGroupTitle("style='width:160px;'", "字段分组");
                 pub1.AddTDGroupTitle("字段排序");
+                pub1.AddTDGroupTitle("是否显示");
                 pub1.AddTREnd();
 
                 #endregion
@@ -282,7 +284,7 @@ namespace CCFlow.WF.Admin
                     #region 01、当前分组标题行tr
 
                     pub1.AddTR();
-                    pub1.AddTDBegin("colspan='5' class='GroupTitle'");
+                    pub1.AddTDBegin("colspan='6' class='GroupTitle'");
 
                     if (gidx > 1)
                     {
@@ -328,6 +330,10 @@ namespace CCFlow.WF.Admin
                         ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
                         ddl.SetSelectItem((int)drGrp[GroupFieldAttr.OID]);
 
+                        cb = new CheckBox();
+                        cb.ID = "CB_" + row[MapAttrAttr.KeyOfEn];
+                        cb.Checked = Convert.ToInt32(row[MapAttrAttr.IsEnableInAPP]) == 1;
+
                         pub1.AddTR();
                         pub1.AddTD("style='text-align:center'", idx_Attr.ToString());
                         pub1.AddTD(string.Format("<a href='javascript:ShowEditWindow(\"{0}\",\"{1}\")'>{2}</a>", row[MapAttrAttr.Name], GenerateEditUrl(row), row[MapAttrAttr.KeyOfEn]));
@@ -356,6 +362,7 @@ namespace CCFlow.WF.Admin
                         }
 
                         pub1.AddTDEnd();
+                        pub1.AddTD(cb);
                         pub1.AddTREnd();
 
                         #endregion
@@ -420,7 +427,7 @@ namespace CCFlow.WF.Admin
                     {
                         #region 该分组下面没有任何字段
                         pub1.AddTR();
-                        pub1.AddTDBegin("colspan='5' style='color:red'");
+                        pub1.AddTDBegin("colspan='6' style='color:red'");
                         pub1.AddSpace(1);
                         pub1.Add("@该分组下面没有任何字段或控件");
                         pub1.AddTDEnd();
@@ -437,7 +444,7 @@ namespace CCFlow.WF.Admin
                 {
                     #region 分组行
                     pub1.AddTR();
-                    pub1.AddTDBegin("colspan='5' class='GroupTitle'");
+                    pub1.AddTDBegin("colspan='6' class='GroupTitle'");
                     pub1.AddSpace(1);
                     pub1.Add("未分组字段");
                     pub1.AddTDEnd();
@@ -460,12 +467,17 @@ namespace CCFlow.WF.Admin
                         ddl.AutoPostBack = true;
                         ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;
 
+                        cb = new CheckBox();
+                        cb.ID = "CB_" + row[MapAttrAttr.KeyOfEn];
+                        cb.Checked = Convert.ToInt32(row[MapAttrAttr.IsEnableInAPP]) == 1;
+
                         pub1.AddTR();
                         pub1.AddTD("style='text-align:center'", idx_Attr.ToString());
                         pub1.AddTD(string.Format("<a href='javascript:ShowEditWindow(\"{0}\",\"{1}\")'>{2}</a>", row[MapAttrAttr.Name], GenerateEditUrl(row), row[MapAttrAttr.KeyOfEn]));
                         pub1.AddTD(row[MapAttrAttr.Name].ToString());
                         pub1.AddTD(ddl);
                         pub1.AddTD("&nbsp;");
+                        pub1.AddTD(cb);
                         pub1.AddTREnd();
 
                         #endregion
@@ -492,6 +504,7 @@ namespace CCFlow.WF.Admin
                     pub1.AddTDGroupTitle("style='width:100px;'", "明细表编号");
                     pub1.AddTDGroupTitle("style='width:160px;'", "中文名称");
                     pub1.AddTDGroupTitle("排序");
+                    pub1.AddTDGroupTitle("是否显示");
                     pub1.AddTREnd();
 
                     #endregion
@@ -567,6 +580,10 @@ namespace CCFlow.WF.Admin
                     pub1.Add("<a href='javascript:void(0)' onclick=\"Form_View('" + this.FK_MapData + "','" + this.FK_Flow + "');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-search'\">预览</a>");
                     pub1.Add("<a href='javascript:void(0)' onclick=\"$('#nodes').dialog('open');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-copy'\">复制排序</a>");
                     pub1.Add("&nbsp;<a href='javascript:void(0)' onclick=\"GroupFieldNew('" + this.FK_MapData + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-addfolder'\">新建分组</a>");
+                    btn = new LinkBtn(false,"Btn_Save_InApp","保存");
+                    btn.SetDataOption("iconCls","'icon-save'");
+                    btn.Click += btnSaveInApp_Click;
+                    pub1.Add(btn);
                     pub1.AddBR();
                     pub1.AddBR();
 
@@ -1065,6 +1082,28 @@ namespace CCFlow.WF.Admin
                               DateTime.Now.ToString("yyyyMMddHHmmssffffff"), true);
         }
         #endregion
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void btnSaveInApp_Click(object sender, EventArgs e)
+        {
+            MapAttr att = null;
+            foreach (Control ctrl in pub1.Controls)
+            {
+                if (ctrl is CheckBox)
+                {
+                    CheckBox cb = ctrl as CheckBox;
+                    bool val=cb.Checked;
+                    string keyOfEn = cb.ID.Replace("CB_","");
+
+                     att = attrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, keyOfEn) as MapAttr;
+                     att.IsEnableInAPP = val;
+                     att.Update();
+                }
+            }
+        }
 
         #region 字段排序
 

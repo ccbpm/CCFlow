@@ -46,6 +46,28 @@ namespace BP.WF.HttpHandler
             }
         }
 
+        /// <summary>
+        /// 选择表单,发起前置导航.
+        /// </summary>
+        /// <returns></returns>
+        public string StartGuideFrms_Init()
+        {
+            BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes();
+
+            QueryObject qo = new QueryObject(fns);
+            qo.AddWhere(FrmNodeAttr.FK_Node, int.Parse(this.FK_Node + "01"));
+            qo.addAnd();
+            qo.AddWhere(FrmNodeAttr.FrmEnableRole, "!=", (int)BP.WF.Template.FrmEnableRole.WhenHaveFrmPara);
+            qo.addOrderBy(FrmNodeAttr.Idx);
+            qo.DoQuery();
+
+            foreach (BP.WF.Template.FrmNode item in fns)
+            {
+                item.GuanJianZiDuan = item.HisFrm.Name;
+            }
+            return fns.ToJson();
+        }
+
         #region 通用人员选择器.
         /// <summary>
         /// 通用人员选择器Init
@@ -912,6 +934,29 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+
+        #region 工作分配.
+        /// <summary>
+        /// 分配工作
+        /// </summary>
+        /// <returns></returns>
+        public string AllotTask_Init()
+        {
+            GenerWorkerLists wls = new GenerWorkerLists(this.WorkID, this.FK_Node, true);
+            return wls.ToJson();
+        }
+        /// <summary>
+        /// 分配工作
+        /// </summary>
+        /// <returns></returns>
+        public string AllotTask_Save()
+        {
+
+            return "";
+        }
+        #endregion
+
+
         #region 执行跳转.
         /// <summary>
         /// 返回可以跳转的节点.
@@ -1564,16 +1609,6 @@ namespace BP.WF.HttpHandler
             string msg = this.GetRequestVal("Message");
             string toEmp = this.GetRequestVal("ToEmp");
             return BP.WF.Dev2Interface.Node_Shift(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
-        }
-        /// <summary>
-        /// 执行分配工作.
-        /// </summary>
-        /// <returns></returns>
-        public string Allot()
-        {
-            string msg = this.GetRequestVal("Message");
-            string toEmp = this.GetRequestVal("ToEmp");
-            return BP.WF.Dev2Interface.Node_Allot(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, toEmp, msg);
         }
         /// <summary>
         /// 撤销移交

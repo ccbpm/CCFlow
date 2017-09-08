@@ -64,7 +64,6 @@ namespace BP.WF.Template
                 return "NodeID";
             }
         }
-        
         /// <summary>
         /// 选择模式
         /// </summary>

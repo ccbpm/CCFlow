@@ -625,7 +625,7 @@
                     strTimeKey += date.getMinutes(); //MM
                     strTimeKey += date.getSeconds(); //SS
 
-                    window.open("../WorkOpt/ReturnWork.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "退回窗口", "height=400, width=800,top=80,left=160,scrollbars=yes");
+                    window.open("../WorkOpt/ReturnWork.htm?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "退回窗口", "height=400, width=800,top=80,left=160,scrollbars=yes");
                     break;
                 case "selectaccepter": //选择接收人
                     window.open("../WorkOpt/Accepter.htm?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&type=1", "选择收件人", "height=600, width=800,scrollbars=yes");
@@ -640,7 +640,7 @@
                     window.open("../WorkOpt/CC.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID + "&s=" + strTimeKey, "抄送", "height=600, width=800,scrollbars=yes");
                     break;
                 case "Shift": //移交
-                    window.open("../WorkOpt/Forward.aspx?FK_Node=" + args.FK_Node + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow, "移交窗口", "height=600, width=800,scrollbars=yes");
+                    window.open("../WorkOpt/Forward.htm?FK_Node=" + args.FK_Node + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow, "移交窗口", "height=600, width=800,scrollbars=yes");
                     break;
                 case "Del": //删除
                     if (confirm("是否真的需要删除?"))
@@ -667,7 +667,7 @@
                     //window.open("../CCForm/Print.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "打印单据", "dialogHeight: 350px, dialogWidth:450px,center: yes, help: no,resizable:yes");
                     break;
                 case "hungup": //挂起
-                    window.open("../WorkOpt/HungUp.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "挂起", "height=600, width=800,scrollbars=yes");
+                    window.open("../WorkOpt/HungUp.htm?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "挂起", "height=600, width=800,scrollbars=yes");
                     break;
                 case "search": //查询
                     WinOpenPage("_blank", "../Rpt/Search.aspx?RptNo=ND" + parseInt(args.FK_Flow) + "MyRpt&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "查询");
@@ -682,7 +682,7 @@
                     window.open("../JumpWay.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow" + args.FK_Flow + "&s=" + strTimeKey, "跳转", "height=600, width=800,scrollbars=yes");
                     break;
                 case "Shift": //移交
-                    window.open("../WorkOpt/Forward.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FK_Dept=" + args.FK_Dept, "移交", "height=600, width=800,scrollbars=yes");
+                    window.open("../WorkOpt/Forward.htm?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FK_Dept=" + args.FK_Dept, "移交", "height=600, width=800,scrollbars=yes");
                     break;
                 case "CCCheckNote"://抄送
                     window.open("../WorkOpt/CCCheckNote.aspx?WorkID=" + args.WorkID + "&FK_Node=" + args.FK_Node + "&FK_Flow=" + args.FK_Flow + "&FID=" + args.FID, "抄送", "height=600, width=800,scrollbars=yes");

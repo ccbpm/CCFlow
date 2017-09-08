@@ -48,7 +48,7 @@
           %>
 
          [<a href='UnSend.aspx?DoIt=DelSubThread&FK_Flow=<%=flowNo %>&WorkID=<%=workid %>' >删除子线程</a>] 
-         - [<a href='/WF/WorkOpt/Forward.aspx?DoIt=Shift&FK_Node=<%=nd.NodeID %>&FK_Flow=<%=flowNo %>&WorkID=<%=workid %>' >移交</a>] 
+         - [<a href='/WF/WorkOpt/Forward.htm?DoIt=Shift&FK_Node=<%=nd.NodeID %>&FK_Flow=<%=flowNo %>&WorkID=<%=workid %>' >移交</a>] 
          - [<a href='UnSend.aspx?FK_Flow=<%=flowNo %>&WorkID=<%=workid %>' >取消</a>]
 
          </center>

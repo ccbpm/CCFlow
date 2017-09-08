@@ -15,7 +15,7 @@
         function SaveSelfFrom() {
 
             if ( <%=btn2.SelectAccepterEnable %> != '0') {
-                var url = '/WF/WorkOpt/Accepter.aspx?FK_Flow=<%=FK_Flow %>&FK_Node=<%=FK_Node %>&WorkIDs=<%=WorkIDs %>&WorkID=0&FID=0';
+                var url = '/WF/WorkOpt/Accepter.htm?FK_Flow=<%=FK_Flow %>&FK_Node=<%=FK_Node %>&WorkIDs=<%=WorkIDs %>&WorkID=0&FID=0';
                 var returnVal= window.showModalDialog(url, "sd", "scrollbars=yes,resizable=yes,center=yes,minimize=yes,maximize=yes,height= 600px,width= 550px, top=50px, left= 650px,alwaysRaised=yes,depended=yes");
                //alert(returnVal);
                if (returnVal == null || returnVal == 'undefined' || returnVal == 'cancel') {

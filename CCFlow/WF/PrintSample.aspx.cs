@@ -1646,7 +1646,7 @@ namespace CCFlow.WF
                 if (exSend.Message.Contains("请选择下一步骤工作") == true)
                 {
                     string url = "";
-                    url = "./WorkOpt/Accepter.aspx?IsWinOpen=0&CFlowNo=" + this.CFlowNo + "&DoFunc=" + this.DoFunc + "&WorkIDs=" + this.WorkIDs + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
+                    url = "./WorkOpt/Accepter.htm?IsWinOpen=0&CFlowNo=" + this.CFlowNo + "&DoFunc=" + this.DoFunc + "&WorkIDs=" + this.WorkIDs + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID;
                     return;
                 }
 
@@ -1757,7 +1757,7 @@ namespace CCFlow.WF
             wk = (Work)this.UCEn1.Copy(wk);
 
             string msg = BP.WF.Glo.DealExp(nd.FocusField, wk, null);
-            this.Response.Redirect("./WorkOpt/ReturnWork.aspx?FK_Node=" + this.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&Info=" + msg, true);
+            this.Response.Redirect("./WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + wk.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&Info=" + msg, true);
             return;
         }
         public void DoShift()
@@ -1779,7 +1779,7 @@ namespace CCFlow.WF
                 msg = BP.WF.Glo.DealExp(nd.FocusField, wk, null);
                 // wk.Update(nd.FocusField, msg);
             }
-            string url = "./WorkOpt/Forward.aspx?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + msg;
+            string url = "./WorkOpt/Forward.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + msg;
             this.Response.Redirect(url, true);
         }
         #endregion

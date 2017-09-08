@@ -8079,7 +8079,7 @@ namespace BP.WF
         {
             // 转化成编号.
             fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            string url = Glo.CCFlowAppPath + "WF/WorkOpt/ReturnWork.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid;
+            string url = Glo.CCFlowAppPath + "WF/WorkOpt/ReturnWork.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid;
             System.Web.HttpContext.Current.Response.Redirect(url, true);
             return;
         }

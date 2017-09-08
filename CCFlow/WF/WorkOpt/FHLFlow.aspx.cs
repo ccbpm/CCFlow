@@ -71,7 +71,7 @@ namespace CCFlow.WF
         {
 
             // 退回流程.
-            this.ToolBar1.Add("<input class=Btn type=button onclick=\"javascript:window.location.href='ReturnWork.aspx?FromUrl=FHLFlow&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "'\" value='退回' >");
+            this.ToolBar1.Add("<input class=Btn type=button onclick=\"javascript:window.location.href='ReturnWork.htm?FromUrl=FHLFlow&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "'\" value='退回' >");
 
             // 关闭.
             this.ToolBar1.AddBtn("Btn_Close", "关闭");

@@ -52,18 +52,7 @@ namespace CCFlow.WF
 
         public void BindWorkList()
         {
-            string pageid = this.Request.RawUrl.ToLower();
-            if (pageid.Contains("small"))
-            {
-                if (pageid.Contains("single"))
-                    pageid = "SmallSingle";
-                else
-                    pageid = "Small";
-            }
-            else
-            {
-                pageid = "";
-            }
+            
             int colspan = 10;
             this.Pub1.AddTable("width='100%'");
             this.Pub1.AddCaptionMsg("取回审批");
@@ -121,19 +110,6 @@ namespace CCFlow.WF
         }
         protected void Page_Load(object sender, EventArgs e)
         {
-            string pageid = this.Request.RawUrl.ToLower();
-            if (pageid.Contains("small"))
-            {
-                if (pageid.Contains("single"))
-                    pageid = "SmallSingle";
-                else
-                    pageid = "Small";
-            }
-            else
-            {
-                pageid = "";
-            }
-
             if (this.DoType == "Tackback")
             {
                 /* */
@@ -142,10 +118,10 @@ namespace CCFlow.WF
                     string s = BP.WF.Dev2Interface.Node_Tackback(this.FK_Node, this.WorkID, this.ToNode);
                     //  s=s.Replace(
                     this.Pub1.AddTable("width='90%' align=left");
-                    this.Pub1.AddCaptionMsg("取回审批-<a href=GetTask" + pageid + ".aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + ">返回</a>");
+                    this.Pub1.AddCaptionMsg("取回审批-<a href=GetTask.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + ">返回</a>");
                     this.Pub1.AddTR();
                     this.Pub1.AddTDBegin();
-                    this.Pub1.AddMsgGreen("取回成功", "<h3>工作已经放入您的待办里</h3><hr><a href='MyFlow" + pageid + ".aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.ToNode + "&WorkID=" + this.WorkID + "&FID=0' >点这里请执行</a>。<br><br>");
+                    this.Pub1.AddMsgGreen("取回成功", "<h3>工作已经放入您的待办里</h3><hr><a href='MyFlow.aspx?FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.ToNode + "&WorkID=" + this.WorkID + "&FID=0' >点这里请执行</a>。<br><br>");
                     this.Pub1.AddTDEnd();
 
                     this.Pub1.AddTR();
@@ -199,7 +175,7 @@ namespace CCFlow.WF
 
                 fk_sort = fl.FK_FlowSort;
 
-                this.Pub1.AddTD("<a href='GetTask" + pageid + ".aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01' >" + fl.Name + "</a>");
+                this.Pub1.AddTD("<a href='GetTask.aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01' >" + fl.Name + "</a>");
 
                 this.Pub1.AddTD("<a href=\"javascript:WinOpen('/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fl.No + "&DoType=Chart','sd');\"  >打开</a>");
                 this.Pub1.AddTD(fl.Note);

@@ -44,7 +44,6 @@ namespace CCFlow.WF.WorkOpt
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
             
         }
 

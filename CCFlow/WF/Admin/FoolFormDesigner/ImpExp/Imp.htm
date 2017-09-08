@@ -3,8 +3,7 @@
 <head>
 
     <link href="../../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
-    <link href="../../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Comm/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
         .style1
         {
@@ -298,6 +297,10 @@
 
         //从一个节点导入.
         function CopyFromNodeFrm() {
+
+            if (confirm('您确定要执行导入吗？导入后会清空当前的设计的元素。') == false)
+                return;
+
             var nodeId = $('#ulNodeFrmImp input:checked').data().nodeid;
             $.ajax({
                 type: 'post',
@@ -320,6 +323,9 @@
 
         //从xml文件导入
         function SaveImpFromLocalXML() {
+
+            if (confirm('您确定要执行导入吗？导入后会清空当前的设计的元素。') == false)
+                return;
 
             var formData = new FormData();
             var name = $("input").val();
@@ -378,8 +384,11 @@
     </script>
 </head>
 <body>
+    
     <form id="formCC" method="post" enctype="multipart/form-data">
+    
     <div id="Msg"> </div>
+
     <div id="tt" class="easyui-tabs" style="width:100%;height:auto;padding:0px;">
         <div title="从本机导入" style="">
             <div style="text-align:left;padding:15px;">
@@ -408,7 +417,7 @@
 
                 <input type="checkbox" checked="checked" id="ckClear" name="IsClear" disabled="true" /> <label for="ckClear">是否清除现在已有的元素</label>
                 <input type="checkbox" checked="checked" id="ckReadOnly" name="IsSetReadonly" /><label for="ckReadOnly">是否只读</label>
-                <input type="button" value="执行从节点表单导入22" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
+                <input type="button" value="执行从节点表单导入" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
             </fieldset>
         </div>
         <div title="从表单库导入" id="divUlFrmTreeImp" style="padding:15px; text-align:left">        

@@ -14,7 +14,6 @@ using BP.En;
 using BP.Sys;
 using System.Data;
 using BP.Web.Controls;
-using CCFlow.WF.Admin.UC;
 
 namespace CCFlow.WF.Comm.Sys
 {

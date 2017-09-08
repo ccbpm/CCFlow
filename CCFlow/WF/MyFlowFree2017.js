@@ -483,8 +483,6 @@ function initBar() {
                 $('[name=SelectAccepter]').attr('onclick', '');
                 $('[name=SelectAccepter]').unbind('click');
                 $('[name=SelectAccepter]').bind('click', function () {
-
-                  
                     initModal("accepter");
                     $('#returnWorkModal').modal().show();
                 });
@@ -549,15 +547,15 @@ function initModal(modalType, toNode) {
             case "PackUp":
                 $('#modalHeader').text("打包下载/打印");
                 var url = "./WorkOpt/Packup.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
-               // alert(url);
+                // alert(url);
                 modalIframeSrc = "./WorkOpt/Packup.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "accepter":
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
-            
-            //发送选择接收节点和接收人   
+
+            //发送选择接收节点和接收人    
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
@@ -3190,9 +3188,11 @@ function dealWithUrl(src) {
 var colVisibleJsonStr = ''
 var jsonStr = '';
 
-//从MyFlowFree2017.htm 中拿过过的
+//从MyFlowFree2017.htm 中拿过过的.
+
 $(function () {
-    var frm = document.forms["divCCForm"]; 
+
+    var frm = document.forms["divCCForm"];
 
     if (plant == "CCFlow")
         frm.action = "MyFlow.ashx?method=login";
@@ -3205,13 +3205,14 @@ $(function () {
 
     GenerWorkNode(); //表单数据.ajax
 
-    $('[name=showCol]').bind('change', function (obj) {
-        if (obj.target.value == "8") {
-            Col4To8();
-        } else {
-            Col8To4();
-        }
-    });
+    //    $('[name=showCol]').bind('change', function (obj) {
+    //        if (obj.target.value == "8") {
+    //            Col4To8();
+    //        } else {
+    //            Col8To4();
+    //        }
+    //    });
+
     if ($("#Message").html() == "") {
         $(".Message").hide();
     }

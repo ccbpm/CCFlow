@@ -43,23 +43,39 @@
                         }
 
                         if (url.No == "pdf") {
-                            html += "<fieldset>";
-                            html += "<legend>pdf 在线打印与预览</legend>";
-                            html += "<ul>";
-                            html += "<li>系统把整个表单生成了一个pdf文件.</li>";
-                            html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/pdf.gif' />进行下载与在线预览</a></li>";
-                            html += "</ul>";
-                            html += "</fieldset>";
+
+                            if (url.Name.indexOf('err@') == 0) {
+                                html += "<fieldset>";
+                                html += "<legend>pdf 生成pdf出现错误</legend>";
+                                html += "<font color=red>" + url.Name + "</font>";
+                                html += "</fieldset>";
+                            } else {
+                                html += "<fieldset>";
+                                html += "<legend>pdf 在线打印与预览</legend>";
+                                html += "<ul>";
+                                html += "<li>系统把整个表单生成了一个pdf文件.</li>";
+                                html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/pdf.gif' />进行下载与在线预览</a></li>";
+                                html += "</ul>";
+                                html += "</fieldset>";
+                            }
                         }
 
                         if (url.No == "zip") {
-                            html += "<fieldset>";
-                            html += "<legend>zip 在线打印与预览</legend>";
-                            html += "<ul>";
-                            html += "<li>系统把整个表单生成了一个zip文件,这个文件里包括了,表单的附件，二维码等信息.</li>";
-                            html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/Zip.gif' />进行打包下载</a></li>";
-                            html += "</ul>";
-                            html += "</fieldset>";
+
+                            if (url.Name.indexOf('err@') == 0) {
+                                html += "<fieldset>";
+                                html += "<legend>生成zip出现错误</legend>";
+                                html += "<font color=red>" + url.Name + "</font>";
+                                html += "</fieldset>";
+                            } else {
+                                html += "<fieldset>";
+                                html += "<legend>zip 在线打印与预览</legend>";
+                                html += "<ul>";
+                                html += "<li>系统把整个表单生成了一个zip文件,这个文件里包括了,表单的附件，二维码等信息.</li>";
+                                html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/Zip.gif' />进行打包下载</a></li>";
+                                html += "</ul>";
+                                html += "</fieldset>";
+                            }
                         }
                     }
 

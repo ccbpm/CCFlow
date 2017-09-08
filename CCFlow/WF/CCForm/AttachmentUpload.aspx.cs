@@ -331,7 +331,7 @@ namespace CCFlow.WF.CCForm
                     /* 继承模式 */
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
-                    qo.addOr();
+                    qo.addAnd();
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(this.PKVal));
                     qo.addOrderBy("RDT");
                     qo.DoQuery();

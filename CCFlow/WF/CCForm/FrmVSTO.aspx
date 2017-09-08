@@ -25,7 +25,12 @@
                 paras += "&SID=" + BP.Web.WebUser.SID;
 		    
             if (paras.Contains("UserNo") == false)
-                paras += "&UserNo=" + BP.Web.WebUser.No;    
+                paras += "&UserNo=" + BP.Web.WebUser.No;
+
+            if (string.IsNullOrWhiteSpace(BP.Sys.SystemConfig.AppSettings["IsAutoTesting"]))
+                paras += "&IsAutoTesting=0";
+            else
+                paras += "&IsAutoTesting=" + Convert.ToInt32(BP.Sys.SystemConfig.AppSettings["IsAutoTesting"]); //用于自动化测试
                         
 			paras = paras.Replace("&", ",");
 

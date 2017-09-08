@@ -224,7 +224,10 @@ namespace BP.Sys
         /// 数值字段是否合计
         /// </summary>
         public const string IsSum = "IsSum";
-
+        /// <summary>
+        /// 在手机端是否显示
+        /// </summary>
+        public const string IsEnableInAPP = "IsEnableInAPP";
         public const string IsSupperText = "IsSupperText";
         public const string IsRichText = "IsRichText";
 
@@ -311,7 +314,20 @@ namespace BP.Sys
                 this.SetValByKey(MapAttrAttr.UIIsInput, value);
             }
         }
-       
+        /// <summary>
+        /// 在手机端中是否显示
+        /// </summary>
+        public bool IsEnableInAPP
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapAttrAttr.IsEnableInAPP, true);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.IsEnableInAPP, value);
+            }
+        }
         /// <summary>
         /// 是否启用高级JS设置
         /// </summary>
@@ -1411,6 +1427,7 @@ namespace BP.Sys
 
                 //显示的分组.
                 map.AddTBInt(MapAttrAttr.GroupID, 0, "显示的分组", true, false);
+                map.AddBoolean(MapAttrAttr.IsEnableInAPP, true, "是否在移动端中显示", true, true);
                 map.AddTBInt(MapAttrAttr.Idx, 0, "序号", true, false);
 
                 //参数属性.

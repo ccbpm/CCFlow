@@ -285,7 +285,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
+                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -293,7 +293,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsOrder_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
+                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -301,7 +301,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearchCond_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
+                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -309,7 +309,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Img/Guide.png";
                 rm.ClassMethodName = this.ToString() + ".DoRptExportTemplate_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
+                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -317,7 +317,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearch_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "本部门发起的流程";
+                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -326,7 +326,7 @@ namespace BP.WF.Rpt
                 rm.Warning = "您确定要执行吗?";
                 rm.ClassMethodName = this.ToString() + ".DoReset_AdminerFlow()";
                 rm.RefMethodType = RefMethodType.Func;
-                rm.GroupName = "本部门发起的流程";
+                rm.GroupName = "高级查询";
                 map.AddRefMethod(rm);
                 #endregion 高级查询.
 

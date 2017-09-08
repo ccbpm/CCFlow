@@ -169,6 +169,7 @@
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HttpHandler\CCMobile_MyFlow.cs" />
     <Compile Include="HttpHandler\WF_Admin_AttrFlow.cs" />
     <Compile Include="HttpHandler\WF.cs" />
     <Compile Include="HttpHandler\WF_Admin_AttrNode.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="HttpHandler\WF_WorkOpt_OneWork.cs" />
     <Compile Include="HttpHandler\WF_AppClassic.cs" />
     <Compile Include="HttpHandler\WF_Comm.cs" />
+    <Compile Include="HttpHandler\CCMobile_WorkOpt.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />

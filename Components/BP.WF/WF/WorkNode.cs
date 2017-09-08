@@ -536,11 +536,11 @@ namespace BP.WF
                 Emp emp = new Emp();
                 emp.No = wl.FK_Emp;
                 if (emp.RetrieveFromDBSources() == 0)
-                    throw new Exception("@接收人规则设置错误，求出来的接收人["+wl.FK_Emp+"]不存在或者被停用。");
+                    throw new Exception("@接收人规则设置错误，求出来的接收人[" + wl.FK_Emp + "]不存在或者被停用。");
 
                 wl.FK_EmpText = emp.Name;
                 wl.FK_Dept = emp.FK_Dept;
-               // wl.WarningHour = town.HisNode.WarningHour;
+                // wl.WarningHour = town.HisNode.WarningHour;
                 wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
 
                 wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
@@ -553,7 +553,7 @@ namespace BP.WF
                 {
                     wl.GroupMark = dt.Rows[0][2].ToString(); //第3个列是分组标记.
                     if (string.IsNullOrEmpty(wl.GroupMark))
-                        throw new Exception("@｛"+wl.FK_Emp+"｝分组标记中没有值,会导致无法按照分组标记去生成子线程,请检查配置的信息是否正确.");
+                        throw new Exception("@｛" + wl.FK_Emp + "｝分组标记中没有值,会导致无法按照分组标记去生成子线程,请检查配置的信息是否正确.");
                 }
 
                 if (this.IsHaveSubThreadGroupMark == true && town.HisNode.HisFormType == NodeFormType.SheetAutoTree)
@@ -612,7 +612,7 @@ namespace BP.WF
                         }
                         else
                         {
-                            throw new Exception("@当前节点["+this.town.HisNode.Name+"]是中间节点，并且是外部用户处理节点，您需要正确的设置，这个外部用户接受人规则。");
+                            throw new Exception("@当前节点[" + this.town.HisNode.Name + "]是中间节点，并且是外部用户处理节点，您需要正确的设置，这个外部用户接受人规则。");
                         }
                     }
 
@@ -711,14 +711,10 @@ namespace BP.WF
                     wl.FK_Node = toNodeId;
                     wl.FK_NodeText = town.HisNode.Name;
                     wl.FK_Emp = dr[0].ToString();
-                    try
-                    {
-                        emp = new Emp(wl.FK_Emp);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("@为人员分配工作时出现错误:" + wl.FK_Emp + ",没有执行成功,异常信息." + ex.Message);
-                    }
+
+                    emp.No = wl.FK_Emp;
+                    if (emp.RetrieveFromDBSources() == 0)
+                        continue;
 
                     wl.FK_EmpText = emp.Name;
                     wl.FK_Dept = emp.FK_Dept;

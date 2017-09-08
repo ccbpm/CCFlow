@@ -839,6 +839,8 @@ namespace BP.WF
         /// </summary>
         public static void UpdataCCFlowVerSQLScript()
         {
+            return;
+
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='UpdataCCFlowVer'";
             string currDBVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
 

@@ -839,35 +839,36 @@ namespace BP.WF
                 fileNameFormat = fileNameFormat.Replace(" ", "");
                 #endregion
 
+                Hashtable ht = new Hashtable();
+                ht.Add("htm", billUrl);
+
                 #region 把所有的文件做成一个zip文件.
                 //生成pdf文件
                 string pdfFile = path + "\\" + fileNameFormat + ".pdf";
                 try
                 {
+
                     Html2Pdf(billUrl, pdfFile);
+
+                    ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/" + fileNameFormat + ".pdf");
                 }
                 catch (Exception ex)
                 {
-                    return "err@生成pdf文件遇到权限问题:" + ex.Message + " @File=" + pdfFile;
+                    ht.Add("pdf","err@生成pdf文件遇到权限问题:" + ex.Message  +"@要保存的pdf路径:"+pdfFile +" ,  html url:"+billUrl);
                 }
-
 
                 string zipFile = path + "\\..\\" + fileNameFormat + ".zip";
                 try
                 {
                     (new FastZip()).CreateZip(zipFile, path, true, "");
+                    ht.Add("zip", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + fileNameFormat + ".zip");
                 }
                 catch (Exception ex)
                 {
-                    return "err@生成zip文件遇到权限问题:" + ex.Message + " @File=" + zipFile;
+                    ht.Add("pdf", "err@生成zip文件遇到权限问题:" + ex.Message);
                 }
                 #endregion 把所有的文件做成一个zip文件.
 
-
-                Hashtable ht = new Hashtable();
-                ht.Add("htm", billUrl);
-                ht.Add("zip", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + fileNameFormat + ".zip");
-                ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/" + fileNameFormat + ".pdf");
                 return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
             }
             catch(Exception ex)

@@ -28,6 +28,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string EmpName = "EmpName";
         /// <summary>
+        /// 部门名称
+        /// </summary>
+        public const string DeptName = "DeptName";
+        /// <summary>
         /// 记录人
         /// </summary>
         public const string Rec = "Rec";
@@ -149,6 +153,20 @@ namespace BP.WF.Template
             set
             {
                 this.SetValByKey(SelectAccperAttr.EmpName, value);
+            }
+        }
+        /// <summary>
+        /// 部门名称
+        /// </summary>
+        public string DeptName
+        {
+            get
+            {
+                return this.GetValStringByKey(SelectAccperAttr.DeptName);
+            }
+            set
+            {
+                this.SetValByKey(SelectAccperAttr.DeptName, value);
             }
         }
         /// <summary>
@@ -297,7 +315,7 @@ namespace BP.WF.Template
                 map.AddTBInt(SelectAccperAttr.WorkID, 0, "WorkID", true, false);
                 map.AddTBString(SelectAccperAttr.FK_Emp, null, "FK_Emp", true, false, 0, 20, 10);
                 map.AddTBString(SelectAccperAttr.EmpName, null, "EmpName", true, false, 0, 20, 10);
-
+                map.AddTBString(SelectAccperAttr.DeptName, null, "部门名称", true, false, 0, 400, 10);
                 map.AddTBInt(SelectAccperAttr.AccType, 0, "类型(@0=接受人@1=抄送人)", true, false);
                 map.AddTBString(SelectAccperAttr.Rec, null, "记录人", true, false, 0, 20, 10);
                 map.AddTBString(SelectAccperAttr.Info, null, "办理意见信息", true, false, 0, 200, 10);
@@ -335,10 +353,25 @@ namespace BP.WF.Template
 
         public void ResetPK()
         {
-            this.MyPK = this.FK_Node + "_" + this.WorkID + "_" + this.FK_Emp+"_"+this.Idx;
+            //注释掉了.
+            // this.MyPK = this.FK_Node + "_" + this.WorkID + "_" + this.FK_Emp+"_"+this.Idx;
+            this.MyPK = this.FK_Node + "_" + this.WorkID + "_" + this.FK_Emp;
         }
         protected override bool beforeUpdateInsertAction()
         {
+            if (this.DeptName.Length == 0)
+            {
+                bool isHavePathName = DBAccess.IsExitsTableCol("Port_Dept", "NameOfpath");
+                if (isHavePathName == true)
+                {
+                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.NameOfPath from port_dept a,port_emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
+                    if (this.DeptName == "无")
+                        this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,port_emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
+                }
+                else
+                    this.DeptName = DBAccess.RunSQLReturnStringIsNull("select a.name from port_dept a,port_emp b where a.No=b.fk_dept and b.no='" + this.FK_Emp + "'", "无");
+            }
+
             this.ResetPK();
             this.Rec = BP.Web.WebUser.No;
             return base.beforeUpdateInsertAction();
@@ -464,8 +497,6 @@ namespace BP.WF.Template
             qo.AddWhere(SelectAccperAttr.WorkID, workid);
             qo.addOrderByDesc(SelectAccperAttr.FK_Node,SelectAccperAttr.Idx);
             qo.DoQuery();
-
-          //  this.Retrieve(SelectAccperAttr.WorkID, workid, SelectAccperAttr.Idx);
         }
         /// <summary>
         /// 得到它的 Entity 

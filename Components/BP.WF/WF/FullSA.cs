@@ -196,6 +196,7 @@ namespace BP.WF
                         Emp emp = new Emp(dr[0].ToString());
                         sa.FK_Emp = emp.No;
                         sa.FK_Node = item.NodeID;
+                        sa.DeptName = emp.FK_DeptText;
 
                         sa.WorkID = workid;
                         sa.Info = "无";
@@ -279,6 +280,7 @@ namespace BP.WF
                         Emp emp = new Emp(dr[0].ToString());
                         sa.FK_Emp = emp.No;
                         sa.FK_Node = item.NodeID;
+                        sa.DeptName = emp.FK_DeptText;
 
                         sa.WorkID = workid;
                         sa.Info = "无";

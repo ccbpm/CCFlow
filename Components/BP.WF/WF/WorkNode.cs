@@ -668,7 +668,7 @@ namespace BP.WF
                 #endregion 是否需要清空记忆属性.
 
                 string myemps = "";
-                Emp emp = null;
+                Emp emp = new Emp();
                 foreach (DataRow dr in dt.Rows)
                 {
                     string fk_emp = dr[0].ToString();
@@ -710,7 +710,7 @@ namespace BP.WF
 
                     wl.FK_Node = toNodeId;
                     wl.FK_NodeText = town.HisNode.Name;
-                    wl.FK_Emp = dr[0].ToString();
+                    wl.FK_Emp = fk_emp;
 
                     emp.No = wl.FK_Emp;
                     if (emp.RetrieveFromDBSources() == 0)

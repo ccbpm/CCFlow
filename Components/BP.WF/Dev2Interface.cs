@@ -7233,19 +7233,22 @@ namespace BP.WF
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count > 12 || dt.Rows.Count == 0)
                     continue;
+                int i = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
                     string empNo = dr[0].ToString();
                     string empName = dr[1].ToString();
-
-                    sa.MyPK = toNodeID + "_" + workID + "_" + empNo;
+                    sa.DeptName = "";
+                    sa.Idx = i;
+                    sa.ResetPK();
                     sa.FK_Emp = empNo;
                     sa.EmpName = empName;
-
+                    sa.Idx = i;
                     sa.FK_Node = toNodeID;
                     sa.WorkID = workID;
                     if (sa.IsExits == false)
                         sa.Insert();
+                    i++;
                 }
             }
         }

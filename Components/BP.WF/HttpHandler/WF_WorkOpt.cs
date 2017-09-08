@@ -97,11 +97,15 @@ namespace BP.WF.HttpHandler
                     string emps = dt.Rows[0]["Tag"].ToString();
                     if (emps == "" || emps == null)
                         emps = dt.Rows[0]["EmpTo"].ToString();
+
                     BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
-                    sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
                 }
+
+                sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
             }
 
+            
+          
             return sas.ToJson();
         }
         /// <summary>

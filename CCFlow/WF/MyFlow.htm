@@ -37,7 +37,9 @@
                     //  alert(data);
 
                     if (data.indexOf('err@') == 0) {
-                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        //$("#Msg").html("<font color=red>" + data + "</font>");
+                        alert(data);
+                        window.close();
                         return;
                     }
 

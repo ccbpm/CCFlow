@@ -1342,21 +1342,19 @@ namespace CCFlow.WF.CCForm
                             FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
                                 SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
-
-
                             //判断目录是否存在.
-                            if (ftpconn.DirectoryExist(athDesc.SaveTo) == false)
-                                ftpconn.CreateDirectory(athDesc.SaveTo);
+                            if (ftpconn.DirectoryExist(athDesc.FK_MapData) == false)
+                                ftpconn.CreateDirectory(athDesc.FK_MapData);
 
                             //设置当前目录，为操作的目录。
-                            ftpconn.SetCurrentDirectory(athDesc.SaveTo);
+                            ftpconn.SetCurrentDirectory(athDesc.FK_MapData);
 
                             //把文件放上去.
                             ftpconn.PutFile(temp, guid + "." + dbUpload.FileExts);
                             ftpconn.Close();
 
                             //设置路径.
-                            dbUpload.FileFullName = athDesc.SaveTo+"//"+ guid + "." + dbUpload.FileExts;
+                            dbUpload.FileFullName = athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
                         }
 
                         dbUpload.Insert();

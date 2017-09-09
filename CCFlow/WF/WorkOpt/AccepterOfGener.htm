@@ -95,7 +95,7 @@
                 row += "<td>" + i + "</td>";
                 row += "<td>" + sa.FK_Emp + "</td>";
                 row += "<td>" + sa.EmpName + "</td>";
-                row += "<td>" + sa.DeptName + "</td>";
+                row += "<td title='" + sa.DeptName + "' >" + sa.DeptName + "</td>";
                 row += "<td><a href=\"javascript:DeleteIt("+i+",'" + sa.FK_Emp + "','"+sa.EmpName+"');\" >移除</a></td>";
                 row += "</tr>";
 
@@ -302,14 +302,14 @@
 
 </head>
 <body>
-    <table id="Table1" style=" width:80%; ">
+    <table id="Table1" style=" width:98%; ">
    <!-- <caption>下一步接受人员列表</caption>-->
     <thead>
         <tr id="title">
          <th style="width:19px;" >序</th>
          <th>编号 </th>
         <th>名称</th>
-        <th>所在部门</th>
+        <th style="width:50%;">所在部门</th>
         <th>操作</th>
         </tr>
     </thead>

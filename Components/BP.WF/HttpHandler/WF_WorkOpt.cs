@@ -322,6 +322,7 @@ namespace BP.WF.HttpHandler
                 return "info@您没有选择人员, 执行信息:" + infos;
             #endregion 求人员集合.
 
+            //把集合都放入到这里.
             GenerWorkerLists gwls = new GenerWorkerLists();
 
             //查询出来其他列的数据.
@@ -343,8 +344,11 @@ namespace BP.WF.HttpHandler
 
                 gwlOfMe.Retrieve();
 
-                gwls.AddEntity(gwlOfMe);
+                GenerWorkerList gwl = new GenerWorkerList();
+                gwl.Copy(gwlOfMe);  
+                gwls.AddEntity(gwl);
             }
+ 
 
             return gwls.ToJson();
         }

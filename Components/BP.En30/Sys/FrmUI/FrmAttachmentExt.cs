@@ -855,7 +855,6 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmAttachmentAttr.GUID, null, "GUID", false, true, 0, 128, 20);
                 #endregion 其他属性。
 
-
                 RefMethod rm = new RefMethod();
                 rm.Title = "高级配置";
               //  rm.Icon = "/WF/Admin/CCFormDesigner/Img/Menu/CC.png";

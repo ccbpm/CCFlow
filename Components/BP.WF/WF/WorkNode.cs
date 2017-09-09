@@ -3808,6 +3808,10 @@ namespace BP.WF
         #region 执行数据copy.
         public void CopyData(Work toWK, Node toND, bool isSamePTable)
         {
+            //如果存储模式为, 合并模式.
+            if (this.HisFlow.HisDataStoreModel == DataStoreModel.SpecTable)
+                return;
+
             string errMsg = "如果两个数据源不想等，就执行 copy - 期间出现错误.";
             if (isSamePTable == true)
                 return;

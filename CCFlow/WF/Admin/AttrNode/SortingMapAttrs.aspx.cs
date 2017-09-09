@@ -193,7 +193,8 @@ namespace CCFlow.WF.Admin
             if (mapdata != null)
             {
                 #region 一、面板1、 分组数据+未分组数据
-                pub1.AddEasyUiPanelInfoBegin(mapdata.Name + "[" + mapdata.No + "]字段排序", padding: 5);
+
+             //   pub1.AddEasyUiPanelInfoBegin(mapdata.Name + "[" + mapdata.No + "]字段排序", padding: 5);
                 pub1.AddTable("class='Table' border='0' cellpadding='0' cellspacing='0' style='width:100%'");
 
                 #region 标题行常量
@@ -487,7 +488,7 @@ namespace CCFlow.WF.Admin
                 }
 
                 pub1.AddTableEnd();
-                pub1.AddEasyUiPanelInfoEnd();
+              //  pub1.AddEasyUiPanelInfoEnd();
                 pub1.AddBR(); 
                 #endregion
 
@@ -541,6 +542,7 @@ namespace CCFlow.WF.Admin
                         pub1.Add(
                             string.Format("<a href='{0}' target='_self' class='easyui-linkbutton' data-options=\"iconCls:'icon-sheet'\">字段排序</a>",
                                 Request.Path + "?FK_Flow=" + (FK_Flow ?? string.Empty) + "&FK_MapData=" + dtl.No + "&t=" + DateTime.Now.ToString("yyyyMMddHHmmssffffff")));
+
 
                         pub1.AddTDEnd();
                         pub1.AddTREnd();
@@ -1436,13 +1438,13 @@ namespace CCFlow.WF.Admin
             switch ((FieldTypeS)drAttr[MapAttrAttr.LGType])
             {
                 case BP.En.FieldTypeS.Enum:
-                    url = "../../Comm/En.htm?Ens=BP.Sys.FrmUI.MapAttrEnums&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
+                    url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
                     break;
                 case BP.En.FieldTypeS.Normal:
                     url += "EditFieldGuide.htm?DoType=Edit&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" + drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
                     break;
                 case BP.En.FieldTypeS.FK:
-                    url = "../../Comm/En.htm?Ens=BP.Sys.FrmUI.MapAttrSFTables&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" +
+                    url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&FK_MapData=" + drAttr[MapAttrAttr.FK_MapData] + "&MyPK=" + drAttr[MapAttrAttr.MyPK] + "&FType=" +
                            drAttr[MapAttrAttr.MyDataType] + "&GroupField=0";
                     break;
                 default:

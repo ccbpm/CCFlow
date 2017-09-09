@@ -164,7 +164,7 @@
         function ReturnWork() {
 
             //WorkID, this.FID, this.FK_Node
-           // var empNos = frames["iframeSelectEmpsForm"].window.returnVal.NO;
+            //var empNos = frames["iframeSelectEmpsForm"].window.returnVal.NO;
 
             var emps = this.document.getElementById("TB_Emps").value;
             if (emps == "") {
@@ -190,6 +190,7 @@
                         $(".Msg").html(data);
                         return;
                     }
+
 
                     var gwls = JSON.parse(data);
                     BindTable(gwls);
@@ -244,8 +245,8 @@
 </head>
 <body>
     <table id="Table1" style=" width:80%; ">
-    <caption>会签人员列表</caption>
-    <thead><tr id='title'>
+    <thead>
+    <tr id='title'>
     <th style="width:19px;" >序</th>
     <th>编号 </th>
     <th>名称</th>

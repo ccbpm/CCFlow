@@ -18,7 +18,7 @@
                 return;
             }
 
-            OpenDialogAndCloseRefresh(url, "编辑字段：" + field, 600, 550, "icon-edit");
+            OpenDialogAndCloseRefresh(url, "编辑字段：" + field, 700, 550, "icon-edit");
         }
         //新增分组名称
         function GroupFieldNew(ensName) {
@@ -55,10 +55,9 @@
 </head>
 <body class="easyui-layout">
     <form id="form1" runat="server">
-    <div data-options="region:'center',title:'字段排序',border:false" style="padding:5px">
+     
         <Pub:uc1 ID="pub1" runat="server" />
         <asp:HiddenField ID="hidCopyNodes" runat="server" />
-    </div>
     </form>
 </body>
 </html>

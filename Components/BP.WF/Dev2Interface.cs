@@ -7226,7 +7226,7 @@ namespace BP.WF
                     continue;
 
                 if (isPinYin == true)
-                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + emp + "' OR NAME ='" + emp + "'  OR PinYin LIKE '%," + emp + ",%'";
+                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + emp + "' OR NAME ='" + emp + "'  OR PinYin LIKE '%," + emp.ToLower() + ",%'";
                 else
                     sql = "SELECT No,Name FROM Port_Emp WHERE No='" + emp + "' OR NAME ='" + emp + "'";
 

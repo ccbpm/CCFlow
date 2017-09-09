@@ -438,10 +438,10 @@ namespace BP.GPM
         protected override bool beforeUpdateInsertAction()
         {
             //增加拼音，以方便查找.
-            string pinyinQP = BP.DA.DataType.ParseStringToPinyin(this.Name);
-            string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(this.Name);
+            string pinyinQP = BP.DA.DataType.ParseStringToPinyin(this.Name).ToLower();
+            string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(this.Name).ToLower();
+            
             this.PinYin = "," + pinyinQP + "," + pinyinJX + ",";
-
 
             DeptEmpStations des = new DeptEmpStations();
             des.Retrieve(DeptEmpStationAttr.FK_Emp, this.No);

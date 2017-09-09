@@ -7922,7 +7922,8 @@ namespace BP.WF
 
                         break;
                     default:
-                        throw new Exception("err@没有判断的类型:"+this.HisNode.HisRunModel);
+                        sql = "SELECT FK_Node FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node!='" + this.HisNode.NodeID + "' ORDER BY RDT,FK_Node ";
+                        //throw new Exception("err@没有判断的类型:"+this.HisNode.HisRunModel);
                         //根据当前节点获取上一个节点，不用管那个人发送的
                         break;
                 }

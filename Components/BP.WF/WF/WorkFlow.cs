@@ -1164,7 +1164,7 @@ namespace BP.WF
         {
             if (null == currNode)
             {
-                return null;
+                return "err@当前节点为空..";
             }
 
             //调用结束前事件.

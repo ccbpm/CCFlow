@@ -211,7 +211,7 @@ namespace BP.Sys
         /// 类型
         /// </summary>
         public const string TBModel = "TBModel";
-        
+
 
         #region 参数属性.
         /// <summary>
@@ -230,7 +230,6 @@ namespace BP.Sys
         public const string IsEnableInAPP = "IsEnableInAPP";
         public const string IsSupperText = "IsSupperText";
         public const string IsRichText = "IsRichText";
-
     }
     /// <summary>
     /// 实体属性

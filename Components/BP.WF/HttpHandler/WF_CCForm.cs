@@ -594,6 +594,56 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(mainTable);
                 #endregion 把主表数据放入.
 
+
+                #region 把外键表加入DataSet
+                DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
+
+                MapExts mes = md.MapExts;
+
+                foreach (DataRow dr in dtMapAttr.Rows)
+                {
+                    string lgType = dr["LGType"].ToString();
+                    if (lgType != "2")
+                        continue;
+
+                    string UIIsEnable = dr["UIVisible"].ToString();
+                    if (UIIsEnable == "0")
+                        continue;
+
+                    string uiBindKey = dr["UIBindKey"].ToString();
+                    if (string.IsNullOrEmpty(uiBindKey) == true)
+                    {
+                        string myPK = dr["MyPK"].ToString();
+                        /*如果是空的*/
+                        //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
+                    }
+
+                    // 检查是否有下拉框自动填充。
+                    string keyOfEn = dr["KeyOfEn"].ToString();
+                    string fk_mapData = dr["FK_MapData"].ToString();
+
+                    #region 处理下拉框数据范围. for 小杨.
+                    me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
+                    if (me != null)
+                    {
+                        string fullSQL = me.Doc.Clone() as string;
+                        fullSQL = fullSQL.Replace("~", ",");
+                        fullSQL = BP.WF.Glo.DealExp(fullSQL, en, null);
+                        DataTable dt = DBAccess.RunSQLReturnTable(fullSQL);
+                        dt.TableName = keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                        ds.Tables.Add(dt);
+                        continue;
+                    }
+                    #endregion 处理下拉框数据范围.
+
+                    // 判断是否存在.
+                    if (ds.Tables.Contains(uiBindKey) == true)
+                        continue;
+
+                    ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+                }
+                #endregion End把外键表加入DataSet
+
                 return BP.Tools.Json.DataSetToJson(ds, false);
             }
             catch (Exception ex)

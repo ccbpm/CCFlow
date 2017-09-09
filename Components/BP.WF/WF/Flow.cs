@@ -1955,6 +1955,26 @@ namespace BP.WF
 
                 Nodes nds = new Nodes(this.No);
 
+                #region 检查是否是数据合并模式?
+                if (this.HisDataStoreModel == Template.DataStoreModel.SpecTable)
+                {
+                    foreach (Node nd in nds)
+                    {
+                        MapData md = new MapData();
+                        md.No = "ND" + nd.NodeID;
+                        if (md.RetrieveFromDBSources() == 1)
+                        {
+                            if (md.PTable != this.PTable)
+                            {
+                                md.PTable = this.PTable;
+                                md.Update();
+                            }
+                        }
+                    }
+                }
+                #endregion 检查是否是数据合并模式?
+
+
                 //单据模版.
                 BillTemplates bks = new BillTemplates(this.No);
 
@@ -2203,6 +2223,9 @@ namespace BP.WF
 
                 msg += "@信息:开始检查节点流程报表.";
                 this.DoCheck_CheckRpt(this.HisNodes);
+
+               
+
 
                 #region 检查焦点字段设置是否还有效
                 msg += "@信息:开始检查节点的焦点字段";

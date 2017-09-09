@@ -120,24 +120,13 @@ namespace BP.WF.HttpHandler
                 int toNodeID = this.GetRequestValInt("ToNode");
                 string emps = this.GetRequestVal("AddEmps");
 
-                SelectAccpers sas = new SelectAccpers();
-                //接受人选择器.
-                Selector sr = new Selector(toNodeID);
-                if (sr.IsSimpleSelector == true)
-                    sas.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
 
                 //增加到里面去.s
                 BP.WF.Dev2Interface.Node_AddNextStepAccepters(this.WorkID, toNodeID, emps, false);
 
                 //查询出来,已经选择的人员.
+                SelectAccpers sas = new SelectAccpers();
                 sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
-
-                //接受人选择器.
-                if (sr.IsSimpleSelector == true)
-                {
-                    if (sas.Count != 1)
-                        return "err@您只能选择一个接受人,现在有[" + sas.Count + "]个，请您删除一个然后增加.";
-                }
 
                 return sas.ToJson();
             }
@@ -184,7 +173,7 @@ namespace BP.WF.HttpHandler
                 if (sr.IsSimpleSelector == true)
                 {
                     if (num != 1)
-                        return "err@您只能选择一个接受人.";
+                        return "err@您只能选择一个接受人,请移除其他的接受人然后执行发送.";
                 }
 
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, null);

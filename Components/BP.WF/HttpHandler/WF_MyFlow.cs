@@ -211,12 +211,15 @@ namespace BP.WF.HttpHandler
                 //判断是否有执行该工作的权限.
                 bool isCanDo = Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
                 if (isCanDo == false)
-                    return "err@您不能执行当前工作.";
+                {
+                    GenerWorkFlow mygwf = new GenerWorkFlow(this.WorkID);
+                    return "err@您[" + WebUser.No + "," + WebUser.Name + "]不能执行当前工作, 当前工作已经运转到[" + mygwf.NodeName + "],处理人[" + mygwf.TodoEmps + "]。";
+                }
             }
 
+            GenerWorkFlow gwf = new GenerWorkFlow();
             //当前工作.
             Work currWK = this.currND.HisWork;
-            GenerWorkFlow gwf = new GenerWorkFlow();
             if (this.WorkID != 0)
             {
                 gwf = new GenerWorkFlow();
@@ -486,6 +489,24 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
         /// <summary>
+        /// 删除流程.
+        /// </summary>
+        /// <returns></returns>
+        public string MyFlow_StopFlow()
+        {
+            try
+            {
+                string str = BP.WF.Dev2Interface.Flow_DoFlowOver(this.FK_Flow, this.WorkID, "无");
+                if (str == "" || str == null)
+                    return "流程成功结束";
+                return str;
+            }
+            catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
         /// 工具栏
         /// </summary>
         /// <returns></returns>
@@ -527,7 +548,6 @@ namespace BP.WF.HttpHandler
                     return toolbar;
                 }
                 #endregion 是否是抄送.
-
 
                 #region 是否是抄送.
                 if (this.IsCC)
@@ -666,7 +686,7 @@ namespace BP.WF.HttpHandler
 
                 if (btnLab.EndFlowEnable && this.currND.IsStartNode == false )
                 {
-                    toolbar += "<input type=button name='EndFlow'  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"To('./WorkOpt/StopFlow.htm?&DoType=StopFlow&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "'); \" />";
+                    toolbar += "<input type=button name='EndFlow'  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"DoStop('" + btnLab.EndFlowLab + "','"+this.FK_Flow+"','"+this.WorkID+"');\" />";
                 }
 
                 if (btnLab.PrintDocEnable )
@@ -1005,46 +1025,46 @@ namespace BP.WF.HttpHandler
                 {
                     DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];
                     ds.Tables.Add(trackDt.Copy());
+                    return BP.Tools.Json.ToJson(ds);
                 }
+
+                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
+                    this.FID, BP.Web.WebUser.No);
+
+                #region 增加上流程的信息.
+                string sql = "";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,NVL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+                else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,IFNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
                 else
+                    sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,ISNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+
+                DataTable wf_generWorkFlowDt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                wf_generWorkFlowDt.TableName = "WF_GenerWorkFlow";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 {
-                    ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
-                        this.FID, BP.Web.WebUser.No);
+                    wf_generWorkFlowDt.Columns["WFSTATE"].ColumnName = "WFState";
+                    wf_generWorkFlowDt.Columns["PWFSTATE"].ColumnName = "PWFState";
+                    wf_generWorkFlowDt.Columns["PFID"].ColumnName = "PFID";
+                    wf_generWorkFlowDt.Columns["PWORKID"].ColumnName = "PWorkID";
+                    wf_generWorkFlowDt.Columns["PNODEID"].ColumnName = "PNodeID";
+                    wf_generWorkFlowDt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
 
-                    string sql = "";
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,NVL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
-                    else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                        sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,IFNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
-                    else
-                        sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,ISNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+                    wf_generWorkFlowDt.Columns["PWORKID2"].ColumnName = "PWorkID2";
+                    wf_generWorkFlowDt.Columns["PNODEID2"].ColumnName = "PNodeID2";
+                    wf_generWorkFlowDt.Columns["PFLOWNO2"].ColumnName = "PFlowNo2";
 
-                    DataTable wf_generWorkFlowDt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                    wf_generWorkFlowDt.TableName = "WF_GenerWorkFlow";
-
-                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    {
-                        wf_generWorkFlowDt.Columns["WFSTATE"].ColumnName = "WFState";
-                        wf_generWorkFlowDt.Columns["PWFSTATE"].ColumnName = "PWFState";
-                        wf_generWorkFlowDt.Columns["PFID"].ColumnName = "PFID";
-                        wf_generWorkFlowDt.Columns["PWORKID"].ColumnName = "PWorkID";
-                        wf_generWorkFlowDt.Columns["PNODEID"].ColumnName = "PNodeID";
-                        wf_generWorkFlowDt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
-
-                        wf_generWorkFlowDt.Columns["PWORKID2"].ColumnName = "PWorkID2";
-                        wf_generWorkFlowDt.Columns["PNODEID2"].ColumnName = "PNodeID2";
-                        wf_generWorkFlowDt.Columns["PFLOWNO2"].ColumnName = "PFlowNo2";
-
-                        wf_generWorkFlowDt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
-                        wf_generWorkFlowDt.Columns["FK_NODE"].ColumnName = "FK_Node";
-                        wf_generWorkFlowDt.Columns["WORKID"].ColumnName = "WorkID";
-                    }
-
-                    //把他转化小写,适应多个数据库.
-                    wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
-
-                    ds.Tables.Add(wf_generWorkFlowDt);
+                    wf_generWorkFlowDt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                    wf_generWorkFlowDt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                    wf_generWorkFlowDt.Columns["WORKID"].ColumnName = "WorkID";
                 }
+                #endregion 增加上流程的信息.
+
+
+                //把他转化小写,适应多个数据库.
+                //   wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
+                // ds.Tables.Add(wf_generWorkFlowDt);
 
                 return BP.Tools.Json.ToJson(ds);
             }

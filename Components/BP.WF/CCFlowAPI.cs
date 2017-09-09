@@ -66,7 +66,6 @@ namespace BP.WF
                 gwf.RetrieveFromDBSources();
 
 
-
                 //加入WF_Node.
                 DataTable WF_Node = nd.ToDataTableField("WF_Node");
                 myds.Tables.Add(WF_Node);
@@ -271,8 +270,6 @@ namespace BP.WF
                 }
                 #endregion End把外键表加入DataSet
 
-              
-
                 #region 处理流程-消息提示.
                 DataTable dtAlert = new DataTable();
                 dtAlert.TableName = "AlertMsg";
@@ -403,6 +400,7 @@ namespace BP.WF
                         break;
                 }
                 #endregion
+
 
                 myds.Tables.Add(dtAlert);
                 return myds;

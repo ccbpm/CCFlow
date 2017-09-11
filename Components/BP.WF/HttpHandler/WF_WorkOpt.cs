@@ -382,13 +382,27 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        // 查询select集合
         public string HuiQian_SelectEmps() { 
             string sql = "";
-            string toEmpStrs = this.GetRequestVal("TB_Emps");
-            string infos = "";
-            sql = "SELECT No,Name FROM Port_Emp WHERE No like '" + toEmpStrs + "%' OR NAME like '" + toEmpStrs + "%'";
+            string emp = this.GetRequestVal("TB_Emps");
+            bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
+            if (isPinYin == true)
+            {
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%')";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%') and rownum<=12";
+            }
+            else
+            {
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%)' and rownum<=12";
+            }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            
+
             return BP.Tools.Json.ToJson(dt);
         }
 

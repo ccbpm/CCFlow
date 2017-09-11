@@ -1728,6 +1728,15 @@ namespace BP.Sys
             MapAttrs attrs = new MapAttrs(fk_mapdata);
             foreach (MapAttr attr in attrs)
             {
+                if (attr.DefValReal.Contains("@"))
+                {
+                    attr.UIIsEnable = false;
+                    attr.DefValReal = ""; //清空默认值.
+                    attr.SetValByKey("ExtDefVal", ""); //设置默认值.
+                    attr.Update();
+                    continue;
+                }
+
                 if (attr.UIIsEnable == true)
                 {
                     attr.UIIsEnable = false;
@@ -1748,6 +1757,14 @@ namespace BP.Sys
                 attrs = new MapAttrs(dtl.No);
                 foreach (MapAttr attr in attrs)
                 {
+                    if (attr.DefValReal.Contains("@"))
+                    {
+                        attr.UIIsEnable = false;
+                        attr.DefValReal = ""; //清空默认值.
+                        attr.SetValByKey("ExtDefVal",  ""); //设置默认值.
+                        attr.Update();
+                    }
+
                     if (attr.UIIsEnable == true)
                     {
                         attr.UIIsEnable = false;
@@ -1857,35 +1874,32 @@ namespace BP.Sys
 				switch (dt.TableName)
 				{
 					case "Sys_MapDtl":
-						foreach (DataRow dr in dt.Rows)
-						{
-							MapDtl dtl = new MapDtl();
-							foreach (DataColumn dc in dt.Columns)
-							{
-								object val = dr[dc.ColumnName] as object;
-								if (val == null)
-									continue;
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            MapDtl dtl = new MapDtl();
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                object val = dr[dc.ColumnName] as object;
+                                if (val == null)
+                                    continue;
 
-								dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
-							}
-						 
-
-							dtl.Insert();
-						}
+                                dtl.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                            }
+                            dtl.Insert();
+                        }
 						break;
 					case "Sys_MapData":
 						foreach (DataRow dr in dt.Rows)
 						{
 							MapData md = new MapData();
-							foreach (DataColumn dc in dt.Columns)
-							{
-								object val = dr[dc.ColumnName] as object;
-								if (val == null)
-									continue;
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                object val = dr[dc.ColumnName] as object;
+                                if (val == null)
+                                    continue;
 
-								md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
-								//md.SetValByKey(dc.ColumnName, val);
-							}
+                                md.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
+                            }
 
 							//如果物理表为空，则使用编号为物理数据表
 							if (string.IsNullOrEmpty(md.PTable.Trim()) == true)
@@ -2597,32 +2611,43 @@ namespace BP.Sys
 			string sql = "";
 			sql = "SELECT * FROM Sys_MapDtl WHERE FK_MapData ='" + this.No + "'";
 			DataTable Sys_MapDtl = DBAccess.RunSQLReturnTable(sql);
-			string ids = "'" + this.No + "'";
-			foreach (DataRow dr in Sys_MapDtl.Rows)
-				ids += ",'" + dr["No"] + "'";
 
-			string where = " FK_MapData IN (" + ids + ")";
+			//string ids = "'" + this.No + "'";
+
+            string whereFK_MapData = "( 1=2 ) ";
+            string whereEnsName = "( 1=2 ) ";
+            string whereNo = "( 1=2 ) ";
+
+            foreach (DataRow dr in Sys_MapDtl.Rows)
+            {
+                // ids += ",'" + dr["No"] + "'";
+                whereFK_MapData += " OR FK_MapData='" + dr["No"] + "' ";
+                whereEnsName += " OR EnName='" + dr["No"] + "' ";
+                whereNo += " OR No='" + dr["No"] + "' ";
+            }
+
+		//	string where = " FK_MapData IN (" + ids + ")";
 
 			#region 删除相关的数据。
 			sql = "DELETE FROM Sys_MapDtl WHERE FK_MapData='" + this.No + "'";
-			sql += "@DELETE FROM Sys_FrmLine WHERE " + where;
-			sql += "@DELETE FROM Sys_FrmEle WHERE " + where;
-			sql += "@DELETE FROM Sys_FrmEvent WHERE " + where;
-			sql += "@DELETE FROM Sys_FrmBtn WHERE " + where;
-			sql += "@DELETE FROM Sys_FrmLab WHERE " + where;
-			sql += "@DELETE FROM Sys_FrmLink WHERE " + where;
-			sql += "@DELETE FROM Sys_FrmImg WHERE " + where;
-			sql += "@DELETE FROM Sys_FrmImgAth WHERE " + where;
-			sql += "@DELETE FROM Sys_FrmRB WHERE " + where;
-			sql += "@DELETE FROM Sys_FrmAttachment WHERE " + where;
-			sql += "@DELETE FROM Sys_MapM2M WHERE " + where;
-			sql += "@DELETE FROM Sys_MapFrame WHERE " + where;
-			sql += "@DELETE FROM Sys_MapExt WHERE " + where;
-			sql += "@DELETE FROM Sys_MapAttr WHERE " + where;
-			sql += "@DELETE FROM Sys_GroupField WHERE EnName IN (" + ids + ")";
-			sql += "@DELETE FROM Sys_MapData WHERE No IN (" + ids + ")";
-			sql += "@DELETE FROM Sys_MapM2M WHERE " + where;
-			sql += "@DELETE FROM Sys_M2M WHERE " + where;
+            sql += "@DELETE FROM Sys_FrmLine WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_FrmEle WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_FrmEvent WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_FrmBtn WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_FrmLab WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_FrmLink WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_FrmImg WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_FrmImgAth WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_FrmRB WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_FrmAttachment WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_MapM2M WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_MapFrame WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_MapExt WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_MapAttr WHERE " + whereFK_MapData;
+			sql += "@DELETE FROM Sys_GroupField WHERE "+whereEnsName;
+            sql += "@DELETE FROM Sys_MapData WHERE " + whereNo;
+            sql += "@DELETE FROM Sys_MapM2M WHERE " + whereFK_MapData;
+            sql += "@DELETE FROM Sys_M2M WHERE " + whereFK_MapData;
 			DBAccess.RunSQLs(sql);
 			#endregion 删除相关的数据。
 

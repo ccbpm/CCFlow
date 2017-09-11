@@ -56,6 +56,7 @@ namespace BP.WF.HttpHandler
                 return false;
             }
         }
+       
         /// <summary>
         /// 轨迹ID
         /// </summary>
@@ -601,7 +602,11 @@ namespace BP.WF.HttpHandler
                         if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                         {
                             /*如果启用了选择人窗口的模式是【选择既发送】.*/
+                            if (this.IsMobile)
+                            toolbar += "<input name='Send' type=button value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();SendIt(); \" />";
+                            else
                             toolbar += "<input name='Send' type=button value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();Send(); \" />";
+
                         }
                     }
                     else
@@ -611,16 +616,27 @@ namespace BP.WF.HttpHandler
                             /*如果启用了发送按钮.
                              * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
                              */
-                            toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();Send();\" />";
+                            if (this.IsMobile)
+                                toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();SendIt();\" />";
+                            else
+                                toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();Send();\" />";
+
                         }
                     }
 
                     /* 处理保存按钮.*/
                     if (btnLab.SaveEnable)
                     {
-                        toolbar += "<input name='Save' type=button  value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false;KindEditerSync();Save();\" />";
+                        if (this.IsMobile)
+                            toolbar += "<input name='Save' type=button  value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false; SaveIt();\" />";
+                        else
+                            toolbar += "<input name='Save' type=button  value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false;KindEditerSync();Save();\" />";
                     }
                 }
+
+
+
+
 
                 if (btnLab.WorkCheckEnable )
                 {

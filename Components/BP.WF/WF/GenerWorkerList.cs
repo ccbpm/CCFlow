@@ -40,6 +40,10 @@ namespace BP.WF
         /// </summary>
         public const string FK_Dept = "FK_Dept";
         /// <summary>
+        /// 部门名称
+        /// </summary>
+        public const string FK_DeptT = "FK_DeptT";
+        /// <summary>
         /// 应该完成时间
         /// </summary>
         public const string SDT = "SDT";
@@ -316,19 +320,18 @@ namespace BP.WF
             }
            
         }
+        /// <summary>
+        /// 部门名称
+        /// </summary>
         public string FK_DeptT
         {
             get
             {
-                try
-                {
-                    Dept d = new Dept(this.FK_Dept);
-                    return d.Name;
-                }
-                catch
-                {
-                    return "";
-                }
+                return this.GetParaString(GenerWorkerListAttr.FK_DeptT);
+            }
+            set
+            {
+                this.SetPara(GenerWorkerListAttr.FK_DeptT, value);
             }
         }
         public string FK_Dept

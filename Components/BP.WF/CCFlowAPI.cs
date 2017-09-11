@@ -221,6 +221,54 @@ namespace BP.WF
                 }
                 #endregion
 
+                #region 增加附件信息.
+                BP.Sys.FrmAttachments athDescs = new FrmAttachments();
+                athDescs.Retrieve(FrmAttachmentAttr.FK_MapData, nd.NodeFrmID);
+                if (athDescs.Count != 0)
+                {
+                    FrmAttachment athDesc = athDescs[0] as FrmAttachment;
+
+                    //查询出来数据实体.
+                    BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
+                    if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                    {
+                        string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + workID, 0).ToString();
+                        if (pWorkID == null || pWorkID == "0")
+                            pWorkID = workID.ToString();
+
+                        if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+                        {
+                            /* 继承模式 */
+                            BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                            qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pWorkID);
+                            qo.addOr();
+                            qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, workID);
+                            qo.addOrderBy("RDT");
+                            qo.DoQuery();
+                        }
+
+                        if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                        {
+                            /*共享模式*/
+                            dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
+                        }
+                    }
+                    else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
+                    {
+                        /* 继承模式 */
+                        BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                        qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                        qo.addAnd();
+                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, workID);
+                        qo.addOrderBy("RDT");
+                        qo.DoQuery();
+                    }
+
+                    //增加一个数据源.
+                    myds.Tables.Add(dbs.ToDataTableField("Sys_FrmAttachmentDB"));
+                }
+                #endregion
+
                 #region 把外键表加入DataSet
                 DataTable dtMapAttr = myds.Tables["Sys_MapAttr"] ;
 

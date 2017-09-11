@@ -185,6 +185,16 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 属性参数.
+        public bool IsMobile
+        {
+            get
+            {
+                string v = this.GetRequestVal("IsMobile");
+                if (v != null && v == "1")
+                    return true;
+                return false;
+            }
+        }
         /// <summary>
         /// 编号
         /// </summary>

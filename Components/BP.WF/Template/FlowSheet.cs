@@ -814,6 +814,8 @@ namespace BP.WF.Template
 
                     Emp emp = new Emp(gwl.FK_Emp);
                     gwl.FK_Dept = emp.FK_Dept;
+                    gwl.FK_DeptT = emp.FK_DeptText;
+
 
                     gwl.RDT = dr["RDT"].ToString();
                     gwl.SDT = dr["RDT"].ToString();

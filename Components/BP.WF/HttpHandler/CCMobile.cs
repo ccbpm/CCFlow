@@ -48,8 +48,30 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-        #region xxx 界面 .
-        #endregion xxx 界面方法.
 
+        public string Home_Init()
+        {
+
+            BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
+            return ace.Home_Init();
+        }
+
+        public string Runing_Init()
+        {
+            BP.WF.HttpHandler.WF wfPage = new WF(this.context);
+          return  wfPage.Runing_Init();
+        }
+
+        public string Todolist_Init()
+        {
+            BP.WF.HttpHandler.WF wfPage = new WF(this.context);
+            return wfPage.Todolist_Init();
+        }
+
+        public string Start_Init()
+        {
+            BP.WF.HttpHandler.WF wfPage = new WF(this.context);
+            return wfPage.Start_Init();
+        }
     }
 }

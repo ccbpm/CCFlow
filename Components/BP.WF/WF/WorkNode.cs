@@ -540,6 +540,8 @@ namespace BP.WF
 
                 wl.FK_EmpText = emp.Name;
                 wl.FK_Dept = emp.FK_Dept;
+                wl.FK_DeptT = emp.FK_DeptText;
+
                 // wl.WarningHour = town.HisNode.WarningHour;
                 wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
 

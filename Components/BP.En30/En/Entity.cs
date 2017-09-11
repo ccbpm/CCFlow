@@ -4978,12 +4978,13 @@ namespace BP.En
 		{
 			DataTable dt = this.ToEmptyTableStringField();
 			Entity en = this.GetNewEntity;
+            Attrs attrs = en.EnMap.Attrs;
 
 			dt.TableName = tableName;
 			foreach (Entity myen in this)
 			{
 				DataRow dr = dt.NewRow();
-				foreach (Attr attr in en.EnMap.Attrs)
+                foreach (Attr attr in attrs)
 				{
 					if (attr.MyDataType == DataType.AppBoolean)
 					{

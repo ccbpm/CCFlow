@@ -406,7 +406,7 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.StaDesc, null, "岗位描述", true, false, 0, 300, 132);
                 map.AddTBInt(EmpAttr.NumOfDept, 0, "部门数量", true, false);
 
-                map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 150, 132);
+                map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132);
 
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
@@ -440,9 +440,9 @@ namespace BP.GPM
             //增加拼音，以方便查找.
             string pinyinQP = BP.DA.DataType.ParseStringToPinyin(this.Name).ToLower();
             string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(this.Name).ToLower();
-            
             this.PinYin = "," + pinyinQP + "," + pinyinJX + ",";
 
+            //处理岗位信息.
             DeptEmpStations des = new DeptEmpStations();
             des.Retrieve(DeptEmpStationAttr.FK_Emp, this.No);
 
@@ -459,6 +459,9 @@ namespace BP.GPM
                     continue;
                 }
 
+                //给拼音重新定义值,让其加上部门的信息.
+                this.PinYin = this.PinYin + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower()+",";
+
                 BP.Port.Station sta = new Port.Station();
                 sta.No = item.FK_Station;
                 if (sta.RetrieveFromDBSources() == 0)
@@ -469,7 +472,6 @@ namespace BP.GPM
 
                 stas += "@" + dept.NameOfPath + "|" + sta.Name;
                 depts += "@" + dept.NameOfPath;
-
             }
 
             this.DeptDesc = depts;

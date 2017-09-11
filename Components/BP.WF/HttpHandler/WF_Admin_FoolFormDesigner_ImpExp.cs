@@ -135,25 +135,33 @@ namespace BP.WF.HttpHandler
         /// <returns>执行结果</returns>
         public string Imp_CopyFrm()
         {
-            string fromMapData = this.FromMapData;
-            bool isClear = this.IsClear;
-
-            MapData md = new MapData(fromMapData);
-
-            MapData.ImpMapData(this.FK_MapData, BP.Sys.CCFormAPI.GenerHisDataSet(md.No));
-
-            //设置为只读模式.
-            if (this.IsSetReadonly == true)
-                MapData.SetFrmIsReadonly(this.FK_MapData);
-
-            // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
-            if (this.FK_MapData.Contains("ND") == true)
+            try
             {
-                string fk_node = this.FK_MapData.Replace("ND", "");
-                Node nd = new Node(int.Parse(fk_node));
-                nd.RepareMap();
+                string fromMapData = this.FromMapData;
+                bool isClear = this.IsClear;
+
+                MapData md = new MapData(fromMapData);
+
+                MapData.ImpMapData(this.FK_MapData, BP.Sys.CCFormAPI.GenerHisDataSet(md.No));
+
+                //设置为只读模式.
+                if (this.IsSetReadonly == true)
+                    MapData.SetFrmIsReadonly(this.FK_MapData);
+
+                // 如果是节点表单，就要执行一次修复，以免漏掉应该有的系统字段。
+                if (this.FK_MapData.Contains("ND") == true)
+                {
+                    string fk_node = this.FK_MapData.Replace("ND", "");
+                    Node nd = new Node(int.Parse(fk_node));
+                    nd.RepareMap();
+                }
+                return "执行成功.";
             }
-            return "执行成功.";
+            catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
         }
 
         public string Imp_Src_Step2()

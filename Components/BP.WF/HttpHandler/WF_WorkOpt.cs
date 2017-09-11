@@ -45,7 +45,6 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-
         /// <summary>
         /// 选择表单,发起前置导航.
         /// </summary>
@@ -217,7 +216,20 @@ namespace BP.WF.HttpHandler
                     item.IsPassInt = 99;
                 }
             }
-            return ens.ToJson();
+
+            //赋值部门名称。
+            DataTable mydt = ens.ToDataTableField();
+            mydt.Columns.Add("FK_DeptT");
+            foreach (DataRow dr in mydt.Rows)
+            {
+                string fk_emp = dr["FK_Emp"].ToString();
+                foreach (GenerWorkerList item in ens)
+                {
+                    if (item.FK_Emp == fk_emp)
+                        dr["FK_DeptT"] = item.FK_DeptT;
+                }
+            }
+            return BP.Tools.Json.ToJson(mydt);
         }
         /// <summary>
         /// 移除
@@ -300,7 +312,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     //增加到队列里面.
-                    emps.AddEntity( new Emp(empNo));
+                    emps.AddEntity(new Emp(empNo));
                 }
             }
 
@@ -326,7 +338,7 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.FK_EmpText = item.Name;
                 gwlOfMe.IsPassInt = 0;
                 gwlOfMe.FK_Dept = item.FK_Dept;
-              //  gwlOfMe.FK_DeptT = item.FK_DeptText;
+                gwlOfMe.FK_DeptT = item.FK_DeptText; //部门名称.
 
                 gwlOfMe.Insert(); //插入作为待办.
                 infos += "\t\n@" + item.No + "  " + item.Name;
@@ -334,12 +346,24 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.Retrieve();
 
                 GenerWorkerList gwl = new GenerWorkerList();
-                gwl.Copy(gwlOfMe);  
+                gwl.Copy(gwlOfMe);
                 gwls.AddEntity(gwl);
             }
- 
 
-            return gwls.ToJson();
+            //赋值部门名称。
+            DataTable mydt = gwls.ToDataTableField();
+            mydt.Columns.Add("FK_DeptT");
+            foreach (DataRow dr in mydt.Rows)
+            {
+                string fk_emp = dr["FK_Emp"].ToString();
+                foreach (GenerWorkerList item in gwls)
+                {
+                    if (item.FK_Emp == fk_emp)
+                        dr["FK_DeptT"] = item.FK_DeptT;
+                }
+            }
+
+            return BP.Tools.Json.ToJson(mydt);
         }
         #endregion
 
@@ -948,7 +972,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AllotTask_Save()
         {
-
             return "";
         }
         #endregion
@@ -1451,7 +1474,6 @@ namespace BP.WF.HttpHandler
             wk.Retrieve();
 
             Selector select = new Selector(toNodeID);
-
             if (select.SelectorModel == SelectorModel.GenerUserSelecter)
                 return "url@AccepterOfGener.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + nd.FK_Flow + "&ToNode=" + toNodeID;
 
@@ -1466,15 +1488,25 @@ namespace BP.WF.HttpHandler
             if (select.IsAutoLoadEmps)
             {
                 if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "SELECT  top 1 Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC";
+                    sql = "SELECT  top 1 Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC";
                 else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT  Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND ROWNUM =1  ORDER BY WorkID DESC ";
+                    sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND ROWNUM =1  ORDER BY WorkID DESC ";
                 else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT  Tag FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID  DESC";
+                    sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID  DESC";
 
-                string tag = DBAccess.RunSQLReturnStringIsNull(sql, "");
+                DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+                string emps = "";
+                if (mydt.Rows.Count != 0)
+                {
+                    emps = mydt.Rows[0]["Tag"].ToString();
+                    if (emps == "" || emps == null)
+                    {
+                        emps = mydt.Rows[0]["EmpTo"].ToString();
+                        emps = emps + "," + emps;
+                    }
+                }
 
-                string[] strs = tag.Split(';');
+                string[] strs = emps.Split(';');
                 foreach (string str in strs)
                 {
                     if (string.IsNullOrEmpty(str) == true)

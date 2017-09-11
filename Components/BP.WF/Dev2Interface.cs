@@ -4736,6 +4736,7 @@ namespace BP.WF
             gwl.HungUpTimes = 0;
             gwl.FID = gwf.FID;
             gwl.FK_Dept = emp.FK_Dept;
+            gwl.FK_DeptT = emp.FK_DeptText;
 
             if (gwl.Update() == 0)
                 gwl.Insert();
@@ -5531,6 +5532,8 @@ namespace BP.WF
             gwl.FID = 0;
             gwl.FK_Flow = fl.No;
             gwl.FK_Dept = WebUser.FK_Dept;
+            gwl.FK_DeptT = WebUser.FK_DeptName;
+
             gwl.SDT = DataType.CurrentDataTime;
             gwl.DTOfWarning = DataType.CurrentDataTime;
             gwl.RDT = DataType.CurrentDataTime;
@@ -5723,6 +5726,8 @@ namespace BP.WF
 
                 gwl.FK_Flow = fl.No;
                 gwl.FK_Dept = emp.FK_Dept;
+                gwl.FK_DeptT = emp.FK_DeptText;
+
 
                 gwl.SDT = DataType.CurrentDataTime;
                 gwl.DTOfWarning = DataType.CurrentDataTime;
@@ -6957,6 +6962,8 @@ namespace BP.WF
 
                         gwl.FK_Flow = fk_flow;
                         gwl.FK_Dept = WebUser.FK_Dept;
+                        gwl.FK_DeptT = WebUser.FK_DeptName;
+
                         gwl.SDT = DataType.CurrentDataTime;
                         gwl.DTOfWarning = DataType.CurrentDataTime;
                         gwl.RDT = DataType.CurrentDataTime;
@@ -7389,6 +7396,8 @@ namespace BP.WF
                 gwl.FK_Emp = BP.Web.WebUser.No;
                 gwl.FK_EmpText = BP.Web.WebUser.Name;
                 gwl.FK_Dept = BP.Web.WebUser.FK_Dept;
+                gwl.FK_DeptT = WebUser.FK_DeptName;
+
                 gwl.IsPassInt = (int)askforSta;
                 gwl.Insert();
                 //重新查询.
@@ -7612,6 +7621,7 @@ namespace BP.WF
                 GenerWorkerList gwl = new GenerWorkerList();
                 gwl.WorkID = workID;
                 gwl.FK_Dept = WebUser.FK_Dept;
+                gwl.FK_DeptT = WebUser.FK_DeptName;
 
                 //gwl.FK_DeptT = WebUser.FK_DeptName;
                 gwl.FK_Node = nodeID;
@@ -7668,6 +7678,8 @@ namespace BP.WF
 
                         wl = new GenerWorkerList();
                         wl.FK_Dept = BP.Web.WebUser.FK_Dept;
+                        wl.FK_DeptT = WebUser.FK_DeptName;
+
                         //   mygwfl.FK_DeptT = BP.Web.WebUser.FK_DeptName;
                         wl.WorkID = workID;
                         wl.FID = 0;

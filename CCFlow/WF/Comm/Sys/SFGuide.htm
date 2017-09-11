@@ -44,7 +44,7 @@
             });
         }
 
-        var CONST_TYPES = [{ NO: '0', NAME: '本地的类' }, { NO: '1', NAME: '创建表' }, { NO: '2', NAME: '表或视图' }, { NO: '3', NAME: 'SQL查询表' }, { NO: '4', NAME: 'WebServices'}];
+        var CONST_TYPES = [{ NO: '0', NAME: '本地的类' }, { NO: '1', NAME: '创建表' }, { NO: '2', NAME: '表或视图' }, { NO: '3', NAME: 'SQL查询表' }, { NO: '4', NAME: 'WebServices' }, { NO: '5', NAME: '动态SQL查询' }];
         var CONST_STRUCTS = [{ NO: '0', NAME: '普通的编码表(具有No,Name)' }, { NO: '1', NAME: '树结构(具有No,Name,ParentNo)'}];
         var CONST_RETURNTYPES = [{ NO: 'DataTable', NAME: 'DataTable数据表' }, { NO: 'DataSet', NAME: 'DataSet数据集' }, { NO: 'Json', NAME: 'Json字符串' }, { NO: 'Xml', NAME: 'Xml字符串'}];
         var CONST_GROUPTITLE = "class='GroupTitle'";
@@ -205,6 +205,7 @@
                      .add('#c91', "<br />比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName");
                     break;
                 case 3: //SQL查询表
+                case 5: //动态SQL查询
                     loadNormalInfo();
 
                     var sql = sftable.SELECTSTATEMENT ? sftable.SELECTSTATEMENT : ''
@@ -228,11 +229,22 @@
                          .addTD('rp', 'cp2', null, '填写此树的根节点值');
                     }
 
-                    t.addTR(null, 'r6')
-                     .addTD('r6', 'c60', CONST_GROUPTITLE, 'SQL语句：')
-                     .addTD('r6', 'c61', 'colspan="2"')
-                     .addTextbox('c61', 'SelectStatement', "style='width:98%'", sql)
-                     .add('#c61', "<br />比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName");
+                    if (srcType == "3") {
+                        t.addTR(null, 'r6')
+                         .addTD('r6', 'c60', CONST_GROUPTITLE, 'SQL语句：')
+                         .addTD('r6', 'c61', 'colspan="2"')
+                         .addTextbox('c61', 'SelectStatement', "style='width:98%'", sql)
+                         .add('#c61', "<br />只需输入where后面的过滤语句，比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName");
+                    }
+
+                    if (srcType == "5") {
+                        t.addTR(null, 'r6')
+                         .addTD('r6', 'c60', CONST_GROUPTITLE, 'SQL语句：')
+                         .addTD('r6', 'c61', 'colspan="2"')
+                         .addTextbox('c61', 'SelectStatement', "style='width:98%'", sql)
+                         .add('#c61', "<br />请输入完整SQL查询语句，且返回字段中必须包含No,Name[若为树结构需包含ParentNo]字段，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName");
+                    }
+
                     break;
                 case 4: //WebServices
                     loadNormalInfo();
@@ -605,6 +617,7 @@
                     sftable.SELECTSTATEMENT = t.getValue("TB_SelectStatement");
                     break;
                 case 3: //SQL查询表
+                case 5: //动态SQL查询
                     if (false == getNormalInfoValue()) {
                         return;
                     }
@@ -737,6 +750,7 @@
                         <option value="2">表或视图</option>
                         <option value="3">SQL查询表</option>
                         <option value="4">WebServices</option>
+                        <option value="5">动态SQL查询</option>
                     </select>
                 </td>
                 <td>

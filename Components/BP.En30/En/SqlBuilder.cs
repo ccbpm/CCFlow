@@ -943,7 +943,9 @@ namespace BP.En
 
                 string fktable = attr.HisFKEn.EnMap.PhysicsTable;
                 Attr refAttr = attr.HisFKEn.EnMap.GetAttrByKey(attr.UIRefKeyValue);
-                from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
+                //added by liuxc,2017-9-11，此处增加是否存在实体表，因新增的字典表类型“动态SQL查询”，此类型没有具体的实体表，完全由SQL动态生成的数据集合，此处不判断会使生成的SQL报错
+                if (DBAccess.IsExitsObject(fktable))
+                    from += " LEFT JOIN " + fktable + " AS " + fktable + "_" + attr.Key + " ON " + mytable + "." + attr.Field + "=" + fktable + "_" + attr.Field + "." + refAttr.Field;
             }
             return from + " WHERE (1=1) ";
         }
@@ -1381,7 +1383,10 @@ namespace BP.En
 
                             Map map = attr.HisFKEn.EnMap;
 
-                            val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            if (DBAccess.IsExitsObject(map.PhysicsTable))
+                                val = val + ", " + map.PhysicsTable + "_" + attr.Key + "." + map.GetFieldByKey(attr.UIRefKeyText) + " AS " + attr.Key + "Text";
+                            else
+                                val = val + ", '' AS " + attr.Key + "Text";
                         }
                         break;
                     case DataType.AppInt:

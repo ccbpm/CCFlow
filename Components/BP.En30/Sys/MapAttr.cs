@@ -369,10 +369,26 @@ namespace BP.Sys
                     if (sf.FK_SFDBSrc == "local")
                     {
                         GENoNames myens = new GENoNames(this.UIBindKey, this.Name);
-                        if (myens == null)
-                            return null;
 
-                        myens.RetrieveAll();
+                        if (sf.SrcType == SrcType.DynamicSQL)
+                        {
+                            //此种类型时，没有物理表或视图，从SQL直接查出数据
+                            DataTable dt = sf.GenerHisDataTable;
+                            EntityNoName enn = null;
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                enn = myens.GetNewEntity as EntityNoName;
+                                enn.No = row["No"] as string;
+                                enn.Name = row["Name"] as string;
+
+                                myens.AddEntity(enn);
+                            }
+                        }
+                        else
+                        {
+                            myens.RetrieveAll();
+                        }
+                        
                         _ens = myens;
                     }
                     else

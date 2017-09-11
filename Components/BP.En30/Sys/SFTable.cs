@@ -38,7 +38,11 @@ namespace BP.Sys
         /// <summary>
         /// WebServices
         /// </summary>
-        WebServices = 4
+        WebServices = 4,
+        /// <summary>
+        /// 动态SQL查询
+        /// </summary>
+        DynamicSQL = 5
     }
     /// <summary>
     /// 编码表类型
@@ -277,13 +281,22 @@ namespace BP.Sys
 
                     if (runObj.Contains("@WebUser.FK_Dept"))
                         runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-
-                    #warning  这是写的什么？ 不是说了吗 不采用这样的表达式,不好转java.  写的这样长，谁能看懂了？ 读完这行代码，还能传过来气吗？
+                    
                     if (this.SrcType == Sys.SrcType.TableOrView)
-                        runObj = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? (", " + this.ParentValue + " ParentNo") : string.Empty) + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(runObj) ? string.Empty : (" WHERE " + runObj));
+                    {
+                        string sql = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name";
 
-                        //runObj = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? (", " + this.ParentValue + " ParentNo") : string.Empty) + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(runObj) ? string.Empty : (" WHERE " + runObj));
+                        if (this.CodeStruct == Sys.CodeStruct.Tree)
+                            sql += ", " + this.ParentValue + " ParentNo";
 
+                        sql += " FROM " + this.SrcTable;
+
+                        if (!string.IsNullOrWhiteSpace(runObj))
+                            sql += " WHERE " + runObj;
+
+                        runObj = sql;
+                    }
+                    
                     return src.RunSQLReturnTable(runObj);
                 }
                 #endregion
@@ -293,6 +306,28 @@ namespace BP.Sys
                 {
                     string sql = "SELECT No, Name FROM " + this.No;
                     return src.RunSQLReturnTable(sql);
+                }
+                #endregion
+
+                #region 动态SQL查询
+                if(this.SrcType == SrcType.DynamicSQL)
+                {
+                    string runObj = this.SelectStatement;
+
+                    if (runObj == null)
+                        runObj = string.Empty;
+
+                    runObj = runObj.Replace("~", "'");
+                    if (runObj.Contains("@WebUser.No"))
+                        runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
+
+                    if (runObj.Contains("@WebUser.Name"))
+                        runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+
+                    if (runObj.Contains("@WebUser.FK_Dept"))
+                        runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
+
+                    return src.RunSQLReturnTable(runObj);
                 }
                 #endregion
 
@@ -739,7 +774,7 @@ namespace BP.Sys
                 map.AddTBString(SFTableAttr.Name, null, "表中文名称", true, false, 0, 200, 20);
 
                 map.AddDDLSysEnum(SFTableAttr.SrcType, 0, "数据表类型", true, false, SFTableAttr.SrcType,
-                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices");
+                    "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=动态SQL查询");
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
 

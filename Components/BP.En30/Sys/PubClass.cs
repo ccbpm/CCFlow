@@ -747,13 +747,43 @@ namespace BP.Sys
             }
             else
             {
-                // 小周鹏----------20150817修改，手机端级联使用----START
-                //string sql = "SELECT No,Name FROM " + uiBindKey;
-                string sql = "SELECT * FROM " + uiBindKey;
-                // 小周鹏----------20150817修改，手机端级联使用----END
-                dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                //added by liuxc,2017-09-11,增加动态SQL查询类型的处理，此种类型没有固定的数据表或视图
+                SFTable sf = new SFTable();
+                sf.No = uiBindKey;
+                if (sf.RetrieveFromDBSources() != 0)
+                    dt = sf.GenerHisDataTable;
+
+                if (dt == null)
+                    dt = new DataTable();
+                
+                foreach(DataColumn col in dt.Columns)
+                {
+                    switch(col.ColumnName.ToLower())
+                    {
+                        case "no":
+                            col.ColumnName = "No";
+                            break;
+                        case "name":
+                            col.ColumnName = "Name";
+                            break;
+                        case "parentno":
+                            col.ColumnName = "ParentNo";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 dt.TableName = uiBindKey;
                 return dt;
+                //下方用不着了
+                //// 小周鹏----------20150817修改，手机端级联使用----START
+                ////string sql = "SELECT No,Name FROM " + uiBindKey;
+                //string sql = "SELECT * FROM " + uiBindKey;
+                //// 小周鹏----------20150817修改，手机端级联使用----END
+                //dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                //dt.TableName = uiBindKey;
+                //return dt;
             }
         }
         /// <summary>

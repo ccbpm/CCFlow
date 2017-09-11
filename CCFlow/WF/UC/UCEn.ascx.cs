@@ -3689,7 +3689,7 @@ namespace CCFlow.WF.UC
                             if ((attr.UIIsEnable == true && this.IsReadonly == false) || activeFilds.Contains(attr.KeyOfEn + ","))
                             {
                                 EntitiesNoName ens = attr.HisEntitiesNoName;
-                                ens.RetrieveAll();
+                                //ens.RetrieveAll();    //在attr.HisEntitiesNoName属性中，就已经获取了集合的数据，此处不需要再次获取，而且，如果是DDL中的动态SQL查询类型，此处使用RetrieveAll获取数据，会将上面已经获取的数据都清空掉，added by liuxc,2017-9-11
                                 ddlFK.Enabled = true;
 
                                 //added by liuxc，2015-10-22.
@@ -3785,12 +3785,21 @@ namespace CCFlow.WF.UC
                                 if (string.IsNullOrEmpty(text) && string.IsNullOrEmpty(val) == false)
                                 {
                                     EntitiesNoName ens = attr.HisEntitiesNoName;
-                                    Entity myen = ens.GetNewEntity;
-                                    myen.PKVal = val;
-                                    if (myen.RetrieveFromDBSources() != 0)
-                                        text = myen.GetValStringByKey("Name");
+                                    EntityNoName enn = ens.GetEntityByKey(val) as EntityNoName;
+
+                                    if (enn != null)
+                                    {
+                                        text = enn.Name;
+                                    }
                                     else
-                                        text = val;
+                                    {
+                                        Entity myen = ens.GetNewEntity;
+                                        myen.PKVal = val;
+                                        if (myen.RetrieveFromDBSources() != 0)
+                                            text = myen.GetValStringByKey("Name");
+                                        else
+                                            text = val;
+                                    }
                                 }
                                 ddlFK.Items.Add(new ListItem(text, val));
 

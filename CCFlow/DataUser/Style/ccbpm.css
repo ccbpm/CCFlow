@@ -20,7 +20,26 @@ input[type="button"], input[type="submit"]
     border-radius: 5px;
 }
 
-/* 文本框只读风格. */
+/*文本框只读风格.*/
+input[disabled],input:disabled{
+border:1px solid #DDD;
+background-color:#F5F5F5;
+color:#ACA899;
+}
+/*文本框只读风格.*/
+textarea[disabled],input:disabled{
+border:1px solid #DDD;
+background-color:#F5F5F5;
+color:#ACA899;
+}
+/*文本框只读风格.*/
+select[disabled],input:disabled{
+border:1px solid #DDD;
+background-color:#F5F5F5;
+color:#ACA899;
+}
+
+/* 文本框只读风格. 要去掉ta */
 .TBReadonly
 {
     font-size: 12px;
@@ -1002,7 +1021,6 @@ body table tr td {
   /* for IE */
   -moz-text-overflow: ellipsis;
   /* for Firefox,mozilla */
-  overflow: hidden;
   white-space: nowrap;
 }
 body table tr td:first-child {
@@ -1028,7 +1046,6 @@ select {
 }
 
 
-
 /*让表格显示 ...*/
 body table {
   table-layout: fixed;
@@ -1040,8 +1057,10 @@ body table tr td {
   /* for IE */
   -moz-text-overflow: ellipsis;
   /* for Firefox,mozilla */
-  overflow: hidden;
+ /* overflow: hidden;*/
   white-space: nowrap;
+  word-wrap:break-word;
+  word-break:break-all;
 }
 
 

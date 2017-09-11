@@ -261,8 +261,8 @@ namespace BP.WF.HttpHandler
         public string HuiQian_AddEmps()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            //if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
-                //return "err@您不是会签主持人，您不能执行该操作。";
+            if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                return "err@您不是会签主持人，您不能执行该操作。";
 
             GenerWorkerList gwlOfMe = new GenerWorkerList();
             int num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,

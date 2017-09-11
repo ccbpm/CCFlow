@@ -16,54 +16,15 @@ namespace BP.WF.HttpHandler
     /// <summary>
     /// 页面功能实体
     /// </summary>
-    public class CCMobile_MyFlow : DirectoryPageBase
+    public class CCMobile_WorkOpt_OneWork : DirectoryPageBase
     {
         /// <summary>
         /// 页面功能实体
         /// </summary>
         /// <param name="mycontext"></param>
-        public CCMobile_MyFlow(HttpContext mycontext)
+        public CCMobile_WorkOpt_OneWork(HttpContext mycontext)
         {
             this.context = mycontext;
-        }
-        /// <summary>
-        /// 获得工作节点
-        /// </summary>
-        /// <returns></returns>
-        public string GenerWorkNode()
-        {
-            WF_MyFlow en = new WF_MyFlow(this.context);
-            return en.GenerWorkNode();
-        }
-        /// <summary>
-        /// 获得toolbar
-        /// </summary>
-        /// <returns></returns>
-        public string InitToolBar()
-        {
-            WF_MyFlow en = new WF_MyFlow(this.context);
-            return en.InitToolBar();
-        }
-        public string MyFlow_Init()
-        {
-            WF_MyFlow en = new WF_MyFlow(this.context);
-            return en.MyFlow_Init();
-        }
-
-        public string MyFlow_StopFlow()
-        {
-            WF_MyFlow en = new WF_MyFlow(this.context);
-            return en.MyFlow_StopFlow();
-        }
-        public string Save()
-        {
-            WF_MyFlow en = new WF_MyFlow(this.context);
-            return en.Save();
-        }
-        public string Send()
-        {
-            WF_MyFlow en = new WF_MyFlow(this.context);
-            return en.Send();
         }
 
         #region 执行父类的重写方法.
@@ -87,6 +48,11 @@ namespace BP.WF.HttpHandler
         #endregion 执行父类的重写方法.
 
         #region xxx 界面 .
+        public string TimeBase_Init()
+        {
+            WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork(this.context);
+            return en.TimeBase_Init();
+        }
         #endregion xxx 界面方法.
 
     }

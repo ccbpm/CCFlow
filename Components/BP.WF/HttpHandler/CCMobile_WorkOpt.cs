@@ -47,6 +47,16 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        /// <summary>
+        /// 打包下载
+        /// </summary>
+        /// <returns></returns>
+        public string Packup_Init()
+        {
+            WF_WorkOpt en = new WF_WorkOpt(this.context);
+            return en.Packup_Init();
+        }
+
         #region 审核组件.
         public string WorkCheck_GetNewUploadedAths()
         {

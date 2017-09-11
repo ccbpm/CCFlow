@@ -32,6 +32,14 @@
         #Message {
             width: 100%;
         }
+        
+        #SelectEmp {
+          position: relative;
+          width:400px;
+          border-top: 0;
+          margin-top:-7px;
+          display: none;
+        }
     </style>
     <script type="text/javascript">
         var param = {};
@@ -240,6 +248,46 @@
             var trArr = $("#Table1 tbody tr");
             tbody.empty();
         }
+
+        $(function () {
+            //人员选择
+            $("#TB_Emps").keydown(function (e) {
+                if (e.keyCode == 13) {
+                    if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
+                        alert("输入内容为空！");
+                        return;
+                    } else {
+                        //回去输入内容，查询数据库
+                        $.ajax({
+                            type: 'post',
+                            async: true,
+                            data: null,
+                            url: Handler + "?DoType=HuiQian_SelectEmps&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random() + "&TB_Emps=" + $("#TB_Emps").val(),
+                            dataType: 'html',
+                            success: function (data) {
+
+                                if (data.indexOf('err@') == 0) {
+                                    alert(data);
+                                    return;
+                                }
+                                //SelectEmp
+                                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
+                                data = JSON.parse(data);
+                                $("#SelectEmp").empty();
+                                for (var i = 0; i < data.length; i++) {
+                                    $("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
+                                }
+                                $("#SelectEmp").show();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        function selectAdd(No) {
+            $("#TB_Emps").val(No);
+        }  
     </script>
 
 </head>
@@ -261,8 +309,12 @@
         <br />
         您也可以输入人员名称,多个名称用逗号分开,(比如:张三,李四,王五).
         <br />
-        <input type="text" id="TB_Emps" name="TB_Emps" value='' style=" width:400px; "/> 
+        输入完成后，点击回车，在输入框下方出现的下拉框中选择您需要的人员.
+        <br />
+        <input type="text" id="TB_Emps" name="TB_Emps" value='' style=" width:400px; " /> 
          <input type="button" id="BtnSelectEmps" value='选择人员'/>
+         <div id="append"></div>
+         <select id="SelectEmp"></select>
          <br />
          <input type="button" value="增加会签人" onclick="ReturnWork();"/>
          <input type="button" value="关闭" onclick="Close();"/>

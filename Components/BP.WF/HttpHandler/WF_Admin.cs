@@ -130,7 +130,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Condition_Init()
         {
-            string toNodeID = this.GetRequestVal("ToNodeId");
+            string toNodeID = this.GetRequestVal("ToNodeID");
             var cond = new Cond();
             cond.Retrieve(CondAttr.NodeID, this.FK_Node, CondAttr.ToNodeID, toNodeID);
             cond.Row.Add("HisDataFrom", cond.HisDataFrom.ToString());

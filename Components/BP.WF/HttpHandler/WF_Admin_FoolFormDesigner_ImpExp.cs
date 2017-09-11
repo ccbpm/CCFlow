@@ -164,47 +164,167 @@ namespace BP.WF.HttpHandler
 
         }
 
-        public string Imp_Src_Step2()
+        #region 04.从外部数据源导入
+        /// <summary>
+        /// 选择一个数据源，进入步骤2
+        /// </summary>
+        /// <returns></returns>
+        public string Imp_Src_Step2_Init()
         {
-            DataSet ds = new DataSet();
             SFDBSrc src = new SFDBSrc(this.GetRequestVal("FK_SFDBSrc"));
 
-            DataTable dt = src.GetTables();
-            dt.TableName = "tables";
-            ds.Tables.Add(dt);
+            //获取所有的表/视图
+            DataTable dtTables = src.GetTables();
 
-            if (!String.IsNullOrEmpty(this.GetRequestVal("STable")))
-            {
-                DataTable tableColumns = src.GetColumns(this.GetRequestVal("STable"));
-                tableColumns.TableName = "tableColumns";
-                ds.Tables.Add(tableColumns); 
-            }
-
-            //加入系统表.
-            return BP.Tools.Json.ToJson(ds);
+            return BP.Tools.FormatToJson.ToJson(dtTables);
         }
 
         /// <summary>
         /// 获取表字段
         /// </summary>
         /// <returns></returns>
-        public string Step2_GetColumns()
+        public string Imp_Src_Step2_GetColumns()
         {
             DataSet ds = new DataSet();
+
+            //01.当前节点表单已经存在的列
+            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            ds.Tables.Add(attrs.ToDataTableField("MapAttrs"));
+
+            //02.数据源表中的列
             SFDBSrc src = new SFDBSrc(this.GetRequestVal("FK_SFDBSrc"));
-
-            DataTable dt = src.GetTables();
-            dt.TableName = "tables";
-            ds.Tables.Add(dt);
-
             DataTable tableColumns = src.GetColumns(this.GetRequestVal("STable"));
-            tableColumns.TableName = "tableColumns";
+            tableColumns.TableName = "TableColumns";
             ds.Tables.Add(tableColumns);
 
-            //加入系统表.
             return BP.Tools.Json.ToJson(ds);
         }
 
+        public string Imp_Src_Step3_Init()
+        {
+            DataSet ds = new DataSet();
+
+            string SColumns = this.GetRequestVal("SColumns");
+            SFDBSrc src = new SFDBSrc(this.GetRequestVal("FK_SFDBSrc"));
+            DataTable tableColumns = src.GetColumns(this.GetRequestVal("STable"));
+
+            //01.添加列
+            DataTable dt = tableColumns.Clone();
+            foreach (DataRow dr in tableColumns.Rows)
+            {
+                if (SColumns.Contains(dr["no"].ToString()))
+                    dt.ImportRow(dr);
+            }
+            dt.TableName = "Columns";
+            ds.Tables.Add(dt);
+
+            //02.添加枚举
+            SysEnums ens = new SysEnums(MapAttrAttr.MyDataType);
+            ds.Tables.Add(ens.ToDataTableField("EnumsDataType"));
+            ens = new SysEnums(MapAttrAttr.LGType);
+            ds.Tables.Add(ens.ToDataTableField("EnumsLGType"));
+
+            return BP.Tools.FormatToJson.ToJson(ds);
+
+        }
+
+        public string Imp_Src_Step3_Save()
+        {
+
+            string hidImpFields = this.GetRequestVal("hidImpFields");
+            string[] fields = hidImpFields.TrimEnd(',').Split(',');
+
+            MapData md = new MapData();
+            md.No = this.FK_MapData;
+            md.RetrieveFromDBSources();
+
+
+            string msg = "导入字段信息:"; 
+            bool isLeft = true;
+            float maxEnd = md.MaxEnd; //底部.
+            for (int i = 0; i < fields.Length; i++)
+            {
+                string colname = fields[i];
+
+                MapAttr ma = new MapAttr();
+                ma.KeyOfEn = colname;
+                ma.Name = this.GetRequestVal("TB_Desc_" + colname);
+                ma.FK_MapData = this.FK_MapData;
+                ma.MyDataType = int.Parse(this.GetRequestVal("DDL_DBType_" + colname));
+                ma.MaxLen = int.Parse(this.GetRequestVal("TB_Len_" + colname));
+                ma.UIBindKey = this.GetRequestVal("TB_BindKey_" + colname);
+                ma.MyPK = this.FK_MapData + "_" + ma.KeyOfEn;
+                ma.LGType = BP.En.FieldTypeS.Normal;
+
+                if (ma.UIBindKey != "")
+                {
+                    SysEnums se = new SysEnums();
+                    se.Retrieve(SysEnumAttr.EnumKey, ma.UIBindKey);
+                    if (se.Count > 0)
+                    {
+                        ma.MyDataType = BP.DA.DataType.AppInt;
+                        ma.LGType = BP.En.FieldTypeS.Enum;
+                        ma.UIContralType = BP.En.UIContralType.DDL;
+                    }
+
+                    SFTable tb = new SFTable();
+                    tb.No = ma.UIBindKey;
+                    if (tb.IsExits == true)
+                    {
+                        ma.MyDataType = BP.DA.DataType.AppString;
+                        ma.LGType = BP.En.FieldTypeS.FK;
+                        ma.UIContralType = BP.En.UIContralType.DDL;
+                    }
+                }
+
+                if (ma.MyDataType == BP.DA.DataType.AppBoolean)
+                    ma.UIContralType = BP.En.UIContralType.CheckBok;
+                if (ma.IsExits)
+                    continue;
+                ma.Insert();
+
+                msg += "\t\n字段:" + ma.KeyOfEn + "" + ma.Name + "加入成功.";
+                FrmLab lab = null;
+                if (isLeft == true)
+                {
+                    maxEnd = maxEnd + 40;
+                    /* 是否是左边 */
+                    lab = new FrmLab();
+                    lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                    lab.FK_MapData = this.FK_MapData;
+                    lab.Text = ma.Name;
+                    lab.X = 40;
+                    lab.Y = maxEnd;
+                    lab.Insert();
+
+                    ma.X = lab.X + 80;
+                    ma.Y = maxEnd;
+                    ma.Update();
+                }
+                else
+                {
+                    lab = new FrmLab();
+                    lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                    lab.FK_MapData = this.FK_MapData;
+                    lab.Text = ma.Name;
+                    lab.X = 350;
+                    lab.Y = maxEnd;
+                    lab.Insert();
+
+                    ma.X = lab.X + 80;
+                    ma.Y = maxEnd;
+                    ma.Update();
+                }
+                isLeft = !isLeft;
+            }
+            
+            //重新设置.
+            md.ResetMaxMinXY();
+
+            return msg;
+
+        } 
+        #endregion
 
         #endregion
 

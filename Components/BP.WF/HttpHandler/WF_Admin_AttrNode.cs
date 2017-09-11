@@ -452,10 +452,13 @@ namespace BP.WF.HttpHandler
             nodes,
             ds);
 
-
-
-
-            //string s = "";
+            //控制页面按钮需要的
+            MapDtl tdtl = new MapDtl();
+            tdtl.No = FK_MapData;
+            if (tdtl.RetrieveFromDBSources() == 1)
+            {
+                ds.Tables.Add(tdtl.ToDataTableField("tdtl")); 
+            }
 
             return BP.Tools.Json.ToJson(ds);
         }
@@ -696,6 +699,15 @@ namespace BP.WF.HttpHandler
         }
 
         #endregion
+
+        public void SortingMapAttrs_Sort() {
+            string type = "";
+            switch (type)
+            {
+                
+            }
+        }
+
         public string SortingMapAttrs_Save()
         {
             Node nd = new Node(this.FK_Node);

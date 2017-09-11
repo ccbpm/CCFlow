@@ -371,7 +371,7 @@ namespace BP.WF.HttpHandler
             string sql = "";
             string toEmpStrs = this.GetRequestVal("TB_Emps");
             string infos = "";
-            sql = "SELECT No,Name FROM Port_Emp WHERE No like '" + toEmpStrs + "%' OR NAME ='" + toEmpStrs + "%'";
+            sql = "SELECT No,Name FROM Port_Emp WHERE No like '" + toEmpStrs + "%' OR NAME like '" + toEmpStrs + "%'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             
             return BP.Tools.Json.ToJson(dt);

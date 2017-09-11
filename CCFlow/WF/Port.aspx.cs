@@ -176,7 +176,7 @@ namespace BP.Web.Port
                     break;
                 case DoWhatList.Start: // 发起工作
                     if (this.FK_Flow == null)
-                        this.Response.Redirect("Start.aspx", true);
+                        this.Response.Redirect("Start.htm", true);
                     else
                         this.Response.Redirect("MyFlow.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID, true);
                     break;
@@ -188,28 +188,28 @@ namespace BP.Web.Port
                     break;
                 case DoWhatList.EmpWorks: // 我的工作小窗口.
                     if (this.FK_Flow == null || this.FK_Flow == "")
-                        this.Response.Redirect("EmpWorks.aspx", true);
+                        this.Response.Redirect("Todolist.htm", true);
                     else
-                        this.Response.Redirect("EmpWorks.aspx?FK_Flow=" + this.FK_Flow, true);
+                        this.Response.Redirect("Todolist.htm?FK_Flow=" + this.FK_Flow, true);
                     break;
                 case DoWhatList.Login:
                     if (this.FK_Flow == null)
-                        this.Response.Redirect("EmpWorks.aspx", true);
+                        this.Response.Redirect("Todolist.htm", true);
                     else
-                        this.Response.Redirect("EmpWorks.aspx?FK_Flow=" + this.FK_Flow, true);
+                        this.Response.Redirect("Todolist.htm?FK_Flow=" + this.FK_Flow, true);
                     break;
                 case DoWhatList.Emps: // 通讯录。
                     this.Response.Redirect("Emps.aspx", true);
                     break;
                 case DoWhatList.FlowSearch: // 流程查询。
                     if (this.FK_Flow == null)
-                        this.Response.Redirect("FlowSearch.aspx", true);
+                        this.Response.Redirect("./RptSearch/Default.htm", true);
                     else
-                        this.Response.Redirect(this.AppPath + "WF/Rpt/Search.aspx?Endse=s&FK_Flow=001&EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras, true);
+                        this.Response.Redirect("./RptDfine/FlowSearch.htm?2=1&FK_Flow=001&EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras, true);
                     break;
                 case DoWhatList.FlowSearchSmall: // 流程查询。
                     if (this.FK_Flow == null)
-                        this.Response.Redirect("FlowSearch.aspx", true);
+                        this.Response.Redirect("./RptSearch/Default.htm", true);
                     else
                         this.Response.Redirect("./Comm/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras, true);
                     break;

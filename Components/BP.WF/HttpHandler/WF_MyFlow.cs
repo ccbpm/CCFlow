@@ -634,10 +634,6 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-
-
-
-
                 if (btnLab.WorkCheckEnable )
                 {
                     /*审核*/

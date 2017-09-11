@@ -71,17 +71,17 @@
                 async: true,
                 url: Handler + "?DoType=Imp_Init&FK_MapData=" + frmID + "&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
                 dataType: 'html',
-                success: function (db) {
+                success: function (data) {
 
-                    if (db.indexOf("err@") > -1) {
-                        alert(db);
+                    if (data.indexOf("err@") > -1) {
+                        alert(data);
                         return;
                     }
 
-                    db = JSON.parse(db);
+                    data = JSON.parse(data);
 
                     //02.从节点表单导入
-                    var nodes = db["WF_Node"];
+                    var nodes = data["WF_Node"];
                     var ulHtml = '';
                     for (var i = 0; i < nodes.length; i++) {
                         var node = nodes[i];
@@ -94,7 +94,7 @@
                     $('#ulNodeFrmImp').html(ulHtml);
 
                     //03.从表单库导入
-                    var treedata = db["Sys_FormTree"],
+                    var treedata = data["Sys_FormTree"],
                         rootdata = $.grep(treedata, function (item) {
                             return item.ParentNo == "0";
                         })[0];
@@ -113,7 +113,7 @@
                         node.text = folder.Name;
                         node.state = "closed";
                         node.children = [];
-                        $.grep(db["Sys_MapData"], function (map) {
+                        $.grep(data["Sys_MapData"], function (map) {
                             //选出当前节点的二级节点
                             return map.FK_FormTree == folder.No;
 
@@ -140,7 +140,7 @@
                     });
 
                     //04.从外部数据源导入
-                    var srcdata = db["SFDBSrcs"],
+                    var srcdata = data["SFDBSrcs"],
                         tableHtml = "";
 
                     tableHtml += "<table class='Table' cellSpacing='0' cellPadding='0'  border='0' style='width:100%'>";
@@ -421,6 +421,9 @@
             }); 
 
             var SColumns = chk_value.join();
+
+
+            alert(nodeID);
 
             $.ajax({
                 type: 'GET',

@@ -261,8 +261,8 @@ namespace BP.WF.HttpHandler
         public string HuiQian_AddEmps()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            //if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
-                //return "err@您不是会签主持人，您不能执行该操作。";
+            if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                return "err@您不是会签主持人，您不能执行该操作。";
 
             GenerWorkerList gwlOfMe = new GenerWorkerList();
             int num = gwlOfMe.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
@@ -288,9 +288,24 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 if (isPinYin == true)
-                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%'";
+                {
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                      sql = "SELECT TOP 12 a.No,a.Name+'/'+b.name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '" + empStr + "%' OR a.NAME LIKE '" + empStr + "%'  OR a.PinYin LIKE '%," + empStr + "%,')";
+
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql = "SELECT   No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%' ROWNUM >=12 ";
+
+                }
                 else
-                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'";
+                {
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 12 No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'";
+
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql = "SELECT TOP 12 No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "' AND ROWNUM  <= 12 ";
+
+
+                }
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count > 12 || dt.Rows.Count == 0)
@@ -367,13 +382,31 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        // 查询select集合
         public string HuiQian_SelectEmps() { 
             string sql = "";
-            string toEmpStrs = this.GetRequestVal("TB_Emps");
-            string infos = "";
-            sql = "SELECT No,Name FROM Port_Emp WHERE No like '" + toEmpStrs + "%' OR NAME like '" + toEmpStrs + "%'";
+            string emp = this.GetRequestVal("TB_Emps");
+            bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
+            if (isPinYin == true)
+            {
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%')";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%') and rownum<=12";
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%') LIMIT 12";
+            }
+            else
+            {
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12";
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
+            }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            
+
             return BP.Tools.Json.ToJson(dt);
         }
 

@@ -1,53 +1,65 @@
-﻿/*  Table 风格  */
-body
-{
-   font-size: 14px;
-   text-align:center;
-}
+﻿    
 
-
-/*  时学业添加 结束位置 */
-th
+/*  Table 风格  */
+table
 {
-   background-color: #f4f4f4;
-    font-size: 12px;
-    border: 1px solid #C2D5E3;
-    text-align: center;
-    height: 20px;
-    line-height: 20px;
-    padding: 3px;
-    font-style: normal;
+    font-family: verdana,arial,sans-serif;
+    font-size: 14px;
     color: #333333;
-}
-
-
-Idx
-{
-    font-size: 12px;
-    border: 1px solid #ccc;
-    text-align: center;
-    font-weight: bold;
-    width: 20px;
-}
-
-  
-td
-{
-    border-right-style: none;
-    border-left-style: none;
-    border-style: solid;
-    padding: 4px;
-    text-align: left;
-    color: #333333;
-    font-size: 12px;
     border-width: 1px;
-    border-color: #C2D5E3;
+    border-color: #D0D0D0;
+    border-collapse: collapse;
 }
-
-
-td input
+table th
 {
-    /*border:none;*/
-    width: auto;
-    word-break: keep-all;
+    border: 1px solid #D0D0D0;
+    padding: 1px;
+    background-color: #F9F9F9;
+    font-weight: normal;
+    font-style: normal;
 }
+table td
+{
+    border: 1px solid #D0D0D0;
+    padding: 1px;
+    background-color: #ffffff;
+}
+
+input[type=text],input[type=password], select
+{
+    border-radius: 5px;
+    border: 1px solid #336699;
+    margin: 0px 0px;
+    width: 100%;
+    padding-left: 0px;
+}
+
+
+/*文本框只读风格.*/
+textarea[disabled],input:disabled{
+border:1px solid #DDD;
+background-color:#F5F5F5;
+color:#ACA899;
+}
+
+
+td input[type="textbox"]
+{
+    margin: 0px;
+    border: 1px solid #D6DDE6;
+    padding: 0px;
+}
+
+input[disabled],input:disabled{
+border:1px solid #DDD;
+background-color:#F5F5F5;
+color:#ACA899;
+}
+
+/*文本框只读风格.*/
+select[disabled],input:disabled{
+border:1px solid #DDD;
+background-color:#F5F5F5;
+color:#ACA899;
+}
+ 

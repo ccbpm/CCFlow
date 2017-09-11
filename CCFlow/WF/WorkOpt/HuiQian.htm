@@ -107,8 +107,8 @@
                 row += "<tr>";
                 row += "<td>" + i + "</td>";
                 row += "<td>" + gwl.FK_Emp + "</td>";
-
                 row += "<td>" + gwl.FK_EmpText + "</td>";
+                row += "<td style='width:50%;'>" + gwl.FK_DeptT + "</td>";
 
                 if (gwl.IsPass == 0) {
                     row += "<td>未审批</td>";
@@ -292,12 +292,13 @@
 
 </head>
 <body>
-    <table id="Table1" style=" width:80%; ">
+    <table id="Table1" style=" width:98%; ">
     <thead>
     <tr id='title'>
     <th style="width:19px;" >序</th>
     <th>编号 </th>
     <th>名称</th>
+    <th style="width:50%;">所在部门</th>
     <th>状态</th>
     <th>操作</th>
     </tr></thead>

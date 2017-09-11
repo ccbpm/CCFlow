@@ -139,7 +139,6 @@
                 dataType: 'html',
                 success: function (data) {
 
-
                     if (data.indexOf('info@') == 0) {
                         alert(data);
                         Close();
@@ -189,7 +188,7 @@
 
                             if (emp.FK_Dept == dept.No) {
 
-                                //检查该人员是否被选择
+                                //检查该人员是否被选择.
                                 var isSele = false;
                                 $.each(selected, function (idx, sele) {
                                     if (sele.No == emp.No)
@@ -199,17 +198,17 @@
                                 //多选.
                                 if (isSimplate == "0") {
                                     if (isSele == true)
-                                        html += "&nbsp;&nbsp;<label><input  type='checkbox' checked=true id='" + emp.No + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
+                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
                                     else
-                                        html += "&nbsp;&nbsp;<label><input  type='checkbox'  id='" + emp.No + "' /> " + emp.No + " " + emp.Name + "</label>";
+                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' /> " + emp.No + " " + emp.Name + "</label>";
                                 }
 
                                 //单选.
                                 if (isSimplate == "1") {
                                     if (isSele == true)
-                                        html += "&nbsp;&nbsp;<label><input name='emps'  type='radio' checked=true id='" + emp.No + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
+                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
                                     else
-                                        html += "&nbsp;&nbsp;<label><input name='emps'  type='radio'  id='" + emp.No + "' /> " + emp.No + " " + emp.Name + "</label>";
+                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' /> " + emp.No + " " + emp.Name + "</label>";
                                 }
 
                             }
@@ -234,19 +233,27 @@
             //生成选择的人员.
             var checked = $('input:checked');
             var selectedEmps = [];
+            var selectedEmpLab="";
             for (var i = 0; i < checked.length; i++) {
+
                 selectedEmps.push(checked[i].id);
+
+                var ctrl = checked[i];
+
+                //录制人员名称.
+                selectedEmpLab += ctrl.id + "," + ctrl.value + ';';
             }
+
             selectedEmps = selectedEmps.join(';');
             if (selectedEmps == '' || selectedEmps == null) {
                 alert('请选择人员.');
                 return;
             }
 
-            if (window.confirm("您确定要执行发送给如下人员["+selectedEmps+"]吗？") == false)
+            if (window.confirm("您确定要执行发送给如下人员[ " + selectedEmpLab + " ]吗？") == false)
                 return;
-            else
-                $("#Msg").html("<font color=green>正在发送请稍候...</font>");
+
+            $("#Msg").html("<font color=green>正在发送请稍候...</font>");
 
             $.ajax({
                 type: 'post',
@@ -343,7 +350,7 @@
     </script>
 </head>
 <body  >
-      
+      <div id="selected"></div>
     <div id="table"></div>
     
     <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">

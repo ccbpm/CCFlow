@@ -60,6 +60,7 @@
         });
 
         $(function () {
+
             switch (searchType) {
                 case "My":
                     $("#dg").datagrid({ title: '我发起的流程' });
@@ -437,6 +438,7 @@
         }
 
         function ViewFlow(rowIndex, rowData) {
+
             if (!rowData && typeof rowIndex != 'undefined') {
                 $('#dg').datagrid('selectRow', rowIndex);
                 rowData = $('#dg').datagrid('getSelected');

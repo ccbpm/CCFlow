@@ -225,6 +225,9 @@ namespace BP.WF.HttpHandler
 
             //选择的字段,就是报表的字段.
             MapAttrs mattrsOfRpt = new MapAttrs(rptNo);
+            mattrsOfRpt.RemoveEn(rptNo + "_OID");
+            mattrsOfRpt.RemoveEn(rptNo + "_Title");
+
             return mattrsOfRpt.ToJson();
         }
         /// <summary>
@@ -257,6 +260,20 @@ namespace BP.WF.HttpHandler
 
                 attr.Update(); //执行更新.
             }
+
+            MapAttr myattr = new MapAttr();
+            myattr.MyPK = rptNo+"_OID";
+            myattr.RetrieveFromDBSources();
+            myattr.Idx = 200;
+            myattr.Name = "工作ID";
+            myattr.Update();
+
+            myattr = new MapAttr();
+            myattr.MyPK = rptNo + "_Title";
+            myattr.RetrieveFromDBSources();
+            myattr.Idx = -100;
+            myattr.Name = "标题";
+            myattr.Update();
 
             return "保存成功..";
         }

@@ -7587,9 +7587,8 @@ namespace BP.WF
                 //移交后事件
                 info += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, nd.HisWork, null);
 
-                info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&FID=" + fid + "' ><img src='Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
+                info += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&FID=" + fid + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
                 return info;
-
             }
 
             GenerWorkFlow gwf = new GenerWorkFlow();
@@ -7736,7 +7735,7 @@ namespace BP.WF
             //移交后事件
             inf1o += "@" + nd.HisFlow.DoFlowEventEntity(EventListOfNode.ShitAfter, nd, nd.HisWork, null);
 
-            inf1o += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&FID=" + fid + "' ><img src='Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
+            inf1o += "@<a href='" + Glo.CCFlowAppPath + "WF/MyFlowInfo.aspx?DoType=UnShift&FK_Flow=" + nd.FK_Flow + "&WorkID=" + workID + "&FK_Node=" + nodeID + "&FID=" + fid + "' ><img src='./Img/Action/UnSend.png' border=0 />撤消工作移交</a>.";
             return inf1o;
         }
         /// <summary>

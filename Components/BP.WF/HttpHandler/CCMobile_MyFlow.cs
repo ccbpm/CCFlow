@@ -54,6 +54,11 @@ namespace BP.WF.HttpHandler
             WF_MyFlow en = new WF_MyFlow(this.context);
             return en.Save();
         }
+        public string Send()
+        {
+            WF_MyFlow en = new WF_MyFlow(this.context);
+            return en.Send();
+        }
 
         #region 执行父类的重写方法.
         /// <summary>

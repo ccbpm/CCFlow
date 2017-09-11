@@ -288,9 +288,24 @@ namespace BP.WF.HttpHandler
                     continue;
 
                 if (isPinYin == true)
-                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%'";
+                {
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                      sql = "SELECT TOP 12 a.No,a.Name+'/'+b.name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '" + empStr + "%' OR a.NAME LIKE '" + empStr + "%'  OR a.PinYin LIKE '%," + empStr + "%,')";
+
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql = "SELECT   No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%' ROWNUM >=12 ";
+
+                }
                 else
-                    sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'";
+                {
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 12 No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'";
+
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql = "SELECT TOP 12 No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "' AND ROWNUM  <= 12 ";
+
+
+                }
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count > 12 || dt.Rows.Count == 0)

@@ -1854,15 +1854,10 @@ namespace BP.Sys
 			{
 				// 求旧的表单ID.
 				foreach (DataRow dr in dtMap.Rows)
-				{
 					oldMapID = dr["No"].ToString();
-				}
 
 				if (string.IsNullOrEmpty(oldMapID) == true)
-				{
 					oldMapID = dtMap.Rows[0]["No"].ToString();
-				}
-				//  throw new Exception("@没有找到 oldMapID ");
 			}
 
 			string timeKey = DateTime.Now.ToString("MMddHHmmss");
@@ -1941,9 +1936,8 @@ namespace BP.Sys
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
 					 
-
-
-							en.MyPK = "Btn_" + idx + "_" + fk_mapdata;
+							//en.MyPK = "Btn_" + idx + "_" + fk_mapdata;
+                            en.MyPK = DBAccess.GenerGUID();
 							en.Insert();
 						}
 						break;
@@ -1962,7 +1956,8 @@ namespace BP.Sys
 
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
-							en.MyPK = "LE_" + idx + "_" + fk_mapdata;
+							//en.MyPK = "LE_" + idx + "_" + fk_mapdata;
+                            en.MyPK = DBAccess.GenerGUID();
 							en.Insert();
 						}
 						break;
@@ -1980,7 +1975,8 @@ namespace BP.Sys
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
 							//  en.FK_MapData = fk_mapdata; 删除此行解决从表lab的问题。
-							en.MyPK = "LB_" + idx + "_" + fk_mapdata;
+							//en.MyPK = "LB_" + idx + "_" + fk_mapdata;
+                            en.MyPK = DBAccess.GenerGUID();
 							en.Insert();
 						}
 						break;
@@ -1999,7 +1995,8 @@ namespace BP.Sys
 
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
-							en.MyPK = "LK_" + idx + "_" + fk_mapdata;
+							//en.MyPK = "LK_" + idx + "_" + fk_mapdata;
+                            en.MyPK = DBAccess.GenerGUID();
 							en.Insert();
 						}
 						break;
@@ -2034,11 +2031,10 @@ namespace BP.Sys
 								if (val == null)
 									continue;
 
-
-
 								en.SetValByKey(dc.ColumnName, val.ToString().Replace(oldMapID, fk_mapdata));
 							}
-							en.MyPK = "Img_" + idx + "_" + fk_mapdata;
+							//en.MyPK = "Img_" + idx + "_" + fk_mapdata;
+                            en.MyPK = DBAccess.GenerGUID();
 							en.Insert();
 						}
 						break;
@@ -2614,9 +2610,9 @@ namespace BP.Sys
 
 			//string ids = "'" + this.No + "'";
 
-            string whereFK_MapData = "( 1=2 ) ";
-            string whereEnsName = "( 1=2 ) ";
-            string whereNo = "( 1=2 ) ";
+            string whereFK_MapData = "FK_MapData= '"+this.No+"' ";
+            string whereEnsName = "EnName= '"+this.No+"' ";
+            string whereNo = "No='"+this.No+"' ";
 
             foreach (DataRow dr in Sys_MapDtl.Rows)
             {

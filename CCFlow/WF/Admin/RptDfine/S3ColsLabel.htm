@@ -81,11 +81,15 @@
                     //console.info(Sys_MapAttr);
                     //输出列.
                     for (var i = 0; i < jsData.length; i++) {
+
+                        var attr = jsData[i];
+
+
                         var str = "<tr>";
                         str += "<td class='Idx' nowrap>" + (i + 1) + "</td>";
-                        str += "<td  nowrap >" + jsData[i].KeyOfEn + "</td>";
-                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + jsData[i].KeyOfEn + "\"   style='width:130px;' /></td>";
-                        str += "<td ><input name=\"TB_" + jsData[i].KeyOfEn + "_Idx\" type=\"text\" value=\"" + (i + 1) + "\" id=\"TB_" + jsData[i].KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
+                        str += "<td  nowrap >" + attr.KeyOfEn + "</td>";
+                        str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:130px;' /></td>";
+                        str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + (i + 1) + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
                         str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a>";
                         str += "</td>";
                         str += "</tr>";

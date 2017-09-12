@@ -1925,9 +1925,18 @@ function InitToNodeDDL(workNode) {
             //IsSelectEmps: "1"
             //Name: "节点2"
             //No: "702"
-            var opt = $("<option value='" + toNode.No + "'>" + toNode.Name + "</option>");
-            opt.data(toNode);
+
+            var opt = "";
+            if (toNode.IsSelected == "1") {
+                var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
+                opt.data(toNode);
+            } else {
+                var opt = $("<option value='" + toNode.No + "'>" + toNode.Name + "</option>");
+                opt.data(toNode);
+            }
+
             toNodeDDL.append(opt);
+
         });
 
 
@@ -2232,6 +2241,10 @@ function GenerWorkNode() {
                 alert("GenerWorkNode转换JSON失败:" + jsonStr);
                 return;
             }
+
+            //设置标题.
+            document.title = '您好:'+ flow_Data.WF_Node[0].Name;
+
 
             $('#CCForm').html('');
             //循环MapAttr

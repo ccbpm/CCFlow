@@ -575,7 +575,7 @@ namespace CCFlow.WF.Admin
                 }
                 else
                 {
-                    btn = new LinkBtn(false, "Btn_ResetAttr_Idx", "重置顺序");
+                    btn = new LinkBtn(false, "Btn_ResetAttr_Idx", "智能重置顺序");
                     btn.SetDataOption("iconCls", "'icon-reset'");
                     btn.Click += btnReSet_Click;
                     pub1.Add(btn);

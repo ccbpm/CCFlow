@@ -425,12 +425,12 @@ namespace CCFlow.WF.CCForm
                                 this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> </li>");
 
                             }
-                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelAll)//删除所有
+                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelAll && this.IsReadonly=="0")//删除所有
                             {
                                 this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> | <a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a></li>");
 
                             }
-                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf)//只能删除自己上传的
+                            else if (athDesc.HisDeleteWay == AthDeleteWay.DelSelf && this.IsReadonly == "0")//只能删除自己上传的
                             {
                                 if (db.Rec.Equals(WebUser.No))
                                     this.Pub1.Add("<li> <a  title='" + db.MyNote + "'><img src = '" + db.FileFullName + "' width=" + athDesc.W + " height=" + athDesc.H + "/></a> | <a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a></li>");
@@ -442,7 +442,7 @@ namespace CCFlow.WF.CCForm
                         this.Pub1.Add("<script>$(function(){$('#" + athDesc.MyPK + "').slideBox({duration : 0.3,easing : 'linear',delay : 5,hideClickBar : false,clickBarRadius : 10});})</script>");
                     }
 
-                    if (athDesc.IsUpload == true)
+                    if (athDesc.IsUpload == true && this.IsReadonly == "0")
                     {
                         /*可以上传,就显示上传的按钮.. */
                         this.Pub1.Add("<a href='AttachmentUploadImg.aspx?1=1" + this.RequestParas + "' >上传</a>");

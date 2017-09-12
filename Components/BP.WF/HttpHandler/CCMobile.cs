@@ -48,6 +48,11 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+        public string Login_Init()
+        {
+            BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
+            return ace.Login_Init();
+        }
 
         public string Home_Init()
         {

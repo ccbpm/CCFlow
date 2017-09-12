@@ -32,6 +32,14 @@
         #Message {
             width: 100%;
         }
+        
+        #SelectEmp {
+          position: relative;
+          width:400px;
+          border-top: 0;
+          margin-top:-7px;
+          display: none;
+        }
     </style>
     <script type="text/javascript">
         var param = {};
@@ -296,7 +304,46 @@
             $(nowTr).parents("tr").remove();
             $("#Table1 tbody tr:eq(" + nowTr + ")").remove();
         }
-         
+
+        $(function () {
+            //人员选择
+            $("#TB_Emps").keydown(function (e) {
+                if (e.keyCode == 13) {
+                    if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
+                        alert("输入内容为空！");
+                        return;
+                    } else {
+                        //回去输入内容，查询数据库
+                        $.ajax({
+                            type: 'post',
+                            async: true,
+                            data: null,
+                            url: Handler + "?DoType=AccepterOfGener_SelectEmps&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random() + "&TB_Emps=" + $("#TB_Emps").val(),
+                            dataType: 'html',
+                            success: function (data) {
+
+                                if (data.indexOf('err@') == 0) {
+                                    alert(data);
+                                    return;
+                                }
+                                //SelectEmp
+                                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
+                                data = JSON.parse(data);
+                                $("#SelectEmp").empty();
+                                for (var i = 0; i < data.length; i++) {
+                                    $("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
+                                }
+                                $("#SelectEmp").show();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+        function selectAdd(No) {
+            $("#TB_Emps").val(No);
+        }    
 </script> 
 
 </head>
@@ -326,6 +373,8 @@
         </div>
         <input type="text" id="TB_Emps" name="TB_Emps" value='' style=" width:400px; "/> 
          <input type="button" id="BtnSelectEmps" value='选择人员'/>
+         <br />
+         <select id="SelectEmp"></select>
          <br />
          <input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>
          <input type="button" value="执行发送" onclick="Send();" id="Btn_Send"/>

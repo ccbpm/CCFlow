@@ -187,6 +187,35 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        // 查询select集合
+        public string AccepterOfGener_SelectEmps()
+        {
+            string sql = "";
+            string emp = this.GetRequestVal("TB_Emps");
+            bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
+            if (isPinYin == true)
+            {
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%')";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%') and rownum<=12";
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%') LIMIT 12";
+            }
+            else
+            {
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12";
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
+            }
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+
         #region 会签.
         /// <summary>
         /// 会签

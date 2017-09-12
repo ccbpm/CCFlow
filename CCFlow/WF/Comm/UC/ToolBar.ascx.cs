@@ -590,6 +590,12 @@ namespace CCFlow.WF.Comm.UC
 
                 if (dw == DTSearchWay.ByDate)
                 {
+                    if (dtFrom.Trim().Length < 11 || dtFrom.Trim().IndexOf(' ') == -1)
+                        dtFrom += " 00:00";
+
+                    if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
+                        dtTo += " 24:00";
+
                     qo.addAnd();
                     qo.addLeftBracket();
                     qo.SQL = dtKey + " >= '" + dtFrom + "'";
@@ -604,7 +610,7 @@ namespace CCFlow.WF.Comm.UC
                     qo.addLeftBracket();
                     qo.SQL = dtKey + " >= '" + dtFrom + " 00:00'";
                     qo.addAnd();
-                    qo.SQL = dtKey + " <= '" + dtTo + " 23:59'";
+                    qo.SQL = dtKey + " <= '" + dtTo + " 24:00'";
                     qo.addRightBracket();
                 }
 

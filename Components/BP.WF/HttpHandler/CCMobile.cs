@@ -54,6 +54,19 @@ namespace BP.WF.HttpHandler
             return ace.Login_Init();
         }
 
+        public string Login_Submit()
+        {
+            BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
+            return ace.Login_Submit();
+        }
+
+        public string GetUserInfo()
+        {
+
+            BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
+            return ace.GetUserInfo();
+        }
+
         public string Home_Init()
         {
 
@@ -71,6 +84,13 @@ namespace BP.WF.HttpHandler
         {
             BP.WF.HttpHandler.WF wfPage = new WF(this.context);
             return wfPage.Todolist_Init();
+        }
+
+        public string DB_GenerReturnWorks()
+        {
+
+            BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
+            return ace.DB_GenerReturnWorks();
         }
 
         public string Start_Init()

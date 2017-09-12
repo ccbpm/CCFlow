@@ -719,10 +719,12 @@ namespace BP.WF.Data
 
                 map.Java_SetEnType(EnType.View);
 
+                map.AddTBIntPK(MyStartFlowAttr.WorkID, 0, "WorkID", true, false);
                 map.AddTBInt(MyStartFlowAttr.FID, 0, "FID", false, false);
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
+
                 map.AddDDLEntities(MyStartFlowAttr.FK_Flow, null, "流程", new Flows(), false);
-                map.AddTBString(MyStartFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 50);
+                map.AddTBString(MyStartFlowAttr.BillNo, null, "单据编号", true, true, 0, 100, 50);
                 map.AddTBInt(MyStartFlowAttr.FK_Node, 0, "节点编号", false, false);
                 map.AddTBString(MyStartFlowAttr.Title, null, "标题", true, false, 0, 100, 200, true);
 
@@ -730,15 +732,15 @@ namespace BP.WF.Data
                 map.AddDDLSysEnum(MyStartFlowAttr.WFState, 0, "流程状态", true, false, MyStartFlowAttr.WFState);
                 map.AddTBString(MyStartFlowAttr.NodeName, null, "停留节点", true, false, 0, 100, 100, true);
                 map.AddTBString(MyStartFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 100, true);
-                map.AddTBString(MyFlowAttr.Emps, null, "参与人", true, false, 0, 4000, 100, true);
                 map.AddTBStringDoc(MyFlowAttr.FlowNote, null, "备注", true, false, true);
 
                 map.AddTBDateTime(MyStartFlowAttr.RDT, "发起日期", true, true);
+
+                map.AddTBString(MyStartFlowAttr.Starter, null, "发起人", false, false, 0, 100, 100);
+
+                map.AddTBString(MyFlowAttr.Emps, null, "参与人", false, false, 0, 4000, 100, true);
                 map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
 
-
-                map.AddTBIntPK(MyStartFlowAttr.WorkID, 0, "WorkID", true, false);
-                map.AddTBString(MyStartFlowAttr.Starter, null, "发起人", false, false, 0, 100, 100);
                 map.AddTBMyNum();
 
                 map.AddSearchAttr(MyStartFlowAttr.FK_Flow);

@@ -717,14 +717,17 @@ namespace BP.WF.Data
                 map.AddTBInt(MyDeptFlowAttr.FID, 0, "FID", false, false);
 
                 map.AddDDLEntities(MyDeptFlowAttr.FK_Flow, null, "流程", new Flows(), false);
+                map.AddTBString(MyDeptFlowAttr.Title, null, "标题", true, false, 0, 100, 10,true);
+
                 map.AddTBString(MyDeptFlowAttr.StarterName, null, "发起人", true, false, 0, 30, 10);
-                map.AddTBString(MyDeptFlowAttr.Title, null, "标题", true, false, 0, 100, 10);
                 map.AddDDLSysEnum(MyDeptFlowAttr.WFSta, 0, "状态", true, false, MyDeptFlowAttr.WFSta);
                 map.AddTBString(MyDeptFlowAttr.NodeName, null, "当前节点", true, false, 0, 100, 10);
                 map.AddTBString(MyDeptFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 10);
                 map.AddTBDateTime(MyDeptFlowAttr.RDT, "发起日期", true, true);
-                map.AddTBString(MyDeptFlowAttr.FlowNote, null, "备注", true, false, 0, 4000, 10);
                 map.AddTBString(MyDeptFlowAttr.FK_Dept, null, "部门", false, false, 0, 30, 10);
+
+                map.AddTBStringDoc(MyDeptFlowAttr.FlowNote, null, "备注", true, false,true);
+
                 map.AddTBMyNum();
 
                 map.AddSearchAttr(MyDeptFlowAttr.FK_Flow);

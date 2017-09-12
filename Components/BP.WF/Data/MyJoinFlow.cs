@@ -167,7 +167,7 @@ namespace BP.WF.Data
 	/// <summary>
     /// 我参与的流程
 	/// </summary>
-	public class MyFlow : Entity
+	public class MyJoinFlow : Entity
 	{	
 		#region 基本属性
         public override UAC HisUAC
@@ -688,10 +688,10 @@ namespace BP.WF.Data
         /// <summary>
 		/// 产生的工作流程
 		/// </summary>
-		public MyFlow()
+		public MyJoinFlow()
 		{
 		}
-        public MyFlow(Int64 workId)
+        public MyJoinFlow(Int64 workId)
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(MyFlowAttr.WorkID, workId);
@@ -723,7 +723,9 @@ namespace BP.WF.Data
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
                 map.AddTBString(MyFlowAttr.Title, null, "流程标题", true, false, 0, 100, 150, true);
                 map.AddDDLEntities(MyFlowAttr.FK_Flow, null, "流程名称", new Flows(), false);
-                map.AddTBInt(MyFlowAttr.FK_Node, 0, "节点编号", false, false);
+                map.AddTBString(MyFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 150);
+                map.AddTBString(MyFlowAttr.StarterName, null, "发起人名称", true, false, 0, 30, 10);
+
                 //map.AddDDLEntities(MyFlowAttr.FK_Dept, null, "发起人部门", new BP.Port.Depts(), false);
                 //map.AddTBString(MyFlowAttr.Starter, null, "发起人编号", true, false, 0, 30, 10);
                 //map.AddTBString(MyFlowAttr.StarterName, null, "发起人名称", true, false, 0, 30, 10);
@@ -731,14 +733,15 @@ namespace BP.WF.Data
 
                 map.AddTBDateTime(MyFlowAttr.RDT, "发起日期", true, true);
                 map.AddDDLSysEnum(MyFlowAttr.WFSta, 0, "状态", true, false, MyFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
-                map.AddDDLSysEnum(MyFlowAttr.WFState, 0, "流程状态", true, false, MyFlowAttr.WFState);
                 map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
                 map.AddTBString(MyFlowAttr.NodeName, null, "当前节点", true, false, 0, 100, 100, true);
                 map.AddTBString(MyStartFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 100, true);
 
-                map.AddTBString(MyFlowAttr.Emps, null, "参与人", true, false, 0, 4000, 10, true);
+                map.AddTBString(MyFlowAttr.Emps, null, "参与人", false, false, 0, 4000, 10, true);
                 map.AddTBStringDoc(MyFlowAttr.FlowNote, null, "备注", true, false, true);
 
+                //隐藏字段.
+                map.AddTBInt(MyFlowAttr.FK_Node, 0, "FK_Node", false, false);
 
                 map.AddTBMyNum();
 
@@ -801,7 +804,7 @@ namespace BP.WF.Data
 	/// <summary>
     /// 我参与的流程s
 	/// </summary>
-	public class MyFlows : Entities
+	public class MyJoinFlows : Entities
 	{
 		#region 方法
 		/// <summary>
@@ -811,13 +814,13 @@ namespace BP.WF.Data
 		{
 			get
 			{			 
-				return new MyFlow();
+				return new MyJoinFlow();
 			}
 		}
 		/// <summary>
 		/// 我参与的流程集合
 		/// </summary>
-		public MyFlows(){}
+		public MyJoinFlows(){}
 		#endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.
@@ -825,20 +828,20 @@ namespace BP.WF.Data
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MyFlow> ToJavaList()
+        public System.Collections.Generic.IList<MyJoinFlow> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MyFlow>)this;
+            return (System.Collections.Generic.IList<MyJoinFlow>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MyFlow> Tolist()
+        public System.Collections.Generic.List<MyJoinFlow> Tolist()
         {
-            System.Collections.Generic.List<MyFlow> list = new System.Collections.Generic.List<MyFlow>();
+            System.Collections.Generic.List<MyJoinFlow> list = new System.Collections.Generic.List<MyJoinFlow>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MyFlow)this[i]);
+                list.Add((MyJoinFlow)this[i]);
             }
             return list;
         }

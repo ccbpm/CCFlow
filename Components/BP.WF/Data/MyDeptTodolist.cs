@@ -683,7 +683,6 @@ namespace BP.WF.Data
                 map.AddTBString(MyDeptTodolistAttr.RDT, null, "发起时间", true, false, 0, 100, 10);
 
                 map.AddTBString(MyDeptTodolistAttr.NodeName, null, "停留节点", true, false, 0, 100, 10);
-
                 map.AddTBStringDoc(MyDeptTodolistAttr.FlowNote, null, "备注", true, false,true);
 
                 //作为隐藏字段.

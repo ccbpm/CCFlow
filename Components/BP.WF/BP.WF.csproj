@@ -149,7 +149,7 @@
     <Compile Include="Data\GenerWorkFlowView.cs" />
     <Compile Include="Data\MyStartFlow.cs" />
     <Compile Include="Data\MyDeptFlow.cs" />
-    <Compile Include="Data\MyFlow.cs" />
+    <Compile Include="Data\MyJoinFlow.cs" />
     <Compile Include="Data\MyDeptTodolist.cs" />
     <Compile Include="Data\Monitor.cs" />
     <Compile Include="Data\MyDeptEmp.cs" />

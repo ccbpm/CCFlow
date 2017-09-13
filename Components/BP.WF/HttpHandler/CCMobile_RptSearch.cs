@@ -53,9 +53,14 @@ namespace BP.WF.HttpHandler
         public string Default_Init()
         {
             DataSet ds = new DataSet();
+            string sql = "";
 
             #region 处理时间段数据源.
-            string sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+            if (this.FK_Flow ==null)
+              sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+            else
+                sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='"+this.FK_Flow+"' AND Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -85,7 +90,13 @@ namespace BP.WF.HttpHandler
             #endregion 处理时间段数据源.
 
             #region 处理流程列表.
+            string tSpan = this.GetRequestVal("TSpan");
+            if (tSpan==null)
             sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+            else
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan='"+tSpan+"' AND  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+
+
             DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -98,7 +109,20 @@ namespace BP.WF.HttpHandler
             #endregion 处理时间段数据源.
 
             #region 处理流程列表.
-            sql = "SELECT  Title, Starter FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+            if (this.FK_Flow == null)
+            {
+                if (tSpan == null)
+                    sql = "SELECT  Title, Starter FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+                else
+                    sql = "SELECT  Title, Starter FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+            }
+            else
+            {
+                if (tSpan == null)
+                    sql = "SELECT  Title, Starter FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+                else
+                    sql = "SELECT  Title, Starter FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+            }
             DataTable dtEns = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {

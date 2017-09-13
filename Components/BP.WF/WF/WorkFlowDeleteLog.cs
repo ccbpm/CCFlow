@@ -277,7 +277,7 @@ namespace BP.WF
                 map.AddDDLEntities(FlowDataAttr.FK_NY, null, "年月", new BP.Pub.NYs(), false);
                 map.AddDDLEntities(FlowDataAttr.FK_Flow, null, "流程", new Flows(), false);
                 map.AddTBDateTime(FlowDataAttr.FlowEnderRDT, null, "最后处理时间", true, true);
-                map.AddTBInt(FlowDataAttr.FlowEndNode, 0, "结束节点", true, true);
+                map.AddTBInt(FlowDataAttr.FlowEndNode, 0, "停留节点", true, true);
                 map.AddTBFloat(FlowDataAttr.FlowDaySpan, 0, "跨度(天)", true, true);
                 map.AddTBInt(FlowDataAttr.MyNum, 1, "个数", true, true);
                 map.AddTBString(FlowDataAttr.FlowEmps, null, "参与人", false, false, 0, 100, 100);

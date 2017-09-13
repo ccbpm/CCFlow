@@ -11,6 +11,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using BP.Web.Controls;
+using BP.WF.Data;
 
 namespace BP.WF.HttpHandler
 {
@@ -40,7 +41,6 @@ namespace BP.WF.HttpHandler
             {
                 switch (this.DoType)
                 {
-                     
                     case "S3ColsLabel_Init": //顺序加载
                         msg = this.S3ColsLabel_Init();
                         break;
@@ -257,6 +257,8 @@ namespace BP.WF.HttpHandler
 
                 attr.Name = vals[1];
                 attr.Idx = int.Parse(vals[2]);
+
+              
 
                 attr.Update(); //执行更新.
             }

@@ -127,6 +127,10 @@ namespace BP.WF.Data
         /// </summary>
         public const string GuestName = "GuestName";
         /// <summary>
+        /// 时间段
+        /// </summary>
+        public const string TSpan = "TSpan";
+        /// <summary>
         /// 单据编号
         /// </summary>
         public const string BillNo = "BillNo";
@@ -713,25 +717,39 @@ namespace BP.WF.Data
                 Map map = new Map("WF_GenerWorkFlow", "我部门的流程");
                 map.Java_SetEnType(EnType.View);
 
-                map.AddTBIntPK(MyDeptFlowAttr.WorkID, 0, "WorkID", true, true);
-                map.AddTBInt(MyDeptFlowAttr.FID, 0, "FID", false, false);
 
                 map.AddDDLEntities(MyDeptFlowAttr.FK_Flow, null, "流程", new Flows(), false);
-                map.AddTBString(MyDeptFlowAttr.Title, null, "标题", true, false, 0, 100, 10,true);
+                map.AddTBString(MyDeptFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
 
+                map.AddTBString(MyDeptFlowAttr.Title, null, "标题", true, false, 0, 100, 10,true);
                 map.AddTBString(MyDeptFlowAttr.StarterName, null, "发起人", true, false, 0, 30, 10);
-                map.AddDDLSysEnum(MyDeptFlowAttr.WFSta, 0, "状态", true, false, MyDeptFlowAttr.WFSta);
+                map.AddTBDateTime(MyDeptFlowAttr.RDT, "发起日期", true, true);
+
                 map.AddTBString(MyDeptFlowAttr.NodeName, null, "当前节点", true, false, 0, 100, 10);
                 map.AddTBString(MyDeptFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 10);
-                map.AddTBDateTime(MyDeptFlowAttr.RDT, "发起日期", true, true);
-                map.AddTBString(MyDeptFlowAttr.FK_Dept, null, "部门", false, false, 0, 30, 10);
+
+                map.AddTBString(MyDeptFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 10);
+                map.AddDDLSysEnum(MyDeptFlowAttr.WFSta, 0, "状态", true, false, MyDeptFlowAttr.WFSta);
+                map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
+
+
 
                 map.AddTBStringDoc(MyDeptFlowAttr.FlowNote, null, "备注", true, false,true);
-
                 map.AddTBMyNum();
+
+
+                //工作ID
+                map.AddTBIntPK(MyDeptFlowAttr.WorkID, 0, "工作ID", true, true);
+
+                //隐藏字段.
+                map.AddTBInt(MyDeptFlowAttr.FID, 0, "FID", false, false);
+                map.AddTBString(MyDeptFlowAttr.FK_Dept, null, "部门", false, false, 0, 30, 10);
+
 
                 map.AddSearchAttr(MyDeptFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyDeptFlowAttr.WFSta);
+                map.AddSearchAttr(MyDeptFlowAttr.TSpan);
+
 
                 //增加隐藏的查询条件.
                 AttrOfSearch search = new AttrOfSearch(MyDeptFlowAttr.FK_Dept, "部门",

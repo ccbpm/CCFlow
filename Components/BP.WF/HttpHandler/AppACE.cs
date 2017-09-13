@@ -264,7 +264,7 @@ namespace BP.WF.HttpHandler
             ht.Add("ServiceTel", SystemConfig.ServiceTel);
             ht.Add("CustomerName", SystemConfig.CustomerName);
 
-            if (WebUser.NoOfRel == null)
+            if ( WebUser.NoOfRel == null )
             {
                 ht.Add("UserNo", "");
                 ht.Add("UserName", "");

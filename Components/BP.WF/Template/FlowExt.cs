@@ -516,7 +516,6 @@ namespace BP.WF.Template
                 rm.GroupName = "实验中的功能";
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "删除NDxxxRpt表,多余字段.";
                 rm.ClassMethodName = this.ToString() + ".DoDeleteFields()";

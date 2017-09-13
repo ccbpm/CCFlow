@@ -719,29 +719,31 @@ namespace BP.WF.Data
 
                 map.Java_SetEnType(EnType.View);
 
-                map.AddTBIntPK(MyStartFlowAttr.WorkID, 0, "WorkID", true, false);
-                map.AddTBInt(MyStartFlowAttr.FID, 0, "FID", false, false);
-                map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
+                map.AddTBIntPK(MyStartFlowAttr.WorkID, 0, "WorkID", false, false);
+                map.AddTBString(MyStartFlowAttr.Title, null, "标题", true, false, 0, 100, 200, true);
 
                 map.AddDDLEntities(MyStartFlowAttr.FK_Flow, null, "流程", new Flows(), false);
                 map.AddTBString(MyStartFlowAttr.BillNo, null, "单据编号", true, true, 0, 100, 50);
                 map.AddTBInt(MyStartFlowAttr.FK_Node, 0, "节点编号", false, false);
-                map.AddTBString(MyStartFlowAttr.Title, null, "标题", true, false, 0, 100, 200, true);
 
-                map.AddDDLSysEnum(MyStartFlowAttr.WFSta, 0, "状态", true, false, MyStartFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
-                map.AddDDLSysEnum(MyStartFlowAttr.WFState, 0, "流程状态", true, false, MyStartFlowAttr.WFState);
-                map.AddTBString(MyStartFlowAttr.NodeName, null, "停留节点", true, false, 0, 100, 100, true);
-                map.AddTBString(MyStartFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 100, true);
-                map.AddTBStringDoc(MyFlowAttr.FlowNote, null, "备注", true, false, true);
-
+                map.AddDDLSysEnum(MyStartFlowAttr.WFSta, 0, "状态", true, true, MyStartFlowAttr.WFSta, "@0=运行中@1=已完成@2=其他");
+                map.AddTBString(MyStartFlowAttr.Starter, null, "发起人", false, false, 0, 100, 100);
                 map.AddTBDateTime(MyStartFlowAttr.RDT, "发起日期", true, true);
 
-                map.AddTBString(MyStartFlowAttr.Starter, null, "发起人", false, false, 0, 100, 100);
+                map.AddTBString(MyStartFlowAttr.NodeName, null, "停留节点", true, true, 0, 100, 100, false);
+                map.AddTBString(MyStartFlowAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 100, false);
+                map.AddTBStringDoc(MyFlowAttr.FlowNote, null, "备注", true, false, true);
+
 
                 map.AddTBString(MyFlowAttr.Emps, null, "参与人", false, false, 0, 4000, 100, true);
                 map.AddDDLSysEnum(MyFlowAttr.TSpan, 0, "时间段", true, false, MyFlowAttr.TSpan, "@0=本周@1=上周@2=两周以前@3=三周以前@4=更早");
 
                 map.AddTBMyNum();
+
+                //隐藏字段.
+                map.AddTBInt(MyStartFlowAttr.WFState, 0, "状态", false, false);
+                map.AddTBInt(MyStartFlowAttr.FID, 0, "FID", false, false);
+                map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
 
                 map.AddSearchAttr(MyStartFlowAttr.FK_Flow);
                 map.AddSearchAttr(MyStartFlowAttr.WFSta);
@@ -780,7 +782,7 @@ namespace BP.WF.Data
         public string DoTrack()
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
-            return "../../WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+            return "../../WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
         }
         /// <summary>
         /// 打开最后一个节点表单
@@ -796,9 +798,9 @@ namespace BP.WF.Data
             if (dt != null && dt.Rows.Count > 0)
             {
                 string myPk = dt.Rows[0][0].ToString();
-                return "../../WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
+                return "../../WFRpt.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
             }
-            return "../../WF/CCForm/Frm.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" + this.FK_Node + "&ReadOnly=1&IsEdit=0";
+            return "../../CCForm/Frm.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" + this.FK_Node + "&ReadOnly=1&IsEdit=0";
         }
         #endregion
     }

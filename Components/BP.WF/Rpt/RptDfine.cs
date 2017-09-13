@@ -6,6 +6,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.Sys;
+using BP.WF.Data;
 
 namespace BP.WF.Rpt
 {
@@ -418,23 +419,23 @@ namespace BP.WF.Rpt
             {
                 if (keys.Contains("," + attr.KeyOfEn + ",") == false)
                     continue;
+
                 attr.FK_MapData = md.No;
+                attr.UIIsEnable = false;
 
                 #region 判断特殊的字段.
                 switch (attr.KeyOfEn)
                 {
-                    case StartWorkAttr.FK_Dept:
+                    case GERptAttr.FK_Dept:
                         attr.UIBindKey = "BP.Port.Depts";
                         attr.UIContralType = UIContralType.DDL;
                         attr.LGType = FieldTypeS.FK;
                         attr.UIVisible = true;
-                        // attr.GroupID = groupID;// gfs[0].GetValIntByKey("OID");
-                        attr.UIIsEnable = false;
                         attr.DefVal = "";
                         attr.MaxLen = 100;
                         attr.Update();
                         break;
-                    case "FK_NY":
+                    case GERptAttr.FK_NY:
                         attr.UIBindKey = "BP.Pub.NYs";
                         attr.UIContralType = UIContralType.DDL;
                         attr.LGType = FieldTypeS.FK;
@@ -442,6 +443,21 @@ namespace BP.WF.Rpt
                         attr.UIIsEnable = false;
                         //attr.GroupID = groupID;
                         attr.Update();
+                        break;
+                    case GERptAttr.Title:
+                        attr.UIWidth = 120;
+                        break;
+                    case GERptAttr.FlowStarter:
+                        attr.UIIsEnable = false;
+                        //attr.LGType = FieldTypeS.FK;
+                        //attr.UIBindKey = "BP.Port.Emps";
+                        //attr.UIContralType = UIContralType.DDL;
+                        //attr.UIWidth = 120;
+                        break;
+                    case GERptAttr.FlowEndNode:
+                        //attr.LGType = FieldTypeS.FK;
+                        //attr.UIBindKey = "BP.WF.Template.NodeExts";
+                        //attr.UIContralType = UIContralType.DDL;
                         break;
                     case "FK_Emp":
                         break;
@@ -452,8 +468,7 @@ namespace BP.WF.Rpt
 
                 attr.Insert();
             }
-
-            return rptMark + "重置成功...";
+            return "标记为: "+rptMark + "的报表，重置成功...";
         }
         #endregion
 

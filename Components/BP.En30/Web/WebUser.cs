@@ -668,7 +668,10 @@ namespace BP.Web
 		{
 			get
 			{
-				return GetSessionByKey("No", null);
+				string val= GetSessionByKey("No", null);
+                if (val == null)
+                    return GetValFromCookie("No", null, true);
+                return null;
 			}
 		}
 		public static string GetValFromCookie(string valKey, string isNullAsVal, bool isChinese)

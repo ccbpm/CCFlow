@@ -1824,6 +1824,7 @@ namespace BP.WF
             // 检查当前的状态是是否是退回，.
             if (this.SendNodeWFState == WFState.ReturnSta)
             {
+
             }
 
             Nodes nds = currNode.HisToNodes;
@@ -1838,8 +1839,8 @@ namespace BP.WF
 
             Conds dcsAll = new Conds();
             dcsAll.Retrieve(CondAttr.NodeID, currNode.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.PRI);
-            if (dcsAll.Count == 0)
-                throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件");
+            //if (dcsAll.Count == 0)
+            //    throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件.");
 
             #region 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
             Nodes myNodes = new Nodes();

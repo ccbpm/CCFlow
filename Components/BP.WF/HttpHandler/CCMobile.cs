@@ -69,7 +69,6 @@ namespace BP.WF.HttpHandler
 
         public string Home_Init()
         {
-
             BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
             return ace.Home_Init();
         }

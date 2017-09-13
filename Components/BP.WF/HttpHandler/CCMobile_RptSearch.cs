@@ -71,24 +71,22 @@ namespace BP.WF.HttpHandler
                 dt.Columns[2].ColumnName = "Num";
             }
 
-            //查找出枚举值，并给Name赋值.
-            sql = "SELECT IntKey , Lab  FROM Sys_Enum WHERE EnumKey='TSpan'";
-            DataTable dtEnum = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            foreach (DataRow dr in dt.Rows)
+            SysEnums ses = new SysEnums("TSpan");
+
+            DataTable dtTSpan=ses.ToDataTableField();
+            foreach (DataRow drSpan in dtTSpan.Rows)
             {
-                string i = dr["No"].ToString();
-                foreach (DataRow mydr in dtEnum.Rows)
+                foreach (DataRow dr in dt.Rows)
                 {
-                    if (mydr["IntKey"].ToString() == i)
+                    if (dr["No"].ToString() == drSpan[SysEnumAttr.IntKey].ToString())
                     {
-                        //给枚举名称赋值.
-                        dr["Name"] = mydr["Lab"].ToString();
-                        break;
+                        drSpan[SysEnumAttr.Lab] = drSpan[SysEnumAttr.Lab] + "(" + dr["Num"] + ")";
                     }
                 }
             }
-            dt.TableName = "TSpan";
-            ds.Tables.Add(dt);
+
+            dtTSpan.TableName = "TSpan";
+            ds.Tables.Add(dtTSpan);
             #endregion 处理时间段数据源.
 
             #region 处理流程列表.

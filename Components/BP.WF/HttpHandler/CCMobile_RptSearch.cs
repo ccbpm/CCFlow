@@ -112,16 +112,16 @@ namespace BP.WF.HttpHandler
             if (this.FK_Flow == null)
             {
                 if (tSpan == null)
-                    sql = "SELECT  Title, Starter FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+                    sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ORDER BY FK_Flow, FlowName";
                 else
-                    sql = "SELECT  Title, Starter FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+                    sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ORDER BY FK_Flow, FlowName";
             }
             else
             {
                 if (tSpan == null)
-                    sql = "SELECT  Title, Starter FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+                    sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ORDER BY FK_Flow, FlowName";
                 else
-                    sql = "SELECT  Title, Starter FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+                    sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ORDER BY FK_Flow, FlowName";
             }
             DataTable dtEns = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -134,8 +134,28 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtEns);
             #endregion 处理时间段数据源.
 
+            return BP.Tools.Json.ToJson(ds);
+        }
 
-            return BP.Tools.Json.ToJson(dt);
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <returns></returns>
+        public string Default_Search()
+        {
+            string sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ";
+
+            sql += " order by FK_Flow, FlowName";
+            DataTable dtEns = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtEns.Columns[0].ColumnName = "No";
+                dtEns.Columns[1].ColumnName = "Name";
+                dtEns.Columns[2].ColumnName = "Num";
+            }
+            dtEns.TableName = "Ens";
+
+            return BP.Tools.Json.ToJson(dtEns);
         }
     }
 }

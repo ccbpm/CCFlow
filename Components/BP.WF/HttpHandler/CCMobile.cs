@@ -141,5 +141,12 @@ namespace BP.WF.HttpHandler
             BP.WF.HttpHandler.WF wfPage = new WF(this.context);
             return wfPage.Start_Init();
         }
+
+        public string HandlerMapExt()
+        {
+            WF_CCForm en = new WF_CCForm(this.context);
+            return en.HandlerMapExt();
+        }
+
     }
 }

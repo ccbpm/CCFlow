@@ -196,6 +196,7 @@
     <Compile Include="HttpHandler\CCMobile_WorkOpt.cs" />
     <Compile Include="HttpHandler\CCMobile_WorkOpt_OneWork.cs" />
     <Compile Include="HttpHandler\CCMobile_RptSearch.cs" />
+    <Compile Include="HttpHandler\CCMobile_CCForm.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />

@@ -57,19 +57,11 @@ namespace BP.WF.HttpHandler
 
             string tSpan = this.GetRequestVal("TSpan");
 
-
             #region 处理时间段数据源.
-            if (tSpan == null)
-            {
-                if (this.FK_Flow == null)
-                    sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
-                else
-                    sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
-            }
+            if ( string.IsNullOrEmpty(this.FK_Flow) )
+                sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
             else
-            {
-
-            }
+                sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -100,20 +92,10 @@ namespace BP.WF.HttpHandler
             #endregion 处理时间段数据源.
 
             #region 处理流程列表.
-            if (tSpan == null)
-            {
-                if (this.FK_Flow == null)
-                    sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
-                else
-                    sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
-            }
+            if (string.IsNullOrEmpty(tSpan) == true)
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
             else
-            {
-                if (this.FK_Flow == null)
-                    sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan='" + tSpan + "' AND  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
-                else
-                    sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND TSpan='" + tSpan + "' AND  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
-            }
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan='" + tSpan + "' AND  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
 
             DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -127,7 +109,7 @@ namespace BP.WF.HttpHandler
             #endregion 处理时间段数据源.
 
             #region 处理流程列表.
-            if (this.FK_Flow == null)
+            if (string.IsNullOrEmpty(this.FK_Flow) == true)
             {
                 if (tSpan == null)
                     sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ORDER BY FK_Flow, FlowName";
@@ -154,7 +136,6 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(ds);
         }
-
         /// <summary>
         /// 查询
         /// </summary>

@@ -14,6 +14,7 @@
     <script language="javascript" type="text/javascript">
 
         function ShowEditWindow(field, url) {
+
             if (!field || !url) {
                 return;
             }

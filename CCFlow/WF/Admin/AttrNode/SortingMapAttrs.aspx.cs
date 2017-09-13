@@ -324,8 +324,23 @@ namespace CCFlow.WF.Admin
                         ddl = new DDL();
                         ddl.ID = "DDL_Group_" + drGrp[GroupFieldAttr.OID] + "_" + row[MapAttrAttr.KeyOfEn];
 
-                        foreach (DataRow rowGroup in dtGroups.Select("CTRLTYPE = ''"))
-                            ddl.Items.Add(new ListItem(rowGroup[GroupFieldAttr.Lab].ToString(), rowGroup[GroupFieldAttr.OID].ToString()));
+                        foreach (DataRow dr in dtGroups.Rows)
+                        {
+                            string type = dr["CtrlType"].ToString();
+                            if (type != "")
+                                continue;
+
+                            string lab = dr[GroupFieldAttr.Lab].ToString();
+                            string oid = dr[GroupFieldAttr.OID].ToString();
+
+                            ListItem li = new ListItem();
+                            li.Text = lab;
+                            li.Value = oid;
+                            ddl.Items.Add(li);
+                        }
+
+                      //  foreach (DataRow rowGroup in dtGroups.Select("CtrlType = ''"))
+                         //   ddl.Items.Add(new ListItem(rowGroup[GroupFieldAttr.Lab].ToString(), rowGroup[GroupFieldAttr.OID].ToString()));
 
                         ddl.AutoPostBack = true;
                         ddl.SelectedIndexChanged += ddl_SelectedIndexChanged;

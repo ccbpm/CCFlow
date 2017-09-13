@@ -266,11 +266,15 @@ namespace BP.WF.HttpHandler
             string json = "{";
             bool isCan;
 
+            Hashtable ht = new Hashtable();
+
             switch (wfstateEnum)
             {
                 case WFState.Runing: /* 运行时*/
                     /*删除流程.*/
                     isCan = BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No);
+
+                    ht.Add("CanFlowOverByCoercion", isCan.ToString().ToLower());
                     json += "\"CanFlowOverByCoercion\":" + isCan.ToString().ToLower() + ",";
 
                     /*取回审批*/
@@ -286,6 +290,7 @@ namespace BP.WF.HttpHandler
                         if (gt.Can_I_Do_It())
                         {
                             isCan = true;
+
                             para = "\"TackBackFromNode\": " + gwf.FK_Node + ",\"TackBackToNode\":" + myNode + ",";
                         }
                     }

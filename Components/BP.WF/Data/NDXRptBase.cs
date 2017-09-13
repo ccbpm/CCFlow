@@ -74,7 +74,7 @@ namespace BP.WF.Data
         /// </summary>
         public const string FlowDaySpan = "FlowDaySpan";
         /// <summary>
-        /// 结束节点
+        /// 停留节点
         /// </summary>
         public const string FlowEndNode = "FlowEndNode";
         /// <summary>
@@ -286,7 +286,7 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
-        /// 结束节点名称
+        /// 停留节点
         /// </summary>
         public string FlowEndNodeText
         {

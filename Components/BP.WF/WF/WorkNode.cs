@@ -1824,6 +1824,7 @@ namespace BP.WF
             // 检查当前的状态是是否是退回，.
             if (this.SendNodeWFState == WFState.ReturnSta)
             {
+
             }
 
             Nodes nds = currNode.HisToNodes;
@@ -1838,8 +1839,8 @@ namespace BP.WF
 
             Conds dcsAll = new Conds();
             dcsAll.Retrieve(CondAttr.NodeID, currNode.NodeID, CondAttr.CondType, (int)CondType.Dir, CondAttr.PRI);
-            if (dcsAll.Count == 0)
-                throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件");
+            //if (dcsAll.Count == 0)
+            //    throw new Exception("@没有为节点(" + currNode.NodeID + " , " + currNode.Name + ")设置方向条件.");
 
             #region 获取能够通过的节点集合，如果没有设置方向条件就默认通过.
             Nodes myNodes = new Nodes();
@@ -2301,9 +2302,9 @@ namespace BP.WF
             if (this.HisWorkerLists.Count >= 2 && this.HisNode.IsTask)
             {
                 if (WebUser.IsWap)
-                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"" + this.VirPath + "WF/WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='" + VirPath + "WF/Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='" + VirPath + "WF/Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
                 else
-                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"javascript:WinOpen('" + VirPath + "WF/WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='" + VirPath + "WF/Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"javascript:WinOpen('./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='" + VirPath + "WF/Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
             }
 
             //if (WebUser.IsWap == false)
@@ -2314,12 +2315,12 @@ namespace BP.WF
                 if (this.HisNode.IsStartNode)
                 {
                     if (WebUser.IsWap)
-                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>, <a href='" + VirPath + "WF/Wap/MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
+                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>, <a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
                     else
-                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a> - <a href='" + VirPath + "WF/MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
+                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a> - <a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
                 }
                 else
-                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a> ", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a> ", SendReturnMsgType.Info);
             }
 
 
@@ -2338,7 +2339,7 @@ namespace BP.WF
             }
             else
             {
-                this.addMsg(SendReturnMsgFlag.WorkRpt, null, "@<img src='" + VirPath + "WF/Img/Btn/PrintWorkRpt.gif' ><a href='" + VirPath + "WF/WFRpt.aspx?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + toND.FK_Flow + "' target='_self' >工作轨迹</a>。");
+                this.addMsg(SendReturnMsgFlag.WorkRpt, null, "@<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + toND.FK_Flow + "' target='_self' >工作轨迹</a>。");
             }
             this.addMsg(SendReturnMsgFlag.WorkStartNode, "@下一步[" + toND.Name + "]工作成功启动.", "@下一步<font color=blue>[" + toND.Name + "]</font>工作成功启动.");
             #endregion
@@ -2476,7 +2477,6 @@ namespace BP.WF
                     FrmAttachmentDB mydb = new FrmAttachmentDB();
                     mydb.Delete(FrmAttachmentDBAttr.FK_MapData, "ND" + nd.NodeID, FrmAttachmentDBAttr.RefPKVal, wk.OID);
 
-
                     /*说明当前节点有附件数据*/
                     int idx = 0;
                     foreach (FrmAttachmentDB athDB in athDBs)
@@ -2567,8 +2567,6 @@ namespace BP.WF
 
             //加入分流异表单，提示信息。
             this.addMsg("FenLiuUnSameSheet", msg);
-
-
 
             //加入变量。
             this.addMsg(SendReturnMsgFlag.VarTreadWorkIDs, workIDs, workIDs, SendReturnMsgType.SystemMsg);
@@ -3336,7 +3334,6 @@ namespace BP.WF
                 ps.Add("FID", this.HisWork.FID);
                 ps.Add("FK_Node", this.HisNode.NodeID);
                 DBAccess.RunSQL(ps);
-
 
                 this.HisGenerWorkFlow.FK_Node = toNode.NodeID;
                 this.HisGenerWorkFlow.NodeName = toNode.Name;

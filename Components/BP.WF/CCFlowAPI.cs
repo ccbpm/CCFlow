@@ -128,6 +128,24 @@ namespace BP.WF
                         dtToNDs.Columns.Add("No", typeof(string));
                         dtToNDs.Columns.Add("Name", typeof(string));
                         dtToNDs.Columns.Add("IsSelectEmps", typeof(string));
+                        dtToNDs.Columns.Add("IsSelected", typeof(string));
+
+                        //上一次选择的节点.
+                        int defalutSelectedNodeID = 0;
+                        if (nds.Count > 1)
+                        {
+                            string mysql = "";
+                            // 找出来上次发送选择的节点.
+                            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                                mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC";
+                            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 AND ROWNUM =1  ORDER BY WorkID DESC ";
+                            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID  DESC";
+
+                            //获得上一次发送到的节点.
+                            defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
+                        }
 
                         foreach (Node item in nds)
                         {
@@ -140,6 +158,13 @@ namespace BP.WF
                                 dr["IsSelectEmps"] = "1";
                             else
                                 dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
+
+                            //设置默认选择的节点.
+                            if (defalutSelectedNodeID == item.NodeID)
+                                dr["IsSelected"] = "1";  
+                            else
+                                dr["IsSelected"] = "0";   
+
                             dtToNDs.Rows.Add(dr);
                         }
 

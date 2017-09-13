@@ -677,12 +677,14 @@ namespace BP.WF.Data
                 map.AddTBInt(MyDeptTodolistAttr.FID, 0, "FID", false, false);
                 map.AddTBString(MyDeptTodolistAttr.Title, null, "流程标题", true, false, 0, 300, 10, true);
                 map.AddDDLEntities(MyDeptTodolistAttr.FK_Flow, null, "流程", new Flows(), false);
-               
-                map.AddTBString(MyDeptTodolistAttr.Starter, null, "发起人编号", true, false, 0, 30, 10);
-                map.AddTBString(MyDeptTodolistAttr.StarterName, null, "发起人名称", true, false, 0, 30, 10);
                 map.AddTBString(MyDeptTodolistAttr.RDT, null, "发起时间", true, false, 0, 100, 10);
 
+               
+                map.AddTBString(MyDeptTodolistAttr.StarterName, null, "发起人名称", true, false, 0, 30, 10);
+
                 map.AddTBString(MyDeptTodolistAttr.NodeName, null, "停留节点", true, false, 0, 100, 10);
+                //map.AddTBString(MyDeptTodolistAttr.TodoEmps, null, "当前处理人", true, false, 0, 100, 10);
+
                 map.AddTBStringDoc(MyDeptTodolistAttr.FlowNote, null, "备注", true, false,true);
 
                 //作为隐藏字段.

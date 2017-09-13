@@ -11,6 +11,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using BP.WF.Data;
 
 namespace BP.WF.HttpHandler
 {
@@ -46,6 +47,35 @@ namespace BP.WF.HttpHandler
             DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node);
             return BP.Tools.Json.DataTableToJson(dt,false);
         }
+
+        /// <summary>
+        /// 获取退回消息
+        /// </summary>
+        /// <returns></returns>
+        public string DB_GenerReturnWorks()
+        {
+            /* 如果工作节点退回了*/
+            BP.WF.ReturnWorks rws = new BP.WF.ReturnWorks();
+            rws.Retrieve(BP.WF.ReturnWorkAttr.ReturnToNode, this.FK_Node, BP.WF.ReturnWorkAttr.WorkID, this.WorkID, BP.WF.ReturnWorkAttr.RDT);
+            StringBuilder append = new StringBuilder();
+            append.Append("[");
+            if (rws.Count != 0)
+            {
+                foreach (BP.WF.ReturnWork rw in rws)
+                {
+                    append.Append("{");
+                    append.Append("ReturnNodeName:'" + rw.ReturnNodeName + "',");
+                    append.Append("ReturnerName:'" + rw.ReturnerName + "',");
+                    append.Append("RDT:'" + rw.RDT + "',");
+                    append.Append("NoteHtml:'" + rw.BeiZhuHtml + "'");
+                    append.Append("},");
+                }
+                append.Remove(append.Length - 1, 1);
+            }
+            append.Append("]");
+            return BP.Tools.Entitis2Json.Instance.ReplaceIllgalChart(append.ToString());
+        }
+
         /// <summary>
         /// 运行
         /// </summary>
@@ -61,6 +91,33 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <returns></returns>
+        public string GetUserInfo()
+        {
+            if (WebUser.No == null)
+                return "{err:'nologin'}";
+
+            StringBuilder append = new StringBuilder();
+            append.Append("{");
+            string userPath = HttpContext.Current.Server.MapPath("/DataUser/UserIcon/");
+            string userIcon = userPath + BP.Web.WebUser.No + "Biger.png";
+            if (System.IO.File.Exists(userIcon))
+            {
+                append.Append("UserIcon:'" + BP.Web.WebUser.No + "Biger.png'");
+            }
+            else
+            {
+                append.Append("UserIcon:'DefaultBiger.png'");
+            }
+            append.Append(",UserName:'" + BP.Web.WebUser.Name + "'");
+            append.Append(",UserDeptName:'" + BP.Web.WebUser.FK_DeptName + "'");
+            append.Append("}");
+            return append.ToString();
+        }
+
+        /// <summary>
         /// 初始化赋值.
         /// </summary>
         /// <returns></returns>
@@ -72,12 +129,33 @@ namespace BP.WF.HttpHandler
 
             //系统名称.
             ht.Add("SysName", BP.Sys.SystemConfig.SysName);
+            ht.Add("CustomerName", BP.Sys.SystemConfig.CustomerName);
 
             ht.Add("Todolist_EmpWorks", BP.WF.Dev2Interface.Todolist_EmpWorks);
             ht.Add("Todolist_Runing", BP.WF.Dev2Interface.Todolist_Runing);
             ht.Add("Todolist_Sharing", BP.WF.Dev2Interface.Todolist_Sharing);
+            ht.Add("Todolist_CCWorks", BP.WF.Dev2Interface.Todolist_CCWorks);
             ht.Add("Todolist_Apply", BP.WF.Dev2Interface.Todolist_Apply); //申请下来的任务个数.
             ht.Add("Todolist_Draft", BP.WF.Dev2Interface.Todolist_Draft); //草稿数量.
+
+            //我发起
+            MyStartFlows myStartFlows = new MyStartFlows();
+            QueryObject obj = new QueryObject(myStartFlows);
+            obj.AddWhere(MyStartFlowAttr.Starter, WebUser.No);
+            obj.addAnd();
+            //运行中\已完成\挂起\退回\转发\加签\批处理\
+            obj.addLeftBracket();
+            obj.AddWhere("WFState=2 or WFState=3 or WFState=4 or WFState=5 or WFState=6 or WFState=8 or WFState=10");
+            obj.addRightBracket();
+            obj.DoQuery();
+            ht.Add("Todolist_MyStartFlow", myStartFlows.Count);
+            
+            //我参与
+            MyJoinFlows myFlows = new MyJoinFlows();
+            obj = new QueryObject(myFlows);
+            obj.AddWhere("Emps like '%" + WebUser.No + "%'");
+            obj.DoQuery();
+            ht.Add("Todolist_MyFlow", myFlows.Count);
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }
@@ -184,8 +262,9 @@ namespace BP.WF.HttpHandler
             Hashtable ht = new Hashtable();
             ht.Add("SysName", SystemConfig.SysName);
             ht.Add("ServiceTel", SystemConfig.ServiceTel);
+            ht.Add("CustomerName", SystemConfig.CustomerName);
 
-            if (WebUser.NoOfRel == null)
+            if ( WebUser.NoOfRel == null )
             {
                 ht.Add("UserNo", "");
                 ht.Add("UserName", "");

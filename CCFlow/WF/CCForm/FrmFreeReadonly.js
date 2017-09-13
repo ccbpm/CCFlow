@@ -434,10 +434,7 @@ function initGroup(frmData, groupFiled) {
                 if (ath.MyPK != groupFiled.CtrlID)
                     continue;
                 var src = "";
-                if (pageData.IsReadonly)
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
-                else
-                    src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
+                src = "AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
 
                 groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
             }
@@ -614,10 +611,7 @@ function InitForm() {
         if (ath.length > 0) {
             ath = ath[0];
             var src = "";
-            if (pageData.IsReadonly)
-                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
-            else
-                src = "/WF/CCForm/AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+                src = "AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
             $('#iframeAthForm').attr('src', src);
             atParamObj["tbId"] = tbId;
             atParamObj["divId"] = divId;
@@ -2194,10 +2188,7 @@ function figure_Template_Attachment(frmAttachment) {
         return $('');
     }
     var src = "";
-    if (pageData.IsReadonly)
-        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
-    else
-        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+        src = "AttachmentUpload.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
 
     eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);

@@ -1885,7 +1885,13 @@ namespace CCFlow.WF.UC
                                 //row["Name"] = "*请选择";
                                 row["Name"] = "无数据";
                                 table.Rows.Add(row);
-
+                            }
+                            else
+                            {
+                                DataRow row = table.NewRow();
+                                row["No"] = "";
+                                row["Name"] = "请选择";
+                                table.Rows.Add(row);
                             }
 
                             ddlFull.Bind(table, "No", "Name");

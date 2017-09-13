@@ -321,7 +321,28 @@ namespace CCFlow.WF.UC
                     this.UCEn1.Add("</div>");
                 }
 
-                if (nd.HisFormType == NodeFormType.FixForm)
+                if (nd.HisFormType == NodeFormType.WebOffice && nd.MapData.HisFrmType == FrmType.FreeFrm)
+                {
+                    MapData map = new MapData(nd.NodeFrmID);
+                    /* 自由表单 */
+                    Width = map.MaxRight + map.MaxLeft * 2 + 10 + "";
+                    if (float.Parse(Width) < 500)
+                        Width = "900";
+
+                    float height = map.MaxEnd + 600;
+
+                    Height = height + "";
+
+                    BtnLab btnLab = new BtnLab(FK_Node);
+
+
+
+                    this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + Height + "px' >");
+                    this.UCEn1.BindCCForm(wk, nd.NodeFrmID, true, 0, false); //, false, false, null);
+                    this.UCEn1.Add("</div>");
+                }
+
+                if (nd.HisFormType == NodeFormType.FixForm || (nd.HisFormType == NodeFormType.WebOffice && nd.MapData.HisFrmType == FrmType.FoolForm))
                 {
                     MapFrmFool map = new MapFrmFool(nd.NodeFrmID);
 

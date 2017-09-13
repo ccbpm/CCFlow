@@ -299,8 +299,23 @@
             width: auto;
         }
     </style>
+     
+     <script type="text/javascript">
+
+         window.onbeforeunload = function close() {
+
+             alert('dd');
+             temp = 0;
+             var n = window.event.screenX - window.screenLeft;
+             var b = n > document.documentElement.scrollWidth - 20;
+             if (b && window.event.clientY < 0 || window.event.altKey) {
+                 window.event.returnValue = "退出登录？"; //这里可以放置你想做的操作代码 
+                 temp = 1;
+             }
+         }
+     </script>
 </head>
-<body>
+<body  >
     <div id="divCurrentForm" style="position: relative;">
         <!--底部功能按钮 发送、移交-->
         <div id="topToolBar" style="padding: 3px 3px; margin: 0px auto; text-align: left;"

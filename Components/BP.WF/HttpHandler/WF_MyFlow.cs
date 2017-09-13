@@ -1077,6 +1077,7 @@ namespace BP.WF.HttpHandler
                 //把他转化小写,适应多个数据库.
                 //   wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
                 // ds.Tables.Add(wf_generWorkFlowDt);
+               // ds.WriteXml("c:\\xx.xml");
 
                 return BP.Tools.Json.ToJson(ds);
             }

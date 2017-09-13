@@ -78,7 +78,7 @@
 
             var param = {
                 DoType: "FlowSearch_Init",
-                SearchType:  searchType,
+                SearchType: searchType,
                 FK_Flow: fk_flow,
                 pageSize: $("#dg").datagrid("options").pageSize
             };
@@ -94,13 +94,20 @@
                 md = d.Sys_MapData[0];
 
                 if (md.RptIsSearchKey == "1") {
-                    $("#tb_main").prepend('<span class="con-span">关键字: </span><input type="text" id="tb_key" style="width:166px;" />');
+                    $("#tb_main").prepend('<span class="con-span">关键字:</span><input type="text" id="tb_key" style="width:90px;" />');
                     $("#tb_key").textbox().textbox("setText", md.T_SearchKey);
                 }
 
                 if (md.RptDTSearchWay && md.RptDTSearchWay != 0) {
-                    $("#btn_search").before('<span class="con-span">' + md.T_DateLabel + '从: </span><input type="text" id="tb_dtFrom" style="width:166px;" />');
-                    $("#tb_dtFrom").after('<span class="con-span">到: </span><input type="text" id="tb_dtTo" style="width:166px;" />');
+
+                    var dtLen = '100px';
+                    if (md.RptDTSearchWay == 2) {
+                        var dtLen = '130px';
+                    }
+
+
+                    $("#btn_search").before('<span class="con-span">' + md.T_DateLabel + ',从: </span><input type="text" id="tb_dtFrom" style="width:' + dtLen + ';" />');
+                    $("#tb_dtFrom").after('&nbsp;到:<input type="text" id="tb_dtTo" style="width:' + dtLen + ';" />');
 
                     if (md.RptDTSearchWay == 1) {
                         $("#tb_dtFrom").datebox({ buttons: buttons }).datebox("setValue", md.T_DTFrom);
@@ -138,26 +145,29 @@
                     var ctrl;
                     var fcId;
                     $.each(d.FilterCtrls, function (idx, c) {
-                        ctrl = '<span class="con-span">' + c.Name + ': </span>';
+
+                        ctrl = '&nbsp;' + c.Name + ':';
+
+                        //ctrl = '<span class="con-span">' + c.Name + ':</span>';
 
                         switch (c.Type) {
                             case "date":
                                 fcId = "D_" + c.Id;
-                                ctrl += '<input type="text" id="' + fcId + '" style="width:166px;" />';
+                                ctrl += '<input type="text" id="' + fcId + '" style="width:150px;" />';
                                 $("#filters").append(ctrl);
                                 $("#" + fcId).datebox({ buttons: buttons }).datebox("setValue", c.DefaultValue);
                                 FilterCtrls.push({ type: c.Type, id: fcId });
                                 break;
                             case "datetime":
                                 fcId = "DT_" + c.Id;
-                                ctrl += '<input type="text" id="' + fcId + '" style="width:166px;" />';
+                                ctrl += '<input type="text" id="' + fcId + '" style="width:150px;" />';
                                 $("#filters").append(ctrl);
                                 $("#" + fcId).datetimebox().datetimebox("setValue", c.DefaultValue);
                                 FilterCtrls.push({ type: c.Type, id: fcId });
                                 break;
                             case "text":
                                 fcId = "TB_" + c.Id;
-                                ctrl += '<input type="text" id="' + fcId + '" style="width:166px;" />';
+                                ctrl += '<input type="text" id="' + fcId + '" style="width:150px;" />';
                                 $("#filters").append(ctrl);
                                 $("#" + fcId).textbox({
                                     icons: [{
@@ -171,7 +181,7 @@
                                 break;
                             case "combo":
                                 fcId = "DDL_" + c.Id;
-                                ctrl += '<select id="' + fcId + '" style="width:166px;">';
+                                ctrl += '<select id="' + fcId + '" style="width:150px;">';
 
                                 $.each(d[c.Id], function (idx1, item) {
                                     ctrl += '<option value="' + item[c.ValueField] + '">' + item[c.TextField] + '</option>';
@@ -220,7 +230,7 @@
                                 break;
                             case "combotree":
                                 fcId = "DDL_" + c.Id;
-                                ctrl += '<select id="' + fcId + '" style="width:166px;"></select>';
+                                ctrl += '<select id="' + fcId + '" style="width:150px;"></select>';
                                 $("#filters").append(ctrl);
                                 $("#" + fcId).combotree({
                                     checkbox: true,

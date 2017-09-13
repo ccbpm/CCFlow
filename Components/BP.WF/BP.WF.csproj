@@ -150,7 +150,6 @@
     <Compile Include="Data\MyStartFlow.cs" />
     <Compile Include="Data\MyDeptFlow.cs" />
     <Compile Include="Data\MyJoinFlow.cs" />
-    <Compile Include="Data\MyDeptTodolist.cs" />
     <Compile Include="Data\Monitor.cs" />
     <Compile Include="Data\MyDeptEmp.cs" />
     <Compile Include="Data\CH.cs" />
@@ -196,6 +195,7 @@
     <Compile Include="HttpHandler\WF_Comm.cs" />
     <Compile Include="HttpHandler\CCMobile_WorkOpt.cs" />
     <Compile Include="HttpHandler\CCMobile_WorkOpt_OneWork.cs" />
+    <Compile Include="HttpHandler\CCMobile_RptSearch.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />

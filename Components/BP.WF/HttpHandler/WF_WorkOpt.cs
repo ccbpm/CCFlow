@@ -248,7 +248,7 @@ namespace BP.WF.HttpHandler
 
             //赋值部门名称。
             DataTable mydt = ens.ToDataTableField();
-            mydt.Columns.Add("FK_DeptT");
+            mydt.Columns.Add("FK_DeptT", typeof(string));
             foreach (DataRow dr in mydt.Rows)
             {
                 string fk_emp = dr["FK_Emp"].ToString();

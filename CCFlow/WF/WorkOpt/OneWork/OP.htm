@@ -34,6 +34,10 @@
                     html += addRollBack(data.CanRollBack);
                     html += addUnHungUp(data.CanUnHungUp);
 
+                    html += addPackUp(data.CanUnHungUp);
+
+
+
                     $("#ccop").append(html);
                 }
             });
@@ -41,6 +45,7 @@
 
         //删除流程
         function addFlowOverByCoercion(isCan) {
+
             if (typeof isCan == "undefined") {
                 return "";
             }
@@ -135,6 +140,7 @@
             return html;
         }
 
+
         //撤销挂起
         function addUnHungUp(isCan) {
             if (typeof isCan == "undefined") {
@@ -155,6 +161,30 @@
 
             return html;
         }
+
+        ///增加打印.
+        function addPackUp(isCan) {
+            //  isCan
+            //            if (typeof isCan == "undefined") {
+            //                return "";
+            //            }
+
+            isCan = true;
+
+            var html = addBlockBegin("打印/打包下载");
+            if (isCan) {
+                html += "功能执行:<a href='../Packup.htm?WorkID=" + workid + "&FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "' >点击执行取消挂起流程</a>。";
+                html += "<br />说明：把表单输出到html,pdf,zip文件里，执行下载或打印.";
+            }
+            else {
+                html += "您没有此权限。";
+            }
+
+            html += addBlockEnd();
+
+            return html;
+        }
+        
 
         //删除流程.
         function DeleteFlowInstance(flowNo, workid) {

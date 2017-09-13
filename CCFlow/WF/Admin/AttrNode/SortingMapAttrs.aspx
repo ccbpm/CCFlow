@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SortingMapAttrs.aspx.cs" Inherits="CCFlow.WF.Admin.SortingMapAttrs" %>
+
 <%@ Register Src="../Pub.ascx" TagName="uc1" TagPrefix="Pub" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -55,9 +56,10 @@
 </head>
 <body class="easyui-layout">
     <form id="form1" runat="server">
-     
-        <Pub:uc1 ID="pub1" runat="server" />
-        <asp:HiddenField ID="hidCopyNodes" runat="server" />
+        <div data-options="region:'center',title:'字段排序',border:false" style="padding: 5px">
+            <Pub:uc1 ID="pub1" runat="server" />
+            <asp:HiddenField ID="hidCopyNodes" runat="server" />
+        </div>
     </form>
 </body>
 </html>

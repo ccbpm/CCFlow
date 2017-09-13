@@ -1033,6 +1033,31 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
+        /// 处理DataTable中的列名，将不规范的No,Name,ParentNo列纠正
+        /// </summary>
+        /// <param name="dt"></param>
+        public void DoCheckTableColumnNameCase(DataTable dt)
+        {
+            foreach(DataColumn col in dt.Columns)
+            {
+                switch(col.ColumnName.ToLower())
+                {
+                    case "no":
+                        col.ColumnName = "No";
+                        break;
+                    case "name":
+                        col.ColumnName = "Name";
+                        break;
+                    case "parentno":
+                        col.ColumnName = "ParentNo";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
         /// 初始化PopVal的值   除了分页表格模式之外的其他数据值
         /// </summary>
         /// <returns></returns>
@@ -1067,6 +1092,7 @@ namespace BP.WF.HttpHandler
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                 dt.TableName = "DTObjs";
+                DoCheckTableColumnNameCase(dt);
                 ds.Tables.Add(dt);
                 return BP.Tools.Json.ToJson(ds);
             }
@@ -1088,6 +1114,7 @@ namespace BP.WF.HttpHandler
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                     dt.TableName = "DTGroup";
+                    DoCheckTableColumnNameCase(dt);
                     ds.Tables.Add(dt);
                 }
 
@@ -1102,6 +1129,7 @@ namespace BP.WF.HttpHandler
 
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                     dt.TableName = "DTEntity";
+                    DoCheckTableColumnNameCase(dt);
                     ds.Tables.Add(dt);
                 }
                 return BP.Tools.Json.ToJson(ds);
@@ -1191,6 +1219,7 @@ namespace BP.WF.HttpHandler
 
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                 dt.TableName = "DTObjs";
+                DoCheckTableColumnNameCase(dt);
                 ds.Tables.Add(dt);
 
                 //处理查询条件.
@@ -1247,6 +1276,7 @@ namespace BP.WF.HttpHandler
                     //查询出来数据，就把他放入到dataset里面.
                     DataTable dtPara = BP.DA.DBAccess.RunSQLReturnTable(sql);
                     dtPara.TableName = para;
+                    DoCheckTableColumnNameCase(dt);
                     ds.Tables.Add(dtPara); //加入到参数集合.
                 }
 

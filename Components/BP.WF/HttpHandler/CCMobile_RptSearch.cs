@@ -93,10 +93,19 @@ namespace BP.WF.HttpHandler
             BP.En.QueryObject qo = new QueryObject(gwfs);
             qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
             qo.Top = 50;
-            DataTable dtGwls = qo.DoQueryToTable();
-            dtGwls.TableName = "Ens";
-            ds.Tables.Add(dtGwls);
 
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                qo.DoQuery();
+                ds.Tables.Add(gwfs.ToDataTableField("Ens"));
+            }
+            else
+            {
+                DataTable dt = qo.DoQueryToTable();
+                dt.TableName = "Ens";
+                ds.Tables.Add(dt);
+            }
             #endregion 
 
             return BP.Tools.Json.ToJson(ds);
@@ -113,11 +122,11 @@ namespace BP.WF.HttpHandler
 
             GenerWorkFlows gwfs = new GenerWorkFlows();
             QueryObject qo = new QueryObject(gwfs);
-            qo.AddWhere(GenerWorkFlowAttr.Emps," LIKE ","%" + BP.Web.WebUser.No + "%");
+            qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
             if (!string.IsNullOrEmpty(TSpan))
             {
                 qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.TSpan, this.GetRequestVal("TSpan")); 
+                qo.AddWhere(GenerWorkFlowAttr.TSpan, this.GetRequestVal("TSpan"));
             }
             if (!string.IsNullOrEmpty(FK_Flow))
             {
@@ -125,8 +134,18 @@ namespace BP.WF.HttpHandler
                 qo.AddWhere(GenerWorkFlowAttr.FK_Flow, this.GetRequestVal("FK_Flow"));
             }
             qo.Top = 50;
-            DataTable dt = qo.DoQueryToTable();
-            return BP.Tools.Json.ToJson(dt);
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                qo.DoQuery();
+                DataTable dt = gwfs.ToDataTableField("Ens");
+                return BP.Tools.Json.ToJson(dt);
+            }
+            else
+            {
+                DataTable dt = qo.DoQueryToTable();
+                return BP.Tools.Json.ToJson(dt);
+            }
         }
 
         /// <summary>

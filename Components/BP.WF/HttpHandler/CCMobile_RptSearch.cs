@@ -55,27 +55,49 @@ namespace BP.WF.HttpHandler
         {
             DataSet ds = new DataSet();
             string sql = "";
-            
+
+            string tSpan = this.GetRequestVal("TSpan");
+            if (tSpan == "")
+                tSpan = null;
+
             #region 1、获取时间段枚举/总数.
             SysEnums ses = new SysEnums("TSpan");
-            DataTable dtTSpan=ses.ToDataTableField();
+            DataTable dtTSpan = ses.ToDataTableField();
             dtTSpan.TableName = "TSpan";
             ds.Tables.Add(dtTSpan);
 
-            sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
-            DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            if (this.FK_Flow == null)
             {
-                dtTSpanNum.Columns[0].ColumnName = "No";
-                dtTSpanNum.Columns[1].ColumnName = "Name";
-                dtTSpanNum.Columns[2].ColumnName = "Num";
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
             }
-            dtTSpanNum.TableName = "TSpanNum";
-            ds.Tables.Add(dtTSpanNum);
-            #endregion 
+            else
+            {
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+            }
+
+            DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            foreach (DataRow drEnum in dtTSpan.Rows)
+            {
+                string no = drEnum["IntKey"].ToString();
+                foreach (DataRow dr in dtTSpanNum.Rows)
+                {
+                    if (dr["No"].ToString() == no)
+                    {
+                        drEnum["Lab"] = drEnum["Lab"].ToString() + "(" + dr["Num"] + ")";
+                        break;
+                    }
+                }
+            }
+            #endregion
 
             #region 2、处理流程类别列表.
-            sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+
+            if (tSpan == null)
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+            else
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+
+
             DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -85,15 +107,27 @@ namespace BP.WF.HttpHandler
             }
             dtFlows.TableName = "Flows";
             ds.Tables.Add(dtFlows);
-            #endregion 
+            #endregion
 
             #region 3、处理流程实例列表.
 
             GenerWorkFlows gwfs = new GenerWorkFlows();
             BP.En.QueryObject qo = new QueryObject(gwfs);
             qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
-            qo.Top = 50;
 
+            if (tSpan != null)
+            {
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.TSpan, tSpan);
+            }
+
+            if (this.FK_Flow != null)
+            {
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.FK_Flow, this.FK_Flow);
+            }
+
+            qo.Top = 50;
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -106,11 +140,10 @@ namespace BP.WF.HttpHandler
                 dt.TableName = "Ens";
                 ds.Tables.Add(dt);
             }
-            #endregion 
+            #endregion
 
             return BP.Tools.Json.ToJson(ds);
         }
-
         /// <summary>
         /// 查询
         /// </summary>

@@ -58,7 +58,7 @@ namespace BP.WF.HttpHandler
             string tSpan = this.GetRequestVal("TSpan");
 
             #region 处理时间段数据源.
-            if ( string.IsNullOrEmpty(this.FK_Flow) )
+            if (string.IsNullOrEmpty(this.FK_Flow))
                 sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
             else
                 sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
@@ -73,7 +73,7 @@ namespace BP.WF.HttpHandler
 
             SysEnums ses = new SysEnums("TSpan");
 
-            DataTable dtTSpan=ses.ToDataTableField();
+            DataTable dtTSpan = ses.ToDataTableField();
             foreach (DataRow drSpan in dtTSpan.Rows)
             {
                 foreach (DataRow dr in dt.Rows)
@@ -107,29 +107,26 @@ namespace BP.WF.HttpHandler
             #endregion 处理时间段数据源.
 
             #region 处理流程列表.
-            if (string.IsNullOrEmpty(this.FK_Flow) == true)
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+            BP.En.QueryObject qo = new QueryObject(gwfs);
+            qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
+
+            if (this.FK_Flow != null)
             {
-                if (tSpan == null)
-                    sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ORDER BY FK_Flow, FlowName";
-                else
-                    sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ORDER BY FK_Flow, FlowName";
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.FK_Flow, this.FK_Flow);
             }
-            else
+
+            if (tSpan != null)
             {
-                if (tSpan == null)
-                    sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ORDER BY FK_Flow, FlowName";
-                else
-                    sql = "SELECT  * FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' ORDER BY FK_Flow, FlowName";
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.TSpan, tSpan);
             }
-            DataTable dtEns = BP.DA.DBAccess.RunSQLReturnTable(sql);
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dtEns.Columns[0].ColumnName = "No";
-                dtEns.Columns[1].ColumnName = "Name";
-                dtEns.Columns[2].ColumnName = "Num";
-            }
-            dtEns.TableName = "Ens";
-            ds.Tables.Add(dtEns);
+
+            qo.Top = 50;
+            DataTable dtGwls = qo.DoQueryToTable();
+            dtGwls.TableName = "Ens";
+            ds.Tables.Add(dtGwls);
             #endregion 处理时间段数据源.
 
             return BP.Tools.Json.ToJson(ds);

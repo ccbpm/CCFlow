@@ -740,7 +740,7 @@ namespace BP.WF.Data
 		#region 执行功能.
         public string DoTrack()
         {
-            PubClass.WinOpen("../../WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
+            PubClass.WinOpen("../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
             return null;
         }
         /// <summary>

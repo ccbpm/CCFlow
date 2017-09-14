@@ -354,7 +354,7 @@ namespace BP.WF.Data
 
         public string DoOpen()
         {
-            return "../../WFRpt.aspx?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
+            return "../../WFRpt.htm?FK_Flow" + this.FK_Flow + "&WorkID=" + this.WorkID + "&OID=" + this.WorkID;
         }
     }
 	/// <summary>

@@ -86,9 +86,9 @@ namespace BP.WF.HttpHandler
                 string trackTable = "ND" + int.Parse(this.FK_Flow) + "Track";
                 string sql = "";
                 if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "SELECT TOP 1 Tag,EmpTo FROM " + trackTable + " WHERE NDTo=" + toNodeID + " AND ActionType=1 AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID desc  ";
+                    sql = "SELECT TOP 1 Tag,EmpTo FROM " + trackTable + " WHERE NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID desc  ";
                 else
-                    sql = "SELECT Tag,EmpTo FROM  " + trackTable + " WHERE NDTo=" + toNodeID + " AND ActionType=1 AND EmpFrom='" + WebUser.No + "' AND ROWNUM=0 ORDER BY  WorkID desc ";
+                    sql = "SELECT Tag,EmpTo FROM  " + trackTable + " WHERE NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' AND ROWNUM=1 ORDER BY  WorkID desc ";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count != 0)
@@ -103,8 +103,6 @@ namespace BP.WF.HttpHandler
                 sas.Retrieve(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, this.WorkID);
             }
 
-            
-          
             return sas.ToJson();
         }
         /// <summary>

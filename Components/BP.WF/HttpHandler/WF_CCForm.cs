@@ -273,6 +273,8 @@ namespace BP.WF.HttpHandler
             {
                 /*如果数据库不区分大小写, 就要按用户输入的sql进行二次处理。*/
                 string mysql = dealSQL.Trim();
+                if (mysql == "")
+                    return "";
 
                 mysql = mysql.Substring(6, mysql.ToLower().IndexOf("from") - 6);
                 mysql = mysql.Replace(",", "|");

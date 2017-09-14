@@ -1308,7 +1308,7 @@ namespace BP.WF
                     msg = "@下列(" + dt.Rows.Count + ")位人员发起的流程已经完成。";
                     foreach (DataRow dr in dt.Rows)
                     {
-                        msg += "<br>发起人：" + dr["Rec"] + " 发起日期：" + dr["RDT"] + " 标题：" + dr["Title"] + "<a href='./../../WF/WFRpt.aspx?WorkID=" + dr["OID"] + "&FK_Flow=" + this.HisFlow.No + "' target=_blank>详细...</a>";
+                        msg += "<br>发起人：" + dr["Rec"] + " 发起日期：" + dr["RDT"] + " 标题：" + dr["Title"] + "<a href='./../../WF/WFRpt.htm?WorkID=" + dr["OID"] + "&FK_Flow=" + this.HisFlow.No + "' target=_blank>详细...</a>";
                     }
                     break;
             }
@@ -1353,7 +1353,7 @@ namespace BP.WF
             pss.Add("Sender", BP.Web.WebUser.No);
             pss.Add("Receivers", emps);
             pss.Add("Title", "工作流抄送：工作名称:" + this.HisFlow.Name + "，最后处理人：" + BP.Web.WebUser.Name);
-            pss.Add("Context", "工作轨迹 http://" + ip + "/WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=0");
+            pss.Add("Context", "工作轨迹 http://" + ip + "/WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=0");
 
             try
             {

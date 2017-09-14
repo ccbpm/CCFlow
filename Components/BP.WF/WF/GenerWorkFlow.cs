@@ -1141,7 +1141,7 @@ namespace BP.WF
 		#region 执行诊断
         public string DoRpt()
         {
-            PubClass.WinOpen("WFRpt.aspx?WorkID=" + this.WorkID + "&FID="+this.FID+"&FK_Flow="+this.FK_Flow);
+            PubClass.WinOpen("WFRpt.htm?WorkID=" + this.WorkID + "&FID="+this.FID+"&FK_Flow="+this.FK_Flow);
             return null;
         }
 		/// <summary>

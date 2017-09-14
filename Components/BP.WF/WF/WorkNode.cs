@@ -2016,7 +2016,6 @@ namespace BP.WF
 
                     // string path = BP.Sys.Glo.Request.ApplicationPath;
                     string mymsg = "@符合工作流程完成条件" + stopMsg + "" + overMsg;
-                    //   string mymsgHtml = mymsg + "@查看<img src='" + VirPath + "WF/Img/Btn/PrintWorkRpt.gif' ><a href='" + VirPath + "WF/WFRpt.aspx?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>";
                     this.addMsg(SendReturnMsgFlag.FlowOver, mymsg, mymsg, SendReturnMsgType.Info);
                 }
             }
@@ -2302,9 +2301,9 @@ namespace BP.WF
             if (this.HisWorkerLists.Count >= 2 && this.HisNode.IsTask)
             {
                 if (WebUser.IsWap)
-                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='" + VirPath + "WF/Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
                 else
-                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"javascript:WinOpen('./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='" + VirPath + "WF/Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.AllotTask, null, "<a href=\"javascript:WinOpen('./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&NodeID=" + toND.NodeID + "&FK_Flow=" + toND.FK_Flow + "')\"><img src='./Img/AllotTask.gif' border=0/>指定特定的处理人处理</a>。", SendReturnMsgType.Info);
             }
 
             //if (WebUser.IsWap == false)
@@ -2315,7 +2314,7 @@ namespace BP.WF
                 if (this.HisNode.IsStartNode)
                 {
                     if (WebUser.IsWap)
-                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>, <a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
+                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>, <a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
                     else
                         this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a> - <a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
                 }
@@ -3244,22 +3243,19 @@ namespace BP.WF
             if (this.HisNode.IsStartNode)
             {
                 if (current_gwls.Count >= 2 && this.HisNode.IsTask)
-                    this.addMsg("AllotTask", "@<img src='" + VirPath + "WF/Img/AllotTask.gif' border=0 /><a href=\"" + VirPath + "WF/WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FID=" + this.WorkID + "&NodeID=" + toNode.NodeID + "\" >修改接受对象</a>.");
+                    this.addMsg("AllotTask", "@<img src='./Img/AllotTask.gif' border=0 /><a href='./WorkOpt/AllotTask.htm?WorkID=" + this.WorkID + "&FID=" + this.WorkID + "&NodeID=" + toNode.NodeID + "' >修改接受对象</a>.");
             }
 
             if (this.HisNode.IsStartNode)
             {
-                if (WebUser.IsWap)
-                    this.addMsg("UnDoNew", "@<a href='" + VirPath + "WF/Wap/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + VirPath + "WF/Wap/MyFlow.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
-                else
-                    this.addMsg("UnDoNew", "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='" + this.VirPath + this.AppType + "/MyFlow.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='" + VirPath + "WF/Img/New.gif' border=0/>新建流程</a>。");
+                    this.addMsg("UnDoNew", "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='MyFlow.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='./Img/New.gif' border=0/>新建流程</a>。");
             }
             else
             {
-                this.addMsg("UnDo", "@<a href='" + this.VirPath + this.AppType + "/MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='" + VirPath + "WF/Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
+                this.addMsg("UnDo", "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
             }
 
-            this.addMsg("Rpt", "@<a href='" + VirPath + "WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + wk.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "'target='_self' >工作轨迹</a>");
+            this.addMsg("Rpt", "@<a href='WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + wk.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "'target='_self' >工作轨迹</a>");
             #endregion 处理消息提示
         }
         /// <summary>
@@ -5851,7 +5847,7 @@ namespace BP.WF
                 else
                     this.addMsg(SendReturnMsgFlag.IsStopFlow, "0", "流程未结束", SendReturnMsgType.SystemMsg);
 
-                string mymsgHtml = "@查看<img src='" + VirPath + "WF/Img/Btn/PrintWorkRpt.gif' ><a href='" + VirPath + "WF/WFRpt.aspx?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>";
+                string mymsgHtml = "@查看<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>";
                 this.addMsg(SendReturnMsgFlag.MsgOfText, mymsgHtml);
 
                 if (this.IsStopFlow == true)
@@ -5971,11 +5967,11 @@ namespace BP.WF
                                 if (func.HisBillFileType == BillFileType.PDF)
                                 {
                                     billUrl = billUrl.Replace(".doc", ".pdf");
-                                    billInfo += "<img src='" + VirPath + "WF/Img/FileType/PDF.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
+                                    billInfo += "<img src='./Img/FileType/PDF.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
                                 }
                                 else
                                 {
-                                    billInfo += "<img src='" + VirPath + "WF/Img/FileType/doc.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
+                                    billInfo += "<img src='./Img/FileType/doc.gif' /><a href='" + billUrl + "' target=_blank >" + func.Name + "</a>";
                                 }
 
                                 path = BP.WF.Glo.FlowFileBill + year + "\\" + this.ExecerDeptNo + "\\" + func.No + "\\";
@@ -6151,7 +6147,7 @@ namespace BP.WF
                         && this.HisRememberMe != null
                         && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
                     {
-                        string url = "/WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
+                        string url = "MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
                           htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
                           textInfo = "@下一步工作您仍然可以处理。";
                         this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, htmlInfo);
@@ -6252,7 +6248,7 @@ namespace BP.WF
                         Glo.AddToTrack(ActionType.StartChildenFlow, rptGe.PFlowNo, rptGe.PWorkID, fid, pND.NodeID, pND.Name,
                             WebUser.No, WebUser.Name,
                             pND.NodeID, pND.Name, WebUser.No, WebUser.Name,
-                            "<a href='/WF/WFRpt.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >打开子流程</a>", paras);
+                            "<a href='WFRpt.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >打开子流程</a>", paras);
                     }
                     else if (SystemConfig.IsBSsystem == true)
                     {
@@ -6278,7 +6274,7 @@ namespace BP.WF
                             string paras = "@CFlowNo=" + this.HisFlow.No + "@CWorkID=" + this.WorkID;
                             Glo.AddToTrack(ActionType.StartChildenFlow, pflowNo, Int64.Parse(pWorkID), Int64.Parse(fid.ToString()), pND.NodeID, pND.Name, WebUser.No, WebUser.Name,
                                 pND.NodeID, pND.Name, WebUser.No, WebUser.Name,
-                                "<a href='/WF/WFRpt.aspx?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >打开子流程</a>", paras);
+                                "<a href='WFRpt.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "' target=_blank >打开子流程</a>", paras);
                         }
                     }
                 }
@@ -6346,7 +6342,7 @@ namespace BP.WF
                     && this.HisRememberMe!=null 
                     && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
                 {
-                    string url = "/WF/MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
+                    string url = "MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
                     string htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
                     string textInfo = "@下一步工作您仍然可以处理。";
 
@@ -7154,7 +7150,7 @@ namespace BP.WF
                     this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, "符合流程完成条件", this.HisNode, this.rptGe);
                     this.IsStopFlow = true;
                     this.addMsg(SendReturnMsgFlag.OneNodeSheetver, "工作已经成功处理(一个流程的工作)。",
-                        "工作已经成功处理(一个流程的工作)。 @查看<img src='" + VirPath + "WF/Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.aspx?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>", SendReturnMsgType.Info);
+                        "工作已经成功处理(一个流程的工作)。 @查看<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>", SendReturnMsgType.Info);
                     return;
                 }
 
@@ -7167,7 +7163,7 @@ namespace BP.WF
 
                     // string path = BP.Sys.Glo.Request.ApplicationPath;
                     this.addMsg(SendReturnMsgFlag.MacthFlowOver, "@符合工作流程完成条件" + stopMsg + "" + overMsg,
-                        "@符合工作流程完成条件" + stopMsg + "" + overMsg + " @查看<img src='" + VirPath + "WF/Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.aspx?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>", SendReturnMsgType.Info);
+                        "@符合工作流程完成条件" + stopMsg + "" + overMsg + " @查看<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>", SendReturnMsgType.Info);
                     return;
                 }
             }

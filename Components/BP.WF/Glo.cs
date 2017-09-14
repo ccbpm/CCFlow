@@ -2227,7 +2227,7 @@ namespace BP.WF
             if (objs.VarAcceptersID == null)
             {
                 isAdd = false;
-                backHtml += " <br> **** 流程结束,查看<a href='/WF/WFRpt.aspx?WorkID=" + workid + "&FK_Flow=" + flowNo + "' target=_blank >流程轨迹</a> ====";
+                backHtml += " <br> **** 流程结束,查看<a href='/WF/WFRpt.htm?WorkID=" + workid + "&FK_Flow=" + flowNo + "' target=_blank >流程轨迹</a> ====";
                 //htmlArr.Add(html);
                 //backHtml += "nextEmpNo";
                 return;

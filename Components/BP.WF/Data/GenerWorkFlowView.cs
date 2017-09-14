@@ -853,7 +853,7 @@ namespace BP.WF.Data
 
         public string DoTrack()
         {
-            PubClass.WinOpen("../../WF/WFRpt.aspx?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
+            PubClass.WinOpen("../../WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
             return null;
         }
         /// <summary>

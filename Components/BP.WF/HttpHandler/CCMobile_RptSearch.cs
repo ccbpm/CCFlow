@@ -56,11 +56,22 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             string sql = "";
             
-            #region 1、获取时间段枚举.
+            #region 1、获取时间段枚举/总数.
             SysEnums ses = new SysEnums("TSpan");
             DataTable dtTSpan=ses.ToDataTableField();
             dtTSpan.TableName = "TSpan";
             ds.Tables.Add(dtTSpan);
+
+            sql = "SELECT  TSpan as No, '' as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+            DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtTSpanNum.Columns[0].ColumnName = "No";
+                dtTSpanNum.Columns[1].ColumnName = "Name";
+                dtTSpanNum.Columns[2].ColumnName = "Num";
+            }
+            dtTSpanNum.TableName = "TSpanNum";
+            ds.Tables.Add(dtTSpanNum);
             #endregion 
 
             #region 2、处理流程类别列表.
@@ -116,6 +127,15 @@ namespace BP.WF.HttpHandler
             qo.Top = 50;
             DataTable dt = qo.DoQueryToTable();
             return BP.Tools.Json.ToJson(dt);
+        }
+
+        /// <summary>
+        /// 获取退回
+        /// </summary>
+        /// <returns></returns>
+        public string DB_GenerReturnWorks() {
+            CCMobile cc = new CCMobile(this.context);
+            return cc.DB_GenerReturnWorks();
         }
     }
 }

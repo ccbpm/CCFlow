@@ -112,11 +112,8 @@
 
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
-
                         var work = data[i];
-
                         var newRow = "";
-
                         if (is1 == true) {
                             newRow = "<tr bgcolor=AliceBlue >";
                             is1 = false;
@@ -131,11 +128,10 @@
                         newRow += "<td class=Idx>" + idx + "</td>";
                         newRow += "<td><a href=\"javascript:WinOpenIt('WFRpt.htm?FK_Flow=" + work.FK_Flow + "&FID=0&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node + "&IsRead=0&T=" + timeKey + "');\" ><img src='./Img/Runing.png' width='16px' />" + work.Title + "</a></td>";
                         newRow += "<td>" + work.FlowName + "</td>";
-                        newRow += "<td>" + work.NodeName + "</td>";
                         newRow += "<td>" + work.StarterName + "</td>";
                         newRow += "<td>" + work.DeptName + "</td>";
-
-                        newRow += "<td>" + work.FlowNote + "</td>";
+                        newRow += "<td>" + work.NodeName + "</td>";
+                        newRow += "<td>" + work.TodoEmps + "</td>";
                         newRow += "<td>";
                         newRow += "<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/UnSend.png' border=0 />撤销</a>";
                         newRow += "<a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
@@ -147,10 +143,9 @@
             });
         }
      </script>
-
      <style type="text/css">
 　 　body{ font-size:1222px;}
-　　.breakLine{word-break: break-all;}
+　　.breakLine{ word-break: break-all;}
 　　</style>
 
 </head>
@@ -161,10 +156,10 @@
 <th style="width:38px;" >序</th>
 <th style="width:40%;" >标题</th>
 <th>流程</th>
-<th>停留节点</th>
 <th>发起人</th>
 <th>发起部门</th>
-<th>流程备注</th>
+<th>停留节点</th>
+<th>当前处理人</th>
 <th>操作</th>
 </tr>
 </table>

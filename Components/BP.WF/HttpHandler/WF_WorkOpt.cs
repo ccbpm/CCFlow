@@ -190,6 +190,7 @@ namespace BP.WF.HttpHandler
         {
             string sql = "";
             string emp = this.GetRequestVal("TB_Emps");
+            emp = FilteSQLStr(emp);
             bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
             if (isPinYin == true)
             {
@@ -317,10 +318,10 @@ namespace BP.WF.HttpHandler
                 if (isPinYin == true)
                 {
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                      sql = "SELECT TOP 12 a.No,a.Name+'/'+b.name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '" + empStr + "%' OR a.NAME LIKE '" + empStr + "%'  OR a.PinYin LIKE '%," + empStr + "%,')";
+                      sql = "SELECT TOP 12 a.No,a.Name+'/'+b.name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No = '" + empStr + "' OR a.NAME = '" + empStr + "'  OR a.PinYin LIKE '%," + empStr + "%,')";
 
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT   No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%' ROWNUM >=12 ";
+                        sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%' ROWNUM <=12 ";
 
                 }
                 else
@@ -329,7 +330,7 @@ namespace BP.WF.HttpHandler
                     sql = "SELECT TOP 12 No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'";
 
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT TOP 12 No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "' AND ROWNUM  <= 12 ";
+                        sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "' AND ROWNUM  <= 12 ";
 
 
                 }
@@ -413,6 +414,7 @@ namespace BP.WF.HttpHandler
         public string HuiQian_SelectEmps() { 
             string sql = "";
             string emp = this.GetRequestVal("TB_Emps");
+            emp = FilteSQLStr(emp);
             bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
             if (isPinYin == true)
             {
@@ -1728,5 +1730,25 @@ namespace BP.WF.HttpHandler
             //调用API.
             return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
         }
+
+        /// 过滤不安全的字符串
+        /// </summary> 
+        /// <param name="Str"></param> 
+        /// <returns></returns> 
+        public static string FilteSQLStr( string Str)
+        {
+
+            Str = Str.Replace("'", "" );
+            Str = Str.Replace("/", "" );
+            Str = Str.Replace("&", "&amp" );
+            Str = Str.Replace("<", "&lt" );
+            Str = Str.Replace(">", "&gt" );
+
+            Str = Str.Replace("delete" , "" );
+            Str = Str.Replace("update" , "" );
+            Str = Str.Replace("insert" , "" );
+
+            return Str; 
+        }
     }
 }

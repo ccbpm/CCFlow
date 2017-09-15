@@ -2130,15 +2130,17 @@ function showTbNoticeInfo() {
         });
     })
 }
+
 //必填项检查   名称最后是*号的必填  如果是选择框，值为'' 或者 显示值为 【*请选择】都算为未填 返回FALSE 检查必填项失败
 function checkBlanks() {
     var checkBlankResult = true;
     //获取所有的列名 找到带* 的LABEL mustInput
     //var lbs = $('[class*=col-md-1] label:contains(*)');
-    var lbs = $('.mustInput');
+    var lbs = $('.mustInput'); //获得所有的class=mustInput的元素.
     $.each(lbs, function (i, obj) {
         if ($(obj).parent().css('display') != 'none' && $(obj).parent().next().css('display')) {
-            var keyofen = $(obj).data().keyofen
+            var keyofen = $(obj).data().keyofen;
+
             var ele = $('[id$=_' + keyofen + ']');
             if (ele.length == 1) {
                 switch (ele[0].tagName.toUpperCase()) {

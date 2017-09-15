@@ -28,10 +28,13 @@
         }
     </style>
     <script type="text/javascript">
-        $(function () {
-            InitTreeData();
 
+   
+        $(function () {
+
+            InitTreeData();
             bindTest();
+
         });
 
         //确定 人员选择
@@ -52,19 +55,19 @@
             }
         }
 
-        var pageData = { IsSelectMore: GetQueryString('IsSelectMore') != undefined && GetQueryString('IsSelectMore')=="1"?true:false, FK_Dept: GetQueryString('FK_Dept') || '', ParentDept: '' };
+        var pageData = { IsSelectMore: GetQueryString('IsSelectMore') != undefined && GetQueryString('IsSelectMore')=="1" ? true:false, FK_Dept: GetQueryString('FK_Dept') || '', ParentDept: '' };
         var returnVal = {};
 
         //初始化树  接收人
         function InitTreeData() {
             //$('#tree').css('display', 'block');
-            $('#orgjstree').css('display', 'block');
+            $('#OrgJSTree').css('display', 'block');
 
             var url = '';
 
             //初始化Tree
             var plugins = [];
-            if (pageData.IsSelectMore == true) {//多选
+            if (pageData.IsSelectMore == true) { //多选
                 plugins = [
                     "checkbox",
                     "state",
@@ -84,7 +87,7 @@
                 }
                 pageData.FK_Dept = parentNo;
                 //本节点
-                var instance = $('#orgjstree').jstree(true);
+                var instance = $('#OrgJSTree').jstree(true);
                 var depts = $.grep(data.Depts, function (value) {
                     return value.ParentNo == parentNo;
                 })
@@ -148,10 +151,14 @@
                 return itemArr;
             };
 
-            $('#orgjstree').jstree({
+            $('#OrgJSTree').jstree({
                 'core': {
                     'data': function (node, cb) {
-                        url = Handler + "?DoType=SelectEmps&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');
+
+                        url = Handler + "?DoType=SelectEmps_Init&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');
+
+                        alert(url);
+
                         //初始化根节点
                         if (node.id == "#") {
                             $.ajax({
@@ -173,7 +180,8 @@
                             }
                             else {
                                 pageData.FK_Dept = node.id;
-                                url = Handler + "?DoType=SelectEmps&FK_Dept=" + node.id + "&m=" + Math.random();
+                                url = Handler + "?DoType=SelectEmps_Init&FK_Dept=" + node.id + "&m=" + Math.random();
+                                alert('dd =:'+url);
                                 $.ajax({
                                     type: 'post',
                                     async: true,
@@ -199,15 +207,15 @@
         //弹出树
         function bindTest() {
             $('#test').bind('click', function () {
-                if ($('#orgjstree').css('display') == "none") {
-                    $('#orgjstree').css('display', 'block');
-                    var instance = $('#orgjstree').jstree(true);
+                if ($('#OrgJSTree').css('display') == "none") {
+                    $('#OrgJSTree').css('display', 'block');
+                    var instance = $('#OrgJSTree').jstree(true);
                     if ($('#orgTxt').val() != undefined && $('#orgTxt').val() != '') {
                         instance.select_node($('#orgTxt').val());
                     }
                 }
                 else {
-                    $('#orgjstree').css('display', 'none');
+                    $('#OrgJSTree').css('display', 'none');
                 }
             });
 
@@ -217,13 +225,13 @@
                 }
                 else {
                     pageData.FK_Dept = pageData.ParentDept;
-                    $('#orgjstree').jstree(true).refresh();
+                    $('#OrgJSTree').jstree(true).refresh();
                 }
             });
         }
         //获取树选中的值
         function GetSelectedEmpsReturnVal() {
-            var instance = $('#orgjstree').jstree(true);
+            var instance = $('#OrgJSTree').jstree(true);
             var selectedIdArr = instance.get_selected();
             var selectedNodes = [];
             var nameArrs = [];
@@ -255,15 +263,12 @@
     </script>
 </head>
 <body>
- <input type="button" onclick="Close()" value="取消"/>
-    <input type="button" onclick="SelectEmps()" value="确定" />
-    <input type="button" value="上一级" id="toPrevDept" />
+  <input type="button" onclick="Close()" value="取消"/>|<input type="button" onclick="SelectEmps()" value="确定" />|<input type="button" value="上一级" id="toPrevDept" />
 
-    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default">
+    <div id="OrgJSTree" class="tree-demo jstree jstree-1 jstree-default">
     </div>
-    <input type="button" onclick="Close()" value="取消"/>
 
-    <input type="button" onclick="SelectEmps()" value="确定" />
+    <input type="button" onclick="Close()" value="取消"/>|<input type="button" onclick="SelectEmps()" value="确定" />
  
 </body>
 </html>

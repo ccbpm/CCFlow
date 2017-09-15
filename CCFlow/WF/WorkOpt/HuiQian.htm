@@ -37,8 +37,30 @@
           position: relative;
           width:400px;
           border-top: 0;
-          margin-top:-7px;
           display: none;
+          margin-top:-7px;
+          /*border: solid 2px #3175af;*/
+        }
+        
+        .item {
+            padding: 3px 5px;
+            cursor: pointer;
+            float:left;
+            width:400px;
+            line-height:20px;
+            display: inline-block;
+            background-color:#F7F7F7;
+        }
+        
+        #next
+        {
+            float:left;
+            position: relative;
+            width:400px;
+         }
+         
+         .addbg {
+            background: #CFCFCF;
         }
     </style>
     <script type="text/javascript">
@@ -109,7 +131,6 @@
                 row += "<td>" + gwl.FK_Emp + "</td>";
                 row += "<td>" + gwl.FK_EmpText + "</td>";
                 row += "<td style='width:50%;'  title='" + sa.FK_DeptT + "' >" + gwl.FK_DeptT + "</td>";
-
 
                 if (gwl.IsPass == 0) {
                     row += "<td>未审批</td>";
@@ -252,10 +273,12 @@
 
         $(function () {
             //人员选择
-            $("#TB_Emps").keydown(function (e) {
-                if (e.keyCode == 13) {
+            $("#TB_Emps").bind('input propertychange',function(){
+                //if (e.keyCode == 13) {
                     if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
-                        alert("输入内容为空！");
+                        //alert("输入内容为空！");
+                        //return;
+                        $("#SelectEmp").hide().html("");
                         return;
                     } else {
                         //回去输入内容，查询数据库
@@ -274,21 +297,35 @@
                                 //SelectEmp
                                 //jQuery("#select_id").append("<option value='Value'>Text</option>");  
                                 data = JSON.parse(data);
-                                $("#SelectEmp").empty();
+                                //$("#SelectEmp").hide().html("");
+                                var html = "";
                                 for (var i = 0; i < data.length; i++) {
-                                    $("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
+                                    //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
+                                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
                                 }
-                                $("#SelectEmp").show();
+                                $("#SelectEmp").show().html(html);
                             }
                         });
                     }
-                }
+                //}
             });
         });
 
         function selectAdd(No) {
             $("#TB_Emps").val(No);
-        }  
+        }
+
+        //鼠标事件
+        function getFocus(obj) {
+            $(".item").removeClass("addbg");
+            $(obj).addClass("addbg");
+        }
+
+        //选择下拉数据
+        function getCon(no) {
+            $("#TB_Emps").val(no);
+            $("#SelectEmp").hide().html("");
+        }
     </script>
 
 </head>
@@ -307,19 +344,20 @@
     </table>
     <br />
       <div>
+       <div id="labInfo">
         输入要会签人的编号(多个加签人使用逗号分开比如:zhangsan,lisi,wangwu)：
         <br />
         您也可以输入人员名称,多个名称用逗号分开,(比如:张三,李四,王五).
         <br />
-        输入完成后，点击回车，在输入框下方出现的下拉框中选择您需要的人员.
-        <br />
         <input type="text" id="TB_Emps" name="TB_Emps" value='' style=" width:400px; " /> 
-         <input type="button" id="BtnSelectEmps" value='选择人员'/>
-         <select id="SelectEmp"></select>
-         <br />
-         <input type="button" value="增加会签人" onclick="ReturnWork();"/>
-         <input type="button" value="关闭" onclick="Close();"/>
-
+        <input type="button" id="BtnSelectEmps" value='选择人员'/>
+        <div id="SelectEmp"></div>
+        <br />
+        <div id="next">
+            <input type="button" value="增加会签人" onclick="ReturnWork();"/>
+            <input type="button" value="关闭" onclick="Close();"/>
+        </div>
+       </div>
     </div>
 
     <div class="Msg" style="text-align: center;"> <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>

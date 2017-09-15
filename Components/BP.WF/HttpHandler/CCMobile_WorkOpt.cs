@@ -135,10 +135,19 @@ namespace BP.WF.HttpHandler
         #endregion 接收人选择器(通用).
 
         #region 选择人员(通用).
+        /// <summary>
+        /// 将要去掉.
+        /// </summary>
+        /// <returns></returns>
         public string SelectEmps()
         {
             WF_WorkOpt en = new WF_WorkOpt(this.context);
-            return en.SelectEmps();
+            return en.SelectEmps_Init();
+        }
+        public string SelectEmps_Init()
+        {
+            WF_WorkOpt en = new WF_WorkOpt(this.context);
+            return en.SelectEmps_Init();
         }
         #endregion 选择人员(通用).
 

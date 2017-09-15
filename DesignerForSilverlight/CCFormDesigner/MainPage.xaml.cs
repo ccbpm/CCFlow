@@ -685,9 +685,10 @@ namespace CCForm
                     myddl.SetValue(Canvas.LeftProperty, Glo.X);
                     myddl.SetValue(Canvas.TopProperty, Glo.Y);
 
-                    if (mylbi.Tag.ToString().EndsWith(":1") || mylbi.Tag.ToString().EndsWith(":2"))
-                        myddl.BindNormal(enKey);
-                    else
+                    //edited by liuxc,2017-09-16,下拉框就应该绑定的是外键，不知之前为什么会将字典表中SrcType=1|2的设置成LGType=0文本，现屏掉这段逻辑，全部为外键，为解决下拉框字段，不能设置级联问题
+                    //if (mylbi.Tag.ToString().EndsWith(":1") || mylbi.Tag.ToString().EndsWith(":2"))
+                    //    myddl.BindNormal(enKey);
+                    //else
                         myddl.BindEns(enKey);
 
                     this.attachElementEvent(myddl);

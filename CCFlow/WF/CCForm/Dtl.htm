@@ -1006,6 +1006,25 @@
         return paramUrlStr;
     }
 
+    function ShowPopValOnParentForm(ctrl, fk_mapExt, refEnPK, width, height, title) {
+        isChange = false;
+        //主表字段数据
+        var formData = parent.window.getFormData(false, false);
+        //明细表当前行数据
+        parent.window.ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, title, formData, workNodeData.Sys_MapDtl[0].No);
+    }
+
+    function SetTextboxValue(id, value) {
+        var oldValue = $('#' + id).val();
+        if (oldValue == value) {
+            return;
+        }
+
+        $('#' + id).val(value);
+        isChange = true;
+        $('#' + id).focus();
+    }
+
     //处理MapExt
     function AfterBindEn_DealMapExt(tr) {
         //var workNode = JSON.parse(jsonStr);
@@ -1017,10 +1036,10 @@
                 case "PopVal"://PopVal窗返回值
                     var tb = $(tr).find('[name$=' + mapExt.AttrOfOper + ']');
                     tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
-                    tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
+                    tb.attr("ondblclick", "ShowPopValOnParentForm(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
 
                     tb.attr('readonly', 'true');
-                    //tb.attr('disabled', 'true');
+                    tb.attr('disabled', 'true');
                     var icon = '';
                     var popWorkModelStr = '';
                     var popWorkModelIndex = mapExt.AtPara != undefined ? mapExt.AtPara.indexOf('@PopValWorkModel=') : -1;
@@ -1326,9 +1345,9 @@
         var result = defVal;
 
         //通过MAINTABLE返回的参数
-        for (var ele in workNodeData.MainTable[0]) {
-            if (keyOfEn == ele && workNodeData.MainTable[0] != '') {
-                result = workNodeData.MainTable[0][ele];
+        for (var ele in workNodeData.DBDtl[0]) {
+            if (keyOfEn == ele && workNodeData.DBDtl[0][ele] != '') {
+                result = workNodeData.DBDtl[0][ele];
                 break;
             }
         }

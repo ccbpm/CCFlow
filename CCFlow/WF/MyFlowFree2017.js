@@ -1793,7 +1793,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     for (var ele in formDataResultObj) {
         formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
     }
-    return formdataResultStr;
+    return encodeURIComponent(formdataResultStr);
 }
 //发送
 function Send() {

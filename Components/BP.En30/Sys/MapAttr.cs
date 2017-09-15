@@ -393,7 +393,9 @@ namespace BP.Sys
                     }
                     else
                     {
-                        throw new Exception("@非实体类实体不能获取EntitiesNoName。");
+                        GENoNames myens = new GENoNames(this.UIBindKey, this.Name);
+                        _ens = myens;
+                        //throw new Exception("@非实体类实体不能获取EntitiesNoName。");
                     }
                 }
                 return _ens;

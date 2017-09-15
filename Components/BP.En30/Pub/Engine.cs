@@ -609,15 +609,16 @@ namespace BP.Pub
                         case "Rec":
                             return dr["EmpFrom"].ToString(); //记录人.
                         case "RecName":
-                            return dr["EmpFromT"].ToString(); //审核人.
+                            string recName = dr["EmpFromT"].ToString(); //审核人.
+                            recName = this.GetCode(recName);
+                            return recName;
                         case "Msg":
                         case "Note":
-
-#warning 输出的乱码，没有解决方案。
-                            // string text=dr["Msg"].ToString();
+                            string text=dr["Msg"].ToString();
+                            text = text.Replace("\\", "\\\\");
+                            text = this.GetCode(text);
                             //return Encoding.GetEncoding("GB2312").GetString(Encoding.UTF8.GetBytes(dr["Msg"].ToString()));
-
-                            return dr["Msg"].ToString();
+                            return text;
 
                         //return System.Text.Encoder  //审核信息.
                         default:

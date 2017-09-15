@@ -103,6 +103,7 @@ namespace BP.Web.WF
             {
                 switch (this.ActionType)
                 {
+                    
                     case "Focus": //把任务放入任务池.
                         BP.WF.Dev2Interface.Flow_Focus(Int64.Parse(this.Request.QueryString["WorkID"]));
                         this.WinClose("ss");

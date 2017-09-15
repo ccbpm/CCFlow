@@ -42,22 +42,6 @@
           /*border: solid 2px #3175af;*/
         }
         
-        .item {
-            padding: 3px 5px;
-            cursor: pointer;
-            float:left;
-            width:400px;
-            line-height:20px;
-            display: inline-block;
-            background-color:#F7F7F7;
-        }
-        
-        #next
-        {
-            float:left;
-            position: relative;
-            width:400px;
-         }
          
          .addbg {
             background: #CFCFCF;
@@ -84,7 +68,11 @@
            + '</div>';
 
             $('body').append($(selectEmpModalHtml));
-            $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random());
+
+            var url = "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random();
+            alert(url);
+            $('#iframeSelectEmpsForm').attr('src', url);
+
             $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
             //$("section").show();
             $(".Msg").hide();
@@ -235,6 +223,7 @@
                 this.AddEmps(true);
                 return;
             }
+
             SendIt();
         }
 
@@ -253,6 +242,28 @@
                         $(".Msg").html(data);
                         return;
                     }
+
+
+                    data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
+                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+
+                    data = data.replace("'WFRpt", "'../WFRpt");
+                    data = data.replace("'WFRpt", "'../WFRpt");
+
+                    data = data.replace("'./Img", "'../Img");
+                    data = data.replace("'./Img", "'../Img");
+                    data = data.replace("'./Img", "'../Img");
+                    data = data.replace("'./Img", "'../Img");
+                    data = data.replace("'./Img", "'../Img");
+
+                    data = data.replace("'./WorkOpt/", "");
+                    data = data.replace("'./WorkOpt/", "");
+                    data = data.replace("'./WorkOpt/", "");
+
+                    data = data.replace('@', '<br/>@');
+                    data = data.replace(/@/g, '<br/>&nbsp;@');
+
 
                     data = data.replace('@', '<br/>@');
                     data+=" <center><input type='button' value='    关    闭    ' onclick='Close();'  /></center>";
@@ -275,6 +286,7 @@
 
         //取消移交
         function Close() {
+
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("");
             } else {
@@ -285,8 +297,15 @@
             window.parent.close();
         }
 
+        //关闭model.
         function CloseModel() {
+
+        //怎么解决关闭当前的model.
             Close();
+
+           // window.parent.get;
+            $('#returnWorkModal').modal('hide');
+            window.close();
         }
 
         //设置选中的人员
@@ -387,7 +406,7 @@
 
 </head>
 <body>
-    <table id="Table1" style=" width:98%; ">
+    <table id="Table1" style="width:98%;" >
    <!-- <caption>下一步接受人员列表</caption>-->
     <thead>
         <tr id="title">
@@ -405,10 +424,9 @@
     <br />
       <div>
        <div id="labInfo">
-        输入要下一步接受人员列表人的编号(多个加签人使用逗号分开比如:zhangsan,lisi,wangwu)：
-        <br />
-        您也可以输入人员名称,多个名称用逗号分开,(比如:张三,李四,王五).
-        <br />
+        输入要下一步接受人员可以使用人员名称拼音支持全拼简拼.
+        <br />比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua
+        <br>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx
         </div>
         <br />
         <input type="text" id="TB_Emps" name="TB_Emps" value='' style=" width:400px; "/> 

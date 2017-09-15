@@ -161,7 +161,6 @@ namespace CCFlow.WF.SDKComponents
                     }
                     else
                     {
-
                         if (sf.SFOpenType == 0)
                         {
                             this.AddTD("style='word-break:break-all;' title='" + item.Title + "'",

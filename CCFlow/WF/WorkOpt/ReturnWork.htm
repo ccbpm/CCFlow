@@ -81,11 +81,13 @@
         });
 
         function SetIsBackTrackingDispaly() {
+
             if ($('#DDL_Nodes option:checked').data().isbacktracking == 0) {
                 $('#btnIsBackTracking').css('display', 'none');
             } else {
                 $('#btnIsBackTracking').css('display', 'inline-block');
             }
+
             //ie9
             if ($('#DDL_Nodes option:checked').attr("data-isbacktracking") == 0) {
                 $('#btnIsBackTracking').css('display', 'none');

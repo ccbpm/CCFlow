@@ -321,7 +321,7 @@ namespace BP.WF.HttpHandler
                       sql = "SELECT TOP 12 a.No,a.Name+'/'+b.name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No = '" + empStr + "' OR a.NAME = '" + empStr + "'  OR a.PinYin LIKE '%," + empStr + "%,')";
 
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%' ROWNUM <=12 ";
+                        sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%' and ROWNUM <=12 ";
 
                 }
                 else

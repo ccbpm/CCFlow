@@ -194,12 +194,25 @@ namespace BP.WF.HttpHandler
             bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
             if (isPinYin == true)
             {
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%')";
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%') and rownum<=12";
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%') LIMIT 12";
+                //标识结束，不要like名字了.
+                if (emp.Contains("/"))
+                {
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%')";
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12";
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') LIMIT 12";
+                }
+                else
+                {
+                    if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                        sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and ( a.PinYin LIKE '%," + emp.ToLower() + "%')";
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                        sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12";
+                    if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                        sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%' ) LIMIT 12";
+                }
             }
             else
             {
@@ -210,7 +223,16 @@ namespace BP.WF.HttpHandler
                 if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
             }
+
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            //  BP.DA.Log.DebugWriteError(sql);
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns[0].ColumnName = "No";
+                dt.Columns[1].ColumnName = "Name";
+            }
 
             return BP.Tools.Json.ToJson(dt);
         }
@@ -411,32 +433,8 @@ namespace BP.WF.HttpHandler
         #endregion
 
         // 查询select集合
-        public string HuiQian_SelectEmps() { 
-            string sql = "";
-            string emp = this.GetRequestVal("TB_Emps");
-            emp = FilteSQLStr(emp);
-            bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
-            if (isPinYin == true)
-            {
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%')";
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%') and rownum<=12";
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + ",%') LIMIT 12";
-            }
-            else
-            {
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12";
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
-            }
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-
-            return BP.Tools.Json.ToJson(dt);
+        public string HuiQian_SelectEmps() {
+            return AccepterOfGener_SelectEmps();
         }
 
         #region 审核组件.
@@ -1466,7 +1464,7 @@ namespace BP.WF.HttpHandler
         /// 人员选择器
         /// </summary>
         /// <returns></returns>
-        public string SelectEmps()
+        public string SelectEmps_Init()
         {
             string fk_dept = this.FK_Dept;
             if (fk_dept == null)

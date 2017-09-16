@@ -350,10 +350,12 @@
             $('body').append($(selectEmpModalHtml));
 
             $('#BtnSelectEmps').bind('click', function () {
+                
                 var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
                 if (dept == null || dept == '' || dept == undefined) {
                     dept = $.cookie('FK_Dept');
                 }
+
                 $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random() + "&IsSelectMore=1");
                 $('#selectEmpsModal').modal().show();
             });

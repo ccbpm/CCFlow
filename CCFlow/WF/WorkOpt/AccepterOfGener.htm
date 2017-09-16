@@ -65,8 +65,10 @@
 
             $('body').append($(selectEmpModalHtml));
 
+
             var url = "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random();
-            alert(url);
+            url = url.replace('101', '10102');
+
             $('#iframeSelectEmpsForm').attr('src', url);
 
             $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
@@ -290,7 +292,7 @@
                 window.close();
             }
 
-            //window.parent.close();
+            window.parent.close();
         }
 
         //关闭model.

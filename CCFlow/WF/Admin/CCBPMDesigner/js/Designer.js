@@ -450,9 +450,9 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "DesignerNodeFormSL": //设计表单
-            if (plant == "JFlow")
-                alert("请选择\"设计节点表单(H5测试版)\"");
-            break;
+//            if (plant == "JFlow")
+//                alert("请选择\"设计节点表单(H5测试版)\"");
+//            break;
             url = "../CCFormDesigner/CCFormDesignerSL.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + FK_Node + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID;
             if (window.parent && 1 == 3) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "ND", "自由表单" + FK_Node, url, item.iconCls);

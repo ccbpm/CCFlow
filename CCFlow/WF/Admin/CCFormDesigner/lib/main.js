@@ -349,6 +349,9 @@ var clipboardBuffer = [];
 **/
 function getCanvas() {
     var canvas = document.getElementById("a");
+    if (canvas.getAttribute("Height") != "2600") {
+        canvas.setAttribute('Height', '2600');
+    }
     return canvas;
 }
 
@@ -3468,7 +3471,12 @@ function Init_Panel(diagramId) {
     }
     //lets make sure that our canvas is set to the correct values
     canvasProps.setWidth(canvasProps.getWidth());
-    canvasProps.setHeight(canvasProps.getHeight());
+    //  canvasProps.setHeight(canvasProps.getHeight());
+
+   // alert( canvasProps.getHeight() );
+
+    canvasProps.setHeight(2000);
+
 
     //Browser support and warnings
     if (isBrowserReady() == 0) { //no support at all

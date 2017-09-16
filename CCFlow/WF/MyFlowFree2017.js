@@ -2497,10 +2497,10 @@ function figure_MapAttr_Template(mapAttr) {
                 //多选下拉框
                 var isMultiSele = "";
                 var isMultiSeleClass = "";
-//                if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-//                    isMultiSele = ' multiple data-live-search="false" ';
-//                    isMultiSeleClass = " selectpicker show-tick form-control ";
-//                }
+                //                if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                //                    isMultiSele = ' multiple data-live-search="false" ';
+                //                    isMultiSeleClass = " selectpicker show-tick form-control ";
+                //                }
                 eleHtml += "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
             } else {
                 //添加文本框 ，日期控件等
@@ -2511,27 +2511,27 @@ function figure_MapAttr_Template(mapAttr) {
                         //多选下拉框
                         var isMultiSele = "";
                         var isMultiSeleClass = "";
-//                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-//                            isMultiSele = ' multiple data-live-search="false" ';
-//                            isMultiSeleClass = " selectpicker show-tick form-control ";
-//                        }
+                        //                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+                        //                            isMultiSele = ' multiple data-live-search="false" ';
+                        //                            isMultiSeleClass = " selectpicker show-tick form-control ";
+                        //                        }
 
 
                         eleHtml +=
                             "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                             (workNodeData, mapAttr, defValue) + "</select>";
                     } else { //文本区域
-                        if (mapAttr.UIHeight <= 23 ) {
+                        if (mapAttr.UIHeight <= 23) {
                             eleHtml +=
                                 "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                             ;
                         }
                         else {
                             /*eleHtml +=
-                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                            "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                             ;*/
                             //如果是富文本就使用KindEditor
-                            if ( mapAttr.AtPara!=null && mapAttr.AtPara.indexOf("@IsRichText=1") != -1) {
+                            if (mapAttr.AtPara != null && mapAttr.AtPara.indexOf("@IsRichText=1") != -1) {
                                 document.KE_MapAttr.push(mapAttr);
                                 eleHtml += "<textarea name='TB_" + mapAttr.KeyOfEn + "' style='width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;'>" + defValue + "</textarea>";
                             } else {
@@ -2581,7 +2581,7 @@ function figure_MapAttr_Template(mapAttr) {
                 if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
                     if (mapAttr.UIContralType == 1) {//DDL
                         //多选下拉框
-                     
+
                         //                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
                         //                            isMultiSele = ' multiple data-live-search="false" ';
                         //                            isMultiSeleClass = " selectpicker show-tick form-control ";
@@ -2659,9 +2659,8 @@ function figure_MapAttr_Template(mapAttr) {
         }
 
         //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
-        eleHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "'  name='TB_" + mapAttr.KeyOfEn + "'></input>";
+        eleHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' />";
     }
-
 
    // alert(eleHtml);
 

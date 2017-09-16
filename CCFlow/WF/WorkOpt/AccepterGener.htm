@@ -502,10 +502,17 @@
             $('body').append($(selectEmpModalHtml));
 
             $('#BtnSelectEmps').bind('click', function () {
+
+
                 var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
                 if (dept == null || dept == '' || dept == undefined) {
                     dept = $.cookie('FK_Dept');
                 }
+
+                // 特殊判断天业集团的bug.
+                if (dept == "101")
+                    dept = "10102";
+
                 $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random() + "&IsSelectMore=1");
                 $('#selectEmpsModal').modal().show();
             });

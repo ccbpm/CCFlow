@@ -157,8 +157,6 @@
 
                         url = Handler + "?DoType=SelectEmps_Init&m=" + Math.random() + (pageData.FK_Dept != undefined ? "&FK_Dept=" + pageData.FK_Dept : '');
 
-                        alert(url);
-
                         //初始化根节点
                         if (node.id == "#") {
                             $.ajax({
@@ -181,7 +179,6 @@
                             else {
                                 pageData.FK_Dept = node.id;
                                 url = Handler + "?DoType=SelectEmps_Init&FK_Dept=" + node.id + "&m=" + Math.random();
-                                alert('dd =:'+url);
                                 $.ajax({
                                     type: 'post',
                                     async: true,

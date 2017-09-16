@@ -94,7 +94,10 @@
            + '</div>';
 
             $('body').append($(selectEmpModalHtml));
-            $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random());
+            var url = "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random();
+            url = url.replace('101', '10102');
+
+            $('#iframeSelectEmpsForm').attr('src',url);
             $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
             //$("section").show();
             $(".Msg").hide();

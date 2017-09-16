@@ -850,6 +850,350 @@ namespace BP.WF.HttpHandler
             }
             return toolbar;
         }
+
+        /// <summary>
+        /// 工具栏
+        /// </summary>
+        /// <returns></returns>
+        public string InitToolBarForMobile()
+        {
+            #region 处理是否是加签，或者是否是会签模式，.
+            bool isAskForOrHuiQian = false;
+            if (this.FK_Node.ToString().EndsWith("01") == false)
+            {
+                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                if (gwf.WFState == WFState.Askfor)
+                {
+                    isAskForOrHuiQian = true;
+                }
+                else
+                {
+                    /*判断是否是加签状态，如果是，就判断是否是主持人，如果不是主持人，就让其 isAskFor=true ,屏蔽退回等按钮. */
+                    if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                        isAskForOrHuiQian = true;
+                }
+            }
+            #endregion 处理是否是加签，或者是否是会签模式，.
+
+            string tKey = DateTime.Now.ToString("yyyy-MM-dd - hh:mm:ss");
+            BtnLab btnLab = new BtnLab(this.FK_Node);
+            string toolbar = "";
+            try
+            {
+                #region 是否是抄送.
+                if (isAskForOrHuiQian == true)
+                {
+                    toolbar += "<a data-role='button' name='Send'  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();Send(); \" ></a>";
+                    // toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
+                    if (btnLab.PackupEnable == true)
+                    {
+                        string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+                        toolbar += "<a data-role='button' type=button name='PackUp'  value='" + btnLab.PackupLab + "' enable=true></a>";
+                    }
+                    return toolbar;
+                }
+                #endregion 是否是抄送.
+
+                #region 是否是抄送.
+                if (this.IsCC)
+                {
+                    toolbar += "<a data-role='button'    value='流程运行轨迹' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" ></a>";
+                    // 判断审核组件在当前的表单中是否启用，如果启用了.
+                    FrmWorkCheck fwc = new FrmWorkCheck(this.FK_Node);
+                    if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Enable)
+                    {
+                        /*如果不等于启用, */
+                        toolbar += "<a data-role='button' type=button  value='填写审核意见' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CCCheckNote.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" ></a>";
+                    }
+                    return toolbar;
+                }
+                #endregion 是否是抄送.
+
+                #region 加载流程控制器 - 按钮
+                if (this.currND.HisFormType == NodeFormType.SelfForm)
+                {
+                    /*如果是嵌入式表单.*/
+                    if (currND.IsEndNode)
+                    {
+                        /*如果当前节点是结束节点.*/
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            /*如果启用了发送按钮.*/
+                            toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if (SendSelfFrom()==false) return false; Send(); this.disabled=true;\" ></a>";
+                        }
+                    }
+                    else
+                    {
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            toolbar += "<a data-role='button' name='Send'  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" ></a>";
+                        }
+                    }
+
+                    /*处理保存按钮.*/
+                    if (btnLab.SaveEnable)
+                    {
+                        toolbar += "<a data-role='button' name='Save'   value='" + btnLab.SaveLab + "' enable=true onclick=\"SaveSelfFrom();\" />";
+                    }
+                }
+
+                if (this.currND.HisFormType != NodeFormType.SelfForm)
+                {
+                    /*启用了其他的表单.*/
+                    if (currND.IsEndNode)
+                    {
+                        /*如果当前节点是结束节点.*/
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            /*如果启用了选择人窗口的模式是【选择既发送】.*/
+                            if (this.IsMobile)
+                                toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();SendIt(); \" ></a>";
+                            else
+                                toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();Send(); \" ></a>";
+
+                        }
+                    }
+                    else
+                    {
+                        if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
+                        {
+                            /*如果启用了发送按钮.
+                             * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
+                             */
+                            if (this.IsMobile)
+                                toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();SendIt();\" ></a>";
+                            else
+                                toolbar += "<a data-role='button' name='Send'  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();Send();\" ></a>";
+
+                        }
+                    }
+
+                    /* 处理保存按钮.*/
+                    if (btnLab.SaveEnable)
+                    {
+                        if (this.IsMobile)
+                            toolbar += "<a data-role='button' name='Save'    value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false; SaveIt();\" ></a>";
+                        else
+                            toolbar += "<a data-role='button' name='Save'   value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false;KindEditerSync();Save();\" ></a>";
+                    }
+                }
+
+                if (btnLab.WorkCheckEnable)
+                {
+                    /*审核*/
+                    string urlr1 = "./WorkOpt/WorkCheck.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' id='Btn_WorkCheck'   value='" + btnLab.WorkCheckLab + "' enable=true onclick=\"WinOpen('" + urlr1 + "','dsdd'); \" ></a>";
+                }
+
+                if (btnLab.ThreadEnable)
+                {
+                    /*如果要查看子线程.*/
+                    string ur2 = "./WorkOpt/ThreadDtl.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' value='" + btnLab.ThreadLab + "' enable=true onclick=\"WinOpen('" + ur2 + "'); \" ></a>";
+                }
+
+                if (btnLab.TCEnable == true)
+                {
+                    /*流转自定义..*/
+                    string ur3 = "./WorkOpt/TransferCustom.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button  value='" + btnLab.TCLab + "' enable=true onclick=\"To('" + ur3 + "'); \" ></a>";
+                }
+
+                if (btnLab.JumpWayEnable)
+                {
+                    /*如果没有焦点字段*/
+                    string urlr = "./WorkOpt/JumpWay.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button  value='" + btnLab.JumpWayLab + "' enable=true onclick=\"To('" + urlr + "'); \" ></a>";
+                }
+
+                if (btnLab.ReturnEnable && this.currND.IsStartNode == false)
+                {
+                    /*如果没有焦点字段*/
+                    string urlr = "./WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' name='Return' type=button  value='" + btnLab.ReturnLab + "' enable=true onclick=\"ReturnWork('" + urlr + "','" + btnLab.ReturnField + "'); \" ></a>";
+                }
+
+                //  if (btnLab.HungEnable && this.currND.IsStartNode == false)
+                if (btnLab.HungEnable)
+                {
+                    /*挂起*/
+                    string urlr = "./WorkOpt/HungUp.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button  value='" + btnLab.HungLab + "' enable=true onclick=\"WinOpen('" + urlr + "'); \" ></a>";
+                }
+
+                if (btnLab.ShiftEnable)
+                {
+                    /*移交*/
+                    string url12 = "./WorkOpt/Forward.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + "移交原因.";
+                    toolbar += "<a data-role='button' name='Shift' type=button  value='" + btnLab.ShiftLab + "' enable=true onclick=\"To('" + url12 + "'); \" ></a>";
+                }
+
+                if ((btnLab.CCRole == CCRole.HandCC || btnLab.CCRole == CCRole.HandAndAuto))
+                {
+                    /* 抄送 */
+                    toolbar += "<a data-role='button' name='CC' type=button  value='" + btnLab.CCLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/CC.htm?WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&s=" + tKey + "','ds'); \" ></a>";
+                }
+
+                if (btnLab.DeleteEnable != 0)
+                {
+                    string urlrDel = appPath + "WF/MyFlowInfo.htm?DoType=DeleteFlow&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' name='Delete' type=button  value='" + btnLab.DeleteLab + "' enable=true onclick=\"To('" + urlrDel + "'); \" ></a>";
+                }
+
+                if (btnLab.EndFlowEnable && this.currND.IsStartNode == false)
+                {
+                    toolbar += "<a data-role='button' type=button name='EndFlow'  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"DoStop('" + btnLab.EndFlowLab + "','" + this.FK_Flow + "','" + this.WorkID + "');\" ></a>";
+                }
+
+                if (btnLab.PrintDocEnable)
+                {
+                    /*如果不是加签 */
+                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintRTF)
+                    {
+                        string urlr = appPath + "WF/WorkOpt/PrintDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                        toolbar += "<a data-role='button' type=button name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" ></a>";
+                    }
+
+                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintWord)
+                    {
+                        string urlr = appPath + "WF/Rpt/RptDoc.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsPrint=1&s=" + tKey;
+                        toolbar += "<a data-role='button' type=button name='PrintDoc'  value='" + btnLab.PrintDocLab + "' enable=true onclick=\"WinOpen('" + urlr + "','dsdd'); \" ></a>";
+                    }
+
+                    if (this.currND.HisPrintDocEnable == PrintDocEnable.PrintHtml)
+                    {
+                        string urlr = appPath + "PrintSample.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + BP.Web.WebUser.No + "&IsPrint=1";
+                        toolbar += "<a data-role='button' type=button  name='PrintDoc' value='" + btnLab.PrintDocLab + "' enable=true onclick=\"printFrom('" + urlr + "'); \" ></a>";
+                    }
+                }
+
+                if (btnLab.TrackEnable)
+                    toolbar += "<a data-role='button' type=button name='Track'  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" ></a>";
+
+
+                if (btnLab.SearchEnable)
+                    toolbar += "<a data-role='button' type=button name='Search'  value='" + btnLab.SearchLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Rpt/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "','dsd0'); \" ></a>";
+
+                if (btnLab.BatchEnable)
+                {
+                    /*批量处理*/
+                    string urlr = appPath + "WF/Batch.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button name='Batch' value='" + btnLab.BatchLab + "' enable=true onclick=\"To('" + urlr + "'); \" ></a>";
+                }
+
+                if (btnLab.AskforEnable)
+                {
+                    /*加签 */
+                    string urlr3 = appPath + "WF/WorkOpt/Askfor.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button name='Askfor'  value='" + btnLab.AskforLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" ></a>";
+                }
+
+                if (btnLab.HuiQianRole)
+                {
+                    /*会签 */
+                    string urlr3 = appPath + "WF/WorkOpt/HuiQian.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button name='HuiQian'  value='" + btnLab.HuiQianLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" ></a>";
+                }
+
+
+                if (btnLab.WebOfficeWorkModel == WebOfficeWorkModel.Button)
+                {
+                    /*公文正文 */
+                    string urlr = appPath + "WF/WorkOpt/WebOffice.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button name='WebOffice'  value='" + btnLab.WebOfficeLab + "' enable=true onclick=\"WinOpen('" + urlr + "','公文正文'); \" ></a>";
+                }
+
+                if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
+                {
+                    /* 启用了数据重置功能 */
+                    string urlr3 = appPath + "WF/MyFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&IsDeleteDraft=1&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button  value='数据重置' enable=true onclick=\"To('" + urlr3 + "','ds'); \" ></a>";
+                }
+
+                if (btnLab.SubFlowEnable == true)
+                {
+                    /* 子流程 */
+                    string urlr3 = appPath + "WF/WorkOpt/SubFlow.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button name='SubFlow'  value='" + btnLab.SubFlowLab + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" ></a>";
+                }
+
+                if (btnLab.CHEnable == true)
+                {
+                    /* 节点时限设置 */
+                    string urlr3 = appPath + "WF/WorkOpt/CH.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button name='CH'  value='" + btnLab.CHLab + "' enable=true onclick=\"WinShowModalDialog('" + urlr3 + "'); \" ></a>";
+                }
+
+                if (btnLab.PRIEnable == true)
+                {
+                    /* 优先级设置 */
+                    string urlr3 = appPath + "WF/WorkOpt/PRI.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    toolbar += "<a data-role='button' type=button name='PR'  value='" + btnLab.PRILab + "' enable=true onclick=\"WinShowModalDialog('" + urlr3 + "'); \" ></a>";
+                }
+
+                /* 关注 */
+                if (btnLab.FocusEnable == true)
+                {
+                    if (HisGenerWorkFlow.Paras_Focus == true)
+                        toolbar += "<a data-role='button' type=button  value='取消关注' enable=true onclick=\"FocusBtn(this,'" + this.WorkID + "'); \" ></a>";
+                    else
+                        toolbar += "<a data-role='button' type=button name='Focus' value='" + btnLab.FocusLab + "' enable=true onclick=\"FocusBtn(this,'" + this.WorkID + "'); \" ></a>";
+                }
+
+                /* 分配工作 */
+                if (btnLab.AllotEnable == true)
+                {
+                    /*分配工作*/
+                    string urlAllot = "./WorkOpt/AllotTask.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow + "&Info=" + "移交原因.";
+                    toolbar += "<a data-role='button' name='Allot' type=button  value='" + btnLab.AllotLab + "' enable=true onclick=\"To('" + urlAllot + "'); \" ></a>";
+                }
+
+                /* 确认 */
+                if (btnLab.ConfirmEnable == true)
+                {
+                    if (HisGenerWorkFlow.Paras_Confirm == true)
+                        toolbar += "<a data-role='button' type=button  value='取消确认' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" ></a>";
+                    else
+                        toolbar += "<a data-role='button' type=button name='Confirm' value='" + btnLab.ConfirmLab + "' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" ></a>";
+                }
+
+                /* 打包下载 */
+                if (btnLab.PackupEnable == true)
+                {
+                    string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+                    toolbar += "<a data-role='button' type=button name='PackUp'  value='" + btnLab.PackupLab + "' enable=true></a>";
+                }
+
+                #endregion
+
+                #region  //加载自定义的button.
+                BP.WF.Template.NodeToolbars bars = new NodeToolbars();
+                bars.Retrieve(NodeToolbarAttr.FK_Node, this.FK_Node);
+                foreach (NodeToolbar bar in bars)
+                {
+                    if (bar.ShowWhere == ShowWhere.Toolbar)
+                    {
+                        if (!string.IsNullOrEmpty(bar.Target) && bar.Target.ToLower() == "javascript")
+                        {
+                            toolbar += "<a data-role='button' type=button  value='" + bar.Title + "' enable=true onclick=\"" + bar.Url + "\" ></a>";
+                        }
+                        else
+                        {
+                            string urlr3 = bar.Url + "&FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                            toolbar += "<a data-role='button' type=button  value='" + bar.Title + "' enable=true onclick=\"WinOpen('" + urlr3 + "'); \" ></a>";
+                        }
+                    }
+                }
+                #endregion  //加载自定义的button.
+
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DefaultLogWriteLineError(ex);
+                toolbar = "err@" + ex.Message;
+            }
+            return toolbar;
+        }
         /// <summary>
         /// 获取主表的方法.
         /// </summary>

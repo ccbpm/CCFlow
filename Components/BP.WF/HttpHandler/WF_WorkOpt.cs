@@ -385,7 +385,7 @@ namespace BP.WF.HttpHandler
                 return "info@" + infos;
 
             if (emps.Count == 0)
-                return "info@您没有选择人员, 执行信息:" + infos;
+                return "info@你输入的人员编号错误, 执行信息:" + infos;
             #endregion 求人员集合.
 
             //把集合都放入到这里.
@@ -1467,7 +1467,7 @@ namespace BP.WF.HttpHandler
         public string SelectEmps_Init()
         {
             string fk_dept = this.FK_Dept;
-            if (fk_dept == null)
+            if (string.IsNullOrEmpty(fk_dept)==true)
                 fk_dept = BP.Web.WebUser.FK_Dept;
 
             DataSet ds = new DataSet();

@@ -405,7 +405,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SaveForm()
         {
-            BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, this.GetRequestVal("diagram"));
+            string docs= this.GetRequestVal("diagram");
+            BP.Sys.CCFormAPI.SaveFrm(this.FK_MapData, docs);
+
+            BP.DA.DataType.WriteFile("c:\\xxxx.txt", docs);
             return "保存成功.";
         }
 

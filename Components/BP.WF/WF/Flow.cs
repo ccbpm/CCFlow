@@ -1939,6 +1939,9 @@ namespace BP.WF
                 // 设置流程名称.
                 DBAccess.RunSQL("UPDATE WF_Node SET FlowName = (SELECT Name FROM WF_Flow WHERE NO=WF_Node.FK_Flow)");
 
+                //设置单据编号只读格式.
+                DBAccess.RunSQL("UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE KeyOfEn='BillNo' AND UIIsEnable=1");
+
                 //删除垃圾,非法数据.
                 string sqls = "DELETE FROM Sys_FrmSln where fk_mapdata not in (select no from sys_mapdata)";
                 sqls += "@ DELETE FROM WF_Direction WHERE Node=ToNode";

@@ -56,6 +56,15 @@ namespace BP.WF.HttpHandler
             WF_WorkOpt en = new WF_WorkOpt(this.context);
             return en.Packup_Init();
         }
+        /// <summary>
+        /// 选择接受人
+        /// </summary>
+        /// <returns></returns>
+        public string HuiQian_SelectEmps()
+        {
+            WF_WorkOpt en = new WF_WorkOpt(this.context);
+            return en.HuiQian_SelectEmps();
+        }
 
         #region 审核组件.
         public string WorkCheck_GetNewUploadedAths()

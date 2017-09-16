@@ -2314,12 +2314,12 @@ namespace BP.WF
                 if (this.HisNode.IsStartNode)
                 {
                     if (WebUser.IsWap)
-                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>, <a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
+                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>, <a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
                     else
-                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a> - <a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
+                        this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a> - <a href='MyFlow.htm?FK_Flow=" + toND.FK_Flow + "&FK_Node=" + int.Parse(toND.FK_Flow) + "01'><img src='./Img/New.gif' border=0/>新建流程</a>.", SendReturnMsgType.Info);
                 }
                 else
-                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a> ", SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.ToEmpExt, null, "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&WorkID=" + this.HisWork.OID + "&FK_Flow=" + toND.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a> ", SendReturnMsgType.Info);
             }
 
 
@@ -3248,11 +3248,11 @@ namespace BP.WF
 
             if (this.HisNode.IsStartNode)
             {
-                    this.addMsg("UnDoNew", "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='MyFlow.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='./Img/New.gif' border=0/>新建流程</a>。");
+                this.addMsg("UnDoNew", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>， <a href='MyFlow.htm?FK_Flow=" + toNode.FK_Flow + "&FK_Node=" + int.Parse(toNode.FK_Flow) + "01' ><img src='./Img/New.gif' border=0/>新建流程</a>。");
             }
             else
             {
-                this.addMsg("UnDo", "@<a href='MyFlowInfo.aspx?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
+                this.addMsg("UnDo", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "'><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
             }
 
             this.addMsg("Rpt", "@<a href='WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + wk.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "'target='_self' >工作轨迹</a>");

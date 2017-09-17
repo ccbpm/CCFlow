@@ -67,6 +67,8 @@
         var param = {};
         $(function () {
 
+            $("#HelpInfo").hide();
+
             //初始化页面移交页面
             param = {
                 FK_Node: GetQueryString('FK_Node'),
@@ -329,6 +331,10 @@
             $("#TB_Emps").val(no);
             $("#SelectEmp").hide().html("");
         }
+
+        function Help() {
+            $("#HelpInfo").toggle();
+        }
     </script>
 
 </head>
@@ -348,10 +354,6 @@
     <br />
       <div>
        <div id="labInfo">
-        输入要会签人的编号(多个加签人使用逗号分开比如:zhangsan,lisi,wangwu)：
-        <br />
-        您也可以输入人员名称,多个名称用逗号分开,(比如:张三,李四,王五).
-        <br />
         <input type="text" id="TB_Emps" name="TB_Emps" value='' style=" width:400px; " /> 
         <input type="button" id="BtnSelectEmps" value='选择人员'/>
         <div id="SelectEmp"></div>
@@ -359,9 +361,24 @@
         <div id="next">
             <input type="button" value="增加会签人" onclick="ReturnWork();"/>
             <input type="button" value="关闭" onclick="Close();"/>
+             <a href="javascript:Help()" >查询帮助?</a>
+
+              <div id="HelpInfo" >
+        <ul>
+        <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
+        <li>比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua </li>
+        <li>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx </li>
+        </ul>
         </div>
+
+        </div>
+       
+
+
        </div>
     </div>
+
+
 
     <div class="Msg" style="text-align: center;"> <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
 

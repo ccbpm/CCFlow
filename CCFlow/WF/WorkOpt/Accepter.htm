@@ -198,17 +198,17 @@
                                 //多选.
                                 if (isSimplate == "0") {
                                     if (isSele == true)
-                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
+                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox' checked=true id='" + emp.No + "'  value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
                                     else
-                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' /> " + emp.No + " " + emp.Name + "</label>";
+                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input  type='checkbox'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
                                 }
 
                                 //单选.
                                 if (isSimplate == "1") {
                                     if (isSele == true)
-                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> <font color=green> " + emp.No + " " + emp.Name + "</font></label>";
+                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "'><input name='emps'  type='radio' checked=true id='" + emp.No + "' value='" + emp.Name + "' /> <font color=green>" + emp.Name + "</font></label>";
                                     else
-                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' /> " + emp.No + " " + emp.Name + "</label>";
+                                        html += "&nbsp;&nbsp;<label id='lab" + emp.No + "' ><input name='emps'  type='radio'  id='" + emp.No + "'  value='" + emp.Name + "' />" + emp.Name + "</label>";
                                 }
 
                             }
@@ -250,8 +250,8 @@
                 return;
             }
 
-            if (window.confirm("您确定要执行发送给如下人员[ " + selectedEmpLab + " ]吗？") == false)
-                return;
+//            if (window.confirm("您确定要执行发送给如下人员[ " + selectedEmpLab + " ]吗？") == false)
+//                return;
 
             $("#Msg").html("<font color=green>正在发送请稍候...</font>");
 
@@ -368,7 +368,8 @@
                 return;
             }
 
-            $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+           
+           $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
         }
     </script>
 </head>

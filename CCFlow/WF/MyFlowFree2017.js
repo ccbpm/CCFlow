@@ -1797,20 +1797,18 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 }
 //发送
 function Send() {
-    //比填写检查
-    //必填项和正则表达式检查
-    var formCheckResult = true;
+
+    //必填项和正则表达式检查.
     if (checkBlanks() == false) {
-        formCheckResult = false;
-    }
-    if (checkReg() == false) {
-        formCheckResult = false;
+        alert("检查必填项出现错误，边框变红颜色的是否填写完整？");
+        return;
     }
 
-    if (formCheckResult==false) {
+    if (checkReg() == false) {
         alert("发送错误:请检查字段边框变红颜色的是否填写完整？");
         return;
     }
+
 
     var toNode = 0;
     //含有发送节点 且接收

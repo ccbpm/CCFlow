@@ -58,6 +58,11 @@
                     html += "</ul>";
                     document.getElementById("menuList").innerHTML = html;
 
+                    var showType = GetQueryString("SearchType");
+                    if (showType == null)
+                        showType = "MyJoin";
+
+                    url = "FlowSearch.htm?SearchType=" + showType + "&FK_Flow=" + fk_flow;
                     $('#context').attr('src', url + '&s=' + Math.random());
 
                     document.title = '流程实例查询';

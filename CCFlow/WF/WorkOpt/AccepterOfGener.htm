@@ -49,7 +49,7 @@
         $(function () {
 
             //初始化人员选择窗口
-            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal">' +
+            var selectEmpModalHtml = '<div class="modal fade" id="SelectEmpsModal">' +
                '<div class="modal-dialog">'
                    + '<div class="modal-content" style="border-radius:0px;width:700px;">'
                       + '<div class="modal-header">'
@@ -71,9 +71,11 @@
 
             $('#iframeSelectEmpsForm').attr('src', url);
 
-            $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+            $('#Btn_SelectEmps').bind('click', function () { $('#SelectEmpsModal').modal().show(); });
             //$("section").show();
             $(".Msg").hide();
+
+            $("#HelpInfo").hide();
 
             // 初始化人员.   //开始加载数据.
             $.ajax({
@@ -109,7 +111,7 @@
                 var row = "";
                 row += "<tr>";
                 row += "<td>" + i + "</td>";
-                row += "<td>" + sa.FK_Emp + "</td>";
+                //row += "<td>" + sa.FK_Emp + "</td>";
                 row += "<td>" + sa.EmpName + "</td>";
                 row += "<td title='" + sa.DeptName + "' >" + sa.DeptName + "</td>";
                 row += "<td><a href=\"javascript:DeleteIt("+i+",'" + sa.FK_Emp + "','"+sa.EmpName+"');\" >移除</a></td>";
@@ -138,8 +140,8 @@
 
         function DeleteIt(row, empNo,empName) {
 
-            if (window.confirm('您确定要移除[' + empNo +' , '+ empName + ']') == false)
-                return;
+//            if (window.confirm('您确定要移除[' + empNo +' , '+ empName + ']') == false)
+            //                return;
 
             $.ajax({
                 type: 'post',
@@ -164,14 +166,15 @@
 
         //确定  执行下一步接受人员列表操作
         function AddEmps(isSend) {
-
             var emps = this.document.getElementById("TB_Emps").value;
-
             if (isSend == false && emps == "") {
                 alert('请输入要加签的人员ID,多个ID使用逗号分开.');
                 return;
             }
-          
+            AddEmpsExt(isSend, emps);
+        }
+
+        function AddEmpsExt(isSend, emps) {
 
             $.ajax({
                 type: 'post',
@@ -194,7 +197,7 @@
 
 
                     //是否执行发送?
-                    if (isSend==true) {
+                    if (isSend == true) {
                         SendIt();
                         return;
                     }
@@ -272,7 +275,7 @@
                     //隐藏table.
                     document.getElementById("Table1").style.display = "none";
                     document.getElementById("TB_Emps").style.display = "none";
-                    document.getElementById("BtnSelectEmps").style.display = "none";
+                    document.getElementById("Btn_SelectEmps").style.display = "none";
                     document.getElementById("Btn_AddEmps").style.display = "none";
                     document.getElementById("Btn_Send").style.display = "none";
                     document.getElementById("labInfo").style.display = "none";
@@ -284,6 +287,13 @@
 
         //取消移交
         function Close() {
+
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose("");
+            } else {
+                $('body').append($('<div>' + "已取消操作" + '</div>'));
+                window.close();
+            }
 
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("");
@@ -309,11 +319,16 @@
         //设置选中的人员
         function selectEmpsWindowClose(data) {
 
-            $('#selectEmpsModal').modal('hide');
+            $('#SelectEmpsModal').modal('hide');
             if (data == '取消') {
                 return;
             }
-            $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
+
+            var val = frames["iframeSelectEmpsForm"].window.returnVal.Name;
+            // alert(val);
+            AddEmpsExt(false, val)
+
+            //$('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
     
         //得到行对象
@@ -397,9 +412,15 @@
 
         //选择下拉数据
         function getCon(no) {
-            $("#TB_Emps").val(no);
+
+            //  $("#TB_Emps").val(no);
             $("#SelectEmp").hide().html("");
-        }  
+            AddEmpsExt(false, no);
+        }
+
+        function Help() {
+            $("#HelpInfo").toggle();
+        }
 </script> 
 
 </head>
@@ -409,10 +430,10 @@
     <thead>
         <tr id="title">
          <th style="width:19px;" >序</th>
-         <th>编号 </th>
-        <th>名称</th>
-        <th style="width:50%;">所在部门</th>
-        <th>操作</th>
+         <!--<th>编号 </th>-->
+        <th style="width:60px;" >姓名</th>
+        <th >所在部门</th>
+        <th style="width:40px;" >操作</th>
         </tr>
     </thead>
     <tbody>
@@ -421,14 +442,9 @@
 
     <br />
       <div>
-       <div id="labInfo">
-        输入要下一步接受人员可以使用人员名称拼音支持全拼简拼.
-        <br />比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua
-        <br>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx
-        </div>
-        <br />
+       
         <input type="text" id="TB_Emps" name="TB_Emps" value='' style=" width:400px; "/> 
-        <input type="button" id="BtnSelectEmps" value='选择人员'/>
+        <input type="button" id="Btn_SelectEmps" value='选择人员'/>
         <div id="SelectEmp"></div>
              <!--<select id="SelectEmp"></select>-->
          <br />
@@ -436,7 +452,19 @@
              <input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>
              <input type="button" value="执行发送" onclick="Send();" id="Btn_Send"/>
              <input type="button" value="关闭" onclick="CloseModel();" id="Btn_Close" />
+             <a href="javascript:Help()" >查询帮助?</a>
          </div>
+
+         
+
+        <div id="HelpInfo" >
+        <ul>
+        <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
+        <li>比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua </li>
+        <li>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx </li>
+        </ul>
+        </div>
+
     </div>
 
     <div class="Msg" style="text-align: left; display:none;"> <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
@@ -446,7 +474,7 @@
 <section style="display: none;">
     <div>
         请选择要下一步接受人员列表的人：
-        <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
+        <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="Btn_SelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
     </div>
     <div>
         下一步接受人员列表原因:

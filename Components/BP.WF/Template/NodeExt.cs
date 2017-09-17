@@ -503,8 +503,10 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.AskforEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.AskforLab, "http://ccbpm.mydoc.io/?v=5404&t=16258");
 
+
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.HuiQianRole, false, "是否启用", true, true);
+                map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作模式@4=组长模式");
+
 
                 // add by 周朋 2014-11-21. 让用户可以自己定义流转.
                 map.AddTBString(BtnAttr.TCLab, "流转自定义", "流转自定义", true, false, 0, 50, 10);

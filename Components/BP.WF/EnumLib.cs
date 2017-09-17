@@ -6,6 +6,22 @@ using System.Text;
 namespace BP.WF
 {
     /// <summary>
+    /// 会签模式
+    /// </summary>
+    public enum HuiQianRole
+    {
+        None,
+        /// <summary>
+        /// 队列(按照顺序处理，有最后一个人发送到下一个节点)
+        /// </summary>
+        Teamup = 1,
+        /// <summary>
+        /// 协作组长模式
+        /// </summary>
+        TeamupGroupLeader = 4
+    }
+
+    /// <summary>
     /// 方向条件控制规则
     /// </summary>
     public enum CondModel
@@ -490,23 +506,23 @@ namespace BP.WF
         /// <summary>
         /// 抢办(谁抢到谁来办理,办理完后其他人就不能办理.)
         /// </summary>
-        QiangBan,
+        QiangBan=0,
         /// <summary>
         /// 协作(没有处理顺序，接受的人都要去处理,由最后一个人发送到下一个节点)
         /// </summary>
-        Teamup,
+        Teamup=1,
         /// <summary>
         /// 队列(按照顺序处理，有最后一个人发送到下一个节点)
         /// </summary>
-        Order,
+        Order=2,
         /// <summary>
         /// 共享模式(需要申请，申请后才能执行)
         /// </summary>
-        Sharing,
+        Sharing=3,
         /// <summary>
         /// 协作组长模式
         /// </summary>
-        TeamupGroupLeader
+        TeamupGroupLeader=4
     }
     /// <summary>
     /// 阻塞模式

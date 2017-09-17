@@ -402,14 +402,23 @@ namespace BP.WF
 
                         if (rws.Count != 0)
                         {
-                            string msgInfo = "";
-                            foreach (BP.WF.ReturnWork rw in rws)
-                            {
-                                DataRow drMsg = dtAlert.NewRow();
-                                drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
-                                drMsg["Msg"] = rw.BeiZhuHtml;
-                                dtAlert.Rows.Add(drMsg);
-                            }
+                            //string msgInfo = "";
+                            //foreach (BP.WF.ReturnWork rw in rws)
+                            //{
+                            //    DataRow drMsg = dtAlert.NewRow();
+                            //    //drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
+                            //    drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT;
+                            //    drMsg["Msg"] = rw.BeiZhuHtml;
+                            //    dtAlert.Rows.Add(drMsg);
+                            //}
+
+                             string msgInfo = "";
+                             foreach (BP.WF.ReturnWork rw in rws)
+                             {
+                                 //drMsg["Title"] = "来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT + "&nbsp;<a href='/DataUser/ReturnLog/" + fk_flow + "/" + rw.MyPK + ".htm' target=_blank>工作日志</a>";
+                                 msgInfo += "\t\n来自节点:" + rw.ReturnNodeName + " 退回人:" + rw.ReturnerName + "  " + rw.RDT;
+                                 msgInfo += rw.BeiZhuHtml;
+                             }
 
                             string str = nd.ReturnAlert;
                             if (str != "")
@@ -428,18 +437,16 @@ namespace BP.WF
 
                                 DataRow drMsg = dtAlert.NewRow();
                                 drMsg["Title"] = "退回信息";
-                                drMsg["Msg"] = str;
+                                drMsg["Msg"] = msgInfo + "\t\n" + str;
                                 dtAlert.Rows.Add(drMsg);
                             }
-                            //else
-                            //{
-                            //    DataRow drMsg = dtAlert.NewRow();
-                            //    drMsg["Title"] = "退回信息";
-                            //    drMsg["Msg"] = msgInfo;
-                            //    dtAlert.Rows.Add(drMsg);
-                            //}
-                            //gwf.WFState = WFState.Runing;
-                            //gwf.DirectUpdate();
+                            else
+                            {
+                                DataRow drMsg = dtAlert.NewRow();
+                                drMsg["Title"] = "退回信息";
+                                drMsg["Msg"] = msgInfo + "\t\n" + str;
+                                dtAlert.Rows.Add(drMsg);
+                            }
                         }
                         break;
                     case WFState.Shift:

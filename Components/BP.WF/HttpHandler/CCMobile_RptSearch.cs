@@ -129,18 +129,28 @@ namespace BP.WF.HttpHandler
 
             qo.Top = 50;
 
+
+            DataTable mydt = null;
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 qo.DoQuery();
-                ds.Tables.Add(gwfs.ToDataTableField("Ens"));
+                mydt = gwfs.ToDataTableField("WF_GenerWorkFlow");
             }
             else
             {
-                DataTable dt = qo.DoQueryToTable();
-                dt.TableName = "Ens";
-                ds.Tables.Add(dt);
+                mydt = qo.DoQueryToTable();
+                mydt.TableName = "WF_GenerWorkFlow";
             }
             #endregion
+
+            //foreach (DataRow dr in mydt.Rows)
+            //{
+            //    if (dr[GenerWorkFlowAttr.TodoEmps].ToString().Contains(WebUser.No) == true)
+            //    {
+            //    }
+            //}
+
+            ds.Tables.Add(mydt);
 
             return BP.Tools.Json.ToJson(ds);
         }

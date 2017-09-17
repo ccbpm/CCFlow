@@ -2532,7 +2532,7 @@ namespace BP.En
 			attr.UIVisible = uiVisable;
 			attr.UIIsReadonly = isReadonly;
 			attr.MaxLength = 50;
-			attr.UIWidth = 100;
+			attr.UIWidth = 55;
 			this.Attrs.Add(attr);
 		}
 		public void AddTBDateTime(string key, string defaultVal, string desc, bool uiVisable, bool isReadonly)

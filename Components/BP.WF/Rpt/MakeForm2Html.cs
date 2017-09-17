@@ -662,7 +662,7 @@ namespace BP.WF
 
                                 msg += "<br>";
                                 msg += "<br>";
-                                msg += "审核人:" + dr["EmpFromT"] + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;审核日期:" + dr["RDT"].ToString();
+                                msg += "审核人:" + dr["EmpFromT"] + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:" + dr["RDT"].ToString();
 
                                 sb.Append("<td colspan=3 valign=middle style='border-style: solid;padding: 4px;text-align: left;color: #333333;font-size: 12px;border-width: 1px;border-color: #C2D5E3;' >" + msg + "</td>");
                                 sb.Append("</tr>");

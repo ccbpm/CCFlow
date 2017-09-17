@@ -1936,11 +1936,21 @@ namespace BP.WF
 
             try
             {
+                #region 对流程的设置做必要的检查.
                 // 设置流程名称.
                 DBAccess.RunSQL("UPDATE WF_Node SET FlowName = (SELECT Name FROM WF_Flow WHERE NO=WF_Node.FK_Flow)");
 
                 //设置单据编号只读格式.
                 DBAccess.RunSQL("UPDATE Sys_MapAttr SET UIIsEnable=0 WHERE KeyOfEn='BillNo' AND UIIsEnable=1");
+
+                //开始节点不能有会签.
+                DBAccess.RunSQL("UPDATE WF_Node SET HuiQianRole=0 WHERE NodePosType=0 AND HuiQianRole !=0");
+
+                //开始节点不能有退回.
+                DBAccess.RunSQL("UPDATE WF_Node SET ReturnRole=0 WHERE NodePosType=0 AND ReturnRole !=0");
+                #endregion 对流程的设置做必要的检查.
+
+
 
                 //删除垃圾,非法数据.
                 string sqls = "DELETE FROM Sys_FrmSln where fk_mapdata not in (select no from sys_mapdata)";

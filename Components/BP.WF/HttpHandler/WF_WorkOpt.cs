@@ -190,7 +190,19 @@ namespace BP.WF.HttpHandler
         {
             string sql = "";
             string emp = this.GetRequestVal("TB_Emps");
-            emp = FilteSQLStr(emp);
+
+            #region 保障查询语句的安全.
+            emp = emp.ToLower();
+            emp = emp.Replace("'", "");
+            emp = emp.Replace("&", "&amp");
+            emp = emp.Replace("<", "&lt");
+            emp = emp.Replace(">", "&gt");
+            emp = emp.Replace("delete", "");
+            emp = emp.Replace("update", "");
+            emp = emp.Replace("insert", "");
+            #endregion 保障查询语句的安全.
+
+
             bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
             if (isPinYin == true)
             {
@@ -1729,24 +1741,6 @@ namespace BP.WF.HttpHandler
             return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
         }
 
-        /// 过滤不安全的字符串
-        /// </summary> 
-        /// <param name="Str"></param> 
-        /// <returns></returns> 
-        public static string FilteSQLStr( string Str)
-        {
-
-            Str = Str.Replace("'", "" );
-            Str = Str.Replace("/", "" );
-            Str = Str.Replace("&", "&amp" );
-            Str = Str.Replace("<", "&lt" );
-            Str = Str.Replace(">", "&gt" );
-
-            Str = Str.Replace("delete" , "" );
-            Str = Str.Replace("update" , "" );
-            Str = Str.Replace("insert" , "" );
-
-            return Str; 
-        }
+      
     }
 }

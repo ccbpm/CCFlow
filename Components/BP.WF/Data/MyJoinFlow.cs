@@ -723,8 +723,8 @@ namespace BP.WF.Data
                 map.AddTBInt(MyFlowAttr.PWorkID, 0, "PWorkID", false, false);
                 map.AddTBString(MyFlowAttr.Title, null, "流程标题", true, false, 0, 100, 150, true);
                 map.AddDDLEntities(MyFlowAttr.FK_Flow, null, "流程名称", new Flows(), false);
-                map.AddTBString(MyFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 150);
-                map.AddTBString(MyFlowAttr.StarterName, null, "发起人名称", true, false, 0, 30, 10);
+                map.AddTBString(MyFlowAttr.BillNo, null, "单据编号", true, false, 0, 100, 50);
+                map.AddTBString(MyFlowAttr.StarterName, null, "发起人", true, false, 0, 30, 40);
 
                 //map.AddDDLEntities(MyFlowAttr.FK_Dept, null, "发起人部门", new BP.Port.Depts(), false);
                 //map.AddTBString(MyFlowAttr.Starter, null, "发起人编号", true, false, 0, 30, 10);

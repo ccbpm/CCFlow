@@ -24,7 +24,6 @@
         $(function () {
 
             var fk_flow = GetQueryString("FK_Flow");
-
             //初始化表格.
             $.ajax({
                 type: 'post',
@@ -42,19 +41,26 @@
                     data = JSON.parse(data);
 
                     var html = "<ul class='navlist'>";
+                    var url = "";
+
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
                         var menu = data[i];
 
                         html += "<li>";
                         html += "<div>";
-                        html += "<a href='javascript:void(0)' onclick=\"OpenUrlInRightFrame(this, 'FlowSearch.htm?SearchType=" + menu.No + "&FK_Flow=" + fk_flow + "');\" >";
+                        url = "FlowSearch.htm?SearchType=" + menu.No + "&FK_Flow=" + fk_flow;
+                        html += "<a href='javascript:void(0)' onclick=\"OpenUrlInRightFrame(this, '" + url + "');\" >";
                         html += "<span>" + menu.Name + "</span></a>";
                         html += "</div>";
                         html += "</li>";
                     }
                     html += "</ul>";
                     document.getElementById("menuList").innerHTML = html;
+
+                    $('#context').attr('src', url + '&s=' + Math.random());
+
+                    document.title = '流程实例查询';
                 }
             });
         });
@@ -65,6 +71,7 @@
         //在右侧框架中显示指定url的页面
         function OpenUrlInRightFrame(ele, url) {
             if (ele != null && ele != undefined) {
+
                 //if (currShow == $(ele).text()) return;
 
                 currShow = $(ele).parents('li').text(); //有回车符
@@ -80,7 +87,7 @@
         }
     </script>
 </head>
-<body class="easyui-layout" onkeypress="Esc();">
+<body class="easyui-layout" onkeypress="Esc();" onkeydown="Esc();" >
     <form id="form1" runat="server">
 
     <div class="easyui-layout" region="north" split="true" style=" height:50px; background-image:url(./Img/BJ.png)" >

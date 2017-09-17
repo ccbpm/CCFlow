@@ -17,9 +17,6 @@
     Int64 workid = Int64.Parse(this.Request.QueryString["WorkID"]);
     string flowNo = this.Request.QueryString["FK_Flow"];
     
- //   Int64 fid = Int64.Parse(this.Request.QueryString["FID"]);
-   // int nodeID = int.Parse(this.Request.QueryString["FK_Node"]);
-
     string doIt = this.Request.QueryString["DoIt"];
     BP.WF.GenerWorkFlow gwf = new BP.WF.GenerWorkFlow(workid);
     BP.WF.Node nd = new BP.WF.Node(gwf.FK_Node);

@@ -273,7 +273,7 @@
 
 
                     data = data.replace('@', '<br/>@');
-                    data+=" <center><input type='button' value='    关    闭    ' onclick='Close();'  /></center>";
+                    data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
                     $(".Msg").show();
                     $(".Msg").html(data);
 
@@ -294,32 +294,21 @@
         }
 
         //取消移交
-        function Close() {
-
+        function CloseAll() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.returnWorkWindowClose("");
-            } else {
-                $('body').append($('<div>' + "已取消操作" + '</div>'));
-                window.close();
+                window.parent.close();
             }
+            window.close();
         }
 
         //关闭model.
         function CloseModel() {
-
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("");
             } else {
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
                 window.close();
             }
-
-            //        //怎么解决关闭当前的model.
-            //            Close();
-
-            //           // window.parent.get;
-            //            $('#returnWorkModal').modal('hide');
-            //            window.close();
         }
 
         //设置选中的人员
@@ -460,18 +449,22 @@
              <!--<input type="button" value="增加下一步工作处理人" id="Btn_AddEmps" onclick="AddEmps(false);"/>-->
              <input type="button" value="执行发送" onclick="Send();" id="Btn_Send"/>
              <input type="button" value="关闭" onclick="CloseModel();" id="Btn_Close" />
+
              <a href="javascript:Help()" >查询帮助?</a>
-         </div>
 
-         
-
-        <div id="HelpInfo" >
+                 <div id="HelpInfo" >
         <ul>
         <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
         <li>比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua </li>
         <li>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx </li>
         </ul>
         </div>
+
+         </div>
+
+         
+
+    
 
     </div>
 

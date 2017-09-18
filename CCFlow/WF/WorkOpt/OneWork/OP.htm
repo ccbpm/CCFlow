@@ -168,11 +168,8 @@
             //            if (typeof isCan == "undefined") {
             //                return "";
             //            }
-
             isCan = true;
-
             var fk_node = GetQueryString("FK_Node");
-
             var html = addBlockBegin("打印/打包下载");
             if (isCan) {
                 html += "功能执行:<a href='../Packup.htm?WorkID=" + workid + "&FK_Flow=" + fk_flow + "&NodeID=" + fk_node + "&FK_Node=" + fk_node + "' >执行打印</a>。";

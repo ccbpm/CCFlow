@@ -95,7 +95,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
         }
-        #endregion 
+        #endregion
 
         #region 执行父类的重写方法.
         /// <summary>
@@ -117,7 +117,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
-       
+
         #region xxx 界面 .
         #endregion xxx 界面方法.
 
@@ -133,25 +133,35 @@ namespace BP.WF.HttpHandler
             int myselft = this.GetRequestValInt("CHK_Myself");
             string sql = "";
 
-            switch (type) {
+            GenerWorkFlows ens = new GenerWorkFlows();
+            QueryObject qo = new QueryObject(ens);
+            switch (type)
+            {
                 case "ByWorkID":
-                    if (myselft == 1)
-                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords + " AND Emps LIKE '@%" + WebUser.No + "%'"; 
-                    else
-                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
+                    qo.AddWhere(GenerWorkFlowAttr.WorkID, keywords);
+                    if (WebUser.IsAdmin == false)
+                    {
+                        qo.addAnd();
+                        qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "@%" + WebUser.No + "%'");
+                    }
                     break;
-
                 case "ByTitle":
-                    if (myselft == 1)
-                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%' AND Emps LIKE '@%" + WebUser.No + "%'";
-                    else
-                        sql = "SELECT * FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%'";
+                    qo.AddWhere(GenerWorkFlowAttr.Title, " LIKE ", "@%" + keywords + "%'");
+                    if (WebUser.IsAdmin == false)
+                    {
+                        qo.addAnd();
+                        qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "@%" + WebUser.No + "%'");
+                    }
                     break;
             }
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            return BP.Tools.Json.ToJson(dt);
-        }
-        #endregion 
 
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                qo.DoQuery();
+                return BP.Tools.Json.ToJson(ens.ToDataTableField());
+            }
+            return BP.Tools.Json.ToJson(qo.DoQueryToTable());
+        }
+        #endregion
     }
 }

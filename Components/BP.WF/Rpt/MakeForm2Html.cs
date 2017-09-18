@@ -28,7 +28,7 @@ namespace BP.WF
     public class MakeForm2Html
     {
         public static string CCFlowAppPath = "/";
-        public static string MakeHtmlDocumentOfFreeFrm(string frmID, Int64 workid,string flowNo = null,string fileNameFormat=null)
+        public static string MakeHtmlDocumentOfFreeFrm(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null)
         {
             try
             {
@@ -824,9 +824,9 @@ namespace BP.WF
                 }
 
                 if (string.IsNullOrEmpty(fileNameFormat) == true)
-                {
                     fileNameFormat = workid.ToString();
-                }
+
+              //  fileNameFormat = workid.ToString();
 
                 char[] strs = "?*\"<>/;.,-:".ToCharArray();
                 foreach (char c in strs)
@@ -845,16 +845,16 @@ namespace BP.WF
                 #region 把所有的文件做成一个zip文件.
                 //生成pdf文件
                 string pdfFile = path + "\\" + fileNameFormat + ".pdf";
+                string pdfFileExe = SystemConfig.PathOfDataUser + "\\ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
                 try
                 {
-
-                    Html2Pdf(billUrl, pdfFile);
+                    Html2Pdf(pdfFileExe,billUrl, pdfFile);
 
                     ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/" + fileNameFormat + ".pdf");
                 }
                 catch (Exception ex)
                 {
-                    ht.Add("pdf","err@生成pdf文件遇到权限问题:" + ex.Message  +"@要保存的pdf路径:"+pdfFile +" ,  html url:"+billUrl);
+                    ht.Add("pdf", "err@生成pdf错误:" + ex.Message + "@路径变量: pdfFileExe=" + pdfFileExe + " pdf " + pdfFile + " ,  html url:" + billUrl);
                 }
 
                 string zipFile = path + "\\..\\" + fileNameFormat + ".zip";
@@ -871,25 +871,29 @@ namespace BP.WF
 
                 return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return "err@生成文件的时候出现IO权限问题的错误," + ex.Message;
+                return "err@报表生成错误:" + ex.Message;
             }
         }
 
-        public static void Html2Pdf(string htmFile, string pdf)
+        public static void Html2Pdf(string pdfFileExe, string htmFile, string pdf)
         {
             //因为Web 是多线程环境，避免甲产生的文件被乙下载去，所以档名都用唯一
 
-            string pdfFileExe = SystemConfig.PathOfDataUser + "\\ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
+
+          //  string "ss"="C:\Program Files (x86)\wkhtmltopdf\bin\wkhtmltopdf.exe";
             string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
 
             //执行wkhtmltopdf.exe
             //Process p = System.Diagnostics.Process.Start(pdfFileExe, @"http://msdn.microsoft.com/zh-cn D:\" + fileNameWithOutExtention + ".pdf");
             Process p = System.Diagnostics.Process.Start(pdfFileExe, htmFile + " " + pdf);
+            p.WaitForExit();
+            //p.WaitForExit();
+
 
             //若不加这一行，程序就会马上执行下一句而抓不到文件发生意外：System.IO.FileNotFoundException: 找不到文件 ''。
-            p.WaitForExit();
+
 
             ////把文件读进文件流
             //FileStream fs = new FileStream(pdf, FileMode.Open);

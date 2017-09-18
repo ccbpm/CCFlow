@@ -133,35 +133,26 @@ namespace BP.WF.HttpHandler
             int myselft = this.GetRequestValInt("CHK_Myself");
             string sql = "";
 
-            GenerWorkFlows ens = new GenerWorkFlows();
-            QueryObject qo = new QueryObject(ens);
             switch (type)
             {
                 case "ByWorkID":
-                    qo.AddWhere(GenerWorkFlowAttr.WorkID, keywords);
-                    if (WebUser.IsAdmin == false)
-                    {
-                        qo.addAnd();
-                        qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "@%" + WebUser.No + "%'");
-                    }
+                    if (myselft == 1)
+                        sql = "SELECT FlowName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords + " AND Emps LIKE '@%" + WebUser.No + "%'";
+                    else
+                        sql = "SELECT FlowName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
                     break;
-                case "ByTitle":
-                    qo.AddWhere(GenerWorkFlowAttr.Title, " LIKE ", "@%" + keywords + "%'");
-                    if (WebUser.IsAdmin == false)
-                    {
-                        qo.addAnd();
-                        qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "@%" + WebUser.No + "%'");
-                    }
-                    break;
-            }
 
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                qo.DoQuery();
-                return BP.Tools.Json.ToJson(ens.ToDataTableField());
+                case "ByTitle":
+                    if (myselft == 1)
+                        sql = "SELECT FlowName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%' AND Emps LIKE '@%" + WebUser.No + "%'";
+                    else
+                        sql = "SELECT FlowName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%'";
+                    break;
             }
-            return BP.Tools.Json.ToJson(qo.DoQueryToTable());
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
         }
         #endregion
+
     }
 }

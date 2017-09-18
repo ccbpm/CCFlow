@@ -48,6 +48,17 @@
 
         function Btn_Click() {
 
+            //window.event兼容
+            if (!window.event) {
+                window.event = arguments.callee.caller.arguments[0]; // 获取event对象
+            }
+            if (!window.event.srcElement) {
+                window.event.srcElement = window.event.target; // 获取event对象
+            }
+            if (!window.event.keyCode) {
+                window.event.keyCode = window.event.which; // 获取event对象
+            }
+
             if (TB_KeyWords.value == "") {
                 return;
             }

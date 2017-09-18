@@ -43,6 +43,12 @@
         .addbg {
             background: #CFCFCF;
         }
+        #next
+        {
+            float:left;
+            position: relative;
+            width:600px;
+         }
     </style>
     <script type="text/javascript">
         var param = {};
@@ -294,15 +300,6 @@
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
                 window.close();
             }
-
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.returnWorkWindowClose("");
-            } else {
-                $('body').append($('<div>' + "已取消操作" + '</div>'));
-                window.close();
-            }
-
-            window.parent.close();
         }
 
         //关闭model.

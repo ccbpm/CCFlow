@@ -30,6 +30,19 @@ namespace BP.WF
     {
         #region 公共属性.
         /// <summary>
+        /// 打印文件
+        /// </summary>
+        public static string PrintBackgroundWord
+        {
+            get
+            {
+                string s = BP.Sys.SystemConfig.AppSettings["PrintBackgroundWord"];
+                if (string.IsNullOrEmpty(s))
+                    s = "驰骋工作流引擎@开源驰骋 - ccflow@openc";
+                return s;
+            }
+        }
+        /// <summary>
         /// 运行平台.
         /// </summary>
         public static Platform Platform

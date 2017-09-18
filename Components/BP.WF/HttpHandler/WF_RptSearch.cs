@@ -149,7 +149,21 @@ namespace BP.WF.HttpHandler
                         sql = "SELECT FlowName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%'";
                     break;
             }
+
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["WFSTA"].ColumnName = "WFSta";
+                dt.Columns["EMPS"].ColumnName = "Emps";
+            }
+
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion

@@ -204,6 +204,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Rpt\MakeForm2Html.cs" />
+    <Compile Include="Rpt\WaterImage.cs" />
     <Compile Include="Rpt\RptExportTemplate.cs" />
     <Compile Include="Rpt\RptDfine.cs" />
     <Compile Include="Service References\CCInterface\Reference.cs">

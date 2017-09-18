@@ -7214,6 +7214,27 @@ namespace BP.WF
         /// <param name="Del_Selected">是否删除历史选择</param>
         public static void Node_AddNextStepAccepters(Int64 workID,  int toNodeID, string emps, bool del_Selected = true)
         {
+
+            if (emps.Contains(";") == true)
+            {
+                // 类似与这样的格式. "00000054,严冬梅;00000649,张磊;
+                string[] mystrs = emps.Split(';');
+                string result = "";
+                foreach (string str in mystrs)
+                {
+                    if (str.Contains(",") == true)
+                    {
+                        result += str.Substring(0, str.IndexOf(',')+1);
+                    }
+                    else
+                    {
+                        result += str;
+                    }
+                }
+                emps = result;
+            }
+
+
             SelectAccper sa = new SelectAccper();
             //删除历史选择
             if (del_Selected == true)

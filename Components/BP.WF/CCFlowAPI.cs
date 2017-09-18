@@ -139,7 +139,7 @@ namespace BP.WF
                             if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                                 mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC";
                             else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 AND ROWNUM =1  ORDER BY WorkID DESC ";
+                                mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                             else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                                 mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID  DESC";
 

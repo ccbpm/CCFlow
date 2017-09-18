@@ -30,6 +30,8 @@ namespace BP.WF
         public static string CCFlowAppPath = "/";
         public static string MakeHtmlDocumentOfFreeFrm(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null)
         {
+
+
             try
             {
                 #region 准备目录文件.
@@ -62,7 +64,12 @@ namespace BP.WF
                     System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(templateFilePath);
                     System.IO.FileInfo[] finfos = dir.GetFiles();
                     foreach (System.IO.FileInfo fl in finfos)
+                    {
+                        if (fl.Name.Contains("ShuiYin"))
+                            continue;
+
                         System.IO.File.Copy(fl.FullName, path + "\\" + fl.Name, true);
+                    }
 
                 }
                 catch (Exception ex)
@@ -71,6 +78,8 @@ namespace BP.WF
                 }
 
                 #endregion 准备目录文件.
+
+              
 
                 #region 生成二维码.
                 /*说明是图片文件.*/
@@ -103,6 +112,17 @@ namespace BP.WF
                 //float wtX = 0;
                 float x = 0;
                 #endregion
+
+                #region 生成水文.
+                string words = Glo.PrintBackgroundWord;
+                if (words.Contains("@") == true)
+                    words = Glo.DealExp(words, en, null);
+
+                string templateFilePathMy = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
+                WaterImageManage wim = new WaterImageManage();
+                wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.5"), ImagePosition.Center, path + "\\ShuiYin.png");
+                #endregion
+
 
                 #region 输出Ele
                 FrmEles eles = mapData.FrmEles;

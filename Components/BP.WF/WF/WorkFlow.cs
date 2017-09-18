@@ -1252,9 +1252,16 @@ namespace BP.WF
             ps.Add("WorkID2", this.WorkID);
             DBAccess.RunSQL(ps);
 
+            //把当前的人员字符串加入到参与人里面去,以方便查询.
+            string emps = WebUser.Name+","+WebUser.No+"@";
+
             // 设置流程完成状态.
             ps = new Paras();
-            ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET  FlowEmps= FlowEmps'||"+emps+"',WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
+            else
+                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps=FlowEmps+'"+emps+"', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
+
             ps.Add("WFState", (int)WFState.Complete);
             ps.Add("WFSta", (int)WFSta.Complete);
             ps.Add("OID", this.WorkID);
@@ -1286,6 +1293,13 @@ namespace BP.WF
             ps.Add(TrackAttr.WorkID, this.WorkID);
             BP.DA.DBAccess.RunSQL(ps);
             #endregion 处理审核问题.
+
+            //执行流程结束.
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            gwf.Emps += emps;
+            gwf.WFState = WFState.Complete;
+            gwf.Update();
+
 
             //if (string.IsNullOrEmpty(msg) == true)
             //    msg = "流程成功结束.";

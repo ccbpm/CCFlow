@@ -132,10 +132,9 @@
 
                 var row = "";
                 row += "<tr>";
-                row += "<td>" + i + "</td>";
-                row += "<td>" + gwl.FK_Emp + "</td>";
+               // row += "<td>" + i + "</td>";
                 row += "<td>" + gwl.FK_EmpText + "</td>";
-                row += "<td style='width:50%;'  title='" + gwl.FK_DeptT + "' >" + gwl.FK_DeptT + "</td>";
+                row += "<td  title='" + gwl.FK_DeptT + "' >" + gwl.FK_DeptT + "</td>";
 
                 if (gwl.IsPass == 0) {
                     row += "<td>未审批</td>";
@@ -168,8 +167,8 @@
 
         function DeleteIt(empNo,row) {
 
-            if (window.confirm('您确定要移除[' + empNo + ']') == false)
-                return;
+//            if (window.confirm('您确定要移除[' + empNo + ']') == false)
+//                return;
 
             $.ajax({
                 type: 'post',
@@ -196,16 +195,15 @@
 
 
         //确定  执行会签操作
-        function ReturnWork() {
+        function ReturnWork(emps) {
 
             //WorkID, this.FID, this.FK_Node
             //var empNos = frames["iframeSelectEmpsForm"].window.returnVal.NO;
-
-            var emps = this.document.getElementById("TB_Emps").value;
-            if (emps == "") {
-                alert('请输入要加签的人员ID,多个ID使用逗号分开.');
-                return;
-            }
+          //  var emps = this.document.getElementById("TB_Emps").value;
+//            if (emps == "") {
+//                alert('请输入要加签的人员ID,多个ID使用逗号分开.');
+//                return;
+//            }
 
             $.ajax({
                 type: 'post',
@@ -258,6 +256,8 @@
           //  alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
            // alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
 
+            ReturnWork(frames["iframeSelectEmpsForm"].window.returnVal.No);
+            return;
             $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
 
@@ -317,7 +317,8 @@
         });
 
         function selectAdd(No) {
-            $("#TB_Emps").val(No);
+            ReturnWork(No);
+            //  $("#TB_Emps").val(No);
         }
 
         //鼠标事件
@@ -328,7 +329,11 @@
 
         //选择下拉数据
         function getCon(no) {
-            $("#TB_Emps").val(no);
+
+            $("#TB_Emps").val('');
+
+            ReturnWork(no);
+
             $("#SelectEmp").hide().html("");
         }
 
@@ -342,10 +347,8 @@
     <table id="Table1" style=" width:98%; ">
     <thead>
     <tr id='title'>
-    <th style="width:19px;" >序</th>
-    <th>编号 </th>
     <th>名称</th>
-    <th style="width:50%;">所在部门</th>
+    <th>所在部门</th>
     <th>状态</th>
     <th>操作</th>
     </tr></thead>
@@ -359,10 +362,9 @@
         <div id="SelectEmp"></div>
         <br />
         <div id="next">
-            <input type="button" value="增加会签人" onclick="ReturnWork();"/>
+            <!--<input type="button" value="增加会签人" onclick="ReturnWork();"/>-->
             <input type="button" value="关闭" onclick="Close();"/>
-             <a href="javascript:Help()" >查询帮助?</a>
-
+             <a href="javascript:Help()" >需要帮助?</a>
               <div id="HelpInfo" >
         <ul>
         <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>

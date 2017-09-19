@@ -239,6 +239,37 @@ function deleteFlowSort() {
         });
     });
 }
+//上移流程类别
+function moveUpFlowSort() {
+    var currSort = $('#flowTree').tree('getSelected');
+    if (currSort == null) return;
+
+    //传入后台参数
+    var params = {
+        DoType: "MoveUpFlowSort",
+        FK_FlowSort: currSort.id
+    };
+    ajaxService(params, function (data) {
+        var parentNo = currSort.attributes.Node.ParentId;
+        RefreshNode('flowTree', parentNo);
+    });
+}
+
+//下移流程类别
+function moveDownFlowSort() {
+    var currSort = $('#flowTree').tree('getSelected');
+    if (currSort == null) return;
+    
+    //传入后台参数
+    var params = {
+        DoType: "MoveDownFlowSort",
+        FK_FlowSort: currSort.id
+    };
+    ajaxService(params, function (data) {
+        var parentNo = currSort.attributes.Node.ParentId;
+        RefreshNode('flowTree', parentNo);
+    });
+}
 
 function CloseAllTabs() {
     $('.tabs-inner span').each(function (i, n) {
@@ -360,6 +391,40 @@ function FlowProperty() {
     url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PK=" + fk_flow + "&Lang=CH&UserNo="+GetQu;
     addTab(currFlow + "PO", "流程属性" + fk_flow, url);
     //WinOpen(url);
+}
+
+//上移流程
+function moveUpFlow() {
+    var currFlow = $('#flowTree').tree('getSelected');
+    if (currFlow == null || currFlow.attributes.ISPARENT != '0')
+        return;
+
+    //传入后台参数
+    var params = {
+        DoType: "MoveUpFlowSort",
+        FK_Flow: currFlow.id
+    };
+    ajaxService(params, function (data) {
+        var parentNo = currFlow.attributes.Node.ParentId;
+        RefreshNode('flowTree', parentNo)
+    });
+}
+
+//下移流程
+function moveDownFlow() {
+    var currFlow = $('#flowTree').tree('getSelected');
+    if (currFlow == null || currFlow.attributes.ISPARENT != '0')
+        return;
+
+    //传入后台参数
+    var params = {
+        DoType: "MoveDownFlow",
+        FK_Flow: currFlow.id
+    };
+    ajaxService(params, function (data) {
+        var parentNo = currFlow.attributes.Node.ParentId;
+        RefreshNode('flowTree', parentNo)
+    });
 }
 
 //新建表单

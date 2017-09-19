@@ -62,10 +62,12 @@ CanvasProps.load = function(o){
     var canvasprops = new CanvasProps();
 
     var tempVal = Number(o.height);
-    canvasprops.height = !isNaN(tempVal) ? tempVal : CanvasProps.DEFAULT_HEIGHT;
+    //    canvasprops.height = !isNaN(tempVal) ? tempVal : CanvasProps.DEFAULT_HEIGHT;
+    canvasprops.height = CanvasProps.DEFAULT_HEIGHT;
 
     tempVal = Number(o.width);
-    canvasprops.width = !isNaN(tempVal) ? tempVal : CanvasProps.DEFAULT_WIDTH;
+    //    canvasprops.width = !isNaN(tempVal) ? tempVal : CanvasProps.DEFAULT_WIDTH;
+    canvasprops.width = CanvasProps.DEFAULT_WIDTH;
 
     canvasprops.fillColor = o.fillColor;
 

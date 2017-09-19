@@ -3582,8 +3582,10 @@ function init(diagramId) {
         canvasProps = new CanvasProps(CanvasProps.DEFAULT_WIDTH, CanvasProps.DEFAULT_HEIGHT, CanvasProps.DEFAULT_FILL_COLOR);
     }
     //lets make sure that our canvas is set to the correct values
-    canvasProps.setWidth(canvasProps.getWidth());
-    canvasProps.setHeight(canvasProps.getHeight());
+    //    canvasProps.setWidth(canvasProps.getWidth());
+    //    canvasProps.setHeight(canvasProps.getHeight());
+    canvasProps.setWidth(CanvasProps.DEFAULT_WIDTH);
+    canvasProps.setHeight(CanvasProps.DEFAULT_HEIGHT);
 
 
 

@@ -2271,7 +2271,7 @@ function GenerWorkNode() {
             }
 
             //设置标题.
-            document.title = '您好:'+ flow_Data.WF_Node[0].Name;
+            document.title = '您好:' + flow_Data.WF_Node[0].Name;
 
 
             $('#CCForm').html('');
@@ -2485,7 +2485,12 @@ function GenerWorkNode() {
             window.UEs = [];
             document.UE_MapAttr.forEach(function (item) {
                 var obj = {};
-                obj.editor = UM.getEditor(item.id);
+                //根据字段只读属性 调整外观
+                //if (item.MapAttr.UIIsEnable == "0") {
+                obj.editor = UM.getEditor(item.id, {
+                    "readonly":item.MapAttr.UIIsEnable == "0",
+                    "textarea":"TB_" + item.MapAttr.KeyOfEn,
+                });
                 obj.attr = item.MapAttr;
                 window.UEs.push(obj);
 
@@ -2558,7 +2563,12 @@ function figure_MapAttr_Template(mapAttr) {
                                 editorPara.MapAttr = mapAttr;
                                 document.UE_MapAttr.push(editorPara);
 
-                                eleHtml += "<script id='" + editorPara.id + "' name='content' type='text/plain'></script>";
+                                if (mapAttr.UIIsEnable == "0") {
+                                    //字段处于只读状态
+                                    eleHtml += "<script id='" + editorPara.id + "' name='content' type='text/plain'>" + defValue + "</script>";
+                                } else {
+                                    eleHtml += "<script id='" + editorPara.id + "' name='content' type='text/plain'></script>";
+                                }
                                 eleHtml += "<input type='hidden' name='TB_" + mapAttr.KeyOfEn + "' />";
                             } else {
                                 eleHtml +=

@@ -74,7 +74,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         protected override string DoDefaultMethod()
         {
-            
+
             return "err@没有判断的标记:" + this.DoType;
         }
         #endregion 执行父类的重写方法.
@@ -104,7 +104,7 @@ namespace BP.WF.HttpHandler
         public string GetEmpsByStationTable()
         {
             string deptid = this.GetRequestVal("DeptNo");
-            string stid = this.GetRequestVal("StationNo"); 
+            string stid = this.GetRequestVal("StationNo");
 
             if (string.IsNullOrWhiteSpace(deptid) || string.IsNullOrWhiteSpace(stid))
                 return "[]";
@@ -552,7 +552,7 @@ namespace BP.WF.HttpHandler
                         node.DirectUpdate();
                     }
                 }
-                
+
                 if (figure["CCBPM_Shape"].ToString() == "Text")
                 {
                     //流程标签处理.
@@ -806,21 +806,21 @@ namespace BP.WF.HttpHandler
         /// <returns>返回结果Json,流程树</returns>
         public string GetFlowTreeTable()
         {
-            string sql = @"SELECT 'F'+No NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+            string sql = @"SELECT * FROM (SELECT 'F'+No NO,'F'+ParentNo PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
-                           SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
+                           SELECT NO, 'F'+FK_FlowSort as PARENTNO,(NO + '.' + NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
 
             if (BP.Sys.SystemConfig.AppCenterDBType == DBType.Oracle)
             {
-                sql = @"SELECT 'F'||No NO,'F'||ParentNo PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+                sql = @"SELECT * FROM (SELECT 'F'||No NO,'F'||ParentNo PARENTNO,NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                         union 
-                        SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
+                        SELECT NO, 'F'||FK_FlowSort as PARENTNO,NO||'.'||NAME NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
             }
             else if (BP.Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
             {
-                sql = @"SELECT CONCAT('F', No) NO, CONCAT('F', ParentNo) PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
+                sql = @"SELECT * FROM (SELECT CONCAT('F', No) NO, CONCAT('F', ParentNo) PARENTNO, NAME, IDX, 1 ISPARENT,'FLOWTYPE' TTYPE,-1 DTYPE FROM WF_FlowSort
                            union 
-                           SELECT NO, CONCAT('F', FK_FlowSort) PARENTNO, CONCAT(NO, '.', NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow";
+                           SELECT NO, CONCAT('F', FK_FlowSort) PARENTNO, CONCAT(NO, '.', NAME) NAME,IDX,0 ISPARENT,'FLOW' TTYPE,DTYPE FROM WF_Flow) A  ORDER BY IDX";
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -842,7 +842,7 @@ namespace BP.WF.HttpHandler
                 if (drs.Length > 0 && !Equals(drs[0]["PARENTNO"], "F0"))
                     drs[0]["PARENTNO"] = "F0";
             }
-      
+
 
             if (WebUser.No != "admin")
             {
@@ -870,7 +870,7 @@ namespace BP.WF.HttpHandler
         {
             DataRow[] rows = dt.Select("ParentNo='" + parentRow["NO"] + "'");
 
-            foreach(DataRow r in rows)
+            foreach (DataRow r in rows)
             {
                 newDt.Rows.Add(r.ItemArray);
 
@@ -973,7 +973,7 @@ namespace BP.WF.HttpHandler
                 aemp.RetrieveFromDBSources();
 
                 if (aemp.UserType != 1)
-                    return "err@您["+WebUser.No+"]已经不是二级管理员了.";
+                    return "err@您[" + WebUser.No + "]已经不是二级管理员了.";
                 if (aemp.RootOfForm == "")
                     return "err@没有给二级管理员[" + WebUser.No + "]设置表单树的权限...";
 
@@ -1285,6 +1285,28 @@ namespace BP.WF.HttpHandler
             }
         }
 
+        /// <summary>
+        /// 上移流程
+        /// </summary>
+        /// <returns></returns>
+        public string MoveUpFlow()
+        {
+            Flow flow = new Flow(this.FK_Flow);
+            flow.DoUp();
+            return flow.No;
+        }
+
+        /// <summary>
+        /// 下移流程
+        /// </summary>
+        /// <returns></returns>
+        public string MoveDownFlow()
+        {
+            Flow flow = new Flow(this.FK_Flow);
+            flow.DoDown();
+            return flow.No;
+        }
+
         public string GetFlowSorts()
         {
             FlowSorts flowSorts = new FlowSorts();
@@ -1345,6 +1367,30 @@ namespace BP.WF.HttpHandler
             subFlowSort.Name = this.Name;
             subFlowSort.Update();
             return "F" + subFlowSort.No;
+        }
+
+        /// <summary>
+        /// 上移流程类别
+        /// </summary>
+        /// <returns></returns>
+        public string MoveUpFlowSort()
+        {
+            string fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
+            FlowSort fsSub = new FlowSort(fk_flowSort);//传入的编号多出F符号，需要替换掉
+            fsSub.DoUp();
+            return "F" + fsSub.No;
+        }
+
+        /// <summary>
+        /// 下移流程类别
+        /// </summary>
+        /// <returns></returns>
+        public string MoveDownFlowSort()
+        {
+            string fk_flowSort = this.GetRequestVal("FK_FlowSort").Replace("F", "");
+            FlowSort fsSub = new FlowSort(fk_flowSort);//传入的编号多出F符号，需要替换掉
+            fsSub.DoDown();
+            return "F" + fsSub.No;
         }
 
         public string EditFlowSort()

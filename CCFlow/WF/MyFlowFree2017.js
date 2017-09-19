@@ -1683,11 +1683,8 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
 }
 
 //获取表单数据
-function getFormData(isCotainTextArea, isCotainUrlParam) {
-    //UEditor 1:调用serialize之前把 UEditor 数据放进去
-    window.UEs.forEach(function (item) {
-        $("input[name=TB_" + item.attr.KeyOfEn + "]").val(item.editor.getContent());
-    });
+function getFormData(isCotainTextArea, isCotainUrlParam) {    
+
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
@@ -2486,11 +2483,14 @@ function GenerWorkNode() {
             document.UE_MapAttr.forEach(function (item) {
                 var obj = {};
                 //根据字段只读属性 调整外观
-                //if (item.MapAttr.UIIsEnable == "0") {
-                obj.editor = UM.getEditor(item.id, {
-                    "readonly":item.MapAttr.UIIsEnable == "0",
-                    "textarea":"TB_" + item.MapAttr.KeyOfEn,
-                });
+                if (item.MapAttr.UIIsEnable == "0") {
+                    obj.editor = UM.getEditor(item.id, {
+                        'toolbar': [],
+                        'readonly': true
+                    });
+                } else {
+                    obj.editor = UM.getEditor(item.id);
+                }
                 obj.attr = item.MapAttr;
                 window.UEs.push(obj);
 
@@ -2564,12 +2564,11 @@ function figure_MapAttr_Template(mapAttr) {
                                 document.UE_MapAttr.push(editorPara);
 
                                 if (mapAttr.UIIsEnable == "0") {
-                                    //字段处于只读状态
-                                    eleHtml += "<script id='" + editorPara.id + "' name='content' type='text/plain'>" + defValue + "</script>";
+                                    //字段处于只读状态.注意这里 name 属性也是可以用来绑定字段名字的
+                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain'>" + defValue + "</script>";
                                 } else {
-                                    eleHtml += "<script id='" + editorPara.id + "' name='content' type='text/plain'></script>";
+                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain'></script>";
                                 }
-                                eleHtml += "<input type='hidden' name='TB_" + mapAttr.KeyOfEn + "' />";
                             } else {
                                 eleHtml +=
                                 "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"

@@ -8,7 +8,7 @@ $(function () {
     CCPMB_Flow_V = getArgsFromHref("Flow_V");
 
     /**default height for canvas*/
-    CanvasProps.DEFAULT_HEIGHT = 680;
+    CanvasProps.DEFAULT_HEIGHT = 2000;
     /**default width for canvas*/
     CanvasProps.DEFAULT_WIDTH = 1950;
 

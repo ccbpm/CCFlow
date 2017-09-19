@@ -409,7 +409,7 @@ function moveUpFlow() {
 
     //传入后台参数
     var params = {
-        DoType: "MoveUpFlowSort",
+        DoType: "MoveUpFlow",
         FK_Flow: currFlow.id
     };
     ajaxService(params, function (data) {

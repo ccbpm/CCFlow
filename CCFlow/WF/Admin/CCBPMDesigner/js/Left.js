@@ -434,7 +434,6 @@ function moveDownFlow() {
         FK_Flow: currFlow.id
     };
     ajaxService(params, function (data) {
-        alert(data);
         var next = $(currFlow.target).parent().next();
         if (next.length == 0 || $('#flowTree').tree('getData', next.children()[0]).attributes.TTYPE != "FLOW") {
             return;

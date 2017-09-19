@@ -579,6 +579,9 @@
         <div class="menu-sep"></div>
         <div onclick="deleteFlowSort()" data-options="iconCls:'icon-delete'">删除</div>
         <div class="menu-sep"></div>
+        <div onclick="moveUpFlowSort()" data-options="iconCls:'icon-up'">上移</div>
+        <div onclick="moveDownFlowSort()" data-options="iconCls:'icon-down'">下移</div>
+        <div class="menu-sep"></div>
         <div onclick="RefreshNode('flowTree', 'F99')" data-options="iconCls:'icon-reload'">刷新</div>
     </div>
     <div id="mFlow" class="easyui-menu" style="width: 120px;">
@@ -590,6 +593,9 @@
         <div class="menu-sep"></div>
         <div onclick="DeleteFlow()" data-options="iconCls:'icon-delete'">删除流程</div>
         <div onclick="FlowProperty()" data-options="iconCls:'icon-sheet'">流程属性</div>
+        <div class="menu-sep"></div>
+        <div onclick="moveUpFlow()" data-options="iconCls:'icon-up'">上移</div>
+        <div onclick="moveDownFlow()" data-options="iconCls:'icon-down'">下移</div>
         <div class="menu-sep"></div>
         <div onclick="ImpLocalFlow()" data-options="iconCls:'icon-imp'">导入本机流程模版</div>
         <div onclick="ImpColudFlow()" data-options="iconCls:'icon-imp'">导入ccbpm云服务流程模版</div>

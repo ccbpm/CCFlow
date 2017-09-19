@@ -1684,10 +1684,10 @@ function ConvertDefVal(workNodeData, defVal, keyOfEn) {
 
 //获取表单数据
 function getFormData(isCotainTextArea, isCotainUrlParam) {
-    //KindEditor 1:调用serialize之前把 KindEditor 数据放进去  
-    if (window.editor) {
-        $("textarea[name='" + editor.srcElement.attr("name") + "']").val(editor.html());
-    }
+    //UEditor 1:调用serialize之前把 UEditor 数据放进去
+    window.UEs.forEach(function (item) {
+        $("input[name=TB_" + item.attr.KeyOfEn + "]").val(item.editor.getContent());
+    });
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
@@ -2173,6 +2173,20 @@ function checkBlanks() {
         }
     });
 
+    //2.对 UMEditor 中的必填项检查
+    window.UEs.forEach(function (item) {
+        //如果是必填
+        if (item.attr.UIIsInput == 1) {
+            var ele = item.editor.$body;
+            if (item.editor.getPlainTxt().trim() === "") {
+                checkBlankResult = false;
+                ele.addClass('errorInput');
+            } else {
+                ele.removeClass('errorInput');
+            }
+        }
+    });
+
     return checkBlankResult;
 }
 
@@ -2195,6 +2209,20 @@ function checkReg() {
                 } else {
                     $(obj).removeClass('errorInput');
                 }
+            }
+        }
+    });
+
+    //2.对 UMEditor 中的必填项检查
+    window.UEs.forEach(function (item) {
+        //如果是必填
+        if (item.attr.UIIsInput == 1) {
+            var ele = item.editor.$body;
+            if (item.editor.getPlainTxt().trim() === "") {
+                checkBlankResult = false;
+                ele.addClass('errorInput');
+            } else {
+                ele.removeClass('errorInput');
             }
         }
     });
@@ -2248,7 +2276,6 @@ function GenerWorkNode() {
 
             $('#CCForm').html('');
             //循环MapAttr
-            document.KE_MapAttr = []; //待KE渲染的字段存在这里,figure_MapAttr_Template会填充该数值
             for (var mapAtrrIndex in flow_Data.Sys_MapAttr) {
                 var mapAttr = flow_Data.Sys_MapAttr[mapAtrrIndex];
                 var eleHtml = figure_MapAttr_Template(mapAttr);
@@ -2454,21 +2481,16 @@ function GenerWorkNode() {
                 $(selectObj).selectpicker('val', defValArr);
             });
 
-            var btns = [
-						'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
-						'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-						'insertunorderedlist', '|', 'emoticons', 'image', 'link'];
+            //给富文本 创建编辑器
+            window.UEs = [];
+            document.UE_MapAttr.forEach(function (item) {
+                var obj = {};
+                obj.editor = UM.getEditor(item.id);
+                obj.attr = item.MapAttr;
+                window.UEs.push(obj);
 
-            KindEditor.ready(function (K) {
-                window.editor = undefined;
-                document.KE_MapAttr.forEach(function (item) {
-                    if (item.UIIsEnable == true) {
-                        window.editor = K.create("textarea[name='TB_" + item.KeyOfEn + "']", { items: btns, resizeType: 0, minWidth: '500px' });
-                    } else {
-                        K.create("textarea[name='TB_" + item.KeyOfEn + "']", { items: [], resizeType: 0, minWidth: '500px', minHeight: '80px', height: item.UIHight + 'px' }).readonly();
-                    }
-                });
-                console.log(new Date().toLocaleTimeString() + "：创建KindEdetor编辑器是否成功？" + (editor != undefined));
+                //调整样式,让必选的红色 * 随后垂直居中
+                obj.editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
             });
         }
     })
@@ -2525,13 +2547,19 @@ function figure_MapAttr_Template(mapAttr) {
                             ;
                         }
                         else {
-                            /*eleHtml +=
-                            "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                            ;*/
-                            //如果是富文本就使用KindEditor
-                            if (mapAttr.AtPara != null && mapAttr.AtPara.indexOf("@IsRichText=1") != -1) {
-                                document.KE_MapAttr.push(mapAttr);
-                                eleHtml += "<textarea name='TB_" + mapAttr.KeyOfEn + "' style='width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;'>" + defValue + "</textarea>";
+
+                            if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+                                //如果是富文本就使用百度 UEditor
+                                if (document.UE_MapAttr === undefined) {
+                                    document.UE_MapAttr = [];
+                                }
+                                var editorPara = {};
+                                editorPara.id = "container" + document.UE_MapAttr.length;
+                                editorPara.MapAttr = mapAttr;
+                                document.UE_MapAttr.push(editorPara);
+
+                                eleHtml += "<script id='" + editorPara.id + "' name='content' type='text/plain'></script>";
+                                eleHtml += "<input type='hidden' name='TB_" + mapAttr.KeyOfEn + "' />";
                             } else {
                                 eleHtml +=
                                 "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"

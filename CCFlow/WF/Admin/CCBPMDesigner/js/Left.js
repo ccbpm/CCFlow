@@ -250,8 +250,12 @@ function moveUpFlowSort() {
         FK_FlowSort: currSort.id
     };
     ajaxService(params, function (data) {
-        var parentNo = currSort.attributes.Node.ParentId;
-        RefreshNode('flowTree', parentNo);
+        var before = $(currSort.target).parent().prev();
+        if (before.length == 0 || $('#flowTree').tree('getData' ,before.children()[0]).attributes.TTYPE != "FLOWTYPE") {
+            return;
+        }
+
+        $(currSort.target).parent().insertBefore(before);
     });
 }
 
@@ -266,8 +270,12 @@ function moveDownFlowSort() {
         FK_FlowSort: currSort.id
     };
     ajaxService(params, function (data) {
-        var parentNo = currSort.attributes.Node.ParentId;
-        RefreshNode('flowTree', parentNo);
+        var next = $(currSort.target).parent().next();
+        if (next.length == 0 || $('#flowTree').tree('getData', next.children()[0]).attributes.TTYPE != "FLOWTYPE") {
+            return;
+        }
+
+        $(currSort.target).parent().insertAfter(next);
     });
 }
 
@@ -405,8 +413,12 @@ function moveUpFlow() {
         FK_Flow: currFlow.id
     };
     ajaxService(params, function (data) {
-        var parentNo = currFlow.attributes.Node.ParentId;
-        RefreshNode('flowTree', parentNo)
+        var before = $(currFlow.target).parent().prev();
+        if (before.length == 0 || $('#flowTree').tree('getData', before.children()[0]).attributes.TTYPE != "FLOW") {
+            return;
+        }
+
+        $(currFlow.target).parent().insertBefore(before);
     });
 }
 
@@ -422,8 +434,13 @@ function moveDownFlow() {
         FK_Flow: currFlow.id
     };
     ajaxService(params, function (data) {
-        var parentNo = currFlow.attributes.Node.ParentId;
-        RefreshNode('flowTree', parentNo)
+        alert(data);
+        var next = $(currFlow.target).parent().next();
+        if (next.length == 0 || $('#flowTree').tree('getData', next.children()[0]).attributes.TTYPE != "FLOW") {
+            return;
+        }
+
+        $(currFlow.target).parent().insertAfter(next);
     });
 }
 

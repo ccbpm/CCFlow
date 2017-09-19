@@ -42,7 +42,13 @@ namespace BP.En
             ps.Add("user", Web.WebUser.No);
             ps.Add("st", fk_station);
 
-            if (DBAccess.IsExits("SELECT FK_Emp FROM Port_EmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "user AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps))
+            bool bl;
+            if (BP.Sys.SystemConfig.OSModel == BP.Sys.OSModel.OneOne)
+                bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_EmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "user AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
+            else
+                bl = DBAccess.IsExits("SELECT FK_Emp FROM Port_DeptEmpStation WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "user AND FK_Station=" + SystemConfig.AppCenterDBVarStr + "st", ps);
+
+            if (bl)
                 this.OpenAll();
             else
                 this.Readonly();
@@ -199,7 +205,7 @@ namespace BP.En
         /// </summary>
         public void ResetDefaultVal()
         {
-           // this.Row.Clear();
+            // this.Row.Clear();
 
             Attrs attrs = this.EnMap.Attrs;
             foreach (Attr attr in attrs)
@@ -309,12 +315,12 @@ namespace BP.En
                     case "@yy年mm月dd日HH时mm分":
                         if (attr.UIIsReadonly == true)
                         {
-                            this.SetValByKey(attr.Key, DateTime.Now.ToString( v.Replace("@","") ));
+                            this.SetValByKey(attr.Key, DateTime.Now.ToString(v.Replace("@", "")));
                         }
                         else
                         {
                             if (string.IsNullOrEmpty(myval) || myval == v)
-                                this.SetValByKey(attr.Key, DateTime.Now.ToString( v.Replace("@", "") ));
+                                this.SetValByKey(attr.Key, DateTime.Now.ToString(v.Replace("@", "")));
                         }
                         continue;
                     default:
@@ -343,12 +349,12 @@ namespace BP.En
                     continue;
                 }
 
-                if (v.Contains("@") == false && v!=null )
+                if (v.Contains("@") == false && v != null)
                 {
                     this.SetValByKey(attr.Key, v);
                     continue;
                 }
- 
+
 
                 // 设置默认值.
                 switch (v)
@@ -654,7 +660,7 @@ namespace BP.En
         {
             try
             {
-                string s= this.Row.GetValByKey(key).ToString();
+                string s = this.Row.GetValByKey(key).ToString();
                 if (string.IsNullOrEmpty(s))
                     return isNullAs;
                 else
@@ -766,7 +772,7 @@ namespace BP.En
         }
         public Int64 GetValInt64ByKey(string key)
         {
-            return Int64.Parse(this.GetValStringByKey(key,"0"));
+            return Int64.Parse(this.GetValStringByKey(key, "0"));
         }
 
         public int GetValIntByKey(string key, int isNullAsVal)
@@ -994,7 +1000,7 @@ namespace BP.En
         #endregion
 
         #endregion
-      
+
 
         #region 属性
         /// <summary>
@@ -1030,7 +1036,7 @@ namespace BP.En
                     }
 
                     string str = this.GetValStrByKey(attr.Key);
-                    if (str == attr.DefaultVal.ToString() || str=="0.00")
+                    if (str == attr.DefaultVal.ToString() || str == "0.00")
                         continue;
                     else
                         return false;

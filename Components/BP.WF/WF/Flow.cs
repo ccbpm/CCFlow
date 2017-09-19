@@ -6211,6 +6211,21 @@ namespace BP.WF
             DBAccess.RunSQLs(sql);
             this.Delete(); //删除需要移除缓存.
         }
+
+        /// <summary>
+        /// 向上移动
+        /// </summary>
+        public void DoUp()
+        {
+            this.DoOrderUp(FlowAttr.FK_FlowSort, this.FK_FlowSort, FlowAttr.Idx);
+        }
+        /// <summary>
+        /// 向下移动
+        /// </summary>
+        public void DoDown()
+        {
+            this.DoOrderDown(FlowAttr.FK_FlowSort, this.FK_FlowSort, FlowAttr.Idx);
+        }
         #endregion
     }
     /// <summary>

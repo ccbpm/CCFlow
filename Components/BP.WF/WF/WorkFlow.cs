@@ -1258,9 +1258,9 @@ namespace BP.WF
             // 设置流程完成状态.
             ps = new Paras();
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET  FlowEmps= FlowEmps'||"+emps+"',WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
+                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET  FlowEmps= FlowEmps ||'"+emps+"', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
             else
-                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps=FlowEmps+'"+emps+"', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
+                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= FlowEmps + '"+emps+"', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
 
             ps.Add("WFState", (int)WFState.Complete);
             ps.Add("WFSta", (int)WFSta.Complete);

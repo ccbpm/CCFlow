@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.International.Converters.PinYinConverter;
 using System.Text;
 
 namespace BP.Tools
@@ -129,55 +130,39 @@ namespace BP.Tools
         /// <returns></returns>
         public static string convert(string chrstr)
         {
-            byte[] array = new byte[2];
-            string returnstr = "";
-            int chrasc = 0;
-            int i1 = 0;
-            int i2 = 0;
-            char[] nowchar = chrstr.ToCharArray();
-            for (int j = 0; j < nowchar.Length; j++)
+            try
             {
-                switch (nowchar[j].ToString())
+                if (chrstr.Length != 0)
                 {
-                    case ")":
-                    case "(":
-                    case "_":
-                    case "-":
-                    case "?":
-                    case "）":
-                    case "（":
-                    case " ":
-                        continue;
-                    default:
-                        break;
-                }
-
-                array = System.Text.Encoding.Default.GetBytes(nowchar[j].ToString());
-
-                if (array.Length < 2)
-                    return chrstr;
-
-                i1 = (short)(array[0]);
-                i2 = (short)(array[1]);
-
-                chrasc = i1 * 256 + i2 - 65536;
-                if (chrasc > 0 && chrasc < 160)
-                {
-                    returnstr += nowchar[j];
-                }
-                else
-                {
-                    for (int i = (pyvalue.Length - 1); i >= 0; i--)
+                    StringBuilder fullSpell = new StringBuilder();
+                    for (int i = 0; i < chrstr.Length; i++)
                     {
-                        if (pyvalue[i] <= chrasc)
+                        bool isChineses = ChineseChar.IsValidChar(chrstr[i]);
+                        if (isChineses)
                         {
-                            returnstr += pystr[i];
-                            break;
+                            ChineseChar chineseChar = new ChineseChar(chrstr[i]);
+                            foreach (string value in chineseChar.Pinyins)
+                            {
+                                if (!string.IsNullOrEmpty(value))
+                                {
+                                    fullSpell.Append(value.Remove(value.Length - 1, 1));
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            fullSpell.Append(chrstr[i]);
                         }
                     }
+                    return fullSpell.ToString().ToLower();
                 }
             }
-            return returnstr;
+            catch (Exception e)
+            {
+                Console.WriteLine("全拼转化出错！" + e.Message);
+            }
+            return string.Empty;
         }
     }
 }

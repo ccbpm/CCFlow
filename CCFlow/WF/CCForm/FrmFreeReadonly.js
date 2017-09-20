@@ -1179,8 +1179,34 @@ function GepParaByName(name, atPara) {
 
 //初始化下拉列表框的OPERATION.
 function InitDDLOperation(frmData, mapAttr, defVal) {
-    var result = frmData.MainTable[0][mapAttr.KeyOfEn + 'T'];
-    var operations = '<option >' + result + ' </option>';
+//    var result = frmData.MainTable[0][mapAttr.KeyOfEn + 'T'];
+//    var operations = '<option >' + result + ' </option>';
+    //    return operations;
+    var operations = '';
+    //外键类型
+    if (mapAttr.LGType == 2) {
+        if (frmData[mapAttr.KeyOfEn] != undefined) {
+            $.each(frmData[mapAttr.KeyOfEn], function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+        }
+        else if (frmData[mapAttr.UIBindKey] != undefined) {
+            $.each(frmData[mapAttr.UIBindKey], function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+        }
+    } else {
+        var enums = frmData.Sys_Enum;
+        enums = $.grep(enums, function (value) {
+            return value.EnumKey == mapAttr.UIBindKey;
+        });
+
+
+        $.each(enums, function (i, obj) {
+            operations += "<option " + (obj.IntKey == defVal ? " selected='selected' " : "") + " value='" + obj.IntKey + "'>" + obj.Lab + "</option>";
+        });
+
+    }
     return operations;
 }
 

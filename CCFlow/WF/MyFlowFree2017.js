@@ -1341,7 +1341,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
 
             if (!islabelIsInEle) {
                 eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
-                (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
+                ((mapAttr.UIIsInput == 1 && mapAttr.UIIsEnable == 1) ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
                 + "</div>" + eleHtml;
 
             }
@@ -2708,7 +2708,7 @@ function figure_MapAttr_Template(mapAttr) {
             //+ "</div>" + eleHtml;
             //先把 必填项的 * 写到元素后面 可能写到标签后面更合适
             eleHtml +=
-           mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
+           (mapAttr.UIIsInput == 1 && mapAttr.UIIsEnable == 1) ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
         }
     } else {
         var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);

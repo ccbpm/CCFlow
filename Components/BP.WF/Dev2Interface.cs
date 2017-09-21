@@ -49,6 +49,64 @@ namespace BP.WF
 
         #region 等待要去处理的消息数量.
         /// <summary>
+        /// 待办工作
+        /// </summary>
+        public static int Todolist_Todolist
+        {
+            get
+            {
+                Paras ps = new Paras();
+                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+
+                if (WebUser.IsAuthorize == false)
+                {
+                    /*不是授权状态*/
+                    if (BP.WF.Glo.IsEnableTaskPool == true)
+                        ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 ";
+                    else
+                        ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
+                    ps.Add("FK_Emp", BP.Web.WebUser.No);
+
+                    //  BP.DA.Log.DebugWriteInfo(ps.SQL);
+                    return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                }
+
+                /*如果是授权状态, 获取当前委托人的信息. */
+                BP.WF.Port.WFEmp emp = new BP.WF.Port.WFEmp(WebUser.No);
+                switch (emp.HisAuthorWay)
+                {
+                    case Port.AuthorWay.All:
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1  ";
+                        else
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
+                        ps.Add("FK_Emp", BP.Web.WebUser.No);
+                        break;
+                    case Port.AuthorWay.SpecFlows:
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta!=0   ";
+                        else
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows;
+
+                        ps.Add("FK_Emp", BP.Web.WebUser.No);
+                        break;
+                    case Port.AuthorWay.None:
+                        /*不是授权状态 */
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp AND TaskSta!=1 ";
+                        else
+                            ps.SQL = "SELECT count(WorkID) as Num FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp ";
+
+                        ps.Add("FK_Emp", BP.Web.WebUser.No);
+                        return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+                    default:
+                        throw new Exception("no such way...");
+                }
+                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+            }
+        }
+
+        /// <summary>
         /// 待办工作数量
         /// </summary>
         public static int Todolist_EmpWorks

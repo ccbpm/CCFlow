@@ -1978,7 +1978,8 @@ namespace BP.WF
             foreach (string key in Htable_FlowFEE.Keys)
             {
                 FlowEventBase fee = Htable_FlowFEE[key] as FlowEventBase;
-                if (fee.FlowMark == flowMark || fee.FlowMark == flowNo)
+                if (fee.FlowMark.Contains(flowMark) == true
+                    || fee.FlowMark.Contains(flowNo) == true)
                     return fee;
             }
             return null;

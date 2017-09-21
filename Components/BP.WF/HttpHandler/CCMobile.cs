@@ -122,13 +122,25 @@ namespace BP.WF.HttpHandler
             BP.WF.HttpHandler.WF wfPage = new WF(this.context);
           return  wfPage.Runing_Init();
         }
-
-        public string Todolist_Init()
+        /// <summary>
+        /// 旧版本
+        /// </summary>
+        /// <returns></returns>
+        public string Todolist_Init111()
         {
             BP.WF.HttpHandler.WF wfPage = new WF(this.context);
             return wfPage.Todolist_Init();
         }
-
+        /// <summary>
+        /// 新版本.
+        /// </summary>
+        /// <returns></returns>
+        public string Todolist_Init()
+        {
+            string fk_node = this.GetRequestVal("FK_Node");
+            DataTable dt = BP.WF.Dev2Interface.DB_Todolist(WebUser.No, this.FK_Node);
+            return BP.Tools.Json.DataTableToJson(dt, false);
+        }
         public string DB_GenerReturnWorks()
         {
 

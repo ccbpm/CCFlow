@@ -80,7 +80,7 @@ namespace BP.WF.Template
         }
         public override int RetrieveAll()
         {
-            int i = base.RetrieveAll();
+            int i = base.RetrieveAll( FlowSortAttr.Idx );
             if (i == 0)
             {
                 FlowSort fs = new FlowSort();

@@ -932,6 +932,18 @@ namespace BP.WF
             throw new Exception("@未判断的类型。");
         }
         /// <summary>
+        /// 获得指定人的流程发起列表
+        /// </summary>
+        /// <param name="userNo">发起人编号</param>
+        /// <returns></returns>
+        public static DataTable DB_StarFlows(string userNo)
+        {
+            DataTable dt=DB_GenerCanStartFlowsOfDataTable(userNo);
+            DataView dv = new DataView(dt);
+            dv.Sort = "Idx";
+            return dv.Table;
+        }
+        /// <summary>
         /// 获取指定人员能够发起流程的集合
         /// 说明:利用此接口可以生成用户的发起的流程列表.
         /// </summary>
@@ -1224,6 +1236,64 @@ namespace BP.WF
         #endregion 我关注的流程
 
         #region 获取当前操作员的共享工作
+        public static DataTable DB_Todolist(string userNo, int fk_node = 0)
+        {
+            string sql = "";
+            sql = "SELECT A.* FROM WF_GenerWorkFlow A, WF_FlowSort B, WF_Flow C";
+            sql += " WHERE (WFState=2 OR WFState=5 OR WFState=8) AND  TodoEmps LIKE '%" + userNo + ",%'";
+            sql += " AND A.FK_FlowSort=B.No ";
+            sql += " AND A.FK_Flow=C.No ";
+
+            if (fk_node != 0)
+                sql += " AND A.FK_Node="+fk_node;
+
+            sql += "  ORDER BY  B.Idx, C.Idx, A.RDT ";
+           
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            //添加oracle的处理
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["PRI"].ColumnName = "PRI";
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                // dt.Columns["ISREAD"].ColumnName = "IsRead";
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+                dt.Columns["WFSTATE"].ColumnName = "WFState";
+                dt.Columns["FK_DEPT"].ColumnName = "FK_Dept";
+                dt.Columns["DEPTNAME"].ColumnName = "DeptName";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+                dt.Columns["PWORKID"].ColumnName = "PWorkID";
+                dt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+                //   dt.Columns["WORKERDEPT"].ColumnName = "WorkerDept";
+                //dt.Columns["RDT"].ColumnName = "RDT";
+                //dt.Columns["ADT"].ColumnName = "ADT";
+                //  dt.Columns["SDT"].ColumnName = "SDT";
+                // dt.Columns["FK_EMP"].ColumnName = "FK_Emp";
+                dt.Columns["FID"].ColumnName = "FID";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+                dt.Columns["SYSTYPE"].ColumnName = "SysType";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["GUESTNO"].ColumnName = "GuestNo";
+                dt.Columns["GUESTNAME"].ColumnName = "GuestName";
+                dt.Columns["BILLNO"].ColumnName = "BillNo";
+                dt.Columns["FLOWNOTE"].ColumnName = "FlowNote";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+                dt.Columns["TODOEMPSNUM"].ColumnName = "TodoEmpsNum";
+                dt.Columns["TODOSTA"].ColumnName = "TodoSta";
+                dt.Columns["TASKSTA"].ColumnName = "TaskSta";
+                //  dt.Columns["LISTTYPE"].ColumnName = "ListType";
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["ATPARA"].ColumnName = "AtPara";
+                dt.Columns["MYNUM"].ColumnName = "MyNum";
+            }
+
+            return dt;
+        }
         /// <summary>
         /// 获取当前人员待处理的工作
         /// </summary>

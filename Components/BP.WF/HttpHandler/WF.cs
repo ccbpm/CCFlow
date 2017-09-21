@@ -109,7 +109,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtSort);
 
             //获得能否发起的流程.
-            DataTable dtStart = Dev2Interface.DB_GenerCanStartFlowsOfDataTable(Web.WebUser.No);
+            DataTable dtStart = Dev2Interface.DB_StarFlows(Web.WebUser.No);
             dtStart.TableName = "Start";
             ds.Tables.Add(dtStart);
 

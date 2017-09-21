@@ -541,10 +541,10 @@ namespace BP.WF.HttpHandler
                 {
                     toolbar += "<input name='Send' type=button value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();Send(); \" />";
                    // toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
-                    if (btnLab.PackupEnable == true)
+                    if (btnLab.PrintZipEnable == true)
                     {
                         string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                        toolbar += "<input type=button name='PackUp'  value='" + btnLab.PackupLab + "' enable=true/>";
+                        toolbar += "<input type=button name='PackUp'  value='" + btnLab.PrintZipLab + "' enable=true/>";
                     }
                     return toolbar;
                 }
@@ -814,12 +814,25 @@ namespace BP.WF.HttpHandler
                 }
 
                 /* 打包下载 */
-                if (btnLab.PackupEnable == true)
+                if (btnLab.PrintZipEnable == true)
                 {
-                    string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow ;
-                    toolbar += "<input type=button name='PackUp'  value='" + btnLab.PackupLab + "' enable=true/>";
+                    string packUrl = "./WorkOpt/Packup.htm?FileType=zip&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow ;
+                    toolbar += "<input type=button name='PackUp_zip'  value='" + btnLab.PrintZipLab + "' enable=true/>";
                 }
 
+                /* 打包下载 */
+                if (btnLab.PrintHtmlEnable == true)
+                {
+                    string packUrl = "./WorkOpt/Packup.htm?FileType=html&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+                    toolbar += "<input type=button name='PackUp_html'  value='" + btnLab.PrintHtmlLab + "' enable=true/>";
+                }
+
+                /* 打包下载 */
+                if (btnLab.PrintPDFEnable == true)
+                {
+                    string packUrl = "./WorkOpt/Packup.htm?FileType=pdf&FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+                    toolbar += "<input type=button name='PackUp_pdf'  value='" + btnLab.PrintPDFLab + "' enable=true/>";
+                }
                 #endregion
 
                 #region  //加载自定义的button.
@@ -885,10 +898,10 @@ namespace BP.WF.HttpHandler
                 {
                     toolbar += "<a data-role='button' name='Send'  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();Send(); \" ></a>";
                     // toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
-                    if (btnLab.PackupEnable == true)
+                    if (btnLab.PrintZipEnable == true)
                     {
                         string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                        toolbar += "<a data-role='button' type=button name='PackUp'  value='" + btnLab.PackupLab + "' enable=true></a>";
+                        toolbar += "<a data-role='button' type=button name='PackUp'  value='" + btnLab.PrintZipLab + "' enable=true></a>";
                     }
                     return toolbar;
                 }
@@ -1158,10 +1171,10 @@ namespace BP.WF.HttpHandler
                 }
 
                 /* 打包下载 */
-                if (btnLab.PackupEnable == true)
+                if (btnLab.PrintZipEnable == true)
                 {
                     string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
-                    toolbar += "<a data-role='button' type=button name='PackUp'  value='" + btnLab.PackupLab + "' enable=true></a>";
+                    toolbar += "<a data-role='button' type=button name='PackUp'  value='" + btnLab.PrintZipLab + "' enable=true></a>";
                 }
 
                 #endregion

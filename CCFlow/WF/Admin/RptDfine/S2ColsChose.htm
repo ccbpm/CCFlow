@@ -52,7 +52,7 @@
 
                     //1.列出系统字段（过滤掉必选字段）
                     $.grep(Sys_MapAttrOfSystem, function (item) {
-                        return item.KeyOfEn == "WFSta" || item.KeyOfEn == "Title" || item.KeyOfEn == "OID";
+                        return item.KeyOfEn == "Title" || item.KeyOfEn == "OID";
                     }, true).forEach(function (item, index) {
 
                         if (index % 3 == 0) {

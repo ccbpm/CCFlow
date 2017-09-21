@@ -493,10 +493,22 @@ function initBar() {
                 $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
             }
 
-            if ($('[name=PackUp]').length > 0) {
-                $('[name=PackUp]').attr('onclick', '');
-                $('[name=PackUp]').unbind('click');
-                $('[name=PackUp]').bind('click', function () { initModal("PackUp"); $('#returnWorkModal').modal().show(); });
+            if ($('[name=PackUp_zip]').length > 0) {
+                $('[name=PackUp_zip]').attr('onclick', '');
+                $('[name=PackUp_zip]').unbind('click');
+                $('[name=PackUp_zip]').bind('click', function () { initModal("PackUp_zip"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=PackUp_html]').length > 0) {
+                $('[name=PackUp_html]').attr('onclick', '');
+                $('[name=PackUp_html]').unbind('click');
+                $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=PackUp_pdf]').length > 0) {
+                $('[name=PackUp_pdf]').attr('onclick', '');
+                $('[name=PackUp_pdf]').unbind('click');
+                $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); $('#returnWorkModal').modal().show(); });
             }
 
             if ($('[name=SelectAccepter]').length > 0) {
@@ -564,11 +576,13 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("会签");
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
-            case "PackUp":
+            case "PackUp_zip":
+            case "PackUp_html":
+            case "PackUp_pdf":
                 $('#modalHeader').text("打包下载/打印");
-                var url = "./WorkOpt/Packup.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+                var url = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_','') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
                 // alert(url);
-                modalIframeSrc = "./WorkOpt/Packup.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "accepter":
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");
@@ -1297,8 +1311,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
 //                        isMultiSeleClass = " selectpicker show-tick form-control ";
 //                    }
 
-                    eleHtml +=
-                            "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                    eleHtml += "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                 }
             } else {
                 //展示附件信息

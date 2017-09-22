@@ -221,15 +221,30 @@ namespace BP.WF.Template
         /// 是否启用确认
         /// </summary>
         public const string ConfirmEnable = "ConfirmEnable";
-
+        /// <summary>
+        /// 打印html
+        /// </summary>
+        public const string PrintHtmlLab = "PrintHtmlLab";
+        /// <summary>
+        /// 打印html
+        /// </summary>
+        public const string PrintHtmlEnable = "PrintHtmlEnable";
+        /// <summary>
+        /// 打印pdf
+        /// </summary>
+        public const string PrintPDFLab = "PrintPDFLab";
+        /// <summary>
+        /// 打印pdf
+        /// </summary>
+        public const string PrintPDFEnable = "PrintPDFEnable";
         /// <summary>
         /// 打包下载
         /// </summary>
-        public const string PackupLab = "PackupLab";
+        public const string PrintZipLab = "PrintZipLab";
         /// <summary>
         /// 是否启用打包下载
         /// </summary>
-        public const string PackupEnable = "PackupEnable";
+        public const string PrintZipEnable = "PrintZipEnable";
 
         /// <summary>
         /// 分配

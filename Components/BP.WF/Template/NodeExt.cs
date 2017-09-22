@@ -457,9 +457,17 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.EndFlowEnable, false, "是否启用", true, true);
                 map.SetHelperUrl(BtnAttr.EndFlowLab, "http://ccbpm.mydoc.io/?v=5404&t=17989"); //增加帮助
 
+
                 // add 2017.9.1 for 天业集团.
-                map.AddTBString(BtnAttr.PackupLab, "打包下载:zip/pdf/htm", "打包下载按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PackupEnable, false, "是否启用", true, true);
+                map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "是否启用", true, true);
+
+                map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.PrintPDFEnable, false, "是否启用", true, true);
+
+                map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
+
 
 
                 map.AddTBString(BtnAttr.PrintDocLab, "打印单据", "打印单据按钮标签", true, false, 0, 50, 10);

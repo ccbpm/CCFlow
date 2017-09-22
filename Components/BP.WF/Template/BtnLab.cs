@@ -613,23 +613,67 @@ namespace BP.WF.Template
         /// <summary>
         /// 打包下载 是否可用
         /// </summary>
-        public bool PackupEnable
+        public bool PrintZipEnable
         {
             get
             {
-                return this.GetValBooleanByKey(BtnAttr.PackupEnable);
+                return this.GetValBooleanByKey(BtnAttr.PrintZipEnable);
             }
         }
         /// <summary>
         /// 打包下载 标签
         /// </summary>
-        public string PackupLab
+        public string PrintZipLab
         {
             get
             {
-                return this.GetValStringByKey(BtnAttr.PackupLab);
+                return this.GetValStringByKey(BtnAttr.PrintZipLab);
             }
         }
+
+
+        /// <summary>
+        /// pdf 是否可用
+        /// </summary>
+        public bool PrintPDFEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintPDFEnable);
+            }
+        }
+        /// <summary>
+        /// 打包下载 标签
+        /// </summary>
+        public string PrintPDFLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.PrintPDFLab);
+            }
+        }
+
+        /// <summary>
+        /// html 是否可用
+        /// </summary>
+        public bool PrintHtmlEnable
+        {
+            get
+            {
+                return this.GetValBooleanByKey(BtnAttr.PrintHtmlEnable);
+            }
+        }
+        /// <summary>
+        /// html 标签
+        /// </summary>
+        public string PrintHtmlLab
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.PrintHtmlLab);
+            }
+        }
+
 
         /// <summary>
         /// 批量处理是否可用
@@ -1106,8 +1150,16 @@ namespace BP.WF.Template
                 map.AddBoolean(BtnAttr.ConfirmEnable, false, "是否启用", true, true);
 
                 // add 2017.9.1 for 天业集团.
-                map.AddTBString(BtnAttr.PackupLab, "打包下载", "打包下载按钮标签", true, false, 0, 50, 10);
-                map.AddBoolean(BtnAttr.PackupEnable, false, "是否启用", true, true);
+                map.AddTBString(BtnAttr.PrintHtmlLab, "打印Html", "打印Html标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.PrintHtmlEnable, false, "是否启用", true, true);
+
+                // add 2017.9.1 for 天业集团.
+                map.AddTBString(BtnAttr.PrintPDFLab, "打印pdf", "打印pdf标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.PrintPDFEnable, false, "是否启用", true, true);
+
+                // add 2017.9.1 for 天业集团.
+                map.AddTBString(BtnAttr.PrintZipLab, "打包下载", "打包下载zip按钮标签", true, false, 0, 50, 10);
+                map.AddBoolean(BtnAttr.PrintZipEnable, false, "是否启用", true, true);
 
 
                 #region 公文按钮

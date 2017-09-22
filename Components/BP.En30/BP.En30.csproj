@@ -106,6 +106,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ChnCharInfo">
+      <HintPath>..\..\RefDLL\ChnCharInfo.dll</HintPath>
+    </Reference>
     <Reference Include="FtpSupport">
       <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
     </Reference>

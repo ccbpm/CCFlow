@@ -1891,9 +1891,8 @@ namespace CCFlow.WF.UC
                                 DataRow row = table.NewRow();
                                 row["No"] = "";
                                 row["Name"] = "请选择";
-                                table.Rows.Add(row);
+                                table.Rows.InsertAt(row,0);
                             }
-
                             ddlFull.Bind(table, "No", "Name");
 
                             string val = "";

@@ -265,9 +265,25 @@ namespace BP.Sys
                 #endregion
 
                 #region SQL查询.外键表/视图，edited by liuxc,2016-12-29
-                if (this.SrcType == Sys.SrcType.SQL || this.SrcType == Sys.SrcType.TableOrView)
+                if (this.SrcType == Sys.SrcType.TableOrView)
+                {
+                    string sql = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name";
+                    if (this.CodeStruct == Sys.CodeStruct.Tree)
+                        sql += ", " + this.ParentValue + " ParentNo";
+
+                    sql += " FROM " + this.SrcTable;
+                    return src.RunSQLReturnTable(sql);
+                }
+                #endregion SQL查询.外键表/视图，edited by liuxc,2016-12-29
+
+
+                #region SQL查询.外键表/视图，edited by liuxc,2016-12-29
+                if (this.SrcType == Sys.SrcType.SQL)
                 {
                     string runObj = this.SelectStatement;
+
+                    if (string.IsNullOrEmpty(runObj))
+                        throw new Exception("@外键类型SQL配置错误," + this.No + " " + this.Name + " 是一个(SQL)类型("+this.GetValStrByKey("SrcType") +")，但是没有配置sql.");
 
                     if (runObj == null)
                         runObj = string.Empty;
@@ -281,22 +297,7 @@ namespace BP.Sys
 
                     if (runObj.Contains("@WebUser.FK_Dept"))
                         runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-                    
-                    if (this.SrcType == Sys.SrcType.TableOrView)
-                    {
-                        string sql = "SELECT " + this.ColumnValue + " No, " + this.ColumnText + " Name";
 
-                        if (this.CodeStruct == Sys.CodeStruct.Tree)
-                            sql += ", " + this.ParentValue + " ParentNo";
-
-                        sql += " FROM " + this.SrcTable;
-
-                        if (!string.IsNullOrWhiteSpace(runObj))
-                            sql += " WHERE " + runObj;
-
-                        runObj = sql;
-                    }
-                    
                     return src.RunSQLReturnTable(runObj);
                 }
                 #endregion

@@ -318,6 +318,9 @@ namespace BP.WF.HttpHandler
                     /*恢复使用流程*/
                     isCan = WebUser.No == "admin";
                     json += "\"CanRollBack\":" + isCan.ToString().ToLower();
+
+                    //判断是否可以打印.
+
                     break;
                 case WFState.HungUp: // 挂起.
                     /*撤销挂起*/

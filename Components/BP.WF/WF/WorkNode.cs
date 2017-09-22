@@ -6657,7 +6657,7 @@ namespace BP.WF
             }
 
             this.HisWork.SetValByKey("Title", gwf.Title);
-            gwf.RDT = this.HisWork.RDT;
+            gwf.RDT = DataType.CurrentDataTime;  // this.HisWork.RDT;
             gwf.Starter = this.Execer;
             gwf.StarterName = this.ExecerName;
             gwf.FK_Flow = this.HisNode.FK_Flow;

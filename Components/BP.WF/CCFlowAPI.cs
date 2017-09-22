@@ -18,7 +18,6 @@ using System.Drawing;
 using System.Configuration;
 using BP.Tools;
 
-
 namespace BP.WF
 {
     public class CCFlowAPI

@@ -709,17 +709,17 @@ namespace BP.Sys
             {
                 /*画布里没有任何东西, 清楚所有的元素.*/
                 string delSqls = "";
-                delSqls += "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapdata + "' AND KeyOfEn NOT IN ('OID')";
-                delSqls += "DELETE FROM Sys_FrmRB WHERE FK_MapData='" + fk_mapdata + "'"; //枚举值的相关rb. 
-                delSqls += "DELETE FROM Sys_MapDtl WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "DELETE FROM Sys_FrmBtn WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "DELETE FROM Sys_FrmLine WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "DELETE FROM Sys_FrmLab WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "DELETE FROM Sys_FrmLink WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "DELETE FROM Sys_FrmImg WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "DELETE FROM Sys_FrmEle WHERE FK_MapData='" + fk_mapdata + "'";
-                delSqls += "DELETE FROM Sys_FrmImgAth WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_MapAttr WHERE FK_MapData='" + fk_mapdata + "' AND KeyOfEn NOT IN ('OID')";
+                delSqls += "@DELETE FROM Sys_FrmRB WHERE FK_MapData='" + fk_mapdata + "'"; //枚举值的相关rb. 
+                delSqls += "@DELETE FROM Sys_MapDtl WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_FrmBtn WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_FrmLine WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_FrmLab WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_FrmLink WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_FrmImg WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_FrmAttachment WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_FrmEle WHERE FK_MapData='" + fk_mapdata + "'";
+                delSqls += "@DELETE FROM Sys_FrmImgAth WHERE FK_MapData='" + fk_mapdata + "'";
 
                 BP.DA.DBAccess.RunSQLs(delSqls);
                 return;

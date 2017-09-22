@@ -493,10 +493,22 @@ function initBar() {
                 $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
             }
 
-            if ($('[name=PackUp]').length > 0) {
-                $('[name=PackUp]').attr('onclick', '');
-                $('[name=PackUp]').unbind('click');
-                $('[name=PackUp]').bind('click', function () { initModal("PackUp"); $('#returnWorkModal').modal().show(); });
+            if ($('[name=PackUp_zip]').length > 0) {
+                $('[name=PackUp_zip]').attr('onclick', '');
+                $('[name=PackUp_zip]').unbind('click');
+                $('[name=PackUp_zip]').bind('click', function () { initModal("PackUp_zip"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=PackUp_html]').length > 0) {
+                $('[name=PackUp_html]').attr('onclick', '');
+                $('[name=PackUp_html]').unbind('click');
+                $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=PackUp_pdf]').length > 0) {
+                $('[name=PackUp_pdf]').attr('onclick', '');
+                $('[name=PackUp_pdf]').unbind('click');
+                $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); $('#returnWorkModal').modal().show(); });
             }
 
             if ($('[name=SelectAccepter]').length > 0) {
@@ -564,11 +576,13 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("会签");
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
-            case "PackUp":
+            case "PackUp_zip":
+            case "PackUp_html":
+            case "PackUp_pdf":
                 $('#modalHeader').text("打包下载/打印");
-                var url = "./WorkOpt/Packup.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+                var url = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_','') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
                 // alert(url);
-                modalIframeSrc = "./WorkOpt/Packup.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "accepter":
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");
@@ -1297,8 +1311,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
 //                        isMultiSeleClass = " selectpicker show-tick form-control ";
 //                    }
 
-                    eleHtml +=
-                            "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                    eleHtml += "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                 }
             } else {
                 //展示附件信息
@@ -1328,7 +1341,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
 
             if (!islabelIsInEle) {
                 eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
-                (mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
+                ((mapAttr.UIIsInput == 1 && mapAttr.UIIsEnable == 1) ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
                 + "</div>" + eleHtml;
 
             }
@@ -1873,10 +1886,20 @@ function execSend(toNode) {
 
 $(function () {
     $('#btnMsgModalOK').bind('click', function () {
-        window.close();
-        if (opener != null && opener != undefined) {
-            opener.window.focus();
+        if (window.opener) {
+            
+            if (window.opener.name && window.opener.name == "main") {
+                window.opener.location.href = window.opener.location.href;
+                if (window.opener.top && window.opener.top.leftFrame) {
+                    window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
+                }
+            } else if (window.opener.name && window.opener.name == "运行流程") {
+                //测试运行流程，不进行刷新
+            } else {
+                //window.opener.location.href = window.opener.location.href;
+            }
         }
+        window.close();
     });
 
     setAttachDisabled();
@@ -2480,23 +2503,25 @@ function GenerWorkNode() {
 
             //给富文本 创建编辑器
             window.UEs = [];
-            document.UE_MapAttr.forEach(function (item) {
-                var obj = {};
-                //根据字段只读属性 调整外观
-                if (item.MapAttr.UIIsEnable == "0") {
-                    obj.editor = UM.getEditor(item.id, {
-                        'toolbar': [],
-                        'readonly': true
-                    });
-                } else {
-                    obj.editor = UM.getEditor(item.id);
-                }
-                obj.attr = item.MapAttr;
-                window.UEs.push(obj);
+            if (document.UE_MapAttr) {
+                document.UE_MapAttr.forEach(function (item) {
+                    var obj = {};
+                    //根据字段只读属性 调整外观
+                    if (item.MapAttr.UIIsEnable == "0") {
+                        obj.editor = UM.getEditor(item.id, {
+                            'toolbar': [],
+                            'readonly': true
+                        });
+                    } else {
+                        obj.editor = UM.getEditor(item.id);
+                    }
+                    obj.attr = item.MapAttr;
+                    window.UEs.push(obj);
 
-                //调整样式,让必选的红色 * 随后垂直居中
-                obj.editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
-            });
+                    //调整样式,让必选的红色 * 随后垂直居中
+                    obj.editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
+                });
+            }
         }
     })
 }
@@ -2683,7 +2708,7 @@ function figure_MapAttr_Template(mapAttr) {
             //+ "</div>" + eleHtml;
             //先把 必填项的 * 写到元素后面 可能写到标签后面更合适
             eleHtml +=
-           mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
+           (mapAttr.UIIsInput == 1 && mapAttr.UIIsEnable == 1) ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
         }
     } else {
         var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);

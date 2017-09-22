@@ -864,13 +864,17 @@ namespace BP.WF
 
                 #region 把所有的文件做成一个zip文件.
                 //生成pdf文件
-                string pdfFile = path + "\\" + fileNameFormat + ".pdf";
+                string pdfPath = path + "\\pdf";
+                if (System.IO.Directory.Exists(pdfPath) == false)
+                    System.IO.Directory.CreateDirectory(pdfPath);
+
+                string pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
                 string pdfFileExe = SystemConfig.PathOfDataUser + "\\ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
                 try
                 {
-                    Html2Pdf(pdfFileExe,billUrl, pdfFile);
+                    Html2Pdf(pdfFileExe, billUrl, pdfFile);
 
-                    ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/" + fileNameFormat + ".pdf");
+                    ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
                 }
                 catch (Exception ex)
                 {
@@ -880,12 +884,12 @@ namespace BP.WF
                 string zipFile = path + "\\..\\" + fileNameFormat + ".zip";
                 try
                 {
-                    (new FastZip()).CreateZip(zipFile, path, true, "");
+                    (new FastZip()).CreateZip(zipFile, pdfPath, true, "");
                     ht.Add("zip", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + fileNameFormat + ".zip");
                 }
                 catch (Exception ex)
                 {
-                    ht.Add("pdf", "err@生成zip文件遇到权限问题:" + ex.Message);
+                    ht.Add("zip", "err@生成zip文件遇到权限问题:" + ex.Message + " @Path:" + pdfFile);
                 }
                 #endregion 把所有的文件做成一个zip文件.
 

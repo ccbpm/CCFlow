@@ -130,7 +130,11 @@
                         newRow += "<td>" + work.FlowName + "</td>";
                         newRow += "<td>" + work.StarterName + "</td>";
                         newRow += "<td>" + work.DeptName + "</td>";
+                      //  newRow += "<td>" + work.FlowStartRDT + "</td>";
+
                         newRow += "<td>" + work.NodeName + "</td>";
+                        newRow += "<td>" + work.RDT + "</td>";
+
                         newRow += "<td>" + work.TodoEmps + "</td>";
                         newRow += "<td>";
                         newRow += "<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/UnSend.png' border=0 />撤销</a>";
@@ -158,7 +162,9 @@
 <th>流程</th>
 <th>发起人</th>
 <th>发起部门</th>
+<!--<th>申请时间</th>-->
 <th>停留节点</th>
+<th>到达时间</th>
 <th>当前处理人</th>
 <th>操作</th>
 </tr>

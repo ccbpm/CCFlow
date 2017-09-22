@@ -12,12 +12,13 @@
 
         $(function () {
 
+            var fileTypes = GetQueryString("FileType");
             // 初始化人员.   //开始加载数据.
             $.ajax({
                 type: 'post',
                 async: true,
                 data: null,
-                url: Handler + "?DoType=Packup_Init&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
+                url: Handler + "?DoType=Packup_Init&FileType=" + GetQueryString("FileType") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -26,13 +27,16 @@
                         return;
                     }
 
+                    var filetype = GetQueryString("FileType");
                     var urls = JSON.parse(data);
                     var html = "";
                     for (var i = 0; i < urls.length; i++) {
 
                         var url = urls[i];
+                        if (fileTypes.indexOf(url.No) < 0 )
+                            continue;
 
-                        if (url.No == "htm") {
+                        if (url.No == "htm" || url.No == "html") {
                             html += "<fieldset>";
                             html += "<legend>html在线预览打印</legend>";
                             html += "<ul>";

@@ -784,6 +784,13 @@ namespace BP.WF
 			//从表
 			DataTable dtDtl = qo.DoQueryToTable();
 
+            //查询所有动态SQL查询类型的字典表记录
+            SFTable sftable = null;
+            DataTable dtsftable = null;
+            DataRow[] drs = null;
+            SFTables sftables = new SFTables();
+            sftables.Retrieve(SFTableAttr.SrcType, (int)SrcType.DynamicSQL);
+
 			// 为明细表设置默认值.
 			MapAttrs dtlAttrs = new MapAttrs(dtl.No);
 			foreach (MapAttr attr in dtlAttrs)
@@ -820,6 +827,26 @@ namespace BP.WF
                     }
                 }
                 #endregion 修改区分大小写.
+
+                //处理增加动态SQL查询类型的下拉框选中值Text值，added by liuxc,2017-9-22
+                if(attr.LGType == FieldTypeS.FK && attr.UIIsEnable == false)
+                {
+                    sftable = sftables.GetEntityByKey(attr.UIBindKey) as SFTable;
+                    if (sftable != null)
+                    {
+                        dtsftable = sftable.GenerHisDataTable;
+
+                        //为Text赋值
+                        foreach (DataRow dr in dtDtl.Rows)
+                        {
+                            drs = dtsftable.Select("No='" + dr[attr.KeyOfEn] + "'");
+                            if (drs.Length == 0)
+                                continue;
+
+                            dr[attr.KeyOfEn + "Text"] = drs[0]["Name"];
+                        }
+                    }
+                }
 
                 //处理它的默认值.
 				if (attr.DefValReal.Contains("@") == false)

@@ -72,6 +72,23 @@ namespace BP.WF.HttpHandler
             MapFrames frms = new MapFrames(this.FK_MapData);
             ds.Tables.Add(frms.ToDataTableField("Sys_MapFrame"));
 
+            //附件表.
+            FrmAttachments aths = new FrmAttachments(this.FK_MapData);
+            ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachment"));
+
+            if (this.FK_MapData.IndexOf("ND") == 0)
+            {
+                string nodeStr = this.FK_MapData.Replace("ND", "");
+
+                if (DataType.IsNumStr(nodeStr) == true)
+                {
+                    FrmNodeComponent fnc = new FrmNodeComponent(int.Parse(nodeStr));
+                    //   var f = fnc.GetValFloatByKey("FWC_H");
+                    ds.Tables.Add(aths.ToDataTableField("WF_Node"));
+                }
+            }
+
+
             //把dataet转化成json 对象.
             return BP.Tools.Json.ToJson(ds);
         }

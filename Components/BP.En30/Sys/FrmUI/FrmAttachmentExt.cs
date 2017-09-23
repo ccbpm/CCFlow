@@ -787,8 +787,8 @@ namespace BP.Sys.FrmUI
                 map.AddTBFloat(FrmAttachmentAttr.X, 5, "X", false, false);
                 map.AddTBFloat(FrmAttachmentAttr.Y, 5, "Y", false, false);
 
-                map.AddTBFloat(FrmAttachmentAttr.W, 40, "宽度", false, false);
-                map.AddTBFloat(FrmAttachmentAttr.H, 150, "高度", false, false);
+                map.AddTBFloat(FrmAttachmentAttr.W, 40, "宽度", true, false);
+                map.AddTBFloat(FrmAttachmentAttr.H, 150, "高度", true, false);
                 #endregion 基本属性。
 
                 #region 权限控制。
@@ -927,6 +927,30 @@ namespace BP.Sys.FrmUI
             }
             else
                 this.MyPK = this.FK_MapData + "_" + this.NoOfObj + "_" + this.FK_Node;
+
+            //更新相关的分组信息.
+
+            GroupField gf = new GroupField();
+            int i= gf.Retrieve(GroupFieldAttr.EnName, this.FK_MapData, GroupFieldAttr.CtrlID, this.MyPK);
+
+            if (i == 0)
+            {
+                gf.Lab = this.Name;
+                gf.EnName = this.FK_MapData;
+                gf.CtrlType = "Ath";
+                gf.Insert();
+            }
+            else
+            {
+                gf.Lab = this.Name;
+                gf.EnName = this.FK_MapData;
+                gf.CtrlType = "Ath";
+                gf.Update();
+            }
+
+
+
+
 
             return base.beforeUpdateInsertAction();
         }

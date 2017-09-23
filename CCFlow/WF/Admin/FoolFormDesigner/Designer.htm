@@ -33,24 +33,20 @@
                 color: #696969;
             }
         </style>
-
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
         <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+        <link href="../../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+        <!--<link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
+
+
         <script language="JavaScript" type="text/javascript" src="../../Comm/JScript.js"></script>
         <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
         <script src="../../Scripts/config.js" type="text/javascript"></script>
         <script src="../../Comm/Gener.js" type="text/javascript"></script>
         <script language="JavaScript" type="text/javascript" src="MapDef.js"></script>
 
-        <script language="JavaScript" type="text/javascript" src="../../CCForm/MapExt.js"></script>
         <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
         <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
-
-
-        <base target="_self" />
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <script language="JavaScript" src="../../Comm/JS/Calendar/WdatePicker.js" type="text/javascript" defer="defer"></script>
-        <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
-        <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
         <base target="_self" />
         <script type="text/javascript">
             function WinOpen(url, name) {
@@ -86,7 +82,6 @@
                 var fk_mapData = GetQueryString("FK_MapData");
 
 
-
                 $.ajax({
                     type: 'get',
                     //async: true,
@@ -112,87 +107,22 @@
                         //拼接 TABLE 
                         //按分组拼接
                         var groupFields = data.Sys_GroupField;
-                        //var tbody = $('<tbody></tbody>');
                         var tbody = $('<tbody></tbody>');
 
+                        var html = "";
+                        for (var k = 0; k < groupFields.length; k++) {
 
-                        $.each(groupFields, function (i, groupobj) {
+                            var groupObj = groupFields[k];
 
-                            var trGroup = '';
-                            var trFrame = '';
-                            switch (groupobj.CtrlType) {
-                                case "Frame": //Frame
-                                    var frame = $.grep(data.Sys_MapFrame, function (frame) { return frame.MyPK == groupobj.CtrlID });
-                                    if (frame.length == 1) {
-                                        groupA.attr('href', "javascript: EditFrame('" + fram[0].MyPK + "')");
-                                        groupA.text(frame[0].Name);
+                            //生成工具栏.
+                            html += GenerGroupTR(groupObj);
 
-                                        tbody.append(trGroup);
-
-                                        //在分组下面增加一个框架
-                                        trFrame = $("<tr><td ColSpan=4 id='TD" + frame[0].MyPK + "'></td></tr>");
-                                        var src = frame[0].URL;
-                                        if (src.Contains("?"))
-                                            src += "&FK_Node=" + pageParam.FK_Node + "&WorkID=" + pageParam.OID;
-                                        else
-                                            src += "?FK_Node=" + pageParam.FK_Node + "&WorkID=" + pageParam.OID;
-
-                                        trFrame.children().append("<td><iframe ID='F" + frame[0].MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + frame[0].H + "'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>");
-                                    }
-                                    break;
-                                case "Dtl": //子表
-                                    var dtl = $.grep(data.Sys_MapDtl, function (dtl) { return dtl.No == groupobj.CtrlID });
-                                    if (dtl.length == 1) {
-                                        groupA.attr('href', "javascript: EditDtl('" + dtl[0].No + "')");
-                                        groupA.text(dtl[0].Name + '-属性');
-                                        var insertCA = $('<a href="javascript:document.getElementById(\'F' + pageParam.fk_mapdata + dtl[0].No + '\').contentWindow.AddF(\'' + pageParam.fk_mapdata + dtl[0].No + '\');"><img src="../../Img/Btn/New.gif" border="0/">插入列</a>');
-                                        var insertCsA = $('<a href="javascript:document.getElementById(\'F' + pageParam.fk_mapdata + dtl[0].No + '\').contentWindow.AddFGroup(\'' + pageParam.fk_mapdata + dtl[0].No + '\');"><img src="../../Img/Btn/New.gif" border="0/">插入列组</a>');
-                                        var copyCA = $('<a href="javascript:document.getElementById(\'F' + pageParam.fk_mapdata + dtl[0].No + '\').contentWindow.CopyF(\'' + pageParam.fk_mapdata + dtl[0].No + '\');"><img src="../../Img/Btn/Copy.gif" border="0/">复制列</a>');
-                                        rightBtn.append(insertCA).append(insertCsA).append(copyCA);
-                                        tbody.append(trGroup);
-                                        //在分组下面增加一个框架
-                                        trFrame = $("<tr><td ColSpan=4 id='TD" + dtl[0].No + "'></td></tr>");
-                                        var src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + pageParam.fk_mapdata + "&FK_MapDtl=" + dtl[0].No;
-                                        trFrame.children().append("<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl[0].H + "'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>");
-                                    }
-                                    break;
-                            }
-
-                            //获取分组下的 MapAttr
-                            var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupobj.OID; });
-
-                            //mapAttrArr = mapAttrArr.sort(function (val1, val2) { return val1.Idx >= val2.Idx });
-                            var groupA = $('<a></a>');
-                            var rightBtn = $('<div style="text-align:right; float:right"></div>');
-                            //向上和向下 所有分组都有
-                            var upA = $('<a href="javascript:GFDoUp(' + groupobj.OID + ')" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:icon-up,plain:true" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-up">&nbsp;</span></span></span></a>');
-                            var downA = $('<a href="javascript:GFDoDown(' + groupobj.OID + ')" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:icon-down,plain:true" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-down">&nbsp;</span></span></span></a>');
-                            rightBtn.append(upA);
-                            rightBtn.append(downA);
-
-                            if (groupA.text() == "") {
-                                groupA.text(groupobj.Lab);
-                                groupA.attr('href', 'javascript:GroupField("' + pageParam.fk_mapdata + '",' + groupobj.OID + ')');
-
-                                var createEleBtn = '<a href="javascript:AddField(' + groupobj.OID + ')" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-new\',plain:true" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-new">&nbsp;</span></span></span></a>';
-                                rightBtn.prepend(createEleBtn);
-                            }
-
-                            trGroup = $('<tr><td ColSpan="4" class="GroupField" valign="top" style="height: 24px;align:left">' +
-                            '<div style="text-align:left; float:left"><img src="./Style/Min.gif" alert="Min" id="Img' + groupobj.Idx + '" border="0" />&nbsp;' +
-                            groupA[0].outerHTML + '</div>' + '<div style="text-align:right; float:right">' + rightBtn[0].outerHTML + '</div></td></tr>');
-                            tbody.append(trGroup);
-
-                            if (trFrame != '') {
-                                tbody.append(trFrame);
-                            }
-
-                            var isNeedTrEND = false;
-                            var isOverTr = false; //是不是可以开始下一个Tr;
-                            tbody.append($('<tr></tr>'));
+                            //生成内容.
+                            html += GenerGroupContext(groupObj, data);
 
 
-                            var html = "";
+                            var mapAttrs = $.grep(data.Sys_MapAttr, function (val) { return val.GroupID == groupObj.OID; });
+
                             var isDrawTR = true; //是否需要话tr ?
                             for (var j = 0; j < mapAttrs.length; j++) {
 
@@ -210,7 +140,6 @@
                                         tdLabel.text(mapAttr.Name);
                                         var tdUp = $('<a href="javascript:Up(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-left\',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-left">&nbsp;</span></span></span></a>');
                                         var tdDown = $('<a href="javascript:Down(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-right\',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a>');
-
 
                                         if (isDrawTR == true) {
                                             tbody.children(":last").append($('<tr>'));
@@ -389,20 +318,16 @@
                                     var tdDown = $('<a href="javascript:Down(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-right\',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a>');
                                     tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
 
-                                    if (mapAttr.UIContralType == 1) {//DDL
+                                    if (mapAttr.UIContralType == 1) { //DDL
                                         tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
                                     }
                                     continue;
                                 }
                             }  //结束attrs循环.
+                        }
 
-                            tbody.children(":last").append($(html));
-
-                        })
-
-
-
-
+                        // alert(html);
+                        tbody.append($(html));
 
                         //contentTable
                         $('#contentTable').children().remove();
@@ -414,6 +339,108 @@
                 $("#Msg").html("");
 
             });
+
+            function GenerGroupContext(groupEn, data) {
+
+                switch (groupEn.CtrlType) {
+
+                    case "Ath":
+                        var ath = data.Sys_FrmAttachment;
+                        if (ath.length == 1) {
+
+                            // PKVal=1568&Ath=AttachM1&FK_MapData=ND1501&FK_FrmAttachment=ND1501_AttachM1;
+
+                            var src = "../../CCForm/AttachmentUpload.htm?PKVal=0&FK_MapData=" + pageParam.fk_mapdata + "&FK_FrmAttachment=" + ath[0].MyPK;
+                            var frameUrl = "<iframe ID='F" + ath[0].MyPK + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + ath[0].H + "px;'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
+                            return "<tr><td colspan=4 id='TD" + ath[0].MyPK + "' style='width:" + ath[0].H + "px;'>" + frameUrl + "</td></tr>";
+
+                        } else {
+                            var html = "<tr><td colspan=4 style='width:100%;height:200px;' > 附件[" + groupEn.CtrlID + "]丢失</td></tr>";
+                            return html;
+                        }
+                        break;
+                    case "FWC":
+                        var nodeID = pageParam.fk_mapdata.replace('ND', '');
+                        var wf_node = data.WF_Node[0];
+                        var fk_flow = GetQueryString("FK_Flow");
+                        var src = "../../WorkOpt/WorkCheck.htm?WorkID=0&FK_Flow=" + fk_flow + "&FK_Node=" + nodeID + "&FK_MapData=" + pageParam.fk_mapdata;
+
+                        var h = wf_node.FWC_H;
+                        alert(h);
+                        var w = wf_node.FWC_W;
+                        alert(w);
+
+                        //                         
+                        //                        alert(wf_node);
+                        //                        alert(wf_node.NodeID);
+                        //                        var h = wf_node.FWC_H;
+                        //                        if (h == 0)
+                        //                            h = "300";
+                        //                        alert(h);
+
+                        var frameUrl = "<iframe ID='FWC' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + h + "px;'  leftMargin='0'  topMargin='0' src='" + src + "' scrolling='auto'  /></iframe>";
+                        return "<tr><td colspan=4 style='width:100%;height:" + h + "px;' id='FWC' >" + frameUrl + "</td></tr>";
+                    case "Dtl":
+                        var dtl = $.grep(data.Sys_MapDtl, function (dtl) { return dtl.No == groupEn.CtrlID });
+                        if (dtl.length == 1) {
+                            var src = "MapDtlDe.htm?DoType=Edit&FK_MapData=" + pageParam.fk_mapdata + "&FK_MapDtl=" + dtl[0].No;
+                            var frameUrl = "<iframe ID='F" + dtl[0].No + "' frameborder=0 style='padding:0px;border:0px;width:100%;height:" + dtl[0].H + "'  leftMargin='0'  topMargin='0' src='" + src + "'  scrolling='auto'  /></iframe>";
+                            return "<tr><td colspan=4 id='TD" + dtl[0].No + "'>" + frameUrl + "</td></tr>";
+                        } else {
+                            html = "<tr><td colspan=4 style='width:100%;height:200px;' > 从表[" + groupEn.CtrlID + "]丢失</td></tr>";
+                            return html;
+                        }
+                        break;
+                    default:
+                        return "";
+                }
+
+                return html;
+            }
+
+            function GenerGroupTR(groupEn) {
+
+                var lab = groupEn.Lab;
+                if (lab == "")
+                    lab = "编辑";
+            
+                //左边的按钮.
+                var leftBtn = "<div style='text-align:left; float:left'>";
+
+                switch (groupEn.CtrlType) {
+                    case "Ath":
+                        leftBtn += "<a href=\"javascript:EditAth('" + groupEn.CtrlID + "')\" >附件:" + lab + "</a>";
+                        break;
+                    case "Dtl":
+                        leftBtn += "<a href=\"javascript:EditDtl('" + groupEn.CtrlID + "')\" >从表属性:" + lab + "</a>";
+                        break;
+                    case "FWC":
+                        leftBtn += "<a href=\"javascript:FrmNodeComponent()\" >审核审批</a>";
+                        break;
+                    default:
+                        leftBtn += "<a href=\"javascript:GroupField('" + groupEn.EnName + "','" + groupEn.OID + "')\" >字段:" + lab + "</a>";
+                        break;
+                }
+                leftBtn += "</div>";
+
+
+                //右边的按钮都一样.
+                var rightBtn = "<div style='text-align:right; float:right'>";
+                rightBtn += "<a href=\"javascript:GFDoUp('" + groupEn.OID + "' )\"  class='easyui-linkbutton l-btn l-btn-plain'  data-options='iconCls:icon-up,plain:true' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>";
+                rightBtn += "<a href=\"javascript:GFDoDown('" + groupEn.OID + "');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-down,plain:true'><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
+                rightBtn += "</div>";
+
+                var html = "<tr>";
+                html += "<th colspan=4>";
+
+               
+                html += leftBtn + rightBtn;
+
+                html += "</th>";
+                html += "</tr>";
+
+                return html;
+            }
 
             function GenerLabel(attr) {
 
@@ -805,7 +832,6 @@
                 OpenEasyUiDialog(url, "eudlgframe", '属性', 800, 450, "icon-property", true, null, null, null, function () {
                     window.location.href = window.location.href;
                 });
-
             }
 
             function FrmNodeComponent(mypk) {
@@ -889,7 +915,7 @@
 
             //修改附件.
             function EditAth(ath) {
-                var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' + pageParam.fk_mapdata + "_" + ath;
+                var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&FK_MapData=' + pageParam.fk_mapdata + '&MyPK=' +  ath;
 
                 OpenEasyUiDialog(url, "eudlgframe", '附件', 800, 500, "icon-edit", true, null, null, null, function () {
                     window.location.href = window.location.href;

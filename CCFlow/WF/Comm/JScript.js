@@ -186,11 +186,14 @@ function WinOpen(url, winName) {
 function openAcc(url) {
     location.href = url;
 }
+
 /* ESC Key Down  */
 function Esc() {
-    if (event.keyCode == 27)
-        window.close();
-    return true;
+    return;
+
+//    if (event.keyCode == 27)
+//        window.close();
+//    return true;
 }
 
 /************************************************ 校验类 top *********************************************************/

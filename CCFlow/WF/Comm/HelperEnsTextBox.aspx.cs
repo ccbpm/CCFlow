@@ -32,6 +32,7 @@ namespace CCFlow.WF.Comm
 
         protected void Page_Load(object sender, EventArgs e)
         {
+           // UIContralType.AthShow
             // 求已经填写的默认值.
             Entities ens = BP.En.ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;

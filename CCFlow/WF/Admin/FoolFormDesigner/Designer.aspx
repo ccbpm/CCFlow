@@ -36,8 +36,6 @@
     <script src="../../Scripts/config.js" type="text/javascript" > </script>
 
     <script language="javascript" type="text/javascript">
-
-
     
         //公共方法
         function AjaxServiceGener(param,extUrl,callbackFunc, scope) {
@@ -322,7 +320,6 @@
             OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
-
         }
 
         //流转自定义.
@@ -333,7 +330,6 @@
             OpenEasyUiDialog(url, "eudlgframe", '组件', 400, 700, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
-
         }
 
         //轨迹组件.

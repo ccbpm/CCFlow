@@ -384,21 +384,7 @@ namespace BP.WF.HttpHandler
                 return "url@" + url;
             }
 
-            if (this.currND.HisFormType == NodeFormType.FixForm)
-            {
-                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上。*/
-                if (this.WorkID == 0)
-                {
-                    currWK = this.currFlow.NewWork();
-                    this.WorkID = currWK.OID;
-                }
-
-                string url = "MyFlowFool.htm";
-
-                //处理连接.
-                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
-                return "url@" + url;
-            }
+         
 
             if (this.currND.HisFormType == NodeFormType.FoolTruck)
             {
@@ -423,6 +409,25 @@ namespace BP.WF.HttpHandler
             {
                 currWK = this.currFlow.NewWork();
                 this.WorkID = currWK.OID;
+            }
+
+            if (this.currND.HisFormType == NodeFormType.FixForm)
+            {
+                /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上。*/
+                if (this.WorkID == 0)
+                {
+                    currWK = this.currFlow.NewWork();
+                    this.WorkID = currWK.OID;
+                }
+
+                string url = "MyFlowFool.htm";
+
+                //处理连接.
+                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
+
+                url = url.Replace("DoType=MyFlow_Init&", "");
+                url = url.Replace("&DoWhat=StartClassic", "");
+                return "url@" + url;
             }
 
             string myurl = "MyFlow.aspx";

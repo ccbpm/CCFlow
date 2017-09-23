@@ -1953,8 +1953,7 @@ namespace BP.WF
             FlowEventBase en = GetFlowEventEntityByFlowMark(flowMark, flowNo);
             if (en == null)
                 return "";
-            else
-                return en.ToString();
+            return en.ToString();
         }
         /// <summary>
         /// 获得事件实体，根据编号或者流程标记.
@@ -1978,8 +1977,7 @@ namespace BP.WF
             foreach (string key in Htable_FlowFEE.Keys)
             {
                 FlowEventBase fee = Htable_FlowFEE[key] as FlowEventBase;
-                if (fee.FlowMark.Contains(flowMark) == true
-                    || fee.FlowMark.Contains(flowNo) == true)
+                if ( fee.FlowMark == flowMark || fee.FlowMark.Contains(","+flowNo+",") == true)
                     return fee;
             }
             return null;

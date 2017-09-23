@@ -833,15 +833,7 @@ namespace BP.En
                         return int.Parse(attr.DefaultVal.ToString());
                 }
 
-                //else
-                //{
-                //    return int.Parse(this.EnMap.GetAttrByKey(key).DefaultVal.ToString());
-                //}
-
-                if (SystemConfig.IsDebug == false)
-                    throw new Exception("@[" + this.EnMap.GetAttrByKey(key).Desc + "]请输入数字，您输入的是[" + this.GetValStrByKey(key) + "]。");
-                else
-                    throw new Exception("@表[" + this.EnDesc + "]在获取属性[" + key + "]值,出现错误，不能将[" + this.GetValStringByKey(key) + "]转换为int类型.错误信息：" + ex.Message + "@请检查是否在存储枚举类型时，您在SetValbyKey中没有转换。正确做法是:this.SetValByKey( Key ,(int)value)  ");
+                throw new Exception("@实体类[" + this.ToString() + "]@[" + this.EnMap.GetAttrByKey(key).Desc + "]请输入数字，您输入的是[" + this.GetValStrByKey(key) + "]。");
             }
         }
         /// <summary>

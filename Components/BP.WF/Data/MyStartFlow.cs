@@ -782,7 +782,7 @@ namespace BP.WF.Data
         public string DoTrack()
         {
             //PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow, 900, 800);
-            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
+            return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow+"&FK_Node="+this.FK_Node;
         }
         /// <summary>
         /// 打开最后一个节点表单
@@ -800,7 +800,9 @@ namespace BP.WF.Data
                 string myPk = dt.Rows[0][0].ToString();
                 return "../../WFRpt.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&DoType=View&MyPK=" + myPk + "&PWorkID=" + this.PWorkID;
             }
-            return "../../CCForm/Frm.aspx?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=ND" + this.FK_Node + "&ReadOnly=1&IsEdit=0";
+
+            Node nd = new Node(this.FK_Node);
+            return "../../CCForm/FrmFreeReadonly.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
         }
         #endregion
     }

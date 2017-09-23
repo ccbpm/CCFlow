@@ -338,7 +338,7 @@ namespace BP.WF.Template
             string str = "";
 
              // 处理失去分组的字段. 
-            string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "' AND CtrlType='' ) ";
+            string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "' AND ( CtrlType='' OR CtrlType IS NULL)  ) ";
             MapAttrs attrs = new MapAttrs();
             attrs.RetrieveInSQL(sql);
             if (attrs.Count != 0)
@@ -350,6 +350,7 @@ namespace BP.WF.Template
                     if (mygf.CtrlID == "")
                         gf = mygf;
                 }
+
                 if (gf == null)
                 {
                     gf = new GroupField();

@@ -3192,16 +3192,25 @@ namespace BP.WF
 
             string sql = "";
             sql = BP.Sys.SystemConfig.GetValByKey("UpdateSID", sql);
-            if (sql=="")
-                sql="UPDATE Port_Emp SET SID=@SID WHERE No=@No";
+            if (sql == "")
+                sql = "UPDATE Port_Emp SET SID=@SID WHERE No=@No";
 
             sql = sql.Replace("@SID", "'" + sid + "'");
             sql = sql.Replace("@No", "'" + userNo + "'");
 
-            if (BP.DA.DBAccess.RunSQL(sql) == 1)
-                return true;
-            else
-                return false;
+            try
+            {
+                if (BP.DA.DBAccess.RunSQL(sql) == 1)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+                    throw new Exception("@执行更新SID失败,您在组织结构集成的时候需要配置一个更新SID的SQL, 比如: update MyUserTable SET SID=@SID WHERE BH='@No'");
+                throw ex;
+            }
         }
         /// <summary>
         /// 发送邮件与消息(如果传入4大流程参数将会增加一个工作链接)

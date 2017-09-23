@@ -36,7 +36,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                if (this.GetRequestVal("IsFirst") == null || this.GetRequestVal("IsFirst")=="" )
+                if (this.GetRequestVal("IsFirst") == null || this.GetRequestVal("IsFirst") == "" || this.GetRequestVal("IsFirst") == "null")
                     return false;
                 return true;
             }
@@ -53,115 +53,25 @@ namespace BP.WF.HttpHandler
             {
                 MapFrmFool cols = new MapFrmFool(this.FK_MapData);
                 cols.DoCheckFixFrmForUpdateVer();
-                return "url@Designer.htm?FK_MapData="+this.FK_MapData+"&FK_Flow="+this.FK_Flow+"&FK_Node="+this.FK_Node;
+                return "url@Designer.htm?FK_MapData=" + this.FK_MapData + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node;
             }
 
-            string sql = "";
-            sql = "SELECT KeyOfEn, Name, Idx, GroupID, UIContralType,MyDataType,LGType, UIHeight, UIWidth, LGType,UIIsEnable,UIIsInput,UIVisible,Colspan FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "'  ORDER BY IDX ";
-            DataTable dtMapAttr = DBAccess.RunSQLReturnTable(sql);
-            dtMapAttr.TableName = "Sys_MapAttr";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dtMapAttr.Columns["KEYOFEN"].ColumnName = "KeyOfEn";
-                dtMapAttr.Columns["NAME"].ColumnName = "Name";
-                dtMapAttr.Columns["IDX"].ColumnName = "Idx";
-                dtMapAttr.Columns["GROUPID"].ColumnName = "GroupID";
+            // 字段属性.
+            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            foreach (MapAttr item in attrs)
+                item.DefVal = item.DefValReal;
 
-                dtMapAttr.Columns["UICONTRALTYPE"].ColumnName = "UIContralType";
-                dtMapAttr.Columns["UIHEIGHT"].ColumnName = "UIHeight";
-                dtMapAttr.Columns["UIWIDTH"].ColumnName = "UIWidth";
-                dtMapAttr.Columns["LGTYPE"].ColumnName = "LGType";
+            ds.Tables.Add(attrs.ToDataTableField("Sys_MapAttr"));
 
-                //dtMapAttr.Columns["GROUPID"].ColumnName = "GroupID";
-                //dtMapAttr.Columns["GROUPID"].ColumnName = "GroupID";
-            }
-            ds.Tables.Add(dtMapAttr);
+            GroupFields gfs = new GroupFields(this.FK_MapData);
+            ds.Tables.Add(gfs.ToDataTableField("Sys_GroupField"));
 
-            sql = "SELECT OID, Lab, EnName, Idx, CtrlType, CtrlID,AtPara FROM Sys_GroupField WHERE EnName='" + this.FK_MapData + "' ORDER BY IDX";
-            DataTable dtGroup = DBAccess.RunSQLReturnTable(sql);
-            dtGroup.TableName = "Sys_GroupField";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                dtGroup.Columns["OID"].ColumnName = "OID";
-                dtGroup.Columns["LAB"].ColumnName = "Lab";
-                dtGroup.Columns["IDX"].ColumnName = "Idx";
-                dtGroup.Columns["CTRLTYPE"].ColumnName = "CtrlType";
-                dtGroup.Columns["CTRLID"].ColumnName = "CtrlID";
-                dtGroup.Columns["ATPARA"].ColumnName = "AtPara";
-            }
-            ds.Tables.Add(dtGroup);
+            MapDtls dtls = new MapDtls(this.FK_MapData);
+            ds.Tables.Add(dtls.ToDataTableField("Sys_MapDtl"));
 
-            sql = @"SELECT No
-      ,Name
-      ,FK_MapData
-      ,PTable
-      ,GroupField
-      ,RefPK
-      ,FEBD
-      ,Model
-      ,RowsOfList
-      ,IsEnableGroupField
-      ,IsShowSum
-      ,IsShowIdx
-      ,IsCopyNDData
-      ,IsHLDtl
-      ,IsReadonly
-      ,IsShowTitle
-      ,IsView
-      ,IsInsert
-      ,IsDelete
-      ,IsUpdate
-      ,IsEnablePass
-      ,IsEnableAthM
-      ,IsEnableM2M
-      ,IsEnableM2MM
-      ,WhenOverSize
-      ,DtlOpenType
-      ,DtlShowModel
-      ,X
-      ,Y
-      ,H
-      ,W
-      ,FrmW
-      ,FrmH
-      ,MTR
-      ,FilterSQLExp
-      ,GUID
-      ,FK_Node
-      ,IsExp
-      ,IsImp
-      ,IsEnableSelectImp
-      ,ImpSQLSearch
-      ,ImpSQLInit
-      ,ImpSQLFull
-      ,AtPara
-      ,SubThreadWorker
-      ,SubThreadWorkerText
-  FROM dbo.Sys_MapDtl where FK_MapData='" + this.FK_MapData + "'";
-            DataTable dtMapDtl = DBAccess.RunSQLReturnTable(sql);
-            dtMapDtl.TableName = "Sys_MapDtl";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                
-            }
-            ds.Tables.Add(dtMapDtl);
+            MapFrames frms = new MapFrames(this.FK_MapData);
+            ds.Tables.Add(frms.ToDataTableField("Sys_MapFrame"));
 
-            sql = @"SELECT MyPK
-      ,FK_MapData
-      ,Name
-      ,URL
-      ,W
-      ,H
-      ,IsAutoSize
-      ,GUID
-  FROM dbo.Sys_MapFrame where FK_MapData='" + this.FK_MapData + "'";
-            DataTable dtMapFrame = DBAccess.RunSQLReturnTable(sql);
-            dtMapFrame.TableName = "Sys_MapFrame";
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-            {
-                
-            }
-            ds.Tables.Add(dtMapFrame);
             //把dataet转化成json 对象.
             return BP.Tools.Json.ToJson(ds);
         }

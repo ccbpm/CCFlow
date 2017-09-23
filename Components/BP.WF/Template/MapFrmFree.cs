@@ -472,7 +472,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoDesignerFool()
         {
-            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData="+this.No+"&MyPK="+this.No+"&IsEditMapData=True";
+            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True&DoDesignerFool&IsFirst=1";
         }
         /// <summary>
         /// 编辑excel模版.

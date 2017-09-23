@@ -266,7 +266,48 @@ namespace BP.WF.HttpHandler
             string json = "{";
             bool isCan;
 
-            Hashtable ht = new Hashtable();
+            #region 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
+            bool CanPackUp = false;
+            if (SystemConfig.CustomerNo == "TianYe")
+            {
+                if (wfstateEnum == WFState.Complete)
+                {
+                    //流程已经完成的情况下, 从轨迹里面找当前人员参与的节点.
+                    string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "TRACK WHERE WorkID=" + this.WorkID + " AND EmpFrom='" + BP.Web.WebUser.No + "'";
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        int nodeid = int.Parse(dr[0].ToString());
+                        Node nd = new Node(nodeid);
+                        if (nd.IsStartNode)
+                        {
+                            CanPackUp = true;
+                            break;
+                        }
+
+                        BtnLab btn = new BtnLab(nodeid);
+                        if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
+                        {
+                            CanPackUp = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    /*没有结束的流程，都是不能打印的.*/
+                    CanPackUp = false;
+                }
+
+            }
+            else
+            {
+                CanPackUp = true;
+            }
+            #endregion 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
+
+            //是否可以打印.
+            json += "\"CanPackUp\":" + CanPackUp.ToString().ToLower() + ",";
 
             switch (wfstateEnum)
             {
@@ -274,7 +315,6 @@ namespace BP.WF.HttpHandler
                     /*删除流程.*/
                     isCan = BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No);
 
-                    ht.Add("CanFlowOverByCoercion", isCan.ToString().ToLower());
                     json += "\"CanFlowOverByCoercion\":" + isCan.ToString().ToLower() + ",";
 
                     /*取回审批*/
@@ -311,6 +351,7 @@ namespace BP.WF.HttpHandler
                     info.addAnd();
                     info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
                     isCan = info.DoQuery() > 0;
+
                     json += "\"CanUnSend\":" + isCan.ToString().ToLower();
                     break;
                 case WFState.Complete: // 完成.

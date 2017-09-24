@@ -2107,6 +2107,7 @@ function figure_MapAttr_Template(mapAttr) {
             //先把 必填项的 * 写到元素后面 可能写到标签后面更合适
             eleHtml +=
            (mapAttr.UIIsInput == 1 && mapAttr.UIIsEnable == 1) ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
+
         }
     } else {
         var value = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);

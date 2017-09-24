@@ -81,7 +81,6 @@
                 //初始化groupID.
                 var fk_mapData = GetQueryString("FK_MapData");
 
-
                 $.ajax({
                     type: 'get',
                     //async: true,
@@ -109,7 +108,15 @@
                         var groupFields = data.Sys_GroupField;
                         var tbody = $('<tbody></tbody>');
 
+                        var frmName = data.Sys_MapData[0].Name;
+                        //alert(frmName);
+
                         var html = "";
+                        html += "<tr>";
+                        html += "<td colspan=4 ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <h2 style='float:right;padding-right:10px;' >" + frmName + "</h2></td>";
+                        html += "</tr>";
+
+
                         for (var k = 0; k < groupFields.length; k++) {
 
                             var groupObj = groupFields[k];
@@ -134,33 +141,33 @@
                                 // AppString  
                                 if (mapAttr.MyDataType == "1") { //不是外键
 
-                                    if (mapAttr.UIContralType == "1") {  //DDL 下拉列表框 是外键.
-                                        var tdLabel = $('<a></a>');
-                                        tdLabel.attr('href', 'javascript:EditEnum(\'' + mapAttr.KeyOfEn + '\',\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'' + mapAttr.KeyOfEn + '\',' + groupobj.OID + ")");
-                                        tdLabel.text(mapAttr.Name);
-                                        var tdUp = $('<a href="javascript:Up(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-left\',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-left">&nbsp;</span></span></span></a>');
-                                        var tdDown = $('<a href="javascript:Down(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-right\',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a>');
+                                    //                                    if (mapAttr.UIContralType == "1") {  //DDL 下拉列表框 是外键.
+                                    //                                        var tdLabel = $('<a></a>');
+                                    //                                        tdLabel.attr('href', 'javascript:EditEnum(\'' + mapAttr.KeyOfEn + '\',\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'' + mapAttr.KeyOfEn + '\',' + groupobj.OID + ")");
+                                    //                                        tdLabel.text(mapAttr.Name);
+                                    //                                        var tdUp = $('<a href="javascript:Up(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-left\',plain:true" alt="向左动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-left">&nbsp;</span></span></span></a>');
+                                    //                                        var tdDown = $('<a href="javascript:Down(\'' + pageParam.fk_mapdata + '_' + mapAttr.KeyOfEn + '\',\'1\');" class="easyui-linkbutton l-btn l-btn-plain" data-options="iconCls:\'icon-right\',plain:true" alt="向右动顺序" group="" id=""><span class="l-btn-left"><span class="l-btn-text"><span class="l-btn-empty icon-right">&nbsp;</span></span></span></a>');
 
-                                        if (isDrawTR == true) {
-                                            tbody.children(":last").append($('<tr>'));
-                                            tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
-                                            //tbody.children
-                                            tbody.children(":last").append($("<td ColSpan=" + mapAttr.ColSpan + "><select name='DDL_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">" +
-                                                        '' + "<option>" + mapAttr.KeyOfEn + "</option></select></td>"));
-                                        }
+                                    //                                        if (isDrawTR == true) {
+                                    //                                            tbody.children(":last").append($('<tr>'));
+                                    //                                            tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
+                                    //                                            //tbody.children
+                                    //                                            tbody.children(":last").append($("<td ColSpan=" + mapAttr.ColSpan + "><select name='DDL_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">" +
+                                    //                                                        '' + "<option>" + mapAttr.KeyOfEn + "</option></select></td>"));
+                                    //                                        }
 
-                                        if (isDrawTR == false) {
+                                    //                                        if (isDrawTR == false) {
 
-                                            tbody.children(":last").append($('<tr>'));
-                                            tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
-                                            //tbody.children
-                                            tbody.children(":last").append($("<td ColSpan=" + mapAttr.ColSpan + "><select name='DDL_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">" +
-                                                        '' + "<option>" + mapAttr.KeyOfEn + "</option></select></td></td>"));
-                                        }
+                                    //                                            tbody.children(":last").append($('<tr>'));
+                                    //                                            tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
+                                    //                                            //tbody.children
+                                    //                                            tbody.children(":last").append($("<td ColSpan=" + mapAttr.ColSpan + "><select name='DDL_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">" +
+                                    //                                                        '' + "<option>" + mapAttr.KeyOfEn + "</option></select></td></td>"));
+                                    //                                        }
 
-                                        isDrawTR = !isDrawTR;
-                                        continue;
-                                    } // end DDL 下拉列表框 是外键.
+                                    //                                        isDrawTR = !isDrawTR;
+                                    //                                        continue;
+                                    //                                    } // end DDL 下拉列表框 是外键.
 
 
                                     if (mapAttr.ColSpan == 3 && mapAttr.UIHeight <= 23) {
@@ -319,7 +326,7 @@
                                     tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
 
                                     if (mapAttr.UIContralType == 1) { //DDL
-                                        tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
+                                        tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
                                     }
                                     continue;
                                 }
@@ -851,12 +858,9 @@
 
             }
 
-            function MapDataEdit(mypk) {
+            function MapDataEdit() {
 
-                if (mypk == null || mypk == "undefined")
-                    mypk = GetQueryString("FK_Node");
-
-                var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PK=' + mypk;
+                var url = '../../Comm/En.htm?EnName=BP.WF.Template.MapFrmFool&PK=' + GetQueryString("FK_MapData");
 
                 OpenEasyUiDialog(url, "eudlgframe", '属性', 800, 450, "icon-property", true, null, null, null, function () {
                     window.location.href = window.location.href;

@@ -41,6 +41,7 @@
         }
         .btn {
             display: inline-block;
+            
             *display: inline;
             padding: 4px 12px;
             margin-bottom: 0;
@@ -89,7 +90,7 @@
 
         .btn:active,
         .btn.active {
-            background-color: #cccccc \9;
+            background-color: #cccccc9;
         }
 
         .btn:first-child {
@@ -97,7 +98,8 @@
         }
 
         .btn:hover,
-        .btn:focus {
+        .btn:focus 
+        {
             color: #333333;
             text-decoration: none;
             background-position: 0 -15px;
@@ -428,27 +430,17 @@
             <i style="display: none;"></i>
             <div id="contentDiv">
                 <form id="divCCForm" method="post">
-                <!--LODOP_OB 先放着 不知道具体是什么-->
-                <div>
-                    <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0"
-                        height="0">
-                        <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="../DataUser/PrintTools/install_lodop32.exe" />
-                    </object>
-                </div>
+               
                 <!--头部功能按钮 发送、移交-->
                 <div class="topBar" id="topBar">
-                    <!-- <uc3:ToolBar ID="ToolBar1" runat="server"/>-->
                 </div>
                 <!--flowInfo-->
                 <div class="flowInfo" id="flowInfo">
-                    <!--<uc1:Pub ID="Pub1" runat="server"/>-->
                 </div>
                 <!--childThread-->
                 <div class="childThread" id='childThread'>
-                    <!--<uc1:Pub ID="Pub3" runat="server"/>-->
                 </div>
                 <!--主表单-->
-                <!--<uc2:UCEn ID="UCEn1" runat="server"/>-->
                 <div id="CCForm">
                     <br />
                     <img src='./Img/Loading.gif' />

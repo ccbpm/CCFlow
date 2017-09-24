@@ -72,9 +72,11 @@ namespace BP.Sys.FrmUI
                 map.AddTBString(FrmEleAttr.URL, null, "URL(支持ccbpm的表达式)", true, false, 0, 3900, 20, true);
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
-                //显示的分组.
-                map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
-                    "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE EnName='@FK_MapData'", true);
+                map.AddTBString(FrmBtnAttr.GroupID, null, "所在分组", false, false, 0, 128, 20);
+
+                ////显示的分组.
+                //map.AddDDLSQL(MapAttrAttr.GroupID, "0", "所在分组",
+                //    "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE EnName='@FK_MapData'", true);
              
                 this._enMap = map;
                 return this._enMap;

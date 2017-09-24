@@ -319,7 +319,7 @@
                                     tbody.children(":last").append($('<td class="FDesc"></td>').append(tdUp).append(tdLabel).append(tdDown));
 
                                     if (mapAttr.UIContralType == 1) { //DDL
-                                        tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
+                                        tbody.children(":last").append($("<td><select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + '' + "</select></td>"));
                                     }
                                     continue;
                                 }
@@ -366,9 +366,7 @@
                         var src = "../../WorkOpt/WorkCheck.htm?WorkID=0&FK_Flow=" + fk_flow + "&FK_Node=" + nodeID + "&FK_MapData=" + pageParam.fk_mapdata;
 
                         var h = wf_node.FWC_H;
-                        alert(h);
                         var w = wf_node.FWC_W;
-                        alert(w);
 
                         //                         
                         //                        alert(wf_node);
@@ -403,16 +401,27 @@
                 var lab = groupEn.Lab;
                 if (lab == "")
                     lab = "编辑";
-            
+
                 //左边的按钮.
                 var leftBtn = "<div style='text-align:left; float:left'>";
+
+                var midBtn = "";
 
                 switch (groupEn.CtrlType) {
                     case "Ath":
                         leftBtn += "<a href=\"javascript:EditAth('" + groupEn.CtrlID + "')\" >附件:" + lab + "</a>";
                         break;
                     case "Dtl":
+
                         leftBtn += "<a href=\"javascript:EditDtl('" + groupEn.CtrlID + "')\" >从表属性:" + lab + "</a>";
+
+                        //中间连接.
+                        midBtn = "";
+                        midBtn += '<a href="javascript:AddFForDtl(\'' + groupEn.CtrlID + '\');"><img src="../../Img/Btn/New.gif" border="0/">插入列</a>';
+                        //midBtn += '<a href="javascript:document.getElementById(\'F' + groupEn.CtrlID + '\').contentWindow.AddFGroup(\'' + groupEn.CtrlID + '\');"><img src="../../Img/Btn/New.gif" border="0/">插入列组</a>';
+                        //midBtn += '<a href="javascript:document.getElementById(\'F'+ groupEn.CtrlID + '\').contentWindow.CopyF(\'' +  groupEn.CtrlID + '\');"><img src="../../Img/Btn/Copy.gif" border="0/">复制列</a>';
+                        midBtn += "";
+
                         break;
                     case "FWC":
                         leftBtn += "<a href=\"javascript:FrmNodeComponent()\" >审核审批</a>";
@@ -425,7 +434,7 @@
 
 
                 //右边的按钮都一样.
-                var rightBtn = "<div style='text-align:right; float:right'>";
+                var rightBtn = "<div style='text-align:right; float:right'>" + midBtn;
                 rightBtn += "<a href=\"javascript:GFDoUp('" + groupEn.OID + "' )\"  class='easyui-linkbutton l-btn l-btn-plain'  data-options='iconCls:icon-up,plain:true' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>";
                 rightBtn += "<a href=\"javascript:GFDoDown('" + groupEn.OID + "');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-down,plain:true'><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
                 rightBtn += "</div>";
@@ -433,7 +442,7 @@
                 var html = "<tr>";
                 html += "<th colspan=4>";
 
-               
+
                 html += leftBtn + rightBtn;
 
                 html += "</th>";
@@ -451,6 +460,20 @@
 
                 return tdUp + "<a href=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "');\" > " + attr.Name + "</a>" + tdDown;
             }
+
+            function AddFForDtl( fk_mapdtl ) {
+
+                var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdtl + '&inlayer=1&s=' + Math.random();
+                OpenEasyUiDialog(url, "eudlgframe", "插入列", 800, 500, "icon-edit", true, null, null, null, function () {
+
+                    var frm = document.getElementById("F" + fk_mapdtl);
+                    frm.src = frm.src;
+
+                   // window.location.href = window.location.href;
+                    //ReloadDtlFrame();
+                });
+            }
+
         </script>
 
     
@@ -602,7 +625,7 @@
                 window.location.href = window.location.href;
             }
 
-            function Edit(mypk, ftype, gf) {
+            function Edit(mypk, ftype, gf, fk_mapdtl) {
 
                 var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + pageParam.fk_mapdata + '&GroupField=' + gf;
                 var title = '';
@@ -634,7 +657,13 @@
                 }
 
                 OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
+
+                    //                    if (fk_mapdtl != undefined) {
+                    //                        var iFrame = parentwin.document.getElementById("F" + fk_mapdtl);
+                    //                        iFrame.location.reload();
+                    //                    }
                     window.location.href = window.location.href;
+
                 });
 
                 // OpenEasyUiDialog(url, "dd", title, 730, 500);
@@ -1016,7 +1045,6 @@
             }
             function EnableAthM() {
                 var url = '../CCForm/AttachmentUpload.htm?IsBTitle=1&PKVal=0&Ath=AthMDtl&FK_MapData=' + pageParam.fk_mapdata + '&FK_FrmAttachment=' + pageParam.fk_mapdata + '_AthMDtl';
-
 
                 OpenEasyUiDialog(url, "eudlgframe", '多附件', 800, 500, "icon-property", true, null, null, null, function () {
                     window.location.href = window.location.href;

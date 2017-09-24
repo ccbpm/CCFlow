@@ -55,7 +55,6 @@
                 $.each(tks, function () {
                     var subaths = GetSubAths(this.NodeID);
 
-
                     if (wcDesc.FWCShowModel == 0) {
                         //表格模式
                         html += '<tr style="background-color: #E2F6FB">';
@@ -72,8 +71,9 @@
                     //审核意见
                     if (this.IsDoc) {
                         html += "<td>";
-                        html += "<div style='float:left'>" + wcDesc.FWCOpLabel + "</div>";
-                        html += "<div style='float:left'><a href=\"javascript:TBHelp('ND" + nodeid + "')\"><img src='../Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>";
+
+                        // html += "<div style='float:left'>" + wcDesc.FWCOpLabel + "</div>";
+                        //html += "<div style='float:left'><a href=\"javascript:TBHelp('ND" + nodeid + "')\"><img src='../Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>";
                         //html += "<div style='float:left'></div>";
 
                         if (wcDesc.FWCAth == 1) {

@@ -60,7 +60,7 @@
 
                           var nameLink = "";
                           if (lgType == 0) {
-                              nameLink = "<a href=\"javascript:Edit('" + fk_mapDtl + "','" + mypk + "','" + dataType + "','" + uiContralType + "')\" > " + name + "</a>";
+                              nameLink = "<a href=\"javascript:Edit('" + mypk + "','" + dataType + "')\" > " + name + "</a>";
                           }
 
                           if (lgType == 1) {
@@ -146,12 +146,18 @@
 
           });
 
-       
-        function AddF(fk_mapdata) {
-            var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata;
-            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
-            window.location.href = window.location.href;
-        }
+
+          function AddF(fk_mapdata) {
+
+              var url = 'FieldTypeList.htm?FK_MapData=' + fk_mapdata;
+              OpenEasyUiDialog(url, "eudlgframe", '新增字段', 800, 500, "icon-property", true, null, null, null, function () {
+                  window.location.href = window.location.href;
+
+              });
+
+              //  var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
+              //window.location.href = window.location.href;
+          }
         function AddFGroup(fk_mapdata) {
             var url = 'Do.aspx?DoType=AddFGroup&FK_MapData=' + fk_mapdata;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 600px;center: yes; help: no');
@@ -168,16 +174,16 @@
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 800px;center: yes; help: no');
             //  window.location.href = window.location.href;
         }
-        function Edit(fk_mapdata, mypk, ftype, uiCtrlType) {
+        function Edit(mypk, ftype) {
             var parentwin = parent.window;
             if (parentwin) {
 
                 var iFrame = parentwin.document.getElementById("F");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
-                    parentwin.Edit(fk_mapdata, mypk, ftype, uiCtrlType);
+                    parentwin.Edit(mypk, ftype);
                     return;
                 }
-                parentwin.Edit(fk_mapdata, mypk, ftype, uiCtrlType);
+                parentwin.Edit(mypk, ftype);
                 //alert("err");
                 return;
             }

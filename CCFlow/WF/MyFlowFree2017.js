@@ -1908,10 +1908,13 @@ function GenerWorkNode() {
                     if (item.MapAttr.UIIsEnable == "0") {
                         obj.editor = UM.getEditor(item.id, {
                             'toolbar': [],
-                            'readonly': true
+                            'readonly': true,
+                            'autoHeightEnabled': false
                         });
                     } else {
-                        obj.editor = UM.getEditor(item.id);
+                        obj.editor = UM.getEditor(item.id,{
+                            'autoHeightEnabled': false
+                        });
                     }
                     obj.attr = item.MapAttr;
                     window.UEs.push(obj);
@@ -1988,9 +1991,9 @@ function figure_MapAttr_Template(mapAttr) {
 
                                 if (mapAttr.UIIsEnable == "0") {
                                     //字段处于只读状态.注意这里 name 属性也是可以用来绑定字段名字的
-                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain'>" + defValue + "</script>";
+                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;'>" + defValue + "</script>";
                                 } else {
-                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain'></script>";
+                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='width:"+ mapAttr.UIWidth +"px;height:"+ mapAttr.UIHeight +"px;'></script>"; 
                                 }
                             } else {
                                 eleHtml +=

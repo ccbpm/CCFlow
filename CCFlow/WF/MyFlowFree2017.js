@@ -1909,11 +1909,13 @@ function GenerWorkNode() {
                         obj.editor = UM.getEditor(item.id, {
                             'toolbar': [],
                             'readonly': true,
-                            'autoHeightEnabled': false
+                            'autoHeightEnabled': false,
+                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
                         });
                     } else {
                         obj.editor = UM.getEditor(item.id,{
-                            'autoHeightEnabled': false
+                            'autoHeightEnabled': false,
+                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
                         });
                     }
                     obj.attr = item.MapAttr;
@@ -1989,11 +1991,16 @@ function figure_MapAttr_Template(mapAttr) {
                                 editorPara.MapAttr = mapAttr;
                                 document.UE_MapAttr.push(editorPara);
 
+                                //设置编辑器的默认样式
+                                var styleText = "text-align:left;font-size:12px;";
+                                styleText += "width:" + mapAttr.UIWidth + "px;";
+                                styleText += "height:" + mapAttr.UIHeight + "px;";
+
                                 if (mapAttr.UIIsEnable == "0") {
                                     //字段处于只读状态.注意这里 name 属性也是可以用来绑定字段名字的
-                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='width:" + mapAttr.UIWidth + "px;height:" + mapAttr.UIHeight + "px;'>" + defValue + "</script>";
+                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
                                 } else {
-                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='width:"+ mapAttr.UIWidth +"px;height:"+ mapAttr.UIHeight +"px;'></script>"; 
+                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'></script>"; 
                                 }
                             } else {
                                 eleHtml +=

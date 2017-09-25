@@ -784,7 +784,7 @@ namespace CCFlow.WF.CCForm
                     btn.ID = "Btn_DownLoad_Zip";
                     btn.CssClass = "Btn";
                     btn.Width = 20;
-                    btn.Height = 2;
+                    btn.Height = 20;
                     btn.ToolTip = "压缩打包下载";
                     btn.Click += new ImageClickEventHandler(btn_DownLoad_Zip);
                     this.Pub1.Add(btn);

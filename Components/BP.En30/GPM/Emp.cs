@@ -70,6 +70,10 @@ namespace BP.GPM
         /// 岗位描述
         /// </summary>
         public const string StaDesc = "StaDesc";
+        /// <summary>
+        /// 签字类型
+        /// </summary>
+        public const string SignType = "SignType";
     }
     /// <summary>
     /// 操作员 的摘要说明。
@@ -407,6 +411,9 @@ namespace BP.GPM
                 map.AddTBInt(EmpAttr.NumOfDept, 0, "部门数量", true, false);
 
                 map.AddTBString(EmpAttr.PinYin, null, "拼音", true, false, 0, 500, 132);
+
+                // 0=不签名 1=图片签名, 2=电子签名.
+                map.AddTBInt(EmpAttr.SignType, 0, "签字类型", true, false);
 
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);

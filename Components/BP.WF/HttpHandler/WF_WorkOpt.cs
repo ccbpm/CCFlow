@@ -512,7 +512,7 @@ namespace BP.WF.HttpHandler
 
             isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
             //历史审核信息显示
-            if (wcDesc.FWCListEnable)
+            if (wcDesc.FWCListEnable==true)
             {
                 tks = wc.HisWorkChecks;
 
@@ -855,6 +855,21 @@ namespace BP.WF.HttpHandler
 
             ds.Tables.Remove("Tracks");
             ds.Tables.Add(sortedTKs);
+
+            //如果有 SignType 列就获得签名信息.
+            if (SystemConfig.CustomerNo == "TianYe")
+            {
+                string tTable="ND" + int.Parse(FK_Flow) + "Track";
+                string sql = "SELECT a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE a.No=b.EmpFrom AND B.WORKID=" + this.WorkID;
+
+                DataTable dtTrack = DBAccess.RunSQLReturnTable(sql);
+                dtTrack.TableName = "SignType";
+
+                dtTrack.Columns["NO"].ColumnName = "No";
+                dtTrack.Columns["SIGNTYPE"].ColumnName = "SignType";
+
+                ds.Tables.Add(dtTrack);
+            }
 
             return BP.Tools.Json.ToJson(ds);
         }

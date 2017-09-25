@@ -164,6 +164,7 @@
     <Compile Include="DTS\DocFieldAddLengthTo1000.cs" />
     <Compile Include="CCFlowAPI.cs" />
     <Compile Include="DTS\ResetSortMapAttr.cs" />
+    <Compile Include="DTS\GenerPinYinForEmp.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>

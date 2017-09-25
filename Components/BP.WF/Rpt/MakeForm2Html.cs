@@ -697,7 +697,7 @@ namespace BP.WF
                             {
                                 //把文件copy到,
                                 string file = item.MakeFullFileFromFtp();
-                                System.IO.File.Copy(file, path + "\\" + item.FileName, true);
+                                System.IO.File.Copy(file, path + "\\pdf\\" + item.FileName, true);
                                 sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                             }
                             catch (Exception ex)
@@ -711,7 +711,7 @@ namespace BP.WF
                             try
                             {
                                 //把文件copy到,
-                                System.IO.File.Copy(item.FileFullName, path + "\\" + item.FileName, true);
+                                System.IO.File.Copy(item.FileFullName, path + "\\pdf\\" + item.FileName, true);
                                 sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                             }
                             catch (Exception ex)
@@ -746,19 +746,20 @@ namespace BP.WF
 
             //生成表头.
             string frmName = mapData.Name;
-            sb.Append("<table style='width:950px' >");
-            sb.Append("<tr style='width:950px' >");
-            sb.Append("<tr>");
-            sb.Append("<td colspan=4 ><div style='float:left' ><img src='icon.png'  /></div> <div  style='float:right;padding-right:10px;'  ><br><h4><b>" + frmName + "</b></h4></div></td>");
-            sb.Append("</tr>");
+            sb.Append("\t\n <table style='width:950px;height:auto;' >");
+            sb.Append("\t\n <tr style='border-style:none;border-width:0px;' >");
+            sb.Append("\t\n <td colspan=1 style='border-style:none;border-width:0px;float:left' ><img src='icon.png' style='height:60px;'  /></td>");
+            sb.Append("\t\n <td colspan=2 style='border-style:none;border-width:0px;' ><div  style='padding-left:10px;' ><br><h2><b>" + frmName + "</b></h2></div></td>");
+            sb.Append("\t\n <td colspan=1 style='border-style:none;border-width:0px;float:right' ><img src='QR.png' style='height:60px;'  /></td>");
+            sb.Append("\t\n </tr>");
 
             GroupFields gfs = new GroupFields(frmID);
             foreach (GroupField gf in gfs)
             {
                 //输出标题.
-                sb.Append("<tr>");
-                sb.Append("  <th colspan=4>" + gf.Lab + "</th>");
-                sb.Append("</tr>");
+                sb.Append("\t\n <tr>");
+                sb.Append("\t\n  <th colspan=4>" + gf.Lab + "</th>");
+                sb.Append("\t\n </tr>");
 
                 #region 输出字段.
                 if (gf.CtrlID == "" && gf.CtrlType == "")
@@ -768,7 +769,7 @@ namespace BP.WF
                     foreach (MapAttr attr in attrs)
                     {
                         //处理隐藏字段，如果是不可见并且是启用的就隐藏.
-                        if (attr.UIVisible == false && attr.UIIsEnable)
+                        if (attr.UIVisible == false)
                             continue;
                         if (attr.GroupID != attr.GroupID)
                             continue;
@@ -791,12 +792,12 @@ namespace BP.WF
                         if (attr.ColSpan == 3)
                         {
                             isDropTR = true;
-                            html += "<tr>";
-                            html += "<td  class='FDesc'  >" + attr.Name + "</td>";
-                            html += "<td ColSpan=3>";
+                            html += "\t\n <tr>";
+                            html += "\t\n <td  class='FDesc'  >" + attr.Name + "</td>";
+                            html += "\t\n <td ColSpan=3>";
                             html += text;
-                            html += "</td>";
-                            html += "</tr>";
+                            html += "\t\n </td>";
+                            html += "\t\n </tr>";
                             continue;
                         }
 
@@ -804,32 +805,32 @@ namespace BP.WF
                         if (attr.ColSpan == 4)
                         {
                             isDropTR = true;
-                            html += "<tr>";
-                            html += "<td ColSpan=4 style='width:100%' >" + attr.Name + "</br>";
+                            html += "\t\n <tr>";
+                            html += "\t\n <td ColSpan=4 style='width:100%' >" + attr.Name + "</br>";
                             html += text;
-                            html += "</td>";
-                            html += "</tr>";
+                            html += "\t\n </td>";
+                            html += "\t\n </tr>";
                             continue;
                         }
 
                         if (isDropTR == true)
                         {
-                            html += "<tr>";
-                            html += "<td class='FDesc' style='width:80px;' >" + attr.Name + "</td>";
-                            html += "<td class='FContext'  >";
+                            html += "\t\n <tr>";
+                            html += "\t\n <td class='FDesc' style='width:80px;' >" + attr.Name + "</td>";
+                            html += "\t\n <td class='FContext'  >";
                             html += text;
-                            html += "</td>";
+                            html += "\t\n </td>";
                             isDropTR = !isDropTR;
                             continue;
                         }
 
                         if (isDropTR == false)
                         {
-                            html += "<td  class='FDesc'>" + attr.Name + "</td>";
-                            html += "<td class='FContext'  >";
+                            html += "\t\n <td  class='FDesc'>" + attr.Name + "</td>";
+                            html += "\t\n <td class='FContext'  >";
                             html += text;
-                            html += "</td>";
-                            html += "<tr>";
+                            html += "\t\n </td>";
+                            html += "\t\n </tr>";
                             isDropTR = !isDropTR;
                             continue;
                         }
@@ -843,25 +844,26 @@ namespace BP.WF
                 if (gf.CtrlType == "Ath")
                 {
                     FrmAttachments aths = new FrmAttachments(frmID);
-                    FrmAttachmentDBs athDBs = null;
-                    if (aths.Count > 0)
-                        athDBs = new FrmAttachmentDBs(frmID, en.PKVal.ToString());
 
                     foreach (FrmAttachment ath in aths)
                     {
+                        if (ath.MyPK != gf.CtrlID)
+                            continue;
+
+                        BP.Sys.FrmAttachmentDBs athDBs = BP.WF.Glo.GenerFrmAttachmentDBs(ath, workid.ToString(), ath.MyPK);
+
 
                         if (ath.UploadType == AttachmentUploadType.Single)
                         {
                             /* 单个文件 */
-                            FrmAttachmentDB athDB = athDBs.GetEntityByKey(FrmAttachmentDBAttr.FK_FrmAttachment, ath.MyPK) as FrmAttachmentDB;
-                            sb.Append("附件没有转化:" + athDB.FileName);
+                            sb.Append("<tr><td colspan=4>单附件没有转化:" + ath.MyPK + "</td></td>");
                             continue;
                         }
 
                         if (ath.UploadType == AttachmentUploadType.Multi)
                         {
-                            sb.Append("<tr><td>");
-                            sb.Append("<ul>");
+                            sb.Append("\t\n<tr><td valign=top colspan=4 >");
+                            sb.Append("\t\n<ul>");
                             foreach (FrmAttachmentDB item in athDBs)
                             {
                                 if (ath.AthSaveWay == AthSaveWay.FTPServer)
@@ -870,7 +872,7 @@ namespace BP.WF
                                     {
                                         //把文件copy到,
                                         string file = item.MakeFullFileFromFtp();
-                                        System.IO.File.Copy(file, path + "\\" + item.FileName, true);
+                                        System.IO.File.Copy(file, path + "\\pdf\\" + item.FileName, true);
                                         sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                                     }
                                     catch (Exception ex)
@@ -884,7 +886,7 @@ namespace BP.WF
                                     try
                                     {
                                         //把文件copy到,
-                                        System.IO.File.Copy(item.FileFullName, path + "\\" + item.FileName, true);
+                                        System.IO.File.Copy(item.FileFullName, path + "\\pdf\\" + item.FileName, true);
                                         sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                                     }
                                     catch (Exception ex)
@@ -892,54 +894,47 @@ namespace BP.WF
                                         sb.Append("<li>" + item.FileName + "(<font color=red>文件未从ftp下载成功{" + ex.Message + "}</font>)</li>");
                                     }
                                 }
-
                             }
-                            sb.Append("</ul>");
-                            sb.Append("</td></tr>");
+                            sb.Append("\t\n</ul>");
+                            sb.Append("\t\n</td></tr>");
                         }
                     }
                 }
                 #endregion 如果是附件.
 
                 #region 审核组件
-                if (gf.CtrlType == "FWC")
+                if (gf.CtrlType == "FWC" && flowNo != null)
                 {
-                    sb.Append("<tr><td>");
+                    //sb.Append(" \t\n <tr><td colspan=4 valign=top style='width:100%;valign:middle;height:auto;'  >");
                     FrmWorkCheck fwc = new FrmWorkCheck(frmID);
-                    if (fwc.HisFrmWorkCheckSta != FrmWorkCheckSta.Disable)
+
+                    string html = ""; // "<table style='width:100%;valign:middle;height:auto;' >";
+
+                    #region 生成审核信息.
+                    string sql = "SELECT NDFromT, Msg , RDT, EmpFromT FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        sb.Append("<table style='border: 1px outset #C0C0C0;padding: inherit; margin: 0;border-collapse:collapse;width:100%;' >");
-                        #region 生成审核信息.
-                        if (flowNo != null)
-                        {
-                            string sql = "SELECT * FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
-                            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                            foreach (DataRow dr in dt.Rows)
-                            {
-                                sb.Append("<tr>");
-                                sb.Append("<td valign=middle style='border-style: solid;padding: 4px;text-align: left;color: #333333;font-size: 12px;border-width: 1px;border-color: #C2D5E3;' >" + dr["NDFromT"] + "</td>");
+                        html += "<tr>";
+                        html += " <td valign=middle >" + dr["NDFromT"] + "</td>";
 
-                                sb.Append("<br><br>");
+                        string msg = "<font color=green>" + dr["Msg"].ToString() + "</font>";
 
-                                string msg = "<font color=green>" + dr["Msg"].ToString() + "</font>";
+                        msg += "<br>";
+                        msg += "<br>";
+                        msg += "审核人:" + dr["EmpFromT"] + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:" + dr["RDT"].ToString();
 
-                                msg += "<br>";
-                                msg += "<br>";
-                                msg += "审核人:" + dr["EmpFromT"] + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:" + dr["RDT"].ToString();
-
-                                sb.Append("<td colspan=3 valign=middle style='border-style: solid;padding: 4px;text-align: left;color: #333333;font-size: 12px;border-width: 1px;border-color: #C2D5E3;' >" + msg + "</td>");
-                                sb.Append("</tr>");
-                            }
-                        }
-                        sb.Append("</table>");
-                        #endregion 生成审核信息.
-
-                        sb.Append("</td></tr>");
+                        html += " <td colspan=3 valign=middle ><br><br>" + msg + "</td>";
+                        html += "\t\n </tr>";
                     }
+                    #endregion 生成审核信息.
+
+                    sb.Append("\t\n " + html);
                 }
                 #endregion 审核组件
             }
-            sb.Append("</table>");
+
+            sb.Append("\t\n</table>");
             return sb;
         }
 
@@ -972,8 +967,14 @@ namespace BP.WF
                         if (fl.Name.Contains("ShuiYin"))
                             continue;
 
+                        if (fl.Name.Contains("htm"))
+                            continue;
+
                         System.IO.File.Copy(fl.FullName, path + "\\" + fl.Name, true);
                     }
+
+                    //把ccs文件copy过去.
+                    System.IO.File.Copy(SystemConfig.PathOfDataUser+"Style\\ccbpm.css", path + "\\ccbpm.css", true);
 
                 }
                 catch (Exception ex)
@@ -1010,7 +1011,7 @@ namespace BP.WF
 
                 string templateFilePathMy = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
                 WaterImageManage wim = new WaterImageManage();
-                wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.5"), ImagePosition.Center, path + "\\ShuiYin.png");
+                wim.DrawWords(templateFilePathMy + "ShuiYin.png", words, float.Parse("0.15"), ImagePosition.Center, path + "\\ShuiYin.png");
                 #endregion
 
                 //生成 表单的 html.

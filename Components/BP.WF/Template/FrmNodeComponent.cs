@@ -151,7 +151,6 @@ namespace BP.WF.Template
             #region 审核组件.
             FrmWorkCheck fwc = new FrmWorkCheck(this.NodeID);
             fwc.Copy(this);
-
             if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
             {
                 gf.Delete(GroupFieldAttr.CtrlID, "FWC" + this.No);
@@ -170,7 +169,6 @@ namespace BP.WF.Template
                 }
             }
             #endregion 审核组件.
-
 
             #region 父子流程组件.
             FrmSubFlow subflow = new FrmSubFlow(this.NodeID);
@@ -195,7 +193,6 @@ namespace BP.WF.Template
             }
             #endregion 父子流程组件.
 
-
             #region 处理轨迹组件.
             FrmTrack track = new FrmTrack(this.NodeID);
             track.Copy(this);
@@ -217,7 +214,6 @@ namespace BP.WF.Template
                 }
             }
             #endregion 处理轨迹组件.
-
 
             #region 子线程组件.
             FrmThread thread = new FrmThread(this.NodeID);
@@ -242,7 +238,7 @@ namespace BP.WF.Template
             }
             #endregion 子线程组件.
 
-            #region 子线程组件.
+            #region 流转自定义组件.
             FrmTransferCustom ftc = new FrmTransferCustom(this.NodeID);
             ftc.Copy(this);
 
@@ -263,7 +259,7 @@ namespace BP.WF.Template
                     gf.Insert(); //插入.
                 }
             }
-            #endregion 子线程组件.
+            #endregion 流转自定义组件.
 
             return base.beforeUpdate();
         }

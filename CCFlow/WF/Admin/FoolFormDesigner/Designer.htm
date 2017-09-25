@@ -465,7 +465,14 @@
                 var tdUp = "<a href=\"javascript:Up('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-left,plain:true'  alt='向左动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-left'>&nbsp;</span></span></span></a>";
                 var tdDown = "<a href=\"javascript:Down('" + attr.MyPK + "','1');\" class='easyui-linkbutton l-btn l-btn-plain' data-options='iconCls:icon-right,plain:true' alt='向右动顺序' ><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-right'>&nbsp;</span></span></span></a>";
 
-                return tdUp + "<a href=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "');\" > " + attr.Name + "</a>" + tdDown;
+                if (attr.LGType == 0)
+                    return tdUp + "<a href=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "','" + attr.LGType + "');\" > " + attr.Name + "</a>" + tdDown;
+
+                if (attr.LGType == 1)
+                    return tdUp + "<a href=\"javascript:EditEnum('" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
+
+                if (attr.LGType == 2)
+                    return tdUp + "<a href=\"javascript:EditTable('" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
             }
 
             function AddFForDtl( fk_mapdtl ) {
@@ -632,6 +639,8 @@
                 window.location.href = window.location.href;
             }
 
+
+
             function Edit(mypk, ftype, gf, fk_mapdtl) {
 
                 var url = 'EditF.htm?DoType=Edit&MyPK=' + mypk + '&FType=' + ftype + '&FK_MapData=' + pageParam.fk_mapdata + '&GroupField=' + gf;
@@ -677,7 +686,7 @@
                 return;
             }
 
-            function EditEnum(keyOfEn, mypk, enumKey, gf) {
+            function EditEnum(mypk, keyOfEn) {
                 var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
 
                 OpenEasyUiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
@@ -685,7 +694,7 @@
                 });
             }
 
-            function EditTable(keyOfEn, mypk, sfTable, gf) {
+            function EditTable(mypk, keyOfEn) {
                 var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();
 
                 OpenEasyUiDialog(url, "eudlgframe", '外键' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {

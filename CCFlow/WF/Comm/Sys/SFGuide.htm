@@ -67,7 +67,7 @@
 
             if (sfno) {
                 //获取信息
-                t.ajax(Handler, { DoType: 'sfguide_getinfo', sfno: sfno }, false, function (msg) {
+                t.ajax(Handler, { DoType: 'SFGuide_GetInfo', sfno: sfno }, false, function (msg) {
                     if (!msg || msg.indexOf("err@") != -1) {
                         alert('获取编号为' + sfno + '的数据源表时出现错误：' + msg);
                         return;
@@ -435,7 +435,7 @@
         function getStructClass(struct) {
             classes = [];
 
-            t.ajax(Handler, { DoType: 'sfguide_getclass', struct: struct, sfno: sfno }, false, function (msg) {
+            t.ajax(Handler, { DoType: 'SFGuide_GetClass', struct: struct, sfno: sfno }, false, function (msg) {
                 if (!msg || msg.indexOf("err@") != -1) {
                     alert('获取类出错：' + msg);
                     classes = [];
@@ -443,9 +443,12 @@
                 }
 
                 classes = $.parseJSON(msg);
+
             }, function (msg) {
-                alert('获取类出错：' + msg);
-                classes = [];
+
+                classes = $.parseJSON(msg);
+                //alert('获取类出错：' + msg);
+                //classes = [];
             });
 
             return classes;
@@ -454,7 +457,8 @@
         function getSrcs(type) {
             srcs = [];
 
-            t.ajax(Handler, { DoType: 'sfguide_getsrcs', type: type }, false, function (msg) {
+            t.ajax(Handler, { DoType: 'SFGuide_GetSrcs', type: type }, false, function (msg) {
+
                 if (!msg || msg.indexOf("err@") != -1) {
                     alert('获取数据源列表出错：' + msg);
                     srcs = [];
@@ -493,7 +497,7 @@
             cols = [];
             var src = $('#DDL_SFDBSrc').val();
 
-            t.ajax(Handler, { DoType: 'sfguide_getcols', src: src, table: table }, false, function (msg) {
+            t.ajax(Handler, { DoType: 'SFGuide_GetCols', src: src, table: table }, false, function (msg) {
                 if (!msg || msg.indexOf("err@") != -1) {
                     alert('获取列信息出错：' + msg);
                     cols = [];
@@ -512,7 +516,7 @@
         function getWSMethods(src) {
             mtds = [];
 
-            t.ajax(Handler, { DoType: 'sfguide_getmtds', src: src }, false, function (msg) {
+            t.ajax(Handler, { DoType: 'SFGuide_Getmtds', src: src }, false, function (msg) {
                 if (!msg || msg.indexOf("err@") != -1) {
                     alert('获取WebService方法列表出错：' + msg);
                     mtds = [];
@@ -666,7 +670,7 @@
                     break;
             }
 
-            sftable.DoType = 'sfguide_saveinfo';
+            sftable.DoType = 'SFGuide_SaveInfo';
             sftable.isnew = sfno == null;
 
             t.ajax(Handler, sftable, false, function (msg) {

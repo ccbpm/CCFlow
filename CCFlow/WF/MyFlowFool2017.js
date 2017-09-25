@@ -1554,7 +1554,6 @@ function checkReg() {
         }
     });
 
-
     return checkRegResult;
 }
 
@@ -1706,10 +1705,10 @@ function GenerWorkNode() {
             }
 
             //循环组件 轨迹图 审核组件 子流程 子线程
-            //  $('#CCForm').append(figure_Template_FigureFlowChart(flow_Data["WF_FrmNodeComponent"][0]));
-            //  $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_FrmNodeComponent"][0]));
-            //$('#CCForm').append(figure_Template_FigureSubFlowDtl(flow_Data["WF_FrmNodeComponent"][0]));
-            //  $('#CCForm').append(figure_Template_FigureThreadDtl(flow_Data["WF_FrmNodeComponent"][0]));
+            // $('#CCForm').append(figure_Template_FigureFlowChart(flow_Data["WF_FrmNodeComponent"][0]));
+            // $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_FrmNodeComponent"][0]));
+            // $('#CCForm').append(figure_Template_FigureSubFlowDtl(flow_Data["WF_FrmNodeComponent"][0]));
+            // $('#CCForm').append(figure_Template_FigureThreadDtl(flow_Data["WF_FrmNodeComponent"][0]));
 
 
             //初始化Sys_MapData
@@ -1841,47 +1840,47 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
     var isDropTR = true;
     for (var i = 0; i < Sys_MapAttr.length; i++) {
 
-        console.log(item);
-        var item = Sys_MapAttr[i];
-        if (item.GroupID != groupID || item.UIVisible == 0)
+        var attr = Sys_MapAttr[i];
+        console.log(attr);
+
+        if (attr.GroupID != groupID || attr.UIVisible == 0)
             continue;
 
-        var enable = item.UIIsEnable == "1" ? "" : " ui-state-disabled";
-        var defval = ConvertDefVal(workNodeData, item.DefVal, item.KeyOfEn);
+        var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
+        var defval = ConvertDefVal(workNodeData, attr.DefVal, attr.KeyOfEn);
 
         var lab = "";
-        if (item.UIContralType == 0)
-            lab = "<label for='TB_" + item.KeyOfEn + "' class='" + (item.UIIsInput == 1 ? "mustInput" : "") + "'>" + item.Name + "</label>";
+        if (attr.UIContralType == 0)
+            lab = "<label for='TB_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
-        if (item.UIContralType == 1)
-            lab = "<label for='DDL_" + item.KeyOfEn + "' class='" + (item.UIIsInput == 1 ? "mustInput" : "") + "'>" + item.Name + "</label>";
+        if (attr.UIContralType == 1)
+            lab = "<label for='DDL_" + attr.KeyOfEn + "' class='" + (attr.UIIsInput == 1 ? "mustInput" : "") + "'>" + attr.Name + "</label>";
 
-        if (item.UIIsInput == 1 && item.UIIsEnable == 1) {
-            lab += " <span style='color:red' class='mustInput' data-keyofen='" + item.KeyOfEn + "' >*</span>";
+        if (attr.UIIsInput == 1 && attr.UIIsEnable == 1) {
+            lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
-
 
 //        if (item.UIContralType == 2)
 //            lab = "<label for='CB_" + item.KeyOfEn + "' >" + item.Name + "</label>";
 
         //线性展示并且colspan=3
-        if ( item.ColSpan == 3) {
+        if (attr.ColSpan == 3) {
             isDropTR = true;
             html += "<tr>";
             html += "<td  class='FDesc'  >" + lab + "</td>";
             html += "<td ColSpan=3>";
-            html += InitMapAttrOfCtrl(item, enable, defval);
+            html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             html += "</tr>";
             continue;
         }
 
         //线性展示并且colspan=4
-        if (item.ColSpan == 4) {
+        if (attr.ColSpan == 4) {
             isDropTR = true;
             html += "<tr>";
             html += "<td ColSpan=4 style='width:100%' >" + lab + "</br>";
-            html += InitMapAttrOfCtrl(item, enable, defval);
+            html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             html += "</tr>";
             continue;
@@ -1891,7 +1890,7 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
             html += "<tr>";
             html += "<td class='FDesc' style='width:80px;' >" + lab + "</td>";
             html += "<td class='FContext'  >";
-            html += InitMapAttrOfCtrl(item, enable, defval);
+            html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             isDropTR = !isDropTR;
             continue;
@@ -1900,7 +1899,7 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
         if (isDropTR == false) {
             html += "<td  class='FDesc'>" + lab + "</td>";
             html += "<td class='FContext'  >";
-            html += InitMapAttrOfCtrl(item, enable, defval);
+            html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             html += "<tr>";
             isDropTR = !isDropTR;

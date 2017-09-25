@@ -1992,8 +1992,8 @@ function figure_MapAttr_Template(mapAttr) {
                                 document.UE_MapAttr.push(editorPara);
 
                                 //设置编辑器的默认样式
-                                var styleText = "text-align:left;font-size:12px;";
-                                styleText += "width:" + mapAttr.UIWidth + "px;";
+                                var styleText = "text-align:left;font-size:12px;white-space:nowrap;";
+                                styleText += "width:100%;";
                                 styleText += "height:" + mapAttr.UIHeight + "px;";
 
                                 if (mapAttr.UIIsEnable == "0") {

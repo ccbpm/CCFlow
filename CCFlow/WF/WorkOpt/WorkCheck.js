@@ -4,6 +4,7 @@
         var wcDesc;
         var tks;
         var aths;
+        var SignType; //签名的人员.有两个列  No, SignType,
         var nodeid = GetQueryString("FK_Node");
         var fk_flow = GetQueryString("FK_Flow");
         var workid = GetQueryString("WorkID");
@@ -40,6 +41,7 @@
                 wcDesc = init.wcDesc[0];
                 tks = init.Tracks;
                 aths = init.Aths;
+                SignType = init.SignType; //签名的人员 No,SignType 列, SignType=0 不签名, 1=图片签名, 2=电子签名。
 
                 var html = '';
 
@@ -97,12 +99,51 @@
                         html += "<b>附件：</b>&nbsp;" + subaths;
                         html += "</td></tr>";
                     }
-                    //签名，日期
-                    html += "<tr>";
-                    html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"
+
+                    //输出签名.
+                    if (SignType == null || SignType == undefined) {
+
+                        //签名，日期.
+                        html += "<tr>";
+                        html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"
                                     + (wcDesc.SigantureEnabel == "0" ? GetUserSmallIcon(this.EmpFrom, this.EmpFromT) : GetUserSiganture(this.EmpFrom, this.EmpFromT))
                                     + "&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
-                    html += "</tr>";
+                        html += "</tr>";
+
+                    } else {
+
+                        for (var idx = 0; idx < SignType.length; idx++) {
+
+
+                            var st = SignType[idx];
+                            if (st.No != this.EmpFrom)
+                                continue;
+
+                            if ( st.SignType == 0) {
+                                html += "<tr>";
+                                html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"
+                                    + GetUserSmallIcon(this.EmpFrom, this.EmpFromT)
+                                    + "&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
+                                html += "</tr>";
+                                break;
+                            }
+
+                            if (st.SignType == 1) {
+                                html += "<tr>";
+                                html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"
+                                    + GetUserSiganture(this.EmpFrom, this.EmpFromT)
+                                    + "&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
+                                html += "</tr>";
+                                break;
+                            }
+
+                            if (st.SignType == 2) {
+                                alert('电子签名的逻辑尚未编写.');
+                                break;
+                            }
+                        }
+                    }
+
                 });
 
                 $("#tbTracks").append(html);
@@ -224,7 +265,7 @@
         }
 
         function GetUserSiganture(userNo, userName) {
-            return "<img src='../../DataUser/Siganture/" + userNo + ".jpg' title='" + userName + "' border=0 onerror=\"src='../../DataUser/UserIcon/DefaultSmaller.png'\" />";
+            return "<img src='../../DataUser/Siganture/" + userNo + ".jpg' title='" + userName + "' border=0 onerror=\"src='../../DataUser/Siganture/UnName.JPG'\" />";
         }
 
         function GetUserSmallIcon(userNo, userName) {

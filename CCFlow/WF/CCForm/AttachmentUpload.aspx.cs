@@ -302,76 +302,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 //查询出来数据实体.
-                BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
-                if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
-                {
-                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PKVal, 0).ToString();
-                    if (pWorkID == null || pWorkID == "0")
-                        pWorkID = this.PKVal;
-
-                    if (athDesc.AthUploadWay == AthUploadWay.Inherit)
-                    {
-                        /* 继承模式 */
-                        BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pWorkID);
-                        qo.addOr();
-                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(this.PKVal));
-                        qo.addOrderBy("RDT");
-                        qo.DoQuery();
-                    }
-
-                    if (athDesc.AthUploadWay == AthUploadWay.Interwork)
-                    {
-                        /*共享模式*/
-                        dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
-                    }
-                }
-                else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
-                {
-                    /* 继承模式 */
-                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                    qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
-                    qo.addAnd();
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(this.PKVal));
-                    qo.addOrderBy("RDT");
-                    qo.DoQuery();
-                }
-                else
-                {
-                    int num = 0;
-                    if (this.FK_FrmAttachment.Contains("AthMDtl"))
-                    {
-                        /*如果是一个明细表的多附件，就直接按照传递过来的PK来查询.*/
-                        BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.PKVal);
-                        qo.addAnd();
-                        qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, " LIKE ", "%AthMDtl");
-                        num = qo.DoQuery();
-                    }
-                    else
-                    {
-                        num = dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachment,
-                           FrmAttachmentDBAttr.RefPKVal, this.PKVal, "RDT");
-                    }
-
-                    if (num == 0 && this.IsCC == "1")
-                    {
-                        /*是抄送的, 的情况. */
-                        CCList cc = new CCList();
-                        int nnn = cc.Retrieve(CCListAttr.FK_Node, this.FK_Node, CCListAttr.WorkID, this.WorkID,
-                            CCListAttr.CCTo, WebUser.No);
-                        if (cc.FK_Node != 0)
-                        {
-                            this._fk_node = cc.FK_Node;
-
-                            dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachmentExt,
-                                FrmAttachmentDBAttr.FK_MapData, "ND" + cc.FK_Node, FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
-
-                            //重新设置文件描述。
-                            athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.NoOfObj, "DocMultiAth");
-                        }
-                    }
-                }
+                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal,this.FK_FrmAttachment); 
 
                 #endregion 处理权限控制.
 

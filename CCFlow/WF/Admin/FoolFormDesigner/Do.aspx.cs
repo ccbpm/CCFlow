@@ -728,10 +728,7 @@ namespace CCFlow.WF.MapDef
             if (string.IsNullOrEmpty(name) == true)
                 return;
 
-            if (rb.ID.Contains("_0") == true)
-                this.Pub1.GetTextBoxByID("TB_No").Text = BP.DA.DataType.ParseStringToPinyin(name);
-            else
-                this.Pub1.GetTextBoxByID("TB_No").Text = BP.DA.DataType.ParseStringToPinyinJianXie(name);
+            this.Pub1.GetTextBoxByID("TB_No").Text = CCFormAPI.ParseStringToPinyinField(name, rb.ID.Contains("_0"), true, 20);
         }
 
         void tb_TextChanged(object sender, EventArgs e)
@@ -741,10 +738,7 @@ namespace CCFlow.WF.MapDef
             if (string.IsNullOrEmpty(text) == true)
                 return;
 
-            if (this.Pub1.GetRadioButtonByID("RB_PY_0").Checked)
-                this.Pub1.GetTextBoxByID("TB_No").Text = BP.DA.DataType.ParseStringToPinyin(text);
-            else
-                this.Pub1.GetTextBoxByID("TB_No").Text = BP.DA.DataType.ParseStringToPinyinJianXie(text);
+            this.Pub1.GetTextBoxByID("TB_No").Text = CCFormAPI.ParseStringToPinyinField(text, this.Pub1.GetRadioButtonByID("RB_PY_0").Checked, true, 20);
         }
 
         public void AddFEnum()

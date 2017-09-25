@@ -344,7 +344,8 @@ namespace BP.Web
         [WebMethod]
         public string ParseStringToPinyin(string name, bool flag)
         {
-            return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, flag);
+            //此处仅在SL表单设计器的添加字段时使用
+            return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, flag, true, 20);
         }
         private string DealPK(string pk, string fromMapdata, string toMapdata)
         {
@@ -952,8 +953,8 @@ namespace BP.Web
                         return null;
                     case "NewHidF":
                         string fk_mapdataHid = v1;
-                        string key = v2;
-                        string name = v3;
+                        string key = DataType.ParseStringForNo(v2, 20);
+                        string name = DataType.ParseStringForName(v3, 20);
                         int dataType = int.Parse(v4);
 
                         MapAttr mdHid = new MapAttr();

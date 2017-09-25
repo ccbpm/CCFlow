@@ -1654,9 +1654,10 @@ namespace BP.Sys
             {
                 try
                 {
-                    this.KeyOfEn = BP.DA.DataType.ParseStringToPinyin(this.Name);
+                    this.KeyOfEn = CCFormAPI.ParseStringToPinyinField(this.Name, true, true, 100);
+
                     if (this.KeyOfEn.Length > 20)
-                        this.KeyOfEn = BP.DA.DataType.ParseStringToPinyinWordFirst(this.Name);
+                        this.KeyOfEn = CCFormAPI.ParseStringToPinyinField(this.Name, false, true, 20);
 
                     if (this.KeyOfEn == null || this.KeyOfEn.Trim() == "")
                         throw new Exception("@请输入字段描述或者字段名称。");

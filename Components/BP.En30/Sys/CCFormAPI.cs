@@ -1543,14 +1543,14 @@ namespace BP.Sys
         /// <returns>转化后的拼音，不成功则抛出异常.</returns>
         public static string ParseStringToPinyinField(string name, bool isQuanPin)
         {
-            string s = string.Empty; ;
+            string s = string.Empty;
             try
             {
                 if (isQuanPin == true)
                 {
                     s = BP.DA.DataType.ParseStringToPinyin(name);
                     if (s.Length > 15)
-                        s = BP.DA.DataType.ParseStringToPinyinWordFirst(name);
+                        s = BP.DA.DataType.ParseStringToPinyinJianXie(name);
                 }
                 else
                 {
@@ -1574,6 +1574,51 @@ namespace BP.Sys
                 //去掉空格，去掉点.
                 s = s.Replace(" ", "");
                 s = s.Replace(".", "");
+                return s;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 转拼音全拼/简写方法(若转换后以数字开头，则前面加F)
+        /// <para>added by liuxc,2017-9-25</para>
+        /// </summary>
+        /// <param name="name">中文字符串</param>
+        /// <param name="isQuanPin">是否转换全拼</param>
+        /// <param name="removeSpecialSymbols">是否去除特殊符号，仅保留汉字、数字、字母、下划线</param>
+        /// <param name="maxLen">转化后字符串最大长度，0为不限制</param>
+        /// <returns>转化后的拼音，不成功则抛出异常.</returns>
+        public static string ParseStringToPinyinField(string name, bool isQuanPin, bool removeSpecialSymbols, int maxLen)
+        {
+            string s = string.Empty;
+
+            if (removeSpecialSymbols)
+                name = DataType.ParseStringForName(name, maxLen);
+
+            try
+            {
+                if (isQuanPin == true)
+                {
+                    s = BP.DA.DataType.ParseStringToPinyin(name);
+                }
+                else
+                {
+                    s = BP.DA.DataType.ParseStringToPinyinJianXie(name);
+                }
+                //如果全拼长度超过maxLen，则取前maxLen长度的字符
+                if (maxLen > 0 && s.Length > maxLen)
+                    s = s.Substring(0, maxLen);
+
+                if (s.Length > 0)
+                {
+                    //去除开头数字
+                    string headStr = s.Substring(0, 1);
+                    if (DataType.IsNumStr(headStr) == true)
+                        s = "F" + (s.Length > maxLen - 1 ? s.Substring(0, maxLen - 1) : s);
+                }
+
                 return s;
             }
             catch (Exception ex)

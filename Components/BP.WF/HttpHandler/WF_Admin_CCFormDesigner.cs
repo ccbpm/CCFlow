@@ -90,10 +90,8 @@ namespace BP.WF.HttpHandler
         {
             string name = GetRequestVal("name");
             string flag = GetRequestVal("flag");
-            if (flag == "true")
-                return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
-            else
-                return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
+            //暂时没发现此方法在哪里有调用，edited by liuxc,2017-9-25
+            return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(flag, "true"), true, 20);
         }
         
         public string HiddenFieldDelete()
@@ -155,12 +153,8 @@ namespace BP.WF.HttpHandler
         {
             string isQuanPin = this.GetRequestVal("IsQuanPin");
             string name = this.GetRequestVal("TB_Name");
-
-            string str = "";
-            if (isQuanPin == "1")
-                str= BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
-            else
-                str = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
+            //表单No长度最大100，因有前缀CCFrm_，因此此处设置最大94，added by liuxc,2017-9-25
+            string str = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(isQuanPin, "1"), true, 94);
 
             MapData md = new MapData();
             md.No = str;
@@ -173,8 +167,8 @@ namespace BP.WF.HttpHandler
         {
             MapData md = new MapData();
             md.Name = this.GetRequestVal("TB_Name");
-            md.No = this.GetRequestVal("TB_No");
-            md.PTable = this.GetRequestVal("TB_PTable");
+            md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
+            md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
 
             md.FK_FrmSort = this.GetRequestVal("DDL_FrmTree");
             md.FK_FormTree = this.GetRequestVal("DDL_FrmTree");

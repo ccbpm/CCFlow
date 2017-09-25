@@ -811,10 +811,11 @@ SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent FROM Sys_MapData   where A
         {
             try
             {
-                string s = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
-                //  string s = BP.DA.DataType.ParseStringToPinyin(name);
+                //此处仅SL新建表单使用，edited by liuxc,2017-9-25
+                string s = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true, true, 100);
+
                 if (s.Length > 15)
-                    s = BP.DA.DataType.ParseStringToPinyinWordFirst(name);
+                    s = BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false, true, 15);
                 return s;
             }
             catch

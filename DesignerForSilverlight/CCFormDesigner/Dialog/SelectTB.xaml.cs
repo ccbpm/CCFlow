@@ -54,9 +54,9 @@ namespace CCForm
                 return;
             }
             
-            if (this.TB_KeyOfEn.Text.Length >= 50)
+            if (this.TB_KeyOfEn.Text.Length > 20)
             {
-                MessageBox.Show("英文名称太长,不能多于50个字符，并且必须是下划线或者英文字母。", "Note",
+                MessageBox.Show("英文名称太长,不能多于20个字符，并且必须只能包含数字、字母、下划线。", "Note",
                     MessageBoxButton.OK);
                 return;
             }

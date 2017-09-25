@@ -189,11 +189,8 @@ namespace BP.WF.HttpHandler
         {
             string name = GetRequestVal("name");
             string flag = this.GetRequestVal("flag");
-
-            if (flag == "true")
-                return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, true);
-
-            return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, false);
+            //此处配置最大长度为20，edited by liuxc,2017-9-25
+            return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(false, "true"), true, 20);
         }
         #endregion 功能界面方法.
     }

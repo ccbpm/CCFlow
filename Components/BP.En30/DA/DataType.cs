@@ -965,6 +965,42 @@ namespace BP.DA
             return val;
         }
         /// <summary>
+        /// 将文本转换成可用做Name,Text的文本，文本中仅允许含有汉字、字母、数字、下划线
+        /// </summary>
+        /// <param name="nameStr">待转换的文本</param>
+        /// <param name="maxLen">文本最大长度，0为不限制，超过maxLen，截取前maxLen字符长度</param>
+        /// <returns></returns>
+        public static string ParseStringForName(string nameStr, int maxLen)
+        {
+            if (string.IsNullOrWhiteSpace(nameStr))
+                return string.Empty;
+
+            string nStr = Regex.Replace(nameStr, RegEx_Replace_OnlyHSZX, "");
+
+            if (maxLen > 0 && nStr.Length > maxLen)
+                return nStr.Substring(0, maxLen);
+
+            return nStr;
+        }
+        /// <summary>
+        /// 将文本转换成可用做No的文本，文本中仅允许含有字母、数字、下划线，且开头只能是字母
+        /// </summary>
+        /// <param name="noStr">待转换的文本</param>
+        /// <param name="maxLen">文本最大长度，0为不限制，超过maxLen，截取前maxLen字符长度</param>
+        /// <returns></returns>
+        public static string ParseStringForNo(string noStr, int maxLen)
+        {
+            if (string.IsNullOrWhiteSpace(noStr))
+                return string.Empty;
+
+            string nStr = Regex.Replace(Regex.Replace(noStr, RegEx_Replace_OnlySZX, ""), RegEx_Replace_FirstXZ, "");
+
+            if (maxLen > 0 && nStr.Length > maxLen)
+                return nStr.Substring(0, maxLen);
+
+            return nStr;
+        }
+        /// <summary>
         /// 将中文转化成拼音
         /// </summary>
         /// <param name="exp"></param>
@@ -1785,6 +1821,29 @@ namespace BP.DA
             AdaptWidth = AdaptWidth * zoom;
         }
 
+        #region 正则表达式
+        /// <summary>
+        /// (RegEx.Replace操作使用)仅含有汉字、数字、字母、下划线
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlyHSZX,""));</para>
+        /// <para>   输出：姓名_a12</para>
+        /// </summary>
+        public const string RegEx_Replace_OnlyHSZX = @"[^0-9a-zA-Z_\u4e00-\u9fa5]";
+        /// <summary>
+        /// (RegEx.Replace操作使用)仅含有数字、字母、下划线
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlySZX,""));</para>
+        /// <para>   输出：_a12</para>
+        /// </summary>
+        public const string RegEx_Replace_OnlySZX = @"[\u4e00-\u9fa5]|[^0-9a-zA-Z_]";
+        /// <summary>
+        /// (RegEx.Replace操作使用)匹配字符串开头为数字或下划线
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("_12_a1",RegEx_Replace_FirstXZ,""));</para>
+        /// <para>   输出：a1</para>
+        /// </summary>
+        public const string RegEx_Replace_FirstXZ = "^(_|[0-9])+";
+        #endregion
 
         #region 数据类型。
         /// <summary>

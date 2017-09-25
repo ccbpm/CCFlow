@@ -100,28 +100,6 @@ namespace BP.WF.HttpHandler
         #endregion
 
         /// <summary>
-        /// 仅允许含有汉字、数字、字母、下划线
-        /// <para>示例：</para>
-        /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlyHSZX,""));</para>
-        /// <para>   输出：姓名_a12</para>
-        /// </summary>
-        public const string RegEx_Replace_OnlyHSZX = @"[^\w\u4e00-\u9fa5]";
-        /// <summary>
-        /// 仅允许含有数字、字母、下划线
-        /// <para>示例：</para>
-        /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlySZX,""));</para>
-        /// <para>   输出：_a12</para>
-        /// </summary>
-        public const string RegEx_Replace_OnlySZX = @"[\u4e00-\u9fa5]|[^\w]";
-        /// <summary>
-        /// 匹配字符串开头为数字或下划线
-        /// <para>示例：</para>
-        /// <para>   Console.WriteLine(RegEx.Replace("_12_a1",RegEx_Replace_FirstXZ,""));</para>
-        /// <para>   输出：a1</para>
-        /// </summary>
-        public const string RegEx_Replace_FirstXZ = "^(_|[0-9])+";
-
-        /// <summary>
         /// 初始化
         /// </summary>
         /// <returns></returns>
@@ -235,15 +213,8 @@ namespace BP.WF.HttpHandler
                 case "ParseStringToPinyin": //转拼音方法.
                     string name = GetRequestVal("name");
                     string flag = GetRequestVal("flag");
-
-                    //仅允许含有汉字、数字、字母、下划线
-                    string newStr = Regex.Replace(name, RegEx_Replace_OnlyHSZX, "");
-
-                    if (flag == "true")
-                        return BP.Sys.CCFormAPI.ParseStringToPinyinField(newStr, true);
-                    else
-                        return BP.Sys.CCFormAPI.ParseStringToPinyinField(newStr, false);
-
+                    //此处为字段中文转拼音，设置为最大20个字符，edited by liuxc,2017-9-25
+                    return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(flag, "true"), true, 20);
                 case "DtlFieldUp": //字段上移
                     MapAttr attrU = new MapAttr(this.MyPK);
                     attrU.DoUpForMapDtl();
@@ -756,8 +727,8 @@ namespace BP.WF.HttpHandler
         {
             string no = this.GetRequestVal("KeyOfEn");
             string name = this.GetRequestVal("Name");
-            string newNo = Regex.Replace(Regex.Replace(no, RegEx_Replace_OnlySZX, ""), RegEx_Replace_FirstXZ, "");
-            string newName = Regex.Replace(name, RegEx_Replace_OnlyHSZX, "");
+            string newNo = DataType.ParseStringForNo(no, 20);
+            string newName = DataType.ParseStringForName(name, 20);
             int fType = int.Parse(this.context.Request.QueryString["FType"]);
 
             MapAttrs attrs = new MapAttrs();

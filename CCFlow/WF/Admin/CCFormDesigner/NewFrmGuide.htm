@@ -161,10 +161,9 @@
         $.ajax({
             type: 'post',
             async: true,
-            url: Handler + "?DoType=NewFrmGuide_GenerPinYin&IsQuanPin=" + isQuanPin + "&TB_Name=" + name + "&m=" + Math.random(),
+            url: Handler + "?DoType=NewFrmGuide_GenerPinYin&IsQuanPin=" + isQuanPin + "&TB_Name=" + encodeURIComponent(name) + "&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
-
                 $("#Msg").html("");
 
                 if (data.indexOf('err@') >= 0) {

@@ -467,14 +467,14 @@ namespace CCForm
         /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlyHSZX,""));</para>
         /// <para>   输出：姓名_a12</para>
         /// </summary>
-        public const string RegEx_Replace_OnlyHSZX = @"[^\w\u4e00-\u9fa5]";
+        public const string RegEx_Replace_OnlyHSZX = @"[^0-9a-zA-Z_\u4e00-\u9fa5]";
         /// <summary>
         /// 仅允许含有数字、字母、下划线
         /// <para>示例：</para>
         /// <para>   Console.WriteLine(RegEx.Replace("姓名@-._#:：“｜：$?>a:12",RegEx_Replace_OnlySZX,""));</para>
         /// <para>   输出：_a12</para>
         /// </summary>
-        public const string RegEx_Replace_OnlySZX = @"[\u4e00-\u9fa5]|[^\w]";
+        public const string RegEx_Replace_OnlySZX = @"[\u4e00-\u9fa5]|[^0-9a-zA-Z_]";
         /// <summary>
         /// 匹配字符串开头为数字或下划线
         /// <para>示例：</para>
@@ -619,11 +619,7 @@ namespace CCForm
             }
 
             //将非汉字/字母/数字/下划线的所有字符去掉
-            string newStr = string.Empty;
-            foreach (Match m in Regex.Matches(TB_Name.Trim(), "[0-9a-zA-Z_\u4e00-\u9fa5]{1,}"))
-            {
-                newStr += m.Value;
-            }
+            string newStr = Regex.Replace(TB_Name.Trim(), Glo.RegEx_Replace_OnlyHSZX, "");
 
             CCFormSoapClient ff = Glo.GetCCFormSoapClientServiceInstance();
             ff.ParseStringToPinyinAsync(newStr, flag);
@@ -631,7 +627,7 @@ namespace CCForm
                 (object sender, FF.ParseStringToPinyinCompletedEventArgs e) =>
                 {
                     if (e.Error == null && e.Result != null)
-                        TB_KeyOfEn.Text = e.Result;
+                        TB_KeyOfEn.Text = e.Result.Length > 20 ? e.Result.Substring(0,20) : e.Result;   //字段KeyOfEn的长度控制在20以内，added by liuxc,2017-9-25
                 });
         }
 

@@ -11,8 +11,7 @@
  2, 把该FrmCheck.js引入到自己的页面里面去.
  3, 在自己的页面里增加一个 id= FrmCheck 的div , 这个div 的位置就是放审核组件的位置.
  4, 在您的页面里需要引用. ./WF/Scripts/jquery-1.4.1.min.js 如果您的页面中已经有了就不要引用.
- 5, 在您的页面里需要引用. ./WF/Scripts/jquery-1.4.1.min.js 如果您的页面中已经有了就不要引用.
-
+ 5, 在您的页面里需要引用. ./WF/Scripts/QueryString.js 如果您的页面中已经有了就不要引用.
 */
 
 $(function () {

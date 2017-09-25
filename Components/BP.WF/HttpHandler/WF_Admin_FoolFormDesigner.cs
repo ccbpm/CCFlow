@@ -72,6 +72,11 @@ namespace BP.WF.HttpHandler
             MapFrames frms = new MapFrames(this.FK_MapData);
             ds.Tables.Add(frms.ToDataTableField("Sys_MapFrame"));
 
+            //把表单属性放入里面去.
+            MapData md = new MapData(this.FK_MapData);
+            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
+
+
             //附件表.
             FrmAttachments aths = new FrmAttachments(this.FK_MapData);
             ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachment"));

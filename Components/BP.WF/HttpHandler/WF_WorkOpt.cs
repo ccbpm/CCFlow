@@ -38,7 +38,7 @@ namespace BP.WF.HttpHandler
             {
                 Node nd = new Node(this.FK_Node);
                 Work wk = nd.HisWork;
-                return BP.WF.MakeForm2Html.MakeHtmlDocumentOfFreeFrm(wk.NodeFrmID, this.WorkID,this.FK_Flow,null);
+                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID,this.FK_Flow,null);
             }
             catch (Exception ex)
             {

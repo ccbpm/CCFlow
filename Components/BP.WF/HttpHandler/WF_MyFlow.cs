@@ -386,7 +386,34 @@ namespace BP.WF.HttpHandler
 
          
 
-            if (this.currND.HisFormType == NodeFormType.FoolTruck)
+
+            #endregion 处理表单类型.
+
+            //求出当前节点frm的类型.
+            NodeFormType frmtype = this.currND.HisFormType;
+            if (this.currND.NodeFrmID.Contains(this.currND.NodeID.ToString()) == false)
+            {
+                /*如果当前节点引用的其他节点的表单.*/
+                string nodeFrmID = currND.NodeFrmID;
+                string refNodeID =  nodeFrmID.Replace("ND", "");
+
+                BP.WF.Node nd = new Node(int.Parse(refNodeID));
+
+                //表单类型.
+                frmtype = nd.HisFormType;
+            }
+
+
+            #region 内置表单类型的判断.
+            /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
+            if (this.WorkID == 0)
+            {
+                currWK = this.currFlow.NewWork();
+                this.WorkID = currWK.OID;
+            }
+
+
+            if (frmtype == NodeFormType.FoolTruck)
             {
                 /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
                 if (this.WorkID == 0)
@@ -402,16 +429,9 @@ namespace BP.WF.HttpHandler
                 return "url@" + url;
             }
 
-            #endregion 处理表单类型.
 
-            /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
-            if (this.WorkID == 0)
-            {
-                currWK = this.currFlow.NewWork();
-                this.WorkID = currWK.OID;
-            }
 
-            if (this.currND.HisFormType == NodeFormType.FixForm)
+            if (frmtype == NodeFormType.FixForm)
             {
                 /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上。*/
                 if (this.WorkID == 0)
@@ -429,6 +449,7 @@ namespace BP.WF.HttpHandler
                 url = url.Replace("&DoWhat=StartClassic", "");
                 return "url@" + url;
             }
+            #endregion 内置表单类型的判断.
 
             string myurl = "MyFlow.aspx";
             if (Glo.IsBeta==true)

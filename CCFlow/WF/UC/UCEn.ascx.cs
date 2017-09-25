@@ -4051,10 +4051,10 @@ namespace CCFlow.WF.UC
                 string fwcOnload = "";
                 string paras = this.RequestParas;
                 if (paras.Contains("FID=") == false)
-                    paras += "&FID=" + en.GetValStrByKey("FID");
+                    paras += "&FID=" + en.GetValStrByKey("FID","0");
 
                 if (paras.Contains("OID=") == false)
-                    paras += "&OID=" + en.GetValStrByKey("OID");
+                    paras += "&OID=" + en.GetValStrByKey("OID","0");
 
                 if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Readonly || this.IsReadonly || this.DoType == "View")
                 {

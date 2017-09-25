@@ -1817,10 +1817,15 @@ function GenerWorkNode() {
                     if (item.MapAttr.UIIsEnable == "0") {
                         obj.editor = UM.getEditor(item.id, {
                             'toolbar': [],
-                            'readonly': true
+                            'readonly': true,
+                            'autoHeightEnabled': false,
+                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
                         });
                     } else {
-                        obj.editor = UM.getEditor(item.id);
+                        obj.editor = UM.getEditor(item.id, {
+                            'autoHeightEnabled': false,
+                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
+                        });
                     }
                     obj.attr = item.MapAttr;
                     window.UEs.push(obj);
@@ -1944,14 +1949,19 @@ function InitMapAttrOfCtrl(mapAttr) {
             editorPara.MapAttr = mapAttr;
             document.UE_MapAttr.push(editorPara);
 
+            //设置编辑器的默认样式
+            var styleText = "text-align:left;font-size:12px;";
+            styleText += "width:100%;";
+            styleText += "height:" + mapAttr.UIHeight + "px;";
+
             if (mapAttr.UIIsEnable == "0") {
                 //字段处于只读状态.注意这里 name 属性也是可以用来绑定字段名字的
-                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain'>" + defValue + "</script>";
+                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
             } else {
-                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain'></script>";
+                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'></script>";
             }
 
-            eleHtml = "<div  style='height:" + mapAttr.UIHeight + "px;width:100%;' >" + eleHtml + '</div>';
+            eleHtml = "<div style='white-space:normal;'>" + eleHtml + "</div>";
             return eleHtml
         }
 

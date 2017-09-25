@@ -118,6 +118,17 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 审核组件状态
+        /// </summary>
+        public FrmWorkCheckSta HisFrmWorkCheckSta
+        {
+            get
+            {
+                return (FrmWorkCheckSta)this.GetValIntByKey(NodeAttr.FWCSta);
+            }
+        }
+        
+        /// <summary>
         /// 超时处理内容
         /// </summary>
         public string DoOutTime
@@ -1410,6 +1421,29 @@ namespace BP.WF.Template
                 workCheckAth.Insert();
             }
             #endregion 创建审核组件附件
+
+
+            #region 审核组件.
+            GroupField gf = new GroupField();
+            if (this.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
+            {
+                gf.Delete(GroupFieldAttr.CtrlType, GroupCtrlType.FWC, GroupFieldAttr.EnName, "ND" + this.NodeID);
+            }
+            else
+            {
+                if (gf.IsExit(GroupFieldAttr.CtrlType, GroupCtrlType.FWC, GroupFieldAttr.EnName, "ND" + this.NodeID) == false)
+                {
+                    gf = new GroupField();
+                    gf.EnName = "ND" + this.NodeID;
+                    gf.CtrlID = "FWC";
+                    gf.CtrlType = GroupCtrlType.FWC;
+                    gf.Lab = "审核列表";
+                    gf.Idx = 0;
+                    gf.Insert(); //插入.
+                }
+            }
+            #endregion 审核组件.
+
 
 
             //清除所有的缓存.

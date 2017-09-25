@@ -1951,7 +1951,7 @@ function InitMapAttrOfCtrl(mapAttr) {
 
             //设置编辑器的默认样式
             var styleText = "text-align:left;font-size:12px;";
-            styleText += "width:" + mapAttr.UIWidth + "px;";
+            styleText += "width:100%;";
             styleText += "height:" + mapAttr.UIHeight + "px;";
 
             if (mapAttr.UIIsEnable == "0") {

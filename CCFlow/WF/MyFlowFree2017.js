@@ -143,7 +143,7 @@ function ReqDtlBObj(dtlTable, DtlColumn, onValue) {
     var getworkid = $('#HidWorkID').val(); //hiddenValue
     $.ajax({
 
-        url: "../../DataUser/Do.aspx",
+        url: "../DataUser/Do.aspx",
         data: { getworkid: getworkid, dtlTable: dtlTable, DtlColumn: DtlColumn, onValue: onValue },
         success: function (arr) {
             alert(arr);
@@ -2281,13 +2281,13 @@ function figure_Template_Image(frmImage) {
         }
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
         if (imgSrc == "")  //|| !File.Exists(Server.MapPath("~/" + imgSrc)))  //
-            imgSrc = "../../DataUser/ICON/CCFlow/LogBig.png";
+            imgSrc = "../DataUser/ICON/CCFlow/LogBig.png";
 
         eleHtml = $('<div></div>');
         var a = $("<a></a>");
         var img = $("<img/>")
        // img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H);
-        img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H).attr('onerror', "this.src='../../DataUser/ICON/CCFlow/LogBig.png'");
+        img.attr("src", imgSrc).css('width', frmImage.W).css('height', frmImage.H).attr('onerror', "this.src='../DataUser/ICON/CCFlow/LogBig.png'");
 
         if (frmImage.LinkURL != undefined && frmImage.LinkURL != '') {
             a.attr('href', frmImage.LinkTarget).attr('target', frmImage.LinkTarget).css('width', frmImage.W).css('height', frmImage.H);

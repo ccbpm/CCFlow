@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程检查</title>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+
+        //初始化页面函数.....
+        $(function () {
+
+            $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>正在检查流程....</font>");
+
+            var flowNo = GetQueryString("FK_Flow");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=FlowCheck_Init&FK_Flow=" + flowNo,
+                success: function (data) {
+
+                    $("#Msg").html("<font color=green>" + data + "</font>");
+                }
+            });
+        });
+    </script>
+</head>
+<body >
+
+            <div id="Msg" />
+
+</body>
+</html>

@@ -2434,6 +2434,20 @@ namespace BP.WF
                return this.GetValIntByKey(FrmWorkCheckAttr.FWCOrderModel);
             }
         }
+        public int FWC_H
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmWorkCheckAttr.FWC_H);
+            }
+        }
+        public int FWC_W
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmWorkCheckAttr.FWC_W);
+            }
+        }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -2476,6 +2490,7 @@ namespace BP.WF
 
                 #region 审核组件.
                 map.AddTBInt(NodeAttr.FWCSta, 0, "审核组件", false, false);
+                map.AddTBInt(NodeAttr.FWC_H, 0, "审核组件高度", false, true);
                 map.AddTBInt(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
 
                 #endregion 审核组件.

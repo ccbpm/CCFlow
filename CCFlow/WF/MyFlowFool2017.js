@@ -293,16 +293,6 @@ function ConfirmBtn(btn, workid) {
     });
 }
 
-//然浏览器最大化.
-function ResizeWindow() {
-    //if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen
-    //    var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽
-    //    var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高
-    //    window.moveTo(0, 0);           //把window放在左上角
-    //    window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh
-    //}
-}
-window.onload = ResizeWindow;
 
 //以下是软通写的
 //初始化网页URL参数
@@ -1608,7 +1598,7 @@ function GenerWorkNode() {
             var frmName = workNodeData.Sys_MapData[0].Name;
 
             html += "<tr>";
-            html += "<td colspan=4 ><div style='float:left' ><img src='../../../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <div  style='float:right;padding-right:10px;'  ><br><h4><b>" + frmName + "</b></h4></div></td>";
+            html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <div  style='float:right;padding-right:10px;'  ><br><h4><b>" + frmName + "</b></h4></div></td>";
             html += "</tr>";
 
             //遍历循环生成 listview
@@ -1661,9 +1651,9 @@ function GenerWorkNode() {
                 if (gf.CtrlType == 'FWC') {
 
                     html += "<tr>";
-                    html += "  <td colspan='4' >";
+                    html += "  <td colspan='4' >"; 
 
-                    html += figure_Template_FigureFrmCheck(workNodeData.WF_Node);
+                    html += figure_Template_FigureFrmCheck(workNodeData.WF_Node[0]);
 
                     html += "  </td>";
                     html += "</tr>";
@@ -1846,7 +1836,6 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
     for (var i = 0; i < Sys_MapAttr.length; i++) {
 
         var attr = Sys_MapAttr[i];
-        console.log(attr);
 
         if (attr.GroupID != groupID || attr.UIVisible == 0)
             continue;
@@ -2103,8 +2092,7 @@ function figure_Template_ImageAth(frmImageAth) {
 function figure_Template_FigureFrmCheck(wf_node) {
     //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
     var sta = wf_node.FWCSta;
-    var h = wf_node.FWC_H;
-    var w = wf_node.FWC_W;
+
     if (sta == 0)
         return $('');
 
@@ -2126,7 +2114,8 @@ function figure_Template_FigureFrmCheck(wf_node) {
         $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
     }
     src += "&r=q" + paras;
-    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe style='width:100%;height:" + h + "px;' id='FFWC" + wf_node.NodeID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    var eleHtml = "<iframe width='100%' height='" + wf_node.FWC_H + "px' id='FFWC" + wf_node.NodeID + "' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
+    
 
     return eleHtml;
 }

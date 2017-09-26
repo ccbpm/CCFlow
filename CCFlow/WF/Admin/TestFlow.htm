@@ -82,13 +82,13 @@
                         newRow += "<td>" + emp.No + "</td>";
                         newRow += "<td>" + emp.Name + "</td>";
 
-                        var url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />AppACE</a>";
+                        var url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=ACE&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />AppACE</a>";
                         //  newRow += "<td>" + url + "</td>";
 
-                        url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />经典</a>";
+                        url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "'  ><img src='./../Img/ie.gif' border=0 />经典</a>";
                         newRow += "<td>" + url + "</td>";
 
-                        url = "<a href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "&IsMobile=1'  ><img src='./../Img/ie.gif' border=0 />手机模式</a>";
+                        url = "<a target='_blank' href='?DoType=TestFlow_ReturnToUser&DoWhat=StartClassic&UserNo=" + encodeURIComponent(emp.No) + "&FK_Flow=" + fk_flow + "&IsMobile=1'  ><img src='./../Img/ie.gif' border=0 />手机模式</a>";
                         newRow += "<td>" + url + "</td>";
 
                         newRow += "<td>" + emp.FK_DeptText + "</td>";

@@ -15,6 +15,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string FWCSta = "FWCSta";
         /// <summary>
+        /// 审核组件高度
+        /// </summary>
+        public const string FWC_H = "FWC_H";
+        /// <summary>
         /// 阻塞模式
         /// </summary>
         public const string BlockModel = "BlockModel";

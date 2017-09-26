@@ -2308,7 +2308,7 @@ function figure_Template_Image(frmImage) {
         }
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
         if (imgSrc == "")//|| !File.Exists(Server.MapPath("~/" + imgSrc)))  //
-            imgSrc = "../DataUser/ICON/CCFlow/LogBig.png";
+            imgSrc = "../../DataUser/ICON/CCFlow/LogBig.png";
         eleHtml = $('<div></div>');
         var a = $("<a></a>");
         var img = $("<img/>")

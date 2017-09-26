@@ -212,11 +212,15 @@ function Designer_ShowMsg(msg, callBack) {
 function FlowProperty() {
 
     url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PK=" + CCBPM_Data_FK_Flow + "&Lang=CH";
-    if (window.parent) {
-        window.parent.addTab(CCBPM_Data_FK_Flow + "PO", "流程属性" + CCBPM_Data_FK_Flow, url);
-    } else {
-        WinOpen(url);
-    }
+    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1100, 550, "icon-property", true, null, null, null, function () {
+        //window.location.href = window.location.href;
+    });
+
+//    if (window.parent) {
+//        window.parent.addTab(CCBPM_Data_FK_Flow + "PO", "流程属性" + CCBPM_Data_FK_Flow, url);
+//    } else {
+//        WinOpen(url);
+//    }
 }
 
 //报表设计
@@ -224,11 +228,17 @@ function DesignMyRptNew() {
     var flowId = Number(CCBPM_Data_FK_Flow);
     flowId = String(flowId);
     url = "../RptDfine/S0_RptList.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
-    if (window.parent) {
-        window.parent.addTab(CCBPM_Data_FK_Flow + "DESIGNRPT", "报表设计" + CCBPM_Data_FK_Flow, url);
-    } else {
-        WinOpen(url);
-    }
+
+    // url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PK=" + CCBPM_Data_FK_Flow + "&Lang=CH";
+    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1100, 550, "icon-property", true, null, null, null, function () {
+        //window.location.href = window.location.href;
+    });
+
+    //    if (window.parent) {
+    //        window.parent.addTab(CCBPM_Data_FK_Flow + "DESIGNRPT", "报表设计" + CCBPM_Data_FK_Flow, url);
+    //    } else {
+    //        WinOpen(url);
+    //    }
 }
 
 //报表设计
@@ -534,17 +544,19 @@ function TextProperty_Funs(item) {
 //运行流程
 function Run_Flow() {
     var url = "../TestFlow.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&Lang=CH";
-    WinOpen(url);
+    OpenEasyUiDialog(url, "eudlgframe", '流程测试运行', 900, 500, "icon-property", true, null, null, null, function () {
+        //window.location.href = window.location.href;
+    });
 }
 
 //检查流程
 function Check_Flow() {
-    var url = "../DoType.htm?RefNo=" + CCBPM_Data_FK_Flow + "&DoType=FlowCheck&Lang=CH";
-    if (window.parent) {
-        window.parent.addTab(CCBPM_Data_FK_Flow + "WFCHECK", "检查流程" + CCBPM_Data_FK_Flow, url);
-    } else {
-        WinOpen(url);
-    }
+    var url = "FlowCheck.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&DoType11=FlowCheck&Lang=CH";
+    OpenEasyUiDialog(url, "eudlgframe", '流程检查', 800, 500, "icon-property", true, null, null, null, function () {
+        //window.location.href = window.location.href;
+    });
+
+    // WinOpen(url);
 }
 
 //工具栏展开缩放

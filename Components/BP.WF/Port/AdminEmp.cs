@@ -166,7 +166,19 @@ namespace BP.WF.Port
         }
         #endregion
 
+
+
         #region 构造函数
+        public override En.UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new En.UAC();
+                uac.OpenForSysAdmin();
+                uac.IsInsert = false;
+                return uac;
+            }
+        }
         /// <summary>
         /// 管理员
         /// </summary>

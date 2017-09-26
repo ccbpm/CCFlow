@@ -23,6 +23,8 @@ namespace CCFlow.WF
                 if (string.IsNullOrEmpty(s))
                     throw new Exception("@流程编号参数错误...");
 
+                s = DataType.ParseStringOnlyIntNumber(s);   //规避注入风险，added by liuxc
+
                 return BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(s);
             }
         }

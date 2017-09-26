@@ -32,6 +32,8 @@ namespace ccbpm
             if (BP.Web.WebUser.No != userNo)
                 BP.WF.Dev2Interface.Port_Login(userNo, sid);
 
+            flowNo = BP.DA.DataType.ParseStringOnlyIntNumber(flowNo);   //规避注入风险，added by liuxc
+
             //创建WorkID,并返回.
             return BP.WF.Dev2Interface.Node_CreateBlankWork(flowNo, null, null, userNo, null);
         }

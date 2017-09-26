@@ -1001,6 +1001,32 @@ namespace BP.DA
             return nStr;
         }
         /// <summary>
+        /// 去除指定字符串中非数字的字符
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <returns></returns>
+        public static string ParseStringOnlyIntNumber(string str)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+                return string.Empty;
+
+            return Regex.Replace(str, RegEx_Replace_OnlyIntNum, "");
+        }
+        /// <summary>
+        /// 去除指定字符串中危险字符
+        /// <para>注：含有这些字符的参数经过拼接，组成SQL可能包含危险语句</para>
+        /// <para>涉及字符：' ; -- / &amp; &gt; &lt;</para>
+        /// </summary>
+        /// <param name="str">字符串</param>
+        /// <returns></returns>
+        public static string ParseStringFilterDangerousSymbols(string str)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+                return string.Empty;
+
+            return Regex.Replace(str, RegEx_Replace_FilterDangerousSymbols, "").Replace("<", "&lt;").Replace(">", "&gt;").Replace("&", "&amp;");
+        }
+        /// <summary>
         /// 将中文转化成拼音
         /// </summary>
         /// <param name="exp"></param>
@@ -1837,12 +1863,26 @@ namespace BP.DA
         /// </summary>
         public const string RegEx_Replace_OnlySZX = @"[\u4e00-\u9fa5]|[^0-9a-zA-Z_]";
         /// <summary>
-        /// (RegEx.Replace操作使用)匹配字符串开头为数字或下划线
+        /// (RegEx.Replace操作使用)字符串开头不能为数字或下划线
         /// <para>示例：</para>
         /// <para>   Console.WriteLine(RegEx.Replace("_12_a1",RegEx_Replace_FirstXZ,""));</para>
         /// <para>   输出：a1</para>
         /// </summary>
         public const string RegEx_Replace_FirstXZ = "^(_|[0-9])+";
+        /// <summary>
+        /// (RegEx.Replace操作使用)仅含有整形数字
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("_12_a1",RegEx_Replace_OnlyIntNum,""));</para>
+        /// <para>   输出：121</para>
+        /// </summary>
+        public const string RegEx_Replace_OnlyIntNum = "[^0-9]";
+        /// <summary>
+        /// (RegEx.Replace操作使用)字符串不能含有指定危险字符
+        /// <para>示例：</para>
+        /// <para>   Console.WriteLine(RegEx.Replace("'_1--2/_a1",RegEx_Replace_FilterDangerousSymbols,""));</para>
+        /// <para>   输出：_12_a1</para>
+        /// </summary>
+        public const string RegEx_Replace_FilterDangerousSymbols = "[';/]|[-]{2}";
         #endregion
 
         #region 数据类型。

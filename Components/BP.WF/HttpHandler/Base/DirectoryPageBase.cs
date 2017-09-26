@@ -192,6 +192,10 @@ namespace BP.WF.HttpHandler
                 string v = this.GetRequestVal("IsMobile");
                 if (v != null && v == "1")
                     return true;
+
+                if (System.Web.HttpContext.Current.Request.RawUrl.Contains("/CCMobile/") == true)
+                    return true;
+
                 return false;
             }
         }

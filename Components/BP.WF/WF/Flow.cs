@@ -1950,8 +1950,6 @@ namespace BP.WF
                 DBAccess.RunSQL("UPDATE WF_Node SET ReturnRole=0 WHERE NodePosType=0 AND ReturnRole !=0");
                 #endregion 对流程的设置做必要的检查.
 
-
-
                 //删除垃圾,非法数据.
                 string sqls = "DELETE FROM Sys_FrmSln where fk_mapdata not in (select no from sys_mapdata)";
                 sqls += "@ DELETE FROM WF_Direction WHERE Node=ToNode";
@@ -2174,7 +2172,7 @@ namespace BP.WF
                         case DeliveryWay.BySelected: /* 由上一步发送人员选择 */
                             if (nd.IsStartNode)
                             {
-                                msg += "@错误:开始节点不能设置指定的选择人员访问规则。";
+                                //msg += "@错误:开始节点不能设置指定的选择人员访问规则。";
                                 break;
                             }
                             break;
@@ -5810,6 +5808,10 @@ namespace BP.WF
                 if (string.IsNullOrWhiteSpace(this.Name))
                     this.Name = "新建流程" + this.No; //新建流程.
 
+
+               // BP.WF.Flow.DoLoadFlowTemplate(flowSort, flowName, ImpFlowTempleteModel.AsNewFlow, "");
+
+
                 this.No = this.GenerNewNoByKey(FlowAttr.No);
                 this.HisDataStoreModel = model;
                 this.PTable = pTable;
@@ -5845,13 +5847,13 @@ namespace BP.WF
                 nd.HisNodeWorkType = NodeWorkType.StartWork;
                 nd.X = 200;
                 nd.Y = 150;
+                nd.NodePosType = NodePosType.Start;
                 nd.ICON = "前台";
 
 
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
                 nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
-
                 nd.Insert();
 
                 nd.CreateMap();
@@ -5873,6 +5875,7 @@ namespace BP.WF
                 nd.X = 200;
                 nd.Y = 250;
                 nd.ICON = "审核";
+                nd.NodePosType = NodePosType.End;
 
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
                 nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
@@ -6082,10 +6085,6 @@ namespace BP.WF
                     #endregion
                 }
 
-               
-
-                this.DoCheck_CheckRpt(this.HisNodes);
-                //  Flow.RepareV_FlowData_View();
                 return this.No;
             }
             catch (Exception ex)

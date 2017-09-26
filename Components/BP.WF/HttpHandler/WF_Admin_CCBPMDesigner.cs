@@ -28,6 +28,21 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        /// <summary>
+        /// 流程检查.
+        /// </summary>
+        /// <returns></returns>
+        public string FlowCheck_Init()
+        {
+            BP.WF.Flow fl = new BP.WF.Flow(this.FK_Flow);
+            string info = fl.DoCheck().Replace("@", "<BR>@");
+            info = info.Replace("@错误", "<font color=red><b>@错误</b></font>");
+            info = info.Replace("@警告", "<font color=yellow><b>@警告</b></font>");
+            info = info.Replace("@信息", "<font color=black><b>@信息</b></font>");
+            return info;
+        }
+
         /// <summary>
         /// 流程信息.
         /// </summary>

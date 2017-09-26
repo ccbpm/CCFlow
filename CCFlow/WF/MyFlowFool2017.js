@@ -2114,7 +2114,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
         $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
     }
     src += "&r=q" + paras;
-    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe width='100%' height='" + wf_node.FWC_H + "px' id='FFWC" + wf_node.NodeID + "' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+    var eleHtml = "<iframe width='100%' height='" + wf_node.FWC_H + "px' id='FFWC" + wf_node.NodeID + "' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
     
 
     return eleHtml;

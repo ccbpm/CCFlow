@@ -48,10 +48,11 @@
                     //生成部门列表.
                     //bgein
                     var depts = data.Depts;
-                    var cond = data.Cond[0]; 
+
+                    var cond = data.Cond[0];
                     $("#t1").append("<td colspan=3 class='GroupTitle' >部门选择</td>");
-                    for (var i = 0, len = depts.length; i < len; i++) {                        
-                        var td = "<td><input type='checkbox' id='dept_CB_" + depts[i].No + "' name='dept_CB_" + depts[i].No + "'/><lable>" + depts[i].Name + "</lable></td>";
+                    for (var i = 0, len = depts.length; i < len; i++) {
+                        var td = "<td><input type='checkbox' id='dept_CB_" + depts[i].No + "' name='dept_CB_" + depts[i].No + "'/><label for='dept_CB_" + depts[i].No + "'>" + depts[i].Name + "</label></td>";
                         if (i % 3 == 0) {
                             $("#t1").append("<tr></tr>");
                         }
@@ -83,7 +84,7 @@
 
                     //end
 
-                    
+
                 }
             });
         });
@@ -206,9 +207,11 @@
 </head>
 <body onkeypress="Esc();">
     <form id="cc">
-    <div>
-        <table id="t1" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 100%">
-        </table>
+    <div style="overflow:auto">
+        <div style="width: 100%;max-height: 600px;overflow:auto">
+            <table id="t1" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 100%;">
+            </table>
+        </div>
         <br />
         
         <div>

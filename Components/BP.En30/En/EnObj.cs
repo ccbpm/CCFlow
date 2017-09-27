@@ -781,7 +781,7 @@ namespace BP.En
             if (str == null || str == "" || str == "null")
                 return isNullAsVal;
 
-            if (DataType.IsNumStr(str)==false)
+            if (DataType.IsNumStr(str) == false)
                 return isNullAsVal;
             return int.Parse(str);
         }
@@ -890,7 +890,11 @@ namespace BP.En
         /// <returns></returns>
         public float GetValFloatByKey(string key, int blNum)
         {
-            return float.Parse(float.Parse(this.Row.GetValByKey(key).ToString()).ToString("0.00"));
+            string val = this.Row.GetValByKey(key).ToString();
+            if (string.IsNullOrEmpty(val))                
+                return float.Parse(blNum.ToString("0.00"));
+
+            return float.Parse(float.Parse(val).ToString("0.00"));
         }
         /// <summary>
         /// 根据key 得到flaot val

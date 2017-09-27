@@ -230,7 +230,6 @@ namespace BP.WF.HttpHandler
             }
 
             #region 判断前置导航.
-
             if (this.currND.IsStartNode && this.IsCC == false && this.WorkID == 0)
             {
                 if (BP.WF.Dev2Interface.Flow_IsCanStartThisFlow(this.FK_Flow, WebUser.No) == false)
@@ -384,6 +383,8 @@ namespace BP.WF.HttpHandler
                 return "url@" + url;
             }
 
+           
+
          
 
 
@@ -412,7 +413,6 @@ namespace BP.WF.HttpHandler
                 this.WorkID = currWK.OID;
             }
 
-
             if (frmtype == NodeFormType.FoolTruck)
             {
                 /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
@@ -439,6 +439,25 @@ namespace BP.WF.HttpHandler
                 }
 
                 string url = "MyFlowFool.htm";
+
+                //处理连接.
+                url = this.MyFlow_Init_DealUrl(currND, currWK, url);
+
+                url = url.Replace("DoType=MyFlow_Init&", "");
+                url = url.Replace("&DoWhat=StartClassic", "");
+                return "url@" + url;
+            }
+
+            //自定义表单
+            if (frmtype == NodeFormType.SelfForm && this.IsMobile == false)
+            {
+                if (this.WorkID == 0)
+                {
+                    currWK = this.currFlow.NewWork();
+                    this.WorkID = currWK.OID;
+                }
+
+                string url = "MyFlowSelfForm.htm";
 
                 //处理连接.
                 url = this.MyFlow_Init_DealUrl(currND, currWK, url);
@@ -1215,8 +1234,6 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='PackUp_pdf'  value='" + btnLab.PrintPDFLab + "' enable=true/>";
                 }
 
-
-
                 ///* 打包下载 */
                 //if (btnLab.PrintZipEnable == true)
                 //{
@@ -1424,6 +1441,61 @@ namespace BP.WF.HttpHandler
             catch (Exception ex)
             {
                 return "err@保存失败:" + ex.Message;
+            }
+        }
+        public string MyFlowSelfForm_Init()
+        {
+            string json = string.Empty;
+            try
+            {
+                DataSet ds = new DataSet();
+
+                if (this.DoType1.ToUpper() == "VIEW")
+                {
+                    DataTable trackDt = BP.WF.Dev2Interface.DB_GenerTrack(this.FK_Flow, this.WorkID, this.FID).Tables["Track"];
+                    ds.Tables.Add(trackDt.Copy());
+                    return BP.Tools.Json.ToJson(ds);
+                }
+
+                ds = BP.WF.CCFlowAPI.GenerWorkNode(this.FK_Flow, this.FK_Node, this.WorkID,
+                    this.FID, BP.Web.WebUser.No);
+
+                #region 增加上流程的信息.
+                string sql = "";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,NVL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+                else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,IFNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+                else
+                    sql = string.Format("select work1.WFState,work2.WFState PWFState,work1.PFID,work1.PWorkID,work1.PNodeID,work1.PFlowNo,ISNULL(work2.PWorkID,0) PWorkID2,work2.PNodeID PNodeID2,work2.PFlowNo PFlowNo2,work1.FK_Flow,work1.FK_Node,work1.WorkID from WF_GenerWorkFlow work1 left join  WF_GenerWorkFlow work2 on  work1.FID=work2.WorkID where work1.WorkID='{0}'", WorkID);
+
+                DataTable wf_generWorkFlowDt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+                wf_generWorkFlowDt.TableName = "WF_GenerWorkFlow";
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    wf_generWorkFlowDt.Columns["WFSTATE"].ColumnName = "WFState";
+                    wf_generWorkFlowDt.Columns["PWFSTATE"].ColumnName = "PWFState";
+                    wf_generWorkFlowDt.Columns["PFID"].ColumnName = "PFID";
+                    wf_generWorkFlowDt.Columns["PWORKID"].ColumnName = "PWorkID";
+                    wf_generWorkFlowDt.Columns["PNODEID"].ColumnName = "PNodeID";
+                    wf_generWorkFlowDt.Columns["PFLOWNO"].ColumnName = "PFlowNo";
+
+                    wf_generWorkFlowDt.Columns["PWORKID2"].ColumnName = "PWorkID2";
+                    wf_generWorkFlowDt.Columns["PNODEID2"].ColumnName = "PNodeID2";
+                    wf_generWorkFlowDt.Columns["PFLOWNO2"].ColumnName = "PFlowNo2";
+
+                    wf_generWorkFlowDt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                    wf_generWorkFlowDt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                    wf_generWorkFlowDt.Columns["WORKID"].ColumnName = "WorkID";
+                }
+                #endregion 增加上流程的信息.
+
+                return BP.Tools.Json.ToJson(ds);
+            }
+            catch (Exception ex)
+            {
+                BP.DA.Log.DefaultLogWriteLineError(ex);
+                return "err@" + ex.Message;
             }
         }
         /// <summary>

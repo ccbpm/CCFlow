@@ -469,6 +469,39 @@ namespace BP.WF.HttpHandler
 
                 if (adminEmp.IsAdmin == false)
                     return "err@您非管理员用户，不能登录.";
+
+                if (string.IsNullOrWhiteSpace(adminEmp.RootOfFlow) == true)
+                    return "err@二级管理员用户没有设置流程树的权限..";
+
+                #region 检查是否有分类好的流程类别数据. for 中冶集团.
+                string sql = "SELECT count(No) FROM WF_FlowSort WHERE ParentNo='" + adminEmp.RootOfFlow + "' OR No='" + adminEmp.RootOfFlow + "'";
+                int num = DBAccess.RunSQLReturnValInt(sql, 0);
+                if (num == 0)
+                    return "err@二级管理员用户没有设置流程树的权限..";
+                if (num == 1)
+                {
+                    /*只有一个根目录: 就让其生成子目录数据, f.*/
+                    string xmlFile = SystemConfig.PathOfDataUser + "XML/InitFlowSort.xml";
+                    if (System.IO.File.Exists(xmlFile) == true)
+                    {
+                        DataSet ds = new DataSet();
+                        ds.ReadXml(xmlFile);
+                        DataTable dt = ds.Tables[0];
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            string no = dr[0].ToString();
+                            string name = dr[1].ToString();
+
+                            FlowSort fs = new FlowSort();
+                            fs.No = adminEmp.RootOfFlow + "_" + no;
+                            fs.Name = name;
+                            fs.ParentNo = adminEmp.RootOfFlow;
+                            fs.Insert();
+                        }
+                    }
+                }
+                #endregion 检查是否有分类好的流程类别数据. for 中冶集团.
+
             }
 
             string pass = this.GetValFromFrmByKey("TB_Pass");
@@ -863,19 +896,25 @@ namespace BP.WF.HttpHandler
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
                 aemp.No = WebUser.No;
+                if (aemp.RetrieveFromDBSources() == 0)
+                    return "err@登录帐号错误.";
 
-                if (aemp.RetrieveFromDBSources() != 0 && aemp.UserType == 1 && !string.IsNullOrWhiteSpace(aemp.RootOfFlow))
-                {
-                    DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
-                    DataRow newRootRow = dt.Select("NO='F" + aemp.RootOfFlow + "'")[0];
+                if (aemp.IsAdmin == false)
+                    return "err@非管理员用户.";
 
-                    newRootRow["PARENTNO"] = "F0";
-                    DataTable newDt = dt.Clone();
-                    newDt.Rows.Add(newRootRow.ItemArray);
+             
 
-                    GenerChildRows(dt, newDt, newRootRow);
-                    dt = newDt;
-                }
+
+                DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
+                DataRow newRootRow = dt.Select("NO='F" + aemp.RootOfFlow + "'")[0];
+
+
+                newRootRow["PARENTNO"] = "F0";
+                DataTable newDt = dt.Clone();
+                newDt.Rows.Add(newRootRow.ItemArray);
+
+                GenerChildRows(dt, newDt, newRootRow);
+                dt = newDt;
             }
 
             return BP.Tools.Json.DataTableToJson(dt, false);
@@ -1329,7 +1368,9 @@ namespace BP.WF.HttpHandler
 
             BP.WF.Port.AdminEmp emp = new Port.AdminEmp(BP.Web.WebUser.No);
 
-            return BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, emp.RootOfFlow);
+            string strs = BP.Tools.Entitis2Json.ConvertEntitis2GenerTree(flowSorts, emp.RootOfFlow);
+
+            return strs;
         }
         /// <summary>
         /// 删除流程类别.

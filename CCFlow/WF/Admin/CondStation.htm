@@ -50,6 +50,7 @@
                     //生成岗位列表.
                     //bgein
                     var types = data.StationTypes;
+
                     var sts = data.Stations;
                     var cond = data.Cond[0].OperatorValue;
                     for (var i = 0, len = types.length; i < len; i++) {
@@ -68,7 +69,7 @@
                         $("#t1").append(title);
 
                         for (var k = 0, klen = curstas.length; k < klen; k++) {
-                            var td = "<td><input type='checkbox' id='emp_CB_" + curstas[k].No + "' name='emp_CB_" + curstas[k].No + "'/><lable>" + curstas[k].Name + "</lable></td>";
+                            var td = "<td><input type='checkbox' id='emp_CB_" + curstas[k].No + "' name='emp_CB_" + curstas[k].No + "'/><label for='emp_CB_" + curstas[k].No + "'>" + curstas[k].Name + "</label></td>";
                             if (k % 3 == 0) {
                                 $("#t1").append("<tr></tr>");
                             }
@@ -227,8 +228,10 @@
 <body>
     <form action="/" method="post" id="cc">
     <div>
-        <table id="t1" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 100%">
-        </table>
+        <div style="max-height:600px;overflow:auto;">
+            <table id="t1" class="Table" cellspacing="1" cellpadding="1" border="1" style="width: 100%">
+            </table>
+        </div>
         <br />
         
         <div>

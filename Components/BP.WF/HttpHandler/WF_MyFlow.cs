@@ -677,11 +677,12 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                if (btnLab.WorkCheckEnable )
+                if (btnLab.WorkCheckEnable)
                 {
                     /*审核*/
-                    string urlr1 = "./WorkOpt/WorkCheck.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
-                    toolbar += "<input id='Btn_WorkCheck' type=button  value='" + btnLab.WorkCheckLab + "' enable=true onclick=\"WinOpen('" + urlr1 + "','dsdd'); \" />";
+                    //     string urlr1 = "./WorkOpt/WorkCheck.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
+                    //   toolbar += "<input  name='Btn_WorkCheck' type=button  value='" + btnLab.WorkCheckLab + "' enable=true onclick=\"WinOpen('" + urlr1 + "','dsdd'); \" />";
+                    toolbar += "<input  name='workcheckBtn' type=button  value='" + btnLab.WorkCheckLab + "' enable=true />";
                 }
 
                 if (btnLab.ThreadEnable)
@@ -792,6 +793,7 @@ namespace BP.WF.HttpHandler
                     /*会签 */
                     string urlr3 = appPath + "WF/WorkOpt/HuiQian.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button name='HuiQian'  value='" + btnLab.HuiQianLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
+
                 }
 
 

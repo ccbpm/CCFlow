@@ -319,6 +319,14 @@ function initBar() {
                 $('[name=Shift]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
             }
 
+            if ($('[name=workcheckBtn]').length > 0) {
+
+                $('[name=workcheckBtn]').attr('onclick', '');
+                $('[name=workcheckBtn]').unbind('click');
+                $('[name=workcheckBtn]').bind('click', function () { initModal("workcheckBtn"); $('#returnWorkModal').modal().show(); });
+            }
+
+
             if ($('[name=Askfor]').length > 0) {
                 $('[name=Askfor]').attr('onclick', '');
                 $('[name=Askfor]').unbind('click');
@@ -391,6 +399,7 @@ function initModal(modalType, toNode) {
 
     $('body').append($(returnWorkModalHtml));
 
+
     var modalIframeSrc = '';
     if (modalType != undefined) {
         switch (modalType) {
@@ -413,6 +422,11 @@ function initModal(modalType, toNode) {
             case "HuiQian":
                 $('#modalHeader').text("会签");
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "workcheckBtn":
+
+                $('#modalHeader').text("审核");
+                modalIframeSrc = "./WorkOpt/WorkCheck.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "PackUp_zip":
             case "PackUp_html":

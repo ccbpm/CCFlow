@@ -1,9 +1,13 @@
 ﻿/*  Table 风格  */
-body
-{
-   font-size: 14px;
-   text-align:center;
+body {
+  color: #333333;
+  font-family: "Open Sans", sans-serif;
+  padding: 0px !important;
+  margin: 0px !important;
+  font-size: 14px;
+  direction: ltr;
 }
+
 a:link    {color:fff;}
 a:visited {color:fff;}
 a:hover   {color:fff;}
@@ -266,14 +270,25 @@ caption1
 /* 在输入信息字段名称，单元格式的风格 */
 .FDesc
 {
-    padding: 4px;
+    padding-left: 4px;
     text-align: left;
     font-size: 12px;
-    margin: 4px;
-    background-color: #e0ecff;
+    margin-left: 4px;
+    background-color: #FCFCFC;
     border: lightgrey 1px solid;
     border-top: none;
-    width: 20%;
+    width: 50px;
+}
+
+.FContext
+{
+    padding-left: 4px;
+    text-align: left;
+    font-size: 12px;
+    margin-left: 4px;
+    border: lightgrey 1px solid;
+    border-top: none;
+    width: 35%;
 }
 
 .TBNum
@@ -457,11 +472,7 @@ display:block;
     display: table;
 }
 
-
-/*杨玉慧写*/
-body {
-    font-family: 'Microsoft YaHei UI';
-}
+ 
 .col-md-2, .col-md-1, .col-md-11,.col-sm-4, .col-sm-2, .col-sm-10 {
     line-height: 40px;
     text-align: left;
@@ -742,14 +753,7 @@ display:none;
 }
 
 
-body {
-  color: #333333;
-  font-family: "Open Sans", sans-serif;
-  padding: 0px !important;
-  margin: 0px !important;
-  font-size: 13px;
-  direction: ltr;
-}
+
  html,body {
             scrollbar-face-color:#2884fa; /*������3D���棨ThreedFace������ɫ*/ 
             scrollbar-highlight-color:white; /*������3D���������ߣ�ThreedHighlight����ɫ*/ 

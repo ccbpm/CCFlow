@@ -24,7 +24,7 @@
             //  $("#Msg").html("<img src='../../Img/loading.gif' /><font color=blue>ccbpm 正在生成代码.</font>");
 
             var fk_flow = GetQueryString("FK_Flow");
-            var url = "/WF/Admin/XAP/DoPort.htm?DoType=ExpFlowTemplete&FK_Flow=" + fk_flow + "&Lang=CH";
+            var url = "../../Admin/XAP/DoPort.htm?DoType=ExpFlowTemplete&FK_Flow=" + fk_flow + "&Lang=CH";
 
             $("#downli").html("驰骋工作流引擎已经为您生成了流程模版文件，<a href=\"javascript:WinOpen('" + url + "');\" >请点击这里下载到本机</a>。");
             return ;

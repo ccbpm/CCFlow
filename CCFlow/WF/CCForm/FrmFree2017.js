@@ -1998,6 +1998,33 @@ function GenerFreeFrm() {
                 var defValArr = defVal.split(',');
                 $(selectObj).selectpicker('val', defValArr);
             });
+
+            //给富文本 创建编辑器
+            window.UEs = [];
+            if (document.UE_MapAttr) {
+                document.UE_MapAttr.forEach(function (item) {
+                    var obj = {};
+                    //根据字段只读属性 调整外观
+                    if (item.MapAttr.UIIsEnable == "0") {
+                        obj.editor = UM.getEditor(item.id, {
+                            'toolbar': [],
+                            'readonly': true,
+                            'autoHeightEnabled': false,
+                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
+                        });
+                    } else {
+                        obj.editor = UM.getEditor(item.id, {
+                            'autoHeightEnabled': false,
+                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
+                        });
+                    }
+                    obj.attr = item.MapAttr;
+                    window.UEs.push(obj);
+
+                    //调整样式,让必选的红色 * 随后垂直居中
+                    obj.editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
+                });
+            }
         }
     })
 }
@@ -2035,18 +2062,37 @@ function figure_MapAttr_Template(mapAttr) {
                             (frmData, mapAttr, defValue) + "</select>";
                     } else { //文本区域
 
-                        // 判断是否是超大文本.
-                        var para = mapAttr.AtPara;
-                        if ( 1==2 && para.indexOf('IsSupperText=1') > 0) {
+                        if (mapAttr.UIHeight <= 23) {
+                            eleHtml +=
+                                "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
+                            ;
+                        }
+                        else {
 
-                            alert('富文本没有解析:' + para);
+                            if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+                                //如果是富文本就使用百度 UEditor
+                                if (document.UE_MapAttr === undefined) {
+                                    document.UE_MapAttr = [];
+                                }
+                                var editorPara = {};
+                                editorPara.id = "container" + document.UE_MapAttr.length;
+                                editorPara.MapAttr = mapAttr;
+                                document.UE_MapAttr.push(editorPara);
 
-                        } else {
-                            if (mapAttr.UIHeight <= 23) {
-                                eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
-                            }
-                            else {
-                                eleHtml += "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
+                                //设置编辑器的默认样式
+                                var styleText = "text-align:left;font-size:12px;";
+                                styleText += "width:100%;";
+                                styleText += "height:" + mapAttr.UIHeight + "px;";
+
+                                if (mapAttr.UIIsEnable == "0") {
+                                    //字段处于只读状态.注意这里 name 属性也是可以用来绑定字段名字的
+                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                                } else {
+                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'></script>";
+                                }
+                            } else {
+                                eleHtml +=
+                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
                             }
                         }
                     }

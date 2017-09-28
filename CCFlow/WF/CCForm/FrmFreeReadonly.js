@@ -1881,6 +1881,24 @@ function GenerFreeFrmReadonly() {
 
             showTbNoticeInfo();
 
+            //给富文本 创建编辑器
+            window.UEs = [];
+            if (document.UE_MapAttr) {
+                document.UE_MapAttr.forEach(function (item) {
+                    var obj = {};
+                    //根据字段只读属性 调整外观
+                    obj.editor = UM.getEditor(item.id, {
+                        'toolbar': [],
+                        'readonly': true,
+                        'autoHeightEnabled': false,
+                        'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
+                    });
+                    obj.attr = item.MapAttr;
+                    window.UEs.push(obj);
+
+                });
+            }
+
         }
     })
 }
@@ -1911,15 +1929,34 @@ function figure_MapAttr_Template(mapAttr) {
                         eleHtml +=
                             "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +  (frmData, mapAttr, defValue) + "</select>";
                     } else {//文本区域
+
                         if (mapAttr.UIHeight <= 23) {
                             eleHtml +=
                                 "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                             ;
                         }
                         else {
-                            eleHtml +=
-                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                            ;
+                            
+                            if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+                                //如果是富文本就使用百度 UEditor
+                                if (document.UE_MapAttr === undefined) {
+                                    document.UE_MapAttr = [];
+                                }
+                                var editorPara = {};
+                                editorPara.id = "container" + document.UE_MapAttr.length;
+                                editorPara.MapAttr = mapAttr;
+                                document.UE_MapAttr.push(editorPara);
+
+                                //设置编辑器的默认样式
+                                var styleText = "text-align:left;font-size:12px;";
+                                styleText += "width:100%;";
+                                styleText += "height:" + mapAttr.UIHeight + "px;";
+
+                                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                            } else {
+                                eleHtml +=
+                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
+                            }
                         }
                     }
                 } //AppDate

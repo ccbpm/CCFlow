@@ -422,9 +422,6 @@
 
             var SColumns = chk_value.join();
 
-
-            alert(nodeID);
-
             $.ajax({
                 type: 'GET',
                 async: true,
@@ -449,9 +446,9 @@
 
                     var optionsEnumsLGType = "",
                         optionsEnumsDataType;
-                    EnumsDataType.forEach(function(item){
+                    /*EnumsDataType.forEach(function(item){
                         optionsEnumsDataType += "<option value='" + item.INTKEY + "'>" + item.LAB + "</option>";
-                    });
+                    });*/
                     EnumsLGType.forEach(function(item){
                         optionsEnumsLGType += "<option value='" + item.INTKEY + "'>" + item.LAB + "</option>";
                     });
@@ -467,6 +464,8 @@
                     tableHtml += "<td class='GroupTitle' nowrap=''>顺序</td>";
                     tableHtml += "</tr>";
 
+                    var dic = {"nvarchar":1,"int":2,"smallint":2,"float":3,"bit":4,"double":5,"date":6,"datetime":7,"money":8};
+
                     if (Columns.length > 0) {
                         Columns.forEach(function(item,index){
                                             tr = "";
@@ -475,29 +474,19 @@
                                             tr += "<td nowrap=''>" + item.NO + "</td>";
                                             tr += "<td><input name='TB_Desc_" + item.NO + "' type='text' value='" + (item.NAME||item.NO) + "' size='20' id='TB_Desc_" + item.NO + "' /></td>";
                                             tr += "<td><select name='DDL_DBType_" + item.NO + "' id='DDL_DBType_" + item.NO + "'>";
-	                                        tr += optionsEnumsDataType ;
+	                                        tr += _GetOptionsEnumsDataType(EnumsDataType,dic[item.DBTYPE]);
                                             tr += "</select></td>";
                                             tr += "<td><select name='DDL_LogicType_" + item.NO + "' id='DDL_LogicType_" + item.NO + "'>";
 	                                        tr += optionsEnumsLGType;
                                             tr += "</select></td>";
                                             tr += "<td><input name='TB_BindKey_" + item.NO + "' type='text' size='30' id='TB_BindKey_" + item.NO + "' ondblclick='OpenSelectBindKey(this)' /></td>";
-                                            tr += "<td><input name='TB_Len_" + item.NO + "' type='text' value='0' size='5' id='TB_Len_" + item.NO + "' /></td>";
+                                            tr += "<td><input name='TB_Len_" + item.NO + "' type='text' value='" + item.DBLENGTH + "' size='5' id='TB_Len_" + item.NO + "' /></td>";
                                             tr += "<td style='text-align:center' nowrap=''><a href='javascript:void(0)' onclick='up(this, 6)' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-up'' group='' id=''><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-up'>&nbsp;</span></span></span></a>&nbsp;<a href='javascript:void(0)' onclick='down(this, 6)' class='easyui-linkbutton l-btn' data-options='iconCls:'icon-down'' group='' id=''><span class='l-btn-left'><span class='l-btn-text'><span class='l-btn-empty icon-down'>&nbsp;</span></span></span></a>";
                                             tr += "</td>";
                                             tr += "</tr>";
                                             tableHtml += tr;
                                             impFields += item.NO + ","
 
-                                            /*//设置 数据类型的枚举值
-                                            var typeString = item["DBTYPE"];
-                                            var mydatatype = 1;
-                                            if (typeString.indexOf("int") >= 0)
-                                                mydatatype = 2;
-                                            if (typeString.indexOf("float") >= 0)
-                                                mydatatype = 3;
-                                            if (typeString.indexOf("double") >= 0)
-                                                mydatatype = 5;
-                                            $('#DDL_DBType_' + item.NO).val(mydatatype);*/
                                             });
                     }
                     tableHtml += "</table>";
@@ -511,16 +500,22 @@
             });
         }
 
+        //构建 Options
+        function _GetOptionsEnumsDataType(EnumsDataType,key){
+            var ret = "";
+            EnumsDataType.forEach(function(item){
+                        ret += "<option value='" + item.INTKEY + "' " + (item.INTKEY == key ?"selected":"") + ">" + item.LAB + "</option>";
+                    });
+            return ret;
+        }
 
+        //3、TODO导入字段 生成表单
         function Save_Click(){
 
             //hid_STable.value = tableName;
             var fromdata = $('#divCCForm').serialize()
             
-            //1.样式处理。选中节点标红，其他节点去红
-            var old = $(event.srcElement).css("color");
-            $(".ulcols li a").css('color',old);
-            $(event.srcElement).css('color','red');
+            
 
             //2.获取数据 FK_MapData=ND18507     &FK_SFDBSrc=NKApp&STable=ND104
             $.ajax({

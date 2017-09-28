@@ -475,11 +475,19 @@ function initBar() {
                 $('[name=Return]').unbind('click');
                 $('[name=Return]').bind('click', function () { initModal("returnBack"); $('#returnWorkModal').modal().show(); });
             }
+            
             if ($('[name=Shift]').length > 0) {
 
                 $('[name=Shift]').attr('onclick', '');
                 $('[name=Shift]').unbind('click');
                 $('[name=Shift]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=Btn_WorkCheck]').length > 0) {
+
+                $('[name=Btn_WorkCheck]').attr('onclick', '');
+                $('[name=Btn_WorkCheck]').unbind('click');
+                $('[name=Btn_WorkCheck]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
             }
 
             if ($('[name=Askfor]').length > 0) {
@@ -572,6 +580,10 @@ function initModal(modalType, toNode) {
             case "askfor":
                 $('#modalHeader').text("加签");
                 modalIframeSrc = "./WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "Btn_WorkCheck":
+                $('#modalHeader').text("审核");
+                modalIframeSrc = "./WorkOpt/WorkCheck.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "HuiQian":
                 $('#modalHeader').text("会签");
@@ -1691,7 +1703,6 @@ function GenerWorkNode() {
                 return;
             }
 
-            //console.info(data);
             jsonStr = data;
             var gengerWorkNode = {};
             var flow_Data;
@@ -1976,7 +1987,7 @@ function figure_MapAttr_Template(mapAttr) {
                     } else { //文本区域
                         if (mapAttr.UIHeight <= 23) {
                             eleHtml +=
-                                "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable==1 ? '' : ' disabled="disabled"') + "/>"
+                                "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip ||'') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
                             ;
                         }
                         else {

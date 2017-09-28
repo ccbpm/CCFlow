@@ -34,7 +34,6 @@
     <script type="text/javascript" charset="utf-8" src="Comm/umeditor1.2.3-utf8/umeditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
     <script type="text/javascript" src="Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
-    <!--UmEditor-->
     <style type="text/css">
         h1{
             font-family: "微软雅黑";
@@ -42,6 +41,7 @@
         }
         .btn {
             display: inline-block;
+            
             *display: inline;
             padding: 4px 12px;
             margin-bottom: 0;
@@ -90,7 +90,7 @@
 
         .btn:active,
         .btn.active {
-            background-color: #cccccc \9;
+            background-color: #cccccc9;
         }
 
         .btn:first-child {
@@ -98,7 +98,8 @@
         }
 
         .btn:hover,
-        .btn:focus {
+        .btn:focus 
+        {
             color: #333333;
             text-decoration: none;
             background-position: 0 -15px;
@@ -134,22 +135,6 @@
             box-shadow: none;
         }
     </style>
-
-    <!--input获取焦点时移除placeholder,失去焦点重新获得placeholder内容-->
-    <style type="text/css">
-    /* WebKit browsers */
-	input:focus::-webkit-input-placeholder,textarea:focus::-webkit-input-placeholder { color:transparent; }
-
-	/* Mozilla Firefox 4 to 18 */
-	input:focus:-moz-placeholder,textarea:focus:-moz-placeholder { color:transparent; }
-
-	/* Mozilla Firefox 19+ */
-	input:focus::-moz-placeholder,textarea:focus::-moz-placeholder { color:transparent; }
-
-	/* Internet Explorer 10+ */
-	input:focus:-ms-input-placeholder,textarea:focus:-ms-input-placeholder { color:transparent; }
-    </style>
-    
     <!--JS 加载-->
     <script type="text/javascript">
 
@@ -198,8 +183,8 @@
             load.LoadJs("Scripts/commonYangYH.js", undefined, function () {
                 load.LoadJs('CCForm/MapExt2016.js', undefined, function () {
                     load.LoadJs('Comm/Gener.js', undefined, function () {
-                        load.LoadJs('MyFlowFree2017.js', undefined, function () {
-                            
+                        load.LoadJs('MyFlowSelfForm.js', undefined, function () {
+
                         })
                     })
                 })
@@ -302,7 +287,7 @@
             line-height: 25px;
         }
         
-        #topContentDiv i.topContentDiv-i
+        #topContentDiv i
         {
             display: block;
             width: 33px;
@@ -412,7 +397,7 @@
         }
     </style>
      
-    <script type="text/javascript">
+     <script type="text/javascript">
 
          window.onbeforeunload = function close() {
              temp = 0;
@@ -423,9 +408,6 @@
                  temp = 1;
              }
          }
-     </script>
-
-    <script type="text/javascript">
         //让IE8 兼容 forEach
         if (typeof Array.prototype.forEach != 'function') {
             Array.prototype.forEach = function (callback) {
@@ -434,8 +416,9 @@
                 }
             };
         }
+
     </script>
-</head>-->
+</head>
 <body  >
     <div id="divCurrentForm" style="position: relative;">
         <!--底部功能按钮 发送、移交-->
@@ -444,30 +427,20 @@
         </div>
         <!--上半部分表单-->
         <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;">
-            <i class="topContentDiv-i" style="display: none;"></i>
+            <i style="display: none;"></i>
             <div id="contentDiv">
                 <form id="divCCForm" method="post">
-                <!--LODOP_OB 先放着 不知道具体是什么-->
-                <div>
-                    <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0"
-                        height="0">
-                        <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="../DataUser/PrintTools/install_lodop32.exe" />
-                    </object>
-                </div>
+               
                 <!--头部功能按钮 发送、移交-->
                 <div class="topBar" id="topBar">
-                    <!-- <uc3:ToolBar ID="ToolBar1" runat="server"/>-->
                 </div>
                 <!--flowInfo-->
                 <div class="flowInfo" id="flowInfo">
-                    <!--<uc1:Pub ID="Pub1" runat="server"/>-->
                 </div>
                 <!--childThread-->
                 <div class="childThread" id='childThread'>
-                    <!--<uc1:Pub ID="Pub3" runat="server"/>-->
                 </div>
                 <!--主表单-->
-                <!--<uc2:UCEn ID="UCEn1" runat="server"/>-->
                 <div id="CCForm">
                     <br />
                     <img src='./Img/Loading.gif' />
@@ -614,5 +587,4 @@
     </div>
     <!-- /.modal -->
 </body>
-</html>-->
--->-->-->
+</html>

@@ -1155,7 +1155,6 @@
     <Content Include="WF\Admin\DoPort.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Attachment.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\Attachment11.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\BatchEdit.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\CCForm\CCForm.asmx" />
     <Content Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx" />
@@ -6393,15 +6392,6 @@
     <Content Include="WF\Admin\CCFormDesigner\ExcelFrmDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\Handler.ashx" />
     <Content Include="WF\Admin\CCFormDesigner\DialogCtr\Handler.ashx" />
-    <Content Include="web.ty.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="web.ty.Debug.config">
-      <DependentUpon>web.ty.config</DependentUpon>
-    </Content>
-    <Content Include="web.ty.Release.config">
-      <DependentUpon>web.ty.config</DependentUpon>
-    </Content>
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.CCFlow" />
     <Content Include="WF\Admin\RptDfine\Handler.ashx" />
     <Content Include="WF\Admin\RptDfine\RptGuide.Master" />

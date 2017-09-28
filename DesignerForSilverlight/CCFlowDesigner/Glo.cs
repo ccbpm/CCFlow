@@ -473,7 +473,7 @@ namespace BP
                     Glo.OpenWindow(Glo.BPMHost + url, "运行流程", 670, 1050);
                     return;
                 case UrlFlag.FlowCheck: // 流程设计。
-                    url = "/WF/Admin/DoType.aspx?RefNo=" + fk_flow + "&DoType=" + dotype + "&Lang=CH";
+                    url = "/WF/Admin/AttrFlow/CheckFlow.htm?FK_Flow="+fk_flow+"&RefNo=" + fk_flow + "&DoType=" + dotype + "&Lang=CH";
                     Glo.OpenWindow(Glo.BPMHost + url, "运行流程", 670, 1050);
                     break;
                 case "LoginPage": // 登录。

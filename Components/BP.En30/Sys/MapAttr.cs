@@ -1438,6 +1438,8 @@ namespace BP.Sys
                 map.AddTBString(MapAttrAttr.Tag, null, "标识（存放临时数据）", true, false, 0, 100, 20);
                 map.AddTBInt(MapAttrAttr.EditType, 0, "编辑类型", true, false);
 
+                map.AddTBString(MapAttrAttr.Tip, null, "激活提示", false, true, 0, 200, 20);
+
                 //单元格数量。2013-07-24 增加。
               //  map.AddTBString(MapAttrAttr.ColSpan, "1", "单元格数量", true, false, 0, 3, 3);
                 map.AddTBInt(MapAttrAttr.ColSpan, 1, "单元格数量", true, false);

@@ -435,10 +435,11 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "DesignerNodeFormFixOld": //设计傻瓜表单.
-            if (plant == "JFlow") {
-                alert("请选择\"设计节点表单(H5测试版)\"");
-                break;
-            }
+
+//            if (plant == "JFlow") {
+//                alert("请选择\"设计节点表单(H5测试版)\"");
+//                break;
+//            }
 
             url = "../FoolFormDesigner/Designer.aspx?IsFirst=1&FK_MapData=ND" + FK_Node + "&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node;
             if (window.parent && 1 == 3) {
@@ -448,10 +449,11 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "DesignerNodeFormFixNew": //设计傻瓜表单.
-            if (plant == "JFlow") {
-                alert("请选择\"设计节点表单(H5测试版) jflow 暂不支持\"");
-                break;
-            }
+
+//            if (plant == "JFlow") {
+//                alert("请选择\"设计节点表单(H5测试版) jflow 暂不支持\"");
+//                break;
+//            }
 
             url = "../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=ND" + FK_Node + "&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node;
             if (window.parent && 1 == 3) {

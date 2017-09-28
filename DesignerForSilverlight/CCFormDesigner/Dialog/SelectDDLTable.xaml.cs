@@ -218,11 +218,8 @@ namespace CCForm
             //this.tableEntity.TB_EnName.Text = "";
             //this.tableEntity.Show();
 
-            string url = Glo.BPMHost + "/WF/Comm/Sys/SFGuide.htm?DoType=New&MyPK=" + Glo.FK_MapData+"&FromApp=SL";
-
-            if (Glo.Platform == Platform.JFlow)
-                url = url.Replace(".aspx", ".jsp");
-
+            string url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/CreateSFGuide.htm?DoType=New&MyPK=" + Glo.FK_MapData + "&FromApp=SL";
+            
             HtmlPage.Window.Eval("window.showModalDialog('" + url + "',window,'dialogHeight:450px;dialogWidth:680px;center:Yes;help:No;scroll:auto;resizable:1;status:No;');");
             this.Close();
         }

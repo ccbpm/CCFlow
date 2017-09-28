@@ -26,6 +26,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1152,7 +1153,6 @@
     <Content Include="WF\Admin\ClientBin\NodeIcon\销售.png" />
     <Content Include="WF\Admin\ClientBin\NodeIcon\顾客.png" />
     <Content Include="WF\Admin\DoPort.aspx" />
-    <Content Include="WF\Admin\DoType.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Action.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Attachment.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Attachment11.htm" />
@@ -7231,13 +7231,6 @@
     </Compile>
     <Compile Include="WF\Admin\DoPort.aspx.designer.cs">
       <DependentUpon>DoPort.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\DoType.aspx.cs">
-      <DependentUpon>DoType.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\DoType.aspx.designer.cs">
-      <DependentUpon>DoType.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Action.aspx.cs">
       <DependentUpon>Action.aspx</DependentUpon>

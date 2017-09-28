@@ -134,6 +134,21 @@
             box-shadow: none;
         }
     </style>
+
+    <!--input获取焦点时移除placeholder,失去焦点重新获得placeholder内容-->
+    <style type="text/css">
+    /* WebKit browsers */
+	input:focus::-webkit-input-placeholder,textarea:focus::-webkit-input-placeholder { color:transparent; }
+
+	/* Mozilla Firefox 4 to 18 */
+	input:focus:-moz-placeholder,textarea:focus:-moz-placeholder { color:transparent; }
+
+	/* Mozilla Firefox 19+ */
+	input:focus::-moz-placeholder,textarea:focus::-moz-placeholder { color:transparent; }
+
+	/* Internet Explorer 10+ */
+	input:focus:-ms-input-placeholder,textarea:focus:-ms-input-placeholder { color:transparent; }
+    </style>
     
     <!--JS 加载-->
     <script type="text/javascript">
@@ -420,7 +435,7 @@
             };
         }
     </script>
-</head>
+</head>-->
 <body  >
     <div id="divCurrentForm" style="position: relative;">
         <!--底部功能按钮 发送、移交-->
@@ -599,4 +614,5 @@
     </div>
     <!-- /.modal -->
 </body>
-</html>
+</html>-->
+-->-->-->

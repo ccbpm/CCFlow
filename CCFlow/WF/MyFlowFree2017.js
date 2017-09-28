@@ -1703,7 +1703,6 @@ function GenerWorkNode() {
                 return;
             }
 
-            //console.info(data);
             jsonStr = data;
             var gengerWorkNode = {};
             var flow_Data;
@@ -1988,7 +1987,7 @@ function figure_MapAttr_Template(mapAttr) {
                     } else { //文本区域
                         if (mapAttr.UIHeight <= 23) {
                             eleHtml +=
-                                "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable==1 ? '' : ' disabled="disabled"') + "/>"
+                                "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip ||'') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
                             ;
                         }
                         else {

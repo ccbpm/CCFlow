@@ -337,7 +337,7 @@ namespace BP.Port
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
 
-                map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);
+               // map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);
 
                 #endregion 字段
 

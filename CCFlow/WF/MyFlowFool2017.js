@@ -532,23 +532,12 @@ function setFormEleDisabled() {
 
 function CheckMinMaxLength() {
 
-    var workNode = JSON.parse(jsonStr);
-    var mapAttrs = workNode.Sys_MapAttr;
-
-    var msg = "";
-    for (var i = 0; i < mapAttrs.length; i++) {
-
-        var attr = mapAttrs[i];
-
-        if (attr.AtPara != null && attr.AtPara.indexOf('@IsRichText=1') >= 0) {
-            var tb = document.getElementById('TB_' + attr.KeyOfEn);
-            if (tb == null || tb == undefined)
-                continue;
-
-            if (length > attr.MaxLen || length < attr.MinLen) {
-                msg += '@' + attr.Name + ' , 输入的值长度必须在:' + attr.MinLen + ', ' + attr.MaxLen + '之间. 现在输入是:' + length;
-            }
-        }
+    var editor = document.activeEditor,
+        wordslen = editor.getContent().length,
+        msg = "";
+    console.log(wordslen);
+    if (wordslen > editor.MaxLen || wordslen < editor.MinLen) {
+        msg += '@' + editor.BindFieldName + ' , 输入的值长度必须在:' + editor.MinLen + ', ' + editor.MaxLen + '之间. 现在输入是:' + wordslen;
     }
 
     if (msg != "") {
@@ -561,8 +550,6 @@ function CheckMinMaxLength() {
 //保存
 function Save() {
 
-    //检查最小最大长度.
-    var f = CheckMinMaxLength();
     if (f == false)
         return false;
 
@@ -588,6 +575,8 @@ function Save() {
 
     //获得表单数据.
     var frmData = getFormData(true, true);
+    //检查最小最大长度.
+    var f = CheckMinMaxLength(frmData);
 
 
     $.ajax({
@@ -1702,7 +1691,7 @@ function GenerWorkNode() {
                 if (gf.CtrlType == 'FWC') {
 
                     html += "<tr>";
-                    html += "  <td colspan='4' >"; 
+                    html += "  <td colspan='4' >";
 
                     html += figure_Template_FigureFrmCheck(workNodeData.WF_Node[0]);
 
@@ -1863,10 +1852,14 @@ function GenerWorkNode() {
                             'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
                         });
                     } else {
-                        obj.editor = UM.getEditor(item.id, {
+                        document.activeEditor = obj.editor = UM.getEditor(item.id, {
                             'autoHeightEnabled': false,
                             'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
                         });
+                        document.activeEditor.MaxLen = item.MapAttr.MaxLen;
+                        document.activeEditor.MinLen = item.MapAttr.MinLen;
+                        document.activeEditor.BindField = item.MapAttr.KeyOfEn;
+                        document.activeEditor.BindFieldName = item.MapAttr.Name;
                     }
                     obj.attr = item.MapAttr;
                     window.UEs.push(obj);

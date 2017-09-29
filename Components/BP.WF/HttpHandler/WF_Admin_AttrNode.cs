@@ -279,7 +279,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    nd.FormType = NodeFormType.FixForm;
+                    nd.FormType = NodeFormType.FoolForm;
                     nd.DirectUpdate();
 
                     md.HisFrmType = BP.Sys.FrmType.FoolForm;
@@ -731,7 +731,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    nd.FormType = NodeFormType.FixForm;
+                    nd.FormType = NodeFormType.FoolForm;
                     nd.DirectUpdate();
 
                     md.HisFrmType = BP.Sys.FrmType.FoolForm;

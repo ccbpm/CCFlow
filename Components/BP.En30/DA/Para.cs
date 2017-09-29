@@ -18,7 +18,10 @@ namespace BP.DA
                 {
                     case System.Data.DbType.String:
                     case System.Data.DbType.Object:
-                        return System.Data.OracleClient.OracleType.VarChar;
+                        if (this.Size > 4000)
+                            return System.Data.OracleClient.OracleType.Clob;
+                        else
+                            return System.Data.OracleClient.OracleType.VarChar;
                     case System.Data.DbType.Int32:
                     case System.Data.DbType.Int16:
                         return System.Data.OracleClient.OracleType.Number;
@@ -29,8 +32,6 @@ namespace BP.DA
                         return System.Data.OracleClient.OracleType.Double;
                     default:
                         throw new Exception("没有涉及到的类型。typeof(obj)=" + this.DAType.ToString());
-
-                       // throw new Exception("没有涉及到的类型。typeof(obj)=");
                 }
             }
         }

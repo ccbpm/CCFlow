@@ -102,7 +102,7 @@ namespace BP.WF.HttpHandler
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = this.WorkID;
             gwf.RetrieveFromDBSources();
-            ds.Tables.Add( gwf.ToDataTableField("WF_GenerWorkFlow") );
+            ds.Tables.Add(gwf.ToDataTableField("WF_GenerWorkFlow"));
 
             if (gwf.WFState != WFState.Complete)
             {
@@ -414,10 +414,18 @@ namespace BP.WF.HttpHandler
             OneWorkXmls xmls = new OneWorkXmls();
             xmls.RetrieveAll();
 
+             
+            int  nodeID = this.FK_Node;
+            if (nodeID == 0)
+            {
+                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                 nodeID = this.FK_Node;
+            }
+
             foreach (OneWorkXml item in xmls)
             {
                 string url = "";
-                url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.URL, this.FK_Node, this.WorkID, this.FK_Flow, this.FID);
+                url = string.Format("{0}?FK_Node={1}&WorkID={2}&FK_Flow={3}&FID={4}", item.URL, nodeID.ToString(), this.WorkID, this.FK_Flow, this.FID);
                 re += "{" + string.Format("\"No\":\"{0}\",\"Name\":\"{1}\", \"Url\":\"{2}\"", item.No, item.Name, url) + "},";
             }
 

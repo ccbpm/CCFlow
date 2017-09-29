@@ -429,7 +429,7 @@ namespace BP.WF.HttpHandler
                 return "url@" + url;
             }
 
-            if (frmtype == NodeFormType.FixForm && this.IsMobile==false)
+            if (frmtype == NodeFormType.FoolForm && this.IsMobile == false)
             {
                 /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上。*/
                 if (this.WorkID == 0)

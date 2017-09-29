@@ -1196,7 +1196,7 @@ namespace BP.WF
         /// <summary>
         /// 傻瓜表单.
         /// </summary>
-        FixForm = 0,
+        FoolForm = 0,
         /// <summary>
         /// 自由表单.
         /// </summary>

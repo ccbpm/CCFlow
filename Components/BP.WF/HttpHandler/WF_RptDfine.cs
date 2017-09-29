@@ -432,6 +432,9 @@ namespace BP.WF.HttpHandler
             }
 
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
+
+            qo.AddWhere( " AND  WFState > 1 ");
+
             md.SetPara("T_total", qo.GetCount());
             qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), 1);
             ds.Tables.Add(ges.ToDataTableField("MainData"));
@@ -488,6 +491,9 @@ namespace BP.WF.HttpHandler
 
 
             qo = InitQueryObject(qo, md, ges.GetNewEntity.EnMap.Attrs, attrs, ur);
+            qo.AddWhere(" AND  WFState > 1 "); //排除空白，草稿数据.
+
+
             md.SetPara("T_total", qo.GetCount());
             qo.DoQuery("OID", string.IsNullOrWhiteSpace(pageSize) ? SystemConfig.PageSize : int.Parse(pageSize), pageIdx);
             ds.Tables.Add(ges.ToDataTableField("MainData"));

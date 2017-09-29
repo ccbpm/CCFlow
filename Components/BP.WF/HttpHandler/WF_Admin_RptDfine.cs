@@ -162,10 +162,7 @@ namespace BP.WF.HttpHandler
                 #endregion 处理特殊字段.
 
                 //增加上必要的字段.
-                if (attr.KeyOfEn == "Title" ||
-                    attr.KeyOfEn == "WorkID" ||
-                    attr.KeyOfEn == "OID" ||
-                    attr.KeyOfEn == "WFSta")
+                if (attr.KeyOfEn == "Title" || attr.KeyOfEn == "WorkID" || attr.KeyOfEn == "OID")
                 {
                     attr.FK_MapData = rptNo;
                     attr.MyPK = attr.FK_MapData + "_" + attr.KeyOfEn;
@@ -244,10 +241,10 @@ namespace BP.WF.HttpHandler
             string[] strs = orders.Split('@');
             foreach (string item in strs)
             {
-                if (string.IsNullOrEmpty(item)==true)
+                if (string.IsNullOrEmpty(item) == true)
                     continue;
 
-                string[] vals=item.Split(',');
+                string[] vals = item.Split(',');
 
                 string mypk = rptNo + "_" + vals[0];
 
@@ -257,8 +254,6 @@ namespace BP.WF.HttpHandler
 
                 attr.Name = vals[1];
                 attr.Idx = int.Parse(vals[2]);
-
-              
 
                 attr.Update(); //执行更新.
             }

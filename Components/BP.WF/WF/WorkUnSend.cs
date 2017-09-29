@@ -614,7 +614,7 @@ namespace BP.WF
                 {
                     switch (wnOfCancelTo.HisNode.HisFormType)
                     {
-                        case NodeFormType.FixForm:
+                        case NodeFormType.FoolForm:
                         case NodeFormType.FreeForm:
                             return "@撤消执行成功." + msg;
                             break;
@@ -630,7 +630,7 @@ namespace BP.WF
                 //  DBAccess.RunSQL("UPDATE WF_ForwardWork SET IsRead=1 WHERE WORKID=" + this.WorkID + " AND FK_Node=" + cancelToNode.NodeID);
                 switch (wnOfCancelTo.HisNode.HisFormType)
                 {
-                    case NodeFormType.FixForm:
+                    case NodeFormType.FoolForm:
                     case NodeFormType.FreeForm:
                         return "@撤消执行成功. " + msg;
                         break;

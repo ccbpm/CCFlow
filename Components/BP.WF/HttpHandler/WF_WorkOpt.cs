@@ -36,9 +36,16 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                Node nd = new Node(this.FK_Node);
+                int nodeID = this.FK_Node;
+                if (this.FK_Node == 0)
+                {
+                    GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                    nodeID = gwf.FK_Node;
+                }
+
+                Node nd = new Node(nodeID);
                 Work wk = nd.HisWork;
-                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID,this.FK_Flow,null);
+                return BP.WF.MakeForm2Html.MakeHtmlDocument(wk.NodeFrmID, this.WorkID, this.FK_Flow, null);
             }
             catch (Exception ex)
             {

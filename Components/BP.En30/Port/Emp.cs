@@ -329,12 +329,16 @@ namespace BP.Port
 
                 #region 字段
                 /* 关于字段属性的增加 .. */
-                map.IsEnableVer = true;
+                //map.IsEnableVer = true;
+
                 map.AddTBStringPK(EmpAttr.No, null, "编号", true, false, 1, 20, 30);
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 20, 10);
                 map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
                 map.AddTBString(EmpAttr.SID, null, "安全校验码", false, false, 0, 36, 36);
+
+                map.AddTBString("docs", null, "安全校33验码", false, false, 0, 4000, 36);
+
                 #endregion 字段
 
                 map.AddSearchAttr(EmpAttr.FK_Dept);

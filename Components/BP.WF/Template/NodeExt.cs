@@ -1251,7 +1251,7 @@ namespace BP.WF.Template
                     PubClass.WinOpen("../../Admin/FoolFormDesigner/CCForm/Frm.htm?FK_MapData=ND" + this.NodeID + "&FK_Flow=" + this.FK_Flow, "设计表单", "sheet", 1024, 768, 0, 0);
                     break;
                 default:
-                case NodeFormType.FixForm:
+                case NodeFormType.FoolForm:
                     PubClass.WinOpen("../../Admin/FoolFormDesigner/Designer.htm?PK=ND" + this.NodeID, "设计表单", "sheet", 800, 500, 210, 300);
                     break;
             }

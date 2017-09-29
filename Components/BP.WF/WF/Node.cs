@@ -843,7 +843,7 @@ namespace BP.WF
                 if (this.HisFormType == NodeFormType.ExcelForm)
                     return "Excel表单";
 
-                if (this.HisFormType == NodeFormType.FixForm)
+                if (this.HisFormType == NodeFormType.FoolForm)
                     return "傻瓜表单";
 
                 if (this.HisFormType == NodeFormType.FoolTruck)

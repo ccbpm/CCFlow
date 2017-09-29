@@ -407,7 +407,7 @@ namespace CCFlow.WF.UC
 
             // this.AddFieldSet("电子签名设置");
 
-            this.Add("<p align=center><img src='../DataUser/Siganture/" + WebUser.No + ".jpg' border=1 onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"/> </p>");
+            this.Add("<p align=center><img src='../DataUser/Siganture/" + WebUser.No + ".jpg' style='wdith:120px;height:30px;' border=1 onerror=\"this.src='../DataUser/Siganture/UnName.jpg'\"/> </p>");
 
             this.Add("上传");
 
@@ -447,22 +447,28 @@ namespace CCFlow.WF.UC
         void btn_Siganture_Click(object sender, EventArgs e)
         {
             FileUpload f = (FileUpload)this.FindControl("F");
-
             if (f.HasFile == false)
                 return;
 
+            //if (f.FileName.EndsW
+
+            //判断文件类型.
+            string fileExt = ",bpm,jpg,jpeg,png,gif,";
+            string ext = f.FileName.Substring(f.FileName.LastIndexOf('.')+1).ToLower();
+            if (fileExt.IndexOf(ext + ",") == -1)
+            {
+                Alert("err@上传的文件必须是以图片格式:" + fileExt + "类型, 现在类型是:" + ext);
+                return;
+            }
+
             try
             {
-                System.IO.File.Delete(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T.jpg");
+                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T" + WebUser.No + ".jpg";
+                if (System.IO.File.Exists(tempFile) == true)
+                    System.IO.File.Delete(tempFile);
 
-                f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T.jpg");
-                System.Drawing.Image img = System.Drawing.Image.FromFile(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T.jpg");
-                if (img.Width != 90 || img.Height != 30)
-                {
-                    img.Dispose();
-                    throw new Exception("您上传的图片不符合要求高度=30px 宽度=90px 的要求。");
-                }
-
+                f.SaveAs(tempFile);
+                System.Drawing.Image img = System.Drawing.Image.FromFile(tempFile);
                 img.Dispose();
             }
             catch (Exception ex)

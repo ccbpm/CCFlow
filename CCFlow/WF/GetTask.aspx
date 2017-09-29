@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_JumpCheck" Codebehind="GetTask.aspx.cs" %>
+﻿<%@ Page Title="取回审批" Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true" Inherits="CCFlow.WF.WF_JumpCheck" Codebehind="GetTask.aspx.cs" %>
 <%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 	<script language="JavaScript" src="./Comm/JScript.js"></script>

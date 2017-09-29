@@ -55,7 +55,7 @@ namespace CCFlow.WF
             
             int colspan = 10;
             this.Pub1.AddTable("width='100%'");
-            this.Pub1.AddCaptionMsg("取回审批");
+          //  this.Pub1.AddCaptionMsg("取回审批");
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("序");
             this.Pub1.AddTDTitle("标题");
@@ -148,7 +148,9 @@ namespace CCFlow.WF
             qo.DoQuery();
 
             this.Pub1.AddTable("width='100%' align=left");
-            this.Pub1.AddCaptionMsg("取回审批");
+            
+            //this.Pub1.AddCaptionMsg("取回审批");
+
             this.Pub1.AddTR();
             this.Pub1.AddTDTitle("序");
             this.Pub1.AddTDTitle("流程类别");

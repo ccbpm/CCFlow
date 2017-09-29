@@ -1429,7 +1429,7 @@ namespace BP.WF.Template
             GroupField gf = new GroupField();
             if (this.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
             {
-                gf.Delete(GroupFieldAttr.CtrlType, GroupCtrlType.FWC, GroupFieldAttr.EnName, "ND" + this.NodeID);
+                gf.Delete(GroupFieldAttr.EnName, "ND" + this.NodeID, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
             }
             else
             {
@@ -1437,9 +1437,8 @@ namespace BP.WF.Template
                 {
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
-                    gf.CtrlID = "FWC";
                     gf.CtrlType = GroupCtrlType.FWC;
-                    gf.Lab = "审核列表";
+                    gf.Lab = "审核信息";
                     gf.Idx = 0;
                     gf.Insert(); //插入.
                 }

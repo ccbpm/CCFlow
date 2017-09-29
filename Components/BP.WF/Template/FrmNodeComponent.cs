@@ -153,11 +153,11 @@ namespace BP.WF.Template
             fwc.Copy(this);
             if (fwc.HisFrmWorkCheckSta == FrmWorkCheckSta.Disable)
             {
-                gf.Delete(GroupFieldAttr.CtrlID, "FWC" + this.No);
+                gf.Delete(GroupFieldAttr.EnName, this.No, GroupFieldAttr.CtrlType, GroupCtrlType.FWC);
             }
             else
             {
-                if (gf.IsExit(GroupFieldAttr.CtrlID, "FWC" + this.No) == false)
+                if (gf.IsExit(GroupFieldAttr.EnName, this.No, GroupFieldAttr.CtrlType, GroupCtrlType.FWC) == false)
                 {
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;

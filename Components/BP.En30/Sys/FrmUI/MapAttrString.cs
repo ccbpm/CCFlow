@@ -14,6 +14,28 @@ namespace BP.Sys.FrmUI
     public class MapAttrString : EntityMyPK
     {
         #region 文本字段参数属性.
+        public bool IsSupperText
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapAttrAttr.IsSupperText);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.IsSupperText, value);
+            }
+        }
+        public bool IsRichText
+        {
+            get
+            {
+                return this.GetValBooleanByKey(MapAttrAttr.IsRichText);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.IsRichText, value);
+            }
+        }
         /// <summary>
         /// 表单ID
         /// </summary>
@@ -210,6 +232,13 @@ namespace BP.Sys.FrmUI
 
             attr.IsRichText = this.GetValBooleanByKey(MapAttrAttr.IsRichText); //是否是富文本？
             attr.IsSupperText = this.GetValBooleanByKey(MapAttrAttr.IsSupperText); //是否是大块文本？
+
+            if (attr.IsRichText || attr.IsSupperText)
+            {
+                attr.MaxLen = 4000;
+                this.SetValByKey(MapAttrAttr.MaxLen, 4000);
+            }
+
 
             //默认值.
             string defval = this.GetValStrByKey("ExtDefVal");

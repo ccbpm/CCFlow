@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -46,6 +47,66 @@ namespace BP.WF.HttpHandler
             throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
         }
         #endregion 执行父类的重写方法.
+
+        public string Default_Init()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("UserNo", WebUser.No);
+            ht.Add("UserName", WebUser.Name);
+
+            BP.Port.Emp emp = new Emp();
+            emp.No = WebUser.No;
+            emp.Retrieve();
+            
+            //部门名称.
+            ht.Add("DeptName", emp.FK_DeptText);
+
+            if (SystemConfig.OSModel == OSModel.OneMore)
+            {
+                BP.GPM.DeptEmpStations des = new BP.GPM.DeptEmpStations();
+                des.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Emp, WebUser.No);
+
+                string depts = "";
+                string stas = "";
+
+                foreach (BP.GPM.DeptEmpStation item in des)
+                {
+                    BP.Port.Dept dept = new Dept(item.FK_Dept);
+                    depts += dept.Name + "、";
+
+
+                    BP.Port.Station sta = new Station(item.FK_Station);
+                    stas += sta.Name + "、";
+                }
+
+                ht.Add("Depts", depts);
+                ht.Add("Stations", stas);
+            }
+
+            if (SystemConfig.OSModel == OSModel.OneOne)
+            {
+                BP.Port.EmpStations des = new BP.Port.EmpStations();
+                des.Retrieve(BP.GPM.DeptEmpStationAttr.FK_Emp, WebUser.No);
+
+                string depts = "";
+                string stas = "";
+
+                foreach (BP.Port.EmpStation item in des)
+                {
+                    BP.Port.Station sta = new Station(item.FK_Station);
+                    stas += sta.Name + "、";
+                }
+
+                ht.Add("Depts", emp.FK_DeptText);
+                ht.Add("Stations", stas);
+            }
+
+            BP.WF.Port.WFEmp wfemp = new Port.WFEmp(WebUser.No);
+            ht.Add("Tel", wfemp.Tel);
+            ht.Add("Email", wfemp.Email);
+
+            return BP.Tools.Json.ToJson(ht);
+        }
 
         #region 图片签名.
         public string Siganture_Init()

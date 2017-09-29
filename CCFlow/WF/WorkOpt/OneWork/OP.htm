@@ -18,6 +18,7 @@
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
 
+
         $(function () {
             $.ajax({
                 type: 'post',
@@ -35,7 +36,6 @@
                     html += addUnHungUp(data.CanUnHungUp);
 
                     html += addPackUp(data.CanPackUp);
-
 
 
                     $("#ccop").append(html);
@@ -165,7 +165,6 @@
         ///增加打印.
         function addPackUp(isCan) {
 
-
             if (typeof isCan == "undefined") {
                 return "";
             }
@@ -174,7 +173,11 @@
                 return "";
 
             var fk_node = GetQueryString("FK_Node");
+            if (fk_node == null)
+                  fk_node = GetQueryString("NodeID");
+
             var html = addBlockBegin("打印/打包下载");
+
             if (isCan) {
                 html += "功能执行:<a href='../Packup.htm?FileType=zip,pdf&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&NodeID=" + fk_node + "&FK_Node=" + fk_node + "' >执行打印</a>。";
                 html += "<br />说明：把表单输出到html,pdf,zip文件里，执行下载或打印.";

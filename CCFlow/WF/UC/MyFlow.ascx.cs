@@ -958,7 +958,7 @@ namespace CCFlow.WF.UC
             #region 处理分合流的退回信息.
             if (this.WorkID != 0)
             {
-                if ((this.currND.HisRunModel == RunModel.FL || this.currND.HisRunModel == RunModel.FHL) && this.currND.HisFormType != NodeFormType.FixForm)
+                if ((this.currND.HisRunModel == RunModel.FL || this.currND.HisRunModel == RunModel.FHL) && this.currND.HisFormType != NodeFormType.FoolForm)
                 {
                     if (gwf.WFState == WFState.ReturnSta)
                     {
@@ -1078,7 +1078,7 @@ namespace CCFlow.WF.UC
                 return;
             }
 
-            if (this.currND.HisFormType == NodeFormType.FixForm)
+            if (this.currND.HisFormType == NodeFormType.FoolForm)
             {
                 /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/
                 if (this.WorkID == 0)
@@ -1134,7 +1134,7 @@ namespace CCFlow.WF.UC
                 gwf.RetrieveFromDBSources();
 
                 #region 处理分合流的退回信息.
-                if ((this.currND.HisRunModel == RunModel.FL || this.currND.HisRunModel == RunModel.FHL) && this.currND.HisFormType != NodeFormType.FixForm)
+                if ((this.currND.HisRunModel == RunModel.FL || this.currND.HisRunModel == RunModel.FHL) && this.currND.HisFormType != NodeFormType.FoolForm)
                 {
                     if (gwf.WFState == WFState.ReturnSta)
                     {
@@ -1431,14 +1431,14 @@ namespace CCFlow.WF.UC
 
             NodeFormType ft = nd.HisFormType;
             if (BP.Web.WebUser.IsWap)
-                ft = NodeFormType.FixForm;
+                ft = NodeFormType.FoolForm;
 
             switch (nd.HisFormType)
             {
                 case NodeFormType.FreeForm:
                 case NodeFormType.DisableIt:
                 case NodeFormType.WebOffice:
-                case NodeFormType.FixForm:
+                case NodeFormType.FoolForm:
                     Frms frms = nd.HisFrms;
                     NodeFormType frmType = nd.HisFormType;
 
@@ -1446,7 +1446,7 @@ namespace CCFlow.WF.UC
                     {
                         BP.WF.Template.BtnLabExtWebOffice btn = new BtnLabExtWebOffice(this.FK_Node);
                         if (btn.WebOfficeFrmModel == FrmType.FoolForm)
-                            frmType = NodeFormType.FixForm;
+                            frmType = NodeFormType.FoolForm;
 
                         if (btn.WebOfficeFrmModel == FrmType.FreeFrm)
                             frmType = NodeFormType.FreeForm;
@@ -1498,7 +1498,7 @@ namespace CCFlow.WF.UC
                          
 
                     }
-                    else if (frmType == NodeFormType.FixForm)
+                    else if (frmType == NodeFormType.FoolForm)
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /*傻瓜表单*/
@@ -1536,7 +1536,7 @@ namespace CCFlow.WF.UC
                             fnNode.IsPrint = false;
                             switch (nd.HisFormType)
                             {
-                                case NodeFormType.FixForm:
+                                case NodeFormType.FoolForm:
                                     fnNode.HisFrmType = FrmType.FoolForm;
                                     break;
                                 case NodeFormType.FreeForm:
@@ -2066,7 +2066,7 @@ namespace CCFlow.WF.UC
                 {
                     case NodeFormType.SelfForm:
                         break;
-                    case NodeFormType.FixForm:
+                    case NodeFormType.FoolForm:
                     case NodeFormType.FreeForm:
                     case NodeFormType.WebOffice:
 

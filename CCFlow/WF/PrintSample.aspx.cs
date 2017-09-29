@@ -898,13 +898,13 @@ namespace CCFlow.WF
 
             NodeFormType ft = nd.HisFormType;
             if (BP.Web.WebUser.IsWap)
-                ft = NodeFormType.FixForm;
+                ft = NodeFormType.FoolForm;
 
             switch (nd.HisFormType)
             {
                 case NodeFormType.FreeForm:
                 case NodeFormType.DisableIt:
-                case NodeFormType.FixForm:
+                case NodeFormType.FoolForm:
                     Frms frms = nd.HisFrms;
                     if (frms.Count == 0 && nd.HisFormType == NodeFormType.FreeForm)
                     {
@@ -934,7 +934,7 @@ namespace CCFlow.WF
                         this.UCEn1.Add("</div>");
 
                     }
-                    else if (frms.Count == 0 && nd.HisFormType == NodeFormType.FixForm)
+                    else if (frms.Count == 0 && nd.HisFormType == NodeFormType.FoolForm)
                     {
                         /* 仅仅只有节点表单的情况。 */
                         /*傻瓜表单*/
@@ -973,7 +973,7 @@ namespace CCFlow.WF
                             fnNode.IsPrint = false;
                             switch (nd.HisFormType)
                             {
-                                case NodeFormType.FixForm:
+                                case NodeFormType.FoolForm:
                                     fnNode.HisFrmType = FrmType.FoolForm;
                                     break;
                                 case NodeFormType.FreeForm:
@@ -1468,7 +1468,7 @@ namespace CCFlow.WF
                 {
                     case NodeFormType.SelfForm:
                         break;
-                    case NodeFormType.FixForm:
+                    case NodeFormType.FoolForm:
                     case NodeFormType.FreeForm:
                         currWK = (Work)this.UCEn1.Copy(this.currWK);
 

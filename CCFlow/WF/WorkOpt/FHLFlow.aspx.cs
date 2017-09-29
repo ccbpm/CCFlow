@@ -89,7 +89,7 @@ namespace CCFlow.WF
             try
             {
                 //根据不同的表单类型展示不同的表单.
-                if (ndPri.HisFormType == NodeFormType.FixForm)
+                if (ndPri.HisFormType == NodeFormType.FoolForm)
                 {
                     this.UCEn1.BindColumn4(wnPri.HisWork, "ND" + wnPri.HisNode.NodeID);
                     this.UCEn1.Add(wnPri.HisWork.WorkEndInfo);

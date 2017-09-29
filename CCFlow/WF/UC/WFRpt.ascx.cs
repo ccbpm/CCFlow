@@ -178,6 +178,7 @@ namespace CCFlow.WF.UC
             wk.RetrieveFromDBSources();
             this.AddB(wk.EnDesc);
             this.ADDWork(wk, rws, this.FK_Node);
+
         }
         public void BindTrack_ViewSpecialWork()
         {
@@ -296,30 +297,14 @@ namespace CCFlow.WF.UC
             Frms frms = nd.HisFrms;
             if (frms.Count == 0)
             {
-                if (nd.HisFormType == NodeFormType.FreeForm)
+                if (nd.HisFormType == NodeFormType.FreeForm 
+                    || nd.HisFormType == NodeFormType.FoolForm)
                 {
                     string url = "./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
                     this.Response.Redirect(url, true);
                     return;
-
-                    MapData map = new MapData(nd.NodeFrmID);
-                    /* 自由表单 */
-                    Width = map.MaxRight + map.MaxLeft * 2 + 10 + "";
-                    if (float.Parse(Width) < 500)
-                        Width = "900";
-
-                    float height = map.MaxEnd +600 ;
-
-                    Height = height + "";
-
-                    BtnLab btnLab = new BtnLab(FK_Node);
-
-                 
-
-                    this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + Height + "px' >");
-                    this.UCEn1.BindCCForm(wk, nd.NodeFrmID, true, 0,false); //, false, false, null);
-                    this.UCEn1.Add("</div>");
                 }
+
 
                 if (nd.HisFormType == NodeFormType.WebOffice && nd.MapData.HisFrmType == FrmType.FreeFrm)
                 {
@@ -335,18 +320,16 @@ namespace CCFlow.WF.UC
 
                     BtnLab btnLab = new BtnLab(FK_Node);
 
-
-
                     this.UCEn1.Add("<div id=divCCForm style='width:" + Width + "px;height:" + Height + "px' >");
                     this.UCEn1.BindCCForm(wk, nd.NodeFrmID, true, 0, false); //, false, false, null);
                     this.UCEn1.Add("</div>");
                 }
 
-                if (nd.HisFormType == NodeFormType.FixForm || (nd.HisFormType == NodeFormType.WebOffice && nd.MapData.HisFrmType == FrmType.FoolForm))
+                if (nd.HisFormType == NodeFormType.FoolForm || (nd.HisFormType == NodeFormType.WebOffice && nd.MapData.HisFrmType == FrmType.FoolForm))
                 {
                     MapFrmFool map = new MapFrmFool(nd.NodeFrmID);
 
-                    this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight+ "px;overflow-x:scroll;' >");
+                    this.UCEn1.Add("<div id=divCCForm style='width:" + map.TableWidth + "px;height:" + map.TableHeight + "px;overflow-x:scroll;' >");
                     /*傻瓜表单*/
                     this.UCEn1.IsReadonly = true;
                     this.UCEn1.BindColumn4(wk, nd.NodeFrmID); //, false, false, null);
@@ -383,7 +366,8 @@ namespace CCFlow.WF.UC
                     Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?3=3"+this.RequestParas);
                     return;
                 }
-                else if (nd.HisFormType != NodeFormType.DisableIt)
+                
+                if (nd.HisFormType != NodeFormType.DisableIt)
                 {
                     Frm myfrm = new Frm();
                     myfrm.No = "ND" + nd.NodeID;
@@ -396,7 +380,7 @@ namespace CCFlow.WF.UC
                     fnNode.IsPrint = false;
                     switch (nd.HisFormType)
                     {
-                        case NodeFormType.FixForm:
+                        case NodeFormType.FoolForm:
                             fnNode.HisFrmType = FrmType.FoolForm;
                             break;
                         case NodeFormType.FreeForm:
@@ -411,6 +395,7 @@ namespace CCFlow.WF.UC
                     myfrm.HisFrmNode = fnNode;
                     frms.AddEntity(myfrm, 0);
                 }
+
                 if (frms.Count == 1)
                 {
                     /* 如果禁用了节点表单，并且只有一个表单的情况。*/
@@ -502,6 +487,7 @@ namespace CCFlow.WF.UC
         protected void Page_Load(object sender, EventArgs e)
         {
             this.Page.Title = "感谢您使用ccflow";
+
             if (this.DoType == "View")
             {
                 /*如果是查看一个工作的详细情况. */

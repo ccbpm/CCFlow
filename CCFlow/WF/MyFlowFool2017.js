@@ -530,7 +530,7 @@ function setFormEleDisabled() {
     $('#divCCForm input[type!=button]').attr('disabled', 'disabled');
 }
 
-function CheckMinMaxLength() {
+function CheckMinMaxLength( frmData ) {
 
     var editor = document.activeEditor,
         wordslen = editor.getContent().length,
@@ -570,8 +570,6 @@ function Save() {
         //alert("请检查表单必填项和正则表达式");
         return false;
     }
-  
-    
 
     setToobarDisiable();
 

@@ -174,7 +174,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                     this.UCEn1.Add("</div>");
                 }
 
-                if (nd.HisFormType == NodeFormType.FixForm)
+                if (nd.HisFormType == NodeFormType.FoolForm)
                 {
                     /*傻瓜表单*/
                     this.UCEn1.IsReadonly = true;
@@ -212,7 +212,7 @@ namespace CCFlow.WF.WorkOpt.OneWork
                     fnNode.IsPrint = false;
                     switch (nd.HisFormType)
                     {
-                        case NodeFormType.FixForm:
+                        case NodeFormType.FoolForm:
                             fnNode.HisFrmType = FrmType.FoolForm;
                             break;
                         case NodeFormType.FreeForm:

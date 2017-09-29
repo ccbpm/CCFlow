@@ -398,23 +398,23 @@
      
      <script type="text/javascript">
 
-         window.onbeforeunload = function close() {
-             temp = 0;
-             var n = window.event.screenX - window.screenLeft;
-             var b = n > document.documentElement.scrollWidth - 20;
-             if (b && window.event.clientY < 0 || window.event.altKey) {
-                 window.event.returnValue = "退出登录？"; //这里可以放置你想做的操作代码 
-                 temp = 1;
-             }
-         }
+//         window.onbeforeunload = function close() {
+//             temp = 0;
+//             var n = window.event.screenX - window.screenLeft;
+//             var b = n > document.documentElement.scrollWidth - 20;
+//             if (b && window.event.clientY < 0 || window.event.altKey) {
+//                 window.event.returnValue = "退出登录？"; //这里可以放置你想做的操作代码 
+//                 temp = 1;
+//             }
+//         }
          //让IE8 兼容 forEach
-         if (typeof Array.prototype.forEach != 'function') {
-             Array.prototype.forEach = function (callback) {
-                 for (var i = 0; i < this.length; i++) {
-                     callback.apply(this, [this[i], i, this]);
-                 }
-             };
-         }
+//         if (typeof Array.prototype.forEach != 'function') {
+//             Array.prototype.forEach = function (callback) {
+//                 for (var i = 0; i < this.length; i++) {
+//                     callback.apply(this, [this[i], i, this]);
+//                 }
+//             };
+//         }
 
     </script>
 </head>

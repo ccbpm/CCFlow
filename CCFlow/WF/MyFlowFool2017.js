@@ -550,6 +550,8 @@ function CheckMinMaxLength() {
 //保存
 function Save() {
 
+    //检查最小最大长度.
+    var f = CheckMinMaxLength();
     if (f == false)
         return false;
 
@@ -575,8 +577,6 @@ function Save() {
 
     //获得表单数据.
     var frmData = getFormData(true, true);
-    //检查最小最大长度.
-    var f = CheckMinMaxLength(frmData);
 
 
     $.ajax({
@@ -1144,6 +1144,11 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 }
 //发送
 function Send() {
+
+    //检查最小最大长度.
+    var f = CheckMinMaxLength();
+    if (f == false)
+        return false;
 
     //必填项和正则表达式检查.
     if (checkBlanks() == false) {

@@ -650,9 +650,31 @@ function setFormEleDisabled() {
     $('#divCCForm input[type!=button]').attr('disabled', 'disabled');
 }
 
+function CheckMinMaxLength() {
+
+    var editor = document.activeEditor,
+        wordslen = editor.getContent().length,
+        msg = "";
+    console.log(wordslen);
+    if (wordslen > editor.MaxLen || wordslen < editor.MinLen) {
+        msg += '@' + editor.BindFieldName + ' , 输入的值长度必须在:' + editor.MinLen + ', ' + editor.MaxLen + '之间. 现在输入是:' + wordslen;
+    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
 
 //保存
 function Save() {
+
+    //检查最小最大长度.
+    var f = CheckMinMaxLength();
+    if (f == false)
+        return false;
+
     //必填项和正则表达式检查
     var formCheckResult = true;
 
@@ -1234,6 +1256,11 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 }
 //发送
 function Send() {
+
+    //检查最小最大长度.
+    var f = CheckMinMaxLength();
+    if (f == false)
+        return false;
 
     //必填项和正则表达式检查.
     if (checkBlanks() == false) {
@@ -1924,10 +1951,14 @@ function GenerWorkNode() {
                             'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
                         });
                     } else {
-                        obj.editor = UM.getEditor(item.id,{
+                        document.activeEditor = obj.editor = UM.getEditor(item.id, {
                             'autoHeightEnabled': false,
                             'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
                         });
+                        document.activeEditor.MaxLen = item.MapAttr.MaxLen;
+                        document.activeEditor.MinLen = item.MapAttr.MinLen;
+                        document.activeEditor.BindField = item.MapAttr.KeyOfEn;
+                        document.activeEditor.BindFieldName = item.MapAttr.Name;
                     }
                     obj.attr = item.MapAttr;
                     window.UEs.push(obj);
@@ -1999,6 +2030,7 @@ function figure_MapAttr_Template(mapAttr) {
                                 }
                                 var editorPara = {};
                                 editorPara.id = "container" + document.UE_MapAttr.length;
+                                editorPara.MaxLen = mapAttr.MaxLen;
                                 editorPara.MapAttr = mapAttr;
                                 document.UE_MapAttr.push(editorPara);
 
@@ -2011,7 +2043,7 @@ function figure_MapAttr_Template(mapAttr) {
                                     //字段处于只读状态.注意这里 name 属性也是可以用来绑定字段名字的
                                     eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
                                 } else {
-                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'></script>"; 
+                                    eleHtml += "<script maxlen='" + mapAttr.MaxLen + "' id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'></script>"; 
                                 }
                             } else {
                                 eleHtml +=

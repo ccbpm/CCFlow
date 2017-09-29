@@ -1951,7 +1951,7 @@ namespace BP.WF
                 #endregion 对流程的设置做必要的检查.
 
                 //删除垃圾,非法数据.
-                string sqls = "DELETE FROM Sys_FrmSln where fk_mapdata not in (select no from sys_mapdata)";
+                string sqls = "DELETE FROM Sys_FrmSln WHERE fk_mapdata not in (select no from sys_mapdata)";
                 sqls += "@ DELETE FROM WF_Direction WHERE Node=ToNode";
                 DBAccess.RunSQLs(sqls);
 
@@ -1985,7 +1985,6 @@ namespace BP.WF
                 }
                 #endregion 检查是否是数据合并模式?
 
-
                 //单据模版.
                 BillTemplates bks = new BillTemplates(this.No);
 
@@ -2016,7 +2015,6 @@ namespace BP.WF
                     }
 
                     msg += "@信息:开始修复节点物理表.";
-                    DBAccess.RunSQL("UPDATE Sys_MapData SET Name='" + nd.Name + "' WHERE No='ND" + nd.NodeID + "'");
                     try
                     {
                         nd.HisWork.CheckPhysicsTable();

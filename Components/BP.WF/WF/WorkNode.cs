@@ -5027,7 +5027,7 @@ namespace BP.WF
         /// <summary>
         /// 如果是协作
         /// </summary>
-        public bool TeamupGroupLeader()
+        public bool DealTeamupGroupLeader()
         {
             GenerWorkerLists gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
@@ -5060,22 +5060,51 @@ namespace BP.WF
                         return false;
                 }
             }
+
+            if (this.HisNode.TeamLeaderConfirmRole == TeamLeaderConfirmRole.HuiQianLeader)
+            {
+                if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == true)
+                {
+                    /*当前人是组长，检查是否可以可以发送,检查自己是否是最后一个人 ？*/
+
+                    string todoEmps = ""; //记录没有处理的人.
+                    int num = 0;
+                    foreach (GenerWorkerList item in gwls)
+                    {
+                        if (item.IsPassInt == 0)
+                        {
+                            if (item.FK_Emp != WebUser.No)
+                                todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
+                            num++;
+                        }
+                    }
+
+                    if (num == 1)
+                    {
+                        this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                        return false; /*只有一个待办,说明自己就是最后的一个人.*/
+                    }
+
+                    this.addMsg(SendReturnMsgFlag.CondInfo, "当前工作未处理的人有: " + todoEmps + ",您不能执行发送.", null, SendReturnMsgType.Info);
+                    return true;
+                }
+            }
             #endregion
 
             //查看是否我是最后一个？
-            int num = 0;
-            string todoEmps = ""; //记录没有处理的人.
+            int mynum = 0;
+            string todoEmps1 = ""; //记录没有处理的人.
             foreach (GenerWorkerList item in gwls)
             {
                 if (item.IsPassInt == 0)
                 {
                     if (item.FK_Emp != WebUser.No)
-                        todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
-                    num++;
+                        todoEmps1 += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
+                    mynum++;
                 }
             }
 
-            if (num == 1)
+            if (mynum == 1)
             {
                 this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
@@ -5097,8 +5126,8 @@ namespace BP.WF
                     this.CheckCompleteCondition();
                 
                 //写入日志.
-                this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
-                this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
+                this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps1, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
+                this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps1 + " .", null, SendReturnMsgType.Info);
                 return true;
             }
 
@@ -5717,13 +5746,10 @@ namespace BP.WF
             if (this.TodolistModel == TodolistModel.TeamupGroupLeader)
             {
                 /* 如果是协作组长模式.*/
-                if (this.TeamupGroupLeader() == true)
+                if (this.DealTeamupGroupLeader() == true)
                 {
-                    //if (this._transferCustom != null)
-                    //    _transferCustom.Delete();
-
                     //执行时效考核.
-                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
+                    //Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                     return this.HisMsgObjs;
                 }
             }

@@ -926,15 +926,31 @@ namespace BP.WF.Template
         {
             string sql;
 
-            if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
-                sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept AND A.FK_Emp!=" + dbStr + "FK_Emp";
-            else
-                sql = "SELECT FK_Emp as No FROM Port_EmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Station=B.FK_Station AND A.FK_Emp=C.No AND B.FK_Node=" + dbStr + "FK_Node AND C.FK_Dept=" + dbStr + "FK_Dept AND A.FK_Emp!=" + dbStr + "FK_Emp";
             Paras ps = new Paras();
-            ps.SQL = sql;
-            ps.Add("FK_Node", town.HisNode.NodeID);
-            ps.Add("FK_Dept", deptNo);
-            ps.Add("FK_Emp", empNo);
+            if (this.town.HisNode.IsExpSender == true)
+            {
+                /* 不允许包含当前处理人. */
+                if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
+                    sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept AND A.FK_Emp!=" + dbStr + "FK_Emp";
+                else
+                    sql = "SELECT FK_Emp as No FROM Port_EmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Station=B.FK_Station AND A.FK_Emp=C.No AND B.FK_Node=" + dbStr + "FK_Node AND C.FK_Dept=" + dbStr + "FK_Dept AND A.FK_Emp!=" + dbStr + "FK_Emp";
+
+                ps.SQL = sql;
+                ps.Add("FK_Node", town.HisNode.NodeID);
+                ps.Add("FK_Dept", deptNo);
+                ps.Add("FK_Emp", empNo);
+            }
+            else
+            {
+                if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
+                    sql = "SELECT FK_Emp as No FROM Port_DeptEmpStation A, WF_NodeStation B WHERE A.FK_Station=B.FK_Station AND B.FK_Node=" + dbStr + "FK_Node AND A.FK_Dept=" + dbStr + "FK_Dept";
+                else
+                    sql = "SELECT FK_Emp as No FROM Port_EmpStation A, WF_NodeStation B, Port_Emp C WHERE A.FK_Station=B.FK_Station AND A.FK_Emp=C.No AND B.FK_Node=" + dbStr + "FK_Node AND C.FK_Dept=" + dbStr + "FK_Dept ";
+
+                ps.SQL = sql;
+                ps.Add("FK_Node", town.HisNode.NodeID);
+                ps.Add("FK_Dept", deptNo);
+            }
 
 
             DataTable dt = DBAccess.RunSQLReturnTable(ps);

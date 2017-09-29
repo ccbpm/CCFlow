@@ -84,12 +84,11 @@ namespace BP.WF.HttpHandler
             if (this.FK_MapData.IndexOf("ND") == 0)
             {
                 string nodeStr = this.FK_MapData.Replace("ND", "");
-
                 if (DataType.IsNumStr(nodeStr) == true)
                 {
                     FrmNodeComponent fnc = new FrmNodeComponent(int.Parse(nodeStr));
                     //   var f = fnc.GetValFloatByKey("FWC_H");
-                    ds.Tables.Add(aths.ToDataTableField("WF_Node"));
+                    ds.Tables.Add(fnc.ToDataTableField("WF_Node"));
                 }
             }
 

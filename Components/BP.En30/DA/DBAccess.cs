@@ -1960,16 +1960,40 @@ namespace BP.DA
             catch (System.Exception ex)
             {
                 conn.Close(); //把它关闭.
+
+
+                if (paras != null)
+                {
+                    foreach (Para item in paras)
+                    {
+                        if (item.DAType == DbType.String)
+                        {
+                            if (sql.Contains(":" + item.ParaName + ","))
+                                sql = sql.Replace(":" + item.ParaName + ",", "'" + item.val + "',");
+                            else
+                                sql = sql.Replace(":" + item.ParaName, "'" + item.val + "'");
+                        }
+                        else
+                        {
+                            if (sql.Contains(":" + item.ParaName + ","))
+                                sql = sql.Replace(":" + item.ParaName + ",", item.val + ",");
+                            else
+                                sql = sql.Replace(":" + item.ParaName, item.val.ToString());
+                        }
+                    }
+                }
+
                 if (BP.Sys.SystemConfig.IsDebug)
                 {
                     string msg = "RunSQL2   SQL=" + sql + ex.Message;
-                    Log.DebugWriteError(msg);
-                    throw new Exception(msg);
+                    //Log.DebugWriteError(msg);
+
+                    throw new Exception("err@" + ex.Message + " SQL=" + sql);
                 }
                 else
                 {
-                    Log.DebugWriteError(ex.Message);
-                    throw new Exception(ex.Message + sql);
+                    //    Log.DebugWriteError(ex.Message);
+                    throw new Exception(ex.Message + "@可以执行的SQL:" + sql);
                 }
             }
             finally

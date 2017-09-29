@@ -496,7 +496,11 @@ namespace BP.WF
         /// <summary>
         /// 按照SQL计算.
         /// </summary>
-        BySQL
+        BySQL,
+        /// <summary>
+        /// 会签时主持人计算
+        /// </summary>
+        HuiQianLeader
     }
     /// <summary>
     /// 普通工作节点处理模式

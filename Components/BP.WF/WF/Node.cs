@@ -541,7 +541,14 @@ namespace BP.WF
 
                 // 检查节点的位置属性。
                 nd.HisNodePosType = nd.GetHisNodePosType();
-                nd.DirectUpdate();
+                try
+                {
+                    nd.DirectUpdate();
+                }
+                catch(Exception ex)
+                {
+                    throw new Exception("err@" + ex.Message + " node=" + nd.Name);
+                }
             }
 
             // 处理岗位分组.
@@ -2309,6 +2316,9 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.DeliveryParas, value);
             }
         }
+        /// <summary>
+        /// 接受人员集合里,是否排除当前操作员?
+        /// </summary>
         public bool IsExpSender
         {
             get
@@ -2320,7 +2330,6 @@ namespace BP.WF
                 this.SetValByKey(NodeAttr.IsExpSender, value);
             }
         }
-
         /// <summary>
         /// 是不是PC工作节点
         /// </summary>
@@ -2434,18 +2443,18 @@ namespace BP.WF
                return this.GetValIntByKey(FrmWorkCheckAttr.FWCOrderModel);
             }
         }
-        public int FWC_H
+        public float FWC_H
         {
             get
             {
-                return this.GetValIntByKey(FrmWorkCheckAttr.FWC_H);
+                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_H);
             }
         }
-        public int FWC_W
+        public float FWC_W
         {
             get
             {
-                return this.GetValIntByKey(FrmWorkCheckAttr.FWC_W);
+                return this.GetValFloatByKey(FrmWorkCheckAttr.FWC_W);
             }
         }
         /// <summary>
@@ -2490,9 +2499,8 @@ namespace BP.WF
 
                 #region 审核组件.
                 map.AddTBInt(NodeAttr.FWCSta, 0, "审核组件", false, false);
-                map.AddTBInt(NodeAttr.FWC_H, 0, "审核组件高度", false, true);
+                map.AddTBFloat(NodeAttr.FWC_H, 0, "审核组件高度", false, true);
                 map.AddTBInt(FrmWorkCheckAttr.FWCOrderModel, 0, "协作模式下操作员显示顺序", false, false);
-
                 #endregion 审核组件.
 
                 #region 考核属性.
@@ -2917,9 +2925,8 @@ namespace BP.WF
                 this.CreateMap();
                 return "";
             }
-            //检查分组
-            md.RepairMap();
 
+            #region 增加节点必要的字段.
             BP.Sys.MapAttr attr = new BP.Sys.MapAttr();
             if (attr.IsExit(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, md.No) == false)
             {
@@ -2989,7 +2996,6 @@ namespace BP.WF
                 attr.Insert();
             }
 
-
             if (attr.IsExit(MapAttrAttr.KeyOfEn, WorkAttr.Rec, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
@@ -3011,7 +3017,6 @@ namespace BP.WF
                 attr.DefVal = "@WebUser.No";
                 attr.Insert();
             }
-
 
             if (attr.IsExit(MapAttrAttr.KeyOfEn, WorkAttr.Emps, MapAttrAttr.FK_MapData, md.No) == false)
             {
@@ -3097,48 +3102,6 @@ namespace BP.WF
                     attr.Insert();
                 }
 
-                //if (attr.IsExit(MapAttrAttr.KeyOfEn, "faqiren", MapAttrAttr.FK_MapData, md.No) == false)
-                //{
-                //    attr = new BP.Sys.MapAttr();
-                //    attr.FK_MapData = md.No;
-                //    attr.HisEditType = BP.En.EditType.Edit;
-                //    attr.KeyOfEn = "faqiren";
-                //    attr.Name = "发起人"; // "发起人";
-                //    attr.MyDataType = BP.DA.DataType.AppString;
-                //    attr.UIContralType = UIContralType.TB;
-                //    attr.LGType = FieldTypeS.Normal;
-                //    attr.UIVisible = true;
-                //    attr.UIIsEnable = false;
-                //    attr.UIIsLine = false;
-                //    attr.MinLen = 0;
-                //    attr.MaxLen = 200;
-                //    attr.Idx = -100;
-                //    attr.DefVal = "@WebUser.No";
-                //    attr.X = (float)159.2;
-                //    attr.Y = (float)102.8;
-                //    attr.Insert();
-                //}
-
-                //if (attr.IsExit(MapAttrAttr.KeyOfEn, "faqishijian", MapAttrAttr.FK_MapData, md.No) == false)
-                //{
-                //    attr = new BP.Sys.MapAttr();
-                //    attr.FK_MapData = md.No;
-                //    attr.HisEditType = BP.En.EditType.Edit;
-                //    attr.KeyOfEn = "faqishijian";
-                //    attr.Name = "发起时间"; //"发起时间";
-                //    attr.MyDataType = BP.DA.DataType.AppDateTime;
-                //    attr.UIContralType = UIContralType.TB;
-                //    attr.LGType = FieldTypeS.Normal;
-                //    attr.UIVisible = true;
-                //    attr.UIIsEnable = false;
-                //    attr.DefVal = "@RDT";
-                //    attr.Tag = "1";
-                //    attr.X = (float)324;
-                //    attr.Y = (float)102.8;
-                //    attr.Insert();
-                //}
-
-
                 if (attr.IsExit(MapAttrAttr.KeyOfEn, "FK_NY", MapAttrAttr.FK_MapData, md.No) == false)
                 {
                     attr = new BP.Sys.MapAttr();
@@ -3159,7 +3122,6 @@ namespace BP.WF
                     attr.Insert();
                 }
 
-
                 if (attr.IsExit(MapAttrAttr.KeyOfEn, "MyNum", MapAttrAttr.FK_MapData, md.No) == false)
                 {
                     attr = new BP.Sys.MapAttr();
@@ -3178,15 +3140,16 @@ namespace BP.WF
                     attr.Insert();
                 }
             }
+            #endregion 增加节点必要的字段.
+
+            //表单自检.
+            md.RepairMap();
+
             string msg = "";
             if (this.FocusField != "")
             {
                 if (attr.IsExit(MapAttrAttr.KeyOfEn, this.FocusField, MapAttrAttr.FK_MapData, md.No) == false)
-                {
                     msg += "@焦点字段 " + this.FocusField + " 被非法删除了.";
-                    //this.FocusField = "";
-                    //this.DirectUpdate();
-                }
             }
             return msg;
         }

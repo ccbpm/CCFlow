@@ -2265,7 +2265,7 @@ namespace BP.En
 
             Map map = en.EnMap;
             Paras ps = new Paras();
-            string err = "";
+            string errKey = "";
             try
             {
                 foreach (Attr attr in map.Attrs)
@@ -2281,6 +2281,9 @@ namespace BP.En
                                 continue;
                         }
                     }
+
+                    errKey = attr.Key;
+
                     switch (attr.MyDataType)
                     {
                         case DataType.AppString:
@@ -2342,7 +2345,9 @@ namespace BP.En
             }
             catch (Exception ex)
             {
-                throw new Exception("生成参数期间错误:" + err + "@截获信息:" + err + " 错误信息:" + ex.Message);
+                Attr attr = en.EnMap.GetAttrByKey(errKey);
+                errKey = "@attrKey=" + attr.Key + ",AttrVal=" + en.Row[attr.Key] + ",DataType=" + attr.MyDataTypeStr;
+                throw new Exception("生成参数期间错误:" + errKey + "@错误信息:" + ex.Message);
             }
 
             if (keys != null)

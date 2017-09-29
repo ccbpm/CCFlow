@@ -1162,16 +1162,19 @@ namespace BP.WF
         /// <returns></returns>
         public string DoFlowOver(ActionType at, string stopMsg, Node currNode, GERpt rpt)
         {
+
             if (null == currNode)
             {
                 return "err@当前节点为空..";
             }
 
-            //调用结束前事件.
-            this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverBefore, currNode, rpt, null);
-
             if (string.IsNullOrEmpty(stopMsg))
                 stopMsg += "流程结束";
+
+            //调用结束前事件.
+            string mymsg = this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverBefore, currNode, rpt, null);
+            if (mymsg != null)
+                stopMsg += "@" + mymsg;
 
             string exp = currNode.FocusField;
             if (string.IsNullOrEmpty(exp) == false && exp.Length > 1)
@@ -1180,11 +1183,10 @@ namespace BP.WF
                     stopMsg += Glo.DealExp(exp, rpt, null);
             }
 
-            string msg = "";
             if (this.IsMainFlow == false)
             {
                 /* 处理子流程完成*/
-                return this.DoFlowSubOver();
+                stopMsg += this.DoFlowSubOver();
             }
 
             #region 处理明细表的汇总.
@@ -1234,7 +1236,7 @@ namespace BP.WF
                 ps.Add("WorkID2", this.WorkID);
                 DBAccess.RunSQL(ps);
             }
-            
+
 
             // 删除子线程产生的 流程注册信息.
             if (this.FID == 0)
@@ -1253,14 +1255,14 @@ namespace BP.WF
             DBAccess.RunSQL(ps);
 
             //把当前的人员字符串加入到参与人里面去,以方便查询.
-            string emps = WebUser.Name+","+WebUser.No+"@";
+            string emps = WebUser.Name + "," + WebUser.No + "@";
 
             // 设置流程完成状态.
             ps = new Paras();
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET  FlowEmps= FlowEmps ||'"+emps+"', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
+                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET  FlowEmps= FlowEmps ||'" + emps + "', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
             else
-                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= FlowEmps + '"+emps+"', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
+                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= FlowEmps + '" + emps + "', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
 
             ps.Add("WFState", (int)WFState.Complete);
             ps.Add("WFSta", (int)WFSta.Complete);
@@ -1269,14 +1271,14 @@ namespace BP.WF
 
             //加入轨迹.
             WorkNode wn = new WorkNode(WorkID, this.HisGenerWorkFlow.FK_Node);
-            wn.AddToTrack(at, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name,stopMsg);
+            wn.AddToTrack(at, WebUser.No, WebUser.Name, wn.HisNode.NodeID, wn.HisNode.Name, stopMsg);
 
             //调用结束后事件.
-           msg+= this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverAfter, currNode, rpt, null);
+            stopMsg += this.HisFlow.DoFlowEventEntity(EventListOfNode.FlowOverAfter, currNode, rpt, null);
             #endregion 处理后续的业务.
 
             //执行最后一个子流程发送后的检查，不管是否成功，都要结束该流程。
-            msg += this.LetParentFlowAutoSendNextSetp();
+            stopMsg += this.LetParentFlowAutoSendNextSetp();
 
             //string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
@@ -1300,10 +1302,9 @@ namespace BP.WF
             gwf.WFState = WFState.Complete;
             gwf.Update();
 
-
             //if (string.IsNullOrEmpty(msg) == true)
             //    msg = "流程成功结束.";
-            return msg;
+            return stopMsg;
         }
         public string GenerFHStartWorkInfo()
         {

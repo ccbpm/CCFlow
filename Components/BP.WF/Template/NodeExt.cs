@@ -1352,7 +1352,9 @@ namespace BP.WF.Template
 
             //如果启动了会签,并且是抢办模式,强制设置为队列模式.
             if (this.GetValIntByKey(BtnAttr.HuiQianRole) != 0)
-                DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + this.GetValIntByKey(BtnAttr.HuiQianRole) + " WHERE NodeID=" + this.NodeID);
+            {
+                DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + this.GetValIntByKey(BtnAttr.HuiQianRole) + ", TeamLeaderConfirmRole=" + (int)TeamLeaderConfirmRole.HuiQianLeader + " WHERE NodeID=" + this.NodeID);
+            }
 
             //如果启用了在发送前打开, 当前节点的方向条件控制模式，是否是在下拉框边选择.?
             if (nd.CondModel != CondModel.SendButtonSileSelect)

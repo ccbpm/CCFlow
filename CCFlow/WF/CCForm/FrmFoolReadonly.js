@@ -1,4 +1,4 @@
-$(function () {
+﻿$(function () {
     SetHegiht();
     //打开表单检查正则表达式
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
@@ -104,7 +104,7 @@ function KindEditerSync() {
     catch (err) {
     }
 }
- 
+
 
 //20160106 by 柳辉
 //获取页面参数
@@ -482,7 +482,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人     
+            //发送选择接收节点和接收人      
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
@@ -530,42 +530,9 @@ function setFormEleDisabled() {
     $('#divCCForm input[type!=button]').attr('disabled', 'disabled');
 }
 
-function CheckMinMaxLength() {
-
-    var workNode = JSON.parse(jsonStr);
-    var mapAttrs = workNode.Sys_MapAttr;
-
-    var msg = "";
-    for (var i = 0; i < mapAttrs.length; i++) {
-
-        var attr = mapAttrs[i];
-
-        if (attr.AtPara != null && attr.AtPara.indexOf('@IsRichText=1') >= 0) {
-            var tb = document.getElementById('TB_' + attr.KeyOfEn);
-            if (tb == null || tb == undefined)
-                continue;
-
-            if (length > attr.MaxLen || length < attr.MinLen) {
-                msg += '@' + attr.Name + ' , 输入的值长度必须在:' + attr.MinLen + ', ' + attr.MaxLen + '之间. 现在输入是:' + length;
-            }
-        }
-    }
-
-    if (msg != "") {
-        alert(msg);
-        return false;
-    }
-    return true;
-}
 
 //保存
 function Save() {
-
-    //检查最小最大长度.
-    var f = CheckMinMaxLength();
-    if (f == false)
-        return false;
-
     //必填项和正则表达式检查
     var formCheckResult = true;
 
@@ -581,19 +548,13 @@ function Save() {
         //alert("请检查表单必填项和正则表达式");
         return false;
     }
-  
-    
 
     setToobarDisiable();
-
-    //获得表单数据.
-    var frmData = getFormData(true, true);
-
 
     $.ajax({
         type: 'post',
         async: true,
-        data: frmData,
+        data: getFormData(true, true),
         url: MyFlow + "?DoType=Save",
         dataType: 'html',
         success: function (data) {
@@ -708,7 +669,7 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
 //    }
 //}
 
- 
+
 
 //处理MapExt
 function AfterBindEn_DealMapExt() {
@@ -734,45 +695,45 @@ function AfterBindEn_DealMapExt() {
                     popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                 }
                 switch (popWorkModelStr) {
-                    /// <summary>    
-                    /// 自定义URL    
-                    /// </summary>    
-                    //SelfUrl =1,    
+                    /// <summary>     
+                    /// 自定义URL     
+                    /// </summary>     
+                    //SelfUrl =1,     
                     case "1":
                         icon = "glyphicon glyphicon-th";
                         break;
-                    /// <summary>    
-                    /// 表格模式    
-                    /// </summary>    
-                    // TableOnly,    
+                    /// <summary>     
+                    /// 表格模式     
+                    /// </summary>     
+                    // TableOnly,     
                     case "2":
                         icon = "glyphicon glyphicon-list";
                         break;
-                    /// <summary>    
-                    /// 表格分页模式    
-                    /// </summary>    
-                    //TablePage,    
+                    /// <summary>     
+                    /// 表格分页模式     
+                    /// </summary>     
+                    //TablePage,     
                     case "3":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>    
-                    /// 分组模式    
-                    /// </summary>    
-                    // Group,    
+                    /// <summary>     
+                    /// 分组模式     
+                    /// </summary>     
+                    // Group,     
                     case "4":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>    
-                    /// 树展现模式    
-                    /// </summary>    
-                    // Tree,    
+                    /// <summary>     
+                    /// 树展现模式     
+                    /// </summary>     
+                    // Tree,     
                     case "5":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
-                    /// <summary>    
-                    /// 双实体树    
-                    /// </summary>    
-                    // TreeDouble    
+                    /// <summary>     
+                    /// 双实体树     
+                    /// </summary>     
+                    // TreeDouble     
                     case "6":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
@@ -1082,20 +1043,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框  
+            //下拉框   
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
-            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val()); 
-            //对于复选下拉框获取值得方法 
-            //                if ($('[data-id=' + name + ']').length > 0) { 
-            //                    var val = $(disabledEle).val().join(','); 
-            //                    formArrResult.push(name + '=' + val); 
-            //                } else { 
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val()); 
-            //                } 
-            // break; 
-            //文本区域  
+            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());  
+            //对于复选下拉框获取值得方法  
+            //                if ($('[data-id=' + name + ']').length > 0) {  
+            //                    var val = $(disabledEle).val().join(',');  
+            //                    formArrResult.push(name + '=' + val);  
+            //                } else {  
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());  
+            //                }  
+            // break;  
+            //文本区域   
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -1702,7 +1663,7 @@ function GenerWorkNode() {
                 if (gf.CtrlType == 'FWC') {
 
                     html += "<tr>";
-                    html += "  <td colspan='4' >"; 
+                    html += "  <td colspan='4' >";
 
                     html += figure_Template_FigureFrmCheck(workNodeData.WF_Node[0]);
 
@@ -1905,8 +1866,8 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
             lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
 
-//        if (item.UIContralType == 2)
-//            lab = "<label for='CB_" + item.KeyOfEn + "' >" + item.Name + "</label>";
+        //        if (item.UIContralType == 2)
+        //            lab = "<label for='CB_" + item.KeyOfEn + "' >" + item.Name + "</label>";
 
         //线性展示并且colspan=3
         if (attr.ColSpan == 3) {
@@ -1967,7 +1928,7 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     //外键类型.
     if (mapAttr.LGType == 2) {
-     //   return "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+        //   return "<select data-val='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
     }
 
     //添加文本框 ，日期控件等
@@ -1975,7 +1936,7 @@ function InitMapAttrOfCtrl(mapAttr) {
     if (mapAttr.MyDataType == "1") {  //不是外键
 
         if (mapAttr.UIHeight <= 23) //普通的文本框.
-            return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:" + mapAttr.UIWidth + ";height:" + mapAttr.UIHeight + ";' type='text' " + (mapAttr.UIIsEnable==1 ? '' : ' disabled="disabled"') + " />";
+            return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:" + mapAttr.UIWidth + ";height:" + mapAttr.UIHeight + ";' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />";
 
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
 
@@ -2007,9 +1968,9 @@ function InitMapAttrOfCtrl(mapAttr) {
 
 
         //普通的大块文本.
-        return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable==1 ? '' : ' disabled="disabled"') + " />"
+        return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
     }
-     
+
     //日期类型.
     if (mapAttr.MyDataType == 6) {
         var enableAttr = '';
@@ -2088,8 +2049,8 @@ function InitMapAttrOfCtrl(mapAttr) {
     return;
 }
 
-var workNodeData = {}; 
-  
+var workNodeData = {};
+
 
 function ImgAth(url, athMyPK) {
     var v = window.showModalDialog(url, 'ddf', 'dialogHeight: 650px; dialogWidth: 950px;center: yes; help: no');
@@ -2166,7 +2127,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
     }
     src += "&r=q" + paras;
     var eleHtml = "<iframe width='100%' height='" + wf_node.FWC_H + "px' id='FFWC" + wf_node.NodeID + "' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
-    
+
 
     return eleHtml;
 }
@@ -2256,7 +2217,7 @@ function figure_Template_Dtl(frmDtl) {
     eleHtml.append(eleIframe);
     //added by liuxc,2017-1-10,此处前台JS中增加变量DtlsLoadedCount记录明细表的数量，用于加载完全部明细表的判断
     var js = "";
-    if (pageData.IsReadonly==false) {
+    if (pageData.IsReadonly == false) {
         js = "<script type='text/javascript' >";
         js += " function SaveDtl(dtl) { ";
         js += "   GenerPageKVs(); //调用产生kvs ";
@@ -2303,7 +2264,7 @@ function figure_Template_FigureFlowChart(wf_node) {
 
     return eleHtml;
 }
- 
+
 
 //子线程
 function figure_Template_FigureThreadDtl(wf_node) {

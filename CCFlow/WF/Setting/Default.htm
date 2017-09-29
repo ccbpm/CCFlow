@@ -1,28 +1,75 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>驰骋工作流程管理系统</title>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Default_Init&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    //调用公共类库的方法:执行批量主表赋值
+                    GenerFullAllCtrlsVal(data);
+
+                    //签名.
+                    $("QianMing").src = "../DataUser/Siganture/" + data.UserNo + ".jpg";
+
+                    return;
+                }
+            });
+        });
+    </script>
+    <base target="main" />
 </head>
 <body>
+
 <fieldset width='100%' >
-<legend>&nbsp;基本信息&nbsp;</legend>
-<p class=BigDoc >用户帐号:&nbsp;&nbsp;
-<font color=green>zhoupeng</font>&nbsp;&nbsp;
-<br>用户名:&nbsp;&nbsp;
-<font color=green>周朋</font>&nbsp;&nbsp;
-<HR><B>电子签字:<img src='../DataUser/Siganture/zhoupeng.jpg' border=1 onerror="this.src='../../DataUser/Siganture/UnName.jpg'"/><a href='Tools.aspx?RefNo=Siganture' >设置/修改</a>。
-</B><BR><HR>主部门 : <font color=green>驰骋软件</font><BR>
-<BR>授权情况：未授权 - <a href='Tools.aspx?RefNo=Auto' >执行授权</a>。
-&nbsp;我要:<a href='Tools.aspx?RefNo=Pass'>修改密码</a><BR>
-<hr><b>信息提示：</b><a href='Tools.aspx?RefNo=Profile'>设置/修改</a><br>
-<br>接受短消息提醒手机号 : <font color=green><a href="javascript:WinOpen('./Msg/SMS.aspx?Tel=82374939-611');"  >
-<img src='/WF/Img/SMS.gif' border=0/>82374939-611</a></font><br>
-<br>接受E-mail提醒 : <font color=green><a href='Mailto:zhoupeng@ccflow.org' >
-<img src='/WF/Img/SMS.gif' border=0/>zhoupeng@ccflow.org</a></font><HR>
-<B>岗位/部门-权限</B><BR><BR>岗位权限 - <font color=green>总经理</font>
-<BR><BR>部门权限 - <font color=green>驰骋软件</font>
+ <legend>&nbsp;基本信息&nbsp;</legend>
+  <p class=BigDoc >用户帐号:&nbsp;&nbsp;<font color=green><div id="UserNo" /></font>&nbsp;&nbsp;
+<br>用户名:&nbsp;&nbsp;<font color=green><div id="UserName" /></font>&nbsp;&nbsp;
+<HR>
+
+<B>电子签字:<img  id="QianMing" border=1 onerror="this.src='../../DataUser/Siganture/UnName.jpg'"/>
+<a href='Siganture.htm' >设置/修改</a>。
+</B><BR><HR>主部门 : <font color=green><div id="DeptName" /></font>
+<BR>
+<BR>授权情况：未授权 - <a href='Author.htm' >执行授权</a>。
+
+&nbsp;我要:<a href='ChangePassword.htm' >修改密码</a><BR>
+
+<hr><b>信息提示：</b><a href='Profile'>设置/修改</a><br>
+
+<br>接受短消息提醒手机号 : <font color=green> <div id="Tel" /></font><br>
+<br>接受E-mail提醒 : <font color=green> <div id="Email" /> </font><HR>
+
+<B>岗位/部门-权限</B><BR><BR>岗位权限 - <font color=green><div id="Stations" /></font>
+<BR><BR>部门权限 - <font color=green>驰<div id="Depts" />骋软件</font>
 </p>
+
 </fieldset>
+
 
 </body>
 </html>

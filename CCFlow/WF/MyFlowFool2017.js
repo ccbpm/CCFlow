@@ -530,19 +530,21 @@ function setFormEleDisabled() {
     $('#divCCForm input[type!=button]').attr('disabled', 'disabled');
 }
 
-function CheckMinMaxLength( frmData ) {
+function CheckMinMaxLength() {
 
-    var editor = document.activeEditor,
-        wordslen = editor.getContent().length,
-        msg = "";
-    console.log(wordslen);
-    if (wordslen > editor.MaxLen || wordslen < editor.MinLen) {
-        msg += '@' + editor.BindFieldName + ' , 输入的值长度必须在:' + editor.MinLen + ', ' + editor.MaxLen + '之间. 现在输入是:' + wordslen;
-    }
+    var editor = document.activeEditor;
+    if (editor) {
+        var wordslen = editor.getContent().length,
+            msg = "";
 
-    if (msg != "") {
-        alert(msg);
-        return false;
+        if (wordslen > editor.MaxLen || wordslen < editor.MinLen) {
+            msg += '@' + editor.BindFieldName + ' , 输入的值长度必须在:' + editor.MinLen + ', ' + editor.MaxLen + '之间. 现在输入是:' + wordslen;
+        }
+
+        if (msg != "") {
+            alert(msg);
+            return false;
+        }
     }
     return true;
 }

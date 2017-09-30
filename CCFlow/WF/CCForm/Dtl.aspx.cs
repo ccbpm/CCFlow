@@ -921,7 +921,7 @@ namespace CCFlow.WF.CCForm
                                             {
                                                 //   ddl1.Attributes["onchange"] = "SetChange(true);";
                                                 EntitiesNoName ens = attr.HisEntitiesNoName;
-                                                ens.RetrieveAll();
+                                                //ens.RetrieveAll();    //在attr.HisEntitiesNoName属性中，就已经获取了集合的数据，此处不需要再次获取，而且，如果是DDL中的动态SQL查询类型，此处使用RetrieveAll获取数据，会将上面已经获取的数据都清空掉，added by liuxc,2017-9-30
                                                 ddl1.BindEntities(ens);
 
                                                 //如果没有选择到数据，就让其出现请选择Item.
@@ -940,8 +940,30 @@ namespace CCFlow.WF.CCForm
                                             }
                                             else
                                             {
-                                                ddl1.Items.Add(new ListItem(dtl.GetValRefTextByKey(attr.KeyOfEn),
-                                                    dtl.GetValStrByKey(attr.KeyOfEn)));
+                                                val = dtl.GetValStrByKey(attr.KeyOfEn);
+                                                string text = dtl.GetValRefTextByKey(attr.KeyOfEn);
+
+                                                if (string.IsNullOrEmpty(text) && string.IsNullOrEmpty(val) == false)
+                                                {
+                                                    EntitiesNoName ens = attr.HisEntitiesNoName;
+                                                    EntityNoName enn = ens.GetEntityByKey(val) as EntityNoName;
+
+                                                    if (enn != null)
+                                                    {
+                                                        text = enn.Name;
+                                                    }
+                                                    else
+                                                    {
+                                                        Entity myen = ens.GetNewEntity;
+                                                        myen.PKVal = val;
+                                                        if (myen.RetrieveFromDBSources() != 0)
+                                                            text = myen.GetValStringByKey("Name");
+                                                        else
+                                                            text = val;
+                                                    }
+                                                }
+
+                                                ddl1.Items.Add(new ListItem(text, val));
                                             }
                                             ddl1.Enabled = attr.UIIsEnable;
                                             this.Pub1.AddTDCenter(ddl1);
@@ -1352,7 +1374,7 @@ namespace CCFlow.WF.CCForm
                                                 if (mydt == null)
                                                 {
                                                     EntitiesNoName ens = attr.HisEntitiesNoName;
-                                                    ens.RetrieveAll();
+                                                    //ens.RetrieveAll();
                                                     mydt = ens.ToDataTableField();
                                                     HTTemp[attr.KeyOfEn] = mydt;
                                                 }
@@ -1372,9 +1394,31 @@ namespace CCFlow.WF.CCForm
                                         }
                                         else
                                         {
+                                            val = dtl.GetValStrByKey(attr.KeyOfEn);
+                                            string text = dtl.GetValRefTextByKey(attr.KeyOfEn);
+
+                                            if (string.IsNullOrEmpty(text) && string.IsNullOrEmpty(val) == false)
+                                            {
+                                                EntitiesNoName ens = attr.HisEntitiesNoName;
+                                                EntityNoName enn = ens.GetEntityByKey(val) as EntityNoName;
+
+                                                if (enn != null)
+                                                {
+                                                    text = enn.Name;
+                                                }
+                                                else
+                                                {
+                                                    Entity myen = ens.GetNewEntity;
+                                                    myen.PKVal = val;
+                                                    if (myen.RetrieveFromDBSources() != 0)
+                                                        text = myen.GetValStringByKey("Name");
+                                                    else
+                                                        text = val;
+                                                }
+                                            }
+
+                                            ddl1.Items.Add(new ListItem(text, val));
                                             ddl1.Enabled = false;
-                                            ddl1.Items.Add(new ListItem(dtl.GetValRefTextByKey(attr.KeyOfEn),
-                                                dtl.GetValStrByKey(attr.KeyOfEn)));
                                         }
                                         this.Pub1.AddTDCenter(ddl1);
                                         break;

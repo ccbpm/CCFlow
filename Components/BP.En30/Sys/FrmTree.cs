@@ -6,12 +6,12 @@ using BP.En;
 using BP.Port;
 using BP.Sys;
 
-namespace BP.WF.Template
+namespace BP.Sys
 {
     /// <summary>
     /// 属性
     /// </summary>
-    public class SysFormTreeAttr : EntityTreeAttr
+    public class FrmTreeAttr : EntityTreeAttr
     {
         /// <summary>
         /// 数据源
@@ -25,7 +25,7 @@ namespace BP.WF.Template
     /// <summary>
     ///  独立表单树
     /// </summary>
-    public class SysFormTree : EntitySimpleTree
+    public class FrmTree : EntitySimpleTree
     {
         #region 属性.
         /// <summary>
@@ -35,11 +35,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValBooleanByKey(SysFormTreeAttr.IsDir);
+                return this.GetValBooleanByKey(FrmTreeAttr.IsDir);
             }
             set
             {
-                this.SetValByKey(SysFormTreeAttr.IsDir, value);
+                this.SetValByKey(FrmTreeAttr.IsDir, value);
             }
         }
         /// <summary>
@@ -49,11 +49,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValIntByKey(SysFormTreeAttr.Idx);
+                return this.GetValIntByKey(FrmTreeAttr.Idx);
             }
             set
             {
-                this.SetValByKey(SysFormTreeAttr.Idx, value);
+                this.SetValByKey(FrmTreeAttr.Idx, value);
             }
         }
         /// <summary>
@@ -63,11 +63,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetValStringByKey(SysFormTreeAttr.ParentNo);
+                return this.GetValStringByKey(FrmTreeAttr.ParentNo);
             }
             set
             {
-                this.SetValByKey(SysFormTreeAttr.ParentNo, value);
+                this.SetValByKey(FrmTreeAttr.ParentNo, value);
             }
         }
         #endregion 属性.
@@ -76,14 +76,14 @@ namespace BP.WF.Template
         /// <summary>
         /// 独立表单树
         /// </summary>
-        public SysFormTree()
+        public FrmTree()
         {
         }
         /// <summary>
         /// 独立表单树
         /// </summary>
         /// <param name="_No"></param>
-        public SysFormTree(string _No) : base(_No) { }
+        public FrmTree(string _No) : base(_No) { }
         #endregion
 
         #region 系统方法.
@@ -98,17 +98,18 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("Sys_FormTree", "表单树");
+
                 map.Java_SetCodeStruct("2");
 
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
                 map.Java_SetDepositaryOfMap( Depositary.Application);
 
-                map.AddTBStringPK(SysFormTreeAttr.No, null, "编号", true, true, 1, 10, 20);
-                map.AddTBString(SysFormTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
-                map.AddTBString(SysFormTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
+                map.AddTBStringPK(FrmTreeAttr.No, null, "编号", true, true, 1, 10, 20);
+                map.AddTBString(FrmTreeAttr.Name, null, "名称", true, false, 0, 100, 30);
+                map.AddTBString(FrmTreeAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
 
-                map.AddTBInt(SysFormTreeAttr.IsDir, 0, "是否是目录?", false, false);
-                map.AddTBInt(SysFormTreeAttr.Idx, 0, "Idx", false, false);
+                map.AddTBInt(FrmTreeAttr.IsDir, 0, "是否是目录?", false, false);
+                map.AddTBInt(FrmTreeAttr.Idx, 0, "Idx", false, false);
 
                 this._enMap = map;
                 return this._enMap;
@@ -128,9 +129,9 @@ namespace BP.WF.Template
         /// <param name="parentNo"></param>
         private void DeleteChild(string parentNo)
         {
-            SysFormTrees formTrees = new SysFormTrees();
-            formTrees.RetrieveByAttr(SysFormTreeAttr.ParentNo, parentNo);
-            foreach (SysFormTree item in formTrees)
+            FrmTrees formTrees = new FrmTrees();
+            formTrees.RetrieveByAttr(FrmTreeAttr.ParentNo, parentNo);
+            foreach (FrmTree item in formTrees)
             {
                 MapData md = new MapData();
                 md.FK_FormTree = item.No;
@@ -138,18 +139,18 @@ namespace BP.WF.Template
                 DeleteChild(item.No);
             }
         }
-        public SysFormTree DoCreateSameLevelNode()
+        public FrmTree DoCreateSameLevelNode()
         {
-            SysFormTree en = new SysFormTree();
+            FrmTree en = new FrmTree();
             en.Copy(this);
             en.No = BP.DA.DBAccess.GenerOID().ToString();
             en.Name = "新建节点";
             en.Insert();
             return en;
         }
-        public SysFormTree DoCreateSubNode()
+        public FrmTree DoCreateSubNode()
         {
-            SysFormTree en = new SysFormTree();
+            FrmTree en = new FrmTree();
             en.Copy(this);
             en.No = BP.DA.DBAccess.GenerOID().ToString();
             en.ParentNo = this.No;
@@ -159,22 +160,22 @@ namespace BP.WF.Template
         }
         public void DoUp()
         {
-            this.DoOrderUp(SysFormTreeAttr.ParentNo, this.ParentNo, SysFormTreeAttr.Idx);
+            this.DoOrderUp(FrmTreeAttr.ParentNo, this.ParentNo, FrmTreeAttr.Idx);
         }
         public void DoDown()
         {
-            this.DoOrderDown(SysFormTreeAttr.ParentNo, this.ParentNo, SysFormTreeAttr.Idx);
+            this.DoOrderDown(FrmTreeAttr.ParentNo, this.ParentNo, FrmTreeAttr.Idx);
         }
     }
     /// <summary>
     /// 独立表单树
     /// </summary>
-    public class SysFormTrees : EntitiesSimpleTree
+    public class FrmTrees : EntitiesSimpleTree
     {
         /// <summary>
         /// 独立表单树s
         /// </summary>
-        public SysFormTrees() { }
+        public FrmTrees() { }
         /// <summary>
         /// 得到它的 Entity 
         /// </summary>
@@ -182,7 +183,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return new SysFormTree();
+                return new FrmTree();
             }
 
         }
@@ -191,12 +192,12 @@ namespace BP.WF.Template
             int i = base.RetrieveAll();
             if (i == 0)
             {
-                SysFormTree fs = new SysFormTree();
+                FrmTree fs = new FrmTree();
                 fs.Name = "公文类";
                 fs.No = "01";
                 fs.Insert();
 
-                fs = new SysFormTree();
+                fs = new FrmTree();
                 fs.Name = "办公类";
                 fs.No = "02";
                 fs.Insert();
@@ -210,20 +211,20 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<SysFormTree> ToJavaList()
+        public System.Collections.Generic.IList<FrmTree> ToJavaList()
         {
-            return (System.Collections.Generic.IList<SysFormTree>)this;
+            return (System.Collections.Generic.IList<FrmTree>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<SysFormTree> Tolist()
+        public System.Collections.Generic.List<FrmTree> Tolist()
         {
-            System.Collections.Generic.List<SysFormTree> list = new System.Collections.Generic.List<SysFormTree>();
+            System.Collections.Generic.List<FrmTree> list = new System.Collections.Generic.List<FrmTree>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((SysFormTree)this[i]);
+                list.Add((FrmTree)this[i]);
             }
             return list;
         }

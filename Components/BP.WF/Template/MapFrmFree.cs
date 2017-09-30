@@ -375,8 +375,8 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
                 rm.Icon = "../../WF/Img/ReName.png";
+                rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Title = "重命表单ID";
@@ -385,6 +385,20 @@ namespace BP.WF.Template
                 rm.HisAttrs.AddTBString("NewFrmID2", null, "确认表单ID名称", true, false, 0, 100, 100);
                 rm.ClassMethodName = this.ToString() + ".DoChangeFrmID";
                 rm.Icon = "../../WF/Img/ReName.png";
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "复制表单";
+                //  rm.GroupName = "高级设置";
+                rm.HisAttrs.AddTBString("FrmID", null, "要复制新表单ID", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FrmName", null, "表单名称", true, false, 0, 100, 100);
+                rm.HisAttrs.AddDDLEntities("FrmTree", null, "复制到表单目录", new FrmTrees(),true);
+
+                rm.ClassMethodName = this.ToString() + ".DoCopyFrm";
+                rm.Icon = "../../WF/Img/Btn/Copy.GIF";
+                rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
 
 
@@ -440,6 +454,15 @@ namespace BP.WF.Template
         public string DoTabIdx()
         {
             return SystemConfig.CCFlowWebPath +"WF/Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
+        }
+
+        /// <summary>
+        /// 复制表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoCopyFrm(string frmID, string frmName, string fk_frmTree)
+        {
+            return BP.Sys.CCFormAPI.CopyFrm(this.No, frmID, frmName, fk_frmTree);
         }
 
         #region 节点表单方法.

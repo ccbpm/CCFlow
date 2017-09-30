@@ -23,6 +23,10 @@ namespace BP.Sys
         /// </summary>
         public const string FK_MapData = "FK_MapData";
         /// <summary>
+        /// 别名
+        /// </summary>
+        public const string Alias = "Alias";
+        /// <summary>
         /// PTable
         /// </summary>
         public const string PTable = "PTable";
@@ -1239,12 +1243,14 @@ namespace BP.Sys
             {
                 if (this._enMap != null)
                     return this._enMap;
+
                 Map map = new Map("Sys_MapDtl", "明细");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "描述", true, false, 1, 200, 20);
+                map.AddTBString(MapDtlAttr.Alias, null, "别名", true, false, 1, 200, 20);
                 map.AddTBString(MapDtlAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);
                 map.AddTBString(MapDtlAttr.PTable, null, "物理表", true, false, 0, 200, 20);
                 map.AddTBString(MapDtlAttr.GroupField, null, "分组字段", true, false, 0, 300, 20);

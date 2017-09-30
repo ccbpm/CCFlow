@@ -422,24 +422,18 @@
 <body  >
     <div id="divCurrentForm" style="position: relative;">
         <!--底部功能按钮 发送、移交-->
-        <div id="topToolBar" style="padding: 3px 3px; margin: 0px auto; text-align: left;"
-            class="Bar">
-        </div>
+        <div id="topToolBar" style="padding: 3px 3px; margin: 0px auto; text-align: left;" class="Bar"></div>
         <!--上半部分表单-->
         <div id="topContentDiv" class="row" style="padding: 20px 5px; margin: 0px auto;">
             <i class="topContentDiv-i" style="display: none;"></i>
             <div id="contentDiv">
                 <form id="divCCForm" method="post">
-               
                 <!--头部功能按钮 发送、移交-->
-                <div class="topBar" id="topBar">
-                </div>
+                <div class="topBar" id="topBar"></div>
                 <!--flowInfo-->
-                <div class="flowInfo" id="flowInfo">
-                </div>
+                <div class="flowInfo" id="flowInfo"></div>
                 <!--childThread-->
-                <div class="childThread" id='childThread'>
-                </div>
+                <div class="childThread" id='childThread'></div>
                 <!--主表单-->
                 <div id="CCForm">
                     <br />
@@ -460,8 +454,7 @@
             </div>
         </div>
         <!--底部功能按钮 发送、移交-->
-        <div id="bottomToolBar" style="display: none; height: 50px; width: 100%; background: rgb(157, 159, 175);
-            padding-top: 5px;" class="Bar">
+        <div id="bottomToolBar" style="display: none; height: 50px; width: 100%; background: rgb(157, 159, 175);padding-top: 5px;" class="Bar">
         </div>
     </div>
     <!--杨玉慧加 暂时解决POP窗不好用的问题-->
@@ -469,20 +462,14 @@
         <div class="modal-dialog" style="margin-left: auto; margin-right: auto;">
             <div class="modal-content" style="border-radius: 0px;">
                 <div class="modal-header">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;
-                        border: none; float: right;">
-                        ×</button>
-                    <h4 class="modal-title">
-                        选择提出人</h4>
+                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;border: none; float: right;">×</button>
+                    <h4 class="modal-title">选择提出人</h4>
                 </div>
                 <div class="modal-body">
-                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframePopModalForm"
-                        name="iframePopModalForm"></iframe>
+                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframePopModalForm" name="iframePopModalForm"></iframe>
                     <div style="text-align: right;">
-                        <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">
-                            取消</button>
-                        <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">
-                            确定</button>
+                        <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">取消</button>
+                        <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">确定</button>
                     </div>
                 </div>
             </div>
@@ -492,26 +479,21 @@
     </div>
     <!-- /.modal -->
     <!--下拉框选项提示信息-->
-    <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px;
-        left: 304.98961639404297px; display: none;">
-        <div class="arrow" style="left: 50.22522522522522%;">
-        </div>
+    <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px;left: 304.98961639404297px; display: none;">
+        <div class="arrow" style="left: 50.22522522522522%;"></div>
         <h3 class="popover-title">
-            <span>title</span><span style="color: white; opacity: 1; float: right; cursor: pointer;"
-                id="span_CloseNoticeInfo">×</span></h3>
-        <div class="popover-content">
-            顶部的 Popover 中的一些内容</div>
+            <span>title</span>
+            <span style="color: white; opacity: 1; float: right; cursor: pointer;" id="span_CloseNoticeInfo">×</span>
+        </h3>
+        <div class="popover-content">顶部的 Popover 中的一些内容</div>
     </div>
     <!--杨玉慧加  附件弹出窗口-->
     <div class="modal fade" id="athModal">
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 0px;">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color: white;
-                        opacity: 1; display: none;">
-                        ×</button>
-                    <h4 class="modal-title">
-                        选择附件</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color: white;opacity: 1; display: none;">×</button>
+                    <h4 class="modal-title">选择附件</h4>
                 </div>
                 <div class="modal-body">
                     <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeAthForm" name="iframeAthForm">
@@ -533,18 +515,13 @@
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 0px;">
                 <div class="modal-header">
-                    <button type="button" class="close" id="btnMsgModalOK1" aria-hidden="true" style="color: white;
-                        opacity: 1; display: none;">
-                        ×</button>
-                    <h4 class="modal-title">
-                        提示信息</h4>
+                    <button type="button" class="close" id="btnMsgModalOK1" aria-hidden="true" style="color: white;opacity: 1; display: none;">×</button>
+                    <h4 class="modal-title">提示信息</h4>
                 </div>
                 <div class="modal-body" style="text-align: center; word-wrap: break-word;">
-                    <div style="width: 100%; border: 0px; height: 400px;" id="msgModalContent" name="iframePopModalForm">
-                    </div>
+                    <div style="width: 100%; border: 0px; height: 400px;" id="msgModalContent" name="iframePopModalForm"></div>
                     <div style="text-align: right;">
-                        <button type="button" id="btnMsgModalOK" class="btn" data-dismiss="modal">
-                            确定</button>
+                        <button type="button" id="btnMsgModalOK" class="btn" data-dismiss="modal">确定</button>
                     </div>
                 </div>
             </div>
@@ -569,15 +546,13 @@
                     <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;
                         border: none; float: right;">
                         ×</button>
-                    <h4 class="modal-title">
-                        错误提示</h4>
+                    <h4 class="modal-title">错误提示</h4>
                 </div>
                 <div class="modal-body">
                     <div id='Message'>
                     </div>
                     <div style="text-align: right;">
-                        <button type="button" class="btn" data-dismiss="modal">
-                            确定</button>
+                        <button type="button" class="btn" data-dismiss="modal">确定</button>
                     </div>
                 </div>
             </div>

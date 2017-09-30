@@ -1636,10 +1636,14 @@ function GenerWorkNode() {
             document.title = '您好:' + flow_Data.WF_Node[0].Name;
 
             var Sys_GroupFields = workNodeData.Sys_GroupField;
+            //初始化Sys_MapData
+            var h = flow_Data.Sys_MapData[0].FrmH;
+            var w = flow_Data.Sys_MapData[0].FrmW;
 
             $('#CCForm').html('');
 
-            var html = "<table style='width:100%;' >";
+            var tableWidth = w - 40;
+            var html = "<table style='width:" + tableWidth + "px;' >";
 
             var frmName = workNodeData.Sys_MapData[0].Name;
 
@@ -1647,7 +1651,6 @@ function GenerWorkNode() {
             html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none' ><h4><b>" + frmName + "</b></h4></div></td>";
           //  html += "<td colspan=2 ></td>";
             html += "</tr>";
-
             //遍历循环生成 listview
             for (var i = 0; i < Sys_GroupFields.length; i++) {
 
@@ -1658,7 +1661,6 @@ function GenerWorkNode() {
 
                 //从表..
                 if (gf.CtrlType == 'Dtl') {
-
                     var dtls = workNodeData.Sys_MapDtl;
 
                     for (var k = 0; k < dtls.length; k++) {
@@ -1746,11 +1748,6 @@ function GenerWorkNode() {
             // $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_FrmNodeComponent"][0]));
             // $('#CCForm').append(figure_Template_FigureSubFlowDtl(flow_Data["WF_FrmNodeComponent"][0]));
             // $('#CCForm').append(figure_Template_FigureThreadDtl(flow_Data["WF_FrmNodeComponent"][0]));
-
-
-            //初始化Sys_MapData
-            var h = flow_Data.Sys_MapData[0].FrmH;
-            var w = flow_Data.Sys_MapData[0].FrmW;
 
             // $('#topContentDiv').height(h);
             $('#topContentDiv').width(w);
@@ -1912,7 +1909,7 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
         if (attr.ColSpan == 3) {
             isDropTR = true;
             html += "<tr>";
-            html += "<td  class='FDesc'  >" + lab + "</td>";
+            html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
             html += "<td ColSpan=3>";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
@@ -1924,7 +1921,7 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
         if (attr.ColSpan == 4) {
             isDropTR = true;
             html += "<tr>";
-            html += "<td ColSpan=4 style='width:100%' >" + lab + "</br>";
+            html += "<td ColSpan='4'>" + lab + "</br>";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
             html += "</tr>";
@@ -1933,7 +1930,7 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
 
         if (isDropTR == true) {
             html += "<tr>";
-            html += "<td class='FDesc' style='width:80px;' >" + lab + "</td>";
+            html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
             html += "<td class='FContext'  >";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
@@ -1942,11 +1939,11 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
         }
 
         if (isDropTR == false) {
-            html += "<td  class='FDesc'>" + lab + "</td>";
-            html += "<td class='FContext'  >";
+            html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+            html += "<td class='FContext'>";
             html += InitMapAttrOfCtrl(attr, enable, defval);
             html += "</td>";
-            html += "<tr>";
+            html += "</tr>";
             isDropTR = !isDropTR;
             continue;
         }

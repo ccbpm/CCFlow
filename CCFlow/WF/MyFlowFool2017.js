@@ -547,6 +547,7 @@ function CheckMinMaxLength() {
         }
     }
     return true;
+
 }
 
 //保存
@@ -1643,7 +1644,8 @@ function GenerWorkNode() {
             var frmName = workNodeData.Sys_MapData[0].Name;
 
             html += "<tr>";
-            html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div> <div  style='float:right;padding-right:10px;'  ><br><h4><b>" + frmName + "</b></h4></div></td>";
+            html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none' ><h4><b>" + frmName + "</b></h4></div></td>";
+          //  html += "<td colspan=2 ></td>";
             html += "</tr>";
 
             //遍历循环生成 listview

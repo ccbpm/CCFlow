@@ -1016,7 +1016,7 @@ text-align:right;
 font-size:14px;display: none;height:90%;overflow:auto;
 }
 body table {
-  table-layout: fixed;
+  
   /*width: 98% border:0px;
                         margin: 0px;*/
 }
@@ -1051,11 +1051,6 @@ select {
 
 
 /*让表格显示 ...*/
-body table {
-  table-layout: fixed;
-  /*width: 98% border:0px;
-                        margin: 0px;*/
-}
 body table tr td {
   text-overflow: ellipsis;
   /* for IE */

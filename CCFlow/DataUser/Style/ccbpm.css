@@ -1015,9 +1015,10 @@ text-align:right;
 #orgjstree {
 font-size:14px;display: none;height:90%;overflow:auto;
 }
-body table {
-  
-  /*width: 98% border:0px;
+body table 
+{
+    
+  /* width: 98% border:0px;
                         margin: 0px;*/
 }
 body table tr td {
@@ -1028,6 +1029,15 @@ body table tr td {
   white-space: nowrap;
 }
 body table tr td:first-child {
+  text-overflow: initial;
+  /* for IE */
+  -moz-text-overflow: initial;
+  /* for Firefox,mozilla */
+  overflow: auto;
+  white-space: normal;
+}
+
+body table tr td label{
   text-overflow: initial;
   /* for IE */
   -moz-text-overflow: initial;

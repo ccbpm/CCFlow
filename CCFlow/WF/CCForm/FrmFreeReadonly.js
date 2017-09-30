@@ -1880,25 +1880,7 @@ function GenerFreeFrmReadonly() {
             showNoticeInfo();
 
             showTbNoticeInfo();
-
-            //给富文本 创建编辑器
-            window.UEs = [];
-            if (document.UE_MapAttr) {
-                document.UE_MapAttr.forEach(function (item) {
-                    var obj = {};
-                    //根据字段只读属性 调整外观
-                    obj.editor = UM.getEditor(item.id, {
-                        'toolbar': [],
-                        'readonly': true,
-                        'autoHeightEnabled': false,
-                        'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
-                    });
-                    obj.attr = item.MapAttr;
-                    window.UEs.push(obj);
-
-                });
-            }
-
+            
         }
     })
 }
@@ -1938,21 +1920,10 @@ function figure_MapAttr_Template(mapAttr) {
                         else {
 
                             if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
-                                //如果是富文本就使用百度 UEditor
-                                if (document.UE_MapAttr === undefined) {
-                                    document.UE_MapAttr = [];
-                                }
-                                var editorPara = {};
-                                editorPara.id = "container" + document.UE_MapAttr.length;
-                                editorPara.MapAttr = mapAttr;
-                                document.UE_MapAttr.push(editorPara);
 
-                                //设置编辑器的默认样式
-                                var styleText = "text-align:left;font-size:12px;";
-                                styleText += "width:100%;";
-                                styleText += "height:" + mapAttr.UIHeight + "px;";
+                                //只读状态直接 div 展示富文本内容
 
-                                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                                eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
                             } else {
                                 eleHtml +=
                                 "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' disabled='disabled'/>"

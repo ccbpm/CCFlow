@@ -568,8 +568,8 @@ namespace CCFlow.WF.Comm.UC
 
             if (dw != DTSearchWay.None)
             {
-                string dtFrom = this.GetTBByID("TB_S_From").Text.Trim();
-                string dtTo = this.GetTBByID("TB_S_To").Text.Trim();
+                string dtFrom = this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
+                string dtTo = this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
 
                 if (string.IsNullOrEmpty(dtFrom) == true)
                 {
@@ -587,11 +587,15 @@ namespace CCFlow.WF.Comm.UC
                         dtTo = "2999-01-01 00:00";
                 }
 
-
                 if (dw == DTSearchWay.ByDate)
                 {
-                    if (dtFrom.Trim().Length < 11 || dtFrom.Trim().IndexOf(' ') == -1)
-                        dtFrom += " 00:00";
+                    //取前一天的24：00
+                    if (dtFrom.Trim().Length == 10) //2017-09-30
+                        dtFrom += " 00:00:00";
+                    if (dtFrom.Trim().Length == 16) //2017-09-30 00:00
+                        dtFrom += ":00";
+
+                    dtFrom = DateTime.Parse(dtFrom).AddDays(-1).ToString("yyyy-MM-dd") + " 24:00";
 
                     if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
                         dtTo += " 24:00";
@@ -606,14 +610,24 @@ namespace CCFlow.WF.Comm.UC
 
                 if (dw == DTSearchWay.ByDateTime)
                 {
+                    //取前一天的24：00
+                    if (dtFrom.Trim().Length == 10) //2017-09-30
+                        dtFrom += " 00:00:00";
+                    if (dtFrom.Trim().Length == 16) //2017-09-30 00:00
+                        dtFrom += ":00";
+
+                    dtFrom = DateTime.Parse(dtFrom).AddDays(-1).ToString("yyyy-MM-dd") + " 24:00";
+
+                    if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
+                        dtTo += " 24:00";
+
                     qo.addAnd();
                     qo.addLeftBracket();
-                    qo.SQL = dtKey + " >= '" + dtFrom + " 00:00'";
+                    qo.SQL = dtKey + " >= '" + dtFrom + "'";
                     qo.addAnd();
-                    qo.SQL = dtKey + " <= '" + dtTo + " 24:00'";
+                    qo.SQL = dtKey + " <= '" + dtTo + "'";
                     qo.addRightBracket();
                 }
-
             }
 
             //  throw new Exception(qo.SQL);

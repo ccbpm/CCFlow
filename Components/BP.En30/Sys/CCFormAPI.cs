@@ -1065,6 +1065,58 @@ namespace BP.Sys
             #endregion 删除没有替换下来的 PKs, 说明这些都已经被删除了.
 
         }
+
+        /// <summary>
+        /// 复制表单
+        /// </summary>
+        /// <param name="srcFrmID">源表单ID</param>
+        /// <param name="copyFrmID">copy到表单ID</param>
+        /// <param name="copyFrmName">表单名称</param>
+        public static string CopyFrm(string srcFrmID, string copyFrmID, string copyFrmName, string fk_frmTree)
+        {
+            MapData mymd = new MapData();
+            mymd.No = copyFrmID;
+            if (mymd.RetrieveFromDBSources() == 1)
+                throw new Exception("@目标表单ID:"+copyFrmID+"已经存在，位于:"+mymd.FK_FormTreeText+"目录下.");
+
+            //获得源文件信息.
+            DataSet ds = GenerHisDataSet(srcFrmID);
+
+            //导入表单文件.
+            ImpFrmTemplate(copyFrmID, ds, false);
+
+            //复制模版文件.
+            MapData md = new MapData(copyFrmID);
+
+            if (md.HisFrmType == FrmType.ExcelFrm)
+            {
+                /*如果是excel表单，那就需要复制excel文件.*/
+                string srcFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + srcFrmID + ".xls";
+                string toFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + copyFrmID + ".xls";
+                if (System.IO.File.Exists(srcFile) == true)
+                {
+                    if (System.IO.File.Exists(toFile) == false)
+                        System.IO.File.Copy(srcFile, toFile, false);
+                }
+
+                srcFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + srcFrmID + ".xlsx";
+                toFile = SystemConfig.PathOfDataUser + "FrmOfficeTemplate/" + copyFrmID + ".xlsx";
+                if (System.IO.File.Exists(srcFile) == true)
+                {
+                    if (System.IO.File.Exists(toFile) == false)
+                        System.IO.File.Copy(srcFile, toFile, false);
+                }
+            }
+
+            md.Retrieve();
+
+            md.FK_FormTree = fk_frmTree;
+            md.FK_FrmSort = fk_frmTree;
+            md.Name = copyFrmName;
+            md.Update();
+           
+            return "表单复制成功,您需要重新登录，或者刷新才能看到。";
+        }
         /// <summary>
         /// 导入表单API
         /// </summary>

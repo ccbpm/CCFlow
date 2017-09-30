@@ -227,7 +227,9 @@
         }
         //获取树选中的值
         function GetSelectedEmpsReturnVal() {
+            
             var instance = $('#OrgJSTree').jstree(true);
+
             var selectedIdArr = instance.get_selected();
             var selectedNodes = [];
             var nameArrs = [];
@@ -236,6 +238,7 @@
             $.each(selectedIdArr, function (i, selectedId) {
                 selectedNodes.push(instance.get_node(selectedId));
             });
+
             $.each(selectedNodes, function (i, selectedNode) {
                 if (selectedNodes[i].icon != true) {
                     nameArrs.push(selectedNode.data);

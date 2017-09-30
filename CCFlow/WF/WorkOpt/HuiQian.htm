@@ -253,10 +253,10 @@
                 return;
             }
 
-           // alert(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+            // alert(frames["iframeSelectEmpsForm"].window.returnVal.Name);
             //alert(data);
-          //  alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
-           // alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
+            //  alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
+            // alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
 
             ReturnWork(frames["iframeSelectEmpsForm"].window.returnVal.No);
             return;
@@ -280,40 +280,41 @@
 
         $(function () {
             //人员选择
-            $("#TB_Emps").bind('input propertychange',function(){
+            $("#TB_Emps").bind('input propertychange', function () {
                 //if (e.keyCode == 13) {
-                    if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
-                        //alert("输入内容为空！");
-                        //return;
-                        $("#SelectEmp").hide().html("");
-                        return;
-                    } else {
-                        //回去输入内容，查询数据库
-                        $.ajax({
-                            type: 'post',
-                            async: true,
-                            data: null,
-                            url: Handler + "?DoType=HuiQian_SelectEmps&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random() + "&TB_Emps=" + $("#TB_Emps").val(),
-                            dataType: 'html',
-                            success: function (data) {
+                if ($("#TB_Emps").val() == null || $("#TB_Emps").val() == "") {
+                    //alert("输入内容为空！");
+                    //return;
+                    $("#SelectEmp").hide().html("");
+                    return;
+                } else {
+                    //回去输入内容，查询数据库
+                    $.ajax({
+                        type: 'post',
+                        async: true,
+                        data: null,
+                        url: Handler + "?DoType=HuiQian_SelectEmps&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&m=" + Math.random() + "&TB_Emps=" + $("#TB_Emps").val(),
+                        dataType: 'html',
+                        success: function (data) {
 
-                                if (data.indexOf('err@') == 0) {
-                                    alert(data);
-                                    return;
-                                }
-                                //SelectEmp
-                                //jQuery("#select_id").append("<option value='Value'>Text</option>");  
-                                data = JSON.parse(data);
-                                //$("#SelectEmp").hide().html("");
-                                var html = "";
-                                for (var i = 0; i < data.length; i++) {
-                                    //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
-                                    html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
-                                }
-                                $("#SelectEmp").show().html(html);
+                            if (data.indexOf('err@') == 0) {
+                                alert(data);
+                                return;
                             }
-                        });
-                    }
+
+                            //SelectEmp
+                            //jQuery("#select_id").append("<option value='Value'>Text</option>");  
+                            data = JSON.parse(data);
+                            //$("#SelectEmp").hide().html("");
+                            var html = "";
+                            for (var i = 0; i < data.length; i++) {
+                                //$("#SelectEmp").append("<option value='" + data[i].No + "' onclick=selectAdd('" + data[i].No + "')>" + data[i].Name + "</option>");
+                                html = html + "<div class='item' onclick='getCon(\"" + data[i].No + "\");' onmouseenter='getFocus(this)'>" + data[i].Name + "</div>";
+                            }
+                            $("#SelectEmp").show().html(html);
+                        }
+                    });
+                }
                 //}
             });
         });

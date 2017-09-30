@@ -479,11 +479,34 @@ function newFrm() {
 function designFrm() {
     var node = $('#formTree').tree('getSelected');
     if (!node) {
+        alert('请选择表单.');
         return;
     }
 
     addTab("DesignerFrm" + node.id, "设计表单-" + node.text, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
 }
+
+
+function CopyFrm() {
+
+    var node = $('#formTree').tree('getSelected');
+    if (!node) {
+        alert('请选择表单.');
+        return;
+    }
+
+    var age = prompt("请输入你的年龄:", "20");
+    if (age != null) {
+        alert("你今年" + age + "岁了!");
+    } else {
+        alert("你按了[取消]按钮");
+    }
+
+    // window.p
+    //   if ( window.config()
+    // addTab("DesignerFrm" + node.id, "设计表单-" + node.text, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
+}
+
 
 //新建数据源，added by liuxc,2015-10-7
 function newSrc() {

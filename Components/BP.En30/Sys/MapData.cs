@@ -1239,7 +1239,7 @@ namespace BP.Sys
 		{
 			get
 			{
-				return DBAccess.RunSQLReturnStringIsNull("SELECT Name FROM Sys_FormTree WHERE No='" + this.No + "'", "数据无");
+				return DBAccess.RunSQLReturnStringIsNull("SELECT Name FROM Sys_FormTree WHERE No='" + this.FK_FormTree + "'", "目录错误");
 			}
 		}
 		/// <summary>
@@ -1789,8 +1789,6 @@ namespace BP.Sys
                 }
                 item.Update();
             }
-            
-
         }
 		/// <summary>
 		/// 导入表单
@@ -2674,17 +2672,6 @@ namespace BP.Sys
 			#endregion
 
 			return base.beforeDelete();
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="mes"></param>
-		/// <param name="en"></param>
-		/// <returns></returns>
-		public GEEntity GenerHisEn(MapExts mes, GEEntity en)
-		{
-			return en;
 		}
 		/// <summary>
 		/// 生成自动的ｊｓ程序。

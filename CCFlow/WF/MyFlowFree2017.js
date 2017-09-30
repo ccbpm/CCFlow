@@ -1650,19 +1650,15 @@ function checkBlanks() {
         }
     });
 
-    //2.对 UMEditor 中的必填项检查
-    window.UEs.forEach(function (item) {
-        //如果是必填
-        if (item.attr.UIIsInput == 1) {
-            var ele = item.editor.$body;
-            if (item.editor.getPlainTxt().trim() === "") {
-                checkBlankResult = false;
-                ele.addClass('errorInput');
-            } else {
-                ele.removeClass('errorInput');
-            }
-        }
-    });
+    //2.对 UMEditor 中的必填项检查  
+
+    var ele = document.activeEditor.$body;
+    if (document.activeEditor.getPlainTxt().trim() === "") {
+        checkBlankResult = false;
+        ele.addClass('errorInput');
+    } else {
+        ele.removeClass('errorInput');
+    }
 
     return checkBlankResult;
 }
@@ -1689,22 +1685,7 @@ function checkReg() {
             }
         }
     });
-
-    //2.对 UMEditor 中的必填项检查
-    window.UEs.forEach(function (item) {
-        //如果是必填
-        if (item.attr.UIIsInput == 1) {
-            var ele = item.editor.$body;
-            if (item.editor.getPlainTxt().trim() === "") {
-                checkBlankResult = false;
-                ele.addClass('errorInput');
-            } else {
-                ele.removeClass('errorInput');
-            }
-        }
-    });
-
-
+    
     return checkRegResult;
 }
 
@@ -1940,35 +1921,17 @@ function GenerWorkNode() {
             });
 
             //给富文本 创建编辑器
-            window.UEs = [];
-            if (document.UE_MapAttr) {
-                document.UE_MapAttr.forEach(function (item) {
-                    var obj = {};
-                    //根据字段只读属性 调整外观
-                    if (item.MapAttr.UIIsEnable == "0") {
-                        obj.editor = UM.getEditor(item.id, {
-                            'toolbar': [],
-                            'readonly': true,
-                            'autoHeightEnabled': false,
-                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
-                        });
-                    } else {
-                        document.activeEditor = obj.editor = UM.getEditor(item.id, {
-                            'autoHeightEnabled': false,
-                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
-                        });
-                        document.activeEditor.MaxLen = item.MapAttr.MaxLen;
-                        document.activeEditor.MinLen = item.MapAttr.MinLen;
-                        document.activeEditor.BindField = item.MapAttr.KeyOfEn;
-                        document.activeEditor.BindFieldName = item.MapAttr.Name;
-                    }
-                    obj.attr = item.MapAttr;
-                    window.UEs.push(obj);
+            var editor = document.activeEditor = UM.getEditor('editor', {
+                'autoHeightEnabled': false,
+                'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
+            });
+            editor.MaxLen = document.BindEditorMapAttr.MaxLen;
+            editor.MinLen = document.BindEditorMapAttr.MinLen;
+            editor.BindField = document.BindEditorMapAttr.KeyOfEn;
+            editor.BindFieldName = document.BindEditorMapAttr.Name;
 
-                    //调整样式,让必选的红色 * 随后垂直居中
-                    obj.editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
-                });
-            }
+            //调整样式,让必选的红色 * 随后垂直居中
+            editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
         }
     })
 }
@@ -2027,25 +1990,20 @@ function figure_MapAttr_Template(mapAttr) {
 
                             if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
                                 //如果是富文本就使用百度 UEditor
-                                if (document.UE_MapAttr === undefined) {
-                                    document.UE_MapAttr = [];
-                                }
-                                var editorPara = {};
-                                editorPara.id = "container" + document.UE_MapAttr.length;
-                                editorPara.MaxLen = mapAttr.MaxLen;
-                                editorPara.MapAttr = mapAttr;
-                                document.UE_MapAttr.push(editorPara);
-
-                                //设置编辑器的默认样式
-                                var styleText = "text-align:left;font-size:12px;";
-                                styleText += "width:100%;";
-                                styleText += "height:" + mapAttr.UIHeight + "px;";
 
                                 if (mapAttr.UIIsEnable == "0") {
-                                    //字段处于只读状态.注意这里 name 属性也是可以用来绑定字段名字的
-                                    eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                                    //只读状态直接 div 展示富文本内容
+                                    //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                                    eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
                                 } else {
-                                    eleHtml += "<script maxlen='" + mapAttr.MaxLen + "' id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'></script>"; 
+                                    document.BindEditorMapAttr = mapAttr;//存到全局备用
+
+                                    //设置编辑器的默认样式
+                                    var styleText = "text-align:left;font-size:12px;";
+                                    styleText += "width:100%;";
+                                    styleText += "height:" + mapAttr.UIHeight + "px;";
+                                    //注意这里 name 属性是可以用来绑定表单提交时的字段名字的
+                                    eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>"; 
                                 }
                             } else {
                                 eleHtml +=

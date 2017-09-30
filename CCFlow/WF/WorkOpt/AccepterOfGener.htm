@@ -176,7 +176,7 @@
         function AddEmps(isSend) {
             var emps = this.document.getElementById("TB_Emps").value;
             if (isSend == false && emps == "") {
-                alert('请输入要加签的人员ID,多个ID使用逗号分开.');
+                alert('请输入接受人的人员ID,支持拼音查询.');
                 return;
             }
             AddEmpsExt(isSend, emps);
@@ -210,9 +210,10 @@
                         return;
                     }
 
-
                     ClearTable();
+
                     var gwls = JSON.parse(data);
+
                     BindTable(gwls);
 
                     document.getElementById("TB_Emps").value = "";
@@ -321,7 +322,8 @@
                 return;
             }
 
-            var val = frames["iframeSelectEmpsForm"].window.returnVal.Name;
+            var val = frames["iframeSelectEmpsForm"].window.returnVal.No;
+
             // alert(val);
             AddEmpsExt(false, val)
 

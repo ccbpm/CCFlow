@@ -7351,7 +7351,6 @@ namespace BP.WF
         /// <param name="Del_Selected">是否删除历史选择</param>
         public static void Node_AddNextStepAccepters(Int64 workID,  int toNodeID, string emps, bool del_Selected = true)
         {
-
             if (emps.Contains(";") == true)
             {
                 // 类似与这样的格式. "00000054,严冬梅;00000649,张磊;
@@ -7371,11 +7370,17 @@ namespace BP.WF
                 emps = result;
             }
 
-
             SelectAccper sa = new SelectAccper();
             //删除历史选择
             if (del_Selected == true)
                 sa.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, workID);
+
+            //检查是否是单选？
+            BP.WF.Template.Selector st = new Selector(toNodeID);
+            if (st.IsSimpleSelector==true)
+                sa.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, workID);
+
+            //if (nd.select==
 
             emps = emps.Replace(" ", "");
             emps = emps.Replace(";", ",");

@@ -965,10 +965,10 @@ namespace BP.WF.Template
 
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "名称", true, false, 1, 200, 20);
+                map.AddTBString(MapDtlAttr.Alias, null, "别名", true, false, 0, 100, 20, false);
                 map.AddTBString(MapDtlAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
                 map.AddTBString(MapDtlAttr.PTable, null, "存储表", true, false, 0, 200, 20);
-
-                map.AddTBString(MapDtlAttr.FEBD, null, "事件类实体", true, true, 0, 100, 20, true);
+                map.AddTBString(MapDtlAttr.FEBD, null, "事件类实体类", true, true, 0, 100, 20, false);
 
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,MapDtlAttr.Model, "@0=普通@1=固定行");
 

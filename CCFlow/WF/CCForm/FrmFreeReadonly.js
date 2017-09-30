@@ -117,7 +117,7 @@ function GetPageParas(sArgName) {
     }
     return retval;
 }
-   
+
 // 获取附件文件名称,如果附件没有上传就返回null.
 function ReqAthFileName(athID) {
     var v = document.getElementById(athID);
@@ -611,7 +611,7 @@ function InitForm() {
         if (ath.length > 0) {
             ath = ath[0];
             var src = "";
-                src = "AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+            src = "AttachmentUpload.htm?IsExtend=1&PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
             $('#iframeAthForm').attr('src', src);
             atParamObj["tbId"] = tbId;
             atParamObj["divId"] = divId;
@@ -775,12 +775,12 @@ function InitMapAttr(mapAttrData, frmData) {
                         } else {//文本区域
                             if (mapAttr.UIHeight <= 23) {
                                 eleHtml +=
-                                    "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' disabled='disabled'/>"
                                     ;
                             }
                             else {
                                 eleHtml +=
-                                    "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
+                                    "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + uiHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' disabled='disabled'/>"
                                 ;
                             }
                         }
@@ -788,7 +788,7 @@ function InitMapAttr(mapAttrData, frmData) {
                         var uiHeight = mapAttr.UIHeight / 23 * 30;
                         isInOneRow = true;
                         eleHtml +=
-                            "<textarea  style='height:" + uiHeight + "px' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "'" + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + "</textarea>"
+                            "<textarea  style='height:" + uiHeight + "px' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' disabled='disabled'>" + "</textarea>"
                             ;
                     }
                 } //AppDate
@@ -974,45 +974,45 @@ function AfterBindEn_DealMapExt() {
                     popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                 }
                 switch (popWorkModelStr) {
-                    /// <summary> 
-                    /// 自定义URL 
-                    /// </summary> 
-                    //SelfUrl =1, 
+                    /// <summary>  
+                    /// 自定义URL  
+                    /// </summary>  
+                    //SelfUrl =1,  
                     case "1":
                         icon = "glyphicon glyphicon-th";
                         break;
-                    /// <summary> 
-                    /// 表格模式 
-                    /// </summary> 
-                    // TableOnly, 
+                    /// <summary>  
+                    /// 表格模式  
+                    /// </summary>  
+                    // TableOnly,  
                     case "2":
                         icon = "glyphicon glyphicon-list";
                         break;
-                    /// <summary> 
-                    /// 表格分页模式 
-                    /// </summary> 
-                    //TablePage, 
+                    /// <summary>  
+                    /// 表格分页模式  
+                    /// </summary>  
+                    //TablePage,  
                     case "3":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary> 
-                    /// 分组模式 
-                    /// </summary> 
-                    // Group, 
+                    /// <summary>  
+                    /// 分组模式  
+                    /// </summary>  
+                    // Group,  
                     case "4":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary> 
-                    /// 树展现模式 
-                    /// </summary> 
-                    // Tree, 
+                    /// <summary>  
+                    /// 树展现模式  
+                    /// </summary>  
+                    // Tree,  
                     case "5":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
-                    /// <summary> 
-                    /// 双实体树 
-                    /// </summary> 
-                    // TreeDouble 
+                    /// <summary>  
+                    /// 双实体树  
+                    /// </summary>  
+                    // TreeDouble  
                     case "6":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
@@ -1179,8 +1179,8 @@ function GepParaByName(name, atPara) {
 
 //初始化下拉列表框的OPERATION.
 function InitDDLOperation(frmData, mapAttr, defVal) {
-//    var result = frmData.MainTable[0][mapAttr.KeyOfEn + 'T'];
-//    var operations = '<option >' + result + ' </option>';
+    //    var result = frmData.MainTable[0][mapAttr.KeyOfEn + 'T'];
+    //    var operations = '<option >' + result + ' </option>';
     //    return operations;
     var operations = '';
     //外键类型
@@ -1285,11 +1285,11 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框 
+            //下拉框  
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
-            //文本区域 
+            //文本区域  
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -1927,7 +1927,7 @@ function figure_MapAttr_Template(mapAttr) {
                 if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                     if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
                         eleHtml +=
-                            "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +  (frmData, mapAttr, defValue) + "</select>";
+                            "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + (frmData, mapAttr, defValue) + "</select>";
                     } else {//文本区域
 
                         if (mapAttr.UIHeight <= 23) {
@@ -1936,7 +1936,7 @@ function figure_MapAttr_Template(mapAttr) {
                             ;
                         }
                         else {
-                            
+
                             if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
                                 //如果是富文本就使用百度 UEditor
                                 if (document.UE_MapAttr === undefined) {
@@ -1955,7 +1955,7 @@ function figure_MapAttr_Template(mapAttr) {
                                 eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
                             } else {
                                 eleHtml +=
-                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
+                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' disabled='disabled'/>"
                             }
                         }
                     }
@@ -2251,7 +2251,7 @@ function figure_Template_Attachment(frmAttachment) {
         return $('');
     }
     var src = "";
-        src = "AttachmentUpload.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+    src = "AttachmentUpload.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
 
     eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
@@ -2322,7 +2322,7 @@ function figure_Template_Dtl(frmDtl) {
     ////}
 
     src = appPath + "WF/CCForm/DtlReadonly.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
- 
+
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='F" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
@@ -2566,6 +2566,6 @@ function dealWithUrl(src) {
     }
     return src;
 }
- 
+
 var colVisibleJsonStr = ''
 var jsonStr = '';

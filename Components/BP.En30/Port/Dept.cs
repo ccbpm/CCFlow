@@ -175,7 +175,7 @@ namespace BP.Port
     /// <summary>
     ///部门s
     /// </summary>
-    public class Depts : EntitiesNoName
+    public class Depts : BP.En.EntitiesNoName
     {
         #region 初始化实体.
         /// <summary>

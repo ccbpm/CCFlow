@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static string Ver = "20170816";
+        public static int Ver = 20170816;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -191,14 +191,13 @@ namespace BP.WF
             UpdataCCFlowVerSQLScript();
 
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
-            string currDBVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
-            if (currDBVer != null && currDBVer != "" && int.Parse(currDBVer) >= int.Parse(Ver))
+            int currDBVer = DBAccess.RunSQLReturnValInt(sql, 0);
+            if (currDBVer != null && currDBVer != 0 && currDBVer >=  Ver)
                 return null; //不需要升级.
 
             // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
             //MapData md = new MapData();
             //md.FormJson = "";
-
             #endregion 检查是否需要升级，并更新升级的业务逻辑.
 
             string msg = "";

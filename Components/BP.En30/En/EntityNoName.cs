@@ -124,11 +124,11 @@ namespace BP.En
         /// </summary>
         /// <param name="entity">要添加的对象</param>
         /// <returns>返回添加到的地方</returns>
-        public virtual int AddEntity(EntityNoName entity)
+        public virtual int AddEntity(Entity entity)
         {
-            foreach (EntityNoName en in this)
+            foreach (Entity en in this)
             {
-                if (en.No == entity.No)
+                if (en.GetValStrByKey("No") == entity.GetValStrByKey("No"))
                     return 0;
             }
             return this.InnerList.Add(entity);

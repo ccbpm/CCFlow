@@ -1266,7 +1266,7 @@ namespace BP.Web.Controls
 
             //edited by liuxc,2015-6-18,增加父级字段是否字符串类型判断，是字符串时，RowFilter中=需要加单引号将值包起来
             var isString = dtNodeSets.Columns[strParentColumn].DataType == typeof(String);
-            dvNodeSets.RowFilter = strParentColumn + "=" + (isString ? string.Format("'{0}'", strRootValue??string.Empty) : strRootValue);
+            dvNodeSets.RowFilter = strParentColumn + "=" + (isString ? string.Format("'{0}'", strRootValue ?? string.Empty) : strRootValue);
 
             string strPading = ""; //缩入字符 
 

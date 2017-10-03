@@ -289,8 +289,6 @@ namespace BP.Web
 					}
 				}
 			}
-
-
 			#endregion 解决部门的问题.
 
 			WebUser.FK_Dept = deptNo;
@@ -309,8 +307,6 @@ namespace BP.Web
 				cookie.Expires = DateTime.Now.AddDays(2);
 				cookie.Values.Add("No", userNo);
 				cookie.Values.Add("Name", HttpUtility.UrlEncode(userName));
-
-
 
 				cookie.Values.Add("FK_Dept", deptNo);
 				cookie.Values.Add("FK_DeptName", HttpUtility.UrlEncode(deptName));

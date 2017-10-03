@@ -202,6 +202,7 @@
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />
+    <Compile Include="Port\Inc.cs" />
     <Compile Include="Rpt\db\MapRpt.cs">
       <SubType>Code</SubType>
     </Compile>

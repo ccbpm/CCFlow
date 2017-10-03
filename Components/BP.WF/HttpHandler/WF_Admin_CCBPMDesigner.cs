@@ -185,7 +185,7 @@ namespace BP.WF.HttpHandler
             string parentrootid = context.Request.QueryString["parentrootid"];
             string newRootId = "";
 
-            if (WebUser.No != "admin")
+            if (WebUser.No != "admin" && 1==2 )
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
                 aemp.No = WebUser.No;
@@ -1020,7 +1020,7 @@ namespace BP.WF.HttpHandler
                 dtForm.Rows.Add(row.ItemArray);
             }
 
-            if (WebUser.No != "admin")
+            if (WebUser.No != "admin" && 1==2 )
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
                 aemp.No = WebUser.No;
@@ -1031,8 +1031,13 @@ namespace BP.WF.HttpHandler
                 if (aemp.RootOfForm == "")
                     return "err@没有给二级管理员[" + WebUser.No + "]设置表单树的权限...";
 
-                DataRow rootRow = dtForm.Select("ParentNo IS NULL")[0];
-                DataRow newRootRow = dtForm.Select("No='" + aemp.RootOfForm + "'")[0];
+                //DataRow rootRow = dtForm.Select("ParentNo IS NULL")[0];
+
+                DataRow[] rootRows = dtForm.Select("No='" + aemp.RootOfForm + "'");
+
+                DataRow newRootRow = rootRows[0]; 
+
+               // DataRow newRootRow = dtForm.Select("No='" + aemp.RootOfForm + "'")[0];
 
                 newRootRow["ParentNo"] = null;
                 DataTable newDt = dtForm.Clone();

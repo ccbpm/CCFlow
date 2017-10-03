@@ -225,11 +225,23 @@ namespace BP.WF.Port
 
                 map.AddDDLEntities(AdminEmpAttr.RootOfFlow, null, "流程权限节点", new BP.WF.Template.FlowSorts(), true);
                 map.AddDDLEntities(AdminEmpAttr.RootOfForm, null, "表单权限节点", new BP.WF.Template.SysFormTrees(), true);
-                map.AddDDLEntities(AdminEmpAttr.RootOfDept, null, "组织结构权限节点", new BP.GPM.Depts(), true);
+                map.AddDDLEntities(AdminEmpAttr.RootOfDept, null, "组织结构权限节点", new BP.WF.Port.Incs(), true);
 
                 //查询条件.
                 map.AddSearchAttr(AdminEmpAttr.UseSta);
                 map.AddSearchAttr(AdminEmpAttr.UserType);
+
+
+
+                RefMethod rm = new RefMethod();
+                rm.Title = "增加管理员";
+                //  rm.GroupName = "高级设置";
+                rm.HisAttrs.AddTBString("FrmID", null, "管理员编号ID", true, false, 0, 100, 100);
+
+                rm.ClassMethodName = this.ToString() + ".DoAddAdminer";
+                rm.Icon = "../../WF/Img/Btn/Copy.GIF";
+                map.AddRefMethod(rm);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -250,6 +262,28 @@ namespace BP.WF.Port
             return base.beforeUpdateInsertAction();
         }
         #endregion
+
+        public string DoAddAdminer(string empID)
+        {
+            BP.Port.Emp emp = new BP.Port.Emp();
+            emp.No = empID;
+            if (emp.RetrieveFromDBSources() == 0)
+                return "err@管理员增加失败，ID="+empID+"不存在用户表，您增加的管理员必须存在与Port_Emp用户表.";
+
+            AdminEmp adminEmp = new AdminEmp();
+            adminEmp.No = empID;
+            if (adminEmp.RetrieveFromDBSources() == 1)
+                return "err@管理员【" + adminEmp.Name + "】已经存在，您不需要在增加.";
+
+            adminEmp.Copy(emp);
+            adminEmp.FK_Dept = WebUser.FK_Dept;
+            adminEmp.RootOfDept = WebUser.FK_Dept;
+            adminEmp.UserType = 1;
+            adminEmp.Insert();
+
+            return "增加成功,请关闭当前窗口查询到该管理员，设置他的权限。";
+
+        }
     }
 	/// <summary>
 	/// 管理员s 

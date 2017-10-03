@@ -1123,6 +1123,9 @@ function GenerWorkNode() {
             var frmName = mapData.Name;
 
             var url = wf_node.FormUrl;
+            if (url == "")
+                url = "../DataUser/DefaultSelfFormUrl.htm";
+
             if (url.indexOf('?') == -1) {
                 url = url + "?1=2";
             }

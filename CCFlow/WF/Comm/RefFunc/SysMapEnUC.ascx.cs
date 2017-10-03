@@ -61,12 +61,10 @@ namespace CCFlow.WF.Comm.RefFunc
                 rowIdx = 0;
                 foreach (MapAttr attr in mattrs)
                 {
-
                     if (attr.GroupID != gf.OID)
                     {
                         if (gf.Idx == 0 && attr.GroupID == 0)
                         {
-
                         }
                         else
                             continue;
@@ -343,7 +341,6 @@ namespace CCFlow.WF.Comm.RefFunc
             js += "\t\n</script>";
             this.Add(js);
             #endregion 处理iFrom 的自适应的问题。
-
 
             #region 处理iFrom Save。
             js = "\t\n<script type='text/javascript' >";

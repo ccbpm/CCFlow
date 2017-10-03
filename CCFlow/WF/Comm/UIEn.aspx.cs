@@ -28,8 +28,6 @@ namespace BP.Web.Comm
             this.Response.Redirect(url,true);
             return;
 
-           
-
         }
 
         #region Web 窗体设计器生成的代码

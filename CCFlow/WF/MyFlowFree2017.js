@@ -652,6 +652,8 @@ function setFormEleDisabled() {
 
 function CheckMinMaxLength() {
 
+    return true;
+
     var editor = document.activeEditor;
     if (editor) {
         var wordslen = editor.getContent().length,
@@ -1650,14 +1652,18 @@ function checkBlanks() {
         }
     });
 
-    //2.对 UMEditor 中的必填项检查  
 
-    var ele = document.activeEditor.$body;
-    if (document.activeEditor.getPlainTxt().trim() === "") {
-        checkBlankResult = false;
-        ele.addClass('errorInput');
-    } else {
-        ele.removeClass('errorInput');
+    //2.对 UMEditor 中的必填项检查
+    if (document.activeEditor != null && document.activeEditor.$body != null) {
+        /* #warning 这个地方有问题.*/
+
+        //        var ele = document.activeEditor.$body;
+        //        if (ele != null && document.activeEditor.getPlainTxt().trim() === "") {
+        //            checkBlankResult = false;
+        //            ele.addClass('errorInput');
+        //        } else {
+        //            ele.removeClass('errorInput');
+        //        }
     }
 
     return checkBlankResult;

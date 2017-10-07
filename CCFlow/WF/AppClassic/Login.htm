@@ -10,7 +10,6 @@
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
@@ -92,10 +91,20 @@
 
     </script>
 
+    <style type="text/css">
+    table
+    {
+        border:0px;
+         margin-left:30px;
+    }
+    td
+    {
+        border:0px;
+    }
+    </style>
 </head>
 <body>
     <form id="cc" >
-
 
    <h2>欢迎登录驰骋工作流引擎</h2>
    
@@ -103,18 +112,18 @@
    <fieldset style="width:30%;text-align:left; float:center">
     <legend> <img src="../../DataUser/ICON/LogBiger.png" border=0 width="200px;" />  </legend>
 
-    <table style="border:0px; width:100%;  border-color:White" >
-    <tr style="border:0px;border-color:White"  >
-    <td style="border:0px;border-color:White; padding-left:20px;" >用户名</td>
-    <td style="border:0px;border-color:White;width:80%;"><input type="text" id="TB_UserNo" name="TB_UserNo"   onkeydown="KeyDownUserNo(event)"  style="width:80%;" /> </td>
+    <table>
+    <tr  >
+    <td  >用户名</td>
+    <td ><input type="text" id="TB_UserNo" name="TB_UserNo"   onkeydown="KeyDownUserNo(event)"  style="width:80%;" /> </td>
     </tr>
-    <tr style="border:0px;border-color:White"   >
-    <td style="border:0px;border-color:White;padding-left:20px;"   > 密&nbsp;&nbsp;码</td>
-    <td style="border:0px;border-color:White;width:80%;"><input type="password" id="TB_Pass" name="TB_Pass" value="123" onkeydown="KeyDownUserPass(event)"   style="width:80%;" /> </td>
+    <tr >
+    <td > 密&nbsp;&nbsp;码</td>
+    <td><input type="password" id="TB_Pass" name="TB_Pass" value="123" onkeydown="KeyDownUserPass(event)"   style="width:80%;" /> </td>
     </tr>
 
     <tr>
-    <td style="border:0px;border-color:White;width:80%;" ></td>
+    <td  ></td>
     <td colspan=1 style="border:0px;border-color:White;width:80%;" > <input type="button" value="登录" id="btn_login" onclick="Login_Submit()" />
     <font color="gray" > 默认密码为:pub</font></td>
 </tr>

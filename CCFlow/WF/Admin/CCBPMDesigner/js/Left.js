@@ -80,7 +80,7 @@ function newFlow() {
     }
     var dgId = "iframDg";
     var url = "NewFlow.htm?sort=" + currSortId + "&s=" + Math.random();
-    OpenEasyUiDialog(url, dgId, '新建流程', 600, 394, 'icon-new', true, function () {
+    OpenEasyUiDialog(url, dgId, '新建流程', 650, 500, 'icon-new', true, function () {
 
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();

@@ -157,13 +157,9 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 }
             }
         }
-
-       
         protected void Btn_SaveAndClose_Click(object sender, EventArgs e)
         {
-            
             this.Btn_Save_Click(null,null);
-
             this.WinClose();
         }
         protected void Btn_Save_Click(object sender, EventArgs e)

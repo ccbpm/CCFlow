@@ -1597,7 +1597,7 @@ function SaveDtlAll() {
     return true;
 }
 
-//将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单
+// 生成表单.
 function GenerWorkNode() {
 
     var href = window.location.href;
@@ -1953,7 +1953,6 @@ function InitMapAttr(Sys_MapAttr, workNodeData, groupID) {
 
 function InitMapAttrOfCtrl(mapAttr) {
 
-
     var str = '';
     var defValue = ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
@@ -2026,7 +2025,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input  type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+        return "<input  type='text'  style='width:120px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
 
@@ -2059,7 +2058,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         if (mapAttr.UIIsEnable != 1)
             enableAttr = "disabled='disabled'";
 
-        return "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) {//AppInt
@@ -2067,7 +2066,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         if (mapAttr.UIIsEnable != 1) {
             enableAttr = "disabled='disabled'";
         }
-        return "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     //AppMoney  AppRate
@@ -2078,7 +2077,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         } else {
             enableAttr = "disabled='disabled'";
         }
-        return "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");

@@ -57,8 +57,8 @@
                 /*其他的节点.*/
                 %>
 
-         <a href='UnSend.aspx?DoIt=Cancel&FK_Flow=<%=flowNo %>&WorkID=<%=workid %>'><img style="vertical-align:middle;" alt=""
-             src="../Scripts/easyUI/themes/icons/ok.png" />确定撤销</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='UnSend.aspx?FK_Flow=<%=flowNo %>&WorkID=<%=workid %>'><img  style="vertical-align:middle;" alt=""
+         <a href="UnSend.aspx?DoIt=Cancel&FK_Flow=<%=flowNo %>&WorkID=<%=workid %>" ><img style="vertical-align:middle;" alt=""
+             src="../Scripts/easyUI/themes/icons/ok.png" />确定撤销</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="UnSend.aspx?FK_Flow=<%=flowNo %>&WorkID=<%=workid %>" ><img  style="vertical-align:middle;" alt=""
                  src="../Scripts/easyUI/themes/icons/redo.png" />取消撤销</a></center>
 
          <%} %>

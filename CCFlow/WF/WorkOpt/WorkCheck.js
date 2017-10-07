@@ -163,6 +163,7 @@
 
 
         function SaveWorkCheck() {
+
             var doc = $("#WorkCheck_Doc").val();
 
 //            if (doc.length == 0) {

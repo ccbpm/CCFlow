@@ -354,7 +354,6 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.New).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 
         if (this.ToolBar1.IsExit(NamesOfBtn.Save))
-
             this.ToolBar1.GetLinkBtnByID(NamesOfBtn.Save).Click += new System.EventHandler(this.ToolBar1_ButtonClick);
 
         if (this.ToolBar1.IsExit(NamesOfBtn.SaveAndClose))
@@ -375,7 +374,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
         #endregion 设置事件
 
         //此处增加一个判断删除成功的逻辑，办法不太好，暂用，added by liuxc，2015-11-10
-        if (!IsPostBack)
+        if (IsPostBack==false)
         {
             if (Request["DeleteOver"] == "1")
             {

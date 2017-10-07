@@ -1632,8 +1632,10 @@ function GenerWorkNode() {
                 return;
             }
 
+            var node = workNodeData.WF_Node[0];
+
             //设置标题.
-            document.title = '您好:' + flow_Data.WF_Node[0].Name;
+            document.title = node.Name;
 
             var Sys_GroupFields = workNodeData.Sys_GroupField;
             //初始化Sys_MapData
@@ -1649,18 +1651,20 @@ function GenerWorkNode() {
 
             html += "<tr>";
             html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none' ><h4><b>" + frmName + "</b></h4></div></td>";
-          //  html += "<td colspan=2 ></td>";
+            //  html += "<td colspan=2 ></td>";
             html += "</tr>";
             //遍历循环生成 listview
             for (var i = 0; i < Sys_GroupFields.length; i++) {
 
                 var gf = Sys_GroupFields[i];
-                html += "<tr>";
-                html += "  <th colspan=4>" + gf.Lab + "</th>";
-                html += "</tr>";
 
                 //从表..
                 if (gf.CtrlType == 'Dtl') {
+
+                    html += "<tr>";
+                    html += "  <th colspan=4>" + gf.Lab + "</th>";
+                    html += "</tr>";
+
                     var dtls = workNodeData.Sys_MapDtl;
 
                     for (var k = 0; k < dtls.length; k++) {
@@ -1686,6 +1690,11 @@ function GenerWorkNode() {
                 if (gf.CtrlType == 'Ath') {
 
                     html += "<tr>";
+                    html += "  <th colspan=4>" + gf.Lab + "</th>";
+                    html += "</tr>";
+
+
+                    html += "<tr>";
                     html += "  <td colspan='4' >";
 
                     html += figure_Template_Attachment(workNodeData, gf);
@@ -1696,13 +1705,18 @@ function GenerWorkNode() {
                     continue;
                 }
 
+
                 //审核组件..
-                if (gf.CtrlType == 'FWC') {
+                if (gf.CtrlType == 'FWC' && node.FWCSta != 0) {
+
+                    html += "<tr>";
+                    html += "  <th colspan=4>" + gf.Lab + "</th>";
+                    html += "</tr>";
 
                     html += "<tr>";
                     html += "  <td colspan='4' >";
 
-                    html += figure_Template_FigureFrmCheck(workNodeData.WF_Node[0]);
+                    html += figure_Template_FigureFrmCheck(node);
 
                     html += "  </td>";
                     html += "</tr>";
@@ -1712,6 +1726,11 @@ function GenerWorkNode() {
 
                 //字段类的控件.
                 if (gf.CtrlType == '' || gf.CtrlType == null) {
+
+                    html += "<tr>";
+                    html += "  <th colspan=4>" + gf.Lab + "</th>";
+                    html += "</tr>";
+
                     html += InitMapAttr(workNodeData.Sys_MapAttr, workNodeData, gf.OID);
                     continue;
                 }
@@ -2137,11 +2156,14 @@ function figure_Template_ImageAth(frmImageAth) {
 
 //审核组件
 function figure_Template_FigureFrmCheck(wf_node) {
+
     //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
     var sta = wf_node.FWCSta;
 
-    if (sta == 0)
-        return $('');
+    var h = wf_node.FWC_H;
+    if (h == 0)
+        h = 300;
+
 
     var src = "./WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";
@@ -2156,14 +2178,8 @@ function figure_Template_FigureFrmCheck(wf_node) {
     {
         src += "&DoType=View";
     }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
     src += "&r=q" + paras;
-    var eleHtml = "<iframe width='100%' height='" + wf_node.FWC_H + "px' id='FFWC" + wf_node.NodeID + "' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
-    
-
+    var eleHtml = "<iframe width='100%' height='" + h + "px' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>";
     return eleHtml;
 }
 

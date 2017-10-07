@@ -347,7 +347,13 @@ namespace BP.WF
         {
             string str = DoUnSendIt();
 
+            int fk_node = DBAccess.RunSQLReturnValInt("SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID, 0);
+
             //删除自己审核的信息.
+            string sql = "DELETE FROM ND" + int.Parse(FlowNo) + "Track WHERE WorkID = " + this.WorkID +
+                              " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + fk_node +
+                              " AND EmpFrom = '" + WebUser.No + "'";
+            DBAccess.RunSQL(sql);
 
             return str;
         }

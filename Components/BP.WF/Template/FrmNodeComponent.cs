@@ -161,7 +161,6 @@ namespace BP.WF.Template
                 {
                     gf = new GroupField();
                     gf.EnName = "ND" + this.NodeID;
-                    gf.CtrlID = "FWC" + this.No;
                     gf.CtrlType = GroupCtrlType.FWC;
                     gf.Lab = "审核组件";
                     gf.Idx = 0;

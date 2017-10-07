@@ -1040,6 +1040,7 @@ namespace BP.WF.HttpHandler
                     Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg,
                                                       wcDesc.FWCOpLabel);
                 }
+
                 if (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog)//日志组件
                 {
                     Dev2Interface.WriteTrackDailyLog(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);

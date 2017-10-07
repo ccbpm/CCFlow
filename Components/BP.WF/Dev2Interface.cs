@@ -3363,7 +3363,7 @@ namespace BP.WF
                 return "";
 
             // 如果是编号，就不用转化.
-            if (DataType.IsNumStr(flowMark))
+            if (DataType.IsNumStr(flowMark)==true)
                 return flowMark;
 
             string s = DBAccess.RunSQLReturnStringIsNull("SELECT No FROM WF_Flow WHERE FlowMark='" + flowMark + "'", null);
@@ -3482,7 +3482,7 @@ namespace BP.WF
             {
                 t.CheckPhysicsTable();
                 t.Insert();
-                t.DirectInsert();
+                //t.DirectInsert();
             }
 
             #region 特殊判断.
@@ -3539,8 +3539,10 @@ namespace BP.WF
             gwf.WorkID = workid;
             gwf.RetrieveFromDBSources();
 
-            //主键.
+            //求主键 2017.10.6以前的逻辑.
             string tag = gwf.Paras_LastSendTruckID + "_" + currNodeID + "_" + workid + "_" + fid + "_" + BP.Web.WebUser.No;
+
+
 
             Node nd = new Node(currNodeID);
             //待办抢办模式，一个节点只能有一条记录.

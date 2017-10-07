@@ -5779,6 +5779,9 @@ namespace BP.WF
             select.SelectorModel = SelectorModel.GenerUserSelecter;
             select.Update();
 
+            //设置审核组件的高度
+            DBAccess.RunSQL("UPDATE WF_Node SET FWC_H=300,FTC_H=300 WHERE NodeID='" + nd.NodeID + "'");
+
             return nd;
         }
         /// <summary>

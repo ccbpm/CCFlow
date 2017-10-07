@@ -469,19 +469,15 @@ namespace BP.WF.HttpHandler
         /// 审核分组保存
         /// </summary>
         /// <returns></returns>
-        public string CheckGroup_Save()
+        public string GroupField_Save()
         {
-            string sta = this.GetValFromFrmByKey("TB_Check_Name");
-            if (sta.Length == 0)
-            {
-                return "审核岗位不能为空";
-            }
+            string lab = this.GetValFromFrmByKey("TB_Check_Name");
+            if (lab.Length == 0)
+                return "err@审核岗位不能为空";
 
             string prx = this.GetValFromFrmByKey("TB_Check_No");
             if (prx.Length == 0)
-            {
-                prx = chs2py.convert(sta);
-            }
+                prx = chs2py.convert(lab);
 
             MapAttr attr = new MapAttr();
             int i = attr.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, prx + "_Note");
@@ -489,9 +485,10 @@ namespace BP.WF.HttpHandler
             i += attr.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, prx + "_RDT");
 
             if (i > 0)
-            {
-                return "前缀已经使用：" + prx + " ， 请确认您是否增加了这个审核分组或者，请您更换其他的前缀。";
-            }
+                return "err@前缀已经使用：" + prx + " ， 请确认您是否增加了这个审核分组或者，请您更换其他的前缀。";
+
+            BP.Sys.CCFormAPI.CreateCheckGroup(this.FK_MapData, lab, prx);
+
             return "保存成功";
         }
         /// <summary>

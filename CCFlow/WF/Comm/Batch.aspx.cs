@@ -497,7 +497,7 @@ namespace CCFlow.WF.Comm
                     return;
                 }
 
-                BP.Sys.PubClass.WinOpen("RefMethod.aspx?Index="+idx+"&EnsName="+this.EnsName+"&OID="+pks+"&r="+DateTime.Now.ToString());
+                BP.Sys.PubClass.WinOpen("RefMethod.aspx?Index="+idx+"&EnsName="+this.EnsName+"&PK="+pks+"&r="+DateTime.Now.ToString());
                 return;
             }
           

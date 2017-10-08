@@ -90,6 +90,24 @@ namespace BP.En
 				_Desc=value;
 			}
 		}
+        /// <summary>
+        /// 显示到分组
+        /// </summary>
+        private string _groupName = null;
+        /// <summary>
+        /// 显示到分组
+        /// </summary>
+        public string GroupName
+        {
+            get
+            {
+                return _groupName;
+            }
+            set
+            {
+                this._groupName = value;
+            }
+        }
 	}
 	/// <summary>
 	/// 

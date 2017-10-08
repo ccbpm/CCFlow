@@ -772,7 +772,7 @@ namespace BP.WF.HttpHandler
 
 
                 if (btnLab.SearchEnable)
-                    toolbar += "<input type=button name='Search'  value='" + btnLab.SearchLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/Rpt/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "','dsd0'); \" />";
+                    toolbar += "<input type=button name='Search'  value='" + btnLab.SearchLab + "' enable=true onclick=\"WinOpen('./RptDfine/Default.htm?RptNo=ND" + int.Parse(this.FK_Flow) + "MyRpt&FK_Flow="+this.FK_Flow+"&SearchType=My&s=" + tKey + "','dsd0'); \" />";
 
                 if (btnLab.BatchEnable)
                 {

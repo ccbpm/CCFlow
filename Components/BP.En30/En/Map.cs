@@ -781,11 +781,13 @@ namespace BP.En
 		/// </summary>
 		/// <param name="ens">集合信息</param>
 		/// <param name="refKey">属性</param>
-		public void AddDtl(Entities ens, string refKey)
+        /// <param name="groupName">显示到分组</param>
+		public void AddDtl(Entities ens, string refKey, string groupName=null)
 		{
 			EnDtl dtl = new EnDtl();
 			dtl.Ens = ens;
 			dtl.RefKey = refKey;
+            dtl.GroupName = groupName;
 			this.Dtls.Add(dtl);
 		}
 		/// <summary>

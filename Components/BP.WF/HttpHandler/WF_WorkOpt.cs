@@ -963,6 +963,10 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string WorkCheck_Save()
         {
+            //设计的时候,workid=0,不让其存储.
+            if (this.WorkID == 0)
+                return "";
+
             // 审核信息.
             string msg = "";
             string dotype = GetRequestVal("ShowType");

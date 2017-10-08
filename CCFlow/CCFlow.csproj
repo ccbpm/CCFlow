@@ -403,7 +403,6 @@
     <Content Include="WF\Admin\Condition.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Designer.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Designer.js" />
-    <Content Include="WF\Admin\FoolFormDesigner\ExpImp.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\GuideSFTableAttr.htm" />
     <Content Include="WF\Admin\TestFlow.htm" />
     <Content Include="WF\Admin\SettingTemplate.htm" />
@@ -1170,7 +1169,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\EditSQL.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditTable.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EleBatch.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\ExpImp.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\GroupField.aspx" />
@@ -6458,6 +6456,7 @@
     <Content Include="web.Release.config">
       <DependentUpon>web.config</DependentUpon>
     </Content>
+    <Content Include="WF\Setting\Handler.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataUser\AppCoder\FrmEventHandle.aspx.designer.cs">
@@ -7295,13 +7294,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\EleBatch.aspx.designer.cs">
       <DependentUpon>EleBatch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ExpImp.aspx.cs">
-      <DependentUpon>ExpImp.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ExpImp.aspx.designer.cs">
-      <DependentUpon>ExpImp.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx.cs">
       <DependentUpon>FrmEvent.aspx</DependentUpon>
@@ -8832,6 +8824,9 @@
     </Compile>
     <Compile Include="WF\SDKComponents\TruakOnly.ascx.designer.cs">
       <DependentUpon>TruakOnly.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Setting\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\StartGuide.aspx.cs">
       <DependentUpon>StartGuide.aspx</DependentUpon>

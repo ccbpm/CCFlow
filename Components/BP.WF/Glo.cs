@@ -401,8 +401,6 @@ namespace BP.WF
                 //升级表单树. 2015.10.05
                 SysFormTree sft = new SysFormTree();
                 sft.CheckPhysicsTable();
-                sql = "UPDATE Sys_FormTree SET DBSrc='local'  WHERE DBSrc IS NULL OR DBSrc=''";
-                BP.DA.DBAccess.RunSQL(sql);
 
 
                 //表单信息表.

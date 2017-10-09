@@ -216,29 +216,23 @@ function FlowProperty() {
         //window.location.href = window.location.href;
     });
 
-//    if (window.parent) {
-//        window.parent.addTab(CCBPM_Data_FK_Flow + "PO", "流程属性" + CCBPM_Data_FK_Flow, url);
-//    } else {
-//        WinOpen(url);
-//    }
+    //    if (window.parent) {
+    //        window.parent.addTab(CCBPM_Data_FK_Flow + "PO", "流程属性" + CCBPM_Data_FK_Flow, url);
+    //    } else {
+    //        WinOpen(url);
+    //    }
 }
 
 //报表设计
 function DesignMyRptNew() {
+
     var flowId = Number(CCBPM_Data_FK_Flow);
     flowId = String(flowId);
-    url = "../RptDfine/S0_RptList.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
 
-    // url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PK=" + CCBPM_Data_FK_Flow + "&Lang=CH";
+    url = "../RptDfine/Default.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_MapData=ND" + flowId + "MyRpt";
     OpenEasyUiDialog(url, "eudlgframe", '流程属性', 990, 500, "icon-property", true, null, null, null, function () {
-        //window.location.href = window.location.href;
-    });
 
-    //    if (window.parent) {
-    //        window.parent.addTab(CCBPM_Data_FK_Flow + "DESIGNRPT", "报表设计" + CCBPM_Data_FK_Flow, url);
-    //    } else {
-    //        WinOpen(url);
-    //    }
+    });
 }
 
 //报表设计
@@ -553,7 +547,7 @@ function Run_Flow() {
 
 //检查流程
 function Check_Flow() {
-    var url = "FlowCheck.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&DoType11=FlowCheck&Lang=CH";
+    var url = "../AttrFlow/CheckFlow.htm?FK_Flow=" + CCBPM_Data_FK_Flow + "&DoType11=FlowCheck&Lang=CH";
     OpenEasyUiDialog(url, "eudlgframe", '流程检查', 800, 500, "icon-property", true, null, null, null, function () {
         //window.location.href = window.location.href;
     });

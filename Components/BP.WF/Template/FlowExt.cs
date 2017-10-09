@@ -597,56 +597,6 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
                 #endregion 开发接口.
 
-                #region 报表设计.
-                rm = new RefMethod();
-                rm.Title = "报表设计";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/DesignRpt.png";
-                rm.ClassMethodName = this.ToString() + ".DoDRpt()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "报表设计";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "流程查询";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
-                rm.ClassMethodName = this.ToString() + ".DoDRptSearch()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "报表设计";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "自定义查询";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/SQL.png";
-                rm.ClassMethodName = this.ToString() + ".DoDRptSearchAdv()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "报表设计";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "分组分析";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Group.png";
-                rm.ClassMethodName = this.ToString() + ".DoDRptGroup()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "报表设计";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "交叉报表(beta)";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/D3.png";
-                rm.ClassMethodName = this.ToString() + ".DoDRptD3()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "报表设计";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "对比分析(beta)";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Contrast.png";
-                rm.ClassMethodName = this.ToString() + ".DoDRptContrast()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "报表设计";
-                map.AddRefMethod(rm);
-                #endregion 报表设计.
-
                 #region 流程运行维护.
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/DTS.gif";
@@ -892,37 +842,6 @@ namespace BP.WF.Template
             return "../../Admin/CCBPMDesigner/App/RptOrder.aspx?anaTime=mouth&FK_Flow=" + this.No;
         }
         #endregion 流程监控.
-
-        #region 报表设计.
-        public string DoDRpt()
-        {
-
-            ///WF/Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt;
-            return "../../Comm/En.htm?EnsName=BP.WF.Rpt.MapRptExts&PK=ND" + int.Parse(this.No) + "MyRpt";
-            //  UIEn.aspx?EnsName=BP.WF.Rpt.MapRptExts&PK=ND185MyRpt
-            //return "../../Rpt/OneFlow.htm?FK_Flow=" + this.No + "&FK_MapData=ND" + int.Parse(this.No) + "MyRpt";
-        }
-        public string DoDRptSearch()
-        {
-            return "../../Rpt/Search.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
-        }
-        public string DoDRptSearchAdv()
-        {
-            return "../../Rpt/SearchAdv.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
-        }
-        public string DoDRptGroup()
-        {
-            return "../../Rpt/Group.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
-        }
-        public string DoDRptD3()
-        {
-            return "../../Rpt/D3.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
-        }
-        public string DoDRptContrast()
-        {
-            return "../../Rpt/Contrast.aspx?FK_Flow=" + this.No + "&RptNo=ND" + int.Parse(this.No) + "MyRpt";
-        }
-        #endregion 报表设计.
 
         #region 开发接口.
         /// <summary>
@@ -1535,8 +1454,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoOpenRpt()
         {
-            return "../../Rpt/OneFlow.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +
-                   int.Parse(this.No) + "Rpt";
+            return "../../Admin/RptDfine/Default.htm?FK_Flow=" + this.No + "&DoType=Edit&FK_MapData=ND" +int.Parse(this.No) + "Rpt";
         }
         /// <summary>
         /// 更新之后的事情，也要更新缓存。

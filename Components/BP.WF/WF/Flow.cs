@@ -881,10 +881,10 @@ namespace BP.WF
                 if (dt.Rows.Count == 0)
                     throw new Exception("@利用table传递数据错误，没有找到指定的行数据，无法为用户填充数据。");
 
-                string innerKeys = ",OID,RDT,CDT,FID,WFState,";
+                string innerKeys = ",OID,RDT,CDT,FID,WFState,WorkID,WORKID,WFSTATE";
                 foreach (DataColumn dc in dt.Columns)
                 {
-                    if (innerKeys.Contains("," + dc.ColumnName + ","))
+                    if (innerKeys.Contains("," + dc.ColumnName.ToUpper() + ","))
                         continue;
 
                     wk.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName].ToString());

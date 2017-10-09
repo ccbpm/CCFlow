@@ -4,12 +4,10 @@
 <%@ Register src="Pub.ascx" tagname="Pub" tagprefix="uc1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-<script src="App/EasyUI/jquery/lib/jquery/jquery-1.5.2.min.js" type="text/javascript"></script>
-<script language="JavaScript" src="Comm/JScript.js" type="text/javascript"></script>
-<script language="JavaScript" src="Comm/JS/Calendar/WdatePicker.js" defer="defer"
+<script src="./Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script language="JavaScript" src="./Comm/JScript.js" type="text/javascript"></script>
+<script language="JavaScript" src="./Comm/JS/Calendar/WdatePicker.js" defer="defer"
     type="text/javascript"></script>
-
-    <script language='JavaScript' src='Scripts/jquery-1.4.1.min.js' type="text/javascript"></script>
     <script type="text/javascript">
         function SelectAll() {
             var arrObj = document.all;

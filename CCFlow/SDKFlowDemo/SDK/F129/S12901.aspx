@@ -24,7 +24,7 @@
                }
 
                document.getElementById('Btn_Save').click(); //调用btn_save事件.
-               alert('save ok');
+               // alert('save ok');
                return true; //保存成功，用户可以发送.
            } catch (e) {
                alert(e.name + " :  " + e.message);

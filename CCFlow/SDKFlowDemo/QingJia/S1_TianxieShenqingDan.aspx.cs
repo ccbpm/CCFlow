@@ -107,6 +107,12 @@ namespace CCFlow.SDKFlowDemo.QingJia
 
                 //调用发送api, 返回发送对象.
                 objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
+
+                //获得接受人员列表.
+                string toemps = objs.VarAcceptersID;
+
+                //通过sql获取. SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerlist WHERE IsPass=0 AND WorkID=1111
+
               //  objs = BP.WF.Dev2Interface.db_c(this.FK_Flow, this.WorkID);
               //  objs.VarCurrNodeID
             }

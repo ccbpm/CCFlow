@@ -1159,19 +1159,12 @@
     <Content Include="WF\Admin\FoolFormDesigner\CopyFieldFromNode.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Do.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditEnum.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditEnum.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditF.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditF.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFExtContral.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditFieldGuide.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\EditSQL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EditSQL.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\EditTable.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\EleBatch.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\FieldTypeList.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\GroupField.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\GroupField.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\GroupFieldEdit.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\HidAttr.htm" />
@@ -1216,7 +1209,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapFrame.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pub.ascx" />
-    <Content Include="WF\Admin\FoolFormDesigner\RETemplete.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\SFSQL.aspx" />
@@ -1224,9 +1216,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\SFTable.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Sln.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SlnDo.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SlnDtl.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\Max.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\Min.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\SysDataType.xml" />
@@ -1234,7 +1224,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\SysEnum.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SysEnumList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\TabIdx.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx" />
     <Content Include="WF\Admin\Img\DesignRpt.png" />
     <Content Include="WF\Admin\Img\PK.png" />
     <Content Include="WF\Admin\Pub.ascx" />
@@ -1983,7 +1972,6 @@
     <Content Include="WF\FlowFormTree\Images\Menu\sysset.png" />
     <Content Include="WF\FlowFormTree\Images\Menu\user1.png" />
     <Content Include="WF\FlowFormTree\Images\Menu\window.png" />
-    <Content Include="WF\Focus.aspx" />
     <Content Include="WF\Focus.htm" />
     <Content Include="WF\GetTask.aspx" />
     <Content Include="WF\HungUpList.htm" />
@@ -7260,20 +7248,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\Do.aspx.designer.cs">
       <DependentUpon>Do.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditEnum.aspx.cs">
-      <DependentUpon>EditEnum.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditEnum.aspx.designer.cs">
-      <DependentUpon>EditEnum.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditF.aspx.cs">
-      <DependentUpon>EditF.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditF.aspx.designer.cs">
-      <DependentUpon>EditF.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\EditSQL.aspx.cs">
       <DependentUpon>EditSQL.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7281,33 +7255,12 @@
     <Compile Include="WF\Admin\FoolFormDesigner\EditSQL.aspx.designer.cs">
       <DependentUpon>EditSQL.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditTable.aspx.cs">
-      <DependentUpon>EditTable.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\EditTable.aspx.designer.cs">
-      <DependentUpon>EditTable.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\EleBatch.aspx.cs">
       <DependentUpon>EleBatch.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\EleBatch.aspx.designer.cs">
       <DependentUpon>EleBatch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx.cs">
-      <DependentUpon>FrmEvent.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\FrmEvent.aspx.designer.cs">
-      <DependentUpon>FrmEvent.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\GroupField.aspx.cs">
-      <DependentUpon>GroupField.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\GroupField.aspx.designer.cs">
-      <DependentUpon>GroupField.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
@@ -7444,13 +7397,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\RETemplete.aspx.cs">
-      <DependentUpon>RETemplete.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\RETemplete.aspx.designer.cs">
-      <DependentUpon>RETemplete.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Rpt.master.cs">
       <DependentUpon>Rpt.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7500,26 +7446,12 @@
     <Compile Include="WF\Admin\FoolFormDesigner\Sln.aspx.designer.cs">
       <DependentUpon>Sln.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx.cs">
-      <DependentUpon>SlnCopy.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SlnCopy.aspx.designer.cs">
-      <DependentUpon>SlnCopy.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SlnDo.aspx.cs">
       <DependentUpon>SlnDo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SlnDo.aspx.designer.cs">
       <DependentUpon>SlnDo.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SlnDtl.aspx.cs">
-      <DependentUpon>SlnDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SlnDtl.aspx.designer.cs">
-      <DependentUpon>SlnDtl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.cs">
       <DependentUpon>SysEnum.aspx</DependentUpon>
@@ -7534,13 +7466,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\TabIdx.aspx.designer.cs">
       <DependentUpon>TabIdx.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx.cs">
-      <DependentUpon>ViewFrm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ViewFrm.aspx.designer.cs">
-      <DependentUpon>ViewFrm.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\WinOpen.master.cs">
       <DependentUpon>WinOpen.master</DependentUpon>
@@ -8505,13 +8430,6 @@
     <Compile Include="WF\FlowFormTree\FlowFormTreeView.aspx.designer.cs">
       <DependentUpon>FlowFormTreeView.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Focus.aspx.cs">
-      <DependentUpon>Focus.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Focus.aspx.designer.cs">
-      <DependentUpon>Focus.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\GetTask.aspx.cs">
       <DependentUpon>GetTask.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -9223,7 +9141,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bin\" />

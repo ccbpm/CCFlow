@@ -157,20 +157,7 @@ namespace BP.Sys.FrmUI
                 rm.GroupName = "高级";
                 map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.Title = "旧版本设置aspx";
-                //rm.ClassMethodName = this.ToString() + ".DoOldVerAspx()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.GroupName = "高级设置";
-                //map.AddRefMethod(rm);
-
-
-                //rm = new RefMethod();
-                //rm.Title = "旧版本设置htm";
-                //rm.ClassMethodName = this.ToString() + ".DoOldVer()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.GroupName = "高级设置";
-                //map.AddRefMethod(rm);
+             
                 #endregion 执行的方法.
 
                 this._enMap = map;
@@ -180,18 +167,7 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 方法执行.
-        /// <summary>
-        /// 旧版本设置
-        /// </summary>
-        /// <returns></returns>
-        public string DoOldVer()
-        {
-            return "/WF/Admin/FoolFormDesigner/EditTable.htm?KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&EnumKey=" + this.UIBindKey + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&UIBindKey=" + this.UIBindKey;
-        }
-        public string DoOldVerAspx()
-        {
-            return "/WF/Admin/FoolFormDesigner/EditTable.aspx?KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&EnumKey=" + this.UIBindKey + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&UIBindKey=" + this.UIBindKey;
-        }
+      
         /// <summary>
         /// 外键表属性
         /// </summary>

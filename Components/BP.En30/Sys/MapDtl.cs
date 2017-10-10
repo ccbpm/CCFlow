@@ -1142,7 +1142,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDtlAttr.PTable, value);
             }
         }
-         /// <summary>
+        /// <summary>
         /// 过滤的SQL表达式.
         /// </summary>
         public string FilterSQLExp

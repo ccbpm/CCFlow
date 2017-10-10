@@ -194,19 +194,19 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "旧版本设置htm";
-                rm.ClassMethodName = this.ToString() + ".DoOldVer()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "旧版本设置htm";
+                //rm.ClassMethodName = this.ToString() + ".DoOldVer()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "高级设置";
+                //map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "旧版本设置aspx";
-                rm.ClassMethodName = this.ToString() + ".DoOldVerAspx()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
+                //rm = new RefMethod();
+                //rm.Title = "旧版本设置aspx";
+                //rm.ClassMethodName = this.ToString() + ".DoOldVerAspx()";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.GroupName = "高级设置";
+                //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "批处理";

@@ -1122,9 +1122,9 @@ namespace BP.WF
             else
             {
                 FlowSort fs = new FlowSort();
-                fs.No = "02";
-                fs.ParentNo = "99";
-                fs.Name = "其他类";
+                fs.No = "01";
+                fs.ParentNo = "0";
+                fs.Name = "流程树";
                 fs.DirectInsert();
             }
             #endregion 初始化数据

@@ -607,7 +607,6 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(mainTable);
                 #endregion 把主表数据放入.
 
-
                 #region 把外键表加入DataSet
                 DataTable dtMapAttr = ds.Tables["Sys_MapAttr"];
 

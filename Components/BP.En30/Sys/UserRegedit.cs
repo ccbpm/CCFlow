@@ -365,8 +365,8 @@ namespace BP.Sys
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
-                map.AddTBString(UserRegeditAttr.FK_Emp, null, "用户", false, false, 1, 30, 20);
-                map.AddTBString(UserRegeditAttr.CfgKey, null, "键", true, false, 1, 200, 20);
+                map.AddTBString(UserRegeditAttr.FK_Emp, null, "用户", false, false, 0, 30, 20);
+                map.AddTBString(UserRegeditAttr.CfgKey, null, "键", true, false, 0, 200, 20);
                 map.AddTBString(UserRegeditAttr.Vals, null, "值", true, false, 0, 2000, 20);
                 map.AddTBString(UserRegeditAttr.GenerSQL, null, "GenerSQL", true, false, 0, 2000, 20);
                 map.AddTBString(UserRegeditAttr.Paras, null, "Paras", true, false, 0, 2000, 20);

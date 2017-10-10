@@ -112,8 +112,8 @@ namespace BP.Sys
                 map.Java_SetDepositaryOfEntity(Depositary.None);
 
                 map.AddMyPK();
-                map.AddTBStringPK(CFieldAttr.EnsName, null, "实体类名称", false, true, 1, 100, 10);
-                map.AddTBStringPK(CFieldAttr.FK_Emp, Web.WebUser.No, "工作人员", false, true, 1, 100, 10);
+                map.AddTBString(CFieldAttr.EnsName, null, "实体类名称", false, true, 0, 100, 10);
+                map.AddTBString(CFieldAttr.FK_Emp, null, "工作人员", false, true, 0, 100, 10);
                 map.AddTBStringDoc(CFieldAttr.Attrs, null, "属性s", true, false);
                 this._enMap = map;
                 return this._enMap;

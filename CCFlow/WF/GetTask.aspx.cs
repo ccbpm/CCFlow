@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -18,7 +17,6 @@ namespace CCFlow.WF
 {
     public partial class WF_JumpCheck : BP.Web.WebPage
     {
-
         #region 属性.
         public Int64 WorkID
         {
@@ -52,7 +50,6 @@ namespace CCFlow.WF
 
         public void BindWorkList()
         {
-            
             int colspan = 10;
             this.Pub1.AddTable("width='100%'");
           //  this.Pub1.AddCaptionMsg("取回审批");
@@ -179,7 +176,7 @@ namespace CCFlow.WF
 
                 this.Pub1.AddTD("<a href='GetTask.aspx?FK_Flow=" + fl.No + "&FK_Node=" + int.Parse(fl.No) + "01' >" + fl.Name + "</a>");
 
-                this.Pub1.AddTD("<a href=\"javascript:WinOpen('/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fl.No + "&DoType=Chart','sd');\"  >打开</a>");
+                this.Pub1.AddTD("<a href=\"javascript:WinOpen('./WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fl.No + "&DoType=Chart','sd');\"  >打开</a>");
                 this.Pub1.AddTD(fl.Note);
                 this.Pub1.AddTREnd();
             }

@@ -1018,7 +1018,7 @@ namespace BP.WF
                 {
                     sql = "SELECT FK_Flow FROM V_FlowStarter WHERE FK_Emp='" + userNo + "'";
                     sql += " UNION ";
-                    sql += "select FK_FLOW from wf_node where nodeid in";
+                    sql += "select FK_FLOW from wf_node where NodePosType=1 AND nodeid in ";
                     sql += "(SELECT a.fk_node FROM WF_NodeDept A, Port_EmpDept B, WF_NodeStation C, Port_EmpStation D "
                     + " WHERE A.FK_Dept= B.FK_Dept AND B.FK_Emp='" + userNo + "' AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp='" + userNo + "')";
 

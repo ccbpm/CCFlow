@@ -186,6 +186,7 @@ namespace BP.WF.HttpHandler
                 ur.MyPK = WebUser.No + rptNo + cfgfix;
                 ur.FK_Emp = WebUser.No;
                 ur.CfgKey = rptNo + cfgfix;
+              
                 ur.Insert();
             }
 

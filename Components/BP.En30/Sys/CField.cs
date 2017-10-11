@@ -105,7 +105,8 @@ namespace BP.Sys
         {
             get
             {
-                if (this._enMap != null) return this._enMap;
+                if (this._enMap != null) 
+                    return this._enMap;
                 Map map = new Map("Sys_UserRegedit","列选择");
 
                 map.Java_SetEnType(EnType.Sys);

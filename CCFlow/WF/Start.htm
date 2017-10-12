@@ -215,7 +215,7 @@
                             myNum++;
                             var newRow = "<tr id='" + sortName + myNum + "' >";
                             newRow += "<td class=Idx >" + myNum + "</td>";
-                            newRow += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "</a></td>";
+                            newRow += "<td width='300px'> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "</a></td>";
 
                             var extHtml = "";
                             if (flow.IsBatchStart)
@@ -245,7 +245,7 @@
 <table id="Table1" style=" width:100%;">
 <tr>
 <th  style=" width:38px;" >序号</th>
-<th>名称</th>
+<th style=" width:500px;">名称</th>
 <th>操作</th>
 <th colspan=3>查询</th>
 </tr>

@@ -219,7 +219,7 @@
 
                             var extHtml = "";
                             if (flow.IsBatchStart)
-                                extHtml = " - <a href=\"javascript:WinOpenBatch('" + flow.No + "');\" >操作</a>";
+                                extHtml = " - <a href=\"javascript:WinOpenBatch('" + flow.No + "');\" >批量发起</a>";
 
 
                             newRow += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" >发起申请</a>" + extHtml + "</td>";
@@ -244,9 +244,9 @@
 
 <table id="Table1" style=" width:100%;">
 <tr>
-<th  style=" width:38px;" >序</th>
+<th  style=" width:38px;" >序号</th>
 <th>名称</th>
-<th>批量发起</th>
+<th>操作</th>
 <th colspan=3>查询</th>
 </tr>
 </table>

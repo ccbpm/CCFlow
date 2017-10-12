@@ -106,7 +106,7 @@ namespace CCFlow.SDKFlowDemo.QingJia
                 //编写我的业务逻辑....
 
                 //调用发送api, 返回发送对象.
-                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
+                objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID,0,null);
 
                 //获得接受人员列表.
                 string toemps = objs.VarAcceptersID;

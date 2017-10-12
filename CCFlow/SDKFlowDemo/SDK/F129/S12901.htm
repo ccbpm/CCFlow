@@ -1,13 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="S12901.aspx.cs" Inherits="CCFlow.SDKFlowDemo.SDK.F129.S12901" %>
-<%--<%@ Register src="../../../WF/SDKComponents/FrmCheck.ascx" tagname="FrmCheck" tagprefix="uc1" %>
---%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
+﻿<html >
+<head>
     <title>嵌入式表单</title>
 </head>
 <body>
-    <form id="form1" runat="server"  >
+    <form id="form1" >
    <script type="text/javascript">
        /*
        *  保存方法demo: 
@@ -47,42 +43,42 @@
 <table border="1" width="90%">
 <tr>
 <td>请假人帐号:</td>
-<td>
-    <asp:TextBox ID="TB_No" ReadOnly=true runat="server" ></asp:TextBox>
+<td> <input  id="TB_No" name="TB_No" id="TB_No" value="zhangsan" />
     </td>
-<td>(只读)当前登录人登录帐号BP.Web.WebUser.No</td>
+<td>当前登录人登录帐号</td>
 </tr>
 
 <tr>
 <td>请假人名称:</td>
 <td>
-    <asp:TextBox ID="TB_Name" ReadOnly=true runat="server" > </asp:TextBox>
+<input   name="TB_Name"  id="TB_Name" value="张三" />
     </td>
-<td>(只读)当前登录人名称BP.Web.WebUser.Name</td>
+<td>当前登录人名称</td>
 </tr>
 
 
 <tr>
 <td>请假人部门编号:</td>
 <td>
-    <asp:TextBox ID="TB_DeptNo" ReadOnly=true runat="server"  ></asp:TextBox>
+<input   name="TB_DeptNo"  id="TB_DeptNo" value="0001" />
+    
     </td>
-<td>(只读)当前登录人部门编号BP.Web.WebUser.FK_Dept</td>
+<td>当前登录人部门编号</td>
 </tr>
 
 <tr>
 <td>请假人部门名称:</td>
 <td>
-    <asp:TextBox ID="TB_DeptName" ReadOnly=true runat="server"  ></asp:TextBox>
+<input name="TB_DeptName"  id="TB_DeptName" value="开发部" />
     </td>
-<td>(只读)当前登录人部门名称BP.Web.WebUser.FK_DeptName</td>
+<td>当前登录人部门名称</td>
 </tr>
 
 
 <tr>
 <td>请假天数:</td>
 <td>
-    <asp:TextBox ID="TB_QingJiaTianShu" runat="server" Text="0" Enabled=true  ></asp:TextBox>
+<input name="TB_QingJiaTianShu"  id="TB_QingJiaTianShu" value="0" />
     </td>
 <td>请输入一个数字</td>
 </tr>
@@ -90,7 +86,8 @@
 <tr>
 <td>请假原因:</td>
 <td>
-    <asp:TextBox ID="TB_QingJiaYuanYin" runat="server" Text="请输入请假原因..."  ></asp:TextBox>
+<input name="TB_QingJiaYuanYin"  id="TB_QingJiaYuanYin" value="请输入请假原因..." />
+     
     </td>
 <td></td>
 </tr>
@@ -101,31 +98,13 @@
 </tr>
 
 
-<!-- 审核组件, 非开始节点不让其显示审核组件 ....................  -->
-<% 
-    string str = this.Request.QueryString["FK_Node"];
-    if (str != "12901")
-    {
-       /*如果不是开始节点，就不它显示审核组件. */
-     %>
-<tr>
-<td> 
-<%--
-<fieldset>
-<legend><font color=green ><b>审批区域</b></font></legend>
-    <uc1:FrmCheck ID="FrmCheck1" runat="server" />
-</fieldset>--%>
-</td>
-</tr>
-<%  } %>
-
 </table>
 
 
 <fieldset>
 <legend> 开发说明：</legend>
 <ul>
-<li>您所看到的该表单demo位于：<%=BP.Sys.SystemConfig.PhysicalApplicationPath %>SDKFlowDemo\\SDK\F129\\S12901.aspx</li>
+<li>您所看到的该表单demo位于：\SDKFlowDemo\\SDK\F129\\S12901.aspx</li>
 <li>您可以打开该文件仔细的看看文档说明。</li>
 <li>该文件中有一个Save 的javascript方法，这是ccbpm与您执行保存动作的约定，在用户点击发送或者保存的时候，就会触发该方法。</li>
 <li>该方法如果保存成功就返回true, 否则返回fase.  在用户点击发送按钮的时候，你返回false 就标识保存错误ccbpm就不能发送。</li>

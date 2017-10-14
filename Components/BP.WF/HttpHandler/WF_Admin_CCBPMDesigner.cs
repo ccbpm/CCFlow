@@ -436,7 +436,14 @@ namespace BP.WF.HttpHandler
                 return "err@升级失败请联系管理员,或者反馈给ccbpm. 失败原因:" + ex.Message;
             }
         }
-
+        //流程设计器登陆前台，转向规则，判断是否为天业BPM
+        public string Login_Redirect()
+        {
+            if (SystemConfig.CustomerNo == "TianYe")
+                return "TianYe";
+            else
+                return "CCFlow";
+        }
         public string Login_Submit()
         {
             BP.Port.Emp emp = new BP.Port.Emp();

@@ -210,6 +210,14 @@ namespace BP.WF.HttpHandler
                 }
             }
 
+            //判断是否含有导出至模板的模板文件，如果有，则显示导出至模板按钮RptExportToTmp
+            string tmpDir = BP.Sys.SystemConfig.PathOfDataUser + @"TempleteExpEns\" + rptNo;
+            if(System.IO.Directory.Exists(tmpDir))
+            {
+                if (System.IO.Directory.GetFiles(tmpDir, "*.xls*").Length > 0)
+                    md.SetPara("T_RptExportToTmp", "1");
+            }
+
             #region //增加显示列信息
             DataRow row = null;
             DataTable dt = new DataTable("Sys_MapAttr");

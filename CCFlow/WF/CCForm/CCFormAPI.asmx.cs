@@ -157,7 +157,7 @@ namespace CCFlow.WF.CCForm
 						}
 						else
 						{
-							if (dt.TableName != dtl.No)
+							if (dt.TableName != dtl.No && dt.TableName != dtl.Alias)    //使用明细表编号与别名验证，符合之一，即代表是此明细表的数据表，added by liuxc,2017-10-13
 								continue;
 						}
 						if (dtl.IsReadonly) //从表是否只读

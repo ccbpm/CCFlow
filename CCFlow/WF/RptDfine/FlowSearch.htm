@@ -132,6 +132,15 @@
                     }
                 });
 
+                if (md.T_RptExportToTmp == "1") {
+                    $("#btn_export").after(' <a href="javascript:void(0)" iconCls="icon-excel" id="btn_exportToTmp">导出至模板</a>');
+                    $("#btn_exportToTmp").linkbutton({
+                        onClick: function () {
+                            window.open('../Do.aspx?ActionType=DownFlowSearchToTmpExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
+                        }
+                    });
+                }
+
                 if (d.FilterCtrls.length > 0) {
                     $("#btn_reset").after('<span class="menu_sep"></span><a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
                     $("#btn_more").linkbutton();

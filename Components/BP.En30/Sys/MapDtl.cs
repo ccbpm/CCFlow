@@ -1182,6 +1182,20 @@ namespace BP.Sys
                 this.SetValByKey(MapDtlAttr.MTR, value);
             }
         }
+        /// <summary>
+        /// 别名
+        /// </summary>
+        public string Alias
+        {
+            get
+            {
+                return this.GetValStrByKey(MapDtlAttr.Alias);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.Alias, value);
+            }
+        }
         #endregion
 
         #region 构造方法

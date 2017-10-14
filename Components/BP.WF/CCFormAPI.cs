@@ -361,19 +361,19 @@ namespace BP.WF
 				//明细表的主表描述
 				sql = "SELECT * FROM Sys_MapDtl WHERE No='" + item.No + "'";
 				dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-				dt.TableName = "Sys_MapDtl_For_" + item.No;
+				dt.TableName = "Sys_MapDtl_For_" + (string.IsNullOrWhiteSpace(item.Alias) ? item.No : item.Alias);
 				myds.Tables.Add(dt);
 
 				//明细表的表单描述
 				sql = "SELECT * FROM Sys_MapAttr WHERE FK_MapData='" + item.No + "'";
 				dtMapAttr = BP.DA.DBAccess.RunSQLReturnTable(sql);
-				dtMapAttr.TableName = "Sys_MapAttr_For_" + item.No;
+                dtMapAttr.TableName = "Sys_MapAttr_For_" + (string.IsNullOrWhiteSpace(item.Alias) ? item.No : item.Alias);
 				myds.Tables.Add(dtMapAttr);
 
 				//明细表的配置信息.
 				sql = "SELECT * FROM Sys_MapExt WHERE FK_MapData='" + item.No + "'";
 				dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-				dt.TableName = "Sys_MapExt_For_" + item.No;
+                dt.TableName = "Sys_MapExt_For_" + (string.IsNullOrWhiteSpace(item.Alias) ? item.No : item.Alias);
 				myds.Tables.Add(dt);
 
 				#region 从表的 外键表/枚举
@@ -541,7 +541,7 @@ namespace BP.WF
 						dr[attr.KeyOfEn] = attr.DefVal;
 				}
 
-				dtDtl.TableName = dtl.No; //修改明细表的名称.
+				dtDtl.TableName = string.IsNullOrWhiteSpace(dtl.Alias) ? dtl.No : dtl.Alias; //edited by liuxc,2017-10-10.如果有别名，则使用别名，没有则使用No
 				myds.Tables.Add(dtDtl); //加入这个明细表, 如果没有数据，xml体现为空.
 			}
 			#endregion 从表数据

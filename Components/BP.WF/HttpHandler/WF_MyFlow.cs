@@ -788,12 +788,11 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='Askfor'  value='" + btnLab.AskforLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
                 }
 
-                if (btnLab.HuiQianRole )
+                if (btnLab.HuiQianRole != HuiQianRole.None)
                 {
                     /*会签 */
                     string urlr3 = appPath + "WF/WorkOpt/HuiQian.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
                     toolbar += "<input type=button name='HuiQian'  value='" + btnLab.HuiQianLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
-
                 }
 
 
@@ -1146,7 +1145,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<a data-role='button' type=button name='Askfor'  value='" + btnLab.AskforLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" ></a>";
                 }
 
-                if (btnLab.HuiQianRole)
+                if (btnLab.HuiQianRole != HuiQianRole.None)
                 {
                     /*会签 */
                     string urlr3 = appPath + "WF/WorkOpt/HuiQian.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;

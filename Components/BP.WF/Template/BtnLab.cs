@@ -718,11 +718,11 @@ namespace BP.WF.Template
         /// <summary>
         /// 会签规则
         /// </summary>
-        public bool HuiQianRole
+        public HuiQianRole HuiQianRole
         {
             get
             {
-                return this.GetValBooleanByKey(BtnAttr.HuiQianRole);
+                return (HuiQianRole)this.GetValIntByKey(BtnAttr.HuiQianRole);
             }
         }
         /// <summary>

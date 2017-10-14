@@ -437,6 +437,15 @@ namespace BP.WF.HttpHandler
                 gwls.AddEntity(gwl);
             }
 
+            //把加签的人员显示到正在处理人员列表中.
+            foreach (GenerWorkerList item in gwls)
+            {
+                if (gwf.TodoEmps.Contains(item.FK_EmpText + ";") == false)
+                    gwf.TodoEmps += item.FK_EmpText + ";";
+            }
+            gwf.Update();
+           
+
             //赋值部门名称。
             DataTable mydt = gwls.ToDataTableField();
             mydt.Columns.Add("FK_DeptT");

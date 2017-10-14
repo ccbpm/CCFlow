@@ -1734,7 +1734,7 @@ function GenerWorkNode() {
             }
 
             //设置标题.
-            document.title = '您好:' + flow_Data.WF_Node[0].Name;
+            //document.title = '您好:' + flow_Data.WF_Node[0].Name;
 
 
             $('#CCForm').html('');
@@ -2294,7 +2294,7 @@ function figure_Template_Image(frmImage) {
 
         }
         // 由于火狐 不支持onerror 所以 判断图片是否存在放到服务器端
-        if (imgSrc == "")  //|| !File.Exists(Server.MapPath("~/" + imgSrc)))  //
+        if (imgSrc == "" || imgSrc == null)  //|| !File.Exists(Server.MapPath("~/" + imgSrc)))  //
             imgSrc = "../DataUser/ICON/CCFlow/LogBig.png";
 
         eleHtml = $('<div></div>');

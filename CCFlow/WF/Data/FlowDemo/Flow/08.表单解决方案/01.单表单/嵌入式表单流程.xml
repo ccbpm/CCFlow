@@ -139,7 +139,7 @@
     <DTFrom>2015-01-17 10:25</DTFrom>
     <DTTo>2015-01-17 10:25</DTTo>
     <FormType>2</FormType>
-    <FormUrl>/SDKFlowDemo/SDK/F129/S12901.htm</FormUrl>
+    <FormUrl>../SDKFlowDemo/SDK/F129/S12901.htm</FormUrl>
     <FocusField />
     <NodeFrmID />
     <SaveModel>0</SaveModel>
@@ -317,7 +317,7 @@
     <DTFrom>2015-01-17 10:25</DTFrom>
     <DTTo>2015-01-17 10:25</DTTo>
     <FormType>2</FormType>
-    <FormUrl>/SDKFlowDemo/SDK/F129/S12901.htm</FormUrl>
+    <FormUrl>../SDKFlowDemo/SDK/F129/S12901.htm</FormUrl>
     <FocusField />
     <NodeFrmID />
     <SaveModel>0</SaveModel>
@@ -495,7 +495,7 @@
     <DTFrom>2015-01-17 10:25</DTFrom>
     <DTTo>2015-01-17 10:25</DTTo>
     <FormType>2</FormType>
-    <FormUrl>/SDKFlowDemo/SDK/F129/S12901.htm</FormUrl>
+    <FormUrl>../SDKFlowDemo/SDK/F129/S12901.htm</FormUrl>
     <FocusField />
     <NodeFrmID />
     <SaveModel>0</SaveModel>

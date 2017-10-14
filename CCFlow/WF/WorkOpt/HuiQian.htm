@@ -12,54 +12,57 @@
     <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
     <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
-
     <script type="text/javascript" src="../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <!-- 导入配置文件. -->
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <style type="text/css">
-        body {
+        body
+        {
             background: transparent;
         }
-            body div {
-                text-align: left;
-            }
-        #Message {
+        body div
+        {
+            text-align: left;
+        }
+        #Message
+        {
             width: 100%;
         }
         
-        #SelectEmp {
-          position: relative;
-          width:400px;
-          border-top: 0;
-          display: none;
-          margin-top:-7px;
-          /*border: solid 2px #3175af;*/
+        #SelectEmp
+        {
+            position: relative;
+            width: 400px;
+            border-top: 0;
+            display: none;
+            margin-top: -7px; /*border: solid 2px #3175af;*/
         }
         
-        .item {
+        .item
+        {
             padding: 3px 5px;
             cursor: pointer;
-            float:left;
-            width:190px;
-            line-height:20px;
+            float: left;
+            width: 190px;
+            line-height: 20px;
             display: inline-block;
-            background-color:#F7F7F7;
+            background-color: #F7F7F7;
         }
         
         #next
         {
-            float:left;
+            float: left;
             position: relative;
-            width:600px;
-         }
-         
-         .addbg {
+            width: 600px;
+        }
+        
+        .addbg
+        {
             background: #CFCFCF;
         }
     </style>
@@ -67,7 +70,7 @@
         var param = {};
         $(function () {
 
-            $("#HelpInfo").hide();
+            $("#HelpInfo").show();
 
             //初始化页面移交页面
             param = {
@@ -97,11 +100,11 @@
 
             $('body').append($(selectEmpModalHtml));
             var url = "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random();
-          //  url = url.replace('101', '10102');
+            //  url = url.replace('101', '10102');
             url = url.replace('=101&', '=10102&');
 
 
-            $('#iframeSelectEmpsForm').attr('src',url);
+            $('#iframeSelectEmpsForm').attr('src', url);
             $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
             //$("section").show();
             $(".Msg").hide();
@@ -134,13 +137,13 @@
 
                 var row = "";
                 row += "<tr>";
-               // row += "<td>" + i + "</td>";
+                // row += "<td>" + i + "</td>";
                 row += "<td>" + gwl.FK_EmpText + "</td>";
                 row += "<td  title='" + gwl.FK_DeptT + "' >" + gwl.FK_DeptT + "</td>";
 
                 if (gwl.IsPass == 0) {
                     row += "<td>未审批</td>";
-                    row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "',"+i+");\" >移除</a></td>";
+                    row += "<td><a href=\"javascript:DeleteIt('" + gwl.FK_Emp + "'," + i + ");\" >移除</a></td>";
                 }
 
                 //当前是主持人
@@ -167,10 +170,10 @@
             }
         }
 
-        function DeleteIt(empNo,row) {
+        function DeleteIt(empNo, row) {
 
-//            if (window.confirm('您确定要移除[' + empNo + ']') == false)
-//                return;
+            //            if (window.confirm('您确定要移除[' + empNo + ']') == false)
+            //                return;
 
             $.ajax({
                 type: 'post',
@@ -201,11 +204,11 @@
 
             //WorkID, this.FID, this.FK_Node
             //var empNos = frames["iframeSelectEmpsForm"].window.returnVal.NO;
-          //  var emps = this.document.getElementById("TB_Emps").value;
-//            if (emps == "") {
-//                alert('请输入要加签的人员ID,多个ID使用逗号分开.');
-//                return;
-//            }
+            //  var emps = this.document.getElementById("TB_Emps").value;
+            //            if (emps == "") {
+            //                alert('请输入要加签的人员ID,多个ID使用逗号分开.');
+            //                return;
+            //            }
 
             $.ajax({
                 type: 'post',
@@ -240,8 +243,10 @@
         function Close() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("");
+                window.parent.close();
             } else {
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
+
                 window.close();
             }
         }
@@ -344,49 +349,63 @@
             $("#HelpInfo").toggle();
         }
     </script>
-
 </head>
 <body>
-    <table id="Table1" style=" width:98%; ">
-    <thead>
-    <tr id='title'>
-    <th>名称</th>
-    <th>所在部门</th>
-    <th>状态</th>
-    <th>操作</th>
-    </tr></thead>
-    <tbody></tbody>
+    <div id="Title">
+        会签人列表
+    </div>
+    <table id="Table1" style="width: 98%;">
+        <thead>
+            <tr id='title'>
+                <th>
+                    名称
+                </th>
+                <th>
+                    所在部门
+                </th>
+                <th>
+                    状态
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
     </table>
     <br />
-      <div>
-       <div id="labInfo">
-        <input type="text" id="TB_Emps" name="TB_Emps" value='' style=" width:400px; " /> 
-        <input type="button" id="BtnSelectEmps" value='选择人员'/>
-        <div id="SelectEmp"></div>
-        <br />
-        <div id="next">
-            <!--<input type="button" value="增加会签人" onclick="ReturnWork();"/>-->
-            <input type="button" value="关闭" onclick="Close();"/>
-             <a href="javascript:Help()" >需要帮助?</a>
-              <div id="HelpInfo" >
-        <ul>
-        <li>输入要下一步接受人员可以使用人员名称拼音支持全拼简拼. </li>
-        <li>比如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua </li>
-        <li>支持单位名称比如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx </li>
-        </ul>
+    <div>
+        <div id="labInfo">
+            <input type="text" id="TB_Emps" name="TB_Emps" value='' style="width: 400px;" />
+            <input type="button" id="BtnSelectEmps" value='添加会签人员' />
+            <div id="SelectEmp">
+            </div>
+            <br />
+            <div id="next">
+                <!--<input type="button" value="增加会签人" onclick="ReturnWork();"/>-->
+                <input type="button" value="保存会签人列表并关闭" onclick="Close();" />
+                <a href="javascript:Help()">详细说明</a>
+                <div id="HelpInfo">
+                    <ul>
+                        <li>会签流程说明 </li>
+                        1、当前节点工作的处理人为会签主持人，可增加其他人员作为会签人，提供意见。
+                        <br />2、点击“保存会签人列表并关闭”按钮后，可将工作发送至列表中除主持人以外的所有会签人的待办，在所有会签人都处理完成后，主持人才可向下一步发送工作。
+                        <br />3、若会签人长时间未处理该工作，或会签主持人不再需要该人提供处理意见，在会签人列表中状态为“未审批”的情况下，可以由会签主持人移除。 
+                        <br /><br />
+                        <li>添加会签人员快捷方式 </li>
+                        可以使用人员名称拼音，支持全拼和简拼。
+                        <br />例如:查找耿润华您可以输入: grh 或者 gengrh 或者 gengrunhua 
+                        <br />支持单位名称，例如：耿润华/集团信息中心， 可以输入为 grh/jtxxzx 
+                    </ul>
+                </div>
+            </div>
         </div>
-
-        </div>
-
-       </div>
-       <div class="Msg" style="float:left;"> <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
+        <div class="Msg" style="float: left;">
+            <img src='../Img/loading.gif' alt="" />页面数据正在加载中，请稍候......</div>
     </div>
-
     <br />
-
-    
-
-<!--
+    <!--
 
 <section style="display: none;">
     <div>
@@ -407,6 +426,5 @@
         <input type="button" id="" value="关闭" onclick="Close();"/>
     </div>
 </section>-->
-
 </body>
 </html>

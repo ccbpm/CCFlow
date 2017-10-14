@@ -1635,8 +1635,8 @@ function GenerWorkNode() {
             var node = workNodeData.WF_Node[0];
 
             //设置标题.
-            //document.title = node.Name;
-
+            document.title = node.Name;
+            document.title = "业务流程管理（BPM）平台";
             var Sys_GroupFields = workNodeData.Sys_GroupField;
             //初始化Sys_MapData
             var h = flow_Data.Sys_MapData[0].FrmH;

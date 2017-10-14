@@ -1734,8 +1734,8 @@ function GenerWorkNode() {
             }
 
             //设置标题.
-            //document.title = '您好:' + flow_Data.WF_Node[0].Name;
-
+            document.title = '您好:' + flow_Data.WF_Node[0].Name;
+            document.title = "业务流程管理（BPM）平台";
 
             $('#CCForm').html('');
             //循环MapAttr

@@ -1635,7 +1635,7 @@ function GenerWorkNode() {
             var node = workNodeData.WF_Node[0];
 
             //设置标题.
-            document.title = node.Name;
+            //document.title = node.Name;
 
             var Sys_GroupFields = workNodeData.Sys_GroupField;
             //初始化Sys_MapData

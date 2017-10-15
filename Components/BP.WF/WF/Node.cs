@@ -17,58 +17,6 @@ namespace BP.WF
     /// </summary>
     public class Node : Entity
     {
-        #region 消息机制.
-        private FrmEvent _SendSuccess_FrmEvent = null;
-        public FrmEvent SendSuccess_FrmEvent
-        {
-            get
-            {
-                if (_SendSuccess_FrmEvent == null)
-                {
-                    _SendSuccess_FrmEvent = new FrmEvent();
-                    _SendSuccess_FrmEvent.MyPK = "ND" + this.NodeID + "_SendSuccess";
-                    int i = _SendSuccess_FrmEvent.RetrieveFromDBSources();
-                    if (i == 0)
-                    {
-                        _SendSuccess_FrmEvent.MsgCtrl = MsgCtrl.BySet;
-                        _SendSuccess_FrmEvent.FK_Event = EventListOfNode.SendSuccess;
-                        _SendSuccess_FrmEvent.MailEnable = true;
-                    }
-                }
-                return _SendSuccess_FrmEvent;
-            }
-        }
-        #endregion
-
-        #region 执行节点事件.
-        /// <summary>
-        /// 执行运动事件
-        /// </summary>
-        /// <param name="doType">事件类型</param>
-        /// <param name="en">实体参数</param>
-        //public string DoNodeEventEntity(string doType,Node currNode, Entity en, string atPara)
-        //{
-        //    if (this.NDEventEntity != null)
-        //        return NDEventEntity.DoIt(doType,currNode, en, atPara);
-
-        //    return this.MapData.FrmEvents.DoEventNode(doType, en, atPara);
-        //}
-        //private BP.WF.NodeEventBase _NDEventEntity = null;
-        ///// <summary>
-        ///// 节点实体类，没有就返回为空.
-        ///// </summary>
-        //private BP.WF.NodeEventBase NDEventEntity11
-        //{
-        //    get
-        //    {
-        //        if (_NDEventEntity == null && this.NodeMark!="" && this.NodeEventEntity!="" )
-        //            _NDEventEntity = BP.WF.Glo.GetNodeEventEntityByEnName( this.NodeEventEntity);
-
-        //        return _NDEventEntity;
-        //    }
-        //}
-        #endregion 执行节点事件.
-
         #region 参数属性
         /// <summary>
         /// 方向条件控制规则

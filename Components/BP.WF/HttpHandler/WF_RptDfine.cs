@@ -60,7 +60,7 @@ namespace BP.WF.HttpHandler
             }
             ds.Tables.Add(dt);
 
-            sql = "SELECT No,Name,FK_FlowSort FROM WF_Flow ORDER BY FK_FlowSort, Idx";
+            sql = "SELECT No,Name,FK_FlowSort FROM WF_Flow WHERE IsCanStart=1 ORDER BY FK_FlowSort, Idx";
             dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Flows";
             if (SystemConfig.AppCenterDBType == DBType.Oracle)

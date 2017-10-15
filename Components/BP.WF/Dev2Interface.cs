@@ -1370,12 +1370,24 @@ namespace BP.WF
                 /*不是授权状态*/
                 if (fk_node==0)
                 {
-                    if (BP.WF.Glo.IsEnableTaskPool == true)
-                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND WFState!=" + (int)WFState.Batch + " ORDER BY FK_Flow,ADT DESC ";
-                    else
-                        ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp  AND WFState!=" + (int)WFState.Batch + " ORDER BY FK_Flow,ADT DESC ";
+                    if (BP.Sys.SystemConfig.CustomerNo == "TianYe")
+                    {
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            ps.SQL = "SELECT * FROM WF_EmpWorks A, WF_Flow B WHERE A.FK_Flow=B.No AND A.FK_Emp=" + dbstr + "FK_Emp AND A.TaskSta=0 AND A.WFState!=" + (int)WFState.Batch + " ORDER BY B.Idx, ADT DESC ";
+                        else
+                            ps.SQL = "SELECT * FROM WF_EmpWorks A, WF_Flow B WHERE A.FK_Flow=B.No AND A.FK_Emp=" + dbstr + "FK_Emp  AND A.WFState!=" + (int)WFState.Batch + " ORDER BY B.Idx, A.ADT DESC ";
 
-                    ps.Add("FK_Emp", userNo);
+                        ps.Add("FK_Emp", userNo);
+                    }
+                    else
+                    {
+                        if (BP.WF.Glo.IsEnableTaskPool == true)
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND TaskSta=0 AND WFState!=" + (int)WFState.Batch + " ORDER BY FK_Flow, ADT DESC ";
+                        else
+                            ps.SQL = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp  AND WFState!=" + (int)WFState.Batch + " ORDER BY FK_Flow, ADT DESC ";
+
+                        ps.Add("FK_Emp", userNo);
+                    }
                 }
                 else
                 {

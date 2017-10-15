@@ -1535,7 +1535,12 @@ namespace BP.WF.HttpHandler
                 dtDept.Columns[2].ColumnName = "ParentNo";
             }
 
-            sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "'";
+            if (SystemConfig.CustomerNo=="TianYe")
+            sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' AND No!='00000001' ";
+            else
+                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' AND No!='' ";
+
+
             DataTable dtEmps = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtEmps.TableName = "Emps";
             ds.Tables.Add(dtEmps);

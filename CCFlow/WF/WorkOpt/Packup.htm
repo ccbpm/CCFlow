@@ -33,7 +33,7 @@
                     for (var i = 0; i < urls.length; i++) {
 
                         var url = urls[i];
-                        if (fileTypes.indexOf(url.No) < 0 )
+                        if (fileTypes.indexOf(url.No) < 0)
                             continue;
 
                         if (url.No == "htm" || url.No == "html") {
@@ -44,6 +44,9 @@
                             html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/htm.gif' />进行在线预览</a></li>";
                             html += "</ul>";
                             html += "</fieldset>";
+
+                            window.location.href = url.Name;
+                            return;
                         }
 
                         if (url.No == "pdf") {
@@ -61,6 +64,9 @@
                                 html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/pdf.gif' />进行下载与在线预览</a></li>";
                                 html += "</ul>";
                                 html += "</fieldset>";
+
+                                downloadFile(url.Name);
+                                return;
                             }
                         }
 
@@ -79,6 +85,9 @@
                                 html += "<li>点击这里<a href=" + url.Name + " target=_blank ><img src='../Img/FileType/Zip.gif' />进行打包下载</a></li>";
                                 html += "</ul>";
                                 html += "</fieldset>";
+
+                                window.location.href = url.Name;
+                                return;
                             }
                         }
                     }
@@ -87,6 +96,15 @@
                 }
             });
         });
+
+
+        function downloadFile(url) {
+            alert(url);
+            window.open(url);
+            window.parent.close();
+            window.close();
+            return;
+        }
 
     </script>
 

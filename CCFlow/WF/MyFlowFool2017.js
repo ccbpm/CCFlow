@@ -696,9 +696,7 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
 //            }
 //        }
 //    }
-//}
-
- 
+//} 
 
 //处理MapExt
 function AfterBindEn_DealMapExt() {
@@ -1619,7 +1617,6 @@ function GenerWorkNode() {
                 return;
             }
 
-            //console.info(data);
             jsonStr = data;
             var gengerWorkNode = {};
             var flow_Data;
@@ -2015,7 +2012,7 @@ function InitMapAttrOfCtrl(mapAttr) {
                 //字段处于只读状态.注意这里 name 属性也是可以用来绑定字段名字的
                 eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
             } else {
-                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'></script>";
+                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
             }
 
             eleHtml = "<div style='white-space:normal;'>" + eleHtml + "</div>";

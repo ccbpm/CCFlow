@@ -1518,7 +1518,7 @@ namespace BP.WF.HttpHandler
         public string SelectEmps_Init()
         {
             string fk_dept = this.FK_Dept;
-            if (string.IsNullOrEmpty(fk_dept)==true)
+            if (string.IsNullOrEmpty(fk_dept) == true)
                 fk_dept = BP.Web.WebUser.FK_Dept;
 
             DataSet ds = new DataSet();
@@ -1535,11 +1535,10 @@ namespace BP.WF.HttpHandler
                 dtDept.Columns[2].ColumnName = "ParentNo";
             }
 
-            if (SystemConfig.CustomerNo=="TianYe")
-            sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' AND No!='00000001' ";
+            if (SystemConfig.CustomerNo == "TianYe")
+                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' AND No!='00000001' ";
             else
-                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' AND No!='' ";
-
+                sql = "SELECT No,Name,FK_Dept FROM Port_Emp WHERE FK_Dept='" + fk_dept + "' ";
 
             DataTable dtEmps = BP.DA.DBAccess.RunSQLReturnTable(sql);
             dtEmps.TableName = "Emps";
@@ -1552,9 +1551,8 @@ namespace BP.WF.HttpHandler
             }
 
             //转化为 json 
-            return BP.Tools.Json.DataSetToJson(ds,false);
+            return BP.Tools.Json.DataSetToJson(ds, false);
         }
-
         #region 选择接受人.
         /// <summary>
         /// 初始化接受人.

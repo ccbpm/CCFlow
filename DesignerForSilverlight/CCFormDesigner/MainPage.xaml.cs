@@ -2472,6 +2472,7 @@ namespace CCForm
                         DataRow mapAttrDR = dtMapAttr.NewRow();
 
                         mapAttrDR["MYPK"] = myPk;
+                        mapAttrDR["NAME"] = ddl.KeyName;
                         mapAttrDR["FK_MAPDATA"] = Glo.FK_MapData;
                         mapAttrDR["KEYOFEN"] = myPk.Replace(pkPrefix, "").Replace(Glo.FK_MapData, "");
                         mapAttrDR["UICONTRALTYPE"] = CtrlType.DDL;

@@ -300,6 +300,11 @@
                             $('body').append($('<div>' + data + '</div>'));
                             $('#btnOk').attr('disabled', true);
                         }
+                        try {
+                            window.opener.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
+                        } catch (e) {
+                            //window.parent.document.getElementById("acc_link_" + ToNode).innerHTML = "选择接受人员" + "<span style='color:black;'>(" + getSaveName + ")</span>";
+                        }
                         //alert('保存成功...');
                         window.close();
                         return;

@@ -2004,11 +2004,12 @@ function GenerFreeFrm() {
                 'autoHeightEnabled': false,
                 'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
             });
-            editor.MaxLen = document.BindEditorMapAttr.MaxLen;
-            editor.MinLen = document.BindEditorMapAttr.MinLen;
-            editor.BindField = document.BindEditorMapAttr.KeyOfEn;
-            editor.BindFieldName = document.BindEditorMapAttr.Name;
-
+            if (document.BindEditorMapAttr) {
+                editor.MaxLen = document.BindEditorMapAttr.MaxLen;
+                editor.MinLen = document.BindEditorMapAttr.MinLen;
+                editor.BindField = document.BindEditorMapAttr.KeyOfEn;
+                editor.BindFieldName = document.BindEditorMapAttr.Name;
+            }
             //调整样式,让必选的红色 * 随后垂直居中
             editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
         }

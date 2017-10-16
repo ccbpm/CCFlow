@@ -984,7 +984,6 @@ Stack.prototype = {
         if(state == STATE_FIGURE_SELECTED){ //FIGURE
             var f = this.figureGetById(selectedFigureId);
             //self dgq
-            debugger
             f.style.gradientBounds = f.getBounds();
             HandleManager.shapeSet(f);
             //alert('Paint handles');

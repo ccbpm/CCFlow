@@ -41,7 +41,7 @@
         <script src="../../Scripts/config.js" type="text/javascript"></script>
         <script src="../../Comm/Gener.js" type="text/javascript"></script>
         <script language="JavaScript" type="text/javascript" src="MapDef.js"></script>
-
+        <script src="../CCBPMDesigner/assets/javascript/json2.js" type="text/javascript"></script>
         <script language="JavaScript" type="text/javascript" src="../../Style/Verify.js"></script>
         <script language="JavaScript" type="text/javascript" src="../../Comm/JS/Calendar/WdatePicker.js" defer="defer"></script>
         <base target="_self" />
@@ -95,7 +95,7 @@
                             window.location.href = data;
                             return;
                         }
-
+                        
                         //里面有三个对象. Sys_MapAttr, Sys_GroupField, Sys_MapData
                         data = JSON.parse(data);
 
@@ -350,7 +350,7 @@
                 });
 
                 $("#Msg").html("");
-
+                ResizeWindow();
             });
 
             function GenerGroupContext(groupEn, data) {
@@ -1079,9 +1079,7 @@
                     window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh
                 }
             }
-            window.onload = ResizeWindow();
         </script>
-
     </head>
     <body onkeypress="Esc();" class="easyui-layout layout panel-noscroll" topmargin="0" leftmargin="0">
         <div class="panel layout-panel layout-panel-center" style="left: 0px; top: 0px; width: 100%;">

@@ -143,12 +143,6 @@
                         }
 
                         if (groupBy == "ByFlow") {
-                            //对数组进行分组排序
-                            data = data.sort(function (a, b) {
-                                a = parseInt(a.FK_Flow);
-                                b = parseInt(b.FK_Flow);
-                                return a - b;
-                            });
                             if (str.indexOf('@' + data[i].FlowName) == -1)
                                 str += "@" + data[i].FlowName;
                         }

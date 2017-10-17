@@ -97,10 +97,10 @@ namespace CCForm
                             url = Glo.BPMHost + "/WF/Admin/FoolFormDesigner/EditFieldGuide.htm?DoType=Edit&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         case 1:
-                            url = Glo.BPMHost + "/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrEnums&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         case 2:
-                            url = Glo.BPMHost + "/WF/Comm/En.htm?EnName=BP.Sys.FrmUI.MapAttrSFTables&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
+                            url = Glo.BPMHost + "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&FK_MapData=" + Glo.FK_MapData + "&MyPK=" + Glo.FK_MapData + "_" + key + "&FType=" + fType + tKey;
                             break;
                         default:
                             break;

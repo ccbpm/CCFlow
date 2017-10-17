@@ -1634,8 +1634,8 @@ function GenerWorkNode() {
             var node = workNodeData.WF_Node[0];
 
             //设置标题.
-            document.title = node.Name;
-            document.title = "业务流程管理（BPM）平台";
+            document.title = node.FlowName +' - '+ node.Name;
+           // document.title = "业务流程管理（BPM）平台";
             var Sys_GroupFields = workNodeData.Sys_GroupField;
             //初始化Sys_MapData
             var h = flow_Data.Sys_MapData[0].FrmH;
@@ -1649,7 +1649,7 @@ function GenerWorkNode() {
             var frmName = workNodeData.Sys_MapData[0].Name;
 
             html += "<tr>";
-            html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none' ><h4><b>" + frmName + "</b></h4></div></td>";
+            html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none;width:70%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
             //  html += "<td colspan=2 ></td>";
             html += "</tr>";
             //遍历循环生成 listview

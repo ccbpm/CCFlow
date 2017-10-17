@@ -183,7 +183,7 @@ namespace CCFlow.WF.WorkOpt
             }
 
             //写入日志.
-            BP.WF.Dev2Interface.WriteTrack(nd.FK_Flow, nd.NodeID, this.WorkID, this.FID, "抄送给:" + msg, BP.WF.ActionType.CC,
+            BP.WF.Dev2Interface.WriteTrack(nd.FK_Flow, nd.NodeID, nd.Name, this.WorkID, this.FID, "抄送给:" + msg, BP.WF.ActionType.CC,
                 null, null, null);
 
             //  this.WinCloseWithMsg("抄送成功...");

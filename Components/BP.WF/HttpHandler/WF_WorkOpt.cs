@@ -593,7 +593,10 @@ namespace BP.WF.HttpHandler
 
                         row = tkDt.NewRow();
                         row["NodeID"] = tk.NDFrom;
-                        row["NodeName"] = (nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
+
+                       //row["NodeName"] = (nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
+                       row["NodeName"] = tk.NDFromT; // "SSS"; //(nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
+
                         row["IsDoc"] = false;
                         row["ParentNode"] = 0;
                         row["RDT"] = string.IsNullOrWhiteSpace(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && string.IsNullOrWhiteSpace(tk.Msg) ? "" : tk.RDT;

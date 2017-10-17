@@ -3554,9 +3554,8 @@ namespace BP.WF
             string tag = gwf.Paras_LastSendTruckID + "_" + currNodeID + "_" + workid + "_" + fid + "_" + BP.Web.WebUser.No;
 
             string nodeName = gwf.NodeName;
-            if (gwf.TodoEmps.Contains(WebUser.No + ",") == true)
+            if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
                 nodeName = "会签";
-
 
             Node nd = new Node(currNodeID);
             //待办抢办模式，一个节点只能有一条记录.
@@ -3578,8 +3577,9 @@ namespace BP.WF
             }
             else
             {
-                ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET Msg=" + dbStr + "Msg,RDT=" + dbStr +
+                ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg,RDT=" + dbStr +
                          "RDT WHERE  Tag=" + dbStr + "Tag";
+                ps.Add(TrackAttr.NDFromT, nodeName);
                 ps.Add(TrackAttr.Msg, msg);
                 ps.Add(TrackAttr.Tag, tag);
                 ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess);

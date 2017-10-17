@@ -1339,10 +1339,7 @@ function execSend(toNode) {
             //setAttachDisabled();
             //setToobarUnVisible();
             //setFormEleDisabled();
-
-            //刷新代办
-            //opener.frameElement.contentWindow.location.reload();
-            window.refreshTodolist = true;
+            
         }
     });
 }

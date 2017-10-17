@@ -1373,9 +1373,9 @@ namespace BP.WF
                     if (BP.Sys.SystemConfig.CustomerNo == "TianYe")
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
-                            ps.SQL = "SELECT * FROM WF_EmpWorks A, WF_Flow B WHERE A.FK_Flow=B.No AND A.FK_Emp=" + dbstr + "FK_Emp AND A.TaskSta=0 AND A.WFState!=" + (int)WFState.Batch + " ORDER BY B.Idx, ADT DESC ";
+                            ps.SQL = "SELECT A.* FROM WF_EmpWorks A, WF_Flow B, WF_FlowSort C WHERE A.FK_Flow=B.No AND B.FK_FlowSort=C.No AND A.FK_Emp=" + dbstr + "FK_Emp AND A.TaskSta=0 AND A.WFState!=" + (int)WFState.Batch + " ORDER BY C.Idx, B.Idx, ADT DESC ";
                         else
-                            ps.SQL = "SELECT * FROM WF_EmpWorks A, WF_Flow B WHERE A.FK_Flow=B.No AND A.FK_Emp=" + dbstr + "FK_Emp  AND A.WFState!=" + (int)WFState.Batch + " ORDER BY B.Idx, A.ADT DESC ";
+                            ps.SQL = "SELECT A.* FROM WF_EmpWorks A, WF_Flow B, WF_FlowSort C WHERE A.FK_Flow=B.No AND B.FK_FlowSort=C.No AND A.FK_Emp=" + dbstr + "FK_Emp  AND A.WFState!=" + (int)WFState.Batch + " ORDER BY C.Idx,B.Idx, A.ADT DESC ";
 
                         ps.Add("FK_Emp", userNo);
                     }

@@ -245,8 +245,24 @@ namespace BP.WF.HttpHandler
 
             BP.Port.Emp emp = new Emp();
             emp.No = userNo;
-            if (emp.RetrieveFromDBSources() ==0)
-                return "err@用户名或者密码错误.";
+            if (emp.RetrieveFromDBSources() == 0)
+            {
+                if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
+                {
+                    /*如果包含昵称列,就检查昵称是否存在.*/
+                    string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
+                    string no = DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    if (no == null)
+                        return "err@用户名或者密码错误.";
+
+                    emp.No = no;
+                    emp.Retrieve();
+                }
+                else
+                {
+                    return "err@用户名或者密码错误.";
+                }
+            }
 
             if (emp.Pass !=pass )
                 return "err@用户名或者密码错误.";

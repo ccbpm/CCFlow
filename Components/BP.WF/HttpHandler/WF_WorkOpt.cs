@@ -1056,15 +1056,15 @@ namespace BP.WF.HttpHandler
 
                 if (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog)//日志组件
                 {
-                    Dev2Interface.WriteTrackDailyLog(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                    Dev2Interface.WriteTrackDailyLog(this.FK_Flow, this.FK_Node,wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
                 }
                 if (wcDesc.HisFrmWorkCheckType == FWCType.WeekLog)//周报
                 {
-                    Dev2Interface.WriteTrackWeekLog(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                    Dev2Interface.WriteTrackWeekLog(this.FK_Flow, this.FK_Node, wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
                 }
                 if (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog)//月报
                 {
-                    Dev2Interface.WriteTrackMonthLog(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                    Dev2Interface.WriteTrackMonthLog(this.FK_Flow, this.FK_Node, wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
                 }
                 #endregion
             }

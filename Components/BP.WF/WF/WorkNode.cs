@@ -2180,7 +2180,7 @@ namespace BP.WF
                         dt = dt.AddMinutes(5);
                         string rdt = dt.ToString("yyyy-MM-dd HH:mm:ss");
 
-                        BP.WF.Dev2Interface.WriteTrack(this.HisFlow.No, town.HisNode.NodeID, this.WorkID, town.HisWork.FID, "",
+                        BP.WF.Dev2Interface.WriteTrack(this.HisFlow.No, town.HisNode.NodeID, town.HisNode.Name, this.WorkID, town.HisWork.FID, "",
                             ActionType.WorkCheck, null, null, null, gwl.FK_Emp, gwl.FK_EmpText, gwl.FK_Emp, gwl.FK_EmpText, rdt);
                     }
                 }
@@ -6613,7 +6613,7 @@ namespace BP.WF
                     //  WebUser.Name, ndFrom.NodeID, ndFrom.FlowName + "\t\n" + ndFrom.FlowName, "被父流程(" + ndFrom.FlowName + ":" + pTitle + ")调起.");
 
                     //记录父流程被调起。
-                    BP.WF.Dev2Interface.WriteTrack(this.HisFlow.No, this.HisNode.NodeID, this.WorkID, 0,
+                    BP.WF.Dev2Interface.WriteTrack(this.HisFlow.No, this.HisNode.NodeID, this.HisNode.Name, this.WorkID, 0,
                         "被{" + ndFrom.FlowName + "}发起,发起人:" + this.ExecerName, ActionType.CallChildenFlow,
                         "@PWorkID=" + PWorkID + "@PFlowNo=" + ndFrom.HisFlow.No, "发起子流程:" + this.HisFlow.Name, null);
                 }

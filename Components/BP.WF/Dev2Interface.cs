@@ -3425,7 +3425,7 @@ namespace BP.WF
         /// <param name="at">活动类型</param>
         /// <param name="tag">参数:用@符号隔开比如, @PWorkID=101@PFlowNo=003</param>
         /// <param name="cFlowInfo">子流程信息</param>
-        public static void WriteTrack(string flowNo, int nodeFrom, Int64 workid, Int64 fid, string msg, ActionType at, string tag,
+        public static void WriteTrack(string flowNo, int nodeFromID, string nodeFromName, Int64 workid, Int64 fid, string msg, ActionType at, string tag,
             string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom=null,string empNameFrom=null, string rdt=null)
         {
             if (at == ActionType.CallChildenFlow)
@@ -3449,9 +3449,9 @@ namespace BP.WF
             t.HisActionType = at;
             t.ActionTypeText = optionMsg;
 
-            Node nd = new Node(nodeFrom);
-            t.NDFrom = nodeFrom;
-            t.NDFromT = nd.Name;
+           // Node nd = new Node(nodeFrom);
+            t.NDFrom = nodeFromID;
+            t.NDFromT = nodeFromName;
 
             if (empNoFrom==null)
             t.EmpFrom = WebUser.No;
@@ -3466,8 +3466,8 @@ namespace BP.WF
 
             t.FK_Flow = flowNo;
 
-            t.NDTo = nodeFrom;
-            t.NDToT = nd.Name;
+            t.NDTo = nodeFromID;
+            t.NDToT = nodeFromName;
 
             if (empNoTo == null)
             {
@@ -3505,9 +3505,8 @@ namespace BP.WF
                 BP.WF.GenerWorkFlow gwf = new GenerWorkFlow(ap.GetValInt64ByKey(GenerWorkFlowAttr.PWorkID));
                 t.WorkID = gwf.WorkID;
 
-                nd = new Node(gwf.FK_Node);
                 t.NDFrom = gwf.FK_Node;
-                t.NDFromT = nd.Name;
+                t.NDFromT = gwf.NodeName;
 
                 t.NDTo = t.NDFrom;
                 t.NDToT = t.NDFromT;
@@ -3529,9 +3528,9 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         /// <param name="fid">fID</param>
         /// <param name="msg">信息</param>
-        public static void WriteTrackInfo(string flowNo, int nodeFrom, Int64 workid, Int64 fid, string msg, string optionMsg)
+        public static void WriteTrackInfo(string flowNo, int nodeFrom, string ndFromName, Int64 workid, Int64 fid, string msg, string optionMsg)
         {
-            WriteTrack(flowNo, nodeFrom, workid, fid, msg, ActionType.Info, null, null, optionMsg);
+            WriteTrack(flowNo, nodeFrom,ndFromName, workid, fid, msg, ActionType.Info, null, null, optionMsg);
         }
         /// <summary>
         /// 写入工作审核日志:
@@ -3554,6 +3553,9 @@ namespace BP.WF
             //求主键 2017.10.6以前的逻辑.
             string tag = gwf.Paras_LastSendTruckID + "_" + currNodeID + "_" + workid + "_" + fid + "_" + BP.Web.WebUser.No;
 
+            string nodeName = gwf.NodeName;
+            if (gwf.TodoEmps.Contains(WebUser.No + ",") == true)
+                nodeName = "会签";
 
 
             Node nd = new Node(currNodeID);
@@ -3572,7 +3574,7 @@ namespace BP.WF
                 //string sql = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  Tag LIKE '" + gwf.Paras_LastSendTruckID + "%'";
                 //DBAccess.RunSQL(ps);
                 //写入日志
-                WriteTrack(flowNo, currNodeID, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName);
+                WriteTrack(flowNo, currNodeID,nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName);
             }
             else
             {
@@ -3584,7 +3586,7 @@ namespace BP.WF
                 if (DBAccess.RunSQL(ps) == 0)
                 {
                     //如果没有更新到，就写入.
-                    WriteTrack(flowNo, currNodeID, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName,null,null);
+                    WriteTrack(flowNo, currNodeID,nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName,null,null);
                 }
             }
         }
@@ -3597,7 +3599,7 @@ namespace BP.WF
         /// <param name="fid"></param>
         /// <param name="msg"></param>
         /// <param name="optionName"></param>
-        public static void WriteTrackDailyLog(string flowNo, int nodeFrom, Int64 workid, Int64 fid, string msg, string optionName)
+        public static void WriteTrackDailyLog(string flowNo, int nodeFrom, string nodeFromName, Int64 workid, Int64 fid, string msg, string optionName)
         {
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             string today = BP.DA.DataType.CurrentData;
@@ -3611,7 +3613,7 @@ namespace BP.WF
             if (DBAccess.RunSQL(ps) == 0)
             {
                 //如果没有更新到，就写入.
-                WriteTrack(flowNo, nodeFrom, workid, fid, msg, ActionType.WorkCheck, null, null, optionName);
+                WriteTrack(flowNo, nodeFrom, nodeFromName, workid, fid, msg, ActionType.WorkCheck, null, null, optionName);
             }
         }
         /// <summary>
@@ -3623,7 +3625,7 @@ namespace BP.WF
         /// <param name="fid"></param>
         /// <param name="msg"></param>
         /// <param name="optionName"></param>
-        public static void WriteTrackWeekLog(string flowNo, int nodeFrom, Int64 workid, Int64 fid, string msg, string optionName)
+        public static void WriteTrackWeekLog(string flowNo, int nodeFrom, string nodeFromName, Int64 workid, Int64 fid, string msg, string optionName)
         {
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
@@ -3670,7 +3672,7 @@ namespace BP.WF
             }
             else
             {
-                WriteTrack(flowNo, nodeFrom, workid, fid, msg, ActionType.WorkCheck, null, null, optionName);
+                WriteTrack(flowNo, nodeFrom, nodeFromName, workid, fid, msg, ActionType.WorkCheck, null, null, optionName);
             }
         }
         /// <summary>
@@ -3682,7 +3684,7 @@ namespace BP.WF
         /// <param name="fid"></param>
         /// <param name="msg"></param>
         /// <param name="optionName"></param>
-        public static void WriteTrackMonthLog(string flowNo, int nodeFrom, Int64 workid, Int64 fid, string msg, string optionName)
+        public static void WriteTrackMonthLog(string flowNo, int nodeFrom, string nodeFromName, Int64 workid, Int64 fid, string msg, string optionName)
         {
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             string today = BP.DA.DataType.CurrentData;
@@ -3731,7 +3733,7 @@ namespace BP.WF
             }
             else
             {
-                WriteTrack(flowNo, nodeFrom, workid, fid, msg, ActionType.WorkCheck, null, null, optionName);
+                WriteTrack(flowNo, nodeFrom, nodeFromName, workid, fid, msg, ActionType.WorkCheck, null, null, optionName);
             }
         }
         /// <summary>
@@ -4672,7 +4674,7 @@ namespace BP.WF
                 WorkFlow wf = new WorkFlow(flowNo, workid);
                 string msg = wf.DoDeleteWorkFlowByReal(false);
 
-                BP.WF.Dev2Interface.WriteTrackInfo(flowNo, gwf.FK_Node, gwf.FID, 0, info, "删除子线程");
+                BP.WF.Dev2Interface.WriteTrackInfo(flowNo, gwf.FK_Node, gwf.NodeName, gwf.FID, 0, info, "删除子线程");
                 return msg;
             }
             return null;
@@ -7274,7 +7276,7 @@ namespace BP.WF
             ps.Add(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
             int i = DBAccess.RunSQL(ps);
 
-            BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, workid, 0, "任务被" + WebUser.Name + "从任务池取走.", "获取");
+            BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, workid, 0, "任务被" + WebUser.Name + "从任务池取走.", "获取");
             if (i > 0)
             {
                 Paras ps1 = new Paras();
@@ -7354,7 +7356,7 @@ namespace BP.WF
                 DBAccess.RunSQL(ps2);
             }
 
-            BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, workid, 0, "任务被" + WebUser.Name + "放入了任务池.", "放入");
+            BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, workid, 0, "任务被" + WebUser.Name + "放入了任务池.", "放入");
         }
         /// <summary>
         /// 增加下一步骤的接受人(用于当前步骤向下一步骤发送时增加接受人)
@@ -7618,7 +7620,7 @@ namespace BP.WF
             }
 
             //写入日志.
-            BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, workid, gwf.FID, askForNote, ActionType.AskforHelp, "", null, null, emp.No, emp.Name);
+            BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, workid, gwf.FID, askForNote, ActionType.AskforHelp, "", null, null, emp.No, emp.Name);
 
             Flow fl = new Flow(gwf.FK_Flow);
             BP.WF.Dev2Interface.Port_SendMsg(askForEmp, gwf.Title, askForNote, "AK" + gwf.FK_Node + "_" + gwf.WorkID, SMSMsgType.AskFor, gwf.FK_Flow, gwf.FK_Node, workid, gwf.FID);

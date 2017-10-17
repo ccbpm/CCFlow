@@ -256,7 +256,9 @@ namespace BP.WF.HttpHandler
                         return "err@用户名或者密码错误.";
 
                     emp.No = no;
-                    emp.Retrieve();
+                    int i = emp.RetrieveFromDBSources();
+                    if (i == 0)
+                        return "err@用户名或者密码错误.";
                 }
                 else
                 {
@@ -271,7 +273,6 @@ namespace BP.WF.HttpHandler
             BP.WF.Dev2Interface.Port_Login(emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText);
 
             return "登录成功.";
-
         }
         public string Login_Init()
         {

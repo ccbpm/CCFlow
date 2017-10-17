@@ -212,7 +212,6 @@ namespace BP.WF.HttpHandler
             emp = emp.Replace("insert", "");
             #endregion 保障查询语句的安全.
 
-
             bool isPinYin = DBAccess.IsExitsTableCol("Port_Emp", "PinYin");
             if (isPinYin == true)
             {

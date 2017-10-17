@@ -638,6 +638,7 @@ function Send() {
         return;
 
     var toNode = 0;
+    window.hasClickSend = true; //标志用来刷新待办
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
         var selectToNode = $('#DDL_ToNode  option:selected').data();

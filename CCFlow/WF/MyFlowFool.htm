@@ -397,7 +397,7 @@
         }
     </style>
      
-     <script type="text/javascript">
+    <script type="text/javascript">
 
          window.onbeforeunload = function close() {
              temp = 0;
@@ -408,6 +408,15 @@
                  temp = 1;
              }
          }
+
+         window.onunload = function () {
+             if (window.hasClickSend && opener.frameElement.contentWindow.location.href.toLowerCase().indexOf("todolist") != -1) {
+                 //刷新代办
+                 opener.frameElement.contentWindow.location.reload();
+             }
+         }
+
+
         //让IE8 兼容 forEach
         if (typeof Array.prototype.forEach != 'function') {
             Array.prototype.forEach = function (callback) {

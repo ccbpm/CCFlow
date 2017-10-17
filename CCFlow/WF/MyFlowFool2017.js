@@ -422,7 +422,7 @@ function initBar() {
     });
 }
 
-//初始化退回、移交、加签窗口
+//初始化退回、移交、加签窗口、接收人等
 function initModal(modalType, toNode) {
 
     //初始化退回窗口的SRC
@@ -441,6 +441,12 @@ function initModal(modalType, toNode) {
    + '</div>';
 
     $('body').append($(returnWorkModalHtml));
+
+    //绑定事件，窗口退出时，刷新待办列表
+    $('#returnWorkModal').on('hidden.bs.modal', function () {
+        //刷新代办
+        window.refreshTodolist = true;
+    })
 
     var modalIframeSrc = '';
     if (modalType != undefined) {
@@ -1151,7 +1157,7 @@ function Send() {
 
     //必填项和正则表达式检查.
     if (checkBlanks() == false) {
-        alert("检查必填项出现错误，边框变红颜色的是否填写完整？");
+        alert("检查必填项出现错误1，边框变红颜色的是否填写完整？");
         return;
     }
 
@@ -1160,6 +1166,7 @@ function Send() {
         return;
     }
 
+    window.hasClickSend = true;//标志用来刷新待办
     var toNode = 0;
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
@@ -1221,8 +1228,6 @@ function execSend(toNode) {
             //setAttachDisabled();
             //setToobarUnVisible();
             //setFormEleDisabled();
-            //刷新代办
-            opener.frameElement.contentWindow.location.reload();
         }
     });
 }

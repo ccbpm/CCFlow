@@ -399,6 +399,13 @@
      
      <script type="text/javascript">
 
+         window.onunload = function () {
+             if (window.hasClickSend && opener.frameElement.contentWindow.location.href.toLowerCase().indexOf("todolist") != -1) {
+                 //刷新代办
+                 opener.frameElement.contentWindow.location.reload();
+             }
+         }
+
          window.onbeforeunload = function close() {
              temp = 0;
              var n = window.event.screenX - window.screenLeft;

@@ -1277,7 +1277,7 @@ function Send() {
         return;
     }
 
-
+    window.hasClickSend = true; //标志用来刷新待办
     var toNode = 0;
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
@@ -1325,10 +1325,10 @@ function execSend(toNode) {
             }
 
             OptSuc(data);
-          //  $('#Message').html(data);
-           // $('#MessageDiv').modal().show();
+            //  $('#Message').html(data);
+            // $('#MessageDiv').modal().show();
 
-            if (opener != null && opener.window != null && opener.window.parent != null 
+            if (opener != null && opener.window != null && opener.window.parent != null
             && opener.window.parent.refSubSubFlowIframe != null && typeof (opener.window.parent.refSubSubFlowIframe) == "function") {
                 opener.window.parent.refSubSubFlowIframe();
             }
@@ -1341,7 +1341,8 @@ function execSend(toNode) {
             //setFormEleDisabled();
 
             //刷新代办
-            opener.frameElement.contentWindow.location.reload();
+            //opener.frameElement.contentWindow.location.reload();
+            window.refreshTodolist = true;
         }
     });
 }

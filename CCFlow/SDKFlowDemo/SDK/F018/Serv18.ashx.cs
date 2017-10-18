@@ -151,8 +151,10 @@ namespace CCFlow.SDKFlowDemo.SDK.F018
                 {
                     //发送到部门经理审批环节
                     objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
+
+                    Node nd = new Node(this.FK_Node);
                     //写入日志
-                    BP.WF.Dev2Interface.WriteTrack(FK_Flow,FK_Node,WorkID,FID,null,ActionType.WorkCheck,"",null,"审核");
+                    BP.WF.Dev2Interface.WriteTrack(FK_Flow,FK_Node,nd.Name, WorkID,FID,null,ActionType.WorkCheck,"",null,"审核");
                 }
                 //部门经理审批
                 else if (this.FK_Node == 1802)
@@ -164,7 +166,8 @@ namespace CCFlow.SDKFlowDemo.SDK.F018
                     else
                         objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, 1899, null);
                     //将部门经理审批意见写入日志
-                    BP.WF.Dev2Interface.WriteTrack(FK_Flow, FK_Node, WorkID, FID, rpt.NoteBM, ActionType.WorkCheck, "", null, "审核");
+                    Node nd = new Node(this.FK_Node);
+                    BP.WF.Dev2Interface.WriteTrack(FK_Flow, FK_Node, nd.Name, WorkID, FID, rpt.NoteBM, ActionType.WorkCheck, "", null, "审核");
                 }
                 //总经理审批
                 else if (this.FK_Node == 1803)
@@ -172,7 +175,8 @@ namespace CCFlow.SDKFlowDemo.SDK.F018
                     //发动到人力资源部
                     objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow,this.WorkID);
                     //将总经理审批意见写入日志
-                    BP.WF.Dev2Interface.WriteTrack(FK_Flow, FK_Node, WorkID, FID, rpt.NoteZJL, ActionType.WorkCheck, "", null, "审核");
+                    Node nd = new Node(this.FK_Node);
+                    BP.WF.Dev2Interface.WriteTrack(FK_Flow, FK_Node, nd.Name, WorkID, FID, rpt.NoteZJL, ActionType.WorkCheck, "", null, "审核");
                 }
                 /**
                  * 一下两步可以合成一步，
@@ -184,7 +188,8 @@ namespace CCFlow.SDKFlowDemo.SDK.F018
                     //归档
                     objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow,this.WorkID);
                     //写入日志
-                    BP.WF.Dev2Interface.WriteTrack(FK_Flow, FK_Node, WorkID, FID, rpt.NoteRL, ActionType.WorkCheck, "", null, "审核");
+                    Node nd = new Node(this.FK_Node);
+                    BP.WF.Dev2Interface.WriteTrack(FK_Flow, FK_Node, nd.Name, WorkID, FID, rpt.NoteRL, ActionType.WorkCheck, "", null, "审核");
                 }
                 //不超过10天时，人力资源审批
                 else if (this.FK_Node == 1899)
@@ -192,7 +197,8 @@ namespace CCFlow.SDKFlowDemo.SDK.F018
                     //归档
                     objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID);
                     //写入日志
-                    BP.WF.Dev2Interface.WriteTrack(FK_Flow, FK_Node, WorkID, FID, rpt.NoteRL, ActionType.WorkCheck, "", null, "审核");
+                    Node nd = new Node(this.FK_Node);
+                    BP.WF.Dev2Interface.WriteTrack(FK_Flow, FK_Node, nd.Name, WorkID, FID, rpt.NoteRL, ActionType.WorkCheck, "", null, "审核");
                 }
 
                 //设置标题

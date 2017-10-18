@@ -70,9 +70,12 @@
            + '</div>';
 
             $('body').append($(selectEmpModalHtml));
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
 
-
-            var url = "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random();
+            var url = "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
             url = url.replace('=101&', '=10102&');
 
          //   url = url.replace('=101&', '=10102&');

@@ -287,6 +287,18 @@ namespace BP.GPM
                 this.SetValByKey(EmpAttr.Leader, value);
             }
         }
+        public int SignType
+        {
+            get
+            {
+                return this.GetValIntByKey(EmpAttr.SignType);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.SignType, value);
+            }
+        }
+        
         /// <summary>
         /// 密码
         /// </summary>
@@ -414,7 +426,6 @@ namespace BP.GPM
 
                 // 0=不签名 1=图片签名, 2=电子签名.
                 map.AddTBInt(EmpAttr.SignType, 0, "签字类型", true, false);
-
 
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段

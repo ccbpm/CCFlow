@@ -537,7 +537,7 @@ function setFormEleDisabled() {
 }
 
 function CheckMinMaxLength() {
-
+    return true;
     var editor = document.activeEditor;
     if (editor) {
         var wordslen = editor.getContent().length,

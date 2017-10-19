@@ -1541,20 +1541,6 @@ function checkBlanks() {
         }
     });
 
-    //2.对 UMEditor 中的必填项检查
-    window.UEs.forEach(function (item) {
-        //如果是必填
-        if (item.attr.UIIsInput == 1) {
-            var ele = item.editor.$body;
-            if (item.editor.getPlainTxt().trim() === "") {
-                checkBlankResult = false;
-                ele.addClass('errorInput');
-            } else {
-                ele.removeClass('errorInput');
-            }
-        }
-    });
-
     return checkBlankResult;
 }
 

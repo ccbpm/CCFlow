@@ -119,7 +119,7 @@
                             if (st.No != this.EmpFrom)
                                 continue;
 
-                            if ( st.SignType == 0) {
+                            if (st.SignType == 0 || st.SignType == null) {
                                 html += "<tr>";
                                 html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"
                                     + GetUserSmallIcon(this.EmpFrom, this.EmpFromT)

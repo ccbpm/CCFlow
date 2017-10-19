@@ -100,6 +100,10 @@ namespace BP.WF
                 this._JumpToEmps = value;
             }
         }
+        /// <summary>
+        /// 是否停止流程？
+        /// </summary>
+        public bool IsStopFlow = false;
         #endregion 在发送前的事件里可以改变参数
 
         #region 系统参数
@@ -494,14 +498,17 @@ namespace BP.WF
                 case EventListOfNode.SaveBefore: // 节点事件 - 保存前.。
                     return this.SaveBefore();
                 case EventListOfNode.SendWhen: // 节点事件 - 发送前。
-                    
-                    string str= this.SendWhen();
+
+                    string str = this.SendWhen();
+
+                    if (this.IsStopFlow == true)
+                        return "@Info=" + str  + "@IsStopFlow=1";
 
                     if (this.JumpToNodeID == 0 && this.JumpToEmps == null)
                         return str;
 
                     //返回这个格式, NodeSend 来解析.
-                    return "@Info=" + str + "@ToNodeID=" + this.JumpToNodeID + "@ToEmps=" + this.JumpToEmps;
+                        return "@Info=" + str + "@ToNodeID=" + this.JumpToNodeID + "@ToEmps=" + this.JumpToEmps;
 
                 case EventListOfNode.SendSuccess: // 节点事件 - 发送成功时。
                     return this.SendSuccess();

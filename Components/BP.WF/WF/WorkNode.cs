@@ -5494,12 +5494,16 @@ namespace BP.WF
                 if (nodeid != 0)
                     jumpToNode = new Node(nodeid);
 
+                //监测是否有停止流程的标志？
+                this.IsStopFlow  = ap.GetValBoolenByKey("IsStopFlow", false);
+
                 string toEmps = ap.GetValStrByKey("ToEmps");
                 if (string.IsNullOrEmpty(toEmps) == true)
                     jumpToEmp = toEmps;
 
                 //处理str信息.
                 sendWhen = sendWhen.Replace("@Info=", "");
+                sendWhen = sendWhen.Replace("@IsStopFlow=1", "");
                 sendWhen = sendWhen.Replace("@ToNodeID=" + nodeid.ToString(), "");
                 sendWhen = sendWhen.Replace("@ToEmps=" + toEmps, "");
             }
@@ -5533,6 +5537,23 @@ namespace BP.WF
             this.addMsg(SendReturnMsgFlag.VarCurrNodeID, this.HisNode.NodeID.ToString(), this.HisNode.NodeID.ToString(), SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarCurrNodeName, this.HisNode.Name, this.HisNode.Name, SendReturnMsgType.SystemMsg);
             this.addMsg(SendReturnMsgFlag.VarWorkID, this.WorkID.ToString(), this.WorkID.ToString(), SendReturnMsgType.SystemMsg);
+
+            if (this.IsStopFlow == true)
+            {
+                /*在检查完后，反馈来的标志流程已经停止了。*/
+
+                //查询出来当前节点的工作报表.
+                this.rptGe = this.HisFlow.HisGERpt;
+                this.rptGe.SetValByKey("OID", this.WorkID);
+                this.rptGe.RetrieveFromDBSources();
+
+                this.Func_DoSetThisWorkOver();
+                this.rptGe.WFState = WFState.Complete;
+                this.rptGe.Update();
+                this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
+                return this.HisMsgObjs;
+            }
+
 
             //设置跳转节点，如果有可以为null.
             this.JumpToNode = jumpToNode;
@@ -6589,8 +6610,6 @@ namespace BP.WF
         private string oldSender = null;
         #endregion
 
-        
-
 
         public GERpt rptGe = null;
         private void InitStartWorkDataV2()
@@ -7050,8 +7069,11 @@ namespace BP.WF
                 _IsStopFlow = value;
                 if (_IsStopFlow == true)
                 {
-                    this.rptGe.WFState = WFState.Complete;
-                    this.rptGe.Update("WFState", (int)WFState.Complete);
+                    if (this.rptGe != null)
+                    {
+                        this.rptGe.WFState = WFState.Complete;
+                        this.rptGe.Update("WFState", (int)WFState.Complete);
+                    }
                 }
             }
         }

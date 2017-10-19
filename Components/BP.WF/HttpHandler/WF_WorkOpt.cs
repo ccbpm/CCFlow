@@ -97,7 +97,7 @@ namespace BP.WF.HttpHandler
                 else if (SystemConfig.AppCenterDBType == DBType.Oracle)
                     sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM " + trackTable + " A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                 else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT  Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID  DESC";
+                    sql = "SELECT  Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1 ";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count != 0)
@@ -1618,7 +1618,7 @@ namespace BP.WF.HttpHandler
                 else if (SystemConfig.AppCenterDBType == DBType.Oracle)
                     sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                 else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID  DESC";
+                    sql = "SELECT  Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1 ";
 
                 DataTable mydt = DBAccess.RunSQLReturnTable(sql);
                 string emps = "";

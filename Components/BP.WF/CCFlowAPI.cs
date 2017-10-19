@@ -140,7 +140,7 @@ namespace BP.WF
                             else if (SystemConfig.AppCenterDBType == DBType.Oracle)
                                 mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                             else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 AND  limit 1,1  ORDER BY WorkID  DESC";
+                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
 
                             //获得上一次发送到的节点.
                             defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);

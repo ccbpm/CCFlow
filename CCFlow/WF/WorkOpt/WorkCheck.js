@@ -119,9 +119,6 @@
                             if (st.No != this.EmpFrom)
                                 continue;
 
-
-                            alert(st.SignType);
-
                             if (st.SignType == 0 || st.SignType == null) {
                                 html += "<tr>";
                                 html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"

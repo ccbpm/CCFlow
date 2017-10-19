@@ -1928,9 +1928,14 @@ function GenerWorkNode() {
             });
 
             //给富文本 创建编辑器
-            var editor = document.activeEditor = UM.getEditor('editor', {
-                'autoHeightEnabled': false,
-                'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
+            var editor = document.activeEditor = UE.getEditor('editor', {
+                autoHeightEnabled: false,
+                emotionLocalization: true,
+                elementPathEnabled: false,
+                wordCount: false,
+                toolbars: [[
+            'fullscreen', 'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'cleardoc', 'fontfamily', 'fontsize', 'indent', 'emotion', 'date', 'time'
+        ]]
             });
 
             if (editor && document.BindEditorMapAttr) {
@@ -1941,7 +1946,7 @@ function GenerWorkNode() {
                 editor.BindFieldName = document.BindEditorMapAttr.Name;
 
                 //调整样式,让必选的红色 * 随后垂直居中
-                editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
+                editor.$container.css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
             }
 
         }

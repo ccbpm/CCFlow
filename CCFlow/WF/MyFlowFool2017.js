@@ -1866,34 +1866,25 @@ function GenerWorkNode() {
             });
 
             //给富文本 创建编辑器
-            window.UEs = [];
-            if (document.UE_MapAttr) {
-                document.UE_MapAttr.forEach(function (item) {
-                    var obj = {};
-                    //根据字段只读属性 调整外观
-                    if (item.MapAttr.UIIsEnable == "0") {
-                        obj.editor = UM.getEditor(item.id, {
-                            'toolbar': [],
-                            'readonly': true,
-                            'autoHeightEnabled': false,
-                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
-                        });
-                    } else {
-                        document.activeEditor = obj.editor = UM.getEditor(item.id, {
-                            'autoHeightEnabled': false,
-                            'fontsize': [10, 12, 14, 16, 18, 20, 24, 36]
-                        });
-                        document.activeEditor.MaxLen = item.MapAttr.MaxLen;
-                        document.activeEditor.MinLen = item.MapAttr.MinLen;
-                        document.activeEditor.BindField = item.MapAttr.KeyOfEn;
-                        document.activeEditor.BindFieldName = item.MapAttr.Name;
-                    }
-                    obj.attr = item.MapAttr;
-                    window.UEs.push(obj);
+            var editor = document.activeEditor = UE.getEditor('editor', {
+                autoHeightEnabled: false,
+                emotionLocalization: true,
+                elementPathEnabled: false,
+                wordCount: false,
+                toolbars: [[
+            'fullscreen', 'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'cleardoc', 'fontfamily', 'fontsize', 'indent', 'emotion', 'date', 'time'
+        ]]
+            });
 
-                    //调整样式,让必选的红色 * 随后垂直居中
-                    obj.editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
-                });
+            if (editor && document.BindEditorMapAttr) {
+
+                editor.MaxLen = document.BindEditorMapAttr.MaxLen;
+                editor.MinLen = document.BindEditorMapAttr.MinLen;
+                editor.BindField = document.BindEditorMapAttr.KeyOfEn;
+                editor.BindFieldName = document.BindEditorMapAttr.Name;
+
+                //调整样式,让必选的红色 * 随后垂直居中
+                editor.$container.css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
             }
         }
     })

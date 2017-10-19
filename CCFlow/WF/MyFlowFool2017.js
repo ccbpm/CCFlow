@@ -1865,7 +1865,7 @@ function GenerWorkNode() {
                 $(selectObj).selectpicker('val', defValArr);
             });
 
-            //给富文本 创建编辑器
+            //给富文本创建编辑器
             var editor = document.activeEditor = UE.getEditor('editor', {
                 autoHeightEnabled: false,
                 emotionLocalization: true,

@@ -3408,7 +3408,7 @@ namespace BP.DA
                         return true;
                     else
                         return false;
-                    break;
+                    //break;
                 case DBType.Access:
                     sql = "select   Type   from   msysobjects   WHERE   UCASE(name)='" + tabelOrViewName.ToUpper() + "'";
                     DataTable dtw = DBAccess.RunSQLReturnTable(sql);
@@ -3452,7 +3452,7 @@ namespace BP.DA
                     throw new Exception("@没有做的判断。");
             }
 
-            DataTable dt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
+            /*DataTable dt = DBAccess.RunSQLReturnTable(sql, "v", tabelOrViewName.ToUpper());
             if (dt.Rows.Count == 0)
                 throw new Exception("@表不存在[" + tabelOrViewName + "]");
 
@@ -3460,7 +3460,7 @@ namespace BP.DA
                 return true;
             else
                 return false;
-            return true;
+            return true;*/
         }
         /// <summary>
         /// 是否存在

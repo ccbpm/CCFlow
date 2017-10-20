@@ -3348,8 +3348,10 @@ function LoadTempDiagram(FK_MapData) {
                     return;
                 }
 
+
+
                 action(data);
-                
+
 
                 var obj = eval('(' + data + ')');
 

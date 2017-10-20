@@ -819,6 +819,8 @@
                                 <td class="BigDoc">
                                     <ul>
                                         <li >绑定的所有的人员，都可以处理该节点的工作。</li>
+                                        <li >特别说名:<font color=red> 如果当前节点为开始节点，所有的人员都可以发起。</font></li>
+
                                     </ul>
                                 </td>
                             </tr>

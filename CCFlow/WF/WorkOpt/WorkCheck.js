@@ -114,10 +114,11 @@
 
                         for (var idx = 0; idx < SignType.length; idx++) {
 
-
                             var st = SignType[idx];
                             if (st.No != this.EmpFrom)
                                 continue;
+
+                         //  alert(st.SignType);
 
                             if (st.SignType == 0 || st.SignType == null) {
                                 html += "<tr>";

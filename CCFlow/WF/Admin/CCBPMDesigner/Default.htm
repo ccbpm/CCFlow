@@ -505,12 +505,8 @@
                 url: Handler + "?DoType=Login_Redirect&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    var url;
-                    if (data.indexOf('TianYe') == 0) 
-                        url = "../../../BPM/pages/login.html";
-                    else  //CCFlow
-                        url = "../../AppClassic/Login.htm?DoType=Logout";
-                    window.open(url);
+                 
+                    window.open(data);
                 }
             }
                 )

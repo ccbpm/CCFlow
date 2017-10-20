@@ -1261,6 +1261,8 @@ namespace BP.WF
             ps = new Paras();
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET  FlowEmps= FlowEmps ||'" + emps + "', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
+            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= CONCAT(FlowEmps ,'" + emps + "'), WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
             else
                 ps.SQL = "UPDATE " + this.HisFlow.PTable + " SET FlowEmps= FlowEmps + '" + emps + "', WFState=" + dbstr + "WFState,WFSta=" + dbstr + "WFSta WHERE OID=" + dbstr + "OID";
 

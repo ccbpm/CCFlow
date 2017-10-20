@@ -143,39 +143,6 @@ namespace BP.WF
         {
             #region 检查是否需要升级，并更新升级的业务逻辑.
             string updataNote = "";
-            updataNote += "20170613.增加审核组件配置项“是否显示退回的审核信息”对应字段 by:liuxianchen";
-            updataNote += "20170522.增加SL表单设计器中对单选/复选按钮进行字体大小调节的功能 by:liuxianchen";
-            updataNote += "20170520.附件删除规则修复 by:liuxianchen";
-            updataNote += "20170519.升级打印，修改BillTemplate中的Url为TempFilePath by:dgq";
-            updataNote += "20170421.升级表单，给FrmImg中的ImgSrcType赋值 by:liuxianchen";
-            updataNote += "20170217.影子字段";
-            updataNote += "20161101.升级表单，增加图片附件必填验证 by:liuxianchen";
-            updataNote += "20161018.升级用户表密码加密.";
-            updataNote += "20160515.升级表单引擎绑定，去掉Isedit列.";
-            updataNote += "20160526.升级FrmEnableRole状态.";
-            updataNote += "20160501.升级todosta状态.";
-            updataNote += "20160420.升级表单属性.";
-            updataNote += "20160226.新版流程FlowJson字段判断..";
-            updataNote += "20151230.升级阻塞规则..";
-            updataNote += "20151208.为国机升级找人规则.";
-            updataNote += "20151205.为流程增加一个周.";
-            updataNote += "20151115.升级自由流程规则.";
-            updataNote += "20151008.升级节点访问规则描述";
-            updataNote += "20151005.升级表单树，dbsrc..";
-            updataNote += "20151004.升级表单，apptype..";
-            updataNote += "20150922.升级表单..";
-            updataNote += "20150902.升级父子流程..";
-            updataNote += "20150814.升级新昌的公文..";
-            updataNote += "20150730.增加考核表.";
-            updataNote += "20150725.升级流程查看权限规则.";
-            updataNote += "20150613.升级CCRole.";
-            updataNote += "201505302.升级FWCType.";
-            updataNote += "2015051673.升级表单属性.";
-            updataNote += "20150516. 为流程引擎增加了数据同步功能.";
-            updataNote += "20150508. 增加删除bpm模式的一个视图 by:DaiGuoQiang.";
-            updataNote += "20150506. 增加了bpm模式的一个视图.";
-            updataNote += "20150505. 处理了岗位枚举值的问题 by:zhoupeng.";
-            updataNote += "20150424. 优化发起列表的效率, by:zhoupeng.";
 
             /*
              * 升级版本记录:
@@ -187,13 +154,16 @@ namespace BP.WF
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
 
-            //先升级脚本.
+            //先升级脚本. 就是说该文件如果被修改了就会自动升级
             UpdataCCFlowVerSQLScript();
 
+            //判断数据库的版本.
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='Ver'";
             int currDBVer = DBAccess.RunSQLReturnValInt(sql, 0);
             if (currDBVer != null && currDBVer != 0 && currDBVer >=  Ver)
                 return null; //不需要升级.
+
+            
 
             // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
             //MapData md = new MapData();
@@ -846,25 +816,25 @@ namespace BP.WF
 
         /// <summary>
         /// 如果发现升级sql文件日期变化了，就自动升级.
+        /// 就是说该文件如果被修改了就会自动升级.
         /// </summary>
         public static void UpdataCCFlowVerSQLScript()
         {
-            return;
 
             string sql = "SELECT IntVal FROM Sys_Serial WHERE CfgKey='UpdataCCFlowVer'";
-            string currDBVer = DBAccess.RunSQLReturnStringIsNull(sql, "");
+            string currDBVer =  DBAccess.RunSQLReturnStringIsNull(sql, "");
 
             string sqlScript = SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql";
             System.IO.FileInfo fi = new System.IO.FileInfo(sqlScript);
-            string ver = fi.LastWriteTime.ToString("yyMMDDHHmmss");
-            if (currDBVer == "" || currDBVer != ver)
+            string myVer = fi.LastWriteTime.ToString("MMddHHmmss");
+            if (currDBVer == "" ||  int.Parse(currDBVer) != int.Parse(myVer) )
             {
                 BP.DA.DBAccess.RunSQLScript(SystemConfig.PathOfData + "\\UpdataCCFlowVer.sql");
-                sql = "UPDATE Sys_Serial SET IntVal=" + Ver + " WHERE CfgKey='UpdataCCFlowVer'";
+                sql = "UPDATE Sys_Serial SET IntVal=" + myVer + " WHERE CfgKey='UpdataCCFlowVer'";
 
                 if (DBAccess.RunSQL(sql) == 0)
                 {
-                    sql = "INSERT INTO Sys_Serial (CfgKey,IntVal) VALUES('UpdataCCFlowVer'," + Ver + ") ";
+                    sql = "INSERT INTO Sys_Serial (CfgKey,IntVal) VALUES('UpdataCCFlowVer'," + myVer + ") ";
                     DBAccess.RunSQL(sql);
                 }
             }

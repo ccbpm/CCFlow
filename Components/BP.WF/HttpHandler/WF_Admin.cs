@@ -267,6 +267,12 @@ namespace BP.WF.HttpHandler
                 sql += " AND KeyOfEn Not IN('FID','MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID')";
                 sql += " AND MyDataType NOT IN (6,7) ";
             }
+            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+            {
+                sql = "SELECT KeyOfEn as No, CONCAT(KeyOfEn,' - ', Name ) as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";
+                sql += " AND KeyOfEn Not IN('FID','MyNum','Rec','CDT','RDT','AtPara','WFSta','FlowNote','FlowStartRDT','FlowEnderRDT','FlowEnder','FlowSpanDays','WFState','OID','PWorkID','PFlowNo','PEmp','FlowEndNode','GUID')";
+                sql += " AND MyDataType NOT IN (6,7) ";
+            }
             else
             {
                 sql = "SELECT KeyOfEn as No, KeyOfEn+' - '+Name as Name FROM Sys_MapAttr WHERE FK_MapData='ND" + int.Parse(nd.FK_Flow) + "Rpt'";

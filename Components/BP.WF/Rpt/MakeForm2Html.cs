@@ -908,10 +908,26 @@ namespace BP.WF
                     //sb.Append(" \t\n <tr><td colspan=4 valign=top style='width:100%;valign:middle;height:auto;'  >");
                     FrmWorkCheck fwc = new FrmWorkCheck(frmID);
 
+
+                    string sql = "";
+                    DataTable dtTrack = null;
+
+                    if (DBAccess.IsExitsTableCol("Port_Emp", "SignType") == true)
+                    {
+                        string tTable = "ND" + int.Parse(flowNo) + "Track";
+                          sql = "SELECT a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE a.No=b.EmpFrom AND B.WorkID=" + workid;
+
+                        dtTrack = DBAccess.RunSQLReturnTable(sql);
+                        dtTrack.TableName = "SignType";
+
+                        dtTrack.Columns[0].ColumnName = "No";
+                        dtTrack.Columns[1].ColumnName = "SignType";
+                    }
+
                     string html = ""; // "<table style='width:100%;valign:middle;height:auto;' >";
 
                     #region 生成审核信息.
-                    string sql = "SELECT NDFromT, Msg , RDT, EmpFromT FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
+                    sql = "SELECT NDFromT,Msg,RDT,EmpFromT,EmpFrom FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -922,7 +938,38 @@ namespace BP.WF
 
                         msg += "<br>";
                         msg += "<br>";
-                        msg += "审核人:" + dr["EmpFromT"] + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:" + dr["RDT"].ToString();
+
+                        string empStrs = "";
+                        if (dtTrack == null)
+                        {
+                            empStrs = dr["EmpFromT"].ToString();
+                        }
+                        else
+                        {
+                            string singType = "0";
+                            foreach (DataRow drTrack in dtTrack.Rows)
+                            {
+                                if (drTrack["No"].ToString() == dr["EmpFrom"].ToString())
+                                {
+                                    singType = drTrack["SignType"].ToString();
+                                    break;
+                                }
+                            }
+
+                            if (singType == "0" || singType=="2")
+                            {
+                                empStrs = dr["EmpFromT"].ToString();
+                            }
+
+
+                            if (singType == "1")
+                            {
+                                empStrs= "<img src='../../../../../DataUser/Siganture/" +  dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.JPG'\" />";
+                            }
+
+                        }
+
+                        msg += "审核人:" + empStrs + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:" + dr["RDT"].ToString();
 
                         html += " <td colspan=3 valign=middle ><br><br>" + msg + "</td>";
                         html += "\t\n </tr>";

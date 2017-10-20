@@ -1963,24 +1963,19 @@ function InitMapAttrOfCtrl(mapAttr) {
 
             var eleHtml = "";
             //如果是富文本就使用百度 UEditor
-            if (document.UE_MapAttr === undefined) {
-                document.UE_MapAttr = [];
-            }
-            var editorPara = {};
-            editorPara.id = "container" + document.UE_MapAttr.length;
-            editorPara.MapAttr = mapAttr;
-            document.UE_MapAttr.push(editorPara);
-
-            //设置编辑器的默认样式
-            var styleText = "text-align:left;font-size:12px;";
-            styleText += "width:100%;";
-            styleText += "height:" + mapAttr.UIHeight + "px;";
-
             if (mapAttr.UIIsEnable == "0") {
-                //字段处于只读状态.注意这里 name 属性也是可以用来绑定字段名字的
-                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                //只读状态直接 div 展示富文本内容
+                //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
             } else {
-                eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                document.BindEditorMapAttr = mapAttr; //存到全局备用
+
+                //设置编辑器的默认样式
+                var styleText = "text-align:left;font-size:12px;";
+                styleText += "width:100%;";
+                styleText += "height:" + mapAttr.UIHeight + "px;";
+                //注意这里 name 属性是可以用来绑定表单提交时的字段名字的
+                eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
             }
 
             eleHtml = "<div style='white-space:normal;'>" + eleHtml + "</div>";

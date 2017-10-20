@@ -1844,7 +1844,7 @@ function GenerWorkNode() {
                 elementPathEnabled: false,
                 wordCount: false,
                 toolbars: [[
-            'fullscreen', 'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'cleardoc', 'fontfamily', 'fontsize', 'indent', 'emotion', 'date', 'time'
+            'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'cleardoc', 'fontfamily', 'fontsize', 'indent', 'emotion', 'date', 'time'
         ]]
             });
 

@@ -152,7 +152,7 @@ namespace BP.WF.HttpHandler
         public string AccepterOfGener_Delete()
         {
             //删除指定的人员.
-            BP.DA.DBAccess.RunSQL("DELETE FROM WF_SelectAccper WHERE WorkID="+this.WorkID+" AND FK_Emp='"+this.FK_Emp+"'");
+            BP.DA.DBAccess.RunSQL("DELETE FROM WF_SelectAccper WHERE WorkID=" + this.WorkID + " AND FK_Emp='" + this.FK_Emp + "'");
 
             int toNodeID = this.GetRequestValInt("ToNode");
 
@@ -184,11 +184,11 @@ namespace BP.WF.HttpHandler
                 }
 
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, null);
-                string strs= objs.ToMsgOfHtml();
+                string strs = objs.ToMsgOfHtml();
                 strs = strs.Replace("@", "<br>@");
                 return strs;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }
@@ -218,32 +218,65 @@ namespace BP.WF.HttpHandler
                 //标识结束，不要like名字了.
                 if (emp.Contains("/"))
                 {
+                    if (SystemConfig.CustomerNo == "TianYe")//只改了oracle的
+                    {
+                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                            sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%')";
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                            sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 AND a.No!='00000001'";
+                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                            sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') LIMIT 12";
+                    }
+                    else
+                    {
+                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                            sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%')";
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                            sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 ";
+                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                            sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') LIMIT 12";
+
+                    }
+                }
+                else
+                    if (SystemConfig.CustomerNo == "TianYe")//只改了oracle的
+                    {
+                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                            sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and ( a.PinYin LIKE '%," + emp.ToLower() + "%')";
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                            sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' ";
+                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                            sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%' ) LIMIT 12";
+                    }
+                    else
+                    {
+                        if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                            sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and ( a.PinYin LIKE '%," + emp.ToLower() + "%')";
+                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                            sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 ";
+                        if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                            sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%' ) LIMIT 12";
+                    }
+            }
+            else
+                if (SystemConfig.CustomerNo == "TianYe")//只改了oracle的
+                {
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%')";
+                        sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12 AND a.No!='00000001'";
+                        sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12 AND a.No!='00000001'";
                     if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                        sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%'  OR a.PinYin LIKE '%," + emp.ToLower() + "%') LIMIT 12";
+                        sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
                 }
                 else
                 {
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                        sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and ( a.PinYin LIKE '%," + emp.ToLower() + "%')";
+                        sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                        sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%') AND rownum<=12   AND a.No!='00000001' ";
+                        sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12 ";
                     if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                        sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (  a.PinYin LIKE '%," + emp.ToLower() + "%' ) LIMIT 12";
+                        sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
                 }
-            }
-            else
-            {
-                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "SELECT TOP 12 a.No,a.Name +'/'+b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%')";
-                if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT a.No,a.Name || '/' || b.name as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') and rownum<=12 AND a.No!='00000001'";
-                if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT a.No,CONCAT(a.Name,'/',b.name) as Name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No like '%" + emp + "%' OR a.NAME  LIKE '%" + emp + "%') LIMIT 12";
-            }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
@@ -361,7 +394,7 @@ namespace BP.WF.HttpHandler
                 if (isPinYin == true)
                 {
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                      sql = "SELECT TOP 12 a.No,a.Name+'/'+b.name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No = '" + empStr + "' OR a.NAME = '" + empStr + "'  OR a.PinYin LIKE '%," + empStr + "%,')";
+                        sql = "SELECT TOP 12 a.No,a.Name+'/'+b.name FROM Port_Emp a,Port_Dept b  WHERE  (a.fk_dept=b.no) and (a.No = '" + empStr + "' OR a.NAME = '" + empStr + "'  OR a.PinYin LIKE '%," + empStr + "%,')";
 
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
                         sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'  OR PinYin LIKE '%," + empStr + ",%' and ROWNUM <=12 ";
@@ -370,7 +403,7 @@ namespace BP.WF.HttpHandler
                 else
                 {
                     if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                    sql = "SELECT TOP 12 No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'";
+                        sql = "SELECT TOP 12 No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "'";
 
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
                         sql = "SELECT No,Name FROM Port_Emp WHERE No='" + empStr + "' OR NAME ='" + empStr + "' AND ROWNUM  <= 12 ";
@@ -443,7 +476,7 @@ namespace BP.WF.HttpHandler
                     gwf.TodoEmps += item.FK_EmpText + ";";
             }
             gwf.Update();
-           
+
 
             //赋值部门名称。
             DataTable mydt = gwls.ToDataTableField();
@@ -463,7 +496,8 @@ namespace BP.WF.HttpHandler
         #endregion
 
         // 查询select集合
-        public string HuiQian_SelectEmps() {
+        public string HuiQian_SelectEmps()
+        {
             return AccepterOfGener_SelectEmps();
         }
 
@@ -527,7 +561,7 @@ namespace BP.WF.HttpHandler
 
             isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
             //历史审核信息显示
-            if (wcDesc.FWCListEnable==true)
+            if (wcDesc.FWCListEnable == true)
             {
                 tks = wc.HisWorkChecks;
 
@@ -549,7 +583,7 @@ namespace BP.WF.HttpHandler
                     }
 
                     tk.Row.Add("T_NodeIndex", idx);
-                    
+
                     nd = nds.GetEntityByKey(tk.NDFrom) as Node;
 
                     fwc = fwcs.GetEntityByKey(tk.NDFrom) as FrmWorkCheck;
@@ -593,8 +627,8 @@ namespace BP.WF.HttpHandler
                         row = tkDt.NewRow();
                         row["NodeID"] = tk.NDFrom;
 
-                       //row["NodeName"] = (nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
-                       row["NodeName"] = tk.NDFromT; // "SSS"; //(nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
+                        //row["NodeName"] = (nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
+                        row["NodeName"] = tk.NDFromT; // "SSS"; //(nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
 
                         row["IsDoc"] = false;
                         row["ParentNode"] = 0;
@@ -877,7 +911,7 @@ namespace BP.WF.HttpHandler
             //如果有 SignType 列就获得签名信息.
             if (SystemConfig.CustomerNo == "TianYe")
             {
-                string tTable="ND" + int.Parse(FK_Flow) + "Track";
+                string tTable = "ND" + int.Parse(FK_Flow) + "Track";
                 string sql = "SELECT a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE a.No=b.EmpFrom AND B.WorkID=" + this.WorkID;
 
                 DataTable dtTrack = DBAccess.RunSQLReturnTable(sql);
@@ -1058,7 +1092,7 @@ namespace BP.WF.HttpHandler
 
                 if (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog)//日志组件
                 {
-                    Dev2Interface.WriteTrackDailyLog(this.FK_Flow, this.FK_Node,wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+                    Dev2Interface.WriteTrackDailyLog(this.FK_Flow, this.FK_Node, wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
                 }
                 if (wcDesc.HisFrmWorkCheckType == FWCType.WeekLog)//周报
                 {
@@ -1415,7 +1449,7 @@ namespace BP.WF.HttpHandler
                 this.WorkID, BP.Web.WebUser.No) == false)
                 return "err@您没有删除该流程的权限";
             //获取节点中配置的流程删除规则
-            if(this.FK_Node != 0)
+            if (this.FK_Node != 0)
             {
                 string sql = "SELECT wn.DelEnable FROM WF_Node wn WHERE wn.NodeID = " + this.FK_Node;
                 return DBAccess.RunSQLReturnValInt(sql) + "";
@@ -1571,7 +1605,7 @@ namespace BP.WF.HttpHandler
             Node nd = new Node(this.FK_Node);
 
             //判断当前是否是协作模式.
-            if (nd.TodolistModel == TodolistModel.Teamup && nd.IsStartNode==false)
+            if (nd.TodolistModel == TodolistModel.Teamup && nd.IsStartNode == false)
             {
                 if (gwf.TodoEmps.Contains(WebUser.No + ","))
                 {
@@ -1606,12 +1640,25 @@ namespace BP.WF.HttpHandler
             //获得 部门与人员.
             DataSet ds = select.GenerDataSet(toNodeID, wk);
 
+            if (SystemConfig.CustomerNo == "TianYe")//天业集团，去掉00000001董事长
+            {
+                DataTable TYEmp = ds.Tables["Emps"];
+                if (TYEmp.Rows.Count != 0)
+                    foreach (DataRow row in TYEmp.Rows)
+                        if (row["No"].ToString() == "00000001")
+                        {
+                            row.Delete();
+                            break;
+                        }
+                TYEmp.AcceptChanges();
+            }
+
             #region 计算上一次选择的结果, 并把结果返回过去.
             string sql = "";
             DataTable dt = new DataTable();
             dt.Columns.Add("No", typeof(string));
             dt.TableName = "Selected";
-            if (select.IsAutoLoadEmps==true)
+            if (select.IsAutoLoadEmps == true)
             {
                 if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                     sql = "SELECT  top 1 Tag,EmpTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC";
@@ -1785,6 +1832,6 @@ namespace BP.WF.HttpHandler
             return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
         }
 
-      
+
     }
 }

@@ -393,10 +393,10 @@ function FlowProperty() {
     if (currFlow == null || currFlow.attributes.ISPARENT != '0')
         return;
 
-    var userNo = GetQueryString("");
+    var userNo = GetQueryString("UserNo");
 
     var fk_flow = currFlow.id;
-    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PK=" + fk_flow + "&Lang=CH&UserNo="+GetQu;
+    url = "../XAP/DoPort.htm?DoType=En&EnName=BP.WF.Template.FlowExt&PK=" + fk_flow + "&Lang=CH&UserNo=" + WebUser.No;
     addTab(currFlow + "PO", "流程属性" + fk_flow, url);
     //WinOpen(url);
 }

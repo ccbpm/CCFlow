@@ -57,24 +57,24 @@
                 $.each(tks, function () {
                     var subaths = GetSubAths(this.NodeID);
 
-                    if (wcDesc.FWCShowModel == 0) {
-                        //表格模式
-                        html += '<tr style="background-color: #E2F6FB">';
-                        html += '<td>' + this.NodeName + '</td>';
-                        html += '</tr>';
-                        html += '<tr>';
-                    }
-                    else {
+//                    if (wcDesc.FWCShowModel == 0) {
+//                        //表格模式
+//                        html += '<tr style="background-color: #E2F6FB">';
+//                        html += '<td>' + this.NodeName + '</td>';
+//                        html += '</tr>';
+//                        html += '<tr>';
+//                    }
+                      
                         //自由模式
                         html += "<tr>";
                         html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
-                    }
 
                     //审核意见
                     if (this.IsDoc) {
+
                         html += "<td>";
 
-                        // html += "<div style='float:left'>" + wcDesc.FWCOpLabel + "</div>";
+                        //html += "<div style='float:left'>" + wcDesc.FWCOpLabel + "</div>";
                         //html += "<div style='float:left'><a href=\"javascript:TBHelp('ND" + nodeid + "')\"><img src='../Img/Emps.gif' width='23px' align='middle' border=0 />选择词汇</a></div>";
                         //html += "<div style='float:left'></div>";
 
@@ -85,6 +85,7 @@
                         html += "<div style='float:left;width:100%;'>";
                         html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;' onblur='SaveWorkCheck()'>" + this.Msg + "</textarea>";
                         html += "</div>";
+
                         html += "</td>";
                     }
                     else {
@@ -92,16 +93,20 @@
                     }
 
                     html += '</tr>';
+
                     //附件
                     if (subaths.length > 0) {
                         var tdid = this.IsDoc ? ("id='aths_" + this.NodeID + "'") : "";
-                        html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'><td " + tdid + " style='word-wrap: break-word;'>";
+
+                        html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'>";
+                        html += "<td " + tdid + " style='word-wrap: break-word;' colspan=2>";
                         html += "<b>附件：</b>&nbsp;" + subaths;
-                        html += "</td></tr>";
+                        html += "</td>"; 
+                        html += "</tr>";
                     }
 
                     //输出签名.
-                    if (SignType == null || SignType == undefined) {
+                    if ( SignType == null || SignType == undefined) {
 
                         //签名，日期.
                         html += "<tr>";

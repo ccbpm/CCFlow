@@ -46,7 +46,6 @@
                             html += "</fieldset>";
 
                             window.location.href = url.Name;
-                            return;
                         }
 
                         if (url.No == "pdf") {
@@ -66,7 +65,6 @@
                                 html += "</fieldset>";
 
                                 downloadFile(url.Name);
-                                return;
                             }
                         }
 
@@ -87,11 +85,12 @@
                                 html += "</fieldset>";
 
                                 window.location.href = url.Name;
-                                return;
                             }
                         }
                     }
+                    html = '<b><font color=red>提示:如果不能弹出打印窗口,请点击连接手工打印下载.</font></b>' + html;
 
+                    html += "<br><br><center><div style=''><a href='javascript:window.parent.close();' >关闭窗口</a></div></center>";
                     document.getElementById("Msg").innerHTML = html;
                 }
             });
@@ -101,7 +100,7 @@
         function downloadFile(url) {
 
             window.open(url);
-            window.parent.close();
+         //   window.parent.close();
            // window.close();
             return;
         }
@@ -113,6 +112,7 @@
         {
             height: 72px;
             width: 272px;
+            
         }
     </style>
 </head>

@@ -482,6 +482,9 @@ function initModal(modalType, toNode) {
                 var url = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
                 // alert(url);
                 modalIframeSrc = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+
+                $('#returnWorkModal').attr('height', 800);
+                $('#returnWorkModal').attr('width', 600);
                 break;
             case "accepter":
                 $('#modalHeader').text("选择下一个节点及下一个节点接受人");

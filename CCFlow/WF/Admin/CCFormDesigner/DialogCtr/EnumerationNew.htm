@@ -38,9 +38,11 @@
         $(function () {
 
             var doType = GetQueryString('DoType');
+
             if (doType != null) {
                 $("#RB_QPJP").attr({ "disabled": "disabled" });
                 $("#RB_QPQP").attr({ "disabled": "disabled" });
+                $("#TB_EnumKey").attr({ "disabled": "disabled" });
                 return;
             }
 
@@ -56,18 +58,15 @@
                     return;
                 }
 
-                if (val == "ziduanquanpin") {
+                if (val == "ziduanquanpin")  
                     ParseStringToPinYin(name, true);
-                }
-                else {
+                else  
                     ParseStringToPinYin(name, false);
-                }
-
+ 
             });
 
             //点击全拼
             $('input[id=RB_QP]').change(function () {
-
                 var tbName = document.getElementById("TB_EnumName").value;
                 ParseStringToPinYin(tbName, true);
             });
@@ -173,21 +172,11 @@
                 }
             }
 
-
-            //for (var i = long; i < 21; i++) {
-            //    var text ='';
-            //    str += '<tr>';
-            //    str += "<td> " + i + "</td> ";
-            //    str += "<td> <input id='TB" + i + "'  class='easyui-textbox'  value='' class='easyui-textbox' style='width: 200px' /></td> ";
-            //    str += '</tr>';
-            //}
-
             var div = this.document.getElementById('DivEnumList');
             div.innerHTML = str;
 
             pageData.DoType = "FrmEnumeration_SaveEnum";
         }
-
 
         //执行保存.
         function SaveEnum() {

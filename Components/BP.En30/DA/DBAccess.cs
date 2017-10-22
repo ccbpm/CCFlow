@@ -146,7 +146,7 @@ namespace BP.DA
                 cm.CommandType = CommandType.Text;
                 cm.CommandText = "UPDATE " + tableName + " SET " + saveToFileField + "=@FlowJsonFile WHERE " + tablePK + " =@PKVal";
 
-                MySqlParameter spFile = new MySqlParameter("FlowJsonFile", MySqlDbType.LongBlob);
+                MySqlParameter spFile = new MySqlParameter("FlowJsonFile", MySqlDbType.Blob);
                 spFile.Value = bytes;
                 cm.Parameters.Add(spFile);
 
@@ -163,7 +163,7 @@ namespace BP.DA
                     if (BP.DA.DBAccess.IsExitsTableCol(tableName, saveToFileField) == false)
                     {
                         /*如果没有此列，就自动创建此列.*/
-                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " LONGBLOB NULL ";
+                        string sql = "ALTER TABLE " + tableName + " ADD  " + saveToFileField + " BLOB NULL ";
                         BP.DA.DBAccess.RunSQL(sql);
                     }
 
@@ -375,7 +375,8 @@ namespace BP.DA
                     if (dr[0] == null || string.IsNullOrEmpty(dr[0].ToString()))
                         return null;
 
-                    byteFile = System.Text.Encoding.Default.GetBytes(dr[0].ToString());
+                    byteFile = dr[0] as byte[];
+                    //System.Text.Encoding.Default.GetBytes(dr[0].ToString());
                 }
 
                 return byteFile;

@@ -473,21 +473,7 @@ namespace BP.Tools
         /// <returns></returns>
         public static string ToJson(Hashtable ht)
         {
-            bool isNoNameFormat = false;
-
-            DataTable dt = new DataTable();
-            foreach (string key in ht.Keys)
-            {
-                dt.Columns.Add(key);
-            }
-
-            List<object> l = new List<object>();
-            foreach (string key in ht.Keys)
-            {
-                l.Add(ht[key]);
-            }
-            dt.Rows.Add(l.ToArray());
-            return ToJson(dt);
+            return ToJsonEntityModel(ht);
         }
         /// <summary>
         /// Datatable转换为Json

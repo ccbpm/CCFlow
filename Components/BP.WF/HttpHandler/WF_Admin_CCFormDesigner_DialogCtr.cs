@@ -125,6 +125,18 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+        public string EnumerationNew_GetEnum()
+        {
+            string enumKey = this.GetRequestVal("EnumKey");
+
+            SysEnumMain sem = new SysEnumMain(enumKey);
+            Hashtable ht = new Hashtable();
+            ht.Add("No", sem.No);
+            ht.Add("Name", sem.Name);
+            ht.Add("CfgVal", sem.CfgVal);
+
+            return BP.Tools.Json.ToJsonEntityModel(ht);
+        }
         public string FrmEnumeration_SaveEnum()
         {
             string enumName = this.GetRequestVal("EnumName");

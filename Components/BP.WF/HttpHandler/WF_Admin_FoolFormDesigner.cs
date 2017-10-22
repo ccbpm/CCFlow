@@ -340,6 +340,15 @@ namespace BP.WF.HttpHandler
             return attr.MyPK;
         }
         /// <summary>
+        /// 删除枚举值
+        /// </summary>
+        /// <returns></returns>
+        public string SysEnumList_Del()
+        {
+            WF_Admin_CCFormDesigner_DialogCtr en = new WF_Admin_CCFormDesigner_DialogCtr(this.context);
+            return en.FrmEnumeration_DelEnum();
+        }
+        /// <summary>
         /// 增加一个枚举类型
         /// </summary>
         /// <returns></returns>

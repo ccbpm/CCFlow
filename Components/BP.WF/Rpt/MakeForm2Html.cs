@@ -866,13 +866,19 @@ namespace BP.WF
                             sb.Append("\t\n<ul>");
                             foreach (FrmAttachmentDB item in athDBs)
                             {
+                                string fileTo = path + "\\pdf\\" + item.FileName;
+
                                 if (ath.AthSaveWay == AthSaveWay.FTPServer)
                                 {
                                     try
                                     {
                                         //把文件copy到,
-                                        string file = item.MakeFullFileFromFtp();
-                                        System.IO.File.Copy(file, path + "\\pdf\\" + item.FileName, true);
+                                        if (System.IO.File.Exists(fileTo) == false)
+                                        {
+                                            string file = item.MakeFullFileFromFtp();
+                                            System.IO.File.Copy(file, fileTo, true);
+                                        }
+
                                         sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                                     }
                                     catch (Exception ex)
@@ -886,12 +892,14 @@ namespace BP.WF
                                     try
                                     {
                                         //把文件copy到,
-                                        System.IO.File.Copy(item.FileFullName, path + "\\pdf\\" + item.FileName, true);
+                                        if (System.IO.File.Exists(fileTo) == false)
+                                            System.IO.File.Copy(item.FileFullName, fileTo, true);
+
                                         sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                                     }
                                     catch (Exception ex)
                                     {
-                                        sb.Append("<li>" + item.FileName + "(<font color=red>文件未从ftp下载成功{" + ex.Message + "}</font>)</li>");
+                                        sb.Append("<li>" + item.FileName + "(<font color=red>文件未从iis下载成功{" + ex.Message + "}</font>)</li>");
                                     }
                                 }
                             }

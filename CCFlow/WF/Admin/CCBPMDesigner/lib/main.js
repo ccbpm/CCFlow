@@ -3429,7 +3429,7 @@ function load(flowNo) {
             }
 
             if (data == "") {
-             //   alert("@没有获得流程图的json数据.");
+                //   alert("@没有获得流程图的json数据.");
                 return;
             }
 
@@ -3456,69 +3456,7 @@ function load(flowNo) {
             }
         }
     );
-}
-
-/**Loads a saved diagram
-*@param {String} tempDiagramName - the name of temporary diagram
-**/
-function loadTempDiagram(tempDiagramName) {
-    //    alert("load diagram [" + tempDiagramName + ']');
-
-    $.post("./common/controller.php", { action: 'loadTemp', tempName: tempDiagramName },
-        function (data) {
-            //                        alert(data);
-            try {
-                var obj = eval('(' + data + ')');
-
-                if (!('v' in obj) || obj.v != DIAGRAMO.fileVersion) {
-                    Importer.importDiagram(obj); //import 1st version of Diagramo files
-                }
-
-                STACK = Stack.load(obj['s']);
-                canvasProps = CanvasProps.load(obj['c']);
-                canvasProps.sync();
-                setUpEditPanel(canvasProps);
-
-                CONNECTOR_MANAGER = ConnectorManager.load(obj['m']);
-                CONTAINER_MANAGER = ContainerFigureManager.load(obj['p']);
-                draw();
-
-                //alert("loaded");
-            } catch (error) {
-                alert("main.js:load() Exception: " + error);
-            }
-        }
-    );
-}
-
-function loadQuickStartDiagram() {
-    $.post("./common/controller.php", { action: 'loadQuickStart' },
-        function (data) {
-            //                        alert(data);
-            try {
-                var obj = eval('(' + data + ')');
-
-                if (!('v' in obj) || obj.v != DIAGRAMO.fileVersion) {
-                    Importer.importDiagram(obj); //import 1st version of Diagramo files
-                }
-
-                STACK = Stack.load(obj['s']);
-                canvasProps = CanvasProps.load(obj['c']);
-                canvasProps.sync();
-                setUpEditPanel(canvasProps);
-
-                CONNECTOR_MANAGER = ConnectorManager.load(obj['m']);
-                CONTAINER_MANAGER = ContainerFigureManager.load(obj['p']);
-                draw();
-
-                //alert("loaded");
-            } catch (error) {
-                alert("main.js:load() Exception: " + error);
-            }
-        }
-    );
-}
-
+} 
  
 
 /**Add listeners to elements on the page*/

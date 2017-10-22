@@ -914,6 +914,11 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string InitToolBarForMobile()
         {
+            string str = InitToolBar();
+            str=str.Replace("Send()","SendIt()");
+            return str;
+
+
             #region 处理是否是加签，或者是否是会签模式，.
             bool isAskForOrHuiQian = false;
             if (this.FK_Node.ToString().EndsWith("01") == false)
@@ -937,11 +942,10 @@ namespace BP.WF.HttpHandler
             string toolbar = "";
             try
             {
-                #region 是否是抄送.
+                #region 是否是会签？.
                 if (isAskForOrHuiQian == true)
                 {
-                    toolbar += "<a data-role='button' name='Send'  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();Send(); \" ></a>";
-                    // toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" />";
+                    toolbar += "<a data-role='button' name='Send'  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();SendIt(); \" ></a>";
                     if (btnLab.PrintZipEnable == true)
                     {
                         string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
@@ -976,14 +980,14 @@ namespace BP.WF.HttpHandler
                         if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                         {
                             /*如果启用了发送按钮.*/
-                            toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if (SendSelfFrom()==false) return false; Send(); this.disabled=true;\" ></a>";
+                            toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if (SendSelfFrom()==false) return false; SendIt(); this.disabled=true;\" ></a>";
                         }
                     }
                     else
                     {
                         if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                         {
-                            toolbar += "<a data-role='button' name='Send'  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; Send(); this.disabled=true;\" ></a>";
+                            toolbar += "<a data-role='button' name='Send'  value='" + btnLab.SendLab + "' enable=true onclick=\"" + btnLab.SendJS + " if ( SendSelfFrom()==false) return false; SendIt(); this.disabled=true;\" ></a>";
                         }
                     }
 
@@ -994,7 +998,7 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                if (this.currND.HisFormType != NodeFormType.SelfForm)
+                if (this.currND.HisFormType == NodeFormType.FoolForm || this.currND.HisFormType == NodeFormType.FreeForm)
                 {
                     /*启用了其他的表单.*/
                     if (currND.IsEndNode)
@@ -1003,11 +1007,7 @@ namespace BP.WF.HttpHandler
                         if (btnLab.SendEnable && currND.HisBatchRole != BatchRole.Group)
                         {
                             /*如果启用了选择人窗口的模式是【选择既发送】.*/
-                            if (this.IsMobile)
-                                toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();SendIt(); \" ></a>";
-                            else
-                                toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();Send(); \" ></a>";
-
+                            toolbar += "<a data-role='button' name='Send' value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();KindEditerSync();SendIt(); \" ></a>";
                         }
                     }
                     else
@@ -1017,21 +1017,14 @@ namespace BP.WF.HttpHandler
                             /*如果启用了发送按钮.
                              * 1. 如果是加签的状态，就不让其显示发送按钮，因为在加签的提示。
                              */
-                            if (this.IsMobile)
-                                toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();SendIt();\" ></a>";
-                            else
-                                toolbar += "<a data-role='button' name='Send'  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();Send();\" ></a>";
-
+                            toolbar += "<a data-role='button' name='Send'   value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;KindEditerSync();SendIt();\" ></a>";
                         }
                     }
 
                     /* 处理保存按钮.*/
                     if (btnLab.SaveEnable)
                     {
-                        if (this.IsMobile)
-                            toolbar += "<a data-role='button' name='Save'    value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false; SaveIt();\" ></a>";
-                        else
-                            toolbar += "<a data-role='button' name='Save'   value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false;KindEditerSync();Save();\" ></a>";
+                        toolbar += "<a data-role='button' name='Save'    value='" + btnLab.SaveLab + "' enable=true onclick=\"   if(SysCheckFrm()==false) return false; SaveIt();\" ></a>";
                     }
                 }
 

@@ -42,7 +42,7 @@ namespace BP.WF.HttpHandler
         public string InitToolBar()
         {
             WF_MyFlow en = new WF_MyFlow(this.context);
-            return en.InitToolBar();
+            return en.InitToolBarForMobile();
         }
         public string MyFlow_Init()
         {

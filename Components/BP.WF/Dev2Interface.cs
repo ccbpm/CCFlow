@@ -1297,10 +1297,15 @@ namespace BP.WF
         public static DataTable DB_Todolist(string userNo, int fk_node = 0)
         {
             string sql = "";
-            sql = "SELECT A.* FROM WF_GenerWorkFlow A, WF_FlowSort B, WF_Flow C";
-            sql += " WHERE (WFState=2 OR WFState=5 OR WFState=8) AND  TodoEmps LIKE '%" + userNo + ",%'";
+            sql = "SELECT A.* FROM WF_GenerWorkFlow A, WF_FlowSort B, WF_Flow C, WF_GENERWORKERLIST D ";
+            sql += " WHERE (WFState=2 OR WFState=5 OR WFState=8)";
             sql += " AND A.FK_FlowSort=B.No ";
             sql += " AND A.FK_Flow=C.No ";
+            sql += " AND A.FK_Node=D.FK_Node ";
+            sql += " AND A.WorkID=D.WorkID ";
+            sql += " AND D.IsPass!=1 ";
+            sql += " AND D.FK_Emp='"+userNo+"'";
+
 
             if (fk_node != 0)
                 sql += " AND A.FK_Node="+fk_node;

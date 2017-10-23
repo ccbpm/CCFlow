@@ -327,8 +327,6 @@ namespace BP.WF
                         string fullSQL = me.Doc.Clone() as string;
                         fullSQL = fullSQL.Replace("~", ",");
                         fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
-                        if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                            fullSQL=fullSQL.ToUpper();
                         dt = DBAccess.RunSQLReturnTable(fullSQL);
                         dt.TableName =  keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
                         myds.Tables.Add(dt);

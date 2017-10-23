@@ -43,27 +43,32 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=SFTableList&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
+                url: Handler + "?DoType=SFList_List&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
                     data = JSON.parse(data);
                     //增加处理.
                     for (var i = 0; i < data.length; i++) {
 
+                        var sfTable = data[i];
+
                         var newRow = "";
                         var nameLink = "";
-
                         if (fk_mapData != null)
-                            nameLink = "<a href=\"javascript:AddSFTable('" + data[i].No + "')\" ><img src='../../Img/Btn/Add.gif' border=0 />" + data[i].No + "</a>";
+                            nameLink = "<a href=\"javascript:AddSFTable('" + sfTable.No + "')\" ><img src='../../Img/Btn/Add.gif' border=0 />" + sfTable.No + "</a>";
                         else
-                            nameLink = data[i].No;
+                            nameLink = sfTable.No;
 
                         newRow = "<tr ><td class=Idx>" + i + "</td>";
                         newRow += "<td>" + nameLink + "</td>";
-                        newRow += "<td>" + data[i].Name + "</td>";
-                        newRow += "<td>" + data[i].FK_SFDBSrcText + "</td>";
-                        newRow += "<td>" + data[i].SrcTypeText + "</td>";
-                        newRow += "<td><a href=\"javascript:Edit('" + data[i].No + "','"+data[i].SrcType+"')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a></td>";
+                        newRow += "<td>" + sfTable.Name + "</td>";
+                        newRow += "<td>" + sfTable.FK_SFDBSrcText + "</td>";
+                        newRow += "<td>" + sfTable.SrcTypeText + "</td>";
+                        newRow += "<td>";
+                        newRow += "<a href=\"javascript:Edit('" + sfTable.No + "','" + sfTable.SrcType + "')\"><img src='../../Img/Btn/Edit.gif' border=0 />编辑</a>";
+                        newRow += " - <a href=\"javascript:Del('" + sfTable.No + "','" + sfTable.Name + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
+                        newRow += "</td>";
                         newRow += "</tr>";
 
                         $("#Table1 tr:last").after(newRow);
@@ -104,7 +109,7 @@
                         return;
                     }
 
-                    url = "/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + data;
+                    url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + data;
                     window.location.href = url;
                 }
             });
@@ -119,6 +124,29 @@
 
             var url = 'Do.aspx?DoType=AddSFSQLAttr&MyPK=' + mypk + '&IDX=' + idx + '&RefNo=' + key;
             var b = window.showModalDialog(url, 'ass', 'dialogHeight: 400px; dialogWidth: 500px;center: yes; help: no');
+        }
+
+        //删除.
+        function Del(no,name) {
+
+            if (window.confirm('您确定要执行删除[' + name + ']吗?') == false)
+                return;
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=SFList_Delete&FK_SFTable=" + no + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    window.location.href = window.location.href; //刷新页面.
+                }
+            });
         }
         
         //编辑.

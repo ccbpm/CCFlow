@@ -531,7 +531,7 @@
             return mtds;
         }
 
-        function saveSFTable() {
+        function SaveSFTable() {
             sftable.SRCTYPE = parseInt(srcType);
             sftable.NO = sfno ? sfno : null;
             sftable.NAME = "";
@@ -673,17 +673,38 @@
             sftable.isnew = sfno == null;
 
             t.ajax(Handler, sftable, false, function (msg) {
+
                 if (!msg || msg.indexOf("err@") != -1) {
                     alert('保存出错：' + msg);
                     return;
                 }
 
-                if (sfno) {
-                    location.href = location.href.indexOf("&t=") != -1 ? location.href.replace("&t=" + t.getQueryString("t"), "&t=" + Math.random()) : (location.href + "&t=" + Math.random());
+
+                alert(msg);
+                window.close();
+                return;
+
+                alert(sfno);
+
+                if (sfno == null) {
+                    var url = 'CreateSFGuide.htm?sfno=' + sftable.NO + '&t=' + Math.random();
+                    location.href = url;
+                    return;
                 }
-                else {
-                    location.href += "&sfno=" + sftable.NO + "&t=" + Math.random();
+
+                if (sfno != null) {
+                    var url = 'CreateSFGuide.htm?sfno=' + sfno + '&t=' + Math.random();
+                    location.href = url;
+                    return;
                 }
+
+
+                //                if (sfno) {
+                //                    location.href = location.href.indexOf("&t=") != -1 ? location.href.replace("&t=" + t.getQueryString("t"), "&t=" + Math.random()) : (location.href + "&t=" + Math.random());
+                //                }
+                //                else {
+                //                    location.href += "&sfno=" + sftable.NO + "&t=" + Math.random();
+                //                }
             }, function (msg) {
                 alert(msg);
             });
@@ -732,20 +753,12 @@
     <div data-options="region:'center',title:'创建数据源表'" style="padding: 5px;">
         <table id="mtable" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 98%">
             <tr>
-                <td class="GroupTitle" width="120px">
-                    项目
-                </td>
-                <td class="GroupTitle" width="300px">
-                    值
-                </td>
-                <td class="GroupTitle">
-                    备注
-                </td>
+                <td class="GroupTitle" width="120px">项目</td>
+                <td class="GroupTitle" width="300px"> 值</td>
+                <td class="GroupTitle"> 备注 </td>
             </tr>
             <tr>
-                <td class="GroupTitle">
-                    数据源表类型：
-                </td>
+                <td class="GroupTitle"> 数据源表类型：</td>
                 <td width="300px">
                     <select id="srcTypes">
                         <option value="0">本地的类</option>
@@ -763,7 +776,7 @@
         </table>
         <br />
         <a href="javascript:void(0)" id="Btn_Create" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
-           onclick="saveSFTable()">保存</a> <a href="javascript:void(0)" id="Btn_ShowData" class="easyui-linkbutton"
+           onclick="SaveSFTable()">保存</a> <a href="javascript:void(0)" id="Btn_ShowData" class="easyui-linkbutton"
                                              data-options="iconCls:'icon-open'" onclick="ShowData()">查看数据</a>
     </div>
 </body>

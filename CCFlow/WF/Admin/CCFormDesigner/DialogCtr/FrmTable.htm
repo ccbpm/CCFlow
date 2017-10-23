@@ -125,7 +125,9 @@
         //编辑.
         function Edit() {
             var no = $.trim($("#TB_No").val());
-            var url = '/WF/Comm/En.htm?EnsName=BP.Sys.FrmUI.SFTableClasss&No=' + no;
+
+            var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.SFTableClasss&No=' + no;
+
             OpenDialogAndCloseRefresh(url, "编辑外键表", 600, 550, "icon-new");
         }
 

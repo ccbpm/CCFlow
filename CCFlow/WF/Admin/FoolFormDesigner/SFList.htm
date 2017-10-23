@@ -14,7 +14,7 @@
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     
      <base target="_self" /> 
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 
     <script language="javascript" type="text/javascript" >
         /* ESC Key Down */
@@ -125,7 +125,7 @@
         function Edit(fk_sftable, sfType) {
 
             var ensName = '';
-            if (sfType == "0") {
+            if (sfType == "0" || sfType==1 ) {
                 ensName = "BP.Sys.FrmUI.SFTables";
             }
 
@@ -134,15 +134,22 @@
             }
 
             var url = '/WF/Comm/En.htm?EnsName=' + ensName + '&No=' + fk_sftable;
-            OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, 800, 495, 'icon-edit');
+            OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, 900, 495, 'icon-edit');
 
+        }
+
+        function New() {
+            var url = 'CreateSFGuide.htm?DoType=New&FromApp=SL&s='+ Math.random();
+            OpenEasyUiDialog(url, "eudlgframe", "新建字典表", 800, 600, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
         }
      </script>
 </head>
 <body onkeypress="Esc()" >
 
-<table id="Table1">
-<caption>字典列表 - <a href="CreateSFGuide.htm?DoType=New&FromApp=SL" >创建字典表</a></caption>
+<table id="Table1" style=" width:98%; ">
+<caption>字典列表 - <a href="javascript:New()">创建字典表</a> </caption>
 <tr>
 <th>序</th>
 <th>编号</th>

@@ -2095,7 +2095,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
         src += "&DoType=View";
     }
     src += "&r=q" + paras;
-    var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no onload='this.height = this.contentDocument.body.clientHeight" + 50 + ";'></iframe>";
+    var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no onload='this.height = this.contentDocument.body.clientHeight" + 800 + ";'></iframe>";
     return eleHtml;
 }
 

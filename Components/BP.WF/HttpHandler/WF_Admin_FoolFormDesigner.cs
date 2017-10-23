@@ -308,37 +308,7 @@ namespace BP.WF.HttpHandler
             return msg;
         }
 
-        public string SFList_SaveSFField()
-        {
-            MapAttr attr = new Sys.MapAttr();
-            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
-            if (attr.RetrieveFromDBSources() != 0)
-                return "err@字段名[" + this.KeyOfEn + "]已经存在.";
-
-            attr.FK_MapData = this.FK_MapData;
-            attr.KeyOfEn = this.KeyOfEn;
-
-            //设置string类型.
-            attr.MyDataType = DataType.AppString;
-
-            //关键字.
-            attr.UIBindKey = this.GetRequestVal("SFTable");
-
-            //分组ID.
-            attr.GroupID = this.GetRequestValInt("GroupID");
-            attr.UIContralType = En.UIContralType.DDL;
-
-            //外键.
-            attr.LGType = En.FieldTypeS.FK;
-
-            SFTable sf = new Sys.SFTable();
-            sf.No = attr.UIBindKey;
-            if (sf.RetrieveFromDBSources() != 0)
-                attr.Name = sf.Name;
-
-            attr.Insert();
-            return attr.MyPK;
-        }
+        
         /// <summary>
         /// 删除枚举值
         /// </summary>
@@ -666,26 +636,69 @@ namespace BP.WF.HttpHandler
             ses.RetrieveAll();
             return ses.ToJson();
         }
+
+
+        #region SFList 外键表列表.
         /// <summary>
         /// 删除
         /// </summary>
         /// <returns></returns>
-        public string SFTableDelete()
+        public string SFList_Delete()
         {
-            SFTable sf = new SFTable(this.FK_SFTable);
-            sf.Delete();
-            return "删除成功...";
+            try
+            {
+                SFTable sf = new SFTable(this.FK_SFTable);
+                sf.Delete();
+                return "删除成功...";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
         /// <summary>
         /// 字典表列表.
         /// </summary>
         /// <returns></returns>
-        public string SFTableList()
+        public string SFList_List()
         {
             SFTables ens = new SFTables();
             ens.RetrieveAll();
             return ens.ToJson();
         }
+        public string SFList_SaveSFField()
+        {
+            MapAttr attr = new Sys.MapAttr();
+            attr.MyPK = this.FK_MapData + "_" + this.KeyOfEn;
+            if (attr.RetrieveFromDBSources() != 0)
+                return "err@字段名[" + this.KeyOfEn + "]已经存在.";
+
+            attr.FK_MapData = this.FK_MapData;
+            attr.KeyOfEn = this.KeyOfEn;
+
+            //设置string类型.
+            attr.MyDataType = DataType.AppString;
+
+            //关键字.
+            attr.UIBindKey = this.GetRequestVal("SFTable");
+
+            //分组ID.
+            attr.GroupID = this.GetRequestValInt("GroupID");
+            attr.UIContralType = En.UIContralType.DDL;
+
+            //外键.
+            attr.LGType = En.FieldTypeS.FK;
+
+            SFTable sf = new Sys.SFTable();
+            sf.No = attr.UIBindKey;
+            if (sf.RetrieveFromDBSources() != 0)
+                attr.Name = sf.Name;
+
+            attr.Insert();
+            return attr.MyPK;
+        }
+        #endregion 外键表列表.
+
         /// <summary>
         /// 初始化表.
         /// </summary>

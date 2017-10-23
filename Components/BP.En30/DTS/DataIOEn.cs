@@ -328,7 +328,7 @@ namespace BP.DTS
 //								len=dr[dc.ColumnName].ToString().Length;
 //						}
 //						len+=10;
-						createTable+=dc.ColumnName+" nvarchar (700) NULL  ," ;
+						createTable+=dc.ColumnName+" varchar (700) NULL  ," ;
 						break;
 					case "System.Int16":
 					case "System.Int32":
@@ -769,9 +769,9 @@ namespace BP.DTS
 				if(ff.DataType==DataType.AppDateTime)
 				{
 					FromSQL+=" CASE  "+
-                        " when datalength( CONVERT(NVARCHAR,datepart(month," + ff.FromField + " )))=1 then datename(year," + ff.FromField + " )+'-'+('0'+CONVERT(NVARCHAR,datepart(month," + ff.FromField + " ))) " +
+                        " when datalength( CONVERT(VARCHAR,datepart(month," + ff.FromField + " )))=1 then datename(year," + ff.FromField + " )+'-'+('0'+CONVERT(NVARCHAR,datepart(month," + ff.FromField + " ))) " +
 						" else "+
-                        " datename(year," + ff.FromField + " )+'-'+CONVERT(NVARCHAR,datepart(month," + ff.FromField + " )) " +
+                        " datename(year," + ff.FromField + " )+'-'+CONVERT(VARCHAR,datepart(month," + ff.FromField + " )) " +
 						" END "+
 						" AS "+ff.FromField+" , ";
 				}
@@ -833,9 +833,9 @@ namespace BP.DTS
 				if(ff.DataType==DataType.AppDateTime)
 				{
 					FromSQL+=" CASE  "+
-                        " when datalength( CONVERT(NVARCHAR,datepart(month," + ff.FromField + " )))=1 then datename(year," + ff.FromField + " )+'-'+('0'+CONVERT(NVARCHAR,datepart(month," + ff.FromField + " ))) " +
+                        " when datalength( CONVERT(VARCHAR,datepart(month," + ff.FromField + " )))=1 then datename(year," + ff.FromField + " )+'-'+('0'+CONVERT(NVARCHAR,datepart(month," + ff.FromField + " ))) " +
 						" else "+
-                        " datename(year," + ff.FromField + " )+'-'+CONVERT(NVARCHAR,datepart(month," + ff.FromField + " )) " +
+                        " datename(year," + ff.FromField + " )+'-'+CONVERT(VARCHAR,datepart(month," + ff.FromField + " )) " +
 						" END "+
 						" AS "+ff.FromField+" , ";
 				}
@@ -1057,7 +1057,7 @@ namespace BP.DTS
 					if(ff.DataType==DataType.AppDateTime)
 					{
 						SELECTSQL+=" case "+
-							" when datalength( CONVERT(NVARCHAR,datepart(month,"+ff.FromField+" )))=1 then datename(year,"+ff.FromField+" )+'-'+('0'+CONVERT(VARCHAR,datepart(month,"+ff.FromField+" ))) "+
+							" when datalength( CONVERT(VARCHAR,datepart(month,"+ff.FromField+" )))=1 then datename(year,"+ff.FromField+" )+'-'+('0'+CONVERT(VARCHAR,datepart(month,"+ff.FromField+" ))) "+
 							" else "+
 							" datename(year,"+ff.FromField+" )+'-'+CONVERT(VARCHAR,datepart(month,"+ff.FromField+" )) "+
 							" END "+

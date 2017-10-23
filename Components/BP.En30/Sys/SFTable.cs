@@ -883,9 +883,9 @@ namespace BP.Sys
                 if (this.CodeStruct == Sys.CodeStruct.NoName || this.CodeStruct == Sys.CodeStruct.GradeNoName)
                 {
                     sql = "CREATE TABLE " + this.No + " (";
-                    sql += "No nvarchar(30) NOT NULL,";
-                    sql += "Name nvarchar(3900) NULL,";
-                    sql += "GUID nvarchar(36)  NULL";
+                    sql += "No varchar(30) NOT NULL,";
+                    sql += "Name varchar(3900) NULL,";
+                    sql += "GUID varchar(36)  NULL";
 
                     sql += ")";
                 }
@@ -893,10 +893,10 @@ namespace BP.Sys
                 if (this.CodeStruct == Sys.CodeStruct.Tree)
                 {
                     sql = "CREATE TABLE " + this.No + " (";
-                    sql += "No nvarchar(30) NOT NULL,";
-                    sql += "Name nvarchar(3900)  NULL,";
-                    sql += "ParentNo nvarchar(3900)  NULL,";
-                    sql += "GUID nvarchar(36)  NULL";
+                    sql += "No varchar(30) NOT NULL,";
+                    sql += "Name varchar(3900)  NULL,";
+                    sql += "ParentNo varchar(3900)  NULL,";
+                    sql += "GUID varchar(36)  NULL";
                     sql += ")";
                 }
                 this.RunSQL(sql);

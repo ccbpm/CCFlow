@@ -24,12 +24,12 @@
         }
         //新增分组名称
         function GroupFieldNew(ensName) {
-            var url = '../FoolFormDesigner/GroupField.aspx?DoType=NewGroup&RefNo=' + ensName + "&inlayer=1";
+            var url = '../FoolFormDesigner/GroupField.htm?DoType=NewGroup&RefNo=' + ensName + "&inlayer=1";
             OpenDialogAndCloseRefresh(url, "新建分组", 600, 550, "icon-new");
         }
         //编辑分组名称
         function GroupField(fk_mapdata, OID) {
-            var url = '../FoolFormDesigner/GroupField.aspx?FK_MapData=' + fk_mapdata + "&GroupField=" + OID + "&inlayer=1";
+            var url = '../FoolFormDesigner/GroupField.htm?FK_MapData=' + fk_mapdata + "&GroupField=" + OID + "&inlayer=1";
             OpenDialogAndCloseRefresh(url, "编辑分组", 600, 550, "icon-edit");
         }
         //.net保存并关闭层所用函数

@@ -130,6 +130,18 @@ namespace BP.Sys
         }
         #endregion
 
+        #region 接口地址配置
+
+        public static string OAAssistantURL
+        {
+            get
+            {
+                return SystemConfig.AppSettings["OAAssistantURL"];
+            }
+        }
+
+        #endregion
+
         #region 组织结构的配置.
 
         /// <summary>

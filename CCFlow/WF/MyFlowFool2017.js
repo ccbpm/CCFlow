@@ -2077,8 +2077,8 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var sta = wf_node.FWCSta;
 
     var h = wf_node.FWC_H;
-    if (h == 0)
-        h = 300;
+    //if (h == 0)
+        h = 800;
 
 
     var src = "./WorkOpt/WorkCheck.htm?s=2";

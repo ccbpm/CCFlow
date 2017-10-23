@@ -632,7 +632,6 @@
                 OpenEasyUiDialog(url, "eudlgframe", '分组', 800, 500, "icon-property", true, null, null, null, function () {
                     window.location.href = window.location.href;
                 });
-
             }
 
             function GroupFieldDel(mypk, refoid) {
@@ -640,7 +639,6 @@
                 var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
                 window.location.href = window.location.href;
             }
-
 
             function Edit(mypk, ftype, gf, fk_mapdtl) {
 
@@ -674,11 +672,7 @@
                 }
 
                 OpenEasyUiDialog(url, "eudlgframe", title, 800, 500, "icon-edit", true, null, null, null, function () {
-
-                    //                    if (fk_mapdtl != undefined) {
-                    //                        var iFrame = parentwin.document.getElementById("F" + fk_mapdtl);
-                    //                        iFrame.location.reload();
-                    //                    }
+                
                     window.location.href = window.location.href;
 
                 });

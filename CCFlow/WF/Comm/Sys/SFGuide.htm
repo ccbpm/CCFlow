@@ -78,8 +78,8 @@
                     if (d.length == 1) {
                         sftable = d[0];
 
-                        $('#srcTypes').val(sftable.SRCTYPE, null);
-                        loadSrcType(sftable.SRCTYPE, null);
+                        $('#srcTypes').val(sftable.SrcType, null);
+                        loadSrcType(sftable.SrcType, null);
                         t.disabled("srcTypes");
                         t.disabled("TB_No");
                     }
@@ -91,7 +91,7 @@
                 });
             }
             else {
-                loadSrcType(CONST_TYPES[0].NO, CONST_TYPES[0].NAME);
+                loadSrcType(CONST_TYPES[0].No, CONST_TYPES[0].Name);
             }
         });
 
@@ -103,8 +103,8 @@
                 $('#mtable tr').last().remove();
             }
 
-            var struct = (sftable.CODESTRUCT | 0).toString();
-            var src = sftable.FK_SFDBSRC ? (sfno ? sftable.FK_SFDBSRC : 'local') : 'local';
+            var struct = (sftable.CodeStruct | 0).toString();
+            var src = sftable.FK_SFDBSrc ? (sfno ? sftable.FK_SFDBSrc : 'local') : 'local';
 
             switch (parseInt(value)) {
                 case 0: //BP类
@@ -120,11 +120,11 @@
                      .addSelect('c31', 'Class', getStructClass(struct), sfno)
                      .addTD('r3', 'c32', null, '选择一个类');
 
-                    if (struct == CONST_STRUCTS[1].NO) {
+                    if (struct == CONST_STRUCTS[1].No) {
                         t.addTR(null, 'rp')
                          .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
                          .addTD('rp', 'cp1')
-                         .addTextbox('cp1', 'RootValue', null, sftable.DEFVAL ? sftable.DEFVAL : '0')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
                          .addTD('rp', 'cp2', null, '填写此树的根节点值');
                     }
                     break;
@@ -142,22 +142,22 @@
                      .addSelect('c51', 'CodeStruct', CONST_STRUCTS, struct, loadStructTable)
                      .addTD('r5', 'c52', null, '选择具体有指定字段的格式');
 
-                    if (struct == CONST_STRUCTS[1].NO) {
+                    if (struct == CONST_STRUCTS[1].No) {
                         t.addTR(null, 'rp')
                          .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
                          .addTD('rp', 'cp1')
-                         .addTextbox('cp1', 'RootValue', null, sftable.DEFVAL ? sftable.DEFVAL : '0')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
                          .addTD('rp', 'cp2', null, '填写此树的根节点值');
                     }
                     break;
                 case 2: //表或视图
                     loadNormalInfo();
-                    var stable = sftable.SRCTABLE ? sftable.SRCTABLE : '';
-                    var colval = sftable.COLUMNVALUE ? sftable.COLUMNVALUE : '';
-                    var coltext = sftable.COLUMNTEXT ? sftable.COLUMNTEXT : '';
-                    var colparent = sftable.PARENTVALUE ? sftable.PARENTVALUE : '';
-                    var rootvalue = sftable.DEFVAL ? sftable.DEFVAL : '0';
-                    var sql = sftable.SELECTSTATEMENT ? sftable.SELECTSTATEMENT : ''
+                    var stable = sftable.SrcTable ? sftable.SrcTable : '';
+                    var colval = sftable.ColumnValue ? sftable.ColumnValue : '';
+                    var coltext = sftable.ColumnText ? sftable.ColumnText : '';
+                    var colparent = sftable.ParentValue ? sftable.ParentValue : '';
+                    var rootvalue = sftable.DefVal ? sftable.DefVal : '0';
+                    var sql = sftable.SelectStatement ? sftable.SelectStatement : ''
 
                     t.addTR(null, 'r4')
                      .addTD('r4', 'c40', CONST_GROUPTITLE, '数据源：')
@@ -177,19 +177,19 @@
                      .addTR(null, 'r7')
                      .addTD('r7', 'c70', CONST_GROUPTITLE, '编码列：')
                      .addTD('r7', 'c71')
-                     .addSelect('c71', 'ColumnValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].NO : '') : stable), colval)
+                     .addSelect('c71', 'ColumnValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), colval)
                      .addTD('r7', 'c72', null, '即No列')
                      .addTR(null, 'r8')
                      .addTD('r8', 'c80', CONST_GROUPTITLE, '标签列：')
                      .addTD('r8', 'c81')
-                     .addSelect('c81', 'ColumnText', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].NO : '') : stable), coltext)
+                     .addSelect('c81', 'ColumnText', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), coltext)
                      .addTD('r8', 'c82', null, '即Name列');
 
-                    if (struct == CONST_STRUCTS[1].NO) {
+                    if (struct == CONST_STRUCTS[1].No) {
                         t.addTR(null, 'rpc')
                          .addTD('rpc', 'cpc0', CONST_GROUPTITLE, '父节点列：')
                          .addTD('rpc', 'cpc1')
-                         .addSelect('cpc1', 'ParentValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].NO : '') : stable), colparent)
+                         .addSelect('cpc1', 'ParentValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), colparent)
                          .addTD('rpc', 'cpc2', null, '即ParentNo列')
                          .addTR(null, 'rpv')
                          .addTD('rpv', 'cpv0', CONST_GROUPTITLE, '根节点值：')
@@ -208,7 +208,7 @@
                 case 5: //动态SQL查询
                     loadNormalInfo();
 
-                    var sql = sftable.SELECTSTATEMENT ? sftable.SELECTSTATEMENT : ''
+                    var sql = sftable.SelectStatement ? sftable.SelectStatement : ''
 
                     t.addTR(null, 'r4')
                      .addTD('r4', 'c40', CONST_GROUPTITLE, '数据源：')
@@ -221,11 +221,11 @@
                      .addSelect('c51', 'CodeStruct', CONST_STRUCTS, struct, loadStructSQL)
                      .addTD('r5', 'c52', null, '选择具体有指定字段的格式');
 
-                    if (struct == CONST_STRUCTS[1].NO) {
+                    if (struct == CONST_STRUCTS[1].No) {
                         t.addTR(null, 'rp')
                          .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
                          .addTD('rp', 'cp1')
-                         .addTextbox('cp1', 'RootValue', null, sftable.DEFVAL ? sftable.DEFVAL : '0')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
                          .addTD('rp', 'cp2', null, '填写此树的根节点值');
                     }
 
@@ -249,10 +249,10 @@
                 case 4: //WebServices
                     loadNormalInfo();
 
-                    var stable = sftable.SRCTABLE ? sftable.SRCTABLE : '';
-                    var sql = sftable.SELECTSTATEMENT ? sftable.SELECTSTATEMENT : ''
-                    src = sftable.FK_SFDBSRC ? (sfno ? sftable.FK_SFDBSRC : '') : '';
-                    var tabledesc = sftable.TABLEDESC ? sftable.TABLEDESC.split(',') : ['', ''];
+                    var stable = sftable.SrcTable ? sftable.SrcTable : '';
+                    var sql = sftable.SelectStatement ? sftable.SelectStatement : ''
+                    src = sftable.FK_SFDBSrc ? (sfno ? sftable.FK_SFDBSrc : '') : '';
+                    var tabledesc = sftable.TableDesc ? sftable.TableDesc.split(',') : ['', ''];
 
                     t.addTR(null, 'r4')
                      .addTD('r4', 'c40', CONST_GROUPTITLE, '数据源：')
@@ -262,7 +262,7 @@
                      .addTR(null, 'r5')
                      .addTD('r5', 'c50', CONST_GROUPTITLE, '方法：')
                      .addTD('r5', 'c51')
-                     .addSelect('c51', 'Method', getWSMethods(src.length > 0 ? src : srcs && srcs.length > 0 ? srcs[0].NO : ''), tabledesc[0])
+                     .addSelect('c51', 'Method', getWSMethods(src.length > 0 ? src : srcs && srcs.length > 0 ? srcs[0].No : ''), tabledesc[0])
                      .addTD('r5', 'c52', null, '选择WebSerivce中提供此字典表数据的接口方法')
                      .addTR(null, 'r6')
                      .addTD('r6', 'c60', CONST_GROUPTITLE, '设置参数：')
@@ -280,11 +280,11 @@
                      .addSelect('c81', 'CodeStruct', CONST_STRUCTS, struct, loadStructWS)
                      .addTD('r8', 'c82', null, '选择具体有指定字段的格式');
 
-                    if (struct == CONST_STRUCTS[1].NO) {
+                    if (struct == CONST_STRUCTS[1].No) {
                         t.addTR(null, 'rp')
                          .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
                          .addTD('rp', 'cp1')
-                         .addTextbox('cp1', 'RootValue', null, sftable.DEFVAL ? sftable.DEFVAL : '0')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
                          .addTD('rp', 'cp2', null, '填写此树的根节点值');
                     }
                     break;
@@ -295,12 +295,12 @@
             t.addTR(null, 'r2')
             .addTD('r2', 'c20', CONST_GROUPTITLE, '字典编号：')
             .addTD('r2', 'c21')
-            .addTextbox('c21', 'No', null, sftable.NO ? sftable.NO : '')
+            .addTextbox('c21', 'No', null, sftable.No ? sftable.No : '')
             .addTD('r2', 'c22', null, '<font color=red>创建字典表的英文名称,不要以数字开头否则创建表出错.</font>')
             .addTR(null, 'r3')
             .addTD('r3', 'c30', CONST_GROUPTITLE, '字典名称：')
             .addTD('r3', 'c31')
-            .addTextbox('c31', 'Name', null, sftable.NAME ? sftable.NAME : '')
+            .addTextbox('c31', 'Name', null, sftable.Name ? sftable.Name : '')
             .addTD('r3', 'c32', null, '创建字典表的中文名称');
         }
 
@@ -309,7 +309,7 @@
 
             t.addSelect('c31', 'Class', getStructClass(value), sfno);
 
-            if (value == CONST_STRUCTS[0].NO) {
+            if (value == CONST_STRUCTS[0].No) {
                 //删除父结点值设置行
                 $('#rp').remove();
             }
@@ -318,13 +318,13 @@
                 t.addTR(null, 'rp', null, '#r3')
                  .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
                  .addTD('rp', 'cp1')
-                 .addTextbox('cp1', 'RootValue', null, sftable.DEFVAL ? sftable.DEFVAL : '0')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
                  .addTD('rp', 'cp2', null, '填写此树的根节点值');
             }
         }
 
         function loadStructTable(value, text) {
-            if (value == CONST_STRUCTS[0].NO) {
+            if (value == CONST_STRUCTS[0].No) {
                 //删除父结点值设置行
                 $('#rp').remove();
             }
@@ -333,13 +333,13 @@
                 t.addTR(null, 'rp')
                  .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
                  .addTD('rp', 'cp1')
-                 .addTextbox('cp1', 'RootValue', null, sftable.DEFVAL ? sftable.DEFVAL : '0')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
                  .addTD('rp', 'cp2', null, '填写此树的根节点值');
             }
         }
 
         function loadStructSet(value, text) {
-            if (value == CONST_STRUCTS[0].NO) {
+            if (value == CONST_STRUCTS[0].No) {
                 //删除父结点列/值设置行
                 $('#rpc').remove();
                 $('#rpv').remove();
@@ -347,13 +347,13 @@
             else {
                 //增加父结点列/值设置行
                 var stable = $('#DDL_SrcTable').val();
-                var colparent = sftable.PARENTVALUE ? sftable.PARENTVALUE : '';
-                var rootvalue = sftable.DEFVAL ? sftable.DEFVAL : '0';
+                var colparent = sftable.ParentValue ? sftable.ParentValue : '';
+                var rootvalue = sftable.DefVal ? sftable.DefVal : '0';
 
                 t.addTR(null, 'rpc', null, '#r8')
                  .addTD('rpc', 'cpc0', CONST_GROUPTITLE, '父节点列：')
                  .addTD('rpc', 'cpc1')
-                 .addSelect('cpc1', 'ParentValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].NO : '') : stable), colparent)
+                 .addSelect('cpc1', 'ParentValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), colparent)
                  .addTD('rpc', 'cpc2', null, '即ParentNo列')
                  .addTR(null, 'rpv', null, '#rpc')
                  .addTD('rpv', 'cpv0', CONST_GROUPTITLE, '根节点值：')
@@ -364,7 +364,7 @@
         }
 
         function loadStructSQL(value, text) {
-            if (value == CONST_STRUCTS[0].NO) {
+            if (value == CONST_STRUCTS[0].No) {
                 //删除父结点值设置行
                 $('#rp').remove();
             }
@@ -373,13 +373,13 @@
                 t.addTR(null, 'rp', null, '#r5')
                  .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
                  .addTD('rp', 'cp1')
-                 .addTextbox('cp1', 'RootValue', null, sftable.DEFVAL ? sftable.DEFVAL : '0')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
                  .addTD('rp', 'cp2', null, '填写此树的根节点值');
             }
         }
 
         function loadStructWS(value, text) {
-            if (value == CONST_STRUCTS[0].NO) {
+            if (value == CONST_STRUCTS[0].No) {
                 //删除父结点值设置行
                 $('#rp').remove();
             }
@@ -388,7 +388,7 @@
                 t.addTR(null, 'rp')
                  .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
                  .addTD('rp', 'cp1')
-                 .addTextbox('cp1', 'RootValue', null, sftable.DEFVAL ? sftable.DEFVAL : '0')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
                  .addTD('rp', 'cp2', null, '填写此树的根节点值');
             }
         }
@@ -396,7 +396,7 @@
         function loadTableViews(value, text) {
             $('#DDL_SrcTable').remove();
 
-            t.addSelect('c51', 'SrcTable', getTableViews(value), sftable.SRCTABLE ? sftable.SRCTABLE : '', loadColumns);
+            t.addSelect('c51', 'SrcTable', getTableViews(value), sftable.SrcTable ? sftable.SrcTable : '', loadColumns);
 
             var selectedTable = $('#DDL_SrcTable').val();
 
@@ -407,11 +407,11 @@
 
         function loadWSMethods(value, text) {
             $('#DDL_SrcTable').remove();
-            t.addSelect('c51', 'SrcTable', getWSMethods(value), sftable.SRCTABLE ? sftable.SRCTABLE : '')
+            t.addSelect('c51', 'SrcTable', getWSMethods(value), sftable.SrcTable ? sftable.SrcTable : '')
         }
 
         function loadColumns(value, text) {
-            var haveparent = $('#DDL_CodeStruct').val() == CONST_STRUCTS[1].NO;
+            var haveparent = $('#DDL_CodeStruct').val() == CONST_STRUCTS[1].No;
 
             $('#DDL_ColumnValue').remove();
             $('#DDL_ColumnText').remove();
@@ -420,9 +420,9 @@
                 $('#DDL_ParentValue').remove();
             }
 
-            var colval = sftable.COLUMNVALUE ? sftable.COLUMNVALUE : '';
-            var coltext = sftable.COLUMNTEXT ? sftable.COLUMNTEXT : '';
-            var colparent = sftable.PARENTVALUE ? sftable.PARENTVALUE : '';
+            var colval = sftable.ColumnValue ? sftable.ColumnValue : '';
+            var coltext = sftable.ColumnText ? sftable.ColumnText : '';
+            var colparent = sftable.ParentValue ? sftable.ParentValue : '';
 
             t.addSelect('c71', 'ColumnValue', getColumns(value), colval)
              .addSelect('c81', 'ColumnText', getColumns(value), coltext);
@@ -532,37 +532,37 @@
         }
 
         function saveSFTable() {
-            sftable.SRCTYPE = parseInt(srcType);
-            sftable.NO = sfno ? sfno : null;
-            sftable.NAME = "";
-            sftable.CODESTRUCT = 0;
+            sftable.SrcType = parseInt(srcType);
+            sftable.No = sfno ? sfno : null;
+            sftable.Name = "";
+            sftable.CodeStruct = 0;
             sftable.FK_VAL = "";
-            sftable.TABLEDESC = "";
-            sftable.DEFVAL = "";
+            sftable.TableDesc = "";
+            sftable.DefVal = "";
             sftable.CASHDT = "";
             sftable.CASHMINUTE = 0;
-            sftable.FK_SFDBSRC = "";
-            sftable.SRCTABLE = "";
-            sftable.COLUMNVALUE = "";
-            sftable.COLUMNTEXT = "";
-            sftable.PARENTVALUE = "";
-            sftable.SELECTSTATEMENT = "";
+            sftable.FK_SFDBSrc = "";
+            sftable.SrcTable = "";
+            sftable.ColumnValue = "";
+            sftable.ColumnText = "";
+            sftable.ParentValue = "";
+            sftable.SelectStatement = "";
             sftable.RDT = "";
 
-            switch (sftable.SRCTYPE) {
+            switch (sftable.SrcType) {
                 case 0: //BP类
-                    if (!sftable.NO) {
-                        sftable.NO = t.getValue("DDL_Class");
+                    if (!sftable.No) {
+                        sftable.No = t.getValue("DDL_Class");
 
-                        if (!sftable.NO || sftable.NO.length == 0) {
+                        if (!sftable.No || sftable.No.length == 0) {
                             alert("类必须选择！");
                             $("#DDL_Class").focus();
                             return;
                         }
 
-                        sftable.NAME = t.getText("DDL_Class");
-                        var idx = sftable.NAME.indexOf('[');
-                        sftable.NAME = sftable.NAME.substr(idx + 1, sftable.NAME.length - idx - 1 - 1);
+                        sftable.Name = t.getText("DDL_Class");
+                        var idx = sftable.Name.indexOf('[');
+                        sftable.Name = sftable.Name.substr(idx + 1, sftable.Name.length - idx - 1 - 1);
                     }
 
                     if (false == getCodeStructValue()) {
@@ -574,7 +574,7 @@
                         return;
                     }
 
-                    sftable.FK_SFDBSRC = t.getValue("DDL_SFDBSrc");
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
 
                     if (false == getCodeStructValue()) {
                         return;
@@ -585,10 +585,10 @@
                         return;
                     }
 
-                    sftable.FK_SFDBSRC = t.getValue("DDL_SFDBSrc");
-                    sftable.SRCTABLE = t.getValue("DDL_SrcTable");
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
+                    sftable.SrcTable = t.getValue("DDL_SrcTable");
 
-                    if (!sftable.SRCTABLE || sftable.SRCTABLE.length == 0) {
+                    if (!sftable.SrcTable || sftable.SrcTable.length == 0) {
                         alert("表/视图必须选择！");
                         $("#DDL_SrcTable").focus();
                         return;
@@ -598,26 +598,26 @@
                         return;
                     }
 
-                    sftable.COLUMNVALUE = t.getValue("DDL_ColumnValue");
-                    sftable.COLUMNTEXT = t.getValue("DDL_ColumnText");
+                    sftable.ColumnValue = t.getValue("DDL_ColumnValue");
+                    sftable.ColumnText = t.getValue("DDL_ColumnText");
 
-                    if (!sftable.COLUMNVALUE || !sftable.COLUMNTEXT) {
+                    if (!sftable.ColumnValue || !sftable.ColumnText) {
                         alert("编码列和标签列必须选择！");
                         $("#DDL_ColumnValue").focus();
                         return;
                     }
 
-                    if (sftable.CODESTRUCT == CONST_STRUCTS[1].NO) {
-                        sftable.PARENTVALUE = t.getValue("DDL_ParentValue");
+                    if (sftable.CodeStruct == CONST_STRUCTS[1].No) {
+                        sftable.ParentValue = t.getValue("DDL_ParentValue");
 
-                        if (!sftable.PARENTVALUE) {
+                        if (!sftable.ParentValue) {
                             alert("父节点列必须选择！");
                             $("#DDL_ParentValue").focus();
                             return;
                         }
                     }
 
-                    sftable.SELECTSTATEMENT = t.getValue("TB_SelectStatement");
+                    sftable.SelectStatement = t.getValue("TB_SelectStatement");
                     break;
                 case 3: //SQL查询表
                 case 5: //动态SQL查询
@@ -625,15 +625,15 @@
                         return;
                     }
 
-                    sftable.FK_SFDBSRC = t.getValue("DDL_SFDBSrc");
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
 
                     if (false == getCodeStructValue()) {
                         return;
                     }
 
-                    sftable.SELECTSTATEMENT = t.getValue("TB_SelectStatement");
+                    sftable.SelectStatement = t.getValue("TB_SelectStatement");
 
-                    if (!sftable.SELECTSTATEMENT || sftable.SELECTSTATEMENT.length == 0) {
+                    if (!sftable.SelectStatement || sftable.SelectStatement.length == 0) {
                         alert("SQL语句必须填写！");
                         $("#TB_SelectStatement").focus();
                         return;
@@ -644,24 +644,24 @@
                         return;
                     }
 
-                    sftable.FK_SFDBSRC = t.getValue("DDL_SFDBSrc");
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
 
-                    if (!sftable.FK_SFDBSRC || sftable.FK_SFDBSRC.length == 0) {
+                    if (!sftable.FK_SFDBSrc || sftable.FK_SFDBSrc.length == 0) {
                         alert("数据源必须选择！");
                         $("#DDL_SFDBSrc").focus();
                         return;
                     }
 
-                    sftable.TABLEDESC = t.getValue("DDL_Method");
+                    sftable.TableDesc = t.getValue("DDL_Method");
 
-                    if (!sftable.TABLEDESC || sftable.TABLEDESC.length == 0) {
+                    if (!sftable.TableDesc || sftable.TableDesc.length == 0) {
                         alert("方法必须选择！");
                         $("#DDL_Method").focus();
                         return;
                     }
 
-                    sftable.TABLEDESC += "," + t.getValue('DDL_ReturnType');
-                    sftable.SELECTSTATEMENT = t.getValue("TB_SelectStatement");
+                    sftable.TableDesc += "," + t.getValue('DDL_ReturnType');
+                    sftable.SelectStatement = t.getValue("TB_SelectStatement");
 
                     if (false == getCodeStructValue()) {
                         return;
@@ -670,7 +670,7 @@
             }
 
             sftable.DoType = 'SFGuide_SaveInfo';
-            sftable.isnew = sfno == null;
+            sftable.IsNew = sfno == null;
 
             t.ajax(Handler, sftable, false, function (msg) {
                 if (!msg || msg.indexOf("err@") != -1) {
@@ -682,7 +682,7 @@
                     location.href = location.href.indexOf("&t=") != -1 ? location.href.replace("&t=" + t.getQueryString("t"), "&t=" + Math.random()) : (location.href + "&t=" + Math.random());
                 }
                 else {
-                    location.href += "&sfno=" + sftable.NO + "&t=" + Math.random();
+                    location.href += "&sfno=" + sftable.No + "&t=" + Math.random();
                 }
             }, function (msg) {
                 alert(msg);
@@ -690,19 +690,19 @@
         }
 
         function getNormalInfoValue() {
-            if (!sftable.NO) {
-                sftable.NO = t.getValue("TB_No");
+            if (!sftable.No) {
+                sftable.No = t.getValue("TB_No");
 
-                if (!sftable.NO || sftable.NO.length == 0) {
+                if (!sftable.No || sftable.No.length == 0) {
                     alert("字典编号必须填写！");
                     $('#TB_No').focus();
                     return false;
                 }
             }
 
-            sftable.NAME = t.getValue("TB_Name");
+            sftable.Name = t.getValue("TB_Name");
 
-            if (!sftable.NAME || sftable.NAME.length == 0) {
+            if (!sftable.Name || sftable.Name.length == 0) {
                 alert("字典名称必须填写！");
                 $('#TB_Name').focus();
                 return false;
@@ -712,12 +712,12 @@
         }
 
         function getCodeStructValue() {
-            sftable.CODESTRUCT = parseInt(t.getValue("DDL_CodeStruct"));
+            sftable.CodeStruct = parseInt(t.getValue("DDL_CodeStruct"));
 
-            if (sftable.CODESTRUCT == CONST_STRUCTS[1].NO) {
-                sftable.DEFVAL = t.getValue("TB_RootValue");
+            if (sftable.CodeStruct == CONST_STRUCTS[1].No) {
+                sftable.DefVal = t.getValue("TB_RootValue");
 
-                if (sftable.DEFVAL.length == 0) {
+                if (sftable.DefVal.length == 0) {
                     alert("根节点值必须填写！");
                     $('#TB_RootValue').focus();
                     return false;

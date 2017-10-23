@@ -161,8 +161,10 @@
                 ensName = 'BP.Sys.FrmUI.SFTableClasss';
             }
 
-            var url = '/WF/Comm/En.htm?EnsName=' + ensName + '&No=' + fk_sftable;
-            OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, 900, 495, 'icon-edit');
+            var url = '../../Comm/En.htm?EnsName=' + ensName + '&No=' + fk_sftable;
+            window.location.href = url;
+
+            //OpenEasyUiDialog(url, "euiframeid", ' 数据外键' + fk_sftable, 900, 495, 'icon-edit');
 
         }
 

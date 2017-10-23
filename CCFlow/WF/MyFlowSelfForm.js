@@ -7,26 +7,6 @@ $(function () {
 
 });
 
-//停止流程.
-function DoStop(msg, flowNo, workid) {
-
-    if (confirm('您确定要执行 [' + msg + '] ?') == false)
-        return;
-
-    var para = 'DoType=MyFlow_StopFlow&FK_Flow=' + flowNo + '&WorkID=' + workid;
-
-    AjaxService(para, function (msg, scope) {
-
-        alert(msg);
-        if (msg.indexOf('err@') == 0) {
-            return;
-        } else {
-            window.close();
-        }
-    });
-}
-
-
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.
 function SaveSelfFrom() {
 

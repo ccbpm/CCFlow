@@ -238,7 +238,12 @@
 
     function TableGuide() {
         ///WF/Comm/Sys/SFGuide.aspx?DoType=New&FK_MapData=<%=this.FK_MapData %>&GroupField=<%=this.GroupField %>
-        window.location.href = '/WF/Admin/FoolFormDesigner/CreateSFGuide.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+        window.location.href = 'CreateSFGuide.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
+    }
+    function ImpTableField() {
+
+        var url = 'ImpTableField.htm?FK_MapData='+GetQueryString('FK_MapData')+'&FType=Class&Idx=&GroupField=0';
+        window.location.href = url;
     }
 </script>
 
@@ -273,7 +278,7 @@
 <td colspan="2">
 
 <ul>
-<li><a href="javascript:WinOpen('ImpTableField.htm?FK_MapData=<%=this.FK_MapData %>&FType=Class&Idx=&GroupField=<%=this.GroupField %>');" ><b>导入字段</b></a>
+<li><a href="javascript:ImpTableField();" ><b>导入字段</b></a>
  &nbsp;&nbsp;从现有的表中导入字段,以提高开发的速度与字段拼写的正确性.</li> 	
 </ul>
 

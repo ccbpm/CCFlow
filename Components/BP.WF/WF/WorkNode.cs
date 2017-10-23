@@ -2331,7 +2331,7 @@ namespace BP.WF
             }
             else
             {
-                this.addMsg(SendReturnMsgFlag.WorkRpt, null, "@<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + toND.FK_Flow + "' target='_self' >工作轨迹</a>。");
+                //this.addMsg(SendReturnMsgFlag.WorkRpt, null, "@<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + toND.FK_Flow + "' target='_self' >工作轨迹</a>。");
             }
             this.addMsg(SendReturnMsgFlag.WorkStartNode, "@下一步[" + toND.Name + "]工作成功启动.", "@下一步<font color=blue>[" + toND.Name + "]</font>工作成功启动.");
             #endregion
@@ -3248,7 +3248,7 @@ namespace BP.WF
             //    this.addMsg("UnDo", "@<a href='./WorkOpt/UnSend.htm?DoType=UnSend&WorkID=" + this.WorkID + "&FK_Flow=" + toNode.FK_Flow + "' ><img src='./Img/Action/UnSend.png' border=0/>撤销本次发送</a>.");
             //}
 
-            this.addMsg("Rpt", "@<a href='WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + wk.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>");
+          //  this.addMsg("Rpt", "@<a href='WFRpt.htm?WorkID=" + this.WorkID + "&FID=" + wk.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>");
             #endregion 处理消息提示
         }
         /// <summary>
@@ -5887,8 +5887,8 @@ namespace BP.WF
                 else
                     this.addMsg(SendReturnMsgFlag.IsStopFlow, "0", "流程未结束", SendReturnMsgType.SystemMsg);
 
-                string mymsgHtml = "@查看<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>";
-                this.addMsg(SendReturnMsgFlag.MsgOfText, mymsgHtml);
+              //  string mymsgHtml = "@查看<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>";
+               // this.addMsg(SendReturnMsgFlag.MsgOfText, mymsgHtml);
 
                 if (this.IsStopFlow == true)
                 {
@@ -7191,7 +7191,7 @@ namespace BP.WF
                     this.HisWorkFlow.DoFlowOver(ActionType.FlowOver, "符合流程完成条件", this.HisNode, this.rptGe);
                     this.IsStopFlow = true;
                     this.addMsg(SendReturnMsgFlag.OneNodeSheetver, "工作已经成功处理(一个流程的工作)。",
-                        "工作已经成功处理(一个流程的工作)。 @查看<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>", SendReturnMsgType.Info);
+                        "工作已经成功处理(一个流程的工作)。 @查看<img src='./Img/Btn/PrintWorkRpt.gif' >", SendReturnMsgType.Info);
                     return;
                 }
 
@@ -7204,7 +7204,7 @@ namespace BP.WF
 
                     // string path = BP.Sys.Glo.Request.ApplicationPath;
                     this.addMsg(SendReturnMsgFlag.MacthFlowOver, "@符合工作流程完成条件" + stopMsg + "" + overMsg,
-                        "@符合工作流程完成条件" + stopMsg + "" + overMsg + " @查看<img src='./Img/Btn/PrintWorkRpt.gif' ><a href='WFRpt.htm?WorkID=" + this.HisWork.OID + "&FID=" + this.HisWork.FID + "&FK_Flow=" + this.HisNode.FK_Flow + "' target='_self' >工作轨迹</a>", SendReturnMsgType.Info);
+                        "@符合工作流程完成条件" + stopMsg + "" + overMsg , SendReturnMsgType.Info);
                     return;
                 }
             }

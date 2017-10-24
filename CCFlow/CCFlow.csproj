@@ -1203,8 +1203,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpression.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_Dtl.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_List.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapFrame.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pub.ascx" />
@@ -7353,20 +7351,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\RegularExpressionBatch.aspx.designer.cs">
       <DependentUpon>RegularExpressionBatch.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_Dtl.aspx.cs">
-      <DependentUpon>TBFullCtrl_Dtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_Dtl.aspx.designer.cs">
-      <DependentUpon>TBFullCtrl_Dtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_List.aspx.cs">
-      <DependentUpon>TBFullCtrl_List.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\MapExt\TBFullCtrl_List.aspx.designer.cs">
-      <DependentUpon>TBFullCtrl_List.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx.cs">
       <DependentUpon>WordFrm.aspx</DependentUpon>

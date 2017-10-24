@@ -191,10 +191,8 @@ namespace BP.En
 				foreach (string key in ap.HisHT.Keys)
 				{
 					dt.Columns.Add(key, typeof(string));
-					// ht.Add(key, ap.HisHT[key]);
 				}
 			}
-
 
 			DataRow dr = dt.NewRow();
 			foreach (Attr attr in this.EnMap.Attrs)

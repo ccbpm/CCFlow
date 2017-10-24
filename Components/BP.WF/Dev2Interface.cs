@@ -1310,7 +1310,7 @@ namespace BP.WF
             if (fk_node != 0)
                 sql += " AND A.FK_Node="+fk_node;
 
-            sql += "  ORDER BY  B.Idx, C.Idx, A.RDT ";
+            sql += "  ORDER BY  B.Idx, C.Idx, A.RDT DESC ";
            
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);

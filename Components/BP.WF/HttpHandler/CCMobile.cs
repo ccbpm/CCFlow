@@ -143,7 +143,6 @@ namespace BP.WF.HttpHandler
         }
         public string DB_GenerReturnWorks()
         {
-
             BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
             return ace.DB_GenerReturnWorks();
         }

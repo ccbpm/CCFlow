@@ -127,7 +127,7 @@ namespace BP.WF.HttpHandler
             //if (f.HasFile == false)
             //    return "err@请上传文件.";
 
-            ////if (f.FileName.EndsW
+            //if (f.FileName.EndsW
 
             ////判断文件类型.
             //string fileExt = ",bpm,jpg,jpeg,png,gif,";

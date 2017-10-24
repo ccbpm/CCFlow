@@ -328,8 +328,19 @@ namespace BP.WF
                         fullSQL = fullSQL.Replace("~", ",");
                         fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
                         dt = DBAccess.RunSQLReturnTable(fullSQL);
-                        dt.TableName =  keyOfEn; //可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
-                        myds.Tables.Add(dt);
+                        //重构新表
+                        DataTable dt_FK_Dll = new DataTable();
+                        dt_FK_Dll.TableName = keyOfEn;//可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                        dt_FK_Dll.Columns.Add("No", typeof(string));
+                        dt_FK_Dll.Columns.Add("Name", typeof(string));
+                        foreach (DataRow dllRow in dt.Rows)
+                        {
+                            DataRow drDll = dt_FK_Dll.NewRow();
+                            drDll["No"] = dllRow["No"];
+                            drDll["Name"] = dllRow["Name"];
+                            dt_FK_Dll.Rows.Add(drDll);
+                        }
+                        myds.Tables.Add(dt_FK_Dll);
                         continue;
                     }
                     #endregion 处理下拉框数据范围.

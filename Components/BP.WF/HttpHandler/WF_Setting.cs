@@ -111,7 +111,13 @@ namespace BP.WF.HttpHandler
         #region 图片签名.
         public string Siganture_Init()
         {
-            return "sss";
+            Hashtable ht = new Hashtable();
+            ht.Add("No", BP.Web.WebUser.No);
+            ht.Add("Name", BP.Web.WebUser.Name);
+            ht.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
+            ht.Add("FK_DeptName", BP.Web.WebUser.FK_DeptName);
+
+            return BP.Tools.Json.ToJson(ht);
         }
         public string Siganture_Save()
         {

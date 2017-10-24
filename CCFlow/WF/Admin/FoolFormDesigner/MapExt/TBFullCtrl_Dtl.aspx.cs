@@ -49,8 +49,6 @@ namespace CCFlow.WF.MapDef
                 MapDtls dtls = new MapDtls(myme.FK_MapData);
                 string[] strs = myme.Tag1.Split('$');
 
-
-
                 foreach (MapDtl dtl in dtls)
                 {
 

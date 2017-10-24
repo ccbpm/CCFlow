@@ -1,4 +1,4 @@
-$(function () {
+﻿$(function () {
     SetHegiht();
     //打开表单检查正则表达式
     if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
@@ -2077,8 +2077,8 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var sta = wf_node.FWCSta;
 
     var h = wf_node.FWC_H;
-    //if (h == 0)
-        h = 800;
+    if (h == 0)
+    	h = 300;
 
 
     var src = "./WorkOpt/WorkCheck.htm?s=2";
@@ -2095,7 +2095,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
         src += "&DoType=View";
     }
     src += "&r=q" + paras;
-    var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no onload='this.height = this.contentDocument.body.clientHeight" + 800 + ";'></iframe>";
+    var eleHtml = "<iframe width='100%' height='" + h +800 + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
     return eleHtml;
 }
 

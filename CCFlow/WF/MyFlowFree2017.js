@@ -1,4 +1,4 @@
- 
+﻿ 
 $(function () {
     SetHegiht();
     //打开表单检查正则表达式
@@ -2462,7 +2462,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
         $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
     }
     src += "&r=q" + paras;
-    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe style='width:100%' height=" + h +800 + "' id='FFWC" + wf_node.NodeID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no onload='this.height = this.contentDocument.body.clientHeight" +800+ ";'></iframe>" + '</div>';
+    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe style='width:100%' height=" + h +800 + "' id='FFWC" + wf_node.NodeID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>" + '</div>';
     eleHtml = $(eleHtml);
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
 

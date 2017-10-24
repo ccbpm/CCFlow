@@ -30,7 +30,7 @@
 
                     data = JSON.parse(data);
 
-                    var mapExt = data['Sys_MapExt'];
+                    var mapExt = data['Sys_MapExt'][0];
 
                     //绑定数据源.
                     GenerBindDDL("DDL_FK_DBSrc", data['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
@@ -40,9 +40,7 @@
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(mapExt);
 
-
-                    alert(mapExt[0].W);
-                    if (mapExt[0].W == "0") {
+                    if (mapExt.W == "0") {
                         document.getElementById("Btn_FullDtl").disabled = true;
                         document.getElementById("Btn_FullDDL").disabled = true;
                     }
@@ -124,8 +122,13 @@
         return;
     }
 
+    //填充ddl.
     function FullDDL() {
-        alert('尚未完成');
+
+        var myPK = GetQueryString('MyPK');
+        var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK;
+        window.location.href = url;
+        return;
     }
 
     function Save() {

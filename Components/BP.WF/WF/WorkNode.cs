@@ -1490,6 +1490,9 @@ namespace BP.WF
                     skipWork = toWn.HisWork;
 
                 dt = fw.DoIt(this.HisFlow, this, toWn); // 找到下一步骤的接受人.
+                string Executor = "";//实际执行人
+                string ExecutorName = "";//实际执行人名称
+                Emp emp = new Emp();
                 if (dt == null || dt.Rows.Count == 0)
                 {
                     if (nd.HisWhenNoWorker == true)
@@ -1555,6 +1558,9 @@ namespace BP.WF
                             #endregion 处理签名，让签名的人是发起人。
 
                             isHave = true;
+                            Executor = dr[0].ToString();
+                            emp = new Emp(Executor);
+                            ExecutorName = emp.Name;
                             break;
                         }
                     }
@@ -1562,7 +1568,7 @@ namespace BP.WF
                     if (isHave == true)
                     {
                         /*如果发现了，当前人员包含处理人集合. */
-                        this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName, nd.NodeID, nd.Name, "自动跳转,(处理人就是提交人)", ndFrom);
+                        this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, "自动跳转,(处理人就是提交人)", ndFrom);
                         ndFrom = nd;
                         continue;
                     }
@@ -1584,13 +1590,16 @@ namespace BP.WF
                         {
                             /*这里不处理签名.*/
                             isHave = true;
+                            Executor = dr[0].ToString();
+                            emp = new Emp(Executor);
+                            ExecutorName = emp.Name;
                             break;
                         }
                     }
 
                     if (isHave == true)
                     {
-                        this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName, nd.NodeID, nd.Name, "自动跳转.(处理人已经出现过)", ndFrom);
+                        this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, "自动跳转.(处理人已经出现过)", ndFrom);
                         ndFrom = nd;
                         continue;
                     }
@@ -1613,6 +1622,9 @@ namespace BP.WF
                         {
                             /*这里不处理签名.*/
                             isHave = true;
+                            Executor = dr[0].ToString();
+                            emp = new Emp(Executor);
+                            ExecutorName = emp.Name;
                             break;
                         }
                     }
@@ -1734,7 +1746,7 @@ namespace BP.WF
                         }
                         #endregion
 
-                        this.AddToTrack(ActionType.Skip, this.Execer, this.ExecerName, nd.NodeID, nd.Name, "自动跳转.(处理人与上一步相同)", ndFrom);
+                        this.AddToTrack(ActionType.Skip, Executor, ExecutorName, nd.NodeID, nd.Name, "自动跳转.(处理人与上一步相同)", ndFrom);
                         ndFrom = nd;
                         continue;
                     }

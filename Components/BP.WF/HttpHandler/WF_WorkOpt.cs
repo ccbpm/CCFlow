@@ -1589,6 +1589,7 @@ namespace BP.WF.HttpHandler
             //转化为 json 
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
+
         #region 选择接受人.
         /// <summary>
         /// 初始化接受人.

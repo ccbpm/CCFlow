@@ -447,6 +447,8 @@ namespace BP.WF.HttpHandler
                 me.FK_DBSrc = "local";
             }
 
+            me.W = i;
+
             if (me.FK_DBSrc == "")
                 me.FK_DBSrc = "local";
 

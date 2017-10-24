@@ -366,7 +366,8 @@ namespace BP.WF.Rpt
             //直到它的长度比图片的宽度小
             for (int i = 0; i < 7; i++)
             {
-                crFont = new Font("arial", sizes[i], FontStyle.Bold);
+                crFont = new Font("arial", sizes[i], FontStyle.Italic);
+
 
                 //测量用指定的 Font 对象绘制并用指定的 StringFormat 对象格式化的指定字符串。
                 crSize = grPhoto.MeasureString(waterWords, crFont);
@@ -425,14 +426,17 @@ namespace BP.WF.Rpt
             //封装文本布局信息（如对齐、文字方向和 Tab 停靠位），显示操作（如省略号插入和国家标准 (National) 数字替换）和 OpenType 功能。
             StringFormat StrFormat = new StringFormat();
 
+             
             //定义需要印的文字居中对齐
             StrFormat.Alignment = StringAlignment.Center;
+
 
             //SolidBrush:定义单色画笔。画笔用于填充图形形状，如矩形、椭圆、扇形、多边形和封闭路径。
             //这个画笔为描绘阴影的画笔，呈灰色
             
             int m_alpha = Convert.ToInt32(256 * alpha);
             SolidBrush semiTransBrush2 = new SolidBrush(Color.FromArgb(m_alpha, 0, 0, 0));
+
 
             //描绘文字信息，这个图层向右和向下偏移一个像素，表示阴影效果
             //DrawString 在指定矩形并且用指定的 Brush 和 Font 对象绘制指定的文本字符串。
@@ -441,6 +445,7 @@ namespace BP.WF.Rpt
                           semiTransBrush2,              //Brush
                           new PointF(xPosOfWm + 1, yPosOfWm + 1), //Position
                           StrFormat);
+
 
             //从四个 ARGB 分量（alpha、红色、绿色和蓝色）值创建 Color 结构，这里设置透明度为153
             //这个画笔为描绘正式文字的笔刷，呈白色
@@ -466,6 +471,24 @@ namespace BP.WF.Rpt
             return targetImage;
 
             //return targetImage.Replace(PicturePath, "");
+        }
+
+        private SolidBrush RndBrush(Color BackColor, Random rnd)
+        {
+            int r, g, b;
+            do
+            {
+                r = rnd.Next(255);
+            } while (Math.Abs(r - BackColor.R) < 50);  //这是为了控制颜色不要和背景色太接近
+            do
+            {
+                g = rnd.Next(255);
+            } while (Math.Abs(g - BackColor.G) < 50);
+            do
+            {
+                b = rnd.Next(255);
+            } while (Math.Abs(b - BackColor.B) < 50);
+            return new SolidBrush(Color.FromArgb(255, r, g, b));
         }
     }
 

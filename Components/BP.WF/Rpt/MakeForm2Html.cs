@@ -1060,7 +1060,17 @@ namespace BP.WF
                 #endregion
 
                 #region 生成水文.
+
+                string rdt="";
+                if (en.EnMap.Attrs.Contains("RDT"))
+                {
+                  rdt = en.GetValStringByKey("RDT");
+                  if (rdt.Length > 10)
+                      rdt = rdt.Substring(0, 10);
+                }
                 string words = Glo.PrintBackgroundWord;
+              words=  words.Replace("@RDT", rdt);
+
                 if (words.Contains("@") == true)
                     words = Glo.DealExp(words, en, null);
 

@@ -115,7 +115,12 @@
 
     function Back() {
         var myPK = GetQueryString('MyPK');
-        var url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
+        var fromPage = GetQueryString('FromPage');
+        var url = '';
+        if (fromPage == null)
+            var url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
+        else
+            var url = 'DDLFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&MyPK=' + myPK + "&KeyOfEn=" + GetQueryString('KeyOfEn');
         window.location.href = url;
         return;
     }

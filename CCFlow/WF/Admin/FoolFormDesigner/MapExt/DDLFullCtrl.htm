@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>为下拉框设置联动填充其它控件</title>
+    <title>为下拉框设置联动填充其他控件</title>
      <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
@@ -30,13 +30,19 @@
 
                     json = JSON.parse(json);
 
-                    var mapExt = json['Sys_MapExt'];
+                    var mapExt = json['Sys_MapExt'][0];
 
                     //绑定数据源.
                     GenerBindDDL("DDL_FK_DBSrc", json['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
 
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(mapExt);
+
+                    if (mapExt.W == "0") {
+                        document.getElementById("Btn_FullDtl").disabled = true;
+                        document.getElementById("Btn_FullDDL").disabled = true;
+                    }
+
                     return;
                 }
             });
@@ -57,10 +63,9 @@
 
 <form id="cc">
 
-<fieldset>
-<legend>为下拉框设置联动填充其他控件</legend>
 
-<table id="table">
+<table id="table" style=" width:100%; ">
+<caption>为下拉框设置联动填充其他控件 </caption>
 <tr>
 <td> 执行SQL的数据源 </td>
 <td> <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc" > </select> </td>
@@ -106,17 +111,25 @@
 </tr>
 
 </table>
-</fieldset> 
 
 <div id="Msg"> </div>
 
 <script type="text/javascript">
 
     function FullDtl() {
-        alert('尚未完成');
+        var myPK = GetQueryString('MyPK');
+        var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK+'&FromPage=DDL';
+        window.location.href = url;
+        return;
     }
+
+    //填充ddl.
     function FullDDL() {
-        alert('尚未完成');
+
+        var myPK = GetQueryString('MyPK');
+        var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL';
+        window.location.href = url;
+        return;
     }
 
     function Save() {
@@ -140,6 +153,7 @@
                 }
 
                 $("#Msg").html("<font color=green>" + data + "</font>");
+                window.location.href = window.location.href;
                 return;
             },
             error: function (data) {

@@ -218,7 +218,19 @@ namespace BP.WF.HttpHandler
                 {
                     if (dtl.No != fk_mapdtl)
                         continue;
-                    dtl.MTR = sql;
+                    dtl.MTR = sql.Trim();
+
+                    string cols ="";
+                    MapAttrs attrs = new MapAttrs(dtl.No);
+                    foreach (MapAttr item in attrs)
+                    {
+                        if (item.KeyOfEn == "OID" || item.KeyOfEn == "RefPKVal")
+                            continue;
+
+                        cols += item.KeyOfEn + ",";
+                    }
+
+                    dtl.Alias = cols; //把ptable作为一个数据参数.
                 }
             }
             return dtls.ToJson();
@@ -232,9 +244,71 @@ namespace BP.WF.HttpHandler
             string str = "";
             foreach (MapDtl dtl in dtls)
             {
-                str += "$" + dtl.No + ":" + this.GetRequestVal("TB_" + dtl.No);   
+                string sql =  this.GetRequestVal("TB_" + dtl.No);
+                sql = sql.Trim();
+                if (sql == "" || sql == null)
+                    continue;
+
+                if (sql.Contains("@Key")==false)
+                    return "err@在配置从表:"+dtl.No+" sql填写错误, 必须包含@Key列, @Key就是当前文本框输入的值. ";
+
+                str += "$" + dtl.No + ":" +sql; 
             }
             me.Tag1 = str;
+            me.Update();
+
+            return "保存成功.";
+        }
+
+        public string TBFullCtrlDDL_Init()
+        {
+            MapExt myme = new MapExt(this.MyPK);
+            MapAttrs attrs = new MapAttrs(myme.FK_MapData);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
+                MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
+
+            string[] strs = myme.Tag.Split('$');
+            foreach (MapAttr attr in attrs)
+            {
+                foreach (string s in strs)
+                {
+                    if (s == null)
+                        continue;
+                    if (s.Contains(attr.KeyOfEn + ":") == false)
+                        continue;
+
+                    string[] ss = s.Split(':');
+                    attr.DefVal = ss[1]; //使用这个字段作为对应设置的sql.
+                }
+            }
+
+            return attrs.ToJson();
+        }
+        public string TBFullCtrlDDL_Save()
+        {
+            MapExt myme = new MapExt(this.MyPK);
+
+            MapAttrs attrs = new MapAttrs(myme.FK_MapData);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
+                MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
+
+            MapExt me = new MapExt(this.MyPK);
+
+            string str = "";
+            foreach (MapAttr attr in attrs)
+            {
+
+                string sql = this.GetRequestVal("TB_" + attr.KeyOfEn);
+                sql = sql.Trim();
+                if (sql == "" || sql == null)
+                    continue;
+
+                if (sql.Contains("@Key") == false)
+                    return "err@在配置从表:" + attr.KeyOfEn + " sql填写错误, 必须包含@Key列, @Key就是当前文本框输入的值. ";
+
+                str += "$" + attr.KeyOfEn + ":" + sql;
+            }
+            me.Tag = str;
             me.Update();
 
             return "保存成功.";

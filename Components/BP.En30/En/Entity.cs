@@ -130,7 +130,8 @@ namespace BP.En
 			{
 				Log.DebugWriteWarning("@ ToJson " + ex.Message);
 			}
-			return BP.Tools.Json.ToJsonEntityModel(ht);
+
+			return BP.Tools.Json.ToJson(ht);
 		}
         
 		/// <summary>

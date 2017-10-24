@@ -1328,7 +1328,6 @@ namespace BP.Sys
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
 
 
-
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
                 map.AddBoolean(MapDtlAttr.IsExp, true, "IsExp", false, false);

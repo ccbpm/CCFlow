@@ -813,6 +813,7 @@ namespace BP.Sys
 
                 map.AddTBString(MapExtAttr.FK_DBSrc, null, "数据源", true, false, 0, 100, 20);
                 map.AddTBStringDoc();
+
                 map.AddTBString(MapExtAttr.Tag, null, "Tag", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag1, null, "Tag1", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag2, null, "Tag2", true, false, 0, 2000, 20);
@@ -827,6 +828,7 @@ namespace BP.Sys
 
                 // add by stone 2013-12-21 计算的优先级,用于js的计算.
                 map.AddTBInt(MapExtAttr.PRI, 0, "PRI", false, false);
+
 
                 this._enMap = map;
                 return this._enMap;

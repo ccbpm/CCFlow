@@ -137,16 +137,7 @@ namespace BP.Sys.FrmUI
                     "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE EnName='@FK_MapData' AND (CtrlType IS NULL OR CtrlType='')  ", true);
                 #endregion 傻瓜表单。
 
-                #region 执行的方法.
-                RefMethod rm = new RefMethod();
-
-                rm = new RefMethod();
-                rm.Title = "旧版本设置";
-                rm.ClassMethodName = this.ToString() + ".DoOldVer()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                #endregion 执行的方法.
+              
 
                 this._enMap = map;
                 return this._enMap;
@@ -154,16 +145,7 @@ namespace BP.Sys.FrmUI
         }
         #endregion
 
-        #region 方法执行.
-        /// <summary>
-        /// 旧版本设置
-        /// </summary>
-        /// <returns></returns>
-        public string DoOldVer()
-        {
-            return "/WF/Admin/FoolFormDesigner/EditF.htm?KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&FType=" + this.MyDataType + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&FK_MapData=" + this.FK_MapData;
-        }
-        #endregion 方法执行.
+       
     }
     /// <summary>
     /// 实体属性s

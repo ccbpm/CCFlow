@@ -163,14 +163,7 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "旧版本设置";
-                rm.ClassMethodName = this.ToString() + ".DoOldVer()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
+          
                 #endregion 执行的方法.
 
                 this._enMap = map;
@@ -193,14 +186,7 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 方法执行.
-        /// <summary>
-        /// 旧版本设置
-        /// </summary>
-        /// <returns></returns>
-        public string DoOldVer()
-        {
-            return "/WF/Admin/FoolFormDesigner/EditF.htm?KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&FType=" + this.MyDataType + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&FK_MapData=" + this.FK_MapData;
-        }
+       
 
         /// <summary>
         /// 自动计算

@@ -194,20 +194,6 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                //rm = new RefMethod();
-                //rm.Title = "旧版本设置htm";
-                //rm.ClassMethodName = this.ToString() + ".DoOldVer()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.GroupName = "高级设置";
-                //map.AddRefMethod(rm);
-
-                //rm = new RefMethod();
-                //rm.Title = "旧版本设置aspx";
-                //rm.ClassMethodName = this.ToString() + ".DoOldVerAspx()";
-                //rm.RefMethodType = RefMethodType.RightFrameOpen;
-                //rm.GroupName = "高级设置";
-                //map.AddRefMethod(rm);
-
                 rm = new RefMethod();
                 rm.Title = "批处理";
                 rm.ClassMethodName = this.ToString() + ".DoEleBatch()";
@@ -276,14 +262,7 @@ namespace BP.Sys.FrmUI
         {
             return "/WF/Admin/FoolFormDesigner/EditF.aspx?DoType=Edit&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
         }
-        /// <summary>
-        /// 旧版本设置
-        /// </summary>
-        /// <returns></returns>
-        public string DoOldVer()
-        {
-            return "/WF/Admin/FoolFormDesigner/EditF.htm?KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&FType=1&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&FK_MapData=" + this.FK_MapData;
-        }
+       
         /// <summary>
         /// 设置开窗返回值
         /// </summary>
@@ -306,7 +285,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoTBFullCtrl()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "/WF/Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
         }
         /// <summary>
         /// 设置级联

@@ -660,7 +660,7 @@ namespace BP.WF.HttpHandler
         /// 字典表列表.
         /// </summary>
         /// <returns></returns>
-        public string SFList_List()
+        public string SFList_Init()
         {
             SFTables ens = new SFTables();
             ens.RetrieveAll();
@@ -798,8 +798,6 @@ namespace BP.WF.HttpHandler
                 attr.Insert();
 
                 return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
-
-                // return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppMoney)
@@ -816,7 +814,6 @@ namespace BP.WF.HttpHandler
                 attr.DefVal = "0.00";
                 attr.Insert();
                 return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
-                //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppFloat)
@@ -835,7 +832,6 @@ namespace BP.WF.HttpHandler
                 attr.Insert();
 
                 return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
-                //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDouble)
@@ -853,7 +849,6 @@ namespace BP.WF.HttpHandler
                 attr.Insert();
 
                 return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrNums&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
-                //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDate)
@@ -870,7 +865,6 @@ namespace BP.WF.HttpHandler
                 attr.Insert();
 
                 return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
-                //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDate + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppDateTime)
@@ -887,7 +881,6 @@ namespace BP.WF.HttpHandler
                 attr.Insert();
 
                 return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrDTs&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
-                //return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppDateTime + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             if (attr.MyDataType == DataType.AppBoolean)
@@ -905,7 +898,6 @@ namespace BP.WF.HttpHandler
                 attr.Insert();
 
                 return "url@../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrBoolens&MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + newNo + "&FType=" + attr.MyDataType + "&DoType=Edit&GroupField=" + this.GroupField;
-                // return "url@EditF.htm?MyPK=" + attr.MyPK + "&FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + no + "&FType=" + DataType.AppBoolean + "&DoType=Edit&GroupField=" + this.GroupField;
             }
 
             return "err@没有判断的数据类型." + attr.MyDataTypeStr;
@@ -1615,25 +1607,25 @@ namespace BP.WF.HttpHandler
         }
         public string SFGuide_SaveInfo()
         {
-            bool isnew = Convert.ToBoolean(context.Request.QueryString["isnew"]);
-            string sfno = context.Request.QueryString["NO"];
-            string myname = context.Request.QueryString["NAME"];
-            int srctype = int.Parse(context.Request.QueryString["SRCTYPE"]);
-            int codestruct = int.Parse(context.Request.QueryString["CODESTRUCT"]);
-            string defval = context.Request.QueryString["DEFVAL"];
-            string sfdbsrc = context.Request.QueryString["FK_SFDBSRC"];
-            string srctable = context.Request.QueryString["SRCTABLE"];
-            string columnvalue = context.Request.QueryString["COLUMNVALUE"];
-            string columntext = context.Request.QueryString["COLUMNTEXT"];
-            string parentvalue = context.Request.QueryString["PARENTVALUE"];
-            string tabledesc = context.Request.QueryString["TABLEDESC"];
-            string selectstatement = context.Request.QueryString["SELECTSTATEMENT"];
+            bool IsNew = Convert.ToBoolean(context.Request.QueryString["IsNew"]);
+            string sfno = context.Request.QueryString["No"];
+            string myname = context.Request.QueryString["Name"];
+            int srctype = int.Parse(context.Request.QueryString["SrcType"]);
+            int codestruct = int.Parse(context.Request.QueryString["CodeStruct"]);
+            string defval = context.Request.QueryString["DefVal"];
+            string sfdbsrc = context.Request.QueryString["FK_SFDBSrc"];
+            string srctable = context.Request.QueryString["SrcTable"];
+            string columnvalue = context.Request.QueryString["ColumnValue"];
+            string columntext = context.Request.QueryString["ColumnText"];
+            string parentvalue = context.Request.QueryString["ParentValue"];
+            string tabledesc = context.Request.QueryString["TableDesc"];
+            string selectstatement = context.Request.QueryString["Selectstatement"];
 
             //判断是否已经存在
             SFTable sftable = new SFTable();
             sftable.No = sfno;
 
-            if (isnew && sftable.RetrieveFromDBSources() > 0)
+            if (IsNew && sftable.RetrieveFromDBSources() > 0)
                 return "err@字典编号" + sfno + "已经存在，不允许重复。";
 
             sftable.Name = myname;
@@ -1700,11 +1692,11 @@ namespace BP.WF.HttpHandler
 
             foreach (DataRow r in dt.Rows)
             {
-                r["NAME"] = r["NO"] +
-                            (r["NAME"] == null || r["NAME"] == DBNull.Value ||
-                             string.IsNullOrWhiteSpace(r["NAME"].ToString())
+                r["Name"] = r["No"] +
+                            (r["Name"] == null || r["Name"] == DBNull.Value ||
+                             string.IsNullOrWhiteSpace(r["Name"].ToString())
                                  ? ""
-                                 : string.Format("[{0}]", r["NAME"]));
+                                 : string.Format("[{0}]", r["Name"]));
             }
 
             return BP.Tools.Json.ToJson(dt);
@@ -1819,7 +1811,7 @@ namespace BP.WF.HttpHandler
                 List<DataRow> wsRows = new List<DataRow>();
                 foreach (DataRow r in dt.Rows)
                 {
-                    if (Equals(r["DBSRCTYPE"], (int)DBSrcType.WebServices))
+                    if (Equals(r["DBSrcType"], (int)DBSrcType.WebServices))
                         wsRows.Add(r);
                 }
 
@@ -1874,14 +1866,14 @@ namespace BP.WF.HttpHandler
                 {
                     mtd = new WSMethod();
                     //1.接口名称 ele.Name
-                    mtd.NO = ele.Name;
-                    mtd.PARAMS = new Dictionary<string, string>();
+                    mtd.No = ele.Name;
+                    mtd.ParaMS = new Dictionary<string, string>();
                     //2.接口返回值类型
                     ctype = res.SchemaType as XmlSchemaComplexType;
                     seq = ctype.Particle as XmlSchemaSequence;
 
                     if (seq != null && seq.Items.Count > 0)
-                        mtd.RETURN = resType = (seq.Items[0] as XmlSchemaElement).SchemaTypeName.Name;
+                        mtd.Return = resType = (seq.Items[0] as XmlSchemaElement).SchemaTypeName.Name;
                     else
                         continue;// resType = "void";   //去除不返回结果的接口
 
@@ -1894,13 +1886,13 @@ namespace BP.WF.HttpHandler
                         foreach (XmlSchemaElement pe in seq.Items)
                         {
                             mparams += pe.SchemaTypeName.Name + " " + pe.Name + ", ";
-                            mtd.PARAMS.Add(pe.Name, pe.SchemaTypeName.Name);
+                            mtd.ParaMS.Add(pe.Name, pe.SchemaTypeName.Name);
                         }
 
                         mparams = mparams.TrimEnd(", ".ToCharArray());
                     }
 
-                    mtd.NAME = string.Format("{0} {1}({2})", resType, ele.Name, mparams);
+                    mtd.Name = string.Format("{0} {1}({2})", resType, ele.Name, mparams);
                     mtds.Add(mtd);
                     //methods.Add(ele.Name, string.Format("{0} {1}({2})", resType, ele.Name, mparams));
                 }
@@ -1918,12 +1910,12 @@ namespace BP.WF.HttpHandler
 
     public class WSMethod
     {
-        public string NO { get; set; }
+        public string No { get; set; }
 
-        public string NAME { get; set; }
+        public string Name { get; set; }
 
-        public Dictionary<string, string> PARAMS { get; set; }
+        public Dictionary<string, string> ParaMS { get; set; }
 
-        public string RETURN { get; set; }
+        public string Return { get; set; }
     }
 }

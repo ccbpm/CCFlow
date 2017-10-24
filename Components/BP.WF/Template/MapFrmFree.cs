@@ -403,6 +403,13 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
+                rm.Title = "重置表单";
+                rm.ClassMethodName = this.ToString() + ".DoResetFrm";
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "手机端表单";
                 rm.GroupName = "高级设置";
                 rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
@@ -456,6 +463,13 @@ namespace BP.WF.Template
             return SystemConfig.CCFlowWebPath +"WF/Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
         }
 
+        public string DoResetFrm()
+        {
+            string sql = "UPDATE Sys_MapData SET FormJson= null WHERE No='"+this.No+"'";
+            DBAccess.RunSQL(sql);
+            return "表单已经重置成功, 请关闭表单设计器重新打开.";
+        }
+        
         /// <summary>
         /// 复制表单
         /// </summary>

@@ -117,25 +117,32 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string TBFullCtrl_Save()
         {
-            MapExt me = new MapExt();
-            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl,
-                MapExtAttr.FK_MapData, this.FK_MapData,
-                MapExtAttr.AttrOfOper, this.KeyOfEn);
+            try
+            {
+                MapExt me = new MapExt();
+                int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.TBFullCtrl,
+                    MapExtAttr.FK_MapData, this.FK_MapData,
+                    MapExtAttr.AttrOfOper, this.KeyOfEn);
 
-            me.FK_MapData = this.FK_MapData;
-            me.AttrOfOper = this.KeyOfEn;
-            me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
-            me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
+                me.FK_MapData = this.FK_MapData;
+                me.AttrOfOper = this.KeyOfEn;
+                me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
+                me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
 
-            me.ExtType = MapExtXmlList.TBFullCtrl;
+                me.ExtType = MapExtXmlList.TBFullCtrl;
 
-            //执行保存.
-            me.InitPK();
+                //执行保存.
+                me.InitPK();
 
-            if (me.Update() == 0)
-                me.Insert();
+                if (me.Update() == 0)
+                    me.Insert();
 
-            return "保存成功.";
+                return "保存成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
         public string TBFullCtrl_Delete()
         {
@@ -170,6 +177,8 @@ namespace BP.WF.HttpHandler
                 me.FK_DBSrc = "local";
             }
 
+            //这个属性没有用.
+            me.W = i;  //用于标记该数据是否保存?  从而不现实填充从表，填充下拉框.按钮是否可以用.
             if (me.FK_DBSrc == "")
                 me.FK_DBSrc = "local";
 
@@ -181,6 +190,54 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dt);
 
             return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 填充从表
+        /// </summary>
+        /// <returns></returns>
+        public string TBFullCtrlDtl_Init()
+        {
+            MapExt me = new MapExt(this.MyPK);
+            
+            string[] strs = me.Tag1.Split('$');
+            // 格式为: $ND101Dtl2:SQL.
+
+            MapDtls dtls = new MapDtls();
+            dtls.Retrieve(MapDtlAttr.FK_MapData, me.FK_MapData);
+
+            foreach (string str in strs)
+            {
+                if (string.IsNullOrEmpty(str) || str.Contains(":")==false)
+                    continue;
+                
+                string[] kvs=str.Split(':');
+                string fk_mapdtl=kvs[0];
+                string sql=kvs[1];
+
+                foreach (MapDtl dtl in dtls)
+                {
+                    if (dtl.No != fk_mapdtl)
+                        continue;
+                    dtl.MTR = sql;
+                }
+            }
+            return dtls.ToJson();
+        }
+
+        public string TBFullCtrlDtl_Save()
+        {
+            MapDtls dtls = new MapDtls(this.FK_MapData);
+            MapExt me = new MapExt(this.MyPK);
+
+            string str = "";
+            foreach (MapDtl dtl in dtls)
+            {
+                str += "$" + dtl.No + ":" + this.GetRequestVal("TB_" + dtl.No);   
+            }
+            me.Tag1 = str;
+            me.Update();
+
+            return "保存成功.";
         }
         #endregion TBFullCtrl 功能界面.
 

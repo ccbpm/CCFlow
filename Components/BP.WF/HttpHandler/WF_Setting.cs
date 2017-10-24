@@ -121,7 +121,7 @@ namespace BP.WF.HttpHandler
         }
         public string Siganture_Save()
         {
-            return "";
+            HttpPostedFile f = context.Request.Files[0];
 
             //FileUpload f = (FileUpload)this.FindControl("F");
             //if (f.HasFile == false)
@@ -129,37 +129,38 @@ namespace BP.WF.HttpHandler
 
             //if (f.FileName.EndsW
 
-            ////判断文件类型.
-            //string fileExt = ",bpm,jpg,jpeg,png,gif,";
-            //string ext = f.FileName.Substring(f.FileName.LastIndexOf('.') + 1).ToLower();
-            //if (fileExt.IndexOf(ext + ",") == -1)
-            //{
-            //    return "err@上传的文件必须是以图片格式:" + fileExt + "类型, 现在类型是:" + ext;
-            //}
+            //判断文件类型.
+            string fileExt = ",bpm,jpg,jpeg,png,gif,";
+            string ext = f.FileName.Substring(f.FileName.LastIndexOf('.') + 1).ToLower();
+            if (fileExt.IndexOf(ext + ",") == -1)
+            {
+                return "err@上传的文件必须是以图片格式:" + fileExt + "类型, 现在类型是:" + ext;
+            }
 
-            //try
-            //{
-            //    string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T" + WebUser.No + ".jpg";
-            //    if (System.IO.File.Exists(tempFile) == true)
-            //        System.IO.File.Delete(tempFile);
+            try
+            {
+                string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/T" + WebUser.No + ".jpg";
+                if (System.IO.File.Exists(tempFile) == true)
+                    System.IO.File.Delete(tempFile);
 
-            //    f.SaveAs(tempFile);
-            //    System.Drawing.Image img = System.Drawing.Image.FromFile(tempFile);
-            //    img.Dispose();
-            //}
-            //catch (Exception ex)
-            //{
-            //    return "err@"+ex.Message;
-            //}
+                f.SaveAs(tempFile);
+                System.Drawing.Image img = System.Drawing.Image.FromFile(tempFile);
+                img.Dispose();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
 
-            //f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
-            //f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
+            f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
+            f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
 
             //f.PostedFile.InputStream.Close();
             //f.PostedFile.InputStream.Dispose();
             //f.Dispose();
 
             //   this.Response.Redirect(this.Request.RawUrl, true);
+            return "上传成功！";
         }
         #endregion 图片签名.
 

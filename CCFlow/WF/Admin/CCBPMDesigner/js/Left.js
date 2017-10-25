@@ -236,6 +236,8 @@ function deleteFlowSort() {
         };
         ajaxService(params, function (data) {
             alert(data);
+            //删除节点
+            $('#flowTree').tree('remove', currSort.target);
         });
     });
 }

@@ -77,15 +77,17 @@ function InitForm() {
 
     }
 
+
+
     //处理下拉框级联等扩展信息
     AfterBindEn_DealMapExt();
 
     //设置默认值
     for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
         var mapAttr = frmData.Sys_MapAttr[j];
+
         //添加 label
         //如果是整行的需要添加  style='clear:both'
-
 
         var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
         if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
@@ -1153,15 +1155,14 @@ function AfterBindEn_DealMapExt() {
                 //}
                 break;
             case "TBFullCtrl"://自动填充  先不做
-                break;
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
                 if (tbAuto == null)
                     continue;
 
                 tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + mapExt.MyPK + "\');");
+                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value, '" + 'TB_' + mapExt.AttrOfOper + "', '" + mapExt.MyPK + "');");
                 tbAuto.attr("AUTOCOMPLETE", "OFF");
-                if (me.Tag != "") {
+                if (mapExt.Tag != "") {
                     /* 处理下拉框的选择范围的问题 */
                     var strs = mapExt.Tag.split('$');
                     for (var str in strs) {
@@ -1812,6 +1813,8 @@ function GenerFreeFrm() {
                 var eleHtml = figure_MapAttr_Template(mapAttr);
                 $('#CCForm').append(eleHtml);
             }
+
+
             //循环FrmLab
             for (var i in flow_Data.Sys_FrmLab) {
                 var frmLab = flow_Data.Sys_FrmLab[i];
@@ -1936,7 +1939,7 @@ function GenerFreeFrm() {
             })
 
 
-            //// 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
+            // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
             var enName = frmData.Sys_MapData[0].No;
             try {
                 ////加载JS文件

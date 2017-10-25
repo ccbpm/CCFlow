@@ -741,11 +741,13 @@
 
             return true;
         }
+        function ToNewVer() {
+            window.location.href = './SFTable/Default.htm';
+        }
     </script>
 </head>
 <body class="easyui-layout">
-<br />
-        <table id="mtable" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 98%">
+        <table id="mtable" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 98%;  padding:5px; margin:5px;">
             <tr>
                 <td class="GroupTitle" width="120px">项目</td>
                 <td class="GroupTitle" width="300px"> 值</td>
@@ -769,7 +771,8 @@
             </tr>
         </table>
         <a href="javascript:void(0)" id="Btn_Create" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
-           onclick="SaveSFTable()">保存</a> 
+           onclick="SaveSFTable()">保存</a> | <a href="javascript:void(0)" id="Btn_ShowData" class="easyui-linkbutton"
+                                             data-options="iconCls:'icon-open'" onclick="ToNewVer()">新版本创建向导</a>
            <!--<a href="javascript:void(0)" id="Btn_ShowData" class="easyui-linkbutton"
                                              data-options="iconCls:'icon-open'" onclick="ShowData()">查看数据</a>-->
 </body>

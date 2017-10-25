@@ -3,7 +3,9 @@ var oldValue = "";
 var oid;
 var highlightindex = -1;
 function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
+
     openDiv(sender, tbid);
+
     var myEvent = window.event || arguments[0];
     var myKeyCode = myEvent.keyCode;
     // 获得ID为divinfo里面的DIV对象 .  
@@ -74,20 +76,27 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
                 success: function (data, textStatus) {
                     /* 如何解决与文本框的宽度与下拉框的一样宽。*/
                     //alert($("#" + tbid));
-                    if (data != "") {
-                        highlightindex = -1;
-                        dataObj = eval("(" + data + ")"); // 转换为json对象 
-                        $.each(dataObj.Head, function (idx, item) {
-                            $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + item.No + "','" + tbid + "','" + fk_mapExt + "');\" value='" + item.No + "'>" + item.No + '|' + item.Name + "</div>");
-                        });
-
-                        if (dataObj.Head.length == 0) {
-                            $("#divinfo").hide();
-                        }
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        $("#divinfo").hide();
+                        return;
                     }
-                    else {
+
+                    if (data == "") {
+                        $("#divinfo").hide();
+                        return;
+                    }
+
+                    highlightindex = -1;
+                    dataObj = eval("(" + data + ")"); // 转换为json对象 
+                    if (dataObj.Head.length == 0) {
                         $("#divinfo").hide();
                     }
+
+                    $.each(dataObj.Head, function (idx, item) {
+                        $("#divinfo").append("<div style='" + itemStyle + "' name='" + idx + "' onmouseover='MyOver(this)' onmouseout='MyOut(this)' onclick=\"ItemClick('" + sender.id + "','" + item.No + "','" + tbid + "','" + fk_mapExt + "');\" value='" + item.No + "'>" + item.No + '|' + item.Name + "</div>");
+                    });
+
                 },
                 complete: function (XMLHttpRequest, textStatus) {
                     //    alert('HideLoading');
@@ -126,30 +135,12 @@ function FullIt(oldValue, tbid, fk_mapExt) {
     //执行m2m 关系填充.
     FullM2M(oldValue, fk_mapExt);
 }
-//打开div.
-function openDiv_bak(e, tbID) {
-    //alert(document.getElementById("divinfo").style.display);
-    if (document.getElementById("divinfo").style.display == "none") {
-        var txtObject = document.getElementById(tbID);
-        var orgObject = document.getElementById("divinfo");
-
-        var rect = getoffset(txtObject);
-        orgObject.style.top = rect[0] + 22;
-        orgObject.style.left = rect[1];
-
-        //        orgObject.style.top =  $("#" + tbID).attr("top") + 22;
-        //        orgObject.style.left = $("#" + tbID).attr("left");
-
-        orgObject.style.display = "block";
-        txtObject.focus();
-    }
-}
 function openDiv(e, tbID) {
 
-    //alert(document.getElementById("divinfo").style.display);
+     
     if (document.getElementById("divinfo").style.display == "none") {
 
-        var txtObject = document.getElementById(tbID);
+        var txtObject = e; //  document.getElementById(tbID);
         var orgObject = document.getElementById("divinfo");
         var rect = getoffset(txtObject);
         var t = rect[0] + 22;

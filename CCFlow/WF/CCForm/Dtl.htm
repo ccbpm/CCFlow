@@ -810,8 +810,9 @@
             if (thisRowIndex != pageData.currentRowIndex && $('#Msg').css('display') == 'none') {
                 pageData.currentRowIndex = thisRowIndex;
                 return; //暂时去掉行的保存
-                saveRow(pageData.currentRowIndex);
+                //saveRow(pageData.currentRowIndex);
             }
+            return;
         }
         var saveAll = false;
         var needSaveCount = 0;
@@ -1134,7 +1135,49 @@
 
                     ctrl.attr(mapExt.Tag2, changeEvent + mapExt.Tag1 + '(this);');
                     break;
-                case "TBFullCtrl"://自动填充  先不做
+                case "TBFullCtrl": //自动填充  先不做.
+                    var tbAuto = $(tr).find("[name=TB_" + mapExt.AttrOfOper + ']');
+                    if (tbAuto == null)
+                        continue;
+
+                    var tbID = tbAuto.attr('id');
+                    if (tbID == undefined)
+                        continue;
+
+                  //  alert(tbID);
+
+                    tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
+                    tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value, '" + tbID + "', '" + mapExt.MyPK + "');");
+                    tbAuto.attr("AUTOCOMPLETE", "OFF");
+                    if (mapExt.Tag != "") {
+                        /* 处理下拉框的选择范围的问题 */
+                        var strs = mapExt.Tag.split('$');
+                        for (var str in strs) {
+                            var str = strs[k];
+                            if (str = "") {
+                                continue;
+                            }
+
+                            var myCtl = str.Split(':');
+                            var ctlID = myCtl[0];
+
+                            var ddlC1 = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
+                            //  var ddlC1 = $("#DDL_" + ctlID);
+                            if (ddlC1 == null) {
+                                continue;
+                            }
+
+                            //如果文本库数值为空，就让其返回.
+                            var txt = tbAuto.val();
+                            if (txt == '')
+                                continue;
+
+                            //获取要填充 ddll 的SQL.
+                            var sql = myCtl[1].Replace("~", "'");
+                            sql = sql.Replace("@Key", txt);
+                            //sql = BP.WF.Glo.DealExp(sql, en, null);  怎么办
+                        }
+                    }
                     break;
                 case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
                     var ddlParent = $(tr).find("[name=DDL_" + mapExt.AttrOfOper + ']');
@@ -1459,5 +1502,7 @@
         return eleHtml;
     }
 </script>
+   <!--DIVINFO-->
+                    <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; align: left; border-color:Black'></div>
 </body>
 </html>

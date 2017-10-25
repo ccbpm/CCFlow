@@ -27,8 +27,20 @@ INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal)VALUES ('BP.Pub.YFs','�
 DELETE FROM Sys_SFTable WHERE No='BP.Pub.NYs';
 INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal)VALUES ('BP.Pub.NYs','年月','FK_NY','年度与月份','');
 
-DELETE FROM Sys_SFTable WHERE No='BP.Pub.NDs';
-INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal)VALUES ('BP.Pub.NDs','年度','FK_ND','年度','');
+DELETE FROM Sys_SFTable WHERE No='Demo_Student';
+INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal,SrcType,FK_SFDBSrc)VALUES ('Demo_Student','学生','FK_Student','学生','',1,'local');
+
+DELETE FROM Sys_SFTable WHERE No='Demo_BanJi';
+INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal,SrcType,FK_SFDBSrc)VALUES ('Demo_BanJi','班级','FK_BJ','班级','',1,'local');
+
+DELETE FROM Sys_SFTable WHERE No='Port_Emp';
+INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal,SrcType,FK_SFDBSrc)VALUES ('Port_Emp','操作员','FK_Emp','操作员','',1,'local');
+
+DELETE FROM Sys_SFTable WHERE No='Port_Dept';
+INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal,SrcType,FK_SFDBSrc)VALUES ('Port_Dept','部门','FK_Dept','部门','',1,'local');
+
+DELETE FROM Sys_SFTable WHERE No='Port_Station';
+INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal,SrcType,FK_SFDBSrc)VALUES ('Port_Station','岗位','FK_Station','岗位','',1,'local');
 
 
 DELETE FROM Demo_Supplier ;

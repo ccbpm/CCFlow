@@ -1810,7 +1810,7 @@ function AfterBindEn_DealMapExt() {
                     continue;
 
                 tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'" + tbAuto.ClientID + "\', \'" + mapExt.MyPK + "\');");
+                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,'" + "#TB_" + mapExt.AttrOfOper + "', '" + mapExt.MyPK + "');");
                 tbAuto.attr("AUTOCOMPLETE", "OFF");
                 if (me.Tag != "") {
                     /* 处理下拉框的选择范围的问题 */

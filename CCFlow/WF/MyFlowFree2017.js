@@ -727,11 +727,15 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
 
 //处理MapExt
 function AfterBindEn_DealMapExt() {
+
     var workNode = JSON.parse(jsonStr);
     var mapExtArr = workNode.Sys_MapExt;
     
     for (var i = 0; i < mapExtArr.length; i++) {
         var mapExt = mapExtArr[i];
+
+        alert(mapExt);
+
         switch (mapExt.ExtType) {
             case "PopVal": //PopVal窗返回值
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
@@ -830,11 +834,12 @@ function AfterBindEn_DealMapExt() {
                 break;
             case "TBFullCtrl": //自动填充
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
+                alert(tbAuto);
                 if (tbAuto == null)
                     continue;
 
                 tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'TB_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\');");
+                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,'TB_" + mapExt.AttrOfOper + "', '" + mapExt.MyPK + "');");
                 tbAuto.attr("AUTOCOMPLETE", "OFF");
                 if (mapExt.Tag != "") {
                     /* 处理下拉框的选择范围的问题 */
@@ -1844,7 +1849,7 @@ function GenerWorkNode() {
                 elementPathEnabled: false,
                 wordCount: false,
                 toolbars: [[
-            'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'cleardoc', 'fontfamily', 'fontsize', 'indent',  'date', 'time'
+            'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'cleardoc', 'fontfamily', 'fontsize', 'indent', 'date', 'time'
         ]]
             });
 

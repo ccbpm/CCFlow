@@ -93,11 +93,11 @@ FigureCreateCommand.prototype = {
                 case "CheckGroup":
                     alert('该功能没有实现' + createFigureName + ' 需要连续创建三个字段.');
                     break;
-                //case CCForm_Controls.FrmCheck: //审核组件       
-                //case CCForm_Controls.FrmCheck: // 审核组件.       
-                //case CCForm_Controls.FlowChart: //轨迹图.       
-                //case CCForm_Controls.SubFlowDtl: //子流程.       
-                //case CCForm_Controls.ThreadDtl: //子线城.       
+                //case CCForm_Controls.FrmCheck: //审核组件        
+                //case CCForm_Controls.FrmCheck: // 审核组件.        
+                //case CCForm_Controls.FlowChart: //轨迹图.        
+                //case CCForm_Controls.SubFlowDtl: //子流程.        
+                //case CCForm_Controls.ThreadDtl: //子线城.        
                 case "FrmCheck": // 审核组件.
                 case "FlowChart": //轨迹图.
                 case "SubFlowDtl": //子流程.
@@ -393,12 +393,17 @@ FigureCreateCommand.prototype = {
     DropDownListTableCreate: function (createdFigure, x, y) {
 
         var dgId = "iframeRadioButton";
-        var url = "DialogCtr/FrmTable.htm?DataType=&s=" + Math.random();
+
+        //var url = "DialogCtr/FrmTable.htm?DataType=&s=" + Math.random();
+
+        var url = './../FoolFormDesigner/SFList.htm?FK_MapData=' + CCForm_FK_MapData+'&From=FreeFrm';
+
         var funIsExist = this.IsExist;
 
         var lab = '外键表字段';
 
-        OpenEasyUiDialog(url, dgId, lab, 850, 494, 'icon-new', true, function () {
+        OpenEasyUiDialog(url, dgId, lab, 950, 550, 'icon-new', true, function () {
+
             var win = document.getElementById(dgId).contentWindow;
             var frmVal = win.GetFrmInfo();
 
@@ -473,7 +478,7 @@ FigureCreateCommand.prototype = {
                 alert(data);
                 return;
             }
-           
+
         }, this);
     },
     IsExist: function (MyPK) {

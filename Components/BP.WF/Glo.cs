@@ -1100,7 +1100,7 @@ namespace BP.WF
             #endregion 初始化数据
 
             #region 6, 生成临时的 wf_emp 数据。
-            if (isInstallFlowDemo)
+            if (isInstallFlowDemo==true)
             {
                 BP.Port.Emps emps = new BP.Port.Emps();
                 emps.RetrieveAllFromDBSource();
@@ -1125,21 +1125,31 @@ namespace BP.WF
                 }
 
                 // 生成简历数据.
-                int oid = 1000;
                 foreach (BP.Port.Emp emp in emps)
                 {
-                    //for (int myIdx = 0; myIdx < 6; myIdx++)
-                    //{
-                    //    BP.WF.Demo.Resume re = new Demo.Resume();
-                    //    re.NianYue = "200" + myIdx + "年01月";
-                    //    re.FK_Emp = emp.No;
-                    //    re.GongZuoDanWei = "工作部门-" + myIdx;
-                    //    re.ZhengMingRen = "张" + myIdx;
-                    //    re.BeiZhu = emp.Name + "同志工作认真.";
-                    //    oid++;
-                    //    re.InsertAsOID(oid);
-                    //}
+                    for (int myIdx = 0; myIdx < 6; myIdx++)
+                    {
+                        string sql = "";
+                        sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.No + "','200" + myIdx + "-01','山东.济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        DBAccess.RunSQL(sql);
+                    }
                 }
+
+                DataTable dtStudent = BP.DA.DBAccess.RunSQLReturnTable("SELECT No FROM Demo_Student");
+                foreach (DataRow dr in dtStudent.Rows)
+                {
+                    string no = dr[0].ToString();
+                    for (int myIdx = 0; myIdx < 6; myIdx++)
+                    {
+                        string sql = "";
+                        sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','山东.济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        DBAccess.RunSQL(sql);
+                    }
+                }
+
+
                 // 生成年度月份数据.
                 string sqls = "";
                 DateTime dtNow = DateTime.Now;

@@ -139,6 +139,29 @@ namespace BP.Sys
                 return SystemConfig.AppSettings["OAAssistantURL"];
             }
         }
+        public static string AppID
+        {
+            get
+            {
+                return SystemConfig.AppSettings["AppID"];
+            }
+        }
+        public static string AppSecret
+        {
+            get
+            {
+                return SystemConfig.AppSettings["AppSecret"];
+            }
+        }
+
+        public static string channel
+        {
+            get
+            {
+                return SystemConfig.AppSettings["channel"];
+            }
+        }
+
 
         #endregion
 

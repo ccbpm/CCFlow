@@ -198,40 +198,41 @@ namespace BP.WF.HttpHandler
         public string TBFullCtrlDtl_Init()
         {
             MapExt me = new MapExt(this.MyPK);
-            
+
             string[] strs = me.Tag1.Split('$');
             // 格式为: $ND101Dtl2:SQL.
 
             MapDtls dtls = new MapDtls();
             dtls.Retrieve(MapDtlAttr.FK_MapData, me.FK_MapData);
-
             foreach (string str in strs)
             {
-                if (string.IsNullOrEmpty(str) || str.Contains(":")==false)
+                if (string.IsNullOrEmpty(str) || str.Contains(":") == false)
                     continue;
-                
-                string[] kvs=str.Split(':');
-                string fk_mapdtl=kvs[0];
-                string sql=kvs[1];
+
+                string[] kvs = str.Split(':');
+                string fk_mapdtl = kvs[0];
+                string sql = kvs[1];
 
                 foreach (MapDtl dtl in dtls)
                 {
                     if (dtl.No != fk_mapdtl)
                         continue;
                     dtl.MTR = sql.Trim();
-
-                    string cols ="";
-                    MapAttrs attrs = new MapAttrs(dtl.No);
-                    foreach (MapAttr item in attrs)
-                    {
-                        if (item.KeyOfEn == "OID" || item.KeyOfEn == "RefPKVal")
-                            continue;
-
-                        cols += item.KeyOfEn + ",";
-                    }
-
-                    dtl.Alias = cols; //把ptable作为一个数据参数.
                 }
+            }
+
+            foreach (MapDtl dtl in dtls)
+            {
+                string cols = "";
+                MapAttrs attrs = new MapAttrs(dtl.No);
+                foreach (MapAttr item in attrs)
+                {
+                    if (item.KeyOfEn == "OID" || item.KeyOfEn == "RefPKVal" || item.KeyOfEn == "RefPK")
+                        continue;
+
+                    cols += item.KeyOfEn + ",";
+                }
+                dtl.Alias = cols; //把ptable作为一个数据参数.
             }
             return dtls.ToJson();
         }

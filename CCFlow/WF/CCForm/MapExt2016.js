@@ -597,6 +597,7 @@ function FullM2M(key, fk_mapExt) {
 //填充明细.
 function FullDtl(key, fk_mapExt) {
 
+
     GenerPageKVs();
     var url = GetLocalWFPreHref();
     //FullM2M(key, fk_mapExt); //填充M2M.
@@ -609,8 +610,14 @@ function FullDtl(key, fk_mapExt) {
             //ShowLoading();
         },
         success: function (data, textStatus) {
+
             if (data == "")
                 return;
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
             var dataObj = eval("(" + data + ")"); //转换为json对象.
             for (var i in dataObj.Head) {

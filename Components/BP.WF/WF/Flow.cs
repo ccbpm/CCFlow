@@ -965,7 +965,7 @@ namespace BP.WF
                 string sql = "SELECT * FROM " + pFlow.PTable + " WHERE OID=" + pOID;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count != 1)
-                    throw new Exception("@不应该查询不到父流程的数据, 可能的情况之一,请确认该父流程的调用节点是子线程，但是没有把子线程的FID参数传递进来。");
+                    throw new Exception("@不应该查询不到父流程的数据["+sql+"], 可能的情况之一,请确认该父流程的调用节点是子线程，但是没有把子线程的FID参数传递进来。");
 
                 wk.Copy(dt.Rows[0]);
                 rpt.Copy(dt.Rows[0]);
@@ -4023,6 +4023,16 @@ namespace BP.WF
                 return this.GetValBooleanByKey(FlowAttr.IsAutoSendSubFlowOver);
             }
         }
+        /// <summary>
+        /// 是否启用数据模版？
+        /// </summary>
+        public bool IsDBTemplate
+        {
+            get
+            {
+                return this.GetValBooleanByKey(FlowAttr.IsDBTemplate);
+            }
+        }
         public string Note
         {
             get
@@ -4289,6 +4299,8 @@ namespace BP.WF
 
                 map.AddTBInt(FlowAttr.CFlowWay, 0, "延续流程方式", true, false);
                 map.AddTBString(FlowAttr.CFlowPara, null, "延续流程参数", true, false, 0, 100, 10, true);
+                map.AddTBInt(FlowAttr.IsDBTemplate, 0, "是否启用数据模版？", true, false);
+
 
                 //批量发起 add 2013-12-27. 
                 map.AddTBInt(FlowAttr.IsBatchStart, 0, "是否可以批量发起", true, false);

@@ -1828,10 +1828,85 @@ namespace BP.WF.HttpHandler
         public string Press()
         {
             string msg = this.GetRequestVal("Msg");
-
             //调用API.
             return BP.WF.Dev2Interface.Flow_DoPress(this.WorkID, msg, true);
         }
+
+        #region 流程数据模版. for 浙商银行 by zhoupeng. 
+        /// <summary>
+        /// 流程数据模版
+        /// </summary>
+        /// <returns></returns>
+        public string DBTemplate_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //获取模版.
+            string sql = "SELECT WorkID,Title,AtPara FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA LIKE '%@DBTemplate=1%'";
+            DataTable dtTemplate = DBAccess.RunSQLReturnTable(sql);
+            dtTemplate.TableName = "DBTemplate";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtTemplate.Columns[0].ColumnName = "WorkID";
+                dtTemplate.Columns[1].ColumnName = "Title";
+            }
+
+            //把模版名称替换 title. 
+            foreach (DataRow dr in dtTemplate.Rows)
+            {
+                string str = dr[2].ToString();
+                BP.DA.AtPara ap = new AtPara(str);
+                dr["Title"] = ap.GetValStrByKey("DBTemplateName");
+            }
+
+            ds.Tables.Add(dtTemplate);
+
+            // 获取历史发起数据.
+            if (SystemConfig.AppCenterDBType== DBType.MSSQL)
+                sql = "SELECT TOP 30 WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA NOT LIKE '%@DBTemplate=1%' ORDER BY RDT ";
+
+            if (SystemConfig.AppCenterDBType== DBType.Oracle)
+                sql = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA NOT LIKE '%@DBTemplate=1%' AND rownum<=30 ORDER BY RDT ";
+
+            if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                sql = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA NOT LIKE '%@DBTemplate=1%' LIMIT 30 ORDER BY RDT ";
+
+            DataTable dtHistroy = DBAccess.RunSQLReturnTable(sql);
+            dtHistroy.TableName = "History";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtHistroy.Columns[0].ColumnName = "WorkID";
+                dtHistroy.Columns[1].ColumnName = "Title";
+            }
+            ds.Tables.Add(dtHistroy);
+
+            //转化为 json.
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        public string DBTemplate_SaveAsDBTemplate()
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            gwf.Paras_DBTemplate  = true;
+            gwf.Paras_DBTemplateName = this.GetRequestVal("Title")  ;
+            gwf.Update();
+            return "设置成功";
+        }
+
+        public string DBTemplate_DeleteDBTemplate()
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            gwf.Paras_DBTemplate = false;
+            gwf.Update();
+
+            return "设置成功";
+        }
+
+        public string DBTemplate_StartFlowAsWorkID()
+        {
+            return "设置成功";
+        }
+        #endregion 流程数据模版.
 
 
     }

@@ -844,6 +844,34 @@ namespace BP.WF
 
         #region 参数属性.
         /// <summary>
+        /// 是否是流程模版?
+        /// </summary>
+        public bool Paras_DBTemplate
+        {
+            get
+            {
+                return this.GetParaBoolen("DBTemplate");
+            }
+            set
+            {
+                this.SetPara("DBTemplate", value);
+            }
+        }
+        /// <summary>
+        /// 模版名称
+        /// </summary>
+        public string Paras_DBTemplateName
+        {
+            get
+            {
+                return this.GetParaString("DBTemplateName");
+            }
+            set
+            {
+                this.SetPara("DBTemplateName", value);
+            }
+        }
+        /// <summary>
         /// 选择的表单(用于子流程列表里，打开草稿，记录当初选择的表单.)
         /// </summary>
         public string Paras_Frms

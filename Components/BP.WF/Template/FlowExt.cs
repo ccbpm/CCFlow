@@ -391,6 +391,7 @@ namespace BP.WF.Template
                 //移动到这里 by zhoupeng 2016.04.08.
                 map.AddBoolean(FlowAttr.IsResetData, false, "是否启用开始节点数据重置按钮？", true, true, true);
                 map.AddBoolean(FlowAttr.IsLoadPriData, false, "是否自动装载上一笔数据？", true, true, true);
+                map.AddBoolean(FlowAttr.IsDBTemplate, true, "是否启用数据模版？", true, true, true);
 
                 //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
                 map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 100, 10, false);

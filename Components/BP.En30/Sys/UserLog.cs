@@ -42,7 +42,6 @@ namespace BP.Sys
             {
                 var uac = new UAC();
                 uac.Readonly();
-
                 return uac;
             }
         }

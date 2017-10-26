@@ -252,6 +252,10 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsLoadPriData = "IsLoadPriData";
         /// <summary>
+        /// 是否启用数据模版？
+        /// </summary>
+        public const string IsDBTemplate = "IsDBTemplate";
+        /// <summary>
         /// 系统类别（第2级流程树节点编号）
         /// </summary>
         public const string SysType = "SysType";

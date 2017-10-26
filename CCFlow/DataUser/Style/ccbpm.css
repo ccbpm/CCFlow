@@ -13,7 +13,7 @@ a:visited {color:fff;}
 a:hover   {color:fff;}
 a:active  {color:fff;}
 /* 按钮风格 */
-input[type="button"], input[type="submit"]
+input[type="button"], input[type="submit"],input[type="file"]
 {
     border: 0; /*background: #4D77A7;*/
     background: #009999;
@@ -173,15 +173,16 @@ td input
     border-color: #003366;
 }
 caption
-{ 
-     height: 30px;
+{
+    height: 30px;
     text-align: left;
-     font-size: 14px;
-    background: url('/DataUser/Style/Img/bg_list.jpg') no-repeat;
-    background-position:12px 6px;
-	border-bottom:1px #CCCCCC solid;
-	text-indent: 1.8em;
-	line-height:30px;
+    font-size: 14px;
+    background-position: 12px 6px;
+    border-bottom: 1px #CCCCCC solid;
+    text-indent: 1.8em;
+    line-height: 30px;
+    color: #336699;
+    font-weight: bolder;
 }
 caption1
 {
@@ -621,16 +622,27 @@ background:#a8352c;
             border-style:none;
         }
 
-input[type=text],input[type=password], select
+input[type=text], input[type=password], select
 {
     border-radius: 5px;
-    border: 1px solid #336699;
-    margin: 8px 0px;
-    line-height: 25px;
+    border: thin solid #CCCCCC;
+    margin: 1px 1px;
     width: 100%;
-    padding-left: 6px;
-    height: 29px;
+    height: 23px;
 }
+
+.FDesc
+{
+    padding: 4px;
+    text-align: left;
+    font-size: 12px;
+    margin: 4px;
+    background-color: #e0ecff;
+    border: lightgrey 1px solid;
+    border-top: none;
+    width: inherit;
+}
+
 
 /*.form_tree  input[type=text]{
     border-radius: 15px 0px 0px 15px  !important;
@@ -667,7 +679,7 @@ textarea,iframe[src*="AttachmentUpload.aspx"] {
     /*margin: 0px 10px;*/
     line-height: 15px !important;
     padding-left: 6px !important;
-    margin: 8px 0px !important;
+    margin: 4px 0px !important;
     width:100%;
     text-align: left;
     min-height: 40px;

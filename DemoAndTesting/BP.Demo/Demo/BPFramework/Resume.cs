@@ -16,7 +16,7 @@ namespace BP.Demo
         /// <summary>
         /// 学生编号
         /// </summary>
-        public const string FK_Student = "FK_Student";
+        public const string RefPK = "RefPK";
         /// <summary>
         /// 工作单位
         /// </summary>
@@ -58,15 +58,15 @@ namespace BP.Demo
         /// <summary>
         /// 人员
         /// </summary>
-        public string FK_Student
+        public string RefPK
         {
             get
             {
-                return this.GetValStringByKey(ResumeAttr.FK_Student);
+                return this.GetValStringByKey(ResumeAttr.RefPK);
             }
             set
             {
-                this.SetValByKey(ResumeAttr.FK_Student, value);
+                this.SetValByKey(ResumeAttr.RefPK, value);
             }
         }
         /// <summary>
@@ -139,7 +139,7 @@ namespace BP.Demo
                 Map map = new Map("Demo_Resume", "简历");
 
                 map.AddTBIntPKOID();
-                map.AddTBString(ResumeAttr.FK_Student, null, "学生编号", false, false, 0, 10, 10);
+                map.AddTBString(ResumeAttr.RefPK, null, "学生编号", false, false, 0, 200, 10);
                 map.AddTBString(ResumeAttr.NianYue, null, "年月", true, false, 0, 200, 50);
                 map.AddTBString(ResumeAttr.GongZuoDanWei, null, "工作单位", true, false, 0, 200, 70);
                 map.AddTBString(ResumeAttr.ZhengMingRen, "", "证明人", true, false, 1, 200, 50);

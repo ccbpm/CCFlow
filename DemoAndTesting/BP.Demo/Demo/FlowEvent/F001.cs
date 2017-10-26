@@ -44,8 +44,10 @@ namespace BP.Demo.FlowEvent
         /// <returns></returns>
         public override string SendWhen()
         {
-            //相关的变量,
+            if (SystemConfig.CustomerNo != "CCFlow")
+                return null;
 
+            //相关的变量,
             // 当前的节点, 其他的变量请从 this.HisNode .
             int nodeID = this.HisNode.NodeID;    // int类型的ID.
             string nodeName = this.HisNode.Name; // 当前节点名称.
@@ -59,6 +61,7 @@ namespace BP.Demo.FlowEvent
 
                     this.JumpToNodeID = 103;
                     this.JumpToEmps = "zhoupeng,liping";
+                    this.ND01_SaveAfter();
 
                     return "SendWhen事件已经执行成功。";
                 default:
@@ -89,12 +92,24 @@ namespace BP.Demo.FlowEvent
         /// 方法命名规则为:ND+节点名_事件名.
         /// </summary>
         public void ND01_SaveAfter()
-        {   
+        {
+            if (DBAccess.IsExitsObject("ND101Dtl1") == false)
+                return;
+
+            if (DBAccess.IsExitsTableCol("ND101Dtl1", "XiaoJi") == false)
+                return;
+
+            if (DBAccess.IsExitsObject("ND101") == false)
+                return;
+
             //求出明细表的合计.
             float hj = BP.DA.DBAccess.RunSQLReturnValFloat("SELECT SUM(XiaoJi) as Num FROM ND101Dtl1 WHERE RefPK=" + this.OID, 0);
 
             //更新合计小写 , 把合计转化成大写.
             string sql = "UPDATE ND101 SET DaXie='" + BP.DA.DataType.ParseFloatToCash(hj) + "',HeJi="+hj+"  WHERE OID=" + this.OID;
+            BP.DA.DBAccess.RunSQL(sql);
+
+            sql = "UPDATE ND1Rpt SET DaXie='" + BP.DA.DataType.ParseFloatToCash(hj) + "',HeJi=" + hj + "  WHERE OID=" + this.OID;
             BP.DA.DBAccess.RunSQL(sql);
 
             //if (1 == 2)

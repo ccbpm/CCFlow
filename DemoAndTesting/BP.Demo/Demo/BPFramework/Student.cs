@@ -303,7 +303,7 @@ namespace BP.Demo.BPFramework
 
 
                 //明细表映射.
-                map.AddDtl(new Resumes(), ResumeAttr.FK_Student);
+                map.AddDtl(new Resumes(), ResumeAttr.RefPK);
 
                 //带有参数的方法.
                 RefMethod rm = new RefMethod();

@@ -9,11 +9,10 @@
     <fieldset>
         <legend>&nbsp;电子签名设置&nbsp;</legend>
         <p align="center">
-            <img id="sigimg" src='../../DataUser/Siganture/zhoupeng.jpg' width="120" height="30"
-                border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
+            <img id="sigimg"  width="120" height="30"   border="1" onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
         </p>
         上传<input type="file" name="myfile" id="myfile" />
-            <input id="btn" type="button" value="确定" /></br></br>
+            <input id="btn" type="button" value="确定" onclick="Upload()" /></br></br>
 
         <b>利用扫描仪设置步骤:</b>
         <ul>
@@ -29,38 +28,51 @@
         <!--<B>让系统自动为您创建（请选择字体）:</B><ul><li><a href='Siganture.htm?RefNo=Siganture&DoType=ST'>宋体</a></li> -->
         <!--<li><a href='Siganture.htm?RefNo=Siganture&DoType=LS'>隶书</a></li> 	-->
     </fieldset>
-    <script>
-		//初始化
-        $.ajax({
-            url: Handler + "?DoType=Siganture_Init",
-            dataType:"json",
-            success: function (data) {
-                var arr = sigimg.src.split('/');
-				arr.pop();
-				arr.push(data.No + ".JPG");
 
-				sigimg.src = arr.join('/');
-            }
-        });
+     <script type="text/javascript" language="javascript">
 
-		//点击上传
-		btn.onclick = function(){
-			var url = Handler + "?DoType=Siganture_Save";
-			var xhr = new XMLHttpRequest();	
-			xhr.open('post',url,true);
-			var formData = new FormData();
-			formData.append('file',myfile.files[0]);
+         //页面启动函数.
+         $(function () {
 
-			xhr.send(formData);
-			
-			//上传结束回掉函数
-			xhr.onload = function(){
-				//var data = JSON.parse(this.responseText);
-				//alert(data.msg);
-				alert(this.responseText);
-				location.reload();
-			}
-		}
+             //初始化
+             $.ajax({
+
+                 url: Handler + "?DoType=Siganture_Init",
+                 dataType: "json",
+                 success: function (data) {
+                     var img = document.getElementById("sigimg");
+                     var url = '../../DataUser/Siganture/' + data.No + '.jpg';
+                     img.src = url; 
+                 }
+             });
+
+//             //点击上传
+//             btn.onclick = function () {
+//                
+//             }
+         });
+
+         function Upload() {
+
+             var url = Handler + "?DoType=Siganture_Save";
+             var xhr = new XMLHttpRequest();
+             xhr.open('post', url, true);
+             var formData = new FormData();
+             formData.append('file', myfile.files[0]);
+             xhr.send(formData);
+
+             //上传结束回掉函数
+             xhr.onload = function () {
+
+                 if (this.responseText.indexOf('err@') == 0) {
+                     alert(responseText);
+                     return;
+                 }
+
+                 alert(this.responseText);
+                 location.reload();
+             }
+         }
 	</script>
 </body>
 </html>

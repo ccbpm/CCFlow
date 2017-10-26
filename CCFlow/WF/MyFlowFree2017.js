@@ -81,7 +81,7 @@ function Change() {
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
 function ReqDDL(ddlID) {
-    var v = document.getElementById( 'DDL_' + ddlID).value;
+    var v = document.getElementById('DDL_' + ddlID).value;
     if (v == null) {
         alert('没有找到ID=' + ddlID + '的下拉框控件.');
     }

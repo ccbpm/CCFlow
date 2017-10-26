@@ -3,10 +3,6 @@
 <head>
     <title>驰骋工作流程管理系统</title>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
-    <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <!-- 引用通用的js文件. -->
@@ -33,9 +29,12 @@
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(data);
 
-                    //签名.
-                    $("QianMing").src = "../DataUser/Siganture/" + data.UserNo + ".jpg";
+                    var url = "../../DataUser/Siganture/" + data.UserNo + ".jpg";
 
+
+                    //签名.
+                    var img = document.getElementById("QianMing");
+                    img.src = url;
                     return;
                 }
             });
@@ -46,26 +45,34 @@
 <body>
 
 <fieldset width='100%' >
+
  <legend>&nbsp;基本信息&nbsp;</legend>
-  <p class=BigDoc >用户帐号:&nbsp;&nbsp;<font color=green><div id="UserNo" /></font>&nbsp;&nbsp;
-<br>用户名:&nbsp;&nbsp;<font color=green><div id="UserName" /></font>&nbsp;&nbsp;
+
+  用户帐号: <div id="UserNo" style=" font-color:green " ></div>
+   
+   <br />
+  用户名:<div id="UserName" ></div>
 <HR>
 
-<B>电子签字:<img  id="QianMing" border=1 onerror="this.src='../../DataUser/Siganture/UnName.jpg'"/>
+电子签字:<img  id="QianMing" border=1 src="../../DataUser/Siganture/UnName.jpg"; onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
+
+
 <a href='Siganture.htm' >设置/修改</a>。
-</B><BR><HR>主部门 : <font color=green><div id="DeptName" /></font>
+
+<hr>主部门 : <div id="DeptName" ></div>
+
 <BR>
 <BR>授权情况：未授权 - <a href='Author.htm' >执行授权</a>。
 
 &nbsp;我要:<a href='ChangePassword.htm' >修改密码</a><BR>
 
-<hr><b>信息提示：</b><a href='Profile'>设置/修改</a><br>
+<hr><b>信息提示：</b><a href='Profile.htm'>设置/修改</a><br>
 
-<br>接受短消息提醒手机号 : <font color=green> <div id="Tel" /></font><br>
-<br>接受E-mail提醒 : <font color=green> <div id="Email" /> </font><HR>
+<br>接受短消息提醒手机号 :  <div id="Tel" ></div><br>
+<br>接受E-mail提醒 :        <div id="Email" ></div> <HR>
 
-<B>岗位/部门-权限</B><BR><BR>岗位权限 - <font color=green><div id="Stations" /></font>
-<BR><BR>部门权限 - <font color=green>驰<div id="Depts" />骋软件</font>
+<B>岗位/部门-权限</B><BR><BR>岗位权限 - <div id="Stations" ></div>
+<BR><BR>部门权限 -  <div id="Depts" ></div>
 </p>
 
 </fieldset>

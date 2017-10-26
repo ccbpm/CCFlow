@@ -32,9 +32,24 @@ namespace ccbpm
         public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
             //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
-
-            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+            // if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+            return true;
+        }
+        [WebMethod]
+        public bool SendWhen(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo)
+        {
+            //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
+            // if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+            return true;
+        }
+        [WebMethod]
+        public bool FlowOverBefore(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo)
+        {
+            //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
+            // if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
@@ -112,7 +127,47 @@ namespace ccbpm
         }
         #endregion 发送消息接口.
 
+        #region 其他的接口.
+        /// <summary>
+        /// 打印文件在处理.
+        /// </summary>
+        /// <param name="billFilePath"></param>
+        [WebMethod]
+        public void Print(string billFilePath)
+        {
+        }
+        #endregion
+
         #region 组织结构.
+        /// <summary>
+        /// 用于单点登录的写入SID
+        /// </summary>
+        /// <param name="miyue">配置在web.config中的密码，用于两个系统的握手.</param>
+        /// <param name="userNo">用户ID , 对应Port_Emp的No列.</param>
+        /// <param name="sid">用户SID , 对应Port_Emp的SID列.</param>
+        /// <returns></returns>
+        [WebMethod]
+        public bool WriteUserSID(string miyue, string userNo, string sid)
+        {
+            #region 简单Demo
+            try
+            {
+                if (miyue != "xxweerwerew")
+                    return false;
+
+                if (userNo.Contains(" ")==true)
+                    return false;
+
+                string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + userNo + "'";
+                BP.DA.DBAccess.RunSQL(sql);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            #endregion 简单Demo
+        }
         /// <summary>
         /// 检查用户名密码是否正确
         /// </summary>
@@ -422,5 +477,23 @@ namespace ccbpm
             #endregion 简单 Demo
         }
         #endregion
+
+        #region 事件接口.
+        /// <summary>
+        /// 发送成功要执行的事件
+        /// </summary>
+        /// <param name="flowNo">流程编号</param>
+        /// <param name="nodeID">节点ID</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="userNo">用户编号</param>
+        /// <param name="userName">用户名称</param>
+        /// <returns>执行结果</returns>
+        [WebMethod]
+        public string SendSuccess(string flowNo, int nodeID, Int64 workid, string userNo, string userName)
+        {
+            return null;
+        }
+        #endregion 事件接口.
+
     }
 }

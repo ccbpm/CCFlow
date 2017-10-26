@@ -5,10 +5,49 @@
   SrcType 类型:  SrcType=DB 是数据库, SrcType=WS 是WebServices.
   URL: 链接的字串. 如果是DBType=DB 
   -->
-  
-  <Item No="001" Name="日常办公"  />
-  <Item No="002" Name="人力资源"  />
-  <Item No="003" Name="财务类"    />
-  <Item No="004" Name="信息中心"  />
-
+<Item No="1"   name="起草发文" />
+<Item No="17"   name="劳动合同" />
+<Item No="18"   name="员工转正" />
+<Item No="20"   name="员工调动" />
+<Item No="19"   name="招聘公告" />
+<Item No="21"   name="奖惩管理" />
+<Item No="23"   name="退休管理" />
+<Item No="22"   name="证书借用" />
+<Item No="24"   name="干部聘免" />
+<Item No="25"   name="后备干部入库申请" />
+<Item No="26"   name="后备干部出库申请" />
+<Item No="27"   name="后备干部人才档案" />
+<Item No="33"   name="组织信息" />
+<Item No="28"   name="工人技术等级证书登记" />
+<Item No="29"   name="专业技术职务证书登记" />
+<Item No="30"   name="执业资格证书登记" />
+<Item No="31"   name="职业资格证书登记" />
+<Item No="32"   name="学历证书登记" />
+<Item No="37"   name="印鉴销毁" />
+<Item No="39"   name="采购计划" />
+<Item No="41"   name="设备维修申请" />
+<Item No="45"   name="内部收文" />
+<Item No="2"   name="护照办理申请" />
+<Item No="3"   name="护照使用申请" />
+<Item No="4"   name="培训需求" />
+<Item No="5"   name="关键、青年人才入库" />
+<Item No="6"   name="关键、青年人才出库" />
+<Item No="7"   name="人才库档案" />
+<Item No="36"   name="使用申请" />
+<Item No="38"   name="需求计划" />
+<Item No="40"   name="设备调拨申请" />
+<Item No="42"   name="设备报废申请" />
+<Item No="43"   name="起草收文" />
+<Item No="44"   name="公告维护" />
+<Item No="8"   name="工资总额审批" />
+<Item No="35"   name="印鉴移交" />
+<Item No="10"   name="项目工资申报" />
+<Item No="11"   name="员工岗位工资系数确定（调整）" />
+<Item No="12"   name="绩效工资申报" />
+<Item No="13"   name="年终奖、年薪、考核兑现奖金申报" />
+<Item No="14"   name="补发、补扣、以及奖罚金申报" />
+<Item No="15"   name="免税金额申报" />
+<Item No="16"   name="综合类申报" />
+<Item No="9"    name="公司岗位工资基数申报" />
+<Item No="34"   name="印鉴制作" />
 </NewDataSet>

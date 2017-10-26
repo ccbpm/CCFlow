@@ -21,7 +21,7 @@
         }
 </script>
 </head>
-<body  >
+<body style=" "  >
     <form id="form1" runat="server">
     <div>
         <uc1:Pub ID="Pub1" runat="server" />

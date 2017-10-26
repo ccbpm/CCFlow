@@ -272,7 +272,7 @@
         }
 
         function GetUserSiganture(userNo, userName) {
-            return "<img src='../../DataUser/Siganture/" + userNo + ".jpg' title='" + userName + "' border=0 onerror=\"src='../../DataUser/Siganture/UnName.JPG'\" />";
+            return "<img src='../../DataUser/Siganture/" + userNo + ".jpg' title='" + userName + "' style='height:30px;' border=0 onerror=\"src='../../DataUser/Siganture/UnName.JPG'\" />";
         }
 
         function GetUserSmallIcon(userNo, userName) {

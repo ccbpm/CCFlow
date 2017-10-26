@@ -268,7 +268,8 @@
                             newRow += "<td>" + GetState(work.WFState) + "</td>";
 
                             //备注
-                            newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
+                            //newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
+
                             newRow += "</tr>";
 
                             $("#Table1 tr:last").after(newRow);
@@ -355,13 +356,12 @@
                 title += "<th><a href='?FK_Node=" + nodeID + "&GroupBy=ByNode' >节点</th>";
             }
 
-
             title += "<th>发起日期</th>";
             title += "<th>到达</th>";
             title += "<th>期限</th>";
             title += "<th>状态</th>";
             title += "<th>类型</th>";
-            title += "<th>备注</th>";
+           // title += "<th>备注</th>";
             title += "</tr>";
 
             return title;

@@ -1894,6 +1894,9 @@ function GenerFreeFrm() {
                 var h = flow_Data.Sys_MapData[0].FrmH;
                 var w = flow_Data.Sys_MapData[0].FrmW;
 
+                //表单名称.
+                document.title = flow_Data.Sys_MapData[0].Name;
+
                 $('#topContentDiv').height(h);
                 $('#topContentDiv').width(w);
                 $('.Bar').width(w + 15);

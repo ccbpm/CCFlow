@@ -1,6 +1,5 @@
 ﻿<%@ Page Title="上传文件" Language="C#" MasterPageFile="WinOpen.master" AutoEventWireup="true"
     Inherits="CCFlow.WF.CCForm.WF_CCForm_AttachmentUpload" CodeBehind="AttachmentUpload.aspx.cs"  ResponseEncoding="utf-8"%>
-
 <%@ Register Src="Pub.ascx" TagName="Pub" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -85,6 +84,16 @@
             float:right;
             margin-right:15px;
         }
+        input[type="button"], input[type="submit"]
+{
+    border: 0; /*background: #4D77A7;*/
+    background: #009999;
+    color: #FFF;
+    font-size: 12px;
+    padding: 4px 8px;
+    margin: 5px 3px 5px 3px;
+    border-radius: 5px;
+}
     </style>
 
    <%-- <link   href="../Scripts/Jquery-plug/fileupload/uploadify.css" rel="stylesheet"  type="text/css" />

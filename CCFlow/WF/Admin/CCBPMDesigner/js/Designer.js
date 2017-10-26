@@ -212,7 +212,7 @@ function Designer_ShowMsg(msg, callBack) {
 function FlowProperty() {
 
     url = "../../Comm/En.htm?EnName=BP.WF.Template.FlowExt&PK=" + CCBPM_Data_FK_Flow + "&Lang=CH";
-    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1100, 550, "icon-property", true, null, null, null, function () {
+    OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1000, 550, "icon-property", true, null, null, null, function () {
         //window.location.href = window.location.href;
     });
 

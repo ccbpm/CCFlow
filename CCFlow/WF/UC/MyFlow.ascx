@@ -19,8 +19,6 @@
             return false;
 
         //执行同步.
-        KindEditerSync();
-
         var dll = document.getElementById("ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_DDL_ToNode");
         if (dll) {
             var selectNodeID = dll.options[dll.selectedIndex].value;

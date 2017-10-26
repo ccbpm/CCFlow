@@ -48,24 +48,12 @@ $(window).resize(function () {
 });
  
 function Change() {
-    var btn = document.getElementById('ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Save');
+    var btn = document.getElementById('Btn_Save');
     if (btn != null) {
         if (btn.value.valueOf('*') == -1)
             btn.value = btn.value + '*';
     }
 }
-
-var longCtlID = '';
-function KindEditerSync() {
-    try {
-        if (editor1 != null) {
-            editor1.sync();
-        }
-    }
-    catch (err) {
-    }
-}
-
 
 //20160106 by 柳辉
 //获取页面参数

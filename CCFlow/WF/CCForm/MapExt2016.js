@@ -249,18 +249,17 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
 
     //杨玉慧 模态框 先用这个
     $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().parent().prev().text());
-    $('#iframePopModalForm').attr("src", url);
+    $('#iframePopModalForm').attr("src", url); //绑定连接.
     $('#btnPopValOK').unbind('click');
     $('#btnPopValOK').bind('click', function () {
         //$(ctrl).val("");
         setValForPopval(ctrl.id, dtlWin, "");
+
         //为表单元素反填值
         var returnValSetObj = frames["iframePopModalForm"].window.pageSetData;
         var returnValObj = frames["iframePopModalForm"].window.returnVal;
         if (returnValSetObj != null && returnValObj != null) {
-            if (returnValSetObj[0]
-                .PopValWorkModel ==
-                "Tree" ||
+            if (returnValSetObj[0].PopValWorkModel == "Tree" ||
                 returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
                 frames["iframePopModalForm"].window.GetTreeReturnVal();
                 if (returnValSetObj[0].PopValFormat == "OnlyNo") {
@@ -661,6 +660,11 @@ function FullCtrlDDL(key, ctrlIdBefore, fk_mapExt) {
         success: function (data, textStatus) {
             if (data == "")
                 return;
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
             var dataObj = eval("(" + data + ")"); //转换为json对象 
             var beforeID = ctrlIdBefore.substring(0, ctrlIdBefore.indexOf('DDL_'));

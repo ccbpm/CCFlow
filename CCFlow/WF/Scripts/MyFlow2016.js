@@ -88,27 +88,17 @@ $(window).resize(function () {
 function SysCheckFrm() {
 }
 function Change() {
-    var btn = document.getElementById('ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Save');
+    var btn = document.getElementById('Btn_Save');
     if (btn != null) {
         if (btn.value.valueOf('*') == -1)
             btn.value = btn.value + '*';
     }
 }
-var longCtlID = 'ContentPlaceHolder1_MyFlowUC1_MyFlow1_UCEn1_';
-function KindEditerSync() {
-    try {
-        if (editor1 != null) {
-            editor1.sync();
-        }
-    }
-    catch (err) {
-    }
-}
-
+ 
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
 function ReqDDL(ddlID) {
-    var v = document.getElementById(longCtlID + 'DDL_' + ddlID).value;
+    var v = document.getElementById( 'DDL_' + ddlID).value;
     if (v == null) {
         alert('没有找到ID=' + ddlID + '的下拉框控件.');
     }
@@ -161,7 +151,7 @@ function ReqDtlBObj(dtlTable, DtlColumn, onValue) {
 }
 // 获取TB值
 function ReqTB(tbID) {
-    var v = document.getElementById(longCtlID + 'TB_' + tbID).value;
+    var v = document.getElementById( 'TB_' + tbID).value;
     if (v == null) {
         alert('没有找到ID=' + tbID + '的文本框控件.');
     }
@@ -169,7 +159,7 @@ function ReqTB(tbID) {
 }
 // 获取CheckBox值
 function ReqCB(cbID) {
-    var v = document.getElementById(longCtlID + 'CB_' + cbID).value;
+    var v = document.getElementById( 'CB_' + cbID).value;
     if (v == null) {
         alert('没有找到ID=' + cbID + '的 CheckBox （单选）控件.');
     }
@@ -187,7 +177,7 @@ function ReqAthFileName(athID) {
 
 /// 获取DDL Obj
 function ReqDDLObj(ddlID) {
-    var v = document.getElementById(longCtlID + 'DDL_' + ddlID);
+    var v = document.getElementById( 'DDL_' + ddlID);
     if (v == null) {
         alert('没有找到ID=' + ddlID + '的下拉框控件.');
     }
@@ -195,7 +185,7 @@ function ReqDDLObj(ddlID) {
 }
 // 获取TB Obj
 function ReqTBObj(tbID) {
-    var v = document.getElementById(longCtlID + 'TB_' + tbID);
+    var v = document.getElementById( 'TB_' + tbID);
     if (v == null) {
         alert('没有找到ID=' + tbID + '的文本框控件.');
     }
@@ -203,7 +193,7 @@ function ReqTBObj(tbID) {
 }
 // 获取CheckBox Obj值
 function ReqCBObj(cbID) {
-    var v = document.getElementById(longCtlID + 'CB_' + cbID);
+    var v = document.getElementById( 'CB_' + cbID);
     if (v == null) {
         alert('没有找到ID=' + cbID + '的单选控件(获取CheckBox)对象.');
     }
@@ -211,9 +201,9 @@ function ReqCBObj(cbID) {
 }
 // 设置值.
 function SetCtrlVal(ctrlID, val) {
-    document.getElementById(longCtlID + 'TB_' + ctrlID).value = val;
-    document.getElementById(longCtlID + 'DDL_' + ctrlID).value = val;
-    document.getElementById(longCtlID + 'CB_' + ctrlID).value = val;
+    document.getElementById( 'TB_' + ctrlID).value = val;
+    document.getElementById( 'DDL_' + ctrlID).value = val;
+    document.getElementById( 'CB_' + ctrlID).value = val;
 }
  
 function To(url) {

@@ -240,16 +240,6 @@ function Change() {
             btn.value = btn.value + '*';
     }
 }
-var longCtlID = '';
-function KindEditerSync() {
-    try {
-        if (editor1 != null) {
-            editor1.sync();
-        }
-    }
-    catch (err) {
-    }
-}
  
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
@@ -1167,7 +1157,7 @@ function AfterBindEn_DealMapExt() {
                     var strs = mapExt.Tag.split('$');
                     for (var str in strs) {
                         var str = strs[k];
-                        if (str = "") {
+                        if (str = "" || str==null) {
                             continue;
                         }
 

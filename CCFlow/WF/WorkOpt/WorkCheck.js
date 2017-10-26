@@ -83,13 +83,13 @@
                         }
 
                         html += "<div style='float:left;width:100%;'>";
-                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;' onblur='SaveWorkCheck()'>" + this.Msg + "</textarea>";
+                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()'>" + this.Msg + "</textarea>";
                         html += "</div>";
 
                         html += "</td>";
                     }
                     else {
-                        html += '<td style="word-wrap: break-word;line-height:30px;"><font color=green>' + this.Msg + '</font></td>';
+                        html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" ><font color=green>' + this.Msg + '</font></td>';
                     }
 
                     html += '</tr>';

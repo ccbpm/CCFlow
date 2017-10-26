@@ -336,7 +336,6 @@ namespace BP.WF.HttpHandler
             attr.GroupID = this.GetRequestValInt("GroupFeid");
 
             attr.UIContralType = En.UIContralType.DDL;
-
             attr.MyDataType = DataType.AppInt;
             attr.LGType = En.FieldTypeS.Enum;
 
@@ -345,10 +344,8 @@ namespace BP.WF.HttpHandler
             if (sem.RetrieveFromDBSources() != 0)
                 attr.Name = sem.Name;
             else
-                attr.Name = "枚举"+attr.UIBindKey;
-
+                attr.Name = "枚举" + attr.UIBindKey;
             attr.Insert();
-
             return attr.MyPK;
         }
 

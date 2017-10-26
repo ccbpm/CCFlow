@@ -57,7 +57,7 @@ namespace BP.WF.HttpHandler
             BP.Port.Emp emp = new Emp();
             emp.No = WebUser.No;
             emp.Retrieve();
-            
+
             //部门名称.
             ht.Add("DeptName", emp.FK_DeptText);
 
@@ -104,30 +104,25 @@ namespace BP.WF.HttpHandler
             BP.WF.Port.WFEmp wfemp = new Port.WFEmp(WebUser.No);
             ht.Add("Tel", wfemp.Tel);
             ht.Add("Email", wfemp.Email);
-
             return BP.Tools.Json.ToJson(ht);
         }
 
         #region 图片签名.
         public string Siganture_Init()
         {
+            if (BP.Web.WebUser.NoOfRel == null)
+                return "err@登录信息丢失";
+
             Hashtable ht = new Hashtable();
             ht.Add("No", BP.Web.WebUser.No);
             ht.Add("Name", BP.Web.WebUser.Name);
             ht.Add("FK_Dept", BP.Web.WebUser.FK_Dept);
             ht.Add("FK_DeptName", BP.Web.WebUser.FK_DeptName);
-
             return BP.Tools.Json.ToJson(ht);
         }
         public string Siganture_Save()
         {
             HttpPostedFile f = context.Request.Files[0];
-
-            //FileUpload f = (FileUpload)this.FindControl("F");
-            //if (f.HasFile == false)
-            //    return "err@请上传文件.";
-
-            //if (f.FileName.EndsW
 
             //判断文件类型.
             string fileExt = ",bpm,jpg,jpeg,png,gif,";
@@ -153,7 +148,7 @@ namespace BP.WF.HttpHandler
             }
 
             f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.No + ".jpg");
-            f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
+           // f.SaveAs(BP.Sys.SystemConfig.PathOfWebApp + "/DataUser/Siganture/" + WebUser.Name + ".jpg");
 
             //f.PostedFile.InputStream.Close();
             //f.PostedFile.InputStream.Dispose();

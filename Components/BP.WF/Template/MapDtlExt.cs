@@ -1023,12 +1023,16 @@ namespace BP.WF.Template
 
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
-                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导出？", false, false);
-                map.AddBoolean(MapDtlAttr.IsImp, true, "是否可以导入？", false, false);
-                map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?", false, false);
-                map.AddTBString(MapDtlAttr.ImpSQLSearch, null, "查询SQL", true, false, 0, 500, 20,true);
-                map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20,true);
-                map.AddTBString(MapDtlAttr.ImpSQLFull, null, "数据填充SQL", true, false, 0, 500, 20,true);
+
+                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导出？(导出到Excel,Txt,html类型文件.)", true, true, true);
+                map.AddBoolean(MapDtlAttr.IsImp, true, "是否可以导入？(从约定的模版格式文件里导入到表.)", true, true, true);
+
+                map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?(定义导入数据源导入到表格里)", true, true, true);
+
+                map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", true, false, true);
+                map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false,true);
+                map.AddTBStringDoc(MapDtlAttr.ImpSQLFull, null, "数据填充SQL(打开查询窗口要现实的tabel的SQL)", true, false,true);
+
                 #endregion 导入导出填充.
 
                 #region 多表头.

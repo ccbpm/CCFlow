@@ -266,7 +266,7 @@
                 type: 'post',
                 async: false,
                 data: formData2,
-                url: Handler + "?DoType=InitPopVal&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+                url: Handler + "?DoType=PopVal_Init&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
                 dataType: 'html',
                 success: function (data) {
                     if (data != null) {
@@ -541,7 +541,7 @@
             //$('#tree').css('display', 'block');
             $('#orgjstree').css('display', 'block');
 
-            var url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + getQueryStringByName('FK_MapExt');
+            var url = Handler + '?DoType=PopVal_InitTree&FK_MapExt=' + getQueryStringByName('FK_MapExt');
             //初始化Tree
             var jstreeOption = {
                 'core': {
@@ -576,7 +576,7 @@
                                 }
                             });
                         } else {
-                            url = Handler + '?DoType=InitPopValTree&FK_MapExt=' + getQueryStringByName('FK_MapExt') + '&ParentNo=' + node.id;
+                            url = Handler + '?DoType=PopVal_InitTree&FK_MapExt=' + getQueryStringByName('FK_MapExt') + '&ParentNo=' + node.id;
                             $.ajax({
                                 type: 'post',
                                 async: true,
@@ -646,8 +646,8 @@
             PageSize: pageSize,
             PageIndex: 1,
             DivId: 'flowListDiv',
-            countUrl: Handler + "?DoType=InitPopValTablePageCount&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
-            listUrl: Handler + "?DoType=InitPopValTablePageList&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+            countUrl: Handler + "?DoType=PopVal_InitTablePageCount&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+            listUrl: Handler + "?DoType=PopVal_InitTablePageList&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
             RenderOverFun: function () {
                 //为CHECKBOX radio绑定事件
                 $('#flowListDiv div table tbody .ck_tbody').bind('change', checkBoxChange);

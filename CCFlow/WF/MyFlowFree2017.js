@@ -556,12 +556,14 @@ function AfterBindEn_DealMapExt() {
     var mapExtArr = workNode.Sys_MapExt;
     
     for (var i = 0; i < mapExtArr.length; i++) {
+
         var mapExt = mapExtArr[i];
 
         alert(mapExt);
 
         switch (mapExt.ExtType) {
             case "PopVal": //PopVal窗返回值
+            case "PopFullCtrl" //弹出表格.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");
                 tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
@@ -627,6 +629,7 @@ function AfterBindEn_DealMapExt() {
                 var eleHtml = ' <div class="input-group form_tree" style="width:' + tb.width() + 'px;height:' + tb.height() + 'px">' + tb.parent().html() +
                 '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle(document.getElementById('TB_" + mapExt.AttrOfOper + "'),'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
+
                 break;
             case "RegularExpression": //正则表达式  统一在保存和提交时检查
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');

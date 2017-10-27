@@ -219,18 +219,20 @@ function SetEleValByName(eleName, val) {
     }
 }
 
-
+function PopFullCtrl(val1, val2) {
+    alert(val1,val2);
+}
 
 /* 内置的Pop自动返回值. google 版 软通*/
-function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, title, formData, dtlNo) {
+function ReturnValCCFormPopValGoogle(extType,ctrl, fk_mapExt, refEnPK, width, height, title, formData, dtlNo) {
     //update by dgq 修改路径
     //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
 
     //设置摸态框的宽度和高度
     $('#returnPopValModal .modal-dialog').height(height);
     $('#returnPopValModal .modal-dialog').width(width);
-    $('#returnPopValModal .modal-dialog').css('margin-left', 'atuo');
-    $('#returnPopValModal .modal-dialog').css('margin-right', 'atuo');
+    $('#returnPopValModal .modal-dialog').css('margin-left', 'auto');
+    $('#returnPopValModal .modal-dialog').css('margin-right', 'auto');
         
     //ctrl = $('#' + ctrl);
     var wfpreHref = GetLocalWFPreHref();
@@ -245,25 +247,37 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
         fd = getFormData(false, false);
     }
 
-    url = wfpreHref + '/WF/CCForm/PopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape(fd)+"&m="+Math.random();
+    if (extType=="PopVal")
+        url = wfpreHref + '/WF/CCForm/PopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape(fd) + "&m=" + Math.random();
+
+    if (extType == "PopFullCtrl")
+        url = wfpreHref + '/WF/CCForm/PopFullCtrl.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape(fd) + "&m=" + Math.random();
 
     //杨玉慧 模态框 先用这个
     $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().parent().prev().text());
     $('#iframePopModalForm').attr("src", url); //绑定连接.
     $('#btnPopValOK').unbind('click');
     $('#btnPopValOK').bind('click', function () {
+
+
         //$(ctrl).val("");
         setValForPopval(ctrl.id, dtlWin, "");
 
         //为表单元素反填值
         var returnValSetObj = frames["iframePopModalForm"].window.pageSetData;
         var returnValObj = frames["iframePopModalForm"].window.returnVal;
+
+        //设置值.
+        if (extType == "PopFullCtrl") {
+            PopFullCtrl(returnValSetObj, returnValObj);
+            return;
+        }
+
         if (returnValSetObj != null && returnValObj != null) {
             if (returnValSetObj[0].PopValWorkModel == "Tree" ||
                 returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
                 frames["iframePopModalForm"].window.GetTreeReturnVal();
                 if (returnValSetObj[0].PopValFormat == "OnlyNo") {
-                    //$(ctrl).val(returnValObj.No);
                     setValForPopval(ctrl.id, dtlWin, returnValObj.No);
                 } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
                     //$(ctrl).val(returnValObj.Name);
@@ -283,7 +297,7 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
             } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
                 returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
                 if (returnValSetObj[0].PopValFormat == "OnlyNo") {
-                    //$(ctrl).val(returnValObj.No);
+                    $(ctrl).val(returnValObj.No);
                     setValForPopval(ctrl.id, dtlWin, returnValObj.No);
                 } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
                     //$(ctrl).val(returnValObj.Name);

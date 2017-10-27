@@ -80,7 +80,7 @@ function InitForm() {
 
 
     //处理下拉框级联等扩展信息
-    AfterBindEn_DealMapExt();
+    AfterBindEn_DealMapExt(frmData);
 
     //设置默认值
     for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
@@ -1045,13 +1045,14 @@ function InitMapAttr(mapAttrData, frmData) {
 }
 
 //处理MapExt
-function AfterBindEn_DealMapExt() {
-    var workNode = JSON.parse(jsonStr);
+function AfterBindEn_DealMapExt(workNode) {
+
     var mapExtArr = workNode.Sys_MapExt;
     for (var i = 0; i < mapExtArr.length; i++) {
         var mapExt = mapExtArr[i];
         switch (mapExt.ExtType) {
-            case "PopVal"://PopVal窗返回值
+            case "PopVal": //PopVal窗返回值
+            case "PopFullCtrl": //PopFullCtrl.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");
                 tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
@@ -1110,10 +1111,11 @@ function AfterBindEn_DealMapExt() {
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
                     default:
+                        icon = "glyphicon glyphicon-th";
                         break;
                 }
                 var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
-                '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
+                '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('" + mapExt.ExtType + "','TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
                 break;
             case "RegularExpression"://正则表达式  统一在保存和提交时检查
@@ -1965,7 +1967,7 @@ function GenerFreeFrm() {
             Common.MaxLengthError();
 
             //处理下拉框级联等扩展信息
-            AfterBindEn_DealMapExt();
+            AfterBindEn_DealMapExt(frmData);
 
             //设置默认值
             for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {

@@ -108,50 +108,6 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>Demo_PopGradeSelectedOneRow_MingChen</MyPK>
-    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
-    <KeyOfEn>MingChen</KeyOfEn>
-    <Name>名称</Name>
-    <DefVal />
-    <UIContralType>0</UIContralType>
-    <MyDataType>1</MyDataType>
-    <LGType>0</LGType>
-    <UIWidth>120</UIWidth>
-    <UIHeight>23</UIHeight>
-    <UIBindKey />
-    <UIRefKey />
-    <UIRefKeyText />
-    <UIVisible>1</UIVisible>
-    <UIIsEnable>1</UIIsEnable>
-    <UIIsLine>0</UIIsLine>
-    <UIIsInput>0</UIIsInput>
-    <IsSigan>0</IsSigan>
-    <X>374</X>
-    <Y>61.5</Y>
-    <GUID />
-    <Tag />
-    <EditType>0</EditType>
-    <Idx>3</Idx>
-    <AtPara />
-    <GroupIDText>0</GroupIDText>
-    <Tip />
-    <ColSpan>1</ColSpan>
-    <ExtIsSum>0</ExtIsSum>
-    <ExtDefVal>0</ExtDefVal>
-    <ExtDefValText>0</ExtDefValText>
-    <ExtRows>1</ExtRows>
-    <IsRichText>0</IsRichText>
-    <IsSupperText>0</IsSupperText>
-    <DefValText>0</DefValText>
-    <RBShowModel>0</RBShowModel>
-    <IsEnableJS>0</IsEnableJS>
-    <UIIsMultiple>0</UIIsMultiple>
-    <MinLen>0</MinLen>
-    <MaxLen>300</MaxLen>
-    <GroupID>3266</GroupID>
-    <IsEnableInAPP>1</IsEnableInAPP>
-  </Sys_MapAttr>
-  <Sys_MapAttr>
     <MyPK>Demo_PopGradeSelectedOneRow_DianHua</MyPK>
     <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
     <KeyOfEn>DianHua</KeyOfEn>
@@ -283,12 +239,140 @@
     <GroupID>3266</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_PopGradeSelectedOneRow_MingCheng</MyPK>
+    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
+    <KeyOfEn>MingCheng</KeyOfEn>
+    <Name>名称</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>353</X>
+    <Y>65.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>7</Idx>
+    <AtPara>@IsRichText=0@IsSupperText=0</AtPara>
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <UIIsMultiple>0</UIIsMultiple>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>3266</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_PopGradeSelectedOneRow_RDT</MyPK>
+    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <Idx>8</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <UIIsMultiple>0</UIIsMultiple>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>3266</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+  </Sys_MapAttr>
+  <Sys_MapExt>
+    <MyPK>PopFullCtrl_Demo_PopGradeSelectedOneRow_YuanGongBianHao</MyPK>
+    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
+    <ExtType>PopFullCtrl</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>YuanGongBianHao</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc>local</FK_DBSrc>
+    <Doc />
+    <Tag />
+    <Tag1 />
+    <Tag2>SELECT No as YGBH, Name as MingCheng, Tel as DianHua, Addr as DiZhi,
+Email as YouJian FROM WF_Emp
+WHERE No LIKE ~z%~</Tag2>
+    <Tag3>SELECT No as YGBH, Name as MingCheng, Tel as DianHua, Addr as DiZhi,
+Email as YouJian FROM WF_Emp
+WHERE No like ~%@Key%~ or Name LIKE ~%@Key%~ 　</Tag3>
+    <Tag4>SELECT No as YGBH, Name as MingCheng, Tel as DianHua, Addr as DiZhi,
+Email as YouJian FROM WF_Emp
+WHERE No =~@Key~ </Tag4>
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
   <Sys_FrmLab>
     <MyPK>12CA3963-32CF-F672-1991-7AE9865364D3</MyPK>
     <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
     <Text>电话</Text>
     <X>521</X>
     <Y>67</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>8E11D0EA-94CB-F325-031E-642A93E62221</MyPK>
+    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
+    <Text>名称</Text>
+    <X>302</X>
+    <Y>72</Y>
     <FontColor>#000000</FontColor>
     <FontName>Arial</FontName>
     <FontSize>15</FontSize>
@@ -317,20 +401,6 @@
     <Text>员工编号</Text>
     <X>59</X>
     <Y>73</Y>
-    <FontColor>#000000</FontColor>
-    <FontName>Arial</FontName>
-    <FontSize>15</FontSize>
-    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>D6B20724-5368-10FC-B2F4-E98E2BDF921A</MyPK>
-    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
-    <Text>名称</Text>
-    <X>332</X>
-    <Y>66</Y>
     <FontColor>#000000</FontColor>
     <FontName>Arial</FontName>
     <FontSize>15</FontSize>

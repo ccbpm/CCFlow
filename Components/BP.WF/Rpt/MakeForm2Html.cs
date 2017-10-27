@@ -695,9 +695,14 @@ namespace BP.WF
                         {
                             try
                             {
-                                //把文件copy到,
-                                string file = item.MakeFullFileFromFtp();
-                                System.IO.File.Copy(file, path + "\\pdf\\" + item.FileName, true);
+                                string toFile = path + "\\pdf\\" + item.FileName;
+                                if (System.IO.File.Exists(toFile) == false)
+                                {
+                                    //把文件copy到,
+                                    string file = item.MakeFullFileFromFtp();
+                                    System.IO.File.Copy(file, toFile, true);
+                                }
+
                                 sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                             }
                             catch (Exception ex)
@@ -710,8 +715,12 @@ namespace BP.WF
                         {
                             try
                             {
-                                //把文件copy到,
-                                System.IO.File.Copy(item.FileFullName, path + "\\pdf\\" + item.FileName, true);
+                                  string toFile = path + "\\pdf\\" + item.FileName;
+                                  if (System.IO.File.Exists(toFile) == false)
+                                  {
+                                      //把文件copy到,
+                                      System.IO.File.Copy(item.FileFullName, path + "\\pdf\\" + item.FileName, true);
+                                  }
                                 sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                             }
                             catch (Exception ex)

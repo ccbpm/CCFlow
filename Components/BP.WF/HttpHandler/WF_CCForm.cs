@@ -1918,5 +1918,18 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }
+
+        #region 从表的选项.
+        public string DtlOpt_Init()
+        {
+            MapDtl dtl = new MapDtl(this.FK_MapDtl);
+
+            DataSet ds = new DataSet();
+            DataTable dt = DBAccess.RunSQLReturnTable(dtl.ImpSQLInit);
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion 从表的选项.
+
     }
 }

@@ -1077,9 +1077,26 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "生成英文字段"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".GenerAttrs";
+                rm.RefMethodType = RefMethodType.Func;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+
+        public string GenerAttrs()
+        {
+            string strs = "";
+            MapAttrs attrs = new MapAttrs(this.No);
+            foreach (MapAttr item in attrs)
+            {
+                strs += "\t\n " + item.KeyOfEn + ",";
+            }
+            return strs;
         }
         /// <summary>
         /// 高级设置

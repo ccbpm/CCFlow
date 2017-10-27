@@ -131,6 +131,13 @@ namespace BP.Sys
         #endregion
 
         #region OA接口地址配置
+        public static string BpmMobileAddress
+        {
+            get
+            {
+                return SystemConfig.AppSettings["BpmMobileAddress"];
+            }
+        }
         public static string OAAddress
         {
             get
@@ -138,6 +145,7 @@ namespace BP.Sys
                 return SystemConfig.AppSettings["OAAddress"];
             }
         }
+
         #endregion
 
         #region 办公助手接口地址配置

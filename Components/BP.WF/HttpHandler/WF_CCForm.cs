@@ -1920,6 +1920,10 @@ namespace BP.WF.HttpHandler
         }
 
         #region 从表的选项.
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <returns></returns>
         public string DtlOpt_Init()
         {
             MapDtl dtl = new MapDtl(this.FK_MapDtl);
@@ -1929,6 +1933,10 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(dt);
         }
+        /// <summary>
+        /// 增加
+        /// </summary>
+        /// <returns></returns>
         public string DtlOpt_Add()
         {
             MapDtl dtl = new MapDtl(this.FK_MapDtl);
@@ -1958,6 +1966,10 @@ namespace BP.WF.HttpHandler
 
             return "成功的导入了["+i+"]行数据...";
         }
+        /// <summary>
+        /// 执行查询.
+        /// </summary>
+        /// <returns></returns>
         public string DtlOpt_Search()
         {
             MapDtl dtl = new MapDtl(this.FK_MapDtl);

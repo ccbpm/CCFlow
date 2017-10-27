@@ -535,7 +535,7 @@ namespace BP.WF.HttpHandler
             {
                 string str = context.Request.QueryString["FK_MapDtl"];
                 if (str == null || str == "" || str == "null")
-                    return null;
+                    str = context.Request.QueryString["EnsName"];
                 return str;
             }
         }

@@ -230,7 +230,7 @@ namespace CCFlow.WF.CCForm
             DataTable dt = null;
             try
             {
-                sql = dtl.ImpSQLFull.Clone() as string;
+                sql = dtl.ImpSQLFullOneRow.Clone() as string;
                 ids = ids.Replace(",", "','");
                 sql = sql.Replace("@Keys", ids.Substring(0, ids.Length - 3));
                 dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
@@ -238,7 +238,7 @@ namespace CCFlow.WF.CCForm
             }
             catch
             {
-                sql = dtl.ImpSQLFull.Clone() as string;
+                sql = dtl.ImpSQLFullOneRow.Clone() as string;
                 sql = sql.Replace("@Keys", ids.Substring(0, ids.Length - 2));
                 dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             }

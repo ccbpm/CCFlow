@@ -14,6 +14,16 @@
 		<script language="JavaScript" src="ActiveX.js"></script>
 		<base target="_self" />
 		<LINK href="./Style/Table0.css" type="text/css" rel="stylesheet">
+
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <link href="../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+     <base target="_self" /> 
+
 		<script language="javascript" for="document" event="onkeydown">
 <!--
  if (window.event.srcElement.tagName="TEXTAREA") 
@@ -26,8 +36,12 @@
 		<script language="javascript" >
 function ShowIt(m)
 {
-   var url='Method.aspx?M='+m;
-   var a=window.showModalDialog( url, 'OneVs' ,'dialogHeight: 400px; dialogWidth: 500px; dialogTop: 100px; dialogLeft: 110px; center: yes; help: no'); 
+    var url = 'Method.aspx?M=' + m;
+    OpenEasyUiDialog(url, "eudlgframe", "方法执行", 600, 450, "icon-edit", true, null, null, null, function () {
+        window.location.href = window.location.href;
+    });
+
+  // var a=window.showModalDialog( url, 'OneVs' ,'dialogHeight: 400px; dialogWidth: 500px; dialogTop: 100px; dialogLeft: 110px; center: yes; help: no'); 
 }
 </script>
 	</HEAD>

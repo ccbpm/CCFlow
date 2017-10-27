@@ -13,8 +13,6 @@
     <script language="JavaScript" src="JScript.js"></script>
     <script language="JavaScript" src="Menu.js"></script>
     <base target="_self" />
-    <link href="./Style/Table.css" type="text/css" rel="stylesheet">
-    <link href="./Style/Table0.css" type="text/css" rel="stylesheet">
 
      <link href='./Style/Table0.css' rel='stylesheet' type='text/css' />
         <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
@@ -23,9 +21,6 @@
         <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
 		<script language="JavaScript" src="JScript.js" type="text/javascript"></script>
 		<script language="JavaScript" src="Menu.js" type="text/javascript"></script>
-		<script language="JavaScript" src="ShortKey.js" type="text/javascript"></script>
-        <script src="./JS/Calendar/WdatePicker.js" type="text/javascript"></script>
-        <link href="./JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
         <link href='./Style/Table0.css' rel='stylesheet' type='text/css' />
 
 </head>

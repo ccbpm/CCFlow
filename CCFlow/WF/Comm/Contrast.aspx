@@ -8,8 +8,7 @@
 <!DocType HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <HTML>
 	<HEAD>
-		<title>感谢您选择:<%= BP.Sys.SystemConfig.DeveloperShortName %>
-			-> 信息列表</title>
+		<title>驰骋技术</title>
 		<meta content="Microsoft Visual Studio .NET 7.1" name="GENERATOR"/>
 		<meta content="C#" name="CODE_LANGUAGE">
 		<meta content="JavaScript" name="vs_defaultClientScript">

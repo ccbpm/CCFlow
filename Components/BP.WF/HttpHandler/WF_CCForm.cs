@@ -997,7 +997,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public string InitPopValTree()
+        public string PopVal_InitTree()
         {
             string mypk = this.GetRequestVal("FK_MapExt");
 
@@ -1072,7 +1072,7 @@ namespace BP.WF.HttpHandler
         /// 初始化PopVal的值   除了分页表格模式之外的其他数据值
         /// </summary>
         /// <returns></returns>
-        public string InitPopVal()
+        public string PopVal_Init()
         {
             MapExt me = new MapExt();
             me.MyPK = this.FK_MapExt;
@@ -1303,7 +1303,7 @@ namespace BP.WF.HttpHandler
         /// 初始化PopVal 分页表格模式的Count  杨玉慧
         /// </summary>
         /// <returns></returns>
-        public string InitPopValTablePageCount()
+        public string PopVal_InitTablePageCount()
         {
             MapExt me = new MapExt();
             me.MyPK = this.FK_MapExt;
@@ -1467,7 +1467,7 @@ namespace BP.WF.HttpHandler
         /// 初始化PopVal分页表格的List  杨玉慧
         /// </summary>
         /// <returns></returns>
-        public string InitPopValTablePageList()
+        public string PopVal_InitTablePageList()
         {
             MapExt me = new MapExt();
             me.MyPK = this.FK_MapExt;

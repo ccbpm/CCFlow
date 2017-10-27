@@ -77,6 +77,10 @@ namespace BP.Sys
         /// 特别附件特别权限
         /// </summary>
         public const string SepcAthSepcUsers = "SepcAthSepcUsers";
+        /// <summary>
+        /// pop填充其他控件
+        /// </summary>
+        public const string PopFullCtrl = "PopFullCtrl";
     }
 	public class MapExtXml:XmlEnNoName
 	{

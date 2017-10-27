@@ -856,6 +856,9 @@ namespace BP.Sys
                 case MapExtXmlList.TBFullCtrl:
                     this.MyPK = MapExtXmlList.TBFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
+                case MapExtXmlList.PopFullCtrl:
+                    this.MyPK = MapExtXmlList.PopFullCtrl + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    break;
                 case MapExtXmlList.AutoFull:
                     this.MyPK = MapExtXmlList.AutoFull + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;

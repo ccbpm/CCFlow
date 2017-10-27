@@ -842,5 +842,222 @@ namespace BP.WF.HttpHandler
         }
         #endregion xxx 界面方法.
 
+
+        #region PopFullCtrl 功能界面 .
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <returns></returns>
+        public string PopFullCtrl_Save()
+        {
+            try
+            {
+                MapExt me = new MapExt();
+                int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PopFullCtrl,
+                    MapExtAttr.FK_MapData, this.FK_MapData,
+                    MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+                me.FK_MapData = this.FK_MapData;
+                me.AttrOfOper = this.KeyOfEn;
+                me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
+
+
+                me.Tag2 = this.GetValFromFrmByKey("TB_Tag2"); //要执行的初始化sql
+                me.Tag3 = this.GetValFromFrmByKey("TB_Tag3"); //查询sql
+                me.Tag4 = this.GetValFromFrmByKey("TB_Tag4"); //赋值sql.
+
+                if (me.Tag3.Contains("@Key") == false)
+                    return "err@查询SQL配置错误，没有包含@Key字段. ";
+
+                if (me.Tag4.Contains("@Key") == false)
+                    return "err@赋值SQL配置错误，没有包含@Key字段. ";
+
+                me.ExtType = MapExtXmlList.PopFullCtrl;
+
+                //执行保存.
+                me.InitPK();
+
+                if (me.Update() == 0)
+                    me.Insert();
+
+                return "保存成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        public string PopFullCtrl_Delete()
+        {
+            MapExt me = new MapExt();
+            me.Delete(MapExtAttr.ExtType, MapExtXmlList.PopFullCtrl,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            return "删除成功.";
+        }
+        public string PopFullCtrl_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //加载数据源.
+            SFDBSrcs srcs = new SFDBSrcs();
+            srcs.RetrieveAll();
+            DataTable dtSrc = srcs.ToDataTableField();
+            dtSrc.TableName = "Sys_SFDBSrc";
+            ds.Tables.Add(dtSrc);
+
+            // 加载 mapext 数据.
+            MapExt me = new MapExt();
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PopFullCtrl,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            if (i == 0)
+            {
+                me.FK_MapData = this.FK_MapData;
+                me.AttrOfOper = this.KeyOfEn;
+                me.FK_DBSrc = "local";
+            }
+
+            //这个属性没有用.
+            me.W = i;  //用于标记该数据是否保存?  从而不现实填充从表，填充下拉框.按钮是否可以用.
+            if (me.FK_DBSrc == "")
+                me.FK_DBSrc = "local";
+
+            //去掉 ' 号.
+            me.SetValByKey("Doc", me.Doc);
+
+            DataTable dt = me.ToDataTableField();
+            dt.TableName = "Sys_MapExt";
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 填充从表
+        /// </summary>
+        /// <returns></returns>
+        public string PopFullCtrlDtl_Init()
+        {
+            MapExt me = new MapExt(this.MyPK);
+
+            string[] strs = me.Tag1.Split('$');
+            // 格式为: $ND101Dtl2:SQL.
+
+            MapDtls dtls = new MapDtls();
+            dtls.Retrieve(MapDtlAttr.FK_MapData, me.FK_MapData);
+            foreach (string str in strs)
+            {
+                if (string.IsNullOrEmpty(str) || str.Contains(":") == false)
+                    continue;
+
+                string[] kvs = str.Split(':');
+                string fk_mapdtl = kvs[0];
+                string sql = kvs[1];
+
+                foreach (MapDtl dtl in dtls)
+                {
+                    if (dtl.No != fk_mapdtl)
+                        continue;
+                    dtl.MTR = sql.Trim();
+                }
+            }
+
+            foreach (MapDtl dtl in dtls)
+            {
+                string cols = "";
+                MapAttrs attrs = new MapAttrs(dtl.No);
+                foreach (MapAttr item in attrs)
+                {
+                    if (item.KeyOfEn == "OID" || item.KeyOfEn == "RefPKVal" || item.KeyOfEn == "RefPK")
+                        continue;
+
+                    cols += item.KeyOfEn + ",";
+                }
+                dtl.Alias = cols; //把ptable作为一个数据参数.
+            }
+            return dtls.ToJson();
+        }
+
+        public string PopFullCtrlDtl_Save()
+        {
+            MapDtls dtls = new MapDtls(this.FK_MapData);
+            MapExt me = new MapExt(this.MyPK);
+
+            string str = "";
+            foreach (MapDtl dtl in dtls)
+            {
+                string sql = this.GetRequestVal("TB_" + dtl.No);
+                sql = sql.Trim();
+                if (sql == "" || sql == null)
+                    continue;
+
+                if (sql.Contains("@Key") == false)
+                    return "err@在配置从表:" + dtl.No + " sql填写错误, 必须包含@Key列, @Key就是当前文本框输入的值. ";
+
+                str += "$" + dtl.No + ":" + sql;
+            }
+            me.Tag1 = str;
+            me.Update();
+
+            return "保存成功.";
+        }
+
+        public string PopFullCtrlDDL_Init()
+        {
+            MapExt myme = new MapExt(this.MyPK);
+            MapAttrs attrs = new MapAttrs(myme.FK_MapData);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
+                MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
+
+            string[] strs = myme.Tag.Split('$');
+            foreach (MapAttr attr in attrs)
+            {
+                foreach (string s in strs)
+                {
+                    if (s == null)
+                        continue;
+                    if (s.Contains(attr.KeyOfEn + ":") == false)
+                        continue;
+
+                    string[] ss = s.Split(':');
+                    attr.DefVal = ss[1]; //使用这个字段作为对应设置的sql.
+                }
+            }
+
+            return attrs.ToJson();
+        }
+        public string PopFullCtrlDDL_Save()
+        {
+            MapExt myme = new MapExt(this.MyPK);
+
+            MapAttrs attrs = new MapAttrs(myme.FK_MapData);
+            attrs.Retrieve(MapAttrAttr.FK_MapData, myme.FK_MapData,
+                MapAttrAttr.UIIsEnable, 1, MapAttrAttr.UIContralType, (int)UIContralType.DDL);
+
+            MapExt me = new MapExt(this.MyPK);
+
+            string str = "";
+            foreach (MapAttr attr in attrs)
+            {
+
+                string sql = this.GetRequestVal("TB_" + attr.KeyOfEn);
+                sql = sql.Trim();
+                if (sql == "" || sql == null)
+                    continue;
+
+                if (sql.Contains("@Key") == false)
+                    return "err@在配置从表:" + attr.KeyOfEn + " sql填写错误, 必须包含@Key列, @Key就是当前文本框输入的值. ";
+
+                str += "$" + attr.KeyOfEn + ":" + sql;
+            }
+            me.Tag = str;
+            me.Update();
+
+            return "保存成功.";
+        }
+        #endregion PopFullCtrl 功能界面.
+
     }
 }

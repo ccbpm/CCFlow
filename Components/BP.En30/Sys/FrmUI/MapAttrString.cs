@@ -182,6 +182,13 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "Pop自动完成";
+                rm.ClassMethodName = this.ToString() + ".DoPopFullCtrl()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 rm = new RefMethod();
                 rm.Title = "脚本验证";
                 rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
@@ -286,6 +293,10 @@ namespace BP.Sys.FrmUI
         public string DoTBFullCtrl()
         {
             return "/WF/Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
+        }
+        public string DoPopFullCtrl()
+        {
+            return "/WF/Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
         }
         /// <summary>
         /// 设置级联

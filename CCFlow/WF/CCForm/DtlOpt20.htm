@@ -6,13 +6,18 @@
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../Comm/Gener.js"></script>
     <script type="text/javascript" src="../Scripts/config.js"></script>
+
     <script type="text/javascript" language="javascript" >
+
+        var result = null;
         //页面启动函数.
         $(function () {
 
             $("#Msg").html("<img src=../Img/loading.gif />正在加载,请稍后......");
 
-            var url = "";
+            var href = window.location.href;
+            var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+            var url = Handler + "?DoType=DtlOpt_Init&" + urlParam + "&m=" + Math.random();
 
             $.ajax({
                 type: 'post',
@@ -20,9 +25,6 @@
                 url: url,
                 dataType: 'html',
                 success: function (data) {
-
-                    $("#Msg").html("");
-                    return;
 
                     if (data.indexOf('err@') == 0) {
                         alert(data); //如果是异常，就提提示.
@@ -35,25 +37,114 @@
                         return;
                     }
 
-                    $("#Msg").html(data);
+
+                    $("#Table1").html(data);
+
+                    data = JSON.parse(data);
+
+                    result = data;
+
+                    var html = "";
+                    html += "<table style='width:100%;' >";
+
+                    //输出列名.
+                    html += "<tr>";
+                    for (var attr in result) {
+                        var myrow = result[attr];
+
+                        var myidx = 0;
+                        for (var myfield in myrow) {
+
+                            if (myidx == 0)
+                                html += "<th><input type='checkbox' onclick='CheckAll()' id='CB_CheckAll' ><label for='CB_CheckAll'>" + myfield + "</label></th>";
+                            else
+                                html += "<th>" + myfield + "</th>";
+
+                            myidx++;
+                        }
+                        break;
+                    }
+                    html += "</th>";
+
+                    //输出数据.
+                    for (var i = 0; i < result.length; i++) {
+
+                        html += "<tr>";
+                        var row = result[i];
+
+                        var idx = 0;
+                        for (var attr in row) {
+                            if (idx == 0) {
+                                html += "<td><input type='checkbox'  id='CB_" + row[attr] + "' ><label for='CB_" + row[attr] + "'>" + row[attr] + "</label></td>";
+                            }
+                            else {
+                                html += "<td>" + row[attr] + "</td>";
+                            }
+
+                            idx++;
+                        }
+                        html += "</tr>";
+                    }
+                    html += "</table>";
+
+                    html += "<div style='float:left'>";
+                    html += "<input type='button' value='添加' onclick='Add()' />";
+                    html += "<input type='button' value='添加并返回' />";
+                    html += "<input type='button' value='取消' />";
+                    html += "</div>";
+
+
+                    $("#Table1").html(html);
+
+                    $("#Msg").html();
+
                     return;
                 }
             });
 
         });
+
+        function Add() {
+
+            var vals = '';
+            $.each($(":checkbox"), function () {
+                if (this.checked == true)
+                    vals += this.id.replace('CB_', '') + ",";
+            });
+
+            //获得pks. 
+            alert(vals);
+
+             
+             
+
+
+            //  AjaxServiceGener(null, "DoType=DtlOp_Add&PKs=" + vals, null, null);
+
+        }
+
+      
+
+        function CheckAll() {
+            var checked = document.getElementById('CB_CheckAll').checked;
+            $.each($(":checkbox"), function () {
+                this.checked = checked;
+            });
+        }
+
     </script>
+    <link href="Dtl.css" rel="stylesheet" type="text/css" />
 </head>
-<body  >
+<body   >
 
 <form id="cc">
+ 
+ <div style='float:left'>关键字:<input type="text" value="" /> <input type="button" value="查询"  onclick="Search()" /> </div>
+<div id="Table1" /> 
 
-关键字:<input type="text" value="" /> <input type="button" value="查询"  onclick="Search()" />
-
-<div id="Table1" />
 
 
 <div id="Msg" />
-
 </form>
 
 </body>

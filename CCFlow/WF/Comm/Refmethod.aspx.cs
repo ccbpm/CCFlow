@@ -60,10 +60,13 @@ namespace CCFlow.Web.Comm
 
                 string info = obj.ToString();
                 info = info.Replace("@", "<br>@");
-                if (info.Contains("<"))
-                    this.ToWFMsgPage(info);
-                else
-                    this.WinCloseWithMsg(info);
+                this.Page.Controls.Clear();
+                this.Response.Write(info);
+
+                //if (info.Contains("<"))
+                //    this.ToWFMsgPage(info);
+                //else
+                //    this.WinCloseWithMsg(info);
                 return;
             }
 

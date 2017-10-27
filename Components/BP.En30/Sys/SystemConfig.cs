@@ -130,58 +130,7 @@ namespace BP.Sys
         }
         #endregion
 
-        #region OA接口地址配置
-        public static string BpmMobileAddress
-        {
-            get
-            {
-                return SystemConfig.AppSettings["BpmMobileAddress"];
-            }
-        }
-        public static string OAAddress
-        {
-            get
-            {
-                return SystemConfig.AppSettings["OAAddress"];
-            }
-        }
 
-        #endregion
-
-        #region 办公助手接口地址配置
-
-        public static string OAAssistantURL
-        {
-            get
-            {
-                return SystemConfig.AppSettings["OAAssistantURL"];
-            }
-        }
-        public static string AppID
-        {
-            get
-            {
-                return SystemConfig.AppSettings["AppID"];
-            }
-        }
-        public static string AppSecret
-        {
-            get
-            {
-                return SystemConfig.AppSettings["AppSecret"];
-            }
-        }
-
-        public static string channel
-        {
-            get
-            {
-                return SystemConfig.AppSettings["channel"];
-            }
-        }
-
-
-        #endregion
 
         #region 组织结构的配置.
 

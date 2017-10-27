@@ -2303,6 +2303,10 @@ namespace BP.WF
                 // 检查流程.
                 Node.CheckFlow(this);
 
+
+                //一直没有找到设置3列，自动回到四列的情况.
+                DBAccess.RunSQL("UPDATE Sys_MapAttr SET ColSpan=3 WHERE  UIHeight<=23 AND ColSpan=4");
+
                 //生成 V001 视图. del by stone 2016.03.27.
                 // CheckRptViewDel(nds);
                 return msg;

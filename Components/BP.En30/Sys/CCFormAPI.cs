@@ -496,7 +496,8 @@ namespace BP.Sys
             attr.UIIsEnable = true;
             attr.UIIsLine = true;
             attr.MaxLen = 4000;
-            attr.ColSpan = 4;
+            attr.SetValByKey(MapAttrAttr.ColSpan, 4);
+           // attr.ColSpan = 4;
             attr.GroupID = gf.OID;
             attr.UIHeight = 23 * 3;
             attr.Idx = 1;
@@ -605,6 +606,9 @@ namespace BP.Sys
 
             //执行保存.
             SaveFrm(fk_mapdata, jd);
+
+            //一直没有找到设置3列，自动回到四列的情况.
+            DBAccess.RunSQL("UPDATE Sys_MapAttr SET ColSpan=3 WHERE  UIHeight<=23 AND ColSpan=4");
         }
         /// <summary>
         /// 将表单设计串格式化为Json.

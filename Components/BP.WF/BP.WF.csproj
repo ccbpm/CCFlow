@@ -165,6 +165,7 @@
     <Compile Include="CCFlowAPI.cs" />
     <Compile Include="DTS\ResetSortMapAttr.cs" />
     <Compile Include="DTS\GenerPinYinForEmp.cs" />
+    <Compile Include="DTS\UpdatePort_EmpSigantureSta.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>

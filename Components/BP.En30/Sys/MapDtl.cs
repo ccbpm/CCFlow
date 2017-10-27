@@ -216,9 +216,9 @@ namespace BP.Sys
         /// </summary>
         public const string ImpSQLInit = "ImpSQLInit";
         /// <summary>
-        /// 填充数据
+        /// 填充数据一行数据
         /// </summary>
-        public const string ImpSQLFull = "ImpSQLFull";
+        public const string ImpSQLFullOneRow = "ImpSQLFullOneRow";
         #endregion
     }
     /// <summary>
@@ -345,15 +345,15 @@ namespace BP.Sys
         /// <summary>
         /// 填充数据
         /// </summary>
-        public string ImpSQLFull
+        public string ImpSQLFullOneRow
         {
             get
             {
-                return this.GetValStringByKey(MapDtlAttr.ImpSQLFull).Replace("~","'");
+                return this.GetValStringByKey(MapDtlAttr.ImpSQLFullOneRow).Replace("~", "'");
             }
             set
             {
-                this.SetValByKey(MapDtlAttr.ImpSQLFull, value);
+                this.SetValByKey(MapDtlAttr.ImpSQLFullOneRow, value);
             }
         }
         #endregion
@@ -1335,7 +1335,7 @@ namespace BP.Sys
                 map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?", false, false);
                 map.AddTBString(MapDtlAttr.ImpSQLSearch, null, "查询SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20);
-                map.AddTBString(MapDtlAttr.ImpSQLFull, null, "数据填充SQL", true, false, 0, 500, 20);
+                map.AddTBString(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充SQL", true, false, 0, 500, 20);
                 #endregion 导入导出填充.
 
 

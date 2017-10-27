@@ -96,17 +96,17 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 填充数据
+        /// 填充数据一行数据
         /// </summary>
-        public string ImpSQLFull
+        public string ImpSQLFullOneRow
         {
             get
             {
-                return this.GetValStringByKey(MapDtlAttr.ImpSQLFull).Replace("~","'");
+                return this.GetValStringByKey(MapDtlAttr.ImpSQLFullOneRow).Replace("~","'");
             }
             set
             {
-                this.SetValByKey(MapDtlAttr.ImpSQLFull, value);
+                this.SetValByKey(MapDtlAttr.ImpSQLFullOneRow, value);
             }
         }
         #endregion
@@ -1031,7 +1031,7 @@ namespace BP.WF.Template
 
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", true, false, true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false,true);
-                map.AddTBStringDoc(MapDtlAttr.ImpSQLFull, null, "数据填充SQL(打开查询窗口要现实的tabel的SQL)", true, false,true);
+                map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false,true);
 
                 #endregion 导入导出填充.
 
@@ -1177,6 +1177,10 @@ namespace BP.WF.Template
             else
                 this.FEBD = febd.ToString();
 
+
+            #region 检查填充的SQL是否符合要求》
+             
+            #endregion
 
             return base.beforeUpdate();
         }

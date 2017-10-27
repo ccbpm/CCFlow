@@ -1929,6 +1929,49 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.ToJson(dt);
         }
+        public string DtlOpt_Add()
+        {
+            MapDtl dtl = new MapDtl(this.FK_MapDtl);
+            string pks = this.GetRequestVal("PKs");
+
+            string[] strs = pks.Split(',');
+            int i = 0;
+            foreach (string str in strs)
+            {
+                if (str == "CheckAll" || str == null || str == "")
+                    continue;
+
+                GEDtl gedtl = new BP.Sys.GEDtl(this.FK_MapDtl);
+                string sql = dtl.ImpSQLFullOneRow;
+                sql = sql.Replace("@Key", str);
+
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+                if (dt.Rows.Count == 0)
+                    return "err@导入数据失败:" + sql;
+
+                gedtl.Copy(dt.Rows[0]);
+                gedtl.RefPK = this.GetRequestVal("RefPKVal");
+                gedtl.InsertAsNew();
+                i++;
+            }
+
+            return "成功的导入了["+i+"]行数据...";
+        }
+        public string DtlOpt_Search()
+        {
+            MapDtl dtl = new MapDtl(this.FK_MapDtl);
+            
+            string sql = dtl.ImpSQLSearch;
+            sql = sql.Replace("@Key", this.GetRequestVal("Key"));
+            sql = sql.Replace("@WebUser.No",WebUser.No);
+            sql = sql.Replace("@WebUser.Name", WebUser.Name);
+            sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+            DataSet ds = new DataSet();
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
+        }
         #endregion 从表的选项.
 
     }

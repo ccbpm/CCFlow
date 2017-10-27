@@ -175,7 +175,7 @@ function ReturnValCCFormPopVal(ctrl, fk_mapExt, refEnPK, width, height, title) {
     //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
 
     var wfpreHref = GetLocalWFPreHref();
-    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
+    url = wfpreHref + '/WF/CCForm/PopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
     var v = window.showModalDialog(url, 'opp', 'scrollbars=yes;resizable=yes;center=yes;minimize:yes;maximize:yes;dialogHeight: ' + (height || 600) + 'px; dialogWidth: ' + (width || 850) + 'px; dialogTop: 100px; dialogLeft: 150px;');
     if (v == null || v == '' || v == 'NaN') {
         return;
@@ -245,7 +245,7 @@ function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, ti
         fd = getFormData(false, false);
     }
 
-    url = wfpreHref + '/WF/CCForm/FrmPopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape(fd)+"&m="+Math.random();
+    url = wfpreHref + '/WF/CCForm/PopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape(fd)+"&m="+Math.random();
 
     //杨玉慧 模态框 先用这个
     $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().parent().prev().text());

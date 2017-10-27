@@ -40,9 +40,11 @@
                     //调用公共类库的方法:执行批量主表赋值
                     GenerFullAllCtrlsVal(mapExt);
 
+                    //特殊判断该字段的值，在后台返回的时候做了特殊处理如果。
                     if (mapExt.W == "0") {
                         document.getElementById("Btn_FullDtl").disabled = true;
-                        document.getElementById("Btn_FullDDL").disabled = true;
+                        document.getElementById("Btn_FullDtl").disabled = true;
+                        document.getElementById("Btn_Delete").disabled = true;
                     }
 
                     return;

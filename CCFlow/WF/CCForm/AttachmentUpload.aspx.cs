@@ -1201,7 +1201,7 @@ namespace CCFlow.WF.CCForm
                     #endregion 保存到iis服务器.
 
                     #region 保存到数据库 / FTP服务器上.
-                    if (athDesc.AthSaveWay == AthSaveWay.DB || athDesc.AthSaveWay  == AthSaveWay.FTPServer)
+                    if (athDesc.AthSaveWay == AthSaveWay.DB || athDesc.AthSaveWay == AthSaveWay.FTPServer)
                     {
                         string guid = DBAccess.GenerGUID();
 
@@ -1211,7 +1211,7 @@ namespace CCFlow.WF.CCForm
 
                         //执行附件上传前事件，added by liuxc,2017-7-15
                         msg = mapData.DoEvent(FrmEventList.AthUploadeBefore, en, "@FK_FrmAttachment=" + athDesc.MyPK + "@FileFullName=" + temp);
-                        if (string.IsNullOrEmpty(msg)==false)
+                        if (string.IsNullOrEmpty(msg) == false)
                         {
                             BP.Sys.Glo.WriteLineError("@AthUploadeBefore事件返回信息，文件：" + fu.FileName + "，" + msg);
 
@@ -1219,7 +1219,7 @@ namespace CCFlow.WF.CCForm
                             {
                                 File.Delete(temp);
                             }
-                            catch 
+                            catch
                             {
                             }
 
@@ -1274,9 +1274,9 @@ namespace CCFlow.WF.CCForm
                         }
 
                         dbUpload.UploadGUID = guid;
-                       
 
-                        if (athDesc.AthSaveWay  == AthSaveWay.DB)
+
+                        if (athDesc.AthSaveWay == AthSaveWay.DB)
                         {
                             //把文件保存到指定的字段里.
                             dbUpload.SaveFileToDB("FileDB", temp);
@@ -1312,7 +1312,7 @@ namespace CCFlow.WF.CCForm
                             BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                     }
                     #endregion 保存到数据库.
-                    
+
                     //this.Response.Redirect("AttachmentUpload.aspx?FK_FrmAttachment=" + this.FK_FrmAttachment + "&FK_Node=" + this.FK_Node + "&PKVal=" + this.PKVal, true);
                 }
 
@@ -1359,9 +1359,10 @@ namespace CCFlow.WF.CCForm
             }
             catch (Exception ex)
             {
-
-                throw ex;
-                BP.Sys.Glo.WriteLineError(ex.ToString());
+                this.Response.Write("err@系统错误:" + ex.Message);
+                return;
+                //BP.Sys.Glo.WriteLineError(ex.ToString());
+                //throw ex;
             }
 
             this.Response.Redirect(this.Request.RawUrl, true);

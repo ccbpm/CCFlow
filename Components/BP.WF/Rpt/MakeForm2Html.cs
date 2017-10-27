@@ -972,7 +972,7 @@ namespace BP.WF
 
                             if (singType == "1")
                             {
-                                empStrs= "<img src='../../../../../DataUser/Siganture/" +  dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.JPG'\" />";
+                                empStrs = "<img src='../../../../../DataUser/Siganture/" + dr["EmpFrom"] + ".jpg' title='" + dr["EmpFromT"] + "' style='height:30px;' border=0 onerror=\"src='../../../../../DataUser/Siganture/UnName.JPG'\" />";
                             }
 
                         }

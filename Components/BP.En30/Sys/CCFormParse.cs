@@ -145,6 +145,11 @@ namespace BP.Sys
             attr.MyPK = fk_mapdata + "_" + fieldID;
             attr.RetrieveFromDBSources();
 
+            //if (attr.KeyOfEn == "BiaoTi")
+            //{
+            //    int i = 11;
+            //}
+
             //执行一次查询,以防止其他的属性更新错误.
             //if (pks.Contains("@" + attr.KeyOfEn + "@") == true)
             //    attr.RetrieveFromDBSources();
@@ -222,6 +227,9 @@ namespace BP.Sys
                 switch (propertyName)
                 {
                     case "Name":
+                        if (attr.Name == "")
+                            attr.Name = val;
+                        break;
                     case "MinLen":
                     case "MaxLen":
                     case "DefVal":
@@ -232,7 +240,8 @@ namespace BP.Sys
                         attr.SetValByKey(propertyName, val);
                         break;
                     case "FieldText":
-                        attr.Name = val;
+                        if (attr.Name=="")
+                           attr.Name = val;
                         break;
                     case "UIIsInput":
                         if (val == "true")
@@ -259,6 +268,8 @@ namespace BP.Sys
 
             attr.UIWidth = float.Parse(imgWidth.ToString("0.00"));
             attr.UIHeight = float.Parse(imgHeight.ToString("0.00"));
+
+          //  attr.ColSpan
 
             if (pks.Contains("@" + attr.KeyOfEn + "@") == true)
             {

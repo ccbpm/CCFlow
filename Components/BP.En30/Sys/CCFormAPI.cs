@@ -585,14 +585,11 @@ namespace BP.Sys
         /// <param name="jsonStrOfH5Frm"></param>
         public static void SaveFrm(string fk_mapdata, string jsonStrOfH5Frm)
         {
-            
             // BP.DA.DataType.WriteFile("D:\\AAAAAA.JSON", jsonStrOfH5Frm);
             //return;
-
             JsonData jd = JsonMapper.ToObject(jsonStrOfH5Frm);
             if (jd.IsObject == false)
                 throw new Exception("err@表单格式不正确，保存失败。");
-
 
             JsonData form_MapData = jd["c"];
 
@@ -981,7 +978,6 @@ namespace BP.Sys
                 sqls = "";
             }
             #endregion 处理节点表单。
-
 
             #region 删除没有替换下来的 PKs, 说明这些都已经被删除了.
             string[] pks = labelPKs.Split('@');

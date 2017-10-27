@@ -130,7 +130,17 @@ namespace BP.Sys
         }
         #endregion
 
-        #region 接口地址配置
+        #region OA接口地址配置
+        public static string OAAddress
+        {
+            get
+            {
+                return SystemConfig.AppSettings["OAAddress"];
+            }
+        }
+        #endregion
+
+        #region 办公助手接口地址配置
 
         public static string OAAssistantURL
         {

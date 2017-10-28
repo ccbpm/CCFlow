@@ -1275,7 +1275,6 @@ namespace CCFlow.WF.CCForm
 
                         dbUpload.UploadGUID = guid;
 
-
                         if (athDesc.AthSaveWay == AthSaveWay.DB)
                         {
                             //把文件保存到指定的字段里.
@@ -1304,7 +1303,6 @@ namespace CCFlow.WF.CCForm
                         }
 
                         dbUpload.Insert();
-
 
                         //执行附件上传后事件，added by liuxc,2017-7-15
                         msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + temp);
@@ -1360,14 +1358,12 @@ namespace CCFlow.WF.CCForm
             catch (Exception ex)
             {
                 this.Response.Write("err@系统错误:" + ex.Message);
+                this.Pub1.AddMsgOfWarning("错误", ex.Message);
+                BP.Sys.Glo.WriteLineError(ex.Message);
                 return;
-                //BP.Sys.Glo.WriteLineError(ex.ToString());
-                //throw ex;
             }
-
             this.Response.Redirect(this.Request.RawUrl, true);
         }
-
         /// <summary>
         /// 转换office文件为html文件
         /// <para>added by liuxc, 2017-03-01</para>

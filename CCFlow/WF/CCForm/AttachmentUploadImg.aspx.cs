@@ -243,7 +243,6 @@ namespace CCFlow.WF.CCForm
             dbUpload.FK_MapData = athDesc.FK_MapData;
             dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
 
-            dbUpload.FileExts = info.Extension;
             dbUpload.FileFullName = saveTo;
             dbUpload.FileName = fu.FileName;
             dbUpload.FileSize = (float)info.Length;

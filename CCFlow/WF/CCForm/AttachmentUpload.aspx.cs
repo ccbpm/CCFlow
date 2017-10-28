@@ -1222,7 +1222,6 @@ namespace CCFlow.WF.CCForm
                             catch
                             {
                             }
-
                             this.Alert("上传附件错误：" + msg, true);
                             return;
                         }
@@ -1251,7 +1250,7 @@ namespace CCFlow.WF.CCForm
                         dbUpload.FK_MapData = athDesc.FK_MapData;
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
                         dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
-                        dbUpload.FileExts = info.Extension;
+                        //dbUpload.FileExts = info.Extension;
                         // dbUpload.FileFullName = saveTo;
                         dbUpload.FileName = fu.FileName;
                         dbUpload.FileSize = (float)info.Length;
@@ -1287,6 +1286,13 @@ namespace CCFlow.WF.CCForm
                             FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
                                 SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
+                            string ny = DateTime.Now.ToString("yyyy_MM");
+
+                            //判断目录年月是否存在.
+                            if (ftpconn.DirectoryExist(ny) == false)
+                                ftpconn.CreateDirectory(ny);
+                            ftpconn.SetCurrentDirectory(ny);
+
                             //判断目录是否存在.
                             if (ftpconn.DirectoryExist(athDesc.FK_MapData) == false)
                                 ftpconn.CreateDirectory(athDesc.FK_MapData);
@@ -1299,7 +1305,7 @@ namespace CCFlow.WF.CCForm
                             ftpconn.Close();
 
                             //设置路径.
-                            dbUpload.FileFullName = athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
+                            dbUpload.FileFullName = ny+"//"+athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
                         }
 
                         dbUpload.Insert();

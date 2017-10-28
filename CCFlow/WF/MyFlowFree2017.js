@@ -563,7 +563,7 @@ function AfterBindEn_DealMapExt() {
 
         switch (mapExt.ExtType) {
             case "PopVal": //PopVal窗返回值
-            case "PopFullCtrl" //弹出表格.
+            case "PopFullCtrl": //弹出表格.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");
                 tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");

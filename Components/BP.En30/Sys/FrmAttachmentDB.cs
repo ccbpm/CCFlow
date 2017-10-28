@@ -184,7 +184,7 @@ namespace BP.Sys
 
                 this.SetValByKey(FrmAttachmentDBAttr.FileName, str);
 
-                string fileExt = str.Substring(str.LastIndexOf('.'));
+                string fileExt = str.Substring(str.LastIndexOf('.')+1);
 
                 //后缀名.
                 this.SetValByKey(FrmAttachmentDBAttr.FileExts, fileExt);

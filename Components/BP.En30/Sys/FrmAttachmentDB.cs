@@ -183,6 +183,11 @@ namespace BP.Sys
                 str = str.Replace("*", "-");
 
                 this.SetValByKey(FrmAttachmentDBAttr.FileName, str);
+
+                string fileExt = str.Substring(str.LastIndexOf('.'));
+
+                //后缀名.
+                this.SetValByKey(FrmAttachmentDBAttr.FileExts, fileExt);
             }
         }
         /// <summary>

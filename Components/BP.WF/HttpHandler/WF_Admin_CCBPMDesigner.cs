@@ -437,13 +437,17 @@ namespace BP.WF.HttpHandler
             }
         }
         //流程设计器登陆前台，转向规则，判断是否为天业BPM
-        public string Login_Redirect11()
+        public string Login_Redirect()
         {
             if (SystemConfig.CustomerNo == "TianYe")
-                return "../../../BPM/pages/login.html";
+                return "url@../../../BPM/pages/login.html";
 
-            return "../../AppClassic/Login.htm?DoType=Logout";
+            return "url@../../AppClassic/Login.htm?DoType=Logout";
         }
+        /// <summary>
+        /// 提交
+        /// </summary>
+        /// <returns></returns>
         public string Login_Submit()
         {
             BP.Port.Emp emp = new BP.Port.Emp();

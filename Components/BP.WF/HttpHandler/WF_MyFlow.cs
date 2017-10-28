@@ -540,7 +540,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                string str = BP.WF.Dev2Interface.Flow_DoFlowOver(this.FK_Flow, this.WorkID, "无");
+                string str = BP.WF.Dev2Interface.Flow_DoFlowOver(this.FK_Flow, this.WorkID, "流程成功结束");
                 if (str == "" || str == null)
                     return "流程成功结束";
                 return str;

@@ -505,8 +505,14 @@
                 url: Handler + "?DoType=Login_Redirect&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                 
-                    window.open(data);
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    var url = data.replace('url@', '');
+                    window.open(url);
                 }
             }
                 )

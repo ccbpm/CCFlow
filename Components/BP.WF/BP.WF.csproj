@@ -105,6 +105,10 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FtpSupport, Version=1.0.1817.24824, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RefDLL\FtpSupport.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\RefDLL\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>

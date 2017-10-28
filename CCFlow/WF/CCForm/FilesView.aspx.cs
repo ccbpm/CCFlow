@@ -118,13 +118,12 @@ namespace CCFlow.WF.CCForm
         }
         #endregion
 
-
         protected void Page_Load(object sender, EventArgs e)
         {
             FrmAttachmentDB downDB = new FrmAttachmentDB();
             if (this.DoType.Equals("view") || DoType.Equals("ViewPic"))
             {
-                if (!string.IsNullOrEmpty(DelPKVal))
+                if (string.IsNullOrEmpty(DelPKVal)==false)
                 {
                     downDB.MyPK = this.DelPKVal;
                     downDB.Retrieve();
@@ -292,10 +291,6 @@ namespace CCFlow.WF.CCForm
                 }
                 #endregion 处理权限方案。
             }
-
-
-
-
             #endregion 处理权限控制.
 
             BP.Sys.FrmAttachmentDBs dbs = LoadAttach(athDesc);
@@ -341,7 +336,6 @@ namespace CCFlow.WF.CCForm
                     }
 
                 }
-
 
                 if (db.Idx != 0)
                     isHave = true;
@@ -423,7 +417,6 @@ namespace CCFlow.WF.CCForm
                 this.Pub1.AddTREnd();
             }
             this.Pub1.AddTableEnd();
-
 
             if (isRedirect)
                 this.Response.Redirect(this.Request.RawUrl, true);

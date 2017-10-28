@@ -390,8 +390,8 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <IsSigan>0</IsSigan>
-    <X>231</X>
-    <Y>449.5</Y>
+    <X>347</X>
+    <Y>396.5</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -434,8 +434,8 @@
     <UIIsLine>0</UIIsLine>
     <UIIsInput>0</UIIsInput>
     <IsSigan>0</IsSigan>
-    <X>230</X>
-    <Y>500.5</Y>
+    <X>346</X>
+    <Y>433.5</Y>
     <GUID />
     <Tag />
     <EditType>0</EditType>
@@ -459,6 +459,180 @@
     <GroupID>3104</GroupID>
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_BiaoGeMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>BiaoGeMoShi</KeyOfEn>
+    <Name>表格模式</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>267.6300048828125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>79.55999755859375</X>
+    <Y>497.10000610351562</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>11</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <UIIsMultiple>0</UIIsMultiple>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>3104</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_JianChanBiaoGeMoShiD</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>JianChanBiaoGeMoShiD</KeyOfEn>
+    <Name>简单表格模式(多选)</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>258</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>84</X>
+    <Y>565.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>12</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <UIIsMultiple>0</UIIsMultiple>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>3104</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_BiaoGeFenXieMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>BiaoGeFenXieMoShi</KeyOfEn>
+    <Name>表格分页模式</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>191</X>
+    <Y>605.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>13</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <Tip />
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <UIIsMultiple>0</UIIsMultiple>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>3104</GroupID>
+    <IsEnableInAPP>1</IsEnableInAPP>
+  </Sys_MapAttr>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_BiaoGeFenXieMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>BiaoGeFenXieMoShi</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag>SELECT TOP @PageSize * FROM ( SELECT row_number() over(order by t.No) as rownumber,No,Name,Tel,Email,FK_BanJi 
+FROM Demo_Student t WHERE Name LIKE ~%@Key%~  AND  FK_BanJi=@FK_BanJi AND XB=@XB ) A WHERE rownumber &gt; @PageCount</Tag>
+    <Tag1>SELECT count(No) FROM Demo_Student WHERE Name LIKE ~%@Key%~  AND  FK_BanJi=@FK_BanJi AND XB=@XB</Tag1>
+    <Tag2 />
+    <Tag3 />
+    <Tag4>$Para=FK_BanJi#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi
+$Para=XB#Label=性别#EnumKey=XB</Tag4>
+    <AtPara>@PopValWorkModel=3@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=0@PopValSelectModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>900</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_BiaoGeMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>BiaoGeMoShi</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1 />
+    <Tag2>SELECT No,Name,XB,Tel,Email FROM Demo_Student </Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=2@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=0@PopValSelectModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>800</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
   <Sys_MapExt>
     <MyPK>PopVal_Demo_Pop1_ChanShiTiShu</MyPK>
     <FK_MapData>Demo_Pop1</FK_MapData>
@@ -537,6 +711,26 @@
     <DBSrc />
     <H>500</H>
     <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_JianChanBiaoGeMoShiD</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>JianChanBiaoGeMoShiD</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1 />
+    <Tag2>SELECT No,Name,XB,Tel,Email,Addr FROM Demo_Student</Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=2@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=0@PopValSelectModel=1</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>800</W>
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
@@ -634,11 +828,25 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
+    <MyPK>1EE19522-0271-68AF-7BAC-DA9A3CD5F14B</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>表格模式(单选&amp;nbsp;)</Text>
+    <X>83.139999389648438</X>
+    <Y>477.79998779296875</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
     <MyPK>53AA78A8-3FDA-8FC4-6B00-A4FA1F12C98C</MyPK>
     <FK_MapData>Demo_Pop1</FK_MapData>
     <Text>分组模式(单选)</Text>
-    <X>119</X>
-    <Y>454</Y>
+    <X>234</X>
+    <Y>398</Y>
     <FontColor>#000000</FontColor>
     <FontName>Arial</FontName>
     <FontSize>15</FontSize>
@@ -665,8 +873,8 @@
     <MyPK>5C26DACE-8172-7506-CB8C-0C8186226BFC</MyPK>
     <FK_MapData>Demo_Pop1</FK_MapData>
     <Text>分组模式多选</Text>
-    <X>119</X>
-    <Y>505</Y>
+    <X>240</X>
+    <Y>435</Y>
     <FontColor>#000000</FontColor>
     <FontName>Arial</FontName>
     <FontSize>15</FontSize>
@@ -735,7 +943,7 @@
     <MyPK>C6977176-0C3E-8C96-8C71-61A1D76F2DD0</MyPK>
     <FK_MapData>Demo_Pop1</FK_MapData>
     <Text>简单模式pop返回值</Text>
-    <X>386.98001098632812</X>
+    <X>388.98001098632812</X>
     <Y>17</Y>
     <FontColor>#000000</FontColor>
     <FontName>Portable User Interface</FontName>
@@ -743,6 +951,34 @@
     <FontStyle>font-size:18;font-weight:bold;color:#000000;</FontStyle>
     <FontWeight>normal</FontWeight>
     <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>EB28791D-C6CC-5BF3-967C-86D37A2586D4</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>表格分页模式</Text>
+    <X>87</X>
+    <Y>610</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>ED6D9820-5DBC-13E3-5A47-A33024E66F75</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>简单表格模式(多选)</Text>
+    <X>89</X>
+    <Y>545</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
 </NewDataSet>

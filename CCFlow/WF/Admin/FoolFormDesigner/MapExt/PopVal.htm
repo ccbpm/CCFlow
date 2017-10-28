@@ -325,19 +325,19 @@
  <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
  <li>比如For SQLServer: SELECT TOP @PageSize * FROM
 (
- SELECT  row_number() over(order by t.No) as rownumber,No,Name,Tel,Email FROM WF_Emp t WHERE  Name LIKE '%@Key%'
+ SELECT  row_number() over(order by t.No) as rownumber,No,Name,Tel,Email FROM Demo_Student  WHERE  Name LIKE '%@Key%'
 ) A WHERE rownumber > @PageCount 
 
 <br />
-总条数: SELECT COUNT(no) FROM WF_Emp WHERE Name LIKE '%@Key%'
+总条数: SELECT COUNT(no) FROM Demo_Student WHERE Name LIKE '%@Key%' OR No LIKE '%@Key%'
  </li>
- <li>比如For Oracle: SELECT No,Name,Email,Tel FROM WF_Emp WHERE Name like '%@Key%'  </li>
- <li>比如For MySQL: SELECT No,Name,Email,Tel FROM WF_Emp WHERE Name like '%@Key%'  </li>
+ <li>比如For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE Name like '%@Key%'  </li>
+ <li>比如For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE Name like '%@Key%'  </li>
  </ul>
  </div>
  <br />
 
-<textarea type="text" id="TB_TablePage_SQL" name="TB_TablePage_SQL"  > </textarea>
+<textarea type="text" rows="4" id="TB_TablePage_SQL" name="TB_TablePage_SQL"  > </textarea>
 
  <br />
 
@@ -346,12 +346,12 @@
 
  <div id="TablePage_Count" style="color:Gray; display:none">
  <ul>
- <li>比如For SQLServer: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
- <li>比如For Oracle: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
- <li>比如For MySQL: SELECT count(No) FROM Port_Emp WHERE Name like '%@Key%'  </li>
+ <li>比如For SQLServer: SELECT count(No) FROM Demo_Student WHERE Name like '%@Key%'  </li>
+ <li>比如For Oracle: SELECT count(No) FROM Demo_Student WHERE Name like '%@Key%'  </li>
+ <li>比如For MySQL: SELECT count(No) FROM Demo_Student WHERE Name like '%@Key%'  </li>
  </ul>
  </div>
-<textarea  cols="90"  rows="3" id="TB_TablePage_SQLCount"  name="TB_TablePage_SQLCount" ></textarea>
+<textarea  style=" height:50px; width:100%;" cols="90"  rows="5" id="TB_TablePage_SQLCount"  name="TB_TablePage_SQLCount" ></textarea>
 
 <br />
 <input type="button"   onclick='TestData()' value='测试数据' />
@@ -457,7 +457,7 @@
  <li>该设置对table查询有效:</li>
  <li>格式为:</li>
 
-<li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Port_Dept WHERE No='@WebUser.No'</li>
+<li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi </li>
 <li>$Para=XB#Label=性别#EnumKey=XB</li>
 <li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))</li>
 <li>$Para=DTTo#Label=到#DefVal=(new Date())</li>

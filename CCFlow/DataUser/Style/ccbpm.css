@@ -1038,7 +1038,6 @@ body table tr td {
   /* for IE */
   -moz-text-overflow: ellipsis;
   /* for Firefox,mozilla */
-  white-space: nowrap;
 }
 body table tr td:first-child {
   text-overflow: initial;

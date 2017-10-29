@@ -860,17 +860,7 @@ namespace BP.WF.HttpHandler
                 me.FK_MapData = this.FK_MapData;
                 me.AttrOfOper = this.KeyOfEn;
                 me.FK_DBSrc = this.GetValFromFrmByKey("FK_DBSrc");
-
-
-                me.Tag2 = this.GetValFromFrmByKey("TB_Tag2"); //要执行的初始化sql
-                me.Tag3 = this.GetValFromFrmByKey("TB_Tag3"); //查询sql
-                me.Tag4 = this.GetValFromFrmByKey("TB_Tag4"); //赋值sql.
-
-                if (me.Tag3.Contains("@Key") == false)
-                    return "err@查询SQL配置错误，没有包含@Key字段. ";
-
-                if (me.Tag4.Contains("@Key") == false)
-                    return "err@赋值SQL配置错误，没有包含@Key字段. ";
+                me.Doc = this.GetValFromFrmByKey("TB_Doc"); //要执行的SQL.
 
                 me.ExtType = MapExtXmlList.PopFullCtrl;
 

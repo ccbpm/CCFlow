@@ -69,19 +69,28 @@ $(window).resize(function () {
 });
 function SysCheckFrm() {
 }
-
 function Change() {
-    var btn = document.getElementById('Btn_Save');
+    var btn = document.getElementById('ContentPlaceHolder1_MyFlowUC1_MyFlow1_ToolBar1_Btn_Save');
     if (btn != null) {
         if (btn.value.valueOf('*') == -1)
             btn.value = btn.value + '*';
     }
-} 
+}
+var longCtlID = '';
+function KindEditerSync() {
+    try {
+        if (editor1 != null) {
+            editor1.sync();
+        }
+    }
+    catch (err) {
+    }
+}
 
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
 function ReqDDL(ddlID) {
-    var v = document.getElementById('DDL_' + ddlID).value;
+    var v = document.getElementById(longCtlID + 'DDL_' + ddlID).value;
     if (v == null) {
         alert('没有找到ID=' + ddlID + '的下拉框控件.');
     }
@@ -130,7 +139,7 @@ function ReqDtlBObj(dtlTable, DtlColumn, onValue) {
 }
 // 获取TB值
 function ReqTB(tbID) {
-    var v = document.getElementById( 'TB_' + tbID).value;
+    var v = document.getElementById(longCtlID + 'TB_' + tbID).value;
     if (v == null) {
         alert('没有找到ID=' + tbID + '的文本框控件.');
     }
@@ -138,7 +147,7 @@ function ReqTB(tbID) {
 }
 // 获取CheckBox值
 function ReqCB(cbID) {
-    var v = document.getElementById( 'CB_' + cbID).value;
+    var v = document.getElementById(longCtlID + 'CB_' + cbID).value;
     if (v == null) {
         alert('没有找到ID=' + cbID + '的 CheckBox （单选）控件.');
     }
@@ -156,7 +165,7 @@ function ReqAthFileName(athID) {
 
 /// 获取DDL Obj
 function ReqDDLObj(ddlID) {
-    var v = document.getElementById( 'DDL_' + ddlID);
+    var v = document.getElementById(longCtlID + 'DDL_' + ddlID);
     if (v == null) {
         alert('没有找到ID=' + ddlID + '的下拉框控件.');
     }
@@ -164,7 +173,7 @@ function ReqDDLObj(ddlID) {
 }
 // 获取TB Obj
 function ReqTBObj(tbID) {
-    var v = document.getElementById( 'TB_' + tbID);
+    var v = document.getElementById(longCtlID + 'TB_' + tbID);
     if (v == null) {
         alert('没有找到ID=' + tbID + '的文本框控件.');
     }
@@ -172,26 +181,25 @@ function ReqTBObj(tbID) {
 }
 // 获取CheckBox Obj值
 function ReqCBObj(cbID) {
-    var v = document.getElementById( 'CB_' + cbID);
+    var v = document.getElementById(longCtlID + 'CB_' + cbID);
     if (v == null) {
         alert('没有找到ID=' + cbID + '的单选控件(获取CheckBox)对象.');
     }
     return v;
 }
-
 // 设置值.
 function SetCtrlVal(ctrlID, val) {
-    var ctrl = document.getElementById( 'TB_' + ctrlID);
+    var ctrl = document.getElementById(longCtlID + 'TB_' + ctrlID);
     if (ctrl) {
         ctrl.value = val;
     }
 
-    ctrl = document.getElementById( 'DDL_' + ctrlID);
+    ctrl = document.getElementById(longCtlID + 'DDL_' + ctrlID);
     if (ctrl) {
         ctrl.value = val;
     }
 
-    ctrl = document.getElementById( 'CB_' + ctrlID);
+    ctrl = document.getElementById(longCtlID + 'CB_' + ctrlID);
     if (ctrl) {
         ctrl.value = val;
     }
@@ -299,6 +307,8 @@ function ConfirmBtn(btn, workid) {
         btn.value = '确认';
     }
 
+    btn.value = (btn.value == '确认' ? '取消确认' : '确认')
+
     var para = "DoType=Confirm&WorkID=" + workid;
     AjaxService(para, function (msg, scope) {
         //  alert(msg);
@@ -346,6 +356,174 @@ function pageParamToUrl() {
         paramUrlStr += '&' + (param.indexOf('@') == 0 ? param.substring(1) : param) + '=' + pageData[param];
     }
     return paramUrlStr;
+}
+//初始化按钮
+//var MyFlow = "MyFlow.ashx";
+function initBar() {
+
+    // 为啥要注释 else MyFlow = "MyFlow.do";
+    if (plant == "CCFlow")
+        MyFlow = "MyFlow.ashx";
+
+    //else
+    //MyFlow = "MyFlow.do";
+
+    var url = MyFlow + "?DoType=InitToolBar&m=" + Math.random();
+
+    $.ajax({
+        type: 'post',
+        async: true,
+        data: pageData,
+        url: url,
+        dataType: 'html',
+        success: function (data) {
+
+            var barHtml = data;
+
+            $('.Bar').html(barHtml);
+
+            if ($('[name=Return]').length > 0) {
+                $('[name=Return]').attr('onclick', '');
+                $('[name=Return]').unbind('click');
+                $('[name=Return]').bind('click', function () { initModal("returnBack"); $('#returnWorkModal').modal().show(); });
+            }
+            
+            if ($('[name=Shift]').length > 0) {
+
+                $('[name=Shift]').attr('onclick', '');
+                $('[name=Shift]').unbind('click');
+                $('[name=Shift]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=Btn_WorkCheck]').length > 0) {
+
+                $('[name=Btn_WorkCheck]').attr('onclick', '');
+                $('[name=Btn_WorkCheck]').unbind('click');
+                $('[name=Btn_WorkCheck]').bind('click', function () { initModal("shift"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=Askfor]').length > 0) {
+                $('[name=Askfor]').attr('onclick', '');
+                $('[name=Askfor]').unbind('click');
+                $('[name=Askfor]').bind('click', function () { initModal("askfor"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=HuiQian]').length > 0) {
+                $('[name=HuiQian]').attr('onclick', '');
+                $('[name=HuiQian]').unbind('click');
+                $('[name=HuiQian]').bind('click', function () { initModal("HuiQian"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=PackUp_zip]').length > 0) {
+                $('[name=PackUp_zip]').attr('onclick', '');
+                $('[name=PackUp_zip]').unbind('click');
+                $('[name=PackUp_zip]').bind('click', function () { initModal("PackUp_zip"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=PackUp_html]').length > 0) {
+                $('[name=PackUp_html]').attr('onclick', '');
+                $('[name=PackUp_html]').unbind('click');
+                $('[name=PackUp_html]').bind('click', function () { initModal("PackUp_html"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=PackUp_pdf]').length > 0) {
+                $('[name=PackUp_pdf]').attr('onclick', '');
+                $('[name=PackUp_pdf]').unbind('click');
+                $('[name=PackUp_pdf]').bind('click', function () { initModal("PackUp_pdf"); $('#returnWorkModal').modal().show(); });
+            }
+
+            if ($('[name=SelectAccepter]').length > 0) {
+                $('[name=SelectAccepter]').attr('onclick', '');
+                $('[name=SelectAccepter]').unbind('click');
+                $('[name=SelectAccepter]').bind('click', function () {
+                    initModal("accepter");
+                    $('#returnWorkModal').modal().show();
+                });
+            }
+            if ($('[name=Delete]').length > 0) {
+                var onclickFun = $('[name=Delete]').attr('onclick');
+                if (onclickFun != undefined) {
+                    if (plant == 'CCFlow') {
+                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.aspx'));
+                    } else {
+                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.jsp'));
+                    }
+                }
+            }
+        }
+    });
+}
+
+//初始化退回、移交、加签窗口
+function initModal(modalType, toNode) {
+
+    //初始化退回窗口的SRC
+    var returnWorkModalHtml = '<div class="modal fade" id="returnWorkModal" data-backdrop="static">' +
+       '<div class="modal-dialog">'
+           + '<div class="modal-content" style="border-radius:0px;width:700px;text-align:left;">'
+              + '<div class="modal-header">'
+                  + '<button type="button" style="color:white;float: right;background: transparent;border: none;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                   + '<h4 class="modal-title" id="modalHeader">工作退回</h4>'
+               + '</div>'
+               + '<div class="modal-body">'
+                   + '<iframe style="width:100%;border:0px;height:400px;" id="iframeReturnWorkForm" name="iframeReturnWorkForm"></iframe>'
+               + '</div>'
+           + '</div><!-- /.modal-content -->'
+       + '</div><!-- /.modal-dialog -->'
+   + '</div>';
+
+    $('body').append($(returnWorkModalHtml));
+
+    var modalIframeSrc = '';
+    if (modalType != undefined) {
+        switch (modalType) {
+            case "returnBack":
+                $('#modalHeader').text("工作退回");
+                modalIframeSrc = "./WorkOpt/ReturnWork.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
+                break;
+            case "accpter":
+                $('#modalHeader').text("工作移交");
+                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "shift":
+                $('#modalHeader').text("工作移交");
+                modalIframeSrc = "./WorkOpt/Forward.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "askfor":
+                $('#modalHeader').text("加签");
+                modalIframeSrc = "./WorkOpt/Askfor.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "Btn_WorkCheck":
+                $('#modalHeader').text("审核");
+                modalIframeSrc = "./WorkOpt/WorkCheck.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "HuiQian":
+                $('#modalHeader').text("会签");
+                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "PackUp_zip":
+            case "PackUp_html":
+            case "PackUp_pdf":
+                $('#modalHeader').text("打包下载/打印");
+                var url = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_','') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random();
+                // alert(url);
+                modalIframeSrc = "./WorkOpt/Packup.htm?FileType=" + modalType.replace('PackUp_', '') + "&FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                break;
+            case "accepter":
+                $('#modalHeader').text("选择下一个节点及下一个节点接受人");
+                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
+                break;
+
+            //发送选择接收节点和接收人    
+            case "sendAccepter":
+                $('#modalHeader').text("发送到节点：" + toNode.Name);
+                modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()
+                break;
+            default:
+                break;
+        }
+    }
+    $('#iframeReturnWorkForm').attr('src', modalIframeSrc);
 }
 
 //设置附件为只读
@@ -551,19 +729,13 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
 
 //处理MapExt
 function AfterBindEn_DealMapExt() {
-
     var workNode = JSON.parse(jsonStr);
     var mapExtArr = workNode.Sys_MapExt;
     
     for (var i = 0; i < mapExtArr.length; i++) {
-
         var mapExt = mapExtArr[i];
-
-        alert(mapExt);
-
         switch (mapExt.ExtType) {
             case "PopVal": //PopVal窗返回值
-            case "PopFullCtrl": //弹出表格.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");
                 tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
@@ -629,7 +801,6 @@ function AfterBindEn_DealMapExt() {
                 var eleHtml = ' <div class="input-group form_tree" style="width:' + tb.width() + 'px;height:' + tb.height() + 'px">' + tb.parent().html() +
                 '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle(document.getElementById('TB_" + mapExt.AttrOfOper + "'),'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
-
                 break;
             case "RegularExpression": //正则表达式  统一在保存和提交时检查
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
@@ -661,19 +832,18 @@ function AfterBindEn_DealMapExt() {
                 break;
             case "TBFullCtrl": //自动填充
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
-                alert(tbAuto);
                 if (tbAuto == null)
                     continue;
 
                 tbAuto.attr("ondblclick", "ReturnValTBFullCtrl(this,'" + mapExt.MyPK + "');");
-                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,'TB_" + mapExt.AttrOfOper + "', '" + mapExt.MyPK + "');");
+                tbAuto.attr("onkeyup", "DoAnscToFillDiv(this,this.value,\'TB_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\');");
                 tbAuto.attr("AUTOCOMPLETE", "OFF");
                 if (mapExt.Tag != "") {
                     /* 处理下拉框的选择范围的问题 */
                     var strs = mapExt.Tag.split('$');
                     for (var str in strs) {
                         var str = strs[k];
-                        if (str = "" || str==null) {
+                        if (str = "") {
                             continue;
                         }
 
@@ -1562,16 +1732,6 @@ function GenerWorkNode() {
                 $('#MessageDiv').modal().show();
             }
 
-            // alert(data);
-            //循环Sys_MapFrame
-            //            for (var i in flow_Data.Sys_MapFrame) {
-            //                var frame = flow_Data.Sys_MapFrame[i];
-            //                var alertMsgEle = figure_Template_IFrame(frame);
-            //                $('#lastOptMsg').append(alertMsgEle);
-            //            }
-            // alert('ddddddddddd');
-
-
             //循环组件 轨迹图 审核组件 子流程 子线程
             $('#CCForm').append(figure_Template_FigureFlowChart(flow_Data["WF_FrmNodeComponent"][0]));
             $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_FrmNodeComponent"][0]));
@@ -1669,26 +1829,29 @@ function GenerWorkNode() {
                 $(selectObj).selectpicker('val', defValArr);
             });
 
-            //给富文本创建编辑器
-            var editor = document.activeEditor = UE.getEditor('editor', {
-                autoHeightEnabled: false,
-                emotionLocalization: true,
-                elementPathEnabled: false,
-                wordCount: false,
-                toolbars: [[
+            if (document.BindEditorMapAttr) 
+            {
+                //给富文本创建编辑器
+                var editor = document.activeEditor = UE.getEditor('editor', {
+                    autoHeightEnabled: false,
+                    emotionLocalization: true,
+                    elementPathEnabled: false,
+                    wordCount: false,
+                    toolbars: [[
             'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'cleardoc', 'fontfamily', 'fontsize', 'indent', 'date', 'time'
         ]]
-            });
+                });
 
-            if (editor && document.BindEditorMapAttr) {
+                if (editor) {
 
-                editor.MaxLen = document.BindEditorMapAttr.MaxLen;
-                editor.MinLen = document.BindEditorMapAttr.MinLen;
-                editor.BindField = document.BindEditorMapAttr.KeyOfEn;
-                editor.BindFieldName = document.BindEditorMapAttr.Name;
+                    editor.MaxLen = document.BindEditorMapAttr.MaxLen;
+                    editor.MinLen = document.BindEditorMapAttr.MinLen;
+                    editor.BindField = document.BindEditorMapAttr.KeyOfEn;
+                    editor.BindFieldName = document.BindEditorMapAttr.Name;
 
-                //调整样式,让必选的红色 * 随后垂直居中
-                editor.$container.css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
+                    //调整样式,让必选的红色 * 随后垂直居中
+                    $(editor.container).css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
+                }
             }
 
         }
@@ -1744,6 +1907,11 @@ function figure_MapAttr_Template(mapAttr) {
                             eleHtml +=
                                 "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip ||'') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
                             ;
+
+
+
+
+
                         }
                         else {
 
@@ -1751,8 +1919,8 @@ function figure_MapAttr_Template(mapAttr) {
                                 //如果是富文本就使用百度 UEditor
 
                                 if (mapAttr.UIIsEnable == "0") {
-                                    //只读状态直接 div 展示富文本内容
-                                    //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+
+                                    //只读状态直接 div.richText 展示富文本内容                                    
                                     eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
                                 } else {
                                     document.BindEditorMapAttr = mapAttr;//存到全局备用
@@ -2271,7 +2439,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var sta = wf_node.FWCSta;
     var x = wf_node.FWC_X;
     var y = wf_node.FWC_Y;
-    var h = wf_node.FWC_H +1000;
+    var h = wf_node.FWC_H;
     var w = wf_node.FWC_W;
     if (sta == 0)
         return $('');
@@ -2294,7 +2462,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
         $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
     }
     src += "&r=q" + paras;
-    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe style='width:100%' height=" + h + "' id='FFWC" + wf_node.NodeID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>" + '</div>';
+    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe style='width:100%' height=" + h + 800 + "' id='FFWC" + wf_node.NodeID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
     eleHtml = $(eleHtml);
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
 

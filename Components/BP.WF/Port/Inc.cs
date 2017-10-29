@@ -19,7 +19,7 @@ namespace BP.WF.Port
 	/// <summary>
 	/// 独立组织
 	/// </summary>
-	public class Inc:EntitySimpleTree
+	public class Inc:EntityNoName
 	{
 		#region 属性
         /// <summary>
@@ -94,7 +94,7 @@ namespace BP.WF.Port
 	/// <summary>
 	///独立组织集合
 	/// </summary>
-    public class Incs : EntitiesSimpleTree
+    public class Incs : EntitiesNoName
     {
         /// <summary>
         /// 得到一个新实体

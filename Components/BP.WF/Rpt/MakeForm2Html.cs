@@ -689,6 +689,11 @@ namespace BP.WF
                     sb.Append("<DIV id='Fd" + ath.MyPK + "' style='position:absolute; left:" + x + "px; top:" + ath.Y + "px; width:" + ath.W + "px; height:" + ath.H + "px;text-align: left;' >");
                     sb.Append("<span>");
                     sb.Append("<ul>");
+
+                    //判断是否有这个目录.
+                    if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
+                        System.IO.Directory.CreateDirectory(path + "\\pdf\\");
+
                     foreach (FrmAttachmentDB item in athDBs)
                     {
                         if (ath.AthSaveWay == AthSaveWay.FTPServer)
@@ -873,6 +878,11 @@ namespace BP.WF
                         {
                             sb.Append("\t\n<tr><td valign=top colspan=4 >");
                             sb.Append("\t\n<ul>");
+
+                            //判断是否有这个目录.
+                            if (System.IO.Directory.Exists(path + "\\pdf\\")==false)
+                                System.IO.Directory.CreateDirectory( path + "\\pdf\\");
+
                             foreach (FrmAttachmentDB item in athDBs)
                             {
                                 string fileTo = path + "\\pdf\\" + item.FileName;
@@ -885,6 +895,8 @@ namespace BP.WF
                                         if (System.IO.File.Exists(fileTo) == false)
                                         {
                                             string file = item.MakeFullFileFromFtp();
+
+                                            
                                             System.IO.File.Copy(file, fileTo, true);
                                         }
 

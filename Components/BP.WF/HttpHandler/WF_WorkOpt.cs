@@ -508,6 +508,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string WorkCheck_Init()
         {
+            #region 定义变量.
             FrmWorkCheck wcDesc = new FrmWorkCheck(this.FK_Node);
             FrmWorkCheck frmWorkCheck = null;
             FrmAttachmentDBs athDBs = null;
@@ -530,7 +531,7 @@ namespace BP.WF.HttpHandler
             int noneEmpIdx = 0;
 
             fwcs.Retrieve(NodeAttr.FK_Flow, this.FK_Flow, NodeAttr.Step);
-            ds.Tables.Add(wcDesc.ToDataTableField("wcDesc"));
+            ds.Tables.Add(wcDesc.ToDataTableField("wcDesc")); //当前的节点审核组件定义，放入ds.
 
             DataTable tkDt = new DataTable("Tracks");
             tkDt.Columns.Add("NodeID", typeof(int));
@@ -545,6 +546,7 @@ namespace BP.WF.HttpHandler
             tkDt.Columns.Add("T_CheckIndex", typeof(int));    //审核人显示顺序，用于后面的排序
             ds.Tables.Add(tkDt);
 
+            //流程附件.
             DataTable athDt = new DataTable("Aths");
             athDt.Columns.Add("NodeID", typeof(int));
             athDt.Columns.Add("MyPK", typeof(string));
@@ -560,7 +562,9 @@ namespace BP.WF.HttpHandler
                 wc = new WorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
 
             isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
-            //历史审核信息显示
+            #endregion 定义变量.
+
+            #region 判断是否显示 - 历史审核信息显示
             if (wcDesc.FWCListEnable == true)
             {
                 tks = wc.HisWorkChecks;
@@ -794,7 +798,9 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            //审核意见填写
+            #endregion 判断是否显示 - 历史审核信息显示
+
+            #region 审核意见填写
             if (isExitTb_doc && wcDesc.HisFrmWorkCheckSta == FrmWorkCheckSta.Enable && isCanDo && dotype != "View")
             {
                 DataRow[] rows = null;
@@ -861,6 +867,7 @@ namespace BP.WF.HttpHandler
                     tkDt.Rows.Add(row);
                 }
             }
+            #endregion
 
             #region 显示有审核组件，但还未审核的节点
             if (tks == null)

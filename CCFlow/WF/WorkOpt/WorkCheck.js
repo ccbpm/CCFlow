@@ -32,11 +32,11 @@
 
             Handler_AjaxQueryData(param, function (data) {
 
-                if (data.indexOf('err@') == 0) {
+                if (data.indexOf('err@') != -1) {
                     alert(data);
                     return;
                 }
-
+                //                    alert(data);
                 init = eval('(' + data + ')');
                 wcDesc = init.wcDesc[0];
                 tks = init.Tracks;
@@ -57,17 +57,17 @@
                 $.each(tks, function () {
                     var subaths = GetSubAths(this.NodeID);
 
-                    //                    if (wcDesc.FWCShowModel == 0) {
-                    //                        //表格模式
-                    //                        html += '<tr style="background-color: #E2F6FB">';
-                    //                        html += '<td>' + this.NodeName + '</td>';
-                    //                        html += '</tr>';
-                    //                        html += '<tr>';
-                    //                    }
-
-                    //自由模式
-                    html += "<tr>";
-                    html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
+//                    if (wcDesc.FWCShowModel == 0) {
+//                        //表格模式
+//                        html += '<tr style="background-color: #E2F6FB">';
+//                        html += '<td>' + this.NodeName + '</td>';
+//                        html += '</tr>';
+//                        html += '<tr>';
+//                    }
+                      
+                        //自由模式
+                        html += "<tr>";
+                        html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
 
                     //审核意见
                     if (this.IsDoc) {
@@ -101,18 +101,18 @@
                         html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'>";
                         html += "<td " + tdid + " style='word-wrap: break-word;' colspan=2>";
                         html += "<b>附件：</b>&nbsp;" + subaths;
-                        html += "</td>";
+                        html += "</td>"; 
                         html += "</tr>";
                     }
 
                     //输出签名.
-                    if (SignType == null || SignType == undefined) {
+                    if ( SignType == null || SignType == undefined) {
 
                         //签名，日期.
                         html += "<tr>";
-                        html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"
+                        html += "<td style='text-align:left;height:35px;line-height:35px;'>签名:"
                                     + (wcDesc.SigantureEnabel == "0" ? GetUserSmallIcon(this.EmpFrom, this.EmpFromT) : GetUserSiganture(this.EmpFrom, this.EmpFromT))
-                                    + "&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
+                                    + "&nbsp;&nbsp;&nbsp;&nbsp;日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
                         html += "</tr>";
 
                     } else {
@@ -123,22 +123,22 @@
                             if (st.No != this.EmpFrom)
                                 continue;
 
-                            //  alert(st.SignType);
+                         //  alert(st.SignType);
 
                             if (st.SignType == 0 || st.SignType == null) {
                                 html += "<tr>";
-                                html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"
-                                    + GetUserSmallIcon(this.EmpFrom, this.EmpFromT)
-                                    + "&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
+                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
+                                    + GetUserSmallIcon(this.EmpFrom, this.EmpFromT) + '</div>'
+                                    + "<div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</div></td>";
                                 html += "</tr>";
                                 break;
                             }
 
                             if (st.SignType == 1) {
                                 html += "<tr>";
-                                html += "<td style='text-align:right;height:35px;line-height:35px;'>签名:&nbsp;"
-                                    + GetUserSiganture(this.EmpFrom, this.EmpFromT)
-                                    + "&nbsp;&nbsp;&nbsp;&nbsp;日期:&nbsp;" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
+                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
+                                    + GetUserSiganture(this.EmpFrom, this.EmpFromT)+'</div>'
+                                    + " <div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</div></td>";
                                 html += "</tr>";
                                 break;
                             }
@@ -277,7 +277,9 @@
         }
 
         function GetUserSmallIcon(userNo, userName) {
-            return "<img src='../../DataUser/UserIcon/" + userNo + "Smaller.png' border=0  style='height:15px;width:15px;padding-right:5px;vertical-align:middle;'  onerror=\"src='../../DataUser/UserIcon/DefaultSmaller.png'\" />" + userName;
+            return userName;
+
+            //return "<img src='../../DataUser/UserIcon/" + userNo + "Smaller.png' border=0  style='height:15px;width:15px;padding-right:5px;vertical-align:middle;'  onerror=\"src='../../DataUser/UserIcon/DefaultSmaller.png'\" />" + userName;
         }
 
         function FindSubAths(nd) {

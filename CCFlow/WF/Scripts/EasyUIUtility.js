@@ -4,10 +4,21 @@
 //added by liuxc,2014-12-1
 //此文件可用于存放EasyUI的公用JS方法，建议都给JS方法加上注释，Demo如下
 
-$.messager.defaults.ok = "确定";
-$.messager.defaults.cancel = "取消";
+
+function InitOKCancelText() {
+
+    if ($.messager == null || $.messager == undefined)
+        return;
+    if ($.messager.defaults == null && $.messager.defaults == undefined)
+        $.messager.defaults.ok = "确定";
+
+    if ($.messager.defaults == null && $.messager.defaults == undefined)
+        $.messager.defaults.cancel = "取消";
+}
 
 function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon, showBtns, okBtnFunc, okBtnFuncArgs, dockObj, dlgClosedFunc) {
+
+    InitOKCancelText();
     ///<summary>使用EasyUiDialog打开一个页面</summary>
     ///<param name="url" type="String">页面链接</param>
     ///<param name="iframeId" type="String">嵌套url页面的iframe的id，在okBtnFunc中，可以通过document.getElementById('eudlgframe').contentWindow获取该页面，然后直接调用该页面的方法，比如获取选中值</param>
@@ -118,6 +129,9 @@ function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon,
 }
 
 function OpenEasyUiSampleEditDialog(editPropertyName, editType, oldValue, okBtnFunc, okBtnFuncArgs, isMultiLine, dlgIcon, dlgWidth, dlgHeight) {
+
+    InitOKCancelText();
+
     ///<summary>使用EasyUiDialog打开一个含有1个字段文本框的编辑页面</summary>
     ///<param name="editPropertyName" type="String">当前编辑的字段中文名称</param>
     ///<param name="editType" type="String">编辑类型，比如：新建、编辑等</param>
@@ -192,6 +206,9 @@ function OpenEasyUiSampleEditDialog(editPropertyName, editType, oldValue, okBtnF
 }
 
 function OpenEasyUiDialogForSingleHtml(url, dlgTitle, dlgWidth, dlgHeight, dlgIcon, showBtns, okBtnFunc, okBtnFuncArgs) {
+
+    InitOKCancelText();
+
     ///<summary>使用EasyUiDialog打开一个页面</summary>
     ///<param name="url" type="String">页面链接</param>
     ///<param name="dlgTitle" type="String">Dialog标题</param>
@@ -257,6 +274,8 @@ function OpenEasyUiDialogForSingleHtml(url, dlgTitle, dlgWidth, dlgHeight, dlgIc
 }
 
 function OpenEasyUiConfirm(msg, okBtnFunc, okBtnFuncArgs) {
+    InitOKCancelText();
+
     ///<summary>打开EasyUiConfirm确认框</summary>
     ///<param name="msg" type="String">确认消息</param>
     ///<param name="okBtnFunc" type="Function">点击“确定”按钮调用的方法</param>
@@ -269,6 +288,9 @@ function OpenEasyUiConfirm(msg, okBtnFunc, okBtnFuncArgs) {
 }
 
 function EasyUiMenuShowForCheckedItems(menuid, itemChecks) {
+
+    InitOKCancelText();
+
     ///<summary>EasyUi Menu中的checkbox项的显示菜单状态处理方法</summary>
     ///<param name="menuid" type="String">menu的id</param>
     ///<param name="itemChecks" type="Array">各checkbox item的选中信息，格式[{id:'各checkbox item id',checked:true},...]</param>
@@ -280,6 +302,9 @@ function EasyUiMenuShowForCheckedItems(menuid, itemChecks) {
 }
 
 function EasyUiCheckedMenuItemClick(menuid, checkitemid) {
+
+    InitOKCancelText();
+
     ///<summary>EasyUi Menu中的checkbox项的按钮选中/取消选中单击处理方法，此处checkbox项是一个虚拟的，本身easyui中不存在</summary>
     ///<param name="menuid" type="String">menu的id</param>
     ///<param name="checkitemid" type="String">复选项的itemid</param>
@@ -294,6 +319,9 @@ function EasyUiCheckedMenuItemClick(menuid, checkitemid) {
 }
 
 function EasyUiMenuItemsCheckOnlyOne(menuid, submenuid, checkitemid, groupItemIdPrefix) {
+
+    InitOKCancelText();
+
     ///<summary>操作EasyUi Menu中的多checkbox项选一项的处理方法，要求这多个item的id前缀一致</summary>
     ///<param name="menuid" type="String">menu的id</param>
     ///<param name="submenuid" type="String">如果这些项处于menu的一个子级菜单中，请填写这个子级菜单项的项级item的id</param>

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Pop填充其它控件</title>
+    <title>为pop返回值填充其它控件</title>
      <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -46,6 +46,7 @@
                         document.getElementById("Btn_FullDDL").disabled = true;
                         document.getElementById("Btn_Delete").disabled = true;
                     }
+
                     return;
                 }
             });
@@ -55,7 +56,7 @@
 
         //装载模版.
         function LoadTemplate() {
-            var url = "../../SettingTemplate.htm?TemplateType=PopFullCtrl";
+            var url = "../../SettingTemplate.htm?TemplateType=TBFullCtrl";
             WinOpen(url, 'ss');
         }
     </script>
@@ -66,8 +67,10 @@
 
 <div id="Msg"></div>
 
+
 <table id="table" style="width:100%;">
-<caption>为pop填充其它控件</caption>
+<caption>为pop返回值填充其它控件</caption>
+
 <tr>
 <th>属性</th>
 <th>输入</th>
@@ -76,14 +79,15 @@
 <tr>
 <td> 执行SQL的数据源 </td>
 <td> <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc" > </select> </td>
-<td>
+<td> ccform允许从其他数据源中取数据,
  <a href="../../../Comm/Sys/SFDBSrcNewGuide.htm" ><img alt='' src='/WF/Img/Setting.png' border=0 />设置/新建数据源</a>
-
  </td>
 </tr>
- 
+
 <tr>
-<th colspan="3">初始化SQL(初始化表格的时候的SQL数据,可以为空)第一列必须是数据源的PK. <a href="javascript:ShowHidden('sqlexp')"  >帮助: </a>
+<td colspan="3"> 执行的SQL
+<a href="javascript:ShowHidden('sqlexp')"  >填充SQL帮助: </a>
+
 <div id='sqlexp'  style='color:Gray; display:none'>
 <ul>
  <li>1. 设置一个查询的SQL语句，该SQL必须包含 No, Name 列, 用与展示快速补全的部分。</li>
@@ -93,39 +97,19 @@
  <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
  <li><img alt="" src="../Img/TBCtrlFull.png" /></li>
  </ul>
-</div> </th>
+</div>
+
+ </td>
 </tr>
 
 <tr> 
-<td colspan="3" style="width:100%;"> 
-<textarea rows="4" name="TB_Tag2" id="TB_Tag2" style="width:95%;" > </textarea> </td>
+<td colspan="3" style="width:100%;"> <textarea rows="4" name="TB_Doc" id="TB_Doc" style="width:95%;" > </textarea> </td>
 </tr>
-
-
-<tr>
-<th colspan="3">查询SQL(SQL里必须包含@Key关键字.)第一列必须是数据源的PK.</th>
-</tr>
-
-<tr> 
-<td colspan="3" style="width:100%;"> 
-<textarea rows="4" name="TB_Tag3" id="TB_Tag3" style="width:95%;" > </textarea> </td>
-</tr>
-
-<tr>
-<th colspan="3">数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)，该sql返回的列名与主表字段名匹配就会自动赋值.</th>
-</tr>
-
-<tr> 
-<td colspan="3" style="width:100%;"> 
-<textarea rows="4" name="TB_Tag4" id="TB_Tag4" style="width:95%;" > </textarea> </td>
-</tr>
-
-
 
 <tr>
 <td colspan=3 >
 
-<input type="button" value="加载模版" onclick="LoadTemplate()" id="PopFullCtrl" />
+<input type="button" value="加载模版" onclick="LoadTemplate()" id="TBFullCtrl" />
 <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
 <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
 
@@ -141,7 +125,7 @@
 
     function FullDtl() {
         var myPK = GetQueryString('MyPK');
-        var url = 'PopFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn='+GetQueryString('KeyOfEn')+'&MyPK=' + myPK;
+        var url = 'PopFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK;
         window.location.href = url;
         return;
     }
@@ -180,8 +164,8 @@
                 alert(data);
 
                 var mypk = 'PopFullCtrl_' + GetQueryString('FK_MapData') + '_' + GetQueryString('KeyOfEn');
-                var url = 'PopFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
-                window.location.href = url; 
+                var url = 'TBFullCtrl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + mypk;
+                window.location.href = url;
                 //$("#Msg").html("<font color=green>" + data + "</font>");
                 return;
             },

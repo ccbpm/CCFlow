@@ -85,7 +85,7 @@ namespace BP.WF.HttpHandler
         {
             Hashtable ht = new Hashtable();
             ht.Add("MyStartFlow", "我发起的流程");
-            ht.Add("MyJoinFlow", "我参与的流程");
+            ht.Add("MyJoinFlow", "我审批的流程");
 
 
 

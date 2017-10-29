@@ -700,5 +700,52 @@ namespace BP.WF.HttpHandler
         }
         #endregion 数据导入.
 
+        #region 修改node Icon.
+        /// <summary>
+        /// 修改节点ICON
+        /// </summary>
+        /// <returns></returns>
+        public string NodesIcon_Init()
+        {
+            DataSet ds = new System.Data.DataSet();
+            Nodes nds = new Nodes(this.FK_Flow);
+            DataTable dt = nds.ToDataTableField("Nodes");
+            ds.Tables.Add(dt);
+
+            //把文件放入ds.
+            string path = SystemConfig.PathOfWebApp + "\\WF\\Admin\\ClientBin\\NodeIcon\\";
+            string[] strs = System.IO.Directory.GetFiles(path);
+            DataTable dtIcon = new System.Data.DataTable();
+            dtIcon.Columns.Add("No");
+            dtIcon.Columns.Add("Name");
+            foreach (string str in strs)
+            {
+                string fileName = str.Substring(str.LastIndexOf("\\")+1);
+                fileName = fileName.Substring(0, fileName.LastIndexOf("."));
+
+                DataRow dr = dtIcon.NewRow();
+                dr[0] = fileName;
+                dr[1] = fileName;
+                dtIcon.Rows.Add(dr);
+            }
+
+            dtIcon.TableName = "ICONs";
+            ds.Tables.Add(dtIcon);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        public string NodesIconSelect_Save()
+        {
+            string icon = this.GetRequestVal("ICON");
+
+            Node nd = new Node(this.FK_Node);
+            nd.ICON = icon;
+            nd.Update();
+
+            return "保存成功...";
+        }
+        #endregion 修改node Icon.
+
+
     }
 }

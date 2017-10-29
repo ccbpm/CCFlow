@@ -458,6 +458,14 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "修改ICON"; // "调用事件接口";
+                rm.ClassMethodName = this.ToString() + ".DoNodesICON";
+              //  rm.Icon = "../../WF/Img/Event.png";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 //rm = new RefMethod();
                 //rm.Title = "与业务表数据同步"; // "抄送规则";
                 //rm.ClassMethodName = this.ToString() + ".DoBTable";
@@ -967,6 +975,14 @@ namespace BP.WF.Template
         public string DoAction()
         {
             return "../../Admin/AttrNode/Action.htm?NodeID=0&FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
+        }
+        /// <summary>
+        /// 节点标签
+        /// </summary>
+        /// <returns></returns>
+        public string DoNodesICON()
+        {
+            return "../../Admin/AttrFlow/NodesIcon.htm?FK_Flow=" + this.No + "&tk=" + new Random().NextDouble();
         }
         public string DoDBSrc()
         {

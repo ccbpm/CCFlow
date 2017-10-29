@@ -83,7 +83,7 @@ namespace BP.WF.HttpHandler
         {
             Hashtable ht = new Hashtable();
             ht.Add("My", "我发起的流程");
-            ht.Add("MyJoin", "我参与的流程");
+            ht.Add("MyJoin", "我审批的流程");
 
             RptDfine rd = new RptDfine(this.FK_Flow);
 
@@ -117,6 +117,9 @@ namespace BP.WF.HttpHandler
 
             if (BP.Web.WebUser.IsAdmin)
                 ht.Add("Adminer", "高级查询");
+
+            Flow fl = new Flow(this.FK_Flow);
+            ht.Add("FlowName", fl.Name);
 
             return BP.Tools.Json.ToJsonEntitiesNoNameMode(ht);
         }
@@ -166,7 +169,7 @@ namespace BP.WF.HttpHandler
                     rd.DoReset(this.SearchType, "我发起的流程");
 
                 if (this.SearchType == "MyJoin")
-                    rd.DoReset(this.SearchType, "我参与的流程");
+                    rd.DoReset(this.SearchType, "我审批的流程");
 
                 if (this.SearchType == "Adminer")
                     rd.DoReset(this.SearchType, "高级查询");

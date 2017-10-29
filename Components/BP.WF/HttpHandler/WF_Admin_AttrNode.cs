@@ -1512,8 +1512,6 @@ namespace BP.WF.HttpHandler
 
             }
             return BP.Tools.Json.ToJson(xmls);
-
-
         }
 
         public string PushMessageEntity_Init()
@@ -1522,7 +1520,11 @@ namespace BP.WF.HttpHandler
             BP.WF.Template.PushMsg en = new BP.WF.Template.PushMsg();
             en.MyPK = this.MyPK;
             en.FK_Event = this.FK_Event;
-            en.RetrieveFromDBSources();
+            int i = en.RetrieveFromDBSources();
+
+            if (i == 0 || this.FK_Event == "SendSuccess")
+                en.MailPushWay = 1;
+
             return en.ToJson();
         }
         public string PushMessageEntity_Save()
@@ -1532,8 +1534,75 @@ namespace BP.WF.HttpHandler
             msg.RetrieveFromDBSources();
             msg.FK_Event = this.FK_Event;
             msg.FK_Node = this.FK_Node;
-            // msg = BP.Sys.PubClass.CopyFromRequestByPost(msg, context.Request) as BP.WF.Template.PushMsg;
-            msg.Save();  //执行保存.
+
+
+
+
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            BP.WF.Nodes nds = new BP.WF.Nodes(nd.FK_Flow);
+
+            #region 求出来选择的节点.
+            string nodesOfSMS = "";
+            string nodesOfEmail = "";
+            foreach (BP.WF.Node mynd in nds)
+            {
+                foreach (string key in context.Request.Params.AllKeys)
+                {
+                    if (key.Contains("CB_SMS_" + mynd.NodeID)
+                        && nodesOfSMS.Contains(mynd.NodeID + "") == false)
+                        nodesOfSMS += mynd.NodeID + ",";
+
+                    if (key.Contains("CB_Email_" + mynd.NodeID)
+                        && nodesOfEmail.Contains(mynd.NodeID + "") == false)
+                        nodesOfEmail += mynd.NodeID + ",";
+                }
+            }
+
+            //节点.
+            msg.MailNodes = nodesOfEmail;
+            msg.SMSNodes = nodesOfSMS;
+            #endregion 求出来选择的节点.
+
+            #region 短信保存.
+
+            msg.SMSPushWay = this.GetRequestValInt("RB_SMS");
+
+
+            //短信手机字段.
+            msg.SMSField = this.GetRequestVal("DDL_SMS_Fields");
+            //替换变量
+            string smsstr = this.GetRequestVal("TB_SMS");
+            //扬玉慧 此处是配置界面  不应该把用户名和用户编号转化掉
+            //smsstr = smsstr.Replace("@WebUser.Name", BP.Web.WebUser.Name);
+            //smsstr = smsstr.Replace("@WebUser.No", BP.Web.WebUser.No);
+
+            System.Data.DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable();
+            // smsstr = smsstr.Replace("@RDT",);
+            //短信内容模版.
+            msg.SMSDoc_Real = smsstr;
+            #endregion 短信保存.
+
+            #region 邮件保存.
+            msg.MailPushWay = this.GetRequestValInt("RB_Email");
+
+            //邮件标题与内容.
+            msg.MailTitle_Real = this.GetRequestVal("TB_Email_Title");
+            msg.MailDoc_Real = this.GetRequestVal("TB_Email_Doc"); //  this.TB_Email_Doc.Text;
+
+            //邮件地址.
+            msg.MailAddress = this.GetRequestVal("DDL_Email");
+            #endregion 邮件保存.
+
+            //保存.
+            if (string.IsNullOrEmpty(msg.MyPK) == true)
+            {
+                msg.MyPK = BP.DA.DBAccess.GenerGUID();
+                msg.Insert();
+            }
+            else
+            {
+                msg.Update();
+            }
 
             return "保存成功...";
         }

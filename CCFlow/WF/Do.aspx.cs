@@ -914,7 +914,7 @@ namespace BP.Web.WF
                     name = "部门发起的流程";
                     break;
                 case "MyJoin": //我参与的.
-                    name = "我参与的流程";
+                    name = "我审批的流程";
                     break;
                 case "Adminer":
                     name = "高级查询";

@@ -1637,7 +1637,13 @@ function InitMapAttrOfCtrl(mapAttr) {
     if (mapAttr.MyDataType == "1") {  //不是外键
 
         if (mapAttr.UIHeight <= 23) //普通的文本框.
-            return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text' " + (mapAttr.UIIsEnable==1 ? '' : ' disabled="disabled"') + " />";
+        {
+            var enableAttr = '';
+            if (mapAttr.UIIsEnable == 0)
+                enableAttr = "disabled='disabled'";
+
+            return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text'  " + enableAttr + " />";
+        }
 
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
 
@@ -1662,7 +1668,6 @@ function InitMapAttrOfCtrl(mapAttr) {
             return eleHtml
         }
 
-
         //普通的大块文本.
         return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable==1 ? '' : ' disabled="disabled"') + " />"
     }
@@ -1678,6 +1683,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         return "<input " + enableAttr + " style='width:80px;' name='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
+    //时期时间类型.
     if (mapAttr.MyDataType == 7) {
 
         var enableAttr = '';
@@ -1689,7 +1695,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         return "<input  type='text'  style='width:120px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
-
+    // boolen 类型.
     if (mapAttr.MyDataType == 4) {  // AppBoolean = 7
 
         if (mapAttr.UIIsEnable == 1)
@@ -1708,7 +1714,13 @@ function InitMapAttrOfCtrl(mapAttr) {
         return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
     }
 
+    //枚举类型.
     if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
+        if (mapAttr.UIIsEnable == 1)
+            enableAttr = "";
+        else
+            enableAttr = "disabled='disabled'";
+
         return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
     }
 
@@ -1719,14 +1731,16 @@ function InitMapAttrOfCtrl(mapAttr) {
         if (mapAttr.UIIsEnable != 1)
             enableAttr = "disabled='disabled'";
 
-        return "<input style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+        // alert(mapAttr.KeyOfEn);
+        return "<input style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
-    if ((mapAttr.MyDataType == 2)) {//AppInt
+    if ((mapAttr.MyDataType == 2)) { //AppInt
         var enableAttr = '';
         if (mapAttr.UIIsEnable != 1) {
             enableAttr = "disabled='disabled'";
         }
+
         return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 

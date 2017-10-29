@@ -32,11 +32,11 @@
 
             Handler_AjaxQueryData(param, function (data) {
 
-                if (data.indexOf('err@') != -1) {
+                if (data.indexOf('err@') == 0) {
                     alert(data);
                     return;
                 }
-                //                    alert(data);
+
                 init = eval('(' + data + ')');
                 wcDesc = init.wcDesc[0];
                 tks = init.Tracks;
@@ -57,17 +57,17 @@
                 $.each(tks, function () {
                     var subaths = GetSubAths(this.NodeID);
 
-//                    if (wcDesc.FWCShowModel == 0) {
-//                        //表格模式
-//                        html += '<tr style="background-color: #E2F6FB">';
-//                        html += '<td>' + this.NodeName + '</td>';
-//                        html += '</tr>';
-//                        html += '<tr>';
-//                    }
-                      
-                        //自由模式
-                        html += "<tr>";
-                        html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
+                    //                    if (wcDesc.FWCShowModel == 0) {
+                    //                        //表格模式
+                    //                        html += '<tr style="background-color: #E2F6FB">';
+                    //                        html += '<td>' + this.NodeName + '</td>';
+                    //                        html += '</tr>';
+                    //                        html += '<tr>';
+                    //                    }
+
+                    //自由模式
+                    html += "<tr>";
+                    html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
 
                     //审核意见
                     if (this.IsDoc) {
@@ -101,12 +101,12 @@
                         html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'>";
                         html += "<td " + tdid + " style='word-wrap: break-word;' colspan=2>";
                         html += "<b>附件：</b>&nbsp;" + subaths;
-                        html += "</td>"; 
+                        html += "</td>";
                         html += "</tr>";
                     }
 
                     //输出签名.
-                    if ( SignType == null || SignType == undefined) {
+                    if (SignType == null || SignType == undefined) {
 
                         //签名，日期.
                         html += "<tr>";
@@ -123,7 +123,7 @@
                             if (st.No != this.EmpFrom)
                                 continue;
 
-                         //  alert(st.SignType);
+                            //  alert(st.SignType);
 
                             if (st.SignType == 0 || st.SignType == null) {
                                 html += "<tr>";

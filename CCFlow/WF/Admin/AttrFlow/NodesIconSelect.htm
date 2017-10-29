@@ -40,9 +40,10 @@
 
                         var fileName = icon.No;
 
-                        html += "&nbsp;&nbsp;<img class='icon'  src='../ClientBin/NodeIcon/" + icon.No + ".png' style='width:40px'  onclick=\"SelectIt('" + icon.No + "')\"  /> ";
+                        html += "&nbsp;&nbsp;<img class='icon'  src='../ClientBin/NodeIcon/" + icon.No + ".png' style='width:60px;height:60px;'  onclick=\"SelectIt('" + icon.No + "')\" alt='" + icon.No + "'  />";
                     }
                     document.getElementById('docs').innerHTML = html;
+
                 }
             });
         });

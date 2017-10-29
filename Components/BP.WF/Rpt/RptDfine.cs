@@ -178,13 +178,13 @@ namespace BP.WF.Rpt
                 map.AddRefMethod(rm);
                 #endregion 我发起的流程.
 
-                #region 我参与的流程.
+                #region 我审批的流程.
                 rm = new RefMethod();
                 rm.Title = "设置显示的列";
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SelectCols.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsChoseOf_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我参与的流程";
+                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -192,7 +192,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/Order.png";
                 rm.ClassMethodName = this.ToString() + ".DoColsOrder_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我参与的流程";
+                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -200,7 +200,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/RptDfine/Img/SearchCond.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearchCond_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我参与的流程";
+                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -216,7 +216,7 @@ namespace BP.WF.Rpt
                 rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/Search.png";
                 rm.ClassMethodName = this.ToString() + ".DoSearch_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "我参与的流程";
+                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -225,7 +225,7 @@ namespace BP.WF.Rpt
                 rm.Warning = "您确定要执行吗?";
                 rm.ClassMethodName = this.ToString() + ".DoReset_MyJoinFlow()";
                 rm.RefMethodType = RefMethodType.Func;
-                rm.GroupName = "我参与的流程";
+                rm.GroupName = "我审批的流程";
                 map.AddRefMethod(rm);
                 #endregion 我发起的流程.
 
@@ -562,7 +562,7 @@ namespace BP.WF.Rpt
         /// <returns></returns>
         public string DoReset_MyJoinFlow()
         {
-            return DoReset("MyJoin","我参与的流程");
+            return DoReset("MyJoin", "我审批的流程");
         }
         /// <summary>
         /// 查询
@@ -572,7 +572,7 @@ namespace BP.WF.Rpt
         {
             return "../../RptDfine/FlowSearch.htm?SearchType=MyJoin&FK_Flow=" + this.No;
         }
-        #endregion 我参与的流程
+        #endregion 我审批的流程
 
         #region 本部门发起的流程
         /// <summary>

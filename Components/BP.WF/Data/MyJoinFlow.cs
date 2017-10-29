@@ -714,7 +714,7 @@ namespace BP.WF.Data
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_GenerWorkFlow", "我参与的流程");
+                Map map = new Map("WF_GenerWorkFlow", "我审批的流程");
 
                 map.Java_SetEnType(EnType.View);
 

@@ -2,10 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>消息实体</title>
-    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
-    <link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
-    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
@@ -72,6 +69,7 @@
                         $("#DDL_SMS_Fields").append("<option value='" + oVal + "' >" + oText + "</option>");
                         $("#DDL_Email_Fields").append("<option value='" + oVal + "' >" + oText + "</option>");
                     }
+
                     //02.节点列表
                     for (i = 0, len = nodes.length; i < len; i++) {
                         var n = nodes[i];
@@ -126,7 +124,7 @@
             return ret[EventListOfNode];
         }
 
-        function Btn_Save_Click() {
+        function Save() {
             var para = "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Event=" + GetQueryString("FK_Event") + "&m=" + Math.random();
             if (GetQueryString("MyPK") != null) {
                 para += "&MyPK=" + GetQueryString("MyPK");
@@ -146,16 +144,22 @@
                         alert(data);
                         return;
                     }
-                    alert(data); 
-                    //window.location.href = "PushMessageEntity.htm?" + para;
-                    window.history.back();
-                    //return;
+
+                    alert(data);
+                    Back();
                 }
             });
         }
 
-        function Btn_Back_Click() {
-            window.location.href = history.back();
+        function Back() {
+
+            var url = '';
+            if (window.confirm('您想使用新版本的设置吗？') == true)
+                url = 'PushMessage.aspx?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
+            else
+                url = 'PushMessage.htm?FK_Node=' + GetQueryString('FK_Node') + '&FK_Flow=' + GetQueryString('FK_Flow') + '&m' + Math.random();
+
+            window.location.href = url;
         }
     </script>
 </head>
@@ -307,8 +311,8 @@
                             </tr>
                         </table>
                     </fieldset>
-                    <input type="submit" name="Btn_Save" value="保存" id="Btn_Save" onclick="Btn_Save_Click();"/>
-                    <input type="submit" name="Btn_Back" value="返回" id="Btn_Back" onclick="Btn_Back_Click();"/>
+                    <input type="button" name="Btn_Save" value="保存" id="Btn_Save" onclick="Save();"/>
+                    <input type="button" name="Btn_Back" value="返回" id="Btn_Back" onclick="Back();"/>
                 </td>
             </tr>
         </table>

@@ -249,7 +249,6 @@ namespace CCFlow.WF.Admin.AttrNode
 
             //邮件地址.
             msg.MailAddress = this.DDL_Email.SelectedValue;
-
             #endregion 邮件保存.
 
             //保存.

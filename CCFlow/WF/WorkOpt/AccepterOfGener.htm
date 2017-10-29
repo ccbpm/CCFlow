@@ -246,7 +246,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url:url,
+                url: url,
                 dataType: 'html',
                 success: function (data) {
 
@@ -292,11 +292,20 @@
                     document.getElementById("Table1").style.display = "none";
                     document.getElementById("TB_Emps").style.display = "none";
                     document.getElementById("Btn_SelectEmps").style.display = "none";
-                    //document.getElementById("Btn_AddEmps").style.display = "none";
-                    document.getElementById("Btn_Send").style.display = "none";
-                    document.getElementById("labInfo").style.display = "none";
-                    document.getElementById("Btn_Close").style.display = "none";
 
+                    //document.getElementById("Btn_AddEmps").style.display = "none";
+
+                    var ctrl = document.getElementById("Btn_Send");
+                    if (ctrl != null)
+                        ctrl.style.display = "none";
+
+                    ctrl = document.getElementById("labInfo");
+                    if (ctrl != null)
+                        ctrl.style.display = "none";
+
+                    ctrl = document.getElementById("Btn_Close");
+                    if (ctrl != null)
+                        ctrl.style.display = "none";
                 }
             });
         }

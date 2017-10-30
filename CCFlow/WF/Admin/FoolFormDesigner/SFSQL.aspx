@@ -6,7 +6,7 @@
     <title runat=server />
     <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
     <script language="JavaScript" src="../../Comm/JScript.js"></script>
-    <script language=javascript>
+    <script language="javascript" type="text/javascript" >
     /* ESC Key Down  */
     function Esc()
     {

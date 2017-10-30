@@ -1,9 +1,10 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <NewDataSet>
   <Sys_GroupField>
     <OID>287</OID>
     <Lab>B类型业务申请单</Lab>
     <EnName>Demo_YWB</EnName>
+  
     <Idx>1</Idx>
     <GUID />
     <CtrlType />
@@ -18,6 +19,7 @@
     <TableWidth>800</TableWidth>
     <TableHeight>900</TableHeight>
     <TableCol>4</TableCol>
+    <PTable>Demo_01</PTable>
   </Sys_MapData>
   <Sys_MapAttr>
     <MyPK>Demo_YWB_OID</MyPK>

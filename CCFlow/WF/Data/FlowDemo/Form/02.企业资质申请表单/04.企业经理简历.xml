@@ -1672,7 +1672,7 @@
     <No>Demo_Inc04Dtl1</No>
     <Name>经理简历信息表</Name>
     <FK_MapData>Demo_Inc04</FK_MapData>
-    <PTable>ent_manage_info</PTable>
+    <PTable>Demo_01Dtl1</PTable>
     <GroupField />
     <RefPK />
     <FEBD />

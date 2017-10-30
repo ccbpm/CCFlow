@@ -1,7 +1,7 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <NewDataSet>
   <Sys_GroupField>
-    <OID>3266</OID>
+    <OID>151</OID>
     <Lab>基础信息</Lab>
     <EnName>Demo_PopGradeSelectedOneRow</EnName>
     <Idx>1</Idx>
@@ -13,11 +13,75 @@
   <Sys_MapData>
     <No>Demo_PopGradeSelectedOneRow</No>
     <Name>Pop窗体-表格单选填充主表数据</Name>
+    <FormEventEntity />
+    <EnPK />
+    <PTable>Demo_01</PTable>
+    <Url />
+    <Dtls />
     <FrmW>900</FrmW>
     <FrmH>2000</FrmH>
-    <TableWidth>800</TableWidth>
-    <TableHeight>900</TableHeight>
     <TableCol>4</TableCol>
+    <TableWidth>800</TableWidth>
+    <Tag />
+    <FK_FrmSort>01</FK_FrmSort>
+    <FK_FormTree>01</FK_FormTree>
+    <FrmType>1</FrmType>
+    <AppType>0</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2017-10-30 22:06:35</Ver>
+    <DesignerTool />
+    <AtPara>@MaxLeft=0@MaxEnd=131@MaxRight=0@IsHaveCA=0@MaxTop=0</AtPara>
+    <OfficeOpenLab>打开本地</OfficeOpenLab>
+    <OfficeOpenEnable>0</OfficeOpenEnable>
+    <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
+    <OfficeOpenTemplateEnable>0</OfficeOpenTemplateEnable>
+    <OfficeSaveLab>保存</OfficeSaveLab>
+    <OfficeSaveEnable>1</OfficeSaveEnable>
+    <OfficeAcceptLab>接受修订</OfficeAcceptLab>
+    <OfficeAcceptEnable>0</OfficeAcceptEnable>
+    <OfficeRefuseLab>拒绝修订</OfficeRefuseLab>
+    <OfficeRefuseEnable>0</OfficeRefuseEnable>
+    <OfficeOverLab>套红按钮</OfficeOverLab>
+    <OfficeOverEnable>0</OfficeOverEnable>
+    <OfficeMarksEnable>1</OfficeMarksEnable>
+    <OfficePrintLab>打印按钮</OfficePrintLab>
+    <OfficePrintEnable>0</OfficePrintEnable>
+    <OfficeSealLab>签章按钮</OfficeSealLab>
+    <OfficeSealEnable>0</OfficeSealEnable>
+    <OfficeInsertFlowLab>插入流程</OfficeInsertFlowLab>
+    <OfficeInsertFlowEnable>0</OfficeInsertFlowEnable>
+    <OfficeNodeInfo>0</OfficeNodeInfo>
+    <OfficeReSavePDF>0</OfficeReSavePDF>
+    <OfficeDownLab>下载</OfficeDownLab>
+    <OfficeDownEnable>0</OfficeDownEnable>
+    <OfficeIsMarks>1</OfficeIsMarks>
+    <OfficeTemplate />
+    <OfficeIsParent>1</OfficeIsParent>
+    <OfficeTHEnable>0</OfficeTHEnable>
+    <OfficeTHTemplate />
+    <TableHeight>900</TableHeight>
+    <FK_Flow />
+    <RightViewWay>0</RightViewWay>
+    <RightViewTag />
+    <RightDeptWay>0</RightDeptWay>
+    <RightDeptTag />
+    <DBURL>0</DBURL>
+    <TemplaterVer />
+    <DBSave />
+    <MyFileName />
+    <MyFilePath />
+    <MyFileExt />
+    <WebPath />
+    <MyFileH>0</MyFileH>
+    <MyFileW>0</MyFileW>
+    <MyFileSize>0</MyFileSize>
   </Sys_MapData>
   <Sys_MapAttr>
     <MyPK>Demo_PopGradeSelectedOneRow_OID</MyPK>
@@ -43,25 +107,23 @@
     <GUID />
     <Tag />
     <EditType>2</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>1</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
-    <Tip />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
     <ExtDefValText>0</ExtDefValText>
-    <ExtRows>1</ExtRows>
     <IsRichText>0</IsRichText>
     <IsSupperText>0</IsSupperText>
     <DefValText>0</DefValText>
     <RBShowModel>0</RBShowModel>
     <IsEnableJS>0</IsEnableJS>
-    <UIIsMultiple>0</UIIsMultiple>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>3266</GroupID>
-    <IsEnableInAPP>1</IsEnableInAPP>
+    <GroupID>151</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>Demo_PopGradeSelectedOneRow_YuanGongBianHao</MyPK>
@@ -87,25 +149,23 @@
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>2</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
-    <Tip />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
     <ExtDefValText>0</ExtDefValText>
-    <ExtRows>1</ExtRows>
     <IsRichText>0</IsRichText>
     <IsSupperText>0</IsSupperText>
     <DefValText>0</DefValText>
     <RBShowModel>0</RBShowModel>
     <IsEnableJS>0</IsEnableJS>
-    <UIIsMultiple>0</UIIsMultiple>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>3266</GroupID>
-    <IsEnableInAPP>1</IsEnableInAPP>
+    <GroupID>151</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>Demo_PopGradeSelectedOneRow_DianHua</MyPK>
@@ -131,25 +191,23 @@
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>4</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
-    <Tip />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
     <ExtDefValText>0</ExtDefValText>
-    <ExtRows>1</ExtRows>
     <IsRichText>0</IsRichText>
     <IsSupperText>0</IsSupperText>
     <DefValText>0</DefValText>
     <RBShowModel>0</RBShowModel>
     <IsEnableJS>0</IsEnableJS>
-    <UIIsMultiple>0</UIIsMultiple>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>3266</GroupID>
-    <IsEnableInAPP>1</IsEnableInAPP>
+    <GroupID>151</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>Demo_PopGradeSelectedOneRow_DeZhi</MyPK>
@@ -175,25 +233,23 @@
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>5</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
-    <Tip />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
     <ExtDefValText>0</ExtDefValText>
-    <ExtRows>1</ExtRows>
     <IsRichText>0</IsRichText>
     <IsSupperText>0</IsSupperText>
     <DefValText>0</DefValText>
     <RBShowModel>0</RBShowModel>
     <IsEnableJS>0</IsEnableJS>
-    <UIIsMultiple>0</UIIsMultiple>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>3266</GroupID>
-    <IsEnableInAPP>1</IsEnableInAPP>
+    <GroupID>151</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>Demo_PopGradeSelectedOneRow_YouJian</MyPK>
@@ -219,25 +275,23 @@
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>6</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
-    <Tip />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
     <ExtDefValText>0</ExtDefValText>
-    <ExtRows>1</ExtRows>
     <IsRichText>0</IsRichText>
     <IsSupperText>0</IsSupperText>
     <DefValText>0</DefValText>
     <RBShowModel>0</RBShowModel>
     <IsEnableJS>0</IsEnableJS>
-    <UIIsMultiple>0</UIIsMultiple>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>3266</GroupID>
-    <IsEnableInAPP>1</IsEnableInAPP>
+    <GroupID>151</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>Demo_PopGradeSelectedOneRow_MingCheng</MyPK>
@@ -263,25 +317,23 @@
     <GUID />
     <Tag />
     <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>7</Idx>
     <AtPara>@IsRichText=0@IsSupperText=0</AtPara>
     <GroupIDText>0</GroupIDText>
-    <Tip />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
     <ExtDefValText>0</ExtDefValText>
-    <ExtRows>1</ExtRows>
     <IsRichText>0</IsRichText>
     <IsSupperText>0</IsSupperText>
     <DefValText>0</DefValText>
     <RBShowModel>0</RBShowModel>
     <IsEnableJS>0</IsEnableJS>
-    <UIIsMultiple>0</UIIsMultiple>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>3266</GroupID>
-    <IsEnableInAPP>1</IsEnableInAPP>
+    <GroupID>151</GroupID>
   </Sys_MapAttr>
   <Sys_MapAttr>
     <MyPK>Demo_PopGradeSelectedOneRow_RDT</MyPK>
@@ -307,25 +359,23 @@
     <GUID />
     <Tag>1</Tag>
     <EditType>1</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
     <Idx>8</Idx>
     <AtPara />
     <GroupIDText>0</GroupIDText>
-    <Tip />
     <ColSpan>1</ColSpan>
     <ExtIsSum>0</ExtIsSum>
     <ExtDefVal>0</ExtDefVal>
     <ExtDefValText>0</ExtDefValText>
-    <ExtRows>1</ExtRows>
     <IsRichText>0</IsRichText>
     <IsSupperText>0</IsSupperText>
     <DefValText>0</DefValText>
     <RBShowModel>0</RBShowModel>
     <IsEnableJS>0</IsEnableJS>
-    <UIIsMultiple>0</UIIsMultiple>
     <MinLen>0</MinLen>
     <MaxLen>300</MaxLen>
-    <GroupID>3266</GroupID>
-    <IsEnableInAPP>1</IsEnableInAPP>
+    <GroupID>151</GroupID>
   </Sys_MapAttr>
   <Sys_MapExt>
     <MyPK>PopFullCtrl_Demo_PopGradeSelectedOneRow_YuanGongBianHao</MyPK>
@@ -354,49 +404,7 @@ WHERE No =~@Key~ </Tag4>
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_FrmLab>
-    <MyPK>12CA3963-32CF-F672-1991-7AE9865364D3</MyPK>
-    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
-    <Text>电话</Text>
-    <X>521</X>
-    <Y>67</Y>
-    <FontColor>#000000</FontColor>
-    <FontName>Arial</FontName>
-    <FontSize>15</FontSize>
-    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>8E11D0EA-94CB-F325-031E-642A93E62221</MyPK>
-    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
-    <Text>名称</Text>
-    <X>302</X>
-    <Y>72</Y>
-    <FontColor>#000000</FontColor>
-    <FontName>Arial</FontName>
-    <FontSize>15</FontSize>
-    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>98D80BF4-6F5C-DA5B-F80D-C770FB43A5CE</MyPK>
-    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
-    <Text>邮件</Text>
-    <X>521</X>
-    <Y>131</Y>
-    <FontColor>#000000</FontColor>
-    <FontName>Arial</FontName>
-    <FontSize>15</FontSize>
-    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
-    <FontWeight>normal</FontWeight>
-    <IsBold>0</IsBold>
-    <IsItalic>0</IsItalic>
-  </Sys_FrmLab>
-  <Sys_FrmLab>
-    <MyPK>C7162563-3A43-F1AE-7F4D-CB545C5AE13C</MyPK>
+    <MyPK>10d81dc8-66db-4010-bb99-946f3c80e1f4</MyPK>
     <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
     <Text>员工编号</Text>
     <X>59</X>
@@ -410,7 +418,21 @@ WHERE No =~@Key~ </Tag4>
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>EC668808-4969-CEE8-3E0A-2B5365A726CE</MyPK>
+    <MyPK>540eaf9f-a4b9-4015-80da-2a358f09967c</MyPK>
+    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
+    <Text>电话</Text>
+    <X>521</X>
+    <Y>67</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>6710043b-971b-4594-847a-4d7633f11f95</MyPK>
     <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
     <Text>地址</Text>
     <X>340</X>
@@ -424,7 +446,7 @@ WHERE No =~@Key~ </Tag4>
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_FrmLab>
-    <MyPK>F00BD1BD-31B6-BD4F-62E8-4737961C55BC</MyPK>
+    <MyPK>68357b5c-74f9-49fc-b80e-071b80e226c8</MyPK>
     <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
     <Text>Pop返回值-弹出一个表格选择一行数据，填充主表其他字段.</Text>
     <X>99.4800033569336</X>
@@ -435,6 +457,34 @@ WHERE No =~@Key~ </Tag4>
     <FontStyle>font-size:18;font-weight:bold;color:#000000;</FontStyle>
     <FontWeight>normal</FontWeight>
     <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>96d75326-1cf1-4b10-beb4-0635544e8592</MyPK>
+    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
+    <Text>名称</Text>
+    <X>302</X>
+    <Y>72</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>ae51e08a-fd0a-4938-8f72-871ac8d43134</MyPK>
+    <FK_MapData>Demo_PopGradeSelectedOneRow</FK_MapData>
+    <Text>邮件</Text>
+    <X>521</X>
+    <Y>131</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
 </NewDataSet>

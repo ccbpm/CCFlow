@@ -1435,7 +1435,7 @@
     <No>Demo_Inc07Dtl1</No>
     <Name>负责人工作简历</Name>
     <FK_MapData>Demo_Inc07</FK_MapData>
-    <PTable>charge_WORK_LIST</PTable>
+    <PTable>Demo_01Dtl1</PTable>
     <GroupField />
     <RefPK />
     <FEBD />

@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("table tr:gt(0)").hover(
@@ -87,7 +88,12 @@
 
                         var str = "<tr>";
                         str += "<td class='Idx' nowrap>" + (i + 1) + "</td>";
-                        str += "<td  nowrap >" + attr.KeyOfEn + "</td>";
+                        //判断是否string
+                        if (attr.MyDataType == 1 || attr.MyDataType == '1') {
+                            str += "<td  nowrap ><a href='javascript:void(0)' onclick=setWidth('" + attr.MyPK + "')>" + attr.KeyOfEn + "</a></td>";
+                        }else{
+                            str += "<td  nowrap >" + attr.KeyOfEn + "</td>";
+                        }
                         str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:130px;' /></td>";
                         str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + (i + 1) + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
                         str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a>";
@@ -139,6 +145,16 @@
 
                     window.close();
                 }
+            });
+        }
+
+        //设置字段宽度
+        function setWidth(url) {
+            url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=" + url;
+            //window.open(url);
+            //return;
+            OpenEasyUiDialog(url, "eudlgframe", '设置字段属性', 700, 470, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
             });
         }
 

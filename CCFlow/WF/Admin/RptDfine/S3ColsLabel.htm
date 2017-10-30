@@ -90,9 +90,9 @@
                         str += "<td class='Idx' nowrap>" + (i + 1) + "</td>";
                         //判断是否string
                         if (attr.MyDataType == 1 || attr.MyDataType == '1') {
-                            str += "<td  nowrap ><a href='javascript:void(0)' onclick=setWidth('" + attr.MyPK + "')>" + attr.KeyOfEn + "</a></td>";
+                            str += "<td  nowrap ><a href='javascript:void(0)' onclick=setWidth('" + attr.MyPK + "')>" + attr.KeyOfEn + "</a><input type='hidden' value='" + attr.KeyOfEn + "'/></td>";
                         }else{
-                            str += "<td  nowrap >" + attr.KeyOfEn + "</td>";
+                            str += "<td  nowrap >" + attr.KeyOfEn + "<input type='hidden' value='" + attr.KeyOfEn + "'></input></td>";
                         }
                         str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:130px;' /></td>";
                         str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + (i + 1) + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
@@ -125,11 +125,10 @@
                 if (i > 0) {//第一是标题
                     var history_income_type = tdArr.eq(2).find('input').val();
                     var history_income_money = tdArr.eq(3).find('input').val();
-                    str = str + "@" + tdArr.eq(1).html() + "," + tdArr.eq(2).find('input').val() + "," + tdArr.eq(3).find('input').val();
+                    str = str + "@" + tdArr.eq(1).find('input').val() + "," + tdArr.eq(2).find('input').val() + "," + tdArr.eq(3).find('input').val();
                 }
                 i++;
             });
-
             $.ajax({
                 type: 'post',
                 async: true,

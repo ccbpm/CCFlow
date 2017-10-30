@@ -6,22 +6,18 @@ using System.Web;
 namespace CCFlow.WF.Admin.FoolFormDesigner.SFTable
 {
     /// <summary>
-    /// Handler 的摘要说明
+    /// 集成基类，业务逻辑都在子类
     /// </summary>
-    public class Handler : IHttpHandler
+    public class Handler : BP.WF.HttpHandler.HttpHandlerBase
     {
-
-        public void ProcessRequest(HttpContext context)
-        {
-            context.Response.ContentType = "text/plain";
-            context.Response.Write("Hello World");
-        }
-
-        public bool IsReusable
+        /// <summary>
+        /// 获取 “Handler业务处理类”的Type
+        /// </summary>
+        public override Type CtrlType
         {
             get
             {
-                return false;
+                return typeof(BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_SFTable);
             }
         }
     }

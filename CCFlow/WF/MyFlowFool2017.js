@@ -6,8 +6,6 @@
     }
 
 });
- 
-
 
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.
 function SaveSelfFrom() {
@@ -1821,7 +1819,6 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var h = wf_node.FWC_H + 1000;
 
 
-
     var src = "./WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";
     var paras = '';
@@ -1843,7 +1840,13 @@ function figure_Template_FigureFrmCheck(wf_node) {
 //初始化 附件
 function figure_Template_Attachment(workNodeData, gf) {
 
-    var ath = workNodeData.Sys_FrmAttachment[0];
+    alert('ddddddddd');
+
+    alert(gf);
+ //   var ath = workNodeData.Sys_FrmAttachment[0];
+
+    alert(ath);
+
 
     var eleHtml = '';
     if (ath.UploadType == 0) { //单附件上传 L4204
@@ -1857,6 +1860,7 @@ function figure_Template_Attachment(workNodeData, gf) {
 
     eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 
+    alert(eleHtml);
 
     return eleHtml;
 }

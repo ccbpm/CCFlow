@@ -382,12 +382,6 @@ namespace BP.WF.HttpHandler
                 //sdk表单就让其跳转.
                 return "url@" + url;
             }
-
-           
-
-         
-
-
             #endregion 处理表单类型.
 
             //求出当前节点frm的类型.
@@ -439,6 +433,8 @@ namespace BP.WF.HttpHandler
                 }
 
                 string url = "MyFlowFool.htm";
+                if (this.IsMobile)
+                    url = "MyFlowFree.htm";
 
                 //处理连接.
                 url = this.MyFlow_Init_DealUrl(currND, currWK, url);

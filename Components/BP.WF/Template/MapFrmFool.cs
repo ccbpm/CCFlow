@@ -335,6 +335,10 @@ namespace BP.WF.Template
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlType='' WHERE CtrlType IS NULL");
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
 
+            //一直遇到遇到自动变长的问题, 强制其修复过来.
+            DBAccess.RunSQL("UPDATE Sys_Mapattr set  colspan=3 WHERE UIHeight=23 AND colspan=4");
+            
+
             string str = "";
 
              // 处理失去分组的字段. 
@@ -375,11 +379,10 @@ namespace BP.WF.Template
                     continue;
 
                 gf.Lab = dtl.Name;
-                gf.CtrlID =  dtl.No;
+                gf.CtrlID = dtl.No;
                 gf.CtrlType = "Dtl";
                 gf.EnName = dtl.FK_MapData;
                 gf.DirectSave();
-
                 str += "@为从表" + dtl.Name + " 增加了分组.";
             }
 

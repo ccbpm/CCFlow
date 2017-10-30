@@ -1840,10 +1840,14 @@ function figure_Template_FigureFrmCheck(wf_node) {
 //初始化 附件
 function figure_Template_Attachment(workNodeData, gf) {
 
+    var ath = workNodeData.Sys_FrmAttachment[0];
+    if (ath == null)
+        return "没有找到附件定义，请与管理员联系。";
+
     var eleHtml = '';
-    if (ath.UploadType == 0) { //单附件上传 L4204
-        return '';
-    }
+//    if (ath.UploadType == 0) { //单附件上传 L4204
+//        return '';
+//    }
     var src = "";
     if (pageData.IsReadonly)
         src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
@@ -1851,8 +1855,6 @@ function figure_Template_Attachment(workNodeData, gf) {
         src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
     eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-
-    alert(eleHtml);
 
     return eleHtml;
 }

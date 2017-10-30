@@ -28,41 +28,22 @@ input[type="button"], input[type="submit"],input[type="file"]
 input[disabled],input:disabled{
 border:1px solid #DDD;
 background-color:#F5F5F5;
-color:#ACA899;
+color:#009999;
 }
 /*文本框只读风格.*/
 textarea[disabled],input:disabled{
 border:1px solid #DDD;
 background-color:#F5F5F5;
-color:#ACA899;
+color:#009999;
 }
 /*文本框只读风格.*/
-select[disabled],input:disabled{
-border:1px solid #DDD;
-background-color:#F5F5F5;
-color:#ACA899;
-}
-
-/* 文本框只读风格. 要去掉ta */
-.TBReadonly
+select[disabled], input:disabled
 {
-    font-size: 12px;
-    text-align: left;
-    float: left;
-    clear: left;
-    width: 100%;
-    border-width: 0px 0px 1px 0px;
-    background-color: #FAFAFA;
-    word-break: keep-all;
-    border-style: dotted none;
+    border: 1px solid #DDD;
+    background-color: #F5F5F5;
+    color: #009999;
 }
-
-.HBtn
-{
-    width: 1px;
-    height: 1px;
-    display: none;
-}
+  
 /*  table 类型风格 */
 table
 {
@@ -184,20 +165,6 @@ caption
     color: #336699;
     font-weight: bolder;
 }
-caption1
-{
-    vertical-align: bottom;
-    text-align: left;
-    height: 30px;
-    line-height: 20px;
-    font-size: 14px;
-    background: url('/DataUser/Style/Img/bg_list.jpg') no-repeat;
-    padding-left: 10px;
-    font-family: 黑体;
-    font-weight: bolder;
-    color: #333333;
-}
-   
 
 .TBDoc
 {
@@ -393,18 +360,7 @@ Img
 display:block;
 }
 
-
-
-.Btn
-{
-    border: 0;
-    
-    color: #FFF;
-    font-size: 12px;
-    padding: 6px 10px;
-    margin: 7px 3px 7px 3px;
-}
-
+ 
 #divCCForm
 {
     position: relative !important;
@@ -472,7 +428,6 @@ display:block;
     margin: 0 auto;
     display: table;
 }
-
  
 .col-md-2, .col-md-1, .col-md-11,.col-sm-4, .col-sm-2, .col-sm-10 {
     line-height: 40px;
@@ -643,25 +598,6 @@ input[type=text], input[type=password], select
     width: inherit;
 }
 
-
-/*.form_tree  input[type=text]{
-    border-radius: 15px 0px 0px 15px  !important;
-    border: #2884fa 1px solid !important;
-    margin: 8px 0px !important ;
-    line-height: 25px !important;
-    width: 100%;
-    padding-left: 6px;
-}
-.form_tree  span{
-    border-radius: 0px 15px 15px 0px  !important;
-    border: #2884fa 1px solid !important;
-    margin: 8px 0px !important ;
-    line-height: 25px !important;
-    width: 100%;
-    padding-left: 6px;
-}*/
-
-
 select {
     height: 29px;
 }
@@ -763,8 +699,6 @@ display:none;
     border:1px solid #2884fa !important;
 
 }
-
-
 
  html,body {
             scrollbar-face-color:#2884fa; /*������3D���棨ThreedFace������ɫ*/ 

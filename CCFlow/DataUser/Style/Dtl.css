@@ -25,13 +25,14 @@ table td
     background-color: #ffffff;
 }
 
-input[type=text],input[type=password], select
+input[type=text], input[type=password], select
 {
     border-radius: 5px;
-    border: 1px solid #336699;
+    border: 0.5px solid #CCCCCC;
     margin: 0px 0px;
     width: 100%;
     padding-left: 0px;
+    margin:0px;
 }
 
 

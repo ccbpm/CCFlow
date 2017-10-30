@@ -30,7 +30,7 @@ table
  
 
 /*  时学业添加 结束位置 */
-th, .Title
+th
 {
     border-width: 1px;
     border-color: #C2D5E3;
@@ -45,7 +45,6 @@ th, .Title
     font-size: 12px;
     font-weight: normal;
 }
-  
 
 td
 {

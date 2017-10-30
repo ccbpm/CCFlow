@@ -1880,22 +1880,13 @@ var DtlsCount = " + dtlsCount + "; //应该加载的明细表数量
 
 //初始化从表
 function figure_Template_Dtl(frmDtl) {
-    var eleHtml = $("<DIV id='Fd" + frmDtl.No + "' style='position:absolute; left:" + frmDtl.X + "px; top:" + frmDtl.Y + "px; width:" + frmDtl.W + "px; height:" + frmDtl.H + "px;text-align: left;' >");
-    var paras = this.pageData;
-    var strs = "";
-    for (var str in paras) {
-        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
-            continue
-        else
-            strs += "&" + str + "=" + paras[str];
-    }
+
     var src = "";
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
     if (frmDtl.DtlShowModel == "0") {
         if (pageData.IsReadOnly) {
-
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=" + load.Version;
         } else {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=" + load.Version;
@@ -1906,8 +1897,20 @@ function figure_Template_Dtl(frmDtl) {
             src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
         else
             src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
-
     }
+
+    return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+
+    var eleHtml = $("<DIV id='Fd" + frmDtl.No + "' style='position:absolute; left:" + frmDtl.X + "px; top:" + frmDtl.Y + "px; width:" + frmDtl.W + "px; height:" + frmDtl.H + "px;text-align: left;' >");
+    var paras = this.pageData;
+    var strs = "";
+    for (var str in paras) {
+        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
+            continue
+        else
+            strs += "&" + str + "=" + paras[str];
+    }
+   
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe class='Fdtl' ID='F" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:100%; height:" + frmDtl.H +

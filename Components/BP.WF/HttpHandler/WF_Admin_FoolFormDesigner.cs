@@ -76,10 +76,29 @@ namespace BP.WF.HttpHandler
             MapData md = new MapData(this.FK_MapData);
             ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
 
-
             //附件表.
             FrmAttachments aths = new FrmAttachments(this.FK_MapData);
             ds.Tables.Add(aths.ToDataTableField("Sys_FrmAttachment"));
+
+            // 检查组件的分组是否完整?
+            foreach (GroupField item in gfs)
+            {
+                    bool isHave=false;
+                if (item.CtrlType == "Dtl")
+                {
+                    foreach (MapDtl dtl in dtls)
+                    {
+                        if (dtl.No == item.CtrlID)
+                        {
+                            isHave = true;
+                            break;
+                        }
+                    }
+                    //分组不存在了，就删除掉他.
+                    if (isHave == false)
+                        item.Delete();
+                }
+            }
 
             if (this.FK_MapData.IndexOf("ND") == 0)
             {

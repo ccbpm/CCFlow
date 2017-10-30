@@ -179,6 +179,7 @@
     <Compile Include="HttpHandler\WF.cs" />
     <Compile Include="HttpHandler\WF_Admin_AttrNode.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_ImpExp.cs" />
+    <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_SFTable.cs" />
     <Compile Include="HttpHandler\WF_Admin_Port.cs" />
     <Compile Include="HttpHandler\WF_Admin_RptDfine.cs" />
     <Compile Include="HttpHandler\WF_Comm_Sys.cs" />

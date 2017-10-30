@@ -189,6 +189,7 @@ namespace BP.Sys
             dtl.FK_MapData = fk_mapdata;
             dtl.Save();
 
+
             //初始化他的map.
             dtl.IntMapAttrs();
         }

@@ -27,7 +27,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=SF1_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+                url: Handler + "?DoType=SF1_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -38,6 +38,8 @@
 
                     data = JSON.parse(data);
 
+                    //绑定数据源.
+                    GenerBindDDL("DDL_FK_DBSrc", data, "No", "Name", "local");
                     return;
                 }
             });
@@ -51,13 +53,19 @@
             $("#Msg").html("正在加载,请稍后......");
 
             var no = document.getElementById('TB_No');
-            var name = document.getElementById('TB_No');
+            var name = document.getElementById('TB_Name');
 
+            if (no == null || name == null) {
+                alert('请输入编号名称.');
+                return;
+            }
 
+            var frmData = $("#cc").serialize();
             $.ajax({
                 type: 'post',
+                data: frmData,
                 async: true,
-                url: Handler + "?DoType=SF1_Save&No=" + no + "&Name=" + name + "&m=" + Math.random(),
+                url: Handler + "?DoType=SF1_Save&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -65,9 +73,8 @@
                         alert(data);
                         return;
                     }
-
                     alert(data);
-                    return;
+                    window.location.herf = 'Default.htm?FK_MapData=' + GetQueryString("FK_MapData");
                 }
             });
 
@@ -99,9 +106,27 @@
 </tr>
 
 
+
+<tr>
+<td> 数据源 </td>
+<td class="style1"> <select id="DDL_FK_DBSrc" /> </td>
+<td> 从那个数据源来查找数据 </td>
+</tr>
+
+
+
+<tr>
+<td> 数据格式 </td>
+<td class="style1"> <select id="DDL_CodeStruct" >
+<option value="0"> 普通格式，具有No,Name两个列. </option>
+<option value="1"> 树形格式，具有No,Name,ParentNo三个列. </option>
+</select> </td>
+<td> 是否是树形结构 </td>
+</tr>
+
 <tr>
 <td colspan=3>  
- <a href="javascript:void(0)" id="Btn_Create" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+ <a href="javascript:Save()" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
            onclick="Save()">保存</a> 
 
              <a href="javascript:void(0)" id="A1" class="easyui-linkbutton" data-options="iconCls:'icon-delete'"
@@ -111,7 +136,6 @@
 </tr>
 
 </table>
-
  
 
 </body>

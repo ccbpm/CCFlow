@@ -1840,14 +1840,6 @@ function figure_Template_FigureFrmCheck(wf_node) {
 //初始化 附件
 function figure_Template_Attachment(workNodeData, gf) {
 
-    alert('ddddddddd');
-
-    alert(gf);
- //   var ath = workNodeData.Sys_FrmAttachment[0];
-
-    alert(ath);
-
-
     var eleHtml = '';
     if (ath.UploadType == 0) { //单附件上传 L4204
         return '';

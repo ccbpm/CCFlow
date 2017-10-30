@@ -48,6 +48,47 @@ namespace BP.WF.HttpHandler
         #endregion 执行父类的重写方法.
 
         #region xxx 界面 .
+        /// <summary>
+        ///  初始化sf0.
+        /// </summary>
+        /// <returns></returns>
+        public string SF0_Init()
+        {
+            return "";
+        }
+        public string SF0_Save()
+        {
+            return "保存成功.";
+        }
+        #endregion xxx 界面方法.
+
+
+        #region 本地表 .
+        /// <summary>
+        ///  初始化sf0.
+        /// </summary>
+        /// <returns></returns>
+        public string SF1_Init()
+        {
+            SFDBSrcs srcs = new SFDBSrcs();
+            srcs.RetrieveAll();
+            return srcs.ToJson();
+        }
+        public string SF1_Save()
+        {
+            SFTable sf = new SFTable();
+            sf.No = this.GetValFromFrmByKey("No");
+            if (sf.IsExits == true)
+                return "err@标记:"+sf.No+"已经存在.";
+
+            sf.Name = this.GetRequestVal("Name");
+            sf.FK_SFDBSrc = this.GetValFromFrmByKey("FK_DBSrc");
+
+            sf.SrcType = SrcType.CreateTable;
+            sf.CodeStruct = (CodeStruct)this.GetValIntFromFrmByKey("CodeStruct");
+            sf.Insert();
+            return "保存成功.";
+        }
         #endregion xxx 界面方法.
 
     }

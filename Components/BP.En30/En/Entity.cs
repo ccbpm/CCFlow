@@ -2838,6 +2838,14 @@ namespace BP.En
 					break;
 			}
 
+            //检查从表.
+            MapDtls dtls = new MapDtls(this.ClassID);
+            foreach (MapDtl dtl in dtls)
+            {
+                GEDtl dtlen = new GEDtl(dtl.No);
+                dtlen.CheckPhysicsTable();
+
+            }
 		}
 		private void CheckPhysicsTable_Informix()
 		{

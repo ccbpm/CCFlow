@@ -99,6 +99,10 @@ namespace BP.WF.DTS
                         md.FK_FormTree = fs.No;
                         md.AppType = "0";
                         md.Update();
+
+                        // 修复数据表.
+                        GEEntity ge = new GEEntity(md.No);
+                        ge.CheckPhysicsTable();
                     }
                     catch(Exception ex)
                     {

@@ -1180,7 +1180,8 @@ namespace BP.Sys
             listNames.Add("Sys_MapData");
             //杨玉慧  加上TableWidth,TableHeight,TableCol 获取傻瓜表单的宽度
             //sql = "@SELECT No,Name,FrmW,FrmH FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
-            sql = "@SELECT No,Name,FrmW,FrmH,TableWidth,TableHeight,TableCol FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
+          //  sql = "@SELECT No,Name,FrmW,FrmH,TableWidth,TableHeight,TableCol,PTable FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
+            sql = "@SELECT * FROM Sys_MapData WHERE No='" + fk_mapdata + "'";
             sqls += sql;
 
             // Sys_MapAttr.

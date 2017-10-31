@@ -163,8 +163,6 @@ namespace BP.WF
             if (currDBVer != null && currDBVer != 0 && currDBVer >=  Ver)
                 return null; //不需要升级.
 
-            
-
             // 升级fromjson .//NOTE:此处有何用？而且md变量在下方已经声明，编译都通不过，2017-05-20，liuxc
             //MapData md = new MapData();
             //md.FormJson = "";
@@ -346,7 +344,6 @@ namespace BP.WF
                 #endregion 其他.
 
                 #region 升级统一规则.
-              
                 try
                 {
                     string sqls = "";
@@ -392,13 +389,16 @@ namespace BP.WF
                     {
                         case DBType.MSSQL:
                             DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson IMAGE NULL");
+                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FrmJson IMAGE NULL");
                             break;
                         case DBType.Oracle:
                         case DBType.Informix:
                             DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson BLOB NULL");
+                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FrmJson BLOB NULL");
                             break;
                         case DBType.MySQL:
                             DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson LONGBLOB NULL");
+                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FrmJson LONGBLOB NULL");
                             break;
                         default:
                             break;
@@ -1131,7 +1131,7 @@ namespace BP.WF
                     {
                         string sql = "";
                         sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.No + "','200" + myIdx + "-01','山东.济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + emp.No + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
                         DBAccess.RunSQL(sql);
                     }
                 }
@@ -1144,7 +1144,7 @@ namespace BP.WF
                     {
                         string sql = "";
                         sql = "INSERT INTO Demo_Resume (OID,RefPK,NianYue,GongZuoDanWei,ZhengMingRen,BeiZhu,QT) ";
-                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','山东.济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
+                        sql += "VALUES(" + DBAccess.GenerOID("Demo_Resume") + ",'" + no + "','200" + myIdx + "-01','济南.驰骋" + myIdx + "公司','张三','表现良好','其他-" + myIdx + "无')";
                         DBAccess.RunSQL(sql);
                     }
                 }
@@ -1162,7 +1162,7 @@ namespace BP.WF
             }
             #endregion 初始化数据
 
-            #region 装载 demo.flow
+            #region 7, 装载 demo.flow
             if (isInstallFlowDemo == true)
             {
                 BP.Port.Emp emp = new BP.Port.Emp("admin");
@@ -1183,8 +1183,9 @@ namespace BP.WF
                 }
 
                 BP.Sys.Glo.WriteLineInfo("装载模板完成。开始修复视图...");
+
                 //修复视图.
-                Flow.RepareV_FlowData_View();
+                //Flow.RepareV_FlowData_View();
 
                 BP.Sys.Glo.WriteLineInfo("视图修复完成。");
             }
@@ -1233,6 +1234,11 @@ namespace BP.WF
             }
             #endregion 增加图片签名.
 
+            //生成拼音，以方便关键字查找.
+            BP.WF.DTS.GenerPinYinForEmp pinyin = new DTS.GenerPinYinForEmp();
+            pinyin.Do();
+
+
             #region 执行补充的sql, 让外键的字段长度都设置成100.
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET maxlen=100 WHERE LGType=2 AND MaxLen<100");
             DBAccess.RunSQL("UPDATE Sys_MapAttr SET maxlen=100 WHERE KeyOfEn='FK_Dept'");
@@ -1261,6 +1267,7 @@ namespace BP.WF
                 }
             }
             #endregion 如果是第一次运行，就执行检查。
+
         }
         /// <summary>
         /// 检查树结构是否符合需求

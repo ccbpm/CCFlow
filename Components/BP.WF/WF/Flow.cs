@@ -5849,10 +5849,6 @@ namespace BP.WF
                 if (string.IsNullOrWhiteSpace(this.Name))
                     this.Name = "新建流程" + this.No; //新建流程.
 
-
-               // BP.WF.Flow.DoLoadFlowTemplate(flowSort, flowName, ImpFlowTempleteModel.AsNewFlow, "");
-
-
                 this.No = this.GenerNewNoByKey(FlowAttr.No);
                 this.HisDataStoreModel = model;
                 this.PTable = pTable;

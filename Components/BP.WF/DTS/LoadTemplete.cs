@@ -180,7 +180,17 @@ namespace BP.WF.DTS
                     }
                 }
             }
+
+            //执行流程检查.
+            Flows flsEns = new Flows();
+            flsEns.RetrieveAll();
+            foreach (Flow fl in flsEns)
+            {
+                fl.DoCheck();
+            }
             #endregion 处理流程.
+
+
 
 
             BP.DA.Log.DefaultLogWriteLineInfo(msg);

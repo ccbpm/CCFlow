@@ -51,6 +51,11 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
+            if (BP.DA.DBAccess.IsView("Port_Emp") == false)
+                return "port_emp 是一个视图无法生成拼音.";
+            if (BP.DA.DBAccess.IsExitsTableCol("Port_Emp", BP.GPM.EmpAttr.PinYin) == false)
+                return "port_emp 不包含PinYin 这一列,无法生成拼音.";
+
             BP.GPM.Emps emps = new BP.GPM.Emps();
             emps.RetrieveAll();
             foreach (BP.GPM.Emp item in emps)
@@ -59,7 +64,6 @@ namespace BP.WF.DTS
                     continue;
                 item.Update();
             }
-
             return "执行成功...";
         }
     }

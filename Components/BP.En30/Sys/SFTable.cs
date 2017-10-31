@@ -916,9 +916,9 @@ namespace BP.Sys
                 {
                     //暂时这样处理
                     string sql = "CREATE VIEW " + this.No + " (";
-                    sql += "[No],";
-                    sql += "[Name]";
-                    sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
+                    sql += "No,";
+                    sql += "Name";
+                    sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",ParentNo)" : ")");
                     sql += " AS ";
                     sql += "SELECT " + this.ColumnValue + " No," + this.ColumnText + " Name" + (this.CodeStruct == Sys.CodeStruct.Tree ? ("," + this.ParentValue + " ParentNo") : "") + " FROM " + this.SrcTable + (string.IsNullOrWhiteSpace(this.SelectStatement) ? "" : (" WHERE " + this.SelectStatement));
 

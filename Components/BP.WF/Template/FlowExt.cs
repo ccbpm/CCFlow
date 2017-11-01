@@ -395,9 +395,10 @@ namespace BP.WF.Template
 
                 //为 莲荷科技增加一个系统类型, 用于存储当前所在流程树的第2级流程树编号.
                 map.AddTBString(FlowAttr.SysType, null, "系统类型", false, false, 0, 100, 10, false);
-
-
                 map.AddTBString(FlowAttr.Tester, null, "设置流程发起测试人", true, false, 0, 300, 10, true);
+
+                map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", true, false, 0, 50, 10, false);
+                map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", true, false, 0, 50, 10, false);
                 #endregion 基本属性。
 
                 //查询条件.

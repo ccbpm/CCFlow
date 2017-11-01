@@ -409,9 +409,19 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Login_Init()
         {
-            if (DBAccess.TestIsConnection() == false)
-                return "err@数据库连接配置错误 AppCenterDSN, AppCenterDBType 参数配置. ccflow请检查 web.config文件, jflow请检查 jflow.properties.";
 
+            //检查数据库连接.
+            try
+            {
+                DBAccess.TestIsConnection();
+            }
+            catch (Exception ex)
+            {
+                return "err@数据库连接配置错误 AppCenterDSN, AppCenterDBType 参数配置. ccflow请检查 web.config文件, jflow请检查 jflow.properties. @异常信息:"+ex.Message;
+            }
+
+
+            //检查是否缺少Port_Emp 表，如果没有就是没有安装.
             if (DBAccess.IsExitsObject("Port_Emp") == false)
                 return "url@../DBInstall.htm";
 

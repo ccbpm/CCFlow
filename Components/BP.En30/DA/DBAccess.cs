@@ -3312,7 +3312,7 @@ namespace BP.DA
                 foreach (DataColumn dc in dt.Columns)
                     cols += " , " + dc.ColumnName;
 
-                BP.DA.Log.DebugWriteInfo("@SQL=" + sql + " . 列=" + cols);
+               // BP.DA.Log.DebugWriteInfo("@SQL=" + sql + " . 列=" + cols);
                 return null;
             }
             return dt.Rows[0][0];

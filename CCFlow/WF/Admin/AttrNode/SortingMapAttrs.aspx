@@ -24,7 +24,7 @@
         }
         //新增分组名称
         function GroupFieldNew(ensName) {
-            var url = '../FoolFormDesigner/GroupField.htm?DoType=NewGroup&RefNo=' + ensName + "&inlayer=1";
+            var url = '../FoolFormDesigner/GroupField.htm?DoType=NewGroup&FK_MapData=' + ensName + "&inlayer=1";
             OpenDialogAndCloseRefresh(url, "新建分组", 600, 550, "icon-new");
         }
         //编辑分组名称

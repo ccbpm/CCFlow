@@ -613,20 +613,20 @@ namespace BP.WF.HttpHandler
                     //lb.BorderStyle = BorderStyle.None;
                     //lb.ID = "lbNodes";
 
-                    nodes = new Nodes();
-                    nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
+                    //nodes = new Nodes();
+                    //nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
 
-                    if (nodes.Count == 0)
-                    {
-                        string nodeid = FK_MapData.Replace("ND", "");
-                        string flowno = string.Empty;
+                    //if (nodes.Count == 0)
+                    //{
+                    //    string nodeid = FK_MapData.Replace("ND", "");
+                    //    string flowno = string.Empty;
 
-                        if (nodeid.Length > 2)
-                        {
-                            flowno = nodeid.Substring(0, nodeid.Length - 2).PadLeft(3, '0');
-                            nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, flowno, BP.WF.Template.NodeAttr.Step);
-                        }
-                    }
+                    //    if (nodeid.Length > 2)
+                    //    {
+                    //        flowno = nodeid.Substring(0, nodeid.Length - 2).PadLeft(3, '0');
+                    //        nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, flowno, BP.WF.Template.NodeAttr.Step);
+                    //    }
+                    //}
 
                     //ListItem item = null;
 
@@ -670,7 +670,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dtDtls);
                 ds.Tables.Add(athMents.ToDataTableField("athMents"));
                 ds.Tables.Add(btns.ToDataTableField("btns"));
-                ds.Tables.Add(nodes.ToDataTableField("nodes"));
+                //ds.Tables.Add(nodes.ToDataTableField("nodes"));
             }
         }
 

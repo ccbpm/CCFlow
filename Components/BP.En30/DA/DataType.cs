@@ -548,44 +548,7 @@ namespace BP.DA
             responseStream.Close();
             return path;
         }
-/// <summary>
-/// httppost方式发送数据
-/// </summary>
-/// <param name="url">要提交的url</param>
-/// <param name="postDataStr"></param>
-/// <param name="timeOut">超时时间</param>
-/// <param name="encode">text code.</param>
-/// <returns>返回读取内容</returns>
-      public static string PostURLContext(string url, string postDataStr, int timeOut, Encoding encode)
-        {
-            try 
-            { 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                request.Method = "POST";
-                request.ContentType = "application/json";
-                request.ContentLength = postDataStr.Length;
-                StreamWriter writer = new StreamWriter(request.GetRequestStream(), encode);
-                writer.Write(postDataStr);
-                writer.Flush();
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                StreamReader reader = new StreamReader(response.GetResponseStream(), encode);
-                string retString = reader.ReadToEnd();
-                return retString;
-            }
-            catch (Exception ex)
-            {
-                try
-                {
-                    BP.DA.Log.DefaultLogWriteLineWarning("@读取URL出现错误:URL=" + url + "@错误信息：" + ex.Message);
-                    return null;
-                }
-                catch
-                {
-                    return ex.Message;
-                }
-            }
-        } 
 
         /// <summary>
         /// 读取URL内容

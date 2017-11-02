@@ -43,6 +43,7 @@
                 aths = init.Aths;
                 SignType = init.SignType; //签名的人员 No,SignType 列, SignType=0 不签名, 1=图片签名, 2=电子签名。
 
+
                 var html = '';
 
                 if (tks.length == 0) {
@@ -57,17 +58,17 @@
                 $.each(tks, function () {
                     var subaths = GetSubAths(this.NodeID);
 
-//                    if (wcDesc.FWCShowModel == 0) {
-//                        //表格模式
-//                        html += '<tr style="background-color: #E2F6FB">';
-//                        html += '<td>' + this.NodeName + '</td>';
-//                        html += '</tr>';
-//                        html += '<tr>';
-//                    }
-                      
-                        //自由模式
-                        html += "<tr>";
-                        html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
+                    //                    if (wcDesc.FWCShowModel == 0) {
+                    //                        //表格模式
+                    //                        html += '<tr style="background-color: #E2F6FB">';
+                    //                        html += '<td>' + this.NodeName + '</td>';
+                    //                        html += '</tr>';
+                    //                        html += '<tr>';
+                    //                    }
+
+                    //自由模式
+                    html += "<tr>";
+                    html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
 
                     //审核意见
                     if (this.IsDoc) {
@@ -101,12 +102,12 @@
                         html += "<tr style='" + (subaths.length > 0 ? "" : "display:none;") + "'>";
                         html += "<td " + tdid + " style='word-wrap: break-word;' colspan=2>";
                         html += "<b>附件：</b>&nbsp;" + subaths;
-                        html += "</td>"; 
+                        html += "</td>";
                         html += "</tr>";
                     }
 
                     //输出签名.
-                    if ( SignType == null || SignType == undefined) {
+                    if (SignType == null || SignType == undefined) {
 
                         //签名，日期.
                         html += "<tr>";
@@ -123,7 +124,7 @@
                             if (st.No != this.EmpFrom)
                                 continue;
 
-                         //  alert(st.SignType);
+                            //  alert(st.SignType);
 
                             if (st.SignType == 0 || st.SignType == null) {
                                 html += "<tr>";
@@ -137,7 +138,7 @@
                             if (st.SignType == 1) {
                                 html += "<tr>";
                                 html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
-                                    + GetUserSiganture(this.EmpFrom, this.EmpFromT)+'</div>'
+                                    + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
                                     + " <div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</div></td>";
                                 html += "</tr>";
                                 break;
@@ -149,6 +150,9 @@
                             }
                         }
                     }
+
+
+                       GenerSiganture(SignType);
 
                 });
 

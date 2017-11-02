@@ -1132,6 +1132,14 @@ namespace BP.WF
                     gwf.RetrieveFromDBSources();
 
                     docs = docs.Replace("@Title", gwf.Title);
+
+
+                    //替换模版尾部的打印说明信息.
+                    string pathInfo = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\EndInfo\\"+flowNo+".txt";
+                    if (System.IO.File.Exists(pathInfo) == true)
+                        docs = docs.Replace("@EndInfo", DataType.ReadTextFile(pathInfo));
+                    else
+                        docs = docs.Replace("@EndInfo", "");
                 }
 
                 string indexFile = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\" + frmID + "\\" + workid + "\\index.htm";

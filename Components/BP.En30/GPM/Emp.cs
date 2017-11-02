@@ -494,7 +494,6 @@ namespace BP.GPM
 
             this.DeptDesc = depts;
             this.StaDesc = stas;
-
             return base.beforeUpdateInsertAction();
         }
 

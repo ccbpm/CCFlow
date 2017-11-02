@@ -887,6 +887,7 @@ namespace BP.WF
                             {
                                 string fileTo = path + "\\pdf\\" + item.FileName;
 
+                                #region 从ftp服务器上下载.
                                 if (ath.AthSaveWay == AthSaveWay.FTPServer)
                                 {
                                     try
@@ -907,7 +908,9 @@ namespace BP.WF
                                         sb.Append("<li>" + item.FileName + "(<font color=red>文件未从ftp下载成功{" + ex.Message + "}</font>)</li>");
                                     }
                                 }
+                                #endregion 从ftp服务器上下载.
 
+                                #region 从iis服务器上下载.
                                 if (ath.AthSaveWay == AthSaveWay.IISServer)
                                 {
                                     try
@@ -923,6 +926,8 @@ namespace BP.WF
                                         sb.Append("<li>" + item.FileName + "(<font color=red>文件未从iis下载成功{" + ex.Message + "}</font>)</li>");
                                     }
                                 }
+                                #endregion 从iis服务器上下载.
+
                             }
                             sb.Append("\t\n</ul>");
                             sb.Append("\t\n</td></tr>");

@@ -1091,10 +1091,11 @@ namespace CCFlow.WF.CCForm
                         }
                         else
                         {
-                            savePath = athDesc.SaveTo + "\\" + this.PKVal;
+                            savePath = athDesc.SaveTo + "\\" + DateTime.Now.ToString("yyyy_MM");
                         }
 
                         //替换关键的字串.
+                        savePath = savePath.Replace("\\\\", "\\");
                         savePath = savePath.Replace("\\\\", "\\");
                         try
                         {

@@ -908,9 +908,6 @@ namespace BP.WF.HttpHandler
                 if (aemp.IsAdmin == false)
                     return "err@非管理员用户.";
 
-             
-
-
                 DataRow rootRow = dt.Select("PARENTNO='F0'")[0];
                 DataRow newRootRow = dt.Select("NO='F" + aemp.RootOfFlow + "'")[0];
 
@@ -1458,6 +1455,66 @@ namespace BP.WF.HttpHandler
             FlowSort fsSub = new FlowSort(fk_flowSort);//传入的编号多出F符号，需要替换掉
             fsSub.DoDown();
             return "F" + fsSub.No;
+        }
+
+        /// <summary>
+        /// 表单树 - 创建表单同级类别
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_NewSameLevelSort()
+        {
+            SysFormTree formTree = new SysFormTree(this.No);
+            string sameLevelNo = formTree.DoCreateSameLevelNode().No;
+            SysFormTree sameLevelFormTree = new SysFormTree(sameLevelNo);
+            sameLevelFormTree.Name = this.Name;
+            sameLevelFormTree.Update();
+            return sameLevelFormTree.No;
+        }
+
+        /// <summary>
+        /// 表单树 - 创建表单子类别
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_NewSubSort() 
+        {
+            SysFormTree formTree = new SysFormTree(this.No);
+            string subNo = formTree.DoCreateSubNode().No;
+            SysFormTree subFormTree = new SysFormTree(subNo);
+            subFormTree.Name = this.Name;
+            subFormTree.Update();
+            return subFormTree.No;
+        }
+        /// <summary>
+        /// 表单树 - 编辑表单类别
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_EditCCFormSort()
+        {
+            SysFormTree formTree = new SysFormTree(this.No);
+            formTree.Name = this.Name;
+            formTree.Update();
+            return this.No;
+        }
+        /// <summary>
+        /// 表单树 - 删除表单类别
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_DelFormSort()
+        {
+            SysFormTree formTree = new SysFormTree(this.No);
+
+            //检查是否有子类别？
+            string sql = "SELECT COUNT(*) FROM Sys_FormTree WHERE ParentNo='" + this.No + "'";
+            if (DBAccess.RunSQLReturnValInt(sql) != 0)
+                return "err@该目录下有子类别，您不能删除。";
+
+            //检查是否有表单？
+            sql = "SELECT COUNT(*) FROM Sys_MapData WHERE FK_FormTree='" + this.No + "'";
+            if (DBAccess.RunSQLReturnValInt(sql) != 0)
+                return "err@该目录下有表单，您不能删除。";
+
+            formTree.Delete();
+            return "删除成功";
         }
 
         /// <summary>

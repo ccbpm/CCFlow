@@ -146,10 +146,10 @@ function OpenEasyUiSampleEditDialog(editPropertyName, editType, oldValue, okBtnF
         dlgLableId = dlgId + 'label',
         dlgTxtId = dlgId + 'txt',
         dlg = $('#' + dlgId),
-        dw = dlgWidth || 300,
-        dh = dlgHeight || 120 + (isMultiLine ? 24 * 3 : 24),
-        tw = dw - 36,
-        th = dh - 120;
+        dw = dlgWidth || 380,
+        dh = dlgHeight || 160 + (isMultiLine ? 24 * 3 : 24),
+        tw = dw - 56,
+        th = dh - 160;
 
     if (dlg.length == 0) {
         var divDom = document.createElement('div');
@@ -157,7 +157,7 @@ function OpenEasyUiSampleEditDialog(editPropertyName, editType, oldValue, okBtnF
         document.body.appendChild(divDom);
         dlg = $('#' + dlgId);
         dlg.append("<div style='padding:10px'><span id='" + dlgLableId + "'>请输入" + editPropertyName + "</span>:<br />" +
-            "<" + (isMultiLine ? "textarea" : "input type='text'") + " id='" + dlgTxtId + "' style='width:" + tw + "px;height:" + th + "px;line-height:24px' /></div>");
+            "<" + (isMultiLine ? "textarea" : "input type='text'") + " id='" + dlgTxtId + "' style='width:" + tw + "px;height:" + th + "px;line-height:24px;' /></div>");
         //选中处理
         $('#' + dlgTxtId).focus(function () {
             this.select();

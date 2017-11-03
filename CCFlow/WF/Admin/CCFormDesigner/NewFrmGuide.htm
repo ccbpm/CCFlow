@@ -33,7 +33,7 @@
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             var frmType = GetQueryString("FrmType");
-            if (frmType == null || frmType=="" )
+            if (frmType == null || frmType == "")
                 frmType = '1';
 
             //创建表单类型.
@@ -43,7 +43,7 @@
             GenerBindEntities("DDL_DBSrc", "BP.Sys.SFDBSrcs", "local");
 
             var sort = GetQueryString("FK_FrmSort");
-
+            $("#HD_FK_FormTree").val(sort);
             //创建表单树.
             GenerBindEntities("DDL_FrmTree", "BP.WF.Template.SysFormTrees", sort);
 
@@ -185,6 +185,7 @@
         var pTable = document.getElementById("TB_PTable").value;
 
         if (name == "" || no == "" || pTable == "") {
+            $("#Msg").html("");
             alert('@请输入必填的字段.');
             return;
         }
@@ -205,8 +206,13 @@
                 }
 
                 $("#Msg").html("<font color=green>" + data + "</font>");
-
                 data = data.replace('url@', '');
+                //表单库增加表单节点
+                if (typeof window.parent.NewFormAppend2Tree != "undefined") {
+                    var sort = $("#HD_FK_FormTree").val();
+                    window.parent.NewFormAppend2Tree(sort, no, name);
+                }
+                //切换页面
                 window.location.href = data;
                 return;
             }
@@ -219,7 +225,7 @@
 </table>
 
 <div id="Msg"> </div>
-
+<input type="hidden" id="HD_FK_FormTree" name="HD_FK_FormTree" />
 </form>
 
 </body>

@@ -53,7 +53,7 @@ function OpenFlowToCanvas(node, id, text) {
     } else if (node.attributes.DTYPE == "1") {//CCBPM
         addTab(id, text, "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1", node.iconCls);
     } else {
-        //        if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
+        //if (confirm("此流程版本为V1.0,是否执行升级为V2.0 ?")) {
         var attrs = node.attributes;    //这样写，是为了不将attributes里面原有的属性丢失，edited by liuxc,2015-11-05
         attrs.DTYPE = "1";
         attrs.Url = "Designer.htm?FK_Flow=" + node.id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID + "&Flow_V=1";
@@ -84,8 +84,6 @@ function newFlow() {
 
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();
-
-        // alert(newFlowInfo);
 
         if (newFlowInfo.flowName == null || newFlowInfo.flowName.length == 0 || newFlowInfo.flowSort == null || newFlowInfo.flowSort.length == 0) {
             $.messager.alert('错误', '信息填写不完整', 'error');
@@ -131,13 +129,13 @@ function newFlow() {
             };
             //展开到指定节点
             $('#flowTree').tree('expandTo', $('#flowTree').tree('find', flowNo).target);
-            $('#flowTree').tree('select', $('#flowTree').tree('find', flowName).target);
+            $('#flowTree').tree('select', $('#flowTree').tree('find', flowNo).target);
 
             //在右侧流程设计区域打开新建的流程
             RefreshFlowJson();
 
             //打开流程.
-            OpenFlowToCanvas(nodeData, jdata.data.no, jdata.data.name);
+            //OpenFlowToCanvas(nodeData, flowNo, nodeData.text);
 
         }, this);
     }, null);
@@ -591,28 +589,49 @@ function newFrm() {
 
     var url = "../CCFormDesigner/NewFrmGuide.htm?Step=0";
     if (node.attributes) {
-        if (node.attributes.TTYPE == "SRC") {
+        if (node.attributes.TType == "SRC") {
             url += "&Src=" + node.id;
-        }
-        else if (node.attributes.TTYPE == "FORMTYPE") {
+        } else if (node.attributes.TType == "FORMTYPE") {
             //在表单类别上单击，则传递表单类别
             var pnode = $('#formTree').tree('getParent', node.target);
             if (pnode != null) {
                 url += "&FK_FrmSort=" + node.id;
 
                 while (pnode && pnode.attributes) {
-                    if (pnode.attributes.TTYPE == "SRC") {
+                    if (pnode.attributes.TType == "SRC") {
                         url += "&Src=" + pnode.id;
                         break;
                     }
-
                     pnode = $('#formTree').tree('getParent', pnode.target);
                 }
             }
         }
     }
-
+    //如果右侧有打开该表单，则关闭
+    var currTab = $('#tabs').tabs('getTab', "新建表单");
+    if (currTab) {
+        $('#tabs').tabs('close', "新建表单");
+    }
     addTab("NewFrm", "新建表单", url);
+}
+
+//表单树添加表单项
+function NewFormAppend2Tree(FK_FormTree, No, Name) {
+    var sortNode = $('#formTree').tree('find', FK_FormTree);
+    $('#formTree').tree('append', {
+        parent: sortNode.target,
+        data: [{
+            id: No,
+            text: Name,
+            attributes: { MenuId: "mFormSort", TType: "FORMTYPE" },
+            checked: false,
+            iconCls: 'icon-form',
+            state: 'open',
+            children: []
+        }]
+    });
+    $("#formTree").tree("expand", sortNode.target);
+    $('#formTree').tree('select', $('#formTree').tree('find', No).target);
 }
 
 //表单属性

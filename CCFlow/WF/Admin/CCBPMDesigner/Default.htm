@@ -628,10 +628,10 @@
     </div>
     <div id="mFormSort" class="easyui-menu" style="width: 120px;">
         <div onclick="newFrm()" data-options="iconCls:'icon-add'">新建/导入表单</div>
-        <div onclick="remove()" data-options="iconCls:'icon-new'">新建同级类别</div>
-        <div onclick="remove()" data-options="iconCls:'icon-new'">新建子级类别</div>
-        <div onclick="remove()" data-options="iconCls:'icon-edit'">编辑</div>
-        <div onclick="remove()" data-options="iconCls:'icon-delete'">删除</div>
+        <div onclick="newCCFormSort(false)" data-options="iconCls:'icon-new'">新建同级类别</div>
+        <div onclick="newCCFormSort(true)" data-options="iconCls:'icon-new'">新建子级类别</div>
+        <div onclick="EditCCFormSort()" data-options="iconCls:'icon-edit'">编辑</div>
+        <div onclick="DeleteCCFormSort()" data-options="iconCls:'icon-delete'">删除</div>
         <div onclick="RefreshNode('formTree', '1')" data-options="iconCls:'icon-reload'">刷新</div>
     </div>
     <div id="mForm" class="easyui-menu" style="width: 120px;">

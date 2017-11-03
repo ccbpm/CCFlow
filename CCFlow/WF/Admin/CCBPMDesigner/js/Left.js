@@ -85,7 +85,7 @@ function newFlow() {
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();
 
-       // alert(newFlowInfo);
+        // alert(newFlowInfo);
 
         if (newFlowInfo.flowName == null || newFlowInfo.flowName.length == 0 || newFlowInfo.flowSort == null || newFlowInfo.flowSort.length == 0) {
             $.messager.alert('错误', '信息填写不完整', 'error');
@@ -94,7 +94,7 @@ function newFlow() {
         //传入参数
         var params = {
             action: "NewFlow",
-            paras: newFlowInfo.flowSort + ',' + newFlowInfo.flowName + ',' + newFlowInfo.dataStoreModel + ',' + newFlowInfo.pTable + ',' + newFlowInfo.flowCode + ',' + newFlowInfo.FlowVersion 
+            paras: newFlowInfo.flowSort + ',' + newFlowInfo.flowName + ',' + newFlowInfo.dataStoreModel + ',' + newFlowInfo.pTable + ',' + newFlowInfo.flowCode + ',' + newFlowInfo.FlowVersion
         };
 
         //访问服务
@@ -253,7 +253,7 @@ function moveUpFlowSort() {
     };
     ajaxService(params, function (data) {
         var before = $(currSort.target).parent().prev();
-        if (before.length == 0 || $('#flowTree').tree('getData' ,before.children()[0]).attributes.TTYPE != "FLOWTYPE") {
+        if (before.length == 0 || $('#flowTree').tree('getData', before.children()[0]).attributes.TTYPE != "FLOWTYPE") {
             return;
         }
 
@@ -265,7 +265,7 @@ function moveUpFlowSort() {
 function moveDownFlowSort() {
     var currSort = $('#flowTree').tree('getSelected');
     if (currSort == null) return;
-    
+
     //传入后台参数
     var params = {
         DoType: "MoveDownFlowSort",
@@ -386,7 +386,7 @@ function DeleteFlow() {
         }, this);
     });
 }
- 
+
 
 //流程属性,树上的.
 function FlowProperty() {
@@ -445,6 +445,102 @@ function moveDownFlow() {
     });
 }
 
+//新建表单树类别
+function newCCFormSort(isSub) {
+    var currCCFormSort = $('#formTree').tree('getSelected');
+    if (currCCFormSort == null || currCCFormSort.attributes.TType != "FORMTYPE")
+        return;
+
+    var propName = (isSub ? '子级' : '同级') + '表单类别';
+    OpenEasyUiSampleEditDialog(propName, '新建', null, function (val) {
+        if (val == null || val.length == 0) {
+            $.messager.alert('错误', '请输入' + propName + '！', 'error');
+            return false;
+        }
+
+        //传入参数
+        var doWhat = isSub ? 'CCForm_NewSubSort' : 'CCForm_NewSameLevelSort';
+        var params = {
+            action: doWhat,
+            No: currCCFormSort.id,
+            Name: val
+        };
+
+        ajaxService(params, function (data) {
+            var parentNode = isSub ? currCCFormSort : $('#formTree').tree('getParent', currCCFormSort.target);
+
+            $('#formTree').tree('append', {
+                parent: parentNode.target,
+                data: [{
+                    id: data,
+                    text: val,
+                    attributes: { MenuId: "mFormSort", TType: "FORMTYPE" },
+                    checked: false,
+                    iconCls: 'icon-tree_folder',
+                    state: 'open',
+                    children: []
+                }]
+            });
+
+            $('#formTree').tree('select', $('#formTree').tree('find', data).target);
+
+        }, this);
+    }, null, false, 'icon-new');
+}
+
+//编辑表单树类别
+function EditCCFormSort() {
+    var currCCFormSort = $('#formTree').tree('getSelected');
+    if (currCCFormSort == null || currCCFormSort.attributes.TType != "FORMTYPE")
+        return;
+
+    OpenEasyUiSampleEditDialog("编辑类别名称", '', currCCFormSort.text, function (val) {
+        if (val == null || val.length == 0) {
+            $.messager.alert('错误', '请输入类别名称', 'error');
+            return false;
+        }
+
+        //传入参数
+        var params = {
+            action: "CCForm_EditCCFormSort",
+            No: currCCFormSort.id,
+            Name: val
+        };
+
+        ajaxService(params, function (data) {
+
+            $('#formTree').tree('update', {
+                target: currCCFormSort.target,
+                text: val
+            });
+            $('#formTree').tree('select', $('#formTree').tree('find', data).target);
+
+        }, this);
+    }, null, false, 'icon-new');
+}
+//删除表单树类别
+function DeleteCCFormSort() {
+    var currFormSort = $('#formTree').tree('getSelected');
+    if (currFormSort == null || currFormSort.attributes.TType != 'FORMTYPE')
+        return;
+
+    OpenEasyUiConfirm("你确定要删除名称为“" + currFormSort.text + "”的类别吗？", function () {
+        var params = {
+            DoType: "CCForm_DelFormSort",
+            No: currFormSort.id
+        };
+        ajaxService(params, function (data) {
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
+            $('#flowTree').tree('remove', currFormSort.target);
+
+        }, this);
+    });
+}
+
 //新建表单
 function newFrm() {
     var node = $('#formTree').tree('getSelected');
@@ -486,8 +582,9 @@ function CCForm_Attr() {
         return;
     }
     var url = '../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=' + node.id;
-    OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560,"icon-window");
+    OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560, "icon-window");
 }
+
 //设计自由表单
 function designFreeFrm() {
     var node = $('#formTree').tree('getSelected');
@@ -495,7 +592,7 @@ function designFreeFrm() {
         alert('请选择表单.');
         return;
     }
-    addTab("DesignerFreeFrm" + node.id, "设计表单-" + node.text, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
+    addTab("DesignerFreeFrm" + node.id, node.text, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
 }
 
 //设计傻瓜表单
@@ -505,7 +602,7 @@ function designFoolFrm() {
         alert('请选择表单.');
         return;
     }
-    addTab("DesignerFoolFrm" + node.id, "设计表单-" + node.text, "../FoolFormDesigner/Designer.htm?FK_MapData=" + node.id + "&MyPK=" + node.id + "&IsEditMapData=True");
+    addTab("DesignerFoolFrm" + node.id, node.text, "../FoolFormDesigner/Designer.htm?FK_MapData=" + node.id + "&MyPK=" + node.id + "&IsEditMapData=True");
 }
 
 //上移表单
@@ -552,7 +649,7 @@ function moveDownCCFormTree() {
 //删除流程树表单
 function deleteCCFormTreeMapData() {
     var currForm = $('#formTree').tree('getSelected');
-    if (currForm == null) 
+    if (currForm == null)
         return;
 
     OpenEasyUiConfirm("你确定要删除名称为“" + currForm.text + "”的表单吗？", function () {
@@ -563,6 +660,11 @@ function deleteCCFormTreeMapData() {
         };
         ajaxService(params, function (data) {
             alert("删除成功！");
+            //如果右侧有打开该表单，则关闭
+            var currTab = $('#tabs').tabs('getTab', currForm.text);
+            if (currTab) {
+                $('#tabs').tabs('close', currForm.text);
+            }
             //删除节点
             $('#formTree').tree('remove', currForm.target);
         });
@@ -853,7 +955,7 @@ function ShowSubDepts(node, treeid) {
                 $("#" + treeid).tree("append", {
                     parent: node.target,
                     data: [{
-                        id: this.PARENTNO +  "|" + this.NO,
+                        id: this.PARENTNO + "|" + this.NO,
                         text: this.NAME,
                         iconCls: "icon-user",
                         attributes: { TType: "EMP", StationId: stationNo, DeptId: deptNo }
@@ -934,7 +1036,7 @@ $(function () {
 
     ajaxService(params, function (data) {
 
-        if (data.indexOf('err@') ==0 ) {
+        if (data.indexOf('err@') == 0) {
             alert(data);
             window.location.href = "Login.htm?DoType=Logout";
             return;

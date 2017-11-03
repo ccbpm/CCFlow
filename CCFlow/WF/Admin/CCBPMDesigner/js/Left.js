@@ -541,6 +541,47 @@ function DeleteCCFormSort() {
     });
 }
 
+//上移表单类别
+function moveUpCCFormSort() {
+    var currFormSort = $('#formTree').tree('getSelected');
+    if (currFormSort == null)
+        return;
+    //传入后台参数
+    var params = {
+        DoType: "CCForm_MoveUpCCFormSort",
+        No: currFormSort.id
+    };
+    ajaxService(params, function (data) {
+        var before = $(currFormSort.target).parent().prev();
+        if (before.length == 0 || $('#formTree').tree('getData', before.children()[0]).attributes.TType != "FORMTYPE") {
+            return;
+        }
+
+        $(currFormSort.target).parent().insertBefore(before);
+    });
+}
+
+//下移表单类别
+function moveDownCCFormSort() {
+    var currFormSort = $('#formTree').tree('getSelected');
+    if (currFormSort == null)
+        return;
+
+    //传入后台参数
+    var params = {
+        DoType: "CCForm_MoveDownCCFormSort",
+        No: currFormSort.id
+    };
+    ajaxService(params, function (data) {
+        var next = $(currFormSort.target).parent().next();
+        if (next.length == 0 || $('#formTree').tree('getData', next.children()[0]).attributes.TType != "FORMTYPE") {
+            return;
+        }
+
+        $(currFormSort.target).parent().insertAfter(next);
+    });
+}
+
 //新建表单
 function newFrm() {
     var node = $('#formTree').tree('getSelected');

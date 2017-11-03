@@ -562,7 +562,7 @@ function deleteCCFormTreeMapData() {
             FK_MapData: currForm.id
         };
         ajaxService(params, function (data) {
-            alert(data);
+            alert("删除成功！");
             //删除节点
             $('#formTree').tree('remove', currForm.target);
         });

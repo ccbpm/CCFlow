@@ -1518,6 +1518,27 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
+        /// 表单树-上移表单类别
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_MoveUpCCFormSort()
+        {
+            SysFormTree formTree = new SysFormTree(this.No);
+            formTree.DoUp();
+            return formTree.No;
+        }
+        /// <summary>
+        /// 表单树-下移表单类别
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_MoveDownCCFormSort()
+        {
+            SysFormTree formTree = new SysFormTree(this.No);
+            formTree.DoDown();
+            return formTree.No;
+        }
+
+        /// <summary>
         /// 表单树-上移表单
         /// </summary>
         /// <returns></returns>

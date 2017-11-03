@@ -478,16 +478,96 @@ function newFrm() {
     addTab("NewFrm", "新建表单", url);
 }
 
-function designFrm() {
+//表单属性
+function CCForm_Attr() {
     var node = $('#formTree').tree('getSelected');
     if (!node) {
         alert('请选择表单.');
         return;
     }
-
-    addTab("DesignerFrm" + node.id, "设计表单-" + node.text, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
+    var url = '../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=' + node.id;
+    OpenEasyUiDialog(url, "CCForm_Attr", '表单属性', 900, 560,"icon-window");
+}
+//设计自由表单
+function designFreeFrm() {
+    var node = $('#formTree').tree('getSelected');
+    if (!node) {
+        alert('请选择表单.');
+        return;
+    }
+    addTab("DesignerFreeFrm" + node.id, "设计表单-" + node.text, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + node.id);
 }
 
+//设计傻瓜表单
+function designFoolFrm() {
+    var node = $('#formTree').tree('getSelected');
+    if (!node) {
+        alert('请选择表单.');
+        return;
+    }
+    addTab("DesignerFoolFrm" + node.id, "设计表单-" + node.text, "../FoolFormDesigner/Designer.htm?FK_MapData=" + node.id + "&MyPK=" + node.id + "&IsEditMapData=True");
+}
+
+//上移表单
+function moveUpCCFormTree() {
+    var currForm = $('#formTree').tree('getSelected');
+    if (currForm == null)
+        return;
+    //传入后台参数
+    var params = {
+        DoType: "CCForm_MoveUpCCFormTree",
+        FK_MapData: currForm.id
+    };
+    ajaxService(params, function (data) {
+        var before = $(currForm.target).parent().prev();
+        if (before.length == 0 || $('#formTree').tree('getData', before.children()[0]).attributes.TType != "FORM") {
+            return;
+        }
+
+        $(currForm.target).parent().insertBefore(before);
+    });
+}
+
+//下移表单
+function moveDownCCFormTree() {
+    var currForm = $('#formTree').tree('getSelected');
+    if (currForm == null)
+        return;
+
+    //传入后台参数
+    var params = {
+        DoType: "CCForm_MoveDownCCFormTree",
+        FK_MapData: currForm.id
+    };
+    ajaxService(params, function (data) {
+        var next = $(currForm.target).parent().next();
+        if (next.length == 0 || $('#formTree').tree('getData', next.children()[0]).attributes.TType != "FORM") {
+            return;
+        }
+
+        $(currForm.target).parent().insertAfter(next);
+    });
+}
+
+//删除流程树表单
+function deleteCCFormTreeMapData() {
+    var currForm = $('#formTree').tree('getSelected');
+    if (currForm == null) 
+        return;
+
+    OpenEasyUiConfirm("你确定要删除名称为“" + currForm.text + "”的表单吗？", function () {
+        //传入后台参数
+        var params = {
+            DoType: "CCForm_DeleteCCFormMapData",
+            FK_MapData: currForm.id
+        };
+        ajaxService(params, function (data) {
+            alert(data);
+            //删除节点
+            $('#formTree').tree('remove', currForm.target);
+        });
+    });
+}
 
 function CopyFrm() {
 

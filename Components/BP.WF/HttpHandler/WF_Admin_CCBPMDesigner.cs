@@ -987,7 +987,7 @@ namespace BP.WF.HttpHandler
 
             //组织数据源.
             string sqls = "SELECT No ,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree ORDER BY Idx ASC ; ";
-            sqls += "SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData   WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree)";
+            sqls += "SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData   WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
 
             //获得表单数据.
@@ -1458,6 +1458,38 @@ namespace BP.WF.HttpHandler
             FlowSort fsSub = new FlowSort(fk_flowSort);//传入的编号多出F符号，需要替换掉
             fsSub.DoDown();
             return "F" + fsSub.No;
+        }
+
+        /// <summary>
+        /// 表单树-上移表单
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_MoveUpCCFormTree()
+        {
+            MapData mapData = new MapData(this.FK_MapData);
+            mapData.DoUp();
+            return mapData.No;
+        }
+        /// <summary>
+        /// 表单树-下移表单
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_MoveDownCCFormTree()
+        {
+            MapData mapData = new MapData(this.FK_MapData);
+            mapData.DoOrderDown();
+            return mapData.No;
+        }
+
+        /// <summary>
+        /// 表单树 - 删除表单
+        /// </summary>
+        /// <returns></returns>
+        public string CCForm_DeleteCCFormMapData()
+        {
+            MapData mapData = new MapData(this.FK_MapData);
+            mapData.Delete();
+            return mapData.No;
         }
 
         public string EditFlowSort()

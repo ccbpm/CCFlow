@@ -5,6 +5,9 @@
   SrcType 类型:  SrcType=DB 是数据库, SrcType=WS 是WebServices.
   URL: 链接的字串. 如果是DBType=DB 
   -->
-  <Item No="001" Name="流程类别1"  />
-  <Item No="002" Name="流程类别2"  />
+  
+  <Item No="001" Name="日常办公"  />
+  <Item No="002" Name="人力资源"  />
+  <Item No="003" Name="财务类"    />
+
 </NewDataSet>

@@ -1095,7 +1095,7 @@ namespace BP.WF
                       rdt = rdt.Substring(0, 10);
                 }
                 string words = Glo.PrintBackgroundWord;
-              words=  words.Replace("@RDT", rdt);
+                words=  words.Replace("@RDT", rdt);
 
                 if (words.Contains("@") == true)
                     words = Glo.DealExp(words, en, null);

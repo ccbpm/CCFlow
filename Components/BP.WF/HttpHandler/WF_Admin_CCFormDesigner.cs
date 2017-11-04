@@ -444,6 +444,22 @@ namespace BP.WF.HttpHandler
             DataTable dt = mapAttrs.ToDataTableField();
             return BP.Tools.Json.ToJson(dt);
           }
+
+       
         #endregion
+
+        /// <summary>
+        /// 表单重置
+        /// </summary>
+        /// <returns></returns>
+        public string ResetFrm_Init()
+        {
+            MapData md = new MapData(this.FK_MapData);
+            md.ResetMaxMinXY();
+            md.FormJson = "";
+            md.Update();
+
+            return "重置成功.";
+        }
     }
 }

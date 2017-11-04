@@ -73,6 +73,12 @@ namespace BP.WF.HttpHandler
             return page.Login_Init();
         }
 
+        public string Login_Out()
+        {
+            BP.WF.Dev2Interface.Port_SigOut();
+            return "安全退出.";
+        }
+
         public string Login_Submit()
         {
             WF_App_ACE page = new WF_App_ACE(context);

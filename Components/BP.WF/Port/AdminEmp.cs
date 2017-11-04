@@ -50,6 +50,10 @@ namespace BP.WF.Port
         public const string Stas = "Stas";
         public const string Depts = "Depts";
         public const string FK_Dept = "FK_Dept";
+        /// <summary>
+        /// 所在组织
+        /// </summary>
+        public const string OrgNo = "OrgNo";
         public const string Idx = "Idx";
         public const string FtpUrl = "FtpUrl";
         public const string Style = "Style";
@@ -120,6 +124,20 @@ namespace BP.WF.Port
             set
             {
                 SetValByKey(AdminEmpAttr.FK_Dept, value);
+            }
+        }
+        /// <summary>
+        /// 组织结构
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStringByKey(AdminEmpAttr.OrgNo);
+            }
+            set
+            {
+                SetValByKey(AdminEmpAttr.OrgNo, value);
             }
         }
         public string RootOfDept
@@ -219,6 +237,8 @@ namespace BP.WF.Port
                 map.AddTBStringPK(AdminEmpAttr.No, null, "帐号", true, true, 1, 50, 36);
                 map.AddTBString(AdminEmpAttr.Name, null, "名称", true,false, 0, 50, 20);
                 map.AddDDLEntities(AdminEmpAttr.FK_Dept, null, "主部门", new BP.Port.Depts(), false);
+                map.AddDDLEntities(AdminEmpAttr.OrgNo, null, "组织", new BP.WF.Port.Incs(), true);
+
 
                 map.AddDDLSysEnum(AdminEmpAttr.UseSta, 3, "用户状态", true, true, AdminEmpAttr.UseSta, "@0=禁用@1=启用");
                 map.AddDDLSysEnum(AdminEmpAttr.UserType, 3, "用户状态", true, true, AdminEmpAttr.UserType, "@0=普通用户@1=管理员用户");
@@ -226,11 +246,12 @@ namespace BP.WF.Port
                 map.AddDDLEntities(AdminEmpAttr.RootOfFlow, null, "流程权限节点", new BP.WF.Template.FlowSorts(), true);
                 map.AddDDLEntities(AdminEmpAttr.RootOfForm, null, "表单权限节点", new BP.WF.Template.SysFormTrees(), true);
                 map.AddDDLEntities(AdminEmpAttr.RootOfDept, null, "组织结构权限节点", new BP.WF.Port.Incs(), true);
+                 
 
                 //查询条件.
                 map.AddSearchAttr(AdminEmpAttr.UseSta);
                 map.AddSearchAttr(AdminEmpAttr.UserType);
-
+                map.AddSearchAttr(AdminEmpAttr.OrgNo);
 
 
                 RefMethod rm = new RefMethod();
@@ -257,6 +278,17 @@ namespace BP.WF.Port
                 this.RootOfDept = "0";
                 this.RootOfFlow = "0";
                 this.RootOfForm = "0";
+            }
+            else
+            {
+                //为树目录更新OrgNo编号.
+                BP.WF.Template.FlowSort fs = new Template.FlowSort();
+                fs.No = this.RootOfDept;
+                if (fs.RetrieveFromDBSources() == 1)
+                {
+                    fs.OrgNo = this.RootOfDept;
+                    fs.Update();
+                }
             }
 
             return base.beforeUpdateInsertAction();

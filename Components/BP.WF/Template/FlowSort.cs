@@ -13,12 +13,34 @@ namespace BP.WF.Template
     /// </summary>
     public class FlowSortAttr : EntityTreeAttr
     {
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public const string OrgNo = "OrgNo";
     }
     /// <summary>
     ///  流程类别
     /// </summary>
     public class FlowSort : EntityTree
     {
+        #region 属性.
+        /// <summary>
+        /// 组织编号
+        /// </summary>
+        public string OrgNo
+        {
+            get
+            {
+                return this.GetValStrByKey(FlowSortAttr.OrgNo);
+            }
+            set
+            {
+                this.SetValByKey(FlowSortAttr.OrgNo, value);
+            }
+        }
+        #endregion 属性.
+
+
         #region 构造方法
         /// <summary>
         /// 流程类别
@@ -48,7 +70,8 @@ namespace BP.WF.Template
                 map.AddTBStringPK(FlowSortAttr.No, null, "编号", true, true, 1, 10, 20);
                 map.AddTBString(FlowSortAttr.Name, null, "名称", true, false, 0, 100, 30);
                 map.AddTBString(FlowSortAttr.ParentNo, null, "父节点No", false, false, 0, 100, 30);
-                map.AddTBString(FlowSortAttr.TreeNo, null, "TreeNo", false, false, 0, 100, 30);
+                map.AddTBString(FlowSortAttr.TreeNo, null, "树节点编号", false, false, 0, 100, 30);
+                map.AddTBString(FlowSortAttr.OrgNo, "0", "组织编号(0为系统组织)", false, false, 0, 50, 30);
 
                 map.AddTBInt(FlowSortAttr.Idx, 0, "Idx", false, false);
                 map.AddTBInt(FlowSortAttr.IsDir, 0, "IsDir", false, false);
@@ -76,7 +99,6 @@ namespace BP.WF.Template
             {
                 return new FlowSort();
             }
-
         }
         public override int RetrieveAll()
         {

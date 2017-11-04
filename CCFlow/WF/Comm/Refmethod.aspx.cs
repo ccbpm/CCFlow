@@ -103,6 +103,14 @@ namespace CCFlow.Web.Comm
             Entity en = ens.GetNewEntity;
             string msg = "";
             string pk = this.Request.QueryString["PK"];
+            if (pk == null || pk == "")
+                pk = this.Request.QueryString["No"];
+            if (pk == null || pk == "")
+                pk = this.Request.QueryString["OID"];
+            if (pk == null || pk == "")
+                pk = this.Request.QueryString["MyPK"];
+
+
             if (pk.Contains(",") == false)
             {
                 /*批处理的方式.*/

@@ -108,6 +108,13 @@
             return;
         }
 
+        function ResetFrm() {
+            var url = "ResetFrm.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            CCForm_ShowDialog(url, '重置表单', 300, 200);
+            return;
+        }
+        
+
         function FoolFormDesigner() {
 
             var url = "../../Admin/FoolFormDesigner/ImpExp/Imp.htm?s=34&FK_MapData=" + CCForm_FK_MapData + "&IsShowTitle=0";
@@ -207,6 +214,13 @@
             <label for="ImpFrmXml" class="toolbarText">手机</label>
         </a>
          
+
+          <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
+        <a style="text-decoration: none;" href="javascript:ResetFrm();" title="重置表单">
+            <img src="../../Img/reset.png" id="Img3" border="0" width="16" height="16" alt="" />
+            <label for="ImpFrmXml" class="toolbarText">重置表单</label>
+        </a>
+
 
         <img class="separator" src="assets/images/toolbar_separator.gif" border="0" width="1" height="18" />
         <a style="text-decoration: none; display:inline;" href="http://www.ccflow.org" target=_blank title="打开官方网站在线帮助." >

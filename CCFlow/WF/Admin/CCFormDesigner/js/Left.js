@@ -134,7 +134,7 @@ function newFlowSort(isSub) {
             return false;
         }
 
-        //传入参数
+        //传入参数.
         var doWhat = isSub ? 'NewSubFlowSort' : 'NewSameLevelFlowSort';
         var params = {
             method: "Do",

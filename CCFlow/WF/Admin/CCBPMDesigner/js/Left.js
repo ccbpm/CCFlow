@@ -151,42 +151,39 @@ function newFlowSort(isSub) {
         return;
 
     var propName = (isSub ? '子级' : '同级') + '流程类别';
+    var val = window.prompt(propName, '');
+    if (val == null || val.length == 0) {
+        alert('必须输入名称.');
+        return false;
+    }
 
-    OpenEasyUiSampleEditDialog(propName, '新建', null, function (val) {
+    //传入参数
+    var doWhat = isSub ? 'NewSubFlowSort' : 'NewSameLevelFlowSort';
+    var params = {
+        action: doWhat,
+        No: currSort.id,
+        Name: val
+    };
 
-        if (val == null || val.length == 0) {
-            $.messager.alert('错误', '请输入' + propName + '！', 'error');
-            return false;
-        }
+    ajaxService(params, function (data) {
+        var parentNode = isSub ? currSort : $('#flowTree').tree('getParent', currSort.target);
 
-        //传入参数
-        var doWhat = isSub ? 'NewSubFlowSort' : 'NewSameLevelFlowSort';
-        var params = {
-            action: doWhat,
-            No: currSort.id,
-            Name: val
-        };
+        $('#flowTree').tree('append', {
+            parent: parentNode.target,
+            data: [{
+                id: data,
+                text: val,
+                attributes: { ISPARENT: '1', MenuId: "mFlowSort", TType: "FLOWTYPE" },
+                checked: false,
+                iconCls: 'icon-tree_folder',
+                state: 'open',
+                children: []
+            }]
+        });
 
-        ajaxService(params, function (data) {
-            var parentNode = isSub ? currSort : $('#flowTree').tree('getParent', currSort.target);
+        $('#flowTree').tree('select', $('#flowTree').tree('find', data).target);
 
-            $('#flowTree').tree('append', {
-                parent: parentNode.target,
-                data: [{
-                    id: data,
-                    text: val,
-                    attributes: { ISPARENT: '1', MenuId: "mFlowSort", TType: "FLOWTYPE" },
-                    checked: false,
-                    iconCls: 'icon-tree_folder',
-                    state: 'open',
-                    children: []
-                }]
-            });
-
-            $('#flowTree').tree('select', $('#flowTree').tree('find', data).target);
-
-        }, this);
-    }, null, false, 'icon-new');
+    }, this);
 }
 
 //修改流程类别
@@ -450,6 +447,7 @@ function newCCFormSort(isSub) {
         return;
 
     var propName = (isSub ? '子级' : '同级') + '表单类别';
+
     OpenEasyUiSampleEditDialog(propName, '新建', null, function (val) {
         if (val == null || val.length == 0) {
             $.messager.alert('错误', '请输入' + propName + '！', 'error');

@@ -281,13 +281,26 @@ namespace BP.WF.Port
             }
             else
             {
-                //为树目录更新OrgNo编号.
-                BP.WF.Template.FlowSort fs = new Template.FlowSort();
-                fs.No = this.RootOfDept;
-                if (fs.RetrieveFromDBSources() == 1)
+                if (this.UserType == 1)
                 {
-                    fs.OrgNo = this.RootOfDept;
-                    fs.Update();
+                    //为树目录更新OrgNo编号.
+                    BP.WF.Template.FlowSort fs = new Template.FlowSort();
+                    fs.No = this.RootOfFlow;  //周朋@于庆海需要对照翻译.
+                    if (fs.RetrieveFromDBSources() == 1)
+                    {
+                        fs.OrgNo = this.RootOfDept;
+                        fs.Update();
+
+                        //更新本级目录.
+                        BP.WF.Template.FlowSorts fsSubs = new Template.FlowSorts();
+                        fsSubs.Retrieve(BP.WF.Template.FlowSortAttr.ParentNo, fs.No);
+                        foreach (BP.WF.Template.FlowSort item in fsSubs)
+                        {
+                            item.OrgNo = this.RootOfDept;
+                            item.Update();
+                        }
+                    }
+                    BP.DA.DBAccess.RunSQL("UPDATE wf_flowsort SET ORGNO='0' WHERE ORGNo NOT IN (SELECT RootOfDept FROM WF_Emp WHERE UserType=1 )");
                 }
             }
 

@@ -256,20 +256,6 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.ChartType, value);
             }
         }
-        /// <summary>
-        /// 那一个组织结构创建的
-        /// </summary>
-        public string FK_Dept
-        {
-            get
-            {
-                return this.GetValStringByKey(FlowAttr.FK_Dept);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.FK_Dept, value);
-            }
-        }
         #endregion
 
         #region 发起限制.
@@ -4334,11 +4320,7 @@ namespace BP.WF
 
                 //设计类型 .
                 map.AddTBInt(FlowAttr.DType, 0, "设计类型0=ccbpm,1=bpmn", true, false);
-
                 map.AddTBInt(FlowAttr.FlowDeleteRole, 0, "流程实例删除规则", true, false);
-
-                //新增字段. 是那一个组织创建的.
-                map.AddTBString(FlowAttr.FK_Dept, null, "隶属组织", true, false, 0, 50, 10, true);
 
                 //参数.
                 map.AddTBAtParas(1000);
@@ -4366,9 +4348,6 @@ namespace BP.WF
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
-
-             
-
                
 
                 //rm = new RefMethod();
@@ -5881,18 +5860,18 @@ namespace BP.WF
                 //this.Paras = "@StartNodeX=10@StartNodeY=15@EndNodeX=40@EndNodeY=10";
                 this.Paras = "@StartNodeX=200@StartNodeY=50@EndNodeX=200@EndNodeY=350";
 
-                #region 集团模式.
-                if (BP.Web.WebUser.No == "admin")
-                {
-                    this.FK_Dept = "";
-                }
-                else
-                {
-                    //把该部门的信息存储到系统里面去.
-                    BP.WF.Port.AdminEmp ae = new Port.AdminEmp(BP.Web.WebUser.No);
-                    this.FK_Dept = ae.RootOfDept; //创建所在部门.
-                }
-                #endregion 集团模式.
+                //#region 集团模式.
+                //if (BP.Web.WebUser.No == "admin")
+                //{
+                //    this.FK_Dept = "";
+                //}
+                //else
+                //{
+                //    //把该部门的信息存储到系统里面去.
+                //    BP.WF.Port.AdminEmp ae = new Port.AdminEmp(BP.Web.WebUser.No);
+                //    this.FK_Dept = ae.RootOfDept; //创建所在部门.
+                //}
+                //#endregion 集团模式.
 
                 this.Save();
 

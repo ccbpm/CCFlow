@@ -93,10 +93,130 @@ namespace BP.WF.HttpHandler
             return wf.HandlerMapExt();
         }
         /// <summary>
-        /// 获得发起列表
+        /// 获得发起列表 
         /// </summary>
         /// <returns></returns>
         public string Start_Init()
+        {
+            //通用的处理器.
+            if (BP.Sys.SystemConfig.CustomerNo != "TianYe")
+                return Start_Init2016();
+
+            // 周朋@于庆海需要翻译.
+
+            BP.WF.Port.WFEmp em = new WFEmp();
+            em.No = BP.Web.WebUser.No;
+            if (em.RetrieveFromDBSources() == 0)
+            {
+                em.FK_Dept = BP.Web.WebUser.FK_Dept;
+                em.Name = Web.WebUser.Name;
+                em.Insert();
+            }
+            string json = em.StartFlows;
+            if (json != "")
+                return json;
+
+          
+
+            //获得当前人员的部门,根据部门获得该人员的组织集合.
+            Paras ps = new Paras();
+            ps.SQL ="SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp="+SystemConfig.AppCenterDBVarStr+"FK_Emp";
+            ps.AddFK_Emp();
+            DataTable dt = DBAccess.RunSQLReturnTable(ps);
+
+            //为当前的人员找组织编号集合.
+            string orgNos = "'0'";
+            foreach (DataRow dr in dt.Rows)
+            {
+                string deptNo = dr[0].ToString();
+                while (true)
+                {
+                    Inc inc = new Inc();
+                    inc.No = deptNo;
+                    if (inc.IsExits == true)
+                    {
+                        orgNos += ",'" + deptNo + "'";
+                        break;
+                    }
+
+                    BP.Port.Dept dept = new BP.Port.Dept(deptNo);
+                    if (dept.ParentNo == "0")
+                        break;
+                    deptNo = dept.ParentNo;
+                }
+            }
+
+            #region 获取类别列表(根据当前人员所在组织结构进行过滤类别.)
+            FlowSorts fss = new FlowSorts();
+            BP.En.QueryObject qo = new En.QueryObject(fss);
+            if (orgNos.Contains(",")==false)
+                qo.AddWhere(FlowSortAttr.OrgNo, orgNos);  //指定的类别..
+            else
+                qo.AddWhereIn(FlowSortAttr.OrgNo, "("+orgNos+")");  //指定的类别.
+
+            //排序.
+            qo.addOrderBy(FlowSortAttr.No, FlowSortAttr.Idx);
+
+
+            DataTable dtSort=qo.DoQueryToTable();
+            dtSort.TableName = "Sort";
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtSort.Columns["NO"].ColumnName = "No";
+                dtSort.Columns["NAME"].ColumnName = "Name";
+                dtSort.Columns["PARENTNO"].ColumnName = "ParentNo";
+                dtSort.Columns["ORGNO"].ColumnName = "OrgNo";
+            }
+
+            //定义容器.
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dtSort); //增加到里面去.
+            #endregion 获取类别列表.
+
+            //构造流程实例数据容器。
+            DataTable dtStart = new DataTable();
+            dtStart.TableName = "Start";
+            dtStart.Columns.Add("No");
+            dtStart.Columns.Add("Name");
+            dtStart.Columns.Add("FK_FlowSort");
+            dtStart.Columns.Add("IsBatchStart");
+
+            //获得所有的流程（包含了所有子公司与集团的可以发起的流程但是没有根据组织结构进行过滤.）
+            DataTable dtAllFlows = Dev2Interface.DB_StarFlows(Web.WebUser.No);
+
+            //按照当前用户的流程类别权限进行过滤.
+            foreach (DataRow drSort in dtSort.Rows)
+            {
+                foreach (DataRow drFlow in dtAllFlows.Rows)
+                {
+                    if (drSort["No"].ToString() != drFlow["FK_FlowSort"].ToString())
+                        continue;
+
+                    DataRow drNew = dtStart.NewRow();
+
+                    drNew["No"] = drFlow["No"];
+                    drNew["Name"] = drFlow["Name"];
+                    drNew["FK_FlowSort"] = drFlow["FK_FlowSort"];
+                    drNew["IsBatchStart"] = drFlow["IsBatchStart"];
+                    dtStart.Rows.Add(drNew); //增加到里里面去.
+                }
+            }
+
+            //把经过权限过滤的流程实体放入到集合里.
+            ds.Tables.Add(dtStart); //增加到里面去.
+             
+            //返回组合
+            json= BP.Tools.Json.DataSetToJson(ds, false);
+
+            //把json存入数据表，避免下一次再取.
+            em.StartFlows = json;
+            em.Update();
+             
+
+            return json;
+        }
+        public string Start_Init2016()
         {
             DataSet ds = new DataSet();
 

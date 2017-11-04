@@ -1406,29 +1406,36 @@ namespace BP.WF.HttpHandler
             return "删除成功.";
         }
         /// <summary>
-        /// 新建同级流程类别
+        /// 新建同级流程类别 于庆海对照需要翻译
         /// </summary>
         /// <returns></returns>
         public string NewSameLevelFlowSort()
         {
             FlowSort fs = null;
-            fs = new FlowSort(this.No.Replace("F", ""));//传入的编号多出F符号，需要替换掉
+            fs = new FlowSort(this.No.Replace("F", "")); //传入的编号多出F符号，需要替换掉.
+
+            string orgNo = fs.OrgNo; //记录原来的组织结构编号. 于庆海对照需要翻译
+
             string sameNodeNo = fs.DoCreateSameLevelNode().No;
             fs = new FlowSort(sameNodeNo);
             fs.Name = this.Name;
+            fs.OrgNo = orgNo; // 组织结构编号. 于庆海对照需要翻译
             fs.Update();
             return "F" + fs.No;
         }
         /// <summary>
-        /// 新建下级类别.
+        /// 新建下级类别. 
         /// </summary>
         /// <returns></returns>
         public string NewSubFlowSort()
         {
-            FlowSort fsSub = new FlowSort(this.No.Replace("F", ""));//传入的编号多出F符号，需要替换掉
+            FlowSort fsSub = new FlowSort(this.No.Replace("F", ""));//传入的编号多出F符号，需要替换掉.
+            string orgNo = fsSub.OrgNo; //记录原来的组织结构编号. 于庆海对照需要翻译
+
             string subNodeNo = fsSub.DoCreateSubNode().No;
             FlowSort subFlowSort = new FlowSort(subNodeNo);
             subFlowSort.Name = this.Name;
+            subFlowSort.OrgNo = orgNo; // 组织结构编号. 于庆海对照需要翻译
             subFlowSort.Update();
             return "F" + subFlowSort.No;
         }

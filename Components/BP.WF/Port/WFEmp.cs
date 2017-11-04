@@ -101,6 +101,10 @@ namespace BP.WF.Port
         /// 授权的人员
         /// </summary>
         public const string AuthorFlows = "AuthorFlows";
+        /// <summary>
+        /// 可以发起的流程
+        /// </summary>
+        public const string StartFlows = "StartFlows";
         #endregion
     }
 	/// <summary>
@@ -299,6 +303,20 @@ namespace BP.WF.Port
                 //SetValByKey(WFEmpAttr.AuthorFlows, value.Substring(1));
             }
         }
+        /// <summary>
+        /// 发起流程.
+        /// </summary>
+        public string StartFlows
+        {
+            get
+            {
+                return this.GetValStrByKey(WFEmpAttr.StartFlows);
+            }
+            set
+            {
+                SetValByKey(WFEmpAttr.StartFlows, value);
+            }
+        }
         public string FtpUrl
         {
             get
@@ -450,6 +468,8 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.FtpUrl, null, "FtpUrl", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.Msg, null, "Msg", true, true, 0, 4000, 20);
                 map.AddTBString(WFEmpAttr.Style, null, "Style", true, true, 0, 4000, 20);
+                map.AddTBString(WFEmpAttr.StartFlows, null, "可以发起的流程", true, true, 0, 4000, 20);
+
                 map.AddTBInt(WFEmpAttr.Idx, 0, "Idx", false, false);
                 this._enMap = map;
                 return this._enMap;

@@ -243,6 +243,11 @@ namespace BP.Sys
 		/// <param name="sendToEmpNo">接受人</param>
 		public static void SendMessageToCCIM(string fromEmpNo, string sendToEmpNo, string msg, string now)
 		{
+            // 周朋@于庆海 
+
+            //暂停对ccim消息提醒的支持.
+            return;
+
 			if (fromEmpNo == null)
 				fromEmpNo = "";
 

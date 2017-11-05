@@ -4017,7 +4017,7 @@ namespace BP.WF
             {
                 return this.GetValIntByKey(FlowAttr.FlowType);
             }
-        }
+        }   
         /// <summary>
         /// (当前节点为子流程时)是否检查所有子流程完成后父流程自动发送
         /// </summary>
@@ -5817,7 +5817,47 @@ namespace BP.WF
             //设置审核组件的高度
             DBAccess.RunSQL("UPDATE WF_Node SET FWC_H=300,FTC_H=300 WHERE NodeID='" + nd.NodeID + "'");
 
+            // 周朋@于庆海需要翻译.
+            CreatePushMsg(nd);
+             
             return nd;
+        }
+        public void CreatePushMsg(Node nd)
+        {
+            // 周朋@于庆海需要翻译.
+            if (SystemConfig.IsEnableCCIM == false)
+                return;
+
+            /*创建发送短消息,为默认的消息.*/
+            BP.WF.Template.PushMsg pm = new BP.WF.Template.PushMsg();
+            int i = pm.Retrieve(PushMsgAttr.FK_Event, EventListOfNode.SendSuccess,
+                PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Flow, nd.FK_Flow);
+            if (i == 0)
+            {
+                pm.FK_Event = EventListOfNode.SendSuccess;
+                pm.FK_Node = nd.NodeID;
+                pm.FK_Flow = this.No;
+
+                pm.SMSPushWay = 1;  // 发送短消息.
+                pm.MailPushWay = 0; //不发送邮件消息.
+                pm.MyPK = DBAccess.GenerGUID();
+                pm.Insert();
+            }
+
+            //设置退回消息提醒.
+            i = pm.Retrieve(PushMsgAttr.FK_Event, EventListOfNode.ReturnAfter,
+                 PushMsgAttr.FK_Node, nd.NodeID, PushMsgAttr.FK_Flow, nd.FK_Flow);
+            if (i == 0)
+            {
+                pm.FK_Event = EventListOfNode.ReturnAfter;
+                pm.FK_Node = nd.NodeID;
+                pm.FK_Flow = this.No;
+
+                pm.SMSPushWay = 1;  // 发送短消息.
+                pm.MailPushWay = 0; //不发送邮件消息.
+                pm.MyPK = DBAccess.GenerGUID();
+                pm.Insert();
+            }
         }
         /// <summary>
         /// 执行新建
@@ -5904,6 +5944,10 @@ namespace BP.WF
                 nd.CreateMap();
                 nd.HisWork.CheckPhysicsTable();
 
+                // 周朋@于庆海需要翻译.
+                CreatePushMsg(nd);
+
+
                 //通用的人员选择器.
                 BP.WF.Template.Selector select = new Template.Selector(nd.NodeID);
                 select.SelectorModel = SelectorModel.GenerUserSelecter;
@@ -5929,6 +5973,9 @@ namespace BP.WF
                 nd.Insert();
                 nd.CreateMap();
                 nd.HisWork.CheckPhysicsTable();
+
+                // 周朋@于庆海需要翻译.
+                CreatePushMsg(nd);
 
                 //通用的人员选择器.
                 select = new Template.Selector(nd.NodeID);
@@ -6175,6 +6222,10 @@ namespace BP.WF
             sql += "@ DELETE  FROM WF_GenerWorkerlist WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM  WF_GenerWorkFlow WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM  WF_Cond WHERE FK_Flow='" + this.No + "'";
+
+
+            //删除消息配置. 周朋@于庆海.
+            sql += "@ DELETE FROM WF_PushMsg WHERE FK_Flow='" + this.No + "'";
 
             // 删除岗位节点。
             sql += "@ DELETE  FROM  WF_NodeStation WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";

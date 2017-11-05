@@ -18,11 +18,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:3569/DataUser/PortalInterface.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:18272/DataUser/PortalInterface.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="PortalInterface11.disco" MetadataType="Disco" ID="81582d77-a637-4345-b415-23e30855388b" SourceId="1" SourceUrl="http://localhost:3569/DataUser/PortalInterface.asmx?disco" />
-    <MetadataFile FileName="PortalInterface11.wsdl" MetadataType="Wsdl" ID="a5c7d9fa-203f-4378-a033-a62e385c5f4b" SourceId="1" SourceUrl="http://localhost:3569/DataUser/PortalInterface.asmx?wsdl" />
+    <MetadataFile FileName="PortalInterface.disco" MetadataType="Disco" ID="88aca998-9d4b-4317-9b0a-d3346bcd0c03" SourceId="1" SourceUrl="http://localhost:18272/DataUser/PortalInterface.asmx?disco" />
+    <MetadataFile FileName="PortalInterface.wsdl" MetadataType="Wsdl" ID="93feacd1-7053-4a62-a2da-6d9d447d71f6" SourceId="1" SourceUrl="http://localhost:18272/DataUser/PortalInterface.asmx?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

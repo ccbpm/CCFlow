@@ -616,7 +616,6 @@ namespace BP.WF.Template
 
                 map.AddTBString(PushMsgAttr.FK_Flow, null, "流程", true, false, 0, 3, 10);
                 map.AddTBInt(PushMsgAttr.FK_Node, 0, "节点", true, false);
-
                 map.AddTBString(PushMsgAttr.FK_Event, null, "事件类型", true, false, 0, 15, 10);
 
                 #region 将要删除.
@@ -1174,9 +1173,7 @@ namespace BP.WF.Template
         /// </summary>
         private void SendShortMessageToSpecNodeWorks()
         {
-
         }
-
         protected override bool beforeUpdateInsertAction()
         {
            //  this.MyPK = this.FK_Event + "_" + this.FK_Node + "_" + this.PushWay;

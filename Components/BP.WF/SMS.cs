@@ -597,16 +597,16 @@ namespace BP.WF
 
                 if (this.HisMobileSta == MsgSta.UnRun)
                 {
+                    string tag = "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara;
                     switch (BP.WF.Glo.ShortMessageWriteTo)
                     {
                         case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
                             break;
                         case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
- 
 
-                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo,
-                                "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara);
+                            //周朋@于庆海需要翻译.
+                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo,tag);
 
                             break;
                         case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
@@ -619,7 +619,7 @@ namespace BP.WF
                             break;
                         case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo ,this.MobileInfo);
+                            soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo ,this.MobileInfo,tag);
                             break;
                         default:
                             break;

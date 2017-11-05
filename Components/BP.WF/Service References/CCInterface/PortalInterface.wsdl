@@ -2,26 +2,6 @@
 <wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
-      <s:element name="StartFlow">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="flowNo" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="userNo" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="sid" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="jsonOfMain" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="jsonOfDtls" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="toNodeID" type="s:int" />
-            <s:element minOccurs="0" maxOccurs="1" name="toUserNo" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="StartFlowResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="StartFlowResult" type="s:string" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
       <s:element name="SendToWebServices">
         <s:complexType>
           <s:sequence>
@@ -38,6 +18,42 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="SendToWebServicesResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWhen">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="msgPK" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sender" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sendToEmpNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tel" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="msgInfo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendWhenResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SendWhenResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FlowOverBefore">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="msgPK" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sender" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="sendToEmpNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tel" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="msgInfo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FlowOverBeforeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="FlowOverBeforeResult" type="s:boolean" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -103,6 +119,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="userNo" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="msg" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="sourceUserNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tag" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -112,6 +129,16 @@
             <s:element minOccurs="1" maxOccurs="1" name="SendToCCIMResult" type="s:boolean" />
           </s:sequence>
         </s:complexType>
+      </s:element>
+      <s:element name="Print">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="billFilePath" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PrintResponse">
+        <s:complexType />
       </s:element>
       <s:element name="WriteUserSID">
         <s:complexType>
@@ -440,7 +467,24 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="SendSuccess">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="flowNo" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="nodeID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="workid" type="s:long" />
+            <s:element minOccurs="0" maxOccurs="1" name="userNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SendSuccessResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SendSuccessResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="boolean" type="s:boolean" />
       <s:element name="int" type="s:int" />
       <s:element name="DataTable" nillable="true">
@@ -451,19 +495,26 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
     </s:schema>
   </wsdl:types>
-  <wsdl:message name="StartFlowSoapIn">
-    <wsdl:part name="parameters" element="tns:StartFlow" />
-  </wsdl:message>
-  <wsdl:message name="StartFlowSoapOut">
-    <wsdl:part name="parameters" element="tns:StartFlowResponse" />
-  </wsdl:message>
   <wsdl:message name="SendToWebServicesSoapIn">
     <wsdl:part name="parameters" element="tns:SendToWebServices" />
   </wsdl:message>
   <wsdl:message name="SendToWebServicesSoapOut">
     <wsdl:part name="parameters" element="tns:SendToWebServicesResponse" />
+  </wsdl:message>
+  <wsdl:message name="SendWhenSoapIn">
+    <wsdl:part name="parameters" element="tns:SendWhen" />
+  </wsdl:message>
+  <wsdl:message name="SendWhenSoapOut">
+    <wsdl:part name="parameters" element="tns:SendWhenResponse" />
+  </wsdl:message>
+  <wsdl:message name="FlowOverBeforeSoapIn">
+    <wsdl:part name="parameters" element="tns:FlowOverBefore" />
+  </wsdl:message>
+  <wsdl:message name="FlowOverBeforeSoapOut">
+    <wsdl:part name="parameters" element="tns:FlowOverBeforeResponse" />
   </wsdl:message>
   <wsdl:message name="SendToDingDingSoapIn">
     <wsdl:part name="parameters" element="tns:SendToDingDing" />
@@ -488,6 +539,12 @@
   </wsdl:message>
   <wsdl:message name="SendToCCIMSoapOut">
     <wsdl:part name="parameters" element="tns:SendToCCIMResponse" />
+  </wsdl:message>
+  <wsdl:message name="PrintSoapIn">
+    <wsdl:part name="parameters" element="tns:Print" />
+  </wsdl:message>
+  <wsdl:message name="PrintSoapOut">
+    <wsdl:part name="parameters" element="tns:PrintResponse" />
   </wsdl:message>
   <wsdl:message name="WriteUserSIDSoapIn">
     <wsdl:part name="parameters" element="tns:WriteUserSID" />
@@ -591,17 +648,11 @@
   <wsdl:message name="GenerEmpsBySpecDeptAndStatsSoapOut">
     <wsdl:part name="parameters" element="tns:GenerEmpsBySpecDeptAndStatsResponse" />
   </wsdl:message>
-  <wsdl:message name="StartFlowHttpGetIn">
-    <wsdl:part name="flowNo" type="s:string" />
-    <wsdl:part name="userNo" type="s:string" />
-    <wsdl:part name="sid" type="s:string" />
-    <wsdl:part name="jsonOfMain" type="s:string" />
-    <wsdl:part name="jsonOfDtls" type="s:string" />
-    <wsdl:part name="toNodeID" type="s:string" />
-    <wsdl:part name="toUserNo" type="s:string" />
+  <wsdl:message name="SendSuccessSoapIn">
+    <wsdl:part name="parameters" element="tns:SendSuccess" />
   </wsdl:message>
-  <wsdl:message name="StartFlowHttpGetOut">
-    <wsdl:part name="Body" element="tns:string" />
+  <wsdl:message name="SendSuccessSoapOut">
+    <wsdl:part name="parameters" element="tns:SendSuccessResponse" />
   </wsdl:message>
   <wsdl:message name="SendToWebServicesHttpGetIn">
     <wsdl:part name="msgPK" type="s:string" />
@@ -612,6 +663,26 @@
     <wsdl:part name="tag" type="s:string" />
   </wsdl:message>
   <wsdl:message name="SendToWebServicesHttpGetOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:message name="SendWhenHttpGetIn">
+    <wsdl:part name="msgPK" type="s:string" />
+    <wsdl:part name="sender" type="s:string" />
+    <wsdl:part name="sendToEmpNo" type="s:string" />
+    <wsdl:part name="tel" type="s:string" />
+    <wsdl:part name="msgInfo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWhenHttpGetOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:message name="FlowOverBeforeHttpGetIn">
+    <wsdl:part name="msgPK" type="s:string" />
+    <wsdl:part name="sender" type="s:string" />
+    <wsdl:part name="sendToEmpNo" type="s:string" />
+    <wsdl:part name="tel" type="s:string" />
+    <wsdl:part name="msgInfo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="FlowOverBeforeHttpGetOut">
     <wsdl:part name="Body" element="tns:boolean" />
   </wsdl:message>
   <wsdl:message name="SendToDingDingHttpGetIn">
@@ -650,10 +721,15 @@
     <wsdl:part name="userNo" type="s:string" />
     <wsdl:part name="msg" type="s:string" />
     <wsdl:part name="sourceUserNo" type="s:string" />
+    <wsdl:part name="tag" type="s:string" />
   </wsdl:message>
   <wsdl:message name="SendToCCIMHttpGetOut">
     <wsdl:part name="Body" element="tns:boolean" />
   </wsdl:message>
+  <wsdl:message name="PrintHttpGetIn">
+    <wsdl:part name="billFilePath" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PrintHttpGetOut" />
   <wsdl:message name="WriteUserSIDHttpGetIn">
     <wsdl:part name="miyue" type="s:string" />
     <wsdl:part name="userNo" type="s:string" />
@@ -750,16 +826,14 @@
   <wsdl:message name="GenerEmpsBySpecDeptAndStatsHttpGetOut">
     <wsdl:part name="Body" element="tns:DataTable" />
   </wsdl:message>
-  <wsdl:message name="StartFlowHttpPostIn">
+  <wsdl:message name="SendSuccessHttpGetIn">
     <wsdl:part name="flowNo" type="s:string" />
+    <wsdl:part name="nodeID" type="s:string" />
+    <wsdl:part name="workid" type="s:string" />
     <wsdl:part name="userNo" type="s:string" />
-    <wsdl:part name="sid" type="s:string" />
-    <wsdl:part name="jsonOfMain" type="s:string" />
-    <wsdl:part name="jsonOfDtls" type="s:string" />
-    <wsdl:part name="toNodeID" type="s:string" />
-    <wsdl:part name="toUserNo" type="s:string" />
+    <wsdl:part name="userName" type="s:string" />
   </wsdl:message>
-  <wsdl:message name="StartFlowHttpPostOut">
+  <wsdl:message name="SendSuccessHttpGetOut">
     <wsdl:part name="Body" element="tns:string" />
   </wsdl:message>
   <wsdl:message name="SendToWebServicesHttpPostIn">
@@ -771,6 +845,26 @@
     <wsdl:part name="tag" type="s:string" />
   </wsdl:message>
   <wsdl:message name="SendToWebServicesHttpPostOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:message name="SendWhenHttpPostIn">
+    <wsdl:part name="msgPK" type="s:string" />
+    <wsdl:part name="sender" type="s:string" />
+    <wsdl:part name="sendToEmpNo" type="s:string" />
+    <wsdl:part name="tel" type="s:string" />
+    <wsdl:part name="msgInfo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendWhenHttpPostOut">
+    <wsdl:part name="Body" element="tns:boolean" />
+  </wsdl:message>
+  <wsdl:message name="FlowOverBeforeHttpPostIn">
+    <wsdl:part name="msgPK" type="s:string" />
+    <wsdl:part name="sender" type="s:string" />
+    <wsdl:part name="sendToEmpNo" type="s:string" />
+    <wsdl:part name="tel" type="s:string" />
+    <wsdl:part name="msgInfo" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="FlowOverBeforeHttpPostOut">
     <wsdl:part name="Body" element="tns:boolean" />
   </wsdl:message>
   <wsdl:message name="SendToDingDingHttpPostIn">
@@ -809,10 +903,15 @@
     <wsdl:part name="userNo" type="s:string" />
     <wsdl:part name="msg" type="s:string" />
     <wsdl:part name="sourceUserNo" type="s:string" />
+    <wsdl:part name="tag" type="s:string" />
   </wsdl:message>
   <wsdl:message name="SendToCCIMHttpPostOut">
     <wsdl:part name="Body" element="tns:boolean" />
   </wsdl:message>
+  <wsdl:message name="PrintHttpPostIn">
+    <wsdl:part name="billFilePath" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="PrintHttpPostOut" />
   <wsdl:message name="WriteUserSIDHttpPostIn">
     <wsdl:part name="miyue" type="s:string" />
     <wsdl:part name="userNo" type="s:string" />
@@ -909,14 +1008,28 @@
   <wsdl:message name="GenerEmpsBySpecDeptAndStatsHttpPostOut">
     <wsdl:part name="Body" element="tns:DataTable" />
   </wsdl:message>
+  <wsdl:message name="SendSuccessHttpPostIn">
+    <wsdl:part name="flowNo" type="s:string" />
+    <wsdl:part name="nodeID" type="s:string" />
+    <wsdl:part name="workid" type="s:string" />
+    <wsdl:part name="userNo" type="s:string" />
+    <wsdl:part name="userName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SendSuccessHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
   <wsdl:portType name="PortalInterfaceSoap">
-    <wsdl:operation name="StartFlow">
-      <wsdl:input message="tns:StartFlowSoapIn" />
-      <wsdl:output message="tns:StartFlowSoapOut" />
-    </wsdl:operation>
     <wsdl:operation name="SendToWebServices">
       <wsdl:input message="tns:SendToWebServicesSoapIn" />
       <wsdl:output message="tns:SendToWebServicesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWhen">
+      <wsdl:input message="tns:SendWhenSoapIn" />
+      <wsdl:output message="tns:SendWhenSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FlowOverBefore">
+      <wsdl:input message="tns:FlowOverBeforeSoapIn" />
+      <wsdl:output message="tns:FlowOverBeforeSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="SendToDingDing">
       <wsdl:input message="tns:SendToDingDingSoapIn" />
@@ -933,6 +1046,10 @@
     <wsdl:operation name="SendToCCIM">
       <wsdl:input message="tns:SendToCCIMSoapIn" />
       <wsdl:output message="tns:SendToCCIMSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Print">
+      <wsdl:input message="tns:PrintSoapIn" />
+      <wsdl:output message="tns:PrintSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="WriteUserSID">
       <wsdl:input message="tns:WriteUserSIDSoapIn" />
@@ -1002,15 +1119,23 @@
       <wsdl:input message="tns:GenerEmpsBySpecDeptAndStatsSoapIn" />
       <wsdl:output message="tns:GenerEmpsBySpecDeptAndStatsSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="SendSuccess">
+      <wsdl:input message="tns:SendSuccessSoapIn" />
+      <wsdl:output message="tns:SendSuccessSoapOut" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="PortalInterfaceHttpGet">
-    <wsdl:operation name="StartFlow">
-      <wsdl:input message="tns:StartFlowHttpGetIn" />
-      <wsdl:output message="tns:StartFlowHttpGetOut" />
-    </wsdl:operation>
     <wsdl:operation name="SendToWebServices">
       <wsdl:input message="tns:SendToWebServicesHttpGetIn" />
       <wsdl:output message="tns:SendToWebServicesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWhen">
+      <wsdl:input message="tns:SendWhenHttpGetIn" />
+      <wsdl:output message="tns:SendWhenHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FlowOverBefore">
+      <wsdl:input message="tns:FlowOverBeforeHttpGetIn" />
+      <wsdl:output message="tns:FlowOverBeforeHttpGetOut" />
     </wsdl:operation>
     <wsdl:operation name="SendToDingDing">
       <wsdl:input message="tns:SendToDingDingHttpGetIn" />
@@ -1027,6 +1152,10 @@
     <wsdl:operation name="SendToCCIM">
       <wsdl:input message="tns:SendToCCIMHttpGetIn" />
       <wsdl:output message="tns:SendToCCIMHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Print">
+      <wsdl:input message="tns:PrintHttpGetIn" />
+      <wsdl:output message="tns:PrintHttpGetOut" />
     </wsdl:operation>
     <wsdl:operation name="WriteUserSID">
       <wsdl:input message="tns:WriteUserSIDHttpGetIn" />
@@ -1096,15 +1225,23 @@
       <wsdl:input message="tns:GenerEmpsBySpecDeptAndStatsHttpGetIn" />
       <wsdl:output message="tns:GenerEmpsBySpecDeptAndStatsHttpGetOut" />
     </wsdl:operation>
+    <wsdl:operation name="SendSuccess">
+      <wsdl:input message="tns:SendSuccessHttpGetIn" />
+      <wsdl:output message="tns:SendSuccessHttpGetOut" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="PortalInterfaceHttpPost">
-    <wsdl:operation name="StartFlow">
-      <wsdl:input message="tns:StartFlowHttpPostIn" />
-      <wsdl:output message="tns:StartFlowHttpPostOut" />
-    </wsdl:operation>
     <wsdl:operation name="SendToWebServices">
       <wsdl:input message="tns:SendToWebServicesHttpPostIn" />
       <wsdl:output message="tns:SendToWebServicesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SendWhen">
+      <wsdl:input message="tns:SendWhenHttpPostIn" />
+      <wsdl:output message="tns:SendWhenHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="FlowOverBefore">
+      <wsdl:input message="tns:FlowOverBeforeHttpPostIn" />
+      <wsdl:output message="tns:FlowOverBeforeHttpPostOut" />
     </wsdl:operation>
     <wsdl:operation name="SendToDingDing">
       <wsdl:input message="tns:SendToDingDingHttpPostIn" />
@@ -1121,6 +1258,10 @@
     <wsdl:operation name="SendToCCIM">
       <wsdl:input message="tns:SendToCCIMHttpPostIn" />
       <wsdl:output message="tns:SendToCCIMHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Print">
+      <wsdl:input message="tns:PrintHttpPostIn" />
+      <wsdl:output message="tns:PrintHttpPostOut" />
     </wsdl:operation>
     <wsdl:operation name="WriteUserSID">
       <wsdl:input message="tns:WriteUserSIDHttpPostIn" />
@@ -1190,11 +1331,15 @@
       <wsdl:input message="tns:GenerEmpsBySpecDeptAndStatsHttpPostIn" />
       <wsdl:output message="tns:GenerEmpsBySpecDeptAndStatsHttpPostOut" />
     </wsdl:operation>
+    <wsdl:operation name="SendSuccess">
+      <wsdl:input message="tns:SendSuccessHttpPostIn" />
+      <wsdl:output message="tns:SendSuccessHttpPostOut" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="PortalInterfaceSoap" type="tns:PortalInterfaceSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="StartFlow">
-      <soap:operation soapAction="http://tempuri.org/StartFlow" style="document" />
+    <wsdl:operation name="SendToWebServices">
+      <soap:operation soapAction="http://tempuri.org/SendToWebServices" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1202,8 +1347,17 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SendToWebServices">
-      <soap:operation soapAction="http://tempuri.org/SendToWebServices" style="document" />
+    <wsdl:operation name="SendWhen">
+      <soap:operation soapAction="http://tempuri.org/SendWhen" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FlowOverBefore">
+      <soap:operation soapAction="http://tempuri.org/FlowOverBefore" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1240,6 +1394,15 @@
     </wsdl:operation>
     <wsdl:operation name="SendToCCIM">
       <soap:operation soapAction="http://tempuri.org/SendToCCIM" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Print">
+      <soap:operation soapAction="http://tempuri.org/Print" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -1400,11 +1563,20 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SendSuccess">
+      <soap:operation soapAction="http://tempuri.org/SendSuccess" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="PortalInterfaceSoap12" type="tns:PortalInterfaceSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="StartFlow">
-      <soap12:operation soapAction="http://tempuri.org/StartFlow" style="document" />
+    <wsdl:operation name="SendToWebServices">
+      <soap12:operation soapAction="http://tempuri.org/SendToWebServices" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1412,8 +1584,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SendToWebServices">
-      <soap12:operation soapAction="http://tempuri.org/SendToWebServices" style="document" />
+    <wsdl:operation name="SendWhen">
+      <soap12:operation soapAction="http://tempuri.org/SendWhen" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FlowOverBefore">
+      <soap12:operation soapAction="http://tempuri.org/FlowOverBefore" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1450,6 +1631,15 @@
     </wsdl:operation>
     <wsdl:operation name="SendToCCIM">
       <soap12:operation soapAction="http://tempuri.org/SendToCCIM" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Print">
+      <soap12:operation soapAction="http://tempuri.org/Print" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1610,11 +1800,20 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SendSuccess">
+      <soap12:operation soapAction="http://tempuri.org/SendSuccess" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="PortalInterfaceHttpGet" type="tns:PortalInterfaceHttpGet">
     <http:binding verb="GET" />
-    <wsdl:operation name="StartFlow">
-      <http:operation location="/StartFlow" />
+    <wsdl:operation name="SendToWebServices">
+      <http:operation location="/SendToWebServices" />
       <wsdl:input>
         <http:urlEncoded />
       </wsdl:input>
@@ -1622,8 +1821,17 @@
         <mime:mimeXml part="Body" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SendToWebServices">
-      <http:operation location="/SendToWebServices" />
+    <wsdl:operation name="SendWhen">
+      <http:operation location="/SendWhen" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FlowOverBefore">
+      <http:operation location="/FlowOverBefore" />
       <wsdl:input>
         <http:urlEncoded />
       </wsdl:input>
@@ -1666,6 +1874,13 @@
       <wsdl:output>
         <mime:mimeXml part="Body" />
       </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Print">
+      <http:operation location="/Print" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output />
     </wsdl:operation>
     <wsdl:operation name="WriteUserSID">
       <http:operation location="/WriteUserSID" />
@@ -1813,6 +2028,15 @@
     </wsdl:operation>
     <wsdl:operation name="GenerEmpsBySpecDeptAndStats">
       <http:operation location="/GenerEmpsBySpecDeptAndStats" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendSuccess">
+      <http:operation location="/SendSuccess" />
       <wsdl:input>
         <http:urlEncoded />
       </wsdl:input>
@@ -1823,8 +2047,8 @@
   </wsdl:binding>
   <wsdl:binding name="PortalInterfaceHttpPost" type="tns:PortalInterfaceHttpPost">
     <http:binding verb="POST" />
-    <wsdl:operation name="StartFlow">
-      <http:operation location="/StartFlow" />
+    <wsdl:operation name="SendToWebServices">
+      <http:operation location="/SendToWebServices" />
       <wsdl:input>
         <mime:content type="application/x-www-form-urlencoded" />
       </wsdl:input>
@@ -1832,8 +2056,17 @@
         <mime:mimeXml part="Body" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SendToWebServices">
-      <http:operation location="/SendToWebServices" />
+    <wsdl:operation name="SendWhen">
+      <http:operation location="/SendWhen" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FlowOverBefore">
+      <http:operation location="/FlowOverBefore" />
       <wsdl:input>
         <mime:content type="application/x-www-form-urlencoded" />
       </wsdl:input>
@@ -1876,6 +2109,13 @@
       <wsdl:output>
         <mime:mimeXml part="Body" />
       </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Print">
+      <http:operation location="/Print" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output />
     </wsdl:operation>
     <wsdl:operation name="WriteUserSID">
       <http:operation location="/WriteUserSID" />
@@ -2030,19 +2270,28 @@
         <mime:mimeXml part="Body" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SendSuccess">
+      <http:operation location="/SendSuccess" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="PortalInterface">
     <wsdl:port name="PortalInterfaceSoap" binding="tns:PortalInterfaceSoap">
-      <soap:address location="http://localhost:3569/DataUser/PortalInterface.asmx" />
+      <soap:address location="http://localhost:18272/DataUser/PortalInterface.asmx" />
     </wsdl:port>
     <wsdl:port name="PortalInterfaceSoap12" binding="tns:PortalInterfaceSoap12">
-      <soap12:address location="http://localhost:3569/DataUser/PortalInterface.asmx" />
+      <soap12:address location="http://localhost:18272/DataUser/PortalInterface.asmx" />
     </wsdl:port>
     <wsdl:port name="PortalInterfaceHttpGet" binding="tns:PortalInterfaceHttpGet">
-      <http:address location="http://localhost:3569/DataUser/PortalInterface.asmx" />
+      <http:address location="http://localhost:18272/DataUser/PortalInterface.asmx" />
     </wsdl:port>
     <wsdl:port name="PortalInterfaceHttpPost" binding="tns:PortalInterfaceHttpPost">
-      <http:address location="http://localhost:3569/DataUser/PortalInterface.asmx" />
+      <http:address location="http://localhost:18272/DataUser/PortalInterface.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

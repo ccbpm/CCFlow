@@ -619,6 +619,8 @@ namespace BP.WF
                             break;
                         case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
+
+                            //周朋@于庆海需要翻译.
                             soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo ,this.MobileInfo,tag);
                             break;
                         default:

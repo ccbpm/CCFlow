@@ -16,17 +16,13 @@ namespace BP.WF.CCInterface {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CCInterface.PortalInterfaceSoap")]
     public interface PortalInterfaceSoap {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/StartFlow", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        string StartFlow(string flowNo, string userNo, string sid, string jsonOfMain, string jsonOfDtls, int toNodeID, string toUserNo);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToWebServices", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendWhen", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool SendWhen(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/FlowOverBefore", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        bool FlowOverBefore(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo);
+        bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToDingDing", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -43,10 +39,6 @@ namespace BP.WF.CCInterface {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendToCCIM", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Print", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        void Print(string billFilePath);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/WriteUserSID", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -115,10 +107,6 @@ namespace BP.WF.CCInterface {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GenerEmpsBySpecDeptAndStats", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         System.Data.DataTable GenerEmpsBySpecDeptAndStats(string deptNo, string stations);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SendSuccess", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string SendSuccess(string flowNo, int nodeID, long workid, string userNo, string userName);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -148,16 +136,12 @@ namespace BP.WF.CCInterface {
                 base(binding, remoteAddress) {
         }
         
-        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo) {
-            return base.Channel.SendToWebServices(msgPK, sender, sendToEmpNo, tel, msgInfo);
+        public string StartFlow(string flowNo, string userNo, string sid, string jsonOfMain, string jsonOfDtls, int toNodeID, string toUserNo) {
+            return base.Channel.StartFlow(flowNo, userNo, sid, jsonOfMain, jsonOfDtls, toNodeID, toUserNo);
         }
         
-        public bool SendWhen(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo) {
-            return base.Channel.SendWhen(msgPK, sender, sendToEmpNo, tel, msgInfo);
-        }
-        
-        public bool FlowOverBefore(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo) {
-            return base.Channel.FlowOverBefore(msgPK, sender, sendToEmpNo, tel, msgInfo);
+        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo, string tag) {
+            return base.Channel.SendToWebServices(msgPK, sender, sendToEmpNo, tel, msgInfo, tag);
         }
         
         public bool SendToDingDing(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo) {
@@ -174,10 +158,6 @@ namespace BP.WF.CCInterface {
         
         public bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo) {
             return base.Channel.SendToCCIM(mypk, userNo, msg, sourceUserNo);
-        }
-        
-        public void Print(string billFilePath) {
-            base.Channel.Print(billFilePath);
         }
         
         public bool WriteUserSID(string miyue, string userNo, string sid) {
@@ -246,10 +226,6 @@ namespace BP.WF.CCInterface {
         
         public System.Data.DataTable GenerEmpsBySpecDeptAndStats(string deptNo, string stations) {
             return base.Channel.GenerEmpsBySpecDeptAndStats(deptNo, stations);
-        }
-        
-        public string SendSuccess(string flowNo, int nodeID, long workid, string userNo, string userName) {
-            return base.Channel.SendSuccess(flowNo, nodeID, workid, userNo, userName);
         }
     }
 }

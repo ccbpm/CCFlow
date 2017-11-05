@@ -710,7 +710,7 @@ namespace BP.WF.Template
             //生成URL.
             string hostUrl = BP.WF.Glo.HostURL;
             string sid = "{EmpStr}_" + workid + "_" + currNode.NodeID + "_" + DataType.CurrentDataTime;
-            string openWorkURl = hostUrl + "WF/Do.aspx?DoType=OF&SID=" + sid;
+            string openWorkURl = hostUrl + "WF/Do.htm?DoType=OF&SID=" + sid;
             openWorkURl = openWorkURl.Replace("//", "/");
             openWorkURl = openWorkURl.Replace("http:/", "http://");
             #endregion 

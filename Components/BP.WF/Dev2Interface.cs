@@ -3245,7 +3245,7 @@ namespace BP.WF
         {
             if (workID != 0)
             {
-                string url = Glo.HostURL + "WF/Do.aspx?SID=" + userNo + "_" + workID + "_" + nodeID;
+                string url = Glo.HostURL + "WF/Do.htm?SID=" + userNo + "_" + workID + "_" + nodeID;
                 url = url.Replace("//", "/");
                 url = url.Replace("//", "/");
                 msgDoc += " <hr>打开工作: " + url;

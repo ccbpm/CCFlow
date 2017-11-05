@@ -467,6 +467,11 @@ namespace BP.WF.HttpHandler
                 GenerWorkerList gwl = new GenerWorkerList();
                 gwl.Copy(gwlOfMe);
                 gwls.AddEntity(gwl);
+
+                //发送消息.
+                BP.WF.Dev2Interface.Port_SendMsg(item.No,
+                    "bpm会签邀请", BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签", "HuiQian");
+
             }
 
             //把加签的人员显示到正在处理人员列表中.

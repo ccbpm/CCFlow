@@ -153,7 +153,6 @@ namespace BP.WF
     public class SMS : EntityMyPK
     {
         #region 新方法 2013 
-        
         /// <summary>
         /// 发送消息
         /// </summary>
@@ -164,14 +163,14 @@ namespace BP.WF
         /// <param name="msgType">类型</param>
         /// <param name="paras">扩展参数</param>
         public static void SendMsg(string userNo, string msgTitle, string msgDoc, string msgFlag,
-            string msgType,string paras)
+            string msgType, string paras)
         {
-           
+
             SMS sms = new SMS();
             sms.MyPK = DBAccess.GenerGUID();
             sms.HisEmailSta = MsgSta.UnRun;
 
-            sms.Sender=WebUser.No;
+            sms.Sender = WebUser.No;
             sms.SendToEmpNo = userNo;
 
             sms.Title = msgTitle;
@@ -179,13 +178,14 @@ namespace BP.WF
 
             sms.Sender = BP.Web.WebUser.No;
             sms.RDT = BP.DA.DataType.CurrentDataTime;
-            
+
             sms.MsgFlag = msgFlag; // 消息标志.
             sms.MsgType = msgType; // 消息类型.'
 
             sms.AtPara = paras;
-           
-            sms.Insert();
+
+            sms.afterInsert();
+            // sms.Insert();
         }
         /// <summary>
         /// 发送消息
@@ -198,7 +198,7 @@ namespace BP.WF
         /// <param name="msgFlag">消息标记，可以为空。</param>
         /// <param name="guestNo">用户编号</param>
         public static void SendMsg(string mobileNum, string mobileInfo, string email, string title, string
-            infoBody, string msgFlag,string msgType,string guestNo)
+            infoBody, string msgFlag, string msgType, string guestNo)
         {
             SMS sms = new SMS();
             sms.Sender = WebUser.No;
@@ -219,7 +219,9 @@ namespace BP.WF
             if (string.IsNullOrEmpty(msgFlag))
             {
                 sms.MyPK = DBAccess.GenerGUID();
-                sms.Insert();
+
+                sms.afterInsert();
+                //sms.Insert();
             }
             else
             {
@@ -227,7 +229,8 @@ namespace BP.WF
                 try
                 {
                     sms.MyPK = msgFlag;
-                    sms.Insert();
+                    sms.afterInsert();
+                    // sms.Insert();
                 }
                 catch
                 {
@@ -600,7 +603,11 @@ namespace BP.WF
                             break;
                         case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo ,this.Mobile, this.MobileInfo);
+ 
+
+                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo,
+                                "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara);
+
                             break;
                         case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();

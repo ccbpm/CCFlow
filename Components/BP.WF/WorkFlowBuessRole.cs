@@ -1675,11 +1675,11 @@ namespace BP.WF
                     BP.WF.Port.WFEmp wfemp = new Port.WFEmp(list.CCTo);
 
                     string sid = list.CCTo + "_" + list.WorkID + "_" + list.FK_Node + "_" + list.RDT;
-                    string url = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid;
+                    string url = basePath + "WF/Do.htm?DoType=OF&SID=" + sid;
                     url = url.Replace("//", "/");
                     url = url.Replace("//", "/");
 
-                    string urlWap = basePath + "WF/Do.aspx?DoType=OF&SID=" + sid + "&IsWap=1";
+                    string urlWap = basePath + "WF/Do.htm?DoType=OF&SID=" + sid + "&IsWap=1";
                     urlWap = urlWap.Replace("//", "/");
                     urlWap = urlWap.Replace("//", "/");
 

@@ -3718,6 +3718,27 @@ namespace BP.WF
                 return baseUrl;
             }
         }
+        /// <summary>
+        /// 移动端主机
+        /// </summary>
+        public static string MobileURL
+        {
+            get
+            {
+                if (BP.Sys.SystemConfig.IsBSsystem)
+                {
+                    /* 如果是BS 就要求 路径.*/
+                }
+
+                string baseUrl = BP.Sys.SystemConfig.AppSettings["BpmMobileAddress"];
+                if (string.IsNullOrEmpty(baseUrl) == true)
+                    baseUrl = "http://127.0.0.1/";
+
+                if (baseUrl.Substring(baseUrl.Length - 1) != "/")
+                    baseUrl = baseUrl + "/";
+                return baseUrl;
+            }
+        }
         public static string CurrPageID
         {
             get

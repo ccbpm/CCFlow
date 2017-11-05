@@ -241,7 +241,7 @@ namespace BP.Web.WF
                         GenerWorkerList wl = new GenerWorkerList();
                         int i = wl.Retrieve(GenerWorkerListAttr.FK_Emp, strs[0],
                             GenerWorkerListAttr.WorkID, strs[1],
-                            GenerWorkerListAttr.FK_Node, strs[2]);
+                            GenerWorkerListAttr.IsPass, 0);
 
                         if (i == 0)
                         {

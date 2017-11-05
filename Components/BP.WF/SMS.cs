@@ -597,7 +597,7 @@ namespace BP.WF
 
                 if (this.HisMobileSta == MsgSta.UnRun)
                 {
-                    string tag = "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara;
+                    string tag = "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara+"@Sender="+this.Sender+"@SenderName="+BP.Web.WebUser.Name;
                     switch (BP.WF.Glo.ShortMessageWriteTo)
                     {
                         case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。

@@ -470,7 +470,7 @@ namespace BP.WF.HttpHandler
 
                 //发送消息.
                 BP.WF.Dev2Interface.Port_SendMsg(item.No,
-                    "bpm会签邀请", BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签", "HuiQian");
+                    "bpm会签邀请","HuiQian"+gwf.WorkID+"_"+gwf.FK_Node+"_"+item.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签", "HuiQian",gwf.FK_Flow,gwf.FK_Node,gwf.WorkID,gwf.FID);
 
             }
 

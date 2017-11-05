@@ -159,5 +159,28 @@ namespace BP.WF.HttpHandler
             return en.HandlerMapExt();
         }
 
+        /// <summary>
+        /// 打开手机端
+        /// </summary>
+        /// <returns></returns>
+        public string Do_OpenFlow()
+        {
+            string sid = this.GetRequestVal("SID");
+            string[] strs = sid.Split('_');
+            GenerWorkerList wl = new GenerWorkerList();
+            int i = wl.Retrieve(GenerWorkerListAttr.FK_Emp, strs[0],
+                GenerWorkerListAttr.WorkID, strs[1],
+                GenerWorkerListAttr.IsPass, 0);
+
+            if (i == 0)
+            {
+                return "err@提示:此工作已经被别人处理或者此流程已删除。";
+            }
+
+            BP.Port.Emp empOF = new BP.Port.Emp(wl.FK_Emp);
+            Web.WebUser.SignInOfGener(empOF);
+            return "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID;
+        }
+
     }
 }

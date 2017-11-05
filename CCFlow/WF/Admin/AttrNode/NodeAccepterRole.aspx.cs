@@ -355,6 +355,10 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
             //本节点接收人不允许包含上一步发送人
             nd.IsExpSender = this.CB_IsExpSender.Checked;
             //发送后转向
+             
+            //清楚发起列表的缓存.
+            if ( nd.IsStartNode==true)
+                DBAccess.RunSQL("UPDATE WF_Emp SET FlowStarter='' ");
 
             nd.DirectUpdate();
         }

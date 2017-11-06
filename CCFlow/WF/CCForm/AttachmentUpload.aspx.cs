@@ -151,7 +151,7 @@ namespace CCFlow.WF.CCForm
                 FrmAttachmentDB delDB = new FrmAttachmentDB();
                 delDB.MyPK = this.DelPKVal == null ? this.MyPK : this.DelPKVal;
 
-                delDB.DirectDelete();
+                delDB.Delete(); //删除上传的文件.
             }
             if (this.DoType == "Down")
             {

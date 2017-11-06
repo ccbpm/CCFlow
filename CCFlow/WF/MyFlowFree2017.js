@@ -77,15 +77,6 @@ function Change() {
     }
 }
 var longCtlID = '';
-function KindEditerSync() {
-    try {
-        if (editor1 != null) {
-            editor1.sync();
-        }
-    }
-    catch (err) {
-    }
-}
 
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 

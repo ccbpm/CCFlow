@@ -80,7 +80,7 @@ function newFlow() {
     }
     var dgId = "iframDg";
     var url = "NewFlow.htm?sort=" + currSortId + "&s=" + Math.random();
-    OpenEasyUiDialog(url, dgId, '新建流程', 650, 500, 'icon-new', true, function () {
+    OpenEasyUiDialog(url, dgId, '新建流程', 650, 350, 'icon-new', true, function () {
 
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();
@@ -310,6 +310,38 @@ function ImpFlow() {
     addTab(fk_flow + "PO", "导入流程模版", url);
 }
 
+//导入流程
+function ImpFlowBySort() {
+    var currFlow = $('#flowTree').tree('getSelected');
+    var fk_flowSort = currFlow.id;
+    fk_flowSort = fk_flowSort.replace("F", "");
+    url = "./../AttrFlow/Imp.htm?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
+    addTab(fk_flowSort + "PO", "导入流程模版", url);
+}
+
+//添加流程到流程树
+function AppendFlowToFlowSortTree(FK_FlowSort, FK_Flow, FlowName) {
+    var flowSortNode = $('#flowTree').tree('find', "F" + FK_FlowSort);
+    $('#flowTree').tree('append', {
+        parent: flowSortNode.target,
+        data: [{
+            id: FK_Flow,
+            text: FK_Flow + "." + FlowName,
+            attributes: { ISPARENT: '0', MenuId: "mFlow", TType: "FLOW" },
+            checked: false,
+            iconCls: 'icon-flow1',
+            state: 'open',
+            children: []
+        }]
+    });
+    
+    $("#flowTree").tree("expand", flowSortNode.target);
+    $('#flowTree').tree('select', $('#flowTree').tree('find', FK_Flow).target);
+
+    //在右侧流程设计区域打开新建的流程
+    RefreshFlowJson();
+}
+
 //导出流程
 function ExpFlow() {
     var currFlow = $('#flowTree').tree('getSelected');
@@ -321,28 +353,6 @@ function ExpFlow() {
     var fk_flow = currFlow.id;
     url = "./../AttrFlow/Exp.htm?FK_Flow=" + fk_flow + "&Lang=CH";
     addTab(fk_flow + "PO", "导出流程模版", url);
-}
-
-//导入流程
-function ImpFlowBySort() {
-    var currFlow = $('#flowTree').tree('getSelected');
-    var fk_flowSort = currFlow.id;
-    fk_flowSort = fk_flowSort.replace("F", "");
-    url = "./../AttrFlow/Imp.htm?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
-    addTab(fk_flowSort + "PO", "导入流程模版", url);
-}
-
-//导出流程
-function ExpFlowBySort() {
-    var currFlow = $('#flowTree').tree('getSelected');
-    if (currFlow == null) {
-        alert('没有获得当前的流程编号.');
-        return;
-    }
-    var fk_flowSort = currFlow.id;
-    fk_flowSort = fk_flowSort.replace("F", "");
-    url = "./../AttrFlow/Exp.htm?FK_FlowSort=" + fk_flowSort + "&Lang=CH";
-    addTab(fk_flowSort + "PO", "导出流程模版", url);
 }
 
 //删除流程
@@ -613,15 +623,16 @@ function newFrm() {
     addTab("NewFrm", "新建表单", url);
 }
 
-//表单树添加表单项
-function NewFormAppend2Tree(FK_FormTree, No, Name) {
+///表单树添加表单项
+///FK_FormTree:表单类别编号，No:表单编号，Name:表单名称
+function AppendFrmToFormTree(FK_FormTree, No, Name) {
     var sortNode = $('#formTree').tree('find', FK_FormTree);
     $('#formTree').tree('append', {
         parent: sortNode.target,
         data: [{
             id: No,
             text: Name,
-            attributes: { MenuId: "mFormSort", TType: "FORMTYPE" },
+            attributes: { MenuId: "mForm", TType: "FORMTYPE" },
             checked: false,
             iconCls: 'icon-form',
             state: 'open',
@@ -630,6 +641,9 @@ function NewFormAppend2Tree(FK_FormTree, No, Name) {
     });
     $("#formTree").tree("expand", sortNode.target);
     $('#formTree').tree('select', $('#formTree').tree('find', No).target);
+    
+    //打开表单
+    addTab("DesignerFreeFrm" + No, Name, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + No);
 }
 
 //表单属性
@@ -806,22 +820,6 @@ function srcTableData() {
     var url = "../FoolFormDesigner/SFTableEditData.htm?FK_SFTable=" + srcTableNode.id; //todo:此处BP.Pub.Days样式的，页面报错
     //OpenEasyUiDialog(url, "euiframeid", srcTableNode.text + ' 数据编辑', 800, 495, 'icon-edit');
     addTab(srcTableNode.id, srcTableNode.text + ' 数据编辑', url, srcTableNode.iconCls);
-}
-
-//打开表单
-function openForm(id, text) {
-    if (!id || !text) {
-        var formNode = $('#formTree').tree('getSelected');
-        if (!formNode || formNode.attributes.TTYPE != 'FORM') {
-            $.messager.alert('错误', '请选择表单！', 'error');
-            return;
-        }
-
-        id = formNode.id;
-        text = formNode.text;
-    }
-
-    addTab(id, text, "../FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID, formNode.iconCls);
 }
 
 /*组织结构树操作开始*/
@@ -1120,4 +1118,13 @@ function SetTreeRoot(data) {
     //functrees[0].Nodes[0].RootParentId = data.RootOfFlow;
     //functrees[1].Nodes[0].RootParentId = data.RootOfForm;
     functrees[2].Nodes[0].MethodParams[0].value = data.RootOfDept;
+}
+
+//通过标题删除标签
+function TabCloseByTitle(TabTitle) {
+    //如果右侧有打开该表单，则关闭
+    var currTab = $('#tabs').tabs('getTab', TabTitle);
+    if (currTab) {
+        $('#tabs').tabs('close', TabTitle);
+    }
 }

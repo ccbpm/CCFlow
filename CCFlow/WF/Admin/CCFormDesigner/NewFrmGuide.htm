@@ -208,13 +208,17 @@
                 $("#Msg").html("<font color=green>" + data + "</font>");
                 data = data.replace('url@', '');
                 //表单库增加表单节点
-                if (typeof window.parent.NewFormAppend2Tree != "undefined") {
+                if (typeof window.parent.AppendFrmToFormTree != "undefined") {
                     var sort = $("#HD_FK_FormTree").val();
-                    window.parent.NewFormAppend2Tree(sort, no, name);
+                    window.parent.AppendFrmToFormTree(sort, no, name);
+                }
+                if (typeof window.parent.TabCloseByTitle != "undefined") {
+                    //需要延时关闭，不可立即关闭。
+                    setTimeout("window.parent.TabCloseByTitle('新建表单')",1000);
                 }
                 //切换页面
-                window.location.href = data;
-                return;
+                //window.location.href = data;
+                //return;
             }
         });
     }

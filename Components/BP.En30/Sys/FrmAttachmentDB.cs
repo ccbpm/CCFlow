@@ -483,6 +483,29 @@ namespace BP.Sys
                 return;
 
             FrmAttachment ath = new FrmAttachment(this.FK_FrmAttachment);
+
+            try
+            {
+                // @于庆海需要翻译.
+                if (ath.AthSaveWay == Sys.AthSaveWay.IISServer)
+                    System.IO.File.Delete(this.FileFullName);
+
+                if (ath.AthSaveWay == Sys.AthSaveWay.FTPServer)
+                {
+                    FtpSupport.FtpConnection ftpconn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,
+                             SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
+
+                    string fullName = this.FileFullName;
+                    //ny + "//" + athDesc.FK_MapData + "//" + guid + "." + dbUpload.FileExts;
+
+                }
+            }
+            catch(Exception ex)
+            {
+                Log.DebugWriteError(ex.Message);
+            }
+
+
             string fkefs = ath.GetParaString("FK_ExcelFile", null);
             if (string.IsNullOrWhiteSpace(fkefs) == false)
             {

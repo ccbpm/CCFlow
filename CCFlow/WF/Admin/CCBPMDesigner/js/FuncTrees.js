@@ -1,11 +1,30 @@
 ﻿//定义功能树存储数组，数组中元素对应easyui-tabs控件中的tab页
-var functrees = [];
 /*
 easyui-tabs功能导航区定义，added by liuxc
 说明：
-1.functrees数组下元素：(1)Id:tab页中的tree控件的id值，tab页的id为"tab_" + 此id；(2)Name:tab页标题；(3)AttrCols:定义WebService获取数据时，要写入node.attributes中的属性列表；(4)ServiceCount:定义此树结构中一共要连接WebService的次数，此处是为便于编程而设置的，一定要设置正确；(5)RootASC:树结构中，如果存在多个根节点，则此项设置是为这多个根节点进行排序，其中Field即排序依据的属性名称，Index即为按Field值排列的顺序；(6)Nodes:tree中的节点数组，功能支持如下：
-①支持无限级节点设置；②支持任一级别从WebService获取DataTable的Json数据填充（此连接WebService使用的是CCBPMDesignerData.js文件中的ajaxService方法，未另写方法，请注意）；③支持各级节点的图标、右键绑定菜单、展开状态、双击链接Url的规则设置，支持多级嵌套规则设置；④链接Url支持node属性值、node.attributes属性值及WebUser属性值、JS表达式计算结果的自动替换（使用“@@属性字段名”来代替要替换的属性；使用`符号来将要计算结果的JS表达式前后包含起来，表达式中允许含有@@参数名，计算时，先将@@参数名替换成对应的参数值，然后进行计算JS表达式。如设置Url: "Rpt/Group.aspx?FK_Flow=@@fk_flow&RptNo=`'ND'+parseInt('@@fk_flow')+'MyRpt'`"，@@fk_flow=001，则打开页面时，自动计算为："Rpt/Group.aspx?FK_Flow=001&RptNo=ND1MyRpt"）
-2.Nodes数组下元素：(1)Type:节点类型，Node=普通定义节点，Service=通过获取WebService数据填充的节点；(2)ServiceMethod:ajaxService方法传参中action的值，即调用的获取数据的方法，Service类型节点特有属性；(3)CodId:WebService返回的DataTable Json数据代表节点Id的列名，Service类型节点特有属性；(4)ColParentId:WebService返回的DataTable Json数据代表父级节点Id的列名，Service类型节点特有属性；(5)ColName:WebService返回的DataTable Json数据代表节点文字的列名，Service类型节点特有属性；(6)RootParentId:WebService返回的DataTable Json数据代表根节点的父级Id的值，Service类型节点特有属性；(7)ColDefine:WebService返回的DataTable Json数据，设置的此列，根据此列的值进行设置各节点的图标、右链菜单以及双击打开页面，Service类型节点特有属性；(8)Defines:此数组的元素代表ColDefine所设列的详细规则设置，每个元素代表一种情况，整个设置可以理解为：
+1.functrees数组下元素：
+(1)Id:tab页中的tree控件的id值，tab页的id为"tab_" + 此id；
+(2)Name:tab页标题；
+(3)AttrCols:定义WebService获取数据时，要写入node.attributes中的属性列表；
+(4)ServiceCount:定义此树结构中一共要连接WebService的次数，此处是为便于编程而设置的，一定要设置正确；
+(5)RootASC:树结构中，如果存在多个根节点，则此项设置是为这多个根节点进行排序，其中Field即排序依据的属性名称，Index即为按Field值排列的顺序；
+(6)Nodes:tree中的节点数组，功能支持如下：
+①支持无限级节点设置；
+②支持任一级别从WebService获取DataTable的Json数据填充（此连接WebService使用的是CCBPMDesignerData.js文件中的ajaxService方法，未另写方法，请注意）；
+③支持各级节点的图标、右键绑定菜单、展开状态、双击链接Url的规则设置，支持多级嵌套规则设置；
+④链接Url支持node属性值、node.attributes属性值及WebUser属性值、JS表达式计算结果的自动替换（使用“@@属性字段名”来代替要替换的属性；
+使用`符号来将要计算结果的JS表达式前后包含起来，表达式中允许含有@@参数名，计算时，先将@@参数名替换成对应的参数值，
+然后进行计算JS表达式。如设置Url: "Rpt/Group.aspx?FK_Flow=@@fk_flow&RptNo=`'ND'+parseInt('@@fk_flow')+'MyRpt'`"，@@fk_flow=001，则打开页面时，
+自动计算为："Rpt/Group.aspx?FK_Flow=001&RptNo=ND1MyRpt"）
+2.Nodes数组下元素：
+(1)Type:节点类型，Node=普通定义节点，Service=通过获取WebService数据填充的节点；
+(2)ServiceMethod:ajaxService方法传参中action的值，即调用的获取数据的方法，Service类型节点特有属性；
+(3)CodId:WebService返回的DataTable Json数据代表节点Id的列名，Service类型节点特有属性；
+(4)ColParentId:WebService返回的DataTable Json数据代表父级节点Id的列名，Service类型节点特有属性；
+(5)ColName:WebService返回的DataTable Json数据代表节点文字的列名，Service类型节点特有属性；
+(6)RootParentId:WebService返回的DataTable Json数据代表根节点的父级Id的值，Service类型节点特有属性；
+(7)ColDefine:WebService返回的DataTable Json数据，设置的此列，根据此列的值进行设置各节点的图标、右链菜单以及双击打开页面，Service类型节点特有属性；
+(8)Defines:此数组的元素代表ColDefine所设列的详细规则设置，每个元素代表一种情况，整个设置可以理解为：
 swith(ColDefine1.Value){
 case 'aaa':
 node.IconCls='icon-aaa';
@@ -26,104 +45,127 @@ break;
 default:    //未设置Value值，则表示此项
 ......
 }
-此项规则设置，可以进行多级嵌套设置，即Defines元素中再包含ColDefine设置，Service类型节点特有属性；(9)Id:节点node.id值，Node类型节点特有属性；(10)ParentId:节点的父节点node.id，根节点的父节点id请设置为null，Node类型节点特有属性；(11)Name:节点node.text值，Node类型节点特有属性；(12)MethodParams:Service类型获取WebService数据时，向WebService发送的参数对象，对象中的每个参数，在WebService端可以用Request["参数名"]获取；(13)Opened:节点加载后是否是展开状态；(14)OSModel:组织结构数据模式，OneOne或OneMore，如果不设置此属性，则支持两种模式
-3.Defines数组下元素：(1)Value:规则判断值；(2)ColDefine:规则判断所用的字段名称；(3)Defines:具体规则设置，见上方规则设置说明；(4)IconCls:节点图标对应的css样式名称；(5)MenuId:节点右链菜单的id，为easyui-menu；(6)Url:节点双击在右侧tab页打开的网页Url，支持node属性值、node.attributes属性值、WebUser属性值以及JS表达式计算结果的自动替换；(7)LazyLoad:是否使用惰性加载，设置true时，在展开当前规则所表示的节点时，加载此规则下Nodes下面的列表，此列表也支持向WebService动态获取；(8)InheritForChild:当前规则所表示的节点数据中，需要向下级传递参数的设置数组，比如设置：[{From: "@@id", To: "fk_flow"}]，表示将当前节点数据中的@@id对应的数据传递给此节点以下的子节点node.attributes.fk_flow属性，以供以下节点使用，此设置为数组，可设置多个；(9)Nodes:惰性加载，展开节点时，加载的节点数据设置；(10)Opened:节点加载后是否是展开状态；(11)Inherits:当前/规则所表示的节点，可以从上级获取的属性数组，这些属性必须在上级节点中的InheritForChild中设置过，比如设置：["fk_flow", "fk_node"]，表示此节点将从上级的节点中继承fk_flow和fk_node这两个属性，保存在node.attributes对象里，需要注意的是：只有节点上设置了Inherits属性，这个节点才能继承设置过的上级节点属性，不设置，不能获得；
+此项规则设置，可以进行多级嵌套设置，即Defines元素中再包含ColDefine设置，Service类型节点特有属性；
+(9)Id:节点node.id值，Node类型节点特有属性；
+(10)ParentId:节点的父节点node.id，根节点的父节点id请设置为null，Node类型节点特有属性；
+(11)Name:节点node.text值，Node类型节点特有属性；(12)MethodParams:Service类型获取WebService数据时，向WebService发送的参数对象，对象中的每个参数，
+在WebService端可以用Request["参数名"]获取；
+(13)Opened:节点加载后是否是展开状态；
+(14)OSModel:组织结构数据模式，OneOne或OneMore，如果不设置此属性，则支持两种模式
+3.Defines数组下元素：
+(1)Value:规则判断值；
+(2)ColDefine:规则判断所用的字段名称；
+(3)Defines:具体规则设置，见上方规则设置说明；
+(4)IconCls:节点图标对应的css样式名称；
+(5)MenuId:节点右链菜单的id，为easyui-menu；
+(6)Url:节点双击在右侧tab页打开的网页Url，支持node属性值、node.attributes属性值、WebUser属性值以及JS表达式计算结果的自动替换；
+(7)LazyLoad:是否使用惰性加载，设置true时，在展开当前规则所表示的节点时，加载此规则下Nodes下面的列表，此列表也支持向WebService动态获取；
+(8)InheritForChild:当前规则所表示的节点数据中，需要向下级传递参数的设置数组，比如设置：[{From: "@@id", To: "fk_flow"}]，
+表示将当前节点数据中的@@id对应的数据传递给此节点以下的子节点node.attributes.fk_flow属性，以供以下节点使用，此设置为数组，可设置多个；
+(9)Nodes:惰性加载，展开节点时，加载的节点数据设置；
+(10)Opened:节点加载后是否是展开状态；
+(11)Inherits:当前/规则所表示的节点，可以从上级获取的属性数组，这些属性必须在上级节点中的InheritForChild中设置过，
+比如设置：["fk_flow", "fk_node"]，表示此节点将从上级的节点中继承fk_flow和fk_node这两个属性，保存在node.attributes对象里，需要注意的是：只有节点上设置了Inherits属性，
+这个节点才能继承设置过的上级节点属性，不设置，不能获得；
 */
+
+var functrees = [];
 //1.流程库
 functrees.push({
     Id: "flowTree",
     Name: "流程",
     AttrCols: ["TTYPE", "DTYPE", "ISPARENT"],
     ServiceCount: 1,
-    Nodes: [
-			{ Type: "Service", ServiceMethod: "GetFlowTreeTable", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "F0",
-			    ColDefine: "TTYPE", Defines: [
-											{ Value: "FLOWTYPE", ColDefine: "PARENTNO",
-											    Defines: [
-															{ Value: "F0", IconCls: "icon-flowtree", MenuId: "mFlowRoot", Opened: true },
-															{ IconCls: "icon-tree_folder", MenuId: "mFlowSort" }
-														]
-											},
-											{ Value: "FLOW", ColDefine: "DTYPE", Defines: [
-                                                { Value: "1", IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=2" },
-                                                { IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=1" }
-                                            ]
-											}
-										  ]
-			},
-            { Type: "Node", Id: "FlowFunc", ParentId: null, Name: "流程应用", Opened: true, TType: "FLOWFUNC", DType: "-1", IconCls: "icon-app",
-                Nodes: [
-						{ Type: "Node", Id: "FlowMonitor", ParentId: "FlowFunc", Name: "流程监控", Opened: false, TType: "FLOWMONITOR", DType: "-1", IconCls: "icon-tree_folder",
-						    Nodes: [
-						            { Type: "Node", Id: "WorkPanel", ParentId: "FlowMonitor", Name: "监控面板", TType: "WORKPANEL", DType: "-1", IconCls: "icon-Monitor", Url: "../CCBPMDesigner/App/Welcome.htm?anaTime=slMouth&flowSort=slFlow&" },
-						         //   { Type: "Node", Id: "WorkPanel", ParentId: "FlowMonitor", Name: "流程列表", TType: "WORKPANEL", DType: "-1", IconCls: "icon-flows", Url: "../CCBPMDesigner/Flows.htm" },
-//						            { Type: "Node", Id: "SearchByKey", ParentId: "FlowMonitor", Name: "全文检索", TType: "SEARCHBYKEY", DType: "-1", IconCls: "icon-SearchKey", Url: "../../KeySearch.htm" },
-						            { Type: "Node", Id: "SynthSearch", ParentId: "FlowMonitor", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" },
-						            { Type: "Node", Id: "SynthAnalysis", ParentId: "FlowMonitor", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews" },
-						            { Type: "Node", Id: "DeleteLog", ParentId: "FlowMonitor", Name: "流程删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs" }
-					              ]
-						}
-					  ]
-            }
-		  ]
+    Nodes: [{
+        Type: "Service", ServiceMethod: "GetFlowTreeTable", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", RootParentId: "F0", ColDefine: "TTYPE",
+        Defines: [{
+            Value: "FLOWTYPE", ColDefine: "PARENTNO",
+            Defines: [{
+                Value: "F0", IconCls: "icon-flowtree", MenuId: "mFlowRoot", Opened: true
+            }, {
+                IconCls: "icon-tree_folder", MenuId: "mFlowSort"
+            }]
+        }, {
+            Value: "FLOW", ColDefine: "DTYPE",
+            Defines: [{
+                Value: "1", IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=2"
+            }, {
+                IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=1"
+            }]
+        }]
+    }, {
+        Type: "Node", Id: "FlowFunc", ParentId: null, Name: "流程应用", Opened: true, TType: "FLOWFUNC", DType: "-1", IconCls: "icon-app",
+        Nodes: [{
+            Type: "Node", Id: "FlowMonitor", ParentId: "FlowFunc", Name: "流程监控", Opened: false, TType: "FLOWMONITOR", DType: "-1", IconCls: "icon-tree_folder",
+            Nodes: [{
+                Type: "Node", Id: "WorkPanel", ParentId: "FlowMonitor", Name: "监控面板", TType: "WORKPANEL", DType: "-1", IconCls: "icon-Monitor", Url: "../CCBPMDesigner/App/Welcome.htm?anaTime=slMouth&flowSort=slFlow&"
+            }, {
+                Type: "Node", Id: "SynthSearch", ParentId: "FlowMonitor", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews"
+            }, {
+                Type: "Node", Id: "SynthAnalysis", ParentId: "FlowMonitor", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews"
+            }, {
+                Type: "Node", Id: "DeleteLog", ParentId: "FlowMonitor", Name: "流程删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs"
+            }]
+        }]
+    }]
 });
+
 //2.表单库
 functrees.push({
     Id: "formTree",
     Name: "表单",
     AttrCols: ["TType"],
     RootASC: { Field: "TType", Index: ["FormType", "FormType", "CloundData"] },  //"SRCROOT", 
-    ServiceCount: 1,//2
-    Nodes: [
-			{ Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "0",
-			    ColDefine: "TType", Defines: [
-											{ Value: "FORMTYPE", ColDefine: "ParentNo",
-											    Defines: [
-															{ Value: "0", IconCls: "icon-formtree", MenuId: "mFormRoot", Opened: true },
-															{ IconCls: "icon-tree_folder", MenuId: "mFormSort" }
-														]
-											},
-                                            { Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID"
-											}
-										  ]
-			},
-			{ Type: "Node", Id: "FormRef", ParentId: null, Name: "表单相关", Opened: true, TType: "FORMREF", IconCls: "icon-tree_folder",
-			    Nodes: [
-						{ Type: "Node", Id: "Tabs", ParentId: "FormRef", Name: "数据源表", TType: "ENUMS", IconCls: "icon-srctable", Url: "../CCFormDesigner/Tables.htm?t=" + Math.random() },
-						{ Type: "Node", Id: "Enums", ParentId: "FormRef", Name: "枚举列表", TType: "ENUMS", IconCls: "icon-enum", Url: "../../Comm/Sys/EnumList.htm?t=" + Math.random() },
-						{ Type: "Node", Id: "JSLib", ParentId: "FormRef", Name: "JS验证库", TType: "JSLIB", IconCls: "icon-js", Url: "../../Comm/Sys/FuncLib.htm?t=" + Math.random() }
-					  ]
-			} 
-		  ]
+    ServiceCount: 1, //2
+    Nodes: [{
+        Type: "Service", ServiceMethod: "GetFormTreeTable", ColId: "No", ColParentId: "ParentNo", ColName: "Name", RootParentId: "0", ColDefine: "TType",
+        Defines: [{
+            Value: "FORMTYPE", ColDefine: "ParentNo", Defines: [{ Value: "0", IconCls: "icon-formtree", MenuId: "mFormRoot", Opened: true }, { IconCls: "icon-tree_folder", MenuId: "mFormSort"}]
+        }, {
+            Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID"
+        }]
+    }, {
+        Type: "Node", Id: "FormRef", ParentId: null, Name: "表单相关", Opened: true, TType: "FORMREF", IconCls: "icon-tree_folder",
+        Nodes: [{
+            Type: "Node", Id: "Tabs", ParentId: "FormRef", Name: "数据源表", TType: "ENUMS", IconCls: "icon-srctable", Url: "../CCFormDesigner/Tables.htm?t=" + Math.random()
+        }, {
+            Type: "Node", Id: "Enums", ParentId: "FormRef", Name: "枚举列表", TType: "ENUMS", IconCls: "icon-enum", Url: "../../Comm/Sys/EnumList.htm?t=" + Math.random()
+        }, { Type: "Node", Id: "JSLib", ParentId: "FormRef", Name: "JS验证库", TType: "JSLIB", IconCls: "icon-js", Url: "../../Comm/Sys/FuncLib.htm?t=" + Math.random()
+        }]
+    }]
 });
+
 //3.组织结构
 functrees.push({
     Id: "OrgTree",
     Name: "组织结构",
     AttrCols: [],
     ServiceCount: 0,
-    Nodes: [{ Type: "Function", ServiceMethod: "GenerStructureTree", MethodParams: [{name:"parentrootid", value:"0"}], OnExpandFunction: "ShowSubDepts"}]
+    Nodes: [{
+        Type: "Function",
+        ServiceMethod: "GenerStructureTree",
+        MethodParams: [{
+            name: "parentrootid", value: "0"
+        }],
+        OnExpandFunction: "ShowSubDepts"
+    }]
 });
-//4.系统维护
+
+//4.系统维护 系统维护管理员菜单 @于庆海 需要翻译
 functrees.push({
     Id: "sysTree",
     Name: "系统",
-    Nodes: [
-			{ Type: "Node", Id: "BasicSetting2", ParentId: null, Name: "基础设置", Opened: true, IconCls: "icon-tree_folder",
-			    Nodes: [
-						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "SQL配置模版设置", IconCls: "icon-Config", Url: "../../Comm/Search.htm?EnsName=BP.WF.Template.SQLTemplates" },
-						{ Type: "Node", Id: "HolidaySetting", ParentId: "BasicSetting2", Name: "节假日设置", IconCls: "icon-Config", Url: "../../Comm/Sys/Holiday.htm" },
-						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "表结构", IconCls: "icon-Config", Url: "../../Comm/Sys/SystemClass.htm" },
-						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "二级管理员", IconCls: "icon-Config", Url: "../../Comm/Search.htm?EnsName=BP.WF.Port.AdminEmps" },
-//						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "部门排序", IconCls: "icon-Config", Url: "../../Admin/Port/OrderOfDept.htm" },
-//						{ Type: "Node", Id: "TableStructure", ParentId: "BasicSetting2", Name: "操作员排序", IconCls: "icon-Config", Url: "../../Admin/Port/OrderOfEmp.htm" },
-
-//						{ Type: "Node", Id: "SysVal", ParentId: "BasicSetting2", Name: "系统变量", IconCls: "icon-Config", Url: "javascript:void(0)" },
-						//{ Type: "Node", Id: "FlowPrevSetting", ParentId: "BasicSetting2", Name: "流程预先审批设置", IconCls: "icon-Config", Url: "../AttrFlow/GetTask.htm" },
-						{ Type: "Node", Id: "FuncDown", ParentId: "BasicSetting2", Name: "功能执行", IconCls: "icon-Config", Url: "../../Comm/MethodLink.htm" }
-					  ]
-			}
-		  ]
+    ServiceCount: 1,
+    AttrCols: ["URL"],
+    Nodes: [{
+        Type: "Node", Id: "AdminMenu", ParentId: null, Name: "基础设置", Opened: true, IconCls: "icon-tree_folder",
+        Nodes: [{
+            Type: "Service", ServiceMethod: "GetTreeJson_AdminMenu", ColId: "NO", ColParentId: "PARENTNO", ColName: "NAME", ColUrl: "URL", RootParentId: "AdminMenu"
+            , Defines: [{
+                IconCls: "icon-accept"
+            }]
+        }]
+    }]
 });
 
 var tabsId = null;
@@ -195,7 +237,7 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
     /// <param name="oFuncTree" type="Object">树对象</param>
 
     //check OSModel, added by liuxc,2016-06-24
-    if(oNode.OSModel && oNode.OSModel != osModel){
+    if (oNode.OSModel && oNode.OSModel != osModel) {
         return;
     }
 
@@ -223,7 +265,7 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
             }
 
             var re = $.parseJSON(data);
-
+            
             //将所有获取的数据转换为Node
             var roots = Find(re, nd.ColParentId, nd.RootParentId);
 
@@ -251,7 +293,7 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
             if (roots.length > 0) {
                 for (var i = 0; i < roots.length; i++) {
                     //check OSModel, added by liuxc,2016-06-24
-                    if(roots[i].OSModel && roots[i].OSModel != osModel){
+                    if (roots[i].OSModel && roots[i].OSModel != osModel) {
                         continue;
                     }
 
@@ -284,7 +326,7 @@ function LoadServiceNode(oNode, oParentNode, oFuncTree) {
                         Name: roots[i][nd.ColName],
                         IconCls: nd.IconCls,
                         MenuId: nd.MenuId,
-                        Url: nd.Url,
+                        Url: nd.ColUrl ? roots[i][nd.ColUrl] : nd.Url,
                         Opened: nd.Opened,
                         Inherits: nd.Inherits,
                         Target: nd.Target
@@ -696,7 +738,7 @@ function LoadServiceSubNode(aServiceNodes, oNode, oParentNode, oServiceNode, oFu
 
     $.each(subs, function (sidx, sub) {
         //check OSModel, added by liuxc,2016-06-24
-        if(oNode.OSModel && oNode.OSModel != osModel){
+        if (oNode.OSModel && oNode.OSModel != osModel) {
             return true;
         }
 
@@ -767,32 +809,32 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
         return;
     }
 
-    if(oNode.Type == "Function"){
+    if (oNode.Type == "Function") {
         var exp = oNode.ServiceMethod + "(";
 
-        if(oNode.MethodParams && oNode.MethodParams.length > 0){
-            $.each(oNode.MethodParams, function(){
-                if(typeof this.value == "String"){
+        if (oNode.MethodParams && oNode.MethodParams.length > 0) {
+            $.each(oNode.MethodParams, function () {
+                if (typeof this.value == "String") {
                     exp += "'" + ReplaceParams(this, oNode, oFuncTree) + "',";
                 }
-                else{
+                else {
                     exp += this.value + ",";
                 }
             });
 
-            if(exp[exp.length - 1] == ","){
-                exp = exp.substr(0,exp.length - 1);
+            if (exp[exp.length - 1] == ",") {
+                exp = exp.substr(0, exp.length - 1);
             }
         }
 
-        if(oNode.MethodParams.length > 0){
+        if (oNode.MethodParams.length > 0) {
             exp += ",";
         }
 
-        if(oParentNode){
+        if (oParentNode) {
             exp += $("#" + oFuncTree.Id).tree("getNode", oParentNode).id;
         }
-        else{
+        else {
             exp += "null";
         }
 
@@ -801,9 +843,9 @@ function LoadTreeNode(oNode, oParentNode, oFuncTree) {
         CalculateJS(exp);
         return;
     }
-    
+
     //check OSModel, added by liuxc,2016-06-24
-    if(oNode.OSModel && oNode.OSModel != osModel){
+    if (oNode.OSModel && oNode.OSModel != osModel) {
         return true;
     }
 

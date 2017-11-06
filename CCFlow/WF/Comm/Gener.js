@@ -17,7 +17,7 @@ function Esc() {
 /* 把一个 @XB=1@Age=25 转化成一个js对象.  */
 function AtParaToJson(json) {
     var jsObj = {};
-    if (json != undefined && json.trim() != '') {
+    if (json && json.indexOf('@') != -1) {
         var atParamArr = json.split('@');
         $.each(atParamArr, function (i,atParam) {
             if (atParam != '') {

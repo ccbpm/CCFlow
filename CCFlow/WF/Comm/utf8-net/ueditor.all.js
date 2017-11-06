@@ -24805,8 +24805,28 @@ UE.plugin.register('insertfile', function (){
     }
 });
 
+//自定义-支持IE8 而加
+if (!Array.prototype.indexOf){
+  Array.prototype.indexOf = function(elt /*, from*/)
+  {
+    var len = this.length >>> 0;
 
+    var from = Number(arguments[1]) || 0;
+    from = (from < 0)
+         ? Math.ceil(from)
+         : Math.floor(from);
+    if (from < 0)
+      from += len;
 
+    for (; from < len; from++)
+    {
+      if (from in this &&
+          this[from] === elt)
+        return from;
+    }
+    return -1;
+  };
+}
 
 // plugins/xssFilter.js
 /**
@@ -24831,8 +24851,9 @@ UE.plugins.xssFilter = function() {
 		}
 
 		UE.utils.each(attrs, function (val, key) {
-
-			if (whitList[tagName].indexOf(key) === -1) {
+            var strTagName = whitList[tagName];
+            var diction = strTagName.indexOf(key);
+			if (diction == -1) {
 				node.setAttr(key);
 			}
 		});

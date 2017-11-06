@@ -225,9 +225,6 @@ function PopFullCtrl(val1, val2) {
 
 /* 内置的Pop自动返回值. google 版 软通*/
 function ReturnValCCFormPopValGoogle(extType,ctrl, fk_mapExt, refEnPK, width, height, title, formData, dtlNo) {
-    //update by dgq 修改路径
-    //url = 'CCForm/FrmPopVal.aspx?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value;
-
     //设置摸态框的宽度和高度
     $('#returnPopValModal .modal-dialog').height(height);
     $('#returnPopValModal .modal-dialog').width(width);

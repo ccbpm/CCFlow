@@ -470,22 +470,6 @@ function srcTableData() {
     addTab(srcTableNode.id, srcTableNode.text + ' 数据编辑', url, srcTableNode.iconCls);
 }
 
-//打开表单
-function openForm(id, text) {
-    if (!id || !text) {
-        var formNode = $('#formTree').tree('getSelected');
-        if (!formNode || formNode.attributes.TTYPE != 'FORM') {
-            $.messager.alert('错误', '请选择表单！', 'error');
-            return;
-        }
-
-        id = formNode.id;
-        text = formNode.text;
-    }
-
-    addTab(id, text, "../FoolFormDesigner/CCForm/Frm.htm?FK_MapData=" + id + "&UserNo=" + WebUser.No + "&SID=" + WebUser.SID, formNode.iconCls);
-}
-
 /*组织结构树操作开始*/
 function getSelected(sTreeId, sName, oChecks) {
     var node = $("#" + sTreeId).tree("getSelected");

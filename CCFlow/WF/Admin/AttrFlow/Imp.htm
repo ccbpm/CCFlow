@@ -19,35 +19,70 @@
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script language="javascript" type="text/javascript" >
-
+        $(function () {
+            $("#pageloading").hide();
+        });
         //流程导入.
         function Imp_Done() {
-
+            var fk_flowSort = GetQueryString("FK_FlowSort");
             var fk_flow = GetQueryString("FK_Flow");
             var impWay = GetRadioValue("RB_ImpType");
             var spenFlowNo = document.getElementById("TB_SpecFlowNo").value;
-
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Imp_Done&FK_Flow=" + fk_flow + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
+            var fileValue = $("#File_Upload").val();
+            //必须要选择文件
+            if (fileValue == "") {
+                $.messager.alert("提示", "没有选择流程模板。");
+                return;
+            }
+            //扩展名
+            var index = fileValue.lastIndexOf('.');
+            var fileExt = fileValue.substring(index);
+            if (fileExt.toLowerCase() != ".xml") {
+                $.messager.alert("提示", "所选不是流程模板文件，请重新选择。");
+                return;
+            }
+            //如果为指定流程编号导入，则编号不可以为空
+            if (impWay == "3" && spenFlowNo == "") {
+                $.messager.alert("提示", "导入模式为指定流程编号模式，编号不可以为空。", "icon-info", function () {
+                    $("#TB_SpecFlowNo").focus();
+                });
+                return;
+            }
+            $("#pageloading").show();
+            //提交数据
+            $("#cc").form("submit", {
+                type: 'POST',
+                url: Handler + "?DoType=Imp_Done&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                },
                 success: function (data) {
-
+                    $("#pageloading").hide();
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
-
-                    $("#Msg").html(data);
+                    var json = eval('(' + data + ')');
+                    $.messager.alert("提示", json.Msg, "icon-info", function () {
+                        //打开新建的流程
+                        if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {
+                            window.parent.AppendFlowToFlowSortTree(json.FK_FlowSort, json.FK_Flow, json.FlowName);
+                        }
+                        //关闭导入界面
+                        if (typeof window.parent.TabCloseByTitle != "undefined") {
+                            //需要延时关闭，不可立即关闭。
+                            setTimeout("window.parent.TabCloseByTitle('导入流程模版')", 1000);
+                        }
+                    });
                 }
             });
         }
-
     </script>
 </head>
 <body>
-
-<form id="cc">
+<div id="pageloading">
+</div>
+<form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
 <table style=" width:100%">
 <caption>流程模版导入 </caption>
 <tr>
@@ -81,7 +116,7 @@
 <legend> 从本机导入  </legend>
 <ul>
 <li>从本机导入：请您选择本机的一个xml格式文件 点击导入按钮完成导入。</li>
-<li> 请选择文件:  <input type="file" id="File_Upload"  /></li>
+<li> 请选择文件:  <input type="file" id="File_Upload" name="File_Upload"  /></li>
 
 <li>导入的方式: 
 <ul>

@@ -683,20 +683,35 @@ namespace BP.WF.HttpHandler
             //设置文件名
             string fileNewName = DateTime.Now.ToString("yyyyMMddHHmmssff") + "_" + System.IO.Path.GetFileName(files[0].FileName);
 
-            //保存文件到服务器的位置.
-            string filePath = "~/DataUser/FlowFile/" + fileNewName;
-            files[0].SaveAs(context.Server.MapPath(filePath));
+            //文件存放路径
+            string filePath = BP.Sys.SystemConfig.PathOfTemp + "\\" + fileNewName;
+            files[0].SaveAs(filePath);
 
             string flowNo = this.FK_Flow;
-
-            Flow fl = new Flow(this.FK_Flow);
+            string FK_FlowSort = this.GetRequestVal("FK_Sort");
+            //检查流程编号
+            if (!string.IsNullOrEmpty(flowNo))
+            {
+                Flow fl = new Flow(flowNo);
+                FK_FlowSort = fl.FK_FlowSort;
+            }
+            //检查流程类别编号
+            if (string.IsNullOrEmpty(FK_FlowSort))
+            {
+                return "err@所选流程类别编号不存在。";
+            }
+            //导入模式
             BP.WF.ImpFlowTempleteModel model = (BP.WF.ImpFlowTempleteModel)this.GetRequestValInt("ImpWay");
             if (model == ImpFlowTempleteModel.AsSpecFlowNo)
                 flowNo = this.GetRequestVal("SpecFlowNo");
 
-            BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(fl.FK_FlowSort, filePath, model, flowNo);
+            //执行导入
+            BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(FK_FlowSort, filePath, model, flowNo);
 
-            return "@导入成功,流程编号为:" + flow.No + " 名称为:" + flow.Name;
+            return "{FK_Flow:'" + flow.No
+                + "',FlowName:'" + flow.Name
+                + "',FK_FlowSort:'" + flow.FK_FlowSort
+                + "',Msg:'导入成功,流程编号为:" + flow.No + " 名称为:" + flow.Name + "'}";
         }
         #endregion 数据导入.
 

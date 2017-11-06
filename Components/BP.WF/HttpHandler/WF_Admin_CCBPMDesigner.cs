@@ -12,6 +12,7 @@ using BP.En;
 using BP.WF;
 using BP.WF.Template;
 using LitJson;
+using BP.WF.XML;
 
 namespace BP.WF.HttpHandler
 {
@@ -1203,6 +1204,38 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataTableToJson(dt, false);
         }
+
+        /// <summary>
+        /// 获取设计器 - 系统维护菜单数据
+        /// 系统维护管理员菜单 @于庆海 需要翻译
+        /// </summary>
+        /// <returns></returns>
+        public string GetTreeJson_AdminMenu()
+        {
+            AdminMenus menus = new AdminMenus();
+            menus.RetrieveAll();
+
+            AdminMenus newMenus = new AdminMenus();
+            foreach (AdminMenu menu in menus)
+            {
+                if (string.IsNullOrEmpty(menu.For) == false && menu.For.Equals(WebUser.No) == false)
+                    continue;
+                //进行返回
+                newMenus.Add(menu);   
+            }
+            //添加默认，无权限
+            if (newMenus.Count == 0)
+            {
+                AdminMenu menu = new AdminMenu();
+                menu.No = "1";
+                menu.ParentNo = "AdminMenu";
+                menu.Name = "无权限";
+                menu.Url = "";
+                newMenus.Add(menu);
+            }            
+            return BP.Tools.Json.DataTableToJson(newMenus.ToDataTable(), true);
+        }
+
         /// <summary>
         /// 根据DataTable生成Json树结构
         /// </summary>

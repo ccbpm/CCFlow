@@ -358,7 +358,7 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
              
             //清楚发起列表的缓存.
             if ( nd.IsStartNode==true)
-                DBAccess.RunSQL("UPDATE WF_Emp SET FlowStarter='' ");
+                DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows='' ");
 
             nd.DirectUpdate();
         }

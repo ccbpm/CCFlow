@@ -102,7 +102,7 @@ namespace BP.WF.HttpHandler
             if (BP.Sys.SystemConfig.CustomerNo != "TianYe")
                 return Start_Init2016();
 
-            // 周朋@于庆海需要翻译.
+            // 周朋需要翻译.
 
             BP.WF.Port.WFEmp em = new WFEmp();
             em.No = BP.Web.WebUser.No;

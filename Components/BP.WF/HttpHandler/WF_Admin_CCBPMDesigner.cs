@@ -1207,7 +1207,7 @@ namespace BP.WF.HttpHandler
 
         /// <summary>
         /// 获取设计器 - 系统维护菜单数据
-        /// 系统维护管理员菜单 @于庆海 需要翻译
+        /// 系统维护管理员菜单 需要翻译
         /// </summary>
         /// <returns></returns>
         public string GetTreeJson_AdminMenu()

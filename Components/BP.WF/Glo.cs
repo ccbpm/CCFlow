@@ -5113,7 +5113,7 @@ namespace BP.WF
         /// <param name="sendToEmpNo">接受人</param>
         public static void SendMessageToCCIM(string fromEmpNo, string sendToEmpNo, string msg, string now)
         {
-            //周朋@于庆海.
+            //周朋.
             return;  //暂停支持.
 
 

@@ -285,7 +285,7 @@ namespace BP.WF.Port
                 {
                     //为树目录更新OrgNo编号.
                     BP.WF.Template.FlowSort fs = new Template.FlowSort();
-                    fs.No = this.RootOfFlow;  //周朋@于庆海需要对照翻译.
+                    fs.No = this.RootOfFlow;  //周朋需要对照翻译.
                     if (fs.RetrieveFromDBSources() == 1)
                     {
                         fs.OrgNo = this.RootOfDept;

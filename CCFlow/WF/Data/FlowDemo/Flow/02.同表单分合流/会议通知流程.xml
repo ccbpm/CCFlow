@@ -480,7 +480,7 @@
     <FK_Flow>007</FK_Flow>
     <Name>会议纪要(分合流点)</Name>
     <DeliveryWay>2</DeliveryWay>
-    <DeliveryParas>select UserNo as No, UserName as Name from ND2701 where oid=@FID</DeliveryParas>
+    <DeliveryParas>select UserNo as No, UserName as Name from ND27Rpt where oid=@FID</DeliveryParas>
     <WhoExeIt>0</WhoExeIt>
     <TurnToDeal>0</TurnToDeal>
     <TurnToDealDoc />

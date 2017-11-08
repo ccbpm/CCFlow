@@ -151,7 +151,7 @@ functrees.push({
     }]
 });
 
-//4.系统维护 系统维护管理员菜单 @于庆海 需要翻译
+//4.系统维护 系统维护管理员菜单 需要翻译
 functrees.push({
     Id: "sysTree",
     Name: "系统",

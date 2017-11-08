@@ -430,7 +430,9 @@
     <Compile Include="WF\WorkFlowDeleteLog.cs" />
     <Compile Include="Data\NDXRptBase.cs" />
     <Compile Include="WorkFlowBuessRole.cs" />
-    <Compile Include="Xml\AdminMenu.cs" />
+    <Compile Include="Xml\AdminMenu.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Xml\CCMenu.cs" />
     <Compile Include="Xml\ClassicMenu.cs" />
     <Compile Include="Xml\ClassicMenuAdvFunc.cs">

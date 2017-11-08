@@ -300,7 +300,7 @@ namespace BP.WF.Port
                             item.Update();
                         }
                     }
-                    BP.DA.DBAccess.RunSQL("UPDATE wf_flowsort SET ORGNO='0' WHERE ORGNo NOT IN (SELECT RootOfDept FROM WF_Emp WHERE UserType=1 )");
+                    BP.DA.DBAccess.RunSQL("UPDATE WF_FlowSort SET OrgNo='0' WHERE OrgNo NOT IN (SELECT RootOfDept FROM WF_Emp WHERE UserType=1 )");
                 }
             }
 

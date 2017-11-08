@@ -858,16 +858,16 @@ namespace BP.En
                         break;
                     case DataType.AppBoolean:
                     case DataType.AppInt:
-                        if (attr.IsPK)
+                        if (attr.IsPK && attr.Key=="OID")
                         {
                             if (attr.UIBindKey == "1")
-                                sql += attr.Field + " int(4) primary key not null auto_increment COMMENT '" + attr.Desc + "',";
+                                sql += attr.Field + " INT(4) primary key not null auto_increment COMMENT '" + attr.Desc + "',";
                             else
-                                sql += attr.Field + " int NOT NULL COMMENT '" + attr.Desc + "',";
+                                sql += attr.Field + " INT NOT NULL COMMENT '" + attr.Desc + "',";
                         }
                         else
                         {
-                            sql += attr.Field + " int COMMENT '" + attr.Desc + "',";
+                            sql += attr.Field + " INT DEFAULT ("+attr.DefaultVal+") COMMENT '" + attr.Desc + "',";
                         }
                         break;
                     default:

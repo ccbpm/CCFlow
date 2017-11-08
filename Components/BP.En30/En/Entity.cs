@@ -3020,7 +3020,7 @@ namespace BP.En
 					continue;
 
 				if (dt.Columns.Contains(attr.Key) == true)
-					continue;
+					continue; //不存在此列.
 
 				if (attr.Key == "AID")
 				{

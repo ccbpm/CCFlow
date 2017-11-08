@@ -94,7 +94,7 @@ namespace BP.WF.Template
                 #endregion 处理标签。
 
                 //执行.
-                sql = "UPDATE WF_Flow SET flowjson = NULL WHERE No='"+fk_flow+"'";
+                sql = "UPDATE WF_Flow SET FlowJson = NULL WHERE No='"+fk_flow+"'";
                 DBAccess.RunSQL(sql);
 
                 // 备份文件

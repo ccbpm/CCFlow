@@ -329,7 +329,7 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_Flow", "节点标签");
+                Map map = new Map("WF_Flow", "流程模版主表");
 
                 map.Java_SetDepositaryOfEntity(Depositary.Application);
 

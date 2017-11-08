@@ -88,6 +88,25 @@ namespace BP.WF.XML
             }
         }
         #endregion
+
+        /// <summary>
+        /// 是否可以使用？
+        /// </summary>
+        /// <param name="no">操作员编号</param>
+        /// <returns></returns>
+        public bool IsCanUse(string no)
+        {
+            if (this.For == "")
+                return true;
+
+            if (this.For == no)
+                return true;
+
+            if (this.For == "SecondAdmin")
+                return true;
+
+            return false;
+        }
     }
     /// <summary>
     /// 

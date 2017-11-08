@@ -1212,16 +1212,19 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GetTreeJson_AdminMenu()
         {
+            //查询全部.
             AdminMenus menus = new AdminMenus();
             menus.RetrieveAll();
 
+            // 定义容器.
             AdminMenus newMenus = new AdminMenus();
             foreach (AdminMenu menu in menus)
             {
-                if (string.IsNullOrEmpty(menu.For) == false && menu.For.Equals(WebUser.No) == false)
+                //是否可以使用？
+                if (menu.IsCanUse(WebUser.No) == false)
                     continue;
-                //进行返回
-                newMenus.Add(menu);   
+
+                newMenus.Add(menu);
             }
             //添加默认，无权限
             if (newMenus.Count == 0)

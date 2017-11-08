@@ -237,7 +237,7 @@ namespace BP.WF
 		{
 			QueryObject qo = new QueryObject(this);
 			//qo.Top=50;
-            qo.AddWhere(StartWorkAttr.OID, " IN ", " ( SELECT WorkID FROM V_WF_Msg  WHERE  (FK_Flow='" + flow + "' AND FK_Emp='" + BP.Web.WebUser.No + "' ) AND ( FK_Flow in ( SELECT No from WF_Flow WHERE FK_FlowSort='" + flowSort + "' )) )");
+            qo.AddWhere(StartWorkAttr.OID, " IN ", " ( SELECT WorkID FROM V_WF_Msg  WHERE  (FK_Flow='" + flow + "' AND FK_Emp='" + BP.Web.WebUser.No + "' ) AND ( FK_Flow in ( SELECT No FROM WF_Flow WHERE FK_FlowSort='" + flowSort + "' )) )");
 			return qo.DoQueryToTable();			 
 		}
 		#endregion 

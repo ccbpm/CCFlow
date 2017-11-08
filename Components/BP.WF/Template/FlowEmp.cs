@@ -87,7 +87,6 @@ namespace BP.WF.Template
                     return this._enMap;
 
                 Map map = new Map("WF_FlowEmp", "流程岗位属性信息");
-                 
 
                 map.AddDDLEntitiesPK(FlowEmpAttr.FK_Flow, null, "FK_Flow", new Flows(), true);
                 map.AddDDLEntitiesPK(FlowEmpAttr.FK_Emp, null, "人员", new Emps(), true);

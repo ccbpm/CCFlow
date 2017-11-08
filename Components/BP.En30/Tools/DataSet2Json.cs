@@ -534,7 +534,11 @@ namespace BP.Tools
             {
                 str = str.ToLower();
             }
-
+            else if (type == typeof(System.Byte[]))
+            {
+                //数字字段需转string后进行拼接 @于庆海 需要翻译
+                str = "\"" + str + "\"";
+            }
             if (str.Length == 0)
                 str = "\"\"";
 

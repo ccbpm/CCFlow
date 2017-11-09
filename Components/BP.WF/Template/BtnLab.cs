@@ -85,6 +85,20 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return this.GetValStringByKey(BtnAttr.Name);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.Name, value);
+            }
+        }
+        /// <summary>
         /// 查询标签
         /// </summary>
         public string SearchLab

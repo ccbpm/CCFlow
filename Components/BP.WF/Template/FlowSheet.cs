@@ -390,10 +390,10 @@ namespace BP.WF.Template
                     "@0=无@1=按系统的URL-(父子流程)单条模式@2=按系统的URL-(子父流程)多条模式@3=按系统的URL-(实体记录,未完成)单条模式@4=按系统的URL-(实体记录,未完成)多条模式@5=从开始节点Copy数据@10=按自定义的Url@11=按用户输入参数", true);
                 map.SetHelperUrl(FlowAttr.StartGuideWay, "http://ccbpm.mydoc.io/?v=5404&t=17883");
 
-                map.AddTBStringDoc(FlowAttr.StartGuidePara1, null, "参数1", true, false, true);
-                map.AddTBStringDoc(FlowAttr.StartGuidePara2, null, "参数2", true, false, true);
-                map.AddTBStringDoc(FlowAttr.StartGuidePara3, null, "参数3", true, false, true);
-
+                map.AddTBString(FlowAttr.StartGuidePara1, null, "参数1", true, false,0,500,20,true);
+                map.AddTBString(FlowAttr.StartGuidePara2, null, "参数2", true, false, 0, 500, 20, true);
+                map.AddTBString(FlowAttr.StartGuidePara3, null, "参数3", true, false, 0, 500, 20, true);
+                
                 map.AddBoolean(FlowAttr.IsResetData, false, "是否启用开始节点数据重置按钮？", true, true, true);
                 //     map.AddBoolean(FlowAttr.IsImpHistory, false, "是否启用导入历史数据按钮？", true, true, true);
                 map.AddBoolean(FlowAttr.IsLoadPriData, false, "是否自动装载上一笔数据？", true, true, true);

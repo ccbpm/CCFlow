@@ -164,11 +164,54 @@ namespace BP.GPM
 
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "增加同级部门";
+                rm.ClassMethodName = this.ToString() + ".DoSameLevelDept";
+                rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, true, 0, 100, 100);
+                rm.HisAttrs.AddTBString("Name", null, "部门名称", true, true, 0, 100, 100); 
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "增加下级部门";
+                rm.ClassMethodName = this.ToString() + ".DoSubDept";
+                rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, true, 0, 100, 100);
+                rm.HisAttrs.AddTBString("Name", null, "部门名称", true, true, 0, 100, 100);
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        public string DoSameLevelDept(string no,string name)
+        {
+            Dept en = new Dept();
+            en.No = no;
+            if (en.RetrieveFromDBSources() == 1)
+                return "err@编号已经存在";
+
+            en.Name = name;
+            en.ParentNo = this.ParentNo;
+            en.Insert();
+
+            return "增加成功..";
+        }
+        public string DoSubDept(string no, string name)
+        {
+            Dept en = new Dept();
+            en.No = no;
+            if (en.RetrieveFromDBSources() == 1)
+                return "err@编号已经存在";
+
+            en.Name = name;
+            en.ParentNo = this.No;
+            en.Insert();
+
+            return "增加成功..";
+        }
         /// <summary>
         /// 重置部门
         /// </summary>

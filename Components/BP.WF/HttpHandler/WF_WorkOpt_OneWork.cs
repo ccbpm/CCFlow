@@ -270,35 +270,28 @@ namespace BP.WF.HttpHandler
             bool CanPackUp = false;
             if (SystemConfig.CustomerNo == "TianYe")
             {
-                if (wfstateEnum == WFState.Complete)
-                {
-                    //流程已经完成的情况下, 从轨迹里面找当前人员参与的节点.
-                    string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "TRACK WHERE WorkID=" + this.WorkID + " AND EmpFrom='" + BP.Web.WebUser.No + "'";
-                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        int nodeid = int.Parse(dr[0].ToString());
-                        Node nd = new Node(nodeid);
-                        if (nd.IsStartNode)
-                        {
-                            CanPackUp = true;
-                            break;
-                        }
 
-                        BtnLab btn = new BtnLab(nodeid);
-                        if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
-                        {
-                            CanPackUp = true;
-                            break;
-                        }
+                //流程已经完成的情况下, 从轨迹里面找当前人员参与的节点.
+                string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND EmpFrom='" + BP.Web.WebUser.No + "'";
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    int nodeid = int.Parse(dr[0].ToString());
+                    BtnLab btn = new BtnLab(nodeid);
+
+                    if (btn.Name.Contains("备案")
+                        || btn.Name.Contains("反馈给申请人"))
+                    {
+                        CanPackUp = true;
+                        break;
+                    }
+
+                    if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
+                    {
+                        CanPackUp = true;
+                        break;
                     }
                 }
-                else
-                {
-                    /*没有结束的流程，都是不能打印的.*/
-                    CanPackUp = false;
-                }
-
             }
             else
             {

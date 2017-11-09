@@ -344,17 +344,31 @@ namespace BP.WF
                 #endregion 其他.
 
                 #region 升级统一规则.
+
                 try
                 {
                     string sqls = "";
-                    sqls += "UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='" + MapExtXmlList.TBFullCtrl + "'";
-                    sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='" + MapExtXmlList.PopVal + "'";
-                    sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='" + MapExtXmlList.DDLFullCtrl + "'";
-                    sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrsOfActive WHERE ExtType='" + MapExtXmlList.ActiveDDL + "'";
+
+                    if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    {
+                        sqls += "UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.TBFullCtrl + "'";
+                        sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.PopVal + "'";
+                        sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrOfOper WHERE ExtType='" + MapExtXmlList.DDLFullCtrl + "'";
+                        sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType||'_'||FK_Mapdata||'_'||AttrsOfActive WHERE ExtType='" + MapExtXmlList.ActiveDDL + "'";
+                    }
+                    else
+                    {
+                        sqls += "UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='" + MapExtXmlList.TBFullCtrl + "'";
+                        sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='" + MapExtXmlList.PopVal + "'";
+                        sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrOfOper WHERE ExtType='" + MapExtXmlList.DDLFullCtrl + "'";
+                        sqls += "@UPDATE Sys_MapExt SET MyPK= ExtType+'_'+FK_Mapdata+'_'+AttrsOfActive WHERE ExtType='" + MapExtXmlList.ActiveDDL + "'";
+                    }
+
                     BP.DA.DBAccess.RunSQLs(sqls);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    BP.DA.Log.DebugWriteError(ex.Message);
                 }
                 #endregion
 
@@ -389,16 +403,16 @@ namespace BP.WF
                     {
                         case DBType.MSSQL:
                             DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson IMAGE NULL");
-                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FrmJson IMAGE NULL");
+                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FormJson IMAGE NULL");
                             break;
                         case DBType.Oracle:
                         case DBType.Informix:
                             DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson BLOB NULL");
-                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FrmJson BLOB NULL");
+                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FormJson BLOB NULL");
                             break;
                         case DBType.MySQL:
                             DBAccess.RunSQL("ALTER TABLE WF_Flow ADD FlowJson LONGBLOB NULL");
-                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FrmJson LONGBLOB NULL");
+                            DBAccess.RunSQL("ALTER TABLE Sys_MapData ADD FormJson LONGBLOB NULL");
                             break;
                         default:
                             break;
@@ -477,14 +491,16 @@ namespace BP.WF
                 #region 执行sql．
                 BP.DA.DBAccess.RunSQL("delete  from Sys_Enum WHERE EnumKey in ('BillFileType','EventDoType','FormType','BatchRole','StartGuideWay','NodeFormType')");
                 DBAccess.RunSQL("UPDATE Sys_FrmSln SET FK_Flow =(SELECT FK_FLOW FROM WF_Node WHERE NODEID=Sys_FrmSln.FK_Node) WHERE FK_Flow IS NULL");
-                try
-                {
+               
+                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                     DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm+'_'+convert(varchar,FK_Node )+'_'+FK_Flow");
-                }
-                catch
-                {
 
-                }
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                    DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm||'_'||FK_Node||'_'||FK_Flow");
+
+                if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                    DBAccess.RunSQL("UPDATE WF_FrmNode SET MyPK=FK_Frm||'_'||FK_Node||'_'||FK_Flow");
+
                 #endregion
 
                 #region 检查必要的升级。

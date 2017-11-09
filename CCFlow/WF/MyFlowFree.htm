@@ -31,6 +31,13 @@
     <link href="Comm/utf8-net/themes/default/css/ueditor.min.css" rel="stylesheet" type="text/css" />
     <script src="Comm/utf8-net/ueditor.config.js" type="text/javascript"></script>
     <script src="Comm/utf8-net/ueditor.all.js" type="text/javascript"></script>
+    
+    <script src="Scripts/config.js" type="text/javascript"></script>
+    <script src="Scripts/commonYangYH.js" type="text/javascript"></script>
+    <script src="Comm/Gener.js" type="text/javascript"></script>
+    <script src="CCForm/MapExt2016.js" type="text/javascript"></script>
+    <script src="MyFlowGener.js" type="text/javascript"></script>
+    <script src="MyFlowFree2017.js" type="text/javascript"></script>
     <style type="text/css">
         h1{
             font-family: "微软雅黑";
@@ -149,10 +156,10 @@
     <!--JS 加载-->
     <script type="text/javascript">
 
-        var load = {};
+        //var load = {};
 
         /*JS 动态加载js 文件*/
-        load.LoadJs = function (jsPath, chartset, callbackfun) {
+        /*load.LoadJs = function (jsPath, chartset, callbackfun) {
             try {
                 var head = document.getElementsByTagName('head')[0];
                 var script = document.createElement('script');
@@ -185,15 +192,15 @@
             }
 
             //$.getScript(jsPath, callbackfun);
-        }
+        }*/
 
         /*js 和CSS 的版本号*/
-        load.Version = '0412145201';
+        /*load.Version = '0412145201';
         //使用随机数作为版本号，保证每次加载的config.js 都是最新的，其余的通过公共函数加载，带入版本号，更新版本号即更新文件
         $.getScript("Scripts/config.js?Version=" + Math.random(), function () {
             load.LoadJs("Scripts/commonYangYH.js", undefined, function () {
                 load.LoadJs('Comm/Gener.js', undefined, function () {
-                load.LoadJs('CCForm/MapExt2016.js', undefined, function () {
+                    load.LoadJs('CCForm/MapExt2016.js', undefined, function () {
                         load.LoadJs('MyFlowGener.js', undefined, function () {
                             load.LoadJs('MyFlowFree2017.js', undefined, function () {
 
@@ -202,7 +209,7 @@
                     })
                 })
             })
-        });
+        });*/
     </script>
     <style type="text/css">
         body
@@ -451,6 +458,7 @@
                 }
             };
         }
+        
     </script>
 </head>
 <body  >

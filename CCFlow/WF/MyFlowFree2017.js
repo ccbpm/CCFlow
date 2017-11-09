@@ -2096,7 +2096,7 @@ function figure_Template_Label(frmLab) {
     var eleHtml = '';
     eleHtml = '<label></label>'
     eleHtml = $(eleHtml);
-    var text = frmLab.Text.replace(/@/g, "<br>");
+    var text = frmLab.Text==null?"":frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
     eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize)
         .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColr));
@@ -2110,7 +2110,7 @@ function figure_Template_Btn(frmBtn) {
     var btnHtml = $('<input type="button" value="">');
     btnHtml.val(frmBtn.Text).width(frmBtn.W).height(frmBtn.H).addClass('btn');
     var doc = frmBtn.EventContext;
-    doc = doc.replace(/~/g, "'");
+    doc = (doc==null?"":doc.replace(/~/g, "'"));
     var eventType = frmBtn.EventType;
     if (eventType == 0) {//禁用
         btnHtml.attr('disabled', 'disabled').css('background', 'gray');
@@ -2153,7 +2153,7 @@ function figure_Template_HyperLink(frmLin) {
     //URL @ 变量替换
     var url = frmLin.URL;
     $.each(workNodeData.Sys_MapAttr, function (i, obj) {
-        if (url.indexOf('@' + obj.KeyOfEn) > 0) {
+        if (url!=null && url.indexOf('@' + obj.KeyOfEn) > 0) {
             //替换
             //url=  url.replace(new RegExp(/(：)/g), ':');
             //先这样吧

@@ -5905,11 +5905,14 @@ namespace BP.WF
                 if (this.IsStopFlow == true)
                 {
                     /*在检查完后，反馈来的标志流程已经停止了。*/
+                    // 这里应该去掉，不然事件就不起作用. @于庆海翻译.
+                    /*
                     this.Func_DoSetThisWorkOver();
                     this.rptGe.WFState = WFState.Complete;
                     this.rptGe.Update();
-
                     this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
+                     * */
+                    return HisMsgObjs;
                 }
                 else
                 {

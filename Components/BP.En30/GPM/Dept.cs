@@ -168,15 +168,15 @@ namespace BP.GPM
                 rm = new RefMethod();
                 rm.Title = "增加同级部门";
                 rm.ClassMethodName = this.ToString() + ".DoSameLevelDept";
-                rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, true, 0, 100, 100);
-                rm.HisAttrs.AddTBString("Name", null, "部门名称", true, true, 0, 100, 100); 
+                rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("Name", null, "部门名称", true, false, 0, 100, 100); 
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "增加下级部门";
                 rm.ClassMethodName = this.ToString() + ".DoSubDept";
-                rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, true, 0, 100, 100);
-                rm.HisAttrs.AddTBString("Name", null, "部门名称", true, true, 0, 100, 100);
+                rm.HisAttrs.AddTBString("No", null, "同级部门编号", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("Name", null, "部门名称", true, false, 0, 100, 100);
                 map.AddRefMethod(rm);
 
 

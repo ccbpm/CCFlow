@@ -631,7 +631,7 @@ namespace BP.WF
                 {
                     if (k == "OID" || k == "WorkID")
                         continue;
-                   
+
                     if (paras.ContainsKey(k))
                         //  continue;
                         paras[k] = BP.Sys.Glo.Request.QueryString[k];
@@ -682,14 +682,14 @@ namespace BP.WF
                 }
                 else
                 {
-                    
+
                     ps.SQL = "SELECT WorkID,FK_Node FROM WF_GenerWorkFlow WHERE WFState=0 AND Starter=" + dbstr + "FlowStarter AND FK_Flow=" + dbstr + "FK_Flow ";
                     ps.Add(GERptAttr.FlowStarter, emp.No);
                     ps.Add(GenerWorkFlowAttr.FK_Flow, this.No);
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
                     //如果没有启用草稿，并且存在草稿就取第一条 by dgq 5.28
-                    if (dt.Rows.Count >0 )
+                    if (dt.Rows.Count > 0)
                     {
                         wk.OID = Int64.Parse(dt.Rows[0][0].ToString());
                         wk.RetrieveFromDBSources();
@@ -704,7 +704,7 @@ namespace BP.WF
                 }
 
                 //启用草稿或空白就创建WorkID
-                if (wk.OID == 0 )
+                if (wk.OID == 0)
                 {
                     /* 说明没有空白,就创建一个空白..*/
                     wk.ResetDefaultVal();
@@ -966,7 +966,7 @@ namespace BP.WF
                 string sql = "SELECT * FROM " + pFlow.PTable + " WHERE OID=" + pOID;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count != 1)
-                    throw new Exception("@不应该查询不到父流程的数据["+sql+"], 可能的情况之一,请确认该父流程的调用节点是子线程，但是没有把子线程的FID参数传递进来。");
+                    throw new Exception("@不应该查询不到父流程的数据[" + sql + "], 可能的情况之一,请确认该父流程的调用节点是子线程，但是没有把子线程的FID参数传递进来。");
 
                 wk.Copy(dt.Rows[0]);
                 rpt.Copy(dt.Rows[0]);
@@ -1020,8 +1020,8 @@ namespace BP.WF
                     //要处理单据编号 BillNo .
                     if (this.BillNoFormat != "")
                     {
-                        rpt.SetValByKey(GERptAttr.BillNo, BP.WF.WorkFlowBuessRole.GenerBillNo(this.BillNoFormat, rpt.OID,rpt, this.PTable  ) );
-                        
+                        rpt.SetValByKey(GERptAttr.BillNo, BP.WF.WorkFlowBuessRole.GenerBillNo(this.BillNoFormat, rpt.OID, rpt, this.PTable));
+
                         //设置单据编号.
                         wk.SetValByKey(GERptAttr.BillNo, rpt.BillNo);
                     }
@@ -2234,7 +2234,7 @@ namespace BP.WF
                 msg += "@信息:开始检查节点流程报表.";
                 this.DoCheck_CheckRpt(this.HisNodes);
 
-               
+
 
 
                 #region 检查焦点字段设置是否还有效
@@ -3025,7 +3025,7 @@ namespace BP.WF
                 }
             }
         }
-        
+
         /// <summary>
         /// 检查数据报表.
         /// </summary>
@@ -3047,7 +3047,7 @@ namespace BP.WF
             Track.CreateOrRepairTrackTable(flowId);
 
             #region 插入字段。
-            string sql = "SELECT distinct KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN ("+ndsstrs+")";
+            string sql = "SELECT distinct KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
 
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
             {
@@ -3060,7 +3060,7 @@ namespace BP.WF
                 string sql2 = "DELETE FROM Sys_MapAttr WHERE KeyOfEn NOT IN (" + sql + ") AND FK_MapData='" + fk_mapData + "' ";
                 DBAccess.RunSQL(sql2); // 删除不存在的字段.
             }
-         
+
             //所有节点表单字段的合集.
             sql = "SELECT MyPK, KeyOfEn FROM Sys_MapAttr WHERE FK_MapData IN (" + ndsstrs + ")";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -3668,7 +3668,7 @@ namespace BP.WF
 
             FrmEvents fes = currNode.MapData.FrmEvents;
             //增加对流程事件的支持，流程事件时，FrmEvent.FK_MapData=FK_Flow，added by liuxc,2017-05-20
-            switch(doType)
+            switch (doType)
             {
                 case EventListOfNode.FlowOverAfter:
                 case EventListOfNode.FlowOverBefore:
@@ -3990,7 +3990,7 @@ namespace BP.WF
                 //return this.GetValRefTextByKey(FlowAttr.FK_FlowSort);
             }
         }
-        
+
         /// <summary>
         /// 版本号
         /// </summary>
@@ -4017,7 +4017,7 @@ namespace BP.WF
             {
                 return this.GetValIntByKey(FlowAttr.FlowType);
             }
-        }   
+        }
         /// <summary>
         /// (当前节点为子流程时)是否检查所有子流程完成后父流程自动发送
         /// </summary>
@@ -4348,7 +4348,7 @@ namespace BP.WF
                 rm.ClassMethodName = this.ToString() + ".DoCheck";
                 rm.GroupName = "流程维护";
                 map.AddRefMethod(rm);
-               
+
 
                 //rm = new RefMethod();
                 //rm.Title = this.ToE("FlowDataOut", "数据转出定义");  //"数据转出定义";
@@ -5817,14 +5817,14 @@ namespace BP.WF
             //设置审核组件的高度
             DBAccess.RunSQL("UPDATE WF_Node SET FWC_H=300,FTC_H=300 WHERE NodeID='" + nd.NodeID + "'");
 
-            // 周朋@于庆海需要翻译.
+
             CreatePushMsg(nd);
-             
+
             return nd;
         }
         public void CreatePushMsg(Node nd)
         {
-            // 周朋@于庆海需要翻译.
+
             if (SystemConfig.IsEnableCCIM == false)
                 return;
 
@@ -5944,7 +5944,7 @@ namespace BP.WF
                 nd.CreateMap();
                 nd.HisWork.CheckPhysicsTable();
 
-                // 周朋@于庆海需要翻译.
+
                 CreatePushMsg(nd);
 
 
@@ -5974,7 +5974,7 @@ namespace BP.WF
                 nd.CreateMap();
                 nd.HisWork.CheckPhysicsTable();
 
-                // 周朋@于庆海需要翻译.
+
                 CreatePushMsg(nd);
 
                 //通用的人员选择器.
@@ -6224,7 +6224,7 @@ namespace BP.WF
             sql += "@ DELETE FROM  WF_Cond WHERE FK_Flow='" + this.No + "'";
 
 
-            //删除消息配置. 周朋@于庆海.
+            //删除消息配置.
             sql += "@ DELETE FROM WF_PushMsg WHERE FK_Flow='" + this.No + "'";
 
             // 删除岗位节点。
@@ -6252,7 +6252,7 @@ namespace BP.WF
             sql += "@ DELETE FROM WF_TurnTo WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
 
             //删除侦听.
-         //   sql += "@ DELETE FROM WF_Listen WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
+            //   sql += "@ DELETE FROM WF_Listen WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
 
             // 删除d2d数据.
             //  sql += "@GO DELETE WF_M2M WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";

@@ -55,9 +55,9 @@ namespace BP.WF
         /// </summary>
         public const string Err = "Err";
     }
-	/// <summary>
-	/// 消息状态
-	/// </summary>
+    /// <summary>
+    /// 消息状态
+    /// </summary>
     public enum MsgSta
     {
         /// <summary>
@@ -77,18 +77,18 @@ namespace BP.WF
         /// </summary>
         Disable
     }
-	/// <summary>
-	/// 消息属性
-	/// </summary>
-	public class SMSAttr:EntityMyPKAttr
-	{
+    /// <summary>
+    /// 消息属性
+    /// </summary>
+    public class SMSAttr : EntityMyPKAttr
+    {
         /// <summary>
         /// 消息标记（有此标记的不在发送）
         /// </summary>
         public const string MsgFlag = "MsgFlag";
-		/// <summary>
-		/// 状态 0 未发送， 1 发送成功，2发送失败.
-		/// </summary>
+        /// <summary>
+        /// 状态 0 未发送， 1 发送成功，2发送失败.
+        /// </summary>
         public const string EmailSta = "EmailSta";
         /// <summary>
         /// 邮件
@@ -146,13 +146,13 @@ namespace BP.WF
         /// 其他参数.
         /// </summary>
         public const string Paras = "Paras";
-	}
-	/// <summary>
-	/// 消息
-	/// </summary> 
+    }
+    /// <summary>
+    /// 消息
+    /// </summary> 
     public class SMS : EntityMyPK
     {
-        #region 新方法 2013 
+        #region 新方法 2013
         /// <summary>
         /// 发送消息
         /// </summary>
@@ -262,7 +262,7 @@ namespace BP.WF
             get
             {
                 return (MsgSta)this.GetValIntByKey(SMSAttr.MobileSta);
-            } 
+            }
             set
             {
                 SetValByKey(SMSAttr.MobileSta, (int)value);
@@ -516,7 +516,7 @@ namespace BP.WF
                 map.AddTBInt(SMSAttr.EmailSta, (int)MsgSta.UnRun, "EmaiSta消息状态", true, true);
                 map.AddTBString(SMSAttr.EmailTitle, null, "标题", false, true, 0, 3000, 20);
                 map.AddTBStringDoc(SMSAttr.EmailDoc, null, "内容", false, true);
-                map.AddTBDateTime(SMSAttr.SendDT,null, "发送时间", false, false);
+                map.AddTBDateTime(SMSAttr.SendDT, null, "发送时间", false, false);
 
                 map.AddTBInt(SMSAttr.IsRead, 0, "是否读取?", true, true);
                 map.AddTBInt(SMSAttr.IsAlert, 0, "是否提示?", true, true);
@@ -591,13 +591,13 @@ namespace BP.WF
                 {
                     /*发送邮件*/
                     soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                    soap.SendToEmail(this.MyPK,WebUser.No,this.SendToEmpNo, this.Email, this.Title, this.DocOfEmail );
+                    soap.SendToEmail(this.MyPK, WebUser.No, this.SendToEmpNo, this.Email, this.Title, this.DocOfEmail);
                     return;
                 }
 
                 if (this.HisMobileSta == MsgSta.UnRun)
                 {
-                    string tag = "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara+"@Sender="+this.Sender+"@SenderName="+BP.Web.WebUser.Name;
+                    string tag = "@MsgFlag=" + this.MsgFlag + "@MsgType=" + this.MsgType + this.AtPara + "@Sender=" + this.Sender + "@SenderName=" + BP.Web.WebUser.Name;
                     switch (BP.WF.Glo.ShortMessageWriteTo)
                     {
                         case BP.WF.ShortMessageWriteTo.ToSMSTable: //写入消息表。
@@ -605,39 +605,38 @@ namespace BP.WF
                         case BP.WF.ShortMessageWriteTo.ToWebservices: // 写入webservices.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
 
-                            //周朋@于庆海需要翻译.
-                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo,tag);
+                            soap.SendToWebServices(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo, tag);
 
                             break;
                         case BP.WF.ShortMessageWriteTo.ToDingDing: // 写入dingding.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo , this.Mobile, this.MobileInfo);
+                            soap.SendToDingDing(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo);
                             break;
                         case BP.WF.ShortMessageWriteTo.ToWeiXin: // 写入微信.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
-                            soap.SendToWeiXin(this.MyPK, WebUser.No, this.SendToEmpNo , this.Mobile, this.MobileInfo);
+                            soap.SendToWeiXin(this.MyPK, WebUser.No, this.SendToEmpNo, this.Mobile, this.MobileInfo);
                             break;
                         case BP.WF.ShortMessageWriteTo.CCIM: // 写入即时通讯系统.
                             soap = BP.WF.Glo.GetPortalInterfaceSoapClient();
 
-                            //周朋@于庆海需要翻译.
-                            soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo ,this.MobileInfo,tag);
+
+                            soap.SendToCCIM(this.MyPK, WebUser.No, this.SendToEmpNo, this.MobileInfo, tag);
                             break;
                         default:
                             break;
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                BP.DA.Log.DebugWriteError("@消息机制没有配置成功."+ex.Message);
+                BP.DA.Log.DebugWriteError("@消息机制没有配置成功." + ex.Message);
             }
             base.afterInsert();
         }
     }
-	/// <summary>
-	/// 消息s
-	/// </summary> 
+    /// <summary>
+    /// 消息s
+    /// </summary> 
     public class SMSs : Entities
     {
         /// <summary>
@@ -679,4 +678,3 @@ namespace BP.WF
         #endregion 为了适应自动翻译成java的需要,把实体转换成List.
     }
 }
- 

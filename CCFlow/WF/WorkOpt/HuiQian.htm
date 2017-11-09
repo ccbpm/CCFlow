@@ -243,7 +243,7 @@
         function Close() {
             if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                 window.parent.returnWorkWindowClose("");
-                window.parent.close();
+               // window.parent.close();
             } else {
                 $('body').append($('<div>' + "已取消操作" + '</div>'));
 
@@ -257,15 +257,8 @@
             if (data == '取消') {
                 return;
             }
-
-            // alert(frames["iframeSelectEmpsForm"].window.returnVal.Name);
-            //alert(data);
-            //  alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
-            // alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
-
+            $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
             ReturnWork(frames["iframeSelectEmpsForm"].window.returnVal.No);
-            return;
-            $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
 
         //删除当前行

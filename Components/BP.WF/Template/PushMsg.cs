@@ -714,8 +714,19 @@ namespace BP.WF.Template
             openWorkURl = openWorkURl.Replace("http:/", "http://");
             #endregion 
 
+
+            // 有可能是退回信息. @于庆海翻译.
+            if (jumpToEmps == null )
+            {
+                if (atPara != null)
+                {
+                    AtPara ap = new AtPara(atPara);
+                    jumpToEmps = ap.GetValStrByKey("SendToEmpIDs");
+                }
+            }
+
             //发送短消息.
-            string msg1 = this.SendShortMessageToSpecNodes(title, openWorkURl, en, jumpToEmps, currNode, workid, objs,   r);
+            string msg1 = this.SendShortMessageToSpecNodes(title, openWorkURl, en, currNode, workid, objs, null,jumpToEmps);
             //发送邮件.
             string msg2 = this.SendEmail(title, openWorkURl, en, jumpToEmps, currNode, workid, objs,  r);
 
@@ -959,7 +970,7 @@ namespace BP.WF.Template
         /// <param name="objs"></param>
         /// <param name="r">处理好的变量集合</param>
         /// <returns></returns>
-        private string SendShortMessageToSpecNodes(string title, string openWorkURl, Entity en, string jumpToEmps, Node currNode, Int64 workid, SendReturnObjs objs, Row r)
+        private string SendShortMessageToSpecNodes(string title, string openWorkURl, Entity en, Node currNode, Int64 workid, SendReturnObjs objs, Row r, string SendToEmpIDs)
         {
             if (this.SMSPushWay == 0)
                 return "";
@@ -1042,7 +1053,7 @@ namespace BP.WF.Template
                 if (this.SMSPushWay == 1)
                 {
                     /*如果向接受人发送短信.*/
-                    toEmpIDs = jumpToEmps;
+                    toEmpIDs = SendToEmpIDs;
                     string[] emps = toEmpIDs.Split(',');
                     foreach (string emp in emps)
                     {

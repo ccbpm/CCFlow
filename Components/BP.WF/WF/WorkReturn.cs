@@ -897,6 +897,9 @@ namespace BP.WF
 
            // string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt,atPara, null, gwl.FK_Emp);
 
+            // 把消息
+            atPara += "@SendToEmpIDs=" + gwl.FK_Emp;
+
             string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt, atPara);
 
 

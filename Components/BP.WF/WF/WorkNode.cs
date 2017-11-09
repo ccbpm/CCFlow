@@ -7171,6 +7171,13 @@ namespace BP.WF
             // 执行初始化人员.
             this.CheckCompleteCondition_IntCompleteEmps();
 
+            // 如果结束流程，就增加如下信息 @于庆海翻译.
+            this.HisGenerWorkFlow.Sender = BP.Web.WebUser.No;
+            this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTime;
+
+            this.rptGe.FlowEnder = BP.Web.WebUser.No;
+            this.rptGe.FlowEnderRDT = DataType.CurrentDataTime;
+
             this.IsStopFlow = false;
             if (this.HisNode.IsEndNode)
             {

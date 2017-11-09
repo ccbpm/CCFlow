@@ -74,7 +74,7 @@
         //确定  执行加签操作
         function ReturnWork() {
             //WorkID, this.FID, this.FK_Node
-            var empNos = frames["iframeSelectEmpsForm"].window.returnVal.NO;
+            var empNos = frames["iframeSelectEmpsForm"].window.returnVal.No;
             $.ajax({
                 type: 'post',
                 async: true,
@@ -107,7 +107,8 @@
             if (data == '取消') {
                 return;
             } else {
-                $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
+                debugger;
+                $('#ToEmp').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
             }
         }
     </script>

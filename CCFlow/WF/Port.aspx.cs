@@ -39,7 +39,8 @@ namespace BP.Web.Port
         {
             get
             {
-                return this.Request.QueryString["UserNo"];
+                string str = this.Request.QueryString["UserNo"];
+                return HttpUtility.UrlDecode(str, System.Text.Encoding.UTF8);
             }
         }
         /// <summary>

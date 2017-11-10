@@ -102,8 +102,11 @@ namespace BP.WF.HttpHandler
             if (BP.Sys.SystemConfig.CustomerNo != "TianYe")
                 return Start_Init2016();
 
-            // 周朋需要翻译.
+            //如果请求了刷新.
+            if (this.GetRequestVal("IsRef") != null)
+                DBAccess.RunSQL("update wf_emp set StartFlows='' where no='"+BP.Web.WebUser.No+"' ");
 
+            // 周朋需要翻译.
             BP.WF.Port.WFEmp em = new WFEmp();
             em.No = BP.Web.WebUser.No;
             if (em.RetrieveFromDBSources() == 0)
@@ -113,9 +116,8 @@ namespace BP.WF.HttpHandler
                 em.Insert();
             }
             string json = em.StartFlows;
-            if (json != "")
+            if (string.IsNullOrEmpty(json)==false)
                 return json;
-
           
 
             //获得当前人员的部门,根据部门获得该人员的组织集合.

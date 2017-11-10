@@ -866,7 +866,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string CHOvertimeRole_Init()
         {
-
             BP.WF.Node nd = new Node(this.FK_Node);
 
             Nodes nds = new Nodes();
@@ -879,7 +878,7 @@ namespace BP.WF.HttpHandler
             dtNodes.TableName = "Nodes";
             ds.Tables.Add(dtNodes);
 
-            DataTable dtNode = nds.ToDataTableField("Node");
+            DataTable dtNode = nd.ToDataTableField("Node");
             dtNode.TableName = "Node";
             ds.Tables.Add(dtNode);
 

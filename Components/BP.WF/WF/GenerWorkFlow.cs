@@ -64,6 +64,24 @@ namespace BP.WF
         Etc
     }
     /// <summary>
+    /// 会签任务状态
+    /// </summary>
+    public enum HuiQianTaskSta
+    {
+        /// <summary>
+        /// 无
+        /// </summary>
+        None,
+        /// <summary>
+        /// 会签中
+        /// </summary>
+        HuiQianing,
+        /// <summary>
+        /// 会签完成
+        /// </summary>
+        HuiQianOver
+    }
+    /// <summary>
     /// 任务状态
     /// </summary>
     public enum TaskSta
@@ -264,6 +282,10 @@ namespace BP.WF
         /// </summary>
         public const string TodoSta = "TodoSta";
         /// <summary>
+        /// 会签状态
+        /// </summary>
+        public const string HuiQianTaskSta = "HuiQianTaskSta";
+        /// <summary>
         /// 数量
         /// </summary>
         public const string MyNum = "MyNum";
@@ -429,8 +451,19 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.Emps, value);
             }
         }
+        public HuiQianTaskSta HuiQianTaskSta
+        {
+            get
+            {
+                return (HuiQianTaskSta)this.GetValIntByKey(GenerWorkFlowAttr.HuiQianTaskSta);
+            }
+            set
+            {
+                SetValByKey(GenerWorkFlowAttr.HuiQianTaskSta, (int)value);
+            }
+        }
         /// <summary>
-        /// 状态
+        /// 共享任务池状态
         /// </summary>
         public TaskSta TaskSta
         {

@@ -391,13 +391,11 @@ namespace BP.WF.HttpHandler
                 /*如果当前节点引用的其他节点的表单.*/
                 string nodeFrmID = currND.NodeFrmID;
                 string refNodeID =  nodeFrmID.Replace("ND", "");
-
                 BP.WF.Node nd = new Node(int.Parse(refNodeID));
 
                 //表单类型.
                 frmtype = nd.HisFormType;
             }
-
 
             #region 内置表单类型的判断.
             /*如果是傻瓜表单，就转到傻瓜表单的解析执行器上，为软通动力改造。*/

@@ -1358,6 +1358,17 @@ namespace BP.WF
             return dt;
         }
         /// <summary>
+        /// 获得会签列表
+        /// </summary>
+        /// <param name="userNo">人员编号</param>
+        /// <returns></returns>
+        public static DataTable DB_HuiQian(string userNo)
+        {
+
+            return null;
+            //BP.Web.WebUser.SignInOfGener2017
+        }
+        /// <summary>
         /// 获取当前人员待处理的工作
         /// </summary>
         /// <param name="fk_node">节点编号</param>
@@ -4525,6 +4536,11 @@ namespace BP.WF
 
             //判断是否是待办.
             int myisPass = int.Parse(dt.Rows[0]["IsPass"].ToString());
+            
+            //新增加的标记,=90 就是会签主持人执行会签的状态. @于庆海翻译.
+            if (myisPass == 90)
+                return true; 
+
             if (myisPass != 0)
                 return false;
 

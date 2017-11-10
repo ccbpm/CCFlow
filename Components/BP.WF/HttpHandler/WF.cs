@@ -98,15 +98,23 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Start_Init()
         {
+            //return Start_Init2016(); 
+
             //通用的处理器.
             if (BP.Sys.SystemConfig.CustomerNo != "TianYe")
                 return Start_Init2016();
 
             //如果请求了刷新.
             if (this.GetRequestVal("IsRef") != null)
-                DBAccess.RunSQL("update wf_emp set StartFlows='' where no='"+BP.Web.WebUser.No+"' ");
+            {
+                //清除权限.
+                DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows='' WHERE No='" + BP.Web.WebUser.No + "' ");
 
-            // 周朋需要翻译.
+                //处理权限,为了防止未知的错误.
+                DBAccess.RunSQL("UPDATE WF_FLOWSORT SET ORGNO='0' WHERE ORGNO='' OR ORGNO IS NULL OR ORGNO='101'");
+            }
+
+            // @于庆海需要翻译.
             BP.WF.Port.WFEmp em = new WFEmp();
             em.No = BP.Web.WebUser.No;
             if (em.RetrieveFromDBSources() == 0)
@@ -116,51 +124,42 @@ namespace BP.WF.HttpHandler
                 em.Insert();
             }
             string json = em.StartFlows;
-            if (string.IsNullOrEmpty(json)==false)
+            if (string.IsNullOrEmpty(json) == false)
                 return json;
-          
 
             //获得当前人员的部门,根据部门获得该人员的组织集合.
             Paras ps = new Paras();
-            ps.SQL ="SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp="+SystemConfig.AppCenterDBVarStr+"FK_Emp";
+            ps.SQL = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp=" + SystemConfig.AppCenterDBVarStr + "FK_Emp";
             ps.AddFK_Emp();
             DataTable dt = DBAccess.RunSQLReturnTable(ps);
 
-            //为当前的人员找组织编号集合.
+            //找到当前人员所在的部门集合, 应该找到他的组织集合为了减少业务逻辑.
             string orgNos = "'0'";
             foreach (DataRow dr in dt.Rows)
             {
                 string deptNo = dr[0].ToString();
-                while (true)
-                {
-                    Inc inc = new Inc();
-                    inc.No = deptNo;
-                    if (inc.IsExits == true)
-                    {
-                        orgNos += ",'" + deptNo + "'";
-                        break;
-                    }
-
-                    BP.Port.Dept dept = new BP.Port.Dept(deptNo);
-                    if (dept.ParentNo == "0")
-                        break;
-                    deptNo = dept.ParentNo;
-                }
+                orgNos += ",'" + deptNo + "'";
             }
 
             #region 获取类别列表(根据当前人员所在组织结构进行过滤类别.)
             FlowSorts fss = new FlowSorts();
             BP.En.QueryObject qo = new En.QueryObject(fss);
-            if (orgNos.Contains(",")==false)
-                qo.AddWhere(FlowSortAttr.OrgNo, orgNos);  //指定的类别..
+            if (orgNos.Contains(",") == false)
+            {
+                qo.AddWhere(FlowSortAttr.OrgNo, "0");  //..
+                qo.addOr();
+                qo.AddWhere(FlowSortAttr.OrgNo, "");  //..
+            }
             else
-                qo.AddWhereIn(FlowSortAttr.OrgNo, "("+orgNos+")");  //指定的类别.
+            {
+                qo.AddWhereIn(FlowSortAttr.OrgNo, "(" + orgNos + ")");  //指定的类别.
+            }
 
             //排序.
             qo.addOrderBy(FlowSortAttr.No, FlowSortAttr.Idx);
 
 
-            DataTable dtSort=qo.DoQueryToTable();
+            DataTable dtSort = qo.DoQueryToTable();
             dtSort.TableName = "Sort";
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -207,14 +206,16 @@ namespace BP.WF.HttpHandler
 
             //把经过权限过滤的流程实体放入到集合里.
             ds.Tables.Add(dtStart); //增加到里面去.
-             
+
             //返回组合
-            json= BP.Tools.Json.DataSetToJson(ds, false);
+            json = BP.Tools.Json.DataSetToJson(ds, false);
 
             //把json存入数据表，避免下一次再取.
-            em.StartFlows = json;
-            em.Update();
-             
+            if (json.Length > 40)
+            {
+                em.StartFlows = json;
+                em.Update();
+            }
 
             return json;
         }
@@ -331,6 +332,34 @@ namespace BP.WF.HttpHandler
         public string Draft_Delete()
         {
           return BP.WF.Dev2Interface.Flow_DoDeleteDraft(this.FK_Flow, this.WorkID, false);
+        }
+        /// <summary>
+        /// 获得会签列表
+        /// </summary>
+        /// <returns></returns>
+        public string HuiQianList_Init()
+        {
+            string sql = "SELECT A.WorkID, A.Title,A.FK_Flow, A.FlowName, A.Starter, A.StarterName, A.Sender, A.Sender,A.FK_Node,A.NodeName,A.SDTOfNode,A.TodoEmps";
+            sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B WHERE A.WorkID=B.WorkID and a.FK_Node=b.FK_Node AND B.IsPass=90 AND B.FK_Emp='"+BP.Web.WebUser.No+"'";
+
+            DataTable dt=DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["WORKID"].ColumnName = "WorkID";
+                dt.Columns["TITLE"].ColumnName = "Title";
+                dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
+                dt.Columns["FLOWNAME"].ColumnName = "FlowName";
+
+                dt.Columns["STARTER"].ColumnName = "Starter";
+                dt.Columns["STARTERNAME"].ColumnName = "StarterName";
+
+                dt.Columns["SENDER"].ColumnName = "Sender";
+                dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
+                dt.Columns["SDTOFNODE"].ColumnName = "SDTOfNode";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps";
+            }
+            return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>
         /// 初始化待办.

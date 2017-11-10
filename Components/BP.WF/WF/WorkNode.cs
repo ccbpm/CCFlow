@@ -4975,6 +4975,40 @@ namespace BP.WF
         {
         }
         /// <summary>
+        /// 通知主持人
+        /// </summary>
+        /// <returns></returns>
+        public string DealAlertZhuChiRen()
+        {
+            /*有两个待办，就说明当前人员是最后一个会签人，就要把主持人的状态设置为0 */
+            //获得主持人信息.
+            string sql = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE IsPass=90 AND WorkID=" + this.WorkID;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            if (dt.Rows.Count == 1)
+            {
+                //从会签列表里移动到待办.
+                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE WorkID='" + this.WorkID + "' AND IsPass=90");
+
+                //发消息.
+                string fk_emp = dt.Rows[0]["FK_Emp"].ToString();
+                BP.WF.Dev2Interface.Port_SendMsg(fk_emp,
+                    "工作会签完毕", this.HisGenerWorkFlow.Title + " 工作会签完毕,请到待办查看.",
+                    "HuiQian" + this.WorkID + "_" + WebUser.No, "HuiQian", HisGenerWorkFlow.FK_Flow, this.HisGenerWorkFlow.FK_Node, this.WorkID, 0);
+
+                //设置为未读.
+                BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisGenerWorkFlow.FK_Node, this.HisGenerWorkFlow.WorkID);
+                return "您是最后一个会签该工作的处理人，已经提醒主持人处理当前工作。";
+            }
+
+            sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Node=" + this.HisGenerWorkFlow.FK_Node + " AND WorkID=" + this.WorkID;
+            dt = DBAccess.RunSQLReturnTable(sql);
+
+            string empNo=dt.Rows[0]["FK_Emp"].ToString();
+            string empName=dt.Rows[0]["FK_EmpText"].ToString();
+
+            return "@您已经处理完毕，还有("+empNo+","+empName+")没有处理.";
+        }
+        /// <summary>
         /// 如果是协作.
         /// </summary>
         /// <returns></returns>
@@ -4985,14 +5019,14 @@ namespace BP.WF
                 GenerWorkerListAttr.FK_Node, this.HisNode.NodeID, GenerWorkerListAttr.IsPass);
 
             if (gwls.Count == 1)
-                return false; /*让其向下执行,因为只有一个人。就没有顺序的问题.*/
+                return false; /*让其向下执行,因为只有一个人,就没有顺序的问题.*/
 
             //查看是否我是最后一个？
             int num = 0;
             string todoEmps = ""; //记录没有处理的人.
             foreach (GenerWorkerList item in gwls)
             {
-                if (item.IsPassInt == 0)
+                if (item.IsPassInt == 0 || item.IsPassInt==90 )
                 {
                     if (item.FK_Emp != WebUser.No)
                         todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
@@ -5023,7 +5057,18 @@ namespace BP.WF
                 }
                 //写入日志.
                 this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
-                this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
+
+
+                //处理会签问题， @于庆海翻译,增加如下代码.
+                if (num == 2)
+                {
+                    string msg = this.DealAlertZhuChiRen();
+                    this.addMsg(SendReturnMsgFlag.OverCurr, msg, null, SendReturnMsgType.Info);
+                }
+                else
+                {
+                    this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
+                }
                 return true;
             }
 
@@ -5076,7 +5121,7 @@ namespace BP.WF
                     int num = 0;
                     foreach (GenerWorkerList item in gwls)
                     {
-                        if (item.IsPassInt == 0)
+                        if (item.IsPassInt == 0 || item.IsPassInt == 90)
                         {
                             if (item.FK_Emp != WebUser.No)
                                 todoEmps += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
@@ -5101,7 +5146,7 @@ namespace BP.WF
             string todoEmps1 = ""; //记录没有处理的人.
             foreach (GenerWorkerList item in gwls)
             {
-                if (item.IsPassInt == 0)
+                if (item.IsPassInt == 0 || item.IsPassInt == 90)
                 {
                     if (item.FK_Emp != WebUser.No)
                         todoEmps1 += BP.WF.Glo.DealUserInfoShowModel(item.FK_Emp, item.FK_EmpText) + " ";
@@ -5129,10 +5174,19 @@ namespace BP.WF
                 // 检查完成条件。
                 if (this.HisNode.IsEndNode == false)
                     this.CheckCompleteCondition();
-                
-                //写入日志.
+
                 this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps1, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
-                this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps1 + " .", null, SendReturnMsgType.Info);
+
+                //处理会签问题， @于庆海翻译,增加如下代码.
+                if (mynum == 2)
+                {
+                    string msg = this.DealAlertZhuChiRen();
+                    this.addMsg(SendReturnMsgFlag.OverCurr, msg, null, SendReturnMsgType.Info);
+                }
+                else
+                {
+                    this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps1 + " .", null, SendReturnMsgType.Info);
+                }
                 return true;
             }
 

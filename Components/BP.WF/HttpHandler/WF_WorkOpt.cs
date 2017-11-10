@@ -95,9 +95,9 @@ namespace BP.WF.HttpHandler
                 if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                     sql = "SELECT TOP 1 Tag,EmpTo FROM " + trackTable + " WHERE NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID desc  ";
                 else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM " + trackTable + " A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                    sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM " + trackTable + " A WHERE A.EmpFrom=" + BP.Web.WebUser.No + " AND A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                 else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                    sql = "SELECT  Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1 ";
+                    sql = "SELECT  Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID  DESC limit 1,1 ";
 
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count != 0)
@@ -356,6 +356,11 @@ namespace BP.WF.HttpHandler
                 GenerWorkerListAttr.WorkID, this.WorkID,
                 GenerWorkerListAttr.FK_Node, this.FK_Node);
 
+            //如果已经没有会签待办了,就设置当前人员状态为0.  @于庆海翻译 增加这部分.
+            string sql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID='" + this.WorkID + "' AND IsPass=0";
+            if (DBAccess.RunSQLReturnValInt(sql) == 0)
+                DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'");
+
             return HuiQian_Init();
         }
         /// <summary>
@@ -505,7 +510,24 @@ namespace BP.WF.HttpHandler
         {
             return AccepterOfGener_SelectEmps();
         }
+        /// <summary>
+        /// 保存并关闭
+        /// </summary>
+        /// <returns></returns>
+        public string HuiQian_SaveAndClose()
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
+            gwf.Update();
 
+            //设置当前操作人员的状态.
+            string sql = "UPDATE WF_GenerWorkerList SET IsPass=90 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND FK_Emp='" + WebUser.No + "'";
+            DBAccess.RunSQL(sql);
+
+            string str = "保存成功.\t\n该工作已经移动到会签列表中了,等到所有的人会签完毕后,就可以出现在待办列表里.";
+            str += "\t\n如果您要增加或者移除会签人请到会签列表找到该记录,执行操作.";
+            return str;
+        }
         #region 审核组件.
         /// <summary>
         /// 初始化审核组件数据.

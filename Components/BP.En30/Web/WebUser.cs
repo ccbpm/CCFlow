@@ -201,7 +201,7 @@ namespace BP.Web
 					BP.Sys.Glo.Request.Cookies.Remove("CCS");
 
 				HttpCookie cookie = new HttpCookie("CCS");
-				cookie.Expires = DateTime.Now.AddDays(2);
+				cookie.Expires = DateTime.Now.AddMinutes(30);
 				cookie.Values.Add("No", em.No);
 				cookie.Values.Add("Name", HttpUtility.UrlEncode(em.Name));
 

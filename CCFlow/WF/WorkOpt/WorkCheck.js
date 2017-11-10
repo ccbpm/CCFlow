@@ -126,7 +126,7 @@
 
                             //  alert(st.SignType);
 
-                            if (st.SignType == 0 || st.SignType == null) {
+                            if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
                                 html += "<tr>";
                                 html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
                                     + GetUserSmallIcon(this.EmpFrom, this.EmpFromT) + '</div>'
@@ -145,12 +145,18 @@
                             }
 
                             if (st.SignType == 2) {
-                                alert('电子签名的逻辑尚未编写.');
+
+                                html += "<tr>";
+                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
+                                    + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
+                                    + " <div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</div></td>";
+                                html += "</tr>";
+
+                              //  alert('电子签名的逻辑尚未编写.');
                                 break;
                             }
                         }
                     }
-
 
                        GenerSiganture(SignType);
 

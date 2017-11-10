@@ -239,16 +239,35 @@
             $(".foot").hide();
         }
 
-        //取消移交
+        //取消移交.
         function Close() {
-            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                window.parent.returnWorkWindowClose("");
-               // window.parent.close();
-            } else {
-                $('body').append($('<div>' + "已取消操作" + '</div>'));
 
-                window.close();
-            }
+            //需要调用设置会签状态并返回才可以.
+            var myurl= Handler + "?DoType=HuiQian_SaveAndClose&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random();
+            //alert(myurl);
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: myurl,
+                dataType: 'html',
+                success: function (data) {
+
+                    alert(data);
+
+                    if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                        window.parent.returnWorkWindowClose("");
+                        window.parent.close();
+                    } else {
+                        $('body').append($('<div>' + "已取消操作" + '</div>'));
+
+                        window.close();
+                    }
+
+                    return;
+                }
+            });
+
         }
         //设置选中的人员
         function selectEmpsWindowClose(data) {
@@ -257,8 +276,15 @@
             if (data == '取消') {
                 return;
             }
-            $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+
+            // alert(frames["iframeSelectEmpsForm"].window.returnVal.Name);
+            //alert(data);
+            //  alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
+            // alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
+
             ReturnWork(frames["iframeSelectEmpsForm"].window.returnVal.No);
+            return;
+            $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
 
         //删除当前行
@@ -350,18 +376,10 @@
     <table id="Table1" style="width: 98%;">
         <thead>
             <tr id='title'>
-                <th>
-                    名称
-                </th>
-                <th>
-                    所在部门
-                </th>
-                <th>
-                    状态
-                </th>
-                <th>
-                    操作
-                </th>
+                <th>名称</th>
+                <th> 所在部门 </th>
+                <th> 状态 </th>
+                <th> 操作 </th>
             </tr>
         </thead>
         <tbody>

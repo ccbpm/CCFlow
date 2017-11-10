@@ -5905,7 +5905,7 @@ namespace BP.WF
                 if (this.IsStopFlow == true)
                 {
                     /*在检查完后，反馈来的标志流程已经停止了。*/
-                    // 这里应该去掉，不然事件就不起作用. @于庆海翻译.
+                    // 这里应该去掉，不然事件就不起作用. 翻译.
                     /*
                     this.Func_DoSetThisWorkOver();
                     this.rptGe.WFState = WFState.Complete;
@@ -7171,7 +7171,7 @@ namespace BP.WF
             // 执行初始化人员.
             this.CheckCompleteCondition_IntCompleteEmps();
 
-            // 如果结束流程，就增加如下信息 @于庆海翻译.
+            // 如果结束流程，就增加如下信息 翻译.
             this.HisGenerWorkFlow.Sender = BP.Web.WebUser.No;
             this.HisGenerWorkFlow.SendDT = DataType.CurrentDataTime;
 

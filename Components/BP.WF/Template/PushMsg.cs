@@ -715,7 +715,7 @@ namespace BP.WF.Template
             #endregion 
 
 
-            // 有可能是退回信息. @于庆海翻译.
+            // 有可能是退回信息. 翻译.
             if (jumpToEmps == null )
             {
                 if (atPara != null)

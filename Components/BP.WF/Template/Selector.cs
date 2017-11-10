@@ -603,7 +603,7 @@ namespace BP.WF.Template
             if (SystemConfig.OSModel == OSModel.OneMore)
             {
                 //部门.
-                string sql = "SELECT distinct a.No, a.Name, a.ParentNo FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID ;
+                string sql = "SELECT distinct a.No, a.Name, a.ParentNo,a.Idx FROM Port_Dept a, WF_NodeStation b, Port_DeptEmpStation c, Port_Emp d WHERE a.No=d.FK_Dept AND b.FK_Station=c.FK_Station AND C.FK_Emp=D.No AND B.FK_Node=" + nodeID + "ORDER BY A.No,A.Idx";
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 dt.TableName = "Depts";
                 ds.Tables.Add(dt);

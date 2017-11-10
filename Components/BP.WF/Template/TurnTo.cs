@@ -324,35 +324,40 @@ namespace BP.WF.Template
                 switch (this.FK_Operator.Trim().ToLower())
                 {
                     case "=":  // 如果是 = 
+                    case "dengyu":  // 如果是 = 
                         if (this.HisWork.GetValStringByKey(attr.KeyOfEn) == this.OperatorValue.ToString())
                             return true;
                         else
                             return false;
-
                     case ">":
+                    case "dayu":
                         if (this.HisWork.GetValDoubleByKey(attr.KeyOfEn) > Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
 
                     case ">=":
+                    case "dayudengyu":
                         if (this.HisWork.GetValDoubleByKey(attr.KeyOfEn) >= Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
 
                     case "<":
+                    case "xiaoyu":
                         if (this.HisWork.GetValDoubleByKey(attr.KeyOfEn) < Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
 
                     case "<=":
+                    case "xiaoyudengyu":
                         if (this.HisWork.GetValDoubleByKey(attr.KeyOfEn) <= Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
                     case "!=":
+                    case "budengyu":
                         if (this.HisWork.GetValDoubleByKey(attr.KeyOfEn) != Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else

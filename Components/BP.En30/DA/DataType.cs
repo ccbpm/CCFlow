@@ -406,6 +406,32 @@ namespace BP.DA
             }
         }
         /// <summary>
+        /// 处理文件名称
+        /// </summary>
+        /// <param name="fileNameFormat">文件格式</param>
+        /// <returns>返回合法的文件名</returns>
+        public static string PraseStringToFileName(string fileNameFormat)
+        {
+            char[] strs = "?*\"<>/;.,-:".ToCharArray();
+            foreach (char c in strs)
+                fileNameFormat = fileNameFormat.Replace(c.ToString(), "_");
+
+            //去掉空格.
+            while (fileNameFormat.Contains(" ") == true)
+                fileNameFormat = fileNameFormat.Replace(" ", "");
+
+            //替换特殊字符.
+            fileNameFormat = fileNameFormat.Replace("\t\n", "");
+
+            //处理合法的文件名.
+            StringBuilder rBuilder = new StringBuilder(fileNameFormat);
+            foreach (char rInvalidChar in Path.GetInvalidFileNameChars())
+                rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
+
+            fileNameFormat = rBuilder.ToString();
+            return fileNameFormat;
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="strs"></param>

@@ -1133,7 +1133,6 @@ namespace BP.WF
 
                     docs = docs.Replace("@Title", gwf.Title);
 
-
                     //替换模版尾部的打印说明信息.
                     string pathInfo = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\EndInfo\\"+flowNo+".txt";
                     if (System.IO.File.Exists(pathInfo) == true)
@@ -1147,6 +1146,7 @@ namespace BP.WF
                 #endregion 替换模版文件..
 
                 #region 处理正确的文件名.
+                 
                 if (fileNameFormat == null)
                 {
                     if (flowNo != null)
@@ -1160,15 +1160,8 @@ namespace BP.WF
 
                 //  fileNameFormat = workid.ToString();
 
-                char[] strs = "?*\"<>/;.,-:".ToCharArray();
-                foreach (char c in strs)
-                {
-                    fileNameFormat = fileNameFormat.Replace(c.ToString(), "_");
-                }
-                fileNameFormat = fileNameFormat.Replace(" ", "");
-                fileNameFormat = fileNameFormat.Replace(" ", "");
-                fileNameFormat = fileNameFormat.Replace(" ", "");
-                fileNameFormat = fileNameFormat.Replace(" ", "");
+                fileNameFormat = BP.DA.DataType.PraseStringToFileName(fileNameFormat);
+
                 #endregion
 
                 Hashtable ht = new Hashtable();
@@ -1181,11 +1174,10 @@ namespace BP.WF
                     System.IO.Directory.CreateDirectory(pdfPath);
 
                 string pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
-                string pdfFileExe = SystemConfig.PathOfDataUser + "\\ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
+                string pdfFileExe = SystemConfig.PathOfDataUser + "ThirdpartySoftware\\wkhtmltox\\wkhtmltopdf.exe";
                 try
                 {
                     Html2Pdf(pdfFileExe, billUrl, pdfFile);
-
                     ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
                 }
                 catch (Exception ex)
@@ -1212,36 +1204,20 @@ namespace BP.WF
                 return "err@报表生成错误:" + ex.Message;
             }
         }
-
         public static void Html2Pdf(string pdfFileExe, string htmFile, string pdf)
         {
-            //因为Web 是多线程环境，避免甲产生的文件被乙下载去，所以档名都用唯一
-
-
-          //  string "ss"="C:\Program Files (x86)\wkhtmltopdf\bin\wkhtmltopdf.exe";
-            string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
-
-            //执行wkhtmltopdf.exe
-            //Process p = System.Diagnostics.Process.Start(pdfFileExe, @"http://msdn.microsoft.com/zh-cn D:\" + fileNameWithOutExtention + ".pdf");
-            Process p = System.Diagnostics.Process.Start(pdfFileExe, htmFile + " " + pdf);
-            p.WaitForExit();
-            //p.WaitForExit();
-
-
-            //若不加这一行，程序就会马上执行下一句而抓不到文件发生意外：System.IO.FileNotFoundException: 找不到文件 ''。
-
-
-            ////把文件读进文件流
-            //FileStream fs = new FileStream(pdf, FileMode.Open);
-            //byte[] file = new byte[fs.Length];
-            //fs.Read(file, 0, file.Length);
-            //fs.Close();
-
-            //Response给客户端下载
-            //Response.Clear();
-            //Response.AddHeader("content-disposition", "attachment; filename=" + fileNameWithOutExtention + ".pdf");//强制下载
-            //Response.ContentType = "application/octet-stream";
-            //Response.BinaryWrite(file);
+            BP.DA.Log.DebugWriteInfo("@开始生成PDF" + pdfFileExe + "@pdf=" + pdf + "@htmFile=" + htmFile);
+            try
+            {
+                string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
+                Process p = System.Diagnostics.Process.Start(pdfFileExe, htmFile + " " + pdf);
+                p.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                //BP.DA.Log.DebugWriteError("@生成PDF错误" + ex.Message + "@pdf=" + pdf + "@htmFile="+htmFile);
+                throw ex;
+            }
         }
     }
 }

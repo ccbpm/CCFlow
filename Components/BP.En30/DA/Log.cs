@@ -35,18 +35,18 @@ namespace BP.DA
 		#region 在测试状态下
 		public static void DebugWriteInfo(string msg)
 		{
-			if (SystemConfig.IsDebug)
+		//	if (SystemConfig.IsDebug)
 				DefaultLogWriteLine(LogType.Info,msg);
 		}
 		public static void DebugWriteWarning(string msg)
 		{
-			if (SystemConfig.IsDebug)
+			//if (SystemConfig.IsDebug)
 				DefaultLogWriteLine(LogType.Warning,msg);
 		}
         public static void DebugWriteError(string msg)
         {
-            if (SystemConfig.IsDebug)
-                DefaultLogWriteLine(LogType.Error, msg);
+            //  if (SystemConfig.IsDebug)
+            DefaultLogWriteLine(LogType.Error, msg);
         }
 		#endregion
 

@@ -1074,6 +1074,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     $.each(disabledEles, function (i, disabledEle) {
         var name = $(disabledEle).attr('name');
         switch (disabledEle.tagName.toUpperCase()) {
+
             case "INPUT":
                 switch (disabledEle.type.toUpperCase()) {
                     case "CHECKBOX": //复选框
@@ -1090,20 +1091,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框 
+            //下拉框  
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
-                //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-                //对于复选下拉框获取值得方法
-//                if ($('[data-id=' + name + ']').length > 0) {
-//                    var val = $(disabledEle).val().join(',');
-//                    formArrResult.push(name + '=' + val);
-//                } else {
-//                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-//                }
-               // break;
-            //文本区域 
+            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val()); 
+            //对于复选下拉框获取值得方法 
+            //                if ($('[data-id=' + name + ']').length > 0) { 
+            //                    var val = $(disabledEle).val().join(','); 
+            //                    formArrResult.push(name + '=' + val); 
+            //                } else { 
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val()); 
+            //                } 
+            // break; 
+            //文本区域  
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -1142,6 +1143,9 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     //为了复选框  合并一下值  复选框的值以  ，号分割
     //用& 符号截取数据
     var formDataArr = formData.split('&');
+
+    //alert(formDataArr);
+     
     var formDataResultObj = {};
     $.each(formDataArr, function (i, formDataObj) {
         //计算出等号的INDEX
@@ -1159,8 +1163,50 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     for (var ele in formDataResultObj) {
         formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
     }
+
+    // 处理没有选择的文本框.
+    //获得checkBoxIDs 格式为: CB_IsXX,CB_IsYY,
+    var ids = GenerCheckIDs();
+    if (ids) {
+        var scores = ids.split(",");
+        var arrLength = scores.length;
+        var sum = 0;
+        var average = null;
+        for (var i = 0; i < arrLength; i++) {
+            var field = scores[i];
+            var index = formdataResultStr.indexOf(field);
+            if (index == -1) {
+                formdataResultStr += '&' + field + '=0';
+            }
+        }
+    }
+    formdataResultStr = formdataResultStr.replace('&&', '&');
+
     return formdataResultStr;
 }
+
+
+//获得所有的checkbox 的id组成一个string用逗号分开, 以方便后台接受的值保存.
+function GenerCheckIDs() {
+
+    var checkBoxIDs = "";
+    var arrObj = document.all;
+
+
+    for (var i = 0; i < arrObj.length; i++) {
+
+        if (arrObj[i].type != 'checkbox')
+            continue;
+
+        var cid = arrObj[i].name;
+        if (cid == null || cid == "" || cid == '')
+            continue;
+
+        checkBoxIDs += arrObj[i].id + ',';
+    }
+    return checkBoxIDs;
+}
+
 //发送
 function Send() {
 

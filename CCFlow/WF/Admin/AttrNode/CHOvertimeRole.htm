@@ -31,10 +31,8 @@
 
                     json = JSON.parse(json);
 
-
                     var nodeEntity = json['Node'][0];
                     var nodes = json['Nodes'];
-
 
                     //绑定数据源.
                     GenerBindDDL("DDL_Nodes", nodes, "NodeID", "Name", nodeEntity.DoOutTime);
@@ -54,8 +52,8 @@
                         document.getElementById("TB_SQL").value = nodeEntity.DoOutTime;
                     }
 
-                    //                    if (nodeEntity.IsEval == 1)
-                    //                        document.getElementById("TB_SQL").value = nodeEntity.DoOutTime;
+                    //  if (nodeEntity.IsEval == 1)
+                    //   document.getElementById("TB_SQL").value = nodeEntity.DoOutTime;
 
                     //调用公共类库的方法:执行批量主表赋值.
                     GenerFullAllCtrlsVal(nodeEntity);
@@ -187,7 +185,6 @@
         $("#Msg").html("正在保存,请稍后......");
 
         var frmData = $("#cc").serialize();
-
 
         var checked = document.getElementById("CB_IsEval").checked;
         if (checked == true)

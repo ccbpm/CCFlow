@@ -342,21 +342,21 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
 
             if (this.RB_ByCCFlowBPM.Checked)
             {
-                //按照ccflow的BPM模式处理
+                //按照ccflow的BPM模式处理.
                 nd.HisDeliveryWay = DeliveryWay.ByCCFlowBPM;
-
             }
+
             //是否可以分配工作？
             nd.IsTask = this.CB_IsSSS.Checked;
-            //是否启用自动记忆功能
 
+            //是否启用自动记忆功能
             nd.IsRememberMe = this.CB_IsRememme.Checked;
 
             //本节点接收人不允许包含上一步发送人
             nd.IsExpSender = this.CB_IsExpSender.Checked;
             //发送后转向
              
-            //清楚发起列表的缓存.
+            //清除发起列表的缓存.
             if ( nd.IsStartNode==true)
                 DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows='' ");
 
@@ -376,7 +376,6 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 this.DDL_ByPreviousNodeFormEmpsField.Items.Add(new ListItem(item.KeyOfEn + " " + item.Name, item.KeyOfEn));
             }
         }
-
         /// <summary>
         /// 09.与指定节点处理人相同 取值
         /// 12.按指定节点的人员岗位计算

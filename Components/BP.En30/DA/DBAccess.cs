@@ -1396,10 +1396,8 @@ namespace BP.DA
         {
             if (tab == null || tab == "")
                 return;
-
             if (DBAccess.IsExitsTabPK(tab) == true)
                 return;
-
             string sql;
             switch (db)
             {

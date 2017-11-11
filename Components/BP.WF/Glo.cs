@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20170816;
+        public static int Ver = 20171110;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -171,6 +171,10 @@ namespace BP.WF
             string msg = "";
             try
             {
+                //增加列FlowStars
+                BP.WF.Port.WFEmp wfemp = new Port.WFEmp();
+                wfemp.CheckPhysicsTable();
+
                 BP.Sys.FrmRB rb = new FrmRB();
                 rb.CheckPhysicsTable();
 

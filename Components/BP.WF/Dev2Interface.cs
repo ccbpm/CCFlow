@@ -3559,6 +3559,66 @@ namespace BP.WF
         /// <param name="optionName">操作名称(比如:科长审核、部门经理审批),如果为空就是"审核".</param>
         public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName)
         {
+             
+            string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = workid;
+            gwf.RetrieveFromDBSources();
+
+            //求主键 2017.10.6以前的逻辑.
+            string tag = currNodeID + "_" + workid + "_" + fid + "_" + BP.Web.WebUser.No;
+
+            //求当前是否是会签.  zhangsan,张三;李四;王五;
+            string nodeName = gwf.NodeName;
+            Node nd = new Node(currNodeID);
+            if (nd.IsStartNode == false)
+            {
+                if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
+                    nodeName = "会签";
+            }
+
+            //待办抢办模式，一个节点只能有一条记录.
+            Paras ps = new Paras();
+            if (nd.TodolistModel == TodolistModel.QiangBan || nd.TodolistModel == TodolistModel.Sharing)
+            {
+                //先删除其他人员写入的数据. 此脚本是2016.11.30号的,为了解决柳州的问题，需要扩展.
+                ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  WorkID=" + dbStr + "WorkID  AND NDFrom=" + dbStr + "NDFrom AND ActionType=" + (int)ActionType.WorkCheck;
+                ps.Add(TrackAttr.WorkID, workid);
+                ps.Add(TrackAttr.NDFrom, currNodeID);
+                DBAccess.RunSQL(ps);
+
+                //写入日志.
+                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName);
+            }
+            else
+            {
+                ps.SQL = "UPDATE  ND" + int.Parse(flowNo) + "Track SET NDFromT=" + dbStr + "NDFromT, Msg=" + dbStr + "Msg, RDT=" + dbStr +
+                         "RDT WHERE  Tag=" + dbStr + "Tag ";
+                ps.Add(TrackAttr.NDFromT, nodeName);
+                ps.Add(TrackAttr.Msg, msg);
+                ps.Add(TrackAttr.Tag, tag);
+                ps.Add(TrackAttr.RDT, DataType.CurrentDataTimess);
+                int num = DBAccess.RunSQL(ps);
+
+                if (num > 1)
+                {
+                    ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  Tag=" + dbStr + "Tag ";
+                    ps.Add(TrackAttr.Tag, tag);
+                    DBAccess.RunSQL(ps);
+                    num = 0;
+                }
+
+                if (num == 0)
+                {
+                    //如果没有更新到，就写入.
+                    WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null);
+                }
+            }
+        }
+
+        public static void WriteTrackWorkCheckForTangRenYiYao(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName)
+        {
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
             //WorkNode wn = new WorkNode(workid, currNodeID);
@@ -3576,7 +3636,7 @@ namespace BP.WF
             Node nd = new Node(currNodeID);
             //待办抢办模式，一个节点只能有一条记录.
             Paras ps = new Paras();
-            if (nd.TodolistModel == TodolistModel.QiangBan || nd.TodolistModel == TodolistModel.Sharing )
+            if (nd.TodolistModel == TodolistModel.QiangBan || nd.TodolistModel == TodolistModel.Sharing)
             {
                 //先删除其他人员写入的数据. 此脚本是2016.11.30号的,为了解决柳州的问题，需要扩展.
                 ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  WorkID=" + dbStr + "WorkID  AND NDFrom=" + dbStr + "NDFrom AND ActionType=" + (int)ActionType.WorkCheck + " AND Tag LIKE '" + gwf.Paras_LastSendTruckID + "%'";
@@ -3589,7 +3649,7 @@ namespace BP.WF
                 //string sql = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  Tag LIKE '" + gwf.Paras_LastSendTruckID + "%'";
                 //DBAccess.RunSQL(ps);
                 //写入日志
-                WriteTrack(flowNo, currNodeID,nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName);
+                WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName);
             }
             else
             {
@@ -3602,7 +3662,7 @@ namespace BP.WF
                 if (DBAccess.RunSQL(ps) == 0)
                 {
                     //如果没有更新到，就写入.
-                    WriteTrack(flowNo, currNodeID,nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName,null,null);
+                    WriteTrack(flowNo, currNodeID, nodeName, workid, fid, msg, ActionType.WorkCheck, tag, null, optionName, null, null);
                 }
             }
         }

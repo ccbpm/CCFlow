@@ -813,13 +813,14 @@ namespace BP.WF.HttpHandler
                     {
                         //判断刚退回时，退回接收人一打开，审核信息复制一条
                         Track lastTrack = tks[tks.Count - 1] as Track;
-                        if ((lastTrack.HisActionType == ActionType.Return || lastTrack.HisActionType == ActionType.Forward) && lastTrack.NDTo == tkDoc.NDFrom)
+                        if ((lastTrack.HisActionType == ActionType.Return || lastTrack.HisActionType == ActionType.Forward) 
+                            && lastTrack.NDTo == tkDoc.NDFrom)
                         {
-                            tkDt.Rows.Add(rdoc.ItemArray)["RDT"] = "";
+                          //  tkDt.Rows.Add(rdoc.ItemArray)["RDT"] = "";
 
-                            rdoc["IsDoc"] = false;
-                            rdoc["RDT"] = tkDoc.RDT;
-                            rdoc["Msg"] = tkDoc.MsgHtml;
+                         //   rdoc["IsDoc"] = false;
+                        //    rdoc["RDT"] = tkDoc.RDT;
+                       //     rdoc["Msg"] = tkDoc.MsgHtml;
                         }
                     }
                 }
@@ -1105,39 +1106,38 @@ namespace BP.WF.HttpHandler
 
                 //设置抄送状态 - 已经审核完毕.
                 Dev2Interface.Node_CC_SetSta(this.FK_Node, this.WorkID, WebUser.No, CCSta.CheckOver);
+                return "";
             }
-            else
+
+            #region 根据类型写入数据  qin
+            if (wcDesc.HisFrmWorkCheckType == FWCType.Check)  //审核组件
             {
-                #region 根据类型写入数据  qin
-                if (wcDesc.HisFrmWorkCheckType == FWCType.Check)  //审核组件
+                //判断是否审核组件中“协作模式下操作员显示顺序”设置为“按照接受人员列表先后顺序(官职大小)”，删除原有的空审核信息
+                if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter    )
                 {
-                    //判断是否审核组件中“协作模式下操作员显示顺序”设置为“按照接受人员列表先后顺序(官职大小)”，删除原有的空审核信息
-                    if (wcDesc.FWCOrderModel == FWCOrderModel.SqlAccepter)
-                    {
-                        sql = "DELETE FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
-                              " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + this.FK_Node +
-                              " AND NDTo = " + this.FK_Node + " AND EmpFrom = '" + WebUser.No + "' AND (Msg='' OR Msg IS NULL)";
-                        DBAccess.RunSQL(sql);
-                    }
-
-                    Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg,
-                                                      wcDesc.FWCOpLabel);
+                    sql = "DELETE FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
+                          " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + this.FK_Node +
+                          " AND NDTo = " + this.FK_Node + " AND EmpFrom = '" + WebUser.No + "'";
+                    DBAccess.RunSQL(sql);
                 }
 
-                if (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog)//日志组件
-                {
-                    Dev2Interface.WriteTrackDailyLog(this.FK_Flow, this.FK_Node, wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
-                }
-                if (wcDesc.HisFrmWorkCheckType == FWCType.WeekLog)//周报
-                {
-                    Dev2Interface.WriteTrackWeekLog(this.FK_Flow, this.FK_Node, wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
-                }
-                if (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog)//月报
-                {
-                    Dev2Interface.WriteTrackMonthLog(this.FK_Flow, this.FK_Node, wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
-                }
-                #endregion
+                Dev2Interface.WriteTrackWorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
             }
+
+            if (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog)//日志组件
+            {
+                Dev2Interface.WriteTrackDailyLog(this.FK_Flow, this.FK_Node, wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+            }
+            if (wcDesc.HisFrmWorkCheckType == FWCType.WeekLog)//周报
+            {
+                Dev2Interface.WriteTrackWeekLog(this.FK_Flow, this.FK_Node, wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+            }
+            if (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog)//月报
+            {
+                Dev2Interface.WriteTrackMonthLog(this.FK_Flow, this.FK_Node, wcDesc.Name, this.WorkID, this.FID, msg, wcDesc.FWCOpLabel);
+            }
+            #endregion
+
 
             sql = "SELECT MyPK,RDT FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE NDFrom = " + this.FK_Node + " AND ActionType = " + (int)ActionType.WorkCheck + " AND EmpFrom = '" + WebUser.No + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql, 1, 1, "MyPK", "RDT", "DESC");

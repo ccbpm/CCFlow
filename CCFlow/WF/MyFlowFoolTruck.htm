@@ -28,7 +28,7 @@
             try {
                 var head = document.getElementsByTagName('head')[0];
                 var script = document.createElement('script');
-                script.src = jsPath + "?Version=" + load.Version;
+                script.src = jsPath + "?Version=" + Math.random();
                 script.type = 'text/javascript';
                 if (chartset != undefined) {
                     script.chartset = chartset;

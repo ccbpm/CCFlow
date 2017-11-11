@@ -1931,9 +1931,9 @@ function figure_Template_Dtl(frmDtl) {
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
     if (frmDtl.DtlShowModel == "0") {
         if (pageData.IsReadOnly) {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=" + load.Version;
+            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
         } else {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=" + load.Version;
+            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
         }
     }
     else if (frmDtl.DtlShowModel == "1") {

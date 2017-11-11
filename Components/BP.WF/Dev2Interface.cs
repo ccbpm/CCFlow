@@ -3603,6 +3603,7 @@ namespace BP.WF
 
                 if (num > 1)
                 {
+                    ps.Clear();
                     ps.SQL = "DELETE FROM ND" + int.Parse(flowNo) + "Track WHERE  Tag=" + dbStr + "Tag ";
                     ps.Add(TrackAttr.Tag, tag);
                     DBAccess.RunSQL(ps);

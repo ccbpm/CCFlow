@@ -1,0 +1,1031 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_GroupField>
+    <OID>241</OID>
+    <Lab>从表多附件权限控制</Lab>
+    <EnName>Demo_FJDtl</EnName>
+    <Idx>1</Idx>
+    <GUID />
+    <CtrlType />
+    <CtrlID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_0</MyPK>
+    <Lab>汽车票</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_1</MyPK>
+    <Lab>打的票</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_2</MyPK>
+    <Lab>火车票</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>2</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_3</MyPK>
+    <Lab>飞机票</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>3</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>FYLX_CH_4</MyPK>
+    <Lab>其它</Lab>
+    <EnumKey>FYLX</EnumKey>
+    <IntKey>4</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>JiMiChengDu_CH_0</MyPK>
+    <Lab>公开</Lab>
+    <EnumKey>JiMiChengDu</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>JiMiChengDu_CH_1</MyPK>
+    <Lab>保密</Lab>
+    <EnumKey>JiMiChengDu</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>JiMiChengDu_CH_2</MyPK>
+    <Lab>秘密</Lab>
+    <EnumKey>JiMiChengDu</EnumKey>
+    <IntKey>2</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>JiMiChengDu_CH_3</MyPK>
+    <Lab>机密</Lab>
+    <EnumKey>JiMiChengDu</EnumKey>
+    <IntKey>3</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_MapData>
+    <No>Demo_FJDtl</No>
+    <Name>从表多附件权限控制</Name>
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableWidth>800</TableWidth>
+    <TableHeight>900</TableHeight>
+    <TableCol>4</TableCol>
+  </Sys_MapData>
+  <Sys_MapAttr>
+    <MyPK>Demo_FJDtl_FK_DQ</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <KeyOfEn>FK_DQ</KeyOfEn>
+    <Name>地区</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>CN_PQ</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>178</X>
+    <Y>476</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>241</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_FJDtl_JiMiChengDu</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <KeyOfEn>JiMiChengDu</KeyOfEn>
+    <Name>机密程度</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>JiMiChengDu</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>411</X>
+    <Y>472</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>241</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_FJDtl_OID</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>241</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_FJDtl_RDT</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>241</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_FJDtl_RiQiShiJianZiDuan</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <KeyOfEn>RiQiShiJianZiDuan</KeyOfEn>
+    <Name>日期时间字段</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>632</X>
+    <Y>442</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>241</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_FJDtl_RiQiZiDuan</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <KeyOfEn>RiQiZiDuan</KeyOfEn>
+    <Name>日期字段</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>6</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>392</X>
+    <Y>439</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>241</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_FJDtl_WenBenZiDuan</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <KeyOfEn>WenBenZiDuan</KeyOfEn>
+    <Name>文本字段</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>20</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>186</X>
+    <Y>443</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>241</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_BeiZhu</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>BeiZhu</KeyOfEn>
+    <Name>备注</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>200</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>0</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_DanJia</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>DanJia</KeyOfEn>
+    <Name>单价</Name>
+    <DefVal>0.00</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_FID</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>FID</KeyOfEn>
+    <Name>FID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_FYLX</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>FYLX</KeyOfEn>
+    <Name>费用类型</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>FYLX</UIBindKey>
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_OID</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>主键</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_RDT</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>记录时间</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_Rec</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>Rec</KeyOfEn>
+    <Name>记录人</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_RefPK</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>RefPK</KeyOfEn>
+    <Name>关联ID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_ShuLiang</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>ShuLiang</KeyOfEn>
+    <Name>数量</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>DtlDemo_FJDtl1_XiaoJi</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <KeyOfEn>XiaoJi</KeyOfEn>
+    <Name>小计</Name>
+    <DefVal>0.00</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>8</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>0</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapExt>
+    <MyPK>AutoFull_DtlDemo_FJDtl1_XiaoJi</MyPK>
+    <FK_MapData>DtlDemo_FJDtl1</FK_MapData>
+    <ExtType>AutoFull</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>XiaoJi</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>@单价*@数量</Doc>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_FrmLine>
+    <MyPK>LE_1_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <X1>84</X1>
+    <X2>687</X2>
+    <Y1>540</Y1>
+    <Y2>540</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLab>
+    <MyPK>LB_1_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>机密程度</Text>
+    <X>326</X>
+    <Y>477</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_10_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>如果在第2个节点上不成删除与上传，就是权限控制成功了。</Text>
+    <X>150</X>
+    <Y>7</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_11_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>字@段@区@域</Text>
+    <X>86</X>
+    <Y>434</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>17</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_2_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>多附件</Text>
+    <X>84</X>
+    <Y>6</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_3_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>如果指定的列在第2个节点上只读，就是权限控制成功了。</Text>
+    <X>132</X>
+    <Y>155</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_4_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>文本字段</Text>
+    <X>127</X>
+    <Y>444</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_5_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>从表</Text>
+    <X>82</X>
+    <Y>159</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_6_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>日期字段</Text>
+    <X>324</X>
+    <Y>441</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_7_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>日期时间字段</Text>
+    <X>542</X>
+    <Y>444</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_8_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>如果这些字段在第2个节点上只读，就是权限控制成功了。</Text>
+    <X>298</X>
+    <Y>505</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_9_Demo_FJDtl</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <Text>地区</Text>
+    <X>133</X>
+    <Y>478</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmAttachment>
+    <MyPK>Demo_FJDtl_FJ</MyPK>
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <UploadType>1</UploadType>
+    <X>81</X>
+    <Y>34</Y>
+    <W>735</W>
+    <H>117</H>
+    <NoOfObj>FJ</NoOfObj>
+    <Name>我的附件</Name>
+    <Exts />
+    <SaveTo>/DataUser/UploadFile/</SaveTo>
+    <IsUpload>1</IsUpload>
+    <DeleteWay>0</DeleteWay>
+    <IsDownload>1</IsDownload>
+    <AtPara />
+  </Sys_FrmAttachment>
+  <Sys_MapDtl>
+    <No>DtlDemo_FJDtl1</No>
+    <Name />
+    <FK_MapData>Demo_FJDtl</FK_MapData>
+    <PTable />
+    <GroupField />
+    <RefPK />
+    <FEBD />
+    <Model>0</Model>
+    <RowsOfList>6</RowsOfList>
+    <IsEnableGroupField>0</IsEnableGroupField>
+    <IsShowSum>1</IsShowSum>
+    <IsShowIdx>1</IsShowIdx>
+    <IsCopyNDData>1</IsCopyNDData>
+    <IsHLDtl>0</IsHLDtl>
+    <IsReadonly>0</IsReadonly>
+    <IsShowTitle>1</IsShowTitle>
+    <IsView>1</IsView>
+    <IsInsert>1</IsInsert>
+    <IsDelete>1</IsDelete>
+    <IsUpdate>1</IsUpdate>
+    <IsEnablePass>0</IsEnablePass>
+    <IsEnableAthM>0</IsEnableAthM>
+    <IsEnableM2M>0</IsEnableM2M>
+    <IsEnableM2MM>0</IsEnableM2MM>
+    <WhenOverSize>0</WhenOverSize>
+    <DtlOpenType>1</DtlOpenType>
+    <DtlShowModel>0</DtlShowModel>
+    <X>81</X>
+    <Y>181</Y>
+    <H>246</H>
+    <W>755</W>
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <MTR />
+    <FilterSQLExp />
+    <GUID />
+    <FK_Node>0</FK_Node>
+    <IsExp>1</IsExp>
+    <IsImp>1</IsImp>
+    <IsEnableSelectImp>0</IsEnableSelectImp>
+    <ImpSQLSearch />
+    <ImpSQLInit />
+    <ImpSQLFull />
+    <AtPara />
+    <SubThreadWorker />
+    <SubThreadWorkerText />
+  </Sys_MapDtl>
+</NewDataSet>

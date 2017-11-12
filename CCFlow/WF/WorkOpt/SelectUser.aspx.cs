@@ -132,7 +132,7 @@ namespace CCFlow.WF.WorkOpt
             }
             else
             {
-                string filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select FK_Emp from Port_EmpDept where FK_Dept in ({0}))", deptId);
+                string filter_dept = deptId == "0" ? String.Empty : String.Format(" and Port_Emp.No in (Select No as FK_Emp from Port_Emp where FK_Dept in ({0}))", deptId);
                 string filter_name = String.IsNullOrEmpty(name) ? String.Empty : String.Format(" and Port_Emp.Name+','+Port_Emp.NO like '%{0}%'", name);
                 if (BP.Sys.SystemConfig.AppCenterDBType == BP.DA.DBType.MySQL)
                 {

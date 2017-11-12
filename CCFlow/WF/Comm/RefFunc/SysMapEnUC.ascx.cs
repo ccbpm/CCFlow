@@ -1254,7 +1254,7 @@ namespace CCFlow.WF.Comm.RefFunc
                     string path = this.Request.PhysicalApplicationPath.ToLower();
                     string path1 = filePath.ToLower();
                     path1 = path1.Replace(path, "");
-                    url = "&nbsp;&nbsp;<a href='../" + path1 + "/" + en.PKVal + "." + fileExt + "' target=_blank ><img src='../Images/FileType/" + fileExt + ".gif' border=0 />" + fileName + "</a>";
+                    url = "&nbsp;&nbsp;<a href='../" + path1 + "/" + en.PKVal + "." + fileExt + "' target=_blank ><img src='../../Img/FileType/" + fileExt + ".gif' border=0 />" + fileName + "</a>";
                 }
 
                 this.AddTR();

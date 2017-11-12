@@ -922,7 +922,7 @@ namespace CCFlow.Web.Comm.UC
                     string path = this.Request.PhysicalApplicationPath.ToLower();
                     string path1 = filePath.ToLower();
                     path1 = path1.Replace(path, "");
-                    url = "&nbsp;&nbsp;<a href='../" + path1 + "/" + en.PKVal + "." + fileExt + "' target=_blank ><img src='../Images/FileType/" + fileExt + ".gif' border=0 />" + fileName + "</a>";
+                    url = "&nbsp;&nbsp;<a href='../" + path1 + "/" + en.PKVal + "." + fileExt + "' target=_blank ><img src='../../Img/FileType/" + fileExt + ".gif' border=0 />" + fileName + "</a>";
                 }
 
                 this.AddTR();
@@ -1737,7 +1737,7 @@ namespace CCFlow.Web.Comm.UC
                     if (fileExt != "")
                     {
                         System.Web.UI.WebControls.ImageButton btn1 = new System.Web.UI.WebControls.ImageButton();
-                        btn1.ImageUrl = "./../../Img/Btn/Delete.gif";
+                        btn1.ImageUrl = "../../Img/Btn/Delete.gif";
 
                         //  btn1.Text = "ÒÆ³ý";
                         btn1.Attributes.Add("class", "Btn1");
@@ -1776,7 +1776,7 @@ namespace CCFlow.Web.Comm.UC
                         this.Add(lab);
 
                         System.Web.UI.WebControls.ImageButton btn_m = new System.Web.UI.WebControls.ImageButton();
-                        btn_m.ImageUrl = "./../../Img/Btn/Delete.gif";
+                        btn_m.ImageUrl = "../../Img/Btn/Delete.gif";
 
                         //btn_m.ImageUrl = "./Img/Btn/Del.gif";
                         btn_m.Attributes.Add("class", "Btn1");
@@ -2385,7 +2385,7 @@ namespace CCFlow.Web.Comm.UC
                 if (fileExt != "")
                 {
                     System.Web.UI.WebControls.ImageButton btn1 = new System.Web.UI.WebControls.ImageButton();
-                    btn1.ImageUrl = "./../../Img/Btn/Delete.gif";
+                    btn1.ImageUrl = "../../Img/Btn/Delete.gif";
 
                     //  btn1.Text = "ÒÆ³ý";
                     btn1.Attributes.Add("class", "Btn1");
@@ -2421,11 +2421,11 @@ namespace CCFlow.Web.Comm.UC
                 else
                 {
                     this.Add("<TD class=TD colspan=2>");
-                    string lab = "&nbsp;<a href='" + cf.FJWebPath + "/" + sf.OID + "." + sf.MyFileExt + "' target=_blank ><img src='../Images/FileType/" + sf.MyFileExt + ".gif' border=0 />" + sf.MyFileName + "." + sf.MyFileExt + "</a>";
+                    string lab = "&nbsp;<a href='" + cf.FJWebPath + sf.OID + "." + sf.MyFileExt + "' target=_blank ><img src='../../Img/FileType/" + sf.MyFileExt + ".gif' border=0 />" + sf.MyFileName + "." + sf.MyFileExt + "</a>";
                     this.Add(lab);
 
                     System.Web.UI.WebControls.ImageButton btn_m = new System.Web.UI.WebControls.ImageButton();
-                    btn_m.ImageUrl = "./Img/Btn/Delete.gif";
+                    btn_m.ImageUrl = "../../Img/Btn/Delete.gif";
 
                     //btn_m.ImageUrl = "./Img/Btn/Del.gif";
                     btn_m.Attributes.Add("class", "Btn1");

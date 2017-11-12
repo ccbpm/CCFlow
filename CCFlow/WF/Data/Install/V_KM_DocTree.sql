@@ -14,7 +14,7 @@ inner join Port_Dept on Port_Dept.No = KM_FileInfo.FK_Dept
 GO
 ----------------------------------------------------------------------------------------------------------------
 CREATE VIEW V_KM_EmpDeptTree AS 
-SELECT b.FK_Dept,a.FK_Emp,b.RefTreeNo FROM Port_EmpDept a,KM_TreeDept b
+SELECT b.FK_Dept,a.No,b.RefTreeNo FROM Port_Emp a,KM_TreeDept b
 WHERE a.FK_Dept = b.FK_Dept
 
 GO

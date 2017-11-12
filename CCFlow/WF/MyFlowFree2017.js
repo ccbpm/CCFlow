@@ -1207,8 +1207,23 @@ function GenerCheckIDs() {
     return checkBoxIDs;
 }
 
+
+// 检查审核组件,是否加盖了电子签章？
+function CheckFWC() {
+    var frm = document.getElementById('FWC');
+    if (frm == null || frm == undefined)
+        return true;
+    return frm.contentWindow.IsCanSendWork();
+}
+
+
 //发送
 function Send() {
+
+    if (CheckFWC() == false) {
+        alert('请您执行电子签章.');
+        return;
+    }
 
     //检查最小最大长度.
     var f = CheckMinMaxLength();
@@ -2498,7 +2513,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
         $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
     }
     src += "&r=q" + paras;
-    var eleHtml = '<div id="FFWC' + wf_node.NodeID + '">' + "<iframe style='width:100%' height=" + h + 800 + "' id='FFWC" + wf_node.NodeID + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
+    var eleHtml = '<div >' + "<iframe style='width:100%' height=" + h + 800 + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto ></iframe>" + '</div>';
     eleHtml = $(eleHtml);
     eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
 

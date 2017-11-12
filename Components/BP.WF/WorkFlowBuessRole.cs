@@ -1066,7 +1066,7 @@ namespace BP.WF
                         if (Glo.OSModel== OSModel.OneOne)
                            sql += "(SELECT No FK_Emp FROM Port_Emp WHERE FK_Dept IN ";
                         else
-                            sql += "(SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ";
+                            sql += "(SELECT No FROM Port_Emp WHERE FK_Dept IN ";
 
 
                         sql += "( SELECT FK_Dept FROM WF_NodeDept WHERE FK_Node=" + dbStr + "FK_Node1)";

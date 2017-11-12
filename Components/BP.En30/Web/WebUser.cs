@@ -133,7 +133,7 @@ namespace BP.Web
 				{
 					string sql = "";
 					if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
-						sql = "SELECT FK_Dept FROM Port_EmpDept WHERE FK_Emp='" + em.No + "'";
+						sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + em.No + "'";
 					else
 						sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + em.No + "'";
 
@@ -273,7 +273,7 @@ namespace BP.Web
 				{
 					string sql = "";
 					if (BP.Sys.SystemConfig.OSModel == OSModel.OneOne)
-						sql = "SELECT FK_Dept FROM Port_EmpDept WHERE FK_Emp='" + userNo + "'";
+						sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + userNo + "'";
 					else
 						sql = "SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + userNo + "'";
 
@@ -613,7 +613,7 @@ namespace BP.Web
 					string dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
 					if (dept == null && SystemConfig.OSModel == OSModel.OneMore)
 					{
-						sql = "SELECT FK_Dept FROM Port_EmpDept WHERE FK_Emp='" + WebUser.No + "'";
+						sql = "SELECT FK_Dept FROM Port_Emp WHERE No='" + WebUser.No + "'";
 						dept = BP.DA.DBAccess.RunSQLReturnStringIsNull(sql, null);
 					}
 

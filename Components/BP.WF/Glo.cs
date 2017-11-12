@@ -224,35 +224,6 @@ namespace BP.WF
                 Cond cnd = new Cond();
                 cnd.CheckPhysicsTable();
 
-                #region 创建 Port_EmpDept 视图兼容旧版本.
-                //创建视图.
-                try
-                {
-                    BP.DA.DBAccess.RunSQL("DROP TABLE Port_EmpDept");
-                }
-                catch
-                {
-                }
-
-                try
-                {
-                    BP.DA.DBAccess.RunSQL("DROP VIEW Port_EmpDept");
-                }
-                catch
-                {
-                }
-
-                if (DBAccess.IsExitsObject("Port_EmpDept") == false)
-                {
-                    if (SystemConfig.OSModel == Sys.OSModel.OneOne)
-                        sql = " CREATE VIEW Port_EmpDept as SELECT No as FK_Emp, FK_Dept FROM Port_Emp ";
-                    else
-                        sql = " CREATE VIEW Port_EmpDept as SELECT FK_Emp, FK_Dept FROM Port_DeptEmpStation ";
-
-                    BP.DA.DBAccess.RunSQL(sql);
-                }
-                #endregion 创建视图.
-
                 #region  增加week字段,方便按周统计.
                 BP.WF.GenerWorkFlow gwf = new GenerWorkFlow();
                 gwf.CheckPhysicsTable();
@@ -986,7 +957,6 @@ namespace BP.WF
                         case "WF_GenerEmpWorkDtls":
                         case "WF_GenerEmpWorks":
                         case "V_FlowData":
-                        case "Port_EmpDept":
                             continue;
                         case "Sys_Enum":
                             en.CheckPhysicsTable();
@@ -1001,37 +971,6 @@ namespace BP.WF
                 {
                 }
             }
-
-          
-            #region 创建 Port_EmpDept 视图兼容旧版本.
-            //创建视图.
-            try
-            {
-                BP.DA.DBAccess.RunSQL("DROP TABLE Port_EmpDept");
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                BP.DA.DBAccess.RunSQL("DROP VIEW Port_EmpDept");
-            }
-            catch
-            {
-            }
-
-            if (DBAccess.IsExitsObject("Port_EmpDept") == false)
-            {
-                string sql = "";
-                if (SystemConfig.OSModel == Sys.OSModel.OneOne)
-                    sql = " CREATE VIEW Port_EmpDept as SELECT No as FK_Emp, FK_Dept FROM Port_Emp ";
-                else
-                    sql = " CREATE VIEW Port_EmpDept as SELECT FK_Emp, FK_Dept FROM Port_DeptEmpStation ";
-
-                BP.DA.DBAccess.RunSQL(sql);
-            }
-            #endregion 创建视图.
 
             #endregion 修复
 
@@ -2071,17 +2010,6 @@ namespace BP.WF
                     return "Port_EmpStation";
             }
         }
-        public static string EmpDept
-        {
-            get
-            {
-                if (BP.WF.Glo.OSModel == BP.Sys.OSModel.OneMore)
-                    return "Port_DeptEmp";
-                else
-                    return "Port_EmpDept";
-            }
-        }
-
         /// <summary>
         /// 是否admin
         /// </summary>

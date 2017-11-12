@@ -1019,8 +1019,8 @@ namespace BP.WF
                     sql = "SELECT FK_Flow FROM V_FlowStarter WHERE FK_Emp='" + userNo + "'";
                     sql += " UNION ";
                     sql += "SELECT FK_Flow FROM WF_Node WHERE NodePosType=1 AND NodeID IN ";
-                    sql += "(SELECT a.FK_Node FROM WF_NodeDept A, Port_EmpDept B, WF_NodeStation C, Port_EmpStation D "
-                    + " WHERE A.FK_Dept= B.FK_Dept AND B.FK_Emp='" + userNo + "' AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp='" + userNo + "')";
+                    sql += "(SELECT a.FK_Node FROM WF_NodeDept A, Port_Emp B, WF_NodeStation C, Port_EmpStation D "
+                    + " WHERE A.FK_Dept= B.FK_Dept AND B.No='" + userNo + "' AND  A.FK_Node=C.FK_Node AND C.FK_Station=D.FK_Station AND D.FK_Emp='" + userNo + "')";
 
                 }
                 else
@@ -8807,7 +8807,7 @@ namespace BP.WF
                 sql = "SELECT A.No,A.Name, A.FK_Dept, B.Name as DeptName FROM Port_Emp A,Port_Dept B WHERE A.FK_Dept=B.No AND a.NO IN ( ";
                 sql += "SELECT FK_EMP FROM Port_DeptEmpStation WHERE FK_STATION ";
                 sql += "IN (SELECT FK_STATION FROM WF_NodeStation WHERE FK_Node=" + nodeID + ") ";
-                sql += ") AND a.No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept ='" + WebUser.FK_Dept + "')";
+                sql += ") AND a.No IN (SELECT No FROM Port_Emp WHERE FK_Dept ='" + WebUser.FK_Dept + "')";
                 sql += " ORDER BY B.Idx,B.No,A.Idx,A.No ";
             }
             else

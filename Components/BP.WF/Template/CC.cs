@@ -72,9 +72,7 @@ namespace BP.WF.Template
                 if (Glo.OSModel == BP.Sys.OSModel.OneOne)
                     sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B WHERE  A.FK_Dept=B.FK_Dept AND B.FK_Node=" + this.NodeID;
                 else
-                    sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B, Port_EmpDept C WHERE  A.No=C.FK_Emp AND B.FK_Dept=C.FK_Dept AND B.FK_Node=" + this.NodeID;
-
-                //sql = "SELECT No,Name FROM Port_Emp WHERE No IN (SELECT FK_Emp FROM Port_EmpDept WHERE FK_Dept IN ( SELECT FK_Dept FROM WF_CCDept WHERE FK_Node=" + this.NodeID + "))";
+                    sql = "SELECT A.No, A.Name FROM Port_Emp A, WF_CCDept B  WHERE  B.FK_Dept=A.FK_Dept AND B.FK_Node=" + this.NodeID;
 
                 mydt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow mydr in mydt.Rows)

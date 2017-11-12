@@ -1530,7 +1530,7 @@
     <No>Demo_Inc05Dtl1</No>
     <Name>技术人员工作简历表</Name>
     <FK_MapData>Demo_Inc05</FK_MapData>
-    <PTable>skill_work_list</PTable>
+    <PTable>Demo_Inc05Dtl1</PTable>
     <GroupField />
     <RefPK />
     <FEBD />

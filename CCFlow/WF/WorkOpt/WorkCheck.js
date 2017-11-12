@@ -428,3 +428,8 @@
                 return;
             }
         }
+
+        //为判断是否增加电子签章所用.
+        function IsCanSendWork() {
+            return true;
+        }

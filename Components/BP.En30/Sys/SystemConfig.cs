@@ -130,8 +130,6 @@ namespace BP.Sys
         }
         #endregion
 
-
-
         #region 组织结构的配置.
 
         /// <summary>
@@ -795,6 +793,16 @@ namespace BP.Sys
 
 
         #region 处理临时缓存
+        /// <summary>
+        /// 回话丢失时间长度(默认为500分钟)
+        /// </summary>
+        public static int SessionLostMinute
+        {
+            get
+            {
+                return SystemConfig.GetValByKeyInt("SessionLostMinute", 500);
+            }
+        }
         /// <summary>
         /// 放在 Temp 中的cash 多少时间失效。
         /// 0, 表示永久不失效。

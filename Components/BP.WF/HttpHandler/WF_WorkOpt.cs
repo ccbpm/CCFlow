@@ -947,7 +947,7 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CustomerNo == "TianYe")
             {
                 string tTable = "ND" + int.Parse(FK_Flow) + "Track";
-                string sql = "SELECT distinct a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE B.ActionType=22 AND a.No=b.EmpFrom AND B.WorkID=" + this.WorkID;
+                string sql = "SELECT distinct a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE (A.No='"+WebUser.No+"') OR B.ActionType=22 AND a.No=b.EmpFrom AND B.WorkID=" + this.WorkID;
 
                 DataTable dtTrack = DBAccess.RunSQLReturnTable(sql);
                 dtTrack.TableName = "SignType";

@@ -881,10 +881,8 @@ function CheckFWC() {
 //发送
 function Send() {
 
-    if (CheckFWC() == false) {
-        alert('请您执行电子签章.');
-        return;
-    }
+    if (CheckFWC() == false)
+        return false;
 
     //检查最小最大长度.
     var f = CheckMinMaxLength();

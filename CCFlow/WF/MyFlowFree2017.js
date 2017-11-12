@@ -1220,10 +1220,8 @@ function CheckFWC() {
 //发送
 function Send() {
 
-    if (CheckFWC() == false) {
-        alert('请您执行电子签章.');
-        return;
-    }
+    if (CheckFWC() == false)
+        return false;
 
     //检查最小最大长度.
     var f = CheckMinMaxLength();
@@ -2116,7 +2114,7 @@ function figure_MapAttr_Template(mapAttr) {
 
     eleHtml = $('<div>' + eleHtml + '</div>');
     eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
-    eleHtml.css('position', 'absolute').css('top', mapAttr.Y - 10).css('left', mapAttr.X);
+    eleHtml.css('position', 'absolute').css('top', mapAttr.Y ).css('left', mapAttr.X);
 
     if (mapAttr.UIIsEnable == "0") {
         enableAttr = eleHtml.find('[name=TB_' + mapAttr.KeyOfEn + ']').attr('disabled', true);
@@ -2159,7 +2157,7 @@ function figure_Template_Label(frmLab) {
     eleHtml = $(eleHtml);
     var text = frmLab.Text==null?"":frmLab.Text.replace(/@/g, "<br>");
     eleHtml.html(text);
-    eleHtml.css('position', 'absolute').css('top', frmLab.Y).css('left', frmLab.X).css('font-size', frmLab.FontSize)
+    eleHtml.css('position', 'absolute').css('top', frmLab.Y-10).css('left', frmLab.X).css('font-size', frmLab.FontSize)
         .css('padding-top', '5px').css('color', TranColorToHtmlColor(frmLab.FontColr));
     analysisFontStyle(eleHtml, frmLab.FontStyle, frmLab.isBold, frmLab.IsItalic);
     return eleHtml;

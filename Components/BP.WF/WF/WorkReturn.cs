@@ -149,8 +149,17 @@ namespace BP.WF
                     if (nodeid == this.ReturnToNode.NodeID)
                         continue;
 
+                    //删除中间的节点.
                     ps.Clear();
                     ps.SQL = "DELETE FROM WF_GenerWorkerList WHERE FK_Node=" + dbStr + "FK_Node AND (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) ";
+                    ps.Add("FK_Node", nodeid);
+                    ps.Add("WorkID1", this.WorkID);
+                    ps.Add("WorkID2", this.WorkID);
+                    DBAccess.RunSQL(ps);
+
+                    //删除审核意见, 已经考虑到了  @于庆海翻译。
+                    ps.Clear();
+                    ps.SQL = "DELETE FROM ND" + int.Parse(this.ReturnToNode.FK_Flow) + "Track WHERE FK_Node=" + dbStr + "FK_Node AND  (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) AND ActionType=22";
                     ps.Add("FK_Node", nodeid);
                     ps.Add("WorkID1", this.WorkID);
                     ps.Add("WorkID2", this.WorkID);
@@ -868,7 +877,6 @@ namespace BP.WF
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
             rw.Insert();
 
-
             // 为电建增加一个退回并原路返回的日志类型.
             if (IsBackTrack == true)
             {
@@ -892,6 +900,8 @@ namespace BP.WF
             {
                 Log.DebugWriteWarning(ex.Message);
             }
+
+          
 
             //把退回原因加入特殊变量里. 为软通小杨处理rpt变量不能替换的问题.
 

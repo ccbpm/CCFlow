@@ -828,8 +828,21 @@ namespace BP.WF.HttpHandler
 
             #endregion 判断是否显示 - 历史审核信息显示
 
-            #region 审核意见填写
-            if (isExitTb_doc && wcDesc.HisFrmWorkCheckSta == FrmWorkCheckSta.Enable && isCanDo && dotype != "View")
+            #region 审核意见默认填写
+
+            //首先判断当前是否有此意见? 如果是退回的该信息已经存在了.
+            bool isHaveMyInfo = false;
+            foreach (DataRow dr in tkDt.Rows)
+            {
+                string fk_node=dr["NodeID"].ToString();
+                string empFrom = dr["EmpFrom"].ToString();
+                if ( int.Parse(fk_node) == this.FK_Node && empFrom == Web.WebUser.No)
+                    isHaveMyInfo = true;
+            }
+
+            // 增加默认的审核意见.
+            if (isExitTb_doc && wcDesc.HisFrmWorkCheckSta == FrmWorkCheckSta.Enable && isCanDo
+                && dotype != "View" && isHaveMyInfo == false)
             {
                 DataRow[] rows = null;
                 nd = nds.GetEntityByKey(this.FK_Node) as Node;

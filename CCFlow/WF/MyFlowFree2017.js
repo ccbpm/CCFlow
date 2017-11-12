@@ -1727,7 +1727,7 @@ function GenerWorkNode() {
                 var createdFigure = figure_Template_HyperLink(frmLink);
                 $('#CCForm').append(createdFigure);
             }
-
+            debugger
             //循环 图片附件
             for (var i in flow_Data.Sys_FrmImgAth) {
                 var frmImgAth = flow_Data.Sys_FrmImgAth[i];
@@ -2287,7 +2287,7 @@ function figure_Template_ImageAth(frmImageAth) {
     var isEdit = frmImageAth.IsEdit;
     var eleHtml = $("<div></div>");
     var img = $("<img/>");
-
+    debugger
     var imgSrc = "/WF/Data/Img/LogH.PNG";
     //获取数据
     if (workNodeData.Sys_FrmImgAthDB) {

@@ -224,13 +224,13 @@ function PopFullCtrl(val1, val2) {
 }
 
 /* 内置的Pop自动返回值. google 版 软通*/
-function ReturnValCCFormPopValGoogle(extType,ctrl, fk_mapExt, refEnPK, width, height, title, formData, dtlNo) {
+function ReturnValCCFormPopValGoogle(extType, ctrl, fk_mapExt, refEnPK, width, height, title, formData, dtlNo) {
     //设置摸态框的宽度和高度
     $('#returnPopValModal .modal-dialog').height(height);
     $('#returnPopValModal .modal-dialog').width(width);
     $('#returnPopValModal .modal-dialog').css('margin-left', 'auto');
     $('#returnPopValModal .modal-dialog').css('margin-right', 'auto');
-        
+
     //ctrl = $('#' + ctrl);
     var wfpreHref = GetLocalWFPreHref();
     var fd;
@@ -243,8 +243,8 @@ function ReturnValCCFormPopValGoogle(extType,ctrl, fk_mapExt, refEnPK, width, he
     else {
         fd = getFormData(false, false);
     }
-
-    if (extType=="PopVal")
+    debugger
+    if (extType == "PopVal")
         url = wfpreHref + '/WF/CCForm/PopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape(fd) + "&m=" + Math.random();
 
     if (extType == "PopFullCtrl")
@@ -271,8 +271,7 @@ function ReturnValCCFormPopValGoogle(extType,ctrl, fk_mapExt, refEnPK, width, he
         }
 
         if (returnValSetObj != null && returnValObj != null) {
-            if (returnValSetObj[0].PopValWorkModel == "Tree" ||
-                returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
+            if (returnValSetObj[0].PopValWorkModel == "Tree" || returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
                 frames["iframePopModalForm"].window.GetTreeReturnVal();
                 if (returnValSetObj[0].PopValFormat == "OnlyNo") {
                     setValForPopval(ctrl.id, dtlWin, returnValObj.No);
@@ -294,7 +293,7 @@ function ReturnValCCFormPopValGoogle(extType,ctrl, fk_mapExt, refEnPK, width, he
             } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
                 returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
                 if (returnValSetObj[0].PopValFormat == "OnlyNo") {
-                    $(ctrl).val(returnValObj.No);
+                    $("#" + ctrl).val(returnValObj.No);
                     setValForPopval(ctrl.id, dtlWin, returnValObj.No);
                 } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
                     //$(ctrl).val(returnValObj.Name);

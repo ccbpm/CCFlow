@@ -1014,10 +1014,6 @@ function InitMapAttr(mapAttrData, frmData) {
                         defValue = defValue;
                     }
                     eleHtml += "<div class='divAth' data-target='" + mapAttr.KeyOfEn + "'  id='DIV_" + mapAttr.KeyOfEn + "'>" + defValue + "</div>";
-
-                    //var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
-                    //'<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
-                    //  tb.parent().html(eleHtml);
                 }
             }
 

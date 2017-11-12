@@ -62,7 +62,7 @@ namespace BP.WF.DTS
             root.ParentNo = "-1";
             root.Insert();
 
-            string frmPath = SystemConfig.PathOfData + "\\FlowDemo\\Form\\";
+            string frmPath = SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\Form\\";
             DirectoryInfo dirInfo = new DirectoryInfo(frmPath);
             DirectoryInfo[] dirs = dirInfo.GetDirectories();
             int i = 0;
@@ -111,7 +111,7 @@ namespace BP.WF.DTS
             #region 处理流程.
             FlowSorts sorts = new FlowSorts();
             sorts.ClearTable();
-              dirInfo = new DirectoryInfo(SystemConfig.PathOfData + "\\FlowDemo\\Flow\\");
+            dirInfo = new DirectoryInfo(SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\Flow\\");
             dirs = dirInfo.GetDirectories();
 
             FlowSort fsRoot = new FlowSort();
@@ -150,7 +150,7 @@ namespace BP.WF.DTS
 
 
                 //调度它的下一级目录.
-                DirectoryInfo dirSubInfo = new DirectoryInfo(SystemConfig.PathOfData + "\\FlowDemo\\Flow\\"+dir.Name);
+                DirectoryInfo dirSubInfo = new DirectoryInfo(SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\Flow\\" + dir.Name);
                 DirectoryInfo[] myDirs = dirSubInfo.GetDirectories();
                 foreach (DirectoryInfo mydir in myDirs)
                 {

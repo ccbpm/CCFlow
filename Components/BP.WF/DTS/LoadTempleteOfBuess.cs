@@ -24,7 +24,7 @@ namespace BP.WF.DTS
         {
             this.Title = "装载流程演示模板";
             this.Help = "为了帮助各位爱好者学习与掌握ccflow, 特提供一些流程模板与表单模板以方便学习。";
-            this.Help += "@这些模板的位于" + SystemConfig.PathOfData + "\\FlowDemo\\FlowBuess";
+            this.Help += "@这些模板的位于" + SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\FlowBuess";
         }
         /// <summary>
         /// 设置执行变量
@@ -62,7 +62,7 @@ namespace BP.WF.DTS
             root.ParentNo = "-1";
             root.Insert();
 
-            string frmPath = SystemConfig.PathOfData + "\\FlowDemo\\Form\\";
+            string frmPath = SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\Form\\";
             DirectoryInfo dirInfo = new DirectoryInfo(frmPath);
             DirectoryInfo[] dirs = dirInfo.GetDirectories();
             int i = 0;
@@ -115,7 +115,7 @@ namespace BP.WF.DTS
             #region 处理流程.
             FlowSorts sorts = new FlowSorts();
             sorts.ClearTable();
-            dirInfo = new DirectoryInfo(SystemConfig.PathOfData + "\\FlowDemo\\FlowBuess\\");
+            dirInfo = new DirectoryInfo(SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\FlowBuess\\");
             dirs = dirInfo.GetDirectories();
 
             FlowSort fsRoot = new FlowSort();
@@ -162,7 +162,7 @@ namespace BP.WF.DTS
                 }
 
                 //调度它的下一级目录.
-                DirectoryInfo dirSubInfo = new DirectoryInfo(SystemConfig.PathOfData + "\\FlowDemo\\FlowBuess\\" + dir.Name);
+                DirectoryInfo dirSubInfo = new DirectoryInfo(SystemConfig.PathOfWebApp + "\\SDKFlowDemo\\FlowDemo\\FlowBuess\\" + dir.Name);
                 DirectoryInfo[] myDirs = dirSubInfo.GetDirectories();
                 foreach (DirectoryInfo mydir in myDirs)
                 {

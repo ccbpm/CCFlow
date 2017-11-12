@@ -262,13 +262,16 @@ namespace BP.Sys
                 this.SetValByKey(EnCfgAttr.FJSavePath, value);
             }
         }
+        /// <summary>
+        /// 附件存储位置.
+        /// </summary>
         public string FJWebPath
         {
             get
             {
                 string str = this.GetValStringByKey(EnCfgAttr.FJWebPath);
                 if (str == "" || str == null)
-                    return BP.Sys.Glo.Request.ApplicationPath + "/DataUser/" + this.No + "/";
+                    return BP.Sys.Glo.Request.ApplicationPath + "DataUser/" + this.No + "/";
                 return str;
             }
             set

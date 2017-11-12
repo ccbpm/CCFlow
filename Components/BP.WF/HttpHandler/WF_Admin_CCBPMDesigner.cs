@@ -439,12 +439,14 @@ namespace BP.WF.HttpHandler
                 // 执行升级
                 string str = BP.WF.Glo.UpdataCCFlowVer();
                 if (str == null)
-                    str = "ccbpm 准备完毕,欢迎登录.";
+                    str = "ccbpm 准备完毕,欢迎登录,当前小版本号为:" + BP.WF.Glo.Ver;
                 return str;
             }
             catch (Exception ex)
             {
-                return "err@升级失败请联系管理员,或者反馈给ccbpm. 失败原因:" + ex.Message;
+                string msg = "err@升级失败(ccbpm有自动修复功能,您可以刷新一下系统会自动创建字段,刷新多次扔解决不了问题,请反馈给我们.www.ccflow.org)";
+                msg += "@系统信息:" + ex.Message;
+                return msg;
             }
         }
         //流程设计器登陆前台，转向规则，判断是否为天业BPM

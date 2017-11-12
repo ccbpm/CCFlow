@@ -71,13 +71,7 @@
         #txbSearchVal {
             font-size: 14px;
         }
-        /*#poptable {
-            display: none;
-        }*/
-        #test {
-            
-        }
-
+        
         .form_tree {
             background: #f4f9ff;
         }
@@ -145,18 +139,6 @@
             //$('#groupTable').hide();
 
             dtTable();
-            $('#test').bind('click', function () {
-                if ($('#orgjstree').css('display') == "none") {
-                    $('#orgjstree').css('display', 'block');
-                    var instance = $('#orgjstree').jstree(true);
-                    if ($('#orgTxt').val() != undefined && $('#orgTxt').val() != '') {
-                        instance.select_node($('#orgTxt').val());
-                    }
-                }
-                else {
-                    $('#orgjstree').css('display', 'none');
-                }
-            });
             var bodyHeight = document.documentElement.clientHeight;
             $('body').height(bodyHeight);
             if (parent == undefined || parent.frames["iframePopModalForm"] == undefined) {
@@ -169,10 +151,7 @@
                     var returnValSetObj = window.pageSetData;
                     var returnValObj = window.returnVal;
                     if (returnValSetObj != null && returnValObj != null) {
-                        if (returnValSetObj[0]
-                            .PopValWorkModel ==
-                            "Tree" ||
-                            returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
+                        if (returnValSetObj[0].PopValWorkModel == "Tree" || returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
                             window.GetTreeReturnVal();
                             if (returnValSetObj[0].PopValFormat == "OnlyNo") {
                                 $(ctrl).val(returnValObj.Name);
@@ -180,17 +159,15 @@
                                 $(ctrl).val(returnValObj.Name);
                             } else {
                                 //$(ctrl).val("(" + returnValObj.No + ',' + returnValObj.Name + ")");
-
                                 for (var property in returnValObj) {
                                     opener.window.SetEleValByName(property, returnValObj[property]);
                                 }
                             }
                         } else if (returnValSetObj[0].PopValWorkModel == "Group") { //分组模式
                             window.GetGroupReturnVal();
-                            console.log(returnValObj)
+                            console.log(returnValObj);
                             $(ctrl).val(returnValObj.Value);
-                        } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
-                            returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
+                        } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" || returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
                             if (returnValSetObj[0].PopValFormat == "OnlyNo") {
                                 $(ctrl).val(returnValObj.No);
                             } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
@@ -296,13 +273,15 @@
                                     data = data.substr(0, data.indexOf('?')) + "?" + params.join('&');
                                 }
                             }
+                            var redirectUrl = data.split("@SelfUrl")[1]; //URL时直接返回了路径
                             //将URL中的@参数替换成值
-                            window.location.href = data.split("@SelfUrl")[1]; //URL时直接返回了路径
+                            window.location.href = redirectUrl;
                             return;
                         } else {
                             setDataArr = JSON.parse(data).Hashtable;
                             initPopValData = JSON.parse(data);
                         }
+
                         pageSetData = setDataArr;
                         var dataArr = JSON.parse(data).DTObjs;
                         var dtgArr = JSON.parse(data).DTGroup;
@@ -612,6 +591,7 @@
                 }
             }
         };
+
         var plugins = [];
         if (pageSetData[0].PopValSelectModel == "More") {//多选
             plugins = [
@@ -701,6 +681,7 @@
 
         $('#searchDiv').append($(conHtml));
     }
+
     //checkbox的选中事件
     function checkBoxChange(obj) {
         var ck = obj.target;
@@ -799,7 +780,7 @@
                 //}
             }
         });
-        
+
         //返回值格式
         switch (pageSetData[0].PopValFormat) {
             case "OnlyNo": //仅NO
@@ -870,10 +851,8 @@
                     <div class="tab-pane active portlet_tab flowLists">
                         <div id="" style="">
                             <table class="table wupop" data-data="true">
-                                <thead>
-                                </thead>
-                                <tbody>
-                                </tbody>
+                                <thead></thead>
+                                <tbody></tbody>
                             </table>
                         </div>
                         <div class="loadDate" style="text-align: center;">
@@ -886,19 +865,16 @@
     </div>
     <!--分页显示table-->
     <div id="main" style="display: none;">
-        <div id="blackDiv" class="portlet portlet-sortable light bg-inverse" style="padding: 0px;
-            margin: 0px; overflow: auto;">
+        <div id="blackDiv" class="portlet portlet-sortable light bg-inverse" style="padding: 0px;margin: 0px; overflow: auto;">
             <!-- BEGIN CHART PORTLET-->
             <div class="portlet-title col-md-12" style="border: none; border-radius: 0px; height: 60px;
                 padding: 12px 0 0 20px;">
                 <div>
                     <form id="searchForm" action="" onkeydown="if(event.keyCode==13){return false;}">
-                    <div id="searchDiv">
-                    </div>
+                    <div id="searchDiv"></div>
                     </form>
                     <div class="searchBtnDiv">
-                        <button class="Btn" id="btnSearch">
-                            搜索</button>
+                        <button class="Btn" id="btnSearch">搜索</button>
                     </div>
                     <div style="font-size: 20px; float: left; width: 100%; display: none;">
                         已选择列表： <span id="selectedlists" style="word-break: break-all;"></span>
@@ -911,10 +887,8 @@
                         <div id="flowListDiv">
                             <div class="tabPdiv">
                                 <table class="tble customthr customHover wupop" data-data="true">
-                                    <thead>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
+                                    <thead></thead>
+                                    <tbody></tbody>
                                 </table>
                             </div>
                             <div class="loadDate" style="text-align: center;">
@@ -929,10 +903,8 @@
                                     <i class="fa fa-angle-right"></i>
                                 </button>
                                 <span class="seperator">|</span>
-                                <button class="btn btnTxt btn-sm default prev" title="转到">
-                                    转到</button>
-                                <input type="text" class="pagination-panel-input form-control input-mini input-inline input-sm"
-                                    maxlenght="5" style="text-align: center; margin: 0 5px;" />
+                                <button class="btn btnTxt btn-sm default prev" title="转到">转到</button>
+                                <input type="text" class="pagination-panel-input form-control input-mini input-inline input-sm" maxlenght="5" style="text-align: center; margin: 0 5px;" />
                                 页<span class="seperator">|</span> <span class="pagination-panel-total">20</span>
                                 <label>
                                     页 <span class="seperator">|</span>每页
@@ -954,31 +926,11 @@
         </div>
     </div>
     <!--树tree-->
-    <!--<div id="tree" style="display: none;">
-        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding:0px;margin:0px;overflow:auto;">
-            <div class="portlet-body " id="" style="overflow:auto;">
-                <div class="tab-content">
-                    <div class="tab-pane active portlet_tab" id="task">
-                        <div id="ListDiv">
-                            <div class="input-group form_tree">
-                                <input class="form-control" type="text" id="orgTxt" readonly="readonly" />
-                                <span class="input-group-addon" id="test"><span class="glyphicon glyphicon-tree-deciduous"></span></span>
-                            </div>
-                            <div id="orgjstree" style="position:absolute;display:none;overflow:auto;width:95%;" class="tree-demo jstree jstree-1 jstree-default">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
     <!--<div><label id="treeVal"></label></div>-->
-    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default" style="">
-    </div>
+    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default" style=""></div>
     <!--分组显示table-->
     <div id="groupTable" style="">
-        <ul id="dt" data-data="true">
-        </ul>
+        <ul id="dt" data-data="true"></ul>
     </div>
     <!--为自由表单和从表加-->
     <div id="freeBarDiv">

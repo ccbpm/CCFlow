@@ -5493,16 +5493,7 @@ namespace BP.WF
                                 en.SetValByKey(dc.ColumnName, val);
                             }
 
-                            try
-                            {
-                                en.MyPK = "I" + timeKey + "_" + idx;
-                                en.Insert();
-                            }
-                            catch
-                            {
-                                en.MyPK = Guid.NewGuid().ToString();
-                                en.Insert();
-                            }
+                            en.MyPK = Guid.NewGuid().ToString();
                         }
                         break;
                     case "Sys_FrmLab":
@@ -5522,18 +5513,8 @@ namespace BP.WF
                                 en.SetValByKey(dc.ColumnName, val);
                             }
 
-                            //en.MyPK = Guid.NewGuid().ToString();
-                            // 出现重复的
-                            try
-                            {
-                                en.MyPK = "Lab" + timeKey + "_" + idx;
-                                en.Insert();
-                            }
-                            catch
-                            {
-                                en.MyPK = Guid.NewGuid().ToString();
-                                en.Insert();
-                            }
+                            en.MyPK = BP.DA.DBAccess.GenerGUID(); // "Lab" + timeKey + "_" + idx;
+                            en.Insert();
                         }
                         break;
                     case "Sys_FrmLink":
@@ -5552,7 +5533,6 @@ namespace BP.WF
                                 en.SetValByKey(dc.ColumnName, val);
                             }
                             en.MyPK = Guid.NewGuid().ToString();
-                            //en.MyPK = "LK" + timeKey + "_" + idx;
                             en.Insert();
                         }
                         break;

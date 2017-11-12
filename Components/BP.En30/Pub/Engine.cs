@@ -1196,7 +1196,7 @@ namespace BP.Pub
                 #endregion 从表合计
 
                 #region 审核组件组合信息，added by liuxc,2016-12-16
-                if (str.Contains("<WorkCheckBegin>") && str.Contains("<WorkCheckEnd>"))
+                if (dtTrack != null && str.Contains("<WorkCheckBegin>") && str.Contains("<WorkCheckEnd>"))
                 {
                     int beginIdx = str.IndexOf("<WorkCheckBegin>"); //len:16
                     int endIdx = str.IndexOf("<WorkCheckEnd>"); //len:14
@@ -1207,34 +1207,35 @@ namespace BP.Pub
                     string checkStr = string.Empty;
                     string[] ps = null;
 
-                    if (dtTrack != null)
+
+                    foreach (string para in paras)
                     {
-                        foreach (string para in paras)
-                        {
-                            if (string.IsNullOrWhiteSpace(para) || !para.Contains("WorkCheckList."))
-                                continue;
+                        if (string.IsNullOrWhiteSpace(para) || para.Contains("WorkCheckList.")==false)
+                            continue;
 
-                            ps = para.Split('.');
-                            tags.Add(ps[1]);
-                        }
-
-                        foreach (DataRow row in dtTrack.Select("ACTIONTYPE=22", "RDT ASC")) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
-                        {
-                            checkStr = moduleStr;
-
-                            foreach (string tag in tags)
-                            {
-                                checkStr = checkStr.Replace("<WorkCheckList." + tag + ">",
-                                                             this.GetCode(this.GetValueCheckWorkByKey(row, tag)));
-                            }
-
-                            str = str.Insert(beginIdx, checkStr);
-                            beginIdx += checkStr.Length;
-                            endIdx += checkStr.Length;
-                        }
-
-                        str = str.Substring(0, beginIdx) + (endIdx < str.Length - 1 ? str.Substring(endIdx + 14) : "");
+                        ps = para.Split('.');
+                        tags.Add(ps[1]);
                     }
+
+                    foreach (DataRow row in dtTrack.Rows) //此处的22是ActionType.WorkCheck的值，此枚举位于BP.WF项目中，此处暂写死此值
+                    {
+                        int acType = int.Parse(row["ACTIONTYPE"].ToString());
+                        if (acType != 22)
+                            continue;
+                        checkStr = moduleStr;
+                        foreach (string tag in tags)
+                        {
+                            checkStr = checkStr.Replace("<WorkCheckList." + tag + ">",
+                                                         this.GetCode(this.GetValueCheckWorkByKey(row, tag)));
+                        }
+
+                        str = str.Insert(beginIdx, checkStr);
+                        beginIdx += checkStr.Length;
+                        endIdx += checkStr.Length;
+                    }
+
+                    str = str.Substring(0, beginIdx) + (endIdx < str.Length - 1 ? str.Substring(endIdx + 14) : "");
+
                 }
                 #endregion
 

@@ -910,23 +910,24 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
-            #region 显示有审核组件，但还未审核的节点
+            #region 显示有审核组件，但还未审核的节点.  包括退回后的.
             if (tks == null)
                 tks = wc.HisWorkChecks;
 
             foreach (FrmWorkCheck item in fwcs)
             {
                 if (item.FWCIsShowTruck == false)
-                    continue;
+                    continue;  //不需要显示历史记录.
 
-                //是否已审核
+                //是否已审核.
                 bool isHave = false;
                 foreach (BP.WF.Track tk in tks)
                 {
-                    if (tk.NDFrom == item.NodeID || tk.NDTo == item.NodeID)
+                    //@于庆海翻译.
+                    if (tk.NDFrom == this.FK_Node && tk.HisActionType==ActionType.WorkCheck)
                     {
-                        isHave = true;
-                        continue;
+                        isHave = true; //已经有了
+                        break;
                     }
                 }
 

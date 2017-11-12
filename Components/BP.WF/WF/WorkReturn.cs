@@ -159,8 +159,8 @@ namespace BP.WF
 
                     //删除审核意见, 已经考虑到了  @于庆海翻译。
                     ps.Clear();
-                    ps.SQL = "DELETE FROM ND" + int.Parse(this.ReturnToNode.FK_Flow) + "Track WHERE FK_Node=" + dbStr + "FK_Node AND  (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) AND ActionType=22";
-                    ps.Add("FK_Node", nodeid);
+                    ps.SQL = "DELETE FROM ND" + int.Parse(this.ReturnToNode.FK_Flow) + "Track WHERE NDFrom=" + dbStr + "NDFrom AND  (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) AND ActionType=22";
+                    ps.Add("NDFrom", nodeid);
                     ps.Add("WorkID1", this.WorkID);
                     ps.Add("WorkID2", this.WorkID);
                     DBAccess.RunSQL(ps);
@@ -843,7 +843,7 @@ namespace BP.WF
             //杨玉慧 
             Emp emp = new Emp(rw.ReturnToEmp);
             //更新待办人员
-            string updateToDoEmpSql = "UPDATE WF_GenerWorkFlow  SET TodoEmps='" + emp.No + "," + emp.Name + "',TodoEmpsNum=1 WHERE  WorkID=" + this.WorkID;
+            string updateToDoEmpSql = "UPDATE WF_GenerWorkFlow SET TodoEmps='" + emp.No + "," + emp.Name + "',TodoEmpsNum=1 WHERE  WorkID=" + this.WorkID;
             //更新WF_GenerWorkFlow 的待办人员
             DBAccess.RunSQL(updateToDoEmpSql);
 
@@ -866,13 +866,13 @@ namespace BP.WF
                 if (BP.DA.DBAccess.RunSQL(sql) == 0)
                     throw new Exception("@退回错误，没有找到要更新的目标数据.技术信息:" + sql);
             }
-            else
-            {
-                rw.IsBackTracking = this.IsBackTrack;
 
-                //调用删除GenerWorkerList数据，不然会导致两个节点之间有垃圾数据，特别遇到中间有分合流时候。
-                this.DeleteSpanNodesGenerWorkerListData();
-            }
+            //@于庆海翻译， 去掉了 else .
+            rw.IsBackTracking = this.IsBackTrack;
+
+            //调用删除GenerWorkerList数据，不然会导致两个节点之间有垃圾数据，特别遇到中间有分合流时候。
+            this.DeleteSpanNodesGenerWorkerListData();
+
 
             rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
             rw.Insert();
@@ -901,11 +901,11 @@ namespace BP.WF
                 Log.DebugWriteWarning(ex.Message);
             }
 
-          
+
 
             //把退回原因加入特殊变量里. 为软通小杨处理rpt变量不能替换的问题.
 
-           // string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt,atPara, null, gwl.FK_Emp);
+            // string text = fl.DoFlowEventEntity(EventListOfNode.ReturnAfter, this.HisNode, rpt,atPara, null, gwl.FK_Emp);
 
             // 把消息
             atPara += "@SendToEmpIDs=" + gwl.FK_Emp;

@@ -166,5 +166,73 @@ namespace BP.WF.HttpHandler
         }
 
         #endregion xxx 界面方法.
+
+        #region sql .
+        /// <summary>
+        ///  初始化sf3.
+        /// </summary>
+        /// <returns></returns>
+        public string SF3_Init()
+        {
+            SFDBSrcs srcs = new SFDBSrcs();
+            srcs.RetrieveAll();
+            return srcs.ToJson();
+        }
+        public string SF3_Save()
+        {
+            SFTable sf = new SFTable();
+            sf.No = this.GetValFromFrmByKey("No");
+            if (sf.IsExits == true)
+                return "err@标记:" + sf.No + "已经存在.";
+
+            sf.Name = this.GetRequestVal("Name");
+            sf.FK_SFDBSrc = this.GetValFromFrmByKey("FK_DBSrc");
+            sf.CodeStruct = (CodeStruct)this.GetValIntFromFrmByKey("CodeStruct");
+            if (sf.CodeStruct == CodeStruct.Tree)
+            {
+                sf.DefVal = this.GetValFromFrmByKey("RootValue");
+            }
+            sf.SelectStatement = this.GetValFromFrmByKey("Selectstatement");
+            sf.SrcType = SrcType.SQL;
+            sf.FK_Val = "FK_" + sf.No;
+            sf.Save();
+            return "保存成功.";
+        }
+
+        #endregion xxx 界面方法.
+
+        #region 动态sql .
+        /// <summary>
+        ///  初始化sf5.
+        /// </summary>
+        /// <returns></returns>
+        public string SF5_Init()
+        {
+            SFDBSrcs srcs = new SFDBSrcs();
+            srcs.RetrieveAll();
+            return srcs.ToJson();
+        }
+        public string SF5_Save()
+        {
+            SFTable sf = new SFTable();
+            sf.No = this.GetValFromFrmByKey("No");
+            if (sf.IsExits == true)
+                return "err@标记:" + sf.No + "已经存在.";
+
+            sf.Name = this.GetRequestVal("Name");
+            sf.FK_SFDBSrc = this.GetValFromFrmByKey("FK_DBSrc");
+            sf.CodeStruct = (CodeStruct)this.GetValIntFromFrmByKey("CodeStruct");
+            if (sf.CodeStruct == CodeStruct.Tree)
+            {
+                sf.DefVal = this.GetValFromFrmByKey("RootValue");
+            }
+            sf.SelectStatement = this.GetValFromFrmByKey("Selectstatement");
+            sf.SrcType = SrcType.DynamicSQL;
+            sf.FK_Val = "FK_" + sf.No;
+            sf.Save();
+            return "保存成功.";
+        }
+
+        #endregion xxx 界面方法.
     }
 }

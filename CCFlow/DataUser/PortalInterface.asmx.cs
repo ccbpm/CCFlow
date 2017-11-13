@@ -158,6 +158,11 @@ namespace ccbpm
                 if (userNo.Contains(" ")==true)
                     return false;
 
+                //判断是否视图，如果为视图则不进行修改 @于庆海 需要翻译
+                if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+                {
+                    return false;
+                }
                 string sql = "UPDATE Port_Emp SET SID='" + sid + "' WHERE No='" + userNo + "'";
                 BP.DA.DBAccess.RunSQL(sql);
                 return true;

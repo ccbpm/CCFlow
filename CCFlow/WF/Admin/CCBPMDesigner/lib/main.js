@@ -3429,7 +3429,8 @@ function load(flowNo) {
             }
 
             if (data == "") {
-                //   alert("@没有获得流程图的json数据.");
+                //@没有获得流程图的json数据.重置流程图 @于庆海需要翻译
+                Conver_CCBPM_V1ToV2();
                 return;
             }
 

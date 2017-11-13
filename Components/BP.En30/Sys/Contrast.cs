@@ -123,11 +123,11 @@ namespace BP.Sys
                 this.SetValByKey(ContrastAttr.GroupWay, value);
             }
         }
-        public int OrderWay
+        public string OrderWay
         {
             get
             {
-                return this.GetValIntByKey(ContrastAttr.OrderWay);
+                return this.GetValStringByKey(ContrastAttr.OrderWay);
             }
             set
             {
@@ -167,7 +167,7 @@ namespace BP.Sys
                 map.AddTBString(ContrastAttr.KeyOfNum, null, "KeyOfNum", false, true, 0, 20, 10);
 
                 map.AddTBInt(ContrastAttr.GroupWay, 1, "求什么?SumAvg", false, true);
-                map.AddTBInt(ContrastAttr.OrderWay, 1, "OrderWay", false, true);
+                map.AddTBString(ContrastAttr.OrderWay, "", "OrderWay", false, true, 0, 10, 10);
 
                 this._enMap = map;
                 return this._enMap;

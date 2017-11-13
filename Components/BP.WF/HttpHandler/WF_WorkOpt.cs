@@ -95,7 +95,7 @@ namespace BP.WF.HttpHandler
                 if (SystemConfig.AppCenterDBType == DBType.MSSQL)
                     sql = "SELECT TOP 1 Tag,EmpTo FROM " + trackTable + " WHERE NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID desc  ";
                 else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                    sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM " + trackTable + " A WHERE A.EmpFrom=" + BP.Web.WebUser.No + " AND A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                    sql = "SELECT * FROM (SELECT  Tag,EmpTo,WorkID FROM " + trackTable + " A WHERE A.EmpFrom='" + BP.Web.WebUser.No + "' AND A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID DESC ) WHERE ROWNUM =1";
                 else if (SystemConfig.AppCenterDBType == DBType.MySQL)
                     sql = "SELECT  Tag,EmpTo FROM " + trackTable + " A WHERE A.NDFrom=" + this.FK_Node + " AND A.NDTo=" + toNodeID + " AND (ActionType=0 OR ActionType=1) AND EmpFrom='" + WebUser.No + "' ORDER BY WorkID  DESC limit 1,1 ";
 

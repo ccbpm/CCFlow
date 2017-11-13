@@ -2228,14 +2228,20 @@ namespace BP.WF
                 }
                 #endregion
 
+                #region 执行一次保存. @于庆海翻译.  增加了此部分.
+                NodeExts nes = new NodeExts();
+                nes.Retrieve(NodeAttr.FK_Flow, this.No);
+                foreach (NodeExt item in nes)
+                {
+                    item.Update(); // 调用里面的业务逻辑执行检查.
+                }
+                #endregion
+
                 msg += "@流程的基础信息: ------ ";
                 msg += "@编号:  " + this.No + " 名称:" + this.Name + " , 存储表:" + this.PTable;
 
                 msg += "@信息:开始检查节点流程报表.";
                 this.DoCheck_CheckRpt(this.HisNodes);
-
-
-
 
                 #region 检查焦点字段设置是否还有效
                 msg += "@信息:开始检查节点的焦点字段";

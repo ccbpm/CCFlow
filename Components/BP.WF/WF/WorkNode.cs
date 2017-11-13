@@ -5822,6 +5822,8 @@ namespace BP.WF
                 }
             }
 
+            //ndFrom.HisReturnRole
+
             //如果是协作组长模式节点, 就判断当前的队列人员是否走完.
             if (this.TodolistModel == TodolistModel.TeamupGroupLeader)
             {

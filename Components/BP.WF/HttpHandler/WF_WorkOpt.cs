@@ -518,11 +518,34 @@ namespace BP.WF.HttpHandler
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
+
+            string emps=gwf.Emps;
+            if (emps.Contains("@" + WebUser.No + "@") == false)
+            {
+                /*会签以后丢失当前操作员的信息.*/
+                Log.DefaultLogWriteLineError("@不应该在会签关闭后丢失当前操作员的信息.");
+                emps += "@" + BP.Web.WebUser.No + "@";
+                emps = emps.Replace("@@", "@");
+                gwf.Emps = emps;
+            }
+            
             gwf.Update();
 
             //设置当前操作人员的状态.
             string sql = "UPDATE WF_GenerWorkerList SET IsPass=90 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND FK_Emp='" + WebUser.No + "'";
             DBAccess.RunSQL(sql);
+
+            //求会签人.
+            GenerWorkerLists gwfs = new GenerWorkerLists();
+            gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
+                GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.IsPass, 0);
+
+            string empsOfHuiQian = "会签人:";
+            foreach (GenerWorkerList item in gwfs)
+                empsOfHuiQian += item.FK_Emp + "," + item.FK_EmpText+";";
+
+            //执行会签,写入日志.
+            BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian, "执行会签");
 
             string str = "保存成功.\t\n该工作已经移动到会签列表中了,等到所有的人会签完毕后,就可以出现在待办列表里.";
             str += "\t\n如果您要增加或者移除会签人请到会签列表找到该记录,执行操作.";

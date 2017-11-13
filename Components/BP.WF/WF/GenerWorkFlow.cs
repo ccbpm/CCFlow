@@ -455,11 +455,11 @@ namespace BP.WF
         {
             get
             {
-                return (HuiQianTaskSta)this.GetValIntByKey(GenerWorkFlowAttr.HuiQianTaskSta);
+                return (HuiQianTaskSta)this.GetParaInt(GenerWorkFlowAttr.HuiQianTaskSta,0);
             }
             set
             {
-                SetValByKey(GenerWorkFlowAttr.HuiQianTaskSta, (int)value);
+                SetPara(GenerWorkFlowAttr.HuiQianTaskSta, (int)value);
             }
         }
         /// <summary>

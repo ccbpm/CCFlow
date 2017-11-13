@@ -203,6 +203,16 @@
                 window.location.href = window.location.href;
             });
         }
+
+        $(document).keyup(function (event) {
+            switch (event.keyCode) {
+                case 27:
+                    var dlg = dlg || $('#eudlg') || {};
+                    if (typeof dlg.dialog === "function") {
+                        //dlg.dialog('close');
+                    }
+            }
+        });
      </script>
 </head>
 <body onkeypress="Esc()" >

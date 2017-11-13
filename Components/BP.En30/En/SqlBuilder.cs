@@ -867,7 +867,7 @@ namespace BP.En
                         }
                         else
                         {
-                            sql += attr.Field + " INT DEFAULT ("+attr.DefaultVal+") COMMENT '" + attr.Desc + "',";
+                            sql += attr.Field + " INT DEFAULT "+attr.DefaultVal+" COMMENT '" + attr.Desc + "',";
                         }
                         break;
                     default:

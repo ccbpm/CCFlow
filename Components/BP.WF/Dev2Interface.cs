@@ -3160,11 +3160,22 @@ namespace BP.WF
                 {
                     try
                     {
+                        //判断是否更新的是用户表中的SID
+                        if (Glo.UpdataSID.Contains("UPDATE Port_Emp SET SID=") == true)
+                        {
+                            //判断是否视图，如果为视图则不进行修改 @于庆海 需要翻译
+                            if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+                            {
+                                return sid;
+                            }
+                        }
+                        //执行已配置表的更新，可以是Port_Emp，也可以是其他表
                         sid = BP.DA.DBAccess.GenerGUID();
+                        ps = new Paras();
                         ps.SQL = Glo.UpdataSID;
                         ps.Add("SID", sid);
                         ps.Add("No", userNo);
-                        BP.DA.DBAccess.RunSQL(ps);
+                        BP.DA.DBAccess.RunSQL(ps);                        
                     }
                     catch
                     {
@@ -3174,7 +3185,6 @@ namespace BP.WF
                 }
                 return sid;
             }
-
             throw new Exception("@没有判断的数据源模式...");
         }
         /// <summary>
@@ -3213,22 +3223,24 @@ namespace BP.WF
         /// <returns>SID</returns>
         public static bool Port_SetSID(string userNo, string sid)
         {
-            //Paras ps = new Paras();
-            //ps.SQL = "UPDATE Port_Emp SET SID=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "SID WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No";
-            //ps.Add("SID", sid);
-            //ps.Add("No", userNo);
-
-            string sql = "";
-            sql = BP.Sys.SystemConfig.GetValByKey("UpdateSID", sql);
-            if (sql == "")
-                sql = "UPDATE Port_Emp SET SID=@SID WHERE No=@No";
-
-            sql = sql.Replace("@SID", "'" + sid + "'");
-            sql = sql.Replace("@No", "'" + userNo + "'");
+            //判断是否更新的是用户表中的SID
+            if (Glo.UpdataSID.Contains("UPDATE Port_Emp SET SID=") == true)
+            {
+                //判断是否视图，如果为视图则不进行修改 @于庆海 需要翻译
+                if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+                {
+                    return false;
+                }
+            }
 
             try
             {
-                if (BP.DA.DBAccess.RunSQL(sql) == 1)
+                //替换变量的值
+                Paras ps = new Paras();
+                ps.SQL = Glo.UpdataSID;
+                ps.Add("SID", sid);
+                ps.Add("No", userNo);
+                if (BP.DA.DBAccess.RunSQL(ps) == 1)
                     return true;
                 else
                     return false;

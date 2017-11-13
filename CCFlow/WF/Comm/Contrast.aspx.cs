@@ -483,7 +483,7 @@ namespace CCFlow.Web.Comm
 
 
             c.GroupWay = this.DDL_GroupWay.SelectedItemIntVal;
-            c.OrderWay = this.DDL_OrderWay.SelectedItemIntVal;
+            c.OrderWay = this.DDL_OrderWay.SelectedItemStringVal;
 
             int i=c.Update();
             if (i == 0)

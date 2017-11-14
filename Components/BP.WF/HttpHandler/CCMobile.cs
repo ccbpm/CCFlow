@@ -60,10 +60,18 @@ namespace BP.WF.HttpHandler
             BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
             return ace.Login_Submit();
         }
+        /// <summary>
+        /// 会签列表
+        /// </summary>
+        /// <returns></returns>
+        public string HuiQianList_Init()
+        {
+            WF wf = new WF(this.context);
+            return wf.HuiQianList_Init();
+        }
 
         public string GetUserInfo()
         {
-
             BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
             return ace.GetUserInfo();
         }
@@ -85,6 +93,8 @@ namespace BP.WF.HttpHandler
             ht.Add("Todolist_CCWorks", BP.WF.Dev2Interface.Todolist_CCWorks);
             ht.Add("Todolist_Apply", BP.WF.Dev2Interface.Todolist_Apply); //申请下来的任务个数.
             ht.Add("Todolist_Draft", BP.WF.Dev2Interface.Todolist_Draft); //草稿数量.
+
+            ht.Add("Todolist_HuiQian", BP.WF.Dev2Interface.Todolist_HuiQian); //会签数量.
 
             return BP.Tools.Json.ToJsonEntityModel(ht);
         }

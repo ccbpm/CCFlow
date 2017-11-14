@@ -229,7 +229,21 @@ namespace BP.WF
                 return BP.DA.DBAccess.RunSQLReturnValInt(ps);
             }
         }
-
+        /// <summary>
+        /// 会签的数量
+        /// </summary>
+        public static int Todolist_HuiQian
+        {
+            get
+            {
+                /*获取数据.*/
+                string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                BP.DA.Paras ps = new BP.DA.Paras();
+                ps.SQL = "SELECT COUNT(workid) as Num FROM WF_GenerWorkerlist WHERE FK_Emp=" + dbStr + "FK_Emp AND IsPass=90";
+                ps.Add(GenerWorkerListAttr.FK_Emp, BP.Web.WebUser.No);
+                return BP.DA.DBAccess.RunSQLReturnValInt(ps);
+            }
+        }
         /// <summary>
         /// 获取已经完成流程数量
         /// </summary>

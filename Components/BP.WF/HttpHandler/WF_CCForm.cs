@@ -2055,11 +2055,17 @@ namespace BP.WF.HttpHandler
         public string DtlOpt_Init()
         {
             MapDtl dtl = new MapDtl(this.FK_MapDtl);
+            if (string.IsNullOrEmpty(dtl.ImpSQLInit))
+            {
+                return "err@从表加载语句为空，请设置从表加载的sql语句。";
+            }
+            else
+            {
+                DataSet ds = new DataSet();
+                DataTable dt = DBAccess.RunSQLReturnTable(dtl.ImpSQLInit);
 
-            DataSet ds = new DataSet();
-            DataTable dt = DBAccess.RunSQLReturnTable(dtl.ImpSQLInit);
-
-            return BP.Tools.Json.ToJson(dt);
+                return BP.Tools.Json.ToJson(dt);
+            }
         }
         /// <summary>
         /// 增加

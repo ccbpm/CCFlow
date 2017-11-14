@@ -1779,7 +1779,7 @@ namespace CCFlow.WF.UC
                     {
                         scriptSaveDtl += "\t\n try {  ";
 
-                        if (dtl.HisDtlShowModel == DtlShowModel.Table)
+                        if (dtl.HisRowShowModel == RowShowModel.Table)
                             scriptSaveDtl += "\t\n  SaveDtl('" + dtl.No + "'); ";
 
                         scriptSaveDtl += "\t\n } catch(e) { ";
@@ -3937,7 +3937,7 @@ namespace CCFlow.WF.UC
 
 
                 string src = "";
-                if (dtl.HisDtlShowModel == DtlShowModel.Table)
+                if (dtl.HisRowShowModel == RowShowModel.Table)
                 {
                     if (isReadonly == true)
                         src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1" + strs;
@@ -4007,7 +4007,7 @@ namespace CCFlow.WF.UC
                 this.Add("<span>");
 
                 string src = "";
-                if (rpt.HisDtlShowModel == DtlShowModel.Table)
+                if (rpt.HisRowShowModel == RowShowModel.Table)
                 {
                     if (isReadonly == true)
                         src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + rpt.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1&FID=" + en.GetValStrByKey("FID", "0");

@@ -1,4 +1,3 @@
-﻿
 DELETE FROM Sys_SFTable WHERE No='CN_PQ';
 INSERT INTO Sys_SFTable (No,Name,FK_Val,TableDesc,DefVal)VALUES ('CN_PQ','地区','FK_DQ','华北、西北、西南。。。','');
 

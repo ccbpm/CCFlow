@@ -1,4 +1,5 @@
-﻿DELETE FROM Port_Dept;
+-- 删除; 
+DELETE FROM Port_Dept;
 DELETE FROM Port_Station;
 DELETE FROM Port_Emp;
 DELETE FROM Port_EmpStation;

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>表单</title>
-     <meta charset="UTF-8"/>
+    <meta charset="UTF-8"/>
     <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
@@ -23,7 +23,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Frm_Init&FK_MapData=" + no + "&m=" + Math.random(),
+                url: Handler + "?DoType=FrmFree_Init&FK_MapData=" + no + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     
@@ -38,7 +38,6 @@
                         return;
                     }
 
-
                     //$("#Msg").html(data);
                     data = JSON.parse(data);
                     var mainTable = data.MAINTABLE; //主表单
@@ -46,7 +45,6 @@
                     var sysFrmLab = data.SYS_FRMLAB; //lab
                     var sysFrmBtn = data.SYS_FRMBTN; //BTN
                     var sysFrmMapAttr = data.SYS_MAPATTR; //组件
-                    
 
                     addLines(sysFrmLine); //增加line.
                     addLabels(sysFrmLab); //增加label
@@ -63,7 +61,7 @@
         });
     </script>
 </head>
-<body  >
+<body >
 
 <form id="cc">
 <div id="Msg"> </div>
@@ -123,30 +121,11 @@
         });
     }
 </script>
-
-<!--<fieldset>
-<legend>开发约定与说明</legend>
-
-<ul>
-    
-<li>需要对 /WF/Comm/Gener.js  进行引用.</li>
-<li>控件的命名必须以 TB_ , DDL_, CB, RB_ 开头, 后半部分，必须与实体类的字段名称保持一致。</li>
-<li>按钮必须以 Btn_ 开头, 常用的按钮名称需要保持一致，比如： Btn_Save  Btn_SaveAndClose , Btn_Close , Btn_Delete </li>
-<li>常用的函数名必须保持一致，比如： Save()  SaveAncClose() Delete() Close() ...</li>
-<li>每个控件的name 的值，都不能为空，否则会导致数据传递不过去，并且checkbox的ids 取不出来。</li>
-<li>该界面是一个jq与bp框架的entity结合的实体信息存储，适用方面广，设计与实现比较容易，籍希望各位同事按照这个模式进行开发。</li>
-
-</ul>
-
-</fieldset> -->
-
 </form>
 
 </body>
 <script type="text/javascript">
-    /**
-        线
-    **/
+    /**  线  **/
     function addLines(lines) {
         var wtX = 0;
         for (var i = 0; i < lines.length; i++) {

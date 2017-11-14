@@ -2049,7 +2049,7 @@ function figure_Template_Dtl(frmDtl) {
             strs += "&" + str + "=" + paras[str];
     }
     var src = "";
-    ////switch (frmDtl.DtlShowModel) {
+    ////switch (frmDtl.RowShowModel) {
     ////    case "0"://Table
     ////        if (pageData.IsReadOnly) {
     ////            src = appPath + "WF/CCForm/Dtl.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;

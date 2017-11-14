@@ -2430,14 +2430,14 @@ function figure_Template_Dtl(frmDtl) {
     }
     var src = "";
 
-    if (frmDtl.DtlShowModel == "0") {
+    if (frmDtl.RowShowModel == "0") {
         if (pageData.IsReadOnly) {
             src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         } else {
             src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
         }
     }
-    else if (frmDtl.DtlShowModel == "1") {
+    else if (frmDtl.RowShowModel == "1") {
         if (pageData.IsReadOnly)
             src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         else

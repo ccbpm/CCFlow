@@ -904,7 +904,7 @@ function figure_Template_Dtl(frmDtl) {
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
-    if (frmDtl.DtlShowModel == "0") {
+    if (frmDtl.RowShowModel == "0") {
         if (pageData.IsReadOnly) {
 
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=" + Math.random();
@@ -912,7 +912,7 @@ function figure_Template_Dtl(frmDtl) {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=" + Math.random();
         }
     }
-    else if (frmDtl.DtlShowModel == "1") {
+    else if (frmDtl.RowShowModel == "1") {
         if (pageData.IsReadOnly)
             src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
         else

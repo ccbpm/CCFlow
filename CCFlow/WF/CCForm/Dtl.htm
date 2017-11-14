@@ -282,9 +282,10 @@
 
         //初始化数据.
         function InitPage() {
+
             var refPKVal = GetQueryString("RefPKVal");
             if (refPKVal == null) {
-                alert('错误没有找到关联的主键.');
+                alert('@错误没有找到关联的主键.');
                 return;
             }
 

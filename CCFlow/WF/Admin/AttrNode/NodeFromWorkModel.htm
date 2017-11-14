@@ -247,15 +247,15 @@
     <script type="text/javascript">
         function ChangeImg(val) {
             if (val == "0")
-                this.BindingImg.src = "./Img/Tree.png";
+                $("#BindingImg").attr("src", "./Img/Tree.png");
             else
-                this.BindingImg.src = "./Img/Tab.png";
+                $("#BindingImg").attr("src", "./Img/Tab.png");
         }
         function SelectImg(val) {
             if (val == "0")
-                this.FrmImg.src = "./Img/FreeFrm.png";
+                $("#FrmImg").attr("src", "./Img/FreeFrm.png");
             else
-                this.FrmImg.src = "./Img/Col4Frm.JPG";
+                $("#FrmImg").attr("src", "./Img/Col4Frm.JPG");
         }
         function SetDDLEnable(ctrl, val) {
             if (val == "enable")

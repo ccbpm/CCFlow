@@ -555,7 +555,7 @@ namespace BP.WF
                 //}
 
                 string src = "";
-                if (dtl.HisDtlShowModel == DtlShowModel.Table)
+                if (dtl.HisRowShowModel == RowShowModel.Table)
                 {
                     src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + dtl.No + "&RefPKVal=" + en.PKVal + "&IsReadonly=1";
                 }

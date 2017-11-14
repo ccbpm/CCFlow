@@ -319,7 +319,7 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT pe.No,pe.Name,pd.No DeptNo,pd.Name DeptName FROM WF_NodeEmp wne "
                          + "  INNER JOIN Port_Emp pe ON pe.No = wne.FK_Emp "
                          + "  LEFT JOIN Port_Dept pd ON pd.No = pe.FK_Dept "
-                         + "WHERE wne.FK_Node = " + nid + " ORDER BY pe.Name";
+                         + "WHERE wne.FK_Node = " + nid + " ORDER BY pd.Idx, pe.Name";
 
             dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
             dt.Columns.Add("Code", typeof(string));
@@ -544,7 +544,7 @@ namespace BP.WF.HttpHandler
             {
                 BP.Port.Dept parentDept = new BP.Port.Dept(parentid);
                 BP.Port.Depts depts = new BP.Port.Depts();
-                depts.Retrieve(BP.Port.DeptAttr.ParentNo, parentid, BP.Port.DeptAttr.Name);
+                depts.Retrieve(BP.Port.DeptAttr.ParentNo, parentid,"Idx");
 
                 //增加部门
                 foreach (BP.Port.Dept dept in depts)
@@ -573,7 +573,7 @@ namespace BP.WF.HttpHandler
             {
                 BP.GPM.Dept parentDept = new BP.GPM.Dept(parentid);
                 BP.GPM.Depts depts = new BP.GPM.Depts();
-                depts.Retrieve(BP.GPM.DeptAttr.ParentNo, parentid, BP.GPM.DeptAttr.Name);
+                depts.Retrieve(BP.GPM.DeptAttr.ParentNo, parentid, BP.GPM.DeptAttr.Idx);
 
                 //增加部门
                 foreach (BP.GPM.Dept dept in depts)
@@ -615,7 +615,7 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT pd.No,pd.Name,pd1.No DeptNo,pd1.Name DeptName FROM WF_NodeDept wnd "
                          + "  INNER JOIN Port_Dept pd ON pd.No = wnd.FK_Dept "
                          + "  LEFT JOIN Port_Dept pd1 ON pd1.No = pd.ParentNo "
-                         + "WHERE wnd.FK_Node = " + nid + " ORDER BY pd.Name";
+                         + "WHERE wnd.FK_Node = " + nid + " ORDER BY pd1.Idx, pd.Name";
 
             dt = DBAccess.RunSQLReturnTable(sql);   //, pagesize, pageidx, "No", "Name", "ASC"
             dt.Columns.Add("Code", typeof(string));

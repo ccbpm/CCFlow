@@ -8,7 +8,7 @@ namespace BP.Sys
     /// <summary>
     /// 从表显示方式
     /// </summary>
-    public enum DtlShowModel
+    public enum RowShowModel
     {
         /// <summary>
         /// 表格方式

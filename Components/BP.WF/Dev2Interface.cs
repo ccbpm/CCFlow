@@ -1317,9 +1317,8 @@ namespace BP.WF
             sql += " AND A.FK_Flow=C.No ";
             sql += " AND A.FK_Node=D.FK_Node ";
             sql += " AND A.WorkID=D.WorkID ";
-            sql += " AND D.IsPass!=1 ";
+            sql += " AND D.IsPass=0  ";  // = 90 是会签主持人.
             sql += " AND D.FK_Emp='"+userNo+"'";
-
 
             if (fk_node != 0)
                 sql += " AND A.FK_Node="+fk_node;

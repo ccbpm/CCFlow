@@ -194,6 +194,15 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoInputCheck()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "超链接";
+                rm.ClassMethodName = this.ToString() + ".DoLink()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                
+
                 
                 rm = new RefMethod();
                 rm.Title = "扩展控件";
@@ -263,20 +272,27 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEleBatch()
         {
-            return "/WF/Admin/FoolFormDesigner/EleBatch.aspx?EleType=MapAttr&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
+            return "/WF/Admin/FoolFormDesigner/EleBatch.aspx?EleType=MapAttr&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
         }
         public string DoOldVerAspx()
         {
-            return "/WF/Admin/FoolFormDesigner/EditF.aspx?DoType=Edit&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
+            return "/WF/Admin/FoolFormDesigner/EditF.aspx?DoType=Edit&KeyOfEn=" + this.KeyOfEn + "&FType=1&MyPK=" + this.MyPK + "&FK_MapData=" + this.FK_MapData;
         }
-       
+        /// <summary>
+        /// 超链接
+        /// </summary>
+        /// <returns></returns>
+        public string DoLink()
+        {
+            return "/WF/Admin/FoolFormDesigner/MapExt/Link.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&FK_MapExt=Link_" + this.FK_MapData + "_" + this.KeyOfEn;
+        }
         /// <summary>
         /// 设置开窗返回值
         /// </summary>
         /// <returns></returns>
         public string DoPopVal()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&FK_MapExt=PopVal_" + this.FK_MapData + "_" + HttpUtility.UrlEncode(this.KeyOfEn);
+            return "/WF/Admin/FoolFormDesigner/MapExt/PopVal.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK) + "&FK_MapExt=PopVal_" + this.FK_MapData + "_" + this.KeyOfEn;
         }
         /// <summary>
         /// 正则表达式
@@ -284,7 +300,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRegularExpression()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/RegularExpression.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "/WF/Admin/FoolFormDesigner/MapExt/RegularExpression.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
         }
         /// <summary>
         /// 文本框自动完成
@@ -292,11 +308,11 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoTBFullCtrl()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
+            return "/WF/Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
         }
         public string DoPopFullCtrl()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
+            return "/WF/Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
         }
         /// <summary>
         /// 设置级联
@@ -304,7 +320,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoInputCheck()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&OperAttrKey=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK) + "&DoType=New&ExtType=InputCheck";
+            return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&OperAttrKey=" + this.KeyOfEn + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK) + "&DoType=New&ExtType=InputCheck";
             // return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn  +"&RefNo="+this.MyPK;
             //  return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
@@ -314,7 +330,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoEditFExtContral()
         {
-            return "/WF/Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
+            return "/WF/Admin/FoolFormDesigner/EditFExtContral.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=" + HttpUtility.UrlEncode(this.MyPK);
             //  return "/WF/Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         #endregion 方法执行.

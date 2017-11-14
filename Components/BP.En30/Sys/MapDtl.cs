@@ -87,9 +87,13 @@ namespace BP.Sys
         /// </summary>
         public const string IsShowTitle = "IsShowTitle";
         /// <summary>
-        /// 显示格式
+        /// 列表显示格式
         /// </summary>
-        public const string DtlShowModel = "DtlShowModel";
+        public const string ListShowModel = "ListShowModel";
+        /// <summary>
+        /// 行数据显示格式
+        /// </summary>
+        public const string RowShowModel = "RowShowModel";
         /// <summary>
         /// 过滤的SQL 表达式.
         /// </summary>
@@ -789,15 +793,15 @@ namespace BP.Sys
 
         #region 属性
         public GEDtls HisGEDtls_temp = null;
-        public DtlShowModel HisDtlShowModel
+        public RowShowModel HisRowShowModel
         {
             get
             {
-                return (DtlShowModel)this.GetValIntByKey(MapDtlAttr.DtlShowModel);
+                return (RowShowModel)this.GetValIntByKey(MapDtlAttr.ListShowModel);
             }
             set
             {
-                this.SetValByKey(MapDtlAttr.DtlShowModel, (int)value);
+                this.SetValByKey(MapDtlAttr.ListShowModel, (int)value);
             }
         }
         /// <summary>
@@ -1300,14 +1304,18 @@ namespace BP.Sys
                 map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", false, false);
                 map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M", false, false);
 
-                map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true,
-                 MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
-                map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true,
-                    MapDtlAttr.DtlOpenType, "@0=操作员@1=工作ID@2=流程ID");
+                // 以下4 @于庆海.需要对比翻译.
+                
+                // 超出行数
+                map.AddTBInt(MapDtlAttr.WhenOverSize, 0, "列表数据显示格式", false, false);
 
-                map.AddDDLSysEnum(MapDtlAttr.DtlShowModel, 0, "显示格式", true, true,
-               MapDtlAttr.DtlShowModel, "@0=表格@1=卡片");
+                //数据开放类型 .
+                map.AddTBInt(MapDtlAttr.DtlOpenType, 0, "列表数据显示格式", false, false);
+                
+                map.AddTBInt(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", false, false);
+                map.AddTBInt(MapDtlAttr.RowShowModel, 0, "行数据显示格式", false, false);
+                  
 
                 map.AddTBFloat(MapDtlAttr.X, 5, "距左", true, false);
                 map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
@@ -1326,7 +1334,6 @@ namespace BP.Sys
 
                 //add 2014-02-21.
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
-
 
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.

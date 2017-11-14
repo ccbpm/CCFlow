@@ -100,6 +100,11 @@ namespace BP.WF.HttpHandler
             WF_WorkOpt en = new WF_WorkOpt(this.context);
             return en.HuiQian_Init();
         }
+        public string HuiQian_SaveAndClose()
+        {
+            WF_WorkOpt en = new WF_WorkOpt(this.context);
+            return en.HuiQian_SaveAndClose();
+        }
         #endregion 会签
 
         #region 接收人选择器(限定接受人范围的).

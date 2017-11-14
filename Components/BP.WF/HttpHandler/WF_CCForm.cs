@@ -487,7 +487,7 @@ namespace BP.WF.HttpHandler
             //返回自由表单解析执行器.
             if (BP.WF.Glo.IsBeta == true)
             {
-                if (md.HisFrmType == FrmType.FreeFrm || 1==1 )
+                if (md.HisFrmType == FrmType.FreeFrm )
                 {
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                         return "url@FrmFreeReadonly.htm?1=2" + paras;
@@ -510,6 +510,10 @@ namespace BP.WF.HttpHandler
                     return "url@FrmFree.htm?1=2" + paras;
             }
         }
+       
+        #endregion frm.htm 主表.
+
+        #region frmFree
         /// <summary>
         /// 执行数据初始化
         /// </summary>
@@ -768,7 +772,9 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-        #endregion frm.htm 主表.
+        #endregion
+
+
 
         #region dtl.htm 从表.
         /// <summary>

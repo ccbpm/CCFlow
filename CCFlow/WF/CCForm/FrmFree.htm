@@ -328,18 +328,7 @@
 
             //构造表单.
             GenerFreeFrm(); //表单数据.
-
-            $('[name=showCol]').bind('change', function (obj) {
-                if (obj.target.value == "8") {
-                    Col4To8();
-                } else {
-                    Col8To4();
-                }
-            });
-
-            if ($("#Message").html() == "") {
-                $(".Message").hide();
-            }
+      
             if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
                 //计算高度，展示滚动条
                 var height = $(parent.document.getElementById('MainFrames')).height() - 110;

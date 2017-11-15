@@ -3430,7 +3430,7 @@ function load(flowNo) {
 
             if (data == "") {
                 //@没有获得流程图的json数据.重置流程图
-                //location.href = "Designer.htm?FK_Flow=" + flowNo + "&UserNo=" + window.parent.WebUser.No + "&SID=" + window.parent.WebUser.SID + "&Flow_V=0";
+                alert("如果流程图为空，请右键选择【重置流程图】。");
                 return;
             }
 

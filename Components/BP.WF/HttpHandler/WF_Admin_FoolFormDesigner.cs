@@ -770,6 +770,22 @@ namespace BP.WF.HttpHandler
             if (i != 0)
                 return "err@字段名：" + newNo + "已经存在.";
 
+            #region 计算GroupID @于庆海 需要翻译
+            int iGroupID = this.GroupField;
+            try
+            {
+                DataTable dt = DBAccess.RunSQLReturnTable("SELECT OID FROM Sys_GroupField WHERE EnName='" + this.FK_MapData + "' and (CtrlID is null or ctrlid ='')");
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    iGroupID = int.Parse(dt.Rows[0][0].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+ 
+            }
+            #endregion
+
             //求出选择的字段类型.
             MapAttr attr = new MapAttr();
             attr.Name = newName;
@@ -777,7 +793,7 @@ namespace BP.WF.HttpHandler
             attr.FK_MapData = this.FK_MapData;
             attr.LGType = FieldTypeS.Normal;
             attr.MyPK = this.FK_MapData + "_" + newNo;
-            attr.GroupID = this.GroupField;
+            attr.GroupID = iGroupID;
             attr.MyDataType = fType;
 
             int colspan = attr.ColSpan;

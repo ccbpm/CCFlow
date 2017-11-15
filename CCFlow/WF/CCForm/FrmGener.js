@@ -163,6 +163,21 @@ function GenerFrm() {
     })
 }
 
+//打开从表的从表
+function DtlFoolFrm(dtl, refPK, refOID) {
+
+    var url = 'DtlFoolFrm.htm?EnsDtl=' + dtl + '&RefPK=' + refPK + '&RefOID=' + refOID;
+    alert('这里没有实现打开iurl '+url);
+
+    //引入了刘贤臣写的东西，一直缺少东西.可否改进一下，弄个稳定的？ @代国强.
+    OpenEasyUiDialog(url, "eudlgframe", "编辑", 600, 450, "icon-edit", true, null, null, null, function () {
+        //   window.location.href = window.location.href;
+    });
+
+   // window.open(url);
+    //alert('打开从表卡片');
+}
+
 function GenerFreeFrm(mapData, frmData) {
 
     //循环MapAttr

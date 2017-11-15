@@ -1403,8 +1403,6 @@ function checkReg() {
             }
         }
     });
-
-
     return checkRegResult;
 }
 
@@ -1443,6 +1441,32 @@ function GenerFreeFrm() {
                 return;
             }
 
+            //获得sys_mapdata.
+            var mapData = flow_Data["Sys_MapData"][0];
+
+            //初始化Sys_MapData
+            var h = mapData.FrmH;
+            var w = mapData.FrmW;
+
+            if (h <= 1200)
+                h = 1200;
+
+            //表单名称.
+            document.title = flow_Data.Sys_MapData[0].Name;
+
+            $('#divCCForm').height(h);
+
+
+            $('#topContentDiv').height(h);
+            $('#topContentDiv').width(w);
+            $('.Bar').width(w + 15);
+
+
+            var marginLeft = $('#topContentDiv').css('margin-left');
+            marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
+            $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
+
+
             $('#CCForm').html('');
             //循环MapAttr
             for (var mapAtrrIndex in flow_Data.Sys_MapAttr) {
@@ -1450,7 +1474,6 @@ function GenerFreeFrm() {
                 var eleHtml = figure_MapAttr_Template(mapAttr);
                 $('#CCForm').append(eleHtml);
             }
-
 
             //循环FrmLab
             for (var i in flow_Data.Sys_FrmLab) {
@@ -1512,7 +1535,7 @@ function GenerFreeFrm() {
                 var createdConnector = connector_Template_Line(frmLine);
                 $('#CCForm').append(createdConnector);
             }
- 
+
 
             //循环Sys_MapFrame
             for (var i in flow_Data.Sys_MapFrame) {
@@ -1522,32 +1545,8 @@ function GenerFreeFrm() {
             }
 
 
-            if (flow_Data["WF_Node"] != undefined && flow_Data["WF_Node"].length == 1) {
-                //循环组件 轨迹图 审核组件 子流程 子线程
-                $('#CCForm').append(figure_Template_FigureFlowChart(flow_Data["WF_Node"][0]));
-                $('#CCForm').append(figure_Template_FigureFrmCheck(flow_Data["WF_Node"][0]));
-                $('#CCForm').append(figure_Template_FigureSubFlowDtl(flow_Data["WF_Node"][0]));
-                $('#CCForm').append(figure_Template_FigureThreadDtl(flow_Data["WF_Node"][0]));
-            }
 
-            if (flow_Data["Sys_MapData"] != undefined && flow_Data["Sys_MapData"].length == 1) {
-                //初始化Sys_MapData
-                var h = flow_Data.Sys_MapData[0].FrmH;
-                var w = flow_Data.Sys_MapData[0].FrmW;
-
-                //表单名称.
-                document.title = flow_Data.Sys_MapData[0].Name;
-
-                $('#topContentDiv').height(h);
-                $('#topContentDiv').width(w);
-                $('.Bar').width(w + 15);
-            }
-
-            var marginLeft = $('#topContentDiv').css('margin-left');
-            marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
-            $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
-            //原有的
-
+            //原有的。
             //为 DISABLED 的 TEXTAREA 加TITLE 
             var disabledTextAreas = $('#divCCForm textarea:disabled');
             $.each(disabledTextAreas, function (i, obj) {

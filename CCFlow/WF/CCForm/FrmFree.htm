@@ -374,56 +374,22 @@
     </script>
 </head>
 <body>
-
-    <!--之前返回的信息-->
-    <div id="lastOptMsg">
-    </div>
-    <!--Message-->
-    <div class="Message alert">
-        <button type="button" id="btnCloseMsg" aria-hidden="true" style="float: right; background: transparent; border: none;">&times;</button>
-        <div id='Message'></div>
-    </div>
-
+   
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">
         
         <!--上半部分表单-->
         <div id="topContentDiv" class="row" style="padding: 20px 5px;margin:0px auto;">
             <i class="topContentDiv-i" style="display:none;"></i>
             <div id="contentDiv">
-                <form id="divCCForm" action="MyFlow.ashx?method=login" method="post">
-                    <!--LODOP_OB 先放着 不知道具体是什么-->
-                    <div>
-                        <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width="0" height="0">
-                            <embed id="LODOP_EM" type="application/x-print-lodop" width="0" height="0" pluginspage="../../DataUser/PrintTools/install_lodop32.exe" />
-                        </object>
-                    </div>
-                    <!--头部功能按钮 发送、移交-->
-                    <div class="topBar" id="topBar">
-                        <!-- <uc3:ToolBar ID="ToolBar1" runat="server"/>-->
-                    </div>
-                    <!--flowInfo-->
-                    <div class="flowInfo" id="flowInfo">
-                        <!--<uc1:Pub ID="Pub1" runat="server"/>-->
-                    </div>
-
-                    <!--childThread-->
-                    <div class="childThread" id='childThread'>
-                        <!--<uc1:Pub ID="Pub3" runat="server"/>-->
-                    </div>
-                    <!--主表单--><!--<uc2:UCEn ID="UCEn1" runat="server"/>-->
+                <form id="divCCForm"  method="post">
+                    
                     <div id="CCForm" style="">
                         <br />
                         <img src='./../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
                         <br />
                         <br />
                     </div>
-                    <!--Pub2 -->
-                    <div class="pub2Class" id="pub2Class">
-                        <!-- <uc1:Pub ID="Pub2" runat="server"/>-->
-                    </div>
 
-                    <!--DIVINFO-->
-                    <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; align: left; border-color:Black'></div>
                 </form>
             </div>
         </div>
@@ -451,7 +417,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-   
      
 
       <div id="Btn" >

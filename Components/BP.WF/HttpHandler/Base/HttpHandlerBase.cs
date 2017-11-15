@@ -44,9 +44,6 @@ namespace BP.WF.HttpHandler
                     paras += "@" + key + " = " + context.Request.QueryString[key];
                 }
 
-               
-
-
                 string err = "";
                 //返回执行错误的结果.
                 if (ex.InnerException != null)

@@ -102,11 +102,18 @@
             $('.foot input').attr('disabled', 'disabled');
             $('.foot input').css('background', 'gray');
 
+            var selectedNodeID = $('#DDL_Nodes option:checked').val();
+
+            if (selectedNodeID == null || selectedNodeID == undefined || selectedNodeID=="") {
+                alert('请选择要退回的节点');
+                return;
+            }
+
             $.ajax({
                 type: 'post',
                 async: true,
                 data: {},
-                url: Handler + "?DoType=DoReturnWork&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&FK_Node=" + pageData.FK_Node + "&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnInfo=' + escape( $('#TB_Doc').val()) + "&IsBack=" + isBack + "&m=" + Math.random(),
+                url: Handler + "?DoType=DoReturnWork&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&FK_Node=" + pageData.FK_Node + "&ReturnToNode=" + selectedNodeID + '&ReturnInfo=' + escape($('#TB_Doc').val()) + "&IsBack=" + isBack + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {

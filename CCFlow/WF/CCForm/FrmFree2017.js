@@ -26,16 +26,7 @@ function InitForm() {
     $.each(disabledTextAreas, function (i, obj) {
         $(obj).attr('title', $(obj).val());
     })
-
-    //初始化提示信息
-    var alertMsgs = frmData.AlertMsg;
-    if (alertMsgs != undefined && alertMsgs.length > 0) {
-        var alertMsgHtml = '';
-        $.each(alertMsgs, function (i, alertMsg) {
-            alertMsgHtml += "退回标题：" + alertMsg.Title + "退回信息：" + alertMsg.Msg + "</br>";
-        });
-        $('#Message').html(alertMsgHtml);
-    }
+     
 
     //根据NAME 设置ID的值
     var inputs = $('[name]');
@@ -76,7 +67,6 @@ function InitForm() {
     catch (err) {
 
     }
-
 
 
     //处理下拉框级联等扩展信息
@@ -170,27 +160,6 @@ $(function () {
         FormOnLoadCheckIsNull();
     }
 });
-
-//. 保存嵌入式表单. add 2015-01-22 for GaoLing.
-function SaveSelfFrom() {
-
-    // 不支持火狐浏览器。
-    var frm = document.getElementById('SelfForm');
-    if (frm == null) {
-        alert('系统错误.');
-        return;
-    }
-    //执行保存.
-    return frm.contentWindow.Save();
-}
-
-function SendSelfFrom() {
-    if (SaveSelfFrom() == false) {
-        alert('表单保存失败，不能发送。');
-        return false;
-    }
-    return true;
-}
   
 function SetHegiht() {
     var screenHeight = document.documentElement.clientHeight;
@@ -225,14 +194,7 @@ function SetHegiht() {
     catch (e) {
     }
 }
-
-$(window).resize(function () {
-    //SetHegiht();
-});
-
-function SysCheckFrm() {
-
-}
+  
 function Change() {
     var btn = document.getElementById('Btn_Save');
     if (btn != null) {
@@ -355,12 +317,7 @@ function To(url) {
     //window.location.href = url;
     window.name = "dialogPage"; window.open(url, "dialogPage")
 }
-
-function WinOpen(url, winName) {
-    var newWindow = window.open(url, winName, 'width=700,height=400,top=100,left=300,scrollbars=yes,resizable=yes,toolbar=false,location=false,center=yes,center: yes;');
-    newWindow.focus();
-    return;
-}
+ 
    
 
 //然浏览器最大化.
@@ -373,113 +330,6 @@ function ResizeWindow() {
     }
 }
  
-
-var LODOP; //声明为全局变量 
-
-function printFrom() {
-    var url = $("#PrintFrom_Url").val();
-    LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
-    LODOP.PRINT_INIT("打印表单");
-
-    // LODOP.ADD_PRINT_URL(30, 20, 746, "100%", location.href);
-
-    //LODOP.ADD_PRINT_HTM(20, 0, "100%", "100%", document.getElementById("divCCForm").innerHTML);
-    LODOP.ADD_PRINT_URL(0, 0, "100%", "100%", url);
-
-    LODOP.SET_PRINT_STYLEA(0, "HOrient", 3);
-    LODOP.SET_PRINT_STYLEA(0, "VOrient", 3);
-    //LODOP.SET_PRINT_PAGESIZE(0, 0, 0, "");
-    LODOP.SET_PRINT_PAGESIZE(2, 2400, 2970, "A4");
-    //		LODOP.SET_SHOW_MODE("MESSAGE_GETING_URL",""); //该语句隐藏进度条或修改提示信息
-    //		LODOP.SET_SHOW_MODE("MESSAGE_PARSING_URL","");//该语句隐藏进度条或修改提示信息
-    //  LODOP.PREVIEW();
-
-    LODOP.PREVIEW();
-}
-
-
-//原有的
-function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
-    var date = new Date();
-    var t = date.getFullYear() + "" + date.getMonth() + "" + date.getDay() + "" + date.getHours() + "" + date.getMinutes() + "" + date.getSeconds();
-
-    var url = 'WebOffice/AttachOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + "&FK_MapData=" + FK_MapData + "&NoOfObj=" + NoOfObj + "&FK_Node=" + FK_Node + "&T=" + t;
-    //var url = 'WebOffice.aspx?DoType=EditOffice&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal;
-    // var str = window.showModalDialog(url, '', 'dialogHeight: 1250px; dialogWidth:900px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
-    //var str = window.open(url, '', 'dialogHeight: 1200px; dialogWidth:1110px; dialogTop: 100px; dialogLeft: 100px; center: no; help: no;resizable:yes');
-    window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
-}
- 
-
-function ReturnVal(ctrl, url, winName) {
-    if (url == "")
-        return;
-    //update by dgq 2013-4-12 判断有没有？
-    if (ctrl && ctrl.value != "") {
-        if (url.indexOf('?') > 0)
-            url = url + '&CtrlVal=' + ctrl.value;
-        else
-            url = url + '?CtrlVal=' + ctrl.value;
-    }
-    //修改标题控制不进行保存
-    if (typeof self.parent.TabFormExists != 'undefined') {
-        var bExists = self.parent.TabFormExists();
-        if (bExists) {
-            self.parent.ChangTabFormTitleRemove();
-        }
-    }
-
-    //杨玉慧 用#控件类型#id  来作为变量绑定  如 Method=#DRDL_DealWithMethod
-
-    while (url.indexOf('#') > 0) {
-        var startIndex = url.indexOf('#');
-        //获取#号后面的& 符号的位置
-        var endIndex = url.indexOf('&', startIndex);
-        if (endIndex < 0) {
-            SetBottomTooBar
-            endIndex = url.length;
-        }
-        var paramId = url.substring(startIndex + 1, endIndex);
-        var value = $("[id$=_'" + paramId + "']").val();
-        url = url.replace('#' + paramId, value);
-    }
-
-
-    //杨玉慧 模态框 先用这个
-    $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().prev().text());
-
-    $('#iframePopModalForm').attr("src", url);
-    $('#btnPopValOK').unbind('click');
-    $('#btnPopValOK').bind('click', function () {
-        var retrunVal = frames["iframePopModalForm"].window.returnValue;
-        if (retrunVal == undefined)
-            retrunVal = "";
-        var txtId = ctrl.id;
-        ctrl.value = retrunVal;
-        if ($('#' + txtId + "_ReValue").length > 0) {
-            $('#' + txtId + "_ReValue").val(retrunVal);
-        }
-    });
-    $('#returnPopValModal').modal().show();
-    //修改标题，失去焦点时进行保存
-    if (typeof self.parent.TabFormExists != 'undefined') {
-        var bExists = self.parent.TabFormExists();
-        if (bExists) {
-            self.parent.ChangTabFormTitle();
-        }
-    }
-    return;
-}
-//然浏览器最大化.
-function ResizeWindow() {
-    //if (window.screen) {  //判断浏览器是否支持window.screen判断浏览器是否支持screen
-    //    var myw = screen.availWidth;   //定义一个myw，接受到当前全屏的宽
-    //    var myh = screen.availHeight;  //定义一个myw，接受到当前全屏的高
-    //    window.moveTo(0, 0);           //把window放在左上角
-    //    window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh
-    //}
-}
-window.onload = ResizeWindow;
 //以下是软通写的
 //初始化网页URL参数
 function initPageParam() {
@@ -579,163 +429,7 @@ function Save() {
 //FK_Flow=005&UserNo=zhwj&DoWhat=StartClassic&=&IsMobile=&FK_Node=501
 var pageData = {};
 var globalVarList = {};
-//解析分组类型 如果返回的为 '' 就表明是字段分组
-function initGroup(frmData, groupFiled) {
-    var groupHtml = '';
-    /*根据控件类型解析分组*/
-    switch (groupFiled.CtrlType) {
-        case "Frame": // 框架 类型.
-            for (var frameIndex in frmData.Sys_MapFrame) {
-                var fram = frmData.Sys_MapFrame[frameIndex];
-                if (fram.MyPK != groupFiled.CtrlID)
-                    continue;
-                //将 中文的  冒号转成英文的冒号
-                var src = fram.URL.replace(new RegExp(/(：)/g), ':');
-                var params = '&FID=' + pageData.FID;
-                params += '&WorkID=' + groupFiled.OID;
-
-
-                if (src.indexOf("?") > 0) {
-                    var params = getQueryStringFromUrl(src);
-                    if (params != null && params.length > 0) {
-                        $.each(params, function (i, param) {
-                            if (param.indexOf('@') == 0) {//是需要替换的参数
-                                paramArr = param.split('=');
-                                if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
-                                    if (paramArr[1].indexOf('@WebUser.') == 0) {
-                                        params[i] = paramArr[0].substring(1) + "=" + frmData.MainTable[0][paramArr[1].substr('@WebUser.'.length)];
-                                    }
-                                    if (frmData.MainTable[0][paramArr[1].substr(1)] != undefined) {
-                                        params[i] = paramArr[0].substring(1) + "=" + frmData.MainTable[0][paramArr[1].substr(1)];
-                                    }
-
-
-                                    //使用URL中的参数
-                                    var pageParams = getQueryString();
-                                    var pageParamObj = {};
-                                    $.each(pageParams, function (i, pageParam) {
-                                        if (pageParam.indexOf('@') == 0) {
-                                            var pageParamArr = pageParam.split('=');
-                                            pageParamObj[pageParamArr[0].substring(1, pageParamArr[0].length)] = pageParamArr[1];
-                                        }
-                                    });
-                                    var result = "";
-                                    //通过MAINTABLE返回的参数
-                                    for (var ele in frmData.MainTable[0]) {
-                                        if (paramArr[0].substring(1) == ele) {
-                                            result = frmData.MainTable[0][ele];
-                                            break;
-                                        }
-                                    }
-                                    //通过URL参数传过来的参数
-                                    for (var pageParam in pageParamObj) {
-                                        if (pageParam == paramArr[0].substring(1)) {
-                                            result = pageParamObj[pageParam];
-                                            break;
-                                        }
-                                    }
-
-                                    if (result != '') {
-                                        params[i] = paramArr[0].substring(1) + "=" + unescape(result);
-                                    }
-                                }
-                            }
-                        });
-                        src = src.substr(0, src.indexOf('?')) + "?" + params.join('&');
-                    }
-                    src += "&IsReadOnly=0";
-                }
-                else {
-                    src += "?IsReadOnly=0";
-                }
-                groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='no'></iframe>" + '</div>';
-            }
-            break;
-        case "Dtl":
-            //WF/CCForm/Dtl.aspx?EnsName=ND501Dtl1&RefPKVal=0&PageIdx=1
-            var src = "Dtl.htm?s=2&EnsName=" + groupFiled.CtrlID + "&RefPKVal=" + pageData.OID + "&PageIdx=1";
-            src += "&r=q" + paras;
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-            break;
-        case "Ath": //增加附件.
-            break;
-            for (var athIndex in frmData.Sys_FrmAttachment) {
-                var ath = frmData.Sys_FrmAttachment[athIndex];
-                if (ath.MyPK != groupFiled.CtrlID)
-                    continue;
-                var src = "";
-                if (pageData.IsReadonly)
-                    src = "AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
-                else
-                    src = "AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + groupFiled.EnName + "&FK_FrmAttachment=" + ath.MyPK;
-
-                groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-            }
-            break;
-        case "FWC": //审核组件.
-            var src = "../WorkOpt/WorkCheck.htm?s=2";
-            var paras = pageParamToUrl();
-            if (paras.indexOf('OID') < 0) {
-                paras += "&OID=" + pageData.OID;
-            }
-
-            if (frmData.WF_Node.length > 0 && frmData.WF_Node[0].FWCSTA == 1) {
-                paras += "&DoType=View";
-            }
-            src += "&r=q" + paras;
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-            break;
-        case "SubFlow": //子流程..
-            var src = "../WorkOpt/SubFlow.htm?s=2";
-            var paras = pageParamToUrl();
-            if (paras.indexOf('OID') < 0) {
-                paras += "&OID=" + pageData.OID;
-            }
-            if (frmData.WF_Node.length > 0 && frmData.WF_Node[0].FWCSTA == 1) {
-                paras += "&DoType=View";
-            }
-            src += "&r=q" + paras;
-            src += "&IsShowTitle=0";
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-            break;
-        case "Track": //轨迹图.
-            var src = "../WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
-            //var paras = pageParamToUrl();
-            //if (paras.indexOf('OID') < 0) {
-            //    paras += "&OID=" + pageData.OID;
-            //}
-            src += '&FK_Flow=' + pageData.FK_Flow;
-            src += '&FK_Node=' + pageData.FK_Node;
-            src += '&WorkID=' + pageData.OID;
-            src += '&FID=' + pageData.FID;
-            //先临时写成这样的
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:500px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-
-            break;
-        case "Thread": //子线程.
-            var src = "../WorkOpt/Thread.htm?s=2";
-            var paras = pageParamToUrl();
-            if (paras.indexOf('OID') < 0) {
-                paras += "&OID=" + pageData.OID;
-            }
-            src += "&r=q" + paras;
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-            break;
-        case "FTC": //流转自定义.  有问题
-            var src = "../WorkOpt/FTC.aspx?s=2";
-            var paras = pageParamToUrl();
-            if (paras.indexOf('OID') < 0) {
-                paras += "&OID=" + pageData.OID;
-            }
-            src += "&r=q" + paras;
-            groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-            break;
-        default:
-            break;
-    }
-    return groupHtml;
-}
-
+ 
 
 
 //刷新子流程
@@ -1446,53 +1140,12 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
 }
 
 $(function () {
-    $('#btnMsgModalOK').bind('click', function () {
-        window.close();
-        if (opener != null && opener != undefined) {
-            opener.window.focus();
-        }
-    });
-
+ 
     setAttachDisabled();
     //setToobarDisiable();
     setFormEleDisabled();
 
-    $('#btnMsgModalOK1').bind('click', function () {
-        window.close();
-        opener.window.focus();
-    });
-
 })
-
-//发送 退回 移交等执行成功后转到  指定页面
-function OptSuc(msg) {
-    // window.location.href = "/WF/MyFlowInfo.aspx";
-    $('.Message').hide();
-    if ($('#returnWorkModal:hidden').length == 0 && $('#returnWorkModal').length > 0) {
-        $('#returnWorkModal').modal().hide()
-    }
-    msg = msg.replace("@查看<img src='/WF/Img/Btn/PrintWorkRpt.gif' >", '')
-
-    $("#msgModalContent").html(msg.replace(/@/g, '<br/>'));
-    var trackA = $('#msgModalContent a:contains("工作轨迹")');
-    var trackImg = $('#msgModalContent img[src*="PrintWorkRpt.gif"]');
-    trackA.remove();
-    trackImg.remove();
-    $("#msgModal").modal().show();
-
-    ////如果是申请页面
-    //if ($('.navbars').css('display') == "none") {
-    //    $("#msgModalContent").append("<a href='/ITILFlow/MainPage.html'>返回流程工作台</a>");
-    //    $('#CCForm').html($('#msgModalContent').html());
-    //    setToobarUnVisible();
-    //} else {
-    //    $("#msgModal").modal().show();
-    //    if (window.opener != null) {
-    //        //刷新父窗口
-    //        window.opener.location.reload();
-    //    }
-    //}
-}
  
 
 //根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示  
@@ -1755,10 +1408,6 @@ function checkReg() {
     return checkRegResult;
 }
 
-function SaveDtlAll() {
-    return true;
-}
-
 //将v1版本表单元素转换为v2 杨玉慧  silverlight 自由表单转化为H5表单.
 function GenerFreeFrm() {
 
@@ -1863,13 +1512,7 @@ function GenerFreeFrm() {
                 var createdConnector = connector_Template_Line(frmLine);
                 $('#CCForm').append(createdConnector);
             }
-
-            //循环之前的提示信息
-            for (var i in flow_Data.AlertMsg) {
-                var alertMsg = flow_Data.AlertMsg[i];
-                var alertMsgEle = figure_Template_MsgAlert(alertMsg);
-                $('#lastOptMsg').append(alertMsgEle);
-            }
+ 
 
             //循环Sys_MapFrame
             for (var i in flow_Data.Sys_MapFrame) {
@@ -2370,9 +2013,9 @@ function figure_Template_Attachment(frmAttachment) {
     }
     var src = "";
     if (pageData.IsReadonly)
-        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+        src = "AttachmentUpload.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
     else
-        src = "/WF/CCForm/AttachmentUpload.aspx?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+        src = "AttachmentUpload.htm?PKVal=" + pageData.OID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
     eleHtml += '<div>' + "<iframe style='width:" + ath.W + "px;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml=$(eleHtml);
@@ -2394,7 +2037,6 @@ function connector_Template_Line(frmLine) {
 
     return eleHtml;
 }
-
 
 function addLoadFunction(id, eventName, method) {
     var js = "";
@@ -2432,16 +2074,16 @@ function figure_Template_Dtl(frmDtl) {
 
     if (frmDtl.RowShowModel == "0") {
         if (pageData.IsReadOnly) {
-            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
+            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         } else {
-            src = appPath + "WF/CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
+            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
         }
     }
     else if (frmDtl.RowShowModel == "1") {
         if (pageData.IsReadOnly)
-            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
+            src = "DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         else
-            src = appPath + "WF/CCForm/DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
+            src = "DtlCard.aspx?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
     }
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='F" + frmDtl.No + "' src='" + src +
@@ -2479,138 +2121,6 @@ function figure_Template_Dtl(frmDtl) {
     return eleHtml;
 }
 
-//初始化轨迹图
-function figure_Template_FigureFlowChart(wf_node) {
-    //轨迹图
-    var sta = wf_node.FrmTrackSta;
-    var x = wf_node.FrmTrack_X;
-    var y = wf_node.FrmTrack_Y;
-    var h = wf_node.FrmTrack_H;
-    var w = wf_node.FrmTrack_W;
-    if (sta == 0) {
-        return $('');
-    }
-    var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
-    src += '&FK_Flow=' + pageData.FK_Flow;
-    src += '&FK_Node=' + pageData.FK_Node;
-    src += '&WorkID=' + pageData.OID;
-    src += '&FID=' + pageData.FID;
-    var  eleHtml = '<div id="divtrack'+wf_node.NodeID+'">' + "<iframe id='track"+wf_node.NodeID+"' style='width:"+w+"px;height="+h+"px;'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-    eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
-
-    return eleHtml;
-}
-
-//审核组件
-function figure_Template_FigureFrmCheck(wf_node) {
-    //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
-    var sta = wf_node.FWCSta;
-    var x = wf_node.FWC_X;
-    var y = wf_node.FWC_Y;
-    var h = wf_node.FWC_H;
-    var w = wf_node.FWC_W;
-    if (sta == 0)
-        return $('');
-
-    var src = appPath + "WF/WorkOpt/WorkCheck.htm?s=2";
-    var fwcOnload = "";
-    var paras = '';
-    
-    paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.OID;
-    if (sta == 2)//只读
-    {
-        src += "&DoType=View";
-    }
-    else
-    {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
-    var eleHtml = '<div id="FFWC'+wf_node.NodeID+'">' + "<iframe style='width:100%;' id='FFWC"+wf_node.NodeID+"'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-    eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
-
-    return eleHtml;
-}
-
-//子线程
-function figure_Template_FigureThreadDtl(wf_node) {
-    //FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W
-    var sta = wf_node.FrmThreadSta;
-    var x = wf_node.FrmThread_X;
-    var y = wf_node.FrmThread_Y;
-    var h = wf_node.FrmThread_H;
-    var w = wf_node.FrmThread_W;
-    if (sta == 0)
-        return $('');
-
-    var src = appPath + "WF/WorkOpt/Thread.aspx?s=2";
-    var fwcOnload = "";
-    var paras = '';
-
-    paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.OID;
-    if (sta == 2)//只读
-    {
-        src += "&DoType=View";
-    }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
-    var eleHtml = '<div id=DIVFT' + wf_node.NodeID + '>' + "<iframe id=FFT" + wf_node.NodeID + " style='width:100%;'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-    eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
-
-    return eleHtml;
-}
-
-//子流程
-function figure_Template_FigureSubFlowDtl(wf_node) {
-    //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
-    var sta = wf_node.SFSta;
-    var x = wf_node.SF_X;
-    var y = wf_node.SF_Y;
-    var h = wf_node.SF_H;
-    var w = wf_node.SF_W;
-    if (sta == 0)
-        return $('');
-
-    var src = appPath + "WF/WorkOpt/SubFlow.aspx?s=2";
-    var fwcOnload = "";
-    var paras = '';
-
-    paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
-    paras += '&FK_Flow=' + pageData.FK_Flow;
-    paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.OID;
-    if (sta == 2)//只读
-    {
-        src += "&DoType=View";
-    }
-    else {
-        fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
-        $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
-    }
-    src += "&r=q" + paras;
-    var eleHtml = '<div id=DIVWC'+wf_node.NodeID+'>' + "<iframe id=FSF"+wf_node.NodeID+" style='width:"+w+"px';height:"+h+"px'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-    eleHtml = $(eleHtml);
-    eleHtml.css('position', 'absolute').css('top', y).css('left', x).css('width', w).css('height', h);
-
-    return eleHtml;
-}
-
 //初始化框架
 function figure_Template_IFrame(fram) {
 
@@ -2634,28 +2144,6 @@ function figure_Template_IFrame(fram) {
 
     eleHtml.append(eleIframe);
 
-    alert(eleHtml);
-
-    return eleHtml;
-
-//    var eleHtml = $("<DIV id='iframe" + fram.MyPK + "'  style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;' >");
-
-//    var src = dealWithUrl(fram.URL) + "&IsReadOnly=0";
-
-//    var iframe = $("<iframe  style='position:absolute; left:" + fram.X + "px; top:" + fram.Y + "px; width:" + fram.W + "px; height:" + fram.H + "px;text-align: left;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='yes'></iframe>");
-
-//    alert(iframe);
-
-//    eleHtml.append(iframe);
-
-//    return eleHtml;
-}
-
-function figure_Template_MsgAlert(msgAlert) {
-    var eleHtml = $('<div></div>');
-    var titleSpan = $('<span>' + msgAlert.Title + '</span>');
-    var msgDiv = $('<div>' + msgAlert.Msg + '</div>');
-    eleHtml.append(titleSpan).append(msgDiv)
     return eleHtml;
 }
 
@@ -2720,73 +2208,8 @@ function dealWithUrl(src) {
     else {
         src += "?q=1";
     }
-
     return src;
 }
 
-/*
-switch (groupFiled.CtrlType) {
-    case "FWC": //审核组件.
-        var src = "/WF/WorkOpt/WorkCheck.htm?s=2";
-        var paras = pageParamToUrl();
-        if (paras.indexOf('OID') < 0) {
-            paras += "&OID=" + pageData.OID;
-        }
-
-
-        if (frmData.WF_Node.length > 0 && frmData.WF_Node[0].FWCSTA == 1) {
-            paras += "&DoType=View";
-        }
-        src += "&r=q" + paras;
-        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-        break;
-    case "SubFlow": //子流程..
-        var src = "/WF/WorkOpt/SubFlow.aspx?s=2";
-        var paras = pageParamToUrl();
-        if (paras.indexOf('OID') < 0) {
-            paras += "&OID=" + pageData.OID;
-        }
-        if (frmData.WF_Node.length > 0 && frmData.WF_Node[0].FWCSTA == 1) {
-            paras += "&DoType=View";
-        }
-        src += "&r=q" + paras;
-        src += "&IsShowTitle=0";
-        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:150px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-        break;
-    case "Track": //轨迹图.
-        var src = "/WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
-        //var paras = pageParamToUrl();
-        //if (paras.indexOf('OID') < 0) {
-        //    paras += "&OID=" + pageData.OID;
-        //}
-        src += '&FK_Flow=' + pageData.FK_Flow;
-        src += '&FK_Node=' + pageData.FK_Node;
-        src += '&WorkID=' + pageData.OID;
-        src += '&FID=' + pageData.FID;
-        //先临时写成这样的
-        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe style='width:100%; height:500px;'   src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-
-        break;
-    case "Thread": //子线程.
-        var src = "/WF/WorkOpt/Thread.aspx?s=2";
-        var paras = pageParamToUrl();
-        if (paras.indexOf('OID') < 0) {
-            paras += "&OID=" + pageData.OID;
-        }
-        src += "&r=q" + paras;
-        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-        break;
-    case "FTC": //流转自定义.  有问题
-        var src = "/WF/WorkOpt/FTC.aspx?s=2";
-        var paras = pageParamToUrl();
-        if (paras.indexOf('OID') < 0) {
-            paras += "&OID=" + pageData.OID;
-        }
-        src += "&r=q" + paras;
-        groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;" id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%;'  src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-        break;
-    default:
-        break;
-}*/
 var colVisibleJsonStr = ''
 var jsonStr = '';

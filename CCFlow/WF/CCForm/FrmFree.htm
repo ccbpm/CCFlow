@@ -226,7 +226,6 @@
             display: block;
             width: 33px;
             height: 22px;
-            background: url("Scripts/bootstrap/css/img/sanjiao_03.png") no-repeat;
             background-size: 80%;
             position: absolute;
             top: 56px;
@@ -327,7 +326,7 @@
             initPageParam(); //初始化参数.
 
             //构造表单.
-            GenerFreeFrm(); //表单数据.
+            GenerFrm(); //表单数据.
       
             if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
                 //计算高度，展示滚动条
@@ -355,6 +354,61 @@
                 $('.Message').hide();
             });
         })
+    </script>
+
+     <!--JS 加载-->
+    <script type="text/javascript">
+        var load = {};
+        /*JS 动态加载js 文件*/
+        load.LoadJs = function (jsPath, chartset, callbackfun) {
+
+            try {
+                var head = document.getElementsByTagName('head')[0];
+                var script = document.createElement('script');
+                script.src = jsPath + "?Version=" + Math.random();
+                script.type = 'text/javascript';
+                if (chartset != undefined) {
+                    script.chartset = chartset;
+                }
+
+                if (script.readyState) {
+                    script.onreadystatechange = function () {
+                        if (script.readyState == "loaded" || script.readyState == "complete") {
+                            script.onreadystatechange = null;
+                            if (callbackfun != undefined && typeof (callbackfun) == 'function') {
+                                callbackfun();
+                            }
+                        }
+                    }
+                } else {
+                    script.onload = function () {
+                        if (callbackfun != undefined && typeof (callbackfun) == 'function') {
+                            callbackfun();
+                        }
+                    }
+                }
+                head.appendChild(script);
+            }
+            catch (err) {
+                alert(err)
+            }
+            //$.getScript(jsPath, callbackfun);
+        }
+
+        /*js 和CSS 的版本号*/
+        load.Version = '0412145201';
+        //使用随机数作为版本号，保证每次加载的config.js 都是最新的，其余的通过公共函数加载，带入版本号，更新版本号即更新文件
+        $.getScript("../Scripts/config.js?Version=" + Math.random(), function () {
+            load.LoadJs("../Scripts/commonYangYH.js", undefined, function () {
+                load.LoadJs('MapExt2016.js', undefined, function () {
+                    load.LoadJs('../Comm/Gener.js', undefined, function () {
+                        load.LoadJs('FrmFoolReadonly.js', undefined, function () {
+
+                        })
+                    })
+                })
+            })
+        });
     </script>
 </head>
 <body>

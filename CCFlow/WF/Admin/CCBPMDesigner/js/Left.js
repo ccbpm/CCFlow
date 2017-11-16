@@ -632,7 +632,7 @@ function AppendFrmToFormTree(FK_FormTree, No, Name) {
         data: [{
             id: No,
             text: Name,
-            attributes: { MenuId: "mForm", TType: "FORMTYPE" },
+            attributes: { MenuId: "mForm", TType: "FORM", Url: "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + No },
             checked: false,
             iconCls: 'icon-form',
             state: 'open',

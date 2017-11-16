@@ -184,8 +184,6 @@ namespace BP.WF.Port
         }
         #endregion
 
-
-
         #region 构造函数
         public override En.UAC HisUAC
         {
@@ -263,6 +261,14 @@ namespace BP.WF.Port
                 rm.Icon = "../../WF/Img/Btn/Copy.GIF";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "设置加密密码";
+                rm.HisAttrs.AddTBString("FrmID", null, "输入密码", true, false, 0, 100, 100);
+                rm.Warning = "您确定要执行设置改密码吗？";
+                rm.ClassMethodName = this.ToString() + ".DoSetPassword";
+               // rm.Icon = "../../WF/Img/Btn/Copy.GIF";
+                map.AddRefMethod(rm);
+
 
                 this._enMap = map;
                 return this._enMap;
@@ -308,6 +314,22 @@ namespace BP.WF.Port
         }
         #endregion
 
+        /// <summary>
+        /// 设置加密密码存储
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public string DoSetPassword(string password)
+        {
+            string str = BP.Tools.Cryptography.EncryptString(password);
+            DBAccess.RunSQLReturnVal("UPDATE Port_Emp SET Pass='" + str + "' WHERE No='" + this.No + "'");
+            return "设置成功..";
+        }
+        /// <summary>
+        /// 增加二级管理员.
+        /// </summary>
+        /// <param name="empID"></param>
+        /// <returns></returns>
         public string DoAddAdminer(string empID)
         {
             BP.Port.Emp emp = new BP.Port.Emp();

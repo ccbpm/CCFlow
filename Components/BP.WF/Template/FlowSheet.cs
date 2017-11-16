@@ -401,12 +401,6 @@ namespace BP.WF.Template
                 #endregion 发起前导航。
 
                 #region 延续流程。
-                //延续流程.
-                map.AddDDLSysEnum(FlowAttr.CFlowWay, (int)CFlowWay.None, "延续流程", true, true,
-                    FlowAttr.CFlowWay, "@0=无:非延续类流程@1=按照参数@2=按照字段配置");
-                map.AddTBStringDoc(FlowAttr.CFlowPara, null, "延续流程参数", true, false, true);
-                map.SetHelperUrl(FlowAttr.CFlowWay, "http://ccbpm.mydoc.io/?v=5404&t=17891");
-
                 // add 2013-03-24.
                 map.AddTBString(FlowAttr.DesignerNo, null, "设计者编号", false, false, 0, 32, 10);
                 map.AddTBString(FlowAttr.DesignerName, null, "设计者名称", false, false, 0, 100, 10);

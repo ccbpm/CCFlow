@@ -172,18 +172,6 @@ namespace BP.WF.Template
         /// </summary>
         public const string BatchStartFields = "BatchStartFields";
         /// <summary>
-        /// 延续流程方式
-        /// </summary>
-        public const string CFlowWay = "CFlowWay";
-        /// <summary>
-        /// 延续流程参数
-        /// </summary>
-        public const string CFlowPara = "CFlowPara";
-        /// <summary>
-        /// 是否启用
-        /// </summary>
-        public const string IsOK1 = "IsOK";
-        /// <summary>
         /// 是否是MD5
         /// </summary>
         public const string IsMD5 = "IsMD5";
@@ -436,24 +424,6 @@ namespace BP.WF.Template
         /// 按照用户选择的表单.
         /// </summary>
         ByFrms
-    }
-    /// <summary>
-    /// 延续流程方式
-    /// </summary>
-    public enum CFlowWay
-    {
-        /// <summary>
-        /// 无:非延续类流程
-        /// </summary>
-        None,
-        /// <summary>
-        /// 按照参数获取
-        /// </summary>
-        ByParas,
-        /// <summary>
-        /// 按照指定的字段获取
-        /// </summary>
-        BySpecField
     }
     /// <summary>
     /// 数据同步方案

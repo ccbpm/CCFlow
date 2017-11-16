@@ -546,36 +546,7 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.FlowAppType, (int)value);
             }
         }
-        /// <summary>
-        /// 延续流程方式
-        /// </summary>
-        public CFlowWay CFlowWay
-        {
-            get
-            {
-                return (CFlowWay)this.GetValIntByKey(FlowAttr.CFlowWay);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.CFlowWay, (int)value);
-            }
-        }
-        /// <summary>
-        /// 延续流程参数。
-        /// </summary>
-        public string CFlowPara
-        {
-            get
-            {
-                return this.GetValStrByKey(FlowAttr.CFlowPara);
-            }
-            set
-            {
-                this.SetValByKey(FlowAttr.CFlowPara, value);
-            }
-        }
-
-        /// <summary>
+         /// <summary>
         /// 流程备注的表达式
         /// </summary>
         public string FlowNoteExp
@@ -4308,10 +4279,7 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.IsLoadPriData, 0, "是否导入上一个数据？", true, false);
                 #endregion 导航方式。
 
-                map.AddTBInt(FlowAttr.CFlowWay, 0, "延续流程方式", true, false);
-                map.AddTBString(FlowAttr.CFlowPara, null, "延续流程参数", true, false, 0, 100, 10, true);
                 map.AddTBInt(FlowAttr.IsDBTemplate, 0, "是否启用数据模版？", true, false);
-
 
                 //批量发起 add 2013-12-27. 
                 map.AddTBInt(FlowAttr.IsBatchStart, 0, "是否可以批量发起", true, false);

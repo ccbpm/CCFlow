@@ -240,7 +240,8 @@ namespace BP.Tools
         public static string EncryptString(string encryptString)
         {
             string strEncrypt = encryptString;
-            if (string.IsNullOrEmpty(encryptString)) return encryptString;
+            if (string.IsNullOrEmpty(encryptString)) 
+                return encryptString;
 
             strEncrypt = MD5_Encrypt(strEncrypt);
             strEncrypt = MD5_Encrypt(strEncrypt);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -67,22 +68,71 @@ namespace BP.WF.HttpHandler
         }
 
         #region 登录界面.
-        public string Login_Init()
-        {
-            WF_App_ACE page = new WF_App_ACE(context);
-            return page.Login_Init();
-        }
-
-        public string Login_Out()
-        {
-            BP.WF.Dev2Interface.Port_SigOut();
-            return "安全退出.";
-        }
-
+        /// <summary>
+        /// 登录.
+        /// </summary>
+        /// <returns></returns>
         public string Login_Submit()
         {
-            WF_App_ACE page = new WF_App_ACE(context);
-            return page.Login_Submit();
+            string userNo = this.GetRequestVal("TB_UserNo");
+            string pass = this.GetRequestVal("TB_Pass");
+
+            BP.Port.Emp emp = new Emp();
+            emp.No = userNo;
+            if (emp.RetrieveFromDBSources() == 0)
+            {
+                if (DBAccess.IsExitsTableCol("Port_Emp", "NikeName") == true)
+                {
+                    /*如果包含昵称列,就检查昵称是否存在.*/
+                    string sql = "SELECT No FROM Port_Emp WHERE NikeName='" + userNo + "'";
+                    string no = DBAccess.RunSQLReturnStringIsNull(sql, null);
+                    if (no == null)
+                        return "err@用户名或者密码错误.";
+
+                    emp.No = no;
+                    int i = emp.RetrieveFromDBSources();
+                    if (i == 0)
+                        return "err@用户名或者密码错误.";
+                }
+                else
+                {
+                    return "err@用户名或者密码错误.";
+                }
+            }
+
+            if (emp.CheckPass(pass) == false)
+                return "err@用户名或者密码错误.";
+
+            //调用登录方法.
+            BP.WF.Dev2Interface.Port_Login(emp.No, emp.Name, emp.FK_Dept, emp.FK_DeptText);
+
+            return "登录成功.";
+        }
+        public string Login_Init()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("SysName", SystemConfig.SysName);
+            ht.Add("ServiceTel", SystemConfig.ServiceTel);
+            ht.Add("CustomerName", SystemConfig.CustomerName);
+
+            if (WebUser.NoOfRel == null)
+            {
+                ht.Add("UserNo", "");
+                ht.Add("UserName", "");
+            }
+            else
+            {
+                ht.Add("UserNo", WebUser.No);
+
+                string name = WebUser.Name;
+
+                if (string.IsNullOrEmpty(name) == true)
+                    ht.Add("UserName", WebUser.No);
+                else
+                    ht.Add("UserName", name);
+            }
+
+            return BP.Tools.Json.ToJsonEntityModel(ht);
         }
         #endregion 登录界面.
 

@@ -103,7 +103,7 @@
 
             var url = "MyFlow.htm?FK_Flow=" + flowNo;
 
-            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no ,fullscreen=yes');
             newWindow.focus();
             return;
         }
@@ -113,7 +113,7 @@
 
             var intFlowNo = flowNo;
             var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
-            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no,fullscreen=yes');
             newWindow.focus();
             return;
         }
@@ -122,7 +122,7 @@
         function WinOpenStart(flowNo) {
             var intFlowNo = flowNo;
             var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
-            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no,fullscreen=yes');
             newWindow.focus();
             return;
         }
@@ -131,7 +131,7 @@
         function WinOpenJoin(flowNo) {
             var intFlowNo = flowNo;
             var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=MyJoin";
-            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no,fullscreen=yes');
             newWindow.focus();
             return;
         }
@@ -140,7 +140,7 @@
         function WinOpenBatch(flowNo) {
 
             var url = "BatchStart.htm?FK_Flow=" + flowNo;
-            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no,fullscreen=yes');
             newWindow.focus();
             return;
         }
@@ -218,7 +218,7 @@
                             newRow += "<td width='300px'> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "</a></td>";
 
                             var extHtml = "";
-                            if (flow.IsBatchStart)
+                            if (flow.IsBatchStart=="1")
                                 extHtml = " - <a href=\"javascript:WinOpenBatch('" + flow.No + "');\" >批量发起</a>";
 
                             newRow += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" >发起申请</a>" + extHtml + "</td>";

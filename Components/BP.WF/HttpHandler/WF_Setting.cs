@@ -159,6 +159,63 @@ namespace BP.WF.HttpHandler
         }
         #endregion 图片签名.
 
+        #region 切换部门.
+        /// <summary>
+        /// 初始化切换部门.
+        /// </summary>
+        /// <returns></returns>
+        public string ChangeDept_Init()
+        {
+            string sql = "SELECT a.No,a.Name, NameOfPath, '0' AS  CurrentDept FROM Port_Dept A, Port_DeptEmp B WHERE A.No=B.FK_Dept AND B.FK_Emp='" + BP.Web.WebUser.No + "'";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["CURRENTDEPT"].ColumnName = "CurrentDept";
+                dt.Columns["NAMEOFPATH"].ColumnName = "NameOfPath";
+            }
+
+            //设置当前的部门.
+            foreach (DataRow dr in dt.Rows)
+            {
+                if (dr["No"].ToString() == WebUser.FK_Dept)
+                    dr["CurrentDept"] = "1";
+
+                if (dr["NameOfPath"].ToString() != "")
+                    dr["Name"] = dr["NameOfPath"];
+            }
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 提交选择的部门。
+        /// </summary>
+        /// <returns></returns>
+        public string ChangeDept_Submit()
+        {
+            string deptNo = this.GetRequestVal("DeptNo");
+            BP.GPM.Dept dept = new GPM.Dept(deptNo);
+
+
+            BP.Web.WebUser.FK_Dept = dept.No;
+            BP.Web.WebUser.FK_DeptName = dept.Name;
+            BP.Web.WebUser.FK_DeptNameOfFull = dept.NameOfPath;
+
+            //重新设置cookies.
+            string strs = "";
+            strs += "@No=" + WebUser.No;
+            strs += "@Name=" + WebUser.Name;
+            strs += "@FK_Dept=" + WebUser.FK_Dept;
+            strs += "@FK_DeptName=" + WebUser.FK_DeptName;
+            strs += "@FK_DeptNameOfFull=" + WebUser.FK_DeptNameOfFull;
+            BP.Web.WebUser.SetValToCookie(strs);
+
+            return "@执行成功,已经切换到｛" + BP.Web.WebUser.FK_DeptName + "｝部门上。";
+        }
+        #endregion
+
         public string UserIcon_Init()
         {
             return "";
@@ -168,5 +225,7 @@ namespace BP.WF.HttpHandler
         {
             return "";
         }
+
+
     }
 }

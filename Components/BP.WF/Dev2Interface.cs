@@ -1389,7 +1389,7 @@ namespace BP.WF
         public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node=0)
         {
             //执行 todolist 调度.
-        //    DTS_GenerWorkFlowTodoSta();
+             DTS_GenerWorkFlowTodoSta();
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -5592,7 +5592,7 @@ namespace BP.WF
                 foreach (string key in htWork.Keys)
                     paras += "@" + key + "=" + htWork[key].ToString();
 
-                if (string.IsNullOrEmpty(paras) == false)
+                if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec==true)
                 {
                     string dbstr = SystemConfig.AppCenterDBVarStr;
                     Paras ps = new Paras();
@@ -6068,7 +6068,7 @@ namespace BP.WF
                 foreach (string key in htWork.Keys)
                     paras += "@" + key + "=" + htWork[key].ToString();
 
-                if (string.IsNullOrEmpty(paras) == false)
+                if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
                 {
                     ps = new Paras();
                     ps.SQL = "UPDATE WF_GenerWorkerlist SET AtPara=" + dbstr + "Paras WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
@@ -6232,7 +6232,7 @@ namespace BP.WF
                     }
                 }
 
-                if (string.IsNullOrEmpty(paras) == false)
+                if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
                 {
                     ps = new Paras();
                     ps.SQL = "UPDATE WF_GenerWorkerlist SET AtPara=" + dbstr + "Paras WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node";
@@ -7139,7 +7139,7 @@ namespace BP.WF
                     foreach (string key in htWork.Keys)
                         paras += "@" + key + "=" + htWork[key].ToString();
 
-                    if (string.IsNullOrEmpty(paras) == false)
+                    if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
                     {
                         string dbstr = SystemConfig.AppCenterDBVarStr;
                         Paras ps = new Paras();
@@ -9203,8 +9203,6 @@ namespace BP.WF
                 //    BP.WF.Dev2Interface.Port_SendSMS
             }
 
-
-
             if (dt.Rows.Count >= 1)
             {
                 //更新预警状态.
@@ -9214,7 +9212,6 @@ namespace BP.WF
                 sql += " AND WF_GenerWorkFlow.TodoSta=0 ";
                 int i = BP.DA.DBAccess.RunSQL(sql);
             }
-
 
 
             //更新逾期期状态.

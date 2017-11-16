@@ -719,6 +719,28 @@ namespace BP.Web
 			}
 			throw new Exception("@err-001 (" + valKey + ")登陆信息丢失。");
 		}
+        /// <summary>
+        /// 设置信息.
+        /// </summary>
+        /// <param name="keyVals"></param>
+        public static void SetValToCookie(string keyVals)
+        {
+            if (BP.Sys.SystemConfig.IsBSsystem == false)
+                return;
+
+            HttpCookie hc = BP.Sys.Glo.Request.Cookies["CCS"];
+            if (hc != null)
+                BP.Sys.Glo.Request.Cookies.Remove("CCS");
+
+            HttpCookie cookie = new HttpCookie("CCS");
+            cookie.Expires = DateTime.Now.AddMinutes(SystemConfig.SessionLostMinute);
+
+            AtPara ap = new AtPara(keyVals);
+            foreach (string key in ap.HisHT.Keys)
+                cookie.Values.Add(key, HttpUtility.UrlEncode(ap.GetValStrByKey(key)));
+            
+            System.Web.HttpContext.Current.Response.AppendCookie(cookie);
+        }
 		/// <summary>
 		/// 是否是操作员？
 		/// </summary>

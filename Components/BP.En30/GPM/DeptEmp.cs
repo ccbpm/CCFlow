@@ -165,7 +165,7 @@ namespace BP.GPM
                     return this._enMap;
 
                 Map map = new Map("Port_DeptEmp");
-                map.EnDesc = "部门人员信息";
+                map.EnDesc = "部门人员信息";  
                 
                 map.AddMyPK();
                 map.AddTBString(DeptEmpAttr.FK_Emp, null, "操作员", false, false, 1, 50, 1);

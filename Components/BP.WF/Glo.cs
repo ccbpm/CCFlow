@@ -2023,6 +2023,20 @@ namespace BP.WF
                 return s.Contains(BP.Web.WebUser.No);
             }
         }
+        public static bool IsEnableTrackRec
+        {
+            get
+            {
+                string s = BP.Sys.SystemConfig.AppSettings["IsEnableTrackRec"];
+                if (string.IsNullOrEmpty(s))
+                    return false;
+                if (s == "0")
+                    return false;
+
+                return true;
+            }
+        }
+        
         /// <summary>
         /// 是否启用beta?
         /// </summary>
@@ -3570,16 +3584,6 @@ namespace BP.WF
                 return BP.Sys.SystemConfig.GetValByKeyBoolen("IsEnableZhiDu", false);
             }
         }
-        ///// <summary>
-        ///// 是否删除流程注册表数据？
-        ///// </summary>
-        //public static bool IsDeleteGenerWorkFlow
-        //{
-        //    get
-        //    {
-        //        return BP.Sys.SystemConfig.GetValByKeyBoolen("IsDeleteGenerWorkFlow", false);
-        //    }
-        //}
         /// <summary>
         /// 是否检查表单树字段填写是否为空
         /// </summary>

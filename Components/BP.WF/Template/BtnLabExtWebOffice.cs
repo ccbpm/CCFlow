@@ -898,7 +898,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(BtnAttr.WebOfficeEnable, 0, "文档启用方式", true, true, BtnAttr.WebOfficeEnable,
                  "@0=不启用@1=按钮方式@2=标签页置后方式@3=标签页置前方式");  //edited by liuxc,2016-01-18,from xc.
 
-                map.AddDDLSysEnum(BtnAttr.WebOfficeFrmModel, 0, "表单工作方式", true, true, "FrmType"); 
+                map.AddDDLSysEnum(BtnAttr.WebOfficeFrmModel, 0, "表单工作方式", true, true, "FrmType");
 
                 #endregion
 

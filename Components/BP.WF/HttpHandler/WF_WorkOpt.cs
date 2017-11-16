@@ -1858,6 +1858,12 @@ namespace BP.WF.HttpHandler
         public string Return_Init()
         {
             DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.FK_Node, this.WorkID, this.FID);
+            if (dt.Rows.Count == 0)
+            {
+                string errMsg= "err@获得可以退回的节点出错误，请反馈给系统管理员.@FK_Node=" + this.FK_Node + "@WorkID=" + this.WorkID + "@FID=" + this.FID;
+                BP.DA.Log.DebugWriteError(errMsg);
+                return errMsg;
+            }
             return BP.Tools.Json.ToJson(dt);
         }
         /// <summary>

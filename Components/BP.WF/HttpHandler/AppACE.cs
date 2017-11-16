@@ -266,7 +266,7 @@ namespace BP.WF.HttpHandler
                 }
             }
 
-            if (emp.Pass !=pass )
+            if (emp.CheckPass(pass) ==false )
                 return "err@用户名或者密码错误.";
 
             //调用登录方法.

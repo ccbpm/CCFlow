@@ -202,9 +202,9 @@ namespace BP.Port
         public bool CheckPass(string pass)
         {
             //检查是否与通用密码相符.
-            string gePass = SystemConfig.AppSettings["GenerPass"];
-            if (gePass == pass && string.IsNullOrEmpty(gePass) == false)
-                return true;
+            //string gePass = SystemConfig.AppSettings["GenerPass"];
+            //if (gePass == pass && string.IsNullOrEmpty(gePass) == false)
+            //    return true;
 
             if (SystemConfig.OSDBSrc == OSDBSrc.WebServices)
             {
@@ -220,11 +220,12 @@ namespace BP.Port
                 //启用加密
                 if (SystemConfig.IsEnablePasswordEncryption == true)
                     pass = BP.Tools.Cryptography.EncryptString(pass);
+
                 /*使用数据库校验.*/
                 if (this.Pass == pass)
                     return true;
-            }
 
+            }
             return false;
         }
 

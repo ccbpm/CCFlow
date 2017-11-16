@@ -236,7 +236,7 @@ namespace BP.WF.HttpHandler
             BP.Sys.MapData md = new BP.Sys.MapData(this.FK_MapData);
             if (md.HisFrmType == BP.Sys.FrmType.FoolForm)
             {
-                /* 傻瓜表单 */
+                /* 傻瓜表单 @于庆海需要翻译. */
                 return "url@../FoolFormDesigner/Designer.htm?IsFirst=1&FK_MapData=" + this.FK_MapData;
             }
 

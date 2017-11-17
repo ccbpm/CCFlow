@@ -8,10 +8,6 @@ body {
   direction: ltr;
 }
 
-a:link    {color:fff;}
-a:visited {color:fff;}
-a:hover   {color:fff;}
-a:active  {color:fff;}
 /* 按钮风格 */
 input[type="button"], input[type="submit"],input[type="file"]
 {

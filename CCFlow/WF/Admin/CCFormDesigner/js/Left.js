@@ -68,14 +68,19 @@ function newFlow() {
     }
     var dgId = "iframDg";
     var url = "DialogCtr/NewFlow.htm?sort=" + currSortId + "&s=" + Math.random();
+
     OpenEasyUiDialog(url, dgId, '新建流程', 650, 500, 'icon-new', true, function () {
         var win = document.getElementById(dgId).contentWindow;
         var newFlowInfo = win.getNewFlowInfo();
 
-        if (newFlowInfo.flowName == null || newFlowInfo.flowName.length == 0 || newFlowInfo.flowSort == null || newFlowInfo.flowSort.length == 0) {
+        if (newFlowInfo.flowName == null
+         || newFlowInfo.flowName.length == 0
+         || newFlowInfo.flowSort == null
+         || newFlowInfo.flowSort.length == 0) {
             $.messager.alert('错误', '信息填写不完整', 'error');
             return false;
         }
+
         //传入参数
         var params = {
             method: "Do",
@@ -84,6 +89,14 @@ function newFlow() {
         };
         //访问服务
         ajaxServiceDefault(params, function (data) {
+
+            if (data.indexOf('@err') == 0) {
+                alert(data);
+                return;
+            }
+
+            //@代国强怎么在这里增加一个等待执行的提示窗口 ，提示为正在创建流程,请稍后.... 
+
             var jdata = $.parseJSON(data);
             if (jdata.success) {
                 //在左侧流程树上增加新建的流程,并选中

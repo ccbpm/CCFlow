@@ -645,7 +645,7 @@ namespace BP.Web
                         return null;
                     }
                     Node nd = new Node(nodeID);
-                    nd.RepareMap();
+                    nd.RepareMap(nd.HisFlow);
                 }
                 return null;
             }
@@ -1304,7 +1304,7 @@ namespace BP.Web
             {
                 string fk_node = fk_mapdata.Replace("ND", "");
                 Node nd = new Node(int.Parse(fk_node));
-                nd.RepareMap();
+                nd.RepareMap(nd.HisFlow);
             }
             return null;
         }

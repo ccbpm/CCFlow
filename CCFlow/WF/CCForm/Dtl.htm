@@ -175,23 +175,13 @@
         //插入行.
         function insertRow( rowShowModel ) {
 
-        rowShowModel=1;
-
           //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
-          if (rowShowModel==1 &&  window.parent )
+          if ( rowShowModel!=0 &&  window.parent )
           {
              var ensName = GetQueryString("EnsName");
              var refPKVal = GetQueryString("RefPKVal");
-             window.parent.DtlFreeFrm(ensName,refPKVal,'0');
+             window.parent.DtlFrm(ensName,refPKVal,'0',rowShowModel);
              return;
-           }
-
-           if (rowShowModel==2 &&  window.parent)
-           {
-              var ensName = GetQueryString("EnsName");
-              var refPKVal = GetQueryString("RefPKVal");
-              window.parent.DtlFoolFrm(ensName,refPKVal,'0');
-              return;
            }
 
             if ($('#dtlDiv div table tbody tr').length == 1) {

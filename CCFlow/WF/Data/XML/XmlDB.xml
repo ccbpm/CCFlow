@@ -112,5 +112,14 @@
   <GovWordRight No="14"  Name="协助办理。" />
   <GovWordRight No="15"  Name="派员参加。" />
   <GovWordRight No="16"  Name="提出拟办意见。" />
+
+
+  <!-- 处理名字多音字. -->
+  <PinYin No="章"  Name="zhang" />
+  <PinYin No="章"  Name="zhang" />
+  <PinYin No="章"  Name="zhang" />
+  <PinYin No="章"  Name="zhang" />
+  <PinYin No="章"  Name="zhang" />
+
 </DS>
 

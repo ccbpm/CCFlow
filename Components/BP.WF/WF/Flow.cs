@@ -5175,9 +5175,9 @@ namespace BP.WF
                                         continue;
                                     case "showsheets":
                                     case "histonds":
-                                    case "groupstands":
+                                    case "groupstands": //去除不必要的替换 @于庆海 需要翻译
                                         string key = "@" + flowID;
-                                        val = val.Replace(key, "");
+                                        val = val.Replace(key, "@");
                                         break;
                                     default:
                                         break;
@@ -5246,9 +5246,9 @@ namespace BP.WF
                                         continue;
                                     case "showsheets":
                                     case "histonds":
-                                    case "groupstands":
+                                    case "groupstands": //修复替换 @于庆海 需要翻译
                                         string key = "@" + flowID;
-                                        val = val.Replace(key, "");
+                                        val = val.Replace(key, "@");
                                         break;
                                     default:
                                         break;

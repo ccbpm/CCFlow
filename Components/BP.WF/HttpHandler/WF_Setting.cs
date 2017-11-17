@@ -227,5 +227,35 @@ namespace BP.WF.HttpHandler
         }
 
 
+        #region 修改密码.
+        public string ChangePassword_Init()
+        {
+            if (BP.DA.DBAccess.IsView("Port_Emp") == true)
+                return "err@当前是组织结构集成模式，您不能修改密码，请在被集成的系统修改密码。";
+
+            return "";
+        }
+        /// <summary>
+        /// 修改密码 @于庆海.
+        /// </summary>
+        /// <returns></returns>
+        public string ChangePassword_Submit()
+        {
+            string oldPass = this.GetRequestVal("OldPass");
+            string pass = this.GetRequestVal("Pass");
+
+            BP.Port.Emp emp = new Emp(BP.Web.WebUser.No);
+            if (emp.CheckPass(oldPass) == false)
+                return "err@旧密码错误.";
+
+            if (BP.Sys.SystemConfig.IsEnablePasswordEncryption == true)
+                    pass = BP.Tools.Cryptography.EncryptString(pass);
+            emp.Pass = pass;
+            emp.Update();
+
+            return "密码修改成功...";
+        }
+        #endregion 修改密码.
+
     }
 }

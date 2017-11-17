@@ -31,8 +31,6 @@ namespace BP.WF.Template
 
             //确定模板
             string tempFile = BP.Sys.SystemConfig.PathOfWebApp + "\\WF\\Data\\Templete\\NewFlow.json";
-            if (flowVer == "1")//CCBPM_DType.CCBPM
-                tempFile = BP.Sys.SystemConfig.PathOfWebApp + "\\WF\\Data\\Templete\\ccbpm.json";
 
             //将流程模版保存到数据库里.
             fl.SaveFileToDB("FlowJson", tempFile);
@@ -53,7 +51,7 @@ namespace BP.WF.Template
             drToNode.ToNode = int.Parse(int.Parse(flowNo) + "02");
             drToNode.Insert();
 
-            //执行一次流程检查.
+            //执行一次流程检查, 为了节省效率，把检查去掉了.
             fl.DoCheck();
 
             return flowNo;

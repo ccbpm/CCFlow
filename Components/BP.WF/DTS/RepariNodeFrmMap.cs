@@ -51,10 +51,11 @@ namespace BP.WF.DTS
             Nodes nds = new Nodes();
             nds.RetrieveAllFromDBSource();
 
+
             string info = "";
             foreach (Node nd in nds)
             {
-                string msg = nd.RepareMap();
+                string msg = nd.RepareMap(nd.HisFlow);
                 if (msg != "")
                     info += "<b>对流程" + nd.FlowName + ",节点(" + nd.NodeID + ")(" + nd.Name + "), 检查结果如下:</b>" + msg + "<hr>";
             }

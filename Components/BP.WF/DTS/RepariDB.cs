@@ -68,7 +68,7 @@ namespace BP.WF.DTS
                 try
                 {
                     BP.WF.Node nd = new Node(int.Parse(nodeid));
-                    nd.RepareMap();
+                    nd.RepareMap(nd.HisFlow);
                     continue;
                 }
                 catch(Exception ex)

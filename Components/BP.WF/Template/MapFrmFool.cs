@@ -331,12 +331,14 @@ namespace BP.WF.Template
         /// </summary>
         public string DoCheckFixFrmForUpdateVer()
         {
+
+
             // 更新状态.
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlType='' WHERE CtrlType IS NULL");
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
 
             //一直遇到遇到自动变长的问题, 强制其修复过来.
-            DBAccess.RunSQL("UPDATE Sys_Mapattr set  colspan=3 WHERE UIHeight=23 AND colspan=4");
+            DBAccess.RunSQL("UPDATE Sys_Mapattr SET colspan=3 WHERE UIHeight=23 AND colspan=4");
             
 
             string str = "";
@@ -427,6 +429,31 @@ namespace BP.WF.Template
                 FrmNodeComponent conn = new FrmNodeComponent(this.NodeID);
                 conn.Update();
             }
+
+
+
+            //删除重复的数据, 比如一个从表显示了多个分组里. @于庆海增加此部分.
+            sql = "SELECT * FROM (SELECT EnName,CtrlID,CtrlType, count(*) as Num FROM sys_groupfield WHERE CtrlID!='' GROUP BY EnName,CtrlID,CtrlType ) AS A WHERE A.Num > 1";
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            foreach (DataRow dr in dt.Rows)
+            {
+                string enName = dr[0].ToString();
+                string ctrlID = dr[1].ToString();
+                string ctrlType = dr[2].ToString();
+
+                GroupFields gfs = new GroupFields();
+                gfs.Retrieve(GroupFieldAttr.EnName, enName, GroupFieldAttr.CtrlID, ctrlID, GroupFieldAttr.CtrlType, ctrlType);
+
+                if (gfs.Count <= 1)
+                    continue;
+                foreach (GroupField gf in gfs)
+                {
+                    gf.Delete(); //删除其中的一个.
+                    break;
+                }
+            }
+
+
 
             if (str == "")
                 return "检查成功.";

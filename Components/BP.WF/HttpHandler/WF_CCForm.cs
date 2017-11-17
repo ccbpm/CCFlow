@@ -492,14 +492,14 @@ namespace BP.WF.HttpHandler
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                         return "url@FrmFreeReadonly.htm?1=2" + paras;
                     else
-                        return "url@FrmFree.htm?1=2" + paras;
+                        return "url@FrmGener.htm?1=2" + paras;
                 }
                 else
                 {
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                         return "url@FrmFoolReadonly.htm?1=2" + paras;
                     else
-                        return "url@FrmFool.htm?1=2" + paras;
+                        return "url@FrmGener.htm?1=2" + paras;
                 }
             }
             else

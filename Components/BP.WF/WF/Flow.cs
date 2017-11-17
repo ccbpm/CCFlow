@@ -1928,7 +1928,7 @@ namespace BP.WF
                 DBAccess.RunSQLs(sqls);
 
                 //更新计算数据.
-                this.NumOfBill = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM WF_BillTemplate WHERE NodeID IN (select NodeID from WF_Flow WHERE no='" + this.No + "')");
+                this.NumOfBill = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM WF_BillTemplate WHERE NodeID IN (SELECT NodeID FROM WF_Flow WHERE No='" + this.No + "')");
                 this.NumOfDtl = DBAccess.RunSQLReturnValInt("SELECT count(*) FROM Sys_MapDtl WHERE FK_MapData='ND" + int.Parse(this.No) + "Rpt'");
                 this.DirectUpdate();
 
@@ -1979,7 +1979,7 @@ namespace BP.WF
                     msg += "@信息:开始补充&修复节点必要的字段";
                     try
                     {
-                        nd.RepareMap();
+                        nd.RepareMap(this);
                     }
                     catch (Exception ex)
                     {
@@ -2255,7 +2255,7 @@ namespace BP.WF
                     if (this.IsMD5)
                     {
                         if (nd.HisWork.EnMap.Attrs.Contains(WorkAttr.MD5) == false)
-                            nd.RepareMap();
+                            nd.RepareMap(this);
                     }
                 }
                 msg += "@信息:检查节点的焦点字段完成.";
@@ -4372,8 +4372,8 @@ namespace BP.WF
             }
             #endregion 删除独立表单的数据.
 
-            string sql = "  where FK_Node in (SELECT NodeID FROM WF_Node WHERE fk_flow='" + this.No + "')";
-            string sql1 = " where NodeID in (SELECT NodeID FROM WF_Node WHERE fk_flow='" + this.No + "')";
+            string sql = "  WHERE FK_Node in (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
+            string sql1 = " WHERE NodeID in (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
 
             // DBAccess.RunSQL("DELETE FROM WF_CHOfFlow WHERE FK_Flow='" + this.No + "'");
 
@@ -5212,6 +5212,7 @@ namespace BP.WF
                             //删除mapdata.
                         }
 
+                        // 执行update 触发其他的业务逻辑。
                         foreach (DataRow dr in dt.Rows)
                         {
                             Node nd = new Node();
@@ -5854,19 +5855,6 @@ namespace BP.WF
                 //this.Paras = "@StartNodeX=10@StartNodeY=15@EndNodeX=40@EndNodeY=10";
                 this.Paras = "@StartNodeX=200@StartNodeY=50@EndNodeX=200@EndNodeY=350";
 
-                //#region 集团模式.
-                //if (BP.Web.WebUser.No == "admin")
-                //{
-                //    this.FK_Dept = "";
-                //}
-                //else
-                //{
-                //    //把该部门的信息存储到系统里面去.
-                //    BP.WF.Port.AdminEmp ae = new Port.AdminEmp(BP.Web.WebUser.No);
-                //    this.FK_Dept = ae.RootOfDept; //创建所在部门.
-                //}
-                //#endregion 集团模式.
-
                 this.Save();
 
                 #region 删除有可能存在的历史数据.
@@ -5896,9 +5884,8 @@ namespace BP.WF
                 nd.Insert();
 
                 nd.CreateMap();
-                nd.HisWork.CheckPhysicsTable();
 
-
+                 //nd.HisWork.CheckPhysicsTable();  去掉，检查的时候会执行.
                 CreatePushMsg(nd);
 
 
@@ -5926,7 +5913,7 @@ namespace BP.WF
 
                 nd.Insert();
                 nd.CreateMap();
-                nd.HisWork.CheckPhysicsTable();
+                //nd.HisWork.CheckPhysicsTable(); //去掉，检查的时候会执行.
 
 
                 CreatePushMsg(nd);
@@ -5943,193 +5930,16 @@ namespace BP.WF
 
                 // 装载模版.
                 string file = BP.Sys.SystemConfig.PathOfDataUser + "XML\\TempleteSheetOfStartNode.xml";
-                if (System.IO.File.Exists(file))
-                {
-                    /*如果存在开始节点表单模版*/
-                    DataSet ds = new DataSet();
-                    ds.ReadXml(file);
+                if (System.IO.File.Exists(file)==false)
+                    throw new Exception("@开始节点表单模版丢失"+file);
 
-                    string nodeID = "ND" + int.Parse(this.No + "01");
-                    BP.Sys.MapData.ImpMapData(nodeID, ds);
-                }
-                else
-                {
-                    #region 生成CCForm 的装饰.
-                    FrmImg img = new FrmImg();
-                    img.MyPK = "Img" + DateTime.Now.ToString("yyMMddhhmmss") + WebUser.No;
-                    img.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    img.X = (float)577.26;
-                    img.Y = (float)3.45;
+                /*如果存在开始节点表单模版*/
+                DataSet ds = new DataSet();
+                ds.ReadXml(file);
 
-                    img.W = (float)137;
-                    img.H = (float)40;
+                string nodeID = "ND" + int.Parse(this.No + "01");
 
-                    img.ImgURL = "/ccform;component/Img/LogoBig.png";
-                    img.LinkURL = "http://ccflow.org";
-                    img.LinkTarget = "_blank";
-                    img.Insert();
-
-                    FrmLab lab = new FrmLab();
-
-                    lab = new FrmLab();
-                    lab.MyPK = "Lab" + DateTime.Now.ToString("yyMMddhhmmss") + WebUser.No + 2;
-                    lab.Text = "发起人";
-                    lab.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    lab.X = (float)106.48;
-                    lab.Y = (float)96.08;
-                    lab.FontSize = 11;
-                    lab.FontColor = "black";
-                    lab.FontName = "Portable User Interface";
-                    lab.FontStyle = "Normal";
-                    lab.FontWeight = "normal";
-                    lab.Insert();
-
-                    lab = new FrmLab();
-                    lab.MyPK = "Lab" + DateTime.Now.ToString("yyMMddhhmmss") + WebUser.No + 3;
-                    lab.Text = "发起时间";
-                    lab.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    lab.X = (float)307.64;
-                    lab.Y = (float)95.17;
-
-                    lab.FontSize = 11;
-                    lab.FontColor = "black";
-                    lab.FontName = "Portable User Interface";
-                    lab.FontStyle = "Normal";
-                    lab.FontWeight = "normal";
-                    lab.Insert();
-
-                    lab = new FrmLab();
-                    lab.MyPK = "Lab" + DateTime.Now.ToString("yyMMddhhmmss") + WebUser.No + 4;
-                    lab.Text = "新建节点(请修改标题)";
-                    lab.FK_MapData = "ND" + int.Parse(this.No + "01");
-
-                    lab.X = (float)294.67;
-                    lab.Y = (float)8.27;
-
-                    lab.FontSize = 23;
-                    lab.FontColor = "Blue";
-                    lab.FontName = "Portable User Interface";
-                    lab.FontStyle = "Normal";
-                    lab.FontWeight = "normal";
-                    lab.Insert();
-
-                    lab = new FrmLab();
-                    lab.MyPK = "Lab" + DateTime.Now.ToString("yyMMddhhmmss") + WebUser.No + 5;
-                    lab.Text = "说明:以上内容是ccflow自动产生的，您可以修改/删除它。@为了更方便您的设计您可以到http://ccflow.org官网下载表单模板.";
-                    lab.Text += "@因为当前技术问题与silverlight开发工具使用特别说明如下:@";
-                    lab.Text += "@1,改变控件位置: ";
-                    lab.Text += "@  所有的控件都支持 wasd, 做为方向键用来移动控件的位置， 部分控件支持方向键. ";
-                    lab.Text += "@2, 增加textbox, 从表, dropdownlistbox, 的宽度 shift+ -> 方向键增加宽度 shift + <- 减小宽度.";
-                    lab.Text += "@3, 保存 windows键 + s.  删除 delete.  复制 ctrl+c   粘帖: ctrl+v.";
-                    lab.Text += "@4, 支持全选，批量移动， 批量放大缩小字体., 批量改变线的宽度.";
-                    lab.Text += "@5, 改变线的长度： 选择线，点绿色的圆点，拖拉它。.";
-                    lab.Text += "@6, 放大或者缩小　label 的字体 , 选择一个多个label , 按 A+ 或者　A－　按钮.";
-                    lab.Text += "@7, 改变线或者标签的颜色， 选择操作对象，点工具栏上的调色板.";
-
-                    lab.X = (float)168.24;
-                    lab.Y = (float)163.7;
-                    lab.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    lab.FontSize = 11;
-                    lab.FontColor = "Red";
-                    lab.FontName = "Portable User Interface";
-                    lab.FontStyle = "Normal";
-                    lab.FontWeight = "normal";
-                    lab.Insert();
-
-                    string key = "L" + DateTime.Now.ToString("yyMMddhhmmss") + WebUser.No;
-                    FrmLine line = new FrmLine();
-                    line.MyPK = key + "_1";
-                    line.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    line.X1 = (float)281.82;
-                    line.Y1 = (float)81.82;
-                    line.X2 = (float)281.82;
-                    line.Y2 = (float)121.82;
-                    line.BorderWidth = (float)2;
-                    line.BorderColor = "Black";
-                    line.Insert();
-
-                    line.MyPK = key + "_2";
-                    line.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    line.X1 = (float)360;
-                    line.Y1 = (float)80.91;
-                    line.X2 = (float)360;
-                    line.Y2 = (float)120.91;
-                    line.BorderWidth = (float)2;
-                    line.BorderColor = "Black";
-                    line.Insert();
-
-                    line.MyPK = key + "_3";
-                    line.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    line.X1 = (float)158.82;
-                    line.Y1 = (float)41.82;
-                    line.X2 = (float)158.82;
-                    line.Y2 = (float)482.73;
-                    line.BorderWidth = (float)2;
-                    line.BorderColor = "Black";
-                    line.Insert();
-
-                    line.MyPK = key + "_4";
-                    line.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    line.X1 = (float)81.55;
-                    line.Y1 = (float)80;
-                    line.X2 = (float)718.82;
-                    line.Y2 = (float)80;
-                    line.BorderWidth = (float)2;
-                    line.BorderColor = "Black";
-                    line.Insert();
-
-
-                    line.MyPK = key + "_5";
-                    line.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    line.X1 = (float)81.82;
-                    line.Y1 = (float)40;
-                    line.X2 = (float)81.82;
-                    line.Y2 = (float)480.91;
-                    line.BorderWidth = (float)2;
-                    line.BorderColor = "Black";
-                    line.Insert();
-
-                    line.MyPK = key + "_6";
-                    line.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    line.X1 = (float)81.82;
-                    line.Y1 = (float)481.82;
-                    line.X2 = (float)720;
-                    line.Y2 = (float)481.82;
-                    line.BorderWidth = (float)2;
-                    line.BorderColor = "Black";
-                    line.Insert();
-
-                    line.MyPK = key + "_7";
-                    line.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    line.X1 = (float)83.36;
-                    line.Y1 = (float)40.91;
-                    line.X2 = (float)717.91;
-                    line.Y2 = (float)40.91;
-                    line.BorderWidth = (float)2;
-                    line.BorderColor = "Black";
-                    line.Insert();
-
-                    line.MyPK = key + "_8";
-                    line.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    line.X1 = (float)83.36;
-                    line.Y1 = (float)120.91;
-                    line.X2 = (float)717.91;
-                    line.Y2 = (float)120.91;
-                    line.BorderWidth = (float)2;
-                    line.BorderColor = "Black";
-                    line.Insert();
-
-                    line.MyPK = key + "_9";
-                    line.FK_MapData = "ND" + int.Parse(this.No + "01");
-                    line.X1 = (float)719.09;
-                    line.Y1 = (float)40;
-                    line.X2 = (float)719.09;
-                    line.Y2 = (float)482.73;
-                    line.BorderWidth = (float)2;
-                    line.BorderColor = "Black";
-                    line.Insert();
-                    #endregion
-                }
+                BP.Sys.MapData.ImpMapData(nodeID, ds); 
 
                 return this.No;
             }
@@ -6163,7 +5973,7 @@ namespace BP.WF
         /// </summary>
         public static void UpdateVer(string flowNo)
         {
-            string sql = "UPDATE WF_Flow SET VER='" + BP.DA.DataType.CurrentDataTimess + "' WHERE No='" + flowNo + "'";
+            string sql = "UPDATE WF_Flow SET Ver='" + BP.DA.DataType.CurrentDataTimess + "' WHERE No='" + flowNo + "'";
             DBAccess.RunSQL(sql);
         }
         public void DoDelete()
@@ -6173,7 +5983,7 @@ namespace BP.WF
 
             string sql = "";
             //sql = " DELETE FROM WF_chofflow WHERE FK_Flow='" + this.No + "'";
-            sql += "@ DELETE  FROM WF_GenerWorkerlist WHERE FK_Flow='" + this.No + "'";
+            sql += "@ DELETE FROM WF_GenerWorkerlist WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM  WF_GenerWorkFlow WHERE FK_Flow='" + this.No + "'";
             sql += "@ DELETE FROM  WF_Cond WHERE FK_Flow='" + this.No + "'";
 
@@ -6182,13 +5992,13 @@ namespace BP.WF
             sql += "@ DELETE FROM WF_PushMsg WHERE FK_Flow='" + this.No + "'";
 
             // 删除岗位节点。
-            sql += "@ DELETE  FROM  WF_NodeStation WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
+            sql += "@ DELETE FROM WF_NodeStation WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
 
             // 删除方向。
-            sql += "@ DELETE FROM  WF_Direction WHERE FK_Flow='" + this.No + "'";
+            sql += "@ DELETE FROM WF_Direction WHERE FK_Flow='" + this.No + "'";
 
             //删除节点绑定信息.
-            sql += "@ DELETE FROM WF_FrmNode  WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
+            sql += "@ DELETE FROM WF_FrmNode WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
 
             sql += "@ DELETE FROM WF_NodeEmp  WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
             sql += "@ DELETE FROM WF_CCEmp WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
@@ -6206,7 +6016,7 @@ namespace BP.WF
             sql += "@ DELETE FROM WF_TurnTo WHERE   FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
 
             //删除侦听.
-            //   sql += "@ DELETE FROM WF_Listen WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
+            // sql += "@ DELETE FROM WF_Listen WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";
 
             // 删除d2d数据.
             //  sql += "@GO DELETE WF_M2M WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE FK_Flow='" + this.No + "')";

@@ -115,7 +115,7 @@ namespace BP.WF.HttpHandler
                 if (this.FK_Node != 0)
                 {
                     Node nd = new Node(this.FK_Node);
-                    nd.RepareMap();
+                    nd.RepareMap( nd.HisFlow);
                 }
 
                 return "执行成功.";
@@ -153,7 +153,7 @@ namespace BP.WF.HttpHandler
                 {
                     string fk_node = this.FK_MapData.Replace("ND", "");
                     Node nd = new Node(int.Parse(fk_node));
-                    nd.RepareMap();
+                    nd.RepareMap(nd.HisFlow);
                 }
                 return "执行成功.";
             }

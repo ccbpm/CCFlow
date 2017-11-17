@@ -2864,7 +2864,7 @@ namespace BP.WF
         /// <summary>
         /// 修复map
         /// </summary>
-        public string RepareMap()
+        public string RepareMap(Flow fl)
         {
             BP.Sys.MapData md = new BP.Sys.MapData();
             md.No = "ND" + this.NodeID;
@@ -2874,9 +2874,13 @@ namespace BP.WF
                 return "";
             }
 
+            BP.Sys.MapAttrs attrs = new BP.Sys.MapAttrs();
+            attrs.Retrieve(MapAttrAttr.FK_MapData, md.No);
+
+
             #region 增加节点必要的字段.
             BP.Sys.MapAttr attr = new BP.Sys.MapAttr();
-            if (attr.IsExit(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, "OID", MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr.FK_MapData = md.No;
                 attr.KeyOfEn = "OID";
@@ -2891,7 +2895,7 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attr.IsExit(MapAttrAttr.KeyOfEn, "FID", MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, "FID", MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
@@ -2907,7 +2911,7 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attr.IsExit(MapAttrAttr.KeyOfEn, WorkAttr.RDT, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.RDT, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
@@ -2923,7 +2927,7 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attr.IsExit(MapAttrAttr.KeyOfEn, WorkAttr.CDT, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.CDT, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
@@ -2944,7 +2948,7 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attr.IsExit(MapAttrAttr.KeyOfEn, WorkAttr.Rec, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.Rec, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
@@ -2966,7 +2970,7 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attr.IsExit(MapAttrAttr.KeyOfEn, WorkAttr.Emps, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.Emps, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
@@ -2983,7 +2987,7 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            if (attr.IsExit(MapAttrAttr.KeyOfEn, StartWorkAttr.FK_Dept, MapAttrAttr.FK_MapData, md.No) == false)
+            if (attrs.Contains(MapAttrAttr.KeyOfEn, StartWorkAttr.FK_Dept, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 attr = new BP.Sys.MapAttr();
                 attr.FK_MapData = md.No;
@@ -3001,9 +3005,8 @@ namespace BP.WF
                 attr.Insert();
             }
 
-            Flow fl = new Flow(this.FK_Flow);
-            if (fl.IsMD5
-                && attr.IsExit(MapAttrAttr.KeyOfEn, WorkAttr.MD5, MapAttrAttr.FK_MapData, md.No) == false)
+
+            if (fl.IsMD5  && attrs.Contains(MapAttrAttr.KeyOfEn, WorkAttr.MD5, MapAttrAttr.FK_MapData, md.No) == false)
             {
                 /* 如果是MD5加密流程. */
                 attr = new BP.Sys.MapAttr();
@@ -3027,7 +3030,7 @@ namespace BP.WF
             if (this.NodePosType == NodePosType.Start)
             {
 
-                if (attr.IsExit(MapAttrAttr.KeyOfEn, StartWorkAttr.Title, MapAttrAttr.FK_MapData, md.No) == false)
+                if (attrs.Contains(MapAttrAttr.KeyOfEn, StartWorkAttr.Title, MapAttrAttr.FK_MapData, md.No) == false)
                 {
                     attr = new BP.Sys.MapAttr();
                     attr.FK_MapData = md.No;
@@ -3050,7 +3053,7 @@ namespace BP.WF
                     attr.Insert();
                 }
 
-                if (attr.IsExit(MapAttrAttr.KeyOfEn, "FK_NY", MapAttrAttr.FK_MapData, md.No) == false)
+                if (attrs.Contains(MapAttrAttr.KeyOfEn, "FK_NY", MapAttrAttr.FK_MapData, md.No) == false)
                 {
                     attr = new BP.Sys.MapAttr();
                     attr.FK_MapData = md.No;
@@ -3070,7 +3073,7 @@ namespace BP.WF
                     attr.Insert();
                 }
 
-                if (attr.IsExit(MapAttrAttr.KeyOfEn, "MyNum", MapAttrAttr.FK_MapData, md.No) == false)
+                if (attrs.Contains(MapAttrAttr.KeyOfEn, "MyNum", MapAttrAttr.FK_MapData, md.No) == false)
                 {
                     attr = new BP.Sys.MapAttr();
                     attr.FK_MapData = md.No;

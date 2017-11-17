@@ -84,10 +84,12 @@ namespace BP.WF.DTS
 
                 foreach (string f in fls)
                 {
-                    msg += "@开始调度表单模板文件:" + f;
                     System.IO.FileInfo info = new System.IO.FileInfo(f);
                     if (info.Extension != ".xml")
                         continue;
+
+                    msg += "@开始调度表单模板文件:" + f;
+                    BP.DA.Log.DefaultLogWriteLineInfo("@开始调度表单模板文件:" + f);
 
                     DataSet ds = new DataSet();
                     ds.ReadXml(f);
@@ -102,6 +104,8 @@ namespace BP.WF.DTS
                     }
                     catch(Exception ex)
                     {
+                        BP.DA.Log.DefaultLogWriteLineInfo("@装载表单模版文件:" + f + "出现错误," + ex.Message + " <br> " + ex.StackTrace);
+
                         throw new Exception("@装载模版文件:"+f+"出现错误,"+ex.Message+" <br> "+ex.StackTrace);
                     }
                 }
@@ -138,6 +142,8 @@ namespace BP.WF.DTS
                 foreach (string filePath in fls)
                 {
                     msg += "\t\n@开始调度流程模板文件:" + filePath;
+                    BP.DA.Log.DefaultLogWriteLineInfo("@开始调度流程模板文件:" + filePath);
+
                     Flow myflow = BP.WF.Flow.DoLoadFlowTemplate(fs.No, filePath, ImpFlowTempleteModel.AsTempleteFlowNo);
                     msg += "\t\n@流程:" + myflow.Name + "装载成功。";
 
@@ -169,6 +175,8 @@ namespace BP.WF.DTS
                     foreach (string filePath in myfls)
                     {
                         msg += "\t\n@开始调度流程模板文件:" + filePath;
+                        BP.DA.Log.DefaultLogWriteLineInfo("@开始调度流程模板文件:" + filePath);
+
                         Flow myflow = BP.WF.Flow.DoLoadFlowTemplate(subFlowSort.No, filePath, ImpFlowTempleteModel.AsTempleteFlowNo);
                         msg += "\t\n@流程:" + myflow.Name + "装载成功。";
 
@@ -189,7 +197,6 @@ namespace BP.WF.DTS
                 fl.DoCheck();
             }
             #endregion 处理流程.
-
 
 
 

@@ -2303,7 +2303,7 @@ namespace BP.En
                     sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Blob NULL ";
 
 				if (BP.DA.DBAccess.AppCenterDBType == DBType.MySQL)
-                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " Blob NULL ";
+                    sql = "ALTER TABLE " + this.EnMap.PhysicsTable + " ADD " + saveToField + " MediumBlob NULL ";
 
 				BP.DA.DBAccess.RunSQL(sql);
 

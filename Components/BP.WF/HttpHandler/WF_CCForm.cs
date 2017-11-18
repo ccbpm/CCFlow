@@ -11,6 +11,7 @@ using BP.Port;
 using BP.Web;
 using BP.WF.Template;
 using BP.WF.XML;
+using BP.En;
 
 namespace BP.WF.HttpHandler
 {
@@ -510,7 +511,169 @@ namespace BP.WF.HttpHandler
                     return "url@FrmGener.htm?1=2" + paras;
             }
         }
-       
+
+        /// <summary>
+        /// 附件图片
+        /// </summary>
+        /// <returns></returns>
+        public string FrmImgAthDB_Init()
+        {
+            string ImgAthPK = this.GetRequestVal("ImgAth");
+
+            FrmImgAthDBs imgAthDBs = new FrmImgAthDBs();
+            QueryObject obj = new QueryObject(imgAthDBs);
+            obj.AddWhere(FrmImgAthDBAttr.FK_MapData, this.FK_MapData);
+            obj.addAnd();
+            obj.AddWhere(FrmImgAthDBAttr.FK_FrmImgAth, ImgAthPK);
+            obj.addAnd();
+            obj.AddWhere(FrmImgAthDBAttr.RefPKVal, this.MyPK);
+            obj.DoQuery();
+            return BP.Tools.Entitis2Json.ConvertEntities2ListJson(imgAthDBs);
+        }
+        /// <summary>
+        /// 上传编辑图片
+        /// </summary>
+        /// <returns></returns>
+        public string FrmImgAthDB_Upload()
+        {
+            string ImgAthPK = this.GetRequestVal("ImgAth");
+            int zoomW = this.GetRequestValInt("zoomW");
+            int zoomH = this.GetRequestValInt("zoomH");
+
+            HttpFileCollection files = this.context.Request.Files;
+            if (files.Count > 0 && files[0].ContentLength > 0)
+            {
+                string myName = ImgAthPK + "_" + this.MyPK;
+                //生成新路径，解决返回相同src后图片不切换问题
+                string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
+                string saveToPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data");
+                string fileUPloadPath = this.context.Server.MapPath(BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Upload");
+                //创建路径
+                if (!Directory.Exists(saveToPath))
+                    Directory.CreateDirectory(saveToPath);
+                if (!Directory.Exists(fileUPloadPath))
+                    Directory.CreateDirectory(fileUPloadPath);
+
+                saveToPath = saveToPath + "\\" + newName + ".png";
+                fileUPloadPath = fileUPloadPath + "\\" + newName + ".png";
+                files[0].SaveAs(saveToPath);
+
+                //源图像  
+                System.Drawing.Bitmap oldBmp = new System.Drawing.Bitmap(saveToPath);
+
+                //新图像,并设置新图像的宽高  
+                System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(zoomW, zoomH);
+                System.Drawing.Graphics draw = System.Drawing.Graphics.FromImage(newBmp);//从新图像获取对应的Graphics  
+                System.Drawing.Rectangle rect = new System.Drawing.Rectangle(0, 0, zoomW, zoomH);//指定绘制新图像的位置和大小  
+                draw.DrawImage(oldBmp, rect);//把源图像的全部完整的内容，绘制到新图像rect这个区域内，
+
+                draw.Dispose();
+                oldBmp.Dispose();//一定要把源图Dispose调，因为保存的是相同路径，需要把之前的图顶替调，如果不释放的话会报错：（GDI+ 中发生一般性错误。）  
+                newBmp.Save(saveToPath);//保存替换到同一个路径 
+
+                //复制一份
+                File.Copy(saveToPath, fileUPloadPath, true);
+                //获取文件大小
+                FileInfo fileInfo = new FileInfo(saveToPath);
+                float fileSize = 0;
+                if (fileInfo.Exists)
+                    fileSize = float.Parse(fileInfo.Length.ToString());
+
+                //更新数据表                
+                FrmImgAthDB imgAthDB = new FrmImgAthDB();
+                imgAthDB.MyPK = myName;
+                imgAthDB.FK_MapData = this.FK_MapData;
+                imgAthDB.FK_FrmImgAth = ImgAthPK;
+                imgAthDB.RefPKVal = this.MyPK;
+                imgAthDB.FileFullName = webPath;
+                imgAthDB.FileName = newName;
+                imgAthDB.FileExts = "png";
+                imgAthDB.FileSize = fileSize;
+                imgAthDB.RDT = DateTime.Now.ToString("yyyy-MM-dd mm:HH");
+                imgAthDB.Rec = BP.Web.WebUser.No;
+                imgAthDB.RecName = BP.Web.WebUser.Name;
+                imgAthDB.Save();
+                return "{SourceImage:\"" + webPath + "\"}";
+            }
+            return "{err:\"没有选择文件\"}";
+        }
+
+        /// <summary>
+        /// 剪切图片
+        /// </summary>
+        /// <returns></returns>
+        public string FrmImgAthDB_Cut()
+        {
+            string ImgAthPK = this.GetRequestVal("ImgAth");
+
+            int zoomW = this.GetRequestValInt("zoomW");
+            int zoomH = this.GetRequestValInt("zoomH");
+            int x = this.GetRequestValInt("cX");
+            int y = this.GetRequestValInt("cY");
+            int w = this.GetRequestValInt("cW");
+            int h = this.GetRequestValInt("cH");
+
+            string myPK = ImgAthPK + "_" + this.MyPK;
+            FrmImgAthDB imgAthDB = new FrmImgAthDB(myPK);
+
+            string appPath = SystemConfig.CCFlowAppPath;
+            appPath = SystemConfig.CCFlowWebPath;
+
+            string newName = ImgAthPK + "_" + this.MyPK + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            string webPath = BP.WF.Glo.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
+            string savePath = SystemConfig.CCFlowAppPath + "DataUser/ImgAth/Data/" + newName + ".png";
+            //获取上传的大图片
+            string strImgPath = this.context.Server.MapPath(SystemConfig.CCFlowWebPath + "DataUser/ImgAth/Upload/" + imgAthDB.FileName + ".png");
+            if (File.Exists(strImgPath) == true)
+            {
+                //剪切图
+                bool bSuc = Crop(strImgPath, savePath, w, h, x, y);
+               imgAthDB.FileFullName = webPath;
+               imgAthDB.Update();
+               return webPath;
+            }
+            return imgAthDB.FileFullName;
+        }
+
+        /// <summary>
+        /// 剪裁图像
+        /// </summary>
+        /// <param name="Img"></param>
+        /// <param name="Width"></param>
+        /// <param name="Height"></param>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        /// <returns></returns>
+        private bool Crop(string Img,string savePath, int Width, int Height, int X, int Y)
+        {
+            try
+            {
+                using (var OriginalImage = new System.Drawing.Bitmap(Img))
+                {
+                    using (var bmp = new System.Drawing.Bitmap(Width, Height, OriginalImage.PixelFormat))
+                    {
+                        bmp.SetResolution(OriginalImage.HorizontalResolution, OriginalImage.VerticalResolution);
+                        using (System.Drawing.Graphics Graphic = System.Drawing.Graphics.FromImage(bmp))
+                        {
+                            Graphic.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                            Graphic.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                            Graphic.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                            Graphic.DrawImage(OriginalImage, new System.Drawing.Rectangle(0, 0, Width, Height), X, Y, Width, Height, System.Drawing.GraphicsUnit.Pixel);
+                            //var ms = new MemoryStream();
+                            bmp.Save(savePath);
+                            //return ms.GetBuffer();
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                throw (Ex);
+            }
+            return false;
+        }
         #endregion frm.htm 主表.
 
         #region frmFree

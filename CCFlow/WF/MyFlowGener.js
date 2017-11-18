@@ -1512,14 +1512,17 @@ function GenerWorkNode() {
             //设置标题.
             document.title = "业务流程管理（BPM）平台";
 
-            //判断类型不同的类型不同的解析表单.
+            //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
             if (node.FormType == 0) {
-                GenerFoolFrm(workNode);
-            } else if (node.FormType == 1) {
-                GenerFreeFrm(workNode);
-            } else if (node.FormType == 5) {
-                /*树形表单*/
-                GenerTreeFrm(workNode);
+                GenerFoolFrm(workNode); //傻瓜表单.
+            } 
+            
+            if (node.FormType == 1) {
+                GenerFreeFrm(workNode);  //自由表单.
+            } 
+            
+            if (node.FormType == 5) {
+                 GenerTreeFrm(workNode); /*树形表单*/
             }
 
             //加入隐藏控件.

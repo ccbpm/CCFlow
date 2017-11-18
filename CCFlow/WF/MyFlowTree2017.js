@@ -6,5 +6,5 @@
 var workNode = null;
 function GenerTreeFrm(wn) {
     workNode = wn;
-
+    
 }

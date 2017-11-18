@@ -453,9 +453,7 @@ namespace BP.WF
                 BP.Sys.MapData md = new BP.Sys.MapData();
                 md.No = "ND" + nd.NodeID;
                 if (md.IsExits == false)
-                {
                     nd.CreateMap();
-                }
 
                 // 工作岗位。
                 sql = "SELECT FK_Station FROM WF_NodeStation WHERE FK_Node=" + nd.NodeID;
@@ -535,7 +533,6 @@ namespace BP.WF
             {
                 this.SetValByKey(BtnAttr.ReturnRole, (int)ReturnRole.CanNotReturn);
                 this.SetValByKey(BtnAttr.ShiftEnable, 0);
-                //  this.SetValByKey(BtnAttr.CCRole, 0);
                 this.SetValByKey(BtnAttr.EndFlowEnable, 0);
             }
 
@@ -557,7 +554,6 @@ namespace BP.WF
 
             //更新版本号.
             Flow.UpdateVer(this.FK_Flow);
-
              
 
             #region 更新流程判断条件的标记。

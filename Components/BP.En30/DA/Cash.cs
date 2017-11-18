@@ -13,6 +13,32 @@ namespace BP.DA
 	/// </summary>
     public class Cash
     {
+        /// <summary>
+        /// 清空缓存.
+        /// </summary>
+        public static void ClearCash()
+        {
+            if (_BS_Cash != null)
+                _BS_Cash.Clear();
+
+            if (_SQL_Cash != null)
+                _SQL_Cash.Clear();
+
+            if (_EnsData_Cash != null)
+                _EnsData_Cash.Clear();
+
+            if (_Map_Cash != null)
+                _Map_Cash.Clear();
+
+            if (_EnsData_Cash_Ext != null)
+                _EnsData_Cash_Ext.Clear();
+
+            if (_Bill_Cash != null)
+                _Bill_Cash.Clear();
+
+        }
+	
+
         static Cash()
         {
             if (SystemConfig.IsBSsystem==false)
@@ -645,14 +671,7 @@ namespace BP.DA
             }
         }
         #endregion
-
-        /// <summary>
-        /// 执行缓存清除
-        /// </summary>
-        public void ClearCash()
-        {
-
-        }
+      
     }
 
     public class CashEntity

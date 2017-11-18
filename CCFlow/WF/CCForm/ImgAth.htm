@@ -19,6 +19,8 @@
         var FK_MapData = "";
         var ImgAth = "";
         var MyPK = "";
+        var zoomW = 620;
+        var zoomH = 400;
 
         function mousePosition(ev) {
             if (ev.pageX || ev.pageY) {
@@ -66,9 +68,10 @@
                     return;
                 }
             }
+            
             //上传
             $.ajaxFileUpload({
-                url: 'Handler.ashx?DoType=FrmImgAthDB_Upload&FK_MapData=' + FK_MapData + '&ImgAth=' + ImgAth + '&MyPK=' + MyPK,
+                url: 'Handler.ashx?DoType=FrmImgAthDB_Upload&FK_MapData=' + FK_MapData + '&ImgAth=' + ImgAth + '&MyPK=' + MyPK + '&zoomW=' + zoomW + '&zoomH=' + zoomH,
                 secureuri: false,
                 type: "post",
                 fileElementId: 'fileImagAth',
@@ -82,6 +85,7 @@
                     $("#myImage").attr("src", fileFullName);
                     $("#imgCut").attr("src", fileFullName);
                     $("#HD_ImgAthSrc").val(fileFullName);
+                    $("#HD_SImgAthSrc").val(fileFullName);
                     var jcrop_api = $.Jcrop("#myImage");
                     if (jcrop_api) {
                         jcrop_api.setImage(fileFullName);
@@ -93,6 +97,55 @@
                 }
             });
             return false;
+        }
+
+        //确认剪切
+        function zoomOut() {
+            //数据检查
+            var cX = $('#x').val();
+            var cY = $('#y').val();
+            var cX2 = $('#x2').val();
+            var cY2 = $('#y2').val();
+            var cW = $('#w').val();
+            var cH = $('#h').val();
+            if (cX == 0 || cY == 0 || cW == 0 || cH == 0) {
+                alert("请选择范围后再试。");
+                return;
+            }
+            //获取图片尺寸
+            var jcrop_api = $.Jcrop("#myImage");
+            //var zoomWH = jcrop_api.getBounds();
+            
+            //获取已上传数据
+            Handler_AjaxQueryData({
+                DoType: "FrmImgAthDB_Cut",
+                FK_MapData: FK_MapData,
+                MyPK: MyPK,
+                ImgAth: ImgAth,
+                zoomW: zoomW,
+                zoomH: zoomH,
+                cX: cX,
+                cY: cY,
+                cW: cW,
+                cH: cH
+            }, function (data) {
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+
+                if (data.length > 0) {
+                    $("#imgCut").attr("src", data);
+                    $("#HD_ImgAthSrc").val(data);
+
+                    var jcrop_api = $.Jcrop("#myImage");
+                    if (jcrop_api) {
+                        var sourceImg = $("#HD_SImgAthSrc").val();
+                        jcrop_api.setImage(sourceImg);
+                    }
+                    AddImgLisenerEvent();
+                }
+            }, this);
         }
 
         //初始化图片
@@ -113,6 +166,7 @@
                     $("#myImage").attr("src", fileName);
                     $("#imgCut").attr("src", fileFullName);
                     $("#HD_ImgAthSrc").val(fileFullName);
+                    $("#HD_SImgAthSrc").val(fileName);
                     AddImgLisenerEvent();
                 }
             }, this);
@@ -137,57 +191,7 @@
                 });
             }
         }
-
-        //确认剪切
-        function zoomOut() {
-            //数据检查
-            var cX = $('#x').val();
-            var cY = $('#y').val();
-            var cX2 = $('#x2').val();
-            var cY2 = $('#y2').val();
-            var cW = $('#w').val();
-            var cH = $('#h').val();
-            if (cX == 0 || cY == 0 || cW == 0 || cH == 0) {
-                alert("请选择范围后再试。");
-                return;
-            }
-            //获取图片尺寸
-            //var jcrop_api = $.Jcrop("#myImage");
-            //var zoomWH = jcrop_api.getWidgetSize();
-
-            //获取已上传数据
-            Handler_AjaxQueryData({
-                DoType: "FrmImgAthDB_Cut",
-                FK_MapData: FK_MapData,
-                MyPK: MyPK,
-                ImgAth: ImgAth,
-                zoomW: zoomWH.W,
-                zoomH: zoomWH.H,
-                cX: cX,
-                cY: cY,
-                cW: cW,
-                cH: cH
-            }, function (data) {
-                if (data.indexOf('err@') == 0) {
-                    alert(data);
-                    return;
-                }
-
-                var dataObj = eval("(" + data + ")"); //转换为json对象 
-                if (dataObj.length > 0) {
-                    var fileFullName = dataObj[0].FileFullName;
-                    var fileName = dataObj[0].FileName;
-                    var fileExts = dataObj[0].FileExts;
-                    fileName = "/DataUser/ImgAth/Upload/" + fileName + "." + fileExts;
-
-                    $("#myImage").attr("src", fileName);
-                    $("#imgCut").attr("src", fileFullName);
-                    $("#HD_ImgAthSrc").val(fileFullName);
-                    AddImgLisenerEvent();
-                }
-            }, this);
-        }
-
+        
         //初始化函数
         $(function () {
             $("#handInput").hide();
@@ -283,5 +287,6 @@
     <input type="hidden" id="w" value="0" />
     <input type="hidden" id="h" value="0" />
     <input type="hidden" id="HD_ImgAthSrc" value="/DataUser/ImgAth/Data/ND101ImgAth1_0.png" />
+    <input type="hidden" id="HD_SImgAthSrc" value="/DataUser/ImgAth/Data/ND101ImgAth1_0.png" />
 </body>
 </html>

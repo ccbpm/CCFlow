@@ -330,12 +330,6 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
 var workNode = {}; 
   
 
-function ImgAth(url, athMyPK) {
-    var v = window.showModalDialog(url, 'ddf', 'dialogHeight: 650px; dialogWidth: 950px;center: yes; help: no');
-    if (v == null)
-        return;
-    document.getElementById('Img' + athMyPK).setAttribute('src', v);
-}
 
 //初始化 IMAGE附件
 function Ele_ImgAth(frmImageAth) {

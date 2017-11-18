@@ -430,7 +430,7 @@ namespace BP.WF.HttpHandler
                     this.WorkID = currWK.OID;
                 }
 
-                string url = "MyFlowFool.htm";
+                string url = "MyFlowGener.htm";
                 if (this.IsMobile)
                     url = "MyFlowFree.htm";
 
@@ -464,7 +464,7 @@ namespace BP.WF.HttpHandler
 
             string myurl = "MyFlow.aspx";
             if (Glo.IsBeta==true)
-                myurl = "MyFlowFree.htm";
+                myurl = "MyFlowGener.htm";
 
             //处理连接.
             myurl = this.MyFlow_Init_DealUrl(currND, currWK, myurl);

@@ -3,6 +3,10 @@ function GenerFoolFrm(mapData, frmData) {
 
     var Sys_GroupFields = frmData.Sys_GroupField;
 
+    var node = frmData.WF_Node;
+    if (node != undefined)
+        node = node[0];
+
     var tableWidth = 800; //  w - 40;
     var html = "<table style='width:" + tableWidth + "px;' >";
     var frmName = mapData.Name;
@@ -35,7 +39,7 @@ function GenerFoolFrm(mapData, frmData) {
                 html += "<tr>";
                 html += "  <td colspan='4' >";
 
-                html += figure_Template_Dtl(dtl);
+                html += Ele_Dtl(dtl);
 
                 html += "  </td>";
                 html += "</tr>";
@@ -55,7 +59,7 @@ function GenerFoolFrm(mapData, frmData) {
             html += "<tr>";
             html += "  <td colspan='4' >";
 
-            html += figure_Template_Attachment(frmData, gf);
+            html += Ele_Attachment(frmData, gf);
 
             html += "  </td>";
             html += "</tr>";
@@ -65,7 +69,7 @@ function GenerFoolFrm(mapData, frmData) {
 
 
         //审核组件..
-        if (gf.CtrlType == 'FWC' && node.FWCSta != 0) {
+        if (gf.CtrlType == 'FWC' && node && node.FWCSta != 0) {
 
             html += "<tr>";
             html += "  <th colspan=4>" + gf.Lab + "</th>";
@@ -106,73 +110,7 @@ function GenerFoolFrm(mapData, frmData) {
 
     $('#CCForm').html("").append(html);
 }
-
-//初始化从表
-function figure_Template_Dtl(frmDtl) {
-
-    var src = "";
-    var href = window.location.href;
-    var urlParam = href.substring(href.indexOf('?') + 1, href.length);
-    urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
-    if (frmDtl.RowShowModel == "0") {
-        if (pageData.IsReadOnly) {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
-        } else {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
-        }
-    }
-    else if (frmDtl.RowShowModel == "1") {
-        if (pageData.IsReadOnly)
-            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
-        else
-            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
-    }
-
-    return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='" + frmDtl.No + "' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
-
-    var eleHtml = $("<DIV id='Fd" + frmDtl.No + "' style='position:absolute; left:" + frmDtl.X + "px; top:" + frmDtl.Y + "px; width:" + frmDtl.W + "px; height:" + frmDtl.H + "px;text-align: left;' >");
-    var paras = this.pageData;
-    var strs = "";
-    for (var str in paras) {
-        if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
-            continue
-        else
-            strs += "&" + str + "=" + paras[str];
-    }
-
-    var eleIframe = '<iframe></iframe>';
-    eleIframe = $("<iframe class='Fdtl' ID='F" + frmDtl.No + "' src='" + src +
-                 "' frameborder=0  style='position:absolute;width:100%; height:" + frmDtl.H +
-                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
-    if (pageData.IsReadOnly) {
-
-    } else {
-        if (frmDtl.DtlSaveModel == 0) {
-            eleHtml.append(addLoadFunction(frmDtl.No, "blur", "SaveDtl"));
-            eleIframe.attr('onload', frmDtl.No + "load()");
-        }
-    }
-    eleHtml.append(eleIframe);
-    //added by liuxc,2017-1-10,此处前台JS中增加变量DtlsLoadedCount记录明细表的数量，用于加载完全部明细表的判断
-    var js = "";
-    if (pageData.IsReadonly == false) {
-        js = "<script type='text/javascript' >";
-        js += " function SaveDtl(dtl) { ";
-        js += "   GenerPageKVs(); //调用产生kvs ";
-        js += "\n   var iframe = document.getElementById('F' + dtl );";
-        js += "   if(iframe && iframe.contentWindow){ ";
-        js += "      iframe.contentWindow.SaveDtlData(); ";
-        js += "   } ";
-        js += " } ";
-        js += " function SaveM2M(dtl) { ";
-        js += "   document.getElementById('F' + dtl ).contentWindow.SaveM2M();";
-        js += "} ";
-        js += "</script>";
-        eleHtml.append($(js));
-    }
-    return eleHtml;
-}
-
+ 
 
 //审核组件
 function figure_Template_FigureFrmCheck(wf_node) {
@@ -214,9 +152,9 @@ function figure_Template_Attachment(frmData, gf) {
     //    }
     var src = "";
     if (pageData.IsReadonly)
-        src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+        src = "AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
     else
-        src = "./CCForm/AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+        src = "AttachmentUpload.htm?PKVal=" + pageData.WorkID + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
 
     eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 
@@ -439,4 +377,58 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     alert(mapAttr.Name + "的类型没有判断.");
     return;
+}
+
+
+//初始化 附件
+function Ele_Attachment(workNode, gf) {
+
+    var ath = workNode.Sys_FrmAttachment[0];
+    if (ath == null)
+        return "没有找到附件定义，请与管理员联系。";
+
+    var eleHtml = '';
+    //    if (ath.UploadType == 0) { //单附件上传 L4204
+    //        return '';
+    //    }
+
+    var pkval = GetQueryString("WorkID");
+    if (pkval == undefined)
+        pkval = GetQueryString("OID");
+
+    var src = "";
+    if (pageData.IsReadonly)
+        src = "AttachmentUpload.htm?PKVal=" + pkval + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK + "&IsReadonly=1";
+    else
+        src = "AttachmentUpload.htm?PKVal=" + pkval + "&Ath=" + ath.NoOfObj + "&FK_MapData=" + ath.FK_MapData + "&FK_FrmAttachment=" + ath.MyPK;
+
+    eleHtml += "<iframe style='width:100%;height:" + ath.H + "px;' ID='Attach_" + ath.MyPK + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
+
+    return eleHtml;
+}
+
+
+var appPath = "../../";
+var DtlsCount = " + dtlsCount + "; //应该加载的明细表数量
+
+//初始化从表
+function Ele_Dtl(frmDtl) {
+    var src = "";
+    var href = window.location.href;
+    var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+    urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
+    if (frmDtl.RowShowModel == "0") {
+        if (pageData.IsReadOnly) {
+            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
+        } else {
+            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
+        }
+    }
+    else if (frmDtl.RowShowModel == "1") {
+        if (pageData.IsReadOnly)
+            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+        else
+            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+    }
+    return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }

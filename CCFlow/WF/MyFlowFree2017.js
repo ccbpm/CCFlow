@@ -459,12 +459,18 @@ function figure_Template_Image(frmImage) {
     }
     return eleHtml;
 }
-
+//图片附件编辑
 function ImgAth(url, athMyPK) {
-    var v = window.showModalDialog(url, 'ddf', 'dialogHeight: 650px; dialogWidth: 950px;center: yes; help: no');
-    if (v == null)
-        return;
-    document.getElementById('Img' + athMyPK).setAttribute('src', v);
+    var dgId = "iframDg";
+    url = url + "&s=" + Math.random();
+    OpenEasyUiDialog(url, dgId, '图片附件', 900, 580, 'icon-new', false, function () {
+        
+    }, null, null, function () {
+        //关闭也切换图片
+        var win = document.getElementById(dgId).contentWindow;
+        var imgSrc = win.ImgAthSrc();
+        document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc);
+    });
 }
 
 //初始化 IMAGE附件
@@ -491,7 +497,7 @@ function figure_Template_ImageAth(frmImageAth) {
         var fieldSet = $("<fieldset></fieldset>");
         var length = $("<legend></legend>");
         var a = $("<a></a>");
-        var url = "/WF/CCForm/ImgAth.aspx?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=ND" + pageData.FK_Node + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
+        var url = "/WF/CCForm/ImgAth.htm?W=" + frmImageAth.W + "&H=" + frmImageAth.H + "&FK_MapData=ND" + pageData.FK_Node + "&MyPK=" + pageData.WorkID + "&ImgAth=" + frmImageAth.MyPK;
 
         a.attr('href', "javascript:ImgAth('" + url + "','" + frmImageAth.MyPK + "');").html("编辑");
         length.css('font-style', 'inherit').css('font-weight', 'bold').css('font-size', '12px');

@@ -317,7 +317,7 @@ namespace BP.WF.HttpHandler
                 string toUrl = "";
                 if (this.currND.HisFormType == NodeFormType.SheetTree || this.currND.HisFormType == NodeFormType.SheetAutoTree)
                 {
-                    toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                    toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                 }
                 else
                 {
@@ -1503,6 +1503,13 @@ namespace BP.WF.HttpHandler
                     wf_generWorkFlowDt.Columns["WORKID"].ColumnName = "WorkID";
                 }
                 #endregion 增加上流程的信息.
+
+
+                //Node nd = new Node(this.FK_Node);
+                //if (nd.HisFormType == NodeFormType.SheetTree)
+                //{
+                //    /*把树形表单的表单信息加载到ds里面.*/
+                //}
 
 
                 //把他转化小写,适应多个数据库.

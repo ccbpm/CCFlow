@@ -48,6 +48,7 @@ function GenerFrm() {
             }
             catch (err) {
                 alert(" frmData数据转换JSON失败:" + data);
+
                 return;
             }
 
@@ -76,10 +77,22 @@ function GenerFrm() {
 
             //根据表单类型不同生成表单.
 
-            if (mapData.FrmType == 0)
-                GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
-            else
-                GenerFreeFrm(mapData, frmData); //自由表单.
+            var isTest = GetQueryString("IsTest");
+
+            if (isTest == "1") {
+
+                var frmType = GetQueryString("FrmType");
+                if (frmType == 'FreeFrm')
+                    GenerFreeFrm(mapData, frmData); //自由表单.
+                else
+                    GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
+
+            } else {
+                if (mapData.FrmType == 0)
+                    GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
+                else
+                    GenerFreeFrm(mapData, frmData); //自由表单.
+            }
 
             //原有的。
             //为 DISABLED 的 TEXTAREA 加TITLE 

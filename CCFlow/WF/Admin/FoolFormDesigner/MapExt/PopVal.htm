@@ -157,31 +157,6 @@
             })
         }
 
-        function GetJson() {
-
-            var fk_mapExt = getQueryStringByName("MyPK");
-            var keyOfEn = getQueryStringByName("RefNo");
-            var fk_mapData = GetQueryString("FK_MapData");
-
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=InitPopSetting&MyPK=" + fk_mapExt + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    alert(data);
-                },
-                error: function (xml, textSta, errorThrown) {
-
-                    alert(xml);
-
-                    alert(textSta);
-                    alert(errorThrown);
-                }
-            })
-        }
-
-
         //页面启动函数.
         $(function () {
             InitPage();
@@ -198,8 +173,8 @@
                 url: Handler + "?DoType=PopVal_Init&MyPK=" + fk_mapExt + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
-                    data = JSON.parse(data);
+                    alert(data);
+                    data = eval('(' + data + ')');
                     if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
                         data = data[0];
                     }
@@ -215,7 +190,7 @@
                             $("#TB_Url").val(data.URL);
                             break;
                         case "TableOnly": //仅仅表格.
-                           // alert(data.EntitySQL);
+                            // alert(data.EntitySQL);
                             $("#TB_Table_SQL").val(data.EntitySQL);
                             break;
                         case "TablePage":  //表格分页模式.

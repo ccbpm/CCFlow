@@ -507,7 +507,7 @@ namespace BP.WF.HttpHandler
                 if (Glo.Plant == Plant.CCFlow)
                     return "url@Frm.aspx?1=2" + paras;
                 else
-                    return "url@FrmFree.htm?1=2" + paras;
+                    return "url@FrmGener.htm?1=2" + paras;
             }
         }
        

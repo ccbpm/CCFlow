@@ -797,6 +797,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='WebOffice'  value='" + btnLab.WebOfficeLab + "' enable=true onclick=\"WinOpen('" + urlr + "','公文正文'); \" />";
                 }
 
+                // @于庆海需要翻译.
                 if (this.currFlow.IsResetData == true && this.currND.IsStartNode)
                 {
                     /* 启用了数据重置功能 */
@@ -850,6 +851,9 @@ namespace BP.WF.HttpHandler
                     else
                         toolbar += "<input type=button name='Confirm' value='" + btnLab.ConfirmLab + "' enable=true onclick=\"ConfirmBtn(this,'" + this.WorkID + "'); \" />";
                 }
+
+
+                // @于庆海需要翻译.
 
                 /* 打包下载zip */
                 if (btnLab.PrintZipEnable == true)

@@ -431,9 +431,12 @@ namespace BP.WF.Template
             }
 
 
-
             //删除重复的数据, 比如一个从表显示了多个分组里. @于庆海增加此部分.
-            sql = "SELECT * FROM (SELECT EnName,CtrlID,CtrlType, count(*) as Num FROM sys_groupfield WHERE CtrlID!='' GROUP BY EnName,CtrlID,CtrlType ) AS A WHERE A.Num > 1";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+              sql = "SELECT * FROM (SELECT EnName,CtrlID,CtrlType, count(*) as Num FROM sys_groupfield WHERE CtrlID!='' GROUP BY EnName,CtrlID,CtrlType ) WHERE Num > 1";
+            else
+                sql = "SELECT * FROM (SELECT EnName,CtrlID,CtrlType, count(*) as Num FROM sys_groupfield WHERE CtrlID!='' GROUP BY EnName,CtrlID,CtrlType ) AS A WHERE A.Num > 1";
+
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow dr in dt.Rows)
             {

@@ -105,14 +105,6 @@ namespace BP.Sys
             ath.X = x;
             ath.Y = y;
             ath.Insert();
-
-            //ath.MyPK = ath.FK_MapData + "_" + ath.NoOfObj;
-            //ath.RetrieveFromDBSources();
-            //ath.UploadType = AttachmentUploadType.Single;
-            //ath.Name = name;
-            //ath.X = x;
-            //ath.Y = y;
-            //ath.Save();
         }
         /// <summary>
         /// 创建/修改-多附件

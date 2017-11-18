@@ -59,6 +59,12 @@ namespace BP.WF.HttpHandler
                     ht.Add("No",  "AthMulti" + num );
                     ht.Add("Name", "多附件"+num);
                     break;
+                case "ImgAth":
+                    sql = "SELECT COUNT(*) FROM Sys_FrmImgAth WHERE FK_MapData='" + this.FK_MapData + "'";
+                    num = DBAccess.RunSQLReturnValInt(sql) + 1;
+                    ht.Add("No", "ImgAth" + num);
+                    ht.Add("Name", "图片附件" + num);
+                    break;
                 case "AthSingle":
                     sql = "SELECT COUNT(*) FROM Sys_FrmAttachment WHERE FK_MapData='" + this.FK_MapData + "'";
                     num = DBAccess.RunSQLReturnValInt(sql)+1;

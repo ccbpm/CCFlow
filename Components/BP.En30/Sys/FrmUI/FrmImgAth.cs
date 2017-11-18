@@ -142,6 +142,19 @@ namespace BP.Sys.FrmUI
 
         #region 构造方法
         /// <summary>
+        /// @于庆海.
+        /// </summary>
+        public override UAC HisUAC
+        {
+            get
+            {
+                UAC uac = new UAC();
+                uac.Readonly();
+                uac.IsUpdate = true;
+                return uac;
+            }
+        }
+        /// <summary>
         /// 图片附件
         /// </summary>
         public FrmImgAth()
@@ -194,11 +207,7 @@ namespace BP.Sys.FrmUI
 
         protected override bool beforeUpdateInsertAction()
         {
-            this.MyPK = this.CtrlID;
-            if (this.CtrlID.Contains(this.FK_MapData) == false)
-            {
-                this.MyPK = this.FK_MapData + this.CtrlID;
-            }
+            this.MyPK = this.FK_MapData + "_" + this.CtrlID;
             return base.beforeUpdateInsertAction();
         }
     }

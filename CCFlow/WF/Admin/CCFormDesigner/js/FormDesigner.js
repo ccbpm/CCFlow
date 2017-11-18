@@ -240,6 +240,8 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'Image') {
+
+
         var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmImgs&PK=' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '图片' + figure.CCForm_MyPK + '属性');
         return;
@@ -266,6 +268,9 @@ function showFigurePropertyWin(figure) {
     }
 
     if (shap == 'AthImg') {
+
+        alert(CCForm_FK_MapData);
+
         var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmImgAths&PK=' + CCForm_FK_MapData + '_' + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '图片附件');
         return;
@@ -308,13 +313,27 @@ function showFigurePropertyWin(figure) {
         return;
     }
 
-    if (shap == 'HyperLink') {
-        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmLinks&PK=' + figure.CCForm_MyPK;
-        CCForm_ShowDialog(url, '超链接属性');
+
+    //枚举类型.
+    if (shap == 'RadioButton') {
+
+        console.log(figure);
+        var mypk= figure.CCForm_MyPK;
+
+        mypk= mypk.replace('RB_', "");
+        mypk= mypk.replace('_0', "");
+        mypk= mypk.replace('_1', "");
+        mypk= mypk.replace('_2', "");
+        mypk= mypk.replace('_3', "");
+
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + CCForm_FK_MapData + "_" + mypk;
+        CCForm_ShowDialog(url, '单选按钮属性');
         return;
     }
 
     if (shap == 'iFrame') {
+
+
         var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapFrameExts&PK=' + CCForm_FK_MapData + "_iFrame_" + figure.CCForm_MyPK;
         CCForm_ShowDialog(url, '框架',500,200);
         return;

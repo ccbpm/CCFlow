@@ -227,7 +227,9 @@ FigureCreateCommand.prototype = {
     RadioButtonCreate: function (createdFigure, x, y, dotype) {
 
         var dgId = "iframeRadioButton";
+        //var url = "DialogCtr/FrmEnumeration.htm?DataType=&s=" + Math.random();
         var url = "DialogCtr/FrmEnumeration.htm?DataType=&s=" + Math.random();
+
         var funIsExist = this.IsExist;
 
         var lab = '单选按钮枚举值';

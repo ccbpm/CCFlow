@@ -659,7 +659,7 @@ namespace CCFlow.WF.CCForm
             {
                 this.Btn_Print.Visible = this.HisFrmNode.IsPrint;
                 this.Btn_Print.Enabled = this.HisFrmNode.IsPrint;
-                this.Btn_Print.Attributes["onclick"] = "window.open('Print.aspx?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&FK_MapData=" + this.FK_MapData + "&WorkID=" + this.OID + "', '', 'dialogHeight: 350px; dialogWidth:450px; center: yes; help: no'); return false;";
+                this.Btn_Print.Attributes["onclick"] = "window.open('Print.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&FK_MapData=" + this.FK_MapData + "&WorkID=" + this.OID + "', '', 'dialogHeight: 350px; dialogWidth:450px; center: yes; help: no'); return false;";
             }
         }
         public void AddJSEvent(Entity en)

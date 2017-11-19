@@ -1494,6 +1494,7 @@ function GenerWorkNode() {
 
             if (data.indexOf('err@') == 0) {
                 alert(data);
+                console.log(data);
                 return;
             }
 
@@ -1503,7 +1504,10 @@ function GenerWorkNode() {
                 workNode = JSON.parse(data);
 
             } catch (err) {
-                alert("GenerWorkNode转换JSON失败:" + data);
+
+                console.log(data);
+
+                alert(" GenerWorkNode转换JSON失败,请查看控制台日志,或者联系管理员." );
                 return;
             }
 
@@ -1515,14 +1519,14 @@ function GenerWorkNode() {
             //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
             if (node.FormType == 0) {
                 GenerFoolFrm(workNode); //傻瓜表单.
-            } 
-            
+            }
+
             if (node.FormType == 1) {
                 GenerFreeFrm(workNode);  //自由表单.
-            } 
-            
+            }
+
             if (node.FormType == 5) {
-                 GenerTreeFrm(workNode); /*树形表单*/
+                GenerTreeFrm(workNode); /*树形表单*/
             }
 
             //加入隐藏控件.

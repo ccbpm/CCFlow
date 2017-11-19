@@ -32,16 +32,12 @@ function GenerFrm() {
         type: 'post',
         async: true,
         data: pageData,
-        //url: "../MyFlow.ashx?DoType=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
-        url: Handler + "?DoType=FrmGener_Init&m=" + Math.random() + "&" + urlParam,
-        // url:"Handler.ashx?DoType=FrmGener_Init&FK_MapData="+pageData.FK_MapData + "&m=" + Math.random(),
+        url: Handler + "?DoType=Entity_Init&m=" + Math.random() + "&" + urlParam,
         dataType: 'html',
         success: function (data) {
 
             if (data.indexOf('err@') == 0) {
-                alert('装载表单出错,请查看控制台console,或者反馈给管理员.');
-                alert(data);
-                console.log(data);
+                alert('装载表单出错..');
                 return;
             }
 
@@ -50,7 +46,7 @@ function GenerFrm() {
             }
             catch (err) {
                 alert(" frmData数据转换JSON失败:" + data);
-                console.log(data);
+
                 return;
             }
 
@@ -197,17 +193,17 @@ function GenerFrm() {
 function DtlFoolFrm(dtl, refPK, refOID) {
 
     var url = 'DtlFoolFrm.htm?EnsDtl=' + dtl + '&RefPK=' + refPK + '&RefOID=' + refOID;
-    alert('这里没有实现打开iurl '+url);
+    alert('这里没有实现打开iurl ' + url);
 
     //引入了刘贤臣写的东西，一直缺少东西.可否改进一下，弄个稳定的？ @代国强.
     OpenEasyUiDialog(url, "eudlgframe", "编辑", 600, 450, "icon-edit", true, null, null, null, function () {
         //   window.location.href = window.location.href;
     });
 
-   // window.open(url);
+    // window.open(url);
     //alert('打开从表卡片');
 }
- 
+
 
 
 
@@ -234,7 +230,7 @@ function Save() {
         type: 'post',
         async: true,
         data: GetFormData(true, true),
-        url: Handler + "?DoType=FrmGener_Save&OID=" + pageData.OID,
+        url: Handler + "?DoType=Entity_Save&OID=" + pageData.OID,
         dataType: 'html',
         success: function (data) {
 
@@ -248,7 +244,7 @@ function Save() {
         }
     });
 }
-  
+
 
 //以下是软通写的
 //初始化网页URL参数
@@ -266,13 +262,13 @@ function initPageParam() {
     var oid = GetQueryString("WorkID");
     if (oid == null)
         oid = GetQueryString("OID");
-    pageData.OID = oid; 
+    pageData.OID = oid;
 
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
-    pageData.IsReadOnly = GetQueryString("IsReadOnly");//如果是IsReadOnly，就表示是查看页面，不是处理页面
-    pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
+    pageData.IsReadOnly = GetQueryString("IsReadOnly"); //如果是IsReadOnly，就表示是查看页面，不是处理页面
+    pageData.IsStartFlow = GetQueryString("IsStartFlow"); //是否是启动流程页面 即发起流程
 
     pageData.DoType1 = GetQueryString("DoType")//View
     pageData.FK_MapData = GetQueryString("FK_MapData")//View
@@ -287,7 +283,7 @@ function pageParamToUrl() {
     }
     return paramUrlStr;
 }
-  
+
 //设置附件为只读
 function setAttachDisabled() {
     //附件设置
@@ -298,8 +294,8 @@ function setAttachDisabled() {
         }
     })
 }
-  
-   
+
+
 //设置表单元素不可用
 function setFormEleDisabled() {
     //文本框等设置为不可用
@@ -370,7 +366,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");
                 tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
-              //  tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
+                //  tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
 
                 tb.attr('readonly', 'true');
                 tb.attr('disabled', 'true');
@@ -382,45 +378,45 @@ function AfterBindEn_DealMapExt(frmData) {
                     popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                 }
                 switch (popWorkModelStr) {
-                    /// <summary>
-                    /// 自定义URL
-                    /// </summary>
-                    //SelfUrl =1,
+                    /// <summary> 
+                    /// 自定义URL 
+                    /// </summary> 
+                    //SelfUrl =1, 
                     case "1":
                         icon = "glyphicon glyphicon-th";
                         break;
-                        /// <summary>
-                        /// 表格模式
-                        /// </summary>
-                        // TableOnly,
+                    /// <summary> 
+                    /// 表格模式 
+                    /// </summary> 
+                    // TableOnly, 
                     case "2":
                         icon = "glyphicon glyphicon-list";
                         break;
-                        /// <summary>
-                        /// 表格分页模式
-                        /// </summary>
-                        //TablePage,
+                    /// <summary> 
+                    /// 表格分页模式 
+                    /// </summary> 
+                    //TablePage, 
                     case "3":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                        /// <summary>
-                        /// 分组模式
-                        /// </summary>
-                        // Group,
+                    /// <summary> 
+                    /// 分组模式 
+                    /// </summary> 
+                    // Group, 
                     case "4":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                        /// <summary>
-                        /// 树展现模式
-                        /// </summary>
-                        // Tree,
+                    /// <summary> 
+                    /// 树展现模式 
+                    /// </summary> 
+                    // Tree, 
                     case "5":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
-                        /// <summary>
-                        /// 双实体树
-                        /// </summary>
-                        // TreeDouble
+                    /// <summary> 
+                    /// 双实体树 
+                    /// </summary> 
+                    // TreeDouble 
                     case "6":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
@@ -432,7 +428,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('" + mapExt.ExtType + "','TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
                 break;
-            case "RegularExpression"://正则表达式  统一在保存和提交时检查
+            case "RegularExpression": //正则表达式  统一在保存和提交时检查
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
 
@@ -449,7 +445,7 @@ function AfterBindEn_DealMapExt(frmData) {
                     //tb.attr("data-checkreginput", "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
                 }
                 break;
-            case "InputCheck"://输入检查
+            case "InputCheck": //输入检查
                 //var tbJS = $("#TB_" + mapExt.AttrOfOper);
                 //if (tbJS != undefined) {
                 //    tbJS.attr(mapExt.Tag2, mapExt.Tag1 + "(this)");
@@ -460,7 +456,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 //        ddl.attr(mapExt.Tag2, mapExt.Tag1 + "(this);");
                 //}
                 break;
-            case "TBFullCtrl"://自动填充  先不做
+            case "TBFullCtrl": //自动填充  先不做
                 var tbAuto = $("#TB_" + mapExt.AttrOfOper);
                 if (tbAuto == null)
                     continue;
@@ -473,7 +469,7 @@ function AfterBindEn_DealMapExt(frmData) {
                     var strs = mapExt.Tag.split('$');
                     for (var str in strs) {
                         var str = strs[k];
-                        if (str = "" || str==null) {
+                        if (str = "" || str == null) {
                             continue;
                         }
 
@@ -497,7 +493,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 }
 
                 break;
-            case "ActiveDDL":/*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
+            case "ActiveDDL": /*自动初始化ddl的下拉框数据. 下拉框的级联操作 已经 OK*/
                 var ddlPerant = $("#DDL_" + mapExt.AttrOfOper);
                 var ddlChild = $("#DDL_" + mapExt.AttrsOfActive);
                 if (ddlPerant == null || ddlChild == null)
@@ -511,7 +507,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 break;
             case "AutoFullDLL": // 自动填充下拉框.
                 continue; //已经处理了。
-            case "DDLFullCtrl":// 自动填充其他的控件..  先不做
+            case "DDLFullCtrl": // 自动填充其他的控件..  先不做
                 break;
                 var ddlOper = $("#DDL_" + mapExt.AttrOfOper);
                 if (ddlOper == null)
@@ -562,7 +558,7 @@ function AfterBindEn_DealMapExt(frmData) {
                         //    }
                         //}
 
-                        var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5' }];
+                        var items = [{ No: 1, Name: '测试1' }, { No: 2, Name: '测试2' }, { No: 3, Name: '测试3' }, { No: 4, Name: '测试4' }, { No: 5, Name: '测试5'}];
                         var operations = '';
                         $.each(items, function (i, item) {
                             operations += "<option  value='" + item.No + "'>" + item.Name + "</option>";
@@ -691,20 +687,20 @@ function GetFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框 
+            //下拉框  
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
 
-            //对于复选下拉框获取值得方法 
-//                if ($('[data-id=' + name + ']').length > 0) {
-//                    var val = $(disabledEle).val().join(',');
-//                    formArrResult.push(name + '=' + val);
-//                } else {
-//                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-//                }
-//                break;
-            //文本区域 
+            //对于复选下拉框获取值得方法  
+            //                if ($('[data-id=' + name + ']').length > 0) { 
+            //                    var val = $(disabledEle).val().join(','); 
+            //                    formArrResult.push(name + '=' + val); 
+            //                } else { 
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val()); 
+            //                } 
+            //                break; 
+            //文本区域  
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -764,13 +760,13 @@ function GetFormData(isCotainTextArea, isCotainUrlParam) {
 }
 
 $(function () {
- 
+
     setAttachDisabled();
     //setToobarDisiable();
     setFormEleDisabled();
 
 })
- 
+
 
 //根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示  
 function ShowNoticeInfo() {
@@ -780,7 +776,7 @@ function ShowNoticeInfo() {
     $("input[type=radio],select").bind('change', function (obj) {
         var needShowDDLids = [];
         var methodVal = obj.target.value;
-        
+
         for (var j = 0; j < data.length; j++) {
             var value = data[j].IntKey;
             var noticeInfo = data[j].Tip;
@@ -818,7 +814,7 @@ function ShowNoticeInfo() {
                             eleDiv = ele.parent();
                         }
                         switch (fieldConArr[1]) {
-                            case "1"://可用
+                            case "1": //可用
                                 if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
                                     needShowDDLids.push(ele[0].id);
                                 }
@@ -829,7 +825,7 @@ function ShowNoticeInfo() {
 
 
                                 break;
-                            case "2"://可见
+                            case "2": //可见
                                 if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
                                     needShowDDLids.push(ele[0].id);
                                 }
@@ -837,7 +833,7 @@ function ShowNoticeInfo() {
                                 labDiv.css('display', 'block');
                                 eleDiv.css('display', 'block');
                                 break;
-                            case "3"://不可见
+                            case "3": //不可见
                                 labDiv.css('display', 'none');
                                 eleDiv.css('display', 'none');
                                 break;

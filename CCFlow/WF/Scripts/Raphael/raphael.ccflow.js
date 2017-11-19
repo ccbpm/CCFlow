@@ -35,7 +35,7 @@ var NODE_WIDTH = 40,
     NODE_WIDTH_CENTER = 6,
     NODE_HEIGHT = 40,
     NODE_BORDER_RADIUS = 5;
-var NODE_ICON_PATH = '../Admin/ClientBin/NodeIcon/';
+var NODE_ICON_PATH = '../../../DataUser/NodeIcon/';
 var NODE_ICON_DEFAULT = 'Default.jpg';
 
 

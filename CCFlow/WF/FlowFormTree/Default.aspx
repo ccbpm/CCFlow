@@ -664,7 +664,7 @@
                         $.messager.alert('提示', '没有指定的工作，不能打印！', 'info');
                         return;
                     }
-                    window.showModalDialog("../CCForm/Print.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "打印单据", "dialogHeight: 350px; dialogWidth:450px; center: yes; help: no");
+                    window.showModalDialog("../CCForm/Print.htm?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "打印单据", "dialogHeight: 350px; dialogWidth:450px; center: yes; help: no");
                     //window.open("../CCForm/Print.aspx?FK_Node=" + args.FK_Node + "&FID=" + args.FID + "&WorkID=" + args.WorkID + "&FK_Flow=" + args.FK_Flow + "&s=" + strTimeKey, "打印单据", "dialogHeight: 350px, dialogWidth:450px,center: yes, help: no,resizable:yes");
                     break;
                 case "hungup": //挂起

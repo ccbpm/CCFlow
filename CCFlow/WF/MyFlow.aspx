@@ -12,6 +12,7 @@
     <link href="Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" language="javascript" src="../DataUser/PrintTools/LodopFuncs.js"></script>
     <script type="text/javascript" language="javascript" src="Scripts/MyFlow.js"></script>
+    <script src="Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script type="text/javascript">
         var DtlsLoadedCount = 0;    //已加载明细表数量
 
@@ -133,6 +134,20 @@
                 }
             }
             return;
+        }
+
+        //图片附件编辑
+        function ImgAth(url, athMyPK) {
+            var dgId = "iframDg";
+            url = url + "&s=" + Math.random();
+            OpenEasyUiDialog(url, dgId, '图片附件', 900, 580, 'icon-new', false, function () {
+
+            }, null, null, function () {
+                //关闭也切换图片
+                var win = document.getElementById(dgId).contentWindow;
+                var imgSrc = win.ImgAthSrc();
+                document.getElementById('Img' + athMyPK).setAttribute('src', imgSrc);
+            });
         }
         //然浏览器最大化.
         function ResizeWindow() {

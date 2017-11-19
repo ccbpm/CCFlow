@@ -4375,23 +4375,23 @@ namespace CCFlow.WF.UC
             FrmImgAths imgAths = this.mapData.FrmImgAths;
             if (imgAths.Count != 0 && this.IsReadonly == false)
             {
-                js = "\t\n<script type='text/javascript' >";
-                js += "\t\n function ImgAth(url,athMyPK)";
-                js += "\t\n {";
-                js += "\t\n  var v= window.showModalDialog(url, 'ddf', 'dialogHeight: 650px; dialogWidth: 950px;center: yes; help: no'); ";
-                js += "\t\n  if (v==null )  ";
-                js += "\t\n     return ;";
-                js += "\t\n document.getElementById('Img'+athMyPK ).setAttribute('src', v); ";
-                js += "\t\n }";
-                js += "\t\n</script>";
-                this.Add(js);
+                //js = "\t\n<script type='text/javascript' >";
+                //js += "\t\n function ImgAth(url,athMyPK)";
+                //js += "\t\n {";
+                //js += "\t\n  var v= window.showModalDialog(url, 'ddf', 'dialogHeight: 650px; dialogWidth: 950px;center: yes; help: no'); ";
+                //js += "\t\n  if (v==null )  ";
+                //js += "\t\n     return ;";
+                //js += "\t\n document.getElementById('Img'+athMyPK ).setAttribute('src', v); ";
+                //js += "\t\n }";
+                //js += "\t\n</script>";
+                //this.Add(js);
             }
 
             foreach (FrmImgAth ath in imgAths)
             {
                 x = ath.X + wtX;
                 this.Add("\t\n<DIV id=" + ath.MyPK + " style='position:absolute;left:" + x + "px;top:" + ath.Y + "px;text-align:left;vertical-align:top' >");
-                string url = appPath + "WF/CCForm/ImgAth.aspx?W=" + ath.W + "&H=" + ath.H + "&FK_MapData=" + enName + "&MyPK=" + en.PKVal + "&ImgAth=" + ath.MyPK;
+                string url = appPath + "WF/CCForm/ImgAth.htm?W=" + ath.W + "&H=" + ath.H + "&FK_MapData=" + enName + "&MyPK=" + en.PKVal + "&ImgAth=" + ath.MyPK;
                 if (isReadonly == false && ath.IsEdit == true)
                     this.AddFieldSet("<a href=\"javascript:ImgAth('" + url + "','" + ath.MyPK + "');\" >编辑</a>");
 

@@ -538,7 +538,7 @@ namespace BP.WF
 
             //给icon设置默认值.
             if (this.GetValStrByKey(NodeAttr.ICON) == "")
-                this.ICON = "../../Data/NodeIcon/审核.png";
+                this.ICON = "审核.png";
 
             #region 如果是数据合并模式，就要检查节点中是否有子线程，如果有子线程就需要单独的表.
             if (this.HisRunModel == RunModel.SubThread)
@@ -844,9 +844,9 @@ namespace BP.WF
                 string s = this.GetValStrByKey(NodeAttr.ICON);
                 if (string.IsNullOrEmpty(s))
                     if (this.IsStartNode)
-                        return "../../Data/NodeIcon/审核.png";
+                        return "审核.png";
                     else
-                        return "../../Data/NodeIcon/前台.png";
+                        return "前台.png";
                 return s;
             }
             set
@@ -2423,7 +2423,6 @@ namespace BP.WF
 
                 map.AddTBInt(NodeAttr.Step, (int)NodeWorkType.Work, "流程步骤", true, false);
 
-                //头像. "/WF/Data/NodeIcon/审核.png"  "/WF/Data/NodeIcon/前台.png"
                 map.AddTBString(NodeAttr.ICON, null, "节点ICON图片路径", true, false, 0, 70, 10);
 
                 map.AddTBInt(NodeAttr.NodeWorkType, 0, "节点类型", false, false);

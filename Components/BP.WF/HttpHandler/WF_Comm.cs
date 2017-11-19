@@ -27,10 +27,26 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
-         
 
-        #region xxx 界面 .
-        #endregion xxx 界面方法.
+
+        #region 界面 .
+        /// <summary>
+        /// 实体初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Entity_Init()
+        {
+            return "";
+        }
+        public string Entity_Save()
+        {
+            return "";
+        }
+        public string Entity_Delete()
+        {
+            return "";
+        }
+        #endregion 界面方法.
 
         public string SFTable()
         {

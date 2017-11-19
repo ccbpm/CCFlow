@@ -170,9 +170,27 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
+        /// <summary>
+        /// 默认值
+        /// </summary>
+        public string DefVal
+        {
+            get
+            {
+                return this.GetValStrByKey(MapAttrAttr.DefVal);
+            }
+            set
+            {
+                this.SetValByKey(MapAttrAttr.DefVal, value);
+            }
+        }
 
         protected override bool beforeUpdateInsertAction()
         {
+            //如果没默认值.
+            if (this.DefVal == "")
+                this.DefVal = "0";
+
             MapAttr attr = new MapAttr();
             attr.MyPK = this.MyPK;
             attr.RetrieveFromDBSources();

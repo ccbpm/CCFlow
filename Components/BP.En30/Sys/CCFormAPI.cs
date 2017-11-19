@@ -1031,7 +1031,13 @@ namespace BP.Sys
                 if (string.IsNullOrEmpty(pk))
                     continue;
 
-                sqls += "@DELETE FROM Sys_MapDtl WHERE No='" + pk + "'";
+                //调用删除逻辑.
+                MapDtl dtl = new MapDtl();
+                dtl.No = pk;
+                dtl.RetrieveFromDBSources();
+                dtl.Delete();
+
+               // sqls += "@DELETE FROM Sys_MapDtl WHERE No='" + pk + "'";
             }
 
 

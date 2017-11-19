@@ -681,7 +681,7 @@ namespace BP.WF.HttpHandler
         /// 执行数据初始化
         /// </summary>
         /// <returns></returns>
-        public string FrmFree_Init()
+        public string FrmGener_Init()
         {
             try
             {
@@ -724,8 +724,15 @@ namespace BP.WF.HttpHandler
                 #endregion  求who is PK.
 
                 en.OID = pk;
-                if (en.RetrieveFromDBSources() == 0)
-                    en.Insert();
+                if (en.OID == 0)
+                {
+                    en.ResetDefaultVal();
+                }
+                else
+                {
+                    if (en.RetrieveFromDBSources() == 0)
+                        en.Insert();
+                }
 
                 //把参数放入到 En 的 Row 里面。
                 if (string.IsNullOrEmpty(atParas) == false)
@@ -901,7 +908,7 @@ namespace BP.WF.HttpHandler
         /// 执行保存
         /// </summary>
         /// <returns></returns>
-        public string FrmFree_Save()
+        public string FrmGener_Save()
         {
             try
             {
@@ -936,8 +943,6 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion
-
-
 
         #region dtl.htm 从表.
         /// <summary>
@@ -2288,6 +2293,199 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion 从表的选项.
+
+        #region 打印.
+        public string Print_Init()
+        {
+            string ApplicationPath = this.context.Request.PhysicalApplicationPath;
+
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            string path = ApplicationPath + @"DataUser\CyclostyleFile\FlowFrm\" + nd.FK_Flow + "\\" + nd.NodeID + "\\";
+            string[] fls = null;
+            try
+            {
+                fls = System.IO.Directory.GetFiles(path);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("BillNo");
+            dt.Columns.Add("BillName");
+
+            int idx = 0;
+            int fileIdx = -1;
+            foreach (string f in fls)
+            {
+                fileIdx++;
+                string myfile = f.Replace(path, "");
+                string[] strs = myfile.Split('.');
+                idx++;
+
+                DataRow dr = dt.NewRow();
+                dr["BillNo"] = strs[0];
+                dr["BillName"] = strs[1];
+
+                dt.Rows.Add(dr);
+            }
+
+            //返回json.
+            return BP.Tools.Json.ToJson(dt);
+        }
+        public string Print_Done()
+        {
+            int billIdx = this.GetValIntFromFrmByKey("BillIdx");
+
+            string ApplicationPath = "";
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            string path = ApplicationPath + "\\DataUser\\CyclostyleFile\\FlowFrm\\" + nd.FK_Flow + "\\" + nd.NodeID + "\\";
+            if (System.IO.Directory.Exists(path) == false)
+            {
+                return "err@模版文件没有找到。" + path;
+            }
+
+            string[] fls = System.IO.Directory.GetFiles(path);
+            string file = fls[billIdx];
+            file = file.Replace(ApplicationPath + @"DataUser\CyclostyleFile", "");
+
+            FileInfo finfo = new FileInfo(file);
+            string tempName = finfo.Name.Split('.')[0];
+            string tempNameChinese = finfo.Name.Split('.')[1];
+
+            string toPath = ApplicationPath + @"DataUser\Bill\FlowFrm\" + DateTime.Now.ToString("yyyyMMdd") + "\\";
+            if (System.IO.Directory.Exists(toPath) == false)
+                System.IO.Directory.CreateDirectory(toPath);
+
+            // string billFile = toPath + "\\" + tempName + "." + this.FID + ".doc";
+            string billFile = toPath + "\\" +  tempNameChinese + "." + this.WorkID + ".doc";
+
+            BP.Pub.RTFEngine engine = new BP.Pub.RTFEngine();
+            if (tempName.ToLower() == "all")
+            {
+                /* 说明要从所有的独立表单上取数据. */
+                FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
+                foreach (FrmNode fn in fns)
+                {
+                    GEEntity ge = new GEEntity(fn.FK_Frm, this.WorkID);
+                    engine.AddEn(ge);
+                    MapDtls mdtls = new MapDtls(fn.FK_Frm);
+                    foreach (MapDtl dtl in mdtls)
+                    {
+                        GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
+                        enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
+                        engine.EnsDataDtls.Add(enDtls);
+                    }
+                }
+
+                // 增加主表.
+                GEEntity myge = new GEEntity("ND" + nd.NodeID, this.WorkID);
+                engine.AddEn(myge);
+
+                //增加从表
+                MapDtls mymdtls = new MapDtls(tempName);
+                foreach (MapDtl dtl in mymdtls)
+                {
+                    GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
+                    enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
+                    engine.EnsDataDtls.Add(enDtls);
+                }
+
+                //增加多附件数据
+                FrmAttachments aths = new FrmAttachments(tempName);
+                foreach (FrmAttachment athDesc in aths)
+                {
+                    FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
+                    if (athDBs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK, FrmAttachmentDBAttr.RefPKVal, this.WorkID, "RDT") == 0)
+                        continue;
+
+                    engine.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
+                }
+                // engine.MakeDoc(file, toPath, tempName + "." + this.WorkID + ".doc", null, false);
+                engine.MakeDoc(file, toPath,  tempNameChinese + "." + this.WorkID + ".doc", null, false);
+            }
+            else
+            {
+                // 增加主表.
+                GEEntity myge = new GEEntity(tempName, this.WorkID);
+                engine.HisGEEntity = myge;
+                engine.AddEn(myge);
+
+                //增加从表.
+                MapDtls mymdtls = new MapDtls(tempName);
+                foreach (MapDtl dtl in mymdtls)
+                {
+                    GEDtls enDtls = dtl.HisGEDtl.GetNewEntities as GEDtls;
+                    enDtls.Retrieve(GEDtlAttr.RefPK, this.WorkID);
+                    engine.EnsDataDtls.Add(enDtls);
+                }
+
+                //增加轨迹表.
+                Paras ps = new BP.DA.Paras();
+                ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
+                ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
+                ps.Add(TrackAttr.WorkID, this.WorkID);
+                engine.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
+
+                engine.MakeDoc(file, toPath,  tempNameChinese + "." + this.WorkID + ".doc", null, false);
+            }
+
+            #region 保存单据，以方便查询.
+            Bill bill = new Bill();
+            bill.MyPK = this.FID + "_" + this.WorkID + "_" + this.FK_Node + "_" + billIdx;
+            bill.WorkID = this.WorkID;
+            bill.FK_Node = this.FK_Node;
+            bill.FK_Dept = WebUser.FK_Dept;
+            bill.FK_Emp = WebUser.No;
+
+            bill.Url = "/DataUser/Bill/FlowFrm/" + DateTime.Now.ToString("yyyyMMdd") + "/" + tempNameChinese + "." + this.WorkID + ".doc";
+            bill.FullPath = toPath + file;
+
+            bill.RDT = DataType.CurrentDataTime;
+            bill.FK_NY = DataType.CurrentYearMonth;
+            bill.FK_Flow = this.FK_Flow;
+            if (this.WorkID != 0)
+            {
+                GenerWorkFlow gwf = new GenerWorkFlow();
+                gwf.WorkID = this.WorkID;
+                if (gwf.RetrieveFromDBSources() == 1)
+                {
+                    bill.Emps = gwf.Emps;
+                    bill.FK_Starter = gwf.Starter;
+                    bill.StartDT = gwf.RDT;
+                    bill.Title = gwf.Title;
+                    bill.FK_Dept = gwf.FK_Dept;
+                }
+            }
+
+            try
+            {
+                bill.Insert();
+            }
+            catch
+            {
+                bill.Update();
+            }
+            #endregion
+
+            BillTemplates templates = new BillTemplates();
+            int iHave = templates.Retrieve(BillTemplateAttr.NodeID, this.FK_Node, BillTemplateAttr.BillOpenModel, (int)BillOpenModel.WebOffice);
+            //在线WebOffice打开
+            if (iHave > 0)
+            {
+                return "url@../WebOffice/PrintOffice.htm?MyPK=" + bill.MyPK;
+            }
+            else
+            {
+                BP.Sys.PubClass.OpenWordDocV2(billFile, tempNameChinese + ".doc");
+            }
+
+            return "err@功能尚未完成..";
+        }
+        #endregion 打印.
+
 
     }
 }

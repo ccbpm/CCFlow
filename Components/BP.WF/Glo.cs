@@ -412,7 +412,7 @@ namespace BP.WF
                 Node wf_Node = new Node();
                 wf_Node.CheckPhysicsTable();
                 // 设置节点ICON.
-                sql = "UPDATE WF_Node SET ICON='/WF/Data/NodeIcon/审核.png' WHERE ICON IS NULL";
+                sql = "UPDATE WF_Node SET ICON='审核.png' WHERE ICON IS NULL";
                 BP.DA.DBAccess.RunSQL(sql);
 
                 BP.WF.Template.NodeSheet nodeSheet = new BP.WF.Template.NodeSheet();

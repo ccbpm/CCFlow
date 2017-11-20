@@ -93,7 +93,7 @@
         function WinField(fk_mapdata, nodeid, fk_flow) {
             var url = "./FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';            
             
-            OpenEasyUiDialog(url, "eudlgframe", '字段权限控制', 800, 500, "icon-edit", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", '字段权限控制', 1260, 560, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }

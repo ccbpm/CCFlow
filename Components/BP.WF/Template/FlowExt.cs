@@ -698,6 +698,15 @@ namespace BP.WF.Template
 
 
                 rm = new RefMethod();
+             //   rm.Icon = "../../WF/Img/Btn/Delete.gif";
+                rm.Title = "按工作ID强制结束"; // this.ToE("DelFlowData", "删除数据"); // "删除数据";
+                rm.GroupName = "流程维护";
+                rm.ClassMethodName = this.ToString() + ".DoStopFlow";
+                rm.HisAttrs.AddTBInt("WorkID", 0, "输入工作ID", true, false);
+                rm.HisAttrs.AddTBString("beizhu", null, "备注", true, false, 0, 100, 100);
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "回滚流程";
                 rm.Icon = "../../WF/Img/Btn/Back.png";
                 rm.ClassMethodName = this.ToString() + ".DoRebackFlowData()";
@@ -1364,6 +1373,18 @@ namespace BP.WF.Template
             {
                 BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.No, workid, true);
                 return "删除成功 workid=" + workid + "  理由:" + note;
+            }
+            catch (Exception ex)
+            {
+                return "删除失败:" + ex.Message;
+            }
+        }
+        public string DoStopFlow(Int64 workid, string note)
+        {
+            try
+            {
+                BP.WF.Dev2Interface.Flow_DoFlowOver(this.No, workid, note);
+                return "流程被强制结束 workid=" + workid + "  理由:" + note;
             }
             catch (Exception ex)
             {

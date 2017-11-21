@@ -1048,7 +1048,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion PopFullCtrl 功能界面.
 
-        #region 超链接保存. @于庆海需要翻译.
+        #region 超链接保存. 需要翻译.
         /// <summary>
         /// 保存
         /// </summary>

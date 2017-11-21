@@ -975,7 +975,7 @@ namespace BP.WF.Template
 
                 map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true,MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
-                // 为浙商银行设置从表打开. @于庆海翻译.
+                // 为浙商银行设置从表打开.翻译.
                 map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", true, true,MapDtlAttr.ListShowModel, "@0=表格@1=卡片");
                 map.AddDDLSysEnum(MapDtlAttr.RowShowModel, 0, "行数据显示格式", true, true,MapDtlAttr.RowShowModel, "@0=无@1=傻瓜表单@2=自由表单");
                 map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true,MapDtlAttr.DtlOpenType, "@0=操作员@1=工作ID@2=流程ID");

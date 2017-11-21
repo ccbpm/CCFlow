@@ -3176,7 +3176,7 @@ namespace BP.WF
                         //判断是否更新的是用户表中的SID
                         if (Glo.UpdataSID.Contains("UPDATE Port_Emp SET SID=") == true)
                         {
-                            //判断是否视图，如果为视图则不进行修改 @于庆海 需要翻译
+                            //判断是否视图，如果为视图则不进行修改 需要翻译
                             if (BP.DA.DBAccess.IsView("Port_Emp") == true)
                             {
                                 return sid;
@@ -3239,7 +3239,7 @@ namespace BP.WF
             //判断是否更新的是用户表中的SID
             if (Glo.UpdataSID.Contains("UPDATE Port_Emp SET SID=") == true)
             {
-                //判断是否视图，如果为视图则不进行修改 @于庆海 需要翻译
+                //判断是否视图，如果为视图则不进行修改 需要翻译
                 if (BP.DA.DBAccess.IsView("Port_Emp") == true)
                 {
                     return false;
@@ -4646,7 +4646,7 @@ namespace BP.WF
             //判断是否是待办.
             int myisPass = int.Parse(dt.Rows[0]["IsPass"].ToString());
             
-            //新增加的标记,=90 就是会签主持人执行会签的状态. @于庆海翻译.
+            //新增加的标记,=90 就是会签主持人执行会签的状态. 翻译.
             if (myisPass == 90)
                 return true; 
 

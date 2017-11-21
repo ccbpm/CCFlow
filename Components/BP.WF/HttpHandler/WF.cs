@@ -114,7 +114,7 @@ namespace BP.WF.HttpHandler
                 DBAccess.RunSQL("UPDATE WF_FLOWSORT SET ORGNO='0' WHERE ORGNO='' OR ORGNO IS NULL OR ORGNO='101'");
             }
 
-            // @于庆海需要翻译.
+            // 需要翻译.
             BP.WF.Port.WFEmp em = new WFEmp();
             em.No = BP.Web.WebUser.No;
             if (em.RetrieveFromDBSources() == 0)

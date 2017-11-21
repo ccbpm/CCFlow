@@ -236,7 +236,7 @@ namespace BP.WF.HttpHandler
             return "";
         }
         /// <summary>
-        /// 修改密码 @于庆海.
+        /// 修改密码 .
         /// </summary>
         /// <returns></returns>
         public string ChangePassword_Submit()

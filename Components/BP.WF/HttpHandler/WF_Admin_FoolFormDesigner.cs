@@ -770,7 +770,7 @@ namespace BP.WF.HttpHandler
             if (i != 0)
                 return "err@字段名：" + newNo + "已经存在.";
 
-            #region 计算GroupID @于庆海 需要翻译
+            #region 计算GroupID  需要翻译
             int iGroupID = this.GroupField;
             try
             {

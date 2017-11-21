@@ -356,7 +356,7 @@ namespace BP.WF.HttpHandler
                 GenerWorkerListAttr.WorkID, this.WorkID,
                 GenerWorkerListAttr.FK_Node, this.FK_Node);
 
-            //如果已经没有会签待办了,就设置当前人员状态为0.  @于庆海翻译 增加这部分.
+            //如果已经没有会签待办了,就设置当前人员状态为0.  增加这部分.
             string sql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID='" + this.WorkID + "' AND IsPass=0";
             if (DBAccess.RunSQLReturnValInt(sql) == 0)
             {
@@ -949,7 +949,7 @@ namespace BP.WF.HttpHandler
                 bool isHave = false;
                 foreach (BP.WF.Track tk in tks)
                 {
-                    //@于庆海翻译.
+                    //翻译.
                     if (tk.NDFrom == this.FK_Node && tk.HisActionType==ActionType.WorkCheck)
                     {
                         isHave = true; //已经有了

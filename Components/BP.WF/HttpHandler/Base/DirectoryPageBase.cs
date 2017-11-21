@@ -468,6 +468,13 @@ namespace BP.WF.HttpHandler
                 _workID = value;
             }
         }
+        public Int64 CWorkID
+        {
+            get
+            {
+                return this.GetRequestValInt("CWorkID");
+            }
+        }
         /// <summary>
         /// 框架ID
         /// </summary>

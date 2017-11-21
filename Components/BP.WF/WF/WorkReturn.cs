@@ -157,7 +157,7 @@ namespace BP.WF
                     ps.Add("WorkID2", this.WorkID);
                     DBAccess.RunSQL(ps);
 
-                    //删除审核意见, 已经考虑到了  @于庆海翻译。
+                    //删除审核意见
                     ps.Clear();
                     ps.SQL = "DELETE FROM ND" + int.Parse(this.ReturnToNode.FK_Flow) + "Track WHERE NDFrom=" + dbStr + "NDFrom AND  (WorkID=" + dbStr + "WorkID1 OR FID=" + dbStr + "WorkID2) AND ActionType=22";
                     ps.Add("NDFrom", nodeid);
@@ -190,9 +190,9 @@ namespace BP.WF
             string msg = this.HisNode.HisFlow.DoFlowEventEntity(EventListOfNode.ReturnBefore, this.HisNode, this.HisWork, atPara);
 
             //执行退回的考核.
-            Glo.InitCH(this.HisNode.HisFlow, this.HisNode, this.WorkID,this.FID, this.HisNode.Name+":退回考核.");
+            Glo.InitCH(this.HisNode.HisFlow, this.HisNode, this.WorkID, this.FID, this.HisNode.Name + ":退回考核.");
 
-           
+
             if (this.HisNode.FocusField != "")
             {
                 try
@@ -365,12 +365,12 @@ namespace BP.WF
             if (isNeedDeleteSpanNodes)
             {
                 //获得可以退回的节点，这个节点是有顺序的.
-                DataTable dt= BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.HisNode.NodeID, this.WorkID, this.FID);
+                DataTable dt = BP.WF.Dev2Interface.DB_GenerWillReturnNodes(this.HisNode.NodeID, this.WorkID, this.FID);
                 bool isDelBegin = false;
                 foreach (DataRow dr in dt.Rows)
                 {
                     int nodeID = int.Parse(dr["No"].ToString());
-                    
+
                     if (nodeID == this.ReturnToNode.NodeID)
                         isDelBegin = true; /*如果等于当前的节点，就开始把他们删除掉.*/
 
@@ -385,7 +385,7 @@ namespace BP.WF
                 sql = "DELETE FROM WF_SelectAccper WHERE FK_Node=" + this.HisNode.NodeID + " AND WorkID=" + this.WorkID;
                 BP.DA.DBAccess.RunSQL(sql);
             }
-            
+
 
             //删除.
             Template.FrmWorkCheck fwc = new Template.FrmWorkCheck(this.HisNode.NodeID);
@@ -434,7 +434,7 @@ namespace BP.WF
                             return ExeReturn1_1(); //
                         case RunModel.SubThread: /* 2.4 分流点to子线程点   */
                             return ExeReturn2_4(); //
-                           // throw new Exception("@退回错误:非法的设计模式或退回模式.分流点to子线程点,请反馈给管理员.");
+                        // throw new Exception("@退回错误:非法的设计模式或退回模式.分流点to子线程点,请反馈给管理员.");
                         default:
                             throw new Exception("@没有判断的节点类型(" + ReturnToNode.Name + ")");
                             break;
@@ -478,12 +478,12 @@ namespace BP.WF
                             throw new Exception("@非法的退回模式,,请反馈给管理员.");
                         case RunModel.FL: /*5.2 分流点 */
                             /*子线程退回给分流点.*/
-                           return ExeReturn5_2();
+                            return ExeReturn5_2();
                         case RunModel.HL: /*5.3 合流点 */
                             throw new Exception("@非法的退回模式,请反馈给管理员.");
                         case RunModel.FHL: /*5.4 分合流点 */
                             return ExeReturn5_2();
-                            //throw new Exception("@目前不支持此场景下的退回,请反馈给管理员.");
+                        //throw new Exception("@目前不支持此场景下的退回,请反馈给管理员.");
                         case RunModel.SubThread: /*5.5 子线程*/
                             return ExeReturn1_1();
                         default:
@@ -553,7 +553,7 @@ namespace BP.WF
 
             string toEmp = "";
             string toEmpName = "";
-            if (gwls.Count ==1 )
+            if (gwls.Count == 1)
             {
                 /*有可能多次退回的情况，表示曾经退回过n次。*/
                 foreach (GenerWorkerList item in gwls)
@@ -564,7 +564,7 @@ namespace BP.WF
                     info += item.FK_Emp + "," + item.FK_EmpText;
                     toEmp = item.FK_Emp;
                     toEmpName = item.FK_EmpText;
-                    info += "("+item.FK_Emp+","+item.FK_EmpText+")";
+                    info += "(" + item.FK_Emp + "," + item.FK_EmpText + ")";
                 }
             }
             else
@@ -572,12 +572,12 @@ namespace BP.WF
                 // 找到合流点的发送人.
                 Nodes nds = this.HisNode.FromNodes;
                 gwls = new GenerWorkerLists();
-                GenerWorkerList gwl=new GenerWorkerList();
+                GenerWorkerList gwl = new GenerWorkerList();
                 foreach (Node nd in nds)
                 {
-                    gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID, 
+                    gwls.Retrieve(GenerWorkerListAttr.WorkID, this.FID,
                         GenerWorkerListAttr.FK_Node, nd.NodeID,
-                        GenerWorkerListAttr.IsPass,1);
+                        GenerWorkerListAttr.IsPass, 1);
                     if (gwls.Count == 0)
                         continue;
 
@@ -597,8 +597,8 @@ namespace BP.WF
                 // 插入一条数据, 行程一个工作人员记录,这个记录就是子线程的延长点. 给合流点上的接受人设置待办.
                 gwl.WorkID = this.WorkID;
                 gwl.FID = this.FID;
-                gwl.IsPass=false; 
-                if (gwl.IsExits==false)
+                gwl.IsPass = false;
+                if (gwl.IsExits == false)
                     gwl.Insert();
                 else
                     gwl.Update();
@@ -867,7 +867,7 @@ namespace BP.WF
                     throw new Exception("@退回错误，没有找到要更新的目标数据.技术信息:" + sql);
             }
 
-            //@于庆海翻译， 去掉了 else .
+            // 去掉了 else .
             rw.IsBackTracking = this.IsBackTrack;
 
             //调用删除GenerWorkerList数据，不然会导致两个节点之间有垃圾数据，特别遇到中间有分合流时候。
@@ -1187,11 +1187,11 @@ namespace BP.WF
 
             wl.FK_Node = backtoNodeID;
             wl.FK_NodeText = nd.Name;
-           // wl.WarningHour = nd.WarningHour;
+            // wl.WarningHour = nd.WarningHour;
             wl.FK_Dept = emp.FK_Dept;
 
             DateTime dtNew = DateTime.Now;
-           // dtNew = dtNew.AddDays(nd.WarningHour);
+            // dtNew = dtNew.AddDays(nd.WarningHour);
 
             wl.SDT = dtNew.ToString(DataType.SysDataTimeFormat); // DataType.CurrentDataTime;
             wl.FK_Flow = this.HisNode.FK_Flow;

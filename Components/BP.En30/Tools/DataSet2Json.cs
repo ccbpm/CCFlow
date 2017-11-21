@@ -467,7 +467,7 @@ namespace BP.Tools
             jsonString = jsonString.TrimEnd(',');
             return jsonString + "}";
         }
-      
+
         /// <summary>
         /// 把dataset转成json 列名大写.
         /// </summary>
@@ -536,7 +536,7 @@ namespace BP.Tools
             }
             else if (type == typeof(System.Byte[]))
             {
-                //数字字段需转string后进行拼接 @于庆海 需要翻译
+                //数字字段需转string后进行拼接 
                 str = "\"" + str + "\"";
             }
             if (str.Length == 0)

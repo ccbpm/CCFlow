@@ -142,7 +142,7 @@ namespace BP.Sys.FrmUI
 
         #region 构造方法
         /// <summary>
-        /// @于庆海.
+
         /// </summary>
         public override UAC HisUAC
         {
@@ -180,7 +180,7 @@ namespace BP.Sys.FrmUI
                     return this._enMap;
                 Map map = new Map("Sys_FrmImgAth", "图片附件");
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
 

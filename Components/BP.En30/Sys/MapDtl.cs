@@ -391,7 +391,7 @@ namespace BP.Sys
                 this.SetPara(MapDtlAttr.IsRowLock, value);
             }
         }
-        #endregion 基本设置 
+        #endregion 基本设置
 
         #region 参数属性
         /// <summary>
@@ -429,7 +429,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetParaBoolen(MapDtlAttr.IsEnableLink,false);
+                return this.GetParaBoolen(MapDtlAttr.IsEnableLink, false);
             }
             set
             {
@@ -440,7 +440,7 @@ namespace BP.Sys
         {
             get
             {
-                string s= this.GetParaString(MapDtlAttr.LinkLabel);
+                string s = this.GetParaString(MapDtlAttr.LinkLabel);
                 if (string.IsNullOrEmpty(s))
                     return "详细";
                 return s;
@@ -1008,7 +1008,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDtlAttr.IsEnablePass, value);
             }
         }
-      
+
         /// <summary>
         /// 是否copy数据？
         /// </summary>
@@ -1157,7 +1157,7 @@ namespace BP.Sys
                 if (string.IsNullOrEmpty(s) == true)
                     return "";
                 s = s.Replace("~", "'");
-                return  s.Trim();
+                return s.Trim();
             }
             set
             {
@@ -1171,16 +1171,16 @@ namespace BP.Sys
         {
             get
             {
-                string s= this.GetValStrByKey(MapDtlAttr.MTR);
-                s = s.Replace("《","<");
-                s = s.Replace( "》",">");
-                s = s.Replace("‘","'");
+                string s = this.GetValStrByKey(MapDtlAttr.MTR);
+                s = s.Replace("《", "<");
+                s = s.Replace("》", ">");
+                s = s.Replace("‘", "'");
                 return s;
             }
             set
             {
                 string s = value;
-                s = s.Replace("<","《");
+                s = s.Replace("<", "《");
                 s = s.Replace(">", "》");
                 s = s.Replace("'", "‘");
                 this.SetValByKey(MapDtlAttr.MTR, value);
@@ -1215,10 +1215,10 @@ namespace BP.Sys
             }
 
             MapAttrs mapAttrs = this.MapAttrs;
-            Map map = new Map(this.PTable,this.Name);
+            Map map = new Map(this.PTable, this.Name);
             map.Java_SetEnType(EnType.App);
             map.Java_SetDepositaryOfEntity(Depositary.None);
-            map.Java_SetDepositaryOfMap( Depositary.Application);
+            map.Java_SetDepositaryOfMap(Depositary.Application);
 
             Attrs attrs = new Attrs();
             foreach (MapAttr mapAttr in mapAttrs)
@@ -1305,17 +1305,17 @@ namespace BP.Sys
                 map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M", false, false);
 
 
-                // 以下4 @于庆海.需要对比翻译.
-                
+
+
                 // 超出行数
                 map.AddTBInt(MapDtlAttr.WhenOverSize, 0, "列表数据显示格式", false, false);
 
                 //数据开放类型 .
                 map.AddTBInt(MapDtlAttr.DtlOpenType, 0, "列表数据显示格式", false, false);
-                
+
                 map.AddTBInt(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", false, false);
                 map.AddTBInt(MapDtlAttr.RowShowModel, 0, "行数据显示格式", false, false);
-                  
+
 
                 map.AddTBFloat(MapDtlAttr.X, 5, "距左", true, false);
                 map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);
@@ -1731,7 +1731,7 @@ namespace BP.Sys
                 return new MapDtl();
             }
         }
-                
+
         #endregion
 
         #region 为了适应自动翻译成java的需要,把实体转换成List.

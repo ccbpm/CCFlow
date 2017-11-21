@@ -546,7 +546,7 @@ namespace BP.WF
                 this.SetValByKey(FlowAttr.FlowAppType, (int)value);
             }
         }
-         /// <summary>
+        /// <summary>
         /// 流程备注的表达式
         /// </summary>
         public string FlowNoteExp
@@ -2199,7 +2199,7 @@ namespace BP.WF
                 }
                 #endregion
 
-                #region 执行一次保存. @于庆海翻译.  增加了此部分.
+                #region 执行一次保存.
                 NodeExts nes = new NodeExts();
                 nes.Retrieve(NodeAttr.FK_Flow, this.No);
                 foreach (NodeExt item in nes)
@@ -5175,7 +5175,7 @@ namespace BP.WF
                                         continue;
                                     case "showsheets":
                                     case "histonds":
-                                    case "groupstands": //去除不必要的替换 @于庆海 需要翻译
+                                    case "groupstands": //去除不必要的替换
                                         string key = "@" + flowID;
                                         val = val.Replace(key, "@");
                                         break;
@@ -5247,7 +5247,7 @@ namespace BP.WF
                                         continue;
                                     case "showsheets":
                                     case "histonds":
-                                    case "groupstands": //修复替换 @于庆海 需要翻译
+                                    case "groupstands": //修复替换 
                                         string key = "@" + flowID;
                                         val = val.Replace(key, "@");
                                         break;
@@ -5885,7 +5885,7 @@ namespace BP.WF
 
                 nd.CreateMap();
 
-                 //nd.HisWork.CheckPhysicsTable();  去掉，检查的时候会执行.
+                //nd.HisWork.CheckPhysicsTable();  去掉，检查的时候会执行.
                 CreatePushMsg(nd);
 
 
@@ -5930,8 +5930,8 @@ namespace BP.WF
 
                 // 装载模版.
                 string file = BP.Sys.SystemConfig.PathOfDataUser + "XML\\TempleteSheetOfStartNode.xml";
-                if (System.IO.File.Exists(file)==false)
-                    throw new Exception("@开始节点表单模版丢失"+file);
+                if (System.IO.File.Exists(file) == false)
+                    throw new Exception("@开始节点表单模版丢失" + file);
 
                 /*如果存在开始节点表单模版*/
                 DataSet ds = new DataSet();
@@ -5939,7 +5939,7 @@ namespace BP.WF
 
                 string nodeID = "ND" + int.Parse(this.No + "01");
 
-                BP.Sys.MapData.ImpMapData(nodeID, ds); 
+                BP.Sys.MapData.ImpMapData(nodeID, ds);
 
                 return this.No;
             }

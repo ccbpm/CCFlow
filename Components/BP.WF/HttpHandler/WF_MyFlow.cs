@@ -1453,6 +1453,486 @@ namespace BP.WF.HttpHandler
         {
             return this.GenerWorkNode();
         }
+
+        #region 表单树操作
+        /// <summary>
+        /// 获取表单树数据
+        /// </summary>
+        /// <returns></returns>
+        BP.WF.Template.FlowFormTrees appFlowFormTree = new FlowFormTrees();
+        public string FlowFormTree_Init()
+        {
+            //add root
+            BP.WF.Template.FlowFormTree root = new BP.WF.Template.FlowFormTree();
+            root.No = "00";
+            root.ParentNo = "0";
+            root.Name = "目录";
+            root.NodeType = "root";
+            appFlowFormTree.Clear();
+            appFlowFormTree.AddEntity(root);
+
+            #region 添加表单及文件夹
+
+            //节点表单
+            string tfModel = SystemConfig.AppSettings["TreeFrmModel"];
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+
+            FrmNodes frmNodes = new FrmNodes();
+            QueryObject qo = new QueryObject(frmNodes);
+            qo.AddWhere(FrmNodeAttr.FK_Node, this.FK_Node);
+            qo.addAnd();
+            qo.AddWhere(FrmNodeAttr.FK_Flow, this.FK_Flow);
+            //如果配置了启用关键字段，一下会判断绑定的独立表单中的关键字段是否有数据，没有就不会被显示
+            // add  by  海南  zqp
+            if (tfModel == "1")
+            {
+                //针对合流点与分合流节点有效
+                //获取独立表单的字段
+                MapDatas mdes = new MapDatas();
+                string mypks = "";
+                if (nd.IsStartNode == false)
+                {
+                    qo.addOrderBy(FrmNodeAttr.Idx);
+                    qo.DoQuery();
+                    foreach (FrmNode fn in frmNodes)
+                    {
+                        if (fn.HisFrmType == FrmType.FoolForm || fn.HisFrmType == FrmType.FreeFrm)
+                        {
+                            mdes.Retrieve(MapDataAttr.No, fn.FK_Frm);
+                            //根据设置的关键字段是否有值，进行判断
+                            foreach (MapData md in mdes)
+                            {
+                                Paras ps = new Paras();
+                                ps.SQL = "SELECT " + fn.GuanJianZiDuan + " FROM " + md.PTable + " WHERE "
+                                + " OID=" + SystemConfig.AppCenterDBVarStr + "OID";
+                                if (this.FID == 0)
+                                    ps.Add("OID", this.WorkID);
+                                else
+                                    ps.Add("OID", this.FID);
+                                try
+                                {
+                                    DataTable dtmd = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                                    string dtVal = dtmd.Rows[0]["" + fn.GuanJianZiDuan + ""].ToString();
+                                    if (string.IsNullOrWhiteSpace(dtVal))
+                                    {
+                                        mypks = mypks + "'" + md.No + "',";
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    mypks = mypks + "'" + md.No + "',";
+                                }
+                            }
+                        }
+                    }
+                    mypks = mypks.TrimEnd(',');
+                    if (!string.IsNullOrWhiteSpace(mypks))
+                    {
+                        //添加查询条件
+                        qo = new QueryObject(frmNodes);
+                        qo.AddWhere(FrmNodeAttr.FK_Node, this.FK_Node);
+                        qo.addAnd();
+                        qo.AddWhere(FrmNodeAttr.FK_Flow, this.FK_Flow);
+                        qo.addAnd();
+                        qo.AddWhere(FrmNodeAttr.FK_Frm + " not in(" + mypks + ")");
+                        qo.addOrderBy(FrmNodeAttr.Idx);
+                        qo.DoQuery();
+                    }
+
+                }
+                else
+                {
+                    qo.addOrderBy(FrmNodeAttr.Idx);
+                    qo.DoQuery();
+                }
+            }
+            else
+            {
+                qo.addOrderBy(FrmNodeAttr.Idx);
+                qo.DoQuery();
+            }
+            //文件夹
+            SysFormTrees formTrees = new SysFormTrees();
+            formTrees.RetrieveAll(SysFormTreeAttr.Name);
+
+            //所有表单集合.
+            MapDatas mds = new MapDatas();
+            mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
+
+            foreach (FrmNode frmNode in frmNodes)
+            {
+                #region 增加判断是否启用规则.
+                switch (frmNode.FrmEnableRole)
+                {
+                    case FrmEnableRole.Allways:
+                        break;
+                    case FrmEnableRole.WhenHaveData: //判断是否有数据.
+                        MapData md = new MapData(frmNode.FK_Frm);
+                        Int64 pk = this.WorkID;
+                        switch (frmNode.WhoIsPK)
+                        {
+                            case WhoIsPK.FID:
+                                pk = this.FID;
+                                break;
+                            case WhoIsPK.PWorkID:
+                                pk = this.PWorkID;
+                                break;
+                            case WhoIsPK.CWorkID:
+                                pk = this.CWorkID;
+                                break;
+                            case WhoIsPK.OID:
+                            default:
+                                pk = this.WorkID;
+                                break;
+                        }
+                        if (DBAccess.RunSQLReturnValInt("SELECT COUNT(*) as Num FROM " + md.PTable + " WHERE OID=" + pk) == 0)
+                            continue;
+                        break;
+                    case FrmEnableRole.WhenHaveFrmPara: //判断是否有参数.
+                        string frms = this.context.Request["Frms"];
+
+                        //修改算法：解决 frmID =ABC  frmID=AB 的问题.
+                        if (string.IsNullOrEmpty(frms) == true)
+                            continue;
+
+                        frms = frms.Trim();
+
+                        frms = frms.Replace(" ", "");
+                        frms = frms.Replace(" ", "");
+
+
+                        if (frms.Contains(",") == false)
+                        {
+                            if (frms != frmNode.FK_Frm)
+                                continue;
+                        }
+
+                        if (frms.Contains(",") == true)
+                        {
+                            if (frms.Contains(frmNode.FK_Frm + ",") == false)
+                                continue;
+                        }
+
+                        break;
+                    case FrmEnableRole.ByFrmFields:
+                        throw new Exception("@这种类型的判断，ByFrmFields 还没有完成。");
+
+                    case FrmEnableRole.BySQL: // 按照SQL的方式.
+                        string mysql = frmNode.FrmEnableExp.Clone() as string;
+                        mysql = mysql.Replace("@OID", this.WorkID.ToString());
+                        mysql = mysql.Replace("@WorkID", this.WorkID.ToString());
+
+                        mysql = mysql.Replace("@NodeID", this.FK_Node.ToString());
+                        mysql = mysql.Replace("@FK_Node", this.FK_Node.ToString());
+
+                        mysql = mysql.Replace("@FK_Flow", this.FK_Flow);
+
+                        mysql = mysql.Replace("@WebUser.No", WebUser.No);
+                        mysql = mysql.Replace("@WebUser.Name", WebUser.Name);
+                        mysql = mysql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+
+
+                        //替换特殊字符.
+                        mysql = mysql.Replace("~", "'");
+
+                        if (DBAccess.RunSQLReturnValFloat(mysql) <= 0)
+                            continue;
+                        break;
+                    case FrmEnableRole.Disable: // 如果禁用了，就continue出去..
+                        continue;
+                    default:
+                        throw new Exception("@没有判断的规则." + frmNode.FrmEnableRole);
+                }
+                #endregion
+
+                #region 检查是否有没有目录的表单?
+                bool isHave = false;
+                foreach (MapData md in mds)
+                {
+                    if (md.FK_FormTree == "")
+                    {
+                        isHave = true;
+                        break;
+                    }
+                }
+
+                string treeNo = "0";
+                if (isHave && mds.Count == 1)
+                {
+                    treeNo = "0";
+                }
+                else if (isHave == true)
+                {
+                    foreach (MapData md in mds)
+                    {
+                        if (md.FK_FormTree != "")
+                        {
+                            treeNo = md.FK_FormTree;
+                            break;
+                        }
+                    }
+                }
+                #endregion 检查是否有没有目录的表单?
+
+                foreach (MapData md in mds)
+                {
+                    if (frmNode.FK_Frm != md.No)
+                        continue;
+
+                    if (md.FK_FormTree == "")
+                        md.FK_FormTree = treeNo;
+
+                    foreach (SysFormTree formTree in formTrees)
+                    {
+                        if (md.FK_FormTree != formTree.No)
+                            continue;
+                        if (appFlowFormTree.Contains("No", formTree.No) == false)
+                        {
+                            BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
+                            nodeFolder.No = formTree.No;
+                            nodeFolder.ParentNo = formTree.ParentNo;
+                            nodeFolder.Name = formTree.Name;
+                            nodeFolder.NodeType = "folder";
+                            appFlowFormTree.AddEntity(nodeFolder);
+                        }
+                    }
+                    //检查必填项
+                    bool IsNotNull = false;
+                    FrmFields formFields = new FrmFields();
+                    QueryObject obj = new QueryObject(formFields);
+                    obj.AddWhere(FrmFieldAttr.FK_Node, this.FK_Node);
+                    obj.addAnd();
+                    obj.AddWhere(FrmFieldAttr.FK_MapData, md.No);
+                    obj.addAnd();
+                    obj.AddWhere(FrmFieldAttr.IsNotNull, "1");
+                    obj.DoQuery();
+                    if (formFields != null && formFields.Count > 0)
+                        IsNotNull = true;
+
+                    BP.WF.Template.FlowFormTree nodeForm = new BP.WF.Template.FlowFormTree();
+                    nodeForm.No = md.No;
+                    nodeForm.ParentNo = md.FK_FormTree;
+                    nodeForm.Name = md.Name;
+                    nodeForm.NodeType = IsNotNull ? "form|1" : "form|0";
+                    nodeForm.IsEdit = Convert.ToString(Convert.ToInt32(frmNode.IsEdit));
+                    appFlowFormTree.AddEntity(nodeForm);
+                }
+            }
+            //找上级表单文件夹
+            AppendFolder(formTrees);
+            #endregion
+
+            //扩展工具，显示位置为表单树类型
+            NodeToolbars extToolBars = new NodeToolbars();
+            QueryObject info = new QueryObject(extToolBars);
+            info.AddWhere(NodeToolbarAttr.FK_Node, this.FK_Node);
+            info.addAnd();
+            info.AddWhere(NodeToolbarAttr.ShowWhere, (int)ShowWhere.Tree);
+            info.DoQuery();
+
+            foreach (NodeToolbar item in extToolBars)
+            {
+                string url = "";
+                if (string.IsNullOrEmpty(item.Url))
+                    continue;
+
+                url = item.Url;
+
+                BP.WF.Template.FlowFormTree formTree = new BP.WF.Template.FlowFormTree();
+                formTree.No = item.OID.ToString();
+                formTree.ParentNo = "01";
+                formTree.Name = item.Title;
+                formTree.NodeType = "tools|0";
+                if (!string.IsNullOrEmpty(item.Target) && item.Target.ToUpper() == "_BLANK")
+                {
+                    formTree.NodeType = "tools|1";
+                }
+
+                formTree.Url = url;
+                appFlowFormTree.AddEntity(formTree);
+            }
+            TansEntitiesToGenerTree(appFlowFormTree, root.No, "");
+            return appendMenus.ToString();
+        }
+        /// <summary>
+        /// 拼接文件夹
+        /// </summary>
+        /// <param name="formTrees"></param>
+        private void AppendFolder(SysFormTrees formTrees)
+        {
+            BP.WF.Template.FlowFormTrees parentFolders = new BP.WF.Template.FlowFormTrees();
+            //二级目录
+            foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
+            {
+                if (string.IsNullOrEmpty(folder.NodeType) || !folder.NodeType.Equals("folder"))
+                    continue;
+
+                foreach (SysFormTree item in formTrees)
+                {
+                    //排除根节点
+                    if (item.ParentNo.Equals("0") || item.No.Equals("0"))
+                        continue;
+                    if (parentFolders.Contains("No", item.No) == true)
+                        continue;
+                    //文件夹
+                    if (folder.ParentNo.Equals(item.No))
+                    {
+                        if (parentFolders.Contains("No", item.No) == true)
+                            continue;
+                        if (item.ParentNo.Equals("0") == true)
+                            continue;
+
+                        BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
+                        nodeFolder.No = item.No;
+                        nodeFolder.ParentNo = item.ParentNo;
+                        nodeFolder.Name = item.Name;
+                        nodeFolder.NodeType = "folder";
+                        parentFolders.AddEntity(nodeFolder);
+                    }
+                }
+            }
+            //找到父级目录添加到集合
+            foreach (BP.WF.Template.FlowFormTree folderapp in parentFolders)
+            {
+                appFlowFormTree.AddEntity(folderapp);
+            }
+            //求出没有父节点的文件夹
+            parentFolders.Clear();
+            foreach (BP.WF.Template.FlowFormTree folder in appFlowFormTree)
+            {
+                if (string.IsNullOrEmpty(folder.NodeType) || folder.NodeType.Equals("folder") == false)
+                    continue;
+
+                bool bHave = false;
+                foreach (BP.WF.Template.FlowFormTree child in appFlowFormTree)
+                {
+                    if (folder.ParentNo.Equals(child.No) == true)
+                    {
+                        bHave = true;
+                        break;
+                    }
+                }
+                //没有父节点的文件夹
+                if (bHave == false && parentFolders.Contains("No", folder.No) == false)
+                {
+                    parentFolders.AddEntity(folder);
+                }
+            }
+            //修改根节点编号
+            foreach (BP.WF.Template.FlowFormTree folder in parentFolders)
+            {
+                foreach (BP.WF.Template.FlowFormTree folderApp in appFlowFormTree)
+                {
+                    if (folderApp.No.Equals(folder.No) == false)
+                        continue;
+                    folderApp.ParentNo = "00";
+                }
+            }
+        }
+        /// <summary>
+        /// 将实体转为树形
+        /// </summary>
+        /// <param name="ens"></param>
+        /// <param name="rootNo"></param>
+        /// <param name="checkIds"></param>
+        StringBuilder appendMenus = new StringBuilder();
+        StringBuilder appendMenuSb = new StringBuilder();
+        public void TansEntitiesToGenerTree(Entities ens, string rootNo, string checkIds)
+        {
+            EntityMultiTree root = ens.GetEntityByKey(rootNo) as EntityMultiTree;
+            if (root == null)
+                throw new Exception("@没有找到rootNo=" + rootNo + "的entity.");
+            appendMenus.Append("[{");
+            appendMenus.Append("\"id\":\"" + rootNo + "\"");
+            appendMenus.Append(",\"text\":\"" + root.Name + "\"");
+
+            //attributes
+            BP.WF.Template.FlowFormTree formTree = root as BP.WF.Template.FlowFormTree;
+            if (formTree != null)
+            {
+                string url = formTree.Url == null ? "" : formTree.Url;
+                url = url.Replace("/", "|");
+                appendMenus.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"Url\":\"" + url + "\"}");
+            }
+            appendMenus.Append(",iconCls:\"icon-Wave\"");
+            // 增加它的子级.
+            appendMenus.Append(",\"children\":");
+            AddChildren(root, ens, checkIds);
+            appendMenus.Append(appendMenuSb);
+            appendMenus.Append("}]");
+        }
+
+        public void AddChildren(EntityMultiTree parentEn, Entities ens, string checkIds)
+        {
+            appendMenus.Append(appendMenuSb);
+            appendMenuSb.Clear();
+
+            appendMenuSb.Append("[");
+            foreach (EntityMultiTree item in ens)
+            {
+                if (item.ParentNo != parentEn.No)
+                    continue;
+
+                if (checkIds.Contains("," + item.No + ","))
+                    appendMenuSb.Append("{\"id\":\"" + item.No + "\",\"text\":\"" + item.Name + "\",\"checked\":true");
+                else
+                    appendMenuSb.Append("{\"id\":\"" + item.No + "\",\"text\":\"" + item.Name + "\",\"checked\":false");
+
+
+                //attributes
+                BP.WF.Template.FlowFormTree formTree = item as BP.WF.Template.FlowFormTree;
+                if (formTree != null)
+                {
+                    string url = formTree.Url == null ? "" : formTree.Url;
+                    string ico = "icon-tree_folder";
+                    if (SystemConfig.SysNo == "YYT")
+                    {
+                        ico = "icon-boat_16";
+                    }
+                    url = url.Replace("/", "|");
+                    appendMenuSb.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"Url\":\"" + url + "\"}");
+                    //图标
+                    if (formTree.NodeType == "form|0")
+                    {
+                        ico = "form0";
+                        if (SystemConfig.SysNo == "YYT")
+                        {
+                            ico = "icon-Wave";
+                        }
+                    }
+                    if (formTree.NodeType == "form|1")
+                    {
+                        ico = "form1";
+                        if (SystemConfig.SysNo == "YYT")
+                        {
+                            ico = "icon-Shark_20";
+                        }
+                    }
+                    if (formTree.NodeType.Contains("tools"))
+                    {
+                        ico = "icon-4";
+                        if (SystemConfig.SysNo == "YYT")
+                        {
+                            ico = "icon-Wave";
+                        }
+                    }
+                    appendMenuSb.Append(",iconCls:\"");
+                    appendMenuSb.Append(ico);
+                    appendMenuSb.Append("\"");
+                }
+                // 增加它的子级.
+                appendMenuSb.Append(",\"children\":");
+                AddChildren(item, ens, checkIds);
+                appendMenuSb.Append("},");
+            }
+            if (appendMenuSb.Length > 1)
+                appendMenuSb = appendMenuSb.Remove(appendMenuSb.Length - 1, 1);
+            appendMenuSb.Append("]");
+            appendMenus.Append(appendMenuSb);
+            appendMenuSb.Clear();
+        }
+        #endregion
+
         /// <summary>
         /// 产生一个工作节点
         /// </summary>

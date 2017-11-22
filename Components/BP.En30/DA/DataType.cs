@@ -1067,7 +1067,11 @@ namespace BP.DA
             {
                 try
                 {
-                    str = BP.Tools.chs2py.convert(c.ToString());
+                    str = CCFormAPI.ChinaMulTonesToPinYin(c.ToString());
+                    if (str == null)
+                    {
+                        str = BP.Tools.chs2py.convert(c.ToString());
+                    }
                     pinYin += str.Substring(0, 1).ToUpper() + str.Substring(1);
                 }
                 catch

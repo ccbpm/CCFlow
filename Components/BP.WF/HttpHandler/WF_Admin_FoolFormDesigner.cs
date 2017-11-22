@@ -472,7 +472,7 @@ namespace BP.WF.HttpHandler
 
             string prx = this.GetValFromFrmByKey("TB_Check_No");
             if (prx.Length == 0)
-                prx = chs2py.convert(lab);
+                prx = DataType.ParseStringToPinyin(lab);
 
             MapAttr attr = new MapAttr();
             int i = attr.Retrieve(MapAttrAttr.FK_MapData, this.FK_MapData, MapAttrAttr.KeyOfEn, prx + "_Note");

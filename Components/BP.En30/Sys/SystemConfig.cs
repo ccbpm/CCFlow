@@ -496,7 +496,7 @@ namespace BP.Sys
         {
             get
             {
-                string url = "http://" + System.Web.HttpContext.Current.Request.Url.Authority;
+                string url = "http://" + System.Web.HttpContext.Current.Request.Url.Authority+"/";
                 return url;
             }
         }

@@ -540,6 +540,218 @@ namespace BP.WF.HttpHandler
             return "删除并删除该分组下的字段成功...";
         }
 
+        public string ImpTableField_Step1()
+        {
+            BP.Sys.SFDBSrcs ens = new BP.Sys.SFDBSrcs();
+            ens.RetrieveAll();
+            DataSet ds = new DataSet();
+            ds.Tables.Add(ens.ToDataTableField("SFDBSrcs"));
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        public string FK_MapData
+        {
+            get
+            {
+                string str = context.Request.QueryString["FK_MapData"];
+                if (string.IsNullOrEmpty(str))
+                    return "abc";
+                return str;
+            }
+        }
+        public string FK_SFDBSrc
+        {
+            get
+            {
+                return context.Request.QueryString["FK_SFDBSrc"];
+            }
+        }
+        private string _STable = null;
+        public string STable
+        {
+            get
+            {
+                if (_STable == null)
+                {
+                    _STable = context.Request.QueryString["STable"];
+                    if (_STable == null || "".Equals(_STable))
+                    {
+                        BP.En.Entity en = BP.En.ClassFactory.GetEn(this.FK_MapData);
+                        if (en != null)
+                            _STable = en.EnMap.PhysicsTable;
+                        else
+                        {
+                            MapData md = new MapData(this.FK_MapData);
+                            _STable = md.PTable;
+                        }
+                    }
+                }
+
+                if (_STable == null)
+                    _STable = "";
+                return _STable;
+            }
+        }
+
+        public string ImpTableField_Step2()
+        {
+            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+
+            SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
+            dictionary.Add("SFDBSrc", src.ToDataTableField());
+
+            DataTable tables = src.GetTables();
+            dictionary.Add("tables", tables);
+            
+            DataTable tableColumns = src.GetColumns(this.STable);
+            dictionary.Add("columns", tableColumns);
+
+            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+            dictionary.Add("attrs", attrs.ToDataTableField("attrs"));
+            dictionary.Add("STable", this.STable);
+
+            return BP.Tools.Json.ToJson(dictionary);
+        }
+
+        private List<string> sCols = null;
+
+        public List<string> SColumns
+        {
+            get
+            {
+                if (sCols != null)
+                    return sCols;
+
+                string cols = context.Request.QueryString["SColumns"] ?? "";
+                string[] arr = cols.Split(',');
+                sCols = new List<string>();
+
+                foreach (string s in arr)
+                {
+                    if (string.IsNullOrWhiteSpace(s))
+                        continue;
+
+                    sCols.Add(s);
+                }
+
+                return sCols;
+            }
+        }
+
+        public string ImpTableField_Step3()
+        {
+            DataSet ds = new DataSet();
+            SFDBSrc src = new SFDBSrc(this.FK_SFDBSrc);
+            var tableColumns = src.GetColumns(this.STable);
+            DataTable dt = tableColumns.Clone();
+            dt.TableName = "selectedColumns";
+            foreach (DataRow dr in tableColumns.Rows)
+            {
+                if (this.SColumns.Contains(dr["No"]))
+                {
+                    dt.Rows.Add(dr.ItemArray);
+                }
+            }
+            ds.Tables.Add(dt);
+            SysEnums ens = new SysEnums(MapAttrAttr.MyDataType);
+            ds.Tables.Add(ens.ToDataTableField("MyDataType"));
+            SysEnums ens1 = new SysEnums(MapAttrAttr.LGType);
+            ds.Tables.Add(ens1.ToDataTableField("LGType"));
+            return BP.Tools.Json.ToJson(ds);
+        }
+
+        public string ImpTableField_Save()
+        {
+            MapData md = new MapData();
+            md.No = this.FK_MapData;
+            md.RetrieveFromDBSources();
+
+            string msg = "导入字段信息:";
+            bool isLeft = true;
+            float maxEnd = md.MaxEnd;
+
+            for (int i = 0; i < context.Request.Form.Count; i++)
+            {
+                string name = context.Request.Form.Keys[i].ToString();
+                if (name.StartsWith("HID_Idx_"))
+                {
+                    string columnName = name.Substring("HID_Idx_".Length);
+                    MapAttr ma = new MapAttr();
+                    ma.KeyOfEn = columnName;
+                    ma.Name = context.Request.Form["TB_Desc_" + columnName];
+                    ma.FK_MapData = this.FK_MapData;
+                    ma.MyDataType = int.Parse(context.Request.Form["DDL_DBType_" + columnName]);
+                    ma.MaxLen = int.Parse(context.Request.Form["TB_Len_" + columnName]);
+                    ma.UIBindKey = context.Request.Form["TB_BindKey_" + columnName];
+                    ma.MyPK = this.FK_MapData + "_" + ma.KeyOfEn;
+                    ma.LGType = BP.En.FieldTypeS.Normal;
+                    if (!string.IsNullOrEmpty(ma.UIBindKey))
+                    {
+                        SysEnums se = new SysEnums();
+                        se.Retrieve(SysEnumAttr.EnumKey, ma.UIBindKey);
+                        if (se.Count > 0)
+                        {
+                            ma.MyDataType = BP.DA.DataType.AppInt;
+                            ma.LGType = BP.En.FieldTypeS.Enum;
+                            ma.UIContralType = BP.En.UIContralType.DDL;
+                        }
+                        SFTable tb = new SFTable();
+                        tb.No = ma.UIBindKey;
+                        if (tb.IsExits == true)
+                        {
+                            ma.MyDataType = BP.DA.DataType.AppString;
+                            ma.LGType = BP.En.FieldTypeS.FK;
+                            ma.UIContralType = BP.En.UIContralType.DDL;
+                        }
+                    }
+                    if (ma.MyDataType == BP.DA.DataType.AppBoolean)
+                        ma.UIContralType = BP.En.UIContralType.CheckBok;
+                    if (ma.IsExits)
+                    {
+                        msg += "\t\n字段:" + ma.KeyOfEn + "" + ma.Name + "已存在.";
+                        continue;
+                    }
+                    ma.Insert();
+
+                    msg += "\t\n字段:" + ma.KeyOfEn + "" + ma.Name + "加入成功.";
+                    FrmLab lab = null;
+                    if (isLeft == true)
+                    {
+                        maxEnd = maxEnd + 40;
+                        /* 是否是左边 */
+                        lab = new FrmLab();
+                        lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                        lab.FK_MapData = this.FK_MapData;
+                        lab.Text = ma.Name;
+                        lab.X = 40;
+                        lab.Y = maxEnd;
+                        lab.Insert();
+
+                        ma.X = lab.X + 80;
+                        ma.Y = maxEnd;
+                        ma.Update();
+                    }
+                    else
+                    {
+                        lab = new FrmLab();
+                        lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                        lab.FK_MapData = this.FK_MapData;
+                        lab.Text = ma.Name;
+                        lab.X = 350;
+                        lab.Y = maxEnd;
+                        lab.Insert();
+
+                        ma.X = lab.X + 80;
+                        ma.Y = maxEnd;
+                        ma.Update();
+                    }
+                    isLeft = !isLeft;
+                }
+            }
+            md.ResetMaxMinXY();
+            return msg;
+        }
+
         /// <summary>
         /// 
         /// </summary>

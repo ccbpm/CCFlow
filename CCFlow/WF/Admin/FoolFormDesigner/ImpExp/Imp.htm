@@ -81,7 +81,7 @@
                     data = JSON.parse(data);
 
                     //02.从节点表单导入
-                    var nodes = data["WF_Node"];
+                    var nodes = data["WF_Node"] || [];
                     var ulHtml = '';
                     for (var i = 0; i < nodes.length; i++) {
                         var node = nodes[i];
@@ -266,7 +266,13 @@
 
     <!--04.从外部数据源导入-->
     <script type="text/javascript">
-    
+        function doImpFromOutside() {
+			var winWidth = 1050;
+			var winHeight = 600;
+			var iTop = (window.screen.height - 30 - winHeight) / 2; //获得窗口的垂直位置;
+			var iLeft = (window.screen.width - 10 - winWidth) / 2; //获得窗口的水平位置;
+			window.open("../ImpTableFieldNew.htm?FK_MapData=" + frmID, "_blank", "height=" + winHeight + "px,width=" + winWidth + "px,top=" + iTop + ",left="+iLeft+",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
+		}
         function CheckAll(checked) {
             $.each($(":checkbox"), function () {
                 this.checked = checked;
@@ -584,12 +590,21 @@
                 disabled="disabled" />
         </div>
         <div title="从外部数据源导入" style="padding: 15px; text-align: left">
-            <div class="easyui-layout" style="height: 500px;">
-                <div id="divSrcImp" data-options="region:'center',title:'导入字段生成表单',fit:true" style="padding: 5px;">
+            <div class="easyui-layout" style="height: 280px;">
+                <fieldset style="height: 90%;">
+					<legend>导入字段生成表单</legend>
+						<ul>
+							<li>操作提示：指定内外部数据源中的一个已经设计好的表，把字段信息导入该表单</li>
+						</ul>
+						<label style="padding-left: 8px;">
+					</label>
+					<input type="button" value="进入导入数据字段向导" onclick="doImpFromOutside()" style="margin-left: 40px;" />
+				</fieldset>
+                <!--<div id="divSrcImp" data-options="region:'center',title:'导入字段生成表单',fit:true" style="padding: 5px;">
                     <div id="srclayout">
                     </div>
-                </div>
-            </div>            
+                </div>-->
+            </div>
             <input type="hidden" id="hid_FK_SFDBSrc" name="hid_FK_SFDBSrc" value=" " />
             <input type="hidden" id="hid_STable" name="hid_STable" value=" " />
         </div>

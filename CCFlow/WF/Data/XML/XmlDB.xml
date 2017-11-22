@@ -115,58 +115,33 @@
 
  <!-- 处理名字多音字. -->
   <PinYin No="阿"  Name="a" />
-  <PinYin No="阿"  Name="e" />
   <PinYin No="挨"  Name="ai" />
-  <PinYin No="拗"  Name="ao" />
   <PinYin No="拗"  Name="niu" />
   <PinYin No="扒"  Name="ba" />
-  <PinYin No="扒"  Name="pa" />
   <PinYin No="把"  Name="ba" />
   <PinYin No="蚌"  Name="bang" />
-  <PinYin No="蚌"  Name="beng" />
   <PinYin No="薄"  Name="bo" />
-  <PinYin No="薄"  Name="bao" />
   <PinYin No="堡"  Name="bao" />
-  <PinYin No="堡"  Name="pu" />
-  <PinYin No="堡"  Name="bu" />
   <PinYin No="暴"  Name="bao" />
-  <PinYin No="暴"  Name="pu" />
   <PinYin No="辟"  Name="bi" />
   <PinYin No="辟"  Name="pi" />
   <PinYin No="扁"  Name="bian" />
   <PinYin No="扁"  Name="pian" />
   <PinYin No="泊"  Name="bo" />
-  <PinYin No="泊"  Name="bai" />
   <PinYin No="藏"  Name="cong" />
-  <PinYin No="藏"  Name="zang" />
-  <PinYin No="禅"  Name="chan" />
   <PinYin No="禅"  Name="shon" />
   <PinYin No="颤"  Name="chan" />
-  <PinYin No="颤"  Name="zhan" />
-  <PinYin No="单"  Name="dan" />
-  <PinYin No="单"  Name="chan" />
   <PinYin No="单"  Name="shan" />
-  <PinYin No="度"  Name="bian" />
   <PinYin No="度"  Name="du" />
-  <PinYin No="囤"  Name="dun" />
   <PinYin No="囤"  Name="tun" />
   <PinYin No="给"  Name="gei" />
-  <PinYin No="给"  Name="ji" />
   <PinYin No="会"  Name="hui" />
-  <PinYin No="会"  Name="kuai" />
   <PinYin No="奇"  Name="qi" />
-  <PinYin No="奇"  Name="ji" />
   <PinYin No="落"  Name="luo" />
-  <PinYin No="落"  Name="la" />
-  <PinYin No="落"  Name="lao" />
   <PinYin No="蔓"  Name="man" />
-  <PinYin No="蔓"  Name="wan" />
   <PinYin No="强"  Name="qiang" />
-  <PinYin No="强"  Name="jiang" />
-  <PinYin No="血"  Name="xue" />
   <PinYin No="血"  Name="xie" />
   <PinYin No="幢"  Name="zhuang" />
-  <PinYin No="幢"  Name="chuang" />
 
 
 </DS>

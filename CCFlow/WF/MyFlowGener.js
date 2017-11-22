@@ -7,25 +7,49 @@ var globalVarList = {};
 var workNode = {};
 
 $(function () {
-
-    var frm = document.forms["divCCForm"];
-
-    if (plant == "CCFlow")
-        frm.action = "MyFlow.ashx?method=login";
-    else
-        frm.action = MyFlow + "?method=login";
-
     initPageParam(); //初始化参数
 
     InitToolBar(); //工具栏.ajax
 
     GenerWorkNode(); //表单数据.ajax
-
-
+    
     if ($("#Message").html() == "") {
         $(".Message").hide();
     }
 
+    $('#btnCloseMsg').bind('click', function () {
+        $('.Message').hide();
+    });
+
+    $('#btnMsgModalOK').bind('click', function () {
+        if (window.opener) {
+
+            if (window.opener.name && window.opener.name == "main") {
+                window.opener.location.href = window.opener.location.href;
+                if (window.opener.top && window.opener.top.leftFrame) {
+                    window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
+                }
+            } else if (window.opener.name && window.opener.name == "运行流程") {
+                //测试运行流程，不进行刷新
+            } else {
+                //window.opener.location.href = window.opener.location.href;
+            }
+        }
+        window.close();
+    });
+
+    setAttachDisabled();
+    setToobarDisiable();
+    setFormEleDisabled();
+
+    $('#btnMsgModalOK1').bind('click', function () {
+        window.close();
+        opener.window.focus();
+    });    
+})
+
+//单表单加载需要执行的函数
+function CCFormLoaded() {
     if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
         //计算高度，展示滚动条
         var height = $(parent.document.getElementById('MainFrames')).height() - 110;
@@ -46,12 +70,12 @@ $(function () {
         });
     }
 
-    $('#btnCloseMsg').bind('click', function () {
-        $('.Message').hide();
-    });
-})
-
-
+    SetHegiht();
+    //打开表单检查正则表达式
+    if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
+        FormOnLoadCheckIsNull();
+    }
+}
 
 //设置底部工具栏
 function SetBottomTooBar() {
@@ -208,7 +232,7 @@ function setToobarDisiable() {
 
 function setToobarEnable() {
     //隐藏下方的功能按钮
-    $('.Bar input').css('background', '#2884fa');
+    $('.Bar input').css('background', '#009999');
     $('.Bar input').removeAttr('disabled');
 }
 //设置表单元素不可用
@@ -961,37 +985,6 @@ function execSend(toNode) {
     });
 }
 
-$(function () {
-
-    $('#btnMsgModalOK').bind('click', function () {
-        if (window.opener) {
-
-            if (window.opener.name && window.opener.name == "main") {
-                window.opener.location.href = window.opener.location.href;
-                if (window.opener.top && window.opener.top.leftFrame) {
-                    window.opener.top.leftFrame.location.href = window.opener.top.leftFrame.location.href;
-                }
-            } else if (window.opener.name && window.opener.name == "运行流程") {
-                //测试运行流程，不进行刷新
-            } else {
-                //window.opener.location.href = window.opener.location.href;
-            }
-        }
-        window.close();
-    });
-
-    setAttachDisabled();
-    setToobarDisiable();
-    setFormEleDisabled();
-
-    $('#btnMsgModalOK1').bind('click', function () {
-        window.close();
-        opener.window.focus();
-    });
-
-})
-
-
 //发送 退回 移交等执行成功后转到  指定页面
 function OptSuc(msg) {
     // window.location.href = "/WF/MyFlowInfo.aspx";
@@ -1342,7 +1335,7 @@ function GenerWorkNode() {
 
                 console.log(data);
 
-                alert(" GenerWorkNode转换JSON失败,请查看控制台日志,或者联系管理员." );
+                alert(" GenerWorkNode转换JSON失败,请查看控制台日志,或者联系管理员.");
                 return;
             }
 
@@ -1351,28 +1344,8 @@ function GenerWorkNode() {
             //设置标题.
             document.title = "业务流程管理（BPM）平台";
 
-            //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
-            if (node.FormType == 0) {
-                GenerFoolFrm(workNode); //傻瓜表单.
-            }
-
-            if (node.FormType == 1) {
-                GenerFreeFrm(workNode);  //自由表单.
-            }
-
-            if (node.FormType == 5) {
-                GenerTreeFrm(workNode); /*树形表单*/
-            }
-
-            //加入隐藏控件.
-            var html = "";
-            for (var attr in workNode.Sys_MapAttr) {
-                if (attr.UIVisable == 0) {
-                    var defval = ConvertDefVal(workNode, attr.DefVal, attr.KeyOfEn);
-                    html += "<input type='hidden' id='TB_" + attr.KeyOfEn + "' name='TB_" + attr.KeyOfEn + "' value='" + defval + "' />";
-                }
-            }
-
+            //发送旁边下拉框
+            InitToNodeDDL(workNode);
 
             //循环之前的提示信息.
             var info = "";
@@ -1387,6 +1360,36 @@ function GenerWorkNode() {
                 $('#MessageDiv').modal().show();
             }
 
+            //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
+            if (node.FormType == 0) {
+                GenerFoolFrm(workNode); //傻瓜表单.
+            }
+
+            if (node.FormType == 1) {
+                GenerFreeFrm(workNode);  //自由表单.
+            }
+
+            if (node.FormType == 5) {
+                GenerTreeFrm(workNode); /*树形表单*/
+                return;
+            }
+
+            var frm = document.forms["divCCForm"];
+            if (plant == "CCFlow")
+                frm.action = "MyFlow.ashx?method=login";
+            else
+                frm.action = MyFlow + "?method=login";
+
+            CCFormLoaded();
+
+            //加入隐藏控件.
+            var html = "";
+            for (var attr in workNode.Sys_MapAttr) {
+                if (attr.UIVisable == 0) {
+                    var defval = ConvertDefVal(workNode, attr.DefVal, attr.KeyOfEn);
+                    html += "<input type='hidden' id='TB_" + attr.KeyOfEn + "' name='TB_" + attr.KeyOfEn + "' value='" + defval + "' />";
+                }
+            }
 
             //初始化Sys_MapData
             var h = workNode.Sys_MapData[0].FrmH;
@@ -1449,7 +1452,6 @@ function GenerWorkNode() {
 
             }
 
-            InitToNodeDDL(workNode);
             Common.MaxLengthError();
 
             //处理下拉框级联等扩展信息
@@ -1899,16 +1901,6 @@ function ConfirmBtn(btn, workid) {
         //  alert(msg);
     });
 }
-
-
-$(function () {
-    SetHegiht();
-    //打开表单检查正则表达式
-    if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
-        FormOnLoadCheckIsNull();
-    }
-
-});
 
 
 //. 保存嵌入式表单. add 2015-01-22 for GaoLing.

@@ -57,7 +57,7 @@ namespace BP.GPM
         /// </summary>
         public const string Leader = "Leader";
         /// <summary>
-        /// 拼音
+        /// 拼音 
         /// </summary>
         public const string PinYin = "PinYin";
         #endregion

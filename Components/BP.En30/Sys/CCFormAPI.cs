@@ -1678,6 +1678,26 @@ namespace BP.Sys
                 throw new Exception(ex.Message);
             }
         }
+
+        /// <summary>
+        /// 多音字转拼音
+        /// </summary>
+        /// <param name="charT">单个汉字</param>
+        /// <returns>包含返回拼音，否则返回null</returns>
+        public static string ChinaMulTonesToPinYin(string charT)
+        {
+            ChMulToneXmls mulChs = new ChMulToneXmls();
+            mulChs.RetrieveAll();
+            foreach (ChMulToneXml en in mulChs)
+            {
+                if (en.No.Equals(charT))
+                {
+                    return en.Name;
+                }
+            }
+            return null;
+        }
+
         /// <summary>
         /// 获得外键表
         /// </summary>

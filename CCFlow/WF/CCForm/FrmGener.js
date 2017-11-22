@@ -6,7 +6,97 @@
 3.  相同的部分写入到了该文件里，不同的部分分别在不同的两个js文件里.
 4.  MapExt2016.js 文件是一个公用的文件，用于处理扩展业务逻辑的，它在多个地方别调用了.
 */
-var frmData = {};
+
+var colVisibleJsonStr = ''
+var jsonStr = '';
+
+//初始化函数
+$(function () {
+    initPageParam(); //初始化参数.
+
+    //构造表单.
+    GenerFrm(); //表单数据.
+
+    if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
+        //计算高度，展示滚动条
+        var height = $(parent.document.getElementById('MainFrames')).height() - 110;
+        $('#topContentDiv').height(height);
+
+        $(window).resize(function () {
+            $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
+        });
+    }
+    else {
+        //新加
+        //计算高度，展示滚动条
+        var height = $(window).height() - 150;
+        $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
+        $('#topContentDiv').height(height);
+
+        $(window).resize(function () {
+            $("#CCForm").height(height + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
+        });
+    }
+    function movetb() {
+        var move;
+        $("#nav").css("top", top);
+    }
+    $('#btnCloseMsg').bind('click', function () {
+        $('.Message').hide();
+    });
+
+    setAttachDisabled();
+    setFormEleDisabled();
+
+    SetHegiht();
+    //打开表单检查正则表达式
+    if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
+        FormOnLoadCheckIsNull();
+    }
+});
+
+function SetHegiht() {
+    var screenHeight = document.documentElement.clientHeight;
+
+    var messageHeight = $('#Message').height();
+    var topBarHeight = 40;
+    var childHeight = $('#childThread').height();
+    var infoHeight = $('#flowInfo').height();
+
+    var allHeight = messageHeight + topBarHeight + childHeight + childHeight + infoHeight;
+    try {
+
+        var BtnWord = $("#BtnWord").val();
+        if (BtnWord == 2)
+            allHeight = allHeight + 30;
+
+        var frmHeight = $("#FrmHeight").val();
+        if (frmHeight == NaN || frmHeight == "" || frmHeight == null)
+            frmHeight = 0;
+
+        if (screenHeight > parseFloat(frmHeight) + allHeight) {
+            // $("#divCCForm").height(screenHeight - allHeight);
+
+            $("#TDWorkPlace").height(screenHeight - allHeight - 10);
+
+        }
+        else {
+            //$("#divCCForm").height(parseFloat(frmHeight) + allHeight);
+            $("#TDWorkPlace").height(parseFloat(frmHeight) + allHeight - 10);
+        }
+    }
+    catch (e) {
+    }
+}
+
+function Change() {
+    var btn = document.getElementById('Btn_Save');
+    if (btn != null) {
+        if (btn.value.valueOf('*') == -1)
+            btn.value = btn.value + '*';
+    }
+}
+
 
 //从表在新建或者在打开行的时候，如果 rowShowModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
 function DtlFrm(ensName, refPKVal, pkVal, frmType) {
@@ -32,9 +122,7 @@ function GenerFrm() {
         type: 'post',
         async: true,
         data: pageData,
-        //url: "../MyFlow.ashx?DoType=GenerWorkNode&DoType=" + pageData.DoType + "&m=" + Math.random(),
         url: Handler + "?DoType=FrmGener_Init&m=" + Math.random() + "&" + urlParam,
-        // url:"Handler.ashx?DoType=FrmGener_Init&FK_MapData="+pageData.FK_MapData + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
 
@@ -207,10 +295,6 @@ function DtlFoolFrm(dtl, refPK, refOID) {
    // window.open(url);
     //alert('打开从表卡片');
 }
- 
-
-
-
 
 //保存
 function Save() {
@@ -761,16 +845,7 @@ function GetFormData(isCotainTextArea, isCotainUrlParam) {
         formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
     }
     return formdataResultStr;
-}
-
-$(function () {
- 
-    setAttachDisabled();
-    //setToobarDisiable();
-    setFormEleDisabled();
-
-})
- 
+} 
 
 //根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示  
 function ShowNoticeInfo() {
@@ -1115,60 +1190,6 @@ function dealWithUrl(src) {
     return src;
 }
 
-var colVisibleJsonStr = ''
-var jsonStr = '';
-
-
-
-$(function () {
-    SetHegiht();
-    //打开表单检查正则表达式
-    if (typeof FormOnLoadCheckIsNull != 'undefined' && FormOnLoadCheckIsNull instanceof Function) {
-        FormOnLoadCheckIsNull();
-    }
-});
-
-function SetHegiht() {
-    var screenHeight = document.documentElement.clientHeight;
-
-    var messageHeight = $('#Message').height();
-    var topBarHeight = 40;
-    var childHeight = $('#childThread').height();
-    var infoHeight = $('#flowInfo').height();
-
-    var allHeight = messageHeight + topBarHeight + childHeight + childHeight + infoHeight;
-    try {
-
-        var BtnWord = $("#BtnWord").val();
-        if (BtnWord == 2)
-            allHeight = allHeight + 30;
-
-        var frmHeight = $("#FrmHeight").val();
-        if (frmHeight == NaN || frmHeight == "" || frmHeight == null)
-            frmHeight = 0;
-
-        if (screenHeight > parseFloat(frmHeight) + allHeight) {
-            // $("#divCCForm").height(screenHeight - allHeight);
-
-            $("#TDWorkPlace").height(screenHeight - allHeight - 10);
-
-        }
-        else {
-            //$("#divCCForm").height(parseFloat(frmHeight) + allHeight);
-            $("#TDWorkPlace").height(parseFloat(frmHeight) + allHeight - 10);
-        }
-    }
-    catch (e) {
-    }
-}
-
-function Change() {
-    var btn = document.getElementById('Btn_Save');
-    if (btn != null) {
-        if (btn.value.valueOf('*') == -1)
-            btn.value = btn.value + '*';
-    }
-}
 
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 

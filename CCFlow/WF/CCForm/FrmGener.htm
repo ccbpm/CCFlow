@@ -17,6 +17,7 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.nav.js"></script>
     <script type="text/javascript" src="FrmGener.js"></script>
     <script type="text/javascript" src="FrmFool.js"></script>
+    <script type="text/javascript" src="FrmFree.js"></script>
 
     <script type="text/javascript" src="MapExt2016.js"></script>
     <script type="text/javascript" src="../Comm/Gener.js"></script>
@@ -320,45 +321,6 @@
 		background-color: #fff;
 	}
     </style>
-
-    <!--杨玉慧 -->
-    <script type="text/javascript">
-
-        $(function () {
-
-            initPageParam(); //初始化参数.
-
-            //构造表单.
-            GenerFrm(); //表单数据.
-      
-            if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
-                //计算高度，展示滚动条
-                var height = $(parent.document.getElementById('MainFrames')).height() - 110;
-                $('#topContentDiv').height(height);
-
-                $(window).resize(function () {
-                    $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");;
-                });
-            }
-            else {
-              //新加
-                //计算高度，展示滚动条
-                var height = $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
-                $('#topContentDiv').height(height);
-
-                $(window).resize(function () {
-                    $("#CCForm").height($(window).height() - 150 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");;
-                });
-            }
-            function movetb() {
-                var move;
-                $("#nav").css("top", top);
-            }
-            $('#btnCloseMsg').bind('click', function () {
-                $('.Message').hide();
-            });
-        })
-    </script>
 
      <!--JS 加载-->
     <script type="text/javascript">

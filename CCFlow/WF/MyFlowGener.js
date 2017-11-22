@@ -12,7 +12,7 @@ $(function () {
     InitToolBar(); //工具栏.ajax
 
     GenerWorkNode(); //表单数据.ajax
-    
+
     if ($("#Message").html() == "") {
         $(".Message").hide();
     }
@@ -45,7 +45,7 @@ $(function () {
     $('#btnMsgModalOK1').bind('click', function () {
         window.close();
         opener.window.focus();
-    });    
+    });
 })
 
 //单表单加载需要执行的函数
@@ -392,7 +392,7 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
     athFormTitle.text("上传附件：" + athLab);
     athModal.modal().show();
 }
- 
+
 
 //处理MapExt
 function AfterBindEn_DealMapExt() {
@@ -417,45 +417,45 @@ function AfterBindEn_DealMapExt() {
                     popWorkModelStr = mapExt.AtPara.substring(popWorkModelIndex, popWorkModelIndex + 1);
                 }
                 switch (popWorkModelStr) {
-                    /// <summary>    
-                    /// 自定义URL    
-                    /// </summary>    
-                    //SelfUrl =1,    
+                    /// <summary>     
+                    /// 自定义URL     
+                    /// </summary>     
+                    //SelfUrl =1,     
                     case "1":
                         icon = "glyphicon glyphicon-th";
                         break;
-                    /// <summary>    
-                    /// 表格模式    
-                    /// </summary>    
-                    // TableOnly,    
+                    /// <summary>     
+                    /// 表格模式     
+                    /// </summary>     
+                    // TableOnly,     
                     case "2":
                         icon = "glyphicon glyphicon-list";
                         break;
-                    /// <summary>    
-                    /// 表格分页模式    
-                    /// </summary>    
-                    //TablePage,    
+                    /// <summary>     
+                    /// 表格分页模式     
+                    /// </summary>     
+                    //TablePage,     
                     case "3":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>    
-                    /// 分组模式    
-                    /// </summary>    
-                    // Group,    
+                    /// <summary>     
+                    /// 分组模式     
+                    /// </summary>     
+                    // Group,     
                     case "4":
                         icon = "glyphicon glyphicon-list-alt";
                         break;
-                    /// <summary>    
-                    /// 树展现模式    
-                    /// </summary>    
-                    // Tree,    
+                    /// <summary>     
+                    /// 树展现模式     
+                    /// </summary>     
+                    // Tree,     
                     case "5":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
-                    /// <summary>    
-                    /// 双实体树    
-                    /// </summary>    
-                    // TreeDouble    
+                    /// <summary>     
+                    /// 双实体树     
+                    /// </summary>     
+                    // TreeDouble     
                     case "6":
                         icon = "glyphicon glyphicon-tree-deciduous";
                         break;
@@ -696,10 +696,10 @@ function ConvertDefVal(workNode, defVal, keyOfEn) {
     });
 
 
-    var result = defVal;     
+    var result = defVal;
 
     var mainTable = workNode.MainTable[0];
-   
+
 
     //通过MAINTABLE返回的参数
     for (var ele in mainTable) {
@@ -770,20 +770,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框   
+            //下拉框    
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
-            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());  
-            //对于复选下拉框获取值得方法  
-            //                if ($('[data-id=' + name + ']').length > 0) {  
-            //                    var val = $(disabledEle).val().join(',');  
-            //                    formArrResult.push(name + '=' + val);  
-            //                } else {  
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());  
-            //                }  
-            // break;  
-            //文本区域   
+            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());   
+            //对于复选下拉框获取值得方法   
+            //                if ($('[data-id=' + name + ']').length > 0) {   
+            //                    var val = $(disabledEle).val().join(',');   
+            //                    formArrResult.push(name + '=' + val);   
+            //                } else {   
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());   
+            //                }   
+            // break;   
+            //文本区域    
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -1380,6 +1380,7 @@ function GenerWorkNode() {
             else
                 frm.action = MyFlow + "?method=login";
 
+            //单表单加载后执行
             CCFormLoaded();
 
             //加入隐藏控件.
@@ -1598,10 +1599,10 @@ function dealWithUrl(src) {
 var colVisibleJsonStr = ''
 
 /*
- 公共的工作处理器js. 
- 1. 该js的方法都是从各个类抽取出来的.
- 2. MyFlowFool.htm, MyFlowFree.htm, MyFlowSelfForm.htm 引用它.
- 3. 用于处理流程业务逻辑，表单业务逻辑.
+公共的工作处理器js. 
+1. 该js的方法都是从各个类抽取出来的.
+2. MyFlowFool.htm, MyFlowFree.htm, MyFlowSelfForm.htm 引用它.
+3. 用于处理流程业务逻辑，表单业务逻辑.
 */
 
 
@@ -1698,7 +1699,7 @@ function InitToolBar() {
                 });
             }
 
-            
+
             if ($('[name=Delete]').length > 0) {
                 var onclickFun = $('[name=Delete]').attr('onclick');
                 if (onclickFun != undefined) {
@@ -1773,7 +1774,7 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&s=" + Math.random()
                 break;
 
-            //发送选择接收节点和接收人     
+            //发送选择接收节点和接收人      
             case "sendAccepter":
                 $('#modalHeader').text("发送到节点：" + toNode.Name);
                 modalIframeSrc = "./WorkOpt/Accepter.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode=" + toNode.No + "&s=" + Math.random()

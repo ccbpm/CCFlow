@@ -58,6 +58,8 @@
         .cs-north
         {
             height: 60px;
+            background: #EAF2FE;
+            overflow:hidden;
         }
         .cs-north-bg
         {
@@ -235,44 +237,10 @@
             <ul id="flowFormTree" class="easyui-tree" data-options="animate:true,dnd:false">
             </ul>
         </div>
-        <div id="mainPanle" region="center" border="true" border="false" style="background: #E3E7F4;">
-            
-            <!--上半部分表单-->
-            <div id="topContentDiv" style="padding: 20px 5px;margin: 0px auto;">
-                <i class="topContentDiv-i" style="display: none;"></i>
-                <div id="contentDiv">
-                    <form id="divCCForm" method="post">
-                    <!--头部功能按钮 发送、移交-->
-                    <div class="topBar" id="topBar">
-                        <!-- <uc3:ToolBar ID="ToolBar1" runat="server"/>-->
-                    </div>
-                    <!--flowInfo-->
-                    <div class="flowInfo" id="flowInfo">
-                        <!--<uc1:Pub ID="Pub1" runat="server"/>-->
-                    </div>
-                    <!--childThread-->
-                    <div class="childThread" id='childThread'>
-                        <!--<uc1:Pub ID="Pub3" runat="server"/>-->
-                    </div>
-                    <!--主表单-->
-                    <!--<uc2:UCEn ID="UCEn1" runat="server"/>-->
-                    <div id="CCForm">
-                        <br />
-                        <img src='./Img/loading.gif' />
-                        正在初始化表单模板及数据，请耐心等待。。。
-                        <br />
-                        <br />
-                    </div>
-                    <!--Pub2 -->
-                    <div class="pub2Class" id="pub2Class">
-                        <!-- <uc1:Pub ID="Pub2" runat="server"/>-->
-                    </div>
-                    <!--DIVINFO-->
-                    <div id='divinfo' style='width: 155px; position: absolute; display: none; cursor: pointer;
-                        align: left; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699;'>
-                    </div>
-                    </form>
-                </div>
+        <div id="mainPanle" region="center" border="true" border="false">
+            <div id="tabs" class="easyui-tabs" fit="true" border="false" data-options="tools:'#tab-tools'">
+                <div></div>
+                <div></div>
             </div>
         </div>
     

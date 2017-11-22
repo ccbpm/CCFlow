@@ -29,7 +29,7 @@ function FlowFormTree_Init() {
         var pushData = eval('(' + data + ')');
         //pushData = pushData[0].children;
         var urlExt = pageParamToUrl();
-        alert(urlExt);
+        
         //加载类别树
         $("#flowFormTree").tree({
             data: pushData,

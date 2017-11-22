@@ -1054,7 +1054,7 @@ namespace BP.WF.Template
                 return "请填写恢复已完成的流程原因.";
 
             Flow fl = new Flow(this.No);
-            GERpt rpt = new GERpt("ND" + int.Parse(this.No) + "Rpt");
+            BP.WF.Data.GERpt rpt = new BP.WF.Data.GERpt("ND" + int.Parse(this.No) + "Rpt");
             rpt.OID = workid;
             int i = rpt.RetrieveFromDBSources();
             if (i == 0)

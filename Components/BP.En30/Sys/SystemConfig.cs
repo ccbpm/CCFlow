@@ -482,11 +482,22 @@ namespace BP.Sys
         {
             get
             {
-                if (!string.IsNullOrEmpty(SystemConfig.AppSettings["HostURL"]))
+                if (string.IsNullOrEmpty(SystemConfig.AppSettings["HostURL"])==false)
                 {
                     return SystemConfig.AppSettings["HostURL"];
                 }
                 return "http:/127.0.0.1/";
+            }
+        }
+        /// <summary>
+        /// HostURL 在bs的模式下调用.
+        /// </summary>
+        public static string HostURLOfBS
+        {
+            get
+            {
+                string url = "http://" + System.Web.HttpContext.Current.Request.Url.Authority;
+                return url;
             }
         }
         /// <summary>

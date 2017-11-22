@@ -1068,7 +1068,7 @@ namespace BP.WF
                 #region 生成二维码.
                 /*说明是图片文件.*/
                 string pathQR = path + "\\QR.png"; // key.Replace("OID.Img@AppPath", SystemConfig.PathOfWebApp);
-                string billUrl = SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
+                string billUrl = SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/index.htm";
                 ThoughtWorks.QRCode.Codec.QRCodeEncoder qrc = new ThoughtWorks.QRCode.Codec.QRCodeEncoder();
                 qrc.QRCodeEncodeMode = ThoughtWorks.QRCode.Codec.QRCodeEncoder.ENCODE_MODE.BYTE;
                 qrc.QRCodeScale = 4;
@@ -1178,7 +1178,7 @@ namespace BP.WF
                 try
                 {
                     Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                    ht.Add("pdf", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                    ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
                 }
                 catch (Exception ex)
                 {
@@ -1189,7 +1189,7 @@ namespace BP.WF
                 try
                 {
                     (new FastZip()).CreateZip(zipFile, pdfPath, true, "");
-                    ht.Add("zip", SystemConfig.HostURL + "DataUser/InstancePacketOfData/" + frmID + "/" + fileNameFormat + ".zip");
+                    ht.Add("zip", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + fileNameFormat + ".zip");
                 }
                 catch (Exception ex)
                 {

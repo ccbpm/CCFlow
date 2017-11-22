@@ -59,7 +59,7 @@ namespace BP.GPM
         /// <summary>
         /// 拼音 
         /// </summary>
-        public const string PinYin = "PinYin";
+        public const string PinYin = "PinYin";  
         #endregion
 
         /// <summary>

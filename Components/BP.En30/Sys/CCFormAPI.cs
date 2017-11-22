@@ -1686,14 +1686,21 @@ namespace BP.Sys
         /// <returns>包含返回拼音，否则返回null</returns>
         public static string ChinaMulTonesToPinYin(string charT)
         {
-            ChMulToneXmls mulChs = new ChMulToneXmls();
-            mulChs.RetrieveAll();
-            foreach (ChMulToneXml en in mulChs)
+            try
             {
-                if (en.No.Equals(charT))
+                ChMulToneXmls mulChs = new ChMulToneXmls();
+                mulChs.RetrieveAll();
+                foreach (ChMulToneXml en in mulChs)
                 {
-                    return en.Name;
+                    if (en.No.Equals(charT))
+                    {
+                        return en.Name;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
             return null;
         }

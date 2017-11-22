@@ -485,16 +485,7 @@ namespace BP.Sys
             return str;
             //return str;
         }
-        /// <summary>
-        /// 将汉字转换成拼音
-        /// </summary>
-        /// <param name="str">要转换的汉字</param>
-        /// <returns>返回的拼音</returns>
-        public string Chs2Pinyin(string str)
-        {
-            return BP.Tools.chs2py.convert(str);
-        }
-
+        
         public static string GenerTablePage(DataTable dt, string title)
         {
 

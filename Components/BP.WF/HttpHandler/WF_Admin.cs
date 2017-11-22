@@ -54,7 +54,7 @@ namespace BP.WF.HttpHandler
             cond.RetrieveFromDBSources();
             ds.Tables.Add(cond.ToDataTableField("Cond"));
 
-            return BP.Tools.Json.DataSetToJson(ds,false);
+            return BP.Tools.Json.DataSetToJson(ds, false);
 
 
         }
@@ -147,7 +147,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ConditionLine_Init()
         {
-            string sql = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node="+this.FK_Node;
+            string sql = "SELECT A.NodeID, A.Name FROM WF_Node A,  WF_Direction B WHERE A.NodeID=B.ToNode AND B.Node=" + this.FK_Node;
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.Columns[0].ColumnName = "NodeID";
@@ -322,7 +322,7 @@ namespace BP.WF.HttpHandler
                 dtOperNumber.Columns.Add("No", typeof(string));
                 dtOperNumber.Columns.Add("Name", typeof(string));
 
-                 DataRow dr = dtOperNumber.NewRow();
+                DataRow dr = dtOperNumber.NewRow();
                 dr["No"] = "dengyu";
                 dr["Name"] = "= 等于";
                 dtOperNumber.Rows.Add(dr);
@@ -401,7 +401,7 @@ namespace BP.WF.HttpHandler
 
             string saveType = this.GetRequestVal("SaveType"); //保存类型.
             CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
-             
+
             //把其他的条件都删除掉.
             DBAccess.RunSQL("DELETE FROM WF_Cond WHERE ( NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.Form);
 
@@ -416,7 +416,7 @@ namespace BP.WF.HttpHandler
 
             cond.FK_Attr = field; //字段属性.
 
-          //  cond.OperatorValueT = ""; // this.GetOperValText;
+            //  cond.OperatorValueT = ""; // this.GetOperValText;
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = condTypeEnum;
 
@@ -626,7 +626,7 @@ namespace BP.WF.HttpHandler
             cond.Note = this.GetRequestVal("TB_Note"); //备注.
 
             cond.FK_Flow = this.FK_Flow;
-            cond.HisCondType = condTypeEnum; 
+            cond.HisCondType = condTypeEnum;
             cond.Insert();
 
             return "保存成功..";
@@ -731,7 +731,7 @@ namespace BP.WF.HttpHandler
             cond.HisCondType = CondType.Dir;
             cond.FK_Node = FK_MainNode;
 
-            
+
 
             cond.ToNodeID = ToNodeID;
             cond.Update();
@@ -780,7 +780,7 @@ namespace BP.WF.HttpHandler
             //取有可能存盘的数据.
             //int FK_MainNode = this.GetRequestValInt("FK_MainNode");
             //int ToNodeID = this.GetRequestValInt("ToNodeID");
-            Cond cond = new Cond(); 
+            Cond cond = new Cond();
             //CondType condType = (CondType)this.GetRequestValInt("CondType");
             //string mypk = this.GetRequestValInt("FK_MainNode") + "_" + this.GetRequestValInt("ToNodeID") + "_" + condType.ToString() + "_" + ConnDataFrom.Depts.ToString();
             cond.MyPK = this.GetRequestVal("MyPK"); ;
@@ -976,7 +976,7 @@ namespace BP.WF.HttpHandler
             }
 
             FlowExt fl = new FlowExt(this.FK_Flow);
-            
+
             /* 检查是否设置了测试人员，如果设置了就按照测试人员身份进入
              * 设置测试人员的目的是太多了人员影响测试效率.
              * */
@@ -1129,7 +1129,7 @@ namespace BP.WF.HttpHandler
 
                     dtMyEmps.Rows.Add(drNew);
                 }
-               
+
                 //返回数据源.
                 return BP.Tools.Json.DataTableToJson(dtMyEmps, false);
             }
@@ -1139,7 +1139,7 @@ namespace BP.WF.HttpHandler
             }
         }
 
-     
+
         /// <summary>
         /// 转到指定的url.
         /// </summary>
@@ -1426,6 +1426,64 @@ namespace BP.WF.HttpHandler
             return sqls.ToJson();
         }
         #region 绑定流程表单
+        /// <summary>
+        /// 复制表单到节点
+        /// </summary>
+        /// <returns></returns>
+        public string DoCopyFrmToNodes()
+        {
+            string nodeStr = this.GetRequestVal("NodeStr");//节点string,
+            string frmStr = this.GetRequestVal("frmStr");//表单string,
+
+            string[] nodeList = nodeStr.Split(',');
+            string[] frmList = frmStr.Split(',');
+
+            foreach (string node in nodeList)
+            {
+                if (string.IsNullOrWhiteSpace(node))
+                    continue;
+
+                int nodeid = int.Parse(node);
+
+                DBAccess.RunSQL("DELETE FROM WF_FRMNODE WHERE FK_NODE=" + nodeid);
+
+                foreach (string frm in frmList)
+                {
+                    if (string.IsNullOrWhiteSpace(frm))
+                        continue;
+
+                    FrmNode fn = new FrmNode();
+                    if (!fn.IsExit("mypk", frm + "_" + nodeid + "_" + this.FK_Flow))
+                    {
+                        fn.FK_Frm = frm;
+                        fn.FK_Node = nodeid;
+                        fn.FK_Flow = this.FK_Flow;
+
+                        fn.Insert();
+                    }
+                }
+            }
+
+            return "操作成功！";
+        }
+        public string GetFlowNodeDropList()
+        {
+            Nodes nodes = new Nodes();
+            nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
+
+            if (nodes.Count == 0)
+                return "";
+
+            StringBuilder sBuilder = new StringBuilder();
+            sBuilder.Append("<select id = \"copynodesdll\"  multiple = \"multiple\" style = \"border - style:None; width: 100%; Height: 100%; \">");
+
+            foreach (Node node in nodes)
+                sBuilder.Append("<option " + (FK_Node == node.NodeID ? "disabled = \"disabled\"" : "") + " value = \"" + node.NodeID + "\" >" + "[" + node.NodeID + "]" + node.Name + "</ option >");
+
+            sBuilder.Append("</select>");
+
+            return sBuilder.ToString();
+        }
         /// <summary>
         /// 获取流程所有节点
         /// </summary>

@@ -346,6 +346,14 @@
                 return;
             }
 
+            $("body").keydown(function () {
+                if (event.keyCode == 13) {
+                    event.cancelBubble = true;
+                    event.returnValue = false;
+                    Login();
+                }
+            });
+
             if (plant == "JFlow") {
                 document.getElementById("BtnSL").style.display = "none";
             }

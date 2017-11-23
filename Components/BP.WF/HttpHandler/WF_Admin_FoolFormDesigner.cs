@@ -752,6 +752,18 @@ namespace BP.WF.HttpHandler
             return msg;
         }
 
+        public string ImpTableFieldSelectBindKey_Init()
+        {
+            BP.Sys.SysEnumMains ens = new BP.Sys.SysEnumMains();
+            ens.RetrieveAll();
+            BP.Sys.SFTables tabs = new BP.Sys.SFTables();
+            tabs.RetrieveAll();
+            DataSet ds = new DataSet();
+            ds.Tables.Add(ens.ToDataTableField("SysEnumMains"));
+            ds.Tables.Add(tabs.ToDataTableField("SFTables"));
+            return BP.Tools.Json.ToJson(ds);
+        }
+
         /// <summary>
         /// 
         /// </summary>

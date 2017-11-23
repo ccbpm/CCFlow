@@ -178,10 +178,11 @@ namespace BP.WF.Template
         {
             get
             {
-                return this.GetParaBoolen(MapDtlAttr.IsEnableLink,false);
+                return this.GetValBooleanByKey(MapDtlAttr.IsEnableLink,false);
             }
             set
             {
+                this.SetValByKey(MapDtlAttr.IsEnableLink, value);
                 this.SetPara(MapDtlAttr.IsEnableLink, value);
             }
         }
@@ -189,13 +190,14 @@ namespace BP.WF.Template
         {
             get
             {
-                string s= this.GetParaString(MapDtlAttr.LinkLabel);
+                string s= this.GetValStrByKey(MapDtlAttr.LinkLabel);
                 if (string.IsNullOrEmpty(s))
                     return "详细";
                 return s;
             }
             set
             {
+                this.SetValByKey(MapDtlAttr.LinkLabel, value);
                 this.SetPara(MapDtlAttr.LinkLabel, value);
             }
         }
@@ -203,7 +205,7 @@ namespace BP.WF.Template
         {
             get
             {
-                string s = this.GetParaString(MapDtlAttr.LinkUrl);
+                string s = this.GetValStrByKey(MapDtlAttr.LinkUrl);
                 if (string.IsNullOrEmpty(s))
                     return "http://ccport.org";
 
@@ -214,6 +216,7 @@ namespace BP.WF.Template
             {
                 string val = value;
                 val = val.Replace("@", "*");
+                this.SetValByKey(MapDtlAttr.LinkUrl, val);
                 this.SetPara(MapDtlAttr.LinkUrl, val);
             }
         }
@@ -221,13 +224,14 @@ namespace BP.WF.Template
         {
             get
             {
-                string s = this.GetParaString(MapDtlAttr.LinkTarget);
+                string s = this.GetValStrByKey(MapDtlAttr.LinkTarget);
                 if (string.IsNullOrEmpty(s))
                     return "_blank";
                 return s;
             }
             set
             {
+                this.SetValByKey(MapDtlAttr.LinkTarget, value);
                 this.SetPara(MapDtlAttr.LinkTarget, value);
             }
         }
@@ -1008,6 +1012,7 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false,true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false,true);
 
+
                 #endregion 导入导出填充.
 
                 #region 多表头.
@@ -1023,6 +1028,11 @@ namespace BP.WF.Template
 
                 string sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE FK_MapData='@No' AND  ( (MyDataType =1 and UIVisible=1 ) or (UIContralType=1))";
                 map.AddDDLSQL(MapDtlAttr.SubThreadWorker, null, "子线程处理人字段", sql, true);
+                //超链接
+                map.AddBoolean(MapDtlAttr.IsEnableLink, false, "是否启用超链接", true, true);
+                map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接标签", true, false, 0, 50, 100);
+                map.AddTBString(MapDtlAttr.LinkTarget, null, "连接目标", true, false, 0, 10, 100);
+                map.AddTBString(MapDtlAttr.LinkUrl, null, "连接URL", true, false, 0, 200, 200, true);
                 #endregion 工作流相关.
 
                 RefMethod  rm = new RefMethod();
@@ -1142,8 +1152,16 @@ namespace BP.WF.Template
         protected override bool beforeUpdate()
         {
             MapDtl dtl = new MapDtl(this.No);
-            dtl.IsEnablePass = this.IsEnableAthM;
+            //启用审核
+            dtl.IsEnablePass = this.IsEnablePass;
+            //超链接
+            dtl.IsEnableLink = this.IsEnableLink;
+            dtl.LinkLabel = this.LinkLabel;
+            dtl.LinkUrl = this.LinkUrl;
+            dtl.LinkTarget = this.LinkTarget;
             dtl.Update();
+
+
 
             //获得事件实体.
             var febd = BP.Sys.Glo.GetFormDtlEventBaseByEnName(this.No);

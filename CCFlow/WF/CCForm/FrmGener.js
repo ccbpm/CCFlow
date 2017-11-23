@@ -9,9 +9,12 @@
 
 var colVisibleJsonStr = ''
 var jsonStr = '';
-
+var IsChange = false;
 //初始化函数
 $(function () {
+    $("#CCForm").unbind().on('click', function () {
+        Change(frmData);
+    });
     initPageParam(); //初始化参数.
 
     //构造表单.
@@ -86,14 +89,6 @@ function SetHegiht() {
         }
     }
     catch (e) {
-    }
-}
-
-function Change() {
-    var btn = document.getElementById('Btn_Save');
-    if (btn != null) {
-        if (btn.value.valueOf('*') == -1)
-            btn.value = btn.value + '*';
     }
 }
 
@@ -317,7 +312,7 @@ function Save() {
     $.ajax({
         type: 'post',
         async: true,
-        data: GetFormData(true, true),
+        data: getFormData(true, true),
         url: Handler + "?DoType=FrmGener_Save&OID=" + pageData.OID,
         dataType: 'html',
         success: function (data) {
@@ -738,7 +733,7 @@ function ConvertDefVal(frmData, defVal, keyOfEn) {
 }
 
 //获取表单数据
-function GetFormData(isCotainTextArea, isCotainUrlParam) {
+function getFormData(isCotainTextArea, isCotainUrlParam) {
     var formss = $('#divCCForm').serialize();
     var formArr = formss.split('&');
     var formArrResult = [];
@@ -1306,7 +1301,31 @@ function To(url) {
     window.name = "dialogPage"; window.open(url, "dialogPage")
 }
 
+function SaveDtlData() {
+    if (IsChange == false)
+        return;
 
+    Save();
+}
+
+function Change(id) {
+    IsChange = true;
+    var tagElement = window.parent.document.getElementById("HL" + id);
+    if (tagElement) {
+        var tabText = tagElement.innerText;
+        var lastChar = tabText.substring(tabText.length - 1, tabText.length);
+        if (lastChar != "*") {
+            tagElement.innerHTML = tagElement.innerText + '*';
+        }
+    }
+
+    if (typeof self.parent.TabFormExists != 'undefined') {
+        var bExists = self.parent.TabFormExists();
+        if (bExists) {
+            self.parent.ChangTabFormTitle();
+        }
+    }
+}
 
 //然浏览器最大化.
 function ResizeWindow() {

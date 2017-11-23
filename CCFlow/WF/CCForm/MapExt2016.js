@@ -243,7 +243,7 @@ function ReturnValCCFormPopValGoogle(extType, ctrl, fk_mapExt, refEnPK, width, h
     else {
         fd = getFormData(false, false);
     }
-    debugger
+    
     if (extType == "PopVal")
         url = wfpreHref + '/WF/CCForm/PopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape(fd) + "&m=" + Math.random();
 

@@ -1951,7 +1951,7 @@ namespace BP.WF.HttpHandler
                 sql = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA NOT LIKE '%@DBTemplate=1%' AND rownum<=30 ORDER BY RDT ";
 
             if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                sql = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA NOT LIKE '%@DBTemplate=1%' LIMIT 30 ORDER BY RDT ";
+                sql = "SELECT WorkID,Title FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND WFState=3 AND Starter='" + WebUser.No + "' AND ATPARA NOT LIKE '%@DBTemplate=1%' ORDER BY RDT LIMIT 30";
 
             DataTable dtHistroy = DBAccess.RunSQLReturnTable(sql);
             dtHistroy.TableName = "History";

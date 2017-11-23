@@ -271,7 +271,7 @@
 			var winHeight = 600;
 			var iTop = (window.screen.height - 30 - winHeight) / 2; //获得窗口的垂直位置;
 			var iLeft = (window.screen.width - 10 - winWidth) / 2; //获得窗口的水平位置;
-			window.open("../ImpTableFieldNew.htm?FK_MapData=" + frmID, "_blank", "height=" + winHeight + "px,width=" + winWidth + "px,top=" + iTop + ",left="+iLeft+",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
+			window.open("../ImpTableFieldNew.htm?FK_MapData=" + frmID + "&reset=true", "_blank", "height=" + winHeight + "px,width=" + winWidth + "px,top=" + iTop + ",left="+iLeft+",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
 		}
         function CheckAll(checked) {
             $.each($(":checkbox"), function () {

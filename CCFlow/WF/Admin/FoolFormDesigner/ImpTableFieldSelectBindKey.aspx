@@ -1,9 +1,16 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/WF/Admin/FoolFormDesigner/WinOpen.master" AutoEventWireup="true" CodeBehind="ImpTableFieldSelectBindKey.aspx.cs" Inherits="CCFlow.WF.MapDef.ImpTableFieldSelectBindKey" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+<script src="../../Scripts/QueryString.js" type="text/javascript"></script>
 <script type="text/javascript">
     function SetIt(val) {
-        window.returnValue = val;
-        window.close();
+        if (parent && parent.window && typeof parent.window.doCloseDialog === 'function') {
+            var ctl_id = GetQueryString("ctl_id");
+            parent.$("#" + ctl_id).val(val);
+            parent.window.doCloseDialog.call();
+        } else {
+            window.returnValue = val;
+        	window.close();
+        }
     }
 </script>
 </asp:Content>

@@ -241,9 +241,13 @@
         window.location.href = 'CreateSFGuide.htm?DoType=New&FK_MapData=' + fk_mapdata + '&FType=Class&GroupField=' + groupID;
     }
     function ImpTableField() {
-
-        var url = 'ImpTableField.htm?FK_MapData='+GetQueryString('FK_MapData')+'&FType=Class&Idx=&GroupField=0';
-        window.location.href = url;
+        var winWidth = 1050;
+        var winHeight = 600;
+        var iTop = (window.screen.height - 30 - winHeight) / 2; //获得窗口的垂直位置;
+        var iLeft = (window.screen.width - 10 - winWidth) / 2; //获得窗口的水平位置;
+        window.open("ImpTableFieldNew.htm?FK_MapData=" + GetQueryString("FK_MapData"), "_blank", "height=" + winHeight + "px,width=" + winWidth + "px,top=" + iTop + ",left=" + iLeft + ",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
+        //var url = 'ImpTableField.htm?FK_MapData='+GetQueryString('FK_MapData')+'&FType=Class&Idx=&GroupField=0';
+        //window.location.href = url;
     }
 </script>
 

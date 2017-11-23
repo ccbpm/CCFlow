@@ -280,7 +280,9 @@
 						alert(json.msg);
 						return; */
 					    alert(json);
-					    findFn(window, "ResetFrm", "请手动重置表单");
+					    if (GetQueryString("reset") == "true") {
+					        findFn(window, "ResetFrm", "请手动重置表单");
+					    }
 						window.close();
 					},
 					error : function (data) {

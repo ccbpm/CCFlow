@@ -105,13 +105,61 @@ function addTab(id, title, url) {
     tabClose();
 }
 
+//判断标签页是否存在
+function TabFormExists() {
+    var currTab = $('#tabs').tabs('getSelected');
+    if (currTab) return true;
+
+    return false;
+}
+
+//修改标题
+function ChangTabFormTitle() {
+    var tabText = "";
+    var p = $(document.getElementById("tabs")).find("li");
+    $.each(p, function (i, val) {
+        if (val.className.indexOf("tabs-selected") > -1) {
+            tabText = $($(val).find("span")[0]).text();
+        }
+    });
+
+    var lastChar = tabText.substring(tabText.length - 1, tabText.length);
+    if (lastChar != "*") {
+        $.each(p, function (i, val) {
+            if (val.className.indexOf("tabs-selected") > -1) {
+                tabText = $($(val).find("span")[0]).text(tabText + '*');
+            }
+        });
+    }
+}
+
+//修改标题
+function ChangTabFormTitleRemove() {
+    var tabText = "";
+    var p = $(parent.document.getElementById("tabs")).find("li");
+    $.each(p, function (i, val) {
+        if (val.className.indexOf("tabs-selected") > -1) {
+            tabText = $($(val).find("span")[0]).text();
+        }
+    });
+
+    var lastChar = tabText.substring(tabText.length - 1, tabText.length);
+    if (lastChar == "*") {
+        $.each(p, function (i, val) {
+            if (val.className.indexOf("tabs-selected") > -1) {
+                $($(val).find("span")[0]).text(tabText.substring(0, tabText.length - 1));
+            }
+        });
+    }
+}
+
 //tab切换事件
 function OnTabChange(scope) {
     //表单内容修改，执行自动保存
     var p = $(document.getElementById("tabs")).find("li");
     var tabText = "";
     $.each(p, function (i, val) {
-        if (val.className == "tabs-selected") {
+        if (val.className.indexOf("tabs-selected") > -1) {
             tabText = $($(val).find("span")[0]).text();
         }
     });
@@ -121,10 +169,10 @@ function OnTabChange(scope) {
         var currTab = $('#tabs').tabs('getSelected');
         var currScope = currTab.find('iframe')[0];
         var contentWidow = currScope.contentWindow;
-        contentWidow.isChange = true;
+        contentWidow.IsChange = true;
         contentWidow.SaveDtlData();
         $.each(p, function (i, val) {
-            if (val.className == "tabs-selected") {
+            if (val.className.indexOf("tabs-selected") > -1) {
                 if (lastChar == "*") {
                     $($(val).find("span")[0]).text(tabText.substring(0, tabText.length - 1));
                 }
@@ -143,7 +191,7 @@ function OnTabChange(scope) {
         var contentWidow = scope.contentWindow;
         contentWidow.SaveDtlData();
         $.each(p, function (i, val) {
-            if (val.className == "tabs-selected") {
+            if (val.className.indexOf("tabs-selected") > -1) {
                 $($(val).find("span")[0]).text(tabText.substring(0, tabText.length - 1));
             }
         });

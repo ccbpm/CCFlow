@@ -282,14 +282,20 @@ function Save() {
     if (checkReg() == false) {
         formCheckResult = false;
     }
-
+    
     if (formCheckResult == false) {
         //alert("请检查表单必填项和正则表达式");
         return false;
     }
-
     setToobarDisiable();
 
+    //树形表单保存
+    if (workNode) {
+        var node = workNode.WF_Node[0];
+        if (node && node.FormType == 5) {
+            OnTabChange("btnsave");
+        }    
+    }
     $.ajax({
         type: 'post',
         async: true,
@@ -1326,7 +1332,6 @@ function GenerWorkNode() {
                 return;
             }
 
-            var workNode;
             try {
 
                 workNode = JSON.parse(data);

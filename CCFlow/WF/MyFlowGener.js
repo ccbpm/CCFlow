@@ -56,17 +56,20 @@ function CCFormLoaded() {
         //$('#topContentDiv').height(height);
 
         $(window).resize(function () {
-            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
+            //$("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); 
+            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto");
         });
     }
     else {
         //新加
         //计算高度，展示滚动条
-        var height = $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
+        //var height = $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff");
+        var height = $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto");
         // $('#topContentDiv').height(height);
 
         $(window).resize(function () {
-            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff"); ;
+            //$("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto").css("scrollbar-face-color", "#fff") ;
+            $("#CCForm").height($(window).height() - 115 + "px").css("overflow-y", "auto");
         });
     }
 

@@ -708,12 +708,12 @@ namespace BP.WF.HttpHandler
                         ma.UIContralType = BP.En.UIContralType.CheckBok;
                     if (ma.IsExits)
                     {
-                        msg += "\t\n字段:" + ma.KeyOfEn + "" + ma.Name + "已存在.";
+                        msg += "\t\n字段:" + ma.KeyOfEn + " - " + ma.Name + "已存在.";
                         continue;
                     }
                     ma.Insert();
 
-                    msg += "\t\n字段:" + ma.KeyOfEn + "" + ma.Name + "加入成功.";
+                    msg += "\t\n字段:" + ma.KeyOfEn + " - " + ma.Name + "加入成功.";
                     FrmLab lab = null;
                     if (isLeft == true)
                     {

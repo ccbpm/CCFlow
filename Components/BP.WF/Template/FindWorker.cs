@@ -246,8 +246,8 @@ namespace BP.WF.Template
                             return dt;
                         }
 
-                        if (dt.Rows.Count == 0 && town.HisNode.HisWhenNoWorker == false)
-                            throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）在指定的节点中没有数据，无法找到子线程的工作人员。");
+                        if (dt.Rows.Count == 0 )
+                            throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）无法找到开始节点的工作人员。");
                         else
                             return dt;
                     }

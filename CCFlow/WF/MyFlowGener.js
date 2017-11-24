@@ -1495,7 +1495,7 @@ function GenerWorkNode() {
                     autoHeightEnabled: false,
                     emotionLocalization: true,
                     elementPathEnabled: false,
-                    wordCount: false,
+                    maximumWords: document.BindEditorMapAttr.MaxLen,
                     toolbars: [[
             'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'cleardoc', 'fontfamily', 'fontsize', 'indent', 'date', 'time'
         ]]

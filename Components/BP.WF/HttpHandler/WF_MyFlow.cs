@@ -433,7 +433,7 @@ namespace BP.WF.HttpHandler
 
                 string url = "MyFlowGener.htm";
                 if (this.IsMobile)
-                    url = "MyFlowFree.htm";
+                    url = "MyFlowGener.htm";
 
                 //处理连接.
                 url = this.MyFlow_Init_DealUrl(currND, currWK, url);

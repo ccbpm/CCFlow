@@ -800,7 +800,7 @@ namespace BP.WF.Data
 
             BP.WF.Node nd = new Node(this.FK_Node);
 
-            return "../../CCForm/FrmFreeReadonly.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
+            return "../../CCForm/FrmGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FK_MapData=" + nd.NodeFrmID + "&ReadOnly=1&IsEdit=0";
         }
 		#endregion
 	}

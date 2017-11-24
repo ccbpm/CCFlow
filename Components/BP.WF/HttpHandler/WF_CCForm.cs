@@ -491,7 +491,7 @@ namespace BP.WF.HttpHandler
                 if (md.HisFrmType == FrmType.FreeFrm )
                 {
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                        return "url@FrmFreeReadonly.htm?1=2" + paras;
+                        return "url@FrmGener.htm?1=2" + paras;
                     else
                         return "url@FrmGener.htm?1=2" + paras;
                 }

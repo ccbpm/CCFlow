@@ -268,9 +268,11 @@ namespace BP.WF.HttpHandler
             //使用ccbpm内置的节点表单
             if (selectFModel == "DefFrm")
             {
+                //呈现风格
                 string frmModel = this.GetValFromFrmByKey("RB_Frm");
                 if (frmModel == "0")
                 {
+                    //自由表单
                     nd.FormType = NodeFormType.FreeForm;
                     nd.DirectUpdate();
 
@@ -279,21 +281,22 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
+                    //傻瓜表单
                     nd.FormType = NodeFormType.FoolForm;
                     nd.DirectUpdate();
 
                     md.HisFrmType = BP.Sys.FrmType.FoolForm;
                     md.Update();
                 }
-
+                //表单引用
                 string refFrm = this.GetValFromFrmByKey("RefFrm");
-
+                //当前节点表单
                 if (refFrm == "0")
                 {
                     nd.NodeFrmID = "";
                     nd.DirectUpdate();
                 }
-
+                //其他节点表单
                 if (refFrm == "1")
                 {
                     nd.NodeFrmID = "ND" + this.GetValFromFrmByKey("DDL_Frm");

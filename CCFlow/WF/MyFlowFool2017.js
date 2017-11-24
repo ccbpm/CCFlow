@@ -218,9 +218,8 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
             var eleHtml = "";
             //如果是富文本就使用百度 UEditor
             if (mapAttr.UIIsEnable == "0") {
-                //只读状态直接 div 展示富文本内容
-                //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
-                eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
+                //只读状态直接 div 展示富文本内容                
+                eleHtml += "<div class='richText'>" + defValue + "</div>";
             } else {
                 document.BindEditorMapAttr = mapAttr; //存到全局备用
 

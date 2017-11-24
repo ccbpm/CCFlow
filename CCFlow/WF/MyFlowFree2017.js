@@ -142,7 +142,7 @@ function figure_MapAttr_Template(mapAttr) {
                                 if (mapAttr.UIIsEnable == "0") {
 
                                     //只读状态直接 div.richText 展示富文本内容                                    
-                                    eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
+                                    eleHtml += "<div class='richText'>" + defValue + "</div>";
                                 } else {
                                     document.BindEditorMapAttr = mapAttr; //存到全局备用
 

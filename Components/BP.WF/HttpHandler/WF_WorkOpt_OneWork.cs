@@ -573,8 +573,6 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                //var re = new { success = true, msg = string.Empty, ds = ds };
-
                 return BP.Tools.Json.DataSetToJson(ds);
             }
             catch (Exception ex)

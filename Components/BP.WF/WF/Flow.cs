@@ -4290,6 +4290,7 @@ namespace BP.WF
                 // true, true, FlowAttr.TimelineRole, "@0=按节点(由节点属性来定义)@1=按发起人(开始节点SysSDTOfFlow字段计算)");
 
                 map.AddTBInt(FlowAttr.IsAutoSendSubFlowOver, 0, "(当前节点为子流程时)是否检查所有子流程完成后父流程自动发送", true, true);
+
                 map.AddTBString(FlowAttr.Ver, null, "版本号", true, true, 0, 20, 10);
 
                 //设计类型 .

@@ -8,23 +8,21 @@ using BP.Port;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 显示位置
+    /// 越轨流程工作方式
     /// </summary>
-    public enum ShowWhere
+    public enum YGWorkWay
     {
         /// <summary>
-        /// 树
+        /// 
         /// </summary>
-        Tree,
-        /// <summary>
-        /// 工具栏
-        /// </summary>
-        Toolbar
+        None,
+        sss,
+        ddd
     }
     /// <summary>
-    /// 工具栏属性
+    /// 越轨流程属性
     /// </summary>
-    public class NodeToolbarAttr : BP.En.EntityOIDNameAttr
+    public class NodeYGFlowAttr : BP.En.EntityOIDNameAttr
     {
         #region 基本属性
         /// <summary>
@@ -38,7 +36,7 @@ namespace BP.WF.Template
         /// <summary>
         /// 标题
         /// </summary>
-        public const string Title = "Title";
+        public const string FK_Flow = "FK_Flow";
         /// <summary>
         /// url
         /// </summary>
@@ -50,13 +48,13 @@ namespace BP.WF.Template
         /// <summary>
         /// 显示在那里？
         /// </summary>
-        public const string ShowWhere = "ShowWhere";
+        public const string YGWorkWay = "YGWorkWay";
         #endregion
     }
     /// <summary>
-    /// 工具栏.	 
+    /// 越轨流程.	 
     /// </summary>
-    public class NodeToolbar : EntityOID
+    public class NodeYGFlow : EntityOID
     {
         #region 基本属性
         /// <summary>
@@ -72,81 +70,69 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 工具栏的事务编号
+        /// 越轨流程的事务编号
         /// </summary>
         public int FK_Node
         {
             get
             {
-                return this.GetValIntByKey(NodeToolbarAttr.FK_Node);
+                return this.GetValIntByKey(NodeYGFlowAttr.FK_Node);
             }
             set
             {
-                SetValByKey(NodeToolbarAttr.FK_Node, value);
+                SetValByKey(NodeYGFlowAttr.FK_Node, value);
             }
         }
-        public string Title
+        /// <summary>
+        /// 流程编号
+        /// </summary>
+        public string FK_Flow
         {
             get
             {
-                return this.GetValStringByKey(NodeToolbarAttr.Title);
+                return this.GetValStringByKey(NodeYGFlowAttr.FK_Flow);
             }
             set
             {
-                SetValByKey(NodeToolbarAttr.Title, value);
+                SetValByKey(NodeYGFlowAttr.FK_Flow, value);
             }
         }
-        public string Url
+        /// <summary>
+        /// 流程名称
+        /// </summary>
+        public string FlowName
         {
             get
             {
-                string s= this.GetValStringByKey(NodeToolbarAttr.Url);
-                if (s.Contains("?") == false && this.Target.ToLower() != "javascript")
-                    s = s+"?1=2";
-                return s;
-            }
-            set
-            {
-                SetValByKey(NodeToolbarAttr.Url, value);
-            }
-        }
-        public string Target
-        {
-            get
-            {
-                return this.GetValStringByKey(NodeToolbarAttr.Target);
-            }
-            set
-            {
-                SetValByKey(NodeToolbarAttr.Target, value);
+                return this.GetValRefTextByKey(NodeYGFlowAttr.FK_Flow);
             }
         }
         /// <summary>
         /// 显示在那里？
         /// </summary>
-        public ShowWhere ShowWhere
+        public YGWorkWay YGWorkWay
         {
             get
             {
-                return (ShowWhere)this.GetValIntByKey(NodeToolbarAttr.ShowWhere);
+                return (YGWorkWay)this.GetValIntByKey(NodeYGFlowAttr.YGWorkWay);
             }
             set
             {
-                SetValByKey(NodeToolbarAttr.ShowWhere, (int)value);
+                SetValByKey(NodeYGFlowAttr.YGWorkWay, (int)value);
             }
         }
         #endregion
 
         #region 构造函数
         /// <summary>
-        /// 工具栏
+        /// 越轨流程
         /// </summary>
-        public NodeToolbar() { }
+        public NodeYGFlow() { }
         /// <summary>
-        /// 工具栏
+        /// 越轨流程
         /// </summary>
-        /// <param name="_oid">工具栏ID</param>	
-        public NodeToolbar(int oid)
+        /// <param name="_oid">越轨流程ID</param>	
+        public NodeYGFlow(int oid)
         {
             this.OID = oid;
             this.Retrieve();
@@ -161,20 +147,16 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("WF_NodeToolbar", "自定义工具栏");
+                Map map = new Map("WF_NodeYGFlow", "越轨流程");
 
                 map.AddTBIntPKOID();
-                map.AddTBString(NodeToolbarAttr.Title, null, "标题", true, false, 0, 100, 100, true);
-                map.AddTBString(NodeToolbarAttr.Target, null, "目标", true, false, 0, 100, 100, true);
-                map.AddTBString(NodeToolbarAttr.Url, null, "连接", true, false, 0, 500, 300, true);
+
+                map.AddDDLEntities(NodeYGFlowAttr.FK_Flow, null, "越轨流程", new Flows(), true);
                 // 显示位置.
-                map.AddDDLSysEnum(NodeToolbarAttr.ShowWhere, 1, "显示位置", false,true, NodeToolbarAttr.ShowWhere,
-                    "@0=树形表单@1=工具栏");
-
-                map.AddTBInt(NodeToolbarAttr.Idx, 0, "显示顺序", true, false);
-                map.AddTBInt(NodeToolbarAttr.FK_Node, 0, "节点", false,true);
-                map.AddMyFile("图标");
-
+                map.AddDDLSysEnum(NodeYGFlowAttr.YGWorkWay, 1, "工作方式", true, true, NodeYGFlowAttr.YGWorkWay,
+                    "@0=停止当前节点等待越轨流程运行完毕后该节点自动向下运行@1=启动越轨流程运行到下一步骤上去");
+                map.AddTBInt(NodeYGFlowAttr.Idx, 0, "显示顺序", true, false);
+                map.AddTBInt(NodeYGFlowAttr.FK_Node, 0, "节点", false,true);
 
                 this._enMap = map;
                 return this._enMap;
@@ -183,9 +165,9 @@ namespace BP.WF.Template
         #endregion
     }
     /// <summary>
-    /// 工具栏集合
+    /// 越轨流程集合
     /// </summary>
-    public class NodeToolbars : EntitiesOID
+    public class NodeYGFlows : EntitiesOID
     {
         #region 方法
         /// <summary>
@@ -195,25 +177,25 @@ namespace BP.WF.Template
         {
             get
             {
-                return new NodeToolbar();
+                return new NodeYGFlow();
             }
         }
         #endregion
 
         #region 构造方法
         /// <summary>
-        /// 工具栏集合
+        /// 越轨流程集合
         /// </summary>
-        public NodeToolbars()
+        public NodeYGFlows()
         {
         }
         /// <summary>
-        /// 工具栏集合.
+        /// 越轨流程集合.
         /// </summary>
         /// <param name="fk_node"></param>
-        public NodeToolbars(string fk_node)
+        public NodeYGFlows(string fk_node)
         {
-            this.Retrieve(NodeToolbarAttr.FK_Node, fk_node);
+            this.Retrieve(NodeYGFlowAttr.FK_Node, fk_node);
         }
         #endregion
 
@@ -221,21 +203,21 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<NodeToolbar> ToJavaList()
+        public System.Collections.Generic.IList<NodeYGFlow> ToJavaList()
         {
-            return (System.Collections.Generic.IList<NodeToolbar>)this;
+            return (System.Collections.Generic.IList<NodeYGFlow>)this;
         }
 
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<NodeToolbar> Tolist()
+        public System.Collections.Generic.List<NodeYGFlow> Tolist()
         {
-            System.Collections.Generic.List<NodeToolbar> list = new System.Collections.Generic.List<NodeToolbar>();
+            System.Collections.Generic.List<NodeYGFlow> list = new System.Collections.Generic.List<NodeYGFlow>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((NodeToolbar)this[i]);
+                list.Add((NodeYGFlow)this[i]);
             }
             return list;
         }

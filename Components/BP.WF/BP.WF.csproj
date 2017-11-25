@@ -248,6 +248,7 @@
     <Compile Include="HttpHandler\WF_Comm_RefFunc.cs" />
     <Compile Include="Template\SQLTemplate.cs" />
     <Compile Include="Template\DirectionStation.cs" />
+    <Compile Include="Template\NodeYGFlow.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
     <Compile Include="DTS\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />

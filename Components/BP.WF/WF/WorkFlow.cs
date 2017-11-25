@@ -1090,8 +1090,17 @@ namespace BP.WF
             if (this.HisGenerWorkFlow.PWorkID == 0)
                 return "";
 
-            if (this.HisFlow.IsAutoSendSubFlowOver == false)
+            if (this.HisFlow.SubFlowOver == SubFlowOver.None)
                 return "";
+
+            //@于庆海需要翻译.
+            if (this.HisFlow.SubFlowOver == SubFlowOver.OverParentFlow)
+            {
+                //如果是结束子流程？
+                BP.WF.Dev2Interface.Flow_DoFlowOver(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID, "子流程完成自动结束父流程.");
+                return "";
+            }
+
 
             // 检查是否是最后的一个.
             int num = BP.WF.Dev2Interface.Flow_NumOfSubFlowRuning(this.HisGenerWorkFlow.PWorkID, this.HisGenerWorkFlow.WorkID);
@@ -1162,11 +1171,8 @@ namespace BP.WF
         /// <returns></returns>
         public string DoFlowOver(ActionType at, string stopMsg, Node currNode, GERpt rpt)
         {
-
             if (null == currNode)
-            {
                 return "err@当前节点为空..";
-            }
 
             if (string.IsNullOrEmpty(stopMsg))
                 stopMsg += "流程结束";
@@ -1225,7 +1231,6 @@ namespace BP.WF
             ps.SQL = "DELETE FROM WF_GenerFH WHERE FID=" + dbstr + "FID";
             ps.Add(GenerFHAttr.FID, this.WorkID);
             DBAccess.RunSQL(ps);
-
 
             if (1 == 2)
             {

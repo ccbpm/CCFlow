@@ -3998,11 +3998,11 @@ namespace BP.WF
         /// <summary>
         /// (当前节点为子流程时)是否检查所有子流程完成后父流程自动发送
         /// </summary>
-        public bool IsAutoSendSubFlowOver
+        public SubFlowOver SubFlowOver
         {
             get
             {
-                return this.GetValBooleanByKey(FlowAttr.IsAutoSendSubFlowOver);
+                return (SubFlowOver)this.GetValIntByKey(FlowAttr.IsAutoSendSubFlowOver);
             }
         }
         /// <summary>

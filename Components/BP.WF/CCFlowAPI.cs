@@ -167,6 +167,31 @@ namespace BP.WF
                             dtToNDs.Rows.Add(dr);
                         }
 
+                        //@于庆海，增加到达越轨流程节点.
+                        NodeYGFlows ygflows = new NodeYGFlows(fk_node.ToString());
+                        foreach (NodeYGFlow item in ygflows)
+                        {
+                            DataRow dr = dtToNDs.NewRow();
+                            dr["No"] = item.FK_Flow + "01";
+                            dr["Name"] = item.FlowName;
+
+                            //if (item.HisDeliveryWay == DeliveryWay.BySelected)
+                            dr["IsSelectEmps"] = "1";
+                            //else
+                            //  dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
+
+                            //设置默认选择的节点.
+                            //if (defalutSelectedNodeID == item.NodeID)
+                            //    dr["IsSelected"] = "1";
+                            //else
+                            //    dr["IsSelected"] = "0";
+
+                            dr["IsSelected"] = "0";
+                            dtToNDs.Rows.Add(dr);
+                        }
+
+
+
                         //增加一个下拉框, 对方判断是否有这个数据.
                         myds.Tables.Add(dtToNDs);
                     }

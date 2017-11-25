@@ -6,6 +6,24 @@ using System.Text;
 namespace BP.WF
 {
     /// <summary>
+    /// 子流程结束处理规则
+    /// </summary>
+    public enum SubFlowOver
+    {
+        /// <summary>
+        /// 无
+        /// </summary>
+        None,
+        /// <summary>
+        /// 发送父流程到下一个节点
+        /// </summary>
+        SendParentFlowToNextStep,
+        /// <summary>
+        /// 结束父流程
+        /// </summary>
+        OverParentFlow
+    }
+    /// <summary>
     /// 会签模式
     /// </summary>
     public enum HuiQianRole

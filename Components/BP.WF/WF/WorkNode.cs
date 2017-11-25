@@ -5339,7 +5339,7 @@ namespace BP.WF
                         continue;
 
                     if (str.Contains("=") == false)
-                        throw new Exception("@阻塞设置的格式不正确。" + str);
+                        throw new Exception("@阻塞设置的格式不正确:" + str);
 
                     string[] nodeFlow = str.Split('=');
                     int nodeid = int.Parse(nodeFlow[0]); //启动子流程的节点.
@@ -5515,6 +5515,58 @@ namespace BP.WF
             }
 
             throw new Exception("@该阻塞模式没有实现...");
+        }
+
+        /// <summary>
+        /// 发送到越轨流程.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="toEmps"></param>
+        /// <returns></returns>
+        private SendReturnObjs NodeSendToYGFlow(Node node, string toEmpIDs)
+        {
+            string sql = "";
+            if (toEmpIDs == null)
+            {
+                sql = "SELECT FK_Emp No, EmpName Name FROM WF_SelectAccper WHERE FK_Node=" + node.NodeID + " AND WorkID=" + this.WorkID + " AND AccType=0";
+                DataTable dt= DBAccess.RunSQLReturnTable(sql);
+                if (dt.Rows.Count == 0)
+                    throw new Exception("@越轨流程目前仅仅支持选择接受人方式.");
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    toEmpIDs += dr["No"].ToString();
+                }
+            }
+
+            Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(node.FK_Flow, null, null,
+                toEmpIDs, null, this.WorkID, 0, this.HisNode.FK_Flow, this.HisNode.NodeID, BP.Web.WebUser.No, 0, null);
+
+            //复制当前信息.
+            Work wk = node.HisWork;
+            wk.OID = workid;
+            wk.RetrieveFromDBSources();
+            wk.Copy(this.HisWork);
+            wk.Update();
+
+            //为接受人显示待办.
+            BP.WF.Dev2Interface.Node_SetDraft2Todolist(node.FK_Flow, workid);
+
+            //设置变量.
+            this.addMsg(SendReturnMsgFlag.VarToNodeID, node.NodeID.ToString(), workid.ToString(), SendReturnMsgType.SystemMsg);
+            this.addMsg(SendReturnMsgFlag.VarAcceptersID, toEmpIDs, toEmpIDs, SendReturnMsgType.SystemMsg);
+
+            //设置消息.
+            this.addMsg(SendReturnMsgFlag.MsgOfText, "子流程(" + node.FlowName + ")已经启动,发送给{" + toEmpIDs + "}处理人.");
+            //this.addMsg(SendReturnMsgFlag.MsgOfText, "需要等待子流程完成后，该流程才能向下运动。");
+            this.addMsg(SendReturnMsgFlag.MsgOfText, "当前您的待办已经消失,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度.");
+
+
+            //设置当前工作操作员不可见.
+            sql = "UPDATE WF_GenerWorkerList SET IsPass=80 WHERE WorkID=" + this.WorkID + " AND IsPass=0";
+            BP.DA.DBAccess.RunSQL(sql);
+
+            return HisMsgObjs;
         }
 
         /// <summary>
@@ -5785,6 +5837,7 @@ namespace BP.WF
 
             // 处理自动运行 - 预先设置未来的运行节点.
             this.DealAutoRunEnable();
+ 
 
             //把数据更新到数据库里.
             this.HisWork.DirectUpdate();
@@ -5821,8 +5874,6 @@ namespace BP.WF
                     return this.HisMsgObjs;
                 }
             }
-
-            //ndFrom.HisReturnRole
 
             //如果是协作组长模式节点, 就判断当前的队列人员是否走完.
             if (this.TodolistModel == TodolistModel.TeamupGroupLeader)
@@ -5970,9 +6021,15 @@ namespace BP.WF
                      * */
                     return HisMsgObjs;
                 }
-                else
+
+                 //@于庆海，翻译.
+                if (jumpToNode != null && this.HisNode.FK_Flow != jumpToNode.FK_Flow)
                 {
-                    #region 第二步: 进入核心的流程运转计算区域. 5*5 的方式处理不同的发送情况.
+                    /*判断是否是越轨流程. */
+                    return NodeSendToYGFlow(jumpToNode, jumpToEmp);
+                }
+
+                #region 第二步: 进入核心的流程运转计算区域. 5*5 的方式处理不同的发送情况.
 
                     // 执行节点向下发送的25种情况的判断.
                     this.NodeSend_Send_5_5();
@@ -6003,7 +6060,6 @@ namespace BP.WF
                     Int64 fid = this.rptGe.FID;
                     this.rptGe.Update();
                     #endregion 第二步: 5*5 的方式处理不同的发送情况.
-                }
 
                 #region 第三步: 处理发送之后的业务逻辑.
                 //把当前节点表单数据copy的流程数据表里.
@@ -6347,7 +6403,7 @@ namespace BP.WF
 
                         //写入track, 调用了父流程.
                         Node pND = new Node(rptGe.PNodeID);
-                        Int64 fid = 0;
+                          fid = 0;
                         if (pND.HisNodeWorkType == NodeWorkType.SubThreadWork)
                         {
                             GenerWorkFlow gwf = new GenerWorkFlow(this.rptGe.PWorkID);
@@ -6376,7 +6432,7 @@ namespace BP.WF
 
                             //写入track, 调用了父流程.
                             Node pND = new Node(pNodeID);
-                            Int64 fid = 0;
+                              fid = 0;
                             if (pND.HisNodeWorkType == NodeWorkType.SubThreadWork)
                             {
                                 GenerWorkFlow gwf = new GenerWorkFlow(Int64.Parse(pWorkID));
@@ -6461,43 +6517,9 @@ namespace BP.WF
                 }
                 #endregion 判断当前处理人员，可否处理下一步工作.
 
-                #region 处理节点到达事件..
-                //执行发送到达事件.
-                if (this.town != null)
-                {
-                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.WorkArrive,
-                        this.town.HisNode, this.rptGe, null, null);
-                }
-                #endregion 处理节点到达事件.
 
-                #region 处理发送成功后事件.
-                try
-                {
-                    //调起发送成功后的事件，把参数传入进去。
-                    if (this.SendHTOfTemp != null)
-                    {
-                        foreach (string key in this.SendHTOfTemp.Keys)
-                        {
-                            if (rptGe.Row.ContainsKey(key) == true)
-                                this.rptGe.Row[key] = this.SendHTOfTemp[key].ToString();
-                            else
-                                this.rptGe.Row.Add(key, this.SendHTOfTemp[key].ToString());
-                        }
-                    }
-
-                    //执行发送.
-                    string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
-                        this.HisNode, this.rptGe, null, this.HisMsgObjs);
-
-                    //string SendSuccess = this.HisNode.MapData.FrmEvents.DoEventNode(EventListOfNode.SendSuccess, this.HisWork);
-                    if (sendSuccess != null)
-                        this.addMsg(SendReturnMsgFlag.SendSuccessMsg, sendSuccess);
-                }
-                catch (Exception ex)
-                {
-                    this.addMsg(SendReturnMsgFlag.SendSuccessMsgErr, ex.Message);
-                }
-                #endregion 处理发送成功后事件.
+                //处理事件.
+                this.Deal_Event();
 
                 //返回这个对象.
                 return this.HisMsgObjs;
@@ -6510,6 +6532,51 @@ namespace BP.WF
                 throw new Exception("Message:" + ex.Message + " StackTrace:" + ex.StackTrace);
             }
         }
+        
+        /// <summary>
+        /// 处理事件
+        /// </summary>
+        private void Deal_Event()
+        {
+            #region 处理节点到达事件..
+            //执行发送到达事件.
+            if (this.town != null)
+            {
+                string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.WorkArrive,
+                    this.town.HisNode, this.rptGe, null, null);
+            }
+            #endregion 处理节点到达事件.
+
+            #region 处理发送成功后事件.
+            try
+            {
+                //调起发送成功后的事件，把参数传入进去。
+                if (this.SendHTOfTemp != null)
+                {
+                    foreach (string key in this.SendHTOfTemp.Keys)
+                    {
+                        if (rptGe.Row.ContainsKey(key) == true)
+                            this.rptGe.Row[key] = this.SendHTOfTemp[key].ToString();
+                        else
+                            this.rptGe.Row.Add(key, this.SendHTOfTemp[key].ToString());
+                    }
+                }
+
+                //执行发送.
+                string sendSuccess = this.HisFlow.DoFlowEventEntity(EventListOfNode.SendSuccess,
+                    this.HisNode, this.rptGe, null, this.HisMsgObjs);
+
+                //string SendSuccess = this.HisNode.MapData.FrmEvents.DoEventNode(EventListOfNode.SendSuccess, this.HisWork);
+                if (sendSuccess != null)
+                    this.addMsg(SendReturnMsgFlag.SendSuccessMsg, sendSuccess);
+            }
+            catch (Exception ex)
+            {
+                this.addMsg(SendReturnMsgFlag.SendSuccessMsgErr, ex.Message);
+            }
+            #endregion 处理发送成功后事件.
+        }
+
         /// <summary>
         /// 执行业务表数据同步.
         /// </summary>

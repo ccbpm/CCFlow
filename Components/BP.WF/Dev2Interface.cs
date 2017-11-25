@@ -771,7 +771,6 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_GenerNDxxxRpt(string fk_flow, string userNo)
         {
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
             string dbstr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             ps.SQL = "SELECT * FROM ND" + int.Parse(fk_flow) + "Rpt WHERE FlowStarter=" + dbstr + "FlowStarter  ORDER BY RDT";
@@ -1579,8 +1578,6 @@ namespace BP.WF
             //执行 todolist 调度.
             DTS_GenerWorkFlowTodoSta();
 
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -1671,8 +1668,6 @@ namespace BP.WF
         /// <returns>表结构与视图WF_EmpWorks一致</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, WFState wfState, string fk_flow)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -2241,9 +2236,6 @@ namespace BP.WF
         /// <returns>返回从视图WF_EmpWorks查询出来的数据.</returns>
         public static DataTable DB_GenerHungUpList(string fk_flow)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             string sql;
             int state = (int)WFState.HungUp;
             if (WebUser.IsAuthorize)
@@ -2281,9 +2273,6 @@ namespace BP.WF
         /// <returns>WF_GenerWorkFlow数据结构的集合</returns>
         public static DataTable DB_GenerDeleteWorkList(string userNo, string fk_flow)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             string sql;
             int state = (int)WFState.Delete;
             if (WebUser.IsAuthorize)
@@ -2316,9 +2305,6 @@ namespace BP.WF
         /// <returns>数据表OID,Title,RDT,FID</returns>
         public static DataTable DB_NDxxRpt(string fk_flow, WFState sta)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             Flow fl = new Flow(fk_flow);
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             string sql = "SELECT OID,Title,RDT,FID FROM " + fl.PTable + " WHERE WFState=" + (int)sta + " AND Rec=" + dbstr + "Rec";
@@ -2607,8 +2593,6 @@ namespace BP.WF
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
         public static DataTable DB_GenerRuning(string userNo, string fk_flow, bool isMyStarter = false)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
             string dbStr = SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
             if (WebUser.IsAuthorize)
@@ -2780,9 +2764,6 @@ namespace BP.WF
         }
         public static DataTable DB_GenerRuning2(string userNo, string fk_flow, string title)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             string sql;
             int state = (int)WFState.Runing;
             if (string.IsNullOrEmpty(fk_flow))
@@ -2810,8 +2791,6 @@ namespace BP.WF
         {
             string userNo = WebUser.No;
             string fk_flow = null;
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
 
             string sql;
             int state = (int)WFState.Runing;
@@ -3404,25 +3383,6 @@ namespace BP.WF
 
             // 先保留本机一份.
             sms.Insert();
-        }
-        /// <summary>
-        /// 转化流程Code到流程编号
-        /// </summary>
-        /// <param name="FlowMark">流程编号</param>
-        /// <returns>返回编码</returns>
-        public static string TurnFlowMarkToFlowNo(string flowMark)
-        {
-            if (string.IsNullOrEmpty(flowMark))
-                return "";
-
-            // 如果是编号，就不用转化.
-            if (DataType.IsNumStr(flowMark)==true)
-                return flowMark;
-
-            string s = DBAccess.RunSQLReturnStringIsNull("SELECT No FROM WF_Flow WHERE FlowMark='" + flowMark + "'", null);
-            if (s == null)
-                throw new Exception("@FlowMark错误:" + flowMark + ",没有找到它的流程编号.");
-            return s;
         }
         /// <summary>
         /// 获取最新的消息
@@ -4039,9 +3999,6 @@ namespace BP.WF
 
         public static GERpt Flow_GenerGERpt(string flowNo, Int64 workID)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt", workID);
             return rpt;
         }
@@ -4052,9 +4009,6 @@ namespace BP.WF
         /// <returns>返回当前操作员创建的工作ID</returns>
         public static Int64 Flow_GenerWorkID(string flowNo)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             Flow fl = new Flow(flowNo);
             return fl.NewWork().OID;
         }
@@ -4065,9 +4019,6 @@ namespace BP.WF
         /// <returns>返回当前操作员创建的工作</returns>
         public static Work Flow_GenerWork(string flowNo)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             Flow fl = new Flow(flowNo);
             Work wk = fl.NewWork();
             wk.ResetDefaultVal();
@@ -4083,9 +4034,6 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static void Flow_DoComeBackWorkFlow(string flowNo, Int64 workID, string msg)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             WorkFlow wf = new WorkFlow(flowNo, workID);
             wf.DoComeBackWorkFlow(msg);
         }
@@ -4116,13 +4064,9 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static string Flow_DoDeleteFlowByReal(string flowNo, Int64 workID, bool isDelSubFlow = false)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
             try
             {
                 WorkFlow.DeleteFlowByReal(flowNo, workID, isDelSubFlow);
-                // WorkFlow wf = new WorkFlow(flowNo, workID);
-                //wf.DoDeleteWorkFlowByReal(isDelSubFlow);
             }
             catch (Exception ex)
             {
@@ -4132,9 +4076,6 @@ namespace BP.WF
         }
         public static string Flow_DoDeleteDraft(string flowNo, Int64 workID, bool isDelSubFlow)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
             gwf.RetrieveFromDBSources();
@@ -4195,8 +4136,6 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static string Flow_DoDeleteFlowByWriteLog(string flowNo, Int64 workID, string deleteNote, bool isDelSubFlow)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
             WorkFlow wf = new WorkFlow(flowNo, workID);
             return wf.DoDeleteWorkFlowByWriteLog(deleteNote, isDelSubFlow);
         }
@@ -4211,9 +4150,6 @@ namespace BP.WF
         /// <returns>执行信息,执行不成功抛出异常.</returns>
         public static string Flow_DoDeleteFlowByFlag(string flowNo, Int64 workID, string msg, bool isDelSubFlow)
         {
-            //转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             WorkFlow wf = new WorkFlow(flowNo, workID);
             wf.DoDeleteWorkFlowByFlag(msg);
             if (isDelSubFlow)
@@ -4237,9 +4173,6 @@ namespace BP.WF
         /// <returns>执行消息,如果撤销不成功则抛出异常.</returns>
         public static string Flow_DoUnDeleteFlowByFlag(string flowNo, Int64 workID, string msg)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             WorkFlow wf = new WorkFlow(flowNo, workID);
             wf.DoUnDeleteWorkFlowByFlag(msg);
             return "撤销删除成功.";
@@ -4253,8 +4186,6 @@ namespace BP.WF
         /// <returns>返回成功执行信息</returns>
         public static string Flow_DoUnSend(string flowNo, Int64 workID, int unSendToNode=0)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
 
             WorkUnSend unSend = new WorkUnSend(flowNo, workID, unSendToNode);
             unSend.UnSendToNode = unSendToNode;
@@ -4269,9 +4200,6 @@ namespace BP.WF
         /// <param name="msg">冻结原因</param>
         public static string Flow_DoFix(string flowNo, Int64 workid, string msg)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             // 执行冻结.
             WorkFlow wf = new WorkFlow(flowNo, workid);
             return wf.DoFix(msg);
@@ -4286,9 +4214,6 @@ namespace BP.WF
         /// <param name="msg">解除原因</param>
         public static string Flow_DoUnFix(string flowNo, Int64 workid, string msg)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             // 执行冻结.
             WorkFlow wf = new WorkFlow(flowNo, workid);
             return wf.DoUnFix(msg);
@@ -4303,9 +4228,6 @@ namespace BP.WF
         /// <returns>返回成功执行信息</returns>
         public static string Flow_DoFlowOver(string flowNo, Int64 workID, string msg)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             WorkFlow wf = new WorkFlow(flowNo, workID);
             Node nd = new Node(wf.HisGenerWorkFlow.FK_Node);
             GERpt rpt = new GERpt("ND" + int.Parse(flowNo) + "Rpt");
@@ -4324,8 +4246,7 @@ namespace BP.WF
         /// <returns>执行强制结束流程</returns>
         public static string Flow_DoFlowOverByCoercion(string flowNo, int nodeid, Int64 workID, Int64 fid, string msg)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
+
             WorkFlow wf = new WorkFlow(flowNo, workID);
 
             Node currND = new Node(nodeid);
@@ -4351,9 +4272,6 @@ namespace BP.WF
         /// <returns>下一步骤的所要到达的节点, 如果获取不到就会抛出异常.</returns>
         public static int Node_GetNextStepNode(string fk_flow, Int64 workid)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             ////检查当前人员是否可以执行当前工作.
             //if (BP.WF.Dev2Interface.Flow_CheckIsCanDoCurrentWork( workid, WebUser.No) == false)
             //    throw new Exception("@当前人员不能执行此节点上的工作.");
@@ -4875,9 +4793,6 @@ namespace BP.WF
         /// <returns>是否设置成功</returns>
         public static bool Flow_ReSetFlowTitle(string flowNo, int nodeID, Int64 workid)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             Node nd = new Node(nodeID);
             Work wk = nd.HisWork;
             wk.OID = workid;
@@ -4895,9 +4810,6 @@ namespace BP.WF
         /// <returns>是否设置成功</returns>
         public static bool Flow_SetFlowParas(string flowNo, Int64 workid, string paras)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workid;
             if (gwf.RetrieveFromDBSources() == 0)
@@ -4924,9 +4836,6 @@ namespace BP.WF
         /// <returns>是否设置成功</returns>
         public static bool Flow_SetFlowTitle(string flowNo, Int64 workid, string title)
         {
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
             //替换标题中出现的英文 ""引号，造成在获取数据时，造成异常
             title = title.Replace('"', '“');
             title = title.Replace('"', '”');
@@ -5507,11 +5416,6 @@ namespace BP.WF
             // 给全局变量赋值.
             BP.WF.Glo.SendHTOfTemp = htWork;
 
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
-            // 父流程编号.
-            parentFlowNo = TurnFlowMarkToFlowNo(parentFlowNo);
             Flow fl = new Flow(flowNo);
             Work wk = fl.NewWork();
             Int64 workID = wk.OID;
@@ -5651,12 +5555,6 @@ namespace BP.WF
             // 给全局变量赋值.
             BP.WF.Glo.SendHTOfTemp = ht;
 
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
-            //转化成编号
-            parentFlowNo = TurnFlowMarkToFlowNo(parentFlowNo);
-
             if (parentFlowNo == null)
                 parentFlowNo = "";
 
@@ -5790,6 +5688,7 @@ namespace BP.WF
                 gwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(fl, wk);
             else
                 gwf.Title = title;
+
             gwf.Starter = WebUser.No;
             gwf.StarterName = WebUser.Name;
             gwf.RDT = DataType.CurrentDataTime;
@@ -5857,12 +5756,6 @@ namespace BP.WF
         {
             // 给全局变量赋值.
             BP.WF.Glo.SendHTOfTemp = htWork;
-
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
-            //转化成编号
-            parentFlowNo = TurnFlowMarkToFlowNo(parentFlowNo);
 
             if (string.IsNullOrEmpty(flowStarter))
                 flowStarter = WebUser.No;
@@ -6092,8 +5985,6 @@ namespace BP.WF
         /// <returns>返回发送结果</returns>
         public static SendReturnObjs Node_SendWork(string fk_flow, Int64 workID, Hashtable ht = null, DataSet dsDtl = null)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
             return Node_SendWork(fk_flow, workID, ht, dsDtl, 0, null);
         }
         /// <summary>
@@ -6106,8 +5997,6 @@ namespace BP.WF
         /// <returns>返回执行信息</returns>
         public static SendReturnObjs Node_SendWork(string fk_flow, Int64 workID, int toNodeID, string toEmps)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
             return Node_SendWork(fk_flow, workID, null, null, toNodeID, toEmps);
         }
         /// <summary>
@@ -6120,8 +6009,6 @@ namespace BP.WF
         public static SendReturnObjs Node_SendWork(string fk_flow, Int64 workID,
             Hashtable htWork, int toNodeID, string nextWorkers)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
 
             return Node_SendWork(fk_flow, workID, htWork, null, toNodeID, nextWorkers, WebUser.No, WebUser.Name, WebUser.FK_Dept, WebUser.FK_DeptName, null);
         }
@@ -6161,8 +6048,6 @@ namespace BP.WF
             //给临时的发送变量赋值，解决带有参数的转向。
             Glo.SendHTOfTemp = htWork;
 
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
             int currNodeId = Dev2Interface.Node_GetCurrentNodeID(fk_flow, workID);
             if (htWork != null)
                 BP.WF.Dev2Interface.Node_SaveWork(fk_flow, currNodeId, workID, htWork, workDtls);
@@ -6172,6 +6057,11 @@ namespace BP.WF
             Work sw = nd.HisWork;
             sw.OID = workID;
             sw.RetrieveFromDBSources();
+
+            //@于庆海翻译.
+            Node ndOfToNode = null; //到达节点ID
+            if (toNodeID != 0)
+                ndOfToNode = new Node(toNodeID);
 
             //补偿性修复.
             if (nd.HisRunModel != RunModel.SubThread)
@@ -6188,10 +6078,12 @@ namespace BP.WF
             wn.title = title; // 设置标题，有可能是从外部传递过来的标题.
             wn.SendHTOfTemp = htWork;
 
-            if (toNodeID == 0 || toNodeID == null)
+            if (ndOfToNode == null)
                 objs = wn.NodeSend(null, nextWorkers);
             else
-                objs = wn.NodeSend(new Node(toNodeID), nextWorkers);
+            {
+                objs = wn.NodeSend(ndOfToNode, nextWorkers);
+            }
 
             #region 更新发送参数.
             if (htWork != null)
@@ -6877,9 +6769,6 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         public static void Node_DeleteDraft(string fk_flow, Int64 workID)
         {
-            //转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             //设置引擎表.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
@@ -6923,9 +6812,6 @@ namespace BP.WF
         /// <param name="workID"></param>
         public static void Node_SetDraft2Todolist(string fk_flow, Int64 workID)
         {
-            //转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             //设置引擎表.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
@@ -6970,9 +6856,6 @@ namespace BP.WF
         /// <param name="workID">工作ID</param>
         public static void Node_SetDraft(string fk_flow, Int64 workID)
         {
-            //转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             //设置引擎表.
             GenerWorkFlow gwf = new GenerWorkFlow();
             gwf.WorkID = workID;
@@ -7015,9 +6898,6 @@ namespace BP.WF
         /// <returns>返回保存的信息</returns>
         public static string Node_SaveWork(string fk_flow, int fk_node, Int64 workID)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             return Node_SaveWork(fk_flow, fk_node, workID, new Hashtable(), null);
         }
         /// <summary>
@@ -7029,9 +6909,6 @@ namespace BP.WF
         /// <returns></returns>
         public static string Node_SaveWork(string fk_flow, int fk_node, Int64 workID, Hashtable wk)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             return Node_SaveWork(fk_flow, fk_node, workID, wk, null);
         }
         /// <summary>
@@ -7045,9 +6922,6 @@ namespace BP.WF
         {
             if (htWork == null)
                 return "参数错误，保存失败。";
-
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
 
             try
             {
@@ -7602,9 +7476,6 @@ namespace BP.WF
         /// <returns>返回执行信息</returns>
         public static string Node_HungUpWork(string fk_flow, Int64 workid, int wayInt, string reldata, string hungNote)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             HungUpWay way = (HungUpWay)wayInt;
             BP.WF.WorkFlow wf = new WorkFlow(fk_flow, workid);
             return wf.DoHungUp(way, reldata, hungNote);
@@ -7618,8 +7489,6 @@ namespace BP.WF
         /// <returns>执行信息</returns>
         public static void Node_UnHungUpWork(string fk_flow, Int64 workid, string msg)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
             BP.WF.WorkFlow wf = new WorkFlow(fk_flow, workid);
             wf.DoUnHungUp();
         }
@@ -8072,8 +7941,6 @@ namespace BP.WF
         public static string Node_ReturnWork(string fk_flow, Int64 workID, Int64 fid, int currentNodeID, int returnToNodeID,
             string returnToEmp, string msg = "无", bool isBackToThisNode = false)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
             WorkReturn wr = new WorkReturn(fk_flow, workID, fid, currentNodeID, returnToNodeID, returnToEmp, isBackToThisNode, msg);
             return wr.DoIt();
         }
@@ -8100,9 +7967,6 @@ namespace BP.WF
         /// <returns>指定工作的NodeID.</returns>
         public static int Node_GetCurrentNodeID(string fk_flow, Int64 workid)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             int nodeID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID=" + workid + " AND FK_Flow='" + fk_flow + "'", 0);
             if (nodeID == 0)
                 return int.Parse(fk_flow + "01");
@@ -8117,9 +7981,6 @@ namespace BP.WF
         /// <param name="workid">工作ID</param>
         public static void Node_FHL_KillSubFlow(string fk_flow, Int64 fid, Int64 workid)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             WorkFlow wkf = new WorkFlow(fk_flow, workid);
             wkf.DoDeleteWorkFlowByReal(true);
         }
@@ -8132,9 +7993,6 @@ namespace BP.WF
         /// <param name="msg">驳回消息</param>
         public static string Node_FHL_DoReject(string fk_flow, int NodeSheetfReject, Int64 fid, Int64 workid, string msg)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             WorkFlow wkf = new WorkFlow(fk_flow, workid);
             return wkf.DoReject(fid, NodeSheetfReject, msg);
         }
@@ -8362,9 +8220,6 @@ namespace BP.WF
         /// <returns>执行结果</returns>
         public static string ChangeAttr_Flow(string fk_flow, string attr1, object v1, string attr2, object v2)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
             Flow fl = new Flow(fk_flow);
             if (attr1 != null)
                 fl.SetValByKey(attr1, v1);
@@ -8374,185 +8229,6 @@ namespace BP.WF
             return "修改成功";
         }
         #endregion 流程属性与节点属性变更接口.
-
-        #region UI 接口
-        /// <summary>
-        /// 获取按钮状态
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="workid">流程ID</param>
-        /// <returns>返回按钮状态</returns>
-        public static ButtonState UI_GetButtonState(string fk_flow, int fk_node, Int64 workid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
-            ButtonState bs = new ButtonState(fk_flow, fk_node, workid);
-            return bs;
-        }
-        /// <summary>
-        /// 打开退回窗口
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="fk_node">当前节点编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_Return(string fk_flow, int fk_node, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            string url = Glo.CCFlowAppPath + "WF/WorkOpt/ReturnWork.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid;
-            System.Web.HttpContext.Current.Response.Redirect(url, true);
-            return;
-        }
-        /// <summary>
-        /// 打开抄送窗口
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="fk_node">当前节点编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_CC(string fk_flow, int fk_node, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/CC.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
-                800, 600);
-        }
-        /// <summary>
-        /// 打开加签窗口
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="fk_node">当前节点编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_AskForHelp(string fk_flow, int fk_node, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
-            string tKey = DateTime.Now.ToString("MMddhhmmss");
-            string urlr3 = Glo.CCFlowAppPath + "WF/WorkOpt/Askfor.aspx?FK_Node=" + fk_node + "&FID=" + fid + "&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&s=" + tKey;
-            PubClass.WinOpen(urlr3, 800, 600);
-        }
-        /// <summary>
-        /// 打开挂起窗口
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="fk_node">当前节点编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_HungUp(string fk_flow, int fk_node, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/HungUp.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
-                500, 400);
-        }
-        /// <summary>
-        /// 打开催办窗口
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="fk_node">当前节点编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_Hurry(string fk_flow, int fk_node, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Hurry.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
-                500, 400);
-        }
-        /// <summary>
-        /// 打开跳转窗口
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="fk_node">当前节点编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_JumpWay(string fk_flow, int fk_node, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/JumpWaySmallSingle.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
-                500, 400);
-        }
-        /// <summary>
-        /// 打开流程轨迹窗口
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="nodeID">当前节点编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_FlowChartTruck(string fk_flow, int nodeID, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid,
-                500, 400);
-        }
-        /// <summary>
-        /// 下一步工作的接受人
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="fk_node">当前节点编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_Accepter(string fk_flow, int fk_node, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/Accepter.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
-                500, 400);
-        }
-        /// <summary>
-        /// 打开流程图窗口
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="fk_node">当前节点编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_FlowChart(string fk_flow)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fk_flow,
-                500, 400);
-        }
-        /// <summary>
-        /// 打开OneWork
-        /// </summary>
-        /// <param name="fk_flow">流程编号</param>
-        /// <param name="workid">工作ID</param>
-        /// <param name="fid">流程ID</param>
-        public static void UI_Window_OneWork(string fk_flow, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid,
-                500, 400);
-        }
-        /// <summary>
-        /// 查看子线程信息
-        /// </summary>
-        /// <param name="fk_flow"></param>
-        /// <param name="fk_node"></param>
-        /// <param name="workid"></param>
-        /// <param name="fid"></param>
-        public static void UI_Window_ThreadInfo(string fk_flow, int fk_node, Int64 workid, Int64 fid)
-        {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-            string key = DateTime.Now.ToString("yyyyMMddhhmmss");
-            string url = Glo.CCFlowAppPath + "WF/ThreadDtl.aspx?FK_Node=" + fk_node + "&FID=" + fid + "&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&s=" + key;
-            PubClass.WinOpen(url, 500, 400);
-        }
-        #endregion UI 接口
 
         #region ccform 接口
       
@@ -9317,6 +8993,181 @@ namespace BP.WF
             BP.DA.DBAccess.RunSQL(sql);
         }
         #endregion
+
+        #region UI 接口
+        /// <summary>
+        /// 获取按钮状态
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="workid">流程ID</param>
+        /// <returns>返回按钮状态</returns>
+        public static ButtonState UI_GetButtonState(string fk_flow, int fk_node, Int64 workid)
+        {
+            
+            
+
+            ButtonState bs = new ButtonState(fk_flow, fk_node, workid);
+            return bs;
+        }
+        /// <summary>
+        /// 打开退回窗口
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">当前节点编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_Return(string fk_flow, int fk_node, Int64 workid, Int64 fid)
+        {
+            
+            
+            string url = Glo.CCFlowAppPath + "WF/WorkOpt/ReturnWork.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid;
+            System.Web.HttpContext.Current.Response.Redirect(url, true);
+            return;
+        }
+        /// <summary>
+        /// 打开抄送窗口
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">当前节点编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_CC(string fk_flow, int fk_node, Int64 workid, Int64 fid)
+        {
+            
+            
+
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/CC.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
+                800, 600);
+        }
+        /// <summary>
+        /// 打开加签窗口
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">当前节点编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_AskForHelp(string fk_flow, int fk_node, Int64 workid, Int64 fid)
+        {
+            
+            
+
+            string tKey = DateTime.Now.ToString("MMddhhmmss");
+            string urlr3 = Glo.CCFlowAppPath + "WF/WorkOpt/Askfor.aspx?FK_Node=" + fk_node + "&FID=" + fid + "&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&s=" + tKey;
+            PubClass.WinOpen(urlr3, 800, 600);
+        }
+        /// <summary>
+        /// 打开挂起窗口
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">当前节点编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_HungUp(string fk_flow, int fk_node, Int64 workid, Int64 fid)
+        {
+            
+            
+
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/HungUp.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
+                500, 400);
+        }
+        /// <summary>
+        /// 打开催办窗口
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">当前节点编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_Hurry(string fk_flow, int fk_node, Int64 workid, Int64 fid)
+        {
+            
+            
+
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Hurry.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
+                500, 400);
+        }
+        /// <summary>
+        /// 打开跳转窗口
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">当前节点编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_JumpWay(string fk_flow, int fk_node, Int64 workid, Int64 fid)
+        {
+            
+            
+
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/JumpWaySmallSingle.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
+                500, 400);
+        }
+        /// <summary>
+        /// 打开流程轨迹窗口
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="nodeID">当前节点编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_FlowChartTruck(string fk_flow, int nodeID, Int64 workid, Int64 fid)
+        {
+            
+            
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid,
+                500, 400);
+        }
+        /// <summary>
+        /// 下一步工作的接受人
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">当前节点编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_Accepter(string fk_flow, int fk_node, Int64 workid, Int64 fid)
+        {
+            
+            
+
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/Accepter.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
+                500, 400);
+        }
+        /// <summary>
+        /// 打开流程图窗口
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="fk_node">当前节点编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_FlowChart(string fk_flow)
+        {
+            
+            
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fk_flow,
+                500, 400);
+        }
+        /// <summary>
+        /// 打开OneWork
+        /// </summary>
+        /// <param name="fk_flow">流程编号</param>
+        /// <param name="workid">工作ID</param>
+        /// <param name="fid">流程ID</param>
+        public static void UI_Window_OneWork(string fk_flow, Int64 workid, Int64 fid)
+        {
+            PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Track&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid,
+                500, 400);
+        }
+        /// <summary>
+        /// 查看子线程信息
+        /// </summary>
+        /// <param name="fk_flow"></param>
+        /// <param name="fk_node"></param>
+        /// <param name="workid"></param>
+        /// <param name="fid"></param>
+        public static void UI_Window_ThreadInfo(string fk_flow, int fk_node, Int64 workid, Int64 fid)
+        {
+            string key = DateTime.Now.ToString("yyyyMMddhhmmss");
+            string url = Glo.CCFlowAppPath + "WF/ThreadDtl.aspx?FK_Node=" + fk_node + "&FID=" + fid + "&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&s=" + key;
+            PubClass.WinOpen(url, 500, 400);
+        }
+        #endregion UI 接口
     }
 
 }

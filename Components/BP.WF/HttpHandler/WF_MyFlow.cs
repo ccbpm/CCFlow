@@ -219,6 +219,7 @@ namespace BP.WF.HttpHandler
             }
 
             GenerWorkFlow gwf = new GenerWorkFlow();
+
             //当前工作.
             Work currWK = this.currND.HisWork;
             if (this.WorkID != 0)

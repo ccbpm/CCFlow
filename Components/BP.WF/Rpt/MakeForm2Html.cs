@@ -759,6 +759,7 @@ namespace BP.WF
             float x = 0;
 
             //生成表头.
+
             string frmName = mapData.Name;
             if (SystemConfig.AppSettings["CustomerNo"] == "TianYe")
                 frmName = "";
@@ -774,7 +775,7 @@ namespace BP.WF
             {
                 //输出标题.
                 sb.Append("\t\n <tr>");
-                sb.Append("\t\n  <th colspan=4>" + gf.Lab + "</th>");
+                sb.Append("\t\n  <th colspan=4><h3>" + gf.Lab + "</h3></th>");
                 sb.Append("\t\n </tr>");
 
                 #region 输出字段.

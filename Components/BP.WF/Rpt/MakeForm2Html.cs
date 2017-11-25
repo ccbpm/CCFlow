@@ -28,7 +28,7 @@ namespace BP.WF
     public class MakeForm2Html
     {
 
-        public static StringBuilder GenerHtmlOfFree(MapData mapData, string frmID, Int64 workid, Entity en, string path, string flowNo=null)
+        public static StringBuilder GenerHtmlOfFree(MapData mapData, string frmID, Int64 workid, Entity en, string path, string flowNo = null)
         {
             StringBuilder sb = new System.Text.StringBuilder();
 
@@ -594,7 +594,7 @@ namespace BP.WF
 
                             sb.Append("<br><br>");
 
-                            string msg = "<font color=green>" + dr["Msg"].ToString() + "</font>";
+                            string msg = dr["Msg"].ToString();
 
                             msg += "<br>";
                             msg += "<br>";
@@ -720,12 +720,12 @@ namespace BP.WF
                         {
                             try
                             {
-                                  string toFile = path + "\\pdf\\" + item.FileName;
-                                  if (System.IO.File.Exists(toFile) == false)
-                                  {
-                                      //把文件copy到,
-                                      System.IO.File.Copy(item.FileFullName, path + "\\pdf\\" + item.FileName, true);
-                                  }
+                                string toFile = path + "\\pdf\\" + item.FileName;
+                                if (System.IO.File.Exists(toFile) == false)
+                                {
+                                    //把文件copy到,
+                                    System.IO.File.Copy(item.FileFullName, path + "\\pdf\\" + item.FileName, true);
+                                }
                                 sb.Append("<li><a href='" + item.FileName + "'>" + item.FileName + "</a></li>");
                             }
                             catch (Exception ex)
@@ -760,6 +760,8 @@ namespace BP.WF
 
             //生成表头.
             string frmName = mapData.Name;
+            if (SystemConfig.AppSettings["CustomerNo"] == "TianYe")
+                frmName = "";
             sb.Append("\t\n <table style='width:950px;height:auto;' >");
             sb.Append("\t\n <tr style='border-style:none;border-width:0px;' >");
             sb.Append("\t\n <td colspan=1 style='border-style:none;border-width:0px;float:left' ><img src='icon.png' style='height:60px;'  /></td>");
@@ -880,8 +882,8 @@ namespace BP.WF
                             sb.Append("\t\n<ul>");
 
                             //判断是否有这个目录.
-                            if (System.IO.Directory.Exists(path + "\\pdf\\")==false)
-                                System.IO.Directory.CreateDirectory( path + "\\pdf\\");
+                            if (System.IO.Directory.Exists(path + "\\pdf\\") == false)
+                                System.IO.Directory.CreateDirectory(path + "\\pdf\\");
 
                             foreach (FrmAttachmentDB item in athDBs)
                             {
@@ -897,7 +899,7 @@ namespace BP.WF
                                         {
                                             string file = item.MakeFullFileFromFtp();
 
-                                            
+
                                             System.IO.File.Copy(file, fileTo, true);
                                         }
 
@@ -949,7 +951,7 @@ namespace BP.WF
                     if (DBAccess.IsExitsTableCol("Port_Emp", "SignType") == true)
                     {
                         string tTable = "ND" + int.Parse(flowNo) + "Track";
-                          sql = "SELECT a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE a.No=b.EmpFrom AND B.WorkID=" + workid;
+                        sql = "SELECT a.No, a.SignType FROM Port_Emp a, " + tTable + " b WHERE a.No=b.EmpFrom AND B.WorkID=" + workid;
 
                         dtTrack = DBAccess.RunSQLReturnTable(sql);
                         dtTrack.TableName = "SignType";
@@ -968,7 +970,7 @@ namespace BP.WF
                         html += "<tr>";
                         html += " <td valign=middle >" + dr["NDFromT"] + "</td>";
 
-                        string msg = "<font color=green>" + dr["Msg"].ToString() + "</font>";
+                        string msg = dr["Msg"].ToString();
 
                         msg += "<br>";
                         msg += "<br>";
@@ -990,7 +992,7 @@ namespace BP.WF
                                 }
                             }
 
-                            if (singType == "0" || singType=="2")
+                            if (singType == "0" || singType == "2")
                             {
                                 empStrs = dr["EmpFromT"].ToString();
                             }
@@ -1037,7 +1039,7 @@ namespace BP.WF
                     {
                         System.IO.Directory.CreateDirectory(path);
                     }
-                   
+
 
                     //把模版文件copy过去.
                     string templateFilePath = SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\";
@@ -1055,7 +1057,7 @@ namespace BP.WF
                     }
 
                     //把ccs文件copy过去.
-                    System.IO.File.Copy(SystemConfig.PathOfDataUser+"Style\\ccbpm.css", path + "\\ccbpm.css", true);
+                    System.IO.File.Copy(SystemConfig.PathOfDataUser + "Style\\ccbpm.css", path + "\\ccbpm.css", true);
 
                 }
                 catch (Exception ex)
@@ -1087,15 +1089,15 @@ namespace BP.WF
 
                 #region 生成水文.
 
-                string rdt="";
+                string rdt = "";
                 if (en.EnMap.Attrs.Contains("RDT"))
                 {
-                  rdt = en.GetValStringByKey("RDT");
-                  if (rdt.Length > 10)
-                      rdt = rdt.Substring(0, 10);
+                    rdt = en.GetValStringByKey("RDT");
+                    if (rdt.Length > 10)
+                        rdt = rdt.Substring(0, 10);
                 }
                 string words = Glo.PrintBackgroundWord;
-                words=  words.Replace("@RDT", rdt);
+                words = words.Replace("@RDT", rdt);
 
                 if (words.Contains("@") == true)
                     words = Glo.DealExp(words, en, null);
@@ -1110,7 +1112,7 @@ namespace BP.WF
                 if (mapData.HisFrmType == FrmType.FoolForm)
                     sb = BP.WF.MakeForm2Html.GenerHtmlOfFool(mapData, frmID, workid, en, path, flowNo);
                 else
-                    sb = BP.WF.MakeForm2Html.GenerHtmlOfFree(mapData, frmID, workid, en,path,flowNo);
+                    sb = BP.WF.MakeForm2Html.GenerHtmlOfFree(mapData, frmID, workid, en, path, flowNo);
 
                 #region 替换模版文件..
 
@@ -1134,7 +1136,7 @@ namespace BP.WF
                     docs = docs.Replace("@Title", gwf.Title);
 
                     //替换模版尾部的打印说明信息.
-                    string pathInfo = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\EndInfo\\"+flowNo+".txt";
+                    string pathInfo = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\EndInfo\\" + flowNo + ".txt";
                     if (System.IO.File.Exists(pathInfo) == true)
                         docs = docs.Replace("@EndInfo", DataType.ReadTextFile(pathInfo));
                     else
@@ -1146,7 +1148,7 @@ namespace BP.WF
                 #endregion 替换模版文件..
 
                 #region 处理正确的文件名.
-                 
+
                 if (fileNameFormat == null)
                 {
                     if (flowNo != null)

@@ -100,8 +100,7 @@ namespace CCFlow.WF
                 string s = this.Request.QueryString["FK_Flow"];
                 if (string.IsNullOrEmpty(s))
                     throw new Exception("@流程编号参数错误...");
-
-                return BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(s);
+                return s;
             }
         }
         public string FromNode

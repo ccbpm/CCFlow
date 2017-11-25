@@ -36,7 +36,7 @@ namespace CCFlow.WF
                         cc.Update();
                     }
                 }
-                this.Response.Redirect(redirectURL +BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
+                this.Response.Redirect(redirectURL +fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace CCFlow.WF
             if (this.Request.QueryString["ViewWork"] != null)
                 return;
 
-            this.Response.Redirect(redirectURL + BP.WF.Dev2Interface.TurnFlowMarkToFlowNo(fk_flow) + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
+            this.Response.Redirect(redirectURL +  fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid, true);
             return;
         }
     }

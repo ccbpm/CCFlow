@@ -1091,7 +1091,11 @@ namespace BP.WF
                 return "";
 
             if (this.HisFlow.SubFlowOver == SubFlowOver.None)
+            {
+                /*让父流程显示待办.*/
+                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE IsPass=80 AND WorkID="+this.HisGenerWorkFlow.PWorkID);
                 return "";
+            }
 
             //@于庆海需要翻译.
             if (this.HisFlow.SubFlowOver == SubFlowOver.OverParentFlow)

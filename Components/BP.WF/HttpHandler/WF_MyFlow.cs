@@ -575,7 +575,7 @@ namespace BP.WF.HttpHandler
             string toolbar = "";
             try
             {
-                #region 是否是抄送.
+                #region 是否是会签？.
                 if (isAskForOrHuiQian == true)
                 {
                     toolbar += "<input name='Send' type=button value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(); \" />";
@@ -587,7 +587,7 @@ namespace BP.WF.HttpHandler
                     }
                     return toolbar;
                 }
-                #endregion 是否是抄送.
+                #endregion 是否是会签.
 
                 #region 是否是抄送.
                 if (this.IsCC)
@@ -702,7 +702,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button  value='" + btnLab.JumpWayLab + "' enable=true onclick=\"To('" + urlr + "'); \" />";
                 }
 
-                if (btnLab.ReturnEnable  && this.currND.IsStartNode == false)
+                if (btnLab.ReturnEnable)
                 {
                     /*如果没有焦点字段*/
                     string urlr = "./WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;

@@ -8,39 +8,15 @@ using BP.Port;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 越轨流程工作方式
-    /// </summary>
-    public enum YGWorkWay
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        None,
-        sss,
-        ddd
-    }
-    /// <summary>
     /// 越轨流程属性
     /// </summary>
     public class NodeYGFlowAttr : BP.En.EntityOIDNameAttr
     {
         #region 基本属性
         /// <summary>
-        /// 节点
-        /// </summary>
-        public const string FK_Node = "FK_Node";
-        /// <summary>
-        /// 到达目标
-        /// </summary>
-        public const string Target = "Target";
-        /// <summary>
         /// 标题
         /// </summary>
         public const string FK_Flow = "FK_Flow";
-        /// <summary>
-        /// url
-        /// </summary>
-        public const string Url = "Url";
         /// <summary>
         /// 顺序号
         /// </summary>
@@ -49,6 +25,10 @@ namespace BP.WF.Template
         /// 显示在那里？
         /// </summary>
         public const string YGWorkWay = "YGWorkWay";
+        /// <summary>
+        /// 节点ID
+        /// </summary>
+        public const string FK_Node = "FK_Node";
         #endregion
     }
     /// <summary>
@@ -67,20 +47,6 @@ namespace BP.WF.Template
                 UAC uac = new UAC();
                 uac.OpenForSysAdmin();
                 return uac;
-            }
-        }
-        /// <summary>
-        /// 越轨流程的事务编号
-        /// </summary>
-        public int FK_Node
-        {
-            get
-            {
-                return this.GetValIntByKey(NodeYGFlowAttr.FK_Node);
-            }
-            set
-            {
-                SetValByKey(NodeYGFlowAttr.FK_Node, value);
             }
         }
         /// <summary>
@@ -107,20 +73,6 @@ namespace BP.WF.Template
                 return this.GetValRefTextByKey(NodeYGFlowAttr.FK_Flow);
             }
         }
-        /// <summary>
-        /// 显示在那里？
-        /// </summary>
-        public YGWorkWay YGWorkWay
-        {
-            get
-            {
-                return (YGWorkWay)this.GetValIntByKey(NodeYGFlowAttr.YGWorkWay);
-            }
-            set
-            {
-                SetValByKey(NodeYGFlowAttr.YGWorkWay, (int)value);
-            }
-        }
         #endregion
 
         #region 构造函数
@@ -128,15 +80,6 @@ namespace BP.WF.Template
         /// 越轨流程
         /// </summary>
         public NodeYGFlow() { }
-        /// <summary>
-        /// 越轨流程
-        /// </summary>
-        /// <param name="_oid">越轨流程ID</param>	
-        public NodeYGFlow(int oid)
-        {
-            this.OID = oid;
-            this.Retrieve();
-        }
         /// <summary>
         /// 重写基类方法
         /// </summary>
@@ -150,13 +93,12 @@ namespace BP.WF.Template
                 Map map = new Map("WF_NodeYGFlow", "越轨流程");
 
                 map.AddTBIntPKOID();
-
+                 
+                map.AddTBInt(NodeYGFlowAttr.FK_Node, 0, "节点", false, true);
                 map.AddDDLEntities(NodeYGFlowAttr.FK_Flow, null, "越轨流程", new Flows(), true);
-                // 显示位置.
                 map.AddDDLSysEnum(NodeYGFlowAttr.YGWorkWay, 1, "工作方式", true, true, NodeYGFlowAttr.YGWorkWay,
                     "@0=停止当前节点等待越轨流程运行完毕后该节点自动向下运行@1=启动越轨流程运行到下一步骤上去");
                 map.AddTBInt(NodeYGFlowAttr.Idx, 0, "显示顺序", true, false);
-                map.AddTBInt(NodeYGFlowAttr.FK_Node, 0, "节点", false,true);
 
                 this._enMap = map;
                 return this._enMap;
@@ -199,7 +141,8 @@ namespace BP.WF.Template
         }
         #endregion
 
-        #region 为了适应自动翻译成java的需要,把实体转换成List   /// <summary>
+        #region 为了适应自动翻译成java的需要,把实体转换成List   
+        /// <summary>
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>

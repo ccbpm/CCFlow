@@ -2333,6 +2333,32 @@ namespace BP.WF
             dt.Columns.Add("IsBackTracking"); // 该节点是否可以退回并原路返回？ 0否, 1是.
 
             Node nd = new Node(fk_node);
+
+            //增加退回到父流程节点的设计.
+            if (nd.IsStartNode == true)
+            {
+                /*如果是开始的节点有可能退回到子流程上去.*/
+                GenerWorkFlow gwf = new GenerWorkFlow(workid);
+                if (gwf.PWorkID == 0)
+                    throw new Exception("@当前节点是开始节点，您不能执行退回。");
+
+                GenerWorkerList gwl = new GenerWorkerList();
+                int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, gwf.PWorkID, GenerWorkerListAttr.IsPass, 80);
+                if (i > 0)
+                {
+                    DataRow dr = dt.NewRow();
+                    dr["No"] = gwl.FK_Node.ToString();
+                    dr["Name"] = gwl.FK_NodeText;
+                    dr["Rec"] = gwl.FK_Emp;
+                    dr["RecName"] = gwl.FK_EmpText;
+                    dr["IsBackTracking"] = "0";
+                    dt.Rows.Add(dr);
+                    return dt;
+                }
+
+                throw new Exception("@没有找到退回到父流程节点。");
+            }
+
             if (nd.HisRunModel == RunModel.SubThread)
             {
                 /*如果是子线程，它只能退回它的上一个节点，现在写死了，其它的设置不起作用了。*/
@@ -7627,7 +7653,7 @@ namespace BP.WF
             DBAccess.RunSQL("UPDATE " + fl.PTable + " SET WFState=" + (int)WFState.Askfor + " WHERE OID=" + workid);
 
             //设置成工作未读。
-            BP.WF.Dev2Interface.Node_SetWorkUnRead(gwf.FK_Node, workid);
+            BP.WF.Dev2Interface.Node_SetWorkUnRead(workid);
 
             string msg = "您的工作已经提交给(" + askForEmp + " " + emp.Name + ")加签了。";
 
@@ -8187,13 +8213,12 @@ namespace BP.WF
         /// <param name="nodeID">节点ID</param>
         /// <param name="workid">工作ID</param>
         /// <param name="userNo">要设置的人</param>
-        public static void Node_SetWorkUnRead(int nodeID, Int64 workid, string userNo)
+        public static void Node_SetWorkUnRead(Int64 workid, string userNo)
         {
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkerList SET IsRead=0 WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node AND FK_Emp=" + dbstr + "FK_Emp";
+            ps.SQL = "UPDATE WF_GenerWorkerList SET IsRead=0 WHERE WorkID=" + dbstr + "WorkID AND FK_Emp=" + dbstr + "FK_Emp";
             ps.Add("WorkID", workid);
-            ps.Add("FK_Node", nodeID);
             ps.Add("FK_Emp", userNo);
             DBAccess.RunSQL(ps);
         }
@@ -8202,9 +8227,9 @@ namespace BP.WF
         /// </summary>
         /// <param name="nodeID">节点ID</param>
         /// <param name="workid">工作ID</param>
-        public static void Node_SetWorkUnRead(int nodeID, Int64 workid)
+        public static void Node_SetWorkUnRead(Int64 workid)
         {
-            Node_SetWorkUnRead(nodeID, workid, BP.Web.WebUser.No);
+            Node_SetWorkUnRead(workid, BP.Web.WebUser.No);
         }
         #endregion 工作有关接口
 

@@ -1097,10 +1097,9 @@ namespace BP.WF
                 return "";
             }
 
-            //@于庆海需要翻译.
+            //如果是结束子流程.
             if (this.HisFlow.SubFlowOver == SubFlowOver.OverParentFlow)
             {
-                //如果是结束子流程？
                 BP.WF.Dev2Interface.Flow_DoFlowOver(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID, "子流程完成自动结束父流程.");
                 return "";
             }

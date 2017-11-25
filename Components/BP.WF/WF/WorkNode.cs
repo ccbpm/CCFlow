@@ -4996,7 +4996,7 @@ namespace BP.WF
                     "HuiQian" + this.WorkID + "_" + WebUser.No, "HuiQian", HisGenerWorkFlow.FK_Flow, this.HisGenerWorkFlow.FK_Node, this.WorkID, 0);
 
                 //设置为未读.
-                BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisGenerWorkFlow.FK_Node, this.HisGenerWorkFlow.WorkID);
+                BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisGenerWorkFlow.WorkID);
                 return "您是最后一个会签该工作的处理人，已经提醒主持人处理当前工作。";
             }
 
@@ -5516,7 +5516,6 @@ namespace BP.WF
 
             throw new Exception("@该阻塞模式没有实现...");
         }
-
         /// <summary>
         /// 发送到越轨流程.
         /// </summary>
@@ -5557,9 +5556,9 @@ namespace BP.WF
             this.addMsg(SendReturnMsgFlag.VarAcceptersID, toEmpIDs, toEmpIDs, SendReturnMsgType.SystemMsg);
 
             //设置消息.
-            this.addMsg(SendReturnMsgFlag.MsgOfText, "子流程(" + node.FlowName + ")已经启动,发送给{" + toEmpIDs + "}处理人.");
+            this.addMsg("Msg1", "子流程(" + node.FlowName + ")已经启动,发送给{" + toEmpIDs + "}处理人.");
             //this.addMsg(SendReturnMsgFlag.MsgOfText, "需要等待子流程完成后，该流程才能向下运动。");
-            this.addMsg(SendReturnMsgFlag.MsgOfText, "当前您的待办已经消失,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度.");
+            this.addMsg("Msg2", "当前您的待办已经消失,需要等待子流程完成后您的待办才能显示,您可以从在途里查看工作进度.");
 
 
             //设置当前工作操作员不可见.
@@ -5737,7 +5736,7 @@ namespace BP.WF
                         this.HisGenerWorkFlow.Update();
 
                         //让加签人，设置成工作未读。
-                        BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisNode.NodeID, this.WorkID, item.FK_Emp);
+                        BP.WF.Dev2Interface.Node_SetWorkUnRead(this.WorkID, item.FK_Emp);
 
                         // 从临时变量里获取回复加签意见.
                         string replyInfo = this.HisGenerWorkFlow.Paras_AskForReply;
@@ -6022,7 +6021,7 @@ namespace BP.WF
                     return HisMsgObjs;
                 }
 
-                 //@于庆海，翻译.
+                 //@增加发送到子流程的判断.
                 if (jumpToNode != null && this.HisNode.FK_Flow != jumpToNode.FK_Flow)
                 {
                     /*判断是否是越轨流程. */
@@ -8076,7 +8075,7 @@ namespace BP.WF
         {
             // 如果没有找到转向他的节点,就返回,当前的工作.
             if (this.HisNode.IsStartNode)
-                throw new Exception("@" + string.Format("此节点是开始节点,没有上一步工作")); //此节点是开始节点,没有上一步工作.
+                throw new Exception("@此节点是开始节点,没有上一步工作."); //此节点是开始节点,没有上一步工作.
 
             string sql = "";
 

@@ -727,10 +727,10 @@ namespace BP.WF.Template
                 map.SetHelperUrl(NodeAttr.MPhone_WorkModel, "http://bbs.ccflow.org/showtopic-2866.aspx");
                 #endregion 移动设置.
 
-                //节点工具栏, 主从表映射.
+                //节点工具栏,主从表映射.
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 
-                //越轨流程
+                //越轨流程.
                 map.AddDtl(new NodeYGFlows(), NodeToolbarAttr.FK_Node);
 
 
@@ -1342,7 +1342,8 @@ namespace BP.WF.Template
             {
                 /*处理按钮的问题*/
                 //不能退回, 加签，移交，退回, 子线程.
-                this.SetValByKey(BtnAttr.ReturnRole,(int)ReturnRole.CanNotReturn);
+                //this.SetValByKey(BtnAttr.ReturnRole,(int)ReturnRole.CanNotReturn); //开始节点可以退回。
+
                 this.SetValByKey(BtnAttr.HungEnable, false);
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
             }

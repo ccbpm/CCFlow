@@ -320,11 +320,76 @@ namespace BP.WF
             }
         }
         /// <summary>
+        /// 要退回到父流程上去
+        /// </summary>
+        /// <returns></returns>
+        private string ReturnToParentFlow()
+        {
+            //当前 gwf.
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
+            //设置子流程信息.
+            GenerWorkFlow gwfP = new GenerWorkFlow(gwf.PWorkID);
+            gwfP.WFState = WFState.ReturnSta;
+            gwfP.Update();
+
+            //启用待办.
+            GenerWorkerList gwl = new GenerWorkerList();
+            GenerWorkerLists gwls = new GenerWorkerLists();
+            gwls.Retrieve(GenerWorkerListAttr.FK_Node, gwfP.FK_Node, GenerWorkerListAttr.WorkID, gwfP.WorkID);
+            foreach (GenerWorkerList item in gwls)
+            {
+                item.IsPassInt = 0;
+                item.Update();
+                gwl = item;
+            }
+
+            #region 写入退回提示.
+            // 记录退回轨迹。
+            ReturnWork rw = new ReturnWork();
+            rw.WorkID = gwfP.WorkID;
+            rw.ReturnToNode = gwfP.FK_Node;
+            rw.ReturnNodeName = gwfP.NodeName;
+
+            rw.ReturnNode = this.HisNode.NodeID; // 当前退回节点.
+            rw.ReturnToEmp = gwl.FK_Emp; //退回给。
+            rw.BeiZhu = Msg;
+             
+            // 去掉了 else .
+            rw.IsBackTracking = this.IsBackTrack;
+            rw.MyPK = DBAccess.GenerOIDByGUID().ToString();
+            rw.Insert();
+
+
+            // 加入track.
+            this.AddToTrack(ActionType.Return, gwl.FK_Emp, gwl.FK_EmpText,
+                this.ReturnToNode.NodeID, this.ReturnToNode.Name, Msg);
+            #endregion
+
+            //删除当前的流程.
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(gwf.FK_Flow, this.WorkID, true);
+
+            //设置当前为未读的状态.
+            BP.WF.Dev2Interface.Node_SetWorkUnRead(gwfP.WorkID);
+
+            //返回退回信息.
+            return "成功的退回到["+gwfP.FlowName+" - "+gwfP.NodeName+"],退回给["+gwfP.TodoEmps+"].";
+        }
+        /// <summary>
         /// 执行退回.
         /// </summary>
         /// <returns>返回退回信息</returns>
         public string DoIt()
         {
+            
+            // 增加要退回到父流程上去. by zhoupeng.
+            if (this.ReturnToNode.FK_Flow != this.HisNode.FK_Flow)
+            {
+                /*子流程要退回到父流程的情况.*/
+                return ReturnToParentFlow();
+            }
+
+
             if (this.HisNode.NodeID == this.ReturnToNode.NodeID)
             {
                 if (this.HisNode.TodolistModel == TodolistModel.Order)

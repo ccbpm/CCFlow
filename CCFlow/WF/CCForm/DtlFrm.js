@@ -12,9 +12,11 @@ var jsonStr = '';
 var IsChange = false;
 //初始化函数
 $(function () {
+
     $("#CCForm").unbind().on('click', function () {
         Change(frmData);
     });
+
     initPageParam(); //初始化参数.
 
     //构造表单.
@@ -58,6 +60,7 @@ $(function () {
     }
 });
 
+
 function SetHegiht() {
     var screenHeight = document.documentElement.clientHeight;
 
@@ -87,7 +90,6 @@ function SetHegiht() {
             //$("#divCCForm").height(parseFloat(frmHeight) + allHeight);
             $("#TDWorkPlace").height(parseFloat(frmHeight) + allHeight - 10);
         }
-       
     }
     catch (e) {
     }
@@ -114,11 +116,14 @@ function GenerFrm() {
         $("#Btn").hide();
     }
 
+    var url = Handler + "?DoType=DtlFrm_Init&m=" + Math.random() + "&" + urlParam;
+   // alert(url);
+
     $.ajax({
         type: 'post',
         async: true,
         data: pageData,
-        url: Handler + "?DoType=FrmGener_Init&m=" + Math.random() + "&" + urlParam,
+        url: url,
         dataType: 'html',
         success: function (data) {
 
@@ -129,11 +134,18 @@ function GenerFrm() {
                 return;
             }
 
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@','');
+                window.location.href = data;
+                return;
+            }
+
+
             try {
                 frmData = JSON.parse(data);
             }
             catch (err) {
-                alert(" frmData数据转换JSON失败:" + data);
+                alert("frmData数据转换JSON失败(请查看控制台console):" + data);
                 console.log(data);
                 return;
             }
@@ -174,7 +186,8 @@ function GenerFrm() {
                     GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
 
             } else {
-                if (mapData.FrmType == 0)
+
+                if (mapData.FrmType == 0 || 1 == 1)
                     GenerFoolFrm(mapData, frmData); //生成傻瓜表单.
                 else
                     GenerFreeFrm(mapData, frmData); //自由表单.
@@ -293,7 +306,7 @@ function DtlFoolFrm(dtl, refPK, refOID) {
 }
 
 //保存
-function Save() {
+function Save(isSaveAndNew) {
 
     //必填项和正则表达式检查
     var formCheckResult = true;
@@ -303,18 +316,17 @@ function Save() {
     if (!CheckReg()) {
         formCheckResult = false;
     }
+
     if (!formCheckResult) {
         //alert("请检查表单必填项和正则表达式");
         return;
     }
 
-    // setToobarDisiable();
-
     $.ajax({
         type: 'post',
         async: true,
         data: getFormData(true, true),
-        url: Handler + "?DoType=FrmGener_Save&OID=" + pageData.OID,
+        url: Handler + "?DoType=FrmGener_Save&EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=" + GetQueryString("OID"),
         dataType: 'html',
         success: function (data) {
 
@@ -323,12 +335,19 @@ function Save() {
                 $('.Message').show();
                 return;
             }
-            window.location.href = window.location.href;
-            //alert(data);
+
+            if (isSaveAndNew == false) {
+                window.location.href = window.location.href;
+                return;
+            }
+
+            var url = "DtlFrm.htm?EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=0";
+            window.location.href = url;
         }
     });
 }
   
+
 
 //以下是软通写的
 //初始化网页URL参数
@@ -1337,4 +1356,27 @@ function ResizeWindow() {
         window.resizeTo(myw, myh);     //把当前窗体的长宽跳转为myw和myh     
     }
 }
- 
+
+
+//保存
+function Delete() {
+
+    if (window.confirm('您确定要删除吗?') == false)
+        return;
+
+    $.ajax({
+        type: 'post',
+        async: true,
+        url: Handler + "?DoType=DtlFrm_Delete&EnsName=" + GetQueryString("EnsName") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&OID=" + GetQueryString("OID"),
+        dataType: 'html',
+        success: function (data) {
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            window.close();
+        }
+    });
+}

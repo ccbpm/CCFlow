@@ -417,11 +417,17 @@ function Ele_Dtl(frmDtl) {
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
+    urlParam = urlParam.replace('EnsName=' + frmDtl.FK_MapData, '');
+    urlParam = urlParam.replace('&RefPKVal=' + GetQueryString('RefPKVal'), '');
+
+    urlParam = "";
+    //alert(urlParam);
+
     if (frmDtl.RowShowModel == "0") {
         if (pageData.IsReadOnly) {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
+            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + GetQueryString('OID') + "&IsReadonly=1&" + urlParam + "&Version=1";
         } else {
-            src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
+            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + GetQueryString('OID') + "&IsReadonly=0&" + urlParam + "&Version=1";
         }
     }
     else if (frmDtl.RowShowModel == "1") {
@@ -430,5 +436,6 @@ function Ele_Dtl(frmDtl) {
         else
             src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
     }
+
     return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }

@@ -428,9 +428,6 @@
     <Content Include="WF\AppClassic\Top.htm" />
     <Content Include="WF\AppClassic\Welcome.htm" />
     <Content Include="WF\AppClassic\Login.htm" />
-    <Content Include="WF\CCForm\FrmFree2017.js" />
-    <Content Include="WF\CCForm\FrmFreeReadonly.htm" />
-    <Content Include="WF\CCForm\FrmFreeReadonly.js" />
     <Content Include="WF\CCForm\DtlReadonly.htm" />
     <Content Include="WF\Comm\Sys\SFDBSrcNewGuide.htm" />
     <Content Include="WF\Data\Install\DemoData.xml" />
@@ -1261,10 +1258,7 @@
     <Content Include="WF\CCForm\FrmDtl.aspx" />
     <Content Include="WF\CCForm\FrmExcel.aspx" />
     <Content Include="WF\CCForm\FrmFix.aspx" />
-    <Content Include="WF\CCForm\FrmFool.htm" />
-    <Content Include="WF\CCForm\FrmFree.htm" />
     <Content Include="WF\CCForm\FrmPopVal.aspx" />
-    <Content Include="WF\CCForm\FrmPopVal.htm" />
     <Content Include="WF\CCForm\FrmPopValDir.aspx" />
     <Content Include="WF\CCForm\FrmReturnValTBFullCtrl.aspx" />
     <Content Include="WF\CCForm\FrmVSTO.aspx" />
@@ -1291,11 +1285,8 @@
     <Content Include="WF\CCForm\MapExt2016.js" />
     <Content Include="WF\CCForm\PointOffice.aspx" />
     <Content Include="WF\CCForm\Port.aspx" />
-    <Content Include="WF\CCForm\Print.aspx" />
     <Content Include="WF\CCForm\Pub.ascx" />
-    <Content Include="WF\CCForm\SLFrm.aspx" />
     <Content Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx" />
-    <Content Include="WF\CCForm\UploadFile.aspx" />
     <Content Include="WF\Comm\MethodLink.htm" />
     <Content Include="WF\Comm\Batch.aspx" />
     <Content Include="WF\Comm\Charts\css\prettify.css" />
@@ -2230,7 +2221,6 @@
     <Content Include="WF\Login.htm" />
     <Content Include="WF\MyFlow.aspx" />
     <Content Include="WF\MyFlow.htm" />
-    <Content Include="WF\MyFlowFree.htm" />
     <Content Include="WF\MyFlowInfo.aspx" />
     <Content Include="WF\MyFlowView.aspx" />
     <Content Include="WF\Port.aspx" />
@@ -7732,13 +7722,6 @@
     <Compile Include="WF\CCForm\Port.aspx.designer.cs">
       <DependentUpon>Port.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\CCForm\Print.aspx.cs">
-      <DependentUpon>Print.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\Print.aspx.designer.cs">
-      <DependentUpon>Print.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\CCForm\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7746,26 +7729,12 @@
     <Compile Include="WF\CCForm\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
     </Compile>
-    <Compile Include="WF\CCForm\SLFrm.aspx.cs">
-      <DependentUpon>SLFrm.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\SLFrm.aspx.designer.cs">
-      <DependentUpon>SLFrm.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx.cs">
       <DependentUpon>ReturnValTBFullCtrl.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\CCForm\UC\ReturnValTBFullCtrl.ascx.designer.cs">
       <DependentUpon>ReturnValTBFullCtrl.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CCForm\UploadFile.aspx.cs">
-      <DependentUpon>UploadFile.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\UploadFile.aspx.designer.cs">
-      <DependentUpon>UploadFile.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\WinOpen.master.cs">
       <DependentUpon>WinOpen.master</DependentUpon>

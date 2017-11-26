@@ -629,10 +629,18 @@ namespace BP.WF
 				AtPara ap = new AtPara(atParas);
 				foreach (string key in ap.HisHT.Keys)
 				{
-					if (wk.Row.ContainsKey(key) == true) //有就该变.
-						wk.Row[key] = ap.GetValStrByKey(key);
-					else
-						wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                    try
+                    {
+
+                        if (wk.Row.ContainsKey(key) == true) //有就该变.
+                            wk.Row[key] = ap.GetValStrByKey(key);
+                        else
+                            wk.Row.Add(key, ap.GetValStrByKey(key)); //增加他.
+                    }
+                    catch(Exception ex)
+                    {
+                        throw new Exception(key);
+                    }
 				}
 			}
 

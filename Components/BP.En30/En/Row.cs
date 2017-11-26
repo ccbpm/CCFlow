@@ -72,7 +72,10 @@ namespace BP.En
 		/// <param name="val"></param>
         public void SetValByKey(string key, object val)
         {
-            if (val == null)
+            if (key == null)
+                return;
+
+            if (val == null )
             {
                 this[key] = val;
                 return;

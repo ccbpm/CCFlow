@@ -28,7 +28,7 @@ namespace BP.WF.Template
                 if (this.No.Contains("Rpt") == true)
                     return false;
 
-                if (this.No.Substring(0, 2) == "ND")
+                if (this.No.Substring(0, 2) == "ND" && this.No.Contains("Dtl") ==false)
                     return true;
 
                 return false;

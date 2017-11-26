@@ -676,6 +676,54 @@ namespace BP.WF.HttpHandler
         }
         #endregion frm.htm 主表.
 
+        #region DtlFrm
+        public string DtlFrm_Init()
+        {
+            Int64 pk = this.RefOID;
+            if (pk == 0)
+                pk = this.OID;
+            if (pk == 0)
+                pk = this.WorkID;
+
+            if (pk != 0)
+                return FrmGener_Init();
+
+            GEEntity en = new GEEntity(this.EnsName);
+            if (BP.Sys.SystemConfig.IsBSsystem == true)
+            {
+                // 处理传递过来的参数。
+                foreach (string k in System.Web.HttpContext.Current.Request.QueryString.AllKeys)
+                {
+                    en.SetValByKey(k, System.Web.HttpContext.Current.Request.QueryString[k]);
+                }
+            }
+
+            //设置主键.
+            en.OID = DBAccess.GenerOID(this.EnsName);
+            en.SetValByKey("RefPK", this.RefPKVal);
+            en.Insert();
+
+            return "url@DtlFrm.htm?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&OID=" + en.OID;
+        }
+
+        public string DtlFrm_Delete()
+        {
+            try
+            {
+                GEEntity en = new GEEntity(this.EnsName);
+                en.OID = this.OID;
+                en.Delete();
+
+                return "删除成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@删除错误:" + ex.Message;
+            }
+        }
+
+        #endregion DtlFrm
+
         #region frmFree
         /// <summary>
         /// 执行数据初始化

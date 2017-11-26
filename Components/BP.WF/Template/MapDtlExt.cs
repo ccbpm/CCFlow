@@ -1068,9 +1068,29 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "设计傻瓜表单"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DFoolFrm";
+                rm.Icon = "/WF/Img/Setting.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+
+        /// <summary>
+        /// 设计傻瓜表单
+        /// </summary>
+        /// <returns></returns>
+        public string DFoolFrm()
+        {
+            string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            return url;
         }
 
         public string GenerAttrs()

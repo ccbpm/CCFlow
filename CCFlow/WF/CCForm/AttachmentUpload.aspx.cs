@@ -522,10 +522,9 @@ namespace CCFlow.WF.CCForm
                             {
                                 this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenOfiice('" + this.FK_FrmAttachment + "','" + this.WorkID + "','" + db.MyPK + "','" + this.FK_MapData + "','" + this.Ath + "','" + this.FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                             }
-                            else if (db.FileExts.ToUpper() == "TXT" || db.FileExts.ToUpper() == "JPG" || db.FileExts.ToUpper() == "JPEG" || db.FileExts.ToUpper() == "GIF" || db.FileExts.ToUpper() == "PNG" || db.FileExts.ToUpper() == "BMP" || db.FileExts.ToUpper() == "PDF" || db.FileExts.ToUpper() == "CEB")
+                            else if (SystemConfig.CustomerNo != "TianYe" && DataType.IsImgExt(db.FileExts)==true)
                             {
                                 this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
-
                             }
                             else
                             {

@@ -301,7 +301,6 @@ namespace CCFlow.WF.CCForm
             int count = 0;
             foreach (FrmAttachmentDB db in dbs)
             {
-
                 if (DataType.IsImgExt(db.FileExts) == false)
                     continue;
 
@@ -348,7 +347,6 @@ namespace CCFlow.WF.CCForm
 
             foreach (FrmAttachmentDB db in dbs)
             {
-
                 if (!DataType.IsImgExt(db.FileExts))
                     continue;
 

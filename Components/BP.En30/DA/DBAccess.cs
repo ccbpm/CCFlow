@@ -3579,24 +3579,33 @@ namespace BP.DA
         /// 1, 字段名称，字段描述，字段类型，字段长度.
         /// </summary>
         /// <param name="tableName">表名</param>
-        public static DataTable GetTableSchema(string tableName)
+        public static DataTable GetTableSchema(string tableName, bool isUpper = true)
         {
             string sql = "";
             switch (SystemConfig.AppCenterDBType)
             {
                 case DBType.MSSQL:
-                    sql = "SELECT column_name as FNAME, data_type as FTYPE, CHARACTER_MAXIMUM_LENGTH as FLEN  from information_schema.columns where table_name='" + tableName + "'";
+                    sql = "SELECT column_name as FNAME, data_type as FTYPE, CHARACTER_MAXIMUM_LENGTH as FLEN , column_name as FDESC FROM information_schema.columns where table_name='" + tableName + "'";
                     break;
                 case DBType.Oracle:
-                    sql = "SELECT COLUMN_NAME as FNAME,DATA_TYPE as FTYPE,DATA_LENGTH as FLEN from all_tab_columns where table_name = upper('" + tableName + "')";
+                    sql = "SELECT COLUMN_NAME as FNAME,DATA_TYPE as FTYPE,DATA_LENGTH as FLEN,COLUMN_NAME as FDESC FROM all_tab_columns WHERE table_name = upper('" + tableName + "')";
                     break;
                 case DBType.MySQL:
-                    sql = "SELECT COLUMN_NAME FNAME,DATA_TYPE FTYPE,CHARACTER_MAXIMUM_LENGTH FLEN,COLUMN_COMMENT 'DESC' FROM information_schema.columns WHERE table_name='" + tableName + "' and TABLE_SCHEMA='" + SystemConfig.AppCenterDBDatabase + "'";
+                    sql = "SELECT COLUMN_NAME FNAME,DATA_TYPE FTYPE,CHARACTER_MAXIMUM_LENGTH FLEN,COLUMN_COMMENT FDESC FROM information_schema.columns WHERE table_name='" + tableName + "' and TABLE_SCHEMA='" + SystemConfig.AppCenterDBDatabase + "'";
                     break;
                 default:
                     break;
             }
-            return BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (isUpper == false)
+            {
+                dt.Columns["FNAME"].ColumnName = "FName";
+                dt.Columns["FTYPE"].ColumnName = "FType";
+                dt.Columns["FLEN"].ColumnName = "FLen";
+                dt.Columns["FDESC"].ColumnName = "FDesc";
+            }
+            return dt;
         }
 
         public static DataTable ToLower(DataTable dt)

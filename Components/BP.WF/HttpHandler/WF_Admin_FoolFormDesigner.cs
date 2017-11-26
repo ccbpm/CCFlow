@@ -978,6 +978,47 @@ namespace BP.WF.HttpHandler
             return attr.ToJson();
         }
         /// <summary>
+        /// 从表里选择字段.
+        /// </summary>
+        /// <returns></returns>
+        public string FieldTypeListChoseOneField_Init()
+        {
+            MapData md = new MapData(this.FK_MapData);
+
+            //获得原始数据.
+            DataTable dt = BP.DA.DBAccess.GetTableSchema(md.PTable, false);
+
+            //创建样本.
+            DataTable mydt = BP.DA.DBAccess.GetTableSchema(md.PTable,false);
+            mydt.Rows.Clear();
+
+            //获得现有的列..
+            MapAttrs attrs = new MapAttrs(this.FK_MapData);
+
+            string flowFiels = ",GUID,PRI,PrjNo,PrjName,PEmp,AtPara,FlowNote,WFSta,PNodeID,FK_FlowSort,FK_Flow,OID,FID,Title,WFState,CDT,FlowStarter,FlowStartRDT,FK_Dept,FK_NY,FlowDaySpan,FlowEmps,FlowEnder,FlowEnderRDT,FlowEndNode,MyNum,PWorkID,PFlowNo,BillNo,ProjNo,";
+
+            //排除已经存在的列.
+            foreach (DataRow dr in dt.Rows)
+            {
+                string key = dr["FName"].ToString();
+                if (attrs.Contains(MapAttrAttr.KeyOfEn, key) == true)
+                    continue;
+
+                if (flowFiels.Contains("," + key + ",") == true)
+                    continue;
+
+                DataRow mydr = mydt.NewRow();
+                mydr["FName"] = dr["FName"];
+                mydr["FType"] = dr["FType"];
+                mydr["FLen"] = dr["FLen"];
+                mydr["FDesc"] = dr["FDesc"];
+                mydt.Rows.Add(mydr);
+            }
+
+            mydt.TableName = "dt";
+            return BP.Tools.Json.ToJson(mydt);
+        }
+        /// <summary>
         /// 字段选择.
         /// </summary>
         /// <returns></returns>

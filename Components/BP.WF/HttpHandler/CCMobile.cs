@@ -191,6 +191,15 @@ namespace BP.WF.HttpHandler
             Web.WebUser.SignInOfGener(empOF);
             return "MyFlow.htm?FK_Flow=" + wl.FK_Flow + "&WorkID=" + wl.WorkID + "&FK_Node=" + wl.FK_Node + "&FID=" + wl.FID;
         }
+        /// <summary>
+        /// 流程单表单查看.
+        /// </summary>
+        /// <returns>json</returns>
+        public string FrmView_Init()
+        {
+            BP.WF.HttpHandler.WF wf = new WF(this.context);
+            return wf.FrmView_Init();
+        }
 
     }
 }

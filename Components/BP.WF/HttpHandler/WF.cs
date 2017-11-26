@@ -15,6 +15,208 @@ namespace BP.WF.HttpHandler
 {
     public class WF : DirectoryPageBase
     {
+        #region 单表单查看.
+        /// <summary>
+        /// 流程单表单查看
+        /// </summary>
+        /// <returns></returns>
+        public string FrmView_Init()
+        {
+            Node nd = new Node(this.FK_Node);
+        
+
+            MapData md = new MapData();
+            md.No = nd.NodeFrmID;
+            if (md.RetrieveFromDBSources() == 0)
+                throw new Exception("装载错误，该表单ID=" + md.No + "丢失，请修复一次流程重新加载一次.");
+
+           
+
+            //获得表单模版.
+            DataSet myds = BP.Sys.CCFormAPI.GenerHisDataSet_2017(md.No);
+
+
+            #region 把主从表数据放入里面.
+            //.工作数据放里面去, 放进去前执行一次装载前填充事件.
+            BP.WF.Work wk = nd.HisWork;
+            wk.OID = this.WorkID;
+            wk.RetrieveFromDBSources();
+
+            //重设默认值.
+            wk.ResetDefaultVal();
+
+            DataTable mainTable = wk.ToDataTableField("MainTable");
+            mainTable.TableName = "MainTable";
+            myds.Tables.Add(mainTable);
+            #endregion
+
+
+            //加入WF_Node.
+            DataTable WF_Node = nd.ToDataTableField("WF_Node");
+            myds.Tables.Add(WF_Node);
+
+            #region 加入组件的状态信息, 在解析表单的时候使用.
+            BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
+            if (nd.NodeFrmID != "ND" + nd.NodeID)
+            {
+                /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
+                int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
+
+                BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(refNodeID);
+
+                fnc.SetValByKey(FrmWorkCheckAttr.FWC_H, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_H));
+                fnc.SetValByKey(FrmWorkCheckAttr.FWC_W, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_W));
+                fnc.SetValByKey(FrmWorkCheckAttr.FWC_X, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_X));
+                fnc.SetValByKey(FrmWorkCheckAttr.FWC_Y, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_Y));
+
+
+                fnc.SetValByKey(FrmSubFlowAttr.SF_H, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_H));
+                fnc.SetValByKey(FrmSubFlowAttr.SF_W, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_W));
+                fnc.SetValByKey(FrmSubFlowAttr.SF_X, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_X));
+                fnc.SetValByKey(FrmSubFlowAttr.SF_Y, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_Y));
+
+                fnc.SetValByKey(FrmThreadAttr.FrmThread_H, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_H));
+                fnc.SetValByKey(FrmThreadAttr.FrmThread_W, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_W));
+                fnc.SetValByKey(FrmThreadAttr.FrmThread_X, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_X));
+                fnc.SetValByKey(FrmThreadAttr.FrmThread_Y, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_Y));
+
+                fnc.SetValByKey(FrmTrackAttr.FrmTrack_H, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_H));
+                fnc.SetValByKey(FrmTrackAttr.FrmTrack_W, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_W));
+                fnc.SetValByKey(FrmTrackAttr.FrmTrack_X, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_X));
+                fnc.SetValByKey(FrmTrackAttr.FrmTrack_Y, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_Y));
+
+                fnc.SetValByKey(FTCAttr.FTC_H, refFnc.GetValFloatByKey(FTCAttr.FTC_H));
+                fnc.SetValByKey(FTCAttr.FTC_W, refFnc.GetValFloatByKey(FTCAttr.FTC_W));
+                fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValFloatByKey(FTCAttr.FTC_X));
+                fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValFloatByKey(FTCAttr.FTC_Y));
+            }
+
+            myds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
+            #endregion 加入组件的状态信息, 在解析表单的时候使用.
+
+            #region 增加附件信息.
+            BP.Sys.FrmAttachments athDescs = new FrmAttachments();
+            athDescs.Retrieve(FrmAttachmentAttr.FK_MapData, nd.NodeFrmID);
+            if (athDescs.Count != 0)
+            {
+                FrmAttachment athDesc = athDescs[0] as FrmAttachment;
+
+                //查询出来数据实体.
+                BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
+                if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
+                {
+                    string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID, 0).ToString();
+                    if (pWorkID == null || pWorkID == "0")
+                        pWorkID = this.WorkID.ToString();
+
+                    if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+                    {
+                        /* 继承模式 */
+                        BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pWorkID);
+                        qo.addOr();
+                        qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                        qo.addOrderBy("RDT");
+                        qo.DoQuery();
+                    }
+
+                    if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                    {
+                        /*共享模式*/
+                        dbs.Retrieve(FrmAttachmentDBAttr.RefPKVal, pWorkID);
+                    }
+                }
+                else if (athDesc.HisCtrlWay == AthCtrlWay.WorkID)
+                {
+                    /* 继承模式 */
+                    BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
+                    qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
+                    qo.addAnd();
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, this.WorkID);
+                    qo.addOrderBy("RDT");
+                    qo.DoQuery();
+                }
+
+                //增加一个数据源.
+                myds.Tables.Add(dbs.ToDataTableField("Sys_FrmAttachmentDB"));
+            }
+            #endregion
+
+            #region 把外键表加入DataSet
+            DataTable dtMapAttr = myds.Tables["Sys_MapAttr"];
+
+            MapExts mes = md.MapExts;
+            MapExt me = new MapExt();
+            DataTable dt = new DataTable();
+            foreach (DataRow dr in dtMapAttr.Rows)
+            {
+                string lgType = dr["LGType"].ToString();
+                if (lgType != "2")
+                    continue;
+
+                string UIIsEnable = dr["UIVisible"].ToString();
+                if (UIIsEnable == "0")
+                    continue;
+
+                string uiBindKey = dr["UIBindKey"].ToString();
+                if (string.IsNullOrEmpty(uiBindKey) == true)
+                {
+                    string myPK = dr["MyPK"].ToString();
+                    /*如果是空的*/
+                    //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
+                }
+
+                // 检查是否有下拉框自动填充。
+                string keyOfEn = dr["KeyOfEn"].ToString();
+                string fk_mapData = dr["FK_MapData"].ToString();
+
+                #region 处理下拉框数据范围. for 小杨.
+                me = mes.GetEntityByKey(MapExtAttr.ExtType, MapExtXmlList.AutoFullDLL, MapExtAttr.AttrOfOper, keyOfEn) as MapExt;
+                if (me != null)
+                {
+                    string fullSQL = me.Doc.Clone() as string;
+                    fullSQL = fullSQL.Replace("~", ",");
+                    fullSQL = BP.WF.Glo.DealExp(fullSQL, wk, null);
+                    dt = DBAccess.RunSQLReturnTable(fullSQL);
+                    //重构新表
+                    DataTable dt_FK_Dll = new DataTable();
+                    dt_FK_Dll.TableName = keyOfEn;//可能存在隐患，如果多个字段，绑定同一个表，就存在这样的问题.
+                    dt_FK_Dll.Columns.Add("No", typeof(string));
+                    dt_FK_Dll.Columns.Add("Name", typeof(string));
+                    foreach (DataRow dllRow in dt.Rows)
+                    {
+                        DataRow drDll = dt_FK_Dll.NewRow();
+                        drDll["No"] = dllRow["No"];
+                        drDll["Name"] = dllRow["Name"];
+                        dt_FK_Dll.Rows.Add(drDll);
+                    }
+                    myds.Tables.Add(dt_FK_Dll);
+                    continue;
+                }
+                #endregion 处理下拉框数据范围.
+
+                // 判断是否存在.
+                if (myds.Tables.Contains(uiBindKey) == true)
+                    continue;
+
+                myds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
+            }
+            #endregion End把外键表加入DataSet
+
+            #region 图片附件
+            FrmImgAthDBs imgAthDBs = new FrmImgAthDBs(nd.NodeFrmID, this.WorkID.ToString());
+            if (imgAthDBs != null && imgAthDBs.Count > 0)
+            {
+                DataTable dt_ImgAth = imgAthDBs.ToDataTableField("Sys_FrmImgAthDB");
+                myds.Tables.Add(dt_ImgAth);
+            }
+            #endregion
+
+
+            return BP.Tools.Json.ToJson(myds);
+        }
+        #endregion
+
         /// <summary>
         /// 初始化数据
         /// </summary>

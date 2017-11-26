@@ -216,12 +216,21 @@ namespace BP.WF.HttpHandler
         {
             return BP.WF.Dev2Interface.Flow_BBSDelete(this.FK_Flow, this.MyPK, WebUser.No);
         }
-
+        /// <summary>
+        /// 执行撤销
+        /// </summary>
+        /// <returns></returns>
         public string OP_UnSend()
         {
-            return BP.WF.Dev2Interface.Flow_DoUnSend(FK_Flow, WorkID);
+            try
+            {
+                return BP.WF.Dev2Interface.Flow_DoUnSend(this.FK_Flow, this.WorkID);
+            }
+            catch(Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
         }
-
         protected override string DoDefaultMethod()
         {
             return "err@没有判断的执行类型：" + this.DoType+" @类 "+this.ToString();

@@ -53,6 +53,15 @@ namespace BP.WF.HttpHandler
             WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork(this.context);
             return en.TimeBase_Init();
         }
+        /// <summary>
+        /// 执行撤销操作.
+        /// </summary>
+        /// <returns></returns>
+        public string TimeBase_UnSend()
+        {
+            WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork(this.context);
+            return en.OP_UnSend();
+        }
         #endregion xxx 界面方法.
 
     }

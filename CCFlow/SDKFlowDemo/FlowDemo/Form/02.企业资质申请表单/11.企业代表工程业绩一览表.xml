@@ -1187,7 +1187,7 @@
     <IsEnableM2MM>0</IsEnableM2MM>
     <WhenOverSize>1</WhenOverSize>
     <DtlOpenType>1</DtlOpenType>
-    <DtlShowModel>0</DtlShowModel>
+    <RowShowModel>0</RowShowModel>
     <X>61</X>
     <Y>129</Y>
     <H>426</H>

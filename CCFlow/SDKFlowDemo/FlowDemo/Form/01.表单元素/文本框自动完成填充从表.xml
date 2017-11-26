@@ -888,7 +888,7 @@ FROM WF_Emp WHERE No LIKE ~@Key%~</Doc>
     <IsEnableM2MM>0</IsEnableM2MM>
     <WhenOverSize>0</WhenOverSize>
     <DtlOpenType>1</DtlOpenType>
-    <DtlShowModel>0</DtlShowModel>
+    <RowShowModel>0</RowShowModel>
     <X>55</X>
     <Y>155</Y>
     <H>311</H>

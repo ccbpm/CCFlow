@@ -968,7 +968,7 @@ WHERE A.No=B.FK_Station AND B.FK_Emp=~@Key~</Tag>
     <IsEnableM2MM>0</IsEnableM2MM>
     <WhenOverSize>0</WhenOverSize>
     <DtlOpenType>1</DtlOpenType>
-    <DtlShowModel>0</DtlShowModel>
+    <RowShowModel>0</RowShowModel>
     <X>74</X>
     <Y>296</Y>
     <H>157</H>

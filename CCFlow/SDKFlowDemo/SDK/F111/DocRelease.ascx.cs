@@ -101,22 +101,22 @@ namespace CCFlow.SDKFlowDemo.SDK.F111
                 this.ToMsg(ex.Message);
             }
         }
-        protected void Btn_Return_Click(object sender, EventArgs e)
-        {
-            BP.WF.Dev2Interface.UI_Window_Return(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
-        }
-        protected void Btn_Track_Click(object sender, EventArgs e)
-        {
-            BP.WF.Dev2Interface.UI_Window_OneWork(this.FK_Flow, this.WorkID, this.FID);
-        }
-        protected void Btn_AskForHelp_Click(object sender, EventArgs e)
-        {
-            BP.WF.Dev2Interface.UI_Window_AskForHelp(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
-        }
-        protected void Btn_CC_Click(object sender, EventArgs e)
-        {
-            BP.WF.Dev2Interface.UI_Window_CC(this.FK_Flow,this.FK_Node, this.WorkID, this.FID);
-        }
+        //protected void Btn_Return_Click(object sender, EventArgs e)
+        //{
+        //    BP.WF.Dev2Interface.UI_Window_Return(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+        //}
+        //protected void Btn_Track_Click(object sender, EventArgs e)
+        //{
+        //    BP.WF.Dev2Interface.UI_Window_OneWork(this.FK_Flow, this.WorkID, this.FID);
+        //}
+        //protected void Btn_AskForHelp_Click(object sender, EventArgs e)
+        //{
+        //    BP.WF.Dev2Interface.UI_Window_AskForHelp(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
+        //}
+        //protected void Btn_CC_Click(object sender, EventArgs e)
+        //{
+        //    BP.WF.Dev2Interface.UI_Window_CC(this.FK_Flow,this.FK_Node, this.WorkID, this.FID);
+        //}
         #endregion 执行流程控制按钮功能.
 
     }

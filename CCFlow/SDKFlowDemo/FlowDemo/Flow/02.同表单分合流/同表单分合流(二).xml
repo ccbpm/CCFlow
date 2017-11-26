@@ -18018,7 +18018,7 @@
     <IsEnableM2MM>0</IsEnableM2MM>
     <WhenOverSize>0</WhenOverSize>
     <DtlOpenType>1</DtlOpenType>
-    <DtlShowModel>1</DtlShowModel>
+    <RowShowModel>1</RowShowModel>
     <X>87.67</X>
     <Y>127.67</Y>
     <H>355</H>
@@ -18065,7 +18065,7 @@
     <IsEnableM2MM>0</IsEnableM2MM>
     <WhenOverSize>0</WhenOverSize>
     <DtlOpenType>1</DtlOpenType>
-    <DtlShowModel>0</DtlShowModel>
+    <RowShowModel>0</RowShowModel>
     <X>80.43</X>
     <Y>120.9</Y>
     <H>277</H>
@@ -18227,24 +18227,7 @@
     <W>400</W>
     <PRI>0</PRI>
   </Sys_MapExt>
-  <Sys_MapExt>
-    <MyPK>ND6901Dtl1_TBFullCtrl_UserNo</MyPK>
-    <FK_MapData>ND6901Dtl1</FK_MapData>
-    <ExtType>TBFullCtrl</ExtType>
-    <DoWay>0</DoWay>
-    <AttrOfOper>UserNo</AttrOfOper>
-    <AttrsOfActive />
-    <Doc>SELECT No,Name, Name as UserName,Tel as DianHua FROM WF_Emp WHERE No LIKE ~@Key%~</Doc>
-    <Tag />
-    <Tag1 />
-    <Tag2 />
-    <Tag3 />
-    <AtPara />
-    <DBSrc />
-    <H>500</H>
-    <W>400</W>
-    <PRI>0</PRI>
-  </Sys_MapExt>
+  
   <Sys_GroupField>
     <OID>274</OID>
     <Lab>子线程点</Lab>

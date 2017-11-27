@@ -805,10 +805,10 @@ namespace BP.WF
                                 break;
                         }
                         //这几种字体生成 pdf都乱码
-                        text = text.Replace("仿宋", "宋体");
-                        text = text.Replace("黑体", "宋体");
-                        text = text.Replace("楷体", "宋体");
-                        text = text.Replace("隶书", "宋体");
+                        text = text.Replace("font-family: 仿宋", "font-family: 宋体");
+                        text = text.Replace("font-family: 黑体", "font-family: 宋体");
+                        text = text.Replace("font-family: 楷体", "font-family: 宋体");
+                        text = text.Replace("font-family: 隶书", "font-family: 宋体");
 
                         //text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.UTF8);
                         // text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.GetEncoding("gb2312"));

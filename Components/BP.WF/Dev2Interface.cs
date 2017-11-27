@@ -6069,7 +6069,7 @@ namespace BP.WF
         /// <param name="execUserDeptName">执行人部门编号</param>
         /// <returns>发送的结果对象</returns>
         public static SendReturnObjs Node_SendWork(string fk_flow, Int64 workID, Hashtable htWork, DataSet workDtls, int toNodeID,
-            string nextWorkers, string execUserNo, string execUserName, string execUserDeptNo, string execUserDeptName, string title)
+            string toEmps, string execUserNo, string execUserName, string execUserDeptNo, string execUserDeptName, string title)
         {
             //给临时的发送变量赋值，解决带有参数的转向。
             Glo.SendHTOfTemp = htWork;
@@ -6105,10 +6105,10 @@ namespace BP.WF
             wn.SendHTOfTemp = htWork;
 
             if (ndOfToNode == null)
-                objs = wn.NodeSend(null, nextWorkers);
+                objs = wn.NodeSend(null, toEmps);
             else
             {
-                objs = wn.NodeSend(ndOfToNode, nextWorkers);
+                objs = wn.NodeSend(ndOfToNode, toEmps);
             }
 
             #region 更新发送参数.
@@ -8671,7 +8671,7 @@ namespace BP.WF
             string[] strs = emps.Split(',');
             foreach (string str in strs)
             {
-                if (str == null || str == "")
+                if (DataType.IsNullOrEmpty(str)==true)
                     continue;
 
                 SelectAccper en = new SelectAccper();

@@ -17,6 +17,11 @@ namespace BP.DA
     /// </summary>
     public class DataType
     {
+        public static bool IsNullOrEmpty(string s)
+        {
+            return string.IsNullOrEmpty(s);
+        }
+
         #region 与日期相关的操作.
         /// <summary>
         /// 获得指定日期的周1第一天日期.

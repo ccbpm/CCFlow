@@ -106,7 +106,7 @@ namespace BP.WF.HttpHandler
         public int GetRequestValInt(string param)
         {
             string str = GetRequestVal(param);
-            if (str == null || str == "" || str == "null" || str=="unde")
+            if (str == null || str == "" || str == "null" || str == "undefined")
                 return 0;
 
             try

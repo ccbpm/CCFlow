@@ -3311,7 +3311,7 @@ namespace BP.WF
             get
             {
                 string s = BP.Sys.SystemConfig.AppSettings["GloSID"] as string;
-                if (s == null || s == "")
+                if (DataType.IsNullOrEmpty(s))
                     s = "sdfq2erre-2342-234sdf23423-323";
                 return s;
             }
@@ -4763,7 +4763,7 @@ namespace BP.WF
                 sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT LIKE '" + DataType.CurrentData + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 {
-                    if (flow.StartLimitPara == "")
+                    if ( DataType.IsNullOrEmpty(flow.StartLimitPara))
                         return true;
 
                     //判断时间是否在设置的发起范围内. 配置的格式为 @11:00-12:00@15:00-13:45
@@ -4793,7 +4793,7 @@ namespace BP.WF
                 sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE RDT >= '" + DataType.WeekOfMonday(dtNow) + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 {
-                    if (flow.StartLimitPara == "")
+                    if ( DataType.IsNullOrEmpty(flow.StartLimitPara))
                         return true; /*如果没有时间的限制.*/
 
                     //判断时间是否在设置的发起范围内. 
@@ -4828,7 +4828,7 @@ namespace BP.WF
                 sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY = '" + DataType.CurrentYearMonth + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 {
-                    if (flow.StartLimitPara == "")
+                    if (DataType.IsNullOrEmpty(flow.StartLimitPara))
                         return true;
 
                     //判断时间是否在设置的发起范围内. 配置格式: @-01 12:00-13:11@-15 12:00-13:11 , 意思是：在每月的1号,15号 12:00-13:11可以启动流程.
@@ -4854,7 +4854,7 @@ namespace BP.WF
                 sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY = '" + DataType.CurrentAPOfJD + "' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 {
-                    if (flow.StartLimitPara == "")
+                    if ( DataType.IsNullOrEmpty( flow.StartLimitPara ))
                         return true;
 
                     //判断时间是否在设置的发起范围内.
@@ -4880,7 +4880,7 @@ namespace BP.WF
                 sql = "SELECT COUNT(*) as Num FROM " + ptable + " WHERE FK_NY LIKE '" + DataType.CurrentYear + "%' AND WFState NOT IN(0,1) AND FlowStarter='" + WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(sql, 0) == 0)
                 {
-                    if (flow.StartLimitPara == "")
+                    if ( DataType.IsNullOrEmpty(flow.StartLimitPara ))
                         return true;
 
                     //判断时间是否在设置的发起范围内.
@@ -5084,11 +5084,10 @@ namespace BP.WF
             //周朋.
             return;  //暂停支持.
 
-
             if (fromEmpNo == null)
                 fromEmpNo = "";
 
-            if (sendToEmpNo == null || sendToEmpNo == "")
+            if (DataType.IsNullOrEmpty(sendToEmpNo))
                 return;
 
             // throw new Exception("@接受人不能为空");

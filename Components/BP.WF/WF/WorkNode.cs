@@ -5525,17 +5525,17 @@ namespace BP.WF
         private SendReturnObjs NodeSendToYGFlow(Node node, string toEmpIDs)
         {
             string sql = "";
-            if (toEmpIDs == null)
+            if ( string.IsNullOrEmpty(toEmpIDs))
             {
+                toEmpIDs = "";
+
                 sql = "SELECT FK_Emp No, EmpName Name FROM WF_SelectAccper WHERE FK_Node=" + node.NodeID + " AND WorkID=" + this.WorkID + " AND AccType=0";
                 DataTable dt= DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
                     throw new Exception("@越轨流程目前仅仅支持选择接受人方式.");
 
                 foreach (DataRow dr in dt.Rows)
-                {
                     toEmpIDs += dr["No"].ToString();
-                }
             }
 
             Int64 workid = BP.WF.Dev2Interface.Node_CreateBlankWork(node.FK_Flow, null, null,

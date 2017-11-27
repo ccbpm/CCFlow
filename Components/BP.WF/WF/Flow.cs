@@ -2653,6 +2653,12 @@ namespace BP.WF
             dt.TableName = "WF_CCStation";
             ds.Tables.Add(dt);
 
+            // 越轨流程。
+            sql = "SELECT * FROM WF_NodeYGFlow WHERE FK_Node IN (" + sqlin + ")";
+            dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "WF_NodeYGFlow";
+            ds.Tables.Add(dt);
+
             //// 流程报表。
             //WFRpts rpts = new WFRpts(this.No);
             //// rpts.SaveToXml(path + "WFRpts.xml");

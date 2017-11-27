@@ -112,7 +112,7 @@ namespace BP.WF
             get
             {
                 string str = this.Request.QueryString["DoType"];
-                if (str == "")
+                if (string.IsNullOrEmpty(str))
                     str = null;
                 return str;
             }
@@ -143,7 +143,7 @@ namespace BP.WF
             get
             {
                 string s = this.Request.QueryString["RefPK"];
-                if (s == null || s == "")
+                if (string.IsNullOrEmpty(s))
                     s = this.Request.QueryString["PK"];
 
                 return s;
@@ -157,7 +157,7 @@ namespace BP.WF
             get
             {
                 string str = this.Request.QueryString["PageIdx"];
-                if (str == null || str == "")
+                if (string.IsNullOrEmpty(str))
                     return 1;
                 return int.Parse(str);
             }
@@ -171,7 +171,7 @@ namespace BP.WF
             get
             {
                 string s = this.Request.QueryString["RefNo"];
-                if (s == null || s == "")
+                if (DataType.IsNullOrEmpty(s) )
                     s = this.Request.QueryString["No"];
 
                 if (s == null || s == "")

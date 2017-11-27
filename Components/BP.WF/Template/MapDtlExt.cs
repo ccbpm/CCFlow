@@ -1191,9 +1191,18 @@ namespace BP.WF.Template
                 this.FEBD = febd.ToString();
 
 
-            #region 检查填充的SQL是否符合要求》
+            #region 检查填充的SQL是否符合要求.
              
             #endregion
+
+            //更新分组标签.
+            BP.Sys.GroupField gf = new GroupField();
+            int i=gf.Retrieve(GroupFieldAttr.CtrlType, "Dtl", GroupFieldAttr.CtrlID, this.No);
+            if (i == 1 && gf.Lab.Equals(this.Name) == false)
+            {
+                gf.Lab = this.Name;
+                gf.Update();
+            }
 
             return base.beforeUpdate();
         }

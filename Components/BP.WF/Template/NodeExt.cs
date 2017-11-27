@@ -730,7 +730,7 @@ namespace BP.WF.Template
                 //节点工具栏,主从表映射.
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 
-                //越轨流程.
+                //延续子流程.
                 map.AddDtl(new NodeYGFlows(), NodeToolbarAttr.FK_Node);
 
 

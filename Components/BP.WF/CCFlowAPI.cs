@@ -124,56 +124,18 @@ namespace BP.WF
 
                         DataTable dtToNDs = new DataTable();
                         dtToNDs.TableName = "ToNodes";
-                        dtToNDs.Columns.Add("No", typeof(string));
-                        dtToNDs.Columns.Add("Name", typeof(string));
-                        dtToNDs.Columns.Add("IsSelectEmps", typeof(string));
-                        dtToNDs.Columns.Add("IsSelected", typeof(string));
+                        dtToNDs.Columns.Add("No", typeof(string));   //节点ID.
+                        dtToNDs.Columns.Add("Name", typeof(string)); //到达的节点名称.
+                        dtToNDs.Columns.Add("IsSelectEmps", typeof(string)); //是否弹出选择人的对话框？
+                        dtToNDs.Columns.Add("IsSelected", typeof(string));  //是否选择？
 
-                        //上一次选择的节点.
-                        int defalutSelectedNodeID = 0;
-                        if (nds.Count > 1)
-                        {
-                            string mysql = "";
-                            // 找出来上次发送选择的节点.
-                            if (SystemConfig.AppCenterDBType == DBType.MSSQL)
-                                mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC";
-                            else if (SystemConfig.AppCenterDBType == DBType.Oracle)
-                                mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
-                            else if (SystemConfig.AppCenterDBType == DBType.MySQL)
-                                mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
-
-                            //获得上一次发送到的节点.
-                            defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
-                        }
-
-                        foreach (Node item in nds)
-                        {
-                            DataRow dr = dtToNDs.NewRow();
-                            dr["No"] = item.NodeID;
-                            dr["Name"] = item.Name;
-                            //if (item.hissel
-
-                            if (item.HisDeliveryWay == DeliveryWay.BySelected)
-                                dr["IsSelectEmps"] = "1";
-                            else
-                                dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
-
-                            //设置默认选择的节点.
-                            if (defalutSelectedNodeID == item.NodeID)
-                                dr["IsSelected"] = "1";  
-                            else
-                                dr["IsSelected"] = "0";   
-
-                            dtToNDs.Rows.Add(dr);
-                        }
-
-                        //增加到达越轨流程节点.
+                        #region 增加到达延续子流程节点。
                         NodeYGFlows ygflows = new NodeYGFlows(fk_node.ToString());
                         foreach (NodeYGFlow item in ygflows)
                         {
                             DataRow dr = dtToNDs.NewRow();
                             dr["No"] = item.FK_Flow + "01";
-                            dr["Name"] = "启动:"+item.FlowName;
+                            dr["Name"] = "启动:" + item.FlowName;
                             //if (item.HisDeliveryWay == DeliveryWay.BySelected)
                             dr["IsSelectEmps"] = "1";
                             //else
@@ -188,7 +150,51 @@ namespace BP.WF
                             dr["IsSelected"] = "0";
                             dtToNDs.Rows.Add(dr);
                         }
+                        #endregion 增加到达延续子流程节点。
 
+                        #region 增加到达延续子流程节点。
+                        if (ygflows.Count > 0 && SystemConfig.CustomerNo != "CZBank")
+                        {
+
+                            //上一次选择的节点.
+                            int defalutSelectedNodeID = 0;
+                            if (nds.Count > 1)
+                            {
+                                string mysql = "";
+                                // 找出来上次发送选择的节点.
+                                if (SystemConfig.AppCenterDBType == DBType.MSSQL)
+                                    mysql = "SELECT  top 1 NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC";
+                                else if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                                    mysql = "SELECT * FROM ( SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID DESC ) WHERE ROWNUM =1";
+                                else if (SystemConfig.AppCenterDBType == DBType.MySQL)
+                                    mysql = "SELECT  NDTo FROM ND" + int.Parse(nd.FK_Flow) + "Track A WHERE A.NDFrom=" + fk_node + " AND ActionType=1 ORDER BY WorkID  DESC limit 1,1";
+
+                                //获得上一次发送到的节点.
+                                defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
+                            }
+
+                            foreach (Node item in nds)
+                            {
+                                DataRow dr = dtToNDs.NewRow();
+                                dr["No"] = item.NodeID;
+                                dr["Name"] = item.Name;
+                                //if (item.hissel
+
+                                if (item.HisDeliveryWay == DeliveryWay.BySelected)
+                                    dr["IsSelectEmps"] = "1";
+                                else
+                                    dr["IsSelectEmps"] = "0";  //是不是，可以选择接受人.
+
+                                //设置默认选择的节点.
+                                if (defalutSelectedNodeID == item.NodeID)
+                                    dr["IsSelected"] = "1";
+                                else
+                                    dr["IsSelected"] = "0";
+
+                                dtToNDs.Rows.Add(dr);
+                            }
+                        }
+                        #endregion 增加到达延续子流程节点。
 
 
                         //增加一个下拉框, 对方判断是否有这个数据.

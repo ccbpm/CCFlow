@@ -702,7 +702,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button  value='" + btnLab.JumpWayLab + "' enable=true onclick=\"To('" + urlr + "'); \" />";
                 }
 
-                if (btnLab.ReturnEnable)
+                if (btnLab.ReturnEnable )
                 {
                     /*如果没有焦点字段*/
                     string urlr = "./WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;
@@ -1067,7 +1067,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<a data-role='button' type=button  value='" + btnLab.JumpWayLab + "' enable=true onclick=\"To('" + urlr + "'); \" ></a>";
                 }
 
-                if (btnLab.ReturnEnable && this.currND.IsStartNode == false)
+                if (btnLab.ReturnEnable )
                 {
                     /*如果没有焦点字段*/
                     string urlr = "./WorkOpt/ReturnWork.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;

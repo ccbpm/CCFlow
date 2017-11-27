@@ -5517,7 +5517,7 @@ namespace BP.WF
             throw new Exception("@该阻塞模式没有实现...");
         }
         /// <summary>
-        /// 发送到越轨流程.
+        /// 发送到延续子流程.
         /// </summary>
         /// <param name="node"></param>
         /// <param name="toEmps"></param>
@@ -5532,7 +5532,7 @@ namespace BP.WF
                 sql = "SELECT FK_Emp No, EmpName Name FROM WF_SelectAccper WHERE FK_Node=" + node.NodeID + " AND WorkID=" + this.WorkID + " AND AccType=0";
                 DataTable dt= DBAccess.RunSQLReturnTable(sql);
                 if (dt.Rows.Count == 0)
-                    throw new Exception("@越轨流程目前仅仅支持选择接受人方式.");
+                    throw new Exception("@延续子流程目前仅仅支持选择接受人方式.");
 
                 foreach (DataRow dr in dt.Rows)
                     toEmpIDs += dr["No"].ToString();
@@ -6024,7 +6024,7 @@ namespace BP.WF
                  //@增加发送到子流程的判断.
                 if (jumpToNode != null && this.HisNode.FK_Flow != jumpToNode.FK_Flow)
                 {
-                    /*判断是否是越轨流程. */
+                    /*判断是否是延续子流程. */
                     return NodeSendToYGFlow(jumpToNode, jumpToEmp);
                 }
 

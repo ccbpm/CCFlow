@@ -2326,11 +2326,11 @@ namespace BP.WF
         public static DataTable DB_GenerWillReturnNodes(int fk_node, Int64 workid, Int64 fid)
         {
             DataTable dt = new DataTable("obt");
-            dt.Columns.Add("No"); // 节点ID
-            dt.Columns.Add("Name"); // 节点名称.
-            dt.Columns.Add("Rec"); // 被退回节点上的操作员编号.
-            dt.Columns.Add("RecName"); // 被退回节点上的操作员名称.
-            dt.Columns.Add("IsBackTracking"); // 该节点是否可以退回并原路返回？ 0否, 1是.
+            dt.Columns.Add("No",typeof(string)); // 节点ID
+            dt.Columns.Add("Name", typeof(string)); // 节点名称.
+            dt.Columns.Add("Rec", typeof(string)); // 被退回节点上的操作员编号.
+            dt.Columns.Add("RecName", typeof(string)); // 被退回节点上的操作员名称.
+            dt.Columns.Add("IsBackTracking", typeof(string)); // 该节点是否可以退回并原路返回？ 0否, 1是.
 
             Node nd = new Node(fk_node);
 

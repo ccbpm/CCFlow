@@ -2653,10 +2653,10 @@ namespace BP.WF
             dt.TableName = "WF_CCStation";
             ds.Tables.Add(dt);
 
-            // 越轨流程。
-            sql = "SELECT * FROM WF_NodeYGFlow WHERE FK_Node IN (" + sqlin + ")";
+            // 延续子流程。
+            sql = "SELECT * FROM WF_NodeSubFlow WHERE FK_Node IN (" + sqlin + ")";
             dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "WF_NodeYGFlow";
+            dt.TableName = "WF_NodeSubFlow";
             ds.Tables.Add(dt);
 
             //// 流程报表。
@@ -4637,7 +4637,7 @@ namespace BP.WF
                 {
                     case "WF_Flow": //模版文件。
                         continue;
-                    case "WF_NodeYGFlow": //越轨流程.
+                    case "WF_NodeSubFlow": //延续子流程.
                         foreach (DataRow dr in dt.Rows)
                         {
                             NodeYGFlow yg = new NodeYGFlow();

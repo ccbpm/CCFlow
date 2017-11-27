@@ -74,7 +74,7 @@ namespace BP.WF
         {
             get
             {
-                if (_execer == null)
+                if (_execer == null || _execer=="")
                     _execer = WebUser.No;
                 return _execer;
             }
@@ -91,7 +91,7 @@ namespace BP.WF
         {
             get
             {
-                if (_execerName == null)
+                if (_execerName == null || _execerName=="")
                     _execerName = WebUser.Name;
                 return _execerName;
             }

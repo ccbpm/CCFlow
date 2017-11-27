@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20171110;
+        public static int Ver = 20171127;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -177,6 +177,13 @@ namespace BP.WF
 
                 BP.Sys.FrmRB rb = new FrmRB();
                 rb.CheckPhysicsTable();
+
+                BP.WF.Template.CC ccEn = new CC();
+                ccEn.CheckPhysicsTable();
+
+                BP.WF.Template.MapDtlExt dtlExt = new MapDtlExt();
+                dtlExt.CheckPhysicsTable();
+
 
                 //删除枚举.
                 DBAccess.RunSQL("DELETE FROM Sys_Enum WHERE EnumKey IN ('SelectorModel','CtrlWayAth')");

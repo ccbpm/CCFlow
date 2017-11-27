@@ -167,14 +167,13 @@ namespace BP.WF
                             dtToNDs.Rows.Add(dr);
                         }
 
-                        //@于庆海，增加到达越轨流程节点.
+                        //增加到达越轨流程节点.
                         NodeYGFlows ygflows = new NodeYGFlows(fk_node.ToString());
                         foreach (NodeYGFlow item in ygflows)
                         {
                             DataRow dr = dtToNDs.NewRow();
                             dr["No"] = item.FK_Flow + "01";
-                            dr["Name"] = item.FlowName;
-
+                            dr["Name"] = "启动:"+item.FlowName;
                             //if (item.HisDeliveryWay == DeliveryWay.BySelected)
                             dr["IsSelectEmps"] = "1";
                             //else

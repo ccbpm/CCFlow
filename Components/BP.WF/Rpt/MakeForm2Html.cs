@@ -804,13 +804,18 @@ namespace BP.WF
                             default:
                                 break;
                         }
+                        //这几种字体生成 pdf都乱码
+                        text = text.Replace("仿宋", "宋体");
+                        text = text.Replace("黑体", "宋体");
+                        text = text.Replace("楷体", "宋体");
+                        text = text.Replace("隶书", "宋体");
 
-                        text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.UTF8);
-                        text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.GetEncoding("gb2312"));
+                        //text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.UTF8);
+                        // text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.GetEncoding("gb2312"));
 
 
-                      //  System.Text.UTF8Encoding utf = new System.Text.UTF8Encoding();
-                       // utf.GetChars(
+                        //  System.Text.UTF8Encoding utf = new System.Text.UTF8Encoding();
+                        // utf.GetChars(
 
                         //线性展示并且colspan=3
                         if (attr.ColSpan == 3)

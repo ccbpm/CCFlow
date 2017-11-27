@@ -130,6 +130,26 @@
             });
         });
 
+        function NewEnum() {
+
+            $("#TB_EnumName").val("");
+            $("#TB_EnumKey").val("");
+            $("#tabs").tabs('select', '枚举信息');
+
+            var str = '<table>';
+            for (var i = 0; i < 21; i++) {
+
+                str += '<tr>';
+                str += "<td> " + i + "</td> ";
+                str += "<td> <input id='TB" + i + "' class='easyui-textbox' style='width: 200px' /></td> ";
+                str += '</tr>';
+            }
+
+            var div = this.document.getElementById('DivEnumList');
+            div.innerHTML = str;
+            pageData.DoType = "FrmEnumeration_NewEnum";
+        }
+
         function Edit(key, name, cfgVal) {
 
             if (key == null || key == "") {

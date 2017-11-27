@@ -100,7 +100,7 @@ function SetHegiht() {
 function DtlFrm(ensName, refPKVal, pkVal, frmType) {
     // model=1 自由表单, model=2傻瓜表单.
     var url = 'DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;
-    alert('@代国强，这里需要弹出一url:' + url);
+    alert('@代国强，这里需要弹出11url:' + url);
 }
 
 var frmData = null;

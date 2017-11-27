@@ -58,11 +58,14 @@
                 },
                 success: function (data) {
                     $("#pageloading").hide();
+                    
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
+
                     var json = eval('(' + data + ')');
+
                     $.messager.alert("提示", json.Msg, "icon-info", function () {
                         //打开新建的流程
                         if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {

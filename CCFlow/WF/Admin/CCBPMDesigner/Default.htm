@@ -419,7 +419,11 @@
             arrayCloseObj.length = 0;
             tabCloseEven();
         }
-
+        // 获取当前选中的tab
+        function currentSelection() {
+            var currentTab = $('#tabs').tabs('getSelected').panel('options');
+            return currentTab;
+        }
         //绑定右键菜单事件
         function tabCloseEven() {
             //刷新

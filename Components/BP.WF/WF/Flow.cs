@@ -2550,11 +2550,6 @@ namespace BP.WF
             ds.Tables.Add(tmps.ToDataTableField("WF_BillTemplate"));
 
             string sqlin = "SELECT NodeID FROM WF_Node WHERE fk_flow='" + this.No + "'";
-            // 独立表单树
-            sql = "SELECT * FROM WF_FlowFormTree WHERE FK_Flow='" + this.No + "'";
-            dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "WF_FlowFormTree";
-            ds.Tables.Add(dt);
 
             //// 独立表单
             //sql = "SELECT * FROM WF_FlowForm WHERE FK_Flow='" + this.No + "'";
@@ -4636,29 +4631,39 @@ namespace BP.WF
                 {
                     case "WF_Flow": //模版文件。
                         continue;
-                    case "WF_FlowFormTree": //独立表单目录 add 2013-12-03
-                        //foreach (DataRow dr in dt.Rows)
-                        //{
-                        //    FlowForm cd = new FlowForm();
-                        //    foreach (DataColumn dc in dt.Columns)
-                        //    {
-                        //        string val = dr[dc.ColumnName] as string;
-                        //        if (val == null)
-                        //            continue;
-                        //        switch (dc.ColumnName.ToLower())
-                        //        {
-                        //            case "fk_flow":
-                        //                val = fl.No;
-                        //                break;
-                        //            default:
-                        //                val = val.Replace("ND" + oldFlowID, "ND" + flowID);
-                        //                break;
-                        //        }
-                        //        cd.SetValByKey(dc.ColumnName, val);
-                        //    }
-                        //    cd.Insert();
-                        //}
-                        break;
+                    case "WF_NodeYGFlow": //越轨流程.
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            NodeYGFlow yg = new NodeYGFlow();
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                string val = dr[dc.ColumnName] as string;
+                                if (val == null)
+                                    continue;
+                                switch (dc.ColumnName.ToLower())
+                                {
+                                    case "tonodeid":
+                                    case "fk_node":
+                                    case "nodeid":
+                                        if (val.Length == 3)
+                                            val = flowID + val.Substring(1);
+                                        else if (val.Length == 4)
+                                            val = flowID + val.Substring(2);
+                                        else if (val.Length == 5)
+                                            val = flowID + val.Substring(3);
+                                        break;
+                                    case "fk_flow":
+                                        val = fl.No;
+                                        break;
+                                    default:
+                                        val = val.Replace("ND" + oldFlowID, "ND" + flowID);
+                                        break;
+                                }
+                                yg.SetValByKey(dc.ColumnName, val);
+                            }
+                            yg.Insert();
+                        }
+                        continue;
                     case "WF_FlowForm": //独立表单。 add 2013-12-03
                         //foreach (DataRow dr in dt.Rows)
                         //{

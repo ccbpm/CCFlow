@@ -935,6 +935,8 @@ namespace BP.WF
                     continue;
                 if (clsName.Contains("NodeSheet") == true)
                     continue;
+                if (clsName.Contains("FlowFormTree") == true)
+                    continue;
 
                 //不安装CCIM的表.
                 if (clsName != null && clsName.Contains("BP.CCIM"))

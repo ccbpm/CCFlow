@@ -226,6 +226,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\Direction.cs" />
+    <Compile Include="Template\FlowFormTree.cs" />
     <Compile Include="Template\FlowSort.cs" />
     <Compile Include="Template\FrmNodeExt.cs" />
     <Compile Include="Template\TemplateGlo.cs">
@@ -301,9 +302,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Template\Selector.cs" />
-    <Compile Include="Template\FlowFormTree.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Template\MapDataExt.cs" />
     <Compile Include="Template\FrmEleType.cs" />
     <Compile Include="Template\SysForm.cs" />

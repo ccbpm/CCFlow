@@ -805,6 +805,13 @@ namespace BP.WF
                                 break;
                         }
 
+                        text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.UTF8);
+                        text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.GetEncoding("gb2312"));
+
+
+                      //  System.Text.UTF8Encoding utf = new System.Text.UTF8Encoding();
+                       // utf.GetChars(
+
                         //线性展示并且colspan=3
                         if (attr.ColSpan == 3)
                         {

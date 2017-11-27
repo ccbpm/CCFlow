@@ -708,10 +708,13 @@ namespace BP.WF.HttpHandler
             //执行导入
             BP.WF.Flow flow = BP.WF.Flow.DoLoadFlowTemplate(FK_FlowSort, filePath, model, flowNo);
 
-            return "{FK_Flow:'" + flow.No
-                + "',FlowName:'" + flow.Name
-                + "',FK_FlowSort:'" + flow.FK_FlowSort
-                + "',Msg:'导入成功,流程编号为:" + flow.No + " 名称为:" + flow.Name + "'}";
+
+            Hashtable ht = new Hashtable();
+            ht.Add("FK_Flow", flow.No);
+            ht.Add("FlowName", flow.Name);
+            ht.Add("FK_FlowSort", flow.FK_FlowSort);
+            ht.Add("Msg", "导入成功,流程编号为:" + flow.No + "名称为:" + flow.Name );
+            return BP.Tools.Json.ToJson(ht);
         }
         #endregion 数据导入.
 

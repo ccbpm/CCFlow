@@ -4571,7 +4571,7 @@ namespace BP.WF
                 {
                     string fk_emp = dr["FK_Emp"].ToString();
                     string isPass = dr["IsPass"].ToString();
-                    if (fk_emp == userNo && isPass == "0")
+                    if (fk_emp == userNo && (isPass == "0" || isPass=="80" || isPass=="90") )
                         return true;
                 }
                 return false;
@@ -4592,6 +4592,9 @@ namespace BP.WF
             
             //新增加的标记,=90 就是会签主持人执行会签的状态. 翻译.
             if (myisPass == 90)
+                return true;
+
+            if (myisPass == 80)
                 return true; 
 
             if (myisPass != 0)
@@ -5697,8 +5700,8 @@ namespace BP.WF
             gwf.FK_FlowSort = fl.FK_FlowSort;
             gwf.SysType = fl.SysType;
 
-            gwf.FK_Dept = WebUser.FK_Dept;
-            gwf.DeptName = WebUser.FK_DeptName;
+            gwf.FK_Dept = empStarter.FK_Dept;
+            gwf.DeptName = empStarter.FK_DeptText;
             gwf.FK_Node = fl.StartNodeID;
             gwf.NodeName = nd.Name;
             gwf.WFState = WFState.Blank;
@@ -5715,8 +5718,8 @@ namespace BP.WF
             else
                 gwf.Title = title;
 
-            gwf.Starter = WebUser.No;
-            gwf.StarterName = WebUser.Name;
+            gwf.Starter = empStarter.No;
+            gwf.StarterName = empStarter.Name;
             gwf.RDT = DataType.CurrentDataTime;
             gwf.PWorkID = parentWorkID;
             gwf.PFID = parentFID;
@@ -5731,15 +5734,15 @@ namespace BP.WF
             GenerWorkerList gwl = new GenerWorkerList();
             gwl.WorkID = wk.OID;
             gwl.FK_Node = nd.NodeID;
-            gwl.FK_Emp = WebUser.No;
+            gwl.FK_Emp = empStarter.No;
             i = gwl.RetrieveFromDBSources();
 
-            gwl.FK_EmpText = WebUser.Name;
+            gwl.FK_EmpText = empStarter.Name;
             gwl.FK_NodeText = nd.Name;
             gwl.FID = 0;
             gwl.FK_Flow = fl.No;
-            gwl.FK_Dept = WebUser.FK_Dept;
-            gwl.FK_DeptT = WebUser.FK_DeptName;
+            gwl.FK_Dept = empStarter.FK_Dept;
+            gwl.FK_DeptT = empStarter.FK_DeptText;
 
             gwl.SDT = DataType.CurrentDataTime;
             gwl.DTOfWarning = DataType.CurrentDataTime;

@@ -1094,14 +1094,14 @@ namespace BP.WF
             {
                 /*让父流程显示待办.*/
                 BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE IsPass=80 AND WorkID="+this.HisGenerWorkFlow.PWorkID);
-                return "";
+                return "父流程已经显示待办.";
             }
 
             //如果是结束子流程.
             if (this.HisFlow.SubFlowOver == SubFlowOver.OverParentFlow)
             {
                 BP.WF.Dev2Interface.Flow_DoFlowOver(this.HisGenerWorkFlow.PFlowNo, this.HisGenerWorkFlow.PWorkID, "子流程完成自动结束父流程.");
-                return "";
+                return "父流程自动结束.";
             }
 
 
@@ -1130,6 +1130,9 @@ namespace BP.WF
             // 因为前面已经对他进行个直接更新所以这里需要进行查询之后在执行更新.
             this.HisGenerWorkFlow.RetrieveFromDBSources();
 
+            //当前登录用户.
+            string currUserNo = BP.Web.WebUser.No;
+
             try
             {
                 //取得调起子流程的人员.
@@ -1146,9 +1149,10 @@ namespace BP.WF
                 this.HisGenerWorkFlow.WFState = WFState.Complete;
                 this.HisGenerWorkFlow.DirectUpdate();
 
-
                 GERpt rpt = new GERpt("ND" + int.Parse(this.HisFlow.No) + "Rpt", this.WorkID);
 
+                //让父流程的userNo登录.
+                BP.WF.Dev2Interface.Port_Login(emp.No);
 
                 // 让当前人员向下发送，但是这种发送一定不要检查发送权限，否则的话就出错误，不能发送下去.
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.HisGenerWorkFlow.PFlowNo, pGWF.WorkID, rpt.Row, null, 0, null,
@@ -1157,12 +1161,19 @@ namespace BP.WF
                 this.HisGenerWorkFlow.WFState = WFState.Complete;
                 this.HisGenerWorkFlow.DirectUpdate();
 
-                return "@当前节点是子流程的最后一个流程, 成功让父流程运行到下一个节点." + objs.ToMsgOfHtml();
+                //切换到当前流程节点.
+                BP.WF.Dev2Interface.Port_Login(currUserNo);
+
+                return "@成功让父流程运行到下一个节点." + objs.ToMsgOfHtml();
             }
             catch (Exception ex)
             {
                 this.HisGenerWorkFlow.WFState = WFState.Complete;
                 this.HisGenerWorkFlow.DirectUpdate();
+
+                //切换到当前流程节点.
+                BP.WF.Dev2Interface.Port_Login(currUserNo);
+
                 return "@在最后一个子流程完成后，让父流程的节点自动发送时，出现错误:" + ex.Message;
             }
         }

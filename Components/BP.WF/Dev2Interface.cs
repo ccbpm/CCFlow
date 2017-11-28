@@ -252,12 +252,12 @@ namespace BP.WF
         {
             get
             {
-              
-                    /* 如果不是删除流程注册表. */
-                    Paras ps = new Paras();
-                    string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                    ps.SQL = "SELECT count(WorkID) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND WFState=" + (int)WFState.Complete;
-                    return BP.DA.DBAccess.RunSQLReturnValInt(ps, 0);
+
+                /* 如果不是删除流程注册表. */
+                Paras ps = new Paras();
+                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+                ps.SQL = "SELECT count(WorkID) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND WFState=" + (int)WFState.Complete;
+                return BP.DA.DBAccess.RunSQLReturnValInt(ps, 0);
                 //}
                 //else
                 //{
@@ -673,7 +673,7 @@ namespace BP.WF
             DataSet ds = new DataSet();
 
             //把轨迹表.
-            ds.Tables.Add(  DB_GenerTrackTable(fk_flow, workid, fid) );
+            ds.Tables.Add(DB_GenerTrackTable(fk_flow, workid, fid));
 
             //把抄送信息加入.
             CCLists ens = new CCLists(fk_flow, workid, fid);
@@ -1009,7 +1009,7 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_StarFlows(string userNo)
         {
-            DataTable dt=DB_GenerCanStartFlowsOfDataTable(userNo);
+            DataTable dt = DB_GenerCanStartFlowsOfDataTable(userNo);
             DataView dv = new DataView(dt);
             dv.Sort = "Idx";
             return dv.Table;
@@ -1055,7 +1055,7 @@ namespace BP.WF
                 }
                 qo.addOrderBy("FK_FlowSort", FlowAttr.Idx);
 
-                DataTable  dt= qo.DoQueryToTable();
+                DataTable dt = qo.DoQueryToTable();
                 if (SystemConfig.AppCenterDBType == DBType.Oracle)
                 {
                     dt.Columns["NO"].ColumnName = "No";
@@ -1201,7 +1201,7 @@ namespace BP.WF
         /// </summary>
         /// <param name="fk_flow">流程编号</param>
         /// <returns>返回草稿数据集合,列信息. OID=工作ID,Title=标题,RDT=记录日期,FK_Flow=流程编号,FID=流程ID, FK_Node=节点ID</returns>
-        public static DataTable DB_GenerDraftDataTable(string flowNo=null )
+        public static DataTable DB_GenerDraftDataTable(string flowNo = null)
         {
             /*获取数据.*/
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -1299,8 +1299,8 @@ namespace BP.WF
                 dt.Columns["TSPAN"].ColumnName = "TSpan";
                 dt.Columns["TODOSTA"].ColumnName = "TodoSta";
                 dt.Columns["SYSTYPE"].ColumnName = "SysType";
-               // dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
-               // dt.Columns["CWORKID"].ColumnName = "CWorkID";
+                // dt.Columns["CFLOWNO"].ColumnName = "CFlowNo";
+                // dt.Columns["CWORKID"].ColumnName = "CWorkID";
             }
             return dt;
         }
@@ -1317,13 +1317,13 @@ namespace BP.WF
             sql += " AND A.FK_Node=D.FK_Node ";
             sql += " AND A.WorkID=D.WorkID ";
             sql += " AND D.IsPass=0  ";  // = 90 是会签主持人.
-            sql += " AND D.FK_Emp='"+userNo+"'";
+            sql += " AND D.FK_Emp='" + userNo + "'";
 
             if (fk_node != 0)
-                sql += " AND A.FK_Node="+fk_node;
+                sql += " AND A.FK_Node=" + fk_node;
 
             sql += "  ORDER BY  B.Idx, C.Idx, A.RDT DESC ";
-           
+
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             //添加oracle的处理
@@ -1385,10 +1385,10 @@ namespace BP.WF
         /// </summary>
         /// <param name="fk_node">节点编号</param>
         /// <returns>共享工作列表</returns>
-        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node=0)
+        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, int fk_node = 0)
         {
             //执行 todolist 调度.
-             DTS_GenerWorkFlowTodoSta();
+            DTS_GenerWorkFlowTodoSta();
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -1396,7 +1396,7 @@ namespace BP.WF
             if (WebUser.IsAuthorize == false)
             {
                 /*不是授权状态*/
-                if (fk_node==0)
+                if (fk_node == 0)
                 {
                     if (BP.Sys.SystemConfig.CustomerNo == "TianYe")
                     {
@@ -1477,7 +1477,7 @@ namespace BP.WF
             switch (emp.HisAuthorWay)
             {
                 case Port.AuthorWay.All:
-                    if ( fk_node==0 )
+                    if (fk_node == 0)
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                             ps.SQL = "SELECT * FROM WF_EmpWorks WHERE  FK_Emp=" + dbstr + "FK_Emp  AND TaskSta=0 ORDER BY FK_Flow,ADT DESC ";
@@ -1498,7 +1498,7 @@ namespace BP.WF
                     }
                     break;
                 case Port.AuthorWay.SpecFlows:
-                    if (fk_node==0)
+                    if (fk_node == 0)
                     {
                         if (BP.WF.Glo.IsEnableTaskPool == true)
                             sql = "SELECT * FROM WF_EmpWorks WHERE FK_Emp=" + dbstr + "FK_Emp AND  FK_Flow IN " + emp.AuthorFlows + " AND TaskSta=0 ORDER BY FK_Flow,ADT DESC ";
@@ -1573,7 +1573,7 @@ namespace BP.WF
         /// <param name="fk_flow">流程编号</param>
         /// <param name="fk_node">节点编号</param>
         /// <returns>共享工作列表</returns>
-        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, string fk_flow=null)
+        public static DataTable DB_GenerEmpWorksOfDataTable(string userNo, string fk_flow = null)
         {
             //执行 todolist 调度.
             DTS_GenerWorkFlowTodoSta();
@@ -1764,7 +1764,7 @@ namespace BP.WF
         /// 区分是自己的待办，还是被授权的待办通过数据源的 FK_Emp 字段来区分。
         /// </summary>
         /// <returns></returns>
-        public static DataTable DB_Todolist(string userNo=null)
+        public static DataTable DB_Todolist(string userNo = null)
         {
             if (userNo == null)
             {
@@ -1873,13 +1873,13 @@ namespace BP.WF
         /// <returns>具有FlowNo,FlowName,Num三个列的指定人员的待办列表</returns>
         public static DataTable DB_FlowCompleteGroup(string userNo)
         {
-           
-                /* 如果不是删除流程注册表. */
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT FK_Flow as No,FlowName,COUNT(*) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + userNo + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " GROUP BY FK_Flow,FlowName";
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
- 
+
+            /* 如果不是删除流程注册表. */
+            Paras ps = new Paras();
+            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            ps.SQL = "SELECT FK_Flow as No,FlowName,COUNT(*) Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + userNo + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " GROUP BY FK_Flow,FlowName";
+            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+
         }
 
         /// <summary>
@@ -1892,26 +1892,26 @@ namespace BP.WF
         /// <returns>用户编号</returns>
         public static DataTable DB_FlowComplete(string userNo, string flowNo, int pageSize, int pageIdx)
         {
-            
-                /* 如果不是删除流程注册表. */
-                GenerWorkFlows ens = new GenerWorkFlows();
-                QueryObject qo = new QueryObject(ens);
-                if (flowNo != null)
-                {
-                    qo.AddWhere(GenerWorkFlowAttr.FK_Flow, flowNo);
-                    qo.addAnd();
-                }
-                qo.AddWhere(GenerWorkFlowAttr.FID, 0);
+
+            /* 如果不是删除流程注册表. */
+            GenerWorkFlows ens = new GenerWorkFlows();
+            QueryObject qo = new QueryObject(ens);
+            if (flowNo != null)
+            {
+                qo.AddWhere(GenerWorkFlowAttr.FK_Flow, flowNo);
                 qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.WFState, (int)WFState.Complete);
-                qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", " '%@" + userNo + "@%'");
-                /**小周鹏修改-----------------------------START**/
-                // qo.DoQuery(GenerWorkFlowAttr.WorkID,pageSize, pageIdx);
-                qo.DoQuery(GenerWorkFlowAttr.WorkID, pageSize, pageIdx, GenerWorkFlowAttr.RDT, true);
-                /**小周鹏修改-----------------------------END**/
-                return ens.ToDataTableField();
-           
+            }
+            qo.AddWhere(GenerWorkFlowAttr.FID, 0);
+            qo.addAnd();
+            qo.AddWhere(GenerWorkFlowAttr.WFState, (int)WFState.Complete);
+            qo.addAnd();
+            qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", " '%@" + userNo + "@%'");
+            /**小周鹏修改-----------------------------START**/
+            // qo.DoQuery(GenerWorkFlowAttr.WorkID,pageSize, pageIdx);
+            qo.DoQuery(GenerWorkFlowAttr.WorkID, pageSize, pageIdx, GenerWorkFlowAttr.RDT, true);
+            /**小周鹏修改-----------------------------END**/
+            return ens.ToDataTableField();
+
         }
         /// <summary>
         /// 查询指定流程中已完成的流程
@@ -1924,20 +1924,20 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FlowComplete(string userNo, int pageCount, int pageSize, int pageIdx, string strFlow)
         {
-           
-                /* 如果不是删除流程注册表. */
-                GenerWorkFlows ens = new GenerWorkFlows();
-                QueryObject qo = new QueryObject(ens);
-                qo.AddWhere(GenerWorkFlowAttr.FID, 0);
-                qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.WFState, (int)WFState.Complete);
-                qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", " '%@" + userNo + "@%'");
-                qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.FK_Flow, strFlow);
-                qo.DoQuery(GenerWorkFlowAttr.WorkID, pageSize, pageIdx);
-                return ens.ToDataTableField();
-          
+
+            /* 如果不是删除流程注册表. */
+            GenerWorkFlows ens = new GenerWorkFlows();
+            QueryObject qo = new QueryObject(ens);
+            qo.AddWhere(GenerWorkFlowAttr.FID, 0);
+            qo.addAnd();
+            qo.AddWhere(GenerWorkFlowAttr.WFState, (int)WFState.Complete);
+            qo.addAnd();
+            qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", " '%@" + userNo + "@%'");
+            qo.addAnd();
+            qo.AddWhere(GenerWorkFlowAttr.FK_Flow, strFlow);
+            qo.DoQuery(GenerWorkFlowAttr.WorkID, pageSize, pageIdx);
+            return ens.ToDataTableField();
+
         }
         /// <summary>
         /// 查询指定流程中已完成的公告流程
@@ -1949,18 +1949,18 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FlowComplete(string strFlow, int pageSize, int pageIdx)
         {
-            
-                /* 如果不是删除流程注册表. */
-                GenerWorkFlows ens = new GenerWorkFlows();
-                QueryObject qo = new QueryObject(ens);
-                qo.AddWhere(GenerWorkFlowAttr.FID, 0);
-                qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.WFState, (int)WFState.Complete);
-                qo.addAnd();
-                qo.AddWhere(GenerWorkFlowAttr.FK_Flow, strFlow);
-                qo.DoQuery(GenerWorkFlowAttr.WorkID, pageSize, pageIdx);
-                return ens.ToDataTableField();
-           
+
+            /* 如果不是删除流程注册表. */
+            GenerWorkFlows ens = new GenerWorkFlows();
+            QueryObject qo = new QueryObject(ens);
+            qo.AddWhere(GenerWorkFlowAttr.FID, 0);
+            qo.addAnd();
+            qo.AddWhere(GenerWorkFlowAttr.WFState, (int)WFState.Complete);
+            qo.addAnd();
+            qo.AddWhere(GenerWorkFlowAttr.FK_Flow, strFlow);
+            qo.DoQuery(GenerWorkFlowAttr.WorkID, pageSize, pageIdx);
+            return ens.ToDataTableField();
+
         }
         /// <summary>
         /// 获取已经完成流程
@@ -1970,13 +1970,13 @@ namespace BP.WF
         {
 
             DataTable dt = null;
-          
-                /* 如果不是删除流程注册表. */
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + " GROUP BY T.FK_Flow,T.FlowName";
-                dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
-            
+
+            /* 如果不是删除流程注册表. */
+            Paras ps = new Paras();
+            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            ps.SQL = "SELECT T.FK_Flow, T.FlowName, COUNT(T.WorkID) as Num FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFSta=" + (int)WFSta.Complete + " GROUP BY T.FK_Flow,T.FlowName";
+            dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+
 
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
@@ -1995,13 +1995,13 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FlowComplete()
         {
-           
-                /* 如果不是删除流程注册表. */
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            
+
+            /* 如果不是删除流程注册表. */
+            Paras ps = new Paras();
+            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + WebUser.No + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
+            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+
         }
         /// <summary>
         /// 获取某一个人已完成的工作
@@ -2010,20 +2010,20 @@ namespace BP.WF
         /// <returns></returns>
         public static DataTable DB_FlowComplete(string userNo)
         {
-           
-                /* 如果不是删除流程注册表. */
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + userNo + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
-            
+
+            /* 如果不是删除流程注册表. */
+            Paras ps = new Paras();
+            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            ps.SQL = "SELECT 'RUNNING' AS Type, T.* FROM WF_GenerWorkFlow T WHERE T.Emps LIKE '%@" + userNo + "@%' AND T.FID=0 AND T.WFState=" + (int)WFState.Complete + " ORDER BY  RDT DESC";
+            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+
         }
         /// <summary>
         /// 获取某一个人某个流程已完成的工作
         /// </summary>
         /// <param name="userNo"></param>
         /// <returns></returns>
-        public static DataTable DB_FlowComplete(string userNo,string flowNo)
+        public static DataTable DB_FlowComplete(string userNo, string flowNo)
         {
 
             /* 如果不是删除流程注册表. */
@@ -2076,26 +2076,26 @@ namespace BP.WF
         }
         public static DataTable DB_FlowComplete2(string fk_flow, string title)
         {
-           
-                /* 如果不是删除流程注册表. */
-                Paras ps = new Paras();
-                string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-                if (string.IsNullOrEmpty(fk_flow))
-                {
-                    if (string.IsNullOrEmpty(title))
-                        ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow!='010' order by RDT desc";
-                    else
-                        ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow!='010' order by RDT desc";
-                }
+
+            /* 如果不是删除流程注册表. */
+            Paras ps = new Paras();
+            string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
+            if (string.IsNullOrEmpty(fk_flow))
+            {
+                if (string.IsNullOrEmpty(title))
+                    ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow!='010' order by RDT desc";
                 else
-                {
-                    if (string.IsNullOrEmpty(title))
-                        ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
-                    else
-                        ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
-                }
-                return BP.DA.DBAccess.RunSQLReturnTable(ps);
-           
+                    ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow!='010' order by RDT desc";
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(title))
+                    ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
+                else
+                    ps.SQL = "SELECT 'RUNNING' AS Type,* FROM WF_GenerWorkFlow WHERE Emps LIKE '%@" + WebUser.No + "@%' and Title Like '%" + title + "%' AND FID=0 AND WFState=" + (int)WFState.Complete + " and FK_Flow='" + fk_flow + "' order by RDT desc";
+            }
+            return BP.DA.DBAccess.RunSQLReturnTable(ps);
+
         }
 
         public static DataTable DB_FlowCompleteAndCC2(string fk_flow, string title)
@@ -2326,7 +2326,7 @@ namespace BP.WF
         public static DataTable DB_GenerWillReturnNodes(int fk_node, Int64 workid, Int64 fid)
         {
             DataTable dt = new DataTable("obt");
-            dt.Columns.Add("No",typeof(string)); // 节点ID
+            dt.Columns.Add("No", typeof(string)); // 节点ID
             dt.Columns.Add("Name", typeof(string)); // 节点名称.
             dt.Columns.Add("Rec", typeof(string)); // 被退回节点上的操作员编号.
             dt.Columns.Add("RecName", typeof(string)); // 被退回节点上的操作员名称.
@@ -2420,7 +2420,7 @@ namespace BP.WF
                     {
                         /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
                         sql = "SELECT a.FK_Node AS No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND a.FID=" + fid + " AND a.WorkID=" + workid + " AND a.FK_Node!=" + fk_node + " AND a.IsPass=1 ORDER BY RDT DESC ";
-                        dt= DBAccess.RunSQLReturnTable(sql);
+                        dt = DBAccess.RunSQLReturnTable(sql);
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
                         {
                             dt.Columns["NO"].ColumnName = "No";
@@ -2437,7 +2437,7 @@ namespace BP.WF
                     else
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a,WF_Node b WHERE a.FK_Node=b.NodeID AND a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node!=" + fk_node + " ORDER BY a.RDT DESC";
 
-                    dt= DBAccess.RunSQLReturnTable(sql);
+                    dt = DBAccess.RunSQLReturnTable(sql);
                     if (SystemConfig.AppCenterDBType == DBType.Oracle)
                     {
                         dt.Columns["NO"].ColumnName = "No";
@@ -2455,7 +2455,7 @@ namespace BP.WF
                         /*如果当前点是分流，或者是分合流，就不按退回规则计算了。*/
                         sql = "SELECT a.FK_Node AS No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND a.FID=" + fid + " AND a.WorkID=" + workid + " AND a.FK_Node=" + mywnP.HisNode.NodeID + " AND a.IsPass=1 ORDER BY RDT DESC ";
 
-                        dt= DBAccess.RunSQLReturnTable(sql);
+                        dt = DBAccess.RunSQLReturnTable(sql);
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
                         {
                             dt.Columns["NO"].ColumnName = "No";
@@ -2470,8 +2470,8 @@ namespace BP.WF
                     if (nd.TodolistModel == TodolistModel.Order)
                     {
                         sql = "SELECT a.FK_Node as No,a.FK_NodeText as Name, a.FK_Emp as Rec, a.FK_EmpText as RecName, b.IsBackTracking FROM WF_GenerWorkerlist a, WF_Node b WHERE a.FK_Node=b.NodeID AND (a.WorkID=" + workid + " AND a.IsEnable=1 AND a.IsPass=1 AND a.FK_Node=" + mywnP.HisNode.NodeID + ") OR (a.FK_Node=" + mywnP.HisNode.NodeID + " AND a.IsPass <0)  ORDER BY a.RDT DESC";
-                        dt= DBAccess.RunSQLReturnTable(sql);
-                        
+                        dt = DBAccess.RunSQLReturnTable(sql);
+
                     }
                     else
                     {
@@ -2500,7 +2500,7 @@ namespace BP.WF
                         else
                             throw new Exception("获取上一步节点，未涉及的数据库类型");
 
-                        dt= DBAccess.RunSQLReturnTable(sql);
+                        dt = DBAccess.RunSQLReturnTable(sql);
 
                         if (SystemConfig.AppCenterDBType == DBType.Oracle)
                         {
@@ -2688,7 +2688,7 @@ namespace BP.WF
                     }
                 }
             }
-           
+
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -2758,7 +2758,7 @@ namespace BP.WF
                 ps.Add("FK_Emp", WebUser.No);
             }
 
-            DataTable dt= BP.DA.DBAccess.RunSQLReturnTable(ps);
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
@@ -3079,7 +3079,7 @@ namespace BP.WF
             WebUser.IsWap = false;
             return;
         }
-      
+
         /// <summary>
         /// 登录
         /// </summary>
@@ -3088,8 +3088,8 @@ namespace BP.WF
         /// <param name="fk_dept">所在部门</param>
         /// <param name="deptName">部门名称</param>
         /// <returns></returns>
-        public static string Port_Login(string userNo, string userName=null,string deptNo=null, string deptName=null,
-            string authNo=null, string authName=null)
+        public static string Port_Login(string userNo, string userName = null, string deptNo = null, string deptName = null,
+            string authNo = null, string authName = null)
         {
             if (userName == null)
             {
@@ -3158,7 +3158,7 @@ namespace BP.WF
             ps.SQL = "SELECT SID, Name FROM Port_Emp WHERE No=" + BP.Sys.SystemConfig.AppCenterDBVarStr + "No";
             ps.Add("No", userNo);
             DataTable table = BP.DA.DBAccess.RunSQLReturnTable(ps);
-            info = BP.Tools.Json.DataTableToJson(table,false);
+            info = BP.Tools.Json.DataTableToJson(table, false);
             return info;
         }
         /// <summary>
@@ -3193,7 +3193,7 @@ namespace BP.WF
                         ps.SQL = Glo.UpdataSID;
                         ps.Add("SID", sid);
                         ps.Add("No", userNo);
-                        BP.DA.DBAccess.RunSQL(ps);                        
+                        BP.DA.DBAccess.RunSQL(ps);
                     }
                     catch
                     {
@@ -3308,7 +3308,7 @@ namespace BP.WF
         /// <param name="sender">发送人</param>
         /// <param name="msgPK">消息唯一标记，防止发送重复.</param>
         public static void Port_SendEmail(string mailAddress, string emilTitle, string emailBody,
-            string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null, string paras=null)
+            string msgType, string msgGroupFlag = null, string sender = null, string msgPK = null, string sendToEmpNo = null, string paras = null)
         {
             if (string.IsNullOrEmpty(mailAddress))
                 return;
@@ -3453,7 +3453,7 @@ namespace BP.WF
         /// <param name="tag">参数:用@符号隔开比如, @PWorkID=101@PFlowNo=003</param>
         /// <param name="cFlowInfo">子流程信息</param>
         public static void WriteTrack(string flowNo, int nodeFromID, string nodeFromName, Int64 workid, Int64 fid, string msg, ActionType at, string tag,
-            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom=null,string empNameFrom=null, string rdt=null)
+            string cFlowInfo, string optionMsg = null, string empNoTo = null, string empNameTo = null, string empNoFrom = null, string empNameFrom = null, string rdt = null)
         {
             if (at == ActionType.CallChildenFlow)
                 if (string.IsNullOrEmpty(cFlowInfo) == true)
@@ -3476,20 +3476,20 @@ namespace BP.WF
             t.HisActionType = at;
             t.ActionTypeText = optionMsg;
 
-           // Node nd = new Node(nodeFrom);
+            // Node nd = new Node(nodeFrom);
             t.NDFrom = nodeFromID;
             t.NDFromT = nodeFromName;
 
-            if (empNoFrom==null)
-            t.EmpFrom = WebUser.No;
+            if (empNoFrom == null)
+                t.EmpFrom = WebUser.No;
             else
                 t.EmpFrom = empNoFrom;
 
             if (empNameFrom == null)
-            t.EmpFromT = WebUser.Name;
+                t.EmpFromT = WebUser.Name;
             else
                 t.EmpFromT = empNameFrom;
-                
+
 
             t.FK_Flow = flowNo;
 
@@ -3507,7 +3507,7 @@ namespace BP.WF
                 t.EmpToT = empNameTo;
             }
 
-             
+
             t.Msg = msg;
 
             if (tag != null)
@@ -3557,7 +3557,7 @@ namespace BP.WF
         /// <param name="msg">信息</param>
         public static void WriteTrackInfo(string flowNo, int nodeFrom, string ndFromName, Int64 workid, Int64 fid, string msg, string optionMsg)
         {
-            WriteTrack(flowNo, nodeFrom,ndFromName, workid, fid, msg, ActionType.Info, null, null, optionMsg);
+            WriteTrack(flowNo, nodeFrom, ndFromName, workid, fid, msg, ActionType.Info, null, null, optionMsg);
         }
         /// <summary>
         /// 写入工作审核日志:
@@ -3570,7 +3570,7 @@ namespace BP.WF
         /// <param name="optionName">操作名称(比如:科长审核、部门经理审批),如果为空就是"审核".</param>
         public static void WriteTrackWorkCheck(string flowNo, int currNodeID, Int64 workid, Int64 fid, string msg, string optionName)
         {
-             
+
             string dbStr = BP.Sys.SystemConfig.AppCenterDBVarStr;
 
             GenerWorkFlow gwf = new GenerWorkFlow();
@@ -4112,9 +4112,9 @@ namespace BP.WF
             gwf.Delete();
 
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
-            
+
             Paras ps = new Paras();
-            
+
             Flow fl = new Flow(flowNo);
             ps = new Paras();
             ps.SQL = "DELETE FROM " + fl.PTable + " WHERE OID=" + dbstr + "OID";
@@ -4210,7 +4210,7 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="workID">工作ID</param>
         /// <returns>返回成功执行信息</returns>
-        public static string Flow_DoUnSend(string flowNo, Int64 workID, int unSendToNode=0)
+        public static string Flow_DoUnSend(string flowNo, Int64 workID, int unSendToNode = 0)
         {
 
             WorkUnSend unSend = new WorkUnSend(flowNo, workID, unSendToNode);
@@ -4562,7 +4562,7 @@ namespace BP.WF
                 gwf.WorkID = workID;
                 if (gwf.RetrieveFromDBSources() == 0)
                     return true;
-                string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID="+workID+" AND FK_Node="+nodeID ;
+                string mysql = "SELECT FK_Emp, IsPass FROM WF_GenerWorkerList WHERE WorkID=" + workID + " AND FK_Node=" + nodeID;
                 DataTable mydt = DBAccess.RunSQLReturnTable(mysql);
                 if (mydt.Rows.Count == 0)
                     return true;
@@ -4571,7 +4571,7 @@ namespace BP.WF
                 {
                     string fk_emp = dr["FK_Emp"].ToString();
                     string isPass = dr["IsPass"].ToString();
-                    if (fk_emp == userNo && (isPass == "0" || isPass=="80" || isPass=="90") )
+                    if (fk_emp == userNo && (isPass == "0" || isPass == "80" || isPass == "90"))
                         return true;
                 }
                 return false;
@@ -4589,13 +4589,13 @@ namespace BP.WF
 
             //判断是否是待办.
             int myisPass = int.Parse(dt.Rows[0]["IsPass"].ToString());
-            
+
             //新增加的标记,=90 就是会签主持人执行会签的状态. 翻译.
             if (myisPass == 90)
                 return true;
 
             if (myisPass == 80)
-                return true; 
+                return true;
 
             if (myisPass != 0)
                 return false;
@@ -4658,7 +4658,7 @@ namespace BP.WF
             //ps.Add("FK_Node", nodeID);
             //ps.Add("FK_Emp", userNo);
             //ps.Add("WorkID", workID);
-            string sql = "SELECT c.RunModel, a.TaskSta FROM WF_GenerWorkFlow a , WF_GenerWorkerlist b, WF_Node c WHERE a.FK_Node='" + nodeID + "'  AND b.FK_Node=c.NodeID AND a.WorkID=b.WorkID AND a.FK_Node=b.FK_Node  AND b.GuestNo='" + userNo + "' AND b.IsEnable=1 AND a.WorkID=" + workID ;
+            string sql = "SELECT c.RunModel, a.TaskSta FROM WF_GenerWorkFlow a , WF_GenerWorkerlist b, WF_Node c WHERE a.FK_Node='" + nodeID + "'  AND b.FK_Node=c.NodeID AND a.WorkID=b.WorkID AND a.FK_Node=b.FK_Node  AND b.GuestNo='" + userNo + "' AND b.IsEnable=1 AND a.WorkID=" + workID;
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 0)
@@ -4763,7 +4763,7 @@ namespace BP.WF
         /// <param name="msg">催办消息</param>
         /// <param name="isPressSubFlow">是否催办子流程？</param>
         /// <returns>返回执行结果</returns>
-        public static string Flow_DoPress(Int64 workID, string msg, bool isPressSubFlow=false)
+        public static string Flow_DoPress(Int64 workID, string msg, bool isPressSubFlow = false)
         {
             GenerWorkFlow gwf = new GenerWorkFlow(workID);
 
@@ -5195,7 +5195,7 @@ namespace BP.WF
                 ps.SQL = "SELECT WorkID FROM WF_GenerWorkFlow WHERE WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID AND Starter=" + SystemConfig.AppCenterDBVarStr + "Starter";
                 ps.Add("WorkID", workid);
                 ps.Add("Starter", userNo);
-                string user = BP.DA.DBAccess.RunSQLReturnStringIsNull(ps,null);
+                string user = BP.DA.DBAccess.RunSQLReturnStringIsNull(ps, null);
                 if (user == null)
                     return false;
                 return true;
@@ -5216,7 +5216,7 @@ namespace BP.WF
             return false;
         }
         #region 与流程有关的接口
-        
+
         /// <summary>
         /// 增加一个评论
         /// </summary>
@@ -5237,7 +5237,7 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="mypk">主键</param>
         /// <returns>返回删除信息.</returns>AddToTrack
-        public static string Flow_BBSDelete(string flowNo, string mypk,string username)
+        public static string Flow_BBSDelete(string flowNo, string mypk, string username)
         {
             Paras pss = new Paras();
             pss.SQL = "SELECT EMPFROM FROM ND" + int.Parse(flowNo) + "Track WHERE MyPK=" + SystemConfig.AppCenterDBVarStr + "MyPK ";
@@ -5256,7 +5256,7 @@ namespace BP.WF
                 return "删除失败,仅能删除自己评论!";
             }
         }
-      
+
         /// <summary>
         /// 取消设置关注
         /// </summary>
@@ -5269,7 +5269,7 @@ namespace BP.WF
             if (i == 0)
                 throw new Exception("@ 设置关注错误：没有找到 WorkID= " + workid + " 的实例。");
             string isFocus = gwf.GetParaString("F_" + WebUser.No, "0"); //edit by liuxc,2016-10-22,修复关注/取消关注逻辑错误
-            
+
             if (isFocus == "0")
                 gwf.SetPara("F_" + WebUser.No, "1");
             else
@@ -5289,7 +5289,7 @@ namespace BP.WF
             int i = gwf.RetrieveFromDBSources();
             if (i == 0)
                 throw new Exception("@ 设置关注错误：没有找到 WorkID= " + workid + " 的实例。");
-            string isFocus = gwf.GetParaString("C_" + WebUser.No, "0"); 
+            string isFocus = gwf.GetParaString("C_" + WebUser.No, "0");
 
             if (isFocus == "0")
                 gwf.SetPara("C_" + WebUser.No, "1");
@@ -5525,7 +5525,7 @@ namespace BP.WF
                 foreach (string key in htWork.Keys)
                     paras += "@" + key + "=" + htWork[key].ToString();
 
-                if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec==true)
+                if (string.IsNullOrEmpty(paras) == false && Glo.IsEnableTrackRec == true)
                 {
                     string dbstr = SystemConfig.AppCenterDBVarStr;
                     Paras ps = new Paras();
@@ -6087,7 +6087,7 @@ namespace BP.WF
             sw.OID = workID;
             sw.RetrieveFromDBSources();
 
-            //@于庆海翻译.
+
             Node ndOfToNode = null; //到达节点ID
             if (toNodeID != 0)
                 ndOfToNode = new Node(toNodeID);
@@ -6232,7 +6232,7 @@ namespace BP.WF
         /// <param name="msgTitle">标题</param>
         /// <param name="msgDoc">内容</param>
         /// <returns>执行信息</returns>
-        public static string Node_CC_WriteTo_CClist(int fk_node,  Int64 workID, string toEmpNo, string toEmpName,
+        public static string Node_CC_WriteTo_CClist(int fk_node, Int64 workID, string toEmpNo, string toEmpName,
             string msgTitle, string msgDoc)
         {
             GenerWorkFlow gwf = new GenerWorkFlow();
@@ -6268,11 +6268,11 @@ namespace BP.WF
             list.FID = gwf.FID;
             list.PFlowNo = gwf.PFlowNo;
             list.PWorkID = gwf.PWorkID;
-          //  list.NDFrom = ndFrom;
+            //  list.NDFrom = ndFrom;
 
             //是否要写入待办.
-            if ( fromNode.CCWriteTo == CCWriteTo.CCList )
-                list.InEmpWorks =  false;    //added by liuxc,2015.7.6
+            if (fromNode.CCWriteTo == CCWriteTo.CCList)
+                list.InEmpWorks = false;    //added by liuxc,2015.7.6
             else
                 list.InEmpWorks = true;    //added by liuxc,2015.7.6
 
@@ -6318,14 +6318,14 @@ namespace BP.WF
         /// <param name="toDepts">到部门，格式:001,002,003</param>
         /// <param name="toStations">到岗位 格式:001,002,003</param>
         /// <param name="toStations">到权限组 格式:001,002,003</param>
-        public static string Node_CC_WriteTo_CClist(int fk_node, Int64 workID, string title, string doc, 
-            string toEmps=null, string toDepts=null, string toStations=null, string toGroups=null)
+        public static string Node_CC_WriteTo_CClist(int fk_node, Int64 workID, string title, string doc,
+            string toEmps = null, string toDepts = null, string toStations = null, string toGroups = null)
         {
 
             Node nd = new Node(fk_node);
 
             //计算出来曾经抄送过的人.
-            string sql = "SELECT CCTo FROM WF_CCList WHERE FK_Node="+fk_node+" AND WorkID="+workID;
+            string sql = "SELECT CCTo FROM WF_CCList WHERE FK_Node=" + fk_node + " AND WorkID=" + workID;
             DataTable mydt = DBAccess.RunSQLReturnTable(sql);
             string toAllEmps = ",";
             foreach (DataRow dr in mydt.Rows)
@@ -6344,7 +6344,7 @@ namespace BP.WF
                 gwf.NodeName = nd.Name;
             }
 
-            #region 处理抄送到人员. 
+            #region 处理抄送到人员.
             if (toEmps != null)
             {
                 string[] emps = toEmps.Split(';');
@@ -6357,7 +6357,7 @@ namespace BP.WF
                     string empNo = strs[0];
                     string empName = strs[1];
 
-                    if (toAllEmps.Contains(","+empNo + ",") == true)
+                    if (toAllEmps.Contains("," + empNo + ",") == true)
                         continue;
 
                     CCList list = new CCList();
@@ -6376,7 +6376,7 @@ namespace BP.WF
                     list.FID = gwf.FID;
                     list.PFlowNo = gwf.PFlowNo;
                     list.PWorkID = gwf.PWorkID;
-                   // list.NDFrom = ndFrom;
+                    // list.NDFrom = ndFrom;
 
                     //是否要写入待办.
                     if (nd.CCWriteTo == CCWriteTo.CCList)
@@ -6406,7 +6406,7 @@ namespace BP.WF
                         list.Update();
                     }
 
-                    ccRec += "" + list.CCToName+";";
+                    ccRec += "" + list.CCToName + ";";
                     //人员编号,加入这个集合.
                     toAllEmps += empNo + ",";
                 }
@@ -6449,7 +6449,7 @@ namespace BP.WF
                         list.FID = gwf.FID;
                         list.PFlowNo = gwf.PFlowNo;
                         list.PWorkID = gwf.PWorkID;
-                       // list.NDFrom = ndFrom;
+                        // list.NDFrom = ndFrom;
 
                         //是否要写入待办.
                         if (nd.CCWriteTo == CCWriteTo.CCList)
@@ -6525,7 +6525,7 @@ namespace BP.WF
                         list.FID = gwf.FID;
                         list.PFlowNo = gwf.PFlowNo;
                         list.PWorkID = gwf.PWorkID;
-                       // list.NDFrom = ndFrom;
+                        // list.NDFrom = ndFrom;
 
                         //是否要写入待办.
                         if (nd.CCWriteTo == CCWriteTo.CCList)
@@ -6554,7 +6554,7 @@ namespace BP.WF
                             list.CheckPhysicsTable();
                             list.Update();
                         }
-                        
+
                         //录制本次抄送到的人员.
                         ccRec += "" + list.CCToName + ";";
 
@@ -6891,7 +6891,7 @@ namespace BP.WF
             if (gwf.RetrieveFromDBSources() == 0)
                 throw new Exception("@工作丢失..");
 
-            if ( gwf.WFState == WFState.Blank)
+            if (gwf.WFState == WFState.Blank)
             {
                 if (gwf.FK_Node != int.Parse(fk_flow + "01"))
                     throw new Exception("@设置草稿错误，只有在开始节点时才能设置草稿，现在的节点是:" + gwf.Title);
@@ -7398,7 +7398,7 @@ namespace BP.WF
         /// <param name="toNodeID">到达的节点ID</param>
         /// <param name="emps">如果多个就用逗号分开</param>
         /// <param name="Del_Selected">是否删除历史选择</param>
-        public static void Node_AddNextStepAccepters(Int64 workID,  int toNodeID, string emps, bool del_Selected = true)
+        public static void Node_AddNextStepAccepters(Int64 workID, int toNodeID, string emps, bool del_Selected = true)
         {
             if (emps.Contains(";") == true)
             {
@@ -7409,7 +7409,7 @@ namespace BP.WF
                 {
                     if (str.Contains(",") == true)
                     {
-                        result += str.Substring(0, str.IndexOf(',')+1);
+                        result += str.Substring(0, str.IndexOf(',') + 1);
                     }
                     else
                     {
@@ -7426,7 +7426,7 @@ namespace BP.WF
 
             //检查是否是单选？
             BP.WF.Template.Selector st = new Selector(toNodeID);
-            if (st.IsSimpleSelector==true)
+            if (st.IsSimpleSelector == true)
                 sa.Delete(SelectAccperAttr.FK_Node, toNodeID, SelectAccperAttr.WorkID, workID);
 
             //if (nd.select==
@@ -7770,7 +7770,7 @@ namespace BP.WF
             Node nd = new Node(nodeID);
 
             if (nd.TodolistModel == TodolistModel.Order
-                || nd.TodolistModel == TodolistModel.Teamup 
+                || nd.TodolistModel == TodolistModel.Teamup
                 || nd.TodolistModel == TodolistModel.TeamupGroupLeader)
             {
                 /*如果是队列模式，或者是协作模式. */
@@ -8259,16 +8259,16 @@ namespace BP.WF
         #endregion 流程属性与节点属性变更接口.
 
         #region ccform 接口
-      
+
         /// <summary>
         ///  获得指定轨迹的json数据. 
         /// </summary>
         /// <param name="flowNo">流程编号</param>
         /// <param name="mypk">流程主键</param>
         /// <returns>返回当时的表单json字符串</returns>
-        public static string CCFrom_GetFrmDBJson(string flowNo,string mypk)
+        public static string CCFrom_GetFrmDBJson(string flowNo, string mypk)
         {
-            return DBAccess.GetBigTextFromDB("ND" + int.Parse(flowNo) + "Track", "MyPK", mypk, "FrmDB"); 
+            return DBAccess.GetBigTextFromDB("ND" + int.Parse(flowNo) + "Track", "MyPK", mypk, "FrmDB");
         }
         /// <summary>
         /// SDK签章接口
@@ -8366,7 +8366,7 @@ namespace BP.WF
                         {
                             bIsCanDo = false;
                             break;
-                        }                        
+                        }
                     }
                 }
                 //条件不符合则不通过
@@ -8674,7 +8674,7 @@ namespace BP.WF
             string[] strs = emps.Split(',');
             foreach (string str in strs)
             {
-                if (DataType.IsNullOrEmpty(str)==true)
+                if (DataType.IsNullOrEmpty(str) == true)
                     continue;
 
                 SelectAccper en = new SelectAccper();
@@ -9031,8 +9031,8 @@ namespace BP.WF
         /// <returns>返回按钮状态</returns>
         public static ButtonState UI_GetButtonState(string fk_flow, int fk_node, Int64 workid)
         {
-            
-            
+
+
 
             ButtonState bs = new ButtonState(fk_flow, fk_node, workid);
             return bs;
@@ -9046,8 +9046,8 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         public static void UI_Window_Return(string fk_flow, int fk_node, Int64 workid, Int64 fid)
         {
-            
-            
+
+
             string url = Glo.CCFlowAppPath + "WF/WorkOpt/ReturnWork.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid;
             System.Web.HttpContext.Current.Response.Redirect(url, true);
             return;
@@ -9061,8 +9061,8 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         public static void UI_Window_CC(string fk_flow, int fk_node, Int64 workid, Int64 fid)
         {
-            
-            
+
+
 
             PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/CC.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
                 800, 600);
@@ -9076,8 +9076,8 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         public static void UI_Window_AskForHelp(string fk_flow, int fk_node, Int64 workid, Int64 fid)
         {
-            
-            
+
+
 
             string tKey = DateTime.Now.ToString("MMddhhmmss");
             string urlr3 = Glo.CCFlowAppPath + "WF/WorkOpt/Askfor.aspx?FK_Node=" + fk_node + "&FID=" + fid + "&WorkID=" + workid + "&FK_Flow=" + fk_flow + "&s=" + tKey;
@@ -9092,8 +9092,8 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         public static void UI_Window_HungUp(string fk_flow, int fk_node, Int64 workid, Int64 fid)
         {
-            
-            
+
+
 
             PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/HungUp.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
                 500, 400);
@@ -9107,8 +9107,8 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         public static void UI_Window_Hurry(string fk_flow, int fk_node, Int64 workid, Int64 fid)
         {
-            
-            
+
+
 
             PubClass.WinOpen(Glo.CCFlowAppPath + "WF/Hurry.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
                 500, 400);
@@ -9122,8 +9122,8 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         public static void UI_Window_JumpWay(string fk_flow, int fk_node, Int64 workid, Int64 fid)
         {
-            
-            
+
+
 
             PubClass.WinOpen(Glo.CCFlowAppPath + "WF/JumpWaySmallSingle.aspx?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
                 500, 400);
@@ -9137,8 +9137,8 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         public static void UI_Window_FlowChartTruck(string fk_flow, int nodeID, Int64 workid, Int64 fid)
         {
-            
-            
+
+
             PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid,
                 500, 400);
         }
@@ -9151,8 +9151,8 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         public static void UI_Window_Accepter(string fk_flow, int fk_node, Int64 workid, Int64 fid)
         {
-            
-            
+
+
 
             PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/Accepter.htm?FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&WorkID=" + workid + "&FID=" + fid,
                 500, 400);
@@ -9166,8 +9166,8 @@ namespace BP.WF
         /// <param name="fid">流程ID</param>
         public static void UI_Window_FlowChart(string fk_flow)
         {
-            
-            
+
+
             PubClass.WinOpen(Glo.CCFlowAppPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&FK_Flow=" + fk_flow,
                 500, 400);
         }

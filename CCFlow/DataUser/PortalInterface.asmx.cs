@@ -62,9 +62,9 @@ namespace ccbpm
         /// <param name="msgInfo">消息内容</param>
         /// <returns>是否发送成功</returns>
         [WebMethod]
-        public bool SendToDingDing(string mypk,string sender, string sendToEmpNo, string tel, string msgInfo)
+        public bool SendToDingDing(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
-         //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
+            //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
 
             if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
                 BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
@@ -80,9 +80,9 @@ namespace ccbpm
         /// <param name="msgInfo"></param>
         /// <returns>是否发送成功</returns>
         [WebMethod]
-        public bool SendToWeiXin(string mypk,string sender, string sendToEmpNo, string tel, string msgInfo)
+        public bool SendToWeiXin(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
-           // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
+            // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWeiXin  MyPK" + mypk + " UserNo:" + userNo + " Tel:" + tel + " msgInfo:" + msgInfo);
 
             if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
                 BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
@@ -102,7 +102,7 @@ namespace ccbpm
         [WebMethod]
         public bool SendToEmail(string mypk, string sender, string sendToEmpNo, string email, string title, string maildoc)
         {
-           // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
+            // BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " email:" + email + " title:" + title + " maildoc:" + maildoc);
             if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
                 BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, title + " \t\n " + maildoc, BP.DA.DataType.CurrentDataTime);
             return true;
@@ -118,11 +118,11 @@ namespace ccbpm
         [WebMethod]
         public bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo)
         {
-         //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
+            //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
 
             if (BP.Sys.SystemConfig.IsEnableCCIM && userNo != null)
                 BP.WF.Glo.SendMessageToCCIM(BP.Web.WebUser.No, userNo, msg, BP.DA.DataType.CurrentDataTime);
-              //BP.CCIM.Glo.SendMsg(userNo, sourceUserNo, msg);
+            //BP.CCIM.Glo.SendMsg(userNo, sourceUserNo, msg);
             return true;
         }
         #endregion 发送消息接口.
@@ -155,10 +155,10 @@ namespace ccbpm
                 if (miyue != "xxweerwerew")
                     return false;
 
-                if (userNo.Contains(" ")==true)
+                if (userNo.Contains(" ") == true)
                     return false;
 
-                //判断是否视图，如果为视图则不进行修改 @于庆海 需要翻译
+
                 if (BP.DA.DBAccess.IsView("Port_Emp") == true)
                 {
                     return false;
@@ -180,20 +180,20 @@ namespace ccbpm
         /// <param name="password">密码</param>
         /// <returns>正确返回1，不正确返回0，其他的情况抛出异常。</returns>
         [WebMethod]
-        public int CheckUserNoPassWord(string userNo,string password)
+        public int CheckUserNoPassWord(string userNo, string password)
         {
             #region 简单Demo
             try
             {
-                string sql= "SELECT Pass FROM Port_Emp WHERE No='"+userNo+"'";
+                string sql = "SELECT Pass FROM Port_Emp WHERE No='" + userNo + "'";
                 string pass = BP.DA.DBAccessOfMSSQL1.RunSQLReturnVal(sql) as string;
-                if ( pass == password)
+                if (pass == password)
                     return 1; //成功返回1.
                 return 0; //失败返回0.
             }
             catch (Exception ex)
             {
-                throw new Exception("@校验出现错误:"+ex.Message); //连接错误，直接抛出异常.
+                throw new Exception("@校验出现错误:" + ex.Message); //连接错误，直接抛出异常.
             }
             #endregion 简单Demo
         }
@@ -207,7 +207,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept WHERE No='"+deptNo+"'");
+                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + deptNo + "'");
             }
             catch (Exception ex)
             {
@@ -315,7 +315,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE a.FK_Dept=b.No AND A.FK_Dept='"+deptNo+"' ");
+                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE a.FK_Dept=b.No AND A.FK_Dept='" + deptNo + "' ");
             }
             catch (Exception ex)
             {
@@ -334,7 +334,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE (a.No='"+no+"') AND (a.FK_Dept=b.No) ");
+                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable("SELECT a.No,a.Name,a.FK_Dept,b.Name as FK_DeptText FROM Port_Emp a, Port_Dept b WHERE (a.No='" + no + "') AND (a.FK_Dept=b.No) ");
             }
             catch (Exception ex)
             {
@@ -371,7 +371,7 @@ namespace ccbpm
             #region 简单 Demo
             try
             {
-                string sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No IN(SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='"+empNo+"')";
+                string sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No IN(SELECT FK_Dept FROM Port_DeptEmp WHERE FK_Emp='" + empNo + "')";
                 return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable(sql);
             }
             catch (Exception ex)
@@ -417,7 +417,7 @@ namespace ccbpm
             }
             #endregion 简单 Demo
         }
-       
+
         #endregion 组织结构.
 
         #region 特殊的查询
@@ -459,7 +459,7 @@ namespace ccbpm
             }
             #endregion 简单 Demo
         }
-       
+
         /// <summary>
         /// 指定部门与一个岗位集合，获得他们的人员。
         /// </summary>
@@ -473,7 +473,7 @@ namespace ccbpm
             try
             {
                 string sql = "SELECT a.No,a.Name,a.FK_Dept FROM Port_Emp A, Port_DeptEmpStation B WHERE A.No=B.FK_Emp AND B.FK_Station IN (" + stations + ") AND A.FK_Dept='" + deptNo + "'";
-                 return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable(sql);
+                return BP.DA.DBAccessOfMSSQL1.RunSQLReturnTable(sql);
             }
             catch (Exception ex)
             {

@@ -104,7 +104,7 @@ namespace BP.WF.Template
                 }
 
                 if (sql.Contains("@GuestUser.No"))
-                    sql=sql.Replace("@GuestUser.No",GuestUser.No);
+                    sql = sql.Replace("@GuestUser.No", GuestUser.No);
 
                 if (sql.Contains("@GuestUser.Name"))
                     sql = sql.Replace("@GuestUser.Name", GuestUser.Name);
@@ -231,8 +231,8 @@ namespace BP.WF.Template
                     //else
                     //    ps.Add("OID", this.WorkID);
 
-                    //@于庆海翻译，去掉上部分.
-                    dt = DBAccess.RunSQLReturnTable("SELECT Starter No, StarterName Name FROM WF_GenerWorkFlow WHERE WorkID="+this.currWn.HisWork.FID+" OR WorkID="+this.WorkID);
+
+                    dt = DBAccess.RunSQLReturnTable("SELECT Starter No, StarterName Name FROM WF_GenerWorkFlow WHERE WorkID=" + this.currWn.HisWork.FID + " OR WorkID=" + this.WorkID);
                     if (dt.Rows.Count == 1)
                         return dt;
                     else
@@ -246,7 +246,7 @@ namespace BP.WF.Template
                             return dt;
                         }
 
-                        if (dt.Rows.Count == 0 )
+                        if (dt.Rows.Count == 0)
                             throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）无法找到开始节点的工作人员。");
                         else
                             return dt;
@@ -628,7 +628,7 @@ namespace BP.WF.Template
                 string para = town.HisNode.DeliveryParas;
                 para = para.Replace("@", "");
 
-                if (string.IsNullOrEmpty(para)  ==false)
+                if (string.IsNullOrEmpty(para) == false)
                 {
                     string[] strs = para.Split(',');
 
@@ -647,7 +647,7 @@ namespace BP.WF.Template
                         empDept = dt.Rows[0][1].ToString();
                     }
 
-                  //  throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）在指定的节点中没有数据，无法找到工作的人员，指定的节点是:"+para);
+                    //  throw new Exception("@流程设计错误，到达的节点（" + town.HisNode.Name + "）在指定的节点中没有数据，无法找到工作的人员，指定的节点是:"+para);
                 }
                 else
                 {
@@ -884,7 +884,7 @@ namespace BP.WF.Template
             //递归出来子部门下有该岗位的人员
             DataTable mydt = Func_GenerWorkerList_DiGui_ByDepts(subDepts, empNo);
             if (mydt == null && this.town.HisNode.HisWhenNoWorker == false)
-                throw new Exception("@按岗位智能计算没有找到(" + town.HisNode.Name + ")接受人 @当前工作人员:"+WebUser.No+",名称:"+WebUser.Name+" , 部门编号:"+WebUser.FK_Dept+" 部门名称："+WebUser.FK_DeptName);
+                throw new Exception("@按岗位智能计算没有找到(" + town.HisNode.Name + ")接受人 @当前工作人员:" + WebUser.No + ",名称:" + WebUser.Name + " , 部门编号:" + WebUser.FK_Dept + " 部门名称：" + WebUser.FK_DeptName);
 
             //add by zhoupeng  考虑到自动跳转，在没有接受人的情况下.
             if (mydt == null)

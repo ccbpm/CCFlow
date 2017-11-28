@@ -500,6 +500,9 @@ namespace SMSServices
 
                                 int jumpNode = int.Parse(doOutTime);
                                 Node jumpToNode = new Node(jumpNode);
+
+                                //设置默认同意.
+                                BP.WF.Dev2Interface.WriteTrackWorkCheck(jumpToNode.FK_Flow, node.NodeID, workid, 0, "同意", "预期自动审批");
                               
                                 //执行发送.
                                 info = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, null, null, jumpToNode.NodeID, null).ToMsgOfText();
@@ -710,6 +713,7 @@ namespace SMSServices
 
                             //执行发送.
                             SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(fl.No, workID);
+
                             //string info_send= BP.WF.Dev2Interface.Node_StartWork(fl.No,);
                             this.SetText("流程:" + fl.No + fl.Name + "的定时任务\t\n -------------- \t\n" + objs.ToMsgOfText());
                         }

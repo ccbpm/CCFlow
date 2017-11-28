@@ -1014,9 +1014,6 @@ function OptSuc(msg) {
 //初始化发送节点下拉框
 function InitToNodeDDL(workNode) {
 
-    alert( JSON.stringify( workNode.ToNodes) );
-
-
     if (workNode.ToNodes != undefined && workNode.ToNodes.length > 0) {
         // $('[value=发送]').
         var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');

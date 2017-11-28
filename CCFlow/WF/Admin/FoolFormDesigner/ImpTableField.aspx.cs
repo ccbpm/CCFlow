@@ -260,7 +260,7 @@ namespace CCFlow.WF.MapDef
                     //中文描述.
                     var tb = new TB();
                     tb.ID = "TB_Desc_" + dr["No"];
-                    tb.Columns = 20;
+                    tb.Columns = 12;
                     tb.Text = dr["Name"].ToString();
                     if (tb.Text.Length == 0)
                         tb.Text = dr["No"].ToString();
@@ -283,7 +283,7 @@ namespace CCFlow.WF.MapDef
                     //绑定的逻辑类型.
                     tb = new TB();
                     tb.ID = "TB_BindKey_" + dr["No"];
-                    tb.Columns = 30;
+                    tb.Columns = 15;
                     //tb.Text = dr["name"].ToString();
                     tb.Attributes["ondblclick"] = "OpenSelectBindKey(this)";
                     this.Pub1.AddTD(tb);
@@ -310,7 +310,6 @@ namespace CCFlow.WF.MapDef
                 }
 
                 this.Pub1.AddTableEnd();
-                this.Pub1.AddBR();
                 this.Pub1.AddBR();
                 this.Pub1.AddSpace(1);
 

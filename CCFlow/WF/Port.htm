@@ -2,30 +2,64 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title>驰骋工作流</title>
-    <!-- 引用通用的js文件. -->
-    <script type="text/javascript"   src="./Scripts/config.js" ></script>
-    <script type="text/javascript" language="javascript" >
-        function Load() {
+    <title>页面接口...</title>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+     <base target="_self" /> 
+    <link href="./Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" >
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
 
             var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
+            var paras = url.substring(url.indexOf('?')+1);
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Port_Init&" + paras + "&mm=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        var url = data.replace('url@', '');
+                        window.location.href = url;
+                        return;
+                    }
+                    alert(data);
+                }
+            });
         }
-    </script>
+     </script>
+
 </head>
-<body  onload="Load()" >
+<body>
 
 <form id="cc">
- <h2> <img src='./Img/loading.gif' border=0 /> 正在加载, 请稍后...</h2>
-</form>
+
+ 
+
+<div id="Msg"></div>
+
+
 
 </body>
 </html>

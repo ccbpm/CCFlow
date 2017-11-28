@@ -271,7 +271,12 @@
 			var winHeight = 600;
 			var iTop = (window.screen.height - 30 - winHeight) / 2; //获得窗口的垂直位置;
 			var iLeft = (window.screen.width - 10 - winWidth) / 2; //获得窗口的水平位置;
-			window.open("../ImpTableFieldNew.htm?FK_MapData=" + frmID + "&reset=true", "_blank", "height=" + winHeight + "px,width=" + winWidth + "px,top=" + iTop + ",left="+iLeft+",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
+
+            var url="../ImpTableFieldNew.htm?FK_MapData=" + frmID + "&reset=true";
+            window.location.href=url;
+            return;
+
+			window.open(url, "_blank", "height=" + winHeight + "px,width=" + winWidth + "px,top=" + iTop + ",left="+iLeft+",toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no");
 		}
         function CheckAll(checked) {
             $.each($(":checkbox"), function () {
@@ -594,6 +599,7 @@
                 <fieldset style="height: 90%;">
 					<legend>导入字段生成表单</legend>
 						<ul>
+							<li>操作提示：指定内外部数据源中的一个已经设计好的表，把字段信息导入该表单</li>
 							<li>操作提示：指定内外部数据源中的一个已经设计好的表，把字段信息导入该表单</li>
 						</ul>
 						<label style="padding-left: 8px;">

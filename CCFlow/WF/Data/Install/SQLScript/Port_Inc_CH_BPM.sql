@@ -63,7 +63,7 @@ INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('12','外来人员岗',
 -- Port_Emp ;
 -- 总经理部 ;
 DELETE FROM Port_Emp;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,FK_Duty,Leader,Tel,Email,NumOfDept) VALUES('admin','admin','pub','100','01','admin','0531-82374939','zhoupeng@ccflow.org',1)  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,FK_Duty,Leader,Tel,Email,NumOfDept) VALUES('admin','admin','123','100','01','admin','0531-82374939','zhoupeng@ccflow.org',1)  ;
 INSERT INTO Port_Emp (No,Name,Pass,FK_Dept,FK_Duty,Leader,Tel,Email,NumOfDept) VALUES('zhoupeng','周朋','123','100','02','admin','0531-82374939','zhoupeng@ccflow.org',1)  ;
 
 -- 市场部 ;

@@ -961,7 +961,6 @@ namespace BP.WF.Template
                 map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", true, false);
                 map.SetHelperAlert(MapDtlAttr.RowsOfList, "对第1个版本有效.");
 
-
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", true, true);
 
                 map.AddBoolean(MapDtlAttr.IsShowSum, true, "是否显示合计？", true, true);
@@ -1052,23 +1051,7 @@ namespace BP.WF.Template
                 #endregion 工作流相关.
 
                 RefMethod  rm = new RefMethod();
-                rm.Title = "高级设置"
-                    ; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoAdvSetting";
-                rm.Icon = "/WF/Img/Setting.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "事件"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoAction";
-                rm.Icon = "/WF/Img/Setting.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
+               
 
                 rm = new RefMethod();
                 rm.Title = "隐藏字段"; // "设计表单";
@@ -1084,6 +1067,7 @@ namespace BP.WF.Template
                 rm.ClassMethodName = this.ToString() + ".GenerAttrs";
                 rm.RefMethodType = RefMethodType.Func;
                 map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.Title = "导入其他表字段"; // "设计表单";
@@ -1102,11 +1086,52 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
 
+                rm = new RefMethod();
+                rm.GroupName = "实验中的功能";
+                rm.Title = "列自动计算"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".ColAutoExp";
+                rm.Icon = "/WF/Img/Setting.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.GroupName = "实验中的功能";
+                rm.Title = "事件"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoAction";
+                rm.Icon = "/WF/Img/Setting.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "实验中的功能";
+                rm.Title = "高级设置";
+                rm.ClassMethodName = this.ToString() + ".DoAdvSetting";
+                rm.Icon = "/WF/Img/Setting.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
-        
+
+        /// <summary>
+        /// 列自动计算
+        /// </summary>
+        /// <returns></returns>
+        public string ColAutoExp()
+        {
+            string url = "../../Admin/FoolFormDesigner/DtlSetting/ColAutoExp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            return url;
+        }
         /// <summary>
         /// 导入其他表字段
         /// </summary>

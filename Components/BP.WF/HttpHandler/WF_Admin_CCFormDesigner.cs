@@ -163,6 +163,24 @@ namespace BP.WF.HttpHandler
 
             return "err@表单ID:" + str + "已经被使用.";
         }
+        /// <summary>
+        /// 获得系统的表
+        /// </summary>
+        /// <returns></returns>
+        public string NewFrmGuide_Init()
+        {
+            DataSet ds = new DataSet();
+
+            SFDBSrc src = new SFDBSrc("local");
+            ds.Tables.Add(src.ToDataTableField("SFDBSrc"));
+
+            DataTable tables = src.GetTables();
+            tables.TableName = "Tables";
+            ds.Tables.Add(tables);
+
+            return BP.Tools.Json.ToJson(ds);
+
+        }
         public string NewFrmGuide_Create()
         {
             MapData md = new MapData();

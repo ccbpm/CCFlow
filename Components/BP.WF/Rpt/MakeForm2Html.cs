@@ -775,7 +775,7 @@ namespace BP.WF
             {
                 //输出标题.
                 sb.Append("\t\n <tr>");
-                sb.Append("\t\n  <th colspan=4><h3>" + gf.Lab + "</h3></th>");
+                sb.Append("\t\n  <th colspan=4>" + gf.Lab + "</th>");
                 sb.Append("\t\n </tr>");
 
                 #region 输出字段.
@@ -805,11 +805,20 @@ namespace BP.WF
                                 break;
                         }
                         //这几种字体生成 pdf都乱码
-                        text = text.Replace("font-family: 仿宋", "font-family: 宋体");
-                        text = text.Replace("font-family: 黑体", "font-family: 宋体");
-                        text = text.Replace("font-family: 楷体", "font-family: 宋体");
-                        text = text.Replace("font-family: 隶书", "font-family: 宋体");
-
+                        text = text.Replace("仿宋,", "宋体,");
+                        text = text.Replace("仿宋;", "宋体;");
+                        text = text.Replace("仿宋\"", "宋体\"");
+                        text = text.Replace("黑体,", "宋体,");
+                        text = text.Replace("黑体;", "宋体;");
+                        text = text.Replace("黑体\"", "宋体\"");
+                        text = text.Replace("楷体,", "宋体,");
+                        text = text.Replace("楷体;", "宋体;");
+                        text = text.Replace("楷体\"", "宋体\"");
+                        text = text.Replace("隶书,", "宋体,");
+                        text = text.Replace("隶书;", "宋体;");
+                        text = text.Replace("隶书\"", "宋体\"");
+                        // text = text.Replace("font-family: 楷体", "font-family: 宋体");
+                        // text = text.Replace("font-family: 隶书", "font-family: 宋体");
                         //text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.UTF8);
                         // text = System.Web.HttpUtility.UrlDecode(text, System.Text.Encoding.GetEncoding("gb2312"));
 
@@ -1020,7 +1029,7 @@ namespace BP.WF
 
                         msg += "审核人:" + empStrs + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期:" + dr["RDT"].ToString();
 
-                        html += " <td colspan=3 valign=middle ><br><br>" + msg + "</td>";
+                        html += " <td colspan=3 valign=middle >" + msg + "</td>";
                         html += "\t\n </tr>";
                     }
                     #endregion 生成审核信息.
@@ -1070,7 +1079,7 @@ namespace BP.WF
                     }
 
                     //把ccs文件copy过去.
-                    System.IO.File.Copy(SystemConfig.PathOfDataUser + "Style\\ccbpm.css", path + "\\ccbpm.css", true);
+                    System.IO.File.Copy(SystemConfig.PathOfDataUser + "InstancePacketOfData\\Template\\ccbpm.css", path + "\\ccbpm.css", true);
 
                 }
                 catch (Exception ex)

@@ -44,8 +44,33 @@
 
             var sort = GetQueryString("FK_FrmSort");
             $("#HD_FK_FormTree").val(sort);
+
             //创建表单树.
             GenerBindEntities("DDL_FrmTree", "BP.WF.Template.SysFormTrees", sort);
+
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=NewFrmGuide_Init&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    $("#Msg").html("");
+
+                    if (data.indexOf('err@') >= 0) {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    var tables = data["Tables"];
+                    GenerBindDDL("DDL_PTable", tables, "No", "Name", null);
+                    return;
+                }
+            });
+
 
             $("#Msg").html("");
             return;
@@ -121,45 +146,22 @@
 </td>
 </tr>
 
+
+
+
 <tr>
 <td class="Idx" > 6 </td>
-<td > <div id="PTableName" ><input type=radio value="0"  checked=true id="RB_TableModel_0" name="RB_TableModel"/><label for="RB_TableModel_0" >自定义存储表</label> </div> </td>
-<td><input type="text" id="TB_PTable" name="TB_PTable" /> </td>
-<td > 
-<div id="PTableDesc" >数据要存储到那个表里？<br>
-</div>
+<td > <div id="PTableName" > 数据表存储类型</div> </td>
+<td>
+ <select id="DDL_PTableModel" name="DDL_TableModel">
+  <option value="0" >自定存储表 </option>
+  <option value="1" > 从数据库中指定，可以修改字段。 </option>
+  <option value="2" > 从数据库中指定，不允许修改字段。 </option>
+ </select>
+
 </td>
-</tr>
-
-
-<tr>
-<td class="Idx" > 6 </td>
-<td > <div id="Div1" ><input type=radio value="1"  id="RB_TableModel_1" name="RB_TableModel"/><label for="RB_TableModel_1" >指定已经有的存储表</label> </div> </td>
-<td>  <select id="Select1" name="DDL_Table1">
-<option> sss </option>
-<option> sss </option>
-<option> sss </option>
-
-</select>  </td>
 <td > 
-<div id="Div2" >从数据库中指定，可以修改字段。<br>
-</div>
-</td>
-</tr>
-
-
-
-<tr>
-<td class="Idx" > 6 </td>
-<td > <div id="Div3" ><input type=radio value="2"  id="RB_TableModel_2" name="RB_TableModel"/><label for="RB_TableModel_2" >指定已经有的存储表,并且不允许修改表结构.</label> </div> </td>
-<td> <select id="DDL_Table1" name="DDL_Table1">
-<option> sss </option>
-<option> sss </option>
-<option> sss </option>
-</select> </td>
-<td > 
-<div id="Div4" >从数据库中指定，不允许修改字段。<br>
-</div>
+<div id="PTableDesc" >确定后，不允许修改。</div>
 </td>
 </tr>
 
@@ -167,6 +169,30 @@
 
 <tr>
 <td class="Idx" > 7 </td>
+<td > <div id="PTableName" >自定义存储表  </div> </td>
+<td><input type="text" id="TB_PTable" name="TB_PTable" /> </td>
+<td > 
+<div id="PTableDesc" >数据要存储到那个表里？</div>
+</td>
+</tr>
+
+
+<tr>
+<td class="Idx" > 8 </td>
+<td > <div id="Div1" >本机已存在的表  </div> </td>
+<td>
+<select id="DDL_PTable" name="DDL_PTable" >
+</select>
+ </td>
+<td > 
+<div id="Div2" >请选择系统存在的表，对后两项有效？</div>
+</td>
+</tr>
+
+
+
+<tr>
+<td class="Idx" > 9 </td>
 <td >  </td>
 
 <td colspan="2">

@@ -24,7 +24,7 @@ namespace CCFlow.WF.Admin.FoolFormDesigner.DtlSetting
         {
             get
             {
-                return typeof(BP.WF.HttpHandler.WF_Admin_FoolFormDesigner);
+                return typeof(BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_DtlSetting);
             }
         }
     }

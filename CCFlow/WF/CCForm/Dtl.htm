@@ -395,8 +395,9 @@
                         if (sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") {//有新增或者有删除，就有删除权限
                             delThData = {
                                 custom: true,
-                                customcontent: 1,
-                                customcontent1: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
+                                customcontent: 2,
+                                customcontent1: 'img@src="../Img/Btn/Edit.gif" onclick="updateRow(this, ' + sys_MapDtl.RowShowModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@',
+                                customcontent2: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
                                 coltype: 'Operation1'
                             };
                         } 
@@ -968,6 +969,14 @@
         </div>
     </form>
 	<script type="text/javascript">
+	    function updateRow(index, RowShowModel) {
+	        var rowData = $(index).parent().parent().data().data;
+	        if (window.parent) {
+	            var ensName = GetQueryString("EnsName");
+	            var refPKVal = GetQueryString("RefPKVal");
+	            window.parent.DtlFrm(ensName, refPKVal, rowData.OID, RowShowModel, InitPage);
+	        }
+	    }
 	    function deleteRow(index) {
 
 	        isDelRowAlert = true;

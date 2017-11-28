@@ -1020,23 +1020,27 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(MapDtlAttr.MTR, null, "请书写html标记,以《TR》开头，以《/TR》结尾。", true, false, true);
                 #endregion 多表头.
 
-                #region 工作流相关.
-                //add 2014-02-21.
-                map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
-                map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "是否允许copy节点数据", false, false);
-                map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", false, false);
-
-                string sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE FK_MapData='@No' AND  ( (MyDataType =1 and UIVisible=1 ) or (UIContralType=1))";
-                map.AddDDLSQL(MapDtlAttr.SubThreadWorker, null, "子线程处理人字段", sql, true);
-                //超链接
+                #region 超链接.
                 map.AddBoolean(MapDtlAttr.IsEnableLink, false, "是否启用超链接", true, true);
                 map.AddTBString(MapDtlAttr.LinkLabel, "", "超连接标签", true, false, 0, 50, 100);
                 map.AddTBString(MapDtlAttr.LinkTarget, null, "连接目标", true, false, 0, 10, 100);
                 map.AddTBString(MapDtlAttr.LinkUrl, null, "连接URL", true, false, 0, 200, 200, true);
+                #endregion 多表头.
+
+
+
+                #region 工作流相关.
+                //add 2014-02-21.
+                map.AddBoolean(MapDtlAttr.IsCopyNDData, true, "是否允许copy节点数据", true, false);
+                map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
+                map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", true, false);
+                string sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE FK_MapData='@No' AND  ( (MyDataType =1 and UIVisible=1 ) or (UIContralType=1))";
+                map.AddDDLSQL(MapDtlAttr.SubThreadWorker, null, "子线程处理人字段", sql, true);
                 #endregion 工作流相关.
 
                 RefMethod  rm = new RefMethod();
-                rm.Title = "高级设置"; // "设计表单";
+                rm.Title = "高级设置"
+                    ; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoAdvSetting";
                 rm.Icon = "/WF/Img/Setting.png";
                 rm.Visable = true;
@@ -1069,6 +1073,12 @@ namespace BP.WF.Template
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "导入其他表字段"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".ImpFields";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "设计傻瓜表单"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DFoolFrm";
                 rm.Icon = "/WF/Img/Setting.png";
@@ -1082,7 +1092,19 @@ namespace BP.WF.Template
                 return this._enMap;
             }
         }
+        
+        /// <summary>
+        /// 导入其他表字段
+        /// </summary>
+        /// <returns></returns>
+        public string ImpFields()
+        {
 
+      //  http://localhost:18272/WF/Admin/FoolFormDesigner/ImpTableFieldNew.htm?FK_MapData=CCFrm_CZBankBXDtl1&reset=true
+            string url = "../../Admin/FoolFormDesigner/ImpTableFieldNew.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            return url;
+        }
+          
         /// <summary>
         /// 设计傻瓜表单
         /// </summary>
@@ -1180,7 +1202,6 @@ namespace BP.WF.Template
             dtl.LinkUrl = this.LinkUrl;
             dtl.LinkTarget = this.LinkTarget;
             dtl.Update();
-
 
 
             //获得事件实体.

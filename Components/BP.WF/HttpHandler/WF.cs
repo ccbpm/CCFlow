@@ -829,5 +829,168 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataTableToJson(dt, false);
         }
+
+        #region 处理page接口.
+        /// <summary>
+        /// 执行的内容
+        /// </summary>
+        public string DoWhat
+        {
+            get
+            {
+                return this.GetRequestVal("DoWhat"); 
+            }
+        }
+        /// <summary>
+        /// 当前的用户
+        /// </summary>
+        public string UserNo
+        {
+            get
+            {
+                return this.GetRequestVal("UserNo"); 
+            }
+        }
+        /// <summary>
+        /// 用户的安全校验码(请参考集成章节)
+        /// </summary>
+        public string SID
+        {
+            get
+            {
+                return this.GetRequestVal("SID"); 
+            }
+        }
+
+        public string Port_Init()
+        {
+            #region 安全性校验.
+            if (this.UserNo == null || this.SID == null || this.DoWhat == null)
+                return "err@必要的参数没有传入，请参考接口规则。";
+
+            if (BP.WF.Dev2Interface.Port_CheckUserLogin(this.UserNo, this.SID) == false)
+                return "err@非法的访问，请与管理员联系。SID=" + this.SID;
+
+            if (BP.Web.WebUser.No != this.UserNo)
+            {
+                BP.WF.Dev2Interface.Port_SigOut();
+                try
+                {
+                    BP.WF.Dev2Interface.Port_Login(this.UserNo, this.SID);
+                }
+                catch (Exception ex)
+                {
+                    return "err@安全校验出现错误:" + ex.Message;
+                }
+            }
+            #endregion 安全性校验.
+
+            #region 生成参数串.
+            string paras = "";
+            foreach (string str in this.context.Request.QueryString)
+            {
+                string val = this.GetRequestVal(str);
+                if (val.IndexOf('@') != -1)
+                    return "err@您没有能参数: [ " + str + " ," + val + " ] 给值 ，URL 将不能被执行。";
+
+                switch (str)
+                {
+                    case DoWhatList.DoNode:
+                    case DoWhatList.Emps:
+                    case DoWhatList.EmpWorks:
+                    case DoWhatList.FlowSearch:
+                    case DoWhatList.Login:
+                    case DoWhatList.MyFlow:
+                    case DoWhatList.MyWork:
+                    case DoWhatList.Start:
+                    case DoWhatList.Start5:
+                    case DoWhatList.StartSimple:
+                    case DoWhatList.FlowFX:
+                    case DoWhatList.DealWork:
+                    case "FK_Flow":
+                    case "WorkID":
+                    case "FK_Node":
+                    case "SID":
+                        break;
+                    default:
+                        paras += "&" + str + "=" + val;
+                        break;
+                }
+            }
+            #endregion 生成参数串.
+
+            string nodeID = int.Parse(this.FK_Flow + "01").ToString();
+            switch (this.DoWhat)
+            {
+                case DoWhatList.OneWork: // 工作处理器调用.
+                    if (this.FK_Flow == null || this.WorkID == null)
+                        throw new Exception("@参数 FK_Flow 或者 WorkID 为 Null 。");
+                    return "url@WFRpt.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras;
+                case DoWhatList.Start: // 发起工作
+                    if (this.FK_Flow == null)
+                        return "url@Start.htm";
+                    else
+                        return "url@MyFlow.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID;
+                    break;
+                case DoWhatList.Runing: // 在途中工作
+                    return "url@Runing.htm?FK_Flow=" + this.FK_Flow;
+                    break;
+                case DoWhatList.EmpWorks: // 我的工作小窗口.
+                case "Todolist": // 我的工作小窗口.
+                    if (DataType.IsNullOrEmpty(this.FK_Flow))
+                        return "url@Todolist.htm";
+                    else
+                        return "url@Todolist.htm?FK_Flow=" + this.FK_Flow;
+                    break;
+
+                case DoWhatList.FlowSearch: // 流程查询。
+                    if (DataType.IsNullOrEmpty(this.FK_Flow))
+                        return "url@./RptSearch/Default.htm";
+                    else
+                        return "url@./RptDfine/FlowSearch.htm?2=1&FK_Flow=001&EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
+                    break;
+                case DoWhatList.FlowSearchSmall: // 流程查询。
+                    if (this.FK_Flow == null)
+                        return "url@./RptSearch/Default.htm";
+                    else
+                        return "url./Comm/Search.htm?EnsName=ND" + int.Parse(this.FK_Flow) + "Rpt" + paras;
+                    break;
+                case DoWhatList.DealWork: //打开处理工作.
+                    if (DataType.IsNullOrEmpty(this.FK_Flow) || this.WorkID == 0)
+                        return "err@参数 FK_Flow 或者 WorkID 为Null 。";
+
+                    return "url@MyFlow.htm?FK_Flow=" + this.FK_Flow + "&WorkID=" + this.WorkID + "&o2=1" + paras;
+                case DoWhatList.DealMsg: //处理消息的连接，比如待办、退回、移交的消息处理.
+                    string guid = this.GetRequestVal("GUID");
+
+                    BP.WF.SMS sms = new SMS();
+                    sms.MyPK = guid;
+                    sms.Retrieve();
+
+                    //判断当前的登录人员.
+                    if (BP.Web.WebUser.No != sms.SendToEmpNo)
+                        BP.WF.Dev2Interface.Port_Login(sms.SendToEmpNo);
+
+                    BP.DA.AtPara ap = new AtPara(sms.AtPara);
+                    switch (sms.MsgType)
+                    {
+                        case SMSMsgType.SendSuccess: // 发送成功的提示.
+
+                            if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(ap.GetValStrByKey("FK_Flow"),
+                                ap.GetValIntByKey("FK_Node"), ap.GetValInt64ByKey("WorkID"), BP.Web.WebUser.No) == true)
+                                return "url@MyFlow.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
+                            else
+                                return "url@WFRpt.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
+                        default: //其他的情况都是查看工作报告.
+                            return "url@WFRpt.htm?FK_Flow=" + ap.GetValStrByKey("FK_Flow") + "&WorkID=" + ap.GetValStrByKey("WorkID") + "&o2=1" + paras;
+                    }
+                default:
+                    return "err@没有约定的标记:DoWhat=" + this.DoWhat;
+                    break;
+            }
+            return "err@错误不应该运行到这里.";
+        }
+        #endregion 处理page接口.
+
     }
 }

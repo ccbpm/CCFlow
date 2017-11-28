@@ -99,6 +99,10 @@ namespace BP.Sys
         /// </summary>
         public const string FilterSQLExp = "FilterSQLExp";
         /// <summary>
+        /// 列自动计算表达式
+        /// </summary>
+        public const string ColAutoExp = "ColAutoExp";
+        /// <summary>
         /// 是否可见
         /// </summary>
         public const string IsView = "IsView";
@@ -1329,7 +1333,12 @@ namespace BP.Sys
                 //MTR 多表头列.
                 map.AddTBString(MapDtlAttr.MTR, null, "多表头列", true, false, 0, 3000, 20);
 
+                //SQL过滤表达式.
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤SQL表达式", true, false, 0, 200, 20, true);
+
+                //列自动计算表达式.
+                map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算表达式", true, false, 0, 200, 20, true);
+
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
                 //add 2014-02-21.

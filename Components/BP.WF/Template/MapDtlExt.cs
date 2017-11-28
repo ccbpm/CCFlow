@@ -945,8 +945,12 @@ namespace BP.WF.Template
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "名称", true, false, 1, 200, 20);
                 map.AddTBString(MapDtlAttr.Alias, null, "别名", true, false, 0, 100, 20, false);
+                map.SetHelperAlert(MapDtlAttr.Alias, "用于Excel表单有效.");
+
                 map.AddTBString(MapDtlAttr.FK_MapData, null, "表单ID", true, true, 0, 100, 20);
                 map.AddTBString(MapDtlAttr.PTable, null, "存储表", true, false, 0, 200, 20);
+                map.SetHelperAlert(MapDtlAttr.PTable, "默认与编号为同一个存储表.");
+
                 map.AddTBString(MapDtlAttr.FEBD, null, "事件类实体类", true, true, 0, 100, 20, false);
 
                 map.AddDDLSysEnum(MapDtlAttr.Model, 0, "工作模式", true, true,MapDtlAttr.Model, "@0=普通@1=固定行");
@@ -955,6 +959,8 @@ namespace BP.WF.Template
                 //map.AddTBString(MapDtlAttr.ImpFixDataSql, null, "固定列数据SQL", true, false, 0, 500, 20);
 
                 map.AddTBInt(MapDtlAttr.RowsOfList, 6, "初始化行数", true, false);
+                map.SetHelperAlert(MapDtlAttr.RowsOfList, "对第1个版本有效.");
+
 
                 map.AddBoolean(MapDtlAttr.IsEnableGroupField, false, "是否启用分组字段", true, true);
 
@@ -982,6 +988,9 @@ namespace BP.WF.Template
                 // 为浙商银行设置从表打开.翻译.
                 map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", true, true,MapDtlAttr.ListShowModel, "@0=表格@1=卡片");
                 map.AddDDLSysEnum(MapDtlAttr.RowShowModel, 0, "行数据显示格式", true, true,MapDtlAttr.RowShowModel, "@0=无@1=傻瓜表单@2=自由表单");
+                map.SetHelperAlert(MapDtlAttr.RowShowModel, "格式为:第1种类型就要新建行,其他类型新建的时候弹出卡片.");
+
+
                 map.AddDDLSysEnum(MapDtlAttr.DtlOpenType, 1, "数据开放类型", true, true,MapDtlAttr.DtlOpenType, "@0=操作员@1=工作ID@2=流程ID");
 
 
@@ -996,6 +1005,12 @@ namespace BP.WF.Template
 
                 //对显示的结果要做一定的限制.
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤数据SQL表达式", true, false, 0, 200, 20,true);
+                map.SetHelperAlert(MapDtlAttr.FilterSQLExp, "格式为:WFState=1 过滤WFState=1的数据");
+
+                //列自动计算表达式.
+                map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
+                map.SetHelperAlert(MapDtlAttr.ColAutoExp, "格式为:@XiaoJi:Sum@NingLing:Avg 要对小计求合计,对年龄求平均数.不配置不显示.");
+
                
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
                 #endregion 基础信息.
@@ -1026,8 +1041,6 @@ namespace BP.WF.Template
                 map.AddTBString(MapDtlAttr.LinkTarget, null, "连接目标", true, false, 0, 10, 100);
                 map.AddTBString(MapDtlAttr.LinkUrl, null, "连接URL", true, false, 0, 200, 200, true);
                 #endregion 多表头.
-
-
 
                 #region 工作流相关.
                 //add 2014-02-21.

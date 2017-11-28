@@ -386,7 +386,11 @@
         }
 
         function Close() {
-            window.close();
+            if (typeof ((parent && parent.doCloseDialog) || doCloseDialog) === "function") {
+                ((parent && parent.doCloseDialog) || doCloseDialog)();
+            } else {
+                window.close();
+            }
         }
               
     </script>

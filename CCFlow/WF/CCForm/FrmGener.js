@@ -98,14 +98,17 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     // model=1 自由表单, model=2傻瓜表单.
     var url = '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;
     //alert('@代国强...这里需要弹出ssurl:' + url);
-    //window.open(url);
-    (parent.OpenEasyUiDialog || OpenEasyUiDialog)(url, "editSubGrid", '编辑', 1000, 550, "icon-property", false, null, null, null, function () {
-        if (typeof InitPage === "function") {
-            InitPage.call();
-        } else {
-            alert("请手动刷新表单");
-        }
-    });
+    if (typeof ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog) === "function") {
+        ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog)(url, "editSubGrid", '编辑', 1000, 550, "icon-property", false, null, null, null, function () {
+            if (typeof InitPage === "function") {
+                InitPage.call();
+            } else {
+                alert("请手动刷新表单");
+            }
+        });
+    } else {
+        window.open(url);
+    }
 }
 
 var frmData = null;

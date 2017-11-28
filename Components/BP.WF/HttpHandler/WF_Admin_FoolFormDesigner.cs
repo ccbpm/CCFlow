@@ -2220,6 +2220,30 @@ namespace BP.WF.HttpHandler
             return mtds;
         }
         #endregion
+
+
+        #region  ImpTableFieldSelectBindKey 外键枚举
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <returns></returns>
+        public string ImpTableFieldSelectBindKey_Init()
+        {
+            DataSet ds = new DataSet();
+
+            BP.Sys.SysEnumMains ens = new BP.Sys.SysEnumMains();
+            ens.RetrieveAll();
+            ds.Tables.Add(ens.ToDataTableField("EnumMain"));
+
+            BP.Sys.SFTables tabs = new BP.Sys.SFTables();
+            tabs.RetrieveAll();
+            ds.Tables.Add(tabs.ToDataTableField("SFTables"));
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion  ImpTableFieldSelectBindKey 外键枚举
+
+
     }
 
     public class WSMethod

@@ -123,16 +123,47 @@
 
 <tr>
 <td class="Idx" > 6 </td>
-<td > <div id="PTableName" >存储表:</div> </td>
+<td > <div id="PTableName" ><input type=radio value="0"  checked=true id="RB_TableModel_0" name="RB_TableModel"/><label for="RB_TableModel_0" >自定义存储表</label> </div> </td>
 <td><input type="text" id="TB_PTable" name="TB_PTable" /> </td>
 <td > 
-
-<div id="PTableDesc" >
-数据要存储到那个表里？<br>
+<div id="PTableDesc" >数据要存储到那个表里？<br>
 </div>
-
 </td>
 </tr>
+
+
+<tr>
+<td class="Idx" > 6 </td>
+<td > <div id="Div1" ><input type=radio value="1"  id="RB_TableModel_1" name="RB_TableModel"/><label for="RB_TableModel_1" >指定已经有的存储表</label> </div> </td>
+<td>  <select id="Select1" name="DDL_Table1">
+<option> sss </option>
+<option> sss </option>
+<option> sss </option>
+
+</select>  </td>
+<td > 
+<div id="Div2" >从数据库中指定，可以修改字段。<br>
+</div>
+</td>
+</tr>
+
+
+
+<tr>
+<td class="Idx" > 6 </td>
+<td > <div id="Div3" ><input type=radio value="2"  id="RB_TableModel_2" name="RB_TableModel"/><label for="RB_TableModel_2" >指定已经有的存储表,并且不允许修改表结构.</label> </div> </td>
+<td> <select id="DDL_Table1" name="DDL_Table1">
+<option> sss </option>
+<option> sss </option>
+<option> sss </option>
+</select> </td>
+<td > 
+<div id="Div4" >从数据库中指定，不允许修改字段。<br>
+</div>
+</td>
+</tr>
+
+
 
 <tr>
 <td class="Idx" > 7 </td>

@@ -153,7 +153,10 @@
         //@代国强 在这里把返回值获取到，放入到对应的文本框里.
         function SelectOne() {
             var url = "FieldTypeListChoseOneField.htm?FK_MapData=" + GetQueryString("FK_MapData");
-            WinOpen(url);            
+
+            window.location.href = url;
+
+            //WinOpen(url);            
         }
     </script>
     <!--<base target="_self" /> -->

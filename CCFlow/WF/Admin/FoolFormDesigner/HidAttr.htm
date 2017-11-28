@@ -15,23 +15,18 @@
                   window.close();
               return true;
           }
-          //@张前龙  showModalDialog 仅仅支持ie设计器。
           function Edit(fk_mapdata, mypk, ftype) {
-              var url = 'EditF.htm?DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
-              var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-              window.location.href = window.location.href;
+              var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
+              window.location.href = url;
           }
           function EditEnum(mypk, refno, ftype) {
 
-              var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
-              var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-              window.location.href = window.location.href;
+              var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
+              window.location.href = url;
           }
           function EditTable(mypk, refno, ftype) {
-              var url = 'EditTable.htm?DoType=Edit&MyPK=' + mypk + '&RefNo=' + refno + '&FType=' + ftype;
-              var b = window.showModalDialog(url, 'ass', 'dialogHeight: 500px; dialogWidth: 700px;center: yes; help: no');
-             // window.close();
-              window.location.href = window.location.href;
+              var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTable&DoType=Edit&FK_MapData=' + fk_mapdata + '&MyPK=' + mypk + '&FType=' + ftype;
+              window.location.href = url;
           }
 
           //页面启动函数.

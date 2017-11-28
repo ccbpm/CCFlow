@@ -1180,8 +1180,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\Img\TBCtrlFull.png" />
     <Content Include="WF\Admin\FoolFormDesigner\Img\Track.png" />
     <Content Include="WF\Admin\FoolFormDesigner\ImpExp\Imp.htm" />
-    <Content Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDefDtlFreeFrm.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtl.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\MapDtlDe.htm" />
@@ -1203,7 +1201,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\MapExt\WordFrm.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\MapFrame.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Pub.ascx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SFList.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFList.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\SFSQL.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx" />
@@ -2223,7 +2220,6 @@
     <Content Include="WF\MyFlow.htm" />
     <Content Include="WF\MyFlowInfo.aspx" />
     <Content Include="WF\MyFlowView.aspx" />
-    <Content Include="WF\Port.aspx" />
     <Content Include="WF\PortDemo.htm" />
     <Content Include="WF\PrintSample.aspx" />
     <Content Include="WF\PrintWorkNode.aspx" />
@@ -7248,20 +7244,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\ImpExp\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx.cs">
-      <DependentUpon>ImpTableField.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ImpTableField.aspx.designer.cs">
-      <DependentUpon>ImpTableField.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx.cs">
-      <DependentUpon>ImpTableFieldSelectBindKey.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\ImpTableFieldSelectBindKey.aspx.designer.cs">
-      <DependentUpon>ImpTableFieldSelectBindKey.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\MapExt\AotuGenerNo.aspx.cs">
       <DependentUpon>AotuGenerNo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7369,13 +7351,6 @@
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\Rpt.master.designer.cs">
       <DependentUpon>Rpt.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFList.aspx.cs">
-      <DependentUpon>SFList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SFList.aspx.designer.cs">
-      <DependentUpon>SFList.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SFSQL.aspx.cs">
       <DependentUpon>SFSQL.aspx</DependentUpon>
@@ -8411,13 +8386,6 @@
     </Compile>
     <Compile Include="WF\MyFlowView.aspx.designer.cs">
       <DependentUpon>MyFlowView.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Port.aspx.cs">
-      <DependentUpon>Port.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Port.aspx.designer.cs">
-      <DependentUpon>Port.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\PrintSample.aspx.cs">
       <DependentUpon>PrintSample.aspx</DependentUpon>

@@ -152,10 +152,9 @@ namespace BP.WF
                         }
                         #endregion 增加到达延续子流程节点。
 
-                        #region 增加到达延续子流程节点。
-                        if (ygflows.Count > 0 && SystemConfig.CustomerNo != "CZBank")
+                        #region 到达其他节点.
+                        if (ygflows.Count==0)
                         {
-
                             //上一次选择的节点.
                             int defalutSelectedNodeID = 0;
                             if (nds.Count > 1)
@@ -194,7 +193,7 @@ namespace BP.WF
                                 dtToNDs.Rows.Add(dr);
                             }
                         }
-                        #endregion 增加到达延续子流程节点。
+                        #endregion 到达其他节点。
 
 
                         //增加一个下拉框, 对方判断是否有这个数据.

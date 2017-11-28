@@ -571,7 +571,7 @@ namespace BP.WF.HttpHandler
             WorkCheck wc = null;
             Tracks tks = null;
             Track tkDoc = null;
-            string nodes = "";
+            string nodes = ""; //可以审核的节点.
             bool isCanDo = false;
             bool isExitTb_doc = true;
             DataSet ds = new DataSet();
@@ -687,7 +687,13 @@ namespace BP.WF.HttpHandler
                         //row["NodeName"] = (nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
                         row["NodeName"] = tk.NDFromT; // "SSS"; //(nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
 
-                        row["IsDoc"] = false;
+                        // zhoupeng 增加了判断，在会签的时候最后会签人发送前不能填写意见.
+                        if (tk.NDFrom==this.FK_Node && tk.EmpFrom==BP.Web.WebUser.No && isCanDo)
+                          row["IsDoc"] = true;
+                        else
+                            row["IsDoc"] = false;
+
+
                         row["ParentNode"] = 0;
                         row["RDT"] = string.IsNullOrWhiteSpace(tk.RDT) ? "" : tk.NDFrom == tk.NDTo && string.IsNullOrWhiteSpace(tk.Msg) ? "" : tk.RDT;
                         row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
@@ -746,17 +752,14 @@ namespace BP.WF.HttpHandler
                         foreach (FrmAttachmentDB athDB in athDBs)
                         {
                             row = athDt.NewRow();
-
                             row["NodeID"] = tk.NDFrom;
                             row["MyPK"] = athDB.MyPK;
                             row["Href"] = GetFileAction(athDB);
                             row["FileName"] = athDB.FileName;
                             row["FileExts"] = athDB.FileExts;
                             row["CanDelete"] = athDB.FK_MapData == this.FK_Node.ToString() && athDB.Rec == WebUser.No && dotype != "View";
-
                             athDt.Rows.Add(row);
                         }
-
                         #endregion
 
                         #region //子流程的审核组件数据
@@ -839,14 +842,13 @@ namespace BP.WF.HttpHandler
                     {
                         //判断刚退回时，退回接收人一打开，审核信息复制一条
                         Track lastTrack = tks[tks.Count - 1] as Track;
-                        if ((lastTrack.HisActionType == ActionType.Return || lastTrack.HisActionType == ActionType.Forward) 
+                        if ((lastTrack.HisActionType == ActionType.Return || lastTrack.HisActionType == ActionType.Forward)
                             && lastTrack.NDTo == tkDoc.NDFrom)
                         {
-                          //  tkDt.Rows.Add(rdoc.ItemArray)["RDT"] = "";
-
-                         //   rdoc["IsDoc"] = false;
-                        //    rdoc["RDT"] = tkDoc.RDT;
-                       //     rdoc["Msg"] = tkDoc.MsgHtml;
+                            //  tkDt.Rows.Add(rdoc.ItemArray)["RDT"] = "";
+                            //   rdoc["IsDoc"] = false;
+                            //    rdoc["RDT"] = tkDoc.RDT;
+                            //     rdoc["Msg"] = tkDoc.MsgHtml;
                         }
                     }
                 }

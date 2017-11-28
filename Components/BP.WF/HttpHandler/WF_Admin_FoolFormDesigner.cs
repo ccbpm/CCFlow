@@ -659,95 +659,112 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(ens1.ToDataTableField("LGType"));
             return BP.Tools.Json.ToJson(ds);
         }
-
+        /// <summary>
+        /// 保存字段
+        /// </summary>
+        /// <returns></returns>
         public string ImpTableField_Save()
         {
             MapData md = new MapData();
             md.No = this.FK_MapData;
             md.RetrieveFromDBSources();
 
-            string msg = "导入字段信息:";
+            string msg = md.Name+"导入字段信息:"+this.FK_MapData;
             bool isLeft = true;
             float maxEnd = md.MaxEnd;
 
-            for (int i = 0; i < context.Request.Form.Count; i++)
+            foreach (string name in this.context.Request.Form.Keys)
             {
-                string name = context.Request.Form.Keys[i].ToString();
-                if (name.StartsWith("HID_Idx_"))
+                if (name.StartsWith("HID_Idx_") == false)
+                    continue;
+
+                string columnName = name.Substring("HID_Idx_".Length);
+
+                MapAttr ma = new MapAttr();
+                ma.KeyOfEn = columnName;
+                ma.FK_MapData = this.FK_MapData;
+                ma.MyPK = this.FK_MapData + "_" + ma.KeyOfEn;
+                if (ma.IsExits)
                 {
-                    string columnName = name.Substring("HID_Idx_".Length);
-                    MapAttr ma = new MapAttr();
-                    ma.KeyOfEn = columnName;
-                    ma.Name = context.Request.Form["TB_Desc_" + columnName];
-                    ma.FK_MapData = this.FK_MapData;
-                    ma.MyDataType = int.Parse(context.Request.Form["DDL_DBType_" + columnName]);
-                    ma.MaxLen = int.Parse(context.Request.Form["TB_Len_" + columnName]);
-                    ma.UIBindKey = context.Request.Form["TB_BindKey_" + columnName];
-                    ma.MyPK = this.FK_MapData + "_" + ma.KeyOfEn;
-                    ma.LGType = BP.En.FieldTypeS.Normal;
-                    if (!string.IsNullOrEmpty(ma.UIBindKey))
-                    {
-                        SysEnums se = new SysEnums();
-                        se.Retrieve(SysEnumAttr.EnumKey, ma.UIBindKey);
-                        if (se.Count > 0)
-                        {
-                            ma.MyDataType = BP.DA.DataType.AppInt;
-                            ma.LGType = BP.En.FieldTypeS.Enum;
-                            ma.UIContralType = BP.En.UIContralType.DDL;
-                        }
-                        SFTable tb = new SFTable();
-                        tb.No = ma.UIBindKey;
-                        if (tb.IsExits == true)
-                        {
-                            ma.MyDataType = BP.DA.DataType.AppString;
-                            ma.LGType = BP.En.FieldTypeS.FK;
-                            ma.UIContralType = BP.En.UIContralType.DDL;
-                        }
-                    }
-                    if (ma.MyDataType == BP.DA.DataType.AppBoolean)
-                        ma.UIContralType = BP.En.UIContralType.CheckBok;
-                    if (ma.IsExits)
-                    {
-                        msg += "\t\n字段:" + ma.KeyOfEn + " - " + ma.Name + "已存在.";
-                        continue;
-                    }
-                    ma.Insert();
-
-                    msg += "\t\n字段:" + ma.KeyOfEn + " - " + ma.Name + "加入成功.";
-                    FrmLab lab = null;
-                    if (isLeft == true)
-                    {
-                        maxEnd = maxEnd + 40;
-                        /* 是否是左边 */
-                        lab = new FrmLab();
-                        lab.MyPK = BP.DA.DBAccess.GenerGUID();
-                        lab.FK_MapData = this.FK_MapData;
-                        lab.Text = ma.Name;
-                        lab.X = 40;
-                        lab.Y = maxEnd;
-                        lab.Insert();
-
-                        ma.X = lab.X + 80;
-                        ma.Y = maxEnd;
-                        ma.Update();
-                    }
-                    else
-                    {
-                        lab = new FrmLab();
-                        lab.MyPK = BP.DA.DBAccess.GenerGUID();
-                        lab.FK_MapData = this.FK_MapData;
-                        lab.Text = ma.Name;
-                        lab.X = 350;
-                        lab.Y = maxEnd;
-                        lab.Insert();
-
-                        ma.X = lab.X + 80;
-                        ma.Y = maxEnd;
-                        ma.Update();
-                    }
-                    isLeft = !isLeft;
+                    msg += "\t\n字段:" + ma.KeyOfEn + " - " + ma.Name + "已存在.";
+                    continue;
                 }
+
+                ma.Name = this.GetValFromFrmByKey("TB_Desc_" + columnName);
+                if (DataType.IsNullOrEmpty(ma.Name))
+                    ma.Name = ma.KeyOfEn;
+
+                ma.MyDataType =this.GetValIntFromFrmByKey("DDL_DBType_" + columnName);
+                ma.MaxLen = this.GetValIntFromFrmByKey("TB_Len_" + columnName);
+                ma.UIBindKey = this.GetValFromFrmByKey("TB_BindKey_" + columnName);
+                ma.LGType = BP.En.FieldTypeS.Normal;
+
+                //绑定了外键或者枚举.
+                if (DataType.IsNullOrEmpty(ma.UIBindKey) == false)
+                {
+                    SysEnums se = new SysEnums();
+                    se.Retrieve(SysEnumAttr.EnumKey, ma.UIBindKey);
+                    if (se.Count > 0)
+                    {
+                        ma.MyDataType = BP.DA.DataType.AppInt;
+                        ma.LGType = BP.En.FieldTypeS.Enum;
+                        ma.UIContralType = BP.En.UIContralType.DDL;
+                    }
+                    SFTable tb = new SFTable();
+                    tb.No = ma.UIBindKey;
+                    if (tb.IsExits == true)
+                    {
+                        ma.MyDataType = BP.DA.DataType.AppString;
+                        ma.LGType = BP.En.FieldTypeS.FK;
+                        ma.UIContralType = BP.En.UIContralType.DDL;
+                    }
+                }
+
+                if (ma.MyDataType == BP.DA.DataType.AppBoolean)
+                    ma.UIContralType = BP.En.UIContralType.CheckBok;
+
+                ma.Insert();
+
+                msg += "\t\n字段:" + ma.KeyOfEn + " - " + ma.Name + "加入成功.";
+
+                //生成lab.
+                FrmLab lab = null;
+                if (isLeft == true)
+                {
+                    maxEnd = maxEnd + 40;
+                    /* 是否是左边 */
+                    lab = new FrmLab();
+                    lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                    lab.FK_MapData = this.FK_MapData;
+                    lab.Text = ma.Name;
+                    lab.X = 40;
+                    lab.Y = maxEnd;
+                    lab.Insert();
+
+                    ma.X = lab.X + 80;
+                    ma.Y = maxEnd;
+                    ma.Update();
+                }
+                else
+                {
+                    lab = new FrmLab();
+                    lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                    lab.FK_MapData = this.FK_MapData;
+                    lab.Text = ma.Name;
+                    lab.X = 350;
+                    lab.Y = maxEnd;
+                    lab.Insert();
+
+                    ma.X = lab.X + 80;
+                    ma.Y = maxEnd;
+                    ma.Update();
+                }
+                isLeft = !isLeft;
             }
+
+            //更新名称.
+            DBAccess.RunSQL("UPDATE Sys_MapAttr SET Name=KeyOfEn WHERE Name=NULL OR Name='' ");
+
             md.ResetMaxMinXY();
             return msg;
         }

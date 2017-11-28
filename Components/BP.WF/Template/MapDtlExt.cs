@@ -1074,8 +1074,9 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "导入其他表字段"; // "设计表单";
+                rm.Warning = "导入后系统不会自动刷新，请手工刷新。";
                 rm.ClassMethodName = this.ToString() + ".ImpFields";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -1100,8 +1101,8 @@ namespace BP.WF.Template
         public string ImpFields()
         {
 
-      //  http://localhost:18272/WF/Admin/FoolFormDesigner/ImpTableFieldNew.htm?FK_MapData=CCFrm_CZBankBXDtl1&reset=true
-            string url = "../../Admin/FoolFormDesigner/ImpTableFieldNew.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+      //  http://localhost:18272/WF/Admin/FoolFormDesigner/ImpTableField.htm?FK_MapData=CCFrm_CZBankBXDtl1&reset=true
+            string url = "../../Admin/FoolFormDesigner/ImpTableField.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             return url;
         }
           

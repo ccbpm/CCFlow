@@ -7,6 +7,7 @@ var globalVarList = {};
 var workNode = {};
 
 $(function () {
+
     initPageParam(); //初始化参数
 
     InitToolBar(); //工具栏.ajax
@@ -1009,9 +1010,12 @@ function OptSuc(msg) {
     trackImg.remove();
     $("#msgModal").modal().show();
 }
-//移交
+
 //初始化发送节点下拉框
 function InitToNodeDDL(workNode) {
+
+    alert( JSON.stringify( workNode.ToNodes) );
+
 
     if (workNode.ToNodes != undefined && workNode.ToNodes.length > 0) {
         // $('[value=发送]').
@@ -1619,7 +1623,7 @@ function InitToolBar() {
 
     // 为啥要注释 else MyFlow = "MyFlow.do";
     if (plant == "CCFlow")
-        MyFlow = "MyFlow.ashx";
+         MyFlow = "MyFlow.ashx";
 
     //else
     //MyFlow = "MyFlow.do";
@@ -1876,8 +1880,6 @@ function AjaxService(param, callback, scope, levPath) {
     });
 }
 
-
-
 //关注 按钮.
 function FocusBtn(btn, workid) {
 
@@ -1978,8 +1980,7 @@ function Change() {
             btn.value = btn.value + '*';
     }
 }
-
-
+/*************************************  以下的方法方便对独立表单模式下的工作处理器，嵌入方式的控件取值与赋值. ***********************************************/
 // ccform 为开发者提供的内置函数. 
 // 获取DDL值 
 function ReqDDL(ddlID) {

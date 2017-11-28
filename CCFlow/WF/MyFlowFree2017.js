@@ -569,13 +569,13 @@ function figure_Template_Dtl(frmDtl) {
         } else {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
         }
-   // }
+// }
 //    //else if (frmDtl.RowShowModel == "1") {
 //        if (pageData.IsReadOnly)
 //            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
 //        else
 //            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
-        //    }
+//    }
 
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe class='Fdtl' ID='F" + frmDtl.No + "' src='" + src +

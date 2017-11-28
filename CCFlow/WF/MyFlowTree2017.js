@@ -5,7 +5,6 @@
 var workNode = null;
 function GenerTreeFrm(wn) {
     workNode = wn;
-
 }
 
 //表单树初始化
@@ -107,8 +106,8 @@ function addTab(id, title, url) {
 //判断标签页是否存在
 function TabFormExists() {
     var currTab = $('#tabs').tabs('getSelected');
-    if (currTab) return true;
-
+    if (currTab)
+        return true;
     return false;
 }
 

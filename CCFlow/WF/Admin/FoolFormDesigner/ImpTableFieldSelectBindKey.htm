@@ -13,6 +13,7 @@
     <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script language="javascript" type="text/javascript" >
         function SetIt(val) {
+        
             if (parent && parent.window && typeof parent.window.doCloseDialog === 'function') {
                 var ctl_id = GetQueryString("ctl_id");
                 parent.$("#" + ctl_id).val(val);
@@ -24,6 +25,7 @@
         }
         /* ESC Key Down */
         function Esc() {
+       
 //            if (event.keyCode == 27)
 //                window.close();
             return true;
@@ -31,7 +33,7 @@
 
         //页面启动函数.
         $(function () {
-
+       
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             InitPage();
@@ -41,7 +43,7 @@
 
         //初始化数据.
         function InitPage() {
-
+       
             var fk_mapData = GetQueryString("FK_MapData");
 
             //初始化表格.
@@ -57,7 +59,7 @@
                         return;
                     }
 
-                    alert(data);
+                   
                     
                     data = JSON.parse(data);
                     var enumMain = data["EnumMain"];
@@ -94,12 +96,12 @@
                     //增加处理 枚举值.
                     for (var i = 0; i < enumMain.length; i++) {
 
-                        var enum = enumMain[i];
+                        var enum2 = enumMain[i];
 
                         var newRow = "";
                         newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + enum.No + "</td>";
-                        newRow += "<td><a href=\"javascript:SetIt('" + enum.No + "')\">" + enum.Name + "</a></td>";
+                        newRow += "<td>" + enum2.No + "</td>";
+                        newRow += "<td><a href=\"javascript:SetIt('" + enum2.No + "')\">" + enum2.Name + "</a></td>";
                         newRow += "<td>" + sfTable.CfgVal + "</td>";
                         newRow += "</tr>";
 

@@ -342,14 +342,12 @@
 
                     $('#dtlDiv div table tbody').html('');//清空表格数据
                     var sys_mapAttr = data["Sys_MapAttr"];
+					// 表头start --------------------
                     if ($('#dtlDiv div table thead tr').length == 0) {
                         var threadTr = $('<tr data-data="true"></tr>');
                         //制造表头
                         //添加序号列
                         workNodeData = data;
-
-                     //   console.log(sys_MapDtl);
-                       // console.log(sys_MapDtl.IsInsert);
 
                        //新增显示方式？ =0行模式, 1=自由表单模式 2=傻瓜表单模式.
                        // ==1,==2 是打开父窗口出现卡片.
@@ -395,11 +393,14 @@
                         if (sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") {//有新增或者有删除，就有删除权限
                             delThData = {
                                 custom: true,
-                                customcontent: 2,
+                                customcontent: 1,
                                 customcontent1: 'img@src="../Img/Btn/Edit.gif" onclick="updateRow($(this).parent().parent().data().data.OID, ' + sys_MapDtl.RowShowModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@',
-                                customcontent2: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
                                 coltype: 'Operation1'
                             };
+                            if (sys_MapDtl.RowShowMode != "0") {
+                                delThData.customcontent = 2;
+                                delThData.customcontent2 = 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@';
+                            }
                         } 
 
                         //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
@@ -429,10 +430,9 @@
 
                         $('#dtlDiv div table thead').append(threadTr);
                     }
+					// 表头over --------------------
 
                     //如果不能新增，就把新增按钮去掉.
-                    //alert(sys_MapDtl.IsInsert );
-
                     if (sys_MapDtl.IsInsert == "0" || sys_MapDtl.IsReadonly == "1" ) {
                         document.getElementById('insertBtn').style.display = 'none';
                     }
@@ -526,7 +526,7 @@
                                 $('#dtlDiv div table tbody tr input[type=checkbox]').attr('disabled', 'disabled');
                             } else if (sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") {
                                 tbodyTrs.on("dblclick", function () {
-                                    updateRow($(this).data().data.OID, sys_MapDtl.RowShowModel);
+                                    updateRow($(this).data().data.OID, lsys_MapDtl.RowShowMode);
                                 });
                             }
 
@@ -1078,7 +1078,7 @@
     function AfterBindEn_DealMapExt(tr) {
         //var workNode = JSON.parse(jsonStr);
         var  workNode = workNodeData;
-        var mapExtArr = workNode.Sys_MapExt;
+        var mapExtArr = workNode.Sys_MapExt;	// 扩展信息
         for (var i = 0; i < mapExtArr.length; i++) {
             var mapExt = mapExtArr[i];
             switch (mapExt.ExtType) {

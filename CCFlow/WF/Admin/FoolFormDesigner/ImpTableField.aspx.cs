@@ -103,9 +103,6 @@ namespace CCFlow.WF.MapDef
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            //this.Response.Redirect("ImpTableField1504.aspx?EnsName=" + this.FK_MapData,
-            //    true);
-            //return;
 
             #region 第1步.
             if (this.Step == 1)

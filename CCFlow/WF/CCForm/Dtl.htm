@@ -527,7 +527,7 @@
                                 $('#dtlDiv div table tbody tr input[type=checkbox]').attr('disabled', 'disabled');
                             } else if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") && sys_MapDtl.RowShowModel != 0) {
                                 tbodyTrs.on("dblclick", function () {
-                                    updateRow($(this).data().data.OID, lsys_MapDtl.RowShowMode);
+                                    updateRow($(this).data().data.OID, lsys_MapDtl.RowShowModel);
                                 });
                             }
 

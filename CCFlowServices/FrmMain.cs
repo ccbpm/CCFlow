@@ -447,17 +447,18 @@ namespace SMSServices
 
             // 遍历循环,逾期表进行处理.
             string msg = "";
+            string info = "";
             foreach (DataRow row in generTab.Rows)
             {
                 string fk_flow = row["FK_Flow"] + "";
-                string fk_node = row["FK_Node"] + "";
+                int fk_node = int.Parse( row["FK_Node"] + "");
                 long workid = long.Parse(row["WorkID"] + "");
                 string title = row["Title"] + "";
                 string compleateTime = row["SDTOfNode"] + "";
                 string starter = row["Starter"] + "";
                 try
                 {
-                    Node node = new Node(int.Parse(fk_node));
+                    Node node = new Node(fk_node);
                     if (node.IsStartNode)
                         continue;
 
@@ -470,42 +471,33 @@ namespace SMSServices
                         case OutTimeDeal.AutoJumpToSpecNode: //跳转到指定的节点.
                             try
                             {
-                                if (doOutTime.Contains(",") == false)
-                                    throw new Exception("@系统设置错误，不符合设置规范,格式为: NodeID,EmpNo  现在设置的为:"+doOutTime);
+                                //if (doOutTime.Contains(",") == false)
+                                //    throw new Exception("@系统设置错误，不符合设置规范,格式为: NodeID,EmpNo  现在设置的为:"+doOutTime);
 
-                                string[] jumps = doOutTime.Split(',');
+                                int jumpNode = int.Parse(doOutTime);
 
-                                string jumpNode = jumps[0];
-                                string jumpEmp = jumps[1];
-
-                                Emp emp = new Emp();
-                                emp.No = jumpEmp;
-                                if (emp.RetrieveFromDBSources() == 0)
-                                    throw new Exception("@设置的跳转人员:"+jumpEmp+"已经不存在.");
-
-                                if (string.IsNullOrEmpty(emp.No))
-                                {
-                                    msg = "流程: '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
-                                          "'超时处理规则为'自动跳转',系统中并没有编号为'" + jumpEmp + "'的人员.";
-                                    SetText(msg);
-                                    BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
-                                }
+                                //string[] jumps = doOutTime.Split(',');
+                                //string jumpNode = jumps[0];
+                                //string jumpEmp = jumps[1];
+                                //Emp emp = new Emp();
+                                //emp.No = jumpEmp;
+                                //if (emp.RetrieveFromDBSources() == 0)
+                                //    throw new Exception("@设置的跳转人员:"+jumpEmp+"已经不存在.");
+                                //if (string.IsNullOrEmpty(emp.No))
+                                //{
+                                //    msg = "流程: '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
+                                //          "'超时处理规则为'自动跳转',系统中并没有编号为'" + jumpEmp + "'的人员.";
+                                //    SetText(msg);
+                                //    BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
+                                //}
 
                                 Node jumpToNode = new Node(jumpNode);
-                                if (string.IsNullOrEmpty(jumpToNode.Name))
-                                {
-                                    msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
-                                          "'超时处理规则为'自动跳转',系统中并没有编号为'" + jumpNode + "'的人员.";
-                                    SetText(msg);
-                                    BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
-                                    return;
-                                }
+                              
                                 //执行发送.
-                                //string info =  BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, null, null, nd.NodeID, emp.No).ToMsgOfText();
-                                string jumpInfo = BP.WF.Dev2Interface.Flow_Schedule(workid, jumpToNode.NodeID,
-                                    emp.No);
+                                  info =  BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, null, null, node.NodeID, null).ToMsgOfText();
+                                  // info = BP.WF.Dev2Interface.Flow_Schedule(workid, jumpToNode.NodeID, emp.No);
                                 msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
-                                      "'超时处理规则为'自动跳转'," + jumpInfo;
+                                      "'超时处理规则为'自动跳转'," + info;
                                 SetText(msg);
                                 BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
 
@@ -523,7 +515,7 @@ namespace SMSServices
                             Emp empShift = new Emp(doOutTime);
                             try
                             {
-                                BP.WF.Dev2Interface.Node_Shift(fk_flow, int.Parse(fk_node), workid, 0, empShift.No,
+                                BP.WF.Dev2Interface.Node_Shift(fk_flow, fk_node, workid, 0, empShift.No,
                                     "流程节点已经逾期,系统自动移交");
 
                                 msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
@@ -547,7 +539,7 @@ namespace SMSServices
                                     GenerWorkFlowAttr.FK_Node, fk_node);
 
                                 WebUser.SignInOfGener(workerList.HisEmp);
-                                WorkNode firstwn = new WorkNode(workid, int.Parse(fk_node));
+                                WorkNode firstwn = new WorkNode(workid, fk_node);
                                 string sendIfo = firstwn.NodeSend().ToMsgOfText();
                                 msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'自动发送到下一节点',发送消息为:" + sendIfo;
@@ -563,7 +555,7 @@ namespace SMSServices
                             }
                             break;
                         case OutTimeDeal.DeleteFlow:
-                            string info = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fk_flow, workid, true);
+                              info = BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fk_flow, workid, true);
                             msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                   "'超时处理规则为'删除流程'," + info;
                             SetText(msg);
@@ -581,7 +573,7 @@ namespace SMSServices
                                 //替换字符串
                                 doOutTime.Replace("@OID", workid + "");
                                 doOutTime.Replace("@FK_Flow", fk_flow);
-                                doOutTime.Replace("@FK_Node", fk_node);
+                                doOutTime.Replace("@FK_Node", fk_node.ToString());
                                 doOutTime.Replace("@Starter", starter);
                                 if (doOutTime.Contains("@"))
                                 {

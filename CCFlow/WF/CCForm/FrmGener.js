@@ -93,15 +93,18 @@ function SetHegiht() {
     }
 }
 
-
 //从表在新建或者在打开行的时候，如果 rowShowModel 配置了使用卡片的模式显示一行数据的时候，就调用此方法.
-function DtlFrm(ensName, refPKVal, pkVal, frmType) {
+function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     // model=1 自由表单, model=2傻瓜表单.
-    var url = 'DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;
+    var url = '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;
     //alert('@代国强...这里需要弹出ssurl:' + url);
     //window.open(url);
-    OpenEasyUiDialog(url, "editSubGrid", '编辑', 1000, 550, "icon-property", false, null, null, null, function () {
-
+    (parent.OpenEasyUiDialog || OpenEasyUiDialog)(url, "editSubGrid", '编辑', 1000, 550, "icon-property", false, null, null, null, function () {
+        if (typeof InitPage === "function") {
+            InitPage.call();
+        } else {
+            alert("请手动刷新表单");
+        }
     });
 }
 

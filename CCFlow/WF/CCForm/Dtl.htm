@@ -396,7 +396,7 @@
                             delThData = {
                                 custom: true,
                                 customcontent: 2,
-                                customcontent1: 'img@src="../Img/Btn/Edit.gif" onclick="updateRow(this, ' + sys_MapDtl.RowShowModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@',
+                                customcontent1: 'img@src="../Img/Btn/Edit.gif" onclick="updateRow($(this).parent().parent().data().data.OID, ' + sys_MapDtl.RowShowModel + ')" class="updateRow" titile="修改" style="cursor:pointer;"@',
                                 customcontent2: 'img@src="../Img/Btn/Delete.png" onclick="deleteRow(this)" class="delRow" titile="删除" style="cursor:pointer;"@',
                                 coltype: 'Operation1'
                             };
@@ -524,6 +524,10 @@
                                 $('#dtlDiv div table tbody tr textarea').attr('disabled', 'disabled');
                                 $('#dtlDiv div table tbody tr select').attr('disabled', 'disabled');
                                 $('#dtlDiv div table tbody tr input[type=checkbox]').attr('disabled', 'disabled');
+                            } else if (sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1") {
+                                tbodyTrs.on("dblclick", function () {
+                                    updateRow($(this).data().data.OID, sys_MapDtl.RowShowModel);
+                                });
                             }
 
                             //循环TBODY 初始化 SYS_MAPEXT
@@ -969,12 +973,11 @@
         </div>
     </form>
 	<script type="text/javascript">
-	    function updateRow(index, RowShowModel) {
-	        var rowData = $(index).parent().parent().data().data;
+	    function updateRow(OID, RowShowModel) {
 	        if (window.parent) {
 	            var ensName = GetQueryString("EnsName");
 	            var refPKVal = GetQueryString("RefPKVal");
-	            window.parent.DtlFrm(ensName, refPKVal, rowData.OID, RowShowModel, InitPage);
+	            window.parent.DtlFrm(ensName, refPKVal, OID, RowShowModel, InitPage);
 	        }
 	    }
 	    function deleteRow(index) {

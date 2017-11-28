@@ -456,6 +456,30 @@ namespace SMSServices
                 string title = row["Title"] + "";
                 string compleateTime = row["SDTOfNode"] + "";
                 string starter = row["Starter"] + "";
+
+
+                GenerWorkerLists gwls = new GenerWorkerLists();
+                gwls.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, fk_node);
+
+
+                bool isLogin = false;
+                foreach (GenerWorkerList item in gwls)
+                {
+                    if (item.IsEnable == false)
+                        continue;
+
+                    BP.Port.Emp emp = new Emp(item.FK_Emp);
+                    BP.Web.WebUser.SignInOfGener(emp);
+                    isLogin = true;
+                }
+
+                if (isLogin == false)
+                {
+                    BP.Port.Emp emp = new Emp("admin");
+                    BP.Web.WebUser.SignInOfGener(emp);
+                }
+               
+
                 try
                 {
                     Node node = new Node(fk_node);
@@ -475,22 +499,6 @@ namespace SMSServices
                                 //    throw new Exception("@系统设置错误，不符合设置规范,格式为: NodeID,EmpNo  现在设置的为:"+doOutTime);
 
                                 int jumpNode = int.Parse(doOutTime);
-
-                                //string[] jumps = doOutTime.Split(',');
-                                //string jumpNode = jumps[0];
-                                //string jumpEmp = jumps[1];
-                                //Emp emp = new Emp();
-                                //emp.No = jumpEmp;
-                                //if (emp.RetrieveFromDBSources() == 0)
-                                //    throw new Exception("@设置的跳转人员:"+jumpEmp+"已经不存在.");
-                                //if (string.IsNullOrEmpty(emp.No))
-                                //{
-                                //    msg = "流程: '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
-                                //          "'超时处理规则为'自动跳转',系统中并没有编号为'" + jumpEmp + "'的人员.";
-                                //    SetText(msg);
-                                //    BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);
-                                //}
-
                                 Node jumpToNode = new Node(jumpNode);
                               
                                 //执行发送.
@@ -504,7 +512,7 @@ namespace SMSServices
                             }
                             catch (Exception ex)
                             {
-                                msg = "流程  '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
+                                msg = "流程 '" + node.FlowName + "',WorkID="+workid+",标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'自动跳转',跳转异常:" + ex.Message;
                                 SetText(msg);
                                 BP.DA.Log.DefaultLogWriteLine(LogType.Error, msg);

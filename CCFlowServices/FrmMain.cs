@@ -502,7 +502,8 @@ namespace SMSServices
                                 Node jumpToNode = new Node(jumpNode);
 
                                 //设置默认同意.
-                                BP.WF.Dev2Interface.WriteTrackWorkCheck(jumpToNode.FK_Flow, node.NodeID, workid, 0, "同意", "预期自动审批");
+                                BP.WF.Dev2Interface.WriteTrackWorkCheck(jumpToNode.FK_Flow, node.NodeID, workid, 0, 
+                                    "同意（预期自动审批）", null);
                               
                                 //执行发送.
                                 info = BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, null, null, jumpToNode.NodeID, null).ToMsgOfText();
@@ -510,6 +511,7 @@ namespace SMSServices
                                 // info = BP.WF.Dev2Interface.Flow_Schedule(workid, jumpToNode.NodeID, emp.No);
                                 msg = "流程 '" + node.FlowName + "',标题: '" + title + "'的应该完成时间为'" + compleateTime + "',当前节点'" + node.Name +
                                       "'超时处理规则为'自动跳转'," + info;
+
                                 
                                 SetText(msg);
                                 BP.DA.Log.DefaultLogWriteLine(LogType.Info, msg);

@@ -58,7 +58,25 @@ function GenerFreeFrm(mapData, frmData) {
     //循环 从表
     for (var i in frmData.Sys_MapDtl) {
         var frmMapDtl = frmData.Sys_MapDtl[i];
-        var createdFigure = figure_Template_Dtl(frmMapDtl);
+		// 主表扩展(统计从表)
+		var ext = undefined;
+		$.each(frmData.Sys_MapExt, function (i, o) {
+			var docs = o.Doc.split("\.");
+			if (docs.length == 3) {
+				var DtlNo = docs[0];
+				if (frmMapDtl.No === DtlNo) {
+					ext = {};
+					ext.DtlNo = DtlNo;
+					ext.FK_MapData = o.FK_MapData;
+					ext.AttrOfOper = o.AttrOfOper;
+					ext.Doc = o.Doc;
+					ext.DtlColumn = docs[1];
+					ext.exp = docs[2];
+					return false;
+				}
+			}
+		});
+        var createdFigure = figure_Template_Dtl(frmMapDtl, ext);
         $('#CCForm').append(createdFigure);
     }
 
@@ -79,7 +97,7 @@ function GenerFreeFrm(mapData, frmData) {
 
 
 //初始化从表
-function figure_Template_Dtl(frmDtl) {
+function figure_Template_Dtl(frmDtl, ext) {
 
     var eleHtml = $("<DIV id='Fd" + frmDtl.No + "' style='position:absolute; left:" + frmDtl.X + "px; top:" + frmDtl.Y + "px; width:" + frmDtl.W + "px; height:" + frmDtl.H + "px;text-align: left;' >");
     var paras = this.pageData;
@@ -119,6 +137,14 @@ function figure_Template_Dtl(frmDtl) {
     }
     eleHtml.append(eleIframe);
 
+	if (ext) {	// 表达式传入iframe
+		eleIframe.load(function () {
+			//$(this).contents().find(":input[id=formExt]").val(JSON.stringify(ext));
+			if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
+				this.contentWindow.parentStatistics(ext);
+			}
+		});
+	}
 
     //added by liuxc,2017-1-10,此处前台JS中增加变量DtlsLoadedCount记录明细表的数量，用于加载完全部明细表的判断
     var js = "";

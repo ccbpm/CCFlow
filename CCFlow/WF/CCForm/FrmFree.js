@@ -139,7 +139,7 @@ function figure_Template_Dtl(frmDtl, ext) {
 
 	if (ext) {	// 表达式传入iframe
 		eleIframe.load(function () {
-			//$(this).contents().find(":input[id=formExt]").val(JSON.stringify(ext));
+			$(this).contents().find(":input[id=formExt]").val(JSON.stringify(ext));
 			if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
 				this.contentWindow.parentStatistics(ext);
 			}

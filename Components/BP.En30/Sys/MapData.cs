@@ -1605,6 +1605,48 @@ namespace BP.Sys
             }
         }
 
+        /// <summary>
+        /// 获得PTableModel=2模式下的表单，没有被使用的字段集合.
+        /// </summary>
+        /// <param name="frmID"></param>
+        /// <returns></returns>
+        public static DataTable GetFieldsOfPTableMode2(string frmID)
+        {
+            MapData md = new MapData(frmID);
+
+            //获得原始数据.
+            DataTable dt = BP.DA.DBAccess.GetTableSchema(md.PTable, false);
+
+            //创建样本表结构.
+            DataTable mydt = BP.DA.DBAccess.GetTableSchema(md.PTable, false);
+            mydt.Rows.Clear();
+
+            //获得现有的列..
+            MapAttrs attrs = new MapAttrs(frmID);
+
+            string flowFiels = ",GUID,PRI,PrjNo,PrjName,PEmp,AtPara,FlowNote,WFSta,PNodeID,FK_FlowSort,FK_Flow,OID,FID,Title,WFState,CDT,FlowStarter,FlowStartRDT,FK_Dept,FK_NY,FlowDaySpan,FlowEmps,FlowEnder,FlowEnderRDT,FlowEndNode,MyNum,PWorkID,PFlowNo,BillNo,ProjNo,";
+
+            //排除已经存在的列. 把所有的列都输出给前台，让前台根据类型分拣.
+            foreach (DataRow dr in dt.Rows)
+            {
+                string key = dr["FName"].ToString();
+                if (attrs.Contains(MapAttrAttr.KeyOfEn, key) == true)
+                    continue;
+
+                if (flowFiels.Contains("," + key + ",") == true)
+                    continue;
+
+                DataRow mydr = mydt.NewRow();
+                mydr["FName"] = dr["FName"];
+                mydr["FType"] = dr["FType"];
+                mydr["FLen"] = dr["FLen"];
+                mydr["FDesc"] = dr["FDesc"];
+                mydt.Rows.Add(mydr);
+            }
+            return mydt;
+        }
+
+
         #endregion
 
         #region 常用方法.

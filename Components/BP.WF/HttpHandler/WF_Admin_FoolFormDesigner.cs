@@ -907,9 +907,23 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string SFList_Init()
         {
+            DataSet ds = new DataSet();
+             
             SFTables ens = new SFTables();
             ens.RetrieveAll();
-            return ens.ToJson();
+
+            DataTable dt = ens.ToDataTableField("SFTables");
+            ds.Tables.Add(dt);
+
+            // @张前龙翻译. 如果是固定列模式，就需要把现有的没有映射的字段推送给前台. 
+            if (this.GetRequestVal("PTableModel").Equals("2"))
+            {
+                DataTable mydt = MapData.GetFieldsOfPTableMode2(this.FK_MapData);
+                mydt.TableName = "Fields";
+                ds.Tables.Add(mydt);
+            }
+
+            return BP.Tools.Json.ToJson(ds);
         }
         public string SFList_SaveSFField()
         {

@@ -19,7 +19,7 @@ $(function () {
     //初始化画板
     Init_Panel(CCForm_FK_MapData);
 
-    //显示网格
+    //显示网格.
     ShowGrid();
 
     //右键菜单

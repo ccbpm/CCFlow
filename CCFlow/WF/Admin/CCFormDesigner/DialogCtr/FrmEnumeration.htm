@@ -4,6 +4,8 @@
     <title></title>
      <!-- 增加一个配置  -->
      <script src="../../../Scripts/config.js" type="text/javascript" > </script>
+     <script src="../../../Scripts/QueryString.js" type="text/javascript" > </script>
+
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -34,6 +36,7 @@
         }
 
         $(function () {
+
             var Ele_TBName = document.getElementById("TB_EnumName");
             Ele_TBName.focus();
 
@@ -94,6 +97,9 @@
 
             var params = {
                 action: "FrmEnumeration_GetEnumerationList",
+                FK_MapData: GetQueryString("FK_MapData"),
+                DataType: GetQueryString("DataType"),
+                PTableModel: GetQueryString("PTableModel"),
                 pageNumber: pageNumber,
                 pageSize: pageSize
             };
@@ -110,11 +116,10 @@
         //加载grid后回调函数
         function LoadDataGridCallBack(js, scorp) {
 
-            if (js.indexOf('err@') != -1) {
+            if (js.indexOf('err@') == 0) {
                 alert(js);
                 return;
             }
-
 
             $("#pageloading").hide();
             if (js == "")
@@ -122,7 +127,7 @@
 
             //系统错误
             if (js.status && js.status == 500) {
-                $("body").html("<b>访问页面出错，请联系管理员。<b>");
+                $("body").html("<b>访问页面出错，请联系管理员。" + JSON.stringify(js) + "<b>");
                 return;
             }
 
@@ -285,7 +290,6 @@
             }
 
             //for (var i = long; i < 21; i++) {
-             
             //    var text ='';
             //    str += '<tr>';
             //    str += "<td> " + i + "</td> ";

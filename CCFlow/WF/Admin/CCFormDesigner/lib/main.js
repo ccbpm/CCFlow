@@ -3327,9 +3327,9 @@ function exportCanvas() {
 /**Loads a saved diagram
 *@param {String} tempDiagramName - the name of temporary diagram
 **/
-function LoadTempDiagram(FK_MapData) {
+function LoadTempDiagram(frmID) {
 
-    $.post(Handler, { action: 'FormDesigner_Loadform', FK_MapData: FK_MapData },
+    $.post(Handler, { action: 'FormDesigner_Loadform', FK_MapData: frmID },
 
         function (data) {
 
@@ -3348,12 +3348,12 @@ function LoadTempDiagram(FK_MapData) {
                     return;
                 }
 
-
-
                 action(data);
 
-
                 var obj = eval('(' + data + ')');
+
+                //alert(obj);
+                //console.log(obj);
 
                 if (!('v' in obj) || obj.v != DIAGRAMO.fileVersion) {
                     Importer.importDiagram(obj); //import 1st version of Diagramo files
@@ -3366,6 +3366,7 @@ function LoadTempDiagram(FK_MapData) {
 
                 CONNECTOR_MANAGER = ConnectorManager.load(obj['m']);
                 CONTAINER_MANAGER = ContainerFigureManager.load(obj['p']);
+
                 draw();
 
                 //alert("loaded");

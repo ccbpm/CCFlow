@@ -92,6 +92,36 @@
 
     <script type="text/javascript" >
 
+        var mapData = null;
+
+        //页面启动函数.
+        $(function () {
+
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=FormDesigner_InitMapData&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    mapData = JSON.parse(data);
+
+                    document.title = mapData.Name +" - CCForm H5表单设计.";
+
+                }
+            });
+
+            $("#Msg").html("");
+        });
+
+         
         function closeDlg() {
             $("#eudlg").dialog("close");
         }
@@ -253,9 +283,7 @@
                 <div id="text-editor-tools">
                 </div>
 
-
                 <span id="figureTip" style="display:none;">
-                    
                 </span>
             </div>
         </div>

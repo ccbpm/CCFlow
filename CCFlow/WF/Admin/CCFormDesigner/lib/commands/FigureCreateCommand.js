@@ -93,11 +93,11 @@ FigureCreateCommand.prototype = {
                 case "CheckGroup":
                     alert('该功能没有实现' + createFigureName + ' 需要连续创建三个字段.');
                     break;
-                //case CCForm_Controls.FrmCheck: //审核组件        
-                //case CCForm_Controls.FrmCheck: // 审核组件.        
-                //case CCForm_Controls.FlowChart: //轨迹图.        
-                //case CCForm_Controls.SubFlowDtl: //子流程.        
-                //case CCForm_Controls.ThreadDtl: //子线城.        
+                //case CCForm_Controls.FrmCheck: //审核组件              
+                //case CCForm_Controls.FrmCheck: // 审核组件.              
+                //case CCForm_Controls.FlowChart: //轨迹图.              
+                //case CCForm_Controls.SubFlowDtl: //子流程.              
+                //case CCForm_Controls.ThreadDtl: //子线城.              
                 case "FrmCheck": // 审核组件.
                 case "FlowChart": //轨迹图.
                 case "SubFlowDtl": //子流程.
@@ -146,8 +146,19 @@ FigureCreateCommand.prototype = {
     /**创建数据字段**/
     DataFieldCreate: function (createdFigure, x, y) {
 
+
         var dgId = "iframeTextBox";
         var url = "DialogCtr/FrmTextBox.htm?DataType=" + createFigureName + "&s=" + Math.random();
+
+        // alert(mapData.PTableModel);
+
+        //如果不允许自定义字段.
+        if (mapData.PTableModel == "2") {
+            url = "DialogCtr/FrmTextBoxChoseOneField.htm?FK_MapData=" + mapData.No + "&DataType=" + createFigureName + "&M=" + Math.random();
+        }
+
+        //  alert(url);
+
         var funIsExist = this.IsExist;
 
         OpenEasyUiDialog(url, dgId, '新建文本字段', 600, 394, 'icon-new', true, function (HidenFieldFun) {
@@ -193,7 +204,6 @@ FigureCreateCommand.prototype = {
                 HidenFieldFun(frmVal);
             } else {
 
-
                 //根据信息创建不同类型的数字控件
                 var transField = new TransFormDataField(createdFigure, frmVal, x, y);
 
@@ -228,7 +238,10 @@ FigureCreateCommand.prototype = {
 
         var dgId = "iframeRadioButton";
         //var url = "DialogCtr/FrmEnumeration.htm?DataType=&s=" + Math.random();
-        var url = "DialogCtr/FrmEnumeration.htm?DataType=&s=" + Math.random();
+
+        var pTableModel = mapData.PTableModel;
+
+        var url = "DialogCtr/FrmEnumeration.htm?PTableModel=" + pTableModel + "&s=" + Math.random();
 
         var funIsExist = this.IsExist;
 
@@ -398,7 +411,7 @@ FigureCreateCommand.prototype = {
 
         //var url = "DialogCtr/FrmTable.htm?DataType=&s=" + Math.random();
 
-        var url = './../FoolFormDesigner/SFList.htm?FK_MapData=' + CCForm_FK_MapData+'&From=FreeFrm';
+        var url = './../FoolFormDesigner/SFList.htm?FK_MapData=' + CCForm_FK_MapData + '&From=FreeFrm';
 
         var funIsExist = this.IsExist;
 

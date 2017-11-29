@@ -96,6 +96,10 @@ namespace BP.Sys
         /// 存储表
         /// </summary>
         public const string PTable = "PTable";
+        /// <summary>
+        /// 表存储格式0=自定义表,1=指定表,可以修改字段2=执行表不可以修改字段.
+        /// </summary>
+        public const string PTableModel = "PTableModel";
         public const string Dtls = "Dtls";
         public const string EnPK = "EnPK";
         public const string FrmW = "FrmW";
@@ -1104,6 +1108,21 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 表存储模式0=自定义表,1,指定的表,2=指定的表不能修改表结构.
+        /// @周朋
+        /// </summary>
+        public int PTableModel
+        {
+            get
+            {
+                return this.GetValIntByKey(MapDataAttr.PTableModel);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.PTableModel, value);
+            }
+        }
+        /// <summary>
         /// URL
         /// </summary>
         public string Url
@@ -1505,6 +1524,11 @@ namespace BP.Sys
 
                 map.AddTBString(MapDataAttr.EnPK, null, "实体主键", true, false, 0, 200, 20);
                 map.AddTBString(MapDataAttr.PTable, null, "物理表", true, false, 0, 500, 20);
+
+                //@周朋 表存储格式0=自定义表,1=指定表,可以修改字段2=执行表不可以修改字段.
+                map.AddTBInt(MapDataAttr.PTableModel, 0, "表存储模式", true, true);
+                
+
                 map.AddTBString(MapDataAttr.Url, null, "连接(对嵌入式表单有效)", true, false, 0, 500, 20);
                 map.AddTBString(MapDataAttr.Dtls, null, "从表", true, false, 0, 500, 20);
 
@@ -1569,6 +1593,18 @@ namespace BP.Sys
         {
             this.DoOrderDown(MapDataAttr.FK_FormTree, this.FK_FormTree, MapDataAttr.Idx);
         }
+
+        //检查表单
+        public void CheckPTableSaveModel(string filed)
+        {
+            if (this.PTableModel == 2)
+            {
+                /*如果是存储格式*/
+                if (DBAccess.IsExitsTableCol(this.PTable, filed) == false)
+                    throw new Exception("@表单的表存储模式不允许您创建不存在的字段(" + filed + ")，不允许修改表结构.");
+            }
+        }
+
         #endregion
 
         #region 常用方法.

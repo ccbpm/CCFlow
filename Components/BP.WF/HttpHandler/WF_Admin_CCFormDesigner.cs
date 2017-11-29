@@ -10,7 +10,6 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.WF.Template;
-using System.Linq;
 
 namespace BP.WF.HttpHandler
 {
@@ -174,7 +173,7 @@ namespace BP.WF.HttpHandler
             SFDBSrc src = new SFDBSrc("local");
             ds.Tables.Add(src.ToDataTableField("SFDBSrc"));
 
-            DataTable tables = src.GetTables();
+            DataTable tables = src.GetTables(true);
             tables.TableName = "Tables";
             ds.Tables.Add(tables);
 
@@ -187,6 +186,9 @@ namespace BP.WF.HttpHandler
             md.Name = this.GetRequestVal("TB_Name");
             md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
             md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
+
+            //数据表模式。 @周朋 需要翻译.
+            md.PTableModel = this.GetRequestValInt("DDL_PTableModel");
 
             md.FK_FrmSort = this.GetRequestVal("DDL_FrmTree");
             md.FK_FormTree = this.GetRequestVal("DDL_FrmTree");

@@ -46,6 +46,91 @@ namespace BP.WF.HttpHandler
         }
         #endregion 执行父类的重写方法.
 
+        #region AutoFullDtlField 自动计算 a*b  功能界面 .
+        /// <summary>
+        /// 保存(自动计算: @单价*@数量 模式.)
+        /// </summary>
+        /// <returns></returns>
+        public string AutoFullDtlField_Save()
+        {
+            MapExt me = new MapExt();
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.AutoFullDtlField,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            me.FK_MapData = this.FK_MapData;
+            me.AttrOfOper = this.KeyOfEn;
+            me.Doc = this.GetValFromFrmByKey("DDL_Dtl") + "." + this.GetValFromFrmByKey("DDL_Field") + "_" + this.GetValFromFrmByKey("DDL_JSFS"); //要执行的表达式.
+
+            me.ExtType = MapExtXmlList.AutoFullDtlField;
+
+            //执行保存.
+            me.MyPK = MapExtXmlList.AutoFullDtlField + "_" + me.FK_MapData + "_" + me.AttrOfOper;
+            if (me.Update() == 0)
+                me.Insert();
+
+            return "保存成功.";
+        }
+        public string AutoFullDtlField_Delete()
+        {
+            MapExt me = new MapExt();
+            me.Delete(MapExtAttr.ExtType, MapExtXmlList.AutoFullDtlField,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+
+            return "删除成功.";
+        }
+        public string AutoFullDtlField_Init()
+        {
+            DataSet ds = new DataSet();
+
+
+         
+
+
+
+            // 加载mapext 数据.
+            MapExt me = new MapExt();
+            int i = me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.AutoFullDtlField,
+                MapExtAttr.FK_MapData, this.FK_MapData,
+                MapExtAttr.AttrOfOper, this.KeyOfEn);
+            if (i == 0)
+            {
+                me.FK_MapData = this.FK_MapData;
+                me.AttrOfOper = this.KeyOfEn;
+                me.FK_DBSrc = "local";
+            }
+
+            if (me.FK_DBSrc == "")
+                me.FK_DBSrc = "local";
+
+            //去掉 ' 号.
+            me.SetValByKey("Doc", me.Doc);
+
+            DataTable dt = me.ToDataTableField();
+            dt.TableName = "Sys_MapExt";
+            ds.Tables.Add(dt);
+
+            //把从表放入里面.
+            MapDtls dtls = new MapDtls(this.FK_MapData);
+            ds.Tables.Add(dtls.ToDataTableField("Dtls"));
+
+            //把从表的字段放入.
+            foreach (MapDtl dtl in dtls)
+            {
+                string sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE FK_MapData='"+dtl.No+"' AND (MyDataType=2 OR MyDataType=3 OR MyDataType=5 OR MyDataType=8)  ";  
+                sql+=" AND KeyOfEn !='OID' AND KeyOfEn!='FID' AND KeyOfEn!='RefPK' ";
+
+                //把从表增加里面去.
+                DataTable mydt = DBAccess.RunSQLReturnTable(sql);
+                mydt.TableName = dtl.No;
+                ds.Tables.Add(mydt);
+            }
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        #endregion AutoFullDtlField  功能界面.
+
         #region AutoFull 自动计算 a*b  功能界面 .
         /// <summary>
         /// 保存(自动计算: @单价*@数量 模式.)

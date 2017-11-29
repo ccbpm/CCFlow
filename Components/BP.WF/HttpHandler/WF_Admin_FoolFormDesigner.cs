@@ -1056,6 +1056,17 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
+            try
+            {
+                MapData md = new MapData(this.FK_MapData);
+                md.CheckPTableSaveModel(newNo);
+            }
+            catch (Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
+
+
             //求出选择的字段类型.
             MapAttr attr = new MapAttr();
             attr.Name = newName;
@@ -1351,6 +1362,13 @@ namespace BP.WF.HttpHandler
                 //定义变量.
                 if (this.EnumKey == null)
                     return "err@没有接收到EnumKey的值，无法进行保存操作。";
+
+
+                //@周朋 , 判断数据模式，创建的字段是否符合要求.
+                MapData md = new MapData(this.FK_MapData);
+                md.CheckPTableSaveModel(this.KeyOfEn);
+             
+
 
                 //赋值.
                 MapAttr attr = new MapAttr();

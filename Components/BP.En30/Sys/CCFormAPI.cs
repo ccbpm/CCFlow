@@ -197,6 +197,10 @@ namespace BP.Sys
         /// <param name="colSpan">跨的列数</param>
         public static void SaveFieldSFTable(string fk_mapdata, string fieldName, string fieldDesc, string fk_SFTable, float x, float y, int colSpan = 1)
         {
+            //检查是否可以创建字段? 
+            MapData md = new MapData(fk_mapdata);
+            md.CheckPTableSaveModel(fieldName);
+
             //外键字段表.
             SFTable sf = new SFTable(fk_SFTable);
 
@@ -316,6 +320,10 @@ namespace BP.Sys
         /// <param name="colSpan"></param>
         public static void NewField(string frmID, string field, string fieldDesc, int mydataType, float x, float y, int colSpan = 1)
         {
+            //检查是否可以创建字段? 
+            MapData md = new MapData(frmID);
+            md.CheckPTableSaveModel(field);
+
             MapAttr ma = new MapAttr();
             ma.FK_MapData = frmID;
             ma.KeyOfEn = field;
@@ -324,11 +332,13 @@ namespace BP.Sys
             ma.X = x;
             ma.Y = y;
             ma.Insert();
-
         }
         public static void NewEnumField(string fk_mapdata, string field, string fieldDesc, string enumKey, UIContralType ctrlType,
            float x, float y, int colSpan = 1)
         {
+            //检查是否可以创建字段? 
+            MapData md = new MapData(fk_mapdata);
+            md.CheckPTableSaveModel(field);
 
             MapAttr ma = new MapAttr();
             ma.FK_MapData = fk_mapdata;

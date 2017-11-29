@@ -1052,7 +1052,7 @@ namespace BP.Sys
         /// 获得数据列表.
         /// </summary>
         /// <returns></returns>
-        public DataTable GetTables()
+        public DataTable GetTables(bool isCutFlowTables=false)
         {
             var sql = new StringBuilder();
             sql.AppendFormat("SELECT ss.SrcTable FROM Sys_SFTable ss WHERE ss.FK_SFDBSrc = '{0}'", this.No);
@@ -1191,6 +1191,33 @@ namespace BP.Sys
                     allTables.Rows.Remove(dr);
                 }
             }
+
+            //去掉系统表.
+            if (isCutFlowTables == true)
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("No", typeof(string));
+                dt.Columns.Add("Name", typeof(string));
+
+                foreach (DataRow dr in allTables.Rows)
+                {
+                    string no = dr["No"].ToString();
+
+                    if (no.Contains("WF_") 
+                        || no.Contains("Track")
+                        || no.Contains("Sys_") 
+                        || no.Contains("Demo_"))
+                        continue;
+
+                    DataRow mydr = dt.NewRow();
+                    mydr["No"] = dr["No"];
+                    mydr["Name"] = dr["Name"];
+                    dt.Rows.Add(mydr);
+                }
+
+                return dt;
+            }
+
             return allTables;
         }
         /// <summary>

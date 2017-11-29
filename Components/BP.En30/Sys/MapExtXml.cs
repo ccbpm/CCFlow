@@ -10,9 +10,13 @@ namespace BP.Sys
     public class MapExtXmlList
     {
         /// <summary>
-        /// 获取与设置外部数据
+        /// 求和
         /// </summary>
         public const string AutoFull = "AutoFull";
+        /// <summary>
+        /// 对从表列求和
+        /// </summary>
+        public const string AutoFullDtlField = "AutoFullDtlField";
         /// <summary>
         /// 自动填充
         /// </summary>

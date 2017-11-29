@@ -152,6 +152,13 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "对从表列自动计算";
+                rm.ClassMethodName = this.ToString() + ".DoAutoFullDtlField()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
                 rm.Title = "正则表达式";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpression()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -204,18 +211,21 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 方法执行.
-       
-
+        public string DoAutoFullDtlField()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/AutoFullDtlField.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn);
+            //return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + KeyOfEnthis.KeyOfEn + "&MyPK=" + this.MyPK;
+        }
+        
         /// <summary>
         /// 自动计算
         /// </summary>
         /// <returns></returns>
         public string DoAutoFull()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn);
+            return "../../Admin/FoolFormDesigner/MapExt/AutoFull.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn);
             //return "/WF/Admin/FoolFormDesigner/MapExt/AutoFull.aspx?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + KeyOfEnthis.KeyOfEn + "&MyPK=" + this.MyPK;
         }
-
         /// <summary>
         /// 设置开窗返回值
         /// </summary>

@@ -18,12 +18,11 @@
   <Item No="003" ParentNo="AdminMenu" Name="表结构"    For="admin" Url="../../Comm/Sys/SystemClass.htm"  />
   <Item No="004" ParentNo="AdminMenu" Name="二级管理员" For="admin" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.AdminEmps"  />
   <Item No="005" ParentNo="AdminMenu" Name="功能执行" For="admin" Url="../../Comm/MethodLink.htm"  />
-  <Item No="010" ParentNo="AdminMenu" Name="修改密码" For="admin" Url="../WF/Setting/ChangePassword.htm"  />
+  <Item No="010" ParentNo="AdminMenu" Name="修改密码" For="" Url="../../Setting/ChangePassword.htm"  />
 
-  <Item No="501" ParentNo="AdminMenu" Name="岗位维护" For="" Url="../../Comm/Search.htm?EnsName=BP.TY.Stations"  />
-  <Item No="502" ParentNo="AdminMenu" Name="部门台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.TY.Depts"  />
-  <Item No="503" ParentNo="AdminMenu" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.TY.Emps"  />
+  <Item No="501" ParentNo="AdminMenu" Name="岗位维护" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Stations"  />
+  <Item No="502" ParentNo="AdminMenu" Name="部门台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Depts"  />
+  <Item No="503" ParentNo="AdminMenu" Name="人员台帐" For="" Url="../../Comm/Search.htm?EnsName=BP.Port.Emps"  />
   <Item No="504" ParentNo="AdminMenu" Name="组织结构维护" For="" Url="../../Comm/Search.htm?EnsName=BP.WF.Port.AdminEmps"  />
-  <Item No="590" ParentNo="AdminMenu" Name="修改密码" For="" Url="../WF/Setting/ChangePassword.htm"  />
 
 </NewDataSet>

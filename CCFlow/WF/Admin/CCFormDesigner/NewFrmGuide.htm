@@ -155,8 +155,8 @@
 <td>
  <select id="DDL_PTableModel" name="DDL_TableModel">
   <option value="0" >自定存储表 </option>
-  <option value="1" > 从数据库中指定，可以修改字段。 </option>
-  <option value="2" > 从数据库中指定，不允许修改字段。 </option>
+  <option value="1" > 从数据库中指定，可以修改数据库结构。 </option>
+  <option value="2" > 从数据库中指定，不允许修改数据库结构。 </option>
  </select>
 
 </td>
@@ -287,6 +287,52 @@
 
 <div id="Msg"> </div>
 <input type="hidden" id="HD_FK_FormTree" name="HD_FK_FormTree" />
+
+<fieldset>
+<legend> 帮助</legend>
+
+
+1. 如果普通类型的字段：身高(float)，年龄(int)，地址(string)，电话(string)，就不用配置。
+2. 金额类型  费用@DType=Money
+3, 枚举类型. 性别@0=女@1=男
+4, 外键类型.   岗位@Table=Port_Station@No=BianHao@Name=MingCheng
+5, Boolen.    是否符合要求@DType=Boolen
+6. 日期类型:      出生日期@DType=Date   2017-11-12
+7. 日期时间类型:  发生时间@DType=DateTime   2017-11-12 12:01
+4, 外键扩展类型.  人员$SELECT No,Name from mytable where xxx='@WebUser.FK_Dept' and myfiel='@MainTableField'
+
+
+自由表单的数据存储格式:
+
+<br />
+枚举值:
+性别@XB;@0=女@1=男
+<br />
+
+外键:
+岗位@Table=Port_Station@No=BianHao@Name=MingCheng
+<br />
+
+
+日期:
+出生日期@DType=Date
+
+<br />
+
+日期时间:
+发生时间@DType=DateTime
+
+<br />
+
+金额:
+费用@DType=Money
+
+<br />
+
+Boolen类型:
+是否符合要求@DType=Boolen
+
+</fieldset>
 </form>
 
 </body>

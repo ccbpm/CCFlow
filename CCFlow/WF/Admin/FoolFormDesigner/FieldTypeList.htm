@@ -150,13 +150,10 @@
             return new RegExp("[\\u4E00-\\u9FFF]+", "g").test(str);
         }
 
-        //@代国强 在这里把返回值获取到，放入到对应的文本框里.
+        //在这里把返回值获取到，放入到对应的文本框里.
         function SelectOne() {
             var url = "FieldTypeListChoseOneField.htm?FK_MapData=" + GetQueryString("FK_MapData");
-
             window.location.href = url;
-
-            //WinOpen(url);            
         }
     </script>
     <!--<base target="_self" /> -->
@@ -195,7 +192,7 @@
   <td colspan="2"> 
    <input type="radio" name="RB_QPJP" id="RB_QP" checked="checked"  value="ziduanquanpin" /> <label for="RB_QP">全拼</label>   
    <input type="radio" name="RB_QPJP" id="RB_JP"  value="ziduanjianpin" />  <label for="RB_JP">简拼</label>    
-   <a href="#"  onclick="SelectOne();"  class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">...</a>
+   <a href="#"  onclick="SelectOne();"  title="从数据表里选择字段" class="easyui-linkbutton" data-options="iconCls:'icon-add',toggle:true">...</a>
   </td>
 </tr>
 

@@ -93,11 +93,11 @@ FigureCreateCommand.prototype = {
                 case "CheckGroup":
                     alert('该功能没有实现' + createFigureName + ' 需要连续创建三个字段.');
                     break;
-                //case CCForm_Controls.FrmCheck: //审核组件              
-                //case CCForm_Controls.FrmCheck: // 审核组件.              
-                //case CCForm_Controls.FlowChart: //轨迹图.              
-                //case CCForm_Controls.SubFlowDtl: //子流程.              
-                //case CCForm_Controls.ThreadDtl: //子线城.              
+                //case CCForm_Controls.FrmCheck: //审核组件               
+                //case CCForm_Controls.FrmCheck: // 审核组件.               
+                //case CCForm_Controls.FlowChart: //轨迹图.               
+                //case CCForm_Controls.SubFlowDtl: //子流程.               
+                //case CCForm_Controls.ThreadDtl: //子线城.               
                 case "FrmCheck": // 审核组件.
                 case "FlowChart": //轨迹图.
                 case "SubFlowDtl": //子流程.
@@ -411,7 +411,9 @@ FigureCreateCommand.prototype = {
 
         //var url = "DialogCtr/FrmTable.htm?DataType=&s=" + Math.random();
 
-        var url = './../FoolFormDesigner/SFList.htm?FK_MapData=' + CCForm_FK_MapData + '&From=FreeFrm';
+        var pTableModel = mapData.PTableModel;
+
+        var url = './../FoolFormDesigner/SFList.htm?FK_MapData=' + CCForm_FK_MapData + '&From=FreeFrm&PTableModel=' + pTableModel;
 
         var funIsExist = this.IsExist;
 

@@ -39,15 +39,43 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=SFList_Init&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
+                url: Handler + "?DoType=SFList_Init&FK_MapData=" + fk_mapData + "&PTableModel=" + GetQueryString("PTableModel") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
-                    data = JSON.parse(data);
-                    //增加处理.
-                    for (var i = 0; i < data.length; i++) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
 
-                        var sfTable = data[i];
+                    data = JSON.parse(data);
+
+                    var sfTabls = data["SFTables"]; //外键表字段.
+                    var fields = data["Fields"]; //已经存在的字段，所有的字段.
+
+
+                    //增加处理.
+                    for (var i = 0; i < sfTabls.length; i++) {
+
+                        var sfTable = sfTabls[i];
+
+
+                        //如果有这个字段.
+                        if (fields != undefined) {
+                            //检查这个字段是否存在可用的字段的列表里.
+                            var isHave = false;
+                            for (var idx = 0; idx < fields.length; idx++) {
+
+                                var field = fields[idx];
+                                if (field.FName != sfTable.No)
+                                    continue;
+                                isHave = true;
+                                break;
+                            }
+                            if (isHave == false)
+                                continue;
+                        }
+
 
                         var newRow = "";
                         var nameLink = "";
@@ -213,7 +241,7 @@
                     }
             }
         });
-     </script>
+    </script>
 </head>
 <body onkeypress="Esc()" >
 

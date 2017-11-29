@@ -85,7 +85,6 @@ namespace BP.Demo.FlowEvent
         }
         #endregion
 
-
         #region 重写节点运动事件.
 
         public override string SaveBefore()

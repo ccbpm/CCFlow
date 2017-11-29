@@ -4,7 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.Port;
 
-namespace BP.WF.MS
+namespace BP.Demo
 {
 	/// <summary>
 	/// 制度属性
@@ -217,7 +217,7 @@ namespace BP.WF.MS
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("MS_ZhiDu", "制度");
+                Map map = new Map("Demo_ZhiDu", "制度");
                 map.Java_SetEnType(EnType.Admin);
 
                 map.AddTBStringPK(ZhiDuAttr.No, null, "编号", true, true, 5, 5, 5);
@@ -231,7 +231,6 @@ namespace BP.WF.MS
                 map.AddTBString(ZhiDuAttr.ExternalNo, null, "外部系统编号", true, true, 0, 200, 4);
                 map.AddTBString(ZhiDuAttr.OID, null, "流程编号", true, true, 0, 200, 4);
                 map.AddBoolean(ZhiDuAttr.IsDelete,false,"是否作废",true,false);
-
 
                 // map.AddTBString(MainAttr.FK_Sort, null, "制度类别", true, false, 0, 500, 10,true);
                 // map.AddTBStringDoc(MainAttr.MainDoc, null, "制度内容(类别与内容支持变量)", true, false,true);

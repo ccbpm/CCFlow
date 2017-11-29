@@ -5,7 +5,7 @@ using System.Text;
 using BP.DA;
 using BP.En;
 
-namespace BP.WF.MS
+namespace BP.Demo
 {
     /// <summary>
     /// 职责与权限属性
@@ -111,7 +111,7 @@ namespace BP.WF.MS
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("MS_DutyAndPower", "职责与权限");
+                Map map = new Map("Demo_DutyAndPower", "职责与权限");
                 map.Java_SetEnType(EnType.Admin);
 
                 map.AddTBStringPK(DutyAndPowerAttr.No, null, "编号", true, true, 10, 10, 10);

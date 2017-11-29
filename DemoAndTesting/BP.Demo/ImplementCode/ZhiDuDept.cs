@@ -4,7 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.Port;
 
-namespace BP.WF.MS
+namespace BP.Demo
 {
     /// <summary>
     /// 制度编号 部门
@@ -94,7 +94,7 @@ namespace BP.WF.MS
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("MS_ZhiDuDept", "制度");
+                Map map = new Map("Demo_ZhiDuDept", "制度");
                 map.Java_SetEnType(EnType.Admin);
 
                 map.AddTBStringPK(ZhiDuDeptAttr.No, null, "编号", true, true, 5, 5, 5);

@@ -49,6 +49,7 @@
     <Compile Include="Demo\BPFramework\StudentKeMu.cs" />
     <Compile Include="Demo\BPFramework\Student.cs" />
     <Compile Include="Demo\BPFramework\KeMu.cs" />
+    <Compile Include="Demo\BuessUnit\BuessUnitDemo.cs" />
     <Compile Include="Demo\CN\City.cs" />
     <Compile Include="Demo\CN\PQ.cs" />
     <Compile Include="Demo\CN\SF.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Demo\FormEvent\CCFrm_ZhuBiaoShiJianCeShi.cs" />
     <Compile Include="Demo\License\License.cs" />
     <Compile Include="Demo\License\People.cs" />
+    <Compile Include="HandlerInterfaceAPI.cs" />
     <Compile Include="ImplementCode\GenerFrmHelpLink.cs" />
     <Compile Include="ImplementCode\DutyAndPower.cs" />
     <Compile Include="ImplementCode\NodeDtl.cs" />

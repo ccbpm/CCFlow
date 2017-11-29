@@ -4,7 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.WF.Port;
 
-namespace BP.WF.MS
+namespace BP.Demo
 {
 	/// <summary>
 	/// 制度章节属性
@@ -81,7 +81,7 @@ namespace BP.WF.MS
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("MS_NodeDtl", "制度章节");
+                Map map = new Map("Demo_NodeDtl", "制度章节");
                  
 
                 map.AddTBIntPK(NodeDtlAttr.FK_Node, 0, "节点", true, true);

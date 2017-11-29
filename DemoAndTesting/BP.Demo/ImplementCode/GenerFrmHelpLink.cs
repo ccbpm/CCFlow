@@ -7,7 +7,7 @@ using System.Reflection;
 using BP.Port;
 using BP.En;
 using BP.Sys;
-namespace BP.WF.DTS
+namespace BP.Demo
 {
     /// <summary>
     /// 增加办事指南连接
@@ -47,7 +47,7 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-            BP.WF.Nodes nds = new Nodes();
+            BP.WF.Nodes nds = new BP.WF.Nodes();
             nds.RetrieveAll();
             foreach (BP.WF.Node nd in nds)
             {

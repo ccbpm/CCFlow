@@ -4,7 +4,7 @@ using BP.DA;
 using BP.En;
 using BP.Port;
 
-namespace BP.WF.MS
+namespace BP.Demo
 {
 	/// <summary>
 	/// 章节属性
@@ -179,7 +179,7 @@ namespace BP.WF.MS
             {
                 if (this._enMap != null)
                     return this._enMap;
-                Map map = new Map("MS_ZhiDuDtl", "章节");
+                Map map = new Map("Demo_ZhiDuDtl", "章节");
                 map.Java_SetEnType(EnType.Admin);
 
                 map.AddTBStringPK(ZhiDuDtlAttr.No, null, "编号", true, true, 5, 5, 5);

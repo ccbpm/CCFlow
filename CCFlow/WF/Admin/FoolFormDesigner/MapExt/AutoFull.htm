@@ -20,19 +20,28 @@
                 async: true,
                 url: Handler + "?DoType=AutoFull_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
                 dataType: 'html',
-                success: function (json) {
+                success: function (data) {
 
-                    if (json.indexOf('err@') == 0) {
-                        alert(json);
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
                         return;
                     }
 
-                    json = JSON.parse(json);
+                    data = JSON.parse(data);
 
-                    var mapExt = json['Sys_MapExt'];
+                    var mapExt = data['Sys_MapExt'];
+
+                    mapExt = mapExt[0];
+
+
+                    if (mapExt.Doc == "" || mapExt.Doc == " ") {
+                        document.getElementById("Btn_Delete").disabled = true;
+                    }
+
+                    document.getElementById("TB_Doc").value = mapExt.Doc;
 
                     //调用公共类库的方法:执行批量主表赋值.
-                    GenerFullAllCtrlsVal(mapExt);
+                    //GenerFullAllCtrlsVal(mapExt);
                     return;
                 }
             });
@@ -64,6 +73,8 @@
                         $("#Msg").html("<font color=red>" + data + "</font>");
                         return;
                     }
+
+                    document.getElementById("Btn_Delete").disabled = false;
 
                     $("#Msg").html("<font color=green>" + data + "</font>");
                     return;

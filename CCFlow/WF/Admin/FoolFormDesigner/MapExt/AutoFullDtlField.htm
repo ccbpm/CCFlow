@@ -20,19 +20,46 @@
                 async: true,
                 url: Handler + "?DoType=AutoFullDtlField_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
                 dataType: 'html',
-                success: function (json) {
+                success: function (data) {
 
-                    if (json.indexOf('err@') == 0) {
-                        alert(json);
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
                         return;
                     }
 
-                    json = JSON.parse(json);
+                    data = JSON.parse(data);
 
-                    var mapExt = json['Sys_MapExt'];
+                    var dtls = data["Dtls"];
+                    var mapExt = data['Sys_MapExt'];
+                    var mapExt = mapExt[0];
+
+                    //根据这个格式对下拉框设置默认值.  "ND101Dtl1.JinE.Sum";
+                    var doc = mapExt.Doc;
+                    var docs = doc.split('\.');
+
+                    if (doc == "") {
+                        document.getElementById("Btn_Delete").disabled = true;
+                    }
+
+                    var selectID = "";
+                    var field = "";
+                    var jsfs = "";
+
+                    GenerBindDDL("DDL_Dtl", dtls, "No", "Name", selectID);
+
+                    for (var i = 0; i < dtls.length; i++) {
+
+                        var dtl = dtls[i];
+                        var dt = data[dtl.No];
+
+                        GenerBindDDL("DDL_Field", dt, "No", "Name", field);
+                    }
+
+                    //设置计算方式.
+                    SetDDLVal("DDL_JSFS", jsfs);
 
                     //调用公共类库的方法:执行批量主表赋值.
-                    GenerFullAllCtrlsVal(mapExt);
+                    // GenerFullAllCtrlsVal(mapExt);
                     return;
                 }
             });
@@ -40,11 +67,8 @@
             $("#Msg").html("");
         });
 
-        //装载模版.
-        function LoadTemplate() {
-            var url = "../../SettingTemplate.htm?TemplateType=AutoFullDtlField";
-            WinOpen(url, 'ss');
-        }
+ 
+  
         function Save() {
 
             $("#Msg").html("正在保存,请稍后......");
@@ -59,11 +83,16 @@
                 url: myurl,
                 dataType: 'html',
                 success: function (data) {
+
                     if (data.indexOf('err@') != -1) {
 
                         $("#Msg").html("<font color=red>" + data + "</font>");
                         return;
                     }
+
+
+                    document.getElementById("Btn_Delete").disabled = false;
+
 
                     $("#Msg").html("<font color=green>" + data + "</font>");
                     return;
@@ -101,32 +130,33 @@
         <table id="table" style="width: 100%;">
             <tr>
                 <td colspan="3" style="width: 100%;">
-                选择从表:<select id="DDL_Dtl"></select> 
-                选择列:<select id="DDL_Field"></select> 
-                选择计算方式:<select id="DDL_JSFS"> 
+                选择从表:<select id="DDL_Dtl" name="DDL_Dtl"></select> 
+                选择列:<select id="DDL_Field" name="DDL_Field" ></select> 
+                选择计算方式:<select id="DDL_JSFS" name="DDL_JSFS" > 
                 <option  value="Sum">求和</option>
                 <option  value="Avg">求平均</option>
                 <option  value="Max">求最大</option>
                 <option  value="Min">求最小</option>
                 </select>
-                <br />
-                    <textarea rows="4" name="TB_Doc" id="TB_Doc"> </textarea>
+                
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
-                    <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
                     <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
                     <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
-                    <a href="javascript:ShowHidden('sqlexp')">填充表达式帮助:</a>
+                    <a href="javascript:ShowHidden('sqlexp')">帮助:</a>
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
                     <div id='sqlexp' style='color: Gray; display: none'>
                         <ul>
-                            <li>1.如果是从表: 表达式就是列之间的计算，比如: @A;+@B; </li>
-                            <li>2.如果是主表: 就是主表字段之间的计算,比如: @DanJia;*@ShuLiang; 或者 @单价*@数量 </li>
+                            <li>1.对从表的里，进行求和，求平均计算。 </li>
+                            <li>2.当从表的对应列发生变化的时候，就调用这个规则把数据数据存储到主表里去。</li>
+                            <li>3.比如：在报销表单里，费用合计是对从表的小计列求和。</li>
+                            <li>4.配置信息存储格式为:Sys_MapExt的Doc 字段 ND101Dtl1.XiaoJi.Sum </li>
+
                         </ul>
                     </div>
                 </td>

@@ -60,7 +60,7 @@ namespace BP.WF.HttpHandler
 
             me.FK_MapData = this.FK_MapData;
             me.AttrOfOper = this.KeyOfEn;
-            me.Doc = this.GetValFromFrmByKey("DDL_Dtl") + "." + this.GetValFromFrmByKey("DDL_Field") + "_" + this.GetValFromFrmByKey("DDL_JSFS"); //要执行的表达式.
+            me.Doc = this.GetValFromFrmByKey("DDL_Dtl") + "." + this.GetValFromFrmByKey("DDL_Field") + "." + this.GetValFromFrmByKey("DDL_JSFS"); //要执行的表达式.
 
             me.ExtType = MapExtXmlList.AutoFullDtlField;
 

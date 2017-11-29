@@ -33,7 +33,7 @@
                     var mapExt = data['Sys_MapExt'];
                     var mapExt = mapExt[0];
 
-                    //根据这个格式对下拉框设置默认值.  "ND101Dtl1.JinE.Sum";
+                    // 根据这个格式对下拉框设置默认值.  "ND101Dtl1.JinE.Sum";
                     var doc = mapExt.Doc;
                     var docs = doc.split('\.');
 
@@ -41,19 +41,21 @@
                         document.getElementById("Btn_Delete").disabled = true;
                     }
 
-                    var selectID = "";
-                    var field = "";
-                    var jsfs = "";
+                    var selectID = docs[0];
+                    var field = docs[1];
+                    var jsfs = docs[2];
 
                     GenerBindDDL("DDL_Dtl", dtls, "No", "Name", selectID);
 
-                    for (var i = 0; i < dtls.length; i++) {
+					$("#DDL_Dtl").on("change", function () {
+						GenerBindDDL("DDL_Field", data[$(this).val()], "No", "Name");
+					});
 
-                        var dtl = dtls[i];
-                        var dt = data[dtl.No];
-
-                        GenerBindDDL("DDL_Field", dt, "No", "Name", field);
-                    }
+					if (typeof data[selectID] != "undefined") {
+						GenerBindDDL("DDL_Field", data[selectID], "No", "Name", field);
+					} else {
+						GenerBindDDL("DDL_Field", data[dtls[0].No], "No", "Name", field);
+					}
 
                     //设置计算方式.
                     SetDDLVal("DDL_JSFS", jsfs);

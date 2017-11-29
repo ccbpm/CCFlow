@@ -16,6 +16,16 @@ namespace BP.WF.HttpHandler
     public class WF_Admin_CCFormDesigner : BP.WF.HttpHandler.DirectoryPageBase
     {
 
+        /// <summary>
+        /// 初始化表单
+        /// </summary>
+        /// <returns></returns>
+        public string FormDesigner_InitMapData()
+        {
+            MapData md = new MapData(this.FK_MapData);
+            return md.ToJson();
+        }
+
         #region 执行父类的重写方法.
         /// <summary>
         /// 初始化数据

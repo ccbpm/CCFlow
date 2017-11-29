@@ -854,9 +854,9 @@ namespace BP.WF
                         if (attr.MyDataType == DataType.AppBoolean)
                         {
                             if (text == "0")
-                                text = "[X]";
+                                text = "[不更新]";
                             else
-                                text = "[是]";
+                                text = "[更新]";
                         }
 
                         // text = text.Replace("font-family: 楷体", "font-family: 宋体");

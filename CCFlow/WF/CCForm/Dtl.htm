@@ -580,52 +580,7 @@
 									statisticsRow.append(td);
 									$(":input[name=" + name + "]").each(function (i, e) {	// 根据遍历该列所有元素
 										$(e).bind("change", function (o) {	// 为该列所有元素增加onchange事件
-											/**
-											 * @param exp 表达式
-											 * @param name 待统计列元素name
-											 * @param template 统计单元格jquery对象
-											 */
-											(function (exp, name, template) {
-												if (exp == "Sum") {	// 和
-													var sum = 0;
-													$(":input[name=" + name + "]").each(function (i, e) {
-														sum += parseFloat($(e).val());
-													});
-													template.val(sum);
-												} else if (exp == "Avg") {	// 平均数
-													var sum = 0;
-													var count = 0;
-													$(":input[name=" + name + "]").each(function (i, e) {
-														sum += parseFloat($(e).val());
-														count++;
-													});
-													if (count > 0) {
-														template.val(sum / count);
-													}
-												} else if (exp == "Max") {	// 最大
-													var max = null;
-													$(":input[name=" + name + "]").each(function (i, e) {
-														var value = parseFloat($(e).val());
-														if (max == null) {
-															max = value;
-														} else if (value > max) {
-															max = value;
-														}
-													});
-													template.val(max);
-												} else if (exp == "Min") {	// 最小
-													var min = null;
-													$(":input[name=" + name + "]").each(function (i, e) {
-														var value = parseFloat($(e).val());
-														if (min == null) {
-															min = value;
-														} else if (value < min) {
-															min = value;
-														}
-													});
-													template.val(min);
-												}
-											})(matchesColumn[0].exp, name, template);
+											doStatistics(matchesColumn[0].exp, name, template);
 										});
 										if (i == 0) {
 											$(e).trigger("change");	// 页面初始化后进行合计计算(仅触发合计列第一个元素即可)
@@ -636,6 +591,19 @@
 								}
 							}
 						});
+
+						var formExt = $("#formExt").val();
+						var extObj = null;
+						try {
+							if (formExt && formExt != "") {
+								extObj = JSON.parse(formExt);
+							}
+						} catch (e) {
+						}
+						if (extObj) {
+							parentStatistics(extObj);
+						}
+
 						// 新增统计行
 						$("#dtlDiv div table tbody").append(statisticsRow);
 					}
@@ -664,7 +632,82 @@
             });
         }
 
-       
+		function parentStatistics(extObj) {
+			if (extObj) {
+				var columnsName = getColumnElementsName(extObj.DtlColumn);
+				$(":input[name=" + columnsName + "]").each(function (i, e) {
+					$(e).bind("change", function (o) {
+						doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document));
+					});
+					if (i == 0) {
+						$(e).trigger("change");
+					}
+				});
+			}
+		}
+
+		/**
+		 * @param exp 表达式
+		 * @param name 待统计列元素name
+		 * @param template 统计单元格jquery对象
+		 */
+		function doStatistics(exp, name, template) {
+			if (exp == "Sum") {	// 和
+				var sum = 0;
+				$(":input[name=" + name + "]").each(function (i, e) {
+					sum += parseFloat($(e).val());
+				});
+				template.val(sum);
+			} else if (exp == "Avg") {	// 平均数
+				var sum = 0;
+				var count = 0;
+				$(":input[name=" + name + "]").each(function (i, e) {
+					sum += parseFloat($(e).val());
+					count++;
+				});
+				if (count > 0) {
+					template.val(sum / count);
+				}
+			} else if (exp == "Max") {	// 最大
+				var max = null;
+				$(":input[name=" + name + "]").each(function (i, e) {
+					var value = parseFloat($(e).val());
+					if (max == null) {
+						max = value;
+					} else if (value > max) {
+						max = value;
+					}
+				});
+				template.val(max);
+			} else if (exp == "Min") {	// 最小
+				var min = null;
+				$(":input[name=" + name + "]").each(function (i, e) {
+					var value = parseFloat($(e).val());
+					if (min == null) {
+						min = value;
+					} else if (value < min) {
+						min = value;
+					}
+				});
+				template.val(min);
+			}
+		}
+
+		function getColumnElementsName(KeyOfEn) {
+			var name = undefined;
+			if (KeyOfEn) {
+				$.each($("#dtlDiv div table thead tr th"), function (i, th) {
+					var data = $(th).data();
+					if (data.colname === KeyOfEn) {
+						var template = figure_MapAttr_Template(data);
+						name = template.attr("name");
+						return false;
+					}
+				});
+			}
+			return name;
+		}
+
         //选项 导入导出功能.
         function Option()
         {
@@ -797,19 +840,13 @@
                         //AppString   
                         if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
-                                eleHtml +=
-                                    "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
-                                    (workNodeData, mapAttr, defValue) + "</select>";
+                                eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + (workNodeData, mapAttr, defValue) + "</select>";
                             } else {//文本区域
                                 if (mapAttr.UIHeight <= 23) {
-                                    eleHtml +=
-                                        "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                                    ;
+                                    eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
                                 }
                                 else {
-                                    eleHtml +=
-                                        "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
-                                    ;
+                                    eleHtml += "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
                                 }
                             }
                         } //AppDate
@@ -844,8 +881,7 @@
 
                         if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
                             if (mapAttr.UIContralType == 1) {//DDL
-                                eleHtml +=
-                                        "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
+                                eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNodeData, mapAttr, defValue) + "</select>";
                             }
                         }
 
@@ -1049,6 +1085,7 @@
 </head>
 <body onblur="SaveAll(this)" >
     <form>
+		<input type="hidden" id="formExt">
         <div id="Msg" style="text-align: center;display:none;"><img src="../Scripts/bootstrap/fonts/loading.gif" /></div>
         <div id="ContentDtlDiv">
             <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px; margin: 0px;">

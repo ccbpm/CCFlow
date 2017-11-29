@@ -444,7 +444,7 @@
                     //为PageData.DBDtl 赋值
                     $.each(dbDtl, function (i, objRow) {
                         pageData.DBDtl.push({ OID: objRow.OID, RowData: objRow });
-                    })
+                    });
 
                     var dtlDataOption = {
                         IsShowAll: true,
@@ -492,8 +492,7 @@
 
                                         if (tmplate.attr('name') !=undefined &&tmplate.attr('name').indexOf('TB_') == 0) {
                                             $(tmplate).bind('blur', function (obj) {
-                                                $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
-                                                    $(obj.target).val();
+                                                $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
                                             });
                                         } else if (tmplate.attr('name') !=undefined && tmplate.attr('name').indexOf('DDL_') == 0) {
                                             //对于只读的下拉框做如下处理  为只读的下拉框赋值
@@ -505,14 +504,12 @@
                                                 $(tmplate).append(option);
                                             } else {
                                                 $(tmplate).bind('change', function (obj) {
-                                                    $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] =
-                                                        $(obj.target).val();
+                                                    $(obj.target).parent().parent().data().data[$(obj.target).data().KeyOfEn] = $(obj.target).val();
                                                 });
                                             }
                                         }else if (tmplate.attr('name') ==undefined &&tmplate.find('[name^=CB_]').length == 1) {
                                             $(tmplate).find('[name^=CB_]').bind('change', function (obj) {
-                                                $(obj.target).parent().parent().parent().data().data[$(obj.target).parent().data().KeyOfEn] =
-                                                    $(tmplate).find('[name^=CB_]')[0].checked==true ? 1 : 0;
+                                                $(obj.target).parent().parent().parent().data().data[$(obj.target).parent().data().KeyOfEn] = $(tmplate).find('[name^=CB_]')[0].checked==true ? 1 : 0;
                                             });
                                         }
                                     }
@@ -543,6 +540,71 @@
                     };
                     $('#dtlDiv div table tbody tr').remove();
                     Common.CustomPagePlug(dtlDataOption);//绑定表格
+
+					/**
+					 * 合计行
+					 * "ColAutoExp":"@ShuLiang:Sum@DanJia:Sum@XiaoJi:Sum"
+					 */
+					if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "") {
+						var columnExp = [];
+						$.each(sys_MapDtl.ColAutoExp.split("@"), function (i, e) {
+							if (e.indexOf(":") != -1) {
+								var sp = e.split(":");
+								columnExp.push({
+									"KeyOfEn" : sp[0],
+									"exp" : sp[1]
+								});
+							}
+						});
+						var statisticsRow = $("<tr></tr>");
+						$.each($("#dtlDiv div table thead tr th"), function (i, th) {
+							var coltype = $(th).data().coltype;
+							if (typeof coltype != "undefined" && coltype == "SN") {
+								statisticsRow.append("<td>" + ($("#dtlDiv div table tbody tr").length + 1) + "</td>");
+							} else {
+								var matchesColumn = $.grep(columnExp, function (val) {
+									return val.KeyOfEn == $(th).data().colname;
+								});
+								if (matchesColumn.length == 1) {
+									var o = $(th);
+									var template = figure_MapAttr_Template(o.data());
+									var name = template.attr("name");
+									template.attr("id", name + "_Statistics");
+									template.attr("name", name + "_Statistics");
+									template.attr('disabled', true);
+									var td = $("<td></td>");
+									td.append(template);
+									statisticsRow.append(td);
+									$(":input[name=" + name + "]").each(function (i, e) {
+										$(e).bind("change", function (o) {
+											(function (exp) {
+												if (exp == "Sum") {	// 和
+													var sum = 0;
+													$(":input[name=" + name + "]").each(function (i, e) {
+														sum += parseFloat($(e).val());
+													});
+													template.val(sum);
+												} else if (exp == "Avg") {	// 平均数
+													
+												} else if (exp == "Max") {	// 最大
+													
+												} else if (exp == "Min") {	// 最小
+													
+												}
+											})(matchesColumn[0].exp);
+										});
+										if (i == 0) {
+											$(e).trigger("change");	// 页面初始化后进行合计计算(仅触发合计列第一个元素即可)
+										}
+									});
+								} else {
+									statisticsRow.append("<td></td>");
+								}
+							}
+						});
+						$("#dtlDiv div table tbody").append(statisticsRow);
+					}
+					// 合计行over
 
                     $('#Msg').hide();
                     return;
@@ -1265,12 +1327,11 @@
                         //先来计算  + -* 、%  的位置
                         
                         if (mapExt.Doc.indexOf('+') > 0 || mapExt.Doc.indexOf('-') > 0 || mapExt.Doc.indexOf('*') > 0 || mapExt.Doc.indexOf('/') > 0) {
-                            var mapExtDocArr1 = [];
+                            var mapExtDocArr1 = [];	// 字段@field
                             var lastOperatorIndex = -1;
-                            var operatorArr = [];
+                            var operatorArr = [];	// 计算符+-*/
                             for (var j = 0; j < mapExt.Doc.length; j++) {
-                                if (mapExt.Doc[j] == "+" || mapExt.Doc[j] == "-" || mapExt.Doc[j] == "*" || mapExt.Doc[j] == "/"
-                                    ) {
+                                if (mapExt.Doc[j] == "+" || mapExt.Doc[j] == "-" || mapExt.Doc[j] == "*" || mapExt.Doc[j] == "/") {
                                     operatorArr.push(mapExt.Doc[j]);
 
                                     mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex+1, j));
@@ -1282,7 +1343,9 @@
                             for (var m = 0; m < mapExtDocArr1.length; m++) {
                                 var extDocObj1 = mapExtDocArr1[m].replace('@', '');
                                 //将extDocObj1转换成KeyOfEn
-                                var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) { return val.Name == extDocObj1 || val.KeyOfEn == extDocObj1; });
+                                var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) {
+									return val.Name == extDocObj1 || val.KeyOfEn == extDocObj1;
+								});
 
                                 if (extObjAr.length == 0) {
                                    // alert("mapExt:" + mapExt.AttrOfOper + "配置有误");
@@ -1295,8 +1358,6 @@
                                     if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
                                         $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
                                         $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
-
-                                            
                                             //替换 
                                             var mapExt = $(obj.target).data().mapExt;
                                             var mapExtDoc = mapExt.Doc;
@@ -1327,9 +1388,9 @@
 
                                             tmpResult = eval(mapExtDoc);
                                             attrOfOperEle.val(tmpResult);
+											attrOfOperEle.trigger("change");	// 触发合计计算
                                             
-                                            $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] =
-                                    tmpResult;
+                                            $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] = tmpResult;
                                         })
                                     }
                                 }

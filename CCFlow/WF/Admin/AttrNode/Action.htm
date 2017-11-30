@@ -105,29 +105,19 @@
 
     </script>
 </head>
-<body   class="easyui-layout" >
+<body class="easyui-layout" >
+	<form id="cc">
+	  <div data-options="region:'center',title:'节点事件',border:false">
 
-<form id="cc">
- 
-
-  <div data-options="region:'center',title:'节点事件',border:false">
-
-        <div class="easyui-layout" data-options="fit:true">
-            <div data-options="region:'east',noheader:true" style="width: 200px;"  >
-                                   <div id="left"></div> 
-            </div>
-
-
-            <iframe style="width:100%; height:100%;" id="myFrm" name="myFrm">
-            
-            </iframe>
-
-    </div>
-    </div>
-
-
-
-</form>
-
+			<div class="easyui-layout" data-options="fit:true">
+				<div data-options="region:'east',noheader:true" style="width: 200px;">
+					<div id="left"></div> 
+				</div>
+				<div data-options="region:'center',noheader:true">
+					<iframe style="width:99%; height:99%;" id="myFrm" name="myFrm" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes"></iframe>
+				</div>
+			</div>
+		</div>
+	</form>
 </body>
 </html>

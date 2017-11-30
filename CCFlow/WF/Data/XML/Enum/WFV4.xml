@@ -112,10 +112,10 @@
   
     
 	<Item Key="EventDoType" 
-        CH="@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类"
-        EN="@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类"
-        JP="@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类"
-        RU="@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类"   />
+        CH="@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类@7=业务单元"
+        EN="@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类@7=业务单元"
+        JP="@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类@7=业务单元"
+        RU="@0=禁用@1=执行存储过程@2=执行SQL语句@3=执行URL@4=WebServices(未完成)@5=执行ddl文件的类与方法@6=EventBase类@7=业务单元"   />
 
   <Item Key="WFState"
         CH="@0=空白@1=草稿@2=运行中@3=已完成@4=挂起@5=退回@6=转发@7=删除@8=加签@9=冻结@10=批处理@11=加签回复状态"

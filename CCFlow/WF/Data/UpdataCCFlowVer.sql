@@ -3,6 +3,7 @@
 DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmTrackSta'; 
+DELETE FROM Sys_Enum WHERE EnumKey ='EventDoType'; 
  
 
 -- 更新枚举值;

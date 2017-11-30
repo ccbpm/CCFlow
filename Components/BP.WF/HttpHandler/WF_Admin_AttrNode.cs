@@ -93,7 +93,7 @@ namespace BP.WF.HttpHandler
             dtBuess.Columns.Add("No", typeof(string));
             dtBuess.Columns.Add("Name", typeof(string));
             dtBuess.TableName = "BuessUnits";
-            ArrayList al = BP.En.ClassFactory.GetObjects("BP.WF.BuessUnitBase");
+            ArrayList al = BP.En.ClassFactory.GetObjects("BP.Sys.BuessUnitBase");
             foreach (BuessUnitBase en in al)
             {
                 DataRow dr = dtBuess.NewRow();

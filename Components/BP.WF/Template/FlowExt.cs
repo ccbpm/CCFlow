@@ -259,7 +259,6 @@ namespace BP.WF.Template
         {
             get
             {
-
                 UAC uac = new UAC();
                 if (BP.Web.WebUser.No == "admin" || this.DesignerNo == WebUser.No)
                 {

@@ -1886,7 +1886,7 @@ namespace BP.WF
             if (Htable_BuessUnit == null || Htable_BuessUnit.Count == 0)
             {
                 Htable_BuessUnit = new Hashtable();
-                ArrayList al = BP.En.ClassFactory.GetObjects("BP.WF.BuessUnitBase");
+                ArrayList al = BP.En.ClassFactory.GetObjects("BP.Sys.BuessUnitBase");
                 foreach (BuessUnitBase en in al)
                 {
                     Htable_BuessUnit.Add(en.ToString(), en);
@@ -1926,7 +1926,7 @@ namespace BP.WF
             if (Htable_BuessUnit == null || Htable_BuessUnit.Count == 0)
             {
                 Htable_BuessUnit = new Hashtable();
-                ArrayList al = BP.En.ClassFactory.GetObjects("BP.WF.BuessUnitBase");
+                ArrayList al = BP.En.ClassFactory.GetObjects("BP.Sys.BuessUnitBase");
                 Htable_BuessUnit.Clear();
                 foreach (BuessUnitBase en in al)
                 {

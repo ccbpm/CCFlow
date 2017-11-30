@@ -444,63 +444,6 @@ namespace BP.En
         #endregion 类型
 
         #region 对象实例
-
-        /// <summary>
-        /// 得到一个object
-        /// </summary>
-        /// <param name="className"></param>
-        /// <returns></returns>
-        public static object GetObject_del(string className)
-        {
-            if (className == "" || className == null)
-                throw new Exception("@要转化类名称为空...");
-
-            /* 判断内存里面有没有.*/
-            object obj = DA.Cash.GetObjFormApplication(className, null);
-            if (obj == null)
-            {
-                /* 如果是空的，就判断一下是否调入了内存中去了。 */
-                if (ClassFactory._BPAssemblies == null)
-                {
-                    /* 如果_BPAssemblies是空的，就执行调入它。 */
-                    ClassFactory.PutClassIntoCash();
-                    obj = DA.Cash.GetObjFormApplication(className, null);
-                }
-            }
-            if (obj == null)
-            {
-                ClassFactory.PutClassIntoCash();
-                throw new Exception("要映射的类[" + className + "]不存在。");
-            }
-
-            return obj;
-
-            //if (Cash.IsExits(cashName, Depositary.Application))
-            //    return ; 
-
-            //Type ty = null;
-            //object obj=null;
-            //foreach (Assembly ass in BPAssemblies)
-            //{
-            //    ty = ass.GetType(className);
-            //    if (ty == null)
-            //        continue;
-
-            //    obj = ass.CreateInstance(className);
-            //    if (obj != null)
-            //    {
-            //        Cash.AddObj(cashName, Depositary.Application, obj);
-            //        return obj;
-            //    }
-            //    else
-            //        throw new Exception("@创建对象实例 " + className + " 失败！");
-
-            //}
-            //if(obj==null)
-            //    throw new Exception("@创建对象类型 "+className+" 失败！");
-            //return obj ;
-
-        }
         /// <summary>
         /// 尽量不用此方法来获取事例
         /// </summary>
@@ -510,8 +453,6 @@ namespace BP.En
         {
             if (className == "" || className == null)
                 throw new Exception("@要转化类名称为空...");
-
-            // Assembly.
 
             Type ty = null;
             object obj = null;

@@ -372,6 +372,22 @@ namespace BP.WF
                 return obj;
             }
         }
+        /// <summary>
+        /// 节点事件
+        /// </summary>
+        public FrmEvents FrmEvents
+        {
+            get
+            {
+                FrmEvents obj = this.GetRefObject("FrmEvents") as FrmEvents;
+                if (obj == null)
+                {
+                    obj = new FrmEvents(this.NodeID);
+                    this.SetRefObject("FrmEvents", obj);
+                }
+                return obj;
+            }
+        }
         #endregion
 
         #region 初试化全局的 Node

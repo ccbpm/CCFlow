@@ -6,9 +6,8 @@ using BP.En;
 using BP.Web.Controls;
 using BP.Web;
 using BP.Sys;
-using BP.WF.XML;
 
-namespace BP.WF
+namespace BP.Sys
 {
     /// <summary>
     /// 业务单元基类

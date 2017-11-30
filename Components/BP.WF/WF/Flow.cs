@@ -3644,7 +3644,7 @@ namespace BP.WF
                 str = this.FEventEntity.DoIt(doType, currNode, en, atPara);
             }
 
-            FrmEvents fes = currNode.MapData.FrmEvents;
+            FrmEvents fes = currNode.FrmEvents;
             //增加对流程事件的支持，流程事件时，FrmEvent.FK_MapData=FK_Flow，added by liuxc,2017-05-20
             switch (doType)
             {

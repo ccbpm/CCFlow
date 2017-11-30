@@ -184,6 +184,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Sys\BuessUnitBase.cs" />
     <Compile Include="Sys\CCFormAPI.cs" />
     <Compile Include="Sys\CCFormParse.cs" />
     <Compile Include="Sys\Contrast.cs">
@@ -197,6 +198,7 @@
     <Compile Include="Sys\ExcelSheet.cs" />
     <Compile Include="Sys\ExcelTable.cs" />
     <Compile Include="Sys\FormEventBase.cs" />
+    <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmEventBase.cs" />
     <Compile Include="Sys\FrmUI\FrmBtn.cs" />
     <Compile Include="Sys\FrmUI\FrmImg.cs" />
@@ -362,7 +364,6 @@
     </Compile>
     <Compile Include="Sys\FrmEle.cs" />
     <Compile Include="Sys\FrmEleDB.cs" />
-    <Compile Include="Sys\FrmEvent.cs" />
     <Compile Include="Sys\FrmReportField.cs" />
     <Compile Include="Sys\FrmRpt.cs" />
     <Compile Include="Sys\GETree.cs" />

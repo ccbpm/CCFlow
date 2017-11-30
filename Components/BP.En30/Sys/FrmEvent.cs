@@ -877,6 +877,19 @@ namespace BP.Sys
             if (nev == null || nev.HisDoType == EventDoType.Disable)
                 return null;
 
+
+            #region 执行的是业务单元.
+            if (nev.HisDoType == EventDoType.BuessUnit)
+            {
+                /* 获得业务单元，开始执行他 */
+                BuessUnitBase enBuesss = BP.En.ClassFactory.GetObject_OK(nev.DoDoc) as BuessUnitBase;
+                enBuesss.WorkID = Int64.Parse(en.PKVal.ToString());
+                return enBuesss.DoIt();
+            }
+            #endregion 执行的是业务单元.
+
+
+
             string doc = nev.DoDoc.Trim();
             if ((doc == null || doc == "") && nev.HisDoType != EventDoType.SpecClass)   //edited by liuxc,2016-01-16,执行DLL文件不需要判断doc为空
                 return null;
@@ -1405,6 +1418,16 @@ namespace BP.Sys
         {
             QueryObject qo = new QueryObject(this);
             qo.AddWhere(FrmEventAttr.FK_MapData, fk_MapData);
+            qo.DoQuery();
+        }
+        /// <summary>
+        /// 事件
+        /// </summary>
+        /// <param name="FK_MapData">按节点ID查询</param>
+        public FrmEvents(int nodeID)
+        {
+            QueryObject qo = new QueryObject(this);
+            qo.AddWhere(FrmEventAttr.FK_Node, nodeID);
             qo.DoQuery();
         }
         /// <summary>

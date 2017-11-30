@@ -44,15 +44,22 @@
                         return;
                     }
 
+
                     data = JSON.parse(data);
 
-                    for (var i = 0; i < data.length; i++) {
+
+                    var ens = data["FrmEvents"];
+                    var buess = data["BuessUnits"];
+
+                    GenerBindDDL("DDL_Doc", buess, "No", "Name", "");
+
+                    for (var i = 0; i < ens.length; i++) {
 
                         var en = data[i];
 
                         var newRow = "<tr>";
                         newRow = "<tr ><td class=Idx>" + i + "</td>";
-                        newRow += "<td>" + GetDoType(en.DoType )+ "</td>";
+                        newRow += "<td>" + GetDoType(en.DoType) + "</td>";
                         newRow += "<td>" + en.DoDoc + "</td>";
                         newRow += "<td>" + en.MsgOK + "</td>";
                         newRow += "<td>" + en.MsgError + "</td>";
@@ -63,8 +70,8 @@
 
                         $("#Table1 tr:last").after(newRow);
                     }
-                     
-                  //  document.getElementById('Table1').caption = "事件类:" + nodeID;
+
+                    //  document.getElementById('Table1').caption = "事件类:" + nodeID;
 
                     //事件类型.
                     //var eventLists = data["EventLists"];

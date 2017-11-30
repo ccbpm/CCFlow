@@ -9,6 +9,8 @@ using BP.Sys;
 using BP.DA;
 using BP.En;
 using BP.WF.Template;
+using BP.WF.XML;
+
 
 namespace BP.WF.HttpHandler
 {
@@ -22,6 +24,103 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        #region 事件基类.
+        /// <summary>
+        /// 事件类型
+        /// </summary>
+        public new string ShowType
+        {
+            get
+            {
+                if (this.FK_Node != 0)
+                    return "Node";
+
+                if (this.FK_Node == 0 && string.IsNullOrEmpty(this.FK_Flow) == false && this.FK_Flow.Length >= 3)
+                    return "Flow";
+
+                if (this.FK_Node == 0 && string.IsNullOrEmpty(this.FK_MapData) == false)
+                    return "Frm";
+
+                return "Node";
+            }
+        }
+        /// <summary>
+        /// 事件基类
+        /// </summary>
+        /// <returns></returns>
+        public string Action_Init()
+        {
+            DataSet ds = new DataSet();
+
+            //事件实体.
+            FrmEvents ndevs = new FrmEvents();
+            if (BP.DA.DataType.IsNullOrEmpty(this.FK_MapData) == false)
+                ndevs.Retrieve(FrmEventAttr.FK_MapData, this.FK_MapData);
+
+            ////已经配置的事件类实体.
+            //DataTable dtFrm = ndevs.ToDataTableField("FrmEvents");
+            //ds.Tables.Add(dtFrm);
+
+            //把事件类型列表放入里面.（发送前，发送成功时.）
+            EventLists xmls = new EventLists();
+            xmls.Retrieve("EventType", this.ShowType);
+
+            DataTable dt = xmls.ToDataTable();
+            dt.TableName = "EventLists";
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 获得该节点下已经绑定该类型的实体.
+        /// </summary>
+        /// <returns></returns>
+        public string ActionDtl_Init()
+        {
+            //事件实体.
+            FrmEvents ndevs = new FrmEvents();
+            string fk_Event = this.GetRequestVal("FK_Event"); //发送成功，失败标记.
+
+            ndevs.Retrieve(FrmEventAttr.FK_Event, fk_Event, FrmEventAttr.FK_Node, this.FK_Node);
+
+            return ndevs.ToJson();
+        }
+        /// <summary>
+        /// 执行删除
+        /// </summary>
+        /// <returns></returns>
+        public string ActionDtl_Delete()
+        {
+            //事件实体.
+            FrmEvent en = new FrmEvent();
+            en.MyPK = this.MyPK;
+            en.Delete();
+            return "删除成功.";
+        }
+        public string ActionDtl_Save()
+        {
+            //事件实体.
+            FrmEvent en = new FrmEvent();
+
+            en.FK_Node = this.FK_Node;
+            en.FK_Event = this.GetRequestVal("FK_Event"); //事件类型.
+            en.HisDoTypeInt =  this.GetValIntFromFrmByKey("EventDoType"); //执行类型.
+            en.MyPK = this.FK_Node + "_" + en.FK_Event + "_" + en.HisDoTypeInt; //组合主键.
+            en.RetrieveFromDBSources();
+
+            en.MsgOKString = this.GetValFromFrmByKey("MsgOK"); //成功的消息.
+            en.MsgErrorString = this.GetValFromFrmByKey("MsgError"); //失败的消息.
+
+            //执行内容.
+            en.DoDoc = this.GetValFromFrmByKey("Doc"); 
+
+            en.Save();
+
+            return "保存成功.";
+        }
+        #endregion 事件基类.
+
 
         #region  单据模版维护
         public string Bill_Init()
@@ -855,12 +954,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 表单模式
 
-        #region 事件.
-        public string Action_Init()
-        {
-            return "";
-        }
-        #endregion 事件.
+       
 
         #region 考核超时规则.
         /// <summary>

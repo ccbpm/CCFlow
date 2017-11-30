@@ -1278,7 +1278,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoAction()
         {
-            return "../../Admin/AttrNode/Action.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
+            return "../../Admin/AttrNode/Action.htm?FK_Node=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&tk=" + new Random().NextDouble();
         }
         /// <summary>
         /// 单据打印
@@ -1288,14 +1288,7 @@ namespace BP.WF.Template
         {
             return "../../Admin/AttrNode/Bill.htm?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID;
         }
-        /// <summary>
-        /// 设置
-        /// </summary>
-        /// <returns></returns>
-        public string DoFAppSet()
-        {
-            return "../../Admin/FAppSet.aspx?NodeID=" + this.NodeID + "&FK_Flow=" + this.FK_Flow;
-        }
+        
         
         protected override bool beforeUpdate()
         {

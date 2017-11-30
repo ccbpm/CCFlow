@@ -215,9 +215,13 @@ namespace BP.Sys
         /// </summary>
         public const string FK_Event = "FK_Event";
         /// <summary>
-        /// 节点ID
+        /// 表单ID
         /// </summary>
         public const string FK_MapData = "FK_MapData";
+        /// <summary>
+        /// 节点ID
+        /// </summary>
+        public const string FK_Node = "FK_Node";
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -367,6 +371,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 节点ID
+        /// </summary>
+        public int FK_Node
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmEventAttr.FK_Node);
+            }
+            set
+            {
+                this.SetValByKey(FrmEventAttr.FK_Node, value);
+            }
+        }
+        /// <summary>
         /// 节点
         /// </summary>
         public string FK_MapData
@@ -476,6 +494,17 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(FrmEventAttr.DoType, (int)value);
+            }
+        }
+        public int HisDoTypeInt
+        {
+            get
+            {
+                return this.GetValIntByKey(FrmEventAttr.DoType);
+            }
+            set
+            {
+                this.SetValByKey(FrmEventAttr.DoType, value);
             }
         }
         #endregion
@@ -757,6 +786,8 @@ namespace BP.Sys
 
                 map.AddTBString(FrmEventAttr.FK_Event, null, "事件名称", true, true, 0, 400, 10);
                 map.AddTBString(FrmEventAttr.FK_MapData, null, "FK_MapData", true, true, 0, 100, 10);
+                map.AddTBInt(FrmEventAttr.FK_Node, 0, "节点ID", true, true);
+
 
                 map.AddTBInt(FrmEventAttr.DoType, 0, "事件类型", true, true);
                 map.AddTBString(FrmEventAttr.DoDoc, null, "执行内容", true, true, 0, 400, 10);

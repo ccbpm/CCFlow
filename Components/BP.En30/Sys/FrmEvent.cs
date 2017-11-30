@@ -64,9 +64,9 @@ namespace BP.Sys
         /// </summary>
         EventBase = 6,
         /// <summary>
-        /// JS
+        /// 执行的业务单元
         /// </summary>
-        Javascript = 7
+        BuessUnit = 7
     }
     public class FrmEventList
     {

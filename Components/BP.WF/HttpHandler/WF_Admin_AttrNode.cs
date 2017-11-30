@@ -83,6 +83,7 @@ namespace BP.WF.HttpHandler
             //事件实体.
             FrmEvents ndevs = new FrmEvents();
             string fk_Event = this.GetRequestVal("FK_Event"); //发送成功，失败标记.
+
             ndevs.Retrieve(FrmEventAttr.FK_Event, fk_Event, FrmEventAttr.FK_Node, this.FK_Node);
             DataTable dt=ndevs.ToDataTableField("FrmEvents");
             ds.Tables.Add(dt);
@@ -124,7 +125,7 @@ namespace BP.WF.HttpHandler
 
             en.FK_Node = this.FK_Node;
             en.FK_Event = this.GetRequestVal("FK_Event"); //事件类型.
-            en.HisDoTypeInt =  this.GetValIntFromFrmByKey("EventDoType"); //执行类型.
+            en.HisDoTypeInt = this.GetValIntFromFrmByKey("EventDoType"); //执行类型.
             en.MyPK = this.FK_Node + "_" + en.FK_Event + "_" + en.HisDoTypeInt; //组合主键.
             en.RetrieveFromDBSources();
 
@@ -132,7 +133,10 @@ namespace BP.WF.HttpHandler
             en.MsgErrorString = this.GetValFromFrmByKey("MsgError"); //失败的消息.
 
             //执行内容.
-            en.DoDoc = this.GetValFromFrmByKey("Doc"); 
+            if (en.HisDoType == EventDoType.BuessUnit)
+                en.DoDoc = this.GetValFromFrmByKey("DDL_Doc");
+            else
+                en.DoDoc = this.GetValFromFrmByKey("TB_Doc");
 
             en.Save();
 

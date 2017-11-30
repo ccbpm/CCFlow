@@ -10,7 +10,7 @@ namespace BP.Demo.BuessUnit
     /// 1. 该子类必须放入到BP.*.dll 里面.
     /// 2. 
     /// </summary>
-    public class BuessUnitDemo : BP.WF.BuessUnitBase
+    public class BuessUnitDemo : BP.Sys.BuessUnitBase
     {
         /// <summary>
         /// 标题

@@ -29,6 +29,7 @@
             var flowNo = GetQueryString("FK_Flow");
 
             GenerBindEnumKey("DDL_EventDoType", "EventDoType", "0");
+			$("#DDL_EventDoType").trigger("change");
 
             var fk_Event = GetQueryString("FK_Event");
 
@@ -46,10 +47,11 @@
 
                     data = JSON.parse(data);
 
-                    var ens = data["FrmEvents"];
+					// 业务单元
                     var buess = data["BuessUnits"];
-
                     GenerBindDDL("DDL_Doc", buess, "No", "Name", "");
+
+					var ens = data["FrmEvents"];
 
                     for (var i = 0; i < ens.length; i++) {
 
@@ -148,6 +150,15 @@
             });
 
         }
+		function doChangeContent(o) {
+			if ($(o).val() == "7") {
+				$("#TB_Doc").hide();
+				$("#DDL_Doc").show();
+			} else {
+				$("#TB_Doc").show();
+				$("#DDL_Doc").hide();
+			}
+		}
     </script>
 </head>
 <body>
@@ -168,17 +179,16 @@
 <caption> 新增事件 </caption>
 <tr>
 <td>内容类型</td>
-<td><select id="DDL_EventDoType" name="DDL_EventDoType" ></select></td>
+<td><select id="DDL_EventDoType" name="DDL_EventDoType" onchange="doChangeContent(this)"></select></td>
 </tr>
 
 <tr>
 <td>内容</td>
 <td>
 
-<textarea id="TB_Doc" name="TB_Doc"></textarea>
+<textarea id="TB_Doc" name="TB_Doc" style="display: none;"></textarea>	<!-- 其它事件 -->
 
-<br />
-<select id="DDL_Doc" name="DDL_Doc" ></select>
+<select id="DDL_Doc" name="DDL_Doc" style="display: none;"></select>	<!-- 业务单元 -->
 
 </td>
 </tr>

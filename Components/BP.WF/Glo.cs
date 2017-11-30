@@ -3648,7 +3648,7 @@ namespace BP.WF
         {
             get
             {
-                return BP.Sys.SystemConfig.GetValByKeyInt("AutoNodeDTSTimeSpanMinutes", 2);
+                return BP.Sys.SystemConfig.GetValByKeyInt("AutoNodeDTSTimeSpanMinutes", 60);
             }
         }
         /// <summary>

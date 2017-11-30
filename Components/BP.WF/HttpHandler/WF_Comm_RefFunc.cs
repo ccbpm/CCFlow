@@ -75,7 +75,7 @@ namespace BP.WF.HttpHandler
 
             foreach (string empNo in empNos)
             {
-                if (dtEmps.Select(string.Format("No='{0}'", empNo)).Length == 0)
+                if (dtEmps.Select(string.Format("No='{0}'", empNo)).Length + dtEmps.Select(string.Format("NO='{0}'", empNo)).Length == 0)
                     continue;
 
                 nemp = new BP.WF.Template.NodeEmp();

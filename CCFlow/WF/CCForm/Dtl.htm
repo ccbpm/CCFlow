@@ -560,6 +560,7 @@
 							});
 							// 统计行
 							var statisticsRow = $("<tr></tr>");
+							statisticsRow.data().customRowType = "statistics";
 							// 遍历表头
 							$.each($("#dtlDiv div table thead tr th"), function (i, th) {
 								var coltype = $(th).data().coltype;
@@ -759,8 +760,7 @@
                         value = checkbox[0].checked == true ? 1 : 0;
                     }
                 }
-                //
-                if (trData[keyOfEn] != undefined) {
+                if (keyOfEn != "" && tr.data().customRowType != "statistics" && trData[keyOfEn] != undefined) {
                     trData[keyOfEn] = value;
                 }
             });
@@ -1037,6 +1037,9 @@
                     var index = i;
                     var trData = $($('table tbody tr')[index]).data().data;
                     var rowData = trData;
+					if ($($('table tbody tr')[index]).data().customRowType == "statistics") {
+						return;
+					}
                     rowData.DoType = "Dtl_SaveRow";
                     rowData.FK_MapDtl = GetQueryString("EnsName");
                     //row.FK_MapData = "ND101";

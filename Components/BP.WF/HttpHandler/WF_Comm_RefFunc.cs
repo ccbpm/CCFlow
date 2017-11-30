@@ -327,7 +327,10 @@ namespace BP.WF.HttpHandler
 
             foreach (DataRow row in dt.Rows)
             {
-                row["Code"] = BP.Tools.chs2py.ConvertStr2Code(row["Name"] as string);
+                if (Glo.Plant.Equals("JFlow") && (DBAccess.AppCenterDBType == DBType.Oracle))
+                    row["Code"] = BP.Tools.chs2py.ConvertStr2Code(row["NAME"] as string);
+                else
+                    row["Code"] = BP.Tools.chs2py.ConvertStr2Code(row["Name"] as string);
                 row["Checked"] = true;
             }
 

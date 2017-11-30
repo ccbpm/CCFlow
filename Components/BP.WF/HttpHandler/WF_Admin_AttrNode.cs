@@ -78,13 +78,32 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string ActionDtl_Init()
         {
+            DataSet ds = new DataSet();
+
             //事件实体.
             FrmEvents ndevs = new FrmEvents();
             string fk_Event = this.GetRequestVal("FK_Event"); //发送成功，失败标记.
-
             ndevs.Retrieve(FrmEventAttr.FK_Event, fk_Event, FrmEventAttr.FK_Node, this.FK_Node);
+            DataTable dt=ndevs.ToDataTableField("FrmEvents");
+            ds.Tables.Add(dt);
 
-            return ndevs.ToJson();
+            //业务单元集合.
+            DataTable dtBuess = new DataTable();
+            dtBuess.Columns.Add("No", typeof(string));
+            dtBuess.Columns.Add("Name", typeof(string));
+            dtBuess.TableName = "BuessUnits";
+            ArrayList al = BP.En.ClassFactory.GetObjects("BP.WF.BuessUnitBase");
+            foreach (BuessUnitBase en in al)
+            {
+                DataRow dr = dtBuess.NewRow();
+                dr["No"] = en.ToString();
+                dr["Name"] = en.Title;
+                dtBuess.Rows.Add(dr);
+            }
+
+            ds.Tables.Add(dtBuess);
+
+            return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
         /// 执行删除

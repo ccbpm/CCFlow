@@ -247,7 +247,7 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' />";
+        return "<input type='text' " + enableAttr + " style='width:120px;' name='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     //时期时间类型.

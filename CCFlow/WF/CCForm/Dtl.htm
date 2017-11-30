@@ -541,67 +541,69 @@
                     $('#dtlDiv div table tbody tr').remove();
                     Common.CustomPagePlug(dtlDataOption);//绑定表格
 
-					/**
-					 * 统计行
-					 * "ColAutoExp":"@ShuLiang:Sum@DanJia:Sum@XiaoJi:Sum"
-					 */
-					if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "") {
-						var columnExp = [];
-						// 解析统计规则字符串
-						$.each(sys_MapDtl.ColAutoExp.split("@"), function (i, e) {
-							if (e.indexOf(":") != -1) {
-								var sp = e.split(":");
-								columnExp.push({
-									"KeyOfEn" : sp[0],	// 字段
-									"exp" : sp[1]		// 表达式
-								});
-							}
-						});
-						// 统计行
-						var statisticsRow = $("<tr></tr>");
-						// 遍历表头
-						$.each($("#dtlDiv div table thead tr th"), function (i, th) {
-							var coltype = $(th).data().coltype;
-							if (typeof coltype != "undefined" && coltype == "SN") {	// 统计行行号列
-								statisticsRow.append("<td>" + ($("#dtlDiv div table tbody tr").length + 1) + "</td>");
-							} else {	// 其它列
-								var matchesColumn = $.grep(columnExp, function (val) {	// 根据表头的colname与待统计列的KeyOfEn对比
-									return val.KeyOfEn == $(th).data().colname;
-								});
-								if (matchesColumn.length == 1) {	// 如果是统计列
-									var o = $(th);
-									var template = figure_MapAttr_Template(o.data());	// 根据该列表头的数据(data)获取到与当前列类型一致的表单元素
-									var name = template.attr("name");
-									template.attr("id", name + "_Statistics");
-									template.attr("name", name + "_Statistics");
-									template.attr('disabled', true);
-									var td = $("<td></td>");
-									td.append(template);
-									statisticsRow.append(td);
-									$(":input[name=" + name + "]").each(function (i, e) {	// 根据遍历该列所有元素
-										$(e).bind("change", function (o) {	// 为该列所有元素增加onchange事件
-											doStatistics(matchesColumn[0].exp, name, template);
-										});
-										if (i == 0) {
-											$(e).trigger("change");	// 页面初始化后进行合计计算(仅触发合计列第一个元素即可)
-										}
+					if ($.isArray(dbDtl) && dbDtl.length > 0) {
+						/**
+						 * 统计行
+						 * "ColAutoExp":"@ShuLiang:Sum@DanJia:Sum@XiaoJi:Sum"
+						 */
+						if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "") {
+							var columnExp = [];
+							// 解析统计规则字符串
+							$.each(sys_MapDtl.ColAutoExp.split("@"), function (i, e) {
+								if (e.indexOf(":") != -1) {
+									var sp = e.split(":");
+									columnExp.push({
+										"KeyOfEn" : sp[0],	// 字段
+										"exp" : sp[1]		// 表达式
 									});
-								} else {	// 非统计列直接赋空<td></td>
-									statisticsRow.append("<td></td>");
 								}
-							}
-						});
+							});
+							// 统计行
+							var statisticsRow = $("<tr></tr>");
+							// 遍历表头
+							$.each($("#dtlDiv div table thead tr th"), function (i, th) {
+								var coltype = $(th).data().coltype;
+								if (typeof coltype != "undefined" && coltype == "SN") {	// 统计行行号列
+									statisticsRow.append("<td>" + ($("#dtlDiv div table tbody tr").length + 1) + "</td>");
+								} else {	// 其它列
+									var matchesColumn = $.grep(columnExp, function (val) {	// 根据表头的colname与待统计列的KeyOfEn对比
+										return val.KeyOfEn == $(th).data().colname;
+									});
+									if (matchesColumn.length == 1) {	// 如果是统计列
+										var o = $(th);
+										var template = figure_MapAttr_Template(o.data());	// 根据该列表头的数据(data)获取到与当前列类型一致的表单元素
+										var name = template.attr("name");
+										template.attr("id", name + "_Statistics");
+										template.attr("name", name + "_Statistics");
+										template.attr('disabled', true);
+										var td = $("<td></td>");
+										td.append(template);
+										statisticsRow.append(td);
+										$(":input[name=" + name + "]").each(function (i, e) {	// 根据遍历该列所有元素
+											$(e).bind("change", function (o) {	// 为该列所有元素增加onchange事件
+												doStatistics(matchesColumn[0].exp, name, template);
+											});
+											if (i == 0) {
+												$(e).trigger("change");	// 页面初始化后进行合计计算(仅触发合计列第一个元素即可)
+											}
+										});
+									} else {	// 非统计列直接赋空<td></td>
+										statisticsRow.append("<td></td>");
+									}
+								}
+							});
 
-						var formExt = $("#formExt").val();
-						var extObj = null;
-						try {
-							if (formExt && formExt != "") {
-								extObj = JSON.parse(formExt);
+							var formExt = $("#formExt").val();
+							var extObj = null;
+							try {
+								if (formExt && formExt != "") {
+									extObj = JSON.parse(formExt);
+								}
+							} catch (e) {
 							}
-						} catch (e) {
-						}
-						if (extObj) {
-							parentStatistics(extObj);
+							if (extObj) {
+								parentStatistics(extObj);
+							}
 						}
 
 						// 新增统计行
@@ -1685,6 +1687,6 @@
     }
 </script>
    <!--DIVINFO-->
-                    <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; align: left; border-color:Black'></div>
+    <div id='divinfo' style='width: 155px; position: absolute; color: Lime; display: none; cursor: pointer; test-align: left; border-color:Black'></div>
 </body>
 </html>

@@ -12,6 +12,7 @@ using BP.WF.Rpt;
 using BP.WF.Data;
 using BP.WF.Template;
 using BP.WF.Port;
+using BP.Web;
 
 namespace BP.WF.HttpHandler
 {
@@ -562,7 +563,7 @@ namespace BP.WF.HttpHandler
                 urlExt = "&PFlowNo=0&PWorkID=0&IsToobar=0&IsHidden=true";
             else
                 urlExt = "&PFlowNo=" + ndrpt.Rows[0]["PFlowNo"] + "&PWorkID=" + ndrpt.Rows[0]["PWorkID"] + "&IsToobar=0&IsHidden=true";
-            urlExt += "&From=CCFlow&TruckKey=" + tk.GetValStrByKey("MyPK") + "&DoType=" + this.DoType + "&UserNo=" + WebUser.No ?? string.Empty + "&SID=" + WebUser.SID ?? string.Empty;
+            urlExt += "&From=CCFlow&TruckKey=" + tk.GetValStrByKey("MyPK") + "&DoType=" + this.DoType + "&UserNo=" +  WebUser.No ?? string.Empty + "&SID=" + WebUser.SID ?? string.Empty;
 
             if (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm)
             {

@@ -101,6 +101,12 @@
 
             //   var frmType = document.getElementById("DDL_FrmType");
         }
+
+        //选择一个表.
+        function DDL_PTable_Change(ddl) {
+            var aa = document.getElementById(ddl);
+            document.getElementById("TB_PTable").value = aa.value;
+        }
     </script>
 </head>
 <body >
@@ -181,7 +187,7 @@
 <td class="Idx" > 8 </td>
 <td > <div id="Div1" >本机已存在的表  </div> </td>
 <td>
-<select id="DDL_PTable" name="DDL_PTable" >
+<select id="DDL_PTable" name="DDL_PTable" onchange="DDL_PTable_Change(this.id)" >
 </select>
  </td>
 <td > 

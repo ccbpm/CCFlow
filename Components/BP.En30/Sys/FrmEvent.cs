@@ -788,7 +788,6 @@ namespace BP.Sys
                 map.AddTBString(FrmEventAttr.FK_MapData, null, "FK_MapData", true, true, 0, 100, 10);
                 map.AddTBInt(FrmEventAttr.FK_Node, 0, "节点ID", true, true);
 
-
                 map.AddTBInt(FrmEventAttr.DoType, 0, "事件类型", true, true);
                 map.AddTBString(FrmEventAttr.DoDoc, null, "执行内容", true, true, 0, 400, 10);
                 map.AddTBString(FrmEventAttr.MsgOK, null, "成功执行提示", true, true, 0, 400, 10);
@@ -882,7 +881,7 @@ namespace BP.Sys
             if (nev.HisDoType == EventDoType.BuessUnit)
             {
                 /* 获得业务单元，开始执行他 */
-                BuessUnitBase enBuesss = BP.En.ClassFactory.GetObject_OK(nev.DoDoc) as BuessUnitBase;
+                BuessUnitBase enBuesss = BP.Sys.Glo.GetBuessUnitEntityByEnName(nev.DoDoc) ;
                 enBuesss.WorkID = Int64.Parse(en.PKVal.ToString());
                 return enBuesss.DoIt();
             }

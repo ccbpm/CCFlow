@@ -8,6 +8,8 @@ using System.Web;
 using BP.DA;
 using BP.Sys;
 using BP.WF;
+using BP.WF.Rpt;
+using BP.WF.Data;
 using BP.WF.Template;
 using BP.WF.Port;
 
@@ -516,6 +518,94 @@ namespace BP.WF.HttpHandler
             {
                 return "err@" + ex.Message;
             }
+        }
+        /// <summary>
+        /// 打开表单
+        /// </summary>
+        /// <returns></returns>
+        public string Runing_OpenFrm()
+        {
+            string appPath = BP.WF.Glo.CCFlowAppPath;
+            Node nd = null;
+            Track tk = new Track();
+            tk.FK_Flow = this.FK_Flow;
+            tk.NDFrom = this.FK_Node;
+
+            tk.WorkID = this.WorkID;
+            if (this.MyPK != null)
+            {
+                tk = new Track(this.FK_Flow, this.MyPK);
+                nd = new Node(tk.NDFrom);
+            }
+            else
+            {
+                nd = new Node(this.FK_Node);
+            }
+
+            Flow fl = new Flow(this.FK_Flow);
+            Int64 workid = 0;
+            if (nd.HisRunModel == RunModel.SubThread)
+                workid = tk.FID;
+            else
+                workid = tk.WorkID;
+
+            Int64 fid = this.FID;
+            if (this.FID == 0)
+                fid = tk.FID;
+
+            if (fid > 0)
+                workid = fid;
+
+            string urlExt = "";
+            DataTable ndrpt = DBAccess.RunSQLReturnTable("SELECT PFlowNo,PWorkID FROM " + fl.PTable + " WHERE OID=" + workid);
+            if (ndrpt.Rows.Count == 0)
+                urlExt = "&PFlowNo=0&PWorkID=0&IsToobar=0&IsHidden=true";
+            else
+                urlExt = "&PFlowNo=" + ndrpt.Rows[0]["PFlowNo"] + "&PWorkID=" + ndrpt.Rows[0]["PWorkID"] + "&IsToobar=0&IsHidden=true";
+            urlExt += "&From=CCFlow&TruckKey=" + tk.GetValStrByKey("MyPK") + "&DoType=" + this.DoType + "&UserNo=" + WebUser.No ?? string.Empty + "&SID=" + WebUser.SID ?? string.Empty;
+
+            if (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm)
+            {
+                //added by liuxc,2016-01-25
+                if (nd.FormUrl.Contains("?"))
+                    return "url@" + nd.FormUrl + "&IsReadonly=1&WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt;
+
+                return "url@" + nd.FormUrl + "?IsReadonly=1&WorkID=" + workid + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt;
+            }
+
+            Work wk = nd.HisWork;
+            wk.OID = workid;
+            if (wk.RetrieveFromDBSources() == 0)
+            {
+                GERpt rtp = nd.HisFlow.HisGERpt;
+                rtp.OID = workid;
+                if (rtp.RetrieveFromDBSources() == 0)
+                {
+                    string info = "打开(" + nd.Name + ")错误";
+                    info += "当前的节点数据已经被删除！！！<br> 造成此问题出现的原因如下。";
+                    info += "1、当前节点数据被非法删除。";
+                    info += "2、节点数据是退回人与被退回人中间的节点，这部分节点数据查看不支持。";
+                    info += "技术信息:表" + wk.EnMap.PhysicsTable + " WorkID=" + workid;
+                    return "err@" + info;
+                }
+                wk.Row = rtp.Row;
+            }
+
+            GenerWorkFlow gwf = new GenerWorkFlow();
+            gwf.WorkID = wk.OID;
+
+            if (nd.HisFlow.IsMD5 && wk.IsPassCheckMD5() == false)
+            {
+                string err = "打开(" + nd.Name + ")错误";
+                err += "当前的节点数据已经被篡改，请报告管理员。";
+                return "err@" + err;
+            }
+
+            Frms frms = nd.HisFrms;
+            if (frms.Count == 0)
+                return "url@./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+
+            return "url@" + appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?3=3" + this.RequestParas;
         }
         /// <summary>
         /// 草稿

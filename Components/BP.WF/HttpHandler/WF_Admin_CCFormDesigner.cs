@@ -195,6 +195,8 @@ namespace BP.WF.HttpHandler
             MapData md = new MapData();
             md.Name = this.GetRequestVal("TB_Name");
             md.No = DataType.ParseStringForNo(this.GetRequestVal("TB_No"), 100);
+
+            //表单的物理表.
             md.PTable = DataType.ParseStringForNo(this.GetRequestVal("TB_PTable"), 100);
 
             //数据表模式。 @周朋 需要翻译.

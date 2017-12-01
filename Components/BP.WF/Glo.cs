@@ -1874,75 +1874,7 @@ namespace BP.WF
             }
         }
 
-        #region 业务单元.
-        private static Hashtable Htable_BuessUnit = null;
-        /// <summary>
-        /// 获得节点事件实体
-        /// </summary>
-        /// <param name="enName">实例名称</param>
-        /// <returns>获得节点事件实体,如果没有就返回为空.</returns>
-        public static BuessUnitBase GetBuessUnitEntityByEnName(string enName)
-        {
-            if (Htable_BuessUnit == null || Htable_BuessUnit.Count == 0)
-            {
-                Htable_BuessUnit = new Hashtable();
-                ArrayList al = BP.En.ClassFactory.GetObjects("BP.Sys.BuessUnitBase");
-                foreach (BuessUnitBase en in al)
-                {
-                    Htable_BuessUnit.Add(en.ToString(), en);
-                }
-            }
-            BuessUnitBase myen = Htable_BuessUnit[enName] as BuessUnitBase;
-            if (myen == null)
-            {
-                //throw new Exception("@根据类名称获取业务单元实例出现错误:" + enName + ",没有找到该类的实体.");
-                BP.DA.Log.DefaultLogWriteLineError("@根据类名称获取业务单元实例出现错误:" + enName + ",没有找到该类的实体.");
-                return null;
-            }
-            return myen;
-        }
-        /// <summary>
-        /// 获得事件实体String，根据编号或者流程标记
-        /// </summary>
-        /// <param name="flowMark">流程标记</param>
-        /// <param name="flowNo">流程编号</param>
-        /// <returns>null, 或者流程实体.</returns>
-        public static string GetBuessUnitEntityStringByFlowMark(string flowMark, string flowNo)
-        {
-            BuessUnitBase en = GetBuessUnitEntityByFlowMark(flowMark, flowNo);
-            if (en == null)
-                return "";
-            return en.ToString();
-        }
-        /// <summary>
-        /// 获得业务单元.
-        /// </summary>
-        /// <param name="flowMark">流程标记</param>
-        /// <param name="flowNo">流程编号</param>
-        /// <returns>null, 或者流程实体.</returns>
-        public static BuessUnitBase GetBuessUnitEntityByFlowMark(string flowMark, string flowNo)
-        {
-
-            if (Htable_BuessUnit == null || Htable_BuessUnit.Count == 0)
-            {
-                Htable_BuessUnit = new Hashtable();
-                ArrayList al = BP.En.ClassFactory.GetObjects("BP.Sys.BuessUnitBase");
-                Htable_BuessUnit.Clear();
-                foreach (BuessUnitBase en in al)
-                {
-                    Htable_BuessUnit.Add(en.ToString(), en);
-                }
-            }
-
-            foreach (string key in Htable_BuessUnit.Keys)
-            {
-                BuessUnitBase fee = Htable_BuessUnit[key] as BuessUnitBase;
-                if (fee.ToString() == flowMark || fee.ToString().Contains("," + flowNo + ",") == true)
-                    return fee;
-            }
-            return null;
-        }
-        #endregion 业务单元.
+        
 
         #region 与流程事件实体相关.
         private static Hashtable Htable_FlowFEE = null;

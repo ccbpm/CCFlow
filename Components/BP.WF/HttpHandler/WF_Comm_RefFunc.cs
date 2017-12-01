@@ -327,7 +327,7 @@ namespace BP.WF.HttpHandler
 
             foreach (DataRow row in dt.Rows)
             {
-                if (Glo.Plant.Equals("JFlow") && (DBAccess.AppCenterDBType == DBType.Oracle))
+                if ((Glo.Plant == BP.WF.Plant.JFlow) && (DBAccess.AppCenterDBType == DBType.Oracle))
                     row["Code"] = BP.Tools.chs2py.ConvertStr2Code(row["NAME"] as string);
                 else
                     row["Code"] = BP.Tools.chs2py.ConvertStr2Code(row["Name"] as string);
@@ -713,7 +713,7 @@ namespace BP.WF.HttpHandler
 
             foreach (string stNo in stNos)
             {
-                if (dtSts.Select(string.Format("No='{0}'", stNo)).Length == 0)
+                if (dtSts.Select(string.Format("No='{0}'", stNo)).Length + dtSts.Select(string.Format("NO='{0}'", stNo)).Length == 0)
                     continue;
 
                 nst = new BP.WF.Template.NodeStation();
@@ -1027,8 +1027,12 @@ namespace BP.WF.HttpHandler
             }
 
             jr.InnerData = dt;
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+            string re = Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+            if (Glo.Plant == BP.WF.Plant.JFlow)
+            {
+                re = re.Replace("\"NO\"", "\"No\"").Replace("\"NAME\"", "\"Name\"").Replace("\"UNITNO\"", "\"UnitNo\"").Replace("\"UNITNAME\"", "\"UnitName\"");
+            }
+            return Newtonsoft.Json.JsonConvert.SerializeObject(re);
         }
         #endregion Dot2DotStationModel.htm（岗位选择）
 

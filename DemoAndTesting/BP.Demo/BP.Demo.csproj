@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CZBank\App.cs" />
+    <Compile Include="CZBank\Start.cs" />
     <Compile Include="Demo\BPFramework\BPUser.cs">
       <SubType>Code</SubType>
     </Compile>

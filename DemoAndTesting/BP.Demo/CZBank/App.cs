@@ -226,8 +226,8 @@ namespace BP.CZBank
         /// <returns></returns>
         public string Start_Init()
         {
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerCanStartFlowsOfDataTable(WebUser.No);
-            return BP.Tools.Json.DataTableToJson(dt,false);
+            BP.WF.HttpHandler.WF wf = new WF.HttpHandler.WF(this.context);
+            return wf.Start_Init();
         }
         /// <summary>
         /// 获得待办
@@ -235,9 +235,8 @@ namespace BP.CZBank
         /// <returns></returns>
         public string Todolist_Init()
         {
-            string fk_node = this.GetRequestVal("FK_Node");
-            DataTable dt = BP.WF.Dev2Interface.DB_GenerEmpWorksOfDataTable(WebUser.No, this.FK_Node);
-            return BP.Tools.Json.DataTableToJson(dt,false);
+            BP.WF.HttpHandler.WF wf = new WF.HttpHandler.WF(this.context);
+            return wf.Todolist_Init();
         }
 
         /// <summary>
@@ -276,10 +275,13 @@ namespace BP.CZBank
         /// <returns>运行中的流程</returns>
         public string Runing_Init()
         {
-            DataTable dt = null;
-            dt = BP.WF.Dev2Interface.DB_GenerRuning();
 
-            return BP.Tools.Json.DataTableToJson(dt,false);
+            BP.WF.HttpHandler.WF wf = new WF.HttpHandler.WF(this.context);
+            return wf.Runing_Init();
+
+            //DataTable dt = null;
+            //dt = BP.WF.Dev2Interface.DB_GenerRuning();
+            //return BP.Tools.Json.DataTableToJson(dt,false);
         }
 
         /// <summary>

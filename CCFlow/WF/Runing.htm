@@ -82,6 +82,31 @@
             return true;
         }
 
+        /* 打开表单. */
+        function OpenFrm(workid, nodeID, flowNo) {
+
+            //执行催办.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Runing_OpenFrm&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        data = data.replace('url@', '');
+                        window.open(data);
+                        return;
+                    }
+                    alert(data);
+                }
+            });
+        }
+
         //页面启动函数.
         $(function () {
 
@@ -133,12 +158,16 @@
                         newRow += "<td>" + work.DeptName + "</td>";
                       //  newRow += "<td>" + work.FlowStartRDT + "</td>";
 
-                        newRow += "<td>" + work.NodeName + "</td>";
+                        newRow += "<td  ><a href=\"javascript:OpenFrm('" + work.WorkID + "','" + work.FK_Node + "','" + work.FK_Flow + "')\" ><img src='./Img/Form.png' border=0 width='16px' alt='打开表单'/>" + work.NodeName + "</a></td>";
+
+
                         newRow += "<td>" + work.RDT + "</td>";
 
                         newRow += "<td>" + work.TodoEmps + "</td>";
                         newRow += "<td>";
+
                         newRow += "<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/UnSend.png' border=0 />撤销</a>";
+
                        // newRow += "<a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
                         newRow += "</td>";
                         newRow += "</tr>";

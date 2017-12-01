@@ -242,7 +242,6 @@ namespace CCFlow.WF.UC
                 //    this.Response.Redirect(nd.FormUrl + "&WorkID=" + tk.WorkID + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
                 //else
                 //    this.Response.Redirect(nd.FormUrl + "?WorkID=" + tk.WorkID + "&FK_Node=" + nd.NodeID + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + urlExt, true);
-
                 //if (nd.HisFormType == NodeFormType.SDKForm)
                 //{
                 //    if (nd.FormUrl.Contains("?"))

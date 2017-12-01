@@ -1612,13 +1612,27 @@ namespace BP.Sys
         /// <returns></returns>
         public static DataTable GetFieldsOfPTableMode2(string frmID)
         {
-            MapData md = new MapData(frmID);
+            string pTable = "";
+
+            MapDtl dtl = new MapDtl();
+            dtl.No = frmID;
+            if (dtl.RetrieveFromDBSources() == 1)
+            {
+                pTable = dtl.PTable;
+            }
+            else
+            {
+                MapData md = new MapData();
+                md.No = frmID;
+                md.RetrieveFromDBSources();
+                pTable = md.PTable;
+            }
 
             //获得原始数据.
-            DataTable dt = BP.DA.DBAccess.GetTableSchema(md.PTable, false);
+            DataTable dt = BP.DA.DBAccess.GetTableSchema(pTable, false);
 
             //创建样本表结构.
-            DataTable mydt = BP.DA.DBAccess.GetTableSchema(md.PTable, false);
+            DataTable mydt = BP.DA.DBAccess.GetTableSchema(pTable, false);
             mydt.Rows.Clear();
 
             //获得现有的列..

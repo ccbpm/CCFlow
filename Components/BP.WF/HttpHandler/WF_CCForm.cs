@@ -878,6 +878,51 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion End把外键表加入DataSet
 
+
+                #region 加入组件的状态信息, 在解析表单的时候使用.
+
+                if (this.FK_Node != 0)
+                {
+                    Node nd = new Node(this.FK_Node);
+                    BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
+                    if (nd.NodeFrmID != "ND" + nd.NodeID)
+                    {
+                        /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
+                        int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
+
+                        BP.WF.Template.FrmNodeComponent refFnc = new FrmNodeComponent(refNodeID);
+
+                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_H, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_H));
+                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_W, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_W));
+                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_X, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_X));
+                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_Y, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_Y));
+
+
+                        fnc.SetValByKey(FrmSubFlowAttr.SF_H, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_H));
+                        fnc.SetValByKey(FrmSubFlowAttr.SF_W, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_W));
+                        fnc.SetValByKey(FrmSubFlowAttr.SF_X, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_X));
+                        fnc.SetValByKey(FrmSubFlowAttr.SF_Y, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_Y));
+
+                        fnc.SetValByKey(FrmThreadAttr.FrmThread_H, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_H));
+                        fnc.SetValByKey(FrmThreadAttr.FrmThread_W, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_W));
+                        fnc.SetValByKey(FrmThreadAttr.FrmThread_X, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_X));
+                        fnc.SetValByKey(FrmThreadAttr.FrmThread_Y, refFnc.GetValFloatByKey(FrmThreadAttr.FrmThread_Y));
+
+                        fnc.SetValByKey(FrmTrackAttr.FrmTrack_H, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_H));
+                        fnc.SetValByKey(FrmTrackAttr.FrmTrack_W, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_W));
+                        fnc.SetValByKey(FrmTrackAttr.FrmTrack_X, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_X));
+                        fnc.SetValByKey(FrmTrackAttr.FrmTrack_Y, refFnc.GetValFloatByKey(FrmTrackAttr.FrmTrack_Y));
+
+                        fnc.SetValByKey(FTCAttr.FTC_H, refFnc.GetValFloatByKey(FTCAttr.FTC_H));
+                        fnc.SetValByKey(FTCAttr.FTC_W, refFnc.GetValFloatByKey(FTCAttr.FTC_W));
+                        fnc.SetValByKey(FTCAttr.FTC_X, refFnc.GetValFloatByKey(FTCAttr.FTC_X));
+                        fnc.SetValByKey(FTCAttr.FTC_Y, refFnc.GetValFloatByKey(FTCAttr.FTC_Y));
+                    }
+
+                    ds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
+                }
+                #endregion 加入组件的状态信息, 在解析表单的时候使用.
+
                 return BP.Tools.Json.DataSetToJson(ds, false);
             }
             catch (Exception ex)

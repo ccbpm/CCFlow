@@ -124,7 +124,7 @@ namespace BP.WF.HttpHandler
                 return ens.ToJson();
             }
 
-           /*如果是固定表结构模式,就返回.*/
+           /*如果是固定表结构模式,就返回已经过滤的字段.*/
 
             return "";
 

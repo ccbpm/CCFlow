@@ -1100,6 +1100,20 @@ namespace BP.Sys
             }
         }
         /// <summary>
+        /// 从表的模式
+        /// </summary>
+        public int PTableModel
+        {
+            get
+            {
+                return this.GetParaInt("PTableModel");
+            }
+            set
+            {
+                this.SetPara("PTableModel", value);
+            }
+        }
+        /// <summary>
         /// 数量
         /// </summary>
         public int RowsOfList
@@ -1275,6 +1289,8 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.Alias, null, "别名", true, false, 1, 200, 20);
                 map.AddTBString(MapDtlAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);
                 map.AddTBString(MapDtlAttr.PTable, null, "物理表", true, false, 0, 200, 20);
+               // map.AddTBInt(MapDtlAttr.PTableModel, 0, "物理表的保存方式", false, false);
+
                 map.AddTBString(MapDtlAttr.GroupField, null, "分组字段", true, false, 0, 300, 20);
                 map.AddTBString(MapDtlAttr.RefPK, null, "关联的主键", true, false, 0, 100, 20);
 

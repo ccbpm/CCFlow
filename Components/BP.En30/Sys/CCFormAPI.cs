@@ -172,6 +172,11 @@ namespace BP.Sys
                 if (dtlName == null)
                     dtlName = dtlNo;
 
+                //把他的模式复制过来.
+                MapData md = new MapData(fk_mapdata);
+                dtl.PTableModel = md.PTableModel;
+
+
                 dtl.W = 500;
             }
 
@@ -179,8 +184,10 @@ namespace BP.Sys
             dtl.Y = y;
             dtl.Name = dtlName;
             dtl.FK_MapData = fk_mapdata;
-            dtl.Save();
 
+         
+
+            dtl.Save();
 
             //初始化他的map.
             dtl.IntMapAttrs();

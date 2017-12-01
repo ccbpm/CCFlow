@@ -201,9 +201,9 @@ namespace BP.WF.HttpHandler
 
             dtl.No = this.FK_MapDtl;
             if (dtl.RetrieveFromDBSources() == 0)
-                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, dtl.Name, 100, 200);
+                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, this.FK_MapDtl, 100, 200);
             else
-                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, this.FK_MapDtl, dtl.X, dtl.Y);
+                BP.Sys.CCFormAPI.CreateOrSaveDtl(this.FK_MapData, this.FK_MapDtl, dtl.Name, dtl.X, dtl.Y);
 
             return "创建成功.";
         }
@@ -871,17 +871,44 @@ namespace BP.WF.HttpHandler
             dtl.Delete();
             return "操作成功..." + this.MyPK;
         }
+
         /// <summary>
         /// 枚举值列表
         /// </summary>
         /// <returns></returns>
-        public string EnumList()
+        public string SysEnumList_Init()
         {
             SysEnumMains ses = new SysEnumMains();
             ses.RetrieveAll();
-            return ses.ToJson();
-        }
 
+            //增加到列表里.
+            DataSet ds = new DataSet();
+            ds.Tables.Add(ses.ToDataTableField("SysEnumMains"));
+
+            int pTableModel = 0;
+            MapDtl dtl = new MapDtl();
+            dtl.No = this.FK_MapData;
+            if (dtl.RetrieveFromDBSources() == 1)
+            {
+                pTableModel = dtl.PTableModel;
+            }
+            else
+            {
+                MapData md = new MapData();
+                md.No = this.FK_MapData;
+                md.RetrieveFromDBSources();
+                pTableModel = md.PTableModel;
+            }
+
+            if (pTableModel == 2)
+            {
+                DataTable dt = MapData.GetFieldsOfPTableMode2(this.FK_MapData);
+                dt.TableName = "Fields";
+                ds.Tables.Add(dt);
+            }
+
+            return BP.Tools.Json.ToJson(ds);
+        }
 
         #region SFList 外键表列表.
         /// <summary>

@@ -101,7 +101,7 @@
         //发起时打开窗口
         function WinOpenStartFlow(flowNo) {
 
-            var url = "MyFlow.htm?FK_Flow=" + flowNo;
+            var url = "../WF/MyFlow.htm?FK_Flow=" + flowNo;
 
             var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
             newWindow.focus();
@@ -112,7 +112,7 @@
         function WinOpenSearch(flowNo) {
 
             var intFlowNo = flowNo;
-            var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
+            var url = "../WF/RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
             var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no,fullscreen=yes');
             newWindow.focus();
             return;
@@ -121,7 +121,7 @@
         //我发起的流程.
         function WinOpenStart(flowNo) {
             var intFlowNo = flowNo;
-            var url = "./RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
+            var url = "../WF/RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
             var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no,fullscreen=yes');
             newWindow.focus();
             return;
@@ -139,7 +139,7 @@
         //批量发起.
         function WinOpenBatch(flowNo) {
 
-            var url = "BatchStart.htm?FK_Flow=" + flowNo;
+            var url = "../WF/BatchStart.htm?FK_Flow=" + flowNo;
             var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no,fullscreen=yes');
             newWindow.focus();
             return;

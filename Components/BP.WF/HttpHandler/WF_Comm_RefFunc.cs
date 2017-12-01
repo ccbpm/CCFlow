@@ -498,7 +498,7 @@ namespace BP.WF.HttpHandler
 
             foreach (string deptNo in deptNos)
             {
-                if (dtDepts.Select(string.Format("No='{0}'", deptNo)).Length == 0)
+                if (dtDepts.Select(string.Format("No='{0}'", deptNo)).Length + dtDepts.Select(string.Format("NO='{0}'", deptNo)).Length == 0)
                     continue;
 
                 nemp = new BP.WF.Template.NodeDept();

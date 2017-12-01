@@ -22,12 +22,7 @@
     <script type="text/javascript" src="../../Comm/Gener.js"></script>
     <script type="text/javascript" src="../../Scripts/config.js"></script>
     <script language="javascript" type="text/javascript" >
-        /* ESC Key Down */
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
+        
 
           //页面启动函数.
         $(function () {
@@ -48,7 +43,7 @@
              $.ajax({
                  type: 'post',
                  async: true,
-                 url: Handler + "?DoType=EnumList&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
+                 url: Handler + "?DoType=SysEnumList_Init&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
                  dataType: 'html',
                  success: function (data) {
 
@@ -59,28 +54,66 @@
 
                      data = JSON.parse(data);
 
+                     //获取两个实体.
+                     var sysEnumMains = data["SysEnumMains"];
+                     var fields = data["Fields"];
+
+                     var numEnum = 0;
+
                      //增加处理.
-                     for (var i = 0; i < data.length; i++) {
+                     for (var i = 0; i < sysEnumMains.length; i++) {
+
+                         var sysEnumMain = sysEnumMains[i];
+
+                         //如果需要字段从集合里选择，排除没有的字段.
+                         if (fields != null) {
+
+                             var isHave = false; //是否存在.
+                             for (var idx = 0; idx < fields.length; idx++) {
+
+                                 var field = fields[idx];
+
+                                 if (field.FType.indexOf('int') == -1) {
+                                     continue;
+                                 }
+
+                                 if (field.FName != sysEnumMain.No) {
+                                     continue;
+                                 }
+
+                                 isHave = true;
+                                 break;
+                             }
+                             if (isHave == false)
+                                 continue;
+                         }
+
+                         numEnum++;
 
                          var newRow = "";
                          newRow += "<tr>";
                          newRow += "<td class=Idx>" + i + "</td>";
 
                          if (fk_mapData != null)
-                             newRow += "<td><a href=\"javascript:AddFrm('" + data[i].No + "','" + fk_mapData + "');\" >" + data[i].No + "</a></td>";
+                             newRow += "<td><a href=\"javascript:AddFrm('" + sysEnumMain.No + "','" + fk_mapData + "');\" >" + sysEnumMain.No + "</a></td>";
                          else
-                             newRow += "<td>" + data[i].No + "</td>";
+                             newRow += "<td>" + sysEnumMain.No + "</td>";
 
-                         newRow += "<td>" + data[i].Name + "</td>";
-                         newRow += "<td><a href=\"javascript:Edit('" + data[i].No + "','" + data[i].Name + "','" + data[i].CfgVal + "')\" >编辑</a></td>";
-                         newRow += "<td><a href=\"javascript:Ref('" + data[i].No + "');\" >引用</a></td>";
-                         newRow += "<td><a href=\"javascript:Del('" + data[i].No + "','" + data[i].Name + "');\" ><img src='../../Img/Btn/Delete.gif' >删除</a></td>";
+                         newRow += "<td>" + sysEnumMain.Name + "</td>";
+                         newRow += "<td><a href=\"javascript:Edit('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "')\" >编辑</a></td>";
+                         newRow += "<td><a href=\"javascript:Ref('" + sysEnumMain.No + "');\" >引用</a></td>";
+                         newRow += "<td><a href=\"javascript:Del('" + sysEnumMain.No + "','" + sysEnumMain.Name + "');\" ><img src='../../Img/Btn/Delete.gif' >删除</a></td>";
 
-                         newRow += "<td>" + data[i].CfgVal + "</td>";
+                         newRow += "<td>" + sysEnumMain.CfgVal + "</td>";
                          newRow += "</tr>";
 
                          $("#Table1 tr:last").after(newRow);
                      }
+
+                     if (numEnum == 0) {
+                         alert('错误:已经没有可以用的字段.');
+                     }
+
                  }
              });
          }
@@ -169,7 +202,7 @@
             alert('查看该枚举值，被那些表单字段引用功能尚未完成.');
         }
 
-     </script>
+    </script>
 </head>
 <body onkeypress="Esc()" >
 

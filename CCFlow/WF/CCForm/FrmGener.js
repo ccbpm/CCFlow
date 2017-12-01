@@ -15,6 +15,7 @@ $(function () {
     $("#CCForm").unbind().on('click', function () {
         Change(frmData);
     });
+
     initPageParam(); //初始化参数.
 
     //构造表单.

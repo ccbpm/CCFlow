@@ -876,7 +876,6 @@ namespace BP.Sys
             if (nev == null || nev.HisDoType == EventDoType.Disable)
                 return null;
 
-
             #region 执行的是业务单元.
             if (nev.HisDoType == EventDoType.BuessUnit)
             {
@@ -886,7 +885,6 @@ namespace BP.Sys
                 return enBuesss.DoIt();
             }
             #endregion 执行的是业务单元.
-
 
 
             string doc = nev.DoDoc.Trim();

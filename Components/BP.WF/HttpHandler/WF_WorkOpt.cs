@@ -618,6 +618,8 @@ namespace BP.WF.HttpHandler
             #endregion 定义变量.
 
             #region 判断是否显示 - 历史审核信息显示
+
+            bool isDoc = false;
             if (wcDesc.FWCListEnable == true)
             {
                 tks = wc.HisWorkChecks;
@@ -688,8 +690,11 @@ namespace BP.WF.HttpHandler
                         row["NodeName"] = tk.NDFromT; // "SSS"; //(nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
 
                         // zhoupeng 增加了判断，在会签的时候最后会签人发送前不能填写意见.
-                        if (tk.NDFrom==this.FK_Node && tk.EmpFrom==BP.Web.WebUser.No && isCanDo)
-                          row["IsDoc"] = true;
+                        if (tk.NDFrom == this.FK_Node && tk.EmpFrom == BP.Web.WebUser.No && isCanDo && isDoc==false)
+                        {
+                            isDoc = true;
+                            row["IsDoc"] = true;
+                        }
                         else
                             row["IsDoc"] = false;
 
@@ -714,10 +719,11 @@ namespace BP.WF.HttpHandler
                                 }
                             }
 
-                            if (isLast)
+                            if (isLast && isDoc==false)
                             {
-                                isExitTb_doc = false;
+                                isExitTb_doc = false;                                 
                                 row["IsDoc"] = true;
+                                isDoc = true;
                                 row["Msg"] = Dev2Interface.GetCheckInfo(this.FK_Flow, this.WorkID, this.FK_Node) ?? "";
                                 tkDoc = tk;
 

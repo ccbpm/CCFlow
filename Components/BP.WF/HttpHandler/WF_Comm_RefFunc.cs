@@ -654,8 +654,12 @@ namespace BP.WF.HttpHandler
             }
 
             jr.InnerData = dt;
-
-            return Newtonsoft.Json.JsonConvert.SerializeObject(jr);
+            string re = BP.Tools.Json.ToJson(jr);
+            if (Glo.Plant == BP.WF.Plant.JFlow)
+            {
+                re = re.Replace("\"NO\"", "\"No\"").Replace("\"NAME\"", "\"Name\"").Replace("\"DEPTNO\"", "\"DeptNo\"").Replace("\"DEPTNAME\"", "\"DeptName\"");
+            }
+            return re;
         }
         #endregion Dot2DotTreeDeptModel.htm（部门选择）
 

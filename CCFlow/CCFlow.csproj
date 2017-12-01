@@ -492,7 +492,6 @@
     <Content Include="WF\WorkOpt\PrintDocQRGuide.htm" />
     <Content Include="WF\WorkOpt\Rollback.htm" />
     <Content Include="WF\Admin\AttrFlow\TruckViewPower.htm" />
-    <Content Include="WF\Admin\AttrNode\Action.aspx" />
     <Content Include="WF\Admin\AttrNode\ActionEvent.aspx" />
     <Content Include="WF\Admin\AttrNode\Img\Col4Frm.JPG" />
     <Content Include="WF\Admin\AttrNode\Img\Doc.png" />
@@ -7089,13 +7088,6 @@
     </Compile>
     <Compile Include="WF\Admin\RptDfine\S8_RptExportTemplate.aspx.designer.cs">
       <DependentUpon>S8_RptExportTemplate.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\Action.aspx.cs">
-      <DependentUpon>Action.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\AttrNode\Action.aspx.designer.cs">
-      <DependentUpon>Action.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\AttrNode\ActionEvent.aspx.cs">
       <DependentUpon>ActionEvent.aspx</DependentUpon>

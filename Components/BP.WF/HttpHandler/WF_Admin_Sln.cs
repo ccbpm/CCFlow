@@ -27,107 +27,84 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
-        #region 执行父类的重写方法.
-        /// <summary>
-        /// 默认执行的方法
-        /// </summary>
-        /// <returns></returns>
-        protected override string DoDefaultMethod()
-        {
-            switch (this.DoType)
-            {
-                case "DtlFieldUp": //字段上移
-                    return "执行成功.";
-                default:
-                    break;
-            }
-
-            //找不不到标记就抛出异常.
-            throw new Exception("@标记[" + this.DoType + "]，没有找到. @RowURL:" + context.Request.RawUrl);
-        }
-        #endregion 执行父类的重写方法.
-
-        #region xxx 界面 .
+        #region 绑定流程表单
         /// <summary>
         /// 获取流程所有节点
         /// </summary>
         /// <returns></returns>
         public string BindForm_GenderFlowNode()
         {
+            Node nd = new Node(this.FK_Node);
+
             //规范做法.
-            Nodes nds = new Nodes(this.FK_Flow);
+            Nodes nds = new Nodes(nd.FK_Flow);
             return nds.ToJson();
+
         }
 
         /// <summary>
-        /// 获取表单库所有表单
+        /// 获取所有节点，复制表单
         /// </summary>
         /// <returns></returns>
-        public string BindForm_GenerForms()
+        public string BindForm_GetFlowNodeDropList()
         {
-            //形成树
-            FlowFormTrees appendFormTrees = new FlowFormTrees();
-            //节点绑定表单
-            FrmNodes frmNodes = new FrmNodes(this.FK_Flow, this.FK_Node);
-            //所有表单类别
-            SysFormTrees formTrees = new SysFormTrees();
-            formTrees.RetrieveAll(SysFormTreeAttr.Idx);
+            Nodes nodes = new Nodes();
+            nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
 
-            //根节点
-            BP.WF.Template.FlowFormTree root = new BP.WF.Template.FlowFormTree();
-            root.No = "00";
-            root.ParentNo = "0";
-            root.Name = "表单库";
-            root.NodeType = "root";
-            appendFormTrees.AddEntity(root);
+            if (nodes.Count == 0)
+                return "";
 
-            foreach (SysFormTree formTree in formTrees)
+            StringBuilder sBuilder = new StringBuilder();
+            sBuilder.Append("<select id = \"copynodesdll\"  multiple = \"multiple\" style = \"border - style:None; width: 100%; Height: 100%; \">");
+
+            foreach (Node node in nodes)
+                sBuilder.Append("<option " + (FK_Node == node.NodeID ? "disabled = \"disabled\"" : "") + " value = \"" + node.NodeID + "\" >" + "[" + node.NodeID + "]" + node.Name + "</ option >");
+
+            sBuilder.Append("</select>");
+
+            return sBuilder.ToString();
+        }
+
+        /// <summary>
+        /// 复制表单到节点
+        /// </summary>
+        /// <returns></returns>
+        public string BindForm_DoCopyFrmToNodes()
+        {
+            string nodeStr = this.GetRequestVal("NodeStr");//节点string,
+            string frmStr = this.GetRequestVal("frmStr");//表单string,
+
+            string[] nodeList = nodeStr.Split(',');
+            string[] frmList = frmStr.Split(',');
+
+            foreach (string node in nodeList)
             {
-                //已经添加排除
-                if (appendFormTrees.Contains("No", formTree.No) == true)
+                if (string.IsNullOrWhiteSpace(node))
                     continue;
-                //根节点排除
-                if (formTree.No.Equals("0"))
-                    continue;
-                //文件夹
-                BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
-                nodeFolder.No = formTree.No;
-                nodeFolder.ParentNo = formTree.ParentNo;
-                nodeFolder.Name = formTree.Name;
-                nodeFolder.NodeType = "folder";
-                if (formTree.ParentNo.Equals("0"))
-                    nodeFolder.ParentNo = root.No;
-                appendFormTrees.AddEntity(nodeFolder);
 
-                //表单
-                MapDatas mapS = new MapDatas();
-                mapS.RetrieveByAttr(MapDataAttr.FK_FormTree, formTree.No);
-                if (mapS != null && mapS.Count > 0)
+                int nodeid = int.Parse(node);
+
+                DBAccess.RunSQL("DELETE FROM WF_FRMNODE WHERE FK_NODE=" + nodeid);
+
+                foreach (string frm in frmList)
                 {
-                    foreach (MapData map in mapS)
+                    if (string.IsNullOrWhiteSpace(frm))
+                        continue;
+
+                    FrmNode fn = new FrmNode();
+                    if (!fn.IsExit("mypk", frm + "_" + nodeid + "_" + this.FK_Flow))
                     {
-                        BP.WF.Template.FlowFormTree formFolder = new BP.WF.Template.FlowFormTree();
-                        formFolder.No = map.No;
-                        formFolder.ParentNo = map.FK_FormTree;
-                        formFolder.Name = map.Name + "[" + map.No + "]";
-                        formFolder.NodeType = "form";
-                        appendFormTrees.AddEntity(formFolder);
+                        fn.FK_Frm = frm;
+                        fn.FK_Node = nodeid;
+                        fn.FK_Flow = this.FK_Flow;
+
+                        fn.Insert();
                     }
                 }
             }
 
-            string strCheckedNos = "";
-            //设置选中
-            foreach (FrmNode frmNode in frmNodes)
-            {
-                strCheckedNos += "," + frmNode.FK_Frm + ",";
-            }
-            //重置
-            appendMenus.Clear();
-            //生成数据
-            TansEntitiesToGenerTree(appendFormTrees, root.No, strCheckedNos);
-            return appendMenus.ToString();
-        }
+            return "操作成功！";
+        }        
 
         /// <summary>
         /// 保存流程表单
@@ -172,97 +149,160 @@ namespace BP.WF.HttpHandler
                 return "err:保存失败。";
             }
         }
-        #endregion xxx 界面方法.
 
-        #region 表单方案.
         /// <summary>
-        /// 表单方案
+        /// 获取表单库所有表单
         /// </summary>
         /// <returns></returns>
-        public string BindFrms_Init()
+        public string BindForm_GenerForms()
         {
-            //注册这个枚举，防止第一次运行出错.
-            BP.Sys.SysEnums ses = new SysEnums("FrmEnableRole");
+            //形成树
+            FlowFormTrees appendFormTrees = new FlowFormTrees();
+            //节点绑定表单
+            FrmNodes frmNodes = new FrmNodes(this.FK_Flow, this.FK_Node);
+            //所有表单类别
+            SysFormTrees formTrees = new SysFormTrees();
+            formTrees.RetrieveAll(SysFormTreeAttr.Idx);
 
-            string text = "";
-            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+            //根节点
+            BP.WF.Template.FlowFormTree root = new BP.WF.Template.FlowFormTree();
+            root.No = "00";
+            root.ParentNo = "0";
+            root.Name = "表单库";
+            root.NodeType = "root";
+            appendFormTrees.AddEntity(root);
 
-            //FrmNodeExt fns = new FrmNodeExt(this.FK_Flow, this.FK_Node);
-
-            FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
-
-            #region 如果没有ndFrm 就增加上.
-            bool isHaveNDFrm = false;
-            foreach (FrmNode fn in fns)
+            foreach (SysFormTree formTree in formTrees)
             {
-                if (fn.FK_Frm == "ND" + this.FK_Node)
+                //已经添加排除
+                if (appendFormTrees.Contains("No", formTree.No) == true)
+                    continue;
+                //根节点排除
+                if (formTree.ParentNo.Equals("0"))
                 {
-                    isHaveNDFrm = true;
-                    break;
-                }
-            }
-
-            if (isHaveNDFrm == false)
-            {
-                FrmNode fn = new FrmNode();
-                fn.FK_Flow = this.FK_Flow;
-                fn.FK_Frm = "ND" + this.FK_Node;
-                fn.FK_Node = this.FK_Node;
-
-                fn.FrmEnableRole = FrmEnableRole.Disable; //就是默认不启用.
-                fn.FrmSln = 0;
-                //  fn.IsEdit = true;
-                fn.IsEnableLoadData = true;
-                fn.Insert();
-                fns.AddEntity(fn);
-            }
-            #endregion 如果没有ndFrm 就增加上.
-
-            //组合这个实体才有外键信息.
-            FrmNodeExts fnes = new FrmNodeExts();
-            foreach (FrmNode fn in fns)
-            {
-                MapData md = new MapData();
-                md.No = fn.FK_Frm;
-                if (md.IsExits == false)
-                {
-                    fn.Delete();  //说明该表单不存在了，就需要把这个删除掉.
+                    root.No = formTree.No;
                     continue;
                 }
+                //文件夹
+                BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
+                nodeFolder.No = formTree.No;
+                nodeFolder.ParentNo = formTree.ParentNo;
+                nodeFolder.Name = formTree.Name;
+                nodeFolder.NodeType = "folder";
+                if (formTree.ParentNo.Equals("0"))
+                    nodeFolder.ParentNo = root.No;
+                appendFormTrees.AddEntity(nodeFolder);
 
-                FrmNodeExt myen = new FrmNodeExt(fn.MyPK);
-                fnes.AddEntity(myen);
+                //表单
+                MapDatas mapS = new MapDatas();
+                mapS.RetrieveByAttr(MapDataAttr.FK_FormTree, formTree.No);
+                if (mapS != null && mapS.Count > 0)
+                {
+                    foreach (MapData map in mapS)
+                    {
+                        BP.WF.Template.FlowFormTree formFolder = new BP.WF.Template.FlowFormTree();
+                        formFolder.No = map.No;
+                        formFolder.ParentNo = map.FK_FormTree;
+                        formFolder.Name = map.Name + "[" + map.No + "]";
+                        formFolder.NodeType = "form";
+                        appendFormTrees.AddEntity(formFolder);
+                    }
+                }
             }
 
-            //把json数据返回过去.
-            return fnes.ToJson();
+            string strCheckedNos = "";
+            //设置选中
+            foreach (FrmNode frmNode in frmNodes)
+            {
+                strCheckedNos += "," + frmNode.FK_Frm + ",";
+            }
+            //重置
+            appendMenus.Clear();
+            //生成数据
+            TansEntitiesToGenerTree(appendFormTrees, root.No, strCheckedNos);
+            return appendMenus.ToString();
         }
+
         /// <summary>
-        /// 删除
+        /// 将实体转为树形
         /// </summary>
-        /// <returns></returns>
-        public string BindFrms_Delete()
+        /// <param name="ens"></param>
+        /// <param name="rootNo"></param>
+        /// <param name="checkIds"></param>
+        StringBuilder appendMenus = new StringBuilder();
+        StringBuilder appendMenuSb = new StringBuilder();
+        public void TansEntitiesToGenerTree(Entities ens, string rootNo, string checkIds)
         {
-            FrmNodeExt myen = new FrmNodeExt(this.MyPK);
-            myen.Delete();
-            return "删除成功.";
+            EntityMultiTree root = ens.GetEntityByKey(rootNo) as EntityMultiTree;
+            if (root == null)
+                throw new Exception("@没有找到rootNo=" + rootNo + "的entity.");
+            appendMenus.Append("[{");
+            appendMenus.Append("\"id\":\"" + rootNo + "\"");
+            appendMenus.Append(",\"text\":\"" + root.Name + "\"");
+            appendMenus.Append(",\"state\":\"open\"");
+
+            //attributes
+            BP.WF.Template.FlowFormTree formTree = root as BP.WF.Template.FlowFormTree;
+            if (formTree != null)
+            {
+                string url = formTree.Url == null ? "" : formTree.Url;
+                url = url.Replace("/", "|");
+                appendMenus.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"Url\":\"" + url + "\"}");
+            }
+            // 增加它的子级.
+            appendMenus.Append(",\"children\":");
+            AddChildren(root, ens, checkIds);
+            appendMenus.Append(appendMenuSb);
+            appendMenus.Append("}]");
         }
 
-        public string BindFrms_DoOrder()
+        public void AddChildren(EntityMultiTree parentEn, Entities ens, string checkIds)
         {
-            FrmNode myen = new FrmNode(this.MyPK);
+            appendMenus.Append(appendMenuSb);
+            appendMenuSb.Clear();
 
-            if (this.GetRequestVal("OrderType") == "Up")
-                myen.DoUp();
-            else
-                myen.DoDown();
+            appendMenuSb.Append("[");
+            foreach (EntityMultiTree item in ens)
+            {
+                if (item.ParentNo != parentEn.No)
+                    continue;
 
-            return "执行成功...";
+                if (checkIds.Contains("," + item.No + ","))
+                    appendMenuSb.Append("{\"id\":\"" + item.No + "\",\"text\":\"" + item.Name + "\",\"checked\":true");
+                else
+                    appendMenuSb.Append("{\"id\":\"" + item.No + "\",\"text\":\"" + item.Name + "\",\"checked\":false");
+
+
+                //attributes
+                BP.WF.Template.FlowFormTree formTree = item as BP.WF.Template.FlowFormTree;
+                if (formTree != null)
+                {
+                    string url = formTree.Url == null ? "" : formTree.Url;
+                    string ico = "icon-tree_folder";
+                    string treeState = "closed";
+                    url = url.Replace("/", "|");
+                    appendMenuSb.Append(",\"attributes\":{\"NodeType\":\"" + formTree.NodeType + "\",\"IsEdit\":\"" + formTree.IsEdit + "\",\"Url\":\"" + url + "\"}");
+                    //图标
+                    if (formTree.NodeType == "form")
+                    {
+                        ico = "icon-sheet";
+                    }
+                    appendMenuSb.Append(",\"state\":\"" + treeState + "\"");
+                    appendMenuSb.Append(",iconCls:\"");
+                    appendMenuSb.Append(ico);
+                    appendMenuSb.Append("\"");
+                }
+                // 增加它的子级.
+                appendMenuSb.Append(",\"children\":");
+                AddChildren(item, ens, checkIds);
+                appendMenuSb.Append("},");
+            }
+            if (appendMenuSb.Length > 1)
+                appendMenuSb = appendMenuSb.Remove(appendMenuSb.Length - 1, 1);
+            appendMenuSb.Append("]");
+            appendMenus.Append(appendMenuSb);
+            appendMenuSb.Clear();
         }
-
-        #endregion 表单方案.
-
-
-
+        #endregion
     }
 }

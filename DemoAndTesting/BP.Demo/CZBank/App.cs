@@ -117,9 +117,9 @@ namespace BP.CZBank
             if (this.DoWhat.Equals("StartClassic") == true)
             {
                 if (this.FK_Flow == null)
-                    return "url@./AppClassic/Home.htm";
+                    return "url@Home.htm";
                 else
-                    return "url@./AppClassic/Home.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID;
+                    return "url@Home.htm?FK_Flow=" + this.FK_Flow + paras + "&FK_Node=" + nodeID;
             }
 
             //打开工作轨迹。

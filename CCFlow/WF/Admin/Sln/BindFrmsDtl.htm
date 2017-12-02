@@ -15,7 +15,7 @@
 
             var param = {
                 DoType: "BindForm_GenderFlowNode",
-                FK_Flow: FK_Flow
+                FK_Node: FK_Node
             };
             Handler_AjaxQueryData(param, function (data, scope) {
 
@@ -116,7 +116,7 @@
             //http://localhost:30362/WF/Admin/AttrNode/SortingMapAttrs.aspx?FK_Flow=&FK_MapData=ND17001&t=2017-11-21 16:59&s=0.8992852238616559
             $('#copyfrmdlg').dialog('open');
             var param = {
-                DoType: "GetFlowNodeDropList",
+                DoType: "BindForm_GetFlowNodeDropList",
                 FK_Flow: FK_Flow,
                 FK_Node: FK_Node
             };
@@ -142,7 +142,7 @@
             if (nodelist.length != 0) {
                 if (confirm("您确定执行此操作吗")) {
                     var param = {
-                        DoType: "DoCopyFrmToNodes",
+                        DoType: "BindForm_DoCopyFrmToNodes",
                         NodeStr: nodelist.join(','),
                         frmStr: frmStr,
                         FK_Flow: FK_Flow

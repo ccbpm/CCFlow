@@ -81,7 +81,7 @@ namespace BP.WF.Template
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
 
-             //map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, false);
+                //map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, false);
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
@@ -96,9 +96,9 @@ namespace BP.WF.Template
                 // add 2014-01-26
 
                 //add 2016.3.25.
-                map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？(分流节点有效)", true, true,true);
-                map.AddTBString(FrmNodeAttr.HuiZong, null, "子线程要汇总的数据表(子线程节点)", true,false, 0, 300, 20);
-             
+                map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？(分流节点有效)", true, true, true);
+                map.AddTBString(FrmNodeAttr.HuiZong, null, "子线程要汇总的数据表(子线程节点)", true, false, 0, 300, 20);
+
                 //模版文件，对于office表单有效.
                 map.AddTBString(FrmNodeAttr.TempleteFile, null, "模版文件", true, false, 0, 500, 20);
 
@@ -107,7 +107,7 @@ namespace BP.WF.Template
 
                 #region 表单启用规则.
                 map.AddDDLSysEnum(FrmNodeAttr.FrmEnableRole, 0, "表单启用规则?", true, true);
-                map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, false,true);
+                map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, false, true);
                 #endregion 表单启用规则.
 
                 RefMethod rm = new RefMethod();
@@ -117,7 +117,7 @@ namespace BP.WF.Template
                 //map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.Title = "自定义方案(权限设置)";
+                rm.Title = "自定义方案(将要删除)";
                 rm.ClassMethodName = this.ToString() + ".DoSelfSln()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
@@ -140,6 +140,13 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "从其他节点Copy权限设置";
+                rm.ClassMethodName = this.ToString() + ".DoCopyFromNode()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+
                 this._enMap = map;
                 return this._enMap;
             }
@@ -156,6 +163,11 @@ namespace BP.WF.Template
             return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
         }
         public string DoAths()
+        {
+            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
+        }
+
+        public string DoCopyFromNode()
         {
             return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
         }

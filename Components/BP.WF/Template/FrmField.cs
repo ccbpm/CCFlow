@@ -45,6 +45,10 @@ namespace BP.WF.Template
         /// 是否写入流程表？
         /// </summary>
         public const string IsWriteToFlowTable = "IsWriteToFlowTable";
+        /// <summary>
+        /// 是否写入流程注册表
+        /// </summary>
+        public const string IsWriteToGenerWorkFlow = "IsWriteToGenerWorkFlow";
     }
 	/// <summary>
 	/// 表单字段方案
@@ -282,6 +286,11 @@ namespace BP.WF.Template
                 // 是否写入流程表? 2014-01-26，如果是，则首先写入该节点的数据表，然后copy到流程数据表里
                 // 在节点发送时有ccflow自动写入，写入目的就是为了
                 map.AddTBInt(FrmFieldAttr.IsWriteToFlowTable, 0, "是否写入流程表", true, false);
+
+                map.AddTBInt(FrmFieldAttr.IsWriteToGenerWorkFlow, 0, "是否写入流程注册表", true, false);
+
+                //map.AddDDLSysEnum(FrmFieldAttr.IsWriteToFlowTable, 0, "写入规则", true, true, FrmFieldAttr.IsWriteToFlowTable,
+                  //  "@0=不写入@1=写入流程数据表@2=写入流程注册表@3=写入全部");
 
 
                 map.AddBoolean(MapAttrAttr.IsSigan, false, "是否签名", true, true);

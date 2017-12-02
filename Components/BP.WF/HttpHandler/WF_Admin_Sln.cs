@@ -392,5 +392,41 @@ namespace BP.WF.HttpHandler
         }
 
         #endregion 表单方案.
+
+
+        #region 字段权限.
+        public string Fields_Init()
+        {
+            return "";
+        }
+        public string Fields_Save()
+        {
+            return "";
+        }
+        #endregion 字段权限.
+
+        #region 附件权限.
+        public string Aths_Init()
+        {
+            return "";
+        }
+        public string Aths_Save()
+        {
+            return "";
+        }
+        #endregion 附件权限.
+
+
+        #region 从表权限.
+        public string Dtls_Init()
+        {
+            return "";
+        }
+        public string Dtls_Save()
+        {
+            return "";
+        }
+        #endregion 从表权限.
+
     }
 }

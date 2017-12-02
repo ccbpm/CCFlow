@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
  <title>绑定列表</title>
-    <link href="../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
-    <link href="../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
-    <script src="../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
-    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="../Scripts/config.js" type="text/javascript"></script>
-    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
-    <script src="../Scripts/CommonUnite.js" type="text/javascript"></script>
-    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
         /* ESC Key Down */
         function Esc() {
@@ -28,7 +28,7 @@
         //页面启动函数.
         $(function () {
 
-            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             InitPage();
 
@@ -72,7 +72,7 @@
                         newRow += "<td>" + frmNode.FK_Frm + "</td>";
 
 
-                        newRow += "<td><a href=\"javascript:Edit('" + mypk + "')\"><img src='./Img/Frm.png'  />" + frmNode.FK_FrmText + "</a></td>";
+                        newRow += "<td><a href=\"javascript:Edit('" + mypk + "')\"><img src='../Img/Frm.png'  />" + frmNode.FK_FrmText + "</a></td>";
 
                         newRow += "<td>" + frmNode.FrmEnableRoleText + "</td>";
                         newRow += "<td>" + frmNode.FrmSlnText + "</td>";
@@ -91,7 +91,7 @@
         }
 
         function WinField(fk_mapdata, nodeid, fk_flow) {
-            var url = "./FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';            
+            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';            
             
             OpenEasyUiDialog(url, "eudlgframe", '字段权限控制', 1260, 560, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -99,7 +99,7 @@
         }
 
         function WinFJ(fk_mapdata, nodeid, fk_flow) {
-            var url = "./FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=FJ';
+            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=FJ';
 
             OpenEasyUiDialog(url, "eudlgframe", '附件权限控制', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;
@@ -107,7 +107,7 @@
         }
 
         function WinDtl(fk_mapdata, nodeid, fk_flow) {
-            var url = "./FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Dtl';
+            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Dtl';
 
             OpenEasyUiDialog(url, "eudlgframe", '明细表权限控制', 800, 500, "icon-edit", true, null, null, null, function () {
                 window.location.href = window.location.href;

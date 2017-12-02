@@ -1490,23 +1490,12 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string BindForm_GenderFlowNode()
         {
+            Node nd = new Node(this.FK_Node);
+
             //规范做法.
-            Nodes nds = new Nodes(this.FK_Flow);
+            Nodes nds = new Nodes(nd.FK_Flow);
             return nds.ToJson();
-
-
-            // 屏蔽一下代码.
-            StringBuilder append = new StringBuilder();
-            Flow flow = new Flow(this.FK_Flow);
-            append.Append("[");
-            foreach (Node node in flow.HisNodes)
-            {
-                append.Append("{No:'" + node.NodeID + "',Name:'" + node.Name + "'},");
-            }
-            if (flow.HisNodes.Count > 0)
-                append.Remove(append.Length - 1, 1);
-            append.Append("]");
-            return append.ToString();
+             
         }
 
         /// <summary>

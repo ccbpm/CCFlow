@@ -488,7 +488,7 @@ function NodeProperty_Funs(item) {
             }
             break;
         case "bindflowfrms": //绑定独立表单
-            url = "../BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH";
+            url = "../Sln/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + CCBPM_Data_FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH";
             if (window.parent) {
                 window.parent.addTab(CCBPM_Data_FK_Flow + FK_Node + "FRM", "绑定独立表单" + FK_Node, url, item.iconCls);
             } else {

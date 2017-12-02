@@ -30,6 +30,7 @@
                 var pushData = eval('(' + data + ')');
                 var objSelect = document.getElementById("lbFlowNodes");
                 if (pushData.length > 0) {
+
                     $.each(pushData, function (index, val) {
                         var varItem = new Option("[" + val.NodeID + "]" + val.Name, val.NodeID);
                         if (FK_Node && FK_Node == val.NodeID) {
@@ -37,6 +38,7 @@
                         }
                         objSelect.options.add(varItem);
                     });
+
                 }
                 $("#pageloading").hide();
             }, this);

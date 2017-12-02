@@ -146,29 +146,29 @@ namespace BP.WF.Template
         }
         #endregion
 
+        #region 表单元素权限.
         public string DoDtls()
         {
-            return "../../Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
+            return "../../Admin/Sln/Dtls.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
         }
         public string DoFields()
         {
-            return "../../Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
+            return "../../Admin/Sln/Fields.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
         }
-
         public string DoAths()
         {
-            return "../../Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
+            return "../../Admin/Sln/Aths.htm?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
         }
-
         public string DoSelfSln()
         {
-            return "/WF/Admin/FoolFormDesigner/Sln.aspx?FK_MapData="+this.FK_Frm+"&FK_Node="+this.FK_Node+"&FK_Flow=084&DoType=Field";
+            return "/WF/Admin/Sln/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
         }
-        
         public string DoEnableRole()
         {
             return "/WF/Admin/AttrNode/BindFrmsFrmEnableRole.htm?MyPK=" + this.MyPK;
         }
+        #endregion 表单元素权限.
+
     }
     /// <summary>
     /// 节点表单s

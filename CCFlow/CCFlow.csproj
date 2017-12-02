@@ -403,6 +403,15 @@
     <Content Include="WF\Admin\FoolFormDesigner\Designer.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Designer.js" />
     <Content Include="WF\Admin\FoolFormDesigner\GuideSFTableAttr.htm" />
+    <Content Include="WF\Admin\Sln\Aths.htm" />
+    <Content Include="WF\Admin\Sln\BindFrms.htm" />
+    <Content Include="WF\Admin\Sln\BindFrmsDtl.htm" />
+    <Content Include="WF\Admin\Sln\CopyFromNode.htm" />
+    <Content Include="WF\Admin\Sln\Dtls.htm" />
+    <Content Include="WF\Admin\Sln\Fields.htm" />
+    <Content Include="WF\Admin\Sln\Sln.aspx" />
+    <Content Include="WF\Admin\Sln\Sln.htm" />
+    <Content Include="WF\Admin\Sln\SlnDo.aspx" />
     <Content Include="WF\Admin\TestFlow.htm" />
     <Content Include="WF\Admin\SettingTemplate.htm" />
     <Content Include="WF\Admin\CondByUrl.htm" />
@@ -506,7 +515,6 @@
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsers.aspx" />
     <Content Include="WF\Admin\AttrNode\SepcFiledsSepcUsersDtl.aspx" />
     <Content Include="WF\Admin\AttrNode\SortingMapAttrs.aspx" />
-    <Content Include="WF\Admin\BindFrmsDtl.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.aspx" />
     <Content Include="WF\Admin\CCBPMDesigner\App\Welcome.htm" />
     <Content Include="WF\Admin\CCBPMDesigner\assets\content-background.jpg" />
@@ -1205,8 +1213,6 @@
     <Content Include="WF\Admin\FoolFormDesigner\SFSQLDataView.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFTable.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\Sln.aspx" />
-    <Content Include="WF\Admin\FoolFormDesigner\SlnDo.aspx" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\Max.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\Min.gif" />
     <Content Include="WF\Admin\FoolFormDesigner\Style\SysDataType.xml" />
@@ -1219,7 +1225,6 @@
     <Content Include="WF\Admin\Pub.ascx" />
     <Content Include="WF\Admin\ReLogin.htm" />
     <Content Include="WF\Admin\SimulationRun.aspx" />
-    <Content Include="WF\Admin\BindFrms.htm" />
     <Content Include="WF\Admin\XAP\DoPort.htm" />
     <Content Include="WF\Admin\XAP\Designer.aspx" />
     <Content Include="WF\Admin\XAP\DoPort.aspx" />
@@ -6380,6 +6385,7 @@
     <Content Include="WF\Admin\FoolFormDesigner\HanderMapExt.ashx" />
     <Content Include="WF\AppClassic\Handler.ashx" />
     <Content Include="WF\Admin\Port\Handler.ashx" />
+    <Content Include="WF\Admin\Sln\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\CCForm\WinOpen.master" />
     <Content Include="WF\Comm\Handler.ashx" />
@@ -7372,20 +7378,6 @@
     <Compile Include="WF\Admin\FoolFormDesigner\SFTableEditData.aspx.designer.cs">
       <DependentUpon>SFTableEditData.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Sln.aspx.cs">
-      <DependentUpon>Sln.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\Sln.aspx.designer.cs">
-      <DependentUpon>Sln.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SlnDo.aspx.cs">
-      <DependentUpon>SlnDo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Admin\FoolFormDesigner\SlnDo.aspx.designer.cs">
-      <DependentUpon>SlnDo.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Admin\FoolFormDesigner\SysEnum.aspx.cs">
       <DependentUpon>SysEnum.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -7423,6 +7415,21 @@
     </Compile>
     <Compile Include="WF\Admin\SimulationRun.aspx.designer.cs">
       <DependentUpon>SimulationRun.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Sln\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Sln\Sln.aspx.cs">
+      <DependentUpon>Sln.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Sln\Sln.aspx.designer.cs">
+      <DependentUpon>Sln.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Sln\SlnDo.aspx.cs">
+      <DependentUpon>SlnDo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Sln\SlnDo.aspx.designer.cs">
+      <DependentUpon>SlnDo.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\UC\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>

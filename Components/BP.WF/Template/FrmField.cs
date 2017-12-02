@@ -282,6 +282,8 @@ namespace BP.WF.Template
                 // 是否写入流程表? 2014-01-26，如果是，则首先写入该节点的数据表，然后copy到流程数据表里
                 // 在节点发送时有ccflow自动写入，写入目的就是为了
                 map.AddTBInt(FrmFieldAttr.IsWriteToFlowTable, 0, "是否写入流程表", true, false);
+
+
                 map.AddBoolean(MapAttrAttr.IsSigan, false, "是否签名", true, true);
 
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值", true, false, 0, 200, 20);

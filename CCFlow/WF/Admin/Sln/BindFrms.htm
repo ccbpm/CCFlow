@@ -81,7 +81,8 @@
                         newRow += "<td><a href=\"javascript:DoOrder('" + mypk + "','Up')\">上移</a></td>";
                         newRow += "<td><a href=\"javascript:DoOrder('" + mypk + "','Down')\">下移</a></td>";
                         newRow += "<td><a href=\"javascript:Delete('" + mypk + "')\">删除</a></td>";
-                        newRow += "<td><a href=\"javascript:WinField('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">字段</a>&nbsp;&nbsp;<a href=\"javascript:WinFJ('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">附件</a>&nbsp;&nbsp;<a href=\"javascript:WinDtl('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">明细表</a></td>";
+
+                        //newRow += "<td><a href=\"javascript:WinField('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">字段</a>&nbsp;&nbsp;<a href=\"javascript:WinFJ('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">附件</a>&nbsp;&nbsp;<a href=\"javascript:WinDtl('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">明细表</a></td>";
                         newRow += "</tr>";
 
                         $("#Table1 tr:last").after(newRow);
@@ -207,9 +208,7 @@
                 <th>
                     删除
                 </th>                
-                <th>
-                    表单元素
-                </th>                
+                            
             </tr>
         </table>
     </div>

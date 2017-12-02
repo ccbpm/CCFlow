@@ -304,5 +304,93 @@ namespace BP.WF.HttpHandler
             appendMenuSb.Clear();
         }
         #endregion
+
+        #region 表单方案.
+        /// <summary>
+        /// 表单方案
+        /// </summary>
+        /// <returns></returns>
+        public string BindFrms_Init()
+        {
+            //注册这个枚举，防止第一次运行出错.
+            BP.Sys.SysEnums ses = new SysEnums("FrmEnableRole");
+
+            string text = "";
+            BP.WF.Node nd = new BP.WF.Node(this.FK_Node);
+
+            //FrmNodeExt fns = new FrmNodeExt(this.FK_Flow, this.FK_Node);
+
+            FrmNodes fns = new FrmNodes(this.FK_Flow, this.FK_Node);
+
+            #region 如果没有ndFrm 就增加上.
+            bool isHaveNDFrm = false;
+            foreach (FrmNode fn in fns)
+            {
+                if (fn.FK_Frm == "ND" + this.FK_Node)
+                {
+                    isHaveNDFrm = true;
+                    break;
+                }
+            }
+
+            if (isHaveNDFrm == false)
+            {
+                FrmNode fn = new FrmNode();
+                fn.FK_Flow = this.FK_Flow;
+                fn.FK_Frm = "ND" + this.FK_Node;
+                fn.FK_Node = this.FK_Node;
+
+                fn.FrmEnableRole = FrmEnableRole.Disable; //就是默认不启用.
+                fn.FrmSln = 0;
+                //  fn.IsEdit = true;
+                fn.IsEnableLoadData = true;
+                fn.Insert();
+                fns.AddEntity(fn);
+            }
+            #endregion 如果没有ndFrm 就增加上.
+
+            //组合这个实体才有外键信息.
+            FrmNodeExts fnes = new FrmNodeExts();
+            foreach (FrmNode fn in fns)
+            {
+                MapData md = new MapData();
+                md.No = fn.FK_Frm;
+                if (md.IsExits == false)
+                {
+                    fn.Delete();  //说明该表单不存在了，就需要把这个删除掉.
+                    continue;
+                }
+
+                FrmNodeExt myen = new FrmNodeExt(fn.MyPK);
+                fnes.AddEntity(myen);
+            }
+
+            //把json数据返回过去.
+            return fnes.ToJson();
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string BindFrms_Delete()
+        {
+            FrmNodeExt myen = new FrmNodeExt(this.MyPK);
+            myen.Delete();
+            return "删除成功.";
+        }
+
+        public string BindFrms_DoOrder()
+        {
+            FrmNode myen = new FrmNode(this.MyPK);
+
+            if (this.GetRequestVal("OrderType") == "Up")
+                myen.DoUp();
+            else
+                myen.DoDown();
+
+            return "执行成功...";
+        }
+
+        #endregion 表单方案.
     }
 }

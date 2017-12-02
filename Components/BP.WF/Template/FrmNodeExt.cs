@@ -81,7 +81,7 @@ namespace BP.WF.Template
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
 
-             //   map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, false);
+             //map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, false);
 
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
@@ -136,7 +136,7 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.Title = "附件权限";
-                rm.ClassMethodName = this.ToString() + ".DoDtls()";
+                rm.ClassMethodName = this.ToString() + ".DoAths()";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
@@ -155,7 +155,7 @@ namespace BP.WF.Template
             return "../../Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
         }
 
-        public string DoFields()
+        public string DoAths()
         {
             return "../../Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
         }

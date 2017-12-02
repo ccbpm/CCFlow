@@ -527,9 +527,9 @@ namespace BP.WF
                 if (attr.MyDataType == DataType.AppBoolean)
                 {
                     if (text == "0")
-                        text = "[X]";
+                        text = "[&#10005]";
                     else
-                        text = "[是]";
+                        text = "[&#10004]";
                 }
 
                  sb.Append(text);
@@ -804,7 +804,7 @@ namespace BP.WF
             {
                 //输出标题.
                 sb.Append("\t\n <tr>");
-                sb.Append("\t\n  <th colspan=4>" + gf.Lab + "</th>");
+                sb.Append("\t\n  <th colspan=4><b>" + gf.Lab + "</b></th>");
                 sb.Append("\t\n </tr>");
 
                 #region 输出字段.
@@ -818,6 +818,9 @@ namespace BP.WF
                         if (attr.UIVisible == false)
                             continue;
                         if (attr.GroupID != attr.GroupID)
+                            continue;
+                        //处理分组数据，非当前分组的数据不输出
+                        if (attr.GroupID != gf.OID)
                             continue;
 
                         string text = "";
@@ -854,9 +857,9 @@ namespace BP.WF
                         if (attr.MyDataType == DataType.AppBoolean)
                         {
                             if (text == "0")
-                                text = "[不更新]";
+                                text = "[&#10005]";
                             else
-                                text = "[更新]";
+                                text = "[&#10004]";
                         }
 
                         // text = text.Replace("font-family: 楷体", "font-family: 宋体");

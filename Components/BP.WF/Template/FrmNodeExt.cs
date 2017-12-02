@@ -110,9 +110,7 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(FrmNodeAttr.FrmEnableExp, null, "启用的表达式", true, false,true);
                 #endregion 表单启用规则.
 
-
                 RefMethod rm = new RefMethod();
-
                 //rm.Title = "启用规则";
                 //rm.ClassMethodName = this.ToString() + ".DoEnableRole()";
                 //rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -124,11 +122,43 @@ namespace BP.WF.Template
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "字段权限";
+                rm.ClassMethodName = this.ToString() + ".DoFields()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "从表权限";
+                rm.ClassMethodName = this.ToString() + ".DoDtls()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "附件权限";
+                rm.ClassMethodName = this.ToString() + ".DoDtls()";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
         #endregion
+
+        public string DoDtls()
+        {
+            return "../../Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
+        }
+        public string DoFields()
+        {
+            return "../../Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
+        }
+
+        public string DoFields()
+        {
+            return "../../Admin/FoolFormDesigner/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
+        }
 
         public string DoSelfSln()
         {

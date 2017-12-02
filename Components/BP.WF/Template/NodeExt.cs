@@ -1242,7 +1242,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoFormTree()
         {
-            return "../../Admin/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&Lang=CH";
+            return "../../Admin/Sln/BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.NodeID + "&Lang=CH";
         }
         
         public string DoMapData()

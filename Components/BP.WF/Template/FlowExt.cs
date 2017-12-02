@@ -1012,7 +1012,7 @@ namespace BP.WF.Template
         }
         public string DoBindFlowExt()
         {
-            return "../../Admin/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow";
+            return "../../Admin/Sln/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow";
         }
         /// <summary>
         /// 轨迹查看权限

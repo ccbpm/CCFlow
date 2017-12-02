@@ -666,7 +666,7 @@ namespace BP.WF.Template
     
         public string DoBindFlowSheet()
         {
-            PubClass.WinOpen("../../Admin/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
+            PubClass.WinOpen("../../Admin/Sln/BindFrms.htm?s=d34&ShowType=FlowFrms&FK_Node=0&FK_Flow=" + this.No + "&ExtType=StartFlow&RefNo=" + DataType.CurrentDataTime, 700, 500);
             return null;
         }
         /// <summary>

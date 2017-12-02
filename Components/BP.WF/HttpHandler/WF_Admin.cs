@@ -1526,8 +1526,11 @@ namespace BP.WF.HttpHandler
                 if (appendFormTrees.Contains("No", formTree.No) == true)
                     continue;
                 //根节点排除
-                if (formTree.No.Equals("0"))
+                if (formTree.ParentNo.Equals("0"))
+                {
+                    root.No = formTree.No;
                     continue;
+                }
                 //文件夹
                 BP.WF.Template.FlowFormTree nodeFolder = new BP.WF.Template.FlowFormTree();
                 nodeFolder.No = formTree.No;

@@ -246,7 +246,7 @@ namespace BP.WF
             else
                 gwf.TaskSta = TaskSta.None;
 
-            gwf.TodoEmps = WebUser.No + "," + WebUser.Name;
+            gwf.TodoEmps = WebUser.No + "," + WebUser.Name+";";
             gwf.Update();
 
             if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
@@ -512,7 +512,7 @@ namespace BP.WF
             else
                 gwf.TaskSta = TaskSta.None;
 
-            gwf.TodoEmps = WebUser.No + "," + WebUser.Name;
+            gwf.TodoEmps = WebUser.No + "," + WebUser.Name+";";
             gwf.Update();
 
             if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)

@@ -7814,7 +7814,7 @@ namespace BP.WF
                 gwf.Starter = emp.No;
                 gwf.StarterName = emp.Name;
                 gwf.WFState = WFState.Shift;
-                gwf.TodoEmps = toEmp;
+                gwf.TodoEmps = toEmp+","+emp.Name+";";
                 gwf.TodoEmpsNum = 1;
                 gwf.RDT = DataType.CurrentDataTime;
                 gwf.NodeName = "";
@@ -8906,7 +8906,7 @@ namespace BP.WF
 
                 //    BP.WF.Dev2Interface.Port_SendSMS
             }
-
+            
             if (dt.Rows.Count >= 1)
             {
                 //更新预警状态.

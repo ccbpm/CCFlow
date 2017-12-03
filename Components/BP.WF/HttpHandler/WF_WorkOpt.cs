@@ -366,6 +366,13 @@ namespace BP.WF.HttpHandler
                 DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'");
             }
 
+            //从待办里移除.
+            BP.Port.Emp myemp = new BP.Port.Emp(this.FK_Emp);
+            string str = gwf.TodoEmps;
+            str = str.Replace(";" + myemp.Name + ";", "");
+            gwf.TodoEmps = str;
+            gwf.Update();
+
             return HuiQian_Init();
         }
         /// <summary>
@@ -468,6 +475,7 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.IsPassInt = 0;
                 gwlOfMe.FK_Dept = item.FK_Dept;
                 gwlOfMe.FK_DeptT = item.FK_DeptText; //部门名称.
+                gwlOfMe.IsRead = false;
 
                 gwlOfMe.Insert(); //插入作为待办.
                 infos += "\t\n@" + item.No + "  " + item.Name;

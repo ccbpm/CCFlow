@@ -1822,7 +1822,7 @@ namespace BP.WF
             this.HisGenerWorkFlow.FK_Node = gwl.FK_Node;
             this.HisGenerWorkFlow.NodeName = gwl.FK_NodeText;
 
-            this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp;
+            this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp+","+gwl.FK_EmpText+";";
             this.HisGenerWorkFlow.TodoEmpsNum = 0;
             this.HisGenerWorkFlow.TaskSta = TaskSta.None;
             this.HisGenerWorkFlow.Update();
@@ -2538,7 +2538,7 @@ namespace BP.WF
                         gwf.NodeName = nd.Name;
                         gwf.FK_Dept = wl.FK_Dept;
                         gwf.DeptName = wl.FK_DeptT;
-                        gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText;
+                        gwf.TodoEmps = wl.FK_Emp + "," + wl.FK_EmpText+";";
                         gwf.DirectInsert();
                     }
 
@@ -4982,7 +4982,7 @@ namespace BP.WF
         {
             /*有两个待办，就说明当前人员是最后一个会签人，就要把主持人的状态设置为0 */
             //获得主持人信息.
-            string sql = "SELECT FK_Emp FROM WF_GenerWorkerList WHERE IsPass=90 AND WorkID=" + this.WorkID;
+            string sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerList WHERE IsPass=90 AND WorkID=" + this.WorkID;
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             if (dt.Rows.Count == 1)
             {
@@ -4991,22 +4991,27 @@ namespace BP.WF
 
                 //发消息.
                 string fk_emp = dt.Rows[0]["FK_Emp"].ToString();
+                string empName = dt.Rows[0]["FK_EmpText"].ToString();
+
                 BP.WF.Dev2Interface.Port_SendMsg(fk_emp,
                     "工作会签完毕", this.HisGenerWorkFlow.Title + " 工作会签完毕,请到待办查看.",
                     "HuiQian" + this.WorkID + "_" + WebUser.No, "HuiQian", HisGenerWorkFlow.FK_Flow, this.HisGenerWorkFlow.FK_Node, this.WorkID, 0);
 
                 //设置为未读.
                 BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisGenerWorkFlow.WorkID);
-                return "您是最后一个会签该工作的处理人，已经提醒主持人处理当前工作。";
+
+                //设置最后处理人.
+                this.HisGenerWorkFlow.TodoEmps = fk_emp + "," + empName+";";
+                this.HisGenerWorkFlow.Update();
+
+                //BP.WF.Dev2Interface.WriteTrackInfo(this.HisFlow.No, this.HisGenerWorkFlow.FK_Node, this.HisGenerWorkFlow.NodeName, this.WorkID, 0, "会签完毕", "会签提示"); 
+                return "您是最后一个会签该工作的处理人，已经提醒主持人(" + fk_emp + ","+empName+")处理当前工作。";
             }
 
-            sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Node=" + this.HisGenerWorkFlow.FK_Node + " AND WorkID=" + this.WorkID;
-            dt = DBAccess.RunSQLReturnTable(sql);
+            //sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Node=" + this.HisGenerWorkFlow.FK_Node + " AND WorkID=" + this.WorkID;
+            //dt = DBAccess.RunSQLReturnTable(sql);
 
-            string empNo = dt.Rows[0]["FK_Emp"].ToString();
-            string empName = dt.Rows[0]["FK_EmpText"].ToString();
-
-            return "@您已经处理完毕，还有(" + empNo + "," + empName + ")没有处理.";
+            return "@您已经处理完毕，还有(" +this.HisGenerWorkFlow.TodoEmps + ")没有处理.";
         }
         /// <summary>
         /// 如果是协作.
@@ -5037,6 +5042,8 @@ namespace BP.WF
             if (num == 1)
             {
                 this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                this.HisGenerWorkFlow.TodoEmpsNum = 1;
+                this.HisGenerWorkFlow.TodoEmps = WebUser.No+","+WebUser.Name+";";
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
             }
 
@@ -5057,6 +5064,11 @@ namespace BP.WF
                 }
                 //写入日志.
                 this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
+
+                //替换人员信息.
+                string emps = this.HisGenerWorkFlow.TodoEmps;
+                emps = emps.Replace(WebUser.No + "," + WebUser.Name + ";", "");
+                this.HisGenerWorkFlow.TodoEmps = emps; 
 
 
                 //处理会签问题，
@@ -5116,7 +5128,6 @@ namespace BP.WF
                 if (this.HisGenerWorkFlow.TodoEmps.Contains(BP.Web.WebUser.No + ",") == true)
                 {
                     /*当前人是组长，检查是否可以可以发送,检查自己是否是最后一个人 ？*/
-
                     string todoEmps = ""; //记录没有处理的人.
                     int num = 0;
                     foreach (GenerWorkerList item in gwls)
@@ -5157,6 +5168,8 @@ namespace BP.WF
             if (mynum == 1)
             {
                 this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
+             //   this.HisGenerWorkFlow.TodoEmpsNum = 1;
+              //  this.HisGenerWorkFlow.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
             }
 
@@ -5176,6 +5189,12 @@ namespace BP.WF
                     this.CheckCompleteCondition();
 
                 this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps1, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
+
+                //cut 当前的人员.
+                string emps = this.HisGenerWorkFlow.TodoEmps;
+                emps = emps.Replace(WebUser.Name+";" , "");
+                this.HisGenerWorkFlow.TodoEmps = emps;
+                this.HisGenerWorkFlow.DirectUpdate();
 
                 //处理会签问题，
                 if (mynum == 2)

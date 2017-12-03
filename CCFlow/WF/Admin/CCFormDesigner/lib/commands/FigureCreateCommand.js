@@ -241,7 +241,7 @@ FigureCreateCommand.prototype = {
 
         var pTableModel = mapData.PTableModel;
 
-        var url = "DialogCtr/FrmEnumeration.htm?PTableModel=" + pTableModel + "&s=" + Math.random();
+        var url = "DialogCtr/FrmEnumeration.htm?PTableModel=" + pTableModel + "&FK_MapData=" + mapData.No + "&s=" + Math.random();
 
         var funIsExist = this.IsExist;
 

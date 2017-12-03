@@ -140,8 +140,9 @@ namespace CCFlow.WF.WebOffice
             get { return _fileFullName; }
             set { _fileFullName = value; }
         }
-
-
+        /// <summary>
+        /// 节点信息
+        /// </summary>
         public string NodeInfo
         {
             get

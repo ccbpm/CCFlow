@@ -136,10 +136,57 @@
             }
 
             var pushData = eval('(' + js + ')');
-            for (var i = 0; i < pushData.length; i++) {
-                var trStr = "<tr onclick=getTr('"+ pushData[i].No + "','" + pushData[i].Name + "','" + pushData[i].CfgVal + "'," + i + ") ><td class=Idx>" + i + "</td><td>" + pushData[i].No + "</td><td>" + pushData[i].Name + "</td><td>" + pushData[i].CfgVal + "</td></tr>";
+
+            //获取两个实体.
+            var sysEnumMains = pushData["SysEnumMains"];
+            var fields = pushData["Fields"];
+
+            var numEnum = 0;
+
+
+            for (var i = 0; i < sysEnumMains.length; i++) {
+
+                var sysEnumMain = sysEnumMains[i];
+
+                //如果需要字段从集合里选择，排除没有的字段.
+                if (fields != null) {
+
+                    var isHave = false; //是否存在.
+                    for (var idx = 0; idx < fields.length; idx++) {
+
+                        var field = fields[idx];
+
+                        if (field.FType.indexOf('int') == -1) {
+                            continue;
+                        }
+
+                        if (field.FName != sysEnumMain.No) {
+                            continue;
+                        }
+
+                        isHave = true;
+                        break;
+                    }
+                    if (isHave == false)
+                        continue;
+                }
+
+                numEnum++;
+
+                var trStr = "<tr onclick=getTr('" + sysEnumMain.No + "','" + sysEnumMain.Name + "','" + sysEnumMain.CfgVal + "'," + i + ") >";
+                trStr += "<td class=Idx>" + i + "</td>";
+                trStr += "<td>" + sysEnumMain.No + "</td>";
+                trStr += "<td>" + sysEnumMain.Name + "</td>";
+                trStr += "<td>" + sysEnumMain.CfgVal + "</td></tr>";
+                trStr += "</tr>";
+
                 $("#newsGrid tr:last").after(trStr);
             }
+
+            if (numEnum == 0) {
+                alert('错误:已经没有可以用的字段.');
+            }
+
             /*$('#newsGrid').datagrid({
                 columns: [[
                     { field: 'No', title: '编号', width: 80 },
@@ -382,7 +429,7 @@
                     &nbsp;&nbsp;
                     <input type="button" id="Btn_DELETE" onclick="Del()" value="删除" />
                 </div>
-                <table id="newsGrid" border="1" cellspacing="0" cellpadding="0">
+                <table id="newsGrid" border="1" cellspacing="0" cellpadding="0" style="width:95%;">
                     <tr>
                         <th>序号</th><th>编号</th><th>名称</th><th>枚举值</th>
                     </tr>

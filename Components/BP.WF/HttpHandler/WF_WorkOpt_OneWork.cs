@@ -116,6 +116,13 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataSetToJson(ds, false);
         }
 
+        public string TimeBase_OpenFrm()
+        {
+            WF en = new WF(this.context);
+            return en.Runing_OpenFrm();
+        }
+
+
         #region 执行父类的重写方法.
         
         #endregion 执行父类的重写方法.
@@ -660,5 +667,7 @@ namespace BP.WF.HttpHandler
             string count = BP.DA.DBAccess.RunSQLReturnValInt(ps).ToString();
             return count;
         }
+
+
     }
 }

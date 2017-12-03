@@ -62,6 +62,11 @@ namespace BP.WF.HttpHandler
             WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork(this.context);
             return en.OP_UnSend();
         }
+        public string TimeBase_OpenFrm()
+        {
+            WF en = new WF(this.context);
+            return en.Runing_OpenFrm();
+        }
         #endregion xxx 界面方法.
 
     }

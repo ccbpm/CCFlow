@@ -281,7 +281,12 @@
                                 }
 
                                 var val = this.track.ACTIONTYPETEXT;
-                                if (val == "协作" || val == "前进") {
+
+                                if ( val == "协作") {
+                                    return true;
+                                }
+
+                                if (val == "前进" && node.isTrackNode.length != 1 ) {
                                     return true;
                                 }
 

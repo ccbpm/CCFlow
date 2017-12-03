@@ -91,7 +91,7 @@ function InitPage() {
                 left = left.replace(':', '时');
                 left = left + "分";
 
-                left += "<br><img src='../../DataUser/UserIcon/" + track.EmpFrom + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" class='UserIcon' /><br>" + track.EmpFromT;
+                left += "<br><img src='../../../DataUser/UserIcon/" + track.EmpFrom + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' /><br>" + track.EmpFromT;
 
                 //时间轴.
                 var timeBase = "";
@@ -100,7 +100,7 @@ function InitPage() {
 
                 //内容.
                 var doc = "";
-                doc = "<img src='../../Img/TolistSta/" + dotColor + ".png' />" + track.NDFromT + "     -  " + timeBase + track.ActionTypeText;
+                doc = "<img src='../../Img/TolistSta/" + dotColor + ".png' />" + track.NDFromT + " - " + timeBase + track.ActionTypeText;
 
                 var at = track.ActionType;
 
@@ -127,7 +127,12 @@ function InitPage() {
                     doc += "<p></p>";
                 }
                 else {
-                    doc += "<p>发送到节点：" + track.NDToT + "</p>";
+
+                    if (at == ActionType.WorkCheck) {
+
+                    } else {
+                        doc += "<p>发送到节点：" + track.NDToT + "</p>";
+                    }
                 }
 
                 //增加两列，到达时间、用时 added by liuxc,2014-12-4
@@ -140,7 +145,11 @@ function InitPage() {
                     var timeDot = tracks[i]["RDT"].replace(/\-/g, "/");
                     timeDot = new Date(timeDot);
 
-                    doc += "<p>到达时间：" + toTime + " 用时：" + GetSpanTime(toTimeDot, timeDot) + "</p>";
+                    if (at == ActionType.WorkCheck) {
+                        doc += "<p>时间：<font color=green>" + toTime + "</font> 用时：<font color=green>" + GetSpanTime(toTimeDot, timeDot) + "</font></p>";
+                    } else {
+                        doc += "<p>到达时间：<font color=green>" + toTime + "</font> 用时：<font color=green>" + GetSpanTime(toTimeDot, timeDot) + "</font></p>";
+                    }
                 }
 
                 // 删除信息.
@@ -150,7 +159,7 @@ function InitPage() {
 
                 var msg = track.Msg;
                 if (msg != "")
-                    doc += "信息:" + msg + "<br>";
+                    doc += "<font color=green>" + msg + "</font><br>";
 
                 var newRow = "";
                 newRow = "<tr  title='" + track.ActionTypeText + "' >";

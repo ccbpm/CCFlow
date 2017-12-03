@@ -280,6 +280,11 @@
                                     return true;
                                 }
 
+                                var val = this.track.ACTIONTYPETEXT;
+                                if (val == "协作") {
+                                    return true;
+                                }
+
                                 tablehtml +=
                                     '<tr>' +
                                     '   <td style="width:120px">' + this.track.RDT + '</td>' +

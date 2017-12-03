@@ -543,6 +543,14 @@ namespace BP.WF.HttpHandler
                 return "当前工作已经到您的待办理了,会签工作已经完成.";
             }
 
+            //说明没有会签人,就直接关闭.
+            if (gwfs.Count == 1)
+                return "您没有设置会签人，当前是待办状态。";
+
+
+           // bool isHaveHuiqian=false;
+
+
             gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
             gwf.Update();
 
@@ -554,9 +562,8 @@ namespace BP.WF.HttpHandler
             string sql = "UPDATE WF_GenerWorkerList SET IsPass=90 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND FK_Emp='" + WebUser.No + "'";
             DBAccess.RunSQL(sql);
          
-
             //执行会签,写入日志.
-            BP.WF.Dev2Interface.WriteTrackInfo(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian, "执行会签");
+            BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian, ActionType.HuiQian,"执行会签",null);
 
             string str = "保存成功.\t\n该工作已经移动到会签列表中了,等到所有的人会签完毕后,就可以出现在待办列表里.";
             str += "\t\n如果您要增加或者移除会签人请到会签列表找到该记录,执行操作.";

@@ -109,15 +109,16 @@ function InitPage() {
                     || at == ActionType.FlowOver    //added by liuxc,2014-12-3,正常结束结点也显示表单
                     || at == ActionType.Skip)   //added by liuxc,2015-7-13,自动跳转的也显示表单
                 {
+
                     //this.AddTD("<a class='easyui-linkbutton' data-options=\"iconCls:'icon-sheet'\" href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + dr[TrackAttr.WorkID].ToString() + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + dr[TrackAttr.NDFrom].ToString() + "&DoType=View&MyPK=" + dr[TrackAttr.MyPK].ToString() + "','" + dr[TrackAttr.MyPK].ToString() + "');\">表单</a>");
+                    //var url = "../../WFRpt.htm?OID=" + track.WorkID + "&WorkID=" + track.WorkID + "&FK_Flow=" + fk_flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK;
+                    //url += "&PWorkID=" + gwf.PWorkID;
+                    //url += "&PFlowNo=" + gwf.PFlowNo;
+                    //url += "&PNodeID=" + gwf.PNodeID;
+                    //url += "&Frms=" + gwf.Paras_Frms;
+                    //javascript: OpenFrm('191', '11804', '118')
 
-                    var url = "../../WFRpt.htm?OID=" + track.WorkID + "&WorkID=" + track.WorkID + "&FK_Flow=" + fk_flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK;
-
-                    url += "&PWorkID=" + gwf.PWorkID;
-                    url += "&PFlowNo=" + gwf.PFlowNo;
-                    url += "&PNodeID=" + gwf.PNodeID;
-                    url += "&Frms=" + gwf.Paras_Frms;
-                    doc += " - <a href=\"javascript:WinOpen('" + url + "','" + track.MyPK + "');\">表单</a>";
+                    doc += " - <a href=\"javascript:OpenFrm('" + track.WorkID + "','" + track.NDFrom + "','" + fk_flow + "');\">表单</a>";
                 }
 
                 if (at == ActionType.FlowOver
@@ -412,4 +413,30 @@ function ActionTypeStr(at) {
     }
 }
 
+/* 打开表单. */
+function OpenFrm(workid, nodeID, flowNo) {
+
+    //执行催办.
+    $.ajax({
+        type: 'post',
+        async: true,
+        url: Handler + "?DoType=TimeBase_OpenFrm&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&m=" + Math.random(),
+        dataType: 'html',
+        success: function (data) {
+
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
+                data = "../../"+data;
+                window.open(data);
+                return;
+            }
+            alert(data);
+        }
+    });
+}
  

@@ -281,7 +281,12 @@
                                 }
 
                                 var val = this.track.ACTIONTYPETEXT;
-                                if (val == "协作" || val=="前进" ) {
+                                if (val == "协作" || val == "前进") {
+                                    return true;
+                                }
+
+                                var emp = this.track.EMPTOT;
+                                if (emp.indexOf('(') >= 0) {
                                     return true;
                                 }
 
@@ -290,7 +295,7 @@
                                     '   <td style="width:120px">' + this.track.RDT + '</td>' +
                                     '   <td style="width:200px">' + this.track.ACTIONTYPETEXT + '</td>' +
                                     '   <td style="width:50px">' + this.track.EMPTOT + '</td>' +
-                                    '   <td>' + this.track.MSG.replace(/~/g, "'") + '</td>' +
+                                    '   <td><font color=green>' + this.track.MSG.replace(/~/g, "'") + '</font></td>' +
                                     '</tr>';
                             });
                         }

@@ -547,7 +547,6 @@ namespace BP.WF.HttpHandler
             if (gwfs.Count == 1)
                 return "您没有设置会签人，当前是待办状态。";
 
-
            // bool isHaveHuiqian=false;
 
 

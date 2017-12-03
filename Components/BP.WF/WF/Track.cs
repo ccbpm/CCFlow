@@ -358,9 +358,9 @@ namespace BP.WF
                 case ActionType.AskforHelp:
                     return "加签";
                 case ActionType.Skip:
-                    return "跳转";
-                case ActionType.Info:
-                    return "信息";
+                    return "跳转";              
+                case ActionType.HuiQian:
+                    return "主持人执行会签";
                 case ActionType.DeleteFlowByFlag:
                     return "逻辑删除";
                 case ActionType.Order:
@@ -370,7 +370,7 @@ namespace BP.WF
                 case ActionType.TeampUp:
                     return "协作";
                 default:
-                    return "未知";
+                    return "信息" + at.ToString();
             }
         }
 

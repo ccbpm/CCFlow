@@ -418,9 +418,13 @@ namespace BP.WF
         /// </summary>
         FlowBBS=29,
         /// <summary>
+        /// 执行会签
+        /// </summary>
+        HuiQian=30,
+        /// <summary>
         /// 信息
         /// </summary>
-        Info=100
+        Info=10
     }
     /// <summary>
     /// 挂起方式

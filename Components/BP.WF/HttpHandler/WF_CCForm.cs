@@ -881,7 +881,7 @@ namespace BP.WF.HttpHandler
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
 
-                if (this.FK_Node != 0)
+                if (this.FK_Node != 0 && this.FK_Node != 999999)
                 {
                     Node nd = new Node(this.FK_Node);
                     BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);

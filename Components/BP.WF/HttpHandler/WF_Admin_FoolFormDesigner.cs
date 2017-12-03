@@ -942,8 +942,27 @@ namespace BP.WF.HttpHandler
             DataTable dt = ens.ToDataTableField("SFTables");
             ds.Tables.Add(dt);
 
-            // @张前龙翻译. 如果是固定列模式，就需要把现有的没有映射的字段推送给前台. 
+            int pTableModel=0;
             if (this.GetRequestVal("PTableModel").Equals("2"))
+                pTableModel = 2;
+
+            //获得ptableModel.
+            if (pTableModel == 0)
+            {
+                MapDtl dtl = new MapDtl();
+                dtl.No = this.FK_MapData;
+                if (dtl.RetrieveFromDBSources() == 1)
+                {
+                    pTableModel = dtl.PTableModel;
+                }
+                else
+                {
+                    MapData md = new MapData(this.FK_MapData);
+                    pTableModel = md.PTableModel;
+                }
+            }
+
+            if (pTableModel == 2)
             {
                 DataTable mydt = MapData.GetFieldsOfPTableMode2(this.FK_MapData);
                 mydt.TableName = "Fields";
@@ -1029,13 +1048,25 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string FieldTypeListChoseOneField_Init()
         {
-            MapData md = new MapData(this.FK_MapData);
+            string ptable = "";
+
+            MapDtl dtl = new MapDtl();
+            dtl.No = this.FK_MapData;
+            if (dtl.RetrieveFromDBSources() == 1)
+            {
+                ptable = dtl.PTable;
+            }
+            else
+            {
+                MapData md = new MapData(this.FK_MapData);
+                ptable = md.PTable;
+            }
 
             //获得原始数据.
-            DataTable dt = BP.DA.DBAccess.GetTableSchema(md.PTable, false);
+            DataTable dt = BP.DA.DBAccess.GetTableSchema(ptable, false);
 
             //创建样本.
-            DataTable mydt = BP.DA.DBAccess.GetTableSchema(md.PTable,false);
+            DataTable mydt = BP.DA.DBAccess.GetTableSchema(ptable, false);
             mydt.Rows.Clear();
 
             //获得现有的列..
@@ -1063,6 +1094,33 @@ namespace BP.WF.HttpHandler
 
             mydt.TableName = "dt";
             return BP.Tools.Json.ToJson(mydt);
+        }
+        public string FieldTypeListChoseOneField_Save()
+        {
+            int dataType = this.GetRequestValInt("DataType");
+            string keyOfEn = this.GetRequestVal("KeyOfEn");
+            string name = this.GetRequestVal("FDesc");
+            string frmID = this.GetRequestVal("FK_MapData");
+
+            MapAttr attr = new MapAttr();
+            attr.FK_MapData = frmID;
+            attr.KeyOfEn = keyOfEn;
+            attr.MyPK = attr.FK_MapData + "_" + keyOfEn;
+            if (attr.IsExits)
+                return "err@该字段["+keyOfEn+"]已经加入里面了.";
+
+            attr.Name = name;
+            attr.MyDataType = dataType;
+
+            if (BP.DA.DataType.AppBoolean == dataType)
+                attr.UIContralType = UIContralType.CheckBok;
+            else
+                attr.UIContralType = UIContralType.TB;
+
+            attr.Insert();
+
+
+            return "保存成功.";
         }
         /// <summary>
         /// 字段选择.

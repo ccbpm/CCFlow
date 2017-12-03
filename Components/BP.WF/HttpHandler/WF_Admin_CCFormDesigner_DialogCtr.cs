@@ -105,29 +105,25 @@ namespace BP.WF.HttpHandler
         }
 
         #region 枚举界面.
+        /// <summary>
+        /// 获得外键列表.
+        /// </summary>
+        /// <returns></returns>
         public string FrmTable_GetSFTableList()
         {
+            //WF_Admin_FoolFormDesigner wf = new WF_Admin_FoolFormDesigner(this.context);
             SFTables ens = new SFTables();
             ens.RetrieveAll();
             return ens.ToJson();
         }
-
+        /// <summary>
+        /// 获得枚举列表.
+        /// </summary>
+        /// <returns></returns>
         public string FrmEnumeration_GetEnumerationList()
         {
-            SysEnumMains ens = new SysEnumMains();
-
-            //判断是否是固定表结构模式？
-            string ptableMode = this.GetRequestVal("PTableModel");
-            if (ptableMode != "2")
-            {
-                ens.RetrieveAll();
-                return ens.ToJson();
-            }
-
-           /*如果是固定表结构模式,就返回已经过滤的字段.*/
-
-            return "";
-
+            WF_Admin_FoolFormDesigner wf = new WF_Admin_FoolFormDesigner(this.context);
+            return wf.SysEnumList_Init();
         }
         #endregion 枚举界面.
 

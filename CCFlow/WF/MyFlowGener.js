@@ -6,6 +6,9 @@ var pageData = {};
 var globalVarList = {};
 var workNode = {};
 
+//处理，表单没有加载完，就可以点击发送按钮.
+var isLoadOk = false;
+
 $(function () {
 
     initPageParam(); //初始化参数

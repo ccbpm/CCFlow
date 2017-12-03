@@ -121,15 +121,15 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var h = wf_node.FWC_H + 1000;
 
 
-    var src = "./WorkOpt/WorkCheck.htm?s=2";
+    var src = "../WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";
     var paras = '';
 
     paras += "&FID=" + pageData["FID"];
-    paras += "&OID=" + pageData["WorkID"];
+    paras += "&OID=" + pageData["OID"];
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
-    paras += '&WorkID=' + pageData.WorkID;
+    paras += '&WorkID=' + pageData.OID;
     if (sta == 2)//只读
     {
         src += "&DoType=View";

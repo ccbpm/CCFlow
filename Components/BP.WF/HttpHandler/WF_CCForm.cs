@@ -920,6 +920,8 @@ namespace BP.WF.HttpHandler
                     }
 
                     ds.Tables.Add(fnc.ToDataTableField("WF_FrmNodeComponent"));
+                    ds.Tables.Add(nd.ToDataTableField("WF_Node"));
+
                 }
                 #endregion 加入组件的状态信息, 在解析表单的时候使用.
 

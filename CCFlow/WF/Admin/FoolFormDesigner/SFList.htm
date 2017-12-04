@@ -59,7 +59,6 @@
 
                         var sfTable = sfTabls[i];
 
-
                         //如果有这个字段.
                         if (fields != undefined) {
                             //检查这个字段是否存在可用的字段的列表里.
@@ -75,7 +74,6 @@
                             if (isHave == false)
                                 continue;
                         }
-
 
                         var newRow = "";
                         var nameLink = "";
@@ -134,7 +132,7 @@
             var fk_mapData = GetQueryString("FK_MapData");
 
             if (fk_mapData == '' || fk_mapData == null) {
-                window.location.href = '/WF/Admin/FoolFormDesigner/SFSQLDataView.aspx?FK_SFTable=' + sfTable;
+                window.location.href = 'SFSQLDataView.aspx?FK_SFTable=' + sfTable;
                 return;
             }
 

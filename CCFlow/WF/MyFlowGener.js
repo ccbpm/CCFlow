@@ -318,6 +318,7 @@ function Save() {
         //alert("请检查表单必填项和正则表达式");
         return false;
     }
+
     setToobarDisiable();
 
     //树形表单保存
@@ -325,12 +326,16 @@ function Save() {
         var node = workNode.WF_Node[0];
         if (node && node.FormType == 5) {
             OnTabChange("btnsave");
-        }    
+        }
     }
+
+    var json = getFormData(true, true);
+    alert(json);
+
     $.ajax({
         type: 'post',
         async: true,
-        data: getFormData(true, true),
+        data: json,
         url: MyFlow + "?DoType=Save",
         dataType: 'html',
         success: function (data) {
@@ -626,81 +631,6 @@ function AfterBindEn_DealMapExt() {
                 if (mapExt.Doc == undefined || mapExt.Doc == '')
                     continue;
 
-
-                //以 + -* 、% 来分割
-                //先来计算  + -* 、%  的位置
-
-                var mapExtDocArr1 = []; // 字段@field
-                var lastOperatorIndex = -1;
-                var operatorArr = []; // 计算符+-*/
-                for (var j = 0; j < mapExt.Doc.length; j++) {
-                    if (mapExt.Doc[j] == "+" || mapExt.Doc[j] == "-" || mapExt.Doc[j] == "*" || mapExt.Doc[j] == "/") {
-                        operatorArr.push(mapExt.Doc[j]);
-
-                        mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex + 1, j));
-                        lastOperatorIndex = j;
-                    }
-                }
-                mapExtDocArr1.push(mapExt.Doc.substring(lastOperatorIndex + 1, mapExt.Doc.length));
-
-                for (var m = 0; m < mapExtDocArr1.length; m++) {
-                    var extDocObj1 = mapExtDocArr1[m].replace('@', '');
-                    //将extDocObj1转换成KeyOfEn
-                    var extObjAr = $.grep(workNodeData.Sys_MapAttr, function (val) {
-                        return val.Name == extDocObj1 || val.KeyOfEn == extDocObj1;
-                    });
-
-
-                    if (extObjAr.length == 0) {
-                        // alert("mapExt:" + mapExt.AttrOfOper + "配置有误");
-
-                    } else {
-                        extDocObj1 = extObjAr[0].KeyOfEn;
-                        $(tr).find('[name=TB_' + mapExt.AttrOfOper + ']').attr('disabled', true);
-
-
-                        if ($(tr).find('[name=TB_' + extDocObj1 + ']').length > 0) {
-                            $(tr).find('[name=TB_' + extDocObj1 + ']').data().mapExt = mapExt;
-                            $(tr).find('[name=TB_' + extDocObj1 + ']').bind('blur', function (obj) {
-                                //替换 
-                                var mapExt = $(obj.target).data().mapExt;
-                                var mapExtDoc = mapExt.Doc;
-                                var evelStr = mapExt.Doc;
-                                var tmpResult = 1;
-                                var tr = $(obj.target).parent().parent();
-                                var attrOfOperEle = $(obj.target).parent().parent().find('[name=TB_' + mapExt.AttrOfOper + "]");
-                                for (var m = 0; m < workNodeData.Sys_MapAttr.length; m++) {
-                                    var mapAttr = workNodeData.Sys_MapAttr[m];
-                                    var hasKeyOfEn = true;
-                                    while (hasKeyOfEn) {
-                                        var mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.KeyOfEn);
-                                        var tranValue = mapAttr.KeyOfEn;
-                                        if (mapExdDocKeyOfEnIndex == -1) {
-                                            mapExdDocKeyOfEnIndex = mapExtDoc.indexOf('@' + mapAttr.Name);
-                                            tranValue = mapAttr.Name;
-                                        }
-                                        //判断参数后面是否是一个运算操作符
-                                        var optionVal = mapExtDoc.substring(mapExdDocKeyOfEnIndex + tranValue.length + 1, mapExdDocKeyOfEnIndex + tranValue.length + 2);
-
-                                        if (mapExdDocKeyOfEnIndex >= 0 && (optionVal == '+' || optionVal == '-' || optionVal == '*' || optionVal == '/' || optionVal == '')) {
-                                            mapExtDoc = mapExtDoc.replace('@' + tranValue, "parseFloat($(tr).find('[name=TB_" + mapAttr.KeyOfEn + "]').val())");
-                                        } else {
-                                            hasKeyOfEn = false;
-                                        }
-                                    }
-                                }
-
-                                tmpResult = eval(mapExtDoc);
-                                attrOfOperEle.val(tmpResult);
-                                attrOfOperEle.trigger("change"); // 触发合计计算
-
-                                $(tr).data().data[$(obj.target).data().mapExt.AttrOfOper] = tmpResult;
-                            })
-                        }
-                    }
-
-                }
-
                 break;
             case "DDLFullCtrl": // 自动填充其他的控件..  先不做
                 var ddlOper = $("#DDL_" + mapExt.AttrOfOper);
@@ -766,6 +696,7 @@ function AfterBindEn_DealMapExt() {
         }
     }
 }
+
 //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
 function GepParaByName(name, atPara) {
     var params = atPara.split('@');
@@ -1485,6 +1416,8 @@ function GenerWorkNode() {
                 GenerTreeFrm(workNode); /*树形表单*/
             }
 
+
+
             var frm = document.forms["divCCForm"];
             if (plant == "CCFlow")
                 frm.action = "MyFlow.ashx?method=login";
@@ -1503,6 +1436,7 @@ function GenerWorkNode() {
                     html += "<input type='hidden' id='TB_" + attr.KeyOfEn + "' name='TB_" + attr.KeyOfEn + "' value='" + defval + "' />";
                 }
             }
+
 
             //初始化Sys_MapData
             var h = workNode.Sys_MapData[0].FrmH;
@@ -1531,6 +1465,7 @@ function GenerWorkNode() {
                     $(obj).attr("id", $(obj).attr("name"));
                 }
             })
+
 
 
             ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
@@ -1570,10 +1505,10 @@ function GenerWorkNode() {
             //处理下拉框级联等扩展信息
             AfterBindEn_DealMapExt();
 
-
             //设置默认值
             for (var j = 0; j < workNode.Sys_MapAttr.length; j++) {
                 var mapAttr = workNode.Sys_MapAttr[j];
+
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'
                 var defValue = ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn);
@@ -1582,6 +1517,8 @@ function GenerWorkNode() {
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);
                 }
             }
+
+
             ShowNoticeInfo();
 
             ShowTextBoxNoticeInfo();

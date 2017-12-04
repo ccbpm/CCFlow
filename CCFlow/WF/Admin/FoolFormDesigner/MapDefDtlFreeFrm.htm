@@ -149,7 +149,7 @@
                 ReloadDtlFrame();
             });
         }
-        function EditTable(fk_mapdata, fk_sfTable, mypk) {
+        function EditTable(fk_mapdata, mypk, fk_sfTable ) {
 
             var url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&inlayer=1&PK=" + mypk;
             OpenEasyUiDialog(url, "eudlgframe", "外键字段属性", 800, 500, "icon-edit", true, null, null, null, function () {

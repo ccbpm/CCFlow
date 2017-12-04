@@ -272,13 +272,18 @@
         function EditTable(fk_mapdata, mypk, fk_sfTable) {
 
             var parentwin = parent.window;
+
             if (parentwin) {
+
                 var iFrame = parentwin.document.getElementById("F");
+
+
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.location.href == location.href) {
-                    parentwin.EditTable(fk_mapdata, fk_sfTable, mypk);
+                    parentwin.EditTable(fk_mapdata, mypk, fk_sfTable);
                     return;
                 }
-                parentwin.EditTable(fk_mapdata, fk_sfTable, mypk);
+
+                parentwin.EditTable(fk_sfTable, mypk, fk_mapdata);
                 return;
             }
 

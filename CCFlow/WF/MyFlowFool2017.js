@@ -200,9 +200,22 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
      //   return "<select data-val='" + ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
     }
 
-    //添加文本框 ，日期控件等
+
+    //添加文本框 ，日期控件等.
     //AppString
     if (mapAttr.MyDataType == "1") {  //不是外键
+
+        if (mapAttr.UIBindKey != "") {
+            var data = workNode[mapAttr.UIBindKey];
+            //枚举类型.
+            if (mapAttr.UIIsEnable == 1)
+                enableAttr = "";
+            else
+                enableAttr = "disabled='disabled'";
+
+            return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
+        }
+
 
         if (mapAttr.UIHeight <= 23) //普通的文本框.
         {
@@ -430,19 +443,21 @@ function Ele_Dtl(frmDtl) {
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
-    if (frmDtl.RowShowModel == "0") {
+    //if (frmDtl.RowShowModel == "0") {
         if (pageData.IsReadOnly) {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
         } else {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
         }
-    }
-    else if (frmDtl.RowShowModel == "1") {
-        if (pageData.IsReadOnly)
-            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
-        else
-            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
-    }
+    //}
+
+    //else if (frmDtl.RowShowModel == "1") {
+      //  if (pageData.IsReadOnly)
+        //    src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+        ///else
+         //   src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+    //}
+
     return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }
   

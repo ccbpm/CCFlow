@@ -95,15 +95,12 @@ function ExpImp() {
     OpenEasyUiDialog(url, "eudlgframe", '导入导出', 800, 500, "icon-edit", true, null, null, null, function () {
         window.location.href = window.location.href;
     });
-
 }
 
 function GroupField(mypk, OID) {
 
-
     // var url = 'GroupFieldEdit.htm?FK_MapData=' + mypk + "&GroupField=" + OID;
     var url = "../../Comm/En.htm?EnsName=BP.Sys.GroupFields&PK=" + OID;
-
     OpenEasyUiDialog(url, "eudlgframe", '分组', 800, 500, "icon-property", true, null, null, null, function () {
         window.location.href = window.location.href;
     });

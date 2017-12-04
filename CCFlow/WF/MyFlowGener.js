@@ -330,7 +330,6 @@ function Save() {
     }
 
     var json = getFormData(true, true);
-    alert(json);
 
     $.ajax({
         type: 'post',

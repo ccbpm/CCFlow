@@ -58,14 +58,9 @@ namespace BP.En
         /// </summary>
         public UAC OpenForSysAdmin()
         {
-            if (SystemConfig.SysNo == "WebSite")
-            {
-                this.OpenAll();
-                return this;
-            }
-
             if (BP.Web.WebUser.No == "admin")
                 this.OpenAll();
+
             return this;
         }
         public UAC OpenForAppAdmin()

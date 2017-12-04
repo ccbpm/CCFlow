@@ -2581,6 +2581,43 @@ namespace BP.WF.HttpHandler
         }
         #endregion 打印.
 
+        #region 附件组件.
+        /// <summary>
+        /// 下载
+        /// </summary>
+        /// <returns></returns>
+        public string AttachmentUpload_Down()
+        {
+            FrmAttachmentDB downDB = new FrmAttachmentDB();
+            downDB.MyPK = this.MyPK;
+            downDB.Retrieve();
+
+            FrmAttachment dbAtt = new FrmAttachment();
+            dbAtt.MyPK = downDB.FK_FrmAttachment;
+            dbAtt.Retrieve();
+
+            if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
+            {
+                //PubClass.DownloadFile(downDB.FileFullName, downDB.FileName);
+                return "url@" + downDB.FileFullName;
+            }
+
+            if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
+            {
+                string fileName=downDB.MakeFullFileFromFtp();
+                //PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
+                return "url@" + fileName;
+            }
+
+            if (dbAtt.AthSaveWay == AthSaveWay.DB)
+            {
+                PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
+            }
+
+            return "正在下载.";
+        }
+        #endregion 附件组件
+
 
     }
 }

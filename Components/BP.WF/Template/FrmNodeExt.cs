@@ -81,8 +81,6 @@ namespace BP.WF.Template
                 map.AddDDLEntities(FrmNodeAttr.FK_Frm, null, "表单", new MapDatas(), false);
                 map.AddTBInt(FrmNodeAttr.FK_Node, 0, "节点ID", true, true);
 
-                //map.AddDDLSysEnum(FrmNodeAttr.FrmType, 0, "表单类型",true, false);
-
                 map.AddBoolean(FrmNodeAttr.IsPrint, false, "是否可以打印", true, true);
                 map.AddBoolean(FrmNodeAttr.IsEnableLoadData, false, "是否启用装载填充事件", true, true);
                 map.AddDDLSysEnum(FrmNodeAttr.FrmSln, 0, "表单控制方案", true, true, FrmNodeAttr.FrmSln,
@@ -92,8 +90,6 @@ namespace BP.WF.Template
 
                 //显示的
                 map.AddTBInt(FrmNodeAttr.Idx, 0, "顺序号(显示的顺序)", true, false);
-
-                // add 2014-01-26
 
                 //add 2016.3.25.
                 map.AddBoolean(FrmNodeAttr.Is1ToN, false, "是否1变N？(分流节点有效)", true, true, true);
@@ -173,11 +169,11 @@ namespace BP.WF.Template
         }
         public string DoSelfSln()
         {
-            return "/WF/Admin/Sln/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
+            return "../../Admin/Sln/Sln.aspx?FK_MapData=" + this.FK_Frm + "&FK_Node=" + this.FK_Node + "&FK_Flow=084&DoType=Field";
         }
         public string DoEnableRole()
         {
-            return "/WF/Admin/AttrNode/BindFrmsFrmEnableRole.htm?MyPK=" + this.MyPK;
+            return "../../Admin/AttrNode/BindFrmsFrmEnableRole.htm?MyPK=" + this.MyPK;
         }
         #endregion 表单元素权限.
 

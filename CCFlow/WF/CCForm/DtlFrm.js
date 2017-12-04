@@ -1376,7 +1376,9 @@ function Delete() {
                 return;
             }
 
-            window.close();
+            alert(data);
+            this.closeIt();
+            return;
         }
     });
 }

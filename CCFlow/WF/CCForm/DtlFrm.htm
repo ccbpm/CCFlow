@@ -385,7 +385,8 @@
             window.location.href = url;
         }
 
-        function Close() {
+        function closeIt() {
+
             if (typeof ((parent && parent.doCloseDialog) || doCloseDialog) === "function") {
                 ((parent && parent.doCloseDialog) || doCloseDialog)();
             } else {
@@ -401,7 +402,7 @@
 <input type="button" value="保存" id="Btn_Save" onclick="Save(false)" />
 <input type="button" value="保存并新建" id="Btn_SaveAndNew" onclick="Save(true)" />
 <input type="button" value="删除" id="Btn_Delete" onclick="Delete()" />
-<input type="button" value="关闭" id="Btn_Close" onclick="Close()" />
+<input type="button" value="关闭" id="Btn_Close" onclick="closeIt()" />
 
    
     <div id="divCurrentForm" style="background: #E3E7F4; position: relative;">

@@ -153,6 +153,7 @@ namespace CCFlow.WF.CCForm
 
                 delDB.Delete(); //删除上传的文件.
             }
+
             if (this.DoType == "Down")
             {
                 FrmAttachmentDB downDB = new FrmAttachmentDB();
@@ -164,22 +165,16 @@ namespace CCFlow.WF.CCForm
                 dbAtt.MyPK = downDB.FK_FrmAttachment;
                 dbAtt.Retrieve();
 
-               // string downpath = GetRealPath(downDB.FileFullName);
+               //string downpath = GetRealPath(downDB.FileFullName);
 
                 if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
-                {
                     PubClass.DownloadFile(downDB.FileFullName, downDB.FileName);
-                }
 
                 if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
-                {
                     PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
-                }
 
                 if (dbAtt.AthSaveWay  == AthSaveWay.DB)
-                {
                     PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
-                }
 
                 this.WinClose();
                 return;
@@ -528,7 +523,7 @@ namespace CCFlow.WF.CCForm
                             }
                             else
                             {
-                                this.Pub1.AddTDTDTitle(db.FileName, "<a href='AttachmentUpload.aspx?DoType=Down&MyPK=" + db.MyPK + "' target=_blank ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                                this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "');\" ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                             }
                         }
                         else

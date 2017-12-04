@@ -4,7 +4,7 @@ DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmTrackSta'; 
 DELETE FROM Sys_Enum WHERE EnumKey ='EventDoType'; 
- 
+DELETE FROM Sys_Enum WHERE EnumKey ='RowShowModel';  
 
 -- 更新枚举值;
 DELETE FROM Sys_Enum WHERE EnumKey ='CodeStruct';

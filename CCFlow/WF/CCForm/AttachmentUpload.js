@@ -18,12 +18,6 @@ function Down2017(mypk) {
         dataType: 'html',
         success: function (data) {
 
-
-
-
-
-            //data = data.re
-
             if (data.indexOf('err@') == 0) {
                 alert(data); //如果是异常，就提提示.
                 return;
@@ -33,21 +27,13 @@ function Down2017(mypk) {
 
                 data = data.replace('url@', ''); //如果返回url，就直接转向.
 
-                alert(data);
-
                 var i = data.indexOf('\DataUser');
-
                 var str = '/' + data.substring(i);
-
-                alert(str);
 
                 window.location.href = str;
                 return;
             }
-
             alert(data);
-
-            // $("#Msg").html(data);
             return;
         }
     });

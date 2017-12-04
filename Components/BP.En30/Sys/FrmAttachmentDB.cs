@@ -444,7 +444,6 @@ namespace BP.Sys
                 //顺序.
                 map.AddTBInt(FrmAttachmentDBAttr.Idx, 0, "排序", true, false);
 
-
                 //这个值在上传时候产生.
                 map.AddTBString(FrmAttachmentDBAttr.UploadGUID, null, "上传GUID", true, false, 0, 500, 20);
 

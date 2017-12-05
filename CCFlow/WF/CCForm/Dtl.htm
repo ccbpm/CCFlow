@@ -1006,8 +1006,8 @@
 			 * 页面失去焦点之后, 无法重新加载?
 			 * 从表生成后如果有统计, 并不自动计算, 所以在初始化完成后触发onblur事件(页面自动计算设计之初就是onblur事件)
 			 */
-			console.log("已禁用SaveAll");
-			return;
+			//console.log("已禁用SaveAll");
+			//return;
 
             if (isDelRowAlert==true)
             {
@@ -1474,7 +1474,7 @@
 										 * 页面初始化后触第一个计算元素的onblur事件, 让表格行统计生效
 										 */
 										if (m == 0) {	// 每一行第一列触发一次
-											$(tr).find('[name=TB_' + extDocObj1 + ']').trigger("blur");
+											//$(tr).find('[name=TB_' + extDocObj1 + ']').trigger("blur");
 											/**
 											 * 该动作与<body onblur="SaveAll(this)">有冲突, 即:
 											 *   页面初始化InitPage()调用到AfterBindEn_DealMapExt()并运行到这里

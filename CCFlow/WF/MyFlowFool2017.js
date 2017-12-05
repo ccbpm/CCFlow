@@ -196,7 +196,7 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
 
 
     //外键类型.
-    if (mapAttr.UIBindKey.length > 6 && mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+    if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
 
         var data = workNode[mapAttr.UIBindKey];
         //枚举类型.

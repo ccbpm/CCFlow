@@ -1,6 +1,8 @@
 ﻿
+var frmData = null;
 function GenerFoolFrm(mapData, frmData) {
 
+    frmData = frmData;
     var Sys_GroupFields = frmData.Sys_GroupField;
 
     var node = frmData.WF_Node;
@@ -245,20 +247,18 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     var eleHtml = '';
 
-
     //外键类型.
-    if (mapAttr.UIBindKey.length > 6 && mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+    if ( mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
 
-        var data = workNode[mapAttr.UIBindKey];
+        var data = frmData[mapAttr.UIBindKey];
         //枚举类型.
         if (mapAttr.UIIsEnable == 1)
             enableAttr = "";
         else
             enableAttr = "disabled='disabled'";
 
-        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
+        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
     }
-
 
     //添加文本框 ，日期控件等
     //AppString
@@ -441,7 +441,6 @@ function Ele_Dtl(frmDtl) {
     else
         isReadonly = "1";
 
-
     if (frmDtl.RowShowModel == "0") {
         if (pageData.IsReadOnly) {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&" + urlParam + "&Version=1";
@@ -452,9 +451,9 @@ function Ele_Dtl(frmDtl) {
     
     if (frmDtl.RowShowModel == "1") {
         if (pageData.IsReadOnly)
-            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" +  + "&IsReadonly=1" + strs;
+            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" +  + "&IsReadonly=1" + strs;
         else
-            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=0" + strs;
+            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=0" + strs;
     }
 
     return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';

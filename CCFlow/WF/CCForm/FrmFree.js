@@ -38,16 +38,11 @@ function testExpression(exp) {
 	return true;
 }
 
-function GenerFreeFrm(mapData, frmData) {
-
-    //循环MapAttr
-    for (var mapAtrrIndex in frmData.Sys_MapAttr) {
-        var mapAttr = frmData.Sys_MapAttr[mapAtrrIndex];
-        var eleHtml = figure_MapAttr_Template(mapAttr);
-        $('#CCForm').append(eleHtml);
-    }
-
-	$.each(frmData.Sys_MapExt, function (i, o) {
+/**
+ * 表单计算(包括普通表单以及从表弹出页表单)
+ */
+function calculator(Sys_MapExt) {
+	$.each(Sys_MapExt, function (i, o) {
 		if (o.ExtType == "AutoFull") {
 			if (!testExpression(o.Doc)) {
 				console.log("MyPk: " + o.MyPK + ", 表达式: '" + o.Doc + "'格式错误");
@@ -76,7 +71,7 @@ function GenerFreeFrm(mapData, frmData) {
 				expression.execute_judgement.push("!isNaN(parseFloat(" + element + ".val()))");
 				expression.calculate = expression.calculate.replace(o, "parseFloat(" + element + ".val())");
 			});
-			(function (targets, expression, pk, expDefined, resultTarget) {
+			(function (targets, expression, resultTarget, pk, expDefined) {
 				$.each(targets, function (i, o) {
 					var target = o.replace("@", "");
 					$(":input[name=TB_" + target + "]").bind("change", function () {
@@ -98,11 +93,26 @@ function GenerFreeFrm(mapData, frmData) {
 						eval(evalExpression);
 						$(":input[name=TB_" + resultTarget + "]").val(result);
 					});
+					if (i == 0) {
+						$(":input[name=TB_" + target + "]").trigger("change");
+					}
 				});
-			})(targets, expression, o.MyPK, o.Doc, o.AttrOfOper);
+			})(targets, expression, o.AttrOfOper, o.MyPK, o.Doc);
 			$(":input[name=TB_" + o.AttrOfOper + "]").attr("disabled", true);
 		}
 	});
+}
+
+function GenerFreeFrm(mapData, frmData) {
+
+    //循环MapAttr
+    for (var mapAtrrIndex in frmData.Sys_MapAttr) {
+        var mapAttr = frmData.Sys_MapAttr[mapAtrrIndex];
+        var eleHtml = figure_MapAttr_Template(mapAttr);
+        $('#CCForm').append(eleHtml);
+    }
+
+	calculator(frmData.Sys_MapExt);
 
     //循环FrmLab
     for (var i in frmData.Sys_FrmLab) {

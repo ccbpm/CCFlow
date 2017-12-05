@@ -419,7 +419,7 @@ function figure_MapAttr_Template(mapAttr) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                 }
                 if ((mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {//AppInt
                     var enableAttr = '';
@@ -428,7 +428,7 @@ function figure_MapAttr_Template(mapAttr) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                 }
                 //AppMoney  AppRate
                 if (mapAttr.MyDataType == 8) {
@@ -438,7 +438,7 @@ function figure_MapAttr_Template(mapAttr) {
                     } else {
                         enableAttr = "disabled='disabled'";
                     }
-                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
                 }
             }
         }

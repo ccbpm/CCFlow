@@ -104,7 +104,30 @@
                 }
 
                 var treeData = eval('(' + data + ')');
-                $("#treeUnits").tree("loadData", treeData.InnerData);
+
+				// for bug 591 at 20171205
+				(function (cnode) {
+					var param = {
+						DoType: "Dot2DotStationModel_GetSubUnits",
+						parentid: cnode.attributes.No,
+						nodeid: nodeid,
+						ttype: cnode.attributes.TType,
+						stype: isUnitModel ? "UNIT" : "ST"
+					};
+
+					Handler_AjaxQueryData(param, function (data, scope) {
+						if (data.indexOf("err@") != -1) {
+							alert(data);
+							return;
+						}
+
+						var redata = eval('(' + data + ')');
+
+						$("#treeUnits").tree("loadData", redata);
+					}, this);
+				})(treeData.InnerData[0]);
+
+                //$("#treeUnits").tree("loadData", treeData.InnerData);	// for bug 591 at 20171205
 
                 isUnitModel = treeData.Msg == "true";
 

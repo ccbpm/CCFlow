@@ -165,19 +165,6 @@ namespace BP.En
             {
                 this.HisEn = BP.En.ClassFactory.GetEn(clas);
                 Attrs attrs = this.HisEn.EnMap.Attrs;
-
-                //if (SystemConfig.IsBSsystem)
-                //{
-                //    //string val = BP.Sys.Glo.Request.QueryString["No"];
-                //    //if (val == null)
-                //    //{
-                //    //    val = BP.Sys.Glo.Request.QueryString["PK"];
-                //    //}
-                //    this.HisEn.PKVal = BP.Sys.Glo.Request.QueryString[this.HisEn.PK];
-                //}
-                //else
-                //    this.HisEn.PKVal = this.PKVal;
-                //this.HisEn.Retrieve();
             }
 
             Type tp = this.HisEn.GetType();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Data;
-using System.Text;
 using System.Web;
 using BP.DA;
 using BP.Sys;
@@ -19,6 +18,15 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_Comm : DirectoryPageBase
     {
+        /// <summary>
+        /// 页面功能实体
+        /// </summary>
+        /// <param name="mycontext"></param>
+        public WF_Comm(HttpContext mycontext)
+        {
+            this.context = mycontext;
+        }
+
         #region Refmethod.htm 相关功能.
         public string RefEnKey
         {
@@ -78,7 +86,6 @@ namespace BP.WF.HttpHandler
             }
             #endregion 处理无参数的方法.
 
-
             //转化为json 返回到前台解析. 处理有参数的方法.
             DataSet ds = new DataSet();
             MapAttrs attrs = rm.HisAttrs.ToMapAttrs;
@@ -126,7 +133,6 @@ namespace BP.WF.HttpHandler
                 // 检查是否有下拉框自动填充。
                 string keyOfEn = dr["KeyOfEn"].ToString();
                 string fk_mapData = dr["FK_MapData"].ToString();
-
 
                 ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
             }
@@ -214,7 +220,6 @@ namespace BP.WF.HttpHandler
         }
         public string DoOneEntity(Entity en, int rmIdx)
         {
-
             BP.En.RefMethod rm = en.EnMap.HisRefMethods[rmIdx];
             rm.HisEn = en;
             int mynum = 0;
@@ -262,8 +267,8 @@ namespace BP.WF.HttpHandler
                                 //attr.DefaultVal=myDoub;
                                 break;
                             case BP.DA.DataType.AppBoolean:
-                                    objs[idx] = this.GetValBoolenFromFrmByKey(attr.Key);
-                                    attr.DefaultVal = false;
+                                objs[idx] = this.GetValBoolenFromFrmByKey(attr.Key);
+                                attr.DefaultVal = false;
                                 break;
                             default:
                                 throw new Exception("没有判断的数据类型．");
@@ -273,7 +278,7 @@ namespace BP.WF.HttpHandler
                     case UIContralType.DDL:
                         try
                         {
-                            string str = this.GetValFromFrmByKey(attr.Key); 
+                            string str = this.GetValFromFrmByKey(attr.Key);
                             objs[idx] = str;
                             attr.DefaultVal = str;
                         }
@@ -284,10 +289,10 @@ namespace BP.WF.HttpHandler
                         break;
                     case UIContralType.CheckBok:
                         bool val = this.GetValBoolenFromFrmByKey(attr.Key);
-                        if (val==true)
-                            objs[idx] = "1";
+                        if (val == true)
+                            objs[idx] = 1;
                         else
-                            objs[idx] = "0";
+                            objs[idx] = 0;
                         attr.DefaultVal = objs[idx].ToString();
                         break;
                     default:
@@ -315,15 +320,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 相关功能.
 
-        /// <summary>
-        /// 页面功能实体
-        /// </summary>
-        /// <param name="mycontext"></param>
-        public WF_Comm(HttpContext mycontext)
-        {
-            this.context = mycontext;
-        }
-
         #region 界面 .
         /// <summary>
         /// 实体初始化
@@ -343,6 +339,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion 界面方法.
 
+        #region  公共方法。
         public string SFTable()
         {
             SFTable sftable = new SFTable(this.GetRequestVal("SFTable") );
@@ -366,12 +363,11 @@ namespace BP.WF.HttpHandler
                 qo.AddWhere(strs[0], strs[1]);
                 qo.DoQuery();
             }
-
             return ens.ToJson();
         }
-
         /// <summary>
         /// 执行一个SQL，然后返回一个列表.
+        /// 用于gener.js 的公共方法.
         /// </summary>
         /// <returns></returns>
         public string SQLList()
@@ -402,6 +398,6 @@ namespace BP.WF.HttpHandler
             SysEnums ses = new SysEnums(this.EnumKey);
             return ses.ToJson();
         }
-
+        #endregion  公共方法。
     }
 }

@@ -1562,9 +1562,7 @@ namespace BP.Sys
             sem.No = enumKey;
             int dataCount = sem.RetrieveFromDBSources();
             if (dataCount > 0 && isNew)
-            {
                 return "err@已存在枚举" + enumKey + ",请修改枚举名字";
-            }
 
             if (dataCount == 0)
             {

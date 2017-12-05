@@ -277,10 +277,11 @@ namespace BP.WF.Port
                 //rm.HisAttrs.AddTBDate("riqi", null, "日期", true, false);
                 //rm.HisAttrs.AddTBDate("riqishijian", null, "日期时间", true, false);
                 //rm.HisAttrs.AddBoolen("boolen", false, "Boolen");
-                //rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举",true,true);
-                //rm.HisAttrs.AddDDLEntities("FK_Emp",null, "w外键", new BP.Port.Depts(),true);
-                //rm.ClassMethodName = this.ToString() + ".DoTest";
-                //map.AddRefMethod(rm);
+                //rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);
+                //rm.HisAttrs.AddDDLEntities("FK_Emp", null, "外键", new BP.Port.Depts(), true);
+
+                rm.ClassMethodName = this.ToString() + ".DoTest";
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
@@ -288,16 +289,17 @@ namespace BP.WF.Port
         }
         #endregion
 
-        public string DoTest(string wenben, int shuzi, string riqi, string riqishijian, bool isOK, int wfstate, string fk_emp)
+        //,string isOK, int wfstate, string fk_emp
+        public string DoTest(string wenben, int shuzi, string riqi, string riqishijian, int boolen)
         {
             string str="";
             str += "wenben=" + wenben;
             str += "shuzi=" + shuzi;
             str += "riqi=" + riqi;
             str += "riqishijian=" + riqishijian;
-            str += "isOK=" + isOK;
-            str += "wfstate=" + wfstate;
-            str += "fk_emp=" + fk_emp;
+            //str += "isOK=" + isOK;
+            //str += "wfstate=" + wfstate;
+            //str += "fk_emp=" + fk_emp;
             return str;
         }
 

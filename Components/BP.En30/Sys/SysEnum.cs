@@ -80,7 +80,7 @@ namespace BP.Sys
 		/// <summary>
 		/// Int val
 		/// </summary>
-		public  int  IntKey
+		public int IntKey
 		{
 			get
 			{

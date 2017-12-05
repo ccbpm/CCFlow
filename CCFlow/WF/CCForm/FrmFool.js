@@ -436,25 +436,21 @@ function Ele_Dtl(frmDtl) {
         refPK = GetQueryString('WorkID');
 
     var isReadonly = GetQueryString("IsReadOnly");
-    if (isReadonly == "null" || isReadonly == "0")
+    if (isReadonly == "null" || isReadonly == "0" || isReadonly == null || isReadonly == undefined)
         isReadonly = "0";
     else
         isReadonly = "1";
 
     if (frmDtl.RowShowModel == "0") {
-        if (pageData.IsReadOnly) {
-            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&" + urlParam + "&Version=1";
-        } else {
-            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&" + urlParam + "&Version=1";
-        }
+        src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&" + urlParam + "&Version=1";
     }
-    
-    if (frmDtl.RowShowModel == "1") {
-        if (pageData.IsReadOnly)
-            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" +  + "&IsReadonly=1" + strs;
-        else
-            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=0" + strs;
-    }
+
+    //    if (frmDtl.RowShowModel == "1") {
+    //        if (pageData.IsReadOnly)
+    //            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" +  + "&IsReadonly=1" + strs;
+    //        else
+    //            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=0" + strs;
+    //    }
 
     return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }

@@ -1098,7 +1098,6 @@ namespace BP.En
         }
 		#endregion  关于属性的增加 String
 
-
 		#region 关于属性的增加 Int
 
 		/// <summary>
@@ -1156,7 +1155,6 @@ namespace BP.En
         }
 		#endregion  关于属性的增加 Int
 
-
 		#region 关于属性的增加 Float类型
 		public void AddTBFloat(string key, string _Field, float defaultVal, string desc, bool uiVisable, bool isReadonly )
 		{
@@ -1177,7 +1175,6 @@ namespace BP.En
 		}
 		#endregion  关于属性的增加 Float
 
-
 		#region Decimal类型
 		public void AddTBDecimal(string key, string _Field, decimal defaultVal, string desc, bool uiVisable, bool isReadonly )
 		{
@@ -1197,7 +1194,6 @@ namespace BP.En
 			this.AddTBDecimal(key,key, defaultVal,desc,uiVisable,isReadonly) ; 
 		}
 		#endregion
-
 
 		#region 日期
 		public void AddTBDate(string key, string field, string defaultVal,  string desc, bool uiVisable, bool isReadonly )
@@ -1267,7 +1263,6 @@ namespace BP.En
 			this.AddTBDateTime(key,key,DateTime.Now.ToString(DataType.SysDataTimeFormat),desc,uiVisable,isReadonly);
 		}
 		#endregion 
-
 
 		#region 于帮定自定义,枚举类型有关系的操作。
         public void AddDDLSysEnum(string key, int defaultVal, string desc, bool isUIVisable, bool isUIEnable, string sysEnumKey)
@@ -1385,7 +1380,6 @@ namespace BP.En
 		}
         #endregion
 
-
 		#region entityNoName
 		public void AddDDLEntities(string key ,object defaultVal,   string desc, EntitiesNoName ens, bool uiIsEnable )
 		{
@@ -1407,7 +1401,6 @@ namespace BP.En
             this.AddDDLEntities(key, key, defaultVal, DataType.AppString, desc, ens, "No", "Name", uiIsEnable);
         }
         #endregion
-
 
         #region EntitiesOIDName
         public void AddDDLEntities(string key, object defaultVal, string desc, EntitiesOIDName ens, bool uiIsEnable)
@@ -1520,8 +1513,6 @@ namespace BP.En
             }
             return null;
         }
-
-      
         /// <summary>
         /// 属性集合
         /// </summary>
@@ -1578,7 +1569,45 @@ namespace BP.En
 		/// 属性集合
 		/// </summary>
 		public Attrs(){}
-	 
+
+        /// <summary>
+        /// 转换为mapattrs
+        /// </summary>
+        public BP.Sys.MapAttrs ToMapAttrs
+        {
+            get
+            {
+                BP.Sys.MapAttrs mapAttrs = new Sys.MapAttrs();
+                foreach (Attr item in this)
+                {
+                    if (item.MyFieldType == FieldType.RefText)
+                        continue;
+
+                    BP.Sys.MapAttr mattr = new Sys.MapAttr();
+
+                    mattr.KeyOfEn = item.Key;
+                    mattr.Name = item.Desc;
+                    mattr.MyDataType = item.MyDataType;
+                    mattr.UIContralType = item.UIContralType;
+                    mattr.UIBindKey = item.UIBindKey;
+
+                    mattr.MaxLen = item.MaxLength;
+                    mattr.MinLen = item.MinLength;
+
+                    mattr.DefValReal = item.DefaultValOfReal;
+
+                    if (item.MyFieldType == FieldType.Enum)
+                        mattr.LGType = FieldTypeS.Enum;
+
+                    if (item.MyFieldType == FieldType.FK)
+                        mattr.LGType = FieldTypeS.FK;
+
+                    mapAttrs.AddEntity(mattr);
+                }
+
+                return mapAttrs;
+            }
+        }
         public void Add(Attr attr)
         {
             if (attr.Field == null || attr.Field == "")

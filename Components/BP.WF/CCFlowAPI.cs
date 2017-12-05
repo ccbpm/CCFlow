@@ -201,7 +201,6 @@ namespace BP.WF
                     }
                 }
 
-
                 // 节点数据.
                 //string sql = "SELECT * FROM WF_Node WHERE NodeID=" + fk_node;
                 //DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);

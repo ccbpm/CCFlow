@@ -32,6 +32,7 @@ namespace BP.WF.HttpHandler
         public string GetValFromFrmByKey(string key)
         {
             string val = context.Request.Form[key];
+
             if (val == null && key.Contains("DDL_") == false)
             {
                 val = context.Request.Form["DDL_" + key];
@@ -40,6 +41,11 @@ namespace BP.WF.HttpHandler
             if (val == null && key.Contains("TB_") == false)
             {
                 val = context.Request.Form["TB_" + key];
+            }
+
+            if (val == null && key.Contains("CB_") == false)
+            {
+                val = context.Request.Form["CB_" + key];
             }
 
             if (val == null)
@@ -150,6 +156,20 @@ namespace BP.WF.HttpHandler
             try
             {
                 return float.Parse(str);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        public decimal GetRequestValDecimal(string param)
+        {
+            string str = GetRequestVal(param);
+            if (str == null || str == "" || str == "null")
+                return 0;
+            try
+            {
+                return decimal.Parse(str);
             }
             catch
             {
@@ -559,6 +579,17 @@ namespace BP.WF.HttpHandler
                 return int.Parse(str);
             }
         }
+        public int Index
+        {
+            get
+            {
+                string str = context.Request.QueryString["Index"];
+                if (str == null || str == "")
+                    return 1;
+                return int.Parse(str);
+            }
+        }
+        
         /// <summary>
         /// 字段属性编号
         /// </summary>
@@ -585,14 +616,33 @@ namespace BP.WF.HttpHandler
                 throw new Exception("@参数:" + key + "没有取到值.");
             return int.Parse(str);
         }
+     
+        public float GetValFloatFromFrmByKey(string key)
+        {
+            string str = this.GetValFromFrmByKey(key);
+            if (str == null || str == "")
+                throw new Exception("@参数:" + key + "没有取到值.");
+            return float.Parse(str);
+        }
+        public decimal GetValDecimalFromFrmByKey(string key)
+        {
+            string str = this.GetValFromFrmByKey(key);
+            if (str == null || str == "")
+                throw new Exception("@参数:" + key + "没有取到值.");
+            return decimal.Parse(str);
+        }
+
         public bool GetValBoolenFromFrmByKey(string key)
         {
             string val = this.GetValFromFrmByKey(key);
+            if (val == "on" || val == "1")
+                return true;
             if (val == null || val == "" || val == "0")
                 return false;
             return true;
         }
-       
+
+         
         public new string RefPK
         {
             get

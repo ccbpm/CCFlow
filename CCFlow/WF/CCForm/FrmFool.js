@@ -245,9 +245,24 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     var eleHtml = '';
 
+
+    //外键类型.
+    if (mapAttr.UIBindKey.length > 6 && mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+
+        var data = workNode[mapAttr.UIBindKey];
+        //枚举类型.
+        if (mapAttr.UIIsEnable == 1)
+            enableAttr = "";
+        else
+            enableAttr = "disabled='disabled'";
+
+        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
+    }
+
+
     //添加文本框 ，日期控件等
     //AppString
-    if (mapAttr.MyDataType == "1" && mapAttr.LGType == 0 ) {  //不是外键
+    if (mapAttr.MyDataType == "1" ) {  //不是外键
 
         if (mapAttr.UIHeight <= 23) //普通的文本框.
         {
@@ -416,18 +431,30 @@ function Ele_Dtl(frmDtl) {
     urlParam = "";
     //alert(urlParam);
 
+    var refPK = GetQueryString('OID');
+    if (refPK == null)
+        refPK = GetQueryString('WorkID');
+
+    var isReadonly = GetQueryString("IsReadOnly");
+    if (isReadonly == "null" || isReadonly == "0")
+        isReadonly = "0";
+    else
+        isReadonly = "1";
+
+
     if (frmDtl.RowShowModel == "0") {
         if (pageData.IsReadOnly) {
-            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + GetQueryString('OID') + "&IsReadonly=1&" + urlParam + "&Version=1";
+            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&" + urlParam + "&Version=1";
         } else {
-            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + GetQueryString('OID') + "&IsReadonly=0&" + urlParam + "&Version=1";
+            src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&" + urlParam + "&Version=1";
         }
     }
-    else if (frmDtl.RowShowModel == "1") {
+    
+    if (frmDtl.RowShowModel == "1") {
         if (pageData.IsReadOnly)
-            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
+            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" +  + "&IsReadonly=1" + strs;
         else
-            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
+            src = appPath + "WF/CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=0" + strs;
     }
 
     return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';

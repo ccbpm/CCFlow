@@ -192,24 +192,25 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
 
     var isInOneRow = false; //是否占一整行
     var islabelIsInEle = false; //
-
     var eleHtml = '';
 
 
+    //外键类型.
+    if (mapAttr.UIBindKey.length > 6 && mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+
+        var data = workNode[mapAttr.UIBindKey];
+        //枚举类型.
+        if (mapAttr.UIIsEnable == 1)
+            enableAttr = "";
+        else
+            enableAttr = "disabled='disabled'";
+
+        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
+    }
+     
     //添加文本框 ，日期控件等.
     //AppString
     if (mapAttr.MyDataType == "1") {  //不是外键
-
-        if (mapAttr.UIBindKey.length >6 ) {
-            var data = workNode[mapAttr.UIBindKey];
-            //枚举类型.
-            if (mapAttr.UIIsEnable == 1)
-                enableAttr = "";
-            else
-                enableAttr = "disabled='disabled'";
-
-            return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
-        }
 
 
         if (mapAttr.UIHeight <= 23) //普通的文本框.

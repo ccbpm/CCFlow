@@ -233,7 +233,9 @@ namespace CCFlow.WF.Comm.RefFunc
                     continue;
                 }
 
-                string url = "../RefMethod.aspx?Index=" + func.Index + "&EnsName=" + en.GetNewEntities.ToString() + keys;
+              //  string url = "../RefMethod.aspx?Index=" + func.Index + "&EnsName=" + en.GetNewEntities.ToString() + keys;
+                string url = "../RefMethod.htm?Index=" + func.Index + "&EnsName=" + en.GetNewEntities.ToString() + keys;
+
                 if (func.Warning == null)
                 {
                     if (func.Target == null)

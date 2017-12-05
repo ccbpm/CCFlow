@@ -1594,7 +1594,9 @@ namespace CCFlow.Web.Comm.UC
                             {
                                 /*如果是功能.*/
                                 string mykeys = "&" + en.PK + "=" + en.PKVal + "&r=" + DateTime.Now.ToString("MMddhhmmss");
-                                string url = "../RefMethod.aspx?Index=" + func.Index + "&EnsName=" + en.GetNewEntities.ToString() + mykeys;
+                               // string url = "../RefMethod.aspx?Index=" + func.Index + "&EnsName=" + en.GetNewEntities.ToString() + mykeys;
+                                string url = "../RefMethod.htm?Index=" + func.Index + "&EnsName=" + en.GetNewEntities.ToString() + mykeys;
+
                                 if (func.Warning == null)
                                 {
                                     if (func.Target == null)

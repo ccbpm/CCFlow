@@ -253,7 +253,6 @@ namespace CCFlow.Web.Comm
             }
         }
 
-
         protected void btnClose_Click(object sender, EventArgs e)
         {
             this.WinClose();

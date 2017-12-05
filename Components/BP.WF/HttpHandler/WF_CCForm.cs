@@ -1167,7 +1167,7 @@ namespace BP.WF.HttpHandler
             {
                 mainEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                 string msg = fes.DoEventNode(EventListDtlList.DtlSaveBefore, mainEn);
-                if (msg != null)
+                if (DataType.IsNullOrEmpty(msg)==false)
                     throw new Exception(msg);
             }
 

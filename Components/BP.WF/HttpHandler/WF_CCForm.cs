@@ -1167,8 +1167,8 @@ namespace BP.WF.HttpHandler
             {
                 mainEn = mdtl.GenerGEMainEntity(this.RefPKVal);
                 string msg = fes.DoEventNode(EventListDtlList.DtlSaveBefore, mainEn);
-                if (DataType.IsNullOrEmpty(msg)==false)
-                    throw new Exception(msg);
+                if (DataType.IsNullOrEmpty(msg) == false)
+                    return "err@" + msg;
             }
 
             if (mdtl.FEBD.Length != 0)
@@ -1201,8 +1201,8 @@ namespace BP.WF.HttpHandler
             if (fes.Count > 0)
             {
                 string msg = fes.DoEventNode(EventListDtlList.DtlSaveEnd, mainEn);
-                if (msg != null)
-                    throw new Exception(msg);
+                if (DataType.IsNullOrEmpty(msg) == false)
+                    return "err@" + msg;
             }
 
             if (mdtl.FEBD.Length != 0)

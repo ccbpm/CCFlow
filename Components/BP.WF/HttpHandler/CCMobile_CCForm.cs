@@ -52,6 +52,12 @@ namespace BP.WF.HttpHandler
             WF_CCForm en = new WF_CCForm(this.context);
             return en.HandlerMapExt();
         }
+
+        public string AttachmentUpload_Down()
+        {
+            WF_CCForm ccform = new WF_CCForm(this.context);
+            return ccform.AttachmentUpload_Down();
+        }
       
 
     }

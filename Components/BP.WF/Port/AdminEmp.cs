@@ -282,7 +282,6 @@ namespace BP.WF.Port
                 //rm.ClassMethodName = this.ToString() + ".DoTest";
                 //map.AddRefMethod(rm);
 
-
                 this._enMap = map;
                 return this._enMap;
             }

@@ -23,6 +23,8 @@ namespace CCFlow.Web.Comm
 	{
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            BP.Sys.SysEnumMain ses = new SysEnumMain();
+            ses.Retrieve();
             string ensName = this.Request.QueryString["EnsName"];
             int index = int.Parse(this.Request.QueryString["Index"]);
             Entities ens = BP.En.ClassFactory.GetEns(ensName);

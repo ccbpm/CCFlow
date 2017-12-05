@@ -361,15 +361,7 @@
 
 <div id="CCForm">
 </div>
-
-
-<table width="100%; border:0px;" id="Table1" >
-  <tr> 
-   <th>名称</th>
-   <th>输入值</th>
-   <th>说明</th>
-  </tr>
-</table>
+ 
 <input type="button" id="Btn_Done" name="Btn_Done" value="执行" onclick="Done()"  /> 
 
 <div id="Msg"></div>
@@ -403,6 +395,13 @@
             url: Handler + "?DoType=Refmethod_Done&Index=" + GetQueryString("Index") + "&PK=" + pk + "&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
+
+
+                console.log(data);
+
+                alert(data);
+
+                return;
 
                 //如果错误,就提示.
                 if (data.indexOf('err@') == 0) {

@@ -1,4 +1,43 @@
 ﻿
+function testExpression(exp) {
+	if (exp == null || typeof exp == "undefined" || typeof exp != "string") {
+		return false;
+	}
+	exp = exp.replace(/\s/g, "");
+	if (exp == "" || exp.length == 0) {
+		return false;
+	}
+	if (/[\+\-\*\/]{2,}/.test(exp)) {
+		return false;
+	}
+	if (/\(\)/.test(exp)) {
+		return false;
+	}
+	var stack = [];
+	for (var i = 0; i < exp.length; i++) {
+		var c = exp.charAt(i);
+		if (c == "(") {
+			stack.push("(");
+		} else if (c == ")") {
+			if (stack.length > 0) {
+				stack.pop();
+			} else {
+				return false;
+			}
+		}
+	}
+	if (stack.length != 0) {
+		return false;
+	}
+	if (/^[\+\-\*\/]|[\+\-\*\/]$/.test(exp)) {
+		return false;
+	}
+	if (/\([\+\-\*\/]|[\+\-\*\/]\)|[\+\-\*\/]\(|\)[\+\-\*\/]/.test(exp)) {
+		return false;
+	}
+	return true;
+}
+
 function GenerFreeFrm(mapData, frmData) {
 
     //循环MapAttr
@@ -7,6 +46,63 @@ function GenerFreeFrm(mapData, frmData) {
         var eleHtml = figure_MapAttr_Template(mapAttr);
         $('#CCForm').append(eleHtml);
     }
+
+	$.each(frmData.Sys_MapExt, function (i, o) {
+		if (o.ExtType == "AutoFull") {
+			if (!testExpression(o.Doc)) {
+				console.log("MyPk: " + o.MyPK + ", 表达式: '" + o.Doc + "'格式错误");
+				return false;
+			}
+			var targets = [];
+			var index = -1;
+			for (var i = 0; i < o.Doc.length; i++) {
+				var c = o.Doc.charAt(i);
+				if (/[\+\-|*\/\(\)]/.test(c)) {
+					targets.push(o.Doc.substring(index + 1, i));
+					index = i;
+				}
+			}
+			targets.push(o.Doc.substring(index + 1, o.Doc.length));
+			//
+			var expression = {
+				"judgement" : [],
+				"execute_judgement" : [],
+				"calculate" : o.Doc
+			};
+			$.each(targets, function (i, o) {
+				var target = o.replace("@", "");
+				var element = "$(':input[name=TB_" + target + "]')";
+				expression.judgement.push(element + ".length == 0");
+				expression.execute_judgement.push("!isNaN(parseFloat(" + element + ".val()))");
+				expression.calculate = expression.calculate.replace(o, "parseFloat(" + element + ".val())");
+			});
+			(function (targets, expression, pk, expDefined, resultTarget) {
+				$.each(targets, function (i, o) {
+					var target = o.replace("@", "");
+					$(":input[name=TB_" + target + "]").bind("change", function () {
+						var evalExpression = " var result = ''; ";
+						if (expression.judgement.length > 0) {
+							evalExpression += " if ( " + expression.judgement.join(" || ") + " ) { ";
+							evalExpression += " 	console.log(\"MyPk: " + pk + ", 表达式: '" + expDefined + "' " + "中有对象在当前页面不存在\");"
+							evalExpression += " } ";
+						}
+						if (expression.execute_judgement.length > 0) {
+							evalExpression += " else if ( " + expression.execute_judgement.join(" && ") + " ) { ";
+						}
+						if (expression.calculate.length > 0) {
+							evalExpression += " 	result = " + expression.calculate + "; ";
+						}
+						if (expression.execute_judgement.length > 0) {
+							evalExpression += " } ";
+						}
+						eval(evalExpression);
+						$(":input[name=TB_" + resultTarget + "]").val(result);
+					});
+				});
+			})(targets, expression, o.MyPK, o.Doc, o.AttrOfOper);
+			$(":input[name=TB_" + o.AttrOfOper + "]").attr("disabled", true);
+		}
+	});
 
     //循环FrmLab
     for (var i in frmData.Sys_FrmLab) {
@@ -55,28 +151,32 @@ function GenerFreeFrm(mapData, frmData) {
         $('#CCForm').append(createdFigure);
     }
 
+	// 主表扩展(统计从表)
+	var detailExt = {};
+	// 装载公式 从表id -> 公式
+	$.each(frmData.Sys_MapExt, function (i, o) {
+		if (o.ExtType == "AutoFullDtlField") {	// 明细统计公式
+			// 从表id.列.[Sum|Avg|Max|Min] -> CCFrm_CongBiaoCeShiDtl1.ShanJia.Avg
+			var docs = o.Doc.split("\.");
+			if (docs.length == 3) {
+				var ext = {
+					"DtlNo" : docs[0],
+					"FK_MapData" : o.FK_MapData,
+					"AttrOfOper" : o.AttrOfOper,
+					"Doc" : o.Doc,
+					"DtlColumn" : docs[1],
+					"exp" : docs[2]
+				};
+				detailExt[ext.DtlNo] = ext;
+				$(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
+			}
+		}
+	});
+
     //循环 从表
     for (var i in frmData.Sys_MapDtl) {
         var frmMapDtl = frmData.Sys_MapDtl[i];
-		// 主表扩展(统计从表)
-		var ext = undefined;
-		$.each(frmData.Sys_MapExt, function (i, o) {
-			var docs = o.Doc.split("\.");
-			if (docs.length == 3) {
-				var DtlNo = docs[0];
-				if (frmMapDtl.No === DtlNo) {
-					ext = {};
-					ext.DtlNo = DtlNo;
-					ext.FK_MapData = o.FK_MapData;
-					ext.AttrOfOper = o.AttrOfOper;
-					ext.Doc = o.Doc;
-					ext.DtlColumn = docs[1];
-					ext.exp = docs[2];
-					return false;
-				}
-			}
-		});
-        var createdFigure = figure_Template_Dtl(frmMapDtl, ext);
+        var createdFigure = figure_Template_Dtl(frmMapDtl, detailExt[frmMapDtl.No]);	// 根据从表id获取公式 从表id -> 公式
         $('#CCForm').append(createdFigure);
     }
 

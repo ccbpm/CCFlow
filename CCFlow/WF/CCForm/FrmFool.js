@@ -119,8 +119,7 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var sta = wf_node.FWCSta;
 
     var h = wf_node.FWC_H + 1000;
-
-
+     
     var src = "../WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";
     var paras = '';
@@ -131,9 +130,8 @@ function figure_Template_FigureFrmCheck(wf_node) {
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.OID;
     if (sta == 2)//只读
-    {
         src += "&DoType=View";
-    }
+
     src += "&r=q" + paras;
     var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
     return eleHtml;
@@ -247,14 +245,9 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     var eleHtml = '';
 
-    //外键类型.
-    if (mapAttr.LGType == 2) {
-        //   return "<select data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-    }
-
     //添加文本框 ，日期控件等
     //AppString
-    if (mapAttr.MyDataType == "1") {  //不是外键
+    if (mapAttr.MyDataType == "1" && mapAttr.LGType == 0 ) {  //不是外键
 
         if (mapAttr.UIHeight <= 23) //普通的文本框.
         {

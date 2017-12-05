@@ -195,17 +195,12 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
 
     var eleHtml = '';
 
-    //外键类型.
-    if (mapAttr.LGType == 2) {
-     //   return "<select data-val='" + ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
-    }
-
 
     //添加文本框 ，日期控件等.
     //AppString
     if (mapAttr.MyDataType == "1") {  //不是外键
 
-        if (mapAttr.UIBindKey != "") {
+        if (mapAttr.UIBindKey.length >6 ) {
             var data = workNode[mapAttr.UIBindKey];
             //枚举类型.
             if (mapAttr.UIIsEnable == 1)

@@ -9,7 +9,7 @@
         var fk_flow = GetQueryString("FK_Flow");
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
-        var dotype = GetQueryString("DoType");
+        var showType = GetQueryString("DoType");
         var enName = GetQueryString("EnName");
         var isChange = false;
 
@@ -27,7 +27,7 @@
                 FK_Node: nodeid,
                 WorkID: workid,
                 FID: fid,
-                ShowType: dotype
+                ShowType: showType
             };
 
             Handler_AjaxQueryData(param, function (data) {
@@ -71,7 +71,7 @@
                     html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
 
                     //审核意见
-                    if (this.IsDoc && dotype!="View" ) {
+                    if (this.IsDoc && showType!="View" ) {
 
                         html += "<td>";
 
@@ -182,7 +182,7 @@
 
             var doc = $("#WorkCheck_Doc").val();
 
-            if (dotype == "View")
+            if (showType == "View")
                 return;
 
 //            if (doc.length == 0) {
@@ -198,7 +198,7 @@
                 FK_Node: nodeid,
                 WorkID: workid,
                 FID: fid,
-                ShowType: dotype,
+                ShowType: showType,
                 Doc: doc,
                 IsCC: GetQueryString("IsCC")
             };
@@ -269,12 +269,12 @@
         }
 
         function AthOpenFileView(pkVal, delPKVal, FK_FrmAttachment, FK_FrmAttachmentExt, fk_flow, fk_node, workID, isCC) {
-            var url = '../CCForm/FilesView.aspx?DoType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=' + FK_FrmAttachment + '&FK_FrmAttachmentExt=' + FK_FrmAttachmentExt + '&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node + '&WorkID=' + workID + '&IsCC=' + isCC;
+            var url = '../CCForm/FilesView.aspx?showType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=' + FK_FrmAttachment + '&FK_FrmAttachmentExt=' + FK_FrmAttachmentExt + '&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node + '&WorkID=' + workID + '&IsCC=' + isCC;
             window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
         }
 
         function AthOpenView(pkVal, delPKVal, FK_FrmAttachment, FK_FrmAttachmentExt, FK_Flow, FK_Node, WorkID, IsCC) {
-            var url = '../CCForm/FilesView.aspx?DoType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=' + FK_FrmAttachment + '&FK_FrmAttachmentExt=' + FK_FrmAttachmentExt + '&FK_Flow=' + FK_Flow + '&FK_Node=' + FK_Node + '&WorkID=' + WorkID + '&IsCC=' + IsCC;
+            var url = '../CCForm/FilesView.aspx?showType=view&DelPKVal=' + delPKVal + '&PKVal=' + pkVal + '&FK_FrmAttachment=' + FK_FrmAttachment + '&FK_FrmAttachmentExt=' + FK_FrmAttachmentExt + '&FK_Flow=' + FK_Flow + '&FK_Node=' + FK_Node + '&WorkID=' + WorkID + '&IsCC=' + IsCC;
             window.open(url, '_blank', 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
         }
 
@@ -343,7 +343,7 @@
 
                 $('#file_upload').uploadify({
                     'swf': '../Scripts/Jquery-plug/fileupload/uploadify.swf',
-                    'uploader': '../CCForm/Handler.ashx?AttachPK=' + nodeid + '_FrmWorkCheck&WorkID=' + workid + '&DoType=MoreAttach&FK_Node=' + nodeid + '&EnsName=' + (enName ? enName : '') + '&FK_Flow=' + fk_flow + '&PKVal=' + workid,
+                    'uploader': '../CCForm/Handler.ashx?AttachPK=' + nodeid + '_FrmWorkCheck&WorkID=' + workid + '&showType=MoreAttach&FK_Node=' + nodeid + '&EnsName=' + (enName ? enName : '') + '&FK_Flow=' + fk_flow + '&PKVal=' + workid,
                     'auto': true,
                     'fileTypeDesc': '请选择上传文件',
                     'buttonText': '上传附件',
@@ -367,7 +367,7 @@
 
         function GetNewUploadedAths(files) {
             var param = {
-                DoType: "WorkCheck_GetNewUploadedAths",
+                showType: "WorkCheck_GetNewUploadedAths",
                 Names: "|",
                 AttachPK: nodeid + "_FrmWorkCheck",
                 FK_Flow: fk_flow,

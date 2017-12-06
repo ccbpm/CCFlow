@@ -63,7 +63,9 @@ function calculator(Sys_MapExt) {
 					index = i;
 				}
 			}
-			targets.push(o.Doc.substring(index + 1, o.Doc.length));
+			if (index + 1 < o.Doc.length) {
+				targets.push(o.Doc.substring(index + 1, o.Doc.length));
+			}
 			//
 			var expression = {
 				"judgement" : [],

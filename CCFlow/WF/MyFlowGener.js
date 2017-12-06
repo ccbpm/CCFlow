@@ -62,12 +62,8 @@ $(function () {
 //}
 function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     // model=1 自由表单, model=2傻瓜表单.
-    var pathName = document.location.pathname;
-	var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-	if (projectName.startsWith("/WF")) {
-		projectName = "";
-	}
-    var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;
+    var url = './CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;
+ 
     if (typeof ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog) === "function") {
         ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog)(url, "editSubGrid", '编辑', 1000, 550, "icon-property", false, null, null, null, function () {
             if (typeof InitPage === "function") {
@@ -238,6 +234,11 @@ function initPageParam() {
 function pageParamToUrl() {
     var paramUrlStr = '';
     for (var param in pageData) {
+
+        var val = pageData[param];
+        if (val == null || val == undefined)
+            continue;
+
         paramUrlStr += '&' + (param.indexOf('@') == 0 ? param.substring(1) : param) + '=' + pageData[param];
     }
     return paramUrlStr;

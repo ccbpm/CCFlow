@@ -431,6 +431,11 @@ function initPageParam() {
 function pageParamToUrl() {
     var paramUrlStr = '';
     for (var param in pageData) {
+
+        var val = pageData[param];
+        if (val == null || val == undefined)
+            continue;
+
         paramUrlStr += '&' + (param.indexOf('@') == 0 ? param.substring(1) : param) + '=' + pageData[param];
     }
     return paramUrlStr;

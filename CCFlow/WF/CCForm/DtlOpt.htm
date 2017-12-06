@@ -169,7 +169,13 @@
             url += "&RefPK=" + GetQueryString("RefPK");
             url += "&FK_MapData=" + GetQueryString("FK_MapData");
             url += "&OID=" + GetQueryString("OID");
-            url += "&IsReadonly=" + GetQueryString("IsReadonly");
+            var isReadonly = GetQueryString("IsReadonly");
+            if (isReadonly == null || isReadonly == "null" || isReadonly == undefined || isReadonly == "0")
+                isReadonly = "0";
+            else
+                isReadonly == "1";
+
+            url += "&IsReadonly=" + isReadonly;
             url += "&UserNo=" + GetQueryString("UserNo");
             url += "&SID=" + GetQueryString("SID");
             url += "&WorkID=" + GetQueryString("WorkID");

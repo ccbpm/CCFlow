@@ -220,7 +220,7 @@ function figure_Template_Dtl(frmDtl, ext) {
     }
     var src = "";
 
-    if (frmDtl.RowShowModel == "0" || 1==1 ) {
+    if (frmDtl.RowShowModel == "0"  ) {
         if (pageData.IsReadOnly) {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         } else {

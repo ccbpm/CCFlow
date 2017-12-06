@@ -70,6 +70,7 @@ function DoAnscToFillDiv(sender, e, tbid, fk_mapExt) {
                 type: "get",
                 url: Handler + "?DoType=HandlerMapExt",
                 data: json_data,
+                dataType: 'html',
                 beforeSend: function (XMLHttpRequest, fk_mapExt) {
                     //ShowLoading();
                 },
@@ -424,21 +425,26 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
 
     $.ajax({
         type: "get",
-
+        dataType: 'html',
         url: Handler + "?DoType=HandlerMapExt&KVs=" + kvs + "&Key=" + e + "&FK_MapExt=" + fk_mapExt,
         beforeSend: function (XMLHttpRequest) {
             //ShowLoading();
         },
         success: function (data, textStatus) {
-            if (data) {
-                var dataObj = eval("(" + data + ")"); //转换为json对象 
-                for (var i in dataObj.Head) {
-                    if (typeof (i) == "function")
-                        continue;
-                    FullIt(e, ddlChild, fk_mapExt);
-                    return;
-                }
+
+            if (data.indexOf('err@')) {
+                alert(data);
+                return;
             }
+
+            var dataObj = eval("(" + data + ")"); //转换为json对象 
+            for (var i in dataObj.Head) {
+                if (typeof (i) == "function")
+                    continue;
+                FullIt(e, ddlChild, fk_mapExt);
+                return;
+            }
+
         },
         complete: function (XMLHttpRequest, textStatus) {
             //HideLoading();
@@ -564,6 +570,7 @@ function FullM2M(key, fk_mapExt) {
     var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqM2MFullList", "OID": oid, "KVs": kvs };
     $.ajax({
         type: "get",
+        dataType: 'html',
         url: Handler + "?DoType=HandlerMapExt&KVs=" + kvs,
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
@@ -613,6 +620,7 @@ function FullDtl(key, fk_mapExt) {
     var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqDtlFullList", "OID": oid, "KVs": kvs };
     $.ajax({
         type: "get",
+        dataType: 'html',
         url: Handler + "?DoType=HandlerMapExt&KVs=" + kvs,
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
@@ -662,6 +670,7 @@ function FullCtrlDDL(key, ctrlIdBefore, fk_mapExt) {
     var json_data = { "Key": key, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqDDLFullList", "KVs": kvs };
     $.ajax({
         type: "get",
+        dataType: 'html',
         url: Handler + "?DoType=HandlerMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
@@ -707,6 +716,7 @@ function FullCtrlDDLDB(e, ddlID, ctrlIdBefore, endID, fk_mapExt) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqDDLFullListDB", "MyDDL": ddlID, "KVs": kvs };
     $.ajax({
         type: "get",
+        dataType: 'html',
         url: Handler + "?DoType=HandlerMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {
@@ -749,6 +759,7 @@ function FullCtrl(e, ctrlIdBefore, fk_mapExt) {
     var json_data = { "Key": e, "FK_MapExt": fk_mapExt, "DoTypeExt": "ReqCtrl", "KVs": kvs };
     $.ajax({
         type: "get",
+        dataType: 'html',
         url: Handler + "?DoType=HandlerMapExt",
         data: json_data,
         beforeSend: function (XMLHttpRequest) {

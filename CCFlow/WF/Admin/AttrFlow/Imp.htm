@@ -52,6 +52,7 @@
             //提交数据
             $("#cc").form("submit", {
                 type: 'POST',
+                dataType: 'html',
                 url: Handler + "?DoType=Imp_Done&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
                 onSubmit: function (param) {
                     //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  

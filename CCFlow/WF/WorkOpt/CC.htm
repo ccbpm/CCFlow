@@ -119,6 +119,7 @@
                 FK_Flow: GetQueryString("FK_Flow")
             };
             $.ajax({
+                dataType: 'html',
                 url: Handler + "?DoType=CC_Init&FK_Node=" + param.FK_Node + "&WorkID=" + param.WorkID + "&FK_Flow=" + param.FK_Flow + "&FID=" + param.FID + '&m=' + Math.random(),
                 success: function (data) {
                     if (data != null) {
@@ -173,6 +174,7 @@
         //部门
         function initTreeData() {
             $.ajax({
+                dataType: 'html',
                 url: Handler + "?DoType=CC_SelectDepts&m=",
                 success: function (data) {
                     if (data != null) {
@@ -230,6 +232,7 @@
         //岗位
         function StationT() {
             $.ajax({
+                dataType: 'html',
                 url: Handler + "?DoType=CC_SelectStations&m=" + Math.random(),
                 success: function (data) {
                     if (data != null) {
@@ -313,6 +316,7 @@
         //权限组.
         function SelectGroups() {
             $.ajax({
+                dataType: 'html',
                 url: Handler + "?DoType=CC_SelectGroups&m=" + Math.random(),
                 success: function (data) {
                     if (data != null) {

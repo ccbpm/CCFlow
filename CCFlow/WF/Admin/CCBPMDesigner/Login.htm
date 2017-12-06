@@ -320,6 +320,7 @@
                 data: frmData,
                 type: 'post',
                 async: true,
+                dataType: 'html',
                 url: Handler + "?DoType=Login_Submit",
                 success: function (data) {
 
@@ -369,6 +370,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
+                dataType: 'html',
                 url: Handler + "?DoType=" + doType,
                 success: function (data) {
 

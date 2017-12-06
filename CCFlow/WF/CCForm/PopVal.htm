@@ -243,6 +243,7 @@
                 type: 'post',
                 async: false,
                 data: formData2,
+                dataType: 'html',
                 url: Handler + "?DoType=PopVal_Init&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
                 dataType: 'html',
                 success: function (data) {
@@ -626,6 +627,7 @@
             PageSize: pageSize,
             PageIndex: 1,
             DivId: 'flowListDiv',
+            dataType: 'html',
             countUrl: Handler + "?DoType=PopVal_InitTablePageCount&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
             listUrl: Handler + "?DoType=PopVal_InitTablePageList&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
             RenderOverFun: function () {

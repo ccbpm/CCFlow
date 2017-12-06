@@ -32,6 +32,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
+                dataType: 'html',
                 url: Handler + "?DoType=" + doType,
                 success: function (data) {
                     $("#Msg").html(data);

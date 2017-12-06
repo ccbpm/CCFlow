@@ -162,6 +162,7 @@
         $.ajax({
             type: 'post',
             async: true,
+            dataType: 'html',
             url: Handler + "?DoType=DTSBTableExt_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
             success: function (data) {
 

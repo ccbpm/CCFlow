@@ -183,6 +183,7 @@
 			$.ajax({
 			    type: 'post',
 			    async: true,
+			    dataType: 'html',
 			    url: Handler + "?DoType=Limit_Save&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
 			    data: {
 			        StartLimitRole: startLimitRole,

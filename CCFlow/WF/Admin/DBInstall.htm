@@ -38,6 +38,7 @@
                 type: 'post',
                 async: true,
                 url: Handler + "?DoType=DBInstall_Init",
+                dataType: 'html',
                 success: function (data) {
 
                     if (data.indexOf('err@') == 0) {
@@ -89,6 +90,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
+                dataType: 'html',
                 url: Handler + "?DoType=DBInstall_Submit&DemoType=" + valT,
                 success: function (data) {
 

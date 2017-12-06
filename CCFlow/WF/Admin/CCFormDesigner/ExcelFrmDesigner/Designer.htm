@@ -339,7 +339,8 @@
 			if(confirm("确定要解除单元格绑定吗？")){
 				var result = false;
 				$.ajax({
-					async: false,
+				    async: false,
+				    dataType: 'html',
 					url: Handler + "?DoType=RemoveBindCell&MyPK=" + pk + "&m=" + Math.random(),
 					// dataType: 'json',
 					success: function (data) {
@@ -647,12 +648,15 @@
 				url: Handler + "?DoType=GetFkeyList&FK_MapData=" + _FormNo + "&MyPK=" + pk + "&Fkey=" + Fkey + "&m=" + Math.random(),
 				dataType: 'json',
 				success: function (data) {
-					if (data.indexOf("err@") > -1) {
-						alert(data);
-						return false;
-					} else {
-						fkeyList = data;
-					}
+
+				    fkeyList = data;
+
+//					if (data.indexOf("err@") > -1) {
+//						alert(data);
+//						return false;
+//					} else {
+//						fkeyList = data;
+//					}
 				}
 			});
 			return fkeyList;

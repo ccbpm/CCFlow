@@ -59,6 +59,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
+                dataType: 'html',
                 url: Handler + "?DoType=FrmTextBoxChoseOneField_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&DataType=" + GetQueryString("DataType"),
                 success: function (data) {
 

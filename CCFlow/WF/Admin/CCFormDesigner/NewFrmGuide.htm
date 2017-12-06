@@ -233,7 +233,7 @@
                 }
 
                 $('#TB_No').val("CCFrm_"+data);
-                $('#TB_PTable').val("CCFrm_" + data);
+                //$('#TB_PTable').val("CCFrm_" + data);
                 return;
             }
         });
@@ -252,6 +252,7 @@
             alert('@请输入必填的字段.');
             return;
         }
+		$("#DDL_PTable").trigger("change");
 
         var frmData = $("#cc").serialize();
 

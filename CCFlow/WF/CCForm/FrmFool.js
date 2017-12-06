@@ -121,6 +121,9 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var sta = wf_node.FWCSta;
 
     var h = wf_node.FWC_H + 1000;
+
+    var isReadonly = "0";
+     
      
     var src = "../WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";

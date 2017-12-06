@@ -75,10 +75,14 @@
                 dept = $.cookie('FK_Dept');
             }
 
+            if (dept == undefined) {
+                dept = "0";
+            }
+
             var url = "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
             url = url.replace('=101&', '=10102&');
 
-         //   url = url.replace('=101&', '=10102&');
+            //   url = url.replace('=101&', '=10102&');
 
             $('#iframeSelectEmpsForm').attr('src', url);
 

@@ -71,7 +71,7 @@
                     html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
 
                     //审核意见
-                    if (this.IsDoc) {
+                    if (this.IsDoc && dotype!="View" ) {
 
                         html += "<td>";
 
@@ -181,6 +181,9 @@
         function SaveWorkCheck() {
 
             var doc = $("#WorkCheck_Doc").val();
+
+            if (dotype == "View")
+                return;
 
 //            if (doc.length == 0) {
 //                if (wcDesc.FWCDefInfo && wcDesc.FWCDefInfo.length > 0) {

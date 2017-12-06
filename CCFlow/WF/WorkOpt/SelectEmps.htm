@@ -165,6 +165,12 @@
                                 data: {},
                                 dataType: 'html',
                                 success: function (data) {
+                                	if (data.indexOf('err@')==0)
+                               	 { 
+                               		alert(data);
+                               		return;                                    		
+                               	 }
+                                	
                                     var fk_dept2 = pageData.FK_Dept;
                                     cb(initNodeData(data, fk_dept2));
                                 }
@@ -185,6 +191,14 @@
                                     data: {},
                                     dataType: 'html',
                                     success: function (data) {
+                                    	 
+                                    	if (data.indexOf('err@')==0)
+                                    	 { 
+                                    		alert(data);
+                                    		return;                                    		
+                                    	 }
+                                    		 
+                                    		
                                         var fk_dept2 = node.id;
                                         cb(initNodeData(data, fk_dept2));
                                     }

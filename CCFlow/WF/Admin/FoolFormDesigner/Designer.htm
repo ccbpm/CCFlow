@@ -143,26 +143,29 @@
                                 if (mapAttr.UIVisible == 0)
                                     continue;
 
+                                if (mapAttr.ColSpan == 1 && mapAttr.UIContralType == "1") { //外键.
+
+                                    if (isDrawTR == true) {
+                                        html += "<tr>";
+                                    }
+
+                                    html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
+                                    html += "<td ColSpan=1 ><select id='" + mapAttr.KeyOfEn + "'><option>" + mapAttr.UIBindKey + "</option></select></td>";
+
+                                    if (isDrawTR == false) {
+                                        html += "</tr>";
+                                    }
+
+                                    isDrawTR = !isDrawTR;
+                                    continue;
+                                }
+
+
                                 // 添加文本框 ，日期控件等.
                                 // AppString  
                                 if (mapAttr.MyDataType == "1") { //不是外键
 
-                                    if (mapAttr.ColSpan == 1 && mapAttr.UIBindKey != "") { // 一列文本框.
-
-                                        if (isDrawTR == true) {
-                                            html += "<tr>";
-                                        }
-
-                                        html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                        html += "<td ColSpan=1 ><select id='" + mapAttr.KeyOfEn + "'><option>"+mapAttr.UIBindKey+"</option></select></td>";
-
-                                        if (isDrawTR == false) {
-                                            html += "</tr>";
-                                        }
-
-                                        isDrawTR = !isDrawTR;
-                                        continue;
-                                    }
+                                   
 
 
                                     if (mapAttr.ColSpan == 3 && mapAttr.UIHeight <= 23) {

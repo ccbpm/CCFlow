@@ -238,7 +238,7 @@ function figure_Template_Dtl(frmDtl, ext) {
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='F" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
-                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling='no' /></iframe>");
+                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
     if (pageData.IsReadOnly) {
 
     } else {

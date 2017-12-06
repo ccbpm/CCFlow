@@ -92,7 +92,8 @@
                     
                       if (msg.indexOf('err@')==0)
                       {
-                         alert(msg);
+                         //alert(msg);
+						 console.log(msg);
                          return;
                       }
 
@@ -376,7 +377,7 @@
                         });
 
                         //添加删除,保存列
-                        var delTh = $('<th style="width:20px;"><img title="选项" style="width: 20px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option();" /></th>');
+                        var delTh = $('<th style="width:60px;"><img title="选项" style="width: 20px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option();" /></th>');
                         //var delTh = $("<th style="width:20px;" onclick= ></th>");
 
                         var delThData;
@@ -573,7 +574,8 @@
 							$.each($("#dtlDiv div table thead tr th"), function (i, th) {
 								var coltype = $(th).data().coltype;
 								if (typeof coltype != "undefined" && coltype == "SN") {	// 统计行行号列
-									statisticsRow.append("<td>" + ($("#dtlDiv div table tbody tr").length + 1) + "</td>");
+									//statisticsRow.append("<td>" + ($("#dtlDiv div table tbody tr").length + 1) + "</td>");
+                                    statisticsRow.append("<td>&nbsp;</td>");
 								} else {	// 其它列
 									var matchesColumn = $.grep(columnExp, function (val) {	// 根据表头的colname与待统计列的KeyOfEn对比
 										return val.KeyOfEn == $(th).data().colname;
@@ -601,18 +603,18 @@
 									}
 								}
 							});
+						}
 
-							var formExt = $("#formExt").val();
-							var extObj = null;
-							try {
-								if (formExt && formExt != "") {
-									extObj = JSON.parse(formExt);
-								}
-							} catch (e) {
+						var formExt = $("#formExt").val();
+						var extObj = null;
+						try {
+							if (formExt && formExt != "") {
+								extObj = JSON.parse(formExt);
 							}
-							if (extObj) {
-								parentStatistics(extObj);
-							}
+						} catch (e) {
+						}
+						if (extObj) {
+							parentStatistics(extObj);
 						}
 
 						// 新增统计行
@@ -643,16 +645,18 @@
             });
         }
 
-		function parentStatistics(extObj) {
-			if (extObj) {
-				var columnsName = getColumnElementsName(extObj.DtlColumn);
-				$(":input[name=" + columnsName + "]").each(function (i, e) {
-					$(e).bind("change", function (o) {
-						doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document));
+		function parentStatistics(extArr) {
+			if ($.isArray(extArr)) {
+				$.each(extArr, function (i, extObj) {
+					var columnsName = getColumnElementsName(extObj.DtlColumn);
+					$(":input[name=" + columnsName + "]").each(function (i, e) {
+						$(e).bind("change", function (o) {
+							doStatistics(extObj.exp, columnsName, $("#TB_" + extObj.AttrOfOper, parent.document));
+						});
+						if (i == 0) {
+							$(e).trigger("change");
+						}
 					});
-					if (i == 0) {
-						$(e).trigger("change");
-					}
 				});
 			}
 		}
@@ -1100,7 +1104,21 @@
                 InitPage();
             }
         }
+		$(function () {
+			var bodyHeight = $(document).height();
+			var headHeight = $("#dtlDiv div table thead").height();
+			$("#dtlDiv div table tbody").height(bodyHeight - headHeight - 40);
+		});
      </script>
+	<style type="text/css">
+		.table thead tr {
+			display:block;
+		}
+		.table tbody {
+			display: block;
+			overflow: auto;
+		}
+	</style>
 </head>
 <body onblur="SaveAll(this)" >
     <form>

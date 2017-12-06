@@ -32,7 +32,7 @@ function testExpression(exp) {
 	if (/^[\+\-\*\/]|[\+\-\*\/]$/.test(exp)) {
 		return false;
 	}
-	if (/\([\+\-\*\/]|[\+\-\*\/]\)|[\+\-\*\/]\(|\)[\+\-\*\/]/.test(exp)) {
+	if (/\([\+\-\*\/]|[\+\-\*\/]\)/.test(exp)) {
 		return false;
 	}
 	return true;
@@ -50,9 +50,15 @@ function calculator(Sys_MapExt) {
 			}
 			var targets = [];
 			var index = -1;
-			for (var i = 0; i < o.Doc.length; i++) {
+			for (var i = 0; i < o.Doc.length; i++) {	// 对于复杂表达式需要重点测试
 				var c = o.Doc.charAt(i);
-				if (/[\+\-|*\/\(\)]/.test(c)) {
+				if (c == "(") {
+					index++;
+				} else if (c == ")") {
+					targets.push(o.Doc.substring(index + 1, i));
+					i++;
+					index = i;
+				} else if (/[\+\-|*\/]/.test(c)) {
 					targets.push(o.Doc.substring(index + 1, i));
 					index = i;
 				}
@@ -177,7 +183,10 @@ function GenerFreeFrm(mapData, frmData) {
 					"DtlColumn" : docs[1],
 					"exp" : docs[2]
 				};
-				detailExt[ext.DtlNo] = ext;
+				if (!$.isArray(detailExt[ext.DtlNo])) {
+					detailExt[ext.DtlNo] = [];
+				}
+				detailExt[ext.DtlNo].push(ext);
 				$(":input[name=TB_" + ext.AttrOfOper + "]").attr("disabled", true);
 			}
 		}
@@ -238,7 +247,7 @@ function figure_Template_Dtl(frmDtl, ext) {
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='F" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
-                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
+                 "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling='no' /></iframe>");
     if (pageData.IsReadOnly) {
 
     } else {
@@ -249,8 +258,16 @@ function figure_Template_Dtl(frmDtl, ext) {
     }
     eleHtml.append(eleIframe);
 
-	if (ext) {	// 表达式传入iframe
+	if (ext) {	// 表达式传入iframe(表达式为数组)
 		eleIframe.load(function () {
+			/*
+			var iframeExp = $(this).contents().find(":input[id=formExt]").val();
+			if (iframeExp == null || typeof iframeExp == "undefined" || iframeExp == "") {
+				iframeExp = "[]";
+			}
+			iframeExp = JSON.parse(iframeExp);
+			iframeExp.push(ext);
+			*/
 			$(this).contents().find(":input[id=formExt]").val(JSON.stringify(ext));
 			if (this.contentWindow && typeof this.contentWindow.parentStatistics === "function") {
 				this.contentWindow.parentStatistics(ext);

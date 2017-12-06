@@ -1794,8 +1794,6 @@
     <Content Include="WF\Comm\kindeditor\themes\qq\qq.css" />
     <Content Include="WF\Comm\kindeditor\themes\simple\simple.css" />
     <Content Include="WF\Comm\Menu.js" />
-    <Content Include="WF\Comm\Method.aspx" />
-    <Content Include="WF\Comm\MethodLink.aspx" />
     <Content Include="WF\Comm\Port\ChangePass.aspx" />
     <Content Include="WF\Comm\Port\ChangePass.gif" />
     <Content Include="WF\Comm\Port\Close.gif" />
@@ -1844,7 +1842,6 @@
     <Content Include="WF\Comm\RefFunc\Top.ascx" />
     <Content Include="WF\Comm\RefFunc\UIEn.aspx" />
     <Content Include="WF\Comm\RefFunc\WinOpen.Master" />
-    <Content Include="WF\Comm\Refmethod.aspx" />
     <Content Include="WF\Comm\Rpt2DBA.aspx" />
     <Content Include="WF\Comm\Rpt2DBADtl.aspx" />
     <Content Include="WF\Comm\Rpt2DBAs.aspx" />
@@ -7421,12 +7418,14 @@
     </Compile>
     <Compile Include="WF\Admin\Sln\Sln.aspx.cs">
       <DependentUpon>Sln.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\Sln\Sln.aspx.designer.cs">
       <DependentUpon>Sln.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Sln\SlnDo.aspx.cs">
       <DependentUpon>SlnDo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WF\Admin\Sln\SlnDo.aspx.designer.cs">
       <DependentUpon>SlnDo.aspx</DependentUpon>
@@ -7818,20 +7817,6 @@
     <Compile Include="WF\Comm\MasterPage.master.designer.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\Method.aspx.cs">
-      <DependentUpon>Method.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Method.aspx.designer.cs">
-      <DependentUpon>Method.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\MethodLink.aspx.cs">
-      <DependentUpon>MethodLink.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\MethodLink.aspx.designer.cs">
-      <DependentUpon>MethodLink.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\Port\ChangePass.aspx.cs">
       <DependentUpon>ChangePass.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -8040,13 +8025,6 @@
     </Compile>
     <Compile Include="WF\Comm\RefFunc\WinOpen.Master.designer.cs">
       <DependentUpon>WinOpen.Master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Refmethod.aspx.cs">
-      <DependentUpon>Refmethod.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Refmethod.aspx.designer.cs">
-      <DependentUpon>Refmethod.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Rpt2DBA.aspx.cs">
       <DependentUpon>Rpt2DBA.aspx</DependentUpon>

@@ -84,7 +84,7 @@ namespace BP.WF.HttpHandler
 
                 int nodeid = int.Parse(node);
 
-                DBAccess.RunSQL("DELETE FROM WF_FRMNODE WHERE FK_NODE=" + nodeid);
+                DBAccess.RunSQL("DELETE FROM WF_FrmNode WHERE FK_Node=" + nodeid);
 
                 foreach (string frm in frmList)
                 {
@@ -390,7 +390,6 @@ namespace BP.WF.HttpHandler
 
             return "执行成功...";
         }
-
         #endregion 表单方案.
 
 

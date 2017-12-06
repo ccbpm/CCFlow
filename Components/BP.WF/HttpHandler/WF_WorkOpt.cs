@@ -1651,7 +1651,7 @@ namespace BP.WF.HttpHandler
         public string SelectEmps_Init()
         {
             string fk_dept = this.FK_Dept;
-            if (string.IsNullOrEmpty(fk_dept) == true)
+            if (DataType.IsNullOrEmpty(fk_dept) == true || fk_dept.Equals("undefined") ==true)
                 fk_dept = BP.Web.WebUser.FK_Dept;
 
             DataSet ds = new DataSet();

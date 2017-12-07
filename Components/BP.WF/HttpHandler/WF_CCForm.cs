@@ -1076,25 +1076,30 @@ namespace BP.WF.HttpHandler
 
                 BP.WF.Template.FrmNode fn = new BP.WF.Template.FrmNode(nd.FK_Flow, nd.NodeID, mdtl.FK_MapData);
                 int i = fn.Retrieve(FrmNodeAttr.FK_Frm, mdtl.FK_MapData, FrmNodeAttr.FK_Node, this.FK_Node);
-                if (i != 0 && fn.FrmSln != 0)
+                if (i != 0 && fn.FrmSln > 1)
                 {
-                    /*使用了自定义的方案.
+                    /*使用了自定义的方案. 
                      * 并且，一定为dtl设定了自定义方案，就用自定义方案.
                      */
                     mdtl.No = this.EnsName + "_" + this.FK_Node;
                     mdtl.RetrieveFromDBSources();
                 }
+
+                if (i != 0 && fn.FrmSln == 1)
+                {
+                    mdtl.IsInsert = false;
+                    mdtl.IsDelete = false;
+                    mdtl.IsUpdate = false;
+                }
             }
 
-            if (this.GetRequestVal("IsReadonly") == "1")
+            if (this.GetRequestVal("IsReadonly") == "1" )
             {
                 mdtl.IsInsert = false;
                 mdtl.IsDelete = false;
                 mdtl.IsUpdate = false;
             }
-            else
-            {
-            }
+           
 
             string strs = this.RequestParas;
             strs = strs.Replace("?", "@");

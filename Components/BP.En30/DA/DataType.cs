@@ -421,6 +421,11 @@ namespace BP.DA
             foreach (char c in strs)
                 fileNameFormat = fileNameFormat.Replace(c.ToString(), "_");
 
+            strs = "：，。；？".ToCharArray();
+            foreach (char c in strs)
+                fileNameFormat = fileNameFormat.Replace(c.ToString(), "_");
+
+
             //去掉空格.
             while (fileNameFormat.Contains(" ") == true)
                 fileNameFormat = fileNameFormat.Replace(" ", "");
@@ -434,6 +439,27 @@ namespace BP.DA
                 rBuilder.Replace(rInvalidChar.ToString(), string.Empty);
 
             fileNameFormat = rBuilder.ToString();
+
+            fileNameFormat = fileNameFormat.Replace("__","_");
+            fileNameFormat = fileNameFormat.Replace("__", "_");
+            fileNameFormat = fileNameFormat.Replace("__", "_");
+            fileNameFormat = fileNameFormat.Replace("__", "_");
+            fileNameFormat = fileNameFormat.Replace("__", "_");
+            fileNameFormat = fileNameFormat.Replace("__", "_");
+            fileNameFormat = fileNameFormat.Replace("__", "_");
+            fileNameFormat = fileNameFormat.Replace("__", "_");
+            fileNameFormat = fileNameFormat.Replace(" ", "");
+            fileNameFormat = fileNameFormat.Replace(" ", "");
+            fileNameFormat = fileNameFormat.Replace(" ", "");
+            fileNameFormat = fileNameFormat.Replace(" ", "");
+            fileNameFormat = fileNameFormat.Replace(" ", "");
+            fileNameFormat = fileNameFormat.Replace(" ", "");
+            fileNameFormat = fileNameFormat.Replace(" ", "");
+            fileNameFormat = fileNameFormat.Replace(" ", "");
+
+            if (fileNameFormat.Length > 240)
+                fileNameFormat = fileNameFormat.Substring(0, 240);
+
             return fileNameFormat;
         }
         /// <summary>

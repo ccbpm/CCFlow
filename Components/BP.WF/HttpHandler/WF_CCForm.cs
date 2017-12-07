@@ -221,6 +221,12 @@ namespace BP.WF.HttpHandler
 
             return "err@没有解析的标记" + me.ExtType;
         }
+        /// <summary>
+        /// 处理sql.
+        /// </summary>
+        /// <param name="sql">要执行的sql</param>
+        /// <param name="key">关键字值</param>
+        /// <returns>执行sql返回的json</returns>
         private string DealSQL(string sql, string key)
         {
             sql = sql.Replace("@Key", key);

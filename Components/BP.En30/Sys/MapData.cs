@@ -2743,7 +2743,7 @@ namespace BP.Sys
 
             #region 删除物理表。
             //如果存在物理表.
-            if (DBAccess.IsExitsObject(this.PTable))
+            if (DBAccess.IsExitsObject(this.PTable) && this.PTable.IndexOf("ND") == 0)
             {
                 //如果其他表单引用了该表，就不能删除它.
                 sql = "SELECT COUNT(No) AS NUM  FROM Sys_MapData WHERE PTable='" + this.PTable + "' OR ( PTable='' AND No='" + this.PTable + "')";

@@ -481,6 +481,7 @@ namespace BP.WF.HttpHandler
                 string str = this.GetRequestVal("WorkID");
                 if (str == null || str == "" || str == "null")
                     return 0;
+
                 return int.Parse(str);
             }
             set
@@ -637,7 +638,7 @@ namespace BP.WF.HttpHandler
             string val = this.GetValFromFrmByKey(key);
             if (val == "on" || val == "1")
                 return true;
-            if (val == null || val == "" || val == "0")
+            if (val == null || val == "" || val == "0" || val=="off")
                 return false;
             return true;
         }

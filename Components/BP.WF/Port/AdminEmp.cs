@@ -270,17 +270,31 @@ namespace BP.WF.Port
                 map.AddRefMethod(rm);
 
 
-                //rm = new RefMethod();
-                //rm.Title = "测试";
-                //rm.HisAttrs.AddTBString("wenben", null, "文本", true, false, 0, 100, 100);
-                //rm.HisAttrs.AddTBInt("shuzi", 0, "数字", true, false);
-                //rm.HisAttrs.AddTBDate("riqi", null, "日期", true, false);
-                //rm.HisAttrs.AddTBDate("riqishijian", null, "日期时间", true, false);
-                //rm.HisAttrs.AddBoolen("boolen", false, "Boolen");
-                //rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);
-                //rm.HisAttrs.AddDDLEntities("FK_Emp", null, "外键", new BP.Port.Depts(), true);
+                rm = new RefMethod();
+                rm.Title = "测试";
+                rm.HisAttrs.AddTBString("wenben", null, "文本", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBInt("shuzi", 0, "数字", true, false);
+                rm.HisAttrs.AddTBDate("riqi", null, "日期", true, false);
+
+                rm.HisAttrs.AddTBDate("riqishijian", null, "日期时间", true, false);
+                rm.HisAttrs.AddBoolen("boolen", false, "Boolen");
+                rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);
+
+                rm.HisAttrs.AddDDLEntities("FK_Emp", null, "外键", new BP.Port.Depts(), true);
 
                 rm.ClassMethodName = this.ToString() + ".DoTest";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "测试Boolen";
+                rm.HisAttrs.AddDDLEntities("FK_Emp", null, "外键", new BP.Port.Depts(), true);
+
+              //  rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);
+           //     rm.HisAttrs.AddBoolen("boolenField", false, "Boolen字段测试");
+             //   rm.HisAttrs.AddTBInt("intType", 0, "数字", true, false);
+
+                rm.ClassMethodName = this.ToString() + ".DoTestBoolen";
                 map.AddRefMethod(rm);
 
                 this._enMap = map;
@@ -290,13 +304,23 @@ namespace BP.WF.Port
         #endregion
 
         //,string isOK, int wfstate, string fk_emp
-        public string DoTest(string wenben, int shuzi, string riqi, string riqishijian, int boolen)
+        public string DoTestBoolen(string intType )
+        {
+            return " WFState=" + intType;
+           // return "boolen=" + boolen + " intType=" + intType;
+        }
+
+        //,string isOK, int wfstate, string fk_emp
+        public string DoTest(string wenben, int shuzi, string riqi, string dateTime, bool boolen, int meiJu, string waiJian)
         {
             string str="";
-            str += "wenben=" + wenben;
-            str += "shuzi=" + shuzi;
-            str += "riqi=" + riqi;
-            str += "riqishijian=" + riqishijian;
+            str += "text=" + wenben;
+            str += "int=" + shuzi;
+            str += "data=" + riqi;
+            str += "dateTime=" + dateTime;
+            str += "boolen=" + boolen;
+            str += "meiJu=" + meiJu;
+            str += "waiJian=" + waiJian;
             //str += "isOK=" + isOK;
             //str += "wfstate=" + wfstate;
             //str += "fk_emp=" + fk_emp;

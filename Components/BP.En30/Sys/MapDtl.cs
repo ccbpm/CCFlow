@@ -1711,13 +1711,17 @@ namespace BP.Sys
             DBAccess.RunSQLs(sql);
 
 
-            if (DBAccess.IsExitsObject(this.PTable))
+            if (DBAccess.IsExitsObject(this.PTable) && this.PTable.IndexOf("ND") == 0 )
             {
-                //如果其他表单引用了该表，就不能删除它.
+                //如果其他表单引用了该表，就不能删除它. 
                 sql = "SELECT COUNT(No) AS NUM  FROM Sys_MapData WHERE PTable='" + this.PTable + "' OR ( PTable='' AND No='" + this.PTable + "')";
-                if (DBAccess.RunSQLReturnValInt(sql, 0) > 1)
+                int i=DBAccess.RunSQLReturnValInt(sql, 0) ;
+
+                sql = "SELECT COUNT(No) AS NUM  FROM Sys_MapDtl WHERE PTable='" + this.PTable + "' OR ( PTable='' AND No='" + this.PTable + "')";
+                i += DBAccess.RunSQLReturnValInt(sql, 0);
+                if (i>=1)
                 {
-                    /* 说明有多个表单在引用.*/
+                    /* 说明有多个表单在引用.就不删除物理*/
                 }
                 else
                 {

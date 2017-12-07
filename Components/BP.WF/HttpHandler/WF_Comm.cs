@@ -401,6 +401,7 @@ namespace BP.WF.HttpHandler
                     continue;
                 en.PKVal = mypk;
                 en.Retrieve();
+
                 string s = DoOneEntity(en, this.Index);
                 if (s != null)
                     msg += "@" + s;
@@ -470,9 +471,19 @@ namespace BP.WF.HttpHandler
                     case UIContralType.DDL:
                         try
                         {
-                            string str = this.GetValFromFrmByKey(attr.Key);
-                            objs[idx] = str;
-                            attr.DefaultVal = str;
+                            if (attr.MyFieldType == FieldType.FK)
+                            {
+                                string str = this.GetValFromFrmByKey(attr.Key);
+                                objs[idx] = str;
+                                attr.DefaultVal = str;
+                            }
+                            else
+                            {
+                                int enumVal = this.GetValIntFromFrmByKey(attr.Key);
+                                objs[idx] = enumVal;
+                                attr.DefaultVal = enumVal;
+                            }
+
                         }
                         catch
                         {
@@ -480,12 +491,10 @@ namespace BP.WF.HttpHandler
                         }
                         break;
                     case UIContralType.CheckBok:
-                        bool val = this.GetValBoolenFromFrmByKey(attr.Key);
-                        if (val == true)
-                            objs[idx] = 1;
-                        else
-                            objs[idx] = 0;
+                        objs[idx] = this.GetValBoolenFromFrmByKey(attr.Key);
+
                         attr.DefaultVal = objs[idx].ToString();
+
                         break;
                     default:
                         break;

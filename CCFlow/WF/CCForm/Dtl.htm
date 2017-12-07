@@ -627,6 +627,7 @@
 						// 新增统计行
 						$("#dtlDiv div table tbody").append(statisticsRow);
 
+						// 对齐单元格
 						var headerCount = $("#dtlDiv div table thead tr th").length;
 						$("#dtlDiv div table thead tr th").each(function (hi, th) {
 							var realWidth = $(this).width();
@@ -1147,8 +1148,8 @@
 		$(function () {
 			var bodyHeight = $(document).height();
 			var headHeight = $("#dtlDiv div table thead").height();
-			$("#dtlDiv div table tbody").height(bodyHeight - headHeight - 40);
-			$("#dtlDiv").height(bodyHeight - 40);
+			$("#dtlDiv div table tbody").height(bodyHeight - headHeight - 75);
+			$("#dtlDiv").height(bodyHeight - 35);
 		});
      </script>
 	<style type="text/css">

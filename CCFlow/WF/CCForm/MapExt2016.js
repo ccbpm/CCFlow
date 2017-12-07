@@ -432,7 +432,7 @@ function DDLFullCtrl(e, ddlChild, fk_mapExt) {
         },
         success: function (data, textStatus) {
 
-            if (data.indexOf('err@')) {
+            if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
             }

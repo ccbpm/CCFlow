@@ -173,7 +173,8 @@
                 url: Handler + "?DoType=PopVal_Init&MyPK=" + fk_mapExt + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-                    alert(data);
+
+
                     data = eval('(' + data + ')');
                     if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
                         data = data[0];
@@ -181,7 +182,6 @@
 
                     //设置选择的模式.
                     $("#RB_PopWorkModel_" + data.PopValWorkModel).attr("checked", "checked");
-
 
                     switch (data.PopValWorkModel) {
                         case "None":

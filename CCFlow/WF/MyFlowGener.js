@@ -309,10 +309,14 @@ function CheckMinMaxLength() {
 //保存
 function Save() {
 
-    //检查最小最大长度.
-    var f = CheckMinMaxLength();
-    if (f == false)
-        return false;
+    //判断是否有保存按钮，如果有就需要安全性检查，否则就不执行，这种情况在会签下，发送的时候不做检查。
+    var btn = document.getElementById('Btn_Save');
+    if (btn != null) {
+        //检查最小最大长度.
+        var f = CheckMinMaxLength();
+        if (f == false)
+            return false;
+    }
 
     //必填项和正则表达式检查
     var formCheckResult = true;

@@ -2,12 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title>相关功能</title>
+    <title>查询</title>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
-    
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
      <base target="_self" /> 
@@ -17,13 +16,18 @@
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
+            //初始化工具栏.
+            InitToolbar();
+
+            //初始化内容.
             InitPage();
 
             $("#Msg").html("");
         });
 
+
         //初始化数据.
-        function InitPage() {
+        function InitToolbar() {
 
             var pk = GetQueryString("No");
             if (pk == null || pk == undefined)
@@ -35,7 +39,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Refmethod_Init&Index=" + GetQueryString("Index") + "&PK=" + pk + "&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
+                url: Handler + "?DoType=Search_Init&Index=" + GetQueryString("Index") + "&PK=" + pk + "&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -79,7 +83,70 @@
                     warning = rm.Warning;
                     document.getElementById("Btn_Done").value = rm.Title;
 
-                   // GenerFoolFrm(data);
+                    // GenerFoolFrm(data);
+                    GenerFoolFrm(data);
+                }
+            });
+        }
+
+        //初始化数据.
+        function InitPage() {
+
+            var pk = GetQueryString("No");
+            if (pk == null || pk == undefined)
+                pk = GetQueryString("MyPK");
+            if (pk == null || pk == undefined)
+                pk = GetQueryString("OID");
+
+            //初始化数据.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Search_Init&Index=" + GetQueryString("Index") + "&PK=" + pk + "&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    //如果错误,就提示.
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    //转到Url..
+                    if (data.indexOf('url@') == 0) {
+                        data = data.replace('url@', '');
+                        window.location.href = data;
+                        return;
+                    }
+
+                    //弹出信息并关闭.
+                    if (data == "close@info") {
+                        window.close();
+                        return;
+                    }
+
+                    //关闭.
+                    if (data.indexOf('close@') == 0) {
+                        alert(data);
+                        window.close();
+                        return;
+                    }
+
+                    //提示信息.
+                    if (data == "info@") {
+                        data = data.replace('info@', '');
+                        alert(data);
+                        return;
+                    }
+
+                    //转化成json.
+                    data = JSON.parse(data);
+
+                    var rm = data["RM"][0];
+                    warning = rm.Warning;
+                    document.getElementById("Btn_Done").value = rm.Title;
+
+                    // GenerFoolFrm(data);
                     GenerFoolFrm(data);
                 }
             });
@@ -96,7 +163,7 @@
             //  html += "<td colspan=2 ></td>";
             html += "</tr>";
 
-           // html += InitMapAttr(attrs, json);
+            // html += InitMapAttr(attrs, json);
 
             html += "</table>";
 
@@ -270,7 +337,7 @@
                     checkedStr = ' checked="checked" ';
                 }
 
-               // checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
+                // checkedStr = ConvertDefVal(frmData, '', mapAttr.KeyOfEn);
 
                 return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
             }
@@ -379,8 +446,6 @@
 
         var frmData = $("#cc").serialize();
 
-        frmData = frmData.replace('=on', '=1');
-
         alert(frmData);
 
         var pk = GetQueryString("No");
@@ -394,12 +459,15 @@
             data: frmData,
             type: 'post',
             async: true,
-            url: Handler + "?DoType=Refmethod_Done&Index=" + GetQueryString("Index") + "&PK=" + pk + "&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
+            url: Handler + "?DoType=Search_Done&Index=" + GetQueryString("Index") + "&PK=" + pk + "&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
             dataType: 'html',
             success: function (data) {
 
+
                 console.log(data);
+
                 alert(data);
+
                 return;
 
                 //如果错误,就提示.

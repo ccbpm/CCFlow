@@ -69,7 +69,6 @@ function GenerFoolFrm(mapData, frmData) {
             continue;
         }
 
-
         //审核组件..
         if (gf.CtrlType == 'FWC' && node && node.FWCSta != 0) {
 
@@ -80,7 +79,9 @@ function GenerFoolFrm(mapData, frmData) {
             html += "<tr>";
             html += "  <td colspan='4' >";
 
-            html += figure_Template_FigureFrmCheck(node);
+            html += Ele_FrmCheck(node);
+
+           // html += figure_Template_FigureFrmCheck(node);
 
             html += "  </td>";
             html += "</tr>";
@@ -115,7 +116,7 @@ function GenerFoolFrm(mapData, frmData) {
  
 
 //审核组件
-function figure_Template_FigureFrmCheck(wf_node) {
+function Ele_FrmCheck(wf_node) {
 
     //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
     var sta = wf_node.FWCSta;
@@ -134,8 +135,11 @@ function figure_Template_FigureFrmCheck(wf_node) {
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.OID;
+
     if (sta == 2)//只读
         src += "&DoType=View";
+
+   //alert(paras);
 
     src += "&r=q" + paras;
     var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";

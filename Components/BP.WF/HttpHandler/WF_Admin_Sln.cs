@@ -93,16 +93,25 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     FrmNode fn = new FrmNode();
+                    FrmNode frmNode = new FrmNode();
+
                     if (fn.IsExit("mypk", frm + "_" + this.FK_Node + "_" + this.FK_Flow))
                     {
-                        FrmNode frmNode = new FrmNode();
                         frmNode.Copy(fn);
                         frmNode.MyPK = frm + "_" + nodeid + "_" + this.FK_Flow;
                         frmNode.FK_Flow = this.FK_Flow;
                         frmNode.FK_Node = nodeid;
                         frmNode.FK_Frm = frm;
-                        frmNode.Insert();
                     }
+                    else
+                    { 
+                        frmNode.MyPK = frm + "_" + nodeid + "_" + this.FK_Flow;
+                        frmNode.FK_Flow = this.FK_Flow;
+                        frmNode.FK_Node = nodeid;
+                        frmNode.FK_Frm = frm;
+                    }
+
+                    frmNode.Insert();
                 }
             }
 

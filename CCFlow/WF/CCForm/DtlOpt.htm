@@ -192,20 +192,21 @@
             });
         }
 
+		$(function () {
+			var bodyHeight = $(document).height();
+			var searchDivHeight = $("#searchDiv").height();
+			$("#Table1").height(bodyHeight - searchDivHeight - 15);
+		});
     </script>
     <link href="Dtl.css" rel="stylesheet" type="text/css" />
 </head>
-<body   >
-
-<form id="cc">
- 
- <div style='float:left'>关键字:<input type="text" id="TB_Key" value="" /> <input type="button" value="查询"  onclick="Search()" /> </div>
-<div id="Table1" /> 
-
-
-
-<div id="Msg" />
-</form>
-
+<body>
+	<form id="cc">
+		<div id="searchDiv" style='text-align: left;'>
+			关键字:&nbsp;<input type="text" id="TB_Key" value="" />&nbsp;<input type="button" value="查询" onclick="Search()" />
+		</div>
+		<div id="Table1" style="overflow: auto;" />
+		<div id="Msg" />
+	</form>
 </body>
 </html>

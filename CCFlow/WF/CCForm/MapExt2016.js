@@ -233,6 +233,10 @@ function ReturnValCCFormPopValGoogle(extType, ctrl, fk_mapExt, refEnPK, width, h
     $('#returnPopValModal .modal-dialog').css('margin-right', 'auto');
 
     //ctrl = $('#' + ctrl);
+	if (typeof ctrl == "string") {
+		ctrl = document.getElementById(ctrl);
+	}
+
     var wfpreHref = GetLocalWFPreHref();
     var fd;
 
@@ -280,11 +284,14 @@ function ReturnValCCFormPopValGoogle(extType, ctrl, fk_mapExt, refEnPK, width, h
                     //$(ctrl).val(returnValObj.Name);
                     setValForPopval(ctrl.id, dtlWin, returnValObj.Name);
                 } else {
+					// ??????????
                     for (var property in returnValObj) {
                         //$('[id$=_' + property + ']').val(returnValObj[property]);
 
                         SetEleValByName(property, returnValObj[property]);
                     }
+
+					setValForPopval(ctrl.id, dtlWin, returnValObj.Name);
                 }
             } else if (returnValSetObj[0].PopValWorkModel == "Group") { //分组模式
                 frames["iframePopModalForm"].window.GetGroupReturnVal();
@@ -294,16 +301,19 @@ function ReturnValCCFormPopValGoogle(extType, ctrl, fk_mapExt, refEnPK, width, h
             } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
                 returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
                 if (returnValSetObj[0].PopValFormat == "OnlyNo") {
-                    $("#" + ctrl).val(returnValObj.No);
+                    $(ctrl).val(returnValObj.No);
                     setValForPopval(ctrl.id, dtlWin, returnValObj.No);
                 } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
                     //$(ctrl).val(returnValObj.Name);
                     setValForPopval(ctrl.id, dtlWin, returnValObj.Name);
                 } else {
+					// ??????????
                     for (var property in returnValObj) {
                         //$('[id$=_' + property + ']').val(returnValObj[property]);
                         SetEleValByName(property, returnValObj[property]);
                     }
+					
+					setValForPopval(ctrl.id, dtlWin, returnValObj.Name);
                 }
             } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") { //自定义URL
                 //frames["iframePopModalForm"].window.GetTreeReturnVal();

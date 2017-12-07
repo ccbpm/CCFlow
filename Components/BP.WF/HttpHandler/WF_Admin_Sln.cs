@@ -84,6 +84,7 @@ namespace BP.WF.HttpHandler
 
                 int nodeid = int.Parse(node);
 
+                //删除节点绑定的表单
                 DBAccess.RunSQL("DELETE FROM WF_FrmNode WHERE FK_Node=" + nodeid);
 
                 foreach (string frm in frmList)
@@ -92,19 +93,21 @@ namespace BP.WF.HttpHandler
                         continue;
 
                     FrmNode fn = new FrmNode();
-                    if (!fn.IsExit("mypk", frm + "_" + nodeid + "_" + this.FK_Flow))
+                    if (fn.IsExit("mypk", frm + "_" + this.FK_Node + "_" + this.FK_Flow))
                     {
-                        fn.FK_Frm = frm;
-                        fn.FK_Node = nodeid;
-                        fn.FK_Flow = this.FK_Flow;
-
-                        fn.Insert();
+                        FrmNode frmNode = new FrmNode();
+                        frmNode.Copy(fn);
+                        frmNode.MyPK = frm + "_" + nodeid + "_" + this.FK_Flow;
+                        frmNode.FK_Flow = this.FK_Flow;
+                        frmNode.FK_Node = nodeid;
+                        frmNode.FK_Frm = frm;
+                        frmNode.Insert();
                     }
                 }
             }
 
             return "操作成功！";
-        }        
+        }
 
         /// <summary>
         /// 保存流程表单

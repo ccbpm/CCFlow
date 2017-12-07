@@ -123,7 +123,12 @@ function Ele_FrmCheck(wf_node) {
 
     var h = wf_node.FWC_H + 1000;
 
-    var isReadonly = "0";
+    var isReadonly = GetQueryString('IsReadonly');
+    if (isReadonly != "1") {
+        isReadonly = "0";
+    }
+    if (sta == 2)//只读
+        isReadonly = "1";
      
      
     var src = "../WorkOpt/WorkCheck.htm?s=2";
@@ -135,10 +140,7 @@ function Ele_FrmCheck(wf_node) {
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.OID;
-
-    if (sta == 2)//只读
-        src += "&DoType=View";
-
+    paras += "&IsReadonly=" + isReadonly;
    //alert(paras);
 
     src += "&r=q" + paras;

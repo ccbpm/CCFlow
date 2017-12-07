@@ -9,7 +9,12 @@
         var fk_flow = GetQueryString("FK_Flow");
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
-        var showType = GetQueryString("DoType");
+
+        //是否只读？
+        var isReadonly = GetQueryString("isReadonly");
+        if (isReadonly != "1")
+            isReadonly = "0";
+            
         var enName = GetQueryString("EnName");
         var isChange = false;
 
@@ -27,7 +32,7 @@
                 FK_Node: nodeid,
                 WorkID: workid,
                 FID: fid,
-                ShowType: showType
+                IsReadonly: isReadonly
             };
 
             Handler_AjaxQueryData(param, function (data) {
@@ -71,7 +76,7 @@
                     html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
 
                     //审核意见
-                    if (this.IsDoc && showType!="View" ) {
+                    if (this.IsDoc && isReadonly == false) {
 
                         html += "<td>";
 
@@ -182,7 +187,7 @@
 
             var doc = $("#WorkCheck_Doc").val();
 
-            if (showType == "View")
+            if (isReadonly==true)
                 return;
 
 //            if (doc.length == 0) {
@@ -198,7 +203,6 @@
                 FK_Node: nodeid,
                 WorkID: workid,
                 FID: fid,
-                ShowType: showType,
                 Doc: doc,
                 IsCC: GetQueryString("IsCC")
             };

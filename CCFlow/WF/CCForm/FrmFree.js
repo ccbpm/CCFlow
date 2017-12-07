@@ -278,14 +278,24 @@ function figure_Template_FigureFrmCheck(wf_node) {
     var fwcOnload = "";
     var paras = '';
 
+    var isReadonly = GetQueryString('IsReadonly');
+    if (isReadonly != "1") {
+        isReadonly = "0";
+    }
+    if (sta == 2)//只读
+        isReadonly = "1";
+
+
     paras += "&FID=" + pageData["FID"];
     paras += "&WorkID=" + pageData["OID"];
     paras += '&FK_Flow=' + pageData.FK_Flow;
     paras += '&FK_Node=' + pageData.FK_Node;
+    paras += "&IsReadonly=" + isReadonly;
+
   //  paras += '&WorkID=' + pageData.WorkID;
     if (sta == 2)//只读
     {
-        src += "&DoType=View";
+       // src += "&DoType=View";
     }
     else {
         fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";

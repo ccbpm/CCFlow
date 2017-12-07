@@ -577,13 +577,17 @@
                                         data = JSON.parse(data);
                                         var itemArr = [];
                                         $.each(data.DTObjs, function (i, rootNode) {
-                                            itemArr.push({
-                                                "text": rootNode.Name, "id": rootNode.No, "children": true, "data": rootNode, "state": {
-                                                //"opened": false, "selected": false
-                                            }
-                                        });
-                                        cb(itemArr);
-                                    });
+											itemArr.push({
+												"text" : rootNode.Name,
+												"id" : rootNode.No,
+												"children" : typeof rootNode.TreeCount != "undefined" && rootNode.TreeCount > 0,
+												"data" : rootNode,
+												"state" : {
+													//"opened": false, "selected": false
+												}
+											});
+											cb(itemArr);
+										});
                                 }
                             }
                         });
@@ -785,7 +789,7 @@
         //返回值格式
         switch (pageSetData[0].PopValFormat) {
             case "OnlyNo": //仅NO
-                returnVal.Name = noArr.join(',');
+                returnVal.No = noArr.join(',');
                 break;
             case "OnlyName": //仅Name
                 returnVal.Name = nameArr.join(',');

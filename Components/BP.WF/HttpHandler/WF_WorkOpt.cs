@@ -590,7 +590,12 @@ namespace BP.WF.HttpHandler
             bool isExitTb_doc = true;
             DataSet ds = new DataSet();
             DataRow row = null;
-            string dotype = this.GetRequestVal("ShowType");
+            
+            //是不是只读?
+            bool isReadonly = false;
+            if (this.GetRequestVal("IsReadonly") == "1")
+                isReadonly = true;
+
             Dictionary<int, DataTable> nodeEmps = new Dictionary<int, DataTable>(); //节点id，接收人列表
             FrmWorkCheck fwc = null;
             DataTable dt = null;
@@ -632,7 +637,7 @@ namespace BP.WF.HttpHandler
 
             //如果是查看状态, 为了屏蔽掉正在审批的节点, 在查看审批意见中.
             bool isShowCurrNodeInfo = true;
-            if (isCanDo == false && dotype == "View")
+            if (isCanDo == false && isReadonly==true)
             {
                 GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
                 if (gwf.WFState == WFState.Runing && gwf.FK_Node== this.FK_Node)
@@ -710,7 +715,7 @@ namespace BP.WF.HttpHandler
                     if (tk.HisActionType != ActionType.WorkCheck && tk.HisActionType != ActionType.StartChildenFlow)
                         continue;
 
-                    //判断会签. 去掉正在审批的节点.
+                    //判断会签, 去掉正在审批的节点.
                     if (tk.NDFrom == this.FK_Node && isShowCurrNodeInfo == false)
                         continue;
 
@@ -736,7 +741,7 @@ namespace BP.WF.HttpHandler
                     row["T_NodeIndex"] = tk.Row["T_NodeIndex"];
                     row["T_CheckIndex"] = tk.Row["T_CheckIndex"];
 
-                    if (dotype != "View" && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
+                    if (isReadonly == false && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                         wcDesc.HisFrmWorkCheckType == FWCType.Check || (
                                         (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
                                         ))
@@ -795,7 +800,7 @@ namespace BP.WF.HttpHandler
                         row["Href"] = GetFileAction(athDB);
                         row["FileName"] = athDB.FileName;
                         row["FileExts"] = athDB.FileExts;
-                        row["CanDelete"] = athDB.FK_MapData == this.FK_Node.ToString() && athDB.Rec == WebUser.No && dotype != "View";
+                        row["CanDelete"] = athDB.FK_MapData == this.FK_Node.ToString() && athDB.Rec == WebUser.No && isReadonly==false;
                         athDt.Rows.Add(row);
                     }
                     #endregion
@@ -906,7 +911,7 @@ namespace BP.WF.HttpHandler
 
             // 增加默认的审核意见.
             if (isExitTb_doc && wcDesc.HisFrmWorkCheckSta == FrmWorkCheckSta.Enable && isCanDo
-                && dotype != "View" && isHaveMyInfo == false)
+                && isReadonly == false && isHaveMyInfo == false)
             {
                 DataRow[] rows = null;
                 nd = nds.GetEntityByKey(this.FK_Node) as Node;

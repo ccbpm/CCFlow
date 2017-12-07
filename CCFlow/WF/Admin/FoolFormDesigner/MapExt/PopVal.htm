@@ -372,8 +372,9 @@
  <ul>
  <li>单实体树是仅仅只有一个实体信息的树，比如部门树。</li>
  <li>单实体树与双实体树都是懒加载的方式完成选择效果。</li>
- <li>设置一个查询的SQL语句，必须返回No,Name,Parent三个列，必须有@ParentNo参数。</li>
- <li>比如:SELECT No, Name,ParentNo FROM Port_Dept WHERE ParentNo='@ParentNo' </li>
+ <li>设置一个查询的SQL语句，必须返回No,Name,Parent,TreeCount三个列，必须有@ParentNo参数。</li>
+ <li>TreeCount列表示该节点下子节点的数量，用于判断该节点是否可以展开。</li>
+ <li>比如: SELECT No, Name, ParentNo, (SELECT COUNT(1) FROM Port_Dept B WHERE B.ParentNo=A.No) AS TreeCount FROM Port_Dept A WHERE ParentNo='@ParentNo'</li>
  <li>该参数支持ccbpm表达式。</li>
  <li>返回的数据源里，必须有根节点。</li>
  </ul>

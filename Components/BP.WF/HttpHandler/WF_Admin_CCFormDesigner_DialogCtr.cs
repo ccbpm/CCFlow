@@ -120,7 +120,7 @@ namespace BP.WF.HttpHandler
         /// 获得枚举列表.
         /// </summary>
         /// <returns></returns>
-        public string FrmEnumeration_GetEnumerationList()
+        public string FrmEnumeration_Init()
         {
             WF_Admin_FoolFormDesigner wf = new WF_Admin_FoolFormDesigner(this.context);
             return wf.SysEnumList_Init();

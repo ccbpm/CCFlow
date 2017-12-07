@@ -703,86 +703,47 @@ namespace BP.WF.HttpHandler
 
                 #region 三、其他。如果是明细表的字段排序，则增加“返回”按钮；否则增加“复制排序”按钮,2016-03-21
 
+                DataTable isDtl = new DataTable();
+                isDtl.Columns.Add("tdDtl",typeof(int));
+                isDtl.Columns.Add("FK_MapData",typeof(string));
+                isDtl.TableName="TRDtl";
+
+                DataRow tddr = isDtl.NewRow();
+
                 MapDtl tdtl = new MapDtl();
                 tdtl.No = FK_MapData;
                 if (tdtl.RetrieveFromDBSources() == 1)
                 {
-                    //pub1.Add(
-                    //        string.Format(
-                    //            "<a href='{0}' target='_self' class='easyui-linkbutton' data-options=\"iconCls:'icon-back'\">返回</a>",
-                    //            Request.Path + "?FK_Flow=" + (FK_Flow ??
-                    //                                          string.Empty) +
-                    //            "&FK_MapData=" + tdtl.FK_MapData +
-                    //            "&t=" +
-                    //            DateTime.Now.ToString("yyyyMMddHHmmssffffff")));
+                    tddr["tdDtl"] = 1;
+                    tddr["FK_MapData"] = tdtl.FK_MapData;
                 }
                 else
                 {
-                    //btn = new LinkBtn(false, "Btn_ResetAttr_Idx", "重置顺序");
-                    //btn.SetDataOption("iconCls", "'icon-reset'");
-                    //btn.Click += btnReSet_Click;
-                    //pub1.Add(btn);
-                    //pub1.Add("<a href='javascript:void(0)' onclick=\"Form_View('" + this.FK_MapData + "','" + this.FK_Flow + "');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-search'\">预览</a>");
-                    //pub1.Add("<a href='javascript:void(0)' onclick=\"$('#nodes').dialog('open');\" class='easyui-linkbutton' data-options=\"iconCls:'icon-copy'\">复制排序</a>");
-                    //pub1.Add("&nbsp;<a href='javascript:void(0)' onclick=\"GroupFieldNew('" + this.FK_MapData + "')\" class='easyui-linkbutton' data-options=\"iconCls:'icon-addfolder'\">新建分组</a>");
-                    //pub1.AddBR();
-                    //pub1.AddBR();
-
-                    //pub1.Add(
-                    //    "<div id='nodes' class='easyui-dialog' data-options=\"title:'选择复制到节点（多选）:',closed:true,buttons:'#btns'\" style='width:280px;height:340px'>");
-
-                    //ListBox lb = new ListBox();
-                    //lb.Style.Add("width", "100%");
-                    //lb.Style.Add("Height", "100%");
-                    //lb.SelectionMode = ListSelectionMode.Multiple;
-                    //lb.BorderStyle = BorderStyle.None;
-                    //lb.ID = "lbNodes";
-
-                    //nodes = new Nodes();
-                    //nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
-
-                    //if (nodes.Count == 0)
-                    //{
-                    //    string nodeid = FK_MapData.Replace("ND", "");
-                    //    string flowno = string.Empty;
-
-                    //    if (nodeid.Length > 2)
-                    //    {
-                    //        flowno = nodeid.Substring(0, nodeid.Length - 2).PadLeft(3, '0');
-                    //        nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, flowno, BP.WF.Template.NodeAttr.Step);
-                    //    }
-                    //}
-
-                    //ListItem item = null;
-
-                    //foreach (BP.WF.Node node in nodes)
-                    //{
-                    //    item = new ListItem(string.Format("({0}){1}", node.NodeID, node.Name),
-                    //                              node.NodeID.ToString());
-
-                    //    if ("ND" + node.NodeID == FK_MapData)
-                    //        item.Attributes.Add("disabled", "disabled");
-
-                    //    lb.Items.Add(item);
-                    //}
-
-                    //pub1.Add(lb);
-                    //pub1.AddDivEnd();
-
-                    //pub1.Add("<div id='btns'>");
-
-                    //LinkBtn lbtn = new LinkBtn(false, NamesOfBtn.Copy, "复制");
-                    //lbtn.OnClientClick = "var v = $('#" + lb.ClientID + "').val(); if(!v) { alert('请选择将此排序复制到的节点！'); return false; } else { $('#" + hidCopyNodes.ClientID + "').val(v); return true; }";
-                    //lbtn.Click += new EventHandler(lbtn_Click);
-                    //pub1.Add(lbtn);
-                    //lbtn = new LinkBtn(false, NamesOfBtn.Cancel, "取消");
-                    //lbtn.OnClientClick = "$('#nodes').dialog('close');";
-                    //pub1.Add(lbtn);
-
-                    //pub1.AddDivEnd();
+                    tddr["tdDtl"] = 0;
+                    tddr["FK_MapData"] = FK_MapData;
                 }
+                
+
+                isDtl.Rows.Add(tddr.ItemArray);
                 #endregion
 
+                #region 增加节点信息
+                nodes = new Nodes();
+                nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, FK_Flow, BP.WF.Template.NodeAttr.Step);
+
+                if (nodes.Count == 0)
+                {
+                    string nodeid = FK_MapData.Replace("ND", "");
+                    string flowno = string.Empty;
+
+                    if (nodeid.Length > 2)
+                    {
+                        flowno = nodeid.Substring(0, nodeid.Length - 2).PadLeft(3, '0');
+                        nodes.Retrieve(BP.WF.Template.NodeAttr.FK_Flow, flowno, BP.WF.Template.NodeAttr.Step);
+                    }
+                }
+                DataTable dtNodes = nodes.ToDataTableField("dtNodes");
+                #endregion
 
                 ds.Tables.Add(mapdatas.ToDataTableField("mapdatas"));
                 dtGroups.TableName = "dtGroups";
@@ -795,6 +756,9 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dtDtls);
                 ds.Tables.Add(athMents.ToDataTableField("athMents"));
                 ds.Tables.Add(btns.ToDataTableField("btns"));
+                ds.Tables.Add(isDtl);
+                dtNodes.TableName = "dtNodes";
+                ds.Tables.Add(dtNodes);
                 //ds.Tables.Add(nodes.ToDataTableField("nodes"));
             }
         }
@@ -825,6 +789,792 @@ namespace BP.WF.HttpHandler
 
         #endregion
 
+        #region 重置字段顺序
+        /// <summary>
+        /// 重置字段顺序
+        /// </summary>
+        /// <returns></returns>
+        public string SortingMapAttrs_ReSet() 
+        {
+            try
+            {
+                MapAttrs attrs = new MapAttrs();
+                QueryObject qo = new QueryObject(attrs);
+                qo.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);//添加查询条件
+                qo.addAnd();
+                qo.AddWhere(MapAttrAttr.UIVisible, true);
+                qo.addOrderBy(MapAttrAttr.Y, MapAttrAttr.X);
+                qo.DoQuery();//执行查询
+                int rowIdx = 0;
+                //执行更新
+                foreach (MapAttr mapAttr in attrs)
+                {
+                    mapAttr.Idx = rowIdx;
+                    mapAttr.DirectUpdate();
+                    rowIdx++;
+                }
+
+                return "1@重置成功！";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message.ToString();
+            }
+        }
+        #endregion
+
+        #region 设置在手机端显示的字段
+        /// <summary>
+        /// 保存需要在手机端表单显示的字段
+        /// </summary>
+        /// <returns></returns>
+        public string SortingMapAttrs_From_Save()
+        {
+            //获取需要显示的字段集合
+            var atts = this.GetRequestVal("attrs");
+            try
+            {
+                MapAttrs attrs = new MapAttrs(FK_MapData);
+                MapAttr att = null;
+                //更新每个字段的显示属性
+                foreach (MapAttr attr in attrs)
+                {
+                    att = attrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
+                    if (atts.Contains(attr.KeyOfEn))
+                        att.IsEnableInAPP = true;
+                    else
+                        att.IsEnableInAPP = false;
+                    att.Update();
+                }
+                return "保存成功！";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message.ToString();
+            }
+        }
+        #endregion
+
+        #region 字段分组
+        /// <summary>
+        /// 字段分组
+        /// </summary>
+        /// <returns></returns>
+        public string SortingMapAttr_GroupChange()
+        {
+            //获取分组ID
+            int gpID = int.Parse(this.GetRequestVal("GroupID"));
+            try
+            {
+                //获取字段对象集合
+                MapAttrs attrs = new MapAttrs(FK_MapData);
+                MapAttr att = null;
+
+                //找到该字段对象
+                att = attrs.GetEntityByKey(MapAttrAttr.FK_MapData, FK_MapData, MapAttrAttr.KeyOfEn, KeyOfEn) as MapAttr;
+                if (att != null)
+                {
+                    //更新分组
+                    att.GroupID = gpID;
+                    att.Update();
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message.ToString();
+            }
+        }
+        #endregion 
+
+        #region 分组、字段排序：上移
+        /// <summary>
+        /// 分组、字段排序：上移
+        /// </summary>
+        /// <returns></returns>
+        public string SortingMapAttrs_Up()
+        {
+            var Type = this.GetRequestVal("Type");
+            var groupID = this.GetRequestVal("GroupID");
+            try
+            {
+                switch (Type)
+                {
+                    //分组排序
+                    case "group":
+                        //获取分组对象的集合
+                        GroupFields groups = new GroupFields(EnsName);
+                        GroupField group = groups.GetEntityByKey(GroupFieldAttr.EnName, EnsName, GroupFieldAttr.OID, MyPK) as GroupField;
+                        //如果存在此分组
+                        if (group != null)
+                        {
+                            int oldIdx = group.Idx;//当前位置
+                            int newIdx;
+                            GroupField newGroup = null;
+
+                            for (int i = 1; i <= groups.Count; i++)
+                            {
+                                //查找下一个位置
+                                newIdx = oldIdx - i;
+
+                                newGroup = groups.GetEntityByKey(GroupFieldAttr.EnName, EnsName, GroupFieldAttr.Idx, newIdx) as GroupField;
+                                if (newGroup != null)
+                                {
+                                    newGroup.Idx = oldIdx;
+                                    group.Idx = newIdx;
+
+                                    //直接更新
+                                    newGroup.DirectUpdate();
+                                    group.DirectUpdate();
+                                    return "";
+                                }
+                            }
+                            //上面没查到，说明idx之间间隔值太大，重新取值
+                            QueryObject qo;
+                            groups = new GroupFields();
+                            qo = new QueryObject(groups);
+                            qo.AddWhere(GroupFieldAttr.EnName, EnsName);
+                            qo.addAnd();
+                            qo.AddWhere(GroupFieldAttr.Idx, "<", oldIdx);
+                            qo.addOrderBy(GroupFieldAttr.Idx);
+                            qo.DoQuery();
+
+                            if (groups.Count <= 0)
+                                return "";
+
+                            foreach (GroupField item in groups)
+                            {
+                                newIdx = item.Idx;
+
+                                newGroup = groups.GetEntityByKey(GroupFieldAttr.Idx, newIdx) as GroupField;
+
+                                //更新位置
+                                group.Idx = newIdx;
+                                newGroup.Idx = oldIdx;
+
+                                group.Update();
+                                newGroup.Update();
+
+                                return "";
+                            }
+                        }
+                        break;
+                    //字段排序
+                    case "attr":
+                        //获取字段对象集合
+                        MapAttrs attrs = new MapAttrs();
+                        attrs.Retrieve(MapAttrAttr.FK_MapData, EnsName, MapAttrAttr.GroupID, groupID, MapAttrAttr.UIVisible, 1);
+                        MapAttr att = null;
+
+                        //找到该字段对象
+                        att = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, MyPK) as MapAttr;
+                        if (att != null)
+                        {
+                            int oldIdx = att.Idx;//当前字段位置
+                            int newIdx;
+                            MapAttr newAtt = null;
+                            for (int i = 1; i <= attrs.Count; i++)
+                            {
+                                newIdx = oldIdx - i;
+                                newAtt = attrs.GetEntityByKey( MapAttrAttr.Idx, newIdx) as MapAttr;
+                                if (newAtt != null)
+                                {
+                                    //更新位置
+                                    att.Idx = newIdx;
+                                    newAtt.Idx = oldIdx;
+
+                                    att.Update();
+                                    newAtt.Update();
+
+                                    //结束循环
+                                    return "";
+                                }
+                            }
+                            //上面没查到，说明idx之间间隔值太大，重新取值
+                            QueryObject qo;
+                            attrs = new MapAttrs();
+                            qo = new QueryObject(attrs);
+                            qo.AddWhere(MapAttrAttr.FK_MapData, EnsName);
+                            qo.addAnd();
+                            qo.AddWhere(MapAttrAttr.Idx, "<", oldIdx);
+                            qo.addOrderByDesc(MapAttrAttr.Idx);
+                            qo.DoQuery();
+
+                            if (attrs.Count <= 0)
+                                return "";
+
+                            foreach (MapAttr item in attrs)
+                            {
+                                newIdx = item.Idx;
+
+                                newAtt = attrs.GetEntityByKey(MapAttrAttr.Idx, newIdx) as MapAttr;
+
+                                //更新位置
+                                att.Idx = newIdx;
+                                newAtt.Idx = oldIdx;
+
+                                att.Update();
+                                newAtt.Update();
+
+                                return "";
+                            }
+                        }
+                        break;
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message.ToString();
+            }
+        }
+        #endregion
+
+        #region 分组、字段排序：下移
+        /// <summary>
+        /// 分组、字段排序：下移
+        /// </summary>
+        /// <returns></returns>
+        public string SortingMapAttrs_Down()
+        {
+            var groupID = this.GetRequestVal("GroupID");
+            var Type = this.GetRequestVal("Type");
+            try
+            {
+                switch (Type)
+                { 
+                    //分组排序
+                    case "group":
+                        //获取分组对象的集合
+                        GroupFields groups = new GroupFields(EnsName);
+                        GroupField group = groups.GetEntityByKey(GroupFieldAttr.EnName, EnsName,GroupFieldAttr.OID,MyPK) as GroupField;
+                        //如果存在此分组
+                        if (group != null)
+                        {
+                            int oldIdx = group.Idx;//当前位置
+                            int newIdx;
+                            GroupField newGroup = null;
+                            for (int i = 1; i <= groups.Count; i++)
+                            {
+                                //查找下一个位置
+                                newIdx = oldIdx + i;
+
+                                newGroup = groups.GetEntityByKey(GroupFieldAttr.EnName, EnsName, GroupFieldAttr.Idx, newIdx) as GroupField;
+                                if (newGroup != null)
+                                {
+                                    newGroup.Idx = oldIdx;
+                                    group.Idx = newIdx;
+
+                                    //直接更新
+                                    newGroup.DirectUpdate();
+                                    group.DirectUpdate();
+                                    return "";
+                                }
+                                
+                            }
+                            //上面没查到，说明idx之间间隔值太大，重新取值
+                            QueryObject qo;
+                            groups = new GroupFields();
+                            qo = new QueryObject(groups);
+                            qo.AddWhere(GroupFieldAttr.EnName, EnsName);
+                            qo.addAnd();
+                            qo.AddWhere(GroupFieldAttr.Idx, ">", oldIdx);
+                            qo.addOrderBy(GroupFieldAttr.Idx);
+                            qo.DoQuery();
+
+                            if (groups.Count <= 0)
+                                return "";
+
+                            foreach (GroupField item in groups)
+                            {
+                                newIdx = item.Idx;
+
+                                newGroup = groups.GetEntityByKey(GroupFieldAttr.Idx, newIdx) as GroupField;
+
+                                //更新位置
+                                group.Idx = newIdx;
+                                newGroup.Idx = oldIdx;
+
+                                group.Update();
+                                newGroup.Update();
+
+                                return "";
+                            }
+                        }
+                        break;
+                    //字段排序
+                    case "attr":
+                        //获取字段对象集合
+                        MapAttrs attrs = new MapAttrs();
+                        attrs.Retrieve(MapAttrAttr.FK_MapData, EnsName, MapAttrAttr.GroupID, groupID,MapAttrAttr.UIVisible,1);
+                        MapAttr att = null;
+
+                        //找到该字段对象
+                        att = attrs.GetEntityByKey(MapAttrAttr.KeyOfEn, MyPK) as MapAttr;
+                        if (att != null)
+                        {
+                            int oldIdx = att.Idx;//当前字段位置
+                            int newIdx;
+                            MapAttr newAtt = null;
+
+                            for (int i = 1; i <= attrs.Count; i++)
+                            {
+                                newIdx = oldIdx + i;
+                                newAtt = attrs.GetEntityByKey(MapAttrAttr.Idx, newIdx) as MapAttr;
+                                if (newAtt != null)
+                                {
+                                    //更新位置
+                                    att.Idx = newIdx;
+                                    newAtt.Idx = oldIdx;
+
+                                    att.Update();
+                                    newAtt.Update();
+
+                                    //结束循环
+                                    return "";
+                                }                             
+                            }
+                            //上面没查到，说明idx之间间隔值太大，重新取值。比如当前idx为10，下面一个为99
+                            QueryObject qo;
+                            attrs = new MapAttrs();
+                            qo = new QueryObject(attrs);
+                            qo.AddWhere(MapAttrAttr.FK_MapData, EnsName);
+                            qo.addAnd();
+                            qo.AddWhere(MapAttrAttr.Idx, ">", oldIdx);
+                            qo.addOrderBy(MapAttrAttr.Idx);
+                            qo.DoQuery();
+
+                            if (attrs.Count <= 0)
+                                return "";
+
+                            foreach (MapAttr item in attrs)
+                            {
+                                newIdx = item.Idx;
+
+                                newAtt = attrs.GetEntityByKey(MapAttrAttr.Idx, newIdx) as MapAttr;
+
+                                //更新位置
+                                att.Idx = newIdx;
+                                newAtt.Idx = oldIdx;
+
+                                att.Update();
+                                newAtt.Update();
+
+                                return "";
+                            }
+                        }
+                        break;
+                }
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message.ToString();
+            }
+        }
+        #endregion
+
+        #region 将分组、字段排序复制到其他节点
+        /// <summary>
+        /// 将分组、字段排序复制到其他节点
+        /// </summary>
+        /// <returns></returns>
+        public string SortingMapAttrs_Copy()
+        {
+            try
+            {
+                string[] nodeids = this.GetRequestVal("NodeIDs").Split(',');
+
+                MapDatas mapdatas = new MapDatas();
+                QueryObject obj = new QueryObject(mapdatas);
+                obj.AddWhere(MapDataAttr.No, "Like", FK_MapData + "%");
+                obj.addOrderBy(MapDataAttr.Idx);
+                obj.DoQuery();
+
+                MapAttrs attrs = new MapAttrs();
+                obj = new QueryObject(attrs);
+                obj.AddWhere(MapAttrAttr.FK_MapData, FK_MapData);
+                obj.addAnd();
+                obj.AddWhere(MapAttrAttr.UIVisible, true);
+                obj.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
+                obj.DoQuery();
+
+                FrmBtns btns = new FrmBtns(this.FK_MapData);
+                FrmAttachments athMents = new FrmAttachments(this.FK_MapData);
+                MapDtls dtls = new MapDtls(this.FK_MapData);
+
+                GroupFields groups = new GroupFields();
+                obj = new QueryObject(groups);
+                obj.AddWhere(GroupFieldAttr.EnName, FK_MapData);
+                obj.addOrderBy(GroupFieldAttr.Idx);
+                obj.DoQuery();
+
+                string tmd = null;
+                GroupField group = null;
+                MapDatas tmapdatas = null;
+                MapAttrs tattrs = null, oattrs = null, tarattrs = null;
+                GroupFields tgroups = null, ogroups = null, targroups = null;
+                MapDtls tdtls = null;
+                MapData tmapdata = null;
+                MapAttr tattr = null;
+                GroupField tgrp = null;
+                MapDtl tdtl = null;
+                int maxGrpIdx = 0;  //当前最大分组排序号
+                int maxAttrIdx = 0; //当前最大字段排序号
+                int maxDtlIdx = 0;  //当前最大明细表排序号
+                List<string> idxGrps = new List<string>();  //复制过的分组名称集合
+                List<string> idxAttrs = new List<string>(); //复制过的字段编号集合
+                List<string> idxDtls = new List<string>();  //复制过的明细表编号集合
+
+                foreach (string nodeid in nodeids)
+                {
+                    tmd = "ND" + nodeid;
+
+                    #region 获取数据
+                    tmapdatas = new MapDatas();
+                    QueryObject qo = new QueryObject(tmapdatas);
+                    qo.AddWhere(MapDataAttr.No, "Like", tmd + "%");
+                    qo.addOrderBy(MapDataAttr.Idx);
+                    qo.DoQuery();
+
+                    tattrs = new MapAttrs();
+                    qo = new QueryObject(tattrs);
+                    qo.AddWhere(MapAttrAttr.FK_MapData, tmd);
+                    qo.addAnd();
+                    qo.AddWhere(MapAttrAttr.UIVisible, true);
+                    qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
+                    qo.DoQuery();
+
+                    tgroups = new GroupFields();
+                    qo = new QueryObject(tgroups);
+                    qo.AddWhere(GroupFieldAttr.EnName, tmd);
+                    qo.addOrderBy(GroupFieldAttr.Idx);
+                    qo.DoQuery();
+
+                    tdtls = new MapDtls();
+                    qo = new QueryObject(tdtls);
+                    qo.AddWhere(MapDtlAttr.FK_MapData, tmd);
+                    qo.addAnd();
+                    qo.AddWhere(MapDtlAttr.IsView, true);
+                    //qo.addOrderBy(MapDtlAttr.RowIdx);
+                    qo.DoQuery();
+                    #endregion
+
+                    #region 复制排序逻辑
+
+                    #region //分组排序复制
+                    foreach (GroupField grp in groups)
+                    {
+                        //通过分组名称来确定是同一个组，同一个组在不同的节点分组编号是不一样的
+                        tgrp = tgroups.GetEntityByKey(GroupFieldAttr.Lab, grp.Lab) as GroupField;
+                        if (tgrp == null) continue;
+
+                        tgrp.Idx = grp.Idx;
+                        tgrp.DirectUpdate();
+
+                        maxGrpIdx = Math.Max(grp.Idx, maxGrpIdx);
+                        idxGrps.Add(grp.Lab);
+                    }
+
+                    foreach (GroupField grp in tgroups)
+                    {
+                        if (idxGrps.Contains(grp.Lab))
+                            continue;
+
+                        grp.Idx = maxGrpIdx = maxGrpIdx + 1;
+                        grp.DirectUpdate();
+                    }
+                    #endregion
+
+                    #region //字段排序复制
+                    foreach (MapAttr attr in attrs)
+                    {
+                        //排除主键
+                        if (attr.IsPK == true)
+                            continue;
+
+                        tattr = tattrs.GetEntityByKey(MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
+                        if (tattr == null) continue;
+
+                        group = groups.GetEntityByKey(GroupFieldAttr.OID, attr.GroupID) as GroupField;
+
+                        //比对字段的分组是否一致，不一致则更新一致
+                        if (group == null)
+                        {
+                            //源字段分组为空，则目标字段分组置为0
+                            tattr.GroupID = 0;
+                        }
+                        else
+                        {
+                            //此处要判断目标节点中是否已经创建了这个源字段所属分组，如果没有创建，则要自动创建
+                            tgrp = tgroups.GetEntityByKey(GroupFieldAttr.Lab, group.Lab) as GroupField;
+
+                            if (tgrp == null)
+                            {
+                                tgrp = new GroupField();
+                                tgrp.Lab = group.Lab;
+                                tgrp.EnName = tmd;
+                                tgrp.Idx = group.Idx;
+                                tgrp.Insert();
+                                tgroups.AddEntity(tgrp);
+
+                                tattr.GroupID = tgrp.OID;
+                            }
+                            else
+                            {
+                                if (tgrp.OID != tattr.GroupID)
+                                    tattr.GroupID = tgrp.OID;
+                            }
+                        }
+
+                        tattr.Idx = attr.Idx;
+                        tattr.DirectUpdate();
+                        maxAttrIdx = Math.Max(attr.Idx, maxAttrIdx);
+                        idxAttrs.Add(attr.KeyOfEn);
+                    }
+
+                    foreach (MapAttr attr in tattrs)
+                    {
+                        //排除主键
+                        if (attr.IsPK == true)
+                            continue;
+                        if (idxAttrs.Contains(attr.KeyOfEn))
+                            continue;
+
+                        attr.Idx = maxAttrIdx = maxAttrIdx + 1;
+                        attr.DirectUpdate();
+                    }
+                    #endregion
+
+                    #region //明细表排序复制
+                    string dtlIdx = string.Empty;
+                    GroupField tgroup = null;
+                    int groupidx = 0;
+                    int tgroupidx = 0;
+
+                    foreach (MapDtl dtl in dtls)
+                    {
+                        dtlIdx = dtl.No.Replace(dtl.FK_MapData + "Dtl", "");
+                        tdtl = tdtls.GetEntityByKey(MapDtlAttr.No, tmd + "Dtl" + dtlIdx) as MapDtl;
+
+                        if (tdtl == null)
+                            continue;
+
+                        //判断目标明细表是否有分组，没有分组，则创建分组
+                        tgroup = GetGroup(tdtl.No, tgroups);
+                        tgroupidx = tgroup == null ? 0 : tgroup.Idx;
+                        group = GetGroup(dtl.No, groups);
+                        groupidx = group == null ? 0 : group.Idx;
+
+                        if (tgroup == null)
+                        {
+                            group = new GroupField();
+                            group.Lab = tdtl.Name;
+                            group.EnName = tdtl.FK_MapData;
+                            group.CtrlType = GroupCtrlType.Dtl;
+                            group.CtrlID = tdtl.No;
+                            group.Idx = groupidx;
+                            group.Insert();
+
+                            tgroupidx = groupidx;
+                            tgroups.AddEntity(group);
+                        }
+
+                        #region 1.明细表排序
+                        if (tgroupidx != groupidx && group != null)
+                        {
+                            tgroup.Idx = groupidx;
+                            tgroup.DirectUpdate();
+
+                            tgroupidx = groupidx;
+                            tmapdata = tmapdatas.GetEntityByKey(MapDataAttr.No, tdtl.No) as MapData;
+                            if (tmapdata != null)
+                            {
+                                tmapdata.Idx = tgroup.Idx;
+                                tmapdata.DirectUpdate();
+                            }
+                        }
+
+                        maxDtlIdx = Math.Max(tgroupidx, maxDtlIdx);
+                        idxDtls.Add(dtl.No);
+                        #endregion
+
+                        #region 2.获取源节点明细表中的字段分组、字段信息
+                        oattrs = new MapAttrs();
+                        qo = new QueryObject(oattrs);
+                        qo.AddWhere(MapAttrAttr.FK_MapData, dtl.No);
+                        qo.addAnd();
+                        qo.AddWhere(MapAttrAttr.UIVisible, true);
+                        qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
+                        qo.DoQuery();
+
+                        ogroups = new GroupFields();
+                        qo = new QueryObject(ogroups);
+                        qo.AddWhere(GroupFieldAttr.EnName, dtl.No);
+                        qo.addOrderBy(GroupFieldAttr.Idx);
+                        qo.DoQuery();
+                        #endregion
+
+                        #region 3.获取目标节点明细表中的字段分组、字段信息
+                        tarattrs = new MapAttrs();
+                        qo = new QueryObject(tarattrs);
+                        qo.AddWhere(MapAttrAttr.FK_MapData, tdtl.No);
+                        qo.addAnd();
+                        qo.AddWhere(MapAttrAttr.UIVisible, true);
+                        qo.addOrderBy(MapAttrAttr.GroupID, MapAttrAttr.Idx);
+                        qo.DoQuery();
+
+                        targroups = new GroupFields();
+                        qo = new QueryObject(targroups);
+                        qo.AddWhere(GroupFieldAttr.EnName, tdtl.No);
+                        qo.addOrderBy(GroupFieldAttr.Idx);
+                        qo.DoQuery();
+                        #endregion
+
+                        #region 4.明细表字段分组排序
+                        maxGrpIdx = 0;
+                        idxGrps = new List<string>();
+
+                        foreach (GroupField grp in ogroups)
+                        {
+                            //通过分组名称来确定是同一个组，同一个组在不同的节点分组编号是不一样的
+                            tgrp = targroups.GetEntityByKey(GroupFieldAttr.Lab, grp.Lab) as GroupField;
+                            if (tgrp == null) continue;
+
+                            tgrp.Idx = grp.Idx;
+                            tgrp.DirectUpdate();
+
+                            maxGrpIdx = Math.Max(grp.Idx, maxGrpIdx);
+                            idxGrps.Add(grp.Lab);
+                        }
+
+                        foreach (GroupField grp in targroups)
+                        {
+                            if (idxGrps.Contains(grp.Lab))
+                                continue;
+
+                            grp.Idx = maxGrpIdx = maxGrpIdx + 1;
+                            grp.DirectUpdate();
+                        }
+                        #endregion
+
+                        #region 5.明细表字段排序
+                        maxAttrIdx = 0;
+                        idxAttrs = new List<string>();
+
+                        foreach (MapAttr attr in oattrs)
+                        {
+                            tattr = tarattrs.GetEntityByKey(MapAttrAttr.KeyOfEn, attr.KeyOfEn) as MapAttr;
+                            if (tattr == null) continue;
+
+                            group = ogroups.GetEntityByKey(GroupFieldAttr.OID, attr.GroupID) as GroupField;
+
+                            //比对字段的分组是否一致，不一致则更新一致
+                            if (group == null)
+                            {
+                                //源字段分组为空，则目标字段分组置为0
+                                tattr.GroupID = 0;
+                            }
+                            else
+                            {
+                                //此处要判断目标节点中是否已经创建了这个源字段所属分组，如果没有创建，则要自动创建
+                                tgrp = targroups.GetEntityByKey(GroupFieldAttr.Lab, group.Lab) as GroupField;
+
+                                if (tgrp == null)
+                                {
+                                    tgrp = new GroupField();
+                                    tgrp.Lab = group.Lab;
+                                    tgrp.EnName = tdtl.No;
+                                    tgrp.Idx = group.Idx;
+                                    tgrp.Insert();
+                                    targroups.AddEntity(tgrp);
+
+                                    tattr.GroupID = tgrp.OID;
+                                }
+                                else
+                                {
+                                    if (tgrp.OID != tattr.GroupID)
+                                        tattr.GroupID = tgrp.OID;
+                                }
+                            }
+
+                            tattr.Idx = attr.Idx;
+                            tattr.DirectUpdate();
+                            maxAttrIdx = Math.Max(attr.Idx, maxAttrIdx);
+                            idxAttrs.Add(attr.KeyOfEn);
+                        }
+
+                        foreach (MapAttr attr in tarattrs)
+                        {
+                            if (idxAttrs.Contains(attr.KeyOfEn))
+                                continue;
+
+                            attr.Idx = maxAttrIdx = maxAttrIdx + 1;
+                            attr.DirectUpdate();
+                        }
+                        #endregion
+                    }
+
+                    //确定目标节点中，源节点没有的明细表的排序
+                    foreach (MapDtl dtl in tdtls)
+                    {
+                        if (idxDtls.Contains(dtl.No))
+                            continue;
+
+                        maxDtlIdx = maxDtlIdx + 1;
+                        tgroup = GetGroup(dtl.No, tgroups);
+
+                        if (tgroup == null)
+                        {
+                            tgroup = new GroupField();
+                            tgroup.Lab = tdtl.Name;
+                            tgroup.EnName = tdtl.FK_MapData;
+                            tgroup.CtrlType = GroupCtrlType.Dtl;
+                            tgroup.CtrlID = tdtl.No;
+                            tgroup.Idx = maxDtlIdx;
+                            tgroup.Insert();
+
+                            tgroups.AddEntity(group);
+                        }
+
+                        if (tgroup.Idx != maxDtlIdx)
+                        {
+                            tgroup.Idx = maxDtlIdx;
+                            tgroup.DirectUpdate();
+                        }
+
+                        tmapdata = tmapdatas.GetEntityByKey(MapDataAttr.No, dtl.No) as MapData;
+                        if (tmapdata != null)
+                        {
+                            tmapdata.Idx = maxDtlIdx;
+                            tmapdata.DirectUpdate();
+                        }
+                    }
+                    #endregion
+
+                    #endregion
+
+                }
+                return "复制成功！";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message.ToString();
+            }
+        }
+
+        private GroupField GetGroup(string ctrlID, GroupFields gfs)
+        {
+            return gfs.GetEntityByKey(GroupFieldAttr.CtrlID, ctrlID) as GroupField;
+        }
+        #endregion
+
+        #endregion
+
+        #region 表单模式
         public void SortingMapAttrs_Sort() {
             string type = "";
             switch (type)

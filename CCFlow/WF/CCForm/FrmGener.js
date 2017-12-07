@@ -196,6 +196,8 @@ function GenerFrm() {
                     GenerFreeFrm(mapData, frmData); //自由表单.
             }
 
+            var isReadonly = GetQueryString("IsReadonly");
+
             //原有的。
             //为 DISABLED 的 TEXTAREA 加TITLE 
             var disabledTextAreas = $('#divCCForm textarea:disabled');
@@ -243,10 +245,13 @@ function GenerFrm() {
 
             }
 
-            Common.MaxLengthError();
 
-            //处理下拉框级联等扩展信息
-            AfterBindEn_DealMapExt(frmData);
+            if (isReadonly != "1") {
+
+                Common.MaxLengthError();
+                //处理下拉框级联等扩展信息
+                AfterBindEn_DealMapExt(frmData);
+            }
 
             //设置默认值
             for (var j = 0; j < frmData.Sys_MapAttr.length; j++) {
@@ -260,6 +265,14 @@ function GenerFrm() {
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);
                 }
+
+                if (isReadonly == "1") {
+
+                    if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
+                      
+                    }
+                }
+
 
             }
 
@@ -613,7 +626,6 @@ function AfterBindEn_DealMapExt(frmData) {
             case "AutoFullDLL": // 自动填充下拉框.
                 continue; //已经处理了。
             case "DDLFullCtrl":// 自动填充其他的控件..  先不做
-                break;
                 var ddlOper = $("#DDL_" + mapExt.AttrOfOper);
                 if (ddlOper == null)
                     continue;
@@ -674,6 +686,10 @@ function AfterBindEn_DealMapExt(frmData) {
                     }
                 }
                 break;
+            default:
+                //alert();
+                break;
+
         }
     }
 }

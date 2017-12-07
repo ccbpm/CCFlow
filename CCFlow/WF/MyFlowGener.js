@@ -1418,8 +1418,6 @@ function GenerWorkNode() {
                 GenerTreeFrm(workNode); /*树形表单*/
             }
 
-
-
             var frm = document.forms["divCCForm"];
             if (plant == "CCFlow")
                 frm.action = "MyFlow.ashx?method=login";

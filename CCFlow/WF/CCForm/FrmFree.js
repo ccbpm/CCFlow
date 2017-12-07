@@ -217,16 +217,17 @@ function GenerFreeFrm(mapData, frmData) {
 
 
     //循环组件 轨迹图 审核组件 子流程 子线程
-    var wf_FrmNodeComponent = frmData["WF_FrmNodeComponent"][0];
+    if (frmData["WF_FrmNodeComponent"] != null) {
+        var wf_FrmNodeComponent = frmData["WF_FrmNodeComponent"][0];
 
-    if (wf_FrmNodeComponent != null) {
+        if (wf_FrmNodeComponent != null) {
 
-        $('#CCForm').append(figure_Template_FigureFlowChart(wf_FrmNodeComponent));
-        $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent));
-        $('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_FrmNodeComponent));
-        $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent));
+            $('#CCForm').append(figure_Template_FigureFlowChart(wf_FrmNodeComponent));
+            $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent));
+            $('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_FrmNodeComponent));
+            $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent));
+        }
     }
-
 }
 
 

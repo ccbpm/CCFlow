@@ -616,7 +616,6 @@ function AfterBindEn_DealMapExt(frmData) {
             case "AutoFullDLL": // 自动填充下拉框.
                 continue; //已经处理了。
             case "DDLFullCtrl":// 自动填充其他的控件..  先不做
-                break;
                 var ddlOper = $("#DDL_" + mapExt.AttrOfOper);
                 if (ddlOper == null)
                     continue;

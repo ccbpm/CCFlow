@@ -27,6 +27,198 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 功能执行.
+        /// <summary>
+        /// 初始化.
+        /// </summary>
+        /// <returns></returns>
+        public string Method_Init()
+        {
+
+            string ensName = this.GetRequestVal("M");
+            Method rm = BP.En.ClassFactory.GetMethod(ensName);
+            if (rm == null)
+                return "err@方法名错误或者该方法已经不存在" + ensName;
+
+            if (rm.HisAttrs.Count == 0)
+            {
+                Hashtable ht = new Hashtable();
+                ht.Add("No", ensName);
+                ht.Add("Title", rm.Title);
+                ht.Add("Help", rm.Help);
+                ht.Add("Warning", rm.Warning);
+                return BP.Tools.Json.ToJson(ht);
+            }
+
+
+            DataTable dt = new DataTable();
+
+
+            //转化为集合.
+            MapAttrs attrs = rm.HisAttrs.ToMapAttrs;
+
+
+            //this.UCEn1.AddFieldSet("<b>功能执行:" + rm.Title + "</b>");
+            //this.UCEn1.AddBR();
+            //this.UCEn1.Add(rm.Help);
+            //if (rm.HisAttrs.Count > 0)
+            //{
+            //    this.UCEn1.BindAttrs(rm.HisAttrs);
+            //}
+            //Button btn = new Button();
+            //btn.CssClass = "Btn";
+            //btn.Text = "功能执行";
+            //if (string.IsNullOrEmpty(rm.Warning) == false)
+            //{
+            //    btn.Attributes["onclick"] = "if (confirm('" + rm.Warning + "')==false) {return false;}else{ this.disabled=true; }";
+            //}
+            //else
+            //{
+            //    btn.OnClientClick = "this.disabled=true;";
+            //    //  btn.Attributes["onclick"] = "this.disabled=true;return window.confirm('" + rm.Warning + "');";
+            //}
+
+            //this.UCEn1.AddBR();
+            //this.UCEn1.AddBR();
+            //btn.ID = "Btn_Do";
+            //btn.UseSubmitBehavior = false;
+            //btn.Click += new EventHandler(btn_Do_Click);
+
+            //this.UCEn1.Add(btn);
+
+            //this.UCEn1.Add("<input type=button class=Btn onclick='window.close();' value='关闭(Esc)' />");
+            //this.UCEn1.AddFieldSetEnd();
+
+            return "";
+        }
+        public string Method_Done()
+        {
+            string ensName = this.GetRequestVal("M");
+            Method rm = BP.En.ClassFactory.GetMethod(ensName);
+            // rm.Init();
+            int mynum = 0;
+            foreach (Attr attr in rm.HisAttrs)
+            {
+                if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+                mynum++;
+            }
+            int idx = 0;
+            foreach (Attr attr in rm.HisAttrs)
+            {
+                if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+                if (attr.UIVisible == false)
+                    continue;
+                try
+                {
+                    switch (attr.UIContralType)
+                    {
+                        case UIContralType.TB:
+                            switch (attr.MyDataType)
+                            {
+                                case BP.DA.DataType.AppString:
+                                case BP.DA.DataType.AppDate:
+                                case BP.DA.DataType.AppDateTime:
+                                    string str1 = this.GetValFromFrmByKey(attr.Key);
+                                    rm.SetValByKey(attr.Key, str1);
+                                    break;
+                                case BP.DA.DataType.AppInt:
+                                    int myInt =  this.GetValIntFromFrmByKey(attr.Key);  //int.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                                    rm.Row[idx] = myInt;
+                                    rm.SetValByKey(attr.Key, myInt);
+                                    break;
+                                case BP.DA.DataType.AppFloat:
+                                    float myFloat = this.GetValFloatFromFrmByKey(attr.Key); // float.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                                    rm.SetValByKey(attr.Key, myFloat);
+                                    break;
+                                case BP.DA.DataType.AppDouble:
+                                case BP.DA.DataType.AppMoney:
+                                    decimal myDoub =this.GetValDecimalFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                                    rm.SetValByKey(attr.Key, myDoub);
+                                    break;
+                                case BP.DA.DataType.AppBoolean:
+                                    bool myBool =this.GetValBoolenFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                                    rm.SetValByKey(attr.Key, myBool);
+                                    break;
+                                default:
+                                    return "err@没有判断的数据类型．";
+                            }
+                            break;
+                        case UIContralType.DDL:
+                            try
+                            {
+                                string str = this.GetValFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                               // string str = this.UCEn1.GetDDLByKey("DDL_" + attr.Key).SelectedItemStringVal;
+                                rm.SetValByKey(attr.Key, str);
+                            }
+                            catch
+                            {
+                                rm.SetValByKey(attr.Key, "");
+                            }
+                            break;
+                        case UIContralType.CheckBok:
+                                    bool myBoolval =this.GetValBoolenFromFrmByKey(attr.Key); // decimal.Parse(this.UCEn1.GetTBByID("TB_" + attr.Key).Text);
+                                rm.SetValByKey(attr.Key, myBoolval);
+                            break;
+                        default:
+                            break;
+                    }
+                    idx++;
+                }
+                catch (Exception ex)
+                {
+                    return "err@获得参数错误" + "attr=" + attr.Key + " attr = " + attr.Key + ex.Message;
+                }
+            }
+
+            try
+            {
+                object obj = rm.Do();
+                if (obj != null)
+                    return obj.ToString();
+                else
+                    return "err@执行完成没有返回信息.";
+            }
+            catch (Exception ex)
+            {
+                return "err@执行错误:" + ex.Message;
+            }
+        }
+        public string MethodLink_Init()
+        {
+            ArrayList al = BP.En.ClassFactory.GetObjects("BP.En.Method");
+            int i = 1;
+            string html = "";
+
+            //DataTable dt = new DataTable();
+            //dt.Columns.Add("No", typeof(string));
+            //dt.Columns.Add("Name", typeof(string));
+            //dt.Columns.Add("Icon", typeof(string));
+            //dt.Columns.Add("Note", typeof(string));
+
+            foreach (BP.En.Method en in al)
+            {
+                if (en.IsCanDo == false
+                    || en.IsVisable == false)
+                    continue;
+
+              //  DataRow dr = dt.NewRow();
+
+                html += "<li><a href=\"javascript:ShowIt('" + en.ToString() + "');\"  >" + en.GetIcon("/") + en.Title + "</a><br><font size=2 color=Green>" + en.Help + "</font><br><br></li>";
+            }
+
+            return html;
+        }
+        #endregion
+
+        #region 查询.
+        public string Search_Init()
+        {
+            return "";
+        }
+        #endregion 查询.
+
         #region Refmethod.htm 相关功能.
         public string RefEnKey
         {

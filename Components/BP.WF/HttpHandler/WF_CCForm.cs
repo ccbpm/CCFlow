@@ -1134,7 +1134,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Dtl_SaveRow()
         {
-            if (this.RefPKVal  == "0" || this.RefPKVal=="")
+            if (this.RefPKVal == "0" || this.RefPKVal == "")
                 return "err@从表保存[Dtl_SaveRow],失败没有接收到refpk的值";
 
             //从表.

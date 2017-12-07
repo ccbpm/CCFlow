@@ -289,6 +289,7 @@ namespace BP.WF.HttpHandler
                 string sql = " SELECT count(No)  FROM WF_Emp WHERE UserType=1 AND No='"+BP.Web.WebUser.No+"'";
                 if ( Web.WebUser.No=="admin" || DBAccess.RunSQLReturnValInt(sql) == 1)
                 {
+                    /*管理员可以打印.*/
                     CanPackUp = true;
                 }
                 else

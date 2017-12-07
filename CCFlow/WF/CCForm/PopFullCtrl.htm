@@ -169,10 +169,7 @@
                     var returnValSetObj = window.pageSetData;
                     var returnValObj = window.returnVal;
                     if (returnValSetObj != null && returnValObj != null) {
-                        if (returnValSetObj[0]
-                            .PopValWorkModel ==
-                            "Tree" ||
-                            returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
+                        if (returnValSetObj[0].PopValWorkModel == "Tree" || returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
                             window.GetTreeReturnVal();
                             if (returnValSetObj[0].PopValFormat == "OnlyNo") {
                                 $(ctrl).val(returnValObj.Name);
@@ -189,8 +186,7 @@
                             window.GetGroupReturnVal();
                             console.log(returnValObj)
                             $(ctrl).val(returnValObj.Value);
-                        } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" ||
-                            returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
+                        } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" || returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
                             if (returnValSetObj[0].PopValFormat == "OnlyNo") {
                                 $(ctrl).val(returnValObj.No);
                             } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
@@ -266,7 +262,7 @@
                 type: 'post',
                 async: false,
                 data: formData2,
-                url: Handler + "?DoType=PopVal_Init&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+                url: Handler + "?DoType=PopVal_Init&PopValWorkModel=2&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
                 dataType: 'html',
                 success: function (data) {
                     if (data != null) {

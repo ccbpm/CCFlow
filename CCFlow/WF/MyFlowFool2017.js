@@ -27,6 +27,7 @@ function GenerFoolFrm(wn) {
 
         var gf = Sys_GroupFields[i];
 
+
         //从表..
         if (gf.CtrlType == 'Dtl') {
 
@@ -439,6 +440,13 @@ function Ele_Dtl(frmDtl) {
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
+
+    var ensName = frmDtl.No;
+    if (ensName == undefined) {
+        alert('系统错误,请找管理员联系');
+        return;
+    }
+
     //if (frmDtl.RowShowModel == "0") {
         if (pageData.IsReadOnly) {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";

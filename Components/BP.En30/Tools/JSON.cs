@@ -533,6 +533,7 @@ namespace BP.Tools
             strs = strs.Replace("\b", "\\b");
             strs = strs.Replace("\t", "\\t");
             strs = strs.Replace("\f", "\\f");
+            strs = strs.Replace("\r", "\\r");
             strs = strs.Replace("/", "\\/");
             return strs;
         }

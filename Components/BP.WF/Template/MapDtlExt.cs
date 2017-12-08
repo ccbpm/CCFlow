@@ -975,7 +975,6 @@ namespace BP.WF.Template
                 map.AddBoolean(MapDtlAttr.IsDelete, true, "是否可以删除行？", true, true);
                 map.AddBoolean(MapDtlAttr.IsUpdate, true, "是否可以更新？", true, true);
 
-                map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", true, true);
                 map.AddBoolean(MapDtlAttr.IsEnableAthM, false, "是否启用多附件", true, true);
 
                 //map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", true, true);
@@ -1048,6 +1047,8 @@ namespace BP.WF.Template
                 map.AddBoolean(MapDtlAttr.IsHLDtl, false, "是否是合流汇总", true, false);
                 string sql = "SELECT KeyOfEn as No, Name FROM Sys_MapAttr WHERE FK_MapData='@No' AND  ( (MyDataType =1 and UIVisible=1 ) or (UIContralType=1))";
                 map.AddDDLSQL(MapDtlAttr.SubThreadWorker, null, "子线程处理人字段", sql, true);
+                map.AddBoolean(MapDtlAttr.IsEnablePass, false, "是否启用通过审核功能?", true, true);
+
                 #endregion 工作流相关.
 
                 RefMethod  rm = new RefMethod();

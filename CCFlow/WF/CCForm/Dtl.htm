@@ -71,7 +71,10 @@
 
         //公共方法
         function AjaxServiceGener(param, callback, scope) {
-
+			// 1=自由表单模式 2=傻瓜表单模式 不需要自动保存
+			if (window.RowShowModel == 1 || window.RowShowModel == 2) {
+				return;
+			}
             $.ajax({
                 type: "GET", //使用GET或POST方法访问后台
                 dataType: "text", //返回json格式的数据
@@ -363,7 +366,8 @@
                        //新增显示方式？ =0行模式, 1=自由表单模式 2=傻瓜表单模式.
                        // ==1,==2 是打开父窗口出现卡片.
                        var RowShowModel= sys_MapDtl.RowShowModel;
-                        
+					   window.RowShowModel = RowShowModel;
+
                         var snTh= $('<th data-coltype="SN" style="width:16px;"><img src="../Img/Btn/Add.gif" id="insertBtn"  style="cursor: pointer;" name="insertBtn" onclick="insertRow('+RowShowModel+')" /></th>');
 
                         threadTr.append(snTh);
@@ -480,6 +484,10 @@
                                     if ($(threadThObj).data().colname != undefined) {
                                         var o = $(threadThObj);
                                         var tmplate = figure_MapAttr_Template(o.data());
+										// 1=自由表单模式 2=傻瓜表单模式
+										if (sys_MapDtl.RowShowModel != 0) {
+											tmplate.attr("disabled", "disabled");
+										}
                                         tmplate.data({ KeyOfEn: o.data().KeyOfEn });
 
                                         //ID 设置为  id+'_1'
@@ -1062,6 +1070,10 @@
 
         //从表全部数据保存 还有问题 需要调整
         function SaveAll(obj) {
+			// 1=自由表单模式 2=傻瓜表单模式 不需要自动保存
+			if (window.RowShowModel == 1 || window.RowShowModel == 2) {
+				return;
+			}
 			/**
 			 * 页面失去焦点之后, 无法重新加载?
 			 * 从表生成后如果有统计, 并不自动计算, 所以在初始化完成后触发onblur事件(页面自动计算设计之初就是onblur事件)

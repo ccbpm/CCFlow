@@ -445,6 +445,9 @@
                 window.event.returnValue = "退出登录？"; //这里可以放置你想做的操作代码 
                 temp = 1;
             }
+        }
+
+        window.onunload = function () {
             if (window.hasClickSend && opener.frameElement.contentWindow.location.href.toLowerCase().indexOf("todolist") != -1) {
                 //刷新代办
                 if (opener.frameElement) {

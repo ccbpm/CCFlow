@@ -248,7 +248,7 @@ namespace BP.WF.HttpHandler
         /// 初始化
         /// </summary>
         /// <returns></returns>
-        public string CondByFrms_Init()
+        public string CondByBindFrms_Init()
         {
             string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FK_Node=" + this.FK_Node;
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

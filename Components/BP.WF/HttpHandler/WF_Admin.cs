@@ -295,6 +295,41 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
         }
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByFrms_Init()
+        {
+            DataSet ds = new DataSet();
+
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+
+            Node nd = new Node(int.Parse(fk_mainNode));
+
+            CondType condTypeEnum = (CondType)this.GetRequestValInt("CondType");
+
+            //增加条件集合.
+            Conds conds = new Conds();
+            conds.Retrieve(CondAttr.FK_Node, fk_mainNode, CondAttr.ToNodeID, toNodeID);
+            ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
+
+            string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FK_Node=" + this.FK_Node;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Frms";
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+
+            DataRow dr = dt.NewRow();
+            dr[0] = "all";
+            dr[1] = "请选择表单字段";
+            dt.Rows.Add(dr);
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
+        }
+
         public string CondByFrm_InitField()
         {
             //定义数据容器.

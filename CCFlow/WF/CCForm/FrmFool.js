@@ -25,9 +25,6 @@ function GenerFoolFrm(mapData, frmData) {
         //从表..
         if (gf.CtrlType == 'Dtl') {
 
-            html += "<tr>";
-            html += "  <th colspan=4>" + gf.Lab + "</th>";
-            html += "</tr>";
 
             var dtls = frmData.Sys_MapDtl;
 
@@ -37,6 +34,10 @@ function GenerFoolFrm(mapData, frmData) {
 
                 if (dtl.No != gf.CtrlID)
                     continue;
+
+                html += "<tr>";
+                html += "  <th colspan=4>" + gf.Lab + "</th>";
+                html += "</tr>";
 
                 html += "<tr>";
                 html += "  <td colspan='4' >";
@@ -450,9 +451,9 @@ function Ele_Dtl(frmDtl) {
     else
         isReadonly = "1";
 
-    if (frmDtl.RowShowModel == "0") {
+   // if (frmDtl.RowShowModel == "0" ) {
         src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&" + urlParam + "&Version=1";
-    }
+    //}
 
     //    if (frmDtl.RowShowModel == "1") {
     //        if (pageData.IsReadOnly)

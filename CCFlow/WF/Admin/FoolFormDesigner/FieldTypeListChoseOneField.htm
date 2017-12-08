@@ -52,10 +52,14 @@
 
         function BindIt() {
 
+         //   alert(dataType);
+
             var html = "<table border=0>";
             for (var i = 0; i < fileds.length; i++) {
 
                 var item = fileds[i];
+                 
+                
                 if (i % 3 == 0) {
                     html += "<tr>";
                 }
@@ -80,12 +84,20 @@
                 if (dataType == "4" && fType.indexOf('int') == -1) {
                     continue; //boolen
                 }
-
-                if ((dataType == "8" || dataType == "3" || dataType == "5")
-                 && (fType.indexOf('float') == -1 || fType.indexOf('decimal') == -1 )) {
+                
+                if (dataType == "8" && fType.indexOf('decimal') == -1) {
+                    continue;
+                }
+                
+                if (dataType == "5" && fType.indexOf('decimal') == -1) {
+                    continue;
+                }
+                
+                if (dataType == "3" && fType.indexOf('float') == -1) {
                     continue;
                 }
 
+                
                 html += "<td nowrap style='width: 33%'>";
                 html += "<input id='" + item.FName + "' name='field' type='radio' value='" + item.FName + "'  />";
                 html += "<input id='F" + item.FName + "' name='field' type='hidden' value='" + item.FDesc + "'  />";

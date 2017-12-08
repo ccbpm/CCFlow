@@ -53,10 +53,7 @@ namespace CCFlow.Web.WF.Comm
         protected void Page_Load(object sender, System.EventArgs e)
         {
              
-            this.BindData();
-        }
-        public void BindData()
-        {
+         
             string ensname = this.Request.QueryString["EnsName"];
             if (ensname == null)
                 ensname = this.Request.QueryString["EnsName"];

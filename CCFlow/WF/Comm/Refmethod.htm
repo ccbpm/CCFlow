@@ -384,10 +384,16 @@
        // alert(frmData);
 
         var pk = GetQueryString("No");
+
         if (pk == null || pk == undefined)
             pk = GetQueryString("MyPK");
+
         if (pk == null || pk == undefined)
             pk = GetQueryString("OID");
+
+        if (pk == null || pk == undefined)
+            pk = GetQueryString("PK");
+
 
         //初始化数据.
         $.ajax({

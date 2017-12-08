@@ -350,6 +350,10 @@ function figure_Template_FigureThreadDtl(wf_node) {
 
 //子流程
 function figure_Template_FigureSubFlowDtl(wf_node) {
+
+    //@这里需要处理, 对于流程表单.
+    return;
+
     //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
     var sta = wf_node.SFSta;
     var x = wf_node.SF_X;

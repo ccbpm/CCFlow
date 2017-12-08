@@ -45,7 +45,7 @@ namespace BP.WF.HttpHandler
                 data = "";
 
             BP.WF.Template.NodeEmps nemps = new BP.WF.Template.NodeEmps();
-            string[] empNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            string[] empNos = data.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
             //提交内容过长时，采用分段式提交
             if (string.IsNullOrWhiteSpace(partno))
@@ -62,7 +62,7 @@ namespace BP.WF.HttpHandler
                 partidx = int.Parse(parts[0]);
                 partcount = int.Parse(parts[1]);
 
-                empNos = data.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                empNos = data.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
                 if (partidx == 1)
                     nemps.Delete(BP.WF.Template.NodeEmpAttr.FK_Node, nid);

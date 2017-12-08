@@ -291,7 +291,7 @@
 
             var param = {
                 DoType: "Dot2DotTreeDeptEmpModel_SaveNodeEmps",
-                data: '|',
+                data: ',',
                 nodeid: nodeid
             };
 
@@ -301,12 +301,12 @@
             var i = 1;
 
             $.each(nodeemps, function () {
-                param.data += this.No + "|";
+                param.data += this.No + ",";
 
                 //500个分一段保存
                 if (i % 500 == 0) {
                     savedatas.push(param.data);
-                    param.data = '|';
+                    param.data = ',';
                 }
 
                 i++;

@@ -272,7 +272,7 @@ namespace BP.WF.HttpHandler
 
             DataRow dr = dt.NewRow();
             dr[0] = "all";
-            dr[1] = "请选择表单字段";
+            dr[1] = "请选择表单";
             dt.Rows.Add(dr);
             ds.Tables.Add(dt);
 

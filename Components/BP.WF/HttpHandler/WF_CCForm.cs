@@ -502,7 +502,7 @@ namespace BP.WF.HttpHandler
                         return "url@FrmGener.htm?1=2" + paras;
                 }
 
-                if (md.HisFrmType == FrmType.VSTOForExcel)
+                if (md.HisFrmType == FrmType.VSTOForExcel || md.HisFrmType == FrmType.ExcelFrm )
                 {
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                         return "url@FrmVSTO.aspx?1=2" + paras;

@@ -8,8 +8,11 @@
         // 在应用程序启动时运行的代码.
         try
         {
-            string temp = Server.MapPath(System.Web.HttpContext.Current.Request.ApplicationPath) + "/Temp/";
-            System.IO.File.Delete(temp);
+            //删除目录.
+            string temp =  BP.Sys.SystemConfig.PathOfTemp;
+            System.IO.Directory.Delete(temp);
+            //创建目录.
+            System.IO.Directory.CreateDirectory(temp);
         }
         catch
         {

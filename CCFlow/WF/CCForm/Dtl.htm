@@ -293,6 +293,8 @@
             setTdDataByTrData(newRowIndex);
 
             insertTr.bind('mouseleave', mouseLeaveTrFun);
+
+			setTimeout(doAlignColumns, 100);
         }
 
         //行最后的保存按钮
@@ -628,39 +630,7 @@
 						// 新增统计行
 						$("#dtlDiv div table tbody").append(statisticsRow);
 
-						// 对齐单元格
-						var headerCount = $("#dtlDiv div table thead tr th").length;
-						$("#dtlDiv div table thead tr th").each(function (hi, th) {
-							var realWidth = $(this).width();
-							var definedWidth = $(this).data().UIWidth;
-							var width;
-							if (typeof realWidth != "undefined" && realWidth > 0) {
-								width = realWidth;
-							} else if (typeof definedWidth != "undefined") {
-								width = definedWidth;
-							} else if (hi == 0) {
-								width = 20;
-							} else if (hi + 1 == headerCount) {
-								width = 60;
-							} else {
-								width = 100;
-							}
-							$("#dtlDiv div table tbody tr").each(function (di, td) {
-								var td = $(this).children().eq(hi);
-								var children = td.children();
-								if (children.first().is("img")) {
-									
-								} else {
-									children.first().width(width - 5);
-								}
-								if (hi + 1 == headerCount) {
-									// 最后一列
-									td.width(width + 1);
-								} else {
-									td.width(width + hi);
-								}
-							});
-						});
+						setTimeout(doAlignColumns, 500);
 					}
 					// 统计行over
 
@@ -686,6 +656,42 @@
                 }
             });
         }
+
+		function doAlignColumns() {
+			// 对齐单元格
+			var headerCount = $("#dtlDiv div table thead tr th").length;
+			$("#dtlDiv div table thead tr th").each(function (hi, th) {
+				var realWidth = $(this).width();
+				var definedWidth = $(this).data().UIWidth;
+				var width;
+				if (typeof realWidth != "undefined" && realWidth > 0) {
+					width = realWidth;
+				} else if (typeof definedWidth != "undefined") {
+					width = definedWidth;
+				} else if (hi == 0) {
+					width = 20;
+				} else if (hi + 1 == headerCount) {
+					width = 60;
+				} else {
+					width = 100;
+				}
+				$("#dtlDiv div table tbody tr").each(function (di, td) {
+					var td = $(this).children().eq(hi);
+					var children = td.children();
+					if (children.first().is("img")) {
+						
+					} else {
+						children.first().width(width - 5);
+					}
+					if (hi + 1 == headerCount) {
+						// 最后一列
+						td.width(width + 1);
+					} else {
+						td.width(width + hi);
+					}
+				});
+			});
+		}
 
 		function parentStatistics(extArr) {
 			if ($.isArray(extArr)) {

@@ -1543,7 +1543,7 @@ function GenerWorkNode() {
                     elementPathEnabled: false,
                     maximumWords: document.BindEditorMapAttr.MaxLen,
                     toolbars: [[
-            'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'cleardoc', 'fontfamily', 'fontsize', 'indent', 'date', 'time'
+             'cleardoc','undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'fontfamily', 'fontsize','formatmatch', 'indent', 'date', 'time'
         ]]
                 });
 

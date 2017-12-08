@@ -381,7 +381,7 @@
 
         frmData = frmData.replace('=on', '=1');
 
-        alert(frmData);
+       // alert(frmData);
 
         var pk = GetQueryString("No");
         if (pk == null || pk == undefined)
@@ -398,13 +398,11 @@
             dataType: 'html',
             success: function (data) {
 
-                console.log(data);
-                alert(data);
-                return;
-
                 //如果错误,就提示.
                 if (data.indexOf('err@') == 0) {
-                    alert(data);
+
+                    $("#Msg").html(data);
+                    //alert(data);
                     return;
                 }
 
@@ -424,18 +422,18 @@
                 //提示信息.
                 if (data == "info@") {
                     data = data.replace('info@', '');
-                    alert(data);
+
+                    $("#Msg").html(data);
+                    //alert(data);
                     return;
                 }
 
-                alert(data);
-                window.close();
+                $("#Msg").html(data);
+                document.getElementByIdx("Btn_Done").disabled = true; 
             }
         });
     }
 </script>
-
-
 
 </body>
 </html>

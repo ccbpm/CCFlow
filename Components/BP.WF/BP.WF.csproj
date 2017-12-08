@@ -208,6 +208,7 @@
     <Compile Include="HttpHandler\WF_FlowFormTree.cs" />
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_DtlSetting.cs" />
     <Compile Include="HttpHandler\WF_Admin_Sln.cs" />
+    <Compile Include="HttpHandler\WF_Admin_Cond.cs" />
     <Compile Include="HttpWebResponseUtility.cs" />
     <Compile Include="Port\StationType.cs" />
     <Compile Include="Port\AdminEmp.cs" />

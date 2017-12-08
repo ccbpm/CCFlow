@@ -27,6 +27,19 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 统计分析组件.
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <returns></returns>
+        public string ContrastDtl_Init()
+        {
+            return "";
+        }
+        #endregion 统计分析组件.
+
+
+
         #region 功能执行.
         /// <summary>
         /// 初始化.

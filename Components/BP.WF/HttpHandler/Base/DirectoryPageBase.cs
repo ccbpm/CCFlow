@@ -127,6 +127,17 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 公共方法获取值
         /// </summary>
+        /// <param name="param">参数名</param>
+        /// <returns></returns>
+        public bool GetRequestValBoolen(string param)
+        {
+            if (this.GetRequestValInt(param) == 1)
+                return true;
+            return false;
+        }
+        /// <summary>
+        /// 公共方法获取值
+        /// </summary>
         /// <param name="param"></param>
         /// <returns></returns>
         public Int64 GetRequestValInt64(string param)

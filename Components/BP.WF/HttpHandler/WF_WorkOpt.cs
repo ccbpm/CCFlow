@@ -1679,6 +1679,13 @@ namespace BP.WF.HttpHandler
 
             string sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ";
             DataTable dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (dtDept.Rows.Count == 0)
+            {
+                fk_dept = BP.Web.WebUser.FK_Dept;
+                sql = "SELECT No,Name,ParentNo FROM Port_Dept WHERE No='" + fk_dept + "' OR ParentNo='" + fk_dept + "' ";
+                dtDept = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            }
+
             dtDept.TableName = "Depts";
             ds.Tables.Add(dtDept);
 

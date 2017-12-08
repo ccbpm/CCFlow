@@ -245,11 +245,14 @@ namespace BP.WF.Port
                 map.AddDDLEntities(AdminEmpAttr.RootOfForm, null, "表单权限节点", new BP.WF.Template.SysFormTrees(), true);
                 map.AddDDLEntities(AdminEmpAttr.RootOfDept, null, "组织结构权限节点", new BP.WF.Port.Incs(), true);
                  
+                map.AddTBMyNum();
+
 
                 //查询条件.
                 map.AddSearchAttr(AdminEmpAttr.UseSta);
                 map.AddSearchAttr(AdminEmpAttr.UserType);
                 map.AddSearchAttr(AdminEmpAttr.OrgNo);
+
 
 
                 RefMethod rm = new RefMethod();
@@ -272,6 +275,7 @@ namespace BP.WF.Port
 
                 rm = new RefMethod();
                 rm.Title = "测试";
+
                 rm.HisAttrs.AddTBString("wenben", null, "文本", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBInt("shuzi", 0, "数字", true, false);
                 rm.HisAttrs.AddTBDate("riqi", null, "日期", true, false);

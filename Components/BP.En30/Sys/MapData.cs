@@ -184,6 +184,11 @@ namespace BP.Sys
         /// 表单body属性.
         /// </summary>
         public const string BodyAttr = "BodyAttr";
+        /// <summary>
+        /// 流程控件
+        /// </summary>
+        public const string FlowCtrls = "FlowCtrls";
+        
 
         #region 报表属性(参数的方式存储).
         /// <summary>
@@ -1363,6 +1368,20 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.BodyAttr, value);
             }
         }
+        /// <summary>
+        /// 流程控件s.
+        /// </summary>
+        public string FlowCtrls
+        {
+            get
+            {
+                return this.GetValStrByKey(MapDataAttr.FlowCtrls);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.FlowCtrls, value);
+            }
+        }
         #endregion
 
         #region 构造方法
@@ -1569,6 +1588,8 @@ namespace BP.Sys
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, false, 0, 30, 20);
                 map.AddTBString(MapDataAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
 
+                //流程控件.
+                map.AddTBString(MapDataAttr.FlowCtrls, null, "流程控件", true, true, 0, 200, 20);
 
                 //增加参数字段.
                 map.AddTBAtParas(4000);

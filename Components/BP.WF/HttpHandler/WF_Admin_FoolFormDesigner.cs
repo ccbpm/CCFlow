@@ -1003,6 +1003,9 @@ namespace BP.WF.HttpHandler
             if (sf.RetrieveFromDBSources() != 0)
                 attr.Name = sf.Name;
 
+            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.EnName='" + this.FK_MapData + "' AND CtrlType='' OR CtrlType= NULL";
+            attr.GroupID = DBAccess.RunSQLReturnValInt(sql, 0);            
+
             attr.Insert();
             return attr.MyPK;
         }
@@ -2032,19 +2035,22 @@ namespace BP.WF.HttpHandler
         }
         public string SFGuide_SaveInfo()
         {
-            bool IsNew = Convert.ToBoolean(context.Request.QueryString["IsNew"]);
-            string sfno = context.Request.QueryString["No"];
-            string myname = context.Request.QueryString["Name"];
-            int srctype = int.Parse(context.Request.QueryString["SrcType"]);
-            int codestruct = int.Parse(context.Request.QueryString["CodeStruct"]);
-            string defval = context.Request.QueryString["DefVal"];
-            string sfdbsrc = context.Request.QueryString["FK_SFDBSrc"];
-            string srctable = context.Request.QueryString["SrcTable"];
-            string columnvalue = context.Request.QueryString["ColumnValue"];
-            string columntext = context.Request.QueryString["ColumnText"];
-            string parentvalue = context.Request.QueryString["ParentValue"];
-            string tabledesc = context.Request.QueryString["TableDesc"];
-            string selectstatement = context.Request.QueryString["Selectstatement"];
+            bool IsNew = this.GetRequestValBoolen("IsNew");
+            string sfno = this.GetRequestVal("No"); 
+            string myname = this.GetRequestVal("Name");
+
+            int srctype = this.GetRequestValInt("SrcType");
+            int codestruct = this.GetRequestValInt("CodeStruct");
+
+            string defval = this.GetRequestVal("DefVal");
+            string sfdbsrc = this.GetRequestVal("FK_SFDBSrc");
+            string srctable = this.GetRequestVal("SrcTable");
+            string columnvalue = this.GetRequestVal("ColumnValue");
+            string columntext = this.GetRequestVal("ColumnText");
+
+            string parentvalue = this.GetRequestVal("ParentValue");
+            string tabledesc = this.GetRequestVal("TableDesc");
+            string selectstatement = this.GetRequestVal("Selectstatement");
 
             //判断是否已经存在
             SFTable sftable = new SFTable();

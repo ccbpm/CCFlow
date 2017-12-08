@@ -739,10 +739,13 @@ namespace BP.Sys
             string flowEle = "";
             string sqls = "";
 
-              string nodeIDStr = fk_mapdata.Replace("ND", "");
-              int nodeID = 0;
-              if (BP.DA.DataType.IsNumStr(nodeIDStr) == true)
-                  nodeID = int.Parse(nodeIDStr);
+            string nodeIDStr = fk_mapdata.Replace("ND", "");
+            int nodeID = 0;
+            if (BP.DA.DataType.IsNumStr(nodeIDStr) == true)
+                nodeID = int.Parse(nodeIDStr);
+
+            //流程控件.
+            string flowCtrls = "";
 
             //循环元素.
             for (int idx = 0, jControl = form_Controls.Count; idx < jControl; idx++)
@@ -843,7 +846,7 @@ namespace BP.Sys
                 if (shape == "Fieldset"
                     || shape == FrmEle.iFrame
                     || shape == FrmEle.Fieldset
-                    || shape== FrmEle.HandSiganture )
+                    || shape == FrmEle.HandSiganture)
                 {
                     //记录已经存在的ID， 需要当时保存.
                     BP.Sys.CCFormParse.SaveFrmEle(fk_mapdata, shape, ctrlID, x, y, height, width);
@@ -874,10 +877,18 @@ namespace BP.Sys
                 }
                 #endregion 附件.
 
-                #region 处理流程组件.
+                #region 处理流程组件, 如果已经传来节点ID,说明是节点表单.
+                //流程类的组件,都记录下来放入到Sys_MapData.FlowCtrls 字段里. 记录控件的位置，原来记录到节点里的都要取消掉.
+                //@zhoupeng
+                if (shape == "FlowChart" || shape == "FrmCheck" || shape == "SubFlowDtl" || shape == "ThreadDtl")
+                {
+                    if (flowCtrls.Contains(shape) == false)
+                        flowCtrls += "@Ctrl=" + shape + ",X=" + x + ",Y=" + y + ",H=" + height + ",W=" + width;
+                }
+
                 if (nodeID != 0)
                 {
-                    sqls="";
+                    sqls = "";
                     switch (shape)
                     {
                         case "FlowChart":
@@ -951,11 +962,8 @@ namespace BP.Sys
                 }
                 #endregion 处理流程组件.
 
-                ////流程类的组件.
-                //if (shape == "FlowChart" || shape == "FrmCheck" ||  shape == "SubFlowDtl" || shape=="ThreadDtl")
-                //{
-                //    continue;
-                //}
+                if (shape == "FlowChart" || shape == "FrmCheck" || shape == "SubFlowDtl" || shape == "ThreadDtl")
+                    continue;
 
                 throw new Exception("@没有判断的ccform保存控件的类型:shape = " + shape);
             }
@@ -978,7 +986,7 @@ namespace BP.Sys
 
                 //子线城组件.
                 if (flowEle.Contains("ThreadDtl") == false)
-                    sqls += "@UPDATE WF_Node SET FrmThreadSta=0 WHERE NodeID=" + nodeID;               
+                    sqls += "@UPDATE WF_Node SET FrmThreadSta=0 WHERE NodeID=" + nodeID;
 
                 //自定义流程组件.
                 if (flowEle.Contains("FrmTransferCustom") == false)
@@ -991,6 +999,9 @@ namespace BP.Sys
                 BP.DA.DBAccess.RunSQLs(sqls);
                 sqls = "";
             }
+
+            //更新组件. @zhoupeng.
+            DBAccess.RunSQL("UPDATE Sys_MapData SET FlowCtrls='"+flowCtrls+"' WHERE No='"+fk_mapdata+"'");
             #endregion 处理节点表单。
 
             #region 删除没有替换下来的 PKs, 说明这些都已经被删除了.
@@ -1054,7 +1065,7 @@ namespace BP.Sys
                 dtl.RetrieveFromDBSources();
                 dtl.Delete();
 
-               // sqls += "@DELETE FROM Sys_MapDtl WHERE No='" + pk + "'";
+                // sqls += "@DELETE FROM Sys_MapDtl WHERE No='" + pk + "'";
             }
 
 

@@ -70,7 +70,7 @@ function GenerFoolFrm(mapData, frmData) {
             continue;
         }
 
-        //审核组件..
+        //审核组件,有节点信息,并且当前节点状态不是禁用的,就可以显示.
         if (gf.CtrlType == 'FWC' && node && node.FWCSta != 0) {
 
             html += "<tr>";

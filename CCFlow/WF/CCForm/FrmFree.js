@@ -111,33 +111,28 @@ function GenerFreeFrm(mapData, frmData) {
 
         if (wf_FrmNodeComponent != null) {
 
-            $('#CCForm').append(figure_Template_FigureFlowChart(wf_FrmNodeComponent));
-            $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent));
-            $('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_FrmNodeComponent));
-            $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent));
+            $('#CCForm').append(figure_Template_FigureFlowChart(wf_FrmNodeComponent, mapData));
+            $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent, mapData));
+            $('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_FrmNodeComponent, mapData));
+            $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent, mapData));
         }
     }
 }
 
 
 //初始化轨迹图
-function figure_Template_FigureFlowChart(wf_node) {
+function figure_Template_FigureFlowChart(wf_node, mapData) {
 
     //轨迹图
     var sta = wf_node.FrmTrackSta;
+    if (sta == 0 || sta==undefined) 
+        return $('');
+
     var x = wf_node.FrmTrack_X;
     var y = wf_node.FrmTrack_Y;
     var h = wf_node.FrmTrack_H;
     var w = wf_node.FrmTrack_W;
-
-    if (sta == 0) {
-        return $('');
-    }
-
-    if (sta == undefined) {
-        return;
-    }
-
+    
     var src = "./WorkOpt/OneWork/OneWork.htm?CurrTab=Track";
     src += '&FK_Flow=' + pageData.FK_Flow;
     src += '&FK_Node=' + pageData.FK_Node;
@@ -151,17 +146,31 @@ function figure_Template_FigureFlowChart(wf_node) {
 }
 
 //审核组件
-function figure_Template_FigureFrmCheck(wf_node) {
+function figure_Template_FigureFrmCheck(wf_node, mapData) {
 
     //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
 
     var sta = wf_node.FWCSta;
-    var x = wf_node.FWC_X;
-    var y = wf_node.FWC_Y;
-    var h = wf_node.FWC_H;
-    var w = wf_node.FWC_W;
-    if (sta == 0)
+    if (sta == 0 || sta == undefined)
         return $('');
+
+    var pos = PreaseFlowCtrls(mapData.FlowCtrls, "FrmCheck");
+
+    var x = 0, y = 0, h = 0, w = 0;
+    if (pos == null) {
+          x = wf_node.FWC_X;
+          y = wf_node.FWC_Y;
+          h = wf_node.FWC_H;
+          w = wf_node.FWC_W;
+    }
+
+    if (pos != null) {
+        x = parseFloat(pos.X);
+        y = parseFloat(pos.Y);
+        h = parseFloat(pos.H);
+        w = parseFloat(pos.W);
+    }
+
 
     var src = "../WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";
@@ -199,11 +208,48 @@ function figure_Template_FigureFrmCheck(wf_node) {
     return eleHtml;
 }
 
+//把FlowCtrls格式转化为. json. @Ctrl=FrmCheck,X=10,Y=100,H=90,W=39
+function PreaseFlowCtrls(flowCtrls, ctrlID) {
+
+    if (flowCtrls == "" || flowCtrls == null || flowCtrls == undefined)
+        return null;
+
+    //先用@符号分开.
+    var at = flowCtrls.split('@');
+
+    //遍历他.
+    for (var i = 0; i < at.length; i++) {
+        var str = at[i];
+        if (str.indexOf(ctrlID) == -1)
+            continue;
+
+        //现在str 的格式为  Ctrl=FrmCheck,X=10,Y=100,H=90,W=39
+
+        var strs = str.split(',');
+
+        var jsonObj = {};
+        $.each(strs, function (i, o) {
+            var kv = o.split("=");
+            if (kv.length == 2) {
+                jsonObj[kv[0]] = kv[1];
+            }
+        });
+
+        return jsonObj;
+
+        //alert(jsonObj + " -> " + JSON.stringify(jsonObj));
+
+    }
+}
+
 //子线程
-function figure_Template_FigureThreadDtl(wf_node) {
+function figure_Template_FigureThreadDtl(wf_node,mapData) {
 
     //FrmThreadSta Sta,FrmThread_X X,FrmThread_Y Y,FrmThread_H H,FrmThread_W
     var sta = wf_node.FrmThreadSta;
+    if (sta == 0 || sta == '0' || sta == undefined)
+        return $('');
+
     var x = wf_node.FrmThread_X;
     var y = wf_node.FrmThread_Y;
     var h = wf_node.FrmThread_H;
@@ -229,6 +275,7 @@ function figure_Template_FigureThreadDtl(wf_node) {
         fwcOnload = "onload= 'WC" + wf_node.NodeID + "load();'";
         $('body').append(addLoadFunction("WC" + wf_node.NodeID, "blur", "SaveDtl"));
     }
+
     src += "&r=q" + paras;
     var eleHtml = '<div id=DIVFT' + wf_node.NodeID + '>' + "<iframe id=FFT" + wf_node.NodeID + " style='width:100%;height:" + h + "px;'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
     eleHtml = $(eleHtml);
@@ -238,10 +285,11 @@ function figure_Template_FigureThreadDtl(wf_node) {
 }
 
 //子流程
-function figure_Template_FigureSubFlowDtl(wf_node) {
+function figure_Template_FigureSubFlowDtl(wf_node, mapData) {
 
     //@这里需要处理, 对于流程表单.
-    return;
+    if (sta == 0 || sta == "0" || sta == undefined)
+        return $('');
 
     //SFSta Sta,SF_X X,SF_Y Y,SF_H H, SF_W W
     var sta = wf_node.SFSta;
@@ -249,8 +297,6 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
     var y = wf_node.SF_Y;
     var h = wf_node.SF_H;
     var w = wf_node.SF_W;
-    if (sta == 0)
-        return $('');
 
     var src = "../WorkOpt/SubFlow.htm?s=2";
     var fwcOnload = "";
@@ -276,7 +322,6 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
 
     return eleHtml;
 }
-
 
 
 //初始化从表

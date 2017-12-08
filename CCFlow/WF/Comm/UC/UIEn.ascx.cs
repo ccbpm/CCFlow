@@ -457,22 +457,22 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
                     try
                     {
                         this.Save();
-                        //this.WinClose();
+                        this.WinClose();
 
-                        string script = "function ParentWindowClose() {";
-                        script += "   if(window.parent && window.parent.Win_Close_Dialog){";
-                        script += "      window.parent.Win_Close_Dialog();";
-                        script += "   }else{";
-                        script += "      window.close();";
-                        script += "   }";
-                        script += " }";
+                        //string script = "function ParentWindowClose() {";
+                        //script += "   if(window.parent && window.parent.Win_Close_Dialog){";
+                        //script += "      window.parent.Win_Close_Dialog();";
+                        //script += "   }else{";
+                        //script += "      window.close();";
+                        //script += "   }";
+                        //script += " }";
 
-                        if (Request.QueryString["inlayer"] == "1")
-                            script += "window.parent.closeDlg();";
-                        else
-                            script += " ParentWindowClose();";
+                        //if (Request.QueryString["inlayer"] == "1")
+                        //    script += "window.parent.closeDlg();";
+                        //else
+                        //    script += " ParentWindowClose();";
                         
-                        this.Response.Write("<script language='JavaScript'>" + script + "</script>");
+                        //this.Response.Write("<script language='JavaScript'>" + script + "</script>");
                     }
                     catch (Exception ex)
                     {

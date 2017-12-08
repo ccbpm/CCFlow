@@ -494,20 +494,26 @@ namespace BP.WF.HttpHandler
             //返回自由表单解析执行器.
             if (BP.WF.Glo.IsBeta == true)
             {
-                if (md.HisFrmType == FrmType.FreeFrm )
+                if (md.HisFrmType == FrmType.FreeFrm)
                 {
                     if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
                         return "url@FrmGener.htm?1=2" + paras;
                     else
                         return "url@FrmGener.htm?1=2" + paras;
                 }
+
+                if (md.HisFrmType == FrmType.VSTOForExcel)
+                {
+                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                        return "url@FrmVSTO.aspx?1=2" + paras;
+                    else
+                        return "url@FrmVSTO.aspx?1=2" + paras;
+                }
+
+                if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
+                    return "url@FrmGener.htm?1=2" + paras;
                 else
-                {
-                    if (this.GetRequestVal("Readonly") == "1" || this.GetRequestVal("IsEdit") == "0")
-                        return "url@FrmGener.htm?1=2" + paras;
-                    else
-                        return "url@FrmGener.htm?1=2" + paras;
-                }
+                    return "url@FrmGener.htm?1=2" + paras;
             }
             else
             {

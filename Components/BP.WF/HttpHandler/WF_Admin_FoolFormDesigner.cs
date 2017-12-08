@@ -364,6 +364,10 @@ namespace BP.WF.HttpHandler
                 attr.Name = sem.Name;
             else
                 attr.Name = "枚举" + attr.UIBindKey;
+
+            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.EnName='" + this.FK_MapData + "' AND CtrlType='' OR CtrlType= NULL";
+            attr.GroupID = DBAccess.RunSQLReturnValInt(sql, 0);
+
             attr.Insert();
             return attr.MyPK;
         }
@@ -1116,6 +1120,9 @@ namespace BP.WF.HttpHandler
                 attr.UIContralType = UIContralType.CheckBok;
             else
                 attr.UIContralType = UIContralType.TB;
+
+            string sql = "SELECT OID FROM Sys_GroupField A WHERE A.EnName='" + this.FK_MapData + "' AND CtrlType='' OR CtrlType= NULL";
+            attr.GroupID  = DBAccess.RunSQLReturnValInt(sql, 0);
 
             attr.Insert();
 

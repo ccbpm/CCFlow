@@ -104,6 +104,18 @@
                 OperVal = $("#DDL_Val").val(); //  操作符.
             }
 
+			var DDL_Frms = $("#DDL_Frms").val();
+			if (typeof DDL_Frms == "undefined" || DDL_Frms == "" || DDL_Frms == "all") {
+				alert("请选择独立表单");
+				return;
+			} else if (typeof DDL_Fields == "undefined" || DDL_Fields == "") {
+				alert("请选择表单字段");
+				return;
+			} else if (typeof OperVal == "undefined" || OperVal == "") {
+				alert("请选择操作符");
+				return;
+			}
+
             var paras = "&DDL_Fields=" + DDL_Fields + "&DDL_Operator=" + DDL_Operator + "&OperVal=" + OperVal + "&SaveType=" + saveType;
 
             //初始化表格.
@@ -164,8 +176,11 @@
 
 		function changeForm(s) {
 			var value = $(s).val();
-			if (value != "all") {
-				 $.ajax({
+			if (value == "all") {
+				$("#DDL_Fields").empty();
+				$("#DDL_Fields").trigger("change");
+			} else {
+				$.ajax({
 					type: 'post',
 					async: true,
 					url: Handler + "?DoType=CondByBindFrms_InitFrmAttr&FrmID=" + value + "&m=" + Math.random(),
@@ -182,12 +197,13 @@
 
         //当字段选择的时候.
         function changeCond(c) {
-            if (c == null || c.value.length == 0)
+
+            if (c == null || c.value.length == 0 || c.value == "all") {
+				$("#DDL_Operator").empty();
                 return;
+			}
 
             var key = c.value;
-            if (key == "all")
-                return;
 
             var fk_flow = GetQueryString("FK_Flow");
 

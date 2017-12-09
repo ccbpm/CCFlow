@@ -384,7 +384,7 @@
                             //设置表格的表头
                             var tableHeader = '';
                             if (pageSetData[0].PopValSelectModel == "More") {//选择模式是单选
-                                tableHeader = "<tr data-data='true'><th data-custom='true' style='width:30px;' data-customcontent='1' data-customcontent1='input@type=checkbox class=ck_tbody@' data-coltype='Operation1'></th>";
+                                tableHeader = "<tr data-data='true'><th data-custom='true' style='width:30px;' data-customcontent='1' data-customcontent1='input@type=checkbox class=ck_tbody@' data-coltype='Operation1'><input type='checkbox' style='margin: 5px 0px;' onclick='checkAll(this)' /></th>";
                             } else {//选择模式是多选
                                 tableHeader = "<tr data-data='true'><th data-custom='true' style='width:30px;' data-customcontent='1' data-customcontent1='input@type=radio name=rb class=rb_tbody@' data-coltype='Operation1'></th>";
                             }
@@ -842,6 +842,12 @@
                 break;
         }
     }
+
+		function checkAll(o) {
+			$("tbody").children().find("input[type='checkbox']").each(function () {
+				this.checked = o.checked;
+			});
+		}
     </script>
 </head>
 <body>

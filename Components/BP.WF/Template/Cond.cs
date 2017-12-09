@@ -1100,7 +1100,7 @@ namespace BP.WF.Template
                     GEEntity myen = new GEEntity(attr.FK_MapData, en.OID);
                     return CheckIsPass(myen);
                 }
-                throw new Exception("@不应该运行到这里。");
+                return false;
             }
         }
         private bool CheckIsPass(Entity en)

@@ -20,7 +20,8 @@
         function DoExp() {
             var url = window.location.href;
             url = url + "&DoType=Exp";
-            var v = window.showModalDialog(url, 'ddd', 'dialogHeight: 550px; dialogWidth: 650px; dialogTop: 100px; dialogLeft: 150px; center: yes; help: no');
+            //var v = window.showModalDialog(url, 'ddd', 'dialogHeight: 550px; dialogWidth: 650px; dialogTop: 100px; dialogLeft: 150px; center: yes; help: no');
+            var v = WinOpen(url, 'wincommgroup', 900, 900);
         }
         function Esc() {
             if (event.keyCode == 27)

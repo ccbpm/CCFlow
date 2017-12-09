@@ -370,7 +370,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string StandAloneFrm_Init()
         {
-            string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FK_Node=" + this.FK_Node;
+            string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FrmEnableRole!=5 AND n.FK_Node=" + this.FK_Node;
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "Frms";
             dt.Columns[0].ColumnName = "No";
@@ -449,7 +449,7 @@ namespace BP.WF.HttpHandler
             QueryObject qo = new QueryObject(conds);
             qo.AddWhere(CondAttr.NodeID, this.FK_Node);
             qo.addAnd();
-            qo.AddWhere(CondAttr.DataFrom, (int)ConnDataFrom.NodeForm);
+            qo.AddWhere(CondAttr.DataFrom, (int)ConnDataFrom.StandAloneFrm);
             qo.addAnd();
             qo.AddWhere(CondAttr.CondType, (int)condTypeEnum);
             if (toNodeID != 0)

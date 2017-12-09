@@ -243,29 +243,7 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
         }
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <returns></returns>
-        public string CondByBindFrms_Init()
-        {
-            string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FK_Node=" + this.FK_Node;
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            dt.TableName = "Frms";
-            dt.Columns[0].ColumnName = "No";
-            dt.Columns[1].ColumnName = "Name";
-
-            DataRow dr = dt.NewRow();
-            dr[0] = "all";
-            dr[1] = "请选择表单";
-            dt.Rows.Add(dr);
-
-            DataSet ds = new DataSet();
-            ds.Tables.Add(dt);
-
-            return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
-        }
+      
 
         public string CondByFrm_InitField()
         {
@@ -466,6 +444,150 @@ namespace BP.WF.HttpHandler
             return "无可删除的数据.";
         }
         #endregion 方向条件 Frm 模版
+
+        #region 独立表单的方向条件.
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string CondByBindFrms_Init()
+        {
+            string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FK_Node=" + this.FK_Node;
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "Frms";
+            dt.Columns[0].ColumnName = "No";
+            dt.Columns[1].ColumnName = "Name";
+
+            DataRow dr = dt.NewRow();
+            dr[0] = "all";
+            dr[1] = "请选择表单";
+            dt.Rows.Add(dr);
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
+        }
+        /// <summary>
+        /// 获得一个表单的字段.
+        /// </summary>
+        /// <returns></returns>
+        public string CondByBindFrms_InitFrmAttr()
+        {
+            string frmID = this.GetRequestVal("FrmID");
+            MapAttrs attrs = new MapAttrs(frmID);
+            return attrs.ToJson();
+        }
+        public string CondByBindFrms_Save()
+        {
+            string frmID = this.GetRequestVal("FrmID");
+
+            //定义变量.
+            string field = this.GetRequestVal("DDL_Fields");
+            field =  frmID+ "_" + field;
+
+            int toNodeID = this.GetRequestValInt("ToNodeID");
+            int fk_Node = this.GetRequestValInt("FK_Node");
+            string oper = this.GetRequestVal("DDL_Operator");
+
+            string operVal = this.GetRequestVal("OperVal");
+
+            //节点,子线城,还是其他
+            CondType condTypeEnum =  (CondType)this.GetRequestValInt("CondType");
+
+            //把其他的条件都删除掉.
+            DBAccess.RunSQL("DELETE FROM WF_Cond WHERE ( NodeID=" + this.FK_Node + " AND ToNodeID=" + toNodeID + ") AND DataFrom!=" + (int)ConnDataFrom.NodeForm);
+
+            Cond cond = new Cond();
+            cond.HisDataFrom = ConnDataFrom.StandAloneFrm;
+            cond.NodeID = fk_Node;
+            cond.ToNodeID = toNodeID;
+
+            cond.FK_Node = this.FK_Node;
+            cond.FK_Operator = oper;
+            cond.OperatorValue = operVal; //操作值.
+
+            cond.FK_Attr = field; //字段属性.
+
+            //  cond.OperatorValueT = ""; // this.GetOperValText;
+            cond.FK_Flow = this.FK_Flow;
+            cond.HisCondType = condTypeEnum;
+
+            ; //保存类型.
+            if (this.GetRequestVal("SaveType").Equals("AND")==true )
+                cond.CondOrAnd = CondOrAnd.ByAnd;
+            else
+                cond.CondOrAnd = CondOrAnd.ByOr;
+
+            #region 方向条件，全部更新.
+            Conds conds = new Conds();
+            QueryObject qo = new QueryObject(conds);
+            qo.AddWhere(CondAttr.NodeID, this.FK_Node);
+            qo.addAnd();
+            qo.AddWhere(CondAttr.DataFrom, (int)ConnDataFrom.NodeForm);
+            qo.addAnd();
+            qo.AddWhere(CondAttr.CondType, (int)condTypeEnum);
+            if (toNodeID != 0)
+            {
+                qo.addAnd();
+                qo.AddWhere(CondAttr.ToNodeID, toNodeID);
+            }
+            int num = qo.DoQuery();
+            foreach (Cond item in conds)
+            {
+                item.CondOrAnd = cond.CondOrAnd;
+                item.Update();
+            }
+            #endregion
+
+            /* 执行同步*/
+            string sqls = "UPDATE WF_Node SET IsCCFlow=0";
+            sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NODEID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
+            BP.DA.DBAccess.RunSQLs(sqls);
+
+            string sql = "UPDATE WF_Cond SET DataFrom=" + (int)ConnDataFrom.NodeForm + " WHERE NodeID=" + cond.NodeID + "  AND FK_Node=" + cond.FK_Node + " AND ToNodeID=" + toNodeID;
+            switch (condTypeEnum)
+            {
+                case CondType.Flow:
+                case CondType.Node:
+                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.Insert();
+                    BP.DA.DBAccess.RunSQL(sql);
+                    break;
+                case CondType.Dir:
+                    // cond.MyPK = cond.NodeID +"_"+ this.Request.QueryString["ToNodeID"]+"_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.ToNodeID = toNodeID;
+                    cond.Insert();
+                    BP.DA.DBAccess.RunSQL(sql);
+                    break;
+                case CondType.SubFlow: //启动子流程.
+                    cond.MyPK = BP.DA.DBAccess.GenerOID().ToString();   //cond.NodeID + "_" + cond.FK_Node + "_" + cond.FK_Attr + "_" + cond.OperatorValue;
+                    cond.ToNodeID = toNodeID;
+                    cond.Insert();
+                    BP.DA.DBAccess.RunSQL(sql);
+                    break;
+                default:
+                    throw new Exception("未设计的情况。" + condTypeEnum.ToString());
+            }
+
+            return "保存成功!!";
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string CondByBindFrms_Delete()
+        {
+            Cond deleteCond = new Cond();
+            deleteCond.MyPK = this.MyPK;
+            int i = deleteCond.Delete();
+            if (i == 1)
+                return "删除成功..";
+
+            return "无可删除的数据.";
+        }
+        #endregion
 
         #region 方向条件SQL 模版
         /// <summary>

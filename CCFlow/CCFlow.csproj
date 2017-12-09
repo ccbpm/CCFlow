@@ -380,6 +380,18 @@
     <Content Include="WF\Admin\AttrFlow\Exp.htm" />
     <Content Include="WF\Admin\AttrFlow\FlowFields.htm" />
     <Content Include="WF\Admin\AttrFlow\Imp.htm" />
+    <Content Include="WF\Admin\Cond\CondByFrm.htm" />
+    <Content Include="WF\Admin\Cond\CondByPara.htm" />
+    <Content Include="WF\Admin\Cond\CondBySQL.htm" />
+    <Content Include="WF\Admin\Cond\CondBySQLTemplate.htm" />
+    <Content Include="WF\Admin\Cond\CondByUrl.htm" />
+    <Content Include="WF\Admin\Cond\CondDept.htm" />
+    <Content Include="WF\Admin\Cond\Condition.htm" />
+    <Content Include="WF\Admin\Cond\ConditionLine.htm" />
+    <Content Include="WF\Admin\Cond\ConditionSubFlow.htm" />
+    <Content Include="WF\Admin\Cond\CondPRI.htm" />
+    <Content Include="WF\Admin\Cond\CondStation.htm" />
+    <Content Include="WF\Admin\Cond\StandAloneFrm.htm" />
     <Content Include="WF\Admin\Port\OrderOfDept.htm" />
     <Content Include="WF\Admin\Port\OrderOfEmp.htm" />
     <Content Include="WF\Admin\RptDfine\DeptPower.aspx" />
@@ -398,8 +410,6 @@
     <Content Include="WF\Admin\AttrFlow\NodeAttrs.htm" />
     <Content Include="WF\Admin\AttrFlow\APICodeFEE.htm" />
     <Content Include="WF\Admin\AttrFlow\DTSBTableExt.htm" />
-    <Content Include="WF\Admin\CondBySQL.htm" />
-    <Content Include="WF\Admin\Condition.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Designer.htm" />
     <Content Include="WF\Admin\FoolFormDesigner\Designer.js" />
     <Content Include="WF\Admin\FoolFormDesigner\GuideSFTableAttr.htm" />
@@ -414,12 +424,6 @@
     <Content Include="WF\Admin\Sln\SlnDo.aspx" />
     <Content Include="WF\Admin\TestFlow.htm" />
     <Content Include="WF\Admin\SettingTemplate.htm" />
-    <Content Include="WF\Admin\CondByUrl.htm" />
-    <Content Include="WF\Admin\CondByPara.htm" />
-    <Content Include="WF\Admin\CondBySQLTemplate.htm" />
-    <Content Include="WF\Admin\CondByFrm.htm" />
-    <Content Include="WF\Admin\CondPRI.htm" />
-    <Content Include="WF\Admin\ConditionLine.htm" />
     <Content Include="WF\Admin\UC\Pub.ascx" />
     <Content Include="WF\AppClassic\Home.htm" />
     <Content Include="WF\AppClassic\Img\Exit.jpg" />
@@ -6383,6 +6387,7 @@
     <Content Include="WF\AppClassic\Handler.ashx" />
     <Content Include="WF\Admin\Port\Handler.ashx" />
     <Content Include="WF\Admin\Sln\Handler.ashx" />
+    <Content Include="WF\Admin\Cond\Handler.ashx" />
     <None Include="WF\CCForm\Port.readme" />
     <Content Include="WF\CCForm\WinOpen.master" />
     <Content Include="WF\Comm\Handler.ashx" />
@@ -7028,6 +7033,9 @@
     </Compile>
     <None Include="WF\Admin\AttrFlow\APICodeFEE.txt.JFlow" />
     <Compile Include="WF\Admin\AttrFlow\Handler.ashx.cs">
+      <DependentUpon>Handler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="WF\Admin\Cond\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
     <Compile Include="WF\Admin\Port\Handler.ashx.cs">

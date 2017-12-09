@@ -57,7 +57,7 @@
 
                     var str = "";
                     switch (data.HisDataFrom) {
-                        case "Form":
+                        case "NodeForm":
                             str = "CondByFrm";
                             break;
                         case "Stas":
@@ -78,8 +78,14 @@
                         case "SQLTemplate":
                             str = "CondBySQLTemplate";
                             break;
+                        case "SQLTemplate":
+                            str = "CondBySQLTemplate";
+                            break;
+                        case "NodeForm":
+                            str = "CondByFrm";
+                            break;
                         default:
-                            alert('err没有判断的条件..');
+                            alert('err没有判断的条件..' + data.HisDataFrom);
                             return;
                     }
 

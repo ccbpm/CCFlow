@@ -126,7 +126,8 @@ namespace BP.WF.HttpHandler
                 qo.addAnd();
                 qo.AddWhere(GenerWorkFlowAttr.FK_Flow, this.FK_Flow);
             }
-
+            qo.addOrderBy("WFSta");
+            qo.addOrderByDesc("RDT");
             qo.Top = 50;
 
 

@@ -81,8 +81,8 @@
                         case "SQLTemplate":
                             str = "CondBySQLTemplate";
                             break;
-                        case "NodeForm":
-                            str = "CondByFrm";
+                        case "StandAloneFrm":
+                            str = "StandAloneFrm";
                             break;
                         default:
                             alert('err没有判断的条件..' + data.HisDataFrom);
@@ -137,7 +137,7 @@
 
                 <select id="cond"  name="cond" class="easyui-combobox" data-options="onSelect:function(rec){ changeCond(rec); }">
                     <option value="CondByFrm">按表单条件计算</option>
-                    <option value="CondByBindFrms">按已选择的独立表单条件计算</option>
+                    <option value="StandAloneFrm">按已选择的独立表单条件计算</option>
                     <option value="CondStation">按指定操作员的岗位条件</option>
                     <option value="CondDept">按指定操作员的部门条件</option>
                     <option value="CondBySQL">按SQL条件计算</option>

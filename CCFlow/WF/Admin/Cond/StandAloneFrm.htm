@@ -38,7 +38,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CondByBindFrms_Init&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + "&m=" + Math.random(),
+                url: Handler + "?DoType=StandAloneFrm_Init&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -73,7 +73,7 @@
                             newRow += "<td> OR </td>";
 
                         newRow += "<td>";
-                        newRow += "<a href=\"javascript:Delete('" + cond.MyPK + "')\"><img src='../Img/Btn/Delete.gif' border=0 />删除</a>";
+                        newRow += "<a href=\"javascript:Delete('" + cond.MyPK + "')\"><img src='../../Img/Btn/Delete.gif' border=0 />删除</a>";
                         newRow += "</td>";
                         newRow += "</tr>";
                         $("#Table1 tr:last").after(newRow);
@@ -122,7 +122,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CondByBindFrms_Save&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + paras + "&m=" + Math.random() + "&FrmID=" + $("#DDL_Frms").val(),
+                url: Handler + "?DoType=StandAloneFrm_Save&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + paras + "&m=" + Math.random() + "&FrmID=" + $("#DDL_Frms").val(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -155,7 +155,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CondByBindFrms_Delete&MyPK=" + mypk + "&m=" + Math.random(),
+                url: Handler + "?DoType=StandAloneFrm_Delete&MyPK=" + mypk + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -183,7 +183,7 @@
 				$.ajax({
 					type: 'post',
 					async: true,
-					url: Handler + "?DoType=CondByBindFrms_InitFrmAttr&FrmID=" + value + "&m=" + Math.random(),
+					url: Handler + "?DoType=StandAloneFrm_InitFrmAttr&FrmID=" + value + "&m=" + Math.random(),
 					dataType: 'html',
 					success: function (data) {
 						if (data) {
@@ -211,7 +211,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CondByBindFrms_InitField&KeyOfEn=" + key + "&FK_Flow=" + fk_flow + "&FrmID=" + $("#DDL_Frms").val() + "&m=" + Math.random(),
+                url: Handler + "?DoType=StandAloneFrm_InitField&KeyOfEn=" + key + "&FK_Flow=" + fk_flow + "&FrmID=" + $("#DDL_Frms").val() + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 

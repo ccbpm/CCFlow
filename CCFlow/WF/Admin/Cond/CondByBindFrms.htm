@@ -110,7 +110,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CondByBindFrms_Save&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + paras + "&m=" + Math.random(),
+                url: Handler + "?DoType=CondByBindFrms_Save&CondType=" + condType + "&FK_Flow=" + fk_flow + "&FK_MainNode=" + fk_mainNode + "&FK_Node=" + fk_Node + "&ToNodeID=" + toNodeID + paras + "&m=" + Math.random() + "&FrmID=" + $("#DDL_Frms").val(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -195,7 +195,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CondByFrm_InitField&KeyOfEn=" + key + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+                url: Handler + "?DoType=CondByBindFrms_InitField&KeyOfEn=" + key + "&FK_Flow=" + fk_flow + "&FrmID=" + $("#DDL_Frms").val() + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 

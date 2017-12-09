@@ -474,7 +474,6 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
 
 //处理MapExt
 function AfterBindEn_DealMapExt(frmData) {
-
     var mapExtArr = frmData.Sys_MapExt;
     for (var i = 0; i < mapExtArr.length; i++) {
         var mapExt = mapExtArr[i];
@@ -486,8 +485,17 @@ function AfterBindEn_DealMapExt(frmData) {
                 tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
               //  tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
 
-                tb.attr('readonly', 'true');
-                tb.attr('disabled', 'true');
+				var UIIsEnable = "0";
+				$.each(frmData.Sys_MapAttr, function (i, o) {
+					if (mapExt.AttrOfOper == o.KeyOfEn) {
+						UIIsEnable = o.UIIsEnable;
+						return false;
+					}
+				});
+				if (UIIsEnable !== "1") {
+					tb.attr('readonly', 'true');
+					tb.attr('disabled', 'true');
+				}
                 var icon = '';
                 var popWorkModelStr = '';
                 var popWorkModelIndex = mapExt.AtPara != undefined ? mapExt.AtPara.indexOf('@PopValWorkModel=') : -1;

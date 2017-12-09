@@ -1083,64 +1083,81 @@ namespace BP.WF.Template
                     #endregion
                 }
 
-                try
+                //从节点表单里判断.
+                if (this.HisDataFrom == ConnDataFrom.NodeForm)
                 {
                     if (en.EnMap.Attrs.Contains(this.AttrKey) == false)
-                        throw new Exception("判断条件方向出现错误：实体：" + nd.EnDesc + " 属性" + this.AttrKey + "已经不存在.");
+                        throw new Exception("err@判断条件方向出现错误：实体：" + nd.EnDesc + " 属性" + this.AttrKey + "已经被删除方向条件判断失败.");
 
                     this.MsgOfCond = "@以表单值判断方向，值 " + en.EnDesc + "." + this.AttrKey + " (" + en.GetValStringByKey(this.AttrKey) + ") 操作符:(" + this.FK_Operator + ") 判断值:(" + this.OperatorValue.ToString() + ")";
+                    return CheckIsPass(en); 
+                }
 
-                    switch (this.FK_Operator.Trim().ToLower())
-                    {
-                        case "<>":
-                            if (en.GetValStringByKey(this.AttrKey) != this.OperatorValue.ToString())
-                                return true;
-                            else
-                                return false;
-                        case "=":  // 如果是 = 
-                            if (en.GetValStringByKey(this.AttrKey) == this.OperatorValue.ToString())
-                                return true;
-                            else
-                                return false;
-                        case ">":
-                            if (en.GetValDoubleByKey(this.AttrKey) > Double.Parse(this.OperatorValue.ToString()))
-                                return true;
-                            else
-                                return false;
-                        case ">=":
-                            if (en.GetValDoubleByKey(this.AttrKey) >= Double.Parse(this.OperatorValue.ToString()))
-                                return true;
-                            else
-                                return false;
-                        case "<":
-                            if (en.GetValDoubleByKey(this.AttrKey) < Double.Parse(this.OperatorValue.ToString()))
-                                return true;
-                            else
-                                return false;
-                        case "<=":
-                            if (en.GetValDoubleByKey(this.AttrKey) <= Double.Parse(this.OperatorValue.ToString()))
-                                return true;
-                            else
-                                return false;
-                        case "!=":
-                            if (en.GetValStringByKey(this.AttrKey) != this.OperatorValue.ToString())
-                                return true;
-                            else
-                                return false;
-                        case "like":
-                            if (en.GetValStringByKey(this.AttrKey).IndexOf(this.OperatorValue.ToString()) == -1)
-                                return false;
-                            else
-                                return true;
-                        default:
-                            throw new Exception("@没有找到操作符号(" + this.FK_Operator.Trim().ToLower() + ").");
-                    }
-                }
-                catch (Exception ex)
+                //从独立表单里判断.
+                if (this.HisDataFrom == ConnDataFrom.StandAloneFrm)
                 {
-                    Node nd23 = new Node(this.NodeID);
-                    throw new Exception("@判断条件:Node=[" + this.NodeID + "," + nd23.EnDesc + "], 出现错误。@" + ex.Message + "。有可能您设置了非法的条件判断方式。");
+                    MapAttr attr = new MapAttr(this.FK_Attr);
+                    GEEntity myen = new GEEntity(attr.FK_MapData, en.OID);
+                    return CheckIsPass(myen);
                 }
+                
+            }
+        }
+        private bool CheckIsPass(Entity en)
+        {
+
+            try
+            {
+                switch (this.FK_Operator.Trim().ToLower())
+                {
+                    case "<>":
+                        if (en.GetValStringByKey(this.AttrKey) != this.OperatorValue.ToString())
+                            return true;
+                        else
+                            return false;
+                    case "=":  // 如果是 = 
+                        if (en.GetValStringByKey(this.AttrKey) == this.OperatorValue.ToString())
+                            return true;
+                        else
+                            return false;
+                    case ">":
+                        if (en.GetValDoubleByKey(this.AttrKey) > Double.Parse(this.OperatorValue.ToString()))
+                            return true;
+                        else
+                            return false;
+                    case ">=":
+                        if (en.GetValDoubleByKey(this.AttrKey) >= Double.Parse(this.OperatorValue.ToString()))
+                            return true;
+                        else
+                            return false;
+                    case "<":
+                        if (en.GetValDoubleByKey(this.AttrKey) < Double.Parse(this.OperatorValue.ToString()))
+                            return true;
+                        else
+                            return false;
+                    case "<=":
+                        if (en.GetValDoubleByKey(this.AttrKey) <= Double.Parse(this.OperatorValue.ToString()))
+                            return true;
+                        else
+                            return false;
+                    case "!=":
+                        if (en.GetValStringByKey(this.AttrKey) != this.OperatorValue.ToString())
+                            return true;
+                        else
+                            return false;
+                    case "like":
+                        if (en.GetValStringByKey(this.AttrKey).IndexOf(this.OperatorValue.ToString()) == -1)
+                            return false;
+                        else
+                            return true;
+                    default:
+                        throw new Exception("@没有找到操作符号(" + this.FK_Operator.Trim().ToLower() + ").");
+                }
+            }
+            catch (Exception ex)
+            {
+                Node nd23 = new Node(this.NodeID);
+                throw new Exception("@判断条件:Node=[" + this.NodeID + "," + nd23.EnDesc + "], 出现错误。@" + ex.Message + "。有可能您设置了非法的条件判断方式。");
             }
         }
         /// <summary>

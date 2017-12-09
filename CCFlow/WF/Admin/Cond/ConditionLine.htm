@@ -70,7 +70,7 @@
                     }
 
                     //增加方向条件设置.
-                    $("#list").append("<li><div><a href='javascript:void(0)' onclick='OpenPRI();'><span class='nav' >优先级设置</span></a></div></li>");
+                    $("#list").append("<li><div><a href='javascript:void(0)' onclick='OpenPRI(this);'><span class='nav' >优先级设置</span></a></div></li>");
 
 					initNodeTree();
                 }
@@ -83,10 +83,10 @@
             OpenUrlInRightFrame(ele, url);
         }
 
-        function OpenPRI() {
+        function OpenPRI(ele) {
 
             var url = "CondPRI.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Attr=" + GetQueryString("FK_Attr");
-            OpenUrlInRightFrame(this, url);
+            OpenUrlInRightFrame(ele, url);
         }
 
         function initNodeTree() {

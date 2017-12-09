@@ -243,8 +243,6 @@ namespace BP.WF.HttpHandler
 
             return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
         }
-      
-
         public string CondByFrm_InitField()
         {
             //定义数据容器.
@@ -593,6 +591,95 @@ namespace BP.WF.HttpHandler
                 return "删除成功..";
 
             return "无可删除的数据.";
+        }
+
+        public string CondByBindFrms_InitField()
+        {
+            //定义数据容器.
+            DataSet ds = new DataSet();
+
+            //字段属性.
+            MapAttr attr = new MapAttr();
+            attr.MyPK =  this.FrmID+ "_" + this.KeyOfEn;
+            attr.Retrieve();
+
+            ds.Tables.Add(attr.ToDataTableField("Sys_MapAttr"));
+
+            if (attr.LGType == FieldTypeS.Enum)
+            {
+                SysEnums ses = new SysEnums(attr.UIBindKey);
+                ds.Tables.Add(ses.ToDataTableField("Enums"));
+            }
+
+
+            #region 增加操作符 number.
+            if (attr.IsNum)
+            {
+                DataTable dtOperNumber = new DataTable();
+                dtOperNumber.TableName = "Opers";
+                dtOperNumber.Columns.Add("No", typeof(string));
+                dtOperNumber.Columns.Add("Name", typeof(string));
+
+                DataRow dr = dtOperNumber.NewRow();
+                dr["No"] = "dengyu";
+                dr["Name"] = "= 等于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "dayu";
+                dr["Name"] = " > 大于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "dayudengyu";
+                dr["Name"] = " >= 大于等于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "xiaoyu";
+                dr["Name"] = " < 小于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "xiaoyudengyu";
+                dr["Name"] = " <= 小于等于";
+                dtOperNumber.Rows.Add(dr);
+
+                dr = dtOperNumber.NewRow();
+                dr["No"] = "budengyu";
+                dr["Name"] = " != 不等于";
+                dtOperNumber.Rows.Add(dr);
+
+                ds.Tables.Add(dtOperNumber);
+            }
+            else
+            {
+                #region 增加操作符 string.
+                DataTable dtOper = new DataTable();
+                dtOper.TableName = "Opers";
+                dtOper.Columns.Add("No", typeof(string));
+                dtOper.Columns.Add("Name", typeof(string));
+
+                DataRow dr = dtOper.NewRow();
+                dr["No"] = "dengyu";
+                dr["Name"] = "= 等于";
+                dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "like";
+                dr["Name"] = " LIKE 包含";
+                dtOper.Rows.Add(dr);
+
+                dr = dtOper.NewRow();
+                dr["No"] = "budengyu";
+                dr["Name"] = " != 不等于";
+                dtOper.Rows.Add(dr);
+                ds.Tables.Add(dtOper);
+                #endregion 增加操作符 string.
+            }
+            #endregion 增加操作符 number.
+
+            return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
         }
         #endregion
 

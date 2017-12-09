@@ -152,6 +152,9 @@ namespace BP.WF.HttpHandler
                     fn.FK_Frm = s;
                     fn.FK_Flow = this.FK_Flow;
                     fn.FK_Node = this.FK_Node;
+
+                    fn.MyPK = fn.FK_Frm + "_" + fn.FK_Node + "_" + fn.FK_Flow;
+
                     fn.Save();
                 }
                 return "true";

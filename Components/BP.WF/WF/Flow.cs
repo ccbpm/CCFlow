@@ -4225,7 +4225,9 @@ namespace BP.WF
                 map.AddTBInt(FlowAttr.ChartType, 1, "节点图形类型", false, false);
 
                 // map.AddBoolean(FlowAttr.IsOK, true, "是否启用", true, true);
-                map.AddBoolean(FlowAttr.IsCanStart, true, "可以独立启动否？", true, true, true);
+                map.AddTBInt(FlowAttr.IsCanStart, 1, "可以独立启动否？", true, true);
+                map.AddTBInt(FlowAttr.IsStartInMobile, 1, "是否可以在手机里发起？", true, true);
+                
                 map.AddTBDecimal(FlowAttr.AvgDay, 0, "平均运行用天", false, false);
 
 

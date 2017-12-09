@@ -88,6 +88,11 @@ namespace BP.WF.Template
         /// </summary>
         public const string IsCanStart = "IsCanStart";
         /// <summary>
+        /// 是否可以在手机里启用?
+        /// </summary>
+        public const string IsStartInMobile = "IsStartInMobile";
+
+        /// <summary>
         /// 是否自动计算未来的处理人？
         /// </summary>
         public const string IsFullSA = "IsFullSA";

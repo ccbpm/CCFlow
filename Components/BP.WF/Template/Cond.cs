@@ -1111,41 +1111,44 @@ namespace BP.WF.Template
                 switch (this.FK_Operator.Trim().ToLower())
                 {
                     case "<>":
-                        if (en.GetValStringByKey(this.AttrKey) != this.OperatorValue.ToString())
+                    case "!=":
+                    case "budingyu":
+                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString())==false)
                             return true;
                         else
                             return false;
                     case "=":  // 如果是 = 
-                        if (en.GetValStringByKey(this.AttrKey) == this.OperatorValue.ToString())
+                    case "dengyu":
+                        if (en.GetValStringByKey(this.AttrKey).Equals(this.OperatorValue.ToString())==true)
                             return true;
                         else
                             return false;
                     case ">":
+                    case "dayu":
                         if (en.GetValDoubleByKey(this.AttrKey) > Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
                     case ">=":
+                    case "dayudengyu":
                         if (en.GetValDoubleByKey(this.AttrKey) >= Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
                     case "<":
+                    case "xiaoyu":
                         if (en.GetValDoubleByKey(this.AttrKey) < Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
                     case "<=":
+                    case "xiaoyudengyu":
                         if (en.GetValDoubleByKey(this.AttrKey) <= Double.Parse(this.OperatorValue.ToString()))
                             return true;
                         else
                             return false;
-                    case "!=":
-                        if (en.GetValStringByKey(this.AttrKey) != this.OperatorValue.ToString())
-                            return true;
-                        else
-                            return false;
                     case "like":
+                    case "baohan":
                         if (en.GetValStringByKey(this.AttrKey).IndexOf(this.OperatorValue.ToString()) == -1)
                             return false;
                         else

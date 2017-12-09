@@ -71,6 +71,8 @@
 
                     //增加方向条件设置.
                     $("#list").append("<li><div><a href='javascript:void(0)' onclick='OpenPRI();'><span class='nav' >优先级设置</span></a></div></li>");
+
+					initNodeTree();
                 }
             });
         });
@@ -87,15 +89,12 @@
             OpenUrlInRightFrame(this, url);
         }
 
-        $(document).ready(function () {
-
+        function initNodeTree() {
             var toNodeID = GetQueryString("ToNodeID");
             var li = $('ul.navlist').find("a[id='a" + toNodeID + "']");
-
             OpenCond(li, toNodeID);
-
             //$('ul.navlist').find("a[id='a" + toNodeID + "']").click();
-        });
+        }
 
          var currShow;
 

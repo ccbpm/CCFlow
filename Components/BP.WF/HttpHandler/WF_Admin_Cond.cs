@@ -466,6 +466,13 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
 
+            //增加条件集合.
+            string fk_mainNode = this.GetRequestVal("FK_MainNode");
+            string toNodeID = this.GetRequestVal("ToNodeID");
+            Conds conds = new Conds();
+            conds.Retrieve(CondAttr.FK_Node, fk_mainNode, CondAttr.ToNodeID, toNodeID);
+            ds.Tables.Add(conds.ToDataTableField("WF_Conds"));
+
             return BP.Tools.Json.DataSetToJson(ds, false); // cond.ToJson();
         }
         /// <summary>

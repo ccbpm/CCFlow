@@ -51,15 +51,7 @@
                     data = JSON.parse(data);
 
                     GenerBindDDL("DDL_Frms", data.Frms, "No", "Name", "all");
-
-                    var sys_mapattr = data["Sys_MapAttr"];
-
-                    //绑定查询.
-                    GenerBindDDL("DDL_Fields", sys_mapattr, "No", "Name", "all");
-
-                    //绑定操作。
-                    //GenerBindDDL("DDL_Operator", OperForNumber, "No", "Name", "=");
-                    //document.getElementById("TB_Note").value = data.Note;
+					return;
 
                     var wf_Conds = data["WF_Conds"];
 
@@ -171,6 +163,24 @@
             });
         }
 
+		function changeForm(s) {
+			var value = $(s).val();
+			if (value != "all") {
+				 $.ajax({
+					type: 'post',
+					async: true,
+					url: Handler + "?DoType=CondByBindFrms_InitFrmAttr&FrmID=" + value + "&m=" + Math.random(),
+					dataType: 'html',
+					success: function (data) {
+						if (data) {
+							GenerBindDDL("DDL_Fields", JSON.parse(data), "KeyOfEn", "Name");
+							$("#DDL_Fields").trigger("change");
+						}
+					}
+				});
+			}
+		}
+
         //当字段选择的时候.
         function changeCond(c) {
             if (c == null || c.value.length == 0)
@@ -186,7 +196,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=CondByBindFrms_InitField&KeyOfEn=" + key + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+                url: Handler + "?DoType=CondByFrm_InitField&KeyOfEn=" + key + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 

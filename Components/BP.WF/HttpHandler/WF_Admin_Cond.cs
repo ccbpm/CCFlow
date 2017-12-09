@@ -368,7 +368,7 @@ namespace BP.WF.HttpHandler
         /// 初始化
         /// </summary>
         /// <returns></returns>
-        public string CondByBindFrms_Init()
+        public string StandAloneFrm_Init()
         {
             string sql = "SELECT m.No, m.Name, n.FK_Node, n.FK_Flow FROM WF_FrmNode n INNER JOIN Sys_MapData m ON n.FK_Frm=m.No WHERE n.FK_Node=" + this.FK_Node;
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -397,13 +397,13 @@ namespace BP.WF.HttpHandler
         /// 获得一个表单的字段.
         /// </summary>
         /// <returns></returns>
-        public string CondByBindFrms_InitFrmAttr()
+        public string StandAloneFrm_InitFrmAttr()
         {
             string frmID = this.GetRequestVal("FrmID");
             MapAttrs attrs = new MapAttrs(frmID);
             return attrs.ToJson();
         }
-        public string CondByBindFrms_Save()
+        public string StandAloneFrm_Save()
         {
             string frmID = this.GetRequestVal("FrmID");
 
@@ -470,7 +470,7 @@ namespace BP.WF.HttpHandler
             sqls += "@UPDATE WF_Node  SET IsCCFlow=1 WHERE NodeID IN (SELECT NODEID FROM WF_Cond a WHERE a.NodeID= NodeID AND CondType=1 )";
             BP.DA.DBAccess.RunSQLs(sqls);
 
-            string sql = "UPDATE WF_Cond SET DataFrom=" + (int)ConnDataFrom.NodeForm + " WHERE NodeID=" + cond.NodeID + "  AND FK_Node=" + cond.FK_Node + " AND ToNodeID=" + toNodeID;
+            string sql = "UPDATE WF_Cond SET DataFrom=" + (int)ConnDataFrom.StandAloneFrm + " WHERE NodeID=" + cond.NodeID + "  AND FK_Node=" + cond.FK_Node + " AND ToNodeID=" + toNodeID;
             switch (condTypeEnum)
             {
                 case CondType.Flow:
@@ -502,7 +502,7 @@ namespace BP.WF.HttpHandler
         /// 删除
         /// </summary>
         /// <returns></returns>
-        public string CondByBindFrms_Delete()
+        public string StandAloneFrm_Delete()
         {
             Cond deleteCond = new Cond();
             deleteCond.MyPK = this.MyPK;
@@ -512,7 +512,7 @@ namespace BP.WF.HttpHandler
 
             return "无可删除的数据.";
         }
-        public string CondByBindFrms_InitField()
+        public string StandAloneFrm_InitField()
         {
             //字段属性.
             MapAttr attr = new MapAttr();

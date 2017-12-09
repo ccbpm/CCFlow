@@ -485,6 +485,7 @@ function AfterBindEn_DealMapExt(frmData) {
                 tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
               //  tb.attr("ondblclick", "ReturnValCCFormPopValGoogle(this,'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');");
 
+				// 字段属性的是否可编辑
 				var UIIsEnable = "0";
 				$.each(frmData.Sys_MapAttr, function (i, o) {
 					if (mapExt.AttrOfOper == o.KeyOfEn) {
@@ -496,6 +497,7 @@ function AfterBindEn_DealMapExt(frmData) {
 					tb.attr('readonly', 'true');
 					tb.attr('disabled', 'true');
 				}
+
                 var icon = '';
                 var popWorkModelStr = '';
                 var popWorkModelIndex = mapExt.AtPara != undefined ? mapExt.AtPara.indexOf('@PopValWorkModel=') : -1;

@@ -44,8 +44,40 @@ $(function () {
 
 //初始化右键菜单
 function InitContexMenu() {
+
+	// 节点双击打开属性
+	$("#a").bind("dblclick", function (e) {
+		var coords = getCanvasXY(e);
+        var x = coords[0];
+        var y = coords[1];
+		lastClick = [x, y];
+		// store id value (from Stack) of clicked text primitive
+		var textPrimitiveId = -1;
+		//find Connector at (x,y)
+		var cId = CONNECTOR_MANAGER.connectorGetByXY(x, y);
+		// check if we clicked a connector
+        if (cId != -1) {
+			
+		} else {
+			var fId = STACK.figureGetByXY(x, y);
+			$("#HD_BPMN_NodeID").val("");
+			$("#HD_BPMN_FigureID").val(fId);
+			var figure = STACK.figureGetById(fId);
+			var bpm_Node = figure.CCBPM_OID;
+			if (bpm_Node) {
+				$("#HD_BPMN_NodeID").val(bpm_Node);
+			}
+			// 对应Designer.htm:196菜单div#nodeMenu子项div的data-options属性
+			NodeProperty_Funs({
+				"iconCls" : "icon-edit",
+				"name" : "NodeProperty"
+			});
+		}
+	});
+
     //画板右键
     $("#a").bind('contextmenu', function (ev) {
+
         var coords = getCanvasXY(ev);
         var x = coords[0];
         var y = coords[1];
@@ -645,7 +677,7 @@ function Conver_CCBPM_V1ToV2() {
 
         //循环连接线
         for (var lineIdx = 0; lineIdx < flow_Data.Direction.length; lineIdx++) {
-
+debugger
             var line = flow_Data.Direction[lineIdx];
             var fromFigureId = FigureIdGetByCCBPM_OID(line.NODE);
             var secondFigureId = FigureIdGetByCCBPM_OID(line.TONODE);

@@ -325,11 +325,34 @@
 
             //如何获得全部的参数？ &FK_Node=120&FK_Flow=222 放入到url里面去？
             var href = window.location.href;
-            var urlParam = href.substring(href.indexOf('?') + 1, href.length);
-
-            //@xiangyu.
-
-
+            //var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+			var urlParam = window.location.search.substring(1);
+			var params = {};
+			if (urlParam == "" && urlParam.length == 0) {
+				urlParam = "1=1"
+			} else {
+				$.each(urlParam.split("&"), function (i, o) {
+					if (o) {
+						var param = o.split("=");
+						if (param.length == 2) {
+							var key = param[0];
+							var value = param[1];
+							if (value != null && typeof value != "undefined" && value != "null" && value != "undefined") {
+								value = value.trim();
+								if (value != "" && value.length > 0) {
+									if (typeof params[key] == "undefined") {
+										params[key] = value;
+									}
+								}
+							}
+						}
+					}
+				});
+			}
+			urlParam = "";
+			$.each(params, function (i, o) {
+				urlParam += i + "=" + o + "&";
+			});
             //初始化表格.
             $.ajax({
                 type: 'post',

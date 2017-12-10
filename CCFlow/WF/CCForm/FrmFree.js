@@ -335,7 +335,7 @@ function figure_Template_Dtl(frmDtl, ext) {
             continue
 
         var val = paras[str];
-        if (val == null || val=="null" || val==undefined )
+        if (val == null || val == "null" || val == undefined || val == "undefined")
             continue;
 
         strs += "&" + str + "=" + paras[str];

@@ -1360,19 +1360,15 @@ namespace BP.WF.Template
             {
                 /*如果是启用了按钮，就检查当前节点到达的节点是否有【按照选择接受人】的方式确定接收人的范围. */
                 Nodes nds = nd.HisToNodes;
-                bool isHaveBySeleced = false;
                 foreach (Node mynd in nds)
                 {
                     if (mynd.HisDeliveryWay == DeliveryWay.BySelected)
                     {
-                        isHaveBySeleced = true;
+                        //强制设置安装人员选择器来选择.
+                        this.SetValByKey(NodeAttr.CondModel, (int)CondModel.SendButtonSileSelect); 
                         break;
                     }
                 }
-
-                // 如果没有选择人接收器.
-                if (isHaveBySeleced == false)
-                    this.SetValByKey(NodeAttr.CondModel, (int)CondModel.SendButtonSileSelect); //禁用他.
             }
             #endregion 处理节点数据.
 

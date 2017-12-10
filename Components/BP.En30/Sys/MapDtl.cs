@@ -1331,7 +1331,7 @@ namespace BP.Sys
                 map.AddTBInt(MapDtlAttr.WhenOverSize, 0, "列表数据显示格式", false, false);
 
                 //数据开放类型 .
-                map.AddTBInt(MapDtlAttr.DtlOpenType, 0, "列表数据显示格式", false, false);
+                map.AddTBInt(MapDtlAttr.DtlOpenType, 1, "数据开放类型", false, false);
 
                 map.AddTBInt(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", false, false);
                 map.AddTBInt(MapDtlAttr.RowShowModel, 0, "行数据显示格式", false, false);

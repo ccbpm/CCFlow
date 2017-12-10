@@ -1986,18 +1986,18 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 增加上流程的信息.
 
-
                 //Node nd = new Node(this.FK_Node);
                 //if (nd.HisFormType == NodeFormType.SheetTree)
                 //{
                 //    /*把树形表单的表单信息加载到ds里面.*/
                 //}
-
-
                 //把他转化小写,适应多个数据库.
                 //   wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
                 // ds.Tables.Add(wf_generWorkFlowDt);
                // ds.WriteXml("c:\\xx.xml");
+
+                //根据表单请.
+
 
                 return BP.Tools.Json.ToJson(ds);
             }

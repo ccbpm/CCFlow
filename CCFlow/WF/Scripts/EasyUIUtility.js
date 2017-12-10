@@ -48,6 +48,8 @@ function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon,
 
 	if (dlg.length == 1 && $('#' + iframeId).length == 0) {
 		dlg.children().remove();
+		dlg.empty();
+		dlg.html("");
 		dlg.append("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:100%'></iframe>");
     }
 	if (dlg.length == 1 && $('#' + iframeId).length == 0) {

@@ -72,7 +72,7 @@
         //公共方法
         function AjaxServiceGener(param, callback, scope) {
 			// 1=自由表单模式 2=傻瓜表单模式 不需要自动保存
-			if (window.RowShowModel == 1 || window.RowShowModel == 2) {
+			if (param.DoType != "Dtl_DeleteRow" && (window.RowShowModel == 1 || window.RowShowModel == 2)) {
 				return;
 			}
             $.ajax({

@@ -334,6 +334,10 @@ function figure_Template_Dtl(frmDtl, ext) {
         if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
             continue
 
+        var val = paras[str];
+        if (val == null || val=="null" || val==undefined )
+            continue;
+
         strs += "&" + str + "=" + paras[str];
     }
     var src = "";

@@ -43,12 +43,23 @@ function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon,
         divDom.setAttribute('id', 'eudlg');
         document.body.appendChild(divDom);
         dlg = $('#eudlg');
-        dlg.append("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:100%'></iframe>");
-        //
-        window.doCloseDialog = function () {
-            dlg.dialog("close");
-        };
+        //dlg.append("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:100%'></iframe>");
     }
+
+	if (dlg.length == 1 && $('#' + iframeId).length == 0) {
+		dlg.children().remove();
+		dlg.append("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:100%'></iframe>");
+    }
+	if (dlg.length == 1 && $('#' + iframeId).length == 0) {
+		console.log("never happend");
+		dlg.html("<iframe frameborder='0' src='' scrolling='auto' id='" + iframeId + "' style='width:100%;height:100%'></iframe>");
+    }
+
+	if (typeof window.doCloseDialog != "function") {
+		window.doCloseDialog = function () {
+	        dlg.dialog("close");
+	    };
+	}
 
     //此处为防止在一个页面使用多次此方法时，传进的iframeId不同，造成找不到非第一次创建的iframe的错误而设置的
     //todo:此处暂时有问题，同一个页面调用此方法，传进的iframeId必须相同，否则会出现问题，此问题有待以后解决

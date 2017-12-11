@@ -331,8 +331,13 @@
         }
 
         function CloseIt() {
-            window.close();
-            return;
+            //window.close();
+            //return;
+			if (parent && parent.window && typeof parent.window.doCloseDialog === 'function') {
+				parent.window.doCloseDialog.call();
+			} else {
+				window.close();
+			}
         }
     </script>
 

@@ -131,6 +131,9 @@ namespace BP.WF
 
                         #region 增加到达延续子流程节点。
                         NodeYGFlows ygflows = new NodeYGFlows(fk_node.ToString());
+                        if (ygflows.Count > 1 && SystemConfig.CustomerNo.Equals("CZBank")==true)
+                            dtToNDs.Rows.Clear();  //为浙商银行做的特殊判断，如果配置了延续流程，就不让其走分支节点.
+
                         foreach (NodeYGFlow item in ygflows)
                         {
                             DataRow dr = dtToNDs.NewRow();
@@ -323,9 +326,7 @@ namespace BP.WF
 
                 #region 把外键表加入DataSet
                 DataTable dtMapAttr = myds.Tables["Sys_MapAttr"] ;
-
                 MapExts mes = md.MapExts;
-
                 foreach (DataRow dr in dtMapAttr.Rows)
                 {
                     string lgType = dr["LGType"].ToString();

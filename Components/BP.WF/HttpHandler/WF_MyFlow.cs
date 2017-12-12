@@ -319,7 +319,10 @@ namespace BP.WF.HttpHandler
                 if (this.currND.HisFormType == NodeFormType.SheetTree || this.currND.HisFormType == NodeFormType.SheetAutoTree)
                 {
                     //toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
-                    toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                    if (this.IsMobile == true)
+                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                    else
+                        toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                 }
                 else
                 {
@@ -1994,9 +1997,24 @@ namespace BP.WF.HttpHandler
                 //把他转化小写,适应多个数据库.
                 //   wf_generWorkFlowDt = DBAccess.ToLower(wf_generWorkFlowDt);
                 // ds.Tables.Add(wf_generWorkFlowDt);
-               // ds.WriteXml("c:\\xx.xml");
+                // ds.WriteXml("c:\\xx.xml");
 
-                //根据表单请.
+                #region 如果是移动应用就考虑多表单的问题.
+                if (currND.HisFormType == NodeFormType.SheetTree && this.IsMobile == true)
+                {
+                    /*如果是表单树并且是，移动模式.*/
+                    FrmNodes fns = new FrmNodes();
+                    QueryObject qo = new QueryObject(fns);
+                    qo.AddWhere(FrmNodeAttr.FK_Node, currND.NodeID);
+                    qo.addAnd();
+                    qo.AddWhere(FrmNodeAttr.FrmEnableRole, "!=", (int)FrmEnableRole.Disable);
+                    qo.addOrderBy("Idx");
+                    qo.DoQuery();
+                    //把节点与表单的关联管理放入到系统.
+                    ds.Tables.Add(fns.ToDataTableField("FrmNodes"));
+
+                }
+                #endregion 如果是移动应用就考虑多表单的问题.
 
 
                 return BP.Tools.Json.ToJson(ds);
@@ -2007,5 +2025,7 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+
+       
     }
 }

@@ -600,7 +600,7 @@ namespace BP.WF
             {
                 foreach (string k in BP.Sys.Glo.Request.QueryString.AllKeys)
                 {
-                    if (k == "OID" || k == "WorkID")
+                    if (k == "OID" || k == "WorkID" || k==null)
                         continue;
 
                     if (paras.ContainsKey(k))

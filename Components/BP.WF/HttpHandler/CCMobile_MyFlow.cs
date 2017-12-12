@@ -65,6 +65,18 @@ namespace BP.WF.HttpHandler
             WF_MyFlow en = new WF_MyFlow(this.context);
             return en.Send();
         }
+
+        public string FrmGener_Init()
+        {
+            WF_CCForm ccfrm = new WF_CCForm(this.context);
+            return ccfrm.FrmGener_Init();
+        }
+        public string FrmGener_Save()
+        {
+            WF_CCForm ccfrm = new WF_CCForm(this.context);
+            return ccfrm.FrmGener_Save();
+        }
+
       
     }
 }

@@ -593,7 +593,7 @@ namespace BP.WF.HttpHandler
             
             //是不是只读?
             bool isReadonly = false;
-            if (this.GetRequestVal("IsReadonly").Equals("1") )
+            if (this.GetRequestVal("IsReadonly") !=null && this.GetRequestVal("IsReadonly").Equals("1") )
                 isReadonly = true;
 
             Dictionary<int, DataTable> nodeEmps = new Dictionary<int, DataTable>(); //节点id，接收人列表

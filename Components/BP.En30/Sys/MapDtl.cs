@@ -1373,7 +1373,6 @@ namespace BP.Sys
 
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
 
-
                 //参数.
                 map.AddTBAtParas(300);
 

@@ -94,7 +94,7 @@
                             msg = msg.replace('<BR>', '\t\n');
                         }
 
-                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()'>" + msg + "</textarea>";
+                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\"'>" + msg + "</textarea>";
                         html += "</div>";
 
                         html += "</td>";
@@ -174,6 +174,8 @@
                 });
 
                 $("#tbTracks").append(html);
+
+				$("textarea").trigger("keydown");
 
                 if ($("#uploaddiv").length > 0) {
                     AddUploadify("uploaddiv");

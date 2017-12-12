@@ -48,7 +48,6 @@
                 aths = init.Aths;
                 SignType = init.SignType; //签名的人员 No,SignType 列, SignType=0 不签名, 1=图片签名, 2=电子签名。
 
-
                 var html = '';
 
                 if (tks.length == 0) {
@@ -89,12 +88,21 @@
                         }
 
                         html += "<div style='float:left;width:100%;'>";
-                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()'>" + this.Msg + "</textarea>";
+                        var msg = this.Msg;
+
+                        while (msg.indexOf('<BR>') >= 0) {
+                            msg = msg.replace('<BR>', '\t\n');
+                        }
+
+                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()'>" + msg + "</textarea>";
                         html += "</div>";
 
                         html += "</td>";
                     }
                     else {
+
+                        var msg = Msg;
+
                         html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" ><font color=green>' + this.Msg + '</font></td>';
                     }
 
@@ -157,13 +165,13 @@
                                     + " <div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</div></td>";
                                 html += "</tr>";
 
-                              //  alert('电子签名的逻辑尚未编写.');
+                                //  alert('电子签名的逻辑尚未编写.');
                                 break;
                             }
                         }
                     }
 
-                      // GenerSiganture(SignType);
+                    // GenerSiganture(SignType);
 
                 });
 

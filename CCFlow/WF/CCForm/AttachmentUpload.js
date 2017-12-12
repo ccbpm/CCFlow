@@ -30,7 +30,9 @@ function Down2017(mypk) {
                 var i = data.indexOf('\DataUser');
                 var str = '/' + data.substring(i);
 
-                window.location.href = str;
+                str = str.replace('\\\\', '\\');
+                //window.location.href = str;
+                window.open(str);
                 return;
             }
             alert(data);

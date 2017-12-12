@@ -633,7 +633,11 @@ namespace BP.WF.HttpHandler
             else
                 wc = new WorkCheck(this.FK_Flow, this.FK_Node, this.WorkID, this.FID);
 
-            isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
+            //是否只读？
+            if (isReadonly == true)
+                isCanDo = false;
+            else
+                isCanDo = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, BP.Web.WebUser.No);
 
             //如果是查看状态, 为了屏蔽掉正在审批的节点, 在查看审批意见中.
             bool isShowCurrNodeInfo = true;
@@ -644,12 +648,26 @@ namespace BP.WF.HttpHandler
                     isShowCurrNodeInfo = false;
             }
 
-
+            /*
+             * 获得当前节点已经审核通过的人员.
+             * 比如：多人处理规则中的已经审核同意的人员，会签人员,组合成成一个字符串。
+             * 格式为: ,zhangsan,lisi,
+             * 用于处理在审核列表中屏蔽临时的保存的审核信息.
+             * */
+            string checkerPassed = ",";
+            if (isCanDo == true)
+            {
+                string sql = "SELECT FK_Emp FROM WF_Generworkerlist where workid="+this.WorkID+" AND IsPass=1 AND FK_Node="+this.FK_Node;
+                DataTable checkerPassedDt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in  checkerPassedDt.Rows)
+                {
+                    checkerPassed += dr["FK_Emp"] + ",";
+                }
+            }
 
             #endregion 定义变量.
 
             #region 判断是否显示 - 历史审核信息显示
-
             bool isDoc = false;
             if (wcDesc.FWCListEnable == true)
             {
@@ -715,16 +733,23 @@ namespace BP.WF.HttpHandler
                     if (tk.HisActionType != ActionType.WorkCheck && tk.HisActionType != ActionType.StartChildenFlow)
                         continue;
 
+                    //如果是当前的节点. 当前人员可以处理, 已经审批通过的人员.
+                    if (tk.NDFrom == this.FK_Node 
+                        && isCanDo == true 
+                        && tk.EmpFrom!=WebUser.No 
+                        && checkerPassed.Contains(","+tk.EmpFrom+",")==false)
+                        continue;
+
                     //判断会签, 去掉正在审批的节点.
                     if (tk.NDFrom == this.FK_Node && isShowCurrNodeInfo == false)
                         continue;
-
 
                     row = tkDt.NewRow();
                     row["NodeID"] = tk.NDFrom;
 
                     //row["NodeName"] = (nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
-                    row["NodeName"] = tk.NDFromT; // "SSS"; //(nds.GetEntityByKey(tk.NDFrom) as Node).FWCNodeName;
+
+                    row["NodeName"] = tk.NDFromT; 
 
                     // zhoupeng 增加了判断，在会签的时候最后会签人发送前不能填写意见.
                     if (tk.NDFrom == this.FK_Node && tk.EmpFrom == BP.Web.WebUser.No && isCanDo && isDoc == false)
@@ -743,7 +768,8 @@ namespace BP.WF.HttpHandler
 
                     if (isReadonly == false && tk.EmpFrom == WebUser.No && this.FK_Node == tk.NDFrom && isExitTb_doc && (
                                         wcDesc.HisFrmWorkCheckType == FWCType.Check || (
-                                        (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
+                                        (wcDesc.HisFrmWorkCheckType == FWCType.DailyLog || wcDesc.HisFrmWorkCheckType == FWCType.WeekLog) 
+                                        && DateTime.Parse(tk.RDT).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")) || (wcDesc.HisFrmWorkCheckType == FWCType.MonthLog && DateTime.Parse(tk.RDT).ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM"))
                                         ))
                     {
                         bool isLast = true;
@@ -894,7 +920,6 @@ namespace BP.WF.HttpHandler
                     }
                 }
             }
-
             #endregion 判断是否显示 - 历史审核信息显示
 
             #region 审核意见默认填写
@@ -1038,7 +1063,6 @@ namespace BP.WF.HttpHandler
                 dtTrack.Columns["NO"].ColumnName = "No";
                 dtTrack.Columns["SIGNTYPE"].ColumnName = "SignType";
                 dtTrack.Columns["ELEID"].ColumnName = "EleID";
-
 
                 ds.Tables.Add(dtTrack);
             }

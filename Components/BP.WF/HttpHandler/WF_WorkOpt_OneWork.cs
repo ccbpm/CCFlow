@@ -286,7 +286,7 @@ namespace BP.WF.HttpHandler
             bool CanPackUp = false;
             if (SystemConfig.CustomerNo == "TianYe")
             {
-                string sql = " SELECT count(No)  FROM WF_Emp WHERE UserType=1 AND No='"+BP.Web.WebUser.No+"'";
+                string sql = " SELECT COUNT(No)  FROM WF_Emp WHERE UserType=1 AND No='"+BP.Web.WebUser.No+"'";
                 if ( Web.WebUser.No=="admin" || DBAccess.RunSQLReturnValInt(sql) == 1)
                 {
                     /*管理员可以打印.*/
@@ -294,7 +294,7 @@ namespace BP.WF.HttpHandler
                 }
                 else
                 {
-                    //流程已经完成的情况下, 从轨迹里面找当前人员参与的节点.
+                    //流程已经完成的情况下,从轨迹里面找当前人员参与的节点.
                     sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND EmpFrom='" + BP.Web.WebUser.No + "'";
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow dr in dt.Rows)
@@ -302,8 +302,9 @@ namespace BP.WF.HttpHandler
                         int nodeid = int.Parse(dr[0].ToString());
                         BtnLab btn = new BtnLab(nodeid);
 
-                        if (btn.Name.Contains("备案")
-                            || btn.Name.Contains("反馈给申请人"))
+                        if (btn.Name.Contains("备案") 
+                            || btn.Name.Contains("反馈") 
+                            || btn.Name.Contains("通知给申请人"))
                         {
                             CanPackUp = true;
                             break;

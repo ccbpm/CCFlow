@@ -41,7 +41,7 @@ namespace BP.WF.HttpHandler
                 string paras = "";
                 foreach (string key in context.Request.QueryString.Keys)
                 {
-                    paras += "@" + key + " = " + context.Request.QueryString[key];
+                    paras += "@" + key + "=" + context.Request.QueryString[key];
                 }
 
                 string err = "";
@@ -52,12 +52,10 @@ namespace BP.WF.HttpHandler
                     err = "err@在执行类[" + this.CtrlType.ToString() + "]，方法[" + ctrl.DoType + "]错误 \t\n @" + ex.Message + " \t\n @技术信息:" + ex.StackTrace + " \t\n相关参数:" + paras;
 
                 if (Web.WebUser.No == null)
-                    err = "err@登录时间过长,请重新登录.";
+                    err = "err@登录时间过长,请重新登录. @其他信息:"+err;
 
-                //记录错误日志以方便分析
+                //记录错误日志以方便分析.
                 BP.DA.Log.DebugWriteError(err);
-
-           
 
                 ctrl.context.Response.Write(err);
             }

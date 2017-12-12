@@ -154,7 +154,7 @@ namespace BP.WF
             if (BP.DA.DBAccess.IsExitsObject("Sys_Serial") == false)
                 return "";
 
-            //先升级脚本. 就是说该文件如果被修改了就会自动升级
+            //先升级脚本,就是说该文件如果被修改了就会自动升级.
             UpdataCCFlowVerSQLScript();
 
             //判断数据库的版本.

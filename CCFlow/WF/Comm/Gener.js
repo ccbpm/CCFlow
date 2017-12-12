@@ -516,12 +516,13 @@ function WinOpenFull(url, winName) {
     return;
 }
 
+// document绑定esc键的keyup事件, 关闭弹出窗
 function closeWhileEscUp() {
 	$(document).bind("keyup", function (e) {
 		e = e || window.event;
 		var key = e.keyCode || e.which || e.charCode;
 		if (key == 27) {
-			// 可能需要调整前3个if判断的顺序
+			// 可能需要调整if判断的顺序
 			if (parent && typeof parent.doCloseDialog === 'function') {
 				parent.doCloseDialog.call();
 			} else if (typeof doCloseDialog === 'function') {

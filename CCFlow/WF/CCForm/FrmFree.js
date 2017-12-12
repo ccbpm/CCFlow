@@ -331,17 +331,16 @@ function figure_Template_Dtl(frmDtl, ext) {
     var paras = this.pageData;
     var strs = "";
     for (var str in paras) {
+
         if (str == "EnsName" || str == "RefPKVal" || str == "IsReadonly")
             continue
 
         var val = paras[str];
         if (val == null || val == "null" || val == undefined || val == "undefined")
             continue;
-
         strs += "&" + str + "=" + paras[str];
     }
     var src = "";
-
  //   if (frmDtl.RowShowModel == "0" ) {
         if (pageData.IsReadOnly) {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;

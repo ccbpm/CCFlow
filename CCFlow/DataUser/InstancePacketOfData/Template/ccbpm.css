@@ -1009,8 +1009,8 @@ body table tr td {
   /* for IE */
   -moz-text-overflow: ellipsis;
   /* for Firefox,mozilla */
- /* overflow: hidden;*/
-  white-space: nowrap;
+ /* overflow: hidden;
+  white-space: nowrap;*/
   word-wrap:break-word;
   word-break:break-all;
 }

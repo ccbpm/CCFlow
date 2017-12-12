@@ -128,7 +128,7 @@
 
                 $("#btn_export").linkbutton({
                     onClick: function () {
-                        window.open('../Do.aspx?ActionType=DownFlowSearchExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
+                        window.open('../Do.htm?ActionType=DownFlowSearchExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
                     }
                 });
 
@@ -136,7 +136,7 @@
                     $("#btn_export").after(' <a href="javascript:void(0)" iconCls="icon-excel" id="btn_exportToTmp">导出至模板</a>');
                     $("#btn_exportToTmp").linkbutton({
                         onClick: function () {
-                            window.open('../Do.aspx?ActionType=DownFlowSearchToTmpExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
+                            window.open('../Do.htm?ActionType=DownFlowSearchToTmpExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
                         }
                     });
                 }

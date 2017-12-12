@@ -4,7 +4,11 @@
 <%@ Register Src="../UC/UIEn.ascx" TagName="UIEn" TagPrefix="uc2" %>
 <%@ Register Src="RefLeft.ascx" TagName="RefLeft" TagPrefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
+	<script src="../Gener.js" type="text/javascript"></script>
     <script type="text/javascript">
+
+		closeWhileEscUp();
+
         function selectTab(tabTitle) {
             $('#nav-tab').tabs('select', tabTitle);
         }

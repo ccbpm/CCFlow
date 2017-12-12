@@ -147,7 +147,7 @@
                     var dtFlow = data["Flows"]; //发起的流程.
 
                     var myNum = 0;
-
+                    var is1 = false;
                     for (var i = 0; i < dtSort.length; i++) {
 
                         var sortNo = dtSort[i].No;
@@ -182,7 +182,17 @@
                                 continue;
 
                             myNum++;
-                            var newRow = "<tr id='" + sortName + myNum + "' >";
+
+                            var newRow = "";
+                            if (is1 == true) {
+                                newRow += "<tr bgcolor=AliceBlue id='" + sortName + myNum + "' >";
+                                is1 = false;
+                            }
+                            else {
+                                newRow += "<tr bgcolor=white id='" + sortName + myNum + "' >";
+                                is1 = true;
+                            }
+
                             newRow += "<td class=Idx >" + myNum + "</td>";
                             newRow += "<td> <a href=\"javascript:WinOpenSearch('" + flow.No + "');\" ><img src='../Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "</a></td>";
 

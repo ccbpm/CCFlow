@@ -101,8 +101,6 @@
                     }
                     else {
 
-                        var msg = Msg;
-
                         html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" ><font color=green>' + this.Msg + '</font></td>';
                     }
 

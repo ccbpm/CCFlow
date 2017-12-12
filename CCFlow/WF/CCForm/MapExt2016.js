@@ -225,7 +225,7 @@ function PopFullCtrl(val1, val2) {
 }
 
 /* 内置的Pop自动返回值. google 版 软通*/
-function ReturnValCCFormPopValGoogle(extType, ctrl, fk_mapExt, refEnPK, width, height, title, formData, dtlNo) {
+function ReturnValCCFormPopValGoogle(ctrl, fk_mapExt, refEnPK, width, height, title, formData, dtlNo,extType) {
     //设置摸态框的宽度和高度
     $('#returnPopValModal .modal-dialog').height(height);
     $('#returnPopValModal .modal-dialog').width(width);
@@ -248,19 +248,20 @@ function ReturnValCCFormPopValGoogle(extType, ctrl, fk_mapExt, refEnPK, width, h
     else {
         fd = getFormData(false, false);
     }
-    
-    if (extType == "PopVal")
+
+    var url = "";
+
+    if (extType == "PopVal" || extType==undefined )
         url = wfpreHref + '/WF/CCForm/PopVal.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape(fd) + "&m=" + Math.random();
 
     if (extType == "PopFullCtrl")
         url = wfpreHref + '/WF/CCForm/PopFullCtrl.htm?FK_MapExt=' + fk_mapExt + '&RefPK=' + refEnPK + '&CtrlVal=' + ctrl.value + "&FormData=" + escape(fd) + "&m=" + Math.random();
 
-    //杨玉慧 模态框 先用这个
+    //杨玉慧 模态框 先用这个.
     $('#returnPopValModal .modal-header h4').text("请选择：" + $(ctrl).parent().parent().prev().text());
     $('#iframePopModalForm').attr("src", url); //绑定连接.
     $('#btnPopValOK').unbind('click');
     $('#btnPopValOK').bind('click', function () {
-
 
         //$(ctrl).val("");
         setValForPopval(ctrl.id, dtlWin, "");

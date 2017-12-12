@@ -61,6 +61,16 @@ function OpenEasyUiDialog(url, iframeId, dlgTitle, dlgWidth, dlgHeight, dlgIcon,
 		window.doCloseDialog = function () {
 	        dlg.dialog("close");
 	    };
+		// 当弹出框未获得焦点时触发
+		$(document).bind("keyup", function (e) {
+			e = e || window.event;    
+			var key = e.keyCode || e.which || e.charCode; 
+			if (key == 27) {
+				if (typeof doCloseDialog === 'function') {
+					doCloseDialog.call();
+				}
+			}
+		});
 	}
 
     //此处为防止在一个页面使用多次此方法时，传进的iframeId不同，造成找不到非第一次创建的iframe的错误而设置的

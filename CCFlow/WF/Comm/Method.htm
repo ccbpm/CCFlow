@@ -10,8 +10,12 @@
     
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+	<script src="Gener.js" type="text/javascript"></script>
      <base target="_self" /> 
     <script language="javascript" type="text/javascript" >
+
+		closeWhileEscUp();
+
         //页面启动函数.
         $(function () {
 
@@ -333,8 +337,8 @@
         function CloseIt() {
             //window.close();
             //return;
-			if (parent && parent.window && typeof parent.window.doCloseDialog === 'function') {
-				parent.window.doCloseDialog.call();
+			if (parent && typeof parent.doCloseDialog === 'function') {
+				parent.doCloseDialog.call();
 			} else {
 				window.close();
 			}

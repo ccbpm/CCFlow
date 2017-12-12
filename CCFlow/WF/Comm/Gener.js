@@ -515,3 +515,22 @@ function WinOpenFull(url, winName) {
     newWindow.focus();
     return;
 }
+
+function closeWhileEscUp() {
+	$(document).bind("keyup", function (e) {
+		e = e || window.event;
+		var key = e.keyCode || e.which || e.charCode;
+		if (key == 27) {
+			// 可能需要调整前3个if判断的顺序
+			if (parent && typeof parent.doCloseDialog === 'function') {
+				parent.doCloseDialog.call();
+			} else if (typeof doCloseDialog === 'function') {
+				doCloseDialog.call();
+			} else if (parent && parent.parent && typeof parent.parent.doCloseDialog === "function") {
+				parent.parent.doCloseDialog.call();
+			} else {
+				window.close();
+			}
+		}
+	});
+}

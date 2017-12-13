@@ -38,8 +38,13 @@
 
                     if (data.indexOf('err@') == 0) {
                         //$("#Msg").html("<font color=red>" + data + "</font>");
-                        alert(data);
-                        window.close();
+                        //alert(data);
+                        while (data.indexOf('\t\n') == -1) {
+                            data = data.replace('\t\n', '<br>');
+                        }
+
+                        $("#Msg").html("<br>" + data);
+                        //window.close();
                         return;
                     }
 

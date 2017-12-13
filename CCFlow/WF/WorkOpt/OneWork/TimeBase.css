@@ -10,7 +10,8 @@
     border-bottom-style: dotted;
     border-bottom-width: thin;
     border-bottom-color: #008000;
-    text-align:left;
+    text-align: left;
+    background-color:InfoBackground;
 }
 
 tr

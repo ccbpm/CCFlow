@@ -1055,29 +1055,42 @@ function OptSuc(msg) {
 //初始化发送节点下拉框
 function InitToNodeDDL(workNode) {
 
-    if (workNode.ToNodes != undefined && workNode.ToNodes.length > 0) {
-        // $('[value=发送]').
-        var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
-        $.each(workNode.ToNodes, function (i, toNode) {
-            //IsSelectEmps: "1"
-            //Name: "节点2"
-            //No: "702"
 
-            var opt = "";
-            if (toNode.IsSelected == "1") {
-                var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
-                opt.data(toNode);
-            } else {
-                var opt = $("<option value='" + toNode.No + "'>" + toNode.Name + "</option>");
-                opt.data(toNode);
-            }
+    if (workNode.ToNodes == undefined)
+        return;
 
-            toNodeDDL.append(opt);
+    if (workNode.ToNodes.length == 0)
+        return;
 
-        });
 
-        $('[name=Send]').after(toNodeDDL);
+    //如果没有发送按钮，就让其刷新,说明加载不同步.
+    var btn = $('[name=Send]');
+    if (btn == null || btn == undefined) {
+        window.location.href = window.location.href;
+        return;
     }
+
+    // $('[value=发送]').
+    var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
+    $.each(workNode.ToNodes, function (i, toNode) {
+        //IsSelectEmps: "1"
+        //Name: "节点2"
+        //No: "702"
+
+        var opt = "";
+        if (toNode.IsSelected == "1") {
+            var opt = $("<option value='" + toNode.No + "' selected='true' >" + toNode.Name + "</option>");
+            opt.data(toNode);
+        } else {
+            var opt = $("<option value='" + toNode.No + "'>" + toNode.Name + "</option>");
+            opt.data(toNode);
+        }
+
+        toNodeDDL.append(opt);
+
+    });
+
+    $('[name=Send]').after(toNodeDDL);
 }
 
 //根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示  
@@ -1393,8 +1406,7 @@ function GenerWorkNode() {
             //设置标题.
             document.title = "业务流程管理（BPM）平台";
 
-            //发送旁边下拉框
-            InitToNodeDDL(workNode);
+         
 
             //循环之前的提示信息.
             var info = "";
@@ -1534,6 +1546,10 @@ function GenerWorkNode() {
                 var defValArr = defVal.split(',');
                 $(selectObj).selectpicker('val', defValArr);
             });
+
+
+            //发送旁边下拉框 edit by zhoupeng 放到这里是为了解决加载不同步的问题.
+            InitToNodeDDL(workNode);
 
             if (document.BindEditorMapAttr) {
                 //给富文本创建编辑器

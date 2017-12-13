@@ -1121,7 +1121,9 @@ namespace CCFlow.WF.CCForm
                                 {
                                     File.Delete(saveTo);
                                 }
-                                catch { }
+                                catch
+                                {
+                                }
 
                                 this.Alert("上传附件错误：" + msg, true);
                                 return;
@@ -1190,7 +1192,8 @@ namespace CCFlow.WF.CCForm
 
                         //执行附件上传后事件，added by liuxc,2017-7-15
                         msg = mapData.DoEvent(FrmEventList.AthUploadeAfter, en, "@FK_FrmAttachment=" + dbUpload.FK_FrmAttachment + "@FK_FrmAttachmentDB=" + dbUpload.MyPK + "@FileFullName=" + dbUpload.FileFullName);
-                        if (!string.IsNullOrEmpty(msg))
+
+                        if (string.IsNullOrEmpty(msg)==false)
                             BP.Sys.Glo.WriteLineError("@AthUploadeAfter事件返回信息，文件：" + dbUpload.FileName + "，" + msg);
                     }
                     #endregion 保存到iis服务器.

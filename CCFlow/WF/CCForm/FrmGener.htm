@@ -382,13 +382,15 @@
 		function setContentHeight() {
 			var bodyHeight = $("body").height();
 			var bottomHeight = $("#bottomToolBar").height();	// save button
+			if (($("#Btn").css("display") || "") != "block") {
+				bottomHeight = 0;
+			}
+			bottomHeight = 0;	// tmp
 			var height = bodyHeight - bottomHeight;
 			$("#divCurrentForm").height(height);
 			$("#topContentDiv").height(height - 45);
 			$("#contentDiv").height(height - 50);
 			$("#divCCForm").height(height - 50);
-			//$("#CCForm").height(height - 50);
-			//$("#CCForm").children("");
 		}
 		$(function () {
 			$("body").css("overflow", "hidden");

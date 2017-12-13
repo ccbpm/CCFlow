@@ -41,7 +41,6 @@ function InitPage() {
             var isHaveCheck = false;
             for (var i = 0; i < tracks.length; i++) {
 
-                //. 
                 var track = tracks[i];
 
                 // 记录审核节点。

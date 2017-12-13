@@ -9,7 +9,7 @@ function Down2017(mypk) {
     //$("#Msg").html("<img src=../Img/loading.gif />正在加载,请稍后......");
 
     //组织url.
-    var url = Handler + "?DoType=AttachmentUpload_Down&MyPK="+mypk+"&m=" + Math.random();
+    var url = Handler + "?DoType=AttachmentUpload_Down&MyPK=" + mypk + "&m=" + Math.random();
 
     $.ajax({
         type: 'post',
@@ -29,14 +29,60 @@ function Down2017(mypk) {
 
                 var i = data.indexOf('\DataUser');
                 var str = '/' + data.substring(i);
-
                 str = str.replace('\\\\', '\\');
-                //window.location.href = str;
-                window.open(str);
+                window.open(str, "_blank", "width=0, height=0,status=0");
                 return;
             }
             alert(data);
             return;
         }
     });
+}
+
+/* 一下的方法从网上找到的，都不适用 . */
+
+function Down3(str) {
+
+    alert(str);
+    var a;
+    a = window.open(str, "_blank", "width=0, height=0,status=0");
+    a.document.execCommand("SaveAs");
+    a.close();
+}
+
+function Down2(imgURL) {
+    
+    var oPop = window.open(imgURL, "", "width=1, height=1, top=5000, left=5000");
+
+    for (; oPop.document.readyState != "complete"; ) {
+        if (oPop.document.readyState == "complete") 
+        break;
+    }
+
+    oPop.document.execCommand("SaveAs");
+    oPop.close();
+
+} 
+
+function Down(url) {
+
+    var $eleForm = $("<form method='get'></form>");
+
+    $eleForm.attr("action", url);
+
+    $(document.body).append($eleForm);
+
+    //提交表单，实现下载
+    $eleForm.submit();
+}
+
+function downloadFile(url) {
+    try {
+        var elemIF = document.createElement("iframe");
+        elemIF.src = url;
+        elemIF.style.display = "none";
+        document.body.appendChild(elemIF);
+    } catch (e) {
+
+    }
 }

@@ -423,7 +423,6 @@ namespace CCFlow.WF.CCForm
 
                         if (this.IsReadonly != "1")
                         {
-
                             if (athDesc.HisDeleteWay == AthDeleteWay.DelAll)//删除所有
                             {
                                 this.Pub1.AddTD("style='border:0px'", "<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>");
@@ -493,7 +492,6 @@ namespace CCFlow.WF.CCForm
                     if (sort.Contains("@") == true)
                         mysort = sort.Substring(sort.IndexOf('@') + 1);
 
-
                     foreach (FrmAttachmentDB db in dbs)
                     {
                         if (haveAuthSort == true && db.Sort != mysort)
@@ -517,9 +515,10 @@ namespace CCFlow.WF.CCForm
                             {
                                 this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenOfiice('" + this.FK_FrmAttachment + "','" + this.WorkID + "','" + db.MyPK + "','" + this.FK_MapData + "','" + this.Ath + "','" + this.FK_Node + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                             }
-                            else if (SystemConfig.CustomerNo != "TianYe" && DataType.IsImgExt(db.FileExts)==true)
+                            else if ( DataType.IsImgExt(db.FileExts)==true)
                             {
-                                this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                                //this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:OpenView('" + this.PKVal + "','" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
+                                this.Pub1.AddTDTDTitle(db.FileName, "<a href=\"javascript:Down2017('" + db.MyPK + "')\"><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a>");
                             }
                             else
                             {
@@ -551,7 +550,6 @@ namespace CCFlow.WF.CCForm
                             //        if (db.Rec.Equals(WebUser.No))
                             //            op = "&nbsp;&nbsp;&nbsp;<a href=\"javascript:Del('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">删除</a>";
                             //    }
-
                             //}
                             #endregion
 

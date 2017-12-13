@@ -1948,7 +1948,17 @@ namespace BP.DA
                 {
                     OracleParameter oraP = new OracleParameter(para.ParaName, para.DATypeOfOra);
                     oraP.Size = para.Size;
-                    oraP.Value = para.val;
+
+                    if (para.DATypeOfOra == OracleType.Clob)
+                    {
+                        if (DataType.IsNullOrEmpty(para.val as string) == true)
+                            oraP.Value = DBNull.Value;
+                        else
+                            oraP.Value = para.val;
+                    }
+                    else
+                        oraP.Value = para.val;
+
                     cmd.Parameters.Add(oraP);
                 }
                 int i = cmd.ExecuteNonQuery();

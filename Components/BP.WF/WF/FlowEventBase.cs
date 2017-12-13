@@ -467,7 +467,7 @@ namespace BP.WF
                 /*如果是bs系统, 就加入外部url的变量.*/
                 foreach (string key in BP.Sys.Glo.Request.QueryString)
                 {
-                    if (key == "OID")
+                    if (key == "OID" ||key==null )
                         continue;
 
                     string val = BP.Sys.Glo.Request.QueryString[key];

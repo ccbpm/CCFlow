@@ -18,7 +18,7 @@ namespace BP.DA
                 {
                     case System.Data.DbType.String:
                     case System.Data.DbType.Object:
-                        if (this.Size > 4000)
+                        if (this.IsBigText)
                             return System.Data.OracleClient.OracleType.Clob;
                         else
                             return System.Data.OracleClient.OracleType.VarChar;
@@ -38,6 +38,10 @@ namespace BP.DA
         public string ParaName = null;
         public int Size = 10;
         public Object val;
+        /// <summary>
+        /// 是否是大文本?
+        /// </summary>
+        public bool IsBigText = false;
         #endregion
 
         /// <summary>
@@ -241,13 +245,21 @@ namespace BP.DA
                 throw new Exception("@没有判断的参数类型:" + _name);
             //     this.Add(_name, obj.ToString());
         }
-		private void Add(string _name, string _val )
+        /// <summary>
+        /// 是否是大块文本?
+        /// </summary>
+        /// <param name="_name">名称</param>
+        /// <param name="_val">值</param>
+        /// <param name="isBigTxt">是否是大文本?</param>
+		public void Add(string _name, string _val, bool isBigTxt=false)
 		{
 			Para en = new Para();
+
 			en.DAType=System.Data.DbType.String;
 			en.val = _val;
 			en.ParaName = _name;
 			en.Size=_val.Length;
+            en.IsBigText = isBigTxt; //是否是大块文本.
 			this.Add(en);
 		}
 

@@ -2287,7 +2287,11 @@ namespace BP.En
                     switch (attr.MyDataType)
                     {
                         case DataType.AppString:
-                            ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'));
+                            if (attr.MaxLength >= 4000)
+                                ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'),true);
+                            else
+                                ps.Add(attr.Key, en.GetValStrByKey(attr.Key).Replace('\'', '~'));
+
                             break;
                         case DataType.AppBoolean:
                             ps.Add(attr.Key, en.GetValIntByKey(attr.Key));

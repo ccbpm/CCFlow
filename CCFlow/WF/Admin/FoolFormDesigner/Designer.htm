@@ -43,6 +43,18 @@
                 padding: 0px;
                 color: #696969;
             }
+
+			input.align_cb {
+				padding-left: 4px;
+				cursor: pointer;
+				margin: 0;
+				vertical-align: middle;
+			}
+			label.align_cbl {
+				display: inline-block;
+				vertical-align: middle;
+				margin-bottom: 2px;
+			}
         </style>
 
         <script type="text/javascript">
@@ -264,7 +276,7 @@
                                     }
 
                                     html += "<td class='FDesc'>" + GenerLabel(mapAttr) + "</td>";
-                                    html += "<td ColSpan=1 ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "'/><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label></td>";
+                                    html += "<td ColSpan=1 ><input " + (mapAttr.DefVal == 1 ? "checked='checked'" : "") + " type='checkbox' " + enableAttr + " name='CB_" + mapAttr.KeyOfEn + "' class='align_cb' /><label class='align_cbl' for='CB_" + mapAttr.KeyOfEn + "' >&nbsp;" + mapAttr.Name + "</label></td>";
 
                                     if (isDrawTR == false) {
                                         html += "</tr>";

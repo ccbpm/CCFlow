@@ -288,7 +288,7 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
 
         checkedStr = ConvertDefVal(workNode, '', mapAttr.KeyOfEn);
 
-        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+        return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " class='align_cb' /><label for='CB_" + mapAttr.KeyOfEn + "' class='align_cbl'>&nbsp;" + mapAttr.Name + "</label>";
     }
 
     //枚举类型.

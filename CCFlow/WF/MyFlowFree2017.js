@@ -192,8 +192,8 @@ function figure_MapAttr_Template(mapAttr) {
                     }
                     checkedStr = ConvertDefVal(workNode, '', mapAttr.KeyOfEn);
 
-                    eleHtml += "<div><input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
-                    eleHtml += '<label class="labRb" for="CB_' + mapAttr.KeyOfEn + '">' + mapAttr.Name + '</label></div>';
+                    eleHtml += "<div><input class='align_cb' " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
+                    eleHtml += '<label class="labRb align_cbl" for="CB_' + mapAttr.KeyOfEn + '">&nbsp;' + mapAttr.Name + '</label></div>';
                     //return eleHtml;
                 }
 

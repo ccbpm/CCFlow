@@ -32,6 +32,11 @@
                 url: Handler + "?DoType=Fields_Init&FK_Flow=" + fk_flow + "&FK_MapData=" + frmID + "&FK_Node=" + fk_Node + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
                     fieldsData = JSON.parse(data);
 
                     var trStr = "";
@@ -165,6 +170,11 @@
                 data: { 'FieldsAttrsObj': JSON.stringify(arr) },
                 success: function (data) {
                     upstate(false);
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
                     alert("共更新" + data + "个字段信息");
                 }
             });

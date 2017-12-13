@@ -380,6 +380,14 @@
         });
 
 		function setContentHeight() {
+			$("body").css("overflow", "hidden");
+			$("#divCurrentForm").css("overflow", "hidden");
+			$("#topContentDiv").css("overflow", "hidden");
+			$("#contentDiv").css("overflow", "hidden");
+			$("#divCCForm").css("overflow", "auto");
+			$("#CCForm").css("overflow", "hidden");
+			$("#CCForm").css("overflow-y", "hidden");
+			$("#CCForm").css("height", "auto");
 			var bodyHeight = $("body").height();
 			var bottomHeight = $("#bottomToolBar").height();	// save button
 			if (($("#Btn").css("display") || "") != "block") {
@@ -399,9 +407,10 @@
 			$("#contentDiv").css("overflow", "hidden");
 			$("#divCCForm").css("overflow", "auto");
 			$("#CCForm").css("overflow", "hidden");
+			$("#CCForm").css("overflow-y", "hidden");
 			$("#CCForm").css("height", "auto");
 			$(window).bind("resize", function () {
-				setContentHeight();
+				setTimeout(setContentHeight, 100);
 			});
 		});
     </script>

@@ -378,6 +378,30 @@
                 })
             })
         });
+
+		function setContentHeight() {
+			var bodyHeight = $("body").height();
+			var bottomHeight = $("#bottomToolBar").height();	// save button
+			var height = bodyHeight - bottomHeight;
+			$("#divCurrentForm").height(height);
+			$("#topContentDiv").height(height - 45);
+			$("#contentDiv").height(height - 50);
+			$("#divCCForm").height(height - 50);
+			//$("#CCForm").height(height - 50);
+			//$("#CCForm").children("");
+		}
+		$(function () {
+			$("body").css("overflow", "hidden");
+			$("#divCurrentForm").css("overflow", "hidden");
+			$("#topContentDiv").css("overflow", "hidden");
+			$("#contentDiv").css("overflow", "hidden");
+			$("#divCCForm").css("overflow", "auto");
+			$("#CCForm").css("overflow", "hidden");
+			$("#CCForm").css("height", "auto");
+			$(window).bind("resize", function () {
+				setContentHeight();
+			});
+		});
     </script>
 </head>
 <body>

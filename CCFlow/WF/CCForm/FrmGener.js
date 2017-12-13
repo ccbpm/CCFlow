@@ -302,6 +302,10 @@ function GenerFrm() {
             }
             //调整样式,让必选的红色 * 随后垂直居中
             editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
+
+			if (typeof setContentHeight == "function") {
+				setContentHeight();
+			}
         }
     })
 }

@@ -288,7 +288,7 @@ function InitPage() {
                         if (gwl.IsPass == 1)
                             continue;
 
-                      
+
 
                         var doc = "";
                         doc += "<table border=0>";
@@ -307,7 +307,7 @@ function InitPage() {
                             doc += "<td><font color=red>尚未阅读（打开）.</font></td>";
                         doc += "</tr>";
 
-                      
+
 
                         doc += "<tr>";
                         doc += "<td>工作到达日期</td>";
@@ -349,7 +349,7 @@ function InitPage() {
                         doc += "</tr>";
 
                         doc += "</table>";
-                         
+
                         var left = "";
                         left += "<br><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
                         left += "" + gwl.FK_EmpText;

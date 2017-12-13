@@ -318,7 +318,7 @@ function InitMapAttrOfCtrl(mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input " + enableAttr + " style='width:80px;' name='TB_" + mapAttr.KeyOfEn + "' />";
+        return "<input " + enableAttr + " style='width:80px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
     }
 
     //时期时间类型.

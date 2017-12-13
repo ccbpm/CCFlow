@@ -562,9 +562,49 @@ namespace BP.WF.HttpHandler
 
 
         #region 从表权限.
+        public class DtlsAttrs
+        {
+            public int idx;
+            public string No;
+            public string Name;
+            /// <summary>
+            /// 原始属性标签
+            /// </summary>
+            public string PrimitiveAttrTag;
+            public string EditTag;
+            public string DelTag;
+        }
         public string Dtls_Init()
         {
-            return "";
+            BP.Sys.MapDtls dtls = new BP.Sys.MapDtls();
+            dtls.Retrieve(MapDtlAttr.FK_MapData, this.FK_MapData);
+            List<DtlsAttrs> dtlsAttrsList = new List<DtlsAttrs>();
+            int idx = 0;
+
+            foreach (BP.Sys.MapDtl item in dtls)
+            {
+                if (item.FK_Node != 0)
+                    continue;
+
+                dtlsAttrsList.Add(new DtlsAttrs { });
+                dtlsAttrsList[idx].idx = idx + 1;
+                dtlsAttrsList[idx].No = item.No;
+                dtlsAttrsList[idx].Name = item.Name;
+                dtlsAttrsList[idx].PrimitiveAttrTag = "<a href=\"javascript:EditDtlYuanShi('" + this.FK_MapData + "','" + item.No + "')\">原始属性</a>";
+                dtlsAttrsList[idx].EditTag = "<a href=\"javascript:EditDtl('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.No + "')\">编辑</a>";
+
+                MapDtl en = new MapDtl();
+                en.No = item.No + "_" + this.FK_Node;
+                if (en.RetrieveFromDBSources() == 0)
+                    dtlsAttrsList[idx].DelTag = "";
+                else
+                    dtlsAttrsList[idx].DelTag = "<a href=\"javascript:DeleteDtl('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.No + "')\">删除</a>";
+
+                idx++;
+
+            }
+
+            return LitJson.JsonMapper.ToJson(dtlsAttrsList);
         }
         public string Dtls_Save()
         {

@@ -185,8 +185,8 @@ namespace BP.Sys
                 map.Java_SetEnType(EnType.Sys);
                 map.AddMyPK();
 
-                map.AddTBString(SysEnumAttr.Lab, null, "Lab", true, false, 1, 80, 8);
-                map.AddTBString(SysEnumAttr.EnumKey, null, "EnumKey", true, false, 1, 40, 8);
+                map.AddTBString(SysEnumAttr.Lab, null, "Lab", true, false, 1, 300, 8);
+                map.AddTBString(SysEnumAttr.EnumKey, null, "EnumKey", true, false, 1, 100, 8);
                 map.AddTBInt(SysEnumAttr.IntKey, 0, "Val", true, false);
                 map.AddTBString(SysEnumAttr.Lang, "CH", "语言", true, false, 0, 10, 8);
 

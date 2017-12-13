@@ -6333,9 +6333,9 @@ namespace BP.WF
                         && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
                     {
                         string url = "MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
-                        htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
+                     //   htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
                         textInfo = "@下一步工作您仍然可以处理。";
-                        this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, htmlInfo);
+                        this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, null);
                     }
                     #endregion 判断当前处理人员，可否处理下一步工作.
 
@@ -6528,10 +6528,10 @@ namespace BP.WF
                     && this.HisRememberMe.Emps.Contains("@" + WebUser.No + "@") == true)
                 {
                     string url = "MyFlow.htm?FK_Flow=" + this.HisFlow.No + "&WorkID=" + this.WorkID + "&FK_Node=" + town.HisNode.NodeID + "&FID=" + this.rptGe.FID;
-                    string htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
+                //    string htmlInfo = "@<a href='" + url + "' >下一步工作您仍然可以处理，点击这里现在处理。</a>.";
                     string textInfo = "@下一步工作您仍然可以处理。";
 
-                    this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, htmlInfo);
+                   // this.addMsg(SendReturnMsgFlag.MsgOfText, textInfo, null);
                 }
                 #endregion 判断当前处理人员，可否处理下一步工作.
 

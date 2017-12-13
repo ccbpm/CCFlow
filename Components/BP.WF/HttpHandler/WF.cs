@@ -387,6 +387,7 @@ namespace BP.WF.HttpHandler
             dtStart.Columns.Add("Name");
             dtStart.Columns.Add("FK_FlowSort");
             dtStart.Columns.Add("IsBatchStart");
+            dtStart.Columns.Add("IsStartInMobile");
 
             //获得所有的流程（包含了所有子公司与集团的可以发起的流程但是没有根据组织结构进行过滤.）
             DataTable dtAllFlows = Dev2Interface.DB_StarFlows(Web.WebUser.No);

@@ -1307,6 +1307,14 @@ namespace BP.WF.HttpHandler
 
             DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
             dt.TableName = "DTObjs";
+
+            //判断是否是oracle.
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+            }
             resultDs.Tables.Add(dt);
 
             //doubleTree
@@ -1322,6 +1330,16 @@ namespace BP.WF.HttpHandler
                 DataTable entityDt = BP.DA.DBAccess.RunSQLReturnTable(sqlObjs);
                 entityDt.TableName = "DTEntitys";
                 resultDs.Tables.Add(entityDt);
+
+
+                //判断是否是oracle.
+                if (SystemConfig.AppCenterDBType == DBType.Oracle)
+                {
+                    entityDt.Columns["NO"].ColumnName = "No";
+                    entityDt.Columns["NAME"].ColumnName = "Name";
+                    // entityDt.Columns["PARENTNO"].ColumnName = "ParentNo";
+                }
+
             }
 
             return BP.Tools.Json.ToJson(resultDs);

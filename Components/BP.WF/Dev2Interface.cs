@@ -752,7 +752,8 @@ namespace BP.WF
                 dt.Columns["EMPTO"].ColumnName = "EmpTo";
                 dt.Columns["EMPTOT"].ColumnName = "EmpToT";
                 dt.Columns["RDT"].ColumnName = "RDT";
-                dt.Columns["WORKTIMESPAN"].ColumnName = "Msg";
+                dt.Columns["WORKTIMESPAN"].ColumnName = "WorkTimeSpan";
+                dt.Columns["MSG"].ColumnName = "Msg";
                 dt.Columns["NODEDATA"].ColumnName = "NodeData";
                 dt.Columns["EXER"].ColumnName = "Exer";
                 dt.Columns["TAG"].ColumnName = "Tag";

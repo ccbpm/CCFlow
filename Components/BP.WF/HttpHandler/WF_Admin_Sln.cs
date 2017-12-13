@@ -550,9 +550,47 @@ namespace BP.WF.HttpHandler
         #endregion 字段权限.
 
         #region 附件权限.
+        public class AthsAttrs
+        {
+            public int idx;
+            public string NoOfObj;
+            public string Name;
+            public string UploadTypeT;
+            public string PrimitiveAttrTag;
+            public string EditTag;
+            public string DelTag;
+        }
         public string Aths_Init()
         {
-            return "";
+            BP.Sys.FrmAttachments fas = new BP.Sys.FrmAttachments();
+            fas.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData);
+
+            List<AthsAttrs> athsAttrsList = new List<AthsAttrs>();
+            int idx = 0;
+            foreach (BP.Sys.FrmAttachment item in fas)
+            {
+                if (item.FK_Node != 0)
+                    continue;
+
+                athsAttrsList.Add(new AthsAttrs { });
+                athsAttrsList[idx].idx = idx + 1;
+                athsAttrsList[idx].NoOfObj = item.NoOfObj;
+                athsAttrsList[idx].Name = item.Name;
+                athsAttrsList[idx].UploadTypeT = item.UploadTypeT;
+                athsAttrsList[idx].PrimitiveAttrTag = "<a href=\"javascript:EditFJYuanShi('" + this.FK_MapData + "','" + item.NoOfObj + "')\">原始属性</a>";
+                athsAttrsList[idx].EditTag = "<a href=\"javascript:EditFJ('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.NoOfObj + "')\">编辑</a>";
+
+                FrmAttachment en = new FrmAttachment();
+                en.MyPK = this.FK_MapData + "_" + item.NoOfObj + "_" + this.FK_Node;
+                if (en.RetrieveFromDBSources() == 0)
+                    athsAttrsList[idx].EditTag = "";
+                else
+                    athsAttrsList[idx].EditTag = "<a href=\"javascript:DeleteFJ('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.NoOfObj + "')\">删除</a>";
+
+                idx++;
+            }
+
+            return LitJson.JsonMapper.ToJson(athsAttrsList);
         }
         public string Aths_Save()
         {
@@ -601,7 +639,6 @@ namespace BP.WF.HttpHandler
                     dtlsAttrsList[idx].DelTag = "<a href=\"javascript:DeleteDtl('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.No + "')\">删除</a>";
 
                 idx++;
-
             }
 
             return LitJson.JsonMapper.ToJson(dtlsAttrsList);

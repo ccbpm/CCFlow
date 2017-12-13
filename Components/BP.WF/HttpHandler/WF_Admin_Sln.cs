@@ -10,6 +10,7 @@ using BP.Port;
 using BP.En;
 using BP.WF;
 using BP.WF.Template;
+using Newtonsoft.Json;
 
 namespace BP.WF.HttpHandler
 {
@@ -410,7 +411,7 @@ namespace BP.WF.HttpHandler
 
         #region 字段权限.
 
-        private class FieldsAttrs
+        public class FieldsAttrs
         {
             public int idx;
             public string KeyOfEn;
@@ -426,16 +427,14 @@ namespace BP.WF.HttpHandler
             /// <summary>
             ///  add new attr 是否写入流程注册表
             /// </summary>
-            public string IsWriteToGenerWorkFlow;
+            public bool IsWriteToGenerWorkFlow;
         }
+
         public string Fields_Init()
         {
-            // 查询出来解决方案.
             FrmFields fss = new FrmFields(this.FK_MapData, this.FK_Node);
 
-            // 处理好.
             MapAttrs attrs = new MapAttrs();
-            //增加排序
             QueryObject obj = new QueryObject(attrs);
             obj.AddWhere(MapAttrAttr.FK_MapData, this.FK_MapData);
             obj.addOrderBy(MapAttrAttr.Y, MapAttrAttr.X);
@@ -477,9 +476,7 @@ namespace BP.WF.HttpHandler
                     fieldsAttrsList[idx].IsSigan = false;
                     fieldsAttrsList[idx].RegularExp = "";
                     fieldsAttrsList[idx].IsWriteToFlowTable = false;
-                    //fieldsAttrsList[idx].IsWriteToGenerWorkFlow = sln.IsWriteToGenerWorkFlow;
-
-                    //this.Pub2.AddTD("<a href=\"javascript:EditSln('" + this.FK_MapData + "','" + this.SlnString + "','" + attr.KeyOfEn + "')\" >Edit</a>");
+                    fieldsAttrsList[idx].IsWriteToGenerWorkFlow = false;
                 }
                 else
                 {
@@ -493,48 +490,62 @@ namespace BP.WF.HttpHandler
                     fieldsAttrsList[idx].RegularExp = sln.RegularExp;
                     fieldsAttrsList[idx].IsWriteToFlowTable = sln.IsWriteToFlowTable;
                     //fieldsAttrsList[idx].IsWriteToGenerWorkFlow = sln.IsWriteToGenerWorkFlow;
-
-                    //this.Pub2.AddTD("<a href=\"javascript:DelSln('" + this.FK_MapData + "','" + this.FK_Flow + "','" + this.FK_Node + "','" + this.FK_Node + "','" + attr.KeyOfEn + "')\" ><img src='../Img/Btn/Delete.gif' border=0/>Delete</a>");
                 }
 
                 idx++;
-                //this.Pub2.AddTREnd();
             }
-            //this.Pub2.AddTableEnd();
 
-            //Button btn = new Button();
-            //btn.ID = "Btn_Save";
-            //btn.Click += new EventHandler(btn_Field_Click);
-            //btn.Text = "保存";
-            //this.Pub2.Add(btn); //保存.
-
-            //if (fss.Count != 0)
-            //{
-            //    btn = new Button();
-            //    btn.ID = "Btn_Del";
-            //    btn.Click += new EventHandler(btn_Field_Click);
-            //    btn.Text = " Delete All ";
-            //    btn.Attributes["onclick"] = "return confirm('Are you sure?');";
-            //    this.Pub2.Add(btn); //删除定义..
-            //}
-
-            //if (dtNodes.Rows.Count >= 1)
-            //{
-            //    //btn = new Button();
-            //    //btn.ID = "Btn_Copy";
-            //    ////btn.Click += new EventHandler(btn_Field_Click);
-            //    //btn.Text = " Copy From Node ";
-            //    //btn.Attributes["onclick"] = "";
-            //    this.Pub2.Add("<input type=button value='从其他节点上赋值权限' onclick=\"javascript:CopyIt('" + this.FK_MapData + "','" + this.FK_Flow + "','" + this.FK_Node + "')\">"); //删除定义..
-            //}
-
-
-            string fsj = LitJson.JsonMapper.ToJson(fieldsAttrsList); 
             return LitJson.JsonMapper.ToJson(fieldsAttrsList);
         }
         public string Fields_Save()
         {
-            return "";
+            string FieldsAttrsObj = this.GetRequestVal("FieldsAttrsObj");
+            var jsonSetting = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+            List<FieldsAttrs> fieldsAttrsList = JsonConvert.DeserializeObject<List<FieldsAttrs>>(FieldsAttrsObj, jsonSetting);
+
+            if (fieldsAttrsList != null)
+            {
+                MapAttrs attrs = new MapAttrs();
+                //增加排序
+                QueryObject obj = new QueryObject(attrs);
+                obj.AddWhere(MapAttrAttr.FK_MapData, this.FK_MapData);
+                obj.DoQuery();
+
+                foreach (MapAttr attr in attrs)
+                {
+                    foreach (FieldsAttrs fieldsAttrs in fieldsAttrsList)
+                    {
+                        if (attr.KeyOfEn != fieldsAttrs.KeyOfEn)
+                            continue;
+
+                        FrmField frmField = new FrmField();
+                        bool isExit = frmField.IsExit("mypk", this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + fieldsAttrs.KeyOfEn + "_" + FrmEleType.Field);
+
+                        frmField.UIVisible = fieldsAttrs.UIVisible;
+                        frmField.UIIsEnable = fieldsAttrs.UIIsEnable;
+                        frmField.IsSigan = fieldsAttrs.IsSigan;
+                        frmField.DefVal = fieldsAttrs.DefVal;
+                        frmField.IsNotNull = fieldsAttrs.IsNotNull;
+                        frmField.RegularExp = fieldsAttrs.RegularExp;
+                        frmField.IsWriteToFlowTable = fieldsAttrs.IsWriteToFlowTable;
+                        //frmField.IsWriteToGenerWorkFlow = fieldsAttrs.IsWriteToGenerWorkFlow;  //sln无此属性
+                        frmField.FK_Node = this.FK_Node;
+                        frmField.FK_Flow = this.FK_Flow;
+                        frmField.FK_MapData = this.FK_MapData;
+                        frmField.KeyOfEn = attr.KeyOfEn;
+                        frmField.Name = attr.Name;
+
+                        if (isExit)
+                            frmField.Update();
+                        else
+                            frmField.Insert();
+                    }
+                }
+
+                return fieldsAttrsList.Count.ToString();
+            }
+
+            return "0";
         }
         #endregion 字段权限.
 

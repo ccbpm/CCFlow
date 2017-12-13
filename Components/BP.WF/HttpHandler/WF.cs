@@ -406,6 +406,7 @@ namespace BP.WF.HttpHandler
                     drNew["Name"] = drFlow["Name"];
                     drNew["FK_FlowSort"] = drFlow["FK_FlowSort"];
                     drNew["IsBatchStart"] = drFlow["IsBatchStart"];
+                    drNew["IsStartInMobile"] = drFlow["IsStartInMobile"];
                     dtStart.Rows.Add(drNew); //增加到里里面去.
                 }
             }

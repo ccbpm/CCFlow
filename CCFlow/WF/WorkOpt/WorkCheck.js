@@ -94,7 +94,7 @@
                             msg = msg.replace('<BR>', '\t\n');
                         }
 
-                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\"'>" + msg + "</textarea>";
+                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>" + msg + "</textarea>";
                         html += "</div>";
 
                         html += "</td>";
@@ -190,6 +190,9 @@
             }, this);
         }
 
+		function setIframeHeight() {
+			$("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height());
+		}
 
         function SaveWorkCheck() {
 

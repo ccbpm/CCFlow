@@ -583,9 +583,9 @@ namespace BP.WF.HttpHandler
                 FrmAttachment en = new FrmAttachment();
                 en.MyPK = this.FK_MapData + "_" + item.NoOfObj + "_" + this.FK_Node;
                 if (en.RetrieveFromDBSources() == 0)
-                    athsAttrsList[idx].EditTag = "";
+                    athsAttrsList[idx].DelTag = "";
                 else
-                    athsAttrsList[idx].EditTag = "<a href=\"javascript:DeleteFJ('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.NoOfObj + "')\">删除</a>";
+                    athsAttrsList[idx].DelTag = "<a href=\"javascript:DeleteFJ('" + this.FK_Node + "','" + this.FK_MapData + "','" + item.NoOfObj + "')\">删除</a>";
 
                 idx++;
             }

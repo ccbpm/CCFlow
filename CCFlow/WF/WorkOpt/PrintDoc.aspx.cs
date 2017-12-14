@@ -37,6 +37,13 @@ namespace CCFlow.WF.WorkOpt
                 return int.Parse(this.Request.QueryString["WorkID"]);
             }
         }
+        public Int64 FID
+        {
+            get
+            {
+                return int.Parse(this.Request.QueryString["FID"]);
+            }
+        }
         public string FK_Bill
         {
             get
@@ -142,6 +149,7 @@ namespace CCFlow.WF.WorkOpt
 
             string[] paths;
             string path;
+            Int64 newWorkID = 0;
             try
             {
 #region 单据变量.
@@ -157,8 +165,37 @@ namespace CCFlow.WF.WorkOpt
                 {
                     //把流程主表数据放入里面去.
                     GEEntity ndxxRpt = new GEEntity("ND" + int.Parse(nd.FK_Flow) + "Rpt");
-                    ndxxRpt.PKVal = this.WorkID;
-                    ndxxRpt.Retrieve();
+                    try
+                    {
+                        ndxxRpt.PKVal = this.WorkID;
+                        ndxxRpt.Retrieve();
+
+                        newWorkID = this.WorkID;
+                    }
+                    catch (Exception ex)
+                    {
+                        if (FID > 0)
+                        {
+                            ndxxRpt.PKVal = this.FID;
+                            ndxxRpt.Retrieve();
+
+                            newWorkID = this.FID;
+
+                            wk = null;
+                            wk = nd.HisWork;
+                            wk.OID = this.FID;
+                            wk.RetrieveFromDBSources();
+                        }
+                        else
+                        {
+                            BP.WF.DTS.InitBillDir dir = new BP.WF.DTS.InitBillDir();
+                            dir.Do();
+                            path = BP.WF.Glo.FlowFileBill + DateTime.Now.Year + "\\" + WebUser.FK_Dept + "\\" + func.No + "\\";
+                            string msgErr = "@" + string.Format("生成单据失败，请让管理员检查目录设置") + "[" + BP.WF.Glo.FlowFileBill + "]。@Err：" + ex.Message + " @File=" + file + " @Path:" + path;
+                            billInfo += "@<font color=red>" + msgErr + "</font>";
+                            throw new Exception(msgErr + "@其它信息:" + ex.Message);
+                        }
+                    }
                     ndxxRpt.Copy(wk);
 
                     //把数据赋值给wk. 有可能用户还没有执行流程检查，字段没有同步到 NDxxxRpt.
@@ -177,7 +214,7 @@ namespace CCFlow.WF.WorkOpt
                     foreach (FrmAttachment athDesc in aths)
                     {
                         FrmAttachmentDBs athDBs = new FrmAttachmentDBs();
-                        if (athDBs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK, FrmAttachmentDBAttr.RefPKVal, this.WorkID, "RDT") == 0)
+                        if (athDBs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, athDesc.MyPK, FrmAttachmentDBAttr.RefPKVal, newWorkID, "RDT") == 0)
                             continue;
 
                         rtf.EnsDataAths.Add(athDesc.NoOfObj, athDBs);
@@ -186,7 +223,7 @@ namespace CCFlow.WF.WorkOpt
                     Paras ps = new BP.DA.Paras();
                     ps.SQL = "SELECT * FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE ActionType=" + SystemConfig.AppCenterDBVarStr + "ActionType AND WorkID=" + SystemConfig.AppCenterDBVarStr + "WorkID";
                     ps.Add(TrackAttr.ActionType, (int)ActionType.WorkCheck);
-                    ps.Add(TrackAttr.WorkID, this.WorkID);
+                    ps.Add(TrackAttr.WorkID, newWorkID);
                     rtf.dtTrack = BP.DA.DBAccess.RunSQLReturnTable(ps);
                 }
 

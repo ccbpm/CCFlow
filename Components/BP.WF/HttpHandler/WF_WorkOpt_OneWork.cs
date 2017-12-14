@@ -286,8 +286,7 @@ namespace BP.WF.HttpHandler
             bool CanPackUp = false;
             if (SystemConfig.CustomerNo == "TianYe")
             {
-                string sql = " SELECT COUNT(No)  FROM WF_Emp WHERE UserType=1 AND No='"+BP.Web.WebUser.No+"'";
-                if ( Web.WebUser.No=="admin" || DBAccess.RunSQLReturnValInt(sql) == 1)
+                if ( Web.WebUser.No=="admin" || WebUser.IsAdmin ==true)
                 {
                     /*管理员可以打印.*/
                     CanPackUp = true;
@@ -295,7 +294,7 @@ namespace BP.WF.HttpHandler
                 else
                 {
                     //流程已经完成的情况下,从轨迹里面找当前人员参与的节点.
-                    sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND EmpFrom='" + BP.Web.WebUser.No + "'";
+                    string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND EmpFrom='" + BP.Web.WebUser.No + "'";
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
                     foreach (DataRow dr in dt.Rows)
                     {

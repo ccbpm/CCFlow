@@ -129,6 +129,9 @@ namespace BP.WF.HttpHandler
         public string KeySearch_Query()
         {
             string type = this.GetRequestVal("type");
+            if (DataType.IsNullOrEmpty(type))
+                type = "ByTitle";
+
             string keywords = this.GetRequestVal("TB_KeyWords");
             int myselft = this.GetRequestValInt("CHK_Myself");
             string sql = "";
@@ -137,16 +140,18 @@ namespace BP.WF.HttpHandler
             {
                 case "ByWorkID":
                     if (myselft == 1)
-                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords + " AND Emps LIKE '@%" + WebUser.No + "%'";
+                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps,IsCanDo FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords + " AND Emps LIKE '@%" + WebUser.No + "%'";
                     else
-                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
+                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps,IsCanDo FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
                     break;
-
                 case "ByTitle":
-                    if (myselft == 1)
-                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%' AND Emps LIKE '@%" + WebUser.No + "%'";
-                    else
-                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%'";
+                    sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.Title,A.Starter,A.RDT,A.WFSta,A.Emps, A.TodoEmps ";
+                    sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B ";
+                    sql += " WHERE A.Title LIKE '%" + keywords + "%' ";
+                    sql += " AND A.Title LIKE '%" + keywords + "%' ";
+                    sql += " AND ( A.Emps LIKE '@%" + WebUser.No + "%' OR B.FK_Emp='" + WebUser.No + "') ";
+                    sql += " AND A.WorkID=B.WorkID ";
+                    sql += " AND A.WFState!=0 ";
                     break;
             }
 
@@ -162,13 +167,24 @@ namespace BP.WF.HttpHandler
                 dt.Columns["TITLE"].ColumnName = "Title";
                 dt.Columns["STARTER"].ColumnName = "Starter";
                 dt.Columns["WFSTA"].ColumnName = "WFSta";
-                dt.Columns["EMPS"].ColumnName = "Emps";
-                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps"; //处理人
-            }
 
+                dt.Columns["EMPS"].ColumnName = "Emps";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps"; //处理人.
+                dt.Columns["ISCANDO"].ColumnName = "IsCanDo"; //是否可以处理？
+            }
             return BP.Tools.Json.ToJson(dt);
         }
-
+        /// <summary>
+        /// 判断是否可以执行当前工作？
+        /// </summary>
+        /// <returns></returns>
+        public string KeySearch_GenerOpenUrl()
+        {
+            if (BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No) == true)
+                return "1";
+            else
+                return "0";
+        }
         //打开表单.
         public string KeySearch_OpenFrm()
         {

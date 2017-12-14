@@ -611,13 +611,41 @@ namespace BP.WF
                     sb.Append("<span>");
 
                     sb.Append("<table   style='border: 1px outset #C0C0C0;padding: inherit; margin: 0;border-collapse:collapse;width:100%;' >");
+
                     #region 生成审核信息.
                     if (flowNo != null)
                     {
-                        string sql = "SELECT * FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
+                        string sql = "SELECT EmpFrom, EmpFromT,RDT,Msg,NDFrom FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
                         DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+                        //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.
+                        sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID="+workid;
+                        DataTable dtOfTodo = DBAccess.RunSQLReturnTable(sql);
+
                         foreach (DataRow dr in dt.Rows)
                         {
+
+                            #region 排除正在审批的人员.
+                            string nodeID = dr["NDFrom"].ToString();
+                            string empFrom = dr["EmpFrom"].ToString();
+                            if (dtOfTodo.Rows.Count != 0)
+                            {
+                                bool isHave = false;
+                                foreach (DataRow mydr in dtOfTodo.Rows)
+                                {
+                                    if (mydr["FK_Node"].ToString() != nodeID)
+                                        continue;
+
+                                    if (mydr["FK_Emp"].ToString() != empFrom)
+                                        continue;
+                                    isHave = true;
+                                }
+
+                                if (isHave == true)
+                                    continue;
+                            }
+                            #endregion 排除正在审批的人员.
+
                             sb.Append("<tr>");
                             sb.Append("<td valign=middle style='border-style: solid;padding: 4px;text-align: left;color: #333333;font-size: 12px;border-width: 1px;border-color: #C2D5E3;' >" + dr["NDFromT"] + "</td>");
 
@@ -1032,8 +1060,36 @@ namespace BP.WF
                     #region 生成审核信息.
                     sql = "SELECT NDFromT,Msg,RDT,EmpFromT,EmpFrom FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+                    //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.
+                    sql = "SELECT FK_Emp, FK_Node FROM WF_GenerWorkerList WHERE IsPass!=1 AND WorkID=" + workid;
+                    DataTable dtOfTodo = DBAccess.RunSQLReturnTable(sql);
+
                     foreach (DataRow dr in dt.Rows)
                     {
+                        #region 排除正在审批的人员.
+                        string nodeID = dr["NDFrom"].ToString();
+                        string empFrom = dr["EmpFrom"].ToString();
+                        if (dtOfTodo.Rows.Count != 0)
+                        {
+                            bool isHave = false;
+                            foreach (DataRow mydr in dtOfTodo.Rows)
+                            {
+                                if (mydr["FK_Node"].ToString() != nodeID)
+                                    continue;
+
+                                if (mydr["FK_Emp"].ToString() != empFrom)
+                                    continue;
+                                isHave = true;
+                            }
+
+                            if (isHave == true)
+                                continue;
+                        }
+                        #endregion 排除正在审批的人员.
+
+
+
                         html += "<tr>";
                         html += " <td valign=middle >" + dr["NDFromT"] + "</td>";
 

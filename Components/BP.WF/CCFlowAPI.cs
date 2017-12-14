@@ -182,7 +182,10 @@ namespace BP.WF
                                 foreach (Node item in nds)
                                 {
                                     if (item.Name.Contains("备案") == true && item.Name.Contains("待") == false)
+                                    {
                                         defalutSelectedNodeID = item.NodeID;
+                                        break;
+                                    }
                                 }
                             }
                             #endregion 为天业集团做一个特殊的判断.

@@ -53,12 +53,6 @@ namespace BP.WF
             string guestNo, string title, Int64 parentWorkID, string parentFlowNo, int parentNodeID, string parentEmp)
         {
 
-            //转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
-            //转化成编号
-            parentFlowNo = TurnFlowMarkToFlowNo(parentFlowNo);
-
             string dbstr = SystemConfig.AppCenterDBVarStr;
 
             Flow fl = new Flow(flowNo);
@@ -207,8 +201,7 @@ namespace BP.WF
         /// <returns>结果集合</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable(string fk_flow, string guestNo)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
+         
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -235,9 +228,7 @@ namespace BP.WF
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
         public static DataTable DB_GenerRuning(string fk_flow, string guestNo)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
-
+           
             string sql;
             int state = (int)WFState.Runing;
 

@@ -57,11 +57,7 @@ namespace BP.WF
             //if (BP.Web.WebUser.No != "Guest")
             //    throw new Exception("@必须是Guest登陆才能发起.");
 
-            // 转化成编号.
-            flowNo = TurnFlowMarkToFlowNo(flowNo);
-
-            //转化成编号
-            parentFlowNo = TurnFlowMarkToFlowNo(parentFlowNo);
+            
 
             string dbstr = SystemConfig.AppCenterDBVarStr;
 
@@ -278,8 +274,7 @@ namespace BP.WF
         /// <returns>结果集合</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable( string guestNo, string fk_flow = null)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
+            
 
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
@@ -306,8 +301,6 @@ namespace BP.WF
         /// <returns>返回从数据视图WF_GenerWorkflow查询出来的数据.</returns>
         public static DataTable DB_GenerRuning(string fk_flow=null, string guestNo=null)
         {
-            // 转化成编号.
-            fk_flow = TurnFlowMarkToFlowNo(fk_flow);
             if (guestNo == null)
                 guestNo = BP.Web.GuestUser.No;
 
@@ -387,21 +380,6 @@ namespace BP.WF
         }
         #endregion
 
-        #region 通用方法
-        public static string TurnFlowMarkToFlowNo(string FlowMark)
-        {
-            if (string.IsNullOrEmpty(FlowMark))
-                return null;
-
-            // 如果是编号，就不用转化.
-            if (DataType.IsNumStr(FlowMark))
-                return FlowMark;
-
-            string s = DBAccess.RunSQLReturnStringIsNull("SELECT No FROM WF_Flow WHERE FlowMark='" + FlowMark + "'", null);
-            if (s == null)
-                throw new Exception("@FlowMark错误:" + FlowMark + ",没有找到它的流程编号.");
-            return s;
-        }
-        #endregion
+        
     }
 }

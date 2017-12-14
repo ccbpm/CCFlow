@@ -706,6 +706,7 @@ namespace BP.WF.HttpHandler
                 DataTable isDtl = new DataTable();
                 isDtl.Columns.Add("tdDtl",typeof(int));
                 isDtl.Columns.Add("FK_MapData",typeof(string));
+                isDtl.Columns.Add("No", typeof(string));
                 isDtl.TableName="TRDtl";
 
                 DataRow tddr = isDtl.NewRow();
@@ -716,11 +717,13 @@ namespace BP.WF.HttpHandler
                 {
                     tddr["tdDtl"] = 1;
                     tddr["FK_MapData"] = tdtl.FK_MapData;
+                    tddr["No"] = tdtl.No;
                 }
                 else
                 {
                     tddr["tdDtl"] = 0;
                     tddr["FK_MapData"] = FK_MapData;
+                    tddr["No"] = tdtl.No;
                 }
                 
 

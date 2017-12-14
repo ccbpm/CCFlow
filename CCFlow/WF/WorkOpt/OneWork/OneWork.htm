@@ -23,9 +23,41 @@
             $("#mtabs").tabs({
                 onSelect: function (title, index) {
                     document.title = title;
+                    var currTab = $('#mtabs').tabs('getSelected');
+                    var url = $(currTab.panel('options').content).attr('src');
+                    if (url != undefined) {
+                        $('#mtabs').tabs('update', {
+                            tab: currTab,
+                            options: {
+                                content: createFrame(url)
+                            }
+                        })
+                    }
                 }
             });
 
+            InitPage();
+        });
+
+        function addTab(id, title, url) {
+            if ($('#mtabs').tabs('exists', title)) {
+                $('#mtabs').tabs('select', title); //选中并刷新
+                var currTab = $('#mtabs').tabs('getSelected');
+            } else {
+                var content = createFrame(url);
+                $('#mtabs').tabs('add', {
+                    title: title,
+                    id: id,
+                    content: content,
+                    closable: false
+                });
+            }
+        }
+
+        function createFrame(url) {
+            return '<iframe scrolling="auto" frameborder="0"  src="'+ url + '" style="width:100%;height:100%;"></iframe>';
+        } 
+        function InitPage() {
             //加载标签页
             $.ajax({
                 type: 'post',
@@ -47,13 +79,7 @@
 
                     $.each(data, function () {
 
-                        $("#mtabs").tabs("add", {
-                            id: this.No,
-                            title: this.Name,
-                            selected: currtab == this.No,
-                            cache: false,
-                            href: this.Url
-                        });
+                        addTab(this.No, this.Name, this.Url);
 
                         tpo[this.No] = this.Name;
                     });
@@ -73,10 +99,6 @@
                     }
                 }
             });
-        });
-
-        function InitPage() {
-            
         }
 
         function RSize() {

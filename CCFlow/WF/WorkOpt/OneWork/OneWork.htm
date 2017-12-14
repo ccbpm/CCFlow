@@ -26,10 +26,6 @@
                 }
             });
 
-            InitPage();
-        });
-
-        function InitPage() {
             //加载标签页
             $.ajax({
                 type: 'post',
@@ -77,6 +73,10 @@
                     }
                 }
             });
+        });
+
+        function InitPage() {
+            
         }
 
         function RSize() {

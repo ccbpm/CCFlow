@@ -1266,6 +1266,15 @@ namespace BP.WF.Template
 
             return base.beforeUpdate();
         }
+
+        protected override void afterDelete()
+        {
+            MapDtl dtl = new MapDtl();
+            dtl.No = this.No;
+            dtl.Delete();
+
+            base.afterDelete();
+        }
         /// <summary>
         /// 获取个数
         /// </summary>

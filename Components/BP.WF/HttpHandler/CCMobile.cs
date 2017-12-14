@@ -201,5 +201,11 @@ namespace BP.WF.HttpHandler
             return wf.FrmView_Init();
         }
 
+        public string AttachmentUpload_Down()
+        {
+            WF_CCForm ccform = new WF_CCForm(this.context);
+            return ccform.AttachmentUpload_Down();
+        }
+
     }
 }

@@ -1473,7 +1473,7 @@ namespace BP.WF.HttpHandler
             string subNodeNo = fsSub.DoCreateSubNode().No;
             FlowSort subFlowSort = new FlowSort(subNodeNo);
             subFlowSort.Name = this.Name;
-            subFlowSort.OrgNo = orgNo; // 组织结构编号. 对照需要翻译
+            subFlowSort.OrgNo = orgNo; // 组织结构编号. 对照需要翻译.
             subFlowSort.Update();
             return "F" + subFlowSort.No;
         }

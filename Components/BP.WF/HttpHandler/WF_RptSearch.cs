@@ -137,16 +137,16 @@ namespace BP.WF.HttpHandler
             {
                 case "ByWorkID":
                     if (myselft == 1)
-                        sql = "SELECT FlowName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords + " AND Emps LIKE '@%" + WebUser.No + "%'";
+                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords + " AND Emps LIKE '@%" + WebUser.No + "%'";
                     else
-                        sql = "SELECT FlowName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
+                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
                     break;
 
                 case "ByTitle":
                     if (myselft == 1)
-                        sql = "SELECT FlowName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%' AND Emps LIKE '@%" + WebUser.No + "%'";
+                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%' AND Emps LIKE '@%" + WebUser.No + "%'";
                     else
-                        sql = "SELECT FlowName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%'";
+                        sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps FROM WF_GenerWorkFlow WHERE  Title LIKE '%" + keywords + "%'";
                     break;
             }
 
@@ -157,14 +157,23 @@ namespace BP.WF.HttpHandler
                 dt.Columns["FLOWNAME"].ColumnName = "FlowName";
                 dt.Columns["FK_FLOW"].ColumnName = "FK_Flow";
                 dt.Columns["FK_NODE"].ColumnName = "FK_Node";
+                dt.Columns["NODENAME"].ColumnName = "NodeName";
                 dt.Columns["WORKID"].ColumnName = "WorkID";
                 dt.Columns["TITLE"].ColumnName = "Title";
                 dt.Columns["STARTER"].ColumnName = "Starter";
                 dt.Columns["WFSTA"].ColumnName = "WFSta";
                 dt.Columns["EMPS"].ColumnName = "Emps";
+                dt.Columns["TODOEMPS"].ColumnName = "TodoEmps"; //处理人
             }
 
             return BP.Tools.Json.ToJson(dt);
+        }
+
+        //打开表单.
+        public string KeySearch_OpenFrm()
+        {
+           BP.WF.HttpHandler.WF wf=new WF(this.context);
+            return wf.Runing_OpenFrm();
         }
         #endregion
 

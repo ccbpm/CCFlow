@@ -144,13 +144,6 @@ namespace BP.WF.HttpHandler
             }
             #endregion
 
-            //foreach (DataRow dr in mydt.Rows)
-            //{
-            //    if (dr[GenerWorkFlowAttr.TodoEmps].ToString().Contains(WebUser.No) == true)
-            //    {
-            //    }
-            //}
-
             ds.Tables.Add(mydt);
 
             return BP.Tools.Json.ToJson(ds);
@@ -200,5 +193,28 @@ namespace BP.WF.HttpHandler
             CCMobile cc = new CCMobile(this.context);
             return cc.DB_GenerReturnWorks();
         }
+
+        #region 关键字查询.
+        /// <summary>
+        /// 打开表单
+        /// </summary>
+        /// <returns></returns>
+        public string KeySearch_OpenFrm()
+        {
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
+            return search.KeySearch_OpenFrm();
+        }
+        /// <summary>
+        /// 执行查询
+        /// </summary>
+        /// <returns></returns>
+        public string KeySearch_Query()
+        {
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
+            return search.KeySearch_Query();
+        }
+        #endregion 关键字查询.
+
+
     }
 }

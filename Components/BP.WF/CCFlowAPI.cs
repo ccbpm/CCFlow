@@ -175,6 +175,20 @@ namespace BP.WF
                                 defalutSelectedNodeID = DBAccess.RunSQLReturnValInt(mysql, 0);
                             }
 
+                            #region 为天业集团做一个特殊的判断.
+                            if (SystemConfig.CustomerNo == "TianYe" && nd.Name.Contains("董事长")==true)
+                            {
+                                /*如果是董事长节点, 如果是下一个节点默认的是备案. */
+                                foreach (Node item in nds)
+                                {
+                                    if (item.Name.Contains("备案") == true && item.Name.Contains("待") == false)
+                                        defalutSelectedNodeID = item.NodeID;
+                                }
+                            }
+                            #endregion 为天业集团做一个特殊的判断.
+
+
+
                             foreach (Node item in nds)
                             {
                                 DataRow dr = dtToNDs.NewRow();

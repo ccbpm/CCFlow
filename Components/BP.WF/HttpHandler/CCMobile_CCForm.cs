@@ -38,7 +38,15 @@ namespace BP.WF.HttpHandler
             WF_CCForm ccform = new WF_CCForm(this.context);
             return ccform.AttachmentUpload_Down();
         }
+        /// <summary>
+        /// 表单初始化.
+        /// </summary>
+        /// <returns></returns>
+        public string Frm_Init()
+        {
+            WF_CCForm ccform = new WF_CCForm(this.context);
+            return ccform.Frm_Init();
+        }
       
-
     }
 }

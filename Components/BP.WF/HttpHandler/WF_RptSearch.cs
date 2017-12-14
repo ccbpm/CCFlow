@@ -170,7 +170,7 @@ namespace BP.WF.HttpHandler
 
                 dt.Columns["EMPS"].ColumnName = "Emps";
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps"; //处理人.
-                dt.Columns["ISCANDO"].ColumnName = "IsCanDo"; //是否可以处理？
+              //  dt.Columns["ISCANDO"].ColumnName = "IsCanDo"; //是否可以处理？
             }
             return BP.Tools.Json.ToJson(dt);
         }

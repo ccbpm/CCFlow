@@ -23,9 +23,9 @@ tr
 
 .TDTime
  {
-             text-align:right;
-               width:20%;
-                   vertical-align: middle;
+    text-align:right;
+    width:20%;
+    vertical-align: middle;
     border-bottom-style: dotted;
     border-bottom-width: thin;
     border-bottom-color: #3399FF;
@@ -68,9 +68,9 @@ tr
 /* 事件图片. */
 .ImgOfAC         
 {
-    width:24px;
-     height:24px;
-     margin:5px;
+   width:20px;
+   height:20px;
+   margin:5px;
 }
 
 th

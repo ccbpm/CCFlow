@@ -155,54 +155,23 @@ function InitPage() {
                 //时间轴.
                 var timeBase = "";
                 var imgUrl = ActionTypeStr(track.ActionType);
-                timeBase = "<img src='" + imgUrl + "' class='ImgOfAC' alt='" + track.ActionTypeText + "'  />";
+                timeBase = "<img src='" + imgUrl + "' width='10px;' class='ImgOfAC' alt='" + track.ActionTypeText + "'  />";
 
                 //内容.
                 var doc = "";
-                doc = "<img src='../../Img/TolistSta/" + dotColor + ".png' />" + track.NDFromT + " - " + timeBase + track.ActionTypeText;
+               // doc += "<img src='../../Img/TolistSta/" + dotColor + ".png' />" + track.NDFromT + " - " + timeBase + track.ActionTypeText;
+                doc += timeBase + track.NDFromT + " - " +track.ActionTypeText;
+
 
                 var at = track.ActionType;
 
-                if (at == ActionType.Forward || at == ActionType.ForwardAskfor || at == ActionType.WorkCheck || at == ActionType.Order
-                    || at == ActionType.SubFlowForward    //分流节点也显示表单
-                    || at == ActionType.FlowOver    //added by liuxc,2014-12-3,正常结束结点也显示表单
-                    || at == ActionType.Skip)   //added by liuxc,2015-7-13,自动跳转的也显示表单
-                {
-
-                    //this.AddTD("<a class='easyui-linkbutton' data-options=\"iconCls:'icon-sheet'\" href=\"javascript:WinOpen('" + BP.WF.Glo.CCFlowAppPath + "WF/WFRpt.aspx?WorkID=" + dr[TrackAttr.WorkID].ToString() + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + dr[TrackAttr.NDFrom].ToString() + "&DoType=View&MyPK=" + dr[TrackAttr.MyPK].ToString() + "','" + dr[TrackAttr.MyPK].ToString() + "');\">表单</a>");
-                    //var url = "../../WFRpt.htm?OID=" + track.WorkID + "&WorkID=" + track.WorkID + "&FK_Flow=" + fk_flow + "&FK_Node=" + track.NDFrom + "&DoType=View&MyPK=" + track.MyPK;
-                    //url += "&PWorkID=" + gwf.PWorkID;
-                    //url += "&PFlowNo=" + gwf.PFlowNo;
-                    //url += "&PNodeID=" + gwf.PNodeID;
-                    //url += "&Frms=" + gwf.Paras_Frms;
-                    //javascript: OpenFrm('191', '11804', '118')
-
-                    doc += " - <a href=\"javascript:OpenFrm('" + track.WorkID + "','" + track.NDFrom + "','" + fk_flow + "');\">表单</a>";
-                }
-
-                if (at == ActionType.FlowOver
-                    || at == ActionType.CC
-                    || at == ActionType.UnSend) {
-                    doc += "<p></p>";
-                    doc += "<p></p>";
-                }
-                else {
-
-                    if (at == ActionType.WorkCheck) {
-                        /*审核没有发送到节点信息.*/
-
-                    } else {
-                        doc += "<p>发送到节点：" + track.NDToT + "</p>";
-                    }
-                }
-
                 //如果是第一节点，就把他设置为到达节点.
-                if (idx == 0) {
+                if (idx == 1 || idx == 0) {
                     trackDotOfForward = track;
                 }
 
                 //增加两列，到达时间、用时 added by liuxc,2014-12-4
-                if (idx > 1) {
+                if (idx > 1 && 1 == 2) {
 
                     //求时间点track.
 
@@ -224,11 +193,8 @@ function InitPage() {
                         var timeDot = track.RDT.replace(/\-/g, "/");
                         timeDot = new Date(timeDot);
 
-                        if (at == ActionType.WorkCheck) {
-                            doc += "<p>到达时间：<font color=green>" + toTime + "</font> 用时：<font color=green>" + GetSpanTime(toTimeDot, timeDot) + "</font></p>";
-                        } else {
-                            doc += "<p>到达时间：<font color=green>" + toTime + "</font> 用时：<font color=green>" + GetSpanTime(toTimeDot, timeDot) + "</font></p>";
-                        }
+                        doc += "<br>到达时间:<font color=green>" + toTime + "</font>用时：<font color=green>" + GetSpanTime(toTimeDot, timeDot) + "</font>";
+
                     }
                 }
 
@@ -243,14 +209,16 @@ function InitPage() {
                         msg = msg.replace('\t\n', '<br>');
                     }
 
-                    doc += "<font color=green><br><br>" + msg + "</font><br>";
+                    doc += "<br><p>";
+                    doc += "<font color=green><br>" + msg + "</font><br>";
+                    doc += "</p>";
                 }
 
                 var newRow = "";
                 newRow = "<tr  title='" + track.ActionTypeText + "' >";
                 newRow += "<td class='TDTime' >" + left + "</td>";
                 newRow += "<td class='TDBase' ></td>";
-                newRow += "<td class='TDDoc' >" + doc + "</td>";
+                newRow += "<td class='TDDoc' >" + doc+"</td>";
                 newRow += "</tr>";
 
                 $("#Table1 tr:last").after(newRow);
@@ -259,7 +227,7 @@ function InitPage() {
             }
 
 
-            //增加等待审核的人员.
+            //增加等待审核的人员, 在所有的人员循环以后.
             if (gwls) {
                 var isHaveNoChecker = false;
                 for (var i = 0; i < gwls.length; i++) {
@@ -286,8 +254,6 @@ function InitPage() {
                         var gwl = gwls[i];
                         if (gwl.IsPass == 1)
                             continue;
-
-
 
                         var doc = "";
                         doc += "<table border=0>";

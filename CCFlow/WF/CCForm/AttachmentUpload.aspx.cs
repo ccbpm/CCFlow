@@ -417,7 +417,7 @@ namespace CCFlow.WF.CCForm
                         }
 
                         if (athDesc.IsDownload)
-                            this.Pub1.AddTD("<a href=\"javascript:Down('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">下载</a>");
+                            this.Pub1.AddTD("<a href=\"javascript:Down2017('" + db.MyPK + "')\">下载</a>");
                         else
                             this.Pub1.AddTD("");
 
@@ -535,7 +535,7 @@ namespace CCFlow.WF.CCForm
                         //输出操作部分.
                         this.Pub1.AddTDBegin();
                         if (athDesc.IsDownload)
-                            this.Pub1.Add("<a href=\"javascript:Down('" + this.FK_FrmAttachment + "','" + this.PKVal + "','" + db.MyPK + "')\">下载</a>");
+                            this.Pub1.Add("<a href=\"javascript:Down2017('" + db.MyPK + "')\">下载</a>");
                         if (this.IsReadonly != "1")
                         {
                             string op = null;

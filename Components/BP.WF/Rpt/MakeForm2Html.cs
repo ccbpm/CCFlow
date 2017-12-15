@@ -1058,7 +1058,7 @@ namespace BP.WF
                     string html = ""; // "<table style='width:100%;valign:middle;height:auto;' >";
 
                     #region 生成审核信息.
-                    sql = "SELECT NDFromT,Msg,RDT,EmpFromT,EmpFrom FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
+                    sql = "SELECT NDFromT,Msg,RDT,EmpFromT,EmpFrom,NDFrom FROM ND" + int.Parse(flowNo) + "Track WHERE WorkID=" + workid + " AND ActionType=" + (int)ActionType.WorkCheck + " ORDER BY RDT ";
                     DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
                     //获得当前待办的人员,把当前审批的人员排除在外,不然就有默认同意的意见可以打印出来.

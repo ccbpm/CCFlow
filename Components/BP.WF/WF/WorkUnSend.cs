@@ -363,6 +363,11 @@ namespace BP.WF
         private string DoUnSendIt()
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
+            //会签人不允许撤销。 @于庆海翻译.
+            if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";") == false)
+                throw  new Exception("您是会签人，您不能执行撤销。");
+
             if (gwf.FID != 0)
             {
                 //执行子线程的撤销.

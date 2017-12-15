@@ -457,7 +457,9 @@ namespace BP.Sys
         /// <returns></returns>
         public string MakeFullFileFromFtp()
         {
-            string tempFile =  SystemConfig.PathOfTemp +System.Guid.NewGuid()+"."+this.FileExts;
+           // string tempFile =  SystemConfig.PathOfTemp +System.Guid.NewGuid()+"."+this.FileExts;
+            string tempFile = SystemConfig.PathOfTemp + this.FileName;
+
             FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP, 
                 SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword  );
 

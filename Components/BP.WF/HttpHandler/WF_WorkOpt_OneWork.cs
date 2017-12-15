@@ -121,6 +121,15 @@ namespace BP.WF.HttpHandler
             WF en = new WF(this.context);
             return en.Runing_OpenFrm();
         }
+        /// <summary>
+        /// 返回打开路径
+        /// </summary>
+        /// <returns></returns>
+        public string FrmGuide_Init()
+        {
+            WF en = new WF(this.context);
+            return en.Runing_OpenFrm();
+        }
 
 
         #region 执行父类的重写方法.

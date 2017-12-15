@@ -200,12 +200,45 @@ namespace BP.WF.HttpHandler
             BP.WF.HttpHandler.WF wf = new WF(this.context);
             return wf.FrmView_Init();
         }
+        /// <summary>
+        /// 撤销发送
+        /// </summary>
+        /// <returns></returns>
+        public string FrmView_UnSend()
+        {
+            BP.WF.HttpHandler.WF_WorkOpt_OneWork en = new WF_WorkOpt_OneWork(this.context);
+            return en.OP_UnSend();
+        }
 
         public string AttachmentUpload_Down()
         {
             WF_CCForm ccform = new WF_CCForm(this.context);
             return ccform.AttachmentUpload_Down();
         }
+
+
+        #region 关键字查询.
+        /// <summary>
+        /// 打开表单
+        /// </summary>
+        /// <returns></returns>
+        public string KeySearch_OpenFrm()
+        {
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
+            return search.KeySearch_OpenFrm();
+        }
+        /// <summary>
+        /// 执行查询
+        /// </summary>
+        /// <returns></returns>
+        public string KeySearch_Query()
+        {
+            BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
+            return search.KeySearch_Query();
+        }
+        #endregion 关键字查询.
+
+      
 
     }
 }

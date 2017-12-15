@@ -46,7 +46,6 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
-
         /// <summary>
         /// 初始化
         /// </summary>
@@ -194,6 +193,7 @@ namespace BP.WF.HttpHandler
             return cc.DB_GenerReturnWorks();
         }
 
+
         #region 关键字查询.
         /// <summary>
         /// 打开表单
@@ -214,6 +214,8 @@ namespace BP.WF.HttpHandler
             return search.KeySearch_Query();
         }
         #endregion 关键字查询.
+
+        
 
 
     }

@@ -133,6 +133,9 @@ namespace BP.WF.HttpHandler
                 type = "ByTitle";
 
             string keywords = this.GetRequestVal("TB_KeyWords");
+            if (DataType.IsNullOrEmpty(keywords)==true)
+                keywords = this.GetRequestVal("TB_Key");
+
             int myselft = this.GetRequestValInt("CHK_Myself");
             string sql = "";
 

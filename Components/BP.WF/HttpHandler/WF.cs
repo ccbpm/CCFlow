@@ -528,11 +528,19 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Runing_OpenFrm()
         {
+            int nodeID = this.FK_Node;
+            if (nodeID == 0)
+            {
+                GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+                nodeID = gwf.FK_Node;
+            }
+
             string appPath = BP.WF.Glo.CCFlowAppPath;
             Node nd = null;
             Track tk = new Track();
             tk.FK_Flow = this.FK_Flow;
-            tk.NDFrom = this.FK_Node;
+
+      
 
             tk.WorkID = this.WorkID;
             if (this.MyPK != null)
@@ -542,7 +550,7 @@ namespace BP.WF.HttpHandler
             }
             else
             {
-                nd = new Node(this.FK_Node);
+                nd = new Node(nodeID);
             }
 
             Flow fl = new Flow(this.FK_Flow);
@@ -594,9 +602,7 @@ namespace BP.WF.HttpHandler
                 wk.Row = rtp.Row;
             }
 
-            GenerWorkFlow gwf = new GenerWorkFlow();
-            gwf.WorkID = wk.OID;
-
+         
             if (nd.HisFlow.IsMD5 && wk.IsPassCheckMD5() == false)
             {
                 string err = "打开(" + nd.Name + ")错误";

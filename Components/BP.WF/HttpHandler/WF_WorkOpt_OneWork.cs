@@ -669,6 +669,11 @@ namespace BP.WF.HttpHandler
             return count;
         }
 
+        public string Runing_OpenFrm()
+        {
+            BP.WF.HttpHandler.WF wf = new WF(this.context);
+            return wf.Runing_OpenFrm();
+        }
 
     }
 }

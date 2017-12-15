@@ -9006,19 +9006,23 @@ namespace BP.WF
             //结束日期为当前.
             DateTime dtEnd = dtBegin.AddDays(7);
 
+            //默认都设置为本周
+            string sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.ThisWeek;
+            BP.DA.DBAccess.RunSQL(sql);
+
             //设置为上周.
-            string sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.NextWeek + " WHERE RDT >= '" + dtBegin.ToString(DataType.SysDataFormat) + " 00:00' AND RDT <= '" + dtEnd.ToString(DataType.SysDataFormat) + " 00:00' AND TSpan=0";
+            sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.NextWeek + " WHERE RDT >= '" + dtBegin.ToString(DataType.SysDataFormat) + " 00:00' AND RDT <= '" + dtEnd.ToString(DataType.SysDataFormat) + " 00:00'";
             BP.DA.DBAccess.RunSQL(sql);
 
             dtBegin = dtBegin.AddDays(-7);
             dtEnd = dtEnd.AddDays(-7);
 
             //把上周的，设置为两个周以前.
-            sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.TowWeekAgo + " WHERE RDT >= '" + dtBegin.ToString(DataType.SysDataFormat) + " 00:00' AND RDT <= '" + dtEnd.ToString(DataType.SysDataFormat) + " 00:00' AND (TSpan=1 OR TSpan=0) ";
+            sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.TowWeekAgo + " WHERE RDT >= '" + dtBegin.ToString(DataType.SysDataFormat) + " 00:00' AND RDT <= '" + dtEnd.ToString(DataType.SysDataFormat) + " 00:00' ";
             BP.DA.DBAccess.RunSQL(sql);
 
             //把上周的，设置为更早.
-            sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.More + " WHERE RDT <= '" + dtBegin.ToString(DataType.SysDataFormat) + " 00:00' AND (TSpan=2 OR TSpan=0)";
+            sql = "UPDATE WF_GenerWorkFlow SET TSpan=" + (int)TSpan.More + " WHERE RDT <= '" + dtBegin.ToString(DataType.SysDataFormat) + " 00:00' ";
             BP.DA.DBAccess.RunSQL(sql);
         }
         #endregion

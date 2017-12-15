@@ -123,7 +123,7 @@ namespace BP.WF.HttpHandler
             mdHid.FK_MapData = this.FK_MapData;
             mdHid.KeyOfEn = this.KeyOfEn;
             mdHid.Name = this.Name;
-            mdHid.MyDataType = this.GetValIntFromFrmByKey("FieldType");
+            mdHid.MyDataType = int.Parse(this.GetRequestVal("FieldType"));
             mdHid.HisEditType = EditType.Edit;
             mdHid.MaxLen = 100;
             mdHid.MinLen = 0;

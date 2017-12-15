@@ -381,6 +381,10 @@ namespace BP.WF
               //如果是会签人，就让其显示待办.
               gwl.IsPassInt = 0;
               gwl.Update();
+
+              //在待办人员列表里加入他.
+              gwf.TodoEmps = gwf.TodoEmps  +BP.Web.WebUser.Name+ ";";
+              gwf.Update();
               return "会签撤销成功...";
           }
 

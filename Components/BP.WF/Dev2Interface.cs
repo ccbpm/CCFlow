@@ -1819,6 +1819,9 @@ namespace BP.WF
         /// <returns>返回从视图WF_EmpWorks查询出来的数据.</returns>
         public static DataTable DB_GenerEmpWorksOfDataTable()
         {
+            //执行 todolist 调度.
+            DTS_GenerWorkFlowTodoSta();
+
             Paras ps = new Paras();
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             string wfSql = "  WFState=" + (int)WFState.Askfor + " OR WFState=" + (int)WFState.Runing + "  OR WFState=" + (int)WFState.AskForReplay + " OR WFState=" + (int)WFState.Shift + " OR WFState=" + (int)WFState.ReturnSta + " OR WFState=" + (int)WFState.Fix;
@@ -8849,25 +8852,16 @@ namespace BP.WF
             string timeDT = DateTime.Now.ToString("yyyy-MM-dd");
             string sql = "";
 
-
             //查询出预警的工作.
-            sql = " SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 0 as DBType FROM WF_GenerWorkerlist A WHERE a.DTOfWarning =< '" + timeDT + "' AND a.SDT <= '" + timeDT + "' AND A.IsPass=0  ";
-            sql += "  UNION ";
-            sql += "SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 1 as DBType FROM WF_GenerWorkerlist A WHERE  a.SDT >'" + timeDT + "' AND A.IsPass=0 ";
-
+            //sql = " SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 0 as DBType FROM WF_GenerWorkerlist A WHERE a.DTOfWarning =< '" + timeDT + "' AND a.SDT <= '" + timeDT + "' AND A.IsPass=0  ";
+            //sql += "  UNION ";
+            //sql += "SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 1 as DBType FROM WF_GenerWorkerlist A WHERE  a.SDT >'" + timeDT + "' AND A.IsPass=0 ";
 
             sql = "SELECT * FROM WF_GenerWorkerlist A WHERE a.DTOfWarning >'" + timeDT + "' AND a.SDT <'" + timeDT + "' AND A.IsPass=0 ORDER BY FK_Node,FK_Emp ";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
 
-            //初始化人员.
-            string emps = "";
-            foreach (DataRow dr in dt.Rows)
-            {
-                //  dtEmps.Rows
 
-            }
-
-
+            #region 向预警人员发消息.
             // 向预警的人员发消息.
             Node nd = new Node();
             BP.WF.Port.WFEmp emp = new Port.WFEmp();
@@ -8904,10 +8898,9 @@ namespace BP.WF
                     emp.No = fk_emp;
                     emp.Retrieve();
                 }
-
-                //    BP.WF.Dev2Interface.Port_SendSMS
             }
-            
+            #endregion 向预警人员发消息.
+
             if (dt.Rows.Count >= 1)
             {
                 //更新预警状态.
@@ -8917,7 +8910,6 @@ namespace BP.WF
                 sql += " AND WF_GenerWorkFlow.TodoSta=0 ";
                 int i = BP.DA.DBAccess.RunSQL(sql);
             }
-
 
             //更新逾期期状态.
             sql = "UPDATE WF_GenerWorkFlow  SET TodoSta=2 ";
@@ -8989,6 +8981,28 @@ namespace BP.WF
         /// </summary>
         public static void DTS_GenerWorkFlowTimeSpan()
         {
+            if (DateTime.Now.Hour >= 8 && DateTime.Now.Hour < 10 && DateTime.Today.DayOfWeek == DayOfWeek.Monday)
+            {
+                string timeKey = "DTSTimeSpanPM" + DateTime.Now.ToString("yyMMdd");
+                Paras ps = new Paras();
+                ps.SQL = "SELECT Val FROM Sys_GloVar WHERE No='" + timeKey + "'";
+                string time = DBAccess.RunSQLReturnStringIsNull(ps, null);
+                if (time == null)
+                {
+                    GloVar var = new GloVar();
+                    var.No = timeKey;
+                    var.Name = "设置时间段" + timeKey+"一周执行一次.";
+                    var.GroupKey = "WF";
+                    var.Val = timeKey;  //更新时间点.
+                    var.Note = "设置时间段PM" + timeKey;
+                    var.Insert();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
             //只能在周1执行.
             DateTime dtNow = DateTime.Now;
 

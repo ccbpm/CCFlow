@@ -602,7 +602,6 @@ namespace BP.WF.HttpHandler
                 wk.Row = rtp.Row;
             }
 
-         
             if (nd.HisFlow.IsMD5 && wk.IsPassCheckMD5() == false)
             {
                 string err = "打开(" + nd.Name + ")错误";
@@ -612,7 +611,7 @@ namespace BP.WF.HttpHandler
 
             Frms frms = nd.HisFrms;
             if (frms.Count == 0)
-                return "url@./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + this.FK_Node + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
+                return "url@./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
 
             return "url@" + appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?3=3" + this.RequestParas;
         }

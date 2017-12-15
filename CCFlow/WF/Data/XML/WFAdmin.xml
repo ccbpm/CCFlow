@@ -9,16 +9,19 @@
   <CondType No="CondByUrl" CH="URL条件" />
   <CondType No="CondByPara" CH="开发者参数" />
   <CondType No="CondPRI" CH="方向优先级计算设置" />
+  
   <!--此处的Truck、Track的No不要改了，改的话，要搜索整个解决方案中CurrTab=Truck与CurrTab=Track的地方，全部改掉-->
   <OneWork No="Truck" CH="轨迹图" UrlCCFlow="Chart.htm" UrlJFlow="Chart.htm"  />
-  <OneWork11 No="Track" CH="时间轴"  UrlCCFlow="LogOfTimeline.aspx" UrlJFlow="LogOfTimeline.htm"  />
   <OneWork No="TimeBase" CH="时间轴"  UrlCCFlow="TimeBase.htm" UrlJFlow="TimeBase.htm"  />
+  <OneWork No="Frm" CH="查看表单" UrlCCFlow="FrmGuide.htm" UrlJFlow="FrmGuide.htm"  />
+  <OneWork No="OP" CH="操作" UrlCCFlow="OP.htm" UrlJFlow="OP.htm"/> 
 
+
+  <OneWork11 No="Track" CH="时间轴"  UrlCCFlow="LogOfTimeline.aspx" UrlJFlow="LogOfTimeline.htm"  />
   <OneWork1 No="LogOfTable" CH="流程日志(表格)"   UrlCCFlow="LogOfTable.aspx" UrlJFlow="LogOfTable.htm" />
   <OneWork1 No="CH" CH="节点时限"  UrlCCFlow="CH.aspx" UrlJFlow="CH.htm" />
   <OneWork1 No="FlowBBS" CH="评论"   UrlCCFlow="FlowBBS.htm" UrlJFlow="FlowBBS.htm"  />
   <OneWork1 No="Ath" CH="流程附件" UrlCCFlow="Ath.htm" UrlJFlow="Ath.htm"/>
-  <OneWork No="OP" CH="操作" UrlCCFlow="OP.htm" UrlJFlow="OP.htm"/>
 
   <OneWork1 No="TrackTime" CH="时间点日志" />
   <OneWork1 No="ChartTime" CH="甘特图" />

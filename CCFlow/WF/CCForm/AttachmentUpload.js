@@ -30,7 +30,7 @@ function Down2017(mypk) {
                 var i = data.indexOf('\DataUser');
                 var str = '/' + data.substring(i);
                 str = str.replace('\\\\', '\\');
-                window.open(str, "_blank", "width=0, height=0,status=0");
+                window.open(str, "_blank", "width=800, height=600,toolbar=yes");
                 return;
             }
             alert(data);

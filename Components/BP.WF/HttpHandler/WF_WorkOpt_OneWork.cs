@@ -295,35 +295,34 @@ namespace BP.WF.HttpHandler
             bool CanPackUp = false;
             if (SystemConfig.CustomerNo == "TianYe")
             {
-                //if ( Web.WebUser.No=="admin" || WebUser.IsAdmin ==true)
-                //{
-                //    /*管理员可以打印.*/
-                //    CanPackUp = true;
-                //}
-                //else
-                //{
-                //流程已经完成的情况下,从轨迹里面找当前人员参与的节点.
-                string sql = "SELECT NDFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND EmpFrom='" + BP.Web.WebUser.No + "'";
+                // 判断是否可以打印.
+                string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND EmpFrom='" + BP.Web.WebUser.No + "'";
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
+                    //string ndName = dr[1].ToString();
+                    //if (ndName.Contains("备案")
+                    //    || ndName.Contains("反馈")
+                    //    || ndName.Contains("通知给申请人"))
+                    //{
+                    //    CanPackUp = true;
+                    //    break;
+                    //}
+
+                    //判断节点是否启用了按钮?
                     int nodeid = int.Parse(dr[0].ToString());
                     BtnLab btn = new BtnLab(nodeid);
-
-                    if (btn.Name.Contains("备案")
-                        || btn.Name.Contains("反馈")
-                        || btn.Name.Contains("通知给申请人"))
-                    {
-                        CanPackUp = true;
-                        break;
-                    }
-
                     if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
                     {
-                        CanPackUp = true;
-                        break;
+                        string empFrom = dr[2].ToString();
+                        if (BP.Web.WebUser.No == empFrom)
+                        {
+                            CanPackUp = true;
+                            break;
+                        }
                     }
                 }
+
                 // }
             }
             else

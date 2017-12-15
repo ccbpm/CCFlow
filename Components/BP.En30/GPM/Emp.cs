@@ -57,9 +57,13 @@ namespace BP.GPM
         /// </summary>
         public const string Leader = "Leader";
         /// <summary>
-        /// 拼音 
+        /// 拼音
         /// </summary>
-        public const string PinYin = "PinYin";  
+        public const string PinYin = "PinYin";
+        /// <summary>
+        /// 身份证号
+        /// </summary>
+        public const string PersonalID = "PersonalID";
         #endregion
 
         /// <summary>
@@ -287,18 +291,6 @@ namespace BP.GPM
                 this.SetValByKey(EmpAttr.Leader, value);
             }
         }
-        public int SignType
-        {
-            get
-            {
-                return this.GetValIntByKey(EmpAttr.SignType);
-            }
-            set
-            {
-                this.SetValByKey(EmpAttr.SignType, value);
-            }
-        }
-        
         /// <summary>
         /// 密码
         /// </summary>
@@ -327,6 +319,35 @@ namespace BP.GPM
                 this.SetValByKey(EmpAttr.Idx, value);
             }
         }
+        /// <summary>
+        /// 签字类型
+        /// </summary>
+        public int SignType
+        {
+            get
+            {
+                return this.GetValIntByKey(EmpAttr.SignType);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.SignType, value);
+            }
+        }
+        /// <summary>
+        /// 身份证号
+        /// </summary>
+        public string PersonalID
+        {
+            get
+            {
+                return this.GetValStringByKey(EmpAttr.PersonalID);
+            }
+            set
+            {
+                this.SetValByKey(EmpAttr.PersonalID, value);
+            }
+        }
+        
         #endregion
 
         #region 公共方法
@@ -408,9 +429,9 @@ namespace BP.GPM
                 map.AddTBString(EmpAttr.Name, null, "名称", true, false, 0, 200, 30);
                 map.AddTBString(EmpAttr.Pass, "123", "密码", false, false, 0, 100, 10);
 
-                map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), false);
+                //map.AddDDLEntities(EmpAttr.FK_Dept, null, "部门", new Port.Depts(), true);
 
-              //  map.AddTBString(EmpAttr.FK_Dept, null, "当前部门", false, false, 0, 50, 50);
+                map.AddTBString(EmpAttr.FK_Dept, null, "当前部门", false, false, 0, 50, 50);
                 map.AddTBString(EmpAttr.FK_Duty, null, "当前职务", false, false, 0, 20, 10);
                 map.AddTBString(EmpAttr.Leader, null, "当前领导", false, false, 0, 50, 1);
 
@@ -427,10 +448,12 @@ namespace BP.GPM
                 // 0=不签名 1=图片签名, 2=电子签名.
                 map.AddTBInt(EmpAttr.SignType, 0, "签字类型", true, false);
 
+                map.AddTBString(EmpAttr.PersonalID, null, "身份证号", true, false, 0, 500, 132);
+
                 map.AddTBInt(EmpAttr.Idx, 0, "序号", true, false);
                 #endregion 字段
 
-                map.AddSearchAttr(EmpAttr.FK_Dept);
+                 map.AddSearchAttr(EmpAttr.FK_Dept);
 
                  //#region 增加点对多属性
                  //他的部门权限
@@ -460,40 +483,13 @@ namespace BP.GPM
             string pinyinJX = BP.DA.DataType.ParseStringToPinyinJianXie(this.Name).ToLower();
             this.PinYin = "," + pinyinQP + "," + pinyinJX + ",";
 
-            //判断当前人员是否有部门数据,没有就增加上.
-            BP.GPM.DeptEmp de = new DeptEmp();
-            de.MyPK = this.FK_Dept + "_" + this.No;
-            if (de.RetrieveFromDBSources() == 0)
-            {
-                de.FK_Dept = this.FK_Dept;
-                de.FK_Emp = this.No;
-                de.Insert(); 
-            }
-
-            //处理部门的信息.
-            string depts = "";
-            DeptEmps deptEmps = new DeptEmps();
-            deptEmps.Retrieve(DeptEmpStationAttr.FK_Emp, this.No);
-            foreach (DeptEmp item in deptEmps)
-            {
-                BP.GPM.Dept dept = new BP.GPM.Dept();
-                dept.No = item.FK_Dept;
-                if (dept.RetrieveFromDBSources() == 0)
-                {
-                    item.Delete();
-                    continue;
-                }
-
-                //给拼音重新定义值,让其加上部门的信息.
-                this.PinYin = this.PinYin + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower() + ",";
-                depts += "@" + dept.NameOfPath;
-            }
-
             //处理岗位信息.
             DeptEmpStations des = new DeptEmpStations();
             des.Retrieve(DeptEmpStationAttr.FK_Emp, this.No);
 
+            string depts = "";
             string stas = "";
+
             foreach (DeptEmpStation item in des)
             {
                 BP.GPM.Dept dept = new BP.GPM.Dept();
@@ -504,6 +500,8 @@ namespace BP.GPM
                     continue;
                 }
 
+                //给拼音重新定义值,让其加上部门的信息.
+                this.PinYin = this.PinYin + pinyinJX + "/" + BP.DA.DataType.ParseStringToPinyinJianXie(dept.Name).ToLower()+",";
 
                 BP.Port.Station sta = new Port.Station();
                 sta.No = item.FK_Station;
@@ -514,10 +512,12 @@ namespace BP.GPM
                 }
 
                 stas += "@" + dept.NameOfPath + "|" + sta.Name;
+                depts += "@" + dept.NameOfPath;
             }
 
             this.DeptDesc = depts;
             this.StaDesc = stas;
+
             return base.beforeUpdateInsertAction();
         }
 
@@ -541,7 +541,9 @@ namespace BP.GPM
             if (pass1.Equals(pass2) == false)
                 return "两次密码不一致";
 
+
             this.Pass = pass1;
+
             this.Update();
             return "密码设置成功";
         }

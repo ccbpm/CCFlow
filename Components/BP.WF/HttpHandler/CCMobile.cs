@@ -222,7 +222,7 @@ namespace BP.WF.HttpHandler
         /// 打开表单
         /// </summary>
         /// <returns></returns>
-        public string KeySearch_OpenFrm()
+        public string SearchKey_OpenFrm()
         {
             BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
             return search.KeySearch_OpenFrm();
@@ -231,14 +231,153 @@ namespace BP.WF.HttpHandler
         /// 执行查询
         /// </summary>
         /// <returns></returns>
-        public string KeySearch_Query()
+        public string SearchKey_Query()
         {
             BP.WF.HttpHandler.WF_RptSearch search = new WF_RptSearch(this.context);
             return search.KeySearch_Query();
         }
         #endregion 关键字查询.
 
-      
+        #region 查询.
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string Search_Init()
+        {
+            DataSet ds = new DataSet();
+            string sql = "";
+
+            string tSpan = this.GetRequestVal("TSpan");
+            if (tSpan == "")
+                tSpan = null;
+
+            #region 1、获取时间段枚举/总数.
+            SysEnums ses = new SysEnums("TSpan");
+            DataTable dtTSpan = ses.ToDataTableField();
+            dtTSpan.TableName = "TSpan";
+            ds.Tables.Add(dtTSpan);
+
+            if (this.FK_Flow == null)
+            {
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+            }
+            else
+            {
+                sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
+            }
+
+            DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            foreach (DataRow drEnum in dtTSpan.Rows)
+            {
+                string no = drEnum["IntKey"].ToString();
+                foreach (DataRow dr in dtTSpanNum.Rows)
+                {
+                    if (dr["No"].ToString() == no)
+                    {
+                        drEnum["Lab"] = drEnum["Lab"].ToString() + "(" + dr["Num"] + ")";
+                        break;
+                    }
+                }
+            }
+            #endregion
+
+            #region 2、处理流程类别列表.
+
+            if (tSpan == null)
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE  Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+            else
+                sql = "SELECT  FK_Flow as No, FlowName as Name, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE TSpan=" + tSpan + " AND Emps LIKE '%" + WebUser.No + "%' GROUP BY FK_Flow, FlowName";
+
+
+            DataTable dtFlows = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dtFlows.Columns[0].ColumnName = "No";
+                dtFlows.Columns[1].ColumnName = "Name";
+                dtFlows.Columns[2].ColumnName = "Num";
+            }
+            dtFlows.TableName = "Flows";
+            ds.Tables.Add(dtFlows);
+            #endregion
+
+            #region 3、处理流程实例列表.
+
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+            BP.En.QueryObject qo = new QueryObject(gwfs);
+            qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
+
+            if (tSpan != null)
+            {
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.TSpan, tSpan);
+            }
+
+            if (this.FK_Flow != null)
+            {
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.FK_Flow, this.FK_Flow);
+            }
+            qo.addOrderBy("WFSta");
+            qo.addOrderByDesc("RDT");
+            qo.Top = 50;
+
+
+            DataTable mydt = null;
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                qo.DoQuery();
+                mydt = gwfs.ToDataTableField("WF_GenerWorkFlow");
+            }
+            else
+            {
+                mydt = qo.DoQueryToTable();
+                mydt.TableName = "WF_GenerWorkFlow";
+            }
+            #endregion
+
+            ds.Tables.Add(mydt);
+
+            return BP.Tools.Json.ToJson(ds);
+        }
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <returns></returns>
+        public string Search_Search()
+        {
+            string TSpan = this.GetRequestVal("TSpan");
+            string FK_Flow = this.GetRequestVal("FK_Flow");
+
+            GenerWorkFlows gwfs = new GenerWorkFlows();
+            QueryObject qo = new QueryObject(gwfs);
+            qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
+            if (!string.IsNullOrEmpty(TSpan))
+            {
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.TSpan, this.GetRequestVal("TSpan"));
+            }
+            if (!string.IsNullOrEmpty(FK_Flow))
+            {
+                qo.addAnd();
+                qo.AddWhere(GenerWorkFlowAttr.FK_Flow, this.GetRequestVal("FK_Flow"));
+            }
+            qo.Top = 50;
+
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                qo.DoQuery();
+                DataTable dt = gwfs.ToDataTableField("Ens");
+                return BP.Tools.Json.ToJson(dt);
+            }
+            else
+            {
+                DataTable dt = qo.DoQueryToTable();
+                return BP.Tools.Json.ToJson(dt);
+            }
+        }
+
+        #endregion
 
     }
 }

@@ -148,7 +148,7 @@ namespace BP.WF.HttpHandler
                         sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps,IsCanDo FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
                     break;
                 case "ByTitle":
-                    sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.Title,A.Starter,A.RDT,A.WFSta,A.Emps, A.TodoEmps ";
+                    sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.Title,A.Starter,A.RDT,A.WFSta,A.Emps, A.TodoEmps,A.WFState ";
                     sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B ";
                     sql += " WHERE A.Title LIKE '%" + keywords + "%' ";
                     sql += " AND A.Title LIKE '%" + keywords + "%' ";

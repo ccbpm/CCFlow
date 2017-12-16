@@ -1014,7 +1014,10 @@ body table tr td {
   word-wrap:break-word;
   word-break:break-all;
 }
-
+/*生成pdf，表格整行显示 ...*/
+table, tr, td, th, tbody, thead, tfoot {
+    page-break-inside: avoid !important;
+}
 
 .errorInput {
     border-color: red;

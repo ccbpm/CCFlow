@@ -10,6 +10,10 @@
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
 
+        //是否是手机端.
+        var isMobile = GetQueryString("IsMobile");
+         
+
         //是否只读？
         var isReadonly = GetQueryString("isReadonly");
         if (isReadonly != "1")
@@ -72,7 +76,15 @@
 
                     //自由模式
                     html += "<tr>";
-                    html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:120px;border:1px solid #D6DDE6;'>" + this.NodeName + "</td>";
+
+                    var tdWidth = "120px";
+                    if (isMobile == "1")
+                        tdWidth = "20%;";
+
+                    html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
+                    html += this.NodeName;
+                    html += "</td>";
+
 
                     //审核意见
                     if (this.IsDoc && isReadonly == false) {
@@ -120,11 +132,13 @@
                     //输出签名.
                     if (SignType == null || SignType == undefined) {
 
+                        var rdt = this.RDT.substring(0, 16);
+
                         //签名，日期.
                         html += "<tr>";
-                        html += "<td style='text-align:left;height:35px;line-height:35px;'>签名:"
+                        html += "<td style='text-align:left;height:35px;line-height:35px;'><font color='Gray' >签名:</font>"
                                     + (wcDesc.SigantureEnabel == "0" ? GetUserSmallIcon(this.EmpFrom, this.EmpFromT) : GetUserSiganture(this.EmpFrom, this.EmpFromT))
-                                    + "&nbsp;&nbsp;&nbsp;&nbsp;日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</td>";
+                                    + "&nbsp;&nbsp;&nbsp;&nbsp;<font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</td>";
                         html += "</tr>";
 
                     } else {
@@ -137,11 +151,15 @@
 
                             //  alert(st.SignType);
 
+
                             if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
+
+                                var rdt = this.RDT.substring(0, 16);
+
                                 html += "<tr>";
-                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
+                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
                                     + GetUserSmallIcon(this.EmpFrom, this.EmpFromT) + '</div>'
-                                    + "<div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</div></td>";
+                                    + "<div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
                                 html += "</tr>";
                                 break;
                             }
@@ -175,7 +193,7 @@
 
                 $("#tbTracks").append(html);
 
-				$("textarea").trigger("keydown");
+                $("textarea").trigger("keydown");
 
                 if ($("#uploaddiv").length > 0) {
                     AddUploadify("uploaddiv");

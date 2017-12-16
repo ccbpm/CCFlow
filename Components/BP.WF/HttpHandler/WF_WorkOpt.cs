@@ -390,6 +390,8 @@ namespace BP.WF.HttpHandler
                  GenerWorkerListAttr.WorkID, this.WorkID,
                  GenerWorkerListAttr.FK_Node, this.FK_Node);
 
+            Node nd = new Node(this.FK_Node);
+
             if (num == 0)
                 return "err@没有查询到当前人员的工作列表数据.";
 
@@ -477,6 +479,32 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.FK_DeptT = item.FK_DeptText; //部门名称.
                 gwlOfMe.IsRead = false;
 
+                #region 计算会签时间.
+                //接受日期.
+                gwlOfMe.RDT = DateTime.Now.ToString(DataType.SysDataTimeFormat);
+
+                //给会签人设置应该完成日期. 考虑到了节假日.                
+                DateTime dtOfShould = Glo.AddDayHoursSpan(DateTime.Now, nd.TimeLimit,
+                     nd.TSpanMinues, nd.TWay);
+
+                //应完成日期.
+                gwlOfMe.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
+
+                //求警告日期.
+                DateTime dtOfWarning = DateTime.Now;
+                if (nd.WarningDay == 0)
+                {
+                    dtOfWarning = dtOfShould;
+                }
+                else
+                {
+                    //计算警告日期。
+                    // 增加小时数. 考虑到了节假日.
+                    dtOfWarning = Glo.AddDayHoursSpan(DateTime.Now, nd.WarningDay, 0, nd.TWay);
+                }
+                gwlOfMe.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
+                #endregion 计算会签时间.
+
                 gwlOfMe.Insert(); //插入作为待办.
                 infos += "\t\n@" + item.No + "  " + item.Name;
 
@@ -488,7 +516,7 @@ namespace BP.WF.HttpHandler
 
                 //发送消息.
                 BP.WF.Dev2Interface.Port_SendMsg(item.No,
-                    "bpm会签邀请","HuiQian"+gwf.WorkID+"_"+gwf.FK_Node+"_"+item.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签", "HuiQian",gwf.FK_Flow,gwf.FK_Node,gwf.WorkID,gwf.FID);
+                    "bpm会签邀请", "HuiQian" + gwf.WorkID + "_" + gwf.FK_Node + "_" + item.No, BP.Web.WebUser.Name + "邀请您对工作｛" + gwf.Title + "｝进行会签,请您在{" + gwl.SDT + "}前完成.", "HuiQian", gwf.FK_Flow, gwf.FK_Node, gwf.WorkID, gwf.FID);
 
             }
 

@@ -148,7 +148,7 @@ namespace BP.WF.HttpHandler
                         sql = "SELECT FlowName,NodeName,FK_Flow,FK_Node,WorkID,Title,Starter,RDT,WFSta,Emps,TodoEmps,IsCanDo FROM WF_GenerWorkFlow WHERE  WorkID=" + keywords;
                     break;
                 case "ByTitle":
-                    sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.Title,A.Starter,A.RDT,A.WFSta,A.Emps, A.TodoEmps,A.WFState ";
+                    sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.Title,A.Starter,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState ";
                     sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B ";
                     sql += " WHERE A.Title LIKE '%" + keywords + "%' ";
                     sql += " AND A.Title LIKE '%" + keywords + "%' ";
@@ -159,6 +159,7 @@ namespace BP.WF.HttpHandler
             }
 
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "WF_GenerWorkFlow";
 
             if (SystemConfig.AppCenterDBType == DBType.Oracle)
             {
@@ -173,9 +174,31 @@ namespace BP.WF.HttpHandler
 
                 dt.Columns["EMPS"].ColumnName = "Emps";
                 dt.Columns["TODOEMPS"].ColumnName = "TodoEmps"; //处理人.
-              //  dt.Columns["ISCANDO"].ColumnName = "IsCanDo"; //是否可以处理？
+                dt.Columns["WFSTATE"].ColumnName = "WFState"; //处理人.
+
+                //  dt.Columns["ISCANDO"].ColumnName = "IsCanDo"; //是否可以处理？
             }
-            return BP.Tools.Json.ToJson(dt);
+
+            #region 加入当前用户信息.
+            DataTable mydt = new DataTable();
+            mydt.Columns.Add("No");
+            mydt.Columns.Add("Name");
+            mydt.Columns.Add("FK_Dept");
+
+            DataRow dr = mydt.NewRow();
+            dr["No"] = WebUser.No;
+            dr["Name"] = WebUser.Name;
+            dr["FK_Dept"] = WebUser.FK_Dept;
+            mydt.Rows.Add(dr);
+            mydt.TableName = "WebUser";
+            #endregion 加入当前用户信息.
+
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(mydt);
+            ds.Tables.Add(dt);
+
+            return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>
         /// 判断是否可以执行当前工作？

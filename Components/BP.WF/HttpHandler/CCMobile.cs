@@ -78,7 +78,6 @@ namespace BP.WF.HttpHandler
 
         public string Home_Init()
         {
-
             Hashtable ht = new Hashtable();
             ht.Add("UserNo", BP.Web.WebUser.No);
             ht.Add("UserName", BP.Web.WebUser.Name);

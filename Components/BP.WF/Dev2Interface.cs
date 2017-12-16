@@ -3590,7 +3590,7 @@ namespace BP.WF
             if (nd.IsStartNode == false)
             {
                 if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
-                    nodeName = "会签";
+                    nodeName = nd.Name + "(会签)";
             }
 
             //待办抢办模式，一个节点只能有一条记录.
@@ -3647,7 +3647,7 @@ namespace BP.WF
 
             string nodeName = gwf.NodeName;
             if (gwf.TodoEmps.Contains(WebUser.No + ",") == false)
-                nodeName = "会签";
+                nodeName = nodeName + "(会签)";
 
             Node nd = new Node(currNodeID);
             //待办抢办模式，一个节点只能有一条记录.
@@ -4555,11 +4555,14 @@ namespace BP.WF
             if (userNo == "admin")
                 return true;
 
+            GenerWorkFlow mygwf = new GenerWorkFlow(workID);
+            if (mygwf.TodoEmps.IndexOf(userNo + ",") >= 0)
+                return true;
+
             #region 判断是否是开始节点.
             /* 判断是否是开始节点 . */
             string str = nodeID.ToString();
-            int len = str.Length - 2;
-            if (str.Substring(len, 2) == "01")
+            if (str.EndsWith("01") ==true)
             {
                 //如果是开始节点，如何去判断是否可以处理当前节点的权限.
                 GenerWorkFlow gwf = new GenerWorkFlow();

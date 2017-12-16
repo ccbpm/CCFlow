@@ -320,7 +320,7 @@ namespace BP.WF.HttpHandler
                 {
                     //toUrl = "./FlowFormTree/Default.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                     if (this.IsMobile == true)
-                        toUrl = "MyFlowGenerTest.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
+                        toUrl = "MyFlowGener.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                     else
                         toUrl = "MyFlowTree.htm?WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&UserNo=" + WebUser.No + "&FID=" + this.FID + "&SID=" + WebUser.SID + "&PFlowNo=" + pFlowNo + "&PWorkID=" + pWorkID;
                 }
@@ -437,7 +437,7 @@ namespace BP.WF.HttpHandler
 
                 string url = "MyFlowGener.htm";
                 if (this.IsMobile)
-                    url = "MyFlowGenerTest.htm";
+                    url = "MyFlowGener.htm";
 
                 //处理连接.
                 url = this.MyFlow_Init_DealUrl(currND, currWK, url);

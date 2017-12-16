@@ -542,11 +542,13 @@ namespace BP.WF
                 wl.FK_Dept = emp.FK_Dept;
                 wl.FK_DeptT = emp.FK_DeptText;
 
-                // wl.WarningHour = town.HisNode.WarningHour;
+                //应完成日期.
                 wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
-
+                //警告日期.
                 wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
-                wl.RDT = DateTime.Now.ToString(DataType.SysDataTimeFormat);
+                //接受日期.
+                wl.RDT = DateTime.Now.ToString(DataType.SysDataTimeFormat); 
+
                 wl.FK_Flow = town.HisNode.FK_Flow;
                 //  wl.Sender = this.Execer;
 
@@ -5011,7 +5013,7 @@ namespace BP.WF
             //sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Node=" + this.HisGenerWorkFlow.FK_Node + " AND WorkID=" + this.WorkID;
             //dt = DBAccess.RunSQLReturnTable(sql);
 
-            return "@您已经处理完毕，还有(" +this.HisGenerWorkFlow.TodoEmps + ")没有处理.";
+            return "@您已经会签完毕，还有(" +this.HisGenerWorkFlow.TodoEmps + ")没有处理.";
         }
         /// <summary>
         /// 如果是协作.
@@ -5168,19 +5170,16 @@ namespace BP.WF
             if (mynum == 1)
             {
                 this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
-             //   this.HisGenerWorkFlow.TodoEmpsNum = 1;
-              //  this.HisGenerWorkFlow.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
             }
 
             //把当前的待办设置已办，并且提示未处理的人。
             foreach (GenerWorkerList gwl in gwls)
             {
-
                 if (gwl.FK_Emp != WebUser.No)
                     continue;
 
-                //设置当前不可以用.
+                //设置当前已经完成.
                 gwl.IsPassInt = 1;
                 gwl.Update();
 
@@ -5188,6 +5187,12 @@ namespace BP.WF
                 if (this.HisNode.IsEndNode == false)
                     this.CheckCompleteCondition();
 
+                //执行时效考核.
+                if (this.rptGe == null)
+                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
+                else
+                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
+                
                 this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps1, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
 
                 //cut 当前的人员.

@@ -1335,7 +1335,7 @@ namespace BP.WF
             try
             {
                 string fileNameWithOutExtention = System.Guid.NewGuid().ToString();
-                Process p = System.Diagnostics.Process.Start(pdfFileExe, htmFile + " " + pdf);
+                Process p = System.Diagnostics.Process.Start(pdfFileExe, " --disable-external-links " + htmFile + " " + pdf);
                 p.WaitForExit();
             }
             catch (Exception ex)

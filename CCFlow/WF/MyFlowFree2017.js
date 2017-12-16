@@ -1,78 +1,78 @@
-﻿var workNode = null;
+﻿var flowData = null;
 function GenerFreeFrm(wn) {
 
-    workNode = wn;
+    flowData = wn;
 
     $('#CCForm').html('');
     //循环MapAttr
-    for (var mapAtrrIndex in workNode.Sys_MapAttr) {
-        var mapAttr = workNode.Sys_MapAttr[mapAtrrIndex];
+    for (var mapAtrrIndex in flowData.Sys_MapAttr) {
+        var mapAttr = flowData.Sys_MapAttr[mapAtrrIndex];
         var eleHtml = figure_MapAttr_Template(mapAttr);
         $('#CCForm').append(eleHtml);
     }
 
     //循环FrmLab
-    for (var i in workNode.Sys_FrmLab) {
-        var frmLab = workNode.Sys_FrmLab[i];
+    for (var i in flowData.Sys_FrmLab) {
+        var frmLab = flowData.Sys_FrmLab[i];
         var label = figure_Template_Label(frmLab);
         $('#CCForm').append(label);
     }
     //循环FrmRB
-    for (var i in workNode.Sys_FrmRB) {
-        var frmLab = workNode.Sys_FrmRB[i];
+    for (var i in flowData.Sys_FrmRB) {
+        var frmLab = flowData.Sys_FrmRB[i];
         var label = figure_Template_RB(frmLab);
         $('#CCForm').append(label);
     }
 
     //循环FrmBtn
-    for (var i in workNode.Sys_FrmBtn) {
-        var frmBtn = workNode.Sys_FrmBtn[i];
+    for (var i in flowData.Sys_FrmBtn) {
+        var frmBtn = flowData.Sys_FrmBtn[i];
         var btn = figure_Template_Btn(frmBtn);
         $('#CCForm').append(btn);
     }
 
     //循环Image
-    for (var i in workNode.Sys_FrmImg) {
-        var frmImg = workNode.Sys_FrmImg[i];
+    for (var i in flowData.Sys_FrmImg) {
+        var frmImg = flowData.Sys_FrmImg[i];
         var createdFigure = figure_Template_Image(frmImg);
         $('#CCForm').append(createdFigure);
     }
 
     //循环 Link
-    for (var i in workNode.Sys_FrmLink) {
-        var frmLink = workNode.Sys_FrmLink[i];
+    for (var i in flowData.Sys_FrmLink) {
+        var frmLink = flowData.Sys_FrmLink[i];
         var createdFigure = figure_Template_HyperLink(frmLink);
         $('#CCForm').append(createdFigure);
     }
     //循环 图片附件
-    for (var i in workNode.Sys_FrmImgAth) {
-        var frmImgAth = workNode.Sys_FrmImgAth[i];
+    for (var i in flowData.Sys_FrmImgAth) {
+        var frmImgAth = flowData.Sys_FrmImgAth[i];
         var createdFigure = figure_Template_ImageAth(frmImgAth);
         $('#CCForm').append(createdFigure);
     }
     //循环 附件
-    for (var i in workNode.Sys_FrmAttachment) {
-        var frmAttachment = workNode.Sys_FrmAttachment[i];
+    for (var i in flowData.Sys_FrmAttachment) {
+        var frmAttachment = flowData.Sys_FrmAttachment[i];
         var createdFigure = figure_Template_Attachment(frmAttachment);
         $('#CCForm').append(createdFigure);
     }
 
     //循环 从表
-    for (var i in workNode.Sys_MapDtl) {
-        var frmMapDtl = workNode.Sys_MapDtl[i];
+    for (var i in flowData.Sys_MapDtl) {
+        var frmMapDtl = flowData.Sys_MapDtl[i];
         var createdFigure = figure_Template_Dtl(frmMapDtl);
         $('#CCForm').append(createdFigure);
     }
 
     //循环线
-    for (var i in workNode.Sys_FrmLine) {
-        var frmLine = workNode.Sys_FrmLine[i];
+    for (var i in flowData.Sys_FrmLine) {
+        var frmLine = flowData.Sys_FrmLine[i];
         var createdConnector = connector_Template_Line(frmLine);
         $('#CCForm').append(createdConnector);
     }
 
     //循环组件 轨迹图 审核组件 子流程 子线程
-    var wf_FrmNodeComponent = workNode["WF_FrmNodeComponent"][0];
+    var wf_FrmNodeComponent = flowData["WF_FrmNodeComponent"][0];
     $('#CCForm').append(figure_Template_FigureFlowChart(wf_FrmNodeComponent));
     $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent));
     $('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_FrmNodeComponent));
@@ -87,7 +87,7 @@ function figure_MapAttr_Template(mapAttr) {
     if (mapAttr.UIVisible == 1) { //是否显示
 
         var str = '';
-        var defValue = ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn);
+        var defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
         var isInOneRow = false; //是否占一整行
         var islabelIsInEle = false; //
@@ -104,7 +104,7 @@ function figure_MapAttr_Template(mapAttr) {
                 //                    isMultiSele = ' multiple data-live-search="false" ';
                 //                    isMultiSeleClass = " selectpicker show-tick form-control ";
                 //                }
-                eleHtml += "<select data-val='" + ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
+                eleHtml += "<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
             } else {
                 //添加文本框 ，日期控件等
                 //AppString   
@@ -121,8 +121,8 @@ function figure_MapAttr_Template(mapAttr) {
 
 
                         eleHtml +=
-                            "<select data-val='" + ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">" +
-                            (workNode, mapAttr, defValue) + "</select>";
+                            "<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">" +
+                            (flowData, mapAttr, defValue) + "</select>";
                     } else { //文本区域
                         if (mapAttr.UIHeight <= 23) {
                             eleHtml +=
@@ -190,7 +190,7 @@ function figure_MapAttr_Template(mapAttr) {
                     if (checkedStr != "true" && checkedStr != '1') {
                         checkedStr = ' checked="checked" ';
                     }
-                    checkedStr = ConvertDefVal(workNode, '', mapAttr.KeyOfEn);
+                    checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
 
                     eleHtml += "<div><input class='align_cb' " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
                     eleHtml += '<label class="labRb align_cbl" for="CB_' + mapAttr.KeyOfEn + '">&nbsp;' + mapAttr.Name + '</label></div>';
@@ -207,9 +207,9 @@ function figure_MapAttr_Template(mapAttr) {
                         //                        }
 
                         //alert('ss');
-                        //eleHtml +="<select data-val='" + ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
+                        //eleHtml +="<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
 
-                        eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
+                        eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
 
                     }
                 }
@@ -266,19 +266,20 @@ function figure_MapAttr_Template(mapAttr) {
             //(mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
             //+ "</div>" + eleHtml;
             //先把 必填项的 * 写到元素后面 可能写到标签后面更合适
+
             eleHtml +=
            (mapAttr.UIIsInput == 1 && mapAttr.UIIsEnable == 1) ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
 
         }
     } else {
-        var value = ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn);
+        var value = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
         if (value == undefined) {
             value = '';
         } else {
             //value = value.toString().replace(/：/g, ':').replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
         }
 
-        //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
+        //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
         eleHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
@@ -369,7 +370,7 @@ function figure_Template_RB(frmRb) {
     if (frmRb.UIIsEnable == false)
         childRbEle.attr('disabled', 'disabled');
 
-    var defVal = ConvertDefVal(workNode, '', frmRb.KeyOfEn);
+    var defVal = ConvertDefVal(flowData, '', frmRb.KeyOfEn);
     if (defVal == frmRb.IntKey) {
         childRbEle.attr("checked", "checked");
     }
@@ -383,12 +384,12 @@ function figure_Template_RB(frmRb) {
 function figure_Template_HyperLink(frmLin) {
     //URL @ 变量替换
     var url = frmLin.URL;
-    $.each(workNode.Sys_MapAttr, function (i, obj) {
+    $.each(flowData.Sys_MapAttr, function (i, obj) {
         if (url != null && url.indexOf('@' + obj.KeyOfEn) > 0) {
             //替换
             //url=  url.replace(new RegExp(/(：)/g), ':');
             //先这样吧
-            url = url.replace('@' + obj.KeyOfEn, workNode.MainTable[0][obj.KeyOfEn]);
+            url = url.replace('@' + obj.KeyOfEn, flowData.MainTable[0][obj.KeyOfEn]);
         }
     });
 
@@ -481,8 +482,8 @@ function figure_Template_ImageAth(frmImageAth) {
 
     var imgSrc = "/WF/Data/Img/LogH.PNG";
     //获取数据
-    if (workNode.Sys_FrmImgAthDB) {
-        $.each(workNode.Sys_FrmImgAthDB, function (i, obj) {
+    if (flowData.Sys_FrmImgAthDB) {
+        $.each(flowData.Sys_FrmImgAthDB, function (i, obj) {
             if (obj.FK_FrmImgAth == frmImageAth.MyPK) {
                 imgSrc = obj.FileFullName;
             }

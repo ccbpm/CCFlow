@@ -4,7 +4,7 @@
 
 var pageData = {};
 var globalVarList = {};
-var workNode = {};
+var flowData = {};
 
 //处理，表单没有加载完，就可以点击发送按钮.
 var isLoadOk = false;
@@ -337,8 +337,8 @@ function Save() {
     setToobarDisiable();
 
     //树形表单保存
-    if (workNode) {
-        var node = workNode.WF_Node[0];
+    if (flowData) {
+        var node = flowData.WF_Node[0];
         if (node && node.FormType == 5) {
             OnTabChange("btnsave");
         }
@@ -453,7 +453,7 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
 //处理MapExt
 function AfterBindEn_DealMapExt() {
 
-    var mapExtArr = workNode.Sys_MapExt;
+    var mapExtArr = flowData.Sys_MapExt;
 
     for (var i = 0; i < mapExtArr.length; i++) {
         var mapExt = mapExtArr[i];
@@ -631,7 +631,7 @@ function AfterBindEn_DealMapExt() {
                 ddlPerant.attr("onchange", "DDLAnsc(this.value,\'" + "DDL_" + mapExt.AttrsOfActive + "\', \'" + mapExt.MyPK + "\')");
                 // 处理默认选择。
                 //string val = ddlPerant.SelectedItemStringVal;
-                var valClient = ConvertDefVal(workNode, '', mapExt.AttrsOfActive); // ddlChild.SelectedItemStringVal;
+                var valClient = ConvertDefVal(flowData, '', mapExt.AttrsOfActive); // ddlChild.SelectedItemStringVal;
 
                 //ddlChild.select(valClient);  未写
                 break;
@@ -651,7 +651,7 @@ function AfterBindEn_DealMapExt() {
                 if (ddlOper == null)
                     continue;
 
-                ddlOper.attr("onchange", "Change('" + workNode.Sys_MapData[0].No + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
+                ddlOper.attr("onchange", "Change('" + flowData.Sys_MapData[0].No + "');DDLFullCtrl(this.value,\'" + "DDL_" + mapExt.AttrOfOper + "\', \'" + mapExt.MyPK + "\')");
                 if (mapExt.Tag != null && mapExt.Tag != "") {
                     /* 下拉框填充范围. */
                     var strs = mapExt.Tag.split('$');
@@ -721,22 +721,22 @@ function GepParaByName(name, atPara) {
 }
 
 //初始化下拉列表框的OPERATION
-function InitDDLOperation(workNode, mapAttr, defVal) {
+function InitDDLOperation(flowData, mapAttr, defVal) {
     var operations = '';
     //外键类型
     if (mapAttr.LGType == 2) {
-        if (workNode[mapAttr.KeyOfEn] != undefined) {
-            $.each(workNode[mapAttr.KeyOfEn], function (i, obj) {
+        if (flowData[mapAttr.KeyOfEn] != undefined) {
+            $.each(flowData[mapAttr.KeyOfEn], function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
         }
-        else if (workNode[mapAttr.UIBindKey] != undefined) {
-            $.each(workNode[mapAttr.UIBindKey], function (i, obj) {
+        else if (flowData[mapAttr.UIBindKey] != undefined) {
+            $.each(flowData[mapAttr.UIBindKey], function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
         }
     } else {
-        var enums = workNode.Sys_Enum;
+        var enums = flowData.Sys_Enum;
         enums = $.grep(enums, function (value) {
             return value.EnumKey == mapAttr.UIBindKey;
         });
@@ -751,7 +751,7 @@ function InitDDLOperation(workNode, mapAttr, defVal) {
 }
 
 //填充默认数据
-function ConvertDefVal(workNode, defVal, keyOfEn) {
+function ConvertDefVal(flowData, defVal, keyOfEn) {
     //计算URL传过来的表单参数@TXB_Title=事件测试
 
     var pageParams = getQueryString();
@@ -766,13 +766,13 @@ function ConvertDefVal(workNode, defVal, keyOfEn) {
 
     var result = defVal;
 
-    var mainTable = workNode.MainTable[0];
+    var mainTable = flowData.MainTable[0];
 
 
     //通过MAINTABLE返回的参数
     for (var ele in mainTable) {
         if (keyOfEn == ele && mainTable != '') {
-            //console.info(ele + "==" + workNode.MainTable[0][ele]);
+            //console.info(ele + "==" + flowData.MainTable[0][ele]);
             result = mainTable[ele];
             break;
         }
@@ -1053,15 +1053,13 @@ function OptSuc(msg) {
 }
 
 //初始化发送节点下拉框
-function InitToNodeDDL(workNode) {
+function InitToNodeDDL(flowData) {
 
-
-    if (workNode.ToNodes == undefined)
+    if (flowData.ToNodes == undefined)
         return;
 
-    if (workNode.ToNodes.length == 0)
+    if (flowData.ToNodes.length == 0)
         return;
-
 
     //如果没有发送按钮，就让其刷新,说明加载不同步.
     var btn = $('[name=Send]');
@@ -1072,7 +1070,7 @@ function InitToNodeDDL(workNode) {
 
     // $('[value=发送]').
     var toNodeDDL = $('<select style="width:auto;" id="DDL_ToNode"></select>');
-    $.each(workNode.ToNodes, function (i, toNode) {
+    $.each(flowData.ToNodes, function (i, toNode) {
         //IsSelectEmps: "1"
         //Name: "节点2"
         //No: "702"
@@ -1095,7 +1093,7 @@ function InitToNodeDDL(workNode) {
 
 //根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示  
 function ShowNoticeInfo() {
-    var rbs = workNode.Sys_FrmRB;
+    var rbs = flowData.Sys_FrmRB;
     data = rbs;
     $("input[type=radio],select").bind('change', function (obj) {
         var needShowDDLids = [];
@@ -1227,7 +1225,7 @@ function ShowNoticeInfo() {
 
 //给出文本框输入提示信息
 function ShowTextBoxNoticeInfo() {
-    var mapAttr = workNode.Sys_MapAttr;
+    var mapAttr = flowData.Sys_MapAttr;
     mapAttr = $.grep(mapAttr, function (attr) {
         var atParams = attr.AtPara;
         return atParams != undefined && AtParaToJson(atParams).Tip != undefined && AtParaToJson(atParams).Tip != '' && $('#TB_' + attr.KeyOfEn).length > 0 && $('#TB_' + attr.KeyOfEn).css('display') != 'none';
@@ -1235,7 +1233,7 @@ function ShowTextBoxNoticeInfo() {
 
     $.each(mapAttr, function (i, attr) {
         $('#TB_' + attr.KeyOfEn).bind('focus', function (obj) {
-            var mapAttr = workNode.Sys_MapAttr;
+            var mapAttr = flowData.Sys_MapAttr;
 
             mapAttr = $.grep(mapAttr, function (attr) {
                 return 'TB_' + attr.KeyOfEn == obj.target.id;
@@ -1391,7 +1389,7 @@ function GenerWorkNode() {
 
             try {
 
-                workNode = JSON.parse(data);
+                flowData = JSON.parse(data);
 
             } catch (err) {
 
@@ -1401,37 +1399,35 @@ function GenerWorkNode() {
                 return;
             }
 
-            var node = workNode.WF_Node[0];
+            var node = flowData.WF_Node[0];
 
             //设置标题.
             document.title = "业务流程管理（BPM）平台";
 
-         
-
             //循环之前的提示信息.
             var info = "";
-            for (var i in workNode.AlertMsg) {
-                var alertMsg = workNode.AlertMsg[i];
+            for (var i in flowData.AlertMsg) {
+                var alertMsg = flowData.AlertMsg[i];
                 var alertMsgEle = figure_Template_MsgAlert(alertMsg, i);
                 $('#Message').append(alertMsgEle);
                 $('#Message').append($('<hr/>'));
             }
 
-            if (workNode.AlertMsg.length != 0) {
+            if (flowData.AlertMsg.length != 0) {
                 $('#MessageDiv').modal().show();
             }
 
             //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
             if (node.FormType == 0) {
-                GenerFoolFrm(workNode); //傻瓜表单.
+                GenerFoolFrm(flowData); //傻瓜表单.
             }
 
             if (node.FormType == 1) {
-                GenerFreeFrm(workNode);  //自由表单.
+                GenerFreeFrm(flowData);  //自由表单.
             }
 
             if (node.FormType == 5) {
-                GenerTreeFrm(workNode); /*树形表单*/
+                GenerTreeFrm(flowData); /*树形表单*/
             }
 
             var frm = document.forms["divCCForm"];
@@ -1446,17 +1442,17 @@ function GenerWorkNode() {
 
             //加入隐藏控件.
             var html = "";
-            for (var attr in workNode.Sys_MapAttr) {
+            for (var attr in flowData.Sys_MapAttr) {
                 if (attr.UIVisable == 0) {
-                    var defval = ConvertDefVal(workNode, attr.DefVal, attr.KeyOfEn);
+                    var defval = ConvertDefVal(flowData, attr.DefVal, attr.KeyOfEn);
                     html += "<input type='hidden' id='TB_" + attr.KeyOfEn + "' name='TB_" + attr.KeyOfEn + "' value='" + defval + "' />";
                 }
             }
 
 
             //初始化Sys_MapData
-            var h = workNode.Sys_MapData[0].FrmH;
-            var w = workNode.Sys_MapData[0].FrmW;
+            var h = flowData.Sys_MapData[0].FrmH;
+            var w = flowData.Sys_MapData[0].FrmW;
 
             // $('#topContentDiv').height(h);
             $('#topContentDiv').width(w);
@@ -1485,7 +1481,7 @@ function GenerWorkNode() {
 
 
             ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
-            var enName = workNode.Sys_MapData[0].No;
+            var enName = flowData.Sys_MapData[0].No;
             try {
                 ////加载JS文件
                 //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
@@ -1522,12 +1518,12 @@ function GenerWorkNode() {
             AfterBindEn_DealMapExt();
 
             //设置默认值
-            for (var j = 0; j < workNode.Sys_MapAttr.length; j++) {
-                var mapAttr = workNode.Sys_MapAttr[j];
+            for (var j = 0; j < flowData.Sys_MapAttr.length; j++) {
+                var mapAttr = flowData.Sys_MapAttr[j];
 
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'
-                var defValue = ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn);
+                var defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);
@@ -1549,7 +1545,7 @@ function GenerWorkNode() {
 
 
             //发送旁边下拉框 edit by zhoupeng 放到这里是为了解决加载不同步的问题.
-            InitToNodeDDL(workNode);
+            InitToNodeDDL(flowData);
 
             if (document.BindEditorMapAttr) {
                 //给富文本创建编辑器
@@ -1620,10 +1616,10 @@ function dealWithUrl(src) {
                     paramArr = param.split('=');
                     if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
                         if (paramArr[1].indexOf('@WebUser.') == 0) {
-                            params[i] = paramArr[0].substring(1) + "=" + workNode.MainTable[0][paramArr[1].substr('@WebUser.'.length)];
+                            params[i] = paramArr[0].substring(1) + "=" + flowData.MainTable[0][paramArr[1].substr('@WebUser.'.length)];
                         }
-                        if (workNode.MainTable[0][paramArr[1].substr(1)] != undefined) {
-                            params[i] = paramArr[0].substring(1) + "=" + workNode.MainTable[0][paramArr[1].substr(1)];
+                        if (flowData.MainTable[0][paramArr[1].substr(1)] != undefined) {
+                            params[i] = paramArr[0].substring(1) + "=" + flowData.MainTable[0][paramArr[1].substr(1)];
                         }
 
                         //使用URL中的参数
@@ -1637,9 +1633,9 @@ function dealWithUrl(src) {
                         });
                         var result = "";
                         //通过MAINTABLE返回的参数
-                        for (var ele in workNode.MainTable[0]) {
+                        for (var ele in flowData.MainTable[0]) {
                             if (paramArr[0].substring(1) == ele) {
-                                result = workNode.MainTable[0][ele];
+                                result = flowData.MainTable[0][ele];
                                 break;
                             }
                         }

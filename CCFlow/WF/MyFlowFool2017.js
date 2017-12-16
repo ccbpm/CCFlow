@@ -1,22 +1,22 @@
 ﻿
-var workNode = null;
+var flowData = null;
 
 function GenerFoolFrm(wn) {
 
-    workNode = wn;
+    flowData = wn;
 
     //初始化Sys_MapData
-    var h = workNode.Sys_MapData[0].FrmH;
-    var w = workNode.Sys_MapData[0].FrmW;
-    var node = workNode.WF_Node[0];
+    var h = flowData.Sys_MapData[0].FrmH;
+    var w = flowData.Sys_MapData[0].FrmW;
+    var node = flowData.WF_Node[0];
 
     $('#CCForm').html('');
 
     var tableWidth = w - 40;
     var html = "<table style='width:" + tableWidth + "px;' >";
 
-    var frmName = workNode.Sys_MapData[0].Name;
-    var Sys_GroupFields = workNode.Sys_GroupField;
+    var frmName = flowData.Sys_MapData[0].Name;
+    var Sys_GroupFields = flowData.Sys_GroupField;
 
     html += "<tr>";
     html += "<td colspan=4 ><div style='float:left' ><img src='../DataUser/ICON/LogBiger.png'  style='height:50px;' /></div><div style='float:right;padding:10px;bordder:none;width:70%;' ><center><h4><b>" + frmName + "</b></h4></center></div></td>";
@@ -35,7 +35,7 @@ function GenerFoolFrm(wn) {
             html += "  <th colspan=4>" + gf.Lab + "</th>";
             html += "</tr>";
 
-            var dtls = workNode.Sys_MapDtl;
+            var dtls = flowData.Sys_MapDtl;
 
             for (var k = 0; k < dtls.length; k++) {
 
@@ -67,7 +67,7 @@ function GenerFoolFrm(wn) {
             html += "<tr>";
             html += "  <td colspan='4' >";
 
-            html += Ele_Attachment(workNode, gf);
+            html += Ele_Attachment(flowData, gf);
 
             html += "  </td>";
             html += "</tr>";
@@ -101,7 +101,7 @@ function GenerFoolFrm(wn) {
             html += "  <th colspan=4>" + gf.Lab + "</th>";
             html += "</tr>";
 
-            html += InitMapAttr(workNode.Sys_MapAttr, workNode, gf.OID);
+            html += InitMapAttr(flowData.Sys_MapAttr, flowData, gf.OID);
             continue;
         }
     }
@@ -112,7 +112,7 @@ function GenerFoolFrm(wn) {
 }
 
 //解析表单字段 MapAttr.
-function InitMapAttr(Sys_MapAttr, workNode, groupID) {
+function InitMapAttr(Sys_MapAttr, flowData, groupID) {
 
     var html = "";
     var isDropTR = true;
@@ -124,7 +124,7 @@ function InitMapAttr(Sys_MapAttr, workNode, groupID) {
             continue;
 
         var enable = attr.UIIsEnable == "1" ? "" : " ui-state-disabled";
-        var defval = ConvertDefVal(workNode, attr.DefVal, attr.KeyOfEn);
+        var defval = ConvertDefVal(flowData, attr.DefVal, attr.KeyOfEn);
 
         var lab = "";
         if (attr.UIContralType == 0) 
@@ -146,7 +146,7 @@ function InitMapAttr(Sys_MapAttr, workNode, groupID) {
             html += "<tr>";
             html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
             html += "<td ColSpan=3>";
-            html += InitMapAttrOfCtrlFool(workNode,attr, enable, defval);
+            html += InitMapAttrOfCtrlFool(flowData,attr, enable, defval);
             html += "</td>";
             html += "</tr>";
             continue;
@@ -157,7 +157,7 @@ function InitMapAttr(Sys_MapAttr, workNode, groupID) {
             isDropTR = true;
             html += "<tr>";
             html += "<td ColSpan='4'>" + lab + "</br>";
-            html += InitMapAttrOfCtrlFool(workNode,attr, enable, defval);
+            html += InitMapAttrOfCtrlFool(flowData,attr, enable, defval);
             html += "</td>";
             html += "</tr>";
             continue;
@@ -167,7 +167,7 @@ function InitMapAttr(Sys_MapAttr, workNode, groupID) {
             html += "<tr>";
             html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
             html += "<td class='FContext'  >";
-            html += InitMapAttrOfCtrlFool(workNode,attr, enable, defval);
+            html += InitMapAttrOfCtrlFool(flowData,attr, enable, defval);
             html += "</td>";
             isDropTR = !isDropTR;
             continue;
@@ -176,7 +176,7 @@ function InitMapAttr(Sys_MapAttr, workNode, groupID) {
         if (isDropTR == false) {
             html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
             html += "<td class='FContext'>";
-            html += InitMapAttrOfCtrlFool(workNode,attr, enable, defval);
+            html += InitMapAttrOfCtrlFool(flowData,attr, enable, defval);
             html += "</td>";
             html += "</tr>";
             isDropTR = !isDropTR;
@@ -186,10 +186,10 @@ function InitMapAttr(Sys_MapAttr, workNode, groupID) {
     return html;
 }
 
-function InitMapAttrOfCtrlFool(workNode,mapAttr) {
+function InitMapAttrOfCtrlFool(flowData,mapAttr) {
 
     var str = '';
-    var defValue = ConvertDefVal(workNode, mapAttr.DefVal, mapAttr.KeyOfEn);
+    var defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
     var isInOneRow = false; //是否占一整行
     var islabelIsInEle = false; //
@@ -199,14 +199,14 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
     //外键类型.
     if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
 
-        var data = workNode[mapAttr.UIBindKey];
+        var data = flowData[mapAttr.UIBindKey];
         //枚举类型.
         if (mapAttr.UIIsEnable == 1)
             enableAttr = "";
         else
             enableAttr = "disabled='disabled'";
 
-        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
+        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
     }
      
     //添加文本框 ，日期控件等.
@@ -286,7 +286,7 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
             checkedStr = ' checked="checked" ';
         }
 
-        checkedStr = ConvertDefVal(workNode, '', mapAttr.KeyOfEn);
+        checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
 
         return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " class='align_cb' /><label for='CB_" + mapAttr.KeyOfEn + "' class='align_cbl'>&nbsp;" + mapAttr.Name + "</label>";
     }
@@ -298,7 +298,7 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(workNode, mapAttr, defValue) + "</select>";
+        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
     }
 
     // AppDouble  AppFloat
@@ -336,7 +336,7 @@ function InitMapAttrOfCtrlFool(workNode,mapAttr) {
     return;
 }
 
-var workNode = {}; 
+var flowData = {}; 
   
 
 
@@ -348,8 +348,8 @@ function Ele_ImgAth(frmImageAth) {
 
     var imgSrc = "/WF/Data/Img/LogH.PNG";
     //获取数据
-    if (workNode.Sys_FrmImgAthDB) {
-        $.each(workNode.Sys_FrmImgAthDB, function (i, obj) {
+    if (flowData.Sys_FrmImgAthDB) {
+        $.each(flowData.Sys_FrmImgAthDB, function (i, obj) {
             if (obj.FK_FrmImgAth == frmImageAth.MyPK) {
                 imgSrc = obj.FileFullName;
             }
@@ -409,9 +409,9 @@ function Ele_FrmCheck(wf_node) {
 }
 
 //初始化 附件
-function Ele_Attachment(workNode, gf) {
+function Ele_Attachment(flowData, gf) {
 
-    var ath = workNode.Sys_FrmAttachment[0];
+    var ath = flowData.Sys_FrmAttachment[0];
     if (ath == null)
         return "没有找到附件定义，请与管理员联系。";
 

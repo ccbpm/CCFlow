@@ -331,15 +331,12 @@ namespace BP.WF.Template
         /// </summary>
         public string DoCheckFixFrmForUpdateVer()
         {
-
-
             // 更新状态.
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlType='' WHERE CtrlType IS NULL");
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
 
             //一直遇到遇到自动变长的问题, 强制其修复过来.
-            DBAccess.RunSQL("UPDATE Sys_Mapattr SET colspan=3 WHERE UIHeight=23 AND colspan=4");
-            
+            DBAccess.RunSQL("UPDATE Sys_Mapattr SET colspan=3 WHERE UIHeight<=38 AND colspan=4");
 
             string str = "";
 

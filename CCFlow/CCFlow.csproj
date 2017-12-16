@@ -6294,7 +6294,6 @@
     <Content Include="WF\WorkOpt\OneWork\Chart.htm" />
     <Content Include="WF\WorkOpt\OneWork\FlowBBS.htm" />
     <Content Include="WF\WorkOpt\OneWork\FlowBBSReplay.htm" />
-    <Content Include="WF\WorkOpt\OneWork\LogOfTable.aspx" />
     <Content Include="WF\WorkOpt\OneWork\css\demo.css" />
     <Content Include="WF\WorkOpt\OneWork\css\demo.js" />
     <Content Include="WF\WorkOpt\OneWork\css\style.css" />
@@ -6315,11 +6314,7 @@
     <Content Include="WF\WorkOpt\OneWork\Img\WEIBO.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\WIFI.png" />
     <Content Include="WF\WorkOpt\OneWork\Img\时间轴.png" />
-    <Content Include="WF\WorkOpt\OneWork\LogOfTable.htm" />
-    <Content Include="WF\WorkOpt\OneWork\NDRpt.aspx" />
     <Content Include="WF\WorkOpt\OneWork\OneWork.htm" />
-    <Content Include="WF\WorkOpt\OneWork\OneWork.master" />
-    <Content Include="WF\WorkOpt\OneWork\OP.aspx" />
     <Content Include="WF\WorkOpt\OneWork\OP.htm" />
     <Content Include="WF\WorkOpt\OneWork\TrackUC.ascx" />
     <Content Include="WF\WorkOpt\OneWork\TruakUC.ascx" />
@@ -8901,36 +8896,8 @@
     <Compile Include="WF\WorkOpt\OneWork\CH.aspx.designer.cs">
       <DependentUpon>CH.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\LogOfTable.aspx.cs">
-      <DependentUpon>LogOfTable.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\LogOfTable.aspx.designer.cs">
-      <DependentUpon>LogOfTable.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\WorkOpt\OneWork\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\NDRpt.aspx.cs">
-      <DependentUpon>NDRpt.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\NDRpt.aspx.designer.cs">
-      <DependentUpon>NDRpt.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\OneWork.master.cs">
-      <DependentUpon>OneWork.master</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\OneWork.master.designer.cs">
-      <DependentUpon>OneWork.master</DependentUpon>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\OP.aspx.cs">
-      <DependentUpon>OP.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\WorkOpt\OneWork\OP.aspx.designer.cs">
-      <DependentUpon>OP.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\WorkOpt\OneWork\TrackUC.ascx.cs">
       <DependentUpon>TrackUC.ascx</DependentUpon>

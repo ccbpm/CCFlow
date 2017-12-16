@@ -357,8 +357,12 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
             //发送后转向
              
             //清除发起列表的缓存.
-            if ( nd.IsStartNode==true)
+            if (nd.IsStartNode == true)
+            {
                 DBAccess.RunSQL("UPDATE WF_Emp SET StartFlows='' ");
+                if (SystemConfig.CustomerNo == "TianYe")
+                    DBAccess.RunSQL("UPDATE WF_FlowSort SET OrgNo='0' WHERE WF_FlowSort.OrgNo='101'");
+            }
 
             nd.DirectUpdate();
         }

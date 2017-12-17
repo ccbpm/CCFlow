@@ -198,11 +198,11 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
             lab += " <span style='color:red' class='mustInput' data-keyofen='" + attr.KeyOfEn + "' >*</span>";
         }
 
-        //if (item.UIContralType == 2)
-        // lab = "<label for='CB_" + item.KeyOfEn + "' >" + item.Name + "</label>";
+        //        if (item.UIContralType == 2)
+        //            lab = "<label for='CB_" + item.KeyOfEn + "' >" + item.Name + "</label>";
 
         //线性展示并且colspan=3
-        if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight <=30 ) ) {
+        if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight <40 ) ) {
             isDropTR = true;
             html += "<tr>";
             html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";

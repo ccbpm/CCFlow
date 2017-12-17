@@ -45,7 +45,7 @@
                     alert(data);
                     return;
                 }
-                
+
                 //  alert(data);
                 init = eval('(' + data + ')');
                 wcDesc = init.wcDesc[0];
@@ -144,9 +144,21 @@
 
                         //签名，日期.
                         html += "<tr>";
-                        html += "<td style='text-align:left;height:35px;line-height:35px;'><font color='Gray' >签名:</font>"
-                                    + (wcDesc.SigantureEnabel == "0" ? GetUserSmallIcon(this.EmpFrom, this.EmpFromT) : GetUserSiganture(this.EmpFrom, this.EmpFromT))
-                                    + "&nbsp;&nbsp;&nbsp;&nbsp;<font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</td>";
+                        html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+
+                        if (wcDesc.SigantureEnabel == "0")
+                            html += GetUserSmallIcon(this.EmpFrom, this.EmpFromT);
+                        else
+                            html += GetUserSiganture(this.EmpFrom, this.EmpFromT);
+
+                        html += "</div>";
+
+
+                        html += "<div style='float:right'> ";
+                        html += "<font color='Gray'>日期:</font>" + rdt;
+                        html += "</div>";
+                        html += "</td>";
+
                         html += "</tr>";
 
                     } else {

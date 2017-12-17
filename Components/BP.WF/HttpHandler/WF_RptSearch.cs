@@ -132,7 +132,7 @@ namespace BP.WF.HttpHandler
             if (DataType.IsNullOrEmpty(type))
                 type = "ByTitle";
 
-            string keywords = this.GetRequestVal("TB_KeyWords");
+            string keywords = this.GetValFromFrmByKey("TB_KeyWords");
             if (DataType.IsNullOrEmpty(keywords)==true)
                 keywords = this.GetRequestVal("TB_Key");
 

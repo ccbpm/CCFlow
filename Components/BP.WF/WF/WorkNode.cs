@@ -622,7 +622,7 @@ namespace BP.WF
                     //wl.GuestName = wl.GuestName;
                 }
 
-                wl.DirectInsert();
+                wl.Insert();
                 this.HisWorkerLists.AddEntity(wl);
 
                 RememberMe rm = new RememberMe(); // this.GetHisRememberMe(town.HisNode);

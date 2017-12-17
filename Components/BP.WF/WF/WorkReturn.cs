@@ -1246,7 +1246,6 @@ namespace BP.WF
             wl.IsPass = false;
             wl.WorkID = this.HisWork.OID;
             wl.FID = this.HisWork.FID;
-            wl.RDT = DataType.CurrentDataTime;
             wl.FK_Emp = FK_Emp;
             wl.FK_EmpText = emp.Name;
 

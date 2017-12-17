@@ -123,7 +123,6 @@ namespace BP.WF
             // 更新当前流程管理表的设置当前的节点。
             DBAccess.RunSQL("UPDATE WF_GenerWorkFlow SET FK_Node=" + fk_node + ", NodeName='" + nd.Name + "' WHERE WorkID=" + this.WorkID);
 
-            wl.RDT = DataType.CurrentDataTime;
             wl.IsPass = false;
             wl.Update();
 
@@ -714,7 +713,6 @@ namespace BP.WF
                             {
                                 item.IsRead = false;
                                 item.IsPassInt = 0;
-                                item.RDT = BP.DA.DataType.CurrentDataTime;
                                 item.SDT = BP.DA.DataType.CurrentDataTime;
                                 item.Update();
                             }
@@ -725,7 +723,6 @@ namespace BP.WF
                 {
                     gwl.IsRead = false;
                     gwl.IsPassInt = 0;
-                    gwl.RDT = BP.DA.DataType.CurrentDataTime;
                     gwl.SDT = BP.DA.DataType.CurrentDataTime;
                     gwl.Update();
                     return "子线程被删除成功,这是最后一个删除的子线程已经为您在{" + gwfMain.NodeName + "}产生了待办,<a href='/WF/MyFlow.htm?WorkID=" + gwfMain.WorkID + "&FK_Flow=" + gwfMain.FK_Flow + "'>点击处理工作</a>.";

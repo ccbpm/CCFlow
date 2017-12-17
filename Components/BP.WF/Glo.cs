@@ -3976,9 +3976,9 @@ namespace BP.WF
         /// <param name="workid"></param>
         /// <param name="fid"></param>
         /// <param name="title"></param>
-        public static void InitCH(Flow fl, Node nd, Int64 workid, Int64 fid, string title)
+        public static void InitCH(Flow fl, Node nd, Int64 workid, Int64 fid, string title,GenerWorkerList gwl=null)
         {
-            InitCH2017(fl, nd, workid, fid, title, null, null, DateTime.Now);
+            InitCH2017(fl, nd, workid, fid, title, null, null, DateTime.Now,gwl);
         }
         /// <summary>
         /// 执行考核
@@ -3992,7 +3992,7 @@ namespace BP.WF
         /// <param name="sdt">应完成日期</param>
         /// <param name="dtNow">当前日期</param>
         private static void InitCH2017(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt,
-            DateTime dtNow)
+            DateTime dtNow, GenerWorkerList gwl)
         {
            // 开始节点不考核.
             if (nd.IsStartNode || nd.HisCHWay == CHWay.None)
@@ -4008,7 +4008,7 @@ namespace BP.WF
             #region 求参与人员 todoEmps ，应完成日期 sdt ，与工作派发日期 prvRDT.
             //参与人员.
             string todoEmps = "";
-            if (nd.IsEndNode == true)
+            if (nd.IsEndNode == true && gwl==null)
             {
                 /* 如果是最后一个节点，可以使用这样的方式来求人员信息 , */
 
@@ -4036,7 +4036,6 @@ namespace BP.WF
                 sdt = dt.Rows[0]["SDTOfNode"].ToString(); //应完成日期.
                 todoEmps = dt.Rows[0]["TodoEmps"].ToString(); //参与人员.
                 #endregion 求应完成日期，与参与的人集合.
-
 
                 #region 求上一个节点的日期.
                 //求上一个时间点.
@@ -4070,64 +4069,17 @@ namespace BP.WF
 
             if (nd.IsEndNode == false)
             {
-                /* 不是最后一个节点, 就要从工作人员列表里获取 . */
-                string dbstr = SystemConfig.AppCenterDBVarStr;
-                Paras ps = new Paras();
-                switch (SystemConfig.AppCenterDBType)
+                if (gwl == null)
                 {
-                    case DBType.MSSQL:
-                        ps.SQL = "SELECT TOP 1 RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node  ORDER BY RDT DESC";
-                        break;
-                    case DBType.Oracle:
-                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node AND ROWNUM = 1 ORDER BY RDT DESC ";
-                        break;
-                    case DBType.MySQL:
-                        ps.SQL = "SELECT  RDT, SDT FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID  AND FK_Node=" + dbstr + "FK_Node ORDER BY RDT DESC limit 0,1 ";
-                        break;
-                    default:
-                        break;
+                    gwl = new GenerWorkerList();
+                    gwl.Retrieve(GenerWorkerListAttr.WorkID, workid,
+                        GenerWorkerListAttr.FK_Node, nd.NodeID,
+                        GenerWorkerListAttr.FK_Emp, WebUser.No);
                 }
 
-                ps.Add("WorkID", workid);
-                ps.Add("FK_Node", nd.NodeID);
-
-                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-                if (dt.Rows.Count ==0)
-                    return;
-
-                prvRDT = dt.Rows[0]["RDT"].ToString(); //上一个时间点的记录日期.
-                sdt = dt.Rows[0]["SDT"].ToString(); //应完成日期.
-
-                #region 从轨迹里找到他的相关责任人. 
+                prvRDT = gwl.RDT; // dt.Rows[0]["RDT"].ToString(); //上一个时间点的记录日期.
+                sdt = gwl.SDT; //  dt.Rows[0]["SDT"].ToString(); //应完成日期.
                 todoEmps = WebUser.No + "," + WebUser.Name + ";";
-                ps = new Paras();
-                switch (SystemConfig.AppCenterDBType)
-                {
-                    case DBType.MSSQL:
-                        ps.SQL = "SELECT TOP 1 Tag FROM ND" + int.Parse(fl.No) + "Track WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo ORDER BY RDT DESC";
-                        break;
-                    case DBType.Oracle:
-                        ps.SQL = "SELECT  Tag FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND ROWNUM=1 ORDER BY RDT DESC ";
-                        break;
-                    case DBType.MySQL:
-                        ps.SQL = "SELECT  Tag FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID AND NDTo=" + dbstr + "NDTo ORDER BY RDT DESC limit 0,1 ";
-                        break;
-                    default:
-                        break;
-                }
-                ps.Add("WorkID", workid);
-                ps.Add("NDTo", nd.NodeID);
-
-                dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
-                if (dt.Rows.Count ==1)
-                {
-                    string str=dt.Rows[0][0] as string;
-                    if (string.IsNullOrEmpty(str)==false)
-                        todoEmps=str;
-                }
-                #endregion 从轨迹里找到他的相关责任人. // 应该处理的人员,需要从轨迹表里取,上一步骤的处理人.
-
-                //todoEmps = dt.Rows[0][2].ToString(); //参与人员.
             }
             #endregion 求参与人员，应完成日期，与工作派发日期.
 
@@ -4237,7 +4189,6 @@ namespace BP.WF
                     ch.Insert();
                 }
             }
-
         }
         public static void InitCH2016(Flow fl, Node nd, Int64 workid, Int64 fid, string title, string prvRDT, string sdt, DateTime dtNow)
         {

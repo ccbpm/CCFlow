@@ -420,10 +420,6 @@ namespace BP.WF
             {
                 return this.GetValStringByKey(GenerWorkerListAttr.RDT);
             }
-            set
-            {
-                this.SetValByKey(GenerWorkerListAttr.RDT, value);
-            }
         }
         /// <summary>
         /// 完成时间
@@ -433,10 +429,6 @@ namespace BP.WF
             get
             {
                 return this.GetValStringByKey(GenerWorkerListAttr.CDT);
-            }
-            set
-            {
-                this.SetValByKey(GenerWorkerListAttr.CDT, value);
             }
         }
         /// <summary>
@@ -690,6 +682,10 @@ namespace BP.WF
                 this.GuestNo = BP.Web.GuestUser.No;
             }
             //this.Sender = BP.Web.WebUser.No;
+
+            //增加记录日期.
+            this.SetValByKey(GenerWorkerListAttr.RDT,  DataType.CurrentDataTime);
+
             return base.beforeInsert();
         }
         #endregion 重写基类的方法.

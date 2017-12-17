@@ -4949,7 +4949,6 @@ namespace BP.WF
             // 执行更新.
             GenerWorkerLists gwls = new GenerWorkerLists(workid);
             GenerWorkerList gwl = gwls[gwls.Count - 1] as GenerWorkerList; //获得最后一个。
-            gwl.RDT = DataType.CurrentDataTime;
             gwl.WorkID = workid;
             gwl.FK_Node = toNodeID;
             gwl.FK_NodeText = nd.Name;
@@ -5753,7 +5752,6 @@ namespace BP.WF
 
             gwl.SDT = DataType.CurrentDataTime;
             gwl.DTOfWarning = DataType.CurrentDataTime;
-            gwl.RDT = DataType.CurrentDataTime;
             gwl.IsEnable = true;
             gwl.IsPass = false;
             gwl.PRI = gwf.PRI;
@@ -5942,7 +5940,6 @@ namespace BP.WF
 
                 gwl.SDT = DataType.CurrentDataTime;
                 gwl.DTOfWarning = DataType.CurrentDataTime;
-                gwl.RDT = DataType.CurrentDataTime;
                 gwl.IsEnable = true;
 
                 gwl.IsPass = false;
@@ -6918,7 +6915,6 @@ namespace BP.WF
                     gwl.IsPassInt = 0;
                     gwl.SDT = DataType.CurrentDataTime;
                     gwl.DTOfWarning = DataType.CurrentDataTime;
-                    gwl.RDT = DataType.CurrentDataTime;
                     gwl.IsEnable = true;
                     gwl.IsRead = true;
                     gwl.IsPass = false;
@@ -7158,7 +7154,6 @@ namespace BP.WF
 
                         gwl.SDT = DataType.CurrentDataTime;
                         gwl.DTOfWarning = DataType.CurrentDataTime;
-                        gwl.RDT = DataType.CurrentDataTime;
                         gwl.IsEnable = true;
 
                         gwl.IsPass = false;
@@ -7848,7 +7843,6 @@ namespace BP.WF
                 gwl.IsPassInt = 0;
                 gwl.IsRead = false;
                 gwl.PressTimes = 0;
-                gwl.RDT = gwf.RDT;
                 gwl.SDT = gwf.RDT;
                 //gwl.Sender = WebUser.No;
                 gwl.Insert();
@@ -7900,7 +7894,6 @@ namespace BP.WF
                         wl.FK_Node = nodeID;
                         wl.FK_NodeText = nd.Name;
                         wl.Sender = BP.Web.WebUser.No;
-                        wl.RDT = BP.DA.DataType.CurrentDataTime;
                         wl.IsPass = false;
                         wl.IsRead = false;
                         wl.IsEnable = true;

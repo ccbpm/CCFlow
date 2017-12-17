@@ -210,7 +210,6 @@ namespace BP.WF
 
             gwl.SDT = DataType.CurrentDataTime;
             gwl.DTOfWarning = DataType.CurrentDataTime;
-            gwl.RDT = DataType.CurrentDataTime;
             gwl.IsEnable = true;
             gwl.IsPass = false;
             gwl.PRI = gwf.PRI;

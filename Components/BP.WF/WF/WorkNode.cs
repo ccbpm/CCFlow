@@ -546,8 +546,6 @@ namespace BP.WF
                 wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
                 //警告日期.
                 wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
-                //接受日期.
-                wl.RDT = DateTime.Now.ToString(DataType.SysDataTimeFormat); 
 
                 wl.FK_Flow = town.HisNode.FK_Flow;
                 //  wl.Sender = this.Execer;
@@ -725,7 +723,6 @@ namespace BP.WF
                     //wl.WarningHour = town.HisNode.WarningHour;
                     wl.SDT = dtOfShould.ToString(DataType.SysDataTimeFormat);
                     wl.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
-                    wl.RDT = DataType.CurrentDataTime;
 
                     wl.FK_Flow = town.HisNode.FK_Flow;
                     if (this.IsHaveSubThreadGroupMark == true)
@@ -1806,7 +1803,7 @@ namespace BP.WF
 
             //更新日期，为了考核. 
             gwl.SDT = sdt;
-            gwl.RDT = DataType.CurrentDataTime;
+          //  gwl.RDT = DataType.CurrentDataTime;
 
 
             gwl.IsPass = false;
@@ -4980,40 +4977,78 @@ namespace BP.WF
         /// 通知主持人
         /// </summary>
         /// <returns></returns>
-        public string DealAlertZhuChiRen()
+        private string DealAlertZhuChiRen()
         {
-            /*有两个待办，就说明当前人员是最后一个会签人，就要把主持人的状态设置为0 */
+            /*有两个待办，就说明当前人员是最后一个会签人，就要把主持人的状态设置为 0 */
             //获得主持人信息.
-            string sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerList WHERE IsPass=90 AND WorkID=" + this.WorkID;
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            if (dt.Rows.Count == 1)
+            GenerWorkerList gwl = new GenerWorkerList();
+            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.IsPass, 90);
+            if (i != 1)
+                return "@您已经会签完毕，还有(" + this.HisGenerWorkFlow.TodoEmps + ")没有处理.";
+
+            gwl.IsPassInt = 0; //从会签列表里移动到待办.
+            gwl.IsRead = false; //设置为未读.
+
+            BP.WF.Dev2Interface.Port_SendMsg(gwl.FK_Emp,
+                "工作会签完毕", this.HisGenerWorkFlow.Title + " 工作会签完毕,请到待办查看.",
+                "HuiQian" + this.WorkID + "_" + WebUser.No, "HuiQian", HisGenerWorkFlow.FK_Flow, this.HisGenerWorkFlow.FK_Node, this.WorkID, 0);
+
+            //设置为未读.
+            BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisGenerWorkFlow.WorkID);
+
+            //设置最后处理人.
+            this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp + "," + gwl.FK_EmpText + ";";
+            this.HisGenerWorkFlow.Update();
+
+
+            #region 处理天业集团对主持人的考核.
+            /*
+             * 对于会签人的时间计算
+             * 1, 从主持人接受工作时间点起，到最后一个一次分配会签人止，作为第一时间段。
+             * 2，所有会签人会签完毕后到会签人执行发送时间点止作为第2个时间段。
+             * 3，第1个时间端+第2个时间段为主持人所处理该工作的时间，时效考核的内容按照这个两个时间段开始计算。
+             */
+            if (this.HisNode.HisCHWay == CHWay.ByTime)
             {
-                //从会签列表里移动到待办.
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE WorkID='" + this.WorkID + "' AND IsPass=90");
+                /*如果是按照时效考核.*/
 
-                //发消息.
-                string fk_emp = dt.Rows[0]["FK_Emp"].ToString();
-                string empName = dt.Rows[0]["FK_EmpText"].ToString();
+                //获得最后一次执行会签的时间点.
+                string sql = "SELECT RDT FROM ND"+int.Parse(this.HisNode.FK_Flow)+"TRACK WHERE WorkID=" + this.WorkID + " AND ActionType=30 ORDER BY RDT";
+                string lastDTOfHuiQian = DBAccess.RunSQLReturnStringIsNull(sql, null);
 
-                BP.WF.Dev2Interface.Port_SendMsg(fk_emp,
-                    "工作会签完毕", this.HisGenerWorkFlow.Title + " 工作会签完毕,请到待办查看.",
-                    "HuiQian" + this.WorkID + "_" + WebUser.No, "HuiQian", HisGenerWorkFlow.FK_Flow, this.HisGenerWorkFlow.FK_Node, this.WorkID, 0);
+                //取出来下达给主持人的时间点.
+                string dtOfToZhuChiRen = gwl.RDT;
 
-                //设置为未读.
-                BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisGenerWorkFlow.WorkID);
+                //获得两个时间间隔.
+                DateTime t_lastDTOfHuiQian = DataType.ParseSysDate2DateTime(lastDTOfHuiQian);
+                DateTime t_dtOfToZhuChiRen = DataType.ParseSysDate2DateTime(dtOfToZhuChiRen);
 
-                //设置最后处理人.
-                this.HisGenerWorkFlow.TodoEmps = fk_emp + "," + empName+";";
-                this.HisGenerWorkFlow.Update();
+                TimeSpan ts = t_lastDTOfHuiQian - t_dtOfToZhuChiRen;
 
-                //BP.WF.Dev2Interface.WriteTrackInfo(this.HisFlow.No, this.HisGenerWorkFlow.FK_Node, this.HisGenerWorkFlow.NodeName, this.WorkID, 0, "会签完毕", "会签提示"); 
-                return "您是最后一个会签该工作的处理人，已经提醒主持人(" + fk_emp + ","+empName+")处理当前工作。";
+                //生成该节点设定的 时间范围.
+                int hour= this.HisNode.TimeLimit *24 + int.Parse( this.HisNode.TSpanHour.ToString());
+                TimeSpan tsLimt = new TimeSpan(hour, 0, 0);
+
+                //获得剩余的时间范围.
+                TimeSpan myLeftTS = tsLimt - ts;
+
+                //计算应该完成的日期.
+                DateTime dtNow = DateTime.Now;
+                dtNow= dtNow.AddHours(myLeftTS.TotalHours);
+
+                //设置应该按成的日期.
+                gwl.SDT = dtNow.ToString( DataType.SysDataTimeFormat);
+
+                //设置预警日期, 为了方便提前1天预警.
+                dtNow = dtNow.AddDays(-1);
+                gwl.DTOfWarning = dtNow.ToString(DataType.SysDataTimeFormat);
             }
+            #endregion 处理天业集团对会签人的考核.
 
-            //sql = "SELECT FK_Emp,FK_EmpText FROM WF_GenerWorkerList WHERE IsPass=0 AND FK_Node=" + this.HisGenerWorkFlow.FK_Node + " AND WorkID=" + this.WorkID;
-            //dt = DBAccess.RunSQLReturnTable(sql);
+            gwl.Update();
 
-            return "@您已经会签完毕，还有(" +this.HisGenerWorkFlow.TodoEmps + ")没有处理.";
+
+            return "您是最后一个会签该工作的处理人，已经提醒主持人(" + gwl.FK_Emp + "," + gwl.FK_EmpText + ")处理当前工作。";
         }
         /// <summary>
         /// 如果是协作.
@@ -5189,9 +5224,9 @@ namespace BP.WF
 
                 //执行时效考核.
                 if (this.rptGe == null)
-                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
+                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title, gwl);
                 else
-                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
+                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title, gwl);
                 
                 this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps1, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
 
@@ -6966,7 +7001,6 @@ namespace BP.WF
             // wl.WarningHour = this.HisNode.WarningHour;
             wl.SDT = DataType.CurrentDataTime;
             wl.DTOfWarning = DataType.CurrentDataTime;
-            wl.RDT = DataType.CurrentDataTime;
 
             try
             {

@@ -812,7 +812,6 @@ namespace BP.WF.Template
                     gwl.FK_DeptT = emp.FK_DeptText;
 
 
-                    gwl.RDT = dr["RDT"].ToString();
                     gwl.SDT = dr["RDT"].ToString();
                     gwl.DTOfWarning = gwf.SDTOfNode;
                     //gwl.WarningHour = nd.WarningHour;

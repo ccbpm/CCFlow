@@ -791,7 +791,6 @@ namespace BP.WF
             // 更新分流节点，让其出现待办.
             gwl.IsPassInt = 0;
             gwl.IsRead = false;
-            gwl.RDT = BP.DA.DataType.CurrentDataTime;
             gwl.SDT = BP.DA.DataType.CurrentDataTime;  //这里计算时间有问题.
             gwl.Update();
 

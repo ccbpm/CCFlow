@@ -20,13 +20,7 @@ function FlowFormTree_Init() {
         WorkID: pageData.WorkID,
         Frms: frms
     };
-
-    var para = {
-        DoType: "FlowFormTree_Init",
-        FK_Flow: pageData.FK_Flow,
-        FK_Node: pageData.FK_Node,
-        WorkID: pageData.WorkID
-    };
+     
 
     AjaxService(para, function (data) {
         if (data.indexOf('err@') == 0) {//发送时发生错误

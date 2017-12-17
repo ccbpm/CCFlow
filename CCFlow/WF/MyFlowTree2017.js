@@ -9,6 +9,18 @@ function GenerTreeFrm(wn) {
 
 //表单树初始化
 function FlowFormTree_Init() {
+
+    //表单参数没有传递过去, 这个需要把url 所有的参数都要传递过去.
+    //@代国强.
+    var frms = GetQueryString("Frms");
+    var para = {
+        DoType: "FlowFormTree_Init",
+        FK_Flow: pageData.FK_Flow,
+        FK_Node: pageData.FK_Node,
+        WorkID: pageData.WorkID,
+        Frms: frms
+    };
+
     var para = {
         DoType: "FlowFormTree_Init",
         FK_Flow: pageData.FK_Flow,

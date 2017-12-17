@@ -45,7 +45,8 @@
                     alert(data);
                     return;
                 }
-                //                    alert(data);
+                
+                //  alert(data);
                 init = eval('(' + data + ')');
                 wcDesc = init.wcDesc[0];
                 tks = init.Tracks;
@@ -82,9 +83,11 @@
                         tdWidth = "20%;";
 
                     html += "<td " + (this.IsDoc ? ("id='tdnode_" + this.NodeID + "'") : "") + " rowspan='" + (subaths.length > 0 ? 3 : 2) + "' style='width:" + tdWidth + ";border:1px solid #D6DDE6;'>";
-                    html += this.NodeName;
-                    html += "</td>";
 
+                    var nodeName = this.NodeName;
+                    nodeName = nodeName.replace('(会签)', '<br>(<font color=Gray>会签</font>)');
+                    html += nodeName;
+                    html += "</td>";
 
                     //审核意见
                     if (this.IsDoc && isReadonly == false) {
@@ -106,14 +109,19 @@
                             msg = msg.replace('<BR>', '\t\n');
                         }
 
-                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>" + msg + "</textarea>";
+                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
+                        html += msg;
+                        html += "</textarea>";
+
                         html += "</div>";
 
                         html += "</td>";
                     }
                     else {
 
-                        html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" ><font color=green>' + this.Msg + '</font></td>';
+                        html += '<td style="word-wrap: break-word;line-height:30px;margin:5px; padding:5px;font-color:green;" >';
+                        html += '<font color=green>' + this.Msg + '</font>';
+                        html += '</td>';
                     }
 
                     html += '</tr>';

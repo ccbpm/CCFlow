@@ -6,8 +6,14 @@
     <script src="../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../Comm/Gener.js" type="text/javascript"></script>
     <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
-    <script src="TimeBase.js" type="text/javascript"></script>
     <link href="TimeBase.css" rel="stylesheet" type="text/css" />
+    <style type="text/css" >
+    span
+    {
+        color:Gray;
+        margin:10px;
+    }
+    </style>
     <script type="text/javascript">
 
         /* 打开表单. */
@@ -305,7 +311,7 @@
                             isHaveNoChecker = true;
                         }
 
-                        //如果有尚未审核的人员，就
+                        //如果有尚未审核的人员，就输出.
                         if (isHaveNoChecker == true) {
 
                             var rowDay = "<tr>";
@@ -320,29 +326,21 @@
                                 if (gwl.IsPass == 1)
                                     continue;
 
+
                                 var doc = "";
+                                doc += "<span>审批人</span>";
+                                doc +=   gwl.FK_EmpText;
 
-                                doc += "<table border=0 style='wdith:100%;'>";
-                                doc += "<tr>";
-                                doc += "<td>审批人</td>";
-                                doc += "<td>" + gwl.FK_EmpText + "</td>";
-                                doc += "</tr>";
-
-                                doc += "<tr>";
-                                doc += "<td>阅读状态</td>";
+                                doc += "<br>";
+                                doc += "<span>阅读状态:</span>";
 
                                 if (gwl.IsRead == "1")
-                                    doc += "<td><font color=green>阅读（打开）.</font></td>";
+                                   doc += "<span><font color=green>已阅读.</font></span>";
                                 else
-                                    doc += "<td><font color=red>尚未阅读（打开）.</font></td>";
-                                doc += "</tr>";
-
-
-                                doc += "<tr>";
-                                doc += "<td>工作到达日期</td>";
-                                doc += "<td>" + gwl.RDT + "</td>";
-                                doc += "</tr>";
-
+                                    doc += "<span><font color=green>尚未阅读.</font></span>";
+                                doc += "<br>";
+                                doc += "<span>工作到达日期:</span>";
+                                doc += gwl.RDT;
 
                                 //到达时间.
                                 var toTime = gwl.RDT;
@@ -352,17 +350,15 @@
                                 //当前发生日期.
                                 timeDot = new Date();
 
-                                doc += "<tr>";
-                                doc += "<td>已经耗时</td>";
-                                doc += "<td>" + GetSpanTime(toTimeDot, timeDot) + "</td>";
-                                doc += "</tr>";
 
+                                doc += "<br>";
+                                doc += "<span>已经耗时:</span>";
+                                doc += GetSpanTime(toTimeDot, timeDot);
 
-                                doc += "<tr>";
-                                doc += "<td>应完成日期</td>";
-                                doc += "<td>" + gwl.SDT + "</td>";
-                                doc += "</tr>";
-
+                                doc += "<br>";
+                                doc += "<span>应完成日期:</span>";
+                                doc += gwl.SDT;
+                                 
 
                                 //应该完成日期.
                                 toTime = gwl.SDT;
@@ -372,12 +368,10 @@
                                 //当前发生日期.
                                 timeDot = new Date();
 
-                                doc += "<tr>";
-                                doc += "<td>还剩余</td>";
-                                doc += "<td>" + GetSpanTime(timeDot, toTimeDot) + "</td>";
-                                doc += "</tr>";
+                                doc += "<br>";
+                                doc += "<span>还剩余:</span>";
+                                doc += GetSpanTime(timeDot, toTimeDot);
 
-                                doc += "</table>";
 
                                 var left = "";
                                 left += "<br><img src='../../../DataUser/UserIcon/" + gwl.FK_Emp + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
@@ -389,6 +383,7 @@
                                 newRow += "<td class='TDBase' ></td>";
                                 newRow += "<td class='TDDoc' >" + doc + "</td>";
                                 newRow += "</tr>";
+
                                 $("#Table1 tr:last").after(newRow);
                             }
                         }

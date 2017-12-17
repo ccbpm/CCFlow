@@ -40,43 +40,89 @@
             });
         });
     </script>
+
+    <style type="text/css">
+    span
+    {
+        font-color:red;
+        font-size:25px;
+         color:Green;
+         font-weight:bolder;
+    }
+    </style>
     <base target="main" />
 </head>
-<body>
+<body style=" padding:10px; margin:20px;">
 
-<fieldset width='100%' >
+<table>
+<caption>我的个人信息</caption>
+<tr>
+<td>登录帐号 </td>
+<td><span id="UserNo" ></span> </td>
 
- <legend>&nbsp;基本信息&nbsp;</legend>
-
-  用户帐号: <div id="UserNo" style=" font-color:green " ></div>
-   
-   <br />
-  用户名:<div id="UserName" ></div>
-<HR>
-
-电子签字:<img  id="QianMing" border=1 src="../../DataUser/Siganture/UnName.jpg"; onerror="this.src='../../DataUser/Siganture/UnName.jpg'" />
+<td>用户名 </td>
+<td><span id="UserName" ></span> </td>
+</tr>
 
 
-<a href='Siganture.htm' >设置/修改</a>。
 
-<hr>主部门 : <div id="DeptName" ></div>
-&nbsp;我要:<a href='ChangeDept.htm' >切换登录部门</a><BR>
+<tr>
+<td>接受短消息提醒手机号 </td>
+<td><span id="Tel" ></span> </td>
 
-<BR>
-<BR>授权情况：未授权 - <a href='Author.htm' >执行授权</a>。
+<td>接受E-mail提醒 </td>
+<td><span id="Email" ></span> </td>
+</tr>
 
-&nbsp;我要:<a href='ChangePassword.htm' >修改密码</a><BR>
 
-<hr><b>信息提示：</b><a href='Profile.htm'>设置/修改</a><br>
+<tr>
+<td>电子签字 </td>
+<td> <img  id="QianMing" border=1 src="../../DataUser/Siganture/UnName.jpg"; onerror="this.src='../../DataUser/Siganture/UnName.jpg'" /> </td>
 
-<br>接受短消息提醒手机号 :  <div id="Tel" ></div><br>
-<br>接受E-mail提醒 :        <div id="Email" ></div> <HR>
+<td colspan=2><a href='Siganture.htm' >设置/修改</a> </td>
+</tr>
 
-<B>岗位/部门-权限</B><BR><BR>岗位权限 - <div id="Stations" ></div>
-<BR><BR>部门权限 -  <div id="Depts" ></div>
-</p>
 
-</fieldset>
+
+<tr>
+<td>主部门 </td>
+<td> <span id="DeptName" ></span> </td>
+
+<td colspan=2>我要:<a href='ChangeDept.htm' >切换登录部门</a><BR> </td>
+</tr>
+
+
+<tr>
+<td>授权情况 </td>
+<td> <span id="Span1" ></span> </td>
+<td colspan=2>我要:<a href='Author.htm' >执行授权</a><BR> </td>
+</tr>
+
+
+
+<tr>
+<td>授权情况 </td>
+<td> <span id="Span2" ></span> </td>
+<td colspan=2>我要:<a href='Author.htm' >执行授权</a><BR> </td>
+</tr>
+
+
+
+
+<tr>
+<td>信息提示 </td>
+<td colspan=3><a href='Profile.htm'>设置/修改</a> </td>
+</tr>
+
+
+<tr>
+<td>岗位/部门-权限 </td>
+<td> <span id="Stations" ></span>  </td>
+<td>岗位/部门-权限 </td>
+<td><span id="Depts" ></span>  </td>
+</tr>
+
+</table>
 
 
 </body>

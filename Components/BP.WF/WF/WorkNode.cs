@@ -622,6 +622,7 @@ namespace BP.WF
                     //wl.GuestName = wl.GuestName;
                 }
 
+                
                 wl.Insert();
                 this.HisWorkerLists.AddEntity(wl);
 
@@ -769,7 +770,7 @@ namespace BP.WF
 
                     try
                     {
-                        wl.DirectInsert();
+                        wl.Insert();
                         this.HisWorkerLists.AddEntity(wl);
                     }
                     catch (Exception ex)

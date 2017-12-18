@@ -171,7 +171,7 @@ namespace CCFlow.WF.CCForm
                     PubClass.DownloadFile(downDB.FileFullName, downDB.FileName);
 
                 if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
-                    PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
+                    PubClass.DownloadFile(downDB.GenerTempFile(dbAtt.AthSaveWay), downDB.FileName);
 
                 if (dbAtt.AthSaveWay  == AthSaveWay.DB)
                     PubClass.DownloadHttpFile(downDB.FileFullName, downDB.FileName);
@@ -468,7 +468,16 @@ namespace CCFlow.WF.CCForm
                     this.Pub1.AddTDTitleExt("style='width:50px;'", "大小KB");
                     this.Pub1.AddTDTitleExt("style='width:90px;'", "上传时间");
                     this.Pub1.AddTDTitleExt("style='width:50px;'", "上传人");
-                    this.Pub1.AddTDTitleExt("style='width:100px;'", "操作");
+
+                    this.Pub1.Add("\n<TD class='TitleExt' nowrap=true style='width:50px;' >");
+
+                    if (athDesc.IsDownload && dbs.Count > 0)
+                        this.Pub1.Add("<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包下载</a>");
+                    else
+                        this.Pub1.Add("操作");
+
+                    this.Pub1.Add("\n</TD");
+
                     this.Pub1.AddTREnd();
                 }
 
@@ -588,37 +597,16 @@ namespace CCFlow.WF.CCForm
                     this.Pub1.AddTD("&nbsp&nbsp");
                     this.Pub1.AddTREnd();
                 }
-                //追加打包下载功能
-                if (athDesc.IsDownload && dbs.Count > 0)
-                {
-                    this.Pub1.AddTR();
-                    if (athDesc.Sort.Contains(","))
-                        this.Pub1.AddTDBegin("colspan=7");
-                    else
-                        this.Pub1.AddTDBegin("colspan=6");
-
-                    //超链接
-                    BP.Web.Controls.BPHyperLink hLink = new BP.Web.Controls.BPHyperLink();
-                    hLink.ID = "H_LINK_Btn";
-                    hLink.Target = "_blank";
-                    this.Pub1.Add(hLink);
-
-                    ImageButton btn = new ImageButton();
-                    btn.ImageUrl = "../Img/FileType/zip.png";
-                    btn.ID = "Btn_DownLoad_Zip";
-                    btn.CssClass = "Btn";
-                    btn.Width = 20;
-                    btn.Height = 20;
-                    btn.ToolTip = "压缩打包下载";
-                    btn.Click += new ImageClickEventHandler(btn_DownLoad_Zip);
-                    this.Pub1.Add(btn);
-
-                    this.Pub1.AddTDEnd();
-                    this.Pub1.AddTREnd();
-                }
-
+             
                 AddFileUpload(isUpdate, athDesc);
                 this.Pub1.AddTableEnd();
+
+
+                //超链接
+                BP.Web.Controls.BPHyperLink hLink = new BP.Web.Controls.BPHyperLink();
+                hLink.ID = "H_LINK_Btn";
+                hLink.Target = "_blank";
+                this.Pub1.Add(hLink);
 
                 #endregion 生成表头表体.
             }
@@ -755,6 +743,7 @@ namespace CCFlow.WF.CCForm
                 }
 
                 string zipName = this.WorkID + "_" + DateTime.Now.ToString("yyyyMMddHHmmssffff");
+
                 string basePath = Server.MapPath("//DataUser//Temp");
                 string tempPath = basePath + "//" + WebUser.No;
                 string zipPath = basePath + "//" + WebUser.No;
@@ -766,6 +755,7 @@ namespace CCFlow.WF.CCForm
                 //根据路径创建文件夹
                 if (System.IO.Directory.Exists(zipPath) == false)
                     System.IO.Directory.CreateDirectory(zipPath);
+
                 //copy文件临时文件夹
                 tempPath = tempPath + "//" + this.WorkID;
                 if (System.IO.Directory.Exists(tempPath) == false)
@@ -774,8 +764,9 @@ namespace CCFlow.WF.CCForm
                 foreach (FrmAttachmentDB db in dbs)
                 {
                     string copyToPath = tempPath;
-                    if (File.Exists(db.FileFullName) == false)
-                        continue;
+
+                    //求出文件路径.
+                    string fileTempPath = db.GenerTempFile(athDesc.AthSaveWay);
 
                     if (string.IsNullOrEmpty(db.Sort) == false)
                     {
@@ -785,7 +776,7 @@ namespace CCFlow.WF.CCForm
                     }
                     //新文件目录
                     copyToPath = copyToPath + "//" + db.FileName;
-                    File.Copy(db.FileFullName, copyToPath, true);
+                    File.Copy(fileTempPath, copyToPath, true);
                 }
 
                 //执行压缩
@@ -1143,7 +1134,7 @@ namespace CCFlow.WF.CCForm
                         dbUpload.NodeID = FK_Node.ToString();
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
                         dbUpload.FID = this.FID; //流程id.
-                        dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台读取.
+                       // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台读取.
 
                         if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                         {
@@ -1245,7 +1236,7 @@ namespace CCFlow.WF.CCForm
 
                         dbUpload.FK_MapData = athDesc.FK_MapData;
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
-                        dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
+                       // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
                         //dbUpload.FileExts = info.Extension;
                         // dbUpload.FileFullName = saveTo;
                         dbUpload.FileName = fu.FileName;

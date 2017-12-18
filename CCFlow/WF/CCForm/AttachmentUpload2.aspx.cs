@@ -201,7 +201,7 @@ namespace CCFlow.WF.CCForm
 
                 if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
                 {
-                    PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
+                    PubClass.DownloadFile(downDB.GenerTempFile(dbAtt.AthSaveWay), downDB.FileName);
                 }
 
                 if (dbAtt.AthSaveWay  == AthSaveWay.DB)
@@ -1182,7 +1182,7 @@ namespace CCFlow.WF.CCForm
                         dbUpload.NodeID = FK_Node.ToString();
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
                         dbUpload.FID = this.FID; //流程id.
-                        dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台读取.
+                      //  dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台读取.
 
                         if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                         {
@@ -1283,7 +1283,7 @@ namespace CCFlow.WF.CCForm
 
                         dbUpload.FK_MapData = athDesc.FK_MapData;
                         dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
-                        dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
+                      //  dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
                         //dbUpload.FileExts = info.Extension;
                         // dbUpload.FileFullName = saveTo;
                         dbUpload.FileName = fu.FileName;

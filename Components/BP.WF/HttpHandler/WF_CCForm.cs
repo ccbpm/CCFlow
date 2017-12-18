@@ -2615,6 +2615,11 @@ namespace BP.WF.HttpHandler
         #endregion 打印.
 
         #region 附件组件.
+        public string AttachmentUpload_DownByStream()
+        {
+           // return AttachmentUpload_Down(true);
+            return AttachmentUpload_Down();
+        }
         /// <summary>
         /// 下载
         /// </summary>
@@ -2637,27 +2642,11 @@ namespace BP.WF.HttpHandler
 
             if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
             {
-                string fileName = downDB.MakeFullFileFromFtp();
-
-                if (1 == 2)
-                {
-                    //BP.Sys.PubClass.DownloadFileV2(attachMentDb.FileFullName, attachMentDb.FileName);
-                    //以字符流的形式下载文件
-                    FileStream fs = new FileStream(fileName, FileMode.Open);
-                    byte[] bytes = new byte[(int)fs.Length];
-                    fs.Read(bytes, 0, bytes.Length);
-                    fs.Close();
-
-                    this.context.Response.ContentType = "application/octet-stream";
-                    //通知浏览器下载文件而不是打开
-                    this.context.Response.AddHeader("Content-Disposition", "attachment;filename=" + HttpUtility.UrlEncode(downDB.FileName, System.Text.Encoding.UTF8));
-                    this.context.Response.BinaryWrite(bytes);
-                    this.context.Response.Flush();
-                    this.context.Response.End();
-                }
-
+                string fileFullName = downDB.MakeFullFileFromFtp();
+                //    BP.Sys.PubClass.DownloadFileV2(fileFullName, downDB.FileName);
+                //  return "";
                 //PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
-                return "url@" + fileName;
+                return "url@" + fileFullName;
             }
 
             if (dbAtt.AthSaveWay == AthSaveWay.DB)

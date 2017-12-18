@@ -215,6 +215,11 @@ namespace BP.WF.HttpHandler
             return ccform.AttachmentUpload_Down();
         }
 
+        public string AttachmentUpload_DownByStream()
+        {
+            WF_CCForm ccform = new WF_CCForm(this.context);
+            return ccform.AttachmentUpload_DownByStream();
+        }
 
         #region 关键字查询.
         /// <summary>

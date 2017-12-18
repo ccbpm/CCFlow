@@ -682,6 +682,5 @@ namespace BP.WF.HttpHandler
             BP.WF.HttpHandler.WF wf = new WF(this.context);
             return wf.Runing_OpenFrm();
         }
-
     }
 }

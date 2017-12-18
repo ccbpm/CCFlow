@@ -348,17 +348,6 @@ namespace BP.Sys
                 this.SetValByKey(FrmAttachmentDBAttr.Idx, value);
             }
         }
-        public AthSaveWay AthSaveWay
-        {
-            get
-            {
-                return (AthSaveWay)this.GetValIntByKey(FrmAttachmentDBAttr.AthSaveWay);
-            }
-            set
-            {
-                this.SetValByKey(FrmAttachmentDBAttr.AthSaveWay, (int)value);
-            }
-        }
         /// <summary>
         /// 附件扩展名
         /// </summary>
@@ -451,11 +440,12 @@ namespace BP.Sys
                 return this._enMap;
             }
         }
+
         /// <summary>
         /// 生成文件.
         /// </summary>
         /// <returns></returns>
-        public string MakeFullFileFromFtp()
+        private string MakeFullFileFromFtp()
         {
             // string tempFile =  SystemConfig.PathOfTemp +System.Guid.NewGuid()+"."+this.FileExts;
             string tempFile = SystemConfig.PathOfTemp + this.FileName;
@@ -540,6 +530,24 @@ namespace BP.Sys
             base.afterDelete();
         }
         #endregion
+
+        /// <summary>
+        /// 获得临时文件
+        /// </summary>
+        /// <returns></returns>
+        public string GenerTempFile(AthSaveWay saveWay= Sys.AthSaveWay.IISServer)
+        {
+            if (saveWay == Sys.AthSaveWay.IISServer)
+                return this.FileFullName;
+
+            if (saveWay == Sys.AthSaveWay.FTPServer)
+                return this.MakeFullFileFromFtp();
+
+            if (saveWay == Sys.AthSaveWay.DB)
+                throw new Exception("@尚未处理存储到db里面的文件.");
+
+            throw new Exception("@尚未处理存储到db里面的文件.");
+        }
     }
     /// <summary>
     /// 附件数据存储s

@@ -216,6 +216,16 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 属性参数.
+        public string PKVal
+        {
+            get
+            {
+                return this.GetRequestVal("PKVal");
+            }
+        }
+        /// <summary>
+        /// 是否是移动？
+        /// </summary>
         public bool IsMobile
         {
             get

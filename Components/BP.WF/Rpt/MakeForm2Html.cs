@@ -761,7 +761,7 @@ namespace BP.WF
                                 if (System.IO.File.Exists(toFile) == false)
                                 {
                                     //把文件copy到,
-                                    string file = item.MakeFullFileFromFtp();
+                                    string file = item.GenerTempFile(ath.AthSaveWay);
                                     System.IO.File.Copy(file, toFile, true);
                                 }
 
@@ -992,7 +992,7 @@ namespace BP.WF
                                         //把文件copy到,
                                         if (System.IO.File.Exists(fileTo) == false)
                                         {
-                                            string file = item.MakeFullFileFromFtp();
+                                            string file = item.GenerTempFile(ath.AthSaveWay);
 
 
                                             System.IO.File.Copy(file, fileTo, true);

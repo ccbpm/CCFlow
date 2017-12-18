@@ -223,8 +223,15 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 //检查SQL是否符合要求.
                 try
                 {
-                    //替换.
-                    sql = sql.Replace("@WorkID", "0");
+                    //替换.避免出错
+                    sql = sql.Replace("@WorkID", "0");//工作ID
+                    sql = sql.Replace("@FID", "0");//
+                    sql = sql.Replace("@OID", "0");
+                    sql = sql.Replace("@FK_Node", "0");
+                    sql = sql.Replace("@FK_Flow", "0");
+                    sql = sql.Replace("@PWorkID", "0");
+                    sql = sql.Replace("@PFlowNo", "0");
+                    sql = sql.Replace("@PNodeID", "0");
 
                     sql = BP.WF.Glo.DealExp(sql, null, null);
                     DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);

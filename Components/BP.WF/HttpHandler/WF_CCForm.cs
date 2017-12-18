@@ -2644,6 +2644,7 @@ namespace BP.WF.HttpHandler
             if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
             {
                 string fileFullName = downDB.GenerTempFile(dbAtt.AthSaveWay);
+
                 //    BP.Sys.PubClass.DownloadFileV2(fileFullName, downDB.FileName);
                 //  return "";
                 //PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);

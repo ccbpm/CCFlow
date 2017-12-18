@@ -777,14 +777,12 @@ namespace BP.WF.Data
                 rm.IsForEns = false;
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/CC.gif";
                 rm.Title = "移交";
                 rm.ClassMethodName = this.ToString() + ".DoFlowShift";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 map.AddRefMethod(rm);
-
 
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/Back.png";
@@ -803,30 +801,29 @@ namespace BP.WF.Data
                 map.AddRefMethod(rm);
 
 
+               // #region 旧版本.
+               // rm = new RefMethod();
+               // rm.GroupName = "旧版本";
+               // rm.Icon = "../../WF/Img/Btn/CC.gif";
+               // rm.Icon = "../../WF/Img/Btn/CC.gif";
 
-                #region 旧版本.
-                rm = new RefMethod();
-                rm.GroupName = "旧版本";
-                rm.Icon = "../../WF/Img/Btn/CC.gif";
-                rm.Icon = "../../WF/Img/Btn/CC.gif";
+               // rm.Title = "移交";
+               // rm.IsForEns = false;
+               // rm.ClassMethodName = this.ToString() + ".DoShift";
+               // rm.HisAttrs.AddTBString("ToEmp", null, "移交给", true, false, 0, 300, 100);
+               // rm.HisAttrs.AddTBString("Note", null, "移交原因", true, false, 0, 300, 100);
+               // map.AddRefMethod(rm);
 
-                rm.Title = "移交";
-                rm.IsForEns = false;
-                rm.ClassMethodName = this.ToString() + ".DoShift";
-                rm.HisAttrs.AddTBString("ToEmp", null, "移交给", true, false, 0, 300, 100);
-                rm.HisAttrs.AddTBString("Note", null, "移交原因", true, false, 0, 300, 100);
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.GroupName = "旧版本";
-                rm.Title = "回滚";
-                rm.IsForEns = false;
-                rm.ClassMethodName = this.ToString() + ".DoComeBack";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-               rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
-               rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 300, 100);
-                map.AddRefMethod(rm);
-                #endregion 旧版本.
+               // rm = new RefMethod();
+               // rm.GroupName = "旧版本";
+               // rm.Title = "回滚";
+               // rm.IsForEns = false;
+               // rm.ClassMethodName = this.ToString() + ".DoComeBack";
+               // rm.RefMethodType = RefMethodType.RightFrameOpen;
+               //rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
+               //rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 300, 100);
+               // map.AddRefMethod(rm);
+               // #endregion 旧版本.
 
 
 

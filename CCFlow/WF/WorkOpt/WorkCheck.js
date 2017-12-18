@@ -339,7 +339,7 @@
 
         function GetUserSiganture(userNo, userName) {
             var func = " oncontextmenu='return false;' ondragstart='return false;'  onselectstart='return false;' onselect='document.selection.empty();'";
-            return "<img src='../../DataUser/Siganture/" + userNo + ".jpg' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/UnName.JPG'\" />";
+            return "<img src='../../DataUser/Siganture/" + userNo + ".jpg?m="+Math.random()+"' title='" + userName + "' " + func + " style='height:40px;' border=0 onerror=\"src='../../DataUser/Siganture/UnName.JPG'\" />";
         }
 
         function GetUserSmallIcon(userNo, userName) {

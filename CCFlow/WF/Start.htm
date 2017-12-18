@@ -27,8 +27,8 @@
        function SetImg(appPath, id) {
            document.getElementById(id).src = appPath + 'WF/Img/Mail_Read.png';
        }
-
-       function GroupBarClick(groupName) {
+       //关闭流程展示
+       function GroupBarClick(groupName, sortNo) {
 
            var alt = document.getElementById('Img' + groupName).alert;
            var sta = 'block';
@@ -43,20 +43,65 @@
            document.getElementById('Img' + groupName).src = './Img/' + alt + '.gif';
            document.getElementById('Img' + groupName).alert = alt;
 
-           var i = 0;
-           for (i = 0; i <= 600; i++) {
+           //找出它的子级
+           var chilSorts = $.grep(dtSort, function (item) {
+               return item.ParentNo == sortNo;
+           });
+           //对子级内的展示的流程进行关闭
+           chilSorts.forEach(function (item, index) {
+               //获取子级的流程
+               var chilFlows = $.grep(dtStart, function (chils) {
+                   return chils.FK_FlowSort == item.No;
+               });
 
-               var row = document.getElementById(groupName + i);
+               //先判断存不存在下属流程
+               if (chilFlows.length <= 0)
+                   return;
 
-               if (row == null || row == undefined || row.style == null)
-                   continue;
+               var chAlt = document.getElementById('Img' + item.Name).alert;
+               var chSta = 'block';
+               if (chAlt == 'Max') {
+                   chSta = 'block';
+                   chAlt = 'Min';
+               } else {
+                   chSta = 'none';
+                   chAlt = 'Max';
+               }
+
+               document.getElementById('Img' + item.Name).src = './Img/' + chAlt + '.gif';
+               document.getElementById('Img' + item.Name).alert = chAlt;
+
+               //关闭子级的流程
+               chilFlows.forEach(function (chf, i) {
+                   var chTrRow = document.getElementById(chf.FK_FlowSort + chf.No);
+                   if (chTrRow == null || chTrRow == undefined || chTrRow.style == null)
+                       return;
+
+                   if (chSta == 'block') {
+                       chTrRow.style.display = '';
+                   } else {
+                       chTrRow.style.display = chSta;
+                   }
+               });
+
+           });
+
+           //找出当前的流程
+           var flows = $.grep(dtStart, function (item) {
+               return item.FK_FlowSort == sortNo;
+           });
+           //将当前类型下的展示的流程全部关闭
+           flows.forEach(function (item, index) {
+               var trRow = document.getElementById(sortNo + item.No);
+               if (trRow == null || trRow == undefined || trRow.style == null)
+                   return;
 
                if (sta == 'block') {
-                   row.style.display = '';
+                   trRow.style.display = '';
                } else {
-                   row.style.display = sta;
+                   trRow.style.display = sta;
                }
-           }
+           });
        }
        function WinOpenIt(url) {
            //窗口最大化e
@@ -155,7 +200,8 @@
 
             $("#Msg").html("");
         });
-
+        var dtSort; //类别.
+        var dtStart; //发起的流程.
         //初始化数据.
         function InitPage() {
 
@@ -174,8 +220,8 @@
 
                     data = JSON.parse(data);
 
-                    var dtSort = data["Sort"]; //类别.
-                    var dtStart = data["Start"]; //发起的流程.
+                    dtSort = data["Sort"]; //类别.
+                    dtStart = data["Start"]; //发起的流程.
 
                     var myNum = 0;
                     var is1 = false;
@@ -201,9 +247,58 @@
                         if (sortName == "" || sortName == null)
                             continue;
 
-                        var grouStr = "<tr  onclick=\"GroupBarClick('" + sortName + "')\" > <th colspan=6 class=Sum > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + sortName + "'   border=0 /> " + sortName + "</th> </tr>";
+                        var grouStr = "<tr  onclick=\"GroupBarClick('" + sortName + "','" + sortNo + "')\" > <th colspan=6 class=Sum > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + sortName + "'   border=0 /> " + sortName + "</th> </tr>";
                         $("#Table1 tr:last").after(grouStr);
 
+                        //找出它的子级
+                        var chilSorts = $.grep(dtSort, function (item) {
+                            return item.ParentNo == sortNo;
+                        });
+                        //增加一个子级类型
+                        chilSorts.forEach(function (item, index) {
+                            //找出所属子级的流程
+                            var chilFlows = $.grep(dtStart, function (chils) {
+                                return chils.FK_FlowSort == item.No;
+                            });
+                            //如果存在，再添加这个子类别
+                            if (chilFlows.length > 0) {
+                                var chilGroupStr = "<tr  onclick=\"GroupBarClick('" + item.Name + "','" + item.No + "')\" > <th colspan=6 class=Sum > <div style='text-align:left; float:left;margin-left: 30px;' > <img src='Style/Min.gif' alert='Min' id='Img" + item.Name + "'   border=0 /> " + item.Name + "</th> </tr>";
+                                $("#Table1 tr:last").after(chilGroupStr);
+                            }
+
+                            //将子类别的流程，显示在此类别下
+                            chilFlows.forEach(function (ch, i) {
+                                myNum++;
+                                var newRow = "";
+                                if (is1 == true) {
+                                    newRow += "<tr bgcolor=AliceBlue id='" + item.No + ch.No + "'>";
+                                    is1 = false;
+                                }
+                                else {
+                                    newRow += "<tr bgcolor=white id='" + item.No + ch.No + "' >";
+                                    is1 = true;
+                                }
+
+                                newRow += "<td class=Idx >" + myNum + "</td>";
+                                newRow += "<td width='300px'> <a style='margin-left: 30px;' href=\"javascript:WinOpenStartFlow('" + ch.No + "');\" ><img src='./Img/Flow1.png' style='width:15px;' /> " + ch.No + "." + ch.Name + "</a></td>";
+
+                                var extHtml = "";
+                                if (ch.IsBatchStart == "1")
+                                    extHtml = " - <a href=\"javascript:WinOpenBatch('" + ch.No + "');\" >批量发起</a>";
+
+                                newRow += "<td> <a href=\"javascript:WinOpenStartFlow('" + ch.No + "');\" >发起申请</a>" + extHtml + "</td>";
+
+                                newRow += "<td> <a href=\"javascript:WinOpenStart('" + ch.No + "');\" ><img src='./Img/Start.png' style='width:15px;' />我发起的流程</a></td>";
+                                newRow += "<td> <a href=\"javascript:WinOpenJoin('" + ch.No + "');\" ><img src='./Img/check.png' style='width:15px;' />我审批的流程</a></td>";
+
+                                newRow += "<td> <a href=\"javascript:WinOpenSearch('" + ch.No + "');\" ><img src='./Img/Home.gif' style='width:15px;' />查询主页</a></td>";
+
+                                newRow += "</tr>";
+
+                                $("#Table1 tr:last").after(newRow);
+                            });
+
+                        });
                         //增加处理.
                         for (var idx = 0; idx < dtStart.length; idx++) {
 
@@ -215,11 +310,11 @@
                             myNum++;
                             var newRow = "";
                             if (is1 == true) {
-                                newRow += "<tr bgcolor=AliceBlue id='" + sortName + myNum + "' >";
+                                newRow += "<tr bgcolor=AliceBlue id='" + sortNo + flow.No + "'>";
                                 is1 = false;
                             }
                             else {
-                                newRow += "<tr bgcolor=white id='" + sortName + myNum + "' >";
+                                newRow += "<tr bgcolor=white id='" + sortNo + flow.No + "' >";
                                 is1 = true;
                             }
 

@@ -54,7 +54,7 @@ namespace CCFlow.WF.MapDef
             string myEvent = this.Event;
             BP.WF.XML.EventListDtl myEnentXml = null;
 
-            this.Pub1.Add("<a href='http://ccflow.org' target=_blank ><img src='../../DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png' /></a>");
+            this.Pub1.Add("<a href='http://ccflow.org' target=_blank ><img src='../DataUser/ICON/" + SystemConfig.CustomerNo + "/LogBiger.png' /></a>");
             this.Pub1.AddUL();
             foreach (BP.WF.XML.EventListDtl xml in xmls)
             {

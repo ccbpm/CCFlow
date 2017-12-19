@@ -240,9 +240,10 @@ namespace BP.WF.HttpHandler
                     case StartGuideWay.BySystemUrlOneEntity:
                         josnData = BP.Tools.FormatToJson.ToJson(dt);
                         break;
+                    case StartGuideWay.BySQLMulti:
+                        josnData = BP.Tools.FormatToJson.ToJson(dt);
+                        break;
                     default:
-                        //绑定多个.
-                        //增加启动流程.
                         break;
                 }
                 return josnData;
@@ -308,8 +309,11 @@ namespace BP.WF.HttpHandler
                         }
                         return "url@StartGuide.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     case StartGuideWay.BySystemUrlOneEntity:
+                        return "url@StartGuideEntities.htm?StartGuideWay=BySystemUrlOneEntity&FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     case StartGuideWay.BySQLOne:
-                        return "url@StartGuideEntities.htm?FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                        return "url@StartGuideEntities.htm?StartGuideWay=BySQLOne&FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
+                    case StartGuideWay.BySQLMulti:
+                        return "url@StartGuideEntities.htm?StartGuideWay=BySQLMulti&FK_Flow=" + this.currFlow.No + "&WorkID=" + workid;
                     case StartGuideWay.BySelfUrl: //按照定义的url.
                         return "url@" + this.currFlow.StartGuidePara1 + this.RequestParas + "&WorkID=" + workid;
                     case StartGuideWay.ByFrms: //选择表单.
@@ -1500,6 +1504,44 @@ namespace BP.WF.HttpHandler
 
                 return "err@发送工作出现错误:" + ex.Message;
             }
+        }
+        /// <summary>
+        /// 批量发送
+        /// </summary>
+        /// <returns></returns>
+        public string StartGuide_MulitSend()
+        {
+            //获取设置的数据源
+            Flow fl = new Flow(this.FK_Flow);
+            string key = this.GetRequestVal("TB_Key");
+            string SKey = this.GetRequestVal("Keys");
+            string sql = "";
+            //判断是否有查询条件
+            sql = fl.StartGuidePara2.Clone() as string;
+            if (!string.IsNullOrWhiteSpace(key))
+            {
+                sql = fl.StartGuidePara1.Clone() as string;
+                sql = sql.Replace("@Key", key);
+            }
+            //替换变量
+            sql = sql.Replace("~", "'");
+            sql = sql.Replace("@WebUser.No", WebUser.No);
+            sql = sql.Replace("@WebUser.Name", WebUser.Name);
+            sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+            sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
+
+            DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            //获取选中的数据源
+            DataRow[] drArr = dt.Select("No in(" + SKey.TrimEnd(',') + ")");
+
+            //获取Nos
+            string Nos = "";
+            for (int i = 0; i < drArr.Length; i++)
+            {
+                DataRow row = drArr[i];
+                Nos += row["No"]+",";
+            }
+            return Nos.TrimEnd(',');
         }
         /// <summary>
         /// 保存

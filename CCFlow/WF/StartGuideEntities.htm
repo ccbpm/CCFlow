@@ -22,6 +22,8 @@
         var WorkID = GetQueryString("WorkID");
         //节点编号
         var FK_Node = parseInt(GetQueryString("FK_Flow") + "01");
+        //前置导航的模式
+        var StartGuideWay = GetQueryString("StartGuideWay");
 
         $(function () {
             var url = MyFlow + "?DoType=StartGuide_Init&" + str + "&m=" + Math.random();
@@ -36,6 +38,36 @@
             var url = MyFlow + "?DoType=StartGuide_Init&" + str + "&Keys=" + key + "&m=" + Math.random();
             //执行查询
             StartGuide_Init(url, FK_Flow, FK_Node, WorkID);
+        }
+        //发起
+        function SendMulit() {
+            var rdVal ="";
+            var cbVal = "";
+            $("input[name='BySQLMulti']:checked").each(function () {
+                cbVal = "'"+$(this).val() + "'," + cbVal+"";
+            });
+            rdVal = cbVal;
+            rdVal = rdVal.replace("undefined", "");
+
+            var url = MyFlow + "?DoType=StartGuide_MulitSend&" + str + "&Keys=" + rdVal + "&m=" + Math.random();
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        _Html += "<tr><td>";
+                        _Html += "" + data + "";
+                        _Html += "</td></tr>";
+                    }
+                    else {
+                        var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&Nos=" + data + "&IsCheckGuide=1";
+                        window.location.href = href;
+                    }
+                }
+            });
         }
         //加载方法
         function StartGuide_Init(url,FK_Flow,FK_Node,WorkID) {
@@ -78,7 +110,14 @@
                             }
                             //添加要显示的数据
                             _Html += "<tr>";
-                            _Html += "<td class='Idx' nowrap>" + (parseInt(i) + parseInt(1)) + "</td>";
+
+                            //如果是SQL多条模式，增加勾选框
+                            if (StartGuideWay == "BySQLMulti") {
+                                _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["NO"] + "' id='" + data[i]["NO"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                            }
+                            else {
+                                _Html += "<td class='Idx' nowrap>" + (parseInt(i) + parseInt(1)) + "</td>";
+                            }
 
                             //根据sql查询的列名，依次显示，并对应列名
                             for (var v in data[i]) {
@@ -90,9 +129,16 @@
                                         key = data[i]["NO"];
 
                                     _Html += "<td nowrap>";
-                                    _Html += "   <a href='" + href + "&KeyNo=" + key + "' target='_self'>";
-                                    _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
-                                    _Html += "</a></td>";
+                                    //如果是SQL多条模式，去掉超链接
+                                    if (StartGuideWay == "BySQLMulti") {
+                                        _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
+                                    }
+                                    else {
+                                        _Html += "   <a href='" + href + "&KeyNo=" + key + "' target='_self'>";
+                                        _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
+                                        _Html += "</a>";
+                                    }
+                                    _Html += "</td>";
                                 }
                                 else {
                                     _Html += "<td nowrap> " + data[i][v] + "</td>"; //显示其他列
@@ -106,6 +152,11 @@
                     $('#dataList').html([
                         _Html
                     ].join(''));
+                    //如果是SQL多条模式，增加发送按钮
+                    if (StartGuideWay == "BySQLMulti") {
+                        var sendMultiHtml = "<tr><td><input type='button' name='pub_Send' value='发起' id='Btn_Send' onclick='SendMulit()'/></td></tr>";
+                        $("#mainTable tr:last").after(sendMultiHtml);
+                    }
                 }
             });
         }

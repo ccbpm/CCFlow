@@ -54,6 +54,10 @@
             }
         }
 
+		function setIframeHeight() {
+			$("#" + window.frameElement.getAttribute("id"), parent.document).height(Math.max($(document).height(), $("body").height()) + ($(".Idx").length * 2));
+		}
+
         $(function () {
             //是字段的扩展属性访问页面时
             if (GetQueryString('IsExtend') != undefined && GetQueryString('IsExtend')=="1") {
@@ -62,6 +66,8 @@
             }
             //$('#bar').css('display', 'block');
             $('#btn_Colse').bind('click', close);
+
+			setIframeHeight();
         });
     </script>
     <style type="text/css">

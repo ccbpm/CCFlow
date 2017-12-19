@@ -314,7 +314,7 @@ namespace BP.WF
             switch (at)
             {
                 case ActionType.Forward:
-                    return "前进";
+                    return "发送";
                 case ActionType.Return:
                     return "退回";
                 case ActionType.ReturnAndBackWay:
@@ -326,7 +326,7 @@ namespace BP.WF
                 case ActionType.Start:
                     return "发起";
                 case ActionType.UnSend:
-                    return "撤消发起";
+                    return "撤消发送";
                 case ActionType.ForwardFL:
                     return " -前进(分流点)";
                 case ActionType.ForwardHL:

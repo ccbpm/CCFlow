@@ -1095,6 +1095,16 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(dtTrack);
             }
 
+            //加入常用短语.
+            if (isReadonly == false && 1==2)
+            {
+                string tTable = "ND" + int.Parse(FK_Flow) + "Track";
+                string sql = "SELECT distinct a.Msg FROM " + tTable + " WHERE ActionType=22 AND EmpFrom='" + BP.Web.WebUser.No + "' ORDER BY RDT DESC";
+                DataTable dtInfos = DBAccess.RunSQLReturnTable(sql);
+                dtInfos.TableName = "CheckItems";
+                ds.Tables.Add(dtInfos);
+            }
+
             return BP.Tools.Json.ToJson(ds);
         }
         /// <summary>

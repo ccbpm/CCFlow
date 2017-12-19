@@ -4997,6 +4997,10 @@ namespace BP.WF
             //设置为未读.
             BP.WF.Dev2Interface.Node_SetWorkUnRead(this.HisGenerWorkFlow.WorkID);
 
+            //删除回签人的信息在generworkerlist里面，不然就会显示到他的下一级的退回列表里.
+            string sql = "DELETE FROM WF_GenerWorkerList WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.HisNode.NodeID + " AND FK_Emp!='" + gwl.FK_Emp + "'";
+            DBAccess.RunSQL(sql);
+
             //设置最后处理人.
             this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp + "," + gwl.FK_EmpText + ";";
             this.HisGenerWorkFlow.Update();
@@ -5014,7 +5018,7 @@ namespace BP.WF
                 /*如果是按照时效考核.*/
 
                 //获得最后一次执行会签的时间点.
-                string sql = "SELECT RDT FROM ND"+int.Parse(this.HisNode.FK_Flow)+"TRACK WHERE WorkID=" + this.WorkID + " AND ActionType=30 ORDER BY RDT";
+                  sql = "SELECT RDT FROM ND"+int.Parse(this.HisNode.FK_Flow)+"TRACK WHERE WorkID=" + this.WorkID + " AND ActionType=30 ORDER BY RDT";
                 string lastDTOfHuiQian = DBAccess.RunSQLReturnStringIsNull(sql, null);
 
                 //取出来下达给主持人的时间点.

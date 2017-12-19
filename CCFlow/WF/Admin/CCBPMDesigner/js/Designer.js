@@ -45,7 +45,7 @@ $(function () {
 //初始化右键菜单
 function InitContexMenu() {
 
-	// 节点双击打开属性
+	// 连线双击打开设置条件/节点双击打开属性
 	$("#a").bind("dblclick", function (e) {
 		var coords = getCanvasXY(e);
         var x = coords[0];
@@ -57,21 +57,27 @@ function InitContexMenu() {
 		var cId = CONNECTOR_MANAGER.connectorGetByXY(x, y);
 		// check if we clicked a connector
         if (cId != -1) {
-			
+			textPrimitiveId = 0; // (0 by default)
+			Line_MenusFuns({
+				"iconCls" : "icon-edit",
+				"name" : "linecondition"
+			}, cId);
 		} else {
 			var fId = STACK.figureGetByXY(x, y);
 			$("#HD_BPMN_NodeID").val("");
 			$("#HD_BPMN_FigureID").val(fId);
 			var figure = STACK.figureGetById(fId);
-			var bpm_Node = figure.CCBPM_OID;
-			if (bpm_Node) {
-				$("#HD_BPMN_NodeID").val(bpm_Node);
+			if (figure) {
+				var bpm_Node = figure.CCBPM_OID;
+				if (bpm_Node) {
+					$("#HD_BPMN_NodeID").val(bpm_Node);
+				}
+				// 对应Designer.htm:196菜单div#nodeMenu子项div的data-options属性
+				NodeProperty_Funs({
+					"iconCls" : "icon-edit",
+					"name" : "NodeProperty"
+				});
 			}
-			// 对应Designer.htm:196菜单div#nodeMenu子项div的data-options属性
-			NodeProperty_Funs({
-				"iconCls" : "icon-edit",
-				"name" : "NodeProperty"
-			});
 		}
 	});
 
@@ -313,6 +319,35 @@ function Line_MenusFuns(item, cId) {
                 });
             }
             break;
+		case "rename" :
+			var connector = CONNECTOR_MANAGER.connectorGetById(cId);
+			shape = connector;
+			textPrimitiveId = 0; // (0 by default)
+			if (textPrimitiveId != -1) {
+				// if group selected
+				if (state == STATE_GROUP_SELECTED) {
+					var selectedGroup = STACK.groupGetById(selectedGroupId);
+					// if group is temporary then destroy it
+					if (!selectedGroup.permanent) {
+						STACK.groupDestroy(selectedGroupId);
+					}
+					//deselect current group
+					selectedGroupId = -1;
+				}
+				// deselect current figure
+				selectedFigureId = -1;
+				// deselect current container
+				selectedContainerId = -1;
+				// deselect current connector
+				selectedConnectorId = -1;
+				// set current state
+				state = STATE_TEXT_EDITING;
+				// set up text editor
+				setUpTextEditorPopup(shape, textPrimitiveId);
+				redraw = true;
+			}
+			draw();
+			break;
         case "deleteline":
             CONNECTOR_MANAGER.connectorRemoveById(cId, true);
             state = STATE_NONE;

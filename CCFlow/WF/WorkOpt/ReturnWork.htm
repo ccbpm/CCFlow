@@ -103,11 +103,20 @@
             $('.foot input').css('background', 'gray');
 
             var selectedNodeID = $('#DDL_Nodes').val();
+
+
+            var val = escape($('#TB_Doc').val());
+            if (val == null || val == "" || val == undefined) {
+                alert("请输入退回原因.");
+                return;
+            }
+
             
             if (selectedNodeID == null || selectedNodeID == undefined || selectedNodeID=="") {
                 alert('请选择要退回的节点');
                 return;
             }
+
 
             $.ajax({
                 type: 'post',

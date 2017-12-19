@@ -1,6 +1,10 @@
 ﻿
 function InitPage() {
 
+    var isMobile = GetQueryString('IsMobile');
+    if (isMobile == null || isMobile == undefined || isMobile == "")
+        isMobile = 0;
+
     //加载标签页
     $.ajax({
         type: 'post',
@@ -50,160 +54,59 @@ function InitPage() {
                 }
             }
 
-            //输出列表.
+            //输出列表. zhoupeng 2017-12-19 修改算法，所有的审核动作都依靠发送来显示.
             for (var i = 0; i < tracks.length; i++) {
 
                 var track = tracks[i];
                 if (track.FID != 0)
                     continue;
 
-                //如果是协作发送，就不输出他. edit 2016.02.20 .BBS也不显示，added by liuxc,2016-12-15
-                if (track.ActionType == ActionType.TeampUp
-                || track.ActionType == ActionType.UnSend //撤销的不现实.
-                || track.ActionType == ActionType.FlowBBS)
+                if (track.ActionType == ActionType.FlowBBS)
                     continue;
-
-                //如果有审核组件, 发送信息都不显示,可以显示会签，流程完成信息.
-                if (isHaveCheck == true && idx > 1) {
-
-                    //所有前进的信息，都不显示.
-                    if (track.ActionType == ActionType.Forward
-                                    || track.ActionType == ActionType.ForwardAskfor
-                                    || track.ActionType == ActionType.ForwardFL
-                                    || track.ActionType == ActionType.ForwardHL) {
-
-                        if (trackDotOfForward && trackDotOfForward.NDFrom != track.NFrom) {
-                            trackDotOfForward = track;
-                        }
-                        continue; //都不显示他.
-                    }
-                }
-
-                // 记录审核节点。
                 if (track.ActionType == ActionType.WorkCheck)
-                    checkStr = track.NDFrom; //记录当前的审核节点id.
-
-                //审核信息过滤,如果到达了该节点, 1.当前节点没有完成.  2.当前流程没有走完.  3.
-                if (track.ActionType == ActionType.WorkCheck
-                && gwf.FK_Node == track.NDFrom
-                && gwf.WFState != 3 && gwls != undefined) {
-                    //如果当前节点与审核信息节点一致，就说明当前人员的审核意见已经保存，但是工作还没有发送,就不让他显示。
-
-                    var isChecked = false;
-                    for (var idxOfGWL = 0; idxOfGWL < gwls.length; idxOfGWL++) {
-                        var gwl = gwls[idxOfGWL];
-
-                        if (gwl.FK_Node != track.NDFrom)
-                            continue;
-
-                        if (gwl.FK_Emp != track.EmpFrom)
-                            continue;
-
-                        if (gwl.IsPass == "1") {
-                            isChecked = true;
-                            break;
-                        }
-                    }
-
-                    //如果他没有审核，就不让他显示.
-                    if (isChecked == false)
-                        continue;
-                } // end 审核信息过滤 , 排除在审批中，并且没有发送的节点.
-
-
-                //前进.
-                if (track.ActionType == ActionType.Forward) {
-                    if (checkStr == track.NDFrom)
-                        continue;
-                }
-
-                var rdt = track.RDT;
-                if (timeDay == "") {
-
-                    timeDay = rdt.substring(0, 10);
-                    dotColor = dotColor + 1;
-                    if (dotColor == 3)
-                        dotColor = 1;
-
-                    var rowDay = "<tr>";
-                    rowDay += "<td colspan=3 class=TDDay ><b>" + timeDay + "</b></td>";
-                    rowDay += "</tr>";
-                    $("#Table1 tr:last").after(rowDay);
-
-                } else if (rdt.indexOf(timeDay) != 0) {
-
-                    timeDay = rdt.substring(0, 10);
-
-                    dotColor = dotColor + 1;
-                    if (dotColor == 3)
-                        dotColor = 1;
-
-                    var rowDay = "<tr>";
-                    rowDay += "<td colspan=3 class=TDDay ><b>" + timeDay + "</b></td>"
-                    rowDay += "</tr>";
-                    $("#Table1 tr:last").after(rowDay);
-                }
-
-                //左边的日期点.
-                var left = "";
-                left = rdt.substring(10, 16);
-                left = left.replace(':', '时');
-                left = left + "分";
-
-                left += "<br><img src='../../../DataUser/UserIcon/" + track.EmpFrom + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' /><br>" + track.EmpFromT;
+                    continue;
 
                 //时间轴.
                 var timeBase = "";
-                var imgUrl = ActionTypeStr(track.ActionType);
-                timeBase = "<img src='" + imgUrl + "' width='10px;' class='ImgOfAC' alt='" + track.ActionTypeText + "'  />";
+                var img = ActionTypeStr(track.ActionType);
+                img = "<img src='" + img + "' width='10px;' class='ImgOfAC' alt='" + track.ActionTypeText + "'  />";
 
                 //内容.
                 var doc = "";
-                // doc += "<img src='../../Img/TolistSta/" + dotColor + ".png' />" + track.NDFromT + " - " + timeBase + track.ActionTypeText;
-                doc += timeBase + track.NDFromT + " - " + track.ActionTypeText;
-
-
+                doc += img + track.NDFromT + " - " + track.ActionTypeText;
                 var at = track.ActionType;
 
-                //如果是第一节点，就把他设置为到达节点.
-                if (idx == 1 || idx == 0) {
-                    trackDotOfForward = track;
-                }
-
-                //增加两列，到达时间、用时 added by liuxc,2014-12-4
-                if (idx > 1 && 1 == 2) {
-
-                    //求时间点track.
-
-                    //求当前节点执行会签的tack, 如果没有就去当前节点上一个节点发送track.
-                    if (track.ActionType == ActionType.Forward
-                                    || track.ActionType == ActionType.ForwardAskfor
-                                    || track.ActionType == ActionType.ForwardFL
-                                    || track.ActionType == ActionType.ForwardHL) {
-                        trackDotOfForward = track;
-                    }
-
-                    if (trackDotOfForward) {
-                        //到达时间.
-                        var toTime = trackDotOfForward.RDT;
-                        var toTimeDot = toTime.replace(/\-/g, "/");
-                        toTimeDot = new Date(toTimeDot);
-
-                        //当前发生日期.
-                        var timeDot = track.RDT.replace(/\-/g, "/");
-                        timeDot = new Date(timeDot);
-
-                        doc += "<br>到达时间:<font color=green>" + toTime + "</font>用时：<font color=green>" + GetSpanTime(toTimeDot, timeDot) + "</font>";
-
-                    }
-                }
-
                 if (at == ActionType.Return) {
-                    doc += "<p><span>退回到:</span><font color=green>" + track.NDToT + "</font></p>";
-                    doc += "<p><span>退回给:</span><font color=green>" + track.EmpToT + "</font> </p>";
+                    doc += "<p><span>退回到:</span><font color=green>" + track.NDToT + "</font><span>退回给:</span><font color=green>" + track.EmpToT + "</font></p>";
                     doc += "<p><span>退回意见如下</span> ----- </p>";
                 }
 
+                if (at == ActionType.Forward ) {
+                    doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
+
+                    //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
+                    for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
+
+                        var checkTrack = tracks[myIdx];
+                        if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                            doc += "<p><span>审批意见：</span><font color=green>" + checkTrack.Msg + "</font> </p>";
+                        }
+                    }
+                }
+
+                //协作发送.
+                if (at == ActionType.TeampUp) {
+
+                    for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
+
+                        var checkTrack = tracks[myIdx];
+                        if (checkTrack.NDFrom == track.NDFrom && checkTrack.ActionType == ActionType.WorkCheck && checkTrack.EmpFrom == track.EmpFrom) {
+                            doc += "<p><span>会签意见：</span><font color=green>" + checkTrack.Msg + "</font> </p>";
+                        }
+                    }
+                }
+
+                //输出备注信息.
                 var tag = track.Tag;
                 if (tag != null)
                     tag = tag.replace("~", "'");
@@ -220,9 +123,11 @@ function InitPage() {
                     doc += "</p>";
                 }
 
+
+                //输出row
                 var newRow = "";
                 newRow = "<tr  title='" + track.ActionTypeText + "' >";
-                newRow += "<td class='TDTime' >" + left + "</td>";
+                newRow += "<td class='TDTime' >" + GenerLeftIcon(track) + "</td>";
                 newRow += "<td class='TDBase' ></td>";
                 newRow += "<td class='TDDoc' >" + doc + "</td>";
                 newRow += "</tr>";
@@ -333,6 +238,19 @@ function InitPage() {
             }
         }
     });
+}
+
+//生成左边的icon.
+function GenerLeftIcon(track) {
+    //左边的日期点.
+    var left = "<center>";
+    left = track.RDT.substring(10, 16);
+    left = left.replace(':', '时');
+    left = left + "分";
+    left += "<br><img src='../../../DataUser/UserIcon/" + track.EmpFrom + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
+    left += "<br>" + track.EmpFromT + "&nbsp;&nbsp;&nbsp;";
+    left += "</center>";
+    return left;
 }
 
 function GetSpanTime(date1, date2) {

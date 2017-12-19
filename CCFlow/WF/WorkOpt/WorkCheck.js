@@ -1,5 +1,8 @@
 ﻿
-/*目的是为了手机也可通用此脚本.*/
+/*
+目的是为了手机也可通用此脚本.
+注意不要在手机端修改.
+*/
         var init;
         var wcDesc;
         var tks;
@@ -109,11 +112,26 @@
                             msg = msg.replace('<BR>', '\t\n');
                         }
 
-                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height=\"60px\";this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
+                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height='60px';this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
                         html += msg;
                         html += "</textarea>";
 
+                     //   var ss = "CheckItems";
+
+                        //加入常用短语.
+                        html += "<br>";
+                        html += "<select id='DuanYu' onchange='SetDocVal()' >";
+                        html += "<option value=''>常用短语</option>";
+                        html += "<option value='同意'>同意</option>";
+                        html += "<option value='同意办理'>同意办理</option>";
+                        html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
+                        html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
+                        html += "<option value='不同意'>不同意</option>";
+                        html += "</select>";
+
                         html += "</div>";
+
+
 
                         html += "</td>";
                     }
@@ -169,12 +187,11 @@
                             if (st.No != this.EmpFrom)
                                 continue;
 
-                            //  alert(st.SignType);
+                            var rdt = this.RDT.substring(0, 16);
 
 
                             if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
 
-                                var rdt = this.RDT.substring(0, 16);
 
                                 html += "<tr>";
                                 html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
@@ -186,9 +203,9 @@
 
                             if (st.SignType == 1) {
                                 html += "<tr>";
-                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
+                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
                                     + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
-                                    + " <div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</div></td>";
+                                    + " <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
                                 html += "</tr>";
                                 break;
                             }
@@ -196,9 +213,9 @@
                             if (st.SignType == 2) {
 
                                 html += "<tr>";
-                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'>签名:"
+                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
                                     + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
-                                    + " <div style='float:right' >日期:" + (this.IsDoc ? "<span id='rdt'>" : "") + this.RDT + (this.IsDoc ? "</span>" : "") + "</div></td>";
+                                    + " <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
                                 html += "</tr>";
 
                                 //  alert('电子签名的逻辑尚未编写.');
@@ -228,6 +245,17 @@
             }, this);
         }
 
+        function SetDocVal() {
+
+            var objS = document.getElementById("DuanYu");
+            var val = objS.options[objS.selectedIndex].value;
+
+            if (val == "")
+                return;
+
+            document.getElementById("WorkCheck_Doc").value = val;
+
+        }
 		function setIframeHeight() {
 			$("#" + window.frameElement.getAttribute("id"), parent.document).height($("body").height());
 		}

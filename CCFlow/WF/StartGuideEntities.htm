@@ -3,28 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <title>驰骋工作流</title>
+    <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
     <!-- 引用通用的js文件. -->
-    <script type="text/javascript"   src="./Scripts/config.js" ></script>
+    <script type="text/javascript" src="./Comm/Gener.js"></script>
+    <script type="text/javascript" src="./Scripts/config.js"></script>
     <script type="text/javascript" language="javascript" >
-        function Load() {
+        //页面启动函数.
+        var str = location.href; //取得整个地址栏
+        var num = str.indexOf("?")
+        str = str.substr(num + 1);
+        //流程编号
+        var FK_Flow = GetQueryString("FK_Flow");
+        //工作ID
+        var WorkID = GetQueryString("WorkID");
+        //节点编号
+        var FK_Node = parseInt(GetQueryString("FK_Flow") + "01");
 
-            var url = window.location.href;
-            if (plant == "CCFlow") {
-                url = url.replace('.htm', '.aspx');
-                window.location.href = url;
-                return;
-            } else {
-                url = url.replace('.htm', '.jsp');
-                window.location.href = url;
-                return;
-            }
+        $(function () {
+            var url = MyFlow + "?DoType=StartGuide_Init&" + str + "&m=" + Math.random();
+            //执行加载
+            StartGuide_Init(url, FK_Flow, FK_Node, WorkID);
+
+        });
+        //关键字查询
+        function KeyOfSearch() {
+            //获取要查询的关键字
+            var key = document.getElementById('TB_Key').value;
+            var url = MyFlow + "?DoType=StartGuide_Init&" + str + "&Keys=" + key + "&m=" + Math.random();
+            //执行查询
+            StartGuide_Init(url, FK_Flow, FK_Node, WorkID);
+        }
+        //加载方法
+        function StartGuide_Init(url,FK_Flow,FK_Node,WorkID) {
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+                    data = JSON.parse(data);
+                    //选中的超链接及参数
+                    var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&IsCheckGuide=1";
+                    var _Html = "";
+                    //判断是否出现异常
+                    if (data.indexOf('err@') == 0) {
+                        _Html += "<tr><td>";
+                        _Html += "" + data + "";
+                        _Html += "</td></tr>";
+                    }
+                    else {
+                        //循环取出来的数据
+                        for (var i in data) {
+                            var key; var Name;
+                            var thHtml = "<tr><th>Idx</th>";
+                            //如果是第一行，先生成table列名
+                            if (i < 1) {
+                                for (var k in data[i]) {
+                                    if (k == "NO") {//No这一列，不显示
+                                        key = data[i][k];
+                                    }
+                                    else if (k == "NAME") {
+                                        Name = data[i][k];
+                                        thHtml += "<th>NAME</th>";
+                                    }
+                                    else {
+                                        thHtml += "<th>" + k + "</th>";
+                                    }
+                                }
+                                _Html += thHtml + "</tr>";
+                            }
+                            //添加要显示的数据
+                            _Html += "<tr>";
+                            _Html += "<td class='Idx' nowrap>" + (parseInt(i) + parseInt(1)) + "</td>";
+
+                            //根据sql查询的列名，依次显示，并对应列名
+                            for (var v in data[i]) {
+                                if (v == "NO") {//此处No列不显示
+                                    key = data[i][v];
+                                }
+                                else if (v == "NAME") {
+                                    if (key.length < 0)//如果No没有在Name列之前，就去读josn中指定的对象值
+                                        key = data[i]["NO"];
+
+                                    _Html += "<td nowrap>";
+                                    _Html += "   <a href='" + href + "&KeyNo=" + key + "' target='_self'>";
+                                    _Html += "" + key + "-" + data[i][v] + ""; //No,Name一起显示在Name列中
+                                    _Html += "</a></td>";
+                                }
+                                else {
+                                    _Html += "<td nowrap> " + data[i][v] + "</td>"; //显示其他列
+                                }
+                            }
+
+                            _Html += "</tr>";
+                        }
+                    }
+                    //在容器中显示
+                    $('#dataList').html([
+                        _Html
+                    ].join(''));
+                }
+            });
         }
     </script>
 </head>
-<body  onload="Load()" >
+<body  >
 
 <form id="cc">
- <h2> 正在加载，请稍后。。。</h2>
+    <div id="mainPanel" region="center" border="true" class="mainPanel">
+        <table id="mainTable" style=" width:100%;">
+            <caption id="cap_Title"></caption>
+            <tbody>
+                <tr>
+                    <td class="ToolBar">
+                        输入关键字:
+                        <input name="TB_Key" type="text" id="TB_Key" />
+                        <input type="button" name="pub_Btn" value="查询" id="Btn_Search" onclick="KeyOfSearch()" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table id="dataList" style=" width:100%;">
+                            
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </form>
 
 </body>

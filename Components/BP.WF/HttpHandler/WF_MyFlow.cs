@@ -200,7 +200,58 @@ namespace BP.WF.HttpHandler
             BP.WF.Dev2Interface.Flow_DeleteSubThread(this.FK_Flow, this.WorkID, "手工删除");
             return "删除成功.";
         }
+        /// <summary>
+        /// 加载前置导航数据
+        /// </summary>
+        /// <returns></returns>
+        public string StartGuide_Init()
+        {
+            string josnData = "";
+            //流程编号
+            string fk_flow = this.GetRequestVal("FK_Flow");
+            //查询的关键字
+            string skey = this.GetRequestVal("Keys");
+            try
+            {
+                //获取流程实例
+                Flow fl = new Flow(fk_flow);
+                //获取设置的前置导航的sql
+                string sql = fl.StartGuidePara2.Clone() as string;
+                //判断是否有查询条件
+                if (!string.IsNullOrWhiteSpace(skey))
+                {
+                    sql = fl.StartGuidePara1.Clone() as string;
+                    sql = sql.Replace("@Key", skey);
+                }
+                sql = sql.Replace("~", "'");
+                //替换约定参数
+                sql = sql.Replace("@WebUser.No", WebUser.No);
+                sql = sql.Replace("@WebUser.Name", WebUser.Name);
+                sql = sql.Replace("@WebUser.FK_Dept", WebUser.FK_Dept);
+                sql = sql.Replace("@WebUser.FK_DeptName", WebUser.FK_DeptName);
 
+                //获取数据
+                DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+
+                //判断前置导航的类型
+                switch (fl.StartGuideWay)
+                {
+                    case StartGuideWay.BySQLOne:
+                    case StartGuideWay.BySystemUrlOneEntity:
+                        josnData = BP.Tools.FormatToJson.ToJson(dt);
+                        break;
+                    default:
+                        //绑定多个.
+                        //增加启动流程.
+                        break;
+                }
+                return josnData;
+            }
+            catch (Exception ex)
+            {
+                return "err@:" + ex.Message.ToString();
+            }
+        }
         /// <summary>
         /// 初始化(处理分发)
         /// </summary>
@@ -271,6 +322,12 @@ namespace BP.WF.HttpHandler
             //string appPath = BP.WF.Glo.CCFlowAppPath; //this.Request.ApplicationPath;
             //this.Page.Title = "第" + this.currND.Step + "步:" + this.currND.Name;
             #endregion 判断前置导航
+
+            #region 前置导航数据拷贝到第一节点
+            if (this.WorkID != 0 && this.context.Request.QueryString["IsCheckGuide"] != null)
+                BP.WF.Glo.StartGuidEnties(this.WorkID, this.FK_Flow, this.FK_Node, this.context.Request.QueryString["KeyNo"]);
+
+            #endregion
 
             #region 处理表单类型.
             if (this.currND.HisFormType == NodeFormType.SheetTree

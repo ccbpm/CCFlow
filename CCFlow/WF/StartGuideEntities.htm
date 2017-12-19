@@ -41,12 +41,15 @@
         }
         //发起
         function SendMulit() {
+            //获取选中的checkbox
             var rdVal ="";
             var cbVal = "";
+            //循环取值
             $("input[name='BySQLMulti']:checked").each(function () {
                 cbVal = "'"+$(this).val() + "'," + cbVal+"";
             });
             rdVal = cbVal;
+            //替换潜在的错误
             rdVal = rdVal.replace("undefined", "");
 
             var url = MyFlow + "?DoType=StartGuide_MulitSend&" + str + "&Keys=" + rdVal + "&m=" + Math.random();
@@ -57,12 +60,12 @@
                 url: url,
                 dataType: 'html',
                 success: function (data) {
+                    //出现异常，提示错误
                     if (data.indexOf('err@') == 0) {
-                        _Html += "<tr><td>";
-                        _Html += "" + data + "";
-                        _Html += "</td></tr>";
+                        alert(data);
                     }
                     else {
+                        //跳转
                         var href = "MyFlow.htm?FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&WorkID=" + WorkID + "&Nos=" + data + "&IsCheckGuide=1";
                         window.location.href = href;
                     }

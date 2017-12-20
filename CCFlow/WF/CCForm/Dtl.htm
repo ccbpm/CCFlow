@@ -1184,6 +1184,7 @@
                     var trData = $($('table tbody tr')[index]).data().data;
                     var rowData = trData;
 					if ($($('table tbody tr')[index]).data().customRowType == "statistics") {
+						needSaveCount--;
 						return;
 					}
                     rowData.DoType = "Dtl_SaveRow";

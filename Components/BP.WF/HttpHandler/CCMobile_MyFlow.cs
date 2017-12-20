@@ -49,7 +49,6 @@ namespace BP.WF.HttpHandler
             WF_MyFlow en = new WF_MyFlow(this.context);
             return en.MyFlow_Init();
         }
-
         public string MyFlow_StopFlow()
         {
             WF_MyFlow en = new WF_MyFlow(this.context);

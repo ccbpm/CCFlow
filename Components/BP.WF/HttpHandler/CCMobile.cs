@@ -75,7 +75,11 @@ namespace BP.WF.HttpHandler
             BP.WF.HttpHandler.WF_App_ACE ace = new WF_App_ACE(this.context);
             return ace.GetUserInfo();
         }
-
+        public string StartGuide_MulitSend()
+        {
+            WF_MyFlow en = new WF_MyFlow(this.context);
+            return en.StartGuide_MulitSend();
+        }
         public string Home_Init()
         {
             Hashtable ht = new Hashtable();

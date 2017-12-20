@@ -2395,6 +2395,7 @@ namespace BP.WF
                     if (!string.IsNullOrWhiteSpace(sql))
                     {
                         sql = sql.Replace("@Key", sKey);
+                        sql = sql.Replace("@key", sKey);
                         sql = sql.Replace("~", "'");
                     }
                     else

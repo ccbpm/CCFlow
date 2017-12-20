@@ -4975,11 +4975,12 @@ namespace BP.WF
         {
         }
         /// <summary>
-        /// 通知主持人
+        /// 通知主持人 @整体需要重新翻译.
         /// </summary>
         /// <returns></returns>
         private string DealAlertZhuChiRen()
         {
+
             /*有两个待办，就说明当前人员是最后一个会签人，就要把主持人的状态设置为 0 */
             //获得主持人信息.
             GenerWorkerList gwl = new GenerWorkerList();
@@ -5004,7 +5005,6 @@ namespace BP.WF
             //设置最后处理人.
             this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp + "," + gwl.FK_EmpText + ";";
             this.HisGenerWorkFlow.Update();
-
 
             #region 处理天业集团对主持人的考核.
             /*
@@ -5051,7 +5051,6 @@ namespace BP.WF
             #endregion 处理天业集团对会签人的考核.
 
             gwl.Update();
-
 
             return "您是最后一个会签该工作的处理人，已经提醒主持人(" + gwl.FK_Emp + "," + gwl.FK_EmpText + ")处理当前工作。";
         }

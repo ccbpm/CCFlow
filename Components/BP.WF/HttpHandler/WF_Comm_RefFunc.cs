@@ -1031,6 +1031,7 @@ namespace BP.WF.HttpHandler
             }
 
             jr.InnerData = dt;
+            jr.Msg = "";
             string re = Newtonsoft.Json.JsonConvert.SerializeObject(jr);
             if (Glo.Plant == BP.WF.Plant.JFlow)
             {

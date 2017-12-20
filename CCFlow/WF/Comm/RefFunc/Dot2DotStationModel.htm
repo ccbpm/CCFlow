@@ -182,6 +182,9 @@
 
                 var redata = eval('(' + data + ')');
                 nodestations = redata.InnerData;
+                if (nodestations == undefined || nodestations == 'undefined')
+                    redata = eval('(' + redata + ')');
+                    nodestations = redata.InnerData;
                 $("#save").linkbutton("enable");
                 ShowSelectedStations();
             }, this);

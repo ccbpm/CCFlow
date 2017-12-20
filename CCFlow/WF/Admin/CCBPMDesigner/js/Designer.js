@@ -712,7 +712,6 @@ function Conver_CCBPM_V1ToV2() {
 
         //循环连接线
         for (var lineIdx = 0; lineIdx < flow_Data.Direction.length; lineIdx++) {
-debugger
             var line = flow_Data.Direction[lineIdx];
             var fromFigureId = FigureIdGetByCCBPM_OID(line.NODE);
             var secondFigureId = FigureIdGetByCCBPM_OID(line.TONODE);

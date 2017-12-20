@@ -380,6 +380,9 @@ namespace BP.WF
                     //if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";") == false)
                     //    throw new Exception("您是会签主持人，您不能执行撤销。");
 
+                    var ds = BP.DA.DBAccess.lockRunSQL;
+
+
                     //如果是会签人，就让其显示待办.
                     gwl.IsPassInt = 0;
                     gwl.IsEnable = true;

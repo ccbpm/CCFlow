@@ -85,6 +85,9 @@ namespace BP.En
 		{
 			if (en.EnMap.EnType==EnType.View)
 				return 0;
+
+            var paras= SqlBuilder.GenerParas(en, keys);
+            string sql = en.SQLCash.GetUpdateSQL(en, keys);
             try
             {
                 switch (en.EnMap.EnDBUrl.DBUrlType)
@@ -95,7 +98,7 @@ namespace BP.En
                             case DBType.MSSQL:
                             case DBType.Oracle:
                             case DBType.MySQL:
-                                return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys), SqlBuilder.GenerParas(en, keys));
+                                return DBAccess.RunSQL(sql, paras);
                             case DBType.Informix:
                                 return DBAccess.RunSQL(en.SQLCash.GetUpdateSQL(en, keys), SqlBuilder.GenerParas_Update_Informix(en, keys));
                             case DBType.Access:

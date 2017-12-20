@@ -151,14 +151,7 @@ function Edit(fk_mapdata, mypk, ftype, gf) {
     // OpenEasyUiDialog(url, "dd", title, 730, 500);
     return;
 }
-
-function EditEnum(fk_mapdata, keyOfEn, mypk, enumKey, gf) {
-    var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
-
-    OpenEasyUiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
-        window.location.href = window.location.href;
-    });
-}
+ 
 
 function EditTable(fk_mapdata, keyOfEn, mypk, sfTable, gf) {
     var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=' + mypk + '&s=' + Math.random();

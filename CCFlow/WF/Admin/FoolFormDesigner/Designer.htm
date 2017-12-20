@@ -481,7 +481,7 @@
                     return tdUp + "<a href=\"javascript:Edit('" + attr.MyPK + "','" + attr.MyDataType + "','" + attr.GroupID + "','" + attr.LGType + "');\" > " + attr.Name + "</a>" + tdDown;
 
                 if (attr.LGType == 1)
-                    return tdUp + "<a href=\"javascript:EditEnum('" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
+                    return tdUp + "<a href=\"javascript:EditEnum('"+attr.FK_MapData+"','" + attr.MyPK + "','" + attr.KeyOfEn + "');\" > " + attr.Name + "</a>" + tdDown;
 
                 if (attr.LGType == 2)
                     return tdUp + "<a href=\"javascript:EditTable('" + attr.FK_MapData + "','" + attr.MyPK + "');\" > " + attr.Name + "</a>" + tdDown;
@@ -687,13 +687,15 @@
                 return;
             }
 
-            function EditEnum(mypk, keyOfEn) {
+            function EditEnum(fk_mapdata, mypk, keyOfEn) {
+
                 var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrEnums&PK=' + mypk + '&s=' + Math.random();
 
                 OpenEasyUiDialog(url, "eudlgframe", '枚举' + keyOfEn + '属性', 730, 500, "icon-property", true, null, null, null, function () {
                     window.location.href = window.location.href;
                 });
             }
+             
 
             function EditTable(fk_mapData, mypk, keyOfEn) {
 

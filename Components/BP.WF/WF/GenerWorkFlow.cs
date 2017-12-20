@@ -289,6 +289,7 @@ namespace BP.WF
         /// 数量
         /// </summary>
         public const string MyNum = "MyNum";
+
         #endregion
     }
 	/// <summary>

@@ -1706,7 +1706,7 @@ namespace BP.DA
         {
             if (sql == null || sql.Trim() == "")
                 return 1;
-
+                
             while (lockRunSQL == true)
             {
             };

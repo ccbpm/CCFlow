@@ -219,11 +219,11 @@ namespace BP.WF
         {
             get
             {
-                return this.GetValIntByKey(GenerWorkFlowAttr.PRI);
+                return this.GetValIntByKey(GenerWorkerListAttr.PRI);
             }
             set
             {
-                SetValByKey(GenerWorkFlowAttr.PRI, value);
+                SetValByKey(GenerWorkerListAttr.PRI, value);
             }
         }
         /// <summary>

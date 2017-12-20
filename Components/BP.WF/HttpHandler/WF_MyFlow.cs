@@ -654,6 +654,10 @@ namespace BP.WF.HttpHandler
                         string packUrl = "./WorkOpt/Packup.htm?FK_Node=" + this.FK_Node + "&WorkID=" + this.WorkID + "&FID=" + this.FID + "&FK_Flow=" + this.FK_Flow;
                         toolbar += "<input type=button name='PackUp'  value='" + btnLab.PrintZipLab + "' enable=true/>";
                     }
+
+                    if (btnLab.TrackEnable)
+                        toolbar += "<input type=button name='Track'  value='" + btnLab.TrackLab + "' enable=true onclick=\"WinOpen('" + appPath + "WF/WorkOpt/OneWork/OneWork.htm?CurrTab=Truck&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&FID=" + this.FID + "&FK_Node=" + this.FK_Node + "&s=" + tKey + "','ds'); \" />";
+
                     return toolbar;
                 }
                 #endregion 是否是会签.

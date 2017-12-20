@@ -365,29 +365,32 @@ namespace BP.WF
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
             #region 判断是否是会签状态,是否是会签人做的撤销.
-            GenerWorkerList gwl = new GenerWorkerList();
-          int i= gwl.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No, 
-                GenerWorkerListAttr.WorkID, this.WorkID,
-                GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+            if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)
+            {
+                GenerWorkerList gwl = new GenerWorkerList();
+                int i = gwl.Retrieve(GenerWorkerListAttr.FK_Emp, WebUser.No,
+                      GenerWorkerListAttr.WorkID, this.WorkID,
+                      GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
-          if (i != 0)
-          {
-              //可能是主持人，或者会签人.
+                if (i != 0)
+                {
+                    //可能是主持人，或者会签人.
 
-              //如果是主持人.
-              if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";") == false)
-                  throw new Exception("您是会签主持人，您不能执行撤销。");
+                    ////如果是主持人.
+                    //if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";") == false)
+                    //    throw new Exception("您是会签主持人，您不能执行撤销。");
 
-              //如果是会签人，就让其显示待办.
-              gwl.IsPassInt = 0;
-              gwl.Update();
+                    //如果是会签人，就让其显示待办.
+                    gwl.IsPassInt = 0;
+                    gwl.IsEnable = true;
+                    gwl.Update();
 
-              //在待办人员列表里加入他.
-              gwf.TodoEmps = gwf.TodoEmps  +BP.Web.WebUser.Name+ ";";
-              gwf.Update();
-              return "会签撤销成功...";
-          }
-
+                    //在待办人员列表里加入他.
+                    gwf.TodoEmps = gwf.TodoEmps + BP.Web.WebUser.Name + ";";
+                    gwf.Update();
+                    return "会签撤销成功...";
+                }
+            }
             #endregion 判断是否是会签状态,是否是会签人做的撤销.
 
 

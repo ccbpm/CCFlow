@@ -1513,7 +1513,7 @@ namespace BP.WF.HttpHandler
         {
             //获取设置的数据源
             Flow fl = new Flow(this.FK_Flow);
-            string key = this.GetRequestVal("TB_Key");
+            string key = this.GetRequestVal("Key");
             string SKey = this.GetRequestVal("Keys");
             string sql = "";
             //判断是否有查询条件

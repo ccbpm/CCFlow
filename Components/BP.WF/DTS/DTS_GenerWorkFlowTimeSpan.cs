@@ -9,12 +9,12 @@ using BP.Sys;
 namespace BP.WF.DTS
 {
     /// <summary>
-    /// 修复数据库 的摘要说明
+    /// 同步待办时间戳 的摘要说明
     /// </summary>
     public class DTS_GenerWorkFlowTimeSpan : Method
     {
         /// <summary>
-        /// 不带有参数的方法
+        /// 同步待办时间戳
         /// </summary>
         public DTS_GenerWorkFlowTimeSpan()
         {

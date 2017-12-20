@@ -8926,49 +8926,12 @@ namespace BP.WF
                 Paras ps = new Paras();
                 ps.SQL = "SELECT Val FROM Sys_GloVar WHERE No='" + timeKey + "'";
                 string time = DBAccess.RunSQLReturnStringIsNull(ps, null);
-                if (time == null)
-                {
-                    /*没有数据就说明没有执行过.*/
+                if (time != null)
+                    return;
 
-                    GloVar var = new GloVar();
-                    var.No = timeKey;
-                    var.Name = "预警信息发送 DTSWarningPM 调度";
-                    var.GroupKey = "WF";
-                    var.Val = timeKey;  //更新时间点.
-                    var.Note = "预警信息发送PM" + timeKey;
-                    var.Insert();
-
-
-                    /*查找一天预警1次的消息记录，并执行推送。*/
-                    string sql = "SELECT A.WorkID, A.Title, A.FlowName, A.TodoSta, B.FK_Emp, b.FK_EmpText, C.WAlertWay  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Node C  ";
-                    sql += " WHERE A.WorkID=B.WorkID AND A.FK_Node=C.NodeID AND a.TodoSta=1 AND ( C.WAlertRole=1 OR C.WAlertRole=2 ) ";
-                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        CHAlertWay way = (CHAlertWay)int.Parse(dr["WAlertWay"].ToString()); //提醒方式.
-                        Int64 workid = Int64.Parse(dr["WorkID"].ToString());
-                        string title = dr["Title"].ToString();
-                        string flowName = dr["FlowName"].ToString();
-                        string empNo = dr["FK_Emp"].ToString();
-                        string empName = dr["FK_EmpText"].ToString();
-
-                        BP.WF.Port.WFEmp emp = new Port.WFEmp(empNo);
-
-                        if (way == CHAlertWay.ByEmail)
-                        {
-                            string titleMail = "";
-                            string docMail = "";
-                            //  BP.WF.Dev2Interface.Port_SendEmail(emp.Email, titleMail, "");
-                        }
-
-                        if (way == CHAlertWay.BySMS)
-                        {
-                            string titleMail = "";
-                            string docMail = "";
-                            //BP.WF.Dev2Interface.Port_SendMsg(emp.Email, titleMail, "");
-                        }
-                    }
-                }
+                BP.WF.DTS.DTS_SendMsgToWarningWorker en = new DTS.DTS_SendMsgToWarningWorker();
+                en.Do();
+                 
             }
             #endregion
         }

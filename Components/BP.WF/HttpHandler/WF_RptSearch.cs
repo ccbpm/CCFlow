@@ -149,11 +149,12 @@ namespace BP.WF.HttpHandler
                     break;
                 case "ByTitle":
                     sql = "SELECT A.FlowName,A.NodeName,A.FK_Flow,A.FK_Node,A.WorkID,A.Title,A.Starter,A.RDT,A.WFSta,A.Emps, A.TodoEmps, A.WFState ";
-                    sql += " FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B ";
+                    sql += " FROM WF_GenerWorkFlow A ";
                     sql += " WHERE A.Title LIKE '%" + keywords + "%' ";
                     sql += " AND A.Title LIKE '%" + keywords + "%' ";
-                    sql += " AND ( A.Emps LIKE '@%" + WebUser.No + "%' OR B.FK_Emp='" + WebUser.No + "') ";
-                    sql += " AND A.WorkID=B.WorkID ";
+                    sql += " AND A.Emps LIKE '@%" + WebUser.No + "%' ";
+                    // sql += " AND ( A.Emps LIKE '@%" + WebUser.No + "%' OR B.FK_Emp='" + WebUser.No + "') ";
+                  //  sql += " AND A.WorkID=B.WorkID ";
                     sql += " AND A.WFState!=0 ";
                     break;
             }

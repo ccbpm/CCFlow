@@ -364,7 +364,8 @@ namespace BP.WF
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
-            #region 判断是否是会签状态,是否是会签人做的撤销.
+
+            #region 判断是否是会签状态,是否是会签人做的撤销. @于庆海
             if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)
             {
                 GenerWorkerList gwl = new GenerWorkerList();
@@ -372,31 +373,17 @@ namespace BP.WF
                       GenerWorkerListAttr.WorkID, this.WorkID,
                       GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
-                if (i != 0)
-                {
-                    //可能是主持人，或者会签人.
+                //如果是会签人，就让其显示待办.
+                gwl.IsPassInt = 0;
+                gwl.IsEnable = true;
+                gwl.Update();
 
-                    ////如果是主持人.
-                    //if (gwf.TodoEmps.Contains(BP.Web.WebUser.No + "," + BP.Web.WebUser.Name + ";") == false)
-                    //    throw new Exception("您是会签主持人，您不能执行撤销。");
-
-                    var ds = BP.DA.DBAccess.lockRunSQL;
-
-
-                    //如果是会签人，就让其显示待办.
-                    gwl.IsPassInt = 0;
-                    gwl.IsEnable = true;
-                    gwl.Update();
-
-                    //在待办人员列表里加入他.
-                    gwf.TodoEmps = gwf.TodoEmps + BP.Web.WebUser.Name + ";";
-                    gwf.Update();
-                    return "会签撤销成功...";
-                }
+                //在待办人员列表里加入他.
+                gwf.TodoEmps = gwf.TodoEmps + BP.Web.WebUser.Name + ";";
+                gwf.Update();
+                return "会签撤销成功...";
             }
             #endregion 判断是否是会签状态,是否是会签人做的撤销.
-
-
 
             if (gwf.FID != 0)
             {
@@ -429,6 +416,7 @@ namespace BP.WF
                 /*该节点不允许退回.*/
                 throw new Exception("当前节点，不允许撤销。");
             }
+
 
 
 
@@ -519,13 +507,40 @@ namespace BP.WF
 
             /********** 开始执行撤销. **********************/
             Node cancelToNode = new Node(cancelToNodeID);
+
+            #region 如果当前是协作组长模式,就要考虑当前是否是会签节点，如果是会签节点，就要处理。
+            if (cancelToNode.TodolistModel == TodolistModel.TeamupGroupLeader)
+            {
+                string sql = "SELECT ActionType FROM ND" + int.Parse(this.FlowNo) + "Track WHERE NDFrom=" + cancelToNodeID + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + this.WorkID;
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in dt.Rows)
+                {
+                    int ac = int.Parse(dr[0].ToString());
+                    ActionType at = (ActionType)ac;
+                    if (at == ActionType.TeampUp)
+                    {
+                        /*如果是写作人员，就不允许他撤销 */
+                        throw new Exception("@您是节点[" + cancelToNode.Name + "]的会签人，您不能执行撤销。");
+                    }
+                }
+
+                //// 是主持人的情况下，就要执行撤销操作。
+                //gwf.FK_Node = cancelToNodeID;
+                //gwf.NodeName = cancelToNode.Name;
+                //gwf.TodoEmpsNum = 1;
+                //gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianOver;
+                //gwf.Update();
+            }
+
+            #endregion 如果当前是协作组长模式
+
+
             WorkNode wnOfCancelTo = new WorkNode(this.WorkID, cancelToNodeID);
 
             // 调用撤消发送前事件。
             string msg = nd.HisFlow.DoFlowEventEntity(EventListOfNode.UndoneBefore, nd, wn.HisWork, null);
 
             #region 删除当前节点数据。
-
             // 删除产生的工作列表。
             GenerWorkerLists wls = new GenerWorkerLists();
             wls.Delete(GenerWorkerListAttr.WorkID, this.WorkID, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
@@ -560,7 +575,7 @@ namespace BP.WF
             }
             else
             {
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0  WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node);
+                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node +" AND FK_Emp='" + WebUser.No + "'");
             }
 
             //更新当前节点，到rpt里面。

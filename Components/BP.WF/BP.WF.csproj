@@ -170,7 +170,7 @@
     <Compile Include="DTS\ResetSortMapAttr.cs" />
     <Compile Include="DTS\GenerPinYinForEmp.cs" />
     <Compile Include="DTS\UpdatePort_EmpSigantureSta.cs" />
-    <Compile Include="DTS\DTSTodolist.cs" />
+    <Compile Include="DTS\DTS_GenerWorkFlowTimeSpan.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>

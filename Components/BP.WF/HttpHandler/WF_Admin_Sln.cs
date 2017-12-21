@@ -67,10 +67,10 @@ namespace BP.WF.HttpHandler
         }
 
         /// <summary>
-        /// 复制表单到节点
+        /// 复制表单到节点 
         /// </summary>
         /// <returns></returns>
-        public string BindForm_DoCopyFrmToNodes()
+        public string BindFrmsDtl_DoCopyFrmToNodes()
         {
             string nodeStr = this.GetRequestVal("NodeStr");//节点string,
             string frmStr = this.GetRequestVal("frmStr");//表单string,
@@ -123,7 +123,7 @@ namespace BP.WF.HttpHandler
         /// 保存流程表单
         /// </summary>
         /// <returns></returns>
-        public string BindForm_SaveBindForms()
+        public string BindFrmsDtl_Save()
         {
             try
             {
@@ -158,11 +158,11 @@ namespace BP.WF.HttpHandler
 
                     fn.Save();
                 }
-                return "true";
+                return "保存成功.";
             }
             catch (Exception ex)
             {
-                return "err:保存失败。";
+                return "err:保存失败."+ex.Message;
             }
         }
 

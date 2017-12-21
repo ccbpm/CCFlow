@@ -1143,6 +1143,10 @@ namespace BP.WF
             sb.Append("\t\n</table>");
             return sb;
         }
+        /// <summary>
+        /// zip文件路径.
+        /// </summary>
+        public static string ZipFilePath = "";
 
         public static string CCFlowAppPath = "/";
         public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null)
@@ -1311,9 +1315,14 @@ namespace BP.WF
                 }
 
                 string zipFile = path + "\\..\\" + fileNameFormat + ".zip";
+
+                System.IO.FileInfo finfo = new FileInfo(zipFile);
+                ZipFilePath = finfo.FullName; //文件路径.
+
                 try
                 {
-                    (new FastZip()).CreateZip(zipFile, pdfPath, true, "");
+                    (new FastZip()).CreateZip(finfo.FullName, pdfPath, true, "");
+
                     ht.Add("zip", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + fileNameFormat + ".zip");
                 }
                 catch (Exception ex)

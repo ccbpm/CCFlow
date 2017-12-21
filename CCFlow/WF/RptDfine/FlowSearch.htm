@@ -283,10 +283,11 @@
 
                 //增加列
                 $.each(d.Sys_MapAttr, function (idx, c) {
+					var width = getColumnWidth(c.No, c.Name, d.MainData, c.Width);
                     cols.push({
                         title: c.Name,
                         field: c.No,
-                        width: 280
+                        width: width
                     });
 
                     if (c.No == "Title") {
@@ -296,7 +297,11 @@
                     }
                 });
 
-                $("#dg").datagrid({ columns: [cols], resizable: true });
+                $("#dg").datagrid({
+					columns: [cols],
+					resizable: true
+					//, fitColumns: true
+				});
                 LoadData(d.MainData, md.T_total, $("#dg").datagrid("options").pageSize, 1);
 
                 //btn events
@@ -307,6 +312,34 @@
                 });
             }, this);
         });
+
+		function getColumnWidth(field, title, datas, defaultWidth) {
+			if (!field) {
+				return defaultWidth;
+			}
+			var per = 10;
+			var offset = 20;
+			var width = [];
+			if (typeof title == "string") {
+				width.push(title.length * 2);
+			}
+			if ($.isArray(datas)) {
+				$.each(datas, function (i, o) {
+					var data = o[field];
+					if (typeof data == "string") {
+						width.push(data.length);
+					} else {
+						width.push(String(data).length);
+					}
+				});
+			}
+			if (width.length > 0) {
+				var maxWidth = Math.max.apply("", width);
+				return maxWidth * per + offset;
+				//return maxWidth * (per - Math.round(maxWidth / 10)) + offset;
+			}
+			return defaultWidth;
+		}
 
         function Search(pageSize, pageIdx) {
             var key = "";

@@ -836,7 +836,9 @@ function figure_MapAttr_Template(mapAttr) {
     f.addPrimitive(ifig);
 
     if (f.CCForm_Shape == "TextBoxBoolean") {
-        var t2 = new Text(mapAttr.Name, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + FigureDefaults.radiusSize / 2 + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+        //var t2 = new Text(mapAttr.Name, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + FigureDefaults.radiusSize / 2 + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
+		// 导入表单checkbox与label错位
+		var t2 = new Text(mapAttr.Name, mapAttr.X + mapAttr.UIWidth / 2 + FigureDefaults.radiusSize / 2, mapAttr.Y + mapAttr.UIHeight / 2, FigureDefaults.textFont, FigureDefaults.textSize);
         t2.style.fillStyle = FigureDefaults.textColor;
         f.addPrimitive(t2);
     }

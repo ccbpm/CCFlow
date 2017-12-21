@@ -29,7 +29,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="key">key</param>
         /// <returns>返回值</returns>
-        public string GetValFromFrmByKey(string key)
+        public string GetValFromFrmByKey(string key, string isNullAsVal=null)
         {
             string val = context.Request.Form[key];
 
@@ -49,7 +49,11 @@ namespace BP.WF.HttpHandler
             }
 
             if (val == null)
+            {
+                if (isNullAsVal != null)
+                    return isNullAsVal;
                 throw new Exception("@获取Form参数错误,参数集合不包含[" + key + "]");
+            }
 
             val = val.Replace("'", "~");
             return val;
@@ -656,7 +660,8 @@ namespace BP.WF.HttpHandler
 
         public bool GetValBoolenFromFrmByKey(string key)
         {
-            string val = this.GetValFromFrmByKey(key);
+
+            string val = this.GetValFromFrmByKey(key,"0");
             if (val == "on" || val == "1")
                 return true;
             if (val == null || val == "" || val == "0" || val=="off")

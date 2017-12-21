@@ -42,11 +42,11 @@
         //发起
         function SendMulit() {
             //获取选中的checkbox
-            var rdVal ="";
+            var rdVal = "";
             var cbVal = "";
             //循环取值
             $("input[name='BySQLMulti']:checked").each(function () {
-                cbVal = "'"+$(this).val() + "'," + cbVal+"";
+                cbVal = "'" + $(this).val() + "'," + cbVal + "";
             });
             rdVal = cbVal;
             //替换潜在的错误
@@ -73,7 +73,7 @@
             });
         }
         //加载方法
-        function StartGuide_Init(url,FK_Flow,FK_Node,WorkID) {
+        function StartGuide_Init(url, FK_Flow, FK_Node, WorkID) {
             $.ajax({
                 type: 'post',
                 async: true,
@@ -98,10 +98,10 @@
                             //如果是第一行，先生成table列名
                             if (i < 1) {
                                 for (var k in data[i]) {
-                                    if (k == "NO") {//No这一列，不显示
+                                    if (k == "NO" || k == "No") {//No这一列，不显示
                                         key = data[i][k];
                                     }
-                                    else if (k == "NAME") {
+                                    else if (k == "NAME" || k == "Name") {
                                         Name = data[i][k];
                                         thHtml += "<th>NAME</th>";
                                     }
@@ -116,7 +116,10 @@
 
                             //如果是SQL多条模式，增加勾选框
                             if (StartGuideWay == "BySQLMulti") {
-                                _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["NO"] + "' id='" + data[i]["NO"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                                if (data[i]["NO"] == null || data[i]["NO"] == '' || data[i]["NO"] == undefined || data[i]["NO"] == "undefined")
+                                    _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["No"] + "' id='" + data[i]["No"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
+                                else
+                                    _Html += "<td class='Idx' nowrap><input type='checkbox' name='BySQLMulti' value='" + data[i]["NO"] + "' id='" + data[i]["NO"] + "' />" + (parseInt(i) + parseInt(1)) + "</td>";
                             }
                             else {
                                 _Html += "<td class='Idx' nowrap>" + (parseInt(i) + parseInt(1)) + "</td>";
@@ -124,13 +127,14 @@
 
                             //根据sql查询的列名，依次显示，并对应列名
                             for (var v in data[i]) {
-                                if (v == "NO") {//此处No列不显示
+                                if (v == "NO" || v == "No") {//此处No列不显示
                                     key = data[i][v];
                                 }
-                                else if (v == "NAME") {
+                                else if (v == "NAME" || v == "Name") {
                                     if (key.length < 0)//如果No没有在Name列之前，就去读josn中指定的对象值
                                         key = data[i]["NO"];
-
+                                    if (key == null || key == '' || key == undefined || key == "undefined")
+                                        key = data[i]["No"];
                                     _Html += "<td nowrap>";
                                     //如果是SQL多条模式，去掉超链接
                                     if (StartGuideWay == "BySQLMulti") {

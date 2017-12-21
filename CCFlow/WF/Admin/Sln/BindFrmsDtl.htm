@@ -142,7 +142,7 @@
             if (nodelist.length != 0) {
                 if (confirm("您确定执行此操作吗")) {
                     var param = {
-                        DoType: "BindForm_DoCopyFrmToNodes",
+                        DoType: "BindFrmsDtl_DoCopyFrmToNodes",
                         NodeStr: nodelist.join(','),
                         frmStr: frmStr,
                         FK_Flow: FK_Flow
@@ -184,17 +184,15 @@
                 var options = document.getElementById("lbFlowNodes").options;
                 if (selectIndex >= 0) {
                     var param = {
-                        DoType: "BindForm_SaveBindForms",
+                        DoType: "BindFrmsDtl_Save",
                         FK_Flow: FK_Flow,
                         FK_Node: options[selectIndex].value,
                         formNos: formNos
                     };
                     Handler_AjaxQueryData(param, function (data, scope) {
-                        if (data == "true") {
-                            $.messager.alert('提示', '保存成功！');
-                        } else {
-                            $.messager.alert('提示', '保存失败，请重试。');
-                        }
+
+                        alert(data);
+                         
                     }, this);
                 } else {
                     $.messager.alert('提示', '没有选中节点');

@@ -199,8 +199,7 @@
 
                             newRow += "<td> <a href=\"javascript:WinOpenStart('" + flow.No + "');\" ><img src='../Img/Start1.png' style='width:15px;' />我发起的流程</a></td>";
                             newRow += "<td> <a href=\"javascript:WinOpenJoin('" + flow.No + "');\" ><img src='../Img/Check.png' style='width:15px;' />我审批的流程</a></td>";
-
-
+                            newRow += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='../Img/Start.png' style='width:15px;' />流程发起</a></td>";
                             newRow += "</tr>";
 
                             $("#Table1 tr:last").after(newRow);
@@ -208,6 +207,16 @@
                     }
                 }
             });
+        }
+
+        //发起时打开窗口
+        function WinOpenStartFlow(flowNo) {
+
+            var url = "../MyFlow.htm?FK_Flow=" + flowNo;
+
+            var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            newWindow.focus();
+            return;
         }
 
         //我发起的流程.
@@ -238,6 +247,7 @@
 <th  style="width:38px;" >序</th>
 <th >名称</th>
 <th colspan="2">查询</th>
+<th >发起</th>
 </tr>
 </table>
 

@@ -1528,6 +1528,23 @@ namespace BP.Sys
                 myStream.Close();
             }
         }
+        public static void DownloadFileV3(string filepath, string tempName)
+        {
+
+            FileInfo fileInfo = new FileInfo(filepath);
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.ClearContent();
+            HttpContext.Current.Response.ClearHeaders();
+            HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename=" + tempName);
+            HttpContext.Current.Response.AddHeader("Content-Length", fileInfo.Length.ToString());
+            HttpContext.Current.Response.AddHeader("Content-Transfer-Encoding", "binary");
+            HttpContext.Current.Response.ContentType = "application/octet-stream";
+            HttpContext.Current.Response.ContentEncoding = System.Text.Encoding.GetEncoding("gb2312");
+            HttpContext.Current.Response.WriteFile(fileInfo.FullName);
+            HttpContext.Current.Response.Flush();
+            HttpContext.Current.Response.End();
+             
+        }
         public static void DownloadFileV2(string filepath, string tempName)
         {
 

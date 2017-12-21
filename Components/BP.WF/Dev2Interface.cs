@@ -370,92 +370,10 @@ namespace BP.WF
         /// <returns>返回处理的消息</returns>
         public static string DTS_DealDeferredWork()
         {
-            //string sql = "SELECT * FROM WF_EmpWorks WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE OutTimeDeal >0 ) AND SDT <='" + DataType.CurrentData + "' ORDER BY FK_Emp";
-            //改成小于号SDT <'" + DataType.CurrentData
-            string sql = "SELECT * FROM WF_EmpWorks WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE OutTimeDeal >0 ) AND SDT <'" + DataType.CurrentData + "' ORDER BY FK_Emp";
-            //string sql = "SELECT * FROM WF_EmpWorks WHERE FK_Node IN (SELECT NodeID FROM WF_Node WHERE OutTimeDeal >0 ) AND SDT <='2013-12-30' ORDER BY FK_Emp";
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            string msg = "";
-            string dealWorkIDs = "";
-            foreach (DataRow dr in dt.Rows)
-            {
-                string FK_Emp = dr["FK_Emp"].ToString();
-                string fk_flow = dr["FK_Flow"].ToString();
-                int fk_node = int.Parse(dr["FK_Node"].ToString());
-                Int64 workid = Int64.Parse(dr["WorkID"].ToString());
-                Int64 fid = Int64.Parse(dr["FID"].ToString());
+            BP.WF.DTS.DTS_DealDeferredWork en = new DTS.DTS_DealDeferredWork();
+            en.Do();
 
-                // 方式两个人同时处理一件工作, 一个人处理后，另外一个人还可以处理的情况.
-                if (dealWorkIDs.Contains("," + workid + ","))
-                    continue;
-                dealWorkIDs += "," + workid + ",";
-
-                if (WebUser.No != FK_Emp)
-                {
-                    Emp emp = new Emp(FK_Emp);
-                    BP.Web.WebUser.SignInOfGener(emp);
-                }
-
-                BP.WF.Template.NodeExt nd = new BP.WF.Template.NodeExt();
-                nd.NodeID = fk_node;
-                nd.Retrieve();
-
-                // 首先判断是否有启动的表达式, 它是是否自动执行的总阀门。
-                if (string.IsNullOrEmpty(nd.DoOutTimeCond) == false)
-                {
-                    Node nodeN = new Node(nd.NodeID);
-                    Work wk = nodeN.HisWork;
-                    wk.OID = workid;
-                    wk.Retrieve();
-                    string exp = nd.DoOutTimeCond.Clone() as string;
-                    if (Glo.ExeExp(exp, wk) == false)
-                        continue; // 不能通过条件的设置.
-                }
-
-                switch (nd.HisOutTimeDeal)
-                {
-                    case OutTimeDeal.None:
-                        break;
-                    case OutTimeDeal.AutoTurntoNextStep: //自动转到下一步骤.
-                        if (string.IsNullOrEmpty(nd.DoOutTime))
-                        {
-                            /*如果是空的,没有特定的点允许，就让其它向下执行。*/
-                            msg += BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid).ToMsgOfText();
-                        }
-                        else
-                        {
-                            int nextNode = Dev2Interface.Node_GetNextStepNode(fk_flow, workid);
-                            if (nd.DoOutTime.Contains(nextNode.ToString())) /*如果包含了当前点的ID,就让它执行下去.*/
-                                msg += BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid).ToMsgOfText();
-                        }
-                        break;
-                    case OutTimeDeal.AutoJumpToSpecNode: //自动的跳转下一个节点.
-                        if (string.IsNullOrEmpty(nd.DoOutTime))
-                            throw new Exception("@设置错误,没有设置要跳转的下一步节点.");
-                        int nextNodeID = int.Parse(nd.DoOutTime);
-                        msg += BP.WF.Dev2Interface.Node_SendWork(fk_flow, workid, null, null, nextNodeID, null).ToMsgOfText();
-                        break;
-                    case OutTimeDeal.AutoShiftToSpecUser: //移交给指定的人员.
-                        msg += BP.WF.Dev2Interface.Node_Shift(fk_flow, fk_node, workid, fid, nd.DoOutTime, "来自ccflow的自动消息:(" + BP.Web.WebUser.Name + ")工作未按时处理(" + nd.Name + "),现在移交给您。");
-                        break;
-                    case OutTimeDeal.SendMsgToSpecUser: //向指定的人员发消息.
-                        BP.WF.Dev2Interface.Port_SendMsg(nd.DoOutTime,
-                            "来自ccflow的自动消息:(" + BP.Web.WebUser.Name + ")工作未按时处理(" + nd.Name + ")",
-                            "感谢您选择ccflow.", "SpecEmp" + workid);
-                        break;
-                    case OutTimeDeal.DeleteFlow: //删除流程.
-                        msg += BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(fk_flow, workid, true);
-                        break;
-                    case OutTimeDeal.RunSQL:
-                        msg += BP.DA.DBAccess.RunSQL(nd.DoOutTime);
-                        break;
-                    default:
-                        throw new Exception("@错误没有判断的超时处理方式." + nd.HisOutTimeDeal);
-                }
-            }
-            Emp emp1 = new Emp("admin");
-            BP.Web.WebUser.SignInOfGener(emp1);
-            return msg;
+            return "执行成功..";
         }
         /// <summary>
         /// 自动执行开始节点数据
@@ -8808,7 +8726,7 @@ namespace BP.WF
                 else
                 {
                     /*如果有数据，就返回，说明已经执行过了。*/
-                    return;
+                    return ;
                 }
             }
 
@@ -8833,86 +8751,15 @@ namespace BP.WF
                 else
                 {
                     /*如果有数据，就返回，说明已经执行过了。*/
-                    return;
+                    return ;
                 }
             }
             #endregion 求出是否可以更新状态.
 
-            //系统期望的是，每一个人仅发一条信息.  “您有xx个预警工作，yy个预期工作，请及时处理。”
 
-            DataTable dtEmps = new DataTable();
-            dtEmps.Columns.Add("EmpNo", typeof(string));
-            dtEmps.Columns.Add("WarningNum", typeof(int));
-            dtEmps.Columns.Add("OverTimeNum", typeof(int));
+            BP.WF.DTS.DTS_GenerWorkFlowTodoSta en = new DTS.DTS_GenerWorkFlowTodoSta();
+            en.Do();
 
-            string timeDT = DateTime.Now.ToString("yyyy-MM-dd");
-            string sql = "";
-
-            //查询出预警的工作.
-            //sql = " SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 0 as DBType FROM WF_GenerWorkerlist A WHERE a.DTOfWarning =< '" + timeDT + "' AND a.SDT <= '" + timeDT + "' AND A.IsPass=0  ";
-            //sql += "  UNION ";
-            //sql += "SELECT DISTINCT FK_Emp,COUNT(FK_Emp) as Num , 1 as DBType FROM WF_GenerWorkerlist A WHERE  a.SDT >'" + timeDT + "' AND A.IsPass=0 ";
-
-            sql = "SELECT * FROM WF_GenerWorkerlist A WHERE a.DTOfWarning >'" + timeDT + "' AND a.SDT <'" + timeDT + "' AND A.IsPass=0 ORDER BY FK_Node,FK_Emp ";
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-
-
-            #region 向预警人员发消息.
-            // 向预警的人员发消息.
-            Node nd = new Node();
-            BP.WF.Port.WFEmp emp = new Port.WFEmp();
-            foreach (DataRow dr in dt.Rows)
-            {
-                Int64 workid = Int64.Parse(dr["WorkID"].ToString());
-                int fk_node = int.Parse(dr["FK_Node"].ToString());
-                string fk_emp = dr["FK_Emp"].ToString();
-
-                if (nd.NodeID != fk_node)
-                {
-                    nd.NodeID = fk_node;
-                    nd.Retrieve();
-                }
-
-                if (nd.HisCHWay != CHWay.ByTime)
-                    continue; //非按照时效考核.
-
-                if (nd.WAlertRole == CHAlertRole.None)
-                    continue;
-
-                //如果仅仅提醒一次.
-                if (nd.WAlertRole == CHAlertRole.OneDayOneTime && isPM == true)
-                {
-
-                }
-                else
-                {
-                    continue;
-                }
-
-                if (emp.No != fk_emp)
-                {
-                    emp.No = fk_emp;
-                    emp.Retrieve();
-                }
-            }
-            #endregion 向预警人员发消息.
-
-            if (dt.Rows.Count >= 1)
-            {
-                //更新预警状态.
-                sql = "UPDATE WF_GenerWorkFlow  SET TodoSta=1 ";
-                sql += " WHERE WorkID IN (SELECT WorkID FROM WF_GenerWorkerlist A WHERE a.DTOfWarning >'" + timeDT + "' AND a.SDT <'" + timeDT + "' AND A.IsPass=0 ) ";
-                sql += " AND WF_GenerWorkFlow.WFState!=3 ";
-                sql += " AND WF_GenerWorkFlow.TodoSta=0 ";
-                int i = BP.DA.DBAccess.RunSQL(sql);
-            }
-
-            //更新逾期期状态.
-            sql = "UPDATE WF_GenerWorkFlow  SET TodoSta=2 ";
-            sql += " WHERE WorkID IN (SELECT WorkID FROM WF_GenerWorkerlist A WHERE a.DTOfWarning >'" + timeDT + "' AND a.SDT <'" + timeDT + "' AND A.IsPass=0 ) ";
-            sql += " AND WF_GenerWorkFlow.WFState!=3 ";
-            sql += " AND WF_GenerWorkFlow.TodoSta=1 ";
-            BP.DA.DBAccess.RunSQL(sql);
         }
         /// <summary>
         /// 预警与逾期的提醒.

@@ -10,12 +10,12 @@ using BP.Sys;
 namespace BP.WF.DTS
 {
     /// <summary>
-    /// 修复数据库 的摘要说明
+    /// 向预期的工作人员发送提醒消息 的摘要说明
     /// </summary>
     public class DTS_SendMsgToWarningWorker : Method
     {
         /// <summary>
-        /// 不带有参数的方法
+        /// 向预期的工作人员发送提醒消息
         /// </summary>
         public DTS_SendMsgToWarningWorker()
         {
@@ -49,7 +49,6 @@ namespace BP.WF.DTS
         /// <returns>返回执行结果</returns>
         public override object Do()
         {
-
 
             /*查找一天预警1次的消息记录，并执行推送。*/
             string sql = "SELECT A.WorkID, A.Title, A.FlowName, A.TodoSta, B.FK_Emp, b.FK_EmpText, C.WAlertWay  FROM WF_GenerWorkFlow A, WF_GenerWorkerlist B, WF_Node C  ";

@@ -15,7 +15,6 @@
 
         //是否是手机端.
         var isMobile = GetQueryString("IsMobile");
-         
 
         //是否只读？
         var isReadonly = GetQueryString("isReadonly");
@@ -230,18 +229,19 @@
 
                 $("#tbTracks").append(html);
 
+                if ($("#WorkCheck_Doc").length > 0) {
+                    if (wcDesc.FWCDefInfo && wcDesc.FWCDefInfo.length > 0) {
+                        SaveWorkCheck();
+                    }
+                }
+
                 $("textarea").trigger("keydown");
 
                 if ($("#uploaddiv").length > 0) {
                     AddUploadify("uploaddiv");
                 }
 
-                if ($("#WorkCheck_Doc").length > 0) {
-                    if (wcDesc.FWCDefInfo && wcDesc.FWCDefInfo.length > 0) {
-                        SaveWorkCheck();
-                        //$("#WorkCheck_Doc").focus();
-                    }
-                }
+               
             }, this);
         }
 

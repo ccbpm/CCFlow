@@ -1,9 +1,16 @@
 ﻿
+function Demo_Emps() {
 
-
-function JSTestTable() {
-
-  
 }
 
 
+
+
+function Demo_Depts() {
+
+}
+
+
+function XingChengLeiXing() {
+
+}

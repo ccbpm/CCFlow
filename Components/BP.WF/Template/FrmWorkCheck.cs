@@ -664,7 +664,6 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Name, null, "节点名称", true, true, 0, 100, 10);
                 map.AddTBString(FrmWorkCheckAttr.FWCLab, "审核信息", "显示标签", true, false, 0, 200, 10, true);
 
-
                 #region 此处变更了 NodeSheet类中的，map 描述该部分也要变更.
                 map.AddDDLSysEnum(FrmWorkCheckAttr.FWCSta, (int)FrmWorkCheckSta.Disable, "审核组件状态",
                    true, true, FrmWorkCheckAttr.FWCSta, "@0=禁用@1=启用@2=只读");

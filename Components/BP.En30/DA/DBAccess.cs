@@ -2051,7 +2051,6 @@ namespace BP.DA
             Paras ps = new Paras();
             return RunSQL_200705_OLE(sql, ps);
         }
-
         /// <summary>
         /// 运行sql
         /// </summary>
@@ -2060,56 +2059,6 @@ namespace BP.DA
         private static int RunSQL_201205_Informix(string sql)
         {
             return RunSQL_201205_Informix(sql, new Paras());
-
-            //ConnOfInformix connofora = (ConnOfInformix)DBAccess.GetAppCenterDBConn;
-            //IfxConnection conn = connofora.Conn;
-            //try
-            //{
-            //    if (conn == null)
-            //        conn = new IfxConnection(SystemConfig.AppCenterDSN);
-
-            //    if (conn.State != System.Data.ConnectionState.Open)
-            //        conn.Open();
-
-            //    IfxCommand cmd = new IfxCommand(sql, conn);
-            //    cmd.CommandType = CommandType.Text;
-            //    int i = cmd.ExecuteNonQuery();
-            //    cmd.Dispose();
-
-            //    conn.Close();
-            //    conn.Dispose();
-
-            //    HisConnOfInformix.PutPool(connofora);
-            //    return i;
-            //}
-            //catch (System.Exception ex)
-            //{
-            //    conn.Close();
-            //    conn.Dispose();
-
-            //    HisConnOfInformix.PutPool(connofora);
-            //    if (BP.Sys.SystemConfig.IsDebug)
-            //    {
-            //        string msg = "RunSQL2   SQL=" + sql + ex.Message;
-            //        Log.DebugWriteError(msg);
-            //        throw new Exception(msg);
-            //    }
-            //    else
-            //    {
-            //        throw new Exception(ex.Message + " RUN SQL=" + sql);
-            //    }
-            //}
-            //finally
-            //{
-            //    if (SystemConfig.IsBSsystem_Test == false)
-            //    {
-            //        conn.Close();
-            //        conn.Dispose();
-            //    }
-
-            //    conn.Close();
-            //    HisConnOfInformix.PutPool(connofora);
-            //}
         }
         private static int RunSQL_201205_Informix(string sql, Paras paras)
         {

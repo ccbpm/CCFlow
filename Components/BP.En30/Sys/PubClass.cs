@@ -767,14 +767,7 @@ namespace BP.Sys
 
                 dt.TableName = uiBindKey;
                 return dt;
-                //下方用不着了
-                //// 小周鹏----------20150817修改，手机端级联使用----START
-                ////string sql = "SELECT No,Name FROM " + uiBindKey;
-                //string sql = "SELECT * FROM " + uiBindKey;
-                //// 小周鹏----------20150817修改，手机端级联使用----END
-                //dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
-                //dt.TableName = uiBindKey;
-                //return dt;
+            
             }
         }
         /// <summary>

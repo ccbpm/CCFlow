@@ -234,5 +234,21 @@ namespace BP.WF.HttpHandler
         }
 
         #endregion xxx 界面方法.
+
+        public string SF7_JQuery_Save()
+        {
+            SFTable sf = new SFTable();
+            sf.No = this.GetValFromFrmByKey("No");
+            if (sf.IsExits == true)
+                return "err@该方法已经存在"+sf.No;
+
+            sf.SrcType = SrcType.JQuery;
+
+            sf.Name = this.GetValFromFrmByKey("Name");
+            sf.FK_SFDBSrc = "local";
+            sf.Insert();
+
+            return "保存成功";
+        }
     }
 }

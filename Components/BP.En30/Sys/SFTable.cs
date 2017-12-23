@@ -42,7 +42,15 @@ namespace BP.Sys
         /// <summary>
         /// 动态SQL查询
         /// </summary>
-        DynamicSQL = 5
+        DynamicSQL = 5,
+        /// <summary>
+        /// hand
+        /// </summary>
+        Handler=6,
+        /// <summary>
+        /// 
+        /// </summary>
+        JQuery=7
     }
     /// <summary>
     /// 编码表类型

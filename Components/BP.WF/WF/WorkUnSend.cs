@@ -364,8 +364,7 @@ namespace BP.WF
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
-
-            #region 判断是否是会签状态,是否是会签人做的撤销. @于庆海
+            #region 判断是否是会签状态,是否是会签人做的撤销. 主持人是不能撤销的. @于庆海
             if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)
             {
                 GenerWorkerList gwl = new GenerWorkerList();
@@ -373,15 +372,25 @@ namespace BP.WF
                       GenerWorkerListAttr.WorkID, this.WorkID,
                       GenerWorkerListAttr.FK_Node, gwf.FK_Node);
 
+                //如果没有找到当前会签人.
+                if (i == 0)
+                    return "err@当前节点是会签状态,您不能执行撤销.";
+
                 //如果是会签人，就让其显示待办.
                 gwl.IsPassInt = 0;
                 gwl.IsEnable = true;
-                gwl.Update();
+                 gwl.Update();
+
 
                 //在待办人员列表里加入他.
                 gwf.TodoEmps = gwf.TodoEmps + BP.Web.WebUser.Name + ";";
                 gwf.Update();
-                return "会签撤销成功...";
+
+                //执行删除会签意见.
+                //string sql = "DELETE FROM ND"+int.Parse(gwf.FK_Flow)+"Track WHERE WorkID="+this.WorkID+" AND FK_Node=" + gwl.FK_Node+" AND FK_Emp='"+BP.Web.WebUser.No+"'";
+                //DBAccess.RunSQL(sql);
+
+                return "会签人撤销成功...";
             }
             #endregion 判断是否是会签状态,是否是会签人做的撤销.
 
@@ -416,9 +425,6 @@ namespace BP.WF
                 /*该节点不允许退回.*/
                 throw new Exception("当前节点，不允许撤销。");
             }
-
-
-
 
             switch (nd.HisNodeWorkType)
             {

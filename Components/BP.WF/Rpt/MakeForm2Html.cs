@@ -1287,10 +1287,7 @@ namespace BP.WF
                 if (string.IsNullOrEmpty(fileNameFormat) == true)
                     fileNameFormat = workid.ToString();
 
-                //  fileNameFormat = workid.ToString();
-
                 fileNameFormat = BP.DA.DataType.PraseStringToFileName(fileNameFormat);
-
                 #endregion
 
                 Hashtable ht = new Hashtable();
@@ -1311,7 +1308,19 @@ namespace BP.WF
                 }
                 catch (Exception ex)
                 {
-                    ht.Add("pdf", "err@生成pdf错误:" + ex.Message + "@路径变量: pdfFileExe=" + pdfFileExe + " pdf " + pdfFile + " ,  html url:" + billUrl);
+                    /*有可能是因为文件路径的错误， 用补偿的方法在执行一次, 如果仍然失败，按照异常处理. */
+                    fileNameFormat = DBAccess.RunSQLReturnStringIsNull("SELECT BillNo FROM WF_GenerWorkFlow WHERE WorkID=" + workid, workid.ToString());
+                    pdfFile = pdfPath + "\\" + fileNameFormat + ".pdf";
+
+                    try
+                    {
+                        Html2Pdf(pdfFileExe, billUrl, pdfFile);
+                        ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                    }
+                    catch
+                    {
+                        ht.Add("pdf", "err@生成pdf错误:" + ex.Message + "@路径变量: pdfFileExe=" + pdfFileExe + " pdf " + pdfFile + " ,  html url:" + billUrl);
+                    }
                 }
 
                 string zipFile = path + "\\..\\" + fileNameFormat + ".zip";

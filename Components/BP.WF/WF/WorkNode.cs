@@ -5054,7 +5054,7 @@ namespace BP.WF
         /// <summary>
         /// 如果是协作.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>是否执行到最后一个人？</returns>
         public bool DealTeamUpNode()
         {
             GenerWorkerLists gwls = new GenerWorkerLists();
@@ -5923,7 +5923,7 @@ namespace BP.WF
             //如果是协作模式节点, 就判断当前的队列人员是否走完.
             if (this.TodolistModel == TodolistModel.Teamup)
             {
-                /* 如果是协作.*/
+                /* 如果是协作*/
                 if (this.DealTeamUpNode() == true)
                 {
                     //if (this._transferCustom != null)

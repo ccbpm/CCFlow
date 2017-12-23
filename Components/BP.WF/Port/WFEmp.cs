@@ -460,7 +460,8 @@ namespace BP.WF.Port
                 //0不授权， 1完全授权，2，指定流程范围授权. 
                 map.AddTBInt(WFEmpAttr.AuthorWay, 0, "授权方式", true, true);
                 map.AddTBDate(WFEmpAttr.AuthorToDate, null, "授权到日期", true, true);
-                map.AddTBString(WFEmpAttr.AuthorFlows, null, "可以执行的授权流程", true, true, 0, 1000, 20);
+
+                map.AddTBString(WFEmpAttr.AuthorFlows, null, "可以执行的授权流程", true, true,0,3900,0);
 
                 map.AddTBString(WFEmpAttr.Stas, null, "岗位s", true, true, 0, 3000, 20);
                 map.AddTBString(WFEmpAttr.Depts, null, "Deptss", true, true, 0, 100, 36);
@@ -468,7 +469,8 @@ namespace BP.WF.Port
                 map.AddTBString(WFEmpAttr.FtpUrl, null, "FtpUrl", true, true, 0, 50, 20);
                 map.AddTBString(WFEmpAttr.Msg, null, "Msg", true, true, 0, 4000, 20);
                 map.AddTBString(WFEmpAttr.Style, null, "Style", true, true, 0, 4000, 20);
-                map.AddTBString(WFEmpAttr.StartFlows, null, "可以发起的流程", true, true, 0, 4000, 20);
+
+                map.AddTBStringDoc(WFEmpAttr.StartFlows, null, "可以发起的流程", true, true);
 
                 map.AddTBInt(WFEmpAttr.Idx, 0, "Idx", false, false);
                 this._enMap = map;

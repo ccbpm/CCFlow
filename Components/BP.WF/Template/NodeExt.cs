@@ -46,7 +46,20 @@ namespace BP.WF.Template
         #endregion
 
         #region 属性.
-        
+        /// <summary>
+        /// 会签规则
+        /// </summary>
+        public HuiQianRole HuiQianRole
+        {
+            get
+            {
+                return (HuiQianRole)this.GetValIntByKey(BtnAttr.HuiQianRole);
+            }
+            set
+            {
+                this.SetValByKey(BtnAttr.HuiQianRole, (int)value);
+            }
+        }
         /// <summary>
         /// 超时处理方式
         /// </summary>
@@ -526,7 +539,7 @@ namespace BP.WF.Template
 
 
                 map.AddTBString(BtnAttr.HuiQianLab, "会签", "会签标签", true, false, 0, 50, 10);
-                map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作模式@4=组长模式");
+                map.AddDDLSysEnum(BtnAttr.HuiQianRole, 0, "会签模式", true, true, BtnAttr.HuiQianRole, "@0=不启用@1=协作(同事)模式@4=组长(领导)模式");
 
 
                 // add by 周朋 2014-11-21. 让用户可以自己定义流转.
@@ -1349,10 +1362,14 @@ namespace BP.WF.Template
                 this.SetValByKey(BtnAttr.ThreadEnable, false); //子线程.
             }
 
-            //如果启动了会签,并且是抢办模式,强制设置为队列模式.
-            if (this.GetValIntByKey(BtnAttr.HuiQianRole) != 0)
+            //如果启动了会签,并且是抢办模式,强制设置为队列模式.或者组长模式.
+            if (this.HuiQianRole != WF.HuiQianRole.None)
             {
-                DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + this.GetValIntByKey(BtnAttr.HuiQianRole) + ", TeamLeaderConfirmRole=" + (int)TeamLeaderConfirmRole.HuiQianLeader + " WHERE NodeID=" + this.NodeID);
+                if (this.HuiQianRole == WF.HuiQianRole.Teamup)
+                    DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + (int)TodolistModel.Teamup + "  WHERE NodeID=" + this.NodeID);
+
+                if (this.HuiQianRole == WF.HuiQianRole.TeamupGroupLeader)
+                    DBAccess.RunSQL("UPDATE WF_Node SET TodolistModel=" + (int)TodolistModel.TeamupGroupLeader + ", TeamLeaderConfirmRole=" + (int)TeamLeaderConfirmRole.HuiQianLeader + " WHERE NodeID=" + this.NodeID);
             }
 
             //如果启用了在发送前打开, 当前节点的方向条件控制模式，是否是在下拉框边选择.?

@@ -240,7 +240,6 @@
                 if ($("#uploaddiv").length > 0) {
                     AddUploadify("uploaddiv");
                 }
-
                
             }, this);
         }

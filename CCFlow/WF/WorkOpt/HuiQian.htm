@@ -70,7 +70,9 @@
         var param = {};
         $(function () {
 
-            $("#HelpInfo").show();
+            Help();
+            //$("#HelpInfo").show();
+            //            Help
 
             //初始化页面移交页面
             param = {
@@ -239,8 +241,12 @@
             $(".foot").hide();
         }
 
-        //取消移交.
-        function Close() {
+        //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
+        function SaveAndClose() {
+
+          //  var url = "HuiQianToNodes.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+          // window.location.href = url;
+         //  return;
 
             //需要调用设置会签状态并返回才可以.
             var myurl= Handler + "?DoType=HuiQian_SaveAndClose&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random();
@@ -370,9 +376,6 @@
     </script>
 </head>
 <body>
-    <div id="Title">
-        会签人列表
-    </div>
     <table id="Table1" style="width: 98%;">
         <thead>
             <tr id='title'>
@@ -388,22 +391,18 @@
     <br />
     <div>
         <div id="labInfo">
-            <input type="text" id="TB_Emps" name="TB_Emps" value='' style="width: 400px;" />
-            <input type="button" id="BtnSelectEmps" value='添加会签人员' />
+           输入关键字: <input type="text" id="TB_Emps" name="TB_Emps" value='' style="width: 300px;" />
+            <input type="button" id="BtnSelectEmps" value='选择会签人' /><a href="javascript:Help()">帮助</a>
             <div id="SelectEmp">
             </div>
             <br />
             <div id="next">
                 <!--<input type="button" value="增加会签人" onclick="ReturnWork();"/>-->
-                
-                <!--
-                <input type="button" id="Btn_OK2HuiQian" value="同意,转会签" onclick="alert('功能在完善中');" />
-                -->
-
-                <input type="button" id="Btn_2HuiQian" value="转会签" onclick="Close();" />
-
-                <a href="javascript:Help()">详细说明</a>
-                <div id="HelpInfo">
+<!--
+                <input type="button" id="Btn_OK2HuiQian" value="同意,转会签" onclick="alert('功能在完善中');" />-->
+                 
+                <input type="button" id="Btn_2HuiQian" value="执行会签" onclick="SaveAndClose();" />
+                <div id="HelpInfo" style="">
                     <ul>
                         1、当前节点工作的处理人为会签主持人，可增加其他人员作为会签人，提供意见。
                         <br />2、点击“保存会签人列表并关闭”按钮后，可将工作发送至列表中除主持人以外的所有会签人的待办，在所有会签人都处理完成后，主持人才可向下一步发送工作。

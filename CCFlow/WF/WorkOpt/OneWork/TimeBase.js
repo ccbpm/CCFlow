@@ -81,7 +81,7 @@ function InitPage() {
                     doc += "<p><span>退回意见如下</span> ----- </p>";
                 }
 
-                if (at == ActionType.Forward ) {
+                if (at == ActionType.Forward) {
                     doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
 
                     //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
@@ -141,6 +141,7 @@ function InitPage() {
             //增加等待审核的人员, 在所有的人员循环以后.
             if (gwls) {
                 var isHaveNoChecker = false;
+                var gwl = null;
                 for (var i = 0; i < gwls.length; i++) {
 
                     var gwl = gwls[i];
@@ -154,9 +155,10 @@ function InitPage() {
                 if (isHaveNoChecker == true) {
 
                     var rowDay = "<tr>";
-                    rowDay += "<td colspan=3 class=TDDay ><b>等待审批</b></td>";
+                    rowDay += "<td colspan=3 class=TDDay ><span>等待审批</span><b>" + gwl.FK_NodeText + "</b></td>";
                     rowDay += "</tr>";
                     $("#Table1 tr:last").after(rowDay);
+
 
                     for (var i = 0; i < gwls.length; i++) {
                         var html = "";

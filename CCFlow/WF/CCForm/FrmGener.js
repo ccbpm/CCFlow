@@ -755,8 +755,8 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
         });
     }
 
-    //外部数据源类型
-    if (mapAttr.LGType == 0) {
+    //外部数据源类型 MyFlowGener.js.InitDDLOperation
+	if (mapAttr.LGType == 0) {
 		var fn;
 		try {
 			if (mapAttr.UIBindKey) {
@@ -764,14 +764,18 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
 			}
 		} catch (e) {
 		}
-		if (typeof  fn != "function") {
+		if (typeof  fn == "function") {
+			$.each(fn.call(), function (i, obj) {
+				operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+			});
+		} else if (typeof CommonHandler == "function") {
+			CommonHandler.call("", mapAttr.UIBindKey, function (data) {
+				GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
+			})
+		} else {
 			alert('没有获得约定的数据源.');
-			return;
 		}
-		$.each(fn.call(), function (i, obj) {
-			operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-		});
-    }
+	}
     return operations;
 }
 

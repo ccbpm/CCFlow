@@ -110,19 +110,24 @@ function figure_MapAttr_Template(mapAttr) {
                 //AppString   
                 if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                     if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
+						if (mapAttr.LGType == 0) {
+							eleHtml += "<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">";
+							eleHtml += InitDDLOperation(flowData, mapAttr, defValue);
+							eleHtml += "</select>";
+						} else {
+							//多选下拉框
+							var isMultiSele = "";
+							var isMultiSeleClass = "";
+							//                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
+							//                            isMultiSele = ' multiple data-live-search="false" ';
+							//                            isMultiSeleClass = " selectpicker show-tick form-control ";
+							//                        }
 
-                        //多选下拉框
-                        var isMultiSele = "";
-                        var isMultiSeleClass = "";
-                        //                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-                        //                            isMultiSele = ' multiple data-live-search="false" ';
-                        //                            isMultiSeleClass = " selectpicker show-tick form-control ";
-                        //                        }
 
-
-                        eleHtml +=
-                            "<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">" +
-                            (flowData, mapAttr, defValue) + "</select>";
+							eleHtml +=
+								"<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">" +
+								(flowData, mapAttr, defValue) + "</select>";
+						}
                     } else { //文本区域
                         if (mapAttr.UIHeight <= 23) {
                             eleHtml +=

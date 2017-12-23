@@ -197,7 +197,15 @@ function InitMapAttrOfCtrlFool(flowData,mapAttr) {
 
 
     //外键类型.
-    if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1") {
+        //枚举类型.
+        if (mapAttr.UIIsEnable == 1) {
+            enableAttr = "";
+        } else {
+            enableAttr = "disabled='disabled'";
+		}
+        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
+    } else if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
 
         var data = flowData[mapAttr.UIBindKey];
         //枚举类型.

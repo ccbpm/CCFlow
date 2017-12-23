@@ -724,7 +724,27 @@ function GepParaByName(name, atPara) {
 function InitDDLOperation(flowData, mapAttr, defVal) {
     var operations = '';
     //外键类型
-    if (mapAttr.LGType == 2) {
+	//外部数据源类型 FrmGener.js.InitDDLOperation
+	if (mapAttr.LGType == 0) {
+		var fn;
+		try {
+			if (mapAttr.UIBindKey) {
+				fn = eval(mapAttr.UIBindKey);
+			}
+		} catch (e) {
+		}
+		if (typeof  fn == "function") {
+			$.each(fn.call(), function (i, obj) {
+				operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+			});
+		} else if (typeof CommonHandler == "function") {
+			CommonHandler.call("", mapAttr.UIBindKey, function (data) {
+				GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
+			})
+		} else {
+			alert('没有获得约定的数据源.');
+		}
+	} else if (mapAttr.LGType == 2) {
         if (flowData[mapAttr.KeyOfEn] != undefined) {
             $.each(flowData[mapAttr.KeyOfEn], function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";

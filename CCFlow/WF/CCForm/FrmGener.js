@@ -724,7 +724,7 @@ function GepParaByName(name, atPara) {
 function InitDDLOperation(frmData, mapAttr, defVal) {
 
     var operations = '';
-    //外键类型
+    //外键类型.
     if (mapAttr.LGType == 2) {
 
         var data = frmData[mapAttr.KeyOfEn];
@@ -736,11 +736,10 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
             return;
         } 
 
-            $.each(data, function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
-        }
-      }
+		$.each(data, function (i, obj) {
+			operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+		});
+	}
         
   
     //枚举类型.
@@ -757,9 +756,21 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
     }
 
     //外部数据源类型
-    if (mapAttr.LGType == 1) {
-
-
+    if (mapAttr.LGType == 0) {
+		var fn;
+		try {
+			if (mapAttr.UIBindKey) {
+				fn = eval(mapAttr.UIBindKey);
+			}
+		} catch (e) {
+		}
+		if (typeof  fn != "function") {
+			alert('没有获得约定的数据源.');
+			return;
+		}
+		$.each(fn.call(), function (i, obj) {
+			operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+		});
     }
     return operations;
 }

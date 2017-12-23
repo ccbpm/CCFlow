@@ -454,9 +454,16 @@ function figure_MapAttr_Template(mapAttr) {
                 if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
                     if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
 
-                        eleHtml +=
+						if (mapAttr.LGType == 0) {
+							eleHtml += "<select data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">";
+							eleHtml += InitDDLOperation(frmData, mapAttr, defValue);
+							eleHtml += "</select>";
+						} else {
+							eleHtml +=
                                 "<select data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" +
                             (frmData, mapAttr, defValue) + "</select>";
+						}
+
                     } else { //文本区域
 
                         if (mapAttr.UIHeight <= 23) {

@@ -28,15 +28,21 @@ namespace ccbpm
         /// <param name="tel">手机号码</param>
         /// <param name="msgInfo">短消息</param>
         /// <returns>是否发送成功</returns>
-        [WebMethod]
-        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo)
+        [WebMethod(EnableSession = true)]
+        public bool SendToWebServices(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo,string tag)
         {
+            string json = "{";
+            json += " \"Name\": 'xxxx',";
+            json += " \"XB\": 'xxxx',";
+            json += " \"Addr\": 'xxxx',";
+            json += " \"Tel\": 'xxxx'}";
+            
             //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
             // if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
             //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public bool SendWhen(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
             //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
@@ -44,7 +50,7 @@ namespace ccbpm
             //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public bool FlowOverBefore(string msgPK, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
             //BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  " + tel + " msgInfo:" + msgInfo);
@@ -61,13 +67,13 @@ namespace ccbpm
         /// <param name="tel">电话</param>
         /// <param name="msgInfo">消息内容</param>
         /// <returns>是否发送成功</returns>
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public bool SendToDingDing(string mypk, string sender, string sendToEmpNo, string tel, string msgInfo)
         {
             //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToWebServices  MyPK" + mypk +" UserNo:"+userNo+ " Tel:" + tel + " msgInfo:" + msgInfo);
 
-            if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
-                BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
+            //if (BP.Sys.SystemConfig.IsEnableCCIM && sendToEmpNo != null)
+            //    BP.WF.Glo.SendMessageToCCIM(sender, sendToEmpNo, msgInfo, BP.DA.DataType.CurrentDataTime);
             return true;
         }
         /// <summary>
@@ -116,7 +122,7 @@ namespace ccbpm
         /// <param name="maildoc">内容</param>
         /// <returns>返回发送结果</returns>
         [WebMethod]
-        public bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo)
+        public bool SendToCCIM(string mypk, string userNo, string msg, string sourceUserNo, string tag = null)
         {
             //   BP.DA.Log.DefaultLogWriteLineInfo("接口调用成功: SendToEmail  MyPK" + mypk + " userNo:" + userNo + " msg:" + msg);
 

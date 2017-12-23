@@ -260,7 +260,6 @@ function InitMapAttrOfCtrl(mapAttr) {
     //外键类型.
     if ( mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
 
-        var data = frmData[mapAttr.UIBindKey];
         //枚举类型.
         if (mapAttr.UIIsEnable == 1)
             enableAttr = "";
@@ -270,9 +269,22 @@ function InitMapAttrOfCtrl(mapAttr) {
         return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
     }
 
+    //外部数据类型.
+    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral ==1 ) {
+
+        //枚举类型.
+        if (mapAttr.UIIsEnable == 1)
+            enableAttr = "";
+        else
+            enableAttr = "disabled='disabled'";
+
+        return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+    }
+
+
     //添加文本框 ，日期控件等
     //AppString
-    if (mapAttr.MyDataType == "1" ) {  //不是外键
+    if (mapAttr.MyDataType == "1" && mapAttr.UIContralType== 0  ) {  //不是外键
 
         if (mapAttr.UIHeight <= 23) //普通的文本框.
         {

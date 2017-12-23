@@ -726,17 +726,25 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
     var operations = '';
     //外键类型
     if (mapAttr.LGType == 2) {
-        if (frmData[mapAttr.KeyOfEn] != undefined) {
-            $.each(frmData[mapAttr.KeyOfEn], function (i, obj) {
+
+        var data = frmData[mapAttr.KeyOfEn];
+        if (data == undefined)
+            data = frmData[mapAttr.UIBindKey];
+
+        if (data == undefined) {
+            alert('没有获得约定的数据源..');
+            return;
+        } 
+
+            $.each(data, function (i, obj) {
                 operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
             });
         }
-        else if (frmData[mapAttr.UIBindKey] != undefined) {
-            $.each(frmData[mapAttr.UIBindKey], function (i, obj) {
-                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-            });
-        }
-    } else {
+      }
+        
+  
+    //枚举类型.
+    if (mapAttr.LGType == 1) {
         var enums = frmData.Sys_Enum;
         enums = $.grep(enums, function (value) {
             return value.EnumKey == mapAttr.UIBindKey;
@@ -748,8 +756,14 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
         });
     }
 
+    //外部数据源类型
+    if (mapAttr.LGType == 1) {
+
+
+    }
     return operations;
 }
+
 
 //填充默认数据
 function ConvertDefVal(frmData, defVal, keyOfEn) {

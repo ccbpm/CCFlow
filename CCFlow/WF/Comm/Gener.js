@@ -1,5 +1,8 @@
-﻿/* ESC Key Down */
+﻿
 
+
+
+/* ESC Key Down */
 
 function ToLoeo( dt ) {
 
@@ -586,3 +589,17 @@ function closeWhileEscUp() {
 		}
 	});
 }
+
+
+/* 关于实体的类
+
+          GEEntity_Init
+
+ var pkval="Demo_DtlExpImpDtl1";  
+           var EnName="BP.WF.Template.MapDtlExt";
+           GEntity en=new GEEntity(EnName,pkval);
+          var strs=  en.ImpSQLNames;
+
+
+        // var strss=en.GetValByKey('ImpSQLNames');
+*/

@@ -585,7 +585,8 @@ namespace BP.WF.Template
 
                 //是否显示
                 map.AddTBInt(FrmNodeAttr.IsEnable,1,"是否显示",true,false);
-                map.AddTBString(FrmNodeAttr.GuanJianZiDuan,null,"关键字段",true,true,1,20,20);
+
+                map.AddTBString(FrmNodeAttr.GuanJianZiDuan,null,"关键字段",true,true,0,20,20);
 
                 this._enMap = map;
                 return this._enMap;

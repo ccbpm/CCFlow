@@ -181,7 +181,7 @@ namespace BP.DA
         /// <returns> key value 模式的json </returns>
         public static string ToJsonEntityModel(Hashtable ht)
         {
-           return BP.Tools.Json.ToJsonEntityModel(ht);
+           return BP.Tools.Json.ToJsonEntityModel(ht,null);
         }
         #endregion 与hashtable 相关的操作.
 

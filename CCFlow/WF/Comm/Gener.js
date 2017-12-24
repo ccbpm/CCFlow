@@ -622,9 +622,9 @@ var strs=  en.ImpSQLNames;
 // var strss=en.GetValByKey('ImpSQLNames');
 */
 
-function GEEntity(EnName, pkval) {
+function GEEntity(enName, pkval) {
 	this.DoType = "GEEntity_Init";
-	this.EnName = EnName;
+	this.EnName = enName;
 	this.pkval = pkval;
 	this.jsonString = undefined;
 	this.loadData();
@@ -683,3 +683,32 @@ GEEntity.prototype = {
     }
 
 };
+
+
+function GEEntitiesOrderBy(ensName, key1, val1, orderBy) {
+
+}
+
+
+function GEEntitiesOrderBy(ensName, key1, val1, key2, val2, orderBy) {
+
+}
+
+
+
+function GEEntitiesOr(ensName, key1, val1, key2, val2, key3, val3, key4, val4) {
+  
+}
+
+
+function GEEntities(ensName, key1, val1, key2, val2, key3, val3, key4, val4) {
+
+    var para = "@" + key1 + "=" + val1 + "@" + key2 + "=" + val2 + "@" + key3 + "=" + val3 + "@" + key4 + "=" + val4;
+
+
+    this.DoType = "GEEntities_Init";
+    this.EnName = enName;
+    this.pkval = pkval;
+    this.jsonString = undefined;
+    this.loadData();
+}

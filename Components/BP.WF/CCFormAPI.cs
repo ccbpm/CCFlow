@@ -624,7 +624,7 @@ namespace BP.WF
 				wk.Insert();
 
 			//把参数放入到 En 的 Row 里面。
-			if (string.IsNullOrEmpty(atParas) == false)
+			if (DataType.IsNullOrEmpty(atParas) == false)
 			{
 				AtPara ap = new AtPara(atParas);
 				foreach (string key in ap.HisHT.Keys)
@@ -666,14 +666,14 @@ namespace BP.WF
             {
                 string lgType = dr["LGType"].ToString();
                 //不是枚举/外键字段
-                if (lgType == "0")
+                if (lgType.Equals("0"))
                     continue;
 
                 string uiBindKey = dr["UIBindKey"].ToString();
                 var mypk = dr["MyPK"].ToString();
 
                 #region 枚举字段
-                if (lgType == "1")
+                if (lgType.Equals("1"))
                 {
                     // 如果是枚举值, 判断是否存在.
                     if (myds.Tables.Contains(uiBindKey) == true)
@@ -693,7 +693,7 @@ namespace BP.WF
 
                 #region 外键字段
                 string UIIsEnable = dr["UIIsEnable"].ToString();
-                if (UIIsEnable == "0") //字段未启用
+                if (UIIsEnable.Equals("0")) //字段未启用
                     continue;
 
                 // 检查是否有下拉框自动填充。
@@ -810,7 +810,7 @@ namespace BP.WF
                     {
                         var a = attr.KeyOfEn;
                         var b = dr.ColumnName;
-                        if (attr.KeyOfEn.ToUpper() == dr.ColumnName)
+                        if (attr.KeyOfEn.ToUpper().Equals(dr.ColumnName))
                         {
                             dr.ColumnName = attr.KeyOfEn;
                             continue;
@@ -818,7 +818,7 @@ namespace BP.WF
 
                         if (attr.LGType == FieldTypeS.Enum || attr.LGType == FieldTypeS.FK)
                         {
-                            if (dr.ColumnName == attr.KeyOfEn.ToUpper() + "TEXT")
+                            if (dr.ColumnName.Equals(  attr.KeyOfEn.ToUpper() + "TEXT"))
                             {
                                 dr.ColumnName = attr.KeyOfEn + "Text";
                             }

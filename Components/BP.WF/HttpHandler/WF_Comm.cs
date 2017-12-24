@@ -52,9 +52,18 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string GEEntity_Init()
         {
-            Entity en = ClassFactory.GetEn(this.EnName);
-            en.PKVal = this.PKVal;
-            return en.ToJson();
+            try
+            {
+                Entity en = ClassFactory.GetEn(this.EnName);
+                en.PKVal = this.PKVal;
+                en.Retrieve();
+
+                return en.ToJson();
+            }
+            catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
         #endregion 
 

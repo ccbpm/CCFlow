@@ -1007,7 +1007,6 @@ namespace BP.WF.Template
                 //列自动计算表达式.
                 map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
                 map.SetHelperAlert(MapDtlAttr.ColAutoExp, "格式为:@XiaoJi:Sum@NingLing:Avg 要对小计求合计,对年龄求平均数.不配置不显示.");
-
                
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
                 #endregion 基础信息.
@@ -1024,6 +1023,7 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false,true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false,true);
 
+                map.AddTBString(MapDtlAttr.ImpSQLNames, null, "列的中文名称", true, false, 0, 900, 20, true);
 
                 #endregion 导入导出填充.
 

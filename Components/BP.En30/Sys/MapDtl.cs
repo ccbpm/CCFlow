@@ -227,6 +227,10 @@ namespace BP.Sys
         /// 填充数据一行数据
         /// </summary>
         public const string ImpSQLFullOneRow = "ImpSQLFullOneRow";
+        /// <summary>
+        /// 列的中文名称
+        /// </summary>
+        public const string ImpSQLNames = "ImpSQLNames";
         #endregion
     }
     /// <summary>
@@ -1365,6 +1369,7 @@ namespace BP.Sys
                 map.AddTBString(MapDtlAttr.ImpSQLSearch, null, "查询SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充SQL", true, false, 0, 500, 20);
+                map.AddTBString(MapDtlAttr.ImpSQLNames, null, "字段中文名", true, false, 0, 900, 20);
                 #endregion 导入导出填充.
 
 

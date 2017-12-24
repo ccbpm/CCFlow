@@ -151,6 +151,7 @@
     <Compile Include="Data\GenerWorkFlowViewNY.cs" />
     <Compile Include="Data\Eval.cs" />
     <Compile Include="Data\GenerWorkFlowView.cs" />
+    <Compile Include="Data\MyDeptTodolist.cs" />
     <Compile Include="Data\MyStartFlow.cs" />
     <Compile Include="Data\MyDeptFlow.cs" />
     <Compile Include="Data\MyJoinFlow.cs" />

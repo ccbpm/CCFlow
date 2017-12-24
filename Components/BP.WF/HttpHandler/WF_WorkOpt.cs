@@ -298,8 +298,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string HuiQian_Init()
         {
-           
-
             //要找到主持人.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
@@ -335,8 +333,6 @@ namespace BP.WF.HttpHandler
                         dr["FK_DeptT"] = item.FK_DeptT;
                 }
             }
-
-          
 
             return BP.Tools.Json.ToJson(mydt);
         }
@@ -561,23 +557,23 @@ namespace BP.WF.HttpHandler
         {
             //生成变量.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-            
+
             //求会签人.
             GenerWorkerLists gwfs = new GenerWorkerLists();
             gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
                 GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.IsPass, 0);
 
-            if (gwfs.Count == 1 && gwf.HuiQianTaskSta== HuiQianTaskSta.HuiQianOver)
+            if (gwfs.Count == 1 && gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianOver)
             {
                 /*只有一个人的情况下, 并且是会签完毕状态，就执行 */
-                return "当前工作已经到您的待办理了,会签工作已经完成.";
+                return "info@当前工作已经到您的待办理了,会签工作已经完成.";
             }
 
             //说明没有会签人,就直接关闭.
             if (gwfs.Count == 1)
-                return "您没有设置会签人，当前是待办状态。";
+                return "info@您没有设置会签人，当前是待办状态。";
 
-           // bool isHaveHuiqian=false;
+            // bool isHaveHuiqian=false;
 
 
             gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
@@ -590,16 +586,30 @@ namespace BP.WF.HttpHandler
             //设置当前操作人员的状态.
             string sql = "UPDATE WF_GenerWorkerList SET IsPass=90 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND FK_Emp='" + WebUser.No + "'";
             DBAccess.RunSQL(sql);
-         
+
             //删除以前执行的会签点,比如:该人多次执行会签，仅保留最后一个会签时间点.  @于庆海.
-            sql = "DELETE ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND ActionType="+(int)ActionType.HuiQian+" AND NDFrom="+this.FK_Node;
+            sql = "DELETE ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND ActionType=" + (int)ActionType.HuiQian + " AND NDFrom=" + this.FK_Node;
             DBAccess.RunSQL(sql);
 
             //执行会签,写入日志.
-            BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian, ActionType.HuiQian,"执行会签",null);
+            BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian, ActionType.HuiQian, "执行会签", null);
 
-            string str = "保存成功.\t\n该工作已经移动到会签列表中了,等到所有的人会签完毕后,就可以出现在待办列表里.";
-            str += "\t\n如果您要增加或者移除会签人请到会签列表找到该记录,执行操作.";
+            //判断当前节点的会签类型.
+
+            Node nd = new Node(gwf.FK_Node);
+
+            string str = "";
+
+            if (nd.TodolistModel == TodolistModel.TeamupGroupLeader)
+            {
+                /*如果是组长模式.*/
+                str = "close@保存成功.\t\n该工作已经移动到会签列表中了,等到所有的人会签完毕后,就可以出现在待办列表里.";
+                str += "\t\n如果您要增加或者移除会签人请到会签列表找到该记录,执行操作.";
+            }
+
+            if (nd.TodolistModel == TodolistModel.Teamup)
+                str = "info@会签成功执行,请点击发送按钮完成您的操作.";
+
             return str;
         }
         #endregion 

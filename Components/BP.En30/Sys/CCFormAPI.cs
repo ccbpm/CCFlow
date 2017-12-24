@@ -228,11 +228,11 @@ namespace BP.Sys
             //根据外键表的类型不同，设置它的LGType.
             switch (sf.SrcType)
             {
-                case SrcType.BPClass:
                 case SrcType.CreateTable:
                 case SrcType.TableOrView:
                     attr.LGType = FieldTypeS.FK;
                     break;
+                case SrcType.BPClass:
                 default:
                     attr.LGType = FieldTypeS.Normal;
                     break;

@@ -38,6 +38,26 @@ namespace BP.WF.HttpHandler
         }
         #endregion 统计分析组件.
 
+        #region 公共类库.
+        public string EnName
+        {
+            get
+            {
+                return this.GetRequestVal("EnName");
+            }
+        }
+        /// <summary>
+        /// 获得实体
+        /// </summary>
+        /// <returns></returns>
+        public string GEEntity_Init()
+        {
+            Entity en = ClassFactory.GetEn(this.EnName);
+            en.PKVal = this.PKVal;
+            return en.ToJson();
+        }
+        #endregion 
+
 
 
         #region 功能执行.

@@ -857,6 +857,10 @@ namespace BP.WF.HttpHandler
                     if (UIIsEnable == "0")
                         continue;
 
+                    //string lgType = dr[MapAttrAttr.LGType].ToString();
+                    //if (lgType == "0")
+                    //    continue
+
                     string uiBindKey = dr["UIBindKey"].ToString();
                     if (string.IsNullOrEmpty(uiBindKey) == true)
                     {

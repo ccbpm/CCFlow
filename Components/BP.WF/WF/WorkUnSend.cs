@@ -374,23 +374,28 @@ namespace BP.WF
 
                 //如果没有找到当前会签人.
                 if (i == 0)
-                    return "err@当前节点是会签状态,您不能执行撤销.";
+                    return "err@当前节点[" + gwf.NodeName + "]是会签状态,[" + gwf.TodoEmps + "]在执行会签,您不能执行撤销.";
 
                 //如果是会签人，就让其显示待办.
                 gwl.IsPassInt = 0;
                 gwl.IsEnable = true;
-                 gwl.Update();
+                gwl.Update();
 
+                // 在待办人员列表里加入他. 要判断当前人员是否是主持人,如果是主持人的话，主持人是否在发送的时候，
+                // 就选择方向与接受人.
+                if (gwf.HuiQianZhuChiRen == WebUser.No)
+                {
+                    gwf.TodoEmps = WebUser.No + "," + BP.Web.WebUser.Name + ";" + gwf.TodoEmps;
 
-                //在待办人员列表里加入他.
-                gwf.TodoEmps = gwf.TodoEmps + BP.Web.WebUser.Name + ";";
+                }
+                else
+                {
+                    gwf.TodoEmps = gwf.TodoEmps + BP.Web.WebUser.Name + ";";
+                }
+
                 gwf.Update();
 
-                //执行删除会签意见.
-                //string sql = "DELETE FROM ND"+int.Parse(gwf.FK_Flow)+"Track WHERE WorkID="+this.WorkID+" AND FK_Node=" + gwl.FK_Node+" AND FK_Emp='"+BP.Web.WebUser.No+"'";
-                //DBAccess.RunSQL(sql);
-
-                return "会签人撤销成功...";
+                return "会签人撤销成功.";
             }
             #endregion 判断是否是会签状态,是否是会签人做的撤销.
 

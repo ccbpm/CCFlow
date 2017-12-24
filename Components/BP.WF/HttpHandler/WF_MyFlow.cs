@@ -420,11 +420,7 @@ namespace BP.WF.HttpHandler
                 //增加fk_node
                 if (toUrl.Contains("&FK_Node=") == false)
                     toUrl += "&FK_Node=" + this.currND.NodeID;
-
-                // 增加表单参数.
-                if (toUrl.Contains("Frms") == false && gwf!=null)
-                    toUrl += "&Frms=" +gwf.Paras_Frms;
-
+            
                 //// 加入设置父子流程的参数.
                 //toUrl += "&DoFunc=" + this.DoFunc;
                 //toUrl += "&CFlowNo=" + this.CFlowNo;

@@ -1054,31 +1054,45 @@ namespace BP.WF
             }
         }
         /// <summary>
-        /// 临时记录到达人员
+        /// 会签到达人员
         /// </summary>
-        public string SendToEmps
+        public string HuiQianSendToEmps
         {
             get
             {
-                return this.GetParaString("SendToEmps");
+                return this.GetParaString("HuiQianSendToEmps");
             }
             set
             {
-                this.SetPara("SendToEmps", value);
+                this.SetPara("HuiQianSendToEmps", value);
             }
         }
         /// <summary>
-        /// 到达节点格式为: 101@102
+        /// 会签到达节点: 101@102
         /// </summary>
-        public string SendToNodeIDStr
+        public string HuiQianSendToNodeIDStr
         {
             get
             {
-                return this.GetParaString("SendToNodeID");
+                return this.GetParaString("HuiQianSendToNodeID");
             }
             set
             {
-                this.SetPara("SendToNodeID", value);
+                this.SetPara("HuiQianSendToNodeID", value);
+            }
+        }
+        /// <summary>
+        /// 会签主持人
+        /// </summary>
+        public string HuiQianZhuChiRen
+        {
+            get
+            {
+                return this.GetParaString("HuiQianZhuChiRen");
+            }
+            set
+            {
+                this.SetPara("HuiQianZhuChiRen", value);
             }
         }
         #endregion 参数属性.

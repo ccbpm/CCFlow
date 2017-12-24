@@ -5932,8 +5932,9 @@ namespace BP.WF
                     if (jumpToNode != null)
                     {
                         /*如果是就记录下来发送到达的节点ID,到达的人员ID.*/
-                        this.HisGenerWorkFlow.SendToNodeIDStr = this.HisNode.NodeID+","+ jumpToNode.NodeID;
-                        this.HisGenerWorkFlow.SendToEmps = jumpToEmp;
+                        this.HisGenerWorkFlow.HuiQianSendToNodeIDStr = this.HisNode.NodeID + "," + jumpToNode.NodeID;
+                        this.HisGenerWorkFlow.HuiQianSendToEmps = jumpToEmp;
+                        this.HisGenerWorkFlow.HuiQianZhuChiRen = WebUser.No;
                         this.HisGenerWorkFlow.Update();
                     }
 
@@ -5947,7 +5948,7 @@ namespace BP.WF
                 if (this.JumpToNode == null)
                 {
                     /*如果是就记录下来发送到达的节点ID,到达的人员ID.*/
-                    string strs = this.HisGenerWorkFlow.SendToNodeIDStr;
+                    string strs = this.HisGenerWorkFlow.HuiQianSendToNodeIDStr;
 
                     if (strs.Contains(",") == true)
                     {
@@ -5957,7 +5958,7 @@ namespace BP.WF
                         if (fromNodeID == this.HisNode.NodeID)
                         {
                             JumpToNode = new Node(toNodeID);
-                            JumpToEmp = this.HisGenerWorkFlow.SendToEmps;
+                            JumpToEmp = this.HisGenerWorkFlow.HuiQianSendToEmps;
                         }
                     }
 

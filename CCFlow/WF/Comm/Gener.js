@@ -620,8 +620,115 @@ var EnName="BP.WF.Template.MapDtlExt";
 GEntity en=new GEEntity(EnName,pkval);
 var strs=  en.ImpSQLNames;
 // var strss=en.GetValByKey('ImpSQLNames');
+en.ImpSQLNames=aaa;
+en.Updata();
 */
 
+var Entity = (function () {
+
+	var jsonString;
+
+	var Entity = function (enName, pkval) {
+		this.enName = enName;
+		this.pkval = pkval;
+		jsonString = loadData(enName, pkval);
+		if (typeof jsonString !== "undefined") {
+			var self = this;
+			$.each(jsonString, function (n, o) {
+				// 需要判断属性名与当前对象属性名是否相同
+				self[n] = o;
+			});
+		}
+	};
+
+	var pathName = document.location.pathname;
+	var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+	if (projectName.startsWith("/WF")) {
+		projectName = "";
+	}
+	var dynamicHandler = "/WF/Comm/Handler.ashx";
+
+	function loadData(enName, pkval) {
+		var json;
+		$.ajax({
+			type: 'post',
+			async: false,
+			url: projectName + dynamicHandler + "?DoType=Entity_Init&EnName=" + enName + "&PKVal=" + pkval + "&t=" + new Date().getTime(),
+			dataType: 'html',
+			success: function (data) {
+				if (data.indexOf("err@") != -1) {
+					alert(data);
+					return;
+				}
+				try {
+					json = JSON.parse(data);
+				} catch (e) {
+					alert("解析错误: " + data);
+				}
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+			}
+		});
+		return json;
+	}
+
+	Entity.prototype = {
+
+		constructor : Entity,
+
+		Update : function () {
+			var self = this;
+			var modifyArrays = {};
+			var count = 0;
+			$.each(jsonString, function (n, defaultValue) {
+				if (self[n] != defaultValue) {
+					modifyArrays[n] = self[n];
+					count++;
+				}
+			});
+			if (count > 0) {
+				$.ajax({
+					type: 'post',
+					async: false,
+					url: projectName + dynamicHandler + "?DoType=Entity_Update&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
+					dataType: 'html',
+					data : modifyArrays,
+					success: function (data) {
+						$.each(modifyArrays, function (n, o) {
+							jsonString[n] = o;
+						});
+					},
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+					}
+				});
+			}
+		},
+
+		Delete : function () {
+			var self = this;
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: projectName + dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
+				dataType: 'html',
+				success: function (data) {
+					
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+				}
+			});
+		}
+
+	};
+
+	return Entity;
+
+})();
+
+/*
 function GEEntity(enName, pkval) {
 	this.DoType = "GEEntity_Init";
 	this.EnName = enName;
@@ -712,3 +819,4 @@ function GEEntities(ensName, key1, val1, key2, val2, key3, val3, key4, val4) {
     this.jsonString = undefined;
     this.loadData();
 }
+*/

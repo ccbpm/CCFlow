@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>创建本机数据表</title>
+	<title>外部数据源</title>
 	<link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
 	<link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
 	<link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
@@ -71,15 +71,27 @@
             <tr>
                 <td class="GroupTitle">方法名</td>
                 <td class="style2"><input type="text" id="TB_No" name="TB_No" /></td>
-                <td>创建字典表的英文名称,不要以数字开头否则创建表出错.</td>
+                <td>方法英文名.</td>
             </tr>
             <tr>
                 <td class="GroupTitle">方法描述</td>
                 <td class="style2"><input type="text" id="TB_Name" name="TB_Name" /></td>
-                <td>创建字典表的中文名称</td>
+                <td>方法中文名</td>
             </tr>
         </table>
         <input type=button value="保存" onclick="Save()" />
+
+        <fieldset>
+        <legend>帮助</legend>
+        <ul>
+        <<li>首先在 \DataUser\SFTable.js 文件里写一个函数, 该文件可以被流程开发人员重写.</li>
+        <<li>该函数的格式要求，请参考SFTable.js 的头部文件.</li>
+        <<li>该功能界面是把外部数据源的js方法注册到Sys_SFTable里.</li>
+        <<li>方法名就是SFTable.js的函数名, 方法描述就填写一个中文描述. </li>
+        <<li>比如有一个 function XCLX() 的函数，方法名为XCLX 方法描述为行程类型.</li>
+        <<li>如果表单引用了该字段，该字段为下来框展示，但是他是外部数据源类型，在Sys_MapAttr里有两条记录分别为FiledName, FieldNameT .</li>
+        </ul>
+        </fieldset>
     </form>
 </body>
 </html>

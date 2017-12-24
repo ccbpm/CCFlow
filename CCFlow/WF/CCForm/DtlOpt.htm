@@ -111,25 +111,25 @@
 //            var dt=DBAccess.RunSQLReturnTable(sql);
 //            var strs = dt[0][0];
 
-            var pkval= GetQueryString("EnsName");  
-            var en=new GEEntity("BP.WF.Template.MapDtlExt",pkval);
-            var strs = "ImpSQLNames: " + en.GetValByKey("ImpSQLNames");
-            strs += "\nRowShowModelText: " + en.GetValByKey("RowShowModelText");
-            strs += "\nListShowModelText: " + en.GetValByKey("ListShowModelText");
-            strs += "\nColAutoExp: " + en.GetValByKey("ColAutoExp");
-            alert(strs);
-//          strs.replace('，',',');
-//          strs.replace(' ','');
-            //var strs = "编号,名称,性别,电话,地址,班级".split(',');
-            /*
+            var pkval = GetQueryString("EnsName");
+
+            var en = new GEEntity("BP.WF.Template.MapDtlExt", pkval);
+            var strs = en.GetValByKey("ImpSQLNames");
+
+
+            while (true) {
+                if (strs.indexOf('，') == -1)
+                    break;
+
+                strs = strs.replace('，', ',');
+            }
+
+            strs = strs.split(',');
+
             for (var i = 0; i < strs.length; i++) {
-
                 var str = strs[i];
-                alert(str);
-
                 $('#sp' + i).html(str);
             }
-            */
          
         }
 

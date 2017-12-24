@@ -283,6 +283,9 @@
 
                 //增加列
                 $.each(d.Sys_MapAttr, function (idx, c) {
+					if (c.No == "OID") {
+						return;
+					}
 					var width = getColumnWidth(c.No, c.Name, d.MainData, c.Width);
                     cols.push({
                         title: c.Name,

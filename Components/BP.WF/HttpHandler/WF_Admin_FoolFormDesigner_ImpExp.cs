@@ -79,6 +79,33 @@ namespace BP.WF.HttpHandler
             }
             #endregion 加入表单库目录.
 
+
+            #region 加入流程树目录.
+            sql = "SELECT No,Name,ParentNo FROM WF_FlowSort ORDER BY  PARENTNO, IDX ";
+
+            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "WF_FlowSort";
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["PARENTNO"].ColumnName = "ParentNo";
+            }
+            ds.Tables.Add(dt);
+
+            //加入表单
+            sql = "SELECT No, Name, FK_FlowSort  FROM WF_Flow ";
+            dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
+            dt.TableName = "WF_Flow";
+            ds.Tables.Add(dt);
+            if (SystemConfig.AppCenterDBType == DBType.Oracle)
+            {
+                dt.Columns["NO"].ColumnName = "No";
+                dt.Columns["NAME"].ColumnName = "Name";
+                dt.Columns["FK_FLOWSORT"].ColumnName = "FK_FlowSort";
+            }
+            #endregion 加入流程树目录.
+
             #region 数据源
             BP.Sys.SFDBSrcs ens = new BP.Sys.SFDBSrcs();
             ens.RetrieveAll();

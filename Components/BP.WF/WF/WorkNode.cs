@@ -5059,10 +5059,12 @@ namespace BP.WF
         {
             GenerWorkerLists gwls = new GenerWorkerLists();
             gwls.Retrieve(GenerWorkerListAttr.WorkID, this.WorkID,
-                GenerWorkerListAttr.FK_Node, this.HisNode.NodeID, GenerWorkerListAttr.IsPass);
+                GenerWorkerListAttr.FK_Node, this.HisNode.NodeID);
 
             if (gwls.Count == 1)
+            {
                 return false; /*让其向下执行,因为只有一个人,就没有顺序的问题.*/
+            }
 
             //查看是否我是最后一个？
             int num = 0;
@@ -5098,28 +5100,23 @@ namespace BP.WF
 
                 // 检查完成条件。
                 if (this.HisNode.IsEndNode == false)
-                {
                     this.CheckCompleteCondition();
-                }
+
                 //写入日志.
-                this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
+                if (this.HisGenerWorkFlow.HuiQianTaskSta != HuiQianTaskSta.None)
+                    this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "会签");
+                else
+                    this.AddToTrack(ActionType.TeampUp, gwl.FK_Emp, todoEmps, this.HisNode.NodeID, this.HisNode.Name, "协作发送");
 
                 //替换人员信息.
                 string emps = this.HisGenerWorkFlow.TodoEmps;
                 emps = emps.Replace(WebUser.No + "," + WebUser.Name + ";", "");
-                this.HisGenerWorkFlow.TodoEmps = emps; 
+                this.HisGenerWorkFlow.TodoEmps = emps;
 
 
-                //处理会签问题，
-                if (num == 2)
-                {
-                    string msg = this.DealAlertZhuChiRen();
-                    this.addMsg(SendReturnMsgFlag.OverCurr, msg, null, SendReturnMsgType.Info);
-                }
-                else
-                {
-                    this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
-                }
+                //处理会签问题
+                this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
+
                 return true;
             }
 
@@ -5874,7 +5871,6 @@ namespace BP.WF
 
                     if (this.HisNode.ThreadKillRole == ThreadKillRole.ByAuto)
                     {
-
                         //删除每个子线程，然后向下运动。
                         foreach (DataRow dr in dtWL.Rows)
                             BP.WF.Dev2Interface.Flow_DeleteSubThread(this.HisFlow.No, Int64.Parse(dr[0].ToString()), "合流点发送时自动删除");
@@ -5883,13 +5879,12 @@ namespace BP.WF
             }
             #endregion 第一步: 检查当前操作员是否可以发送
 
-
             //查询出来当前节点的工作报表.
             this.rptGe = this.HisFlow.HisGERpt;
             this.rptGe.SetValByKey("OID", this.WorkID);
             this.rptGe.RetrieveFromDBSources();
 
-            //检查阻塞模式
+            //检查阻塞模式.
             this.CheckBlockModel();
 
             // 检查FormTree必填项目,如果有一些项目没有填写就抛出异常.
@@ -5929,10 +5924,48 @@ namespace BP.WF
                     //if (this._transferCustom != null)
                     //    _transferCustom.Delete();
 
+                    /*
+                     * 1. 判断是否传递过来到达节点，到达人员信息，如果传递过来，就可能是主持人在会签之后执行的发送.
+                     * 2. 会签之后执行的发送，就要把到达节点，到达人员存储到数据表里.
+                     */
+
+                    if (jumpToNode != null)
+                    {
+                        /*如果是就记录下来发送到达的节点ID,到达的人员ID.*/
+                        this.HisGenerWorkFlow.SendToNodeIDStr = this.HisNode.NodeID+","+ jumpToNode.NodeID;
+                        this.HisGenerWorkFlow.SendToEmps = jumpToEmp;
+                        this.HisGenerWorkFlow.Update();
+                    }
+
                     //执行时效考核.
                     Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, this.rptGe.FID, this.rptGe.Title);
                     return this.HisMsgObjs;
                 }
+
+                //取出来已经存储的到达节点，节点人员信息. 在tempUp模式的会签时，主持人发送会把发送到节点，发送给人员的信息
+                // 存储到wf_generworkflow里面.
+                if (this.JumpToNode == null)
+                {
+                    /*如果是就记录下来发送到达的节点ID,到达的人员ID.*/
+                    string strs = this.HisGenerWorkFlow.SendToNodeIDStr;
+
+                    if (strs.Contains(",") == true)
+                    {
+                        string[] nds = strs.Split(',');
+                        int fromNodeID = int.Parse( nds[0]);
+                        int toNodeID = int.Parse(nds[1]);
+                        if (fromNodeID == this.HisNode.NodeID)
+                        {
+                            JumpToNode = new Node(toNodeID);
+                            JumpToEmp = this.HisGenerWorkFlow.SendToEmps;
+                        }
+                    }
+
+                    //this.HisGenerWorkFlow.SendToEmps = jumpToEmp;
+                    //this.HisGenerWorkFlow.Update();
+                }
+
+
             }
 
             //如果是协作组长模式节点, 就判断当前的队列人员是否走完.

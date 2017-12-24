@@ -979,6 +979,7 @@ namespace BP.WF
                 this.SetPara("LastTruckID", value);
             }
         }
+       
         /// <summary>
         /// 加签信息
         /// </summary>
@@ -1050,6 +1051,34 @@ namespace BP.WF
             set
             {
                 this.SetPara("TodolistModel", (int)value);
+            }
+        }
+        /// <summary>
+        /// 临时记录到达人员
+        /// </summary>
+        public string SendToEmps
+        {
+            get
+            {
+                return this.GetParaString("SendToEmps");
+            }
+            set
+            {
+                this.SetPara("SendToEmps", value);
+            }
+        }
+        /// <summary>
+        /// 到达节点格式为: 101@102
+        /// </summary>
+        public string SendToNodeIDStr
+        {
+            get
+            {
+                return this.GetParaString("SendToNodeID");
+            }
+            set
+            {
+                this.SetPara("SendToNodeID", value);
             }
         }
         #endregion 参数属性.

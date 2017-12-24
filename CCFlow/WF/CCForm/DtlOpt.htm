@@ -50,7 +50,7 @@
 
             var html = "";
             html += "<table style='width:100%;' >";
-            //输出列名.
+            //输出列名. 
             html += "<tr>";
             for (var attr in result) {
                 var myrow = result[attr];
@@ -59,9 +59,9 @@
                 for (var myfield in myrow) {
 
                     if (myidx == 0)
-                        html += "<th><input type='checkbox' onclick='CheckAll()' id='CB_CheckAll' ><label for='CB_CheckAll'>" + myfield + "</label></th>";
+                        html += "<th><input type='checkbox' onclick='CheckAll()' id='CB_CheckAll' ><label for='CB_CheckAll'><span id='sp" + myidx + "'>" + myfield + "</span></label></th>";
                     else
-                        html += "<th>" + myfield + "</th>";
+                        html += "<th><span id='sp" + myidx + "'>" + myfield + "</span></th>"; 
                     myidx++;
                 }
                 break;
@@ -97,6 +97,35 @@
 
             $("#Table1").html(html);
             $("#Msg").html();
+
+            //改变列名.
+            CheangeColName();
+        }
+
+        function CheangeColName() {
+
+            //  BP.WF.Template.MapDtlExt ext = new BP.WF.Template.MapDtlExt();
+            var ensName = GetQueryString("EnsName"); // Demo_DtlExpImpDtl1
+
+            var sql = "SELECT ImpSQLNames FROM Sys_MapDtl WHERE No='" + ensName + "'";
+            var dt=DBAccess.RunSQLReturnTable(sql);
+            var strs = dt[0][0];
+
+//          var pkval= GetQueryString("EnsName");  
+//           GEntity en=new GEEntity("BP.WF.Template.MapDtlExt",pkval);
+//          var strs=  en.ImpSQLNames;
+//          strs.replace('，',',');
+//          strs.replace(' ','');
+            //var strs = "编号,名称,性别,电话,地址,班级".split(',');
+
+            for (var i = 0; i < strs.length; i++) {
+
+                var str = strs[i];
+                alert(str);
+
+                $('#sp' + i).html(str);
+            }
+         
         }
 
         function Search() {

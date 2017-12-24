@@ -57,10 +57,27 @@ namespace BP.WF.HttpHandler
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
                 en.Retrieve();
-
                 return en.ToJson();
             }
             catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <returns></returns>
+        public string GEEntity_Delete()
+        {
+            try
+            {
+                Entity en = ClassFactory.GetEn(this.EnName);
+                en.PKVal = this.PKVal;
+                en.Delete();
+                return "删除成功.";
+            }
+            catch (Exception ex)
             {
                 return "err@" + ex.Message;
             }

@@ -61,9 +61,9 @@ namespace BP.WF.HttpHandler
             BP.WF.Template.FrmNodes fns = new BP.WF.Template.FrmNodes();
 
             QueryObject qo = new QueryObject(fns);
-            qo.AddWhere(FrmNodeAttr.FK_Node, int.Parse(this.FK_Node + "01"));
+            qo.AddWhere(FrmNodeAttr.FK_Node, int.Parse(this.FK_Flow + "01"));
             qo.addAnd();
-            qo.AddWhere(FrmNodeAttr.FrmEnableRole, "!=", (int)BP.WF.Template.FrmEnableRole.WhenHaveFrmPara);
+            qo.AddWhere(FrmNodeAttr.FrmEnableRole, (int)BP.WF.Template.FrmEnableRole.WhenHaveFrmPara);
             qo.addOrderBy(FrmNodeAttr.Idx);
             qo.DoQuery();
 

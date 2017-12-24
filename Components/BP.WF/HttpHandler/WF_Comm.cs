@@ -134,8 +134,14 @@ namespace BP.WF.HttpHandler
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
 
+                //插入数据库.
                 en.Insert();
-                return "插入成功.";
+
+                //执行查询.
+                en.Retrieve();
+
+                //返回数据.
+                return en.ToJson();
             }
             catch (Exception ex)
             {

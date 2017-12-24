@@ -38,7 +38,10 @@ namespace BP.WF.HttpHandler
         }
         #endregion 统计分析组件.
 
-        #region 公共类库.
+        #region Entity 公共类库.
+        /// <summary>
+        /// 实体类名
+        /// </summary>
         public string EnName
         {
             get
@@ -50,7 +53,7 @@ namespace BP.WF.HttpHandler
         /// 获得实体
         /// </summary>
         /// <returns></returns>
-        public string GEEntity_Init()
+        public string Entity_Init()
         {
             try
             {
@@ -68,7 +71,7 @@ namespace BP.WF.HttpHandler
         /// 删除
         /// </summary>
         /// <returns></returns>
-        public string GEEntity_Delete()
+        public string Entity_Delete()
         {
             try
             {
@@ -82,20 +85,50 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-        #endregion 
-
-        #region sss
         /// <summary>
-        /// 运行SQL执行查询
+        /// 更新
         /// </summary>
-        /// <returns>返回结果集</returns>
-        public string DBAccess_RunSQLReturnTable()
+        /// <returns></returns>
+        public string Entity_Update()
         {
-            string sql = this.GetRequestVal("SQL");
-            return BP.Tools.Json.ToJson( BP.DA.DBAccess.RunSQLReturnTable(sql));
+            try
+            {
+                Entity en = ClassFactory.GetEn(this.EnName);
+                en.PKVal = this.PKVal;
+                en.Update();
+                return "删除成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
         }
-        #endregion
+        #endregion 
+       
+        #region Entities 公共类库.
+        /// <summary>
+        /// 获得实体
+        /// </summary>
+        /// <returns></returns>
+        public string Entities_Init()
+        {
+            try
+            {
+                Entities ens = ClassFactory.GetEns(this.EnsName);
 
+                string condKey = "";
+
+                string keys = "@FK_Dept=01@XB=0@OrderBy=Age";
+
+
+                return ens.ToJson();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        #endregion 
 
 
         #region 功能执行.
@@ -592,24 +625,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 相关功能.
 
-        #region 界面 .
-        /// <summary>
-        /// 实体初始化
-        /// </summary>
-        /// <returns></returns>
-        public string Entity_Init()
-        {
-            return "";
-        }
-        public string Entity_Save()
-        {
-            return "";
-        }
-        public string Entity_Delete()
-        {
-            return "";
-        }
-        #endregion 界面方法.
 
         #region  公共方法。
         public string SFTable()

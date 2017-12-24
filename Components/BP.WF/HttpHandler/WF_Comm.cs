@@ -77,6 +77,10 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
+                int i= en.RetrieveFromDBSources();
+                if (i == 0)
+                    return "无此记录，无法删除.";
+
                 en.Delete();
                 return "删除成功.";
             }

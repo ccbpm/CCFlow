@@ -154,6 +154,7 @@ namespace BP.WF.HttpHandler
         }
         /// <summary>
         /// 从流程上copy表单
+        /// @徐彪来调用.
         /// </summary>
         /// <returns></returns>
         public string Imp_CopyFromFlow()

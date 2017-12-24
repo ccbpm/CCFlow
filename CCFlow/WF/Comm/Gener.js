@@ -638,8 +638,10 @@ GEEntity.prototype = {
         var self = this;
 		var dynamicHandler;
 		if (plant == "CCFlow") {
+			// CCFlow
 			dynamicHandler = "/WF/Comm/Handler.ashx";
 		} else {
+			// JFlow
 			dynamicHandler = "/WF/Comm/ProcessRequest.do";
 		}
         $.ajax({

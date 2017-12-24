@@ -11,6 +11,7 @@ var isLoadOk = false;
 
 $(function () {
 
+
     initPageParam(); //初始化参数
 
     InitToolBar(); //工具栏.ajax
@@ -1437,7 +1438,22 @@ function GenerWorkNode() {
                 $('#MessageDiv').modal().show();
             }
 
+
+            ShowNoticeInfo();
+
+            ShowTextBoxNoticeInfo();
+
+            //发送旁边下拉框 edit by zhoupeng 放到这里是为了解决加载不同步的问题.
+            InitToNodeDDL(flowData);
+
+
             //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
+
+            if (node.FormType == 5) {
+                GenerTreeFrm(flowData); /*树形表单*/
+                return;
+            }
+
             if (node.FormType == 0) {
                 GenerFoolFrm(flowData); //傻瓜表单.
             }
@@ -1446,9 +1462,8 @@ function GenerWorkNode() {
                 GenerFreeFrm(flowData);  //自由表单.
             }
 
-            if (node.FormType == 5) {
-                GenerTreeFrm(flowData); /*树形表单*/
-            }
+            //以下代码是 傻瓜表单与自由表单, 公共方法.
+            var local = window.location.href;
 
             var frm = document.forms["divCCForm"];
             if (plant == "CCFlow")
@@ -1456,9 +1471,8 @@ function GenerWorkNode() {
             else
                 frm.action = MyFlow + "?method=login";
 
-            //单表单加载后执行
+            //单表单加载后执行.
             CCFormLoaded();
-
 
             //加入隐藏控件.
             var html = "";
@@ -1468,7 +1482,6 @@ function GenerWorkNode() {
                     html += "<input type='hidden' id='TB_" + attr.KeyOfEn + "' name='TB_" + attr.KeyOfEn + "' value='" + defval + "' />";
                 }
             }
-
 
             //初始化Sys_MapData
             var h = flowData.Sys_MapData[0].FrmH;
@@ -1489,8 +1502,7 @@ function GenerWorkNode() {
                 $(obj).attr('title', $(obj).val());
             })
 
-
-            //根据NAME 设置ID的值
+            //根据NAME 设置ID的值.
             var inputs = $('[name]');
             $.each(inputs, function (i, obj) {
                 if ($(obj).attr("id") == undefined || $(obj).attr("id") == '') {
@@ -1498,9 +1510,7 @@ function GenerWorkNode() {
                 }
             })
 
-
-
-            ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题
+            ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
             var enName = flowData.Sys_MapData[0].No;
             try {
                 ////加载JS文件
@@ -1534,6 +1544,7 @@ function GenerWorkNode() {
 
             Common.MaxLengthError();
 
+
             //处理下拉框级联等扩展信息
             AfterBindEn_DealMapExt();
 
@@ -1550,32 +1561,16 @@ function GenerWorkNode() {
                 }
             }
 
-
-            ShowNoticeInfo();
-
-            ShowTextBoxNoticeInfo();
-
-            //初始化复选下拉框 
-            var selectPicker = $('.selectpicker');
-            $.each(selectPicker, function (i, selectObj) {
-                var defVal = $(selectObj).attr('data-val');
-                var defValArr = defVal.split(',');
-                $(selectObj).selectpicker('val', defValArr);
-            });
-
-
-            //发送旁边下拉框 edit by zhoupeng 放到这里是为了解决加载不同步的问题.
-            InitToNodeDDL(flowData);
-
+            //给富文本创建编辑器
             if (document.BindEditorMapAttr) {
-                //给富文本创建编辑器
+               
                 var editor = document.activeEditor = UE.getEditor('editor', {
                     autoHeightEnabled: false,
                     emotionLocalization: true,
                     elementPathEnabled: false,
                     maximumWords: document.BindEditorMapAttr.MaxLen,
                     toolbars: [[
-             'cleardoc','undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'fontfamily', 'fontsize','formatmatch', 'indent', 'date', 'time'
+             'cleardoc', 'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'fontfamily', 'fontsize', 'formatmatch', 'indent', 'date', 'time'
         ]]
                 });
 
@@ -1590,7 +1585,7 @@ function GenerWorkNode() {
                     $(editor.container).css({ "display": "inline-block", "margin-right": "4px", "vertical-align": "middle" });
                 }
             }
-
+            //给富文本创建编辑器
         }
     })
 }

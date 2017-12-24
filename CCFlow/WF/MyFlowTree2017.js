@@ -21,7 +21,6 @@ function FlowFormTree_Init() {
         Frms: frms
     };
      
-
     AjaxService(para, function (data) {
         if (data.indexOf('err@') == 0) {//发送时发生错误
             alert(data);

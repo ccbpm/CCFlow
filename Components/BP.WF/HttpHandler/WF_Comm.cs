@@ -59,7 +59,14 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
-                en.Retrieve();
+                if (en.PKVal == "0" || en.PKVal == "")
+                {
+                    Map map = en.EnMap;
+                }
+                else
+                {
+                    en.Retrieve();
+                }
                 return en.ToJson();
             }
             catch(Exception ex)
@@ -99,8 +106,36 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
+                en.RetrieveFromDBSources();
+
+                //遍历属性，循环赋值.
+                foreach (Attr attr in en.EnMap.Attrs)
+                    en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
                 en.Update();
-                return "删除成功.";
+                return "更新成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 执行插入.
+        /// </summary>
+        /// <returns></returns>
+        public string Entity_Insert()
+        {
+            try
+            {
+                Entity en = ClassFactory.GetEn(this.EnName);
+                en.RetrieveFromDBSources();
+
+                //遍历属性，循环赋值.
+                foreach (Attr attr in en.EnMap.Attrs)
+                    en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
+
+                en.Insert();
+                return "插入成功.";
             }
             catch (Exception ex)
             {

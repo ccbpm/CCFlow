@@ -58,6 +58,18 @@ namespace BP.WF.HttpHandler
         }
         #endregion 
 
+        #region sss
+        /// <summary>
+        /// 运行SQL执行查询
+        /// </summary>
+        /// <returns>返回结果集</returns>
+        public string DBAccess_RunSQLReturnTable()
+        {
+            string sql = this.GetRequestVal("SQL");
+            return BP.Tools.Json.ToJson( BP.DA.DBAccess.RunSQLReturnTable(sql));
+        }
+        #endregion
+
 
 
         #region 功能执行.

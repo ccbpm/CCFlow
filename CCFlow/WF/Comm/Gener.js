@@ -636,10 +636,16 @@ GEEntity.prototype = {
 
     loadData: function () {
         var self = this;
+		var dynamicHandler;
+		if (plant == "CCFlow") {
+			dynamicHandler = "/WF/Comm/Handler.ashx";
+		} else {
+			dynamicHandler = "/WF/Comm/ProcessRequest.do";
+		}
         $.ajax({
             type: 'post',
             async: false,
-            url: "/WF/Comm/Handler.ashx?DoType=GEEntity_Init&EnName=" + self.EnName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
+            url: dynamicHandler + "?DoType=GEEntity_Init&EnName=" + self.EnName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
             dataType: 'html',
             success: function (data) {
 

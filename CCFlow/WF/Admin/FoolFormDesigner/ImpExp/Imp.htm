@@ -528,8 +528,6 @@
 
             //hid_STable.value = tableName;
             var fromdata = $('#divCCForm').serialize()
-            
-            
 
             //2.获取数据 FK_MapData=ND18507     &FK_SFDBSrc=NKApp&STable=ND104
             $.ajax({
@@ -590,6 +588,14 @@
                 <input type="button" value="执行从节点表单导入" onclick="CopyFromNodeFrm()" id="copyFromFrmNodeSave" />
             </fieldset>
         </div>
+        <div title="从其他流程导入" id="div1" style="padding: 15px; text-align: left">
+            <ul id="ul1" style="height: auto;">
+            </ul>
+            <input type="hidden" value="" id="Hidden1" name="selFrmNode111" />
+            <input type="button" value="从其他流程导入" id="Button1" onclick="SaveImpFromLib()" style="margin: 25px;"
+                disabled="disabled" />
+        </div>
+
         <div title="从表单库导入" id="divUlFrmTreeImp" style="padding: 15px; text-align: left">
             <ul id="ulLib" style="height: auto;">
             </ul>

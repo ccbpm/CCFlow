@@ -153,6 +153,15 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 从流程上copy表单
+        /// </summary>
+        /// <returns></returns>
+        public string Imp_CopyFromFlow()
+        {
+            string ndfrm = "ND"+int.Parse(this.FK_Flow) + "01";
+            return Imp_CopyFrm(ndfrm);
+        }
+        /// <summary>
         /// 从节点上Copy
         /// </summary>
         /// <param name="fromMapData">从表单ID</param>
@@ -160,11 +169,14 @@ namespace BP.WF.HttpHandler
         /// <param name="isClear">是否清楚现有的元素？</param>
         /// <param name="isSetReadonly">是否设置为只读？</param>
         /// <returns>执行结果</returns>
-        public string Imp_CopyFrm()
+        public string Imp_CopyFrm(string frmID=null)
         {
             try
             {
-                string fromMapData = this.FromMapData;
+                string fromMapData =frmID;
+                if (fromMapData==null)
+                  fromMapData = this.FromMapData;
+
                 bool isClear = this.IsClear;
 
                 MapData md = new MapData(fromMapData);

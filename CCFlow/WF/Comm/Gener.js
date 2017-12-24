@@ -523,6 +523,7 @@ function ConvertDataTableFieldCase(dt, isLower) {
 
 //通用的aj访问与处理工具.
 function AjaxServiceGener(param, myUrl, callback, scope) {
+
     $.ajax({
         type: "GET", //使用GET或POST方法访问后台
         dataType: "html", //返回json格式的数据
@@ -588,6 +589,27 @@ function closeWhileEscUp() {
 			}
 		}
 	});
+}
+
+function DBAccess() {
+
+    var url = Handler + "?SQL=select * from sss";
+    $.ajax({
+        type: "GET", //使用GET或POST方法访问后台
+        dataType: "json", //返回json格式的数据
+        contentType: "application/json; charset=utf-8",
+        url: url, //要访问的后台地址
+        async: true,
+        cache: false,
+        complete: function () { }, //AJAX请求完成时隐藏loading提示
+        error: function (XMLHttpRequest, errorThrown) {
+            callback(XMLHttpRequest);
+        },
+        success: function (data) { //msg为返回的数据，在这里做数据绑定
+            callback(data, scope);
+        }
+    });
+
 }
 
 

@@ -614,14 +614,58 @@ function DBAccess() {
 
 
 /* 关于实体的类
-
-          GEEntity_Init
-
- var pkval="Demo_DtlExpImpDtl1";  
-           var EnName="BP.WF.Template.MapDtlExt";
-           GEntity en=new GEEntity(EnName,pkval);
-          var strs=  en.ImpSQLNames;
-
-
-        // var strss=en.GetValByKey('ImpSQLNames');
+GEEntity_Init
+var pkval="Demo_DtlExpImpDtl1";  
+var EnName="BP.WF.Template.MapDtlExt";
+GEntity en=new GEEntity(EnName,pkval);
+var strs=  en.ImpSQLNames;
+// var strss=en.GetValByKey('ImpSQLNames');
 */
+
+function GEEntity(EnName, pkval) {
+	this.DoType = "GEEntity_Init";
+	this.EnName = EnName;
+	this.pkval = pkval;
+	this.jsonString = undefined;
+	this.loadData();
+}
+
+GEEntity.prototype = {
+
+	constructor : GEEntity,
+
+	loadData : function () {
+		var self = this;
+		$.ajax({
+			type : 'post',
+			async : false,
+			url : "/WF/Comm/Handler.ashx?DoType=" + self.DoType + "&EnName=" + self.EnName + "&pkval" + self.pkval + "&t=" + new Date().getTime(),
+			dataType : 'html',
+			success : function (data) {
+				if (data) {
+					if (data.indexOf("err@") != -1) {
+						alert(data);
+					} else {
+						try {
+							self.jsonString = JSON.parse(data);
+						} catch (e) {
+							alert("解析错误: " + data);
+						}
+					}
+				} else {
+					alert("未请求到数据");
+				}
+			},
+			error : function (XMLHttpRequest, textStatus, errorThrown) {
+				alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+			}
+		});
+	},
+
+	GetValByKey : function (key) {
+		if (typeof this.jsonString != "undefined" && typeof key != "undefined") {
+			return this.jsonString[key];
+		}
+	}
+
+};

@@ -636,6 +636,12 @@ GEEntity.prototype = {
 
     loadData: function () {
         var self = this;
+        //
+        var pathName = document.location.pathname;
+        var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+        if (projectName.startsWith("/WF")) {
+            projectName = "";
+        }
 		var dynamicHandler;
 		if (plant == "CCFlow") {
 			// CCFlow
@@ -647,7 +653,7 @@ GEEntity.prototype = {
         $.ajax({
             type: 'post',
             async: false,
-            url: dynamicHandler + "?DoType=GEEntity_Init&EnName=" + self.EnName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
+            url: projectName + dynamicHandler + "?DoType=GEEntity_Init&EnName=" + self.EnName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
             dataType: 'html',
             success: function (data) {
 

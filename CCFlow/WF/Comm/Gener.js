@@ -631,7 +631,10 @@ var Entity = (function () {
 	var Entity = function (enName, pkval) {
 		this.enName = enName;
 		this.pkval = pkval;
-		jsonString = loadData(enName, pkval);
+		loadData(enName, pkval);
+	};
+
+	function setData() {
 		if (typeof jsonString !== "undefined") {
 			var self = this;
 			$.each(jsonString, function (n, o) {
@@ -639,7 +642,7 @@ var Entity = (function () {
 				self[n] = o;
 			});
 		}
-	};
+	}
 
 	var pathName = document.location.pathname;
 	var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
@@ -649,7 +652,6 @@ var Entity = (function () {
 	var dynamicHandler = "/WF/Comm/Handler.ashx";
 
 	function loadData(enName, pkval) {
-		var json;
 		$.ajax({
 			type: 'post',
 			async: false,
@@ -661,7 +663,8 @@ var Entity = (function () {
 					return;
 				}
 				try {
-					json = JSON.parse(data);
+					jsonString = JSON.parse(data);
+					setData();
 				} catch (e) {
 					alert("解析错误: " + data);
 				}
@@ -670,12 +673,47 @@ var Entity = (function () {
 				alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
 			}
 		});
-		return json;
 	}
 
 	Entity.prototype = {
 
 		constructor : Entity,
+
+		Insert : function () {
+			var self = this;
+			var modifyArrays = {};
+			var count = 0;
+			$.each(jsonString, function (n, defaultValue) {
+				if (self[n] != defaultValue) {
+					modifyArrays[n] = self[n];
+					count++;
+				}
+			});
+			if (count > 0) {
+				$.ajax({
+					type : 'post',
+					async : false,
+					url : projectName + dynamicHandler + "?DoType=Entity_Insert&EnName=" + self.enName + "&t=" + new Date().getTime(),
+					dataType : 'html',
+					data : modifyArrays,
+					success : function (data) {
+						if (data.indexOf("err@") != -1) {
+							alert(data);
+							return;
+						}
+						try {
+							jsonString = JSON.parse(data);
+							setData();
+						} catch (e) {
+							alert("解析错误: " + data);
+						}
+					},
+					error : function (XMLHttpRequest, textStatus, errorThrown) {
+						alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+					}
+				});
+			}
+		},
 
 		Update : function () {
 			var self = this;

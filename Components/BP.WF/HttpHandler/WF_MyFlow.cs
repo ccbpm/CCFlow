@@ -1676,6 +1676,19 @@ namespace BP.WF.HttpHandler
             MapDatas mds = new MapDatas();
             mds.RetrieveInSQL("SELECT FK_Frm FROM WF_FrmNode WHERE FK_Node=" + this.FK_Node);
 
+
+            string frms = this.context.Request["Frms"];
+            GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (DataType.IsNullOrEmpty(frms) == true)
+            {
+                frms = gwf.Paras_Frms;
+            }
+            else
+            {
+                gwf.Paras_Frms = frms;
+                gwf.Update();
+            }
+
             foreach (FrmNode frmNode in frmNodes)
             {
                 #region 增加判断是否启用规则.
@@ -1706,11 +1719,7 @@ namespace BP.WF.HttpHandler
                             continue;
                         break;
                     case FrmEnableRole.WhenHaveFrmPara: //判断是否有参数.
-                        string frms = this.context.Request["Frms"];
-
-                        //修改算法：解决 frmID =ABC  frmID=AB 的问题.
-                        if (string.IsNullOrEmpty(frms) == true)
-                            continue;
+                       
 
                         frms = frms.Trim();
 

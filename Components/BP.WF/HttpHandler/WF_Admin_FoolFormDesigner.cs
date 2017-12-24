@@ -982,32 +982,19 @@ namespace BP.WF.HttpHandler
             if (attr.RetrieveFromDBSources() != 0)
                 return "err@字段名[" + this.KeyOfEn + "]已经存在.";
 
-            attr.FK_MapData = this.FK_MapData;
-            attr.KeyOfEn = this.KeyOfEn;
+            BP.Sys.CCFormAPI.SaveFieldSFTable(this.FK_MapData, this.KeyOfEn, null, this.GetRequestVal("SFTable"), 100, 100, 1);
 
-            //设置string类型.
-            attr.MyDataType = DataType.AppString;
-
-            //关键字.
-            attr.UIBindKey = this.GetRequestVal("SFTable");
-
-            //分组ID.
-            attr.GroupID = this.GetRequestValInt("GroupID");
-            attr.UIContralType = En.UIContralType.DDL;
-
-            //外键.
-            attr.LGType = En.FieldTypeS.FK;
-
-            SFTable sf = new Sys.SFTable();
-            sf.No = attr.UIBindKey;
-            if (sf.RetrieveFromDBSources() != 0)
-                attr.Name = sf.Name;
-
+            attr.Retrieve();
             string sql = "SELECT OID FROM Sys_GroupField A WHERE A.EnName='" + this.FK_MapData + "' AND CtrlType='' OR CtrlType= NULL";
-            attr.GroupID = DBAccess.RunSQLReturnValInt(sql, 0);            
+            attr.GroupID = DBAccess.RunSQLReturnValInt(sql, 0);
+            attr.Update();
 
-            attr.Insert();
-            return attr.MyPK;
+            SFTable sf = new SFTable(attr.UIBindKey);
+
+            if (sf.SrcType == SrcType.TableOrView || sf.SrcType == SrcType.BPClass || sf.SrcType == SrcType.CreateTable)
+                return "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrSFTables&PK=" + attr.MyPK;
+            else
+                return "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=" + attr.MyPK;
         }
         #endregion 外键表列表.
 

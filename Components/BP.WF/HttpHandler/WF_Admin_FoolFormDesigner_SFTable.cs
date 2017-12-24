@@ -227,7 +227,7 @@ namespace BP.WF.HttpHandler
                 sf.DefVal = this.GetValFromFrmByKey("RootValue");
             }
             sf.SelectStatement = this.GetValFromFrmByKey("Selectstatement");
-            sf.SrcType = SrcType.DynamicSQL;
+            sf.SrcType = SrcType.SQL;
             sf.FK_Val = "FK_" + sf.No;
             sf.Save();
             return "保存成功.";

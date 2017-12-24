@@ -211,6 +211,9 @@ namespace BP.Sys
             //外键字段表.
             SFTable sf = new SFTable(fk_SFTable);
 
+            if (DataType.IsNullOrEmpty(fieldDesc) == true)
+                fieldDesc = sf.Name;
+
             MapAttr attr = new MapAttr();
             attr.MyPK = fk_mapdata + "_" + fieldName;
             attr.RetrieveFromDBSources();

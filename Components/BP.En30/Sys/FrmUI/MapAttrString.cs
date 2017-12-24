@@ -64,20 +64,6 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey(MapAttrAttr.KeyOfEn, value);
             }
         }
-        /// <summary>
-        /// 绑定的枚举ID
-        /// </summary>
-        public string UIBindKey
-        {
-            get
-            {
-                return this.GetValStringByKey(MapAttrAttr.UIBindKey);
-            }
-            set
-            {
-                this.SetValByKey(MapAttrAttr.UIBindKey, value);
-            }
-        }
         #endregion
 
         #region 构造方法
@@ -221,6 +207,18 @@ namespace BP.Sys.FrmUI
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        protected override void afterDelete()
+        {
+            //删除可能存在的关联属性.
+            string sql = "DELETE FROM Sys_MapAttr WHERE FK_MapData='" + this.FK_MapData + "' AND KeyOfEn='" + this.KeyOfEn + "T'";
+            DBAccess.RunSQL(sql);
+
+            base.afterDelete();
         }
 
         protected override bool beforeUpdateInsertAction()

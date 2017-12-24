@@ -796,8 +796,9 @@ namespace BP.WF
             SFTable sftable = null;
             DataTable dtsftable = null;
             DataRow[] drs = null;
+
             SFTables sftables = new SFTables();
-            sftables.Retrieve(SFTableAttr.SrcType, (int)SrcType.DynamicSQL);
+            sftables.Retrieve(SFTableAttr.SrcType, (int)SrcType.SQL);
 
 			// 为明细表设置默认值.
 			MapAttrs dtlAttrs = new MapAttrs(dtl.No);

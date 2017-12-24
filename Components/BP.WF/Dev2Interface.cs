@@ -3887,7 +3887,7 @@ namespace BP.WF
         /// <param name="flowNo"></param>
         /// <param name="workID"></param>
         /// <param name="newBillNo"></param>
-        public static void SetBillNo(string flowNo, Int64 workID, string newBillNo)
+        public static void SetBillNo11(string flowNo, Int64 workID, string newBillNo)
         {
             string dbstr = BP.Sys.SystemConfig.AppCenterDBVarStr;
             Paras ps = new Paras();

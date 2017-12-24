@@ -370,7 +370,7 @@ namespace BP.Sys
                     {
                         GENoNames myens = new GENoNames(this.UIBindKey, this.Name);
 
-                        if (sf.SrcType == SrcType.DynamicSQL)
+                        if (sf.SrcType == SrcType.SQL)
                         {
                             //此种类型时，没有物理表或视图，从SQL直接查出数据
                             DataTable dt = sf.GenerHisDataTable;

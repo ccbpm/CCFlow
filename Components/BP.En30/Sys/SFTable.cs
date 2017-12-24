@@ -40,17 +40,13 @@ namespace BP.Sys
         /// </summary>
         WebServices = 4,
         /// <summary>
-        /// 动态SQL查询
-        /// </summary>
-        DynamicSQL = 5,
-        /// <summary>
         /// hand
         /// </summary>
-        Handler=6,
+        Handler=5,
         /// <summary>
-        /// 
+        /// JS请求数据.
         /// </summary>
-        JQuery=7
+        JQuery=6
     }
     /// <summary>
     /// 编码表类型
@@ -285,7 +281,7 @@ namespace BP.Sys
                 #endregion SQL查询.外键表/视图，edited by liuxc,2016-12-29
 
 
-                #region SQL查询.外键表/视图，edited by liuxc,2016-12-29
+                #region 动态SQL，edited by liuxc,2016-12-29
                 if (this.SrcType == Sys.SrcType.SQL)
                 {
                     string runObj = this.SelectStatement;
@@ -318,27 +314,6 @@ namespace BP.Sys
                 }
                 #endregion
 
-                #region 动态SQL查询
-                if(this.SrcType == SrcType.DynamicSQL)
-                {
-                    string runObj = this.SelectStatement;
-
-                    if (runObj == null)
-                        runObj = string.Empty;
-
-                    runObj = runObj.Replace("~", "'");
-                    if (runObj.Contains("@WebUser.No"))
-                        runObj = runObj.Replace("@WebUser.No", BP.Web.WebUser.No);
-
-                    if (runObj.Contains("@WebUser.Name"))
-                        runObj = runObj.Replace("@WebUser.Name", BP.Web.WebUser.Name);
-
-                    if (runObj.Contains("@WebUser.FK_Dept"))
-                        runObj = runObj.Replace("@WebUser.FK_Dept", BP.Web.WebUser.FK_Dept);
-
-                    return src.RunSQLReturnTable(runObj);
-                }
-                #endregion
 
                 throw new Exception("@没有判断的数据类型." + this.SrcType + " - " + this.SrcTypeText);
             }
@@ -941,26 +916,26 @@ namespace BP.Sys
                     this.RunSQL(sql);
                 }
 
-                if (this.SrcType == Sys.SrcType.SQL)
-                {
-                    //暂时这样处理
-                    string sql = "CREATE VIEW " + this.No + " (";
-                    sql += "[No],";
-                    sql += "[Name]";
-                    sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
-                    sql += " AS ";
-                    sql += this.SelectStatement;
+                //if (this.SrcType == Sys.SrcType.SQL)
+                //{
+                //    //暂时这样处理
+                //    string sql = "CREATE VIEW " + this.No + " (";
+                //    sql += "[No],";
+                //    sql += "[Name]";
+                //    sql += (this.CodeStruct == Sys.CodeStruct.Tree ? ",[ParentNo])" : ")");
+                //    sql += " AS ";
+                //    sql += this.SelectStatement;
 
-                    if (Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
-                    {
-                        sql = sql.Replace("[", "`").Replace("]", "`");
-                    }
-                    else
-                    {
-                        sql = sql.Replace("[", "").Replace("]", "");
-                    }
-                    this.RunSQL(sql);
-                }
+                //    if (Sys.SystemConfig.AppCenterDBType == DBType.MySQL)
+                //    {
+                //        sql = sql.Replace("[", "`").Replace("]", "`");
+                //    }
+                //    else
+                //    {
+                //        sql = sql.Replace("[", "").Replace("]", "");
+                //    }
+                //    this.RunSQL(sql);
+                //}
             }
             catch (Exception ex)
             {

@@ -906,12 +906,23 @@ var DBAccess = (function () {
 
 var HttpHandler = (function () {
 
-	var parameters;
+	var parameters = {};
 
 	var formData;
 
 	function HttpHandler(handlerName) {
-	    parameters = "httpHandlerName=" + handlerName;
+	    parameters.httpHandlerName = handlerName;
+	}
+
+	function validate(s) {
+		if (s == null || typeof s === "undefined") {
+			return false;
+		}
+		s = s.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+		if (s == "" || s == "null" || s == "undefined") {
+			return false;
+		}
+		return true;
 	}
 
 	var dynamicHandler = "/WF/Comm/Handler.ashx";
@@ -921,7 +932,17 @@ var HttpHandler = (function () {
 		constructor : HttpHandler,
 
 		AddUrlData : function () {
-			parameters += "&" + document.location.search.substr(1);
+			var queryString = document.location.search.substr(1);
+			if (queryString.length > 0) {
+				$.each(queryString.split("&"), function (i, o) {
+					var param = o.split("=");
+					if (param.length == 2 && validate(param[1]) {
+						(function (key, value) {
+							AddPara(key, value);
+						})(param[0], param[1]);
+					}
+				});
+			}
 		},
 
 		AddFormData : function () {
@@ -929,16 +950,32 @@ var HttpHandler = (function () {
 		},
 
 		AddPara : function (key, value) {
-			parameters += "&" + key + "=" + value;
+			parameters[key] = value;
+		},
+
+		Clear : function () {
+			parameters = {};
+			formData = undefined;
+		},
+
+		getParams : function () {
+			var params = [];
+			$.each(parameters, function (key, value) {
+				params.push(key + "=" + value);
+			});
+			return params.join("&");
 		},
 
 		DoMethodReturnString : function (methodName) {
+
+			var self = this;
+
 			var jsonString;
 
 			$.ajax({
 				type: 'post',
 				async: false,
-				url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&" + parameters + "&t=" + new Date().getTime(),
+				url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&" + self.getParams() + "&t=" + new Date().getTime(),
 				data : formData,
 				dataType: 'html',
 				success: function (data) {

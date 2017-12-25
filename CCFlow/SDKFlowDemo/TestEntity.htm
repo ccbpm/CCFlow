@@ -21,13 +21,14 @@
             alert('Insert成功');
 
             //更新.
-            emp.Name = "张三风";
+            emp.Name = "张三丰";
             emp.Update();
             alert('Update成功');
 
             //删除.
             emp.Delete();
             alert('Delete成功');
+
 
             //创建一个实体,获取实体的属性.
             var emp = Entity("BP.Port.Emp", "liyan");
@@ -36,8 +37,12 @@
             var deptName = emp.FK_DeptText; //部门名称.
 
 
-            emp.Do("ResetPass"); //不带参数的方法.
-            emp.Do("ResetPass", "&oldpass=456&pass1=123&pass2==123"); //带参数的方法.
+            //执行实体的方法.
+            var result = emp.Do("ResetPass"); //重置密码:不带参数的方法.
+            alert(result);
+
+            var result1 = emp.Do("ChangePass", "&oldpass=456&pass1=123&pass2=123"); //修改密码:带参数的方法.
+            alert(result1);
 
         }
 
@@ -47,7 +52,6 @@
             var html = "<ul>";
             for (var i = 0; i < emps.length; i++) {
                 var emp = emps[i];
-
                 html += "<li>" + emp.Name + "</li>";
             }
             html += "</ul>";
@@ -68,28 +72,49 @@
         }
 
         //执行方法.(没有想明白)
-        function ExecEntityMonthod() {
+        function ExecHttpHandlerMonthod_A() {
 
             //执行非静态的方法,有参数,仅仅传递指定的参数其他参数不处理.
             var handler = CreateHttpHandler("BP.WF.HttpHandler.WF_AppClassic");
-            handler.AddUrlData();
-            handler.AddFormData();
+            handler.AddUrlData();  //把url参数加入里面去.
+            handler.AddFormData(); //把form数据加入里面去.
+
             //执行提交.
             var result = handler.Login_Submit();
-
             var result = handler.Do("Login_Submit");
-
-
+            //处理结果.
+            if (result.indexOf('err@') == 0) {
+                alert(result); //登录失败.
+                return;
+            }
         }
 
         //执行方法.(没有想明白)
-        function ExecHttpHandlerMonthod() {
+        function ExecHttpHandlerMonthod_B() {
              
             //执行非静态的方法,无参数.(系统就会把url与当前页面的form作为参数传递到后台去.)
-            var val = Exce("BP.WF.HttpHandler.WF_AppClassic", "Login_Submit");
+            var result = Exce("BP.WF.HttpHandler.WF_AppClassic", "Login_Submit");
 
             //执行非静态的方法,有参数,仅仅传递指定的参数其他参数不处理.
-            var val = Exce("BP.WF.HttpHandler.WF_AppClassic", "Login_Submit","&UserNo=zhoupeng&Password=123");
+            var result = Exce("BP.WF.HttpHandler.WF_AppClassic", "Login_Submit", "&UserNo=zhoupeng&Password=123");
+            
+            //处理结果.
+            if (result.indexOf('err@') == 0) {
+                alert(result); //登录失败.
+                return;
+            }
+        }
+
+        //直接访问数据库.
+        function DBAccess() {
+
+            var sql = "UPDATE Port_Emp SET Name='张三' WHERE No='zhangsan' ";
+            var result = DBAccess.RunSQL(sql);
+            alert("一共[" + result + "] 条记录被更新");
+
+            sql = "SELECT No,Name FROM Demo_Student WHERE XB='0' ";
+            var dt = DBAccess.RunSQLReturnTable(sql);
+            alert("一共[" + dt.lenght + "] 条记录被查询到");
         }
     </script>
      

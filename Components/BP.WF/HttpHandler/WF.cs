@@ -540,7 +540,7 @@ namespace BP.WF.HttpHandler
             Track tk = new Track();
             tk.FK_Flow = this.FK_Flow;
 
-      
+
 
             tk.WorkID = this.WorkID;
             if (this.MyPK != null)
@@ -573,7 +573,7 @@ namespace BP.WF.HttpHandler
                 urlExt = "&PFlowNo=0&PWorkID=0&IsToobar=0&IsHidden=true";
             else
                 urlExt = "&PFlowNo=" + ndrpt.Rows[0]["PFlowNo"] + "&PWorkID=" + ndrpt.Rows[0]["PWorkID"] + "&IsToobar=0&IsHidden=true";
-            urlExt += "&From=CCFlow&TruckKey=" + tk.GetValStrByKey("MyPK") + "&DoType=" + this.DoType + "&UserNo=" +  WebUser.No ?? string.Empty + "&SID=" + WebUser.SID ?? string.Empty;
+            urlExt += "&From=CCFlow&TruckKey=" + tk.GetValStrByKey("MyPK") + "&DoType=" + this.DoType + "&UserNo=" + WebUser.No ?? string.Empty + "&SID=" + WebUser.SID ?? string.Empty;
 
             if (nd.HisFormType == NodeFormType.SDKForm || nd.HisFormType == NodeFormType.SelfForm)
             {
@@ -613,7 +613,7 @@ namespace BP.WF.HttpHandler
             if (frms.Count == 0)
                 return "url@./CCForm/Frm.htm?FK_MapData=" + nd.NodeFrmID + "&OID=" + wk.OID + "&FK_Flow=" + this.FK_Flow + "&FK_Node=" + nd.NodeID + "&PK=OID&PKVal=" + wk.OID + "&IsEdit=0&IsLoadData=0&IsReadonly=1";
 
-            return "url@" + appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?3=3" + this.RequestParas;
+            return "url@../../../MyFlowTreeReadonly.htm?3=3" + this.RequestParas;
         }
         /// <summary>
         /// 草稿

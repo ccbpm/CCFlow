@@ -224,7 +224,6 @@ function InitMapAttrOfCtrlFool(flowData,mapAttr) {
     //AppString
     if (mapAttr.MyDataType == "1") {  //不是外键
 
-
         if (mapAttr.UIHeight <= 23) //普通的文本框.
         {
             var enableAttr = '';

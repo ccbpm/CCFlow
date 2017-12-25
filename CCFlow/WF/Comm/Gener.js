@@ -626,143 +626,150 @@ en.Updata();
 
 var Entity = (function () {
 
-	var jsonString;
+    var jsonString;
 
-	var Entity = function (enName, pkval) {
-		this.enName = enName;
-		this.pkval = pkval;
-		loadData(enName, pkval);
-	};
+    var Entity = function (enName, pkval) {
+        this.enName = enName;
+        this.pkval = pkval;
+        loadData(enName, pkval);
+    };
 
-	function setData() {
-		if (typeof jsonString !== "undefined") {
-			var self = this;
-			$.each(jsonString, function (n, o) {
-				// 需要判断属性名与当前对象属性名是否相同
-				self[n] = o;
-			});
-		}
-	}
+    function setData() {
+        if (typeof jsonString !== "undefined") {
+            var self = this;
+            $.each(jsonString, function (n, o) {
+                // 需要判断属性名与当前对象属性名是否相同
+                self[n] = o;
+            });
+        }
+    }
 
-	var pathName = document.location.pathname;
-	var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-	if (projectName.startsWith("/WF")) {
-		projectName = "";
-	}
-	var dynamicHandler = "/WF/Comm/Handler.ashx";
+    var pathName = document.location.pathname;
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+    if (projectName.startsWith("/WF")) {
+        projectName = "";
+    }
 
-	function loadData(enName, pkval) {
-		$.ajax({
-			type: 'post',
-			async: false,
-			url: projectName + dynamicHandler + "?DoType=Entity_Init&EnName=" + enName + "&PKVal=" + pkval + "&t=" + new Date().getTime(),
-			dataType: 'html',
-			success: function (data) {
-				if (data.indexOf("err@") != -1) {
-					alert(data);
-					return;
-				}
-				try {
-					jsonString = JSON.parse(data);
-					setData();
-				} catch (e) {
-					alert("解析错误: " + data);
-				}
-			},
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-				alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-			}
-		});
-	}
+    var dynamicHandler = "/WF/Comm/Handler.ashx";
 
-	Entity.prototype = {
 
-		constructor : Entity,
+    function loadData(enName, pkval) {
 
-		Insert : function () {
-			var self = this;
-			var modifyArrays = {};
-			var count = 0;
-			$.each(jsonString, function (n, defaultValue) {
-				if (self[n] != defaultValue) {
-					modifyArrays[n] = self[n];
-					count++;
-				}
-			});
-			if (count > 0) {
-				$.ajax({
-					type : 'post',
-					async : false,
-					url : projectName + dynamicHandler + "?DoType=Entity_Insert&EnName=" + self.enName + "&t=" + new Date().getTime(),
-					dataType : 'html',
-					data : modifyArrays,
-					success : function (data) {
-						if (data.indexOf("err@") != -1) {
-							alert(data);
-							return;
-						}
-						try {
-							jsonString = JSON.parse(data);
-							setData();
-						} catch (e) {
-							alert("解析错误: " + data);
-						}
-					},
-					error : function (XMLHttpRequest, textStatus, errorThrown) {
-						alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-					}
-				});
-			}
-		},
+        var url =   dynamicHandler + "?DoType=Entity_Init&EnName=" + enName + "&PKVal=" + pkval + "&t=" + new Date().getTime();
 
-		Update : function () {
-			var self = this;
-			var modifyArrays = {};
-			var count = 0;
-			$.each(jsonString, function (n, defaultValue) {
-				if (self[n] != defaultValue) {
-					modifyArrays[n] = self[n];
-					count++;
-				}
-			});
-			if (count > 0) {
-				$.ajax({
-					type: 'post',
-					async: false,
-					url: projectName + dynamicHandler + "?DoType=Entity_Update&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
-					dataType: 'html',
-					data : modifyArrays,
-					success: function (data) {
-						$.each(modifyArrays, function (n, o) {
-							jsonString[n] = o;
-						});
-					},
-					error: function (XMLHttpRequest, textStatus, errorThrown) {
-						alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-					}
-				});
-			}
-		},
+        alert(url);
 
-		Delete : function () {
-			var self = this;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: projectName + dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
-				dataType: 'html',
-				success: function (data) {
-					
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-				}
-			});
-		}
+        $.ajax({
+            type: 'post',
+            async: false,
+            url: url,
+            dataType: 'html',
+            success: function (data) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+                try {
+                    jsonString = JSON.parse(data);
+                    setData();
+                } catch (e) {
+                    alert("解析错误: " + data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+            }
+        });
+    }
 
-	};
+    Entity.prototype = {
 
-	return Entity;
+        constructor: Entity,
+
+        Insert: function () {
+            var self = this;
+            var modifyArrays = {};
+            var count = 0;
+            $.each(jsonString, function (n, defaultValue) {
+                if (self[n] != defaultValue) {
+                    modifyArrays[n] = self[n];
+                    count++;
+                }
+            });
+            if (count > 0) {
+                $.ajax({
+                    type: 'post',
+                    async: false,
+                    url: projectName + dynamicHandler + "?DoType=Entity_Insert&EnName=" + self.enName + "&t=" + new Date().getTime(),
+                    dataType: 'html',
+                    data: modifyArrays,
+                    success: function (data) {
+                        if (data.indexOf("err@") != -1) {
+                            alert(data);
+                            return;
+                        }
+                        try {
+                            jsonString = JSON.parse(data);
+                            setData();
+                        } catch (e) {
+                            alert("解析错误: " + data);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    }
+                });
+            }
+        },
+
+        Update: function () {
+            var self = this;
+            var modifyArrays = {};
+            var count = 0;
+            $.each(jsonString, function (n, defaultValue) {
+                if (self[n] != defaultValue) {
+                    modifyArrays[n] = self[n];
+                    count++;
+                }
+            });
+            if (count > 0) {
+                $.ajax({
+                    type: 'post',
+                    async: false,
+                    url: projectName + dynamicHandler + "?DoType=Entity_Update&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
+                    dataType: 'html',
+                    data: modifyArrays,
+                    success: function (data) {
+                        $.each(modifyArrays, function (n, o) {
+                            jsonString[n] = o;
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    }
+                });
+            }
+        },
+
+        Delete: function () {
+            var self = this;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: projectName + dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                success: function (data) {
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+            });
+        }
+
+    };
+
+    return Entity;
 
 })();
 

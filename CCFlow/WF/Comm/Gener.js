@@ -871,11 +871,13 @@ var HttpHandler = (function () {
 
 	var parameters;
 
+	var formData;
+
 	function HttpHandler(enName) {
-		parameters = "EnsName=" + ensName;
+		parameters = "EnName=" + enName;
 	}
 
-	var formData;
+	var dynamicHandler = "/WF/Comm/Handler.ashx";
 
 	HttpHandler.prototype = {
 
@@ -907,18 +909,21 @@ var HttpHandler = (function () {
 			});
 
 			return jsonString;
+
 		},
 
 		DoMethodReturnJSON : function (methodName) {
 			var jsonString = this.DoMethodReturnString(methodName);
 			try {
-				jsonString = JSON.parse(data);
+				jsonString = JSON.parse(jsonString);
 			} catch (e) {
-				alert("err@解析错误: " + data);
+				jsonString = "err@解析错误: " + jsonString;
 			}
 			return jsonString;
 		}
 
 	}
+
+	return HttpHandler;
 
 })();

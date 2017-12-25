@@ -788,7 +788,7 @@ var Entities = (function () {
 							alert("解析失败, 返回值不是集合");
 						}
 					} catch (e) {
-						alert("解析错误: " + data);
+						alert("json解析错误: " + data);
 					}
 				},
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -851,7 +851,7 @@ var DBAccess = (function () {
 				try {
 					jsonString = JSON.parse(data);
 				} catch (e) {
-					alert("解析错误: " + data);
+					alert("json解析错误: " + data);
 				}
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -924,7 +924,7 @@ var HttpHandler = (function () {
 			try {
 				jsonString = JSON.parse(jsonString);
 			} catch (e) {
-				jsonString = "err@解析错误: " + jsonString;
+				jsonString = "err@json解析错误: " + jsonString;
 			}
 			return jsonString;
 		}

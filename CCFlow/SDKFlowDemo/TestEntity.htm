@@ -11,79 +11,76 @@
         window.onload =
 
 		function Test() {
-			
-			var emps = new Entities("BP.Port.Emps", "FK_Dept", 1);
-			var html = "<ul>";
-			for (var i = 0; i < emps.length; i++) {
-				var emp = emps[i];
-				html += "<li>" + emp.Name + "</li>";
-			}
-			html += "</ul>";
-			$(document).html(html);
-			
-			//
-			
-			var count = DBAccess.RunSQL("UPDATE Port_Emp SET Name='福惠1' WHERE No='fuhui'");
 
-			var dataTable = DBAccess.RunSQLReturnTable("SELECT * FROM Port_Emp");
+		    return;
 
-			return;
+		    var emps = new Entities("BP.Port.Emps", "FK_Dept", 1);
+		    var html = "<ul>";
+		    for (var i = 0; i < emps.length; i++) {
+		        var emp = emps[i];
+		        html += "<li>" + emp.Name + "</li>";
+		    }
+		    html += "</ul>";
+		    alert(html);
 
-            // 创建一个空实体.
-            var emp = new Entity("BP.Port.Emp");
-            emp.No = "ranzun";
-            emp.Name = "冉尊";
-            emp.FK_Dept = "1";
-            emp.Insert(); //增加.
+		    var count = DBAccess.RunSQL("UPDATE Port_Emp SET Name='福惠1' WHERE No='fuhui'");
+		    alert(count);
 
-            //更新.
-            emp.Name = "张三风";
-            emp.Update();
+		    var dataTable = DBAccess.RunSQLReturnTable("SELECT * FROM Port_Emp");
+		    alert(JSON.stringify(dataTable));
 
-            //删除.
-            emp.Delete();
+		    // 创建一个空实体.
+		    var emp = new Entity("BP.Port.Emp");
+		    emp.No = "ranzun";
+		    emp.Name = "冉尊";
+		    emp.FK_Dept = "1";
+		    emp.Insert(); //增加.
 
-            //创建一个实体,获取实体的属性.
-            var emp = new Entity("BP.Port.Emp", "liyan");
-            var name = emp.Name;
-            var deptNo = emp.FK_Dept;  //部门编号
-            var deptName = emp.FK_DeptText; //部门名称.
+		    //更新.
+		    emp.Name = "张三风";
+		    emp.Update();
 
-			return;
+		    //删除.
+		    emp.Delete();
 
-            // 创建一个空实体.
-            var emp = Entity("BP.Port.Emp");
-            emp.No = "zhangsan";
-            emp.Name = "张三";
-            emp.FK_Dept = "1";
-            emp.Insert(); //增加.
-            alert('Insert成功');
+		    //创建一个实体,获取实体的属性.
+		    var emp = new Entity("BP.Port.Emp", "liyan");
+		    var name = emp.Name;
+		    var deptNo = emp.FK_Dept;  //部门编号
+		    var deptName = emp.FK_DeptText; //部门名称.
 
-            //更新.
-            emp.Name = "张三丰";
-            emp.Update();
-            alert('Update成功');
+		    // 创建一个空实体.
+		    var emp = Entity("BP.Port.Emp");
+		    emp.No = "zhangsan";
+		    emp.Name = "张三";
+		    emp.FK_Dept = "1";
+		    emp.Insert(); //增加.
+		    alert('Insert成功');
 
-            //删除.
-            emp.Delete();
-            alert('Delete成功');
+		    //更新.
+		    emp.Name = "张三丰";
+		    emp.Update();
+		    alert('Update成功');
+
+		    //删除.
+		    emp.Delete();
+		    alert('Delete成功');
 
 
-            //创建一个实体,获取实体的属性.
-            var emp = Entity("BP.Port.Emp", "liyan");
-            var name = emp.Name;
-            var deptNo = emp.FK_Dept;  //部门编号
-            var deptName = emp.FK_DeptText; //部门名称.
+		    //创建一个实体,获取实体的属性.
+		    var emp = Entity("BP.Port.Emp", "liyan");
+		    var name = emp.Name;
+		    var deptNo = emp.FK_Dept;  //部门编号
+		    var deptName = emp.FK_DeptText; //部门名称.
 
+		    //执行实体的方法.
+		    var result = emp.Do("ResetPass"); //重置密码:不带参数的方法.
+		    alert(result);
 
-            //执行实体的方法.
-            var result = emp.Do("ResetPass"); //重置密码:不带参数的方法.
-            alert(result);
+		    var result1 = emp.Do("ChangePass", "&oldpass=456&pass1=123&pass2=123"); //修改密码:带参数的方法.
+		    alert(result1);
 
-            var result1 = emp.Do("ChangePass", "&oldpass=456&pass1=123&pass2=123"); //修改密码:带参数的方法.
-            alert(result1);
-
-        }
+		}
 
         function TestEns() {
 
@@ -145,7 +142,7 @@
         }
 
         //直接访问数据库.
-        function DBAccess() {
+        function DBAccess11() {
 
             var sql = "UPDATE Port_Emp SET Name='张三' WHERE No='zhangsan' ";
             var result = DBAccess.RunSQL(sql);

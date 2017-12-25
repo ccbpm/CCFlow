@@ -134,7 +134,8 @@
                         onSelect: function (node) {
                             if (node.children == undefined) {
                                 btnFrmLib.disabled = "";
-                                selFrmNode.value = node.id;
+                                //selFrmNode.value = node.id;
+								$("#Hidden1").val(node.id);
                             } else {
                                 btnFrmLib.disabled = "disabled";
                             }
@@ -253,6 +254,30 @@
                 type: 'post',
                 async: true,
                 url: Handler + "?DoType=Imp_CopyFrm&FK_MapData=" + frmID + "&FromMapData=" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data + '\t\n 如果父页面不能刷新，请关闭当前表单设计器重新打开.');
+                    window.parent.location.href = window.parent.location.href;
+
+                }
+            });
+        }
+
+		        //从其他流程导入
+        function SaveImpOtherFlow() {
+
+            //var flowNo = Hidden1.value;
+            var flowNo = $("#Hidden1").val();
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Imp_CopyFromFlow&FK_MapData=" + frmID + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 

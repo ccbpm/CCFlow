@@ -891,6 +891,10 @@ var HttpHandler = (function () {
 			formData = $("form").serialize();
 		},
 
+		AddPara : function (key, value) {
+			parameters += "&" + key + "=" + value;
+		},
+
 		DoMethodReturnString : function (methodName) {
 			var jsonString;
 

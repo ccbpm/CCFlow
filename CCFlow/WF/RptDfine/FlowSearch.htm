@@ -60,7 +60,8 @@
         });
 
         $(function () {
-
+			$("#Msg").show();
+			$("#Msg").css("line-height", $("body").height() / 1.5 + "px");
             switch (searchType) {
                 case "My":
                     $("#dg").datagrid({ title: '我发起的流程' });
@@ -345,6 +346,7 @@
 		}
 
         function Search(pageSize, pageIdx) {
+			$("#Msg").show();
             var key = "";
             var mvals = "";
             var vals = "";
@@ -448,6 +450,7 @@
                     Search(pageSize, pageNum);
                 }
             });
+			$("#Msg").hide();
         }
 
         function JoinMVals(mvals) {
@@ -526,7 +529,8 @@
         <div class="conditions hide" id="filters">
         </div>
     </div>
-    <!--<div id="Msg">
-    </div>-->
+	<div id="Msg" style="width: 100%; height: 100%; position: absolute; z-index: 999; text-align: center; text-align: center; vertical-align: middle; display: block;">
+		<h1><img src='../Img/loading.gif' /> 正在加载请稍候. </h1>
+	</div>
 </body>
 </html>

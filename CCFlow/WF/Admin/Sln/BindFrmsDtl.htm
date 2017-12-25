@@ -189,10 +189,11 @@
                         FK_Node: options[selectIndex].value,
                         formNos: formNos
                     };
-                    Handler_AjaxQueryData(param, function (data, scope) {
+                    Handler_AjaxPostData(param, function (data, scope) {
 
-                        alert(data);
-                         
+                        var str = JSON.stringify(data);
+                        alert(str);
+
                     }, this);
                 } else {
                     $.messager.alert('提示', '没有选中节点');

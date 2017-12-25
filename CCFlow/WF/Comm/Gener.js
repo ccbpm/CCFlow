@@ -630,13 +630,12 @@ var Entity = (function () {
 
     var Entity = function (enName, pkval) {
         this.enName = enName;
-        this.pkval = pkval;
-        loadData(enName, pkval);
+        this.pkval = pkval || "";
+        this.loadData();
     };
 
-    function setData() {
+    function setData(self) {
         if (typeof jsonString !== "undefined") {
-            var self = this;
             $.each(jsonString, function (n, o) {
                 // 需要判断属性名与当前对象属性名是否相同
                 self[n] = o;
@@ -644,122 +643,103 @@ var Entity = (function () {
         }
     }
 
-    var pathName = document.location.pathname;
-    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-    if (projectName.startsWith("/WF")) {
-        projectName = "";
-    }
+	function getParams(self) {
+		var params = {};
+		$.each(jsonString, function (n, o) {
+			params[n] = self[n];
+		});
+		return params;
+	}
 
     var dynamicHandler = "/WF/Comm/Handler.ashx";
-
-
-    function loadData(enName, pkval) {
-
-        var url =   dynamicHandler + "?DoType=Entity_Init&EnName=" + enName + "&PKVal=" + pkval + "&t=" + new Date().getTime();
-
-        alert(url);
-
-        $.ajax({
-            type: 'post',
-            async: false,
-            url: url,
-            dataType: 'html',
-            success: function (data) {
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
-                try {
-                    jsonString = JSON.parse(data);
-                    setData();
-                } catch (e) {
-                    alert("解析错误: " + data);
-                }
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-            }
-        });
-    }
 
     Entity.prototype = {
 
         constructor: Entity,
 
+		loadData : function () {
+			var self = this;
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Entity_Init&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
+				dataType: 'html',
+				success: function (data) {
+					if (data.indexOf("err@") != -1) {
+						alert(data);
+						return;
+					}
+					try {
+						jsonString = JSON.parse(data);
+						setData(self);
+					} catch (e) {
+						alert("解析错误: " + data);
+					}
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+				}
+			});
+		},
+
         Insert: function () {
-            var self = this;
-            var modifyArrays = {};
-            var count = 0;
-            $.each(jsonString, function (n, defaultValue) {
-                if (self[n] != defaultValue) {
-                    modifyArrays[n] = self[n];
-                    count++;
-                }
-            });
-            if (count > 0) {
-                $.ajax({
-                    type: 'post',
-                    async: false,
-                    url: projectName + dynamicHandler + "?DoType=Entity_Insert&EnName=" + self.enName + "&t=" + new Date().getTime(),
-                    dataType: 'html',
-                    data: modifyArrays,
-                    success: function (data) {
-                        if (data.indexOf("err@") != -1) {
-                            alert(data);
-                            return;
-                        }
-                        try {
-                            jsonString = JSON.parse(data);
-                            setData();
-                        } catch (e) {
-                            alert("解析错误: " + data);
-                        }
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-                    }
-                });
-            }
+			var self = this;
+			var params = getParams(self);
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Entity_Insert&EnName=" + self.enName + "&t=" + new Date().getTime(),
+				dataType: 'html',
+				data: params,
+				success: function (data) {
+					if (data.indexOf("err@") != -1) {
+						alert(data);
+						return;
+					}
+					try {
+						jsonString = JSON.parse(data);
+						setData(self);
+					} catch (e) {
+						alert("解析错误: " + data);
+					}
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+				}
+			});
         },
 
         Update: function () {
             var self = this;
-            var modifyArrays = {};
-            var count = 0;
-            $.each(jsonString, function (n, defaultValue) {
-                if (self[n] != defaultValue) {
-                    modifyArrays[n] = self[n];
-                    count++;
-                }
-            });
-            if (count > 0) {
-                $.ajax({
-                    type: 'post',
-                    async: false,
-                    url: projectName + dynamicHandler + "?DoType=Entity_Update&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
-                    dataType: 'html',
-                    data: modifyArrays,
-                    success: function (data) {
-                        $.each(modifyArrays, function (n, o) {
-                            jsonString[n] = o;
-                        });
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-                    }
-                });
-            }
+			var params = getParams(self);
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Entity_Update&EnName=" + self.enName + "&t=" + new Date().getTime(),
+				dataType: 'html',
+				data: params,
+				success: function (data) {
+					$.each(params, function (n, o) {
+						jsonString[n] = o;
+					});
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+				}
+			});
         },
 
         Delete: function () {
             var self = this;
+			var params = getParams(self);
             $.ajax({
                 type: 'post',
                 async: false,
-                url: projectName + dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&m=" + new Date().getTime(),
                 dataType: 'html',
+				data: params,
                 success: function (data) {
-
+					alert(data);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
@@ -774,69 +754,6 @@ var Entity = (function () {
 })();
 
 /*
-function GEEntity(enName, pkval) {
-	this.DoType = "GEEntity_Init";
-	this.EnName = enName;
-	this.pkval = pkval;
-	this.jsonString = undefined;
-	this.loadData();
-}
-
-GEEntity.prototype = {
-
-    constructor: GEEntity,
-
-    loadData: function () {
-        var self = this;
-        //
-        var pathName = document.location.pathname;
-        var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-        if (projectName.startsWith("/WF")) {
-            projectName = "";
-        }
-		var dynamicHandler;
-		if (plant == "CCFlow") {
-			// CCFlow
-			dynamicHandler = "/WF/Comm/Handler.ashx";
-		} else {
-			// JFlow
-			dynamicHandler = "/WF/Comm/ProcessRequest.do";
-		}
-        $.ajax({
-            type: 'post',
-            async: false,
-            url: projectName + dynamicHandler + "?DoType=GEEntity_Init&EnName=" + self.EnName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
-            dataType: 'html',
-            success: function (data) {
-
-                if (data.indexOf("err@") != -1) {
-                    alert(data);
-                    return;
-                }
-
-                try {
-                    self.jsonString = JSON.parse(data);
-                } catch (e) {
-                    alert("解析错误: " + data);
-                }
-
-
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-            }
-        });
-    },
-
-    GetValByKey: function (key) {
-        if (typeof this.jsonString != "undefined" && typeof key != "undefined") {
-            return this.jsonString[key];
-        }
-    }
-
-};
-
-
 function GEEntitiesOrderBy(ensName, key1, val1, orderBy) {
 
 }

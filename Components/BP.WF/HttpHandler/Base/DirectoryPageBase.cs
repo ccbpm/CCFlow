@@ -220,11 +220,28 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 属性参数.
+        /// <summary>
+        /// @于庆海翻译.
+        /// </summary>
         public string PKVal
         {
             get
             {
-                return this.GetRequestVal("PKVal");
+                string str= this.GetRequestVal("PKVal");
+                if (DataType.IsNullOrEmpty(str)==true)
+                    str = this.GetRequestVal("OID");
+
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = this.GetRequestVal("No");
+
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = this.GetRequestVal("MyPK");
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = this.GetRequestVal("NodeID");
+
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = this.GetRequestVal("WorkID");
+                return str;
             }
         }
         /// <summary>

@@ -111,6 +111,7 @@ namespace BP.WF.HttpHandler
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
+
                 en.Update();
                 return "更新成功.";
             }
@@ -128,7 +129,8 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
-                en.RetrieveFromDBSources();
+                //en.PKVal = this.PKVal;
+                //en.RetrieveFromDBSources();
 
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
@@ -175,7 +177,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 
 
-
         #region 功能执行.
         /// <summary>
         /// 初始化.
@@ -183,7 +184,6 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Method_Init()
         {
-
             string ensName = this.GetRequestVal("M");
             Method rm = BP.En.ClassFactory.GetMethod(ensName);
             if (rm == null)
@@ -199,44 +199,10 @@ namespace BP.WF.HttpHandler
                 return BP.Tools.Json.ToJson(ht);
             }
 
-
             DataTable dt = new DataTable();
-
 
             //转化为集合.
             MapAttrs attrs = rm.HisAttrs.ToMapAttrs;
-
-
-            //this.UCEn1.AddFieldSet("<b>功能执行:" + rm.Title + "</b>");
-            //this.UCEn1.AddBR();
-            //this.UCEn1.Add(rm.Help);
-            //if (rm.HisAttrs.Count > 0)
-            //{
-            //    this.UCEn1.BindAttrs(rm.HisAttrs);
-            //}
-            //Button btn = new Button();
-            //btn.CssClass = "Btn";
-            //btn.Text = "功能执行";
-            //if (string.IsNullOrEmpty(rm.Warning) == false)
-            //{
-            //    btn.Attributes["onclick"] = "if (confirm('" + rm.Warning + "')==false) {return false;}else{ this.disabled=true; }";
-            //}
-            //else
-            //{
-            //    btn.OnClientClick = "this.disabled=true;";
-            //    //  btn.Attributes["onclick"] = "this.disabled=true;return window.confirm('" + rm.Warning + "');";
-            //}
-
-            //this.UCEn1.AddBR();
-            //this.UCEn1.AddBR();
-            //btn.ID = "Btn_Do";
-            //btn.UseSubmitBehavior = false;
-            //btn.Click += new EventHandler(btn_Do_Click);
-
-            //this.UCEn1.Add(btn);
-
-            //this.UCEn1.Add("<input type=button class=Btn onclick='window.close();' value='关闭(Esc)' />");
-            //this.UCEn1.AddFieldSetEnd();
 
             return "";
         }
@@ -352,7 +318,7 @@ namespace BP.WF.HttpHandler
                     || en.IsVisable == false)
                     continue;
 
-              //  DataRow dr = dt.NewRow();
+              //DataRow dr = dt.NewRow();
 
                 html += "<li><a href=\"javascript:ShowIt('" + en.ToString() + "');\"  >" + en.GetIcon("/") + en.Title + "</a><br><font size=2 color=Green>" + en.Help + "</font><br><br></li>";
             }
@@ -670,7 +636,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 相关功能.
 
-
         #region  公共方法。
         public string SFTable()
         {
@@ -731,5 +696,68 @@ namespace BP.WF.HttpHandler
             return ses.ToJson();
         }
         #endregion  公共方法。
+
+        #region 执行方法.
+        /// <summary>
+        /// 执行方法
+        /// </summary>
+        /// <param name="clsName">类名称</param>
+        /// <param name="monthodName">方法名称</param>
+        /// <param name="paras">参数，可以为空.</param>
+        /// <returns>执行结果</returns>
+        public string Exec(string clsName, string methodName, string paras=null)
+        {
+            #region 处理 HttpHandler 类.
+            if (clsName.Contains(".HttpHandler.") == true)
+            {
+                //创建类实体.
+                DirectoryPageBase ctrl = Activator.CreateInstance(System.Type.GetType("BP.WF.HttpHandler.DirectoryPageBase"),
+                    this.context) as DirectoryPageBase;
+                ctrl.context = this.context;
+
+                try
+                {
+                    //执行方法返回json.
+                    string data = ctrl.DoMethod(ctrl, methodName);
+                    return data;
+                }
+                catch (Exception ex)
+                {
+                    string parasStr = "";
+                    foreach (string key in context.Request.QueryString.Keys)
+                    {
+                        parasStr += "@" + key + "=" + context.Request.QueryString[key];
+                    }
+                    return "err@" + ex.Message + " 参数:" + parasStr;
+                }
+            }
+            #endregion 处理 page 类.
+
+
+            #region 执行entity类的方法.
+            try
+            {
+                //创建类实体.
+                BP.En.Entity en = Activator.CreateInstance(System.Type.GetType("BP.En.Entity")) as BP.En.Entity;
+                en.PKVal = this.PKVal;
+                en.RetrieveFromDBSources();
+
+                Type tp = en.GetType();
+                System.Reflection.MethodInfo mp = tp.GetMethod(methodName);
+                if (mp == null)
+                    return "err@没有找到类[" + clsName + "]方法[" + methodName + "].";
+
+                //执行该方法.
+                object[] myparas = null;
+                string result= mp.Invoke(this, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return "err@执行实体类的方法错误:" + ex.Message;
+            }
+            #endregion 执行entity类的方法.
+        }
+        #endregion
     }
 }

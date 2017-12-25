@@ -8,7 +8,7 @@
 
     <script type="text/javascript">
 
-    window.onload=
+        window.onload =
 
         function Test() {
 
@@ -23,12 +23,11 @@
             //更新.
             emp.Name = "张三风";
             emp.Update();
-            alert('update成功');
+            alert('Update成功');
 
             //删除.
             emp.Delete();
-            alert('delete成功');
-
+            alert('Delete成功');
 
             //创建一个实体,获取实体的属性.
             var emp = Entity("BP.Port.Emp", "liyan");
@@ -36,6 +35,61 @@
             var deptNo = emp.FK_Dept;  //部门编号
             var deptName = emp.FK_DeptText; //部门名称.
 
+
+            emp.Do("ResetPass"); //不带参数的方法.
+            emp.Do("ResetPass", "&oldpass=456&pass1=123&pass2==123"); //带参数的方法.
+
+        }
+
+        function TestEns() {
+
+            var emps = Entities("BP.Port.Emps", "FK_Dept", "1");
+            var html = "<ul>";
+            for (var i = 0; i < emps.length; i++) {
+                var emp = emps[i];
+
+                html += "<li>" + emp.Name + "</li>";
+            }
+            html += "</ul>";
+            alert(html);
+
+            //获得性别为女的学生.
+            var students1 = Entities("BP.Demo.BPFramework.Students", "XB", "0");
+
+            //获得性别为女的学生并且按年龄排序.
+            var students2 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "Age");
+
+            //获得性别为女的,并且班级为01 的学生.
+            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi","01");
+
+            //获得性别为女的,并且班级为01 的学生, 按照年龄排序.
+            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01","Age");
+
+        }
+
+        //执行方法.(没有想明白)
+        function ExecEntityMonthod() {
+
+            //执行非静态的方法,有参数,仅仅传递指定的参数其他参数不处理.
+            var handler = CreateHttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            handler.AddUrlData();
+            handler.AddFormData();
+            //执行提交.
+            var result = handler.Login_Submit();
+
+            var result = handler.Do("Login_Submit");
+
+
+        }
+
+        //执行方法.(没有想明白)
+        function ExecHttpHandlerMonthod() {
+             
+            //执行非静态的方法,无参数.(系统就会把url与当前页面的form作为参数传递到后台去.)
+            var val = Exce("BP.WF.HttpHandler.WF_AppClassic", "Login_Submit");
+
+            //执行非静态的方法,有参数,仅仅传递指定的参数其他参数不处理.
+            var val = Exce("BP.WF.HttpHandler.WF_AppClassic", "Login_Submit","&UserNo=zhoupeng&Password=123");
         }
     </script>
      

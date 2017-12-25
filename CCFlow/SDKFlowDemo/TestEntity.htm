@@ -11,102 +11,81 @@
         window.onload =
 
 		function Test() {
-
-		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
-
-			handler.AddUrlData();  //把url参数加入里面去.
-			handler.AddFormData(); //把form数据加入里面去.
-
-			handler.AddPara("UserNo", "zhoupeng");
-			handler.AddPara("PassWord", "123"); 
-
-			var result1 = handler.DoMethodReturnJSON("Login_Submit");
-			alert(result1);
-
-			var result2 = handler.DoMethodReturnString("Login_Submit");
-			alert(result2);
-			return;
-
-			// entities
-		    var emps = new Entities("BP.Port.Emps", "FK_Dept", 1);
-		    var html = "<ul>";
-		    for (var i = 0; i < emps.length; i++) {
-		        var emp = emps[i];
-		        html += "<li>" + emp.Name + "</li>";
-		    }
-		    html += "</ul>";
-		    alert(html);
-
-			// run sql
-		    var count = DBAccess.RunSQL("UPDATE Port_Emp SET Name='福惠1' WHERE No='fuhui'");
-		    alert(count);
-
-		    var dataTable = DBAccess.RunSQLReturnTable("SELECT * FROM Port_Emp");
-		    alert(JSON.stringify(dataTable));
-
-			// entity
+		    // entity
 		    // 创建一个空实体.
 		    var emp = new Entity("BP.Port.Emp");
 		    emp.No = "ranzun";
 		    emp.Name = "冉尊";
 		    emp.FK_Dept = "1";
-		    emp.Insert(); //增加.
+		    var insert = emp.Insert(); //增加.
+		    alert("插入结果:" + insert);
 
 		    //更新.
 		    emp.Name = "张三风";
-		    emp.Update();
+		    var update = emp.Update();
+		    alert("更新结果:" + update);
+
+		    //执行保存.
+		    var save = emp.Save();
+		    alert("保存结果:" + save);
 
 		    //删除.
-		    emp.Delete();
+		    var del = emp.Delete();
+		    alert("删除结果:" + del);
 
 		    //创建一个实体,获取实体的属性.
 		    var emp = new Entity("BP.Port.Emp", "liyan");
 		    var name = emp.Name;
 		    var deptNo = emp.FK_Dept;  //部门编号
 		    var deptName = emp.FK_DeptText; //部门名称.
+		    alert("用户编号:" + emp.No + ",名称:" + emp.Name + "部门编号:" + emp.FK_Dept + ",部门名称:" + emp.FK_DeptText);
 
-			return;
 		    //执行实体的方法.
-		    var result = emp.Do("ResetPass"); //重置密码:不带参数的方法.
-		    alert(result);
+		    var result_ResetPass = emp.Do("ResetPass"); //重置密码:不带参数的方法.
+		    alert(result_ResetPass);
 
-		    var result1 = emp.Do("ChangePass", "&oldpass=456&pass1=123&pass2=123"); //修改密码:带参数的方法.
-		    alert(result1);
-
+		    //执行实体的方法.
+		    var result_ChangePass = emp.Do("ChangePass", "@oldpass=123@pass1=456@pass2=456"); //重置密码:不带参数的方法.
+		    alert(result_ChangePass);
 		}
 
         function TestEns() {
 
             var emps = Entities("BP.Port.Emps", "FK_Dept", "1");
-            var html = "<ul>";
-            for (var i = 0; i < emps.length; i++) {
-                var emp = emps[i];
-                html += "<li>" + emp.Name + "</li>";
-            }
-            html += "</ul>";
-            alert(html);
+            alert("BP.Port.Emps查询到:" + emps.length);
+          
 
             //获得性别为女的学生.
             var students1 = Entities("BP.Demo.BPFramework.Students", "XB", "0");
+            alert("Students XB=0 查询到:" + students1.length);
+
 
             //获得性别为女的学生并且按年龄排序.
             var students2 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "Age");
+            alert("Students XB=0 查询到:" + students2.length);
+
 
             //获得性别为女的,并且班级为01 的学生.
-            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi","01");
+            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01");
+            alert("Students XB=0 ,FK_BanJi=01 查询到:" + students3.length);
+
 
             //获得性别为女的,并且班级为01 的学生, 按照年龄排序.
-            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01","Age");
+            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01", "Age");
+            alert("Students XB=0 ,FK_BanJi=01 查询到:" + students3.length);
 
         }
 
-        //执行方法.(没有想明白)
-        function ExecHttpHandlerMonthod_A() {
+        function ExecHttpHandlerMonthod() {
 
             //执行非静态的方法,有参数,仅仅传递指定的参数其他参数不处理.
             var handler = CreateHttpHandler("BP.WF.HttpHandler.WF_AppClassic");
             handler.AddUrlData();  //把url参数加入里面去.
             handler.AddFormData(); //把form数据加入里面去.
+
+            handler.AddPara("TB_UserNo", "zhoupeng");
+            handler.AddPara("TB_Pass", "123");
+
 
             //执行提交.
             var result = handler.Login_Submit();
@@ -114,23 +93,6 @@
             var result = handler.DoMethodReturnJSON("Login_Submit");
             var result = handler.DoMethodReturnString("Login_Submit");
 
-
-            //处理结果.
-            if (result.indexOf('err@') == 0) {
-                alert(result); //登录失败.
-                return;
-            }
-        }
-
-        //执行方法.(没有想明白)
-        function ExecHttpHandlerMonthod_B() {
-             
-            //执行非静态的方法,无参数.(系统就会把url与当前页面的form作为参数传递到后台去.)
-            var result = Exce("BP.WF.HttpHandler.WF_AppClassic", "Login_Submit");
-
-            //执行非静态的方法,有参数,仅仅传递指定的参数其他参数不处理.
-            var result = Exce("BP.WF.HttpHandler.WF_AppClassic", "Login_Submit", "&UserNo=zhoupeng&Password=123");
-            
             //处理结果.
             if (result.indexOf('err@') == 0) {
                 alert(result); //登录失败.
@@ -139,7 +101,7 @@
         }
 
         //直接访问数据库.
-        function DBAccess11() {
+        function DBAccessRun() {
 
             var sql = "UPDATE Port_Emp SET Name='张三' WHERE No='zhangsan' ";
             var result = DBAccess.RunSQL(sql);

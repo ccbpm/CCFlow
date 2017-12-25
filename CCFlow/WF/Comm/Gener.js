@@ -805,7 +805,7 @@ var Entities = (function () {
 
 var DBAccess = (function () {
 
-	function DBAccess() {
+    function DBAccess() {
 	}
 
 	var dynamicHandler = "/WF/Comm/Handler.ashx";
@@ -817,7 +817,7 @@ var DBAccess = (function () {
 		$.ajax({
 			type: 'post',
 			async: false,
-			url: dynamicHandler + "?DoType=RunSQL&SQL=" + sql + "&t=" + new Date().getTime(),
+			url: dynamicHandler + "?DoType=DBAccess_RunSQL&SQL=" + sql + "&t=" + new Date().getTime(),
 			dataType: 'html',
 			success: function (data) {
 				count = parseInt(data);
@@ -841,7 +841,7 @@ var DBAccess = (function () {
 		$.ajax({
 			type: 'post',
 			async: false,
-			url: dynamicHandler + "?DoType=RunSQLReturnTable&SQL=" + sql + "&t=" + new Date().getTime(),
+			url: dynamicHandler + "?DoType=DBAccess_RunSQLReturnTable&SQL=" + sql + "&t=" + new Date().getTime(),
 			dataType: 'html',
 			success: function (data) {
 				if (data.indexOf("err@") != -1) {
@@ -873,8 +873,8 @@ var HttpHandler = (function () {
 
 	var formData;
 
-	function HttpHandler(enName) {
-		parameters = "EnName=" + enName;
+	function HttpHandler(handlerName) {
+	    parameters = "httpHandlerName=" + handlerName;
 	}
 
 	var dynamicHandler = "/WF/Comm/Handler.ashx";
@@ -897,7 +897,7 @@ var HttpHandler = (function () {
 			$.ajax({
 				type: 'post',
 				async: false,
-				url: dynamicHandler + "?DoType=" + methodName + "&" + parameters + "&t=" + new Date().getTime(),
+				url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&" + parameters + "&t=" + new Date().getTime(),
 				data : formData,
 				dataType: 'html',
 				success: function (data) {

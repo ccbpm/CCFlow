@@ -12,6 +12,18 @@
 
 		function Test() {
 
+			var handler = CreateHttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+			handler.AddUrlData();  //把url参数加入里面去.
+			handler.AddFormData(); //把form数据加入里面去.
+
+			var result1 = handler.DoMethodReturnJSON("Login_Submit");
+			alert(result1);
+
+			var result2 = handler.DoMethodReturnString("Login_Submit");
+			alert(result2);
+
+			return;
+
 			// entities
 		    var emps = new Entities("BP.Port.Emps", "FK_Dept", 1);
 		    var html = "<ul>";

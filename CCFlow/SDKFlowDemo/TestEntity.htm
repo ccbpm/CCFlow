@@ -12,16 +12,19 @@
 
 		function Test() {
 
-			var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+
 			handler.AddUrlData();  //把url参数加入里面去.
 			handler.AddFormData(); //把form数据加入里面去.
+
+			handler.AddPara("UserNo", "zhoupeng");
+			handler.AddPara("PassWord", "123"); 
 
 			var result1 = handler.DoMethodReturnJSON("Login_Submit");
 			alert(result1);
 
 			var result2 = handler.DoMethodReturnString("Login_Submit");
 			alert(result2);
-
 			return;
 
 			// entities

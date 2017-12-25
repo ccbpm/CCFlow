@@ -10,7 +10,47 @@
 
         window.onload =
 
-        function Test() {
+		function Test() {
+			
+			var emps = new Entities("BP.Port.Emps", "FK_Dept", 1);
+			var html = "<ul>";
+			for (var i = 0; i < emps.length; i++) {
+				var emp = emps[i];
+				html += "<li>" + emp.Name + "</li>";
+			}
+			html += "</ul>";
+			$(document).html(html);
+			
+			//
+			
+			var count = DBAccess.RunSQL("UPDATE Port_Emp SET Name='福惠1' WHERE No='fuhui'");
+
+			var dataTable = DBAccess.RunSQLReturnTable("SELECT * FROM Port_Emp");
+
+			return;
+
+            // 创建一个空实体.
+            var emp = new Entity("BP.Port.Emp");
+            emp.No = "ranzun";
+            emp.Name = "冉尊";
+            emp.FK_Dept = "1";
+            emp.Insert(); //增加.
+
+            //更新.
+            emp.Name = "张三风";
+            emp.Update();
+
+            //删除.
+            emp.Delete();
+
+            //创建一个实体,获取实体的属性.
+            var emp = new Entity("BP.Port.Emp", "liyan");
+            var name = emp.Name;
+            var deptNo = emp.FK_Dept;  //部门编号
+            var deptName = emp.FK_DeptText; //部门名称.
+
+			return;
+
 
             // 创建一个空实体.
             var emp = Entity("BP.Port.Emp");

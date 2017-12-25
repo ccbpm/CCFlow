@@ -12,8 +12,6 @@
 
 		function Test() {
 
-		    return;
-
 		    var emps = new Entities("BP.Port.Emps", "FK_Dept", 1);
 		    var html = "<ul>";
 		    for (var i = 0; i < emps.length; i++) {
@@ -22,6 +20,7 @@
 		    }
 		    html += "</ul>";
 		    alert(html);
+		    return;
 
 		    var count = DBAccess.RunSQL("UPDATE Port_Emp SET Name='福惠1' WHERE No='fuhui'");
 		    alert(count);
@@ -118,6 +117,7 @@
             //执行提交.
             var result = handler.Login_Submit();
             var result = handler.Do("Login_Submit");
+
             //处理结果.
             if (result.indexOf('err@') == 0) {
                 alert(result); //登录失败.

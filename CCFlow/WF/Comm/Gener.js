@@ -634,14 +634,14 @@ var Entity = (function () {
         this.loadData();
     };
 
-    function setData(self) {
-        if (typeof jsonString !== "undefined") {
-            $.each(jsonString, function (n, o) {
-                // 需要判断属性名与当前对象属性名是否相同
-                self[n] = o;
-            });
-        }
-    }
+	function setData(self) {
+		if (typeof jsonString !== "undefined") {
+			$.each(jsonString, function (n, o) {
+				// 需要判断属性名与当前对象属性名是否相同
+				self[n] = o;
+			});
+		}
+	}
 
 	function getParams(self) {
 		var params = {};
@@ -651,11 +651,11 @@ var Entity = (function () {
 		return params;
 	}
 
-    var dynamicHandler = "/WF/Comm/Handler.ashx";
+	var dynamicHandler = "/WF/Comm/Handler.ashx";
 
-    Entity.prototype = {
+	Entity.prototype = {
 
-        constructor: Entity,
+		constructor: Entity,
 
 		loadData : function () {
 			var self = this;
@@ -735,11 +735,14 @@ var Entity = (function () {
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&m=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&t=" + new Date().getTime(),
                 dataType: 'html',
 				data: params,
                 success: function (data) {
-					alert(data);
+					$.each(jsonString, function (n, o) {
+						jsonString[n] = undefined;
+					});
+					setData(self);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
@@ -753,32 +756,132 @@ var Entity = (function () {
 
 })();
 
-/*
-function GEEntitiesOrderBy(ensName, key1, val1, orderBy) {
+var Entities = (function () {
 
-}
+	var jsonString;
 
+	var Entities = function () {
+		this.ensName = arguments[0];
+		this.Paras = "";
+		this.orderBy;
+		var length;
+		if (arguments.length % 2 == 0) {
+			this.orderBy = arguments[arguments.length - 1];
+			length = arguments.length - 1;
+		} else {
+			length = arguments.length;
+		}
+		for (var i = 1; i < length; i += 2) {
+			this.Paras += "@" + arguments[i] + "=" + arguments[i + 1];
+		}
+		if (typeof this.orderBy !== "undefined") {
+			this.Paras += "@OrderBy=" + this.orderBy;
+		}
+		this.loadData();
+	};
 
-function GEEntitiesOrderBy(ensName, key1, val1, key2, val2, orderBy) {
+	var dynamicHandler = "/WF/Comm/Handler.ashx";
 
-}
+	Entities.prototype = {
 
+		constructor: Entities,
 
+		loadData : function () {
+			var self = this;
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Entities_Init&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
+				dataType: 'html',
+				success: function (data) {
+					if (data.indexOf("err@") != -1) {
+						alert(data);
+						return;
+					}
+					try {
+						jsonString = JSON.parse(data);
+						if ($.isArray(jsonString)) {
+							self.length = jsonString.length;
+							$.extend(self, jsonString);
+						} else {
+							alert("解析失败, 返回值不是集合");
+						}
+					} catch (e) {
+						alert("解析错误: " + data);
+					}
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+				}
+			});
+		}
 
-function GEEntitiesOr(ensName, key1, val1, key2, val2, key3, val3, key4, val4) {
-  
-}
+	};
 
+	return Entities;
 
-function GEEntities(ensName, key1, val1, key2, val2, key3, val3, key4, val4) {
+})();
 
-    var para = "@" + key1 + "=" + val1 + "@" + key2 + "=" + val2 + "@" + key3 + "=" + val3 + "@" + key4 + "=" + val4;
+var DBAccess = (function () {
 
+	function DBAccess() {
+	}
 
-    this.DoType = "GEEntities_Init";
-    this.EnName = enName;
-    this.pkval = pkval;
-    this.jsonString = undefined;
-    this.loadData();
-}
-*/
+	var dynamicHandler = "/WF/Comm/Handler.ashx";
+
+	DBAccess.RunSQL = function (sql) {
+
+		var count = 0;
+
+		$.ajax({
+			type: 'post',
+			async: false,
+			url: dynamicHandler + "?DoType=RunSQL&SQL=" + sql + "&t=" + new Date().getTime(),
+			dataType: 'html',
+			success: function (data) {
+				count = parseInt(data);
+				if (isNaN(count)) {
+					count = -1;
+				}
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+			}
+		});
+
+		return count;
+
+	};
+
+	DBAccess.RunSQLReturnTable = function (sql) {
+
+		var jsonString;
+
+		$.ajax({
+			type: 'post',
+			async: false,
+			url: dynamicHandler + "?DoType=RunSQLReturnTable&SQL=" + sql + "&t=" + new Date().getTime(),
+			dataType: 'html',
+			success: function (data) {
+				if (data.indexOf("err@") != -1) {
+					alert(data);
+					return;
+				}
+				try {
+					jsonString = JSON.parse(data);
+				} catch (e) {
+					alert("解析错误: " + data);
+				}
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+			}
+		});
+
+		return jsonString;
+
+	};
+
+	return DBAccess;
+
+})();

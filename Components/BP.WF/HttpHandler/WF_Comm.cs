@@ -112,8 +112,30 @@ namespace BP.WF.HttpHandler
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
 
-                en.Update();
-                return "更新成功.";
+                return en.Update().ToString();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 执行保存
+        /// </summary>
+        /// <returns></returns>
+        public string Entity_Save()
+        {
+            try
+            {
+                Entity en = ClassFactory.GetEn(this.EnName);
+                en.PKVal = this.PKVal;
+                en.RetrieveFromDBSources();
+
+                //遍历属性，循环赋值.
+                foreach (Attr attr in en.EnMap.Attrs)
+                    en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
+
+                return en.Save().ToString();
             }
             catch (Exception ex)
             {

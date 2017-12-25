@@ -362,7 +362,7 @@ namespace CCFlow.WF.UC
                 if (nd.HisFormType == NodeFormType.SheetTree)
                 {
                    // Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?WorkID=" + workid + "&FK_Flow=" + nd.FK_Flow + "&FID=" + fid + "&FK_Node=" + nd.NodeID + "&CWorkID=" + this.CWorkID);
-                    Response.Redirect(appPath + "WF/FlowFormTree/FlowFormTreeView.aspx?3=3"+this.RequestParas);
+                    Response.Redirect("/WF/FlowFormTree/FlowFormTreeView.aspx?3=3"+this.RequestParas);
                     return;
                 }
                 

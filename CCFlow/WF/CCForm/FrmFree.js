@@ -451,8 +451,8 @@ function figure_MapAttr_Template(mapAttr) {
             } else {
                 //添加文本框 ，日期控件等
                 //AppString   
-                if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
-                    if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
+                if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") { //不是外键
+                    if (mapAttr.UIContralType == "1") { //DDL 下拉列表框
 
 						if (mapAttr.LGType == 0) {
 							eleHtml += "<select data-val='" + ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable ? '' : 'disabled="disabled"') + ">";

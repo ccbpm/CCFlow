@@ -116,7 +116,10 @@
 
             //执行提交.
             var result = handler.Login_Submit();
-            var result = handler.Do("Login_Submit");
+
+            var result = handler.DoMethodReturnJSON("Login_Submit");
+            var result = handler.DoMethodReturnString("Login_Submit");
+
 
             //处理结果.
             if (result.indexOf('err@') == 0) {

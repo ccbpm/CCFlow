@@ -911,7 +911,7 @@ var HttpHandler = (function () {
 	var formData;
 
 	function HttpHandler(handlerName) {
-	    parameters.httpHandlerName = handlerName;
+	    this.handlerName = handlerName;
 	}
 
 	function validate(s) {
@@ -975,7 +975,7 @@ var HttpHandler = (function () {
 			$.ajax({
 				type: 'post',
 				async: false,
-				url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&" + self.getParams() + "&t=" + new Date().getTime(),
+				url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&httpHandlerName=" + self.handlerName + "&" + self.getParams() + "&t=" + new Date().getTime(),
 				data : formData,
 				dataType: 'html',
 				success: function (data) {

@@ -16,9 +16,13 @@ namespace BP.En
 	/// </summary>	
 	[Serializable]
 	abstract public class Entity : EnObj
-	{
-		#region 与缓存有关的操作
-		private Entities _GetNewEntities = null;
+    {
+        #region mapInfotoJson
+       
+        #endregion
+
+        #region 与缓存有关的操作
+        private Entities _GetNewEntities = null;
 		public virtual Entities GetNewEntities
 		{
 			get

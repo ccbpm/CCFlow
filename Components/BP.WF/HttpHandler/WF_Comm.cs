@@ -180,10 +180,11 @@ namespace BP.WF.HttpHandler
 
                 QueryObject qo = new QueryObject(ens);
                 string[] myparas = this.Paras.Split('@');
+
+                int idx = 0;
                 for (int i = 0; i < myparas.Length; i++)
                 {
                     string para = myparas[i];
-
                     if (DataType.IsNullOrEmpty(para) || para.Contains("=")==false)
                         continue;
 
@@ -192,9 +193,12 @@ namespace BP.WF.HttpHandler
                     string val = strs[1];
 
                     if (key.ToLower().Equals("orderby") == true)
+                    {
                         qo.addOrderBy(val);
+                        continue;
+                    }
 
-                    if (i == 0)
+                    if (idx == 0)
                     {
                         qo.AddWhere(key, val);
                     }
@@ -203,7 +207,9 @@ namespace BP.WF.HttpHandler
                         qo.addAnd();
                         qo.AddWhere(key, val);
                     }
+                    idx++;
                 }
+
                 qo.DoQuery();
                 return ens.ToJson();
             }
@@ -366,8 +372,99 @@ namespace BP.WF.HttpHandler
 
 
         #region 查询.
+        /// <summary>
+        /// 获得查询的基本信息.
+        /// </summary>
+        /// <returns></returns>
+        public string Search_MapBaseInfo()
+        {
+            //获得
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            Entity en = ens.GetNewEntity;
+            Map map = ens.GetNewEntity.EnMapInTime;
+
+            Hashtable ht = new Hashtable();
+
+            //把权限信息放入.
+            UAC uac = en.HisUAC;
+            ht.Add("IsUpdata", uac.IsUpdate);
+            ht.Add("IsInsert", uac.IsInsert);
+            ht.Add("IsDelete", uac.IsDelete);
+            ht.Add("IsView", uac.IsView);
+            ht.Add("IsExp", uac.IsExp); //是否可以导出?
+            ht.Add("IsImp", uac.IsImp); //是否可以导入?
+
+            //把map信息放入
+            ht.Add("PhysicsTable", map.PhysicsTable);
+            ht.Add("CodeStruct", map.CodeStruct);
+            ht.Add("CodeLength", map.CodeLength);
+
+            //查询条件.
+            ht.Add("IsShowSearchKey", map.IsShowSearchKey);
+
+            return BP.Tools.Json.ToJson(ht);
+        }
+        /// <summary>
+        /// 外键或者枚举的查询.
+        /// </summary>
+        /// <returns></returns>
+        public string Search_SearchAttrs()
+        {
+            //获得
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            Entity en = ens.GetNewEntity;
+            Map map = ens.GetNewEntity.EnMapInTime;
+
+            DataSet ds = new DataSet();
+
+            //构造查询条件集合.
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Field");
+            dt.Columns.Add("Name");
+            dt.TableName = "Attrs";
+
+            AttrSearchs attrs = map.SearchAttrs;
+            foreach (AttrSearch item in attrs)
+            {
+                DataRow dr = dt.NewRow();
+                dr["Field"] = item.Key;
+                dr["Name"] = item.HisAttr.Desc;
+                dt.Rows.Add(dr);
+            }
+            ds.Tables.Add(dt);
+
+            //把外键枚举增加到里面.
+            foreach (AttrSearch item in attrs)
+            {
+                if (item.HisAttr.IsEnum == true)
+                {
+                    SysEnums ses = new SysEnums(item.HisAttr.UIBindKey);
+                    DataTable dtEnum = ses.ToDataTableField();
+                    dtEnum.TableName = item.Key;
+                    ds.Tables.Add(dtEnum);
+                    continue;
+                }
+
+                if (item.HisAttr.IsFK == true)
+                {
+                    Entities ensFK = item.HisAttr.HisFKEns;
+                    ensFK.RetrieveAll();
+
+                    DataTable dtEn = ensFK.ToDataTableField();
+                    ds.Tables.Add(dtEn);
+                }
+            }
+
+            return BP.Tools.Json.ToJson(ds);
+        }
         public string Search_Init()
         {
+            //获得
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            Entity en = ens.GetNewEntity;
+            Hashtable ht = new Hashtable();
+            
+
             return "";
         }
         #endregion 查询.
@@ -813,7 +910,7 @@ namespace BP.WF.HttpHandler
         /// 运行SQL返回DataTable
         /// </summary>
         /// <returns>DataTable转换的json</returns>
-        public string DBAccess_RunSQLRturnTable()
+        public string DBAccess_RunSQLReturnTable()
         {
             string sql = this.GetRequestVal("SQL");
             DataTable dt = DBAccess.RunSQLReturnTable(sql);

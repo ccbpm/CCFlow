@@ -174,7 +174,6 @@ namespace BP.En
 		}
 		#endregion 帮助.
 
-
 		#region 与xml 文件操作有关系
 		/// <summary>
 		/// xml 文件的位置
@@ -188,6 +187,8 @@ namespace BP.En
 			get { return _IsAllowRepeatNo; }
 			set { _IsAllowRepeatNo = value; }
 		}
+
+       
 
 		#region chuli
 		/// <summary>

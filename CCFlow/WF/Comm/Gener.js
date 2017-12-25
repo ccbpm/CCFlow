@@ -1,23 +1,4 @@
-﻿
-
-
-
-/* ESC Key Down */
-
-function ToLoeo( dt ) {
-
-return dt;
- 
-}
-
-function Esc() {
-    if (event.keyCode == 27)
-        window.close();
-    return true;
-}
-
-
-/* 把一个 @XB=1@Age=25 转化成一个js对象.  */
+﻿/* 把一个 @XB=1@Age=25 转化成一个js对象.  */
 function AtParaToJson(json) {
     var jsObj = {};
     if (json) {

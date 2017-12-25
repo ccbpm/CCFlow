@@ -9,6 +9,7 @@
     <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script src="Gener.js" type="text/javascript"></script>
      <base target="_self" /> 
     <script language="javascript" type="text/javascript" >
         //页面启动函数.
@@ -28,6 +29,8 @@
 
         //初始化数据.
         function InitToolbar() {
+
+                var hs=ex
 
             var pk = GetQueryString("No");
             if (pk == null || pk == undefined)

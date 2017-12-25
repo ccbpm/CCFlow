@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>JS开发框架展示</title>
+    <script src="../WF/Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+    window.onload=
+
+        function Test() {
+
+            // 创建一个空实体.
+            var emp = Entity("BP.Port.Emp");
+            emp.No = "zhangsan";
+            emp.Name = "张三";
+            emp.FK_Dept = "1";
+            emp.Insert(); //增加.
+            alert('Insert成功');
+
+            //更新.
+            emp.Name = "张三风";
+            emp.Update();
+            alert('update成功');
+
+            //删除.
+            emp.Delete();
+            alert('delete成功');
+
+
+            //创建一个实体,获取实体的属性.
+            var emp = Entity("BP.Port.Emp", "liyan");
+            var name = emp.Name;
+            var deptNo = emp.FK_Dept;  //部门编号
+            var deptName = emp.FK_DeptText; //部门名称.
+
+        }
+    </script>
+     
+</head>
+<body>
+
+
+
+</body>
+</html>

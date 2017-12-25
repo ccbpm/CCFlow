@@ -154,7 +154,17 @@ namespace BP.WF.HttpHandler
        
         #region Entities 公共类库.
         /// <summary>
-        /// 获得实体
+        /// 调用参数.
+        /// </summary>
+        public string Paras
+        {
+            get
+            {
+                return this.GetRequestVal("Paras");
+            }
+        }
+        /// <summary>
+        /// 获得实体集合s
         /// </summary>
         /// <returns></returns>
         public string Entities_Init()
@@ -162,12 +172,39 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entities ens = ClassFactory.GetEns(this.EnsName);
+                if (this.Paras == null)
+                {
+                    ens.RetrieveAll();
+                    return ens.ToJson();
+                }
 
-                string condKey = "";
+                QueryObject qo = new QueryObject(ens);
+                string[] myparas = this.Paras.Split('@');
+                for (int i = 0; i < myparas.Length; i++)
+                {
+                    string para = myparas[i];
 
-                string keys = "@FK_Dept=01@XB=0@OrderBy=Age";
+                    if (DataType.IsNullOrEmpty(para) || para.Contains("=")==false)
+                        continue;
 
+                    string[] strs = para.Split('=');
+                    string key = strs[0];
+                    string val = strs[1];
 
+                    if (key.ToLower().Equals("orderby") == true)
+                        qo.addOrderBy(val);
+
+                    if (i == 0)
+                    {
+                        qo.AddWhere(key, val);
+                    }
+                    else
+                    {
+                        qo.addAnd();
+                        qo.AddWhere(key, val);
+                    }
+                }
+                qo.DoQuery();
                 return ens.ToJson();
             }
             catch (Exception ex)

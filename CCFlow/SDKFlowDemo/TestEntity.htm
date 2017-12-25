@@ -12,6 +12,7 @@
 
 		function Test() {
 
+			// entities
 		    var emps = new Entities("BP.Port.Emps", "FK_Dept", 1);
 		    var html = "<ul>";
 		    for (var i = 0; i < emps.length; i++) {
@@ -20,14 +21,15 @@
 		    }
 		    html += "</ul>";
 		    alert(html);
-		    return;
 
+			// run sql
 		    var count = DBAccess.RunSQL("UPDATE Port_Emp SET Name='福惠1' WHERE No='fuhui'");
 		    alert(count);
 
 		    var dataTable = DBAccess.RunSQLReturnTable("SELECT * FROM Port_Emp");
 		    alert(JSON.stringify(dataTable));
 
+			// entity
 		    // 创建一个空实体.
 		    var emp = new Entity("BP.Port.Emp");
 		    emp.No = "ranzun";
@@ -48,30 +50,7 @@
 		    var deptNo = emp.FK_Dept;  //部门编号
 		    var deptName = emp.FK_DeptText; //部门名称.
 
-		    // 创建一个空实体.
-		    var emp = Entity("BP.Port.Emp");
-		    emp.No = "zhangsan";
-		    emp.Name = "张三";
-		    emp.FK_Dept = "1";
-		    emp.Insert(); //增加.
-		    alert('Insert成功');
-
-		    //更新.
-		    emp.Name = "张三丰";
-		    emp.Update();
-		    alert('Update成功');
-
-		    //删除.
-		    emp.Delete();
-		    alert('Delete成功');
-
-
-		    //创建一个实体,获取实体的属性.
-		    var emp = Entity("BP.Port.Emp", "liyan");
-		    var name = emp.Name;
-		    var deptNo = emp.FK_Dept;  //部门编号
-		    var deptName = emp.FK_DeptText; //部门名称.
-
+			return;
 		    //执行实体的方法.
 		    var result = emp.Do("ResetPass"); //重置密码:不带参数的方法.
 		    alert(result);

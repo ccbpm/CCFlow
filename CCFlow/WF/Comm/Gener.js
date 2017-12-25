@@ -918,6 +918,9 @@ var HttpHandler = (function () {
 
 		DoMethodReturnJSON : function (methodName) {
 			var jsonString = this.DoMethodReturnString(methodName);
+			if (jsonString.indexOf("err@") != -1) {
+				return jsonString;
+			}
 			try {
 				jsonString = JSON.parse(jsonString);
 			} catch (e) {

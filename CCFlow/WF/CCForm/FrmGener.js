@@ -732,7 +732,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
             data = frmData[mapAttr.UIBindKey];
 
         if (data == undefined) {
-            alert('没有获得约定的数据源..');
+            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
             return;
         } 
 
@@ -764,16 +764,19 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
 			}
 		} catch (e) {
 		}
-		if (typeof  fn == "function") {
-			$.each(fn.call(), function (i, obj) {
-				operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-			});
+		if (typeof fn == "function") {
+		    $.each(fn.call(), function (i, obj) {
+		        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+		    });
 		} else if (typeof CommonHandler == "function") {
-			CommonHandler.call("", mapAttr.UIBindKey, function (data) {
-				GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
-			})
+		    CommonHandler.call("", mapAttr.UIBindKey, function (data) {
+		        GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
+		    })
 		} else {
-			alert('没有获得约定的数据源.');
+
+		    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+
+		    //alert('没有获得约定的数据源.');
 		}
 	}
     return operations;

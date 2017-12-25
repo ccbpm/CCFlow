@@ -59,7 +59,7 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
-                if (en.PKVal == "0" || en.PKVal == "")
+                if (en.PKVal == "0" || en.PKVal == "" || this.PKVal == "undefined")
                 {
                     Map map = en.EnMap;
                 }

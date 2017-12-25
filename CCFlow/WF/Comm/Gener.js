@@ -866,3 +866,59 @@ var DBAccess = (function () {
 	return DBAccess;
 
 })();
+
+var HttpHandler = (function () {
+
+	var parameters;
+
+	function HttpHandler(enName) {
+		parameters = "EnsName=" + ensName;
+	}
+
+	var formData;
+
+	HttpHandler.prototype = {
+
+		constructor : HttpHandler,
+
+		AddUrlData : function () {
+			parameters += "&" + document.location.search.substr(1);
+		},
+
+		AddFormData : function () {
+			formData = $("form").serialize();
+		},
+
+		DoMethodReturnString : function () {
+			var jsonString;
+
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=XXXXXXXXXX&" + parameters + "&t=" + new Date().getTime(),
+				data : formData,
+				dataType: 'html',
+				success: function (data) {
+					jsonString = data;
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					jsonString = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+				}
+			});
+
+			return jsonString;
+		},
+
+		DoMethodReturnJSON : function () {
+			var jsonString = this.DoMethodReturnString();
+			try {
+				jsonString = JSON.parse(data);
+			} catch (e) {
+				alert("err@解析错误: " + data);
+			}
+			return jsonString;
+		}
+
+	}
+
+})();

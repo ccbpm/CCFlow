@@ -889,13 +889,13 @@ var HttpHandler = (function () {
 			formData = $("form").serialize();
 		},
 
-		DoMethodReturnString : function () {
+		DoMethodReturnString : function (methodName) {
 			var jsonString;
 
 			$.ajax({
 				type: 'post',
 				async: false,
-				url: dynamicHandler + "?DoType=XXXXXXXXXX&" + parameters + "&t=" + new Date().getTime(),
+				url: dynamicHandler + "?DoType=" + methodName + "&" + parameters + "&t=" + new Date().getTime(),
 				data : formData,
 				dataType: 'html',
 				success: function (data) {
@@ -909,8 +909,8 @@ var HttpHandler = (function () {
 			return jsonString;
 		},
 
-		DoMethodReturnJSON : function () {
-			var jsonString = this.DoMethodReturnString();
+		DoMethodReturnJSON : function (methodName) {
+			var jsonString = this.DoMethodReturnString(methodName);
 			try {
 				jsonString = JSON.parse(data);
 			} catch (e) {

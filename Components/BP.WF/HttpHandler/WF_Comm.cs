@@ -462,8 +462,15 @@ namespace BP.WF.HttpHandler
             //获得
             Entities ens = ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;
-            Hashtable ht = new Hashtable();
-            
+            Map map = en.EnMapInTime;
+
+            MapAttrs attrs = map.Attrs.ToMapAttrs;
+
+            DataTable dtAttrs = attrs.ToDataTableField();
+            dtAttrs.TableName = "Attrs";
+
+            DataSet ds = new DataSet();
+            ds.Tables.Add(dtAttrs);
 
             return "";
         }
@@ -917,5 +924,20 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(dt);
         }
         #endregion
+
+        //执行方法.
+        public string HttpHandler()
+        {
+            //获得两个参数.
+            string httpHandlerName = this.GetRequestVal("HttpHandlerName");
+            string methodName = this.GetRequestVal("DoMethod");
+
+            BP.WF.HttpHandler.DirectoryPageBase en =
+                Activator.CreateInstance(System.Type.GetType(httpHandlerName),this.context) 
+                as BP.WF.HttpHandler.DirectoryPageBase;
+
+            en.context = this.context;
+            return en.DoMethod(en, methodName);
+        }
     }
 }

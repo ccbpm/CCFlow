@@ -364,6 +364,7 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+
         #region 查询.
         public string Search_Init()
         {
@@ -794,6 +795,29 @@ namespace BP.WF.HttpHandler
                 return "err@执行实体类的方法错误:" + ex.Message;
             }
             #endregion 执行entity类的方法.
+        }
+        #endregion
+
+
+        #region 数据库相关.
+        /// <summary>
+        /// 运行SQL
+        /// </summary>
+        /// <returns>返回影响行数</returns>
+        public string DBAccess_RunSQL()
+        {
+            string sql = this.GetRequestVal("SQL");
+            return DBAccess.RunSQL(sql).ToString();
+        }
+        /// <summary>
+        /// 运行SQL返回DataTable
+        /// </summary>
+        /// <returns>DataTable转换的json</returns>
+        public string DBAccess_RunSQLRturnTable()
+        {
+            string sql = this.GetRequestVal("SQL");
+            DataTable dt = DBAccess.RunSQLReturnTable(sql);
+            return BP.Tools.Json.ToJson(dt);
         }
         #endregion
     }

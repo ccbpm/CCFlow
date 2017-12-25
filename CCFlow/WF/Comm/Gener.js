@@ -674,10 +674,13 @@ var Entity = (function () {
 				dataType: 'html',
 				data: params,
 				success: function (data) {
+					result = data;
+					if (data.indexOf("err@") != -1) {
+						return;
+					}
 					$.each(params, function (n, o) {
 						jsonString[n] = o;
 					});
-					result = data;
 				},
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
 					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
@@ -697,10 +700,13 @@ var Entity = (function () {
 				dataType: 'html',
 				data: params,
 				success: function (data) {
+					result = data;
+					if (data.indexOf("err@") != -1) {
+						return;
+					}
 					$.each(params, function (n, o) {
 						jsonString[n] = o;
 					});
-					result = data;
 				},
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
 					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
@@ -720,10 +726,13 @@ var Entity = (function () {
 				dataType: 'html',
 				data: params,
 				success: function (data) {
+					result = data;
+					if (data.indexOf("err@") != -1) {
+						return;
+					}
 					$.each(params, function (n, o) {
 						jsonString[n] = o;
 					});
-					result = data;
 				},
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
 					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
@@ -743,11 +752,14 @@ var Entity = (function () {
                 dataType: 'html',
 				data: params,
                 success: function (data) {
+					result = data;
+					if (data.indexOf("err@") != -1) {
+						return;
+					}
 					$.each(jsonString, function (n, o) {
 						jsonString[n] = undefined;
 					});
 					setData(self);
-					result = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);

@@ -101,7 +101,11 @@
            + '</div>';
 
             $('body').append($(selectEmpModalHtml));
-            var url = "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random();
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept")
+            if (dept == null || dept == '' || dept == undefined) {
+                dept = $.cookie('FK_Dept');
+            }
+            var url = "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
             //  url = url.replace('101', '10102');
             url = url.replace('=101&', '=10102&');
 
@@ -244,12 +248,12 @@
         //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
         function SaveAndClose() {
 
-          //  var url = "HuiQianToNodes.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
-          // window.location.href = url;
-         //  return;
+            //  var url = "HuiQianToNodes.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+            // window.location.href = url;
+            //  return;
 
             //需要调用设置会签状态并返回才可以.
-            var myurl= Handler + "?DoType=HuiQian_SaveAndClose&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random();
+            var myurl = Handler + "?DoType=HuiQian_SaveAndClose&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random();
             //alert(myurl);
 
             $.ajax({

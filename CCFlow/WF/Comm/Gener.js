@@ -666,6 +666,7 @@ var Entity = (function () {
         Insert: function () {
 			var self = this;
 			var params = getParams(self);
+			var result;
 			$.ajax({
 				type: 'post',
 				async: false,
@@ -673,26 +674,22 @@ var Entity = (function () {
 				dataType: 'html',
 				data: params,
 				success: function (data) {
-					if (data.indexOf("err@") != -1) {
-						alert(data);
-						return;
-					}
-					try {
-						jsonString = JSON.parse(data);
-						setData(self);
-					} catch (e) {
-						alert("解析错误: " + data);
-					}
+					$.each(params, function (n, o) {
+						jsonString[n] = o;
+					});
+					result = data;
 				},
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
 					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
 				}
 			});
+			return result;
         },
 
         Update: function () {
             var self = this;
 			var params = getParams(self);
+			var result;
 			$.ajax({
 				type: 'post',
 				async: false,
@@ -703,16 +700,42 @@ var Entity = (function () {
 					$.each(params, function (n, o) {
 						jsonString[n] = o;
 					});
+					result = data;
 				},
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
 					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
 				}
 			});
+			return result;
+        },
+
+		Save: function () {
+            var self = this;
+			var params = getParams(self);
+			var result;
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Entity_Save&EnName=" + self.enName + "&t=" + new Date().getTime(),
+				dataType: 'html',
+				data: params,
+				success: function (data) {
+					$.each(params, function (n, o) {
+						jsonString[n] = o;
+					});
+					result = data;
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+				}
+			});
+			return result;
         },
 
         Delete: function () {
-            var self = this;
+			var self = this;
 			var params = getParams(self);
+			var result;
             $.ajax({
                 type: 'post',
                 async: false,
@@ -724,11 +747,13 @@ var Entity = (function () {
 						jsonString[n] = undefined;
 					});
 					setData(self);
+					result = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
                 }
             });
+			return result;
         }
 
     };

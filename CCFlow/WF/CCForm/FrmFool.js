@@ -257,8 +257,8 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     var eleHtml = '';
 
-    //外键类型.
-    if ( mapAttr.LGType == "0" && mapAttr.MyDataType == "1") {
+    //外部数据源类型.
+    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType=="1" ) {
 
         //枚举类型.
         if (mapAttr.UIIsEnable == 1)
@@ -267,7 +267,10 @@ function InitMapAttrOfCtrl(mapAttr) {
             enableAttr = "disabled='disabled'";
 
         return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-    } else if ( mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+    } 
+    
+    //外键类型.
+    if ( mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
 
         //枚举类型.
         if (mapAttr.UIIsEnable == 1)

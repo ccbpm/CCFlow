@@ -1104,7 +1104,13 @@ var HttpHandler = (function () {
 
 var WebUser = function () {
 
-	var dynamicHandler = "/WF/Comm/Handler.ashx";
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
 
 	var jsonString = {};
 

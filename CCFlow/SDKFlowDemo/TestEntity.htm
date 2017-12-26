@@ -13,12 +13,14 @@
 		function Test() {
 
 		    //获得当前用户信息.
-		    var no = WebUser.No;
-		    var name = WebUser.Name;
-		    var fk_dept = WebUser.FK_Dept;
-		    var deptName = WebUser.FK_DeptName;
+			var webUser = new WebUser();
+		    var no = webUser.No;
+		    var name = webUser.Name;
+		    var fk_dept = webUser.FK_Dept;
+		    var deptName = webUser.FK_DeptName;
 
 
+			return;
 		    // entity
 		    // 创建一个空实体.
 		    var emp = new Entity("BP.Port.Emp");

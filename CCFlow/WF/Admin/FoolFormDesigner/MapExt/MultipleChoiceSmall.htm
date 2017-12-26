@@ -45,22 +45,27 @@
             else
                 $("#Btn_Delete").removeAttr("disabled");
 
+            //设置文本框选择的值.
+            $("input[name='RB']:checked").val(en.DoWay);
+
             //按照文本计算.
             $("#TB_Doc").val(en.Tag1);
 
             //绑定枚举.
             var enums = new Entities("BP.Sys.SysEnumMains");
-            enums.retall();
-            GenerBindEntities("DDL_Enums", enums, en.Tag2);
+            enums.RetrieveAll();
+
+            GenerBindDDL("DDL_Enums", enums, "No","Name", en.Tag2);
 
             //绑定外键.
             var tables = new Entities("BP.Sys.SFTables");
-            tables.retall();
-            GenerBindEntities("DDL_SFTable", tables, en.Tag3);
+            tables.RetrieveAll();
+
+            GenerBindDDL("DDL_SFTables", tables, "No", "Name", en.Tag3);
 
             //绑定SQL
             $("#TB_SQL").val(en.Tag4);
-             
+
         });
 
         //执行保存
@@ -77,8 +82,7 @@
             en.ExtType = "MultipleChoiceSmall";
             en.MyPK = mypk;
 
-            var checkVal = 0;
-
+            var checkVal = $("input[name='RB']:checked").val();
             en.DoWay = checkVal;
 
             if (checkVal == 0)
@@ -88,7 +92,7 @@
                 en.Tag2 = $("#DDL_Enums").val();
 
             if (checkVal == 2)
-                en.Tag3 = $("#DDL_SFTable").val();
+                en.Tag3 = $("#DDL_SFTables").val();
 
             if (checkVal == 3)
                 en.Tag4 = $("#TB_SQL").val();

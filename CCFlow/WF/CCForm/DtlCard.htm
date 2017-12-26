@@ -10,11 +10,10 @@
     <script type="text/javascript">
         //页面启动函数.
         $(function () {
-
             var ensName = GetQueryString("EnsName");
 
+            //加载JS文件
             try {
-                //加载JS文件
                 var s = document.createElement('script');
                 s.type = 'text/javascript';
                 s.src = "../../DataUser/JSLibData/" + ensName + ".js";
@@ -22,9 +21,15 @@
                 tmp.parentNode.insertBefore(s, tmp);
             }
             catch (err) {
+
             }
 
-            InitPage();
+            //获得mapdtl实体的基本信息.
+            var mapDtl = new Entity("BP.Sys.MapDtl", ensName);
+            var mapAttrs = new Entities("BP.Sys.MapAttrs", "@FK_MapData=" + ensName);
+
+
+
         });
 
 

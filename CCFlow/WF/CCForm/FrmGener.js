@@ -12,6 +12,7 @@ var jsonStr = '';
 var IsChange = false;
 //初始化函数
 $(function () {
+
     $("#CCForm").unbind().on('click', function () {
         Change(frmData);
     });
@@ -20,6 +21,12 @@ $(function () {
 
     //构造表单.
     GenerFrm(); //表单数据.
+
+    //设置不可以用.
+    var isReadonly = GetQueryString("IsReadonly");
+    if (isReadonly == "1") {
+        SetReadonly();
+    }
 
     if (parent != null && parent.document.getElementById('MainFrames') != undefined) {
         //计算高度，展示滚动条
@@ -58,6 +65,16 @@ $(function () {
         FormOnLoadCheckIsNull();
     }
 });
+
+//设置不可以用.
+function SetReadonly() {
+
+    //设置保存按钮不可以用.
+    $("#Btn_Save").attr("disabled", true);
+
+    //@于庆海,怎么设置全部的表单元素不可以使用？ 遍历每个控件.
+
+}
 
 function SetHegiht() {
     var screenHeight = document.documentElement.clientHeight;

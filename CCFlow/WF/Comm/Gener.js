@@ -1020,17 +1020,17 @@ var WebUser = (function () {
 		dataType: 'html',
 		success: function (data) {
 			if (data.indexOf("err@") != -1) {
-				alert(data);
+				console.log(data);
 				return;
 			}
 			try {
 				jsonString = JSON.parse(data);
 			} catch (e) {
-				alert("json解析错误: " + data);
+				console.log("json解析错误: " + data);
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+			console.log("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
 		}
 	});
 

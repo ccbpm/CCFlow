@@ -212,14 +212,7 @@
 
         //确定  执行会签操作
         function ReturnWork(emps) {
-
-            //WorkID, this.FID, this.FK_Node
-            //var empNos = frames["iframeSelectEmpsForm"].window.returnVal.NO;
-            //  var emps = this.document.getElementById("TB_Emps").value;
-            //            if (emps == "") {
-            //                alert('请输入要加签的人员ID,多个ID使用逗号分开.');
-            //                return;
-            //            }
+            
 
             $.ajax({
                 type: 'post',
@@ -240,10 +233,8 @@
                         return;
                     }
 
-
                     var gwls = JSON.parse(data);
                     BindTable(gwls);
-
                     return;
                 }
             });

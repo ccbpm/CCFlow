@@ -1013,8 +1013,9 @@ function Send( isHuiQian=false ) {
 
             if (isHuiQian==true)
             {
-               initModal("HuiQian",selectToNode);
+               initModal("HuiQian",toNode);
                $('#returnWorkModal').modal().show();
+
             }else
             {
                initModal("sendAccepter", selectToNode);
@@ -1034,7 +1035,6 @@ function Send( isHuiQian=false ) {
 
     //执行发送.
     execSend(toNode);
-
 }
 
 function execSend(toNode) {
@@ -1868,12 +1868,12 @@ function initModal(modalType, toNode) {
                 break;
             case "HuiQian": 
                
-               if (toNode.No!=null)
+               if (toNode!=null)
                  $('#modalHeader').text("会签 => 发送");
                 else
                  $('#modalHeader').text("会签");
 
-                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode="+toNode.No+"&Info=&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode="+toNode+"&Info=&s=" + Math.random()
                 break;
             case "PackUp_zip":
             case "PackUp_html":

@@ -27,30 +27,37 @@
     <base target="_self" />
     <script type="text/javascript">
        
+        /*隐藏与显示.*/
+        function ShowHidden(ctrlID) {
+            var ctrl = document.getElementById(ctrlID);
+            if (ctrl.style.display == "block") {
+                ctrl.style.display = 'none';
+            } else {
+                ctrl.style.display = 'block';
+            }
+        }
         //执行保存
         function Save() {
 
-            //组织主键.
-            var mypk = "Link_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-            var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = mypk;
-            en.Returnfromdbsrc();
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
 
-            en.FK_MapData = this.FK_MapData;
-            en.AttrOfOper = this.KeyOfEn;
+            handler.AddFormData(); //加入表单参数.
 
-            //url.
-            en.Doc = $("#TB_Url"); //要执行的SQL.
-            en.W = $("#TB_Width"); //要执行的SQL.
-            en.H = $("#TB_Height"); //要执行的SQL.
+            //组织参数.
+            var fk_mapExt = GetQueryString("MyPK");
+            var keyOfEn = GetQueryString("KeyOfEn") || GetQueryString("RefNo");
+            var fk_mapData = getQueryStringByName("FK_MapData");
 
-            en.ExtType = "Link";
+            handler.AddPara("FK_MapExt", fk_mapExt);
+            handler.AddPara("KeyOfEn", keyOfEn);
+            handler.AddPara("FK_MapData", fk_mapData);
 
-            if (en.Update() == 0)
-                en.Insert();
+            //执行方法.
+            var str = handler.DoMethodReturnString("Link_Save");
+            alert(str);
 
-            window.location.href = "Link.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
-            return;
+            window.location.href = 'Link.htm?MyPK='+;
+            document.getElementById("Btn_Delete").disabled = false;
         }
 
         //删除.
@@ -59,9 +66,10 @@
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
-            var mypk = "Link_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+             var mypk= "Link_"+ GetQueryString("FK_MapData")+"_" + GetQueryString("KeyOfEn");
             var en = new Entity("BP.Sys.MapExt", mypk);
             en.Delete();
+
             window.location.href = window.location.href;
         }
 
@@ -84,6 +92,7 @@
             $("#TB_Height").val(en.H);
             $("#TB_Url").val(en.Doc);
         });
+
     </script>
 </head>
 <body >
@@ -92,9 +101,8 @@
  <fieldset>
 <legend>连接设置</legend>
 
-<a href="javascript:ShowHidden('help')">自定义URL:</a>
-
- <div id="help" style="color:Gray; display:none">
+<a href="javascript:ShowHidden('url')">自定义URL:</a>
+ <div id="url" style="color:Gray; display:none">
  <ul>
  <li>您选择了使用外部的URL. </li>
  <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>

@@ -966,5 +966,19 @@ namespace BP.WF.HttpHandler
             en.context = this.context;
             return en.DoMethod(en, methodName);
         }
+        /// <summary>
+        /// 当前登录人员信息
+        /// </summary>
+        /// <returns></returns>
+        public string WebUser_Init()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("No", WebUser.No);
+            ht.Add("Name", WebUser.Name);
+            ht.Add("FK_Dept", WebUser.FK_Dept);
+            ht.Add("FK_DeptName", WebUser.FK_DeptName);
+            ht.Add("FK_DeptNameOfFull", WebUser.FK_DeptNameOfFull);
+            return BP.Tools.Json.ToJson(ht);
+        }
     }
 }

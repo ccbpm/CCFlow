@@ -11,6 +11,14 @@
         window.onload =
 
 		function Test() {
+
+		    //获得当前用户信息.
+		    var no = WebUser.No;
+		    var name = WebUser.Name;
+		    var fk_dept = WebUser.FK_Dept;
+		    var deptName = WebUser.FK_DeptName;
+
+
 		    // entity
 		    // 创建一个空实体.
 		    var emp = new Entity("BP.Port.Emp");
@@ -63,6 +71,44 @@
             //获得性别为女的学生并且按年龄排序.
             var students2 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "Age");
             alert("Students XB=0 查询到:" + students2.length);
+
+
+            //获得性别为女的,并且班级为01 的学生.
+            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01");
+            alert("Students XB=0 ,FK_BanJi=01 查询到:" + students3.length);
+
+
+            //获得性别为女的,并且班级为01 的学生, 按照年龄排序.
+            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01", "Age");
+            alert("Students XB=0 ,FK_BanJi=01 查询到:" + students3.length);
+
+        }
+        function TestEns_Adv() {
+
+            var emps = new Entities("BP.Port.Emps");
+            var num=emps.RetrieveAll(); //调用查询全部，返回num个数量.
+            alert("BP.Port.Emps查询到:" + emps.length);
+
+
+            //获得性别为女的学生.
+            var students = new Entities("BP.Demo.BPFramework.Students");
+            students.Retrieve("XB", 0);
+            alert("Students XB=0 查询到:" + students.length);
+
+            //查询性别为女的并按照年龄排序.
+            students.Retrieve("XB", 0, "Age");
+            alert("Students XB=0 查询到:" + students.length);
+
+
+
+            //查询性别为女的并班级=01的学生, 按照年龄排序.
+            students.Retrieve("XB", 0, "FK_BanJi","01");
+            alert("Students XB=0 查询到:" + students.length);
+
+
+            //查询性别为女的并班级=01的学生, 按照年龄排序.
+            students.Retrieve("XB", 0, "FK_BanJi", "01","Age");
+            alert("Students XB=0 查询到:" + students.length);
 
 
             //获得性别为女的,并且班级为01 的学生.

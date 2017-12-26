@@ -1006,3 +1006,34 @@ var HttpHandler = (function () {
 	return HttpHandler;
 
 })();
+
+var WebUser = (function () {
+
+	var dynamicHandler = "/WF/Comm/Handler.ashx";
+
+	var jsonString = {};
+
+	$.ajax({
+		type: 'post',
+		async: false,
+		url: dynamicHandler + "?DoType=WebUser_Init&t=" + new Date().getTime(),
+		dataType: 'html',
+		success: function (data) {
+			if (data.indexOf("err@") != -1) {
+				alert(data);
+				return;
+			}
+			try {
+				jsonString = JSON.parse(data);
+			} catch (e) {
+				alert("json解析错误: " + data);
+			}
+		},
+		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+		}
+	});
+
+	return jsonString;
+
+})();

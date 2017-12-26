@@ -349,7 +349,6 @@ namespace BP.Sys
                 this.SetPara("PopValFormat", (int)value);
             }
         }
-
         /// <summary>
         /// 双实体树的实体
         /// </summary>
@@ -362,10 +361,8 @@ namespace BP.Sys
             set
             {
                 this.Tag1 = value;
-
             }
         }
-        
         /// <summary>
         /// pop 选择方式
         /// 0,多选,1=单选.
@@ -437,8 +434,6 @@ namespace BP.Sys
                 this.SetPara("PopValSearchTip", value);
             }
         }
-
-        
         /// <summary>
         /// 数据源
         /// </summary>
@@ -501,7 +496,7 @@ namespace BP.Sys
         /// <summary>
         /// 数据源
         /// </summary>
-        public string DBSrc111
+        public string DBSrc
         {
             get
             {

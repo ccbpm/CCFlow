@@ -680,7 +680,7 @@ namespace BP.WF.HttpHandler
                 #region 如果当前节点启用了协作会签.
                 if (btnLab.HuiQianRole == HuiQianRole.Teamup)
                 {
-                    toolbar += "<input name='SendHuiQian' type=button value='会签发送' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();HuiQianSend(); \" />";
+                    toolbar += "<input name='SendHuiQian' type=button value='会签发送' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(true); \" />";
                 }
                 #endregion 如果当前节点启用了协作会签
 

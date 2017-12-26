@@ -558,6 +558,9 @@ namespace BP.WF.HttpHandler
             //生成变量.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
+            //判断当前节点的会签类型.
+            Node nd = new Node(gwf.FK_Node);
+
             //求会签人.
             GenerWorkerLists gwfs = new GenerWorkerLists();
             gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
@@ -594,9 +597,6 @@ namespace BP.WF.HttpHandler
             //执行会签,写入日志.
             BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian, ActionType.HuiQian, "执行会签", null);
 
-            //判断当前节点的会签类型.
-
-            Node nd = new Node(gwf.FK_Node);
 
             string str = "";
 
@@ -605,10 +605,22 @@ namespace BP.WF.HttpHandler
                 /*如果是组长模式.*/
                 str = "close@保存成功.\t\n该工作已经移动到会签列表中了,等到所有的人会签完毕后,就可以出现在待办列表里.";
                 str += "\t\n如果您要增加或者移除会签人请到会签列表找到该记录,执行操作.";
+                return str;
             }
 
             if (nd.TodolistModel == TodolistModel.Teamup)
-                str = "info@会签成功执行,请点击发送按钮完成您的操作.";
+            {
+                int toNodeID = this.GetRequestValInt("ToNode");
+                if (toNodeID == 0)
+                    return "close@会签成功执行,请点击发送按钮完成您的操作.";
+
+                Node toND = new Node(toNodeID);
+                //如果到达的节点是按照接受人来选择,就转向接受人选择器.
+                if (toND.HisDeliveryWay == DeliveryWay.BySelected)
+                    return "url@Accepter.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&ToNode=" + toNodeID;
+                else
+                    return "Send@执行发送操作";
+            }
 
             return str;
         }

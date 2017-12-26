@@ -109,7 +109,7 @@ namespace BP.WF.HttpHandler
 
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
-                    en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
+                    en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
 
                 return en.Update().ToString(); //返回影响行数.
             }
@@ -129,7 +129,11 @@ namespace BP.WF.HttpHandler
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
                 int i = en.RetrieveFromDBSources();
-                en.Row.Add("RetrieveFromDBSources", i);
+
+                if (en.Row.ContainsKey("RetrieveFromDBSources") == true)
+                    en.Row["RetrieveFromDBSources"] = i;
+                else
+                    en.Row.Add("RetrieveFromDBSources", i);
 
                 return en.ToJson();
             }
@@ -149,7 +153,13 @@ namespace BP.WF.HttpHandler
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
                 int i = en.Retrieve();
-                en.Row.Add("Retrieve", i);
+
+
+                if (en.Row.ContainsKey("Retrieve") == true)
+                    en.Row["Retrieve"] = i;
+                else
+                    en.Row.Add("Retrieve", i);
+
 
                 return en.ToJson();
             }
@@ -169,7 +179,12 @@ namespace BP.WF.HttpHandler
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
                 bool isExit = en.IsExits;
-                en.Row.Add("IsExits", isExit);
+
+                if (en.Row.ContainsKey("IsExits") == true)
+                    en.Row["IsExits"] = isExit;
+                else
+                    en.Row.Add("IsExits", isExit);
+
                 return en.ToJson();
             }
             catch (Exception ex)
@@ -244,6 +259,16 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 查询全部
+        /// </summary>
+        /// <returns></returns>
+        public string Entities_RetrieveAll()
+        {
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            ens.RetrieveAll();
+            return ens.ToJson();
+        }
+        /// <summary>
         /// 获得实体集合s
         /// </summary>
         /// <returns></returns>
@@ -253,10 +278,7 @@ namespace BP.WF.HttpHandler
             {
                 Entities ens = ClassFactory.GetEns(this.EnsName);
                 if (this.Paras == null)
-                {
-                    ens.RetrieveAll();
-                    return ens.ToJson();
-                }
+                    return "0";
 
                 QueryObject qo = new QueryObject(ens);
                 string[] myparas = this.Paras.Split('@');

@@ -119,6 +119,65 @@ namespace BP.WF.HttpHandler
             }
         }
         /// <summary>
+        /// 从数据源查询.
+        /// </summary>
+        /// <returns></returns>
+        public string Entity_RetrieveFromDBSources()
+        {
+            try
+            {
+                Entity en = ClassFactory.GetEn(this.EnName);
+                en.PKVal = this.PKVal;
+                int i = en.RetrieveFromDBSources();
+                en.Row.Add("RetrieveFromDBSources", i);
+
+                return en.ToJson();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 从数据源查询.
+        /// </summary>
+        /// <returns></returns>
+        public string Entity_Retrieve()
+        {
+            try
+            {
+                Entity en = ClassFactory.GetEn(this.EnName);
+                en.PKVal = this.PKVal;
+                int i = en.Retrieve();
+                en.Row.Add("Retrieve", i);
+
+                return en.ToJson();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 是否存在
+        /// </summary>
+        /// <returns></returns>
+        public string Entity_IsExits()
+        {
+            try
+            {
+                Entity en = ClassFactory.GetEn(this.EnName);
+                en.PKVal = this.PKVal;
+                bool isExit = en.IsExits;
+                en.Row.Add("IsExits", isExit);
+                return en.ToJson();
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
         /// 执行保存
         /// </summary>
         /// <returns></returns>

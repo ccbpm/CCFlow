@@ -26,6 +26,28 @@
     </style>
     <base target="_self" />
     <script type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            //组织主键.
+            var mypk = "Link_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+
+            var i = en.RetrieveFromDBSources();
+
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
+
+            //给公共属性赋值.
+            $("#TB_Width").val(en.W);
+            $("#TB_Height").val(en.H);
+            $("#TB_Url").val(en.Doc);
+        });
+
        
         //执行保存
         function Save() {
@@ -34,15 +56,15 @@
             var mypk = "Link_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var en = new Entity("BP.Sys.MapExt");
             en.MyPK = mypk;
-            en.Returnfromdbsrc();
+            en.RetrieveFromDBSources();
 
-            en.FK_MapData = this.FK_MapData;
-            en.AttrOfOper = this.KeyOfEn;
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
 
             //url.
-            en.Doc = $("#TB_Url"); //要执行的SQL.
-            en.W = $("#TB_Width"); //要执行的SQL.
-            en.H = $("#TB_Height"); //要执行的SQL.
+            en.Doc = $("#TB_Url").val(); //要执行的SQL.
+            en.W = $("#TB_Width").val(); //要执行的SQL.
+            en.H = $("#TB_Height").val(); //要执行的SQL.
 
             en.ExtType = "Link";
 
@@ -55,35 +77,18 @@
 
         //删除.
         function Delete() {
-
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
             var mypk = "Link_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
-            var en = new Entity("BP.Sys.MapExt", mypk);
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
             en.Delete();
-            window.location.href = window.location.href;
+
+            var url = "Link.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            window.location.href = url;
         }
-
-        //页面启动函数.
-        $(function () {
-
-            //组织主键.
-             var mypk= "Link_"+ GetQueryString("FK_MapData")+"_" + GetQueryString("KeyOfEn");
-
-             var en =new Entity("BP.Sys.MapExt");
-             en.MyPK=mypk;
-
-             if (en.ret()==false)
-                $("#Btn_Delete").attr("disabled", true);
-             else
-                $("#Btn_Delete").removeAttr("disabled");
-
-            //给公共属性赋值.
-            $("#TB_Width").val(en.W);
-            $("#TB_Height").val(en.H);
-            $("#TB_Url").val(en.Doc);
-        });
     </script>
 </head>
 <body >

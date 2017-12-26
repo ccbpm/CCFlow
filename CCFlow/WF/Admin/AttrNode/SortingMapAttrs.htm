@@ -251,8 +251,8 @@
                             //分组的下移、上移按钮
                             var btnDown = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnDown('" + dtGroups[i].EnName + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-down'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-down l-btn-icon-left'>下移</span></span></a>";
                             var btnUp = "<a id='pub1_Btn_Group_Down_3_1_1_0_425' onclick=btnUp('" + dtGroups[i].EnName + "','" + dtGroups[i].OID + "','group','') class='easyui-linkbutton l-btn' data-options='plain:false,iconCls:'icon-up'' href='#' group=''><span class='l-btn-left'><span class='l-btn-text icon-up l-btn-icon-left'>上移</span></span></a>";
-                            if (dtGroups.length == 1) { 
-                                
+                            if (dtGroups.length == 1) {
+
                             }
                             else if (i == 0) {//如果是第一个，只显示下移
                                 tr += btnDown;
@@ -501,19 +501,20 @@
 
                         //用于复制到其他节点
                         //将当前流程的节点显示出来，用于用户选择节点，然后进行复制分组、字段排序
-                        var nodesHtml = "<select size='4' name='pub1$lbNodes' multiple='multiple' id='pub1_lbNodes' style='border-style:None;width:100%;Height:100%;'>";
-                        for (var i = 0; i < dtNodes.length; i++) {
-                            if (("ND" + dtNodes[i].NodeID) == FK_MapData) {
-                                nodesHtml += "<option value='" + dtNodes[i].NodeID + "' disabled='disabled'>(" + dtNodes[i].NodeID + ")" + dtNodes[i].Name + "</option>";
+                        if (dtNodes) {
+                            var nodesHtml = "<select size='4' name='pub1$lbNodes' multiple='multiple' id='pub1_lbNodes' style='border-style:None;width:100%;Height:100%;'>";
+                            for (var i = 0; i < dtNodes.length; i++) {
+                                if (("ND" + dtNodes[i].NodeID) == FK_MapData) {
+                                    nodesHtml += "<option value='" + dtNodes[i].NodeID + "' disabled='disabled'>(" + dtNodes[i].NodeID + ")" + dtNodes[i].Name + "</option>";
+                                }
+                                else {
+                                    nodesHtml += "<option value='" + dtNodes[i].NodeID + "'>(" + dtNodes[i].NodeID + ")" + dtNodes[i].Name + "</option>";
+                                }
                             }
-                            else {
-                                nodesHtml += "<option value='" + dtNodes[i].NodeID + "'>(" + dtNodes[i].NodeID + ")" + dtNodes[i].Name + "</option>";
-                            }
+                            nodesHtml += "</select>";
+
+                            $('#nodes_panel').html([nodesHtml].join(''));
                         }
-                        nodesHtml += "</select>";
-                        $('#nodes_panel').html([
-                            nodesHtml
-                        ].join(''));
                     }
                 }
             });

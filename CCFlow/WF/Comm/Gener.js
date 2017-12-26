@@ -619,7 +619,9 @@ var Entity = (function () {
 		if (typeof jsonString !== "undefined") {
 			$.each(jsonString, function (n, o) {
 				// 需要判断属性名与当前对象属性名是否相同
-				self[n] = o;
+				if (typeof self[n] !== "function") {
+					self[n] = o;
+				}
 			});
 		}
 	}
@@ -630,6 +632,16 @@ var Entity = (function () {
 			params[n] = self[n];
 		});
 		return params;
+	}
+
+	function getParams1(self) {
+		var params = [ "t=" + new Date().getTime() ];
+		$.each(jsonString, function (n, o) {
+			if (typeof self[n] !== "function" && self[n] != o) {
+				params.push(n + "=" + self[n]);
+			}
+		});
+		return params.join("&");
 	}
 
 	var dynamicHandler = "/WF/Comm/Handler.ashx";
@@ -766,7 +778,90 @@ var Entity = (function () {
                 }
             });
 			return result;
-        }
+        },
+
+		Retrieve : function () {
+			var self = this;
+			var result;
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + getParams1(self),
+				dataType: 'html',
+				success: function (data) {
+					if (data.indexOf("err@") != -1) {
+						result = data;
+						return;
+					}
+					try {
+						jsonString = JSON.parse(data);
+						setData(self);
+						result = jsonString.Retrieve;
+					} catch (e) {
+						result = "err@解析错误: " + data;
+					}
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+				}
+			});
+			return result;
+		},
+
+		RetrieveFromDBSources : function () {
+			var self = this;
+			var result;
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&" + getParams1(self),
+				dataType: 'html',
+				success: function (data) {
+					if (data.indexOf("err@") != -1) {
+						result = data;
+						return;
+					}
+					try {
+						jsonString = JSON.parse(data);
+						setData(self);
+						result = jsonString.Retrieve;
+					} catch (e) {
+						result = "err@解析错误: " + data;
+					}
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+				}
+			});
+			return result;
+		},
+
+		IsExits : function () {
+			var self = this;
+			var result;
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Entity_IsExits&EnName=" + self.enName + "&" + getParams1(self),
+				dataType: 'html',
+				success: function (data) {
+					if (data.indexOf("err@") != -1) {
+						result = data;
+						return;
+					}
+					try {
+						var json = JSON.parse(data);
+						result = json.IsExits;
+					} catch (e) {
+						result = "err@解析错误: " + data;
+					}
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+				}
+			});
+			return result;
+		}
 
     };
 

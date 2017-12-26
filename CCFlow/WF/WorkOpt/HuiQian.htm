@@ -262,6 +262,14 @@
                 url: myurl,
                 dataType: 'html',
                 success: function (data) {
+                    var toNode = GetQueryString("ToNode");
+                    //alert(toNode);
+                    if (toNode != null) {
+                        var url = "Accepter.htm?FK_Node=" + GetQueryString("FK_Node") + "&FID=" + GetQueryString("FID") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&ToNode="+toNode+"&s=" + Math.random();
+                        window.location.href = url;
+                        return;
+                    }
+
 
                     if (data.indexOf('close@') == 0) {
 

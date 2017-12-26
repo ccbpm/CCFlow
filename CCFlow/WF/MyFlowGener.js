@@ -975,6 +975,7 @@ function HuiQianSend() {
     Send(true);
 }
  
+
 //发送
 function Send(isHuiQian=false) {
 
@@ -997,21 +998,35 @@ function Send(isHuiQian=false) {
         return;
     }
 
-    window.hasClickSend = true; //标志用来刷新待办
-    var toNode = 0;
+    window.hasClickSend = true; //标志用来刷新待办.
+
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
+        
         var selectToNode = $('#DDL_ToNode  option:selected').data();
-        if (selectToNode.IsSelectEmps == "1") {//跳到选择接收人窗口
+
+        if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口
 
             Save();
 
-            initModal("sendAccepter", selectToNode);
-
-            $('#returnWorkModal').modal().show();
+            if (isHuiQian==true)
+            {
+               initModal("HuiQian",selectToNode);
+               $('#returnWorkModal').modal().show();
+            }else
+            {
+               initModal("sendAccepter", selectToNode);
+               $('#returnWorkModal').modal().show();
+            }
             return false;
         } else {
             toNode = selectToNode.No;
+
+               if (isHuiQian==true)
+            {
+              initModal("HuiQian"); 
+              $('#returnWorkModal').modal().show();
+            }
         }
     }
 
@@ -1846,9 +1861,9 @@ function initModal(modalType, toNode) {
                 $('#modalHeader').text("审核");
                 modalIframeSrc = "./WorkOpt/WorkCheck.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
-            case "HuiQian":
+            case "HuiQian": 
                 $('#modalHeader').text("会签");
-                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
+                modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode="+toNode.No+"&Info=&s=" + Math.random()
                 break;
             case "PackUp_zip":
             case "PackUp_html":

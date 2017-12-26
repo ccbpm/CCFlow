@@ -84,12 +84,11 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
-                int i= en.RetrieveFromDBSources();
+                int i= en.RetrieveFromDBSources(); //查询出来再删除.
                 if (i == 0)
                     return "无此记录，无法删除.";
 
-                en.Delete();
-                return "删除成功.";
+               return en.Delete().ToString(); //返回影响行数.
             }
             catch (Exception ex)
             {
@@ -112,7 +111,7 @@ namespace BP.WF.HttpHandler
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
 
-                return en.Update().ToString();
+                return en.Update().ToString(); //返回影响行数.
             }
             catch (Exception ex)
             {
@@ -473,13 +472,19 @@ namespace BP.WF.HttpHandler
                     ensFK.RetrieveAll();
 
                     DataTable dtEn = ensFK.ToDataTableField();
+                    dtEn.TableName = item.Key;
+
                     ds.Tables.Add(dtEn);
                 }
             }
 
             return BP.Tools.Json.ToJson(ds);
         }
-        public string Search_Init()
+        /// <summary>
+        /// 执行查询.
+        /// </summary>
+        /// <returns></returns>
+        public string Search_SearchIt()
         {
             //获得
             Entities ens = ClassFactory.GetEns(this.EnsName);
@@ -494,7 +499,7 @@ namespace BP.WF.HttpHandler
             DataSet ds = new DataSet();
             ds.Tables.Add(dtAttrs);
 
-            return "";
+            return BP.Tools.Json.ToJson(ds);
         }
         #endregion 查询.
 

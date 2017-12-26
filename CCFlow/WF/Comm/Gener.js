@@ -875,23 +875,30 @@ var Entities = (function () {
 
 	var Entities = function () {
 		this.ensName = arguments[0];
-		this.Paras = "";
-		this.orderBy;
+		this.Paras = getParameters(arguments);
+		if (arguments.length >= 3) {
+			this.loadData();
+		}
+	};
+
+	function getParameters(args) {
+		var params = "";
 		var length;
-		if (arguments.length % 2 == 0) {
-			this.orderBy = arguments[arguments.length - 1];
-			length = arguments.length - 1;
+		var orderBy;
+		if (args.length % 2 == 0) {
+			orderBy = args[args.length - 1];
+			length = args.length - 1;
 		} else {
-			length = arguments.length;
+			length = args.length;
 		}
 		for (var i = 1; i < length; i += 2) {
-			this.Paras += "@" + arguments[i] + "=" + arguments[i + 1];
+			params += "@" + args[i] + "=" + args[i + 1];
 		}
-		if (typeof this.orderBy !== "undefined") {
-			this.Paras += "@OrderBy=" + this.orderBy;
+		if (typeof orderBy !== "undefined") {
+			params += "@OrderBy=" + orderBy;
 		}
-		this.loadData();
-	};
+		return params;
+	}
 
 	var dynamicHandler = "/WF/Comm/Handler.ashx";
 
@@ -905,6 +912,41 @@ var Entities = (function () {
 				type: 'post',
 				async: false,
 				url: dynamicHandler + "?DoType=Entities_Init&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
+				dataType: 'html',
+				success: function (data) {
+					if (data.indexOf("err@") != -1) {
+						alert(data);
+						return;
+					}
+					try {
+						jsonString = JSON.parse(data);
+						if ($.isArray(jsonString)) {
+							self.length = jsonString.length;
+							$.extend(self, jsonString);
+						} else {
+							alert("解析失败, 返回值不是集合");
+						}
+					} catch (e) {
+						alert("json解析错误: " + data);
+					}
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+				}
+			});
+		},
+
+		Retrieve : function () {
+			this.Paras = getParameters(arguments);
+			this.loadData();
+		},
+
+		RetrieveAll : function () {
+			var self = this;
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Entities_RetrieveAll&EnsName=" + self.ensName + "&t=" + new Date().getTime(),
 				dataType: 'html',
 				success: function (data) {
 					if (data.indexOf("err@") != -1) {

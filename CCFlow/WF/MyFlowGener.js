@@ -1005,7 +1005,7 @@ function Send( isHuiQian=false ) {
     if ($('#DDL_ToNode').length > 0) {
         
         var selectToNode = $('#DDL_ToNode  option:selected').data();
-        
+        toNode = selectToNode.No;
 
         if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口
 
@@ -1033,7 +1033,8 @@ function Send( isHuiQian=false ) {
     }
 
     //执行发送.
-    execSend(selectToNode.No);
+    execSend(toNode);
+
 }
 
 function execSend(toNode) {
@@ -1866,7 +1867,12 @@ function initModal(modalType, toNode) {
                 modalIframeSrc = "./WorkOpt/WorkCheck.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&Info=&s=" + Math.random()
                 break;
             case "HuiQian": 
-                $('#modalHeader').text("会签");
+               
+               if (toNode.No!=null)
+                 $('#modalHeader').text("会签 => 发送");
+                else
+                 $('#modalHeader').text("会签");
+
                 modalIframeSrc = "./WorkOpt/HuiQian.htm?FK_Node=" + pageData.FK_Node + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID + "&FK_Flow=" + pageData.FK_Flow + "&ToNode="+toNode.No+"&Info=&s=" + Math.random()
                 break;
             case "PackUp_zip":

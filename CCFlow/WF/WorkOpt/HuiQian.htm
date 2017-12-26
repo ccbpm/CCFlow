@@ -71,10 +71,11 @@
         $(function () {
 
             Help();
+
             //$("#HelpInfo").show();
             //            Help
 
-            //初始化页面移交页面
+            //初始化页面移交页面.
             param = {
                 FK_Node: GetQueryString('FK_Node'),
                 WorkID: GetQueryString('WorkID'),
@@ -333,6 +334,8 @@
         }
 
         $(function () {
+
+          //  $("#TB_Emps").plac
             //人员选择
             $("#TB_Emps").bind('input propertychange', function () {
                 //if (e.keyCode == 13) {
@@ -415,7 +418,11 @@
     <br />
     <div>
         <div id="labInfo">
-           输入关键字: <input type="text" id="TB_Emps" name="TB_Emps" value='' style="width: 300px;" />
+           输入关键字: <input type="text" id="TB_Emps"
+              title="查张三,您可输入: zs或zhangs或zhangsan";
+         placeholder="查张三,您可输入:zs或zhangs或zhangsan";
+            
+            name="TB_Emps" value='' style="width: 300px;" />
             <input type="button" id="BtnSelectEmps" value='选择会签人' /><a href="javascript:Help()">帮助</a>
             <div id="SelectEmp">
             </div>

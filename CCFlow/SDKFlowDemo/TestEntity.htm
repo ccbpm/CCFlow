@@ -12,6 +12,12 @@
 
 		function Test() {
 
+			var emp = new Entity("BP.Port.Emp");
+			emp.No = "admin";
+			var ie = emp.IsExits();
+
+			return;
+
 		    //获得当前用户信息.
 			var webUser = new WebUser();
 		    var no = webUser.No;
@@ -19,8 +25,6 @@
 		    var fk_dept = webUser.FK_Dept;
 		    var deptName = webUser.FK_DeptName;
 
-
-			return;
 		    // entity
 		    // 创建一个空实体.
 		    var emp = new Entity("BP.Port.Emp");

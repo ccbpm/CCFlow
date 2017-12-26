@@ -677,6 +677,14 @@ namespace BP.WF.HttpHandler
                 }
                 #endregion 是否是抄送.
 
+                #region 如果当前节点启用了协作会签.
+                if (btnLab.HuiQianRole == HuiQianRole.Teamup)
+                {
+                    toolbar += "<input name='SendHuiQian' type=button value='会签发送' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();HuiQianSend(); \" />";
+                }
+                #endregion 如果当前节点启用了协作会签
+
+
                 #region 加载流程控制器 - 按钮
                 if (this.currND.HisFormType == NodeFormType.SelfForm)
                 {

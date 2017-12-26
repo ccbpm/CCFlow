@@ -974,10 +974,9 @@ function GenerCheckIDs() {
 function HuiQianSend() {
     Send(true);
 }
- 
 
 //发送
-function Send(isHuiQian=false) {
+function Send( isHuiQian=false ) {
 
     if (CheckFWC() == false)
         return false;
@@ -1000,10 +999,13 @@ function Send(isHuiQian=false) {
 
     window.hasClickSend = true; //标志用来刷新待办.
 
+    var toNode=0;
+
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
         
         var selectToNode = $('#DDL_ToNode  option:selected').data();
+        
 
         if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口
 
@@ -1019,10 +1021,10 @@ function Send(isHuiQian=false) {
                $('#returnWorkModal').modal().show();
             }
             return false;
-        } else {
-            toNode = selectToNode.No;
 
-               if (isHuiQian==true)
+        } else {
+
+            if (isHuiQian==true)
             {
               initModal("HuiQian"); 
               $('#returnWorkModal').modal().show();
@@ -1030,10 +1032,12 @@ function Send(isHuiQian=false) {
         }
     }
 
-    execSend(toNode);
+    //执行发送.
+    execSend(selectToNode.No);
 }
 
 function execSend(toNode) {
+
     //先设置按钮等不可用
     setToobarDisiable();
 

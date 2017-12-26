@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            var ensName = GetQueryString("EnsName");
+
+            try {
+                //加载JS文件
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.src = "../../DataUser/JSLibData/" + ensName + ".js";
+                var tmp = document.getElementsByTagName('script')[0];
+                tmp.parentNode.insertBefore(s, tmp);
+            }
+            catch (err) {
+            }
+
+            InitPage();
+        });
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

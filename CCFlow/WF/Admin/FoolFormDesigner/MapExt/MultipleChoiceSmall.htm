@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>字段超链接</title>
+    <title>小范围的多选</title>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
@@ -23,69 +23,34 @@
             width: 66px;
         }
        
+        #TB_
+        {
+            height: 96px;
+        }
+       
     </style>
     <base target="_self" />
     <script type="text/javascript">
-       
-        /*隐藏与显示.*/
-        function ShowHidden(ctrlID) {
-            var ctrl = document.getElementById(ctrlID);
-            if (ctrl.style.display == "block") {
-                ctrl.style.display = 'none';
-            } else {
-                ctrl.style.display = 'block';
-            }
-        }
-        //执行保存
-        function Save() {
-
-            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
-
-            handler.AddFormData(); //加入表单参数.
-
-            //组织参数.
-            var fk_mapExt = GetQueryString("MyPK");
-            var keyOfEn = GetQueryString("KeyOfEn") || GetQueryString("RefNo");
-            var fk_mapData = getQueryStringByName("FK_MapData");
-
-            handler.AddPara("FK_MapExt", fk_mapExt);
-            handler.AddPara("KeyOfEn", keyOfEn);
-            handler.AddPara("FK_MapData", fk_mapData);
-
-            //执行方法.
-            var str = handler.DoMethodReturnString("Link_Save");
-            alert(str);
-
-            window.location.href = 'Link.htm?MyPK='+;
-            document.getElementById("Btn_Delete").disabled = false;
-        }
-
-        //删除.
-        function Delete() {
-
-            if (window.confirm('您确定要删除吗？') == false)
-                return;
-
-             var mypk= "Link_"+ GetQueryString("FK_MapData")+"_" + GetQueryString("KeyOfEn");
-            var en = new Entity("BP.Sys.MapExt", mypk);
-            en.Delete();
-
-            window.location.href = window.location.href;
-        }
 
         //页面启动函数.
         $(function () {
 
             //组织主键.
-             var mypk= "Link_"+ GetQueryString("FK_MapData")+"_" + GetQueryString("KeyOfEn");
+            var mypk = "MultipleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            var i = en.RetrieveFromDBSources();
 
-             var en =new Entity("BP.Sys.MapExt");
-             en.MyPK=mypk;
-
-             if (en.ret()==false)
+            if (i == 0)
                 $("#Btn_Delete").attr("disabled", true);
-             else
+            else
                 $("#Btn_Delete").removeAttr("disabled");
+
+            var ens = new Entities("BP.Sys.SysEnumMains");
+            ens.Retrn();
+
+            GenerBindEntities("DDL_Sf"
+
 
             //给公共属性赋值.
             $("#TB_Width").val(en.W);
@@ -93,16 +58,80 @@
             $("#TB_Url").val(en.Doc);
         });
 
+
+        //执行保存
+        function Save() {
+
+            //组织主键.
+            var mypk = "MultipleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+
+            //url.
+            en.Doc = $("#TB_Url").val(); //要执行的SQL.
+            en.W = $("#TB_Width").val(); //要执行的SQL.
+            en.H = $("#TB_Height").val(); //要执行的SQL.
+
+            en.ExtType = "MultipleChoiceSmall";
+
+            if (en.Update() == 0)
+                en.Insert();
+
+            window.location.href = "MultipleChoiceSmall.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            return;
+        }
+
+        //删除.
+        function Delete() {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var mypk = "MultipleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+            en.Delete();
+
+            var url = "MultipleChoiceSmall.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            window.location.href = url;
+        }
     </script>
 </head>
 <body >
 <form id="cc">
  
- <fieldset>
-<legend>连接设置</legend>
+<fieldset>
+<legend><input type="radio" value="0" id="RB_0"  name="RB" /><label for="RB_0" >按文本输入的值</label> </legend>
+<textarea  rows="3" id="TB_Docs" name="TB_Docs" ></textarea>
+ </fieldset>
 
-<a href="javascript:ShowHidden('url')">自定义URL:</a>
- <div id="url" style="color:Gray; display:none">
+ 
+<fieldset>
+<legend><input type="radio" value="1" id="RB_1"  name="RB" /><label for="RB_1" >按照枚举值</label> </legend>
+ 请选择一个枚举: <select id="DDL_Enums" ></select>
+ </fieldset>
+
+ 
+<fieldset>
+<legend><input type="radio" value="2" id="RB_2"  name="RB" /><label for="RB_2" >按照系统外键表计算</label> </legend>
+ 请选择一个外键表: <select id="DDL_SFTables" ></select>
+ </fieldset>
+
+ 
+<fieldset>
+<legend><input type="radio" value="2" id="Radio1"  name="RB" /><label for="RB_2" >按照SQL计算</label> </legend>
+<textarea  rows="3" id="Textarea1" name="TB_Docs" ></textarea>
+ </fieldset>
+
+<input type="button" value="保存" id="Btn_Save"  onclick="Save()" />
+<input type="button" value="删除"  id="Btn_Delete"  onclick="Delete()" />
+
+<a href="javascript:ShowHidden('help')">帮助:</a>
+ <div id="help" style="color:Gray; display:none">
  <ul>
  <li>您选择了使用外部的URL. </li>
  <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
@@ -110,16 +139,6 @@
  <li>可以使用@SDKFromServHost 变量，标识一个配置路径，该配置在web.config里设置。</li>
  </ul>
  </div>
-
-<input type="text" id="TB_Url" name="TB_Url" value=""   />
-
-宽度(px)： <input type="text" id="TB_Width" name="TB_Width"  value="" />  
-高度(px)：<input type="text" id="TB_Height" name="TB_Height"  value="" />   
-开窗模式： 
-
- </fieldset>
-<input type="button" value="保存" id="Btn_Save"  onclick="Save()" />
-<input type="button" value="删除"  id="Btn_Delete"  onclick="Delete()" />
 
 </form>
 

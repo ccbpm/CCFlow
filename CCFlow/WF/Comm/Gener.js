@@ -824,7 +824,7 @@ var Entity = (function () {
 					try {
 						jsonString = JSON.parse(data);
 						setData(self);
-						result = jsonString.Retrieve;
+						result = jsonString.RetrieveFromDBSources;
 					} catch (e) {
 						result = "err@解析错误: " + data;
 					}

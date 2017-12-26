@@ -970,13 +970,8 @@ function GenerCheckIDs() {
     return checkBoxIDs;
 }
 
-//会签发送.
-function HuiQianSend() {
-    Send(true);
-}
-
 //发送
-function Send( isHuiQian=false ) {
+function Send(isHuiQian) {
 
     if (CheckFWC() == false)
         return false;
@@ -1003,32 +998,32 @@ function Send( isHuiQian=false ) {
 
     //含有发送节点 且接收
     if ($('#DDL_ToNode').length > 0) {
-        
+
         var selectToNode = $('#DDL_ToNode  option:selected').data();
         toNode = selectToNode.No;
 
         if (selectToNode.IsSelectEmps == "1") { //跳到选择接收人窗口
 
-            Save();
+            Save(); //执行保存.
 
-            if (isHuiQian==true)
-            {
-               initModal("HuiQian",toNode);
-               $('#returnWorkModal').modal().show();
+            if (isHuiQian == true) {
+                initModal("HuiQian", toNode);
+                $('#returnWorkModal').modal().show();
 
-            }else
-            {
-               initModal("sendAccepter", selectToNode);
-               $('#returnWorkModal').modal().show();
+            } else {
+                initModal("sendAccepter", selectToNode);
+                $('#returnWorkModal').modal().show();
             }
             return false;
 
         } else {
 
-            if (isHuiQian==true)
-            {
-              initModal("HuiQian"); 
-              $('#returnWorkModal').modal().show();
+            if (isHuiQian == true) {
+
+                Save(); //执行保存.
+                initModal("HuiQian", toNode);
+                $('#returnWorkModal').modal().show();
+                return false;
             }
         }
     }

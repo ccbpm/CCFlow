@@ -248,9 +248,12 @@
             // window.location.href = url;
             //  return;
 
+            var toNode = GetQueryString("ToNode");
+            if (toNode == undefined || toNode == "undefined")
+                toNode = "0";
+
             //需要调用设置会签状态并返回才可以.
-            var myurl = Handler + "?DoType=HuiQian_SaveAndClose&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random();
-            //alert(myurl);
+            var myurl = Handler + "?DoType=HuiQian_SaveAndClose&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNode=" + toNode + "&m=" + Math.random();
 
             $.ajax({
                 type: 'post',
@@ -258,18 +261,41 @@
                 url: myurl,
                 dataType: 'html',
                 success: function (data) {
-                    var toNode = GetQueryString("ToNode");
-                    //alert(toNode);
-                    if (toNode != null) {
-                        var url = "Accepter.htm?FK_Node=" + GetQueryString("FK_Node") + "&FID=" + GetQueryString("FID") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&ToNode="+toNode+"&s=" + Math.random();
-                        window.location.href = url;
+
+                    if (data.indexOf('url@') == 0) {
+                        data = data.replace('url@', '');
+                        window.location.href = data;
                         return;
                     }
 
+                    //如果需要发送,就执行发送.
+                    if (data.indexOf('Send@') == 0) {
+                        SendIt();
+                        return;
+                    }
 
+                    //提示信息后关闭窗口.
                     if (data.indexOf('close@') == 0) {
 
                         alert(data.replace('close@', ''));
+
+                        if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                            window.parent.returnWorkWindowClose("");
+                            window.parent.close();
+
+                        } else {
+
+                            $('body').append($('<div>' + "已取消操作" + '</div>'));
+
+                            window.close();
+                        }
+                        return;
+                    }
+
+                    //提示信息.
+                    if (data.indexOf('info@') == 0) {
+
+                        alert(data.replace('info@', ''));
 
                         if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                             window.parent.returnWorkWindowClose("");
@@ -280,12 +306,7 @@
 
                             window.close();
                         }
-                    }
-
-                    if (data.indexOf('info@') == 0) {
-
-                        alert(data.replace('info@', ''));
-                        window.close();
+                        return;
                     }
 
                     alert(data);
@@ -295,6 +316,84 @@
             });
 
         }
+        function SendIt() {
+
+            var url = Handler + "?DoType=AccepterOfGener_Send&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&ToNode=" + GetQueryString("ToNode");
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        $(".Msg").show();
+                        $(".Msg").html(data);
+                        return;
+                    }
+
+
+                    data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
+                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+
+                    data = data.replace("'WFRpt", "'../WFRpt");
+                    data = data.replace("'WFRpt", "'../WFRpt");
+
+                    data = data.replace("'./Img", "'../Img");
+                    data = data.replace("'./Img", "'../Img");
+                    data = data.replace("'./Img", "'../Img");
+                    data = data.replace("'./Img", "'../Img");
+                    data = data.replace("'./Img", "'../Img");
+
+                    data = data.replace("'./WorkOpt/", "");
+                    data = data.replace("'./WorkOpt/", "");
+                    data = data.replace("'./WorkOpt/", "");
+                    data = data.replace("'./WorkOpt/", "");
+
+
+                    data = data.replace('@', '<br/>@');
+                    data = data.replace(/@/g, '<br/>&nbsp;@');
+
+
+                    data = data.replace('@', '<br/>@');
+                    data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
+                    $(".Msg").show();
+                    $(".Msg").html(data);
+
+                    $("#labInfo").empty();
+                    $("#next").empty();
+
+                    //隐藏table.
+                    document.getElementById("Table1").style.display = "none";
+                    document.getElementById("TB_Emps").style.display = "none";
+                    document.getElementById("Btn_SelectEmps").style.display = "none";
+
+                    //document.getElementById("Btn_AddEmps").style.display = "none";
+
+                    var ctrl = document.getElementById("Btn_Send");
+                    if (ctrl != null)
+                        ctrl.style.display = "none";
+
+                    ctrl = document.getElementById("labInfo");
+                    if (ctrl != null)
+                        ctrl.style.display = "none";
+
+                    ctrl = document.getElementById("Btn_Close");
+                    if (ctrl != null)
+                        ctrl.style.display = "none";
+                }
+            });
+        }
+
+        //取消移交
+        function CloseAll() {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.close();
+            }
+            window.close();
+        }
+
         //设置选中的人员
         function selectEmpsWindowClose(data) {
 
@@ -423,10 +522,6 @@
             </div>
             <br />
             <div id="next">
-                <!--<input type="button" value="增加会签人" onclick="ReturnWork();"/>-->
-<!--
-                <input type="button" id="Btn_OK2HuiQian" value="同意,转会签" onclick="alert('功能在完善中');" />-->
-                 
                 <input type="button" id="Btn_2HuiQian" value="执行会签" onclick="SaveAndClose();" />
                 <div id="HelpInfo" style="">
                     <ul>

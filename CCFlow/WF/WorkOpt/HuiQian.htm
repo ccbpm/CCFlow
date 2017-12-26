@@ -16,6 +16,7 @@
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.cokie.min.js"></script>
     <script type="text/javascript" src="../Scripts/QueryString2016.js"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
     <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
     <!-- 导入配置文件. -->
@@ -71,11 +72,10 @@
         $(function () {
 
             Help();
-
             //$("#HelpInfo").show();
             //            Help
 
-            //初始化页面移交页面.
+            //初始化页面移交页面
             param = {
                 FK_Node: GetQueryString('FK_Node'),
                 WorkID: GetQueryString('WorkID'),
@@ -102,9 +102,13 @@
            + '</div>';
 
             $('body').append($(selectEmpModalHtml));
-            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept")
+            var dept = getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept");
             if (dept == null || dept == '' || dept == undefined) {
                 dept = $.cookie('FK_Dept');
+            }
+            if (dept == undefined) {
+                var u = new WebUser();
+                dept = u.FK_Dept;
             }
             var url = "SelectEmps.htm?FK_Dept=" + dept + "&s=" + Math.random();
             //  url = url.replace('101', '10102');

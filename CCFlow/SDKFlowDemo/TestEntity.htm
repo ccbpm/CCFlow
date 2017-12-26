@@ -12,18 +12,12 @@
 
 		function Test() {
 
-			var emp = new Entity("BP.Port.Emp");
-			emp.No = "admin";
-			var ie = emp.IsExits();
-
-			return;
-
 		    //获得当前用户信息.
-			var webUser = new WebUser();
-		    var no = webUser.No;
-		    var name = webUser.Name;
-		    var fk_dept = webUser.FK_Dept;
-		    var deptName = webUser.FK_DeptName;
+		    var currUser = new WebUser();
+		    var no = currUser.No;
+		    var name = currUser.Name;
+		    var fk_dept = currUser.FK_Dept;
+		    var deptName = currUser.FK_DeptName;
 
 		    // entity
 		    // 创建一个空实体.
@@ -63,6 +57,24 @@
 		    alert(result_ChangePass);
 		}
 
+		function Test_Adv() {
+
+		    var emp = new Entity("BP.Port.Emp");
+		    emp.No = "zhoupeng";
+		    var i = emp.RetrieveFromDBSources(); //从数据库查询，查询不到不返回异常.
+		    if (i == 0)
+		        alert('实体不存在');
+
+		    emp.No = 'zhoupeng';
+		    emp.Retrieve(); //从数据库或者缓存查询，如果不存在就抛出异常.
+
+		    emp.No = "zhoupeng";
+		    var bool = emp.IsExit(); //根据主键判断该实体是否存在.
+		    if (bool == false)
+		        alert('实体不存在');
+
+		}
+
         function TestEns() {
 
             var emps = Entities("BP.Port.Emps", "FK_Dept", "1");
@@ -92,9 +104,9 @@
         function TestEns_Adv() {
 
             var emps = new Entities("BP.Port.Emps");
-            var num=emps.RetrieveAll(); //调用查询全部，返回num个数量.
-            alert("BP.Port.Emps查询到:" + emps.length);
+            var num = emps.RetrieveAll(); //调用查询全部，返回num个数量.
 
+            alert("BP.Port.Emps查询到:" + emps.length);
 
             //获得性别为女的学生.
             var students = new Entities("BP.Demo.BPFramework.Students");
@@ -105,27 +117,17 @@
             students.Retrieve("XB", 0, "Age");
             alert("Students XB=0 查询到:" + students.length);
 
-
-
             //查询性别为女的并班级=01的学生, 按照年龄排序.
-            students.Retrieve("XB", 0, "FK_BanJi","01");
+            students.Retrieve("XB", 0, "FK_BanJi", "01");
             alert("Students XB=0 查询到:" + students.length);
 
-
             //查询性别为女的并班级=01的学生, 按照年龄排序.
-            students.Retrieve("XB", 0, "FK_BanJi", "01","Age");
+            students.Retrieve("XB", 0, "FK_BanJi", "01", "Age");
             alert("Students XB=0 查询到:" + students.length);
 
-
-            //获得性别为女的,并且班级为01 的学生.
-            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01");
-            alert("Students XB=0 ,FK_BanJi=01 查询到:" + students3.length);
-
-
-            //获得性别为女的,并且班级为01 的学生, 按照年龄排序.
-            var students3 = Entities("BP.Demo.BPFramework.Students", "XB", "0", "FK_BanJi", "01", "Age");
-            alert("Students XB=0 ,FK_BanJi=01 查询到:" + students3.length);
-
+            //查询全部.
+            students.RetrieveAll();
+            alert("Students 全部数据,查询到:" + students.length);
         }
 
         function ExecHttpHandlerMonthod() {
@@ -137,7 +139,6 @@
 
             handler.AddPara("TB_UserNo", "zhoupeng");
             handler.AddPara("TB_Pass", "123");
-
 
             //执行提交.
             var result = handler.Login_Submit();

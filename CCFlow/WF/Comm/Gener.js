@@ -936,7 +936,7 @@ var HttpHandler = (function () {
 			if (queryString.length > 0) {
 				$.each(queryString.split("&"), function (i, o) {
 					var param = o.split("=");
-					if (param.length == 2 && validate(param[1]) {
+					if (param.length == 2 && validate(param[1])) {
 						(function (key, value) {
 							AddPara(key, value);
 						})(param[0], param[1]);
@@ -1002,9 +1002,7 @@ var HttpHandler = (function () {
 			}
 			return jsonString;
 		}
-
 	}
-
 	return HttpHandler;
 
 })();

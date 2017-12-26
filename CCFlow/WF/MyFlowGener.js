@@ -969,9 +969,14 @@ function GenerCheckIDs() {
     }
     return checkBoxIDs;
 }
+
+//会签发送.
+function HuiQianSend() {
+    Send(true);
+}
  
 //发送
-function Send() {
+function Send(isHuiQian=false) {
 
     if (CheckFWC() == false)
         return false;

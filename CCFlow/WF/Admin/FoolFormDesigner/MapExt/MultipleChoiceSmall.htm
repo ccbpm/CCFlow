@@ -40,24 +40,28 @@
             var en = new Entity("BP.Sys.MapExt");
             en.MyPK = mypk;
             var i = en.RetrieveFromDBSources();
-
             if (i == 0)
                 $("#Btn_Delete").attr("disabled", true);
             else
                 $("#Btn_Delete").removeAttr("disabled");
 
-            var ens = new Entities("BP.Sys.SysEnumMains");
-            ens.Retrn();
+            //按照文本计算.
+            $("#TB_Doc").val(en.Tag1);
 
-            GenerBindEntities("DDL_Sf"
+            //绑定枚举.
+            var enums = new Entities("BP.Sys.SysEnumMains");
+            enums.retall();
+            GenerBindEntities("DDL_Enums", enums, en.Tag2);
 
+            //绑定外键.
+            var tables = new Entities("BP.Sys.SFTables");
+            tables.retall();
+            GenerBindEntities("DDL_SFTable", tables, en.Tag3);
 
-            //给公共属性赋值.
-            $("#TB_Width").val(en.W);
-            $("#TB_Height").val(en.H);
-            $("#TB_Url").val(en.Doc);
+            //绑定SQL
+            $("#TB_SQL").val(en.Tag4);
+             
         });
-
 
         //执行保存
         function Save() {
@@ -70,13 +74,24 @@
 
             en.FK_MapData = GetQueryString("FK_MapData");
             en.AttrOfOper = GetQueryString("KeyOfEn");
-
-            //url.
-            en.Doc = $("#TB_Url").val(); //要执行的SQL.
-            en.W = $("#TB_Width").val(); //要执行的SQL.
-            en.H = $("#TB_Height").val(); //要执行的SQL.
-
             en.ExtType = "MultipleChoiceSmall";
+            en.MyPK = mypk;
+
+            var checkVal = 0;
+
+            en.DoWay = checkVal;
+
+            if (checkVal == 0)
+                en.Tag1 = $("#TB_Doc").val();
+
+            if (checkVal == 1)
+                en.Tag2 = $("#DDL_Enums").val();
+
+            if (checkVal == 2)
+                en.Tag3 = $("#DDL_SFTable").val();
+
+            if (checkVal == 3)
+                en.Tag4 = $("#TB_SQL").val();
 
             if (en.Update() == 0)
                 en.Insert();
@@ -87,6 +102,7 @@
 
         //删除.
         function Delete() {
+
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
@@ -103,6 +119,8 @@
 </head>
 <body >
 <form id="cc">
+
+<caption>小范围多选</caption>
  
 <fieldset>
 <legend><input type="radio" value="0" id="RB_0"  name="RB" /><label for="RB_0" >按文本输入的值</label> </legend>
@@ -123,7 +141,7 @@
 
  
 <fieldset>
-<legend><input type="radio" value="2" id="Radio1"  name="RB" /><label for="RB_2" >按照SQL计算</label> </legend>
+<legend><input type="radio" value="3" id="RB_3"  name="RB" /><label for="RB_3" >按照SQL计算</label> </legend>
 <textarea  rows="3" id="Textarea1" name="TB_Docs" ></textarea>
  </fieldset>
 

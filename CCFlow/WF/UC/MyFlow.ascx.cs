@@ -623,7 +623,7 @@ namespace CCFlow.WF.UC
                 }
                 else
                 {
-                    toolbar.Add("<input type=button  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"To('./WorkOpt/StopFlow.aspx?&DoType=StopFlow&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "'); \" />");
+                    toolbar.Add("<input type=button  value='" + btnLab.EndFlowLab + "' enable=true onclick=\"To('./WorkOpt/StopFlow.aspx?DoType=StopFlow&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Node=" + this.FK_Node + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey + "'); \" />");
                 }
 
                 //toolbar.AddBtn("Btn_EndFlow", btnLab.EndFlowLab);

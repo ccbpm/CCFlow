@@ -865,7 +865,7 @@ namespace BP.WF.HttpHandler
                     toolbar += "<input type=button name='Askfor'  value='" + btnLab.AskforLab + "' enable=true onclick=\"To('" + urlr3 + "'); \" />";
                 }
 
-                if (btnLab.HuiQianRole != HuiQianRole.None)
+                if (btnLab.HuiQianRole == HuiQianRole.TeamupGroupLeader)
                 {
                     /*会签 */
                     string urlr3 = appPath + "WF/WorkOpt/HuiQian.htm?FK_Node=" + this.FK_Node + "&FID=" + this.FID + "&WorkID=" + this.WorkID + "&FK_Flow=" + this.FK_Flow + "&s=" + tKey;

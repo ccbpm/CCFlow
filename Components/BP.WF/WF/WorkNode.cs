@@ -5115,7 +5115,7 @@ namespace BP.WF
 
 
                 //处理会签问题
-                this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
+                this.addMsg(SendReturnMsgFlag.OverCurr, "@会签工作已完成@当前工作未处理的会签人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
 
                 return true;
             }
@@ -5182,7 +5182,7 @@ namespace BP.WF
                         return false; /*只有一个待办,说明自己就是最后的一个人.*/
                     }
 
-                    this.addMsg(SendReturnMsgFlag.CondInfo, "当前工作未处理的人有: " + todoEmps + ",您不能执行发送.", null, SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.CondInfo, "@当前工作未处理的会签人有: " + todoEmps + ",您不能执行发送.", null, SendReturnMsgType.Info);
                     return true;
                 }
             }
@@ -5243,7 +5243,7 @@ namespace BP.WF
                 }
                 else
                 {
-                    this.addMsg(SendReturnMsgFlag.OverCurr, "当前工作未处理的人有: " + todoEmps1 + " .", null, SendReturnMsgType.Info);
+                    this.addMsg(SendReturnMsgFlag.OverCurr, "@会签工作已完成@当前工作未处理的会签人有:" + todoEmps1 + " .", null, SendReturnMsgType.Info);
                 }
                 return true;
             }

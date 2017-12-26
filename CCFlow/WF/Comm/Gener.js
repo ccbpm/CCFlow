@@ -1007,7 +1007,7 @@ var HttpHandler = (function () {
 
 })();
 
-var WebUser = (function () {
+var WebUser = function () {
 
 	var dynamicHandler = "/WF/Comm/Handler.ashx";
 
@@ -1034,6 +1034,9 @@ var WebUser = (function () {
 		}
 	});
 
-	return jsonString;
+	var self = this;
+	$.each(jsonString, function (n, o) {
+		self[n] = o;
+	});
 
-})();
+};

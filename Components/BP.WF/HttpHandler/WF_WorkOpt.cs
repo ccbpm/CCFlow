@@ -557,6 +557,12 @@ namespace BP.WF.HttpHandler
         {
             //生成变量.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+            if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianOver)
+            {
+                /*只有一个人的情况下, 并且是会签完毕状态，就执行 */
+                return "info@当前工作已经到您的待办理了,会签工作已经完成.";
+            }
+
 
             //判断当前节点的会签类型.
             Node nd = new Node(gwf.FK_Node);
@@ -566,15 +572,17 @@ namespace BP.WF.HttpHandler
             gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
                 GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.IsPass, 0);
 
-            if (gwfs.Count == 1 && gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianOver)
-            {
-                /*只有一个人的情况下, 并且是会签完毕状态，就执行 */
-                return "info@当前工作已经到您的待办理了,会签工作已经完成.";
-            }
-
             //说明没有会签人,就直接关闭.
             if (gwfs.Count == 1)
-                return "info@您没有设置会签人，当前是待办状态。";
+            {
+                gwfs = new GenerWorkerLists();
+                gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
+                    GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.IsPass, 90);
+                if (gwfs.Count == 1)
+                {
+                    return "info@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
+                }
+            }
 
             // bool isHaveHuiqian=false;
 
@@ -596,8 +604,7 @@ namespace BP.WF.HttpHandler
 
             //执行会签,写入日志.
             BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian, ActionType.HuiQian, "执行会签", null);
-
-
+            
             string str = "";
 
             if (nd.TodolistModel == TodolistModel.TeamupGroupLeader)

@@ -766,6 +766,7 @@ namespace BP.Sys
         }
         #endregion
 
+
         #region 构造方法
         /// <summary>
         /// 扩展
@@ -810,6 +811,7 @@ namespace BP.Sys
                 map.AddTBStringDoc();
 
                 map.AddTBString(MapExtAttr.Tag, null, "Tag", true, false, 0, 2000, 20);
+
                 map.AddTBString(MapExtAttr.Tag1, null, "Tag1", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag2, null, "Tag2", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag3, null, "Tag3", true, false, 0, 2000, 20);

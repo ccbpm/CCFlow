@@ -1264,6 +1264,36 @@ namespace BP.WF.HttpHandler
         }
         #endregion dtl.htm 从表.
 
+        #region dtl.Card
+        public string DtlCard_Init()
+        {
+            DataSet ds = new DataSet();
+
+            MapDtl md = new MapDtl(this.EnsName);
+
+            //主表数据.
+            DataTable dt = md.ToDataTableField("Main");
+            ds.Tables.Add(dt);
+
+            //主表字段.
+            MapAttrs attrs = md.MapAttrs;
+            ds.Tables.Add(attrs.ToDataTableField("MapAttrs"));
+
+            //从表.
+            MapDtls dtls = md.MapDtls;
+            ds.Tables.Add(dtls.ToDataTableField("MapDtls"));
+
+
+            GEDtls enDtls = new GEDtls(this.EnsName);
+            enDtls.Retrieve(GEDtlAttr.RefPK, this.RefPKVal);
+            ds.Tables.Add(enDtls.ToDataTableField("DTDtls"));
+
+            return BP.Tools.Json.ToJson(ds);
+
+        }
+        #endregion dtl.Card
+
+
         /// <summary>
         /// 处理SQL的表达式.
         /// </summary>
@@ -2864,6 +2894,7 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion 附件组件
+
 
 
     }

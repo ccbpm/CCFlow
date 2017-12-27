@@ -866,6 +866,7 @@ var Entity = (function () {
 		DoMethodReturnString : function (methodName) {
 			var params = [];
 			$.each(arguments, function (i, o) {
+                if (i > 0) 
 				params.push(o);
 			});
 			var self = this;

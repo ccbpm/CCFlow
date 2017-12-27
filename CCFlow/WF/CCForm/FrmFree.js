@@ -495,63 +495,64 @@ function figure_MapAttr_Template(mapAttr) {
 							}
 						}
 						if (typeof ext != "undefined" && ext.ExtType == "MultipleChoiceSmall") {
-							var d = [];
-							var valueField = "No";
-							var textField = "Name";
-							switch (ext.DoWay) {
-							case 1:
-								$.each((ext.Tag1 || "").split(","), function (i, o) {
-									d.push({No:i,Name:o})
-								});
-								break;
-							case 2:
-								valueField = "IntKey"
-								textField = "Lab";
-								var enums = new Entities("BP.Sys.SysEnums");
-								enums.Retrieve("EnumKey", ext.Tag2);
-								d = enums;
-								break;
-							case 3:
-								var en = new Entity("BP.Sys.SFTable", ext.Tag3);
-								d = en.DoMethodReturnJSON("GenerDataOfJson");
-								break;
-							case 4:
-								d = DBAccess.RunSQLReturnTable(ext.Tag4);
-								break;
-							}
+						    var d = [];
+						    var valueField = "No";
+						    var textField = "Name";
+						    switch (ext.DoWay) {
+						        case 1:
+						            $.each((ext.Tag1 || "").split(","), function (i, o) {
+						                d.push({ No: i, Name: o })
+						            });
+						            break;
+						        case 2:
+						            valueField = "IntKey"
+						            textField = "Lab";
+						            var enums = new Entities("BP.Sys.SysEnums");
+						            enums.Retrieve("EnumKey", ext.Tag2);
+						            d = enums;
+						            break;
+						        case 3:
+						            var en = new Entity("BP.Sys.SFTable", ext.Tag3);
+						            d = en.DoMethodReturnJSON("GenerDataOfJson");
+						           // alert(JSON.stringify(d));
+						            break;
+						        case 4:
+						            d = DBAccess.RunSQLReturnTable(ext.Tag4);
+						            break;
+						    }
 
-							eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' editable='false' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'" + valueField + "',textField:'" + textField + "',multiple:true,onSelect:function(p) { sel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "', '" + ext.FK_MapData + "'); },onUnselect:function(p) { unsel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "'); }\" />"
+						    eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' editable='false' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'" + valueField + "',textField:'" + textField + "',multiple:true,onSelect:function(p) { sel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "', '" + ext.FK_MapData + "'); },onUnselect:function(p) { unsel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "'); }\" />"
 						}
-						else 
-                        if (mapAttr.UIHeight <= 23) {
-                            eleHtml +=
+						else
+						    if (mapAttr.UIHeight <= 23) {
+						        eleHtml +=
                                 "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
                             ;
-                        }
-                        else {
+						    }
+						    else {
 
-                            if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
-                                //如果是富文本就使用百度 UEditor
+						        if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+						            //如果是富文本就使用百度 UEditor
 
-                                if (mapAttr.UIIsEnable == "0") {
-                                    //只读状态直接 div 展示富文本内容
-                                    //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
-                                    eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
-                                } else {
-                                    document.BindEditorMapAttr = mapAttr; //存到全局备用
+						            if (mapAttr.UIIsEnable == "0") {
+						                //只读状态直接 div 展示富文本内容
+						                //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+						                eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
+						            } else {
+						                document.BindEditorMapAttr = mapAttr; //存到全局备用
 
-                                    //设置编辑器的默认样式
-                                    var styleText = "text-align:left;font-size:12px;";
-                                    styleText += "width:100%;";
-                                    styleText += "height:" + mapAttr.UIHeight + "px;";
-                                    //注意这里 name 属性是可以用来绑定表单提交时的字段名字的
-                                    eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
-                                }
-                            } else {
-                                eleHtml +=
+						                //设置编辑器的默认样式
+						                var styleText = "text-align:left;font-size:12px;";
+						                styleText += "width:100%;";
+						                styleText += "height:" + mapAttr.UIHeight + "px;";
+						                //注意这里 name 属性是可以用来绑定表单提交时的字段名字的
+						                eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+						            }
+						        } else {
+						            eleHtml +=
                                 "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
-                            }
-                        }
+						        }
+						    }
                     }
                 } //AppDate
                 else if (mapAttr.MyDataType == 6) {//AppDate

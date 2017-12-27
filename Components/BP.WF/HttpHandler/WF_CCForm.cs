@@ -1265,6 +1265,10 @@ namespace BP.WF.HttpHandler
         #endregion dtl.htm 从表.
 
         #region dtl.Card
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
         public string DtlCard_Init()
         {
             DataSet ds = new DataSet();

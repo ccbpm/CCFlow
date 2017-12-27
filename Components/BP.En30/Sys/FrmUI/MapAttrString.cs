@@ -187,18 +187,7 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                rm = new RefMethod();
-                rm.Title = "小范围多选";
-                rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSmall()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "搜索多选";
-                rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSearch()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-                
+              
                 
                 rm = new RefMethod();
                 rm.Title = "扩展控件";
@@ -213,6 +202,22 @@ namespace BP.Sys.FrmUI
                 rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
                 #endregion 执行的方法.
+
+                #region 多选.
+                rm = new RefMethod();
+                rm.GroupName = "输入内容多选";
+                rm.Title = "小范围多选";
+                rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSmall()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "输入内容多选";
+                rm.Title = "搜索多选";
+                rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSearch()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                #endregion
 
                 this._enMap = map;
                 return this._enMap;

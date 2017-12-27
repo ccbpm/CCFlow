@@ -200,8 +200,6 @@ namespace BP.En
         /// </summary>
         public void ResetDefaultVal()
         {
-            // this.Row.Clear();
-
             Attrs attrs = this.EnMap.Attrs;
             foreach (Attr attr in attrs)
             {

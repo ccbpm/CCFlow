@@ -57,20 +57,20 @@ namespace BP.WF.HttpHandler
         {
             try
             {
+                string pkval = this.PKVal;
                 Entity en = ClassFactory.GetEn(this.EnName);
-                en.PKVal = this.PKVal;
-                if (en.PKVal == "0" || en.PKVal == "" || en.PKVal == null || this.PKVal == "undefined")
+                if (pkval == "0" || pkval == "" || pkval == null || pkval == "undefined")
                 {
                     Map map = en.EnMap;
-
                     //设置默认的数据.
                     en.ResetDefaultVal();
-
                 }
                 else
                 {
+                    en.PKVal = pkval;
                     en.Retrieve();
                 }
+
                 return en.ToJson();
             }
             catch(Exception ex)
@@ -133,6 +133,12 @@ namespace BP.WF.HttpHandler
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
                 int i = en.RetrieveFromDBSources();
+
+                if (i == 0)
+                {
+                    en.ResetDefaultVal();
+                    en.PKVal = this.PKVal;
+                }
 
                 if (en.Row.ContainsKey("RetrieveFromDBSources") == true)
                     en.Row["RetrieveFromDBSources"] = i;

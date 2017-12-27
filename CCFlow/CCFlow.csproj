@@ -1253,7 +1253,6 @@
     <Content Include="WF\CCForm\DocMainAth.aspx" />
     <Content Include="WF\CCForm\Dtl.aspx" />
     <Content Include="WF\CCForm\Dtl.htm" />
-    <Content Include="WF\CCForm\DtlCard.aspx" />
     <Content Include="WF\CCForm\DtlOpSelectItems.aspx" />
     <Content Include="WF\CCForm\DtlOpt.aspx" />
     <Content Include="WF\CCForm\DtlSearch.aspx" />
@@ -7554,13 +7553,6 @@
     </Compile>
     <Compile Include="WF\CCForm\Dtl.aspx.designer.cs">
       <DependentUpon>Dtl.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\CCForm\DtlCard.aspx.cs">
-      <DependentUpon>DtlCard.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\CCForm\DtlCard.aspx.designer.cs">
-      <DependentUpon>DtlCard.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\CCForm\DtlOpSelectItems.aspx.cs">
       <DependentUpon>DtlOpSelectItems.aspx</DependentUpon>

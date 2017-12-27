@@ -149,7 +149,32 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@导入失败:" + ex.Message;
+                //第一次导入，可能因为没有字段，导致报错，系统会刷新一次，并修复字段
+                //所以再执行一次导入
+                try
+                {
+                    string fk_mapData = this.FK_MapData;
+
+                    //读取上传的XML 文件.
+                    DataSet ds = new DataSet();
+                    //ds.ReadXml(path);
+                    ds.ReadXml(this.context.Request.Files[0].InputStream);
+
+                    //执行装载.
+                    MapData.ImpMapData(fk_mapData, ds);
+
+                    if (this.FK_Node != 0)
+                    {
+                        Node nd = new Node(this.FK_Node);
+                        nd.RepareMap(nd.HisFlow);
+                    }
+
+                    return "执行成功.";
+                }
+                catch (Exception newex)
+                {
+                    return "err@导入失败:" + newex.Message;
+                }
             }
         }
         /// <summary>
@@ -161,6 +186,15 @@ namespace BP.WF.HttpHandler
         {
             string ndfrm = "ND"+int.Parse(this.FK_Flow) + "01";
             return Imp_CopyFrm(ndfrm);
+        }
+        /// <summary>
+        /// 从表单库导入
+        /// 从节点导入
+        /// </summary>
+        /// <returns></returns>
+        public string Imp_FromsCopyFrm()
+        {
+            return Imp_CopyFrm();
         }
         /// <summary>
         /// 从节点上Copy

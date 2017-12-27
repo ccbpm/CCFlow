@@ -970,6 +970,15 @@ namespace BP.Sys
         }
 
         /// <summary>
+        /// 返回json.
+        /// </summary>
+        /// <returns></returns>
+        public string GenerDataOfJson()
+        {
+            return BP.Tools.Json.ToJson(this.GenerData());
+        }
+
+        /// <summary>
         /// 初始化数据.
         /// </summary>
         public void InitDataTable()

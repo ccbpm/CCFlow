@@ -230,7 +230,7 @@ namespace BP.Sys
         protected override bool beforeUpdateInsertAction()
         {
             //this.MyPK = this.FK_MapData + "_" + this.EleID + "_" + this.RefPKVal;
-            this.GenerPKVal();
+           // this.GenerPKVal();
             return base.beforeUpdateInsertAction();
         }
         public void GenerPKVal()

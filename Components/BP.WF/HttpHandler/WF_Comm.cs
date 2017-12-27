@@ -62,6 +62,10 @@ namespace BP.WF.HttpHandler
                 if (en.PKVal == "0" || en.PKVal == "" || en.PKVal == null || this.PKVal == "undefined")
                 {
                     Map map = en.EnMap;
+
+                    //设置默认的数据.
+                    en.ResetDefaultVal();
+
                 }
                 else
                 {
@@ -245,6 +249,13 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
+
+        public string Entity_IsExits()
+        {
+             
+        }
+
+
         #endregion 
        
         #region Entities 公共类库.

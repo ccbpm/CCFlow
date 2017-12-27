@@ -479,14 +479,53 @@ function figure_MapAttr_Template(mapAttr) {
 							}
 						}
 						if (typeof ext != "undefined" && ext.ExtType == "MultipleChoiceSmall") {
+							var d = [];
+							var valueField = "No";
+							var textField = "Name";
+							switch (ext.DoWay) {
+							case 1:
+								$.each((ext.Tag1 || "").split(","), function (i, o) {
+									d.push({No:i,Name:o})
+								});
+								break;
+							case 2:
+								valueField = "IntKey"
+								textField = "Lab";
+								var enums = new Entities("BP.Sys.SysEnums");
+								enums.Retrieve("EnumKey", ext.Tag2);
+								d = enums;
+								break;
+							case 3:
+								//var en = new entity("BP.Sys.SFTable",ext.Tag3);
+								//var result =  en.DoMethodReturnJSON("GenerData");
+								//alert(result);
+								break;
+							case 4:
+								d = DBAccess.RunSQLReturnTable(ext.Tag4);
+								break;
+							}
+							
+							window.sel = function (n, KeyOfEn, FK_MapData) {
+								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+								frmEleDB.FK_MapData = FK_MapData;
+								frmEleDB.EleID = KeyOfEn;
+								frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
+								frmEleDB.Tag1 = n;
+								if (frmEleDB.Update() == 0) {
+									frmEleDB.Insert();
+								}
+							}
+							window.unsel = function (n, KeyOfEn) {
+								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+								frmEleDB.Delete();
+							}
+							//onUnselect
 							eleHtml += "<input type='hidden' name='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'>";
-							var d = []
-							$.each((ext.Tag1 || "").split(","), function (i, o) {
-								d.push({No:o,Name:o})
-							});
-							eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'No',textField:'Name',multiple:true,onSelect:function() { $('#TB_" + mapAttr.KeyOfEn + "').val($('#" + mapAttr.KeyOfEn + "_combobox').combobox('getValues')); }\" />"
-						} else 
-
+							eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' editable='false' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'" + valueField + "',textField:'" + textField + "',multiple:true,onSelect:function(p) { sel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "', '" + ext.FK_MapData + "'); },onUnselect:function(p) { unsel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "'); }\" />"
+						}
+						else 
                         if (mapAttr.UIHeight <= 23) {
                             eleHtml +=
                                 "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"

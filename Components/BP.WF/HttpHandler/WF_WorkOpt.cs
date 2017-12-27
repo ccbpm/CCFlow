@@ -613,7 +613,7 @@ namespace BP.WF.HttpHandler
             {
                 int toNodeID = this.GetRequestValInt("ToNode");
                 if (toNodeID == 0)
-                    return "close@会签成功执行,请点击发送按钮完成您的操作.";
+                    return "Send@["+nd.Name+"]会签成功执行.";
 
                 Node toND = new Node(toNodeID);
                 //如果到达的节点是按照接受人来选择,就转向接受人选择器.

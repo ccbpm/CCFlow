@@ -680,7 +680,10 @@ namespace BP.WF.HttpHandler
                 #region 如果当前节点启用了协作会签.
                 if (btnLab.HuiQianRole == HuiQianRole.Teamup)
                 {
-                    toolbar += "<input name='SendHuiQian' type=button value='会签发送' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(true); \" />";
+                    if (this.IsMobile == true)
+                        toolbar += "<input name='SendHuiQian' type=button value='会签发送' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();SendIt(true); \" />";
+                    else
+                        toolbar += "<input name='SendHuiQian' type=button value='会签发送' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SaveDtlAll();Send(true); \" />";
                 }
                 #endregion 如果当前节点启用了协作会签
 
@@ -740,7 +743,6 @@ namespace BP.WF.HttpHandler
                                 toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;SendIt();\" />";
                             else
                                 toolbar += "<input name='Send' type=button  value='" + btnLab.SendLab + "' enable=true onclick=\" " + btnLab.SendJS + " if(SysCheckFrm()==false) return false;Send();\" />";
-
                         }
                     }
 

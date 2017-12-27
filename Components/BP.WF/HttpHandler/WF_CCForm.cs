@@ -1287,6 +1287,13 @@ namespace BP.WF.HttpHandler
             MapDtls dtls = md.MapDtls;
             ds.Tables.Add(dtls.ToDataTableField("MapDtls"));
 
+            //从表的从表.
+            foreach (MapDtl dtl in dtls)
+            {
+                MapAttrs subAttrs = new MapAttrs(dtl.No);
+                ds.Tables.Add(subAttrs.ToDataTableField(dtl.No));
+            }
+
 
             GEDtls enDtls = new GEDtls(this.EnsName);
             enDtls.Retrieve(GEDtlAttr.RefPK, this.RefPKVal);

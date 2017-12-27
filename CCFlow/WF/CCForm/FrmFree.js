@@ -521,8 +521,6 @@ function figure_MapAttr_Template(mapAttr) {
 								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
 								frmEleDB.Delete();
 							}
-							//onUnselect
-							eleHtml += "<input type='hidden' name='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'>";
 							eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' editable='false' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'" + valueField + "',textField:'" + textField + "',multiple:true,onSelect:function(p) { sel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "', '" + ext.FK_MapData + "'); },onUnselect:function(p) { unsel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "'); }\" />"
 						}
 						else 

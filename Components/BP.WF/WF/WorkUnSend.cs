@@ -246,7 +246,7 @@ namespace BP.WF
             else
                 gwf.TaskSta = TaskSta.None;
 
-            gwf.TodoEmps = WebUser.No + "," + WebUser.Name+";";
+            gwf.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
             gwf.Update();
 
             if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
@@ -364,7 +364,7 @@ namespace BP.WF
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
-            #region 判断是否是会签状态,是否是会签人做的撤销. 主持人是不能撤销的. @于庆海
+            #region 判断是否是会签状态,是否是会签人做的撤销. 主持人是不能撤销的.
             if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)
             {
                 GenerWorkerList gwl = new GenerWorkerList();
@@ -573,7 +573,7 @@ namespace BP.WF
             else
                 gwf.TaskSta = TaskSta.None;
 
-            gwf.TodoEmps = WebUser.No + "," + WebUser.Name+";";
+            gwf.TodoEmps = WebUser.No + "," + WebUser.Name + ";";
             gwf.Update();
 
             if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
@@ -586,7 +586,7 @@ namespace BP.WF
             }
             else
             {
-                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node +" AND FK_Emp='" + WebUser.No + "'");
+                BP.DA.DBAccess.RunSQL("UPDATE WF_GenerWorkerlist SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + gwf.FK_Node + " AND FK_Emp='" + WebUser.No + "'");
             }
 
             //更新当前节点，到rpt里面。
@@ -600,7 +600,7 @@ namespace BP.WF
             if (fwc.FWCSta == FrmWorkCheckSta.Enable && fwc.FWCOrderModel == FWCOrderModel.SqlAccepter)
             {
                 BP.DA.DBAccess.RunSQL("DELETE FROM ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID = " + this.WorkID +
-                                      " AND ActionType = " + (int) ActionType.WorkCheck + " AND NDFrom = " + nd.NodeID +
+                                      " AND ActionType = " + (int)ActionType.WorkCheck + " AND NDFrom = " + nd.NodeID +
                                       " AND NDTo = " + nd.NodeID + " AND (Msg = '' OR Msg IS NULL)");
             }
 

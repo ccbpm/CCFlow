@@ -29,7 +29,7 @@ namespace BP.WF.HttpHandler
         /// </summary>
         /// <param name="key">key</param>
         /// <returns>返回值</returns>
-        public string GetValFromFrmByKey(string key, string isNullAsVal=null)
+        public string GetValFromFrmByKey(string key, string isNullAsVal = null)
         {
             string val = context.Request.Form[key];
 
@@ -85,7 +85,7 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果</returns>
         protected virtual string DoDefaultMethod()
         {
-            return "err@子类["+this.ToString()+"]没有重写该["+this.DoType+"]方法，请确认该方法是否缺少或者是非public类型的.";
+            return "err@子类[" + this.ToString() + "]没有重写该[" + this.DoType + "]方法，请确认该方法是否缺少或者是非public类型的.";
         }
         #endregion 执行方法.
 
@@ -221,14 +221,14 @@ namespace BP.WF.HttpHandler
 
         #region 属性参数.
         /// <summary>
-        /// @于庆海翻译.
+        /// 
         /// </summary>
         public string PKVal
         {
             get
             {
-                string str= this.GetRequestVal("PKVal");
-                if (DataType.IsNullOrEmpty(str)==true)
+                string str = this.GetRequestVal("PKVal");
+                if (DataType.IsNullOrEmpty(str) == true)
                     str = this.GetRequestVal("OID");
 
                 if (DataType.IsNullOrEmpty(str) == true)
@@ -284,7 +284,7 @@ namespace BP.WF.HttpHandler
                 return str;
             }
         }
-        
+
         /// <summary>
         /// 执行类型
         /// </summary>
@@ -384,7 +384,7 @@ namespace BP.WF.HttpHandler
                 if (str == null || str == "" || str == "null")
                     return null;
                 return str;
-                 
+
             }
         }
         /// <summary>
@@ -396,7 +396,7 @@ namespace BP.WF.HttpHandler
             {
                 string str = this.GetRequestVal("FK_MapData");
                 if (str == null || str == "" || str == "null")
-                    str = this.GetRequestVal("FrmID"); 
+                    str = this.GetRequestVal("FrmID");
                 return str;
             }
         }
@@ -417,7 +417,7 @@ namespace BP.WF.HttpHandler
                     }
                 }
 
-                   
+
                 return str;
             }
         }
@@ -469,7 +469,7 @@ namespace BP.WF.HttpHandler
                 if (str == null || str == "" || str == "null")
                     return 0;
 
-                return int.Parse( str);
+                return int.Parse(str);
             }
         }
         /// <summary>
@@ -574,7 +574,7 @@ namespace BP.WF.HttpHandler
                 string str = context.Request.QueryString["RefOID"];
 
                 if (str == null || str == "" || str == "null")
-                    str= context.Request.QueryString["OID"];
+                    str = context.Request.QueryString["OID"];
 
                 if (str == null || str == "" || str == "null")
                     return 0;
@@ -632,7 +632,7 @@ namespace BP.WF.HttpHandler
                 return int.Parse(str);
             }
         }
-        
+
         /// <summary>
         /// 字段属性编号
         /// </summary>
@@ -659,7 +659,7 @@ namespace BP.WF.HttpHandler
                 throw new Exception("@参数:" + key + "没有取到值.");
             return int.Parse(str);
         }
-     
+
         public float GetValFloatFromFrmByKey(string key)
         {
             string str = this.GetValFromFrmByKey(key);
@@ -678,15 +678,15 @@ namespace BP.WF.HttpHandler
         public bool GetValBoolenFromFrmByKey(string key)
         {
 
-            string val = this.GetValFromFrmByKey(key,"0");
+            string val = this.GetValFromFrmByKey(key, "0");
             if (val == "on" || val == "1")
                 return true;
-            if (val == null || val == "" || val == "0" || val=="off")
+            if (val == null || val == "" || val == "0" || val == "off")
                 return false;
             return true;
         }
 
-         
+
         public new string RefPK
         {
             get

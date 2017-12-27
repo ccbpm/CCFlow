@@ -511,12 +511,14 @@ function figure_MapAttr_Template(mapAttr) {
 								enums.Retrieve("EnumKey", ext.Tag2);
 								d = enums;
 								break;
-							case 3:
-								var en = new entity("BP.Sys.SFTable");
-								//ext.Tag3
-								var result =  en.DoMethodReturnJSON("GenerData");
-								alert(result);
-								break;
+			  	case 3:
+				    var en = new Entity("BP.Sys.SFTable", ext.Tag3);
+
+
+				    //ext.Tag3
+				    var result = en.DoMethodReturnJSON("GenerDataOfJson");
+				    alert(result);
+				    break;
 							case 4:
 								d = DBAccess.RunSQLReturnTable(ext.Tag4);
 								break;

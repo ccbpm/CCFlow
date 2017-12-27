@@ -49,12 +49,12 @@
 		    alert("用户编号:" + emp.No + ",名称:" + emp.Name + "部门编号:" + emp.FK_Dept + ",部门名称:" + emp.FK_DeptText);
 
 		    //执行实体的方法.
-		    var result_ResetPass = emp.Do("ResetPass"); //重置密码:不带参数的方法.
-		    alert(result_ResetPass);
+		    var msg = emp.DoMethodReturnString("ResetPass"); //重置密码:不带参数的方法.
+		    alert(msg);
 
 		    //执行实体的方法.
-		    var result_ChangePass = emp.Do("ChangePass", "@oldpass=123@pass1=456@pass2=456"); //重置密码:不带参数的方法.
-		    alert(result_ChangePass);
+		    var msg2 = emp.DoMethodReturnString("ChangePass", "@oldpass=123@pass1=456@pass2=456"); //重置密码:不带参数的方法.
+		    alert(msg2);
 		}
 
 		function Test_Adv() {
@@ -104,9 +104,10 @@
         function TestEns_Adv() {
 
             var emps = new Entities("BP.Port.Emps");
-            var num = emps.RetrieveAll(); //调用查询全部，返回num个数量.
 
+            var num = emps.RetrieveAll(); //调用查询全部，返回num个数量.
             alert("BP.Port.Emps查询到:" + emps.length);
+
 
             //获得性别为女的学生.
             var students = new Entities("BP.Demo.BPFramework.Students");

@@ -249,10 +249,31 @@ namespace BP.WF.HttpHandler
                 return "err@" + ex.Message;
             }
         }
-
-        public string Entity_IsExits()
+        
+        public string Entity_DoMethodReturnString()
         {
-             
+            //创建类实体.
+            BP.En.Entity en = ClassFactory.GetEn(this.EnName); // Activator.CreateInstance(System.Type.GetType("BP.En.Entity")) as BP.En.Entity;
+            en.PKVal = this.PKVal;
+            en.RetrieveFromDBSources();
+
+            string methodName = this.GetRequestVal("MethodName");
+
+            Type tp = en.GetType();
+            System.Reflection.MethodInfo mp = tp.GetMethod(methodName);
+            if (mp == null)
+                return "err@没有找到类[" + this.EnName + "]方法[" + methodName + "].";
+
+            string paras = this.GetRequestVal("paras");
+
+            //执行该方法.
+            object[] myparas = new object[0];
+
+            if (DataType.IsNullOrEmpty(paras) == false)
+                myparas = paras.Split(',');
+
+            string result = mp.Invoke(en, myparas) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
+            return result;
         }
 
 

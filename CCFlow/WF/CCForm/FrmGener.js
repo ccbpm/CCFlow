@@ -216,7 +216,7 @@ function GenerFrm() {
                 else
                     GenerFreeFrm(mapData, frmData); //自由表单.
             }
-
+			$.parser.parse("#CCForm");
             var isReadonly = GetQueryString("IsReadonly");
 
             //原有的。
@@ -329,6 +329,24 @@ function GenerFrm() {
 			}
         }
     })
+}
+
+function sel(n, KeyOfEn, FK_MapData) {
+	var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+	frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+	frmEleDB.FK_MapData = FK_MapData;
+	frmEleDB.EleID = KeyOfEn;
+	frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
+	frmEleDB.Tag1 = n;
+	if (frmEleDB.Update() == 0) {
+		frmEleDB.Insert();
+	}
+}
+
+function unsel(n, KeyOfEn) {
+	var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+	frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+	frmEleDB.Delete();
 }
 
 //打开从表的从表

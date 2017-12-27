@@ -1487,6 +1487,8 @@ function GenerWorkNode() {
                 GenerFreeFrm(flowData);  //自由表单.
             }
 
+			$.parser.parse("#CCForm");
+
             //以下代码是 傻瓜表单与自由表单, 公共方法.
             var local = window.location.href;
 
@@ -1615,6 +1617,23 @@ function GenerWorkNode() {
     })
 }
 
+function sel(n, KeyOfEn, FK_MapData) {
+	var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+	frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+	frmEleDB.FK_MapData = FK_MapData;
+	frmEleDB.EleID = KeyOfEn;
+	frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
+	frmEleDB.Tag1 = n;
+	if (frmEleDB.Update() == 0) {
+		frmEleDB.Insert();
+	}
+}
+
+function unsel(n, KeyOfEn) {
+	var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+	frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+	frmEleDB.Delete();
+}
 
 function addLoadFunction(id, eventName, method) {
     var js = "";

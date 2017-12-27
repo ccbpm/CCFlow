@@ -223,7 +223,43 @@ function InitMapAttrOfCtrlFool(flowData,mapAttr) {
     //添加文本框 ，日期控件等.
     //AppString
     if (mapAttr.MyDataType == "1") {  //不是外键
+		var ext;
+		for (var p in flowData.Sys_MapExt) {
+			if (mapAttr.KeyOfEn == flowData.Sys_MapExt[p].AttrOfOper) {
+				ext = flowData.Sys_MapExt[p];
+			}
+		}
+		if (typeof ext != "undefined" && ext.ExtType == "MultipleChoiceSmall") {
+			var d = [];
+			var valueField = "No";
+			var textField = "Name";
+			switch (ext.DoWay) {
+				case 1:
+					$.each((ext.Tag1 || "").split(","), function (i, o) {
+						d.push({ No: i, Name: o })
+					});
+					break;
+				case 2:
+					valueField = "IntKey"
+					textField = "Lab";
+					var enums = new Entities("BP.Sys.SysEnums");
+					enums.Retrieve("EnumKey", ext.Tag2);
+					d = enums;
+					break;
+				case 3:
+					var en = new Entity("BP.Sys.SFTable", ext.Tag3);
+					d = en.DoMethodReturnJSON("GenerDataOfJson");
+				   // alert(JSON.stringify(d));
+					break;
+				case 4:
+					d = DBAccess.RunSQLReturnTable(ext.Tag4);
+					break;
+			}
 
+			eleHtml += "<input style='width: 99%;' id='" + mapAttr.KeyOfEn + "_combobox' editable='false' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'" + valueField + "',textField:'" + textField + "',multiple:true,onSelect:function(p) { sel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "', '" + ext.FK_MapData + "'); },onUnselect:function(p) { unsel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "'); }\" />"
+			return eleHtml;
+		}
+		else
         if (mapAttr.UIHeight <= 23) //普通的文本框.
         {
             var enableAttr = '';

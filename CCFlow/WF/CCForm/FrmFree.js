@@ -118,7 +118,6 @@ function GenerFreeFrm(mapData, frmData) {
         }
     }
 
-	$.parser.parse("#CCForm");
 }
 
 
@@ -431,24 +430,6 @@ function figure_Template_IFrame(fram) {
     eleHtml.append(eleIframe);
 
     return eleHtml;
-}
-
-function sel(n, KeyOfEn, FK_MapData) {
-	var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-	frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
-	frmEleDB.FK_MapData = FK_MapData;
-	frmEleDB.EleID = KeyOfEn;
-	frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
-	frmEleDB.Tag1 = n;
-	if (frmEleDB.Update() == 0) {
-		frmEleDB.Insert();
-	}
-}
-
-function unsel(n, KeyOfEn) {
-	var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-	frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
-	frmEleDB.Delete();
 }
 
 //升级表单元素 初始化文本框、日期、时间

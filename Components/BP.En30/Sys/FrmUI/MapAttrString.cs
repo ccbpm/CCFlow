@@ -192,6 +192,13 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSmall()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "搜索多选";
+                rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSearch()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                
                 
                 rm = new RefMethod();
                 rm.Title = "扩展控件";
@@ -286,6 +293,14 @@ namespace BP.Sys.FrmUI
         public string DoMultipleChoiceSmall()
         {
             return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSmall.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
+        }
+        /// <summary>
+        /// 大范围多选
+        /// </summary>
+        /// <returns></returns>
+        public string DoMultipleChoiceSearch()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/MultipleChoiceSearch.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&m=s";
         }
         /// <summary>
         /// 超链接

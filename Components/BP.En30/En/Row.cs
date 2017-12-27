@@ -75,6 +75,12 @@ namespace BP.En
             if (key == null)
                 return;
 
+            if (this.ContainsKey(key) == false)
+            {
+                this.Add(key, val);
+                return;
+            }
+
             if (val == null )
             {
                 this[key] = val;

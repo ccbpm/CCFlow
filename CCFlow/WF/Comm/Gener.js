@@ -814,7 +814,7 @@ var Entity = (function () {
 			$.ajax({
 				type: 'post',
 				async: false,
-				url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&" + getParams1(self),
+				url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName +"&PKVal=" + self.pkval + "&" + getParams1(self),
 				dataType: 'html',
 				success: function (data) {
 					if (data.indexOf("err@") != -1) {
@@ -870,8 +870,7 @@ var Entity = (function () {
 			$.ajax({
 				type: 'post',
 				async: false,
-				url: dynamicHandler + "?DoType=Exec&clsName=" + self.enName + "&methodName=" + methodName + "&paras=" + params + "&t=" + new Date().getTime(),
-				data : formData,
+				url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName + "&paras=" + params + "&t=" + new Date().getTime(),
 				dataType: 'html',
 				success: function (data) {
 					string = data;

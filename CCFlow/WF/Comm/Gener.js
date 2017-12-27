@@ -941,7 +941,7 @@ var Entities = (function () {
 			$.each(arguments, function (i, o) {
 				args.push(o);
 			});
-			this.Paras = getParameters.call(this, args);
+			this.Paras = getParameters(args);
 			this.loadData();
 		},
 

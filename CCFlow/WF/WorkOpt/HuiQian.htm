@@ -294,18 +294,7 @@
 
                     //提示信息.
                     if (data.indexOf('info@') == 0) {
-
                         alert(data.replace('info@', ''));
-
-                        if (window.parent != null && window.parent.returnWorkWindowClose != null) {
-                            window.parent.returnWorkWindowClose("");
-                            window.parent.close();
-                        } else {
-
-                            $('body').append($('<div>' + "已取消操作" + '</div>'));
-
-                            window.close();
-                        }
                         return;
                     }
 

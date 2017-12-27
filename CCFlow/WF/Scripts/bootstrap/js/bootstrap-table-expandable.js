@@ -7,6 +7,7 @@
             table.children('tbody').children('tr').filter(':even').click(function () {
                 var element = $(this);
                 element.next('tr').toggle('slow');
+                element.next('tr').css('background-color', '#F5F5F5');
                 element.find(".table-expandable-arrow").toggleClass("up");
                 element.toggleClass("checked");
             });

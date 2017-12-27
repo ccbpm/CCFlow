@@ -3,7 +3,7 @@ table.table-expandable > tbody > tr:nth-child(odd) {
 }
 
 table.table-expandable.table-hover > tbody > tr:nth-child(even):hover td {
-    background-color: white;
+    /* background-color:White; */
 }
 
 table.table-expandable > tbody > tr div.table-expandable-arrow {
@@ -15,8 +15,8 @@ table.table-expandable > tbody > tr div.table-expandable-arrow.up {
 }
 table.table-expandable > tbody > tr.tbodyTr
 {
-    /* background-color:White; */
-    background-color:#F5F5F5;
+    background-color:White;
+    
 }
 table.table-expandable > tbody > tr.tbodyTr.checked
 {

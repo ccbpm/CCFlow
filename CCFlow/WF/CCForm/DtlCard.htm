@@ -49,7 +49,10 @@
             var columnCount = 2;
             var headTHs = [];
             var tableMinWidth = 0;
-            var th = $("<th><img src='../Img/Btn/Add.gif' style='cursor: pointer;' name='insertBtn' onclick='insertRow(1)' /></th>");
+            var th = $("<th></th>");
+            if (sys_MapDtl.IsInsert == 1) {
+                th = $("<th><img src='../Img/Btn/Add.gif' style='cursor: pointer;' name='insertBtn' onclick='insertRow(1)' /></th>");
+            }
             th.css('width', '20px');
             threadTr.append(th);
 
@@ -89,17 +92,21 @@
                     tbodyTr.append(td);
                 });
 
-                var optionTD = $('<td></td>');
-                var optionEdit = $("<img src='../Img/Btn/Edit.gif' onclick='updateRow(" + dataObj.OID + ", 1)' class='updateRow' titile='修改' style='cursor:pointer;'/>");
-                var optionDelete = $("<img src='../Img/Btn/Delete.png' onclick='deleteRow(" + dataObj.OID + ")' class='delRow' titile='删除' style='cursor:pointer;'/>");
-                optionTD.append(optionEdit);
-                optionTD.append("&nbsp;&nbsp;");
-                optionTD.append(optionDelete);
+                var optionTD = $("<td style='width:80px;'></td>");
+                if (sys_MapDtl.IsUpdate == 1) {
+                    var optionEdit = $("<img src='../Img/Btn/Edit.gif' onclick='updateRow(" + dataObj.OID + ", 1)' class='updateRow' titile='修改' style='cursor:pointer;'/>");
+                    optionTD.append(optionEdit);
+                    optionTD.append("&nbsp;&nbsp;");       
+                }
+                if (sys_MapDtl.IsDelete == 1) {
+                    var optionDelete = $("<img src='../Img/Btn/Delete.png' onclick='deleteRow(" + dataObj.OID + ")' class='delRow' titile='删除' style='cursor:pointer;'/>");
+                    optionTD.append(optionDelete);
+                }
                 tbodyTr.append(optionTD);
 
                 //展开行后的内容
                 var tbodyExpTr = $('<tr></tr>');
-                var tbodyExpTd = $('<td colspan=' + columnCount + '></td>');
+                var tbodyExpTd = $('<td colspan=' + columnCount + ' align="center"></td>');
                 //加载子表
                 var childTable = ChildDtls(mapDtls, tbodyExpTd, dataObj.OID);
                 //tbodyExpTd.append(childTable);
@@ -133,7 +140,7 @@
             if (mapDtls.length > 0) {
                 $.each(mapDtls, function (i, mapDtl) {
                     var mapAttrs = mainData[mapDtl.No];
-                    var table = $('<table class="table table-hover"></table>');
+                    var table = $('<table class="table" style="width:95%;background-color:White;"></table>');
                     //表头
                     var thread = $('<thead></thead>');
                     var threadTr = $('<tr></tr>');

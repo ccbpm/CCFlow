@@ -117,6 +117,8 @@ function GenerFreeFrm(mapData, frmData) {
             $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent, mapData));
         }
     }
+
+	$.parser.parse("#CCForm");
 }
 
 
@@ -470,6 +472,20 @@ function figure_MapAttr_Template(mapAttr) {
 						}
 
                     } else { //文本区域
+						var ext;
+						for (var p in frmData.Sys_MapExt) {
+							if (mapAttr.KeyOfEn == frmData.Sys_MapExt[p].AttrOfOper) {
+								ext = frmData.Sys_MapExt[p];
+							}
+						}
+						if (typeof ext != "undefined" && ext.ExtType == "MultipleChoiceSmall") {
+							eleHtml += "<input type='hidden' name='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "'>";
+							var d = []
+							$.each((ext.Tag1 || "").split(","), function (i, o) {
+								d.push({No:o,Name:o})
+							});
+							eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'No',textField:'Name',multiple:true,onSelect:function() { $('#TB_" + mapAttr.KeyOfEn + "').val($('#" + mapAttr.KeyOfEn + "_combobox').combobox('getValues')); }\" />"
+						} else 
 
                         if (mapAttr.UIHeight <= 23) {
                             eleHtml +=

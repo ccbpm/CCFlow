@@ -573,7 +573,6 @@ namespace BP.WF.HttpHandler
                     return "info@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
             }
 
-
             //判断当前节点的会签类型.
             Node nd = new Node(gwf.FK_Node);
              

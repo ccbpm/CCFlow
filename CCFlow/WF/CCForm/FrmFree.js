@@ -433,7 +433,23 @@ function figure_Template_IFrame(fram) {
     return eleHtml;
 }
 
+function sel(n, KeyOfEn, FK_MapData) {
+	var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+	frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+	frmEleDB.FK_MapData = FK_MapData;
+	frmEleDB.EleID = KeyOfEn;
+	frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
+	frmEleDB.Tag1 = n;
+	if (frmEleDB.Update() == 0) {
+		frmEleDB.Insert();
+	}
+}
 
+function unsel(n, KeyOfEn) {
+	var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+	frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+	frmEleDB.Delete();
+}
 
 //升级表单元素 初始化文本框、日期、时间
 function figure_MapAttr_Template(mapAttr) {
@@ -504,23 +520,7 @@ function figure_MapAttr_Template(mapAttr) {
 								d = DBAccess.RunSQLReturnTable(ext.Tag4);
 								break;
 							}
-							
-							window.sel = function (n, KeyOfEn, FK_MapData) {
-								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
-								frmEleDB.FK_MapData = FK_MapData;
-								frmEleDB.EleID = KeyOfEn;
-								frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
-								frmEleDB.Tag1 = n;
-								if (frmEleDB.Update() == 0) {
-									frmEleDB.Insert();
-								}
-							}
-							window.unsel = function (n, KeyOfEn) {
-								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
-								frmEleDB.Delete();
-							}
+
 							eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' editable='false' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'" + valueField + "',textField:'" + textField + "',multiple:true,onSelect:function(p) { sel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "', '" + ext.FK_MapData + "'); },onUnselect:function(p) { unsel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "'); }\" />"
 						}
 						else 

@@ -1291,6 +1291,30 @@ namespace BP.WF.HttpHandler
             return BP.Tools.Json.ToJson(ds);
 
         }
+        /// <summary>
+        /// 获得从表的从表数据
+        /// </summary>
+        /// <returns></returns>
+        public string DtlCard_Init_Dtl()
+        {
+            DataSet ds = new DataSet();
+
+            MapDtl md = new MapDtl(this.EnsName);
+
+            //主表数据.
+            DataTable dt = md.ToDataTableField("Main");
+            ds.Tables.Add(dt);
+
+            //主表字段.
+            MapAttrs attrs = md.MapAttrs;
+            ds.Tables.Add(attrs.ToDataTableField("MapAttrs"));
+
+            GEDtls enDtls = new GEDtls(this.EnsName);
+            enDtls.Retrieve(GEDtlAttr.RefPK, this.RefPKVal);
+            ds.Tables.Add(enDtls.ToDataTableField("DTDtls"));
+
+            return BP.Tools.Json.ToJson(ds);
+        }
         #endregion dtl.Card
 
 

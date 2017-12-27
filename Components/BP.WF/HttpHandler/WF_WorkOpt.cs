@@ -170,17 +170,20 @@ namespace BP.WF.HttpHandler
             try
             {
                 int toNodeID = this.GetRequestValInt("ToNode");
-
-                /* 仅仅设置一个,检查压入的人员个数.*/
-                string sql = "SELECT count(WorkID) as Num FROM WF_SelectAccper WHERE FK_Node=" + toNodeID + " AND WorkID=" + this.WorkID + " AND AccType=0";
-                int num = DBAccess.RunSQLReturnValInt(sql, 0);
-                if (num == 0)
-                    return "err@请设置选择的人员.";
-                Selector sr = new Selector(toNodeID);
-                if (sr.IsSimpleSelector == true)
+                Node nd = new Node(toNodeID);
+                if (nd.HisDeliveryWay == DeliveryWay.BySelected)
                 {
-                    if (num != 1)
-                        return "err@您只能选择一个接受人,请移除其他的接受人然后执行发送.";
+                    /* 仅仅设置一个,检查压入的人员个数.*/
+                    string sql = "SELECT count(WorkID) as Num FROM WF_SelectAccper WHERE FK_Node=" + toNodeID + " AND WorkID=" + this.WorkID + " AND AccType=0";
+                    int num = DBAccess.RunSQLReturnValInt(sql, 0);
+                    if (num == 0)
+                        return "err@请指定下一步工作的处理人.";
+                    Selector sr = new Selector(toNodeID);
+                    if (sr.IsSimpleSelector == true)
+                    {
+                        if (num != 1)
+                            return "err@您只能选择一个接受人,请移除其他的接受人然后执行发送.";
+                    }
                 }
 
                 SendReturnObjs objs = BP.WF.Dev2Interface.Node_SendWork(this.FK_Flow, this.WorkID, toNodeID, null);
@@ -563,32 +566,24 @@ namespace BP.WF.HttpHandler
                 return "info@当前工作已经到您的待办理了,会签工作已经完成.";
             }
 
+            if (gwf.HuiQianTaskSta == HuiQianTaskSta.None)
+            {
+                string mysql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND IsPass=0 AND FK_Emp!='" + BP.Web.WebUser.No + "'";
+                if (DBAccess.RunSQLReturnValInt(mysql, 0) == 0)
+                    return "info@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
+            }
+
 
             //判断当前节点的会签类型.
             Node nd = new Node(gwf.FK_Node);
+             
+            gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
+            gwf.Update();
 
             //求会签人.
             GenerWorkerLists gwfs = new GenerWorkerLists();
             gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
                 GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.IsPass, 0);
-
-            //说明没有会签人,就直接关闭.
-            if (gwfs.Count == 1)
-            {
-                gwfs = new GenerWorkerLists();
-                gwfs.Retrieve(GenerWorkerListAttr.WorkID, gwf.WorkID,
-                    GenerWorkerListAttr.FK_Node, gwf.FK_Node, GenerWorkerListAttr.IsPass, 90);
-                if (gwfs.Count == 1)
-                {
-                    return "info@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
-                }
-            }
-
-            // bool isHaveHuiqian=false;
-
-
-            gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
-            gwf.Update();
 
             string empsOfHuiQian = "会签人:";
             foreach (GenerWorkerList item in gwfs)

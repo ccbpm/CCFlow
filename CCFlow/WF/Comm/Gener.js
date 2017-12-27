@@ -937,7 +937,11 @@ var Entities = (function () {
 		},
 
 		Retrieve : function () {
-			this.Paras = getParameters(arguments);
+			var args = [ "" ];
+			$.each(arguments, function (i, o) {
+				args.push(o);
+			});
+			this.Paras = getParameters.call(this, args);
 			this.loadData();
 		},
 

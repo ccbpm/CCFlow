@@ -52,7 +52,7 @@ namespace BP.WF.Template
             get
             {
                 UAC uac = new UAC();
-                uac.OpenForSysAdmin();
+                uac.OpenAll();
                 uac.IsDelete = false;
                 uac.IsInsert = false;
                 return uac;

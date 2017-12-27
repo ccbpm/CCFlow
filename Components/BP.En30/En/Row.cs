@@ -75,6 +75,7 @@ namespace BP.En
             if (key == null)
                 return;
 
+            // warning 需要商榷，不增加就会导致赋值错误.
             if (this.ContainsKey(key) == false)
             {
                 this.Add(key, val);

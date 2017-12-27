@@ -1294,7 +1294,7 @@ namespace BP.WF.HttpHandler
                 ds.Tables.Add(subAttrs.ToDataTableField(dtl.No));
             }
 
-
+            //从表的数据.
             GEDtls enDtls = new GEDtls(this.EnsName);
             enDtls.Retrieve(GEDtlAttr.RefPK, this.RefPKVal);
             ds.Tables.Add(enDtls.ToDataTableField("DTDtls"));

@@ -304,6 +304,11 @@ namespace BP.WF.HttpHandler
             //要找到主持人.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
+            if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianOver)
+            {
+                return "err@会签工作已经完成，您不能在执行会签。";
+            }
+
             //查询出来集合.
             GenerWorkerLists ens = new GenerWorkerLists(this.WorkID, this.FK_Node);
             foreach (GenerWorkerList item in ens)
@@ -560,6 +565,7 @@ namespace BP.WF.HttpHandler
         {
             //生成变量.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
+
             if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianOver)
             {
                 /*只有一个人的情况下, 并且是会签完毕状态，就执行 */

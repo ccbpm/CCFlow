@@ -861,6 +861,41 @@ var Entity = (function () {
 				}
 			});
 			return result;
+		},
+
+		DoMethodReturnString : function (methodName, params) {
+			params = params || "";
+			var self = this;
+			var string;
+			$.ajax({
+				type: 'post',
+				async: false,
+				url: dynamicHandler + "?DoType=Exec&clsName=" + self.enName + "&methodName=" + methodName + "&paras=" + params + "&t=" + new Date().getTime(),
+				data : formData,
+				dataType: 'html',
+				success: function (data) {
+					string = data;
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					string = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+				}
+			});
+
+			return string;
+
+		},
+
+		DoMethodReturnJSON : function (methodName, params) {
+			var jsonString = this.DoMethodReturnString(methodName, params);
+			if (jsonString.indexOf("err@") != -1) {
+				return jsonString;
+			}
+			try {
+				jsonString = JSON.parse(jsonString);
+			} catch (e) {
+				jsonString = "err@json解析错误: " + jsonString;
+			}
+			return jsonString;
 		}
 
     };

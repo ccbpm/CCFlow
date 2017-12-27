@@ -82,7 +82,7 @@ function GenerFoolFrm(mapData, frmData) {
 
             html += Ele_FrmCheck(node);
 
-           // html += figure_Template_FigureFrmCheck(node);
+            // html += figure_Template_FigureFrmCheck(node);
 
             html += "  </td>";
             html += "</tr>";
@@ -114,7 +114,7 @@ function GenerFoolFrm(mapData, frmData) {
 
     $('#CCForm').html("").append(html);
 }
- 
+
 
 //审核组件
 function Ele_FrmCheck(wf_node) {
@@ -130,8 +130,8 @@ function Ele_FrmCheck(wf_node) {
     }
     if (sta == 2)//只读
         isReadonly = "1";
-     
-     
+
+
     var src = "../WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";
     var paras = '';
@@ -142,7 +142,7 @@ function Ele_FrmCheck(wf_node) {
     paras += '&FK_Node=' + pageData.FK_Node;
     paras += '&WorkID=' + pageData.OID;
     paras += "&IsReadonly=" + isReadonly;
-   //alert(paras);
+    //alert(paras);
 
     src += "&r=q" + paras;
     var eleHtml = "<iframe width='100%' height='" + h + "' id='FWC' src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=no ></iframe>";
@@ -202,7 +202,7 @@ function InitMapAttr(Sys_MapAttr, frmData, groupID) {
         //            lab = "<label for='CB_" + item.KeyOfEn + "' >" + item.Name + "</label>";
 
         //线性展示并且colspan=3
-        if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight <40 ) ) {
+        if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
             isDropTR = true;
             html += "<tr>";
             html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
@@ -258,7 +258,7 @@ function InitMapAttrOfCtrl(mapAttr) {
     var eleHtml = '';
 
     //外部数据源类型.
-    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType=="1" ) {
+    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
 
         //枚举类型.
         if (mapAttr.UIIsEnable == 1)
@@ -267,10 +267,10 @@ function InitMapAttrOfCtrl(mapAttr) {
             enableAttr = "disabled='disabled'";
 
         return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
-    } 
-    
+    }
+
     //外键类型.
-    if ( mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
+    if (mapAttr.LGType == "2" && mapAttr.MyDataType == "1") {
 
         //枚举类型.
         if (mapAttr.UIIsEnable == 1)
@@ -282,7 +282,7 @@ function InitMapAttrOfCtrl(mapAttr) {
     }
 
     //外部数据类型.
-    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral ==1 ) {
+    if (mapAttr.LGType == "0" && mapAttr.MyDataType == "1" && mapAttr.UIContral == 1) {
 
         //枚举类型.
         if (mapAttr.UIIsEnable == 1)
@@ -296,7 +296,7 @@ function InitMapAttrOfCtrl(mapAttr) {
 
     //添加文本框 ，日期控件等
     //AppString
-    if (mapAttr.MyDataType == "1" && mapAttr.UIContralType== 0  ) {  //不是外键
+    if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 0) {  //不是外键
 
         if (mapAttr.UIHeight <= 23) //普通的文本框.
         {
@@ -476,16 +476,12 @@ function Ele_Dtl(frmDtl) {
     else
         isReadonly = "1";
 
-   // if (frmDtl.RowShowModel == "0" ) {
+    if (frmDtl.ListShowModel == "0") {
         src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&" + urlParam + "&Version=1";
-    //}
-
-    //    if (frmDtl.RowShowModel == "1") {
-    //        if (pageData.IsReadOnly)
-    //            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" +  + "&IsReadonly=1" + strs;
-    //        else
-    //            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=0" + strs;
-    //    }
+    }
+    else if (frmDtl.ListShowModel == "1") {
+        src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + refPK + "&IsReadonly=" + isReadonly + "&" + urlParam + "&Version=1";
+    }
 
     return "<iframe style='width:100%;height:" + frmDtl.H + "px;' ID='" + frmDtl.No + "'    src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling=auto></iframe>" + '</div>';
 }

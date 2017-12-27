@@ -326,7 +326,6 @@ function figure_Template_FigureSubFlowDtl(wf_node, mapData) {
 
 //初始化从表
 function figure_Template_Dtl(frmDtl, ext) {
-
     var eleHtml = $("<DIV id='Fd" + frmDtl.No + "' style='position:absolute; left:" + frmDtl.X + "px; top:" + frmDtl.Y + "px; width:" + frmDtl.W + "px; height:" + frmDtl.H + "px;text-align: left;' >");
     var paras = this.pageData;
     var strs = "";
@@ -341,13 +340,19 @@ function figure_Template_Dtl(frmDtl, ext) {
         strs += "&" + str + "=" + paras[str];
     }
     var src = "";
- //   if (frmDtl.RowShowModel == "0" ) {
+    if (frmDtl.ListShowModel == "0") {
         if (pageData.IsReadOnly) {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         } else {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
         }
-   // }
+    } else if (frmDtl.ListShowModel == "1") {
+        if (pageData.IsReadOnly) {
+            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
+        } else {
+            src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
+        }
+    }
 
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='F" + frmDtl.No + "' src='" + src +

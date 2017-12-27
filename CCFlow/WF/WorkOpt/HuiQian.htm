@@ -305,6 +305,8 @@
             });
 
         }
+
+        //执行发送.
         function SendIt() {
 
             var url = Handler + "?DoType=AccepterOfGener_Send&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&ToNode=" + GetQueryString("ToNode");
@@ -314,6 +316,8 @@
                 url: url,
                 dataType: 'html',
                 success: function (data) {
+
+                    alert(data);
 
                     if (data.indexOf('err@') == 0) {
                         $(".Msg").show();
@@ -344,14 +348,19 @@
                     data = data.replace('@', '<br/>@');
                     data = data.replace(/@/g, '<br/>&nbsp;@');
 
-
                     data = data.replace('@', '<br/>@');
                     data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
+
+                    $("#btns").attr("display", "block");
+
                     $(".Msg").show();
                     $(".Msg").html(data);
 
                     $("#labInfo").empty();
                     $("#next").empty();
+
+
+                    //  display
 
                     //隐藏table.
                     document.getElementById("Table1").style.display = "none";

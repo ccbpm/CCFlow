@@ -863,14 +863,17 @@ var Entity = (function () {
 			return result;
 		},
 
-		DoMethodReturnString : function (methodName, params) {
-			params = params || "";
+		DoMethodReturnString : function (methodName) {
+			var params = [];
+			$.each(arguments, function (i, o) {
+				params.push(o);
+			});
 			var self = this;
 			var string;
 			$.ajax({
 				type: 'post',
 				async: false,
-				url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName + "&paras=" + params + "&t=" + new Date().getTime(),
+				url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName + "&paras=" + params.join(",") + "&t=" + new Date().getTime(),
 				dataType: 'html',
 				success: function (data) {
 					string = data;

@@ -2356,7 +2356,6 @@ function onMouseMove(ev) {
 **/
 function onDblClick(ev) {
 return;	// 20171219 双击绑定其它事件, 修改名称操作在右键菜单中进行
-debugger;
     var coords = getCanvasXY(ev);
     var x = coords[0];
     var y = coords[1];

@@ -28,7 +28,6 @@ ShapeChangePropertyCommand.prototype = {
     /**This method got called every time the Command must execute*/
     execute : function(){
         if (this.firstExecute) {
-            debugger
             this._setValue(this.figureId, this.property, this.newValue);
             this.firstExecute = false; 
             //setUpEditPanel(STACK.figureGetById(this.figureId));

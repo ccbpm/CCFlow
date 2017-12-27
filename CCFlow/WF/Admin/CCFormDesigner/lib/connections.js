@@ -517,7 +517,6 @@ Connector.prototype = {
             var cps = CONNECTOR_MANAGER.connectionPointGetAllByParent(this.id);
             var rStartPoint = cps[0];
             var rEndPoint = cps[cps.length - 1];
-            debugger
             var xSpan = rStartPoint.point.x - rEndPoint.point.x;
             var ySpan = rStartPoint.point.y - rEndPoint.point.y;
             //如果为横线,上下键只能是移动，左右键增长或缩短线长度

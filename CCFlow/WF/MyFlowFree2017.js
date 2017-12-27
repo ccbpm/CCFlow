@@ -568,7 +568,6 @@ function figure_Template_Dtl(frmDtl) {
     var href = window.location.href;
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
-    debugger
     if (frmDtl.ListShowModel == "0") {
         //表格模式
         if (pageData.IsReadOnly) {

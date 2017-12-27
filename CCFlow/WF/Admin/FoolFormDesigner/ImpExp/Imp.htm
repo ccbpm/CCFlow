@@ -240,7 +240,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Imp_CopyFrm&FK_MapData=" + frmID + "&FromMapData=ND" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
+                url: Handler + "?DoType=Imp_FromsCopyFrm&FK_MapData=" + frmID + "&FromMapData=ND" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 
@@ -302,7 +302,7 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Imp_CopyFrm&FK_MapData=" + frmID + "&FromMapData=" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
+                url: Handler + "?DoType=Imp_FromsCopyFrm&FK_MapData=" + frmID + "&FromMapData=" + nodeId + "&" + $('#formCC').serialize() + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
 

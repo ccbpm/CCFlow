@@ -60,7 +60,7 @@ function GenerFoolFrm(mapData, frmData) {
 
 
             html += "<tr>";
-            html += "  <td colspan='4' >";
+            html += "  <td colspan='4'>";
 
             html += Ele_Attachment(frmData, gf);
 

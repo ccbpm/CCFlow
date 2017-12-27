@@ -119,7 +119,7 @@
 
                         //加入常用短语.
                         html += "<br>";
-                        html += "<select id='DuanYu' onchange='SetDocVal()' >";
+                        html += "<select id='DuanYu' onchange='SetDocVal();SaveWorkCheck();' >";
                         html += "<option value=''>常用短语</option>";
                         html += "<option value='同意'>同意</option>";
                         html += "<option value='同意办理'>同意办理</option>";

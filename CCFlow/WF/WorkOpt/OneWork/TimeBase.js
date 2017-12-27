@@ -246,8 +246,11 @@ function InitPage() {
 function GenerLeftIcon(track) {
     //左边的日期点.
     var left = "<center>";
-    left = track.RDT.substring(10, 16);
+    left = track.RDT.substring(5, 16);
+    left = left.replace('-', '月');
+    left = left.replace(' ', '日');
     left = left.replace(':', '时');
+
     left = left + "分";
     left += "<br><img src='../../../DataUser/UserIcon/" + track.EmpFrom + ".png'  onerror=\"src='../../../DataUser/UserIcon/Default.png'\" style='width:60px;' />";
     left += "<br>" + track.EmpFromT + "&nbsp;&nbsp;&nbsp;";

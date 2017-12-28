@@ -1,0 +1,55 @@
+<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+   <Item Key="Group" Val=""  For="BP.Tax.Taxpayers"  
+   Desc="数据分析项目中需要要加入的字段,默认的是全部加入分析行列" />
+
+   <!--  默认的查询配置　-->
+   <Item Key="DefaultSelectedAttrs" Val="@No@Name@FR@Addr@CWR@JJFW@Tel@"  For="BP.Tax.Taxpayers"  />
+   <Item Key="NoShowSum" Val="@NodeDeductDays@NodeDeductCent@"  For="BP.WF.V_CHOfNodes"  />
+   <Item Key="NoShowSum" Val="@RateVal@RateValTZ@"  For="BP.ZF1.RDEs"  />
+   <Item Key="NoShowSum" Val="@RateVal@"  For="BP.ZF1.RDZs"  />
+   <Item Key="NoShowSum" Val="@MinGrade@LifeCycle@"  For="BP.ZF1.Rates"  />
+   <Item Key="NoShowSum" Val="@CentOfCut@CentOfAdd@NeedDays@"  For="BP.ZF1.Dots"  />
+   <Item Key="NoShowSum" Val="@RateOfTZ@"  For="BP.ZF1.DDETZs"  />
+  
+  
+  <!-- 不显示对比查询中的 (比较对象) 属性 ，显示它们没有意义。-->
+  <Item Key="NoShowContrast" Val="@FK_Dot@FK_Rate@"  For="BP.ZF1.DDEViews"  />
+ 
+  <!--  是否要显示相关功能 -->
+  <Item Key="IsShowRefFunc" Val="0"  For="BP.ZF1.DDEViews"  />
+
+
+  <!--  在Group中需要显示的排序  -->
+  <Item Key="ShowOrder" Val="@FK_Rate@FK_ZSJG@"  For="BP.ZF1.RDZs"  />
+    
+   <!-- 显示在下拉框中的标签长度。-->
+   <Item Key="ShowTextLen" Val="8"  For="BP.Tax.HYs"  />
+   <Item Key="ShowTextLen" Val="8"  For="BP.Tax.JJXZs"  />
+   <Item Key="ShowTextLen" Val="13"  For="BP.WF.Nodes"  />
+   <Item Key="ShowTextLen" Val="13"  For="BP.WF.Flows"  />
+   <Item Key="ShowTextLen" Val="13"  For="BP.ZF1.Dots"  />
+   <Item Key="ShowTextLen" Val="13"  For="BP.ZF1.Rates"  />
+   <Item Key="ShowTextLen" Val="13"  For="BP.ZF1.Dots"  />
+   <Item Key="ShowTextLen" Val="13"  For="BP.ZF.CJ.ErrToEmps"  />
+   
+   <!--  分组通用页面 标签值　-->
+   <Item Key="GroupEns" Val="排序查询"  For="BP.CH.DotDatas"  />
+  
+   <!--  对比分析通用页面 标签值　-->
+   <Item Key="TimeSpan" Val="对比分析"  For="BP.CH.DotDataTSs"  />
+
+   <!-- 是否要显示查询的key., -->
+   <Item Key="IsShowSearchKey" Val="1"  For="BP.Tax.Taxpayers"  />
+   
+   <!-- 生成 word 单据模板位置。  -->   
+   <Item Key="BillTemplatePath" Val="\\WSB\\HZ.rtf"  For="BP.Tax.BillHZs"  />
+   <Item Key="BillTemplatePath" Val="\\WSB\\ZLXG.rtf"  For="BP.Tax.BillZLXGs"  />
+  
+
+  <!-- 用于显示两列的分组信息。 设置规则：@属性=标签 -->
+  <Item Key="GroupTitle" DESC="基础信息"  
+        Val="@NodeID=节点@WarningDays=考核信息@IsTask=其它" 
+        For="BP.WF.Template.NodeC"   />
+  
+</NewDataSet>

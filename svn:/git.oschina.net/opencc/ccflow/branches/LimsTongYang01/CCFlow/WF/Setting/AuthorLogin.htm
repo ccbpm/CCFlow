@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>授权方式登录</title>
+</head>
+<body>
+
+<fieldset width='100%' ><legend>&nbsp;授权详细信息&nbsp;</legend><BR><Table class='Table' cellpadding='2' cellspacing='2'>
+<TR>
+<TH >项目</TH>
+<TH >内容</TH>
+</TR>
+<TR>
+<TD  nowrap >授权给:</TD>
+<TD  nowrap ><input type=text value="" /> <input type=button  value="选择授权人" id="Btn_Auto" /> </TD>
+</TR>
+<TR>
+<TD  nowrap >收回授权日期:</TD>
+<TD ><input name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$TB_DT" type="text" value="2017-10-13 12:20" maxlength="20" id="ContentPlaceHolder1_Tools1_ToolsWap1_TB_DT" class="TBcalendar" onfocus="WdatePicker({dateFmt:&#39;yyyy-MM-dd HH:mm&#39;});" /></TD>
+</TR>
+<TR>
+<TD  nowrap >授权方式:</TD>
+<TD ><select name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$DDL_AuthorWay" id="ContentPlaceHolder1_Tools1_ToolsWap1_DDL_AuthorWay">
+	<option selected="selected" value="0">不授权</option>
+	<option value="1">全部流程授权</option>
+	<option value="2">指定流程授权</option>
+
+</select></TD>
+</TR>
+<TR>
+<TD colspan=1 ><b><a href="javascript:WinShowModalDialog('ToolsSet.aspx?RefNo=AthFlows&d=2017/9/29 12:20:55')" >设置要授权的流程范围</a></b></TD>
+<TD  nowrap colspan=1  ><input type="submit" name="ctl00$ContentPlaceHolder1$Tools1$ToolsWap1$Btn_Save" value="保存" id="ContentPlaceHolder1_Tools1_ToolsWap1_Btn_Save" class="Btn" /></TD>
+</TR>
+<TR>
+<TD class='BigDoc' colspan=2 valign=top>说明:在您确定了收回授权日期后，被授权人不能再以您的身份登陆，<br>如果未到指定的日期您可以取回授权。</TD>
+</TR></Table>
+<Br>
+
+</fieldset>
+
+</body>
+</html>

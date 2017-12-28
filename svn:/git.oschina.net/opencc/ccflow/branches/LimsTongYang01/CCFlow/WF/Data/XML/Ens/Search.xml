@@ -1,0 +1,4 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Item Attr="CentOfFlowCut" URL="ContrastDtl.aspx?EnsName=BP.WF.CHOfNodeCentOfCuts@Keys" For="BP.ZF1.EmpSummarys" Desc="流程逾期扣分" />
+</NewDataSet>

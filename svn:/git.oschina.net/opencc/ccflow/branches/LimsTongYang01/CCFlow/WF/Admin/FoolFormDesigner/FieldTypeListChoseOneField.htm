@@ -1,0 +1,208 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>选择字段放入表单</title>
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript" >
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+
+        });
+
+        var fileds = null;
+        var dataType = "1";
+
+        function InitPage() {
+
+            var frmID = unescape(GetQueryString("FK_MapData"));
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=FieldTypeListChoseOneField_Init&FK_MapData=" + frmID + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf("@") == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    var dt = JSON.parse(data);
+                    fileds = dt;
+                    BindIt();
+
+                }
+            });
+        }
+
+        function BindIt() {
+
+         //   alert(dataType);
+
+            var html = "<table border=0>";
+            for (var i = 0; i < fileds.length; i++) {
+
+                var item = fileds[i];
+                 
+                
+                if (i % 3 == 0) {
+                    html += "<tr>";
+                }
+
+                var fType = item.FType;
+                if (dataType == "1" && fType.indexOf('char') == -1) {
+                    continue; //String.
+                }
+
+                if (dataType == "2" && fType.indexOf('int') == -1) {
+                    continue; // int 类型.
+                }
+
+                if (dataType == "6" && fType.indexOf('char') == -1) {
+                    continue; //日期.
+                }
+
+                if (dataType == "7" && fType.indexOf('char') == -1) {
+                    continue; //日期时间.
+                }
+
+                if (dataType == "4" && fType.indexOf('int') == -1) {
+                    continue; //boolen
+                }
+                
+                if (dataType == "8" && fType.indexOf('decimal') == -1) {
+                    continue;
+                }
+                
+                if (dataType == "5" && fType.indexOf('decimal') == -1) {
+                    continue;
+                }
+                
+                if (dataType == "3" && fType.indexOf('float') == -1) {
+                    continue;
+                }
+
+                
+                html += "<td nowrap style='width: 33%'>";
+                html += "<input id='" + item.FName + "' name='field' type='radio' value='" + item.FName + "'  />";
+                html += "<input id='F" + item.FName + "' name='field' type='hidden' value='" + item.FDesc + "'  />";
+                html += "<label for='" + item.FName + "'>" + item.FDesc + "(" + item.FName + ")</label>";
+                html += "</td>";
+
+                if (i % 3 == 2) {
+                    html += "</tr>";
+                }
+
+            }
+            html += "</table>";
+
+            $("#TypeString").append(html);
+        }
+
+
+        //@代国强，这里返回的是 
+        // 字段名称@字段中文名称@BP的字段类型 , 比如 XingMing@姓名@1
+        //  对方接受后，就可以自动的把两个名称放入到里面去.
+        function Save() {
+            var frmID = GetQueryString("FK_MapData");
+
+            var keyOfEn = $("input[name='field']:checked").val();
+            var name = document.getElementById('F' + keyOfEn).value;
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=FieldTypeListChoseOneField_Save&FK_MapData=" + frmID + "&DataType=" + dataType + "&KeyOfEn=" + keyOfEn + "&FDesc="+name+"&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf("@") == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data);
+
+                }
+            });
+
+        }
+
+        function ToDataType( dtype) {
+            //alert(dtype);
+            $("#TypeString").html("");
+
+            //类型.
+            dataType = dtype;
+
+            //绑定.
+            BindIt(dtype);
+        }
+    </script>
+    
+    <base target="_self" /> 
+    <style type="text/css">
+    .li
+    {
+         list-style:none;
+         float:left;
+    }
+    </style>
+</head>
+<body class="easyui-layout">
+    <form id="form1" method="post">
+    <div data-options="region:'center',title:'选择一个字段放入表单',border:false" style="padding: 5px;
+        height: auto">
+
+
+            <a href="#" onclick="javascript:ToDataType('1');">字符型</a>|
+        <a href="#" onclick="javascript:ToDataType('2');">整数型</a> |
+          <a href="#" onclick="javascript:ToDataType('8');">金额型</a> |
+          <a href="#" onclick="javascript:ToDataType('3');">浮点型</a>  |
+          <a href="#" onclick="javascript:ToDataType('5');">双精度</a> |
+           <a href="#" onclick="javascript:ToDataType('6');">日期型</a>  |
+           <a href="#" onclick="javascript:ToDataType('7');">日期时间型</a> |
+           <a href="#" onclick="javascript:ToDataType('4');">Boole型(是/否)</a>  
+         
+
+
+        <table id="tsys" class='Table' style="width:90%" cellpadding='2' cellspacing='2'>
+            <tr>
+                <th class='GroupTitle' colspan="3">
+                    选择字段
+                </td>
+            </tr>
+            <tr>
+                 <td>
+
+                 <div id="TypeString"></div>
+
+                 </td>
+            </tr>
+             
+        </table>
+         
+        <br />
+        <a id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;"
+            href="javascript:Save()">确定并返回</a>
+        <br />
+        <br />
+    </div>
+    </form>
+</body>
+</html>

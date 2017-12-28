@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>方向优先级</title>
+    
+
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <base target="_self" />
+    <script type="text/javascript">
+
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        var OperForString = null;
+        var OperForNumber = null;
+
+        //初始化页面函数.....
+        $(function () {
+
+            var fk_flow = GetQueryString("FK_Flow");
+            var fk_Node = GetQueryString("FK_Node");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=CondPRI_Init&FK_Flow=" + fk_flow + "&FK_Node=" + fk_Node + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
+                        return;
+                    }
+
+                    //转json.
+                    var wf_Cond = JSON.parse(data);
+
+                    var strs = "";
+                    for (var i = 0; i < wf_Cond.length; i++) {
+
+                        var cond = wf_Cond[i];
+                        if (strs.indexOf('@' + cond.ToNodeID) >= 1) {
+                            continue;
+                        }
+                        strs += "@" + cond.NodeID;
+
+                        var newRow = "";
+                        newRow = "<tr >";
+                        newRow += "<td class=Idx>" + i + "</td>";
+                        newRow += "<td>" + cond.ToNodeID + "</td>";
+                        newRow += "<td>" + cond.Note + "</td>";
+                        newRow += "<td>" + cond.PRI + "</td>";
+                        newRow += "<td><a href=\"javascript:DoIt('" + cond.MyPK + "','Up')\">上移</a></td>";
+                        newRow += "<td><a href=\"javascript:DoIt('" + cond.MyPK + "','Down')\">下移</a></td>";
+                        newRow += "</tr>";
+                        $("#Table1 tr:last").after(newRow);
+                    }
+                }
+            });
+        });
+         
+
+        //执行删除..
+        function DoIt( mypk, updown) {
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=CondPRI_Move&MyPK=" + mypk + "&FK_Node="+GetQueryString("FK_Node")+"&MoveType=" + updown + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        var url = data.replace('url@', '');
+                        window.location.href = url;
+                        return;
+                    }
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+         
+    </script>
+</head>
+<body onkeypress="Esc();"  class="easyui-layout"  topmargin="0" leftmargin="0"   style="font-size:smaller">
+
+<form id="cc" > 
+
+            <div data-options="region:'center',title:'方向条件优先级'" style="overflow-y:hidden;">
+
+<table id="Table1" name="Table1"  style="width:90%;">
+<tr>
+<th>序</th>
+<th>到节点ID</th>
+<th>名称</th>
+<th>优先级</th>
+<th>操作</th>
+<th>操作</th>
+</tr>
+</table>
+    </div>
+
+ <center><div id="Msg" /></center>
+
+ <div style=" float:left; text-align:left">
+ <h5>什么是方向条件的优先级？ </h5>
+
+<ul>
+   <li> 在转向中，如果出现一个以上的路线都成立时时，系统就会按照第一个路线来计算，那一个排列最前面就按照那一个计算。</li>
+    <li> 例如：在demo中002.请假流程，如果一个人员既有基层岗，也有中层岗那么到达基层与中层的路线都会成立，如果设置了方向条件的优先级，系统就会按照优先满足的条件的路线计算。</li>
+    </ul>
+    </div>
+ 
+
+    
+</form>
+</body>
+</html>
+

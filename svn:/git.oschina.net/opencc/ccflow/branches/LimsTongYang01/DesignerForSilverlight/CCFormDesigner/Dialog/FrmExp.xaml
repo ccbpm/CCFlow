@@ -1,0 +1,35 @@
+﻿<controls:ChildWindow x:Class="CCForm.FrmExp"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+           Width="428" Height="326" 
+           Title="表单模板导出-选择导出路径" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+    <Grid x:Name="LayoutRoot" Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="1" />
+        <Button x:Name="OKButton" Content="确定" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="1" />
+        <TextBox Height="248" HorizontalAlignment="Left" Margin="6,4,0,0"
+                 TextWrapping="Wrap" HorizontalScrollBarVisibility="Disabled" 
+                 AcceptsReturn="True" 
+                 Name="textBox1" VerticalAlignment="Top" Width="400" Text="   ccflow流程模板与表单模板功能使用协议
+-------------------------------------------------
+前言：
+    为了更方便用户之间互相传递数据，减轻开发压力共享模板，特制定此
+协议，确定表示遵守此协议，取消放弃。
+协议条款:
+   1，导出的模板必须共享给其它用户，并且没有版权限制，其它人可以无
+      限制的引用系统中而不必承担法律责任。
+   2，同样在导入模板也没有版权限制，任何个人与单位都可以使用。
+   3，ccflow会定期处理来自于各方各行业的共享模板，根据质量优劣进行
+      评级、整理、编辑，发布。
+   4，ccflow 不会为您共享的模板数据承担保密责任。
+   5，以上条款适用于非vip用户，解释权归济南驰骋信息技术有限公司。
+                  ccflow.org
+                  2010-08-01
+                  " />
+    </Grid>
+</controls:ChildWindow>

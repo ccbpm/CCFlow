@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+ <title>绑定列表</title>
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+       
+
+        var fk_flow = GetQueryString('FK_Flow');
+        var fk_node = GetQueryString('FK_Node');
+
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            var fk_flow = GetQueryString("FK_Flow");
+            var fk_node = GetQueryString("FK_Node");
+
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=BindFrms_Init&FK_Flow=" + fk_flow + "&FK_Node=" + fk_node + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    //增加处理.
+                    for (var i = 0; i < data.length; i++) {
+
+                        var newRow = "";
+
+                        var frmNode = data[i];
+
+                        var mypk = data[i].MyPK;
+
+
+                        newRow = "<tr ><td class=Idx>" + i + "</td>";
+                        newRow += "<td>" + frmNode.FK_Frm + "</td>";
+
+
+                        newRow += "<td><a href=\"javascript:Edit('" + mypk + "')\"><img src='../Img/Frm.png'  />" + frmNode.FK_FrmText + "</a></td>";
+
+                        newRow += "<td>" + frmNode.FrmEnableRoleText + "</td>";
+                        newRow += "<td>" + frmNode.FrmSlnText + "</td>";
+                        newRow += "<td>" + frmNode.WhoIsPKText + "</td>";
+
+                        newRow += "<td><a href=\"javascript:DoOrder('" + mypk + "','Up')\">上移</a></td>";
+                        newRow += "<td><a href=\"javascript:DoOrder('" + mypk + "','Down')\">下移</a></td>";
+                        newRow += "<td><a href=\"javascript:Delete('" + mypk + "')\">删除</a></td>";
+
+                        //newRow += "<td><a href=\"javascript:WinField('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">字段</a>&nbsp;&nbsp;<a href=\"javascript:WinFJ('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">附件</a>&nbsp;&nbsp;<a href=\"javascript:WinDtl('" + data[i].FK_Frm + "','" + fk_node + "','" + fk_flow + "')\">明细表</a></td>";
+                        newRow += "</tr>";
+
+                        $("#Table1 tr:last").after(newRow);
+                    }
+                }
+            });
+        }
+
+        function WinField(fk_mapdata, nodeid, fk_flow) {
+            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Field';            
+            
+            OpenEasyUiDialog(url, "eudlgframe", '字段权限控制', 1260, 560, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function WinFJ(fk_mapdata, nodeid, fk_flow) {
+            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=FJ';
+
+            OpenEasyUiDialog(url, "eudlgframe", '附件权限控制', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function WinDtl(fk_mapdata, nodeid, fk_flow) {
+            var url = "../FoolFormDesigner/Sln.aspx?FK_MapData=" + fk_mapdata + "&FK_Node=" + nodeid + '&FK_Flow=' + fk_flow + '&DoType=Dtl';
+
+            OpenEasyUiDialog(url, "eudlgframe", '明细表权限控制', 800, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        //顺序.
+        function DoOrder(no, type) {
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=BindFrms_DoOrder&MyPK=" + no + "&OrderType=" + type + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+
+        //删除.
+        function Delete(no) {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            //删除学生.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=BindFrms_Delete&MyPK=" + no + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data);
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+
+        function Edit(mypk) {
+
+            var url = '../../Comm/En.htm?EnsName=BP.WF.Template.FrmNodeExts&MyPK=' + mypk;
+
+            OpenEasyUiDialog(url, "eudlgframe", '编辑', 900, 500, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+        function ToBindFrms() {
+            var url = "BindFrmsDtl.htm?FK_Node=" + fk_node + '&FK_Flow=' + fk_flow + '&DoType=SelectedFrm';
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body   class="easyui-layout">
+    <div data-options="region:'center'">
+        <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+            <tr class="GroupTitle">
+                <td colspan="10">
+                    绑定的表单列表 - <a href="javascript:void(0)" onclick="ToBindFrms()">绑定表单</a>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    序
+                </th>
+                <th>
+                    表单编号
+                </th>
+                <th>
+                    名称
+                </th>
+                <th>
+                    启用规则
+                </th>
+                <th>
+                    权限控制方案
+                </th>
+                <th>
+                    谁是主键？
+                </th>
+                <th>
+                    上移
+                </th>
+                <th>
+                    下移
+                </th>
+                <th>
+                    删除
+                </th>                
+                            
+            </tr>
+        </table>
+    </div>
+    <div id="Msg">
+    </div>
+</body>
+</html>

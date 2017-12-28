@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+   
+  <!-- ccflow 主菜单配置: 说明:如果遇到& 号的输出，请用 &amp; 替换。 -->
+  <Item1ssss No="Home" CH="主页" EN="Home" JP="ホーム" RU="Дома" OnClick="" Url="Home.aspx" Img="./Img/Home.gif"  Enable="1" Title="个人工作主页。" />
+   <Item No="Start" CH="发起" B5="发起" EN="Launch" JP="打ち上げ" RU="Запуск"  Url="Start.aspx" Img="./Img/Start.gif" Enable="1" Title="发起我能够发起的流程" />
+   <Item No="Todolist" CH="待办" B5="待办" EN="Pending"  JP="保留中" RU="В ожидании"  Url="Todolist.htm" Img="./Img/MyWork.gif" Enable="1" Title="等待我处理的工作。" />
+   <Item No="CC" CH="抄送" B5="抄送" EN="Pending"  JP="保留中" RU="В ожидании"   Url="CC.aspx" Img="./Img/MyWork.gif" Enable="1" Title="等待我处理的工作。" />
+   <Item No="HungUpList" CH="挂起" B5="挂起" EN="HungUpList"  JP="HungUpList" RU="HungUpList"    Url="HungUpList.aspx" Img="./Img/MyWork.gif" Enable="1" Title="等待我处理的工作。" />
+   <Item No="Runing" CH="已办" B5="已办" EN="In transit"  JP="トランジットで" RU="В пути"  Url="Runing.aspx" Img="./Img/Runing.gif" Enable="1" Title="我参与的工作，没有完成。" />
+   <Item No="Calendar" CH="日历" B5="日历" EN="In transit"  JP="トランジットで" RU="В пути"  
+        OnClick="" Url="Calendar.aspx" Img="./Img/Runing.gif" Enable="1" Title="查看自己每天都做了什么" />
+   <Item No="FlowSearch" CH="查询"  B5="查询"  EN="Report"  JP="お問い合わせ" RU="Запрос"
+        OnClick="" Url="FlowSearch.aspx"  Img="./Img/Search.gif" Enable="0" Title="流程查询。" />
+  <Item No="Tools" CH="设置"  B5="设置"  EN="Tools"  JP="ツールバー" RU="Создавать" Url="Tools.aspx" Img="./Img/Tools.gif" Enable="0" Title="工具栏" />
+  <Item No="Emps"  CH="成员"  B5="成员"  EN="Employers"  JP="成员" RU="Член" Url="Emps.aspx" Img="./Img/Emps.gif" Enable="0" Title="员工通讯录。" />
+  <Item No="Login" CH="切换"  B5="切换"  EN="Switch User"  JP="スイッチ" RU="Переключатель" Url="Login.htm" Img="./Img/Login.gif" Enable="0" Title="切换用户。" />
+    
+  <Item1 No="Msg" CH="消息"  B5="消息"  EN="Messages"  JP="消息" RU="Новости" Url="Msg.aspx" Img="./Img/Msg.gif" Enable="0" Title="流程查询。" />
+  <Item1 No="Calendar" CH="日历"  B5="日历"  EN="Calendar"  JP="お問い合わせ" RU="Запрос" Url="Calendar.aspx" Img="./Img/Calendar.gif" Enable="1" Title="工作日历。" />
+  <Item1 No="Link" CH="连接"  B5="连接"  EN="Link"  JP="连接" RU="Link" Url="Link.aspx" Img="./Img/Link.gif" Enable="0" Title="常用链接" />
+  <Item11s No="Calendar" CH="Calendar"  B5="Calendar"  EN="Calendar"  JP="Calendar" RU="Calendar" Url="Calendar.aspx" Img="./Img/Login.gif" Enable="0" Title="Calendar。" />
+  <Item1 No="WF" CH="报表" EN="Rpt" RU="Заявления" Url="SelfWFRpt.aspx" Img="./Img/Runing.gif" Enable="0" Title="自定义报表。" />
+  <Item1 No="Warning" CH="预警" EN="Waring" RU="Предупреждение" Url="Warning.aspx" Img="./Img/Warning.gif" Enable="1" Title="我的工作的警告的工作状态。" />
+  <Item1 No="Home" CH="单据" EN="Bill" RU="Инструменты" Url="../Bill/Home.aspx" Img="./Img/Bill.gif" Enable="1" Title="" />
+  <Item1 No="Help" CH="帮助" EN="Help" RU="Помощь" Url="./Help/Default.aspx" Img="./Img/Help.gif" Enable="1" />
+  <Item1 No="CS" CH="切换系统" EN="Cheange" RU="Включение системы" Url="../../Comm/Port/ChangeSystem.aspx" Img="./Img/ChangeSys.gif" Enable="1" />
+</NewDataSet>

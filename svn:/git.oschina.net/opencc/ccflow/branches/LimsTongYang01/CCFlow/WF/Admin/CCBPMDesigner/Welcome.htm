@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="UTF-8" />
+    <title></title>
+     <script type="text/javascript">
+         function OpenTab(id, name, url, icon) {
+             if (window.parent != null && window.parent.closeTab != null) {
+                 window.parent.closeTab(name);
+                 window.parent.addTab(id, name, url, icon);
+             }
+         }
+         function OpenNewFlowPanel() {
+             if (window.parent && window.parent.newFlow) {
+                 window.parent.newFlow();
+             }
+         }
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+    <div style=" text-align:left">
+
+  <table style="width:99%">
+        <tr>
+            <td valign="top">
+                <fieldset>
+                    <legend>欢迎使用驰骋BPM</legend>
+                    <ul>
+                     <li>驰骋工作流引擎研发与2003年，具有.net与java两个版本，它们代码结构、数据库结构、设计思想、功能组成、操作手册完全相同。流程表单模版两个版本完全通用。</li>
+    <li>CCFlow是.net版本的简称，由济南团队负责研发。JFlow是在java版本的简称，由深圳研发团队研发。两款产品核心代码向社会100%开源，十多年来，我们一直践行自己的诺言，努力提高产品质量，真心服务中国IT产业，成为了国内知名的老牌工作流引擎，在国内开源BPM领域稳坐第一位。</li>
+   <li> 驰骋工作流引擎操作简单、概念通俗易懂、操作手册完善（计:14万字）、代码注释完整、案例丰富翔实、单元测试覆盖面广。</li>
+    <li>驰骋工作流引擎包含表单引擎与流程引擎两大部分，并且两块完美结合，协同高效工作。流程与表单界面可视化的设计，可配置程度高，适应于中国国情的多种场景的需要。</li>
+   <li> 驰骋工作流引擎发展与2003年，历经十多年的发展，在国内拥有最广泛的研究群体与应用客户群，是大型集团企业IT部门、软件公司、研究院、高校研究与应用的产品。</li>
+    <li>  驰骋工作流引擎不仅仅能够满足中小企业的需要，也能满足通信级用户的应用，先后在西门子、海南航空、中国船舶、陕汽重卡、山东省国土资源厅、华电国际、江苏测绘院、厦门证券、天津港等国内外大型企业政府单位服役。</li>
+    <li>ccbpm拥有完整的解决方案:ccform表单引擎、ccgpm权限管理系统、ccsso单点登录系统、ccoa驰骋OA、CCIM即时通讯(能够满足20万人同时在线).以上的解决方案除ccim以外都是开源的一体化的解决方案。</li>
+   <li> ccbpm方便与您的开发框架集成，与第三方组织机构集成. 既有配置类型的开发适用于业务人员，IT维护人员， 也有面向程序员的高级引擎API开发。 </li>
+                    <li> 服务电话：0531-82374939 </li>
+                    </ul>
+                </fieldset>
+            </td>
+           
+            <td valign="top">
+                <fieldset >
+                    <legend>更多资源</legend>
+                    <ul style="list-style: none" >
+                        <li><a href="http://online.ccflow.org" target="_blank">BPM工程师培训认证网</a></li>
+                        <li><a href="http://jflow.cn" target="_blank">JFlow官方网站</a></li>
+                        <li><a href="http://ccflow.org" target="_blank">ccflow官方网站</a></li>
+                        <li><a href="http://ccbpm.mydoc.io" target="_blank">ccbpm在线手册</a></li>
+                        <li><a href="http://ccform.mydoc.io" target="_blank">ccform在线手册</a></li>
+                        <li><a href="http://bbs.ccflow.org" target="_blank">驰骋工作流引擎论坛</a></li>
+                    </ul>
+                </fieldset>
+            </td>
+        </tr>
+
+        </table>
+    </form>
+</body>
+</html>

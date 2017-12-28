@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8"/>
+<title> 模版导入</title>
+
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../Scripts/SyntaxHighlighter/Styles/shCoreDefault.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/SyntaxHighlighter/shCore.js" type="text/javascript"></script>
+    <script src="../../Scripts/SyntaxHighlighter/shBrushCSharp.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+	<link href="../../Comm/Style/Tabs.css" rel="stylesheet" type="text/css" />
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script language="javascript" type="text/javascript" >
+        $(function () {
+            $("#pageloading").hide();
+        });
+        //流程导入.
+        function Imp_Done() {
+            var fk_flowSort = GetQueryString("FK_FlowSort");
+            var fk_flow = GetQueryString("FK_Flow");
+            var impWay = GetRadioValue("RB_ImpType");
+            var spenFlowNo = document.getElementById("TB_SpecFlowNo").value;
+            var fileValue = $("#File_Upload").val();
+            //必须要选择文件
+            if (fileValue == "") {
+                $.messager.alert("提示", "没有选择流程模板。");
+                return;
+            }
+            //扩展名
+            var index = fileValue.lastIndexOf('.');
+            var fileExt = fileValue.substring(index);
+            if (fileExt.toLowerCase() != ".xml") {
+                $.messager.alert("提示", "所选不是流程模板文件，请重新选择。");
+                return;
+            }
+            //如果为指定流程编号导入，则编号不可以为空
+            if (impWay == "3" && spenFlowNo == "") {
+                $.messager.alert("提示", "导入模式为指定流程编号模式，编号不可以为空。", "icon-info", function () {
+                    $("#TB_SpecFlowNo").focus();
+                });
+                return;
+            }
+            $("#pageloading").show();
+            //提交数据
+            $("#cc").form("submit", {
+                type: 'POST',
+                dataType: 'html',
+                url: Handler + "?DoType=Imp_Done&FK_Flow=" + fk_flow + "&FK_Sort=" + fk_flowSort + "&ImpWay=" + impWay + "&SpecFlowNo=" + spenFlowNo,
+                onSubmit: function (param) {
+                    //return false; //这里可以做表单的验证，如果验证失败，就return false 来终止表单提交  
+                },
+                success: function (data) {
+                    $("#pageloading").hide();
+                    
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    var json = eval('(' + data + ')');
+
+                    $.messager.alert("提示", json.Msg, "icon-info", function () {
+                        //打开新建的流程
+                        if (typeof window.parent.AppendFlowToFlowSortTree != "undefined") {
+                            window.parent.AppendFlowToFlowSortTree(json.FK_FlowSort, json.FK_Flow, json.FlowName);
+                        }
+                        //关闭导入界面
+                        if (typeof window.parent.TabCloseByTitle != "undefined") {
+                            //需要延时关闭，不可立即关闭。
+                            setTimeout("window.parent.TabCloseByTitle('导入流程模版')", 1000);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="pageloading">
+</div>
+<form id="cc" name="cc" action="" enctype="multipart/form-data" method="post">
+<table style=" width:100%">
+<caption>流程模版导入 </caption>
+<tr>
+<td valign="top" style="width:30%;">
+
+<fieldset>
+<legend><img src="../../Img/Btn/Help.gif" />关于流程模版</legend>
+<ol>
+<li>ccbpm生成的流程模版是一个特定格式的xml文件。</li>
+<li>它是流程引擎模版与表单引擎模版的完整的组合体。</li>
+<li>ccbpm的jflow与ccflow的流程引擎导出的流程模版通用。</li>
+<li>流程模版用于流程设计者的作品交换。</li>
+<li>在实施的过程中，我们可以把一个系统上的流程模版导入到另外一个系统中去。</li>
+</ol>
+</fieldset>
+
+<fieldset>
+<legend><img src="../../Img/Btn/Help.gif" />关于流程模版云</legend>
+<ol>
+<li>ccbpm团队为各位爱好者提供了云储存</li>
+<li>它是流程引擎模版与表单引擎模版的完整的组合体。</li>
+<li>ccbpm的jflow与ccflow的流程引擎导出的流程模版通用。</li>
+<li>流程模版用于流程设计者的作品交换。</li>
+<li>在实施的过程中，我们可以把一个系统上的流程模版导入到另外一个系统中去。</li>
+</ol>
+</fieldset>
+ </td>
+
+<td  valign="top">
+<fieldset>
+<legend> 从本机导入  </legend>
+<ul>
+<li>从本机导入：请您选择本机的一个xml格式文件 点击导入按钮完成导入。</li>
+<li> 请选择文件:  <input type="file" id="File_Upload" name="File_Upload"  /></li>
+
+<li>导入的方式: 
+<ul>
+<li><input id="Import_0" type="radio" name="RB_ImpType" value="0"  checked="true" /><label for="Import_0">作为新流程导入(由ccbpm自动生成新的流程编号).</label></li>
+<li><input id="Import_1" type="radio" name="RB_ImpType" value="1"  /><label for="Import_1">作为新流程导入(使用流程模版里面的流程编号，如果该编号已经存在系统则会提示错误).</label></li>
+<li><input id="Import_2" type="radio" name="RB_ImpType" value="2"  /><label for="Import_2">作为新流程导入(使用流程模版里面的流程编号，如果该编号已经存在系统则会覆盖此流程).</label></li>
+<li><input id="Import_3" type="radio" name="RB_ImpType" value="3"  /><label for="Import_3">按指定流程编号导入.</label>
+请输入指定的流程编号: <input type="text" id="TB_SpecFlowNo" /> </li>
+</ul>
+
+<br />
+ </li>
+</ul>
+<div style=" text-align:center; padding:5px;">
+<input type=button id="Btn_Do"  value="执行导入" onclick="Imp_Done();" />
+ </div>
+</fieldset>
+
+<fieldset>
+<legend> 从云服务器导入(暂停开放) </legend>
+<ul>
+<li> <a href="#"><img src="../CCBPMDesigner/Img/FlowPrivate.png" />从私有云导入</a></li>
+<li><a href="#"><img src="../CCBPMDesigner/Img/FlowPublic.png" />从共有云导入</a> 
+</ul>
+ 
+</fieldset>
+ </td>
+</tr>
+</table>
+</form>
+
+</body>
+</html>

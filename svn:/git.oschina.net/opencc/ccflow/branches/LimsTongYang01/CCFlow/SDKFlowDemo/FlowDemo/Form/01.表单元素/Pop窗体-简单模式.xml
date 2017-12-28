@@ -1,0 +1,1022 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_GroupField>
+    <OID>149</OID>
+    <Lab>基础信息</Lab>
+    <EnName>Demo_Pop1</EnName>
+    <Idx>1</Idx>
+    <GUID />
+    <CtrlType />
+    <CtrlID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_MapData>
+    <No>Demo_Pop1</No>
+    <Name>Pop窗体-简单模式</Name>
+    <FormEventEntity />
+    <EnPK />
+    <PTable>Demo_01</PTable>
+    <Url />
+    <Dtls />
+    <FrmW>900</FrmW>
+    <FrmH>2000</FrmH>
+    <TableCol>4</TableCol>
+    <TableWidth>800</TableWidth>
+    <Tag />
+    <FK_FrmSort>01</FK_FrmSort>
+    <FK_FormTree>01</FK_FormTree>
+    <FrmType>1</FrmType>
+    <AppType>0</AppType>
+    <DBSrc>local</DBSrc>
+    <BodyAttr />
+    <Note />
+    <Designer />
+    <DesignerUnit />
+    <DesignerContact />
+    <Idx>100</Idx>
+    <GUID />
+    <Ver>2017-10-30 22:06:35</Ver>
+    <DesignerTool />
+    <AtPara>@MaxLeft=0@MaxEnd=610@MaxRight=0@IsHaveCA=0@MaxTop=0</AtPara>
+    <OfficeOpenLab>打开本地</OfficeOpenLab>
+    <OfficeOpenEnable>0</OfficeOpenEnable>
+    <OfficeOpenTemplateLab>打开模板</OfficeOpenTemplateLab>
+    <OfficeOpenTemplateEnable>0</OfficeOpenTemplateEnable>
+    <OfficeSaveLab>保存</OfficeSaveLab>
+    <OfficeSaveEnable>1</OfficeSaveEnable>
+    <OfficeAcceptLab>接受修订</OfficeAcceptLab>
+    <OfficeAcceptEnable>0</OfficeAcceptEnable>
+    <OfficeRefuseLab>拒绝修订</OfficeRefuseLab>
+    <OfficeRefuseEnable>0</OfficeRefuseEnable>
+    <OfficeOverLab>套红按钮</OfficeOverLab>
+    <OfficeOverEnable>0</OfficeOverEnable>
+    <OfficeMarksEnable>1</OfficeMarksEnable>
+    <OfficePrintLab>打印按钮</OfficePrintLab>
+    <OfficePrintEnable>0</OfficePrintEnable>
+    <OfficeSealLab>签章按钮</OfficeSealLab>
+    <OfficeSealEnable>0</OfficeSealEnable>
+    <OfficeInsertFlowLab>插入流程</OfficeInsertFlowLab>
+    <OfficeInsertFlowEnable>0</OfficeInsertFlowEnable>
+    <OfficeNodeInfo>0</OfficeNodeInfo>
+    <OfficeReSavePDF>0</OfficeReSavePDF>
+    <OfficeDownLab>下载</OfficeDownLab>
+    <OfficeDownEnable>0</OfficeDownEnable>
+    <OfficeIsMarks>1</OfficeIsMarks>
+    <OfficeTemplate />
+    <OfficeIsParent>1</OfficeIsParent>
+    <OfficeTHEnable>0</OfficeTHEnable>
+    <OfficeTHTemplate />
+    <TableHeight>900</TableHeight>
+    <FK_Flow />
+    <RightViewWay>0</RightViewWay>
+    <RightViewTag />
+    <RightDeptWay>0</RightDeptWay>
+    <RightDeptTag />
+    <DBURL>0</DBURL>
+    <TemplaterVer />
+    <DBSave />
+    <MyFileName />
+    <MyFilePath />
+    <MyFileExt />
+    <WebPath />
+    <MyFileH>0</MyFileH>
+    <MyFileW>0</MyFileW>
+    <MyFileSize>0</MyFileSize>
+  </Sys_MapData>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_OID</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>主键</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>1</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_JianChanMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>JianChanMoShi</KeyOfEn>
+    <Name>简单模式</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>258</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>166</X>
+    <Y>55.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>2</Idx>
+    <AtPara>@IsRichText=0@IsSupperText=0</AtPara>
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_RDT</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>3</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_ChanShiTiShu</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>ChanShiTiShu</KeyOfEn>
+    <Name>单实体树</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>260</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>159</X>
+    <Y>160.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>4</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_JianChanMoShiDuoShua</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>JianChanMoShiDuoShua</KeyOfEn>
+    <Name>简单模式(多选)</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>253</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>167</X>
+    <Y>98.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>5</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_ChanShiTiShuDuoShua</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>ChanShiTiShuDuoShua</KeyOfEn>
+    <Name>单实体树(多选)</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>267</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>158</X>
+    <Y>209.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>6</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_ShuangShiTiShuChanSh</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>ShuangShiTiShuChanSh</KeyOfEn>
+    <Name>双实体树(单选)</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>253</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>165</X>
+    <Y>282.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>7</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_ShuangShiTiShuDuoShu</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>ShuangShiTiShuDuoShu</KeyOfEn>
+    <Name>双实体树(多选)</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>251</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>164</X>
+    <Y>328.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>8</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_FenZuMoShiChanShua</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>FenZuMoShiChanShua</KeyOfEn>
+    <Name>分组模式(单选)</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>263</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>347</X>
+    <Y>396.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>9</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_FenZuMoShiDuoShua</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>FenZuMoShiDuoShua</KeyOfEn>
+    <Name>分组模式多选</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>277</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>346</X>
+    <Y>433.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>10</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_BiaoGeMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>BiaoGeMoShi</KeyOfEn>
+    <Name>表格模式</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>267.6300048828125</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>79.55999755859375</X>
+    <Y>497.10000610351562</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>11</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_JianChanBiaoGeMoShiD</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>JianChanBiaoGeMoShiD</KeyOfEn>
+    <Name>简单表格模式(多选)</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>258</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>84</X>
+    <Y>565.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>12</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_Pop1_BiaoGeFenXieMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <KeyOfEn>BiaoGeFenXieMoShi</KeyOfEn>
+    <Name>表格分页模式</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>191</X>
+    <Y>605.5</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Tip />
+    <IsEnableInAPP>1</IsEnableInAPP>
+    <Idx>13</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>149</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_BiaoGeFenXieMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>BiaoGeFenXieMoShi</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag>SELECT TOP @PageSize * FROM ( SELECT row_number() over(order by t.No) as rownumber,No,Name,Tel,Email,FK_BanJi 
+FROM Demo_Student t WHERE Name LIKE ~%@Key%~  AND  FK_BanJi=@FK_BanJi AND XB=@XB ) A WHERE rownumber &gt; @PageCount</Tag>
+    <Tag1>SELECT count(No) FROM Demo_Student WHERE Name LIKE ~%@Key%~  AND  FK_BanJi=@FK_BanJi AND XB=@XB</Tag1>
+    <Tag2 />
+    <Tag3 />
+    <Tag4>$Para=FK_BanJi#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi
+$Para=XB#Label=性别#EnumKey=XB</Tag4>
+    <AtPara>@PopValWorkModel=3@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=0@PopValSelectModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>900</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_BiaoGeMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>BiaoGeMoShi</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1 />
+    <Tag2>SELECT No,Name,XB,Tel,Email FROM Demo_Student </Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=2@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=0@PopValSelectModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>800</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_ChanShiTiShu</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>ChanShiTiShu</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1 />
+    <Tag2>SELECT No, Name,ParentNo FROM Port_Dept WHERE ParentNo=~@ParentNo~ </Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=5@PopValTreeParentNo=0@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=0@PopValSelectModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_ChanShiTiShuDuoShua</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>ChanShiTiShuDuoShua</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1 />
+    <Tag2>SELECT No, Name,ParentNo FROM Port_Dept WHERE ParentNo=~@ParentNo~</Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=5@PopValTreeParentNo=0@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=2@PopValSelectModel=1</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_FenZuMoShiChanShua</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>FenZuMoShiChanShua</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1>SELECT No, Name FROM Port_Dept</Tag1>
+    <Tag2>SELECT No, Name,FK_Dept FROM Port_Emp </Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=4@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=2@PopValSelectModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_FenZuMoShiDuoShua</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>FenZuMoShiDuoShua</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1>SELECT No, Name FROM Port_Dept</Tag1>
+    <Tag2>SELECT No, Name,FK_Dept FROM Port_Emp </Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=4@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=2@PopValSelectModel=1</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_JianChanBiaoGeMoShiD</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>JianChanBiaoGeMoShiD</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1 />
+    <Tag2>SELECT No,Name,XB,Tel,Email,Addr FROM Demo_Student</Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=2@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=0@PopValSelectModel=1</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>800</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_JianChanMoShi</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>JianChanMoShi</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1 />
+    <Tag2>SELECT No,Name FROM Port_Emp</Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=2@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=0@PopValSelectModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_JianChanMoShiDuoShua</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>JianChanMoShiDuoShua</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1 />
+    <Tag2>SELECT No,Name FROM Port_Emp </Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=2@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=0@PopValSelectModel=1</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_ShuangShiTiShuChanSh</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>ShuangShiTiShuChanSh</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1>SELECT No, Name,FK_Dept FROM Port_Emp WHERE FK_Dept=~@ParentNo~ </Tag1>
+    <Tag2>SELECT No, Name,ParentNo FROM Port_Dept </Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=6@PopValTreeParentNo=0@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=2@PopValSelectModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_Pop1_ShuangShiTiShuDuoShu</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>ShuangShiTiShuDuoShu</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag />
+    <Tag1>SELECT No, Name,FK_Dept FROM Port_Emp WHERE FK_Dept=~@ParentNo~</Tag1>
+    <Tag2>SELECT No, Name,ParentNo FROM Port_Dept</Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara>@PopValWorkModel=6@PopValTreeParentNo=0@PopValTitle=@PopValSearchTip=请输入关键字@PopValFormat=2@PopValSelectModel=1</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_FrmLab>
+    <MyPK>0bb627f0-f73e-42bc-a1d0-2fc9b978b54d</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>表格模式(单选&amp;nbsp;)</Text>
+    <X>83.139999389648438</X>
+    <Y>477.79998779296875</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>3f697e4d-ba53-4f89-8b61-a71cf8b7e431</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>表格分页模式</Text>
+    <X>87</X>
+    <Y>610</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>45baa4c9-8555-46bd-bc80-3c2c085fa328</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>单实体树(单选)</Text>
+    <X>55</X>
+    <Y>163</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>52534674-7d42-4fb8-8f90-226a09f781b5</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>分组模式多选</Text>
+    <X>240</X>
+    <Y>435</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>6b278d98-79d8-4fef-9192-33ce1e31bcac</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>简单表格模式(多选)</Text>
+    <X>89</X>
+    <Y>545</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>788b25b3-5d2d-4494-aa05-855fb6b29980</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>简单模式(多选)</Text>
+    <X>59</X>
+    <Y>102</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>9b30ab68-6aeb-4caf-b46d-24b51b8677a7</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>单实体树(多选)</Text>
+    <X>53</X>
+    <Y>215</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>a43591ef-516c-4594-af20-6e0db5a9e900</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>简单模式(单选)</Text>
+    <X>58</X>
+    <Y>55</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>c4f4111d-a4c2-4317-a182-9222ad0b124b</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>双实体树(多选)</Text>
+    <X>56</X>
+    <Y>332</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>d8bd1c5b-026f-4c87-9f44-3b4f61cef08c</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>双实体树(单选)</Text>
+    <X>55</X>
+    <Y>285</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>ebd91134-0479-4d85-bd46-241e71582b87</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>分组模式(单选)</Text>
+    <X>234</X>
+    <Y>398</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Arial</FontName>
+    <FontSize>15</FontSize>
+    <FontStyle>font-size:14;font-weight:normal;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>f7404c38-b8a5-4cd9-819d-621c9e7baf55</MyPK>
+    <FK_MapData>Demo_Pop1</FK_MapData>
+    <Text>简单模式pop返回值</Text>
+    <X>388.98001098632812</X>
+    <Y>17</Y>
+    <FontColor>#000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>18</FontSize>
+    <FontStyle>font-size:18;font-weight:bold;color:#000000;</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+</NewDataSet>

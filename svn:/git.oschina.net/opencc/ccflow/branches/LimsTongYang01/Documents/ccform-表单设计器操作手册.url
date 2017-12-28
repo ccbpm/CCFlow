@@ -1,0 +1,10 @@
+[DEFAULT]
+BASEURL=http://www.duba.com/?f=dbsj&db_99_43&z=0
+[{000214A0-0000-0000-C000-000000000046}]
+Prop3=19,2
+[InternetShortcut]
+URL=http://ccform.mydoc.io/
+IDList=
+IconFile=http://ccform.mydoc.io/img/32logo_green.ico?t=1423294219000
+IconIndex=1
+HotKey=0

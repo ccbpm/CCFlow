@@ -1,0 +1,25 @@
+﻿        /// <summary>
+        /// 发送人员字段
+        /// 用在节点发送时确定下一个节点接受人员, 类似与发送邮件来选择接受人.
+        /// 并且在下一个节点属性的 访问规则中选择【按表单SysSendEmps字段计算】有效。
+        /// </summary>
+        public const string SysSendEmps = "SysSendEmps";
+        /// <summary>
+        /// 抄送人员字段
+        /// 当前的工作需要抄送时, 就需要在当前节点表单中，增加此字段。
+        /// 并且在节点属性的抄送规则中选择【按表单SysCCEmps字段计算】有效。
+        /// 如果有多个操作人员，字段的接受值用逗号分开。比如: zhangsan,lisi,wangwu
+        /// </summary>
+        public const string SysCCEmps = "SysCCEmps";
+        /// <summary>
+        /// 流程应完成日期
+        /// 说明：在开始节点表单中增加此字段，用来标记此流程应当完成的日期.
+        /// 用户在发送后就会把此值记录在WF_GenerWorkFlow 的 SDTOfFlow 中.
+        /// 此字段显示在待办，发起，在途，删除，挂起列表里.
+        /// </summary>
+        public const string SysSDTOfFlow = "SysSDTOfFlow";
+        /// <summary>
+        /// 节点应完成时间
+        /// 说明：在开始节点表单中增加此字段，用来标记此节点的下一个节点应该完成的日期.
+        /// </summary>
+        public const string SysSDTOfNode = "SysSDTOfNode";

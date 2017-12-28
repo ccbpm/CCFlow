@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>创建本机数据表</title>
+     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <base target="_self" />
+    <style type="text/css">
+        .style1
+        {
+            width: 184px;
+        }
+    </style>
+    <script type="text/javascript" language="javascript" >
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=SF1_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    //绑定数据源.
+                    GenerBindDDL("DDL_FK_DBSrc", data, "No", "Name", "local");
+                    return;
+                }
+            });
+
+            $("#Msg").html("");
+        });
+
+        //装载  模版.
+        function Save() {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var no = document.getElementById('TB_No');
+            var name = document.getElementById('TB_Name');
+
+            if (no == null || name == null) {
+                alert('请输入编号名称.');
+                return;
+            }
+
+            var frmData = $("#cc").serialize();
+            $.ajax({
+                type: 'post',
+                data: frmData,
+                async: true,
+                url: Handler + "?DoType=SF1_Save&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    document.location.href = 'Default.htm?FK_MapData=' + GetQueryString("FK_MapData");
+                }
+            });
+
+            $("#Msg").html("");
+        }
+    </script>
+</head>
+<body>
+<table style="width:95%; margin:5px; padding:5px;">
+<caption><a href="./Default.htm">返回</a> - 本机数据表  </caption>
+
+<tr>
+<th> 说明 </th>
+<th class="style1"> 说明 </th>
+<th> 备注 </th>
+</tr>
+
+<tr>
+<td> 表中文名称 </td>
+<td class="style1"> <input type="text" id="TB_Name" name="TB_Name" /> </td>
+<td> 系统唯一 </td>
+</tr>
+
+
+<tr>
+<td> 表英文名称 </td>
+<td class="style1"> <input type="text" id="TB_No" name="TB_No" /> </td>
+<td> 系统唯一，不准以数字开头，必须是以英文或者下划线组合. </td>
+</tr>
+
+
+
+<tr>
+<td> 数据源 </td>
+<td class="style1"> <select id="DDL_FK_DBSrc" /> </td>
+<td> 从那个数据源来查找数据 </td>
+</tr>
+
+
+
+<tr>
+<td> 数据格式 </td>
+<td class="style1"> <select id="DDL_CodeStruct" >
+<option value="0"> 普通格式，具有No,Name两个列. </option>
+<option value="1"> 树形格式，具有No,Name,ParentNo三个列. </option>
+</select> </td>
+<td> 是否是树形结构 </td>
+</tr>
+
+<tr>
+<td colspan=3>  
+ <a href="javascript:Save()" id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+           onclick="Save()">保存</a> 
+
+             <a href="javascript:void(0)" id="A1" class="easyui-linkbutton" data-options="iconCls:'icon-delete'"
+           onclick="Delete()">删除</a> 
+
+ </td>
+</tr>
+
+</table>
+ 
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!--
+  作用：描述与设置 Ens 的信息。
+  其它：信息存储在BP.Sys.AppCfg
+  DBType = String Int Enum Boolen
+  -->
+  <!-- 信息发布 -->
+  <Item EnsName="BP.WF.GEWorks" No="EditerType" Name="文本编辑器类型" DefVal="0" 
+        Desc="文本编辑器类型" DBType="Enum" EnumKey="EditerType" EnumVals="@0=无@1=Sina@2=FCediter" WinCardH="300" WinCardW="300" />
+  <Item EnsName="BP.WF.GEStartWorks" No="EditerType" Name="文本编辑器类型" DefVal="0"
+        Desc="文本编辑器类型" DBType="Enum" EnumKey="EditerType" EnumVals="@0=无@1=Sina@2=FCediter" WinCardH="300" WinCardW="300" />
+</NewDataSet>

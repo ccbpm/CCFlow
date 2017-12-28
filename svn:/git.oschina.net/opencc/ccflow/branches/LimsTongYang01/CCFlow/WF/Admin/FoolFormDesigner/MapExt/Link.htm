@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>字段超链接</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+   <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <style type="text/css">
+       
+        #TB_Url
+        {
+            width: 100%;
+        }
+        
+        #TB_Width
+        {
+            width: 62px;
+        }
+        #TB_Height
+        {
+            width: 66px;
+        }
+       
+    </style>
+    <base target="_self" />
+    <script type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+
+            //组织主键.
+            var mypk = "Link_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+
+            var i = en.RetrieveFromDBSources();
+
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
+
+            //给公共属性赋值.
+            $("#TB_Width").val(en.W);
+            $("#TB_Height").val(en.H);
+            $("#TB_Url").val(en.Doc);
+        });
+
+       
+        //执行保存
+        function Save() {
+
+            //组织主键.
+            var mypk = "Link_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+
+            //url.
+            en.Doc = $("#TB_Url").val(); //要执行的SQL.
+            en.W = $("#TB_Width").val(); //要执行的SQL.
+            en.H = $("#TB_Height").val(); //要执行的SQL.
+
+            en.ExtType = "Link";
+
+            if (en.Update() == 0)
+                en.Insert();
+
+            window.location.href = "Link.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
+            return;
+        }
+
+        //删除.
+        function Delete() {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var mypk = "Link_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            var en = new Entity("BP.Sys.MapExt");
+            en.MyPK = mypk;
+            en.RetrieveFromDBSources();
+            en.Delete();
+
+            var url = "Link.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            window.location.href = url;
+        }
+    </script>
+</head>
+<body >
+<form id="cc">
+ 
+ <fieldset>
+<legend>连接设置</legend>
+
+<a href="javascript:ShowHidden('help')">自定义URL:</a>
+
+ <div id="help" style="color:Gray; display:none">
+ <ul>
+ <li>您选择了使用外部的URL. </li>
+ <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+ <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.htm </li>
+ <li>可以使用@SDKFromServHost 变量，标识一个配置路径，该配置在web.config里设置。</li>
+ </ul>
+ </div>
+
+<input type="text" id="TB_Url" name="TB_Url" value=""   />
+
+宽度(px)： <input type="text" id="TB_Width" name="TB_Width"  value="" />  
+高度(px)：<input type="text" id="TB_Height" name="TB_Height"  value="" />   
+开窗模式： 
+
+ </fieldset>
+<input type="button" value="保存" id="Btn_Save"  onclick="Save()" />
+<input type="button" value="删除"  id="Btn_Delete"  onclick="Delete()" />
+
+</form>
+
+</body>
+</html>

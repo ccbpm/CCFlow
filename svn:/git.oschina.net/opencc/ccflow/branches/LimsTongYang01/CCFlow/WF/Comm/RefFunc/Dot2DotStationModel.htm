@@ -1,0 +1,474 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>岗位选择器</title>
+    <link href="../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/easyloader.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.parser.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.draggable.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.resizable.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.progressbar.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.panel.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.linkbutton.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.window.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.dialog.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.messager.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.tooltip.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.validatebox.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.tree.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.pagination.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.datagrid.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.textbox.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var ensName = GetQueryString("EnsName");
+        var enName = GetQueryString("EnName");
+        var attrKey = GetQueryString("AttrKey");
+        var nodeid = GetQueryString("NodeID");
+        var nodestations = new Array(); //节点绑定岗位
+        var currstations = new Array(); //记录当前表格中绑定的岗位列表集合
+        var PAGESIZE = 10;  //默认每页显示条数
+        var partidx = 0;
+        var partcount = 0;
+        var savedatas = new Array();
+        var isUnitModel = false;
+
+        $(function () {
+            $("#treeUnits").tree({
+                checkbox: true,
+                onExpand: function (node) {
+                    GetSubUnits(node);
+                },
+                onCascadeCheck: function (node, checked) {
+                    if (!node.attributes || node.attributes.TType != "S") {
+                        return;
+                    }
+
+                    CheckNode(node, checked);
+                },
+                onCheck: function (node, checked) {
+                    if (typeof node.checked == typeof checked || !node.attributes || node.attributes.TType != "S") {
+                        return;
+                    }
+                    alert(node.attributes.Name + "_" + node.checked + "_" + checked);
+                },
+                checkbox: function (node) {
+                    if (node.attributes && (node.attributes.TType == "UNITROOT" || node.attributes.TType == "UNIT" || node.attributes.TType == "STROOT" || node.attributes.TType == "ST")) {
+                        if (node.children.length == 1 && node.children[0].text == "loading...") {
+                            return false;
+                        }
+
+                        return true;
+                    }
+
+                    if (node.text == "loading...") {
+                        return false;
+                    }
+
+                    return true;
+                }
+            });
+
+            $("#sStations").datagrid({
+                pagination: true,
+                pageNumber: 0,
+                pageSize: PAGESIZE,
+                pageList: [10, 20, 30, 40, 50]
+            });
+
+            $("#kw").textbox({
+                onChange: function (newValue, oldValue) {
+                    FilterStations(newValue);
+                }
+            });
+
+            Init();
+        });
+
+        function Init() {
+            //获取组织结构根结点
+            var param = {
+                DoType: "Dot2DotStationModel_GetStructureTreeRoot",
+                parentrootid: "0"
+            };
+
+            Handler_AjaxQueryData(param, function (data, scope) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+
+                var treeData = eval('(' + data + ')');
+
+				// for bug 591 at 20171205
+				(function (cnode) {
+					var param = {
+						DoType: "Dot2DotStationModel_GetSubUnits",
+						parentid: cnode.attributes.No,
+						nodeid: nodeid,
+						ttype: cnode.attributes.TType,
+						stype: isUnitModel ? "UNIT" : "ST"
+					};
+
+					Handler_AjaxQueryData(param, function (data, scope) {
+						if (data.indexOf("err@") != -1) {
+							alert(data);
+							return;
+						}
+
+						var redata = eval('(' + data + ')');
+
+						$("#treeUnits").tree("loadData", redata);
+					}, this);
+				})(treeData.InnerData[0]);
+
+                //$("#treeUnits").tree("loadData", treeData.InnerData);	// for bug 591 at 20171205
+
+                isUnitModel = treeData.Msg == "true";
+
+                //获取当前节点绑定的岗位
+                GetNodeStations(PAGESIZE, 1);
+            }, this);
+        }
+
+        function GetSubUnits(cnode) {
+            var param = {
+                DoType: "Dot2DotStationModel_GetSubUnits",
+                parentid: cnode.attributes.No,
+                nodeid: nodeid,
+                ttype: cnode.attributes.TType,
+                stype: isUnitModel ? "UNIT" : "ST"
+            };
+            
+            var children = $("#treeUnits").tree("getChildren", cnode.target);
+            if (children[0].text != "loading...") {
+                return;
+            }
+
+            Handler_AjaxQueryData(param, function (data, scope) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+
+                var redata = eval('(' + data + ')');
+
+                $("#treeUnits").tree("remove", children[0].target);
+                $("#treeUnits").tree("append", { parent: cnode.target, data: redata });
+            }, this);
+        }
+
+        function GetNodeStations(pagesize, pageidx) {
+            var param = {
+                DoType: "Dot2DotStationModel_GetNodeStations",
+                pagesize: pagesize,
+                pageidx: pageidx,
+                nodeid: nodeid,
+                stype: isUnitModel ? "UNIT" : "ST"
+            };
+
+            $("#save").linkbutton("disable");
+
+            Handler_AjaxQueryData(param, function (data, scope) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+
+                var redata = eval('(' + data + ')');
+                nodestations = redata.InnerData;
+                if (nodestations == undefined || nodestations == 'undefined')
+                    redata = eval('(' + redata + ')');
+                    nodestations = redata.InnerData;
+                $("#save").linkbutton("enable");
+                ShowSelectedStations();
+            }, this);
+        }
+
+        function ShowSelectedStations() {
+            LoadStationsInDataGrid(nodestations, 1, $("#sStations").datagrid("options").pageSize);
+        }
+
+        function CheckNode(node, checked) {
+            var currstation = {
+                No: node.attributes.No,
+                Name: node.attributes.Name,
+                UnitNo: node.attributes.ParentNo,
+                UnitName: $("#treeUnits").tree("getParent", $("div[id='" + node.domId + "']")[0]).attributes.Name,
+                Checked: checked,
+                Code: node.attributes.Code
+            };
+            //选中，判断是否已经存在绑定列表中
+            if (checked) {  //选中
+                if (IndexOfArray(nodestations, "No", currstation.No) == -1) {
+                    nodestations.push(currstation);
+                }
+            }
+            else {  //取消选中
+                var idx = IndexOfArray(nodestations, "No", currstation.No);
+
+                if (idx != -1) {
+                    nodestations.splice(idx, 1);
+                }
+            }
+        }
+
+        function FilterStations(key) {
+            var pageSize = $("#sStations").datagrid("options").pageSize;
+
+            if (!key || key.length == 0) {
+                LoadStationsInDataGrid(nodestations, 1, pageSize);
+                return;
+            }
+
+            var filterstations = new Array();   //检索结果岗位集合
+
+            key = key.toLowerCase();
+
+            $.each(nodestations, function () {
+                if (this.Code.indexOf(key) != -1 || this.Name.indexOf(key) != -1 || this.UnitName.indexOf(key) != -1) {
+                    filterstations.push(this);
+                }
+            });
+
+            LoadStationsInDataGrid(filterstations, 1, pageSize);
+        }
+
+        function LoadStationsInDataGrid(stations, pageNum, pageSize) {
+            currstations = stations;
+
+            $("#sStations").datagrid({
+                pageSize: pageSize,
+                pageNumber: pageNum
+            });
+
+            $("#sStations").datagrid("loadData", GetPagedStations(currstations, pageSize, pageNum));
+
+            var pager = $("#sStations").datagrid("getPager");
+
+            pager.pagination({
+                showRefresh: false,
+                total: currstations.length,
+                pageSize: pageSize,
+                pageNumber: pageNum,
+                onSelectPage: function (pageNum, pageSize) {
+                    LoadStationsInDataGrid(currstations, pageNum, pageSize);
+                }
+            });
+        }
+
+        function IndexOfArray(array, field, value) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i][field] == value) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        function DeleteSelectedStations(deleteall) {
+            var sstations = new Array();
+            var opts = $("#sStations").datagrid("options");
+            var node;
+
+            if (!deleteall) {
+                var idx;
+
+                sstations = $("#sStations").datagrid("getChecked");
+
+                $.each(sstations, function () {
+                    idx = IndexOfArray(nodestations, "No", this.No);
+
+                    if (idx != -1) {
+                        nodestations.splice(idx, 1);
+                    }
+
+                    //删除树中勾选项
+                    node = $("#treeUnits").tree("find", "S_" + this.UnitNo + "_" + this.No);
+
+                    if (node) {
+                        $("#treeUnits").tree("uncheck", node.target);
+                    }
+                });
+                //todo:如果是检索结果下删除选中行后，剩下的结果应当仍然显示检索结果集下的，待处理
+                LoadStationsInDataGrid(nodestations, opts.pageNumber, opts.pageSize);
+                return;
+            }
+
+            $.messager.confirm("提示", "您确定要删除所有已经选择的岗位吗？", function (r) {
+                if (r) {
+                    //删除树中勾选项
+                    while (nodestations.length > 0) {
+                        node = $("#treeUnits").tree("find", "S_" + nodestations[0].UnitNo + "_" + nodestations[0].No);
+
+                        if (node && node.checked) {
+                            $("#treeUnits").tree("uncheck", node.target);
+                        }
+                    }
+
+                    if ($("#sStations").datagrid("getData").total > 0) {
+                        LoadStationsInDataGrid(nodestations, 1, opts.pageSize);
+                    }
+                }
+            });
+        }
+
+        function Save() {
+            var param = {
+                DoType: "Dot2DotStationModel_SaveNodeStations",
+                data: '|',
+                nodeid: nodeid
+            };
+
+            $("#save").linkbutton("disable");
+
+            //组织数据
+            var i = 1;
+
+            $.each(nodestations, function () {
+                param.data += this.No + "|";
+
+                //500个分一段保存
+                if (i % 500 == 0) {
+                    savedatas.push(param.data);
+                    param.data = '|';
+                }
+
+                i++;
+            });
+
+            if (param.data.length > 1) {
+                savedatas.push(param.data);
+            }
+            else {
+                param.data = savedatas.shift();
+
+                Handler_AjaxQueryData(param, function (data, scope) {
+                    $("#save").linkbutton("enable");
+
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+
+                    var redata = eval('(' + data + ')');
+
+                    $.messager.show({
+                        title: " ",
+                        msg: redata.Msg,
+                        timeout: 1000
+                    });
+
+                    ShowSelectedStations();
+                }, this);
+                return;
+            }
+
+            partidx = 1;
+            partcount = savedatas.length;
+            param.partno = partidx + "/" + partcount;
+            param.data = savedatas.shift();
+
+            SavePart(param);
+        }
+
+        function SavePart(param) {
+            Handler_AjaxQueryData(param, function (data, scope) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    alert("保存过程中出现错误，已经保存部分数据，请手动刷新本页面，重新设置！");
+                    $("#save").linkbutton("enable");
+                    return;
+                }
+
+                var redata = eval('(' + data + ')');
+
+                if (redata.InnerData.lastpart) {
+                    $.messager.show({
+                        title: " ",
+                        msg: redata.Msg,
+                        timeout: 1000
+                    });
+
+                    $("#save").linkbutton("enable");
+                    partidx = 0;
+                    partcount = 0;
+                    ShowSelectedStations();
+                    return;
+                }
+
+                partidx++;
+
+                if (savedatas.length > 0) {
+                    param.partno = partidx + "/" + partcount;
+                    param.data = savedatas.shift();
+                    SavePart(param);
+                }
+
+            }, this);
+        }
+
+        function GetPagedStations(stations, pagesize, pageidx) {
+            var start = pagesize * (pageidx - 1);
+            var end = pagesize * pageidx;
+
+            if (stations.length - 1 < start) {
+                start = stations.length - 1;
+            }
+
+            if (stations.length - 1 < end) {
+                end = stations.length;
+            }
+
+            return { total: stations.length, rows: stations.slice(start, end) };
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'north'" style="width: 100%; height: 40px; padding: 5px;
+        line-height: 30px;">
+        <a id="save" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+            onclick="Save()">保存</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-delete'"
+                onclick="DeleteSelectedStations(true)">清空选择</a> &nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+    <div data-options="region:'west',title:'选择单位'" style="width: 40%; padding: 5px;">
+        <ul id="treeUnits" class="easyui-tree">
+        </ul>
+    </div>
+    <div data-options="region:'center',title:'已选岗位'" style="width: 60%; padding: 5px;">
+        <table id="sStations" class="easyui-datagrid" data-options="fit:true,fitColumns:true,singleSelect:false,rownumbers:true,
+        toolbar:'#tb'">
+            <thead>
+                <tr>
+                    <th data-options="field:'Checked',checkbox:true">
+                        选
+                    </th>
+                    <th data-options="field:'No',width:80">
+                        编码
+                    </th>
+                    <th data-options="field:'Name',width:80">
+                        名称
+                    </th>
+                    <th data-options="field:'UnitName',width:140">
+                        单位
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="tb" style="line-height: 30px;">
+        &nbsp; <a href="javascript:void(0)" onclick="ShowSelectedStations()" class="easyui-linkbutton"
+            data-options="iconCls:'icon-table'">显示已选岗位</a> &nbsp;
+        <input id="kw" class="easyui-textbox" onkeyup="" style="width: 80px" />
+        <a href="javascript:void(0)" onclick="FilterStations($('#kw').textbox('getValue'))" class="easyui-linkbutton"
+            data-options="iconCls:'icon-search'">检索</a> &nbsp;<a href="javascript:void(0)" onclick="DeleteSelectedStations(false)"
+                class="easyui-linkbutton" data-options="iconCls:'icon-delete'">删除</a>
+    </div>
+</body>
+</html>

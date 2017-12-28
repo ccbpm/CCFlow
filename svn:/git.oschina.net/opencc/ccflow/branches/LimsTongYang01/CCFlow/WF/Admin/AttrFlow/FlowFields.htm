@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- 于庆海  -->
+    <meta charset="UTF-8"/>
+    <title>流程字段列表</title>
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+     <base target="_self" /> 
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    
+    <script language="javascript" type="text/javascript" >
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+        
+        //初始化数据.
+        function InitPage() {
+
+           var fk_flow = GetQueryString("FK_Flow");
+
+            //初始化表格.
+           $.ajax({
+               type: 'post',
+               async: true,
+               url: Handler + "?DoType=FlowFields_Init&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+               dataType: 'html',
+               success: function (data) {
+
+                   if (data.indexOf('err@') == 0) {
+                       alert(data);
+                       return;
+                   }
+
+                   data = JSON.parse(data);
+                   var idx1 = 1;
+                   //处理系统字段..
+                   for (var i = 0; i < data.length; i++) {
+
+                       var newRow = "";
+                       var keyOfEn = data[i].KeyOfEn;
+                       switch (keyOfEn) {
+                           case "OID":
+                           case "AtPara":
+                           case "BillNo":
+                           case "FID":
+                           case "FK_Dept":
+                           case "FK_NY":
+                           case "FlowDaySpan":
+                           case "FlowEmps":
+                           case "FlowEnder":
+                           case "FlowEnderRDT":
+                           case "FlowEndNode":
+                           case "FlowNote":
+                           case "FlowStarter":
+                           case "FlowStartRDT":
+                           case "GuestName":
+                           case "GuestNo":
+                           case "GUID":
+                           case "MyNum":
+                           case "PEmp":
+                           case "PFID":
+                           case "PFlowNo":
+                           case "PNodeID":
+                           case "PrjName":
+                           case "PrjNo":
+                           case "PWorkID":
+                           case "Title":
+                           case "WFSta":
+                           case "WFState":
+                               break;
+                           default:
+                               continue;
+                       }
+                       newRow = "<tr ><td class=Idx>" + idx1 + "</td>";
+                       newRow += "<td>" + data[i].KeyOfEn + "</td>";
+                       newRow += "<td>" + data[i].Name + "</td>";
+                       newRow += "<td>" + data[i].MinLen + "</td>";
+                       newRow += "<td>" + data[i].MaxLen + "</td>";
+                       newRow += "<td>" + data[i].UIBindKey + "</td>";
+                       newRow += "<td>";
+                       newRow += "</tr>";
+                       $("#Table1 tr:last").after(newRow);
+                       idx1++;
+                   }
+
+                   var idx2 = 1;
+                   //处理普通字段..
+                   for (var i = 0; i < data.length; i++) {
+
+                       var newRow = "";
+                       var LGType = data[i].LGType;
+                       switch (LGType) {
+                           case 0:
+                               break;
+                           default:
+                               continue;
+                       }
+                       newRow = "<tr ><td class=Idx>" + idx2 + "</td>";
+                       newRow += "<td>" + data[i].KeyOfEn + "</td>";
+                       newRow += "<td>" + data[i].Name + "</td>";
+                       newRow += "<td>" + data[i].MinLen + "</td>";
+                       newRow += "<td>" + data[i].MaxLen + "</td>";
+                       newRow += "<td>" + data[i].UIBindKey + "</td>";
+                       newRow += "<td>";
+                       newRow += "</tr>";
+                       $("#Table2 tr:last").after(newRow);
+                       idx2++;
+                   }
+
+                   var idx3 = 1;
+                   //处理普枚举字段..
+                   for (var i = 0; i < data.length; i++) {
+
+                       var newRow = "";
+                       var LGType = data[i].LGType;
+                       switch (LGType) {
+                           case 1:
+                               break;
+                           default:
+                               continue;
+                       }
+                       newRow = "<tr ><td class=Idx>" + idx3 + "</td>";
+                       newRow += "<td>" + data[i].KeyOfEn + "</td>";
+                       newRow += "<td>" + data[i].Name + "</td>";
+                       newRow += "<td>" + data[i].MinLen + "</td>";
+                       newRow += "<td>" + data[i].MaxLen + "</td>";
+                       newRow += "<td>" + data[i].UIBindKey + "</td>";
+                       newRow += "<td>";
+                       newRow += "</tr>";
+                       $("#Table3 tr:last").after(newRow);
+                       idx3++;
+                   }
+
+                   var idx4 = 1;
+                   //处理外键字段..
+                   for (var i = 0; i < data.length; i++) {
+
+                       var newRow = "";
+                       var LGType = data[i].LGType;
+                       switch (LGType) {
+                           case 2:
+                               break;
+                           default:
+                               continue;
+                       }
+                       newRow = "<tr ><td class=Idx>" + idx4 + "</td>";
+                       newRow += "<td>" + data[i].KeyOfEn + "</td>";
+                       newRow += "<td>" + data[i].Name + "</td>";
+                       newRow += "<td>" + data[i].MinLen + "</td>";
+                       newRow += "<td>" + data[i].MaxLen + "</td>";
+                       newRow += "<td>" + data[i].UIBindKey + "</td>";
+                       newRow += "<td>";
+                       newRow += "</tr>";
+                       $("#Table4 tr:last").after(newRow);
+                       idx4++;
+                   }
+               }
+           });
+        }
+          
+     </script>
+</head>
+<body onkeypress="Esc()" >
+
+<table id="Table1" style="width: 100%">
+<caption>流程系统字段</caption>
+  <tr>
+        <th style="width: 5%">序</th>
+        <th style="width: 20%">字段名</th>
+        <th style="width: 20%">字段中文名称</th>
+        <th style="width: 10%">最小长度</th>
+        <th style="width: 10%">最大长度</th>
+        <th style="width: 20%">业务类型</th>
+        <th style="width: 15%">其他</th>
+    </tr>
+</table>
+
+
+<table id="Table2" style="width: 100%">
+<caption>普通字段</caption>
+  <tr>
+        <th style="width: 5%">序</th>
+        <th style="width: 20%">字段名</th>
+        <th style="width: 20%">字段中文名称</th>
+        <th style="width: 10%">最小长度</th>
+        <th style="width: 10%">最大长度</th>
+        <th style="width: 20%">业务类型</th>
+        <th style="width: 15%">其他</th>
+    </tr>
+</table>
+
+
+<table id="Table3" style="width: 100%">
+<caption>枚举字段</caption>
+  <tr>
+        <th style="width: 5%">序</th>
+        <th style="width: 20%">字段名</th>
+        <th style="width: 20%">字段中文名称</th>
+        <th style="width: 10%">最小长度</th>
+        <th style="width: 10%">最大长度</th>
+        <th style="width: 20%">业务类型</th>
+        <th style="width: 15%">其他</th>
+    </tr>
+</table>
+
+
+
+<table id="Table4" style="width: 100%">
+<caption>外键字段</caption>
+  <tr>
+        <th style="width: 5%">序</th>
+        <th style="width: 20%">字段名</th>
+        <th style="width: 20%">字段中文名称</th>
+        <th style="width: 10%">最小长度</th>
+        <th style="width: 10%">最大长度</th>
+        <th style="width: 20%">业务类型</th>
+        <th style="width: 15%">其他</th>
+    </tr>
+</table>
+<table>
+        <tr>
+            <th colspan="7">
+                <div style="float: right" id="dtsbt">如果您想把该表的数据实时的同步到您指定的表，请执行【<a href="DTSBTable.htm?FK_Flow=flowNo">与业务数据表同步</a>】</div>
+            </th>
+        </tr>
+
+    </table>
+<div id="Msg"></div>
+
+</body>
+<script language="javascript" type="text/javascript" >
+    //动态修改参数
+    $("#dtsbt a").click(function () {
+        $(this).attr("href", $(this).attr('href').replace('flowNo', GetQueryString("FK_Flow")));
+    });
+</script>
+</html>

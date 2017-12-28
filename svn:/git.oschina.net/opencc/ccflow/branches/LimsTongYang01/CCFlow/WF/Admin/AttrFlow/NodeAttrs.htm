@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="UTF-8"/>
+	<title>流程[{flow name}]-节点属性面板</title>
+	<link href="../../../WF/Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../../Comm/JScript.js"></script>
+	<script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+	<script type="text/javascript" src="../../Scripts/config.js"></script>
+	<base target="_self" />
+<script type="text/javascript">
+	//! TODO: 1.显示流程名称？	2.JS方法中的页面路径
+
+	/* ESC Key Down */
+	function Esc() {
+		if (event.keyCode === 27)
+			window.close();
+		return true;
+	}
+
+	//页面启动函数.
+	$(function () {
+	    $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+	    InitPage();
+	    $("#Msg").html("");
+	});
+
+	var FK_Flow; 	//流程id
+	var selectNodeId; //要突出选择的节点
+	//初始化数据.
+	function InitPage() {
+		FK_Flow = GetQueryString("FK_Flow");
+		selectNodeId = GetQueryString("FK_Node");
+		//初始化表格.
+		$.ajax({
+		    type: 'post',
+		    async: true,
+		    url: Handler + "?DoType=NodeAttrs_Init&FK_Flow=" + FK_Flow + "&m=" + Math.random(),
+		    dataType: 'html',
+		    success: function (data) {
+		        if (data.indexOf("err@") == 0) {
+		            alert(data);
+		            return;
+		        }
+
+		        data = JSON.parse(data);
+		    //    data = data.data;
+
+		        //增加处理.
+		        var newRow;
+		        for (var i in data) {
+		            newRow = "";
+
+		            newRow = "<tr onmouseover='TROver(this)' onmouseout='TROut(this)'><td class=Idx>" + i + "</td>";
+		            newRow += "<td><a href=\"javascript:OpenAttr('" + data[i].NodeID + "');\" >" + data[i].NodeID + "&nbsp;" + data[i].Name + "</a></td>";
+		            //表单方案
+		            newRow += "<td><a href=\"javascript:OpenFrmAttr('" + data[i].NodeID + "');\"  >" + data[i].HisFormTypeText + "</a></td>";
+		            //节点类型
+		            newRow += "<td>" + data[i].HisRunModelT + "</td>";
+		            //设置处理人（接收人）
+		            newRow += "<td><a href=\"javascript:FindWorker('" +data[i].NodeID +"');\" >" +data[i].HisDeliveryWayText +"</a>&nbsp;<a href='javascript:FindWorkerSp('" +data[i].HisDeliveryWayJsFnPara +"','" +data[i].NodeID +"');\" >" +data[i].HisDeliveryWayCountLabel + "(" +data[i].HisDeliveryWayCount +")</a></td>";
+		            //抄送人
+		            newRow += "<td><a href=\"javascript:NodeCCRole('" + data[i].NodeID + "');\" >" + data[i].HisCCRoleText + "</a></td>";
+		            //消息&事件
+		            newRow += "<td><a href=\"javascript:Action('" + data[i].NodeID + "','" + FK_Flow + "');\" >消息&事件(" + data[i].HisFrmEventsCount + ")</a></td>";
+		            //流程完成条件
+		            newRow += "<td><a href=\"javascript:Cond('" + data[i].NodeID + "','" + FK_Flow + "');\" >流程完成条件(" + data[i].HisFinishCondsCount + ")</a></td>";
+		            //按钮权限控制
+		            newRow += "<td><a href=\"javascript:OpenButtonControl('" + data[i].NodeID + "');\" >设置</a></td>";
+		            //吊起子流程
+		            newRow += "<td><a href=\"javascript:OpenSubFlows('" + data[i].NodeID + "');\" >子流程</a></td>";
+		            newRow += "</tr>";
+
+		            $("#Table1 tr:last").after(newRow);
+
+		            //$("#Msg").html("");
+		        }
+		    }
+		});
+	}
+
+	//节点属性.
+	function OpenAttr(nodeID) {
+		var url = "../../Comm/En.htm?EnName=BP.WF.Template.NodeExt&PK=" + nodeID;
+		window.open(url, 'att1r', 'height=590, width=1030, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+	}
+	// 表单方案.
+	function OpenFrmAttr(nodeID) {
+	    var url = "../AttrNode/NodeFromWorkModel.htm?FK_Node=" + nodeID;
+		// window.open(url, 'OpenFrmAttr', 'height=670, width=997, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+		window.parent.addTab('OpenFrmAttr', '自由表单', url);
+	}
+
+	// 设计自由表单
+	function OpenFreeFrm(nodeID,flowNo) {
+	    var url = "../CCFormDesigner/FormDesigner.htm?FK_MapData=ND" + nodeID + '&FK_Flow=' + flowNo;
+		// window.open(url, 'OpenFreeFrm', 'height=auto, width=auto, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+	}
+
+	// URL
+	function OpenUrl(url) {
+		window.open(url, 'attr', 'height=400, width=500, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+	}
+	// 审核组件
+	function OpenAuditModule(nodeID) {
+		var url = "../../Comm/En.htm?EnName=BP.WF.Template.FrmWorkCheck&PK=" + nodeID;
+		window.open(url, 'OpenFreeFrm', 'height=470, width=840, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+	}
+
+	//显示处理人.
+	function FindWorker(nodeID) {
+	    var url = "../AttrNode/NodeAccepterRole.htm?FK_Node=" + nodeID;
+		window.open(url, 'FindWorker', 'height=720, width=1200, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+	}
+	function FindWorkerSp(type, nodeId) {
+		switch (type) {
+		case "ByStations":
+			FindWorkerByStations(nodeId);
+			return;
+		case "ByDepts":
+			FindWorkerByDepts(nodeId);
+			return;
+		case "ByEmps":
+			FindWorkerByEmps(nodeId);
+			return;
+		default:
+			FindWorker(nodeId);	//alert("此类型的处理人尚未实现！");
+			return;
+		}
+	}
+	function FindWorkerByStations(nodeID) {
+		var url = "../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeStations&NodeID=" + nodeID + "&r=1120035051&ShowWay=None";
+		window.open(url, 'FindWorkerByStations', 'height=540, width=770, top=200, left=200, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+	}
+	function FindWorkerByDepts(nodeID) {
+		var url = "../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeDepts&NodeID=" + nodeID + "&r=1120035051&ShowWay=None";
+		window.open(url, 'FindWorkerByEmps', 'height=540, width=770, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+	}
+	function FindWorkerByEmps(nodeID) {
+		var url = "../../Comm/RefFunc/Dot2DotSingle.aspx?EnsName=BP.WF.Template.Selectors&EnName=BP.WF.Template.Selector&AttrKey=BP.WF.Template.NodeEmps&NodeID=" + nodeID + "&r=1120035051&ShowWay=FK_Emp";
+		window.open(url, 'FindWorkerByEmps', 'height=540, width=770, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+	}
+
+	function NodeCCRole(nodeID) {
+	    var url = "../AttrNode/NodeCCRole.htm?FK_Node=" + nodeID;
+		window.open(url, 'NodeCCRole', 'height=560, width=660, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+	}
+
+	function Action(nodeID, FK_Flow) {
+	    var url = "../AttrNode/Action.htm?NodeID=" + nodeID + '&FK_Flow=' + FK_Flow;
+		window.open(url, 'Action', 'height=auto, width=1050, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+		window.parent.addTab('Action', '消息&事件', url);
+
+	}
+
+	function Cond(nodeID, FK_Flow) {
+		var url = "../Cond.htm?FK_MainNode=" + nodeID + '&FK_Node=' + nodeID + '&ToNodeID=' + nodeID + '&CondType=1&FK_Flow=' + FK_Flow;
+		//  window.open(url, 'Cond', 'height=545, width=820, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+
+		window.parent.addTab('Cond', '流程完成条件', url);
+	}
+
+	// 按钮权限配置.
+	function OpenButtonControl(nodeID) {
+		var url = "../../Comm/En.htm?EnsName=BP.WF.Template.BtnLabs&PK=" + nodeID;
+		// window.open(url, 'OpenFrmAttr', 'height=auto, width=810, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no');
+		window.parent.addTab('Btns', '按钮权限', url);
+	}
+
+	// 按钮权限配置.
+	function OpenSubFlows(nodeID) {
+	    var url = "../../Comm/En.htm?EnsName=BP.WF.Template.FrmSubFlows&PK=" + nodeID;
+		window.parent.closeTab('SubFlows');
+		window.parent.addTab('SubFlows', '调起子流程', url, 'icon-SubFlows');
+	}
+
+	function Refurbish() {
+	    window.location.href = window.location.href;
+	}
+</script>
+</head>
+<body onkeypress="Esc()">
+	<table id="Table1">
+		<caption>
+			 节点属性面板
+			<div style="float: right">
+				<a href="javascript:Refurbish();">
+					<img src="../../Img/Btn/Refurbish.gif" alt="刷新" />刷新 </a>
+			</div>
+		</caption>
+		<tr>
+			<th>
+				序
+			</th>
+			<th>
+				<img src="../../Admin/CCBPMDesigner/Img/Menu/property.png" alt="节点名称" class="Icon" />节点属性
+			</th>
+			<th>
+				<img src="../../Img/Form.png" alt="设置表单的工作方式" class="Icon" />表单方案
+			</th>
+			<th>
+				<img src="../../Img/Btn/SelectAll.gif" alt="节点类型" class="Icon" />节点类型
+			</th>
+			<th>
+				<img src="../../Admin/CCBPMDesigner/Img/Menu/Sender.png" alt="设置处理人" class="Icon" />设置处理人
+			</th>
+			<th>
+				<img src="../../Admin/CCBPMDesigner/Img/Menu/CC.png" alt="设置处理人" class="Icon" />设置抄送人
+			</th>
+			<th>
+				<img src="../../Img/Event.png" alt="消息&事件" class="Icon" />消息&事件
+			</th>
+			<th>
+				<img src="../../Admin/CCBPMDesigner/Img/Menu/Cond.png" alt="流程完成条件" class="Icon" />流程完成条件
+			</th>
+			 
+			<th>
+				<img src="../../Admin/CCBPMDesigner/Img/Menu/CheckFlow.png" alt="按钮权限控制" class="Icon" />按钮权限
+			</th>
+			<th>
+				<img src="../../Admin/CCBPMDesigner/Img/Menu/SubFlows.png" alt="父子流程" class="Icon" />子流程
+			</th>
+		</tr>
+	</table>
+	<div id="Msg">
+	</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+       <script type="text/javascript" language="javascript" >
+           function Load() {
+               var url = window.location.href;
+               var div = document.getElementById("url");
+               div.innerHTML = url;
+
+               var workid = GetQueryString('WorkID');
+               var flowNo = GetQueryString('FK_Flow');
+               var nodeID = GetQueryString('FK_Node');
+           }
+
+           function Save() {
+               alert('Save 方法被激活.');
+           }
+    </script>
+</head>
+<body onload="Load()"  >
+
+<div> 没有为该节点定义url.</div>
+
+<ul>
+<li> 该页面是一个可以被重写的页面。</li>
+<li>他是在用户设置节点表单为嵌入模式表单，并且没有设置Url的情况下转入该界面的。 </li>
+<li> 位于/DataUser/DefaultSelfFormUrl.htm, 完整的Url 如下: </li>
+<li>  <div id="url" /> </li>
+
+<li> 开发人员可以重写页面转向自己的功能页面上来。</li>
+</ul>
+    <p>
+        <a href="../WF/Scripts/QueryString.js">QueryString.js</a></p>
+</body>
+</html>

@@ -1,0 +1,113 @@
+
+*{
+	margin:0;
+	padding:0;
+	font-size:12px;
+	list-style:none;
+}
+a{
+	text-decoration:none;
+}
+body{
+	background:url(bgimg.jpg) left -0px no-repeat;
+}
+ 
+.top{
+	position:relative;
+	min-height:70px;
+	margin:0 auto;
+	width:960px;
+
+}
+.wp h2
+{
+    float: right;
+    padding: 20px 20px 8 0;
+}
+.wp .fsatlg{
+	position:absolute;
+	bottom:8px;
+	right:0px;
+}
+.wp .y{
+	float:right;
+}
+.wp .y p{
+	padding-bottom:6px;
+	line-height:20px;
+}
+.xi2,.xi2 a{
+	color:#369;
+}
+.login{
+	padding-right:5px;
+	margin-right:5px;
+	border-right:1px solid #cdcdcd;
+	float:right;
+}
+.login p{
+	padding-bottom:4px;
+}
+.ftid{
+	vertical-align:middle;
+	float:left;
+	margin-right:6px;
+	width:50px;
+	height:20px;
+	line-height:20px;
+}
+.pc{
+	vertical-align:middle;
+}
+.px{
+	vertical-align:middle;
+	height:20px;
+	line-height:20px;
+	border:1px solid;
+	border-color: #369 #C2D5E3 #C2D5E3  #369 ;
+	width:130px;
+}
+.z{
+	float:left;
+}
+
+.pn{
+	background:#e5edf2;
+	border:1px solid;
+	border-color: #C2D5E3 #369 #369 ;
+	width:60px;
+	vertical-align:middle;
+}
+.nv{
+	padding-left:3px;
+	height:33px;
+	background:url(nv.png) #2b7acd;
+	width:960px;
+	margin:0 auto;
+}
+.nv li{
+	float:left;
+	padding-right:1px;
+	font-size:14px;
+	background:url(nv_a.png) right top no-repeat;
+	height:33px;
+	line-height:33px;
+}
+.nv li span{
+	color:#fff;
+	float:left;
+	padding:0 20px;
+	height:33px;
+	font-size:14px;
+	font-weight:bold;
+}
+.nv .current,.nv a:hover{
+	background:url(nv_a.png) center 33px;
+}
+.nv li span:hover{
+	text-decoration:underline;
+}	
+
+
+
+	

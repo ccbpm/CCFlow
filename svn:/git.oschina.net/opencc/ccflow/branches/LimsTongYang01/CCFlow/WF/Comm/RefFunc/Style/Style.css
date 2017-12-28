@@ -1,0 +1,139 @@
+/* the style of page */
+body
+{
+	margin: 0 auto;
+	font-size: 16px;
+	color: #000;
+	line-height: 20px;
+	width: 80%;
+	font-family: ËÎÌו;
+	font-size: 12px;
+}
+
+.MasterPage
+{
+	background-color: #FFFFFF;
+	font-family: ËÎÌו;
+	font-size: 13px;
+	border-left-style: double;
+	border-right-style: double;
+}
+
+a:link, a:visited, a:active
+{
+	color: blue;
+	text-decoration: none;
+}
+
+a:hover
+{
+	text-decoration: underline;
+}
+  
+ 
+
+.TB
+{
+	font-size: 12px;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    border-bottom-style: none;
+    text-align: left;
+    float: left;
+    clear: left;
+}
+
+.TBFile
+{
+	border-top-style: none;
+	border-bottom: 0px solid;
+	border-right-style: none;
+	border-left-style: none;
+}
+
+.TBNum
+{
+	font-size: 12px;
+	border-top-style: none;
+	border-right-style: none;
+	border-left-style: none;
+	border-bottom-style: none;
+	text-align: right;
+	float: left;
+	clear: left;
+	vertical-align: bottom;
+	text-align:left;
+}
+
+.TBReadonly
+{
+	background-color: infobackground;
+	font-size: 12px;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    border-bottom-style: none;
+    text-align: left;
+    float: left;
+    clear: left;
+	text-align:left;
+	width:100%;
+    
+}
+ 
+
+.TBNumReadonly
+{
+	font-size: 12px;
+	background-color: infobackground;
+	border-right: black thin;
+	border-top: black thin;
+	border-left: black thin;
+	border-bottom: black thin;
+	text-align: right;
+	vertical-align: bottom;
+	text-align:left;
+	
+}
+
+.TextArea1
+{
+	border: 1px solid #000000;
+	font-size: 12px;
+	width:100%;
+	height:100%;
+	
+}
+    
+ 
+/* the style of ddl */
+
+.DDL
+{
+	
+}
+ 
+ 
+.LB1
+{
+	font-size: 9pt;
+	line-height: 20px;
+}
+.LB2
+{
+	font-size: 9pt;
+	color: #000000;
+	line-height: 20px;
+}
+.LB3
+{
+	font-size: 9pt;
+	line-height: 16px;
+}
+
+.Btn1
+{
+	font: icon;
+}
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!-- 数据源:
+  No 编号标记一定要唯一.
+  SrcType 类型:  SrcType=DB 是数据库, SrcType=WS 是WebServices.
+  URL: 链接的字串. 如果是DBType=DB 
+  -->
+  <Item No="001" Name="流程类别1"  />
+  <Item No="002" Name="流程类别2"  />
+</NewDataSet>

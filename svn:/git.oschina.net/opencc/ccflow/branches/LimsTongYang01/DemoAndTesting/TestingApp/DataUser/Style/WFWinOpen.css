@@ -1,0 +1,19 @@
+﻿body
+{
+    margin: 0 auto;
+    font-size: 16px;
+    color: #000;
+    line-height: 25px;
+    width: 100%;
+    font-family: 宋体;
+}
+.Icon
+{
+    width: 16px;
+    height: 16px;
+}
+#mainPanel
+{
+    background-color: #d0d0d0;
+    position: relative !important;
+}

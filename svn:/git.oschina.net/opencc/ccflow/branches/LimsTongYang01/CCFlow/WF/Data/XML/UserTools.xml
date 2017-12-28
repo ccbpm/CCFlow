@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+   <AdminTools>
+		<ICON> ../../Images/System/User_1.gif </ICON>
+		<URL> /WF/Port/SignInOfRe.aspx?IsChangeUser=1 </URL>
+		<Name> 更改用户  </Name>
+		<DESC> 更改用户。</DESC>
+		<Enable>0</Enable>		
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/Sys.gif </ICON>
+		<URL> ../Port/ChangePass.aspx  </URL>
+		<Name> 修改密码  </Name>
+		<DESC> 修改您在本系统登陆密码。</DESC>
+		<Enable>1</Enable>		
+	</AdminTools>
+	
+	<AdminTools>
+		<ICON> ../../Images/System/Sys.gif </ICON>
+		<URL> ../Port/Authorize.aspx</URL>
+		<Name> 授权/授权方式登陆/退出授权登陆模式 </Name>
+		<DESC> 系统会根据您当前的登陆状态自动选择相应的操作。</DESC>
+		<Enable>1</Enable>		
+	</AdminTools>
+	
+	<AdminTools>
+		<ICON> ../../Images/System/UI.gif </ICON>
+		<URL> ../Port/Personal.aspx</URL>
+		<Name> 用户界面设置  </Name>
+		<DESC> 用户使用风格设置。</DESC>
+		<Enable>0</Enable>
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/Ring.gif </ICON>
+		<URL> ../Port/NoticeSound.aspx</URL>
+		<Name> 消息铃声设置  </Name>
+		<DESC> 在新的消息到来时间，用什么样的铃声提示给您．</DESC>
+		<Enable>0</Enable>		
+		
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/NewMsg.gif </ICON>
+		<URL>  ../Msg/Reader.aspx </URL>
+		<Name>我的消息</Name>
+		<DESC> 系统或您的同事发送给您的消息.</DESC>
+		<Enable>0</Enable>		
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/NewMsg.gif </ICON>
+		<URL>  ../Msg/Sender.aspx</URL>
+		<Name>发送消息</Name>
+		<DESC> 发送消息</DESC>
+		<Enable>0</Enable>
+	</AdminTools>
+	<AdminTools>
+		<ICON>../../Images/System/NewMsg.gif </ICON>
+		<URL>../FAQ/FAQ.aspx</URL>
+		<Name> 我的问题</Name>
+		<DESC> 我提出的问题，等待管理员解决。</DESC>
+		<Enable>1</Enable>		
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/DataIO.gif </ICON>
+		<URL> DTS.aspx</URL>
+		<Name> 数据同步  </Name>
+		<DESC> 他就是手工的执行系统的调度</DESC>
+	</AdminTools>
+	<AdminTools>
+		<ICON> ../../Images/System/Users.gif </ICON>
+		<URL>../../Comm/Port/OnlineUsers.aspx</URL>
+		<Name> 在线用户  </Name>
+		<DESC> 查看用户在线情况</DESC>
+	</AdminTools>
+</NewDataSet>

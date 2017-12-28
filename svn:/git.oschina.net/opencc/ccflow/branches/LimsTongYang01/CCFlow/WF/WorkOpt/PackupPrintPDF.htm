@@ -1,0 +1,33 @@
+﻿<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
+ <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html >
+ <head>
+ 
+
+ </head>
+ 
+  <body style="background-color: #ffffff">
+ 
+	 <c:forEach items="${imgPath}" var="path">
+		 <div   align="center">
+		 		<img   src="${path}">  	 
+		 </div>
+	 </c:forEach>
+ 
+  </body>
+    <script language="javascript"> 
+ 	preview() ;
+	function preview() 
+	{ 
+		//bdhtml=window.document.body.innerHTML; 
+		//sprnstr="<!--startprint-->"; 
+		//eprnstr="<!--endprint-->"; 
+		//prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17); 
+		//prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr)); 
+		//window.document.body.innerHTML=prnhtml; 
+	 	  window.print(); 
+	} 
+</script> 
+  </html>

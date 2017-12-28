@@ -1,0 +1,378 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>菜单</title>
+     <meta charset="UTF-8"/>
+    <!--<link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />-->
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../WF/Comm/Gener.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/config.js"></script>
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src='../Img/loading.gif' /><font color=Green>ccbpm 正在为登做准备.</font>");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Home_Init&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    //调用公共类库的方法:执行批量主表赋值
+                    GenerFullAllCtrlsVal(data);
+
+                    $("#Msg").html("<font color=blue>ccbpm 欢迎登录...</font>");
+                    return;
+                }
+            });
+        });
+        //左侧目录js
+
+        function ReqDocument(d) {
+            return document.getElementById(d);
+        }
+        // set or get the current display style of the div
+        function dsp(d, v) {
+            if (v == undefined) {
+                return d.style.display;
+            } else {
+                d.style.display = v;
+            }
+        }
+        // set or get the height of a div.
+        function sh(d, v) {
+            // if you are getting the height then display must be block to return the absolute height
+            if (v == undefined) {
+                if (dsp(d) != 'none' && dsp(d) != '') {
+                    return d.offsetHeight;
+                }
+                viz = d.style.visibility;
+                d.style.visibility = 'hidden';
+                o = dsp(d);
+                dsp(d, 'block');
+                r = parseInt(d.offsetHeight);
+                dsp(d, o);
+                d.style.visibility = viz;
+                return r;
+            } else {
+                d.style.height = v;
+            }
+        }
+        /*
+        * Variable 'S' defines the speed of the accordian
+        * Variable 'T' defines the refresh rate of the accordian
+        */
+        s = 7;
+        t = 10;
+        //Collapse Timer is triggered as a setInterval to reduce the height of the div exponentially.
+        function ct(d) {
+            d = ReqDocument(d);
+            if (sh(d) > 0) {
+                v = Math.round(sh(d) / d.s);
+                v = (v < 1) ? 1 : v;
+                v = (sh(d) - v);
+                sh(d, v + 'px');
+                d.style.opacity = (v / d.maxh);
+                d.style.filter = 'alpha(opacity=' + (v * 100 / d.maxh) + ');';
+            } else {
+                sh(d, 0);
+                dsp(d, 'none');
+                clearInterval(d.t);
+            }
+        }
+        //Expand Timer is triggered as a setInterval to increase the height of the div exponentially.
+        function et(d) {
+            d = ReqDocument(d);
+            if (sh(d) < d.maxh) {
+                v = Math.round((d.maxh - sh(d)) / d.s);
+                v = (v < 1) ? 1 : v;
+                v = (sh(d) + v);
+                sh(d, v + 'px');
+                d.style.opacity = (v / d.maxh);
+                d.style.filter = 'alpha(opacity=' + (v * 100 / d.maxh) + ');';
+            } else {
+                sh(d, d.maxh);
+                clearInterval(d.t);
+            }
+        }
+        // Collapse Initializer
+        function cl(d) {
+            if (dsp(d) == 'block') {
+                clearInterval(d.t);
+                d.t = setInterval('ct("' + d.id + '")', t);
+            }
+        }
+        //Expand Initializer
+        function ex(d) {
+            if (dsp(d) == 'none') {
+                dsp(d, 'block');
+                d.style.height = '0px';
+                clearInterval(d.t);
+                d.t = setInterval('et("' + d.id + '")', t);
+            }
+        }
+        // Removes Classname from the given div.
+        function cc(n, v) {
+            s = n.className.split(/\s+/);
+            for (p = 0; p < s.length; p++) {
+                if (s[p] == v + n.tc) {
+                    s.splice(p, 1);
+                    n.className = s.join(' ');
+                    break;
+                }
+            }
+        }
+        //Accordian Initializer
+        function Accordian(d, s, tc) {
+            // get all the elements that have id as content
+            l = ReqDocument(d).getElementsByTagName('div');
+            c = [];
+            for (i = 0; i < l.length; i++) {
+                h = l[i].id;
+                if (h.substr(h.indexOf('-') + 1, h.length) == 'content') { c.push(h); }
+            }
+            sel = null;
+            //then search through headers
+            for (i = 0; i < l.length; i++) {
+                h = l[i].id;
+                if (h.substr(h.indexOf('-') + 1, h.length) == 'header') {
+                    d = ReqDocument(h.substr(0, h.indexOf('-')) + '-content');
+                    d.style.display = 'none';
+                    d.style.overflow = 'hidden';
+                    d.maxh = sh(d);
+                    d.s = (s == undefined) ? 7 : s;
+                    h = ReqDocument(h);
+                    h.tc = tc;
+                    h.c = c;
+                    // set the onclick function for each header.
+                    h.onclick = function () {
+                        for (i = 0; i < this.c.length; i++) {
+                            cn = this.c[i];
+                            n = cn.substr(0, cn.indexOf('-'));
+                            if ((n + '-header') == this.id) {
+                                ex(ReqDocument(n + '-content'));
+                                n = ReqDocument(n + '-header');
+                                cc(n, '__');
+                                n.className = n.className + ' ' + n.tc;
+                            } else {
+                                cl(ReqDocument(n + '-content'));
+                                cc(ReqDocument(n + '-header'), '');
+                            }
+                        }
+                    }
+                    if (h.className.match(/selected+/) != undefined) { sel = h; }
+                }
+            }
+            if (sel != undefined) { sel.onClick(); }
+            //默认打开
+            var selcc = document.getElementById("test1-content");
+            selcc.style.display = "block";
+            selcc.style.height = "200px";
+        }
+    </script>
+    <base target="main" />
+    <style type="text/css">
+        body
+        {
+            font-size: 12px;
+            color: #999999; /* [disabled]background-color: #000000; */
+            font-family: Arial, Helvetica, sans-serif;
+            text-transform: capitalize;
+            background: #eff1f7;
+        }
+        *
+        {
+            margin: 0px;
+            padding: 0px;
+            border: 0px;
+            list-style: none;
+        }
+        /*菜单样式*/
+        #basic-accordian
+        {
+            width: 204px;
+            z-index: 2;
+            border-top-style: solid;
+            border-top-color: #999999;
+            border-bottom-style: solid;
+            border-bottom-color: #666666;
+            padding-bottom: 15px;
+            margin-bottom: 2%;
+        }
+        /*菜单背景*/
+        .accordion_headings
+        {
+            color: #464646;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 40px;
+            letter-spacing: 1px;
+            height: 37px;
+            background: #e3e7f1;
+            border: 1px solid #d5d7dc;
+        }
+        /*菜单分类行*/
+        .accordion_headings:hover
+        {
+        }
+        .accordion_child
+        {
+            padding-left: 0px; /* [disabled]padding-bottom: 8px; */
+        }
+        .accordion_child ul
+        {
+        }
+        .accordion_child ul li
+        {
+            font-size: 12px;
+            display: block;
+            line-height: 42px;
+            display: block;
+            padding: 0 0 4px 50px;
+            border-bottom: 1px solid #d5d7dc;
+            height: 35px;
+        }
+        .accordion_child ul li a
+        {
+            text-decoration: none;
+            color: #666666;
+        }
+        .accordion_child ul li a:hover
+        {
+            /* [disabled]color: #FFFFFF; */
+        }
+        .accordion_child span
+        {
+            padding: 5px 0 5px 32px; /* [disabled]height: 37px; */
+        }
+        .header_highlight
+        {
+            background: url(images/bg_xz.jpg);
+        }
+        /*当前显示菜单分类样式*/
+        
+        /*菜单样式结束*/
+        .main
+        {
+            background: #eff1f7;
+            float: left;
+        }
+        .accordion_headings span
+        {
+            margin: 0 0 0 20px;
+            padding: 5px 0 6px 35px;
+        }
+        <!--.icon_d1
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d2
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d3
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d4
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        
+        .icon_d_1
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_2
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_3
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_4
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_5
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_6
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_7
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_8
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_9
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_10
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_11
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_12
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }
+        .icon_d_13
+        {
+            background: url(./Img/Start.png) no-repeat;
+        }-->
+    </style>
+</head>
+<body  onload="new Accordian('basic-accordian',10,'header_highlight');">
+
+<div class="main">
+        <div id="basic-accordian">
+
+            <div id="test1-header" class="accordion_headings">
+                <span style="background: url(Img/Bar1.png) no-repeat;" >基础功能</span>
+            </div>
+
+            <div id="test1-content">
+                <div class="accordion_child">
+                    <ul>
+                        <li><a href="Start.htm" target="main"><span style="background: url(Img/Start.png) no-repeat;" >发起</span></a></li>
+                        <li><a href="Todolist.htm" target="main"><span  id="empworkCount"  style="background: url(Img/Todolist.png) no-repeat;">待办(<label id="Todolist_EmpWorks" ></label>)</span></a></li>
+                        <li><a href="Runing.htm " target="main"><span id="DGRunningCount"  style="background: url(Img/Runing.png) no-repeat;">在途(<label id="Todolist_Runing" ></label>)</span></a></li>
+                        <li><a href="FlowJoin.htm" target="main"><span class="icon_d_10">我发起的流程</span></a></li>
+                        <li><a href="FlowStarts.htm" target="main"><span class="icon_d_11">我参与的流程</span></a></li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</body>
+</html>

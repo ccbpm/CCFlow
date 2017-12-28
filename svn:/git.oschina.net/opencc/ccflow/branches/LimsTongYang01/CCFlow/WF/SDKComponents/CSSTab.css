@@ -1,0 +1,734 @@
+﻿*
+{
+    margin: 0px;
+    padding: 0px;
+}
+ul
+{
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+.clear
+{
+    clear: both;
+}
+
+body
+{
+    font-size: 12px;
+    background: #fff url(../images/bg.jpg) repeat-x;
+    margin: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+.body
+{
+    font-size: 12px;
+    background: #fff url(../images/bg.jpg) repeat-x;
+    margin: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+/*表*/
+.mainTab
+{
+    margin: 20px;
+    text-align: center;
+    width: 1000px;
+    margin: 0px auto;
+}
+.mainTab .mTit
+{
+    margin: 0px auto;
+    font-family: "黑体";
+    font-size: 32px;
+    color: #003a6c;
+    font-weight: bold;
+    height: 38px;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    text-align: center;
+    width: 713px;
+    background-image: url(../images/top_bg.png) !important; /*FF  IE7 */
+    background-repeat: no-repeat;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/top_bg.png'); /*  IE6 */
+    _background-image: none; /* IE6 */
+}
+.mainTab .Tab
+{
+    font-size: 12px;
+    margin: 0px auto;
+    background: #fff;
+    border: 6px solid #fff;
+}
+.mainTab .Tab th
+{
+    text-align: left;
+    font-weight: normal;
+    font-size: 14px;
+    background: #F0F0F0;
+    height: 24px;
+    line-height: 24px;
+    padding: 0px 10px;
+    color: #666;
+}
+.mainTab .Tab td
+{
+    text-align: left;
+    height: 24px;
+    line-height: 24px;
+    color: #666;
+}
+.mainTab .tit
+{
+    background: url(../images/TabLine.jpg) repeat-x;
+    height: 36px;
+    padding: 0px;
+    border-bottom: 1px solid #2A8CCD;
+}
+.mainTab .tit2
+{
+    background: url(../images/TabLine.jpg) repeat-x;
+    height: 36px;
+    padding: 0px;
+    border-bottom: 1px solid #B60B0B;
+}
+.mainTab .tit3
+{
+    background: url(../images/TabLine.jpg) repeat-x;
+    height: 36px;
+    padding: 0px;
+    border-bottom: 1px solid #79B93B;
+}
+.mainTab .tit b
+{
+    background: url(../images/TabJpg.jpg) no-repeat;
+    display: block;
+    height: 36px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 36px;
+    padding-left: 10px;
+}
+.mainTab .tit3 .bt
+{
+    background: url(../images/TabJpg2.jpg) no-repeat;
+    display: block;
+    height: 36px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 36px;
+    padding-left: 10px;
+}
+.mainTab .tit2 .bt2
+{
+    background: url(../images/TabJpg3.jpg) no-repeat;
+    display: block;
+    height: 36px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 36px;
+    padding-left: 10px;
+}
+
+.othTab
+{
+}
+.othTab th
+{
+    text-align: left;
+    font-weight: normal;
+    font-size: 12px;
+    background: #F0F0F0;
+    height: 24px;
+    line-height: 24px;
+    padding: 0px 10px;
+    color: #666;
+}
+.othTab td
+{
+    text-align: left;
+    height: 24px;
+    line-height: 24px;
+    color: #666;
+    font-size: 12px;
+}
+
+.fjTab
+{
+    border: 1px dashed #ccc;
+    background: #fff;
+    margin: 10px;
+    width: 980px;
+}
+.fjTab td
+{
+    font-size: 12px;
+    color: #666;
+    padding: 5px;
+}
+
+
+.dengjiTab
+{
+    border: 1px dashed #ccc;
+    background: #fff;
+    width: 980px;
+}
+.dengjiTab th
+{
+    font-weight: normal;
+    font-size: 14px;
+    background: #F0F0F0;
+    height: 24px;
+    line-height: 24px;
+    padding: 0px 10px;
+    color: #666;
+}
+.dengjiTab td
+{
+    height: 24px;
+    line-height: 24px;
+    color: #666;
+    font-size: 12px;
+}
+.dengjiTab2
+{
+    background: #fff;
+    width: 100%;
+}
+.dengjiTab2 th
+{
+    font-weight: normal;
+    font-size: 12px;
+    background: #F0F0F0;
+    height: 24px;
+    line-height: 24px;
+    padding: 1px 10px;
+    color: #666;
+}
+.dengjiTab2 td
+{
+    height: 24px;
+    line-height: 24px;
+    color: #666;
+    font-size: 12px;
+    padding-left: 6px;
+}
+
+
+.beizhuTab
+{
+    border: 1px dashed #E0D9CB;
+    background: #fff;
+    margin: 10px 10px 0px 10px;
+    width: 980px;
+}
+.beizhuTab th
+{
+    font-weight: normal;
+    font-size: 14px;
+    background: #EDEBE1;
+    height: 28px;
+    line-height: 28px;
+    padding: 0px 10px;
+    color: #666;
+    text-align: left;
+}
+.beizhuTab td
+{
+    height: 24px;
+    line-height: 24px;
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+    padding: 5px;
+}
+
+.lishiTab
+{
+    border: 1px dashed #ccc;
+    background: #fff;
+    color: #666;
+    margin-top: 10px;
+    width: 980px;
+}
+.lishiTab th
+{
+    font-weight: normal;
+    font-size: 12px;
+    background: #F0F0F0;
+    height: 26px;
+    line-height: 26px;
+    padding: 0px 10px;
+    text-align: center;
+}
+.lishiTab td
+{
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    text-align: center;
+}
+
+
+
+.caozuo
+{
+    color: #FF0000;
+}
+.caozuo2
+{
+    color: #333333;
+}
+.caozuo3
+{
+    color: #003399;
+}
+.tCenter
+{
+    text-align: center;
+}
+
+/*表单*/
+.input01
+{
+    width: 600px;
+    background: #fff;
+    font-size: 12px;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+    height: 24px;
+    line-height: 24px;
+}
+.input1
+{
+    width: 99%;
+    background: #fff;
+    font-size: 12px;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+    height: 24px;
+    line-height: 24px;
+}
+.input2
+{
+    width: 99%;
+    background: #fff;
+    font-size: 12px;
+    height: 80px;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+    overflow: auto;
+}
+.input3
+{
+    width: 80px;
+    background: #fff;
+    font-size: 12px;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+    height: 24px;
+    line-height: 24px;
+}
+.input4
+{
+    width: 200px;
+    background: #fff;
+    font-size: 12px;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+    height: 24px;
+    line-height: 24px;
+}
+.input5
+{
+    width: 96%;
+    background: #fff;
+    font-size: 12px;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+    height: 24px;
+    line-height: 24px;
+}
+
+/*其他*/
+.mainTab .Tab .z_1
+{
+    font-size: 12px;
+    color: #666;
+}
+.xlk_01
+{
+    width: 200px;
+}
+.xlk_02
+{
+    width: 280px;
+}
+.tabys, Title
+{
+    background: #f4f4f4;
+    font-size: 12px;
+    padding: 3px;
+}
+.bg_01
+{
+    background: #f8f8f8;
+    font-size: 12px;
+}
+.mainTab .Tab_gysj
+{
+    font-size: 12px;
+    width: 1000px;
+    margin: 0px auto;
+    background: #fff;
+    border: 6px solid #e5edf3;
+}
+
+/*按钮*/
+.anniu_01
+{
+    background: url(../images/tjfj.jpg);
+    border: none;
+    width: 80px;
+    height: 22px;
+    color: #FFF;
+    line-height: 22px;
+    font-size: 12px;
+}
+.anniu_02
+{
+    background: url(../images/tybt.jpg);
+    border: none;
+    width: 60px;
+    height: 22px;
+    color: #FFF;
+    font-size: 12px;
+}
+.anniu_02_1
+{
+    background: url(../images/tybt.jpg);
+    border: none;
+    height: 22px;
+    color: #FFF;
+    font-size: 12px;
+}
+.anniu_03
+{
+    background: url(../images/qxbt.jpg);
+    border: none;
+    width: 60px;
+    height: 22px;
+    color: #333;
+    font-size: 12px;
+}
+.anniu_04
+{
+    background: url(../images/tjfj.jpg);
+    border: none;
+    width: 80px;
+    height: 22px;
+    color: #fff;
+    margin-left: 15px;
+    font-size: 12px;
+}
+.anniu_05
+{
+    background: url(../images/anniu_01.jpg);
+    border: none;
+    width: 60px;
+    height: 22px;
+    color: #FFF;
+    line-height: 22px;
+    float: right;
+    margin-right: 15px;
+}
+.anniu_06
+{
+    background: url(../images/anniu_03.jpg);
+    border: none;
+    width: 80px;
+    height: 22px;
+    color: #666;
+    line-height: 22px;
+    margin-left: 15px;
+}
+.anniu_06_01
+{
+    background: url(../images/anniu_03.jpg);
+    border: none;
+    width: 80px;
+    height: 22px;
+    color: #666;
+    line-height: 22px;
+ 
+}
+.anniu_07
+{
+    background: url(../images/anniu_02.jpg);
+    border: none;
+    width: 60px;
+    height: 22px;
+    color: #FFF;
+    font-size: 12px;
+}
+.anniu_08
+{
+    background: url(../images/anniu_01.jpg) no-repeat center;
+    border: none;
+    width: 60px;
+    height: 22px;
+    color: #fff;
+    line-height: 22px;
+}
+.anniu_09
+{
+    background: url(../images/anniu_04.jpg);
+    border: none;
+    width: 80px;
+    height: 22px;
+    color: #fff;
+    line-height: 22px;
+    margin-right: 15px;
+    float: right;
+}
+.anniu_09_01
+{
+    background: url(../images/anniu_04.jpg);
+    border: none;
+    width: 80px;
+    height: 22px;
+    color: #fff;
+    line-height: 22px;
+  
+}
+.anniu_10
+{
+    background: url(../images/xuanze.jpg);
+    border: none;
+    width: 80px;
+    height: 22px;
+    color: #fff;
+    margin-left: 15px;
+    font-size: 12px;
+}
+.off
+{
+    background: url(../images/off.jpg);
+    border: none;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.off2
+{
+    background: url(../images/off_2.jpg) no-repeat;
+    border: none;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+/*表格3*/
+.nubmer
+{
+    float: right;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+.nubmer .textbb
+{
+    width: 140px;
+    border: 0px;
+    border-bottom: 1px solid #ccc;
+    background: none;
+}
+.Binput1
+{
+    width: 100px;
+    background: #fff;
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+
+
+/*分理*/
+.fenli
+{
+    overflow: hidden;
+    position: relative;
+    z-index: 30;
+    background: #f4f4f4;
+    margin: 8px 5px 5px 1px;
+}
+.fenliTit
+{
+    left: 0px;
+    top: 0px;
+    width: 18px;
+    height: auto;
+    position: absolute;
+    z-index: 100;
+    cursor: default;
+    text-align: center;
+    font-size: 12px;
+    background: #ccc;
+    padding: 3px;
+    line-height: 18px;
+}
+.curT
+{
+    color: #FFF;
+    font-size: 12px;
+    background: #CC0000;
+}
+.TabFenli
+{
+    font-size: 12px;
+    margin: 0px auto;
+    background: #fff;
+}
+.TabFenli th
+{
+    text-align: left;
+    font-weight: normal;
+    font-size: 14px;
+    background: #F0F0F0;
+    height: 24px;
+    line-height: 24px;
+    padding: 0px 10px;
+    color: #666;
+}
+.TabFenli td
+{
+    text-align: left;
+    height: 24px;
+    line-height: 24px;
+    color: #666;
+}
+.searchAdd
+{
+    background: url(../images/add.jpg) no-repeat;
+    height: 22px;
+    width: 60px;
+    color: #FFFFFF;
+    border: 0px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.tiJiao
+{
+    background: url(../images/tiJiao.jpg) no-repeat;
+    height: 22px;
+    width: 60px;
+    color: #FFFFFF;
+    border: 0px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+
+/*分理*/
+.none
+{
+    display: none;
+}
+.Tabqh
+{
+    margin: 10px;
+    text-align: left;
+    width: 980px;
+}
+.Tabqh .nTab
+{
+    float: left;
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+}
+.nTab .TabTitle
+{
+    width: 100%;
+    border-bottom: 1px #AACCEE solid;
+}
+.nTab .TabTitle li
+{
+    float: left;
+    padding: 0px 15px;
+    text-align: center;
+    height: 24px;
+    line-height: 24px;
+}
+.nTab .TabTitle .active
+{
+    background: url(../images/TabJpg4.jpg) repeat-x;
+    color: #fff;
+    cursor: pointer;
+    border-right: 1px solid #fff;
+}
+.nTab .TabTitle .normal
+{
+    background: #DDE9F6;
+    color: #63696E;
+    border-right: 1px solid #fff;
+    cursor: pointer;
+}
+.nTab .TabTitle .wuxiao
+{
+    background: #e4e4e4;
+    border-right: 1px solid #fff;
+    color: #888;
+}
+.nTab .TabContent
+{
+    width: 980px;
+    background: #fff;
+    margin: 0px auto;
+    padding: 10px;
+    border-bottom: 1px #AACCEE solid;
+    border-right: 1px #AACCEE solid;
+    border-left: 1px #AACCEE solid;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

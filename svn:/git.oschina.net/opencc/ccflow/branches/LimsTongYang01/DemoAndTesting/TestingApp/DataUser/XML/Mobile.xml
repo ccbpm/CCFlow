@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Item No="Start" Name="发起"   Tip="能够发起的流程" Type="Sys"  IsEnable="1" />
+  <Item No="TodoList" Name="待办" Tip="等待我去做的工作"   Type="Sys" IsEnable="1" />
+  <Item No="CC" Name="抄送"  Tip="别人抄送给我的工作,让我阅知." Type="Sys" IsEnable="1" />
+  <Item No="Runing" Name="未完成"  Tip="在途,我参与的但是没有完成的."   Type="Sys" IsEnable="1" />
+  <Item No="Complete" Name="已完成" Tip="流程已经结束的工作"   Type="Sys" IsEnable="1" />
+  <Item No="Share" Name="共享任务"  Tip="公共任务池的工作" Type="Sys" IsEnable="1" />
+  <Item No="Search" Name="查询"  Tip="已经完成的流程查询" Type="Sys" IsEnable="1" />
+  <Item No="Msg" Name="系统消息"  Tip="消息提示" Type="Sys" IsEnable="1" />
+  <Item No="Setting" Name="设置"  Tip="系统设置"  Type="Sys" IsEnable="1" />
+  <Item No="Address" Name="通讯录"  Tip="通讯人员"  Type="Sys" IsEnable="1" />
+  <Item No="Relogin" Name="切换用户"   Tip="重新登录，以其他用户名登录." Type="Sys" IsEnable="1" />
+</NewDataSet>

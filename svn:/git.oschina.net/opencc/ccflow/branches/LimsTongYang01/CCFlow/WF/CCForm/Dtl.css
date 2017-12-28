@@ -1,0 +1,149 @@
+﻿/*  Table 风格  */
+body
+{
+   font-size: 14px;
+   text-align:center;
+}
+
+/* 按钮风格 */
+input[type="button"], input[type="submit"]
+{
+    border: 0;
+    /*background: #4D77A7;*/
+    background: #2884fa;
+    color: #FFF;
+    font-size: 12px;
+    padding: 4px 8px;
+    margin: 5px 3px 5px 3px;
+
+    border-radius:15px;
+}
+ 
+/*  table 类型风格 */
+table
+{
+    border: 1px outset #C0C0C0;
+    padding: inherit;
+    margin: 0;
+    border-collapse: collapse;
+}
+ 
+
+/*  时学业添加 结束位置 */
+th
+{
+    border-width: 1px;
+    border-color: #C2D5E3;
+    border-style: solid;
+    line-height: 25px;
+    color: 0a0a0a;
+    white-space: nowrap;
+    padding: 0 2px;
+    background-color: #e0ecff;
+    font-size: 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+td
+{
+    border-right-style: none;
+    border-left-style: none;
+    border-style: solid;
+    padding: 4px;
+    text-align: left;
+    color: #333333;
+    font-size: 12px;
+    border-width: 1px;
+    border-color: #C2D5E3;
+}
+
+
+td a
+{
+    text-decoration: none;
+    font-size: 12px;
+}
+ 
+
+td input[type="textbox"]
+{
+    margin: 0px;
+    border: 1px solid #D6DDE6;
+    padding: 0px;
+}
+ 
+td input
+{
+    /*border:none;*/
+    width: auto;
+    word-break: keep-all;
+}
+         
+Img
+{
+    border: 0px;
+}
+  
+
+#bottomToolBar {
+display:block;
+}
+
+     
+
+
+/*杨玉慧写*/
+body {
+    font-family: 'Microsoft YaHei UI';
+}
+.col-md-2, .col-md-1, .col-md-11,.col-sm-4, .col-sm-2, .col-sm-10 {
+    line-height: 40px;
+    text-align: left;
+    /*padding: 8px 0px;*/
+}
+
+#nav li span {
+}
+
+
+
+#nav {
+    display: inline-block;
+}
+    
+select {
+    height: 29px;
+}
+
+.col-md-1 label,.col-sm-2 label {
+    width: auto;
+    text-align: right;
+}
+  
+.col-md-2 a,.col-md-11 a,.col-md-4 a,.col-md-10 a {
+    line-height: 45px;
+    display: inline-block;
+}
+ 
+
+/*让表格显示 ...*/
+body table {
+  table-layout: fixed;
+  /*width: 98% border:0px;
+                        margin: 0px;*/
+}
+body table tr td {
+  text-overflow: ellipsis;
+  /* for IE */
+  -moz-text-overflow: ellipsis;
+  /* for Firefox,mozilla */
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+
+.delRow {
+    margin-left:6px;
+}

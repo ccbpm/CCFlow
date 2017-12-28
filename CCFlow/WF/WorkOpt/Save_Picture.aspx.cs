@@ -8,31 +8,41 @@ using System.Web.UI.WebControls;
 using System.IO;
 using System.Web.Script.Services;
 using System.Web.Services;
+using BP.Sys;
+using BP.Web;
 
 
 namespace TYApp.WF.PicSignature
 {
-[ScriptService]
+    [ScriptService]
     public partial class Save_Picture : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
-    [WebMethod()]
-    public static void UploadPic(string imageData)
-    {
-        string Pic_Path = HttpContext.Current.Server.MapPath("MyPicture.png");
-        using (FileStream fs = new FileStream(Pic_Path, FileMode.Create))
+        [WebMethod()]
+        public static void UploadPic(string imageData, string WorkID, string FK_Node, string FK_Flow)
         {
-            using (BinaryWriter bw = new BinaryWriter(fs))
+            string basePath = SystemConfig.PathOfDataUser + "HandWritingImg";
+            string ny = DateTime.Now.ToString("yyyy_MM");
+            string tempPath = basePath + "\\" + ny + "\\" + FK_Flow;
+            string tempName = WorkID + "_" + FK_Node + "_" + WebUser.No + ".png";
+            //string tempName = WorkID + "_" + FK_Node + "_" + "12345678.png";
+            if (System.IO.Directory.Exists(tempPath) == false)
+                System.IO.Directory.CreateDirectory(tempPath);
+            string Pic_Path = tempPath + "\\" + tempName;
+
+            using (FileStream fs = new FileStream(Pic_Path, FileMode.Create))
             {
-                byte[] data = Convert.FromBase64String(imageData);
-                bw.Write(data);
-                bw.Close();
+                using (BinaryWriter bw = new BinaryWriter(fs))
+                {
+                    byte[] data = Convert.FromBase64String(imageData);
+                    bw.Write(data);
+                    bw.Close();
+                }
             }
         }
-    }
     }
 }
 

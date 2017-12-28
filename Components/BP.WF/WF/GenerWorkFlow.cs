@@ -782,6 +782,10 @@ namespace BP.WF
             {
                 //改变了节点就把会签状态去掉.
                 this.HuiQianTaskSta = WF.HuiQianTaskSta.None;
+                this.HuiQianSendToNodeIDStr = "";
+                this.HuiQianSendToEmps = "";
+                this.HuiQianZhuChiRen = "";
+
                 SetValByKey(GenerWorkFlowAttr.FK_Node, value);
             }
         }

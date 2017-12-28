@@ -5933,7 +5933,12 @@ namespace BP.WF
                     {
                         /*如果是就记录下来发送到达的节点ID,到达的人员ID.*/
                         this.HisGenerWorkFlow.HuiQianSendToNodeIDStr = this.HisNode.NodeID + "," + jumpToNode.NodeID;
-                        this.HisGenerWorkFlow.HuiQianSendToEmps = jumpToEmp;
+                        if (jumpToEmp==null)
+                        this.HisGenerWorkFlow.HuiQianSendToEmps = "";
+                        else
+                            this.HisGenerWorkFlow.HuiQianSendToEmps = jumpToEmp;
+
+
                         this.HisGenerWorkFlow.HuiQianZhuChiRen = WebUser.No;
                         this.HisGenerWorkFlow.Update();
                     }

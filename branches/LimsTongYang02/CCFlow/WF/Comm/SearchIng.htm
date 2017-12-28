@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>查询</title>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script src="Gener.js" type="text/javascript"></script>
+     <base target="_self" /> 
+    <script language="javascript" type="text/javascript" >
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            //初始化工具栏.
+            InitToolbar();
+
+            //执行查询.
+            SearchIt();
+
+            $("#Msg").html("");
+        });
+
+
+        //初始化数据.
+        function InitToolbar() {
+
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            //handler.AddUrlData(); //加入页面参数.
+
+            handler.AddPara("EnsName", "BP.TY.CHExts");
+
+            //获得map基本信息.
+            var mapBase = handler.DoMethodReturnJSON("Search_MapBaseInfo");
+
+            //获得查询信息，包含了查询数据表.
+            var data = handler.DoMethodReturnJSON("Search_SearchAttrs");
+
+            var html = "";
+            if (mapBase.IsShowSearchKey == "True")
+                html = "关键字:<input type=text value='' />";
+
+            //绑定外键枚举查询条件.
+            var attrs = data["Attrs"];
+
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                html += attr.Name +"<select name='" + attr.Field + "' ID='" + attr.Field + "'>" + InitDDLOperation(data, attr, "") + "</select>";
+            }
+            //绑定数据 @谢工.
+            html += "<input type='button' value='查询' onclick='Search();' />";
+
+            $("#toolbar").html(html); //设置基础信息.
+        }
+
+        //初始化下拉列表框的OPERATION
+        function InitDDLOperation(frmData, mapAttr, defVal) {
+
+            var operations = "";
+            var ens = frmData[mapAttr.Field];
+            for (var i = 0; i < ens.length; i++) {
+                var en = ens[i];
+                operations += "<option value='" + en.No + "'>" + en.Name + "</option>";
+            }
+            return operations;
+        }
+
+        //执行查询.
+        function Search() {
+
+            alert('执行查询');
+
+            //保存查询条件.
+            var ensName=GetQueryString("EnsName");
+            var myPK= WebUser.No + ensName + "_SearchAttrs";
+
+            var ur=new Entity("BP.Sys.UserRegedit");
+            ur.MyPK=myPK;
+            ur.FK_Emp = WebUser.No;
+            ur.CfgKey = "SearchAttrs";
+
+            if (document.getElementById("TB_Key")!=null)
+                ur.SearchKey = document.getElementById("TB_Key").value;
+
+             //设置查询时间.
+             if (document.getElementById("TB_S_From")!=null)
+                 ur.DTFrom_Data = this.GetTBByID("TB_S_From").value;
+
+             if (document.getElementById("TB_S_To")!=null)
+                 ur.DTTo_Data = this.GetTBByID("TB_S_To").value;
+
+                 
+             if (document.getElementById("TB_S_From")!=null)
+                 ur.DTFrom_Datatime = this.GetTBByID("TB_S_From").value;
+                 
+             if (document.getElementById("TB_S_To")!=null)
+                 ur.DTTo_Datatime = this.GetTBByID("TB_S_To").value;
+                  
+
+
+                  //遍历所有的元素.
+                  for (var i = 0; i < document.length; i++) {
+
+                  var ctrl=document.childNodes;
+                  if (ti.id == null)
+                    continue;
+
+                     if (ti.id.IndexOf("DDL_") == -1)
+                    continue;
+
+                str += "@" + ti.ID + "=" + ddl.SelectedItemStringVal;
+                  }
+                   
+            ur.FK_Emp = WebUser.No;
+            ur.CfgKey = ensName + "_SearchAttrs";
+            ur.Vals = str;
+            ur.Save();
+
+            //执行查询.
+            SearchIt();
+        }
+
+        //执行查询.
+        function SearchIt() {
+
+            //创建处理器.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+            handler.AddPara("EnsName", "BP.TY.CHExts");
+
+            //获得查询的基本信息, 实体属性 attrs, 实体数据.
+            var data = handler.DoMethodReturnJSON("Search_SearchIt");
+
+            var attrs = data["Attrs"];
+
+            var html = "<table style='width:99%;' >";
+            html += "<tr>";
+            html += "<th>序</th>";
+            for (var i = 0; i < attrs.length; i++) {
+
+                var attr = attrs[i];
+                html += "<th>"+attr.Name+"</th>";
+            }
+            html += "</tr>";
+
+            //生成数据.
+
+
+
+            html += "</table>";
+            $("#docs").html(html);
+
+
+
+        }
+    </script>
+</head>
+<body>
+
+<form id="cc">
+<table style="width:99%;">
+<tr>
+<td><div id="toolbar"></div> </td>
+</tr>
+
+<tr>
+<td> <div id="docs"></div> </td>
+</tr>
+
+<tr>
+<td> <div id="end"></div> </td>
+</tr>
+
+</table>
+
+<div id="Msg"></div>
+</form>
+
+</body>
+</html>

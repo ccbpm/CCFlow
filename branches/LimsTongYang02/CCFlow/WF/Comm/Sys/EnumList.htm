@@ -1,0 +1,30 @@
+﻿<head>
+    <title>驰骋工作流</title>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        function ToURL() {
+
+            var url = window.location.href;
+            if (plant == "CCFlow") {
+                url = url.replace('.htm', '.aspx');
+                window.location.href = url;
+                return;
+            } else {
+                url = url.replace('.htm', '.jsp');
+                window.location.href = url;
+                return;
+            }
+        }
+    </script>
+</head>
+<body  onload="ToURL()" >
+
+<form id="cc">
+
+<br />
+<center> <img src='../../Img/loading.gif' alt="" />正在加载，请稍后。。。 </center>
+</form>
+
+</body>
+</html>

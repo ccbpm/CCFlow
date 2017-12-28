@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>驰骋工作流</title>
+    <!-- 于庆海 -->
+    <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../Scripts/config.js"></script>
+
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+        //初始化数据.
+        function InitPage() {
+
+            var fk_node = GetQueryString("FK_Node");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=BlockModel_Init&FK_Node=" + fk_node + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+
+                    data = JSON.parse(data);
+
+                    //console.info(data)
+
+                    //调用公共类库的方法:执行批量主表赋值
+                    GenerFullAllCtrlsVal(data);
+
+                    //GenerBindDDL("DDL_BRole", ses, "IntKey", "Lab", data.BatchRole);
+
+                    $("#TB_Alert").val(data.BlockAlert);
+                    switch (data.BlockModel) {
+                        case "0":
+                            break;
+                        case "1":
+                            break;
+                        case "2":
+                            $("#TB_SpecSubFlow").val(data.BlockExp);
+                            break;
+                        case "3":
+                            $("#TB_SQL").val(data.BlockExp);
+                            break;
+                        case "4":
+                            $("#TB_Exp").val(data.BlockExp);
+                            break;
+                        default:
+                            break;
+                    }
+                    return;
+                }
+            });
+        }
+
+
+        //ajax 提交
+        function Btn_Save_Click() {
+            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            var frmData = $("#cc").serialize();
+            //alert(frmData);
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=BlockModel_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        return;
+                    }
+                    alert(data);
+                    window.location.href = window.location.href;
+                    return;
+                }
+            });
+        }
+    </script>
+</head>
+<body  >
+
+<form id="cc">
+ 
+ <table style="width:100%;">
+<caption>发送阻塞模式 </caption>
+<tr>
+
+
+<td valign="top"> 
+<fieldset>
+<legend><input type="radio" ID="RB_BlockModel_0" value="0" name="RB_BlockModel" runat="server" /><label for="RB_BlockModel_0">不阻塞</label>
+    </legend>
+ <ul  style="color:Gray;">
+ <li>默认模式，不阻塞。</li>
+ <li>如果以下几种模式不能满足需求就可以在发送成功前的事件里抛出异常，阻止向下运动。</li>
+ </ul>
+</fieldset>
+
+
+<fieldset>
+<legend><input type="radio" ID="RB_BlockModel_1" value="1" runat="server"  name="RB_BlockModel" /><label for="RB_BlockModel_1">当前节点有未完成的子流程时</label></legend>
+ <ul  style="color:Gray;">
+ <li> 当前节点吊起了子流程，并且有未完成的子流程时就不能向下运动。</li>
+ </ul>
+</fieldset>
+
+
+<fieldset>
+<legend><input type="radio" ID="RB_BlockModel_2" value="2" runat=""  name="RB_BlockModel" /><label for="RB_BlockModel_2">按约定格式阻塞未完成子流程</label></legend>
+<a href="javascript:ShowHidden('flows')">请设置表达式:</a>
+
+<div id="flows" style="color:Gray; display:none">
+ <ul>
+ <li>当该节点向下运动时，要检查指定的历史节点曾经启动的指定的子流程全部完成，作为条件。</li>
+ <li>例如：在D节点上，要检查曾经在C节点上启动的甲子流程是否全部完成，如果完成就不阻塞。</li>
+ <li>配置格式：@指定的节点1=子流程编号1@指定的节点n=子流程编号n。</li>
+ </ul>
+ </div>
+ <input type="text" ID="TB_SpecSubFlow" name="TB_SpecSubFlow" runat="server" style="width:95%"/>
+</fieldset>
+
+
+<fieldset>
+<legend><input type="radio" ID="RB_BlockModel_3" value="3" runat="server"  name="RB_BlockModel" /><label for="RB_BlockModel_3">按照SQL阻塞</label></legend>
+<a href="javascript:ShowHidden('sql')">请输入SQL:</a>
+<div id="sql" style="color:Gray; display:none">
+ <ul>
+ <li>配置一个SQL，该SQL返回一行一列的数值类型的值。</li>
+ <li>如果该值大于0，则阻塞发送, 反之不阻塞.</li>
+ <li>配置的参数支持ccbpm表达式。</li>
+ </ul>
+ </div>
+<input type="text" ID="TB_SQL" name="TB_SQL" runat="server"  TextMode="MultiLine" Rows="1"  style="width:95%" />
+</fieldset>
+
+<fieldset>
+<legend><input type="radio" ID="RB_BlockModel_4" value="4" runat="server"   name="RB_BlockModel" /><label for="RB_BlockModel_4">按照表达式阻塞</label></legend>
+ 
+<a href="javascript:ShowHidden('exp')">请输入表达式:</a>
+<div id="exp" style="color:Gray; display:none">
+ <ul>
+ <li>配置一个表达式, 比如: @MyFieldName = 1 该表达式成立的时候，系统就不能向下发送。 </li>
+ <li>表达式：@+字段名+空格+运算符+空格+值；字段名就是节点表单的所有字段，空格为英文状态下空格，运算符包含=、!=、>、>=、<、<=、LIKE </li>
+ <li>注意: 仅仅支持一个表达式 . 比如: @JinE > 10000  </li>
+ </ul>
+ </div>
+<input type="text" ID="TB_Exp" name="TB_Exp" runat="server"   style="width:95%" />
+</fieldset>
+ 
+ 
+<fieldset>
+<legend>其他选项设置</legend>
+
+<font color="gray">被阻塞时提示信息(默认为:符合发送阻塞规则，不能向下发送):</font>
+<input type="text" ID="TB_Alert" name="TB_Alert" runat="server"   style="width:95%"/>
+</fieldset>
+ 
+</td>
+
+<td valign="top" style="width:30%;"> 
+<fieldset>
+<legend>帮助</legend>
+<ul>
+<li>发送阻塞，就是让当前节点不能向下运动的规则。</li>
+<li>如果满足一定的条件，就不能让其向下运动。</li>
+</ul>
+</fieldset>
+</td>
+
+
+
+</tr>
+<tr>
+<td colspan=2>
+
+<input type="button" ID="Btn_Save" runat="server" value="保存" onclick="Btn_Save_Click()" />
+
+</td>
+</tr>
+</table>
+
+</form>
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="UTF-8"/>
+	<title>字段同步</title>
+	<link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../../Comm/JScript.js"></script>
+	<script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+	<script type="text/javascript" src="../../Scripts/config.js"></script>
+	<base target="_self" />
+<script type="text/javascript">
+    //! TODO: 1.显示流程名称？	2.JS方法中的页面路径
+
+    /* ESC Key Down */
+    function Esc() {
+        if (event.keyCode === 27)
+            window.close();
+        return true;
+    }
+
+    //页面启动函数.
+    $(function () {
+        $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+        InitPage();
+        $("#Msg").html("");
+    });
+
+    //初始化数据.
+    function InitPage() {
+        
+        var flowNo = GetQueryString("FK_Flow");
+        var dbSrc = GetQueryString("FK_DBSrc");
+        var tableName = GetQueryString("TableName");
+
+        //初始化表格.
+        $.ajax({
+            type: 'post',
+            async: true,
+            url: Handler + "?DoType=DTSBTableExt_Init&FK_Flow=" + flowNo + "&FK_DBSrc=" + dbSrc + "&TableName=" + tableName + "&m=" + Math.random(),
+            dataType: 'html',
+            success: function (data) {
+
+                if (data.indexOf("err@") == 0) {
+                    alert(data);
+                    return;
+                }
+
+
+                data = JSON.parse(data);
+
+                //属性.
+                var mapAttrs = data["Sys_MapAttr"];
+                var cols = data["Cols"]; //表的列名.
+
+
+                //把OID锁定第1行.
+                var newRow;
+                for (var i in mapAttrs) {
+
+                    var attr = mapAttrs[i];
+
+                    var keyOfEn = mapAttrs[i].KeyOfEn;
+                    if (keyOfEn != "OID")
+                        continue;
+
+                    var lgType = mapAttrs[i].LGType;
+
+                    newRow = "<tr >";
+                    newRow += "<td class=Idx>" + i + "</td>";
+
+                    var rb = "<input type=radio value=0  id=PKModel_0 name=PKModel /> <label for=PKModel_0 >OID是主键 </label>";
+                    rb += "<input type=radio value=1  id=PKModel_1 name=PKModel /> <label for=PKModel_1 >GUID是主键 </label>";
+
+                    newRow += "<td>" + rb + "</td>";
+                    newRow += "<td>主键<img src='../../Img/PRI/2.png' /></td>";
+
+                    var ddl = "<select name='DDL_OID' >" + InitDDLOperation(cols, keyOfEn) + "</select>";
+
+                    newRow += "<td>" + ddl + "</td>";
+                    newRow += "</tr>";
+
+                    $("#Table1 tr:last").after(newRow);
+                }
+
+
+                //增加处理.
+                for (var i in mapAttrs) {
+
+                    var attr = mapAttrs[i];
+                    if (attr.KeyOfEn == "OID")
+                        continue;
+
+                    var keyOfEn = attr.KeyOfEn;
+
+
+                    newRow = "";
+                    newRow = "<tr><td class=Idx>" + i + "</td>";
+                    newRow += "<td><input  type='checkbox' name='CB_" + attr.KeyOfEn + "' />";
+                    newRow += '<label for="CB_' + attr.KeyOfEn + '\" >' + attr.KeyOfEn + ' - ' + attr.Name + '</label></td>';
+                    newRow += "<td>" + GetDataTypeDesc(mapAttrs[i].MyDataType) + "</td>";
+
+
+                    var ddl = "<select name='DDL_" + keyOfEn + "' >" + InitDDLOperation(cols, keyOfEn) + "</select>";
+                    newRow += "<td>" + ddl + "</td>";
+                    newRow += "</tr>";
+
+                    $("#Table1 tr:last").after(newRow);
+                }
+            }
+        });
+    }
+
+    //初始化下拉列表框的OPERATION
+    function InitDDLOperation(cols, defVal) {
+
+        var operations = '';
+
+        $.each(cols, function (i, obj) {
+            //operations += "<option value='" + obj.No + "'>" + obj.Name + "</option>";
+            operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.No +  obj.Name + "</option>";
+        });
+
+        return operations;
+    }
+
+    function GetDataTypeDesc(datatype) {
+
+        switch (datatype) {
+            case "4":
+                return "布尔(Int)";
+            case "6":
+                return "日期nvarchar";
+            case "7":
+                return "日期时间nvarchar";
+            case "5":
+                return "双精度(double)";
+            case "3":
+                return "浮点(float)";
+            case "2":
+                return "整型(int)";
+            case "8":
+                return "货币(float)";
+            case "1":
+                return "字符(nvarchar)";
+            default:
+                return "字符(nvarchar)" + datatype;
+        }
+
+    }
+
+    //执行保存.
+    function Save() {
+
+        var fk_flow = GetQueryString("FK_Flow");
+
+        var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+        // alert(CheckBoxIDs);
+        var frmData = $("#cc").serialize();
+
+        $.ajax({
+            type: 'post',
+            async: true,
+            dataType: 'html',
+            url: Handler + "?DoType=DTSBTableExt_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+            success: function (data) {
+
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+
+                $("#Msg").html(data);
+            }
+        });
+    }
+
+    function Close() {
+        window.close();
+    }
+</script>
+</head>
+<body onkeypress="Esc()">
+
+<form id="cc">
+	<table id="Table1" style=" width:80%;">
+		<caption>
+			 请设置流程字段与业务表字段的同步映射
+		</caption>
+		<tr>
+			<th>序</th>
+			<th>是否同步</th>
+			<th>类型</th>
+			<th>业务表</th>
+		</tr>
+	</table>
+    <input type="button" value="Save" id="Btn_Save" onclick="Save();" />
+    <input type="button" value="Cancel" id="Button1" onclick="Close()" />
+	<div id="Msg">
+	</div>
+
+    </form>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+  <Item No="EnsAppCfg" Name="基础信息" Url="EnsAppCfg.aspx" Target=""  Img=""  DESC="可以完成"   />
+  <Item No="Adv" Name="高级设置" Url="EnsAppCfg.aspx?DoType=Adv"    Target="" Img=""  DESC="组建" />
+  <Item No="EnsAppCfg" Name="导入导出" Url="EnsAppCfg.aspx"    Target="" Img=""   DESC="组建"  />
+  <Item No="EditWebConfig" Name="全局站点设置" Url="EditWebConfig.aspx"    Target="" Img=""   DESC="组建" DFor="admin"   />
+</NewDataSet>

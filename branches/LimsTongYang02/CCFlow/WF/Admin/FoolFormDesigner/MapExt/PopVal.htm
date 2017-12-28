@@ -1,0 +1,483 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>弹窗工作模式设置</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+   <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+
+    <style type="text/css">
+        #TBSQL
+        {
+            width: 1159px;
+             height:200px;
+        }
+        #TB_Url
+        {
+            width: 789px;
+        }
+        #TB_ColNames
+        {
+            width: 421px;
+        }
+        #TB_RootVal
+        {
+             width: 7%;
+        }
+        #TB_Tree_SQL0
+        {
+            width: 90%;
+        }
+        #TB_Tree_SQL
+        {
+            height: 23px;
+            width: 90%;
+        }
+        #TB_TablePage_SQL
+        {
+            width: 90%;
+            height: 41px;
+        }
+        #TB_TablePage_SQLCount
+        {
+            width: 90%;
+        }
+        #TB_Table_SQL
+        {
+            width: 90%;
+        }
+        #TB_LJZTree_SQL
+        {
+            width: 561px;
+        }
+        #TB_GroupModel_Group
+        {
+            width: 823px;
+        }
+        #TB_GroupModel_Entity
+        {
+            width: 90%;
+        }
+        #TB_Width
+        {
+            width: 62px;
+        }
+        #TB_Height
+        {
+            width: 66px;
+        }
+        #TB_TreeSQL
+        {
+            height: 51px;
+            width: 768px;
+        }
+        #TB_TreeParentNo
+        {
+            height: 19px;
+            width: 47px;
+        }
+        #Textarea1
+        {
+            width: 779px;
+        }
+        #TB_DoubleTreeSQL
+        {
+            width: 778px;
+        }
+    </style>
+    <base target="_self" />
+    <script type="text/javascript">
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+        function WinOpen(url, name) {
+            window.open(url, name, 'height=600, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no');
+        }
+        function TROver(ctrl) {
+            ctrl.style.backgroundColor = 'LightSteelBlue';
+        }
+
+        function TROut(ctrl) {
+            ctrl.style.backgroundColor = 'white';
+        }
+        /*隐藏与显示.*/
+        function ShowHidden(ctrlID) {
+            var ctrl = document.getElementById(ctrlID);
+            if (ctrl.style.display == "block") {
+                ctrl.style.display = 'none';
+            } else {
+                ctrl.style.display = 'block';
+            }
+        }
+        //执行保存
+        function Save() {
+            var fk_mapExt = getQueryStringByName("MyPK");
+            var frmData = $("#cc").serialize();
+            var keyOfEn = getQueryStringByName("KeyOfEn") || getQueryStringByName("RefNo");
+            var fk_mapData = getQueryStringByName("FK_MapData");
+            $.ajax({
+                data:frmData,
+                type: 'post',
+                async: true,
+                url: Handler+"?DoType=PopVal_Save&FK_MapExt=" + fk_mapExt + "&m=" + Math.random() + "&KeyOfEn=" + keyOfEn + '&FK_MapData=' + fk_mapData,
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                }
+            });
+        }
+
+        function SaveAndClose() {
+            Save();
+            window.close();
+        }
+
+        function Close() {
+            window.close();
+        }
+
+        function TestData() {
+
+            var fk_mapExt = getQueryStringByName("MyPK");
+            var keyOfEn = getQueryStringByName("RefNo");
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=aa&pageIndex=1&pageSize=12&ReqCount=0&MyPK=" + fk_mapExt + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                }
+            })
+        }
+
+        //页面启动函数.
+        $(function () {
+            InitPage();
+        });
+        function InitPage() {
+
+            var fk_mapExt = getQueryStringByName("FK_MapExt");
+            var keyOfEn = getQueryStringByName("RefNo");
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=PopVal_Init&MyPK=" + fk_mapExt + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+
+                    data = eval('(' + data + ')');
+                    if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
+                        data = data[0];
+                    }
+
+                    //设置选择的模式.
+                    $("#RB_PopWorkModel_" + data.PopValWorkModel).attr("checked", "checked");
+
+                    switch (data.PopValWorkModel) {
+                        case "None":
+                            break;
+                        case "SelfUrl":
+                            $("#TB_Url").val(data.URL);
+                            break;
+                        case "TableOnly": //仅仅表格.
+                            // alert(data.EntitySQL);
+                            $("#TB_Table_SQL").val(data.EntitySQL);
+                            break;
+                        case "TablePage":  //表格分页模式.
+                            $("#TB_TablePage_SQL").val(data.PopValTablePageSQL);
+                            $("#TB_TablePage_SQLCount").val(data.PopValTablePageSQLCount);
+                            break;
+                        case "Group":
+                            $("#TB_GroupModel_Group").val(data.GroupSQL);
+                            $("#TB_GroupModel_Entity").val(data.EntitySQL);
+                            break;
+                        case "Tree":
+                            $("#TB_TreeSQL").val(data.TreeSQL);
+                            $("#TB_TreeParentNo").val(data.TreeParentNo);
+                            //$("#TB_DoubleTreeSQL").val(data.TreeSQL);
+                            //$("#TB_DoubleTreeParentNo").val(data.TreeParentNo);
+                            //$("#TB_DoubleTreeEntitySQL").val(data.PopValTablePageSQLCount);
+                            //$("#TB_TreeSQL").val(data.PopValTablePageSQLCount);
+                            //$("#TB_TreeParentNo").val(data.PopValTablePageSQLCount);
+                            break;
+                        case "TreeDouble":
+                            $("#TB_DoubleTreeSQL").val(data.DoubleTreeSQL);
+                            $("#TB_DoubleTreeParentNo").val(data.DoubleTreeParentNo);
+                            $("#TB_DoubleTreeEntitySQL").val(data.DoubleTreeEntitySQL);
+                            break;
+                        default:
+                            alert('没有判断的元素.PopValWorkModel=' + data.PopValWorkModel);
+                            break;
+                    }
+
+                    //给公共属性赋值.
+                    $("#TB_Width").val(data.W);
+                    $("#TB_Height").val(data.H);
+                    $("#TB_Title").val(data.PopValTitle);
+
+                    //搜索提示.
+                    $("#TB_PopValSearchTip").val(data.PopValSearchTip);
+                    $("#TB_PopValSearchCond").val(data.PopValSearchCond); //查询条件.
+
+                    //替换列信息.
+                    $("#TB_ColNames").val(data.PopValColNames);
+
+                    //设置返回值模式.
+                    $("#RB_PopValFormat_" + data.PopValFormat).attr('checked', 'checked');
+                    // alert(data.PopValFormat);
+
+                    //设置选择模式.
+                    $("#RB_PopValSelectModel_" + data.PopValSelectModel).attr('checked', 'checked');
+
+                }
+            });
+        }
+     
+    </script>
+</head>
+<body onkeypress="Esc();">
+<form id="cc"    >
+
+<!---------------------------- 模式0 ：禁用 ---------------------------------------------------->
+<fieldset>
+<legend><input id="RB_PopWorkModel_None" type="radio" name="Model" value="None"   checked="true" /><label for="RB_PopWorkModel_None">禁用</label>  </legend>
+ <ul>
+ <li>不使用弹出窗体. </li>
+ </ul>
+</fieldset>
+
+<!---------------------------- 模式1 ：自定义URL ---------------------------------------------------->
+<fieldset>
+<legend><input id="RB_PopWorkModel_SelfUrl" type="radio" name="Model" value="SelfUrl"  /><label for="RB_PopWorkModel_SelfUrl">自定义URL</label>  </legend>
+<a href="javascript:ShowHidden('url')">自定义URL:</a>
+ <div id="url" style="color:Gray; display:none">
+ <ul>
+ <li>您选择了使用外部的URL. </li>
+ <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
+ <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.aspx </li>
+ <li>可以使用@SDKFromServHost 变量，标识一个配置路径，该配置在web.config里设置。</li>
+ </ul>
+ </div>
+<input type="text" id="TB_Url" name="TB_Url" value=""   />
+</fieldset>
+
+<!---------------------------- 模式2：Table  ---------------------------------------------------->
+<fieldset>
+<legend><input id="RB_PopWorkModel_TableOnly" type="radio" name="Model" value="TableOnly"  /><label for="RB_PopWorkModel_TableOnly">表格模式</label>  </legend>
+<a href="javascript:ShowHidden('Table')">初始化表格的查询 SQL </a>
+ <div id="Table" style="color:Gray; display:none">
+ 
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>比如:SELECT No,Name FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ </ul>
+ </div>
+<textarea type="text" rows=3 id="TB_Table_SQL" name="TB_Table_SQL"  ></textarea>
+</fieldset>
+
+
+<!---------------------------- 模式3 ：分页的Table  ---------------------------------------------------->
+<fieldset>
+
+
+<legend><input id="RB_PopWorkModel_TablePage" type="radio" name="Model"  value="TablePage"  /><label for="RB_PopWorkModel_TablePage">表格分页模式</label>  </legend>
+<a href="javascript:ShowHidden('TablePage')">数据SQL</a>
+ <div id="TablePage" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM WF_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
+ <li>比如For SQLServer: SELECT TOP @PageSize * FROM
+(
+ SELECT  row_number() over(order by t.No) as rownumber,No,Name,Tel,Email FROM Demo_Student  WHERE  Name LIKE '%@Key%'
+) A WHERE rownumber > @PageCount 
+
+<br />
+总条数: SELECT COUNT(no) FROM Demo_Student WHERE Name LIKE '%@Key%' OR No LIKE '%@Key%'
+ </li>
+ <li>比如For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE Name like '%@Key%'  </li>
+ <li>比如For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE Name like '%@Key%'  </li>
+ </ul>
+ </div>
+ <br />
+
+<textarea type="text" rows="4" id="TB_TablePage_SQL" name="TB_TablePage_SQL"  > </textarea>
+
+ <br />
+
+<a href="javascript:ShowHidden('TablePage_Count')">总条数SQL</a>
+ <br />
+
+ <div id="TablePage_Count" style="color:Gray; display:none">
+ <ul>
+ <li>比如For SQLServer: SELECT count(No) FROM Demo_Student WHERE Name like '%@Key%'  </li>
+ <li>比如For Oracle: SELECT count(No) FROM Demo_Student WHERE Name like '%@Key%'  </li>
+ <li>比如For MySQL: SELECT count(No) FROM Demo_Student WHERE Name like '%@Key%'  </li>
+ </ul>
+ </div>
+<textarea  style=" height:50px; width:100%;" cols="90"  rows="5" id="TB_TablePage_SQLCount"  name="TB_TablePage_SQLCount" ></textarea>
+
+<br />
+<input type="button"   onclick='TestData()' value='测试数据' />
+ 
+</fieldset>
+
+<!---------------------------- 模式4 ：分组显示,但是不分页.  ---------------------------------------------------->
+<fieldset>
+<legend><input id="RB_PopWorkModel_Group" type="radio" name="Model" value="Group"  /><label for="RB_PopWorkModel_Group">分组模式</label>  </legend>
+<a href="javascript:ShowHidden('GroupModelSQL')">分组查询SQL(可以为空):</a>
+<br />
+ <div id="GroupModelSQL" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>比如:SELECT No, Name FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>该方式不考虑分页，不关键字查询。</li>
+ </ul>
+ </div>
+<textarea rows="3" cols="90" id="TB_GroupModel_Group"  name="TB_GroupModel_Group" ></textarea>
+
+<br />
+<a href="javascript:ShowHidden('GroupModelEntity')">实体查询SQL</a>
+ <div id="GroupModelEntity" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列，如果有三个列，第3个列必须是编码并且与分组查询SQL的编码列对应。</li>
+ <li>比如:SELECT No, Name FROM Port_Emp 或者. SELECT No, Name,FK_Dept FROM Port_Emp </li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>SELECT No, Name,FK_Dept FROM Port_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>该方式不考虑分页，不关键字查询。</li>
+ </ul>
+ </div>
+ <br />
+<textarea rows="3" cols="90" type="text" id="TB_GroupModel_Entity"  name="TB_GroupModel_Entity" ></textarea>
+</fieldset>
+
+
+<!---------------------------- 模式5 ：树模式(单实体),没有关键字查询.  ---------------------------------------------------->
+<fieldset>
+<legend><input id="RB_PopWorkModel_Tree" type="radio" name="Model" value="Tree"  /><label for="RB_PopWorkModel_Tree">树模式(单实体)</label>  </legend>
+<a href="javascript:ShowHidden('Tree')">初始化树SQL</a>
+ <div id="Tree" style="color:Gray; display:none">
+ <ul>
+ <li>单实体树是仅仅只有一个实体信息的树，比如部门树。</li>
+ <li>单实体树与双实体树都是懒加载的方式完成选择效果。</li>
+ <li>设置一个查询的SQL语句，必须返回No,Name,Parent,TreeCount三个列，必须有@ParentNo参数。</li>
+ <li>TreeCount列表示该节点下子节点的数量，用于判断该节点是否可以展开。</li>
+ <li>比如: SELECT No, Name, ParentNo, (SELECT COUNT(1) FROM Port_Dept B WHERE B.ParentNo=A.No) AS TreeCount FROM Port_Dept A WHERE ParentNo='@ParentNo'</li>
+ <li>该参数支持ccbpm表达式。</li>
+ <li>返回的数据源里，必须有根节点。</li>
+ </ul>
+ </div>
+ <br />
+    <textarea  cols="90"  id="TB_TreeSQL" name="TB_TreeSQL"  ></textarea>
+ <br />
+    根节点值:<input type="text" id="TB_TreeParentNo" name="TB_TreeParentNo" value="0" />
+ </fieldset>
+
+ 
+<!---------------------------- 模式6 ：树模式(双实体),没有关键字查询.  ---------------------------------------------------->
+<fieldset>
+<legend><input id="RB_PopWorkModel_TreeDouble" type="radio" name="Model" value="TreeDouble" /><label for="RB_PopWorkModel_TreeDouble">树模式(双实体)</label>  </legend>
+<a href="javascript:ShowHidden('Tree6')">初始化树SQL</a>
+ <div id="Tree6" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name,Parent三个列。</li>
+ <li>比如:SELECT No, Name,ParentNo FROM Port_Dept WHERE  ParentNo='@ParentNo'</li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name,ParentNo FROM Port_Dept WHERE ParentNo='@WebUser.FK_Dept'</li>
+ <li>返回的数据源里，必须有根节点。</li>
+ </ul>
+ </div>
+ <br />
+    <textarea rows="3" cols="90" id="TB_DoubleTreeSQL" name="TB_DoubleTreeSQL"  ></textarea>
+ <br />
+    根节点值:<input type="text" id="TB_DoubleTreeParentNo" name="TB_DoubleTreeParentNo" value="0" />
+     <br />
+ <a href="javascript:ShowHidden('DoubleTreeEntitySQL')">实体SQL</a>
+     <br />
+
+ <div id="DoubleTreeEntitySQL" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name, [外键] 三个列，第3个列是外键，必须有 @ParentNo 参数,@ParentNo是选择节点的ID.</li>
+ <li>比如:SELECT No, Name,FK_Dept FROM Port_Emp WHERE FK_Dept='@ParentNo' </li>
+ </ul>
+ </div>
+    <textarea rows="3"  cols="90" id="TB_DoubleTreeEntitySQL" name="TB_DoubleTreeEntitySQL"  ></textarea>
+
+ </fieldset>
+
+
+<!---------------------------- 高级设置.  ---------------------------------------------------->
+<fieldset>
+<legend><label for="RB_PopWorkModel_Tree">高级设置</label>  </legend>
+宽度(px)： <input type="text" id="TB_Width" name="TB_Width"  value="" />  
+高度(px)：<input type="text" id="TB_Height" name="TB_Height"  value="" />   
+开窗标题：<input type="text" id="TB_Title"  name="TB_Title"  value="" />
+
+搜索关键字提示：<input type="text" id="TB_PopValSearchTip" name="TB_PopValSearchTip" value="" style=" width:300px;" />
+<br />
+
+<a href="javascript:ShowHidden('PopValSearchCond')">查询条件设置(可以为空)：日期的默认值是JS函数表达式</a>
+ <div id="PopValSearchCond" style="color:Gray; display:none">
+ <ul>
+ <li>该设置对table查询有效:</li>
+ <li>格式为:</li>
+
+<li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi </li>
+<li>$Para=XB#Label=性别#EnumKey=XB</li>
+<li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))</li>
+<li>$Para=DTTo#Label=到#DefVal=(new Date())</li>
+
+ </ul>
+ </div>
+
+<textarea  id="TB_PopValSearchCond" rows="5" name="TB_PopValSearchCond" value="" style="width:90%;" > 
+</textarea>
+<hr /> 
+ 
+
+<a href="javascript:ShowHidden('ColName')">显示的中文列名(可以为空)：</a>
+ <div id="ColName" style="color:Gray; display:none">
+ <ul>
+ <li>适用于表格方式数据显示，是为了避免在列表的表头上显示英文字段名对使用者不友好。</li>
+ <li>可以为空，如果为空列名就按照英文名字显示。 为列设置样式 style 设置 显示 title data-title='true'</li>
+ <li>格式为: @col1=列名1&style='width:200px;'&data-title='true'&data-col='abc'@col2=列名2@col3=列名3 </li>
+ </ul>
+ </div>
+
+<input type="text" id="TB_ColNames" name="TB_ColNames"  value="" />
+
+</fieldset>
+
+<fieldset>
+<legend> 返回值格式  </legend>
+<input id="RB_PopValFormat_OnlyNo" type="radio" name="PopValFormat" checked="checked" value="OnlyNo"  /><label for="RB_PopValFormat_OnlyNo">No(仅编号)</label> 
+<input id="RB_PopValFormat_OnlyName" type="radio" name="PopValFormat" value="OnlyName"  /><label for="RB_PopValFormat_OnlyName">Name(仅名称)</label> 
+<input id="RB_PopValFormat_NoName" type="radio" name="PopValFormat" value="NoName"   /><label for="RB_PopValFormat_NoName">No,Name(编号与名称,比如zhangsan,张三;lisi,李四;)</label> 
+</fieldset> 
+
+<fieldset>
+<legend> 选择模式  </legend>
+<input id="RB_PopValSelectModel_One" type="radio" name="PopValSelectModel" value="One"  /><label for="RB_PopValSelectModel_One">单选</label> 
+<input id="RB_PopValSelectModel_More" type="radio" name="PopValSelectModel" value="More"  /><label for="RB_PopValSelectModel_More">多选</label> 
+</fieldset>
+
+<input type="button" value="保存"  onclick="Save()" />
+<input type="button" value="保存并关闭"  onclick="SaveAndClose()" />
+<input type="button" value="关闭"  onclick="windows.close();" />
+
+</form>
+
+
+</body>
+</html>

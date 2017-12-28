@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>切换用户</title>
+    <link href="../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="./Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+     <base target="_self" /> 
+    <link href="./Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" >
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Login_Init&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    //转化成json.
+                    data = JSON.parse(data);
+
+                    if (data.USERNO == "") { //没有登录的信息.
+
+                        $("#Btn_Login").val(data.USERNO);
+
+                        //退出授权登录按钮不可见.
+                        $("#divBtnAuth").style.display = "none";
+
+                        //安全退出按钮不可见
+                        $("#divBtnExit").style.display = "none";
+                        return;
+                    }
+
+
+                    if (data.UserNo != "") {  //有登录的信息.
+
+                    }
+
+
+                    if (data.Auth == "") {
+                          //退出授权登录按钮不可见.
+                        var div= document.getElementById("divBtnAuth");
+                       div.style.display = "none";
+                    }
+                }
+            });
+        }
+
+
+        ///执行登录.
+        function Submit() {
+
+            var frmData = $("#cc").serialize();
+
+            //执行登录..
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=LoginSubmit&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    //alert(data);
+                    //转化成json.
+                    //data = JSON.parse(data);
+
+                    var toWhere = GetQueryString("ToWhere");
+                    if (toWhere == null || toWhere == "") {
+                        toWhere = "EmpWorks.aspx";
+                    }
+                    window.location.href = toWhere;
+                }
+            });
+        }
+
+        ///安全退出..
+        function Exit() {
+            //执行登录..
+            var frmData = $("#cc").serialize();
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=LoginExit&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                  //转到自己的界面上.
+                  window.location.href = window.location.href;
+                }
+            });
+        }
+     </script>
+
+    <script  language="javascript" type="text/javascript" >
+        function ExitAuth(fk_emp) {
+            if (window.confirm('您确定要退出授权登陆模式吗？') == false)
+                return;
+
+            var url = 'Do.aspx?DoType=ExitAuth&FK_Emp=' + fk_emp;
+            WinShowModalDialog(url, '');
+            window.location.href = 'Tools.aspx';
+        }
+        function NoSubmit(fk_emp) {
+
+        }
+</script>
+
+<!--
+ 
+ 负责人:fanjiahui.
+
+-->
+
+</head>
+<body>
+
+<form id="cc">
+
+<table width="100%; border:0px;">
+
+<caption class="CaptionMsg" >切换用户</caption>
+<tr>
+<td style="text-align:center">
+<br /><br />
+
+<center>
+<table style="text-align:center">
+<tr>
+<td> 用户名</td>
+<td><input type="text"  value="" id="TB_UserNo" name="TB_UserNo"  />  </td>
+</tr>
+<tr>
+<td>密码 </td>
+<td> <input type="password" value="" id="TB_Pass" name="TB_Pass"  /> </td>
+</tr>
+
+<tr>
+<td colspan="2" > 
+
+<div id="div1" style=" float:right">
+<input type="button" id="Btn_Login" name="Btn_Login"   onclick="Submit();" value="登录" /> 
+</div>
+
+<div id="divBtnAuth" style=" float:right">
+<input type="button" id="Btn_ExitAuth" name="Btn_ExitAuth" onclick="ExitAuth();" value="退出授权模式" /> 
+</div>
+
+<div id="divBtnExit"  style=" float:right">
+<input type="button" id="Btn_Exit" name="Btn_Exit"  onclick="Exit();"  value="安全退出" /> 
+</div>
+
+
+
+</td>
+</tr>
+
+</table>
+ 
+ </center>
+
+
+<br /><br />
+
+<div id="Msg"></div>
+
+    </td>
+    </tr>
+    </table>
+
+</form>
+
+    <p>
+        &nbsp;</p>
+
+</body>
+</html>

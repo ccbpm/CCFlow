@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>评论回复</title>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../WF/Comm/Gener.js"></script>
+    <link href="../../../WF/Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" >
+        function GetRequest() {
+            var url = decodeURIComponent(location.search);
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+                }
+            }
+            return theRequest;
+        }
+        var Request = new Object();
+        Request = GetRequest();
+        //清空回复
+        function Clear() {
+            $("#TB_Msg").val("");
+            return;
+        }
+        //取消关闭
+        function Close() {
+            window.close();  
+        }
+        function RE() {
+            var myDate = new Date();
+            var time = myDate.toLocaleString();   
+            var username = Request["UserName"];
+            var WebUser = Request["WebUser"];
+            var date = date;
+            $("#TB_RE").val(username);
+            $("#TB_title").val("在" + time + "来自" + WebUser + "的流程评论消息回复");
+        }
+      //提交回复
+        function Submit() {        
+           var MyPK = Request["MyPK"];
+           var FK_Flow = Request["FK_Flow"];
+           var WorkID = Request["WorkID"];
+           var RE = Request["RE"];
+           var MyPK= Request["MyPK"];
+           var frmData = $("#cc").serialize();
+           if ($("#TB_title").val() == null || $("#TB_title").val() == "" || $("#TB_title").val().trim().length == 0) {
+               alert("标题不能为空!");
+               return;
+           }
+          if ($("#TB_Msg").val() == null || $("#TB_Msg").val() == "" || $("#TB_Msg").val().trim().length == 0) {
+              alert("请填写回复内容!");
+              return;
+          }
+          $.ajax({
+              data: frmData,
+              type: 'post',
+              async: true,
+              url: Handler + "?DoType=FlowBBS_Replay&F&TB_Msg=" + $("#TB_Msg").val() + "&Title=" + $("#TB_title").val() + "&UserName=" + RE + "&MyPK=" + MyPK + "&m=" + Math.random(),
+              dataType: 'html'
+          });
+          alert("发送回复消息成功!");
+          window.close();
+          window.opener.location.href = window.opener.location.href
+      }
+    </script>
+
+</head>
+<body  style='background-color: #dbe5f1' onload="RE();" class="easyui-layout layout panel-noscroll">
+<form id="cc" >
+<div class="aspNetHidden"></div>
+ <div id="mainPanel"   class="mainPanel">       
+ <table class='Table' >
+ <caption>
+ <div class="CaptionMsg">评论消息回复</div>
+ </caption>
+<TR>
+<TD   >发送给：</TD>
+<TD ><input name="TB_RE" type="text" readonly="readonly" id="TB_RE" style="width:430px;" /></TD>
+</TR>
+<tr>
+<TD>回复标题：</TD>
+<TD><input name="TB_title" id="TB_title" style="width:430px;" type="text" /></TD>
+</tr>
+<TR>
+<TD>回复内容：</TD>
+<TD >
+ <textarea  rows="3" id="TB_Msg" name="TB_Msg"  cols="60" style="height:120px;width:430px;" >
+</textarea>
+ </TD>
+</TR>
+<TR>
+<TD  colspan="2">
+<input type="button" name="Btn_Save" value="发送回复" id="Btn_Save"  onclick="Submit();"/>
+<input type="button" id="Btn_Qing" name="Btn_Qing" value="清空回复"  onclick="Clear();"/>
+<input type="button" name="Btn_Qu" value="取消关闭" id="Btn_Qu"   onclick="Close();" />
+</TD>
+</TR>
+</table>
+</div>
+</form>
+</body>
+</html>

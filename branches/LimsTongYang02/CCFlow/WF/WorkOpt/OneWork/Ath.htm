@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程附件</title>
+    <script src="../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <link href="../../Scripts/easyUI15/themes/icon-15.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=GetAthsAndBills&FK_Node=" + GetQueryString("FK_Node") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+                    addAths(data.Aths, data.AppPath);
+                    addBills(data.Bills, data.AppPath);
+                }
+            });
+        });
+
+        function addAths(aths, appPath) {
+            var i = 1;
+            var html = "<table class='Table' cellpadding='0' cellspacing='0' border='0' style='width: 100%'>";
+            html += "<tr><td class='GroupTitle' colspan='7'>流程附件</td></tr>";
+            html += "<tr>";
+            html += "<td  class='GroupTitle' style='text-align:center;width:40px'>序</td>";
+            html += "<td  class='GroupTitle'>附件编号</td>";
+            html += "<td  class='GroupTitle'>节点</td>";
+            html += "<td  class='GroupTitle'>名称</td>";
+            html += "<td  class='GroupTitle'>大小(KB)</td>";
+            html += "<td  class='GroupTitle'>上传人</td>";
+            html += "<td  class='GroupTitle'>上传日期</td>";
+            html += "</tr>";
+
+            if (aths.length > 0) {
+                $.each(aths, function () {
+                    html += "<tr>";
+                    html += "<td class='Idx'>" + i + "</td>";
+                    html += "<td>" + this.FK_FRMATTACHMENT + "</td>";
+                    html += "<td>" + this.NODENAME + "</td>";
+                    html += "<td><a href='" + appPath + "WF/CCForm/AttachmentUpload.aspx?DoType=Down&MyPK=" + this.MYPK + "' target=_sd ><img src='/WF/Img/FileType/" + this.FILEEXTS + ".gif' onerror=\"this.src='/WF/Img/FileType/Undefined.gif'\" border=0/>" + this.FILENAME + "</a></td>";
+                    html += "<td>" + this.FILESIZE + "</td>";
+                    html += "<td>" + this.RECNAME + "</td>";
+                    html += "<td>" + this.RDT + "</td>";
+                    html += "</tr>";
+                    i++;
+                });
+            }
+            else {
+                html += "<tr><td colspan='7' style='font-weight:bold;text-align:center'>当前流程没有附件！</td></tr>";
+            }
+
+            html += "</table><br />";
+            $("#ccath").append(html);
+        }
+
+        function addBills(bills, appPath) {
+            var i = 1;
+            var html = "<table class='Table' cellpadding='0' cellspacing='0' border='0' style='width: 100%'>";
+            html += "<tr><td class='GroupTitle' colspan='6'>流程单据</td></tr>";
+            html += "<tr>";
+            html += "<td  class='GroupTitle' style='text-align:center;width:40px'>序</td>";
+            html += "<td  class='GroupTitle'>名称</td>";
+            html += "<td  class='GroupTitle'>节点</td>";
+            html += "<td  class='GroupTitle'>打印人</td>";
+            html += "<td  class='GroupTitle'>日期</td>";
+            html += "<td  class='GroupTitle'>功能</td>";
+            html += "</tr>";
+
+            if (bills.length > 0) {
+                $.each(bills, function () {
+                    html += "<tr>";
+                    html += "<td class='Idx'>" + i + "</td>";
+                    html += "<td>" + this.FK_BillTypeT + "</td>";
+                    html += "<td>" + this.FK_NodeT + "</td>";
+                    html += "<td>" + this.FK_EmpT + "</td>";
+                    html += "<td>" + this.RDT + "</td>";
+                    html += "<td><a class='easyui-linkbutton' data-options=\"iconCls:'icon-print'\" href='" + appPath + "WF/Rpt/Bill.aspx?MyPK=" + this.MyPK + "&DoType=Print' >打印</a></td>";
+                    html += "</tr>";
+                    i++;
+                });
+            }
+            else {
+                html += "<tr><td colspan='6' style='font-weight:bold;text-align:center'>当前流程没有单据！</td></tr>";
+            }
+
+            html += "</table>";
+            $("#ccath").append(html);
+        }
+    </script>
+    <div id="ccath"></div>
+</body>
+</html>

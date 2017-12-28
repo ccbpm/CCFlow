@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" />
+    <script src="../../Scripts/easyUI145/jquery.min.js"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("table tr:gt(0)").hover(
+                function () { $(this).addClass("tr_hover"); },
+                function () { $(this).removeClass("tr_hover"); });
+        });
+
+        //上移
+        function up(obj, idxTBColumnIdx) {
+            var objParentTR = $(obj).parent().parent();
+            var prevTR = objParentTR.prev();
+            var currTrId;
+            var prevTrId;
+            if (prevTR.length > 0 && !isNaN(prevTR.children(":eq(0)").text())) {
+                prevTR.insertAfter(objParentTR);
+                currTrId = Number(objParentTR.children(":eq(0)").text());
+                prevTrId = Number(prevTR.children(":eq(0)").text());
+                objParentTR.children(":eq(0)").text(prevTrId);
+                prevTR.children(":eq(0)").text(currTrId);
+                objParentTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(prevTrId);
+                prevTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(currTrId);
+            } else {
+                return;
+            }
+        }
+        //下移
+        function down(obj, idxTBColumnIdx) {
+            var objParentTR = $(obj).parent().parent();
+            var nextTR = objParentTR.next();
+            var currTrId;
+            var nextTrId;
+            if (nextTR.length > 0 && !isNaN(nextTR.children(":eq(0)").text())) {
+                nextTR.insertBefore(objParentTR);
+                currTrId = Number(objParentTR.children(":eq(0)").text());
+                nextTrId = Number(nextTR.children(":eq(0)").text());
+                objParentTR.children(":eq(0)").text(nextTrId);
+                nextTR.children(":eq(0)").text(currTrId);
+                objParentTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(nextTrId);
+                nextTR.children(":eq(" + idxTBColumnIdx + ")").children(":first").val(currTrId);
+            } else {
+                return;
+            }
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+            $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
+
+        function InitPage() {
+            var rptNo = unescape(GetQueryString("RptNo"));
+            var flowNo = unescape(GetQueryString("FK_Flow"));
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=S3ColsLabel_Init&RptNo=" + rptNo + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf("@") == 0) {
+                        alert(data);
+                        return;
+                    }
+                    var jsData = JSON.parse(data);
+                    //var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
+                    //console.info(Sys_MapAttr);
+                    //输出列.
+                    for (var i = 0; i < jsData.length; i++) {
+
+                        var attr = jsData[i];
+
+
+                        var str = "<tr>";
+                        str += "<td class='Idx' nowrap>" + (i + 1) + "</td>";
+                        //判断是否string
+                        if (attr.MyDataType == 1 || attr.MyDataType == '1') {
+                            str += "<td  nowrap ><a href='javascript:void(0)' onclick=setWidth('" + attr.MyPK + "')>" + attr.KeyOfEn + "</a><input type='hidden' value='" + attr.KeyOfEn + "'/></td>";
+                        }else{
+                            str += "<td  nowrap >" + attr.KeyOfEn + "<input type='hidden' value='" + attr.KeyOfEn + "'></input></td>";
+                        }
+                        str += "<td ><input name=\"TB_" + attr.KeyOfEn + "\" type=\"text\" value=\"" + jsData[i].Name + "\" id=\"TB_" + attr.KeyOfEn + "\"   style='width:130px;' /></td>";
+                        str += "<td ><input name=\"TB_" + attr.KeyOfEn + "_Idx\" type=\"text\" value=\"" + (i + 1) + "\" id=\"TB_" + attr.KeyOfEn + "_Idx\"   style='width:30px;' /></td>";
+                        str += "<td><a href='javascript:void(0)' onclick='up(this, 3)' class='up'>上移</a> <a href='javascript:void(0)' onclick='down(this, 3)' class='down'>下移</a>";
+                        str += "</td>";
+                        str += "</tr>";
+                        $("table").append(str);
+                    }
+
+                    $(".up").linkbutton({
+                        iconCls: 'icon-up'
+                    });
+                    $(".down").linkbutton({
+                        iconCls: 'icon-down'
+                    });
+                }
+            });
+        }
+
+        function Btn_Save_Click() {
+
+            var fk_flow = GetQueryString("FK_Flow");
+            var rptNo = GetQueryString("RptNo");
+            var str = "";
+            var i = 0;
+
+            //获取数据列表
+            $("#table1").find("tr").each(function () {
+                var tdArr = $(this).children();
+                if (i > 0) {//第一是标题
+                    var history_income_type = tdArr.eq(2).find('input').val();
+                    var history_income_money = tdArr.eq(3).find('input').val();
+                    str = str + "@" + tdArr.eq(1).find('input').val() + "," + tdArr.eq(2).find('input').val() + "," + tdArr.eq(3).find('input').val();
+                }
+                i++;
+            });
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=S3ColsLabel_Save&FK_Flow=" + fk_flow + "&RptNo=" + rptNo + "&m=" + Math.random(),
+                dataType: 'html',
+                data: { 'Orders': str },
+                success: function (data) {
+                    alert(data)
+                    if (window.opener != null) {
+                        //刷新父窗口
+                        window.opener.location.reload();
+                    }
+
+                    window.close();
+                }
+            });
+        }
+
+        //设置字段宽度
+        function setWidth(url) {
+            url = "../../Comm/En.htm?EnsName=BP.Sys.FrmUI.MapAttrStrings&PK=" + url;
+            //window.open(url);
+            //return;
+            OpenEasyUiDialog(url, "eudlgframe", '设置字段属性', 700, 470, "icon-edit", true, null, null, null, function () {
+                window.location.href = window.location.href;
+            });
+        }
+
+        function Cancel() {
+            window.close();
+        }
+    </script>
+    <base target="_self" />
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'center',title:'3. 设置报表显示列次序',border:false" style="padding:5px;height:auto">
+        <Table id="table1" class='Table' border='1' cellspacing='0' cellpadding='0' style='width:100%'>
+            <TR>
+                <TD class='GroupTitle' style='text-align:center;width:50px'>序</TD>
+                <TD class='GroupTitle'>字段</TD>
+                <TD class='GroupTitle'>标签</TD>
+                <TD class='GroupTitle'>显示顺序号</TD>
+                <TD class='GroupTitle'>调整</TD>
+            </TR>
+        </Table>
+        <br />
+        <a id="ContentPlaceHolder1_Btn_Save1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;" href="javascript:Btn_Save_Click()">保存</a>
+        <a id="ContentPlaceHolder1_Btn_Cancel1" class="easyui-linkbutton" data-options="iconCls:&#39;icon-undo&#39;" href="javascript:Cancel()">取消</a>
+        <br />
+        <br />
+    </div>
+</body>
+</html>

@@ -1,0 +1,269 @@
+/*  Table */
+.Table
+{
+	border-style: none;
+	border-width: 2px;
+	border-color: #C0C0C0;
+	margin: 2px;
+	padding: 5px;
+	background-color: #FFFFFF;
+}
+
+.TableFrom
+{
+    border: 1px outset #C0C0C0;
+    margin: 2px;
+    padding: 5px;
+    text-align: left;
+}
+
+/* the style of Table */
+.Table1
+{
+	border-right: activeborder solid;
+	border-top: activeborder solid;
+	font-size: x-small;
+	border-left: activeborder solid;
+	color: black;
+	border-bottom: activeborder solid;
+	font-family: 新宋体;
+	background-color: white;
+	text-align:left;
+}
+
+.TableGreen
+{
+	border-right: darkgreen 1px solid;
+	padding-right: 5px;
+	border-top: darkgreen 1px solid;
+	padding-left: 5px;
+	font-size: 12px;
+	padding-bottom: 1px;
+	margin: 1px;
+	border-left: darkgreen 1px solid;
+	padding-top: 1px;
+	border-bottom: darkgreen 1px solid;
+}
+
+.Caption
+{
+	font: caption;
+	color: #339966;
+	font-size: medium;
+}
+
+.TitleLeft
+{
+	border-right: infobackground thin groove;
+	padding-right: 0px;
+	border-top: infobackground thin groove;
+	padding-left: 1px;
+	padding-bottom: 0px;
+	margin: 0px 0px 0px 1px;
+	border-left: infobackground thin groove;
+	padding-top: 0px;
+	border-bottom: infobackground thin groove;
+	background-color: activeborder;
+	text-align: left;
+}
+
+
+/*   Title */
+.Title
+{
+	background-color: #F0F8FF;
+	color: #669999;
+}
+
+
+/* 在输入信息字段名称，单元格式的风格 */
+.FDesc
+{
+	border-color: #C0C0C0;
+	padding: 4px;
+	margin: 4px;
+	border-bottom: lightgrey 1px solid;
+	border-left: lightgrey 1px solid;
+	border-right: lightgrey 1px solid;
+	font-family: 宋体;
+	text-align: left;
+	width: 10%;
+	background-color: #F9F9F9;
+}
+
+.GroupField
+{
+	background-color: #E1E1E1;
+	font-size: medium;
+	font-weight: bold;
+	font-style: normal;
+	font-variant: normal;
+	text-transform: capitalize;
+	color: #000000;
+	border-left: 10px;
+	border-right: 10px;
+	border-top: 10px;
+	border-bottom: 10px;
+	border-width: 5px;
+	font-size: small;
+	vertical-align:middle;
+	padding:1px;
+}
+
+.TB
+{
+	font-size: 12px;
+	text-align: left;
+	width:100%;
+	float: left;
+	clear: left;
+	border: none;
+	padding:0px;
+}
+ 
+.TBReadonly
+{
+	background-color: infobackground;
+	font-size: 12px;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    border-bottom-style: none;
+    text-align: left;
+    float: left;
+    clear: left;
+    
+}
+ 
+
+.TBNumReadonly
+{
+	font-size: 12px;
+	border-right: black thin;
+	border-top: black thin;
+	border-left: black thin;
+	border-bottom: black thin;
+	text-align: right;
+	vertical-align: bottom;
+	font-size: 12px;
+	color: #666666;
+}
+
+.TR
+{
+}
+
+.TRSum
+{
+	background-color: infobackground;
+}
+
+.TRHand
+{
+	cursor: hand;
+}
+.Idx
+{
+	padding: 4px;
+	margin: 4px;
+	border-bottom: lightgrey 1px solid;
+	font-family: 宋体;
+	text-align: left;
+	
+}
+
+
+.TDCenter
+{
+	padding: 4px;
+	margin: 4px;
+	border-bottom: lightgrey 1px solid;
+	font-family: 宋体;
+	text-align: center;
+	font-size:12px;
+} 
+
+.TD, Idx
+{
+	padding: 4px;
+	margin: 4px;
+	border-bottom: lightgrey 1px solid;
+	font-family: 宋体;
+	text-align: left;
+	
+}   
+
+.TDNum
+{
+	border-right: lightgrey 1px solid;
+	padding-right: 0px;
+	border-top: lightgrey 1px solid;
+	padding-left: 1px;
+	padding-bottom: 0px;
+	margin: 0px 0px 0px 1px;
+	border-left: lightgrey 1px solid;
+	padding-top: 0px;
+	border-bottom: lightgrey 1px solid;
+	font-family: 宋体;
+	text-align: right;
+	
+}
+
+
+.TBNum
+{
+	font-size: 12px;
+	border-top-style: none;
+	border-right-style: none;
+	border-left-style: none;
+	border-bottom-style: none;
+	text-align: right;
+	float: right;
+	clear: left;
+	vertical-align: bottom;
+	
+}
+ 
+.BigDoc
+{
+	border-style: none;
+	padding-right: 5px;
+	padding-left: 5px;
+	font-size: 12px;
+	padding-bottom: 5px;
+	margin: 5px;
+	padding-top: 5px;
+	line-height: 15pt;
+	letter-spacing: 0pc;
+	text-align:left;
+	
+}
+
+.ToolBar
+{
+    background-color: #d8edff;
+    font-family:Verdana;
+    font-size:12px;
+    height:20px;
+    line-height:20px;
+    padding:3px;
+}
+
+fieldset
+{
+    table-layout: auto;
+    padding: 9px;
+    text-align:left;
+}
+
+legend
+{
+    color: green;
+    font-style: inherit;
+    font-weight: bold;
+}
+
+.TitleMsg
+{
+	background-color: #EEEEEE;
+}

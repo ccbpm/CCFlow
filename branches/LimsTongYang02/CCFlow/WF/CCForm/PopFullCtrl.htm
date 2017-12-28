@@ -1,0 +1,986 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
+    <script src="../Scripts/QueryString2016.js"></script>
+    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jsTree.ddl.js"></script>
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <style type="text/css">
+    * {
+        list-style: none;
+    }
+        body .table tbody tr td {
+            line-height: 18px;
+        }
+
+        .portlet-body, body, .portlet-title {
+            background: #f4f9ff !important;
+            border-bottom: 0px;
+        }
+
+        .customthr tr:nth-child(2n) {
+            background: #d4e6fe;
+        }
+
+        .customthr tr:nth-child(2n+1) {
+            background: #f4f9ff;
+        }
+
+        .customthr thead tr {
+            background: #d4e6fe !important;
+        }
+
+        .btn {
+            background: #2884fa !important;
+            border-radius: 20px !important;
+            color: white !important;
+            padding: 4px 17px !important;
+        }
+
+        /*input[type=text], select {
+            border-radius: 15px !important;
+            border: #2884fa 1px solid !important;
+            margin: 8px 0px !important;
+            line-height: 25px;
+            padding-left: 6px;
+        }*/
+
+        #btnSearch {
+            height: 30px;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            background: #2884fa !important;
+            color: #fff;
+        }
+
+        #txbSearchVal {
+            font-size: 14px;
+        }
+        /*#poptable {
+            display: none;
+        }*/
+        #test {
+            
+        }
+
+        .form_tree {
+            background: #f4f9ff;
+        }
+
+            .form_tree #orgTxt {
+                border-radius: 15px 0px 0px 15px !important;
+                margin: 0px !important;
+                /*border:#2884fa 1px solid;*/
+            }
+
+            .form_tree .input-group-addon {
+                border-radius: 0px 15px 15px 0px !important;
+                /*broder:#2884fa 1px solid;*/
+            }
+    #groupTable #dt ul {
+        /*background: #f4f9ff;*/
+        font-weight: normal;
+        background: #d4e6fe;
+    }
+        #groupTable #dt > li {
+            /*background: #d4e6fe;*/
+            font-weight: bold;
+            background: #f4f9ff;
+        }
+        #groupTable {
+            display: none;
+            height: 90%;
+            overflow: auto;
+        }
+
+        .searchGroup {
+            float: left;
+            padding-right: 25px;
+        }
+        .searchGroup select, .searchGroup input[type=text] {
+            width:auto;
+        }
+            .searchGroup label {
+            padding-right:5px;
+            }
+        #searchForm {
+            float: left;
+        }
+
+        #searchBtnDiv {
+            /*float:right;*/
+        }
+
+        #btnSearch {
+            position: absolute;
+            top: 15px;
+            right: 5px;
+        }
+
+        li label, li input[type=checkbox], li input[type=radio] {
+            cursor: pointer;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            //先把所有的都取消掉显示  DISPLAY:NONE
+            //$('#poptablew').hide();
+            //$('#main').hide();
+            //$('#orgjstree').hide();
+            //$('#groupTable').hide();
+
+            dtTable();
+            $('#test').bind('click', function () {
+                if ($('#orgjstree').css('display') == "none") {
+                    $('#orgjstree').css('display', 'block');
+                    var instance = $('#orgjstree').jstree(true);
+                    if ($('#orgTxt').val() != undefined && $('#orgTxt').val() != '') {
+                        instance.select_node($('#orgTxt').val());
+                    }
+                }
+                else {
+                    $('#orgjstree').css('display', 'none');
+                }
+            });
+            var bodyHeight = document.documentElement.clientHeight;
+            $('body').height(bodyHeight);
+            if (parent == undefined || parent.frames["iframePopModalForm"] == undefined) {
+                $('#freeBarDiv').css('display', 'block');
+                //自由表单时使用
+                $('#BtnOk').bind('click', function () {
+                    var ctrlId = GetQueryString("CtrlId");
+                    var ctrl = opener.window.document.getElementById(ctrlId);
+                    //为表单元素反填值
+                    var returnValSetObj = window.pageSetData;
+                    var returnValObj = window.returnVal;
+                    if (returnValSetObj != null && returnValObj != null) {
+                        if (returnValSetObj[0].PopValWorkModel == "Tree" || returnValSetObj[0].PopValWorkModel == "TreeDouble") { //树模式 分组模式
+                            window.GetTreeReturnVal();
+                            if (returnValSetObj[0].PopValFormat == "OnlyNo") {
+                                $(ctrl).val(returnValObj.Name);
+                            } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
+                                $(ctrl).val(returnValObj.Name);
+                            } else {
+                                //$(ctrl).val("(" + returnValObj.No + ',' + returnValObj.Name + ")");
+
+                                for (var property in returnValObj) {
+                                    opener.window.SetEleValByName(property, returnValObj[property]);
+                                }
+                            }
+                        } else if (returnValSetObj[0].PopValWorkModel == "Group") { //分组模式
+                            window.GetGroupReturnVal();
+                            console.log(returnValObj)
+                            $(ctrl).val(returnValObj.Value);
+                        } else if (returnValSetObj[0].PopValWorkModel == "TableOnly" || returnValSetObj[0].PopValWorkModel == "TablePage") { //表格模式
+                            if (returnValSetObj[0].PopValFormat == "OnlyNo") {
+                                $(ctrl).val(returnValObj.No);
+                            } else if (returnValSetObj[0].PopValFormat == "OnlyName") {
+                                $(ctrl).val(returnValObj.Name);
+                            } else {
+                                for (var property in returnValObj) {
+
+                                    //var valueArr = [];
+                                    //$.each(selectedTrArr, function (i, selectedTr) {
+                                    //    valueArr.push("(" + selectedTr.No + "," + selectedTr.Name + ")");
+                                    //});
+                                    //$(ctrl).val(valueArr.join(','));
+                                    $('[id$=_' + property + ']').val(returnValObj[property]);
+                                    opener.window.SetEleValByName(property, returnValObj[property]);
+                                }
+                            }
+                        } else if (returnValSetObj[0].PopValWorkModel == "SelfUrl") { //自定义URL
+                            //frames["iframePopModalForm"].window.GetTreeReturnVal();
+                            if (window.GetReturnVal != undefined &&
+                                typeof (window.GetReturnVal) == "function") {
+                                window.GetReturnVal()
+                            }
+                            $(ctrl).val(returnValObj.Value);
+                        }
+                    } else {
+                        if (window.returnValue != undefined) {
+                            var Value = window.returnValue;
+                        }
+                        $(ctrl).val(Value);
+                    }
+
+                    window.close();
+                });
+
+                $('#BtnCancel').bind('click', function () {
+                    window.close();
+                })
+            }
+
+            //设置表格的高度  和滚动条
+            var portletTitlePadding = parseInt($('#blackDiv .portlet-title').css('padding-top').substr(0, $('#blackDiv .portlet-title').css('padding-top').length - 2)) + parseInt($('#blackDiv .portlet-title').css('padding-bottom').substr(0, $('#blackDiv .portlet-title').css('padding-bottom').length - 2));
+            var pagetableHeight = bodyHeight - $('#blackDiv .portlet-title').height() - $('#blackDiv #flowListDiv .pagination-panel').height() - portletTitlePadding - 5 - 100;
+
+            if ($('#freeBarDiv:hidden').length == 0 && $('#freeBarDiv').length == 1) {
+                pagetableHeight = pagetableHeight - $('#freeBarDiv').height();
+            }
+            $('#flowListDiv .tabPdiv').height(pagetableHeight);
+        });
+
+        //配置数据
+        var pageSetData = {};
+        var initPopValData = {};
+        var firstLoad = true;
+
+        function dtTable() {
+            var fk_MapExt = getQueryStringByName("FK_MapExt");
+            var searchData = $('#searchForm').serialize();
+            var formData = getQueryString('FormData');
+            var formData2 = {};
+            for (var i = 0; i < formData.length; i++) {
+                formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
+            }
+
+            var formData = unescape(getQueryString('FormData')).split('&');
+
+            var formData2 = {};
+            for (var i = 0; i < formData.length; i++) {
+                //formData2[formData[i].split('=')[0]] = formData[i].split('=')[1];
+                formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
+            }
+
+            $.ajax({
+                type: 'post',
+                async: false,
+                data: formData2,
+                url: Handler + "?DoType=PopVal_Init&PopValWorkModel=2&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+                dataType: 'html',
+                success: function (data) {
+                    if (data != null) {
+                        var setDataArr = null;
+                        //SelfUrl   自定义URL
+                        if (data.indexOf('@SelfUrl') == 0) {
+
+                            if (parent.window.jsonStr != undefined && parent.window.jsonStr.trim() != '') {
+                                var workNodeData = JSON.parse(parent.window.jsonStr);
+                                workNodeData.MainTable;
+
+                                var params = getQueryStringFromUrl(data);
+                                if (params != null && params.length > 0) {
+                                    $.each(params, function (i, param) {
+                                        if (param.indexOf('@') == 0) {//是需要替换的参数
+                                            paramArr = param.split('=');
+                                            if (paramArr.length == 2 && paramArr[1].indexOf('@') == 0) {
+                                                if (paramArr[1].indexOf('@WebUser.') == 0) {
+                                                    params[i] = paramArr[0].substring(1) + "=" + workNodeData.MainTable[0][paramArr[1].substr('@WebUser.'.length)];
+                                                }
+                                                if (workNodeData.MainTable[0][paramArr[1].substr(1)] != undefined) {
+                                                    params[i] = paramArr[0].substring(1) + "=" + workNodeData.MainTable[0][paramArr[1].substr(1)];
+                                                }
+                                            }
+                                        }
+                                    });
+                                    data = data.substr(0, data.indexOf('?')) + "?" + params.join('&');
+                                }
+                            }
+                            //将URL中的@参数替换成值
+                            window.location.href = data.split("@SelfUrl")[1]; //URL时直接返回了路径
+                            return;
+                        } else {
+                            setDataArr = JSON.parse(data).Hashtable;
+                            initPopValData = JSON.parse(data);
+                        }
+                        pageSetData = setDataArr;
+                        var dataArr = JSON.parse(data).DTObjs;
+                        var dtgArr = JSON.parse(data).DTGroup;
+                        var dteArr = JSON.parse(data).DTEntity;
+                        if (setDataArr.length > 0) {
+                            var tbData = $(".flowLists table");
+                            if (tbData != undefined && tbData.data != undefined && tbData.data() != undefined && tbData.data().data != undefined && tbData.data().data == true) {
+                                $.each(setDataArr, function (i, obje) {
+                                    $($('.flowLists table')[i]).data().data = obje;
+                                });
+                            }
+                            var ulData = $("#groupTable #dt");
+                            if (ulData != undefined && ulData.data != undefined && ulData.data() != undefined && ulData.data().data != undefined && ulData.data().data == true) {
+                                $.each(setDataArr, function (i, obje) {
+                                    $($('#groupTable #dt')[i]).data().data = obje;
+                                });
+                            }
+                        }
+                        var WorkM = setDataArr[0].PopValWorkModel;
+                        if (WorkM == "Group") {
+                            $('#groupTable').css('display', 'block');
+                            window.fkName = '';
+                            if (dteArr != undefined && dteArr.length > 0) {
+                                for (var pro in dteArr[0]) {
+                                    if (pro.toLowerCase() != "no" && pro.toLowerCase() != "name") {
+                                        fkName = pro;
+                                        break;
+                                    }
+                                }
+                            }
+                            var ultdg = '';
+                            var ultde = '';
+                            if (pageSetData[0].PopValSelectModel == "More") {//选择模式是多选
+                                $.each(dtgArr, function (i, obje) {
+                                    for (var k = 0; k < dteArr.length; k++) {
+                                        if (obje.No == dteArr[k][fkName]) {
+                                            ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='checkbox' style='margin: 5px 5px;' id='CK_" + obje.No + '_' + k + "'/><label for='CK_" + obje.No + '_' + k + "'>" + dteArr[k].Name + "</label></li>";
+                                        }
+                                    }
+                                    ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'><input type='checkbox' class='ulm_head' style='margin: 5px 0px;' id='CK_" + obje.No + "'/><label for='CK_" + obje.No + "'>" + obje.Name + "</label><ul style='overflow:hidden;margin:10px 5px 10px 0px;'>" + ultde + "</ul></li>";
+                                    ultde = "";
+                                });
+                            } else {//选择模式是单选
+                                $.each(dtgArr, function (i, obje) {
+                                    $.each(dteArr, function (k, obj) {
+                                        if (obje.No == obj[fkName]) {
+                                            ultde += "<li data-data='true' style='float:left;margin-right:10px;' class='lim'><input type='radio' name='cm' style='margin: 5px 5px;' class='groupr' id='RB_" + obje.No + "_" + k + "'/><label for='RB_" + obje.No + "_" + k + "'>" + dteArr[k].Name + "</label></li>";
+                                        }
+                                    });
+                                    ultdg += "<li data-data='true' class='lif' name='" + obje.No + "'>" + obje.Name + "<ul style='overflow:hidden;margin:10px 0px;'>" + ultde + "</ul></li>";
+                                    ultde = "";
+                                });
+                            }
+                            $("#groupTable #dt").html(ultdg);
+                            $(".ulm_head").click(function () {
+                                if (this.checked) {
+                                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                                } else {
+                                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                                }
+                            });
+                            //机构绑定
+                            if (dtgArr.length > 0) {
+                                var liData = $("#groupTable #dt>li");
+                                if (liData != undefined && liData.data != undefined && liData.data() != undefined && liData.data().data != undefined && liData.data().data == true) {
+                                    $.each(dtgArr, function (i, obje) {
+                                        $($('#groupTable #dt>li')[i]).data().data = obje;
+                                    });
+                                }
+                            }
+                            //实体绑定
+                            $.each(dteArr, function (k, obj) {
+                                var lifs = $("#groupTable #dt .lif");
+                                for (var i = 0; i < lifs.length; i++) {
+                                    if ($(lifs[i]).attr("name") == obj[fkName]) {
+                                        var limData = $(lifs[i]).find(".lim");
+                                        for (var m = 0; m < limData.length; m++) {
+                                            var lim = limData[m];
+                                            if ($(lim).text() == obj.Name && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
+                                                $(lim).data().data = obj;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                            //树模式
+                        } else if (WorkM == "Tree" || WorkM == "TreeDouble") {//单实体+多实体
+                            initTreeData(WorkM);
+                        } else if (WorkM == "TablePage" && firstLoad) {
+                            firstLoad = false;
+                            $('#main').css('display', 'block');
+                            $('#btnSearch').bind('click', initTableData);
+                            //初始化多个初始化搜索条件
+                            initMoreConSearch(pageSetData[0].PopValSearchCond);
+                            $('#btnSearch').trigger('click');
+                        }
+                        else if (dataArr != undefined && dataArr.length > 0) {//TablePage 和TableOnly
+                            var colencn = setDataArr[0].PopValColNames;
+                            //设置表格的表头
+                            var tableHeader = '';
+                            if (pageSetData[0].PopValSelectModel == "More") {//选择模式是单选
+                                tableHeader = "<tr data-data='true'><th data-custom='true' style='width:30px;' data-customcontent='1' data-customcontent1='input@type=checkbox class=ck_tbody@' data-coltype='Operation1'></th>";
+                            } else {//选择模式是多选
+                                tableHeader = "<tr data-data='true'><th data-custom='true' style='width:30px;' data-customcontent='1' data-customcontent1='input@type=radio name=rb class=rb_tbody@' data-coltype='Operation1'></th>";
+                            }
+                            var colEnCnArr = colencn.split('@');
+                            colEnCnArr = $.grep(colEnCnArr, function (value) {
+                                return value != '' && value.split('=').length >= 2;
+                            });
+                            if (colEnCnArr.length > 0) {
+                                for (var i = 0; i < colEnCnArr.length; i++) {
+                                    var enName = colEnCnArr[i].split('=')[0];
+                                    var cnNameAndAttrStr = colEnCnArr[i].substr(enName.length + 1, colEnCnArr[i].length);
+                                    cnNameAndAttr = cnNameAndAttrStr.split('&');
+                                    tableHeader += '<th data-colname="' + enName + '"  ' + cnNameAndAttrStr.substr(cnNameAndAttr[0].length + 1, cnNameAndAttrStr.length).replace(/&/g, ' ') + '>' + cnNameAndAttr[0] + '</th>';
+                                }
+                            } else {
+                                if (dataArr.length > 0) {
+                                    for (var property in dataArr[0]) {
+                                        tableHeader += '<th data-colname="' + property + '">' + property + '</th>';
+                                    }
+                                } else {
+                                    tableHeader += '<th data-colname="No" style="width:10%;" >编号</th>';
+                                    tableHeader += '<th data-colname="Name">名称</th>';
+                                }
+                            }
+                            tableHeader += '</tr>';
+
+
+                            //填充无分页表格的表格内容
+                            //表格无分页模式
+                            if (WorkM == "TableOnly") {
+                                $('#poptablew').css('display', 'block');
+                                $("#poptablew .wupop thead").html(tableHeader);
+                                var html = '';
+                                $.each(dataArr, function (k, obje) {
+                                    if (obje) {
+                                        html += "<tr>";
+                                        var headers = $(".wupop thead tr th");
+                                        for (var i = 0; i < headers.length; i++) {
+                                            if ($(headers[i]).data != undefined && $(headers[i]).data().colname != undefined && obje[$(headers[i]).data().colname] != undefined) {
+                                                if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "date") {//类型是日期的TD
+                                                    html += "<td>" + _this.DateFromMSJsonString(obje[$(headers[i]).data().colname]) + "</td>"
+                                                }
+                                                else if ($(headers[i]).data().opeation != undefined) {//存在操作按钮的TD
+                                                    //添加字符截取功能
+                                                    if ($(headers[i]).data().charlength != undefined) {
+                                                        var charlength = $(headers[i]).data().charlength;
+                                                        html += "<td title='" + obje[$(headers[i]).data().colname] + "'> <a onclick=" + $(headers[i]).data().opeation + ">" + (obje[$(headers[i]).data().colname].length <= charlength ? obje[$(headers[i]).data().colname] : (obje[$(headers[i]).data().colname].substr(0, charlength)) + "...") + "</a></td>"
+                                                    } else {
+                                                        html += "<td> <a onclick=" + $(headers[i]).data().opeation + ">" + obje[$(headers[i]).data().colname] + "</a></td>"
+                                                    }
+                                                }
+                                                //是否把TITLE放上去
+                                                else if ($(headers[i]).data().title != undefined) {
+                                                    if ($(headers[i]).data().title != undefined) {
+                                                        var title = $(headers[i]).data().title;
+                                                        if (title == "true" || title) {
+                                                            html += "<td title='" + obje[$(headers[i]).data().colname] + "'>" + obje[$(headers[i]).data().colname] + "</td>"
+                                                        }
+                                                        else {
+                                                            html += "<td>" + obje[$(headers[i]).data().colname] + "</td>"
+                                                        }
+                                                    }
+                                                }
+                                                else if ($(headers[i]).data().visiable != undefined) {
+                                                    html += "<td style='display:none;'>" + obje[$(headers[i]).data().colname] + "</td>"
+                                                }
+                                                else {//添加字符截取功能 没有类型的TD
+                                                    if ($(headers[i]).data().charlength != undefined) {
+                                                        var charlength = $(headers[i]).data().charlength;
+
+                                                        html += "<td title='" + obje[$(headers[i]).data().colname] + "'>" + (obje[$(headers[i]).data().colname].length <= charlength ? obje[$(headers[i]).data().colname] : (obje[$(headers[i]).data().colname].substr(0, charlength) + "...")) + "</td>"
+                                                    } else {
+                                                        html += "<td>" + obje[$(headers[i]).data().colname] + "</td>";
+                                                    }
+                                                }
+                                            }
+                                            else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "SN") {//序号  序号的类型是SN colname列名称为空
+                                                html += "<td>" + (parseInt(k) + 1 + parseInt(_this.InitData.PageSize) * (parseInt(_this.InitData.PageIndex) - 1)) + "</td>";
+                                            }
+                                            else if ($(headers[i]).data().coltype != undefined && $(headers[i]).data().coltype == "Operation") {//序号  序号的类型是SN colname列名称为空){
+                                                html += ('<td><a style="text-decoration:underline;" href="#" onclick="updateReport(this)" class="btn btn-link btn_det">编辑</a>' + '<a href="#" style="text-decoration:underline;" onclick="delReport(this)" class="btn btn-link btn_det">删除</a></td>');
+                                                html += "</tr>";
+                                            }
+                                            //自定义内容
+                                            else if ($(headers[i]).data().custom != undefined && $(headers[i]).data().customcontent != undefined) {
+
+                                                var tmp = '';
+                                                var customCount = parseInt($(headers[i]).data().customcontent);
+                                                for (var j = 1; j <= customCount; j++) {
+                                                    //标签; 属性;VALUE
+                                                    var tmpC = $(headers[i]).data()["customcontent" + j];
+                                                    tmpC = tmpC.split('@');
+                                                    tmp += '<' + tmpC[0] + ' ' + tmpC[1] + '>' + tmpC[2] + '</' + tmpC[0] + '>';
+                                                }
+                                                html += ('<td>' + tmp + '</td>');
+                                            }
+                                            else {
+                                                html += "<td>" + "" + "</td>"
+                                            }
+                                        }
+                                        html += "</tr>";
+                                    }
+                                });
+
+                                $('#poptablew .wupop tbody').html(html);
+                                $(".loadDate").hide();
+                                //为TR设置DATA
+                                $.each(dataArr, function (k, obje) {
+                                    if (obje) {
+                                        //设置data-data
+                                        $($('#poptablew tbody tr')[k]).data().data = obje;
+                                    }
+                                });
+
+                                //为CHECKBOX radio绑定事件
+                                $('#poptablew tbody .ck_tbody').bind('change', checkBoxChange);
+                                $('#poptablew tbody .rb_tbody').bind('change', radioChange);
+                                //表格有分页模式
+                            } else if (WorkM == "TablePage") {
+                                $("#flowListDiv div table thead").html(tableHeader);
+                                //$('#main').css('display', 'block');
+                                //$('#btnSearch').bind('click', initTableData);
+                                //$('#btnSearch').trigger('click');
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        //初始化树  单实体+多实体
+        function initTreeData(workModel) {
+            //$('#tree').css('display', 'block');
+            $('#orgjstree').css('display', 'block');
+
+            var url = Handler + '?DoType=PopVal_InitTree&FK_MapExt=' + getQueryStringByName('FK_MapExt');
+            //初始化Tree
+            var jstreeOption = {
+                'core': {
+                    'data': function (node, cb) {
+                        //初始化根节点
+                        var formData = unescape(getQueryString('FormData')).split('&');
+
+                        var formData2 = {};
+                        for (var i = 0; i < formData.length; i++) {
+                            //  formData2[formData[i].split('=')[0]] =formData[i].split('=')[1];
+                            formData2[unescape(formData[i].split('=')[0])] = unescape(formData[i].split('=')[1]);
+                        }
+
+                        if (node.id === "#") {
+                            $.ajax({
+                                type: 'post',
+                                async: true,
+                                url: url,
+                                data: formData2,
+                                dataType: 'html',
+                                success: function (data) {
+                                    data = JSON.parse(data);
+                                    var itemArr = [];
+                                    $.each(data.DTObjs, function (i, rootNode) {
+                                        itemArr.push({
+                                            "text": rootNode.Name, "id": rootNode.No, "children": true, "data": rootNode, "state": {
+                                                "opened": true, "selected": false
+                                            }
+                                        });
+                                    });
+                                    cb(itemArr);
+                                }
+                            });
+                        } else {
+                            url = Handler + '?DoType=PopVal_InitTree&FK_MapExt=' + getQueryStringByName('FK_MapExt') + '&ParentNo=' + node.id;
+                            $.ajax({
+                                type: 'post',
+                                async: true,
+                                url: url,
+                                data: formData2,
+                                dataType: 'html',
+                                success: function (data) {
+                                    if (window.pageSetData[0].PopValWorkModel == "TreeDouble") {//双实体树
+                                        data = JSON.parse(data);
+                                        var itemArr = [];
+                                        $.each(data.DTEntitys, function (i, rootNode) {
+                                            itemArr.push({
+                                                "text": rootNode.Name, "id": rootNode.No, "children": false, "icon": "jstree-file", "data": rootNode
+                                            });
+                                        });
+
+                                        cb(itemArr);
+                                    } else {//单实体树
+                                        data = JSON.parse(data);
+                                        var itemArr = [];
+                                        $.each(data.DTObjs, function (i, rootNode) {
+                                            itemArr.push({
+                                                "text": rootNode.Name, "id": rootNode.No, "children": true, "data": rootNode, "state": {
+                                                //"opened": false, "selected": false
+                                            }
+                                        });
+                                        cb(itemArr);
+                                    });
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        };
+        var plugins = [];
+        if (pageSetData[0].PopValSelectModel == "More") {//多选
+            plugins = [
+                    "checkbox",
+            //"state",
+            //"conditionalselect"
+
+                ];
+            jstreeOption.core.multiple = true;
+        } else {
+            jstreeOption.core.multiple = false;
+        }
+
+        jstreeOption.plugins = plugins;
+
+        $('#orgjstree').jstree(jstreeOption).on('changed.jstree', function (node, cb) {
+            GetTreeReturnVal();
+            //$('#orgTxt').val(returnVal.Name);
+            //$('#orgjstree').css('display', 'none');
+        });
+    }
+    //分页table
+    function initTableData() {
+        var fk_MapExt = getQueryStringByName("FK_MapExt");
+        var pageSize = $('#flowListDiv  .pagination-panel select').val();
+        if (pageSize == "-1") {
+            pageSize = 10;
+            $('#flowListDiv  .pagination-panel select').children("[value=10]").attr('selected', 'selected');
+        }
+        var searchData = $('#searchForm').serialize();
+        var toDoListInitData = {
+            PageSize: pageSize,
+            PageIndex: 1,
+            dataType: 'html',
+            DivId: 'flowListDiv',
+            countUrl: Handler + "?DoType=PopVal_InitTablePageCount&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+            listUrl: Handler + "?DoType=PopVal_InitTablePageList&FK_MapExt=" + fk_MapExt + '&m=' + Math.random() + "&" + searchData,
+            RenderOverFun: function () {
+                //为CHECKBOX radio绑定事件
+                $('#flowListDiv div table tbody .ck_tbody').bind('change', checkBoxChange);
+                $('#flowListDiv div table tbody .rb_tbody').bind('change', radioChange);
+            }
+        };
+        $('#flowListDiv div table tbody tr').remove();
+        Common.CustomPagePlug(toDoListInitData); //绑定表格
+
+        dtTable();
+    }
+    function tab() {
+        var event = window.event || arguments.callee.caller.arguments[0];
+        if (event.keyCode == "13") {
+            document.getElementById("btnSearch").click();
+            return false;
+        }
+    }
+    function initMoreConSearch(conditionStr) {
+        var conditions = conditionStr.split('$');
+        var conHtml = '';
+        //先加上KEY 
+        conHtml += "<div class='searchGroup'><label>" + initPopValData.Hashtable[0].PopValSearchTip + "</label>" + "<input name='Key' id='Key' type='text' onkeydown='tab()'/></div>";
+        $.each(conditions, function (i, con) {
+            if (con != undefined && con.trim() != '') {
+                var paramList = con.split('#');
+                var paramName = paramList[0].split('=')[1];
+                var lableText = paramList[1].split('=')[1];
+                var defVal = paramList.length > 2 ? paramList[2].split('=')[1] : '';
+                conHtml += "<div class='searchGroup'><label>" + lableText + "</label>";
+                if (paramList.length == 3 && (paramList[2].indexOf('ListSQL') >= 0 || paramList[2].indexOf('EnumKey') >= 0)) {//是DDL 下拉框
+                    conHtml += "<select name='" + paramName + "' id='" + paramName + "'><option value='all'>请选择</option>";
+                    if (initPopValData[paramName] != undefined && initPopValData[paramName].length > 0) {
+                        $.each(initPopValData[paramName], function (j, enumObj) {
+                            conHtml += "<option value='" + enumObj.No + "'>" + enumObj.Name + "</option>";
+                        });
+                    }
+                    conHtml += "</select>";
+                } else {//日期
+                    if (defVal != undefined && defVal.trim() != '') {
+                        defVal = defVal.replace('<br/>', '');
+                        defVal = defVal.replace('@Now', "(new Date())");
+                        defVal = new Date(eval(defVal));
+                        defVal = defVal.FormateDate("yyyy-MM-dd");
+                    }
+                    conHtml += '<input value="' + defVal + '"  onfocus="' + "WdatePicker({dateFmt:'yyyy-MM-dd'})" + '"' + " type='text' value='2016-10-16' name='" + paramName + "' id='" + paramName + "'/>";
+                }
+                conHtml += "</div>";
+            }
+        });
+
+        $('#searchDiv').append($(conHtml));
+    }
+    //checkbox的选中事件
+    function checkBoxChange(obj) {
+        var ck = obj.target;
+        var trData = $(ck).parent().parent().data().data;
+
+        if (obj.target.checked) {
+            selectedTrArr.push(trData);
+        } else {
+            selectedTrArr.pop(trData);
+        }
+
+        SetReturnValFromSelectedTrArr();
+        $('#selectedlist').data().data = returnVal;
+    }
+
+    //radio 的选中事件
+    function radioChange(obj) {
+        var radio = obj.target;
+        var trData = $(radio).parent().parent().data().data;
+
+        if (obj.target.checked) {
+            selectedTrArr.length = 0;
+            selectedTrArr.push(trData);
+        } else {
+            selectedTrArr.pop(trData);
+        }
+
+        SetReturnValFromSelectedTrArr();
+        $('#selectedlist').data().data = returnVal;
+    }
+
+    //组装好的返回值  在MyFlow.htm中使用
+    var returnVal = {};
+    //返回值的数组
+    var selectedTrArr = [];
+
+    function SetReturnValFromSelectedTrArr() {
+        //返回值格式
+        switch (pageSetData[0].PopValFormat) {
+            case "OnlyNo": //仅NO
+                var noArr = [];
+                $.each(selectedTrArr, function (i, selectedTr) {
+                    noArr.push(selectedTr.No);
+                });
+                returnVal.No = noArr.join(',');
+                break;
+            case "OnlyName": //仅Name
+                var nameArr = [];
+                $.each(selectedTrArr, function (i, selectedTr) {
+                    nameArr.push(selectedTr.Name);
+                });
+                returnVal.Name = nameArr.join(',');
+                break;
+            case "NoName": //No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
+                var noArr = [];
+                if (selectedTrArr.length > 0) {
+                    for (var property in selectedTrArr[0]) {
+                        returnVal[property] = [];
+                    }
+                }
+
+                $.each(selectedTrArr, function (i, selectedTr) {
+                    for (var property in returnVal) {
+                        returnVal[property].push(selectedTr[property]);
+                    }
+                });
+                for (var property in selectedTrArr[0]) {
+                    returnVal[property] = returnVal[property].join(",");
+                }
+                break;
+        }
+    }
+
+    function GetTreeReturnVal() {
+        var instance = $('#orgjstree').jstree(true);
+        var selectedIdArr = instance.get_selected();
+        var selectedNodes = [];
+        var nameArrs = [];
+        var noArr = [];
+        var nameArr = [];
+        $.each(selectedIdArr, function (i, selectedId) {
+            selectedNodes.push(instance.get_node(selectedId));
+        });
+        $.each(selectedNodes, function (i, selectedNode) {
+            if (pageSetData[0].PopValWorkModel == "TreeDouble") {
+                if (selectedNodes[i].icon != true) {
+                    nameArrs.push(selectedNode.data);
+                    noArr.push(selectedNode.id);
+                    nameArr.push(selectedNode.text);
+                }
+            } else {
+                //if (selectedNodes[i].children.length == 0) {
+                nameArrs.push(selectedNode.data);
+                noArr.push(selectedNode.id);
+                nameArr.push(selectedNode.text);
+                //}
+            }
+        });
+
+        //返回值格式
+        switch (pageSetData[0].PopValFormat) {
+            case "OnlyNo": //仅NO
+                returnVal.Name = noArr.join(',');
+                break;
+            case "OnlyName": //仅Name
+                returnVal.Name = nameArr.join(',');
+                break;
+            case "NoName": //No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
+                if (nameArrs.length > 0) {
+                    for (var property in nameArrs[0]) {
+                        returnVal[property] = [];
+                    }
+                }
+                $.each(nameArrs, function (i, selected) {
+                    for (var property in returnVal) {
+                        returnVal[property].push(selected[property]);
+                    }
+                });
+                for (var property in nameArrs[0]) {
+                    returnVal[property] = returnVal[property].join(",");
+                }
+                break;
+        }
+    }
+
+    function GetGroupReturnVal() {
+        var checked = $('input:checked');
+        //var selectedIdArrf = [];
+        //var selectedNodesf = [];
+        //for (var i = 0; i < checked.parent(".lif").length; i++) {
+        //    selectedIdArrf.push($(checked.parent(".lif")[i]).data().data.No);
+        //    selectedNodesf.push($(checked.parent(".lif")[i]).data().data.Name);
+        //}
+        var selectedIdArrm = [];
+        var selectedNodesm = [];
+        var nameArr = [];
+
+        for (var i = 0; i < checked.parent(".lim").length; i++) {
+            selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.No);
+            selectedNodesm.push($(checked.parent(".lim")[i]).data().data.Name);
+            nameArr.push("(" + $(checked.parent(".lim")[i]).data().data.No + "," + $(checked.parent(".lim")[i]).data().data.Name + ")");
+        }
+        //返回值格式
+        switch (pageSetData[0].PopValFormat) {
+            case "OnlyNo": //仅NO
+                returnVal.Value = selectedIdArrm.join(',');
+                break;
+            case "OnlyName": //仅Name
+                returnVal.Value = selectedNodesm.join(',');
+                break;
+            case "NoName": //No,Name 都返回 其实是返回的一行数据  解决多个表单元素的回填问题
+                returnVal.Value = nameArr.join(',');
+                break;
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="selectedlist" style="display: none;">
+    </div>
+    <!--无分页显示table-->
+    <div id="poptablew" style="display: none;">
+        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding: 0px;
+            margin: 0px;">
+            <div class="portlet-body " id="" style="">
+                <div class="tab-content" style="margin: 4px 0px;">
+                    <div class="tab-pane active portlet_tab flowLists">
+                        <div id="" style="">
+                            <table class="table wupop" data-data="true">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="loadDate" style="text-align: center;">
+                            <img src="../Scripts/bootstrap/fonts/loading.gif" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--分页显示table-->
+    <div id="main" style="display: none;">
+        <div id="blackDiv" class="portlet portlet-sortable light bg-inverse" style="padding: 0px;
+            margin: 0px; overflow: auto;">
+            <!-- BEGIN CHART PORTLET-->
+            <div class="portlet-title col-md-12" style="border: none; border-radius: 0px; height: 60px;
+                padding: 12px 0 0 20px;">
+                <div>
+                    <form id="searchForm" action="" onkeydown="if(event.keyCode==13){return false;}">
+                    <div id="searchDiv">
+                    </div>
+                    </form>
+                    <div class="searchBtnDiv">
+                        <button class="Btn" id="btnSearch">
+                            搜索</button>
+                    </div>
+                    <div style="font-size: 20px; float: left; width: 100%; display: none;">
+                        已选择列表： <span id="selectedlists" style="word-break: break-all;"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body " id="merDiv">
+                <div class="tab-content" style="margin: 4px 0px;">
+                    <div class="tab-pane active portlet_tab flowLists">
+                        <div id="flowListDiv">
+                            <div class="tabPdiv">
+                                <table class="tble customthr customHover wupop" data-data="true">
+                                    <thead>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="loadDate" style="text-align: center;">
+                                <img src="../Scripts/bootstrap/fonts/loading.gif" />
+                            </div>
+                            <div class="pagination-panel">
+                                页码
+                                <button class="btn btnTxt  btn-sm default prev" title="上一页">
+                                    <i class="fa fa-angle-left"></i>
+                                </button>
+                                <button class="btn btnTxt btn-sm default next" title="下一页">
+                                    <i class="fa fa-angle-right"></i>
+                                </button>
+                                <span class="seperator">|</span>
+                                <button class="btn btnTxt btn-sm default prev" title="转到">
+                                    转到</button>
+                                <input type="text" class="pagination-panel-input form-control input-mini input-inline input-sm"
+                                    maxlenght="5" style="text-align: center; margin: 0 5px;" />
+                                页<span class="seperator">|</span> <span class="pagination-panel-total">20</span>
+                                <label>
+                                    页 <span class="seperator">|</span>每页
+                                    <select onchange="" style="width: auto !important;" class="form-control input-xsmall input-sm input-inline">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="150">150</option>
+                                        <option value="-1">全部</option>
+                                    </select>
+                                    条
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--树tree-->
+    <!--<div id="tree" style="display: none;">
+        <div id="" class="portlet portlet-sortable light bg-inverse" style="padding:0px;margin:0px;overflow:auto;">
+            <div class="portlet-body " id="" style="overflow:auto;">
+                <div class="tab-content">
+                    <div class="tab-pane active portlet_tab" id="task">
+                        <div id="ListDiv">
+                            <div class="input-group form_tree">
+                                <input class="form-control" type="text" id="orgTxt" readonly="readonly" />
+                                <span class="input-group-addon" id="test"><span class="glyphicon glyphicon-tree-deciduous"></span></span>
+                            </div>
+                            <div id="orgjstree" style="position:absolute;display:none;overflow:auto;width:95%;" class="tree-demo jstree jstree-1 jstree-default">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <!--<div><label id="treeVal"></label></div>-->
+    <div id="orgjstree" class="tree-demo jstree jstree-1 jstree-default" style="">
+    </div>
+    <!--分组显示table-->
+    <div id="groupTable" style="">
+        <ul id="dt" data-data="true">
+        </ul>
+    </div>
+    <!--为自由表单和从表加-->
+    <div id="freeBarDiv">
+        <input type="button" value="取消" id="BtnCancel" />
+        <input type="button" value="确定" id="BtnOk" />
+    </div>
+</body>
+</html>

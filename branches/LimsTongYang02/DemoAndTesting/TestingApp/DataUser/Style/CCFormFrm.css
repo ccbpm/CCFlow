@@ -1,0 +1,24 @@
+﻿.HBtn
+{
+    /* display:none; */
+    visibility: visible;
+    background-color: White;
+    border: 0;
+}
+#divCCForm
+{
+    position: relative !important;
+    background-color: white;
+    margin: 0 auto;
+}
+.container
+{
+    background-color: #d0d0d0;
+    position: relative !important;
+ 
+}
+.ucen
+{
+    overflow-y: auto;
+    height: 100%;
+}

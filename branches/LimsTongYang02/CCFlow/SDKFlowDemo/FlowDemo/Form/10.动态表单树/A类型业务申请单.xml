@@ -1,0 +1,118 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_GroupField>
+    <OID>285</OID>
+    <Lab>A类型业务申请单</Lab>
+    <EnName>Demo_YWA</EnName>
+    <Idx>1</Idx>
+    <GUID />
+    <CtrlType />
+    <CtrlID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_MapData>
+    <No>Demo_YWA</No>
+    <Name>A类型业务申请单</Name>
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+    <TableWidth>800</TableWidth>
+    <TableHeight>900</TableHeight>
+    <TableCol>4</TableCol>
+  </Sys_MapData>
+  <Sys_MapAttr>
+    <MyPK>Demo_YWA_OID</MyPK>
+    <FK_MapData>Demo_YWA</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>285</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_YWA_RDT</MyPK>
+    <FK_MapData>Demo_YWA</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <GroupID>285</GroupID>
+  </Sys_MapAttr>
+  <Sys_FrmLab>
+    <MyPK>LB_1_Demo_YWA</MyPK>
+    <FK_MapData>Demo_YWA</FK_MapData>
+    <Text>A类型业务申请单</Text>
+    <X>224</X>
+    <Y>151</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+</NewDataSet>

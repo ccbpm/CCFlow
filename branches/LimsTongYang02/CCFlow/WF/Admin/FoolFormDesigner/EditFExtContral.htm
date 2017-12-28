@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>扩展控件</title>
+     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+   
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <link href="../../../DataUser/Style/table0.css" rel="stylesheet"  type="text/css" />
+
+    <script type="text/javascript">
+
+        //页面启动函数.
+        $(function () {
+         InitPage();
+        });
+     function InitPage() {
+
+            var mypk = GetQueryString("MyPK");
+            var keyOfEn = GetQueryString("KeyOfEn");
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            // 绑定附件列表.
+            GenerBindSQL("DDL_Ath", "EditFExtContral_AthList", "@FK_MapData=" + fk_mapData);
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=EditFExtContral_Init&MyPK=" + mypk + "&FK_MapData=" + fk_mapData + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                    }
+
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+                    //data = data.replace("\t\n", "");
+
+                    //data = data.replace(/\n/g, "");
+                    //data = data.replace(/\r/g, "");
+
+                    data = JSON.parse(data);
+                    if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
+                        data = data[0];
+                    }
+
+                    //设置选择的模式.
+                    $("#RB_CtrlType_" + data.UIContralType).attr("checked", "checked");
+
+                    switch (data.UIContralType) {
+                        case "0":
+                            break;
+                        case "4":
+                            break;
+                        case "5":
+                            break;
+                        case "7":
+                            break;
+                        case "6": //附件扩展组件..
+                            $("#DDL_Ath").val(data.AthRefObj); //设置选择的值.
+                            $("#DDL_AthShowModel").val(data.AthShowModel); //设置选择的值.
+                            break;
+                        default:
+                            alert('没有判断的元素.' + data.UIContralType);
+                            break;
+                    }
+                }
+            });
+        }
+        //执行保存
+        function Save() {
+            var fk_mapExt = GetQueryString("MyPK");
+            var frmData = $("#cc").serialize();
+            var keyOfEn = GetQueryString("KeyOfEn");
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            //增加附件判断
+            var DDL_Ath = $("#DDL_Ath").val();
+            var CtrlType = document.getElementById("RB_CtrlType_6").checked;
+            if (CtrlType && null == DDL_Ath) {
+                alert("该表单中没有附件，请您先在表单设计器中创建一个附件");
+                return;
+            }
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=EditFExtContral_Save&FK_MapExt=" + fk_mapExt + "&m=" + Math.random() + "&KeyOfEn=" + keyOfEn + '&FK_MapData=' + fk_mapData,
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                }
+            });
+        }
+
+        function SaveAndClose() {
+            Save();
+            window.close();
+        }
+
+        function Close() {
+            window.close();
+        }
+
+    </script>
+</head>
+<body>
+ 
+ <form id="cc"  >
+<fieldset>
+<legend><input id="RB_CtrlType_0" type="radio" name="Model" value="0"  /><label for="RB_CtrlType_0">不设置(使用文本框展示)</label>   </legend>
+<ul>
+<li> 不做任何设置. </li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend><input id="RB_CtrlType_6" type="radio" name="Model" value="6"  /><label for="RB_CtrlType_6">设置为附件展示字段</label>   </legend>
+<ul>
+<li> 请选择一个附件  <select id="DDL_Ath" name="DDL_Ath" >
+</select>该附件的上传的文件数据就显示到这个控件上.</li>
+
+<li><a href="javascript:EditAth()">编辑附件</a></li>
+
+<script type="text/javascript">
+    function EditAth() {
+        //增加附件判断
+        var DDL_Ath = $("#DDL_Ath").val();
+        if (null == DDL_Ath) {
+            alert("该表单中没有附件，请您先在表单设计器中创建一个附件");
+            return;
+        }
+        var ddl = document.getElementById("DDL_Ath");
+        var mypk = ddl.options[ddl.selectedIndex].value;
+        var url = '../../Comm/En.htm?EnsName=BP.Sys.FrmUI.FrmAttachmentExts&MyPK=' + mypk;
+        WinOpen(url);
+    }
+</script>
+
+
+<li>文件数据展示模式:   <select id="DDL_AthShowModel" name="DDL_AthShowModel" >
+  <option value="0" >简洁模式.   格式: 附件(x) </option>
+  <option value="1" >仅文件名称. 格式: 我的文件1.doc,我的文件2.doc </option>
+</select> .</li>
+
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend><input id="RB_CtrlType_4" type="radio" name="Model" value="4"  /><label for="RB_CtrlType_4">地图控件</label>   </legend>
+<ul>
+<li> 用于移动设备 </li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend>  <input id="RB_CtrlType_7" type="radio" name="Model" value="7"  /><label for="RB_CtrlType_7">手机拍照控件</label>   </legend>
+<ul>
+<li> 用于移动设备 </li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend> <input id="RB_CtrlType_5" type="radio" name="Model" value="5"  /><label for="RB_CtrlType_5">手机录音控件</label>    </legend>
+<ul>
+<li> 用于移动设备 </li>
+</ul>
+</fieldset>
+
+<input type="button" value="保存"  onclick="Save()" id="Btn_Save" name="Btn_Save" />
+<!--<input type="button" value="保存&关闭"  onclick="SaveAndClose()" id="Btn_SaveAndClose" name="Btn_SaveAndClose" />-->
+<!--<input type="button" value="取消"  onclick="Cancel()" id="Btn_Cancel" name="Btn_Cancel" />-->
+</form>
+
+</body>
+</html>

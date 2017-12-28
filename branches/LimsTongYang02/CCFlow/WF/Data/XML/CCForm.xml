@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 元素类别  -->
+  <Item No="03" Name="字段类"  />
+  <Item No="04" Name="组件类"  />
+  <Item No="05" Name="业务逻辑类"  />
+
+
+  <Item No="01"    Name="装饰类"  />
+  <Ele No="Lable"  Name="标签"     EleType="01"  />
+  <Ele No="Img"    Name="装饰图片" EleType="01" />
+
+  <Item No="02" Name="功能类"  />
+  <Ele No="Button" Name="按钮"     EleType="01"  />
+  <Ele No="Link"  Name="超连接"     EleType="01"  />
+
+
+
+
+  <Ele No="Singer" Name="签章"  />
+  <Ele No="Img" Name="装饰图片"  />
+  <Ele No="Img" Name="装饰图片"  />
+
+
+</NewDataSet>

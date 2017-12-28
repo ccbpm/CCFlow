@@ -1,0 +1,66 @@
+﻿    
+
+/*  Table 风格  */
+table
+{
+    font-family: verdana,arial,sans-serif;
+    font-size: 14px;
+    color: #333333;
+    border-width: 1px;
+    border-color: #D0D0D0;
+    border-collapse: collapse;
+}
+table th
+{
+    border: 1px solid #D0D0D0;
+    padding: 1px;
+    background-color: #F9F9F9;
+    font-weight: normal;
+    font-style: normal;
+}
+table td
+{
+    border: 1px solid #D0D0D0;
+    padding: 1px;
+    background-color: #ffffff;
+}
+
+input[type=text], input[type=password], select
+{
+    border-radius: 5px;
+    border: 0.5px solid #CCCCCC;
+    margin: 0px 0px;
+    width: 100%;
+    padding-left: 0px;
+    margin:0px;
+}
+
+
+/*文本框只读风格.*/
+textarea[disabled],input:disabled{
+border:1px solid #DDD;
+background-color:#F5F5F5;
+color:#ACA899;
+}
+
+
+td input[type="textbox"]
+{
+    margin: 0px;
+    border: 1px solid #D6DDE6;
+    padding: 0px;
+}
+
+input[disabled],input:disabled{
+border:1px solid #DDD;
+background-color:#F5F5F5;
+color:#ACA899;
+}
+
+/*文本框只读风格.*/
+select[disabled],input:disabled{
+border:1px solid #DDD;
+background-color:#F5F5F5;
+color:#ACA899;
+}
+ 

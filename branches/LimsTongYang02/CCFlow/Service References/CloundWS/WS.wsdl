@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetFlowDir">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetFlowDirResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFlowDirResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDataByNo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="no" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDataByNoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDataByNoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSonDirByParentNo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="no" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSonDirByParentNoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSonDirByParentNoResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFlowTempByDir">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="no" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFlowTempByDirResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFlowTempByDirResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRecentlyFlowTemp">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetRecentlyFlowTempResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRecentlyFlowTempResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTotalCount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="searchText" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTotalCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="GetTotalCountResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPagingData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="searchText" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="pageIdx" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="pageSize" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="isPost" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetPagingDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetPagingDataResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFlowTemplateByGuid">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFlowTemplateByGuidResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFlowTemplateByGuidResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFlowXML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="guid" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFlowXMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFlowXMLResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFlowsTree">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetFlowsTreeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFlowsTreeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DataTable" nillable="true">
+        <s:complexType>
+          <s:sequence>
+            <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+            <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="int" type="s:int" />
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetFlowDirSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFlowDir" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowDirSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFlowDirResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDataByNoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDataByNo" />
+  </wsdl:message>
+  <wsdl:message name="GetDataByNoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDataByNoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSonDirByParentNoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSonDirByParentNo" />
+  </wsdl:message>
+  <wsdl:message name="GetSonDirByParentNoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSonDirByParentNoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTempByDirSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFlowTempByDir" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTempByDirSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFlowTempByDirResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentlyFlowTempSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRecentlyFlowTemp" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentlyFlowTempSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRecentlyFlowTempResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTotalCountSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTotalCount" />
+  </wsdl:message>
+  <wsdl:message name="GetTotalCountSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTotalCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetPagingDataSoapIn">
+    <wsdl:part name="parameters" element="tns:GetPagingData" />
+  </wsdl:message>
+  <wsdl:message name="GetPagingDataSoapOut">
+    <wsdl:part name="parameters" element="tns:GetPagingDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTemplateByGuidSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFlowTemplateByGuid" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTemplateByGuidSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFlowTemplateByGuidResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowXMLSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFlowXML" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowXMLSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFlowXMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowsTreeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFlowsTree" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowsTreeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFlowsTreeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowDirHttpGetIn" />
+  <wsdl:message name="GetFlowDirHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDataByNoHttpGetIn">
+    <wsdl:part name="no" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDataByNoHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetSonDirByParentNoHttpGetIn">
+    <wsdl:part name="no" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSonDirByParentNoHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTempByDirHttpGetIn">
+    <wsdl:part name="no" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTempByDirHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentlyFlowTempHttpGetIn" />
+  <wsdl:message name="GetRecentlyFlowTempHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetTotalCountHttpGetIn">
+    <wsdl:part name="searchText" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTotalCountHttpGetOut">
+    <wsdl:part name="Body" element="tns:int" />
+  </wsdl:message>
+  <wsdl:message name="GetPagingDataHttpGetIn">
+    <wsdl:part name="searchText" type="s:string" />
+    <wsdl:part name="pageIdx" type="s:string" />
+    <wsdl:part name="pageSize" type="s:string" />
+    <wsdl:part name="isPost" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPagingDataHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTemplateByGuidHttpGetIn">
+    <wsdl:part name="guid" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTemplateByGuidHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowXMLHttpGetIn">
+    <wsdl:part name="guid" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowXMLHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowsTreeHttpGetIn" />
+  <wsdl:message name="GetFlowsTreeHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowDirHttpPostIn" />
+  <wsdl:message name="GetFlowDirHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetDataByNoHttpPostIn">
+    <wsdl:part name="no" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDataByNoHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetSonDirByParentNoHttpPostIn">
+    <wsdl:part name="no" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSonDirByParentNoHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTempByDirHttpPostIn">
+    <wsdl:part name="no" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTempByDirHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetRecentlyFlowTempHttpPostIn" />
+  <wsdl:message name="GetRecentlyFlowTempHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetTotalCountHttpPostIn">
+    <wsdl:part name="searchText" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetTotalCountHttpPostOut">
+    <wsdl:part name="Body" element="tns:int" />
+  </wsdl:message>
+  <wsdl:message name="GetPagingDataHttpPostIn">
+    <wsdl:part name="searchText" type="s:string" />
+    <wsdl:part name="pageIdx" type="s:string" />
+    <wsdl:part name="pageSize" type="s:string" />
+    <wsdl:part name="isPost" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPagingDataHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTemplateByGuidHttpPostIn">
+    <wsdl:part name="guid" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowTemplateByGuidHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowXMLHttpPostIn">
+    <wsdl:part name="guid" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowXMLHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetFlowsTreeHttpPostIn" />
+  <wsdl:message name="GetFlowsTreeHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="WSSoap">
+    <wsdl:operation name="GetFlowDir">
+      <wsdl:input message="tns:GetFlowDirSoapIn" />
+      <wsdl:output message="tns:GetFlowDirSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDataByNo">
+      <wsdl:input message="tns:GetDataByNoSoapIn" />
+      <wsdl:output message="tns:GetDataByNoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSonDirByParentNo">
+      <wsdl:input message="tns:GetSonDirByParentNoSoapIn" />
+      <wsdl:output message="tns:GetSonDirByParentNoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTempByDir">
+      <wsdl:input message="tns:GetFlowTempByDirSoapIn" />
+      <wsdl:output message="tns:GetFlowTempByDirSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentlyFlowTemp">
+      <wsdl:input message="tns:GetRecentlyFlowTempSoapIn" />
+      <wsdl:output message="tns:GetRecentlyFlowTempSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTotalCount">
+      <wsdl:input message="tns:GetTotalCountSoapIn" />
+      <wsdl:output message="tns:GetTotalCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPagingData">
+      <wsdl:input message="tns:GetPagingDataSoapIn" />
+      <wsdl:output message="tns:GetPagingDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTemplateByGuid">
+      <wsdl:input message="tns:GetFlowTemplateByGuidSoapIn" />
+      <wsdl:output message="tns:GetFlowTemplateByGuidSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowXML">
+      <wsdl:input message="tns:GetFlowXMLSoapIn" />
+      <wsdl:output message="tns:GetFlowXMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowsTree">
+      <wsdl:input message="tns:GetFlowsTreeSoapIn" />
+      <wsdl:output message="tns:GetFlowsTreeSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="WSHttpGet">
+    <wsdl:operation name="GetFlowDir">
+      <wsdl:input message="tns:GetFlowDirHttpGetIn" />
+      <wsdl:output message="tns:GetFlowDirHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDataByNo">
+      <wsdl:input message="tns:GetDataByNoHttpGetIn" />
+      <wsdl:output message="tns:GetDataByNoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSonDirByParentNo">
+      <wsdl:input message="tns:GetSonDirByParentNoHttpGetIn" />
+      <wsdl:output message="tns:GetSonDirByParentNoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTempByDir">
+      <wsdl:input message="tns:GetFlowTempByDirHttpGetIn" />
+      <wsdl:output message="tns:GetFlowTempByDirHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentlyFlowTemp">
+      <wsdl:input message="tns:GetRecentlyFlowTempHttpGetIn" />
+      <wsdl:output message="tns:GetRecentlyFlowTempHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTotalCount">
+      <wsdl:input message="tns:GetTotalCountHttpGetIn" />
+      <wsdl:output message="tns:GetTotalCountHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPagingData">
+      <wsdl:input message="tns:GetPagingDataHttpGetIn" />
+      <wsdl:output message="tns:GetPagingDataHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTemplateByGuid">
+      <wsdl:input message="tns:GetFlowTemplateByGuidHttpGetIn" />
+      <wsdl:output message="tns:GetFlowTemplateByGuidHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowXML">
+      <wsdl:input message="tns:GetFlowXMLHttpGetIn" />
+      <wsdl:output message="tns:GetFlowXMLHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowsTree">
+      <wsdl:input message="tns:GetFlowsTreeHttpGetIn" />
+      <wsdl:output message="tns:GetFlowsTreeHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="WSHttpPost">
+    <wsdl:operation name="GetFlowDir">
+      <wsdl:input message="tns:GetFlowDirHttpPostIn" />
+      <wsdl:output message="tns:GetFlowDirHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDataByNo">
+      <wsdl:input message="tns:GetDataByNoHttpPostIn" />
+      <wsdl:output message="tns:GetDataByNoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSonDirByParentNo">
+      <wsdl:input message="tns:GetSonDirByParentNoHttpPostIn" />
+      <wsdl:output message="tns:GetSonDirByParentNoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTempByDir">
+      <wsdl:input message="tns:GetFlowTempByDirHttpPostIn" />
+      <wsdl:output message="tns:GetFlowTempByDirHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentlyFlowTemp">
+      <wsdl:input message="tns:GetRecentlyFlowTempHttpPostIn" />
+      <wsdl:output message="tns:GetRecentlyFlowTempHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTotalCount">
+      <wsdl:input message="tns:GetTotalCountHttpPostIn" />
+      <wsdl:output message="tns:GetTotalCountHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPagingData">
+      <wsdl:input message="tns:GetPagingDataHttpPostIn" />
+      <wsdl:output message="tns:GetPagingDataHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTemplateByGuid">
+      <wsdl:input message="tns:GetFlowTemplateByGuidHttpPostIn" />
+      <wsdl:output message="tns:GetFlowTemplateByGuidHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowXML">
+      <wsdl:input message="tns:GetFlowXMLHttpPostIn" />
+      <wsdl:output message="tns:GetFlowXMLHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowsTree">
+      <wsdl:input message="tns:GetFlowsTreeHttpPostIn" />
+      <wsdl:output message="tns:GetFlowsTreeHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSSoap" type="tns:WSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetFlowDir">
+      <soap:operation soapAction="http://tempuri.org/GetFlowDir" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataByNo">
+      <soap:operation soapAction="http://tempuri.org/GetDataByNo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSonDirByParentNo">
+      <soap:operation soapAction="http://tempuri.org/GetSonDirByParentNo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTempByDir">
+      <soap:operation soapAction="http://tempuri.org/GetFlowTempByDir" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentlyFlowTemp">
+      <soap:operation soapAction="http://tempuri.org/GetRecentlyFlowTemp" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTotalCount">
+      <soap:operation soapAction="http://tempuri.org/GetTotalCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPagingData">
+      <soap:operation soapAction="http://tempuri.org/GetPagingData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTemplateByGuid">
+      <soap:operation soapAction="http://tempuri.org/GetFlowTemplateByGuid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowXML">
+      <soap:operation soapAction="http://tempuri.org/GetFlowXML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowsTree">
+      <soap:operation soapAction="http://tempuri.org/GetFlowsTree" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSSoap12" type="tns:WSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetFlowDir">
+      <soap12:operation soapAction="http://tempuri.org/GetFlowDir" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataByNo">
+      <soap12:operation soapAction="http://tempuri.org/GetDataByNo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSonDirByParentNo">
+      <soap12:operation soapAction="http://tempuri.org/GetSonDirByParentNo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTempByDir">
+      <soap12:operation soapAction="http://tempuri.org/GetFlowTempByDir" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentlyFlowTemp">
+      <soap12:operation soapAction="http://tempuri.org/GetRecentlyFlowTemp" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTotalCount">
+      <soap12:operation soapAction="http://tempuri.org/GetTotalCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPagingData">
+      <soap12:operation soapAction="http://tempuri.org/GetPagingData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTemplateByGuid">
+      <soap12:operation soapAction="http://tempuri.org/GetFlowTemplateByGuid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowXML">
+      <soap12:operation soapAction="http://tempuri.org/GetFlowXML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowsTree">
+      <soap12:operation soapAction="http://tempuri.org/GetFlowsTree" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSHttpGet" type="tns:WSHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetFlowDir">
+      <http:operation location="/GetFlowDir" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataByNo">
+      <http:operation location="/GetDataByNo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSonDirByParentNo">
+      <http:operation location="/GetSonDirByParentNo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTempByDir">
+      <http:operation location="/GetFlowTempByDir" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentlyFlowTemp">
+      <http:operation location="/GetRecentlyFlowTemp" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTotalCount">
+      <http:operation location="/GetTotalCount" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPagingData">
+      <http:operation location="/GetPagingData" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTemplateByGuid">
+      <http:operation location="/GetFlowTemplateByGuid" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowXML">
+      <http:operation location="/GetFlowXML" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowsTree">
+      <http:operation location="/GetFlowsTree" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSHttpPost" type="tns:WSHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetFlowDir">
+      <http:operation location="/GetFlowDir" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDataByNo">
+      <http:operation location="/GetDataByNo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSonDirByParentNo">
+      <http:operation location="/GetSonDirByParentNo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTempByDir">
+      <http:operation location="/GetFlowTempByDir" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRecentlyFlowTemp">
+      <http:operation location="/GetRecentlyFlowTemp" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTotalCount">
+      <http:operation location="/GetTotalCount" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPagingData">
+      <http:operation location="/GetPagingData" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowTemplateByGuid">
+      <http:operation location="/GetFlowTemplateByGuid" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowXML">
+      <http:operation location="/GetFlowXML" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlowsTree">
+      <http:operation location="/GetFlowsTree" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WS">
+    <wsdl:port name="WSSoap" binding="tns:WSSoap">
+      <soap:address location="http://online.ccflow.org/App/TemplateInterface/WS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WSSoap12" binding="tns:WSSoap12">
+      <soap12:address location="http://online.ccflow.org/App/TemplateInterface/WS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WSHttpGet" binding="tns:WSHttpGet">
+      <http:address location="http://online.ccflow.org/App/TemplateInterface/WS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WSHttpPost" binding="tns:WSHttpPost">
+      <http:address location="http://online.ccflow.org/App/TemplateInterface/WS.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+    <title>数据源管理 </title>
+    <link href="../Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="/WF/Scripts/config.js" type="text/javascript" ></script>
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            //$("#Msg").html("正在加载,请稍后......");
+
+            InitPage();
+
+            //$("#Msg").html("");
+            
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            var DoType = GetQueryString("DoType");
+            switch (DoType) {
+                case "New":
+                case "Edit":
+                    LoadSrc(DoType);
+                    break;
+                default:
+                    BindList();
+                    break;
+            }
+
+        }
+       
+        function BindList() {
+            $.ajax({
+                type: 'GET',
+                async: true,
+                url: Handler + "?DoType=SFDBSrcNewGuide_GetList",
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    $(".panel-title").html("数据源管理");
+                    var table = "<table id='Table1' class='Table' cellpadding='0' cellspacing='0' border='0' style='width: 100%'>";
+                    table += "<tr>"
+                    table += "<td class='GroupTitle' style='text-align: center; width: 40px;'>序</td>";
+                    table += "<td class='GroupTitle' style='width: 120px'>编号</td>";
+                    table += "<td class='GroupTitle' style='width: 120px'>名称</td>";
+                    table += "<td class='GroupTitle' style='width: 100px'>类型</td>";
+                    table += "<td class='GroupTitle' nowrap>操作</td>";
+                    table += "</tr>";
+                    table += "</table>";
+                    $("#main").append(table);
+
+                    for (var i = 0, len = data.length; i < len; i++) {
+
+                        var newRow = "<tr>";
+                        newRow += "<td class='Idx' nowrap='nowrap'>" + (i + 1) + "</td>";
+                        newRow += "<td nowrap='nowrap'>" + data[i].No + "</td>";
+                        newRow += "<td nowrap='nowrap'>" + data[i].Name + "</td>";
+                        newRow += "<td nowrap='nowrap'>" + data[i].DBSrcType + "</td>";
+                        if (data[i].No != "local") {
+                            newRow += "<td valign='top' nowrap=''><a class='easyui-linkbutton l-btn' href='./SFDBSrcNewGuide.htm?DoType=Edit&amp;No=" + data[i].No + "&amp;t=20170823103107827251' data-options='plain:false,iconCls:'icon-edit',disabled:false' target='_self' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-edit l-btn-icon-left'>修改</span></span></a>&nbsp;</td>";
+                        }
+                        newRow += "</tr>";
+
+                        $("#Table1 tr:last").after(newRow);
+                    }
+
+                    var btn = "<br/><a class='easyui-linkbutton l-btn' href='./SFDBSrcNewGuide.htm?DoType=New' data-options='plain:false,iconCls:'icon-new',disabled:false' target='_self' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-new l-btn-icon-left'>新建数据源</span></span></a>";
+                    $("#main").append(btn);
+                }
+            });
+        }
+
+        //TODO 1、下拉框
+        function LoadSrc(DoType) {
+
+            //1、构建页面
+            if (DoType == "New") {
+                $(".panel-title").html("新建数据源");
+            }
+            else if (DoType == "Edit") {
+                $(".panel-title").html("修改数据源");
+            }
+            var table = "<Table class='Table' cellpadding='0' cellspacing='0' border='0' style='width:100%' >";
+			table += "<tr>";
+			table += "<td class='GroupTitle' nowrap>项目</td>";
+			table += "<td class='GroupTitle' nowrap>数据</td>";
+			table += "<td class='GroupTitle' nowrap>描述</td>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td class='GroupTitle' style='width:140px' >数据源类型：</td>";
+			table += "<td  nowrap='nowrap' style='width:200px'  >";
+			table += "<select name='DDL_DBSrcType' id='DDL_DBSrcType' >";
+			table += "</select></td>";
+			table += "<td  nowrap='nowrap' >要创建的数据源类型.</td>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td class='GroupTitle' nowrap>编号：</td>";
+			table += "<td><input name='TB_No' type='text' id='TB_No' class='easyui-validatebox' required='true'/></td>";
+			table += "<td  nowrap='nowrap' >比如：ERP, CRM, OA, HR需要英文或下划线数字的组合.</td>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td class='GroupTitle' nowrap>名称：</td>";
+			table += "<td><input name='TB_Name' type='text' id='TB_Name' class='easyui-validatebox' required='true'/></td>";
+			table += "<td  nowrap='nowrap' >不能为空,中文描述.比如:ERP数据源.</td>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td class='GroupTitle' nowrap>数据库名称：</td>";
+			table += "<td><input name='TB_DBName' type='text' id='TB_DBName' class='easyui-validatebox' required='true'/></td>";
+			table += "<td  nowrap='nowrap' >连接数据库的名称.</td>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td class='GroupTitle' nowrap>数据库IP地址：</td>";
+			table += "<td><input name='TB_IP' type='text' id='TB_IP' class='easyui-validatebox' required='true'/></td>";
+			table += "<td  nowrap='nowrap' >数据库服务器的IP地址.</td>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td class='GroupTitle' nowrap>数据库登录帐号：</td>";
+			table += "<td><input name='TB_UserID' type='text' id='TB_UserID' class='easyui-validatebox' required='true'/></td>";
+			table += "<td  nowrap='nowrap' >数据库连接用户名.</td>";
+			table += "</tr>";
+			table += "<tr>";
+			table += "<td class='GroupTitle' nowrap>数据库登录密码：</td>";
+			table += "<td><input name='TB_Password' type='text' id='TB_Password' class='easyui-validatebox' required='true'/></td>";
+			table += "<td  nowrap='nowrap' >数据库连接用户的密码.</td>";
+			table += "</tr>";
+			table += "</Table>";
+			$("#main").append(table);
+
+			var btnSave = "<br/>&nbsp;&nbsp;<input id='btnSave' type='submit' value='保 存' style='cursor:pointer;padding:5px 10px;'>";
+			$("#main").append(btnSave);
+
+			if (GetQueryString("DoType") == "Edit") {
+			    var btnDel = "&nbsp;&nbsp;<input id='btnDel' type='button' onclick='Delete()' value='删 除' style='cursor:pointer;padding:5px 10px;'>";
+			    $("#main").append(btnDel);
+			}
+
+            var btnBack = "&nbsp;&nbsp;<a class='easyui-linkbutton l-btn' href='SFDBSrcNewGuide.htm' data-options='plain:false,iconCls:'icon-new',disabled:false' target='_self' group='' id=''><span class='l-btn-left'><span class='l-btn-text icon-back l-btn-icon-left'>返回</span></span></a>";
+            $("#main").append(btnBack);
+
+            //2、取数据
+            var no = GetQueryString("No");
+            var hUrl = Handler + "?DoType=SFDBSrcNewGuide_LoadSrc";
+            if (no) {
+                hUrl += "&No=" + no;
+            }
+            $.ajax({
+                type: 'GET',
+                async: true,
+                url: hUrl,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    //01.设置枚举下拉框
+                    var DBSrcType = data.DBSrcType;
+                    for (var i = 0, len = DBSrcType.length; i < len; i++) {
+
+                        var val = DBSrcType[i].IntKey;
+                        var text = DBSrcType[i].Lab;
+                        if (val == 0) {
+                            continue;
+                        }
+                        $("#DDL_DBSrcType").append("<option value='" + val + "'>" + text + "</option>");
+                    }
+                    //$("#DDL_DBSrcType").val(2);
+
+                    //02.装载数据
+                    var SFDBSrc = data.SFDBSrc[0];
+                    $("#TB_No").val(SFDBSrc.No);
+                    if (GetQueryString("DoType") == "Edit") {
+                        $("#TB_No").attr("readonly", "readonly");
+                    }
+                    $("#TB_Name").val(SFDBSrc.Name);
+                    $("#DDL_DBSrcType").val(SFDBSrc.DBSrcType);
+                    $("#TB_UserID").val(SFDBSrc.UserID);
+                    $("#TB_Password").val(SFDBSrc.Password);
+                    $("#TB_IP").val(SFDBSrc.IP);
+                    $("#TB_DBName").val(SFDBSrc.DBName);
+
+                }
+            });
+
+            //3、表单提交绑定验证
+
+            $('#cc').form({
+                url: Handler,
+                onSubmit: function () {
+                    var r = $(this).form('validate');
+                    if (r) {
+                        //post方式后台无法获取url参数
+                        $('#cc').append("<input type='hidden' name='DoType' value='SFDBSrcNewGuide_SaveSrc'/>");
+                        $('#cc').append("<input type='hidden' name='NewOrEdit' value='" + GetQueryString("DoType") + "'/>");
+                    }
+                    return r;
+                },
+                success: function (data) {
+                    $.messager.alert('Info', data, 'info');
+                }
+            });
+
+        }
+
+        function Delete() {
+
+            if (window.confirm('确定要删除本数据源吗？数据源一经使用，不允许删除！') == false)
+                return;
+            var no = GetQueryString("No");
+            $.ajax({
+                data: null,
+                type: 'GET',
+                async: true,
+                url: Handler + "?DoType=SFDBSrcNewGuide_DelSrc&No=" + no + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') >= 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    window.location.href = "SFDBSrcNewGuide.htm";
+                    return;
+                }
+            });
+        }
+
+    </script>
+</head>
+<body class="easyui-layout">
+    <form id="cc">
+    <div class="panel layout-panel layout-panel-center" style="left: 0px; top: 0px; width:100%">
+        <div class="panel-header" >
+            <div class="panel-title">
+                新建数据源</div>
+            <div class="panel-tool">
+                <a class="panel-tool-collapse" href="javascript:void(0)" style="display: none;">
+                </a>
+            </div>
+        </div>
+        <div id="main" data-options="region:'center'" title="" style="padding: 5px;">
+        </div>
+    </div>
+    </form>
+</body>
+</html>

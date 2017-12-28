@@ -1,0 +1,784 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>创建字典表向导</title>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI145/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../../Comm/JS/Ctrls.js" type="text/javascript"></script>
+	<script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+		closeWhileEscUp();
+
+        function showInfo(title, msg, autoHiddenMillionSeconds) {
+            $.messager.show({
+                title: title,
+                msg: msg,
+                timeout: autoHiddenMillionSeconds,
+                showType: 'slide',
+                style: {
+                    right: '',
+                    top: document.body.scrollTop + document.documentElement.scrollTop,
+                    bottom: ''
+                }
+            });
+        }
+
+        function showInfoAndGo(title, msg, icon, url) {
+            if (url == undefined || url == null || url.length == 0) {
+                $.messager.alert(title, msg, icon);
+            }
+            else {
+                $.messager.alert(title, msg, icon, function () {
+                    self.location = url;
+                });
+            }
+        }
+
+        function showInfoAndBack(title, msg, icon) {
+            $.messager.alert(title, msg, icon, function () {
+                history.back();
+            });
+        }
+
+        var CONST_TYPES = [{ NO: '0', NAME: '本地的类' }, { NO: '1', NAME: '创建表' }, { NO: '2', NAME: '表或视图' }, { NO: '3', NAME: 'SQL查询表' }, { NO: '4', NAME: 'WebServices' }, { NO: '5', NAME: '动态SQL查询' }];
+        var CONST_STRUCTS = [{ NO: '0', NAME: '普通的编码表(具有No,Name)' }, { NO: '1', NAME: '树结构(具有No,Name,ParentNo)'}];
+        var CONST_RETURNTYPES = [{ NO: 'DataTable', NAME: 'DataTable数据表' }, { NO: 'DataSet', NAME: 'DataSet数据集' }, { NO: 'Json', NAME: 'Json字符串' }, { NO: 'Xml', NAME: 'Xml字符串'}];
+        var CONST_GROUPTITLE = "class='GroupTitle'";
+        var t;
+        var srcType = 0;
+        var sfno;
+        var sftable = {};
+        var classes;
+        var srcs;
+        var tvs;
+        var cols;
+        var mtds;
+
+        $(function () {
+            t = new CtrlFactory('mtable');
+            sfno = t.getQueryString('sfno');
+            $('#srcTypes').change(function () {
+                loadSrcType(this.value, this.options[this.selectedIndex].text);
+            });
+
+            if (sfno) {
+                //获取信息
+                t.ajax(Handler, { DoType: 'SFGuide_GetInfo', sfno: sfno }, false, function (msg) {
+                    if (!msg || msg.indexOf("err@") != -1) {
+                        alert('获取编号为' + sfno + '的数据源表时出现错误：' + msg);
+                        return;
+                    }
+
+                    var d = $.parseJSON(msg);
+
+                    if (d.length == 1) {
+                        sftable = d[0];
+
+                        $('#srcTypes').val(sftable.SrcType, null);
+                        loadSrcType(sftable.SrcType, null);
+                        t.disabled("srcTypes");
+                        t.disabled("TB_No");
+                    }
+                    else {
+                        alert('错误：未能查询到编号为' + sfno + '的数据源表！');
+                    }
+                }, function (msg) {
+                    alert('获取编号为' + sfno + '的数据源表时出现错误：' + msg);
+                });
+            }
+            else {
+                loadSrcType(CONST_TYPES[0].No, CONST_TYPES[0].Name);
+            }
+        });
+
+        function loadSrcType(value, text) {
+            srcType = value;
+
+            //清除第2行下面所有行
+            while ($('#mtable tr').length > 2) {
+                $('#mtable tr').last().remove();
+            }
+
+            var struct = (sftable.CodeStruct | 0).toString();
+            var src = sftable.FK_SFDBSrc ? (sfno ? sftable.FK_SFDBSrc : 'local') : 'local';
+
+            switch (parseInt(value)) {
+                case 0: //BP类
+
+                    t.addTR(null, 'r2')
+                     .addTD('r2', 'c20', CONST_GROUPTITLE, '实体类型：')
+                     .addTD('r2', 'c21')
+                     .addSelect('c21', 'CodeStruct', CONST_STRUCTS, struct, loadStructClass)
+                     .addTD('r2', 'c22', null, '选择具体有指定字段的实体类型')
+                     .addTR(null, 'r3')
+                     .addTD('r3', 'c30', CONST_GROUPTITLE, '类：')
+                     .addTD('r3', 'c31')
+                     .addSelect('c31', 'Class', getStructClass(struct), sfno)
+                     .addTD('r3', 'c32', null, '选择一个类');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rp')
+                         .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
+                         .addTD('rp', 'cp1')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                         .addTD('rp', 'cp2', null, '填写此树的根节点值');
+                    }
+                    break;
+                case 1: //创建表
+                    loadNormalInfo();
+
+                    t.addTR(null, 'r4')
+                     .addTD('r4', 'c40', CONST_GROUPTITLE, '数据源：')
+                     .addTD('r4', 'c41')
+                     .addSelect('c41', 'SFDBSrc', getSrcs(), src)
+                     .addTD('r4', 'c42', null, '选择字典表所属数据源')
+                     .addTR(null, 'r5')
+                     .addTD('r5', 'c50', CONST_GROUPTITLE, '数据格式：')
+                     .addTD('r5', 'c51')
+                     .addSelect('c51', 'CodeStruct', CONST_STRUCTS, struct, loadStructTable)
+                     .addTD('r5', 'c52', null, '选择具体有指定字段的格式');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rp')
+                         .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
+                         .addTD('rp', 'cp1')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                         .addTD('rp', 'cp2', null, '填写此树的根节点值');
+                    }
+                    break;
+                case 2: //表或视图
+                    loadNormalInfo();
+                    var stable = sftable.SrcTable ? sftable.SrcTable : '';
+                    var colval = sftable.ColumnValue ? sftable.ColumnValue : '';
+                    var coltext = sftable.ColumnText ? sftable.ColumnText : '';
+                    var colparent = sftable.ParentValue ? sftable.ParentValue : '';
+                    var rootvalue = sftable.DefVal ? sftable.DefVal : '0';
+                    var sql = sftable.SelectStatement ? sftable.SelectStatement : ''
+
+                    t.addTR(null, 'r4')
+                     .addTD('r4', 'c40', CONST_GROUPTITLE, '数据源：')
+                     .addTD('r4', 'c41')
+                     .addSelect('c41', 'SFDBSrc', getSrcs(), src, loadTableViews)
+                     .addTD('r4', 'c42', null, '选择字典表所属数据源')
+                     .addTR(null, 'r5')
+                     .addTD('r5', 'c50', CONST_GROUPTITLE, '表/视图：')
+                     .addTD('r5', 'c51')
+                     .addSelect('c51', 'SrcTable', getTableViews(src), stable, loadColumns)
+                     .addTD('r5', 'c52', null, '选择一个表或视图')
+                     .addTR(null, 'r6')
+                     .addTD('r6', 'c60', CONST_GROUPTITLE, '数据格式：')
+                     .addTD('r6', 'c61')
+                     .addSelect('c61', 'CodeStruct', CONST_STRUCTS, struct, loadStructSet)
+                     .addTD('r6', 'c62', null, '选择具体有指定字段的格式')
+                     .addTR(null, 'r7')
+                     .addTD('r7', 'c70', CONST_GROUPTITLE, '编码列：')
+                     .addTD('r7', 'c71')
+                     .addSelect('c71', 'ColumnValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), colval)
+                     .addTD('r7', 'c72', null, '即No列')
+                     .addTR(null, 'r8')
+                     .addTD('r8', 'c80', CONST_GROUPTITLE, '标签列：')
+                     .addTD('r8', 'c81')
+                     .addSelect('c81', 'ColumnText', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), coltext)
+                     .addTD('r8', 'c82', null, '即Name列');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rpc')
+                         .addTD('rpc', 'cpc0', CONST_GROUPTITLE, '父节点列：')
+                         .addTD('rpc', 'cpc1')
+                         .addSelect('cpc1', 'ParentValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), colparent)
+                         .addTD('rpc', 'cpc2', null, '即ParentNo列')
+                         .addTR(null, 'rpv')
+                         .addTD('rpv', 'cpv0', CONST_GROUPTITLE, '根节点值：')
+                         .addTD('rpv', 'cpv1')
+                         .addTextbox('cpv1', 'RootValue', null, rootvalue)
+                         .addTD('rpv', 'cpv2', null, '填写此树的根节点值');
+                    }
+
+                    t.addTR(null, 'r9')
+                     .addTD('r9', 'c90', CONST_GROUPTITLE, '过滤SQL：')
+                     .addTD('r9', 'c91', 'colspan="2"')
+                     .addTextbox('c91', 'SelectStatement', "style='width:98%'", sql)
+                     .add('#c91', "<br />比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName");
+                    break;
+                case 3: //SQL查询表
+                case 5: //动态SQL查询
+                    loadNormalInfo();
+
+                    var sql = sftable.SelectStatement ? sftable.SelectStatement : ''
+
+                    t.addTR(null, 'r4')
+                     .addTD('r4', 'c40', CONST_GROUPTITLE, '数据源：')
+                     .addTD('r4', 'c41')
+                     .addSelect('c41', 'SFDBSrc', getSrcs(), src)
+                     .addTD('r4', 'c42', null, '选择字典表所属数据源')
+                     .addTR(null, 'r5')
+                     .addTD('r5', 'c50', CONST_GROUPTITLE, '数据格式：')
+                     .addTD('r5', 'c51')
+                     .addSelect('c51', 'CodeStruct', CONST_STRUCTS, struct, loadStructSQL)
+                     .addTD('r5', 'c52', null, '选择具体有指定字段的格式');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rp')
+                         .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
+                         .addTD('rp', 'cp1')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                         .addTD('rp', 'cp2', null, '填写此树的根节点值');
+                    }
+
+                    if (srcType == "3") {
+                        t.addTR(null, 'r6')
+                         .addTD('r6', 'c60', CONST_GROUPTITLE, 'SQL语句：')
+                         .addTD('r6', 'c61', 'colspan="2"')
+                         .addTextbox('c61', 'SelectStatement', "style='width:98%'", sql)
+                         .add('#c61', "<br />只需输入where后面的过滤语句，比如：XXX = '002' AND YYY = 3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName");
+                    }
+
+                    if (srcType == "5") {
+                        t.addTR(null, 'r6')
+                         .addTD('r6', 'c60', CONST_GROUPTITLE, 'SQL语句：')
+                         .addTD('r6', 'c61', 'colspan="2"')
+                         .addTextbox('c61', 'SelectStatement', "style='width:98%'", sql)
+                         .add('#c61', "<br />请输入完整SQL查询语句，且返回字段中必须包含No,Name[若为树结构需包含ParentNo]字段，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName");
+                    }
+
+                    break;
+                case 4: //WebServices
+                    loadNormalInfo();
+
+                    var stable = sftable.SrcTable ? sftable.SrcTable : '';
+                    var sql = sftable.SelectStatement ? sftable.SelectStatement : ''
+                    src = sftable.FK_SFDBSrc ? (sfno ? sftable.FK_SFDBSrc : '') : '';
+                    var tabledesc = sftable.TableDesc ? sftable.TableDesc.split(',') : ['', ''];
+
+                    t.addTR(null, 'r4')
+                     .addTD('r4', 'c40', CONST_GROUPTITLE, '数据源：')
+                     .addTD('r4', 'c41')
+                     .addSelect('c41', 'SFDBSrc', getSrcs(100), src, loadWSMethods)
+                     .addTD('r4', 'c42', null, '选择字典表所属WebService数据源')
+                     .addTR(null, 'r5')
+                     .addTD('r5', 'c50', CONST_GROUPTITLE, '方法：')
+                     .addTD('r5', 'c51')
+                     .addSelect('c51', 'Method', getWSMethods(src.length > 0 ? src : srcs && srcs.length > 0 ? srcs[0].No : ''), tabledesc[0])
+                     .addTD('r5', 'c52', null, '选择WebSerivce中提供此字典表数据的接口方法')
+                     .addTR(null, 'r6')
+                     .addTD('r6', 'c60', CONST_GROUPTITLE, '设置参数：')
+                     .addTD('r6', 'c61', 'colspan="2"')
+                     .addTextbox('c61', 'SelectStatement', "style='width:98%'", sql)
+                     .add('#c61', "<br />比如：aaa=002&bbb=3，支持参数表达式：@WebUser.No,@WebUser.Name,@WebUser.FK_Dept,@WebUser.FK_DeptName")
+                     .addTR(null, 'r7')
+                     .addTD('r7', 'c70', CONST_GROUPTITLE, '返回值类型：')
+                     .addTD('r7', 'c71')
+                     .addSelect('c71', 'ReturnType', CONST_RETURNTYPES, tabledesc[1])
+                     .addTD('r7', 'c72', null, '选择具体有指定字段的格式')
+                     .addTR(null, 'r8')
+                     .addTD('r8', 'c80', CONST_GROUPTITLE, '数据格式：')
+                     .addTD('r8', 'c81')
+                     .addSelect('c81', 'CodeStruct', CONST_STRUCTS, struct, loadStructWS)
+                     .addTD('r8', 'c82', null, '选择具体有指定字段的格式');
+
+                    if (struct == CONST_STRUCTS[1].No) {
+                        t.addTR(null, 'rp')
+                         .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
+                         .addTD('rp', 'cp1')
+                         .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                         .addTD('rp', 'cp2', null, '填写此树的根节点值');
+                    }
+                    break;
+            }
+        }
+
+        function loadNormalInfo() {
+            t.addTR(null, 'r2')
+            .addTD('r2', 'c20', CONST_GROUPTITLE, '字典编号：')
+            .addTD('r2', 'c21')
+            .addTextbox('c21', 'No', null, sftable.No ? sftable.No : '')
+            .addTD('r2', 'c22', null, '创建字典表的英文名称,不要以数字开头否则创建表出错.')
+            .addTR(null, 'r3')
+            .addTD('r3', 'c30', CONST_GROUPTITLE, '字典名称：')
+            .addTD('r3', 'c31')
+            .addTextbox('c31', 'Name', null, sftable.Name ? sftable.Name : '')
+            .addTD('r3', 'c32', null, '创建字典表的中文名称');
+        }
+
+        function loadStructClass(value, text) {
+            $('#DDL_Class').remove();
+
+            t.addSelect('c31', 'Class', getStructClass(value), sfno);
+
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点值设置行
+                $('#rp').remove();
+            }
+            else {
+                //增加父结点值设置行
+                t.addTR(null, 'rp', null, '#r3')
+                 .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
+                 .addTD('rp', 'cp1')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                 .addTD('rp', 'cp2', null, '填写此树的根节点值');
+            }
+        }
+
+        function loadStructTable(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点值设置行
+                $('#rp').remove();
+            }
+            else {
+                //增加父结点值设置行
+                t.addTR(null, 'rp')
+                 .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
+                 .addTD('rp', 'cp1')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                 .addTD('rp', 'cp2', null, '填写此树的根节点值');
+            }
+        }
+
+        function loadStructSet(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点列/值设置行
+                $('#rpc').remove();
+                $('#rpv').remove();
+            }
+            else {
+                //增加父结点列/值设置行
+                var stable = $('#DDL_SrcTable').val();
+                var colparent = sftable.ParentValue ? sftable.ParentValue : '';
+                var rootvalue = sftable.DefVal ? sftable.DefVal : '0';
+
+                t.addTR(null, 'rpc', null, '#r8')
+                 .addTD('rpc', 'cpc0', CONST_GROUPTITLE, '父节点列：')
+                 .addTD('rpc', 'cpc1')
+                 .addSelect('cpc1', 'ParentValue', getColumns(stable.length == 0 ? (tvs && tvs.length > 0 ? tvs[0].No : '') : stable), colparent)
+                 .addTD('rpc', 'cpc2', null, '即ParentNo列')
+                 .addTR(null, 'rpv', null, '#rpc')
+                 .addTD('rpv', 'cpv0', CONST_GROUPTITLE, '根节点值：')
+                 .addTD('rpv', 'cpv1')
+                 .addTextbox('cpv1', 'RootValue', null, rootvalue)
+                 .addTD('rpv', 'cpv2', null, '填写此树的根节点值');
+            }
+        }
+
+        function loadStructSQL(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点值设置行
+                $('#rp').remove();
+            }
+            else {
+                //增加父结点值设置行
+                t.addTR(null, 'rp', null, '#r5')
+                 .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
+                 .addTD('rp', 'cp1')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                 .addTD('rp', 'cp2', null, '填写此树的根节点值');
+            }
+        }
+
+        function loadStructWS(value, text) {
+            if (value == CONST_STRUCTS[0].No) {
+                //删除父结点值设置行
+                $('#rp').remove();
+            }
+            else {
+                //增加父结点值设置行
+                t.addTR(null, 'rp')
+                 .addTD('rp', 'cp0', CONST_GROUPTITLE, '根节点值：')
+                 .addTD('rp', 'cp1')
+                 .addTextbox('cp1', 'RootValue', null, sftable.DefVal ? sftable.DefVal : '0')
+                 .addTD('rp', 'cp2', null, '填写此树的根节点值');
+            }
+        }
+
+        function loadTableViews(value, text) {
+            $('#DDL_SrcTable').remove();
+
+            t.addSelect('c51', 'SrcTable', getTableViews(value), sftable.SrcTable ? sftable.SrcTable : '', loadColumns);
+
+            var selectedTable = $('#DDL_SrcTable').val();
+
+            if (selectedTable.length > 0) {
+                loadColumns(selectedTable, $('#DDL_SrcTable').text());
+            }
+        }
+
+        function loadWSMethods(value, text) {
+            $('#DDL_SrcTable').remove();
+            t.addSelect('c51', 'SrcTable', getWSMethods(value), sftable.SrcTable ? sftable.SrcTable : '')
+        }
+
+        function loadColumns(value, text) {
+            var haveparent = $('#DDL_CodeStruct').val() == CONST_STRUCTS[1].No;
+
+            $('#DDL_ColumnValue').remove();
+            $('#DDL_ColumnText').remove();
+
+            if (haveparent) {
+                $('#DDL_ParentValue').remove();
+            }
+
+            var colval = sftable.ColumnValue ? sftable.ColumnValue : '';
+            var coltext = sftable.ColumnText ? sftable.ColumnText : '';
+            var colparent = sftable.ParentValue ? sftable.ParentValue : '';
+
+            t.addSelect('c71', 'ColumnValue', getColumns(value), colval)
+             .addSelect('c81', 'ColumnText', getColumns(value), coltext);
+
+            if (haveparent) {
+                t.addSelect('cpc1', 'ParentValue', getColumns(value), colparent);
+            }
+        }
+
+        function getStructClass(struct) {
+            classes = [];
+
+            t.ajax(Handler, { DoType: 'SFGuide_GetClass', struct: struct, sfno: sfno }, false, function (msg) {
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取类出错：' + msg);
+                    classes = [];
+                    return;
+                }
+
+                classes = $.parseJSON(msg);
+
+            }, function (msg) {
+
+                alert('获取类出错：' + msg);
+                classes = [];
+            });
+
+            return classes;
+        }
+
+        function getSrcs(type) {
+            srcs = [];
+
+            t.ajax(Handler, { DoType: 'SFGuide_GetSrcs', type: type }, false, function (msg) {
+
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取数据源列表出错：' + msg);
+                    srcs = [];
+                    return;
+                }
+
+                srcs = $.parseJSON(msg);
+            }, function (msg) {
+                alert('获取数据源列表出错：' + msg);
+                srcs = [];
+            });
+
+            return srcs;
+        }
+
+        function getTableViews(src) {
+            tvs = [];
+
+            t.ajax(Handler, { DoType: 'SFGuide_GetTVs', src: src }, false, function (msg) {
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取表/视图列表出错：' + msg);
+                    tvs = [];
+                    return;
+                }
+
+                tvs = $.parseJSON(msg);
+            }, function (msg) {
+                alert('获取表/视图列表出错：' + msg);
+                tvs = [];
+            });
+
+            return tvs;
+        }
+
+        function getColumns(table) {
+            cols = [];
+            var src = $('#DDL_SFDBSrc').val();
+
+            t.ajax(Handler, { DoType: 'SFGuide_GetCols', src: src, table: table }, false, function (msg) {
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取列信息出错：' + msg);
+                    cols = [];
+                    return;
+                }
+
+                cols = $.parseJSON(msg);
+            }, function (msg) {
+                alert('获取列信息出错：' + msg);
+                cols = [];
+            });
+
+            return cols;
+        }
+
+        function getWSMethods(src) {
+            mtds = [];
+
+            t.ajax(Handler, { DoType: 'SFGuide_Getmtds', src: src }, false, function (msg) {
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('获取WebService方法列表出错：' + msg);
+                    mtds = [];
+                    return;
+                }
+
+                mtds = $.parseJSON(msg);
+            }, function (msg) {
+                alert('获取WebService方法列表出错：' + msg);
+                mtds = [];
+            });
+
+            return mtds;
+        }
+
+        function SaveSFTable() {
+
+            sftable.SrcType = parseInt(srcType);
+            sftable.No = sfno ? sfno : null;
+            sftable.Name = "";
+            sftable.CodeStruct = 0;
+            sftable.FK_VAL = "";
+            sftable.TableDesc = "";
+            sftable.DefVal = "";
+            sftable.CASHDT = "";
+            sftable.CASHMINUTE = 0;
+            sftable.FK_SFDBSrc = "";
+            sftable.SrcTable = "";
+            sftable.ColumnValue = "";
+            sftable.ColumnText = "";
+            sftable.ParentValue = "";
+            sftable.SelectStatement = "";
+            sftable.RDT = "";
+
+            switch (sftable.SrcType) {
+                case 0: //BP类
+                    if (!sftable.No) {
+                        sftable.No = t.getValue("DDL_Class");
+
+                        if (!sftable.No || sftable.No.length == 0) {
+                            alert("类必须选择！");
+                            $("#DDL_Class").focus();
+                            return;
+                        }
+
+                        sftable.Name = t.getText("DDL_Class");
+                        var idx = sftable.Name.indexOf('[');
+                        sftable.Name = sftable.Name.substr(idx + 1, sftable.Name.length - idx - 1 - 1);
+                    }
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+                    break;
+                case 1: //创建表
+                    if (false == getNormalInfoValue()) {
+                        return;
+                    }
+
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+                    break;
+                case 2: //表或视图
+                    if (false == getNormalInfoValue()) {
+                        return;
+                    }
+
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
+                    sftable.SrcTable = t.getValue("DDL_SrcTable");
+
+                    if (!sftable.SrcTable || sftable.SrcTable.length == 0) {
+                        alert("表/视图必须选择！");
+                        $("#DDL_SrcTable").focus();
+                        return;
+                    }
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+
+                    sftable.ColumnValue = t.getValue("DDL_ColumnValue");
+                    sftable.ColumnText = t.getValue("DDL_ColumnText");
+
+                    if (!sftable.ColumnValue || !sftable.ColumnText) {
+                        alert("编码列和标签列必须选择！");
+                        $("#DDL_ColumnValue").focus();
+                        return;
+                    }
+
+                    if (sftable.CodeStruct == CONST_STRUCTS[1].No) {
+                        sftable.ParentValue = t.getValue("DDL_ParentValue");
+
+                        if (!sftable.ParentValue) {
+                            alert("父节点列必须选择！");
+                            $("#DDL_ParentValue").focus();
+                            return;
+                        }
+                    }
+
+                    sftable.SelectStatement = t.getValue("TB_SelectStatement");
+                    break;
+                case 3: //SQL查询表
+                case 5: //动态SQL查询
+                    if (false == getNormalInfoValue()) {
+                        return;
+                    }
+
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+
+                    sftable.SelectStatement = t.getValue("TB_SelectStatement");
+
+                    if (!sftable.SelectStatement || sftable.SelectStatement.length == 0) {
+                        alert("SQL语句必须填写！");
+                        $("#TB_SelectStatement").focus();
+                        return;
+                    }
+                    break;
+                case 4: //WebServices
+                    if (false == getNormalInfoValue()) {
+                        return;
+                    }
+
+                    sftable.FK_SFDBSrc = t.getValue("DDL_SFDBSrc");
+
+                    if (!sftable.FK_SFDBSrc || sftable.FK_SFDBSrc.length == 0) {
+                        alert("数据源必须选择！");
+                        $("#DDL_SFDBSrc").focus();
+                        return;
+                    }
+
+                    sftable.TableDesc = t.getValue("DDL_Method");
+
+                    if (!sftable.TableDesc || sftable.TableDesc.length == 0) {
+                        alert("方法必须选择！");
+                        $("#DDL_Method").focus();
+                        return;
+                    }
+
+                    sftable.TableDesc += "," + t.getValue('DDL_ReturnType');
+                    sftable.SelectStatement = t.getValue("TB_SelectStatement");
+
+                    if (false == getCodeStructValue()) {
+                        return;
+                    }
+                    break;
+            }
+
+            sftable.DoType = 'SFGuide_SaveInfo';
+            sftable.IsNew = sfno == null;
+
+            t.ajax(Handler, sftable, false, function (msg) {
+
+                if (!msg || msg.indexOf("err@") != -1) {
+                    alert('保存出错：' + msg);
+                    return;
+                }
+
+                alert(msg);
+
+                //暂时屏蔽，报异常
+                /*if (sfno == null) {
+                    var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.SFTables&No=' + sftable.No + '&t=' + Math.random();
+                    location.href = url;
+                    return;
+                }
+
+                if (sfno != null) {
+                    var url = '../../Comm/En.htm?EnName=BP.Sys.FrmUI.SFTables&No=' + sftable.No + '&t=' + Math.random();
+                    location.href = url;
+                    return;
+                }*/
+
+
+                //                if (sfno) {
+                //                    location.href = location.href.indexOf("&t=") != -1 ? location.href.replace("&t=" + t.getQueryString("t"), "&t=" + Math.random()) : (location.href + "&t=" + Math.random());
+                //                }
+                //                else {
+                //                    location.href += "&sfno=" + sftable.No + "&t=" + Math.random();
+                //                }
+            }, function (msg) {
+                alert(msg);
+            });
+        }
+
+        function getNormalInfoValue() {
+            if (!sftable.No) {
+                sftable.No = t.getValue("TB_No");
+
+                if (!sftable.No || sftable.No.length == 0) {
+                    alert("字典编号必须填写！");
+                    $('#TB_No').focus();
+                    return false;
+                }
+            }
+
+            sftable.Name = t.getValue("TB_Name");
+
+            if (!sftable.Name || sftable.Name.length == 0) {
+                alert("字典名称必须填写！");
+                $('#TB_Name').focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        function getCodeStructValue() {
+            sftable.CodeStruct = parseInt(t.getValue("DDL_CodeStruct"));
+
+            if (sftable.CodeStruct == CONST_STRUCTS[1].No) {
+                sftable.DefVal = t.getValue("TB_RootValue");
+
+                if (sftable.DefVal.length == 0) {
+                    alert("根节点值必须填写！");
+                    $('#TB_RootValue').focus();
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        function ToNewVer() {
+            window.location.href = './SFTable/Default.htm';
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+        <table id="mtable" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 98%;  padding:5px; margin:5px;">
+            <tr>
+                <td class="GroupTitle" width="120px">项目</td>
+                <td class="GroupTitle" width="300px"> 值</td>
+                <td class="GroupTitle"> 备注 </td>
+            </tr>
+            <tr>
+                <td class="GroupTitle"> 数据源表类型：</td>
+                <td width="300px">
+                    <select id="srcTypes">
+                        <option value="0">本地的类</option>
+                        <option value="1">创建表</option>
+                        <option value="2">表或视图</option>
+                        <option value="3">SQL查询表</option>
+                        <option value="4">WebServices</option>
+                        <option value="5">动态SQL查询</option>
+                    </select>
+                </td>
+                <td>
+                    选择5种类型中的一种
+                </td>
+            </tr>
+        </table>
+        <a href="javascript:void(0)" id="Btn_Create" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+           onclick="SaveSFTable()">保存</a> | <a href="javascript:void(0)" id="Btn_ShowData" class="easyui-linkbutton"
+                                             data-options="iconCls:'icon-open'" onclick="ToNewVer()">新版本创建向导</a>
+           <!--<a href="javascript:void(0)" id="Btn_ShowData" class="easyui-linkbutton"
+                                             data-options="iconCls:'icon-open'" onclick="ShowData()">查看数据</a>-->
+</body>
+</html>

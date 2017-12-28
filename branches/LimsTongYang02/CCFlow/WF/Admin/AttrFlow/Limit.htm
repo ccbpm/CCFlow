@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+	<title>发起限制规则</title>
+	<link href="../../../WF/Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		.input
+		{
+			width: 95%;
+			height: 20px;
+		}
+	</style>
+	<script type="text/javascript" src="../../Comm/JScript.js"></script>
+	<script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+	<script type="text/javascript" src="../../Scripts/config.js"></script>
+	<script type="text/javascript" src="../../Comm/Gener.js"></script>
+
+	<base target="_self" />
+	<script type="text/javascript">
+		//全局变量
+		var FK_Flow; 	//流程id
+		var _StartLimitRole; //限制规则枚举（JSON)
+
+		/* ESC Key Down */
+		function Esc() {
+			if (event.keyCode === 27)
+				window.close();
+			return true;
+		}
+
+		//页面启动函数.
+		$(function () {
+		    $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+		    InitPage();
+
+		    $("#Msg").html("");
+
+		});
+
+		function InitPage() {
+
+		    var fk_flow = GetQueryString("FK_Flow");
+		    var myurl = Handler + "?DoType=Limit_Init&FK_Flow=" + fk_flow + "&m=" + Math.random();
+
+		    //获取数据，绑定值。
+
+		    $.ajax({
+		        type: 'post',
+		        async: true,
+		        url: myurl,
+		        dataType: 'html',
+		        success: function (data) {
+
+		            if (data.indexOf("err@") == 0) {
+		                alert(data);
+		                return;
+		            }
+
+		            data = JSON.parse(data);
+
+		            var _StartLimitRole = data.StartLimitRole;
+
+		            //批量赋值.
+		            GenerFullAllCtrlsVal(data);
+
+		            if (_StartLimitRole == 1) {
+		                $("#RB_ByTime").attr("checked", true);
+		                $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                $("#DDL_ByTime").val(0);
+		            }
+
+		            var dat = data;
+		            $("#TB_Alert").val(dat.StartLimitAlert); //限制提示信息
+		            switch (dat.StartLimitRole) {
+		                case "0": //不限制 None
+		                    $("#RB_None").attr("checked", true);
+		                    //$("input[name=xzgz][value=RB_None]").attr("checked", true); 
+		                    $("#TB_ByTimePara").val(dat.StartLimitPara); //for test
+		                    break;
+		                case "1": //天
+		                    $("#RB_ByTime").attr("checked", true);
+		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                    $("#DDL_ByTime").val(0);
+		                    break;
+		                case "2": //周
+		                    $("#RB_ByTime").attr("checked", true);
+		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                    $("#DDL_ByTime").val(1);
+		                    break;
+		                case "3": //月份
+		                    $("#RB_ByTime").attr("checked", true);
+		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                    $("#DDL_ByTime").val(2);
+		                    break;
+		                case "4": 	//月份？
+		                    $("#RB_ByTime").attr("checked", true);
+		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                    $("#DDL_ByTime").val(3);
+		                    break;
+		                case "5": //年度
+		                    $("#RB_ByTime").attr("checked", true);
+		                    $("#TB_ByTimePara").val(dat.StartLimitPara);
+		                    $("#DDL_ByTime").val(4);
+		                    break;
+		                case "6": 		//发起的列不能重复,(多个列可以用逗号分开)
+		                    $("#RB_ColNotExit").attr("checked", true);
+		                    $("#TB_ColNotExit_Fields").val(dat.StartLimitPara);
+		                    break;
+		                case "7": 	//<=0
+		                    $("#RB_SQL").attr("checked", true);
+		                    $("#TB_SQL_Para").val(dat.StartLimitPara);
+		                    $("#DDL_SQL").val(0);
+		                    break;
+		                case "8": //>0
+		                    $("#RB_SQL").attr("checked", true);
+		                    $("#TB_SQL_Para").val(dat.StartLimitPara);
+		                    $("#DDL_SQL").val(1);
+		                    break;
+		                case "9": 	//为子流程时仅仅只能被调用1此
+		                    $("#RB_OnlyOneSubFlow").attr("checked", true);
+		                    break;
+		                default:
+		                    alert('没有判断的类型.');
+		                    break;
+		            }
+		            $("#Msg").html("");
+		        }
+		    });
+		}
+
+		function Save(parameters) {
+			//debugger;
+			//获取控件值
+			var startLimitRole = "", startLimitPara = "";
+			var xzgz = $("input[name=xzgz]:checked")[0].id; //$("input[type=radio][name=xzgz]:checked")[0].id
+			alert(xzgz);
+			switch (xzgz) {
+				case "RB_None":
+					startLimitRole ="0";
+					break;
+				case "RB_ByTime":
+					var DDL_ByTime = parseInt($("#DDL_ByTime").val());
+					switch (DDL_ByTime) {
+						case 0:
+							startLimitRole = "1";
+							break;
+						case 1:
+							startLimitRole = "2";
+							break;
+						case 2:
+							startLimitRole = "3";
+							break;
+						case 3:
+							startLimitRole = "4";
+							break;
+						case 4:
+							startLimitRole = "5";
+							break;
+					}
+					startLimitPara = $("#TB_ByTimePara").val();
+					break;
+				case "RB_OnlyOneSubFlow":
+					startLimitRole = "9";
+					break;
+				case "RB_ColNotExit":
+					startLimitRole = "6";
+					startLimitPara = $("#TB_ColNotExit_Fields").val();
+					break;
+				case "RB_SQL":
+					var DDL_SQL = $("#DDL_SQL").val();
+					startLimitRole = DDL_SQL == 0 ? "7" : "8";
+					startLimitPara = $("#TB_SQL_Para").val();
+					break;
+				default:
+					break;
+			}
+
+			//保存到服务器
+			$.ajax({
+			    type: 'post',
+			    async: true,
+			    dataType: 'html',
+			    url: Handler + "?DoType=Limit_Save&FK_Flow=" + GetQueryString("FK_Flow") + "&m=" + Math.random(),
+			    data: {
+			        StartLimitRole: startLimitRole,
+			        StartLimitPara: startLimitPara,
+			        StartLimitAlert: $("#TB_Alert").val()
+			    },
+			    dataType: 'html',
+			    success: function (data) {
+
+			        if (data.indexOf("err@") == 0) {
+			            alert(data);
+			            return;
+			        }
+
+			        alert(data);
+			        window.location.href = window.location.href;
+			    }
+			});
+			//alert($("input[type='radio'][name='xzgz'][checked='true']")[0].id);
+		}
+	</script>
+</head>
+<body>
+	<table style="width: 100%">
+		<caption>
+			发起限制规则
+		</caption>
+		<tr>
+			<td valign="top" style="width: 20%;">
+				<fieldset>
+					<legend>填写帮助</legend>
+					<ul>
+						<li>发起限制，根据不同的应用场景来设置的发起频率的限制规则。</li>
+						<li>比如：纳税人注销流程只能一个纳税人注销一次，不允许多次注销，发起多次，就是违反也正常的业务逻辑。。</li>
+					</ul>
+				</fieldset>
+			</td>
+			<td valign="top">
+				<fieldset>
+					<legend>
+						<input type="radio" name="xzgz" id="RB_None" value="RB_None"> <!-- checked="checked"> -->
+						<label for="RB_None">
+							不限制（默认）</label>
+					</legend>
+					<ul style="color: Gray">
+						<li>不限制发起次数，比如报销流程、请款流程。</li>
+					</ul>
+				</fieldset>
+				<fieldset>
+					<legend>
+						<input type="radio" name="xzgz" id="RB_ByTime">
+						<label for="RB_ByTime">
+							按时间规则计算</label>
+					</legend>
+					<table style="width: 100%">
+						<tr>
+							<td style="width: 80px;">
+								规则模式：
+							</td>
+							<td>
+								<select id="DDL_ByTime">
+									<option value="0">每人每天一次</option>
+									<option value="1">每人每周一次</option>
+									<option value="2">每人每月一次</option>
+									<option value="3">每人每季一次</option>
+									<option value="4">每人每年一次</option>
+								</select>
+							</td>
+							<td class="style2">
+								<font color="gray">
+									<ul>
+										<li>按照选择的时间频率进行设置发起限制</li>
+										<li><a href="javascript:WinOpen('http://bbs.ccflow.org/showtopic-3711.aspx')">更多规则模式与参数设置</a></li>
+									</ul>
+								</font>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<a href="javascript:ShowHidden('FQGZ')">发起时间段限制参数设置:</a>
+								<br>
+								<div id="FQGZ" style="display: none; color: Gray">
+									<ul>
+										<li>该设置，可以为空。</li>
+										<li>用来限制该流程可以在什么时间段内发起。</li>
+										<li>例如:按照每人每天一次设置时间范围，规则参数：@08:30-09:00@18:00-18:30，解释：该流程只能在08:30-09:00与18:00-18:30两个时间段发起且只能发起一次。</li>
+									</ul>
+								</div>
+								<input type="text" class="input" id="TB_ByTimePara">
+							</td>
+						</tr>
+					</table>
+				</fieldset>
+				<fieldset>
+					<legend>
+						<input type="radio" name="xzgz" id="RB_OnlyOneSubFlow">
+						<label for="RB_OnlyOneSubFlow">
+							为子流程时，仅仅只能被调用1次</label>
+					</legend>
+					<ul>
+						<li>如果当前为子流程，仅仅只能被调用1次。</li>
+					</ul>
+				</fieldset>
+				<fieldset>
+					<legend>
+						<input type="radio" name="xzgz" id="RB_ColNotExit">
+						<label for="RB_ColNotExit">
+							按照发起字段不能重复规则</label>
+					</legend><a href="javascript:ShowHidden('fields')">填写设置字段</a>
+					<div id="fields" style="display: none; color: Gray">
+						<ul>
+							<li>设置一个列允许重复，比如：NSRBH</li>
+							<li>设置多个列的时候，需要用逗号分开，比如：field1,field2</li>
+							<li>流程在发起的时候如果发现，该列是重复的，就抛出异常，阻止流程发起。</li>
+							<li>比如：纳税人注销流程，一个纳税人只能发起一次注销，就要配置纳税人字段，让其不能重复。</li>
+						</ul>
+					</div>
+					<input type="text" class="input" id="TB_ColNotExit_Fields">
+				</fieldset>
+				<fieldset>
+					<legend>
+						<input type="radio" name="xzgz" id="RB_SQL">
+						<label for="RB_SQL">
+							按SQL规则</label>
+					</legend>
+					<!-- &nbsp;&nbsp; -->
+					<span>规则模式：</span>
+					<br>
+					<select name="规则模式" id="DDL_SQL">
+						<option value="0">设置的SQL数据为空，或者返回结果为零时可以启动</option>
+						<option value="1">设置的SQL数据为空，或者返回结果为零时不可以启动</option>
+					</select>
+					<br>
+					<a href="javascript:ShowHidden('Div2')">SQL规则参数:</a>
+					<br>
+					<div id="Div2" style="display: none; color: Gray">
+						<ul>
+							<li>例如：SELECT COUNT(*) AS Num FROM TABLE1 WHERE NAME='@MyFieldName'</li>
+							<li>解释：编写一个sql语句返回一行一列，如果信息是0，就是可以启动，非0就不可以启动。</li>
+							<li>该参数支持ccbpm的表达式。</li>
+						</ul>
+					</div>
+					<textarea class="input" id="TB_SQL_Para" rows="3" style="height: 45px;"></textarea>
+				</fieldset>
+				<fieldset>
+					<legend><a href="javascript:ShowHidden('msgAlert')">限制提示信息:</a></legend>
+					<div id="msgAlert" style="display: none; color: Gray">
+						<ul>
+							<li>例如:您的发起的流程违反了xxx限制规则，不能发起该流程。</li>
+							<li>当限制规则起作用的时候，应该提示给用户什么信息。</li>
+							<li>该信息在创建工作失败的时候提示。</li>
+						</ul>
+					</div>
+					<br>
+					<input type="text" class="input" id="TB_Alert">
+				</fieldset>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" style="text-align: center;">
+				<button class="easyui-linkbutton" id="Btn_Save" onclick="Save()">
+					保存</button>
+			</td>
+		</tr>
+	</table>
+	<div id="Msg">
+	</div>
+</body>
+</html>

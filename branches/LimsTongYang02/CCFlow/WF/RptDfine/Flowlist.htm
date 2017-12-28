@@ -1,0 +1,257 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>流程发起列表</title>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <base target="_self" /> 
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <base target="_self" /> 
+     <style type="text/css">    
+        a
+        {
+            color:#0066CC;
+            text-decoration:none;
+        }
+        a:hover
+        {
+            color:#0084C5;
+            text-decoration:underline;
+        }
+    </style>
+   <script type="text/javascript">
+
+       function SetImg(appPath, id) {
+           document.getElementById(id).src = '../Img/Mail_Read.png';
+       }
+
+       function GroupBarClick(groupName) {
+
+           var alt = document.getElementById('Img' + groupName).alert;
+           var sta = 'block';
+           if (alt == 'Max') {
+               sta = 'block';
+               alt = 'Min';
+           } else {
+               sta = 'none';
+               alt = 'Max';
+           }
+
+           document.getElementById('Img' + groupName).src = '../Img/' + alt + '.gif';
+           document.getElementById('Img' + groupName).alert = alt;
+
+           var i = 0;
+           for (i = 0; i <= 600; i++) {
+
+               var row = document.getElementById(groupName + i);
+
+               if (row == null || row == undefined || row.style == null)
+                   continue;
+
+               if (sta == 'block') {
+                   row.style.display = '';
+               } else {
+                   row.style.display = sta;
+               }
+           }
+       }
+       function WinOpenIt(url) {
+           //窗口最大化e
+           var scrWidth = screen.availWidth;
+           var scrHeight = screen.availHeight;
+           var self = window.open(url, '_blank', "resizable=1,scrollbars=yes");
+           self.moveTo(0, 0);
+           self.resizeTo(scrWidth, scrHeight);
+           self.focus();
+           return;
+       }
+    </script>
+    
+
+    <style type="text/css">
+        table
+        {
+            font: 12px 宋体, Arial, Verdana;
+        }
+        .TRSum
+        {
+            font: 12px 宋体, Arial, Verdana;
+        }
+        .centerTitle th
+        {
+            text-align: center;
+        }
+        .Idx
+        {
+            font-size: 16px;
+            font-family: Vijaya;
+        }
+    </style>
+    <script language="javascript" type="text/javascript" >
+
+        //发起时打开窗口
+        function WinOpenStartFlow(flowNo) {
+
+            var url = "MyFlow.htm?FK_Flow=" + flowNo;
+
+            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            newWindow.focus();
+            return;
+        }
+
+        //查询
+        function WinOpenSearch(flowNo) {
+
+            var intFlowNo = flowNo;
+
+            // var url = "./Rpt/Search.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
+            var url = "../RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo;
+
+            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            newWindow.focus();
+            return;
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src='../Img/loading.gif' />正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Flowlist_Init&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    var dtSort = data["Sort"]; //类别.
+                    var dtFlow = data["Flows"]; //发起的流程.
+
+                    var myNum = 0;
+                    var is1 = false;
+                    for (var i = 0; i < dtSort.length; i++) {
+
+                        var sortNo = dtSort[i].No;
+                        var sortName = dtSort[i].Name;
+
+                        //检查该类别下是否有流程，没有流程就continue ;.
+                        var isHaveFlow = false;
+                        for (var idx = 0; idx < dtFlow.length; idx++) {
+
+                            var flow = dtFlow[idx];
+                            if (sortNo == flow.FK_FlowSort) {
+                                isHaveFlow = true;
+                                break;
+                            }
+                        }
+
+                        if (isHaveFlow == false)
+                            continue;
+
+                        if (sortName == "" || sortName == null)
+                            continue;
+
+                        var grouStr = "<tr  onclick=\"GroupBarClick('" + sortName + "')\" > <th colspan=4 class=Sum > <div style='text-align:left; float:left' > <img src='../Style/Min.gif' alert='Min' id='Img" + sortName + "'   border=0 /> " + sortName + "</th> </tr>";
+                        $("#Table1 tr:last").after(grouStr);
+
+                        //增加处理.
+                        for (var idx = 0; idx < dtFlow.length; idx++) {
+
+                            var flow = dtFlow[idx];
+                            var flowSort = flow.FK_FlowSort;
+                            if (sortNo != flowSort)
+                                continue;
+
+                            myNum++;
+
+                            var newRow = "";
+                            if (is1 == true) {
+                                newRow += "<tr bgcolor=AliceBlue id='" + sortName + myNum + "' >";
+                                is1 = false;
+                            }
+                            else {
+                                newRow += "<tr bgcolor=white id='" + sortName + myNum + "' >";
+                                is1 = true;
+                            }
+
+                            newRow += "<td class=Idx >" + myNum + "</td>";
+                            newRow += "<td> <a href=\"javascript:WinOpenSearch('" + flow.No + "');\" ><img src='../Img/Flow1.png' style='width:15px;' /> " + flow.No + "." + flow.Name + "</a></td>";
+
+
+                            newRow += "<td> <a href=\"javascript:WinOpenStart('" + flow.No + "');\" ><img src='../Img/Start1.png' style='width:15px;' />我发起的流程</a></td>";
+                            newRow += "<td> <a href=\"javascript:WinOpenJoin('" + flow.No + "');\" ><img src='../Img/Check.png' style='width:15px;' />我审批的流程</a></td>";
+                            newRow += "<td> <a href=\"javascript:WinOpenStartFlow('" + flow.No + "');\" ><img src='../Img/Start.png' style='width:15px;' />流程发起</a></td>";
+                            newRow += "</tr>";
+
+                            $("#Table1 tr:last").after(newRow);
+                        }
+                    }
+                }
+            });
+        }
+
+        //发起时打开窗口
+        function WinOpenStartFlow(flowNo) {
+
+            var url = "../MyFlow.htm?FK_Flow=" + flowNo;
+
+            var newWindow = window.open(url, flowNo, 'toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            newWindow.focus();
+            return;
+        }
+
+        //我发起的流程.
+        function WinOpenStart(flowNo) {
+            var intFlowNo = flowNo;
+            var url = "../RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=My";
+            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            newWindow.focus();
+            return;
+        }
+
+        //我发起的流程.
+        function WinOpenJoin(flowNo) {
+            var intFlowNo = flowNo;
+            var url = "../RptDfine/Default.htm?RptNo=ND" + Number(flowNo) + "MyRpt&FK_Flow=" + flowNo + "&SearchType=MyJoin";
+            var newWindow = window.open(url, flowNo, 'height=600,width=850,top=50,left=50,toolbar=no,menubar=no,scrollbars=yes, resizable=yes,location=no, status=no');
+            newWindow.focus();
+            return;
+        }
+
+    </script>
+</head>
+
+<body >
+
+<table id="Table1" style="width:100%;">
+<tr>
+<th  style="width:38px;" >序</th>
+<th >名称</th>
+<th colspan="2">查询</th>
+<th >发起</th>
+</tr>
+</table>
+
+<div id="Msg"></div>
+
+</body>
+</html>

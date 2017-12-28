@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8"/>
+    <title>驰骋工作流引擎ccbpm6 </title>
+    <script src="../Scripts/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        function OpenIt(fk_flow, fk_node, workid) {
+            var url = '../WFRpt.aspx?WorkID=' + workid + '&FK_Flow=' + fk_flow + '&FK_Node=' + fk_node;
+            var newWindow = window.open(url, 'card', 'width=700,top=50,left=50,height=500,scrollbars=yes,resizable=yes,toolbar=false,location=false');
+            newWindow.focus();
+            return;
+        }
+    </script>
+    <base target="_self" />
+    <script type="text/javascript">
+        function RSize() {
+            if (document.body.scrollWidth > (window.screen.availWidth - 100)) {
+                window.dialogWidth = (window.screen.availWidth - 100).toString() + "px"
+            } else {
+                window.dialogWidth = (document.body.scrollWidth + 50).toString() + "px"
+            }
+
+            if (document.body.scrollHeight > (window.screen.availHeight - 70)) {
+                window.dialogHeight = (window.screen.availHeight - 50).toString() + "px"
+            } else {
+                window.dialogHeight = (document.body.scrollHeight + 115).toString() + "px"
+            }
+            window.dialogLeft = ((window.screen.availWidth - document.body.clientWidth) / 2).toString() + "px"
+            window.dialogTop = ((window.screen.availHeight - document.body.clientHeight) / 2).toString() + "px"
+        }
+
+        function NoSubmit(ev) {
+            if (window.event.srcElement.tagName == "TEXTAREA")
+                return true;
+
+            if (ev.keyCode == 13) {
+                window.event.keyCode = 9;
+                ev.keyCode = 9;
+                return true;
+            }
+            return true;
+        }
+
+        function Btn_Click() {
+
+            //window.event兼容
+            if (!window.event) {
+                window.event = arguments.callee.caller.arguments[0]; // 获取event对象
+            }
+            if (!window.event.srcElement) {
+                window.event.srcElement = window.event.target; // 获取event对象
+            }
+            if (!window.event.keyCode) {
+                window.event.keyCode = window.event.which; // 获取event对象
+            }
+
+            if (TB_KeyWords.value == "") {
+                return;
+            }
+
+            if (event.srcElement.id == "Btn_ByWorkID") {
+                var g = /^[1-9]*[1-9][0-9]*$/;
+                if (!(g.test(TB_KeyWords.value))) {
+                    alert("您输入的不是一个workid");
+                    return;
+                }
+            }
+            
+            var frmData = $("#cc").serialize();
+
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=KeySearch_Query&type=" + event.srcElement.name + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    //转化成json.
+                    data = JSON.parse(data);
+                    if (data.length > 0) {
+
+                        var tableHtml = "<table class='Table'>",
+                            statusArr = ["未完成", "已完成", "其他"],
+                            tr = "";
+
+                        tableHtml += "<tr>";
+                        tableHtml += "<th>Idx</th>";
+                        tableHtml += "<th>流程</th>";
+                        tableHtml += "<th>停留节点</th>";
+                        tableHtml += "<th>处理人</th>";
+                        tableHtml += "<th>标题</th>";
+                        tableHtml += "<th>发起人</th>";
+                        tableHtml += "<th>发起日期</th>";
+                        tableHtml += "<th>状态</th>";
+                        tableHtml += "<th>参与人</th>";
+                        tableHtml += "<th>轨迹图</th>";
+                        tableHtml += "</tr>";
+
+
+                        data.forEach(function (item, index) {
+                            tr = "";
+                            tr += "<td>" + (index + 1) + "</td>";
+                            tr += "<td>" + item.FlowName + "</td>";
+                            tr += "<td>" + item.NodeName + "</td>";
+                            tr += "<td>" + item.TodoEmps + "</td>";
+                            tr += "<td><a href=\"javascript:OpenFrm('" + item.WorkID + "','" + item.FK_Node + "','" + item.FK_Flow + "');\" >" + item.Title + "</a></td>";
+                            tr += "<td>" + item.Starter + "</td>";
+                            tr += "<td>" + item.RDT + "</td>";
+                            tr += "<td>" + statusArr[item.WFSta] + "</td>";
+                            tr += "\n<td class='BigDoc' valign=top>" + item.Emps + "</td>";
+                            tr += "<td><a href=\"javascript:OpenIt('" + item.FK_Flow + "','" + item.FK_Node + "','" + item.WorkID + "');\" >轨迹</a></td>";
+                            tr += "</tr>";
+                            tableHtml += tr;
+                        });
+                        tableHtml += "</table>";
+                        document.getElementById("result").innerHTML = tableHtml;
+                    } else {
+                        document.getElementById("result").innerHTML = "<h3>&nbsp;&nbsp;竟然没有查出任何东西，真不思议。</h3>";
+                    }
+                }
+            });
+        }
+
+
+        /* 打开表单. */
+        function OpenFrm(workid, nodeID, flowNo) {
+
+            //执行催办.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=KeySearch_OpenFrm&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        data = data.replace('url@', '.');
+
+                        window.open(data);
+                        return;
+                    }
+                    alert(data);
+                }
+            });
+        }
+    </script>
+</head>
+<body topmargin="0" leftmargin="0" onkeypress="NoSubmit(event);" class="easyui-layout">
+    <form id="cc" onkeypress="NoSubmit(event);">
+    <div id="mainPanel" region="center" border="true" border="false" class="mainPanel">
+        <table width="100%;" border="0">
+            <tr>
+                <td style="text-align: center">
+                    </br></br> <b>&nbsp;输入任何关键字:</b><input name="TB_KeyWords"
+                        type="text" id="TB_KeyWords" style="border-color: AliceBlue;border-style: Inset; font-size: Large; font-weight: bold; width: 259px;" />
+                    <span style="color: #0033CC; font-weight: bold;">
+                        <input id="CHK_Myself" type="checkbox" name="CHK_Myself" value="1"/><label for="CHK_Myself">仅查询我审批的流程</label></span>
+                    <br />
+                    &nbsp;<input type="button" value="按工作ID查" id="Btn_ByWorkID" name="ByWorkID" onclick="Btn_Click();"/>
+                    <input type="button" value="按流程标题字段关键字查" id="Btn_ByTitle" name="ByTitle" onclick="Btn_Click();"/>
+                    </br>
+                </td>
+            </tr>
+        </table>
+        <div id="result">
+        </div>
+
+    </div>
+    </form>
+</body>
+</html>

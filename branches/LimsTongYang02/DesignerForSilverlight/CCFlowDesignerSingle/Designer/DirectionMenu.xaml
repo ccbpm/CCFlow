@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="BP.DirectionMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:liquidMenu="clr-namespace:Liquid;assembly=Liquid.Menu"  
+             MouseLeave="UserControl_MouseLeave"
+             MouseRightButtonDown="UserControl_MouseRightButtonDown">
+    <Canvas VerticalAlignment="Top" HorizontalAlignment="Left" >        
+        <StackPanel Name="spContentMenu"  Canvas.ZIndex="1000"  Canvas.Left="0" Canvas.Top="0" Background="WhiteSmoke"  Orientation="Vertical" >
+            <liquidMenu:Menu x:Name="MuContentMenu" Visibility="Visible"  ItemSelected="Menu_ItemSelected">
+                <liquidMenu:MenuItem ID="menuSetDirectionCondition" Text="设置方向转向条件" Icon="../Images/MenuItem/Setting.png" />
+                <liquidMenu:MenuItem ID="menuIsCanBack" Text="是否可以原路返回" CheckBoxVisibility="Visible" IsChecked="True" Icon="../Images/MenuItem/Setting.png" />
+                <liquidMenu:MenuItem ID="menuIsPolyline" Text="是否为折线" CheckBoxVisibility="Visible" IsChecked="True" Icon="../Images/MenuItem/Setting.png" />
+                <liquidMenu:MenuItem ID="menuDeleteDirection" Text="删除连线" Icon="../Images/MenuItem/Delete.png" />
+            </liquidMenu:Menu>
+        </StackPanel>
+    </Canvas>
+</UserControl>

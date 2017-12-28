@@ -1,0 +1,474 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>部门选择器</title>
+    <link href="../../Scripts/easyUI15/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI15/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/easyloader.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.parser.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.draggable.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.resizable.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.progressbar.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.panel.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.linkbutton.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.window.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.dialog.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.messager.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.tooltip.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.validatebox.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.tree.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.pagination.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.datagrid.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/plugins/jquery.textbox.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI15/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Gener.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var ensName = GetQueryString("EnsName");
+        var enName = GetQueryString("EnName");
+        var attrKey = GetQueryString("AttrKey");
+        var nodeid = GetQueryString("NodeID");
+        var nodedepts = new Array(); //节点绑定人员
+        var currdepts = new Array(); //记录当前表格中绑定的人员列表集合
+        var PAGESIZE = 10;  //默认每页显示条数
+        var partidx = 0;
+        var partcount = 0;
+        var savedatas = new Array();
+
+        $(function () {
+            $("#treeDepts").tree({
+                checkbox: true,
+                cascadeCheck: false,
+                formatter: function (node) {
+                    if (!node.attributes) {
+                        return node.text;
+                    }
+
+                    if (node.children.length > 0) {
+                        if (node.children.length == 1 && node.children[0].text == "loading...") {
+                            return node.text;
+                        }
+
+                        return node.text + "<input type='checkbox' id='cb_" + node.id + "' onchange='CheckAllChildren(this, \"" + node.id + "\")' />[" + node.children.length + "]";
+                    }
+                },
+                onExpand: function (node) {
+                    if (node.attributes && node.attributes.TType == "CDEPT") {  //只处理DEPT类型                    
+                        return;
+                    }
+
+                    GetSubDepts(node);
+                },
+                onCheck: function (node, checked) {
+                    if (!node.attributes || node.attributes.TType != "DEPT") {
+                        return;
+                    }
+
+                    CheckNode(node, checked);
+                }
+            });
+
+            $("#sDepts").datagrid({
+                pagination: true,
+                pageNumber: 0,
+                pageSize: PAGESIZE,
+                pageList: [10, 20, 30, 40, 50]
+            });
+
+            $("#kw").textbox({
+                onChange: function (newValue, oldValue) {
+                    FilterDepts(newValue);
+                }
+            });
+
+            $("#save").linkbutton();
+
+            GetNodeDepts();
+        });
+
+        function CheckAllChildren(cb, nid) {
+            var children = $("#treeDepts").tree("getChildren", $("#treeDepts").tree("find", nid).target);
+
+            $.each(children, function () {
+                if (this.text == "loading..." || $("#treeDepts").tree("getParent", this.target).id != nid) {
+                    return true;
+                }
+
+                if (cb.checked) {
+                    $("#treeDepts").tree("check", this.target);
+                }
+                else {
+                    $("#treeDepts").tree("uncheck", this.target);
+                }
+            });
+        }
+
+        function Init() {
+            //获取组织结构根结点
+            var param = {
+                DoType: "Dot2DotTreeDeptModel_GetStructureTreeRoot",
+                parentrootid: "0",
+                nodeid: nodeid
+            };
+
+            Handler_AjaxQueryData(param, function (data, scope) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+
+                var treeData = eval('(' + data + ')');
+                $("#save").linkbutton("enable");
+                $("#treeDepts").tree("loadData", treeData.InnerData);
+            }, this);
+        }
+
+        function GetSubDepts(cnode) {
+            var param = {
+                DoType: "Dot2DotTreeDeptModel_GetSubDepts",
+                parentid: cnode.attributes.No,
+                nodeid: nodeid
+            };
+
+            var children = $("#treeDepts").tree("getChildren", cnode.target);
+            if (children[0].text != "loading...") {
+                return;
+            }
+
+            Handler_AjaxQueryData(param, function (data, scope) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+
+                var redata = eval('(' + data + ')');
+
+                $("#treeDepts").tree("remove", children[0].target);
+                $("#treeDepts").tree("append", { parent: cnode.target, data: redata });
+            }, this);
+        }
+
+        function GetNodeDepts() {
+            var param = {
+                DoType: "Dot2DotTreeDeptModel_GetNodeDepts",
+                nodeid: nodeid
+            };
+
+            $("#save").linkbutton("disable");
+
+            Handler_AjaxQueryData(param, function (data, scope) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+
+                var redata = eval('(' + data + ')');
+                nodedepts = redata.InnerData;
+                ShowSelectedDepts();
+                Init();
+            }, this);
+        }
+
+        function ShowSelectedDepts() {
+            LoadDeptsInDataGrid(nodedepts, 1, $("#sDepts").datagrid("options").pageSize);
+        }
+
+        function CheckRootNode(link, checked) {
+            var root = $("#treeDepts").tree("getRoot");
+            var jlink = $(link);
+
+            CheckNode(root, checked);
+            ShowSelectedDepts();
+
+            jlink.text(checked ? "[取消]" : "[选择]");
+            jlink.attr("onclick", checked ? "CheckRootNode(this, false)" : "CheckRootNode(this, true)");
+            jlink.attr("title", checked ? "取消选择根节点部门" : "选择根节点部门");
+        }
+
+        function CheckNode(node, checked) {
+            var deptname = '';
+            var parent = $("#treeDepts").tree("getParent", $("div[id='" + node.domId + "']")[0]);
+
+            if (parent != null) {
+                deptname = parent.attributes.Name;
+            }
+
+            var currdept = {
+                No: node.attributes.No,
+                Name: node.attributes.Name,
+                DeptNo: node.attributes.ParentNo,
+                DeptName: deptname,
+                Checked: checked,
+                Code: node.attributes.Code
+            };
+            //选中，判断是否已经存在绑定列表中
+            if (checked) {  //选中
+                if (IndexOfArray(nodedepts, "No", currdept.No) == -1) {
+                    nodedepts.push(currdept);
+                }
+            }
+            else {  //取消选中
+                var idx = IndexOfArray(nodedepts, "No", currdept.No);
+
+                if (idx != -1) {
+                    nodedepts.splice(idx, 1);
+                }
+            }
+        }
+
+        function FilterDepts(key) {
+            var pageSize = $("#sDepts").datagrid("options").pageSize;
+
+            if (!key || key.length == 0) {
+                LoadDeptsInDataGrid(nodedepts, 1, pageSize);
+                return;
+            }
+
+            var filterdepts = new Array();   //检索结果人员集合
+
+            key = key.toLowerCase();
+
+            $.each(nodedepts, function () {
+                if (this.Code.indexOf(key) != -1 || this.Name.indexOf(key) != -1 || (this.DeptName && this.DeptName.indexOf(key) != -1)) {
+                    filterdepts.push(this);
+                }
+            });
+
+            LoadDeptsInDataGrid(filterdepts, 1, pageSize);
+        }
+
+        function LoadDeptsInDataGrid(depts, pageNum, pageSize) {
+            currdepts = depts;
+
+            $("#sDepts").datagrid({
+                pageSize: pageSize,
+                pageNumber: pageNum
+            });
+
+            $("#sDepts").datagrid("loadData", GetPagedDepts(currdepts, pageSize, pageNum));
+
+            var pager = $("#sDepts").datagrid("getPager");
+
+            pager.pagination({
+                showRefresh: false,
+                total: currdepts.length,
+                pageSize: pageSize,
+                pageNumber: pageNum,
+                onSelectPage: function (pageNum, pageSize) {
+                    LoadDeptsInDataGrid(currdepts, pageNum, pageSize);
+                }
+            });
+        }
+
+        function IndexOfArray(array, field, value) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i][field] == value) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        function DeleteSelectedDepts(deleteall) {
+            var sdepts = new Array();
+            var opts = $("#sDepts").datagrid("options");
+
+            if (!deleteall) {
+                var idx;
+                var node;
+
+                sdepts = $("#sDepts").datagrid("getChecked");
+
+                $.each(sdepts, function () {
+                    idx = IndexOfArray(nodedepts, "No", this.No);
+
+                    if (idx != -1) {
+                        nodedepts.splice(idx, 1);
+                    }
+
+                    //删除树中勾选项
+                    node = $("#treeDepts").tree("find", "DEPT_" + this.No);
+
+                    if (node) {
+                        $("#treeDepts").tree("uncheck", node.target);
+                    }
+                });
+                //todo:如果是检索结果下删除选中行后，剩下的结果应当仍然显示检索结果集下的，待处理
+                LoadDeptsInDataGrid(nodedepts, opts.pageNumber, opts.pageSize);
+                return;
+            }
+
+            $.messager.confirm("提示", "您确定要删除所有已经选择的部门吗？", function (r) {
+                if (r) {
+                    //删除树中勾选项
+                    while (nodedepts.length > 0) {
+                        node = $("#treeDepts").tree("find", "DEPT_" + nodedepts[0].No);
+
+                        if (node && node.checked) {
+                            $("#treeDepts").tree("uncheck", node.target);
+                        }
+                    }
+
+                    if ($("#sDepts").datagrid("getData").total > 0) {
+                        LoadDeptsInDataGrid(nodedepts, 1, opts.pageSize);
+                    }
+                }
+            });
+        }
+
+        function Save() {
+            var param = {
+                DoType: "Dot2DotTreeDeptModel_SaveNodeDepts",
+                data: '|',
+                nodeid: nodeid
+            };
+
+            $("#save").linkbutton("disable");
+
+            //组织数据
+            var i = 1;
+
+            $.each(nodedepts, function () {
+                param.data += this.No + "|";
+
+                //500个分一段保存
+                if (i % 500 == 0) {
+                    savedatas.push(param.data);
+                    param.data = '|';
+                }
+
+                i++;
+            });
+
+            if (param.data.length > 1) {
+                savedatas.push(param.data);
+            }
+            else {
+                param.data = savedatas.shift();
+
+                Handler_AjaxQueryData(param, function (data, scope) {
+                    $("#save").linkbutton("enable");
+
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+
+                    var redata = eval('(' + data + ')');
+
+                    $.messager.show({
+                        title: " ",
+                        msg: redata.Msg,
+                        timeout: 1000
+                    });
+
+                    ShowSelectedDepts();
+                }, this);
+                return;
+            }
+
+            partidx = 1;
+            partcount = savedatas.length;
+            param.partno = partidx + "/" + partcount;
+            param.data = savedatas.shift();
+
+            SavePart(param);
+        }
+
+        function SavePart(param) {
+            Handler_AjaxQueryData(param, function (data, scope) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    alert("保存过程中出现错误，已经保存部分数据，请手动刷新本页面，重新设置！");
+                    $("#save").linkbutton("enable");
+                    return;
+                }
+
+                var redata = eval('(' + data + ')');
+
+                if (redata.InnerData.lastpart) {
+                    $.messager.show({
+                        title: " ",
+                        msg: redata.Msg,
+                        timeout: 1000
+                    });
+
+                    $("#save").linkbutton("enable");
+                    partidx = 0;
+                    partcount = 0;
+                    ShowSelectedDepts();
+                    return;
+                }
+
+                partidx++;
+
+                if (savedatas.length > 0) {
+                    param.partno = partidx + "/" + partcount;
+                    param.data = savedatas.shift();
+                    SavePart(param);
+                }
+
+            }, this);
+        }
+
+        function GetPagedDepts(depts, pagesize, pageidx) {
+            var start = pagesize * (pageidx - 1);
+            var end = pagesize * pageidx;
+
+            if (depts.length - 1 < start) {
+                start = depts.length - 1;
+            }
+
+            if (depts.length - 1 < end) {
+                end = depts.length;
+            }
+
+            return { total: depts.length, rows: depts.slice(start, end) };
+        }
+    </script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'north'" style="width: 100%; height: 40px; padding: 5px;
+        line-height: 30px;">
+        <a id="save" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'"
+            onclick="Save()">保存</a> <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-delete'"
+                onclick="DeleteSelectedDepts(true)">清空选择</a> &nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+    <div data-options="region:'west',title:'选择部门'" style="width: 40%; padding: 5px;">
+        <ul id="treeDepts" class="easyui-tree">
+        </ul>
+    </div>
+    <div data-options="region:'center',title:'已选部门'" style="width: 60%; padding: 5px;">
+        <table id="sDepts" class="easyui-datagrid" data-options="fit:true,fitColumns:true,singleSelect:false,rownumbers:true,
+        toolbar:'#tb'">
+            <thead>
+                <tr>
+                    <th data-options="field:'Checked',checkbox:true">
+                        选
+                    </th>
+                    <th data-options="field:'No',width:80">
+                        编号
+                    </th>
+                    <th data-options="field:'Name',width:80">
+                        部门
+                    </th>
+                    <th data-options="field:'DeptName',width:140">
+                        上级部门
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div id="tb" style="line-height: 30px;">
+        &nbsp; <a href="javascript:void(0)" onclick="ShowSelectedDepts()" class="easyui-linkbutton"
+            data-options="iconCls:'icon-table'">显示已选部门</a> &nbsp;
+        <input id="kw" class="easyui-textbox" data-options="prompt:'支持汉字首字母检索'" style="width: 120px" />
+        <a href="javascript:void(0)" onclick="FilterDepts($('#kw').textbox('getValue'))"
+            class="easyui-linkbutton" data-options="iconCls:'icon-search'">检索</a> &nbsp;<a href="javascript:void(0)"
+                onclick="DeleteSelectedDepts(false)" class="easyui-linkbutton" data-options="iconCls:'icon-delete'">删除</a>
+    </div>
+</body>
+</html>

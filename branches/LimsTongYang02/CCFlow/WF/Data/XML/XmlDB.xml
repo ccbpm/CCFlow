@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DS>
+  <!-- 系统内置字段-与工作流相关的内置字段. -->
+  <InitField No="SAIDs" CH="下一步接受人"  GroupName="节点表单字段" Note="用于采集下一步的接收人,双击文本框使用pop弹窗弹出接受人,请参考节点访问规则."  />
+  <InitField No="SysCCEmps" CH="抄送给"  GroupName="节点表单字段" Note="用于采集下一步的抄送人,双击文本框使用pop弹窗弹出抄送人,请参考节点抄送规则."  />
+  <InitField No="PrjNo" CH="项目编号,项目名称"  GroupName="节点表单字段" Note="直接增加项目PrjNo,PrjName两个字段,这是项目类流程约定的两个字段."  />
+  <InitField No="SysIsReadReceipts" CH="是否启用阅读回执"  GroupName="节点表单字段" Note="请参考阅读回执规则"  />
+  <InitField No="IsSendEmail" CH="是否发送邮件"  GroupName="节点表单字段" Note="此字段配合节点事件的消息推送实现"   />
+  <InitField No="IsSendSMS"   CH="是否短信提醒"  GroupName="节点表单字段"   Note="此字段配合节点事件的消息推送实现"  />
+  
+  <!--./Img/MapExt/ExpImp.png-->
+    <MapMenu No="ExpImp" CH="导入/导出" JS="javascript:ExpImp(@MyPK,@FK_Flow);" Img="icon-copy"
+           Note="导入或者导入表单模板。" />
+    <!--./../Img/Btn/New.gif-->
+  <MapMenu No="NewF" CH="新建字段"   JS="javascript:AddF(@MyPK);"  Img="icon-new" 
+           Note="向表单中增加新字段。" />
+  
+  <!--./Img/MapExt/HiddenField.png-->
+  <MapMenu No="HidAttr" CH="隐藏字段" JS="javascript:HidAttr(@MyPK);" Img="icon-hidden"
+            Note="多用于计算、方向条件设置。" />
+  <!--./Img/MapExt/GroupBar.png-->
+  <MapMenu No="FGroup" CH="新建字段分组" JS="javascript:GroupFieldNew(@MyPK);" Img="icon-groupbar"
+             Note="把同类的字段分割开,让显示更有条理." />
+    
+  <!--<MapMenu No="CopyF" CH="复制字段"  JS="javascript:CopyFieldFromNode(@MyPK);"  Img="/WF/Img/Btn/Copy.gif"
+           Note="从其它表单中复制字段" />-->
+  <!--./Img/MapExt/Dtl.png-->
+  <MapMenu No="DTable" CH="新建从表" JS="javascript:MapDtl(@MyPK);" Img="icon-dtl"
+           Note="也称从表,如:报销费用清单."  />
+  <!--./../Img/Btn/ChoseCol.gif-->
+  <MapMenu11 No="DM" CH="增加一对多"   JS="javascript:MapM2M(@MyPK);" Img="icon-closecol" 
+           Note="如:项目人员、选课." />
+  
+  <!--./../Img/Btn/ChoseCol.gif-->
+    <MapMenu11 No="DMM" CH="增加一对多对多"   JS="javascript:MapM2MM(@MyPK);" Img="icon-closecol"
+           Note="比如为人员集合的每个人设置岗位" />
+  <!--./Img/MapExt/Attachment.png-->
+  <MapMenu No="Ath" CH="新建附件组件"     JS="javascript:Ath(@MyPK);" Img="icon-attachment" 
+           Note="单个附件与多个附件类型的数据上传、浏览。"/>
+  <!--./Img/Frame.gif-->
+  <MapMenu No="Frm" CH="设置框架"    JS="javascript:MapFrame(@MyPK);" Img="icon-frame" 
+           Note="框架嵌入自定义URL"/>
+  <!--./Img/MapExt/event.png-->
+  <MapMenu11 No="FrmEvent" CH="表单事件"    JS="javascript:FrmEvent(@MyPK);" Img="icon-event"
+             Note="可以实现特殊的应用需求."/>
+  <!--./Img/MapExt/DTS.gif-->
+    <MapMenu No="MapExt" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="icon-dts"
+            Note="表单的业务逻辑，实现特殊的应用需求."/>
+  <!--./Img/MapExt/DTS.gif-->
+  <MapMenu111 No="Sln" CH="权限控制方案"    JS="javascript:Sln(@MyPK);" Img="icon-dts"
+          Note="可以实现不用的节点对不同字段的权限访问."/>
+  <!--./Img/MapExt/DTS.gif-->
+  <MapMenu No="MapExt" CH="表单属性"    JS="javascript:MapDataEdit(@MyPK);" Img="icon-dts"
+            Note="更改表单的基础信息，映射的物理表，展示格式..."/>
+  <!--./Img/MapExt/DTS.gif-->
+  <MapMenu11 No="BatchEdit" CH="批量修改"    JS="javascript:BatchEdit(@MyPK);" Img="icon-dts"
+            Note="批量修改字段属性..."/>
+
+  
+  
+  
+  
+    <!--<MapMenu111 No="Ext" CH="扩展设置"    JS="javascript:MapExt(@MyPK);" Img="/WF/Img/Btn/DTS.gif" />-->
+
+  <FExt No="Auto" CH="自动填充" DFor="TB,DDL,Checkbox" />
+
+  <InputCheck No="01" CH="文本框只能输入数字代码(小数点也不能输入)"    JS="this.value=this.value.replace(/\D/g,'')" />
+  <InputCheck No="02" CH="只能输入数字,能输小数点"    JS="this.value=this.value.replace(/\D/g,'')" />
+
+    <FieldGroup No="IsPass" CH="从表审核分组" CHDesc="批量增加三个审核分组字段，是否通过,审核人,审核日期." />
+    <FieldGroup No="Eval"   CH="质量评价" CHDesc="批量增加4个审核分组字段，评价人员ID,评价人员名称,评价分值，评价内容." />
+    <!-- 表单事件 -->
+    <FrmEvent No="FrmLoadBefore" CH="装载前" CHDesc="" />
+    <FrmEvent No="FrmLoadAfter" CH="装载后"  CHDesc="" />
+    <FrmEvent No="SaveBefore" CH="保存前"    CHDesc="" />
+    <FrmEvent No="SaveAfter" CH="保存后"     CHDesc="" />
+    <FrmEvent No="DtlSaveEnd" CH="从表保存后"     CHDesc="" />
+
+  <!-- 公文左边词条 -->
+  <GovWordLeft No="01"  Name="拟" />
+  <GovWordLeft No="02"  Name="请" />
+  <GovWordLeft No="03"  Name="呈" />
+  <GovWordLeft No="04"  Name="报" />
+  <GovWordLeft No="05"  Name="拟呈" />
+  <GovWordLeft No="06"  Name="建议" />
+  <GovWordLeft No="07"  Name="拟转请" />
+  
+  <!--<GovWordLeft No="08"  Name="同意。" />
+  <GovWordLeft No="09"  Name="拟同意，" />
+  <GovWordLeft No="10"  Name="妥否，" />
+  <GovWordLeft No="11"  Name="已核，" />
+  <GovWordLeft No="12"  Name="，" />
+  <GovWordLeft No="13"  Name="。" />
+  <GovWordLeft No="14"  Name="、" />
+  <GovWordLeft No="15"  Name="；" />
+  <GovWordLeft No="16"  Name="？" />-->
+
+  <!-- 公文右边词条 -->
+  <GovWordRight No="01"  Name="同志"   />
+  <GovWordRight No="02"  Name="阅知（抄送）。" />
+  <GovWordRight No="03"  Name="阅办。" />
+  <GovWordRight No="04"  Name="阅处。" />
+  <GovWordRight No="05"  Name="阅示。" />
+  <GovWordRight No="06"  Name="核示。" />
+  <GovWordRight No="07"  Name="批示。" />
+  <GovWordRight No="08"  Name="传阅(并行)。" />
+  <GovWordRight No="09"  Name="审阅。" />
+  <GovWordRight No="10"  Name="办理。" />
+  <GovWordRight No="11"  Name="审定。" />
+  <GovWordRight No="12"  Name="会签。" />
+  <GovWordRight No="13"  Name="牵头办理。" />
+  <GovWordRight No="14"  Name="协助办理。" />
+  <GovWordRight No="15"  Name="派员参加。" />
+  <GovWordRight No="16"  Name="提出拟办意见。" />
+
+ <!-- 处理名字多音字. -->
+  <PinYin No="阿"  Name="a" />
+  <PinYin No="挨"  Name="ai" />
+  <PinYin No="拗"  Name="niu" />
+  <PinYin No="扒"  Name="ba" />
+  <PinYin No="把"  Name="ba" />
+  <PinYin No="蚌"  Name="bang" />
+  <PinYin No="薄"  Name="bo" />
+  <PinYin No="堡"  Name="bao" />
+  <PinYin No="暴"  Name="bao" />
+  <PinYin No="辟"  Name="bi" />
+  <PinYin No="辟"  Name="pi" />
+  <PinYin No="扁"  Name="bian" />
+  <PinYin No="扁"  Name="pian" />
+  <PinYin No="泊"  Name="bo" />
+  <PinYin No="藏"  Name="cong" />
+  <PinYin No="禅"  Name="shon" />
+  <PinYin No="颤"  Name="chan" />
+  <PinYin No="单"  Name="shan" />
+  <PinYin No="度"  Name="du" />
+  <PinYin No="囤"  Name="tun" />
+  <PinYin No="给"  Name="gei" />
+  <PinYin No="会"  Name="hui" />
+  <PinYin No="奇"  Name="qi" />
+  <PinYin No="落"  Name="luo" />
+  <PinYin No="蔓"  Name="man" />
+  <PinYin No="强"  Name="qiang" />
+  <PinYin No="血"  Name="xie" />
+  <PinYin No="幢"  Name="zhuang" />
+  <PinYin No="红"  Name="hong" />
+  <PinYin No="万"  Name="wan" />
+  <PinYin No="盛"  Name="sheng" />
+  <PinYin No="汤"  Name="tang" />
+  <PinYin No="曾"  Name="zeng" />  
+  <PinYin No="解"  Name="xie" /> 
+  <PinYin No="贾"  Name="jia" /> 
+  <PinYin No="翟"  Name="zhai" />   
+  <PinYin No="查"  Name="zha" />
+  <PinYin No="家"  Name="jia" />
+  <PinYin No="邹"  Name="zou" />  
+</DS>
+

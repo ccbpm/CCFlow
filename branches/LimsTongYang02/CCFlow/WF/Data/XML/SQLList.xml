@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes" ?>
+<!--
+1, 该文件用于配置一个SQL语句列表. 在公共的方法里，执行这个SQL语句确保系统安全. 
+2, 参数为 @+参数名, 适合各种数据库.
+3, No 的命名规则为 页面名称+"_"+方法名.  比如: EditFExtContral_AthList
+4, 该文件被 Gener.js 的 GenerBindSQL调用到.
+-->
+<NewDataSet>
+	<Item No="EditFExtContral_AthList" SQL="SELECT MyPK AS NO, NAME FROM Sys_FrmAttachment WHERE FK_MapData='@FK_MapData'" 
+        Note="获得一个表单的附件列表"  />
+
+  <!-- 字段分组 -->
+  <Item No="GroupField" SQL="SELECT OID AS NO, Lab as NAME FROM Sys_GroupField WHERE  ( CtrlType IS NULL OR CtrlType='' ) AND EnName='@FK_MapData'"
+        Note="获得一个表单的字段分组列表"  />
+</NewDataSet>

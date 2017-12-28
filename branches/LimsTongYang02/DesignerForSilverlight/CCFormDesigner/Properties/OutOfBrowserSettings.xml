@@ -1,0 +1,7 @@
+<OutOfBrowserSettings ShortName="ccflow 自由表单设计器" EnableGPUAcceleration="False" ShowInstallMenuItem="True">
+  <OutOfBrowserSettings.Blurb>您的桌面上的 CCForm 应用程序；在家、工作或旅途中均可使用。</OutOfBrowserSettings.Blurb>
+  <OutOfBrowserSettings.WindowSettings>
+    <WindowSettings Title="ccflow 自由表单设计器" />
+  </OutOfBrowserSettings.WindowSettings>
+  <OutOfBrowserSettings.Icons />
+</OutOfBrowserSettings>

@@ -1,0 +1,24 @@
+﻿<controls:ChildWindow x:Class="CCForm.SelectM2M"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+           Width="400" Height="300" 
+           Title="SelectM2M" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+    <Grid x:Name="LayoutRoot" Margin="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="224*" />
+            <ColumnDefinition Width="154*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="1" Grid.Column="1" />
+        <Button x:Name="OKButton" Content="确定" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="1" Grid.Column="1" />
+        <sdk:Label Height="19" HorizontalAlignment="Left" Margin="48,92,0,0" Name="label1" VerticalAlignment="Top" Width="32" Content="编号" />
+        <sdk:Label Content="名称" HorizontalAlignment="Left" Margin="47,61,0,0" Name="label2" Width="32" Height="19" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Right" Margin="0,0,79,145" Name="TB_Name" VerticalAlignment="Bottom" Width="213" LostFocus="TB_Name_LostFocus" Grid.ColumnSpan="2" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="86,89,0,0" Name="TB_No" VerticalAlignment="Top" Width="211" Grid.ColumnSpan="2" />
+    </Grid>
+</controls:ChildWindow>

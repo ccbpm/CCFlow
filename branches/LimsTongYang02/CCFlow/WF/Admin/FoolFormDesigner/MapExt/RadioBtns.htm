@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript" src="../../../Scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../../../Scripts/QueryString2016.js"></script>
+    <link href="../../../../DataUser/Style/Table0.css" rel="stylesheet" />
+    <script src="../../../Scripts/config.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        //页面启动函数.
+        var initData = {};
+        var pageData = {};
+        $(function () {
+            pageData = {
+                FK_MapData: GetQueryString("FK_MapData"),
+                KeyOfEn: GetQueryString("KeyOfEn"),
+                SelectIntKey: GetQueryString("SelectIntKey"),
+                MyPK: GetQueryString("MyPK")
+            };
+
+            if (pageData.selectIntKey == null)
+                pageData.selectIntKey = "1";
+
+            $('#lb_EnName').text(pageData.KeyOfEn);
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler+"?DoType=RadioBtns_Init&FK_MapData=" + pageData.FK_MapData + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data != undefined && data.indexOf('err@') == 0) {
+                        console.error(data);
+                        return;
+                    }
+                    initData = JSON.parse(data);
+                    //绑定左侧的列表值
+                    var ulListValuesLiHtml = '';
+                    $.each(initData.Sys_FrmRB, function (i, rb) {
+                        ulListValuesLiHtml += '<li>' + '<input id="RB_' + rb.KeyOfEn + rb.IntKey + '"' + (rb.IntKey == pageData.selectIntKey ? ' checked="true" ' : '') + '     type="radio" name="' + pageData.KeyOfEn + '" value="' + rb.IntKey + '" /> <label for="RB_' + rb.KeyOfEn + rb.IntKey + '" > ' + rb.Lab + '</label></li>';
+                    })
+                    $('#ulListValues').html(ulListValuesLiHtml);
+
+                    $('[name=' + pageData.KeyOfEn + ']').bind('change', function (obj) {
+                        saveCurrentConfig();
+                        pageData.selectIntKey = $(obj.target).val();
+                        BindConfig();
+                    })
+                    
+                    //绑定表单的所有字段
+                    var mapAttrHtml = '';
+                    $.each(initData.Sys_MapAttr, function (i, attr) {
+                        mapAttrHtml += '<tr><td>' + (i + 1) + '</td><td>' + attr.KeyOfEn + '</td><td>' + attr.Name + '</td><td><input type="radio" id="' + attr.KeyOfEn + '0" name="' + attr.KeyOfEn + '" value="0"/><label for="' + attr.KeyOfEn + '0" >不设置</label></td><td><input type="radio" id="' + attr.KeyOfEn + '1" name="' + attr.KeyOfEn + '" value="1"/><label for="' + attr.KeyOfEn + '1" >可用</label></td><td><input type="radio" id="' + attr.KeyOfEn + '2" name="' + attr.KeyOfEn + '" value="2"/><label for="' + attr.KeyOfEn + '2" >可见</label></td></td><td><input type="radio" id="' + attr.KeyOfEn + '3" name="' + attr.KeyOfEn + '" value="3"/> <label for="' + attr.KeyOfEn + '3" >不可见</label></td></tr>';
+                    })
+                    $('#Fields tbody').html(mapAttrHtml);
+
+                    //为表单字段绑定DATA
+                    $.each($('#Fields tbody tr'), function (i, tr) {
+                        $(tr).data(initData.Sys_MapAttr[i]);
+                    });
+
+                    BindConfig();
+                },
+                error: function (xml, textSta, errorThrown) {
+                    alert(xml);
+                    alert(textSta);
+                    alert(errorThrown);
+                }
+            })
+        })
+
+        function bindData() {
+            //保存切换配置前的
+            
+            //绑定切换后的配置
+            BindConfigData();
+        }
+
+        //保存当前配置
+        function saveCurrentConfig() {
+            var currentSaveRb = $.grep(initData.Sys_FrmRB, function (value) {
+                return value.IntKey == pageData.selectIntKey;
+            });
+            var configData = $('#formFields').serialize();
+            configDataArr = configData.split('&');
+            configDataArr = $.grep(configDataArr, function (value) {
+                return value.split('=').length == 2 && value.split('=')[1] != 0;
+            });
+            if (configDataArr.length > 0) {
+                configData = '@' + configDataArr.join('@');
+            } else {
+                configData = '';
+            }
+            var script = $('#TB_Script').val();
+            var tip = $('#TB_Tip').val();
+            currentSaveRb[0].Script = script;
+            currentSaveRb[0].FieldsCfg = configData;
+            currentSaveRb[0].Tip = tip;
+        }
+
+        function saveEditData() {
+            var selectRb = $.grep(initData.Sys_FrmRB, function (value) {
+                return value.IntKey == pageData.selectIntKey;
+            });
+            $('#TB_Script').val(selectRb.Script);
+            $('#TB_Tip').val(selectRb.Tip);
+        }
+
+        //绑定右侧配置信息
+        function BindConfig() {
+            var selectRb = $.grep(initData.Sys_FrmRB, function (value) {
+                return value.IntKey == pageData.selectIntKey;
+            });
+            $('#TB_Script').val(selectRb[0].Script);
+            $('#TB_Tip').val(selectRb[0].Tip);
+            //解析下面的元素显示与否
+            var fieldsCfg = selectRb[0].FieldsCfg;
+
+            //'@ConfigInfo:' + $('[name=xx]:checked').val() + '@ViewSta:' + 
+            //开始绑定字段状态信息
+            if (fieldsCfg != undefined) {
+                var viewStaStr = fieldsCfg;
+                var viewStaArr = viewStaStr.split('@');
+                var viewStaObj = {};
+                $.each(viewStaArr, function (i, viewSta) {
+                    if (viewSta != '' && viewSta)
+                        viewStaObj[viewSta.split('=')[0]] = viewSta.split('=')[1];
+                });
+                //为表单字段绑定DATA
+                $.each($('#Fields tbody tr'), function (i, tr) {
+                    var keyOfEn = $(tr).data().KeyOfEn;
+                    if (viewStaObj[keyOfEn] != undefined) {
+                        $('#' + keyOfEn + viewStaObj[keyOfEn]).attr('checked', true);
+                    } else {
+                        $('#' + keyOfEn + '0').attr('checked', true);
+                    }
+                });
+            } else {
+                //为表单字段绑定DATA
+                $.each($('#Fields tbody tr'), function (i, tr) {
+                    var keyOfEn = $(tr).data().KeyOfEn;
+                    $('#' + keyOfEn + '0').attr('checked', true);
+                });
+            }
+        }
+
+        //执行保存
+        function Save() {
+            //保存当前打开表单信息
+            saveCurrentConfig();
+            $.ajax({
+                data: { data: JSON.stringify(initData.Sys_FrmRB) },
+                type: 'post',
+                async: true,
+                url: Handler+"?DoType=RadioBtns_Save&FK_MapData=" + pageData + "&FK_MapExt=" + pageData.MyPK + "&KeyOfEn=" + pageData.KeyOfEn + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data)
+                }
+            });
+        }
+
+        function SaveAndClose() {
+            Save();
+            window.close();
+        }
+
+        function Close() {
+            window.close();
+        }
+    </script>
+</head>
+<body>
+    <table style="width:100%;">
+        <caption><label id="lb_EnName"></label>字段的高级设置</caption>
+        <tr>
+            <td valign="top">
+                <fieldset>
+                    <legend> 列表值 </legend>
+                    <ul id="ulListValues">
+                        
+                    </ul>
+                </fieldset>
+            </td>
+
+            <td valign="top">
+                <fieldset>
+                    <legend>执行JS脚本</legend>
+                    <div id="JS">
+                        <textarea rows="3" cols="50" id="TB_Script"></textarea>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Tip 提示信息</legend>
+                    <div id="Tip">
+                        <textarea rows="3" cols="50" id="TB_Tip"></textarea>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>联动其他的控件使其属性该表(可见，只读)</legend>
+                    <form id="formFields">
+                        <div id="Fields">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>字段</th>
+                                        <th>字段名</th>
+                                        <th>不设置</th>
+                                        <th>可用</th>
+                                        <th>可见</th>
+                                        <th>不可见</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </form>
+                </fieldset>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" ID="Btn_Save" value="保存" onclick="Save()" />
+                <input type="button" value="保存并关闭" onclick="SaveAndClose()" />
+                <input type="button" value="关闭" onclick="Close()"/>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

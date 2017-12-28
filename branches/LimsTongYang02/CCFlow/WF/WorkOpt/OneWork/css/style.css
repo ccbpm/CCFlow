@@ -1,0 +1,152 @@
+body {
+	margin:0;
+	font:12px Î¢ÈíÑÅºÚ,ËÎÌå,Arial,sans-serif;
+}
+html,body {
+	-webkit-text-size-adjust:none;
+	background:#f7f7f7;
+}
+div,form,input,textarea,p,ul,li,dl,dt,dd,h1,table,h2 {
+	padding:0;
+	margin:0;
+}
+li {
+	list-style-type:none;
+}
+a {
+	color:#63D029;
+	text-decoration:none;
+}
+a:hover {
+	color:#F60;
+	text-decoration:underline;
+}
+.content {
+	position:relative;
+	width:1000px;
+	margin:0 auto;
+}
+
+ul, li {
+	list-style: none;
+}
+a {
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: none;
+	cursor: point;
+}
+.content {
+	padding: 50px 0;
+	min-height: 720px;
+	width: 100%;
+}
+.content .wrapper {
+	position: relative;
+	background: url("../Img/log/release-bg.png") repeat-y right top;
+	width: 960px;
+	margin: 0 auto;
+}
+.content .light {
+	position: absolute;
+	left: 55px;
+	top: -50px;
+	width: 152px;
+	height: 191px;
+	background: url("../Img/log/light-top.png") no-repeat top center;
+}
+.content .light i {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	background: url("../Img/log/light.png") no-repeat top center;
+}
+.content .line-left {
+	position: absolute;
+	left: 0;
+	top: 15px;
+	width: 70px;
+}
+.content .line-right {
+	position: absolute;
+	right: 0;
+	top: 15px;
+	width: 460px;
+}
+.content .main {
+	background: url("../Img/log/line-bg.png") repeat-y 249px 0;
+}
+.content .main .title {
+	position: absolute;
+	line-height: 40px;
+	padding-left: 67px;
+	left: 230px;
+	top: 0;
+	color: #58a6fb;
+	font-size: 24px;
+	background: url("../Img/log/clock.png") no-repeat left top;
+}
+.content .main .year {
+	position: relative;
+	z-index: 100;
+}
+.content .main .year h2 {
+	height: 40px;
+	width: 170px;
+	padding-right: 30px;
+	font-size: 24px;
+	line-height: 40px;
+	text-align: right;
+}
+.content .main .year h2 a {
+	color: #58a6fb;
+}
+.content .main .year .list ul {
+	bottom: 0;
+}
+.content .main .year .list ul li {
+	padding: 2px 0;
+	color: #a1a4b8;
+}
+.cls {
+	zoom: 1;
+}
+.cls:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.content .main .year .list ul li.highlight .date, .content .main .year .list ul li.highlight .intro .bdurl{
+	color: #ec6a13;
+}
+.content .main .year .list ul li .date,.content .main .year .list ul li .version{
+	float:left;
+	display:block;
+	clear:left;
+	width:200px;
+	line-height:24px;
+	text-align:right
+}
+.content .main .year .list ul li .date{
+	font-size:18px;
+	line-height:32px;
+	color:#60C52B;
+}
+.content .main .year .list ul li .intro, .content .main .year .list ul li .more {
+	float: left;
+	display: block;
+	width: 400px;
+	margin-left: 100px;
+	line-height: 24px;
+	color:#616161;
+}
+.content .main .year .list ul li .intro {
+	font-size: 18px;
+	line-height: 32px;
+	color: #63d029;
+}
+.content{padding-top:2px;}

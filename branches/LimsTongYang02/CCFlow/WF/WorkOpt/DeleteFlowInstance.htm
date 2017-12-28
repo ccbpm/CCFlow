@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>删除流程</title>
+    <link href="../Scripts/easyUI145/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI145/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI145/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+    <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var fk_flow = GetQueryString("FK_Flow");
+        var fk_node = GetQueryString("FK_Node");
+        var workid = GetQueryString("WorkID");
+
+        $(function () {
+            Init();
+        });
+
+        function Init() {
+            var param = {
+                DoType: "DeleteFlowInstance_Init",
+                FK_Flow: fk_flow,
+                FK_Node: fk_node,
+                WorkID: workid
+            };
+
+            Handler_AjaxQueryData(param, function (data) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+
+                if (data.length == 0 || data == "4") {
+                    return;
+                }
+
+                $('input[name="deleteWay"][value="' + data + '"]').attr("checked", true);
+                $('#trDelEnable').hide();
+            }, this);
+        }
+
+        function OK() {
+            var TB_Doc = $("#TB_Doc").val();
+            var deleteWay = $('input[name="deleteWay"]').filter(':checked').val();
+            var CB_IsDeleteSubFlow = $('input[name="CB_IsDeleteSubFlow"]').filter(':checked').val();
+
+            if (TB_Doc == "" || TB_Doc.trim().length == 0) {
+                alert("请填写删除原因!");
+                return;
+            }
+
+            if (deleteWay == "" || deleteWay == null || deleteWay == "undefined") {
+                alert("请选择删除方式!");
+                return;
+            }
+
+            var param = {
+                DoType: "DeleteFlowInstance_DoDelete",
+                FK_Flow: fk_flow,
+                FK_Node: fk_node,
+                WorkID: workid,
+                RB_DeleteWay: deleteWay,
+                TB_Doc: TB_Doc,
+                CB_IsDeleteSubFlow: CB_IsDeleteSubFlow
+            };
+
+            Handler_AjaxQueryData(param, function (data) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+
+                $("body").layout("panel", "center").panel("clear");
+                $("body").layout("panel", "center").panel({ content: "<fieldset style='width:360px;margin:auto;font-size:14px;margin-top:50px;'><legend><img align='middle' src='../Img/info.png'>操作提示</legend><br /><br />&nbsp;&nbsp;· " + data + "<br /><br />&nbsp;&nbsp;· 若页面未自动关闭，请手动点击右上角关闭按钮.<br /><br /><br /><br /></fieldset>" });
+                window.close();
+            }, this);
+        }   
+    </script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'center',title:'删除流程'" style="padding: 5px">
+        <table id="tMain" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+            <tr>
+                <td style="width: 120px">
+                    删除原因
+                </td>
+                <td>
+                    <textarea rows="3" id="TB_Doc" name="TB_Doc" style="height: 100px; width: 98%;"></textarea>
+                </td>
+            </tr>
+            <tr id="trDelEnable">
+                <td>
+                    删除方式
+                </td>
+                <td>
+                    <input type="radio" id="deleteWay1" name="deleteWay" value="1" /><label for="deleteWay1">逻辑删除.</label><input
+                        type="radio" id="deleteWay2" name="deleteWay" value="2" /><label for="deleteWay2">记录日志方式删除.</label><input
+                            type="radio" id="deleteWay3" name="deleteWay" value="3" /><label for="deleteWay3">彻底删除.</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <input type="checkbox" name="CB_IsDeleteSubFlow" value="1" />是否删除子流程？
+                </td>
+            </tr>
+        </table>
+        <input type="button" value="执行删除" name="Btn_OK" id="Btn_OK" onclick="OK()" />
+        <input type="button" value="取消" name="Btn_Cancel" id="Btn_Cancel" onclick="window.close()" />
+    </div>
+</body>
+</html>

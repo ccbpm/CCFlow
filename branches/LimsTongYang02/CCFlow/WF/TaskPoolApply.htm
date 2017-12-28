@@ -1,0 +1,424 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>我申请下来的共享任务</title>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="./Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="./Scripts/config.js" type="text/javascript"></script>
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+     <base target="_self" /> 
+     <style type="text/css">    
+        a
+        {
+            color:#0066CC;
+            text-decoration:none;
+        }
+        a:hover
+        {
+            color:#0084C5;
+            text-decoration:underline;
+        }
+    </style>
+    
+<script type="text/javascript">
+        function SetImg(id) {
+            document.getElementById(id).src = './Img/Mail_Read.png';
+        }
+        function GroupBarClick(rowIdx) {
+            var alt = document.getElementById('Img' + rowIdx).alert;
+            var sta = 'block';
+            if (alt == 'Max') {
+                sta = 'block';
+                alt = 'Min';
+            } else {
+                sta = 'none';
+                alt = 'Max';
+            }
+            document.getElementById('Img' + rowIdx).src = './Img/' + alt + '.gif';
+            document.getElementById('Img' + rowIdx).alert = alt;
+            var i = 0
+            for (i = 0; i <= 1000; i++) {
+                if (document.getElementById(rowIdx + '_' + i) == null)
+                    continue;
+
+                if (sta == 'block') {
+                    document.getElementById(rowIdx + '_' + i).style.display = '';
+                } else {
+                    document.getElementById(rowIdx + '_' + i).style.display = sta;
+                }
+
+            }
+        }
+
+        function WinOpenIt(url) {
+            //窗口最大化e
+            var scrWidth = screen.availWidth;
+            var scrHeight = screen.availHeight;
+            var self = window.open(url, '_blank', "resizable=1,scrollbars=yes");
+            self.moveTo(0, 0);
+            self.resizeTo(scrWidth, scrHeight);
+            self.focus();
+            return;
+        }
+    </script>
+    <script language="javascript" type="text/javascript" >
+
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+            InitPage();
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            //获取当前时间
+            var cdt = getNowFormatDate();
+            var timeKey = Math.random();
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=TaskPoolApply_Init&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = eval('(' + data + ')');
+
+                    //设置表头.
+                    var groupBy = GetQueryString("GroupBy");
+                    if (groupBy == "" || groupBy == null)
+                        groupBy = "ByFlow";
+
+                    var title = GetTitle(groupBy);
+                    $("#Table1 tr:last").after(title);
+
+                    //生成分组的字符串.
+                    var str = "";
+                    for (var i = 0; i < data.length; i++) {
+
+                        if (groupBy == "ByNode") {
+                            if (str.indexOf(data[i].NodeName) == -1)
+                                str += "@" + data[i].NodeName;
+                        }
+
+                        if (groupBy == "ByFlow") {
+                            if (str.indexOf(data[i].FlowName) == -1)
+                                str += "@" + data[i].FlowName;
+                        }
+
+                        if (groupBy == "ByStarter") {
+                            if (str.indexOf(data[i].StarterName) == -1)
+                                str += "@" + data[i].StarterName;
+                        }
+                    }
+                    var strs = str.split("@"); //生成数组.
+
+                    var num = 0;
+                    var is1 = false;
+
+                    //循环数组.
+                    for (var idx = 0; idx < strs.length; idx++) {
+
+                        var groupName = strs[idx];
+                        if (groupName == "" || groupName == null)
+                            continue;
+
+                        var grouStr = "<tr class=TRSum onclick=\"GroupBarClick('" + idx + "')\" > <th colspan=11 > <div style='text-align:left; float:left' > <img src='Style/Min.gif' alert='Min' id='Img" + idx + "'   border=0 /> " + groupName + "</th> </tr>";
+                        $("#Table1 tr:last").after(grouStr);
+
+                        //增加处理.
+                        for (var i = 0; i < data.length; i++) {
+
+                            var work = data[i];
+                            if (groupBy == "ByNode") {
+
+                                if (work.NodeName != groupName) {
+                                    continue;
+                                }
+                            } else if (groupBy == "ByFlow") {
+                                if (work.FlowName != groupName) {
+                                    continue;
+                                }
+                            } else if (groupBy == "ByStarter") {
+                                if (work.StarterName != groupName) {
+                                    continue;
+                                }
+                            } else {
+                                continue;
+                            }
+
+                            var newRow = "";
+                            var title = work.Title;
+                            var isRead = work.IsRead;
+                            var flowNo = work.FK_Flow;
+                            var flowName = work.FlowName;
+                            var nodeName = work.NodeName;
+                            var starterName = work.StarterName;
+                            var pri = work.PRI;
+                            var nodeID = work.FK_Node;
+                            var fid = work.FID;
+                            var workID = work.WorkID;
+                            var pWorkID = work.PWorkID;
+                            var paras = work.AtPara;
+
+                            if (paras != '') {
+                                paras = paras.replace("'", "\\'");
+                                paras = paras.replace('@', '&');
+                                paras = paras.replace('@', '&');
+                                paras = paras.replace('@', '&');
+                                paras = paras.replace('@', '&');
+                                paras = paras.replace('@', '&');
+                                paras = "1" + paras;
+                            }
+
+                            num++;
+
+                            if (is1 == true) {
+                                newRow += "<tr bgcolor=AliceBlue   " + "ID='" + idx + "_" + i + "'" + " >";
+                                is1 = false;
+                            }
+                            else {
+                                newRow += "<tr bgcolor=white  " + "ID='" + idx + "_" + i + "'" + " >";
+                                is1 = true;
+                            }
+
+
+                            newRow += "<td style='width:20px'>" + num + "</td>"; //序号.
+                            //newRow += "<td><img class=Icon src='Img/PRI/" + pri + ".png' class=Icon /></td>"; //优先级
+
+                            var url = "";
+                            if (isRead == 0)
+                                url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle' src='Img/Mail_UnRead.png' id='i"+idx+"_"+i+"' />" + title + "</a>";
+                            else
+                                url = "<a href=\"javascript:WinOpenIt('MyFlow.htm?FK_Flow=" + flowNo + "&PWorkID=" + pWorkID + "&FK_Node=" + nodeID + "&FID=" + fid + "&WorkID=" + workID + "&IsRead=0&T=" + timeKey + "&Paras=" + paras + "');\" ><img class=Icon align='middle'  src='Img/Mail_Read.png' />" + title + "</a>";
+
+                            if (isRead == 0)
+                                newRow += "<td SetImg('I" + idx + "_" + i + "')\" >" + url + "</td>";
+                            else
+                                newRow += "<td>" + url + "</td>"; //标题
+
+                            if (groupBy == "ByNode") {
+                                newRow += "<td>" + flowName + "</td>"; //流程类别.
+                                newRow += "<td>" + starterName + "</td>"; //发起人.
+                            } else if (groupBy == "ByFlow") {
+                                newRow += "<td>" + nodeName + "</td>"; //节点名称.
+                                newRow += "<td>" + starterName + "</td>"; //发起人.
+                            } else if (groupBy == "ByStarter") {
+                                newRow += "<td>" + flowName + "</td>"; //流程类别
+                                newRow += "<td>" + nodeName + "</td>"; //节点名称
+                            }
+
+
+                            newRow += "<td>" + work.RDT + "</td>"; //发起时间
+                            newRow += "<td>" + work.ADT + "</td>"; //接受时间
+                            newRow += "<td>" + work.SDT + "</td>"; //应完成时间
+                            //判断流程是否逾期
+                            if (cdt > work.SDT && work.WFState == 2)
+                                newRow += "<td><img src='./Img/TolistSta/2.png' class='Icon'/><font color=red>逾期</font></td>";
+                            else
+                                newRow += "<td><img src='./Img/TolistSta/0.png' class='Icon'/><font color=green>正常</font></td>";
+
+                            newRow += "<td>" + GetState(work.WFState) + "</td>";
+
+                            //备注
+                            newRow += "<td width='100'><div style='width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;' title='" + work.FlowNote + "'>" + work.FlowNote + "</div></td>";
+
+                            newRow += "<td ><a href=\"javascript:PutOne('" + workID + "')\" ><img src='./Img/Action/put.png' class='Icon'/>放入</a></td>";
+
+                            newRow += "</tr>";
+
+                            $("#Table1 tr:last").after(newRow);
+                        }
+                    }
+
+                    $("#Table1").after("<br><br><div style='float:left;' >合计:" + data.length + "条</div> <div style='float:right;' ><a href=\"TaskPoolSharing.htm\" >共享任务</a></div>");
+                }
+            });
+        }
+        function GetState(wfState) {
+
+            switch (wfState) {
+                case 1:
+                    return "草稿";
+                case 2:
+                    return "待办";
+                    break;
+                case 3: //已完成.
+                    break;
+                case 4:
+                    return  "挂起";
+                case 5:
+                    return "<font color=red>退回</font>";
+                case 6:
+                    return "转发";
+                case 7:
+                    return "删除";
+                case 8:
+                    return "加签";
+                case 11:
+                    return "加签回复";
+                default:
+                    return "其他";
+            }
+        }
+        //获取当前时间
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            //当前时间=年份-月份-日 小时：分钟
+            var cdt = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes();
+
+            return cdt;
+        }
+
+        function GetTitle(groupBy) {
+
+            var nodeID = GetQueryString("FK_Node");
+
+            var title = "";
+            title += "<tr>";
+            title += "<th style='width:15px;'>序号</th>";
+           // title += "<th style='width:20px;'>优先级</th>";
+            title += "<th style='width:25%;'>标题</th>";
+
+            if (groupBy == "ByNode") {
+                title += "<th><a href='?FK_Node=" + nodeID + "&GroupBy=ByFlow' >流程</th>";
+                title += "<th><a href='?FK_Node=" + nodeID + "&GroupBy=ByStarter' >发起人</th>";
+            } 
+            
+             if (groupBy == "ByFlow") {
+                title += "<th><a href='?FK_Node=" + nodeID + "&GroupBy=ByNode' >节点</th>";
+                title += "<th><a href='?FK_Node=" + nodeID + "&GroupBy=ByStarter' >发起人</th>";
+            }
+
+            if (groupBy == "ByStarter") {
+                title += "<th><a href='?FK_Node=" + nodeID + "&GroupBy=ByFlow' >流程</th>";
+                title += "<th><a href='?FK_Node=" + nodeID + "&GroupBy=ByNode' >节点</th>";
+            }
+             
+
+            title += "<th>发起日期</th>";
+            title += "<th>到达</th>";
+            title += "<th>期限</th>";
+            title += "<th>状态</th>";
+            title += "<th>类型</th>";
+            title += "<th>备注</th>";
+            title += "<th>操作</th>";
+            title += "</tr>";
+
+            return title;
+        }
+        function PutOne(workid) {
+
+            if (window.confirm('您确定要把该任务放入任务池吗？') == false)
+                return;
+            //执行撤销.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=TaskPoolApply_PutOne&WorkID=" + workid + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+    </script>
+</head>
+<body onkeypress="Esc()" >
+<table   id="Table1" width='100%'  cellspacing='0' cellpadding='0' align="left">
+ <tr style=" display:none">
+ <td style="width:20px; height:0px;"></td>
+ <td style="width:600px; height:0px;"></td>
+ <td colspan=8></td>
+ </tr>
+
+</table>
+
+<div id="Msg"></div>
+
+<script type="text/javascript">
+        var NS4 = (document.layers);
+        var IE4 = (document.all);
+        var win = window;
+        var n = 0;
+        function findInPage(str) {
+
+            alert(document.getElementById('string1'));
+            str = document.getElementById('string1').value;
+            //    alert(str);
+            var txt, i, found;
+            if (str == "")
+                return false;
+            if (NS4) {
+                if (!win.find(str))
+                    while (win.find(str, false, true))
+                        n++;
+                else
+                    n++;
+                if (n == 0)
+                    alert("对不起！没有你要找的内容。");
+            }
+            if (IE4) {
+                txt = win.document.body.createTextRange();
+                for (i = 0; i <= n && (found = txt.findText(str)) != false; i++) {
+                    txt.moveStart("character", 1);
+                    txt.moveEnd("textedit");
+                }
+                if (found) {
+                    txt.moveStart("character", -1);
+                    txt.findText(str);
+                    txt.select();
+                    txt.scrollIntoView();
+                    n++;
+                }
+                else {
+                    if (n > 0) {
+                        n = 0;
+                        findInPage(str);
+                    }
+                    else
+                        alert("对不起！没有你要找的内容。");
+                }
+            }
+            return false;
+        }
+</script>
+
+</body>
+
+
+</html>

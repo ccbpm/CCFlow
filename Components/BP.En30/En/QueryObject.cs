@@ -1226,7 +1226,7 @@ namespace BP.En
             }
         }
         /// <summary>
-        /// 
+        /// 按照
         /// </summary>
         /// <returns></returns>
         public DataTable DoQueryToTable()

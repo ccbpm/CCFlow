@@ -393,8 +393,8 @@ namespace BP.Sys
         }
         protected override bool beforeUpdateInsertAction()
         {
-            if (AutoMyPK)
-                this.MyPK = this.FK_Emp + this.CfgKey;
+            //if (AutoMyPK)
+            //    this.MyPK = this.FK_Emp + this.CfgKey;
 
             return base.beforeUpdateInsertAction();
         }

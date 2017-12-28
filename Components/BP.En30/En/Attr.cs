@@ -1594,6 +1594,8 @@ namespace BP.En
                     mattr.MaxLen = item.MaxLength;
                     mattr.MinLen = item.MinLength;
 
+                    mattr.UIVisible = item.UIVisible;
+
                     mattr.DefValReal = item.DefaultValOfReal;
 
                     if (item.MyFieldType == FieldType.Enum)

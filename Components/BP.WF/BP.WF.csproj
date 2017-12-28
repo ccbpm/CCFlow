@@ -175,6 +175,7 @@
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
     <Compile Include="DTS\DTS_DealDeferredWork.cs" />
     <Compile Include="DTS\DTS_GenerWorkFlowTodoSta.cs" />
+    <Compile Include="DTS\RelFlowTemplateToSubInc.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>

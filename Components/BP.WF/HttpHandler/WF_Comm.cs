@@ -612,14 +612,185 @@ namespace BP.WF.HttpHandler
 
             MapAttrs attrs = map.Attrs.ToMapAttrs;
 
+            //属性集合.
             DataTable dtAttrs = attrs.ToDataTableField();
             dtAttrs.TableName = "Attrs";
 
             DataSet ds = new DataSet();
-            ds.Tables.Add(dtAttrs);
+            ds.Tables.Add(dtAttrs); //把描述加入.
+
+            //取出来查询条件.
+
+            BP.Sys.UserRegedit ur = new UserRegedit();
+            ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
+            //获得关键字.
+            AtPara ap = new AtPara(ur.Vals);
+
+            string keyWord = ap.GetValStrByKey("KeyWord");
+
+            QueryObject qo = new QueryObject(ens);
+
+            qo.AddHD();
+
+            #region 关键字字段.
+            if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) && keyWord.Length > 1)
+            {
+                Attr attrPK = new Attr();
+                foreach (Attr attr in attrs)
+                {
+                    if (attr.IsPK)
+                    {
+                        attrPK = attr;
+                        break;
+                    }
+                }
+                int i = 0;
+                foreach (Attr attr in attrs)
+                {
+                    switch (attr.MyFieldType)
+                    {
+                        case FieldType.Enum:
+                        case FieldType.FK:
+                        case FieldType.PKFK:
+                            continue;
+                        default:
+                            break;
+                    }
+
+                    if (attr.MyDataType != DataType.AppString)
+                        continue;
+
+                    if (attr.MyFieldType == FieldType.RefText)
+                        continue;
+
+                    if (attr.Key == "FK_Dept")
+                        continue;
+
+                    i++;
+                    if (i == 1)
+                    {
+                        /* 第一次进来。 */
+                        qo.addLeftBracket();
+                        if (SystemConfig.AppCenterDBVarStr == "@")
+                            qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? (" CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : (" '%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                        else
+                            qo.AddWhere(attr.Key, " LIKE ", " '%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+                        continue;
+                    }
+                    qo.addOr();
+
+                    if (SystemConfig.AppCenterDBVarStr == "@")
+                        qo.AddWhere(attr.Key, " LIKE ", SystemConfig.AppCenterDBType == DBType.MySQL ? ("CONCAT('%'," + SystemConfig.AppCenterDBVarStr + "SKey,'%')") : ("'%'+" + SystemConfig.AppCenterDBVarStr + "SKey+'%'"));
+                    else
+                        qo.AddWhere(attr.Key, " LIKE ", "'%'||" + SystemConfig.AppCenterDBVarStr + "SKey||'%'");
+
+                }
+                qo.MyParas.Add("SKey", keyWord);
+                qo.addRightBracket();
+            }
+            #endregion
+
+
+            #region 获得查询数据.
+            foreach (string str in ap.HisHT.Keys)
+            {
+                    qo.addAnd();
+                    qo.AddWhere(str, ap.GetValStrByKey(str));
+            }
+
+            //获得行数.
+            if (this.PageIdx != 1)
+               ur.SetPara("RecCount",  qo.GetCount());
+
+            qo.DoQuery(en.PK,12,this.PageIdx);
+            #endregion 获得查询数据.
+
+            DataTable dt = ens.ToDataTableField();
+            dt.TableName = "DT";
+
+         
+
+            ds.Tables.Add(dt); //把数据加入里面.
 
             return BP.Tools.Json.ToJson(ds);
         }
+        public string Search_GenerPageIdx()
+        {
+            string url = "?EnsName="+this.EnsName;
+            int pageSpan = 20;
+            int recNum = this.GetRequestValInt("RecCount");
+            int pageSize = 12;
+            if (recNum <= pageSize)
+                return "1";
+
+            string html = "";
+            html += "<div style='text-align:center;'>";
+
+            string appPath = ""; // this.Request.ApplicationPath;
+            int myidx = 0;
+            if (PageIdx <= 1)
+            {
+                //this.Add("《- 《-");
+                html += "<img style='vertical-align:middle' src='/WF/Img/Arr/LeftEnd.png' border=0/><img style='vertical-align:middle' src='/WF/Img/Arr/Left.png' border=0/>";
+            }
+            else
+            {
+                myidx = PageIdx - 1;
+                //this.Add("<a href='" + url + "&PageIdx=1' >《-</a> <a href='" + url + "&PageIdx=" + myidx + "'>《-</a>");
+                html += "<a href='" + url + "&PageIdx=1' ><img style='vertical-align:middle' src='/WF/Img/Arr/LeftEnd.png' border=0/></a><a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='/WF/Img/Arr/Left.png' border=0/></a>";
+            }
+
+            int pageNum = 0;
+            decimal pageCountD = decimal.Parse(recNum.ToString()) / decimal.Parse(pageSize.ToString()); // 页面个数。
+            string[] strs = pageCountD.ToString("0.0000").Split('.');
+            if (int.Parse(strs[1]) > 0)
+                pageNum = int.Parse(strs[0]) + 1;
+            else
+                pageNum = int.Parse(strs[0]);
+
+            int from = 0;
+            int to = 0;
+
+            decimal spanTemp = decimal.Parse(PageIdx.ToString()) / decimal.Parse(pageSpan.ToString()); // 页面个数。
+
+            strs = spanTemp.ToString("0.0000").Split('.');
+            from = int.Parse(strs[0]) * pageSpan;
+            to = from + pageSpan;
+            for (int i = 1; i <= pageNum; i++)
+            {
+                if (i >= from && i < to)
+                {
+                }
+                else
+                {
+                    continue;
+                }
+
+                if (PageIdx == i)
+                    html += "&nbsp;<font style='font-weight:bloder;color:#f00'>" + i + "</font>&nbsp;";
+                else
+                    html += "&nbsp;<a href='" + url + "&PageIdx=" + i + "'>" + i + "</a>";
+            }
+
+            if (PageIdx != pageNum)
+            {
+                myidx = PageIdx + 1;
+                //this.Add("&nbsp;<a href='" + url + "&PageIdx=" + myidx + "'>-》</a>&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'>-》</a>&nbsp;&nbsp;Page:" + PageIdx + "/" + pageNum + " Total:" + recNum + ".");
+                html += "&nbsp;<a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='/WF/Img/Arr/Right.png' border=0/></a>&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'><img style='vertical-align:middle' src='/WF/Img/Arr/RightEnd.png' border=0/></a>&nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum;
+            }
+            else
+            {
+                //this.Add("&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'> -》》</a>&nbsp;&nbsp;Page:" + PageIdx + "/" + pageNum + " Totlal:" + recNum + ".");
+                html += "&nbsp;<img style='vertical-align:middle' src='/WF/Img/Arr/Right.png' border=0/>&nbsp;&nbsp;";
+                html += "&nbsp;<img style='vertical-align:middle' src='/WF/Img/Arr/RightEnd.png' border=0/>&nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum;
+                //this.Add("<img src='/WF/Img/Page_Down.gif' border=1 />");
+            }
+            html += "</div>";
+            return html;
+        }
+
         #endregion 查询.
 
         #region Refmethod.htm 相关功能.

@@ -56,6 +56,10 @@
         /// </summary>
         var FoolTruck = 10;
         /// <summary>
+        /// 表单库的表单
+        /// </summary>
+        var RefOneFrmTree = 11;
+        /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>
         var DisableIt = 100;
@@ -70,129 +74,115 @@
             //初始化groupID.
             nodeID = GetQueryString("FK_Node");
             fk_flow = GetQueryString("FK_Flow");
-            //            //调用公共类库的方法.
-            //            GenerBindEnumKey("DDL_TWay", "TWay", "1");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=NodeFromWorkModel_Init&FK_Node=" + nodeID + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
+            handler.AddUrlData();
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var data = handler.DoMethodReturnString("NodeFromWorkModel_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                  
-                    data = JSON.parse(data);
-                 
-
-                    //绑定节点.
-                    var nodes = data["Nodes"];
-
-                    var node = data["WF_Node"][0];
-
-                    var mybtn = data["WF_BtnLabExtWebOffice"][0]; //nodeOffice
-                    var btn = data["WF_BtnLab"][0]; //nodeOffice.
-
-                    fk_flow = node.FK_Flow;
-
-                    var frmIDSelected = node.NodeFrmID;
-                    if (frmIDSelected == "" || frmIDSelected == null)
-                        frmIDSelected = "ND" + nodeID;
-
-                    var seledtNodeID = frmIDSelected.replace('ND', '');
-                    GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", seledtNodeID);
-
-                    // $("#DDL_Frm").val(frmIDSelected); // 操作权限.
-
-                    //傻瓜表单.
-                    if (node.FormType == FixForm) {
-
-                        document.getElementById("RB_FixFrm").checked = true;
-                        document.getElementById("RB_Frm_1").checked = true;
-
-                        if (seledtNodeID == nodeID) {
-                            document.getElementById("RB_CurrentForm").checked = true;
-                            SetDDLEnable("DDL_Frm", false);
-                        }
-                        else {
-                            document.getElementById("RB_OtherForms").checked = true;
-                        }
-                    }
-
-                    if (node.FormType == FreeForm) {
-
-                        document.getElementById("RB_FixFrm").checked = true;
-                        document.getElementById("RB_Frm_0").checked = true;
-
-                        if (seledtNodeID == nodeID) {
-                            document.getElementById("RB_CurrentForm").checked = true;
-                            SetDDLEnable("DDL_Frm", false);
-                        }
-                        else
-                            document.getElementById("RB_OtherForms").checked = true;
-                    }
+            data = JSON.parse(data);
 
 
-                    //轨迹模式傻瓜表单.
-                    if (node.FormType == FoolTruck) {
-                        document.getElementById("RB_FoolTruck").checked = true;
-                    }
+            //绑定节点.
+            var nodes = data["Nodes"];
+            var node = data["WF_Node"][0];
 
-                    //使用嵌入式表单.
-                    if (node.FormType == SelfForm) {
-                        document.getElementById("RB_SelfForm").checked = true;
-                        document.getElementById("TB_CustomURL").value = node.FormUrl;
-                    }
+            var mybtn = data["WF_BtnLabExtWebOffice"][0]; //nodeOffice
+            var btn = data["WF_BtnLab"][0]; //nodeOffice.
 
-                    //使用sdk表单.
-                    if (node.FormType == SDKForm) {
-                        document.getElementById("RB_SDKForm").checked = true;
-                        document.getElementById("TB_FormURL").value = node.FormUrl;
-                    }
+            fk_flow = node.FK_Flow;
 
-                    //表单树.
-                    if (node.FormType == SheetTree) {
-                        document.getElementById("RB_SheetTree").checked = true;
-                        document.getElementById("RB_tree").checked = true;
-                    }
+            var frmIDSelected = node.NodeFrmID;
+            if (frmIDSelected == "" || frmIDSelected == null)
+                frmIDSelected = "ND" + nodeID;
 
-                    if (node.FormType == DisableIt) {
-                        document.getElementById("RB_SheetTree").checked = true;
-                        document.getElementById("RB_tab").checked = true;
-                    }
+            var seledtNodeID = frmIDSelected.replace('ND', '');
+            GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", seledtNodeID);
 
-                    //使用公文表单..
-                    if (node.FormType == WebOffice) {
-                        document.getElementById("RB_WebOffice").checked = true;
-                        document.getElementById("RB_WebOffice_FrmFirst").checked = true;
+            //傻瓜表单.
+            if (node.FormType == FixForm) {
 
+                document.getElementById("RB_FixFrm").checked = true;
+                document.getElementById("RB_Frm_1").checked = true;
 
-                        var FrmFirst = 2;
-                        if (btn.WebOfficeEnable == FrmFirst)
-                            document.getElementById("RB_WebOffice_FrmFirst").checked = true;
-                        else
-                            document.getElementById("RB_WebOffice_WordFirst").checked = true;
-
-                        //  this.RB_WebOffice_FreeFrm.Checked = true; //默认为自由表单工作模式.
-                        //if (mybtn.WebOfficeFrmModel == BP.Sys.FrmType.FreeFrm)
-                        //  this.RB_WebOffice_FreeFrm.Checked = true;
-                        //else
-                        //  this.RB_WebOffice_FoolForm.Checked = true;
-                    }
-
-                    //document.getElementById("DDL_Frm").selectedIndex
-                    //  GenerBindDDL("DDL_Frm", nodes, "NodeID", "Name", nd.NodeFrmID.substring(2));
-                    //调用公共类库的方法:执行批量主表赋值
-                    // GenerFullAllCtrlsVal(data);
+                if (seledtNodeID == nodeID) {
+                    document.getElementById("RB_CurrentForm").checked = true;
+                    SetDDLEnable("DDL_Frm", false);
                 }
-            });
+                else {
+                    document.getElementById("RB_OtherForms").checked = true;
+                }
+            }
+
+            if (node.FormType == FreeForm) {
+
+                document.getElementById("RB_FixFrm").checked = true;
+                document.getElementById("RB_Frm_0").checked = true;
+
+                if (seledtNodeID == nodeID) {
+                    document.getElementById("RB_CurrentForm").checked = true;
+                    SetDDLEnable("DDL_Frm", false);
+                }
+                else
+                    document.getElementById("RB_OtherForms").checked = true;
+            }
+
+            //轨迹模式傻瓜表单.
+            if (node.FormType == RefOneFrmTree) {
+
+                document.getElementById("RB_RefOneFrmTree").checked = true;
+
+                //
+                //GenerBindEntities("DDL_RefOneFrmTree", 
+            }
+
+            //轨迹模式傻瓜表单.
+            if (node.FormType == FoolTruck) {
+                document.getElementById("RB_FoolTruck").checked = true;
+            }
+
+            //使用嵌入式表单.
+            if (node.FormType == SelfForm) {
+                document.getElementById("RB_SelfForm").checked = true;
+                document.getElementById("TB_CustomURL").value = node.FormUrl;
+            }
+
+            //使用sdk表单.
+            if (node.FormType == SDKForm) {
+                document.getElementById("RB_SDKForm").checked = true;
+                document.getElementById("TB_FormURL").value = node.FormUrl;
+            }
+
+            //表单树.
+            if (node.FormType == SheetTree) {
+                document.getElementById("RB_SheetTree").checked = true;
+                document.getElementById("RB_tree").checked = true;
+            }
+
+            if (node.FormType == DisableIt) {
+                document.getElementById("RB_SheetTree").checked = true;
+                document.getElementById("RB_tab").checked = true;
+            }
+
+            //使用公文表单..
+            if (node.FormType == WebOffice) {
+                document.getElementById("RB_WebOffice").checked = true;
+                document.getElementById("RB_WebOffice_FrmFirst").checked = true;
+
+                var FrmFirst = 2;
+                if (btn.WebOfficeEnable == FrmFirst)
+                    document.getElementById("RB_WebOffice_FrmFirst").checked = true;
+                else
+                    document.getElementById("RB_WebOffice_WordFirst").checked = true;
+            }
+
         });
 
-        //节点表单组件属性
+        //节点表单组件属性.
         function ShowFWCAttr() {
             var nodeID = GetQueryString("FK_Node");
             var url = "../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + nodeID;
@@ -200,32 +190,16 @@
         }
 
         //执行保存.
-        function Save()
-        {
-           var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
-           var frmData = $("#cc").serialize();
+        function Save() {
 
-           var nodeID = GetQueryString("FK_Node");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_AttrNode");
 
-           var url = Handler + "?DoType=NodeFromWorkModel_Save&CheckBoxIDs=" + checkBoxIDs + "&FK_Node=" + nodeID + "&m=" + Math.random();
+            handler.AddUrlData();
+            handler.AddFormData();
 
-           $.ajax({
-               data: frmData,
-               type: 'post',
-               async: true,
-               url: url,
-               dataType: 'html',
-               success: function (data) {
-
-                   if (data.indexOf('err@') >= 0) {
-                       alert(data);
-                       return;
-                   }
-                   alert(data);
-                   return;
-               }
-           });
-      }
+            var data = handler.DoMethodReturnString("NodeFromWorkModel_Save");
+            alert(data);
+        }
     </script>
 
     <style type="text/css">
@@ -331,6 +305,27 @@
                         </td>
                     </tr>
                 </table>
+            </td>
+        </tr>
+
+        
+        <!-- =================================== 使用 表单库的表单  -->
+        <tr>
+            <th colspan="2" class="DemoImgTD">
+            <input type="radio"  value="RefOneFrmTree" id="RB_RefOneFrmTree"  name="RefOneFrmTree" /> <label  for="RB_RefOneFrmTree" >绑定表单库的表单 </label>
+            </th>
+        </tr>
+        <tr>
+            <td class="DemoImgTD">
+                <a href="http://ccbpm.mydoc.io/?v=5404&t=17925" target="_blank">
+                    <img src="./Img/SelfFrm.png" class="DemoImg" alt="点击放大" />
+                </a>
+            </td>
+            <td>
+               <ul>
+               <li>表单库里选择一个表单绑定到当前节点上.</li>
+               </ul>
+               <select id="DDL_RefOneFrmTree"> </select>
             </td>
         </tr>
         

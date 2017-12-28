@@ -462,6 +462,40 @@ function AfterBindEn_DealMapExt() {
         var mapExt = mapExtArr[i];
 
         switch (mapExt.ExtType) {
+            case "MultipleChoiceSmall": //小范围的多选.
+                //@于庆海, 把代码移动到这里.
+                continue;
+
+                var d = [];
+                var valueField = "No";
+                var textField = "Name";
+                switch (ext.DoWay) {
+                    case 1:
+                        $.each((ext.Tag1 || "").split(","), function (i, o) {
+                            d.push({ No: i, Name: o })
+                        });
+                        break;
+                    case 2:
+                        valueField = "IntKey"
+                        textField = "Lab";
+                        var enums = new Entities("BP.Sys.SysEnums");
+                        enums.Retrieve("EnumKey", ext.Tag2);
+                        d = enums;
+                        break;
+                    case 3:
+                        var en = new Entity("BP.Sys.SFTable", ext.Tag3);
+                        d = en.DoMethodReturnJSON("GenerDataOfJson");
+                        // alert(JSON.stringify(d));
+                        break;
+                    case 4:
+                        d = DBAccess.RunSQLReturnTable(ext.Tag4);
+                        break;
+                }
+
+                var tb = document.getElementById("TB_" + mapAttr.KeyOfEn);
+
+                //eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' editable='false' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'" + valueField + "',textField:'" + textField + "',multiple:true,onSelect:function(p) { sel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "', '" + ext.FK_MapData + "'); },onUnselect:function(p) { unsel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "'); }\" />"
+                break;
             case "PopVal": //PopVal窗返回值
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");
@@ -1438,9 +1472,7 @@ function GenerWorkNode() {
                 flowData = JSON.parse(data);
 
             } catch (err) {
-
                 console.log(data);
-
                 alert(" GenerWorkNode转换JSON失败,请查看控制台日志,或者联系管理员.");
                 return;
             }
@@ -1448,7 +1480,7 @@ function GenerWorkNode() {
             var node = flowData.WF_Node[0];
 
             //设置标题.
-            document.title = "业务流程管理（BPM）平台";
+            document.title = node.FlowName + ','+ node.Name; // "业务流程管理（BPM）平台";
 
             //循环之前的提示信息.
             var info = "";
@@ -1462,7 +1494,6 @@ function GenerWorkNode() {
             if (flowData.AlertMsg.length != 0) {
                 $('#MessageDiv').modal().show();
             }
-
 
             ShowNoticeInfo();
 
@@ -1487,7 +1518,7 @@ function GenerWorkNode() {
                 GenerFreeFrm(flowData);  //自由表单.
             }
 
-			$.parser.parse("#CCForm");
+            $.parser.parse("#CCForm");
 
             //以下代码是 傻瓜表单与自由表单, 公共方法.
             var local = window.location.href;
@@ -1590,7 +1621,7 @@ function GenerWorkNode() {
 
             //给富文本创建编辑器
             if (document.BindEditorMapAttr) {
-               
+
                 var editor = document.activeEditor = UE.getEditor('editor', {
                     autoHeightEnabled: false,
                     emotionLocalization: true,

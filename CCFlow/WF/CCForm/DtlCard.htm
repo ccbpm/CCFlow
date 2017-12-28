@@ -50,12 +50,13 @@
             var headTHs = [];
             var tableMinWidth = 0;
             var th = $("<th></th>");
+            //有新增权限，添加按钮
             if (sys_MapDtl.IsInsert == 1) {
                 th = $("<th><img src='../Img/Btn/Add.gif' style='cursor: pointer;' name='insertBtn' onclick='insertRow(1)' /></th>");
             }
             th.css('width', '20px');
             threadTr.append(th);
-
+            //生成列名
             $.each(sys_mapAttrs, function (i, mapAttrObj) {
                 th = $('<th></th>');
                 th.text(mapAttrObj.Name);
@@ -69,7 +70,7 @@
                     threadTr.append(th);
                 }
             });
-
+            //添加列名行到Head
             thread.append(threadTr);
             $('#dt_CardPanel').append(thread);
 
@@ -92,6 +93,7 @@
                     tbodyTr.append(td);
                 });
 
+                //添加操作列，删除、编辑
                 var optionTD = $("<td style='width:80px;'></td>");
                 if (sys_MapDtl.IsUpdate == 1) {
                     var optionEdit = $("<img src='../Img/Btn/Edit.gif' onclick='updateRow(" + dataObj.OID + ", 1)' class='updateRow' titile='修改' style='cursor:pointer;'/>");
@@ -104,26 +106,30 @@
                 }
                 tbodyTr.append(optionTD);
 
-                //展开行后的内容
+                //点击行展开行后的内容
                 var tbodyExpTr = $('<tr></tr>');
                 var tbodyExpTd = $('<td colspan=' + columnCount + ' align="center"></td>');
+                
                 //加载子表
                 var childTable = ChildDtls(mapDtls, tbodyExpTd, dataObj.OID);
-                //tbodyExpTd.append(childTable);
                 tbodyExpTr.append(childTable);
 
+                //添加两条数据行，tbodyTr 父级数据，tbodyExpTr 子级内容
                 tbody.append(tbodyTr);
                 tbody.append(tbodyExpTr);
             });
 
+            //表格生成完成
             $('#dt_CardPanel').append(tbody);
 
-            //加载JS文件
             try {
+                //表格宽度计算
                 if (sys_MapDtl.FrmW < tableMinWidth) {
                     $('#dt_CardPanel').css("width", tableMinWidth + "px");
                     $('#dt_CardPanel').css("max-width", tableMinWidth + "px");
                 }
+
+                //加载JS文件
                 var s = document.createElement('script');
                 s.type = 'text/javascript';
                 s.src = "../Scripts/bootstrap/js/bootstrap-table-expandable.js";
@@ -147,7 +153,7 @@
                     var columnCount = 0;
                     var headTHs = [];
 
-                    //表格头
+                    //表格列头
                     $.each(mapAttrs, function (i, mapAttrObj) {
                         var th = $('<th></th>');
                         th.text(mapAttrObj.Name);
@@ -170,6 +176,7 @@
                     hand.AddPara("RefPKVal", RefPK);
                     var dtlDatas = hand.DoMethodReturnJSON("DtlCard_Init_Dtl");
                     var dtlData = dtlDatas["DTDtls"];
+
                     //数据行
                     var tbody = $('<tbody></tbody>');
                     if (dtlData.length > 0) {
@@ -205,7 +212,6 @@
 
         //插入行.
         function insertRow(rowShowModel) {
-
             //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
             if (rowShowModel != 0 && window.parent) {
                 var ensName = GetQueryString("EnsName");
@@ -222,6 +228,7 @@
                 window.parent.DtlFrm(ensName, refPKVal, OID, RowShowModel, InitMainTable);
             }
         }
+
         //删除行
         function deleteRow(OID) {
             var result = parent.window.confirm('确定要删除吗?');

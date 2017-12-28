@@ -1,9 +1,0 @@
-﻿<UserControl x:Class="CCForm.BPLine"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Height="10" Width="200"   
- >
-    <Line x:Name="MyLine"  X1="0" Y1="0" X2="200" Y2="0" Stroke="Blue" StrokeThickness="20" >  </Line>
-</UserControl>

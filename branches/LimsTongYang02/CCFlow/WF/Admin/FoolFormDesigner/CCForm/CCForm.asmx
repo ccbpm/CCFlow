@@ -1,1 +1,0 @@
-﻿<%@ WebService Language="C#" CodeBehind="CCForm.asmx.cs" Class="BP.Web.CCForm" %>

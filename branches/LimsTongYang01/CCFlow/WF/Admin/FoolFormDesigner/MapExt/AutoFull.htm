@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>自动计算</title>
+    <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" language="javascript">
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=AutoFull_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+
+                    var mapExt = data['Sys_MapExt'];
+
+                    mapExt = mapExt[0];
+
+
+                    if (mapExt.Doc == "" || mapExt.Doc == " ") {
+                        document.getElementById("Btn_Delete").disabled = true;
+                    }
+
+                    document.getElementById("TB_Doc").value = mapExt.Doc;
+
+                    //调用公共类库的方法:执行批量主表赋值.
+                    //GenerFullAllCtrlsVal(mapExt);
+                    return;
+                }
+            });
+
+            $("#Msg").html("");
+        });
+
+        //装载模版.
+        function LoadTemplate() {
+            var url = "../../SettingTemplate.htm?TemplateType=AutoFull";
+            WinOpen(url, 'ss');
+        }
+        function Save() {
+
+            $("#Msg").html("正在保存,请稍后......");
+
+            var frmData = $("#cc").serialize();
+
+            var myurl = Handler + "?DoType=AutoFull_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: myurl,
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') != -1) {
+
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+
+                    document.getElementById("Btn_Delete").disabled = false;
+
+                    $("#Msg").html("<font color=green>" + data + "</font>");
+                    return;
+                },
+                error: function (data) {
+                    alert(data);
+                    console.info(data);
+                }
+            });
+        }
+
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return false;
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=AutoFull_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data);
+                    window.location.href = window.location.href;
+                    return;
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <form id="cc">
+    <fieldset>
+        <legend>自动计算</legend>
+        <table id="table" style="width: 100%;">
+            <tr>
+                <td colspan="3">
+                    自动计算表达式
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width: 100%;">
+                    <textarea rows="4" name="TB_Doc" id="TB_Doc"> </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <input type="button" value="装载模版" onclick="LoadTemplate()" id="ddd" />
+                    <input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+                    <input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+                    <a href="javascript:ShowHidden('sqlexp')">填充表达式帮助:</a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id='sqlexp' style='color: Gray; display: none'>
+                        <ul>
+                            <li>1.如果是从表: 表达式就是列之间的计算，比如: @A;+@B; </li>
+                            <li>2.如果是主表: 就是主表字段之间的计算,比如: @DanJia;*@ShuLiang; 或者 @单价*@数量 </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <div id="Msg">
+    </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>绑定表单树</title>
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script type="text/javascript" language="javascript">
+        //绑定流程所有节点
+        function InitFlowNodes(FK_Flow, FK_Node) {
+
+            var param = {
+                DoType: "BindForm_GenderFlowNode",
+                FK_Node: FK_Node
+            };
+            Handler_AjaxQueryData(param, function (data, scope) {
+
+                //提示错误.
+                if (data.indexOf('err@') == 0) {
+                    alert(data);
+                    return;
+                }
+
+                //转化数据.
+                var pushData = eval('(' + data + ')');
+                var objSelect = document.getElementById("lbFlowNodes");
+                if (pushData.length > 0) {
+
+                    $.each(pushData, function (index, val) {
+                        var varItem = new Option("[" + val.NodeID + "]" + val.Name, val.NodeID);
+                        if (FK_Node && FK_Node == val.NodeID) {
+                            varItem.selected = "selected";
+                        }
+                        objSelect.options.add(varItem);
+                    });
+
+                }
+                $("#pageloading").hide();
+            }, this);
+        }
+        //绑定表单库
+        function InitFormTree(FK_Flow, FK_Node) {
+            var param = {
+                DoType: "BindForm_GenerForms",
+                FK_Flow: FK_Flow,
+                FK_Node: FK_Node
+            };
+            Handler_AjaxQueryData(param, function (data, scope) {
+                var pushData = eval('(' + data + ')');
+                //加载表单库
+                $("#formTree").tree({
+                    data: pushData,
+                    iconCls: 'tree-folder',
+                    collapsed: true,
+                    checkbox: true,
+                    lines: true,
+                    onCheck: function (node) {
+                        var pasteSelectIndex = document.getElementById("lbFlowNodes").selectedIndex;
+                        if (pasteSelectIndex >= 0) {
+                            $('#saveBindTree').linkbutton('enable');
+                        }
+                    },
+                    onClick: function (node) {
+                        if (node) {
+                            $('#formTree').tree('expand', node.target);
+                        }
+                    }
+                });
+                $("#pageloading").hide();
+                $('#saveBindTree').linkbutton('disable');
+            }, this);
+        }
+
+        function GetCheckedFrms() {
+            var frms = new Array();
+            var nodes = $('#formTree').tree('getChecked');
+            if (nodes.length > 0) {
+                for (var i = 0; i < nodes.length; i++) {
+                    if (nodes[i].attributes.NodeType != "form")
+                        continue;
+
+                    frms.push(nodes[i].id);
+                }
+            }
+
+            if (frms.length != 0)
+                return frms.join(',');
+
+            return '';
+        }
+
+
+        //所选节点发生变化
+        function LoadFormTressOnChange() {
+            var FK_Flow = Application.common.getArgsFromHref("FK_Flow");
+            var selectIndex = document.getElementById("lbFlowNodes").selectedIndex;
+            var options = document.getElementById("lbFlowNodes").options;
+            if (selectIndex >= 0) {
+                var nodeID = options[selectIndex].value;
+                InitFormTree(FK_Flow, nodeID);
+            }
+        }
+
+        //复制绑定
+        function CopyFormTrees() {
+            var frmStr = GetCheckedFrms();
+            if (!frmStr) {
+                alert("请先选择要绑定的表单！");
+                return;
+            }
+
+            //http://localhost:30362/WF/Admin/AttrNode/SortingMapAttrs.aspx?FK_Flow=&FK_MapData=ND17001&t=2017-11-21 16:59&s=0.8992852238616559
+            $('#copyfrmdlg').dialog('open');
+            var param = {
+                DoType: "BindForm_GetFlowNodeDropList",
+                FK_Flow: FK_Flow,
+                FK_Node: FK_Node
+            };
+            $('#copyfrmdlg .panel-body').empty();
+            Handler_AjaxQueryData(param, function (data, scope) {
+                $('#copyfrmdlg .panel-body').append(data);
+            }, this);
+        }
+        //执行复制
+        function DoCopy() {
+            var frmStr = GetCheckedFrms();
+            if (!frmStr) {
+                alert("请先选择要绑定的表单！");
+                return;
+            }
+
+            var selectnodes = $("#copynodesdll").find("option:selected");
+            var nodelist = new Array();
+            $("#copynodesdll").find("option:selected").each(function () {
+                nodelist.push(this.value);
+            });
+
+            if (nodelist.length != 0) {
+                if (confirm("您确定执行此操作吗")) {
+                    var param = {
+                        DoType: "BindFrmsDtl_DoCopyFrmToNodes",
+                        NodeStr: nodelist.join(','),
+                        frmStr: frmStr,
+                        FK_Flow: FK_Flow
+                    };
+
+                    Handler_AjaxQueryData(param, function (data, scope) {
+                        alert(data);
+                        $('#copyfrmdlg').dialog('close');
+                    }, this);
+                }
+            } else {
+                alert("请选择要绑定的节点");
+            }
+        }
+        //查询节点
+        function QueryFlowNodes() {
+
+        }
+        //保存节点表单
+        function SaveBindTreeToNode() {
+            var saveRight = $('#saveBindTree').linkbutton("options");
+            if (saveRight && saveRight.disabled == false) {
+                //处理完全选中项
+                var nodes = $('#formTree').tree('getChecked');
+                var formNos = "";
+                if (nodes.length > 0) {
+                    for (var i = 0; i < nodes.length; i++) {
+                        if (nodes[i].attributes.NodeType == "root")
+                            continue;
+                        if (nodes[i].attributes.NodeType == "folder")
+                            continue;
+
+                        formNos += "," + nodes[i].id + ",";
+                    }
+                }
+                //执行保存
+                var FK_Flow = Application.common.getArgsFromHref("FK_Flow");
+                var selectIndex = document.getElementById("lbFlowNodes").selectedIndex;
+                var options = document.getElementById("lbFlowNodes").options;
+                if (selectIndex >= 0) {
+                    var param = {
+                        DoType: "BindFrmsDtl_Save",
+                        FK_Flow: FK_Flow,
+                        FK_Node: options[selectIndex].value,
+                        formNos: formNos
+                    };
+                    Handler_AjaxPostData(param, function (data, scope) {
+
+                        var str = JSON.stringify(data);
+                        alert(str);
+
+                    }, this);
+                } else {
+                    $.messager.alert('提示', '没有选中节点');
+                }
+            }
+        }
+        //设置方案
+        function SetFormSln() {
+            var FK_Flow = Application.common.getArgsFromHref("FK_Flow");
+            var FK_Node = $("#lbFlowNodes").val();
+            window.location.href = "BindFrms.htm?ShowType=FlowFrms&FK_Flow=" + FK_Flow + "&FK_Node=" + FK_Node + "&Lang=CH";
+        }
+        var FK_Flow = null;
+        var FK_Node = null;
+        //初始化页面
+        $(function () {
+            FK_Flow = Application.common.getArgsFromHref("FK_Flow");
+            FK_Node = Application.common.getArgsFromHref("FK_Node");
+
+            //初始化节点.
+            InitFlowNodes(FK_Flow, FK_Node);
+
+            //初始化表单树.
+            InitFormTree(FK_Flow, FK_Node);
+
+            //查询 事件
+            $('#QueryFlowNodes').bind('click', function () {
+                QueryFlowNodes();
+            });
+
+            //保存 事件
+            $('#saveBindTree').bind('click', function () {
+                SaveBindTreeToNode();
+            });
+        });
+    </script>
+</head>
+<body class="easyui-layout">
+    <div data-options="region:'north',border:false" style="height: 40px; background: #E0ECFF;
+        padding: 10px">
+        <div class="toolbar">
+            <div style="float:left;">查询节点：<input type="text" id="searchContent" name="searchContent" /></div>
+            <a href="#" style="float:left;" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" id="QueryFlowNodes"> 查询</a>
+            <div class="datagrid-btn-separator"></div>
+            <a href="#" style="float:left;" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save',disabled:true" id="saveBindTree">保存</a>
+            <a href="#" style="float:left;" id="rightC" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-copy'" onclick="CopyFormTrees()">复制表单到其他节点</a>
+            <div class="datagrid-btn-separator"></div>
+            <a href="#" id="A1" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-4'" onclick="SetFormSln()">设置方案</a>
+        </div>
+        <div id='copyfrmdlg' class='easyui-dialog' data-options="title:'复制表单到其他节点:',closed:true,buttons:'#btns'" style='width:280px;height:340px'>
+            <div id="btns" class="dialog-button">
+                <a class="easyui-linkbutton" href="javascript:void(0);" data-options="plain:true,iconCls:'icon-copy'" onclick="DoCopy()">复制</a>
+                <a class="easyui-linkbutton" href="javascript:void(0);" data-options="plain:true,iconCls:'icon-cancel'" onclick="javascript: $('#copyfrmdlg').dialog('close');">取消</a>
+            </div>
+        </div>
+    </div>
+    <div data-options="region:'west',split:true" title="节点" style="width: 200px; padding1: 1px;
+        overflow: hidden;">
+        <div style="width: 100%; height: 100%; overflow: auto;">
+            <select size="4" name="lbFlowNodes" id="lbFlowNodes" onchange="LoadFormTressOnChange()"
+                    style="height: 100%; width: 100%;"></select>
+            <div id="mm1" class="easyui-menu" style="width: 150px;">
+                <div id="rightCcontent" onclick="CopyFormTrees()">复制表单到其他节点</div>
+            </div>
+        </div>
+        <div id="StationDialog">
+            <div style="height: 420px; overflow: auto">
+                <ul id="StationTree" class="easyui-tree" data-options="animate:true,dnd:false"></ul>
+            </div>
+            <div style="font-weight: bold; background: #E0ECFF; height: 40px;">
+                <span style="color: Red; font-weight: bold; margin-top: 5px;">
+                    说明： 【清空式复制】首先将所选表单清空，然后将所选表单添加。<br />
+                    【覆盖式复制】保留所选节点之前的表单，将复制的表单递增给所选节点。
+                </span>
+            </div>
+        </div>
+        <span id="copyMsg" style="color: Red; font-weight: bold; display: none"></span>
+    </div>
+    <div data-options="region:'center'" title="表单库" style="overflow: hidden;">
+        <div style="overflow: auto; height: 100%;">
+            <ul id="formTree" class="easyui-tree" data-options="animate:false,dnd:false"></ul>
+        </div>
+    </div>
+</body>
+</html>

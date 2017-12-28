@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="BP.LabelMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:liquidMenu="clr-namespace:Liquid;assembly=Liquid.Menu" MouseLeave="UserControl_MouseLeave">
+    <Canvas VerticalAlignment="Top" HorizontalAlignment="Left" >
+         
+        <StackPanel  >
+           
+            <StackPanel Name="spContentMenu"  Canvas.ZIndex="1000"  Canvas.Left="50" Canvas.Top="50" Background="WhiteSmoke"  Orientation="Vertical" >
+                    <liquidMenu:Menu x:Name="MuContentMenu" Visibility="Visible"  ItemSelected="Menu_ItemSelected">
+                    <liquidMenu:MenuItem ID="menuModifyLabel" Text="修改标签" Icon="../Images/MenuItem/Edit.png" />
+                    <liquidMenu:MenuItem ID="menuDeleteLabel" Text="删除标签"    Icon="../Images/MenuItem/Delete.png" />                         
+                    </liquidMenu:Menu>
+             </StackPanel>
+        </StackPanel>
+    </Canvas>
+</UserControl>

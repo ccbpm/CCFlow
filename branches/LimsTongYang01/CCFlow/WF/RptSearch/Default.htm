@@ -1,0 +1,152 @@
+﻿
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>流程综合查询</title>
+    <link href="../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script src="../Comm/Gener.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //初始化页面函数.....
+        $(function () {
+
+            var fk_flow = GetQueryString("FK_Flow");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Default_Init&FK_Flow=" + fk_flow + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    return;
+
+                    //转json.
+                    data = JSON.parse(data);
+
+                    var html = "<ul class='navlist'>";
+                    //增加处理.
+                    for (var i = 0; i < data.length; i++) {
+                        var menu = data[i];
+
+                        html += "<li>";
+                        html += "<div>";
+                        html += "<a href='javascript:void(0)' onclick=\"OpenUrlInRightFrame(this, '" + menu.No + ".htm?FK_Flow=" + fk_flow + "');\" >";
+                        html += "<span>" + menu.Name + "</span></a>";
+                        html += "</div>";
+                        html += "</li>";
+                    }
+                    html += "</ul>";
+                    document.getElementById("menuList").innerHTML = html;
+                }
+            });
+        });
+    </script>
+
+    <script language="javascript" type="text/javascript">
+        var currShow;
+        //在右侧框架中显示指定url的页面
+        function OpenUrlInRightFrame(ele, url) {
+            if (ele != null && ele != undefined) {
+                //if (currShow == $(ele).text()) return;
+
+                currShow = $(ele).parents('li').text(); //有回车符
+
+                $.each($('ul.navlist'), function () {
+                    $.each($(this).children('li'), function () {
+                        $(this).children('div').css('font-weight', $(this).text() == currShow ? 'bold' : 'normal');
+                    });
+                });
+
+                $('#context').attr('src', url + '&s=' + Math.random());
+            }
+        }
+    </script>
+</head>
+<body class="easyui-layout" onkeypress="Esc();">
+    <form id="form1" runat="server">
+
+    <div class="easyui-layout" region="north" split="true" style=" height:50px; background-image:url(./Img/BJ.png)" >
+	 <div style="text-align:left">
+     
+     <div style="font-size:20px; font-color:white;  vertical-align:middle" >
+       <font color="white">流程综合查询</font>
+     </div>
+
+    </div>
+	</div>
+
+
+    <div data-options="region:'center',border:false">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'west',split:true" style="width: 200px;">
+
+                <div class="easyui-panel" title="流程查询" data-options="collapsible:true,border:false" style="height: auto">
+                <label id="menuList" />
+
+<!-- start 菜单内容 -->
+                
+<fieldset>
+<legend>全局流程查询</legend>
+<ul>
+<li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyJoinFlows" target="mainS" >我审批的流程</a></li>
+<li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyStartFlows" target="mainS">我发起的流程</a></li>
+<li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyDeptFlows" target="mainS">我部门发起的流程</a></li>
+<!--<li><a href="../Comm/Search.htm?EnsName=BP.WF.Data.MyDeptTodolists" target="mainS">我部门的待办</a></li>-->
+<li><a href="../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs" target="mainS">流程删除日志</a></li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend>关键字查询</legend>
+<ul>
+<li><a href="KeySearch.htm" target="mainS">关键字查询</a></li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend>按流程查询</legend>
+<ul>
+<li><a href="../RptDfine/Flowlist.htm" target="mainS">按流程高级查询</a></li>
+</ul>
+</fieldset>
+
+
+<fieldset>
+<legend>工作分布</legend>
+<ul>
+<li><a href="DistributedOfMy.htm" target="mainS">我的工作分布</a></li>
+</ul>
+</fieldset>
+
+<!-- end 菜单内容 -->
+</div>
+            </div>
+            <div data-options="region:'center',noheader:true" style="overflow-y: hidden">
+                <iframe id="context" scrolling="auto" frameborder="0" src="KeySearch.htm" name="mainS" style="width: 100%; height: 100%;"></iframe>
+            </div>
+        </div>
+    </div>
+    </form>
+</body>
+</html>

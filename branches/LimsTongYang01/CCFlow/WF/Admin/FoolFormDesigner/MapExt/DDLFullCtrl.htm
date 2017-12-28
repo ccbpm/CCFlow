@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>为下拉框设置联动填充其他控件</title>
+     <script language="JavaScript" src="../../../Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" language="javascript" >
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=DDLFullCtrl_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" +  GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (json) {
+
+                    if (json.indexOf('err@') == 0) {
+                        alert(json);
+                        return;
+                    }
+
+                    json = JSON.parse(json);
+
+                    var mapExt = json['Sys_MapExt'][0];
+
+                    //绑定数据源.
+                    GenerBindDDL("DDL_FK_DBSrc", json['Sys_SFDBSrc'], "No", "Name", mapExt.FK_DBSrc);
+
+                    //调用公共类库的方法:执行批量主表赋值
+                    GenerFullAllCtrlsVal(mapExt);
+
+                    if (mapExt.W == "0") {
+                        document.getElementById("Btn_FullDtl").disabled = true;
+                        document.getElementById("Btn_FullDDL").disabled = true;
+                    }
+
+                    return;
+                }
+            });
+
+            $("#Msg").html("");
+        });
+
+        //装载  模版.
+        function LoadTemplate() {
+
+            //打开方向条件.
+            var url = "../../SettingTemplate.htm?TemplateType=DDLFullCtrl";
+            WinOpen(url, 'ss');
+        }
+    </script>
+</head>
+<body  >
+
+<form id="cc">
+
+
+<table id="table" style=" width:100%; ">
+<caption>为下拉框设置联动填充其他控件 </caption>
+<tr>
+<td> 执行SQL的数据源 </td>
+<td> <select name="DDL_FK_DBSrc" id="DDL_FK_DBSrc" > </select> </td>
+<td> ccform允许从其他数据源中取数据,<a href="/WF/Comm/Sys/SFDBSrcNewGuide.aspx" ><img src='../../../../WF/Img/Setting.png' border=0 />设置/新建数据源</a></td>
+</tr>
+
+<tr>
+<td colspan="3">执行的SQL </td>
+</tr>
+
+<tr> 
+<td  colspan="3" style="width:100%;"  > <textarea rows="4" name="TB_Doc" id="TB_Doc" > </textarea> </td>
+</tr>
+
+
+<tr>
+<td colspan=3 >
+<input type="button" value="加载模版" onclick="LoadTemplate()" id="Btn_load" />
+<input type="button" value="保存" onclick="Save()" id="Btn_Save" />
+<input type="button" value="删除" onclick="Delete()" id="Btn_Delete" />
+
+<input type="button" value="填充从表" onclick="FullDtl()" id="Btn_FullDtl" title = "当数据填充后，需要改变指定的从表数据。比如：主表选择人员，从表人员简历信息。"  />
+<input type="button" value="填充下拉框" onclick="FullDDL()" id="Btn_FullDDL"  title="当数据填充后，需要改变指定的下拉框内容。比如：选择人员后，有一个人员岗位的下拉框，该下拉框的内容仅仅需要显示人员岗位。" />
+
+<a href="javascript:ShowHidden('sqlexp')"  >填充SQL帮助: </a>
+ </td>
+</tr>
+
+<tr>
+<td colspan="3" >
+
+<div id='sqlexp'  style='color:Gray; display:none'>
+<ul>
+ <li>1. 设置一个查询的SQL语句，该SQL必须包含 @Key 关键字，@Key 是选择的Item值.</li>
+ <li>2. SQL返回的列与其他字段名称保持一致，就可以完成控件数据的自动填充。</li>
+ <li>3. 比如:SELECT Name as CZYName, Tel as DianHua, Email as YouJian FROM WF_Emp WHERE No = '@Key' </li>
+ <li>表单如果有： CZYName ， DianHua ， YouJian 字段 数据就会自动填充上. </li>
+ <li>ccform为您准备了一个demo,请参考表单库\\本机数据源\\表单元素\\基础功能</li>
+ <li><img alt="" src="../Img/DDLCtrlFull.png" /></li>
+ </ul>
+</div>
+ </td>
+</tr>
+
+</table>
+
+<div id="Msg"> </div>
+
+<script type="text/javascript">
+
+    function FullDtl() {
+        var myPK = GetQueryString('MyPK');
+        var url = 'TBFullCtrlDtl.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK+'&FromPage=DDL';
+        window.location.href = url;
+        return;
+    }
+
+    //填充ddl.
+    function FullDDL() {
+
+        var myPK = GetQueryString('MyPK');
+        var url = 'TBFullCtrlDDL.htm?FK_MapData=' + GetQueryString('FK_MapData') + '&KeyOfEn=' + GetQueryString('KeyOfEn') + '&MyPK=' + myPK + '&FromPage=DDL';
+        window.location.href = url;
+        return;
+    }
+
+    function Save() {
+
+        $("#Msg").html("正在保存,请稍后......");
+
+        var frmData = $("#cc").serialize();
+
+        var myurl = Handler + "?DoType=DDLFullCtrl_Save&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random();
+        $.ajax({
+            data: frmData,
+            type: 'post',
+            async: true,
+            url: myurl,
+            dataType: 'html',
+            success: function (data) {
+                if (data.indexOf('err@') != -1) {
+
+                    $("#Msg").html("<font color=red>" + data + "</font>");
+                    return;
+                }
+
+                $("#Msg").html("<font color=green>" + data + "</font>");
+                window.location.href = window.location.href;
+                return;
+            },
+            error: function (data) {
+                alert(data);
+                // console.info(data);
+            }
+        });
+    }
+
+    function Delete() {
+
+        if (window.confirm('您确定要删除吗？') == false)
+            return false;
+
+        $.ajax({
+            type: 'post',
+            async: true,
+            url: Handler + "?DoType=DDLFullCtrl_Delete&FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&m=" + Math.random(),
+            dataType: 'html',
+            success: function (data) {
+                alert(data);
+                window.location.href = window.location.href;
+                return;
+            }
+        });
+    }
+</script>
+
+</form>
+
+</body>
+</html>

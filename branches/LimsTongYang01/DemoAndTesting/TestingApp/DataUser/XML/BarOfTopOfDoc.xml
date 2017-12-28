@@ -1,0 +1,25 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!-- 流程管理  -->
+  <Item No="Start" CH="起草公文" B5="发起" EN="Start" JP="发起" RU="Запускаемых" Url="Start.aspx" Img="./Img/Start.gif" Enable="1" Title="发起我能够发起的流程" />
+  <Item No="EmpWorks" CH="待办公文" B5="待办" EN="Warting"  JP="待办" RU="Чтобы Bыполнитe" Url="EmpWorks.aspx" Img="./Img/MyWork.gif" Enable="1" Title="等待我处理的工作。" />
+  <Item No="OnTheWay" CH="在途公文" B5="在途" EN="On The Way Work"  JP="在途" RU="В транзите" Url="Runing.aspx" Img="./Img/Runing.gif" Enable="1" Title="我参与的工作，没有完成。" />
+  <Item No="FS" CH="公文查询"  B5="查询"  EN="Rpt"  JP="查询" RU="Заявления" Url="FlowSearch.aspx" Img="./Img/Search.gif" Enable="0" Title="流程查询。" />
+  <Item No="Reg" CH="收文登记"  B5="查询"  EN="Rpt"  JP="查询" RU="Заявления" Url="FlowSearch.aspx" Img="./Img/Search.gif" Enable="0" Title="流程查询。" />
+
+  <Item1 No="Tools" CH="工具栏"  B5="工具栏"  EN="Rpt"  JP="工具栏" RU="Заявления" Url="Tools.aspx" Img="./Img/Tools.gif" Enable="0" Title="工具栏" />
+  <Item1 No="Login" CH="切换"  B5="切换"  EN="Rpt"  JP="切换" RU="Заявления" Url="Login.aspx" Img="./Img/Login.gif" Enable="0" Title="流程查询。" />
+  <Item1 No="WF" CH="报表" EN="Rpt" RU="Заявления" Url="SelfWFRpt.aspx" Img="./Img/Runing.gif" Enable="0" Title="自定义报表。" />
+  <Item1 No="Warning" CH="预警" EN="Waring" RU="Предупреждение" Url="Warning.aspx" Img="./Img/Warning.gif" Enable="1" Title="我的工作的警告的工作状态。" />
+  <Item1 No="Home" CH="文书" EN="Book" RU="Инструменты" Url="../Book/Home.aspx" Img="./Img/Book.gif" Enable="1" Title="" />
+  <Item1 No="Help" CH="帮助" EN="Help" RU="Помощь" Url="./Help/Default.aspx" Img="./Img/Help.gif" Enable="1" />
+  <Item1 No="CS" CH="切换系统" EN="Cheange" RU="Включение системы" Url="../../Comm/Port/ChangeSystem.aspx" Img="./Img/ChangeSys.gif" Enable="1" />
+
+  <FlowBar No="MyFlow.aspx?DoType=Sheet" CH="基础信息" />
+  
+  <FlowBar1 No="MyFlowDoc.aspx?DoType=" CH="公文正文" />
+  
+  <FlowBar No="MyFlow.aspx?DoType=Process" CH="流转过程" />
+  <FlowBar No="MyFlow.aspx?DoType=FlowImg" CH="流程图" />
+  
+</NewDataSet>

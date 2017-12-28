@@ -1,0 +1,538 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>抄送人</title>
+    <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/components-rounded.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" />
+    <link href="../Scripts/bootstrap/css/themes/default/style.min.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../Scripts/commonYangYH.js"></script>
+    <script src="../Scripts/QueryString2016.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/js/jquery.cokie.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/config.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jstree.js"></script>
+    <style type="text/css">
+        * {
+            list-style: none;
+        }
+
+        .btn {
+            background: #2884fa !important;
+            border-radius: 20px !important;
+            color: white !important;
+            padding: 4px 17px !important;
+        }
+
+        header {
+            height: 40px;
+            font: bold 18px "宋体";
+            background: url('/DataUser/Style/Img/TitleBG.png') repeat-x;
+            line-height: 35px;
+            padding-left: 10px;
+        }
+
+        body {
+            background: #e0ecff;
+        }
+
+        .ys {
+            margin: 20px auto;
+            padding: 0px 30px;
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+            .ys .Tos {
+                height: 30px;
+                line-height: 24px;
+                width: 70%;
+                border-radius: 25px 0px 0px 25px;
+                border: 1px solid #2884fa;
+                resize: none;
+                float: right;
+                padding-left: 20px;
+                font-size: 12px;
+            }
+
+            .ys .csTitle, #csry {
+                width: 85%;
+                border-radius: 25px;
+            }
+
+            .ys input {
+                width: 15%;
+                border-radius: 0px 25px 25px 0px;
+                height: 30px;
+                float: right;
+                background: #2884fa;
+                color: #fff;
+                border: none;
+            }
+
+        #yss {
+            width: 85%;
+            float: right;
+            border-radius: 25px;
+            min-height: 150px;
+            border: 1px solid #2884fa;
+            resize: none;
+            padding: 20px;
+            font-size: 12px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        $(function () {
+            dtTable();
+            initSelectEmpModal();
+            $(".BtnSelectEmpsb").click(function () {
+                var state = $(this).parent("").siblings(".jstree");
+                var stateb = $(this).parents(".selectEmpsDivg").siblings().find(".jstree");
+                if (state.css("display") == "none") {
+                    state.addClass("active").addClass("in").show();
+                    stateb.removeClass("active").addClass("in").hide();
+                    $(".closs").click(function() {
+                        state.hide();
+                    });
+                } else {
+                    state.removeClass("active").addClass("in").hide();
+                    stateb.removeClass("active").addClass("in").hide();
+                }
+            });
+
+            initTreeData();
+
+            StationT();
+
+            SelectGroups();
+
+          });
+        //初始化、接收人
+        function dtTable() {
+            var param = {
+                FK_Node: GetQueryString('FK_Node'),
+                WorkID: GetQueryString('WorkID'),
+                FID: GetQueryString('FID'),
+                FK_Flow: GetQueryString("FK_Flow")
+            };
+            $.ajax({
+                dataType: 'html',
+                url: Handler + "?DoType=CC_Init&FK_Node=" + param.FK_Node + "&WorkID=" + param.WorkID + "&FK_Flow=" + param.FK_Flow + "&FID=" + param.FID + '&m=' + Math.random(),
+                success: function (data) {
+                    if (data != null) {
+                        var dataArr = JSON.parse(data);
+                        if (dataArr != undefined) {
+                            $(".csTitle").val(dataArr.Title);
+                            if (dataArr.CCTo != "") {
+                                $(".cs").show();
+                                $("#csry").val(dataArr.CCTo);
+                            }
+                            if (dataArr.IsGroup == "1") {
+                                $(".gt").show();
+                            }
+                        }
+                    }
+
+                }
+            });
+        }
+        function initSelectEmpModal() {
+            var selectEmpModalHtml = '<div class="modal fade" id="selectEmpsModal" style="width: 80%;margin: 40px auto;">' +
+               '<div class="modal-dialog" style="margin: 0px;">'
+                   + '<div class="modal-content" style="border-radius:0px;width:700px;">'
+                      + '<div class="modal-header">'
+                          + '<button type="button" class="close" style="color:white;opacity:1;" data-dismiss="modal" aria-hidden="true">&times;</button>'
+                           + '<h4 class="modal-title">选择人员</h4>'
+                       + '</div>'
+                       + '<div class="modal-body">'
+                           + '<iframe style="width:100%;border:0px;height:400px;" id="iframeSelectEmpsForm" name="iframeSelectEmpsForm"></iframe>'
+                       + '</div>'
+                   + '</div><!-- /.modal-content -->'
+               + '</div><!-- /.modal-dialog -->'
+           + '</div>';
+
+            $('body').append($(selectEmpModalHtml));
+
+            $('#BtnSelectEmpsp').bind('click', function () {
+
+
+                $('#iframeSelectEmpsForm').attr('src', "SelectEmps.htm?FK_Dept=" + getQueryStringByNameFromUrl("?" + $.cookie('CCS'), "FK_Dept") + "&s=" + Math.random() + "&IsSelectMore=1");
+                $('#selectEmpsModal').modal().show();
+            });
+        }
+        function selectEmpsWindowClose(data) {
+            $('#selectEmpsModal').modal('hide');
+            if (data == '取消') {
+                return;
+            } else {
+                $('#ToEmps').val(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
+            }
+        }
+        //部门
+        function initTreeData() {
+            $.ajax({
+                dataType: 'html',
+                url: Handler + "?DoType=CC_SelectDepts&m=",
+                success: function (data) {
+                    if (data != null) {
+                        var dataArr = JSON.parse(data);
+                        if (dataArr != undefined) {
+                            var jsTreedata = [];
+                            $.each(dataArr, function (i, obj) {
+                                jsTreedata.push({ "id": obj.No, "parent": obj.ParentNo, "text": obj.Name, "data": obj });
+                            });
+                            for (var i = 0; i < jsTreedata.length; i++) {
+                                if (jsTreedata[i].parent != '#') {
+                                    var pNode = $.grep(jsTreedata, function (value) {
+                                        return value.id == jsTreedata[i].parent;
+                                    });
+                                    if (pNode.length == 0) {
+                                        jsTreedata[i].parent = '#';
+                                    }
+                                }
+                            }
+                            $('#jstreeb').jstree({
+                                plugins: ["checkbox"],
+                                'core': {
+                                    "multiple": true,
+                                    'data': jsTreedata
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+        var returnVal = {};
+        function GetTreeReturnVal() {
+            var instance = $("#jstreeb").jstree(true);
+            var selectedIdArr = instance.get_selected();
+            var selectedNodes = [];
+            $.each(selectedIdArr, function (i, selectedId) {
+                selectedNodes.push(instance.get_node(selectedId));
+            });
+            var nameArr = [];
+            var noArr = [];
+            $.each(selectedNodes, function (i, selectedNode) {
+                if (selectedNode.icon == true) {
+                    nameArr.push(selectedNode.text);
+                    noArr.push(selectedNode.id);
+                }
+            });
+            returnVal.Value = nameArr.join(';');
+            returnVal.name = noArr.join(';');
+            $('#ToDepts').val(returnVal.Value);
+            $('#ToDepts').attr("name", returnVal.name);
+            $("#jstreebs").hide();
+        }
+
+        //岗位
+        function StationT() {
+            $.ajax({
+                dataType: 'html',
+                url: Handler + "?DoType=CC_SelectStations&m=" + Math.random(),
+                success: function (data) {
+                    if (data != null) {
+                        var datgArr = JSON.parse(data).Port_StationType;
+                        var dateArr = JSON.parse(data).Port_Station;
+                        if (datgArr != undefined && dateArr != undefined) {
+                            var ultdg = '';
+                            var ultde = '';
+                            $.each(datgArr, function (i, obje) {
+                                for (var k = 0; k < dateArr.length; k++) {
+                                    if (obje.NO == dateArr[k].FK_STATIONTYPE) {
+                                        ultde += "<li data-data='true' style='min-width:120px;display: inline-block;margin:0px 5px;' class='lim'><input type='checkbox' style='margin: 5px 5px;'/><span>" + dateArr[k].NAME + "</span></li>";
+                                    }
+                                }
+                                ultdg += "<li data-data='true' class='lif' name='" + obje.NO + "' style='background: #D9E3F0;font-size:14px;font-weight: bold;'><input type='checkbox' class='ulm_head' style='margin: 10px 5px 0px 10px;'/><span>" + obje.NAME + "</span><ul style='overflow:hidden;margin:10px 0px 10px 0px;padding-left: 20px;background: #fff;font-size:12px;font-weight: normal;'>" + ultde + "</ul></li>";
+                                ultde = "";
+                            });
+                            $("#jstreeg #dt").html(ultdg);
+                            $(".wait").hide();
+                            $.each(dateArr, function (k, obj) {
+                                var lifs = $("#jstreeg #dt .lif");
+                                for (var i = 0; i < lifs.length; i++) {
+                                    if ($(lifs[i]).attr("name") == obj.FK_STATIONTYPE) {
+                                        var limData = $(lifs[i]).find(".lim");
+                                        for (var m = 0; m < limData.length; m++) {
+                                            var lim = limData[m];
+                                            if ($(lim).text() == obj.NAME && $(lim) != undefined && $(lim).data != undefined && $(lim).data() != undefined && $(lim).data().data == true) {
+                                                $(lim).data().data = obj;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                            $(".ulm_head").click(function () {
+                                if (this.checked) {
+                                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                                } else {
+                                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                                }
+                            });
+                            $(".lif>span").click(function () {
+                                if (this.parentNode.childNodes[0].checked) {
+                                    $(this).parent("li").children("ul").children("li").children("input").removeAttr("checked", "checked");
+                                    $(this).prev("input").removeAttr("checked", "checked");
+                                } else {
+                                    $(this).parent("li").children("ul").find("input").prop("checked", "checked");
+                                    $(this).prev("input").prop("checked", "checked");
+                                }
+                            });
+                            $(".lim>span").click(function () {
+                                if (this.parentNode.childNodes[0].checked) {
+                                    $(this).prev("input").removeAttr("checked", "checked");
+                                } else {
+                                    $(this).prev("input").prop("checked", "checked");
+                                }
+                            });
+                        }
+                    }
+                }
+
+            });
+        }
+
+        // 岗位.
+        function GetStationsReturnVal() {
+            var checked = $('input:checked');
+            var selectedIdArrm = [];
+            var selectedNodesm = [];
+            for (var i = 0; i < checked.parent(".lim").length; i++) {
+                selectedIdArrm.push($(checked.parent(".lim")[i]).data().data.NO);
+                selectedNodesm.push($(checked.parent(".lim")[i]).data().data.NAME);
+            }
+            returnVal.Value = selectedIdArrm.join(',');
+            returnVal.name = selectedNodesm.join(',');
+            $('#ToStations').val(returnVal.name);
+            $('#ToStations').attr("name", returnVal.Value);
+            $("#jstreeg").hide();
+        }
+
+        //权限组.
+        function SelectGroups() {
+            $.ajax({
+                dataType: 'html',
+                url: Handler + "?DoType=CC_SelectGroups&m=" + Math.random(),
+                success: function (data) {
+                    if (data != null) {
+                        var datgArr = JSON.parse(data);
+                        if (datgArr != undefined) {
+                            var ultdg = '';
+                            $.each(datgArr, function (i, obje) {
+                                ultdg += "<li data-data='true' class='lig' name='" + obje.NO + "' title='" + obje.NAME + "'><input type='checkbox' class='ulm_head' style='margin: 10px 5px 0px 10px;'/><span>" + obje.NAME + "</span></li>";
+                            });
+                            $("#Div1 #Ul1").html(ultdg);
+                            $(".wait").hide();
+                        }
+                    }
+                }
+
+            });
+        }
+        
+
+        function GetGroupReturnVal() {
+            var checked = $('input:checked');
+            var selectedIdArrms = [];
+            var selectedNodesms = [];
+            for (var i = 0; i < checked.length; i++) {
+                selectedIdArrms.push($(checked[i]).parent(".lig").attr("name"));
+                selectedNodesms.push($(checked[i]).parent(".lig").attr("title"));
+            }
+            if (selectedIdArrms.length > 1 || selectedNodesms.length > 1) {
+                returnVal.Value = selectedIdArrms.join(',');
+                returnVal.name = selectedNodesms.join(',');
+            }
+            $('#ToGroups').val(returnVal.name);
+            $('#ToGroups').attr("name", returnVal.Value);
+            $("#Div1").hide();
+        }
+        //发送
+        function Close() {
+            if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                window.parent.returnWorkWindowClose("取消");
+
+                window.close();
+            } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                window.opener.returnWorkWindowClose("取消");
+
+                window.close();
+            } else {
+                $('body').append($('<div>' + data + '</div>'));
+                $('#btnOk').attr('disabled', true);
+            }
+        }
+        function SendNode() {
+            var tb_Title = $(".csTitle").val();
+            var tb_Doc = $("#yss").val();
+            var emps; //选择的人员.
+            var stations; //选择的岗位.
+            var depts; //选择的部门.
+            var groups;//选择的权限组
+            if (frames["iframeSelectEmpsForm"].window.returnVal != undefined) {
+                var empsn = frames["iframeSelectEmpsForm"].window.returnVal.No.split(",");
+                var empsm = frames["iframeSelectEmpsForm"].window.returnVal.Name.split(",");
+                var s = [];
+                $.each(empsn, function (i, obj) {
+                    s.push(obj +','+ empsm[i]);
+                });
+                emps = s.join(";");
+
+            } else {
+                emps = "";
+            }
+            if ($('#ToDepts').attr("name") != undefined) {
+                depts = $('#ToDepts').attr("name");
+            } else {
+                depts = "";
+            }
+
+            if ($('#ToStations').attr("name") != undefined) {
+                stations = $('#ToStations').attr("name");
+            } else {
+                stations = "";
+            }
+            if ($('#ToGroups').attr("name") != undefined) {
+                groups = $('#ToGroups').attr("name");
+            } else {
+                groups = "";
+            }
+            if (depts == "" && emps == "" && stations == "") {
+                alert('请选择人员、部门、岗位任意一种.');
+                return;
+            }
+
+            $.ajax({
+                url: Handler + "?DoType=CC_Send&FK_Node=" + GetQueryString("FK_Node") + "&WorkID=" + GetQueryString("WorkID") + "&Emps=" + emps + "&Stations=" + stations + "&Depts=" + depts + "&TB_Title=" + tb_Title + "&TB_Doc=" + tb_Doc + "&Groups=" + groups + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+                        window.parent.returnWorkWindowClose(data);
+                    } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                        window.opener.returnWorkWindowClose(data);
+                        alert(data);
+                    } else {
+                        $('#btnOk').attr('disabled', true);
+                        alert(data);
+                    }
+                    window.close();
+                    return;
+                }
+            });
+            $(".foot").hide();
+        }
+</script>
+</head>
+<body>
+    <header>工作抄送</header>
+    <section>
+        <div id="selectEmpsDivp">
+            <div class="ys">
+                请选择接受人：
+                <input type="button" id="BtnSelectEmpsp" value='选择接受人' />
+                <textarea id="ToEmps" class="Tos"></textarea>
+            </div>
+        </div>
+        <div class="selectEmpsDivg">
+            <div class="ys">
+                请选择部门：
+                <input type="button" class="BtnSelectEmpsb" value='选择接部门' />
+                <textarea id="ToDepts" class="Tos"></textarea>
+            </div>
+            <div class="modal fade jstree" style="background: #898F98;" id="jstreebs">
+                <div class="modal-dialog" style="width: 80%; margin: 40px auto;">
+                    <div class="modal-content" style="height: 487px; border-radius: 0px;">
+                        <div class="modal-header" style="font-size: 16px;">
+                            选择部门
+                        </div>
+                        <div class="modal-body" style="height: 380px; overflow-y: auto;">
+                            <div id="jstreeb"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-info" onclick="GetTreeReturnVal()">确定</button>
+                            <button class="btn btn-info closs">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="selectEmpsDivg">
+            <div class="ys">
+                请选择岗位：
+                <input type="button" class="BtnSelectEmpsb" value='选择岗位' />
+                <textarea id="ToStations" class="Tos"></textarea>
+            </div>
+            <div class="modal fade jstree" style="background: #898F98;" id="jstreeg">
+                <div class="modal-dialog" style="width: 80%; margin: 40px auto;">
+                    <div class="modal-content" style="height: 487px; border-radius: 0px;">
+                        <div class="modal-header" style="font-size: 16px;">
+                            选择岗位
+                        </div>
+                        <div class="modal-body" style="height: 380px; overflow-y: auto;">
+                            <div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
+                            <ul id="dt" data-data="true"></ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-info" onclick="GetStationsReturnVal()">确定</button>
+                            <button class="btn btn-info closs">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="selectEmpsDivg gt" style="display: none;">
+            <div class="ys">
+                选择权限组：
+                <input type="button" class="BtnSelectEmpsb" value='选择权限组' />
+                <textarea id="ToGroups" class="Tos"></textarea>
+            </div>
+            <div class="modal fade jstree" style="background: #898F98;" id="Div1">
+                <div class="modal-dialog" style="width: 80%; margin: 40px auto;">
+                    <div class="modal-content" style="height: 487px; border-radius: 0px;">
+                        <div class="modal-header" style="font-size: 16px;">
+                            选择权限组
+                        </div>
+                        <div class="modal-body" style="height: 380px; overflow-y: auto;">
+                            <div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
+                            <ul id="Ul1" data-data="true"></ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-info" onclick="GetGroupReturnVal()">确定</button>
+                            <button class="btn btn-info closs">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ys">
+            标题：
+            <textarea class="Tos csTitle"></textarea>
+        </div>
+        <div class="ys">
+            抄送信息：
+            <textarea id="yss" name=""></textarea>
+        </div>
+        <div class="ys cs" style="display: none;">
+            已经抄送人员：
+            <textarea id="csry" name="" class="Tos"></textarea>
+        </div>
+        <div style="float: right" class="foot">
+            <button id="btnOk" class="btn btn-info" onclick="SendNode()">抄送</button>
+            <button id="btnCancel" class="btn btn-info" onclick="Close()">取消</button>
+        </div>
+    </section>
+</body>
+</html>

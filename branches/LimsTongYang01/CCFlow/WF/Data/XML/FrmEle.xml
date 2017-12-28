@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+	<!-- 表单元素扩展配置  -->
+	<Item DFor="HandSiganture"  Tag1="@Label=存储路径@FType=String"  Tag2="@Label=窗口打开宽度@FType=Int"   Tag3="@Label=窗口打开高度@FType=Int" Tag4="" />
+  <Item DFor="FrmFrame"   Tag1="@Label=Url@FType=String"  Tag2="@Label=宽度@FType=Int"   Tag3="@Label=高度@FType=Int" Tag4="" />
+</NewDataSet>

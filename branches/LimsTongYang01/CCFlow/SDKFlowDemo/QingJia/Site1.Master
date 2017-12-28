@@ -1,0 +1,27 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site1.master.cs" Inherits="CCFlow.SDKFlowDemo.QingJia.Site1" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+
+    <%
+        int nodeid = int.Parse(this.Request.QueryString["FK_Node"]);
+        BP.WF.Node nd = new BP.WF.Node(nodeid);
+         %>
+
+    <h3>请假流程 -  当前节点:<%=nd.Name %></h3>
+     登录者信息: <%=BP.Web.WebUser.No %>,<%=BP.Web.WebUser.Name %>  部门编号:<%=BP.Web.WebUser.FK_Dept %>,部门名称<%=BP.Web.WebUser.FK_DeptName %> 
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>

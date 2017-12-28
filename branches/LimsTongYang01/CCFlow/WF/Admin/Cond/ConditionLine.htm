@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>方向条件-按照SQL计算</title>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <link href="../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+
+     <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+
+    
+    <base target="_self" />
+    <script type="text/javascript">
+
+		closeWhileEscUp();
+
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //初始化页面函数.....
+        $(function () {
+
+            var fk_flow = GetQueryString("FK_Flow");
+            var fk_Node = GetQueryString("FK_Node");
+            var toNodeID = GetQueryString("ToNodeID");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=ConditionLine_Init&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + GetQueryString("ToNodeID") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+
+                    if (data.indexOf('err@') == 0) {
+                        $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font> .");
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        var url = data.replace('url@', '');
+                        window.location.href = url;
+                        return;
+                    }
+
+                    //转json.
+                    data = JSON.parse(data);
+
+                    var ul = document.getElementById("list");
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        var en = data[i];
+
+                        $("#list").append("<li> <div> <a id='a" + en.NodeID + "' href='javascript:void(0)' onclick=\"javascript:OpenCond(this,'" + en.NodeID + "');\" ><span class='nav' >到达:" + en.Name + "</span></a></div></li>");
+                    }
+
+                    //增加方向条件设置.
+                    $("#list").append("<li><div><a href='javascript:void(0)' onclick='OpenPRI(this);'><span class='nav' >优先级设置</span></a></div></li>");
+
+					initNodeTree();
+                }
+            });
+        });
+
+        function OpenCond(ele, toNodeID) {
+
+            var url = "Condition.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_Node") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + toNodeID + "&FK_Attr=" + GetQueryString("FK_Attr");
+            OpenUrlInRightFrame(ele, url);
+        }
+
+        function OpenPRI(ele) {
+
+            var url = "CondPRI.htm?CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&FK_Attr=" + GetQueryString("FK_Attr");
+            OpenUrlInRightFrame(ele, url);
+        }
+
+        function initNodeTree() {
+            var toNodeID = GetQueryString("ToNodeID");
+            var li = $('ul.navlist').find("a[id='a" + toNodeID + "']");
+            OpenCond(li, toNodeID);
+            //$('ul.navlist').find("a[id='a" + toNodeID + "']").click();
+        }
+
+         var currShow;
+
+        //在右侧框架中显示指定url的页面
+         function OpenUrlInRightFrame(ele, url) {
+
+
+             if (ele != null && ele != undefined) {
+                 //if (currShow == $(ele).text()) return;
+
+                 currShow = $(ele).parents('li').text(); //有回车符
+
+                 $.each($('ul.navlist'), function () {
+                     $.each($(this).children('li'), function () {
+                         $(this).children('div').css('font-weight', $(this).text() == currShow ? 'bold' : 'normal');
+                     });
+                 });
+
+                 $('#context').attr('src', url + '&s=' + Math.random());
+
+             }
+         }
+    </script>
+</head>
+ <body class="easyui-layout">
+    <form id="form1" runat="server">
+    <div data-options="region:'center',border:false">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'west',split:true,title:'节点方向'" style="width: 300px;">
+
+                <ul class="navlist" id="list">
+                </ul>
+
+            </div>
+            <div data-options="region:'center',noheader:true" style="overflow-y: hidden">
+                <iframe id="context" scrolling="auto" frameborder="0" src="" style="width: 100%;
+                    height: 100%;"></iframe>
+            </div>
+        </div>
+    </div>
+    </form>
+</body>
+</html>
+

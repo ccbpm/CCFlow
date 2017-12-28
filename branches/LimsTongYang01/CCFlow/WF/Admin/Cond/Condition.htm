@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head >
+    <title>方向条件</title>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <base target="_self" />
+    <script type="text/javascript">
+
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+
+        //初始化页面函数.....
+        $(function () {
+
+//            var condType = GetQueryString("CondType");
+//            var fk_flow = GetQueryString("FK_Flow");
+//            var fk_mainNode = GetQueryString("FK_MainNode");
+//            var fk_Node = GetQueryString("FK_Node");
+//            var toNodeID = GetQueryString("ToNodeID");
+//            var FK_Attr = GetQueryString("FK_Attr");
+//            var dirType = GetQueryString("DirType");
+//            var toNodeId = GetQueryString("ToNodeId");
+
+            var myurl = Handler + "?DoType=Condition_Init&CondType=" + GetQueryString("CondType") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_MainNode=" + GetQueryString("FK_MainNode") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNodeID=" + GetQueryString("ToNodeID") + "&m=" + Math.random();
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: myurl,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        $("#Msg").html("<font color=red>加载失败:<br>" + data + "</font>.");
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        var url = data.replace('url@', '');
+                        window.location.href = url;
+                        return;
+                    }
+
+                    //转json.
+                    data = JSON.parse(data);
+
+                    var str = "";
+                    switch (data.HisDataFrom) {
+                        case "NodeForm":
+                            str = "CondByFrm";
+                            break;
+                        case "Stas":
+                            str = "CondStation";
+                            break;
+                        case "Depts":
+                            str = "CondDept";
+                            break;
+                        case "SQL":
+                            str = "CondBySQL";
+                            break;
+                        case "Paras":
+                            str = "CondByPara";
+                            break;
+                        case "Url":
+                            str = "CondByUrl";
+                            break;
+                        case "SQLTemplate":
+                            str = "CondBySQLTemplate";
+                            break;
+                        case "SQLTemplate":
+                            str = "CondBySQLTemplate";
+                            break;
+                        case "StandAloneFrm":
+                            str = "StandAloneFrm";
+                            break;
+                        default:
+                            alert('err没有判断的条件..' + data.HisDataFrom);
+                            return;
+                    }
+
+
+                    //选择数据库中有的数据.
+                    $('#cond').combobox('select', str);
+
+                }
+            });
+        });
+
+
+        var currCond ="";
+        function changeCond(c) {
+            if (c == null || c.value.length == 0)
+                return;
+
+            var condType = GetQueryString("CondType");
+            var fk_flow = GetQueryString("FK_Flow");
+            var fk_mainNode = GetQueryString("FK_MainNode");
+            var fk_Node = GetQueryString("FK_Node");
+            var toNodeID = GetQueryString("ToNodeID");
+            var FK_Attr = GetQueryString("FK_Attr");
+            var dirType = GetQueryString("DirType");
+            var toNodeId = GetQueryString("ToNodeId");
+
+            $('#mainCond').layout('panel', 'center').panel('setTitle', c.text);
+
+            var paras = 'CondType=' + condType + '&FK_Flow=' + fk_flow + '&FK_MainNode=' + fk_mainNode + '&FK_Node=' + fk_Node + '&FK_Attr=' + FK_Attr + '&DirType=' + dirType + '&ToNodeID=' + toNodeId;
+
+            $('#context').attr('src', c.value + '.htm?' + paras);
+
+//            if (c.value == 'CondByFrm' || c.value == 'CondBySQL' || c.value == 'CondBySQLTemplate' || c.value == 'CondByUrl' || c.value == 'CondByPara')
+//                $('#context').attr('src', c.value + '.htm?' + paras);
+//            else
+//                $('#context').attr('src', c.value + '.aspx?' + paras);
+        }
+		$(function () {
+			var bodyHeight = $("body").height();
+			var selHeight = $("#conditionSelector").height();
+			$("#container").height(bodyHeight - selHeight - 40);
+		});
+    </script>
+    <base target="_self" />
+</head>
+	<body class="easyui-layout"  topmargin="0" leftmargin="0"   style="font-size:smaller">
+		<form id="form1" runat="server">
+			<div data-options="region:'center',border:false,title:''">
+				<div id="mainCond" class="easyui-layout" data-options="fit:true">
+					<div id="conditionSelector" data-options="region:'north',border:false" style="height:35px; padding:5px">
+						&nbsp;&nbsp; <label for="">条件设置类型：</label>
+						<select id="cond"  name="cond" class="easyui-combobox" data-options="onSelect:function(rec){ changeCond(rec); }">
+							<option value="CondByFrm">按表单条件计算</option>
+							<option value="StandAloneFrm">按已选择的独立表单条件计算</option>
+							<option value="CondStation">按指定操作员的岗位条件</option>
+							<option value="CondDept">按指定操作员的部门条件</option>
+							<option value="CondBySQL">按SQL条件计算</option>
+							<option value="CondBySQLTemplate">按SQL模版条件计算</option>
+							<option value="CondByPara">按开发者参数计算</option>
+							<option value="CondByUrl">按Url条件计算</option>
+						</select>
+					</div>
+					<div id="container" data-options="region:'center',title:' '" style="overflow-y:hidden;">
+						<iframe id="context" scrolling="yes" frameborder="0" src="" style="width: 100%; height: 100%;"></iframe>
+					</div>
+				</div>
+			</div>
+		</form>
+	</body>
+</html>

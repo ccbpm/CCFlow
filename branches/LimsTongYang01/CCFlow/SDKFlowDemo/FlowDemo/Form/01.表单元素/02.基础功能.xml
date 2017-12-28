@@ -1,0 +1,3059 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_GroupField>
+    <OID>113</OID>
+    <Lab>02.主表字段关系演示</Lab>
+    <EnName>Demo_02</EnName>
+    <Idx>1</Idx>
+    <GUID />
+    <CtrlType />
+    <CtrlID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_Enum>
+    <MyPK>ShenFen_CH_0</MyPK>
+    <Lab>工人</Lab>
+    <EnumKey>ShenFen</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>ShenFen_CH_1</MyPK>
+    <Lab>农民</Lab>
+    <EnumKey>ShenFen</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>ShenFen_CH_2</MyPK>
+    <Lab>干部</Lab>
+    <EnumKey>ShenFen</EnumKey>
+    <IntKey>2</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>XingBie_CH_0</MyPK>
+    <Lab>男</Lab>
+    <EnumKey>XingBie</EnumKey>
+    <IntKey>0</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_Enum>
+    <MyPK>XingBie_CH_1</MyPK>
+    <Lab>女</Lab>
+    <EnumKey>XingBie</EnumKey>
+    <IntKey>1</IntKey>
+    <Lang>CH</Lang>
+  </Sys_Enum>
+  <Sys_MapData>
+    <No>Demo_02</No>
+    <Name>02.基础功能</Name>
+    <FrmW>900</FrmW>
+    <FrmH>1400</FrmH>
+    <TableWidth>800</TableWidth>
+    <TableHeight>900</TableHeight>
+    <TableCol>4</TableCol>
+  </Sys_MapData>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_D_Tel</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>D_Tel</KeyOfEn>
+    <Name>电话</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>120</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>215</X>
+    <Y>728</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_DDL_Email</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>DDL_Email</KeyOfEn>
+    <Name>邮件</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>148</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>376</X>
+    <Y>646</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_DDL_FK_Dept</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>DDL_FK_Dept</KeyOfEn>
+    <Name>部门</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>BP.Port.Depts</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>559</X>
+    <Y>646</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_DDL_FK_Emp</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>DDL_FK_Emp</KeyOfEn>
+    <Name>人员</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>BP.Port.Emps</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>87</X>
+    <Y>647</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_DDL_Tel</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>DDL_Tel</KeyOfEn>
+    <Name>电话</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>243</X>
+    <Y>647</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_DianHua</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>DianHua</KeyOfEn>
+    <Name>电话</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>448</X>
+    <Y>448</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_Email</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>Email</KeyOfEn>
+    <Name>邮件</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>173</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>106</X>
+    <Y>489</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_FK_City</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>FK_City</KeyOfEn>
+    <Name>城市</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>BP.CN.Citys</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>448</X>
+    <Y>806</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_FK_Dept</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>FK_Dept</KeyOfEn>
+    <Name>部门</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>BP.Port.Depts</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>328</X>
+    <Y>488</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>100</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_FK_DQ</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>FK_DQ</KeyOfEn>
+    <Name>地区</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>BP.CN.PQs</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>104</X>
+    <Y>808</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_FK_SF</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>FK_SF</KeyOfEn>
+    <Name>省份</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>BP.CN.SFs</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>264</X>
+    <Y>807</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_FK_Station</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>FK_Station</KeyOfEn>
+    <Name>岗位</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>BP.Port.Stations</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>374</X>
+    <Y>566</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_HunFou</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>HunFou</KeyOfEn>
+    <Name>婚否</Name>
+    <DefVal />
+    <UIContralType>2</UIContralType>
+    <MyDataType>4</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>388</X>
+    <Y>211</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_C</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>C</KeyOfEn>
+    <Name>C</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>60</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>275</X>
+    <Y>60</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_CaoZuoYuanBianHao</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>CaoZuoYuanBianHao</KeyOfEn>
+    <Name>操作员编号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>107</X>
+    <Y>448</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_CaoZuoYuanMingCheng</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>CaoZuoYuanMingCheng</KeyOfEn>
+    <Name>操作员名称</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>281</X>
+    <Y>449</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_D</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>D</KeyOfEn>
+    <Name>D</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>62</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>274</X>
+    <Y>93</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_D_Email</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>D_Email</KeyOfEn>
+    <Name>邮件</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>156</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>364</X>
+    <Y>729</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_RenYuan</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>RenYuan</KeyOfEn>
+    <Name>人员</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>78</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>85</X>
+    <Y>567</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_RenYuanMingCheng</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>RenYuanMingCheng</KeyOfEn>
+    <Name>人员名称</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>85</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>223</X>
+    <Y>567</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_ShenFen</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>ShenFen</KeyOfEn>
+    <Name />
+    <DefVal />
+    <UIContralType>3</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>30</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>ShenFen</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>0</X>
+    <Y>0</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_XingBie</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>XingBie</KeyOfEn>
+    <Name>性别</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>1</LGType>
+    <UIWidth>62</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>XingBie</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>315</X>
+    <Y>210</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_XingMing</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>XingMing</KeyOfEn>
+    <Name>姓名</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>74</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>206</X>
+    <Y>209</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_YouBian</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>YouBian</KeyOfEn>
+    <Name>邮编</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>420</X>
+    <Y>289</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_YouJian</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>YouJian</KeyOfEn>
+    <Name>邮件</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>562</X>
+    <Y>289</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_TianXieXinXi</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>TianXieXinXi</KeyOfEn>
+    <Name>填写信息</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>312</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>364</X>
+    <Y>249</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>0</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_A</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>A</KeyOfEn>
+    <Name>A</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>47</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>105</X>
+    <Y>68</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>1</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_B</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>B</KeyOfEn>
+    <Name>B</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>48</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>104</X>
+    <Y>96</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>2</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_AaddB</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>AaddB</KeyOfEn>
+    <Name>A加B</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>58</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>97</X>
+    <Y>138</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>3</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_CAddD</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>CAddD</KeyOfEn>
+    <Name>CAddD</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>68</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>271</X>
+    <Y>137</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_D_FK_Emp</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>D_FK_Emp</KeyOfEn>
+    <Name>人员</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>BP.Port.Emps</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>81</X>
+    <Y>727</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_D_FK_Station</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>D_FK_Station</KeyOfEn>
+    <Name>他的岗位集合</Name>
+    <DefVal />
+    <UIContralType>1</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>2</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey>BP.Port.Stations</UIBindKey>
+    <UIRefKey>NO</UIRefKey>
+    <UIRefKeyText>NAME</UIRefKeyText>
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>523</X>
+    <Y>728</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_ShouJiHao</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>ShouJiHao</KeyOfEn>
+    <Name>手机号</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>273</X>
+    <Y>290</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_ShuZiLeiXingChaoLianJie</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>ShuZiLeiXingChaoLianJie</KeyOfEn>
+    <Name>数字类型超连接</Name>
+    <DefVal>100</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>366</X>
+    <Y>890</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_OID</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>0</X>
+    <Y>0</Y>
+    <GUID />
+    <Tag />
+    <EditType>1</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>20</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_Pop</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>Pop</KeyOfEn>
+    <Name>Pop弹窗字段</Name>
+    <DefVal />
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>549</UIWidth>
+    <UIHeight>22</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>1</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>125</X>
+    <Y>964</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_RDT</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>Demo_02_WenBenLeiXingChaoLianJie</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>WenBenLeiXingChaoLianJie</KeyOfEn>
+    <Name>文本类型超连接</Name>
+    <DefVal>@WebUser.No</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>1</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>1</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>147</X>
+    <Y>889</Y>
+    <GUID />
+    <Tag />
+    <EditType>0</EditType>
+    <Idx>999</Idx>
+    <AtPara />
+    <GroupIDText>0</GroupIDText>
+    <ColSpan>1</ColSpan>
+    <ExtIsSum>0</ExtIsSum>
+    <ExtDefVal>0</ExtDefVal>
+    <ExtDefValText>0</ExtDefValText>
+    <ExtRows>1</ExtRows>
+    <IsRichText>0</IsRichText>
+    <IsSupperText>0</IsSupperText>
+    <DefValText>0</DefValText>
+    <RBShowModel>0</RBShowModel>
+    <IsEnableJS>0</IsEnableJS>
+    <MinLen>0</MinLen>
+    <MaxLen>500</MaxLen>
+    <GroupID>113</GroupID>
+  </Sys_MapAttr>
+  <Sys_MapExt>
+    <MyPK>ActiveDDL_Demo_02_FK_City</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>ActiveDDL</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>FK_SF</AttrOfOper>
+    <AttrsOfActive>FK_City</AttrsOfActive>
+    <FK_DBSrc />
+    <Doc>SELECT No, Name FROM CN_City WHERE FK_SF = ~@Key~ </Doc>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>ActiveDDL_Demo_02_FK_SF</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>ActiveDDL</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>FK_DQ</AttrOfOper>
+    <AttrsOfActive>FK_SF</AttrsOfActive>
+    <FK_DBSrc />
+    <Doc>SELECT No, Name FROM CN_SF WHERE FK_PQ = ~@Key~</Doc>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>AutoFull_Demo_02_AaddB</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>AutoFull</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>AaddB</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>@A+@B</Doc>
+    <Tag>1</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>DDLFullCtrl_Demo_02_D_FK_Emp</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>DDLFullCtrl</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>D_FK_Emp</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>SELECT Tel as D_Tel,Email as D_Email, FK_Dept as D_FK_Dept FROM WF_Emp WHERE No = ~@Key~</Doc>
+    <Tag>$D_FK_Station:SELECT No,Name FROM Port_Station WHERE No IN ( SELECT FK_Station FROM Port_EmpStation WHERE FK_Emp=~@Key~)</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>DDLFullCtrl_Demo_02_DDL_FK_Emp</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>DDLFullCtrl</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>DDL_FK_Emp</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>SELECT Tel as DDL_Tel,Email as DDL_Email, FK_Dept as DDL_FK_Dept FROM WF_Emp WHERE No = ~@Key~</Doc>
+    <Tag />
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>InputCheck_Demo_02_DianHuaHaoMa</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>InputCheck</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>DianHuaHaoMa</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>function isTel(s) {
+    //var patrn=/^[+]{0,1}(\d){1,3}[ ]?([-]?(\d){1,12})+$/; 
+    var patrn = /^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
+    if (!patrn.exec(s.value)) 
+    {
+       alert(~非法的电话号码格式.~);
+       return false;
+    }
+    return true
+} </Doc>
+    <Tag>D:\ccflow\trunk\CCFlow\Data\JSLib\onblur\04.校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-” .js</Tag>
+    <Tag1>isTel</Tag1>
+    <Tag2>onblur</Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>InputCheck_Demo_02_ShouJiHao</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>InputCheck</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>ShouJiHao</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>function isMobil(c) {
+    var patrn = /^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
+    if (c.value == ~~)
+        return;
+    if (!patrn.exec(c.value)) {
+        c.focus();
+        c.select();
+        alert(~非法的手机号码.~);
+        return false;
+    }
+    return true
+}</Doc>
+    <Tag>D:\ccflow\trunk\CCFlow\\Data\\JSLib\onblur\01.校验手机号码.js</Tag>
+    <Tag1>isMobil</Tag1>
+    <Tag2>onblur</Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>InputCheck_Demo_02_YouBian</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>InputCheck</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>YouBian</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>function isPostalCode(c) {
+    var val = c.value;
+    if (val == ~~)
+        return;
+    if (val.length != 6) {
+        c.select();
+        c.focus();
+        alert(~非法的邮政编码格式.~);
+        return false;
+    }
+    var patrn = /^[0-9]+$/;
+    if (!patrn.exec(val)) {
+        c.select();
+        c.focus();
+        alert(~非法的邮政编码格式.~);
+        return false;
+    }
+    return true
+}
+</Doc>
+    <Tag>D:\ccflow\trunk\CCFlow\WF\Data\\JSLib\onblur\07.校验邮政编码.js</Tag>
+    <Tag1>isPostalCode</Tag1>
+    <Tag2>onblur</Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>InputCheck_Demo_02_YouJian</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>InputCheck</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>YouJian</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>function checkMail(c) {
+    var email = c.value;
+    if (email == ~~)
+        return;
+
+    //存在@符号
+    var a = email.indexOf("@");
+    //是否存在点
+    var point = email.indexOf(".");
+    //存在@，点，并且 点在@之后，且不相邻
+    if (a == -1 || point == -1 || point - a &lt;= 1) {
+        alert("Email格式不正确。正确的例如abc@ccflow.org");
+        c.select();
+        c.focus();
+        return false;
+    }
+    //@不能够是第一个字符，点不能够是最后一个字符
+    if (a == 0 || point == email.length - 1) {
+        alert("Email格式不正确。正确的例如abc@ccflow.org");
+        c.select();
+        c.focus();
+        return false;
+    }
+    return true;
+}</Doc>
+    <Tag>D:\ccflow\trunk\CCFlow\\Data\\JSLib\onblur\08.校验email.js</Tag>
+    <Tag1>checkMail</Tag1>
+    <Tag2>onblur</Tag2>
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>Link_Demo_02_ShuZiLeiXingChaoLianJie</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>Link</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>ShuZiLeiXingChaoLianJie</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag>http://ccflow.org?MyNum=@ShuZiLeiXingChaoLianJie</Tag>
+    <Tag1>_ShuZiLeiXingChaoLianJie</Tag1>
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>Link_Demo_02_WenBenLeiXingChaoLianJie</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>Link</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>WenBenLeiXingChaoLianJie</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc />
+    <Tag>http://ccflow.org?UsreNo=@WenBenLeiXingChaoLianJie</Tag>
+    <Tag1>_WenBenLeiXingChaoLianJie</Tag1>
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>PopVal_Demo_02_Pop</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>PopVal</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>Pop</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>/SDKFlowDemo/PopSelectVal.aspx</Doc>
+    <Tag />
+    <Tag1>SELECT No,Name  FROM Port_Dept</Tag1>
+    <Tag2>SELECT No,Name, FK_Dept FROM Port_Emp</Tag2>
+    <Tag3>0</Tag3>
+    <Tag4 />
+    <AtPara>@PopValFormat=2@PopValWorkModel=1@PopValSelectModel=0@PopValShowModel=0</AtPara>
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>RegularExpression_Demo_02_ShouJiHao_onblur</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>RegularExpression</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>ShouJiHao</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>/^[0-9]*$/</Doc>
+    <Tag>onblur</Tag>
+    <Tag1>只能输入数字</Tag1>
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>TBFullCtrl_Demo_02_CaoZuoYuanBianHao</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>TBFullCtrl</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>CaoZuoYuanBianHao</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>SELECT No,Name,Name as CaoZuoYuanMingCheng,Tel as DianHua,Email,FK_Dept FROM WF_Emp WHERE No LIKE ~@Key%~</Doc>
+    <Tag>SELECT No,Name,Name as CaoZuoYuanMingCheng,~0531-82374939~ as DianHua,FK_Dept FROM Port_Emp WHERE No LIKE ~@Key%~</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_MapExt>
+    <MyPK>TBFullCtrl_Demo_02_RenYuan</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <ExtType>TBFullCtrl</ExtType>
+    <DoWay>0</DoWay>
+    <AttrOfOper>RenYuan</AttrOfOper>
+    <AttrsOfActive />
+    <FK_DBSrc />
+    <Doc>SELECT No,Name,Name as RenYuanMingCheng FROM Port_Emp WHERE No LIKE ~@Key%~</Doc>
+    <Tag>$FK_Station:SELECT No,Name FROM Port_Station WHERE No IN ( SELECT FK_Station FROM Port_EmpStation WHERE FK_Emp=~@Key~)</Tag>
+    <Tag1 />
+    <Tag2 />
+    <Tag3 />
+    <Tag4 />
+    <AtPara />
+    <DBSrc />
+    <H>500</H>
+    <W>400</W>
+    <PRI>0</PRI>
+  </Sys_MapExt>
+  <Sys_FrmLine>
+    <MyPK>LE_1_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>45</X1>
+    <X2>680</X2>
+    <Y1>199</Y1>
+    <Y2>199</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_10_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>52</X1>
+    <X2>660</X2>
+    <Y1>761</Y1>
+    <Y2>761</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_11_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>160</X1>
+    <X2>160</X2>
+    <Y1>66</Y1>
+    <Y2>182</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_12_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>205</X1>
+    <X2>377</X2>
+    <Y1>121</Y1>
+    <Y2>121</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_13_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>40</X1>
+    <X2>681</X2>
+    <Y1>359</Y1>
+    <Y2>359</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_14_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>48</X1>
+    <X2>560</X2>
+    <Y1>519</Y1>
+    <Y2>519</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_15_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>50</X1>
+    <X2>556</X2>
+    <Y1>600</Y1>
+    <Y2>600</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_16_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>40</X1>
+    <X2>40</X2>
+    <Y1>39</Y1>
+    <Y2>1116</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_17_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>682</X1>
+    <X2>682</X2>
+    <Y1>38</Y1>
+    <Y2>1116</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_18_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>53</X1>
+    <X2>664</X2>
+    <Y1>839</Y1>
+    <Y2>839</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_19_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>476</X1>
+    <X2>476</X2>
+    <Y1>219</Y1>
+    <Y2>219</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_2_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>39</X1>
+    <X2>679</X2>
+    <Y1>281</Y1>
+    <Y2>281</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_20_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>345</X1>
+    <X2>345</X2>
+    <Y1>56</Y1>
+    <Y2>174</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_21_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>682</X1>
+    <X2>682</X2>
+    <Y1>160</Y1>
+    <Y2>160</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_22_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>48</X1>
+    <X2>181</X2>
+    <Y1>123</Y1>
+    <Y2>123</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_23_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>41</X1>
+    <X2>682</X2>
+    <Y1>996</Y1>
+    <Y2>996</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_3_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>40</X1>
+    <X2>683</X2>
+    <Y1>39</Y1>
+    <Y2>39</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_4_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>49</X1>
+    <X2>663</X2>
+    <Y1>681</Y1>
+    <Y2>681</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_5_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>55</X1>
+    <X2>673.57</X2>
+    <Y1>918</Y1>
+    <Y2>918</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_6_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>367</X1>
+    <X2>367</X2>
+    <Y1>939</Y1>
+    <Y2>939</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_7_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>42</X1>
+    <X2>682</X2>
+    <Y1>1117</Y1>
+    <Y2>1117</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_8_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>394</X1>
+    <X2>394</X2>
+    <Y1>41</Y1>
+    <Y2>198</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_9_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <X1>562</X1>
+    <X2>562</X2>
+    <Y1>78</Y1>
+    <Y2>78</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmBtn>
+    <FK_MapData>Demo_02</FK_MapData>
+    <MyPK>Btn_1_Demo_02</MyPK>
+    <Text>C+D=</Text>
+    <EventType>6</EventType>
+    <EventContext>SetCtrlVal(~CAddD~,   parseFloat( ReqTB(~C~))+ parseFloat( ReqTB(~D~)) );</EventContext>
+    <MsgErr />
+    <MsgOK />
+    <X>218</X>
+    <Y>137</Y>
+  </Sys_FrmBtn>
+  <Sys_FrmBtn>
+    <FK_MapData>Demo_02</FK_MapData>
+    <MyPK>Btn_2_Demo_02</MyPK>
+    <Text>生成填写信息</Text>
+    <EventType>6</EventType>
+    <EventContext>var s=~~; s+=~姓名:~+ReqTB(~XingMing~);  s+=~性别:~+ReqDDL(~XingBie~); s+=~婚否:~+ReqCB(~HunFou~);SetCtrlVal(~TianXieXinXi~,s); alert(~生成成功~);</EventContext>
+    <MsgErr />
+    <MsgOK />
+    <X>75</X>
+    <Y>245</Y>
+  </Sys_FrmBtn>
+  <Sys_FrmBtn>
+    <FK_MapData>Demo_02</FK_MapData>
+    <MyPK>Btn_3_Demo_02</MyPK>
+    <Text>清除</Text>
+    <EventType>6</EventType>
+    <EventContext>SetCtrlVal(~TianXieXinXi~,~~);</EventContext>
+    <MsgErr />
+    <MsgOK />
+    <X>206</X>
+    <Y>245</Y>
+  </Sys_FrmBtn>
+  <Sys_FrmImg>
+    <MyPK>Img_1_Demo_02</MyPK>
+    <ImgSrcType>0</ImgSrcType>
+    <ImgURL>/CCFormDesigner;component/Img/Logo/ccflow/LogoBig.png</ImgURL>
+    <ImgPath>/CCFormDesigner;component/Img/Logo//LogoBig.png</ImgPath>
+    <LinkURL />
+    <LinkTarget>_blank</LinkTarget>
+    <Tag0 />
+    <Name />
+    <EnPK />
+    <GUID />
+    <FK_MapData>Demo_02</FK_MapData>
+    <ImgAppType>0</ImgAppType>
+    <X>436</X>
+    <Y>47</Y>
+    <H>77</H>
+    <W>200</W>
+    <IsEdit>1</IsEdit>
+  </Sys_FrmImg>
+  <Sys_FrmLab>
+    <MyPK>LB_1_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>手写板@显示大小可以用shift+方向键来改变。@右键编辑属性。</Text>
+    <X>423</X>
+    <Y>1014</Y>
+    <FontColor>#FF291CFF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_10_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>手工计算特效</Text>
+    <X>202</X>
+    <Y>47</Y>
+    <FontColor>#FF1515FF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_11_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>Pop弹窗字段</Text>
+    <X>51</X>
+    <Y>968</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_12_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>CCForm的基础功能</Text>
+    <X>169</X>
+    <Y>1</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>20</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_13_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>填写信息</Text>
+    <X>309</X>
+    <Y>252</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_14_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>输入完整性校验</Text>
+    <X>47</X>
+    <Y>286</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>21</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_15_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>邮编</Text>
+    <X>387</X>
+    <Y>293</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_16_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>邮件</Text>
+    <X>348</X>
+    <Y>652</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_17_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>CCForm对Javascript@支持部分展示</Text>
+    <X>407</X>
+    <Y>129</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>20</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_18_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>手机号</Text>
+    <X>231</X>
+    <Y>295</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_19_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>电话</Text>
+    <X>213</X>
+    <Y>651</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_2_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>JS操作表单控件</Text>
+    <X>45</X>
+    <Y>208</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>17</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_20_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>文本框自动完成:利用SQL控制下拉框的显示范围</Text>
+    <X>46</X>
+    <Y>529</Y>
+    <FontColor>#FF291CFF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_21_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>人员名称</Text>
+    <X>170</X>
+    <Y>571</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_22_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>下拉框自动填充主表控件：可以通过配置的sql自动填充表单上其它控件的值。</Text>
+    <X>43</X>
+    <Y>613</Y>
+    <FontColor>#FF291CFF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_23_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>A</Text>
+    <X>83</X>
+    <Y>73</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_24_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>请在文本框上双点击.</Text>
+    <X>565</X>
+    <Y>935</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_25_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>B</Text>
+    <X>82</X>
+    <Y>101</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_26_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>人员</Text>
+    <X>53</X>
+    <Y>570</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_27_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>电话</Text>
+    <X>409</X>
+    <Y>450</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_28_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>级联下拉框:可实现无限级别级联.</Text>
+    <X>49</X>
+    <Y>777</Y>
+    <FontColor>#FF291CFF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_29_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>省份</Text>
+    <X>225</X>
+    <Y>811</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_3_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>操作员编号</Text>
+    <X>48</X>
+    <Y>453</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_30_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>人员</Text>
+    <X>47</X>
+    <Y>731</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_31_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>部门</Text>
+    <X>293</X>
+    <Y>493</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_32_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>人员</Text>
+    <X>50</X>
+    <Y>650</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_33_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>A+B=</Text>
+    <X>54</X>
+    <Y>139</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_34_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>未完待续</Text>
+    <X>307</X>
+    <Y>1129</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>19</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_35_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>C</Text>
+    <X>249</X>
+    <Y>66</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_36_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>城市</Text>
+    <X>402</X>
+    <Y>810</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_37_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>姓名</Text>
+    <X>178</X>
+    <Y>212</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_38_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>字段Pop弹窗:可以解决弹出窗体返回值的到当前文本框的问题.</Text>
+    <X>54</X>
+    <Y>929</Y>
+    <FontColor>#FF291CFF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_39_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>文本框自动填充主表控件：可以通过配置的sql自动填充表单上其它控件的值。</Text>
+    <X>46</X>
+    <Y>414</Y>
+    <FontColor>#FF291CFF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_4_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>下拉框自动填充主表控件：&amp;nbsp;可以动态控制要填充的下拉框的范围。</Text>
+    <X>46</X>
+    <Y>693</Y>
+    <FontColor>#FF291CFF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_40_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>邮件</Text>
+    <X>339</X>
+    <Y>731</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_41_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>D</Text>
+    <X>248</X>
+    <Y>99</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_42_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>邮件</Text>
+    <X>529</X>
+    <Y>292</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_43_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>电话</Text>
+    <X>189</X>
+    <Y>732</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_44_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>文本类型超连接</Text>
+    <X>55</X>
+    <Y>892</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_45_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>检验函数库分为系统函数库与自定义函数库，请参考手册。</Text>
+    <X>53</X>
+    <Y>334</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_46_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>数字类型超连接</Text>
+    <X>273</X>
+    <Y>892</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_47_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>岗位</Text>
+    <X>333</X>
+    <Y>571</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_48_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>他的岗位集合</Text>
+    <X>522</X>
+    <Y>705</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_49_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>操作员名称</Text>
+    <X>217</X>
+    <Y>452</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_5_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>邮件</Text>
+    <X>74</X>
+    <Y>494</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_50_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>部门</Text>
+    <X>533</X>
+    <Y>651</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_51_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>地区</Text>
+    <X>63</X>
+    <Y>815</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_52_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>Ajax自动填充主表数据控件</Text>
+    <X>42</X>
+    <Y>369</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>23</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_6_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>身份:</Text>
+    <X>450</X>
+    <Y>212</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>12</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_7_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>性别</Text>
+    <X>284</X>
+    <Y>211</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_8_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>字段超连接:可以实现对一个字段的数据连接到其它的界面上去，该字段必须是只读字段.</Text>
+    <X>54</X>
+    <Y>854</Y>
+    <FontColor>#FF291CFF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>LB_9_Demo_02</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <Text>自动计算特效</Text>
+    <X>58</X>
+    <Y>46</Y>
+    <FontColor>#FF1515FF</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>11</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight />
+    <IsBold>1</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmRB>
+    <MyPK>Demo_02_ShenFen_0</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>ShenFen</KeyOfEn>
+    <EnumKey>ShenFen</EnumKey>
+    <Lab>工人</Lab>
+    <IntKey>0</IntKey>
+    <X>487</X>
+    <Y>213</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>Demo_02_ShenFen_1</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>ShenFen</KeyOfEn>
+    <EnumKey>ShenFen</EnumKey>
+    <Lab>农民</Lab>
+    <IntKey>1</IntKey>
+    <X>536</X>
+    <Y>213</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>Demo_02_ShenFen_2</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>ShenFen</KeyOfEn>
+    <EnumKey>ShenFen</EnumKey>
+    <Lab>干部</Lab>
+    <IntKey>2</IntKey>
+    <X>584</X>
+    <Y>212</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmRB>
+    <MyPK>Demo_02_ShenFen_3</MyPK>
+    <FK_MapData>Demo_02</FK_MapData>
+    <KeyOfEn>ShenFen</KeyOfEn>
+    <EnumKey>ShenFen</EnumKey>
+    <Lab>其它</Lab>
+    <IntKey>3</IntKey>
+    <X>632</X>
+    <Y>211</Y>
+    <Script />
+    <FieldsCfg />
+    <Tip />
+    <GUID />
+    <AtPara />
+  </Sys_FrmRB>
+  <Sys_FrmEle>
+    <FK_MapData>Demo_02</FK_MapData>
+    <MyPK>Demo_02_HandSiganture_ShouXieBan</MyPK>
+    <EleType>HandSiganture</EleType>
+    <EleID>ShouXieBan</EleID>
+    <EleName>手写板</EleName>
+    <X>48</X>
+    <Y>1005</Y>
+    <W>339</W>
+    <H>74</H>
+  </Sys_FrmEle>
+</NewDataSet>

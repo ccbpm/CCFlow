@@ -1,0 +1,68 @@
+﻿#body
+{
+    margin: 0 auto;
+    font-size: 16px;
+    color: #000;
+    line-height: 25px;
+    width: 100%;
+    font-family: 宋体;
+    font-size: 12px;
+    background-color: #E0E0E0;
+    overflow: hidden;
+}
+.Icon
+{
+    width: 16px;
+    height: 16px;
+}
+#loading-mask
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: #D2E0F2;
+    z-index: 20000;
+}
+#pageloading
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -120px 0px 0px -120px;
+    text-align: center;
+    border: 2px solid #8DB2E3;
+    width: 200px;
+    height: 40px;
+    font-size: 14px;
+    padding: 10px;
+    font-weight: bold;
+    background: #fff;
+    color: #15428B;
+}
+#mainPanel
+{
+    background-color: #d0d0d0;
+     position: relative !important; 
+    height:100%
+    
+
+}
+#freeForm
+{
+    background-color: #d0d0d0;
+     position: relative !important; 
+    height: 100%; 
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+     
+    
+}
+
+#officeIfream, #trackIframe
+{
+    width: 100%;
+    height: 100%;
+}

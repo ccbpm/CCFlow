@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="UTF-8"/>
+    <title>增加一个表单到流程多个节点里</title>
+</head>
+<body>
+<form id="cc">
+
+<!-- edit by xushuhao -->
+
+<%
+    string flowNo = this.Request.QueryString["FK_Flow"];
+    if (flowNo == null)
+        flowNo = "001";
+    
+    BP.WF.Flow fl = new BP.WF.Flow(flowNo);
+    
+     %>
+<table style="width:100%">
+<caption > 增加一个表单到流程[<%=fl.Name %>]多个节点里 </caption>
+<tr>
+<td valign=top style="30%;">
+<fieldset>
+<legend>帮助</legend>
+<ul>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+<li>sdsdsdsdsd</li>
+</ul>
+</fieldset>
+</td>
+
+<td valign="top" style="70%;" >
+
+<fieldset>
+<legend>请从表单库里选择一个要绑定的表单</legend>
+<%
+    //BP.Sys.SysFormTrees trees = new BP.Sys.SysFormTrees();
+    //trees.RetrieveAll();
+%>
+</fieldset>
+
+
+<fieldset>
+<legend>选择要绑定的节点</legend>
+<%
+    //BP.WF.Nodes nds = new BP.WF.Nodes(flowNo);
+    //nds.RetrieveAll();
+%>
+</fieldset>
+
+<input type="button" value="保存" />
+
+</td>
+</tr>
+</table>
+
+
+</form>
+</body>
+</html>

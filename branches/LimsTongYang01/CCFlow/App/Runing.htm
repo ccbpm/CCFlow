@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>运行中</title>
+    <script language="JavaScript" src="../WF/Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../WF/Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../WF/Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+     <base target="_self" />
+    <link href="../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" >
+        // 撤销。
+        function UnSend(fk_flow, workid, fid) {
+
+            if (window.confirm('您确定要撤销本次发送吗？') == false)
+                return;
+
+            //执行撤销.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Runing_UnSend&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    $("#Msg").html(data + " <br> @点击这里<a href='javascript:window.location.href = window.location.href;' >刷新</a>");
+                    alert(data);
+                    var url = 'MyFlow.htm?FK_Flow=' + fk_flow + '&WorkID=' + workid;
+                    window.open(url);
+                    window.location.href = window.location.href;
+                    return;
+                }
+            });
+        }
+
+        //催办.
+        function Press(fk_flow, workid, fid) {
+
+            var msg = window.prompt('请输入催办信息', '该工作因为xxx原因，需要您优先处理.');
+            if (msg == null)
+                return;
+
+            //执行催办.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Runing_Press&Msg=" + msg + "&FK_Flow=" + fk_flow + "&WorkID=" + workid + "&FID=" + fid + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data);
+                    return;
+                }
+            });
+        }
+
+        function WinOpenIt(url) {
+            //窗口最大化e
+            var scrWidth = screen.availWidth;
+            var scrHeight = screen.availHeight;
+            var self = window.open(url, '_blank', "resizable=1,scrollbars=yes");
+            self.moveTo(0, 0);
+            self.resizeTo(scrWidth, scrHeight);
+            self.focus();
+            return;
+        }
+
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=./Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            //随机串.
+            var timeKey = Math.random();
+            var is1 = false;
+
+            var idx = 0;
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Runing_Init&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    data = JSON.parse(data);
+
+                    //增加处理.
+                    for (var i = 0; i < data.length; i++) {
+                        var work = data[i];
+                        var newRow = "";
+                        if (is1 == true) {
+                            newRow = "<tr bgcolor=AliceBlue >";
+                            is1 = false;
+                        }
+                        else {
+                            newRow = "<tr bgcolor=white  >";
+                            is1 = true;
+                        }
+
+                        idx++;
+
+                        newRow += "<td class=Idx>" + idx + "</td>";
+                        newRow += "<td><a href=\"javascript:WinOpenIt('../WF/WFRpt.htm?FK_Flow=" + work.FK_Flow + "&FID=0&WorkID=" + work.WorkID + "&FK_Node=" + work.FK_Node + "&IsRead=0&T=" + timeKey + "');\" ><img src='./Img/Runing.png' width='16px' />" + work.Title + "</a></td>";
+                        newRow += "<td>" + work.FlowName + "</td>";
+                        newRow += "<td>" + work.StarterName + "</td>";
+                        newRow += "<td>" + work.DeptName + "</td>";
+                        //  newRow += "<td>" + work.FlowStartRDT + "</td>";
+
+                        newRow += "<td>" + work.NodeName + "</td>";
+                        newRow += "<td>" + work.RDT + "</td>";
+
+                        newRow += "<td>" + work.TodoEmps + "</td>";
+                        newRow += "<td>";
+                        newRow += "<a href=\"javascript:UnSend('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/UnSend.png' border=0 />撤销</a>";
+                        // newRow += "<a href=\"javascript:Press('" + work.FK_Flow + "','" + work.WorkID + "','" + work.FID + "')\"><img src='./Img/Action/Press.png' border=0 />催办</a>";
+                        newRow += "</td>";
+                        newRow += "</tr>";
+                        $("#Table1 tr:last").after(newRow);
+                    }
+                }
+            });
+        }
+     </script>
+     <style type="text/css">
+　 　body{ font-size:1222px;}
+　　.breakLine{ word-break: break-all;}
+　　</style>
+
+</head>
+<body onkeypress="Esc()" >
+
+<table id="Table1" style="width:100%;word-break: break-all;" >
+<tr>
+<th style="width:38px;" >序号</th>
+<th style="width:40%;" >标题</th>
+<th>流程</th>
+<th>发起人</th>
+<th>发起部门</th>
+<!--<th>申请时间</th>-->
+<th>停留节点</th>
+<th>到达时间</th>
+<th>当前处理人</th>
+<th>操作</th>
+</tr>
+</table>
+
+<div id="Msg"></div>
+
+</body>
+</html>

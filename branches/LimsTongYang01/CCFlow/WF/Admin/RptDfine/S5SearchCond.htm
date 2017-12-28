@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>设置报表查询条件</title>
+    <link href="../../Comm/Style/CommStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../Scripts/QueryString2016.js"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js"></script>
+    <script language="javascript" type="text/javascript" >
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../../../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+
+        });
+
+        function InitPage() {
+
+            var rptNo = unescape(GetQueryString("RptNo"));
+            var flowNo = unescape(GetQueryString("FK_Flow"));
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=S5SearchCond_Init&RptNo=" + rptNo + "&FK_Flow=" + flowNo + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf("@") == 0) {
+                        alert(data);
+                        return;
+                    }
+                    var jsData = JSON.parse(data);
+
+                    var md = jsData["Main"][0]; //主表数据.
+                    var Sys_MapAttr = jsData["Sys_MapAttr"]; //所有的列.
+                    var Sys_MapAttrOfDate = jsData["Sys_MapAttrOfDate"]; //日期列表.
+                    //关键字查询.
+                    document.getElementById("CB_Key").checked = (md.AtPara.indexOf("@RptIsSearchKey=1@") != -1);
+
+                    var js = md.AtPara.split("@");
+                    var RptSearchKeys = null;
+                    var RptDTSearchWay = null;
+                    var RptDTSearchKey = null;
+                    for (var i = 0; i < js.length; i++) {
+                        if (js[i].indexOf("RptSearchKeys") != -1)
+                            RptSearchKeys = js[i].replace("RptSearchKeys=", "")
+                        if (js[i].indexOf("RptDTSearchWay") != -1)
+                            RptDTSearchWay = js[i].replace("RptDTSearchWay=", "")
+                        if (js[i].indexOf("RptDTSearchKey") != -1)
+                            RptDTSearchKey = js[i].replace("RptDTSearchKey=", "")
+                    }
+                    //绑定外键字段.
+                    for (var i = 0, length = Sys_MapAttr.length; i < length; i++) {
+                        var attr = Sys_MapAttr[i],
+                            flag = false;
+
+                        if (attr.UIContralType != 1) {
+                            continue;
+                        }
+                        if (RptSearchKeys) {
+                            flag = (RptSearchKeys.indexOf("*" + attr.KeyOfEn + "*") != -1);
+                        }
+                        $("#FKeys").append("<input type='checkbox' " + (flag ? "checked = 'checked'" : "") + " id='" + attr.KeyOfEn + "' /><label for='" + attr.KeyOfEn + "' >" + attr.Name + "(" + attr.KeyOfEn + ")</label></br>");
+                    }
+
+                    $("#DDL_DTSearchWay").val(RptDTSearchWay);
+
+                    //绑定日期下拉框.
+                    if (Sys_MapAttrOfDate != null) {
+                        GenerBindDDL("DDL_DTSearchKey", Sys_MapAttrOfDate, "KeyOfEn", "Name", RptDTSearchKey);
+                    }
+
+                    return;
+                }
+            });
+        }
+
+        function Save() {
+
+            var FK_Flow = GetQueryString("FK_Flow"),
+                RptNo = GetQueryString("RptNo"),
+                IsSearchKey = document.getElementById("CB_Key").checked ? 1 : 0,
+                DTSearchWay = document.getElementById("DDL_DTSearchWay").value,
+                DTSearchKey = document.getElementById("DDL_DTSearchKey").value,
+                Fields = "";
+
+            var oChecks = document.getElementById("FKeys").getElementsByTagName("input");
+            for (var i = 0, len = oChecks.length; i < len; i++) {
+                var item = oChecks[i];
+                if (item.checked) {
+                    Fields += "*" + item.id;
+                }
+            }
+            $.ajax({
+                type: 'GET',
+                async: true,
+                url: Handler + "?DoType=S5SearchCond_Save&FK_Flow=" + FK_Flow + "&RptNo=" + RptNo + "&Fields=" + Fields + "&IsSearchKey=" + IsSearchKey + "&DTSearchWay=" + DTSearchWay + "&DTSearchKey=" + DTSearchKey + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    alert(data)
+                }
+            });
+        }
+    </script>
+    <base target="_self" /> 
+</head>
+<body class="easyui-layout">
+
+    <form id="cc">
+    <div data-options="region:'center',title:'4. 设置报表查询条件',border:false" style="padding: 5px;
+        height: auto">
+        <div style='width: 100%'>
+            <div class='easyui-panel' title='是否增加关键字查询' data-options="iconCls:'icon-tip',fit:true"
+                style='height: auto; padding: 10px'>
+                关键字查询是接受用户输入一个关键字，在整个报表的显示列中使用like查询(外键、枚举、数值类型的除外)<br>
+                <input id="CB_Key" type="checkbox" name="CB_Key" /><label for="CB_Key">是否增加关键字查询</label></div>
+        </div>
+        <br>
+        <div style='width: 100%'>
+            <div id='FKeys' class='easyui-panel' title='外键与枚举类型' data-options="iconCls:'icon-tip',fit:false"
+                style='height: auto; padding: 10px'>
+                外键、枚举类型的数据可以添加到查询条件中，请选择要添加的查询条件：<br>
+
+            </div>
+        </div>
+        <br>
+        <div style='width: 100%'>
+            <div class='easyui-panel' title='时间段' data-options="iconCls:'icon-tip',fit:true"
+                style='height: auto; padding: 10px'>
+                对数据按照时间段进行查询，比如：按流程的发起时间，在指定时间段内进行查询。<br>
+                选择方式：<select name="DDL_DTSearchWay" id="DDL_DTSearchWay">
+                    <option selected="selected" value="0">不启用</option>
+                    <option value="1">按日期</option>
+                    <option value="2">按日期时间</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字段：<select name="DDL_DTSearchKey"
+                    id="DDL_DTSearchKey">
+                    <!--<option value="FlowEnderRDT">FlowEnderRDT 结束时间</option>
+                    <option selected="selected" value="FlowStartRDT">FlowStartRDT 发起时间</option>-->
+                </select></div>
+        </div>
+
+        <br/>
+        <br/>
+        <a id="Btn_Save" class="easyui-linkbutton" data-options="iconCls:&#39;icon-save&#39;"
+            href="javascript:Save()">
+            保存</a> 
+    </div>
+    </form>
+
+
+</body>
+</html>

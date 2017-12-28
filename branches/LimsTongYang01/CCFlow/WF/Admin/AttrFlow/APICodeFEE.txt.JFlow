@@ -1,0 +1,371 @@
+﻿using System;
+using System.Threading;
+using System.Collections;
+using BP.Web.Controls;
+using System.Data;
+using BP.DA;
+using BP.DTS;
+using BP.En;
+using BP.Web;
+using BP.Sys;
+using BP.WF;
+
+namespace BP.FlowEvent
+{
+    /// <summary>
+    /// @FlowName 事件子类.
+    /// ccbpm提供了可以让程序员编写代码与流程引擎，表单引擎进行交互，以处理复杂的业务逻辑。
+    /// ccbpm预留一个基类 BP.WF.FlowEventBase ，只要从这个基类上集成下来的子类，按照约定的格式重写相关的方法属性，流程引擎就会把这些代码注册到流程引擎中，并在运动中执行。
+    /// 该功能提供了一个自动生成的代码模版，如果您有编程基础，就很容易明白如何通过该子类实现复杂的业务逻辑。
+    /// 下载下来该类后，您必须把他放入一个以BP.开头的类库里，ccflow才能被注册到引擎中去。
+    /// </summary>
+    public class F001Templepte : BP.WF.FlowEventBase
+    {
+        #region 重写属性.
+        /// <summary>
+        /// 重写流程标记
+        /// </summary>
+        public override string FlowMark
+        {
+            get { return "@FlowNo"; }
+        }
+        #endregion 重写属性.
+
+        #region 构造 & 变量.
+        /// <summary>
+        /// 报销流程事件
+        /// </summary>
+        public F001Templepte()
+        {
+        }
+        #endregion 构造 & 变量.
+
+        #region 与发送相关事件.
+        /// <summary>
+        /// 重写发送前事件
+        /// </summary>
+        /// <returns></returns>
+        public override string SendWhen()
+        {
+            /*
+             * 说明：
+             * 0. 此事件在发送前触发，如果抛出异常，系统就会把异常信息提示出来，从而阻止向下运动。
+             * 1, 一般来说，在改事件里填写安全性检查代码与其他的业务逻辑。比如表单校验，校验失败就提示错误。
+             * 2, 也可以写一些其他的业务逻辑，来组织特定的节点在不符合条件的时候 ，不让其向下发送。
+             * 3, 也可以更新一些其他系统的数据、状态.
+             */
+
+            // 当前的节点, 其他的变量请从 this.HisNode .
+            int nodeID = this.HisNode.NodeID;    // int类型的ID.
+            string nodeName = this.HisNode.Name; // 当前节点名称.
+            return base.SendWhen();
+        }
+        /// <summary>
+        /// 发送成功事件，发送成功时，把流程的待办写入其他系统里.
+        /// </summary>
+        /// <returns>返回执行结果，如果返回null就不提示。</returns>
+        public override string SendSuccess()
+        {
+
+           /*
+           * 说明：
+           * 0. 此事件在发送成功的时候触发，系统会把抛出异常的信息提示出来，如果返回一个执行结果的字符串系统就会把它提示出来。
+           * 1, 一般来说，在改事件里填写与外部数据交互代码，比如：把执行的信息，写入到其他的系统。
+           * 2, 可以通过访问当前的发送结果对象，来判断到流程实例发送到那个节点，那些接收人。
+           */
+
+            try
+            {
+                // 组织必要的变量.
+                Int64 workid = this.WorkID; // 工作id.
+                string flowNo = this.HisNode.FK_Flow; // 流程编号.
+                int currNodeID = this.SendReturnObjs.VarCurrNodeID; //当前节点id
+                int toNodeID = this.SendReturnObjs.VarToNodeID; // 到达节点id.
+                string toNodeName = this.SendReturnObjs.VarToNodeName; // 到达节点名称。
+                string acceptersID = this.SendReturnObjs.VarAcceptersID; // 接受人员id, 多个人员会用 逗号分看 ,比如 zhangsan,lisi。
+                string acceptersName = this.SendReturnObjs.VarAcceptersName; // 接受人员名称，多个人员会用逗号分开比如:张三,李四.
+
+                //执行向其他系统写入待办.
+                /*
+                 * 在这里需要编写你的业务逻辑，根据上面组织的变量.
+                 * 
+                 */
+
+                return base.SendSuccess();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("执行发送失败,执行节点[" + this.HisNode.NodeID + "," + this.HisNode.Name + "]，详细信息：" + ex.Message);
+            }
+        }
+        /// <summary>
+        /// 发送失败事件
+        /// </summary>
+        /// <returns>返回空</returns>
+        public override string SendError()
+        {
+            /*
+          * 说明：
+          * 0. 此事件在发送失败的时候触发，系统会把抛出异常的信息提示出来，如果返回一个执行结果的字符串系统就会把它提示出来。
+          * 1, 一般来说，在改事件里填写与外部数据交互回滚代码，比如在发送前，已经写了收款逻辑，在发送失败后就执行退款逻辑。
+          */
+
+            try
+            {
+                // 组织必要的变量.
+                Int64 workid = this.WorkID; // 工作id.
+                string flowNo = this.HisNode.FK_Flow; // 流程编号.
+                int currNodeID = this.SendReturnObjs.VarCurrNodeID; //当前节点id
+                int toNodeID = this.SendReturnObjs.VarToNodeID; // 到达节点id.
+                string toNodeName = this.SendReturnObjs.VarToNodeName; // 到达节点名称。
+                string acceptersID = this.SendReturnObjs.VarAcceptersID; // 接受人员id, 多个人员会用 逗号分看 ,比如 zhangsan,lisi。
+                string acceptersName = this.SendReturnObjs.VarAcceptersName; // 接受人员名称，多个人员会用逗号分开比如:张三,李四.
+
+                //执行向其他系统写入待办.
+                /*
+                 * 在这里需要编写你的业务逻辑，根据上面组织的变量.
+                 * 
+                 */
+
+                return base.SendError();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("执行发送失败,执行节点[" + this.HisNode.NodeID + "," + this.HisNode.Name + "]，详细信息：" + ex.Message);
+            }
+        }
+        #endregion 与发送相关事件.
+
+        #region 与流程相关的操作.
+        /// <summary>
+        /// 当创建WorkID的时候.
+        /// 经常根据当前用户的身份初始化数据.
+        /// </summary>
+        /// <returns>返回执行信息.</returns>
+        public override string FlowOnCreateWorkID()
+        {
+            return base.FlowOnCreateWorkID();
+        }
+        /// <summary>
+        /// 流程结束之前
+        /// </summary>
+        /// <returns>返回null,不提示信息，返回string提示结束信息,抛出异常就阻止流程删除.</returns>
+        public override string FlowOverBefore()
+        {
+            /*
+             * 说明
+             * 0, 流程结束之前的操作. 
+             */
+
+            try
+            {
+                return null;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("@流程不能结束,异常信息:"+ex.Message);
+            }
+        }
+        /// <summary>
+        /// 流程结束之后
+        /// </summary>
+        /// <returns>返回null，不提示信息，返回string提示结束信息,抛出异常不处理。</returns>
+        public override string FlowOverAfter()
+        {
+            try
+            {
+                return null;
+                //return "流程正常结束.";
+            }
+            catch(Exception ex) 
+            {
+                return ex.Message;
+            }
+        }
+        /// <summary>
+        /// 流程删除前
+        /// </summary>
+        /// <returns>返回null,不提示信息,返回信息，提示删除警告/提示信息, 抛出异常阻止删除操作.</returns>
+        public override string BeforeFlowDel()
+        {
+            /*
+             * 说明：
+             * 0，该方法在流程删除之前触发。
+             * 1，删除之前，首先要检查必要的业务操作，如果抛出异常就不能阻止删除动作，
+             * 2, 返回string 就提示删除操作的风险。
+             * 3，返回null, 就不提示。
+             */
+
+
+            /*
+             * 执行退款操作.
+             */
+            if (1 == 2)
+                throw new Exception("@该流程不能被删除，因为退款不成功。");
+
+            return "@退款已经成功了，该订单取消了。";
+        }
+        /// <summary>
+        /// 流程删除后
+        /// </summary>
+        /// <returns>返回null,不提示信息,返回信息，提示删除警告/提示信息, 抛出异常不处理.</returns>
+        public override string AfterFlowDel()
+        {
+            /*
+           * 说明：
+           * 0，该方法在流程成功删除之后触发。
+           * 1，删除之后，可以处理相关的业务，如果抛出异常系统不处理。
+           * 2, 返回string 提示删除执行结果。
+           * 3，返回null, 就不提示。
+           */
+
+            return base.AfterFlowDel();
+        }
+        #endregion 与流程相关的操作
+
+        #region 与节点表单相关事件 .
+        /// <summary>
+        /// 保存后执行的事件
+        /// </summary>
+        /// <returns></returns>
+        public override string SaveAfter()
+        {
+            /*
+             * 说明：
+             * 0, 该事件仅仅与节点表单有效.
+             * 1, 
+             * 1, 保存后，可以处理复杂的表单字段之间的关系,比如：把从表的一个数值列求和到主表上去。
+             */
+            try
+            {
+                // 当前的节点, 其他的变量请从 this.HisNode .
+                int nodeID = this.HisNode.NodeID;    // int类型的ID.
+                string nodeName = this.HisNode.Name; // 当前节点名称.
+                return base.SaveAfter();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("执行[保存后执行的事件],执行节点[" + this.HisNode.NodeID + "," + this.HisNode.Name + "]，详细信息：" + ex.Message);
+            }
+        }
+        /// <summary>
+        /// 保存之前
+        /// </summary>
+        /// <returns></returns>
+        public override string SaveBefore()
+        {
+            return base.SaveBefore();
+        }
+        #endregion 与节点表单相关事件 .
+
+        #region 与撤销相关的操作.
+        /// <summary>
+        /// 撤销之前的操作
+        /// </summary>
+        /// <returns>返回撤销前提示的信息,返回null，则不提示,抛出异常则阻止撤销操作.</returns>
+        public override string UndoneBefore()
+        {
+            /*
+             * 说明:
+             * 0, 撤销是一个在发送之后，由当前节点之前的发送人执行的收回发送操作.
+             * 1, 该事件在执行撤销之前触发。
+             * 2，如果返回null, 怎不提示，返回一个字符串则提示撤销前的警告，如果抛出异常则阻止撤销操作。
+             * 3, 使用该事件，可以灵活的处理撤销前后的一些业务逻辑。
+             */
+            return base.UndoneBefore();
+        }
+        /// <summary>
+        /// 撤销之后的操作 
+        /// </summary>
+        /// <returns>返回执行撤销成功的信息,返回null，则不提示，如果抛出异常不处理。</returns>
+        public override string UndoneAfter()
+        {
+            /*
+            * 说明:
+            * 0, 撤销后事件是在执行撤销后触发。
+            * 1，如果返回null, 怎不提示，返回一个字符串则提示撤销前的警告，如果抛出异常则阻止撤销操作。
+            * 2, 使用该事件，可以灵活的处理撤销前后的一些业务逻辑。
+            */
+            return base.UndoneAfter();
+        }
+        #endregion 与撤销相关的操作.
+
+        #region 与退回相关事件.
+        /// <summary>
+        /// 退回前事件
+        /// </summary>
+        /// <returns>退回时的提示信息</returns>
+        public override string ReturnBefore()
+        {
+            /*
+            * 说明：
+            * 0, 退回前要触发的事件.
+            * 1, 如果抛出异常，系统就阻止了退回，比如：有一些商品是不允许退货的，有一些商品是可以退货。
+             *   执行这个事件就抛出异常系统就会把该信息提示出来。
+            * 2, 返回string信息，系统就提示该信息给操作员。
+            */
+            try
+            {
+                // 当前的节点, 其他的变量请从 this.HisNode .
+                int nodeID = this.HisNode.NodeID;    // int类型的ID.
+                string nodeName = this.HisNode.Name; // 当前节点名称.
+
+                if (1 == 0)
+                    throw new Exception("该商品不允许退货，您不能退回。");
+
+                return null; //返回空就不提示。
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("执行[退回前事件],执行节点[" + this.HisNode.NodeID + "," + this.HisNode.Name + "]，详细信息：" + ex.Message);
+            }
+        }
+        /// <summary>
+        /// 退回后执行的事件
+        /// </summary>
+        /// <returns>退回后的提示信息</returns>
+        public override string ReturnAfter()
+        {
+            /*
+           * 说明：
+           * 0, 退回前要触发的事件.
+           * 1, 如果抛出异常，系统不处理，比如：比如在商城退货后就提示信息，告诉操作员。
+           * 2, 返回string信息，系统就提示该信息给操作员。
+           */
+            try
+            {
+                // 当前的节点, 其他的变量请从 this.HisNode .
+                int nodeID = this.HisNode.NodeID;    // int类型的ID.
+                string nodeName = this.HisNode.Name; // 当前节点名称.
+
+                return "退回成功."; //提示退回信息. return null, 不提示信息。
+            }
+            catch (Exception ex)
+            {
+                return "执行[退回前事件],执行节点[" + this.HisNode.NodeID + "," + this.HisNode.Name + "]，详细信息：" + ex.Message;
+            }
+        }
+        #endregion 与退回相关事件.
+
+        #region 与加签相关的操作.
+        /// <summary>
+        /// 加签之后的操作
+        /// </summary>
+        /// <returns>返回执行的信息</returns>
+        public override string AskerAfter()
+        {
+            return base.AskerAfter();
+        }
+        /// <summary>
+        /// 加签答复相关的操作
+        /// </summary>
+        /// <returns>返回执行的信息</returns>
+        public override string AskerReAfter()
+        {
+            return base.AskerReAfter();
+        }
+       
+        #endregion 与加签相关的操作.
+
+    }
+}

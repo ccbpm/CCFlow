@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>流程跳转</title>
+    <!--
+    1, 流程跳转。
+    2，需要 FK_Flow, FK_Node,WorkID, FID.
+    3, 调用方法 FlowSkip.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
+    -->
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <script type="text/javascript" src="../Scripts/QueryString.js"></script>
+    <script type="text/javascript" src="../Scripts/jquery-1.7.2.min.js"></script>
+    <script src="../Scripts/commonYangYH.js"></script>
+    <!-- 导入配置文件. -->
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
+    <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <style type="text/css">
+        body {
+            background: transparent;
+        }
+
+            body div {
+                text-align: left;
+                margin: 20px auto;
+            }
+
+        #Message {
+            width: 100%;
+        }
+    </style>
+    <script type="text/javascript">
+        var pageData = {};
+        $(function () {
+            //初始化页面退回信息
+
+            alert('正在实施中.');
+
+            pageData = {
+                FK_Node: GetQueryString('FK_Node'),
+                WorkID: GetQueryString('WorkID'),
+                FID: GetQueryString('FID'),
+                Message: GetQueryString('Info'),
+                FK_Flow: GetQueryString("FK_Flow")
+            };
+
+            if (pageData.Message != undefined && pageData.Message != '') {
+                $('#TB_Doc').val(pageData.Message);
+            }
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                data: null,
+                url: Handler + "?DoType=FlowSkip_Init&FK_Node=" + pageData.FK_Node + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    var returnNodeArr = JSON.parse(data);
+                    var DDL_NodesHtml = '';
+
+                    $.each(returnNodeArr, function (i, returnNode) {
+                        DDL_NodesHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '">' + returnNode.Name + '=&gt;' + returnNode.RecName + '</option>';
+                    });
+
+                    $('#DDL_Nodes').html(DDL_NodesHtml);
+
+                    $('#DDL_Nodes').bind('change', SetIsBackTrackingDispaly);
+                    SetIsBackTrackingDispaly();
+
+                    $("section").show();
+                    $(".wait").hide();
+                }
+            });
+            Common.MaxLengthError();
+        });
+
+        function SetIsBackTrackingDispaly() {
+            if ($('#DDL_Nodes option:checked').data().isbacktracking == 0) {
+                $('#btnIsBackTracking').css('display', 'none');
+            } else {
+                $('#btnIsBackTracking').css('display', 'inline-block');
+            }
+            //ie9
+            if ($('#DDL_Nodes option:checked').attr("data-isbacktracking") == 0) {
+                $('#btnIsBackTracking').css('display', 'none');
+            } else {
+                $('#btnIsBackTracking').css('display', 'inline-block');
+            }
+        }
+
+        //确定 执行 跳转 操作
+        function DoFlowSkip(isBack) {
+
+            //WorkID, this.FID, this.FK_Node
+            $('.foot input').attr('disabled', 'disabled');
+            $('.foot input').css('background', 'gray');
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                data: {},
+                url: Handler + "?DoType=FlowSkip_Do&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&FK_Node=" + pageData.FK_Node + "&ReturnToNode=" + $('#DDL_Nodes option:checked').val() + '&ReturnInfo=' + escape( $('#TB_Doc').val()) + "&IsBack=" + isBack + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (window.parent != null && window.parent.DoFlowSkipWindowClose != null) {
+                        window.parent.DoFlowSkipWindowClose(data);
+                    } else {
+                        $('body').append($('<div>'+data+'</div>'));
+                    }
+                }
+            });
+            $(".foot").hide();
+        }
+
+        //取消退回
+        function Close() {
+            if (window.parent != null && window.parent.DoFlowSkipWindowClose != null) {
+                window.parent.DoFlowSkipWindowClose("取消");
+            }
+            else {
+                $('body').append($('<div>' + "已取消操作" + '</div>'));
+                window.close();
+            }
+         }
+    </script>
+</head>
+<body>
+<div class="wait" style="text-align: center;">页面数据正在加载中，请稍候......</div>
+<section style="display: none;">
+    <div>
+        请选择要跳转的节点:
+        <select id="DDL_Nodes" name="DDL_Nodes" style="width: 77%;"></select>
+    </div>
+    <div>
+        跳转原因：
+        <textarea id="TB_Doc" name="TB_Doc" style="vertical-align: top; width: 98%;" maxlength="100"></textarea>
+    </div>
+</section>
+</body>
+</html>

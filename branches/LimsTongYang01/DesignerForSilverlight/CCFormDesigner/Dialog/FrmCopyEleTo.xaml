@@ -1,0 +1,32 @@
+﻿<controls:ChildWindow x:Class="CCForm.FrmCopyEleTo"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+           Width="400" Height="300" 
+           Title="复制元素到其它表单" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+    <Grid x:Name="LayoutRoot" Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Button x:Name="CancelButton" Content="取消" Click="CancelButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,0,0" Grid.Row="1" />
+        <Button x:Name="OKButton" Content="确定" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,79,0" Grid.Row="1" />
+        <controls:TabControl Height="217" HorizontalAlignment="Left" Margin="10,9,0,0" Name="tabControl1" VerticalAlignment="Top" Width="356">
+            <controls:TabItem Header="选择要复制的表单，Ctrl+ 鼠标可以实现多选。" Name="tabItem1">
+                <Grid Height="188" Width="344">
+                    <ListBox Height="180" HorizontalAlignment="Left" Margin="2,1,0,0" Name="listBox1" VerticalAlignment="Top" Width="343" />
+                </Grid>
+            </controls:TabItem>
+            <controls:TabItem Header="Help" Name="tabItem2">
+                <Grid>
+                    <sdk:Label Height="165" HorizontalAlignment="Left" Margin="6,9,0,0" Name="label1" VerticalAlignment="Top" Width="332" 
+Content="   应用场景:因为节点表单有经常变化(增删表单元素)的可能，并且这
+种变化是依此变化的，就是一个表单变化后它之后的表单也跟着变化。
+    比如：我在开始节点增加一个字段，开始之后的节点都要增加这个
+字段。为了减少这样的重复劳动设计利用此功能进行复制就可以了。" />
+                </Grid>
+            </controls:TabItem>
+        </controls:TabControl>
+    </Grid>
+</controls:ChildWindow>

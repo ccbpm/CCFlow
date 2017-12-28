@@ -1,0 +1,66 @@
+﻿<navigation:Page xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk"  x:Class="BP.Frm.Frms" 
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           mc:Ignorable="d"
+           xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
+           d:DesignWidth="640" d:DesignHeight="480"
+           Title="表单库" Loaded="Page_Loaded">
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <sdk:DataGrid   Grid.Column="0" Grid.Row="1" x:Name="Grid1" Margin="10" ColumnWidth="150" AutoGenerateColumns="False">
+            <sdk:DataGrid.Columns>
+                <sdk:DataGridTextColumn Header="编号" Binding="{Binding No}" Visibility="Collapsed" IsReadOnly="True" CanUserReorder="False" CanUserSort="True" />
+                <sdk:DataGridTextColumn Header="名称" Binding="{Binding Name}" IsReadOnly="True" CanUserReorder="False" CanUserSort="True" />
+                <sdk:DataGridTextColumn Header="物理表名" Binding="{Binding TableName}" IsReadOnly="True" CanUserReorder="False" CanUserSort="True" />
+            </sdk:DataGrid.Columns>
+        </sdk:DataGrid>
+        <StackPanel   Grid.Column="0"  Grid.Row="0" HorizontalAlignment="Left" Name="stackPanel2" VerticalAlignment="Bottom"  Orientation="Horizontal">
+            <Button  Width="100" Margin="5" Name="btnCreate" VerticalAlignment="Center" Click="btnCreate_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/Images/ToolBarNewNode.png" ></Image>
+                        <TextBlock Margin="5"  Text="新建" FontSize="20"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button  Width="100" Margin="5" Name="btnEdit" VerticalAlignment="Center" Click="btnEdit_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/Images/ToolBarNewNode.png" ></Image>
+                        <TextBlock Margin="5"  Text="编辑" FontSize="16"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button  Width="100" Margin="5" Name="btnDelete" VerticalAlignment="Center" Click="btnDelete_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/Images/ToolBarNewNode.png" ></Image>
+                        <TextBlock Margin="5"  Text="删除" FontSize="16"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button  Width="100" Margin="5" Name="btnShowField" VerticalAlignment="Center" Click="btnShowField_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/Images/ToolBarNewNode.png" ></Image>
+                        <TextBlock Margin="5"  Text="字段" FontSize="16"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button  Width="100" Margin="5" Name="btnPreview" VerticalAlignment="Center" Click="btnPreview_Click">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="/Images/ToolBarNewNode.png" ></Image>
+                        <TextBlock Margin="5"  Text="预览" FontSize="16"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        
+    </Grid>
+</navigation:Page>

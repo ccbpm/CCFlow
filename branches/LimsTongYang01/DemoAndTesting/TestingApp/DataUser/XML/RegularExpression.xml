@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" standalone="yes" ?>
+<NewDataSet>
+  <!--
+   TBType= 编号
+   Name=名称
+   Note=描述
+   For=适用于哪些文本框.
+   onblur，onchange，ondblclick，onkeypress，onkeyup
+  -->
+  <Item No="NotNull" Name="字段不能为空" Note="应用于字段不能为空人检查"  ForCtrl="TB" />
+  <Dtl ItemNo="NotNull" ForEvent="onblur" Exp="sdsdsd"   Msg="字段不能为空"   Note=""/>
+  <Dtl ItemNo="NotNull" ForEvent="onkeypress" Exp="sdsds" Msg="字段不能为空"  Note=""/>
+  
+  <Item No="Tel" Name="检查手机号码是否输入正确" Note="应用于手机号码的输入检查"  ForCtrl="TB" />
+  <Dtl ItemNo="Tel"  ForEvent="onblur"  Exp="/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/" Msg="非法的手机号码" />
+
+  <Item No="TelNotNull" Name="检查手机号码是否输入正确(并且提交时不能为空)" Note="应用于手机号码的输入检查"  ForCtrl="TB" />
+  <Dtl ItemNo="TelNotNull"  ForEvent="onblur"   Exp="/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/" Msg="非法的手机号码" />
+  <Dtl ItemNo="TelNotNull"  ForEvent="onsubmit" Exp="/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/" Msg="非法的手机号码" />
+  
+</NewDataSet>

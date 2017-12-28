@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" language="javascript">
+        function WindowClose() {
+            var tab = window.parent.tab;
+            var item_list = tab.getTabidList();
+            var preItem = item_list[item_list.length - 1];
+            tab.removeTabItem(preItem);
+        }
+    </script>
+</head>
+<body onload="WindowClose();">
+</body>
+</html>

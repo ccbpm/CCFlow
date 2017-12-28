@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <!-- 数据源:
+  No 编号标记一定要唯一.
+  SrcType 类型:  SrcType=DB 是数据库, SrcType=WS 是WebServices.
+  URL: 链接的字串. 如果是DBType=DB 
+  -->
+  <Item No="ccflow" Name="ccflow应用程序数据源" SrcType="DB" Url="AppCenterDSN" DESC="这个人系统默认的不能被删除的."   />
+  <Item No="ccflowWS" Name="ccflow提供的接口"   SrcType="DB" Url="AppCenterDSN" DESC="."   />
+
+</NewDataSet>

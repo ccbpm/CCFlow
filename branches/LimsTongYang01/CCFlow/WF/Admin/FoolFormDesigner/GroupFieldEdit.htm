@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>新建分组</title>
+     <!-- 引用配置文件.-->
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
+    <link href="../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../Scripts/jquery.easyui.min.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            var gfID = GetQueryString("GroupField");
+            if (gfID == null)
+                gfID = "0";
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=GroupField_Init&GroupField=" + gfID + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') >= 0) {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+                    if (data instanceof Array) { //判断是否是数组 如果是数组就取第一个对象 杨玉慧
+                        data = data[0];
+                    }
+                    $("#TB_Blank_Name").val(data.Lab);
+                    $("#TB_Blank_No").val(data.CtrlID);
+                    return;
+                }
+            });
+        });
+
+        //转拼音，并去除开头为数字的字符
+        function ParseStringToPinYin(parseString, parseModel) {
+            parseString = $.trim(parseString);
+            if (parseString != "") {
+                $.post(  Handler, { action: 'ParseStringToPinyin', name: parseString, flag: parseModel }, function (data) {
+                    if (data != "false") {
+                        document.getElementById("TB_No").value = data;
+                    }
+                });
+            }
+        }
+
+
+        //传入父窗体
+        function GetFrmInfo() {
+            return {
+                Name: $.trim($("#TB_Name").val()),
+                No: $.trim($("#TB_No").val()),
+                IsCreateLabel: $("#CB_SCBQ").prop("checked")
+            };
+        }
+
+
+        function SaveBlank() {
+
+            var name = $("#TB_Blank_Name").val();
+            if (name == "") {
+                alert("分组名称不能为空.");
+                return;
+            }
+            var fk_mapData = GetQueryString("FK_MapData");
+            var checkBoxIDs = GenerCheckIDs(); //获得所有的 checkBox ID传入到后台去,用于解决checkbox控件，在没有被选择的时候，没有值的问题。
+            var frmData = $("#cc").serialize();
+
+            $("#Msg").html("正在保存,请稍后......");
+            var gfID = GetQueryString("GroupField");
+            if (gfID == null)
+                gfID = "0";
+
+            $.ajax({
+                data: frmData,
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=GroupField_SaveBlank&CheckBoxIDs=" + checkBoxIDs + "&GroupField=" + gfID + "&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') >= 0) {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+
+                    alert(data);
+                    return;
+                }
+            });
+        }
+
+        function SaveBlank_Close() {
+            SaveBlank();
+            window.close();
+        }
+
+        function GroupField_Delete(num) {
+
+            var gfID = GetQueryString("GroupField");
+            if (gfID == null) {
+                gfID = "0";
+                return;
+            }
+
+            if (confirm('您确定要删除吗？') == false)
+                return;
+
+            var url ;
+            if (num == 1) {
+                url = Handler + "?DoType=GroupField_DeleteCheck&GroupField=" + gfID + "&m=" + Math.random();
+            } else {
+                url = Handler + "?DoType=GroupField_DeleteAllCheck&GroupField=" + gfID + "&m=" + Math.random();
+            }
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') >= 0) {
+                        $("#Msg").html("<font color=red>" + data + "</font>");
+                        return;
+                    }
+                    alert(data);
+                    window.close();
+                    return;
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+
+<div id="Msg"></div>
+
+
+<form id="cc">
+
+ <fieldset>
+    <legend>新建空白分组</legend>
+    <table>
+    <tr> 
+    <td>分组名称(不能为空)</td>
+    <td>  <input type="text" value="" name="TB_Blank_Name" id="TB_Blank_Name" />  </td>
+    </tr>
+
+    <tr> 
+    <td>分组标记(可以为空)</td>
+    <td>  <input type="text" value="" name="TB_Blank_No" id="TB_Blank_No" />   </td>
+    </tr>
+
+    <tr>
+    <td colspan="4"> <font color="gray"> 空白字段分组，建立后可以把相关的字段放入此分组里。</font></td>
+    </tr>
+
+    <tr> 
+    <td colspan="4" > 
+    <input type="button" value="保存"   onclick="SaveBlank()" id="Btn_SaveBlank" name="Btn_SaveBlank" />
+    <input type="button" value="保存并关闭"   onclick="SaveBlank_Close()" id="Button1" name="Btn_SaveBlank" />
+    <input type="button" value="删除"   onclick="GroupField_Delete(1)" id="Button2" name="Btn_SaveBlank" />
+    <input type="button" value="删除并删除该分组下的字段"   onclick="GroupField_Delete(2)" id="Button3" name="Btn_SaveBlank" />
+     </td>
+     </td>
+    </tr>
+    </table>
+    </fieldset>
+    </form>
+
+</body>
+</html>

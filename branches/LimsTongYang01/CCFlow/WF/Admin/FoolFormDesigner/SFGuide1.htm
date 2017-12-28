@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>创建字典表</title>
+     <script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+     <base target="_self" /> 
+    <link href="../../Comm/Style/Table0.css" rel="stylesheet" type="text/css" />
+
+    <script language="javascript" type="text/javascript" >
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            var fk_mapData = GetQueryString("FK_MapData");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=SFTableList&FK_MapData=" + fk_mapData + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    data = JSON.parse(data);
+                    //增加处理.
+                    for (var i = 0; i < data.length; i++) {
+
+                        var newRow = "";
+
+                        var nameLink = "";
+
+                        if (fk_mapData == null)
+                            nameLink = "<a href=\"javascript:AddSFTable('" + data[i].No + "')\" >" + data[i].No + "</a>";
+                        else
+                            nameLink = data[i].No;
+
+                        newRow = "<tr ><td class=Idx>" + i + "</td><td>" + nameLink + "</td><td>" + data[i].Name + "</td><td>" + data[i].FK_SFDBSrcText + "</td> <td>" + data[i].SrcTypeText + "</td> <td><a href=\"javascript:Edit('" + data[i].No + "')\">编辑</a></td><td><a href=\"javascript:Ref('" + data[i].No + "')\">引用</a></td><td><a href=\"javascript:Delete('" + data[i].No + "')\">删除</a></td></tr>";
+
+                        $("#Table1 tr:last").after(newRow);
+                    }
+                }
+            });
+        }
+
+        function Delete(key) {
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            //删除表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=SFTableDelete&FK_SFTable=" + key + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                    } else {
+                        window.location.href = window.location.href;
+                    }
+                }
+            });
+        }
+
+
+       
+
+     </script>
+</head>
+<body onkeypress="Esc()" >
+<table id="Table1" style="width:100%">
+<caption>创建字典表</caption>
+<tr>
+<td> 
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+<fieldset>
+<legend>本地类</legend>
+编号：
+名称：
+
+</fieldset>
+
+
+ </td>
+</tr>
+
+
+</table>
+
+
+<div id="Msg"></div>
+
+</body>
+</html>

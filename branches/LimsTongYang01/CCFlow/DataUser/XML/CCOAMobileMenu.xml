@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  
+  <!-- 移动OA的右边菜单. -->
+  <MobileMenu No="News" CH="新闻"  Url="/App/News/NewsListMobile.aspx" Img="/WF/App/Classic/Img/Menu/Start.png" Enable="1" Title="发起我能够发起的流程" />
+  <MobileMenu No="Notice" CH="公告" Url="/App/Notice/NoticeListMobile.aspx" Img="/WF/App/Classic/Img/Menu/EmpWorks.png" Enable="1" Title="等待我处理的工作。" />
+  <MobileMenu No="BBS" CH="集团论坛" Url="/App/BBS/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/EmpWorks.png" Enable="1" Title="等待我处理的工作。" />
+  <MobileMenu No="AddressList" CH="通讯录"  Url="/App/AddressList/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="抄送给我的工作。" />
+  
+  <MobileMenu No="Meeting" CH="会议室"  Url="/App/Meeting/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="抄送给我的工作。" />
+  <MobileMenu No="Car" CH="车辆"  Url="/App/Car/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="抄送给我的工作。" />
+  <MobileMenu No="DailySupplies" CH="办公用品"  Url="/App/DailySupplies/ListMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="抄送给我的工作。" />
+
+  <MobileMenu No="HRInfo" CH="工资条"  Url="/App/HR/SalaryBillMobile.aspx" Img="/WF/App/Classic/Img/Menu/CC.png" Enable="1" Title="抄送给我的工作。" />
+
+</NewDataSet>

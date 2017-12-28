@@ -1,0 +1,64 @@
+
+   项目工程类的流程在ccflow中应用与设计说明书
+
+
+概要说明:
+--------------------------------------
+1, Prj为项目工程所用的一些扩展应用,项目流程也可以称为工程流程，是为了建造一个跨期比较长的工程在每个环节上需要流程控制。
+
+
+2, 项目流程权限控制比较特殊，比如一个人在a项目中是项目经理，在b项目中是工程师。这类的流程在节点权限控制时会遇到局限在本项目中流转。
+
+
+3，一个项目会有资料树的概念，每一个有关项目的流程具有一些文档，这些文档会于项目关联。
+
+
+4，项目流程ccflow在表单设计中有一个约定。每个节点表单中（流程表单除外）都必须有PrjNo,PrjName两个属性.
+   在流程设计时必须指明此流程为项目类型的流程。
+
+
+环境搭建
+----------------------------------------
+1.  D:\ccflow\ExpandingApplication\Prj\Prj 复制到 D:\ccflow\VisualFlow\ 中去.
+
+2.  在ccflow webapplication 中引用 D:\ccflow\trunk\ExpandingApplication\Prj\Components\BP.PRJ\BP.PRJ.csproj
+
+3. 在目录: D:\ccflow\trunk\CCFlow\DataUser 下创建一个Prj.Data 目录. 这个目录将会放资料树。  
+    D:\ccflow\trunk\CCFlow\DataUser\PrjData\Data 资料树数据．
+　　D:\ccflow\trunk\CCFlow\DataUser\PrjData\Templete　资料树模板数据.
+ 
+3. 编译该项目.
+
+
+创建您的第一个工程项目:
+----------------------------------------
+1, 在流程设计器中建立一个项目, 该项目的编号为 0001.
+
+
+2, 为该项目设计项目树模板.
+   2.1 创建目录: D:\ccflow\trunk\CCFlow\DataUser\PrjData\Templete\001
+   2.2 在以上目录下创建目录模板, 系统中读取文件名.文件里面可以没有任何内容. (为了方便期间你可以把 D:\ccflow\ExpandingApplication\Prj\Templete\*.* copy 里面测试)
+       目前只支持一级的资料树.
+
+   2.3 说明:在您上传资料后，系统就会自动的把文件上传到 D:\ccflow\trunk\CCFlow\DataUser\PrjData\Data\001 下面。
+ 
+3. 为该项目设计岗位与人员.设计资料树节点访问规则.
+
+4. 新建一个流程，在流程属性中设置该流程为项目类型的流程.
+
+5. 为该流程的每个节点表单都要增加一个PrjNo,PrjName字段.
+
+6, 在表单上，增加一个超连接 连接地址为 ./Prj/DocTree.aspx?FK_Prj=@PrjNo&FK_Node=当前节点ID. 系统就会打开项目树了.
+ 
+
+
+如果以上有变动，请参考ccflow流程设计器说明书 . http://ccflow.org 下载.
+
+============== over  =================
+
+
+
+   
+  
+
+

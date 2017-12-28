@@ -1,0 +1,187 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Sys_GroupField>
+    <OID>2451</OID>
+    <Lab>开始节点</Lab>
+    <EnName>ND19101</EnName>
+    <Idx>1</Idx>
+    <GUID />
+    <CtrlType />
+    <CtrlID />
+    <AtPara />
+  </Sys_GroupField>
+  <Sys_MapData>
+    <No>ND19101</No>
+    <Name>开始节点</Name>
+    <FrmW>900</FrmW>
+    <FrmH>1200</FrmH>
+  </Sys_MapData>
+  <Sys_MapAttr>
+    <MyPK>ND19101_OID</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <KeyOfEn>OID</KeyOfEn>
+    <Name>OID</Name>
+    <DefVal>0</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>2</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag />
+    <EditType>2</EditType>
+    <ColSpan>1</ColSpan>
+    <GroupID>0</GroupID>
+    <Idx>999</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_MapAttr>
+    <MyPK>ND19101_RDT</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <KeyOfEn>RDT</KeyOfEn>
+    <Name>更新时间</Name>
+    <DefVal>@RDT</DefVal>
+    <UIContralType>0</UIContralType>
+    <MyDataType>7</MyDataType>
+    <LGType>0</LGType>
+    <UIWidth>100</UIWidth>
+    <UIHeight>23</UIHeight>
+    <MinLen>0</MinLen>
+    <MaxLen>300</MaxLen>
+    <UIBindKey />
+    <UIRefKey />
+    <UIRefKeyText />
+    <UIVisible>0</UIVisible>
+    <UIIsEnable>0</UIIsEnable>
+    <UIIsLine>0</UIIsLine>
+    <UIIsInput>0</UIIsInput>
+    <IsSigan>0</IsSigan>
+    <X>5</X>
+    <Y>5</Y>
+    <GUID />
+    <Tag>1</Tag>
+    <EditType>1</EditType>
+    <ColSpan>1</ColSpan>
+    <GroupID>0</GroupID>
+    <Idx>999</Idx>
+    <AtPara />
+  </Sys_MapAttr>
+  <Sys_FrmLine>
+    <MyPK>LE_4_ND19101</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <X1>81.55</X1>
+    <X2>718.82</X2>
+    <Y1>80</Y1>
+    <Y2>80</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_5_ND19101</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <X1>81.82</X1>
+    <X2>81.82</X2>
+    <Y1>40</Y1>
+    <Y2>480.91</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_6_ND19101</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <X1>81.82</X1>
+    <X2>720</X2>
+    <Y1>481.82</Y1>
+    <Y2>481.82</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_7_ND19101</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <X1>83.36</X1>
+    <X2>717.91</X2>
+    <Y1>40.91</Y1>
+    <Y2>40.91</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_8_ND19101</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <X1>83.36</X1>
+    <X2>717.91</X2>
+    <Y1>120.91</Y1>
+    <Y2>120.91</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmLine>
+    <MyPK>LE_9_ND19101</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <X1>719.09</X1>
+    <X2>719.09</X2>
+    <Y1>40</Y1>
+    <Y2>482.73</Y2>
+    <BorderColor>Black</BorderColor>
+    <BorderWidth>2</BorderWidth>
+  </Sys_FrmLine>
+  <Sys_FrmImg>
+    <MyPK>Img_1_ND19101</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <ImgAppType>0</ImgAppType>
+    <X>579.26</X>
+    <Y>-2.55</Y>
+    <H>40</H>
+    <W>137</W>
+    <ImgURL>/ccform;component/Img/LogoBig.png</ImgURL>
+    <ImgPath>/CCFormDesigner;component/Img/Logo//LogoBig.png</ImgPath>
+    <LinkURL>http://ccflow.org</LinkURL>
+    <LinkTarget>_blank</LinkTarget>
+    <GUID />
+    <Tag0 />
+    <SrcType>0</SrcType>
+    <IsEdit>1</IsEdit>
+    <Name />
+    <EnPK />
+  </Sys_FrmImg>
+  <Sys_FrmLab>
+    <MyPK>LB_4_ND19101</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <Text>填写xxxx申请单</Text>
+    <X>79.67</X>
+    <Y>4.27</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>23</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <FontWeight>normal</FontWeight>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+  <Sys_FrmLab>
+    <MyPK>ND19101LB1</MyPK>
+    <FK_MapData>ND19101</FK_MapData>
+    <Text>Made&amp;nbsp;by&amp;nbsp;ccform</Text>
+    <X>605</X>
+    <Y>490</Y>
+    <FontColor>#FF000000</FontColor>
+    <FontName>Portable User Interface</FontName>
+    <FontSize>14</FontSize>
+    <FontStyle>Normal</FontStyle>
+    <IsBold>0</IsBold>
+    <IsItalic>0</IsItalic>
+  </Sys_FrmLab>
+</NewDataSet>

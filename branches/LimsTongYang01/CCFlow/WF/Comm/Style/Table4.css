@@ -1,0 +1,312 @@
+/*  Table 风格  */
+body
+{
+    font-size:12px;
+}
+
+/*  table 类型风格 */
+table
+{
+    border: 1px solid #C2D5E3;
+    border-collapse: collapse;
+	margin:0 auto;
+
+}
+
+th, .Title
+{
+    background-color: #FCF9F0;
+    font-size: 12px;
+    border: 1px solid #ffcccc;
+    text-align: center;
+	height:25px;
+	line-height:25px;
+	color:#BA350F;
+}
+
+th .Idx
+{
+	background-color:#eee;
+	font-size:12px;
+	border:1px solid #ccc;
+	text-align: center;
+}
+
+td
+{
+    border: 1px solid #FFCCCC;
+    padding: 4px;
+    text-align: left;
+    background-color: #FFFFFF;
+	color:#333333;
+}
+
+td input[type="textbox"]
+{
+    margin: 0px;
+    border: 1px solid #D6DDE6;
+    padding: 0px;
+}
+
+td .TDNum
+{
+  text-align:right;
+    word-break: keep-all;
+}
+
+td input
+{
+    border:none;
+    width:auto;
+    word-break: keep-all;
+}
+
+.TBcalendar
+{
+    background-position: right center;
+    background-image: url('Img/calendar.gif');
+    background-repeat: no-repeat;
+	    text-align: left;
+
+}
+
+caption,.TitleMsg
+{
+    font: bolder medium Arial, Helvetica, sans-serif;
+    color: #BA350F;
+    text-align: left;
+	font-size:12px;
+	padding-left:10px;
+	font-weight:bold;
+	background: url('Img/title_bg4.png');
+	color:#BA350F;
+	border: 1px solid #FFCCCC;
+	border-bottom:none;
+	height:30px;
+	_padding-top:8px;
+	_height:20px;
+}
+.Caption b,.TitleMsg b{
+    font-size:12px;
+	font-weight:bold;
+    line-height:30px;
+	_line-height:20px;
+}
+.TitleMsg img,caption img{
+	vertical-align:middle;
+}
+.TitleMsg,.TitleMsg b{
+height:20px;
+line-height:20px;
+}
+
+table input[type="textbox"]
+{
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: none;
+    border-left-style: none;
+    background-color: #FF0000;
+    word-break: keep-all;
+}
+
+.TBDoc
+{
+    border-style: dotted none dotted none;
+    border-width: 1px;
+    border-color: #CCCCCC;
+    overflow: visible;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.TB
+{
+    border-style: none none dotted none;
+    border-width: 1px;
+    border-color: #CCCCCC;
+    overflow: visible;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    word-break: keep-all;
+    
+}
+
+/*  input 类型风格 */
+input[type="button"], .Btn, input[type="submit"]
+{
+     padding:0 8px;
+    margin: 3px;
+    height: 25px;
+    border-right: #002D96 1px solid;
+    border-top: #002D96 1px solid;
+    font-size: 12px;
+    line-height:25px;
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,
+StartColorStr=#FFFFFF, EndColorStr=#9DBCEA);
+    border-left: #002D96 1px solid;
+    cursor: hand;
+    color: black;
+    border-bottom: #002D96 1px solid;
+}
+
+/** 其它  */
+.ToolBar
+{
+    background-color: #d8edff;
+}
+
+.GroupTitle  
+{
+    padding: 4px;
+    margin: 4px;
+    background-color: #eee;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    word-break: keep-all;
+    font-weight: bold;
+    color: #006666;
+}
+
+.GroupField
+{
+   padding: 4px;
+    margin: 4px;
+    background-color: #eee;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    word-break: keep-all;
+    font-weight: bold;
+    color: #006666;
+}
+
+
+.GroupField a
+{
+    font-weight: bold;
+}
+ 
+/* 在输入信息字段名称，单元格式的风格 */
+.FDesc
+{
+	padding: 4px;
+    text-align: right;
+    font-size: 12px;
+    margin: 4px;
+    background-color: #f4f4f4;
+	border: lightgrey 1px solid;
+	border-top:none;
+}
+
+.TBNum
+{
+    border-style: none none dotted none;
+    padding: 1px;
+    margin: 1px;
+    font-size: 12px;
+    text-align: right;
+    float: left;
+    clear: left;
+    width: auto;
+    border-width: 1px;
+    width: 70px;
+    word-break: keep-all;
+}
+ 
+.TBReadonly
+{
+    font-size: 12px;
+    text-align: left;
+    float: left;
+    clear: left;
+    width: 100%;
+    border-width: 0px;
+    background-color: #FFFFFF;
+    word-break: keep-all;
+}
+
+.TBNumReadonly
+{
+    font-size: 12px;
+    background-color: #FFFFFF;
+    border-right: black thin;
+    border-top: black thin;
+    border-left: black thin;
+    border-bottom: black thin;
+    text-align: right;
+    vertical-align: bottom;
+    text-align: right;
+    width: 70px;
+    word-break: keep-all;
+}
+
+.TR1
+{
+    background-color: AliceBlue;
+}
+
+
+.TRSum
+{
+    background-color: #FFFFFF;
+    font-size: 12px;
+}
+
+
+.BigDoc
+{
+    border-style: none;
+    padding-right: 5px;
+    padding-left: 5px;
+    font-size: 12px;
+    padding-bottom: 5px;
+    margin: 5px;
+    padding-top: 5px;
+    line-height: 15pt;
+    letter-spacing: 0pc;
+}
+
+/* 内部标签风格 */
+fieldset
+{
+    margin: 5px;
+    table-layout: auto;
+    padding: 2px;
+    text-align: left;
+}
+
+legend
+{
+    color: green;
+    font-style: inherit;
+    font-weight: bold;
+}
+
+
+a:link, a:visited, a:active
+{
+    color: blue;
+    text-decoration: none;
+}
+
+a:hover
+{
+    text-decoration: underline;
+}
+
+ul
+{
+    border-right-style: 0;
+    border-left-style: 0;
+    left: 2px;
+    clip: rect(auto, auto, auto, 2px);
+}
+ 

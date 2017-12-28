@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DS>
+  <Item No="String" Name="字符型" Desc="" />
+  <Item No="Int" Name="整数型" Desc="" />
+  <Item No="Money" Name="金额型" Desc="" />
+  <Item No="Float" Name="浮点型" Desc="" />
+  <Item No="Date" Name="日期型" Desc="" />
+  <Item No="DateTime" Name="日期时间型" Desc="" />
+  <Item No="Bool" Name="Boole型(是/否)" Desc="" />
+  <Item No="Enum" Name="枚举型" Desc="" />
+  <Item No="FK" Name="外键型" Desc="" />
+
+  <MapMenu No="FK" Name="外键型" Desc="" />
+  <MapMenu No="FK" Name="外键型" Desc="" />
+
+  <MsgType No="All" Name="全部" Desc="" />
+  <MsgType No="Self" Name="自定义消息" Desc="" />
+  <MsgType No="CC" Name="抄送消息" Desc="" />
+  <MsgType No="ToDo" Name="待办消息" Desc="" />
+  <MsgType No="Etc" Name="其他" Desc="" />
+
+  <CCMenu No="-1" Name="全部" Desc="" />
+  <CCMenu No="0" Name="已读" Desc="" />
+  <CCMenu No="1" Name="未读" Desc="" />
+  <CCMenu11 No="2" Name="删除" Desc="" />
+
+</DS>
+

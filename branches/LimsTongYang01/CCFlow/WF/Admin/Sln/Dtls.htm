@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+    <style type="text/css">
+        th, td {
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+        var frmID;
+        var fk_flow;
+        var fk_Node;
+        $(function () {
+            frmID = GetQueryString("FK_MapData");
+            fk_flow = GetQueryString("FK_Flow");
+            fk_Node = GetQueryString("FK_Node");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=Dtls_Init&FK_Flow=" + fk_flow + "&FK_MapData=" + frmID + "&FK_Node=" + fk_Node + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    data = JSON.parse(data);
+                    var trStr = "";
+
+                    for (var i = 0; i < data.length; i++) { 
+                        trStr += "<tr >";
+                        trStr += "<td class=Idx>" + data[i].idx + "</td>";
+                        trStr += "<td>" + data[i].No + "</td>";
+                        trStr += "<td>" + data[i].Name + "</td>";
+                        trStr += "<td>" + data[i].PrimitiveAttrTag + "</td>";
+                        trStr += "<td>" + data[i].EditTag + "</td>";
+                        trStr += "<td>" + data[i].DelTag + "</td>";
+                        trStr += "</tr>";
+                    }
+
+                    $("#Table1 tr:last").after(trStr);
+                }
+            });
+        });
+
+        //编辑Dtl的原始属性.
+        function EditDtlYuanShi(fk_mapdata, dtlKey) {
+            var url = 'MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtlKey + '&DoType=Edit';
+            WinOpen(url, 'ss');
+        }
+
+        //编辑附件在该节点权限.
+        function EditDtl(fk_node, fk_mapdata, dtlNo) {
+            var url = 'MapDefDtlFreeFrm.aspx?DoType=Edit&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtlNo + '&FK_Node=' + fk_node;
+            var b = window.showModalDialog(url, 'ass', 'dialogHeight: 600px; dialogWidth: 700px;center: yes; help:no;resizable:yes');
+            window.location.href = window.location.href;
+        }
+
+        //删除附件的权限控制.
+        function DeleteDtl(fk_node, fk_mapdata, dtl) {
+            if (confirm('您确定要删除该控件在当前节点的权限控制吗？') == false)
+                return;
+            var url = 'Sln.aspx?DoType=DeleteDtl&FK_Node=' + fk_node + '&FK_MapData=' + fk_mapdata + '&FK_MapDtl=' + dtl;
+            alert(url);
+            WinShowModalDialog(url, 'ss');
+            window.location.href = window.location.href;
+        }
+    </script>
+</head>
+<body onkeypress="Esc();">
+    <table id="Table1" class="table tableizer-table  table-striped table-bordered table-hover table-condensed">
+        <tr>
+            <td colspan="6">
+                节点-表单-明细表权限
+            </td>
+        </tr>
+        <tr>
+            <td>序</td>
+            <td>编号</td>
+            <td>名称</td>
+            <td>原始属性</td>
+            <td>编辑</td>
+            <td>删除</td>
+        </tr>
+    </table>
+</body>
+</html>

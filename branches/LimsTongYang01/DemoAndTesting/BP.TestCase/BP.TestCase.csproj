@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{698A4AC7-4EA0-4E27-9374-6F671C6D96EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BP.TestCase</RootNamespace>
+    <AssemblyName>BP.TestCase</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AttrNode\T2Cond\TurnByURL.cs" />
+    <Compile Include="DevInterface\AboutTitle.cs" />
+    <Compile Include="AttrFlow\GenerTitle.cs" />
+    <Compile Include="AttrFlow\GeneWorkID.cs" />
+    <Compile Include="AttrFlow\CreateStartWork.cs" />
+    <Compile Include="AttrFlow\RebackWorkFlow.cs" />
+    <Compile Include="AttrNode\DoOutTimeCond.cs" />
+    <Compile Include="AttrNode\SaveDraft.cs" />
+    <Compile Include="AttrNode\SendPara.cs" />
+    <Compile Include="DevInterface\FlowBaseFunc023.cs" />
+    <Compile Include="AttrNode\ReadReceipts.cs" />
+    <Compile Include="AttrNode\TestHungUp.cs" />
+    <Compile Include="DevInterface\SendObjs.cs" />
+    <Compile Include="AttrNode\TestAskFor.cs" />
+    <Compile Include="AttrFlow\GenerBillNo.cs" />
+    <Compile Include="DevInterface\TaskPool.cs" />
+    <Compile Include="AttrNode\FindWorkNode\FindLeader.cs" />
+    <Compile Include="AttrNode\FindWorkNode\FindByDept.cs" />
+    <Compile Include="DevInterface\DeleteSubThread.cs" />
+    <Compile Include="AttrNode\Skip\Skip1_11.cs" />
+    <Compile Include="AttrNode\Skip\Skip1_12.cs" />
+    <Compile Include="AttrNode\Skip\Skip1_13.cs" />
+    <Compile Include="AttrNode\Skip\Skip2.cs" />
+    <Compile Include="ReturnCase\Test088Return.cs" />
+    <Compile Include="ReturnCase\Test005Return.cs" />
+    <Compile Include="T0Send\SendCases.cs" />
+    <Compile Include="T0Send\Test001.cs" />
+    <Compile Include="T0Send\Send024.cs" />
+    <Compile Include="T0Send\SendByGUIDDept.cs" />
+    <Compile Include="T0Send\StarterFlowByERS.cs" />
+    <Compile Include="T0Send\SendCase.cs" />
+    <Compile Include="T0Send\Send009.cs" />
+    <Compile Include="T0Send\Send055.cs" />
+    <Compile Include="ReturnCase\HeLiuNodeReturn.cs" />
+    <Compile Include="ReturnCase\Return024.cs" />
+    <Compile Include="DevInterface\SubFlowReback.cs" />
+    <Compile Include="T0Send\Send122.cs" />
+    <Compile Include="T0Send\Send011ParentFlow.cs" />
+    <Compile Include="TestCaseTemplete.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CellTestBase.cs" />
+    <Compile Include="T0Send\Send023.cs" />
+    <Compile Include="T0Send\Send005.cs" />
+    <Compile Include="ReturnCase\ReturnByDesigner.cs" />
+    <Compile Include="ReturnCase\Test001Return.cs" />
+    <Compile Include="AttrNode\T2Cond\TurnByFieldAndStation.cs" />
+    <Compile Include="AttrNode\T2Cond\TurnByDept.cs" />
+    <Compile Include="AttrNode\T2Cond\TurnByDevPara.cs" />
+    <Compile Include="AttrNode\T2Cond\TurnBySQL.cs" />
+    <Compile Include="DevInterface\CallSubFlow.cs" />
+    <Compile Include="Rpt\GenerBillByDataTable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Components\BP.En30\BP.En30.csproj">
+      <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
+      <Name>BP.En30</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Components\BP.WF\BP.WF.csproj">
+      <Project>{04147518-E5E6-4B01-A797-094B8BA9CFD5}</Project>
+      <Name>BP.WF</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

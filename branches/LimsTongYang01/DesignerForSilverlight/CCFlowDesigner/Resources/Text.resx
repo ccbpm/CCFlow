@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FlowNodeName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="FlowNodeType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="FlowNodeType_AND_BRANCH" xml:space="preserve">
+    <value>AND_BRANCH</value>
+  </data>
+  <data name="FlowNodeType_AND_MERGE" xml:space="preserve">
+    <value>AND_MERGE</value>
+  </data>
+  <data name="FlowNodeType_AUTOMATION" xml:space="preserve">
+    <value>AUTOMATION</value>
+  </data>
+  <data name="FlowNodeType_COMPLETION" xml:space="preserve">
+    <value>COMPLETION</value>
+  </data>
+  <data name="FlowNodeType_DUMMY" xml:space="preserve">
+    <value>DUMMY</value>
+  </data>
+  <data name="FlowNodeType_INITIAL" xml:space="preserve">
+    <value>INITIAL</value>
+  </data>
+  <data name="FlowNodeType_INTERACTION" xml:space="preserve">
+    <value>INTERACTION</value>
+  </data>
+  <data name="FlowNodeType_OR_BRANCH" xml:space="preserve">
+    <value>OR_BRANCH</value>
+  </data>
+  <data name="FlowNodeType_OR_MERGE" xml:space="preserve">
+    <value>OR_MERGE</value>
+  </data>
+  <data name="FlowNodeType_SUBPROCESS" xml:space="preserve">
+    <value>SUBPROCESS</value>
+  </data>
+  <data name="FlowNodeType_VOTE_MERGE" xml:space="preserve">
+    <value>VOTE_MERGE</value>
+  </data>
+  <data name="Button_AddFlowNode" xml:space="preserve">
+    <value>Add FlowNode</value>
+  </data>
+  <data name="Button_AddLabel" xml:space="preserve">
+    <value>Add Label</value>
+  </data>
+  <data name="Button_AddDirection" xml:space="preserve">
+    <value>Add Direction</value>
+  </data>
+  <data name="Button_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Button_Cancle" xml:space="preserve">
+    <value>Cancle</value>
+  </data>
+  <data name="Button_ClearContainer" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Button_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Button_CreatePicture" xml:space="preserve">
+    <value>CreatePicture</value>
+  </data>
+  <data name="Button_ExportToXml" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="Button_ImportFromXml" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="Button_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Button_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Button_Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Button_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Button_Zoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="Comfirm_Delete" xml:space="preserve">
+    <value>will delete Object,continue?</value>
+  </data>
+  <data name="ContainerHeight" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="ContainerWidth" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="LineType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Menu_AlignBottom" xml:space="preserve">
+    <value>AlignBottom</value>
+  </data>
+  <data name="Menu_AlignLeft" xml:space="preserve">
+    <value>AlignLeft</value>
+  </data>
+  <data name="Menu_AlignRight" xml:space="preserve">
+    <value>AlignRight</value>
+  </data>
+  <data name="Menu_AlignTop" xml:space="preserve">
+    <value>AlignTop</value>
+  </data>
+  <data name="Menu_CopyFlowNode" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Menu_CopyLabel" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Menu_CopyDirection" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Menu_CopySelected" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Menu_DeleteFlowNode" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Menu_DeleteLabel" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Menu_DeleteDirection" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Menu_DeleteSelected" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Menu_ModifyFlowNode" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="Menu_ModifyDirection" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="Menu_Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="Menu_ShowGridLines" xml:space="preserve">
+    <value>ShowGridLines</value>
+  </data>
+  <data name="Message_BeginActivitiesCanNotHavePreFlowNode" xml:space="preserve">
+    <value>begin-activitity can not have pre-FlowNode.</value>
+  </data>
+  <data name="Message_BeginAndEndFlowNodeCanNotBeTheSame" xml:space="preserve">
+    <value>begin and end FlowNode  can not be the same.</value>
+  </data>
+  <data name="Message_HeLiuNodeOnlyHaveOnePreFlowNode" xml:space="preserve">
+    <value>branch-FlowNode only have one pre-FlowNode.</value>
+  </data>
+  <data name="Message_CanNotHavePreFlowNode" xml:space="preserve">
+    <value>can not have pre-FlowNode.</value>
+  </data>
+  <data name="Message_EndFlowNodeCanNotHaveFollowUpActivitiy" xml:space="preserve">
+    <value>end-activitity can not have follow-up activitiy.</value>
+  </data>
+  <data name="Message_SubThreadNodeOnlyHaveAFollowUpFlowNode" xml:space="preserve">
+    <value>merge-activitity  only have one follow-up activitiy.</value>
+  </data>
+  <data name="Message_ModifyWorkFlowByTip" xml:space="preserve">
+    <value>please modify workflow  in accordance with tips.</value>
+  </data>
+  <data name="Message_MustBeLinkToBeginFlowNode" xml:space="preserve">
+    <value>rule must be linked to begin-activitiy.</value>
+  </data>
+  <data name="Message_MustBeLinkToBeginAndEndFlowNode" xml:space="preserve">
+    <value>rule must be linked to begin-activitiy and end-FlowNode.</value>
+  </data>
+  <data name="Message_MustBeLinkToEndFlowNode" xml:space="preserve">
+    <value>rule must be linked to end-activitiy.</value>
+  </data>
+  <data name="Message_MustHaveAtLeastOneEndFlowNode" xml:space="preserve">
+    <value>must have at least one end-FlowNode.</value>
+  </data>
+  <data name="Message_MustHaveAtLeastOneFollowUpFlowNode" xml:space="preserve">
+    <value>must have at least one follow-up FlowNode.</value>
+  </data>
+  <data name="Message_MustHaveAtLeastOnePreFlowNode" xml:space="preserve">
+    <value>must have at least one pre-FlowNode.</value>
+  </data>
+  <data name="Message_MustHaveOnlyOneBeginFlowNode" xml:space="preserve">
+    <value>must have only one begin-FlowNode.</value>
+  </data>
+  <data name="Message_MustHaveOnlyOneFollowUpFlowNode" xml:space="preserve">
+    <value>must have only one follow-up FlowNode</value>
+  </data>
+  <data name="Message_MustHaveOnlyOnePreFlowNode" xml:space="preserve">
+    <value>must have only one pre-FlowNode.</value>
+  </data>
+  <data name="Message_NotHaveFollowUpFlowNode" xml:space="preserve">
+    <value>not have follow-up FlowNode.</value>
+  </data>
+  <data name="Message_RequireTheInstallationOfPreAndFollowupFlowNode" xml:space="preserve">
+    <value>require the installation of pre-and follow-up activities.</value>
+  </data>
+  <data name="Message_Saved" xml:space="preserve">
+    <value>WorkFlow had saved!</value>
+  </data>
+  <data name="Message_TheSameDirectionThatAlreadyExist" xml:space="preserve">
+    <value>The same rule that already exists.</value>
+  </data>
+  <data name="NewFlowNode" xml:space="preserve">
+    <value>NewFlowNode</value>
+  </data>
+  <data name="NewLable" xml:space="preserve">
+    <value>NewLabel</value>
+  </data>
+  <data name="NewDirection" xml:space="preserve">
+    <value>NewDirection</value>
+  </data>
+  <data name="RepeatDirection" xml:space="preserve">
+    <value>Direction</value>
+  </data>
+  <data name="RepeatDirection_Horizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="RepeatDirection_Vertical" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="DirectionCondition" xml:space="preserve">
+    <value>Conditon</value>
+  </data>
+  <data name="DirectionLineType_Line" xml:space="preserve">
+    <value>Line</value>
+  </data>
+  <data name="DirectionLineType_Polyline" xml:space="preserve">
+    <value>Polyline</value>
+  </data>
+  <data name="DirectionName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SubFlow" xml:space="preserve">
+    <value>SubFlow</value>
+  </data>
+  <data name="UpdateLable" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="WorkFlowName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="DeleteFlow" xml:space="preserve">
+    <value>will delete WorkFlow,continue?</value>
+  </data>
+  <data name="DeleteFlowSort" xml:space="preserve">
+    <value>will delete WorkFlow Sort,continue?</value>
+  </data>
+  <data name="IsSave" xml:space="preserve">
+    <value>Is Save ?</value>
+  </data>
+  <data name="Button_AddTemplate" xml:space="preserve">
+    <value>AddTemplate</value>
+  </data>
+  <data name="Button_CreatTemplate" xml:space="preserve">
+    <value>CreatTemplate</value>
+  </data>
+  <data name="Button_DesignerTable" xml:space="preserve">
+    <value>DesignerTable</value>
+  </data>
+  <data name="Button_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Button_FlowCheck" xml:space="preserve">
+    <value>FlowCheck</value>
+  </data>
+  <data name="Button_FlowProper" xml:space="preserve">
+    <value>FlowProper</value>
+  </data>
+  <data name="Button_FlowRptDefinition" xml:space="preserve">
+    <value>FlowRptDefinition</value>
+  </data>
+  <data name="Button_NewFlow" xml:space="preserve">
+    <value>NewFlow</value>
+  </data>
+  <data name="Button_RunFlow" xml:space="preserve">
+    <value>RunFlow</value>
+  </data>
+  <data name="Button_ShowLine" xml:space="preserve">
+    <value>ShowLine</value>
+  </data>
+  <data name="NewFlowSort" xml:space="preserve">
+    <value>NewFowSort</value>
+  </data>
+  <data name="OpenFlow" xml:space="preserve">
+    <value>OpenFlow</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="TbDept" xml:space="preserve">
+    <value>Dept</value>
+  </data>
+  <data name="TbItemFlow" xml:space="preserve">
+    <value>Flow</value>
+  </data>
+  <data name="TbStation" xml:space="preserve">
+    <value>Station</value>
+  </data>
+  <data name="Button_DelFlow" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+</root>

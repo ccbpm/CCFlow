@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+    <title>SQL模版</title>
+    <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/easyUI15/jquery.min.js" type="text/javascript"></script>
+    <script src="../Scripts/easyUI15/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript"></script>
+    <script src="../Scripts/CommonUnite.js" type="text/javascript"></script>
+    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        /* ESC Key Down */
+        function Esc() {
+            if (event.keyCode == 27)
+                window.close();
+            return true;
+        }
+
+        var fk_flow = GetQueryString('FK_Flow');
+        var fk_node = GetQueryString('FK_Node');
+
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            InitPage();
+
+            $("#Msg").html("");
+        });
+
+        //初始化数据.
+        function InitPage() {
+
+            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+
+            var sqlType = GetQueryString("TemplateType");
+            var condType = GetQueryString("CondType");
+
+            //初始化表格.
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=SettingTemplate_Init&TemplateType=" + sqlType + "&CondType=" + condType + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        window.close();
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        var url = data.replace('url@', '');
+                        window.location.href = url;
+                        return;
+                    }
+
+                    data = JSON.parse(data);
+                    if (data.length == 0) {
+                        alert('该设置还没有模版.');
+                        window.close();
+                        return;
+                    }
+
+                    //增加处理.
+                    for (var i = 0; i < data.length; i++) {
+
+                        var newRow = "";
+                        var en = data[i];
+
+                        var docs = en.Docs;
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+                        docs = docs.replace("~", "'");
+
+                        newRow = "<tr ><td class=Idx>" + i + "</td>";
+                        newRow += "<td>" + en.No + "</td>";
+                        newRow += "<td>" + en.Name + "</td>";
+                        newRow += "<td style=''><input type=text name='" + en.No + "' id='" + en.No + "' value=\"" + docs + "\" style='width:96%;'> </td>";
+                        newRow += "<td><a href=\"javascript:CopyIt('" + en.No + "');\" >选择</a></td>";
+                        newRow += "</tr>";
+                        $("#Table1 tr:last").after(newRow);
+                    }
+                }
+            });
+        }
+
+        //执行copy.
+        function CopyIt(tbid) {
+
+            var tb = document.getElementById(tbid);
+            tb.select(); //选择对象
+
+            //document.execCommand("Copy"); // 执行浏览器复制命令
+            //window.clipboardData.setData("Text", tb.value);
+            //alert("已复制好，可贴粘.");
+        }
+
+        function OK() {
+            alert('该功能为实现，请复制内容并copy到输入区域里。');
+        }
+        function Cancel() {
+
+            window.close();
+        }
+         
+    </script>
+</head>
+<body onkeypress="Esc()" class="easyui-layout">
+ 
+        <table id="Table1" class="Table" cellpadding="0" cellspacing="0" border="0" style="width: 100%">
+        <caption>请选择一个模版点击确定按钮.</caption>
+            <tr>
+                <th style="width:20px;" >序</th>
+                <th style="width:30px;" >编号</th>
+                <th style="width:100px;"  > 名称</th>
+                <th> 数据</th>
+                <th style="width:30px;" >复制</th>
+            </tr>
+        </table>
+
+        <input type="button"  value="确定"  onclick="OK()" />
+        <input type="button" value="取消"  onclick="Cancel()" />
+   
+    <div id="Msg"></div>
+
+</body>
+</html>

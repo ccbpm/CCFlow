@@ -1,0 +1,469 @@
+/*  Table 风格  */
+body
+{
+    font-size: 14px;
+}
+
+/* 按钮风格 */
+input[type="button"], input[type="submit"]
+{
+    border: 0;
+    background: #4D77A7;
+    color: #FFF;
+    font-size: 12px;
+    padding: 4px 8px;
+    margin: 5px 3px 5px 3px;
+}
+
+/* 文本框只读风格. */
+.TBReadonly
+{
+    font-size: 12px;
+    text-align: left;
+    float: left;
+    clear: left;
+    width: 100%;
+    border-width: 0px 0px 1px 0px;
+    background-color: #FAFAFA;
+    word-break: keep-all;
+    border-style: dotted none;
+}
+
+.HBtn
+{
+    width: 1px;
+    height: 1px;
+    display: none;
+}
+
+/*  table 类型风格 */
+table
+{
+    border: 1px outset #C0C0C0;
+    padding: inherit;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+/*  时学业添加 开始位置 */
+
+/*扩展应用明细表与多附件.*/
+.TitleExt
+{
+    background-color: #f4f4f4;
+    font-size: 12px;
+    border: 1px solid #C2D5E3;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    padding: 3px;
+    font-style: normal;
+    color: #333333;
+}
+
+
+/*  时学业添加 结束位置 */
+th, .Title
+{
+   background-color: #f4f4f4;
+    font-size: 12px;
+    border: 1px solid #C2D5E3;
+    text-align: center;
+    height: 20px;
+    line-height: 20px;
+    padding: 3px;
+    font-style: normal;
+    color: #333333;
+}
+
+.Idx
+{
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-weight: bold;
+    width: 20px;
+}
+
+.Sum
+{
+    background-color: #FFFFFF;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    font-weight: bold;
+}
+
+td
+{
+    border-right-style: none;
+    border-left-style: none;
+    border-style: solid;
+    padding: 4px;
+    text-align: left;
+    color: #333333;
+    font-size: 12px;
+    border-width: 1px;
+    border-color: #C2D5E3;
+}
+
+
+td a
+{
+    text-decoration: none;
+    font-size: 12px;
+}
+
+
+.tdHJ
+{
+    border: 1px solid #D6DDE6;
+    padding: 4px;
+    text-align: left;
+    background-color: #FFFFFF;
+    color: #333333;
+    font-weight: bold;
+}
+
+.tdHJNum
+{
+    border: 1px solid #D6DDE6;
+    padding: 4px;
+    text-align: right;
+    background-color: #FFFFFF;
+    color: #333333;
+    font-weight: bold;
+}
+
+td input[type="textbox"]
+{
+    margin: 0px;
+    border: 1px solid #D6DDE6;
+    padding: 0px;
+}
+
+.TDNum
+{
+    text-align: right;
+    word-break: keep-all;
+}
+
+td input
+{
+    /*border:none;*/
+    width: auto;
+    word-break: keep-all;
+}
+
+.TBcalendar
+{
+    background-position: left center;
+    border-style: none none dotted none;
+    border-width: 1px;
+    border-color: #003366;
+}
+
+.TitleMsg
+{
+    font: bolder medium Arial, Helvetica, sans-serif;
+    color: #33517A;
+    text-align: left;
+    font-size: 12px;
+    padding-left: 10px;
+    font-weight: bold;
+    background: url('Img/title_bg0.png');
+    color: #31659C;
+    border: 1px solid #C2D5E3;
+    border-bottom: none;
+    height: 30px;
+    _padding-top: 8px;
+    _height: 20px;
+    vertical-align: middle;
+}
+
+caption, .caption
+{
+    vertical-align: bottom;
+    text-align: left;
+    height: 32px;
+    line-height: 20px;
+    font-size: 14px;
+    background: url('/DataUser/Style/Img/TitleBG.png') repeat-x;
+    height: 30px;
+    padding-left: 10px;
+    font-family: 黑体;
+    font-weight: bolder;
+    color: #333333;
+}
+
+.CaptionMsg
+{
+    vertical-align: middle;
+    text-align: left;
+    height: 32px;
+    background-position: left center;
+    line-height: 34px;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    height: 30px;
+    font-family: 黑体;
+    font-weight: bolder;
+    color: #FFFFFF;
+    background: url('/DataUser/Style/Img/TitleMsg.png');
+    width: 138px;
+    margin-left: -10px;
+    padding-left: 0px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.CaptionMsg a:hover
+{
+    color: white;
+}
+
+.CaptionMsgLong
+{
+    vertical-align: middle;
+    text-align: left;
+    height: 32px;
+    background-position: left center;
+    line-height: 34px;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    height: 30px;
+    font-family: 黑体;
+    font-weight: bolder;
+    color: #FFFFFF;
+    background: url('/DataUser/Style/Img/TitleMsgLong.png');
+    width: 238px;
+    margin-left: -10px;
+    padding-left: 0px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    text-align: center;
+}
+/*可变长度Caption样式，三段式拼接*/
+.CapLeft
+{
+    margin-left: -10px;
+    width: 40px;
+    height: 30px;
+    background-position: 0 0;
+    line-height: 30px;
+    font-size: 12px;
+    background: url('/DataUser/Style/Img/TitleMsg.png');
+    background-repeat: no-repeat;
+    float: left;
+}
+
+.CapCenter
+{
+    text-align: left;
+    height: 30px;
+    background-position: left top;
+    line-height: 30px;
+    font-size: 12px;
+    font-family: 黑体;
+    font-weight: bolder;
+    color: #FFFFFF;
+    background: url('/DataUser/Style/Img/TitleMsgCenterBg.png');
+    background-repeat: repeat-x;
+    float: left;
+}
+
+.CapRight
+{
+    width: 20px;
+    height: 30px;
+    line-height: 30px;
+    background-image: url('/DataUser/Style/Img/TitleMsgRightBg.png');
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    float: left;
+}
+/*可变长度Caption样式，三段式拼接 完成*/
+.TBDoc
+{
+    /*border-style: dotted; */
+    border-width: 1px;
+    border-color: #CCCCCC; /*  overflow: visible;*/
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    display: block;
+}
+
+.TB
+{
+    border-style: none none dotted none;
+    border-width: 1px;
+    border-color: #003366;
+    overflow: visible;
+    width: 100%;
+    font-size: 12px;
+}
+
+
+/** 其它  */
+.ToolBar
+{
+    background-color: #d8edff;
+}
+
+.GroupTitle
+{
+    padding: 4px;
+    margin: 4px;
+    background-color: #e0ecff;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    word-break: keep-all;
+    font-weight: bold;
+    color: #0e2d5f;
+}
+.GroupField
+{
+    padding: 4px;
+    margin: 4px;
+    background-color: #eee;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+    word-break: keep-all;
+    font-weight: bold;
+    color: #006666;
+}
+
+.Icon
+{
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.GroupField a
+{
+    font-weight: bold;
+}
+
+/* 在输入信息字段名称，单元格式的风格 */
+.FDesc
+{
+    padding: 4px;
+    text-align: left;
+    font-size: 12px;
+    margin: 4px;
+    background-color: #e0ecff;
+    border: lightgrey 1px solid;
+    border-top: none;
+    width: inherit;
+}
+
+.TBNum
+{
+    border-style: none none dotted none;
+    padding: 1px;
+    margin: 1px;
+    font-size: 12px;
+    text-align: right;
+    float: left;
+    clear: left;
+    width: auto;
+    border-width: 1px;
+    width: 70px;
+    word-break: keep-all;
+}
+
+
+.TBNumReadonly
+{
+    font-size: 12px;
+    background-color: infobackground;
+    border-right: black thin;
+    border-top: black thin;
+    border-left: black thin;
+    border-bottom: black thin;
+    text-align: right;
+    vertical-align: bottom;
+    text-align: right;
+    width: 70px;
+    word-break: keep-all;
+}
+
+.TR1
+{
+    background-color: AliceBlue;
+}
+
+.TRSum
+{
+    font-size: 12px;
+    background-color: #FFFFFF;
+    border-bottom-style: double;
+    border-bottom-width: 2px;
+    border-bottom-color: #C0C0C0;
+    border-right-style: none;
+    border-left-style: none;
+}
+
+.BigDoc
+{
+}
+
+/* 内部标签风格 */
+fieldset
+{
+    margin: 5px;
+    table-layout: auto;
+    padding: 2px;
+    text-align: left;
+}
+
+legend
+{
+    color: green;
+    font-style: inherit;
+    font-weight: bold;
+}
+
+.FieldsetInfo
+{
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 0px;
+    border-top: 1px outset;
+    border-top-color: #CCCCCC;
+    border-right-color: inherit;
+    border-left-color: inherit;
+    border-width: 1px 0px 0px 0px;
+    border-style: outset none outset none;
+}
+
+Img
+{
+    border: 0px;
+}
+
+.Left
+{
+    background-color: #FFFFFF;
+}
+
+/*鼠标移动到行上，行背景色变化*/
+.tr_hover
+{
+    background: none repeat scroll 0 0 #e0ecff;
+}
+
+/*从表删除按钮*/
+.delRow {
+    margin-left:6px;
+}
+
+

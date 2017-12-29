@@ -233,12 +233,21 @@
                 for (var idx = 0; idx < attrs.length; idx++) {
                     var attr = attrs[idx];
 
-                    if (attr.UIVisible == 0
-                || attr.KeyOfEn == "OID"
-                || attr.KeyOfEn == "MyNum"
-                || attr.KeyOfEn == "MyPK")
+                    if (attr.UIVisible == 0  || attr.KeyOfEn == "OID"  || attr.KeyOfEn == "MyNum"  || attr.KeyOfEn == "MyPK")
                         continue;
-                    html += "<td>" + en[attr.KeyOfEn] + "</td>";
+
+
+                   // var str = JSON.stringify(attr);
+                     //                   alert(str);
+                    if (attr.LGType == 0)
+                        html += "<td>" + en[attr.KeyOfEn] + "</td>";
+                    else {
+                        var text = en[attr.KeyOfEn + 'Text'];
+                        if (text == null)
+                            text = "";
+                        html += "<td>" + text + "</td>";
+                    }
+
                 }
                 html += "</tr>";
             }
@@ -252,7 +261,7 @@
             var url = "En.htm?EnsName=" + GetQueryString("EnsName") + "&PK=" + pk;
           //  var url = "En2018.htm?EnsName=" + GetQueryString("EnsName") + "&PK=" + pk;
 
-            OpenEasyUiDialog(url, "eudlgframe", '流程属性', 1000, 550, "icon-property", true, null, null, null, function () {
+            OpenEasyUiDialog(url, "eudlgframe", this.document.title+' : 详细', 1000, 550, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;
             });
         }

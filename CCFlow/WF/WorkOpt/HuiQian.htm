@@ -212,7 +212,6 @@
 
         //确定  执行会签操作
         function ReturnWork(emps) {
-            
 
             $.ajax({
                 type: 'post',
@@ -261,6 +260,8 @@
                 url: myurl,
                 dataType: 'html',
                 success: function (data) {
+
+                    alert(data);
 
                     if (data.indexOf('url@') == 0) {
                         data = data.replace('url@', '');
@@ -317,7 +318,7 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    alert(data);
+                   // alert(data);
 
                     if (data.indexOf('err@') == 0) {
                         $(".Msg").show();

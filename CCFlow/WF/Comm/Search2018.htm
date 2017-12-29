@@ -16,13 +16,10 @@
         //定义公共个变量.
         var webUser = new WebUser();
 
-
-
         //当前用户页面信息.
         var ur = new Entity("BP.Sys.UserRegedit");
         ur.MyPK = webUser.No + "_" + GetQueryString("EnsName") + "_SearchAttrs";
         ur.RetrieveFromDBSources();
-        var PageIdx = 0;
         var ensName = GetQueryString("EnsName");
 
         //页面启动函数.
@@ -40,10 +37,6 @@
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-            this.PageIdx = GetQueryString("PageIdx");
-
-            if (PageIdx == undefined || PageIdx == 0 || PageIdx == "");
-            PageIdx = 1;
 
             //初始化工具栏.
             InitToolbar();
@@ -71,8 +64,20 @@
             var data = handler.DoMethodReturnJSON("Search_SearchAttrs");
 
             var html = "";
-            if (mapBase.IsShowSearchKey == "True")
+            if (mapBase.IsShowSearchKey == "1")
                 html = "关键字:<input type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' />";
+
+            if (mapBase.DTSearchWay != "0") {
+                html += mapBase.DTSearchLable;
+
+                if (mapBase.DTs == "1") {
+                    html += "<input type=text id='TB_S_From' name='TB_S_From' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" />";
+                    html += "到<input type=text id='TB_S_To' name='TB_S_From' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" />";
+                } else {
+                    html += "<input type=text id='TB_S_From' name='TB_S_From' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" />";
+                    html += "到<input type=text id='TB_S_To' name='TB_S_From' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" />";
+                }
+            }
 
             //绑定外键枚举查询条件.
             var attrs = data["Attrs"];
@@ -94,8 +99,6 @@
 
                 var attr = attrs[i];
                 var selectVal = json[attr.Field];
-
-
                 $("#DDL_" + attr.Field).val(selectVal);
             }
         }
@@ -124,9 +127,6 @@
             //保存查询条件.
             var ensName = GetQueryString("EnsName");
             var ur = new Entity("BP.Sys.UserRegedit");
-            alert(ur.toString());
-
-
             ur.MyPK = webUser.No + "_" + ensName + "_SearchAttrs";
             ur.FK_Emp = webUser.No;
 
@@ -142,12 +142,7 @@
 
             if (document.getElementById("TB_S_To") != null)
                 ur.DTTo_Data = this.GetTBByID("TB_S_To").value;
-
-            if (document.getElementById("TB_S_From") != null)
-                ur.DTFrom_Datatime = this.GetTBByID("TB_S_From").value;
-
-            if (document.getElementById("TB_S_To") != null)
-                ur.DTTo_Datatime = this.GetTBByID("TB_S_To").value;
+                 
 
             //获得外键的查询条件,存储里面去.
             var str = "";
@@ -161,13 +156,7 @@
             ur.CfgKey = "SearchAttrs";
             ur.Vals = str;
             ur.FK_MapData = ensName;
-
-            alert(ur.toString());
-
             var i = ur.Save();
-
-            alert(ur.toString());
-
 
             window.location.href = "?EnsName=" + ensName + "&PageIdx=1";
         }
@@ -181,7 +170,10 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
 
             //获得查询的基本信息, 实体属性 attrs, 实体数据.
-            handler.AddPara("PageIdx", this.PageIdx)
+
+            var pageIdx = this.GetQueryString("PageIdx");
+
+            handler.AddPara("PageIdx", pageIdx);
             handler.AddPara("EnsName", GetQueryString("EnsName"));
 
             var data = handler.DoMethodReturnString("Search_SearchIt");
@@ -247,8 +239,9 @@
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
-            handler.AddPara("PageIdx", this.PageIdx);
-            handler.AddPara("RecCount", ur.RecCount);
+
+            var pageIdx = this.GetQueryString("PageIdx");
+            handler.AddPara("PageIdx", pageIdx);
 
             var html= handler.DoMethodReturnString("Search_GenerPageIdx");
             $("#end").html(html);

@@ -149,6 +149,10 @@ namespace BP.WF
         /// 表单IDs
         /// </summary>
         public const string FrmIDs = "FrmIDs";
+        /// <summary>
+        /// 是否会签？
+        /// </summary>
+        public const string IsHuiQian = "IsHuiQian";
     }
     /// <summary>
     /// 工作者列表
@@ -156,6 +160,17 @@ namespace BP.WF
     public class GenerWorkerList : Entity
     {
         #region 参数属性.
+        public bool IsHuiQian
+        {
+            get
+            {
+                return this.GetParaBoolen(GenerWorkerListAttr.IsHuiQian);
+            }
+            set
+            {
+                this.SetPara(GenerWorkerListAttr.IsHuiQian, value);
+            }
+        }
         /// <summary>
         /// 分组标记
         /// </summary>

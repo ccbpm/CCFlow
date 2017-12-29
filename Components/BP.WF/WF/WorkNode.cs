@@ -5098,7 +5098,7 @@ namespace BP.WF
                     {
                         if (item.FK_Emp == WebUser.No)
                         {
-                            item.IsEnable = false;
+                            item.IsHuiQian = true;
                             item.Update();
                             break;
                         }
@@ -5117,14 +5117,12 @@ namespace BP.WF
                 gwl.IsPassInt = 1;
                 if (this.HisGenerWorkFlow.HuiQianTaskSta != HuiQianTaskSta.None)
                 {
-                    if (this.HisGenerWorkFlow.HuiQianZhuChiRen == WebUser.No)
-                        gwl.IsEnable = true;
-                    else
-                        gwl.IsEnable = false;
+                    if (this.HisGenerWorkFlow.HuiQianZhuChiRen != WebUser.No)
+                        gwl.IsHuiQian = true;
                 }
                 else
                 {
-                    gwl.IsEnable = false;
+                    gwl.IsHuiQian = true;
                 }
                 gwl.Update();
 

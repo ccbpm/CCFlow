@@ -24,8 +24,9 @@
 				search.before(tag);
 				onSelect(target, data);
 				tag.delegate("i", "click", function (e) {
-					opts.onUnselect.call("", $(this).parent().data());
+					var record = $(this).parent().data();
 					$(this).parent().remove();
+					opts.onUnselect.call("", record);
 				});
 			}
 		}
@@ -211,8 +212,9 @@
 					search.before(tag);
 					onSelect(target, data);
 					tag.delegate("i", "click", function () {
-						opts.onUnselect.call("", $(this).parent().data());
+						var record = $(this).parent().data();
 						$(this).parent().remove();
+						opts.onUnselect.call("", record);
 					});
 				}
 				search.val("");

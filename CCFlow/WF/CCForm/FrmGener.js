@@ -540,57 +540,67 @@ function AfterBindEn_DealMapExt(frmData) {
 						data = DBAccess.RunSQLReturnTable(mapExt.Tag4);
 						break;
 				}
-				var cbx = $("#" + mapExt.AttrOfOper + "_combobox");
-				cbx.attr("class", "easyui-combobox");
-				cbx.combobox({
-					"editable" : false,
-					"valueField" : valueField,
-					"textField" : textField,
-					"multiple" : true,
-					"onSelect" : function (p) {
-						(function sel(n, KeyOfEn, FK_MapData) {
-							var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-							frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
-							frmEleDB.FK_MapData = FK_MapData;
-							frmEleDB.EleID = KeyOfEn;
-							frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
-							frmEleDB.Tag1 = n;
-							if (frmEleDB.Update() == 0) {
-								frmEleDB.Insert();
-							}
-						})(p[valueField], mapExt.AttrOfOper, mapExt.FK_MapData);
-					},
-					"onUnselect" : function (p) {
-						(function unsel(n, KeyOfEn) {
-							var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-							frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
-							frmEleDB.Delete();
-						})(p[valueField], mapExt.AttrOfOper);
-					}
-				});
-				cbx.combobox("loadData", data);
+				(function (AttrOfOper, data) {
+					var cbx = $("#" + AttrOfOper + "_combobox");
+					var hiddenField = $('<input type="hidden" />');
+					hiddenField.attr("id", "TB_" + AttrOfOper);
+					hiddenField.attr("name", "TB_" + AttrOfOper);
+					cbx.after(hiddenField);
+					cbx.attr("class", "easyui-combobox");
+					cbx.combobox({
+						"editable" : false,
+						"valueField" : valueField,
+						"textField" : textField,
+						"multiple" : true,
+						"onSelect" : function (p) {
+							$("#TB_" + AttrOfOper).val(cbx.combobox("getText"));
+							(function sel(n, KeyOfEn, FK_MapData) {
+								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+								frmEleDB.FK_MapData = FK_MapData;
+								frmEleDB.EleID = KeyOfEn;
+								frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
+								frmEleDB.Tag1 = n;
+								if (frmEleDB.Update() == 0) {
+									frmEleDB.Insert();
+								}
+							})(p[valueField], AttrOfOper, FK_MapData);
+						},
+						"onUnselect" : function (p) {
+							$("#TB_" + AttrOfOper).val(cbx.combobox("getText"));
+							(function unsel(n, KeyOfEn) {
+								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+								frmEleDB.Delete();
+							})(p[valueField], AttrOfOper);
+						}
+					});
+					cbx.combobox("loadData", data);
+				})(mapExt.AttrOfOper, data);
 				break;
 			case "MultipleChoiceSearch":
 				switch (mapExt.DoWay) {
 				case 1:
-					var hiddenField = $('<input type="hidden" />');
-					hiddenField.attr("id", "TB_" + mapExt.AttrOfOper);
-					hiddenField.attr("name", "TB_" + mapExt.AttrOfOper);
-					var mselector = $("#" + mapExt.AttrOfOper + "_mselector");
-					mselector.after(hiddenField);
-					mselector.mselector({
-						"fit" : true,
-						"filter" : false,
-						"sql" : mapExt.Tag1,
-						"onSelect" : function (record) {
-							$("#TB_" + mapExt.AttrOfOper).val(mselector.mselector("getValue"));
-							//mssel(record);
-						},
-						"onUnselect" : function (record) {
-							$("#TB_" + mapExt.AttrOfOper).val(mselector.mselector("getValue"));
-							//msunsel(record);
-						}
-					});
+					(function (AttrOfOper, sql) {
+						var mselector = $("#" + AttrOfOper + "_mselector");
+						var hiddenField = $('<input type="hidden" />');
+						hiddenField.attr("id", "TB_" + AttrOfOper);
+						hiddenField.attr("name", "TB_" + AttrOfOper);
+						mselector.after(hiddenField);
+						mselector.mselector({
+							"fit" : true,
+							"filter" : false,
+							"sql" : sql,
+							"onSelect" : function (record) {
+								$("#TB_" + AttrOfOper).val(mselector.mselector("getValue"));
+								//mssel(record);
+							},
+							"onUnselect" : function (record) {
+								$("#TB_" + AttrOfOper).val(mselector.mselector("getValue"));
+								//msunsel(record);
+							}
+						});
+					})(mapExt.AttrOfOper, mapExt.Tag1);
 					break;
 				}
 				break;

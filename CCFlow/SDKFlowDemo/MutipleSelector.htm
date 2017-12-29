@@ -14,10 +14,21 @@
 	<script type="text/javascript">
 		$(document).ready(function () {
 			$("#container").mselector({
-				"label" : "测试",
+				"label" : "测试1",
+				"valueField" : "value",
+				"textField" : "text",
 				"tip" : "请输入",
 				"fit" : false,
-				"width" : 300
+				"width" : 300,
+				"data" : [{ "value" : "2102", "text" : "大连" }, { "value" : "3701", "text" : "济南" }]
+			});
+			//
+			$("#container1").mselector({
+				"label" : "测试2",
+				"fit" : false,
+				"width" : 500,
+				"filter" : false,
+				"sql" : "SELECT No, Name FROM CN_CITY WHERE Name Like '%@Key%'"
 			});
 		});
 		function getValue() {
@@ -32,6 +43,28 @@
 		function setValues() {
 			$("#container").mselector("setValues", "2102,3701");
 		}
+		//
+		function getValue1() {
+			alert($("#container1").mselector("getValue"));
+		}
+		function getText1() {
+			alert($("#container1").mselector("getText"));
+		}
+		function doClear1() {
+			$("#container1").mselector("clear");
+		}
+		function setValues1() {
+			$("#container1").mselector("setValues", "大");
+		}
+		function loadData1() {
+			$("#container1").mselector("loadData", [{
+				"No" : "2102",
+				"Name" : "大连"
+			}, {
+				"No" : "3701",
+				"Name" : "济南"
+			}]);
+		}
 	</script>
 </head>
 <body>
@@ -43,5 +76,16 @@
 	<br>
 	<br>
 	<input type="button" value="setValues" onclick="setValues()">&nbsp;$("#container").mselector("setValues", "2102,3701");	// 2102,3701 (大连,济南)
+	<hr>
+	<div id="container1"></div>
+	<input type="button" value="getValue" onclick="getValue1()">
+	<input type="button" value="getText" onclick="getText1()">
+	<input type="button" value="clear" onclick="doClear1()">
+	<br>
+	<br>
+	<br>
+	<input type="button" value="setValues" onclick="setValues1()">&nbsp;$("#container").mselector("setValues", "大");	// 大
+	<br>
+	<input type="button" value="loadData" onclick="loadData1()">&nbsp;$("#container").mselector("loadData", [{ "value" : "2102", "text" : "大连" }, { "value" : "3701", "text" : "济南" }]);
 </body>
 </html>

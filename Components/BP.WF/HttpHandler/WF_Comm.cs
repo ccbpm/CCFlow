@@ -116,7 +116,7 @@ namespace BP.WF.HttpHandler
                     en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
 
 
-                //处理参数的赋值. @于庆海翻译.
+                //处理参数的赋值. 翻译.
                 if (en.EnMap.Attrs.Contains("AtPara") == true)
                 {
                     //更新参数值.
@@ -241,7 +241,7 @@ namespace BP.WF.HttpHandler
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
 
 
-                //处理参数的赋值. @于庆海翻译.
+                //处理参数的赋值. 翻译.
                 if (en.EnMap.Attrs.Contains("AtPara") == true)
                 {
                     //更新参数值.

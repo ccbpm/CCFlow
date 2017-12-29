@@ -500,6 +500,7 @@ function AfterBindEn_DealMapExt() {
 						"textField" : textField,
 						"multiple" : true,
 						"onSelect" : function (p) {
+							$("#TB_" + AttrOfOper).val(cbx.combobox("getText"));
 							(function sel(n, KeyOfEn, FK_MapData) {
 								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
 								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
@@ -513,6 +514,7 @@ function AfterBindEn_DealMapExt() {
 							})(p[valueField], AttrOfOper, FK_MapData);
 						},
 						"onUnselect" : function (p) {
+							$("#TB_" + AttrOfOper).val(cbx.combobox("getText"));
 							(function unsel(n, KeyOfEn) {
 								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
 								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;

@@ -39,13 +39,10 @@
 
             //初始化工具栏.
             InitToolbar();
-
             //执行查询.
             BindTable();
-
             //生成翻页.
             GenerPageIdx();
-
             $("#Msg").html("");
         });
 
@@ -67,6 +64,7 @@
                 html = "关键字:<input type=text id='TB_Key' name='TB_Key' value='" + ur.SearchKey + "' />";
 
             if (mapBase.DTSearchWay != "0") {
+
                 html += mapBase.DTSearchLable;
 
                 if (mapBase.DTSearchWay == "1") {
@@ -136,10 +134,10 @@
                 ur.SearchKey = document.getElementById("TB_Key").value;
 
             //设置查询时间.
-            if ($("#TB_S_From").length == 1)
+            if ($("#TB_DTFrom").length == 1)
                 ur.DTFrom = $("#TB_DTFrom").val();
 
-            if ($("#TB_S_To").length == 1)
+            if ($("#TB_DTTo").length == 1)
                 ur.DTTo = $("#TB_DTTo").val();
 
             //获得外键的查询条件,存储里面去.
@@ -155,7 +153,6 @@
             ur.Vals = str;
             ur.FK_MapData = ensName;
             var i = ur.Save();
-
             window.location.href = "?EnsName=" + ensName + "&PageIdx=1";
         }
 
@@ -168,7 +165,6 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
 
             //获得查询的基本信息, 实体属性 attrs, 实体数据.
-
             var pageIdx = this.GetQueryString("PageIdx");
 
             handler.AddPara("PageIdx", pageIdx);
@@ -199,18 +195,23 @@
                 || attr.KeyOfEn == "MyNum" 
                 || attr.KeyOfEn == "MyPK")
                     continue;
-
                 html += "<th>" + attr.Name + "</th>";
             }
             html += "</tr>";
 
             //生成数据.
             var dt = data["DT"];
-
+            var isTr = false;
             for (var i = 0; i < dt.length; i++) {
                 var en = dt[i];
 
-                html += "<tr>";
+                if (isTr==true)
+                    html += "<tr style='background-color:#F4F4F4;' >";
+                else
+                    html += "<tr>";
+                isTr = !isTr;
+
+
                 html += "<td class='Idx' >" + i + "</td>";
 
                 for (var idx = 0; idx < attrs.length; idx++) {

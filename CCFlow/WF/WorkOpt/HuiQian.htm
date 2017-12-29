@@ -261,7 +261,6 @@
                 dataType: 'html',
                 success: function (data) {
 
-                    alert(data);
 
                     if (data.indexOf('url@') == 0) {
                         data = data.replace('url@', '');
@@ -318,14 +317,11 @@
                 dataType: 'html',
                 success: function (data) {
 
-                   // alert(data);
-
                     if (data.indexOf('err@') == 0) {
                         $(".Msg").show();
                         $(".Msg").html(data);
                         return;
                     }
-
 
                     data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
                     data = data.replace("'MyFlow.htm", "'../MyFlow.htm");

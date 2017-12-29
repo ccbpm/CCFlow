@@ -37,7 +37,6 @@
 
             $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
-
             //初始化工具栏.
             InitToolbar();
 
@@ -70,12 +69,12 @@
             if (mapBase.DTSearchWay != "0") {
                 html += mapBase.DTSearchLable;
 
-                if (mapBase.DTs == "1") {
-                    html += "<input type=text id='TB_S_From' name='TB_S_From' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" />";
-                    html += "到<input type=text id='TB_S_To' name='TB_S_From' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" />";
+                if (mapBase.DTSearchWay == "1") {
+                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:65px;' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" style='width:65px;' />";
                 } else {
-                    html += "<input type=text id='TB_S_From' name='TB_S_From' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" />";
-                    html += "到<input type=text id='TB_S_To' name='TB_S_From' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" />";
+                    html += "<input type=text id='TB_DTFrom' name='TB_DTFrom' value='" + ur.DTFrom + "'  onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\" style='width:95px;' />";
+                    html += "到<input type=text id='TB_DTTo' name='TB_DTTo' value='" + ur.DTTo + "' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'});\"  style='width:95px;' />";
                 }
             }
 
@@ -137,12 +136,11 @@
                 ur.SearchKey = document.getElementById("TB_Key").value;
 
             //设置查询时间.
-            if (document.getElementById("TB_S_From") != null)
-                ur.DTFrom_Data = this.GetTBByID("TB_S_From").value;
+            if ($("#TB_S_From").length == 1)
+                ur.DTFrom = $("#TB_DTFrom").val();
 
-            if (document.getElementById("TB_S_To") != null)
-                ur.DTTo_Data = this.GetTBByID("TB_S_To").value;
-                 
+            if ($("#TB_S_To").length == 1)
+                ur.DTTo = $("#TB_DTTo").val();
 
             //获得外键的查询条件,存储里面去.
             var str = "";

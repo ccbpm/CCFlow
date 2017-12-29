@@ -152,12 +152,8 @@
     </Compile>
     <Compile Include="Comm\Xml\RelationalMapping.cs" />
     <Compile Include="Comm\Xml\CfgMenu.cs" />
-    <Compile Include="Comm\WebPageSession.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Comm\WebPageAdmin.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="Comm\WebPageSession.cs" />
+    <Compile Include="Comm\WebPageAdmin.cs" />
     <Compile Include="CTL\Btn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -177,9 +173,7 @@
     <Compile Include="Comm\UCBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Comm\WebPage.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="Comm\WebPage.cs" />
     <Compile Include="Comm\Help.cs" />
     <Compile Include="CTL\BPHyperLink.cs">
       <SubType>Code</SubType>
@@ -262,13 +256,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="IWCW\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\BP.En30\BP.En30.csproj">
       <Project>{F9D27BAB-758D-4205-BFC8-76B49A4C87F1}</Project>
       <Name>BP.En30</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IWCW\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

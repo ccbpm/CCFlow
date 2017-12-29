@@ -121,7 +121,7 @@ namespace BP.En
 
 			try
 			{
-				/*如果包含这个字段*/
+				/*如果包含这个字段  @FK_BanJi=01 */
 				AtPara ap = this.atPara;
 				foreach (string key in ap.HisHT.Keys)
 				{
@@ -129,6 +129,9 @@ namespace BP.En
 						continue;
 					ht.Add(key, ap.HisHT[key]);
 				}
+
+                //把参数属性移除.
+                ht.Remove("_ATObj_");
 			}
 			catch (Exception ex)
 			{
@@ -1475,7 +1478,7 @@ namespace BP.En
 		#endregion
 
 		#region 参数字段
-		private AtPara atPara
+		public AtPara atPara
 		{
 			get
 			{
@@ -1492,8 +1495,8 @@ namespace BP.En
 
 						// 重新获取一次。
 						atParaStr = this.GetValStringByKey("AtPara");
-						if (string.IsNullOrEmpty(atParaStr))
-							atParaStr = "@1=1@2=2";
+						if (DataType.IsNullOrEmpty(atParaStr))
+							atParaStr = "";
 
 						at = new AtPara(atParaStr);
 						this.SetValByKey("_ATObj_", at);

@@ -616,20 +616,14 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = context.Request.QueryString["PageIdx"];
-                if (str == null || str == "")
-                    return 1;
-                return int.Parse(str);
+                return this.GetRequestValInt("PageIdx");
             }
         }
         public int Index
         {
             get
             {
-                string str = context.Request.QueryString["Index"];
-                if (str == null || str == "")
-                    return 1;
-                return int.Parse(str);
+                return this.GetRequestValInt("Index");
             }
         }
 

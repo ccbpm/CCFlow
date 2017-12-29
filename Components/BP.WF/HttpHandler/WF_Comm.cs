@@ -115,6 +115,28 @@ namespace BP.WF.HttpHandler
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
 
+
+                //处理参数的赋值. @于庆海翻译.
+                if (en.EnMap.Attrs.Contains("AtPara") == true)
+                {
+                    //更新参数值.
+                    AtPara para = en.atPara;
+                    foreach (string key in para.HisHT.Keys)
+                        en.SetPara(key, this.GetRequestVal(key));
+
+                    //处理参数赋值, 从特殊约定的字段取值.
+                    string bpParas = this.GetRequestVal("BPParas");
+                    if (bpParas != "")
+                    {
+                        AtPara ap = new AtPara(bpParas);
+                        foreach (string item in ap.HisHT.Keys)
+                        {
+                            en.SetPara(item, ap.GetValStrByKey(item));
+                        }
+                    }
+                }
+
+
                 return en.Update().ToString(); //返回影响行数.
             }
             catch (Exception ex)
@@ -217,6 +239,28 @@ namespace BP.WF.HttpHandler
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
+
+
+                //处理参数的赋值. @于庆海翻译.
+                if (en.EnMap.Attrs.Contains("AtPara") == true)
+                {
+                    //更新参数值.
+                    AtPara para = en.atPara;
+                    foreach (string key in para.HisHT.Keys)
+                        en.SetPara(key, this.GetRequestVal(key));
+
+                    //处理参数赋值, 从特殊约定的字段取值.
+                    string bpParas = this.GetRequestVal("BPParas");
+                    if (bpParas != "")
+                    {
+                        AtPara ap = new AtPara(bpParas);
+                        foreach (string item in ap.HisHT.Keys)
+                        {
+                            en.SetPara(item, ap.GetValStrByKey(item));
+                        }
+                    }
+                }
+
 
                 return en.Save().ToString();
             }
@@ -605,7 +649,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Search_SearchIt()
         {
-            //获得
+            //获得.
             Entities ens = ClassFactory.GetEns(this.EnsName);
             Entity en = ens.GetNewEntity;
             Map map = en.EnMapInTime;
@@ -620,7 +664,6 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtAttrs); //把描述加入.
 
             //取出来查询条件.
-
             BP.Sys.UserRegedit ur = new UserRegedit();
             ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
             ur.RetrieveFromDBSources();
@@ -628,17 +671,15 @@ namespace BP.WF.HttpHandler
             //获得关键字.
             AtPara ap = new AtPara(ur.Vals);
 
-            string keyWord = ap.GetValStrByKey("KeyWord");
-
+            //关键字.
+            string keyWord = ur.SearchKey;
             QueryObject qo = new QueryObject(ens);
 
-            qo.AddHD();
-
             #region 关键字字段.
-            if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) && keyWord.Length > 1)
+            if (en.EnMap.IsShowSearchKey && DataType.IsNullOrEmpty(keyWord) == false && keyWord.Length > 1)
             {
                 Attr attrPK = new Attr();
-                foreach (Attr attr in attrs)
+                foreach (Attr attr in map.Attrs)
                 {
                     if (attr.IsPK)
                     {
@@ -647,7 +688,7 @@ namespace BP.WF.HttpHandler
                     }
                 }
                 int i = 0;
-                foreach (Attr attr in attrs)
+                foreach (Attr attr in map.Attrs)
                 {
                     switch (attr.MyFieldType)
                     {
@@ -689,38 +730,112 @@ namespace BP.WF.HttpHandler
                 }
                 qo.MyParas.Add("SKey", keyWord);
                 qo.addRightBracket();
+
+            }
+            else
+            {
+                qo.AddHD();
             }
             #endregion
 
 
+            #region 普通属性
+            string opkey = ""; // 操作符号。
+            foreach (AttrOfSearch attr in en.EnMap.AttrsOfSearch)
+            {
+                if (attr.IsHidden)
+                {
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    qo.AddWhere(attr.RefAttrKey, attr.DefaultSymbol, attr.DefaultValRun);
+                    qo.addRightBracket();
+                    continue;
+                }
+
+                if (attr.SymbolEnable == true)
+                {
+                    opkey = ap.GetValStrByKey("DDL_" + attr.Key);
+                    if (opkey == "all")
+                        continue;
+                }
+                else
+                {
+                    opkey = attr.DefaultSymbol;
+                }
+
+                qo.addAnd();
+                qo.addLeftBracket();
+
+                if (attr.DefaultVal.Length >= 8)
+                {
+                    string date = "2005-09-01";
+                    try
+                    {
+                        /* 就可能是年月日。 */
+                        string y =ap.GetValStrByKey("DDL_" + attr.Key + "_Year");
+                        string m = ap.GetValStrByKey("DDL_" + attr.Key + "_Month");
+                        string d = ap.GetValStrByKey("DDL_" + attr.Key + "_Day");
+                        date = y + "-" + m + "-" + d;
+
+                        if (opkey == "<=")
+                        {
+                            DateTime dt = DataType.ParseSysDate2DateTime(date).AddDays(1);
+                            date = dt.ToString(DataType.SysDataFormat);
+                        }
+                    }
+                    catch
+                    {
+                    }
+
+                    qo.AddWhere(attr.RefAttrKey, opkey, date);
+                }
+                else
+                {
+                    qo.AddWhere(attr.RefAttrKey, opkey, ap.GetValStrByKey("TB_" + attr.Key));
+                }
+                qo.addRightBracket();
+            }
+            #endregion
+
             #region 获得查询数据.
             foreach (string str in ap.HisHT.Keys)
             {
-                    qo.addAnd();
-                    qo.AddWhere(str, ap.GetValStrByKey(str));
+                var val = ap.GetValStrByKey(str);
+                if (val.Equals("all"))
+                    continue;
+                qo.addAnd();
+                qo.addLeftBracket();
+                qo.AddWhere(str, ap.GetValStrByKey(str));
+                qo.addRightBracket();
             }
 
             //获得行数.
-            if (this.PageIdx != 1)
-               ur.SetPara("RecCount",  qo.GetCount());
+            if (this.PageIdx == 1)
+            {
+                ur.SetPara("RecCount", qo.GetCount());
+                ur.Update();
+            }
 
             qo.DoQuery(en.PK,12,this.PageIdx);
             #endregion 获得查询数据.
 
-            DataTable dt = ens.ToDataTableField();
-            dt.TableName = "DT";
+            DataTable mydt = ens.ToDataTableField();
+            mydt.TableName = "DT";
 
-         
-
-            ds.Tables.Add(dt); //把数据加入里面.
+            ds.Tables.Add(mydt); //把数据加入里面.
 
             return BP.Tools.Json.ToJson(ds);
         }
         public string Search_GenerPageIdx()
         {
+
+            BP.Sys.UserRegedit ur = new UserRegedit();
+            ur.MyPK = WebUser.No + "_" + this.EnsName + "_SearchAttrs";
+            ur.RetrieveFromDBSources();
+
             string url = "?EnsName="+this.EnsName;
             int pageSpan = 20;
-            int recNum = this.GetRequestValInt("RecCount");
+            int recNum = ur.GetParaInt("RecCount"); //获得查询数量.
             int pageSize = 12;
             if (recNum <= pageSize)
                 return "1";
@@ -1218,7 +1333,6 @@ namespace BP.WF.HttpHandler
             #endregion 执行entity类的方法.
         }
         #endregion
-
 
         #region 数据库相关.
         /// <summary>

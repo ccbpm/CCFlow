@@ -220,7 +220,6 @@ namespace BP.Sys
                 this.SetValByKey(UserRegeditAttr.DTTo, value);
             }
         }
-
         public string DTFrom_Datatime
         {
             get
@@ -379,6 +378,9 @@ namespace BP.Sys
 
                 map.AddTBString(UserRegeditAttr.DTFrom, null, "查询时间从", true, false, 0, 20, 20);
                 map.AddTBString(UserRegeditAttr.DTTo, null, "到", true, false, 0, 20, 20);
+
+                //增加属性. @于庆海. 
+                map.AddTBAtParas(4000);
                 
                 this._enMap = map;
                 return this._enMap;

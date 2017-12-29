@@ -2128,7 +2128,12 @@ namespace BP.WF
                             }
                             break;
                         case DeliveryWay.ByPreviousNodeFormEmpsField:
-                            if (mattrs.Contains(BP.Sys.MapAttrAttr.KeyOfEn, nd.DeliveryParas) == false)
+                            //去rpt表中，查询是否有这个字段
+                            string str = nd.NodeID.ToString().Substring(0, nd.NodeID.ToString().Length - 2);
+                            MapAttrs rptAttrs = new BP.Sys.MapAttrs();
+                            rptAttrs.Retrieve(MapAttrAttr.FK_MapData, "ND" + str + "Rpt", MapAttrAttr.KeyOfEn);
+
+                            if (rptAttrs.Contains(BP.Sys.MapAttrAttr.KeyOfEn, nd.DeliveryParas) == false)
                             {
                                 /*检查节点字段是否有FK_Emp字段*/
                                 msg += "@错误:您设置了该节点的访问规则是[06.按上一节点表单指定的字段值作为本步骤的接受人]，但是您没有在节点属性的[访问规则设置内容]里设置指定的表单字段，详细参考开发手册.";

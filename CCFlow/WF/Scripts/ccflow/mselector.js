@@ -1,5 +1,15 @@
 ﻿(function ($) {
 
+	function onSelect(target, record) {
+		var opts = getOptions(target);
+		opts.onSelect.call("", record);
+	}
+
+	function onUnselect(target, record) {
+		var opts = getOptions(target);
+		opts.onUnselect.call("", record);
+	}
+
 	function loadData(target, datas) {
 		var opts = getOptions(target);
 		var search = $(target).find(".ccflow-search");
@@ -12,7 +22,9 @@
 				tag.data(data);
 				tag.html(data[textField] + '&nbsp;<i class="fa fa-times" data-role="remove"></i>');
 				search.before(tag);
-				$(target).find(".ccflow-input-span-container span").delegate("i", "click", function () {
+				onSelect(target, data);
+				tag.delegate("i", "click", function (e) {
+					opts.onUnselect.call("", $(this).parent().data());
 					$(this).parent().remove();
 				});
 			}
@@ -65,7 +77,7 @@
 	function executeSql(sql, valueField, textField, key) {
 		var datas = [];
 		if (sql) {
-			var dt = DBAccess.RunSQLReturnTable(sql.replace("@Key", key));
+			var dt = DBAccess.RunSQLReturnTable(sql.replace("@Key", key).replace(/~/g, "'"));
 			if ($.isArray(dt)) {
 				$.each(dt, function (i, o) {
 					var option = {};
@@ -197,7 +209,9 @@
 					tag.data(data);
 					tag.html($(this).text() + '&nbsp;<i class="fa fa-times" data-role="remove"></i>');
 					search.before(tag);
-					$(target).find(".ccflow-input-span-container span").delegate("i", "click", function () {
+					onSelect(target, data);
+					tag.delegate("i", "click", function () {
+						opts.onUnselect.call("", $(this).parent().data());
 						$(this).parent().remove();
 					});
 				}
@@ -300,9 +314,14 @@
 		"textField" : "Name",
 		"label" : "",
 		"filter" : true,
-		"tip" : "请输入关键字"
-		//"data" : [{ "No" : "2102", "Name" : "大连" }, { "No" : "3701", "Name" : "济南" }],
-		//"sql" : "SELECT No, Name FROM CN_CITY WHERE Name Like '%@Key%'"
+		"tip" : "请输入关键字",
+		"data" : [],	// [{ "No" : "2102", "Name" : "大连" }, { "No" : "3701", "Name" : "济南" }]
+		"sql" : "",	// "SELECT No, Name FROM CN_CITY WHERE Name Like '%@Key%'"
+
+		"onSelect" : function (record) {
+		},
+		"onUnselect" : function (record) {
+		}
 	};
 
 })(jQuery);

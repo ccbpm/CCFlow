@@ -520,7 +520,8 @@ namespace BP.WF
             Node cancelToNode = new Node(cancelToNodeID);
 
             #region 如果当前是协作组长模式,就要考虑当前是否是会签节点，如果是会签节点，就要处理。
-            if (cancelToNode.TodolistModel == TodolistModel.TeamupGroupLeader)
+            if (cancelToNode.TodolistModel == TodolistModel.TeamupGroupLeader
+                || cancelToNode.TodolistModel == TodolistModel.Teamup)
             {
                 string sql = "SELECT ActionType FROM ND" + int.Parse(this.FlowNo) + "Track WHERE NDFrom=" + cancelToNodeID + " AND EmpFrom='" + WebUser.No + "' AND WorkID=" + this.WorkID;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
@@ -534,15 +535,7 @@ namespace BP.WF
                         throw new Exception("@您是节点[" + cancelToNode.Name + "]的会签人，您不能执行撤销。");
                     }
                 }
-
-                //// 是主持人的情况下，就要执行撤销操作。
-                //gwf.FK_Node = cancelToNodeID;
-                //gwf.NodeName = cancelToNode.Name;
-                //gwf.TodoEmpsNum = 1;
-                //gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianOver;
-                //gwf.Update();
             }
-
             #endregion 如果当前是协作组长模式
 
 

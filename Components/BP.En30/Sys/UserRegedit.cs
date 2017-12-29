@@ -188,7 +188,7 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStringByKey(UserRegeditAttr.DTFrom);
-                if (string.IsNullOrEmpty(s) || 1==1)
+                if (string.IsNullOrEmpty(s) || 1 == 1)
                 {
                     DateTime dt = DateTime.Now.AddDays(-14);
                     return dt.ToString(DataType.SysDataFormat);
@@ -208,12 +208,55 @@ namespace BP.Sys
             get
             {
                 string s = this.GetValStringByKey(UserRegeditAttr.DTTo);
-                if (string.IsNullOrEmpty(s) || 1 == 1 )
+                if (string.IsNullOrEmpty(s) || 1 == 1)
                 {
                     DateTime dt = DateTime.Now;
                     return dt.ToString(DataType.SysDataFormat);
                 }
                 return s.Substring(0, 10);
+            }
+            set
+            {
+                this.SetValByKey(UserRegeditAttr.DTTo, value);
+            }
+        }
+
+        /// <summary>
+        /// 查询时间从
+        /// </summary>
+        public string DTFrom
+        {
+            get
+            {
+                return this.GetValStringByKey(UserRegeditAttr.DTFrom); 
+                //string s = this.GetValStringByKey(UserRegeditAttr.DTFrom);
+                //if (string.IsNullOrEmpty(s) || 1==1)
+                //{
+                //    DateTime dt = DateTime.Now.AddDays(-14);
+                //    return dt.ToString(DataType.SysDataFormat);
+                //}
+                //return s.Substring(0, 10);
+            }
+            set
+            {
+                this.SetValByKey(UserRegeditAttr.DTFrom, value);
+            }
+        }
+        /// <summary>
+        /// 到
+        /// </summary>
+        public string DTTo
+        {
+            get
+            {
+                return this.GetValStringByKey(UserRegeditAttr.DTTo); 
+                //string s = this.GetValStringByKey(UserRegeditAttr.DTTo);
+                //if (string.IsNullOrEmpty(s) || 1 == 1 )
+                //{
+                //    DateTime dt = DateTime.Now;
+                //    return dt.ToString(DataType.SysDataFormat);
+                //}
+                //return s.Substring(0, 10);
             }
             set
             {
@@ -395,9 +438,6 @@ namespace BP.Sys
         }
         protected override bool beforeUpdateInsertAction()
         {
-            //if (AutoMyPK)
-            //    this.MyPK = this.FK_Emp + this.CfgKey;
-
             return base.beforeUpdateInsertAction();
         }
         #endregion 重写

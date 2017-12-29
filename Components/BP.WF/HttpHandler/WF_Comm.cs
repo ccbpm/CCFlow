@@ -578,6 +578,9 @@ namespace BP.WF.HttpHandler
             ht.Add("IsExp", uac.IsExp); //是否可以导出?
             ht.Add("IsImp", uac.IsImp); //是否可以导入?
 
+            ht.Add("EnDesc", en.EnDesc); //描述?
+
+
             //把map信息放入
             ht.Add("PhysicsTable", map.PhysicsTable);
             ht.Add("CodeStruct", map.CodeStruct);
@@ -745,6 +748,44 @@ namespace BP.WF.HttpHandler
                 qo.AddHD();
             }
             #endregion
+
+
+            if (map.DTSearchWay != DTSearchWay.None && DataType.IsNullOrEmpty( ur.DTFrom) ==false)
+            {
+                string dtFrom = ur.DTFrom; // this.GetTBByID("TB_S_From").Text.Trim().Replace("/", "-");
+                string dtTo = ur.DTTo; // this.GetTBByID("TB_S_To").Text.Trim().Replace("/", "-");
+
+                if (map.DTSearchWay == DTSearchWay.ByDate)
+                {
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
+                    qo.addAnd();
+                    qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
+                    qo.addRightBracket();
+                }
+
+                if (map.DTSearchWay == DTSearchWay.ByDateTime)
+                {
+                    //取前一天的24：00
+                    if (dtFrom.Trim().Length == 10) //2017-09-30
+                        dtFrom += " 00:00:00";
+                    if (dtFrom.Trim().Length == 16) //2017-09-30 00:00
+                        dtFrom += ":00";
+
+                    dtFrom = DateTime.Parse(dtFrom).AddDays(-1).ToString("yyyy-MM-dd") + " 24:00";
+
+                    if (dtTo.Trim().Length < 11 || dtTo.Trim().IndexOf(' ') == -1)
+                        dtTo += " 24:00";
+
+                    qo.addAnd();
+                    qo.addLeftBracket();
+                    qo.SQL = map.DTSearchKey + " >= '" + dtFrom + "'";
+                    qo.addAnd();
+                    qo.SQL = map.DTSearchKey + " <= '" + dtTo + "'";
+                    qo.addRightBracket();
+                }
+            }
 
 
             #region 普通属性

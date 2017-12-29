@@ -17,55 +17,42 @@
 		closeWhileEscUp();
 
         //页面启动函数.
-        $(function () {
+		$(function () {
 
-            $("#Msg").html("<img src=../Img/loading.gif />&nbsp;正在加载,请稍后......");
+		    var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm");
+		    handler.AddUrlData();
+		    var data = handler.DoMethodReturnString("Method_Init");
 
-            InitPage();
+		    //如果错误,就提示.
+		    if (data.indexOf('err@') == 0) {
+		        alert(data);
+		        return;
+		    }
 
-            $("#Msg").html("");
-        });
+		    //转化成json.
+		    data = JSON.parse(data);
+		    method = data;
+
+		    var html = "<fieldset>";
+		    html += "<legend>" + data.Title + " </legend>";
+		    html += "<font color=green>" + data.Help + " </font>";
+		    html += "</fieldset>";
+
+		    $("#CCForm").html(html);
+		    document.getElementById("Btn_Done").value = data.Title;
+		    return;
+
+		    //带有参数的方法，没有翻译.
+		    if (1 == 2) {
+		        var rm = data["RM"][0];
+		        warning = rm.Warning;
+		        document.getElementById("Btn_Done").value = rm.Title;
+		        GenerFoolFrm(data);
+		    }
+
+		});
 
         var method = null;
-        //初始化数据.
-        function InitPage() {
-
-            //初始化数据.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Method_Init&M=" + GetQueryString("M") + "&inlayer=" + GetQueryString("inlayer") + "&sm=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    //如果错误,就提示.
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    //转化成json.
-                    data = JSON.parse(data);
-                    method = data;
-
-                    var html = "<fieldset>";
-                    html += "<legend>" + data.Title + " </legend>";
-                    html += "<font color=green>" + data.Help + " </font>";
-                    html += "</fieldset>";
-
-                    $("#CCForm").html(html);
-                    document.getElementById("Btn_Done").value = data.Title;
-                    return;
-
-                    //带有参数的方法，没有翻译.
-                    if (1 == 2) {
-                        var rm = data["RM"][0];
-                        warning = rm.Warning;
-                        document.getElementById("Btn_Done").value = rm.Title;
-                        GenerFoolFrm(data);
-                    }
-                }
-            });
-        }
 
         function GenerFoolFrmSimple(json) {
 

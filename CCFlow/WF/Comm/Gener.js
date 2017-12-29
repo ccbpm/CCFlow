@@ -899,6 +899,10 @@ var Entity = (function () {
 				jsonString = "err@json解析错误: " + jsonString;
 			}
 			return jsonString;
+		},
+
+		toString : function () {
+			return JSON.stringify(this);
 		}
 
     };

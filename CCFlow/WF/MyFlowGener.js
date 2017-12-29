@@ -487,7 +487,7 @@ function AfterBindEn_DealMapExt() {
 						data = DBAccess.RunSQLReturnTable(mapExt.Tag4);
 						break;
 				}
-				(function (AttrOfOper, data) {
+				(function (AttrOfOper, data, FK_MapData) {
 					var cbx = $("#" + AttrOfOper + "_combobox");
 					var hiddenField = $('<input type="hidden" />');
 					hiddenField.attr("id", "TB_" + AttrOfOper);
@@ -521,7 +521,7 @@ function AfterBindEn_DealMapExt() {
 						}
 					});
 					cbx.combobox("loadData", data);
-				})(mapExt.AttrOfOper, data);
+				})(mapExt.AttrOfOper, data, mapExt.FK_MapData);
 				break;
 			case "MultipleChoiceSearch":
 				switch (mapExt.DoWay) {

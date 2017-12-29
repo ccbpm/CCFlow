@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title></title>
+	<link href="../WF/Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link href="../WF/Scripts/ccflow/mselector.css" rel="stylesheet" type="text/css" />
+	<script src="../WF/Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
+	<script src="../WF/Scripts/easyUI/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/ccflow/mselector.js" type="text/javascript"></script>
+
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("#container").mselector({
+				"label" : "测试",
+				"tip" : "请输入",
+				"fit" : false,
+				"width" : 300
+			});
+		});
+		function getValue() {
+			alert($("#container").mselector("getValue"));
+		}
+		function getText() {
+			alert($("#container").mselector("getText"));
+		}
+		function doClear() {
+			$("#container").mselector("clear");
+		}
+		function setValues() {
+			$("#container").mselector("setValues", "2102,3701");
+		}
+	</script>
+</head>
+<body>
+	<div id="container"></div>
+	<input type="button" value="getValue" onclick="getValue()">
+	<input type="button" value="getText" onclick="getText()">
+	<input type="button" value="clear" onclick="doClear()">
+	<br>
+	<br>
+	<br>
+	<input type="button" value="setValues" onclick="setValues()">&nbsp;$("#container").mselector("setValues", "2102,3701");	// 2102,3701 (大连,济南)
+</body>
+</html>

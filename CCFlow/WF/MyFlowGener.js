@@ -462,40 +462,85 @@ function AfterBindEn_DealMapExt() {
         var mapExt = mapExtArr[i];
 
         switch (mapExt.ExtType) {
-            case "MultipleChoiceSmall": //小范围的多选.
-                //@于庆海, 把代码移动到这里.
-                continue;
-
-                var d = [];
-                var valueField = "No";
-                var textField = "Name";
-                switch (ext.DoWay) {
-                    case 1:
-                        $.each((ext.Tag1 || "").split(","), function (i, o) {
-                            d.push({ No: i, Name: o })
-                        });
-                        break;
-                    case 2:
-                        valueField = "IntKey"
-                        textField = "Lab";
-                        var enums = new Entities("BP.Sys.SysEnums");
-                        enums.Retrieve("EnumKey", ext.Tag2);
-                        d = enums;
-                        break;
-                    case 3:
-                        var en = new Entity("BP.Sys.SFTable", ext.Tag3);
-                        d = en.DoMethodReturnJSON("GenerDataOfJson");
-                        // alert(JSON.stringify(d));
-                        break;
-                    case 4:
-                        d = DBAccess.RunSQLReturnTable(ext.Tag4);
-                        break;
-                }
-
-                var tb = document.getElementById("TB_" + mapAttr.KeyOfEn);
-
-                //eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' editable='false' class='easyui-combobox' data-options=\"data:" + JSON.stringify(d).replace(/"/g, "'") + ",valueField:'" + valueField + "',textField:'" + textField + "',multiple:true,onSelect:function(p) { sel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "', '" + ext.FK_MapData + "'); },onUnselect:function(p) { unsel(p['" + valueField + "'], '" + mapAttr.KeyOfEn + "'); }\" />"
-                break;
+			case "MultipleChoiceSmall":
+				var data = [];
+				var valueField = "No";
+				var textField = "Name";
+				switch (mapExt.DoWay) {
+					case 1:
+						$.each((mapExt.Tag1 || "").split(","), function (i, o) {
+							data.push({ No: i, Name: o })
+						});
+						break;
+					case 2:
+						valueField = "IntKey"
+						textField = "Lab";
+						var enums = new Entities("BP.Sys.SysEnums");
+						enums.Retrieve("EnumKey", mapExt.Tag2);
+						data = enums;
+						break;
+					case 3:
+						var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
+						data = en.DoMethodReturnJSON("GenerDataOfJson");
+						break;
+					case 4:
+						data = DBAccess.RunSQLReturnTable(mapExt.Tag4);
+						break;
+				}
+				var cbx = $("#" + mapExt.AttrOfOper + "_combobox");
+				cbx.attr("class", "easyui-combobox");
+				cbx.combobox({
+					"editable" : false,
+					"valueField" : valueField,
+					"textField" : textField,
+					"multiple" : true,
+					"onSelect" : function (p) {
+						(function sel(n, KeyOfEn, FK_MapData) {
+							var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+							frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+							frmEleDB.FK_MapData = FK_MapData;
+							frmEleDB.EleID = KeyOfEn;
+							frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
+							frmEleDB.Tag1 = n;
+							if (frmEleDB.Update() == 0) {
+								frmEleDB.Insert();
+							}
+						})(p[valueField], mapExt.AttrOfOper, mapExt.FK_MapData);
+					},
+					"onUnselect" : function (p) {
+						(function unsel(n, KeyOfEn) {
+							var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+							frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
+							frmEleDB.Delete();
+						})(p[valueField], mapExt.AttrOfOper);
+					}
+				});
+				cbx.combobox("loadData", data);
+				break;
+			case "MultipleChoiceSearch":
+				switch (mapExt.DoWay) {
+				case 1:
+					var hiddenField = $('<input type="hidden" />');
+					hiddenField.attr("id", "TB_" + mapExt.AttrOfOper);
+					hiddenField.attr("name", "TB_" + mapExt.AttrOfOper);
+					var mselector = $("#" + mapExt.AttrOfOper + "_mselector");
+					mselector.after(hiddenField);
+					mselector.mselector({
+						"fit" : true,
+						"filter" : false,
+						"sql" : mapExt.Tag1,
+						"onSelect" : function (record) {
+							$("#TB_" + mapExt.AttrOfOper).val(mselector.mselector("getValue"));
+							//mssel(record);
+						},
+						"onUnselect" : function (record) {
+							$("#TB_" + mapExt.AttrOfOper).val(mselector.mselector("getValue"));
+							//msunsel(record);
+						}
+					});
+					break;
+				}
+				break;
             case "PopVal": //PopVal窗返回值
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");
@@ -1664,6 +1709,17 @@ function unsel(n, KeyOfEn) {
 	var frmEleDB = new Entity("BP.Sys.FrmEleDB");
 	frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
 	frmEleDB.Delete();
+}
+// V
+function getMapExt(Sys_MapExt, KeyOfEn) {
+	var ext = {};
+	for (var p in Sys_MapExt) {
+		if (KeyOfEn == Sys_MapExt[p].AttrOfOper) {
+			ext = Sys_MapExt[p];
+			break;
+		}
+	}
+	return ext;
 }
 
 function addLoadFunction(id, eventName, method) {

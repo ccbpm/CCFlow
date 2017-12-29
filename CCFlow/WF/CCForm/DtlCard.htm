@@ -29,6 +29,7 @@
             InitMainTable();
         });
 
+        //生成主表数据
         function InitMainTable() {
             //获得mapdtl实体的基本信息.
             var hand = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
@@ -40,7 +41,7 @@
             var sys_MapDtl = mainData["Main"][0]; //从表描述.
             var sys_mapAttrs = mainData["MapAttrs"]; //从表字段.
             var mapDtls = mainData["MapDtls"]; //从表的从表集合.
-
+            
             $('#dt_CardPanel').html(''); //清空表格数据
             //表头
             var thread = $('<thead></thead>');
@@ -54,7 +55,7 @@
             if (sys_MapDtl.IsInsert == 1) {
                 th = $("<th><img src='../Img/Btn/Add.gif' style='cursor: pointer;' name='insertBtn' onclick='insertRow(1)' /></th>");
             }
-            th.css('width', '20px');
+            th.css('width', '30px');
             threadTr.append(th);
             //生成列名
             $.each(sys_mapAttrs, function (i, mapAttrObj) {
@@ -119,6 +120,15 @@
                 tbody.append(tbodyExpTr);
             });
 
+            //小计配置规则
+            if (typeof sys_MapDtl.ColAutoExp != "undefined" && sys_MapDtl.ColAutoExp != "" && mainTable.length > 0) {
+                //创建统计行
+                var statisticTr = addStatisticsRow(sys_MapDtl, headTHs, mainTable, false);
+                if (statisticTr) {
+                    //添加统计行数据
+                    tbody.append(statisticTr);
+                }
+            }
             //表格生成完成
             $('#dt_CardPanel').append(tbody);
 
@@ -202,6 +212,15 @@
                         var tbodyTr = $('<tr><td colspan=' + columnCount + '>无数据</td></tr>');
                         tbody.append(tbodyTr);
                     }
+                    //小计配置规则
+                    if (typeof mapDtl.ColAutoExp != "undefined" && mapDtl.ColAutoExp != "" && dtlData.length > 0) {
+                        //创建统计行
+                        var statisticTr = addStatisticsRow(mapDtl, headTHs, dtlData, true);
+                        if (statisticTr) {
+                            //添加统计行数据
+                            tbody.append(statisticTr);
+                        }
+                    }
                     table.append(tbody);
                     parentTDObj.append(table);
                     parentTDObj.append("<br/>");
@@ -210,6 +229,108 @@
             return parentTDObj;
         }
 
+        /// 生成统计行
+        /// mapDtl: 明细表描述信息
+        /// headHTs: 表格显示列头
+        /// DTDtls: 明细表数据
+        function addStatisticsRow(mapDtl, headHTs, DTDtls, isSub) {
+            var columnExp = [];
+            // 解析统计规则字符串
+            $.each(mapDtl.ColAutoExp.split("@"), function (i, e) {
+                if (e.indexOf(":") != -1) {
+                    var sp = e.split(":");
+                    columnExp.push({
+                        "KeyOfEn": sp[0], // 字段
+                        "exp": sp[1]		// 表达式
+                    });
+                }
+            });
+
+            // 统计行
+            var statisticsRow = $("<tr id='dtl_Sum'></tr>");
+            statisticsRow.data().customRowType = "statistics";
+
+            if (isSub == false) {
+                statisticsRow.append("<td></td>");
+            }
+            // 遍历表头
+            $.each(headHTs, function (i, th) {
+                // 根据表头的colname与待统计列的KeyOfEn对比
+                var matchesColumn = $.grep(columnExp, function (val) {
+                    return val.KeyOfEn == $(th).data().colname;
+                });
+
+                
+                // 如果是统计列
+                if (matchesColumn.length == 1) {
+                    var keyOfEn = matchesColumn[0]["KeyOfEn"];
+                    var exp = matchesColumn[0]["exp"];
+                    var figureNum = 0;
+
+                    if (exp == "Sum") {	// 和
+                        // 遍历数据
+                        $.each(DTDtls, function (i, dataObj) {
+                            var ival = parseFloat(dataObj[keyOfEn]);
+                            if (!isNaN(ival)) {
+                                figureNum += ival;
+                            }
+                        });
+                    } else if (exp == "Avg") {	// 平均数
+                        var sum = 0;
+                        var count = 0;
+                        $.each(DTDtls, function (i, dataObj) {
+                            var ival = parseFloat(dataObj[keyOfEn]);
+                            if (!isNaN(ival)) {
+                                sum += ival;
+                                count++;
+                            }
+                        });
+                        if (count > 0) {
+                            figureNum = sum / count;
+                        }
+                    } else if (exp == "Max") {	// 最大
+                        var max = null;
+                        $.each(DTDtls, function (i, dataObj) {
+                            var ival = parseFloat(dataObj[keyOfEn]);
+                            if (!isNaN(ival)) {
+                                if (max == null) {
+                                    max = ival;
+                                } else if (ival > max) {
+                                    max = ival;
+                                }
+                            }
+                        });
+                        figureNum = max;
+                    } else if (exp == "Min") {	// 最小
+                        var min = null;
+                        $.each(DTDtls, function (i, dataObj) {
+                            var ival = parseFloat(dataObj[keyOfEn]);
+                            if (!isNaN(ival)) {
+                                if (min == null) {
+                                    min = ival;
+                                } else if (ival < min) {
+                                    min = ival;
+                                }
+                            }
+                        });
+                        figureNum = min;
+                    }
+                    var td = $("<td></td>");
+                    td.text(figureNum);
+                    statisticsRow.append(td);
+                } else {
+                    // 非统计列直接赋空<td></td>
+                    statisticsRow.append("<td></td>");
+                }
+            });
+
+            //主表需要补充一列操作列
+            if (isSub == false) {
+                statisticsRow.append("<td></td>");
+            }
+            //返回统计行
+            return statisticsRow;
+        }
         //插入行.
         function insertRow(rowShowModel) {
             //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.

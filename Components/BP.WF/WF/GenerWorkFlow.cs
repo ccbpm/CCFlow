@@ -780,12 +780,6 @@ namespace BP.WF
             }
             set
             {
-                //改变了节点就把会签状态去掉.
-                this.HuiQianTaskSta = WF.HuiQianTaskSta.None;
-                this.HuiQianSendToNodeIDStr = "";
-                this.HuiQianSendToEmps = "";
-                this.HuiQianZhuChiRen = "";
-
                 SetValByKey(GenerWorkFlowAttr.FK_Node, value);
             }
         }
@@ -1099,6 +1093,20 @@ namespace BP.WF
             set
             {
                 this.SetPara("HuiQianZhuChiRen", value);
+            }
+        }
+        /// <summary>
+        /// 会签主持人名称
+        /// </summary>
+        public string HuiQianZhuChiRenName
+        {
+            get
+            {
+                return this.GetParaString("HuiQianZhuChiRenName");
+            }
+            set
+            {
+                this.SetPara("HuiQianZhuChiRenName", value);
             }
         }
         #endregion 参数属性.

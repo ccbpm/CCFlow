@@ -1804,8 +1804,7 @@ namespace BP.WF
 
             //更新日期，为了考核. 
             gwl.SDT = sdt;
-          //  gwl.RDT = DataType.CurrentDataTime;
-
+            //  gwl.RDT = DataType.CurrentDataTime;
 
             gwl.IsPass = false;
             gwl.Update();
@@ -1822,7 +1821,7 @@ namespace BP.WF
             this.HisGenerWorkFlow.FK_Node = gwl.FK_Node;
             this.HisGenerWorkFlow.NodeName = gwl.FK_NodeText;
 
-            this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp+","+gwl.FK_EmpText+";";
+            this.HisGenerWorkFlow.TodoEmps = gwl.FK_Emp + "," + gwl.FK_EmpText + ";";
             this.HisGenerWorkFlow.TodoEmpsNum = 0;
             this.HisGenerWorkFlow.TaskSta = TaskSta.None;
             this.HisGenerWorkFlow.Update();
@@ -5062,9 +5061,7 @@ namespace BP.WF
                 GenerWorkerListAttr.FK_Node, this.HisNode.NodeID);
 
             if (gwls.Count == 1)
-            {
                 return false; /*让其向下执行,因为只有一个人,就没有顺序的问题.*/
-            }
 
             //查看是否我是最后一个？
             int num = 0;
@@ -5081,9 +5078,32 @@ namespace BP.WF
 
             if (num == 1)
             {
-                this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
-                this.HisGenerWorkFlow.TodoEmpsNum = 1;
-                this.HisGenerWorkFlow.TodoEmps = WebUser.No+","+WebUser.Name+";";
+                if (this.HisGenerWorkFlow.HuiQianTaskSta == HuiQianTaskSta.None)
+                {
+                    this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(BP.Web.WebUser.No, BP.Web.WebUser.Name);
+                    this.HisGenerWorkFlow.TodoEmpsNum = 1;
+                    this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
+                }
+                else
+                {
+                    string huiqianNo = this.HisGenerWorkFlow.HuiQianZhuChiRen;
+                    string huiqianName = this.HisGenerWorkFlow.HuiQianZhuChiRenName;
+
+                    this.HisGenerWorkFlow.Sender = BP.WF.Glo.DealUserInfoShowModel(huiqianNo, huiqianName);
+                    this.HisGenerWorkFlow.TodoEmpsNum = 1;
+                    this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
+
+                    //要把非主持人的IsEnable设置为 0 ,让其不可以用。
+                    foreach (GenerWorkerList item in gwls)
+                    {
+                        if (item.FK_Emp == WebUser.No)
+                        {
+                            item.IsEnable = false;
+                            item.Update();
+                            break;
+                        }
+                    }
+                }
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
             }
 
@@ -5095,7 +5115,17 @@ namespace BP.WF
 
                 //设置当前不可以用.
                 gwl.IsPassInt = 1;
-                gwl.IsEnable = false;
+                if (this.HisGenerWorkFlow.HuiQianTaskSta != HuiQianTaskSta.None)
+                {
+                    if (this.HisGenerWorkFlow.HuiQianZhuChiRen == WebUser.No)
+                        gwl.IsEnable = true;
+                    else
+                        gwl.IsEnable = false;
+                }
+                else
+                {
+                    gwl.IsEnable = false;
+                }
                 gwl.Update();
 
                 // 检查完成条件。
@@ -5113,10 +5143,8 @@ namespace BP.WF
                 emps = emps.Replace(WebUser.No + "," + WebUser.Name + ";", "");
                 this.HisGenerWorkFlow.TodoEmps = emps;
 
-
                 //处理会签问题
                 this.addMsg(SendReturnMsgFlag.OverCurr, "@会签工作已完成@当前工作未处理的会签人有: " + todoEmps + " .", null, SendReturnMsgType.Info);
-
                 return true;
             }
 
@@ -5933,13 +5961,11 @@ namespace BP.WF
                     {
                         /*如果是就记录下来发送到达的节点ID,到达的人员ID.*/
                         this.HisGenerWorkFlow.HuiQianSendToNodeIDStr = this.HisNode.NodeID + "," + jumpToNode.NodeID;
-                        if (jumpToEmp==null)
-                        this.HisGenerWorkFlow.HuiQianSendToEmps = "";
+                        if (jumpToEmp == null)
+                            this.HisGenerWorkFlow.HuiQianSendToEmps = "";
                         else
                             this.HisGenerWorkFlow.HuiQianSendToEmps = jumpToEmp;
 
-
-                        this.HisGenerWorkFlow.HuiQianZhuChiRen = WebUser.No;
                         this.HisGenerWorkFlow.Update();
                     }
 

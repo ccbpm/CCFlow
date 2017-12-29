@@ -581,8 +581,14 @@ namespace BP.WF.HttpHandler
 
             //判断当前节点的会签类型.
             Node nd = new Node(gwf.FK_Node);
-             
+
+            //设置当前接单是会签的状态.
             gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态.
+            gwf.HuiQianZhuChiRen = WebUser.No;
+            gwf.HuiQianZhuChiRenName = WebUser.Name;
+
+            //改变了节点就把会签状态去掉.
+            gwf.HuiQianSendToNodeIDStr = "";
             gwf.Update();
 
             //求会签人.
@@ -606,7 +612,6 @@ namespace BP.WF.HttpHandler
             BP.WF.Dev2Interface.WriteTrack(gwf.FK_Flow, gwf.FK_Node, gwf.NodeName, gwf.WorkID, gwf.FID, empsOfHuiQian, ActionType.HuiQian, "执行会签", null);
             
             string str = "";
-
             if (nd.TodolistModel == TodolistModel.TeamupGroupLeader)
             {
                 /*如果是组长模式.*/

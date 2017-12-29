@@ -584,7 +584,15 @@ namespace BP.WF.HttpHandler
             ht.Add("CodeLength", map.CodeLength);
 
             //查询条件.
-            ht.Add("IsShowSearchKey", map.IsShowSearchKey);
+            if (map.IsShowSearchKey==true)
+               ht.Add("IsShowSearchKey", 1);
+            else
+                ht.Add("IsShowSearchKey", 0);
+
+            //按日期查询.
+            ht.Add("DTSearchWay", (int)map.DTSearchWay);
+            ht.Add("DTSearchLable", map.DTSearchLable);
+            ht.Add("DTSearchKey", map.DTSearchKey);
 
             return BP.Tools.Json.ToJson(ht);
         }

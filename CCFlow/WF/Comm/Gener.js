@@ -3,9 +3,9 @@ function AtParaToJson(json) {
     var jsObj = {};
     if (json) {
         var atParamArr = json.split('@');
-        $.each(atParamArr, function (i,atParam) {
+        $.each(atParamArr, function (i, atParam) {
             if (atParam != '') {
-                var  atParamKeyValue = atParam.split('=');
+                var atParamKeyValue = atParam.split('=');
                 if (atParamKeyValue.length == 2) {
                     jsObj[atParamKeyValue[0]] = atParamKeyValue[1];
                 }
@@ -22,7 +22,7 @@ function DearUrlParas(urlParam) {
     //var href = window.location.href;
     //var urlParam = href.substring(href.indexOf('?') + 1, href.length);
 
-    if (urlParam==null || urlParam==undefined)
+    if (urlParam == null || urlParam == undefined)
         urlParam = window.location.search.substring(1);
 
     var params = {};
@@ -138,7 +138,7 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
     }
 
     //设置选中的值.
-    if (selectVal != undefined ) {
+    if (selectVal != undefined) {
 
         var v = $("#" + ddlCtrlID)[0].options.length;
         if (v == 0)
@@ -155,11 +155,10 @@ function GenerBindDDL(ddlCtrlID, data, noCol, nameCol, selectVal) {
 
 /*绑定枚举值.*/
 function GenerBindEnumKey(ctrlDDLId, enumKey, selectVal) {
-
     $.ajax({
         type: 'post',
         async: true,
-        url: "/WF/Comm/Handler.ashx?DoType=EnumList&EnumKey=" + enumKey + "&m=" + Math.random(),
+        url: dynamicHandler + "?DoType=EnumList&EnumKey=" + enumKey + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
 
@@ -178,38 +177,38 @@ function GenerBindEntities(ctrlDDLId, ensName, selectVal, filter) {
     $.ajax({
         type: 'post',
         async: true,
-        url: "/WF/Comm/Handler.ashx?DoType=EnsData&EnsName=" + ensName + "&Filter=" + filter + "&m=" + Math.random(),
+        url: dynamicHandler + "?DoType=EnsData&EnsName=" + ensName + "&Filter=" + filter + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
 
-//            if (data.indexof('err@') ==0 )
-//            {
-//               alert(data);
-//               return ;
-//            }
+            //            if (data.indexof('err@') ==0 )
+            //            {
+            //               alert(data);
+            //               return ;
+            //            }
 
             data = JSON.parse(data);
             //绑定枚举值.
-            GenerBindDDL(ctrlDDLId, data, "No", "Name",selectVal);
+            GenerBindDDL(ctrlDDLId, data, "No", "Name", selectVal);
             return;
         },
         error: function (jqXHR, textStatus, errorThrown) {
             /*错误信息处理*/
-            alert("GenerBindEntities,错误:参数:EnsName"+ensName+" , 异常信息 responseText:"+jqXHR.responseText+"; status:"+jqXHR.status+"; statusText:"+jqXHR.statusText+"; \t\n textStatus="+textStatus+";errorThrown="+errorThrown);
+            alert("GenerBindEntities,错误:参数:EnsName" + ensName + " , 异常信息 responseText:" + jqXHR.responseText + "; status:" + jqXHR.status + "; statusText:" + jqXHR.statusText + "; \t\n textStatus=" + textStatus + ";errorThrown=" + errorThrown);
         }
     });
 }
 
 
 /*
-  绑定外键表.
+绑定外键表.
 */
 function GenerBindSFTable(ctrlDDLId, sfTable, selectVal) {
 
     $.ajax({
         type: 'post',
         async: true,
-        url: "/WF/Comm/Handler.ashx?DoType=SFTable&SFTable=" + sfTable + "&m=" + Math.random(),
+        url: dynamicHandler + "?DoType=SFTable&SFTable=" + sfTable + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
             data = JSON.parse(data);
@@ -238,7 +237,7 @@ function GenerBindSQL(ctrlDDLId, sqlKey, paras, colNo, colName, selectVal) {
     $.ajax({
         type: 'post',
         async: true,
-        url: "/WF/Comm/Handler.ashx?DoType=SQLList&SQLKey=" + sqlKey + "&Paras=" + paras + "&m=" + Math.random(),
+        url: dynamicHandler + "?DoType=SQLList&SQLKey=" + sqlKey + "&Paras=" + paras + "&m=" + Math.random(),
         dataType: 'html',
         success: function (data) {
 
@@ -311,7 +310,7 @@ function GenerFullAllCtrlsVal(data) {
         }
 
         // RadioButton. 单选按钮.
-        var rb = document.getElementById('RB_' + attr+"_"+val);
+        var rb = document.getElementById('RB_' + attr + "_" + val);
         if (rb != null) {
             rb.checked = true;
             continue;
@@ -445,7 +444,7 @@ function OpenDialogAndCloseRefresh(url, dlgTitle, dlgWidth, dlgHeight, dlgIcon, 
         },
         cache: false
     });
-    
+
     dlg.dialog('open');
     $('#' + iframeId).attr('src', url);
 }
@@ -554,22 +553,22 @@ function WinOpenFull(url, winName) {
 
 // document绑定esc键的keyup事件, 关闭弹出窗
 function closeWhileEscUp() {
-	$(document).bind("keyup", function (e) {
-		e = e || window.event;
-		var key = e.keyCode || e.which || e.charCode;
-		if (key == 27) {
-			// 可能需要调整if判断的顺序
-			if (parent && typeof parent.doCloseDialog === 'function') {
-				parent.doCloseDialog.call();
-			} else if (typeof doCloseDialog === 'function') {
-				doCloseDialog.call();
-			} else if (parent && parent.parent && typeof parent.parent.doCloseDialog === "function") {
-				parent.parent.doCloseDialog.call();
-			} else {
-				window.close();
-			}
-		}
-	});
+    $(document).bind("keyup", function (e) {
+        e = e || window.event;
+        var key = e.keyCode || e.which || e.charCode;
+        if (key == 27) {
+            // 可能需要调整if判断的顺序
+            if (parent && typeof parent.doCloseDialog === 'function') {
+                parent.doCloseDialog.call();
+            } else if (typeof doCloseDialog === 'function') {
+                doCloseDialog.call();
+            } else if (parent && parent.parent && typeof parent.parent.doCloseDialog === "function") {
+                parent.parent.doCloseDialog.call();
+            } else {
+                window.close();
+            }
+        }
+    });
 }
 
 function DBAccess() {
@@ -615,295 +614,301 @@ var Entity = (function () {
         this.loadData();
     };
 
-	function setData(self) {
-		if (typeof jsonString !== "undefined") {
-			$.each(jsonString, function (n, o) {
-				// 需要判断属性名与当前对象属性名是否相同
-				if (typeof self[n] !== "function") {
-					self[n] = o;
-				}
-			});
-		}
-	}
+    function setData(self) {
+        if (typeof jsonString !== "undefined") {
+            $.each(jsonString, function (n, o) {
+                // 需要判断属性名与当前对象属性名是否相同
+                if (typeof self[n] !== "function") {
+                    self[n] = o;
+                }
+            });
+        }
+    }
 
-	function getParams(self) {
-		var params = {};
-		$.each(jsonString, function (n, o) {
-			params[n] = self[n];
-		});
-		return params;
-	}
+    function getParams(self) {
+        var params = {};
+        $.each(jsonString, function (n, o) {
+            params[n] = self[n];
+        });
+        return params;
+    }
 
-	function getParams1(self) {
-		var params = [ "t=" + new Date().getTime() ];
-		$.each(jsonString, function (n, o) {
-			if (typeof self[n] !== "function" && self[n] != o) {
-				params.push(n + "=" + self[n]);
-			}
-		});
-		return params.join("&");
-	}
+    function getParams1(self) {
+        var params = ["t=" + new Date().getTime()];
+        $.each(jsonString, function (n, o) {
+            if (typeof self[n] !== "function" && self[n] != o) {
+                params.push(n + "=" + self[n]);
+            }
+        });
+        return params.join("&");
+    }
 
-	var dynamicHandler = "/WF/Comm/Handler.ashx";
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
 
-	Entity.prototype = {
+    Entity.prototype = {
 
-		constructor: Entity,
+        constructor: Entity,
 
-		loadData : function () {
-			var self = this;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entity_Init&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
-				dataType: 'html',
-				success: function (data) {
-					if (data.indexOf("err@") != -1) {
-						alert(data);
-						return;
-					}
-					try {
-						jsonString = JSON.parse(data);
-						setData(self);
-					} catch (e) {
-						alert("解析错误: " + data);
-					}
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-				}
-			});
-		},
-
-        Insert: function () {
-			var self = this;
-			var params = getParams(self);
-			var result;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entity_Insert&EnName=" + self.enName + "&t=" + new Date().getTime(),
-				dataType: 'html',
-				data: params,
-				success: function (data) {
-					result = data;
-					if (data.indexOf("err@") != -1) {
-						return;
-					}
-					$.each(params, function (n, o) {
-						jsonString[n] = o;
-					});
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-				}
-			});
-			return result;
-        },
-
-        Update: function () {
+        loadData: function () {
             var self = this;
-			var params = getParams(self);
-			var result;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entity_Update&EnName=" + self.enName + "&t=" + new Date().getTime(),
-				dataType: 'html',
-				data: params,
-				success: function (data) {
-					result = data;
-					if (data.indexOf("err@") != -1) {
-						return;
-					}
-					$.each(params, function (n, o) {
-						jsonString[n] = o;
-					});
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-				}
-			});
-			return result;
-        },
-
-		Save: function () {
-            var self = this;
-			var params = getParams(self);
-			var result;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entity_Save&EnName=" + self.enName + "&t=" + new Date().getTime(),
-				dataType: 'html',
-				data: params,
-				success: function (data) {
-					result = data;
-					if (data.indexOf("err@") != -1) {
-						return;
-					}
-					$.each(params, function (n, o) {
-						jsonString[n] = o;
-					});
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-				}
-			});
-			return result;
-        },
-
-        Delete: function () {
-			var self = this;
-			var params = getParams(self);
-			var result;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_Init&EnName=" + self.enName + "&PKVal=" + self.pkval + "&t=" + new Date().getTime(),
                 dataType: 'html',
-				data: params,
                 success: function (data) {
-					result = data;
-					if (data.indexOf("err@") != -1) {
-						return;
-					}
-					$.each(jsonString, function (n, o) {
-						jsonString[n] = undefined;
-					});
-					setData(self);
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+                    try {
+                        jsonString = JSON.parse(data);
+                        setData(self);
+                    } catch (e) {
+                        alert("解析错误: " + data);
+                    }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
                 }
             });
-			return result;
         },
 
-		Retrieve : function () {
-			var self = this;
-			var result;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + getParams1(self),
-				dataType: 'html',
-				success: function (data) {
-					if (data.indexOf("err@") != -1) {
-						result = data;
-						return;
-					}
-					try {
-						jsonString = JSON.parse(data);
-						setData(self);
-						result = jsonString.Retrieve;
-					} catch (e) {
-						result = "err@解析错误: " + data;
-					}
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-				}
-			});
-			return result;
-		},
+        Insert: function () {
+            var self = this;
+            var params = getParams(self);
+            var result;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entity_Insert&EnName=" + self.enName + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                data: params,
+                success: function (data) {
+                    result = data;
+                    if (data.indexOf("err@") != -1) {
+                        return;
+                    }
+                    $.each(params, function (n, o) {
+                        jsonString[n] = o;
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+            });
+            return result;
+        },
 
-		RetrieveFromDBSources : function () {
-			var self = this;
-			var result;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName +"&PKVal=" + self.pkval + "&" + getParams1(self),
-				dataType: 'html',
-				success: function (data) {
-					if (data.indexOf("err@") != -1) {
-						result = data;
-						return;
-					}
-					try {
-						jsonString = JSON.parse(data);
-						setData(self);
-						result = jsonString.RetrieveFromDBSources;
-					} catch (e) {
-						result = "err@解析错误: " + data;
-					}
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-				}
-			});
-			return result;
-		},
+        Update: function () {
+            var self = this;
+            var params = getParams(self);
+            var result;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entity_Update&EnName=" + self.enName + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                data: params,
+                success: function (data) {
+                    result = data;
+                    if (data.indexOf("err@") != -1) {
+                        return;
+                    }
+                    $.each(params, function (n, o) {
+                        jsonString[n] = o;
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+            });
+            return result;
+        },
 
-		IsExits : function () {
-			var self = this;
-			var result;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entity_IsExits&EnName=" + self.enName + "&" + getParams1(self),
-				dataType: 'html',
-				success: function (data) {
-					if (data.indexOf("err@") != -1) {
-						result = data;
-						return;
-					}
-					try {
-						var json = JSON.parse(data);
-						result = json.IsExits;
-					} catch (e) {
-						result = "err@解析错误: " + data;
-					}
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-				}
-			});
-			return result;
-		},
+        Save: function () {
+            var self = this;
+            var params = getParams(self);
+            var result;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entity_Save&EnName=" + self.enName + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                data: params,
+                success: function (data) {
+                    result = data;
+                    if (data.indexOf("err@") != -1) {
+                        return;
+                    }
+                    $.each(params, function (n, o) {
+                        jsonString[n] = o;
+                    });
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+            });
+            return result;
+        },
 
-		DoMethodReturnString : function (methodName) {
-			var params = [];
-			$.each(arguments, function (i, o) {
-                if (i > 0) 
-				params.push(o);
-			});
-			var self = this;
-			var string;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName + "&paras=" + params.join(",") + "&t=" + new Date().getTime(),
-				dataType: 'html',
-				success: function (data) {
-					string = data;
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					string = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-				}
-			});
+        Delete: function () {
+            var self = this;
+            var params = getParams(self);
+            var result;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                data: params,
+                success: function (data) {
+                    result = data;
+                    if (data.indexOf("err@") != -1) {
+                        return;
+                    }
+                    $.each(jsonString, function (n, o) {
+                        jsonString[n] = undefined;
+                    });
+                    setData(self);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+            });
+            return result;
+        },
 
-			return string;
+        Retrieve: function () {
+            var self = this;
+            var result;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + getParams1(self),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        result = data;
+                        return;
+                    }
+                    try {
+                        jsonString = JSON.parse(data);
+                        setData(self);
+                        result = jsonString.Retrieve;
+                    } catch (e) {
+                        result = "err@解析错误: " + data;
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                }
+            });
+            return result;
+        },
 
-		},
+        RetrieveFromDBSources: function () {
+            var self = this;
+            var result;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval + "&" + getParams1(self),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        result = data;
+                        return;
+                    }
+                    try {
+                        jsonString = JSON.parse(data);
+                        setData(self);
+                        result = jsonString.RetrieveFromDBSources;
+                    } catch (e) {
+                        result = "err@解析错误: " + data;
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                }
+            });
+            return result;
+        },
 
-		DoMethodReturnJSON : function (methodName, params) {
-			var jsonString = this.DoMethodReturnString(methodName, params);
-			if (jsonString.indexOf("err@") != -1) {
-				return jsonString;
-			}
-			try {
-				jsonString = JSON.parse(jsonString);
-			} catch (e) {
-				jsonString = "err@json解析错误: " + jsonString;
-			}
-			return jsonString;
-		},
+        IsExits: function () {
+            var self = this;
+            var result;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entity_IsExits&EnName=" + self.enName + "&" + getParams1(self),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        result = data;
+                        return;
+                    }
+                    try {
+                        var json = JSON.parse(data);
+                        result = json.IsExits;
+                    } catch (e) {
+                        result = "err@解析错误: " + data;
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                }
+            });
+            return result;
+        },
 
-		toString : function () {
-			return JSON.stringify(this);
-		}
+        DoMethodReturnString: function (methodName) {
+            var params = [];
+            $.each(arguments, function (i, o) {
+                if (i > 0)
+                    params.push(o);
+            });
+            var self = this;
+            var string;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entity_DoMethodReturnString&EnName=" + self.enName + "&PKVal=" + self.pkval + "&MethodName=" + methodName + "&paras=" + params.join(",") + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                success: function (data) {
+                    string = data;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    string = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                }
+            });
+
+            return string;
+
+        },
+
+        DoMethodReturnJSON: function (methodName, params) {
+            var jsonString = this.DoMethodReturnString(methodName, params);
+            if (jsonString.indexOf("err@") != -1) {
+                return jsonString;
+            }
+            try {
+                jsonString = JSON.parse(jsonString);
+            } catch (e) {
+                jsonString = "err@json解析错误: " + jsonString;
+            }
+            return jsonString;
+        },
+
+        toString: function () {
+            return JSON.stringify(this);
+        }
 
     };
 
@@ -913,281 +918,299 @@ var Entity = (function () {
 
 var Entities = (function () {
 
-	var jsonString;
+    var jsonString;
 
-	var Entities = function () {
-		this.ensName = arguments[0];
-		this.Paras = getParameters(arguments);
-		if (arguments.length >= 3) {
-			this.loadData();
-		}
-	};
+    var Entities = function () {
+        this.ensName = arguments[0];
+        this.Paras = getParameters(arguments);
+        if (arguments.length >= 3) {
+            this.loadData();
+        }
+    };
 
-	function getParameters(args) {
-		var params = "";
-		var length;
-		var orderBy;
-		if (args.length % 2 == 0) {
-			orderBy = args[args.length - 1];
-			length = args.length - 1;
-		} else {
-			length = args.length;
-		}
-		for (var i = 1; i < length; i += 2) {
-			params += "@" + args[i] + "=" + args[i + 1];
-		}
-		if (typeof orderBy !== "undefined") {
-			params += "@OrderBy=" + orderBy;
-		}
-		return params;
-	}
+    function getParameters(args) {
+        var params = "";
+        var length;
+        var orderBy;
+        if (args.length % 2 == 0) {
+            orderBy = args[args.length - 1];
+            length = args.length - 1;
+        } else {
+            length = args.length;
+        }
+        for (var i = 1; i < length; i += 2) {
+            params += "@" + args[i] + "=" + args[i + 1];
+        }
+        if (typeof orderBy !== "undefined") {
+            params += "@OrderBy=" + orderBy;
+        }
+        return params;
+    }
 
-	var dynamicHandler = "/WF/Comm/Handler.ashx";
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
 
-	Entities.prototype = {
+    Entities.prototype = {
 
-		constructor: Entities,
+        constructor: Entities,
 
-		loadData : function () {
-			var self = this;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entities_Init&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
-				dataType: 'html',
-				success: function (data) {
-					if (data.indexOf("err@") != -1) {
-						alert(data);
-						return;
-					}
-					try {
-						jsonString = JSON.parse(data);
-						if ($.isArray(jsonString)) {
-							self.length = jsonString.length;
-							$.extend(self, jsonString);
-						} else {
-							alert("解析失败, 返回值不是集合");
-						}
-					} catch (e) {
-						alert("json解析错误: " + data);
-					}
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-				}
-			});
-		},
+        loadData: function () {
+            var self = this;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entities_Init&EnsName=" + self.ensName + "&Paras=" + self.Paras + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+                    try {
+                        jsonString = JSON.parse(data);
+                        if ($.isArray(jsonString)) {
+                            self.length = jsonString.length;
+                            $.extend(self, jsonString);
+                        } else {
+                            alert("解析失败, 返回值不是集合");
+                        }
+                    } catch (e) {
+                        alert("json解析错误: " + data);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+            });
+        },
 
-		Retrieve : function () {
-			var args = [ "" ];
-			$.each(arguments, function (i, o) {
-				args.push(o);
-			});
-			this.Paras = getParameters(args);
-			this.loadData();
-		},
+        Retrieve: function () {
+            var args = [""];
+            $.each(arguments, function (i, o) {
+                args.push(o);
+            });
+            this.Paras = getParameters(args);
+            this.loadData();
+        },
 
-		RetrieveAll : function () {
-			var self = this;
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=Entities_RetrieveAll&EnsName=" + self.ensName + "&t=" + new Date().getTime(),
-				dataType: 'html',
-				success: function (data) {
-					if (data.indexOf("err@") != -1) {
-						alert(data);
-						return;
-					}
-					try {
-						jsonString = JSON.parse(data);
-						if ($.isArray(jsonString)) {
-							self.length = jsonString.length;
-							$.extend(self, jsonString);
-						} else {
-							alert("解析失败, 返回值不是集合");
-						}
-					} catch (e) {
-						alert("json解析错误: " + data);
-					}
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-				}
-			});
-		}
+        RetrieveAll: function () {
+            var self = this;
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=Entities_RetrieveAll&EnsName=" + self.ensName + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+                    try {
+                        jsonString = JSON.parse(data);
+                        if ($.isArray(jsonString)) {
+                            self.length = jsonString.length;
+                            $.extend(self, jsonString);
+                        } else {
+                            alert("解析失败, 返回值不是集合");
+                        }
+                    } catch (e) {
+                        alert("json解析错误: " + data);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+            });
+        }
 
-	};
+    };
 
-	return Entities;
+    return Entities;
 
 })();
 
 var DBAccess = (function () {
 
     function DBAccess() {
-	}
+    }
 
-	var dynamicHandler = "/WF/Comm/Handler.ashx";
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
 
-	DBAccess.RunSQL = function (sql) {
+    DBAccess.RunSQL = function (sql) {
 
-		var count = 0;
+        var count = 0;
 
-		$.ajax({
-			type: 'post',
-			async: false,
-			url: dynamicHandler + "?DoType=DBAccess_RunSQL&SQL=" + sql + "&t=" + new Date().getTime(),
-			dataType: 'html',
-			success: function (data) {
-				count = parseInt(data);
-				if (isNaN(count)) {
-					count = -1;
-				}
-			},
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-				alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-			}
-		});
+        $.ajax({
+            type: 'post',
+            async: false,
+            url: dynamicHandler + "?DoType=DBAccess_RunSQL&SQL=" + sql + "&t=" + new Date().getTime(),
+            dataType: 'html',
+            success: function (data) {
+                count = parseInt(data);
+                if (isNaN(count)) {
+                    count = -1;
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+            }
+        });
 
-		return count;
+        return count;
 
-	};
+    };
 
-	DBAccess.RunSQLReturnTable = function (sql) {
+    DBAccess.RunSQLReturnTable = function (sql) {
 
-		var jsonString;
+        var jsonString;
 
-		$.ajax({
-			type: 'post',
-			async: false,
-			url: dynamicHandler + "?DoType=DBAccess_RunSQLReturnTable&SQL=" + sql + "&t=" + new Date().getTime(),
-			dataType: 'html',
-			success: function (data) {
-				if (data.indexOf("err@") != -1) {
-					alert(data);
-					return;
-				}
-				try {
-					jsonString = JSON.parse(data);
-				} catch (e) {
-					alert("json解析错误: " + data);
-				}
-			},
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-				alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-			}
-		});
+        $.ajax({
+            type: 'post',
+            async: false,
+            url: dynamicHandler + "?DoType=DBAccess_RunSQLReturnTable&SQL=" + sql + "&t=" + new Date().getTime(),
+            dataType: 'html',
+            success: function (data) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+                try {
+                    jsonString = JSON.parse(data);
+                } catch (e) {
+                    alert("json解析错误: " + data);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+            }
+        });
 
-		return jsonString;
+        return jsonString;
 
-	};
+    };
 
-	return DBAccess;
+    return DBAccess;
 
 })();
 
 var HttpHandler = (function () {
 
-	var parameters = {};
+    var parameters = {};
 
-	var formData;
+    var formData;
 
-	function HttpHandler(handlerName) {
-	    this.handlerName = handlerName;
-	}
+    function HttpHandler(handlerName) {
+        this.handlerName = handlerName;
+    }
 
-	function validate(s) {
-		if (s == null || typeof s === "undefined") {
-			return false;
-		}
-		s = s.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-		if (s == "" || s == "null" || s == "undefined") {
-			return false;
-		}
-		return true;
-	}
+    function validate(s) {
+        if (s == null || typeof s === "undefined") {
+            return false;
+        }
+        s = s.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+        if (s == "" || s == "null" || s == "undefined") {
+            return false;
+        }
+        return true;
+    }
 
-	var dynamicHandler = "/WF/Comm/Handler.ashx";
+    if (plant == "CCFlow") {
+        // CCFlow
+        dynamicHandler = "/WF/Comm/Handler.ashx";
+    } else {
+        // JFlow
+        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+    }
 
-	HttpHandler.prototype = {
+    HttpHandler.prototype = {
 
-		constructor : HttpHandler,
+        constructor: HttpHandler,
 
-		AddUrlData : function () {
-			var queryString = document.location.search.substr(1);
-			if (queryString.length > 0) {
-				var self = this;
-				$.each(queryString.split("&"), function (i, o) {
-					var param = o.split("=");
-					if (param.length == 2 && validate(param[1])) {
-						(function (key, value) {
-							self.AddPara(key, value);
-						})(param[0], param[1]);
-					}
-				});
-			}
-		},
+        AddUrlData: function () {
+            var queryString = document.location.search.substr(1);
+            if (queryString.length > 0) {
+                var self = this;
+                $.each(queryString.split("&"), function (i, o) {
+                    var param = o.split("=");
+                    if (param.length == 2 && validate(param[1])) {
+                        (function (key, value) {
+                            self.AddPara(key, value);
+                        })(param[0], param[1]);
+                    }
+                });
+            }
+        },
 
-		AddFormData : function () {
-			formData = $("form").serialize();
-		},
+        AddFormData: function () {
+            formData = $("form").serialize();
+        },
 
-		AddPara : function (key, value) {
-			parameters[key] = value;
-		},
+        AddPara: function (key, value) {
+            parameters[key] = value;
+        },
 
-		Clear : function () {
-			parameters = {};
-			formData = undefined;
-		},
+        Clear: function () {
+            parameters = {};
+            formData = undefined;
+        },
 
-		getParams : function () {
-			var params = [];
-			$.each(parameters, function (key, value) {
-				params.push(key + "=" + value);
-			});
-			return params.join("&");
-		},
+        getParams: function () {
+            var params = [];
+            $.each(parameters, function (key, value) {
+                params.push(key + "=" + value);
+            });
+            return params.join("&");
+        },
 
-		DoMethodReturnString : function (methodName) {
+        DoMethodReturnString: function (methodName) {
 
-			var self = this;
+            var self = this;
 
-			var jsonString;
+            var jsonString;
 
-			$.ajax({
-				type: 'post',
-				async: false,
-				url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&httpHandlerName=" + self.handlerName + "&" + self.getParams() + "&t=" + new Date().getTime(),
-				data : formData,
-				dataType: 'html',
-				success: function (data) {
-					jsonString = data;
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					jsonString = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-				}
-			});
+            $.ajax({
+                type: 'post',
+                async: false,
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&httpHandlerName=" + self.handlerName + "&" + self.getParams() + "&t=" + new Date().getTime(),
+                data: formData,
+                dataType: 'html',
+                success: function (data) {
+                    jsonString = data;
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    jsonString = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                }
+            });
 
-			return jsonString;
+            return jsonString;
 
-		},
+        },
 
-		DoMethodReturnJSON : function (methodName) {
-			var jsonString = this.DoMethodReturnString(methodName);
-			if (jsonString.indexOf("err@") != -1) {
-				return jsonString;
-			}
-			try {
-				jsonString = JSON.parse(jsonString);
-			} catch (e) {
-				jsonString = "err@json解析错误: " + jsonString;
-			}
-			return jsonString;
-		}
-	}
-	return HttpHandler;
+        DoMethodReturnJSON: function (methodName) {
+            var jsonString = this.DoMethodReturnString(methodName);
+            if (jsonString.indexOf("err@") != -1) {
+                return jsonString;
+            }
+            try {
+                jsonString = JSON.parse(jsonString);
+            } catch (e) {
+                jsonString = "err@json解析错误: " + jsonString;
+            }
+            return jsonString;
+        }
+    }
+    return HttpHandler;
 
 })();
 
@@ -1201,32 +1224,32 @@ var WebUser = function () {
         dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
     }
 
-	var jsonString = {};
+    var jsonString = {};
 
-	$.ajax({
-		type: 'post',
-		async: false,
-		url: dynamicHandler + "?DoType=WebUser_Init&t=" + new Date().getTime(),
-		dataType: 'html',
-		success: function (data) {
-			if (data.indexOf("err@") != -1) {
-				console.log(data);
-				return;
-			}
-			try {
-				jsonString = JSON.parse(data);
-			} catch (e) {
-				console.log("json解析错误: " + data);
-			}
-		},
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			console.log("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-		}
-	});
+    $.ajax({
+        type: 'post',
+        async: false,
+        url: dynamicHandler + "?DoType=WebUser_Init&t=" + new Date().getTime(),
+        dataType: 'html',
+        success: function (data) {
+            if (data.indexOf("err@") != -1) {
+                console.log(data);
+                return;
+            }
+            try {
+                jsonString = JSON.parse(data);
+            } catch (e) {
+                console.log("json解析错误: " + data);
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+        }
+    });
 
-	var self = this;
-	$.each(jsonString, function (n, o) {
-		self[n] = o;
-	});
+    var self = this;
+    $.each(jsonString, function (n, o) {
+        self[n] = o;
+    });
 
 };

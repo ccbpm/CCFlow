@@ -53,7 +53,8 @@
 		    alert(msg);
 
 		    //执行实体的方法.
-		    var msg2 = emp.DoMethodReturnString("ChangePass", "@oldpass=123@pass1=456@pass2=456"); //重置密码:不带参数的方法.
+		    //var msg2 = emp.DoMethodReturnString("ChangePass", "@oldpass=123@pass1=456@pass2=456"); //重置密码:不带参数的方法.
+		    var msg2 = emp.DoMethodReturnString("ChangePass", "123","123","123"); //重置密码:不带参数的方法.
 		    alert(msg2);
 		}
 
@@ -72,6 +73,16 @@
 		    var bool = emp.IsExit(); //根据主键判断该实体是否存在.
 		    if (bool == false)
 		        alert('实体不存在');
+
+            //删除部门编号为 0012的员工.
+		    var delNum = emp.Delete("FK_Dept", "0012");
+		    alert('共有:' + delNum + "数据被删除.");
+
+            //实体参数.
+		    var gwf = new Entity("BP.WF.GenerWorkFlow", 98);
+		    gwf.SetPara("HuiQianSta", 0); //设置参数属性.
+		    alert(gwf.HuiQianSta); //访问参数属性.
+		    gwf.Update();
 
 		}
 

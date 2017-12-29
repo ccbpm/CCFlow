@@ -28,7 +28,13 @@
 				"fit" : false,
 				"width" : 500,
 				"filter" : false,
-				"sql" : "SELECT No, Name FROM CN_CITY WHERE Name Like '%@Key%'"
+				"sql" : "SELECT No, Name FROM CN_CITY WHERE Name Like '%@Key%'",
+				"onSelect" : function (record) {
+					console.log(JSON.stringify(record));
+				},
+				"onUnselect" : function (record) {
+					console.log(JSON.stringify(record));
+				}
 			});
 		});
 		function getValue() {

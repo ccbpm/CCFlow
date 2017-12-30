@@ -636,7 +636,7 @@ var Entity = (function () {
     function getParams1(self) {
         var params = ["t=" + new Date().getTime()];
         $.each(jsonString, function (n, o) {
-            if (typeof self[n] !== "function" && self[n] != o) {
+            if (typeof self[n] !== "function" && (self[n] != o || true)) {
                 params.push(n + "=" + self[n]);
             }
         });
@@ -787,11 +787,12 @@ var Entity = (function () {
 
         Retrieve: function () {
             var self = this;
+			var params = getParams1(this);
             var result;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + getParams1(self),
+                url: dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + params,
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf("err@") != -1) {
@@ -815,11 +816,12 @@ var Entity = (function () {
 
         RetrieveFromDBSources: function () {
             var self = this;
+			var params = getParams1(this);
             var result;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval + "&" + getParams1(self),
+                url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval + "&" + params,
                 dataType: 'html',
                 success: function (data) {
 

@@ -1904,8 +1904,6 @@
     <Content Include="WF\Comm\Sys\EnsCfg.aspx" />
     <Content Include="WF\Comm\Sys\EnsDataIO.aspx" />
     <Content Include="WF\Comm\Sys\EnumList.aspx" />
-    <Content Include="WF\Comm\Sys\FuncLib.aspx" />
-    <Content Include="WF\Comm\Sys\GetCfgValByKey.aspx" />
     <Content Include="WF\Comm\Sys\Handler.ashx" />
     <Content Include="WF\Comm\Sys\Holiday.aspx" />
     <Content Include="WF\Comm\Sys\Img\MySQL.png" />
@@ -1915,11 +1913,6 @@
     <Content Include="WF\Comm\Sys\Img\View.png" />
     <Content Include="WF\Comm\Sys\Img\WS.png" />
     <Content Include="WF\Comm\Sys\Pub.ascx" />
-    <Content Include="WF\Comm\Sys\SFGuide.aspx" />
-    <Content Include="WF\Comm\Sys\SFGuide.htm" />
-    <Content Include="WF\Comm\Sys\SFTableList.aspx" />
-    <Content Include="WF\Comm\Sys\SystemClass.aspx" />
-    <Content Include="WF\Comm\Sys\SystemClassDtl.aspx" />
     <Content Include="WF\Comm\Sys\TestCash.aspx" />
     <Content Include="WF\Comm\Sys\TestHost.aspx" />
     <Content Include="WF\Comm\Sys\UserTools.aspx" />
@@ -8115,20 +8108,6 @@
     <Compile Include="WF\Comm\Sys\EnumList.aspx.designer.cs">
       <DependentUpon>EnumList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WF\Comm\Sys\FuncLib.aspx.cs">
-      <DependentUpon>FuncLib.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\FuncLib.aspx.designer.cs">
-      <DependentUpon>FuncLib.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\GetCfgValByKey.aspx.cs">
-      <DependentUpon>GetCfgValByKey.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\GetCfgValByKey.aspx.designer.cs">
-      <DependentUpon>GetCfgValByKey.aspx</DependentUpon>
-    </Compile>
     <Compile Include="WF\Comm\Sys\Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
     </Compile>
@@ -8145,34 +8124,6 @@
     </Compile>
     <Compile Include="WF\Comm\Sys\Pub.ascx.designer.cs">
       <DependentUpon>Pub.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SFGuide.aspx.cs">
-      <DependentUpon>SFGuide.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SFGuide.aspx.designer.cs">
-      <DependentUpon>SFGuide.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SFTableList.aspx.cs">
-      <DependentUpon>SFTableList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SFTableList.aspx.designer.cs">
-      <DependentUpon>SFTableList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SystemClass.aspx.cs">
-      <DependentUpon>SystemClass.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SystemClass.aspx.designer.cs">
-      <DependentUpon>SystemClass.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SystemClassDtl.aspx.cs">
-      <DependentUpon>SystemClassDtl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WF\Comm\Sys\SystemClassDtl.aspx.designer.cs">
-      <DependentUpon>SystemClassDtl.aspx</DependentUpon>
     </Compile>
     <Compile Include="WF\Comm\Sys\TestCash.aspx.cs">
       <DependentUpon>TestCash.aspx</DependentUpon>

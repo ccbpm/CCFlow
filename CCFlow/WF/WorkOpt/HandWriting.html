@@ -48,13 +48,10 @@
             $('#saveBtn').attr('disabled', true);
         }
 
-        function saveSignature() {
+        function saveSignatureBack() {
             var nodeid = GetQueryString("FK_Node");
             var fk_flow = GetQueryString("FK_Flow");
             var workid = GetQueryString("WorkID");
-           // workid = "2345";
-            //fk_flow = "17";
-            //nodeid = "1702";
             $('#signature').empty();
             var Pic = $('.js-signature').eq(0).jqSignature('getDataURL');
             Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "")
@@ -66,27 +63,32 @@
                 contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
                 success: function (msg) {
-                    //alert("Done, Picture Uploaded.");
+                    alert("图片上传成功。");
+                   // window.close();
                 }
             });
         }
 
-        function saveSignature1() {
+        function saveSignature() {
+
             var Pic = $('.js-signature').eq(0).jqSignature('getDataURL');
             Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "")
-            // Sending the image data to Server  &imageData=" + Pic + "
+            var form = new FormData();
+            form.append("imageData", Pic);
+
+            // Sending the image data to Server 
             $.ajax({
                 type: 'POST',
                 url: Handler + "?DoType=SaveHandWritingImg",
-                data: '{ "imageData" : "' + Pic + '" }',
-
-                dataType: 'html',
+                data:form,
+                processData: false,
+                contentType: false,
                 success: function (data) {
                     if (data.indexOf('err@') == 0) {
                         alert(data);
                         return;
                     }
-                    alert("Done, Picture Uploaded.");
+                    alert("图片上传成功.");
                 }
             });
         }

@@ -16,7 +16,7 @@
             //组织主键.
             var mypk = "MultipleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = mypk;
+            en.pkval = mypk;
             var i = en.RetrieveFromDBSources();
 
             if (i == 0)
@@ -52,13 +52,13 @@
             //组织主键.
             var mypk = "MultipleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = mypk;
+            en.pkval = mypk;
             en.RetrieveFromDBSources();
 
             en.FK_MapData = GetQueryString("FK_MapData");
             en.AttrOfOper = GetQueryString("KeyOfEn");
             en.ExtType = "MultipleChoiceSmall";
-            en.MyPK = mypk;
+            en.pkval = mypk;
 
             var checkVal = $("input[name='RB']:checked").val();
             en.DoWay = checkVal;
@@ -88,7 +88,7 @@
 
             var mypk = "MultipleChoiceSmall_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var en = new Entity("BP.Sys.MapExt");
-            en.MyPK = mypk;
+            en.pkval = mypk;
             en.RetrieveFromDBSources();
             en.Delete();
 

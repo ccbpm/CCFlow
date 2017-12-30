@@ -22,23 +22,29 @@
             $("#Msg").html("<img src=../../Img/loading.gif />&nbsp;正在加载,请稍后......");
 
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
-            handler.AddPara("EnsName", GetQueryString("EnsName"));
+            handler.AddPara("EnName", GetQueryString("EnName"));
 
-            var data = handler.DoMethodReturnString("SystemClass_FuncLib");
+            var data = handler.DoMethodReturnString("SystemClass_EnsCheck");
             $("#Msg").html(data);
         });
     </script>
 </head>
 
 <body style="padding:1px; margin:1px;">
-<fieldset>
-<legend></legend>
-</fieldset>
+
 <form id="cc">
 <div style=" padding:10px;" id="Msg">
 <img src="../../Img/loading.gif" />&nbsp;正在加载,请稍后......</div>
 </form>
 
 
+<fieldset>
+<legend>什么是数据体检? </legend>
+数据体检就是检查数据的完整性
+<br>如果系统升级，一些字段的长度发生变化，字段的类型发生变化系统就会自动修复。
+<br>系统会检查出来，外键枚举对应不上的信息，并把该信息列出来让管理员处理。
+</fieldset>
+
 </body>
 </html>
+ 

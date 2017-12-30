@@ -69,9 +69,10 @@
             var en = new Entity("BP.Sys.MapExt");
             en.MyPK = mypk;
             en.RetrieveFromDBSources();
-            en.Delete();
+            var i = en.Delete();
+            alert(i);
 
-            var url = "MultipleChoiceSearch.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            var url = "MultipleChoiceSearch.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn")+"&M="+Math.random();
             window.location.href = url;
         }
     </script>

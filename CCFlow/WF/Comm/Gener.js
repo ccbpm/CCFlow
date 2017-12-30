@@ -822,10 +822,14 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval + "&" + getParams1(self),
                 dataType: 'html',
                 success: function (data) {
-                    if (data.indexOf("err@") != -1) {
+
+                    if (data.indexOf("err@") == 0) {
                         result = data;
+                        var str = "查询:" + self.enName + " pk=" + self.pkval + " 错误.\t\n" + data.replace('err@', '');
+                        alert('查询:' + str);
                         return;
                     }
+
                     try {
                         jsonString = JSON.parse(data);
                         setData(self);
@@ -1198,14 +1202,21 @@ var HttpHandler = (function () {
         },
 
         DoMethodReturnJSON: function (methodName) {
+
             var jsonString = this.DoMethodReturnString(methodName);
-            if (jsonString.indexOf("err@") != -1) {
+
+            if (jsonString.indexOf("err@") == 0) {
+                alert('请查看控制台:'+jsonString);
+                console.log(jsonString);
                 return jsonString;
             }
+
             try {
                 jsonString = JSON.parse(jsonString);
             } catch (e) {
                 jsonString = "err@json解析错误: " + jsonString;
+                alert(jsonString);
+                console.log(jsonString);
             }
             return jsonString;
         }

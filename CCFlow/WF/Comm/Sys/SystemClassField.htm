@@ -24,16 +24,14 @@
             var handler = new HttpHandler("BP.WF.HttpHandler.WF_Comm_Sys");
             handler.AddPara("EnsName", GetQueryString("EnsName"));
 
-            var data = handler.DoMethodReturnString("SystemClass_FuncLib");
+            var data = handler.DoMethodReturnString("SystemClass_Fields");
             $("#Msg").html(data);
         });
     </script>
 </head>
 
 <body style="padding:1px; margin:1px;">
-<fieldset>
-<legend></legend>
-</fieldset>
+
 <form id="cc">
 <div style=" padding:10px;" id="Msg">
 <img src="../../Img/loading.gif" />&nbsp;正在加载,请稍后......</div>

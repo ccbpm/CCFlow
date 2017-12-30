@@ -88,7 +88,7 @@
             en.RetrieveFromDBSources();
             en.Delete();
 
-            var url = "MultipleChoiceSmall.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn");
+            var url = "MultipleChoiceSmall.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn") + "&M=" + Math.random();
             window.location.href = url;
         }
     </script>

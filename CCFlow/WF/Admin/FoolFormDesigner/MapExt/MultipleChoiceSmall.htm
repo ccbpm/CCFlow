@@ -71,6 +71,8 @@
 
             en.Tag4 = $("#TB_SQL").val();
 
+            en.Tag = $("#DDL_Tag").val(); //工作方式.
+
             if (en.Update() == 0)
                 en.Insert();
 
@@ -126,7 +128,6 @@
  请选择一个外键表: <select id="DDL_SFTables" ></select>
   <br />
  系统用枚举值作为该字段的多选.
-
  </fieldset>
 
  
@@ -134,6 +135,18 @@
 <legend><input type="radio" value="4" id="RB_4"  name="RB" /><label for="RB_4" >按照SQL计算</label> </legend>
 <textarea  rows="3" id="TB_SQL" name="TB_SQL" ></textarea>
  </fieldset>
+ 
+<fieldset>
+<legend>高级设置 </legend>
+工作方式：
+<select id="DDL_Tag">
+<option value="0"> combox 方式 </option>
+<option value="1"> checkboxs 横向</option>
+<option value="2"> checkboxs 纵向</option>
+</select>
+ 
+</fieldset>
+
 
 <input type="button" value="保存" id="Btn_Save"  onclick="Save()" />
 <input type="button" value="删除"  id="Btn_Delete"  onclick="Delete()" />

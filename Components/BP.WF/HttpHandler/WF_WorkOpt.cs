@@ -4,6 +4,7 @@ using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
+using System.IO;
 using BP.DA;
 using BP.Sys;
 using BP.Web;
@@ -1399,6 +1400,39 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
+        #region 保存手写签名图片
+        public string SaveHandWritingImg()
+        {
+            try
+            {
+                string basePath = SystemConfig.PathOfDataUser + "HandWritingImg";
+                string ny = DateTime.Now.ToString("yyyy_MM");
+                string tempPath = basePath + "\\" + ny + "\\" + this.FK_Flow;
+                string tempName = this.WorkID + "_" + this.FK_Node + "_" + WebUser.No + ".png";
+
+                if (System.IO.Directory.Exists(tempPath) == false)
+                    System.IO.Directory.CreateDirectory(tempPath);
+                string Pic_Path = tempPath + "\\" + tempName;
+
+                string ImageData = this.GetValFromFrmByKey("imageData");
+
+                using (System.IO.FileStream fs = new FileStream(Pic_Path, FileMode.Create))
+                {
+                    using (BinaryWriter bw = new BinaryWriter(fs))
+                    {
+                        byte[] data = Convert.FromBase64String(ImageData);
+                        bw.Write(data);
+                        bw.Close();
+                    }
+                }
+                return "ok";
+            }
+            catch(Exception e)
+            { 
+            return "err@" + e.Message;
+            }
+        }
+        #endregion
         #region 工作分配.
         /// <summary>
         /// 分配工作

@@ -146,10 +146,9 @@ namespace BP.Sys.FrmUI
                     MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA");
                 #endregion 傻瓜表单。
 
-                #region 执行的方法.
+                #region 基本功能.
                 RefMethod rm = new RefMethod();
-
-              //  设置开窗返回值-正则表达式-文本框自动完成-脚本验证-扩展控件
+                //  设置开窗返回值-正则表达式-文本框自动完成-脚本验证-扩展控件
                 rm = new RefMethod();
                 rm.Title = "设置开窗返回值";
                 rm.ClassMethodName = this.ToString() + ".DoPopVal()";
@@ -186,22 +185,7 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoLink()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-
-              
-                
-                rm = new RefMethod();
-                rm.Title = "扩展控件";
-                rm.ClassMethodName = this.ToString() + ".DoEditFExtContral()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "批处理";
-                rm.ClassMethodName = this.ToString() + ".DoEleBatch()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.GroupName = "高级设置";
-                map.AddRefMethod(rm);
-                #endregion 执行的方法.
+                #endregion 基本功能.
 
                 #region 多选.
                 rm = new RefMethod();
@@ -218,6 +202,22 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
                 #endregion
+
+                #region 高级设置.
+                rm = new RefMethod();
+                rm.Title = "扩展控件";
+                rm.ClassMethodName = this.ToString() + ".DoEditFExtContral()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "批处理";
+                rm.ClassMethodName = this.ToString() + ".DoEleBatch()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+                #endregion 执行的方法.
 
                 this._enMap = map;
                 return this._enMap;

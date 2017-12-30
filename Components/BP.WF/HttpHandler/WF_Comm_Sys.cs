@@ -32,6 +32,227 @@ namespace BP.WF.HttpHandler
             this.context = mycontext;
         }
 
+        #region 系统实体属性.
+        public string SystemClass_EnsCheck()
+        {
+            try
+            {
+                BP.En.Entity en = BP.En.ClassFactory.GetEn(this.EnName);
+                BP.En.Map map = en.EnMap;
+                en.CheckPhysicsTable();
+                string msg = "";
+                // string msg = "";
+                string table = "";
+                string sql = "";
+                string sql1 = "";
+                string sql2 = "";
+                int COUNT1 = 0;
+                int COUNT2 = 0;
+
+                DataTable dt = new DataTable();
+                Entity refen = null;
+                foreach (Attr attr in map.Attrs)
+                {
+                    /**/
+                    if (attr.MyFieldType == FieldType.FK || attr.MyFieldType == FieldType.PKFK)
+                    {
+                        refen = ClassFactory.GetEns(attr.UIBindKey).GetNewEntity;
+                        table = refen.EnMap.PhysicsTable;
+                        sql1 = "SELECT COUNT(*) FROM " + table;
+
+                        Attr pkAttr = refen.EnMap.GetAttrByKey(refen.PK);
+                        sql2 = "SELECT COUNT( distinct " + pkAttr.Field + ") FROM " + table;
+
+                        COUNT1 = DBAccess.RunSQLReturnValInt(sql1);
+                        COUNT2 = DBAccess.RunSQLReturnValInt(sql2);
+
+                        if (COUNT1 != COUNT2)
+                        {
+                            msg += "<BR>@关联表(" + refen.EnMap.EnDesc + ")主键不唯一，它会造成数据查询不准确或者意向不到的错误：<BR>sql1=" + sql1 + " <BR>sql2=" + sql2;
+                            msg += "@SQL= SELECT * FROM (  select " + refen.PK + ",  COUNT(*) AS NUM  from " + table + " GROUP BY " + refen.PK + " ) WHERE NUM!=1";
+                        }
+
+                        sql = "SELECT " + attr.Field + " FROM " + map.PhysicsTable + " WHERE " + attr.Field + " NOT IN (SELECT " + pkAttr.Field + " FROM " + table + " )";
+                        dt = DBAccess.RunSQLReturnTable(sql);
+                        if (dt.Rows.Count == 0)
+                            continue;
+                        else
+                            msg += "<BR>:有" + dt.Rows.Count + "个错误。" + attr.Desc + " sql= " + sql;
+                    }
+                    if (attr.MyFieldType == FieldType.PKEnum || attr.MyFieldType == FieldType.Enum)
+                    {
+                        sql = "SELECT " + attr.Field + " FROM " + map.PhysicsTable + " WHERE " + attr.Field + " NOT IN ( select Intkey from sys_enum WHERE ENUMKEY='" + attr.UIBindKey + "' )";
+                        dt = DBAccess.RunSQLReturnTable(sql);
+                        if (dt.Rows.Count == 0)
+                            continue;
+                        else
+                            msg += "<BR>:有" + dt.Rows.Count + "个错误。" + attr.Desc + " sql= " + sql;
+                    }
+                }
+
+                // 检查pk是否一致。
+                if (en.PKs.Length == 1)
+                {
+                    sql1 = "SELECT COUNT(*) FROM " + map.PhysicsTable;
+                    COUNT1 = DBAccess.RunSQLReturnValInt(sql1);
+
+                    Attr attrMyPK = en.EnMap.GetAttrByKey(en.PK);
+                    sql2 = "SELECT COUNT(DISTINCT " + attrMyPK.Field + ") FROM " + map.PhysicsTable;
+                    COUNT2 = DBAccess.RunSQLReturnValInt(sql2);
+                    if (COUNT1 != COUNT2)
+                    {
+                        msg += "@物理表(" + map.EnDesc + ")中主键不唯一;它会造成数据查询不准确或者意向不到的错误：<BR>sql1=" + sql1 + " <BR>sql2=" + sql2;
+                        msg += "@SQL= SELECT * FROM (  select " + en.PK + ",  COUNT(*) AS NUM  from " + map.PhysicsTable + " GROUP BY " + en.PK + " ) WHERE NUM!=1";
+                    }
+                }
+
+                if (msg == "")
+                    return map.EnDesc + ":数据体检成功,完全正确.";
+
+                string info = map.EnDesc + ":数据体检信息：体检失败" + msg;
+                return info;
+
+            }catch(Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        public string SystemClass_Fields()
+        {
+            Entities ens = ClassFactory.GetEns(this.EnsName);
+            Entity en = ens.GetNewEntity;
+
+            BP.En.Map map = en.EnMap;
+            en.CheckPhysicsTable();
+
+            string html = "<table>";
+
+            html += "<caption>数据结构" + map.EnDesc + "," + map.PhysicsTable + "</caption>";
+
+            html += "<tr>";
+            html += "<th>序号</th>";
+            html += "<th>描述</th>";
+            html += "<th>属性</th>";
+            html += "<th>物理字段</th>";
+            html += "<th>数据类型</th>";
+            html += "<th>关系类型</th>";
+            html += "<th>长度</th>";
+            html += "<th>对应</th>";
+            html += "<th>默认值</th>";
+            html += "</tr>";
+
+            int i = 0;
+            foreach (Attr attr in map.Attrs)
+            {
+                if (attr.MyFieldType == FieldType.RefText)
+                    continue;
+                i++;
+                html += "<tr>";
+                html += "<td>" + i + "</td>";
+                html += "<td>" + attr.Desc + "</td>";
+                html += "<td>" + attr.Key + "</td>";
+                html += "<td>" + attr.Field + "</td>";
+                html += "<td>" + attr.MyDataTypeStr + "</td>";
+                html += "<td>" + attr.MyFieldType.ToString() + "</td>";
+
+                if (attr.MyDataType == DataType.AppBoolean
+                    || attr.MyDataType == DataType.AppDouble
+                    || attr.MyDataType == DataType.AppFloat
+                    || attr.MyDataType == DataType.AppInt
+                    || attr.MyDataType == DataType.AppMoney
+                    )
+                    html += "<td>无</td>";
+                else
+                    html += "<td>" + attr.MaxLength + "</td>";
+
+
+                switch (attr.MyFieldType)
+                {
+                    case FieldType.Enum:
+                    case FieldType.PKEnum:
+                        try
+                        {
+                            SysEnums ses = new SysEnums(attr.UIBindKey);
+                            string str = "";
+                            foreach (SysEnum se in ses)
+                            {
+                                str += se.IntKey + "&nbsp;" + se.Lab + ",";
+                            }
+                            html += "<td>" + str + "</td>";
+                        }
+                        catch
+                        {
+                            html += "<td>未使用</td>";
+
+                        }
+                        break;
+                    case FieldType.FK:
+                    case FieldType.PKFK:
+                        Entities myens = ClassFactory.GetEns(attr.UIBindKey);
+                        html += "<td>表/视图:" + myens.GetNewEntity.EnMap.PhysicsTable + " 关联字段:" + attr.UIRefKeyValue + "," + attr.UIRefKeyText+"</td>";
+                        break;
+                    default:
+                        html += "<td>无</td>";
+                        break;
+                }
+
+                html += "<td>" + attr.DefaultVal.ToString() + "</td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+            return html;
+        }
+
+        public string SystemClass_Init()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No");
+            dt.Columns.Add("EnsName");
+            dt.Columns.Add("Name");
+            dt.Columns.Add("PTable");
+
+            ArrayList al = null;
+            al = BP.En.ClassFactory.GetObjects("BP.En.Entity");
+            foreach (Object obj in al)
+            {
+                Entity en = null;
+                try
+                {
+                    en = obj as Entity;
+                    string s = en.EnDesc;
+                    if (en == null)
+                        continue;
+                }
+                catch
+                {
+                    continue;
+                }
+
+                if (en.ToString() == null)
+                    continue;
+
+
+                DataRow dr = dt.NewRow();
+               
+                dr["No"] = en.ToString();
+                try
+                {
+                    dr["EnsName"] = en.GetNewEntities.ToString();
+                }
+                catch
+                {
+                    dr["EnsName"] = en.ToString()+"s";
+                }
+                dr["Name"] = en.EnMap.EnDesc;
+                dr["PTable"] = en.EnMap.PhysicsTable;
+                dt.Rows.Add(dr);
+            }
+
+            return BP.Tools.Json.ToJson(dt);
+        }
+        #endregion
+
+
         #region 执行父类的重写方法.
         /// <summary>
         /// 默认执行的方法

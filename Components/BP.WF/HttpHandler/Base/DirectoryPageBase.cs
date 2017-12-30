@@ -308,6 +308,21 @@ namespace BP.WF.HttpHandler
                 return doType;
             }
         }
+        public string EnName
+        {
+            get
+            {
+                string str = this.GetRequestVal("EnName");
+
+                if (str == null || str == "" || str == "null")
+                    str = this.GetRequestVal("FK_MapData");
+
+                if (str == null || str == "" || str == "null")
+                    return null;
+
+                return str;
+            }
+        }
         public string EnsName
         {
             get

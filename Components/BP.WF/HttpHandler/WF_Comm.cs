@@ -554,7 +554,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-
         #region 查询.
         /// <summary>
         /// 获得查询的基本信息.

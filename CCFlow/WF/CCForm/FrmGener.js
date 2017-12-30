@@ -10,8 +10,11 @@
 var colVisibleJsonStr = ''
 var jsonStr = '';
 var IsChange = false;
+var webUser=null;
 //初始化函数
 $(function () {
+   
+     webUser = new WebUser();
 
     $("#CCForm").unbind().on('click', function () {
         Change(frmData);
@@ -150,7 +153,6 @@ function GenerFrm() {
     //如果是有流程信息，就相关的按钮加载出来.
     InitToolBar();
 
-
     $.ajax({
         type: 'post',
         async: true,
@@ -265,7 +267,6 @@ function GenerFrm() {
             catch (err) {
 
             }
-
 
             if (isReadonly != "1") {
 
@@ -515,69 +516,9 @@ function AfterBindEn_DealMapExt(frmData) {
     for (var i = 0; i < mapExtArr.length; i++) {
         var mapExt = mapExtArr[i];
         switch (mapExt.ExtType) {
-			case "MultipleChoiceSmall":
-				var data = [];
-				var valueField = "No";
-				var textField = "Name";
-				switch (mapExt.DoWay) {
-					case 1:
-						$.each((mapExt.Tag1 || "").split(","), function (i, o) {
-							data.push({ No: i, Name: o })
-						});
-						break;
-					case 2:
-						valueField = "IntKey"
-						textField = "Lab";
-						var enums = new Entities("BP.Sys.SysEnums");
-						enums.Retrieve("EnumKey", mapExt.Tag2);
-						data = enums;
-						break;
-					case 3:
-						var en = new Entity("BP.Sys.SFTable", mapExt.Tag3);
-						data = en.DoMethodReturnJSON("GenerDataOfJson");
-						break;
-					case 4:
-						data = DBAccess.RunSQLReturnTable(mapExt.Tag4);
-						break;
-				}
-				(function (AttrOfOper, data, FK_MapData) {
-					var cbx = $("#" + AttrOfOper + "_combobox");
-					var hiddenField = $('<input type="hidden" />');
-					hiddenField.attr("id", "TB_" + AttrOfOper);
-					hiddenField.attr("name", "TB_" + AttrOfOper);
-					cbx.after(hiddenField);
-					cbx.attr("class", "easyui-combobox");
-					cbx.combobox({
-						"editable" : false,
-						"valueField" : valueField,
-						"textField" : textField,
-						"multiple" : true,
-						"onSelect" : function (p) {
-							$("#TB_" + AttrOfOper).val(cbx.combobox("getText"));
-							(function sel(n, KeyOfEn, FK_MapData) {
-								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
-								frmEleDB.FK_MapData = FK_MapData;
-								frmEleDB.EleID = KeyOfEn;
-								frmEleDB.RefPKVal = (pageData.WorkID || pageData.OID || "");
-								frmEleDB.Tag1 = n;
-								if (frmEleDB.Update() == 0) {
-									frmEleDB.Insert();
-								}
-							})(p[valueField], AttrOfOper, FK_MapData);
-						},
-						"onUnselect" : function (p) {
-							$("#TB_" + AttrOfOper).val(cbx.combobox("getText"));
-							(function unsel(n, KeyOfEn) {
-								var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-								frmEleDB.MyPK = KeyOfEn + "_" + (pageData.WorkID || pageData.OID || "") + "_" + n;
-								frmEleDB.Delete();
-							})(p[valueField], AttrOfOper);
-						}
-					});
-					cbx.combobox("loadData", data);
-				})(mapExt.AttrOfOper, data, mapExt.FK_MapData);
-				break;
+            case "MultipleChoiceSmall":
+                MultipleChoiceSmall(mapExt);
+                break;
 			case "MultipleChoiceSearch":
 				switch (mapExt.DoWay) {
 				case 1:
@@ -1390,17 +1331,7 @@ function dealWithUrl(src) {
     }
     return src;
 }
-
-
-// ccform 为开发者提供的内置函数. 
-// 获取DDL值 
-function ReqDDL(ddlID) {
-    var v = document.getElementById('DDL_' + ddlID).value;
-    if (v == null) {
-        alert('没有找到ID=' + ddlID + '的下拉框控件.');
-    }
-    return v;
-}
+ 
 
 //20160106 by 柳辉
 //获取页面参数
@@ -1423,78 +1354,7 @@ function GetPageParas(sArgName) {
     }
     return retval;
 }
-
-//获取Dtl中TB的值 20160106 from 柳辉
-function ReqDtlBObj(dtlTable, DtlColumn, onValue) {
-
-    var getworkid = $('#HidWorkID').val(); //hiddenValue
-
-    $.ajax({
-
-        url: "../../DataUser/Do.aspx",
-        data: { getworkid: getworkid, dtlTable: dtlTable, DtlColumn: DtlColumn, onValue: onValue },
-        success: function (arr) {
-            alert(arr);
-            if (arr == "true") {
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-
-    });
-}
-// 获取TB值
-function ReqTB(tbID) {
-    var v = document.getElementById('TB_' + tbID).value;
-    if (v == null) {
-        alert('没有找到ID=' + tbID + '的文本框控件.');
-    }
-    return v;
-}
-// 获取CheckBox值
-function ReqCB(cbID) {
-    var v = document.getElementById('CB_' + cbID).value;
-    if (v == null) {
-        alert('没有找到ID=' + cbID + '的 CheckBox （单选）控件.');
-    }
-    return v;
-}
-// 获取附件文件名称,如果附件没有上传就返回null.
-function ReqAthFileName(athID) {
-    var v = document.getElementById(athID);
-    if (v == null) {
-        return null;
-    }
-    var fileName = v.alt;
-    return fileName;
-}
-
-/// 获取DDL Obj
-function ReqDDLObj(ddlID) {
-    var v = document.getElementById('DDL_' + ddlID);
-    if (v == null) {
-        alert('没有找到ID=' + ddlID + '的下拉框控件.');
-    }
-    return v;
-}
-// 获取TB Obj
-function ReqTBObj(tbID) {
-    var v = document.getElementById('TB_' + tbID);
-    if (v == null) {
-        alert('没有找到ID=' + tbID + '的文本框控件.');
-    }
-    return v;
-}
-// 获取CheckBox Obj值
-function ReqCBObj(cbID) {
-    var v = document.getElementById('CB_' + cbID);
-    if (v == null) {
-        alert('没有找到ID=' + cbID + '的单选控件(获取CheckBox)对象.');
-    }
-    return v;
-}
+ 
 // 设置值.
 function SetCtrlVal(ctrlID, val) {
     document.getElementById('TB_' + ctrlID).value = val;

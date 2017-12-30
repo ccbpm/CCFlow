@@ -16,6 +16,7 @@
     <script language="JavaScript" src="Menu.js" type="text/javascript"></script>
     <script language="JavaScript" src="ShortKey.js" type="text/javascript"></script>
     <script src="./JS/Calendar/WdatePicker.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
     <script src="Gener.js" type="text/javascript"></script>
     <link href="./JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
     <link href='./Style/Table0.css' rel='stylesheet' type='text/css' />

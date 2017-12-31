@@ -46,7 +46,6 @@ namespace CCFlow.WF.OneWork
             string isZhidu = this.Request.QueryString["isZhiDu"];
             if (string.IsNullOrEmpty(isZhidu) == false)
             {
-
                 string zhiduNo = this.Request.QueryString["ZhiDuNo"];
                 if (!string.IsNullOrEmpty(zhiduNo))
                 {

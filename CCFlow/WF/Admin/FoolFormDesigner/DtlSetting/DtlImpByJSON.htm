@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>从表导入JS模式</title>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
+
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+
+    <script type="text/javascript" language="javascript" >
+        //页面启动函数.
+        $(function () {
+
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            maExp
+            //
+            $("#TB_Docs").val(mapExt.Docs);
+
+        });
+
+
+        function Btn_Delete_onclick() {
+
+        }
+
+        function Btn_Save_onclick() {
+
+        }
+
+    </script>
+</head>
+<body  >
+
+<form id="cc">
+
+<table id="Table1" style="width:99%;">
+<caption> 从表的导入JSON模式配置 </caption>
+<tr>
+<td>标题</td>
+<td><input type="text" id="TB_Title" /> </td>
+</tr>
+
+<tr>
+<td>搜索提示</td>
+<td><input type="text" id="TB_SearchTip" /> </td>
+</tr>
+
+
+<tr>
+<td colspan=2>列表数据源</td>
+</tr>
+
+<tr>
+<td colspan=2>
+<textarea id="TB_Docs" name="TB_Docs" style="width:99%; height: 99px;">
+</textarea>
+</td>
+</tr>
+
+
+<tr>
+<td colspan=2>
+描述:
+$@Lab=标签@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=
+
+事例:<br>
+$@Lab=全部@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,消费类型;SYRQ,使用日期;Addr,地点;LSJE,流水金额;<br>
+$@Lab=携程商旅@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,消费类型;SYRQ,使用日期;Addr,地点;LSJE,流水金额;<br>
+$@Lab=滴滴出行@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,消费类型;SYRQ,使用日期;Addr,地点;LSJE,流水金额;<br>
+$@Lab=浙商金卡@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,消费类型;SYRQ,使用日期;Addr,地点;LSJE,流水金额;<br>
+
+</td>
+</tr>
+
+
+
+<tr>
+<td colspan=2>搜索JSON</td>
+</tr>
+
+<tr>
+<td colspan=2>
+
+<textarea id="Textarea1" name="TB_Docs" style="width:99%; height: 37px;">
+</textarea>
+
+</td>
+</tr>
+
+
+
+<tr>
+<td colspan=2><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Btn_Save_onclick()" />
+<input type="button" value="删除"  id="Btn_Delete" name="Btn_Delete" onclick="return Btn_Delete_onclick()" />
+</td>
+</tr>
+
+
+</table>
+
+ 
+
+</form>
+
+</body>
+</html>

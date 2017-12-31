@@ -1,0 +1,246 @@
+﻿<head>
+    <title>驰骋工作流</title>
+   <script language="JavaScript" src="../Comm/JScript.js" type="text/javascript" ></script>
+    <script type="text/javascript" src="../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <!-- 引用通用的js文件. -->
+    <script type="text/javascript" src="../Scripts/config.js"></script>
+    <script type="text/javascript" src="../Comm/Gener.js"></script>
+
+    <script type="text/javascript" language="javascript" >
+
+        var result = null;
+        //页面启动函数.
+        $(function () {
+
+            $("#Msg").html("<img src=../Img/loading.gif />正在加载,请稍后......");
+
+            var href = window.location.href;
+            var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+            var url = Handler + "?DoType=DtlOpt_Init&" + urlParam + "&m=" + Math.random();
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data); //如果是异常，就提提示.
+                        return;
+                    }
+
+                    if (data.indexOf('url@') == 0) {
+                        data = data.replace('url@', ''); //如果返回url，就直接转向.
+                        window.location.href = data;
+                        return;
+                    }
+
+                    result = JSON.parse(data);
+                    BindTable();
+                    return;
+                }
+            });
+        });
+
+        function BindTable() {
+
+            $("#Table1").html();
+
+            var html = "";
+            html += "<table style='width:100%;' >";
+            //输出列名. 
+            html += "<tr>";
+            for (var attr in result) {
+                var myrow = result[attr];
+
+                var myidx = 0;
+                for (var myfield in myrow) {
+
+                    if (myidx == 0)
+                        html += "<th><input type='checkbox' onclick='CheckAll()' id='CB_CheckAll' ><label for='CB_CheckAll'><span id='sp" + myidx + "'>" + myfield + "</span></label></th>";
+                    else
+                        html += "<th><span id='sp" + myidx + "'>" + myfield + "</span></th>"; 
+                    myidx++;
+                }
+                break;
+            }
+            html += "</th>";
+
+            //输出数据.
+            for (var i = 0; i < result.length; i++) {
+
+                html += "<tr>";
+                var row = result[i];
+
+                var idx = 0;
+                for (var attr in row) {
+                    if (idx == 0) {
+                        html += "<td><input type='checkbox'  id='CB_" + row[attr] + "' ><label for='CB_" + row[attr] + "'>" + row[attr] + "</label></td>";
+                    }
+                    else {
+                        html += "<td>" + row[attr] + "</td>";
+                    }
+
+                    idx++;
+                }
+                html += "</tr>";
+            }
+            html += "</table>";
+
+            html += "<div style='float:left'>";
+            html += "<input type='button' value='添加' onclick='Add(false)' />";
+            html += "<input type='button' value='添加并返回'  onclick='Add(true)' />";
+            html += "<input type='button' value='返回'  onclick='Back()' />";
+            html += "</div>";
+
+            $("#Table1").html(html);
+            $("#Msg").html();
+
+            //改变列名.
+            CheangeColName();
+        }
+
+        function CheangeColName() {
+
+            //  BP.WF.Template.MapDtlExt ext = new BP.WF.Template.MapDtlExt();
+//            var ensName = GetQueryString("EnsName"); // Demo_DtlExpImpDtl1
+
+//            var sql = "SELECT ImpSQLNames FROM Sys_MapDtl WHERE No='" + ensName + "'";
+//            var dt=DBAccess.RunSQLReturnTable(sql);
+//            var strs = dt[0][0];
+
+            var pkval = GetQueryString("EnsName");
+
+            var en = new GEEntity("BP.WF.Template.MapDtlExt", pkval);
+            var strs = en.GetValByKey("ImpSQLNames");
+
+
+            while (true) {
+                if (strs.indexOf('，') == -1)
+                    break;
+
+                strs = strs.replace('，', ',');
+            }
+
+            strs = strs.split(',');
+
+            for (var i = 0; i < strs.length; i++) {
+                var str = strs[i];
+                $('#sp' + i).html(str);
+            }
+         
+        }
+
+        function Search() {
+
+            var key = document.getElementById("TB_Key").value;
+            if (key == null || key == undefined || key == '') {
+                alert('请输入关键字');
+                return;
+            }
+
+           // var href = window.location.href;
+            //var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+            var url = Handler + "?DoType=DtlOpt_Search&Key=" + key + "&FK_MapDtl=" + GetQueryString("FK_MapDtl") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&m=" + Math.random();
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+                    result = JSON.parse(data);
+                    BindTable();
+                }
+            });
+        }
+
+        function Add( isReturnToDtl ) {
+
+            var vals = '';
+            $.each($(":checkbox"), function () {
+                if (this.checked == true)
+                    vals += this.id.replace('CB_', '') + ",";
+            });
+
+            //获得pks. 
+            alert(vals);
+
+            var href = window.location.href;
+            var urlParam = href.substring(href.indexOf('?') + 1, href.length);
+            var url = Handler + "?DoType=DtlOpt_Add&PKs="+vals+"&" + urlParam + "&m=" + Math.random();
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: url,
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    alert(data);
+                    if (isReturnToDtl == false)
+                        return;
+                    Back(); //返回。
+                }
+            });
+        }
+
+        function Back() {
+            var url = 'Dtl.htm?EnsName=' + GetQueryString('EnsName');
+            url += "&FK_MapDtl=" + GetQueryString("FK_MapDtl");
+            url += "&RefPK=" + GetQueryString("RefPK");
+            url += "&FK_MapData=" + GetQueryString("FK_MapData");
+            url += "&OID=" + GetQueryString("OID");
+            var isReadonly = GetQueryString("IsReadonly");
+            if (isReadonly == null || isReadonly == "null" || isReadonly == undefined || isReadonly == "0")
+                isReadonly = "0";
+            else
+                isReadonly == "1";
+
+            url += "&IsReadonly=" + isReadonly;
+            url += "&UserNo=" + GetQueryString("UserNo");
+            url += "&SID=" + GetQueryString("SID");
+            url += "&WorkID=" + GetQueryString("WorkID");
+            url += "&FK_Flow=" + GetQueryString("FK_Flow");
+            url += "&FK_Node=" + GetQueryString("FK_Node");
+            url += "&RefPKVal=" + GetQueryString("RefPKVal");
+            window.location.href = url;
+        }
+
+        function CheckAll() {
+            var checked = document.getElementById('CB_CheckAll').checked;
+            $.each($(":checkbox"), function () {
+                this.checked = checked;
+            });
+        }
+
+		$(function () {
+			var bodyHeight = $(document).height();
+			var searchDivHeight = $("#searchDiv").height();
+			$("#Table1").height(bodyHeight - searchDivHeight - 15);
+		});
+    </script>
+    <link href="Dtl.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<form id="cc">
+		<div id="searchDiv" style='text-align: left;'>
+			关键字:&nbsp;<input type="text" id="TB_Key" value="" />&nbsp;<input type="button" value="查询" onclick="Search()" />
+		</div>
+		<div id="Table1" style="overflow: auto;" />
+		<div id="Msg" />
+	</form>
+</body>
+</html>

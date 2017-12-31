@@ -115,28 +115,6 @@ namespace BP.WF.HttpHandler
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
 
-
-                //处理参数的赋值. 翻译.
-                if (en.EnMap.Attrs.Contains("AtPara") == true)
-                {
-                    //更新参数值.
-                    AtPara para = en.atPara;
-                    foreach (string key in para.HisHT.Keys)
-                        en.SetPara(key, this.GetRequestVal(key));
-
-                    //处理参数赋值, 从特殊约定的字段取值.
-                    string bpParas = this.GetRequestVal("BPParas");
-                    if (bpParas != "")
-                    {
-                        AtPara ap = new AtPara(bpParas);
-                        foreach (string item in ap.HisHT.Keys)
-                        {
-                            en.SetPara(item, ap.GetValStrByKey(item));
-                        }
-                    }
-                }
-
-
                 return en.Update().ToString(); //返回影响行数.
             }
             catch (Exception ex)
@@ -186,14 +164,12 @@ namespace BP.WF.HttpHandler
                 en.PKVal = this.PKVal;
                 int i = en.Retrieve();
 
-
                 if (en.Row.ContainsKey("Retrieve") == true)
                     en.Row["Retrieve"] = i;
                 else
                     en.Row.Add("Retrieve", i);
 
-
-                return en.ToJson();
+                return en.ToJson(false);
             }
             catch (Exception ex)
             {
@@ -278,8 +254,6 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
-                //en.PKVal = this.PKVal;
-                //en.RetrieveFromDBSources();
 
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
@@ -292,7 +266,7 @@ namespace BP.WF.HttpHandler
                 en.Retrieve();
 
                 //返回数据.
-                return en.ToJson();
+                return en.ToJson(false);
             }
             catch (Exception ex)
             {

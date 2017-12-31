@@ -170,7 +170,10 @@ namespace BP.Sys
         /// 映射的实体事件类
         /// </summary>
         public const string FEBD = "FEBD";
-
+        /// <summary>
+        /// 导入模式.
+        /// </summary>
+        public const string ImpModel = "ImpModel";
 
         #region 参数属性.
         public const string IsEnableLink = "IsEnableLink";
@@ -207,14 +210,6 @@ namespace BP.Sys
         /// 是否可以导出
         /// </summary>
         public const string IsExp = "IsExp";
-        /// <summary>
-        /// 是否可以导入Excel？
-        /// </summary>
-        public const string IsImp = "IsImp";
-        /// <summary>
-        /// 是否启用选择导入？
-        /// </summary>
-        public const string IsEnableSelectImp = "IsEnableSelectImp";
         /// <summary>
         /// 查询sql
         /// </summary>
@@ -285,34 +280,6 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 是否可以导入？
-        /// </summary>
-        public bool IsImp
-        {
-            get
-            {
-                return this.GetValBooleanByKey(MapDtlAttr.IsImp);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.IsImp, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用选择数据项目导入？
-        /// </summary>
-        public bool IsEnableSelectImp
-        {
-            get
-            {
-                return this.GetValBooleanByKey(MapDtlAttr.IsEnableSelectImp);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.IsEnableSelectImp, value);
-            }
-        }
-        /// <summary>
         /// 执行的类
         /// </summary>
         public string FEBD
@@ -324,6 +291,20 @@ namespace BP.Sys
             set
             {
                 this.SetValByKey(MapDtlAttr.FEBD, value);
+            }
+        }
+        /// <summary>
+        /// 导入模式
+        /// </summary>
+        public int ImpModel
+        {
+            get
+            {
+                return this.GetValIntByKey(MapDtlAttr.ImpModel);
+            }
+            set
+            {
+                this.SetValByKey(MapDtlAttr.ImpModel, value);
             }
         }
         /// <summary>
@@ -1356,16 +1337,16 @@ namespace BP.Sys
                 //SQL过滤表达式.
                 map.AddTBString(MapDtlAttr.FilterSQLExp, null, "过滤SQL表达式", true, false, 0, 200, 20, true);
 
-              
-
                 //add 2014-02-21.
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
 
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
                 map.AddBoolean(MapDtlAttr.IsExp, true, "IsExp", false, false);
-                map.AddBoolean(MapDtlAttr.IsImp, true, "IsImp", false, false);
-                map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?", false, false);
+                map.AddTBInt(MapDtlAttr.ImpModel, 0, "导入规则", false, false);
+
+               // map.AddBoolean(MapDtlAttr.IsImp, true, "IsImp", false, false);
+               // map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?", false, false);
                 map.AddTBString(MapDtlAttr.ImpSQLSearch, null, "查询SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLInit, null, "初始化SQL", true, false, 0, 500, 20);
                 map.AddTBString(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充SQL", true, false, 0, 500, 20);

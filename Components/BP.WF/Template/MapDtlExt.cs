@@ -40,34 +40,6 @@ namespace BP.WF.Template
             }
         }
         /// <summary>
-        /// 是否可以导入？
-        /// </summary>
-        public bool IsImp
-        {
-            get
-            {
-                return this.GetValBooleanByKey(MapDtlAttr.IsImp);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.IsImp, value);
-            }
-        }
-        /// <summary>
-        /// 是否启用选择数据项目导入？
-        /// </summary>
-        public bool IsEnableSelectImp
-        {
-            get
-            {
-                return this.GetValBooleanByKey(MapDtlAttr.IsEnableSelectImp);
-            }
-            set
-            {
-                this.SetValByKey(MapDtlAttr.IsEnableSelectImp, value);
-            }
-        }
-        /// <summary>
         /// 查询sql
         /// </summary>
         public string ImpSQLInit
@@ -988,7 +960,7 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(MapDtlAttr.RowShowModel, 0, "编辑数据方式", true, true, MapDtlAttr.RowShowModel, "@0=无@1=傻瓜表单@2=自由表单");
                 map.SetHelperAlert(MapDtlAttr.RowShowModel, "格式为:第1种类型就要新建行,其他类型新建的时候弹出卡片.");
 
-
+              
 
 
                 //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
@@ -1007,17 +979,23 @@ namespace BP.WF.Template
                 //列自动计算表达式.
                 map.AddTBString(MapDtlAttr.ColAutoExp, null, "列自动计算", true, false, 0, 200, 20, true);
                 map.SetHelperAlert(MapDtlAttr.ColAutoExp, "格式为:@XiaoJi:Sum@NingLing:Avg 要对小计求合计,对年龄求平均数.不配置不显示.");
-               
+           
+                
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", false, false, 0, 128, 20);
+
                 #endregion 基础信息.
 
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
+                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导出？(导出到Excel,Txt,html类型文件.)", true, true);
 
-                map.AddBoolean(MapDtlAttr.IsExp, true, "是否可以导出？(导出到Excel,Txt,html类型文件.)", true, true, true);
-                map.AddBoolean(MapDtlAttr.IsImp, true, "是否可以导入？(从约定的模版格式文件里导入到表.)", true, true, true);
+                //导入模式.
+                map.AddDDLSysEnum(MapDtlAttr.ImpModel, 0, "导入方式", true, true, MapDtlAttr.ImpModel,
+                    "@0=不导入@1=按SQL设置导入@2=按JSON模式导入@3=按照xls文件模版导入");
+                map.SetHelperAlert(MapDtlAttr.RowShowModel, "您需要在相关功能里设置相对应的导入模式设置.");
 
-                map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?(定义导入数据源导入到表格里)", true, true, true);
+              //  map.AddBoolean(MapDtlAttr.IsImp, true, "是否可以导入？(从约定的模版格式文件里导入到表.)", true, true, true);
+                //map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?(定义导入数据源导入到表格里)", true, true, true);
 
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", true, false, true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false,true);

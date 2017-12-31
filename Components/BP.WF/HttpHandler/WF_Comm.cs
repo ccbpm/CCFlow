@@ -62,8 +62,14 @@ namespace BP.WF.HttpHandler
                 if (pkval == "0" || pkval == "" || pkval == null || pkval == "undefined")
                 {
                     Map map = en.EnMap;
+                    foreach (Attr attr in en.EnMap.Attrs)
+                    {
+                        en.SetValByKey(attr.Key, attr.DefaultVal);
+                    }
+
                     //设置默认的数据.
                     en.ResetDefaultVal();
+
                 }
                 else
                 {
@@ -71,7 +77,7 @@ namespace BP.WF.HttpHandler
                     en.Retrieve();
                 }
 
-                return en.ToJson();
+                return en.ToJson(false);
             }
             catch(Exception ex)
             {
@@ -145,7 +151,7 @@ namespace BP.WF.HttpHandler
                 else
                     en.Row.Add("RetrieveFromDBSources", i);
 
-                return en.ToJson();
+                return en.ToJson(false);
             }
             catch (Exception ex)
             {
@@ -193,7 +199,7 @@ namespace BP.WF.HttpHandler
                 else
                     en.Row.Add("IsExits", isExit);
 
-                return en.ToJson();
+                return en.ToJson(false);
             }
             catch (Exception ex)
             {
@@ -236,7 +242,6 @@ namespace BP.WF.HttpHandler
                         }
                     }
                 }
-
 
                 return en.Save().ToString();
             }

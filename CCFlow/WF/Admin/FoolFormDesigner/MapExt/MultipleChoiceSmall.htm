@@ -41,8 +41,14 @@
             tables.RetrieveAll();
             GenerBindDDL("DDL_SFTables", tables, "No", "Name", en.Tag3);
 
+            //去掉 ' 号。
+            var tag = en.Tag4;
+            while (tag.indexOf('~') > 1) {
+                tag = tag.replace("~", "'");
+            }
+
             //绑定SQL
-            $("#TB_SQL").val(en.Tag4);
+            $("#TB_SQL").val(tag);
 
         });
 

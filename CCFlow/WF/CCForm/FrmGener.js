@@ -13,8 +13,8 @@ var IsChange = false;
 var webUser=null;
 //初始化函数
 $(function () {
-   
-     webUser = new WebUser();
+
+    webUser = new WebUser();
 
     $("#CCForm").unbind().on('click', function () {
         Change(frmData);
@@ -27,7 +27,7 @@ $(function () {
 
     //设置不可以用.
     var isReadonly = GetQueryString("IsReadonly");
-    if (isReadonly == "1") {
+    if (isReadonly == 1) {
         SetReadonly();
     }
 
@@ -75,8 +75,16 @@ function SetReadonly() {
     //设置保存按钮不可以用.
     $("#Btn_Save").attr("disabled", true);
 
-    //@于庆海,怎么设置全部的表单元素不可以使用？ 遍历每个控件.
-
+    //设置为只读属性.
+    var ctrls = document.childNodes;
+    for (var i = 0; i < ctrls.length; i++) {
+        var ctrl = ctrls[i];
+        var id = ctrl.id;
+        var tb = $("#" + id);  //("disabled", true);
+        if (tb.length == 1) {
+            tb.attr("disabled", true);
+        }
+    }
 }
 
 function SetHegiht() {
@@ -218,7 +226,8 @@ function GenerFrm() {
                 else
                     GenerFreeFrm(mapData, frmData); //自由表单.
             }
-			$.parser.parse("#CCForm");
+
+            $.parser.parse("#CCForm");
             var isReadonly = GetQueryString("IsReadonly");
 
             //原有的。
@@ -237,14 +246,9 @@ function GenerFrm() {
                 }
             })
 
-
             // 加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
             var enName = frmData.Sys_MapData[0].No;
             try {
-                ////加载JS文件
-                //jsSrc = "<script language='JavaScript' src='/DataUser/JSLibData/" + enName + "_Self.js' ></script>";
-                //$('body').append($('<div>' + jsSrc + '</div>'));
-
                 var s = document.createElement('script');
                 s.type = 'text/javascript';
                 s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
@@ -281,27 +285,35 @@ function GenerFrm() {
                 var mapAttr = frmData.Sys_MapAttr[j];
 
                 //添加 label
-                //如果是整行的需要添加  style='clear:both'
-
+                //如果是整行的需要添加  style='clear:both'.
                 var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
                     $('#TB_' + mapAttr.KeyOfEn).val(defValue);
                 }
 
-                if (isReadonly == "1") {
-
-                    if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
-                      
-                    }
+                if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
+                    $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
                 }
 
+                if ($('#CB_' + mapAttr.KeyOfEn).length == 1) {
+                    if (defValue == "1")
+                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", true);
+                    else
+                        $('#CB_' + mapAttr.KeyOfEn).attr("checked", false);
+                }
 
+                if (mapAttr.UIIsEnable == "0") {
+
+                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', true);
+                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', true);
+                }
             }
 
             ShowNoticeInfo();
 
             ShowTextBoxNoticeInfo();
-
 
             //初始化复选下拉框 
             var selectPicker = $('.selectpicker');
@@ -325,9 +337,9 @@ function GenerFrm() {
             //调整样式,让必选的红色 * 随后垂直居中
             editor.$container.css({ "display": "inline-block", "margin-right": "10px", "vertical-align": "middle" });
 
-			if (typeof setContentHeight == "function") {
-				setContentHeight();
-			}
+            if (typeof setContentHeight == "function") {
+                setContentHeight();
+            }
         }
     })
 }
@@ -515,36 +527,14 @@ function AfterBindEn_DealMapExt(frmData) {
     var mapExtArr = frmData.Sys_MapExt;
     for (var i = 0; i < mapExtArr.length; i++) {
         var mapExt = mapExtArr[i];
+
         switch (mapExt.ExtType) {
             case "MultipleChoiceSmall":
-                MultipleChoiceSmall(mapExt);
+                MultipleChoiceSmall(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
-			case "MultipleChoiceSearch":
-				switch (mapExt.DoWay) {
-				case 1:
-					(function (AttrOfOper, sql) {
-						var mselector = $("#" + AttrOfOper + "_mselector");
-						var hiddenField = $('<input type="hidden" />');
-						hiddenField.attr("id", "TB_" + AttrOfOper);
-						hiddenField.attr("name", "TB_" + AttrOfOper);
-						mselector.after(hiddenField);
-						mselector.mselector({
-							"fit" : true,
-							"filter" : false,
-							"sql" : sql,
-							"onSelect" : function (record) {
-								$("#TB_" + AttrOfOper).val(mselector.mselector("getValue"));
-								//mssel(record);
-							},
-							"onUnselect" : function (record) {
-								$("#TB_" + AttrOfOper).val(mselector.mselector("getValue"));
-								//msunsel(record);
-							}
-						});
-					})(mapExt.AttrOfOper, mapExt.Tag1);
-					break;
-				}
-				break;
+            case "MultipleChoiceSearch":
+                MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                break;
             case "PopVal": //PopVal窗返回值
             case "PopFullCtrl": //PopFullCtrl.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');

@@ -28,8 +28,14 @@
             //设置文本框选择的值.
             $("#RB_" + en.DoWay).attr("checked", true);
 
+            //去掉 ' 号。
+            var tag = en.Tag1;
+            while (tag.indexOf('~') > 1) {
+                tag = tag.replace("~", "'");
+            }
+
             //按照文本计算.
-            $("#TB_Docs").val(en.Tag1);
+            $("#TB_Docs").val(tag);
 
         });
 

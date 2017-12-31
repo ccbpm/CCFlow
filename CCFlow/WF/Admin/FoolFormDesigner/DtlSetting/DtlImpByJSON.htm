@@ -22,25 +22,28 @@
             $("#TB_SearchTip").val(mapExt.GetPara("SearchTip"));
 
             //主题数据源.
-            $("#TB_Docs").val(mapExt.Docs);
+            $("#TB_Docs").val(mapExt.Doc);
             $("#TB_Tag").val(mapExt.Tag); //查询数据源.
 
-
             //设置按钮是否可以用?
-                if (i == 0)
-                    $("#Btn_Delete").attr("disabled", true);
-                else
-                    $("#Btn_Delete").removeAttr("disabled");
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
 
         });
 
 
         function Delete() {
 
+            if (confirm('您确定要删除吗？') == false)
+                return;
+
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
+            window.location.href = window.location.href;
         }
 
         function Save() {
@@ -49,12 +52,17 @@
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
+            mapExt.FK_MapData = GetQueryString("FK_MapData");
+
             mapExt.SetPara("Title", $("#TB_Title").val());
             mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
 
             //主题数据源.
             mapExt.Doc = $("#TB_Docs").val();
             mapExt.Tag = $("#TB_Tag").val(); //查询关键。
+
+            mapExt.ExtType = "DtlImpByJSON";
+
             mapExt.Save();
 
             window.location.href = window.location.href;
@@ -78,7 +86,6 @@
 <td><input type="text" id="TB_SearchTip" /> ,显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</td>
 </tr>
 
-
 <tr>
 <td colspan=2>列表数据源</td>
 </tr>
@@ -89,7 +96,6 @@
 </textarea>
 </td>
 </tr>
-
 
 <tr>
 <td colspan=2>

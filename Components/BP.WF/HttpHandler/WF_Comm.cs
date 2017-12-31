@@ -63,10 +63,7 @@ namespace BP.WF.HttpHandler
                 {
                     Map map = en.EnMap;
                     foreach (Attr attr in en.EnMap.Attrs)
-                    {
                         en.SetValByKey(attr.Key, attr.DefaultVal);
-                    }
-
                     //设置默认的数据.
                     en.ResetDefaultVal();
 

@@ -436,14 +436,14 @@ namespace BP.Tools
         /// </summary>
         /// <param name="ht"></param>
         /// <returns></returns>
-        public static string ToJsonEntityModel(Hashtable ht, string ensName=null)
+        public static string ToJsonEntityModel(Hashtable ht)
         {
             string strs = "{";
             foreach (string key in ht.Keys)
             {
                 strs += "\"" + key + "\":\"" + ht[key] + "\",";
             }
-            strs += "\"EnsName\":\"" + ensName + "\"";
+            //strs += "\"EnsName\":\"" + ensName + "\"";
             strs += "}";
             strs = TranJsonStr(strs);
             return strs;

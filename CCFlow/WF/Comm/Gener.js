@@ -745,7 +745,7 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") != -1) {
-                        return data;
+                        return;
                     }
                     $.each(params, function (n, o) {
                         jsonString[n] = o;

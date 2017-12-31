@@ -18,11 +18,15 @@
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
+            //基本属性.
             $("#TB_Title").val(mapExt.GetPara("Title"));
             $("#TB_SearchTip").val(mapExt.GetPara("SearchTip"));
 
+            $("#TB_W").val(mapExt.W); //宽度
+            $("#TB_H").val(mapExt.H); //高度.
+
             //主题数据源.
-            $("#TB_Docs").val(mapExt.Doc);
+            $("#TB_Doc").val(mapExt.Doc);
             $("#TB_Tag").val(mapExt.Tag); //查询数据源.
 
             //设置按钮是否可以用?
@@ -57,17 +61,18 @@
             mapExt.SetPara("Title", $("#TB_Title").val());
             mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
 
+            mapExt.W = $("#TB_W").val(); //宽度
+            mapExt.H = $("#TB_H").val(); //高度
+
             //主题数据源.
-            mapExt.Doc = $("#TB_Docs").val();
+            mapExt.Doc = $("#TB_Doc").val();
             mapExt.Tag = $("#TB_Tag").val(); //查询关键。
 
             mapExt.ExtType = "DtlImpByJSON";
-
-            mapExt.Save();
+            var i = mapExt.Save();
 
             window.location.href = window.location.href;
         }
-
     </script>
 </head>
 <body  >
@@ -82,8 +87,14 @@
 </tr>
 
 <tr>
+<td colspan=2 >弹窗高度:<input type="text"  id="TB_H" style="width:80px; text-align:right"  /> 宽度:<input type="text"  id="TB_W" style="width:80px; text-align:right"  /> </td>
+</tr>
+
+
+<tr>
 <td>搜索提示</td>
-<td><input type="text" id="TB_SearchTip" /> ,显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</td>
+<td><input type="text" id="TB_SearchTip" style="width:90%;" /> 
+<br><font color=gray >显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font></td>
 </tr>
 
 <tr>
@@ -92,21 +103,24 @@
 
 <tr>
 <td colspan=2>
-<textarea id="TB_Docs" name="TB_Docs" style="width:99%; height: 99px;">
+<textarea id="TB_Doc" name="TB_Doc" style="width:99%; height: 99px;">
 </textarea>
 </td>
 </tr>
 
 <tr>
 <td colspan=2>
+ 
+<a href="javascript:ShowHidden('help')">设置帮助:</a>
+<div id="help"   >
 描述:
 $@Lab=标签@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=
-
 事例:<br>
 $@Lab=全部@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,消费类型;SYRQ,使用日期;Addr,地点;LSJE,流水金额;<br>
 $@Lab=携程商旅@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,消费类型;SYRQ,使用日期;Addr,地点;LSJE,流水金额;<br>
 $@Lab=滴滴出行@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,消费类型;SYRQ,使用日期;Addr,地点;LSJE,流水金额;<br>
 $@Lab=浙商金卡@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,消费类型;SYRQ,使用日期;Addr,地点;LSJE,流水金额;<br>
+</div>
 
 </td>
 </tr>

@@ -1,5 +1,6 @@
 ﻿/*大范围，查询模式的多选. */
 function MultipleChoiceSearch(mapExt) {
+
     if (mapExt.DoWay == 0)
         return;
 

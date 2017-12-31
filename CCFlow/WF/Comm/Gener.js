@@ -1036,7 +1036,7 @@ var Entities = (function () {
 
 		getPara : function (key) {
 			var atPara = this.AtPara;
-			if (typeof atPara != "string") {
+			if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
 				return undefined;
 			}
 			var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");

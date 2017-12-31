@@ -15,6 +15,7 @@ namespace BP.CN
         public const string FK_SF = "FK_SF";
         public const string Grade = "Grade";
         public const string Names = "Names";
+        public const string PinYin = "PinYin";
         #endregion
     }
 	/// <summary>
@@ -42,6 +43,17 @@ namespace BP.CN
             get
             {
                 return this.GetValStrByKey(CityAttr.FK_SF);
+            }
+        }
+        public string PinYin
+        {
+            get
+            {
+                return this.GetValStrByKey(CityAttr.PinYin);
+            }
+            set
+            {
+                this.SetValByKey(CityAttr.PinYin, value);
             }
         }
         #endregion
@@ -93,6 +105,7 @@ namespace BP.CN
 
                 map.AddDDLEntities(CityAttr.FK_SF, null, "Ê¡·Ý", new SFs(), true);
                 map.AddDDLEntities(CityAttr.FK_PQ, null, "Æ¬Çø", new PQs(), true);
+                map.AddTBString(CityAttr.PinYin, null, "ËÑË÷Æ´Òô", true, false, 0, 200, 200);
 
                 map.AddSearchAttr(CityAttr.FK_SF);
                 #endregion

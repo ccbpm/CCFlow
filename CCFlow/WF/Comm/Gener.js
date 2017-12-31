@@ -827,8 +827,8 @@ var Entity = (function () {
 
                     if (data.indexOf("err@") == 0) {
                         result = data;
-                        var str = "查询:" + self.enName + " pk=" + self.pkval + " 错误.\t\n" + data.replace('err@', '');
-                        alert('查询:' + str);
+                        //var str = "查询:" + self.enName + " pk=" + self.pkval + " 错误.\t\n" + data.replace('err@', '');
+                        //alert('查询:' + str);
                         return;
                     }
 
@@ -914,7 +914,41 @@ var Entity = (function () {
 
         toString: function () {
             return JSON.stringify(this);
-        }
+        },
+
+		GetPara : function (key) {
+			var atPara = this.AtPara;
+			if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
+				return undefined;
+			}
+			var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");
+			var results = atPara.match(reg);
+			if (results != null) {
+				return unescape(results[2]);
+			}
+			return undefined;
+		},
+
+		SetPara : function (key, value) {
+			var atPara = this.AtPara;
+			if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
+				return;
+			}
+			var m = "@" + key + "=";
+			var index = atPara.indexOf(m);
+			if (index == -1) {
+				this.AtPara += "@" + key + "=" + value;
+			} else {
+				var p = atPara.substring(0, index + m.length);
+				var s = atPara.substring(index + m.length, atPara.length);
+				var i = s.indexOf("@");
+				if (i == -1) {
+					this.AtPara = p + value;
+				} else {
+					this.AtPara = p + value + s.substring(i, s.length);
+				}
+			}
+		}
 
     };
 
@@ -1032,41 +1066,7 @@ var Entities = (function () {
                     alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
                 }
             });
-        },
-
-		getPara : function (key) {
-			var atPara = this.AtPara;
-			if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
-				return undefined;
-			}
-			var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");
-			var results = atPara.match(reg);
-			if (results != null) {
-				return unescape(results[2]);
-			}
-			return undefined;
-		},
-
-		setPara : function (key, value) {
-			var atPara = this.AtPara;
-			if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
-				return;
-			}
-			var m = "@" + key + "=";
-			var index = atPara.indexOf(m);
-			if (index == -1) {
-				this.AtPara += "@" + key + "=" + value;
-			} else {
-				var p = atPara.substring(0, index + m.length);
-				var s = atPara.substring(index + m.length, atPara.length);
-				var i = s.indexOf("@");
-				if (i == -1) {
-					this.AtPara = p + value;
-				} else {
-					this.AtPara = p + value + s.substring(i, s.length);
-				}
-			}
-		}
+        }
 
     };
 

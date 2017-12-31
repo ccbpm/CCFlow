@@ -628,7 +628,9 @@ var Entity = (function () {
     function getParams(self) {
         var params = {};
         $.each(jsonString, function (n, o) {
-            params[n] = self[n];
+			if (typeof self[n] !== "function") {
+				params[n] = self[n];
+			}
         });
         return params;
     }
@@ -693,6 +695,7 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") != -1) {
+						alert(data);
                         return;
                     }
                     $.each(params, function (n, o) {
@@ -719,6 +722,7 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") != -1) {
+						alert(data);
                         return;
                     }
                     $.each(params, function (n, o) {
@@ -772,6 +776,7 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") != -1) {
+						alert(data);
                         return;
                     }
                     $.each(jsonString, function (n, o) {
@@ -796,8 +801,9 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + params,
                 dataType: 'html',
                 success: function (data) {
+					result = data;
                     if (data.indexOf("err@") != -1) {
-                        result = data;
+						alert(data);
                         return;
                     }
                     try {
@@ -806,10 +812,12 @@ var Entity = (function () {
                         result = jsonString.Retrieve;
                     } catch (e) {
                         result = "err@解析错误: " + data;
+						alert(result);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+					alert(jsonString);
                 }
             });
             return result;
@@ -825,9 +833,9 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval + "&" + params,
                 dataType: 'html',
                 success: function (data) {
-
+					result = data;
                     if (data.indexOf("err@") == 0) {
-                        result = data;
+						alert(data);
                         //var str = "查询:" + self.enName + " pk=" + self.pkval + " 错误.\t\n" + data.replace('err@', '');
                         //alert('查询:' + str);
                         return;
@@ -839,10 +847,12 @@ var Entity = (function () {
                         result = jsonString.RetrieveFromDBSources;
                     } catch (e) {
                         result = "err@解析错误: " + data;
+						alert(result);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+					alert(result);
                 }
             });
             return result;
@@ -857,8 +867,9 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_IsExits&EnName=" + self.enName + "&" + getParams1(self),
                 dataType: 'html',
                 success: function (data) {
+					result = data;
                     if (data.indexOf("err@") != -1) {
-                        result = data;
+						alert(data);
                         return;
                     }
                     try {
@@ -866,10 +877,12 @@ var Entity = (function () {
                         result = json.IsExits;
                     } catch (e) {
                         result = "err@解析错误: " + data;
+						alert(result);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+					alert(result);
                 }
             });
             return result;
@@ -893,6 +906,7 @@ var Entity = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     string = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+					alert(string);
                 }
             });
 
@@ -903,12 +917,14 @@ var Entity = (function () {
         DoMethodReturnJSON: function (methodName, params) {
             var jsonString = this.DoMethodReturnString(methodName, params);
             if (jsonString.indexOf("err@") != -1) {
+				alert(jsonString);
                 return jsonString;
             }
             try {
                 jsonString = JSON.parse(jsonString);
             } catch (e) {
                 jsonString = "err@json解析错误: " + jsonString;
+				alert(jsonString);
             }
             return jsonString;
         },
@@ -1231,6 +1247,7 @@ var HttpHandler = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     jsonString = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+					alert(jsonString);
                 }
             });
 
@@ -1281,17 +1298,17 @@ var WebUser = function () {
         dataType: 'html',
         success: function (data) {
             if (data.indexOf("err@") != -1) {
-                console.log(data);
+                alert(data);
                 return;
             }
             try {
                 jsonString = JSON.parse(data);
             } catch (e) {
-                console.log("json解析错误: " + data);
+				alert("json解析错误: " + data);
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            console.log("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+            alert("err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
         }
     });
 

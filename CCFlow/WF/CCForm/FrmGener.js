@@ -610,7 +610,7 @@ function AfterBindEn_DealMapExt(frmData) {
                         break;
                 }
                 var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html() +
-                '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('" + mapExt.ExtType + "','TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
+                '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
                 break;
             case "RegularExpression"://正则表达式  统一在保存和提交时检查

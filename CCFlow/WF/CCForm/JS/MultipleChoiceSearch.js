@@ -3,12 +3,19 @@ function MultipleChoiceSearch(mapExt) {
     if (mapExt.DoWay == 0)
         return;
 
+	var tb = $("#TB_" + mapExt.AttrOfOper);
+	var width = tb.width();
+	var height = tb.height();
+	tb.hide();
+
+	var container = $("<div></div>");
+	tb.before(container);
+	container.attr("id", mapExt.AttrOfOper + "_mselector");
+	container.width(width);
+	container.height(height);
+
     (function (AttrOfOper, sql) {
         var mselector = $("#" + AttrOfOper + "_mselector");
-        var hiddenField = $('<input type="hidden" />');
-        hiddenField.attr("id", "TB_" + AttrOfOper);
-        hiddenField.attr("name", "TB_" + AttrOfOper);
-        mselector.after(hiddenField);
         mselector.mselector({
             "fit": true,
             "filter": false,

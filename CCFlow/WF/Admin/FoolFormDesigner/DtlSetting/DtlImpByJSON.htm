@@ -16,21 +16,48 @@
 
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
-            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
-            maExp
-            //
+            $("#TB_Title").val(mapExt.GetPara("Title"));
+            $("#TB_SearchTip").val(mapExt.GetPara("SearchTip"));
+
+            //主题数据源.
             $("#TB_Docs").val(mapExt.Docs);
+            $("#TB_Tag").val(mapExt.Tag); //查询数据源.
+
+
+            //设置按钮是否可以用?
+                if (i == 0)
+                    $("#Btn_Delete").attr("disabled", true);
+                else
+                    $("#Btn_Delete").removeAttr("disabled");
 
         });
 
 
-        function Btn_Delete_onclick() {
+        function Delete() {
 
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            mapExt.Delete();
         }
 
-        function Btn_Save_onclick() {
+        function Save() {
 
+            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
+            mapExt.RetrieveFromDBSources(); //从数据库来查询.
+
+            mapExt.SetPara("Title", $("#TB_Title").val());
+            mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
+
+            //主题数据源.
+            mapExt.Doc = $("#TB_Docs").val();
+            mapExt.Tag = $("#TB_Tag").val(); //查询关键。
+            mapExt.Save();
+
+            window.location.href = window.location.href;
         }
 
     </script>
@@ -43,12 +70,12 @@
 <caption> 从表的导入JSON模式配置 </caption>
 <tr>
 <td>标题</td>
-<td><input type="text" id="TB_Title" /> </td>
+<td><input type="text" id="TB_Title" /> ,显示在窗口的文字，比如:关联流水.</td>
 </tr>
 
 <tr>
 <td>搜索提示</td>
-<td><input type="text" id="TB_SearchTip" /> </td>
+<td><input type="text" id="TB_SearchTip" /> ,显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</td>
 </tr>
 
 
@@ -79,7 +106,6 @@ $@Lab=浙商金卡@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,
 </tr>
 
 
-
 <tr>
 <td colspan=2>搜索JSON</td>
 </tr>
@@ -87,17 +113,18 @@ $@Lab=浙商金卡@JsonURL=http://xxxxx/ssss?xx=*sss@ColName=FKR,付款人;XFLX,
 <tr>
 <td colspan=2>
 
-<textarea id="Textarea1" name="TB_Docs" style="width:99%; height: 37px;">
+<textarea id="TB_Tag" name="TB_Tag" style="width:99%; height: 37px;">
 </textarea>
-
 </td>
-</tr>
-
-
 
 <tr>
-<td colspan=2><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Btn_Save_onclick()" />
-<input type="button" value="删除"  id="Btn_Delete" name="Btn_Delete" onclick="return Btn_Delete_onclick()" />
+<td colspan=2>点击关键字执行搜索返回的数据源,比如: </td>
+</tr>
+</tr>
+
+<tr>
+<td colspan=2><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Save()" />
+<input type="button" value="删除"  id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
 </td>
 </tr>
 

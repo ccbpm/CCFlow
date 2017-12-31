@@ -210,6 +210,14 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoPopSimpleModel()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "Pop返回值";
+                rm.Title = "部门员工模式(高级)";
+                rm.ClassMethodName = this.ToString() + ".DoPopDeptEmpModelAdv()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
                 #endregion
 
 
@@ -233,6 +241,8 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
+
+         
 
         /// <summary>
         /// 删除
@@ -296,6 +306,14 @@ namespace BP.Sys.FrmUI
         public string DoPopSimpleModel()
         {
             return "../../Admin/FoolFormDesigner/PopSetting/SimpleModel.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 部门人员模式多选
+        /// </summary>
+        /// <returns></returns>
+        public string DoPopDeptEmpModelAdv()
+        {
+            return "../../Admin/FoolFormDesigner/PopSetting/DeptEmpModelAdv.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion
 

@@ -556,6 +556,9 @@ function AfterBindEn_DealMapExt(frmData) {
             case "MultipleChoiceSearch":
                 MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
+            case "PopDeptEmpModelAdv": //部门人员高级多选.
+                DeptEmpModelAdv(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                break;
             case "PopVal": //PopVal窗返回值
             case "PopFullCtrl": //PopFullCtrl.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');

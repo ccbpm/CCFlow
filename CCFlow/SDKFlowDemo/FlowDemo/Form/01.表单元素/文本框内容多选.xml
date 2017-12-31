@@ -1,9 +1,9 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <NewDataSet>
   <Sys_GroupField>
     <OID>2609</OID>
-    <Lab>基础信息</Lab>
-    <EnName>CCFrm_DuoShua</EnName>
+    <Lab>文本框内容多选</Lab>
+    <EnName>CCFrm_DuoShuaWenBen</EnName>
     <Idx>1</Idx>
     <GUID />
     <CtrlType />
@@ -11,11 +11,11 @@
     <AtPara />
   </Sys_GroupField>
   <Sys_MapData>
-    <No>CCFrm_DuoShua</No>
-    <Name>多选</Name>
+    <No>CCFrm_DuoShuaWenBen</No>
+    <Name>文本框内容多选</Name>
     <FormEventEntity />
     <EnPK />
-    <PTable>CCFrm_DuoShua</PTable>
+    <PTable>CCFrm_DuoShuaWenBen</PTable>
     <PTableModel>0</PTableModel>
     <Url />
     <Dtls />
@@ -86,8 +86,8 @@
     <FlowCtrls />
   </Sys_MapData>
   <Sys_MapAttr>
-    <MyPK>CCFrm_DuoShua_OID</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>CCFrm_DuoShuaWenBen_OID</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Name>主键</Name>
     <KeyOfEn>OID</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -128,8 +128,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>CCFrm_DuoShua_WenBenLeiXingDeDuoSh</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>CCFrm_DuoShuaWenBen_WenBenLeiXingDeDuoSh</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Name>文本类型的多选</Name>
     <KeyOfEn>WenBenLeiXingDeDuoSh</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -170,8 +170,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>CCFrm_DuoShua_MeiJuDuoShua</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>CCFrm_DuoShuaWenBen_MeiJuDuoShua</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Name>枚举多选</Name>
     <KeyOfEn>MeiJuDuoShua</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -212,8 +212,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>CCFrm_DuoShua_WaiJianDuoShua</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>CCFrm_DuoShuaWenBen_WaiJianDuoShua</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Name>外键多选</Name>
     <KeyOfEn>WaiJianDuoShua</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -254,8 +254,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>CCFrm_DuoShua_SQLDuoShua</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>CCFrm_DuoShuaWenBen_SQLDuoShua</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Name>SQL多选</Name>
     <KeyOfEn>SQLDuoShua</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -296,8 +296,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <MyPK>CCFrm_DuoShua_RDT</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>CCFrm_DuoShuaWenBen_RDT</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Name>更新时间</Name>
     <KeyOfEn>RDT</KeyOfEn>
     <MyDataType>7</MyDataType>
@@ -338,8 +338,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapExt>
-    <MyPK>MultipleChoiceSmall_CCFrm_DuoShua_MeiJuDuoShua</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>MultipleChoiceSmall_CCFrm_DuoShuaWenBen_MeiJuDuoShua</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <ExtType>MultipleChoiceSmall</ExtType>
     <DoWay>2</DoWay>
     <AttrOfOper>MeiJuDuoShua</AttrOfOper>
@@ -358,8 +358,8 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>MultipleChoiceSmall_CCFrm_DuoShua_SQLDuoShua</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>MultipleChoiceSmall_CCFrm_DuoShuaWenBen_SQLDuoShua</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <ExtType>MultipleChoiceSmall</ExtType>
     <DoWay>4</DoWay>
     <AttrOfOper>SQLDuoShua</AttrOfOper>
@@ -378,8 +378,8 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>MultipleChoiceSmall_CCFrm_DuoShua_WaiJianDuoShua</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>MultipleChoiceSmall_CCFrm_DuoShuaWenBen_WaiJianDuoShua</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <ExtType>MultipleChoiceSmall</ExtType>
     <DoWay>3</DoWay>
     <AttrOfOper>WaiJianDuoShua</AttrOfOper>
@@ -398,8 +398,8 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>MultipleChoiceSmall_CCFrm_DuoShua_WenBenLeiXingDeDuoSh</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <MyPK>MultipleChoiceSmall_CCFrm_DuoShuaWenBen_WenBenLeiXingDeDuoSh</MyPK>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <ExtType>MultipleChoiceSmall</ExtType>
     <DoWay>1</DoWay>
     <AttrOfOper>WenBenLeiXingDeDuoSh</AttrOfOper>
@@ -419,7 +419,7 @@
   </Sys_MapExt>
   <Sys_FrmLab>
     <MyPK>2E713715-8B58-B71A-FD25-15EB6E588170</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Text>SQL多选</Text>
     <X>104</X>
     <Y>297</Y>
@@ -433,7 +433,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>3C99BF0B-AB23-34AB-BCDF-C3AF0D947FC0</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Text>外键多选</Text>
     <X>97</X>
     <Y>224</Y>
@@ -447,7 +447,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>985D85C3-082C-AB99-D0B8-F077A8AECCDB</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Text>文本类型的多选</Text>
     <X>80.5</X>
     <Y>66</Y>
@@ -461,7 +461,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>CABC29A1-E2E0-695B-5F9E-A0C5268147C3</MyPK>
-    <FK_MapData>CCFrm_DuoShua</FK_MapData>
+    <FK_MapData>CCFrm_DuoShuaWenBen</FK_MapData>
     <Text>枚举多选</Text>
     <X>95</X>
     <Y>133</Y>

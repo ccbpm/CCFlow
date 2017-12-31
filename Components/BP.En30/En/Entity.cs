@@ -109,13 +109,19 @@ namespace BP.En
 			}
 			return kvs;
 		}
-		/// <summary>
-		/// 把一个实体转化成Json.
-		/// </summary>
-		/// <returns>返回一个string json串.</returns>
-		public string ToJson()
+		
+        /// <summary>
+        /// 把一个实体转化成Json.
+        /// </summary>
+        /// <param name="isInParaFields">是否转换参数字段</param>
+        /// <returns>返回该实体的单个json</returns>
+		public string ToJson(bool isInParaFields=true)
 		{
 			Hashtable ht = this.Row;
+            //如果不包含参数字段.
+            if (isInParaFields==false)
+                return BP.Tools.Json.ToJsonEntityModel(ht,this.ToString());
+
 			if (ht.ContainsKey("AtPara") == false)
 				return BP.Tools.Json.ToJsonEntityModel(ht);
 
@@ -140,7 +146,7 @@ namespace BP.En
 
 			return BP.Tools.Json.ToJson(ht);
 		}
-        
+         
 		/// <summary>
 		/// 转化成json字符串，包含外键与枚举，主表使用Main命名。
 		/// 外键使用外键表命名，枚举值使用枚举值命名。

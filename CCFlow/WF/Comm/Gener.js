@@ -745,6 +745,7 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") != -1) {
+						alert(data);
                         return;
                     }
                     $.each(params, function (n, o) {

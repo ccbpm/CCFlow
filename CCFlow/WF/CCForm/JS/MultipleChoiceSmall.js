@@ -1,7 +1,6 @@
 ﻿//小范围的多选,不需要搜索.
 function MultipleChoiceSmall(mapExt) {
 
-
     var data = [];
     var valueField = "No";
     var textField = "Name";
@@ -108,8 +107,7 @@ function MakeCheckBoxsModel(mapExt, data) {
 
         //开始绑定事件.
 
-
-        //end 绑定checkbox事件.
+        //end 绑定checkbox事件. @解相宇 绑定取消选择事件.
 
         textbox.before(cb);
 
@@ -123,11 +121,11 @@ function MakeCheckBoxsModel(mapExt, data) {
 }
 
 //删除数据.
-function Delete(keyOfEn, n) {
+function Delete(keyOfEn, val) {
 
     var oid = (pageData.WorkID || pageData.OID || "");
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-    frmEleDB.MyPK = KeyOfEn + "_" + oid + "_" + n;
+    frmEleDB.MyPK = KeyOfEn + "_" + oid + "_" + val;
     frmEleDB.Delete();
 }
 
@@ -138,11 +136,11 @@ function SaveVal(fk_mapdata, keyOfEn, val) {
 
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
 
-    frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + n;
+    frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val;
     frmEleDB.FK_MapData = fk_mapdata;
     frmEleDB.EleID = KeyOfEn;
     frmEleDB.RefPKVal = oid;
-    frmEleDB.Tag1 = n;
+    frmEleDB.Tag1 = val;
     if (frmEleDB.Update() == 0) {
         frmEleDB.Insert();
     }

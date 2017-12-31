@@ -443,7 +443,7 @@ namespace BP.Tools
             {
                 strs += "\"" + key + "\":\"" + ht[key] + "\",";
             }
-            //strs += "\"EnsName\":\"" + ensName + "\"";
+            strs += "\"EndJSON\":\"0\"";
             strs += "}";
             strs = TranJsonStr(strs);
             return strs;

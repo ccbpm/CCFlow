@@ -172,19 +172,7 @@ namespace BP.DA
         }
         #endregion
 
-
-        #region 与hashtable 相关的操作.
-        /// <summary>
-        /// 转化成Json. 成为 key value 模式.
-        /// </summary>
-        /// <param name="ht">要转换的ht</param>
-        /// <returns> key value 模式的json </returns>
-        public static string ToJsonEntityModel(Hashtable ht)
-        {
-           return BP.Tools.Json.ToJsonEntityModel(ht,null);
-        }
-        #endregion 与hashtable 相关的操作.
-
+ 
 
         #region Datatable转换为Json
         /// <summary>     

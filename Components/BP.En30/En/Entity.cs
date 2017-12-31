@@ -121,7 +121,6 @@ namespace BP.En
             //如果不包含参数字段.
             if (isInParaFields == false)
             {
-                ht.Add("EnName", this.ToString());
                 return BP.Tools.Json.ToJsonEntityModel(ht);
             }
 

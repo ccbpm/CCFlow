@@ -875,7 +875,8 @@ namespace BP.Sys
                     this.MyPK = MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
                 default:
-                    this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    //这里要去掉，不然组合组主键，会带来错误.
+                    //this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     // throw new Exception("@没有判断的扩展类型." + this.ExtType);
                     // this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;

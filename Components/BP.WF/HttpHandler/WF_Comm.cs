@@ -219,27 +219,6 @@ namespace BP.WF.HttpHandler
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
 
-
-                //处理参数的赋值. 翻译.
-                if (en.EnMap.Attrs.Contains("AtPara") == true)
-                {
-                    //更新参数值.
-                    AtPara para = en.atPara;
-                    foreach (string key in para.HisHT.Keys)
-                        en.SetPara(key, this.GetRequestVal(key));
-
-                    //处理参数赋值, 从特殊约定的字段取值.
-                    string bpParas = this.GetRequestVal("BPParas");
-                    if (bpParas != "")
-                    {
-                        AtPara ap = new AtPara(bpParas);
-                        foreach (string item in ap.HisHT.Keys)
-                        {
-                            en.SetPara(item, ap.GetValStrByKey(item));
-                        }
-                    }
-                }
-
                 return en.Save().ToString();
             }
             catch (Exception ex)

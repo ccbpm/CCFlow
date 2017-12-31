@@ -203,6 +203,16 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
                 #endregion
 
+                #region Pop返回值.
+                rm = new RefMethod();
+                rm.GroupName = "Pop返回值";
+                rm.Title = "简单模式";
+                rm.ClassMethodName = this.ToString() + ".DoPopSimpleModel()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                #endregion
+
+
                 #region 高级设置.
                 rm = new RefMethod();
                 rm.Title = "扩展控件";
@@ -275,6 +285,17 @@ namespace BP.Sys.FrmUI
                 this.SetValByKey("GroupID", "0");
 
             return base.beforeUpdateInsertAction();
+        }
+        #endregion
+
+        #region 方法执行 pop返回值
+        /// <summary>
+        /// 简单模式多选
+        /// </summary>
+        /// <returns></returns>
+        public string DoPopSimpleModel()
+        {
+            return "../../Admin/FoolFormDesigner/PopSetting/SimpleModel.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion
 

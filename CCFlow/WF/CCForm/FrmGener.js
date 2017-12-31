@@ -69,6 +69,27 @@ $(function () {
     }
 });
 
+function numonly(e) {
+	if (navigator.userAgent.indexOf("Firefox") > 0) {
+		var code;
+		if (window.event) {
+			code = event.keyCode;
+		} else {
+			code = e.which;
+		}
+		if (code != 8 && code != 9 && code != 13 && code != 16 && code != 17 && code != 18) {
+			if (code < 45 || code > 57) {
+				if (window.event) {
+					event.returnValue = false;
+				} else {
+					e.preventDefault();
+					return false;
+				}
+			}
+		}
+	}
+}
+
 //设置不可以用.
 function SetReadonly() {
 

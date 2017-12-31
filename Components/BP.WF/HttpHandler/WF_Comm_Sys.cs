@@ -15,6 +15,7 @@ using System.Net;
 using System.Xml.Schema;
 using System.Web.Services.Description;
 using System.Linq;
+using System.IO;
 
 namespace BP.WF.HttpHandler
 {
@@ -30,6 +31,69 @@ namespace BP.WF.HttpHandler
         public WF_Comm_Sys(HttpContext mycontext)
         {
             this.context = mycontext;
+        }
+        /// <summary>
+        /// 函数库
+        /// </summary>
+        /// <returns></returns>
+        public string SystemClass_FuncLib()
+        {
+            string expFileName = "all-wcprops,dir-prop-base,entries";
+            string expDirName = ".svn";
+
+            string pathDir = BP.Sys.SystemConfig.PathOfData + "\\JSLib\\";
+
+            string html = "";
+            html += "<fieldset>";
+            html += "<legend>" + "系统自定义函数. 位置:" + pathDir + "</legend>";
+
+
+            //.AddFieldSet();
+            DirectoryInfo dir = new DirectoryInfo(pathDir);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            foreach (DirectoryInfo mydir in dirs)
+            {
+                if (expDirName.Contains(mydir.Name))
+                    continue;
+
+                html += "事件名称" + mydir.Name;
+                html += "<ul>";
+                FileInfo[] fls = mydir.GetFiles();
+                foreach (FileInfo fl in fls)
+                {
+                    if (expFileName.Contains(fl.Name))
+                        continue;
+
+                    html += "<li>" + fl.Name + "</li>";
+                }
+                html += "</ul>";
+            }
+            html += "</fieldset>";
+
+            pathDir = BP.Sys.SystemConfig.PathOfDataUser + "\\JSLib\\";
+            html += "<fieldset>";
+            html += "<legend>" + "用户自定义函数. 位置:" + pathDir + "</legend>";
+
+            dir = new DirectoryInfo(pathDir);
+            dirs = dir.GetDirectories();
+            foreach (DirectoryInfo mydir in dirs)
+            {
+                if (expDirName.Contains(mydir.Name))
+                    continue;
+
+                html += "事件名称" + mydir.Name;
+                html += "<ul>";
+                FileInfo[] fls = mydir.GetFiles();
+                foreach (FileInfo fl in fls)
+                {
+                    if (expFileName.Contains(fl.Name))
+                        continue;
+                    html += "<li>" + fl.Name + "</li>";
+                }
+                html += "</ul>";
+            }
+            html += "</fieldset>";
+            return html;
         }
 
         #region 系统实体属性.

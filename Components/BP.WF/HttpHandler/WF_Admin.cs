@@ -241,6 +241,10 @@ namespace BP.WF.HttpHandler
         #endregion 测试页面.
 
         #region 安装.
+        /// <summary>
+        /// 初始化安装包
+        /// </summary>
+        /// <returns></returns>
         public string DBInstall_Init()
         {
             if (DBAccess.TestIsConnection() == false)

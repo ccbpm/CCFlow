@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20171209;
+        public static int Ver = 20171230;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -171,6 +171,26 @@ namespace BP.WF
             string msg = "";
             try
             {
+                if (DBAccess.IsExitsObject("CN_City") == true)
+                {
+                    if (DBAccess.IsExitsTableCol("CN_City", "PinYin") == true)
+                    {
+                        /*为cn_city 设置拼音.*/
+                          sql = "SELECT No,Names FROM CN_City ";
+                          DataTable dtCity = DBAccess.RunSQLReturnTable(sql);
+
+                          foreach (DataRow dr in dtCity.Rows)
+                          {
+                              string no = dr["No"].ToString();
+                              string name = dr["Names"].ToString();
+                              string pinyin1 = DataType.ParseStringToPinyin(name);
+                              string pinyin2 = DataType.ParseStringToPinyinJianXie(name);
+                              string pinyin = "," + pinyin1 + "," + pinyin2 + ",";
+                              DBAccess.RunSQL("UPDATE CN_City SET PinYin='" + pinyin + "' WHERE NO='" + no + "'");
+                          }
+                    }
+                }
+
                 //增加列FlowStars
                 BP.WF.Port.WFEmp wfemp = new Port.WFEmp();
                 wfemp.CheckPhysicsTable();
@@ -178,7 +198,7 @@ namespace BP.WF
                 BP.Sys.FrmRB rb = new FrmRB();
                 rb.CheckPhysicsTable();
 
-                BP.WF.Template.CC ccEn = new CC();
+                CC ccEn = new CC();
                 ccEn.CheckPhysicsTable();
 
                 BP.WF.Template.MapDtlExt dtlExt = new MapDtlExt();
@@ -1214,6 +1234,7 @@ namespace BP.WF
             //生成拼音，以方便关键字查找.
             BP.WF.DTS.GenerPinYinForEmp pinyin = new DTS.GenerPinYinForEmp();
             pinyin.Do();
+             
 
 
             #region 执行补充的sql, 让外键的字段长度都设置成100.

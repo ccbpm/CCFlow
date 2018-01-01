@@ -235,7 +235,6 @@ function initPageParam() {
     pageData.IsStartFlow = GetQueryString("IsStartFlow"); //是否是启动流程页面 即发起流程
 
     pageData.DoType1 = GetQueryString("DoType")//View
-    //$('#navIframe').attr('src', 'Admin/CCBPMDesigner/truck/centerTrakNav.html?FK_Flow=' + pageData.FK_Flow + "&FID=" + pageData.FID + "&WorkID=" + pageData.WorkID);
 }
 
 //将获取过来的URL参数转成URL中的参数形式  &
@@ -412,44 +411,6 @@ function refSubSubFlowIframe() {
     var iframe = $('iframe[src*="SubFlow.aspx"]');
     //iframe[0].contentWindow.location.reload();
     iframe[0].contentWindow.location.href = iframe[0].src;
-}
-//回填扩展字段的值
-function SetAth(data) {
-    var atParamObj = $('#iframeAthForm').data();
-    var tbId = atParamObj.tbId;
-    var divId = atParamObj.divId;
-    var athTb = $('#' + tbId);
-    var athDiv = $('#' + divId);
-
-    $('#athModal').modal('hide');
-    //不存在或来自于viewWorkNodeFrm
-    if (atParamObj != undefined && atParamObj.IsViewWorkNode != 1 && divId != undefined && tbId != undefined) {
-        if (atParamObj.AthShowModel == "1") {
-            athTb.val(data.join('*'));
-            athDiv.html(data.join(';&nbsp;'));
-        } else {
-            athTb.val('@AthCount=' + data.length);
-            athDiv.html("附件<span class='badge' >" + data.length + "</span>个");
-        }
-    } else {
-        $('#athModal').removeClass('in');
-    }
-    $('#athModal').hide();
-    var ifs = $("iframe[id^=track]").contents();
-    if (ifs.length > 0) {
-        for (var i = 0; i < ifs.length; i++) {
-            $(ifs[i]).find(".modal-backdrop").hide();
-        }
-    }
-}
-
-//查看页面的附件展示  查看页面调用
-function ShowViewNodeAth(athLab, atParamObj, src) {
-    var athForm = $('iframeAthForm');
-    var athModal = $('athModal');
-    var athFormTitle = $('#athModal .modal-title');
-    athFormTitle.text("上传附件：" + athLab);
-    athModal.modal().show();
 }
 
 
@@ -1151,20 +1112,6 @@ function execSend(toNode) {
             }
 
             OptSuc(data);
-            //  $('#Message').html(data);
-            // $('#MessageDiv').modal().show();
-
-            if (opener != null && opener.window != null && opener.window.parent != null
-            && opener.window.parent.refSubSubFlowIframe != null && typeof (opener.window.parent.refSubSubFlowIframe) == "function") {
-                opener.window.parent.refSubSubFlowIframe();
-            }
-            //if (window.opener != null && window.opener != undefined && window.opener)
-            //    $('#Message').html(data);
-            //$('#MessageDiv').modal().show();
-            ////发送成功时
-            //setAttachDisabled();
-            //setToobarUnVisible();
-            //setFormEleDisabled();
 
         }
     });
@@ -1535,7 +1482,7 @@ function GenerWorkNode() {
             var node = flowData.WF_Node[0];
 
             //设置标题.
-            document.title = node.FlowName + ','+ node.Name; // "业务流程管理（BPM）平台";
+            document.title = node.FlowName + ',' + node.Name; // "业务流程管理（BPM）平台";
 
             //循环之前的提示信息.
             var info = "";
@@ -1557,7 +1504,6 @@ function GenerWorkNode() {
             //发送旁边下拉框 edit by zhoupeng 放到这里是为了解决加载不同步的问题.
             InitToNodeDDL(flowData);
 
-
             //判断类型不同的类型不同的解析表单. 处理中间部分的表单展示.
 
             if (node.FormType == 5) {
@@ -1571,6 +1517,11 @@ function GenerWorkNode() {
 
             if (node.FormType == 1) {
                 GenerFreeFrm(flowData);  //自由表单.
+            }
+
+            //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
+            if (node.FormType == 11) {
+                GenerFreeFrm(flowData);
             }
 
             $.parser.parse("#CCForm");
@@ -1596,6 +1547,24 @@ function GenerWorkNode() {
                 }
             }
 
+            //2018.1.1 新增加的类型, 流程独立表单， 为了方便期间都按照自由表单计算了.
+            if (node.FormType == 11) {
+                //获得配置信息.
+                var frmNode = flowData["FrmNode"];
+                if (frmNode) {
+                    frmNode = frmNode[0];
+                    if (frmNode.FrmSln == 1) {
+
+                        /*只读的方案.*/
+                        //alert("把表单设置为只读.");
+                        SetFrmReadonly();
+                        alert('ssssssssssss');
+
+                    }
+                }
+            }
+
+
             //初始化Sys_MapData
             var h = flowData.Sys_MapData[0].FrmH;
             var w = flowData.Sys_MapData[0].FrmW;
@@ -1604,6 +1573,7 @@ function GenerWorkNode() {
             $('#topContentDiv').width(w);
             $('.Bar').width(w + 15);
             $('#lastOptMsg').width(w + 15);
+
             var marginLeft = $('#topContentDiv').css('margin-left');
             marginLeft = parseFloat(marginLeft.substr(0, marginLeft.length - 2)) + 50;
             $('#topContentDiv i').css('left', marginLeft.toString() + 'px');
@@ -1622,6 +1592,7 @@ function GenerWorkNode() {
                     $(obj).attr("id", $(obj).attr("name"));
                 }
             })
+
 
             ////加载JS文件 改变JS文件的加载方式 解决JS在资源中不显示的问题.
             var enName = flowData.Sys_MapData[0].No;
@@ -1701,6 +1672,14 @@ function GenerWorkNode() {
             //给富文本创建编辑器
         }
     })
+}
+
+function SetFrmReadonly() {
+
+    $('#CCForm').find('input,textarea').attr('disabled', false);
+    $('#CCForm').find('input,textarea').attr('readonly', true);
+    $('#CCForm').find('input,textarea').attr('disabled', true);
+    $('#Btn_Save').attr('disabled', true);
 }
 
 function sel(n, KeyOfEn, FK_MapData) {
@@ -1920,7 +1899,6 @@ function InitToolBar() {
                     $('#returnWorkModal').modal().show();
                 });
             }
-
 
             if ($('[name=Delete]').length > 0) {
                 var onclickFun = $('[name=Delete]').attr('onclick');

@@ -155,6 +155,7 @@ namespace CCFlow.Web.Comm
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            
             //2015.01.12 edited by liuxc
             //.     this.Page.RegisterClientScriptBlock("s",
             //"<link href='./Style/Table" + BP.Web.WebUser.Style + ".css' rel='stylesheet' type='text/css' />");

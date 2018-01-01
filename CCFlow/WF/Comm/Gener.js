@@ -628,9 +628,9 @@ var Entity = (function () {
     function getParams(self) {
         var params = {};
         $.each(jsonString, function (n, o) {
-			if (typeof self[n] !== "function") {
-				params[n] = self[n];
-			}
+            if (typeof self[n] !== "function") {
+                params[n] = self[n];
+            }
         });
         return params;
     }
@@ -695,7 +695,7 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") != -1) {
-						alert(data);
+                        alert(data);
                         return;
                     }
                     $.each(params, function (n, o) {
@@ -722,15 +722,18 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") != -1) {
-						alert(data);
+                        var err = data.replace('err@', '');
+
+                        alert('更新异常:' + err + " \t\nEnName"+self.enName);
                         return;
                     }
+
                     $.each(params, function (n, o) {
                         jsonString[n] = o;
                     });
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    alert("Entity Update系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
                 }
             });
             return result;
@@ -749,7 +752,7 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") != -1) {
-						alert(data);
+                        alert(data);
                         return;
                     }
                     $.each(params, function (n, o) {
@@ -776,7 +779,7 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") != -1) {
-						alert(data);
+                        alert(data);
                         return;
                     }
                     $.each(jsonString, function (n, o) {
@@ -793,7 +796,7 @@ var Entity = (function () {
 
         Retrieve: function () {
             var self = this;
-			var params = getParams1(this);
+            var params = getParams1(this);
             var result;
             $.ajax({
                 type: 'post',
@@ -801,23 +804,25 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_Retrieve&EnName=" + self.enName + "&" + params,
                 dataType: 'html',
                 success: function (data) {
-					result = data;
-                    if (data.indexOf("err@") != -1) {
-						alert(data);
+                    result = data;
+                    if (data.indexOf("err@") == 0) {
+                        alert('查询失败:' + self.enName +"请联系管理员:\t\n"+ data.replace('err@', ''));
                         return;
                     }
+
                     try {
                         jsonString = JSON.parse(data);
                         setData(self);
                         result = jsonString.Retrieve;
+
                     } catch (e) {
                         result = "err@解析错误: " + data;
-						alert(result);
+                        alert(result);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-					alert(jsonString);
+                    result = "Retrieve[" + self.enName + "]:err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    alert(jsonString);
                 }
             });
             return result;
@@ -825,7 +830,7 @@ var Entity = (function () {
 
         RetrieveFromDBSources: function () {
             var self = this;
-			var params = getParams1(this);
+            var params = getParams1(this);
             var result;
             $.ajax({
                 type: 'post',
@@ -833,9 +838,9 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_RetrieveFromDBSources&EnName=" + self.enName + "&PKVal=" + self.pkval + "&" + params,
                 dataType: 'html',
                 success: function (data) {
-					result = data;
+                    result = data;
                     if (data.indexOf("err@") == 0) {
-						alert(data);
+                        alert(data);
                         //var str = "查询:" + self.enName + " pk=" + self.pkval + " 错误.\t\n" + data.replace('err@', '');
                         //alert('查询:' + str);
                         return;
@@ -847,12 +852,12 @@ var Entity = (function () {
                         result = jsonString.RetrieveFromDBSources;
                     } catch (e) {
                         result = "err@解析错误: " + data;
-						alert(result);
+                        alert(result);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-					alert(result);
+                    alert(result);
                 }
             });
             return result;
@@ -867,9 +872,9 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_IsExits&EnName=" + self.enName + "&" + getParams1(self),
                 dataType: 'html',
                 success: function (data) {
-					result = data;
+                    result = data;
                     if (data.indexOf("err@") != -1) {
-						alert(data);
+                        alert(data);
                         return;
                     }
                     try {
@@ -877,12 +882,12 @@ var Entity = (function () {
                         result = json.IsExits;
                     } catch (e) {
                         result = "err@解析错误: " + data;
-						alert(result);
+                        alert(result);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-					alert(result);
+                    alert(result);
                 }
             });
             return result;
@@ -906,7 +911,7 @@ var Entity = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     string = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-					alert(string);
+                    alert(string);
                 }
             });
 
@@ -917,14 +922,14 @@ var Entity = (function () {
         DoMethodReturnJSON: function (methodName, params) {
             var jsonString = this.DoMethodReturnString(methodName, params);
             if (jsonString.indexOf("err@") != -1) {
-				alert(jsonString);
+                alert(jsonString);
                 return jsonString;
             }
             try {
                 jsonString = JSON.parse(jsonString);
             } catch (e) {
                 jsonString = "err@json解析错误: " + jsonString;
-				alert(jsonString);
+                alert(jsonString);
             }
             return jsonString;
         },
@@ -933,39 +938,39 @@ var Entity = (function () {
             return JSON.stringify(this);
         },
 
-		GetPara : function (key) {
-			var atPara = this.AtPara;
-			if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
-				return undefined;
-			}
-			var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");
-			var results = atPara.match(reg);
-			if (results != null) {
-				return unescape(results[2]);
-			}
-			return undefined;
-		},
+        GetPara: function (key) {
+            var atPara = this.AtPara;
+            if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
+                return undefined;
+            }
+            var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");
+            var results = atPara.match(reg);
+            if (results != null) {
+                return unescape(results[2]);
+            }
+            return undefined;
+        },
 
-		SetPara : function (key, value) {
-			var atPara = this.AtPara;
-			if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
-				return;
-			}
-			var m = "@" + key + "=";
-			var index = atPara.indexOf(m);
-			if (index == -1) {
-				this.AtPara += "@" + key + "=" + value;
-			} else {
-				var p = atPara.substring(0, index + m.length);
-				var s = atPara.substring(index + m.length, atPara.length);
-				var i = s.indexOf("@");
-				if (i == -1) {
-					this.AtPara = p + value;
-				} else {
-					this.AtPara = p + value + s.substring(i, s.length);
-				}
-			}
-		}
+        SetPara: function (key, value) {
+            var atPara = this.AtPara;
+            if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
+                return;
+            }
+            var m = "@" + key + "=";
+            var index = atPara.indexOf(m);
+            if (index == -1) {
+                this.AtPara += "@" + key + "=" + value;
+            } else {
+                var p = atPara.substring(0, index + m.length);
+                var s = atPara.substring(index + m.length, atPara.length);
+                var i = s.indexOf("@");
+                if (i == -1) {
+                    this.AtPara = p + value;
+                } else {
+                    this.AtPara = p + value + s.substring(i, s.length);
+                }
+            }
+        }
 
     };
 

@@ -35,14 +35,28 @@
     <script src="Comm/utf8-net/ueditor.config.js" type="text/javascript"></script>
     <script src="Comm/utf8-net/ueditor.all.js" type="text/javascript"></script>
 
-    <script src="Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <!-- 引用基础js库. -->
     <script src="Scripts/config.js" type="text/javascript"></script>
-    <script src="Scripts/commonYangYH.js" type="text/javascript"></script>
     <script src="./Comm/Gener.js" type="text/javascript"></script>
+
+    <!-- 引入easyUI 写的js. -->
+    <script src="Scripts/EasyUIUtility.js" type="text/javascript"></script>
+    <script src="Scripts/commonYangYH.js" type="text/javascript"></script>
     <script src="./CCForm/MapExt2016.js" type="text/javascript"></script>
+
+    <!-- 引入解析表单的三个重要js文件. -->
     <script src="MyFlowGener.js" type="text/javascript"></script>
     <script src="MyFlowFree2017.js" type="text/javascript"></script>
     <script src="MyFlowFool2017.js" type="text/javascript"></script>
+
+    <!-- 引入表单的扩展控件. -->
+    <link href="CCForm/JS/mselector.css" rel="stylesheet" type="text/css" />
+    <script src="CCForm/JS/Pop.js" type="text/javascript"></script>
+    <script src="CCForm/JS/mselector.js" type="text/javascript"></script>
+    <script src="CCForm/JS/MultipleChoiceSearch.js" type="text/javascript"></script>
+    <script src="CCForm/JS/MultipleChoiceSmall.js" type="text/javascript"></script>
+
+
     <style type="text/css">
         h1{
             font-family: "微软雅黑";
@@ -541,32 +555,6 @@
             padding-top: 5px;" class="Bar">
         </div>
     </div>
-    <!--杨玉慧加 暂时解决POP窗不好用的问题-->
-    <div class="modal fade" id="returnPopValModal">
-        <div class="modal-dialog" style="margin-left: auto; margin-right: auto;">
-            <div class="modal-content" style="border-radius: 0px;">
-                <div class="modal-header">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" style="background: none;
-                        border: none; float: right;">
-                        ×</button>
-                    <h4 class="modal-title">
-                        选择提出人</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframePopModalForm"
-                        name="iframePopModalForm"></iframe>
-                    <div style="text-align: right;">
-                        <button type="button" id="btnPopValCancel" class="btn" data-dismiss="modal">
-                            取消</button>
-                        <button type="button" id="btnPopValOK" class="btn" data-dismiss="modal">
-                            确定</button>
-                    </div>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
     <!-- /.modal -->
     <!--下拉框选项提示信息-->
     <div class="popover fade top in" role="tooltip" id="div_NoticeInfo" style="top: 24.01042366027832px;
@@ -579,32 +567,7 @@
         <div class="popover-content">
             顶部的 Popover 中的一些内容</div>
     </div>
-    <!--杨玉慧加  附件弹出窗口-->
-    <div class="modal fade" id="athModal">
-        <div class="modal-dialog">
-            <div class="modal-content" style="border-radius: 0px;">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color: white;
-                        opacity: 1; display: none;">
-                        ×</button>
-                    <h4 class="modal-title">
-                        选择附件</h4>
-                </div>
-                <div class="modal-body">
-                    <iframe style="width: 100%; border: 0px; height: 400px;" id="iframeAthForm" name="iframeAthForm">
-                    </iframe>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-    <!--杨玉慧加  中间导航-->
-    <iframe id="navIframe" style="display: none;"></iframe>
-    <div>
-        <iframe id="hisIframe" style="width: 100%; display: none;"></iframe>
-    </div>
+    
     <!--杨玉慧加   提示信息弹出窗口-->
     <div class="modal fade" id="msgModal" data-backdrop="static">
         <div class="modal-dialog" >
@@ -630,11 +593,7 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-
-
-     <div id="ShowPFlow" style="display: none;">
-        <button id="btnShowPFlow" value="查看父流程信息" style="float: left;">查看父流程信息</button>
-    </div>
+    
     <!--之前返回的信息-->
     <div id="lastOptMsg">
     </div>

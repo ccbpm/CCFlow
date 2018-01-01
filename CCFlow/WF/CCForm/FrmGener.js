@@ -92,20 +92,11 @@ function numonly(e) {
 
 //设置不可以用.
 function SetReadonly() {
-
     //设置保存按钮不可以用.
     $("#Btn_Save").attr("disabled", true);
-
-    //设置为只读属性.
-    var ctrls = document.childNodes;
-    for (var i = 0; i < ctrls.length; i++) {
-        var ctrl = ctrls[i];
-        var id = ctrl.id;
-        var tb = $("#" + id);  //("disabled", true);
-        if (tb.length == 1) {
-            tb.attr("disabled", true);
-        }
-    }
+    $('#CCForm').find('input,textarea').attr('disabled', false);
+    $('#CCForm').find('input,textarea').attr('readonly', true);
+    $('#CCForm').find('input,textarea').attr('disabled', true);
 }
 
 function SetHegiht() {

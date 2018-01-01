@@ -26,6 +26,8 @@ namespace CCFlow.SDKFlowDemo
                 this.Response.Write("1");
             else
                 this.Response.Write("0");
+
+            
         }
     }
 }

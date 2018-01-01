@@ -11,8 +11,9 @@
         window.onload =
 
 		function Test() {
-			Test_EntityPara();
-			return;
+         
+		  //  Test_EntityPara();
+		    return;
 		    //获得当前用户信息.
 		    var currUser = new WebUser();
 		    var no = currUser.No;
@@ -55,7 +56,7 @@
 
 		    //执行实体的方法.
 		    //var msg2 = emp.DoMethodReturnString("ChangePass", "@oldpass=123@pass1=456@pass2=456"); //重置密码:不带参数的方法.
-		    var msg2 = emp.DoMethodReturnString("ChangePass", "123","123","123"); //重置密码:不带参数的方法.
+		    var msg2 = emp.DoMethodReturnString("ChangePass", "123", "123", "123"); //重置密码:不带参数的方法.
 		    alert(msg2);
 		}
 
@@ -79,7 +80,6 @@
                 alert('参数字段没有保存成功.');
                 return;
             }
-
 		}
 
 		function Test_Adv() {

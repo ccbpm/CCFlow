@@ -164,13 +164,15 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
+
+                en = en.CreateInstance();
                 en.PKVal = this.PKVal;
-                int i = en.Retrieve();
+                en.Retrieve();
 
                 if (en.Row.ContainsKey("Retrieve") == true)
-                    en.Row["Retrieve"] = i;
+                    en.Row["Retrieve"] = "1";
                 else
-                    en.Row.Add("Retrieve", i);
+                    en.Row.Add("Retrieve", "1");
 
                 return en.ToJson(false);
             }

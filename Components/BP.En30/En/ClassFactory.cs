@@ -555,11 +555,11 @@ namespace BP.En
                 ArrayList al = ClassFactory.GetObjects(cl);
                 foreach (Entity en in al)
                 {
-                    string key =  string.Empty ;
-                    if( null == en || string.IsNullOrEmpty(key =en.ToString()))
+                    string key = string.Empty;
+                    if (null == en || string.IsNullOrEmpty(key = en.ToString()))
                         continue;
-                  
-                    if (!Htable_En.ContainsKey(key))
+
+                    if (Htable_En.ContainsKey(key) == false)
                         Htable_En.Add(key, en);
                     else
                     {
@@ -570,6 +570,11 @@ namespace BP.En
             }
             object tmp = Htable_En[className];
             return (tmp as Entity);
+
+            //   object tmp = Htable_En[className];
+            // Entity myen = tmp as Entity;
+            //myen = myen.CreateInstance();
+            //return (tmp as Entity);
         }
         #endregion
 

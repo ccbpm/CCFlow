@@ -452,15 +452,18 @@ namespace BP.WF.HttpHandler
 
             //求出当前节点frm的类型.
             NodeFormType frmtype = this.currND.HisFormType;
-            if (this.currND.NodeFrmID.Contains(this.currND.NodeID.ToString()) == false)
+            if (frmtype != NodeFormType.RefOneFrmTree)
             {
-                /*如果当前节点引用的其他节点的表单.*/
-                string nodeFrmID = currND.NodeFrmID;
-                string refNodeID =  nodeFrmID.Replace("ND", "");
-                BP.WF.Node nd = new Node(int.Parse(refNodeID));
+                if (this.currND.NodeFrmID.Contains(this.currND.NodeID.ToString()) == false)
+                {
+                    /*如果当前节点引用的其他节点的表单.*/
+                    string nodeFrmID = currND.NodeFrmID;
+                    string refNodeID = nodeFrmID.Replace("ND", "");
+                    BP.WF.Node nd = new Node(int.Parse(refNodeID));
 
-                //表单类型.
-                frmtype = nd.HisFormType;
+                    //表单类型.
+                    frmtype = nd.HisFormType;
+                }
             }
 
             #region 内置表单类型的判断.

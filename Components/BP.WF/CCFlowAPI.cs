@@ -71,7 +71,7 @@ namespace BP.WF
 
                 #region 加入组件的状态信息, 在解析表单的时候使用.
                 BP.WF.Template.FrmNodeComponent fnc = new FrmNodeComponent(nd.NodeID);
-                if (nd.NodeFrmID != "ND" + nd.NodeID)
+                if (nd.NodeFrmID != "ND" + nd.NodeID && nd.HisFormType != NodeFormType.RefOneFrmTree)
                 {
                     /*说明这是引用到了其他节点的表单，就需要把一些位置元素修改掉.*/
                     int refNodeID = int.Parse(nd.NodeFrmID.Replace("ND", ""));
@@ -271,8 +271,8 @@ namespace BP.WF
                 if (me.Retrieve(MapExtAttr.ExtType, MapExtXmlList.PageLoadFull, MapExtAttr.FK_MapData, wk.NodeFrmID) == 1)
                 {
                     //执行通用的装载方法.
-                    MapAttrs attrs = new MapAttrs("ND" + fk_node);
-                    MapDtls dtls = new MapDtls("ND" + fk_node);
+                    MapAttrs attrs = new MapAttrs(wk.NodeFrmID);
+                    MapDtls dtls = new MapDtls(wk.NodeFrmID);
                     wk = BP.WF.Glo.DealPageLoadFull(wk, me, attrs, dtls) as Work;
                 }
 
@@ -536,6 +536,18 @@ namespace BP.WF
                         break;
                 }
                 #endregion
+
+                #region 增加流程节点表单绑定信息.
+                if (nd.HisFormType == NodeFormType.RefOneFrmTree)
+                {
+                    /* 独立流程节点表单. */
+
+                    FrmNode fn = new FrmNode();
+                    fn.MyPK = nd.NodeFrmID + "_" + nd.NodeID + "_" + nd.FK_Flow;
+                    fn.Retrieve();
+                    myds.Tables.Add(fn.ToDataTableField("FrmNode"));
+                }
+                #endregion 增加流程节点表单绑定信息.
 
 
                 myds.Tables.Add(dtAlert);

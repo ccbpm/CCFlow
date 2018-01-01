@@ -1260,6 +1260,10 @@ namespace BP.WF
         /// </summary>
         FoolTruck = 10,
         /// <summary>
+        /// 节点单表单
+        /// </summary>
+        RefOneFrmTree = 11,
+        /// <summary>
         /// 禁用(对多表单流程有效)
         /// </summary>
         DisableIt = 100,

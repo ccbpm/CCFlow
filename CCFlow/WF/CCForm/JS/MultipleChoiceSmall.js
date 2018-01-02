@@ -205,6 +205,14 @@ function DeptEmpModelAdv0(mapExt) {
 	//
 	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?" + params.join("&");
 	target.on("click", function () {
-		OpenEasyUiDialog(url, iframeId, title, width, height);
+		OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
+			var iframe = document.getElementById(iframeId);
+			if (iframe) {
+				var selectedRows = iframe.contentWindow.selectedRows;
+				// save data eledb
+				alert(JSON.stringify(selectedRows));
+			}
+			return true;
+		});
 	});
 }

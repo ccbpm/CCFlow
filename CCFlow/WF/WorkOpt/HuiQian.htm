@@ -5,7 +5,7 @@
     <!--
     1, 退回界面。
     2，需要 FK_Flow, FK_Node,WorkID, FID.
-    3, 调用方法 ReturnWork.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
+    3, 调用方法 HuiQian.htm?FK_Flow=001&FK_Node=103&WorkID=232&FID=23
     -->
     <meta http-equiv="Access-Control-Allow-Origin" content="*" />
     <link href="../Scripts/bootstrap/css/bootstrap.css" rel="stylesheet" />
@@ -116,9 +116,8 @@
             //  url = url.replace('101', '10102');
             url = url.replace('=101&', '=10102&');
 
-
             $('#iframeSelectEmpsForm').attr('src', url);
-            $('#BtnSelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
+            $('#Btn_SelectEmps').bind('click', function () { $('#selectEmpsModal').modal().show(); });
             //$("section").show();
             $(".Msg").hide();
 
@@ -213,7 +212,7 @@
 
 
         //确定  执行会签操作
-        function ReturnWork(emps) {
+        function DoHuiQian(emps) {
 
             $.ajax({
                 type: 'post',
@@ -253,6 +252,10 @@
             if (toNode == undefined || toNode == "undefined")
                 toNode = "0";
 
+            $("#Btn_HuiQian").attr("disabled", "disabled");
+            $("#Btn_HuiQian").val("执行中...");
+            $("#Btn_SelectEmps").attr("disabled", "disabled");
+
             //需要调用设置会签状态并返回才可以.
             var myurl = Handler + "?DoType=HuiQian_SaveAndClose&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&ToNode=" + toNode + "&m=" + Math.random();
 
@@ -262,7 +265,6 @@
                 url: myurl,
                 dataType: 'html',
                 success: function (data) {
-
 
                     if (data.indexOf('url@') == 0) {
                         data = data.replace('url@', '');
@@ -297,6 +299,11 @@
                     //提示信息.
                     if (data.indexOf('info@') == 0) {
                         alert(data.replace('info@', ''));
+
+                        $("#Btn_HuiQian").attr("disabled", false);
+                        $("#Btn_HuiQian").val("执行会签");
+                        $("#Btn_SelectEmps").attr("disabled", false);
+
                         return;
                     }
 
@@ -404,7 +411,7 @@
             //  alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
             // alert(frames["iframeSelectEmpsForm"].window.returnVal.NAME);
 
-            ReturnWork(frames["iframeSelectEmpsForm"].window.returnVal.No);
+            DoHuiQian(frames["iframeSelectEmpsForm"].window.returnVal.No);
             return;
             $('#TB_Emps').val(frames["iframeSelectEmpsForm"].window.returnVal.No);
         }
@@ -468,8 +475,7 @@
         });
 
         function selectAdd(No) {
-            ReturnWork(No);
-            //  $("#TB_Emps").val(No);
+            DoHuiQian(No);
         }
 
         //鼠标事件
@@ -483,7 +489,7 @@
 
             $("#TB_Emps").val('');
 
-            ReturnWork(no);
+            DoHuiQian(no);
 
             $("#SelectEmp").hide().html("");
         }
@@ -509,17 +515,14 @@
     <br />
     <div>
         <div id="labInfo">
-           输入关键字: <input type="text" id="TB_Emps"
-              title="查张三,您可输入: zs或zhangs或zhangsan";
-         placeholder="查张三,您可输入:zs或zhangs或zhangsan";
-            
-            name="TB_Emps" value='' style="width: 300px;" />
-            <input type="button" id="BtnSelectEmps" value='选择会签人' /><a href="javascript:Help()">帮助</a>
+           输入关键字: <input type="text" id="TB_Emps"  title="查张三,您可输入: zs或zhangs或zhangsan"
+         placeholder="查张三,您可输入:zs或zhangs或zhangsan"  name="TB_Emps" value='' style="width: 300px;" />
+            <input type="button" id="Btn_SelectEmps" value='选择会签人' /><a href="javascript:Help()">帮助</a>
             <div id="SelectEmp">
             </div>
             <br />
             <div id="next">
-                <input type="button" id="Btn_2HuiQian" value="执行会签" onclick="SaveAndClose();" />
+                <input type="button" id="Btn_HuiQian" value="执行会签" onclick="SaveAndClose();" />
                 <div id="HelpInfo" style="">
                     <ul>
                         1、当前节点工作的处理人为会签主持人，可增加其他人员作为会签人，提供意见。
@@ -541,7 +544,7 @@
 <section style="display: none;">
     <div>
         请选择要会签的人：
-        <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="BtnSelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
+        <input type="text" id="ToEmp" name="ToEmp" value='' style="width: 80%;"/> <input type="button" id="Btn_SelectEmps" value='选择接受人' style="position: relative; right: -562px; top: -41px; border-radius: 0px 25px 25px 0px; height: 27px;"/>
     </div>
     <div>
         会签原因:
@@ -553,7 +556,7 @@
         <input type="radio" id="RB_Model_1" value="1" name="RB_Model"/> <label for="RB_Model_1">会签后发送给我由我发送给下一步处理人</label>
     </div>
     <div style="position: fixed; bottom: 0px; right: 0px;" class="foot">
-        <input type=button value="确定" onclick="ReturnWork();"/>
+        <input type=button value="确定" onclick="DoHuiQian();"/>
         <input type="button" id="" value="关闭" onclick="Close();"/>
     </div>
 </section>-->

@@ -35,8 +35,6 @@
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
-        if (
-
 
        // alert(val);
 

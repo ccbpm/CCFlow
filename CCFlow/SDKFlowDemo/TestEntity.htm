@@ -187,13 +187,19 @@
         //直接访问数据库.
         function DBAccessRun() {
 
-            var sql = "UPDATE Port_Emp SET Name='张三' WHERE No='zhangsan' ";
+            var sql = "UPDATE Port_Emp SET Name='张三' WHERE No='zhangsan' AND 1=2 ";
             var result = DBAccess.RunSQL(sql);
             alert("一共[" + result + "] 条记录被更新");
 
-            sql = "SELECT No,Name FROM Demo_Student WHERE XB='0' ";
+            sql = "SELECT No,Name FROM Demo_Student WHERE XB='0' AND 1=2 ";
             var dt = DBAccess.RunSQLReturnTable(sql);
             alert("一共[" + dt.lenght + "] 条记录被查询到");
+
+            var url = "http:xxxxx/sss";
+            var dt = DBAccess.RunUrlReturnJSON(sql);
+            var dt = DBAccess.RunUrlReturnString(sql);
+            // var dt = DBAccess.RunUrlCrossReturnJSON(sql);
+            //  var dt = DBAccess.RunUrlCrossReturnString(sql);
         }
     </script>
      

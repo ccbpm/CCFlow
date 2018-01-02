@@ -1312,7 +1312,6 @@ namespace BP.WF.HttpHandler
             }
             #endregion 处理 page 类.
 
-
             #region 执行entity类的方法.
             try
             {
@@ -1358,6 +1357,16 @@ namespace BP.WF.HttpHandler
             string sql = this.GetRequestVal("SQL");
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
+        }
+        /// <summary>
+        /// 运行Url返回string.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public string RunUrlCrossReturnString(string url)
+        {
+            string strs = DataType.ReadURLContext(url, 9999, System.Text.Encoding.UTF8);
+            return strs;
         }
         #endregion
 

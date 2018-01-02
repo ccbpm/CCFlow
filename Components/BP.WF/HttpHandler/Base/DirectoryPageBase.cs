@@ -531,11 +531,14 @@ namespace BP.WF.HttpHandler
             {
                 if (_workID != 0)
                     return _workID;
-                //string str = context.Request.QueryString["WorkID"];
-                //if (str == null || str == "" || str == "null")
-                //    return 0;
-                //杨玉慧
+
                 string str = this.GetRequestVal("WorkID");
+                if (str == null || str == "" || str == "null")
+                    str = this.GetRequestVal("PKVal");
+
+                if (str == null || str == "" || str == "null")
+                    str = this.GetRequestVal("OID");
+
                 if (str == null || str == "" || str == "null")
                     return 0;
 

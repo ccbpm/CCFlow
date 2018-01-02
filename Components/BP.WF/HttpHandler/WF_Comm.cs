@@ -1377,8 +1377,7 @@ namespace BP.WF.HttpHandler
             string httpHandlerName = this.GetRequestVal("HttpHandlerName");
             string methodName = this.GetRequestVal("DoMethod");
 
-            BP.WF.HttpHandler.DirectoryPageBase en =
-                Activator.CreateInstance(System.Type.GetType(httpHandlerName),this.context) 
+            BP.WF.HttpHandler.DirectoryPageBase en = Activator.CreateInstance(System.Type.GetType(httpHandlerName),this.context) 
                 as BP.WF.HttpHandler.DirectoryPageBase;
 
             en.context = this.context;

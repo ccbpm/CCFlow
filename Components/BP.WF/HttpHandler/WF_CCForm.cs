@@ -2849,9 +2849,7 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string AttachmentUpload_DownZip()
         {
-
             string zipName = this.WorkID + "_" + this.FK_FrmAttachment;
-
             try
             {
                 #region 处理权限控制.
@@ -2863,7 +2861,6 @@ namespace BP.WF.HttpHandler
 
                 if (dbs.Count == 0)
                     return "err@文件不存在，不需打包下载。";
-
 
                 string basePath = SystemConfig.PathOfDataUser + "Temp";
                 string tempPath = basePath + "\\" + WebUser.No;
@@ -2877,8 +2874,9 @@ namespace BP.WF.HttpHandler
                     {
                         System.IO.Directory.Delete(tempPath, true);
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        return "err@删除tempPath错误" + ex.Message;
                     }
                 }
                 //根据路径创建文件夹
@@ -2916,8 +2914,9 @@ namespace BP.WF.HttpHandler
                     //删除临时文件夹
                     System.IO.Directory.Delete(tempPath, true);
                 }
-                catch
+                catch(Exception ex)
                 {
+                    return "err@删除临时文件错误" + ex.Message;
                 }
 
                 string url = HttpContext.Current.Request.ApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
@@ -2925,7 +2924,7 @@ namespace BP.WF.HttpHandler
             }
             catch(Exception ex)
             {
-                return "err@" + ex.Message;
+                return "err@下载zip文件错误:" + ex.Message;
             }
         }
         #endregion 附件组件

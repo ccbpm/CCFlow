@@ -140,7 +140,7 @@ namespace BP.Sys
         /// <summary>
         /// 数据源
         /// </summary>
-        public const string DBSrc = "DBSrc";
+        public const string DBType = "DBType";
         /// <summary>
         /// Doc
         /// </summary>
@@ -494,17 +494,17 @@ namespace BP.Sys
             }
         }
         /// <summary>
-        /// 数据源
+        /// 数据格式
         /// </summary>
-        public string DBSrc
+        public string DBType
         {
             get
             {
-                return this.GetValStrByKey(MapExtAttr.DBSrc);
+                return this.GetValStrByKey(MapExtAttr.DBType);
             }
             set
             {
-                this.SetValByKey(MapExtAttr.DBSrc, value);
+                this.SetValByKey(MapExtAttr.DBType, value);
             }
         }
         public string AtPara
@@ -802,12 +802,12 @@ namespace BP.Sys
 
                 map.AddTBString(MapExtAttr.FK_MapData, null, "主表", true, false, 0, 100, 20);
                 map.AddTBString(MapExtAttr.ExtType, null, "类型", true, false, 0, 30, 20);
+
                 map.AddTBInt(MapExtAttr.DoWay, 0, "执行方式", true, false);
 
                 map.AddTBString(MapExtAttr.AttrOfOper, null, "操作的Attr", true, false, 0, 30, 20);
                 map.AddTBString(MapExtAttr.AttrsOfActive, null, "激活的字段", true, false, 0, 900, 20);
 
-                map.AddTBString(MapExtAttr.FK_DBSrc, null, "数据源", true, false, 0, 100, 20);
                 map.AddTBStringDoc();
 
                 map.AddTBString(MapExtAttr.Tag, null, "Tag", true, false, 0, 2000, 20);
@@ -817,14 +817,19 @@ namespace BP.Sys
                 map.AddTBString(MapExtAttr.Tag3, null, "Tag3", true, false, 0, 2000, 20);
                 map.AddTBString(MapExtAttr.Tag4, null, "Tag4", true, false, 0, 2000, 20);
 
-                map.AddTBString(MapExtAttr.AtPara, null, "参数", true, false, 0, 2000, 20);
-                map.AddTBString(MapExtAttr.DBSrc, null, "数据源", true, false, 0, 20, 20);
 
                 map.AddTBInt(MapExtAttr.H, 500, "高度", false, false);
                 map.AddTBInt(MapExtAttr.W, 400, "宽度", false, false);
 
+                // 数据类型 @0=SQL@1=URLJSON@2=FunctionJSON.
+                map.AddTBInt(MapExtAttr.DBType, 0, "数据类型", true, false);
+                map.AddTBString(MapExtAttr.FK_DBSrc, null, "数据源", true, false, 0, 100, 20);
+
+
                 // add by stone 2013-12-21 计算的优先级,用于js的计算.
                 map.AddTBInt(MapExtAttr.PRI, 0, "PRI", false, false);
+                map.AddTBString(MapExtAttr.AtPara, null, "参数", true, false, 0, 3999, 20);
+
 
 
                 this._enMap = map;

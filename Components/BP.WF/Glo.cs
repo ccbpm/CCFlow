@@ -4524,6 +4524,28 @@ namespace BP.WF
         #endregion 与考核相关.
 
         #region 其他方法。
+        /// <summary>
+        /// 删除临时文件
+        /// </summary>
+        public static void DeleteTempFiles()
+        {
+            //删除目录.
+            string temp = BP.Sys.SystemConfig.PathOfTemp;
+            System.IO.Directory.Delete(temp, true);
+
+            //创建目录.
+            System.IO.Directory.CreateDirectory(temp);
+
+            //删除pdf 目录.
+            temp = BP.Sys.SystemConfig.PathOfDataUser + "InstancePacketOfData\\";
+            System.IO.DirectoryInfo info = new System.IO.DirectoryInfo(temp);
+            System.IO.DirectoryInfo[] dirs = info.GetDirectories();
+            foreach (System.IO.DirectoryInfo dir in dirs)
+            {
+                if (dir.Name.IndexOf("ND") == 0)
+                    dir.Delete(true);
+            }
+        }
         public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string PKVal, string FK_FrmAttachment)
         {
 

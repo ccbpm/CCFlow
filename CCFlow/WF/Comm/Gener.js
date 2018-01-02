@@ -996,6 +996,7 @@ var Entity = (function () {
                     self[n] = target.val();
                 }
 
+				/*
                 var target = $("input[name='CB_" + n + "']:checked");
                 if (target.length > 0) {
                     var tmp = [];
@@ -1004,10 +1005,16 @@ var Entity = (function () {
                     });
                     self[n] = tmp.join(",");
                 }
+				*/
+				var target = $("input[name='CB_" + n + "']:checked");
+				if (target.length > 0) {
+					self[n] = "1";
+				}
 
                 var target = $("input[name='RB_" + n + "']:checked");
                 if (target.length == 1) {
-                    self[n] = target.val();
+                    //self[n] = target.val();
+					self[n] = "1";
                 }
             });
         }

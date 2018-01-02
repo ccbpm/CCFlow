@@ -145,3 +145,66 @@ function SaveVal(fk_mapdata, keyOfEn, val) {
         frmEleDB.Insert();
     }
 }
+/**
+{
+	"Sys_MapExt":[{
+		"MyPK":"PopDeptEmpModelAdv_CCFrm_FFFFF_TEST",
+		"FK_MapData":"CCFrm_FFFFF",
+		"ExtType":"PopDeptEmpModelAdv",
+		"DoWay":0,
+		"AttrOfOper":"TEST",
+		"AttrsOfActive":"",
+		"FK_DBSrc":"",
+		"Doc":"",
+		"Tag":"",
+		"Tag1":"\/SDKFlowDemo\/Handler.ashx?DoType=SearchEmps&Keyword=@Key",
+		"Tag2":"\/SDKFlowDemo\/Handler.ashx?DoType=ReqDepts",
+		"Tag3":"\/SDKFlowDemo\/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key",
+		"Tag4":"",
+		"AtPara":"@Title=关联流水@SearchTip=请输入付款人名称,进行搜索@RootNo=0",
+		"DBSrc":"",
+		"H":500,
+		"W":400,
+		"PRI":0
+	}]
+}
+ */
+function GetAtPara(atPara, key) {
+	if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
+		return undefined;
+	}
+	var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");
+	var results = atPara.match(reg);
+	if (results != null) {
+		return unescape(results[2]);
+	}
+	return undefined;
+}
+
+function DeptEmpModelAdv0(mapExt) {
+	var target = $("#TB_" + mapExt.AttrOfOper);
+	//target.attr("readonly", true);
+	//target.attr("disabled", true);
+	var title = GetAtPara(mapExt.AtPara, "Title");
+	var tip = GetAtPara(mapExt.AtPara, "SearchTip");
+	var width = mapExt.W;
+	var height = mapExt.H;
+	var iframeId = mapExt.MyPK + mapExt.FK_MapData;
+	//
+	var searchUrl = mapExt.Tag1;
+	var treeUrl = mapExt.Tag2;
+	var rootNo = GetAtPara(mapExt.AtPara, "RootNo");
+	var treeClickUrl = mapExt.Tag3;
+	//
+	var params = [];
+	params.push("searchUrl=" + escape(searchUrl));
+	params.push("treeUrl=" + escape(treeUrl));
+	params.push("rootNo=" + rootNo);
+	params.push("treeClickUrl=" + escape(treeClickUrl));
+	params.push("m=" + Math.random());
+	//
+	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?" + params.join("&");
+	target.on("click", function () {
+		OpenEasyUiDialog(url, iframeId, title, width, height);
+	});
+}

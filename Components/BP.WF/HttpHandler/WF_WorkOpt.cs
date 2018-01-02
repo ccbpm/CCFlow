@@ -304,7 +304,6 @@ namespace BP.WF.HttpHandler
         {
             //要找到主持人.
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
-
             if (gwf.HuiQianTaskSta == HuiQianTaskSta.HuiQianOver)
             {
                 return "err@会签工作已经完成，您不能在执行会签。";

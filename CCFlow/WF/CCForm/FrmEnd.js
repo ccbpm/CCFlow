@@ -29,13 +29,13 @@
 
         var mapAttr = mapAttrs[i];
 
-
         $('#TB_' + mapAttr.KeyOfEn).attr("name", "TB_" + mapAttr.KeyOfEn);
         $('#DDL_' + mapAttr.KeyOfEn).attr("name", "DDL_" + mapAttr.KeyOfEn);
         $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
+        if (
 
 
        // alert(val);

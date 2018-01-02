@@ -106,7 +106,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     /***************** 外键 *****************************/
     if (mapAttr.LGType == 2 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "' />" + InitDDLOperation(flowData, mapAttr) + "</select>";
+        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(flowData, mapAttr) + "</select>";
         return eleHtml;
     }
 

@@ -243,10 +243,10 @@
 
         //确定后，就弹出选择到达节点，选择接受人，填写审核意见窗口.
         function SaveAndClose() {
-
-            //  var url = "HuiQianToNodes.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
+        
+            // var url = "HuiQianToNodes.htm?WorkID=" + GetQueryString("WorkID") + "&FK_Flow=" + GetQueryString("FK_Flow") + "&FK_Node=" + GetQueryString("FK_Node");
             // window.location.href = url;
-            //  return;
+            // return;
 
             var toNode = GetQueryString("ToNode");
             if (toNode == undefined || toNode == "undefined")
@@ -523,6 +523,7 @@
             <br />
             <div id="next">
                 <input type="button" id="Btn_HuiQian" value="执行会签" onclick="SaveAndClose();" />
+                <img src="../Img/Multiplayer.png"  onclick="SaveAndClose();"  style="width:27px;"/>
                 <div id="HelpInfo" style="">
                     <ul>
                         1、当前节点工作的处理人为会签主持人，可增加其他人员作为会签人，提供意见。

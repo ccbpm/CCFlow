@@ -99,8 +99,6 @@
         //确定 退回 执行退回操作
         function ReturnWork(isBack) {
             //WorkID, this.FID, this.FK_Node
-            $('.foot input').attr('disabled', 'disabled');
-            $('.foot input').css('background', 'gray');
 
             var selectedNodeID = $('#DDL_Nodes').val();
 
@@ -111,12 +109,15 @@
                 return;
             }
 
+
             
             if (selectedNodeID == null || selectedNodeID == undefined || selectedNodeID=="") {
                 alert('请选择要退回的节点');
                 return;
             }
 
+            $('.foot input').attr('disabled', 'disabled');
+            $('.foot input').css('background', 'gray');
 
             $.ajax({
                 type: 'post',

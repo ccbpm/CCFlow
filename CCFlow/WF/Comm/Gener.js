@@ -970,7 +970,46 @@ var Entity = (function () {
                     this.AtPara = p + value + s.substring(i, s.length);
                 }
             }
-        }
+        },
+
+		CopyURL : function () {
+			var self = this;
+			$.each(self, function (n, o) {
+				if (typeof o !== "function") {
+					var value = GetQueryString(n);
+					self[n] = value;
+				}
+			});
+		},
+
+		CopyForm : function () {
+			var self = this;
+			$.each(self, function (n, o) {
+				var target = $("#TB_" + n);
+				if (target.length == 1) {
+					self[n] = target.val();
+				}
+				
+				var target = $("#DDL_" + n);
+				if (target.length == 1) {
+					self[n] = target.val();
+				}
+				
+				var target = $("input[name='CB_" + n + "']:checked");
+				if (target.length > 0) {
+					var tmp = [];
+					target.each(function (i, o) {
+						tmp.push($(this).val());
+					});
+					self[n] = tmp.join(",");
+				}
+				
+				var target = $("input[name='RB_" + n + "']:checked");
+				if (target.length == 1) {
+					self[n] = target.val();
+				}
+			});
+		}
 
     };
 

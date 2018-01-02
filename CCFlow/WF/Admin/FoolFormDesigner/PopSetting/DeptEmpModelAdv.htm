@@ -18,13 +18,13 @@
             mapExt.MyPK = "PopDeptEmpModelAdv_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
+
             //基本属性.
             $("#TB_Title").val(mapExt.GetPara("Title"));
             $("#TB_SearchTip").val(mapExt.GetPara("SearchTip"));
 
             $("#TB_W").val(mapExt.W); //宽度
             $("#TB_H").val(mapExt.H); //高度.
-
 
 
             $("#TB_Tag1").val(mapExt.Tag1); //查询数据源.
@@ -38,9 +38,7 @@
                 $("#Btn_Delete").attr("disabled", true);
             else
                 $("#Btn_Delete").removeAttr("disabled");
-
         });
-
 
         function Delete() {
 
@@ -60,14 +58,16 @@
             mapExt.MyPK = "PopDeptEmpModelAdv_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
+            //mapExt.CopyURL();  //从url里面copy数据.
+            //mapExt.CopyFrom(); //从from里面copy数据. 
+
             mapExt.FK_MapData = GetQueryString("FK_MapData");
 
             mapExt.SetPara("Title", $("#TB_Title").val());
             mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
 
-            mapExt.W = $("#TB_W").val(); //宽度
-            mapExt.H = $("#TB_H").val(); //高度
-
+            mapExt.W = $("#TB_W").val(); //宽度.
+            mapExt.H = $("#TB_H").val(); //高度.
 
             mapExt.Tag1 = $("#TB_Tag1").val(); //查询数据源.
             mapExt.Tag2 = $("#TB_Tag2").val(); //树列表数据源.
@@ -88,7 +88,14 @@
 <form id="cc">
 
 <table id="Table1" style="width:99%;">
-<caption> 部门人员模式开窗返回值 </caption>
+<caption> 部门人员模式开窗返回值</caption>
+
+
+<tr>
+<th colspan=2>基本信息</td>
+</tr>
+
+
 <tr>
 <td>标题</td>
 <td><input type="text" id="TB_Title" style="width:99%;" /> 
@@ -108,16 +115,30 @@
 <tr>
 <td>搜索提示</td>
 <td><input type="text" id="TB_SearchTip" style="width:90%;" /> 
-<br><font color=gray >显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font></td>
+<br><font color="gray" >显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font></td>
 </tr>
 
 <tr>
-<th colspan=2>搜索JSON</th>
+<td>高级属性</td>
+<td >数据源类型<select id="DDL_DBType" >
+<option id="0">SQL模式</option>
+<option id="1">JSON模式</option>
+</select> 
+
+ 查询展示方式:<select id="" >
+<option value="0"> 平铺模式 </option>
+<option value="1"> 下拉框模式 </option>
+</select>
+ </td>
+</tr>
+
+<tr>
+<th colspan=2>搜索数据源</th>
 </tr>
 
 <tr>
 <td colspan=2>
-<textarea id="TB_Tag1" name="TB_Tag1" style="width:99%; height: 34px;">
+<textarea id="TB_Tag1" name="TB_Tag1" style="width:99%; height: 23px;">
 </textarea>
 </td>
 
@@ -125,7 +146,7 @@
 <td colspan=2>
 
 <font color="gray" >点击关键字执行搜索返回的数据源,
-<br />比如:http://xxx/SDKFlowDemo/Handler.ashx?DoType=SearchEmps&Keyword=@Key
+<br />比如:/SDKFlowDemo/Handler.ashx?DoType=SearchEmps&Keyword=@Key
 @Key是关键字,是搜索的关键字.
 </font>
 
@@ -140,12 +161,14 @@
 
 <tr>
 <td colspan=2>
-<textarea id="TB_Tag2" name="TB_Tag2" style="width:99%; height: 53px;">
+<textarea id="TB_Tag2" name="TB_Tag2" style="width:99%; height: 23px;">
 </textarea>
+
+<font color="gray" >
 设置一个可以返回json的数据源该数据源有No,Name,ParentNo三个约定的列. 
 <br />
-比如:http://xxx/SDKFlowDemo/Handler.ashx?DoType=ReqDepts
-<front></front>
+比如:/SDKFlowDemo/Handler.ashx?DoType=ReqDepts
+</front>
 </td>
 </tr>
 
@@ -155,7 +178,6 @@
 </input>
 </td>
 </tr>
- 
 
  
 <tr>
@@ -164,18 +186,17 @@
 
 <tr>
 <td colspan=2>
-<textarea id="TB_Tag3" name="TB_Tag3" style="width:99%; height: 73px;">
+<textarea id="TB_Tag3" name="TB_Tag3" style="width:99%; height: 23px;">
 </textarea>
 
 
 <font color="gray" >选择右边的树返回的详细信息列表数据源,
-<br />比如:http://xxx/SDKFlowDemo/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key
-@Key是关键字,是搜索的关键字.
+<br />比如:/SDKFlowDemo/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key
+<br />@Key是关键字,是搜索的关键字.
 </font>
 
 </td>
 </tr>
- 
 
 
 <tr>

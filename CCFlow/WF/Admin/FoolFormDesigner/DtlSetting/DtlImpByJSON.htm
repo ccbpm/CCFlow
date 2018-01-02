@@ -56,10 +56,7 @@
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             //mapExt.CopyFrom();
-
-            //
             //CopyToEntity(mapExt);
-
 
             mapExt.FK_MapData = GetQueryString("FK_MapData");
 
@@ -89,11 +86,14 @@
 <form id="cc">
 
 <table id="Table1" style="width:99%;">
-<caption> 从表的导入JSON模式配置 </caption>
+<caption> 从表的导入配置 </caption>
+
+<tr>
+<th colspan=2>基本信息配置</th>
+</tr>
 <tr>
 <td>标题</td>
-<td><input type="text" id="TB_Title" style="width:99%;" /> 
-<br />
+<td><input type="text" id="TB_Title" style="width:200px;" /> 
 <font color=gray>
 显示在窗口的文字，比如:关联流水.
 </font>
@@ -107,9 +107,9 @@
 
 <tr>
 <td>高级属性</td>
-<td >数据源类型<select id="DBType" >
-<option id="0">JSON格式 </option>
-<option id="1">SQL格式 </option>
+<td >数据源类型<select id="DDL_DBType" >
+<option id="0">SQL模式</option>
+<option id="1">JSON模式</option>
 </select> 
 
 查询展示方式:<select id="" >
@@ -148,15 +148,12 @@
 </tr>
 
 <tr>
-<td colspan=2>
-显示的中文列名
-<textarea id="TB_Tag" name="TB_Tag" style="width:99%; height: 99px;">
-</textarea>
-
-<font color=gray >,
-比如:编号,电话,地址,邮件
+<td> 显示的中文列名</td>
+<td>
+<input type=text id="TB_Tag" name="TB_Tag" style="width:50%;" />
+<font color=gray >
+比如:编号,电话,地址,邮件, 这个配置在显示的时候要替换掉数据源返回的英文列名.
 </font>
-
 </td>
 </tr>
 
@@ -167,7 +164,7 @@
 
 <tr>
 <td colspan=2>
-<textarea id="TB_Tag2" name="TB_Tag2" style="width:99%; height: 99px;">
+<textarea id="TB_Tag2" name="TB_Tag2" style="width:99%; height: 23px;">
 </textarea>
 </td>
 </tr>
@@ -187,7 +184,7 @@ $Para=XB#Label=性别#EnumKey=XB
 </tr>
 
 <tr>
-<th colspan=2>填充从表数据源（外键或者枚举）</th>
+<th colspan=2>填充从表数据源</th>
 </tr>
 
 <tr>

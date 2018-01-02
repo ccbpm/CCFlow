@@ -558,20 +558,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框      
+            //下拉框       
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
-            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());     
-            //对于复选下拉框获取值得方法     
-            //                if ($('[data-id=' + name + ']').length > 0) {     
-            //                    var val = $(disabledEle).val().join(',');     
-            //                    formArrResult.push(name + '=' + val);     
-            //                } else {     
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());     
-            //                }     
-            // break;     
-            //文本区域      
+            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());      
+            //对于复选下拉框获取值得方法      
+            //                if ($('[data-id=' + name + ']').length > 0) {      
+            //                    var val = $(disabledEle).val().join(',');      
+            //                    formArrResult.push(name + '=' + val);      
+            //                } else {      
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());      
+            //                }      
+            // break;      
+            //文本区域       
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;

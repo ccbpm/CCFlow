@@ -3,45 +3,6 @@ function Down(fk_ath, pkVal, delPKVal) {
     window.location.href = 'AttachmentUpload.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
 }
 
-function DownZip() {
-
-
-    //http: //localhost:18272/WF/CCForm/AttachmentUpload.aspx?PKVal=2987&Ath=AttachM1&FK_MapData=ND1702&FK_FrmAttachment=ND1702_AttachM1
-
-    //组织url.
-    var url = Handler + "?DoType=AttachmentUpload_DownZip&PKVal=" + GetQueryString('PKVal') + "&FK_MapData=" + GetQueryString('FK_MapData') + "&FK_FrmAttachment=" + GetQueryString('FK_FrmAttachment') + "&m=" + Math.random();
-    url += "&WorkID=" + GetQueryString('WorkID');
-    url += "&FK_Node=" + GetQueryString('FK_Node');
-
-    $.ajax({
-        type: 'post',
-        async: true,
-        url: url,
-        dataType: 'html',
-        success: function (data) {
-
-            if (data.indexOf('err@') == 0) {
-                alert(data); //如果是异常，就提提示.
-                console.log(data);
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-
-                data = data.replace('url@', ''); //如果返回url，就直接转向.
-
-                var i = data.indexOf('\DataUser');
-                var str = '/' + data.substring(i);
-                str = str.replace('\\\\', '\\');
-                window.open(str, "_blank", "width=800, height=600,toolbar=yes");
-                return;
-            }
-            alert(data);
-            return;
-        }
-    });
-}
-
 //点击文件名称执行的下载.
 function Down2017(mypk) {
 

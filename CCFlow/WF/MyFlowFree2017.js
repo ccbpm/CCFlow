@@ -77,9 +77,7 @@ function GenerFreeFrm(wn) {
     $('#CCForm').append(figure_Template_FigureFrmCheck(wf_FrmNodeComponent));
     $('#CCForm').append(figure_Template_FigureSubFlowDtl(wf_FrmNodeComponent));
     $('#CCForm').append(figure_Template_FigureThreadDtl(wf_FrmNodeComponent));
-
 }
-
 
 function figure_MapAttr_Template(mapAttr) {
 
@@ -101,20 +99,20 @@ function figure_MapAttr_TemplateEle(mapAttr) {
 
     var eleHtml = '';
 
-    /***************** 隐藏的控件 (在装载元素之后处理.) *****************************/
+    /***************** 隐藏的控件 (在 CCForm/FrmEnd.js 处理.) *****************************/
     if (mapAttr.UIVisible == 0) {
         return "";
     }
 
     /***************** 外键 *****************************/
     if (mapAttr.LGType == 2 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "'>" + InitDDLOperation(flowData, mapAttr) + "</select>";
+        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "' />" + InitDDLOperation(flowData, mapAttr) + "</select>";
         return eleHtml;
     }
 
     /***************** 外部数据源 *****************************/
     if (mapAttr.LGType == 1 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
-        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
+        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "' >"  + InitDDLOperation(flowData, mapAttr, "") + "</select>";
         return eleHtml;
     }
 
@@ -169,8 +167,10 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             var styleText = "text-align:left;font-size:12px;";
             styleText += "width:100%;";
             styleText += "height:" + mapAttr.UIHeight + "px;";
-            //注意这里 name 属性是可以用来绑定表单提交时的字段名字的
+            //注意这里 name 属性是可以用来绑定表单提交时的字段名字的 editor是特殊约定的.
             eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+            // eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+
             return eleHtml;
         }
 

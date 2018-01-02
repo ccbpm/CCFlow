@@ -328,13 +328,13 @@ function GenerFrm() {
 
             ShowTextBoxNoticeInfo();
 
-            //初始化复选下拉框 
-            var selectPicker = $('.selectpicker');
-            $.each(selectPicker, function (i, selectObj) {
-                var defVal = $(selectObj).attr('data-val');
-                var defValArr = defVal.split(',');
-                $(selectObj).selectpicker('val', defValArr);
-            });
+//            //初始化复选下拉框 
+//            var selectPicker = $('.selectpicker');
+//            $.each(selectPicker, function (i, selectObj) {
+//                var defVal = $(selectObj).attr('data-val');
+//                var defValArr = defVal.split(',');
+//                $(selectObj).selectpicker('val', defValArr);
+//            });
 
             //给富文本 创建编辑器
             var editor = document.activeEditor = UM.getEditor('editor', {
@@ -597,9 +597,7 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
 		        GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
 		    })
 		} else {
-
 		    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-
 		    //alert('没有获得约定的数据源.');
 		}
 	}

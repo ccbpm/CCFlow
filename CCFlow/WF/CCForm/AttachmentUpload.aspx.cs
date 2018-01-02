@@ -461,9 +461,11 @@ namespace CCFlow.WF.CCForm
                     if (athDesc.Sort.Contains(","))
                     {
                         string sortColumn = athDesc.Sort.Contains("@") == true ? athDesc.Sort.Substring(0, athDesc.Sort.IndexOf("@")) : "类别";
-                        if (sortColumn == "") sortColumn = "类别";
+                        if (sortColumn == "") 
+                            sortColumn = "类别";
                         this.Pub1.AddTD("style='background:#f4f4f4; font-size:12px; padding:3px;'", sortColumn);
                     }
+
                     this.Pub1.AddTDTitleExt("style='min-width:200px;'", "文件名");
                     this.Pub1.AddTDTitleExt("style='width:50px;'", "大小KB");
                     this.Pub1.AddTDTitleExt("style='width:90px;'", "上传时间");

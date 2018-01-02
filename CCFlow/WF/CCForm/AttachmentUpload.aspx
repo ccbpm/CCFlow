@@ -4,18 +4,44 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script type="text/javascript"   src="../Scripts/config.js" ></script>
+    <script type="text/javascript"   src="../Comm/Gener.js" ></script>
     <link href="../Scripts/slideBox/style/jquery.slideBox.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/slideBox/jquery.slideBox.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="AttachmentUpload.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 
+        function DownZip() {
+
+            var httphandle = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            httphandle.AddUrlData();
+
+            var data = httphandle.DoMethodReturnString("AttachmentUpload_DownZip");
+
+            if (data.indexOf('err@') == 0) {
+                alert(data); //如果是异常，就提提示.
+                console.log(data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+
+                data = data.replace('url@', ''); //如果返回url，就直接转向.
+
+                var i = data.indexOf('\DataUser');
+                var str = '/' + data.substring(i);
+                str = str.replace('\\\\', '\\');
+                window.open(str, "_blank", "width=800, height=600,toolbar=yes");
+                return;
+            }
+            alert(data);
+        }
+
         function Del(fk_ath, pkVal, delPKVal) {
             if (window.confirm('您确定要删除吗？ ') == false)
                 return;
             window.location.href = 'AttachmentUpload.aspx?DoType=Del&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow=<%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>' + (GetQueryString("IsExtend")!=undefined?"&IsExtend="+GetQueryString("IsExtend"):"");
         }
-
    
         function OpenOfiice(fk_ath, pkVal, delPKVal, FK_MapData, NoOfObj, FK_Node) {
             var date = new Date();

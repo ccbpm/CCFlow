@@ -29,11 +29,14 @@
 
         var mapAttr = mapAttrs[i];
 
+
         $('#TB_' + mapAttr.KeyOfEn).attr("name", "TB_" + mapAttr.KeyOfEn);
         $('#DDL_' + mapAttr.KeyOfEn).attr("name", "DDL_" + mapAttr.KeyOfEn);
         $('#CB_' + mapAttr.KeyOfEn).attr("name", "CB_" + mapAttr.KeyOfEn);
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
+
+
 
        // alert(val);
 
@@ -46,7 +49,10 @@
 
         //枚举下拉框.
         if (mapAttr.UIContralType == 1) {
+
+           // InitDDLOperation(flowData, mapAttr, val);
             $('#DDL_' + mapAttr.KeyOfEn).val(val);
+
         }
 
         //checkbox.
@@ -75,7 +81,7 @@ function AfterBindEn_DealMapExt(frmData) {
             case "PopDeptEmpModelAdv": //部门人员模式的高级多选.
                 DeptEmpModelAdv0(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
-            case "PopVal": //PopVal窗返回值
+            case "PopVal": //PopVal窗返回值.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");
                 tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");

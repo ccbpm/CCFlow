@@ -977,8 +977,9 @@ var Entity = (function () {
             $.each(self, function (n, o) {
                 if (typeof o !== "function") {
                     var value = GetQueryString(n);
-                    if (value != null && typeof value !== "undefined" && $.trim(value) != "")
+                    if (value != null && typeof value !== "undefined" && $.trim(value) != "") {
                         self[n] = value;
+					}
                 }
             });
         },

@@ -7,9 +7,9 @@ using BP;
 using BP.Web;
 namespace BP.Sys
 {
-	/// <summary>
-	/// 用户注册表
-	/// </summary>
+    /// <summary>
+    /// 用户注册表
+    /// </summary>
     public class UserRegeditAttr
     {
         /// <summary>
@@ -69,20 +69,20 @@ namespace BP.Sys
         /// </summary>
         public const string DTTo = "DTTo";
     }
-	/// <summary>
-	/// 用户注册表
-	/// </summary>
-	public class UserRegedit: EntityMyPK
-	{
-		#region 用户注册表信息键值列表
-		#endregion
+    /// <summary>
+    /// 用户注册表
+    /// </summary>
+    public class UserRegedit : EntityMyPK
+    {
+        #region 用户注册表信息键值列表
+        #endregion
 
         /// <summary>
         /// 是否使用自动的MyPK,即FK_Emp + CfgKey
         /// </summary>
         public bool AutoMyPK { get; set; }
 
-		#region 基本属性
+        #region 基本属性
         /// <summary>
         /// 是否显示图片
         /// </summary>
@@ -166,20 +166,20 @@ namespace BP.Sys
                 this.SetValByKey(UserRegeditAttr.OrderBy, value);
             }
         }
-		/// <summary>
-		/// FK_Emp
-		/// </summary>
-		public string FK_Emp
-		{
-			get
-			{
-				return this.GetValStringByKey(UserRegeditAttr.FK_Emp) ; 
-			}
-			set
-			{
-				this.SetValByKey(UserRegeditAttr.FK_Emp,value) ; 
-			}
-		}
+        /// <summary>
+        /// FK_Emp
+        /// </summary>
+        public string FK_Emp
+        {
+            get
+            {
+                return this.GetValStringByKey(UserRegeditAttr.FK_Emp);
+            }
+            set
+            {
+                this.SetValByKey(UserRegeditAttr.FK_Emp, value);
+            }
+        }
         /// <summary>
         /// 查询时间从
         /// </summary>
@@ -228,7 +228,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStringByKey(UserRegeditAttr.DTFrom); 
+                return this.GetValStringByKey(UserRegeditAttr.DTFrom);
                 //string s = this.GetValStringByKey(UserRegeditAttr.DTFrom);
                 //if (string.IsNullOrEmpty(s) || 1==1)
                 //{
@@ -249,7 +249,7 @@ namespace BP.Sys
         {
             get
             {
-                return this.GetValStringByKey(UserRegeditAttr.DTTo); 
+                return this.GetValStringByKey(UserRegeditAttr.DTTo);
                 //string s = this.GetValStringByKey(UserRegeditAttr.DTTo);
                 //if (string.IsNullOrEmpty(s) || 1 == 1 )
                 //{
@@ -273,7 +273,7 @@ namespace BP.Sys
                     DateTime dt = DateTime.Now.AddDays(-14);
                     return dt.ToString(DataType.SysDataTimeFormat);
                 }
-                return s ;
+                return s;
             }
             set
             {
@@ -293,27 +293,27 @@ namespace BP.Sys
                     DateTime dt = DateTime.Now;
                     return dt.ToString(DataType.SysDataTimeFormat);
                 }
-                return s ;
+                return s;
             }
             set
             {
                 this.SetValByKey(UserRegeditAttr.DTTo, value);
             }
         }
-		/// <summary>
-		/// CfgKey
-		/// </summary>
-		public string CfgKey
-		{
-			get
-			{
-				return this.GetValStringByKey(UserRegeditAttr.CfgKey ) ; 
-			}
-			set
-			{
-				this.SetValByKey(UserRegeditAttr.CfgKey,value) ; 
-			}
-		}
+        /// <summary>
+        /// CfgKey
+        /// </summary>
+        public string CfgKey
+        {
+            get
+            {
+                return this.GetValStringByKey(UserRegeditAttr.CfgKey);
+            }
+            set
+            {
+                this.SetValByKey(UserRegeditAttr.CfgKey, value);
+            }
+        }
         public string SearchKey
         {
             get
@@ -325,20 +325,20 @@ namespace BP.Sys
                 this.SetValByKey(UserRegeditAttr.SearchKey, value);
             }
         }
-		/// <summary>
-		/// Vals
-		/// </summary>
-		public string Vals
-		{
-			get
-			{
-				return this.GetValStringByKey(UserRegeditAttr.Vals ) ; 
-			}
-			set
-			{
-				this.SetValByKey(UserRegeditAttr.Vals,value) ; 
-			}
-		}
+        /// <summary>
+        /// Vals
+        /// </summary>
+        public string Vals
+        {
+            get
+            {
+                return this.GetValStringByKey(UserRegeditAttr.Vals);
+            }
+            set
+            {
+                this.SetValByKey(UserRegeditAttr.Vals, value);
+            }
+        }
         public string MVals
         {
             get
@@ -361,24 +361,24 @@ namespace BP.Sys
                 this.SetValByKey(UserRegeditAttr.MyPK, value);
             }
         }
-		#endregion
+        #endregion
 
-		#region 构造方法
-		/// <summary>
-		/// 用户注册表
-		/// </summary>
-		public UserRegedit()
-		{
+        #region 构造方法
+        /// <summary>
+        /// 用户注册表
+        /// </summary>
+        public UserRegedit()
+        {
             AutoMyPK = true;
-		}
-		/// <summary>
-		/// 用户注册表
-		/// </summary>
-		/// <param name="fk_emp">人员</param>
-		/// <param name="cfgkey">配置</param>
-		public UserRegedit(string fk_emp, string cfgkey)
-            :this()
-		{
+        }
+        /// <summary>
+        /// 用户注册表
+        /// </summary>
+        /// <param name="fk_emp">人员</param>
+        /// <param name="cfgkey">配置</param>
+        public UserRegedit(string fk_emp, string cfgkey)
+            : this()
+        {
             this.MyPK = fk_emp + cfgkey;
             this.CfgKey = cfgkey;
             this.FK_Emp = fk_emp;
@@ -388,12 +388,12 @@ namespace BP.Sys
                 this.CfgKey = cfgkey;
                 this.FK_Emp = fk_emp;
                 this.DirectInsert();
-               // this.DirectInsert();
+                // this.DirectInsert();
             }
-		}
-		/// <summary>
-		/// EnMap
-		/// </summary>
+        }
+        /// <summary>
+        /// EnMap
+        /// </summary>
         public override Map EnMap
         {
             get
@@ -403,7 +403,7 @@ namespace BP.Sys
                 Map map = new Map("Sys_UserRegedit", "用户注册表");
 
                 map.Java_SetDepositaryOfEntity(Depositary.None);
-                map.Java_SetDepositaryOfMap( Depositary.Application);
+                map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
                 map.AddMyPK();
@@ -422,14 +422,14 @@ namespace BP.Sys
                 map.AddTBString(UserRegeditAttr.DTFrom, null, "查询时间从", true, false, 0, 20, 20);
                 map.AddTBString(UserRegeditAttr.DTTo, null, "到", true, false, 0, 20, 20);
 
-                //增加属性. @于庆海. 
+                //增加属性.
                 map.AddTBAtParas(4000);
-                
+
                 this._enMap = map;
                 return this._enMap;
             }
         }
-		#endregion 
+        #endregion
 
         #region 重写
         public override Entities GetNewEntities
@@ -456,7 +456,7 @@ namespace BP.Sys
             int idx = -1;
             Dictionary<string, string> kvs = new Dictionary<string, string>();
 
-            foreach(string str in strs)
+            foreach (string str in strs)
             {
                 idx = str.IndexOf('=');
 
@@ -515,9 +515,9 @@ namespace BP.Sys
             }
         }
     }
-	/// <summary>
-	/// 用户注册表s
-	/// </summary>
+    /// <summary>
+    /// 用户注册表s
+    /// </summary>
     public class UserRegedits : EntitiesMyPK
     {
         #region 构造

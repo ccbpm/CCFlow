@@ -1198,6 +1198,9 @@ var DBAccess = (function () {
 
 	DBAccess.RunUrlReturnJSON = function (url) {
 		var jsonString = DBAccess.RunUrlReturnString(url);
+		if (typeof jsonString === "undefined") {
+			return;
+		}
 		if (jsonString.indexOf("err@") != -1) {
 			alert(jsonString);
 			return jsonString;

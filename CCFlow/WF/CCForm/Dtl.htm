@@ -47,7 +47,7 @@
             rowIndex 只有当 saveAll=false 时，设置保存行的序号  从0开始
             */
             saveRowCurrent: { count: 0, overCount: 0, saveAll: false, rowIndex: 0 },
-            currentRowIndex: -1,//如果该值有改变，就表明需要存盘，入库  -1 表示还未做操作  光标所在行
+            currentRowIndex: -1//如果该值有改变，就表明需要存盘，入库  -1 表示还未做操作  光标所在行
         };
         /* ESC Key Down */
         function Esc() {
@@ -407,9 +407,9 @@
 
                         //添加删除,保存列
                         var delTh="";
-
-                        if (sys_MapDtl.IsImp == 1 && sys_MapDtl.ImpSQLInit.length > 5 )
-                          delTh = $('<th style="width:60px;"><img title="选项" style="width: 30px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option();" /></th>');
+                        var impModel = sys_MapDtl.ImpModel;
+                        if (impModel != 0)
+                            delTh = $('<th style="width:60px;"><img title="选项" style="width: 30px;height: 20px;padding: 0px 10px;cursor:pointer;" src="../Img/Btn/Option.gif" onclick="Option(' + impModel + ');" /></th>');
                         else
                           delTh = $('<th style="width:60px;"></th>');
 
@@ -850,18 +850,41 @@
 		}
 
         //选项 导入导出功能.
-        function Option()
-        {
+		function Option(impModel, mapDtl, mapExts) {
+		    if (impModel == 0) {
+		        alert("请配置导入方式。");
+		    }
+            //SQL导入方式
+		    if (impModel == 1) {
+		        var url = window.location.href;
+		        url = url.replace('Dtl.htm', 'DtlOpt.htm');
 
-         var url =  window.location.href;
-         url = url.replace('Dtl.htm','DtlOpt.htm');
-                window.location.href = url;
-                return;
+		    }
+		    //JSON模式导入方式
+		    if (impModel == 2) {
+		        var url = window.location.href;
+		        url = url.replace('Dtl.htm', 'DtlImpByJSON.htm');
 
-//            OpenEasyUiDialog(url, "eudlgframe", "选项", 490, 250, "icon-edit", true, null, null, null, function () {
-//                window.location.href = window.location.href;
-//            });
-        }
+		    }
+		    //excel模式导入方式
+		    if (impModel == 3) {
+		        var url = window.location.href;
+		        url = url.replace('Dtl.htm', 'DtlOpt.aspx');
+
+		    }
+		    if (window.parent && window.parent.OpenBootStrapModal) {
+		        window.parent.OpenBootStrapModal(url, "eudlgframe", "导入数据", 900, 450, "icon-edit", false, function () { }, null, function () {
+		            location = location;
+		        });
+		        return;
+            }
+		    window.location.href = url;
+		    return;
+
+		    //            OpenEasyUiDialog(url, "eudlgframe", "选项", 490, 250, "icon-edit", true, null, null, null, function () {
+		    //                window.location.href = window.location.href;
+		    //            });
+		}
 
         //根据表格中编辑过的值，设置表格TR 的 data
         function setTrDataByData(rowIndex) {

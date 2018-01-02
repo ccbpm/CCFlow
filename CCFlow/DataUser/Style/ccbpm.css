@@ -579,7 +579,6 @@ input[type=text], input[type=password], select
     border-radius: 5px;
     border: thin solid #CCCCCC;
     margin: 1px 1px;
-    width: 100%;
     height: 23px;
 }
 

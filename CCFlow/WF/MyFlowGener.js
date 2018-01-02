@@ -1579,7 +1579,7 @@ function initModal(modalType, toNode) {
             case "HuiQian": 
                
                if (toNode!=null)
-                 $('#modalHeader').text("会签 => 发送");
+                 $('#modalHeader').text("先会签，后发送。");
                 else
                  $('#modalHeader').text("会签");
 

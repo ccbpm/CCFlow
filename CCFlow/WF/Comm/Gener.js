@@ -1162,6 +1162,55 @@ var DBAccess = (function () {
 
     };
 
+	DBAccess.RunUrlReturnString = function (url) {
+		if (url == null || typeof url === "undefined") {
+			alert("err@url无效");
+			return;
+		}
+
+		if (url.match(/^http:\/\//)) {
+			url = dynamicHandler + "?DoType=RunUrlCrossReturnString&t=" + new Date().getTime() + "&url=" + url
+		}
+
+		var string;
+
+		$.ajax({
+			type: 'post',
+			async: false,
+			url: url,
+			dataType: 'html',
+			success: function (data) {
+				if (data.indexOf("err@") != -1) {
+					alert(data);
+					return;
+				}
+				string = data;
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				string = "err系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+				alert(string);
+			}
+		});
+
+		return string;
+
+	};
+
+	DBAccess.RunUrlReturnJSON = function (url) {
+		var jsonString = DBAccess.RunUrlReturnString(url);
+		if (jsonString.indexOf("err@") != -1) {
+			alert(jsonString);
+			return jsonString;
+		}
+		try {
+			jsonString = JSON.parse(jsonString);
+		} catch (e) {
+			jsonString = "err@json解析错误: " + jsonString;
+			alert(jsonString);
+		}
+		return jsonString;
+	};
+
     return DBAccess;
 
 })();

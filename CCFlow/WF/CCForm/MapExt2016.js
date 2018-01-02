@@ -428,7 +428,9 @@ function GenerPageKVs() {
 /* 自动填充 */
 function DDLFullCtrl(e, ddlChild, fk_mapExt) {
 
+
     GenerPageKVs();
+
     var url = GetLocalWFPreHref();
     
     // alert(url);

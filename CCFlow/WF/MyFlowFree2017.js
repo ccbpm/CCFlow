@@ -80,227 +80,168 @@ function GenerFreeFrm(wn) {
 
 }
 
-//升级表单元素 初始化文本框、日期、时间
+
 function figure_MapAttr_Template(mapAttr) {
 
-    var eleHtml = '';
-    if (mapAttr.UIVisible == 1) { //是否显示
+    //根据不同的类型控件，生成html.
+    var ele = figure_MapAttr_TemplateEle(mapAttr);
 
-        var str = '';
-        var defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+    eleHtml += mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
 
-        var isInOneRow = false; //是否占一整行
-        var islabelIsInEle = false; //
+    var eleHtml = $('<div>' + ele + '</div>');
 
-        eleHtml += '';
-
-        if (mapAttr.UIContralType != 6) {
-
-            if (mapAttr.LGType == 2) {
-                //多选下拉框
-                var isMultiSele = "";
-                var isMultiSeleClass = "";
-                //                if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-                //                    isMultiSele = ' multiple data-live-search="false" ';
-                //                    isMultiSeleClass = " selectpicker show-tick form-control ";
-                //                }
-                eleHtml += "<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
-            } else {
-                //添加文本框 ，日期控件等
-                //AppString   
-                if (mapAttr.MyDataType == "1" && mapAttr.LGType != "2") {//不是外键
-                    if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
-						if (mapAttr.LGType == 0) {
-							eleHtml += "<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">";
-							eleHtml += InitDDLOperation(flowData, mapAttr, defValue);
-							eleHtml += "</select>";
-						} else {
-							//多选下拉框
-							var isMultiSele = "";
-							var isMultiSeleClass = "";
-							//                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-							//                            isMultiSele = ' multiple data-live-search="false" ';
-							//                            isMultiSeleClass = " selectpicker show-tick form-control ";
-							//                        }
-
-
-							eleHtml +=
-								"<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + ">" +
-								(flowData, mapAttr, defValue) + "</select>";
-						}
-                    } else { //文本区域
-						var ext = getMapExt(flowData.Sys_MapExt, mapAttr.KeyOfEn);
-						if (ext.ExtType == "MultipleChoiceSmall") {
-							eleHtml += "<input id='" + mapAttr.KeyOfEn + "_combobox' />";
-						} else if (ext.ExtType == "MultipleChoiceSearch") {
-							eleHtml += "<div id='" + mapAttr.KeyOfEn + "_mselector'></div>";
-						}
-						else
-                        if (mapAttr.UIHeight <= 23) {
-                            eleHtml +=
-                                "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
-                            ;
-                        }
-                        else {
-
-                            if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
-                                //如果是富文本就使用百度 UEditor
-
-                                if (mapAttr.UIIsEnable == "0") {
-
-                                    //只读状态直接 div.richText 展示富文本内容                                    
-                                    eleHtml += "<div class='richText'>" + defValue + "</div>";
-                                } else {
-                                    document.BindEditorMapAttr = mapAttr; //存到全局备用
-
-                                    //设置编辑器的默认样式
-                                    var styleText = "text-align:left;font-size:12px;";
-                                    styleText += "width:100%;";
-                                    styleText += "height:" + mapAttr.UIHeight + "px;";
-                                    //注意这里 name 属性是可以用来绑定表单提交时的字段名字的
-                                    eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
-                                }
-                            } else {
-                                eleHtml +=
-                                "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>"
-                            }
-                        }
-                    }
-                } //AppDate
-                else if (mapAttr.MyDataType == 6) {//AppDate
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 1) {
-                        enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-                }
-                else if (mapAttr.MyDataType == 7) {// AppDateTime = 7
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 1) {
-                        enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
-                        //enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    eleHtml += "<input maxlength=" + mapAttr.MaxLen / 2 + "  type='text' class='TBcalendar'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
-                }
-                else if (mapAttr.MyDataType == 4) { // AppBoolean = 7
-                    if (mapAttr.UIIsEnable == 1) {
-
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    //CHECKBOX 默认值
-                    var checkedStr = '';
-                    if (checkedStr != "true" && checkedStr != '1') {
-                        checkedStr = ' checked="checked" ';
-                    }
-                    checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
-
-                    eleHtml += "<div><input class='align_cb' " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
-                    eleHtml += '<label class="labRb align_cbl" for="CB_' + mapAttr.KeyOfEn + '">&nbsp;' + mapAttr.Name + '</label></div>';
-                    //return eleHtml;
-                }
-
-                if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
-                    if (mapAttr.UIContralType == 1) {//DDL
-                        //多选下拉框
-
-                        //                        if (mapAttr.UIIsMultiple != undefined && mapAttr.UIIsMultiple == 1) {
-                        //                            isMultiSele = ' multiple data-live-search="false" ';
-                        //                            isMultiSeleClass = " selectpicker show-tick form-control ";
-                        //                        }
-
-                        //alert('ss');
-                        //eleHtml +="<select data-val='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' class='" + isMultiSeleClass + "' " + isMultiSele + " name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable==1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
-
-                        eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(flowData, mapAttr, defValue) + "</select>";
-
-                    }
-                }
-
-                // AppDouble  AppFloat 
-                if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 1) {
-
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-                }
-                if ((mapAttr.MyDataType == 2 && mapAttr.LGType != 1)) {//AppInt
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 1) {
-
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-                }
-                //AppMoney  AppRate
-                if (mapAttr.MyDataType == 8) {
-                    var enableAttr = '';
-                    if (mapAttr.UIIsEnable == 1) {
-
-                    } else {
-                        enableAttr = "disabled='disabled'";
-                    }
-                    eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
-                }
-            }
-        } else {
-            //展示附件信息  FREE 不需要
-            return;
-
-            //            var atParamObj = AtParaToJson(mapAttr.AtPara);
-            //            if (atParamObj.AthRefObj != undefined) {//扩展设置为附件展示
-            //                eleHtml += "<input type='hidden' class='tbAth' data-target='" + mapAttr.AtPara + "' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' >" + "</input>";
-            //                defValue = defValue != undefined && defValue != '' ? defValue : '&nbsp;';
-            //                if (defValue.indexOf('@AthCount=') == 0) {
-            //                    defValue = "附件" + "<span class='badge'>" + defValue.substring('@AthCount='.length, defValue.length) + "</span>个";
-            //                } else {
-            //                    defValue = defValue;
-            //                }
-            //                eleHtml += "<div class='divAth' data-target='" + mapAttr.KeyOfEn + "'  id='DIV_" + mapAttr.KeyOfEn + "'>" + defValue + "</div>";
-            //            }
-        }
-
-        if (!islabelIsInEle) {
-            //eleHtml = '<div style="text-align:right;padding:0px;margin:0px; ' + (isInOneRow ? "clear:left;" : "") + '"  class="col-lg-1 col-md-1 col-sm-2 col-xs-4"><label>' + mapAttr.Name + "</label>" +
-            //(mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "")
-            //+ "</div>" + eleHtml;
-            //先把 必填项的 * 写到元素后面 可能写到标签后面更合适
-
-            eleHtml +=
-           (mapAttr.UIIsInput == 1 && mapAttr.UIIsEnable == 1) ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
-
-        }
-    } else {
-        var value = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
-        if (value == undefined) {
-            value = '';
-        } else {
-            //value = value.toString().replace(/：/g, ':').replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}');
-        }
-
-        //hiddenHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + " value='" + ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' name='TB_" + mapAttr.KeyOfEn + "></input>";
-        eleHtml += "<input type='hidden' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' />";
-    }
-
-    // alert(eleHtml);
-
-    eleHtml = $('<div>' + eleHtml + '</div>');
     eleHtml.children(0).css('width', mapAttr.UIWidth).css('height', mapAttr.UIHeight);
     eleHtml.css('position', 'absolute').css('top', mapAttr.Y).css('left', mapAttr.X);
 
-    if (mapAttr.UIIsEnable == "0") {
-        enableAttr = eleHtml.find('[name=TB_' + mapAttr.KeyOfEn + ']').attr('disabled', true);
-        enableAttr = eleHtml.find('[name=DDL_' + mapAttr.KeyOfEn + ']').attr('disabled', true);
-    }
     return eleHtml;
+}
+
+//升级表单元素 初始化文本框、日期、时间
+function figure_MapAttr_TemplateEle(mapAttr) {
+
+    var eleHtml = '';
+
+    /***************** 隐藏的控件 (在装载元素之后处理.) *****************************/
+    if (mapAttr.UIVisible == 0) {
+        return "";
+    }
+
+    /***************** 外键 *****************************/
+    if (mapAttr.LGType == 2 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "'>" + InitDDLOperation(flowData, mapAttr) + "</select>";
+        return eleHtml;
+    }
+
+    /***************** 外部数据源 *****************************/
+    if (mapAttr.LGType == 1 && mapAttr.MyDataType == "1" && mapAttr.UIContralType == "1") {
+        eleHtml = "<select id='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
+        return eleHtml;
+    }
+
+    /***************** 作为附件展示的控件. *****************************/
+    if (mapAttr.UIContralType == 6) {
+        var atParamObj = AtParaToJson(mapAttr.AtPara);
+        if (atParamObj.AthRefObj != undefined) { //扩展设置为附件展示
+            eleHtml += "<input type='hidden' class='tbAth' data-target='" + mapAttr.AtPara + "' id='TB_" + mapAttr.KeyOfEn + "' name='TB_" + mapAttr.KeyOfEn + "' >" + "</input>";
+            defValue = defValue != undefined && defValue != '' ? defValue : '&nbsp;';
+            if (defValue.indexOf('@AthCount=') == 0) {
+                defValue = "附件" + "<span class='badge'>" + defValue.substring('@AthCount='.length, defValue.length) + "</span>个";
+            } else {
+                defValue = defValue;
+            }
+            eleHtml += "<div class='divAth' data-target='" + mapAttr.KeyOfEn + "'  id='DIV_" + mapAttr.KeyOfEn + "'>" + defValue + "</div>";
+        }
+        return eleHtml;
+    }
+
+    /***************** 其他类型的控件. *****************************/
+    var str = '';
+    var isInOneRow = false; //是否占一整行
+    var islabelIsInEle = false; //
+    eleHtml += '';
+
+    //添加文本框 ，日期控件等
+    //AppString
+    if (mapAttr.MyDataType == "1") {
+
+        //普通类型的单行文本.
+        if (mapAttr.UIHeight <= 23) {
+            eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  id='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' />";
+            return eleHtml;
+        }
+
+        //判断是否是富文本?
+        if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+
+            //如果是富文本就使用百度 UEditor
+
+            if (mapAttr.UIIsEnable == "0") {
+                //只读状态直接 div 展示富文本内容
+                //eleHtml += "<script id='" + editorPara.id + "' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+                var defValue = ConvertDefVal(flowData, mapAttr.DefVal, mapAttr.KeyOfEn);
+                eleHtml = "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
+                return eleHtml;
+            }
+
+            document.BindEditorMapAttr = mapAttr; //存到全局备用
+
+            //设置编辑器的默认样式.
+            var styleText = "text-align:left;font-size:12px;";
+            styleText += "width:100%;";
+            styleText += "height:" + mapAttr.UIHeight + "px;";
+            //注意这里 name 属性是可以用来绑定表单提交时的字段名字的
+            eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+            return eleHtml;
+        }
+
+        //多行文本模式.
+        eleHtml = "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;' id='TB_" + mapAttr.KeyOfEn + "' type='text' />";
+        return eleHtml;
+    }
+
+    //日期类型.
+    if (mapAttr.MyDataType == 6) { //AppDate
+        var enableAttr = '';
+        if (mapAttr.UIIsEnable == 1) {
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd'})" + '";';
+        } 
+
+        eleHtml = "<input  type='text' class='TBcalendar'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
+        return eleHtml;
+    }
+
+    //日期时间类型.
+    if (mapAttr.MyDataType == 7) { // AppDateTime = 7
+        var enableAttr = '';
+        if (mapAttr.UIIsEnable == 1) {
+            enableAttr = 'onfocus="WdatePicker({dateFmt:' + "'yyyy-MM-dd HH:mm'})" + '";';
+        }
+        eleHtml = "<input type='text' class='TBcalendar' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
+        return eleHtml;
+    }
+
+    //checkbox 类型.
+    if (mapAttr.MyDataType == 4) { // AppBoolean = 7
+
+        //CHECKBOX 默认值
+        var checkedStr = '';
+        if (checkedStr != "true" && checkedStr != '1') {
+            checkedStr = ' checked="checked" '
+        }
+        checkedStr = ConvertDefVal(flowData, '', mapAttr.KeyOfEn);
+        eleHtml += "<div><input class='align_cb' " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox'  id='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + "/>";
+        eleHtml += '<label class="labRb align_cbl" for="CB_' + mapAttr.KeyOfEn + '">&nbsp;' + mapAttr.Name + '</label></div>';
+        return eleHtml;
+    }
+
+    //枚举下拉框.
+    if (mapAttr.MyDataType == 2 && mapAttr.LGType == 1) { //AppInt Enum
+        if (mapAttr.UIContralType == 1) { //DDL
+            //多选下拉框.
+            eleHtml += "<select  id='DDL_" + mapAttr.KeyOfEn + "' >" + InitDDLOperation(flowData, mapAttr, "") + "</select>";
+        }
+        return eleHtml;
+    }
+
+    // 浮点类型. AppDouble  AppFloat
+    if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
+        eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
+        return eleHtml;
+    }
+
+    // int 类型.
+    if ((mapAttr.MyDataType == 2 && mapAttr.UIContralType == 0)) { //AppInt
+        eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "' />";
+        return eleHtml;
+    }
+
+    // 金额类型. AppMoney  AppRate
+    if (mapAttr.MyDataType == 8) {
+        eleHtml += "<input style='text-align:right;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
+        return eleHtml;
+    }
+
+    alert(mapAttr.Name + '没有判断...');
 }
 
 //将#FF000000 转换成 #FF0000

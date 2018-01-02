@@ -239,9 +239,6 @@
 
         function Send() {
 
-//            if (window.confirm('您确定要执行发送吗？') == false)
-//                return;
-
             var emps = this.document.getElementById("TB_Emps").value;
             if (emps != "") {
                 this.AddEmps(true);
@@ -253,72 +250,73 @@
 
         function SendIt() {
 
-            var url = Handler + "?DoType=AccepterOfGener_Send&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random() + "&ToNode=" + GetQueryString("ToNode");
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        $(".Msg").show();
-                        $(".Msg").html(data);
-                        return;
-                    }
+            var httphandler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt");
+            httphandler.AddUrlData();
 
 
-                    data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
-                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
-                    data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            $("#Btn_Send").attr("disabled", "disabled");
+            $("#Btn_Send").val("正在发送请稍候...");
+            $("#Btn_Close").attr("display", "none");
+             
 
-                    data = data.replace("'WFRpt", "'../WFRpt");
-                    data = data.replace("'WFRpt", "'../WFRpt");
+            var data = httphandler.DoMethodReturnString("AccepterOfGener_Send");
 
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-                    data = data.replace("'./Img", "'../Img");
-
-                    data = data.replace("'./WorkOpt/", "");
-                    data = data.replace("'./WorkOpt/", "");
-                    data = data.replace("'./WorkOpt/", "");
-                    data = data.replace("'./WorkOpt/", "");
+            if (data.indexOf('err@') == 0) {
+                $(".Msg").show();
+                $(".Msg").html(data);
+                return;
+            }
 
 
-                    data = data.replace('@', '<br/>@');
-                    data = data.replace(/@/g, '<br/>&nbsp;@');
+            data = data.replace("'MyFlowInfo", "'../MyFlowInfo");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+            data = data.replace("'MyFlow.htm", "'../MyFlow.htm");
+
+            data = data.replace("'WFRpt", "'../WFRpt");
+            data = data.replace("'WFRpt", "'../WFRpt");
+
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+            data = data.replace("'./Img", "'../Img");
+
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
+            data = data.replace("'./WorkOpt/", "");
 
 
-                    data = data.replace('@', '<br/>@');
-                    data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
-                    $(".Msg").show();
-                    $(".Msg").html(data);
-
-                    $("#next").empty();
+            data = data.replace('@', '<br/>@');
+            data = data.replace(/@/g, '<br/>&nbsp;@');
 
 
-                    //隐藏table.
-                    document.getElementById("Table1").style.display = "none";
-                    document.getElementById("TB_Emps").style.display = "none";
-                    document.getElementById("Btn_SelectEmps").style.display = "none";
+            data = data.replace('@', '<br/>@');
+            data += " <center><input type='button' value='    关    闭    ' onclick='CloseAll();'  /></center>";
+            $(".Msg").show();
+            $(".Msg").html(data);
 
-                    //document.getElementById("Btn_AddEmps").style.display = "none";
+            $("#next").empty();
 
-                    var ctrl = document.getElementById("Btn_Send");
-                    if (ctrl != null)
-                        ctrl.style.display = "none";
 
-                    ctrl = document.getElementById("labInfo");
-                    if (ctrl != null)
-                        ctrl.style.display = "none";
+            //隐藏table.
+            document.getElementById("Table1").style.display = "none";
+            document.getElementById("TB_Emps").style.display = "none";
+            document.getElementById("Btn_SelectEmps").style.display = "none";
 
-                    ctrl = document.getElementById("Btn_Close");
-                    if (ctrl != null)
-                        ctrl.style.display = "none";
-                }
-            });
+            //document.getElementById("Btn_AddEmps").style.display = "none";
+
+            var ctrl = document.getElementById("Btn_Send");
+            if (ctrl != null)
+                ctrl.style.display = "none";
+
+            ctrl = document.getElementById("labInfo");
+            if (ctrl != null)
+                ctrl.style.display = "none";
+
+            ctrl = document.getElementById("Btn_Close");
+            if (ctrl != null)
+                ctrl.style.display = "none";
         }
 
         //取消移交

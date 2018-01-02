@@ -724,7 +724,7 @@ var Entity = (function () {
                     if (data.indexOf("err@") != -1) {
                         var err = data.replace('err@', '');
 
-                        alert('更新异常:' + err + " \t\nEnName"+self.enName);
+                        alert('更新异常:' + err + " \t\nEnName" + self.enName);
                         return;
                     }
 
@@ -806,7 +806,7 @@ var Entity = (function () {
                 success: function (data) {
                     result = data;
                     if (data.indexOf("err@") == 0) {
-                        alert('查询失败:' + self.enName +"请联系管理员:\t\n"+ data.replace('err@', ''));
+                        alert('查询失败:' + self.enName + "请联系管理员:\t\n" + data.replace('err@', ''));
                         return;
                     }
 
@@ -972,44 +972,45 @@ var Entity = (function () {
             }
         },
 
-		CopyURL : function () {
-			var self = this;
-			$.each(self, function (n, o) {
-				if (typeof o !== "function") {
-					var value = GetQueryString(n);
-					self[n] = value;
-				}
-			});
-		},
+        CopyURL: function () {
+            var self = this;
+            $.each(self, function (n, o) {
+                if (typeof o !== "function") {
+                    var value = GetQueryString(n);
+                    if (value != null && typeof value !== "undefined" && $.trim(value) != "")
+                        self[n] = value;
+                }
+            });
+        },
 
-		CopyForm : function () {
-			var self = this;
-			$.each(self, function (n, o) {
-				var target = $("#TB_" + n);
-				if (target.length == 1) {
-					self[n] = target.val();
-				}
-				
-				var target = $("#DDL_" + n);
-				if (target.length == 1) {
-					self[n] = target.val();
-				}
-				
-				var target = $("input[name='CB_" + n + "']:checked");
-				if (target.length > 0) {
-					var tmp = [];
-					target.each(function (i, o) {
-						tmp.push($(this).val());
-					});
-					self[n] = tmp.join(",");
-				}
-				
-				var target = $("input[name='RB_" + n + "']:checked");
-				if (target.length == 1) {
-					self[n] = target.val();
-				}
-			});
-		}
+        CopyForm: function () {
+            var self = this;
+            $.each(self, function (n, o) {
+                var target = $("#TB_" + n);
+                if (target.length == 1) {
+                    self[n] = target.val();
+                }
+
+                var target = $("#DDL_" + n);
+                if (target.length == 1) {
+                    self[n] = target.val();
+                }
+
+                var target = $("input[name='CB_" + n + "']:checked");
+                if (target.length > 0) {
+                    var tmp = [];
+                    target.each(function (i, o) {
+                        tmp.push($(this).val());
+                    });
+                    self[n] = tmp.join(",");
+                }
+
+                var target = $("input[name='RB_" + n + "']:checked");
+                if (target.length == 1) {
+                    self[n] = target.val();
+                }
+            });
+        }
 
     };
 

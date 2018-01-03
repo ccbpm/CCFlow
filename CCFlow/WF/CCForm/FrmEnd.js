@@ -35,14 +35,17 @@
 
         var val = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
-
        // alert(val);
 
         $('#TB_' + mapAttr.KeyOfEn).val(val);
 
         //文本框.
         if (mapAttr.UIContralType == 0) {
-            $('#TB_' + mapAttr.KeyOfEn).val(val);
+            if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {
+                $('#editor').val(val);
+            } else {
+                $('#TB_' + mapAttr.KeyOfEn).val(val);
+            }
         }
 
         //枚举下拉框.

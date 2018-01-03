@@ -881,9 +881,10 @@ namespace BP.Sys
                     break;
                 default:
                     //这里要去掉，不然组合组主键，会带来错误.
-                    //this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
-                    // throw new Exception("@没有判断的扩展类型." + this.ExtType);
-                    // this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
+                    if (DataType.IsNullOrEmpty(this.AttrOfOper) == true)
+                        this.MyPK = this.ExtType + "_" + this.FK_MapData;
+                    else
+                        this.MyPK = this.ExtType + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;
             }
         }

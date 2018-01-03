@@ -102,13 +102,12 @@ namespace BP.Sys.FrmUI
                 map.Java_SetDepositaryOfMap(Depositary.Application);
                 map.Java_SetEnType(EnType.Sys);
 
-                #region 基本信息.
+                #region 基本字段信息.
                 map.AddTBStringPK(MapAttrAttr.MyPK, null, "主键", false, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.FK_MapData, null, "实体标识", false, false, 1, 100, 20);
 
                 map.AddTBString(MapAttrAttr.Name, null, "字段中文名", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.KeyOfEn, null, "字段名", true, true, 1, 200, 20);
-
 
                 //默认值.
                 string sql = "SELECT No,Name FROM Sys_GloVar WHERE GroupKey='DefVal'";
@@ -131,9 +130,9 @@ namespace BP.Sys.FrmUI
                 map.AddBoolean(MapAttrAttr.IsSupperText, false, "是否大块文本？(是否该字段存放的超长字节字段)", true, true,true);
                 map.AddTBString(MapAttrAttr.Tip, null, "激活提示", true, false, 0, 400, 20, true);
 
-                #endregion 基本信息.
+                #endregion 基本字段信息.
 
-                #region 傻瓜表单。
+                #region 傻瓜表单
                 //单元格数量 2013-07-24 增加
                 map.AddDDLSysEnum(MapAttrAttr.ColSpan, 1, "单元格数量", true, true, "ColSpanAttrString", 
                     "@1=跨1个单元格@3=跨3个单元格@4=跨4个单元格");
@@ -144,16 +143,10 @@ namespace BP.Sys.FrmUI
 
                 map.AddDDLSysEnum(MapAttrAttr.IsSigan, 0, "签名模式", true, true,
                     MapAttrAttr.IsSigan, "@0=无@1=图片签名@2=山东CA@3=广东CA");
-                #endregion 傻瓜表单。
+                #endregion 傻瓜表单
 
                 #region 基本功能.
                 RefMethod rm = new RefMethod();
-                //  设置开窗返回值-正则表达式-文本框自动完成-脚本验证-扩展控件
-                rm = new RefMethod();
-                rm.Title = "设置开窗返回值";
-                rm.ClassMethodName = this.ToString() + ".DoPopVal()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.Title = "正则表达式";
@@ -164,13 +157,6 @@ namespace BP.Sys.FrmUI
                 rm = new RefMethod();
                 rm.Title = "文本框自动完成";
                 rm.ClassMethodName = this.ToString() + ".DoTBFullCtrl()";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "Pop自动完成";
-                rm.ClassMethodName = this.ToString() + ".DoPopFullCtrl()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -187,10 +173,10 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
                 #endregion 基本功能.
 
-                #region 多选.
+                #region 输入多选.
                 rm = new RefMethod();
                 rm.GroupName = "输入内容多选";
-                rm.Title = "小范围多选";
+                rm.Title = "小范围多选(combox)";
                 rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSmall()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -201,25 +187,83 @@ namespace BP.Sys.FrmUI
                 rm.ClassMethodName = this.ToString() + ".DoMultipleChoiceSearch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
-                #endregion
+                #endregion 输入多选
+
+                #region Pop 自动填充.
+                rm = new RefMethod();
+                rm.GroupName = "Pop自动填充";
+                rm.Title = "简单列表模式";
+                rm.ClassMethodName = this.ToString() + ".DoPopFullCtrl()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "Pop自动填充";
+                rm.Title = "多条件查询列表模式";
+                rm.ClassMethodName = this.ToString() + ".DoPopFullCtrlAdv()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                #endregion Pop 自动填充.
+
 
                 #region Pop返回值.
                 rm = new RefMethod();
-                rm.GroupName = "Pop返回值";
-                rm.Title = "简单模式";
-                rm.ClassMethodName = this.ToString() + ".DoPopSimpleModel()";
+                rm.GroupName = "Pop返回值2018";
+                rm.Title = "枝干叶子模式";
+                rm.ClassMethodName = this.ToString() + ".DoBranchesAndLeaf()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
-                rm.GroupName = "Pop返回值";
-                rm.Title = "部门员工模式(高级)";
-                rm.ClassMethodName = this.ToString() + ".DoPopDeptEmpModelAdv()";
+                rm.GroupName = "Pop返回值2018";
+                rm.Title = "枝干叶子模式-懒加载";
+                rm.ClassMethodName = this.ToString() + ".DoBranchesAndLeafLazyLoad()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-                #endregion
+                rm = new RefMethod();
+                rm.GroupName = "Pop返回值2018";
+                rm.Title = "枝干模式";
+                rm.ClassMethodName = this.ToString() + ".DoBranches()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.GroupName = "Pop返回值2018";
+                rm.Title = "枝干模式-懒加载";
+                rm.ClassMethodName = this.ToString() + ".DoBranchesLazyLoad()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "Pop返回值2018";
+                rm.Title = "分组模式";
+                rm.ClassMethodName = this.ToString() + ".DoGroupModel()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "Pop返回值2018";
+                rm.Title = "列表模式-简单";
+                rm.ClassMethodName = this.ToString() + ".DoListSimple()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.GroupName = "Pop返回值2018";
+                rm.Title = "列表模式-多条件查询";
+                rm.ClassMethodName = this.ToString() + ".DoListSimpleSearch()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                //  设置开窗返回值-正则表达式-文本框自动完成-脚本验证-扩展控件
+                rm = new RefMethod();
+                rm.GroupName = "Pop返回值2018";
+                rm.Title = "设置开窗返回值(旧版本)";
+                rm.ClassMethodName = this.ToString() + ".DoPopVal()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                #endregion
 
                 #region 高级设置.
                 rm = new RefMethod();
@@ -241,9 +285,6 @@ namespace BP.Sys.FrmUI
                 return this._enMap;
             }
         }
-
-         
-
         /// <summary>
         /// 删除
         /// </summary>
@@ -255,66 +296,85 @@ namespace BP.Sys.FrmUI
 
             base.afterDelete();
         }
-
-        protected override bool beforeUpdateInsertAction()
-        {
-            MapAttr attr = new MapAttr();
-            attr.MyPK = this.MyPK;
-            attr.RetrieveFromDBSources();
-
-            //高度.
-          //  attr.UIHeightInt = this.GetValIntByKey("ExtRows") * 23;
-
-            attr.IsRichText = this.GetValBooleanByKey(MapAttrAttr.IsRichText); //是否是富文本？
-            attr.IsSupperText = this.GetValBooleanByKey(MapAttrAttr.IsSupperText); //是否是大块文本？
-
-            if (attr.IsRichText || attr.IsSupperText)
-            {
-                attr.MaxLen = 4000;
-                this.SetValByKey(MapAttrAttr.MaxLen, 4000);
-            }
-
-
-            //默认值.
-            string defval = this.GetValStrByKey("ExtDefVal");
-            if (defval == "" || defval == "0")
-            {
-                string defVal = this.GetValStrByKey("DefVal");
-                if (defval.Contains("@") == true)
-                    this.SetValByKey("DefVal", "");
-            }
-            else
-            {
-                this.SetValByKey("DefVal", this.GetValByKey("ExtDefVal"));
-            }
-
-            //执行保存.
-            attr.Save();
-
-            if (this.GetValStrByKey("GroupID") == "无")
-                this.SetValByKey("GroupID", "0");
-
-            return base.beforeUpdateInsertAction();
-        }
         #endregion
+
+        #region 方法执行 Pop自动完成.
+        /// <summary>
+        /// 简单列表模式
+        /// </summary>
+        /// <returns></returns>
+        public string DoPopFullCtrl()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
+        }
+        /// <summary>
+        /// 多条件查询列表模式
+        /// </summary>
+        /// <returns></returns>
+        public string DoPopFullCtrlAdv()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
+        }
+        #endregion 方法执行 Pop填充自动完成.
+
 
         #region 方法执行 pop返回值
         /// <summary>
         /// 简单模式多选
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回url</returns>
         public string DoPopSimpleModel()
         {
             return "../../Admin/FoolFormDesigner/PopSetting/SimpleModel.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
-        /// 部门人员模式多选
+        /// 枝干叶子模式
+        /// </summary>
+        /// <returns>返回url</returns>
+        public string DoBranchesAndLeaf()
+        {
+            return "../../Admin/FoolFormDesigner/PopSetting/BranchesAndLeaf.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 枝干叶子懒加载
         /// </summary>
         /// <returns></returns>
-        public string DoPopDeptEmpModelAdv()
+        public string DoBranchesAndLeafLazyLoad()
         {
-            return "../../Admin/FoolFormDesigner/PopSetting/DeptEmpModelAdv.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/PopSetting/BranchesAndLeaf.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
+        
+        /// <summary>
+        /// 枝干模式
+        /// </summary>
+        /// <returns>返回url</returns>
+        public string DoBranches()
+        {
+            return "../../Admin/FoolFormDesigner/PopSetting/Branches.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        /// <summary>
+        /// 枝干模式懒加载
+        /// </summary>
+        /// <returns>返回url</returns>
+        public string DoBranchesLazyLoad()
+        {
+            return "../../Admin/FoolFormDesigner/PopSetting/Branches.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+
+        public string DoGroupModel()
+        {
+            return "../../Admin/FoolFormDesigner/PopSetting/Branches.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+
+        public string DoListSimple()
+        {
+            return "../../Admin/FoolFormDesigner/PopSetting/GroupModel.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        public string DoListSimpleSearch()
+        {
+            return "../../Admin/FoolFormDesigner/PopSetting/GroupModel.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+
         #endregion
 
         #region 方法执行.
@@ -378,10 +438,8 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/MapExt/TBFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
         }
-        public string DoPopFullCtrl()
-        {
-            return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
-        }
+        
+
         /// <summary>
         /// 设置级联
         /// </summary>
@@ -402,6 +460,49 @@ namespace BP.Sys.FrmUI
             //  return "../../Admin/FoolFormDesigner/MapExt/InputCheck.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + this.KeyOfEn + "&RefNo=" + this.MyPK;
         }
         #endregion 方法执行.
+
+        #region 重载.
+        protected override bool beforeUpdateInsertAction()
+        {
+            MapAttr attr = new MapAttr();
+            attr.MyPK = this.MyPK;
+            attr.RetrieveFromDBSources();
+
+            //高度.
+            //  attr.UIHeightInt = this.GetValIntByKey("ExtRows") * 23;
+
+            attr.IsRichText = this.GetValBooleanByKey(MapAttrAttr.IsRichText); //是否是富文本？
+            attr.IsSupperText = this.GetValBooleanByKey(MapAttrAttr.IsSupperText); //是否是大块文本？
+
+            if (attr.IsRichText || attr.IsSupperText)
+            {
+                attr.MaxLen = 4000;
+                this.SetValByKey(MapAttrAttr.MaxLen, 4000);
+            }
+
+
+            //默认值.
+            string defval = this.GetValStrByKey("ExtDefVal");
+            if (defval == "" || defval == "0")
+            {
+                string defVal = this.GetValStrByKey("DefVal");
+                if (defval.Contains("@") == true)
+                    this.SetValByKey("DefVal", "");
+            }
+            else
+            {
+                this.SetValByKey("DefVal", this.GetValByKey("ExtDefVal"));
+            }
+
+            //执行保存.
+            attr.Save();
+
+            if (this.GetValStrByKey("GroupID") == "无")
+                this.SetValByKey("GroupID", "0");
+
+            return base.beforeUpdateInsertAction();
+        }
+        #endregion
     }
     /// <summary>
     /// 实体属性s

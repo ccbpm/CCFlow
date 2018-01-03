@@ -299,8 +299,6 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 
     // AppDouble  AppFloat
     if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
-
-        // alert(mapAttr.KeyOfEn);
         return "<input  value='" + defValue + "' style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
@@ -309,6 +307,8 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         if (mapAttr.UIIsEnable != 1) {
             enableAttr = "disabled='disabled'";
         }
+
+        //alert(defValue);
 
         return "<input  value='" + defValue + "' style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
     }

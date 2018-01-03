@@ -168,7 +168,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
             styleText += "width:100%;";
             styleText += "height:" + mapAttr.UIHeight + "px;";
             //注意这里 name 属性是可以用来绑定表单提交时的字段名字的 editor是特殊约定的.
-            eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
+            eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'></script>";
             // eleHtml += "<script id='editor' name='TB_" + mapAttr.KeyOfEn + "' id='TB_" + mapAttr.KeyOfEn + "' type='text/plain' style='" + styleText + "'>" + defValue + "</script>";
 
             return eleHtml;

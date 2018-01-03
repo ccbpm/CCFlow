@@ -49,7 +49,7 @@
 
     //body块
     var modalBody = $("<div class='modal-body'></div>");
-    var iframeWidth = dlgWidth - 35;
+    var iframeWidth = dlgWidth - 45;
 
     var iFrame = $("<iframe></iframe>");
     iFrame.attr("id", iframeId);
@@ -116,4 +116,9 @@
 
     $('#bootStrapdlg').modal().show();
     return "bootStrapdlg";
+}
+
+//关闭弹出窗
+function CloseBootstrapDialog() {
+    $('#bootStrapdlg').modal('hide');
 }

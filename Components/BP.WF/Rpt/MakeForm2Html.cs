@@ -1149,7 +1149,7 @@ namespace BP.WF
         public static string ZipFilePath = "";
 
         public static string CCFlowAppPath = "/";
-        public static string pMakeHtmlDocument(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null)
+        public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null)
         {
             try
             {

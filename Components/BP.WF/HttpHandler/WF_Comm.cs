@@ -208,7 +208,7 @@ namespace BP.WF.HttpHandler
         /// <summary>
         /// 执行保存
         /// </summary>
-        /// <returns></returns>
+        /// <returns>返回保存影响的行数</returns>
         public string Entity_Save()
         {
             try
@@ -220,6 +220,13 @@ namespace BP.WF.HttpHandler
                 //遍历属性，循环赋值.
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
+
+                //保存参数属性.
+                string frmParas = this.GetValFromFrmByKey("frmParas");
+                if (DataType.IsNullOrEmpty(frmParas) == false)
+                {
+
+                }
 
                 return en.Save().ToString();
             }

@@ -913,7 +913,6 @@ namespace BP.WF.Template
                 map.Java_SetEnType(EnType.Sys);
 
                 #region 基础信息.
-
                 map.AddTBStringPK(MapDtlAttr.No, null, "编号", true, false, 1, 100, 20);
                 map.AddTBString(MapDtlAttr.Name, null, "名称", true, false, 1, 200, 20);
                 map.AddTBString(MapDtlAttr.Alias, null, "别名", true, false, 0, 100, 20, false);
@@ -991,8 +990,8 @@ namespace BP.WF.Template
 
                 //导入模式.
                 map.AddDDLSysEnum(MapDtlAttr.ImpModel, 0, "导入方式", true, true, MapDtlAttr.ImpModel,
-                    "@0=不导入@1=按SQL设置导入@2=按JSON模式导入@3=按照xls文件模版导入");
-                map.SetHelperAlert(MapDtlAttr.RowShowModel, "您需要在相关功能里设置相对应的导入模式设置.");
+                    "@0=不导入@1=按配置模式导入@2=按照xls文件模版导入");
+                map.SetHelperAlert(MapDtlAttr.ImpModel, "您需要在相关功能里设置相对应的导入模式设置.");
 
               //  map.AddBoolean(MapDtlAttr.IsImp, true, "是否可以导入？(从约定的模版格式文件里导入到表.)", true, true, true);
                 //map.AddBoolean(MapDtlAttr.IsEnableSelectImp, false, "是否启用选择数据导入?(定义导入数据源导入到表格里)", true, true, true);
@@ -1000,7 +999,6 @@ namespace BP.WF.Template
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLInit, null, "初始化SQL(初始化表格的时候的SQL数据,可以为空)", true, false, true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLSearch, null, "查询SQL(SQL里必须包含@Key关键字.)", true, false,true);
                 map.AddTBStringDoc(MapDtlAttr.ImpSQLFullOneRow, null, "数据填充一行数据的SQL(必须包含@Key关键字,为选择的主键)", true, false,true);
-
                 map.AddTBString(MapDtlAttr.ImpSQLNames, null, "列的中文名称", true, false, 0, 900, 20, true);
 
                 #endregion 导入导出填充.

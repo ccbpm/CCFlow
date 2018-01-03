@@ -2850,54 +2850,59 @@ namespace BP.WF.HttpHandler
         public string AttachmentUpload_DownZip()
         {
             string zipName = this.WorkID + "_" + this.FK_FrmAttachment;
+
+            #region 处理权限控制.
+            BP.Sys.FrmAttachment athDesc = this.GenerAthDesc();
+
+            //查询出来数据实体.
+            BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal, this.FK_FrmAttachment);
+            #endregion 处理权限控制.
+
+            if (dbs.Count == 0)
+                return "err@文件不存在，不需打包下载。";
+
+            string basePath = SystemConfig.PathOfDataUser + "Temp";
+            string tempUserPath = basePath + "\\" + WebUser.No;
+            string tempFilePath = basePath + "\\" + WebUser.No+"\\"+this.OID;
+            string zipPath = basePath + "\\" + WebUser.No;
+            string zipFile = zipPath + "\\" + zipName + ".zip";
+
+            string info = "";
             try
             {
-                #region 处理权限控制.
-                BP.Sys.FrmAttachment athDesc = this.GenerAthDesc();
+                //删除临时文件，保证一个用户只能存一份，减少磁盘占用空间.
+                info = "@创建用户临时目录:" + tempUserPath;
+                if (System.IO.Directory.Exists(tempUserPath) == false)
+                    System.IO.Directory.CreateDirectory(tempUserPath);
 
-                //查询出来数据实体.
-                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal, this.FK_FrmAttachment);
-                #endregion 处理权限控制.
+                if (System.IO.Directory.Exists(tempFilePath) == false)
+                    System.IO.Directory.CreateDirectory(tempFilePath);
 
-                if (dbs.Count == 0)
-                    return "err@文件不存在，不需打包下载。";
+                ////根据路径创建文件夹
+                //info = "@创建临时用户目录:" + tempFilePath + "错误.";
+                //System.IO.Directory.CreateDirectory(tempPath);
+                ////copy文件临时文件夹
+                //tempPath = tempPath + "\\" + this.WorkID;
+                //info = "@创建临时文件目录:" + tempPath + "错误.";
+                //System.IO.Directory.CreateDirectory(tempPath);
+            }
+            catch (Exception ex)
+            {
+                return "err@组织临时目录出现错误:" + ex.Message;
+            }
 
-                string basePath = SystemConfig.PathOfDataUser + "Temp";
-                string tempPath = basePath + "\\" + WebUser.No;
-                string zipPath = basePath + "\\" + WebUser.No;
-                string zipFile = zipPath + "\\" + zipName + ".zip";
-
-                //删除临时文件，保证一个用户只能存一份，减少磁盘占用空间
-                if (System.IO.Directory.Exists(tempPath) == true)
-                {
-                    try
-                    {
-                        System.IO.Directory.Delete(tempPath, true);
-                    }
-                    catch(Exception ex)
-                    {
-                        return "err@删除tempPath错误" + ex.Message;
-                    }
-                }
-                //根据路径创建文件夹
-                if (System.IO.Directory.Exists(zipPath) == false)
-                    System.IO.Directory.CreateDirectory(zipPath);
-
-                //copy文件临时文件夹
-                tempPath = tempPath + "\\" + this.WorkID;
-                if (System.IO.Directory.Exists(tempPath) == false)
-                    System.IO.Directory.CreateDirectory(tempPath);
-
+            try
+            {
                 foreach (FrmAttachmentDB db in dbs)
                 {
-                    string copyToPath = tempPath;
+                    string copyToPath = tempFilePath;
 
                     //求出文件路径.
                     string fileTempPath = db.GenerTempFile(athDesc.AthSaveWay);
 
                     if (string.IsNullOrEmpty(db.Sort) == false)
                     {
-                        copyToPath = tempPath + "//" + db.Sort;
+                        copyToPath = tempFilePath + "//" + db.Sort;
                         if (System.IO.Directory.Exists(copyToPath) == false)
                             System.IO.Directory.CreateDirectory(copyToPath);
                     }
@@ -2905,27 +2910,32 @@ namespace BP.WF.HttpHandler
                     copyToPath = copyToPath + "//" + db.FileName;
                     File.Copy(fileTempPath, copyToPath, true);
                 }
-
-                //执行压缩
-                (new FastZip()).CreateZip(zipFile, tempPath, true, "");
-
-                try
-                {
-                    //删除临时文件夹
-                    System.IO.Directory.Delete(tempPath, true);
-                }
-                catch(Exception ex)
-                {
-                    return "err@删除临时文件错误" + ex.Message;
-                }
-
-                string url = HttpContext.Current.Request.ApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
-                return "url@" + url;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return "err@下载zip文件错误:" + ex.Message;
+                return "err@组织文件期间出现错误:" + ex.Message;
             }
+
+            try
+            {
+                while (System.IO.File.Exists(zipFile) == false)
+                {
+                    //执行压缩.
+                    FastZip fz = new FastZip();
+                    fz.CreateZip(zipFile, tempFilePath, true, "");
+                }
+            }
+            catch (Exception ex)
+            {
+                return "err@执行压缩出现错误:" + ex.Message + ",路径tempPath:" + tempFilePath + ",zipFile=" + zipFile;
+            }
+
+            if (System.IO.File.Exists(zipFile) == false)
+                return "err@压缩文件未生成成功,请在点击一次.";
+
+            string url = HttpContext.Current.Request.ApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
+            return "url@" + url;
+
         }
         #endregion 附件组件
 

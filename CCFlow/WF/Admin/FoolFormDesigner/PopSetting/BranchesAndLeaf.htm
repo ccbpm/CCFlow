@@ -15,19 +15,16 @@
         $(function () {
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "PopDeptEmpModelAdv_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
-           //alert( JSON.stringify(mapExt) );
-
+            //批量为复制.
             GenerFullAllCtrlsVal(mapExt);
 
             //基本属性.
             $("#TB_Title").val(mapExt.GetPara("Title"));
             $("#TB_SearchTip").val(mapExt.GetPara("SearchTip"));
-
             $("#TB_RootTreeNo").val(mapExt.GetPara("RootNo")); //树的根节点编号.
-
 
             //设置按钮是否可以用?
             if (i == 0)
@@ -42,7 +39,7 @@
                 return;
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "PopDeptEmpModelAdv_" + GetQueryString("FK_MapData")+"_"+GetQueryString("KeyOfEn");
+            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData")+"_"+GetQueryString("KeyOfEn");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
             window.location.href = window.location.href;
@@ -51,7 +48,7 @@
         function Save() {
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "PopDeptEmpModelAdv_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             mapExt.CopyURL();  //从url里面copy数据.
@@ -61,7 +58,12 @@
             mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
             mapExt.SetPara("RootNo", $("#TB_RootTreeNo").val()); //树的根节点编号.
 
-            mapExt.ExtType = "PopDeptEmpModelAdv";
+            //var val= $("#DDL_SelectType").val();
+            //alert(val);
+
+            mapExt.SetPara("SelectType", val); //选择类型.
+
+            mapExt.ExtType = "PopBranchesAndLeaf";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
 
             mapExt.Save();
@@ -78,14 +80,14 @@
 <caption> 枝干叶子模式</caption>
 
 <tr>
-<th colspan=2>基本信息</th>
+<th colspan="2" >基本信息</th>
 </tr>
 
 <tr>
 <td>标题</td>
 <td><input type="text" id="TB_Title" style="width:99%;" /> 
 <br />
-<font color=gray>
+<font color="gray">
 显示在窗口的文字，比如:关联流水.
 </font>
 </td>
@@ -104,23 +106,29 @@
 </tr>
 
 <tr>
-<td>高级属性</td>
+<td>高级设置</td>
 <td >
 
-数据源类型:<select id="DDL_DBType"  >
+数据源类型
+<select id="DDL_DBType"  >
 <option value="0">执行SQL</option>
 <option value="1">执行url返回JSON</option>
+<option value="2">执行CCFromRef.js返回JSON</option>
 </select> 
- 
+
+选择类型:
+<input type="radio" id="RB_SelectType_0" name="RB_SelectType" value="0"  /> <label for="RB_SelectType_0">单选</label>
+<input type="radio" id="RB_SelectType_1" name="RB_SelectType" value="1" /> <label for="RB_SelectType_1">多选</label>
+  
  </td>
 </tr>
 
 <tr>
-<th colspan=2>搜索数据源</th>
+<th colspan="2">搜索数据源</th>
 </tr>
 
 <tr>
-<td colspan=2>
+<td colspan="2">
 <textarea id="TB_Tag1" name="TB_Tag1" style="width:99%; height: 23px;">
 </textarea>
 </td>

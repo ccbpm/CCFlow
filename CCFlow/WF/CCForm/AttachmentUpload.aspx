@@ -31,11 +31,13 @@
                 var i = data.indexOf('\DataUser');
                 var str = '/' + data.substring(i);
                 str = str.replace('\\\\', '\\');
+
                 window.open(str, "_blank", "width=800, height=600,toolbar=yes");
                 return;
             }
             alert(data);
         }
+         
 
         function Del(fk_ath, pkVal, delPKVal) {
             if (window.confirm('您确定要删除吗？ ') == false)

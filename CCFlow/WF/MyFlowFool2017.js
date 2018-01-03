@@ -258,7 +258,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input type='text' " + enableAttr + " style='width:120px;' id='TB_" + mapAttr.KeyOfEn + "' />";
+        return "<input type='text' " + enableAttr + " value='" + defValue + "' style='width:120px;' id='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     //时期时间类型.
@@ -270,7 +270,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
         else
             enableAttr = "disabled='disabled'";
 
-        return "<input  type='text'  style='width:140px;' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
+        return "<input  type='text'  value='" + defValue + "' style='width:140px;' " + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "' />";
     }
 
     // boolen 类型.
@@ -301,7 +301,7 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
     if (mapAttr.MyDataType == 5 || mapAttr.MyDataType == 3) {
 
         // alert(mapAttr.KeyOfEn);
-        return "<input style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -310,12 +310,12 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
             enableAttr = "disabled='disabled'";
         }
 
-        return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     //AppMoney  AppRate
     if (mapAttr.MyDataType == 8) {
-        return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
+        return "<input  value='" + defValue + "' style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text' id='TB_" + mapAttr.KeyOfEn + "'/>";
     }
 
     alert(mapAttr.Name + "的类型没有判断.");
@@ -323,8 +323,6 @@ function InitMapAttrOfCtrlFool(flowData, mapAttr) {
 }
 
 var flowData = {}; 
-  
-
 
 //初始化 IMAGE附件
 function Ele_ImgAth(frmImageAth) {

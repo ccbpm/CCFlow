@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>从表导入JS模式</title>
+    <title>从表导入</title>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
@@ -18,13 +18,15 @@
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
+            var en = mapExt.ToJsonWithParas();
+
+
             //基本属性.
             $("#TB_Title").val(mapExt.GetPara("Title"));
             $("#TB_SearchTip").val(mapExt.GetPara("SearchTip"));
 
-            $("#TB_W").val(mapExt.W); //宽度
+            $("#TB_W").val(mapExt.W); //宽度.
             $("#TB_H").val(mapExt.H); //高度.
-
 
             GenerFullAllCtrlsVal(mapExt);
 
@@ -33,9 +35,7 @@
                 $("#Btn_Delete").attr("disabled", true);
             else
                 $("#Btn_Delete").removeAttr("disabled");
-
         });
-
 
         function Delete() {
 
@@ -46,6 +46,12 @@
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
+
+            //删除就要设置，不能导出.
+            var dtl = new Entity("BP.Sys.MapDtl", GetQueryString("FK_MapData"));
+            dtl.ImpModel = 0; //设置不可导入.
+            dtl.Update();
+
             window.location.href = window.location.href;
         }
 
@@ -55,7 +61,7 @@
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
-            //mapExt.CopyFrom();
+            mapExt.CopyFrom();
             //CopyToEntity(mapExt);
 
             mapExt.FK_MapData = GetQueryString("FK_MapData");
@@ -76,6 +82,12 @@
              
             mapExt.ExtType = "DtlImpByJSON";
             var i = mapExt.Save();
+
+            //删除就要设置，不能导出.
+            var dtl = new Entity("BP.Sys.MapDtl", GetQueryString("FK_MapData"));
+            dtl.ImpModel = 1; //设置不可导入.
+            dtl.Update();
+
 
             window.location.href = window.location.href;
         }
@@ -112,10 +124,10 @@
 <option id="1">JSON模式</option>
 </select> 
 
-查询展示方式:<select id="" >
-<option value="0"> 平铺模式 </option>
-<option value="1"> 下拉框模式 </option>
-</select>
+查询展示方式:
+<input type="radio" value="0"  id="" name="RB_SelectType" id="RB_SelectType_0"  /><label for="RB_SelectType_0" >平铺模式</label>
+<input type="radio" value="0"  id="Radio1" name="RB_SelectType" id="RB_SelectType_0"  /><label for="RB_SelectType_0" >下拉框模式</label>
+ 
  </td>
 </tr>
 

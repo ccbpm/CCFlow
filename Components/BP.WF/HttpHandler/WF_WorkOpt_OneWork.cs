@@ -332,7 +332,7 @@ namespace BP.WF.HttpHandler
             #endregion 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
 
             //是否可以打印.
-            json += "\"CanPackUp\":" + CanPackUp.ToString().ToLower() + ",";
+            json += "\"CanPackUp\":" + CanPackUp.ToString().ToLower();
 
             switch (wfstateEnum)
             {
@@ -340,7 +340,7 @@ namespace BP.WF.HttpHandler
                     /*删除流程.*/
                     isCan = BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No);
 
-                    json += "\"CanFlowOverByCoercion\":" + isCan.ToString().ToLower() + ",";
+                    json += ",\"CanFlowOverByCoercion\":" + isCan.ToString().ToLower() + ",";
 
                     /*取回审批*/
                     isCan = false;
@@ -360,10 +360,10 @@ namespace BP.WF.HttpHandler
                         }
                     }
 
-                    json += "\"CanTackBack\":" + isCan.ToString().ToLower() + "," + para;
+                    json += ",\"CanTackBack\":" + isCan.ToString().ToLower() + "," + para;
 
                     /*催办*/
-                    json += "\"CanHurry\":false,";  //原逻辑，不能催办
+                    json += ",\"CanHurry\":false,";  //原逻辑，不能催办
 
                     /*撤销发送*/
                     GenerWorkerLists workerlists = new GenerWorkerLists();
@@ -377,13 +377,13 @@ namespace BP.WF.HttpHandler
                     info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
                     isCan = info.DoQuery() > 0;
 
-                    json += "\"CanUnSend\":" + isCan.ToString().ToLower();
+                    json += ",\"CanUnSend\":" + isCan.ToString().ToLower();
                     break;
                 case WFState.Complete: // 完成.
                 case WFState.Delete: // 逻辑删除..
                     /*恢复使用流程*/
                     isCan = WebUser.No == "admin";
-                    json += "\"CanRollBack\":" + isCan.ToString().ToLower();
+                    json += ",\"CanRollBack\":" + isCan.ToString().ToLower();
 
                     //判断是否可以打印.
 
@@ -391,7 +391,7 @@ namespace BP.WF.HttpHandler
                 case WFState.HungUp: // 挂起.
                     /*撤销挂起*/
                     isCan = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(FK_Flow, FK_Node, WorkID, WebUser.No);
-                    json += "\"CanUnHungUp\":" + isCan.ToString().ToLower();
+                    json += ",\"CanUnHungUp\":" + isCan.ToString().ToLower();
                     break;
                 default:
                     break;

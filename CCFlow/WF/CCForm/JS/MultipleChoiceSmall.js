@@ -185,6 +185,18 @@ function DeptEmpModelAdv0(mapExt) {
 	var target = $("#TB_" + mapExt.AttrOfOper);
 	//target.attr("readonly", true);
 	//target.attr("disabled", true);
+
+	var width = target.width();
+	var height = target.height();
+	var container = $("<div></div>");
+	target.before(container);
+	container.attr("id", mapExt.AttrOfOper + "_mtags");
+	container.width(width);
+	container.height(height);
+	$("#" + mapExt.AttrOfOper + "_mtags").mtags({
+		"fit" : true
+	});
+
 	var title = GetAtPara(mapExt.AtPara, "Title");
 	var tip = GetAtPara(mapExt.AtPara, "SearchTip");
 	var width = mapExt.W;
@@ -211,6 +223,7 @@ function DeptEmpModelAdv0(mapExt) {
 				var selectedRows = iframe.contentWindow.selectedRows;
 				// save data eledb
 				alert(JSON.stringify(selectedRows));
+				//$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", selectedRows);
 			}
 			return true;
 		});

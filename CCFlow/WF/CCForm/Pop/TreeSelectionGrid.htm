@@ -1,22 +1,37 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<!DOCTYPE html>
+<html>
 	<head>
 		<title></title>
 		<meta charset="UTF-8"/>
-		<base target="_self" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script language="JavaScript" src="../../Comm/JScript.js" type="text/javascript" ></script>
 		<script type="text/javascript" src="../../Scripts/QueryString.js"></script>
 		<script type="text/javascript" src="../../Scripts/config.js"></script>
-		<link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/default/easyui.css" />
-		<link rel="stylesheet" type="text/css" href="../../Scripts/easyUI145/themes/icon.css" />
-		<script type="text/javascript" src="../../Scripts/easyUI145/jquery.min.js"></script>
-		<script type="text/javascript" src="../../Scripts/easyUI145/jquery.easyui.min.js"></script>
-		<script type="text/javascript" src="../../Scripts/easyUI145/locale/easyui-lang-zh_CN.js"></script>
-		<script type="text/javascript" src="../../Scripts/EasyUIUtility.js"></script>
+
+        <script src="../../Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+
+        <script src="../../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <link href="../../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+        <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+        <script src="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.js" type="text/javascript"></script>
+        <link href="../../Scripts/bootstrap/bootstrap-table/src/bootstrap-table.css" rel="stylesheet" type="text/css" />
+        <script src="../../Scripts/bootstrap/bootstrap-table/src/locale/bootstrap-table-zh-CN.js" type="text/javascript"></script>
+
+        <script src="../../Scripts/bootstrap/bootstrap-treeview/src/js/bootstrap-treeview.js" type="text/javascript"></script>
+        <link href="../../Scripts/bootstrap/bootstrap-treeview/src/css/bootstrap-treeview.css" rel="stylesheet" type="text/css" />
+
+		<style type="text/css">
+			.row-margin-top {
+				margin-top: 20px;
+			}
+		</style>
+
 		<script type="text/javascript">
 			function loadViewGrid(json) {
 				if ($.isArray(json)) {
-					$("#viewGrid").datagrid("loadData", json);
+					$('#viewGrid').bootstrapTable("load", json);
 				}
 			}
 			function addSelectedData(globalSelectedRows, selectedRows) {
@@ -68,7 +83,7 @@
 								}
 							});
 						}
-						$("#selectGrid").datagrid("loadData", json);
+						$('#selectGrid').bootstrapTable("load", json);
 					}
 				});
 			}
@@ -76,13 +91,13 @@
 				var appendToTree = function (treeToAppend, child) {
 					$.each(treeToAppend, function (i, o) {
 						if (o.id == child.ParentNo) {
-							o.children.push({
+							o.nodes.push({
 								"id" : child.No,
 								"text" : child.Name,
-								"children" : []
+								"nodes" : []
 							});
 						} else {
-							appendToTree(o.children, child);
+							appendToTree(o.nodes, child);
 						}
 					});
 				};
@@ -93,16 +108,28 @@
 							jsonTree.push({
 								"id" : o.No,
 								"text" : o.Name,
-								"children" : []
+								"nodes" : []
 							});
 						} else {
 							appendToTree(jsonTree, o);
 						}
 					});
 				}
+				function _(treeArray) {
+					$.each(treeArray, function (i, o) {
+						if ($.isArray(o.nodes)) {
+							if (o.nodes.length == 0) {
+								o.nodes = undefined;
+							} else {
+								_(o.nodes);
+							}
+						}
+					});
+				}
+				_(jsonTree);
 				return jsonTree;
 			}
-			function loadTree(treeUrl, global) {
+			function loadTree(treeUrl, treeClickUrl, global) {
 				$.ajax({
 					type: 'post',
 					async: true,
@@ -115,36 +142,72 @@
 						}
 						var rootNo = GetQueryString("rootNo");
 						var jsonTree = findChildren(JSON.parse(data), rootNo);
-						$("#tree").tree("loadData", jsonTree);
+						
+						$('#tree').treeview({
+							data : jsonTree,         // 数据源
+							showCheckbox: false,   //是否显示复选框
+							highlightSelected: true,    //是否高亮选中
+							//nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
+							nodeIcon: 'glyphicon',
+							emptyIcon: '',    //没有子节点的节点图标
+							multiSelect: false,    //多选
+							onNodeChecked: function (event, data) {
+								//alert(data.nodeId);
+							},
+							onNodeSelected: function (event, data) {
+								loadSelectGrid(treeClickUrl, data.nodeId, global.selectedRows);
+							}
+						});
 					}
 				});
 			}
 			$(function () {
 				var global = window;
-				global.selectedRows = [];	
+				global.selectedRows = [];
 				var treeClickUrl = GetQueryString("treeClickUrl");
 				if (typeof treeClickUrl === "string") {
 					treeClickUrl = unescape(treeClickUrl);
 				}
 				// tree
-				$("#tree").tree({
-					checkbox : false,
-					onClick : function (node) {
-						loadSelectGrid(treeClickUrl, node.id, global.selectedRows);
-					}
-				});
 				var treeUrl = GetQueryString("treeUrl");
 				if (treeUrl) {
-					loadTree(unescape(treeUrl), global);
+					loadTree(unescape(treeUrl), treeClickUrl, global);
 				}
 				// grid1
-				$("#selectGrid").datagrid({
-					"onCheck" : function (rowIndex, rowData) {
-						addSelectedData(global.selectedRows, [ rowData ]);
+				$('#selectGrid').bootstrapTable({
+					striped: true,
+					cache: false,
+					sortOrder: "asc",
+					strictSearch: true,
+					minimumCountColumns: 2,
+					clickToSelect: true,
+					sortable: false,
+					cardView: false,
+					detailView: false,
+					height: $(document).height() / 3,
+					uniqueId: "No",
+					columns: [{
+						checkbox : true,
+						formatter : function (value, row, index) {
+							if (row.checked) {
+								return {
+									"checked" : true
+								};
+							}
+						}
+					}, {
+						field: 'No',
+						title: '员工号'
+					}, {
+						field: 'Name',
+						title: '姓名'
+					}],
+					"onCheck" : function (row, element) {
+						addSelectedData(global.selectedRows, [ row ]);
 						loadViewGrid(global.selectedRows);
 					},
-					"onUncheck" : function (rowIndex, rowData) {
-						removeSelectedData(global.selectedRows, [ rowData ]);
+					"onUncheck" : function (row, element) {
+						removeSelectedData(global.selectedRows, [ row ]);
 						loadViewGrid(global.selectedRows);
 					},
 					"onCheckAll" : function (rows) {
@@ -156,41 +219,65 @@
 						loadViewGrid(global.selectedRows);
 					}
 				});
-				
+				// grid2
+				$('#viewGrid').bootstrapTable({
+					striped: true,
+					cache: false,
+					sortOrder: "asc",
+					strictSearch: true,
+					minimumCountColumns: 2,
+					clickToSelect: true,
+					sortable: false,
+					cardView: false,
+					detailView: false,
+					height: $(document).height() / 3,
+					uniqueId: "No",
+					columns: [{
+						field: 'No',
+						title: '员工号'
+					}, {
+						field: 'Name',
+						title: '姓名'
+					}]
+				});
 			});
 		</script>
 	<head>
-	<body class="easyui-layout">
-		<div data-options="region:'north'" style="height:100px;">
-			
-		</div>
-		<div class="easyui-layout" data-options="region:'center'" border="false">
-			<div data-options="region:'west',title:'权限部门档案'" style="width:250px;">
-				<ul id="tree" class="easyui-tree"></ul>
-			</div>
-			<div class="easyui-layout" data-options="region:'center'" border="false">
-				<div data-options="region:'north'" border="false" style="height:50%;">
-					<table id="selectGrid" class="easyui-datagrid" data-options="fit:true,fitColumns:true,singleSelect:false,rownumbers:true">
-						<thead>
-							<tr>
-								<th data-options="field:'Checked',checkbox:true"></th>
-								<th data-options="field:'No',width:80">员工号</th>
-								<th data-options="field:'Name',width:150">姓名</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-				<div data-options="region:'center'" border="false">
-					<table id="viewGrid" class="easyui-datagrid" data-options="fit:true,fitColumns:true,singleSelect:true,rownumbers:true">
-						<thead>
-							<tr>
-								<th data-options="field:'No',width:80">员工号</th>
-								<th data-options="field:'Name',width:150">姓名</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div>
-		</div>
+	<body>
+        <div class="container-fluid">
+	        <div class="row">
+		        <div class="col-md-12">
+			        <h3 class="text-center">
+				        关联流水
+			        </h3>
+					<div class="row">
+						<div class="col-md-1 col-sm-1"></div>
+						<div class="col-md-10 col-sm-10">
+							<div class="pull-center search">
+								<input class="form-control" type="text" placeholder="搜索">
+							</div>
+						</div>
+						<div class="col-md-1 col-sm-1"></div>
+					</div>
+		        </div>
+	        </div>
+	        <div class="row row-margin-top">
+		        <div class="col-md-4 col-sm-4">
+                    <div id="tree"></div>
+		        </div>
+		        <div class="col-md-8 col-sm-8">
+					<div class="row">
+						<div class="col-md-12">
+							<table id="selectGrid"></table>
+						</div>
+					</div>
+					<div class="row row-margin-top">
+						<div class="col-md-12">
+							<table id="viewGrid"></table>
+						</div>
+					</div>
+		        </div>
+	        </div>
+        </div>
 	</body>
 </html>

@@ -162,6 +162,11 @@
 				});
 			}
 			$(function () {
+				var title = GetQueryString("title");
+				$("#title").text(unescape(title));
+				var tip = GetQueryString("tip");
+				$("#userNo").attr("placeholder", unescape(tip));
+				//
 				var global = window;
 				global.selectedRows = [];
 				var treeClickUrl = GetQueryString("treeClickUrl");
@@ -247,14 +252,12 @@
         <div class="container-fluid">
 	        <div class="row">
 		        <div class="col-md-12">
-			        <h3 class="text-center">
-				        关联流水
-			        </h3>
+			        <h3 class="text-center" id="title"></h3>
 					<div class="row">
 						<div class="col-md-1 col-sm-1"></div>
 						<div class="col-md-10 col-sm-10">
 							<div class="pull-center search">
-								<input class="form-control" type="text" placeholder="搜索">
+								<input class="form-control" type="text" placeholder="" id="userNo" onchange="">
 							</div>
 						</div>
 						<div class="col-md-1 col-sm-1"></div>

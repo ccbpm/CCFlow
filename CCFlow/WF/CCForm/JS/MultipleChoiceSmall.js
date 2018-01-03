@@ -183,16 +183,16 @@ function GetAtPara(atPara, key) {
 
 function DeptEmpModelAdv0(mapExt) {
 	var target = $("#TB_" + mapExt.AttrOfOper);
-	//target.attr("readonly", true);
-	//target.attr("disabled", true);
+	target.hide();
 
 	var width = target.width();
 	var height = target.height();
 	var container = $("<div></div>");
-	target.before(container);
-	container.attr("id", mapExt.AttrOfOper + "_mtags");
+	target.after(container);
 	container.width(width);
 	container.height(height);
+	container.attr("id", mapExt.AttrOfOper + "_mtags");
+
 	$("#" + mapExt.AttrOfOper + "_mtags").mtags({
 		"fit" : true
 	});
@@ -213,17 +213,20 @@ function DeptEmpModelAdv0(mapExt) {
 	params.push("treeUrl=" + escape(treeUrl));
 	params.push("rootNo=" + rootNo);
 	params.push("treeClickUrl=" + escape(treeClickUrl));
+	params.push("tip=" + escape(tip));
+	params.push("title=" + escape(title));
 	params.push("m=" + Math.random());
 	//
 	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?" + params.join("&");
-	target.on("click", function () {
+	container.on("dblclick", function () {
 		OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
 			var iframe = document.getElementById(iframeId);
 			if (iframe) {
 				var selectedRows = iframe.contentWindow.selectedRows;
 				// save data eledb
-				alert(JSON.stringify(selectedRows));
-				//$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", selectedRows);
+				if ($.isArray(selectedRows)) {
+					$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", selectedRows);
+				}
 			}
 			return true;
 		});

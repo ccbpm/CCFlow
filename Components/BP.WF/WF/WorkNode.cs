@@ -5158,7 +5158,7 @@ namespace BP.WF
                 GenerWorkerListAttr.FK_Node, this.HisNode.NodeID, GenerWorkerListAttr.IsPass);
 
             if (gwls.Count == 1)
-                return false; /*让其向下执行,因为只有一个人。就没有顺序的问题.*/
+                return false; /*让其向下执行,因为只有一个人,就没有顺序的问题.*/
 
             #region  判断自己是否是组长？如果是组长，就让返回false, 让其运动到最后一个节点，因为组长同意了，就全部同意了。
             if (this.HisNode.TeamLeaderConfirmRole == TeamLeaderConfirmRole.ByDeptFieldLeader)
@@ -5273,7 +5273,6 @@ namespace BP.WF
                 }
                 return true;
             }
-
             throw new Exception("@不应该运行到这里。");
         }
         /// <summary>
@@ -5990,12 +5989,9 @@ namespace BP.WF
                             JumpToEmp = this.HisGenerWorkFlow.HuiQianSendToEmps;
                         }
                     }
-
                     //this.HisGenerWorkFlow.SendToEmps = jumpToEmp;
                     //this.HisGenerWorkFlow.Update();
                 }
-
-
             }
 
             //如果是协作组长模式节点, 就判断当前的队列人员是否走完.

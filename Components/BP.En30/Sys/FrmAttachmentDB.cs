@@ -463,6 +463,7 @@ namespace BP.Sys
                 SystemConfig.FTPUserNo, SystemConfig.FTPUserPassword);
 
             conn.GetFile(this.FileFullName, tempFile, false, System.IO.FileAttributes.ReadOnly);
+
             return tempFile;
         }
         /// <summary>

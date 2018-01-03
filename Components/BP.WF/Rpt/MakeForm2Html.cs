@@ -1149,7 +1149,7 @@ namespace BP.WF
         public static string ZipFilePath = "";
 
         public static string CCFlowAppPath = "/";
-        public static string MakeHtmlDocument(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null)
+        public static string pMakeHtmlDocument(string frmID, Int64 workid, string flowNo = null, string fileNameFormat = null)
         {
             try
             {
@@ -1304,7 +1304,7 @@ namespace BP.WF
                 try
                 {
                     Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                    ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                    ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
                 }
                 catch (Exception ex)
                 {
@@ -1315,7 +1315,7 @@ namespace BP.WF
                     try
                     {
                         Html2Pdf(pdfFileExe, billUrl, pdfFile);
-                        ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + fileNameFormat + ".pdf");
+                        ht.Add("pdf", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + workid + "/pdf/" + DataType.PraseStringToUrlFileName(fileNameFormat) + ".pdf");
                     }
                     catch
                     {
@@ -1332,7 +1332,7 @@ namespace BP.WF
                 {
                     (new FastZip()).CreateZip(finfo.FullName, pdfPath, true, "");
 
-                    ht.Add("zip", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + fileNameFormat + ".zip");
+                    ht.Add("zip", SystemConfig.HostURLOfBS + "DataUser/InstancePacketOfData/" + frmID + "/" + DataType.PraseStringToUrlFileName( fileNameFormat) + ".zip");
                 }
                 catch (Exception ex)
                 {

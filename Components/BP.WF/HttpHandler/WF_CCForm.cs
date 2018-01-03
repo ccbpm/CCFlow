@@ -2707,7 +2707,7 @@ namespace BP.WF.HttpHandler
             if (dbAtt.AthSaveWay == AthSaveWay.IISServer)
             {
                 //PubClass.DownloadFile(downDB.FileFullName, downDB.FileName);
-                return "url@" + downDB.FileFullName;
+                return "url@" + DataType.PraseStringToUrlFileName( downDB.FileFullName);
             }
 
             if (dbAtt.AthSaveWay == AthSaveWay.FTPServer)
@@ -2717,7 +2717,7 @@ namespace BP.WF.HttpHandler
                 //    BP.Sys.PubClass.DownloadFileV2(fileFullName, downDB.FileName);
                 //  return "";
                 //PubClass.DownloadFile(downDB.MakeFullFileFromFtp(), downDB.FileName);
-                return "url@" + fileFullName;
+                return "url@" + DataType.PraseStringToUrlFileName(  fileFullName);
             }
 
             if (dbAtt.AthSaveWay == AthSaveWay.DB)
@@ -2933,9 +2933,35 @@ namespace BP.WF.HttpHandler
             if (System.IO.File.Exists(zipFile) == false)
                 return "err@压缩文件未生成成功,请在点击一次.";
 
+            zipName = DataType.PraseStringToUrlFileName(zipName);
+
             string url = HttpContext.Current.Request.ApplicationPath + "DataUser/Temp/" + WebUser.No + "/" + zipName + ".zip";
             return "url@" + url;
 
+        }
+        public string DearFileName(string fileName)
+        {
+            fileName= DearFileNameExt(fileName,"+","%2B");
+            fileName= DearFileNameExt(fileName," ","%20");
+            fileName= DearFileNameExt(fileName,"/","%2F");
+            fileName= DearFileNameExt(fileName,"?","%3F");
+            fileName= DearFileNameExt(fileName,"%","%25");
+            fileName= DearFileNameExt(fileName,"#","%23");
+            fileName= DearFileNameExt(fileName,"&","%26");
+            fileName= DearFileNameExt(fileName,"=","%3D");
+            return fileName;
+        }
+        public string DearFileNameExt(string fileName, string val, string replVal)
+        {
+            fileName=fileName.Replace(val,replVal);
+            fileName=fileName.Replace(val,replVal);
+            fileName=fileName.Replace(val,replVal);
+            fileName=fileName.Replace(val,replVal);
+            fileName=fileName.Replace(val,replVal);
+            fileName=fileName.Replace(val,replVal);
+            fileName=fileName.Replace(val,replVal);
+            fileName=fileName.Replace(val,replVal);
+            return fileName;
         }
         #endregion 附件组件
 

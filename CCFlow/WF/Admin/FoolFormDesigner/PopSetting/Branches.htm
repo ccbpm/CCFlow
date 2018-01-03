@@ -18,8 +18,7 @@
             mapExt.MyPK = "PopDeptEmpModelAdv_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
-           alert( JSON.stringify(mapExt) );
-
+           //alert( JSON.stringify(mapExt) );
 
             GenerFullAllCtrlsVal(mapExt);
 
@@ -109,9 +108,10 @@
 <tr>
 <td>高级属性</td>
 <td >
-数据源类型:<select id="DDL_DBType" >
-<option id="0">SQL模式</option>
-<option id="1">JSON模式</option>
+
+数据源类型:<select id="DDL_DBType"  >
+<option value="0">SQL模式</option>
+<option value="1">JSON模式</option>
 </select> 
  
  </td>
@@ -159,7 +159,13 @@
 
 <tr>
 <td colspan=2>
-根目录树编号:<input id="TB_RootTreeNo" name="TB_RootTreeNo" value="0"  type="text" >
+
+数据源类型:<select id="DDL_DBScrt"  >
+<option value="0">编码名称结构</option>
+<option value="1">树结构</option>
+</select> 
+
+ 根目录树编号:<input id="TB_RootTreeNo" value="0"  style="width:50px;" type="text" > <font color=gray>对树结构有效</font>
 </input>
 </td>
 </tr>

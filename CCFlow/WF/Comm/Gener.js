@@ -987,6 +987,20 @@ var Entity = (function () {
         },
 
         CopyForm: function () {
+			// 复制form中有但Entity对象中没有的属性
+			var frmParas = [];
+			$("input[name^=TB_],input[name^=CB_]:checked,input[name^=RB_]:checked,[name^=DDL_]").each(function (i, o) {
+				var key = $(this).attr("name").replace(/^TB_|CB_|RB_|DDL_/, "");
+				var value = $(this).val();
+				frmParas.push("@" + key + "=" + value);
+			});
+			var formParams = frmParas.join("");
+			//
+			this.frmParas = formParams;
+			jsonString.frmParas = formParams;
+			// ----------
+			return;
+			// 老版本
             var self = this;
             $.each(self, function (n, o) {
                 var target = $("#TB_" + n);
@@ -1019,7 +1033,28 @@ var Entity = (function () {
                     self[n] = target.val();
                 }
             });
-        }
+        },
+
+		ToJsonWithParas : function () {
+			var json = {};
+			$.each(this, function (n, o) {
+				if (typeof o !== "undefined") {
+					json[n] = o;
+				}
+			});
+			if (typeof this.AtPara == "string") {
+				$.each(this.AtPara.split("@"), function (i, o) {
+					if (o == "") {
+						return true;
+					}
+					var kv = o.split("=");
+					if (kv.length == 2) {
+						json[kv[0]] = kv[1];
+					}
+				});
+			}
+			return json;
+		}
 
     };
 

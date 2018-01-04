@@ -221,11 +221,16 @@ namespace BP.WF.HttpHandler
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
 
-                ////保存参数属性.
-                //string frmParas = this.GetValFromFrmByKey("frmParas");
-                //if (DataType.IsNullOrEmpty(frmParas) == false)
-                //{
-                //}
+                //保存参数属性.
+                string frmParas = this.GetValFromFrmByKey("frmParas","");
+                if (DataType.IsNullOrEmpty(frmParas) == false)
+                {
+                    AtPara ap = new AtPara(frmParas);
+                    foreach (string key in ap.HisHT.Keys)
+                    {
+                        en.SetPara(key, ap.GetValStrByKey(key));
+                    }
+                }
 
                 return en.Save().ToString();
             }

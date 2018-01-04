@@ -801,6 +801,15 @@ namespace BP.WF.Data
                 map.AddRefMethod(rm);
 
 
+                rm = new RefMethod();
+                rm.Icon = "../../WF/Img/Btn/CC.gif";
+                rm.Title = "修复该流程数据实例";
+                rm.IsForEns = false;
+                rm.ClassMethodName = this.ToString() + ".RepairDataIt";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
                // #region 旧版本.
                // rm = new RefMethod();
                // rm.GroupName = "旧版本";
@@ -835,6 +844,128 @@ namespace BP.WF.Data
         #endregion
 
         #region 执行功能.
+        public string RepairDataIt()
+        {
+            string infos = "";
+
+            Flow fl = new Flow(this.FK_Flow);
+            Node nd = new Node(int.Parse(fl.No + "01"));
+            Work wk = nd.HisWork;
+
+            string trackTable = "ND" + int.Parse(fl.No) + "Track";
+            string sql = "SELECT MyPK FROM " + trackTable + " WHERE WorkID=" + this.WorkID + " AND ACTIONTYPE=1 and NDFrom=" + nd.NodeID;
+            string mypk = DBAccess.RunSQLReturnString(sql);
+            if (DataType.IsNullOrEmpty(mypk) == true)
+                return "err@没有找到track主键。";
+
+            wk.OID = this.WorkID;
+            wk.RetrieveFromDBSources();
+
+            string file = "c:\\temp\\" + this.WorkID + ".txt";
+            try
+            {
+                BP.DA.DBAccess.GetFileFromDB(file, trackTable, "MyPK", mypk, "FrmDB");
+            }
+            catch (Exception ex)
+            {
+                infos += "@ 错误:" + fl.No + " - Rec" + wk.Rec + " db=" + wk.OID + " - " + fl.Name;
+            }
+
+            string json = DataType.ReadTextFile(file);
+            DataTable dtVal = BP.Tools.Json.ToDataTable(json);
+
+            DataRow mydr = dtVal.Rows[0];
+
+            Attrs attrs = wk.EnMap.Attrs;
+            bool isHave = false;
+            foreach (Attr attr in attrs)
+            {
+                string jsonVal = mydr[attr.Key].ToString();
+                string enVal = wk.GetValStringByKey(attr.Key);
+                if (enVal == "" || enVal == null)
+                {
+                    wk.SetValByKey(attr.Key, jsonVal);
+                    isHave = true;
+                }
+            }
+
+            if (isHave == true)
+            {
+                wk.DirectUpdate();
+                return "不需要更新数据.";
+            }
+            infos += "@WorkID=" + wk.OID + " =" + wk.Rec + "  dt=" + wk.RDT + "被修复.";
+
+            return infos;
+        }
+        public string RepairDataAll()
+        {
+            string infos = "";
+
+            Flows fls = new Flows();
+            fls.RetrieveAll();
+
+            foreach (Flow fl in fls)
+            {
+
+
+                string sql = "SELECT OID FROM " + fl.PTable + " WHERE BillNo IS NULL AND OID="+this.WorkID;
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+
+                Node nd = new Node(int.Parse(fl.No + "01"));
+                Work wk = nd.HisWork;
+
+                string trackTable = "ND" + int.Parse(fl.No) + "Track";
+                foreach (DataRow dr in dt.Rows)
+                {
+                    Int64 workid = Int64.Parse(dr["OID"].ToString());
+
+                    sql = "SELECT MyPK FROM " + trackTable + " WHERE WorkID=" + workid + " AND ACTIONTYPE=1 and NDFrom=" + nd.NodeID;
+                    string mypk = DBAccess.RunSQLReturnString(sql);
+                    if (DataType.IsNullOrEmpty(mypk) == true)
+                        continue;
+
+                    wk.OID = workid;
+                    wk.RetrieveFromDBSources();
+
+                    string file = "c:\\temp\\" + mypk + ".txt";
+                    try
+                    {
+                        BP.DA.DBAccess.GetFileFromDB(file, trackTable, "MyPK", mypk, "FrmDB");
+                    }
+                    catch (Exception ex)
+                    {
+                        infos += "@ 错误:" + fl.No + " - Rec" + wk.Rec + " db=" + wk.OID + " - " + fl.Name;
+                    }
+
+                    string json = DataType.ReadTextFile(file);
+                    DataTable dtVal = BP.Tools.Json.ToDataTable(json);
+
+                    DataRow mydr = dtVal.Rows[0];
+
+                    Attrs attrs = wk.EnMap.Attrs;
+                    bool isHave = false;
+                    foreach (Attr attr in attrs)
+                    {
+                        string jsonVal = mydr[attr.Key].ToString();
+                        string enVal = wk.GetValStringByKey(attr.Key);
+                        if (enVal == "" || enVal == null)
+                        {
+                            wk.SetValByKey(attr.Key, jsonVal);
+                            isHave = true;
+                        }
+                    }
+
+                    if (isHave == true)
+                    {
+                        wk.DirectUpdate();
+                        continue;
+                    }
+                    infos += "@WorkID=" + wk.OID + " =" + wk.Rec + "  dt=" + wk.RDT + "被修复.";
+                }
+            }
+            return infos;
+        }
 
         /// <summary>
         /// 回滚

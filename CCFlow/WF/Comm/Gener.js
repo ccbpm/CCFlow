@@ -1380,7 +1380,7 @@ var HttpHandler = (function () {
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&httpHandlerName=" + self.handlerName + "&" + self.getParams() + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=HttpHandler&DoMethod=" + methodName + "&HttpHandlerName=" + self.handlerName + "&" + self.getParams() + "&t=" + new Date().getTime(),
                 data: formData,
                 dataType: 'html',
                 success: function (data) {

@@ -66,14 +66,24 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     var pathName = document.location.pathname;
     var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
     var projectName = pathName.length > 3 ? pathName.substring(1, 3) : "";
-    
+    var wWidth = $(window).width();
+    var wHeight = $(window).height();
+    if (wWidth > 1200) {
+        wWidth = 1000;
+    }
+    if (wHeight < 600) {
+        wHeight = 600;
+    } else {
+        wHeight = wHeight - 10;
+    }
+
     if (projectName == "WF") {
         projectName = "";
     }
     var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;
- 
+
     if (typeof ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog) === "function") {
-        ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog)(url, "editSubGrid", '编辑', 1000, 550, "icon-property", false, null, null, null, function () {
+        ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog)(url, "editSubGrid", '编辑', wWidth, wHeight, "icon-property", false, null, null, null, function () {
             if (typeof InitPage === "function") {
                 InitPage.call();
             } else {

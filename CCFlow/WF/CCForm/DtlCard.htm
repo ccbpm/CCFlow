@@ -260,7 +260,7 @@
                     return val.KeyOfEn == $(th).data().colname;
                 });
 
-                
+
                 // 如果是统计列
                 if (matchesColumn.length == 1) {
                     var keyOfEn = matchesColumn[0]["KeyOfEn"];
@@ -287,6 +287,15 @@
                         });
                         if (count > 0) {
                             figureNum = sum / count;
+                            var strDecimal = figureNum.toString();
+                            var decimalIndex = strDecimal.indexOf('.');
+                            if (decimalIndex >= 0) {
+                                var decimalPart = strDecimal.substring(decimalIndex + 1, strDecimal.length);
+                                //小数位太多进行舍去
+                                if (decimalPart.length > 4) {
+                                    figureNum = Math.round(figureNum * 10000) / 10000;
+                                }
+                            }
                         }
                     } else if (exp == "Max") {	// 最大
                         var max = null;

@@ -854,20 +854,14 @@
 		    if (impModel == 0) {
 		        alert("请配置导入方式。");
 		    }
-            //SQL导入方式
+            //SQL\JSON导入方式
 		    if (impModel == 1) {
 		        var url = window.location.href;
-		        url = url.replace('Dtl.htm', 'DtlOpt.htm');
-
-		    }
-		    //JSON模式导入方式
-		    if (impModel == 2) {
-		        var url = window.location.href;
+		        //url = url.replace('Dtl.htm', 'DtlOpt.htm');
 		        url = url.replace('Dtl.htm', 'DtlImpByJSON.htm');
-
 		    }
 		    //excel模式导入方式
-		    if (impModel == 3) {
+		    if (impModel == 2) {
 		        var url = window.location.href;
 		        url = url.replace('Dtl.htm', 'DtlOpt.aspx');
 

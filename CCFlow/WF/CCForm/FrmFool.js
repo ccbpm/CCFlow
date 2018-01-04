@@ -297,15 +297,7 @@ function InitMapAttrOfCtrl(mapAttr) {
     //添加文本框 ，日期控件等
     //AppString
     if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 0) {  //不是外键
-		var ext = getMapExt(frmData.Sys_MapExt, mapAttr.KeyOfEn);
-		if (ext.ExtType == "MultipleChoiceSmall") {
-			eleHtml += "<input style='width: 99%;' id='" + mapAttr.KeyOfEn + "_combobox' />";
-			return eleHtml;
-		} else if (ext.ExtType == "MultipleChoiceSearch") {
-			eleHtml += "<div style='width: 99%;' id='" + mapAttr.KeyOfEn + "_mselector'></div>";
-			return eleHtml
-		}
-		else
+
         if (mapAttr.UIHeight <= 23) //普通的文本框.
         {
             var enableAttr = '';

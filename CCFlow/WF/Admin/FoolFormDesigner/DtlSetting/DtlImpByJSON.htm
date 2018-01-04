@@ -18,7 +18,7 @@
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
-            var en = mapExt.ToJsonWithParas();
+            //var en = mapExt.ToJsonWithParas();
 
 
             //基本属性.
@@ -61,7 +61,7 @@
             mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
-            mapExt.CopyFrom();
+            mapExt.CopyForm();
             //CopyToEntity(mapExt);
 
             mapExt.FK_MapData = GetQueryString("FK_MapData");

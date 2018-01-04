@@ -4,13 +4,11 @@
     <title>从表导入</title>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
-    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
-
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
     <!-- 引用通用的js文件. -->
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
     <script type="text/javascript" src="../../../Comm/Gener.js"></script>
-
-    <script type="text/javascript" language="javascript" >
+    <script type="text/javascript" language="javascript">
         //页面启动函数.
         $(function () {
 
@@ -79,7 +77,7 @@
 
             mapExt.Tag = $("#TB_Tag").val(); //高度
 
-             
+
             mapExt.ExtType = "DtlImpByJSON";
             var i = mapExt.Save();
 
@@ -93,138 +91,110 @@
         }
     </script>
 </head>
-<body  >
-
-<form id="cc">
-
-<table id="Table1" style="width:99%;">
-<caption> 从表的导入配置 </caption>
-
-<tr>
-<th colspan=2>基本信息配置</th>
-</tr>
-<tr>
-<td>标题</td>
-<td><input type="text" id="TB_Title" style="width:200px;" /> 
-<font color=gray>
-显示在窗口的文字，比如:关联流水.
-</font>
-</td>
-</tr>
-
-<tr>
-<td>弹窗属性</td>
-<td >高度:<input type="text"  id="TB_H" style="width:80px; text-align:right"  /> 宽度:<input type="text"  id="TB_W" style="width:80px; text-align:right"  /> </td>
-</tr>
-
-<tr>
-<td>高级属性</td>
-<td >数据源类型<select id="DDL_DBType" >
-<option id="0">SQL模式</option>
-<option id="1">JSON模式</option>
-</select> 
-
-查询展示方式:
-<input type="radio" value="0"  id="" name="RB_SelectType" id="RB_SelectType_0"  /><label for="RB_SelectType_0" >平铺模式</label>
-<input type="radio" value="0"  id="Radio1" name="RB_SelectType" id="RB_SelectType_0"  /><label for="RB_SelectType_0" >下拉框模式</label>
- 
- </td>
-</tr>
-
-
-
-<tr>
-<td>搜索提示</td>
-<td><input type="text" id="TB_SearchTip" style="width:90%;" /> 
-<br><font color=gray >显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font></td>
-</tr>
-
-<tr>
-<th colspan=2>列表显示数据源</th>
-</tr>
-
-<tr>
-<td colspan=2>
-<textarea id="TB_Tag1" name="TB_Tag1" style="width:99%; height: 37px;">
-</textarea>
-</td>
-
-<tr>
-<td colspan=2>
-
-<font color=gray >点击关键字执行搜索返回的数据源,
-比如:/DataUser/Handler.ashx?DoType=DtlImpSearchKey&Keyword=@Key;
-</font>
- </td>
-</tr>
-</tr>
-
-<tr>
-<td> 显示的中文列名</td>
-<td>
-<input type=text id="TB_Tag" name="TB_Tag" style="width:50%;" />
-<font color=gray >
-比如:编号,电话,地址,邮件, 这个配置在显示的时候要替换掉数据源返回的英文列名.
-</font>
-</td>
-</tr>
-
-
-<tr>
-<th colspan="2">查询条件数据源</th>
-</tr>
-
-<tr>
-<td colspan=2>
-<textarea id="TB_Tag2" name="TB_Tag2" style="width:99%; height: 23px;">
-</textarea>
-</td>
-</tr>
-
-<tr>
-<td colspan=2>
-返回No,Name两个列的数据源 事例:/DataUser/Handler.ashx?DoType=DtlImpReqAll
-<br />
-SQL实例:
-<br />
-$Para=FK_BanJi#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi
-<br />
-$Para=XB#Label=性别#EnumKey=XB
-<br />
-
-</td>
-</tr>
-
-<tr>
-<th colspan=2>填充从表数据源</th>
-</tr>
-
-<tr>
-<td colspan=2>
-
-<textarea id="TB_Tag3" name="TB_Tag3" style="width:99%; height: 37px;">
-</textarea>
-
-<font color=gray >点击关键字执行搜索返回的数据源,
-比如:/DataUser/Handler.ashx?DoType=DtlImpFullData&Keyword=@Key
-</font>
-
-</td>
-
-
-
-<tr>
-<td colspan=2><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Save()" />
-<input type="button" value="删除"  id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
-</td>
-</tr>
-
-
-</table>
-
- 
-
-</form>
-
+<body>
+    <form id="cc">
+    <table id="Table1" style="width: 99%;">
+        <caption>从表的导入配置</caption>
+        <tr>
+            <th colspan="2">基本信息配置</th>
+        </tr>
+        <tr>
+            <td>标题</td>
+            <td>
+                <input type="text" id="TB_Title" style="width: 200px;" />
+                <font color="gray">显示在窗口的文字，比如:关联流水 </font>
+            </td>
+        </tr>
+        <tr>
+            <td>弹窗属性</td>
+            <td>
+                高度:<input type="text" id="TB_H" style="width: 80px; text-align: right" />
+                宽度:<input type="text" id="TB_W" style="width: 80px; text-align: right" />
+            </td>
+        </tr>
+        <tr>
+            <td>高级属性</td>
+            <td>
+                数据源类型<select id="DDL_DBType">
+                    <option id="0" value="0">SQL模式</option>
+                    <option id="1" value="1" selected="selected">JSON模式</option>
+                </select>
+                查询展示方式:
+                <input type="radio" value="0" name="RB_SelectType" id="RB_SelectType_0" checked="checked" />
+                <label for="RB_SelectType_0">平铺模式</label>
+                <input type="radio" value="0" name="RB_SelectType" id="RB_SelectType_1" />
+                <label for="RB_SelectType_0">下拉框模式</label>
+            </td>
+        </tr>
+        <tr>
+            <td>搜索提示</td>
+            <td>
+                <input type="text" id="TB_SearchTip" style="width: 90%;" />
+                <br/>
+                <font color="gray">显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索</font>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">列表显示数据源</th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="TB_Tag1" name="TB_Tag1" style="width: 99%; height: 37px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <font color="gray">点击关键字执行搜索返回的数据源, 比如:/DataUser/Handler.ashx?DoType=DtlImpSearchKey&Keyword=@Key </font>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">显示的中文列名</th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="text" id="TB_Tag" name="TB_Tag" style="width: 100%;" />
+                <font color="gray">比如:编号,电话,地址,邮件, 这个配置在显示的时候要替换掉数据源返回的英文列名. </font>
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">查询条件数据源</th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="TB_Tag2" name="TB_Tag2" style="width: 99%; height: 23px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                返回No,Name两个列的数据源 事例:/DataUser/Handler.ashx?DoType=DtlImpReqAll
+                <br />
+                SQL实例:
+                <br />
+                $Para=FK_BanJi#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi
+                <br />
+                $Para=XB#Label=性别#EnumKey=XB
+                <br />
+            </td>
+        </tr>
+        <tr>
+            <th colspan="2">
+                填充从表数据源
+            </th>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea id="TB_Tag3" name="TB_Tag3" style="width: 99%; height: 37px;"></textarea>
+                <font color="gray">点击关键字执行搜索返回的数据源, 比如:/DataUser/Handler.ashx?DoType=DtlImpFullData&Keyword=@Key
+                </font>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" value="保存" id="Btn_Save" name="Btn_Save" onclick="return Save()" />
+                <input type="button" value="删除" id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
+            </td>
+        </tr>
+    </table>
+    </form>
 </body>
 </html>

@@ -2924,6 +2924,8 @@ namespace BP.WF.HttpHandler
                     FastZip fz = new FastZip();
                     fz.CreateZip(zipFile, tempFilePath, true, "");
                 }
+                //删除临时文件夹
+                System.IO.Directory.Delete(tempFilePath, true);
             }
             catch (Exception ex)
             {

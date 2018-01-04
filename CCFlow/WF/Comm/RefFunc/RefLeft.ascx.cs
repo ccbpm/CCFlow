@@ -48,6 +48,9 @@ namespace CCFlow.WF.Comm.RefFunc
                     if (pk == null)
                         pk = this.Request.QueryString["MyPK"];
 
+                    if (pk == null)
+                        pk = this.Request.QueryString["WorkID"];
+
 
                     if (pk != null)
                     {

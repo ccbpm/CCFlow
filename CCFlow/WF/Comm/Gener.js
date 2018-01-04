@@ -921,10 +921,12 @@ var Entity = (function () {
 
         DoMethodReturnJSON: function (methodName, params) {
             var jsonString = this.DoMethodReturnString(methodName, params);
+            
             if (jsonString.indexOf("err@") != -1) {
                 alert(jsonString);
                 return jsonString;
             }
+
             try {
                 jsonString = JSON.parse(jsonString);
             } catch (e) {

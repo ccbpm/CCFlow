@@ -31,6 +31,10 @@
                 pk = GetQueryString("MyPK");
             if (pk == null || pk == undefined)
                 pk = GetQueryString("OID");
+            if (pk == null || pk == undefined)
+                pk = GetQueryString("WorkID");
+            if (pk == null || pk == undefined)
+                pk = GetQueryString("NodeID");
 
             //初始化数据.
             $.ajax({

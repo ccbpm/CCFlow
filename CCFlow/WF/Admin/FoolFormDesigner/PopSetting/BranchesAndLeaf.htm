@@ -54,14 +54,13 @@
             mapExt.CopyURL();  //从url里面copy数据.
             mapExt.CopyForm(); //从from里面copy数据. 
 
-            mapExt.SetPara("Title", $("#TB_Title").val());
-            mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
-            mapExt.SetPara("RootNo", $("#TB_RootTreeNo").val()); //树的根节点编号.
+          //  mapExt.SetPara("Title", $("#TB_Title").val());
+           // mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
+          // mapExt.SetPara("RootNo", $("#TB_RootTreeNo").val()); //树的根节点编号.
 
             //var val= $("#DDL_SelectType").val();
             //alert(val);
-
-            mapExt.SetPara("SelectType", val); //选择类型.
+            //  mapExt.SetPara("SelectType", val); //选择类型.
 
             mapExt.ExtType = "PopBranchesAndLeaf";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");

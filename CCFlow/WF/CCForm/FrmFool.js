@@ -317,6 +317,7 @@ function InitMapAttrOfCtrl(mapAttr) {
                 //eleHtml += "<div class='richText' style='width:" + mapAttr.UIWidth + "px'>" + defValue + "</div>";
                 eleHtml += "<div class='richText'>" + defValue + "</div>";
             } else {
+
                 document.BindEditorMapAttr = mapAttr; //存到全局备用
 
                 //设置编辑器的默认样式

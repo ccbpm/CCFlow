@@ -11,7 +11,7 @@
         window.onload =
 
 		function Test() {
-			
+
 			return;
 			var url = "http://localhost:30362/WF/Comm/Handler.ashx?DoType=DBAccess_RunSQLReturnTable&SQL=SELECT No, Name FROM Demo_Student";
 			//url = "/WF/Comm/Handler.ashx?DoType=DBAccess_RunSQLReturnTable&SQL=SELECT No, Name FROM Demo_Student";
@@ -211,10 +211,12 @@
 </head>
 <body>
 <input type="button" id="button" value="button">
-<input type="text" id="text" value="text">
-<input type="checkbox" id="checkbox" value="checkbox" checked>
-<input type="radio" id="radio" value="radio" checked>
-<select id="select">
+<input type="text" id="TB_TEXT" name="TB_TEXT" value="text">
+<input type="checkbox" id="CB_CHECKBOX" name="CB_CHECKBOX" value="checkbox" checked>
+<input type="radio" id="RB_RADIO" name="RB_RADIO" value="radio" checked>
+<input type="checkbox" id="CB_CHECKBOX1" name="CB_CHECKBOX1" value="checkbox">
+<input type="radio" id="RB_RADIO1" name="RB_RADIO1" value="radio">
+<select id="DDL_SELECT" name="DDL_SELECT">
 	<option value="0">SELECT0</option>
 	<option value="1" selected>SELECT1</option>
 	<option value="2">SELECT2</option>

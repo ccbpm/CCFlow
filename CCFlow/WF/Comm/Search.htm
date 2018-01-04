@@ -197,6 +197,8 @@
 
                 if (attr.UIVisible == 0
                 || attr.KeyOfEn == "OID"
+                || attr.KeyOfEn == "WorkID"
+                || attr.KeyOfEn == "NodeID"
                 || attr.KeyOfEn == "MyNum" 
                 || attr.KeyOfEn == "MyPK")
                     continue;
@@ -219,6 +221,10 @@
                     pkval = en["OID"];
                 if (pkval == undefined)
                     pkval = en["MyPK"];
+                if (pkval == undefined)
+                    pkval = en["WorkID"];
+                if (pkval == undefined)
+                    pkval = en["NodeID"];
 
                 if (isTr == true)
                     html += "<tr style='background-color:#F4F4F4;' ondblclick=\"OpenEn('" + pkval + "');\" >";

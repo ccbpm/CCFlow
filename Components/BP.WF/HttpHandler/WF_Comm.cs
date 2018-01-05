@@ -936,23 +936,7 @@ namespace BP.WF.HttpHandler
         {
             get
             {
-                string str = this.GetRequestVal("No");
-                if (str == null)
-                    str = this.GetRequestVal("OID");
-
-                if (str == null)
-                    str = this.GetRequestVal("MyPK");
-
-                if (str == null)
-                    str = this.GetRequestVal("PK");
-
-                if (str == null)
-                    str = this.GetRequestVal("WorkID");
-
-                if (str == null)
-                    str = this.GetRequestVal("NodeID");
-
-                return str;
+                return this.PKVal;
             }
         }
         public string Refmethod_Init()

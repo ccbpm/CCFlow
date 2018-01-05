@@ -366,6 +366,9 @@
     <Compile Include="WF\Flow.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WF\GenerFH.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="WF\Node.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -394,7 +397,6 @@
     <Compile Include="WF\FlowOpList.cs" />
     <Compile Include="Template\FrmWorkCheck.cs" />
     <Compile Include="Data\GERpt.cs" />
-    <Compile Include="WF\GenerFH.cs" />
     <Compile Include="Msg.cs">
       <SubType>Code</SubType>
     </Compile>

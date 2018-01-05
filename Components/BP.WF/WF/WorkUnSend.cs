@@ -364,6 +364,9 @@ namespace BP.WF
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
 
+            // 如果停留的节点是分合流。
+            Node nd = new Node(gwf.FK_Node);
+
             #region 判断是否是会签状态,是否是会签人做的撤销. 主持人是不能撤销的.
             if (gwf.HuiQianTaskSta != HuiQianTaskSta.None)
             {
@@ -395,6 +398,7 @@ namespace BP.WF
 
                 gwf.Update();
 
+
                 return "会签人撤销成功.";
             }
             #endregion 判断是否是会签状态,是否是会签人做的撤销.
@@ -423,13 +427,13 @@ namespace BP.WF
             }
 
 
-            // 如果停留的节点是分合流。
-            Node nd = new Node(gwf.FK_Node);
+         
             if (nd.HisCancelRole == CancelRole.None)
             {
                 /*该节点不允许退回.*/
                 throw new Exception("当前节点，不允许撤销。");
             }
+
 
             switch (nd.HisNodeWorkType)
             {
@@ -604,6 +608,10 @@ namespace BP.WF
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkFlow WHERE WorkID=" + this.WorkID);
                 DBAccess.RunSQL("DELETE FROM WF_GenerWorkerlist WHERE WorkID=" + this.WorkID + " AND FK_Node=" + nd.NodeID);
             }
+
+            //首先删除当前节点的，审核意见.
+            string delTrackSQl = "DELETE ND" + int.Parse(nd.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND NDFrom=" + nd.NodeID + " AND ActionType =22 ";
+            DBAccess.RunSQL(delTrackSQl);
 
             if (wn.HisNode.IsEval)
             {

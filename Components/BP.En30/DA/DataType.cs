@@ -431,6 +431,7 @@ namespace BP.DA
             fName = PraseStringToUrlFileNameExt(fName, "&", "%26");
             fName = PraseStringToUrlFileNameExt(fName, "=", "%3D");
             fName = PraseStringToUrlFileNameExt(fName, " ", "%20");
+
             // }
             return filePath + fName;
         }

@@ -946,6 +946,12 @@ namespace BP.WF.HttpHandler
                 if (str == null)
                     str = this.GetRequestVal("PK");
 
+                if (str == null)
+                    str = this.GetRequestVal("WorkID");
+
+                if (str == null)
+                    str = this.GetRequestVal("NodeID");
+
                 return str;
             }
         }

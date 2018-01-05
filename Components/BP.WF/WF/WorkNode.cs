@@ -7935,12 +7935,17 @@ namespace BP.WF
                     if (strs.Contains("," + athDB.FK_FrmAttachment + ",") == false)
                         continue;
 
+                    //判断是否已经存在附件，避免重复上传
+                    FrmAttachmentDB athNDB = new FrmAttachmentDB();
+                    int num = athNDB.Retrieve(FrmAttachmentDBAttr.FK_MapData, "ND" + ndOfHeLiu.NodeID, FrmAttachmentDBAttr.RefPKVal, this.HisWork.FID.ToString(), FrmAttachmentDBAttr.UploadGUID, athDB.UploadGUID);
+                    if (num > 0)
+                        continue;
+
                     FrmAttachmentDB athDB_N = new FrmAttachmentDB();
                     athDB_N.Copy(athDB);
                     athDB_N.FK_MapData = "ND" + ndOfHeLiu.NodeID;
                     athDB_N.RefPKVal = this.HisWork.FID.ToString();
                     athDB_N.FK_FrmAttachment = ath.MyPK;
-                    athDB_N.UploadGUID = "";
 
                     //生成新的GUID.
                     athDB_N.MyPK = BP.DA.DBAccess.GenerGUID();

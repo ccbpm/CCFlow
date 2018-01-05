@@ -570,7 +570,6 @@ function closeWhileEscUp() {
         }
     });
 }
-var dynamicHandler = "";
 function DBAccess() {
 
     var url = Handler + "?SQL=select * from sss";

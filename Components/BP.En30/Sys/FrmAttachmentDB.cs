@@ -137,7 +137,12 @@ namespace BP.Sys
                 str = str.Replace("~", "-");
                 str = str.Replace("'", "-");
                 str = str.Replace("*", "-");
-                str = str.Replace("/", "\\");
+
+                //str = str.Replace("/", "\\");
+                //str = str.Replace("/", "\\");
+                //str = str.Replace("/", "\\");
+                //str = str.Replace("/", "\\");
+
                 this.SetValByKey(FrmAttachmentDBAttr.FileFullName, str);
             }
         }

@@ -2877,14 +2877,6 @@ namespace BP.WF.HttpHandler
 
                 if (System.IO.Directory.Exists(tempFilePath) == false)
                     System.IO.Directory.CreateDirectory(tempFilePath);
-
-                ////根据路径创建文件夹
-                //info = "@创建临时用户目录:" + tempFilePath + "错误.";
-                //System.IO.Directory.CreateDirectory(tempPath);
-                ////copy文件临时文件夹
-                //tempPath = tempPath + "\\" + this.WorkID;
-                //info = "@创建临时文件目录:" + tempPath + "错误.";
-                //System.IO.Directory.CreateDirectory(tempPath);
             }
             catch (Exception ex)
             {

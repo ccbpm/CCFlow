@@ -80,6 +80,12 @@ namespace BP.WF.HttpHandler
             return ccfrm.FrmGener_Save();
         }
 
+        public string MyFlowGener_Delete()
+        {
+            BP.WF.Dev2Interface.Flow_DoDeleteFlowByWriteLog(this.FK_Flow, this.WorkID, Web.WebUser.Name+"用户删除", true);
+            return "删除成功...";
+        }
+
         public string AttachmentUpload_Down()
         {
             WF_CCForm ccform = new WF_CCForm(this.context);

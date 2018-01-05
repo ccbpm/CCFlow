@@ -570,7 +570,7 @@ function closeWhileEscUp() {
         }
     });
 }
-
+var dynamicHandler = "";
 function DBAccess() {
 
     var url = Handler + "?SQL=select * from sss";
@@ -634,7 +634,7 @@ var Entity = (function () {
         });
         return params;
     }
-
+    
     function getParams1(self) {
         var params = ["t=" + new Date().getTime()];
         $.each(jsonString, function (n, o) {
@@ -921,7 +921,7 @@ var Entity = (function () {
 
         DoMethodReturnJSON: function (methodName, params) {
             var jsonString = this.DoMethodReturnString(methodName, params);
-            
+
             if (jsonString.indexOf("err@") != -1) {
                 alert(jsonString);
                 return jsonString;
@@ -981,26 +981,26 @@ var Entity = (function () {
                     var value = GetQueryString(n);
                     if (value != null && typeof value !== "undefined" && $.trim(value) != "") {
                         self[n] = value;
-					}
+                    }
                 }
             });
         },
 
         CopyForm: function () {
-			// 复制form中有但Entity对象中没有的属性
-			var frmParas = [];
-			$("input[name^=TB_],input[name^=CB_]:checked,input[name^=RB_]:checked,[name^=DDL_]").each(function (i, o) {
-				var key = $(this).attr("name").replace(/^TB_|CB_|RB_|DDL_/, "");
-				var value = $(this).val();
-				frmParas.push("@" + key + "=" + value);
-			});
-			var formParams = frmParas.join("");
-			//
-			this.frmParas = formParams;
-			jsonString.frmParas = formParams;
-			// ----------
-			return;
-			// 老版本
+            // 复制form中有但Entity对象中没有的属性
+            var frmParas = [];
+            $("input[name^=TB_],input[name^=CB_]:checked,input[name^=RB_]:checked,[name^=DDL_]").each(function (i, o) {
+                var key = $(this).attr("name").replace(/^TB_|CB_|RB_|DDL_/, "");
+                var value = $(this).val();
+                frmParas.push("@" + key + "=" + value);
+            });
+            var formParams = frmParas.join("");
+            //
+            this.frmParas = formParams;
+            jsonString.frmParas = formParams;
+            // ----------
+            return;
+            // 老版本
             var self = this;
             $.each(self, function (n, o) {
                 var target = $("#TB_" + n);
@@ -1013,20 +1013,20 @@ var Entity = (function () {
                     self[n] = target.val();
                 }
 
-				/*
+                /*
                 var target = $("input[name='CB_" + n + "']:checked");
                 if (target.length > 0) {
-                    var tmp = [];
-                    target.each(function (i, o) {
-                        tmp.push($(this).val());
-                    });
-                    self[n] = tmp.join(",");
+                var tmp = [];
+                target.each(function (i, o) {
+                tmp.push($(this).val());
+                });
+                self[n] = tmp.join(",");
                 }
-				*/
-				var target = $("input[name='CB_" + n + "']:checked");
-				if (target.length > 0) {
-					self[n] = "1";
-				}
+                */
+                var target = $("input[name='CB_" + n + "']:checked");
+                if (target.length > 0) {
+                    self[n] = "1";
+                }
 
                 var target = $("input[name^='RB_" + n + "']:checked");
                 if (target.length == 1) {
@@ -1035,26 +1035,26 @@ var Entity = (function () {
             });
         },
 
-		ToJsonWithParas : function () {
-			var json = {};
-			$.each(this, function (n, o) {
-				if (typeof o !== "undefined") {
-					json[n] = o;
-				}
-			});
-			if (typeof this.AtPara == "string") {
-				$.each(this.AtPara.split("@"), function (i, o) {
-					if (o == "") {
-						return true;
-					}
-					var kv = o.split("=");
-					if (kv.length == 2) {
-						json[kv[0]] = kv[1];
-					}
-				});
-			}
-			return json;
-		}
+        ToJsonWithParas: function () {
+            var json = {};
+            $.each(this, function (n, o) {
+                if (typeof o !== "undefined") {
+                    json[n] = o;
+                }
+            });
+            if (typeof this.AtPara == "string") {
+                $.each(this.AtPara.split("@"), function (i, o) {
+                    if (o == "") {
+                        return true;
+                    }
+                    var kv = o.split("=");
+                    if (kv.length == 2) {
+                        json[kv[0]] = kv[1];
+                    }
+                });
+            }
+            return json;
+        }
 
     };
 

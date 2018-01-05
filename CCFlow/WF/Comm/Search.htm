@@ -45,6 +45,7 @@
 
             //执行查询.
             BindTable();
+
             //生成翻页.
             GenerPageIdx();
             $("#Msg").html("");
@@ -172,6 +173,9 @@
             //获得查询的基本信息, 实体属性 attrs, 实体数据.
             var pageIdx = this.GetQueryString("PageIdx");
 
+            if (pageIdx == "" || pageIdx == undefined)
+                pageIdx = "1";
+
             handler.AddPara("PageIdx", pageIdx);
             handler.AddPara("EnsName", GetQueryString("EnsName"));
 
@@ -238,9 +242,13 @@
                 for (var idx = 0; idx < attrs.length; idx++) {
                     var attr = attrs[idx];
 
-                    if (attr.UIVisible == 0  || attr.KeyOfEn == "OID"  || attr.KeyOfEn == "MyNum"  || attr.KeyOfEn == "MyPK")
+                    if (attr.UIVisible == 0 ||
+                     attr.KeyOfEn == "OID" ||
+                     attr.KeyOfEn == "MyNum" ||
+                     attr.KeyOfEn == "NodeID" ||
+                     attr.KeyOfEn == "WorkID" || 
+                     attr.KeyOfEn == "MyPK")
                         continue;
-
 
                    // var str = JSON.stringify(attr);
                      //                   alert(str);

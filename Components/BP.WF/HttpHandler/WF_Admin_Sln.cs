@@ -499,6 +499,8 @@ namespace BP.WF.HttpHandler
         }
         public string Fields_Save()
         {
+            Node currND = new Node(this.FK_Node);
+
             string FieldsAttrsObj = this.GetRequestVal("FieldsAttrsObj");
             var jsonSetting = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
             List<FieldsAttrs> fieldsAttrsList = JsonConvert.DeserializeObject<List<FieldsAttrs>>(FieldsAttrsObj, jsonSetting);
@@ -518,6 +520,41 @@ namespace BP.WF.HttpHandler
                         if (attr.KeyOfEn != fieldsAttrs.KeyOfEn)
                             continue;
 
+                        if (currND.HisFormType == NodeFormType.RefOneFrmTree)
+                        {
+                            attr.UIVisible = fieldsAttrs.UIVisible;
+                            attr.UIIsEnable = fieldsAttrs.UIIsEnable;
+                            attr.IsSigan = fieldsAttrs.IsSigan;
+                            attr.DefVal = fieldsAttrs.DefVal;
+                            attr.UIIsInput = fieldsAttrs.IsNotNull;
+                            attr.FK_MapData = this.FK_MapData;
+                            attr.KeyOfEn = attr.KeyOfEn;
+                            attr.Name = attr.Name;
+                            attr.Update();
+
+                            //如果是表单库表单，需要写入MapAttr
+                            if (!string.IsNullOrWhiteSpace(fieldsAttrs.RegularExp))
+                            {
+                                MapExt ext = new MapExt();
+                                bool extisExit = ext.IsExit("MyPK", "RegularExpression_" + this.FK_MapData + "_" + fieldsAttrs.KeyOfEn + "_onchange");
+
+                                ext.FK_MapData = this.FK_MapData;
+                                ext.ExtType = MapExtXmlList.RegularExpression;
+                                ext.DoWay = 0;
+                                ext.AttrOfOper = fieldsAttrs.KeyOfEn;
+                                ext.Doc = fieldsAttrs.RegularExp;
+                                ext.Tag = "onchange";
+                                ext.Tag1 = "格式不正确！";
+
+                                if (extisExit)
+                                    ext.Update();
+                                else
+                                {
+                                    ext.MyPK = "RegularExpression_" + this.FK_MapData + "_" + fieldsAttrs.KeyOfEn + "_onchange";
+                                    ext.Insert();
+                                }
+                            }
+                        }
                         FrmField frmField = new FrmField();
                         bool isExit = frmField.IsExit("mypk", this.FK_MapData + "_" + this.FK_Flow + "_" + this.FK_Node + "_" + fieldsAttrs.KeyOfEn + "_" + FrmEleType.Field);
 

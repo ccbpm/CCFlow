@@ -75,6 +75,7 @@
         var DisableIt = 100;
         var nodeID = 0;
         var fk_flow = "";
+        var nodeFrmID = "";
 
         //页面启动函数.
         $(function () {
@@ -121,16 +122,18 @@
             frmTrees.RetrieveAll();
             GenerBindDDL("DDL_FrmTree", frmTrees, "No", "Name", node.FormUrl);
 
-            //怎么实现级联.
-            //    $("#DDL_FrmTree").change(function(){
-            //  alert("ss");
-            // });
-            //  $("#DDL_FrmTree").
-
             //绑定表单.
             var frms = new Entities("BP.Sys.MapDatas");
             frms.RetrieveAll();
-            GenerBindDDL("DDL_RefOneFrmTree", frms, "No", "Name", node.NodeFrmID);
+
+            //根据表单类别的默认值，初始加载默认的表单
+            var sortNo = $("#DDL_FrmTree").val();
+            var frm = $.grep(frms, function (item) {
+                return item.FK_FormTree == sortNo;
+            });
+            //绑定表单
+            GenerBindDDL("DDL_RefOneFrmTree", frm, "No", "Name", node.NodeFrmID);
+            nodeFrmID = node.NodeFrmID;
 
             //var ddl = $("#DDL_RefOneFrmTree");
             //绑定表单.
@@ -288,6 +291,21 @@
             var data = handler.DoMethodReturnString("NodeFromWorkModel_Save");
             alert(data);
         }
+        //设置联动
+        function change() {
+            //获取表单库中的所有表单
+            var frms = new Entities("BP.Sys.MapDatas");
+            frms.RetrieveAll();
+
+            //根据表单类别的默认值，初始加载默认的表单
+            var sortNo = $("#DDL_FrmTree").val();
+            //晒选表单
+            var frm = $.grep(frms, function (item) {
+                return item.FK_FormTree == sortNo;
+            });
+            //绑定表单
+            GenerBindDDL("DDL_RefOneFrmTree", frm, "No", "Name", nodeFrmID);
+        }
     </script>
 
     <style type="text/css">
@@ -416,7 +434,7 @@
                </ul>
                表单类别：
 
-               <select id="DDL_FrmTree" name="DDL_FrmTree" > </select>
+               <select id="DDL_FrmTree" name="DDL_FrmTree" onchange="change()" > </select>
                表单:  <select id="DDL_RefOneFrmTree" name="DDL_RefOneFrmTree" > </select>
                <div id="Div_RefOneFrmTree" ></div>
             </td>

@@ -864,13 +864,13 @@ namespace BP.WF.HttpHandler
             if (PageIdx <= 1)
             {
                 //this.Add("《- 《-");
-                html += "<img style='vertical-align:middle' src='/WF/Img/Arr/LeftEnd.png' border=0/><img style='vertical-align:middle' src='/WF/Img/Arr/Left.png' border=0/>";
+                html += "<img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/LeftEnd.png' border=0/><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Left.png' border=0/>";
             }
             else
             {
                 myidx = PageIdx - 1;
                 //this.Add("<a href='" + url + "&PageIdx=1' >《-</a> <a href='" + url + "&PageIdx=" + myidx + "'>《-</a>");
-                html += "<a href='" + url + "&PageIdx=1' ><img style='vertical-align:middle' src='/WF/Img/Arr/LeftEnd.png' border=0/></a><a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='/WF/Img/Arr/Left.png' border=0/></a>";
+                html += "<a href='" + url + "&PageIdx=1' ><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/LeftEnd.png' border=0/></a><a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Left.png' border=0/></a>";
             }
 
             int pageNum = 0;
@@ -909,13 +909,13 @@ namespace BP.WF.HttpHandler
             {
                 myidx = PageIdx + 1;
                 //this.Add("&nbsp;<a href='" + url + "&PageIdx=" + myidx + "'>-》</a>&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'>-》</a>&nbsp;&nbsp;Page:" + PageIdx + "/" + pageNum + " Total:" + recNum + ".");
-                html += "&nbsp;<a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='/WF/Img/Arr/Right.png' border=0/></a>&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'><img style='vertical-align:middle' src='/WF/Img/Arr/RightEnd.png' border=0/></a>&nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum;
+                html += "&nbsp;<a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Right.png' border=0/></a>&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/RightEnd.png' border=0/></a>&nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum;
             }
             else
             {
                 //this.Add("&nbsp;<a href='" + url + "&PageIdx=" + pageNum + "'> -》》</a>&nbsp;&nbsp;Page:" + PageIdx + "/" + pageNum + " Totlal:" + recNum + ".");
-                html += "&nbsp;<img style='vertical-align:middle' src='/WF/Img/Arr/Right.png' border=0/>&nbsp;&nbsp;";
-                html += "&nbsp;<img style='vertical-align:middle' src='/WF/Img/Arr/RightEnd.png' border=0/>&nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum;
+                html += "&nbsp;<img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Right.png' border=0/>&nbsp;&nbsp;";
+                html += "&nbsp;<img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/RightEnd.png' border=0/>&nbsp;&nbsp;页数:" + PageIdx + "/" + pageNum + "&nbsp;&nbsp;总数:" + recNum;
                 //this.Add("<img src='/WF/Img/Page_Down.gif' border=1 />");
             }
             html += "</div>";

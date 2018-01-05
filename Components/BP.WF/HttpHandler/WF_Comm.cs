@@ -873,7 +873,7 @@ namespace BP.WF.HttpHandler
                 html += "<a href='" + url + "&PageIdx=1' ><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/LeftEnd.png' border=0/></a><a href='" + url + "&PageIdx=" + myidx + "'><img style='vertical-align:middle' src='" + Glo.CCFlowAppPath + "WF/Img/Arr/Left.png' border=0/></a>";
             }
 
-            int pageNum = 0;
+            /*int pageNum = 0;
             decimal pageCountD = decimal.Parse(recNum.ToString()) / decimal.Parse(pageSize.ToString()); // 页面个数。
             string[] strs = pageCountD.ToString("0.0000").Split('.');
             if (int.Parse(strs[1]) > 0)
@@ -888,7 +888,14 @@ namespace BP.WF.HttpHandler
 
             strs = spanTemp.ToString("0.0000").Split('.');
             from = int.Parse(strs[0]) * pageSpan;
-            to = from + pageSpan;
+            to = from + pageSpan;*/
+            //分页采用java默认方式分页，采用bigdecimal分页报错
+            int pageNum = (recNum + pageSize - 1) / pageSize;// 页面个数。
+
+            int from = PageIdx < 1 ? 0 : (PageIdx - 1) * pageSize + 1;//从
+
+            int to = PageIdx < 1 ? pageSize : PageIdx * pageSize;//到
+
             for (int i = 1; i <= pageNum; i++)
             {
                 if (i >= from && i < to)

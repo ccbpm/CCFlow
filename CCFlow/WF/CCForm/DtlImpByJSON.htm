@@ -358,7 +358,7 @@
         function DalogModelOK() {
             //实体参数.
             var EnsName = GetQueryString("EnsName");
-            var RefPKVal = GetQueryString("RefPKVal");
+            var refPKVal = GetQueryString("RefPKVal");
             var PWorkID = GetQueryString("PWorkID");
             var FK_Node = GetQueryString("FK_Node");
             var FID = GetQueryString("FID");
@@ -379,12 +379,11 @@
             //插入明细表数据
             var dtl = new Entity(EnsName);
             $.each(paraDatas, function (i, data) {
-
                 dtl.CopyJSON(data);
-
-                dtl.RefPK = RefPKVal;
+                dtl.RefPK = refPKVal;
                 dtl.Rec = UserNo;
                 dtl.OID = 0;
+                dtl.FID = FID;
                 dtl.Insert();
             });
 

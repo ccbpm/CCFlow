@@ -58,7 +58,9 @@ namespace BP.WF.HttpHandler
             try
             {
                 string pkval = this.PKVal;
-                Entity en = ClassFactory.GetEn(this.EnName);
+                Entity en = ClassFactory.GetEn(this.EnName) ;
+
+                
                 if (pkval == "0" || pkval == "" || pkval == null || pkval == "undefined")
                 {
                     Map map = en.EnMap;

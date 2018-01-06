@@ -548,6 +548,17 @@ namespace BP.En
         /// <returns>En</returns>
         public static Entity GetEn(string className)
         {
+
+            //判断标记初始化实体.
+            if (className.Contains(".") == false)
+            {
+                if (className.Contains("Dtl") == true)
+                    return new GEDtl(className); //明细表.
+                else
+                    return new GEEntity(className); //表单实体.
+            }
+
+
             if (Htable_En == null)
             {
                 Htable_En = new Hashtable();

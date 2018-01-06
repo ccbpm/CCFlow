@@ -1034,6 +1034,21 @@ var Entity = (function () {
             });
         },
 
+		CopyJSON : function (json) {
+			var count = 0;
+			if (json) {
+				var self = this;
+				$.each(json, function (n, o) {
+					if (typeof self[n] !== "function") {
+						self[n] = o;
+						jsonString[n] = o;
+						count++;
+					}
+				});
+			}
+			return count;
+		},
+
         ToJsonWithParas: function () {
             var json = {};
             $.each(this, function (n, o) {

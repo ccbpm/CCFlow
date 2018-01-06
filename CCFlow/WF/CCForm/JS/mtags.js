@@ -1,5 +1,10 @@
 ﻿(function ($) {
 
+	function onUnselect(target, record) {
+		var opts = getOptions(target);
+		opts.onUnselect.call("", record);
+	}
+
 	function append(target, datas, remove) {
 		var opts = getOptions(target);
 		var container = $(target).find(".ccflow-input-span-container");
@@ -18,6 +23,7 @@
 				tag.delegate("i", "click", function (e) {
 					var record = $(this).parent().data();
 					$(this).parent().remove();
+					opts.onUnselect.call("", record);
 				});
 			}
 		}
@@ -150,7 +156,9 @@
 		"width" : "100%",
 		"fit" : true,
 		"valueField" : "No",
-		"textField" : "Name"
+		"textField" : "Name",
+		"onUnselect" : function (record) {
+		}
 	};
 
 })(jQuery);

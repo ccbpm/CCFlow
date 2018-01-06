@@ -182,7 +182,10 @@ function DeptEmpModelAdv0(mapExt) {
 	container.attr("id", mapExt.AttrOfOper + "_mtags");
 
 	$("#" + mapExt.AttrOfOper + "_mtags").mtags({
-		"fit" : true
+		"fit" : true,
+		"onUnselect" : function (record) {
+			console.log("unselect: " + JSON.stringify(record));
+		}
 	});
 
 	var width = mapExt.W;
@@ -202,7 +205,9 @@ function DeptEmpModelAdv0(mapExt) {
 				var selectedRows = iframe.contentWindow.selectedRows;
 				// save data eledb
 				if ($.isArray(selectedRows)) {
+					console.log(JSON.stringify(selectedRows));
 					$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", selectedRows);
+					
 				}
 			}
 			return true;

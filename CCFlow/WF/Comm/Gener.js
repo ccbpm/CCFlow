@@ -697,8 +697,12 @@ var Entity = (function () {
                         alert(data);
                         return;
                     }
+					var self = this;
                     $.each(params, function (n, o) {
-                        jsonString[n] = o;
+						if (typeof self[n] !== "function") {
+							jsonString[n] = o;
+							self[n] = o;
+						}
                     });
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -722,7 +726,6 @@ var Entity = (function () {
                     result = data;
                     if (data.indexOf("err@") != -1) {
                         var err = data.replace('err@', '');
-
                         alert('更新异常:' + err + " \t\nEnName" + self.enName);
                         return;
                     }

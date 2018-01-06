@@ -193,11 +193,7 @@ function DeptEmpModelAdv0(mapExt) {
 	var iframeId = mapExt.MyPK + mapExt.FK_MapData;
 	var title = GetAtPara(mapExt.AtPara, "Title");
 	//
-	var params = [];
-	params.push("MyPK=" + mapExt.MyPK);
-	params.push("m=" + Math.random());
-	//
-	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?" + params.join("&");
+	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?MyPK=" + mapExt.MyPK + "&m=" + Math.random();
 	container.on("dblclick", function () {
 		OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
 			var iframe = document.getElementById(iframeId);

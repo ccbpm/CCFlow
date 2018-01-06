@@ -169,19 +169,8 @@ function SaveVal(fk_mapdata, keyOfEn, val) {
 	}]
 }
  */
-function GetAtPara(atPara, key) {
-	if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
-		return undefined;
-	}
-	var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");
-	var results = atPara.match(reg);
-	if (results != null) {
-		return unescape(results[2]);
-	}
-	return undefined;
-}
-
 function DeptEmpModelAdv0(mapExt) {
+
 	var target = $("#TB_" + mapExt.AttrOfOper);
 	target.hide();
 
@@ -197,24 +186,13 @@ function DeptEmpModelAdv0(mapExt) {
 		"fit" : true
 	});
 
-	var title = GetAtPara(mapExt.AtPara, "Title");
-	var tip = GetAtPara(mapExt.AtPara, "SearchTip");
 	var width = mapExt.W;
 	var height = mapExt.H;
 	var iframeId = mapExt.MyPK + mapExt.FK_MapData;
-	//
-	var searchUrl = mapExt.Tag1;
-	var treeUrl = mapExt.Tag2;
-	var rootNo = GetAtPara(mapExt.AtPara, "RootNo");
-	var treeClickUrl = mapExt.Tag3;
+	var title = GetAtPara(mapExt.AtPara, "Title");
 	//
 	var params = [];
-	params.push("searchUrl=" + escape(searchUrl));
-	params.push("treeUrl=" + escape(treeUrl));
-	params.push("rootNo=" + rootNo);
-	params.push("treeClickUrl=" + escape(treeClickUrl));
-	params.push("tip=" + escape(tip));
-	params.push("title=" + escape(title));
+	params.push("MyPK=" + mapExt.MyPK);
 	params.push("m=" + Math.random());
 	//
 	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?" + params.join("&");

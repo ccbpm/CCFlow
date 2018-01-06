@@ -39,20 +39,15 @@
         }
     </style>
     <script type="text/javascript" language="javascript">
-        var result = null;
+        var mapExt = null;
         //页面启动函数.
         $(function () {
-            var href = window.location.href;
-            var urlParam = href.substring(href.indexOf('?') + 1, href.length);
-
+            SetTableSize();
+            //重置页面内容
             ResetHtml();
-            //获得当前用户信息.
-            var currUser = new WebUser();
-            var no = currUser.No;
-
             //实体参数.
             var ensName = GetQueryString("EnsName");
-            var mapExt = new Entity("BP.Sys.MapExt");
+            mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "DtlImpByJSON_" + ensName;
             var i = mapExt.RetrieveFromDBSources();
             if (i == 0) {
@@ -63,9 +58,12 @@
                 alert("参数配置错误，请联系管理员。");
                 return;
             }
-            //分组标签
-            InitGroupLabel(mapExt);
 
+            //分组标签
+            InitGroupLabel();
+            //输入关键字查询数据
+            InputKeyWordData();
+            //绑定事件
             $('.menuGroup a').each(function () {
                 var aLabel = $(this);
                 aLabel.click(function () {
@@ -75,17 +73,32 @@
                     $(this).toggleClass("menuGroupSelected");
                 });
             });
+
+            $('#TB_Key').bind('input propertychange', function () {
+                InputKeyWordData();
+            });
         });
 
-        //重置标签
-        function ResetHtml() {
-            $("#groupDiv").html("");
+        //设置表格高度
+        function SetTableSize() {
+            var height = $(window).innerHeight();
+            height = height - 150;
+            $("#tableContent").height(height);
         }
-
+        
         //初始化标签
-        function InitGroupLabel(mapExt) {
-            var url = mapExt.Tag2;
-            var ifcData = DBAccess.RunUrlReturnJSON(url);
+        function InitGroupLabel() {
+            var ifcData = null;
+            if (mapExt.DBType == 0) {//SQL 模式
+                var sql = mapExt.Tag2;
+                //ifcData = DBAccess.RunSQLReturnTable(sql);
+            }
+
+            if (mapExt.DBType == 1) {//JSON模式
+                var url = mapExt.Tag2;
+                ifcData = DBAccess.RunUrlReturnJSON(url);
+            }
+            
             $("#groupDiv").html("");
             if (ifcData && ifcData.length > 0) {
                 var data = ifcData[0];
@@ -102,15 +115,156 @@
                 var noKey = oKeys[0];
                 var nameKey = oKeys[1];
 
-                $("#groupDiv").append("<a class='menuGroupSelected' href='javascript:void(0);'>全部</a>");
+                $("#groupDiv").append("<a id='all' class='menuGroupSelected' href='javascript:void(0);'>全部</a>");
                 $.each(ifcData, function (i, dataObj) {
                     var no = dataObj[noKey];
                     var name = dataObj[nameKey];
                     $("#groupDiv").append("<a id='" + no + "' href='javascript:void(0);'>" + name + "</a>");
                 });
             } else {
-                $("#groupDiv").append("<a class='menuGroupSelected' href='javascript:void(0);'>全部</a>");
+                $("#groupDiv").append("<a id='all' class='menuGroupSelected' href='javascript:void(0);'>全部</a>");
             }
+
+            $("#groupDiv a").unbind("click").bind("click", function () {
+                var value = this.id;
+                OnClickGroupLabelData(value);
+            });
+        }
+
+        //输入关键字进行查询
+        function InputKeyWordData() {
+            var data = null;
+            var UserNo = GetQueryString("UserNo");
+            var RefPKVal = GetQueryString("RefPKVal");
+            if (mapExt.DBType == 0) {//SQL 模式
+                var sql = mapExt.Tag1;
+                //data = DBAccess.RunSQLReturnTable(sql);
+            }
+            if (mapExt.DBType == 1) {//JSON模式
+                var url = mapExt.Tag1;
+                var keyWord = $("#TB_Key").val();
+                keyWord = encodeURI(keyWord);
+
+                url = url.replace("@Key", keyWord);
+                url = url + "&UserNo=" + UserNo + "&RefPKVal=" + RefPKVal;
+                data = DBAccess.RunUrlReturnJSON(url);
+            }
+
+            $("#jsonDataTable").html("");
+            if (data && data.length > 0) {
+                InitTableByData(data);
+            }
+        }
+
+        //点击标签返回的数据
+        function OnClickGroupLabelData(groupValue) {
+            var data = null;
+            var UserNo = GetQueryString("UserNo");
+            var RefPKVal = GetQueryString("RefPKVal");
+            if (mapExt.DBType == 0) {//SQL 模式
+                var sql = mapExt.Tag3;
+                //data = DBAccess.RunSQLReturnTable(sql);
+            }
+            if (mapExt.DBType == 1) {//JSON模式
+                var url = mapExt.Tag3;
+                var keyWord = $("#TB_Key").val();
+                url = url.replace("@Key", groupValue);
+                url = url + "&UserNo=" + UserNo + "&RefPKVal=" + RefPKVal;
+                data = DBAccess.RunUrlReturnJSON(url);
+            }
+
+            $("#jsonDataTable").html("");
+            if (data && data.length > 0) {
+                InitTableByData(data);
+            }
+        }
+
+        //数据返回Table
+        function InitTableByData(dataTable) {
+            //获取数据列名
+            var columns = [];
+            var texts = [];
+            var heads = [];
+            var tag = mapExt.Tag;
+            if (tag.length > 0) {
+                texts = tag.split(',');
+            }
+            for (var col in dataTable[0]) {
+                columns.push(col);
+            }
+            
+            //以中文个数为表格显示列的个数
+            if (texts && texts.length > 0) {
+                for (var i = 0; i < texts.length; i++) {
+                    var text = texts[i];
+                    if (text == "")
+                        continue;
+
+                    var value = columns[i];
+                    if (typeof value == "undefined") {
+                        value = "";
+                    }
+
+                    var column = {};
+                    column.No = value;
+                    column.Name = text;
+                    heads.push(column);
+                }
+            } else {
+                $.each(columns, function (i, col) {
+                    var column = {};
+                    column.No = col;
+                    column.Name = col;
+                    heads.push(column);
+                });
+            }
+
+            //表头
+            var thread = $('<thead></thead>');
+            var threadTr = $('<tr></tr>');
+            //复选框
+            var thFirst = $("<th style='width:35px;'></th>");
+            var ckBox = $("<input type='checkbox' onclick='CheckAll()' id='CB_CheckAll' >");
+            thFirst.append(ckBox);
+            threadTr.append(thFirst);
+            $.each(heads, function (i, head) {
+                var th = $("<th></th>");
+                th.text(head.Name);
+                th.data(head);
+                threadTr.append(th);
+            });
+            thread.append(threadTr);
+            $("#jsonDataTable").append(thread);
+
+            //生成表格体
+            var tbody = $('<tbody></tbody>');
+            $.each(dataTable, function (i, dataObj) {
+                var tbodyTr = $('<tr></tr>');
+                var tdFirst = $("<td></td>");
+                //第一列为主键
+                var refPK = heads[0].No;
+                var no = dataObj[refPK];
+
+                var ckBox = $("<input type='checkbox'/>");
+                ckBox.attr("id", "CB_" + no);
+                ckBox.data(dataObj);
+                tdFirst.append(ckBox);
+
+                tbodyTr.append(tdFirst);
+                //字段列
+                $.each(heads, function (i, head) {
+                    var td = $("<td></td>");
+                    var text = "";
+
+                    if (head.No && head.No != "") {
+                        text = dataObj[head.No];
+                    }
+                    td.text(text);
+                    tbodyTr.append(td);
+                });
+                tbody.append(tbodyTr);
+            });
+            $("#jsonDataTable").append(tbody);
         }
 
         //ajax获取后台数据
@@ -178,70 +332,43 @@
             });
         }
 
-        function Search() {
-            var key = document.getElementById("TB_Key").value;
-            if (key == null || key == undefined || key == '') {
-                alert('请输入关键字');
-                return;
-            }
-            var url = Handler + "?DoType=DtlOpt_Search&Key=" + key + "&FK_MapDtl=" + GetQueryString("FK_MapDtl") + "&RefPKVal=" + GetQueryString("RefPKVal") + "&m=" + Math.random();
-
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    result = JSON.parse(data);
-                    BindTable();
-                }
-            });
+        //重置标签
+        function ResetHtml() {
+            $("#groupDiv").html("");
+            $("#jsonDataTable").html("");
         }
 
-        function Add(isReturnToDtl) {
-
-            var vals = '';
-            $.each($(":checkbox"), function () {
-                if (this.checked == true)
-                    vals += this.id.replace('CB_', '') + ",";
-            });
-
-            //获得pks. 
-            alert(vals);
-
-            var href = window.location.href;
-            var urlParam = href.substring(href.indexOf('?') + 1, href.length);
-            var url = Handler + "?DoType=DtlOpt_Add&PKs=" + vals + "&" + urlParam + "&m=" + Math.random();
-
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: url,
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    alert(data);
-                    if (isReturnToDtl == false)
-                        return;
-                }
-            });
-        }
-
+        //全选
         function CheckAll() {
             var checked = document.getElementById('CB_CheckAll').checked;
             $.each($(":checkbox"), function () {
                 this.checked = checked;
             });
+        }
+
+        //确定按钮，导入数据
+        function DalogModelOK() {
+            //实体参数.
+            var EnsName = GetQueryString("EnsName");
+            var RefPKVal = GetQueryString("RefPKVal");
+            var PWorkID = GetQueryString("PWorkID");
+            var FK_Node = GetQueryString("FK_Node");
+            var FID = GetQueryString("FID");
+            var UserNo = GetQueryString("UserNo");
+            var paraDatas = [];
+            $.each($(":checkbox"), function (i, cb) {
+                if (cb.checked) {
+                    var data = $(cb).data();
+                    if (data) {
+                        paraDatas.push(data);
+                    }
+                }
+            });
+            if (paraDatas.length == 0) {
+                alert("没有选择导入数据，请选择！");
+                return;
+            }
+
         }
 
         //取消，关闭弹出层
@@ -254,11 +381,11 @@
 </head>
 <body>
     <form id="cc">
-    <table style="border: 0px; width: 99%;">
+    <table style="border: 0px; width: 99%;table-layout: fixed;">
         <tr>
             <td>
                 <div id="searchDiv" style='text-align: left;'>
-                    <input type="text" id="TB_Key" value="" class="keyWordInput" style="width: 60%;" placeholder="输入付款人、金额进行搜索" onchange="Search()" />
+                    <input type="text" id="TB_Key" value="" class="keyWordInput" style="width: 60%;" placeholder="输入付款人、金额进行搜索"/>
                 </div>
             </td>
         </tr>
@@ -273,7 +400,7 @@
         </tr>
         <tr>
             <td style="border: 1px #FF8000 solid;">
-                <div>
+                <div id="tableContent" style="overflow:auto;">
                     <div>
                         <table class="table table-striped" id='jsonDataTable'></table>
                     </div>
@@ -287,7 +414,7 @@
             <td style="float:right;">
                 <div style="margin-top:10px; margin-right:10px;">
                     <input type="button" class="btn" onclick="DalogModelCose()" value="取消" />
-                    <input type="button" class="btn btn-danger" value="确定" />
+                    <input type="button" class="btn btn-danger" onclick="DalogModelOK()" value="确定" />
                 </div>
             </td>
         </tr>

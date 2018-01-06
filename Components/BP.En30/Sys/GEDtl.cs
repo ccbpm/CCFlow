@@ -211,10 +211,10 @@ namespace BP.Sys
         {
             // 判断是否有变化的项目，决定是否执行储存。
             MapAttrs mattrs = new MapAttrs(this.FK_MapDtl);
-            bool isC = false;
+            bool isChange = false;
             foreach (MapAttr mattr in mattrs)
             {
-                if (isC)
+                if (isChange)
                     break;
                 switch (mattr.KeyOfEn)
                 {
@@ -235,20 +235,20 @@ namespace BP.Sys
 
                             if (decimal.Parse(s) == mattr.DefValDecimal)
                                 continue;
-                            isC = true;
+                            isChange = true;
                             break;
                         }
                         else
                         {
                             if (this.GetValStrByKey(mattr.KeyOfEn) == mattr.DefVal)
                                 continue;
-                            isC = true;
+                            isChange = true;
                             break;
                         }
                         break;
                 }
             }
-            if (isC == false)
+            if (isChange == false)
                 return false;
 
             this.Rec = BP.Web.WebUser.No;

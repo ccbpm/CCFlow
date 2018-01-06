@@ -558,7 +558,6 @@ namespace BP.En
                     return new GEEntity(className); //表单实体.
             }
 
-
             if (Htable_En == null)
             {
                 Htable_En = new Hashtable();

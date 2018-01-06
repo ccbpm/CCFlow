@@ -377,11 +377,14 @@
                 return;
             }
             //插入明细表数据
+            var dtl = new Entity(EnsName);
             $.each(paraDatas, function (i, data) {
-                var dtl = new Entity(EnsName);
+
                 dtl.CopyJSON(data);
+
                 dtl.RefPK = RefPKVal;
                 dtl.Rec = UserNo;
+                dtl.OID = 0;
                 dtl.Insert();
             });
 

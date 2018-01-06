@@ -170,7 +170,6 @@ function SaveVal(fk_mapdata, keyOfEn, val) {
 }
  */
 function DeptEmpModelAdv0(mapExt) {
-
 	var target = $("#TB_" + mapExt.AttrOfOper);
 	target.hide();
 

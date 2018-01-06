@@ -74,9 +74,9 @@
             mapExt.Tag1 = $("#TB_Tag1").val(); //高度
             mapExt.Tag2 = $("#TB_Tag2").val(); //高度
             mapExt.Tag3 = $("#TB_Tag3").val(); //高度
-
+            
             mapExt.Tag = $("#TB_Tag").val(); //高度
-
+            mapExt.DBType = $("#DDL_DBType").val(); //导入模式
 
             mapExt.ExtType = "DtlImpByJSON";
             var i = mapExt.Save();
@@ -115,7 +115,7 @@
         <tr>
             <td>高级属性</td>
             <td>
-                数据源类型<select id="DDL_DBType">
+                数据源类型<select id="DDL_DBType" name="DDL_DBType">
                     <option id="0" value="0">SQL模式</option>
                     <option id="1" value="1" selected="selected">JSON模式</option>
                 </select>
@@ -129,7 +129,7 @@
         <tr>
             <td>搜索提示</td>
             <td>
-                <input type="text" id="TB_SearchTip" style="width: 90%;" />
+                <input type="text" id="TB_SearchTip"name="TB_SearchTip" style="width: 90%;" />
                 <br/>
                 <font color="gray">显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索</font>
             </td>

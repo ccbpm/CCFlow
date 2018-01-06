@@ -75,6 +75,15 @@
 							return;
 						}
 						var json = JSON.parse(data);
+						//
+						$('#selectGrid').bootstrapTable("hideAllColumns");
+						if ($.isArray(json)) {
+							$('#selectGrid').bootstrapTable("showColumn", "_checkbox");
+							$.each(json[0], function (n, o) {
+								$('#selectGrid').bootstrapTable("showColumn", n);
+							});
+						}
+						//
 						if ($.isArray(selectedRows)) {
 							$.each(json, function (i, o) {
 								var sel = $.grep(selectedRows, function (obj) {
@@ -202,21 +211,25 @@
 			        height: $(document).height() / 3,
 			        uniqueId: "No",
 			        columns: [{
-			            checkbox: true,
-			            formatter: function (value, row, index) {
-			                if (row.checked) {
-			                    return {
-			                        "checked": true
-			                    };
-			                }
-			            }
-			        }, {
-			            field: 'No',
-			            title: '编号'
-			        }, {
-			            field: 'Name',
-			            title: '名称'
-			        }],
+						field : "_checkbox",
+						checkbox: true,
+						formatter: function (value, row, index) {
+							if (row.checked) {
+								return {
+									"checked": true
+								};
+							}
+						}
+					}, {
+						field: 'No',
+						title: '编号'
+					}, {
+						field: 'Name',
+						title: '名称'
+					}, {
+						field: 'test',
+						title: '测试'
+					}],
 			        "onCheck": function (row, element) {
 			            addSelectedData(global.selectedRows, [row]);
 			            loadViewGrid(global.selectedRows);
@@ -294,7 +307,7 @@
 							<table id="selectGrid"></table>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row row-margin-top">
 						<div class="col-md-12">
 							<table id="viewGrid"></table>
 						</div>

@@ -82,6 +82,9 @@ function AfterBindEn_DealMapExt(frmData) {
             case "PopDeptEmpModelAdv": //部门人员模式的高级多选.
                 DeptEmpModelAdv0(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
+			case "PopBranchesAndLeaf":
+				console.log(JSON.stringify(mapExt));
+				break;
             case "PopVal": //PopVal窗返回值.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");

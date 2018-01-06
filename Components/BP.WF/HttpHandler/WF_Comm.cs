@@ -1354,6 +1354,7 @@ namespace BP.WF.HttpHandler
         public string DBAccess_RunSQL()
         {
             string sql = this.GetRequestVal("SQL");
+            sql = sql.Replace("~", "'");
             return DBAccess.RunSQL(sql).ToString();
         }
         /// <summary>
@@ -1363,6 +1364,7 @@ namespace BP.WF.HttpHandler
         public string DBAccess_RunSQLReturnTable()
         {
             string sql = this.GetRequestVal("SQL");
+            sql = sql.Replace("~","'");
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }

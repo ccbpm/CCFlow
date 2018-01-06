@@ -120,6 +120,10 @@ namespace BP.WF.HttpHandler
                 foreach (Attr attr in en.EnMap.Attrs)
                     en.SetValByKey(attr.Key, this.GetRequestVal(attr.Key));
 
+
+                //返回数据.
+               // return en.ToJson(false);
+
                 return en.Update().ToString(); //返回影响行数.
             }
             catch (Exception ex)
@@ -256,10 +260,9 @@ namespace BP.WF.HttpHandler
                     en.SetValByKey(attr.Key, this.GetValFromFrmByKey(attr.Key));
 
                 //插入数据库.
-                en.Insert();
-
-                //执行查询.
-                en.Retrieve();
+                int i = en.Insert();
+                if (i == 1)
+                    en.Retrieve();//执行查询.
 
                 //返回数据.
                 return en.ToJson(false);

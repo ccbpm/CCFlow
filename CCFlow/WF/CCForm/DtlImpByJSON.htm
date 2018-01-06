@@ -91,7 +91,7 @@
             var ifcData = null;
             if (mapExt.DBType == 0) {//SQL 模式
                 var sql = mapExt.Tag2;
-                //ifcData = DBAccess.RunSQLReturnTable(sql);
+                ifcData = DBAccess.RunSQLReturnTable(sql);
             }
 
             if (mapExt.DBType == 1) {//JSON模式
@@ -136,13 +136,17 @@
             var data = null;
             var UserNo = GetQueryString("UserNo");
             var RefPKVal = GetQueryString("RefPKVal");
+            var keyWord = $("#TB_Key").val();
             if (mapExt.DBType == 0) {//SQL 模式
                 var sql = mapExt.Tag1;
-                //data = DBAccess.RunSQLReturnTable(sql);
+                while (sql.indexOf("@Key") > -1) {
+                    sql = sql.replace("@Key", keyWord);
+                }
+                sql = encodeURI(sql);
+                data = DBAccess.RunSQLReturnTable(sql);
             }
             if (mapExt.DBType == 1) {//JSON模式
                 var url = mapExt.Tag1;
-                var keyWord = $("#TB_Key").val();
                 keyWord = encodeURI(keyWord);
 
                 url = url.replace("@Key", keyWord);
@@ -161,9 +165,13 @@
             var data = null;
             var UserNo = GetQueryString("UserNo");
             var RefPKVal = GetQueryString("RefPKVal");
+            groupValue = groupValue == "all" ? "" : groupValue;
             if (mapExt.DBType == 0) {//SQL 模式
                 var sql = mapExt.Tag3;
-                //data = DBAccess.RunSQLReturnTable(sql);
+                while (sql.indexOf("@Key") > -1) {
+                    sql = sql.replace("@Key", groupValue);
+                }
+                data = DBAccess.RunSQLReturnTable(sql);
             }
             if (mapExt.DBType == 1) {//JSON模式
                 var url = mapExt.Tag3;
@@ -368,7 +376,8 @@
                 alert("没有选择导入数据，请选择！");
                 return;
             }
-
+            var stringJson = JSON.stringify(paraDatas);
+            alert(stringJson);
         }
 
         //取消，关闭弹出层

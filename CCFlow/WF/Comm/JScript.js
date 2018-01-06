@@ -694,3 +694,17 @@ function replaceAll(s1, s2, s3) {
     return s1.replace(new RegExp(s2, 'gm'), s3);
 }
 
+/**
+ * AtPara=@key1=value1@key2=valu2...@keyN=valueN
+ */
+function GetAtPara(atPara, key) {
+	if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
+		return undefined;
+	}
+	var reg = new RegExp("(^|@)" + key + "=([^@]*)(@|$)");
+	var results = atPara.match(reg);
+	if (results != null) {
+		return unescape(results[2]);
+	}
+	return undefined;
+}

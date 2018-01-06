@@ -69,54 +69,6 @@ $(function () {
     }
 });
 
-/**
- * 输入验证firfox, ff浏览器不支持execCommand()
- */
-function isFF() {
-	return navigator.userAgent.indexOf("Firefox") > 0;
-}
-function valitationBefore(o, validateType) {
-	if (isFF()) {
-		var value = o.value;
-		var flag = false;
-		switch (validateType) {
-			case "int" :
-				flag = (!isNaN(value) && value % 1 === 0);
-			break;
-			case "float" :
-			case "money" :
-				flag = !isNaN(value);
-			break;
-		}
-		if (flag) {
-			$(o).data({
-				value : o.value
-			});
-		}
-	}
-}
-function valitationAfter(o, validateType) {
-	if (isFF()) {
-		var value = o.value;
-		var flag = false;
-		switch (validateType) {
-			case "int" :
-				flag = (!isNaN(value) && value % 1 === 0);
-			break;
-			case "float" :
-			case "money" :
-				flag = !isNaN(value);
-			break;
-		}
-		if (!flag) {
-			o.value = $(o).data().value;
-		}
-	}
-}
-/**
- * 输入验证firfox, ff浏览器不支持execCommand()
- */
-
 function numonly(e) {
 	if (navigator.userAgent.indexOf("Firefox") > 0) {
 		var code;

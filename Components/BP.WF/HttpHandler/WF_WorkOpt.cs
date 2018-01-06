@@ -2219,7 +2219,7 @@ namespace BP.WF.HttpHandler
         {
             GenerWorkFlow gwf = new GenerWorkFlow(this.WorkID);
             gwf.Paras_DBTemplate = true;
-            gwf.Paras_DBTemplateName = this.GetRequestVal("Title");
+            gwf.Paras_DBTemplateName = HttpUtility.UrlDecode(this.GetRequestVal("Title"), System.Text.Encoding.UTF8);//this.GetRequestVal("Title");
             gwf.Update();
             return "设置成功";
         }

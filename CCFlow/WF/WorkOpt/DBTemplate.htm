@@ -120,7 +120,7 @@
             var name = window.prompt('请输入模版名称', title);
             if (name == null || name == '')
                 return;
-
+            name = encodeURI(name);
             $.ajax({
                 type: 'post',
                 async: true,

@@ -125,7 +125,7 @@ function Delete(keyOfEn, val) {
 
     var oid = (pageData.WorkID || pageData.OID || "");
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-    frmEleDB.MyPK = KeyOfEn + "_" + oid + "_" + val;
+    frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val;
     frmEleDB.Delete();
 }
 
@@ -138,7 +138,7 @@ function SaveVal(fk_mapdata, keyOfEn, val) {
 
     frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val;
     frmEleDB.FK_MapData = fk_mapdata;
-    frmEleDB.EleID = KeyOfEn;
+    frmEleDB.EleID = keyOfEn;
     frmEleDB.RefPKVal = oid;
     frmEleDB.Tag1 = val;
     if (frmEleDB.Update() == 0) {

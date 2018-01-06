@@ -980,6 +980,7 @@ var Entity = (function () {
                     var value = GetQueryString(n);
                     if (value != null && typeof value !== "undefined" && $.trim(value) != "") {
                         self[n] = value;
+						jsonString[n] = value;
                     }
                 }
             });

@@ -376,8 +376,17 @@
                 alert("没有选择导入数据，请选择！");
                 return;
             }
-            var stringJson = JSON.stringify(paraDatas);
-            alert(stringJson);
+            //插入明细表数据
+            $.each(paraDatas, function (i, data) {
+                var dtl = new Entity(EnsName);
+                dtl.CopyJSON(data);
+                dtl.RefPK = RefPKVal;
+                dtl.Rec = UserNo;
+                dtl.Insert();
+            });
+
+            //执行完毕关闭弹窗
+            DalogModelCose();
         }
 
         //取消，关闭弹出层

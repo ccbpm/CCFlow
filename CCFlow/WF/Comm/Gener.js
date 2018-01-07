@@ -633,7 +633,7 @@ var Entity = (function () {
         });
         return params;
     }
-    
+
     function getParams1(self) {
         var params = ["t=" + new Date().getTime()];
         $.each(jsonString, function (n, o) {
@@ -697,12 +697,12 @@ var Entity = (function () {
                         alert(data);
                         return;
                     }
-					var self = this;
+                    var self = this;
                     $.each(params, function (n, o) {
-						if (typeof self[n] !== "function") {
-							jsonString[n] = o;
-							self[n] = o;
-						}
+                        if (typeof self[n] !== "function") {
+                            jsonString[n] = o;
+                            self[n] = o;
+                        }
                     });
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -983,7 +983,7 @@ var Entity = (function () {
                     var value = GetQueryString(n);
                     if (value != null && typeof value !== "undefined" && $.trim(value) != "") {
                         self[n] = value;
-						jsonString[n] = value;
+                        jsonString[n] = value;
                     }
                 }
             });
@@ -992,20 +992,22 @@ var Entity = (function () {
         CopyForm: function () {
             // 复制form中有但Entity对象中没有的属性
             var frmParas = [];
-            $("input[name^=TB_],input[name^=CB_]:checked,input[name^=RB_]:checked,[name^=DDL_]").each(function (i, o) {
-                var key = $(this).attr("name").replace(/^TB_|CB_|RB_|DDL_/, "");
-                var value = $(this).val();
-                frmParas.push("@" + key + "=" + value);
-            });
-            var formParams = frmParas.join("");
-            //
-            this.frmParas = formParams;
-            jsonString.frmParas = formParams;
-            // ----------
-            return;
+            //            $("input[name^=TB_],input[name^=CB_]:checked,input[name^=RB_]:checked,[name^=DDL_]").each(function (i, o) {
+            //                var key = $(this).attr("name").replace(/^TB_|CB_|RB_|DDL_/, "");
+            //                var value = $(this).val();
+            //                frmParas.push("@" + key + "=" + value);
+            //            });
+            //            var formParams = frmParas.join("");
+            //            //
+            //            this.frmParas = formParams;
+            //            jsonString.frmParas = formParams;
+            //            // ----------
+            //            return;
             // 老版本
             var self = this;
             $.each(self, function (n, o) {
+
+                 //基本属性.
                 var target = $("#TB_" + n);
                 if (target.length == 1) {
                     self[n] = target.val();
@@ -1016,16 +1018,7 @@ var Entity = (function () {
                     self[n] = target.val();
                 }
 
-                /*
-                var target = $("input[name='CB_" + n + "']:checked");
-                if (target.length > 0) {
-                var tmp = [];
-                target.each(function (i, o) {
-                tmp.push($(this).val());
-                });
-                self[n] = tmp.join(",");
-                }
-                */
+                //@解， 怎么设置如果没有选择就设置0? 
                 var target = $("input[name='CB_" + n + "']:checked");
                 if (target.length > 0) {
                     self[n] = "1";
@@ -1035,23 +1028,55 @@ var Entity = (function () {
                 if (target.length == 1) {
                     self[n] = target.val();
                 }
+
+                //参数属性.
+                var target = $("#TBPara_" + n);
+                if (target.length == 1) {
+                    var value = $(this).val();
+                    frmParas.push("@" + n + "=" + value);
+                }
+
+                var target = $("#DDLPara_" + n);
+                if (target.length == 1) {
+                    var value = $(this).val();
+                    frmParas.push("@" + n + "=" + value);
+                }
+
+                //@解， 怎么设置如果没有选择就设置0? 
+                var target = $("input[name='CB_" + n + "']:checked");
+                if (target.length > 0) {
+                    frmParas.push("@" + n + "=1");
+                }
+
+                // 列表参数.
+                var target = $("input[name^='RBPara_" + n + "']:checked");
+                if (target.length == 1) {
+                    frmParas.push("@" + n + "=" + target.val());
+                }
+
             });
+
+            this.frmParas = formParams;
+            var formParams = frmParas.join("");
+            this.frmParas = formParams;
+            jsonString.frmParas = formParams;
+
         },
 
-		CopyJSON : function (json) {
-			var count = 0;
-			if (json) {
-				var self = this;
-				$.each(json, function (n, o) {
-					if (typeof self[n] !== "function") {
-						self[n] = o;
-						jsonString[n] = o;
-						count++;
-					}
-				});
-			}
-			return count;
-		},
+        CopyJSON: function (json) {
+            var count = 0;
+            if (json) {
+                var self = this;
+                $.each(json, function (n, o) {
+                    if (typeof self[n] !== "function") {
+                        self[n] = o;
+                        jsonString[n] = o;
+                        count++;
+                    }
+                });
+            }
+            return count;
+        },
 
         ToJsonWithParas: function () {
             var json = {};

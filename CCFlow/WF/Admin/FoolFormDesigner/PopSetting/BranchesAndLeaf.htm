@@ -17,6 +17,13 @@
             var mapExt = new Entity("BP.Sys.MapExt");
             mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
+            // alert(mapExt.Tag);
+            //alert(mapExt.MyPK);
+
+            if (mapExt.GetPara("SelectType") == "")
+                mapExt.SetPara("SelectType", "1");
+
+            //alert(i);
 
             //批量为复制.
             GenerFullAllCtrlsVal(mapExt);
@@ -52,21 +59,23 @@
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             mapExt.CopyURL();  //从url里面copy数据.
-            mapExt.CopyForm(); //从from里面copy数据. 
+            mapExt.CopyForm(); //从from里面copy数据.
 
-          //  mapExt.SetPara("Title", $("#TB_Title").val());
-           // mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
+            
+
+           mapExt.SetPara("Title", $("#TB_Title").val());
+          // mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
           // mapExt.SetPara("RootNo", $("#TB_RootTreeNo").val()); //树的根节点编号.
 
             //var val= $("#DDL_SelectType").val();
             //alert(val);
-            //  mapExt.SetPara("SelectType", val); //选择类型.
+            //mapExt.SetPara("SelectType", val); //选择类型.
 
             mapExt.ExtType = "PopBranchesAndLeaf";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
 
-            mapExt.Save();
-
+            var val = mapExt.Save();
+           // alert(val);
             window.location.href = window.location.href;
         }
     </script>
@@ -84,7 +93,7 @@
 
 <tr>
 <td>标题</td>
-<td><input type="text" id="TB_Title" style="width:99%;" /> 
+<td><input type="text" id="TBPara_Title" style="width:99%;" /> 
 <br />
 <font color="gray">
 显示在窗口的文字，比如:关联流水.
@@ -100,7 +109,7 @@
 
 <tr>
 <td>搜索提示</td>
-<td><input type="text" id="TB_SearchTip" style="width:90%;" /> 
+<td><input type="text" id="TBPara_SearchTip" style="width:90%;" /> 
 <br><font color="gray" >显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font></td>
 </tr>
 
@@ -116,8 +125,8 @@
 </select> 
 
 选择类型:
-<input type="radio" id="RB_SelectType_0" name="RB_SelectType" value="0"  /> <label for="RB_SelectType_0">单选</label>
-<input type="radio" id="RB_SelectType_1" name="RB_SelectType" value="1" /> <label for="RB_SelectType_1">多选</label>
+<input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0"  /> <label for="RBPara_SelectType_0">单选</label>
+<input type="radio" id="RBPara_SelectType_1" name="RBPara_SelectType" value="1" /> <label for="RBPara_SelectType_1">多选</label>
   
  </td>
 </tr>
@@ -163,7 +172,7 @@
 </tr>
 <tr>
 <td colspan=2>
- 根目录树编号:<input id="TB_RootTreeNo" value="0"  style="width:50px;" type="text" > <!--<font color=gray>对树结构有效</font>-->
+ 根目录树编号:<input id="TBPara_RootTreeNo" value="0"  style="width:50px;" type="text" > <!--<font color=gray>对树结构有效</font>-->
 </input>
 </td>
 </tr>

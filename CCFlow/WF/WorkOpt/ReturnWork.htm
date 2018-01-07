@@ -14,7 +14,6 @@
     <!-- 导入配置文件. -->
     <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
     <link href="../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
-
     <script type="text/javascript" src="../Scripts/config.js"></script>
     <style type="text/css">
         body {
@@ -34,6 +33,7 @@
         var pageData = {};
         $(function () {
             //初始化页面退回信息
+
 
             pageData = {
                 FK_Node: GetQueryString('FK_Node'),
@@ -65,7 +65,9 @@
                     var DDL_NodesHtml = '';
 
                     $.each(returnNodeArr, function (i, returnNode) {
-                        DDL_NodesHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
+                        if (returnNode.AtPara && returnNode.AtPara.indexOf('IsHuiQian=1') == -1) {
+                            DDL_NodesHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
+                        }
                     });
 
                     $('#DDL_Nodes').html(DDL_NodesHtml);

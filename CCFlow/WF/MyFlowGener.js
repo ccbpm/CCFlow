@@ -11,7 +11,6 @@ var isLoadOk = false;
 
 $(function () {
 
-
     initPageParam(); //初始化参数
 
     InitToolBar(); //工具栏.ajax
@@ -1530,17 +1529,36 @@ function InitToolBar() {
             }
 
             if ($('[name=Delete]').length > 0) {
-                var onclickFun = $('[name=Delete]').attr('onclick');
-                if (onclickFun != undefined) {
-                    if (plant == 'CCFlow') {
-                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.aspx'));
-                    } else {
-                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.jsp'));
-                    }
-                }
+                $('[name=Delete]').attr('onclick', '');
+                $('[name=Delete]').unbind('click');
+                $('[name=Delete]').bind('click', function () {
+                    // initModal("Delete");
+                    // $('#Delete').modal().show();
+                    DeleteFlow();
+                });
             }
+
+
+            //            if ($('[name=Delete]').length > 0) {
+            //                var onclickFun = $('[name=Delete]').attr('onclick');
+
+            //                if (onclickFun != undefined) {
+            //                    if (plant == 'CCFlow') {
+            //                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.aspx'));
+            //                    } else {
+            //                        $('[name=Delete]').attr('onclick', onclickFun.replace('MyFlowInfo.htm', 'MyFlowInfo.jsp'));
+            //                    }
+            //                }
+            //            }
         }
     });
+}
+
+//sss
+function DeleteFlow() {
+
+    alert('sss');
+ 
 }
 
 //初始化退回、移交、加签窗口

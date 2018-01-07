@@ -29,9 +29,9 @@
             GenerFullAllCtrlsVal(mapExt);
 
             //基本属性.
-            $("#TB_Title").val(mapExt.GetPara("Title"));
-            $("#TB_SearchTip").val(mapExt.GetPara("SearchTip"));
-            $("#TB_RootTreeNo").val(mapExt.GetPara("RootNo")); //树的根节点编号.
+           // $("#TB_Title").val(mapExt.GetPara("Title"));
+          //p").val(mapExt.GetPara("SearchTip"));
+         //   $("#TB_RootTreeNo").val(mapExt.GetPara("RootNo")); //树的根节点编号.
 
             //设置按钮是否可以用?
             if (i == 0)
@@ -61,9 +61,7 @@
             mapExt.CopyURL();  //从url里面copy数据.
             mapExt.CopyForm(); //从from里面copy数据.
 
-            
 
-           mapExt.SetPara("Title", $("#TB_Title").val());
           // mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
           // mapExt.SetPara("RootNo", $("#TB_RootTreeNo").val()); //树的根节点编号.
 

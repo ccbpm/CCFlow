@@ -960,20 +960,23 @@ var Entity = (function () {
             if (typeof atPara != "string" || typeof key == "undefined" || key == "") {
                 return;
             }
+
             var m = "@" + key + "=";
             var index = atPara.indexOf(m);
             if (index == -1) {
                 this.AtPara += "@" + key + "=" + value;
-            } else {
-                var p = atPara.substring(0, index + m.length);
-                var s = atPara.substring(index + m.length, atPara.length);
-                var i = s.indexOf("@");
-                if (i == -1) {
-                    this.AtPara = p + value;
-                } else {
-                    this.AtPara = p + value + s.substring(i, s.length);
-                }
+                return;
             }
+
+            var p = atPara.substring(0, index + m.length);
+            var s = atPara.substring(index + m.length, atPara.length);
+            var i = s.indexOf("@");
+            if (i == -1) {
+                this.AtPara = p + value;
+            } else {
+                this.AtPara = p + value + s.substring(i, s.length);
+            }
+
         },
 
         CopyURL: function () {
@@ -1005,61 +1008,72 @@ var Entity = (function () {
             //            return;
             // 老版本
             var self = this;
-            $.each(self, function (n, o) {
+            $.each(self, function (attrKay, val) {
 
-                 //基本属性.
-                var target = $("#TB_" + n);
+                //alert(o);
+                //需要排除非参数属性.
+
+                //基本属性.
+                var target = $("#TB_" + attrKay);
                 if (target.length == 1) {
-                    self[n] = target.val();
+                    self[attrKay] = target.val();
                 }
 
-                var target = $("#DDL_" + n);
+                var target = $("#DDL_" + attrKay);
                 if (target.length == 1) {
-                    self[n] = target.val();
+                    self[attrKay] = target.val();
                 }
 
                 //@解， 怎么设置如果没有选择就设置0? 
-                var target = $("input[name='CB_" + n + "']:checked");
+                var target = $("input[name='CB_" + attrKay + "']:checked");
                 if (target.length > 0) {
-                    self[n] = "1";
+                    self[attrKay] = "1";
                 }
 
-                var target = $("input[name^='RB_" + n + "']:checked");
+                var target = $("input[name^='RB_" + attrKay + "']:checked");
                 if (target.length == 1) {
-                    self[n] = target.val();
+                    self[attrKay] = target.val();
                 }
 
                 //参数属性.
-                var target = $("#TBPara_" + n);
+                var target = $("#TBPara_" + attrKay);
                 if (target.length == 1) {
+
                     var value = $(this).val();
-                    frmParas.push("@" + n + "=" + value);
+                    //  alert(value);
+
+                    self.SetPara(attrKay, value);
+                    //frmParas.push("@" + n + "=" + value);
                 }
 
-                var target = $("#DDLPara_" + n);
+                var target = $("#DDLPara_" + attrKay);
                 if (target.length == 1) {
                     var value = $(this).val();
-                    frmParas.push("@" + n + "=" + value);
+                    self.SetPara(attrKay, value);
+                    // frmParas.push("@" + n + "=" + value);
                 }
 
                 //@解， 怎么设置如果没有选择就设置0? 
-                var target = $("input[name='CB_" + n + "']:checked");
+                var target = $("input[name='CB_" + attrKay + "']:checked");
                 if (target.length > 0) {
-                    frmParas.push("@" + n + "=1");
+
+                    self.SetPara(attrKay, "1");
+                    // frmParas.push("@" + n + "=1");
                 }
 
                 // 列表参数.
-                var target = $("input[name^='RBPara_" + n + "']:checked");
+                var target = $("input[name^='RBPara_" + attrKay + "']:checked");
                 if (target.length == 1) {
-                    frmParas.push("@" + n + "=" + target.val());
+                    var value = $(this).val();
+                    self.SetPara(attrKay, value);
                 }
-
             });
 
-            this.frmParas = formParams;
-            var formParams = frmParas.join("");
-            this.frmParas = formParams;
-            jsonString.frmParas = formParams;
+            //            this.frmParas = formParams;
+            //            var formParams = frmParas.join("");
+            //            this.frmParas = formParams;
+            //            jsonString.frmParas = formParams;
+            alert(JSON.stringify(self));
 
         },
 

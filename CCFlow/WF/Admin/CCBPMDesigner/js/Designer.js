@@ -63,20 +63,34 @@ function InitContexMenu() {
 				"name" : "linecondition"
 			}, cId);
 		} else {
-			var fId = STACK.figureGetByXY(x, y);
-			$("#HD_BPMN_NodeID").val("");
-			$("#HD_BPMN_FigureID").val(fId);
-			var figure = STACK.figureGetById(fId);
-			if (figure) {
-				var bpm_Node = figure.CCBPM_OID;
-				if (bpm_Node) {
-					$("#HD_BPMN_NodeID").val(bpm_Node);
+			cId = CONNECTOR_MANAGER.connectorGetByTextXY(x, y);
+			if (cId != -1) {
+
+			} else {
+				var fId = STACK.figureGetByXY(x, y);
+				if (fId != -1) {
+					$("#HD_BPMN_NodeID").val("");
+					$("#HD_BPMN_FigureID").val(fId);
+					var figure = STACK.figureGetById(fId);
+					var tId = STACK.textGetByFigureXY(fId, x, y);
+					if (tId == -1) {
+						var bpm_Node = figure.CCBPM_OID;
+						if (bpm_Node) {
+							$("#HD_BPMN_NodeID").val(bpm_Node);
+						}
+						// 对应Designer.htm:196菜单div#nodeMenu子项div的data-options属性
+						NodeProperty_Funs({
+							"iconCls" : "icon-edit",
+							"name" : "NodeProperty"
+						});
+					} else {
+						$("#HD_BPMN_TextPrimitiveID").val(tId);
+						TextProperty_Funs({
+							"iconCls" : "icon-edit",
+							"name" : "text_edit"
+						});
+					}
 				}
-				// 对应Designer.htm:196菜单div#nodeMenu子项div的data-options属性
-				NodeProperty_Funs({
-					"iconCls" : "icon-edit",
-					"name" : "NodeProperty"
-				});
 			}
 		}
 	});
@@ -580,7 +594,7 @@ function NodeProperty_Funs(item) {
 
 function TextProperty_Funs(item) {
     var figureId = $("#HD_BPMN_FigureID").val();
-    
+    var textPrimitiveId = $("#HD_BPMN_TextPrimitiveID").val() || 0;
     //根据事件名称进行执行
     switch (item.name) {
         case "text_edit": //编辑文本
@@ -595,7 +609,7 @@ function TextProperty_Funs(item) {
             // set current state
             state = STATE_TEXT_EDITING;
             // set up text editor
-            setUpTextEditorPopup(figure, 0);
+            setUpTextEditorPopup(figure, textPrimitiveId);
             redraw = true;
             draw();
             break;

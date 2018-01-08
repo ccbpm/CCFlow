@@ -241,6 +241,9 @@ namespace BP.WF.HttpHandler
 
                 if (DataType.IsNullOrEmpty(str) == true)
                     str = this.GetRequestVal("WorkID");
+
+                if (DataType.IsNullOrEmpty(str) == true)
+                    str = this.GetRequestVal("PK");
                 return str;
             }
         }

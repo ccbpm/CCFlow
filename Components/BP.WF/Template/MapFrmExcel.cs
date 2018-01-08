@@ -157,6 +157,8 @@ namespace BP.WF.Template
 				#region 模版属性。
 				map.AddTBString(MapFrmExcelAttr.TemplaterVer, null, "模版编号", true, false, 0, 30, 20);
                 map.AddTBString(MapFrmExcelAttr.DBSave, null, "Excel数据文件存储", true, false, 0, 50, 20);
+                map.SetHelperAlert(MapFrmExcelAttr.DBSave,
+                    "二进制的excel文件存储到表的那个字段里面？默认为DBFile, 如果此表对应多个excel文件就会导致二进制excel文件存储覆盖.");
 				#endregion 模版属性。
 
 				#region 设计者信息.
@@ -320,7 +322,12 @@ namespace BP.WF.Template
 				map.AddRefMethod(rm);
 
 
-
+                rm = new RefMethod();
+                rm.Title = "Excel表单属性";
+                rm.GroupName = "高级设置";
+                rm.ClassMethodName = this.ToString() + ".DoMapExcel";
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
 
 				#endregion 高级设置.
 
@@ -354,12 +361,14 @@ namespace BP.WF.Template
 
 		#region 节点表单方法.
 
+        public string DoMapExcel()
+        {
+            return SystemConfig.CCFlowWebPath + "WF/Comm/En.htm?EnName=BP.WF.Template.MapFrmExcel&No=" + this.No;
+        }
 		public string DoDesignerFool()
 		{
 			return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
 		}
-
-
 		public string DoEditExcelTemplate()
 		{
 			return "../../Admin/CCFormDesigner/ExcelFrmDesigner/Designer.htm?FK_MapData=" + this.No;

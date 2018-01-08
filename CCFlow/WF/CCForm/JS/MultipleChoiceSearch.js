@@ -15,7 +15,7 @@ function MultipleChoiceSearch(mapExt) {
 	container.width(width);
 	container.height(height);
 
-    (function (AttrOfOper, sql) {
+    (function (FK_MapData, AttrOfOper, sql) {
         var mselector = $("#" + AttrOfOper + "_mselector");
         mselector.mselector({
             "fit": true,
@@ -23,12 +23,36 @@ function MultipleChoiceSearch(mapExt) {
             "sql": sql,
             "onSelect": function (record) {
                 $("#TB_" + AttrOfOper).val(mselector.mselector("getValue"));
-                //mssel(record);
+				msSaveVal(FK_MapData, AttrOfOper, record.No, record.Name);
             },
             "onUnselect": function (record) {
                 $("#TB_" + AttrOfOper).val(mselector.mselector("getValue"));
-                //msunsel(record);
+                msDelete(AttrOfOper, record.No);
             }
         });
-    })(mapExt.AttrOfOper, mapExt.Tag1);
+		//mselector.mselector("loadData", [{ No : "admin", Name : "admin"}]);
+    })(mapExt.FK_MapData, mapExt.AttrOfOper, mapExt.Tag1);
+}
+
+//删除数据.
+function msDelete(keyOfEn, val) {
+    var oid = (pageData.WorkID || pageData.OID || "");
+    var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+    frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val;
+    frmEleDB.Delete();
+}
+
+//设置值.
+function msSaveVal(fk_mapdata, keyOfEn, val1, val2) {
+    var oid = (pageData.WorkID || pageData.OID || "");
+    var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+    frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val1;
+    frmEleDB.FK_MapData = fk_mapdata;
+    frmEleDB.EleID = keyOfEn;
+    frmEleDB.RefPKVal = oid;
+    frmEleDB.Tag1 = val1;
+	frmEleDB.Tag2 = val2;
+    if (frmEleDB.Update() == 0) {
+        frmEleDB.Insert();
+    }
 }

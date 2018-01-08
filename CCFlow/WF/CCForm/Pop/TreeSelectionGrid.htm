@@ -46,6 +46,7 @@
 						return obj.No == o.No;
 					});
 					if (sel.length == 0) {
+						SaveVal(FK_MapData, AttrOfOper, oid, o.No);
 						globalSelectedRows.push(o);
 					}
 				});
@@ -57,6 +58,7 @@
 				$.each(selectedRows, function (i, o) {
 					for (var index = 0; index < globalSelectedRows.length; index++) {
 						if (o.No == globalSelectedRows[index].No) {
+							Delete(AttrOfOper, oid, o.No);
 							globalSelectedRows.splice(index, 1);
 							break;
 						}
@@ -185,7 +187,13 @@
 			    // global
 			    var global = window;
 			    global.selectedRows = [];
+				
+				//
+				global.FK_MapData = mapExt.FK_MapData;
+				global.AttrOfOper = mapExt.AttrOfOper;
+				global.oid = GetQueryString("oid");
 			    
+				//
 			    var searchUrl = mapExt.Tag1;
 			    var treeUrl = mapExt.Tag2;
 				var treeClickUrl = mapExt.Tag3;
@@ -278,6 +286,27 @@
 					field : "No",
 					values : [ No ]
 				});
+			}
+
+			//删除数据.
+			function Delete(keyOfEn, oid, No) {
+				return;
+				var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+				frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + No;
+				frmEleDB.Delete();
+			}
+			//设置值.
+			function SaveVal(fk_mapdata, keyOfEn, oid, val) {
+				return;
+				var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+				frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val;
+				frmEleDB.FK_MapData = fk_mapdata;
+				frmEleDB.EleID = keyOfEn;
+				frmEleDB.RefPKVal = oid;
+				frmEleDB.Tag1 = val;
+				if (frmEleDB.Update() == 0) {
+					frmEleDB.Insert();
+				}
 			}
 		</script>
 	<head>

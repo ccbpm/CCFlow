@@ -193,7 +193,7 @@ function DeptEmpModelAdv0(mapExt) {
 	var iframeId = mapExt.MyPK + mapExt.FK_MapData;
 	var title = GetAtPara(mapExt.AtPara, "Title");
 	//
-	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?MyPK=" + mapExt.MyPK + "&m=" + Math.random();
+	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?MyPK=" + mapExt.MyPK + "&oid=" + (pageData.WorkID || pageData.OID || "") + "&m=" + Math.random();
 	container.on("dblclick", function () {
 		OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
 			var iframe = document.getElementById(iframeId);
@@ -201,9 +201,7 @@ function DeptEmpModelAdv0(mapExt) {
 				var selectedRows = iframe.contentWindow.selectedRows;
 				// save data eledb
 				if ($.isArray(selectedRows)) {
-					console.log(JSON.stringify(selectedRows));
 					$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", selectedRows);
-					
 				}
 			}
 			return true;

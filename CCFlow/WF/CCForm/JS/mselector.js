@@ -233,8 +233,26 @@
 
 	function resize(target) {
 		var c = $(target).find(".ccflow-input-span-container");
+		//
+		var width = c.width();
+		//
+		var pl = c.css("padding-left").match(/[0-9]+/);
+		if ($.isArray(pl) && pl.length > 0) {
+			width += 2 * parseInt(pl[0]);
+		} else {
+			width += 8;
+		}
+		//
+		var bl = c.css("border-left").match(/[0-9]+/);
+		if ($.isArray(bl) && bl.length > 0) {
+			width += 2 * parseInt(bl[0]);
+		} else {
+			width += 2;
+		}
+		//
 		$(target).find(".ccflow-block").css({
-			"width" : c.width() + 2 * parseInt(c.css("padding-left").match(/[0-9]+/)[0]) +  2 * parseInt(c.css("border-left").match(/[0-9]+/)[0])
+			//"width" : c.width() + 2 * parseInt(c.css("padding-left").match(/[0-9]+/)[0]) + 2 * parseInt(c.css("border-left").match(/[0-9]+/)[0])
+			"width" : width
 		});
 	}
 

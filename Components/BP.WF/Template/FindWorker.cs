@@ -597,6 +597,31 @@ namespace BP.WF.Template
             }
             #endregion
 
+            #region 按配置的人员路由表计算
+            if (town.HisNode.HisDeliveryWay == DeliveryWay.ByFromEmpToEmp)
+            {
+                string[] fromto = town.HisNode.DeliveryParas.Split('@');
+
+                foreach (string str in fromto)
+                {
+                    string[] kv=str.Split(',');
+
+                    if (kv[0]==WebUser.No)
+                    {
+                        string empTo=kv[1];
+                        //BP.Port.Emp emp = new BP.Port.Emp(empTo);
+                        DataRow dr = dt.NewRow();
+                        dr[0] = empTo;
+                      //  dr[1] = emp.Name;
+                        dt.Rows.Add(dr);
+                        return dt;
+                    }
+                }
+                throw new Exception("@系统管理员没有为您配置路由");
+            }
+            #endregion
+
+
             #region 按岗位计算(以部门集合为纬度).
             if (town.HisNode.HisDeliveryWay == DeliveryWay.ByStationAndEmpDept)
             {

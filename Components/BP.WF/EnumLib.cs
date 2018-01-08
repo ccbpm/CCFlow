@@ -932,6 +932,10 @@ namespace BP.WF
         /// </summary>
         BySQLTemplate = 17,
         /// <summary>
+        /// 从人员到人员
+        /// </summary>
+        ByFromEmpToEmp = 18,
+        /// <summary>
         /// 按照ccflow的BPM模式处理
         /// </summary>
         ByCCFlowBPM = 100

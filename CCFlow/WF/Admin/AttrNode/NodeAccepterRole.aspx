@@ -76,6 +76,11 @@
             //按绑定部门计算，该部门一人处理标识该工作结束(子线程)
             $("#RB16").hide();
             $("#YC_17").hide();
+
+            //按人员从到来计算.
+            $("#RB18").hide();
+            $("#YC_18_").hide();
+
             //按ccBPM的BPM模式处理
             $("#RB100").hide();
             $("#YC_18").hide();
@@ -212,8 +217,18 @@
                     iconCls: 'icon-reddot'
                 });
             }
+
             if (document.getElementById("<%=RB_ByCCFlowBPM.ClientID%>").checked) {
-                onclickSJ(18);
+                onclickSJ(100);
+                $('#tt').tree('update', {
+                    target: $('#tt').tree('find', "node_18").target,
+                    iconCls: 'icon-reddot'
+                });
+            }
+
+
+            if (document.getElementById("<%=RB_ByFromEmpToEmp.ClientID%>").checked) {
+                onclickSJ('RB_ByFromEmpToEmp');
                 $('#tt').tree('update', {
                     target: $('#tt').tree('find', "node_18").target,
                     iconCls: 'icon-reddot'
@@ -279,15 +294,27 @@
             //按绑定部门计算，该部门一人处理标识该工作结束(子线程)
             $("#RB16").hide();
             $("#YC_17").hide();
+
+            $("#RB17").hide();
+            $("#YC_17_").hide();
+            
             //按ccBPM的BPM模式处理
             $("#RB100").hide();
             $("#YC_18").hide();
+
+            if (runModel == "RB_ByFromEmpToEmp") {
+                $("#RB18").show();
+                document.getElementById("<%=RB_ByFromEmpToEmp.ClientID%>").checked = "checked";
+                $("#YC_18_").show();
+                return;
+            }
 
             if (runModel == 1) {
                 $("#RB0").show();
                 document.getElementById("<%=RB_ByStation.ClientID%>").checked = "checked";
                 $("#YC_1").show();
             }
+
             if (runModel == 2) {
                 $("#RB1").show();
                 document.getElementById("<%=RB_ByDept.ClientID%>").checked = "checked";
@@ -377,7 +404,7 @@
                 document.getElementById("<%=RB_BySetDeptAsSubthread.ClientID%>").checked = "checked";
                 $("#YC_17").show();
             }
-            if (runModel == 18) {
+            if (runModel == 18 || runModel==100) {
                 $("#RB100").show();
                 document.getElementById("<%=RB_ByCCFlowBPM.ClientID%>").checked = "checked";
                 $("#YC_18").show();
@@ -523,7 +550,11 @@
                                     </li>
                                     <li id="node_18">
                                         <div>
-                                            <a  class='l-link' onclick="onclickSJ(18)" href="#RB100"><span class="nav">
+                                            <a  class='l-link' onclick="onclickSJ('RB_ByFromEmpToEmp')" href="#RB18"><span class="nav">按照配置的人员路由列表计算</span></a></div>
+                                    </li>
+                                    <li id="node_100">
+                                        <div>
+                                            <a  class='l-link' onclick="onclickSJ(100)" href="#RB100"><span class="nav">
                                                 按ccBPM的BPM模式处理</span></a></div>
                                     </li>
                                 </ul>
@@ -929,6 +960,26 @@
                                     </ul>
                                 </td>
                             </tr>
+
+                             <!-- ===================================  18 按照从人员，到人员计算. -->
+                            <tr id="RB18">
+                                <th>
+                                    <div style="float: left">
+                                        <asp:RadioButton ID="RB_ByFromEmpToEmp" Text="按照人员配置的路由计算" GroupName="xxx" runat="server" />
+                                    </div>
+                                    <div style="float: right">请按照约定的格式设置从人员发送到人员的路由路径.</div>
+                                </th>
+                            </tr>
+                            <tr id="YC_18_">
+                                <td class="BigDoc">
+                                    <asp:TextBox ID="TB_ByFromEmpToEmp" runat="server" Width="98%" Rows="3" Height="63px" TextMode="MultiLine"></asp:TextBox>
+                                    <ul>
+                                        <li >格式为 @zhangsan,lisi@wangwu,zhaoliu      从如果是张三发送的就发送到李四身上. 多个人员对用@分开. </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                           
+
                         </table>
                     </div>
                     <div title="辅助属性" style="padding: 10px">
@@ -981,6 +1032,8 @@
                                     </ul>
                                 </td>
                             </tr>
+
+
                         </table>
                     </div>
                 </div>

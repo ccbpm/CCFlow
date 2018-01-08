@@ -154,6 +154,10 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                     case DeliveryWay.ByCCFlowBPM:
                         this.RB_ByCCFlowBPM.Checked = true;
                         break;
+                    case DeliveryWay.ByFromEmpToEmp: //从人员，到人员.
+                        this.RB_ByFromEmpToEmp.Checked = true;
+                        this.TB_ByFromEmpToEmp.Text = nd.DeliveryParas; // dt.Rows[0]["DeliveryParas"].ToString();
+                        break;
                 }
             }
         }
@@ -164,14 +168,12 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
         }
         protected void Btn_Save_Click(object sender, EventArgs e)
         {
-
             //获取选择的 09.与指定节点处理人相同.
             string strzdjd = "";
             foreach (ListItem li in this.CBL_BySpecNodeEmp.Items)
             {
                 if (li.Selected) strzdjd += li.Value + ",";
             }
-
             strzdjd = strzdjd.TrimEnd(',');
 
             //12.按指定节点的人员岗位计算
@@ -269,7 +271,6 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
             {
                 //由上一步发送人选择
                 nd.HisDeliveryWay = DeliveryWay.BySelected;
-
             }
 
             if (this.RB_ByPreviousNodeFormEmpsField.Checked)
@@ -352,6 +353,16 @@ namespace CCFlow.WF.Admin.FlowNodeAttr
                 //按照ccflow的BPM模式处理.
                 nd.HisDeliveryWay = DeliveryWay.ByCCFlowBPM;
             }
+
+            //从人员，到人员的路由.
+            if (this.RB_ByFromEmpToEmp.Checked)
+            {
+                //按 RB_BySQLTemplate 
+                nd.HisDeliveryWay = DeliveryWay.ByFromEmpToEmp;
+                nd.DeliveryParas = this.TB_ByFromEmpToEmp.Text; //.SelectedValue;
+                nd.DirectUpdate();
+            }
+
 
             //是否可以分配工作？
             nd.IsTask = this.CB_IsSSS.Checked;

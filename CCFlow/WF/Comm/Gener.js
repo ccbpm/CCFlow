@@ -317,43 +317,54 @@ function GenerFullAllCtrlsVal(data) {
         }
 
         // 处理参数字段.....................
+		if (attr == "AtPara") {
+			//val=@Title=1@SelectType=0@SearchTip=2@RootTreeNo=0
+			$.each(val.split("@"), function (i, o) {
+				if (o == "") {
+					return true;
+				}
+				var kv = o.split("=");
+				if (kv.length == 2) {
+					json[kv[0]] = kv[1];
+					var suffix = kv[0];
+					var val = kv[1];
+					
+					// textbox
+					tb = document.getElementById('TBPara_' + suffix);
+					if (tb != null) {
+						tb.value = val;
+						return true;
+					}
 
-        // textbox
-        tb = document.getElementById('TBPara_' + attr);
-        if (tb != null) {
-            tb.value = val;
-            continue;
-        }
+					//下拉框.
+					ddl = document.getElementById('DDLPara_' + suffix);
+					if (ddl != null) {
+						if (ddl.options.length == 0)
+							return true;
+						$("#DDL_" + suffix).val(val); // 操作权限.
+						return true;
+					}
 
-        //checkbox.
-        cb = document.getElementById('CBPara_' + attr);
-        if (cb != null) {
-            if (val == "1")
-                cb.checked = true;
-            else
-                cb.checked = false;
-            continue;
-        }
+					//checkbox.
+					cb = document.getElementById('CBPara_' + suffix);
+					if (cb != null) {
+						if (val == "1")
+							cb.checked = true;
+						else
+							cb.checked = false;
+						return true;
+					}
 
-        //下拉框.
-        ddl = document.getElementById('DDLPara_' + attr);
-        if (ddl != null) {
-
-            if (ddl.options.length == 0)
-                continue;
-
-            $("#DDL_" + attr).val(val); // 操作权限.
-            continue;
-        }
-
-        // RadioButton. 单选按钮.
-        rb = document.getElementById('RBPara_' + attr + "_" + val);
-        if (rb != null) {
-            rb.checked = true;
-            continue;
-        }
-
-        unSetCtrl += "@" + attr + " = " + val;
+					// RadioButton. 单选按钮.
+					rb = document.getElementById('RBPara_' + suffix + "_" + val);
+					if (rb != null) {
+						rb.checked = true;
+						return true;
+					}
+				}
+			});
+		}
+		unSetCtrl += "@" + attr + " = " + val;
     }
 }
 
@@ -994,7 +1005,7 @@ var Entity = (function () {
 
         CopyForm: function () {
             // 复制form中有但Entity对象中没有的属性
-            var frmParas = [];
+            //var frmParas = [];
             //            $("input[name^=TB_],input[name^=CB_]:checked,input[name^=RB_]:checked,[name^=DDL_]").each(function (i, o) {
             //                var key = $(this).attr("name").replace(/^TB_|CB_|RB_|DDL_/, "");
             //                var value = $(this).val();
@@ -1006,75 +1017,145 @@ var Entity = (function () {
             //            jsonString.frmParas = formParams;
             //            // ----------
             //            return;
+			
             // 老版本
-            var self = this;
-            $.each(self, function (attrKay, val) {
+            //var self = this;
+            //$.each(self, function (attrKay, val) {
+            //
+            //    //alert(o);
+            //    //需要排除非参数属性.
+            //
+            //    //基本属性.
+            //    var target = $("#TB_" + attrKay);
+            //    if (target.length == 1) {
+            //        self[attrKay] = target.val();
+            //    }
+            //
+            //    var target = $("#DDL_" + attrKay);
+            //    if (target.length == 1) {
+            //        self[attrKay] = target.val();
+            //    }
+            //
+            //    //@解， 怎么设置如果没有选择就设置0? 
+            //    var target = $("input[name='CB_" + attrKay + "']:checked");
+            //    if (target.length > 0) {
+            //        self[attrKay] = "1";
+            //    }
+            //
+            //    var target = $("input[name^='RB_" + attrKay + "']:checked");
+            //    if (target.length == 1) {
+            //        self[attrKay] = target.val();
+            //    }
+            //
+            //    //参数属性.
+            //    var target = $("#TBPara_" + attrKay);
+            //    if (target.length == 1) {
+            //
+            //        var value = $(this).val();
+            //        //  alert(value);
+            //
+            //        self.SetPara(attrKay, value);
+            //        //frmParas.push("@" + n + "=" + value);
+            //    }
+            //
+            //    var target = $("#DDLPara_" + attrKay);
+            //    if (target.length == 1) {
+            //        var value = $(this).val();
+            //        self.SetPara(attrKay, value);
+            //        // frmParas.push("@" + n + "=" + value);
+            //    }
+            //
+            //    //@解， 怎么设置如果没有选择就设置0? 
+            //    var target = $("input[name='CB_" + attrKay + "']:checked");
+            //    if (target.length > 0) {
+            //
+            //        self.SetPara(attrKay, "1");
+            //        // frmParas.push("@" + n + "=1");
+            //    }
+            //
+            //    // 列表参数.
+            //    var target = $("input[name^='RBPara_" + attrKay + "']:checked");
+            //    if (target.length == 1) {
+            //        var value = $(this).val();
+            //        self.SetPara(attrKay, value);
+            //    }
+            //});
+            //
+            ////            this.frmParas = formParams;
+            ////            var formParams = frmParas.join("");
+            ////            this.frmParas = formParams;
+            ////            jsonString.frmParas = formParams;
+            //alert(JSON.stringify(self));
 
-                //alert(o);
-                //需要排除非参数属性.
-
-                //基本属性.
-                var target = $("#TB_" + attrKay);
-                if (target.length == 1) {
-                    self[attrKay] = target.val();
-                }
-
-                var target = $("#DDL_" + attrKay);
-                if (target.length == 1) {
-                    self[attrKay] = target.val();
-                }
-
-                //@解， 怎么设置如果没有选择就设置0? 
-                var target = $("input[name='CB_" + attrKay + "']:checked");
-                if (target.length > 0) {
-                    self[attrKay] = "1";
-                }
-
-                var target = $("input[name^='RB_" + attrKay + "']:checked");
-                if (target.length == 1) {
-                    self[attrKay] = target.val();
-                }
-
-                //参数属性.
-                var target = $("#TBPara_" + attrKay);
-                if (target.length == 1) {
-
-                    var value = $(this).val();
-                    //  alert(value);
-
-                    self.SetPara(attrKay, value);
-                    //frmParas.push("@" + n + "=" + value);
-                }
-
-                var target = $("#DDLPara_" + attrKay);
-                if (target.length == 1) {
-                    var value = $(this).val();
-                    self.SetPara(attrKay, value);
-                    // frmParas.push("@" + n + "=" + value);
-                }
-
-                //@解， 怎么设置如果没有选择就设置0? 
-                var target = $("input[name='CB_" + attrKay + "']:checked");
-                if (target.length > 0) {
-
-                    self.SetPara(attrKay, "1");
-                    // frmParas.push("@" + n + "=1");
-                }
-
-                // 列表参数.
-                var target = $("input[name^='RBPara_" + attrKay + "']:checked");
-                if (target.length == 1) {
-                    var value = $(this).val();
-                    self.SetPara(attrKay, value);
-                }
-            });
-
-            //            this.frmParas = formParams;
-            //            var formParams = frmParas.join("");
-            //            this.frmParas = formParams;
-            //            jsonString.frmParas = formParams;
-            alert(JSON.stringify(self));
-
+			// 新版本20180107 2130
+			var self = this;
+			// 普通属性
+			$("[name^=TB_],[name^=CB_],[name^=RB_],[name^=DDL_]").each(function (i, o) {
+				var target = $(this);
+				var name = target.attr("name");
+				var key = name.replace(/^TB_|CB_|RB_|DDL_/, "");
+				if (typeof self[key] === "function") {
+					return true;
+				}
+				if (name.match(/^TB_/)) {
+					self[key] = target.val();
+				} else if (name.match(/^DDL_/)) {
+					self[key] = target.val();
+				} else if (name.match(/^CB_/)) {
+					if (target.length == 1) {	// 仅一个复选框
+						if (target.is(":checked")) {
+							// 已选
+							self[key] = "1";
+						} else {
+							// 未选
+							self[key] = "0";
+						}
+					} else if (target.length > 1) {	// 多个复选框(待扩展)
+						// ?
+					}
+				} else if (name.match(/^RB_/)) {
+					if (target.is(":checked")) {
+						// 已选
+						self[key] = "1";
+					} else {
+						// 未选
+						self[key] = "0";
+					}
+				}
+			});
+			// 参数属性
+			$("[name^=TBPara_],[name^=CBPara_],[name^=RBPara_],[name^=DDLPara_]").each(function (i, o) {
+				var target = $(this);
+				var name = target.attr("name");
+				var value;
+				if (name.match(/^TBPara_/)) {
+					value = target.val();
+				} else if (name.match(/^DDLPara_/)) {
+					value = target.val();
+				} else if (name.match(/^CBPara_/)) {
+					if (target.length == 1) {	// 仅一个复选框
+						if (target.is(":checked")) {
+							// 已选
+							value = "1";
+						} else {
+							// 未选
+							value = "0";
+						}
+					} else if (target.length > 1) {	// 多个复选框(待扩展)
+						// ?
+					}
+				} else if (name.match(/^RBPara_/)) {
+					if (target.is(":checked")) {
+						// 已选
+						value = "1";
+					} else {
+						// 未选
+						value = "0";
+					}
+				}
+				var key = name.replace(/^TBPara_|CBPara_|RBPara_|DDLPara_/, "");
+				self.SetPara(key, value);
+			});
         },
 
         CopyJSON: function (json) {

@@ -91,7 +91,7 @@
 
 <tr>
 <td>标题</td>
-<td><input type="text" id="TBPara_Title" style="width:99%;" /> 
+<td><input type="text" id="TBPara_Title" name="TBPara_Title" style="width:99%;" /> 
 <br />
 <font color="gray">
 显示在窗口的文字，比如:关联流水.
@@ -101,13 +101,13 @@
 
 <tr>
 <td>弹窗属性</td>
-<td >高度:<input type="text"  id="TB_H" style="width:80px; text-align:right"  /> 宽度:<input type="text"  id="TB_W" style="width:80px; text-align:right"  /> </td>
+<td >高度:<input type="text"  id="TB_H" name="TB_H" style="width:80px; text-align:right"  /> 宽度:<input type="text"  id="TB_W" name="TB_W" style="width:80px; text-align:right"  /> </td>
 </tr>
 
 
 <tr>
 <td>搜索提示</td>
-<td><input type="text" id="TBPara_SearchTip" style="width:90%;" /> 
+<td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> 
 <br><font color="gray" >显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font></td>
 </tr>
 
@@ -116,7 +116,7 @@
 <td >
 
 数据源类型
-<select id="DDL_DBType"  >
+<select id="DDL_DBType" name="DDL_DBType">
 <option value="0">执行SQL</option>
 <option value="1">执行url返回JSON</option>
 <option value="2">执行CCFromRef.js返回JSON</option>
@@ -170,7 +170,7 @@
 </tr>
 <tr>
 <td colspan=2>
- 根目录树编号:<input id="TBPara_RootTreeNo" value="0"  style="width:50px;" type="text" > <!--<font color=gray>对树结构有效</font>-->
+ 根目录树编号:<input id="TBPara_RootTreeNo"  name="TBPara_RootTreeNo" value="0"  style="width:50px;" type="text" > <!--<font color=gray>对树结构有效</font>-->
 </input>
 </td>
 </tr>

@@ -46,7 +46,7 @@
 						return obj.No == o.No;
 					});
 					if (sel.length == 0) {
-						SaveVal(FK_MapData, AttrOfOper, oid, o.No);
+						SaveVal(FK_MapData, AttrOfOper, oid, o.No, o.Name);
 						globalSelectedRows.push(o);
 					}
 				});
@@ -197,14 +197,17 @@
 			    var searchUrl = mapExt.Tag1;
 			    var treeUrl = mapExt.Tag2;
 				var treeClickUrl = mapExt.Tag3;
+				
 				// search
 				$("#TB_Key").on("keyup", function () {
 					loadSelectGrid(searchUrl.replace("@Key", $(this).val()), global.selectedRows);
 				});
+				
 			    // tree
 				if (treeUrl) {
 			        loadTree(treeUrl, treeClickUrl, rootNo, global);
 			    }
+				
 			    // grid1
 			    $('#selectGrid').bootstrapTable({
 			        striped: true,
@@ -255,6 +258,7 @@
 			            loadViewGrid(global.selectedRows);
 			        }
 			    });
+				
 			    // grid2
 			    $('#viewGrid').bootstrapTable({
 			        striped: true,
@@ -280,6 +284,17 @@
 						}
 					}]
 			    });
+				
+				// 初始化加载
+				var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+				frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
+				$.each(frmEleDBs, function (i, o) {
+					global.selectedRows.push({
+						"No" : o.Tag1,
+						"Name" : o.Tag2
+					});
+				});
+				loadViewGrid(global.selectedRows);
 			});
 			function removeRecord(No) {
 				$("#selectGrid").bootstrapTable("uncheckBy", {
@@ -290,20 +305,19 @@
 
 			//删除数据.
 			function Delete(keyOfEn, oid, No) {
-				return;
 				var frmEleDB = new Entity("BP.Sys.FrmEleDB");
 				frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + No;
 				frmEleDB.Delete();
 			}
 			//设置值.
-			function SaveVal(fk_mapdata, keyOfEn, oid, val) {
-				return;
+			function SaveVal(fk_mapdata, keyOfEn, oid, val1, val2) {
 				var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-				frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val;
+				frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val1;
 				frmEleDB.FK_MapData = fk_mapdata;
 				frmEleDB.EleID = keyOfEn;
 				frmEleDB.RefPKVal = oid;
-				frmEleDB.Tag1 = val;
+				frmEleDB.Tag1 = val1;
+				frmEleDB.Tag2 = val2;
 				if (frmEleDB.Update() == 0) {
 					frmEleDB.Insert();
 				}

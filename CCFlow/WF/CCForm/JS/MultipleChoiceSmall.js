@@ -192,16 +192,29 @@ function DeptEmpModelAdv0(mapExt) {
 	var height = mapExt.H;
 	var iframeId = mapExt.MyPK + mapExt.FK_MapData;
 	var title = GetAtPara(mapExt.AtPara, "Title");
+	var oid = (pageData.WorkID || pageData.OID || "");
+	
+	var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+	frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+	var initJsonData = [];
+	$.each(frmEleDBs, function (i, o) {
+		initJsonData.push({
+			"No" : o.Tag1,
+			"Name" : o.Tag2
+		});
+	});
+	$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
 	//
-	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?MyPK=" + mapExt.MyPK + "&oid=" + (pageData.WorkID || pageData.OID || "") + "&m=" + Math.random();
+	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
 	container.on("dblclick", function () {
 		OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
 			var iframe = document.getElementById(iframeId);
 			if (iframe) {
 				var selectedRows = iframe.contentWindow.selectedRows;
-				// save data eledb
 				if ($.isArray(selectedRows)) {
-					$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", selectedRows);
+					var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
+					mtags.mtags("loadData", selectedRows);
+					$("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
 				}
 			}
 			return true;

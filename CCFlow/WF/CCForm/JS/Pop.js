@@ -27,7 +27,6 @@ function PopBranchesAndLeaf(mapExt) {
    // tb.parent().html(eleHtml);
    // alert(eleHtml);
 
-
     //在文本框双击，绑定弹出. DeptEmpModelAdv.htm的窗口.
     tb.attr("onclick", "alert('ssssssssssssss');");
 

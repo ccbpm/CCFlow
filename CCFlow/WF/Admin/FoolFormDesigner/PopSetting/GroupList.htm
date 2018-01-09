@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>分组列表模式</title>
+    <title>分组列表平铺</title>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
@@ -75,7 +75,7 @@
 <form id="cc">
 
 <table id="Table1" style="width:99%;">
-<caption>分组列表模式</caption>
+<caption>分组列表平铺</caption>
 
 <tr>
 <th colspan="4" >基本信息</th>
@@ -86,7 +86,7 @@
 <td colspan=3><input type="text" id="TBPara_Title" name="TBPara_Title" style="width:99%;" /> 
 <br />
 <font color="gray">
-显示在窗口的文字，比如:请选择部门.
+显示在窗口的文字，比如:请选择采购产品.
 </font>
 </td>
 </tr>
@@ -109,11 +109,10 @@
 <option value="1">执行url返回JSON</option>
 <option value="2">执行CCFromRef.js返回JSON</option>
 </select> 
-
-<td>
-选择类型:
 </td>
 
+选择类型:
+</td>
 <td> 
 
 <input type="radio" id="RBPara_SelectType_0" name="RBPara_SelectType" value="0"  checked=true /> <label for="RBPara_SelectType_0">单选</label>
@@ -123,12 +122,12 @@
 </tr>
 
 <tr>
-<th colspan=4>树干列表数据源</th>
+<th colspan=4>列表数据源</th>
 </tr>
 
 <tr>
 <td colspan=4>
-<textarea id="TB_Tag" name="TB_Tag" style="width:99%; height: 23px;">
+<textarea id="TB_Tag1" name="TB_Tag1" style="width:99%; height: 23px;">
 </textarea>
 
 <font color="gray" >
@@ -136,21 +135,32 @@
 <br />
 比如:Url事例: /DataUser/Handler.ashx?DoType=ReqDepts
 <br />
-SQL事例: SELECT No,Name,ParentNo FROM Port_Dept
-</front>
+SQL事例: SELECT No,Name FROM Demo_BanJi
+</font>
 </td>
 </tr>
-<tr>
-<td colspan=1>根目录树编号</td>
-<td colspan=2>
- <input id="TB_Doc"  name="TB_Doc" value="0"  style="width:250px;" type="text" >
- </td>
- <td>
- <font color=gray>支持ccbpm的表达式,比如:@WebUser.FK_Dept , @FieldName</font>
-</td>
-</tr>
+ 
 
+ 
 <tr>
+<th colspan=4>实体数据源</th>
+</tr>
+<tr>
+<td colspan=4>
+<textarea id="TB_Tag2" name="TB_Tag2" style="width:99%; height: 23px;">
+</textarea>
+
+<font color="gray" >
+设置一个可以返回json的数据源该数据源有No,Name,ParentNo三个约定的列. 
+<br />
+比如:Url事例: /DataUser/Handler.ashx?DoType=Demo_Students
+<br />
+SQL事例: SELECT No,Name,FK_BanJi FROM Demo_Student
+</font>
+</td>
+</tr>
+ 
+ <tr>
 <td colspan=4><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Save()" />
 <input type="button" value="删除"  id="Btn_Delete" name="Btn_Delete" onclick="return Delete()" />
 </td>

@@ -48,7 +48,7 @@ namespace BP.WF.DTS
         public override object Do()
         {
             //找到根目录.
-            string sql = "SELECT No FROM wf_flowsort where parentNo='0'";
+            string sql = "SELECT No FROM WF_FlowSort where ParentNo='0'";
             string rootNo = DBAccess.RunSQLReturnString(sql, null);
             if (rootNo == null)
                 return "没有找到根目录节点"+sql;
@@ -59,9 +59,8 @@ namespace BP.WF.DTS
 
             //取得所有根目录下的流程模版.
             Flows fls = new Flows(rootNo);
-
+            
             string infos = "";
-
             foreach (Flow fl in fls)
             {
                 //不是模版.

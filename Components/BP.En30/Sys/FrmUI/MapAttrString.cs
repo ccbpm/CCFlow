@@ -223,14 +223,14 @@ namespace BP.Sys.FrmUI
 
                 rm = new RefMethod();
                 rm.GroupName = "Pop返回值2018";
-                rm.Title = "枝干模式";
+                rm.Title = "枝干模式(简单)";
                 rm.ClassMethodName = this.ToString() + ".DoBranches()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.GroupName = "Pop返回值2018";
-                rm.Title = "枝干模式-懒加载";
+                rm.Title = "枝干模式(简单)-懒加载";
                 rm.ClassMethodName = this.ToString() + ".DoBranchesLazyLoad()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -341,9 +341,8 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoBranchesAndLeafLazyLoad()
         {
-            return "../../Admin/FoolFormDesigner/PopSetting/BranchesAndLeaf.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/PopSetting/BranchesAndLeafLazyLoad.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&IsLazyLoad=1";
         }
-        
         /// <summary>
         /// 枝干模式
         /// </summary>

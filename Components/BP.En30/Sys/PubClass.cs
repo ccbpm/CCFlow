@@ -746,10 +746,11 @@ namespace BP.Sys
 
                 if (dt == null)
                     dt = new DataTable();
-                
-                foreach(DataColumn col in dt.Columns)
+
+                #region 把列名做成标准的.
+                foreach (DataColumn col in dt.Columns)
                 {
-                    switch(col.ColumnName.ToLower())
+                    switch (col.ColumnName.ToLower())
                     {
                         case "no":
                             col.ColumnName = "No";
@@ -764,6 +765,8 @@ namespace BP.Sys
                             break;
                     }
                 }
+                #endregion 把列名做成标准的.
+
 
                 dt.TableName = uiBindKey;
                 return dt;

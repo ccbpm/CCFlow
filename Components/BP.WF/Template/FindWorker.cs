@@ -602,9 +602,17 @@ namespace BP.WF.Template
             {
                 string[] fromto = town.HisNode.DeliveryParas.Split('@');
 
+                string defUser = "";
+
                 foreach (string str in fromto)
                 {
                     string[] kv=str.Split(',');
+
+                    if (kv[0].Equals("Defalut") == true)
+                    {
+                        defUser = kv[1];
+                        continue;
+                    }
 
                     if (kv[0]==WebUser.No)
                     {
@@ -617,6 +625,16 @@ namespace BP.WF.Template
                         return dt;
                     }
                 }
+
+                if (DataType.IsNullOrEmpty(defUser) == false)
+                {
+                    string empTo = defUser;
+                    DataRow dr = dt.NewRow();
+                    dr[0] = empTo;
+                    dt.Rows.Add(dr);
+                    return dt;
+                }
+
                 throw new Exception("@系统管理员没有为您配置路由");
             }
             #endregion

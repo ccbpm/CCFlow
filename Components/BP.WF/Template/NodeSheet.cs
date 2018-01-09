@@ -25,6 +25,36 @@ namespace BP.WF.Template
             }
         }
 
+        /// <summary>
+        /// 步骤
+        /// </summary>
+        public int Step
+        {
+            get
+            {
+                return this.GetValIntByKey(NodeAttr.Step);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.Step, value);
+            }
+        }
+
+        /// <summary>
+        /// 节点名称
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return this.GetValStringByKey(NodeAttr.Name);
+            }
+            set
+            {
+                this.SetValByKey(NodeAttr.Name, value);
+            }
+        }
+
         #region 构造函数
         /// <summary>
         /// 节点

@@ -1395,7 +1395,7 @@ namespace BP.Web
                 md.MaxTop = tmp == 0 ? md.MaxTop : tmp;
 
                 //表单设计类型.
-                md.DesignerTool = "Silverlight";
+              //  md.DesignerTool = "Silverlight";
                 md.FormJson = ""; //把他的元素设置为空，以防止在打开.
 
                 md.Update();

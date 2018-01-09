@@ -528,7 +528,11 @@ function CCForm_FoolFrm() {
 //表单属性
 function CCForm_Attr() {
     var url = '../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmFrees&PK=' + CCForm_FK_MapData;
-  //  OpenWindow(url, 400, 300);
+    var fk_node = Application.common.getArgsFromHref("FK_Node");
+    //设置的为节点表单
+    if (fk_node) {
+        url = '../../Comm/En.htm?EnsName=BP.WF.Template.MapFrmNodes&PK=' + CCForm_FK_MapData;
+    }
     CCForm_ShowDialog(url, '表单属性');
 }
 

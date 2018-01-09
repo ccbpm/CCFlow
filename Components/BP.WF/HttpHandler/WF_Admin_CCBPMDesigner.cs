@@ -987,7 +987,7 @@ namespace BP.WF.HttpHandler
 
             //组织数据源.
             string sqls = "SELECT No ,ParentNo,Name, Idx, 1 IsParent, 'FORMTYPE' TType FROM Sys_FormTree ORDER BY Idx ASC ; ";
-            sqls += "SELECT No, FK_FrmSort as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData   WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
+            sqls += "SELECT No, FK_FormTree as ParentNo,Name,Idx,0 IsParent, 'FORM' TType FROM Sys_MapData   WHERE AppType=0 AND FK_FormTree IN (SELECT No FROM Sys_FormTree) ORDER BY Idx ASC";
             DataSet ds = DBAccess.RunSQLReturnDataSet(sqls);
 
             //获得表单数据.
@@ -1026,7 +1026,7 @@ namespace BP.WF.HttpHandler
                 dtForm.Rows.Add(row.ItemArray);
             }
 
-            if (WebUser.No != "admin" && 1==2 )
+            if (WebUser.No != "admin")
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
                 aemp.No = WebUser.No;
@@ -1037,22 +1037,16 @@ namespace BP.WF.HttpHandler
                 if (aemp.RootOfForm == "")
                     return "err@没有给二级管理员[" + WebUser.No + "]设置表单树的权限...";
 
-                //DataRow rootRow = dtForm.Select("ParentNo IS NULL")[0];
-
                 DataRow[] rootRows = dtForm.Select("No='" + aemp.RootOfForm + "'");
+                DataRow newRootRow = rootRows[0];
 
-                DataRow newRootRow = rootRows[0]; 
-
-               // DataRow newRootRow = dtForm.Select("No='" + aemp.RootOfForm + "'")[0];
-
-                newRootRow["ParentNo"] = null;
+                newRootRow["ParentNo"] = "0";
                 DataTable newDt = dtForm.Clone();
                 newDt.Rows.Add(newRootRow.ItemArray);
 
                 GenerChildRows(dtForm, newDt, newRootRow);
                 dtForm = newDt;
             }
-
             return BP.Tools.Json.DataTableToJson(dtForm, false);
         }
         public string GetSrcTreeTable()

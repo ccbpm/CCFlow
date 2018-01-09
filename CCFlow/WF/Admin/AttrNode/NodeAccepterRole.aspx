@@ -975,6 +975,7 @@
                                     <asp:TextBox ID="TB_ByFromEmpToEmp" runat="server" Width="98%" Rows="3" Height="63px" TextMode="MultiLine"></asp:TextBox>
                                     <ul>
                                         <li >格式为 @zhangsan,lisi@wangwu,zhaoliu      从如果是张三发送的就发送到李四身上. 多个人员对用@分开. </li>
+                                        <li >如果没有找到，就按照默认值寻找: @Defualt,zhangsan  着一样配置表示，没有找到人就按照默认值投递.</li>
                                     </ul>
                                 </td>
                             </tr>

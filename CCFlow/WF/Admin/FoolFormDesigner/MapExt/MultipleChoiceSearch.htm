@@ -20,22 +20,21 @@
             en.MyPK = mypk;
             var i = en.RetrieveFromDBSources();
 
+            GenerFullAllCtrlsVal(en);
+
             if (i == 0)
                 $("#Btn_Delete").attr("disabled", true);
             else
                 $("#Btn_Delete").removeAttr("disabled");
 
-            //设置文本框选择的值.
-            $("#RB_" + en.DoWay).attr("checked", true);
-
             //去掉 ' 号。
-            var tag = en.Tag1;
+            var tag = en.Doc;
             while (tag.indexOf('~') > 1) {
                 tag = tag.replace("~", "'");
             }
 
             //按照文本计算.
-            $("#TB_Docs").val(tag);
+            $("#TB_Doc").val(tag);
 
         });
 
@@ -48,15 +47,12 @@
             en.MyPK = mypk;
             en.RetrieveFromDBSources();
 
+            en.CopyForm(); //复制表单数据.
+
             en.FK_MapData = GetQueryString("FK_MapData");
             en.AttrOfOper = GetQueryString("KeyOfEn");
             en.ExtType = "MultipleChoiceSearch";
             en.MyPK = mypk;
-
-            var checkVal = $("input[name='RB']:checked").val();
-            en.DoWay = checkVal;
-
-            en.Tag1 = $("#TB_Docs").val();
 
             if (en.Update() == 0)
                 en.Insert();
@@ -76,7 +72,6 @@
             en.MyPK = mypk;
             en.RetrieveFromDBSources();
             var i = en.Delete();
-            alert(i);
 
             var url = "MultipleChoiceSearch.htm?FK_MapData=" + GetQueryString("FK_MapData") + "&KeyOfEn=" + GetQueryString("KeyOfEn")+"&M="+Math.random();
             window.location.href = url;
@@ -87,17 +82,42 @@
 <form id="cc">
 
 
+<table style="width:100%;">
+<caption>文本框搜索多选 </caption>
+ 
+ <tr> <td>数据源类型 </td><td> 
 
-<fieldset>
-<legend><input type="radio" value="0" id="RB_0"  name="RB" /><label for="RB_0" >无，不设置</label> </legend>
-不做任何设置.
- </fieldset>
+<select id="DDL_DBType" name="DDL_DBType">
+<option value="0">执行SQL</option>
+<option value="1">执行url返回JSON</option>
+<option value="2">执行CCFromRef.js返回JSON</option>
+</select>  </td>
+ </tr>
 
-<fieldset>
-<legend><input type="radio" value="1" id="RB_1"  name="RB" /><label for="RB_1" >查询SQL</label> </legend>
-<textarea  rows="3" id="TB_Docs" name="TB_Docs" ></textarea>
+ 
+
+<tr>
+<td>搜索提示</td>
+<td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> 
+<br><font color="gray" >显示在搜索文本框的背景文字,事例：输入城市名称,比如:beijing,bj,进行搜索.</font></td>
+</tr>
+
+
+ <tr>
+ <th colspan=2>数据源 </th>
+ </tr>
+
+ <tr>
+ <td colspan=2>
+<textarea  rows="3" id="TB_Doc" name="TB_Doc"   ></textarea>
 比如: SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%'
- </fieldset>
+<br />
+SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'
+
+</td>
+</tr>
+</table>
+
   
 <input type="button" value="保存" id="Btn_Save"  onclick="Save()" />
 <input type="button" value="删除"  id="Btn_Delete"  onclick="Delete()" />
@@ -111,6 +131,8 @@
  <li>可以使用@SDKFromServHost 变量，标识一个配置路径，该配置在web.config里设置。</li>
  </ul>
  </div>
+
+
 
 </form>
 

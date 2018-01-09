@@ -23,12 +23,13 @@
                 $("#Btn_Delete").attr("disabled", true);
             else
                 $("#Btn_Delete").removeAttr("disabled");
+             
 
             //设置文本框选择的值.
             $("#RB_" + en.DoWay).attr("checked", true);
 
             //按照文本计算.
-            $("#TB_Docs").val(en.Tag1);
+            $("#TB_Doc").val(en.Tag1);
 
             //绑定枚举.
             var enums = new Entities("BP.Sys.SysEnumMains");
@@ -69,7 +70,7 @@
             var checkVal = $("input[name='RB']:checked").val();
             en.DoWay = checkVal;
 
-            en.Tag1 = $("#TB_Docs").val();
+            en.Tag1 = $("#TB_Doc").val();
 
             en.Tag2 = $("#DDL_Enums").val();
 
@@ -106,8 +107,6 @@
 <body >
 <form id="cc">
 
-
-
 <fieldset>
 <legend><input type="radio" value="0" id="RB_0"  name="RB" /><label for="RB_0" >无，不设置</label> </legend>
 不做任何设置.
@@ -116,7 +115,7 @@
  
 <fieldset>
 <legend><input type="radio" value="1" id="RB_1"  name="RB" /><label for="RB_1" >按文本输入的值</label> </legend>
-<textarea  rows="3" id="TB_Docs" name="TB_Docs" ></textarea>
+<textarea  rows="3" id="TB_Doc" name="TB_Doc" ></textarea>
 值用逗号分开,比如: 飞机,火车,轮船,火箭,其他
  </fieldset>
 

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>部门人员选择-高级模式</title>
+    <title>树干模式</title>
     <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet"  type="text/css" />
@@ -15,7 +15,7 @@
         $(function () {
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.MyPK = "PopBranches_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
             // alert(mapExt.Tag);
             //alert(mapExt.MyPK);
@@ -23,15 +23,9 @@
             if (mapExt.GetPara("SelectType") == "")
                 mapExt.SetPara("SelectType", "1");
 
-            //alert(i);
-
-            //批量为复制.
+            //批量为赋值.
             GenerFullAllCtrlsVal(mapExt);
 
-            //基本属性.
-            // $("#TB_Title").val(mapExt.GetPara("Title"));
-            //p").val(mapExt.GetPara("SearchTip"));
-            //   $("#TB_RootTreeNo").val(mapExt.GetPara("RootNo")); //树的根节点编号.
 
             //设置按钮是否可以用?
             if (i == 0)
@@ -46,7 +40,7 @@
                 return;
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.MyPK = "PopBranches_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
             window.location.href = window.location.href;
@@ -55,22 +49,20 @@
         function Save() {
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
+            mapExt.MyPK = "PopBranches_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
             mapExt.CopyURL();  //从url里面copy数据.
             mapExt.CopyForm(); //从from里面copy数据.
 
 
-            // mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
-            // mapExt.SetPara("RootNo", $("#TB_RootTreeNo").val()); //树的根节点编号.
-
-            //var val= $("#DDL_SelectType").val();
-            //alert(val);
-            //mapExt.SetPara("SelectType", val); //选择类型.
-
-            mapExt.ExtType = "PopBranchesAndLeaf";
+            mapExt.ExtType = "PopBranches";
             mapExt.AttrOfOper = GetQueryString("KeyOfEn");
+
+            var err = "";
+
+            if (mapExt.GetPara("Title") == "")
+                err += '\t\n必填字段[标题]不能为空';
 
             var val = mapExt.Save();
             // alert(val);
@@ -83,7 +75,7 @@
 <form id="cc">
 
 <table id="Table1" style="width:99%;">
-<caption> 枝干叶子模式</caption>
+<caption>树干模式</caption>
 
 <tr>
 <th colspan="2" >基本信息</th>
@@ -104,13 +96,7 @@
 <td >高度:<input type="text"  id="TB_H" name="TB_H" style="width:80px; text-align:right"  /> 宽度:<input type="text"  id="TB_W" name="TB_W" style="width:80px; text-align:right"  /> </td>
 </tr>
 
-
-<tr>
-<td>搜索提示</td>
-<td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> 
-<br><font color="gray" >显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font></td>
-</tr>
-
+ 
 <tr>
 <td>高级设置</td>
 <td >
@@ -130,35 +116,12 @@
 </tr>
 
 <tr>
-<th colspan="2">搜索数据源</th>
-</tr>
-
-<tr>
-<td colspan="2">
-<textarea id="TB_Tag1" name="TB_Tag1" style="width:99%; height: 23px;">
-</textarea>
-</td>
-
-<tr>
-<td colspan=2>
-
-<font color="gray" >点击关键字执行搜索返回的数据源,
-<br />比如:/DataUser/Handler.ashx?DoType=SearchEmps&Keyword=@Key
-@Key是关键字,是搜索的关键字.
-</font>
-
- </td>
-</tr>
-</tr>
-
-
-<tr>
-<th colspan=2>左侧树列表数据源</th>
+<th colspan=2>树干列表数据源</th>
 </tr>
 
 <tr>
 <td colspan=2>
-<textarea id="TB_Tag2" name="TB_Tag2" style="width:99%; height: 23px;">
+<textarea id="TB_Tag" name="TB_Tag" style="width:99%; height: 23px;">
 </textarea>
 
 <font color="gray" >
@@ -176,37 +139,6 @@
 </input>
 </td>
 </tr>
- 
-<tr>
-<th colspan=2>右上列表信息数据源(点左边树一个节点查询数据源)</th>
-</tr>
-
-<tr>
-<td colspan=2>
-<textarea id="TB_Tag3" name="TB_Tag3" style="width:99%; height: 23px;">
-</textarea>
-
-<font color="gray" >选择右边的树返回的详细信息列表数据源,
-<br />比如:/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key
-<br />@Key是关键字,是搜索的关键字.
-</font>
-
-</td>
-</tr>
-
-
-<tr>
-<th colspan=2>数据列名与中文意思对照</th>
-</tr>
-
-<tr>
-<td colspan=2>
-<input id="TB_Tag" name="TB_Tag" style="width:100%;" />
-<font color="gray" >该选项可以为空,在右上角的列表里查询或点树枝干的数据源出现的列表,需要用中文显示列头.
-例如: No=编号,Name=名称,Addr=地址,</font>
-</td>
-</tr>
-
 
 <tr>
 <td colspan=2><input type="button" value="保存"  id="Btn_Save" name="Btn_Save" onclick="return Save()" />
@@ -214,10 +146,8 @@
 </td>
 </tr>
 
-
 </table>
 
- 
 
 </form>
 

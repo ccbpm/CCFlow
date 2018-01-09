@@ -79,12 +79,12 @@ function AfterBindEn_DealMapExt(frmData) {
             case "MultipleChoiceSearch":
                 MultipleChoiceSearch(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
                 break;
-            case "PopDeptEmpModelAdv": //部门人员模式的高级多选.
-                DeptEmpModelAdv0(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+            case "PopBranchesAndLeaf": //树干叶子模式.
+                PopBranchesAndLeaf(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
                 break;
-			case "PopBranchesAndLeaf":
-				console.log(JSON.stringify(mapExt));
-				break;
+            case "PopBranches": //树干简单模式.
+                PopBranches(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                break;
             case "PopVal": //PopVal窗返回值.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");

@@ -533,6 +533,11 @@
                                              }
                                          }
                                          else {
+											// 判断下拉框是否有对应option, 若没有则追加
+											if ($("option[value='" + textVal + "']", tmplate).length == 0) {
+												tmplate.append("<option value='" + textVal + "'>" + textVal + "</option>");
+											}
+											//
                                              tmplate.val(textVal);
                                          }
                                         //处理单选按钮。。。 还没做
@@ -633,7 +638,6 @@
                     $('#Msg').hide();
                     return;
 
-
                     /********解析数据组装datagrid表*****/
                     /*0 否 1 是*/
                     var IsShowSum = sys_MapDtl.IsShowSum == 1 ? true : false; //是否显示合计
@@ -648,7 +652,6 @@
                     var IsShowTitle = sys_MapDtl.IsShowTitle == 1 ? true : false; //是否显示标题
                     var IsView = sys_MapDtl.IsView == 1 ? true : false; //是否可见
                     var titles = IsShowTitle ? sys_MapDtl.Name : '';
-
                 }
             });
         }

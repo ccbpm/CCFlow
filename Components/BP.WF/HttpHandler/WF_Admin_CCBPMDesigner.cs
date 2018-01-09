@@ -171,7 +171,7 @@ namespace BP.WF.HttpHandler
             string parentrootid = context.Request.QueryString["parentrootid"];
             string newRootId = "";
 
-            if (WebUser.No != "admin" && 1==2 )
+            if (WebUser.No != "admin")
             {
                 BP.WF.Port.AdminEmp aemp = new Port.AdminEmp();
                 aemp.No = WebUser.No;

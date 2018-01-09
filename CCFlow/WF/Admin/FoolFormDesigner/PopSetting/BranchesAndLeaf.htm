@@ -170,7 +170,9 @@
 </tr>
 <tr>
 <td colspan=2>
- 根目录树编号:<input id="TBPara_RootTreeNo"  name="TBPara_RootTreeNo" value="0"  style="width:50px;" type="text" > <!--<font color=gray>对树结构有效</font>-->
+ 根目录树编号:<input id="TB_Doc"  name="TB_Doc" value="0"  style="width:250px;" type="text" >
+ 支持ccbpm的表达式,比如:@WebUser.FK_Dept , @FieldName
+  <!--<font color=gray>对树结构有效</font>-->
 </input>
 </td>
 </tr>
@@ -193,14 +195,13 @@
 </tr>
 
 
-
 <tr>
 <th colspan=2>数据列名与中文意思对照</th>
 </tr>
 
 <tr>
 <td colspan=2>
-<input id="TB_Tag4" name="TB_Tag4" style="width:100%;" />
+<input id="TB_Tag" name="TB_Tag" style="width:100%;" />
 
 <font color="gray" >该选项可以为空,在右上角的列表里查询或点树枝干的数据源出现的列表,需要用中文显示列头.
 例如: No=编号,Name=名称,Addr=地址,</font>

@@ -503,7 +503,7 @@ function figure_MapAttr_TemplateEle(mapAttr) {
     if (mapAttr.MyDataType == "1") {
 
         //普通类型的单行文本.
-        if (mapAttr.UIHeight <= 23) {
+        if (mapAttr.UIHeight <= 40) {
             eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' placeholder='" + (mapAttr.Tip || '') + "' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + "/>";
             return eleHtml;
         }

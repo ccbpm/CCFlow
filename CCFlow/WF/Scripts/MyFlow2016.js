@@ -1398,7 +1398,7 @@ function InitMapAttr(mapAttrData, workNodeData) {
                                     (workNodeData, mapAttr, defValue) + "</select>";
                             eleHtml += '</div>';
                         } else {//文本区域
-                            if (mapAttr.UIHeight <= 23) {
+                            if (mapAttr.UIHeight <= 40) {
                                 eleHtml += '<div class="col-lg-' + mdCol + ' col-md-' + mdCol + ' col-sm-' + smCol + '">' +
                                     "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>"
                                     + '</div>';

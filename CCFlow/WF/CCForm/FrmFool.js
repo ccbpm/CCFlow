@@ -298,7 +298,7 @@ function InitMapAttrOfCtrl(mapAttr) {
     //AppString
     if (mapAttr.MyDataType == "1" && mapAttr.UIContralType == 0) {  //不是外键
 
-        if (mapAttr.UIHeight <= 23) //普通的文本框.
+        if (mapAttr.UIHeight <= 40) //普通的文本框.
         {
             var enableAttr = '';
             if (mapAttr.UIIsEnable == 0)

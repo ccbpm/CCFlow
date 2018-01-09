@@ -652,7 +652,7 @@ function InitMapAttrOfCtrl(mapAttr) {
     //AppString
     if (mapAttr.MyDataType == "1") {  //不是外键
 
-        if (mapAttr.UIHeight <= 23) //普通的文本框.
+        if (mapAttr.UIHeight <= 40) //普通的文本框.
             return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:" + mapAttr.UIWidth + ";height:" + mapAttr.UIHeight + ";' type='text' " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />";
 
         if (mapAttr.AtPara && mapAttr.AtPara.indexOf("@IsRichText=1") >= 0) {

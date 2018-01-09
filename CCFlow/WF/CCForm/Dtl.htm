@@ -1002,7 +1002,7 @@
                             if (mapAttr.UIContralType == "1") {//DDL 下拉列表框
                                 eleHtml += "<select name='DDL_" + mapAttr.KeyOfEn + "' value='" + ConvertDefVal(workNodeData, mapAttr.DefVal, mapAttr.KeyOfEn) + "' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + ">" + (workNodeData, mapAttr, defValue) + "</select>";
                             } else {//文本区域
-                                if (mapAttr.UIHeight <= 23) {
+                                if (mapAttr.UIHeight <= 40) {
                                     eleHtml += "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' type='text' " + (mapAttr.UIIsEnable ? '' : ' disabled="disabled"') + "/>";
                                 }
                                 else {

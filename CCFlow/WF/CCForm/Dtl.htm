@@ -535,7 +535,7 @@
                                          else {
 											// 判断下拉框是否有对应option, 若没有则追加
 											if ($("option[value='" + textVal + "']", tmplate).length == 0) {
-												tmplate.append("<option value='" + textVal + "'>" + textVal + "</option>");
+												tmplate.append("<option value='" + textVal + "'>" + workNodeData.DBDtl[k][o.data().KeyOfEn + "Text"] + "</option>");
 											}
 											//
                                              tmplate.val(textVal);

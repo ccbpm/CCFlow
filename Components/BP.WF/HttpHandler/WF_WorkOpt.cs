@@ -617,6 +617,10 @@ namespace BP.WF.HttpHandler
                 /*如果是组长模式.*/
                 str = "close@保存成功.\t\n该工作已经移动到会签列表中了,等到所有的人会签完毕后,就可以出现在待办列表里.";
                 str += "\t\n如果您要增加或者移除会签人请到会签列表找到该记录,执行操作.";
+
+                //删除自己的意见，以防止其他人员看到.
+                BP.WF.Dev2Interface.DeleteCheckInfo(gwf.FK_Flow, this.WorkID, gwf.FK_Node);
+
                 return str;
             }
 
@@ -1348,8 +1352,13 @@ namespace BP.WF.HttpHandler
                 msg = doc;
             }
 
+            //在审核人打开后，申请人撤销，就不不能让其保存.
+            string sql = "SELECT FK_Node FROM WF_GenerWorkFlow WHERE WorkID="+this.WorkID;
+            if (DBAccess.RunSQLReturnValInt(sql) != this.FK_Node)
+                return "err@当前工作已经被撤销或者已经移动到下一个节点您不能在执行审核.";
+
             // 处理人大的需求，需要把审核意见写入到FlowNote里面去.
-            string sql = "UPDATE WF_GenerWorkFlow SET FlowNote='" + msg + "' WHERE WorkID=" + this.WorkID;
+            sql = "UPDATE WF_GenerWorkFlow SET FlowNote='" + msg + "' WHERE WorkID=" + this.WorkID;
             DBAccess.RunSQL(sql);
 
             // 判断是否是抄送?

@@ -3849,7 +3849,7 @@ namespace BP.WF
         /// <param name="flowNo">流程编号</param>
         /// <param name="workId">工作ID</param>
         /// <param name="nodeFrom">节点从</param>
-        /// <returns></returns>
+        /// <returns>删除自己的审核信息</returns>
         public static void DeleteCheckInfo(string flowNo, Int64 workId, int nodeFrom)
         {
             string table = "ND" + int.Parse(flowNo) + "Track";

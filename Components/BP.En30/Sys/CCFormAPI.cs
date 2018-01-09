@@ -611,7 +611,7 @@ namespace BP.Sys
             MapData mapData = new MapData(fk_mapdata);
             mapData.FrmW = float.Parse(form_MapData["width"].ToJson());
             mapData.FrmH = float.Parse(form_MapData["height"].ToJson());
-            mapData.DesignerTool = "Html5";
+         //   mapData.DesignerTool = "Html5";
             mapData.Update();
 
             //表单描述文件直接保存到数据库.

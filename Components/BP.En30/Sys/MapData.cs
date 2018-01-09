@@ -135,7 +135,7 @@ namespace BP.Sys
         /// <summary>
         /// 设计器
         /// </summary>
-        public const string DesignerTool = "DesignerTool";
+        public const string DesignerTool11 = "DesignerTool";
         /// <summary>
         /// 表单类别
         /// </summary>
@@ -998,21 +998,7 @@ namespace BP.Sys
                 this.SetValByKey(MapDataAttr.FormEventEntity, value);
             }
         }
-
-        /// <summary>
-        /// 表单设计器设计工具
-        /// </summary>
-        public string DesignerTool
-        {
-            get
-            {
-                return this.GetValStringByKey(MapDataAttr.DesignerTool, "Silverlight");
-            }
-            set
-            {
-                this.SetValByKey(MapDataAttr.DesignerTool, value);
-            }
-        }
+ 
         public static Boolean IsEditDtlModel
         {
             get
@@ -1586,7 +1572,6 @@ namespace BP.Sys
                 map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", true, true);
                 map.AddTBString(MapDataAttr.GUID, null, "GUID", true, false, 0, 128, 20);
                 map.AddTBString(MapDataAttr.Ver, null, "版本号", true, false, 0, 30, 20);
-                map.AddTBString(MapDataAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
 
                 //流程控件.
                 map.AddTBString(MapDataAttr.FlowCtrls, null, "流程控件", true, true, 0, 200, 20);

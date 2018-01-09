@@ -296,7 +296,6 @@ function GenerFrm() {
 
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'.
-				debugger;
                 var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {

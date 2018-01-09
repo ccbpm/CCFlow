@@ -390,6 +390,10 @@
                 return;
         }
 
+        $("#Btn_Done").attr("disabled", "disabled");
+        $("#Btn_Done").val("正在执行....");
+
+
         var frmData = $("#cc").serialize();
         frmData = frmData.replace('=on', '=1');
 

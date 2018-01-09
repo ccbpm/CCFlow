@@ -10,11 +10,61 @@ using System.Collections.Generic;
 namespace BP.WF.Template
 {
     /// <summary>
-    /// 傻瓜表单属性
+    /// 自由表单属性 attr
     /// </summary>
-    public class MapFrmFool : EntityNoName
+    public class MapFrmNodeAttr : MapDataAttr
     {
+        /// <summary>
+        /// 保存标签
+        /// </summary>
+        public const string BtnSaveLab = "BtnSaveLab";
+        /// <summary>
+        /// 保存是否启用
+        /// </summary>
+        public const string BtnSaveEnable = "BtnSaveEnable";
+
+        /// <summary>
+        /// 删除标签
+        /// </summary>
+        public const string BtnDelLab = "BtnDelLab";
+        /// <summary>
+        /// 删除是否启用
+        /// </summary>
+        public const string BtnDelEnable = "BtnDelEnable";
+
+        /// <summary>
+        /// 打印标签
+        /// </summary>
+        public const string BtnPrintLab = "BtnPrintLab";
+        /// <summary>
+        /// 打印是否启用
+        /// </summary>
+        public const string BtnPrintEnable = "BtnPrintEnable";
+    }
+    /// <summary>
+    /// 自由表单属性
+    /// </summary>
+    public class MapFrmNode : EntityNoName
+    {
+        #region 文件模版属性.
+       
+        #endregion 文件模版属性.
+
         #region 属性
+        /// <summary>
+        /// 表单事件实体
+        /// </summary>
+        public string FromEventEntity
+        {
+            get
+            {
+                return this.GetValStrByKey(MapDataAttr.FormEventEntity);
+            }
+            set
+            {
+                this.SetValByKey(MapDataAttr.FormEventEntity,value);
+            }
+        }
         /// <summary>
         /// 是否是节点表单?
         /// </summary>
@@ -28,7 +78,7 @@ namespace BP.WF.Template
                 if (this.No.Contains("Rpt") == true)
                     return false;
 
-                if (this.No.Substring(0, 2) == "ND" && this.No.Contains("Dtl") ==false)
+                if (this.No.Substring(0, 2) == "ND")
                     return true;
 
                 return false;
@@ -51,7 +101,7 @@ namespace BP.WF.Template
         {
             get
             {
-                int i = this.GetValIntByKey(MapDataAttr.TableWidth);
+                int i = this.GetValIntByKey(MapFrmNodeAttr.TableWidth);
                 if (i <= 50)
                     return "900";
                 return i.ToString();
@@ -64,7 +114,7 @@ namespace BP.WF.Template
         {
             get
             {
-                int i = this.GetValIntByKey(MapDataAttr.TableHeight);
+                int i = this.GetValIntByKey(MapFrmNodeAttr.TableHeight);
                 if (i <= 500)
                     return "900";
                 return i.ToString();
@@ -78,17 +128,16 @@ namespace BP.WF.Template
             get
             {
                 return 4;
-                int i = this.GetValIntByKey(MapDataAttr.TableCol);
+                int i = this.GetValIntByKey(MapFrmNodeAttr.TableCol);
                 if (i == 0 || i == 1)
                     return 4;
                 return i;
             }
             set
             {
-                this.SetValByKey(MapDataAttr.TableCol, value);
+                this.SetValByKey(MapFrmNodeAttr.TableCol, value);
             }
         }
-       
         #endregion
 
         #region 权限控制.
@@ -111,17 +160,16 @@ namespace BP.WF.Template
 
         #region 构造方法
         /// <summary>
-        /// 傻瓜表单属性
+        /// 自由表单属性
         /// </summary>
-        public MapFrmFool()
+        public MapFrmNode()
         {
         }
         /// <summary>
-        /// 傻瓜表单属性
+        /// 自由表单属性
         /// </summary>
         /// <param name="no">表单ID</param>
-        public MapFrmFool(string no)
-            : base(no)
+        public MapFrmNode(string no)  : base(no)
         {
         }
         /// <summary>
@@ -134,48 +182,48 @@ namespace BP.WF.Template
                 if (this._enMap != null)
                     return this._enMap;
 
-                Map map = new Map("Sys_MapData", "傻瓜傻瓜表单属性");
+                Map map = new Map("Sys_MapData", "自由表单属性");
                 map.Java_SetEnType(EnType.Sys);
-                map.Java_SetCodeStruct("4");
 
                 #region 基本属性.
-
-                map.AddTBStringPK(MapDataAttr.No, null, "表单编号", true, true, 1, 190, 20);
-                map.AddTBString(MapDataAttr.PTable, null, "存储表", true, false, 0, 100, 20);
-                map.AddTBString(MapDataAttr.Name, null, "表单名称", true, false, 0, 500, 20, true);
-
-                map.AddTBInt(MapDataAttr.TableCol, 4, "表单显示列数", true, true);
-                map.AddTBInt(MapDataAttr.TableWidth, 900, "傻瓜表单宽度", true, false);
-                map.AddTBInt(MapDataAttr.TableHeight, 900, "傻瓜表单高度", true, false);
-
+                map.AddTBStringPK(MapFrmNodeAttr.No, null, "表单编号", true, true, 1, 190, 20);
+                map.AddTBString(MapFrmNodeAttr.PTable, null, "存储表", true, false, 0, 100, 20);
+                map.AddTBString(MapFrmNodeAttr.Name, null, "表单名称", true, false, 0, 200, 20,true);
+                map.AddTBString(MapDataAttr.FormEventEntity, null, "事件实体", true, true, 0, 100, 20, true);
+                 
                 //数据源.
-                map.AddDDLEntities(MapDataAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
-                map.AddDDLEntities(MapDataAttr.FK_FormTree, "01", "表单类别", new SysFormTrees(), true);
+                map.AddDDLEntities(MapFrmNodeAttr.DBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
+
+                //宽度高度.
+                map.AddTBInt(MapFrmNodeAttr.FrmW, 900, "宽度", true, false);
+                map.AddTBInt(MapFrmNodeAttr.FrmH, 1200, "高度", true, false);
+
                 //表单的运行类型.
-                map.AddDDLSysEnum(MapDataAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型",
-                    true, false, MapDataAttr.FrmType);
+                map.AddDDLSysEnum(MapFrmNodeAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型", true, false, MapFrmNodeAttr.FrmType);
                 #endregion 基本属性.
+ 
 
                 #region 设计者信息.
-                map.AddTBString(MapDataAttr.Designer, null, "设计者", true, false, 0, 500, 20);
-                map.AddTBString(MapDataAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
-                map.AddTBString(MapDataAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
-                map.AddTBString(MapDataAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
-                map.AddTBString(MapDataAttr.Ver, null, "版本号", true, true, 0, 30, 20);
-               // map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
+                map.AddTBString(MapFrmNodeAttr.Designer, null, "设计者", true, false, 0, 500, 20);
+                map.AddTBString(MapFrmNodeAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
+                map.AddTBString(MapFrmNodeAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, false);
+                map.AddTBString(MapFrmNodeAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
+                map.AddTBString(MapFrmNodeAttr.Ver, null, "版本号", true, true, 0, 30, 20);
+                map.AddTBStringDoc(MapFrmNodeAttr.Note, null, "备注", true, false, true);
 
-                map.AddTBStringDoc(MapDataAttr.Note, null, "备注", true, false, true);
                 //增加参数字段.
                 map.AddTBAtParas(4000);
-                map.AddTBInt(MapDataAttr.Idx, 100, "顺序号", false, false);
+                map.AddTBInt(MapFrmNodeAttr.Idx, 100, "顺序号", false, false);
                 #endregion 设计者信息.
 
+                map.AddMyFile("表单模版");
+
                 //查询条件.
-                map.AddSearchAttr(MapDataAttr.DBSrc);
+                map.AddSearchAttr(MapFrmNodeAttr.DBSrc);
 
                 #region 方法 - 基本功能.
-
                 RefMethod rm = new RefMethod();
+
                 rm = new RefMethod();
                 rm.Title = "启动傻瓜表单设计器";
                 rm.ClassMethodName = this.ToString() + ".DoDesignerFool";
@@ -183,6 +231,25 @@ namespace BP.WF.Template
                 rm.Visable = true;
                 rm.Target = "_blank";
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "字段维护";
+                rm.ClassMethodName = this.ToString() + ".DoEditFiledsList";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/field.png";
+                rm.Visable = true;
+                rm.Target = "_blank";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "批量修改字段"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
+                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/field.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
@@ -207,23 +274,6 @@ namespace BP.WF.Template
                 rm.Title = "批量设置验证规则";
                 rm.Icon = "../../WF/Img/RegularExpression.png";
                 rm.ClassMethodName = this.ToString() + ".DoRegularExpressionBatch";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                map.AddRefMethod(rm);
-
-                rm = new RefMethod();
-                rm.Title = "批量修改字段"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".DoBatchEditAttr";
-                rm.Icon = "../../WF/Admin/CCBPMDesigner/Img/field.png";
-                rm.Visable = true;
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
-                rm.Target = "_blank";
-                map.AddRefMethod(rm);
-
-
-                rm = new RefMethod();
-                rm.Title = "手机端表单";
-                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
-                rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -254,27 +304,99 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
-
-                //带有参数的方法.
                 rm = new RefMethod();
-                rm.Title = "重命名字段";
-                rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
-                rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
-                rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
-                rm.Icon = "../../WF/Img/ReName.png";
-                map.AddRefMethod(rm);
-              
-                rm = new RefMethod();
-                rm.Title = "表单检查"; // "设计表单";
+                rm.Title = "表单检查";  //"设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoCheckFixFrmForUpdateVer";
                 rm.Visable = true;
                 rm.RefAttrLinkLabel = "表单检查";
                 rm.Icon = "../../WF/Img/Check.png";
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
-             
+
+                rm = new RefMethod();
+                rm.Title = "重置表单";  //"设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoReset";
+                rm.Warning = "重置就是重新让设计器还原原来的设置. \t\n注意:执行重置有可能会导致部分的界面元素不能按照原始的方式还原上来.";
+                rm.Visable = true;
+                rm.RefAttrLinkLabel = "重置表单";
+                rm.Icon = "../../WF/Img/Check.png";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "Tab顺序键"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DoTabIdx";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
+
+
+                //rm = new RefMethod();
+                //rm.Title = "节点表单组件"; // "设计表单";
+                //rm.ClassMethodName = this.ToString() + ".DoNodeFrmCompent";
+                //rm.Visable = true;
+                //rm.RefAttrLinkLabel = "节点表单组件";
+                //rm.RefMethodType = RefMethodType.RightFrameOpen;
+                //rm.Target = "_blank";
+                //rm.Icon = ../../Img/Components.png";
+                //map.AddRefMethod(rm);
                 #endregion 方法 - 基本功能.
+
+                #region 高级设置.
+
+                //带有参数的方法.
+                rm = new RefMethod();
+                rm.Title = "重命名字段";
+             //   rm.GroupName = "高级设置";
+                rm.HisAttrs.AddTBString("FieldOld", null, "旧字段英文名", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FieldNew", null, "新字段英文名", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FieldNewName", null, "新字段中文名", true, false, 0, 100, 100);
+                rm.ClassMethodName = this.ToString() + ".DoChangeFieldName";
+                rm.Icon = "../../WF/Img/ReName.png";
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "重命表单ID";
+              //  rm.GroupName = "高级设置";
+                rm.HisAttrs.AddTBString("NewFrmID1", null, "新表单ID名称", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("NewFrmID2", null, "确认表单ID名称", true, false, 0, 100, 100);
+                rm.ClassMethodName = this.ToString() + ".DoChangeFrmID";
+                rm.Icon = "../../WF/Img/ReName.png";
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "复制表单";
+                //  rm.GroupName = "高级设置";
+                rm.HisAttrs.AddTBString("FrmID", null, "要复制新表单ID", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("FrmName", null, "表单名称", true, false, 0, 100, 100);
+                rm.HisAttrs.AddDDLEntities("FrmTree", null, "复制到表单目录", new FrmTrees(),true);
+
+                rm.ClassMethodName = this.ToString() + ".DoCopyFrm";
+                rm.Icon = "../../WF/Img/Btn/Copy.GIF";
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "重置表单";
+                rm.ClassMethodName = this.ToString() + ".DoResetFrm";
+                rm.GroupName = "高级设置";
+                map.AddRefMethod(rm);
+
+
+                rm = new RefMethod();
+                rm.Title = "手机端表单";
+                rm.GroupName = "高级设置";
+                rm.Icon = "../../WF/Admin/CCFormDesigner/Img/telephone.png";
+                rm.ClassMethodName = this.ToString() + ".DoSortingMapAttrs";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+                #endregion 高级设置.
 
                 #region 方法 - 开发接口.
                 rm = new RefMethod();
@@ -290,7 +412,7 @@ namespace BP.WF.Template
                 rm = new RefMethod();
                 rm.Title = "调用分析API"; // "设计表单";
                 rm.ClassMethodName = this.ToString() + ".DoGroup";
-                rm.Icon = "../../WF/Img/Table.gif";
+                rm.Icon ="../../Img/Table.gif";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.LinkeWinOpen;
                 rm.Target = "_blank";
@@ -304,27 +426,86 @@ namespace BP.WF.Template
         }
         #endregion
 
-        #region 节点表单方法.
+        protected override bool beforeUpdate()
+        {
+            //注册事件表单实体.
+            BP.Sys.FormEventBase feb = BP.Sys.Glo.GetFormEventBaseByEnName(this.No);
+            if (feb == null)
+                this.FromEventEntity = "";
+            else
 
+                this.FromEventEntity = feb.ToString();
+
+            return base.beforeUpdate();
+        }
+        public string DoTabIdx()
+        {
+            return SystemConfig.CCFlowWebPath +"WF/Admin/FoolFormDesigner/TabIdx.htm?FK_MapData=" + this.No;
+        }
+
+        public string DoResetFrm()
+        {
+            string sql = "UPDATE Sys_MapData SET FormJson= null WHERE No='"+this.No+"'";
+            DBAccess.RunSQL(sql);
+            return "表单已经重置成功, 请关闭表单设计器重新打开.";
+        }
+        
+        /// <summary>
+        /// 复制表单
+        /// </summary>
+        /// <returns></returns>
+        public string DoCopyFrm(string frmID, string frmName, string fk_frmTree)
+        {
+            return BP.Sys.CCFormAPI.CopyFrm(this.No, frmID, frmName, fk_frmTree);
+        }
+
+        #region 节点表单方法.
+        public string DoReset()
+        {
+            string sql = "UPDATE Sys_MapData SET FormJson = null WHERE No='"+this.No+"'";
+            BP.DA.DBAccess.RunSQL(sql);
+            return "重置成功,您需要关闭当前H5的表单设计器然后重新打开.";
+        }
+        /// <summary>
+        /// 启动自由表单设计器(SL)
+        /// </summary>
+        /// <returns></returns>
+        public string DoDesignerSL()
+        {
+            return "../../Admin/CCFormDesigner/CCFormDesignerSL.htm?FK_MapData="+this.No+"&UserNo="+Web.WebUser.No+"&SID="+BP.Web.WebUser.SID;
+        }
+        /// <summary>
+        /// 启动自由表单设计器(h5)
+        /// </summary>
+        /// <returns></returns>
+        public string DoDesignerH5()
+        {
+            // WF/Admin/CCFormDesigner/FormDesigner.htm?FK_MapData=ND102&UserNo=admin&SID=44a42h5gcbxnwjof2hv2pw5e
+            return "../../Admin/CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.No + "&UserNo=" + Web.WebUser.No + "&SID=" + BP.Web.WebUser.SID;
+        }
         /// <summary>
         /// 傻瓜表单设计器
         /// </summary>
         /// <returns></returns>
         public string DoDesignerFool()
         {
-            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True";
+            return "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&MyPK=" + this.No + "&IsEditMapData=True&DoDesignerFool&IsFirst=1";
         }
-
         /// <summary>
-        /// 节点表单组件
+        /// 编辑excel模版.
         /// </summary>
         /// <returns></returns>
-        public string DoNodeFrmCompent()
+        public string DoEditExcelTemplate()
         {
-            if (this.No.Contains("ND") == true)
-                return "../../Comm/En.htm?EnName=BP.WF.Template.FrmNodeComponent&PK=" + this.No.Replace("ND", "") + "&t=" + DataType.CurrentDataTime;
-            else
-                return "../../Admin/FoolFormDesigner/Do.aspx&DoType=FWCShowError";
+            return "../../Admin/CCFormDesigner/ExcelFrmDesigner/Designer.htm?FK_MapData=" + this.No;
+        }
+        /// <summary>
+        /// 表单字段.
+        /// </summary>
+        /// <returns></returns>
+        public string DoEditFiledsList()
+        {
+            return "../../Admin/FoolFormDesigner/BatchEdit.htm?FK_MapData=" + this.No;
         }
         /// <summary>
         /// 执行旧版本的兼容性检查.
@@ -335,13 +516,10 @@ namespace BP.WF.Template
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlType='' WHERE CtrlType IS NULL");
             DBAccess.RunSQL("UPDATE Sys_GroupField SET CtrlID='' WHERE CtrlID IS NULL");
 
-            //一直遇到遇到自动变长的问题, 强制其修复过来.
-            DBAccess.RunSQL("UPDATE Sys_Mapattr SET colspan=3 WHERE UIHeight<=38 AND colspan=4");
-
             string str = "";
 
              // 处理失去分组的字段. 
-            string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "' AND ( CtrlType='' OR CtrlType IS NULL)  )  OR GroupID IS NULL ";
+            string sql = "SELECT MyPK FROM Sys_MapAttr WHERE FK_MapData='" + this.No + "' AND GroupID NOT IN (SELECT OID FROM Sys_GroupField WHERE EnName='" + this.No + "' AND CtrlType='' ) ";
             MapAttrs attrs = new MapAttrs();
             attrs.RetrieveInSQL(sql);
             if (attrs.Count != 0)
@@ -353,7 +531,6 @@ namespace BP.WF.Template
                     if (mygf.CtrlID == "")
                         gf = mygf;
                 }
-
                 if (gf == null)
                 {
                     gf = new GroupField();
@@ -378,10 +555,11 @@ namespace BP.WF.Template
                     continue;
 
                 gf.Lab = dtl.Name;
-                gf.CtrlID = dtl.No;
+                gf.CtrlID =  dtl.No;
                 gf.CtrlType = "Dtl";
                 gf.EnName = dtl.FK_MapData;
                 gf.DirectSave();
+
                 str += "@为从表" + dtl.Name + " 增加了分组.";
             }
 
@@ -427,34 +605,6 @@ namespace BP.WF.Template
                 conn.Update();
             }
 
-
-            //删除重复的数据, 比如一个从表显示了多个分组里. 增加此部分.
-            if (SystemConfig.AppCenterDBType == DBType.Oracle)
-              sql = "SELECT * FROM (SELECT EnName,CtrlID,CtrlType, count(*) as Num FROM sys_groupfield WHERE CtrlID!='' GROUP BY EnName,CtrlID,CtrlType ) WHERE Num > 1";
-            else
-                sql = "SELECT * FROM (SELECT EnName,CtrlID,CtrlType, count(*) as Num FROM sys_groupfield WHERE CtrlID!='' GROUP BY EnName,CtrlID,CtrlType ) AS A WHERE A.Num > 1";
-
-            DataTable dt = DBAccess.RunSQLReturnTable(sql);
-            foreach (DataRow dr in dt.Rows)
-            {
-                string enName = dr[0].ToString();
-                string ctrlID = dr[1].ToString();
-                string ctrlType = dr[2].ToString();
-
-                GroupFields gfs = new GroupFields();
-                gfs.Retrieve(GroupFieldAttr.EnName, enName, GroupFieldAttr.CtrlID, ctrlID, GroupFieldAttr.CtrlType, ctrlType);
-
-                if (gfs.Count <= 1)
-                    continue;
-                foreach (GroupField gf in gfs)
-                {
-                    gf.Delete(); //删除其中的一个.
-                    break;
-                }
-            }
-
-
-
             if (str == "")
                 return "检查成功.";
 
@@ -463,6 +613,43 @@ namespace BP.WF.Template
         #endregion
 
         #region 通用方法.
+        /// <summary>
+        /// 重命名
+        /// </summary>
+        /// <param name="frmID1"></param>
+        /// <param name="frmID2"></param>
+        /// <returns></returns>
+        public string DoChangeFrmID(string frmID1, string frmID2)
+        {
+            MapData md = new MapData();
+            md.No = frmID1;
+            if (md.IsExits == true)
+                return "表单ID【" + frmID1 + "】已经存在";
+
+            if (frmID1 != frmID2)
+                return "两次输入的ID不一致.";
+
+
+            string frmIDOld = this.No;
+
+            string sqls = "";
+            sqls += "@UPDATE Sys_MapData SET No='" + frmID1 + "' WHERE No='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmLine SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmLab SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmBtn SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_MapAttr SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_MapExt SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmImg SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmImgAth SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmRB SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_MapDtl SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_MapFrame SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmEle SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            sqls += "UPDATE Sys_FrmEvent SET FK_MapData='" + frmID1 + "' WHERE FK_MapData='" + frmIDOld + "'";
+            BP.DA.DBAccess.RunSQLs(sqls);
+
+            return "重命名成功，你需要关闭窗口重新刷新。";
+        }
         /// <summary>
         /// 替换名称
         /// </summary>
@@ -529,7 +716,7 @@ namespace BP.WF.Template
         /// <returns></returns>
         public string DoRegularExpressionBatch()
         {
-            return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.aspx?FK_Flow=&FK_MapData=" +
+            return "../../Admin/FoolFormDesigner/MapExt/RegularExpressionBatch.htm?FK_Flow=&FK_MapData=" +
                    this.No + "&t=" + DataType.CurrentDataTime;
         }
         /// <summary>
@@ -611,7 +798,7 @@ namespace BP.WF.Template
             return "../../Admin/FoolFormDesigner/MapExt/InitScript.htm?s=34&FK_MapData=" + this.No + "&ExtType=PageLoadFull&RefNo=";
         }
         /// <summary>
-        /// 傻瓜表单属性.
+        /// 自由表单属性.
         /// </summary>
         /// <returns></returns>
         public string DoBodyAttr()
@@ -647,15 +834,15 @@ namespace BP.WF.Template
         #endregion 方法.
     }
     /// <summary>
-    /// 傻瓜表单属性s
+    /// 自由表单属性s
     /// </summary>
-    public class MapFrmFools : EntitiesNoName
+    public class MapFrmNodes : EntitiesNoName
     {
         #region 构造
         /// <summary>
-        /// 傻瓜表单属性s
+        /// 自由表单属性s
         /// </summary>
-        public MapFrmFools()
+        public MapFrmNodes()
         {
         }
         /// <summary>
@@ -665,7 +852,7 @@ namespace BP.WF.Template
         {
             get
             {
-                return new MapFrmFool();
+                return new MapFrmNode();
             }
         }
         #endregion
@@ -675,20 +862,20 @@ namespace BP.WF.Template
         /// 转化成 java list,C#不能调用.
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.IList<MapFrmFool> ToJavaList()
+        public System.Collections.Generic.IList<MapFrmNode> ToJavaList()
         {
-            return (System.Collections.Generic.IList<MapFrmFool>)this;
+            return (System.Collections.Generic.IList<MapFrmNode>)this;
         }
         /// <summary>
         /// 转化成list
         /// </summary>
         /// <returns>List</returns>
-        public System.Collections.Generic.List<MapFrmFool> Tolist()
+        public System.Collections.Generic.List<MapFrmNode> Tolist()
         {
-            System.Collections.Generic.List<MapFrmFool> list = new System.Collections.Generic.List<MapFrmFool>();
+            System.Collections.Generic.List<MapFrmNode> list = new System.Collections.Generic.List<MapFrmNode>();
             for (int i = 0; i < this.Count; i++)
             {
-                list.Add((MapFrmFool)this[i]);
+                list.Add((MapFrmNode)this[i]);
             }
             return list;
         }

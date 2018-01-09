@@ -14,7 +14,6 @@ namespace BP.WF.Template
     /// </summary>
     public class MapFrmFreeAttr : MapDataAttr
     {
-        public const string TemplaterVer = "TemplaterVer";
         /// <summary>
         /// 保存标签
         /// </summary>
@@ -48,20 +47,7 @@ namespace BP.WF.Template
     public class MapFrmFree : EntityNoName
     {
         #region 文件模版属性.
-        /// <summary>
-        /// 模版版本号
-        /// </summary>
-        public string TemplaterVer
-        {
-            get
-            {
-                return this.GetValStringByKey(MapFrmFreeAttr.TemplaterVer);
-            }
-            set
-            {
-                this.SetValByKey(MapFrmFreeAttr.TemplaterVer, value);
-            }
-        }
+       
         #endregion 文件模版属性.
 
         #region 属性
@@ -216,19 +202,14 @@ namespace BP.WF.Template
                 //表单的运行类型.
                 map.AddDDLSysEnum(MapFrmFreeAttr.FrmType, (int)BP.Sys.FrmType.FreeFrm, "表单类型", true, false, MapFrmFreeAttr.FrmType);
                 #endregion 基本属性.
-
-                #region 模版属性。
-                map.AddTBString(MapFrmFreeAttr.TemplaterVer, null, "模版编号", true, false, 0, 30, 20);
-
-                #endregion 模版属性。
+ 
 
                 #region 设计者信息.
                 map.AddTBString(MapFrmFreeAttr.Designer, null, "设计者", true, false, 0, 500, 20);
                 map.AddTBString(MapFrmFreeAttr.DesignerContact, null, "联系方式", true, false, 0, 500, 20);
-                map.AddTBString(MapFrmFreeAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, true);
+                map.AddTBString(MapFrmFreeAttr.DesignerUnit, null, "单位", true, false, 0, 500, 20, false);
                 map.AddTBString(MapFrmFreeAttr.GUID, null, "GUID", true, true, 0, 128, 20, false);
                 map.AddTBString(MapFrmFreeAttr.Ver, null, "版本号", true, true, 0, 30, 20);
-                map.AddTBString(MapFrmFreeAttr.DesignerTool, null, "表单设计器", true, true, 0, 30, 20);
                 map.AddTBStringDoc(MapFrmFreeAttr.Note, null, "备注", true, false, true);
 
                 //增加参数字段.

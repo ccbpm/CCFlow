@@ -296,6 +296,7 @@ function GenerFrm() {
 
                 //添加 label
                 //如果是整行的需要添加  style='clear:both'.
+				debugger;
                 var defValue = ConvertDefVal(frmData, mapAttr.DefVal, mapAttr.KeyOfEn);
 
                 if ($('#TB_' + mapAttr.KeyOfEn).length == 1) {
@@ -305,7 +306,9 @@ function GenerFrm() {
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
 					// 判断下拉框是否有对应option, 若没有则追加
 					if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
-						$('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + defValue + "</option>");
+						var mainTable = frmData.MainTable[0];
+						var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+						$('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
 					}
 					//
                     $('#DDL_' + mapAttr.KeyOfEn).val(defValue);

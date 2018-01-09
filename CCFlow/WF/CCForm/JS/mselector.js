@@ -78,7 +78,8 @@
 	function executeSql(sql, valueField, textField, key) {
 		var datas = [];
 		if (sql && $.trim(key) != "") {
-			var dt = DBAccess.RunSQLReturnTable(sql.replace("@Key", key).replace(/~/g, "'"));
+			var _sql = sql.replace(/@Key/g, key).replace(/~/g, "'");
+			var dt = DBAccess.RunSQLReturnTable(_sql);
 			if ($.isArray(dt)) {
 				$.each(dt, function (i, o) {
 					var option = {};

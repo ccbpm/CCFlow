@@ -15,12 +15,35 @@ function MultipleChoiceSearch(mapExt) {
 	container.width(width);
 	container.height(height);
 
-    (function (FK_MapData, AttrOfOper, oid, sql) {
+	var tip = undefined;
+	try {
+		tip = GetAtPara(mapExt.AtPara, "SearchTip");
+	} catch (e) {
+	}
+	
+	var _sql;
+	var _url;
+	var _json;
+	switch (mapExt.DBType) {
+		case 0:
+			_sql = mapExt.Doc;
+			break;
+		case 1:
+			_url = mapExt.Doc;
+			break;
+		case 2:
+			_json = mapExt.Doc;
+	}
+
+    (function (FK_MapData, AttrOfOper, oid, tip, _sql, _url, _json) {
         var mselector = $("#" + AttrOfOper + "_mselector");
         mselector.mselector({
             "fit": true,
             "filter": false,
-            "sql": sql,
+			"tip" : tip,
+            "sql": _sql,
+			"url" : _url,
+			"data" : _json,
             "onSelect": function (record) {
                 $("#TB_" + AttrOfOper).val(mselector.mselector("getText"));
 				msSaveVal(FK_MapData, AttrOfOper, oid, record.No, record.Name);
@@ -42,7 +65,7 @@ function MultipleChoiceSearch(mapExt) {
 		});
 		mselector.mselector("loadData", initJsonData);
 		//
-    })(mapExt.FK_MapData, mapExt.AttrOfOper, (pageData.WorkID || pageData.OID || ""), mapExt.Tag1);
+    })(mapExt.FK_MapData, mapExt.AttrOfOper, (pageData.WorkID || pageData.OID || ""), tip, _sql, _url, _json);
 }
 
 //删除数据.

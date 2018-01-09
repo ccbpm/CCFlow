@@ -45,6 +45,8 @@
 			datas = opts.data;
 		} else if ($.trim(opts.sql) != "") {
 			datas = executeSql(opts.sql, opts.valueField, opts.textField, values);
+		} else if ($.trim(opts.url) != "") {
+			datas = requestUrl(opts.url, valueField, textField, text);
 		}
 		loadData(target, datas);
 	}
@@ -74,6 +76,39 @@
 	}
 
 	var empty = "__empty__";
+
+	function requestUrl(url, valueField, textField, key) {
+		var datas = [];
+		return datas;
+		if (url && $.trim(url) != "") {
+			//var _url = url.replace(/@Key/g, key).replace(/~/g, "'");
+			$.ajax({
+                type: 'post',
+                async: false,
+                url: url + "&t=" + new Date().getTime(),
+                dataType: 'html',
+                success: function (data) {
+                    if (data.indexOf("err@") != -1) {
+                        alert(data);
+                        return;
+                    }
+					var ja = JSON.parse(data);
+                    if ($.isArray(ja)) {
+						$.each(ja, function (i, o) {
+							var option = {};
+							option[valueField] = o[valueField];
+							option[textField] = o[textField];
+							datas.push(option);
+						});
+					}
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                }
+			});
+		}
+		return datas;
+	}
 
 	function executeSql(sql, valueField, textField, key) {
 		var datas = [];
@@ -191,6 +226,8 @@
 				datas = opts.data;
 			} else if ($.trim(opts.sql) != "") {
 				datas = executeSql(opts.sql, valueField, textField, text);
+			} else if ($.trim(opts.url) != "") {
+				datas = requestUrl(opts.url, valueField, textField, text);
 			}
 			if (opts.filter) {
 				datas = $.grep(datas, function (o) {
@@ -324,7 +361,8 @@
 			"label" : "string",
 			"filter" : "boolean",
 			"tip" : "string",
-			"sql" : "string"
+			"sql" : "string",
+			"url" : "string"
 		}]));
 	};
 
@@ -338,7 +376,7 @@
 		"tip" : "请输入关键字",
 		"data" : [],	// [{ "No" : "2102", "Name" : "大连" }, { "No" : "3701", "Name" : "济南" }]
 		"sql" : "",	// "SELECT No, Name FROM CN_CITY WHERE Name Like '%@Key%'"
-
+		"url" : "",
 		"onSelect" : function (record) {
 		},
 		"onUnselect" : function (record) {

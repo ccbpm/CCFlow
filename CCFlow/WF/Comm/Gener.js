@@ -622,6 +622,7 @@ var Entity = (function () {
         this.enName = enName;
 		
 		if (pkval != null && typeof pkval === "object") {
+			jsonString = {};
 			this.CopyJSON(pkval);
 		} else {
 			this.pkval = pkval || "";

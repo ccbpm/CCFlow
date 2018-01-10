@@ -620,8 +620,13 @@ var Entity = (function () {
 
     var Entity = function (enName, pkval) {
         this.enName = enName;
-        this.pkval = pkval || "";
-        this.loadData();
+		
+		if (pkval != null && typeof pkval === "object") {
+			this.CopyJSON(pkval);
+		} else {
+			this.pkval = pkval || "";
+			this.loadData();
+		}
     };
 
     function setData(self) {

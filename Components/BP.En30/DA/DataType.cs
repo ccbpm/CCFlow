@@ -454,9 +454,7 @@ namespace BP.DA
         /// <returns>返回合法的文件名</returns>
         public static string PraseStringToFileName(string fileNameFormat)
         {
-            //return fileNameFormat;
-
-            char[] strs = "+#?*\"<>/;.,-:%".ToCharArray();
+            char[] strs = "+#?*\"<>/;.,-:%~".ToCharArray();
             foreach (char c in strs)
                 fileNameFormat = fileNameFormat.Replace(c.ToString(), "_");
 

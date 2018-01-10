@@ -1074,8 +1074,8 @@ namespace BP.WF.Template
 
                 rm = new RefMethod();
                 rm.GroupName = "实验中的功能";
-                rm.Title = "数据导入(JSON模式)"; // "设计表单";
-                rm.ClassMethodName = this.ToString() + ".ImpByJson";
+                rm.Title = "数据导入"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DtlImp";
                 rm.Icon = "/WF/Img/Setting.png";
                 rm.Visable = true;
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -1112,9 +1112,9 @@ namespace BP.WF.Template
         /// 列自动计算
         /// </summary>
         /// <returns></returns>
-        public string ImpByJson()
+        public string DtlImp()
         {
-            string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImpByJSON.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            string url = "../../Admin/FoolFormDesigner/DtlSetting/DtlImp.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             return url;
         }
         /// <summary>

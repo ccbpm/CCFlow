@@ -256,6 +256,15 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.GroupName = "Pop返回值2018";
+                rm.Title = "自定义URL";
+                rm.ClassMethodName = this.ToString() + ".DoSelfUrl()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+
                 //  设置开窗返回值-正则表达式-文本框自动完成-脚本验证-扩展控件
                 rm = new RefMethod();
                 rm.GroupName = "Pop返回值2018";
@@ -319,6 +328,14 @@ namespace BP.Sys.FrmUI
 
 
         #region 方法执行 pop返回值
+        /// <summary>
+        /// 自定义Url.
+        /// </summary>
+        /// <returns></returns>
+        public string DoSelfUrl()
+        {
+            return "../../Admin/FoolFormDesigner/PopSetting/SelfUrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
         /// <summary>
         /// 实体列表模式
         /// </summary>

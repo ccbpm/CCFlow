@@ -86,6 +86,7 @@ function PopGroupList_Done(mapExt) {
     //弹出这个url, 主要有高度宽度, 可以在  ReturnValCCFormPopValGoogle 上做修改.
     var url = 'Pop/GroupList.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal="+pkval+"&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
 
+	// @代国强 弹出窗口
     open(url);
 
   //  ReturnValCCFormPopValGoogle("TB_" + mapExt.AttrOfOper, "'" + mapExt.MyPK + "'", mapExt.FK_MapData, mapExt.W, mapExt.H, "'分组平铺'");

@@ -1093,6 +1093,11 @@ var Entity = (function () {
             ////            jsonString.frmParas = formParams;
             //alert(JSON.stringify(self));
 
+			$("input,select").each(function (i, e) {
+				if (typeof $(e).attr("name") === "undefined" || $(e).attr("name") == "") {
+					$(e).attr("name", $(e).attr("id"));
+				}
+			});
 			// 新版本20180107 2130
 			var self = this;
 			// 普通属性

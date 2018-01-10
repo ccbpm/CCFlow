@@ -64,6 +64,41 @@ function PopBranches(mapExt) {
 
 }
 
+/******************************************  表格查询 **********************************/
+
+function PopTableSearch(mapExt) {
+
+    var tb = $("#TB_" + mapExt.AttrOfOper);
+    if (tb.length == 0)
+        return; //有可能字段被删除了.
+
+    //设置文本框只读.
+    tb.attr('readonly', 'true');
+    // tb.attr('disabled', 'true');
+
+    //在文本框双击，绑定弹出. PopGroupList.htm的窗口. 
+    tb.bind("click", function () { PopTableSearch_Done(mapExt) });
+}
+
+function PopTableSearch_Done(mapExt) {
+
+    //获得主键.
+    var pkval = GetPKVal();
+
+    //弹出这个url, 主要有高度宽度, 可以在  ReturnValCCFormPopValGoogle 上做修改.
+    var url = 'Pop/TableSearch.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
+
+    if (window.parent && window.parent.OpenBootStrapModal) {
+        window.parent.OpenBootStrapModal(url, "eudlgframe", "导入数据", mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
+            location = location;
+        });
+        return;
+    }
+}
+
+
+/******************************************  分组列表 **********************************/
+
 function PopGroupList(mapExt) {
 
     var tb = $("#TB_" + mapExt.AttrOfOper);
@@ -86,15 +121,14 @@ function PopGroupList_Done(mapExt) {
     //弹出这个url, 主要有高度宽度, 可以在  ReturnValCCFormPopValGoogle 上做修改.
     var url = 'Pop/GroupList.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal="+pkval+"&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
 
-	// @代国强 弹出窗口
-    open(url);
-
-  //  ReturnValCCFormPopValGoogle("TB_" + mapExt.AttrOfOper, "'" + mapExt.MyPK + "'", mapExt.FK_MapData, mapExt.W, mapExt.H, "'分组平铺'");
-    //alert(url);
-    //   window.open(url);
-    //  ReturnValCCFormPopValGoogle(url);
-    //alert(mapExt.FK_MapData);
+    if (window.parent && window.parent.OpenBootStrapModal) {
+        window.parent.OpenBootStrapModal(url, "eudlgframe", "导入数据", mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
+            //location = location;
+        });
+        return;
+    }
 }
+
 
 function GetPKVal() {
 

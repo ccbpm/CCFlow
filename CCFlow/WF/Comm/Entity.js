@@ -674,7 +674,7 @@ function GetFormData(isCotainTextArea, isCotainUrlParam) {
             case "INPUT":
                 switch (disabledEle.type.toUpperCase()) {
                     case "CHECKBOX": //复选框
-                        formArrResult.push(name + '=' + $(disabledEle).is(':checked') ? 1 : 0);
+                        formArrResult.push(name + '=' + ($(disabledEle).is(':checked') ? 1 : 0));
                         break;
                     case "TEXT": //文本框
                         formArrResult.push(name + '=' + $(disabledEle).val());

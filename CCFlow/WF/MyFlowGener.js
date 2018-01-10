@@ -554,7 +554,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
             case "INPUT":
                 switch (disabledEle.type.toUpperCase()) {
                     case "CHECKBOX": //复选框
-                        formArrResult.push(name + '=' + $(disabledEle).is(':checked') ? 1 : 0);
+                        formArrResult.push(name + '=' + ($(disabledEle).is(':checked') ? 1 : 0));
                         break;
                     case "TEXT": //文本框
                         formArrResult.push(name + '=' + $(disabledEle).val());
@@ -567,20 +567,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框       
+            //下拉框        
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
-            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());      
-            //对于复选下拉框获取值得方法      
-            //                if ($('[data-id=' + name + ']').length > 0) {      
-            //                    var val = $(disabledEle).val().join(',');      
-            //                    formArrResult.push(name + '=' + val);      
-            //                } else {      
-            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());      
-            //                }      
-            // break;      
-            //文本区域       
+            //formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());       
+            //对于复选下拉框获取值得方法       
+            //                if ($('[data-id=' + name + ']').length > 0) {       
+            //                    var val = $(disabledEle).val().join(',');       
+            //                    formArrResult.push(name + '=' + val);       
+            //                } else {       
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());       
+            //                }       
+            // break;       
+            //文本区域        
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -618,7 +618,6 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     //为了复选框  合并一下值  复选框的值以  ，号分割
     //用& 符号截取数据
     var formDataArr = formData.split('&');
-  //  alert(formDataArr);
 
     var formDataResultObj = {};
     $.each(formDataArr, function (i, formDataObj) {
@@ -641,6 +640,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     // 处理没有选择的文本框.
     //获得checkBoxIDs 格式为: CB_IsXX,CB_IsYY,
     var ids = GenerCheckIDs();
+    
     if (ids) {
         var scores = ids.split(",");
         var arrLength = scores.length;
@@ -656,6 +656,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
     }
 
     formdataResultStr = formdataResultStr.replace('&&', '&');
+
     return formdataResultStr;
 }
 

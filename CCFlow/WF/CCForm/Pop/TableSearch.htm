@@ -16,11 +16,6 @@
         var selectedEles = null;
         var mapExt = null;
 
-		function loadEntities() {
-			selectedEles = new Entities("BP.Sys.FrmEleDBs");
-            selectedEles.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", GetQueryString("PKVal"));
-		}
-
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
@@ -41,7 +36,10 @@
                 isRB = false;
 
             //获得已经选择的集合.
-            loadEntities(mapExt);
+            selectedEles = new Entities("BP.Sys.FrmEleDBs");
+            selectedEles.Retrieve("FK_MapData", mapExt.FK_MapExt, "EleID", mapExt.AttrOfOper, "RefPKVal", GetQueryString("PKVal"));
+
+            // alert(eleDBs.length);
 
             for (var i = 0; i < groups.length; i++) {
                 var group = groups[i];
@@ -143,9 +141,9 @@
         //保存.
         function Save() {
 
-            //获得存储的值.
+           //获得存储的值.
             var selectVals = [];
-
+        
             //获得选择的数据.
             var selectType = mapExt.GetPara("SelectType");
             if (selectType == "0") {  //单选.
@@ -161,81 +159,22 @@
                 });
             }
 
-            //删除变量中没有的数据,已经取消掉的.  selectedEles 数据.
-            var FK_MapData = mapExt.FK_MapData;
-            var keyOfEn = mapExt.AttrOfOper;
-            var oid = GetQueryString("PKVal");
-            //
-            var insertArray = selectedElements(selectedEles, selectVals);
-            $.each(insertArray, function (i, o) {
-                var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-                frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + o;
-                frmEleDB.FK_MapData = FK_MapData;
-                frmEleDB.EleID = keyOfEn;
-                frmEleDB.RefPKVal = oid;
-                frmEleDB.Tag1 = o;
-                if (frmEleDB.Update() == 0) {
-                    frmEleDB.Insert();
-                }
-            });
+            alert(selectVals.join(','));
 
-            var deleteArray = canceledElements(selectedEles, selectVals);
-            $.each(deleteArray, function (i, o) {
-                var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-                frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + o;
-                frmEleDB.Delete();
-            });
-
-            loadEntities();
-
-            parent.CloseBootstrapDialog();
+          
 
 
             //插入新选择的数据.
+
             //获得已经选择的集合.
-            // var eleDBs = new Entities("BP.Sys.FrmEleDBs");
-            // eleDBs.Retrieve("FK_MapData", mapExt.FK_MapExt, "EleID", mapExt.AttrOfOper, "RefPKVal", GetQueryString("PKVal"));
+              // var eleDBs = new Entities("BP.Sys.FrmEleDBs");
+              // eleDBs.Retrieve("FK_MapData", mapExt.FK_MapExt, "EleID", mapExt.AttrOfOper, "RefPKVal", GetQueryString("PKVal"));
+
             //组成返回的字符串.
+
             //执行返回,并关闭窗口.
         }
 
-		// 新增
-		function selectedElements(entities, selectedArray) {
-			var array = [];
-			$.each(selectedArray, function (i, e) {
-				if (typeof e === "undefined") {
-					return true;
-				}
-				var exists = false;
-				$.each(entities, function (n, o) {
-					if (o.Tag1 == e) {
-						exists = true;
-						return false;
-					}
-				});
-				if (!exists) {
-					array.push(e);
-				}
-			});
-			return array;
-		}
-		// 删除
-		function canceledElements(entities, selectedArray) {
-			if (!$.isArray(selectedArray)) {
-				return;
-			}
-			var array = [];
-			$.each(entities, function (i, o) {
-				var value = o.Tag1;
-				var t = selectedArray.filter(function (e) {
-					return e == value;
-				});
-				if (t.length == 0) {
-					array.push(value);
-				}
-			});
-			return array;
-		}
     </script>
 </head>
 <body>

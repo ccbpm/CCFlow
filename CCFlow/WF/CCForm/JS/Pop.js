@@ -42,7 +42,7 @@ function PopBranchesAndLeaf_Deal()
 //树干模式.
 function PopBranches(mapExt) {
 
-    var tb = $("#" + mapExt.AttrOfOper);
+    var tb = $("#TB_" + mapExt.AttrOfOper);
 
     //设置文本框只读.
     tb.attr('readonly', 'true');
@@ -56,11 +56,57 @@ function PopBranches(mapExt) {
     eleHtml += '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
     tb.parent().html(eleHtml);
 
-
     //在文本框双击，绑定弹出. DeptEmpModelAdv.htm的窗口.
-    tb.attr("onclick", "alert('ssssssssssssss');");
+  //  tb.attr("onclick", "alert('ssssssssssssss');");
 
     //    tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
     //窗口返回值的时候，重新计算文本块.
+
+}
+
+function PopGroupList(mapExt) {
+
+    var tb = $("#TB_" + mapExt.AttrOfOper);
+    if (tb.length == 0)
+        return; //有可能字段被删除了.
+
+    //设置文本框只读.
+    tb.attr('readonly', 'true');
+   // tb.attr('disabled', 'true');
+
+    //在文本框双击，绑定弹出. PopGroupList.htm的窗口. 
+    tb.bind("click", function (){ PopGroupList_Done(mapExt)} );
+}
+
+function PopGroupList_Done(mapExt) {
+
+    //获得主键.
+    var pkval = GetPKVal();
+
+    //弹出这个url, 主要有高度宽度, 可以在  ReturnValCCFormPopValGoogle 上做修改.
+    var url = 'Pop/GroupList.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal="+pkval+"&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
+
+    open(url);
+
+  //  ReturnValCCFormPopValGoogle("TB_" + mapExt.AttrOfOper, "'" + mapExt.MyPK + "'", mapExt.FK_MapData, mapExt.W, mapExt.H, "'分组平铺'");
+    //alert(url);
+    //   window.open(url);
+    //  ReturnValCCFormPopValGoogle(url);
+    //alert(mapExt.FK_MapData);
+}
+
+function GetPKVal() {
+
+    var val = GetQueryString("OID");
+    if (val==undefined || val=="")
+        val = GetQueryString("No");
+    if (val == undefined || val == "")
+        val = GetQueryString("WorkID");
+
+    if (val == undefined || val == "")
+        val = GetQueryString("MyPK");
+
+    return val;
+
 
 }

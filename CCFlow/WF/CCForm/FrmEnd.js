@@ -85,6 +85,9 @@ function AfterBindEn_DealMapExt(frmData) {
             case "PopBranches": //树干简单模式.
                 PopBranches(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
                 break;
+            case "PopGroupList": //分组模式.
+                PopGroupList(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
+                break;
             case "PopVal": //PopVal窗返回值.
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
                 //tb.attr("placeholder", "请双击选择。。。");

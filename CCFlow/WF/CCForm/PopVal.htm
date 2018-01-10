@@ -314,7 +314,7 @@
                             }
                             var ultdg = '';
                             var ultde = '';
-                            if (pageSetData[0].PopValSelectModel == "More") {//选择模式是多选
+                            if (pageSetData[0].PopValSelectModel == "More") { //选择模式是多选
                                 $.each(dtgArr, function (i, obje) {
                                     for (var k = 0; k < dteArr.length; k++) {
                                         if (obje.No == dteArr[k][fkName]) {
@@ -369,7 +369,7 @@
                                 }
                             });
                             //树模式
-                        } else if (WorkM == "Tree" || WorkM == "TreeDouble") {//单实体+多实体
+                        } else if (WorkM == "Tree" || WorkM == "TreeDouble") { //单实体+多实体
                             initTreeData(WorkM);
                         } else if (WorkM == "TablePage" && firstLoad) {
                             firstLoad = false;

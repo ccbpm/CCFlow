@@ -1096,7 +1096,11 @@ namespace CCFlow.WF.CCForm
                         }
 
                         string guid = BP.DA.DBAccess.GenerGUID();
-                        string realSaveTo = savePath + "/" + guid + "." + fu.FileName.Replace("~", "-").Replace("'", "-").Replace("*", "-");    //edited by liuxc,2016-08-30，此处如果不将特殊字符替换掉，则会与保存在数据库中的附件名可能不一致
+
+                        string fileName= fu.FileName.Replace("~", "-").Replace("'", "-").Replace("*", "-");    //edited by liuxc,2016-08-30，此处如果不将特殊字符替换掉，则会与保存在数据库中的附件名可能不一致
+                        fileName = DataType.PraseStringToFileName(fileName);
+
+                        string realSaveTo = savePath + "/" + guid + "." + fileName;
                         string saveTo = realSaveTo;
                         try
                         {
@@ -1241,7 +1245,11 @@ namespace CCFlow.WF.CCForm
                        // dbUpload.AthSaveWay = athDesc.AthSaveWay; //设置保存方式,以方便前台展示读取.
                         //dbUpload.FileExts = info.Extension;
                         // dbUpload.FileFullName = saveTo;
-                        dbUpload.FileName = fu.FileName;
+
+                        string fileName = fu.FileName.Replace("~", "-").Replace("'", "_").Replace("*", "_");    //edited by liuxc,2016-08-30，此处如果不将特殊字符替换掉，则会与保存在数据库中的附件名可能不一致
+                        fileName = DataType.PraseStringToFileName(fileName);
+
+                        dbUpload.FileName = fileName;
                         dbUpload.FileSize = (float)info.Length;
                         dbUpload.RDT = DataType.CurrentDataTimess;
                         dbUpload.Rec = BP.Web.WebUser.No;

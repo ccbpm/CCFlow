@@ -533,9 +533,19 @@
                                              }
                                          }
                                          else {
+										 debugger;
 											// 判断下拉框是否有对应option, 若没有则追加
-											if ($("option[value='" + textVal + "']", tmplate).length == 0) {
-												tmplate.append("<option value='" + textVal + "'>" + workNodeData.DBDtl[k][o.data().KeyOfEn + "Text"] + "</option>");
+											if (o.data().LGType == 2 || o.data().UIContralType == "1") {
+												if ($("option[value='" + textVal + "']", tmplate).length == 0) {
+													try {
+														var c = workNodeData.DBDtl[k];
+														if (c) {
+															tmplate.append("<option value='" + textVal + "'>" + c[o.data().KeyOfEn + "Text"] + "</option>");
+														}
+													} catch (e) {
+													}
+												}
+
 											}
 											//
                                              tmplate.val(textVal);

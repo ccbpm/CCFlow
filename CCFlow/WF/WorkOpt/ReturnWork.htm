@@ -57,20 +57,23 @@
 
                     if (data.indexOf('err@') == 0) {
                         console.error("退回窗口错误信息" + data);
-
                         alert(data);
                         return;
                     }
                     var returnNodeArr = JSON.parse(data);
-                    var DDL_NodesHtml = '';
+                    var nodeListHtml = '';
 
                     $.each(returnNodeArr, function (i, returnNode) {
-                        if (returnNode.AtPara && returnNode.AtPara.indexOf('IsHuiQian=1') == -1) {
-                            DDL_NodesHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
+                        if (returnNode.AtPara && returnNode.AtPara.indexOf('IsHuiQian=1') != 0) {
+                            return true;
                         }
+                        nodeListHtml += '<option data-IsBackTracking=' + returnNode.IsBackTracking + ' value="' + returnNode.No + '@' + returnNode.Rec + '">' + returnNode.RecName + '=&gt;' + returnNode.Name + '</option>';
                     });
 
-                    $('#DDL_Nodes').html(DDL_NodesHtml);
+
+                    $('#DDL_Nodes').html(nodeListHtml);
+
+                    // $('#DDL_Nodes').html(DDL_NodesHtml);
 
                     $('#DDL_Nodes').bind('change', SetIsBackTrackingDispaly);
                     SetIsBackTrackingDispaly();

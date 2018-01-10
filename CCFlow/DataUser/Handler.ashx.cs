@@ -60,6 +60,7 @@ namespace CCFlow.SDKFlowDemo
             if (doType == "DtlImpSearchKey")
             {
                 string key = context.Request.QueryString["Keyword"];
+                key = HttpUtility.UrlDecode(key, System.Text.Encoding.UTF8);
                 sql = "SELECT No,Name  FROM Port_Emp WHERE No like '%" + key + "%' OR Name like '%" + key + "%' ";
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 string json = BP.Tools.Json.ToJson(dt);
@@ -68,7 +69,7 @@ namespace CCFlow.SDKFlowDemo
             if (doType == "DtlImpReqAll" )
             {
                 string key = context.Request.QueryString["Keyword"];
-                sql = "SELECT No,Name  FROM Port_Emp WHERE  1=1";
+                sql = "select No,Name from Port_StationType";
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 string json = BP.Tools.Json.ToJson(dt);
                 this.OutInfo(json);
@@ -83,7 +84,12 @@ namespace CCFlow.SDKFlowDemo
 
             if (doType == "DtlImpFullData" )
             {
-                sql = "SELECT No,Name  FROM Port_Emp WHERE  1=1 ";
+                string key = context.Request.QueryString["Keyword"];
+                sql = "SELECT No,Name  FROM Port_Emp WHERE  FK_Duty='0" + key + "' ";
+                if (key.Equals("all"))
+                {
+                    sql = "SELECT No,Name  FROM Port_Emp WHERE  1=1"; 
+                }
                 DataTable dt = BP.DA.DBAccess.RunSQLReturnTable(sql);
                 string json = BP.Tools.Json.ToJson(dt);
                 this.OutInfo(json);

@@ -123,7 +123,9 @@ function PopGroupList_Done(mapExt) {
 
     if (window.parent && window.parent.OpenBootStrapModal) {
         window.parent.OpenBootStrapModal(url, "eudlgframe", "导入数据", mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
+            
             //location = location;
+
         });
         return;
     }

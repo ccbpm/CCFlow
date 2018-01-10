@@ -708,6 +708,38 @@ namespace BP.WF.HttpHandler
 
         #region 审核组件.
         /// <summary>
+        /// 校验密码
+        /// </summary>
+        /// <returns></returns>
+        public string WorkCheck_CheckPass()
+        {
+            string sPass = this.GetRequestVal("SPass");
+            BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            if (emp.SPass == sPass)
+                return "签名成功";
+            return "err@密码错误";
+        }
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <returns></returns>
+        public string WorkCheck_ChangePass()
+        {
+            string sPass = this.GetRequestVal("SPass");
+            string sPass1 = this.GetRequestVal("SPass1");
+            string sPass2 = this.GetRequestVal("SPass2");
+
+            BP.WF.Port.WFEmp emp = new Port.WFEmp(WebUser.No);
+            if (emp.SPass == sPass)
+                return "旧密码错误";
+
+            if (sPass1.Equals(sPass2) == false)
+                return "err@两次输入的密码不一致";
+            emp.SPass = sPass2;
+            emp.Update();
+            return "密码修改成功";
+        }
+        /// <summary>
         /// 初始化审核组件数据.
         /// </summary>
         /// <returns></returns>
@@ -1190,7 +1222,7 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(sortedTKs);
 
             //如果有 SignType 列就获得签名信息.
-            if (SystemConfig.CustomerNo == "TianYe")
+            if (SystemConfig.CustomerNo == "TianYe" )
             {
                 string tTable = "ND" + int.Parse(FK_Flow) + "Track";
                 string sql = "SELECT distinct a.No, a.SignType, a.EleID FROM Port_Emp a, " + tTable + " b WHERE (A.No='" + WebUser.No + "') OR B.ActionType=22 AND a.No=b.EmpFrom AND B.WorkID=" + this.WorkID;

@@ -186,10 +186,10 @@
                 frmEleDB.Delete();
             });
 
-            loadEntities();
+            //loadEntities();
 
-            parent.CloseBootstrapDialog();
-
+            //parent.CloseBootstrapDialog();
+			return selectVals;
 
             //插入新选择的数据.
             //获得已经选择的集合.
@@ -244,7 +244,7 @@
   
  </table>
 
- <input type=button id="Btn_Save" onclick="Save();"  value="Save"/>
+ <input type=button id="Btn_Save" onclick="Save();" style="display: none;" value="Save"/>
  <div id="Msg"> </div>
 
 </body>

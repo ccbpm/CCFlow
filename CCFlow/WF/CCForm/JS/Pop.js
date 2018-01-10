@@ -122,10 +122,17 @@ function PopGroupList_Done(mapExt) {
     var url = 'Pop/GroupList.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal="+pkval+"&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
 
     if (window.parent && window.parent.OpenBootStrapModal) {
-        window.parent.OpenBootStrapModal(url, "eudlgframe", "导入数据", mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
-            
-            //location = location;
-
+        window.parent.OpenBootStrapModal(url, "eudlgframe", "导入数据", mapExt.H, mapExt.W, "icon-edit", true, function () {
+			var iframe = document.getElementById("eudlgframe");
+			if (iframe) {
+				var savefn = iframe.contentWindow.Save;
+				if (typeof savefn === "function") {
+					var selectVals = savefn();
+					$("#TB_" + mapExt.AttrOfOper).val(selectVals);
+				}
+			}
+		}, null, function () {
+			
         });
         return;
     }

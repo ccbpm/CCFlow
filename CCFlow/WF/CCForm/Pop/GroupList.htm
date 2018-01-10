@@ -50,7 +50,7 @@
                 if (isRB == true)
                     html += "" + group.Name;
                 else
-                    html += "<input type='checkbox'  id='CB_Group_" + group.No + "'  /><label for='CB_Group_" + group.No + "'>" + group.Name + "</label>";
+                    html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "'  /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
 
                 html += "</th>";
                 html += "</tr>";
@@ -102,9 +102,9 @@
                         html += "<TR>";
 
                     if (isRB == true)
-                        html += "<td><input type='radio' name='RB' id='RB_" + en.No + "' value='"+en.No+"'/><label for='RB_" + en.No + "'>" + lab + "</label></td>";
+                        html += "<td><input type='radio' name='RB' id='RB_" + en.No + "' value='" + en.No + "'/><label for='RB_" + en.No + "'>" + lab + "</label></td>";
                     else
-                        html += "<td><input type='checkbox' name='"+group.No+"' id='CB_" + en.No + "' value='"+en.No+"' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+                        html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
 
                     if (myNum == 2) {
                         html += "</tr>";
@@ -128,6 +128,15 @@
             $("#Msg").html("");
             $("#Msg").html(html);
         });
+       
+        //选择与取消选择.
+        function CheckAll(checked, no) {
+
+            $("input[name='" + no + "']").each(function () {
+                this.checked = checked;
+            });
+         
+        }
 
         //保存.
         function Save() {
@@ -138,19 +147,30 @@
             //获得选择的数据.
             var selectType = mapExt.GetPara("SelectType");
             if (selectType == "0") {  //单选.
-                selectVals.push( $("input[name='RB']:checked").val());
+                selectVals.push($("input[name='RB']:checked").val());
             } else {
 
                 var cbs = $("input[type='checkbox']:checked");
 
                 cbs.each(function () {
+                    if (this.id.indexOf('CB_') == -1)
+                        return true;
                     selectVals.push(this.value);
                 });
             }
+
             alert(selectVals.join(','));
 
-
             //删除变量中没有的数据,已经取消掉的.  selectedEles 数据.
+            selectedEles.each(function () {
+
+                selectVals.each()
+                {
+                   
+                }
+
+            });
+
 
             //插入新选择的数据.
 

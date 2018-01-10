@@ -13,18 +13,8 @@
         $(function () {
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapData");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
-
-            //var en = mapExt.ToJsonWithParas();
-
-
-            //基本属性.
-            $("#TB_Title").val(mapExt.GetPara("Title"));
-            $("#TB_SearchTip").val(mapExt.GetPara("SearchTip"));
-
-            $("#TB_W").val(mapExt.W); //宽度.
-            $("#TB_H").val(mapExt.H); //高度.
 
             GenerFullAllCtrlsVal(mapExt);
 
@@ -41,7 +31,7 @@
                 return;
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapData");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
             mapExt.Delete();
 
@@ -56,36 +46,20 @@
         function Save() {
 
             var mapExt = new Entity("BP.Sys.MapExt");
-            mapExt.MyPK = "DtlImpByJSON_" + GetQueryString("FK_MapData");
+            mapExt.MyPK = "DtlImp_" + GetQueryString("FK_MapData");
             mapExt.RetrieveFromDBSources(); //从数据库来查询.
 
+            mapExt.CopyURL();
             mapExt.CopyForm();
-            //CopyToEntity(mapExt);
-
             mapExt.FK_MapData = GetQueryString("FK_MapData");
+            mapExt.ExtType = "DtlImp";
 
-            mapExt.SetPara("Title", $("#TB_Title").val());
-            mapExt.SetPara("SearchTip", $("#TB_SearchTip").val());
-
-            mapExt.W = $("#TB_W").val(); //宽度
-            mapExt.H = $("#TB_H").val(); //高度
-
-            //主题数据源.
-            mapExt.Tag1 = $("#TB_Tag1").val(); //高度
-            mapExt.Tag2 = $("#TB_Tag2").val(); //高度
-            mapExt.Tag3 = $("#TB_Tag3").val(); //高度
-            
-            mapExt.Tag = $("#TB_Tag").val(); //高度
-            mapExt.DBType = $("#DDL_DBType").val(); //导入模式
-
-            mapExt.ExtType = "DtlImpByJSON";
             var i = mapExt.Save();
 
             //删除就要设置，不能导出.
             var dtl = new Entity("BP.Sys.MapDtl", GetQueryString("FK_MapData"));
             dtl.ImpModel = 1; //设置不可导入.
             dtl.Update();
-
 
             window.location.href = window.location.href;
         }
@@ -99,93 +73,125 @@
             <th colspan="2">基本信息配置</th>
         </tr>
         <tr>
-            <td>标题</td>
+            <td><a href="javascript:alert('显示在窗口的文字，比如:关联流水');" >标题</a></td>
             <td>
-                <input type="text" id="TB_Title" style="width: 200px;" />
-                <font color="gray">显示在窗口的文字，比如:关联流水 </font>
+                <input type="text" id="TBPara_Title" name="TBPara_Title" style="width: 100%;" />
             </td>
         </tr>
         <tr>
             <td>弹窗属性</td>
             <td>
-                高度:<input type="text" id="TB_H" style="width: 80px; text-align: right" />
-                宽度:<input type="text" id="TB_W" style="width: 80px; text-align: right" />
+                高度:<input type="text" id="TB_H" name="TB_H" style="width: 80px; text-align: right" />
+                宽度:<input type="text" id="TB_W" name="TB_W" style="width: 80px; text-align: right" />
             </td>
         </tr>
         <tr>
-            <td>高级属性</td>
+            <td>数据源类型</td>
             <td>
-                数据源类型<select id="DDL_DBType" name="DDL_DBType">
-                    <option id="0" value="0">SQL模式</option>
-                    <option id="1" value="1" selected="selected">JSON模式</option>
+                <select id="DDL_DBType" name="DDL_DBType">
+                    <option id="0" value="0" selected="selected">SQL模式</option>
+                    <option id="1" value="1" >JSON模式</option>
+                    <option id="2" value="2" >内置的CCFormRef.js函数</option>
                 </select>
                 查询展示方式:
-                <input type="radio" value="0" name="RB_SelectType" id="RB_SelectType_0" checked="checked" />
-                <label for="RB_SelectType_0">平铺模式</label>
-                <input type="radio" value="0" name="RB_SelectType" id="RB_SelectType_1" />
-                <label for="RB_SelectType_0">下拉框模式</label>
+                <input type="radio" value="0" name="RBPara_SelectType" id="RBPara_SelectType_0" checked="checked" />
+                <label for="RBPara_SelectType_0">平铺模式</label>
+                <input type="radio" value="0" name="RBPara_SelectType" id="RBPara_SelectType_1" />
+                <label for="RBPara_SelectType_1">下拉框模式</label>
             </td>
         </tr>
         <tr>
-            <td>搜索提示</td>
+            <td><a href="javascript:alert('显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索');" >搜索提示</a></td>
             <td>
-                <input type="text" id="TB_SearchTip"name="TB_SearchTip" style="width: 90%;" />
-                <br/>
-                <font color="gray">显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索</font>
+                <input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width: 90%;" />
             </td>
         </tr>
         <tr>
-            <th colspan="2">列表显示数据源</th>
+            <th colspan="2">
+            
+<a href="javascript:ShowHidden('PopValSearchCond')">列表显示数据源</a>
+ <div id="PopValSearchCond" style="color:Gray; display:none">
+ <ul>
+ <li>该数据源必须包含一个@Key的关键字.</li>
+<li>格式为:</li>
+<li>点击关键字执行搜索返回的数据源, 比如:/DataUser/Handler.ashx?DoType=DtlImpSearchKey&Keyword=@Key </li>
+ </ul>
+ </div>
+
+            </th>
         </tr>
         <tr>
             <td colspan="2">
-                <textarea id="TB_Tag1" name="TB_Tag1" style="width: 99%; height: 37px;"></textarea>
+                <textarea rows=3 id="TB_Tag1" name="TB_Tag1" style="width: 99%; height: 37px;"></textarea>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <font color="gray">点击关键字执行搜索返回的数据源, 比如:/DataUser/Handler.ashx?DoType=DtlImpSearchKey&Keyword=@Key </font>
+                <font color="gray"> </font>
             </td>
         </tr>
-        <tr>
-            <th colspan="2">显示的中文列名</th>
-        </tr>
+        
+<tr>
+<th colspan="2">
+<a href="javascript:ShowHidden('divTag')">数据列名与中文意思对照</a>
+ <div id="divTag" style="color:Gray; display:none">
+ <ul>
+   <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头..</li>
+   <li>格式为:</li>
+   <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
+ </ul>
+ </div>
+
+</th>
+</tr>
+ 
+
         <tr>
             <td colspan="2">
                 <input type="text" id="TB_Tag" name="TB_Tag" style="width: 100%;" />
-                <font color="gray">比如:编号,电话,地址,邮件, 这个配置在显示的时候要替换掉数据源返回的英文列名. </font>
             </td>
         </tr>
-        <tr>
-            <th colspan="2">查询条件数据源</th>
-        </tr>
+      
+      
+<tr>
+<th colspan="2">
+<a href="javascript:ShowHidden('Pop1')">查询条件设置</a>
+ <div id="Pop1" style="color:Gray; display:none">
+ <ul>
+ <li>该设置对table查询有效,(可以为空)：日期的默认值是JS函数表达式.</li>
+<li>格式为:</li>
+<li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi </li>
+<li>$Para=XB#Label=性别#EnumKey=XB</li>
+<li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))</li>
+<li>$Para=DTTo#Label=到#DefVal=(new Date())</li>
+ </ul>
+ </div>
+</th>
+</tr>
+
+
         <tr>
             <td colspan="2">
                 <textarea id="TB_Tag2" name="TB_Tag2" style="width: 99%; height: 23px;"></textarea>
             </td>
         </tr>
-        <tr>
-            <td colspan="2">
-                返回No,Name两个列的数据源 事例:/DataUser/Handler.ashx?DoType=DtlImpReqAll
-                <br />
-                SQL实例:
-                <br />
-                $Para=FK_BanJi#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi
-                <br />
-                $Para=XB#Label=性别#EnumKey=XB
-                <br />
-            </td>
-        </tr>
-        <tr>
-            <th colspan="2">
-                填充从表数据源
-            </th>
-        </tr>
+        
+        
+<tr>
+<th colspan="2">
+<a href="javascript:ShowHidden('Pop3')">填充从表数据源</a>
+ <div id="Pop3" style="color:Gray; display:none">
+ <ul>
+ <li>点击关键字执行搜索返回的数据源, 比如:/DataUser/Handler.ashx?DoType=DtlImpFullData&Keyword=@Key</li>
+ </ul>
+ </div>
+</th>
+</tr>
+
         <tr>
             <td colspan="2">
                 <textarea id="TB_Tag3" name="TB_Tag3" style="width: 99%; height: 37px;"></textarea>
-                <font color="gray">点击关键字执行搜索返回的数据源, 比如:/DataUser/Handler.ashx?DoType=DtlImpFullData&Keyword=@Key
-                </font>
+                 
             </td>
         </tr>
         <tr>

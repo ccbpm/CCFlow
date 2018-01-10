@@ -88,6 +88,9 @@ debugger;
             case "PopGroupList": //分组模式.
                 PopGroupList(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
                 break;
+            case "PopSelfUrl": //自定义url.
+                SelfUrl(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.
+                break;
             case "PopTableSearch": //表格查询.
                 PopTableSearch(mapExt); //调用 /CCForm/JS/Pop.js 的方法来完成.
                 break;

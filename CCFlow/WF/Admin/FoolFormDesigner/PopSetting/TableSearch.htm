@@ -107,12 +107,8 @@
 </tr>
 
 <tr>
-<td>标题</td>
+<td> <a href="javascript:alert('显示在窗口的文字，比如:搜索单据.')"> 标题</a></td>
 <td><input type="text" id="TBPara_Title" name="TBPara_Title" style="width:99%;" /> 
-<br />
-<font color="gray">
-显示在窗口的文字，比如:搜索单据.
-</font>
 </td>
 </tr>
 
@@ -123,9 +119,9 @@
 
 
 <tr>
-<td>搜索提示</td>
+<td><a href="javascript:alert('显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.')"> 搜索提示</a> </td>
 <td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> 
-<br><font color="gray" >显示在搜索文本框的背景文字,比如：请输入付款人名称,进行搜索.</font></td>
+</td>
 </tr>
 
 <tr>
@@ -147,52 +143,73 @@
 </tr>
 
 <tr>
-<th colspan="2">查询条件设置</th>
+<th colspan="2">
+
+<a href="javascript:ShowHidden('PopValSearchCond')">查询条件设置</a>
+ <div id="PopValSearchCond" style="color:Gray; display:none">
+ <ul>
+ <li>该设置对table查询有效,(可以为空)：日期的默认值是JS函数表达式.</li>
+<li>格式为:</li>
+<li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi </li>
+<li>$Para=XB#Label=性别#EnumKey=XB</li>
+<li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))</li>
+<li>$Para=DTTo#Label=到#DefVal=(new Date())</li>
+ </ul>
+ </div>
+
+</th>
 </tr>
 
 <tr>
 <td colspan="2">
-<textarea id="TB_Tag1" name="TB_Tag1" style="width:99%; height: 23px;">
+<textarea id="TB_Tag1" name="TB_Tag1" style="width:99%; height: 60px;">
 </textarea>
-
-<font color="gray" >
-<br />
-$Para=FK_BanJi#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi
-<br />
-$Para=XB#Label=性别#EnumKey=XB
-<br />
-$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))
-<br />
-$Para=DTTo#Label=到#DefVal=(new Date())
-<br />
-</font>
 </td>
 </tr>
 
 
 <tr>
-<th colspan="2">打开弹出页面初始化数的据源</th>
+<th colspan="2">
+<a href="javascript:ShowHidden('TablePage')">数据源</a>
+ <div id="TablePage" style="color:Gray; display:none">
+ <ul>
+ <li>设置一个查询的SQL语句，必须返回No,Name两个列。</li>
+ <li>该参数支持ccbpm表达式,比如:SELECT No, Name FROM WF_Emp WHERE FK_Dept='@WebUser.FK_Dept'</li>
+ <li>必须有：@PageCount @PageSize @Key 三个参数,分别标识:@PageCount =第几页, @PageSize=每页大小. @Key=关键字</li>
+ <li>比如For SQLServer: SELECT TOP @PageSize * FROM
+(
+ SELECT  row_number() over(order by t.No) as rownumber,No,Name,Tel,Email FROM Demo_Student  WHERE  Name LIKE '%@Key%'
+) A WHERE rownumber > @PageCount 
+
+<br />
+总条数: SELECT COUNT(no) FROM Demo_Student 
+WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB
+ </li>
+ <li>比如For Oracle: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB </li>
+ <li>比如For MySQL: SELECT No,Name,Email,Tel FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
+ </ul>
+ </div>
+ </th>
 </tr>
 
 <tr>
 <td colspan="2">
 <textarea id="TB_Tag2" name="TB_Tag2" style="width:99%; height: 23px;">
 </textarea>
-
-<font color="gray" >
-设置一个可以返回json的数据源
-<br />
-比如:
-<br />
-url模式:/DataUser/Handler.ashx?DoType=ReqDepts
-<br />
-SQL模式: SELECT No,Name,FK_BanJi,XB FROM Demo_Student  //注意数据源太大了会导致数据变慢.
-</front>
 </td>
 </tr>
  
 <tr>
-<th colspan="2">查询数据源</th>
+<th colspan="2">
+<a href="javascript:ShowHidden('TablePage_Count')">总条数</a>
+ <br />
+ <div id="TablePage_Count" style="color:Gray; display:none">
+ <ul>
+ <li>比如For SQLServer: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
+ <li>比如For Oracle: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
+ <li>比如For MySQL: SELECT count(No) FROM Demo_Student WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@XB  </li>
+ </ul>
+ </div></th>
 </tr>
 
 <tr>
@@ -200,23 +217,26 @@ SQL模式: SELECT No,Name,FK_BanJi,XB FROM Demo_Student  //注意数据源太大
 <textarea id="TB_Tag3" name="TB_Tag3" style="width:99%; height: 23px;">
 </textarea>
 
-<font color="gray" >用户点查询的时候出现的返回的数据,必须有@Key参数,
-<br />比如:/DataUser/Handler.ashx?DoType=ReqEmpsByDeptNo&DeptNo=@Key
-<br />SELECT No,Name,FK_BanJi,XB,Addr,Email FROM Demo_Student WHERE No LIKE '%@Key%' OR Name LIKE '%@Key%'
-</font>
-
 </td>
 </tr>
 
 <tr>
-<th colspan="2">数据列名与中文意思对照</th>
+<th colspan="2">
+<a href="javascript:ShowHidden('divTag')">数据列名与中文意思对照</a>
+ <div id="divTag" style="color:Gray; display:none">
+ <ul>
+   <li>该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头..</li>
+   <li>格式为:</li>
+   <li>例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</li>
+ </ul>
+ </div>
+
+</th>
 </tr>
 
 <tr>
 <td colspan="2">
 <input id="TB_Tag" name="TB_Tag" style="width:100%;" />
-<font color="gray" >该选项可以为空,在右上角的列表里查询或点树树干的数据源出现的列表,需要用中文显示列头.
-例如: No=编号,Name=名称,Addr=地址,Tel=电话,Email=邮件</font>
 </td>
 </tr>
 

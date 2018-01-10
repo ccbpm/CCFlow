@@ -1,10 +1,44 @@
-﻿//树干叶子模式.
+﻿
+
+//自定义url. ********************************************************************************************************
+function SelfUrl(mapExt) {
+
+    var tb = $("#TB_" + mapExt.AttrOfOper);
+    if (tb.length == 0)
+        return; //有可能字段被删除了.
+
+    //设置文本框只读.
+    tb.attr('readonly', 'true');
+    // tb.attr('disabled', 'true');
+
+    //在文本框双击，绑定弹出. PopGroupList.htm的窗口. 
+    tb.bind("click", function () { SelfUrl_Done(mapExt) });
+}
+
+function SelfUrl_Done(mapExtJson) {
+
+    //alert(mapExtJson);
+    var mapExt = new Entity("BP.Sys.MapExt", mapExtJson);
+
+    //获得主键.
+    var pkval = GetPKVal();
+    var url = mapExt.Tag;
+    if (url.indexOf('?') == -1)
+        url = url + "?PKVal=" + pkval;
+    var title = mapExt.GetPara("Title");
+
+    if (window.parent && window.parent.OpenBootStrapModal) {
+        window.parent.OpenBootStrapModal(url, "eudlgframe", title, mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
+            //location = location;
+        });
+        return;
+    }
+}
+
+//树干叶子模式.
 function PopBranchesAndLeaf(mapExt) {
 
     var tb = $("#" + mapExt.AttrOfOper);
-
-    // 如果该文本框只读，就return,因为只读模式下不让其选择了.
-    // var tb.attr('disabled');
 
     //设置文本框只读.
     tb.attr('readonly', 'true');
@@ -36,7 +70,7 @@ function PopBranchesAndLeaf(mapExt) {
 
 function PopBranchesAndLeaf_Deal()
 {
- 
+
 }
 
 //树干模式.
@@ -64,6 +98,8 @@ function PopBranches(mapExt) {
 
 }
 
+
+
 /******************************************  表格查询 **********************************/
 
 function PopTableSearch(mapExt) {
@@ -89,7 +125,7 @@ function PopTableSearch_Done(mapExt) {
     var url = 'Pop/TableSearch.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
 
     if (window.parent && window.parent.OpenBootStrapModal) {
-        window.parent.OpenBootStrapModal(url, "eudlgframe", "导入数据", mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
+        window.parent.OpenBootStrapModal(url, "eudlgframe", mapExt.GetPara("Title"), mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
             location = location;
         });
         return;

@@ -13,6 +13,8 @@
         var workid = GetQueryString("WorkID");
         var fid = GetQueryString("FID");
 
+        var isCanSend = true; //是否可以发送？
+
         //是否是手机端.
         var isMobile = GetQueryString("IsMobile");
 
@@ -115,7 +117,7 @@
                         html += msg;
                         html += "</textarea>";
 
-                     //   var ss = "CheckItems";
+                        //   var ss = "CheckItems";
 
                         //加入常用短语.
                         html += "<br>";
@@ -127,11 +129,7 @@
                         html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
                         html += "<option value='不同意'>不同意</option>";
                         html += "</select>";
-
                         html += "</div>";
-
-
-
                         html += "</td>";
                     }
                     else {
@@ -154,7 +152,7 @@
                         html += "</tr>";
                     }
 
-                    //输出签名.
+                    //输出签名,没有签名的要求.
                     if (SignType == null || SignType == undefined) {
 
                         var rdt = this.RDT.substring(0, 16);
@@ -191,7 +189,6 @@
 
                             if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {
 
-
                                 html += "<tr>";
                                 html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>"
                                     + GetUserSmallIcon(this.EmpFrom, this.EmpFromT) + '</div>'
@@ -216,8 +213,23 @@
                                     + GetUserSiganture(this.EmpFrom, this.EmpFromT) + '</div>'
                                     + " <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
                                 html += "</tr>";
-
                                 //  alert('电子签名的逻辑尚未编写.');
+                                break;
+                            }
+
+                            //如果是图片密码签名.
+                            if (st.SignType == 3) {
+
+                                isCanSend = false; //设置不可以发送.
+                                html += "<tr>";
+                                html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
+
+                                html += "<a href='WorkCheck_CheckPass();'>请输入签名</a>";
+
+                                html += "</div>";
+
+                                html += +" <div style='float:right' ><font color='Gray' >日期:</font>" + (this.IsDoc ? "<span id='rdt'>" : "") + rdt + (this.IsDoc ? "</span>" : "") + "</div></td>";
+                                html += "</tr>";
                                 break;
                             }
                         }
@@ -240,7 +252,7 @@
                 if ($("#uploaddiv").length > 0) {
                     AddUploadify("uploaddiv");
                 }
-               
+
             }, this);
         }
 
@@ -318,6 +330,10 @@
                 });
             }
         }
+
+
+
+          
 
         function TBHelp(enName) {
 
@@ -514,5 +530,62 @@
 
         //为判断是否增加电子签章所用.
         function IsCanSendWork() {
+            if (isCanSend == false)
+                return false;
+
             return true;
+        }
+
+        //当用户点击签名图片的时候，弹出窗体让其输入密码.
+        function WorkCheck_CheckPass() {
+
+            var pass = window.prompt('请输入签名密码，初始化密码为123，您可以修改该密码.', "");
+            if (pass == undefined || pass == "")
+                return;
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=WorkCheck_CheckPass&SPass=" + pass + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    //让其可以发送.
+                    isCanSend = true;
+
+                    //签名成功后，就需要把图片显示出来.
+
+
+                }
+            });
+        }
+
+
+
+        function WorkCheck_ChangePass() {
+
+            $.ajax({
+                type: 'post',
+                async: true,
+                url: Handler + "?DoType=WorkCheck_ChangePass&FK_Emp=" + empNo + "&FK_Flow=" + GetQueryString("FK_Flow") + "&WorkID=" + GetQueryString("WorkID") + "&FID=" + GetQueryString("FID") + "&FK_Node=" + GetQueryString("FK_Node") + "&m=" + Math.random(),
+                dataType: 'html',
+                success: function (data) {
+
+                    if (data.indexOf('err@') == 0 || data.indexOf('info@') == 0) {
+                        alert(data);
+                        return;
+                    }
+
+                    delRow(row); //清空单个table tbody
+
+                    // 把返回的结果，重新绑定.
+                    var sas = JSON.parse(data);
+                    BindTable(sas);
+                }
+            });
         }

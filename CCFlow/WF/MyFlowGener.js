@@ -1648,6 +1648,7 @@ function CheckFWC() {
     var frm = document.getElementById('FWC');
     if (frm == null || frm == undefined)
         return true;
+
     return frm.contentWindow.IsCanSendWork();
 }
 

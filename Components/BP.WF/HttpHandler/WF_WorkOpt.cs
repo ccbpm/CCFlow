@@ -620,7 +620,6 @@ namespace BP.WF.HttpHandler
 
                 //删除自己的意见，以防止其他人员看到.
                 BP.WF.Dev2Interface.DeleteCheckInfo(gwf.FK_Flow, this.WorkID, gwf.FK_Node);
-
                 return str;
             }
 

@@ -237,22 +237,22 @@ namespace BP.Sys.FrmUI
 
                 rm = new RefMethod();
                 rm.GroupName = "Pop返回值2018";
-                rm.Title = "分组模式";
-                rm.ClassMethodName = this.ToString() + ".DoGroupModel()";
+                rm.Title = "分组列表平铺";
+                rm.ClassMethodName = this.ToString() + ".DoGroupList()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.GroupName = "Pop返回值2018";
-                rm.Title = "列表模式-简单";
-                rm.ClassMethodName = this.ToString() + ".DoListSimple()";
+                rm.Title = "单实体平铺";
+                rm.ClassMethodName = this.ToString() + ".DoTableList()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
                 rm.GroupName = "Pop返回值2018";
-                rm.Title = "列表模式-多条件查询";
-                rm.ClassMethodName = this.ToString() + ".DoListSimpleSearch()";
+                rm.Title = "列表查询模式";
+                rm.ClassMethodName = this.ToString() + ".DoTableSearch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
@@ -320,12 +320,12 @@ namespace BP.Sys.FrmUI
 
         #region 方法执行 pop返回值
         /// <summary>
-        /// 简单模式多选
+        /// 实体列表模式
         /// </summary>
         /// <returns>返回url</returns>
-        public string DoPopSimpleModel()
+        public string DoTableList()
         {
-            return "../../Admin/FoolFormDesigner/PopSetting/SimpleModel.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/PopSetting/TableList.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         /// <summary>
         /// 枝干叶子模式
@@ -359,21 +359,22 @@ namespace BP.Sys.FrmUI
         {
             return "../../Admin/FoolFormDesigner/PopSetting/Branches.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
-
-        public string DoGroupModel()
+        /// <summary>
+        /// 分组模式
+        /// </summary>
+        /// <returns></returns>
+        public string DoGroupList()
         {
-            return "../../Admin/FoolFormDesigner/PopSetting/Branches.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/PopSetting/GroupList.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
-
-        public string DoListSimple()
+        /// <summary>
+        /// 实体查询模式
+        /// </summary>
+        /// <returns></returns>
+        public string DoTableSearch()
         {
-            return "../../Admin/FoolFormDesigner/PopSetting/GroupModel.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+            return "../../Admin/FoolFormDesigner/PopSetting/TableSearch.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
-        public string DoListSimpleSearch()
-        {
-            return "../../Admin/FoolFormDesigner/PopSetting/GroupModel.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
-        }
-
         #endregion
 
         #region 方法执行.

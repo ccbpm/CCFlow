@@ -71,7 +71,7 @@ function AfterBindEn_DealMapExt(frmData) {
 
     for (var i = 0; i < mapExtArr.length; i++) {
         var mapExt = mapExtArr[i];
-debugger;
+		//debugger;
         switch (mapExt.ExtType) {
             case "MultipleChoiceSmall":
                 MultipleChoiceSmall(mapExt); //调用 /CCForm/JS/MultipleChoiceSmall.js 的方法来完成.

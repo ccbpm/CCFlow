@@ -1555,10 +1555,10 @@ function InitToolBar() {
     });
 }
 
-//sss
+//删除流程.
 function DeleteFlow() {
 
-    alert('sss');
+  var http
  
 }
 

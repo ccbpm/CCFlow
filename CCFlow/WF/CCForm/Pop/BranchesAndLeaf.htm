@@ -66,41 +66,34 @@
 		        });
 		    }
 		    function loadSelectGrid(url, selectedRows) {
-		        $.ajax({
-		            type: 'post',
-		            async: true,
-		            url: url + "&m=" + Math.random(),
-		            dataType: 'html',
-		            success: function (data) {
-		                if (data.indexOf("err@") != -1) {
-		                    alert(data);
-		                    return;
-		                }
-		                var json = JSON.parse(data);
-		                if (!$.isArray(json) || json.length == 0) {
-		                    return;
-		                }
-		                //
-		                $('#selectGrid').bootstrapTable("hideAllColumns");
-		                $('#selectGrid').bootstrapTable("showColumn", "_checkbox");
-		                $.each(json[0], function (n, o) {
-		                    $('#selectGrid').bootstrapTable("showColumn", n);
-		                });
-		                //
-		                if ($.isArray(selectedRows)) {
-		                    $.each(json, function (i, o) {
-		                        var sel = $.grep(selectedRows, function (obj) {
-		                            return o.No == obj.No;
-		                        });
-		                        if (sel.length > 0) {
-		                            o.checked = true;
-		                        }
-		                    });
-		                }
-		                $('#selectGrid').bootstrapTable("load", json);
-		            }
+
+		        //获得json.
+		        var json = ExecDBSrc(url);
+
+		        if (!$.isArray(json) || json.length == 0) {
+		            return;
+		        }
+
+		        // 绑定内容列表.
+		        $('#selectGrid').bootstrapTable("hideAllColumns");
+		        $('#selectGrid').bootstrapTable("showColumn", "_checkbox");
+		        $.each(json[0], function (n, o) {
+		            $('#selectGrid').bootstrapTable("showColumn", n);
 		        });
+
+		        if ($.isArray(selectedRows)) {
+		            $.each(json, function (i, o) {
+		                var sel = $.grep(selectedRows, function (obj) {
+		                    return o.No == obj.No;
+		                });
+		                if (sel.length > 0) {
+		                    o.checked = true;
+		                }
+		            });
+		        }
+		        $('#selectGrid').bootstrapTable("load", json);
 		    }
+
 		    function findChildren(jsonArray, parentNo) {
 		        var appendToTree = function (treeToAppend, child) {
 		            $.each(treeToAppend, function (i, o) {
@@ -144,33 +137,23 @@
 		        return jsonTree;
 		    }
 		    function loadTree(treeUrl, treeClickUrl, rootNo, global) {
-		        $.ajax({
-		            type: 'post',
-		            async: true,
-		            url: treeUrl + "&m=" + Math.random(),
-		            dataType: 'html',
-		            success: function (data) {
-		                if (data.indexOf("err@") != -1) {
-		                    alert(data);
-		                    return;
-		                }
-		                var jsonTree = findChildren(JSON.parse(data), rootNo);
 
-		                $('#tree').treeview({
-		                    data: jsonTree,         // 数据源
-		                    showCheckbox: false,   //是否显示复选框
-		                    highlightSelected: true,    //是否高亮选中
-		                    //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
-		                    nodeIcon: 'glyphicon',
-		                    emptyIcon: '',    //没有子节点的节点图标
-		                    multiSelect: false,    //多选
-		                    onNodeChecked: function (event, data) {
-		                        //alert(data.nodeId);
-		                    },
-		                    onNodeSelected: function (event, data) {
-		                        loadSelectGrid(treeClickUrl.replace("@Key", data.nodeId), global.selectedRows);
-		                    }
-		                });
+		        var json = ExecDBSrc(treeUrl); //执行url返回json.
+		        var jsonTree = findChildren(json, rootNo);
+
+		        $('#tree').treeview({
+		            data: jsonTree,         // 数据源
+		            showCheckbox: false,   //是否显示复选框
+		            highlightSelected: true,    //是否高亮选中
+		            //nodeIcon: 'glyphicon glyphicon-user',    //节点上的图标
+		            nodeIcon: 'glyphicon',
+		            emptyIcon: '',    //没有子节点的节点图标
+		            multiSelect: false,    //多选
+		            onNodeChecked: function (event, data) {
+		                //alert(data.nodeId);
+		            },
+		            onNodeSelected: function (event, data) {
+		                loadSelectGrid(treeClickUrl.replace("@Key", data.nodeId), global.selectedRows);
 		            }
 		        });
 		    }
@@ -189,16 +172,16 @@
 
 		        // AtPara
 		        var title = GetAtPara(mapExt.AtPara, "Title");
-		        $("#title").text(title);
+		        $("#title").text(title); //设置标题.
 
 		        var tip = GetAtPara(mapExt.AtPara, "SearchTip");
-		        $("#TB_Key").attr("placeholder", tip);
-		        var rootNo = GetAtPara(mapExt.AtPara, "RootTreeNo");
+		        $("#TB_Key").attr("placeholder", tip); //设置查询提示.
 
+		        //跟节点编号.
+		        var rootNo = GetAtPara(mapExt.AtPara, "RootTreeNo");
 		        if (rootNo == "WebUser.FK_Dept") {
 		            rootNo = webUser.FK_Dept;
 		        }
-
 
 		        // global
 		        var global = window;
@@ -207,12 +190,16 @@
 		        //
 		        global.FK_MapData = mapExt.FK_MapData;
 		        global.AttrOfOper = mapExt.AttrOfOper;
-		        global.oid = GetQueryString("oid");
+		        global.oid = GetQueryString("OID");
 
-		        //
-		        var searchUrl = mapExt.Tag1;
-		        var treeUrl = mapExt.Tag2;
-		        var treeClickUrl = mapExt.Tag3;
+		        var searchUrl = mapExt.Tag1;    //查询
+		        var treeUrl = mapExt.Tag2;      //初始化树
+		        var treeClickUrl = mapExt.Tag3; //树选择.
+
+		        if (searchUrl == "" || treeUrl == "" || treeClickUrl == "") {
+		            alert('配置错误:查询数据源，初始化树的数据源，点击树节点返回数据的数据源，必须都不能为空。');
+		            return;
+		        }
 
 		        var searchTableColumns = [{
 		            field: "_checkbox",
@@ -225,6 +212,8 @@
 		                }
 		            }
 		        }];
+
+		        //显示列的中文名称.
 		        if (typeof mapExt.Tag4 == "string") {
 		            $.each(mapExt.Tag4.split(","), function (i, o) {
 		                var exp = o.split("=");

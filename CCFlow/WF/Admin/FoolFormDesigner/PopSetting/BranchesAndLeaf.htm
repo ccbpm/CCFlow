@@ -23,15 +23,20 @@
             if (mapExt.GetPara("SelectType") == "")
                 mapExt.SetPara("SelectType", "1");
 
+            if (mapExt.W <= 400)
+                mapExt.W = 900;
+
+            //mapExt.SetPara("SelectType", "1");
+
             //alert(i);
 
             //批量为复制.
             GenerFullAllCtrlsVal(mapExt);
 
             //基本属性.
-           // $("#TB_Title").val(mapExt.GetPara("Title"));
-          //p").val(mapExt.GetPara("SearchTip"));
-         // $("#TB_RootTreeNo").val(mapExt.GetPara("RootNo")); //树的根节点编号.
+            // $("#TB_Title").val(mapExt.GetPara("Title"));
+            //p").val(mapExt.GetPara("SearchTip"));
+            // $("#TB_RootTreeNo").val(mapExt.GetPara("RootNo")); //树的根节点编号.
 
             //设置按钮是否可以用?
             if (i == 0)

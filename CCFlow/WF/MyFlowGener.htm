@@ -232,6 +232,14 @@
         })
         })
         });*/
+
+        //删除流程
+        function DeleteFlow() {
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddUrlData();
+            var str = handler.DoMethodReturnJSON("DeleteFlow");
+            alert(str);
+        }
     </script>
     <style type="text/css">
         body

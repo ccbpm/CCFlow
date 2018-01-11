@@ -1429,7 +1429,6 @@ var DBAccess = (function () {
 		});
 
 		return string;
-
 	};
 
 	DBAccess.RunUrlReturnJSON = function (url) {
@@ -1609,5 +1608,45 @@ var WebUser = function () {
     $.each(jsonString, function (n, o) {
         self[n] = o;
     });
-
 };
+
+//执行数据源返回json.
+function ExecDBSrc(dbSrc, dbType) {
+
+    if (dbSrc == "" || dbSrc == null || dbSrc == undefined) {
+        alert("数据源为空..");
+        return;
+    }
+
+    if (dbType == undefined) {
+        dbType = 0; //默认为sql.
+        if (dbSrc.length <= 20) {
+            dbType = 2; //可能是一个方法名称.
+        }
+        if (dbSrc.indexOf('/') != -1) {
+            dbType = 1; //是一个url.
+        }
+    }
+
+    if (dbSrc.indexOf('@') != -1) {
+        alert("数据源参数没有替换" + dbSrc);
+        return;
+    }
+
+    //执行的SQL
+    if (dbType == 0) {
+        return DBAccess.RunSQLReturnTable(dbSrc);
+    }
+
+    //执行URL
+    if (dbType == 1 || dbType == "1") {
+        return DBAccess.RunUrlReturnJSON(dbSrc);
+    }
+
+    //执行方法名称返回json.
+    if (dbType == 2 || dbType == "2") {
+        return DBAccess.RunFunctionReturnJSON(dbSrc);
+    }
+    //@谢 如何执行一个方法,
+    //   alert("@没有处理执行方法。"); RunFunctionReturnJSON
+}

@@ -81,6 +81,12 @@
     function ReturnWork() {
         //WorkID, this.FID, this.FK_Node
         var empNos = frames["iframeSelectEmpsForm"].window.returnVal.No;
+
+        if (empNos == "" || empNos ==undefined || empNos==null)
+            return;
+
+        alert(empNos);
+
         $.ajax({
             type: 'post',
             async: true,

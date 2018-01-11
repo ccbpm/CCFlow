@@ -65,10 +65,12 @@
 		            }
 		        });
 		    }
-		    function loadSelectGrid(url, selectedRows) {
+		    function loadSelectGrid(dbSrc, selectedRows) {
 
 		        //获得json.
-		        var json = ExecDBSrc(url);
+		        var json = ExecDBSrc(dbSrc);
+
+		     // alert(JSON.stringify( json));
 
 		        if (!$.isArray(json) || json.length == 0) {
 		            return;
@@ -77,9 +79,11 @@
 		        // 绑定内容列表.
 		        $('#selectGrid').bootstrapTable("hideAllColumns");
 		        $('#selectGrid').bootstrapTable("showColumn", "_checkbox");
+
 		        $.each(json[0], function (n, o) {
 		            $('#selectGrid').bootstrapTable("showColumn", n);
 		        });
+
 
 		        if ($.isArray(selectedRows)) {
 		            $.each(json, function (i, o) {
@@ -95,6 +99,8 @@
 		    }
 
 		    function findChildren(jsonArray, parentNo) {
+
+
 
 		        var appendToTree = function (treeToAppend, child) {
 		            $.each(treeToAppend, function (i, o) {
@@ -141,9 +147,6 @@
 
 		        var json = ExecDBSrc(treeUrl); //执行url返回json.
 
-		        alert(json);
-
-
 		        var jsonTree = findChildren(json, rootNo);
 
 		        $('#tree').treeview({
@@ -158,7 +161,12 @@
 		                //alert(data.nodeId);
 		            },
 		            onNodeSelected: function (event, data) {
-		                loadSelectGrid(treeClickUrl.replace("@Key", data.nodeId), global.selectedRows);
+
+		                var myurl = replaceAll(treeClickUrl, "@Key", data.nodeId);
+
+		              //  alert(treeClickUrl);
+		                loadSelectGrid(myurl, global.selectedRows);
+
 		            }
 		        });
 		    }
@@ -183,7 +191,7 @@
 		        $("#TB_Key").attr("placeholder", tip); //设置查询提示.
 
 		        //跟节点编号.
-		        var rootNo = GetAtPara(mapExt.AtPara, "RootTreeNo");
+		        var rootNo = mapExt.Doc;
 		        if (rootNo == "WebUser.FK_Dept") {
 		            rootNo = webUser.FK_Dept;
 		        }
@@ -200,6 +208,8 @@
 		        var searchUrl = mapExt.Tag1;    //查询
 		        var treeUrl = mapExt.Tag2;      //初始化树
 		        var treeClickUrl = mapExt.Tag3; //树选择.
+
+
 
 		        if (searchUrl == "" || treeUrl == "" || treeClickUrl == "") {
 		            alert('配置错误:查询数据源，初始化树的数据源，点击树节点返回数据的数据源，必须都不能为空。');
@@ -253,21 +263,14 @@
 		        // search
 		        $("#TB_Key").on("keyup", function () {
 
-		           // var url = replaceAll(searchUrl, "@Key", $(this).val());
-		            url = searchUrl.replace(/@Key/g, $(this).val());
-
+		            searchUrl = replaceAll(searchUrl, "@Key", $(this).val());
 
 		            loadSelectGrid(searchUrl, global.selectedRows);
-		           // loadSelectGrid(url, global.selectedRows);
-
-
 
 		        });
 
 		        // tree
-		        if (treeUrl) {
-		            loadTree(treeUrl, treeClickUrl, rootNo, global);
-		        }
+		         loadTree(treeUrl, treeClickUrl, rootNo, global);
 
 		        // grid1
 		        $('#selectGrid').bootstrapTable({

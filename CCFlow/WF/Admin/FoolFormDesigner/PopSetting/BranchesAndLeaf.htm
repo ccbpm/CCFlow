@@ -14,7 +14,9 @@
         //页面启动函数.
         $(function () {
 
+
             var mapExt = new Entity("BP.Sys.MapExt");
+
             mapExt.MyPK = "PopBranchesAndLeaf_" + GetQueryString("FK_MapData") + "_" + GetQueryString("KeyOfEn");
             var i = mapExt.RetrieveFromDBSources(); //从数据库来查询.
             // alert(mapExt.Tag);
@@ -23,8 +25,10 @@
             if (mapExt.GetPara("SelectType") == "")
                 mapExt.SetPara("SelectType", "1");
 
+
             if (mapExt.W <= 400)
                 mapExt.W = 900;
+
 
             //mapExt.SetPara("SelectType", "1");
             //alert(i);
@@ -113,7 +117,13 @@
 <tr>
 <td> <a href="javascript:ShowHidden('h_title')"> 标题</a>
 <div id="h_title" style="color:Gray; display:none" >
-显示在窗口的文字，比如:搜索单据.
+<ul>
+<li> 显示在窗口的文字，比如:</li>
+<li> 搜索单据.</li>
+<li> 选择人员.</li>
+<li> 请选择接受人.</li>
+</ul>
+
 </div>
 </td>
 
@@ -131,9 +141,13 @@
 <tr>
 <td> <a href="javascript:ShowHidden('HSearch')"> 搜索提示</a>
 <div id="HSearch" style="color:Gray; display:none" >
-显示在搜索文本框的背景文字
-<br />比如：
-<br>请输入付款人名称,进行搜索. 
+
+<ul>
+<li> 显示在搜索文本框的背景文字，比如:</li>
+<li> 请输入付款人名称,进行搜索.</li>
+<li> 输入人员编号,名称，名称全拼,简拼关键字搜索.</li>
+</ul>
+
 </div>
 
 </td>

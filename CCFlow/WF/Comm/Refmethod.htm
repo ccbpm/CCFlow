@@ -40,10 +40,9 @@
             $.ajax({
                 type: 'post',
                 async: true,
-                url: Handler + "?DoType=Refmethod_Init&Index=" + GetQueryString("Index") + "&PK=" + pk + "&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
+                url: Handler + "?DoType=Refmethod_Init&Index=" + GetQueryString("Index") + "&PKVal=" + pk + "&PK="+pk+"&EnsName=" + GetQueryString("EnsName") + "&inlayer=" + GetQueryString("inlayer") + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
-
 
                     console.log(data);
 
@@ -407,6 +406,9 @@
 
         if (pk == null || pk == undefined)
             pk = GetQueryString("PK");
+
+        if (pk == null || pk == undefined)
+            pk = GetQueryString("WorkID");
 
         //初始化数据.
         $.ajax({

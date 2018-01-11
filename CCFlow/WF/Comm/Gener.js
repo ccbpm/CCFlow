@@ -274,13 +274,13 @@ function GenerFullAllCtrlsVal(data) {
             continue;
         }
 
-
         // textbox
         var tb = document.getElementById('TB_' + attr);
         if (tb != null) {
 
-          
-            val = val.replace(/~/g, "'"); //替换掉特殊字符,设置的sql语句的引号.
+           val= val.replace(new RegExp("~", "gm"), "'");
+
+            //val = val.replace( /~/g,  "'");   //替换掉特殊字符,设置的sql语句的引号.
 
             if (tb.tagName.toLowerCase() != "input") {
                 tb.innerHTML = val;
@@ -337,7 +337,7 @@ function GenerFullAllCtrlsVal(data) {
 					tb = document.getElementById('TBPara_' + suffix);
 					if (tb != null) {
 
-					    val = val.replace(/~/g, "'"); //替换掉特殊字符,设置的sql语句的引号.
+					    val = val.replace(new RegExp("~", "gm"), "'");
 						tb.value = val;
 						return true;
 					}
@@ -1621,12 +1621,15 @@ var WebUser = function () {
 };
 
 //替换全部.
-function replaceAll(str, oldKey, newKey ) {
-    if (str != null)
-        str = str.replace( "/"+oldKey+"/g", newKey);
+function replaceAll(str, oldKey, newKey) {
+
+    if (str == undefined || str == null) {
+        alert("要替换的原始字符串为空.");
+        return str;
+    }
+    str = str.replace(new RegExp(oldKey, "gm"), newKey);
     return str;
 }
-
 
 //执行数据源返回json.
 function ExecDBSrc(dbSrc, dbType) {
@@ -1663,7 +1666,7 @@ function ExecDBSrc(dbSrc, dbType) {
     if (dbType == 1 || dbType == "1") {
         return DBAccess.RunUrlReturnJSON(dbSrc);
     }
-     
+
     //执行方法名称返回json.
     if (dbType == 2 || dbType == "2") {
         return DBAccess.RunFunctionReturnJSON(dbSrc);

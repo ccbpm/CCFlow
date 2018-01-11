@@ -620,14 +620,14 @@ var Entity = (function () {
 
     var Entity = function (enName, pkval) {
         this.enName = enName;
-		
-		if (pkval != null && typeof pkval === "object") {
-			jsonString = {};
-			this.CopyJSON(pkval);
-		} else {
-			this.pkval = pkval || "";
-			this.loadData();
-		}
+
+        if (pkval != null && typeof pkval === "object") {
+            jsonString = {};
+            this.CopyJSON(pkval);
+        } else {
+            this.pkval = pkval || "";
+            this.loadData();
+        }
     };
 
     function setData(self) {
@@ -1023,7 +1023,7 @@ var Entity = (function () {
             //            jsonString.frmParas = formParams;
             //            // ----------
             //            return;
-			
+
             // 老版本
             //var self = this;
             //$.each(self, function (attrKay, val) {
@@ -1093,80 +1093,83 @@ var Entity = (function () {
             ////            jsonString.frmParas = formParams;
             //alert(JSON.stringify(self));
 
-			$("input,select").each(function (i, e) {
-				if (typeof $(e).attr("name") === "undefined" || $(e).attr("name") == "") {
-					$(e).attr("name", $(e).attr("id"));
-				}
-			});
-			// 新版本20180107 2130
-			var self = this;
-			// 普通属性
-			$("[name^=TB_],[name^=CB_],[name^=RB_],[name^=DDL_]").each(function (i, o) {
-				var target = $(this);
-				var name = target.attr("name");
-				var key = name.replace(/^TB_|CB_|RB_|DDL_/, "");
-				if (typeof self[key] === "function") {
-					return true;
-				}
-				if (name.match(/^TB_/)) {
-					self[key] = target.val();
-				} else if (name.match(/^DDL_/)) {
-					self[key] = target.val();
-				} else if (name.match(/^CB_/)) {
-					if (target.length == 1) {	// 仅一个复选框
-						if (target.is(":checked")) {
-							// 已选
-							self[key] = "1";
-						} else {
-							// 未选
-							self[key] = "0";
-						}
-					} else if (target.length > 1) {	// 多个复选框(待扩展)
-						// ?
-					}
-				} else if (name.match(/^RB_/)) {
-					if (target.is(":checked")) {
-						// 已选
-						self[key] = "1";
-					} else {
-						// 未选
-						self[key] = "0";
-					}
-				}
-			});
-			// 参数属性
-			$("[name^=TBPara_],[name^=CBPara_],[name^=RBPara_],[name^=DDLPara_]").each(function (i, o) {
-				var target = $(this);
-				var name = target.attr("name");
-				var value;
-				if (name.match(/^TBPara_/)) {
-					value = target.val();
-				} else if (name.match(/^DDLPara_/)) {
-					value = target.val();
-				} else if (name.match(/^CBPara_/)) {
-					if (target.length == 1) {	// 仅一个复选框
-						if (target.is(":checked")) {
-							// 已选
-							value = "1";
-						} else {
-							// 未选
-							value = "0";
-						}
-					} else if (target.length > 1) {	// 多个复选框(待扩展)
-						// ?
-					}
-				} else if (name.match(/^RBPara_/)) {
-					if (target.is(":checked")) {
-						// 已选
-						value = "1";
-					} else {
-						// 未选
-						value = "0";
-					}
-				}
-				var key = name.replace(/^TBPara_|CBPara_|RBPara_|DDLPara_/, "");
-				self.SetPara(key, value);
-			});
+            $("input,select").each(function (i, e) {
+                if (typeof $(e).attr("name") === "undefined" || $(e).attr("name") == "") {
+                    $(e).attr("name", $(e).attr("id"));
+                }
+            });
+
+            // 新版本20180107 2130
+            var self = this;
+            // 普通属性
+            $("[name^=TB_],[name^=CB_],[name^=RB_],[name^=DDL_]").each(function (i, o) {
+                var target = $(this);
+                var name = target.attr("name");
+                var key = name.replace(/^TB_|CB_|RB_|DDL_/, "");
+                if (typeof self[key] === "function") {
+                    return true;
+                }
+                if (name.match(/^TB_/)) {
+                    self[key] = target.val();
+                } else if (name.match(/^DDL_/)) {
+                    self[key] = target.val();
+                } else if (name.match(/^CB_/)) {
+                    if (target.length == 1) {	// 仅一个复选框
+                        if (target.is(":checked")) {
+                            // 已选
+                            self[key] = "1";
+                        } else {
+                            // 未选
+                            self[key] = "0";
+                        }
+                    } else if (target.length > 1) {	// 多个复选框(待扩展)
+                        // ?
+                    }
+                } else if (name.match(/^RB_/)) {
+                    if (target.is(":checked")) {
+                        // 已选
+                        self[key] = "1";
+                    } else {
+                        // 未选
+                        self[key] = "0";
+                    }
+                }
+            });
+            // 参数属性
+            $("[name^=TBPara_],[name^=CBPara_],[name^=RBPara_],[name^=DDLPara_]").each(function (i, o) {
+                var target = $(this);
+                var name = target.attr("name");
+                var value;
+                if (name.match(/^TBPara_/)) {
+                    value = target.val();
+                    value = value.replace('@', ''); //替换掉@符号.
+                } else if (name.match(/^DDLPara_/)) {
+                    value = target.val();
+                    value = value.replace('@', ''); //替换掉@符号.
+                } else if (name.match(/^CBPara_/)) {
+                    if (target.length == 1) {	// 仅一个复选框
+                        if (target.is(":checked")) {
+                            // 已选
+                            value = "1";
+                        } else {
+                            // 未选
+                            value = "0";
+                        }
+                    } else if (target.length > 1) {	// 多个复选框(待扩展)
+                        // ?
+                    }
+                } else if (name.match(/^RBPara_/)) {
+                    if (target.is(":checked")) {
+                        // 已选
+                        value = "1";
+                    } else {
+                        // 未选
+                        value = "0";
+                    }
+                }
+                var key = name.replace(/^TBPara_|CBPara_|RBPara_|DDLPara_/, "");
+                self.SetPara(key, value);
+            });
         },
 
         CopyJSON: function (json) {

@@ -181,82 +181,91 @@
 				return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
 			}
 			$(function () {
+
 			    var mypk = GetQueryString("MyPK");
 			    var mapExt = new Entity("BP.Sys.MapExt", mypk);
 
-				// AtPara
+			    var webUser = new WebUser();
+
+			    // AtPara
 			    var title = GetAtPara(mapExt.AtPara, "Title");
 			    $("#title").text(title);
+
 			    var tip = GetAtPara(mapExt.AtPara, "SearchTip");
 			    $("#TB_Key").attr("placeholder", tip);
-				var rootNo = GetAtPara(mapExt.AtPara, "RootTreeNo");
-				
+			    var rootNo = GetAtPara(mapExt.AtPara, "RootTreeNo");
+
+			    if (rootNo == "WebUser.FK_Dept") {
+			        rootNo = webUser.FK_Dept;
+			    }
+
+
 			    // global
 			    var global = window;
 			    global.selectedRows = [];
-				
-				//
-				global.FK_MapData = mapExt.FK_MapData;
-				global.AttrOfOper = mapExt.AttrOfOper;
-				global.oid = GetQueryString("oid");
-			    
-				//
+
+			    //
+			    global.FK_MapData = mapExt.FK_MapData;
+			    global.AttrOfOper = mapExt.AttrOfOper;
+			    global.oid = GetQueryString("oid");
+
+			    //
 			    var searchUrl = mapExt.Tag1;
 			    var treeUrl = mapExt.Tag2;
-				var treeClickUrl = mapExt.Tag3;
-				
-				var searchTableColumns = [{
-					field : "_checkbox",
-					checkbox: true,
-					formatter: function (value, row, index) {
-						if (row.checked) {
-							return {
-								"checked": true
-							};
-						}
-					}
-				}];
-				if (typeof mapExt.Tag4 == "string") {
-					$.each(mapExt.Tag4.split(","), function (i, o) {
-						var exp = o.split("=");
-						var field;
-						var title;
-						if (exp.length == 1) {
-							field = title = exp[0];
-						} else if (exp.length == 2) {
-							field = exp[0];
-							title = exp[1];
-						}
-						if (!isLegalName(field)) {
-							return true;
-						}
-						searchTableColumns.push({
-							field : field,
-							title : title
-						});
-					});
-				} else {
-					// by default
-					searchTableColumns.push({
-						field: 'No',
-						title: '编号'
-					});
-					searchTableColumns.push({
-						field: 'Name',
-						title: '名称'
-					});
-				}
-				
-				// search
-				$("#TB_Key").on("keyup", function () {
-					loadSelectGrid(searchUrl.replace("@Key", $(this).val()), global.selectedRows);
-				});
-				
+			    var treeClickUrl = mapExt.Tag3;
+
+			    var searchTableColumns = [{
+			        field: "_checkbox",
+			        checkbox: true,
+			        formatter: function (value, row, index) {
+			            if (row.checked) {
+			                return {
+			                    "checked": true
+			                };
+			            }
+			        }
+			    }];
+			    if (typeof mapExt.Tag4 == "string") {
+			        $.each(mapExt.Tag4.split(","), function (i, o) {
+			            var exp = o.split("=");
+			            var field;
+			            var title;
+			            if (exp.length == 1) {
+			                field = title = exp[0];
+			            } else if (exp.length == 2) {
+			                field = exp[0];
+			                title = exp[1];
+			            }
+			            if (!isLegalName(field)) {
+			                return true;
+			            }
+			            searchTableColumns.push({
+			                field: field,
+			                title: title
+			            });
+			        });
+			    } else {
+			        // by default
+			        searchTableColumns.push({
+			            field: 'No',
+			            title: '编号'
+			        });
+			        searchTableColumns.push({
+			            field: 'Name',
+			            title: '名称'
+			        });
+			    }
+
+			    // search
+			    $("#TB_Key").on("keyup", function () {
+			        loadSelectGrid(searchUrl.replace("@Key", $(this).val()), global.selectedRows);
+			    });
+
 			    // tree
-				if (treeUrl) {
+			    if (treeUrl) {
 			        loadTree(treeUrl, treeClickUrl, rootNo, global);
 			    }
-				
+
 			    // grid1
 			    $('#selectGrid').bootstrapTable({
 			        striped: true,
@@ -288,7 +297,7 @@
 			            loadViewGrid(global.selectedRows);
 			        }
 			    });
-				
+
 			    // grid2
 			    $('#viewGrid').bootstrapTable({
 			        striped: true,
@@ -309,22 +318,22 @@
 			            field: 'Name',
 			            title: '名称'
 			        }, {
-						title: '操作', formatter: function (value, row, index) {
-							return '<a class="btn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">删除</a>';
-						}
-					}]
+			            title: '操作', formatter: function (value, row, index) {
+			                return '<a class="btn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">删除</a>';
+			            }
+			        }]
 			    });
-				
-				// 初始化加载
-				var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
-				frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
-				$.each(frmEleDBs, function (i, o) {
-					global.selectedRows.push({
-						"No" : o.Tag1,
-						"Name" : o.Tag2
-					});
-				});
-				loadViewGrid(global.selectedRows);
+
+			    // 初始化加载
+			    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+			    frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
+			    $.each(frmEleDBs, function (i, o) {
+			        global.selectedRows.push({
+			            "No": o.Tag1,
+			            "Name": o.Tag2
+			        });
+			    });
+			    loadViewGrid(global.selectedRows);
 			});
 			function removeRecord(No) {
 				$("#selectGrid").bootstrapTable("uncheckBy", {

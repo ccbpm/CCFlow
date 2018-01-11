@@ -2006,7 +2006,7 @@ namespace BP.WF.HttpHandler
             //获得 部门与人员.
             DataSet ds = select.GenerDataSet(toNodeID, wk);
 
-            if (SystemConfig.CustomerNo == "TianYe")//天业集团，去掉00000001董事长
+            if (SystemConfig.CustomerNo == "TianYe") //天业集团，去掉00000001董事长
             {
                 DataTable TYEmp = ds.Tables["Emps"];
                 if (TYEmp.Rows.Count != 0)

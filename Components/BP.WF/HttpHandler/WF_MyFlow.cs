@@ -1404,6 +1404,21 @@ namespace BP.WF.HttpHandler
             return htMain;
         }
         /// <summary>
+        /// 删除流程
+        /// </summary>
+        /// <returns></returns>
+        public string DeleteFlow()
+        {
+            try
+            {
+                return BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(this.FK_Flow, this.WorkID, "删除流程", false);
+            }
+            catch (Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
+        }
+        /// <summary>
         /// 发送
         /// </summary>
         /// <returns></returns>

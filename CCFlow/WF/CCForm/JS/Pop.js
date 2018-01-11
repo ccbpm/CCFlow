@@ -37,7 +37,58 @@ function SelfUrl_Done(mapExtJson) {
 
 //树干叶子模式.
 function PopBranchesAndLeaf(mapExt) {
+	var target = $("#TB_" + mapExt.AttrOfOper);
+	target.hide();
 
+	var width = target.width();
+	var height = target.height();
+	var container = $("<div></div>");
+	target.after(container);
+	container.width(width);
+	container.height(height);
+	container.attr("id", mapExt.AttrOfOper + "_mtags");
+
+	$("#" + mapExt.AttrOfOper + "_mtags").mtags({
+		"fit" : true,
+		"onUnselect" : function (record) {
+			console.log("unselect: " + JSON.stringify(record));
+		}
+	});
+
+	var width = mapExt.W;
+	var height = mapExt.H;
+	var iframeId = mapExt.MyPK + mapExt.FK_MapData;
+	var title = GetAtPara(mapExt.AtPara, "Title");
+	var oid = (pageData.WorkID || pageData.OID || "");
+	
+	var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+	frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+	var initJsonData = [];
+	$.each(frmEleDBs, function (i, o) {
+		initJsonData.push({
+			"No" : o.Tag1,
+			"Name" : o.Tag2
+		});
+	});
+	$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
+	//
+	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
+	container.on("dblclick", function () {
+		OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
+			var iframe = document.getElementById(iframeId);
+			if (iframe) {
+				var selectedRows = iframe.contentWindow.selectedRows;
+				if ($.isArray(selectedRows)) {
+					var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
+					mtags.mtags("loadData", selectedRows);
+					$("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+				}
+			}
+			return true;
+		});
+	});
+
+	return;
     var tb = $("#" + mapExt.AttrOfOper);
 
     //设置文本框只读.

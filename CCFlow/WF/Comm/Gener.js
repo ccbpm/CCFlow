@@ -278,6 +278,10 @@ function GenerFullAllCtrlsVal(data) {
         // textbox
         var tb = document.getElementById('TB_' + attr);
         if (tb != null) {
+
+          
+            val = val.replace(/~/g, "'"); //替换掉特殊字符,设置的sql语句的引号.
+
             if (tb.tagName.toLowerCase() != "input") {
                 tb.innerHTML = val;
             }
@@ -332,6 +336,8 @@ function GenerFullAllCtrlsVal(data) {
 					// textbox
 					tb = document.getElementById('TBPara_' + suffix);
 					if (tb != null) {
+
+					    val = val.replace(/~/g, "'"); //替换掉特殊字符,设置的sql语句的引号.
 						tb.value = val;
 						return true;
 					}
@@ -1371,6 +1377,10 @@ var DBAccess = (function () {
 
     DBAccess.RunSQLReturnTable = function (sql) {
 
+        //sql = replaceAll(sql, "~", "'");
+
+        sql = sql.replace(/~/g, "'");
+
         var jsonString;
 
         $.ajax({
@@ -1398,56 +1408,56 @@ var DBAccess = (function () {
 
     };
 
-	DBAccess.RunUrlReturnString = function (url) {
-		if (url == null || typeof url === "undefined") {
-			alert("err@url无效");
-			return;
-		}
+    DBAccess.RunUrlReturnString = function (url) {
+        if (url == null || typeof url === "undefined") {
+            alert("err@url无效");
+            return;
+        }
 
-		if (url.match(/^http:\/\//)) {
-			url = dynamicHandler + "?DoType=RunUrlCrossReturnString&t=" + new Date().getTime() + "&url=" + url
-		}
+        if (url.match(/^http:\/\//)) {
+            url = dynamicHandler + "?DoType=RunUrlCrossReturnString&t=" + new Date().getTime() + "&url=" + url
+        }
 
-		var string;
+        var string;
 
-		$.ajax({
-			type: 'post',
-			async: false,
-			url: url,
-			dataType: 'html',
-			success: function (data) {
-				if (data.indexOf("err@") != -1) {
-					alert(data);
-					return;
-				}
-				string = data;
-			},
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-				string = "err系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-				alert(string);
-			}
-		});
+        $.ajax({
+            type: 'post',
+            async: false,
+            url: url,
+            dataType: 'html',
+            success: function (data) {
+                if (data.indexOf("err@") != -1) {
+                    alert(data);
+                    return;
+                }
+                string = data;
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                string = "err系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                alert(string);
+            }
+        });
 
-		return string;
-	};
+        return string;
+    };
 
-	DBAccess.RunUrlReturnJSON = function (url) {
-		var jsonString = DBAccess.RunUrlReturnString(url);
-		if (typeof jsonString === "undefined") {
-			return;
-		}
-		if (jsonString.indexOf("err@") != -1) {
-			alert(jsonString);
-			return jsonString;
-		}
-		try {
-			jsonString = JSON.parse(jsonString);
-		} catch (e) {
-			jsonString = "err@json解析错误: " + jsonString;
-			alert(jsonString);
-		}
-		return jsonString;
-	};
+    DBAccess.RunUrlReturnJSON = function (url) {
+        var jsonString = DBAccess.RunUrlReturnString(url);
+        if (typeof jsonString === "undefined") {
+            return;
+        }
+        if (jsonString.indexOf("err@") != -1) {
+            alert(jsonString);
+            return jsonString;
+        }
+        try {
+            jsonString = JSON.parse(jsonString);
+        } catch (e) {
+            jsonString = "err@json解析错误: " + jsonString;
+            alert(jsonString);
+        }
+        return jsonString;
+    };
 
     return DBAccess;
 
@@ -1610,6 +1620,14 @@ var WebUser = function () {
     });
 };
 
+//替换全部.
+function replaceAll(str, oldKey, newKey ) {
+    if (str != null)
+        str = str.replace( "/"+oldKey+"/g", newKey);
+    return str;
+}
+
+
 //执行数据源返回json.
 function ExecDBSrc(dbSrc, dbType) {
 
@@ -1629,9 +1647,12 @@ function ExecDBSrc(dbSrc, dbType) {
     }
 
     if (dbSrc.indexOf('@') != -1) {
-        alert("数据源参数没有替换" + dbSrc);
+        //val = val.replace(/~/g, "'"); //替换掉特殊字符,设置的sql语句的引号.
+        var alt = "如果关键字有多个，可以使用.  /myword/g 作为通配符替换。  ";
+        alert("数据源参数没有替换" + dbSrc + " \t\n" + alt);
         return;
     }
+
 
     //执行的SQL
     if (dbType == 0) {
@@ -1642,7 +1663,7 @@ function ExecDBSrc(dbSrc, dbType) {
     if (dbType == 1 || dbType == "1") {
         return DBAccess.RunUrlReturnJSON(dbSrc);
     }
-
+     
     //执行方法名称返回json.
     if (dbType == 2 || dbType == "2") {
         return DBAccess.RunFunctionReturnJSON(dbSrc);

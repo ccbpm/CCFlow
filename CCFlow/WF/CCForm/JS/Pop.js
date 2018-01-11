@@ -113,9 +113,7 @@ function PopBranchesAndLeaf(mapExt) {
     tb.attr("onclick", "alert('ssssssssssssss');");
     return;
 
-
-  //  alert(tb);
-
+    //  alert(tb);
     // 把文本框的内容，按照逗号分开, 并且块状显示. 右上角出现删除叉叉.
 
     // 文本框尾部出现选择的图标.

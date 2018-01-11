@@ -95,6 +95,7 @@
 		    }
 
 		    function findChildren(jsonArray, parentNo) {
+
 		        var appendToTree = function (treeToAppend, child) {
 		            $.each(treeToAppend, function (i, o) {
 		                if (o.id == child.ParentNo) {
@@ -139,6 +140,10 @@
 		    function loadTree(treeUrl, treeClickUrl, rootNo, global) {
 
 		        var json = ExecDBSrc(treeUrl); //执行url返回json.
+
+		        alert(json);
+
+
 		        var jsonTree = findChildren(json, rootNo);
 
 		        $('#tree').treeview({
@@ -247,7 +252,16 @@
 
 		        // search
 		        $("#TB_Key").on("keyup", function () {
-		            loadSelectGrid(searchUrl.replace("@Key", $(this).val()), global.selectedRows);
+
+		           // var url = replaceAll(searchUrl, "@Key", $(this).val());
+		            url = searchUrl.replace(/@Key/g, $(this).val());
+
+
+		            loadSelectGrid(searchUrl, global.selectedRows);
+		           // loadSelectGrid(url, global.selectedRows);
+
+
+
 		        });
 
 		        // tree

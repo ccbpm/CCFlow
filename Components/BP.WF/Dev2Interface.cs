@@ -5244,6 +5244,7 @@ namespace BP.WF
             gwl.FK_Emp = emp.No;
             gwl.FK_EmpText = emp.Name;
             gwl.IsPassInt = 0;
+            gwl.IsRead = false;
             gwf.Insert();
 
             //更新当前节点状态.

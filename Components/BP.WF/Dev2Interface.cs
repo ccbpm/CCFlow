@@ -5213,6 +5213,47 @@ namespace BP.WF
         }
 
         /// <summary>
+        /// 调整
+        /// </summary>
+        /// <param name="workid">要调整的ID</param>
+        /// <param name="toNodeID">调整到人员</param>
+        /// <param name="note">调整原因</param>
+        public static string Flow_ReSend(Int64 workid, int toNodeID, string toEmpID, string note)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(workid);
+            if (gwf.WFState == WFState.Complete)
+                return "err@该流程已经运行完成您不能执行调整,可以执行回滚.";
+
+            Node nd = new Node(toNodeID);
+            BP.Port.Emp emp = new Emp(toEmpID);
+
+            gwf.TodoEmps = emp.No + "," + emp.Name + ";";
+            gwf.HuiQianTaskSta = HuiQianTaskSta.None;
+            gwf.WFState = WFState.Runing;
+
+            //给当前人员产生待办.
+            GenerWorkerList gwl = new GenerWorkerList();
+            int i = gwl.Retrieve(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.IsPass, 0);
+            if (i == 0)
+                return "err@没有找到当前的待办人员.";
+
+            //删除当前节点人员信息.
+            gwl.Delete(GenerWorkerListAttr.WorkID, workid, GenerWorkerListAttr.FK_Node, gwf.FK_Node);
+
+            //插入一条信息，让调整的人员显示待办.
+            gwl.FK_Emp = emp.No;
+            gwl.FK_EmpText = emp.Name;
+            gwl.IsPassInt = 0;
+            gwf.Insert();
+
+            //更新当前节点状态.
+            gwf.FK_Node = toNodeID;
+            gwf.NodeName = nd.Name;
+            gwf.Update();
+
+            return "调整成功,调整到:" + gwf.NodeName + " , 调整给:" + emp.Name;
+        }
+        /// <summary>
         /// 取消、确认.
         /// </summary>
         /// <param name="workid">要取消设置的工作ID</param>
@@ -7707,7 +7748,7 @@ namespace BP.WF
                 try
                 {
                     string sql = "UPDATE WF_GenerWorkerlist SET FK_Emp='" + emp.No + "', FK_EmpText='" + emp.Name + "' WHERE FK_Emp='" + WebUser.No + "' AND FK_Node=" + nodeID + " AND WorkID=" + workID;
-                    BP.DA.DBAccess.RunSQL(sql);
+                    int i= BP.DA.DBAccess.RunSQL(sql);
                 }
                 catch
                 {

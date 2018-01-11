@@ -275,19 +275,16 @@ namespace BP.WF.Port
 
                 rm = new RefMethod();
                 rm.Title = "测试";
-
                 rm.HisAttrs.AddTBString("wenben", null, "文本", true, false, 0, 100, 100);
                 rm.HisAttrs.AddTBInt("shuzi", 0, "数字", true, false);
                 rm.HisAttrs.AddTBDate("riqi", null, "日期", true, false);
-
                 rm.HisAttrs.AddTBDate("riqishijian", null, "日期时间", true, false);
                 rm.HisAttrs.AddBoolen("boolen", false, "Boolen");
                 rm.HisAttrs.AddDDLSysEnum("WFState", 0, "枚举", true, true);
-
                 rm.HisAttrs.AddDDLEntities("FK_Emp", null, "外键", new BP.Port.Depts(), true);
-
                 rm.ClassMethodName = this.ToString() + ".DoTest";
                 map.AddRefMethod(rm);
+
 
 
                 rm = new RefMethod();
@@ -318,13 +315,13 @@ namespace BP.WF.Port
         public string DoTest(string wenben, int shuzi, string riqi, string dateTime, bool boolen, int meiJu, string waiJian)
         {
             string str="";
-            str += "text=" + wenben;
-            str += "int=" + shuzi;
-            str += "data=" + riqi;
-            str += "dateTime=" + dateTime;
-            str += "boolen=" + boolen;
-            str += "meiJu=" + meiJu;
-            str += "waiJian=" + waiJian;
+            str += "@text=" + wenben;
+            str += "@int=" + shuzi;
+            str += "@data=" + riqi;
+            str += "@dateTime=" + dateTime;
+            str += "@boolen=" + boolen;
+            str += "@meiJu=" + meiJu;
+            str += "@waiJian=" + waiJian;
             //str += "isOK=" + isOK;
             //str += "wfstate=" + wfstate;
             //str += "fk_emp=" + fk_emp;

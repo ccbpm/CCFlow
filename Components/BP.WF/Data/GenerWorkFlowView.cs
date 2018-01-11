@@ -787,8 +787,11 @@ namespace BP.WF.Data
                 rm = new RefMethod();
                 rm.Icon = "../../WF/Img/Btn/Back.png";
                 rm.Title = "回滚";
-                rm.ClassMethodName = this.ToString() + ".Rollback";
-                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                rm.ClassMethodName =  this.ToString()+ ".Rollback";
+                //rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
+               // rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
+                rm.HisAttrs.AddTBString("NodeID", null, "NodeID", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBString("EmpNo", null, "回滚到人员编号",true,false,0,100,100);
                 map.AddRefMethod(rm);
 
 
@@ -810,31 +813,13 @@ namespace BP.WF.Data
                 map.AddRefMethod(rm);
 
 
-               // #region 旧版本.
-               // rm = new RefMethod();
-               // rm.GroupName = "旧版本";
-               // rm.Icon = "../../WF/Img/Btn/CC.gif";
-               // rm.Icon = "../../WF/Img/Btn/CC.gif";
-
-               // rm.Title = "移交";
-               // rm.IsForEns = false;
-               // rm.ClassMethodName = this.ToString() + ".DoShift";
-               // rm.HisAttrs.AddTBString("ToEmp", null, "移交给", true, false, 0, 300, 100);
-               // rm.HisAttrs.AddTBString("Note", null, "移交原因", true, false, 0, 300, 100);
-               // map.AddRefMethod(rm);
-
-               // rm = new RefMethod();
-               // rm.GroupName = "旧版本";
-               // rm.Title = "回滚";
-               // rm.IsForEns = false;
-               // rm.ClassMethodName = this.ToString() + ".DoComeBack";
-               // rm.RefMethodType = RefMethodType.RightFrameOpen;
-               //rm.HisAttrs.AddTBInt("NodeID", 0, "回滚到节点", true, false);
-               //rm.HisAttrs.AddTBString("Note", null, "回滚原因", true, false, 0, 300, 100);
-               // map.AddRefMethod(rm);
-               // #endregion 旧版本.
-
-
+                rm = new RefMethod();
+                rm.Title = "调整";
+                rm.HisAttrs.AddTBString("wenben", null, "调整到人员", true, false, 0, 100, 100);
+                rm.HisAttrs.AddTBInt("shuzi", 0, "调整到节点", true, false);
+                 
+                rm.ClassMethodName = this.ToString() + ".DoTest";
+                map.AddRefMethod(rm);
 
 
                 this._enMap = map;
@@ -844,6 +829,19 @@ namespace BP.WF.Data
         #endregion
 
         #region 执行功能.
+        //,string isOK, int wfstate, string fk_emp
+        public string DoTest(string toEmpNo, int toNodeID)
+        {
+
+            BP.WF.Dev2Interface.Flow_ReSend(this.WorkID, toNodeID, toEmpNo,"admin调整");
+
+            //string str = "";
+            //str += "@text=" + wenben;
+            //str += "@int=" + shuzi;
+            return "调整成功";
+        }
+
+
         public string RepairDataIt()
         {
             string infos = "";
@@ -966,17 +964,16 @@ namespace BP.WF.Data
             }
             return infos;
         }
-
         /// <summary>
         /// 回滚
         /// </summary>
         /// <param name="nodeid">节点ID</param>
         /// <param name="note">回滚原因</param>
         /// <returns>回滚的结果</returns>
-        public string DoComeBack(int nodeid, string note)
+        public string Rollback(string nodeid, string note)
         {
             BP.WF.Template.FlowSheet fl = new Template.FlowSheet(this.FK_Flow);
-            return fl.DoRebackFlowData(this.WorkID, nodeid, note);
+            return fl.DoRebackFlowData(this.WorkID, int.Parse(nodeid), note);
         }
 
         public string DoTrack()

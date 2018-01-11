@@ -74,18 +74,34 @@ function PopBranchesAndLeaf(mapExt) {
 	//
 	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
 	container.on("dblclick", function () {
-		OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
-			var iframe = document.getElementById(iframeId);
-			if (iframe) {
-				var selectedRows = iframe.contentWindow.selectedRows;
-				if ($.isArray(selectedRows)) {
-					var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
-					mtags.mtags("loadData", selectedRows);
-					$("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+		if (window.parent && window.parent.OpenBootStrapModal) {
+			window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+				var iframe = document.getElementById(iframeId);
+				if (iframe) {
+					var selectedRows = iframe.contentWindow.selectedRows;
+					if ($.isArray(selectedRows)) {
+						var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
+						mtags.mtags("loadData", selectedRows);
+						$("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+					}
 				}
-			}
-			return true;
-		});
+			}, null, function () {
+				
+			});
+			return;
+		}
+		//OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
+		//	var iframe = document.getElementById(iframeId);
+		//	if (iframe) {
+		//		var selectedRows = iframe.contentWindow.selectedRows;
+		//		if ($.isArray(selectedRows)) {
+		//			var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
+		//			mtags.mtags("loadData", selectedRows);
+		//			$("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+		//		}
+		//	}
+		//	return true;
+		//});
 	});
 
 	return;

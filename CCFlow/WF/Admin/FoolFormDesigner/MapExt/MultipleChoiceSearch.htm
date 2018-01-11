@@ -125,10 +125,9 @@ SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'
 <a href="javascript:ShowHidden('help')">帮助:</a>
  <div id="help" style="color:Gray; display:none">
  <ul>
- <li>您选择了使用外部的URL. </li>
- <li>使用外部的URL，我们提供了一个demo,您需要按照自己的格式来编写该url.</li>
- <li>该demo的位置 /SDKFlowDemo/SDKFlowDemo/PopSelectVal.htm </li>
- <li>可以使用@SDKFromServHost 变量，标识一个配置路径，该配置在web.config里设置。</li>
+ <li>数据源类型支持SQL模式 </li>
+ <li>SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%' </li>
+ <li>SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%' </li>
  </ul>
  </div>
 

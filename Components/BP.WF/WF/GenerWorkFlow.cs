@@ -452,11 +452,18 @@ namespace BP.WF
                 SetValByKey(GenerWorkFlowAttr.Emps, value);
             }
         }
+        /// <summary>
+        /// 会签状态
+        /// </summary>
         public HuiQianTaskSta HuiQianTaskSta
         {
             get
             {
-                return (HuiQianTaskSta)this.GetParaInt(GenerWorkFlowAttr.HuiQianTaskSta,0);
+                //如果有方向信息，并且方向不包含到达的节点.
+                if (this.HuiQianSendToNodeIDStr.Length > 3 && this.HuiQianSendToNodeIDStr.Contains(this.FK_Node + ",") == false)
+                    return WF.HuiQianTaskSta.None;
+
+                return (HuiQianTaskSta)this.GetParaInt(GenerWorkFlowAttr.HuiQianTaskSta, 0);
             }
             set
             {

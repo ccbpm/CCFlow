@@ -382,6 +382,12 @@ namespace BP.WF
                 if (i == 0)
                     return "err@当前节点[" + gwf.NodeName + "]是会签状态,[" + gwf.TodoEmps + "]在执行会签,您不能执行撤销.";
 
+                if (gwl.IsHuiQian == true)
+                {
+
+                }
+
+
                 //如果是会签人，就让其显示待办.
                 gwl.IsPassInt = 0;
                 gwl.IsEnable = true;

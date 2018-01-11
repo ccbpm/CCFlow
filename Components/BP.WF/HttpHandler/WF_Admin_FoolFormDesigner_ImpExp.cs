@@ -129,16 +129,17 @@ namespace BP.WF.HttpHandler
                 if (this.context.Request.Files.Count == 0)
                     return "err@请上传导入的模板文件.";
 
-                string fk_mapData = this.FK_MapData;
-            
-                //读取上传的XML 文件.
+                //创建临时文件.
+                string temp=SystemConfig.PathOfTemp+"\\"+Guid.NewGuid()+".xml";
+                this.context.Request.Files[0].SaveAs(temp);
+
+                string fk_mapData = this.FK_MapData;            
                 DataSet ds = new DataSet();
                 //ds.ReadXml(path);
-                ds.ReadXml(this.context.Request.Files[0].InputStream);
+                ds.ReadXml(temp);
 
                 //执行装载.
                 MapData.ImpMapData(fk_mapData, ds);
-
                 if (this.FK_Node != 0)
                 {
                     Node nd = new Node(this.FK_Node);

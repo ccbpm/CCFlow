@@ -77,14 +77,15 @@
 							return;
 						}
 						var json = JSON.parse(data);
+						if (!$.isArray(json) || json.length == 0) {
+							return;
+						}
 						//
 						$('#selectGrid').bootstrapTable("hideAllColumns");
-						if ($.isArray(json)) {
-							$('#selectGrid').bootstrapTable("showColumn", "_checkbox");
-							$.each(json[0], function (n, o) {
-								$('#selectGrid').bootstrapTable("showColumn", n);
-							});
-						}
+						$('#selectGrid').bootstrapTable("showColumn", "_checkbox");
+						$.each(json[0], function (n, o) {
+							$('#selectGrid').bootstrapTable("showColumn", n);
+						});
 						//
 						if ($.isArray(selectedRows)) {
 							$.each(json, function (i, o) {
@@ -173,6 +174,12 @@
 					}
 				});
 			}
+			function isLegalName(name) {
+				if (!name) {
+					return false;
+				}
+				return name.match(/^[a-zA-Z\$_][a-zA-Z\d\$_]*$/);
+			}
 			$(function () {
 			    var mypk = GetQueryString("MyPK");
 			    var mapExt = new Entity("BP.Sys.MapExt", mypk);
@@ -182,7 +189,7 @@
 			    $("#title").text(title);
 			    var tip = GetAtPara(mapExt.AtPara, "SearchTip");
 			    $("#TB_Key").attr("placeholder", tip);
-				var rootNo = GetAtPara(mapExt.AtPara, "RootNo");
+				var rootNo = GetAtPara(mapExt.AtPara, "RootTreeNo");
 				
 			    // global
 			    var global = window;
@@ -197,6 +204,48 @@
 			    var searchUrl = mapExt.Tag1;
 			    var treeUrl = mapExt.Tag2;
 				var treeClickUrl = mapExt.Tag3;
+				
+				var searchTableColumns = [{
+					field : "_checkbox",
+					checkbox: true,
+					formatter: function (value, row, index) {
+						if (row.checked) {
+							return {
+								"checked": true
+							};
+						}
+					}
+				}];
+				if (typeof mapExt.Tag4 == "string") {
+					$.each(mapExt.Tag4.split(","), function (i, o) {
+						var exp = o.split("=");
+						var field;
+						var title;
+						if (exp.length == 1) {
+							field = title = exp[0];
+						} else if (exp.length == 2) {
+							field = exp[0];
+							title = exp[1];
+						}
+						if (!isLegalName(field)) {
+							return true;
+						}
+						searchTableColumns.push({
+							field : field,
+							title : title
+						});
+					});
+				} else {
+					// by default
+					searchTableColumns.push({
+						field: 'No',
+						title: '编号'
+					});
+					searchTableColumns.push({
+						field: 'Name',
+						title: '名称'
+					});
+				}
 				
 				// search
 				$("#TB_Key").on("keyup", function () {
@@ -221,26 +270,7 @@
 			        detailView: false,
 			        height: $(document).height() / 3,
 			        uniqueId: "No",
-			        columns: [{
-						field : "_checkbox",
-						checkbox: true,
-						formatter: function (value, row, index) {
-							if (row.checked) {
-								return {
-									"checked": true
-								};
-							}
-						}
-					}, {
-						field: 'No',
-						title: '编号'
-					}, {
-						field: 'Name',
-						title: '名称'
-					}, {
-						field: 'test',
-						title: '测试'
-					}],
+			        columns: searchTableColumns,
 			        "onCheck": function (row, element) {
 			            addSelectedData(global.selectedRows, [row]);
 			            loadViewGrid(global.selectedRows);
@@ -298,6 +328,12 @@
 			});
 			function removeRecord(No) {
 				$("#selectGrid").bootstrapTable("uncheckBy", {
+					field : "No",
+					values : [ No ]
+				});
+				//
+				Delete(AttrOfOper, oid, No);
+				$('#viewGrid').bootstrapTable("remove", {
 					field : "No",
 					values : [ No ]
 				});

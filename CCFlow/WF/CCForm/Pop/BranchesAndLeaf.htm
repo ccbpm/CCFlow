@@ -68,7 +68,7 @@
 		    function loadSelectGrid(dbSrc, selectedRows) {
 
 		        //获得json.
-		        var json = ExecDBSrc(dbSrc);
+		        var json = DBAccess.RunDBSrc(dbSrc);
 
 		     // alert(JSON.stringify( json));
 
@@ -145,7 +145,7 @@
 		    }
 		    function loadTree(treeUrl, treeClickUrl, rootNo, global) {
 
-		        var json = ExecDBSrc(treeUrl); //执行url返回json.
+		        var json = DBAccess.RunDBSrc(treeUrl); //执行url返回json.
 
 		        var jsonTree = findChildren(json, rootNo);
 
@@ -209,8 +209,6 @@
 		        var treeUrl = mapExt.Tag2;      //初始化树
 		        var treeClickUrl = mapExt.Tag3; //树选择.
 
-
-
 		        if (searchUrl == "" || treeUrl == "" || treeClickUrl == "") {
 		            alert('配置错误:查询数据源，初始化树的数据源，点击树节点返回数据的数据源，必须都不能为空。');
 		            return;
@@ -229,8 +227,9 @@
 		        }];
 
 		        //显示列的中文名称.
-		        if (typeof mapExt.Tag4 == "string") {
-		            $.each(mapExt.Tag4.split(","), function (i, o) {
+		        if (typeof mapExt.Tag == "string") {
+
+		            $.each(mapExt.Tag.split(","), function (i, o) {
 		                var exp = o.split("=");
 		                var field;
 		                var title;
@@ -270,7 +269,7 @@
 		        });
 
 		        // tree
-		         loadTree(treeUrl, treeClickUrl, rootNo, global);
+		        loadTree(treeUrl, treeClickUrl, rootNo, global);
 
 		        // grid1
 		        $('#selectGrid').bootstrapTable({

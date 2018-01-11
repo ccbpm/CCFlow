@@ -1374,6 +1374,50 @@ var DBAccess = (function () {
         return count;
 
     };
+    //执行数据源返回json.
+    DBAccess.RunDBSrc = function (dbSrc, dbType) {
+
+        if (dbSrc == "" || dbSrc == null || dbSrc == undefined) {
+            alert("数据源为空..");
+            return;
+        }
+
+        if (dbType == undefined) {
+            dbType = 0; //默认为sql.
+            if (dbSrc.length <= 20) {
+                dbType = 2; //可能是一个方法名称.
+            }
+            if (dbSrc.indexOf('/') != -1) {
+                dbType = 1; //是一个url.
+            }
+        }
+
+        if (dbSrc.indexOf('@') != -1) {
+            //val = val.replace(/~/g, "'"); //替换掉特殊字符,设置的sql语句的引号.
+            var alt = "如果关键字有多个，可以使用.  /myword/g 作为通配符替换。  ";
+            alert("数据源参数没有替换" + dbSrc + " \t\n" + alt);
+            return;
+        }
+
+
+        //执行的SQL
+        if (dbType == 0) {
+            return DBAccess.RunSQLReturnTable(dbSrc);
+        }
+
+        //执行URL
+        if (dbType == 1 || dbType == "1") {
+            return DBAccess.RunUrlReturnJSON(dbSrc);
+        }
+
+        //执行方法名称返回json.
+        if (dbType == 2 || dbType == "2") {
+            return DBAccess.RunFunctionReturnJSON(dbSrc);
+        }
+        //@谢 如何执行一个方法,
+        //   alert("@没有处理执行方法。"); RunFunctionReturnJSON
+
+    };
 
     DBAccess.RunSQLReturnTable = function (sql) {
 
@@ -1629,48 +1673,4 @@ function replaceAll(str, oldKey, newKey) {
     }
     str = str.replace(new RegExp(oldKey, "gm"), newKey);
     return str;
-}
-
-//执行数据源返回json.
-function ExecDBSrc(dbSrc, dbType) {
-
-    if (dbSrc == "" || dbSrc == null || dbSrc == undefined) {
-        alert("数据源为空..");
-        return;
-    }
-
-    if (dbType == undefined) {
-        dbType = 0; //默认为sql.
-        if (dbSrc.length <= 20) {
-            dbType = 2; //可能是一个方法名称.
-        }
-        if (dbSrc.indexOf('/') != -1) {
-            dbType = 1; //是一个url.
-        }
-    }
-
-    if (dbSrc.indexOf('@') != -1) {
-        //val = val.replace(/~/g, "'"); //替换掉特殊字符,设置的sql语句的引号.
-        var alt = "如果关键字有多个，可以使用.  /myword/g 作为通配符替换。  ";
-        alert("数据源参数没有替换" + dbSrc + " \t\n" + alt);
-        return;
-    }
-
-
-    //执行的SQL
-    if (dbType == 0) {
-        return DBAccess.RunSQLReturnTable(dbSrc);
-    }
-
-    //执行URL
-    if (dbType == 1 || dbType == "1") {
-        return DBAccess.RunUrlReturnJSON(dbSrc);
-    }
-
-    //执行方法名称返回json.
-    if (dbType == 2 || dbType == "2") {
-        return DBAccess.RunFunctionReturnJSON(dbSrc);
-    }
-    //@谢 如何执行一个方法,
-    //   alert("@没有处理执行方法。"); RunFunctionReturnJSON
 }

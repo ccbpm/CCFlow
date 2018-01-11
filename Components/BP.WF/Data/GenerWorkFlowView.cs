@@ -832,16 +832,8 @@ namespace BP.WF.Data
         //,string isOK, int wfstate, string fk_emp
         public string DoTest(string toEmpNo, int toNodeID)
         {
-
-            BP.WF.Dev2Interface.Flow_ReSend(this.WorkID, toNodeID, toEmpNo,"admin调整");
-
-            //string str = "";
-            //str += "@text=" + wenben;
-            //str += "@int=" + shuzi;
-            return "调整成功";
+           return BP.WF.Dev2Interface.Flow_ReSend(this.WorkID, toNodeID, toEmpNo,"admin调整");
         }
-
-
         public string RepairDataIt()
         {
             string infos = "";

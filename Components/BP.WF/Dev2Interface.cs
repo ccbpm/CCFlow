@@ -5243,16 +5243,16 @@ namespace BP.WF
             //插入一条信息，让调整的人员显示待办.
             gwl.FK_Emp = emp.No;
             gwl.FK_EmpText = emp.Name;
-            gwf.FK_Node = toNodeID;
+            gwl.FK_Node = toNodeID;
             gwl.IsPassInt = 0;
             gwl.IsRead = false;
             try
             {
-                gwf.Insert();
+                gwl.Insert();
             }
             catch
             {
-                gwf.Update();
+                gwl.Update();
             }
 
             //更新当前节点状态.

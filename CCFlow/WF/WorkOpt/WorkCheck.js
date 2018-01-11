@@ -157,6 +157,11 @@
 
                         var rdt = this.RDT.substring(0, 16);
 
+                        if (rdt == "") {
+                            var dt = new Date();
+                            rdt = dt.getFullYear() + "-" +  (dt.getMonth()+1) + "-" + dt.getDate();  // new Date().toString("yyyy-MM-dd HH:mm");
+                        }
+
                         //签名，日期.
                         html += "<tr>";
                         html += "<td style='text-align:left;height:35px;line-height:35px;'><div style='float:left'><font color='Gray' >签名:</font>";
@@ -185,6 +190,7 @@
                                 continue;
 
                             var rdt = this.RDT.substring(0, 16);
+
 
 
                             if (st.SignType == 0 || st.SignType == 2 || st.SignType == null) {

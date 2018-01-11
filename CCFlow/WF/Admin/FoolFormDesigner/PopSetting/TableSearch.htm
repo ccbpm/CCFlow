@@ -149,11 +149,17 @@
  <div id="PopValSearchCond" style="color:Gray; display:none">
  <ul>
  <li>该设置对table查询有效,(可以为空)：日期的默认值是JS函数表达式.</li>
-<li>格式为:</li>
+<li>SQL格式为:</li>
 <li>$Para=Dept#Label=所在班级#ListSQL=Select No,Name FROM Demo_BanJi </li>
 <li>$Para=XB#Label=性别#EnumKey=XB</li>
 <li>$Para=DTFrom#Label=注册日期从#DefVal=(new Date( (new Date().setDate(-30 + new Date().getDate()))))</li>
 <li>$Para=DTTo#Label=到#DefVal=(new Date())</li>
+
+<li>URL格式为:</li>
+<li>$Para=Dept#Label=所在班级#ListURL=/DataUser/Handler.ashx?xxx=sss </li>
+
+ <li>执行CCFromRef.js返回JSON格式为:</li>
+<li>$Para=Dept#Label=所在班级#ListFuncName=MyFunc </li>
  </ul>
  </div>
 

@@ -18,36 +18,29 @@
     <script type="text/javascript">
 
         /* 打开表单. */
-        function OpenFrm(workid, nodeID, flowNo) {
+        function OpenFrm(nodeID) {
 
-            var workid = GetQueryString("WorkID");
-            var nodeID = GetQueryString("FK_Node");
-            var flowNo = GetQueryString("FK_Flow");
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_WorkOpt_OneWork");
+            handler.AddUrlData();
+            if (nodeID != undefined)
+                handler.AddPara("FK_Node", nodeID);
 
-            //执行催办.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Runing_OpenFrm&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
+            var data = handler.DoMethodReturnString("Runing_OpenFrm");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
 
-                    if (data.indexOf('url@') == 0) {
-                        data = data.replace('url@', '');
+            if (data.indexOf('url@') == 0) {
+                data = data.replace('url@', '');
 
-                        data = "../." + data;
+                data = "../." + data;
 
-                        WinOpen(data);
-                        return;
-                    }
-                    alert(data);
-                }
-            });
+                WinOpen(data);
+                return;
+            }
+            alert(data);
         }
     </script>
 </head>

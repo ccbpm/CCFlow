@@ -83,6 +83,8 @@ function InitPage() {
 
                 if (at == ActionType.Forward) {
                     doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
+                    doc += "<p><span><a href=\"javascript:OpenFrm('" + track.NDTo + "')\">表单</a></span></p>";
+
 
                     //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。
                     for (var myIdx = 0; myIdx < tracks.length; myIdx++) {
@@ -240,6 +242,10 @@ function InitPage() {
             }
         }
     });
+}
+
+function OpenFrm(nodeID) {
+  
 }
 
 //生成左边的icon.
@@ -485,31 +491,4 @@ function ActionTypeStr(at) {
         default:
             return "../../Img/Dot.png";
     }
-}
-
-/* 打开表单. */
-function OpenFrm(workid, nodeID, flowNo) {
-
-    //执行催办.
-    $.ajax({
-        type: 'post',
-        async: true,
-        url: Handler + "?DoType=TimeBase_OpenFrm&FK_Node=" + nodeID + "&FK_Flow=" + flowNo + "&WorkID=" + workid + "&m=" + Math.random(),
-        dataType: 'html',
-        success: function (data) {
-
-            if (data.indexOf('err@') == 0) {
-                alert(data);
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-                data = data.replace('url@', '');
-                data = "../../" + data;
-                window.open(data);
-                return;
-            }
-            alert(data);
-        }
-    });
 }

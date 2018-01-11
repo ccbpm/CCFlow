@@ -406,6 +406,7 @@ public partial class CCFlow_Comm_UC_UIEn : BP.Web.UC.UCBase3
     private void Btn_DelFile_Click(object sender, ImageClickEventArgs e)
     {
         Entity en = this.UCEn1.GetEnData(this.GetEns.GetNewEntity);
+        en.PKVal = this.PKVal;
         en.RetrieveFromDBSources();
 
         string file = en.GetValStringByKey("MyFilePath") + "//" + en.PKVal + "." + en.GetValStringByKey("MyFileExt");

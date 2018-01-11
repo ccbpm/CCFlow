@@ -32,7 +32,7 @@
     <script language="javascript" type="text/javascript" >
 
         var hjl = new Array(); //合计列名称集合
-        var mapExt;  //mapExt扩展
+        var mapExts;  //mapExts扩展
         var isEditable;
         var ensName = GetQueryString("EnsName");
 
@@ -374,7 +374,7 @@
                     var sys_MapDtl = data["Sys_MapDtl"][0]; //从表描述.
                     var sys_mapAttr = data["Sys_MapAttr"]; //从表字段.
                     var sys_mapExtDtl = data["Sys_MapExt"]; //扩展信息.
-                    mapExt = sys_mapExtDtl;
+                    mapExts = sys_mapExtDtl;
                     var dbDtl = data["DBDtl"]; //从表数据.
 
                     $('#dtlDiv div table tbody').html('');//清空表格数据
@@ -533,7 +533,6 @@
                                              }
                                          }
                                          else {
-										 debugger;
 											// 判断下拉框是否有对应option, 若没有则追加
 											if (o.data().LGType == 2 || o.data().UIContralType == "1") {
 												if ($("option[value='" + textVal + "']", tmplate).length == 0) {
@@ -863,7 +862,7 @@
 		}
 
         //选项 导入导出功能.
-		function Option(impModel, mapDtl, mapExts) {
+		function Option(impModel) {
 		    if (impModel == 0) {
 		        alert("请配置导入方式。");
 		    }
@@ -880,17 +879,27 @@
 
 		    }
 		    if (window.parent && window.parent.OpenBootStrapModal) {
-		        window.parent.OpenBootStrapModal(url, "eudlgframe", "导入数据", 900, 450, "icon-edit", false, function () { }, null, function () {
+		        var dtl_ImpMapExt = $.grep(mapExts, function (ext) { return ext.ExtType == "DtlImp" });
+		        var title = "导入数据";
+		        var digWidth = 900;
+		        var digHeight = 450;
+		        if (dtl_ImpMapExt.length > 0) {
+		            digWidth = dtl_ImpMapExt[0].W;
+		            digHeight = dtl_ImpMapExt[0].H;
+
+		            var atPara = dtl_ImpMapExt[0].AtPara;
+		            var reg = new RegExp("(^|@)Title=([^@]*)(@|$)");
+		            var results = atPara.match(reg);
+		            if (results != null) {
+		                title = unescape(results[2]);
+		            }
+		        }
+		        window.parent.OpenBootStrapModal(url, "eudlgframe", title, digWidth, digHeight, "icon-edit", false, function () { }, null, function () {
 		            location = location;
 		        });
 		        return;
-            }
+		    }
 		    window.location.href = url;
-		    return;
-
-		    //            OpenEasyUiDialog(url, "eudlgframe", "选项", 490, 250, "icon-edit", true, null, null, null, function () {
-		    //                window.location.href = window.location.href;
-		    //            });
 		}
 
         //根据表格中编辑过的值，设置表格TR 的 data

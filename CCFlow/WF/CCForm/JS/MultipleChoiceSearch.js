@@ -1,9 +1,6 @@
 ﻿/*大范围，查询模式的多选. */
 function MultipleChoiceSearch(mapExt) {
 
-    if (mapExt.DoWay == 0)
-        return;
-
 	var tb = $("#TB_" + mapExt.AttrOfOper);
 	var width = tb.width();
 	var height = tb.height();

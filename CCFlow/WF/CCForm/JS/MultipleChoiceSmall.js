@@ -204,8 +204,8 @@ function DeptEmpModelAdv0(mapExt) {
 		});
 	});
 	$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
-	//
-	var url = "/WF/CCForm/Pop/TreeSelectionGrid.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
+	//解项羽 这里需要相对路径.
+	var url = "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
 	container.on("dblclick", function () {
 		OpenEasyUiDialog(url, iframeId, title, width, height, undefined, true, function () {
 			var iframe = document.getElementById(iframeId);

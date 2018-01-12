@@ -1370,6 +1370,11 @@ namespace BP.WF.HttpHandler
         {
             string sql = this.GetRequestVal("SQL");
             sql = sql.Replace("~","'");
+            sql = sql.Replace("-", "%");
+            if (null == sql || "" == sql)
+            {
+                return "err@查询sql为空";
+            }
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             return BP.Tools.Json.ToJson(dt);
         }

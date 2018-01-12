@@ -277,9 +277,8 @@ function GenerFullAllCtrlsVal(data) {
         // textbox
         var tb = document.getElementById('TB_' + attr);
         if (tb != null) {
-
-           val= val.replace(new RegExp("~", "gm"), "'");
-
+            if (val != null && '' != val && !isNaN(val) && !(/^\+?[1-9][0-9]*$/.test(val + '')))
+                val = val.replace(new RegExp("~", "gm"), "'");
             //val = val.replace( /~/g,  "'");   //替换掉特殊字符,设置的sql语句的引号.
 
             if (tb.tagName.toLowerCase() != "input") {
@@ -321,56 +320,56 @@ function GenerFullAllCtrlsVal(data) {
         }
 
         // 处理参数字段.....................
-		if (attr == "AtPara") {
-			//val=@Title=1@SelectType=0@SearchTip=2@RootTreeNo=0
-			$.each(val.split("@"), function (i, o) {
-				if (o == "") {
-					return true;
-				}
-				var kv = o.split("=");
-				if (kv.length == 2) {
-					json[kv[0]] = kv[1];
-					var suffix = kv[0];
-					var val = kv[1];
-					
-					// textbox
-					tb = document.getElementById('TBPara_' + suffix);
-					if (tb != null) {
+        if (attr == "AtPara") {
+            //val=@Title=1@SelectType=0@SearchTip=2@RootTreeNo=0
+            $.each(val.split("@"), function (i, o) {
+                if (o == "") {
+                    return true;
+                }
+                var kv = o.split("=");
+                if (kv.length == 2) {
+                    json[kv[0]] = kv[1];
+                    var suffix = kv[0];
+                    var val = kv[1];
 
-					    val = val.replace(new RegExp("~", "gm"), "'");
-						tb.value = val;
-						return true;
-					}
+                    // textbox
+                    tb = document.getElementById('TBPara_' + suffix);
+                    if (tb != null) {
 
-					//下拉框.
-					ddl = document.getElementById('DDLPara_' + suffix);
-					if (ddl != null) {
-						if (ddl.options.length == 0)
-							return true;
-						$("#DDL_" + suffix).val(val); // 操作权限.
-						return true;
-					}
+                        val = val.replace(new RegExp("~", "gm"), "'");
+                        tb.value = val;
+                        return true;
+                    }
 
-					//checkbox.
-					cb = document.getElementById('CBPara_' + suffix);
-					if (cb != null) {
-						if (val == "1")
-							cb.checked = true;
-						else
-							cb.checked = false;
-						return true;
-					}
+                    //下拉框.
+                    ddl = document.getElementById('DDLPara_' + suffix);
+                    if (ddl != null) {
+                        if (ddl.options.length == 0)
+                            return true;
+                        $("#DDL_" + suffix).val(val); // 操作权限.
+                        return true;
+                    }
 
-					// RadioButton. 单选按钮.
-					rb = document.getElementById('RBPara_' + suffix + "_" + val);
-					if (rb != null) {
-						rb.checked = true;
-						return true;
-					}
-				}
-			});
-		}
-		unSetCtrl += "@" + attr + " = " + val;
+                    //checkbox.
+                    cb = document.getElementById('CBPara_' + suffix);
+                    if (cb != null) {
+                        if (val == "1")
+                            cb.checked = true;
+                        else
+                            cb.checked = false;
+                        return true;
+                    }
+
+                    // RadioButton. 单选按钮.
+                    rb = document.getElementById('RBPara_' + suffix + "_" + val);
+                    if (rb != null) {
+                        rb.checked = true;
+                        return true;
+                    }
+                }
+            });
+        }
+        unSetCtrl += "@" + attr + " = " + val;
     }
 }
 
@@ -1420,11 +1419,10 @@ var DBAccess = (function () {
     };
 
     DBAccess.RunSQLReturnTable = function (sql) {
-
         //sql = replaceAll(sql, "~", "'");
 
         sql = sql.replace(/~/g, "'");
-
+        sql = sql.replace(/%/g, "-");
         var jsonString;
 
         $.ajax({
@@ -1593,7 +1591,7 @@ var HttpHandler = (function () {
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     jsonString = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
-					alert(jsonString);
+                    alert(jsonString);
                 }
             });
 
@@ -1606,7 +1604,7 @@ var HttpHandler = (function () {
             var jsonString = this.DoMethodReturnString(methodName);
 
             if (jsonString.indexOf("err@") == 0) {
-                alert('请查看控制台:'+jsonString);
+                alert('请查看控制台:' + jsonString);
                 console.log(jsonString);
                 return jsonString;
             }
@@ -1650,7 +1648,7 @@ var WebUser = function () {
             try {
                 jsonString = JSON.parse(data);
             } catch (e) {
-				alert("json解析错误: " + data);
+                alert("json解析错误: " + data);
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

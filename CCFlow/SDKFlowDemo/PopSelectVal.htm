@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>JS开发框架展示</title>
+    <script src="../WF/Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
+    <script src="../WF/Scripts/config.js" type="text/javascript"></script>
+    <script src="../WF/Comm/Gener.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        window.onload =
+		function Init() {
+
+		    $("#Msg").html("正在加载请稍候....");
+		    var emps = new Entities("BP.Port.Emps");
+		    emps.RetrieveAll();
+
+		    var html = "<ul>";
+		    for (var i = 0; i < emps.length; i++) {
+
+              var emp=emps[i];
+              html += "<li> <input type=checkbox value='" + emp.No + "' id='CB_" + emp.No + "' /><label for='CB_"+emp.No+"'>"+emp.Name+"</label> </li>";
+		    }
+		    html += "</ul>";
+
+		    $("#Msg").html("");
+		    $("#Msg").html(html);
+		}
+    </script>
+     
+</head>
+<body>
+
+<div id="Msg" />
+
+</body>
+</html>

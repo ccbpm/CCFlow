@@ -1,88 +1,88 @@
 ﻿(function ($) {
 
-	function onSelect(target, record) {
-		var opts = getOptions(target);
-		opts.onSelect.call("", record);
-	}
+    function onSelect(target, record) {
+        var opts = getOptions(target);
+        opts.onSelect.call("", record);
+    }
 
-	function onUnselect(target, record) {
-		var opts = getOptions(target);
-		opts.onUnselect.call("", record);
-	}
+    function onUnselect(target, record) {
+        var opts = getOptions(target);
+        opts.onUnselect.call("", record);
+    }
 
-	function loadData(target, datas) {
-		var opts = getOptions(target);
-		var search = $(target).find(".ccflow-search");
-		var valueField = opts.valueField;
-		var textField = opts.textField;
-		for (var i = 0; i < datas.length; i++) {
-			var data = datas[i];
-			if (!contains(target, data, valueField) && data[valueField] != empty && typeof data[valueField] !== "undefined") {
-				var tag = $('<span class="ccflow-tag ccflow-label ccflow-label-primary"></span>');
-				tag.data(data);
-				tag.html(data[textField] + '&nbsp;<i class="fa fa-times" data-role="remove"></i>');
-				search.before(tag);
-				onSelect(target, data);
-				tag.delegate("i", "click", function (e) {
-					var record = $(this).parent().data();
-					$(this).parent().remove();
-					opts.onUnselect.call("", record);
-				});
-			}
-		}
-	}
+    function loadData(target, datas) {
+        var opts = getOptions(target);
+        var search = $(target).find(".ccflow-search");
+        var valueField = opts.valueField;
+        var textField = opts.textField;
+        for (var i = 0; i < datas.length; i++) {
+            var data = datas[i];
+            if (!contains(target, data, valueField) && data[valueField] != empty && typeof data[valueField] !== "undefined") {
+                var tag = $('<span class="ccflow-tag ccflow-label ccflow-label-primary"></span>');
+                tag.data(data);
+                tag.html(data[textField] + '&nbsp;<i class="fa fa-times" data-role="remove"></i>');
+                search.before(tag);
+                onSelect(target, data);
+                tag.delegate("i", "click", function (e) {
+                    var record = $(this).parent().data();
+                    $(this).parent().remove();
+                    opts.onUnselect.call("", record);
+                });
+            }
+        }
+    }
 
-	function clear(target) {
-		$(target).find(".ccflow-input-span-container span").remove();
-	}
+    function clear(target) {
+        $(target).find(".ccflow-input-span-container span").remove();
+    }
 
-	function setValues(target, values) {
-		var opts = getOptions(target);
-		var valueField = opts.valueField;
-		var textField = opts.textField;
-		var datas = [];
-		if ($.isArray(opts.data) && opts.data.length > 0) {
-			datas = opts.data;
-		} else if ($.trim(opts.sql) != "") {
-			datas = executeSql(opts.sql, opts.valueField, opts.textField, values);
-		} else if ($.trim(opts.url) != "") {
-			datas = requestUrl(opts.url, valueField, textField, text);
-		}
-		loadData(target, datas);
-	}
+    function setValues(target, values) {
+        var opts = getOptions(target);
+        var valueField = opts.valueField;
+        var textField = opts.textField;
+        var datas = [];
+        if ($.isArray(opts.data) && opts.data.length > 0) {
+            datas = opts.data;
+        } else if ($.trim(opts.sql) != "") {
+            datas = executeSql(opts.sql, opts.valueField, opts.textField, values);
+        } else if ($.trim(opts.url) != "") {
+            datas = requestUrl(opts.url, valueField, textField, text);
+        }
+        loadData(target, datas);
+    }
 
-	function getText(target) {
-		var opts = getOptions(target);
-		var textField = opts.textField;
-		var text = [];
-		$(target).find(".ccflow-input-span-container span").each(function () {
-			text.push($(this).data()[textField]);
-		});
-		return text.join(",");
-	}
+    function getText(target) {
+        var opts = getOptions(target);
+        var textField = opts.textField;
+        var text = [];
+        $(target).find(".ccflow-input-span-container span").each(function () {
+            text.push($(this).data()[textField]);
+        });
+        return text.join(",");
+    }
 
-	function getValue(target) {
-		var opts = getOptions(target);
-		var valueField = opts.valueField;
-		var text = [];
-		$(target).find(".ccflow-input-span-container span").each(function () {
-			text.push($(this).data()[valueField]);
-		});
-		return text.join(",");
-	}
+    function getValue(target) {
+        var opts = getOptions(target);
+        var valueField = opts.valueField;
+        var text = [];
+        $(target).find(".ccflow-input-span-container span").each(function () {
+            text.push($(this).data()[valueField]);
+        });
+        return text.join(",");
+    }
 
-	function getOptions(target) {
-		return $.data(target, "mselector").options;
-	}
+    function getOptions(target) {
+        return $.data(target, "mselector").options;
+    }
 
-	var empty = "__empty__";
+    var empty = "__empty__";
 
-	function requestUrl(url, valueField, textField, key) {
-		var datas = [];
-		return datas;
-		if (url && $.trim(url) != "") {
-			//var _url = url.replace(/@Key/g, key).replace(/~/g, "'");
-			$.ajax({
+    function requestUrl(url, valueField, textField, key) {
+        var datas = [];
+        return datas;
+        if (url && $.trim(url) != "") {
+            //var _url = url.replace(/@Key/g, key).replace(/~/g, "'");
+            $.ajax({
                 type: 'post',
                 async: false,
                 url: url + "&t=" + new Date().getTime(),
@@ -92,295 +92,299 @@
                         alert(data);
                         return;
                     }
-					var ja = JSON.parse(data);
+                    var ja = JSON.parse(data);
                     if ($.isArray(ja)) {
-						$.each(ja, function (i, o) {
-							var option = {};
-							option[valueField] = o[valueField];
-							option[textField] = o[textField];
-							datas.push(option);
-						});
-					}
+                        $.each(ja, function (i, o) {
+                            var option = {};
+                            option[valueField] = o[valueField];
+                            option[textField] = o[textField];
+                            datas.push(option);
+                        });
+                    }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
                 }
-			});
-		}
-		return datas;
-	}
+            });
+        }
+        return datas;
+    }
 
-	function executeSql(sql, valueField, textField, key) {
-		var datas = [];
-		if (sql && $.trim(key) != "") {
-			var _sql = sql.replace(/@Key/g, key).replace(/~/g, "'");
-			var dt = DBAccess.RunSQLReturnTable(_sql);
-			if ($.isArray(dt)) {
-				$.each(dt, function (i, o) {
-					var option = {};
-					option[valueField] = o[valueField];
-					option[textField] = o[textField];
-					datas.push(option);
-				});
-			}
-			/*
-			if (values) {
-				var machesData = [];
-				$.each(values.split(","), function (i, o) {
-					$.each(datas, function (index, object) {
-						if (o == object[valueField]) {
-							var option = {};
-							option[valueField] = object[valueField];
-							option[textField] = object[textField];
-							machesData.push(option);
-						}
-					});
-				});
-				datas = machesData;
-			}
-			*/
-		}
-		return datas;
-	}
+    function executeSql(sql, valueField, textField, key) {
+        var datas = [];
+        if (sql && $.trim(key) != "") {
+            var _sql = sql.replace(/@Key/g, key).replace(/~/g, "'");
+            var dt = DBAccess.RunSQLReturnTable(_sql);
+            if ($.isArray(dt)) {
+                $.each(dt, function (i, o) {
+                    var option = {};
+                    option[valueField] = o[valueField];
+                    option[textField] = o[textField];
+                    datas.push(option);
+                });
+            }
+            /*
+            if (values) {
+            var machesData = [];
+            $.each(values.split(","), function (i, o) {
+            $.each(datas, function (index, object) {
+            if (o == object[valueField]) {
+            var option = {};
+            option[valueField] = object[valueField];
+            option[textField] = object[textField];
+            machesData.push(option);
+            }
+            });
+            });
+            datas = machesData;
+            }
+            */
+        }
+        return datas;
+    }
 
-	function contains(target, data, valueField) {
-		var flag = false;
-		$(target).find(".ccflow-input-span-container span").each(function () {
-			if (data[valueField] == $(this).data()[valueField]) {
-				flag = true;
-				return;
-			}
-		});
-		return flag;
-	}
+    function contains(target, data, valueField) {
+        var flag = false;
+        $(target).find(".ccflow-input-span-container span").each(function () {
+            if (data[valueField] == $(this).data()[valueField]) {
+                flag = true;
+                return;
+            }
+        });
+        return flag;
+    }
 
-	function create(target) {
-		var opts = getOptions(target);
-		var html = "";
-		html += '<div class="col-xs-10 main-container">';
-		html += 	'<label>' + opts.label + '</label>';
-		html += 	'<div class="ccflow-input-span-container">';
-		html += 		'<input type="text" class="ccflow-search" value="" placeholder="' + opts.tip + '">';
-		html += 	'</div>';
-		html += 	'<div class="ccflow-block">';
-		html += 		'<ul class="ccflow-ul">';
-		html += 		'</ul>';
-		html += 	'</div>';
-		html += '</div>';
-		$(target).html(html);
+    function create(target) {
+        var opts = getOptions(target);
+        var html = "";
+        html += '<div class="col-xs-10 main-container">';
+        html += '<label>' + opts.label + '</label>';
+        html += '<div class="ccflow-input-span-container">';
+        html += '<input type="text" class="ccflow-search" value="" placeholder="' + opts.tip + '">';
+        html += '</div>';
+        html += '<div class="ccflow-block">';
+        html += '<ul class="ccflow-ul">';
+        html += '</ul>';
+        html += '</div>';
+        html += '</div>';
+        $(target).html(html);
 
-		var valueField = opts.valueField;
-		var textField = opts.textField;
-		var emptyOption = {};
-		emptyOption[valueField] = empty;
-		emptyOption[textField] = "无匹配项";
+        var valueField = opts.valueField;
+        var textField = opts.textField;
+        var emptyOption = {};
+        emptyOption[valueField] = empty;
+        emptyOption[textField] = "无匹配项";
 
-		var search = $(target).find(".ccflow-search");
-		var container = $(target).find(".ccflow-input-span-container");
-		var block = $(target).find(".ccflow-block");
-		var ul = $(target).find(".ccflow-ul");
+        var search = $(target).find(".ccflow-search");
+        var container = $(target).find(".ccflow-input-span-container");
+        var block = $(target).find(".ccflow-block");
+        var ul = $(target).find(".ccflow-ul");
 
-		search.focus(function (){
-			animteDown();
-		});
+        search.focus(function () {
+            animteDown();
+        });
 
-		search.blur(function () {
-			setTimeout(function () {
-				animateUp(container, block);
-			}, 200);
-		});
+        search.blur(function () {
+            setTimeout(function () {
+                animateUp(container, block);
+            }, 200);
+        });
 
-		function addDictionary(datas, callback) {
-			for (var i = 0; i < datas.length; i++) {
-				var data = datas[i];
-				var li = $("<li></li>");
-				li.text(data[textField]);
-				li.data(datas[i]);
-				ul.append(li);
-			}
-			callback(data, valueField);
-		}
+        function addDictionary(datas, callback) {
+            for (var i = 0; i < datas.length; i++) {
+                var data = datas[i];
+                var li = $("<li></li>");
+                li.text(data[textField]);
+                li.data(datas[i]);
+                ul.append(li);
+            }
+            callback(data, valueField);
+        }
 
-		function updateDictionary(datas, callback) {
-			ul.empty();
-			addDictionary(datas, callback);
-		}
+        function updateDictionary(datas, callback) {
+            ul.empty();
+            addDictionary(datas, callback);
+        }
 
-		function animteDown() {
-			block.slideDown("fast").css({
-				"border" : "1px solid #96C8DA",
-				"border-top" : "0px",
-				"box-shadow" : "0 2px 3px 0 rgba(34,36,38,.15)"
-			});
-			container.css({
-				"border" : "1px solid #96C8DA",
-				"border-bottom" : "0px",
-				"box-shadow" : "0 2px 3px 0 rgba(34,36,38,.15)"
-			});
-		}
+        function animteDown() {
+            block.slideDown("fast").css({
+                "border": "1px solid #96C8DA",
+                "border-top": "0px",
+                "box-shadow": "0 2px 3px 0 rgba(34,36,38,.15)"
+            });
+            container.css({
+                "border": "1px solid #96C8DA",
+                "border-bottom": "0px",
+                "box-shadow": "0 2px 3px 0 rgba(34,36,38,.15)"
+            });
+        }
 
-		search.keyup(function (e) {
-			var text = search.val();
-			var datas = [];
-			if ($.isArray(opts.data) && opts.data.length > 0) {
-				datas = opts.data;
-			} else if ($.trim(opts.sql) != "") {
-				datas = executeSql(opts.sql, valueField, textField, text);
-			} else if ($.trim(opts.url) != "") {
-				datas = requestUrl(opts.url, valueField, textField, text);
-			}
-			if (opts.filter) {
-				datas = $.grep(datas, function (o) {
-					return o[textField].indexOf(text) != -1;
-				});
-				if (datas.length === 0) {
-					datas.push(emptyOption);
-				}
-			}
-			updateDictionary(datas, addListener);
-		});
+        search.keyup(function (e) {
+            var text = search.val();
+            var datas = [];
+            var src = opts.dbSrc;
+            
+            //增加数据源的访问.
+            src = src.replace(/@Key/g, text).replace(/~/g, "'");
+            var dt = DBAccess.RunDBSrc(src);
 
-		function addListener() {
-			ul.delegate("li", "click", function () {
-				var data = $(this).data();
-				if (!contains(target, data, valueField) && data[valueField] != empty) {
-					var tag = $('<span class="ccflow-tag ccflow-label ccflow-label-primary"></span>');
-					tag.data(data);
-					tag.html($(this).text() + '&nbsp;<i class="fa fa-times" data-role="remove"></i>');
-					search.before(tag);
-					onSelect(target, data);
-					tag.delegate("i", "click", function () {
-						var record = $(this).parent().data();
-						$(this).parent().remove();
-						opts.onUnselect.call("", record);
-					});
-				}
-				search.val("");
-				animateUp();
-			});
-		}
+            if ($.isArray(dt)) {
+                $.each(dt, function (i, o) {
+                    var option = {};
+                    option[valueField] = o[valueField];
+                    option[textField] = o[textField];
+                    datas.push(option);
+                });
+            }
 
-		function animateUp() {
-			block.slideUp("fast", function () {
-				container.css({
-					"border" : "1px solid #ccc"
-				});
-			});
-		}
-	}
+            if (opts.filter) {
+                datas = $.grep(datas, function (o) {
+                    return o[textField].indexOf(text) != -1;
+                });
+                if (datas.length === 0) {
+                    datas.push(emptyOption);
+                }
+            }
+            updateDictionary(datas, addListener);
+        });
 
-	function resize(target) {
-		var c = $(target).find(".ccflow-input-span-container");
-		//
-		var width = c.width();
-		//
-		var pl = c.css("padding-left").match(/[0-9]+/);
-		if ($.isArray(pl) && pl.length > 0) {
-			width += 2 * parseInt(pl[0]);
-		} else {
-			width += 8;
-		}
-		//
-		var bl = c.css("border-left").match(/[0-9]+/);
-		if ($.isArray(bl) && bl.length > 0) {
-			width += 2 * parseInt(bl[0]);
-		} else {
-			width += 2;
-		}
-		//
-		$(target).find(".ccflow-block").css({
-			//"width" : c.width() + 2 * parseInt(c.css("padding-left").match(/[0-9]+/)[0]) + 2 * parseInt(c.css("border-left").match(/[0-9]+/)[0])
-			"width" : width
-		});
-	}
+        function addListener() {
+            ul.delegate("li", "click", function () {
+                var data = $(this).data();
+                if (!contains(target, data, valueField) && data[valueField] != empty) {
+                    var tag = $('<span class="ccflow-tag ccflow-label ccflow-label-primary"></span>');
+                    tag.data(data);
+                    tag.html($(this).text() + '&nbsp;<i class="fa fa-times" data-role="remove"></i>');
+                    search.before(tag);
+                    onSelect(target, data);
+                    tag.delegate("i", "click", function () {
+                        var record = $(this).parent().data();
+                        $(this).parent().remove();
+                        opts.onUnselect.call("", record);
+                    });
+                }
+                search.val("");
+                animateUp();
+            });
+        }
 
-	function setSize(target) {
-		var opts = getOptions(target);
-		var t = $(target);
-		if (opts.fit == true) {
-			var p = t.parent();
-			opts.width = p.width();
-		}
-		var header = t.find('.main-container');
-		t._outerWidth(opts.width);
-		resize(target);
-		$(window).bind("resize", function () {
-			resize(target);
-		});
-	}
+        function animateUp() {
+            block.slideUp("fast", function () {
+                container.css({
+                    "border": "1px solid #ccc"
+                });
+            });
+        }
+    }
 
-	$.fn.mselector = function (options, params) {
-		if (typeof options == 'string') {
-			return $.fn.mselector.methods[options](this, params);
-		}
-		options = options || {};
-		return this.each(function () {
-			var state = $.data(this, "mselector");
-			if (state) {
-				$.extend(state.options, options);
-			} else {
-				state = $.data(this, 'mselector', {
-					options : $.extend({}, $.fn.mselector.defaults, $.fn.mselector.parseOptions(this), options)
-				});
-				create(this);
-			}
-			setSize(this);
-		});
-	};
+    function resize(target) {
+        var c = $(target).find(".ccflow-input-span-container");
+        //
+        var width = c.width();
+        //
+        var pl = c.css("padding-left").match(/[0-9]+/);
+        if ($.isArray(pl) && pl.length > 0) {
+            width += 2 * parseInt(pl[0]);
+        } else {
+            width += 8;
+        }
+        //
+        var bl = c.css("border-left").match(/[0-9]+/);
+        if ($.isArray(bl) && bl.length > 0) {
+            width += 2 * parseInt(bl[0]);
+        } else {
+            width += 2;
+        }
+        //
+        $(target).find(".ccflow-block").css({
+            //"width" : c.width() + 2 * parseInt(c.css("padding-left").match(/[0-9]+/)[0]) + 2 * parseInt(c.css("border-left").match(/[0-9]+/)[0])
+            "width": width
+        });
+    }
 
-	$.fn.mselector.methods = {
-		setValues : function (jq, values) {
-			return jq.each(function(){
-				setValues(this, values);
-			});
-		},
-		getValue : function (jq) {
-			return getValue(jq[0]);
-		},
-		getText : function (jq) {
-			return getText(jq[0]);
-		},
-		clear : function (jq) {
-			return jq.each(function () {
-				clear(this);
-			});
-		},
-		loadData : function (jq, values) {
-			return jq.each(function(){
-				loadData(this, values);
-			});
-		}
-	};
+    function setSize(target) {
+        var opts = getOptions(target);
+        var t = $(target);
+        if (opts.fit == true) {
+            var p = t.parent();
+            opts.width = p.width();
+        }
+        var header = t.find('.main-container');
+        t._outerWidth(opts.width);
+        resize(target);
+        $(window).bind("resize", function () {
+            resize(target);
+        });
+    }
 
-	$.fn.mselector.parseOptions = function (target) {
-		var t = $(target);
-		return $.extend({}, $.parser.parseOptions(target, [ "width", "data", {
-			"fit" : "boolean",
-			"valueField" : "string",
-			"textField" : "string",
-			"label" : "string",
-			"filter" : "boolean",
-			"tip" : "string",
-			"sql" : "string",
-			"url" : "string"
-		}]));
-	};
+    $.fn.mselector = function (options, params) {
+        if (typeof options == 'string') {
+            return $.fn.mselector.methods[options](this, params);
+        }
+        options = options || {};
+        return this.each(function () {
+            var state = $.data(this, "mselector");
+            if (state) {
+                $.extend(state.options, options);
+            } else {
+                state = $.data(this, 'mselector', {
+                    options: $.extend({}, $.fn.mselector.defaults, $.fn.mselector.parseOptions(this), options)
+                });
+                create(this);
+            }
+            setSize(this);
+        });
+    };
 
-	$.fn.mselector.defaults = {
-		"width" : "100%",
-		"fit" : true,
-		"valueField" : "No",
-		"textField" : "Name",
-		"label" : "",
-		"filter" : true,
-		"tip" : "请输入关键字",
-		"data" : [],	// [{ "No" : "2102", "Name" : "大连" }, { "No" : "3701", "Name" : "济南" }]
-		"sql" : "",	// "SELECT No, Name FROM CN_CITY WHERE Name Like '%@Key%'"
-		"url" : "",
-		"onSelect" : function (record) {
-		},
-		"onUnselect" : function (record) {
-		}
-	};
+    $.fn.mselector.methods = {
+        setValues: function (jq, values) {
+            return jq.each(function () {
+                setValues(this, values);
+            });
+        },
+        getValue: function (jq) {
+            return getValue(jq[0]);
+        },
+        getText: function (jq) {
+            return getText(jq[0]);
+        },
+        clear: function (jq) {
+            return jq.each(function () {
+                clear(this);
+            });
+        },
+        loadData: function (jq, values) {
+            return jq.each(function () {
+                loadData(this, values);
+            });
+        }
+    };
+
+    $.fn.mselector.parseOptions = function (target) {
+        var t = $(target);
+        return $.extend({}, $.parser.parseOptions(target, ["width", "data", {
+            "fit": "boolean",
+            "valueField": "string",
+            "textField": "string",
+            "label": "string",
+            "filter": "boolean",
+            "dbSrc": "string"
+        }]));
+    };
+
+    $.fn.mselector.defaults = {
+        "width": "100%",
+        "fit": true,
+        "valueField": "No",
+        "textField": "Name",
+        "label": "",
+        "filter": true,
+        "tip": "请输入关键字",
+        "dbSrc": "",
+        "onSelect": function (record) {
+        },
+        "onUnselect": function (record) {
+        }
+    };
 
 })(jQuery);

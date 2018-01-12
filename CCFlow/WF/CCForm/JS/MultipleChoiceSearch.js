@@ -1,6 +1,9 @@
 ﻿/*大范围，查询模式的多选. */
 function MultipleChoiceSearch(mapExt) {
 
+    mapExt = new Entity("BP.Sys.MapExt", mapExt);
+
+
 	var tb = $("#TB_" + mapExt.AttrOfOper);
 	var width = tb.width();
 	var height = tb.height();
@@ -12,35 +15,18 @@ function MultipleChoiceSearch(mapExt) {
 	container.width(width);
 	container.height(height);
 
-	var tip = undefined;
-	try {
-		tip = GetAtPara(mapExt.AtPara, "SearchTip");
-	} catch (e) {
-	}
-	
-	var _sql;
-	var _url;
-	var _json;
-	switch (mapExt.DBType) {
-		case 0:
-			_sql = mapExt.Doc;
-			break;
-		case 1:
-			_url = mapExt.Doc;
-			break;
-		case 2:
-			_json = mapExt.Doc;
-	}
+	var tip = mapExt.GetPara("SearchTip"); //   undefined;
 
-    (function (FK_MapData, AttrOfOper, oid, tip, _sql, _url, _json) {
+	var dbSrc = mapExt.Doc;
+     
+
+    (function (FK_MapData, AttrOfOper, oid, tip, dbSrc) {
         var mselector = $("#" + AttrOfOper + "_mselector");
         mselector.mselector({
             "fit": true,
             "filter": false,
 			"tip" : tip,
-            "sql": _sql,
-			"url" : _url,
-			"data" : _json,
+			"dbSrc": dbSrc,
             "onSelect": function (record) {
                 $("#TB_" + AttrOfOper).val(mselector.mselector("getText"));
 				msSaveVal(FK_MapData, AttrOfOper, oid, record.No, record.Name);
@@ -62,7 +48,7 @@ function MultipleChoiceSearch(mapExt) {
 		});
 		mselector.mselector("loadData", initJsonData);
 		//
-    })(mapExt.FK_MapData, mapExt.AttrOfOper, (pageData.WorkID || pageData.OID || ""), tip, _sql, _url, _json);
+    })(mapExt.FK_MapData, mapExt.AttrOfOper, (pageData.WorkID || pageData.OID || ""), tip, dbSrc);
 }
 
 //删除数据.

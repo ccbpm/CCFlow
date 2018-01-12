@@ -94,26 +94,30 @@
 </select>  </td>
  </tr>
 
- 
 
 <tr>
-<td>搜索提示</td>
-<td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> 
-<br><font color="gray" >显示在搜索文本框的背景文字,事例：输入城市名称,比如:beijing,bj,进行搜索.</font></td>
+<td>
+
+<a href="javascript:ShowHidden('SearchTip')">搜索提示</a>
+ <div id="SearchTip" style="color:Gray; display:none">
+ <ul>
+ <li>显示在搜索文本框的背景文字.</li>
+ <li>输入城市名称,比如:beijing,bj,进行搜索.</li>
+ <li>人员的编号,名称,拼音,进行模糊搜索.</li>
+ </ul>
+ </div>
+
+</td>
+<td><input type="text" id="TBPara_SearchTip" name="TBPara_SearchTip" style="width:90%;" /> </td>
 </tr>
 
-
  <tr>
- <th colspan=2>数据源 </th>
+ <th colspan="2">数据源</th>
  </tr>
 
  <tr>
  <td colspan=2>
-<textarea  rows="3" id="TB_Doc" name="TB_Doc"   ></textarea>
-比如: SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%'
-<br />
-SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'
-
+<textarea   rows="3" id="TB_Doc" name="TB_Doc"   ></textarea>
 </td>
 </tr>
 </table>
@@ -125,9 +129,14 @@ SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'
 <a href="javascript:ShowHidden('help')">帮助:</a>
  <div id="help" style="color:Gray; display:none">
  <ul>
- <li>数据源类型支持SQL模式 </li>
- <li>SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%' </li>
- <li>SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%' </li>
+<li>SQL格式为:</li>
+<li>SELECT No,Name FROM Port_Emp WHERE PinYin LIKE '@Key%' OR No LIKE '%@Key%' OR Name LIKE '%@Key%' </li>
+<li>SELECT No,Name FROM CN_City WHERE PinYin LIKE '%@Key%' OR Name LIKE '%@Key%'</li>
+
+<li>URL格式为:</li>
+<li>/DataUser/Handler.ashx?xxx=sss </li>
+<li>方法的格式为:</li>
+ <li>MyFunName</li>
  </ul>
  </div>
 

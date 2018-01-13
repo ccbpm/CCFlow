@@ -30,16 +30,24 @@ namespace BP.WF.HttpHandler
         #region 实体的操作.
         public string Entity_Init()
         {
-            string enName = this.EnName;
-            if (DataType.IsNullOrEmpty(enName) == true)
-                return "err@类名没有传递过来";
-
             //初始化entity.
-            Entity en = ClassFactory.GetEn(this.EnName);
+            string enName = this.EnName;
+            Entity en=null;
+            if (DataType.IsNullOrEmpty(enName) == true)
+            {
+                if (DataType.IsNullOrEmpty(this.EnsName) == true)
+                    return "err@类名没有传递过来";
+
+                Entities ens = ClassFactory.GetEns(this.EnsName);
+                en = ens.GetNewEntity;
+            }
+            else
+            {
+                en = ClassFactory.GetEn(this.EnName);
+            }
 
             //获得描述.
             Map map = en.EnMap;
-             
             string pkVal = this.PKVal;
             if (DataType.IsNullOrEmpty(pkVal) == false)
             {

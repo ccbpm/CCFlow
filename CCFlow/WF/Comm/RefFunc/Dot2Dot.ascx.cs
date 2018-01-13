@@ -331,7 +331,6 @@ namespace CCFlow.WF.Comm.RefFunc
             this.ToolBar1.AddSpace(2);
             this.ToolBar1.AddLinkBtn("Btn_Search", "检索");
             this.ToolBar1.GetLinkBtnByID("Btn_Search").Click += new EventHandler(BPToolBar1_ButtonClick);
-
             #endregion
 
             this.SetDataV2();

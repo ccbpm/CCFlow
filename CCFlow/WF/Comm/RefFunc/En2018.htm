@@ -49,17 +49,18 @@
 
             var enName = GetQueryString("EnName");
             var pkVal = GetPKVal();
-
             httpHandler.AddPara("EnName", enName);
 
             if (pkVal != null) {
                 httpHandler.AddPara("PKVal", pkVal);
             }
 
+           //httpHandler.AddPara("EnName", "BP.WF.Template.NodeExt");
+           //httpHandler.AddPara("NodeID", "102");
+
             var data = httpHandler.DoMethodReturnString("Entity_Init");
             if (data.indexOf('err@') == 0) {
-                alert(data);
-                window.close();
+                $("#CCForm").html(data);
                 return;
             }
 
@@ -223,14 +224,10 @@
 
             frmData = frmData;
             var Sys_GroupFields = frmData.Sys_GroupField;
-
-            var node = frmData.WF_Node;
-            if (node != undefined)
-                node = node[0];
+            var mapAtrrs = frmData.Sys_MapAttr;
 
             var tableWidth = 800; //  w - 40;
             var html = "<table style='width:" + tableWidth + "px;' >";
-            var frmName = mapData.Name;
 
             //遍历循环生成 listview
             for (var i = 0; i < Sys_GroupFields.length; i++) {
@@ -246,21 +243,38 @@
                     continue;
                 }
             }
-
             html += "</table>";
 
             //加入隐藏控件.
-            for (var attr in frmData.Sys_MapAttr) {
-                if (attr.UIVisable == 0) {
+            for (var i = 0; i < mapAtrrs.length; i++) {
+                var attr = mapAtrrs[i];
+                if (attr.UIVisible == 0) {
                     var defval = ConvertDefVal(attr);
                     html += "<input type='hidden' id='TB_" + attr.KeyOfEn + "' name='TB_" + attr.KeyOfEn + "' value='" + defval + "' />";
                 }
             }
 
+
             $('#CCForm').html("").append(html);
+
+//            //设置为只读的字段.
+//            for (var i = 0; i < mapAtrrs.length; i++) {
+
+//                var mapAttr = mapAtrrs[i];
+//                //设置文本框只读.
+//                if (mapAttr.UIIsEnable == false || mapAttr.UIIsEnable == 1 || 1 == 1) {
+
+//                    //   alert(mapAttr.KeyOfEn);
+//                    // alert(mapAttr.KeyOfEn);
+
+//                    $('#TB_' + mapAttr.KeyOfEn).attr('disabled', "disabled");
+//                    $('#CB_' + mapAttr.KeyOfEn).attr('disabled', "disabled");
+//                    $('#DDL_' + mapAttr.KeyOfEn).attr('disabled', "disabled");
+//                }
+//            }
         }
 
-//解析表单字段 MapAttr.
+        //解析表单字段 MapAttr.
         function InitMapAttr(Sys_MapAttr, mainData, groupID) {
 
             var html = "";
@@ -280,7 +294,6 @@
                         rm = dtM[iRm];
                     }
                 }
-
 
                 var name = null;
                 if (attr.UIRefKeyText == "" || attr == null)
@@ -304,7 +317,7 @@
                     isDropTR = true;
                     html += "<tr>";
                     html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
-                    html += "<td ColSpan=3>";
+                    html += "<td colspan=3>";
                     html += InitMapAttrOfCtrl(attr);
                     html += "</td>";
                     html += "</tr>";
@@ -312,7 +325,7 @@
                     if (rm != null) {
                         html += "<tr>";
                         html += "<td class='FDesc' style='width:120px;'></td>";
-                        html += "<td ColSpan=3>";
+                        html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
                         html += "</tr>";
@@ -325,7 +338,7 @@
                 if (attr.ColSpan == 4) {
                     isDropTR = true;
                     html += "<tr>";
-                    html += "<td ColSpan='4'>" + lab + "</br>";
+                    html += "<td colspan='4'>" + lab + "</br>";
                     html += InitMapAttrOfCtrl(attr);
                     html += "</td>";
                     html += "</tr>";
@@ -334,13 +347,12 @@
                     if (rm != null) {
                         html += "<tr>";
                         html += "<td class='FDesc' style='width:120px;'></td>";
-                        html += "<td ColSpan=3>";
+                        html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
                         html += "</tr>";
                         isDropTR = true;
                     }
-
                     continue;
                 }
 
@@ -353,15 +365,12 @@
                     isDropTR = !isDropTR;
 
                     if (rm != null) {
-                        html += "<tr>";
-                        html += "<td class='FDesc' style='width:120px;'></td>";
-                        html += "<td ColSpan=3>";
+                        html += "<td colspan=2>";
                         html += GenerRM(rm);
                         html += "</td>";
                         html += "</tr>";
                         isDropTR = true;
                     }
-
                     continue;
                 }
 
@@ -377,7 +386,7 @@
                     if (rm != null) {
                         html += "<tr>";
                         html += "<td class='FDesc' style='width:120px;'></td>";
-                        html += "<td ColSpan=3>";
+                        html += "<td colspan=3>";
                         html += GenerRM(rm);
                         html += "</td>";
                         html += "</tr>";
@@ -392,19 +401,24 @@
 
         function GenerRM(rm) {
 
-            var html = "<img src='../" + rm.Icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
+            var icon = rm.Icon;
+            if (rm.Icon == "" || rm.Icon == null) {
+                icon = "../../Img/dot.png";
+            }
+
+            if (rm.Icon !=null && rm.Icon.indexOf('http') != 0) {
+                icon = "../" + rm.Icon;
+            }
+            var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
             return html;
         }
 
         function InitMapAttrOfCtrl(mapAttr) {
 
             var str = '';
-
             var defValue = ""; //  ConvertDefVal(mapAttr);
-
             var isInOneRow = false; //是否占一整行
             var islabelIsInEle = false; //
-
             var eleHtml = '';
 
             //外部数据源类型.
@@ -525,7 +539,10 @@
 
             if ((mapAttr.MyDataType == 2)) { //AppInt
                 var enableAttr = '';
-                if (mapAttr.UIIsEnable != 1) {
+
+                //alert(mapAttr.KeyOfEn + " - " + mapAttr.UIIsEnable);
+
+                if (mapAttr.UIIsEnable == 0 || mapAttr.KeyOfEn=="NodeID" ) {
                     enableAttr = "disabled='disabled'";
                 }
 
@@ -618,22 +635,39 @@
             return operations;
         }
 
+        //新建.
         function New() {
             var enName = GetQueryString("EnName");
-            var url = "?EnName=" + GetQueryString("EnName");
+            var url = "?EnName=" + GetQueryString("EnName") + "&t=" + Math.random();
             window.location.href = url; //刷新.
         }
 
+        //更新.
         function Update() {
+
             var enName = GetQueryString("EnName");
             var en = new Entity(enName);
-            //  en.CopyURL();
+            var pkval = GetPKVal();
+            //  alert(pkval);
+            if (pkval == null) {
+                en.CopyForm();
+                var info = en.Insert();
+                if (info != 1) {
+                    alert('插入错误:' + info);
+                    return;
+                }
+            } else {
+                en.pkval = pkval;
+              // en.RetrieveFromDBSources();
+                en.CopyForm();
+                en.pkval = pkval;
 
-            en.pkval = GetPKVal();
-
-            en.RetrieveFromDBSources();
-            en.CopyForm();
-            en.Save();
+                var i = en.Update();
+                if (info != 1) {
+                  //  alert('更新错误:' + info);
+                    //return;
+                }
+            }
 
             var url = "?EnName=" + GetQueryString("EnName") + "&PKVal=" + en.pkval;
             window.location.href = url; //刷新.

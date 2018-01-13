@@ -271,8 +271,10 @@
         }
 
         function OpenEn(pk) {
-            var url = "En.htm?EnsName=" + GetQueryString("EnsName") + "&PK=" + pk;
-          //  var url = "En2018.htm?EnsName=" + GetQueryString("EnsName") + "&PK=" + pk;
+
+           // var url = "En.htm?EnsName=" + GetQueryString("EnsName") + "&PK=" + pk;
+
+            var url = "./RefFunc/En2018.htm?EnsName=" + GetQueryString("EnsName") + "&PKVal=" + pk;
 
             OpenEasyUiDialog(url, "eudlgframe", this.document.title+' : 详细', 1000, 550, "icon-property", true, null, null, null, function () {
                 window.location.href = window.location.href;

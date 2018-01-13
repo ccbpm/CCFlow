@@ -62,7 +62,6 @@
         var condtionFieldsArry = [];
         //页面启动函数.
         $(function () {
-            SetTableSize();
             //重置页面内容
             ResetHtml();
             //实体参数.
@@ -105,22 +104,30 @@
             });
             //输入关键字查询数据
             InputKeyWordData();
+            //设置表格内容高度
+            SetTableSize();
         });
 
         //设置表格高度
         function SetTableSize() {
             var height = $(window).innerHeight();
-            height = height - 150;
+            height = height - 100;
             if (condtionsArry && condtionsArry.length > 0) {
-                if (condtionsArry.length > 2) {
+                //展现方式,0平铺、1下拉
+                var selectType = mapExt.GetPara("SelectType");
+                if (selectType == "0") {
+                    height = height - 50;
+                }
+                if (condtionsArry.length >= 3) {
                     var TB_Key = $("#TB_Key");
                     TB_Key.css("width", "260px");
+                    height = height - 40;
                 }
                 if (condtionsArry.length > 6) {
-                    var height = $("#tableContent").height();
-                    height = height - 20;
-                    $("#tableContent").height(height);   
+                    height = height - 40;
                 }
+            } else {
+                $("#groupTr").remove();
             }
             //表格内容高度
             $("#tableContent").height(height);
@@ -170,14 +177,13 @@
             //关键字后面的查询条件
             var noFirstRow = false;
             $.each(condtionsArry, function (i, condtion) {
-                var ibr = i % 4;
                 //第一行条件个数
                 var countRow = 3;
                 //如果不是第一行，条件的个数
                 if (noFirstRow == true) {
-                    countRow = 3;
+                    countRow = 4;
                 }
-                if (ibr == countRow) {
+                if (i !=0 && !(i % countRow)) {
                     searchPanel.append("<br/><br/>");
                     noFirstRow = true;
                 }

@@ -55,9 +55,7 @@ public partial class CCFlow_Comm_UIEnsV10 : BP.Web.WebPage
 
     protected void Page_Load(object sender, EventArgs e)
     {
-
-     //   BP.Sys.GEEntity en = new GEEntity("BP.WF.Flow", "001");
-
+        //BP.Sys.GEEntity en = new GEEntity("BP.WF.Flow", "001");
         this.Page.RegisterClientScriptBlock("s",
         "<link href='./Style/Table" + BP.Web.WebUser.Style + ".css' rel='stylesheet' type='text/css' />");
 

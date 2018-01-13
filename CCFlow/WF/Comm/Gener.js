@@ -1289,6 +1289,14 @@ var Entities = (function () {
 
         loadData: function () {
             var self = this;
+
+            if (self.ensName == null || self.ensName == "" || self.ensName == "") {
+                alert("在初始化实体期间EnsName没有赋值");
+                return;
+            }
+
+
+
             $.ajax({
                 type: 'post',
                 async: false,

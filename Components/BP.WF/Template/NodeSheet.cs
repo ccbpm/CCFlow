@@ -86,7 +86,7 @@ namespace BP.WF.Template
                 map.AddTBString(NodeAttr.Tip, null, "操作提示", true, false, 0, 100, 10, false, "http://ccbpm.mydoc.io/?v=5404&t=18084");
 
                 string str = "";
-               // str += "@0=01.按岗位智能计算";
+                // str += "@0=01.按岗位智能计算";
                 str += "@0=01.按岗位智能计算";
                 str += "@1=02.按节点绑定的部门计算";
                 str += "@2=03.按设置的SQL获取接受人计算";
@@ -105,14 +105,14 @@ namespace BP.WF.Template
                 str += "@15=16.由FEE来决定";
                 str += "@16=17.按绑定部门计算,该部门一人处理标识该工作结束(子线程).";
                 str += "@100=18.按ccflow的BPM模式处理";
-                map.AddDDLSysEnum(NodeAttr.DeliveryWay, 0, "节点访问规则", true, true, NodeAttr.DeliveryWay,str);
+                map.AddDDLSysEnum(NodeAttr.DeliveryWay, 0, "节点访问规则", true, true, NodeAttr.DeliveryWay, str);
                 map.SetHelperUrl(NodeAttr.DeliveryWay, "http://ccbpm.mydoc.io/?v=5404&t=17907");
                 map.AddBoolean(NodeAttr.IsExpSender, true, "本节点接收人不允许包含上一步发送人?", true, true, true, "http://ccbpm.mydoc.io/?v=5404&t=17904");
 
-                map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置内容", 
-                    true, false, 0, 500, 10,true, "http://ccbpm.mydoc.io/?v=5404&t=17907");
+                map.AddTBString(NodeAttr.DeliveryParas, null, "访问规则设置内容",
+                    true, false, 0, 500, 10, true, "http://ccbpm.mydoc.io/?v=5404&t=17907");
 
-                map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它",true, true, NodeAttr.WhoExeIt, "@0=操作员执行@1=机器执行@2=混合执行");
+                map.AddDDLSysEnum(NodeAttr.WhoExeIt, 0, "谁执行它", true, true, NodeAttr.WhoExeIt, "@0=操作员执行@1=机器执行@2=混合执行");
                 map.SetHelperUrl(NodeAttr.WhoExeIt, "http://ccbpm.mydoc.io/?v=5404&t=17913");
 
                 map.AddDDLSysEnum(NodeAttr.TurnToDeal, 0, "发送后转向",
@@ -122,15 +122,15 @@ namespace BP.WF.Template
                 map.AddDDLSysEnum(NodeAttr.ReadReceipts, 0, "已读回执", true, true, NodeAttr.ReadReceipts,
                     "@0=不回执@1=自动回执@2=由上一节点表单字段决定@3=由SDK开发者参数决定");
                 map.SetHelperUrl(NodeAttr.ReadReceipts, "http://ccbpm.mydoc.io/?v=5404&t=17915");
-                
+
 
                 map.AddDDLSysEnum(NodeAttr.CondModel, 0, "方向条件控制规则", true, true, NodeAttr.CondModel,
                  "@0=由连接线条件控制@1=让用户手工选择@2=发送按钮旁下拉框选择");
                 map.SetHelperUrl(NodeAttr.CondModel, "http://ccbpm.mydoc.io/?v=5404&t=17917"); //增加帮助
 
                 // 撤销规则.
-                map.AddDDLSysEnum(NodeAttr.CancelRole,(int)CancelRole.OnlyNextStep, "撤销规则", true, true,
-                    NodeAttr.CancelRole,"@0=上一步可以撤销@1=不能撤销@2=上一步与开始节点可以撤销@3=指定的节点可以撤销");
+                map.AddDDLSysEnum(NodeAttr.CancelRole, (int)CancelRole.OnlyNextStep, "撤销规则", true, true,
+                    NodeAttr.CancelRole, "@0=上一步可以撤销@1=不能撤销@2=上一步与开始节点可以撤销@3=指定的节点可以撤销");
                 map.SetHelperUrl(NodeAttr.CancelRole, "http://ccbpm.mydoc.io/?v=5404&t=17919");
 
                 // 节点工作批处理. edit by peng, 2014-01-24. 
@@ -153,12 +153,13 @@ namespace BP.WF.Template
                 #endregion  基础属性
 
                 #region 对应关系
+
                 // 相关功能。
                 if (BP.WF.Glo.OSModel == OSModel.OneOne)
                 {
-                    map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeStations(), new BP.Port.Stations(),
-                        BP.WF.Template.NodeStationAttr.FK_Node, BP.WF.Template.NodeStationAttr.FK_Station,
-                        DeptAttr.Name, DeptAttr.No, "节点绑定岗位");
+                    map.AttrsOfOneVSM.AddGroupModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                        BP.WF.Template.NodeStationAttr.FK_Node,
+                        BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
 
                     //判断是否为集团使用，集团时打开新页面以树形展示
                     if (BP.WF.Glo.IsUnit == true)
@@ -178,10 +179,12 @@ namespace BP.WF.Template
                 else
                 {
                     //节点岗位.
-                    map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeStations(),
+                    map.AttrsOfOneVSM.AddGroupModel(new BP.WF.Template.NodeStations(),
                         new BP.GPM.Stations(),
                       NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
-                      DeptAttr.Name, DeptAttr.No, "节点绑定岗位");
+                       "节点绑定岗位", BP.GPM.StationAttr.FK_StationType);
+
+
                     //判断是否为集团使用，集团时打开新页面以树形展示
                     if (BP.WF.Glo.IsUnit == true)
                     {
@@ -199,7 +202,6 @@ namespace BP.WF.Template
             DeptAttr.No, "节点绑定部门", Dot2DotModel.TreeDept);
                     }
                 }
-
 
                 map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeEmps(),
                     new BP.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,

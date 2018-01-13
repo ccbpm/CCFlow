@@ -38,6 +38,10 @@ namespace BP.En
         /// </summary>
         public EntitiesSimpleTree EnsTree = null;
         /// <summary>
+        /// 默认的分组key.
+        /// </summary>
+        public string DefaultGroupAttrKey = null;
+        /// <summary>
         /// 关联的树字段
         /// </summary>
         public string RefTreeAttr =null; 
@@ -266,6 +270,31 @@ namespace BP.En
 			 
 			this.Add(en);				
 		}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_ensOfMM"></param>
+        /// <param name="_ensOfM"></param>
+        /// <param name="AttrOfOneInMM"></param>
+        /// <param name="AttrOfMInMM"></param>
+        /// <param name="desc">标签或者描述</param>
+        /// <param name="AttrOfMText">显示的标签,一般为 Name</param>
+        /// <param name="AttrOfMValue">存储的值字段,一般为 No</param>
+        /// <param name="defaultGroupKey">默认的分组外键或者枚举,如果为空就不分组.</param>
+        public void AddGroupModel(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
+            string desc, string defaultGroupKey = null, string AttrOfMText = "Name", string AttrOfMValue = "No")
+        {
+            //属性.
+            AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM, _ensOfM, AttrOfOneInMM, AttrOfMInMM, AttrOfMText, AttrOfMValue, desc);
+
+            //工作模式.
+            en.Dot2DotModel = Dot2DotModel.Default; //分组模式.
+
+            //默认的分组字段，可以是一个类名或者枚举.
+            en.DefaultGroupAttrKey = defaultGroupKey;
+
+            this.Add(en);
+        }
 		 
 	}
 }

@@ -162,7 +162,17 @@ namespace BP.WF.HttpHandler
                             else if (vsM.Dot2DotModel == Dot2DotModel.TreeDeptEmp)
                                 url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
                             else
-                                url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+                            {
+                                // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+                                url = "Dot2Dot.htm?EnName=" + this.EnName + "&EnsOfMM=" + vsM.EnsOfMM.ToString();
+                                url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
+                                url += "&AttrOfMInMM=" + vsM.AttrOfMInMM; //dot2dot存储表那个与实体表.  比如:FK_Station.
+                                url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体分组依据.  比如:FK_Station.
+                                url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  比如:FK_Station.
+
+                                //+"&RefAttrEnsName=" + vsM.EnsOfM.ToString();
+                                //url += "&RefAttrKey=" + vsM.AttrOfOneInMM + "&RefAttrEnsName=" + vsM.EnsOfM.ToString();
+                            }
 
                             dr["URL"] = url + "&" + en.PK + "=" + en.PKVal + "&PKVal=" + en.PKVal;
                             dr["Icon"] = "../Img/M2M.png"; 
@@ -368,5 +378,57 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion 实体的操作.
+
+        /// <summary>
+        /// 获得分组的数据源
+        /// </summary>
+        /// <returns></returns>
+        public string Dot2Dot_GenerGroupEntitis()
+        {
+            string key = this.GetRequestVal("DefaultGroupAttrKey");
+
+            //实体集合.
+            string ensName = this.GetRequestVal("EnsOfM");
+            Entities ens = ClassFactory.GetEns(ensName);
+            Entity en = ens.GetNewEntity;
+
+            Attrs attrs = en.EnMap.Attrs;
+            Attr attr = attrs.GetAttrByKey(key);
+
+            if (attr == null)
+                return "err@设置的分组外键错误[" + key + "],不存在[" + ensName + "]或者已经被删除.";
+
+            if (attr.MyFieldType == FieldType.Normal)
+                return "err@设置的默认分组["+key+"]不能是普通字段.";
+
+            if (attr.MyFieldType == FieldType.FK)
+            {
+                Entities ensFK = attr.HisFKEns;
+                ensFK.Clear();
+                ensFK.RetrieveAll();
+                return ensFK.ToJson();
+            }
+
+            if (attr.MyFieldType == FieldType.Enum)
+            {
+                /* 如果是枚举 */
+                SysEnums ses = new SysEnums();
+                ses.Retrieve(SysEnumAttr.IntKey, attr.UIBindKey);
+
+                //ses.ToStringOfSQLModelByKey
+
+                BP.Pub.NYs nys = new Pub.NYs();
+                foreach (SysEnum item in ses)
+                {
+                    BP.Pub.NY ny =new Pub.NY();
+                    ny.No = item.IntKey.ToString();
+                    ny.Name = item.Lab;
+                    nys.AddEntity(ny);
+                }
+                return nys.ToJson();
+            }
+
+            return "err@设置的默认分组[" + key + "]不能是普通字段.";
+        }
     }
 }

@@ -82,8 +82,6 @@
 
             //生成查询条件
             InitQueryParameters();
-            //输入关键字查询数据
-            InputKeyWordData();
             //绑定事件
             $('.menuGroup a').each(function () {
                 var aLabel = $(this);
@@ -105,6 +103,8 @@
             $('#TB_Key').bind('input propertychange', function () {
                 InputKeyWordData();
             });
+            //输入关键字查询数据
+            InputKeyWordData();
         });
 
         //设置表格高度
@@ -122,6 +122,7 @@
                     $("#tableContent").height(height);   
                 }
             }
+            //表格内容高度
             $("#tableContent").height(height);
         }
         
@@ -130,11 +131,6 @@
             var ifcData = null;
             //$Para=Dept#Label=所在班级#ListURL=/DataUser/Handler.ashx?DoType=DtlImpReqAll
             var condtions = mapExt.Tag1;
-            //展现方式,0平铺、1下拉
-            var selectType = mapExt.GetPara("SelectType");
-            if(selectType == "1"){
-                $("#groupTr").remove();
-            }
             if (condtions == "")
                 return;
 
@@ -150,92 +146,28 @@
             condtionFieldsArry.sort(function (a, b) {
                 return b.FieldKey.length - a.FieldKey.length;
             });
-            //平铺取第一个下拉框
-            if (selectType == "0") {
-                $("#groupDiv").html("");
-                $("#HD_GroupField").val();
-                if (ifcData && ifcData.length > 0) {
-                    var data = ifcData[0];
-                    var oKeys = [];
-                    for (var key in data) {
-                        oKeys.push(key);
-                    }
-
-                    if (oKeys.length < 2) {
-                        alert("返回数据格式有问题，列的数量小于2。");
-                        return;
-                    }
-
-                    var noKey = oKeys[0];
-                    var nameKey = oKeys[1];
-
-                    $("#groupDiv").append("<a id='all' class='menuGroupSelected' href='javascript:void(0);'>全部</a>");
-                    $.each(ifcData, function (i, dataObj) {
-                        var no = dataObj[noKey];
-                        var name = dataObj[nameKey];
-                        $("#groupDiv").append("<a id='" + no + "' href='javascript:void(0);'>" + name + "</a>");
-                    });
-                } else {
-                    $("#groupDiv").append("<a id='all' class='menuGroupSelected' href='javascript:void(0);'>全部</a>");
-                }
-
-                $("#groupDiv a").unbind("click").bind("click", function () {
-                    var value = this.id;
-                    $("#HD_GroupValue").val(value);
-                    InputKeyWordData();
-                });
-            }
             //生成查询条件控件
             CreateCondtionCtrls();
-        }
-
-        //添加查询条件到数组
-        function CondtionArryPush(condtion) {
-            if (condtion == "") {
-                return;
-            }
-            var paras = condtion.split("#");
-            if (paras.length != 3) {
-                return;
-            }
-
-            var item = {};
-            var paraKey = "", labelText = "";
-            var ctrType = "Date", ctrValue = "";
-            $.each(paras, function (j, para) {
-                if (para.indexOf("Para=") > -1) {
-                    paraKey = para.replace("Para=", "");
-                }
-                if (para.indexOf("Label=") > -1) {
-                    labelText = para.replace("Label=", "");
-                }
-                if (para.indexOf("ListURL=") > -1) {
-                    ctrValue = para.replace("ListURL=", "");
-                    ctrType = "ListURL";
-                }
-                if (para.indexOf("ListSQL=") > -1) {
-                    ctrValue = para.replace("ListSQL=", "");
-                    ctrType = "ListSQL";
-                }
-                if (para.indexOf("EnumKey=") > -1) {
-                    ctrValue = para.replace("EnumKey=", "");
-                    ctrType = "EnumKey";
-                }
-                if (para.indexOf("DefVal=") > -1) {
-                    ctrValue = para.replace("DefVal=", "");
-                }
-            });
-            item.CtrlType = ctrType;
-            item.FieldKey = paraKey;
-            item.Label = labelText;
-            item.Val = ctrValue;
-            condtionsArry.push(item);
         }
 
         //根据条件数组生成查询控件
         function CreateCondtionCtrls() {
             //生成查询条件控件
             var searchPanel = $("#searchDiv");
+            //展现方式,0平铺、1下拉
+            var selectType = mapExt.GetPara("SelectType");
+            if (selectType == "1") {
+                $("#groupTr").remove();
+            }
+
+            //平铺取第一个下拉框
+            if (selectType == "0") {
+                var groupItems = $.grep(condtionsArry, function (condtion) {
+                    return condtion.CtrlType == "ListURL" || condtion.CtrlType == "ListSQL" || condtion.CtrlType == "EnumKey";
+                });
+                CreateGroupPanel(groupItems);
+            }
+            //关键字后面的查询条件
             var noFirstRow = false;
             $.each(condtionsArry, function (i, condtion) {
                 var ibr = i % 4;
@@ -249,6 +181,13 @@
                     searchPanel.append("<br/><br/>");
                     noFirstRow = true;
                 }
+
+                //排除已创建分组条件
+                var groupField = $("#HD_GroupField").val();
+                if (groupField != "" && condtion.FieldKey == groupField) {
+                    return;
+                }
+
                 var label = $("<label>" + condtion.Label + "</label>");
                 label.addClass("searchpanellabel");
                 searchPanel.append(label);
@@ -311,12 +250,92 @@
             SetTableSize();
         }
 
+        //创建分组面板
+        function CreateGroupPanel(groupItems) {
+            $("#groupDiv").html("");
+            if (groupItems.length == 0) {
+                return;
+            }
+
+            var groupItem = groupItems[0];
+            var dbTyep = groupItem.CtrlType == "ListSQL" ? 0 : 1;
+            var ifcData = DBAccess.RunDBSrc(groupItem.Val, dbTyep);
+            $("#HD_GroupField").val(groupItem.FieldKey);
+            $("#groupDiv").append("<a id='all' class='menuGroupSelected' href='javascript:void(0);'>全部</a>");
+            var hd_GroupValue = $("<input type='hidden' value='' />");
+            hd_GroupValue.attr("id",groupItem.FieldKey);
+            $("#groupDiv").append(hd_GroupValue);
+
+            if (ifcData && ifcData.length > 0) {
+                var oKeys = [];
+                var noKey = "";
+                var nameKey = "";
+                for (var key in ifcData[0]) {
+                    oKeys.push(key);
+                }
+
+                noKey = oKeys[0];
+                nameKey = oKeys[1];
+                $.each(ifcData, function (i, dataObj) {
+                    var no = dataObj[noKey];
+                    var name = dataObj[nameKey];
+                    $("#groupDiv").append("<a id='" + no + "' href='javascript:void(0);'>" + name + "</a>");
+                });
+            }
+            $("#groupDiv a").unbind("click").bind("click", function () {
+                var value = this.id;
+                var groupField = $("#HD_GroupField").val();
+                $("#" + groupField).val(value);
+                InputKeyWordData();
+            });
+        }
+
+        //添加查询条件到数组
+        function CondtionArryPush(condtion) {
+            if (condtion == "") {
+                return;
+            }
+            var paras = condtion.split("#");
+            if (paras.length != 3) {
+                return;
+            }
+
+            var item = {};
+            var paraKey = "", labelText = "";
+            var ctrType = "Date", ctrValue = "";
+            $.each(paras, function (j, para) {
+                if (para.indexOf("Para=") > -1) {
+                    paraKey = para.replace("Para=", "");
+                }
+                if (para.indexOf("Label=") > -1) {
+                    labelText = para.replace("Label=", "");
+                }
+                if (para.indexOf("ListURL=") > -1) {
+                    ctrValue = para.replace("ListURL=", "");
+                    ctrType = "ListURL";
+                }
+                if (para.indexOf("ListSQL=") > -1) {
+                    ctrValue = para.replace("ListSQL=", "");
+                    ctrType = "ListSQL";
+                }
+                if (para.indexOf("EnumKey=") > -1) {
+                    ctrValue = para.replace("EnumKey=", "");
+                    ctrType = "EnumKey";
+                }
+                if (para.indexOf("DefVal=") > -1) {
+                    ctrValue = para.replace("DefVal=", "");
+                }
+            });
+            item.CtrlType = ctrType;
+            item.FieldKey = paraKey;
+            item.Label = labelText;
+            item.Val = ctrValue;
+            condtionsArry.push(item);
+        }
+
         //输入关键字进行查询
         function InputKeyWordData() {
             var data = null;
-            $("#HD_GroupValue").val();
-            $("#HD_GroupField").val();
-
             var UserNo = GetQueryString("UserNo");
             var RefPKVal = GetQueryString("RefPKVal");
             var keyWord = $("#TB_Key").val();
@@ -585,6 +604,5 @@
     </table>
     </form>
     <input type="hidden" id="HD_GroupField" value="" />
-    <input type="hidden" id="HD_GroupValue" value="" />
 </body>
 </html>

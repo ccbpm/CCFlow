@@ -164,7 +164,7 @@ namespace BP.WF.HttpHandler
                             else
                             {
                                 // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
-                                url = "Dot2Dot.htm?EnName=" + this.EnName + "&EnsOfMM=" + vsM.EnsOfMM.ToString();
+                                url = "Dot2Dot.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString();
                                 url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
                                 url += "&AttrOfMInMM=" + vsM.AttrOfMInMM; //dot2dot存储表那个与实体表.  比如:FK_Station.
                                 url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体分组依据.  比如:FK_Station.
@@ -379,6 +379,44 @@ namespace BP.WF.HttpHandler
         }
         #endregion 实体的操作.
 
+
+        /// <summary>
+        /// 执行保存
+        /// </summary>
+        /// <returns></returns>
+        public string Dot2Dot_Save()
+        {
+
+            try
+            {
+                string eles = this.GetRequestVal("Eles");
+
+                //实体集合.
+                string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
+                string attrOfOneInMM = this.GetRequestVal("AttrOfOneInMM");
+                string attrOfMInMM = this.GetRequestVal("AttrOfMInMM");
+
+                //获得点对点的实体.
+                Entity en = ClassFactory.GetEns(dot2DotEnsName).GetNewEntity;
+                en.Delete(attrOfOneInMM, this.PKVal); //首先删除.
+
+                string[] strs = eles.Split(',');
+                foreach (string str in strs)
+                {
+                    if (DataType.IsNullOrEmpty(str) == true)
+                        continue;
+
+                    en.SetValByKey(attrOfOneInMM, this.PKVal);
+                    en.SetValByKey(attrOfMInMM, str);
+                    en.Insert();
+                }
+                return "数据保存成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@"+ex.Message;
+            }
+        }
         /// <summary>
         /// 获得分组的数据源
         /// </summary>

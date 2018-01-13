@@ -29,8 +29,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion
 
-        
-
         /// <summary>
         /// 页面功能实体
         /// </summary>

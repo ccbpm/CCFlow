@@ -1302,11 +1302,16 @@ var Entities = (function () {
         },
 
         RetrieveAll: function () {
+            var pathRe = "";
+            if (plant == "JFlow" && (basePath == null || basePath == '')) {
+                var rowUrl = window.document.location.href;
+                pathRe = rowUrl.substring(0, rowUrl.indexOf('/SDKFlowDemo') + 1);
+            }
             var self = this;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entities_RetrieveAll&EnsName=" + self.ensName + "&t=" + new Date().getTime(),
+                url: pathRe + dynamicHandler + "?DoType=Entities_RetrieveAll&EnsName=" + self.ensName + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 success: function (data) {
                     if (data.indexOf("err@") != -1) {

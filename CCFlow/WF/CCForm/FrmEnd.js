@@ -71,6 +71,10 @@ function AfterBindEn_DealMapExt(frmData) {
 
     for (var i = 0; i < mapExtArr.length; i++) {
         var mapExt = mapExtArr[i];
+
+        //一起转成entity.
+        var mapExt = new Entity("BP.Sys.MapExt", mapExt);
+
 		//debugger;
         switch (mapExt.ExtType) {
             case "MultipleChoiceSmall":

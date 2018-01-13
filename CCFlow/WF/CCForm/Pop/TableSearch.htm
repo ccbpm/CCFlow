@@ -22,111 +22,18 @@
 
             var mypk = GetQueryString("FK_MapExt");
             mapExt = new Entity("BP.Sys.MapExt", mypk);
-
             var srcOfGroup = mapExt.Tag1; //分组.
             var srcOfEntitis = mapExt.Tag2; //实体.
 
-            var groups = DBAccess.RunSQLReturnTable(srcOfGroup); //分组.
-            var entities = DBAccess.RunSQLReturnTable(srcOfEntitis); //数据源.
+            var html = "关键字:";
+            html += "<input type='text' id='TB_Key' name='TB_Key' />";
+            html += "<input type='button' id='Btn_Search' name='Btn_Search' value='查询' />";
 
-            var html = "<table style='width:100%;' >";
-
-            var isRB = true;
-            if (mapExt.GetPara('SelectType') == 1)
-                isRB = false;
-
-            //获得已经选择的集合.
-            selectedEles = new Entities("BP.Sys.FrmEleDBs");
-            selectedEles.Retrieve("FK_MapData", mapExt.FK_MapExt, "EleID", mapExt.AttrOfOper, "RefPKVal", GetQueryString("PKVal"));
-
-            // alert(eleDBs.length);
-
-            for (var i = 0; i < groups.length; i++) {
-                var group = groups[i];
-
-                html += "<tr>";
-                html += "<th colspan=3>";
-
-                if (isRB == true)
-                    html += "" + group.Name;
-                else
-                    html += "<input type='checkbox'  onclick='CheckAll(this.checked, \"" + group.No + "\");' id='Group_" + group.No + "'  /><label for='Group_" + group.No + "'>" + group.Name + "</label>";
-
-                html += "</th>";
-                html += "</tr>";
-
-
-                var myNum = -1;
-                for (var idx = 0; idx < entities.length; idx++) {
-
-                    en = entities[idx];
-
-                    var myidx = 0;
-                    var oOfEn;
-                    for (var obj in en) {
-                        if (myidx == 2) {
-                            oOfEn = obj;
-                            break;
-                        }
-                        myidx++;
-                    }
-
-                    myidx = 0;
-                    var oOfGroup;
-                    for (var obj in en) {
-                        if (myidx == 0) {
-                            oOfGroup = obj;
-                            break;
-                        }
-                        myidx++;
-                    }
-
-                    if (en[oOfEn] != group[oOfGroup])
-                        continue;
-
-                    var isHave = false;
-                    for (var iEle = 0; iEle < selectedEles.length; iEle++) {
-                        var ele = selectedEles[i];
-                        if (ele.RefPKVal == en.No) {
-                            isHave = true;
-                            break;
-                        }
-                    }
-
-                    var lab = en.Name;
-                    if (isHave)
-                        lab = "<font color=green>" + en.Name + "</font>";
-
-                    myNum++;
-                    if (myNum == 0)
-                        html += "<TR>";
-
-                    if (isRB == true)
-                        html += "<td><input type='radio' name='RB' id='RB_" + en.No + "' value='" + en.No + "'/><label for='RB_" + en.No + "'>" + lab + "</label></td>";
-                    else
-                        html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
-
-                    if (myNum == 2) {
-                        html += "</tr>";
-                        myNum = -1;
-                    }
-                }
-
-                if (idx == 1) {
-                    html += "<td colspan=2></td>";
-                    html += "</tr>";
-                }
-
-                if (idx == 2) {
-                    html += "<td></td>";
-                    html += "</tr>";
-                }
-
-            }
-            html += "</table>";
-
-            $("#Msg").html("");
             $("#Msg").html(html);
+
+            // var groups = DBAccess.RunSQLReturnTable(srcOfGroup); //分组.
+            // var entities = DBAccess.RunSQLReturnTable(srcOfEntitis); //数据源.
+
         });
        
         //选择与取消选择.
@@ -183,7 +90,6 @@
   
  </table>
 
- <input type=button id="Btn_Save" onclick="Save();"  value="Save"/>
  <div id="Msg"> </div>
 
 </body>

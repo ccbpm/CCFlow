@@ -15,6 +15,29 @@ function AtParaToJson(json) {
     return jsObj;
 }
 
+
+function GetPKVal() {
+
+    var val = GetQueryString("OID");
+
+    if (val==undefined || val=="")
+        val = GetQueryString("No");
+
+    if (val == undefined || val == "")
+        val = GetQueryString("WorkID");
+
+    if (val == undefined || val == "")
+        val = GetQueryString("NodeID");
+
+    if (val == undefined || val == "")
+        val = GetQueryString("MyPK");
+
+    if (val == undefined || val == "")
+        val = GetQueryString("PKVal");
+
+    return val;
+}
+
 //处理url，删除无效的参数.
 function DearUrlParas(urlParam) {
 

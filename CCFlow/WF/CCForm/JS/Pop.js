@@ -1,6 +1,4 @@
-﻿
-
-//自定义url. ********************************************************************************************************
+﻿//自定义url. ********************************************************************************************************
 function SelfUrl(mapExt) {
 
     var tb = $("#TB_" + mapExt.AttrOfOper);
@@ -16,9 +14,6 @@ function SelfUrl(mapExt) {
 }
 
 function SelfUrl_Done(mapExtJson) {
-
-    //alert(mapExtJson);
-    var mapExt = new Entity("BP.Sys.MapExt", mapExtJson);
 
     //获得主键.
     var pkval = GetPKVal();
@@ -58,8 +53,8 @@ function PopBranchesAndLeaf(mapExt) {
 	var width = mapExt.W;
 	var height = mapExt.H;
 	var iframeId = mapExt.MyPK + mapExt.FK_MapData;
-	var title = GetAtPara(mapExt.AtPara, "Title");
-	var oid = (pageData.WorkID || pageData.OID || "");
+	var title = mapExt.GetPara("Title");
+	var oid = GetPKVal(); 
 	
 	var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
 	frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
@@ -164,14 +159,14 @@ function PopBranches(mapExt) {
 }
 
 
-
 /******************************************  表格查询 **********************************/
-
 function PopTableSearch(mapExt) {
 
     var tb = $("#TB_" + mapExt.AttrOfOper);
-    if (tb.length == 0)
-        return; //有可能字段被删除了.
+    if (tb.length == 0) { 
+        mapExt.Delete(); //把他删除掉.
+        return;
+    }
 
     //设置文本框只读.
     tb.attr('readonly', 'true');
@@ -191,7 +186,9 @@ function PopTableSearch_Done(mapExt) {
 
     if (window.parent && window.parent.OpenBootStrapModal) {
         window.parent.OpenBootStrapModal(url, "eudlgframe", mapExt.GetPara("Title"), mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
-            location = location;
+           
+            // location = location;
+
         });
         return;
     }
@@ -237,21 +234,4 @@ function PopGroupList_Done(mapExt) {
         });
         return;
     }
-}
-
-
-function GetPKVal() {
-
-    var val = GetQueryString("OID");
-    if (val==undefined || val=="")
-        val = GetQueryString("No");
-    if (val == undefined || val == "")
-        val = GetQueryString("WorkID");
-
-    if (val == undefined || val == "")
-        val = GetQueryString("MyPK");
-
-    return val;
-
-
 }

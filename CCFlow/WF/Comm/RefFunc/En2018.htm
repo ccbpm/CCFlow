@@ -694,11 +694,11 @@
         }
 
         function CloseIt() {
-
-            alert('没有实现@代国强.');
-
-            //alert('ss');
-            window.close();
+            if (window.parent && window.parent.CloseBootstrapDialog) {
+                window.parent.CloseBootstrapDialog("取消");
+            } else {
+                window.close();
+            }
         }
     </script>
 </head>

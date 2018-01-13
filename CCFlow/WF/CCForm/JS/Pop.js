@@ -72,7 +72,7 @@ function PopBranchesAndLeaf(mapExt) {
 	});
 	$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
 	//解项羽 这里需要相对路径.
-	var url = "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
+	var url = "../CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
 	container.on("dblclick", function () {
 		if (window.parent && window.parent.OpenBootStrapModal) {
 			window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {

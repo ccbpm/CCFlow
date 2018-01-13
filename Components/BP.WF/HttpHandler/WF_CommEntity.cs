@@ -30,316 +30,342 @@ namespace BP.WF.HttpHandler
         #region 实体的操作.
         public string Entity_Init()
         {
-            //初始化entity.
-            string enName = this.EnName;
-            Entity en=null;
-            if (DataType.IsNullOrEmpty(enName) == true)
+            try
             {
-                if (DataType.IsNullOrEmpty(this.EnsName) == true)
-                    return "err@类名没有传递过来";
-
-                Entities ens = ClassFactory.GetEns(this.EnsName);
-                en = ens.GetNewEntity;
-            }
-            else
-            {
-                en = ClassFactory.GetEn(this.EnName);
-            }
-
-            //获得描述.
-            Map map = en.EnMap;
-            string pkVal = this.PKVal;
-            if (DataType.IsNullOrEmpty(pkVal) == false)
-            {
-                en.PKVal = pkVal;
-                en.RetrieveFromDBSources();
-            }
-            else
-            {
-                foreach (Attr attr in en.EnMap.Attrs)
-                    en.SetValByKey(attr.Key, attr.DefaultVal);
-                //设置默认的数据.
-                en.ResetDefaultVal();
-            }
-
-            //定义容器.
-            DataSet ds = new DataSet();
-
-            //定义Sys_MapData.
-            MapData md = new MapData();
-            md.No = this.EnName;
-            md.Name = map.EnDesc;
-
-            #region 加入权限信息.
-            //把权限加入参数里面.
-            if (en.HisUAC.IsInsert)
-                md.SetPara("IsInsert", "1");
-            if (en.HisUAC.IsUpdate)
-                md.SetPara("IsUpdate", "1");
-            if (en.HisUAC.IsDelete)
-                md.SetPara("IsDelete", "1");
-            #endregion 加入权限信息.
-
-            #region 增加 上方法.
-            DataTable dtM = new DataTable("dtM");
-            dtM.Columns.Add("No");
-            dtM.Columns.Add("Title");
-            dtM.Columns.Add("Tip");
-            dtM.Columns.Add("Visable");
-
-            dtM.Columns.Add("Url");
-            dtM.Columns.Add("Target");
-            dtM.Columns.Add("Warning");
-            dtM.Columns.Add("RefMethodType");
-            dtM.Columns.Add("GroupName");
-            dtM.Columns.Add("W");
-            dtM.Columns.Add("H");
-            dtM.Columns.Add("Icon");
-            dtM.Columns.Add("IsCanBatch");
-            dtM.Columns.Add("RefAttrKey");
-
-            RefMethods rms = map.HisRefMethods;
-            foreach (RefMethod item in rms)
-            {
-                string myurl = "";
-                if (item.RefMethodType != RefMethodType.Func)
+                //初始化entity.
+                string enName = this.EnName;
+                Entity en = null;
+                if (DataType.IsNullOrEmpty(enName) == true)
                 {
-                    myurl = item.Do(null) as string;
-                    if (myurl == null)
-                        continue;
+                    if (DataType.IsNullOrEmpty(this.EnsName) == true)
+                        return "err@类名没有传递过来";
+                    Entities ens = ClassFactory.GetEns(this.EnsName);
+                    en = ens.GetNewEntity;
                 }
                 else
                 {
-                    myurl = "../RefMethod.htm?Index=" + item.Index + "&EnsName=" + en.GetNewEntities.ToString() + "&PK=" + this.PKVal;
+                    en = ClassFactory.GetEn(this.EnName);
                 }
 
-                DataRow dr = dtM.NewRow();
+                if (en == null)
+                    return "err@参数类名不正确.";
 
-                dr["No"] = item.Index;
-                dr["Title"] = item.Title;
-                dr["Tip"] = item.ToolTip;
-                dr["Visable"] = item.Visable;
-                dr["Warning"] = item.Warning;
-                dr["RefMethodType"] = (int)item.RefMethodType;
-                dr["RefAttrKey"] = item.RefAttrKey;
-                dr["URL"] = myurl;
-                dr["W"] = item.Width;
-                dr["H"] = item.Height;
-                dr["Icon"] = item.Icon;
-                dr["IsCanBatch"] = item.IsCanBatch;
-                dr["GroupName"] = item.GroupName;
-
-                dtM.Rows.Add(dr); //增加到rows.
-            }
-            #endregion 增加 上方法.
-
-            #region 加入一对多的实体编辑
-            AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
-            string sql = "";
-            int i = 0;
-            if (oneVsM.Count > 0)
-            {
-                foreach (AttrOfOneVSM vsM in oneVsM)
+                //获得描述.
+                Map map = en.EnMap;
+                string pkVal = this.PKVal;
+                if (DataType.IsNullOrEmpty(pkVal) == false)
                 {
-                    //判断该dot2dot是否显示？
-                    Entity enMM = vsM.EnsOfMM.GetNewEntity;
-                    enMM.SetValByKey(vsM.AttrOfOneInMM, this.PKVal);
-                    if (enMM.HisUAC.IsView == false)
-                        continue;
+                    en.PKVal = pkVal;
+                    en.RetrieveFromDBSources();
+                }
+                else
+                {
+                    foreach (Attr attr in en.EnMap.Attrs)
+                        en.SetValByKey(attr.Key, attr.DefaultVal);
+                    //设置默认的数据.
+                    en.ResetDefaultVal();
+                }
+
+                //定义容器.
+                DataSet ds = new DataSet();
+
+                //定义Sys_MapData.
+                MapData md = new MapData();
+                md.No = this.EnName;
+                md.Name = map.EnDesc;
+
+                #region 加入权限信息.
+                //把权限加入参数里面.
+                if (en.HisUAC.IsInsert)
+                    md.SetPara("IsInsert", "1");
+                if (en.HisUAC.IsUpdate)
+                    md.SetPara("IsUpdate", "1");
+                if (en.HisUAC.IsDelete)
+                    md.SetPara("IsDelete", "1");
+                #endregion 加入权限信息.
+
+                #region 增加 上方法.
+                DataTable dtM = new DataTable("dtM");
+                dtM.Columns.Add("No");
+                dtM.Columns.Add("Title");
+                dtM.Columns.Add("Tip");
+                dtM.Columns.Add("Visable");
+
+                dtM.Columns.Add("Url");
+                dtM.Columns.Add("Target");
+                dtM.Columns.Add("Warning");
+                dtM.Columns.Add("RefMethodType");
+                dtM.Columns.Add("GroupName");
+                dtM.Columns.Add("W");
+                dtM.Columns.Add("H");
+                dtM.Columns.Add("Icon");
+                dtM.Columns.Add("IsCanBatch");
+                dtM.Columns.Add("RefAttrKey");
+
+                RefMethods rms = map.HisRefMethods;
+                foreach (RefMethod item in rms)
+                {
+                    string myurl = "";
+                    if (item.RefMethodType != RefMethodType.Func)
+                    {
+                        myurl = item.Do(null) as string;
+                        if (myurl == null)
+                            continue;
+                    }
+                    else
+                    {
+                        myurl = "../RefMethod.htm?Index=" + item.Index + "&EnsName=" + en.GetNewEntities.ToString() + "&PK=" + this.PKVal;
+                    }
+
                     DataRow dr = dtM.NewRow();
 
-                    ////判断模式.
-                    //string url = "";
-                    //if (vsM.Dot2DotModel == Dot2DotModel.TreeDept)
-                    //    url = "Dot2DotTreeDeptModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
-                    //else if (vsM.Dot2DotModel == Dot2DotModel.TreeDeptEmp)
-                    //    url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
-                    //else
-                    //    url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString() + keys;
-                    //try
-                    //{
-                    //    sql = "SELECT COUNT(*) as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "='" + en.PKVal + "'";
-                    //    i = DBAccess.RunSQLReturnValInt(sql);
-                    //}
-                    //catch
-                    //{
-                    //    sql = "SELECT COUNT(*) as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "=" + en.PKVal;
-                    //    try
-                    //    {
-                    //        i = DBAccess.RunSQLReturnValInt(sql);
-                    //    }
-                    //    catch
-                    //    {
-                    //        vsM.EnsOfMM.GetNewEntity.CheckPhysicsTable();
-                    //    }
-                    //}
-                    //if (i == 0)
-                    //{
-                    //    if (this.AttrKey == vsM.EnsOfMM.ToString())
-                    //    {
-                    //        //AddLi(string.Format(
-                    //        //    "<div style='font-weight:bold'><a href='{0}'>{3}<span class='nav'>{1}</span></a></div>{2}",
-                    //        //    url, vsM.Desc, Environment.NewLine, GetIcon(IconM2MDefault)));
-                    //        AddGroupedLeftItem(dictDefs, "默认组", new LeftMenuItem(CCFlowPath, vsM.Desc, url, IconM2MDefault, true));
-                    //        ItemCount++;
-                    //    }
-                    //    else
-                    //    {
-                    //        //AddLi(string.Format("<div><a href='{0}'>{3}<span class='nav'>{1}</span></a></div>{2}", url, vsM.Desc, Environment.NewLine, GetIcon(IconM2MDefault)));
-                    //        AddGroupedLeftItem(dictDefs, "默认组", new LeftMenuItem(CCFlowPath, vsM.Desc, url, IconM2MDefault, false));
-                    //        ItemCount++;
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (this.AttrKey == vsM.EnsOfMM.ToString())
-                    //    {
-                    //        //AddLi(string.Format(
-                    //        //    "<div style='font-weight:bold'><a href='{0}'>{4}<span class='nav'>{1}[{2}]</span></a></div>{3}",
-                    //        //    url, vsM.Desc, i, Environment.NewLine, GetIcon(IconM2MDefault)));
-                    //        AddGroupedLeftItem(dictDefs, "默认组", new LeftMenuItem(CCFlowPath, vsM.Desc + "[" + i + "]", url, IconM2MDefault, true));
-                    //        ItemCount++;
-                    //    }
-                    //    else
-                    //    {
-                    //        //AddLi(string.Format("<div><a href='{0}'>{4}<span class='nav'>{1}[{2}]</span></a></div>{3}", url, vsM.Desc, i, Environment.NewLine, GetIcon(IconM2MDefault)));
-                    //        AddGroupedLeftItem(dictDefs, "默认组", new LeftMenuItem(CCFlowPath, vsM.Desc + "[" + i + "]", url, IconM2MDefault, false));
-                    //        ItemCount++;
-                    //    }
-                    //}
+                    dr["No"] = item.Index;
+                    dr["Title"] = item.Title;
+                    dr["Tip"] = item.ToolTip;
+                    dr["Visable"] = item.Visable;
+                    dr["Warning"] = item.Warning;
+                    dr["RefMethodType"] = (int)item.RefMethodType;
+                    dr["RefAttrKey"] = item.RefAttrKey;
+                    dr["URL"] = myurl;
+                    dr["W"] = item.Width;
+                    dr["H"] = item.Height;
+                    dr["Icon"] = item.Icon;
+                    dr["IsCanBatch"] = item.IsCanBatch;
+                    dr["GroupName"] = item.GroupName;
+
+                    dtM.Rows.Add(dr); //增加到rows.
                 }
-            }
-            ds.Tables.Add(dtM);
-            #endregion 增加 一对多.
+                #endregion 增加 上方法.
 
-
-
-            ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
-
-            //把主数据放入里面去.
-            DataTable dtMain = en.ToDataTableField("MainTable");
-            ds.Tables.Add(dtMain);
-
-            #region 增加上分组信息.
-            EnCfg ec = new EnCfg(this.EnName);
-            string groupTitle = ec.GroupTitle;
-            if (DataType.IsNullOrEmpty(groupTitle) == true)
-                groupTitle = "@" + en.PK + ",基本信息," + map.EnDesc + "";
-
-            //增加上.
-            DataTable dtGroups = new DataTable("Sys_GroupField");
-            dtGroups.Columns.Add("OID");
-            dtGroups.Columns.Add("Lab");
-            dtGroups.Columns.Add("Tip");
-            dtGroups.Columns.Add("CtrlType");
-            dtGroups.Columns.Add("CtrlID");
-
-            string[] strs = groupTitle.Split('@');
-            foreach (string str in strs)
-            {
-                if (DataType.IsNullOrEmpty(str))
-                    continue;
-
-                string[] vals = str.Split('=');
-                if (vals.Length == 1)
-                    vals = str.Split(',');
-
-                if (vals.Length == 0)
-                    continue;
-
-                DataRow dr = dtGroups.NewRow();
-                dr["OID"] = vals[0];
-                dr["Lab"] = vals[1];
-                if (vals.Length == 3)
-                    dr["Tip"] = vals[2];
-                dtGroups.Rows.Add(dr);
-            }
-            ds.Tables.Add(dtGroups);
-
-            #endregion 增加上分组信息.
-
-            #region 字段属性.
-            MapAttrs attrs = en.EnMap.Attrs.ToMapAttrs;
-            DataTable sys_MapAttrs = attrs.ToDataTableField("Sys_MapAttr");
-            sys_MapAttrs.Columns.Remove(MapAttrAttr.GroupID);
-            sys_MapAttrs.Columns.Add("GroupID");
-
-            //sys_MapAttrs.Columns[MapAttrAttr.GroupID].DataType = typeof(string); //改变列类型.
-
-            //给字段增加分组.
-            string currGroupID = "";
-            foreach (DataRow drAttr in sys_MapAttrs.Rows)
-            {
-                if (currGroupID.Equals("") == true)
-                    currGroupID = dtGroups.Rows[0]["OID"].ToString();
-
-                string keyOfEn = drAttr[MapAttrAttr.KeyOfEn].ToString();
-                foreach (DataRow drGroup in dtGroups.Rows)
+                #region 加入一对多的实体编辑
+                AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
+                string sql = "";
+                int i = 0;
+                if (oneVsM.Count > 0)
                 {
-                    string field = drGroup["OID"].ToString();
-                    if (keyOfEn.Equals( field) )
+                    foreach (AttrOfOneVSM vsM in oneVsM)
                     {
-                        currGroupID = field;
+                        //判断该dot2dot是否显示？
+                        Entity enMM = vsM.EnsOfMM.GetNewEntity;
+                        enMM.SetValByKey(vsM.AttrOfOneInMM, this.PKVal);
+                        if (enMM.HisUAC.IsView == false)
+                            continue;
+                        DataRow dr = dtM.NewRow();
+                        dr["No"] = enMM.ToString();
+                       // dr["GroupName"] = vsM.GroupName;
+                        if (en.PKVal != null)
+                        {
+                            //判断模式.
+                            string url = "";
+                            if (vsM.Dot2DotModel == Dot2DotModel.TreeDept)
+                                url = "Dot2DotTreeDeptModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+                            else if (vsM.Dot2DotModel == Dot2DotModel.TreeDeptEmp)
+                                url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+                            else
+                                url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+
+                            dr["URL"] = url + "&" + en.PK + "=" + en.PKVal + "&PKVal=" + en.PKVal;
+                            dr["Icon"] = "../Img/M2M.png"; 
+                            
+                        }
+
+                        dr["W"] = "900";
+                        dr["H"] = "500";
+                        dr["RefMethodType"] = (int)RefMethodType.RightFrameOpen;
+
+
+                        // 获得选择的数量.
+                        try
+                        {
+                            sql = "SELECT COUNT(*) as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "='" + en.PKVal + "'";
+                            i = DBAccess.RunSQLReturnValInt(sql);
+                        }
+                        catch
+                        {
+                            sql = "SELECT COUNT(*) as NUM FROM " + vsM.EnsOfMM.GetNewEntity.EnMap.PhysicsTable + " WHERE " + vsM.AttrOfOneInMM + "=" + en.PKVal;
+                            try
+                            {
+                                i = DBAccess.RunSQLReturnValInt(sql);
+                            }
+                            catch
+                            {
+                                vsM.EnsOfMM.GetNewEntity.CheckPhysicsTable();
+                            }
+                        }
+                        dr["Title"] = vsM.Desc + "(" + i + ")";
+                        dtM.Rows.Add(dr);
                     }
                 }
-                drAttr[MapAttrAttr.GroupID] = currGroupID;
-            }
-            ds.Tables.Add(sys_MapAttrs);
-            #endregion 字段属性.
+                #endregion 增加 一对多.
 
-            #region 把外键与枚举放入里面去.
-            foreach (DataRow dr in sys_MapAttrs.Rows)
-            {
-                string uiBindKey = dr["UIBindKey"].ToString();
-                string lgType = dr["LGType"].ToString();
-                if (lgType != "2")
-                    continue;
-
-                string UIIsEnable = dr["UIVisible"].ToString();
-                if (UIIsEnable == "0")
-                    continue;
-
-                if (string.IsNullOrEmpty(uiBindKey) == true)
+                #region 从表
+                EnDtls enDtls = en.EnMap.Dtls;
+                foreach (EnDtl enDtl in enDtls)
                 {
-                    string myPK = dr["MyPK"].ToString();
-                    /*如果是空的*/
-                    //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
+                    //判断该dtl是否要显示?
+                    Entity myEnDtl = enDtl.Ens.GetNewEntity; //获取他的en
+                    myEnDtl.SetValByKey(enDtl.RefKey, this.PKVal);  //给refpk赋值
+                    if (myEnDtl.HisUAC.IsView == false)
+                        continue;
+
+                    DataRow dr = dtM.NewRow();
+                    string url = "Dtl.aspx?EnName=" + this.EnName + "&PK=" + this.PKVal + "&EnsName=" + enDtl.EnsName + "&RefKey=" + enDtl.RefKey + "&RefVal=" + en.PKVal.ToString() + "&MainEnsName=" + en.ToString() ;
+                    try
+                    {
+                        i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + enDtl.Ens.GetNewEntity.EnMap.PhysicsTable + " WHERE " + enDtl.RefKey + "='" + en.PKVal + "'");
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            i = DBAccess.RunSQLReturnValInt("SELECT COUNT(*) FROM " + enDtl.Ens.GetNewEntity.EnMap.PhysicsTable + " WHERE " + enDtl.RefKey + "=" + en.PKVal);
+                        }
+                        catch
+                        {
+                            enDtl.Ens.GetNewEntity.CheckPhysicsTable();
+                        }
+                    }
+                    dr["No"] = enDtl.EnsName;
+                    dr["Title"] = enDtl.Desc+"("+i+")";
+                    dr["Url"] = url;
+                    dr["GroupName"] = enDtl.GroupName;
+                    dtM.Rows.Add(dr);
+                }
+                ds.Tables.Add(dtM); //
+                #endregion 增加 从表.
+
+
+                ds.Tables.Add(md.ToDataTableField("Sys_MapData"));
+
+                //把主数据放入里面去.
+                DataTable dtMain = en.ToDataTableField("MainTable");
+                ds.Tables.Add(dtMain);
+
+                #region 增加上分组信息.
+                EnCfg ec = new EnCfg(this.EnName);
+                string groupTitle = ec.GroupTitle;
+                if (DataType.IsNullOrEmpty(groupTitle) == true)
+                    groupTitle = "@" + en.PK + ",基本信息," + map.EnDesc + "";
+
+                //增加上.
+                DataTable dtGroups = new DataTable("Sys_GroupField");
+                dtGroups.Columns.Add("OID");
+                dtGroups.Columns.Add("Lab");
+                dtGroups.Columns.Add("Tip");
+                dtGroups.Columns.Add("CtrlType");
+                dtGroups.Columns.Add("CtrlID");
+
+                string[] strs = groupTitle.Split('@');
+                foreach (string str in strs)
+                {
+                    if (DataType.IsNullOrEmpty(str))
+                        continue;
+
+                    string[] vals = str.Split('=');
+                    if (vals.Length == 1)
+                        vals = str.Split(',');
+
+                    if (vals.Length == 0)
+                        continue;
+
+                    DataRow dr = dtGroups.NewRow();
+                    dr["OID"] = vals[0];
+                    dr["Lab"] = vals[1];
+                    if (vals.Length == 3)
+                        dr["Tip"] = vals[2];
+                    dtGroups.Rows.Add(dr);
+                }
+                ds.Tables.Add(dtGroups);
+
+                #endregion 增加上分组信息.
+
+                #region 字段属性.
+                MapAttrs attrs = en.EnMap.Attrs.ToMapAttrs;
+                DataTable sys_MapAttrs = attrs.ToDataTableField("Sys_MapAttr");
+                sys_MapAttrs.Columns.Remove(MapAttrAttr.GroupID);
+                sys_MapAttrs.Columns.Add("GroupID");
+
+                //sys_MapAttrs.Columns[MapAttrAttr.GroupID].DataType = typeof(string); //改变列类型.
+
+                //给字段增加分组.
+                string currGroupID = "";
+                foreach (DataRow drAttr in sys_MapAttrs.Rows)
+                {
+                    if (currGroupID.Equals("") == true)
+                        currGroupID = dtGroups.Rows[0]["OID"].ToString();
+
+                    string keyOfEn = drAttr[MapAttrAttr.KeyOfEn].ToString();
+                    foreach (DataRow drGroup in dtGroups.Rows)
+                    {
+                        string field = drGroup["OID"].ToString();
+                        if (keyOfEn.Equals(field))
+                        {
+                            currGroupID = field;
+                        }
+                    }
+                    drAttr[MapAttrAttr.GroupID] = currGroupID;
+                }
+                ds.Tables.Add(sys_MapAttrs);
+                #endregion 字段属性.
+
+                #region 把外键与枚举放入里面去.
+                foreach (DataRow dr in sys_MapAttrs.Rows)
+                {
+                    string uiBindKey = dr["UIBindKey"].ToString();
+                    string lgType = dr["LGType"].ToString();
+                    if (lgType != "2")
+                        continue;
+
+                    string UIIsEnable = dr["UIVisible"].ToString();
+                    if (UIIsEnable == "0")
+                        continue;
+
+                    if (string.IsNullOrEmpty(uiBindKey) == true)
+                    {
+                        string myPK = dr["MyPK"].ToString();
+                        /*如果是空的*/
+                        //   throw new Exception("@属性字段数据不完整，流程:" + fl.No + fl.Name + ",节点:" + nd.NodeID + nd.Name + ",属性:" + myPK + ",的UIBindKey IsNull ");
+                    }
+
+                    // 检查是否有下拉框自动填充。
+                    string keyOfEn = dr["KeyOfEn"].ToString();
+                    string fk_mapData = dr["FK_MapData"].ToString();
+
+
+                    // 判断是否存在.
+                    if (ds.Tables.Contains(uiBindKey) == true)
+                        continue;
+
+                    ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
                 }
 
-                // 检查是否有下拉框自动填充。
-                string keyOfEn = dr["KeyOfEn"].ToString();
-                string fk_mapData = dr["FK_MapData"].ToString();
-
-
-                // 判断是否存在.
-                if (ds.Tables.Contains(uiBindKey) == true)
-                    continue;
-
-                ds.Tables.Add(BP.Sys.PubClass.GetDataTableByUIBineKey(uiBindKey));
-            }
-
-            string enumKeys = "";
-            foreach (Attr attr in map.Attrs)
-            {
-                if (attr.MyFieldType == FieldType.Enum)
+                string enumKeys = "";
+                foreach (Attr attr in map.Attrs)
                 {
-                    enumKeys += "'" + attr.UIBindKey + "',";
+                    if (attr.MyFieldType == FieldType.Enum)
+                    {
+                        enumKeys += "'" + attr.UIBindKey + "',";
+                    }
                 }
-            }
 
-            if (enumKeys.Length > 2)
+                if (enumKeys.Length > 2)
+                {
+                    enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
+                    // Sys_Enum
+                    string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
+                    DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
+                    dtEnum.TableName = "Sys_Enum";
+                    ds.Tables.Add(dtEnum);
+                }
+
+                #endregion 把外键与枚举放入里面去.
+
+                return BP.Tools.Json.ToJson(ds);
+            }
+            catch (Exception ex)
             {
-                enumKeys = enumKeys.Substring(0, enumKeys.Length - 1);
-                // Sys_Enum
-                string sqlEnum = "SELECT * FROM Sys_Enum WHERE EnumKey IN (" + enumKeys + ")";
-                DataTable dtEnum = DBAccess.RunSQLReturnTable(sqlEnum);
-                dtEnum.TableName = "Sys_Enum";
-                ds.Tables.Add(dtEnum);
+                return "err@" + ex.Message;
             }
-
-            #endregion 把外键与枚举放入里面去.
-
-            return BP.Tools.Json.ToJson(ds);
         }
         #endregion 实体的操作.
     }

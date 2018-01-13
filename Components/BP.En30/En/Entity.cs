@@ -3560,84 +3560,81 @@ namespace BP.En
 		/// <param name="fk_mapdata"></param>
 		private void DTSMapToSys_MapData_InitMapAttr(Attrs attrs, string fk_mapdata)
 		{
-			foreach (Attr attr in attrs)
-			{
-				if (attr.IsRefAttr)
-					continue;
+            foreach (Attr attr in attrs)
+            {
+                if (attr.IsRefAttr)
+                    continue;
 
-				MapAttr mattr = new MapAttr();
-				mattr.KeyOfEn = attr.Key;
-				mattr.FK_MapData = fk_mapdata;
-				mattr.MyPK = mattr.FK_MapData + "_" + mattr.KeyOfEn;
-				mattr.RetrieveFromDBSources();
+                MapAttr mattr = new MapAttr();
+                mattr.KeyOfEn = attr.Key;
+                mattr.FK_MapData = fk_mapdata;
+                mattr.MyPK = mattr.FK_MapData + "_" + mattr.KeyOfEn;
+                mattr.RetrieveFromDBSources();
 
-				mattr.Name = attr.Desc;
-				mattr.DefVal = attr.DefaultVal.ToString();
-				mattr.KeyOfEn = attr.Field;
+                mattr.Name = attr.Desc;
+                mattr.DefVal = attr.DefaultVal.ToString();
+                mattr.KeyOfEn = attr.Field;
 
-				mattr.MaxLen = attr.MaxLength;
-				mattr.MinLen = attr.MinLength;
-				mattr.UIBindKey = attr.UIBindKey;
-				mattr.UIIsLine = attr.UIIsLine;
-				mattr.UIHeight = 0;
+                mattr.MaxLen = attr.MaxLength;
+                mattr.MinLen = attr.MinLength;
+                mattr.UIBindKey = attr.UIBindKey;
+                mattr.UIIsLine = attr.UIIsLine;
+                mattr.UIHeight = 0;
 
-				if (attr.MaxLength > 3000)
-					mattr.UIHeight = 10;
+                if (attr.MaxLength > 3000)
+                    mattr.UIHeight = 10;
 
-				mattr.UIWidth = attr.UIWidth;
-				mattr.MyDataType = attr.MyDataType;
+                mattr.UIWidth = attr.UIWidth;
+                mattr.MyDataType = attr.MyDataType;
 
-				mattr.UIRefKey = attr.UIRefKeyValue;
+                mattr.UIRefKey = attr.UIRefKeyValue;
 
-				mattr.UIRefKeyText = attr.UIRefKeyText;
-				mattr.UIVisible = attr.UIVisible;
+                mattr.UIRefKeyText = attr.UIRefKeyText;
+                mattr.UIVisible = attr.UIVisible;
 
-				switch (attr.MyFieldType)
-				{
-					case FieldType.Enum:
-					case FieldType.PKEnum:
-						mattr.UIContralType = attr.UIContralType;
-						mattr.LGType = FieldTypeS.Enum;
-						mattr.UIIsEnable = attr.UIIsReadonly;
-						break;
-					case FieldType.FK:
-					case FieldType.PKFK:
-						mattr.UIContralType = attr.UIContralType;
-						mattr.LGType = FieldTypeS.FK;
-						//attr.MyDataType = (int)FieldType.FK;
-						mattr.UIRefKey = "No";
-						mattr.UIRefKeyText = "Name";
-						mattr.UIIsEnable = attr.UIIsReadonly;
-						break;
-					default:
-						mattr.UIContralType = UIContralType.TB;
-						mattr.LGType = FieldTypeS.Normal;
-						mattr.UIIsEnable = !attr.UIIsReadonly;
-						switch (attr.MyDataType)
-						{
-							case DataType.AppBoolean:
-								mattr.UIContralType = UIContralType.CheckBok;
-								mattr.UIIsEnable = attr.UIIsReadonly;
-								break;
-							case DataType.AppDate:
-								//if (this.Tag == "1")
-								//    attr.DefaultVal = DataType.CurrentData;
-								break;
-							case DataType.AppDateTime:
-								//if (this.Tag == "1")
-								//    attr.DefaultVal = DataType.CurrentData;
-								break;
-							default:
-								break;
-						}
-						break;
-				}
-
-
-
-				if (mattr.Update() == 0)
-					mattr.Insert();
-			}
+                switch (attr.MyFieldType)
+                {
+                    case FieldType.Enum:
+                    case FieldType.PKEnum:
+                        mattr.UIContralType = attr.UIContralType;
+                        mattr.LGType = FieldTypeS.Enum;
+                        mattr.UIIsEnable = attr.UIIsReadonly;
+                        break;
+                    case FieldType.FK:
+                    case FieldType.PKFK:
+                        mattr.UIContralType = attr.UIContralType;
+                        mattr.LGType = FieldTypeS.FK;
+                        //attr.MyDataType = (int)FieldType.FK;
+                        mattr.UIRefKey = "No";
+                        mattr.UIRefKeyText = "Name";
+                        mattr.UIIsEnable = attr.UIIsReadonly;
+                        break;
+                    default:
+                        mattr.UIContralType = UIContralType.TB;
+                        mattr.LGType = FieldTypeS.Normal;
+                        mattr.UIIsEnable = !attr.UIIsReadonly;
+                        switch (attr.MyDataType)
+                        {
+                            case DataType.AppBoolean:
+                                mattr.UIContralType = UIContralType.CheckBok;
+                                mattr.UIIsEnable = attr.UIIsReadonly;
+                                break;
+                            case DataType.AppDate:
+                                //if (this.Tag == "1")
+                                //    attr.DefaultVal = DataType.CurrentData;
+                                break;
+                            case DataType.AppDateTime:
+                                //if (this.Tag == "1")
+                                //    attr.DefaultVal = DataType.CurrentData;
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                }
+                if (mattr.Update() == 0)
+                    mattr.Insert();
+            }
 		}
 
 	}

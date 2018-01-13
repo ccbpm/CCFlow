@@ -205,6 +205,8 @@ namespace BP.WF.Template
                     new BP.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,
                     DeptAttr.No, "节点绑定接受人");
 
+                map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
+
                 // 傻瓜表单可以调用的子流程. 2014.10.19 去掉.
                 //map.AttrsOfOneVSM.Add(new BP.WF.NodeFlows(), new Flows(), NodeFlowAttr.FK_Node, NodeFlowAttr.FK_Flow, DeptAttr.Name, DeptAttr.No,
                 //    "傻瓜表单可调用的子流程");

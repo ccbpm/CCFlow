@@ -1583,6 +1583,9 @@ namespace BP.En
                     if (item.MyFieldType == FieldType.RefText)
                         continue;
 
+                 //   if (item.IsPK == true && item.UIVisible == false)
+                   //     continue;
+
                     BP.Sys.MapAttr mattr = new Sys.MapAttr();
                     mattr.KeyOfEn = item.Key;
                     mattr.Name = item.Desc;
@@ -1592,9 +1595,7 @@ namespace BP.En
 
                     mattr.MaxLen = item.MaxLength;
                     mattr.MinLen = item.MinLength;
-
                     mattr.UIVisible = item.UIVisible;
-
                     mattr.DefValReal = item.DefaultValOfReal;
 
                     mattr.UIIsEnable = item.UIIsReadonly;

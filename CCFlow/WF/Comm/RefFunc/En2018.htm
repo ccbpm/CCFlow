@@ -16,6 +16,7 @@
     <script type="text/javascript" src="../../Scripts/Cookie.js"></script>
     <script type="text/javascript" src="../../Scripts/bootstrap/js/jquery.nav.js"></script>
     <script type="text/javascript" src="../../Scripts/QueryString.js"></script>
+    <script src="../../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
 
     <link href="../../Scripts/bootstrap/css/bootstrap.css" rel="Stylesheet" />
     <script src="../../Scripts/EasyUIUtility.js" type="text/javascript"></script>
@@ -406,9 +407,13 @@
                 icon = "../../Img/dot.png";
             }
 
-            if (rm.Icon !=null && rm.Icon.indexOf('http') != 0) {
+            if (rm.Icon != null && rm.Icon.indexOf('http') != 0) {
                 icon = "../" + rm.Icon;
             }
+
+
+
+            // alert('没有实现@代国强, 需要根据窗口大小，弹出模态窗口..');
             var html = "<img src='" + icon + "' border=0 style='width:16px;height:16px;' /><a href='javascript:OpenIt(\"" + rm.Url + "\",\"" + rm.Title + "\",\"" + rm.W + "\",\"" + rm.H + "\")'>" + rm.Title + "</a>";
             return html;
         }
@@ -658,14 +663,13 @@
                 }
             } else {
                 en.pkval = pkval;
-              // en.RetrieveFromDBSources();
+                 en.RetrieveFromDBSources();
                 en.CopyForm();
                 en.pkval = pkval;
-
                 var i = en.Update();
                 if (info != 1) {
-                  //  alert('更新错误:' + info);
-                    //return;
+                    alert('更新错误:' + info);
+                    return;
                 }
             }
 
@@ -674,6 +678,7 @@
         }
 
         function Delete() {
+
             if (window.confirm('您确定要删除吗？') == false)
                 return;
 
@@ -689,6 +694,8 @@
         }
 
         function CloseIt() {
+
+            alert('没有实现@代国强.');
 
             //alert('ss');
             window.close();

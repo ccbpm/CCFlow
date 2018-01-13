@@ -4,15 +4,17 @@
     <meta charset="UTF-8"/>
     <title>查询</title>
     <link href="../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <link href="../Scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
-    <script src="JS/EasyUI/jquery.easyui.min.js" type="text/javascript"></script>
-    <link href="JS/EasyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <script src="../Scripts/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../Scripts/config.js" type="text/javascript"></script>
+    
     <script src="../Comm/JS/Calendar/WdatePicker.js" type="text/javascript"></script>
     <link href="../Comm/JS/Calendar/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
-    <script src="../Scripts/EasyUIUtility.js" type="text/javascript"></script>
+
     <script src="Gener.js" type="text/javascript"></script>
+    <script src="../Scripts/bootstrap/BootstrapUIDialog.js" type="text/javascript"></script>
      <base target="_self" />
     <script language="javascript" type="text/javascript" >
 
@@ -24,6 +26,8 @@
         ur.MyPK = webUser.No + "_" + GetQueryString("EnsName") + "_SearchAttrs";
         ur.RetrieveFromDBSources();
         var ensName = GetQueryString("EnsName");
+
+        var mapBase;
 
         //页面启动函数.
         $(function () {
@@ -59,7 +63,7 @@
             handler.AddUrlData();  //增加参数.
 
             //获得map基本信息.
-            var mapBase = handler.DoMethodReturnJSON("Search_MapBaseInfo");
+            mapBase = handler.DoMethodReturnJSON("Search_MapBaseInfo");
             // $("#Title").html(mapBase.EnDesc); 
             document.title = mapBase.EnDesc;
 
@@ -273,12 +277,16 @@
         function OpenEn(pk) {
 
            // var url = "En.htm?EnsName=" + GetQueryString("EnsName") + "&PK=" + pk;
+            var url = "./RefFunc/En2018.htm?EnName=" + mapBase.EnName + "&PKVal=" + pk;
 
-            var url = "./RefFunc/En2018.htm?EnsName=" + GetQueryString("EnsName") + "&PKVal=" + pk;
+//            OpenEasyUiDialog(url, "eudlgframe", this.document.title+' : 详细', 1000, 550, "icon-property", true, null, null, null, function () {
+//                window.location.href = window.location.href;
+//            });
 
-            OpenEasyUiDialog(url, "eudlgframe", this.document.title+' : 详细', 1000, 550, "icon-property", true, null, null, null, function () {
-                window.location.href = window.location.href;
+            OpenBootStrapModal(url, "eudlgframe", this.document.title + ' : 详细', 1000, 550, "icon-edit", false, function () { }, null, function () {
+                location = location;
             });
+
         }
 
         function GenerPageIdx() {

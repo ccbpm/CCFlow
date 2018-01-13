@@ -1584,7 +1584,6 @@ namespace BP.En
                         continue;
 
                     BP.Sys.MapAttr mattr = new Sys.MapAttr();
-
                     mattr.KeyOfEn = item.Key;
                     mattr.Name = item.Desc;
                     mattr.MyDataType = item.MyDataType;
@@ -1597,6 +1596,34 @@ namespace BP.En
                     mattr.UIVisible = item.UIVisible;
 
                     mattr.DefValReal = item.DefaultValOfReal;
+
+                    mattr.UIIsEnable = item.UIIsReadonly;
+                    if (item.MyFieldType == FieldType.Normal)
+                    {
+                        if (item.MyDataType == DataType.AppInt ||
+                            item.MyDataType == DataType.AppFloat ||
+                            item.MyDataType == DataType.AppDouble ||
+                            item.MyDataType == DataType.AppMoney ||
+                            item.MyDataType == DataType.AppString)
+                        {
+                            mattr.UIIsEnable = !item.UIIsReadonly;
+                        }
+                    }
+
+                    if (item.UIIsLine == true)
+                        mattr.ColSpan = 3;
+
+                    //帮助url.
+                    mattr.UIRefKeyText = item.HelperUrl;
+
+                    //if (item.UIIsReadonly == true && item.MyFieldType== FieldType.Normal)
+                    //    mattr.UIIsEnable = !item.UIIsReadonly;
+                    //else
+                    //    mattr.UIIsEnable = item.UIIsReadonly;
+                   // else
+                     //   mattr.UIIsEnable = !item.UIIsReadonly;
+
+
 
                     if (item.MyFieldType == FieldType.Enum)
                         mattr.LGType = FieldTypeS.Enum;

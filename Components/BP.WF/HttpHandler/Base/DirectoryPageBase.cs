@@ -228,6 +228,8 @@ namespace BP.WF.HttpHandler
             get
             {
                 string str = this.GetRequestVal("PKVal");
+
+
                 if (DataType.IsNullOrEmpty(str) == true)
                     str = this.GetRequestVal("OID");
 
@@ -244,6 +246,10 @@ namespace BP.WF.HttpHandler
 
                 if (DataType.IsNullOrEmpty(str) == true)
                     str = this.GetRequestVal("PK");
+
+                if ("null".Equals(str) == true)
+                    return null;
+
                 return str;
             }
         }

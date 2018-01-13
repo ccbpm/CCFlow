@@ -220,6 +220,9 @@ namespace BP.WF.HttpHandler
             try
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
+                if (en == null)
+                    return "err@实体类名错误["+this.EnName+"].";
+
                 en.PKVal = this.PKVal;
                 en.RetrieveFromDBSources();
 
@@ -242,7 +245,7 @@ namespace BP.WF.HttpHandler
             }
             catch (Exception ex)
             {
-                return "err@" + ex.Message;
+                return "err@保存错误:" + ex.Message;
             }
         }
         /// <summary>

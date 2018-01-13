@@ -188,6 +188,7 @@
     <Compile Include="HttpHandler\WF_Admin_FoolFormDesigner_SFTable.cs" />
     <Compile Include="HttpHandler\WF_Admin_Port.cs" />
     <Compile Include="HttpHandler\WF_Admin_RptDfine.cs" />
+    <Compile Include="HttpHandler\WF_CommEntity.cs" />
     <Compile Include="HttpHandler\WF_Comm_Sys.cs" />
     <Compile Include="HttpHandler\WF_RptDfine.cs" />
     <Compile Include="HttpHandler\WF_RptSearch.cs" />

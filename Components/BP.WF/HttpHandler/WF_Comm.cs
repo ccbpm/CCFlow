@@ -553,7 +553,7 @@ namespace BP.WF.HttpHandler
             ht.Add("IsImp", uac.IsImp); //是否可以导入?
 
             ht.Add("EnDesc", en.EnDesc); //描述?
-
+            ht.Add("EnName", en.ToString() ); //类名?
 
             //把map信息放入
             ht.Add("PhysicsTable", map.PhysicsTable);

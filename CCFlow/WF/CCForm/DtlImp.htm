@@ -58,6 +58,8 @@
         var mapExt = null;
         //查询条件集合
         var condtionsArry = [];
+        //查询条件，按照条件字段长度排序后
+        var condtionFieldsArry = [];
         //页面启动函数.
         $(function () {
             SetTableSize();
@@ -136,49 +138,18 @@
             if (condtions == "")
                 return;
 
-            //组合查询条件
+            //组合查询条件数组
             var tempArry = condtions.split("$");
             $.each(tempArry, function (i, obj) {
-                if (obj == "")
-                    return;
-
-                var paras = obj.split("#");
-                if (paras.length != 3)
-                    return;
-
-                var item = {};
-                var paraKey = "", labelText = "";
-                var ctrType = "Date", ctrValue = "";
-                $.each(paras, function (j, para) {
-                    if (para.indexOf("Para=") > -1) {
-                        paraKey = para.replace("Para=", "");
-                    }
-                    if (para.indexOf("Label=") > -1) {
-                        labelText = para.replace("Label=", "");
-                    }
-                    if (para.indexOf("ListURL=") > -1) {
-                        ctrValue = para.replace("ListURL=", "");
-                        ctrType = "ListURL";
-                    }
-                    if (para.indexOf("ListSQL=") > -1) {
-                        ctrValue = para.replace("ListSQL=", "");
-                        ctrType = "ListSQL";
-                    }
-                    if (para.indexOf("EnumKey=") > -1) {
-                        ctrValue = para.replace("EnumKey=", "");
-                        ctrType = "EnumKey";
-                    }
-                    if (para.indexOf("DefVal=") > -1) {
-                        ctrValue = para.replace("DefVal=", "");
-                    }
-                });                
-                item.CtrlType = ctrType;
-                item.FieldKey = paraKey;
-                item.Label = labelText;
-                item.Val = ctrValue;
-                condtionsArry.push(item);
+                CondtionArryPush(obj);
             });
 
+            //复制查询条件，排序
+            condtionFieldsArry = jQuery.extend(true, [], condtionsArry);
+            //利用js中的sort方法  
+            condtionFieldsArry.sort(function (a, b) {
+                return b.FieldKey.length - a.FieldKey.length;
+            });
             //平铺取第一个下拉框
             if (selectType == "0") {
                 $("#groupDiv").html("");
@@ -214,7 +185,55 @@
                     InputKeyWordData();
                 });
             }
+            //生成查询条件控件
+            CreateCondtionCtrls();
+        }
 
+        //添加查询条件到数组
+        function CondtionArryPush(condtion) {
+            if (condtion == "") {
+                return;
+            }
+            var paras = condtion.split("#");
+            if (paras.length != 3) {
+                return;
+            }
+
+            var item = {};
+            var paraKey = "", labelText = "";
+            var ctrType = "Date", ctrValue = "";
+            $.each(paras, function (j, para) {
+                if (para.indexOf("Para=") > -1) {
+                    paraKey = para.replace("Para=", "");
+                }
+                if (para.indexOf("Label=") > -1) {
+                    labelText = para.replace("Label=", "");
+                }
+                if (para.indexOf("ListURL=") > -1) {
+                    ctrValue = para.replace("ListURL=", "");
+                    ctrType = "ListURL";
+                }
+                if (para.indexOf("ListSQL=") > -1) {
+                    ctrValue = para.replace("ListSQL=", "");
+                    ctrType = "ListSQL";
+                }
+                if (para.indexOf("EnumKey=") > -1) {
+                    ctrValue = para.replace("EnumKey=", "");
+                    ctrType = "EnumKey";
+                }
+                if (para.indexOf("DefVal=") > -1) {
+                    ctrValue = para.replace("DefVal=", "");
+                }
+            });
+            item.CtrlType = ctrType;
+            item.FieldKey = paraKey;
+            item.Label = labelText;
+            item.Val = ctrValue;
+            condtionsArry.push(item);
+        }
+
+        //根据条件数组生成查询控件
+        function CreateCondtionCtrls() {
             //生成查询条件控件
             var searchPanel = $("#searchDiv");
             var noFirstRow = false;
@@ -304,9 +323,10 @@
             var dbSrc = mapExt.Tag2;
             var reg = new RegExp("@Key", "g");
             dbSrc = dbSrc.replace(reg, keyWord);
-            $.each(condtionsArry, function (i, obj) {
+            $.each(condtionFieldsArry, function (i, obj) {
                 var regC = new RegExp("@" + obj.FieldKey, "g");
                 var value = $("#" + obj.FieldKey).val();
+                if (value == null || value == "null") value = "";
                 dbSrc = dbSrc.replace(regC, value);
             });
             data = DBAccess.RunDBSrc(dbSrc, mapExt.DBType);
@@ -507,7 +527,6 @@
                 dtl.CopyJSON(data);
                 dtl.RefPK = refPKVal;
                 dtl.Rec = UserNo;
-                dtl.OID = 0;
                 dtl.FID = FID;
                 dtl.Insert();
             });

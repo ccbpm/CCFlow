@@ -297,13 +297,40 @@ namespace BP.En
 
             //默认的分组字段，可以是一个类名或者枚举.
             en.DefaultGroupAttrKey = defaultGroupKey;
-            en.RootNo = defaultGroupKey;
+            en.RootNo = rootNo; //默认的根目录.
 
             this.Add(en);
         }
-        
         /// <summary>
-        /// 
+        /// 增加分组列表模式
+        /// </summary>
+        /// <param name="_ensOfMM"></param>
+        /// <param name="_ensOfM"></param>
+        /// <param name="AttrOfOneInMM"></param>
+        /// <param name="AttrOfMInMM"></param>
+        /// <param name="desc"></param>
+        /// <param name="defaultGroupKey"></param>
+        /// <param name="AttrOfMText"></param>
+        /// <param name="AttrOfMValue"></param>
+        /// <param name="rootNo"></param>
+        public void AddGroupListModel(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
+          string desc, string defaultGroupKey = null, string AttrOfMText = "Name", string AttrOfMValue = "No")
+        {
+            //属性.
+            AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM, _ensOfM, AttrOfOneInMM,
+                AttrOfMInMM, AttrOfMText, AttrOfMValue, desc);
+
+            //工作模式.
+            en.Dot2DotModel = Dot2DotModel.TreeDeptEmp; //分组模式.
+
+            //默认的分组字段，可以是一个类名或者枚举.
+            en.DefaultGroupAttrKey = defaultGroupKey;
+            en.RootNo = "0";
+
+            this.Add(en);
+        }
+        /// <summary>
+        /// 绑定分组列表平铺模式
         /// </summary>
         /// <param name="_ensOfMM"></param>
         /// <param name="_ensOfM"></param>
@@ -313,7 +340,7 @@ namespace BP.En
         /// <param name="AttrOfMText">显示的标签,一般为 Name</param>
         /// <param name="AttrOfMValue">存储的值字段,一般为 No</param>
         /// <param name="defaultGroupKey">默认的分组外键或者枚举,如果为空就不分组.</param>
-        public void AddGroupModel(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
+        public void AddGroupPanelModel(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
             string desc, string defaultGroupKey = null, string AttrOfMText = "Name", string AttrOfMValue = "No")
         {
             //属性.

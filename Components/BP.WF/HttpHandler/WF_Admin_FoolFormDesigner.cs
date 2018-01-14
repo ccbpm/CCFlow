@@ -215,6 +215,18 @@ namespace BP.WF.HttpHandler
         {
             this.context = mycontext;
         }
+
+        /// <summary>
+        /// 转拼音
+        /// </summary>
+        /// <returns></returns>
+        public string ParseStringToPinyin()
+        {
+            string name = GetRequestVal("name");
+            string flag = GetRequestVal("flag");
+            //此处为字段中文转拼音，设置为最大20个字符，edited by liuxc,2017-9-25
+            return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(flag, "true"), true, 20);
+        }
         /// <summary>
         /// 执行默认的方法
         /// </summary>
@@ -228,11 +240,6 @@ namespace BP.WF.HttpHandler
             
             switch (this.DoType)
             {
-                case "ParseStringToPinyin": //转拼音方法.
-                    string name = GetRequestVal("name");
-                    string flag = GetRequestVal("flag");
-                    //此处为字段中文转拼音，设置为最大20个字符，edited by liuxc,2017-9-25
-                    return BP.Sys.CCFormAPI.ParseStringToPinyinField(name, Equals(flag, "true"), true, 20);
                 case "DtlFieldUp": //字段上移
                     MapAttr attrU = new MapAttr(this.MyPK);
                     attrU.DoUpForMapDtl();

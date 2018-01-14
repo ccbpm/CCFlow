@@ -454,7 +454,9 @@ namespace BP.WF.HttpHandler
             AttrOfOneVSM vsM=null;
             foreach (AttrOfOneVSM item in oneVsM)
             {
-                if (item.EnsOfMM.ToString().Equals(dot2DotEnsName) && item.DefaultGroupAttrKey.Equals(defaultGroupAttrKey ))
+                if ( item.Dot2DotModel== Dot2DotModel.TreeDeptEmp 
+                    && item.EnsOfMM.ToString().Equals(dot2DotEnsName)
+                    && item.DefaultGroupAttrKey.Equals(defaultGroupAttrKey ))
                 {
                     vsM = item;
                     break;

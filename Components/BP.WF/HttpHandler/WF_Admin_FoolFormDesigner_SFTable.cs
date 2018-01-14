@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Data;
 using System.Text;
 using System.Web;
@@ -49,48 +50,62 @@ namespace BP.WF.HttpHandler
 
         #region xxx 界面 .
         /// <summary>
-        ///  初始化sf0.
+        ///  初始化sf0. @于庆海，新方法.
         /// </summary>
         /// <returns></returns>
         public string SF0_Init()
         {
-            return "";
+            string cl = "BP.En.Entities";
+            ArrayList al = ClassFactory.GetObjects(cl);
+
+            //定义容器.
+            DataTable dt = new DataTable();
+            dt.Columns.Add("No");
+            dt.Columns.Add("Name");
+
+            SFTables sfs = new SFTables();
+            sfs.RetrieveAll();
+
+            foreach (object obj in al)
+            {
+                Entities ens = obj as Entities;
+                if (ens == null)
+                    continue;
+
+                try
+                {
+                    Entity en = ens.GetNewEntity;
+                    if (en == null)
+                        continue;
+
+                    if (en.EnMap.Attrs.Contains("No") == false)
+                        continue;
+
+                    if (sfs.Contains(ens.ToString()) == true)
+                        continue;
+
+                    DataRow dr = dt.NewRow();
+                    dr["No"] = ens.ToString();
+
+                    if (en.IsTreeEntity)
+                        dr["Name"] = en.EnMap.EnDesc + "(树结构) " + ens.ToString();
+                    else
+                        dr["Name"] = en.EnMap.EnDesc + " " + ens.ToString();
+
+                    dt.Rows.Add(dr);
+                }
+                catch
+                {
+
+                }
+            }
+            return BP.Tools.Json.ToJson(dt);
         }
         public string SF0_Save()
         {
             return "保存成功.";
         }
         #endregion xxx 界面方法.
-
-
-        #region 本地表 .
-        /// <summary>
-        ///  初始化sf0.
-        /// </summary>
-        /// <returns></returns>
-        public string SF1_Init()
-        {
-            SFDBSrcs srcs = new SFDBSrcs();
-            srcs.RetrieveAll();
-            return srcs.ToJson();
-        }
-        public string SF1_Save()
-        {
-            SFTable sf = new SFTable();
-            sf.No = this.GetValFromFrmByKey("No");
-            if (sf.IsExits == true)
-                return "err@标记:"+sf.No+"已经存在.";
-
-            sf.Name = this.GetRequestVal("Name");
-            sf.FK_SFDBSrc = this.GetValFromFrmByKey("FK_DBSrc");
-
-            sf.SrcType = SrcType.CreateTable;
-            sf.CodeStruct = (CodeStruct)this.GetValIntFromFrmByKey("CodeStruct");
-            sf.Insert();
-            return "保存成功.";
-        }
-        #endregion xxx 界面方法.
-
 
         #region 表或者视图 .
         /// <summary>
@@ -121,7 +136,6 @@ namespace BP.WF.HttpHandler
 
             if (string.IsNullOrWhiteSpace(src))
                 throw new Exception("err@参数不正确");
-
 
             if (string.IsNullOrWhiteSpace(table))
             {
@@ -166,89 +180,6 @@ namespace BP.WF.HttpHandler
         }
 
         #endregion xxx 界面方法.
-
-        #region sql .
-        /// <summary>
-        ///  初始化sf3.
-        /// </summary>
-        /// <returns></returns>
-        public string SF3_Init()
-        {
-            SFDBSrcs srcs = new SFDBSrcs();
-            srcs.RetrieveAll();
-            return srcs.ToJson();
-        }
-        public string SF3_Save()
-        {
-            SFTable sf = new SFTable();
-            sf.No = this.GetValFromFrmByKey("No");
-            if (sf.IsExits == true)
-                return "err@标记:" + sf.No + "已经存在.";
-
-            sf.Name = this.GetRequestVal("Name");
-            sf.FK_SFDBSrc = this.GetValFromFrmByKey("FK_DBSrc");
-            sf.CodeStruct = (CodeStruct)this.GetValIntFromFrmByKey("CodeStruct");
-            if (sf.CodeStruct == CodeStruct.Tree)
-            {
-                sf.DefVal = this.GetValFromFrmByKey("RootValue");
-            }
-            sf.SelectStatement = this.GetValFromFrmByKey("Selectstatement");
-            sf.SrcType = SrcType.SQL;
-            sf.FK_Val = "FK_" + sf.No;
-            sf.Save();
-            return "保存成功.";
-        }
-
-        #endregion xxx 界面方法.
-
-        #region 动态sql .
-        /// <summary>
-        ///  初始化sf5.
-        /// </summary>
-        /// <returns></returns>
-        public string SF5_Init()
-        {
-            SFDBSrcs srcs = new SFDBSrcs();
-            srcs.RetrieveAll();
-            return srcs.ToJson();
-        }
-        public string SF5_Save()
-        {
-            SFTable sf = new SFTable();
-            sf.No = this.GetValFromFrmByKey("No");
-            if (sf.IsExits == true)
-                return "err@标记:" + sf.No + "已经存在.";
-
-            sf.Name = this.GetRequestVal("Name");
-            sf.FK_SFDBSrc = this.GetValFromFrmByKey("FK_DBSrc");
-            sf.CodeStruct = (CodeStruct)this.GetValIntFromFrmByKey("CodeStruct");
-            if (sf.CodeStruct == CodeStruct.Tree)
-            {
-                sf.DefVal = this.GetValFromFrmByKey("RootValue");
-            }
-            sf.SelectStatement = this.GetValFromFrmByKey("Selectstatement");
-            sf.SrcType = SrcType.SQL;
-            sf.FK_Val = "FK_" + sf.No;
-            sf.Save();
-            return "保存成功.";
-        }
-
-        #endregion xxx 界面方法.
-
-        public string SF7_JQuery_Save()
-        {
-            SFTable sf = new SFTable();
-            sf.No = this.GetValFromFrmByKey("No");
-            if (sf.IsExits == true)
-                return "err@该方法已经存在"+sf.No;
-
-            sf.SrcType = SrcType.JQuery;
-
-            sf.Name = this.GetValFromFrmByKey("Name");
-            sf.FK_SFDBSrc = "local";
-            sf.Insert();
-
-            return "保存成功";
-        }
+       
     }
 }

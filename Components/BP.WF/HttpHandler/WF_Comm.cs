@@ -197,13 +197,9 @@ namespace BP.WF.HttpHandler
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
                 bool isExit = en.IsExits;
-
-                if (en.Row.ContainsKey("IsExits") == true)
-                    en.Row["IsExits"] = isExit;
-                else
-                    en.Row.Add("IsExits", isExit);
-
-                return en.ToJson(false);
+                if (isExit == true)
+                    return "1";
+                return "0";
             }
             catch (Exception ex)
             {

@@ -136,7 +136,7 @@ namespace BP.Sys
         /// <summary>
         /// 最近缓存的时间
         /// </summary>
-        public const string CashDT = "CashDT";
+        public const string RootVal = "RootVal";
         /// <summary>
         /// 加入日期
         /// </summary>
@@ -414,15 +414,15 @@ namespace BP.Sys
         /// <summary>
         /// 数据缓存时间
         /// </summary>
-        public string CashDT
+        public string RootVal
         {
             get
             {
-                return this.GetValStringByKey(SFTableAttr.CashDT);
+                return this.GetValStringByKey(SFTableAttr.RootVal);
             }
             set
             {
-                this.SetValByKey(SFTableAttr.CashDT, value);
+                this.SetValByKey(SFTableAttr.RootVal, value);
             }
         }
         /// <summary>
@@ -761,14 +761,13 @@ namespace BP.Sys
                     "@0=本地的类@1=创建表@2=表或视图@3=SQL查询表@4=WebServices@5=动态SQL查询@6=动态Handler@7=动态Json");
 
                 map.AddDDLSysEnum(SFTableAttr.CodeStruct, 0, "字典表类型", true, false, SFTableAttr.CodeStruct);
+                map.AddTBString(SFTableAttr.RootVal, null, "根节点值", false, false, 0, 200, 20);
+
 
                 map.AddTBString(SFTableAttr.FK_Val, null, "默认创建的字段名", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.TableDesc, null, "表描述", true, false, 0, 200, 20);
                 map.AddTBString(SFTableAttr.DefVal, null, "默认值", true, false, 0, 200, 20);
 
-                //与同步相关的数据.
-                map.AddTBString(SFTableAttr.CashDT, null, "上次同步的时间", false, false, 0, 200, 20);
-                map.AddTBInt(SFTableAttr.CashMinute, 0, "数据缓存时间(0表示不缓存)", false, false);
 
                 //数据源.
                 map.AddDDLEntities(SFTableAttr.FK_SFDBSrc, "local", "数据源", new BP.Sys.SFDBSrcs(), true);
@@ -855,6 +854,22 @@ namespace BP.Sys
         {
             //利用这个时间串进行排序.
             this.RDT = DataType.CurrentDataTime;
+
+
+            #region 如果是本地类. @于庆海.
+            if (this.SrcType == Sys.SrcType.BPClass)
+            {
+                Entities ens = ClassFactory.GetEns(this.No);
+                Entity en = ens.GetNewEntity;
+                this.Name = en.EnDesc;
+
+                //检查是否是树结构.
+                if (en.IsTreeEntity == true)
+                    this.CodeStruct = Sys.CodeStruct.Tree;
+                else
+                    this.CodeStruct = Sys.CodeStruct.NoName;
+            }
+            #endregion 如果是本地类.
 
             if (this.SrcType == Sys.SrcType.CreateTable)
             {

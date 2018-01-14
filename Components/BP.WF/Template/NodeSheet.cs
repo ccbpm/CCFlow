@@ -159,9 +159,13 @@ namespace BP.WF.Template
                 // 相关功能。
                 if (BP.WF.Glo.OSModel == OSModel.OneOne)
                 {
-                    map.AttrsOfOneVSM.AddGroupModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                    map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
                         BP.WF.Template.NodeStationAttr.FK_Node,
                         BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
+
+                    map.AttrsOfOneVSM.AddGroupListModel(new BP.WF.Template.NodeStations(), new BP.WF.Port.Stations(),
+                      BP.WF.Template.NodeStationAttr.FK_Node,
+                      BP.WF.Template.NodeStationAttr.FK_Station, "节点绑定岗位", StationAttr.FK_StationType);
 
                     //判断是否为集团使用，集团时打开新页面以树形展示
                     if (BP.WF.Glo.IsUnit == true)
@@ -181,12 +185,11 @@ namespace BP.WF.Template
                 else
                 {
                     //节点岗位.
-                    map.AttrsOfOneVSM.AddGroupModel(new BP.WF.Template.NodeStations(),
+                    map.AttrsOfOneVSM.AddGroupPanelModel(new BP.WF.Template.NodeStations(),
                         new BP.GPM.Stations(),
                       NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
                        "节点绑定岗位", BP.GPM.StationAttr.FK_StationType);
-
-
+                     
                     //判断是否为集团使用，集团时打开新页面以树形展示
                     if (BP.WF.Glo.IsUnit == true)
                     {

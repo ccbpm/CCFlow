@@ -42,6 +42,10 @@ namespace BP.En
         /// </summary>
         public string DefaultGroupAttrKey = null;
         /// <summary>
+        /// 树的根节点
+        /// </summary>
+        public string RootNo = null;
+        /// <summary>
         /// 关联的树字段
         /// </summary>
         public string RefTreeAttr =null; 
@@ -270,6 +274,34 @@ namespace BP.En
 			 
 			this.Add(en);				
 		}
+        /// <summary>
+        /// 增加树杆叶子类型
+        /// </summary>
+        /// <param name="_ensOfMM"></param>
+        /// <param name="_ensOfM"></param>
+        /// <param name="AttrOfOneInMM"></param>
+        /// <param name="AttrOfMInMM"></param>
+        /// <param name="desc"></param>
+        /// <param name="defaultGroupKey"></param>
+        /// <param name="AttrOfMText"></param>
+        /// <param name="AttrOfMValue"></param>
+        public void AddBranchesAndLeaf(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
+            string desc, string defaultGroupKey = null, string AttrOfMText = "Name", string AttrOfMValue = "No", string rootNo="0")
+        {
+            //属性.
+            AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM, _ensOfM, AttrOfOneInMM,
+                AttrOfMInMM, AttrOfMText, AttrOfMValue, desc);
+
+            //工作模式.
+            en.Dot2DotModel = Dot2DotModel.TreeDeptEmp; //分组模式.
+
+            //默认的分组字段，可以是一个类名或者枚举.
+            en.DefaultGroupAttrKey = defaultGroupKey;
+            en.RootNo = defaultGroupKey;
+
+            this.Add(en);
+        }
+        
         /// <summary>
         /// 
         /// </summary>

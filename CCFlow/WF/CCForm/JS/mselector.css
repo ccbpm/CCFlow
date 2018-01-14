@@ -17,11 +17,10 @@
 .ccflow-input-span-container .ccflow-tag {
 	padding: -2px;
 	font-size: 12px;
-	font-family: serif;;
-	margin-right: 2px;
-	margin-top: 2px;
+	font-family: serif;
+	margin-right: 0px;
+	margin-top: 0px;
 	margin-bottom: 2px;
-	display: inline-block;
 }
 .ccflow-label {
 	font-size: 10px;
@@ -31,9 +30,10 @@
 	border-radius: 3px;
 	font-weight: 200;
 }
-.ccflow-label-primary {
-	background: #2693FF;
-	color: white;
+.ccflow-label-primary
+{
+    background: #0099FF;
+    color: white;
 }
 .ccflow-input-span-container span i[data-role='remove'] {
 	cursor: pointer;

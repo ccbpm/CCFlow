@@ -18,7 +18,7 @@
 			if (!contains(target, data, valueField)) {
 				var tag = $('<span class="ccflow-tag ccflow-label ccflow-label-primary"></span>');
 				tag.data(data);
-				tag.html(data[textField] + '&nbsp;<i class="fa fa-times" data-role="remove"></i>');
+				tag.html(data[textField] + '<i class="fa fa-times" data-role="remove"></i>');
 				container.append(tag);
 				tag.delegate("i", "click", function (e) {
 					var record = $(this).parent().data();

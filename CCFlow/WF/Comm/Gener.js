@@ -723,7 +723,7 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState+" enName="+self.enName+" pkval="+self.pkval);
                 }
             });
         },
@@ -817,12 +817,13 @@ var Entity = (function () {
 
         Delete: function () {
             var self = this;
-            var params = getParams(self);
+            //var params = getParams(self);
+            var params = getParams1(this);
             var result;
             $.ajax({
                 type: 'post',
                 async: false,
-                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&t=" + new Date().getTime(),
+                url: dynamicHandler + "?DoType=Entity_Delete&EnName=" + self.enName + "&" + params + "&t=" + new Date().getTime(),
                 dataType: 'html',
                 data: params,
                 success: function (data) {

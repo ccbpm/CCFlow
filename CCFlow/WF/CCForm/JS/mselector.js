@@ -20,7 +20,7 @@
             if (!contains(target, data, valueField) && data[valueField] != empty && typeof data[valueField] !== "undefined") {
                 var tag = $('<span class="ccflow-tag ccflow-label ccflow-label-primary"></span>');
                 tag.data(data);
-                tag.html(data[textField] + '&nbsp;<i class="fa fa-times" data-role="remove"></i>');
+                tag.html( data[textField] + '<i class="fa fa-times" data-role="remove"></i>');
                 search.before(tag);
                 onSelect(target, data);
                 tag.delegate("i", "click", function (e) {
@@ -254,7 +254,7 @@
                 if (!contains(target, data, valueField) && data[valueField] != empty) {
                     var tag = $('<span class="ccflow-tag ccflow-label ccflow-label-primary"></span>');
                     tag.data(data);
-                    tag.html($(this).text() + '&nbsp;<i class="fa fa-times" data-role="remove"></i>');
+                    tag.html($(this).text() + '<i class="fa fa-times" data-role="remove"></i>');
                     search.before(tag);
                     onSelect(target, data);
                     tag.delegate("i", "click", function () {

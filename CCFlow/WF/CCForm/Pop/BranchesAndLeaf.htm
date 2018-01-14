@@ -70,7 +70,7 @@
 		        //获得json.
 		        var json = DBAccess.RunDBSrc(dbSrc);
 
-		     // alert(JSON.stringify( json));
+		        //  alert(JSON.stringify(json));
 
 		        if (!$.isArray(json) || json.length == 0) {
 		            return;
@@ -99,8 +99,6 @@
 		    }
 
 		    function findChildren(jsonArray, parentNo) {
-
-
 
 		        var appendToTree = function (treeToAppend, child) {
 		            $.each(treeToAppend, function (i, o) {
@@ -163,8 +161,6 @@
 		            onNodeSelected: function (event, data) {
 
 		                var myurl = replaceAll(treeClickUrl, "@Key", data.nodeId);
-
-		              //  alert(treeClickUrl);
 		                loadSelectGrid(myurl, global.selectedRows);
 
 		            }
@@ -184,10 +180,10 @@
 		        var webUser = new WebUser();
 
 		        // AtPara
-		        var title = GetAtPara(mapExt.AtPara, "Title");
+		        var title = mapExt.GetPara("Title");
 		        $("#title").text(title); //设置标题.
 
-		        var tip = GetAtPara(mapExt.AtPara, "SearchTip");
+		        var tip = mapExt.GetPara("SearchTip");
 		        $("#TB_Key").attr("placeholder", tip); //设置查询提示.
 
 		        //跟节点编号.
@@ -200,7 +196,7 @@
 		        var global = window;
 		        global.selectedRows = [];
 
-		        //
+		        //设置变量.
 		        global.FK_MapData = mapExt.FK_MapData;
 		        global.AttrOfOper = mapExt.AttrOfOper;
 		        global.oid = GetQueryString("OID");
@@ -208,7 +204,7 @@
 		        var searchUrl = mapExt.Tag1;    //查询
 		        var treeUrl = mapExt.Tag2;      //初始化树
 		        var treeClickUrl = mapExt.Tag3; //树选择.
-
+                
 		        if (searchUrl == "" || treeUrl == "" || treeClickUrl == "") {
 		            alert('配置错误:查询数据源，初始化树的数据源，点击树节点返回数据的数据源，必须都不能为空。');
 		            return;
@@ -262,9 +258,8 @@
 		        // search
 		        $("#TB_Key").on("keyup", function () {
 
-		            searchUrl = replaceAll(searchUrl, "@Key", $(this).val());
-
-		            loadSelectGrid(searchUrl, global.selectedRows);
+		            var mySrc = replaceAll(searchUrl, "@Key", $(this).val());
+		            loadSelectGrid(mySrc, global.selectedRows);
 
 		        });
 
@@ -324,7 +319,7 @@
 		                title: '名称'
 		            }, {
 		                title: '操作', formatter: function (value, row, index) {
-		                    return '<a class="btn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">删除</a>';
+		                    return '<a class="btn btn-danger" href="#" onclick="removeRecord(\'' + row.No + '\')">X</a>';
 		                }
 		            }]
 		        });

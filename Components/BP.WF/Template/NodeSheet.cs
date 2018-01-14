@@ -13,6 +13,7 @@ namespace BP.WF.Template
     /// </summary>
     public class NodeSheet : Entity
     {
+        #region 属性.
         public int NodeID
         {
             get
@@ -54,6 +55,7 @@ namespace BP.WF.Template
                 this.SetValByKey(NodeAttr.Name, value);
             }
         }
+        #endregion 属性.
 
         #region 构造函数
         /// <summary>
@@ -203,9 +205,14 @@ namespace BP.WF.Template
                     }
                 }
 
-                map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeEmps(),
-                    new BP.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,
-                    DeptAttr.No, "节点绑定接受人");
+                //节点绑定人员. 使用树杆与叶子的模式绑定.
+                map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(), new BP.Port.Emps(),
+                   BP.WF.Template.NodeEmpAttr.FK_Node,
+                   BP.WF.Template.NodeEmpAttr.FK_Emp, "节点绑定接受人", EmpAttr.FK_Dept, EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+
+                //map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeEmps(),
+                //new BP.Port.Emps(), NodeEmpAttr.FK_Node, NodeEmpAttr.FK_Emp, DeptAttr.Name,
+                //DeptAttr.No, "节点绑定接受人");
 
                 map.AddDtl(new NodeToolbars(), NodeToolbarAttr.FK_Node);
 

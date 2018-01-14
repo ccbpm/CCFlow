@@ -160,14 +160,25 @@ namespace BP.WF.HttpHandler
                             if (vsM.Dot2DotModel == Dot2DotModel.TreeDept)
                                 url = "Dot2DotTreeDeptModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
                             else if (vsM.Dot2DotModel == Dot2DotModel.TreeDeptEmp)
-                                url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
-                            else
                             {
+                             //   url = "Dot2DotTreeDeptEmpModel.htm?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
                                 // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
-                                url = "Dot2Dot.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString();
+                                url = "BranchesAndLeaf.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString();
+                                url += "&PKVal="+en.PKVal;
+                                url += "&Dot2DotEnName=" + vsM.EnsOfMM.GetNewEntity.ToString(); //存储实体类.
                                 url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
                                 url += "&AttrOfMInMM=" + vsM.AttrOfMInMM; //dot2dot存储表那个与实体表.  比如:FK_Station.
                                 url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体分组依据.  比如:FK_Station.
+                                url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  比如:FK_Station.
+                                //url += "&RootNo=" + vsM.RootNo; //默认的B实体分组依据.  比如:FK_Station.
+                            }
+                            else
+                            {
+                                // url = "Dot2Dot.aspx?EnsName=" + en.GetNewEntities.ToString() + "&EnName=" + this.EnName + "&AttrKey=" + vsM.EnsOfMM.ToString();
+                                url = "Dot2Dot.htm?EnName=" + this.EnName + "&Dot2DotEnsName=" + vsM.EnsOfMM.ToString(); //比如:BP.WF.Template.NodeStations
+                                url += "&AttrOfOneInMM=" + vsM.AttrOfOneInMM; //存储表那个与主表关联. 比如: FK_Node
+                                url += "&AttrOfMInMM=" + vsM.AttrOfMInMM;  //dot2dot存储表那个与实体表.  比如:FK_Station.
+                                url += "&EnsOfM=" + vsM.EnsOfM.ToString(); //默认的B实体.   //比如:BP.Port.Stations
                                 url += "&DefaultGroupAttrKey=" + vsM.DefaultGroupAttrKey; //默认的B实体分组依据.  比如:FK_Station.
 
                                 //+"&RefAttrEnsName=" + vsM.EnsOfM.ToString();
@@ -378,7 +389,129 @@ namespace BP.WF.HttpHandler
             }
         }
         #endregion 实体的操作.
+        public string BranchesAndLeaf_SearchByNodeID()
+        {
+            string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
+            string defaultGroupAttrKey = this.GetRequestVal("DefaultGroupAttrKey");
+            string key = this.GetRequestVal("Key"); //查询关键字.
 
+            string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
+            Entities ensMen = ClassFactory.GetEns(ensOfM);
+            QueryObject qo = new QueryObject(ensMen); //集合.
+            qo.AddWhere(defaultGroupAttrKey, key);
+            qo.DoQuery();
+            return ensMen.ToJson();
+        }
+        public string BranchesAndLeaf_SearchByKey()
+        {
+            string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
+            string defaultGroupAttrKey = this.GetRequestVal("DefaultGroupAttrKey");
+
+            string key = this.GetRequestVal("Key"); //查询关键字.
+
+            string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
+            Entities ensMen = ClassFactory.GetEns(ensOfM);
+            QueryObject qo = new QueryObject(ensMen); //集合.
+            qo.AddWhere("No", " LIKE ", "%" + key + "%");
+            qo.addOr();
+            qo.AddWhere("Name", " LIKE ", "%" + key + "%");
+            qo.DoQuery();
+
+            return ensMen.ToJson();
+        }
+        public string BranchesAndLeaf_Delete()
+        {
+            try
+            {
+                string dot2DotEnName = this.GetRequestVal("Dot2DotEnName");
+                string AttrOfOneInMM = this.GetRequestVal("AttrOfOneInMM");
+                string AttrOfMInMM = this.GetRequestVal("AttrOfMInMM");
+                Entity mm = ClassFactory.GetEn(dot2DotEnName);
+                mm.Delete(AttrOfOneInMM, this.PKVal, AttrOfMInMM, this.GetRequestVal("Key"));
+                return "删除成功.";
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <returns></returns>
+        public string BranchesAndLeaf_Init()
+        {
+            string dot2DotEnsName = this.GetRequestVal("Dot2DotEnsName");
+            string defaultGroupAttrKey = this.GetRequestVal("DefaultGroupAttrKey");
+
+            //string enName = this.GetRequestVal("EnName");
+            Entity en = ClassFactory.GetEn(this.EnName);
+            en.PKVal = this.PKVal;
+            en.Retrieve();
+
+            //找到映射.
+            AttrsOfOneVSM oneVsM = en.EnMap.AttrsOfOneVSM;
+            AttrOfOneVSM vsM=null;
+            foreach (AttrOfOneVSM item in oneVsM)
+            {
+                if (item.EnsOfMM.ToString().Equals(dot2DotEnsName) && item.DefaultGroupAttrKey.Equals(defaultGroupAttrKey ))
+                {
+                    vsM = item;
+                    break;
+                }
+            }
+            if (vsM == null)
+                return "err@参数错误,没有找到VSM";
+
+            //组织数据.
+            DataSet ds = new DataSet();
+            string rootNo = vsM.RootNo;
+            if (rootNo.Equals("@WebUser.FK_Dept") || rootNo.Equals("WebUser.FK_Dept"))
+                rootNo = WebUser.FK_Dept;
+
+            #region 生成树目录.
+            string ensOfM = this.GetRequestVal("EnsOfM"); //多的实体.
+          Entities ensMen=ClassFactory.GetEns(ensOfM);
+            Entity enMen=ensMen.GetNewEntity;
+
+            Attr attr =enMen.EnMap.GetAttrByKey(defaultGroupAttrKey);
+            if (attr == null)
+                return "err@在实体[" + ensOfM + "]指定的分树的属性[" + defaultGroupAttrKey + "]不存在，请确认是否删除了该属性?";
+
+            if (attr.MyFieldType == FieldType.Normal)
+                return "err@在实体[" + ensOfM + "]指定的分树的属性[" + defaultGroupAttrKey + "]不能是普通字段，必须是外键或者枚举.";
+
+            Entities trees = attr.HisFKEns; 
+            trees.RetrieveAll();
+
+            DataTable dt = trees.ToDataTableField("DBTrees");
+            //如果没有parnetNo 列，就增加上, 有可能是分组显示使用这个模式.
+            if (dt.Columns.Contains("ParentNo") == false)
+            {
+                dt.Columns.Add("ParentNo");
+                foreach (DataRow dr in dt.Rows)
+                    dr["ParentNo"] = rootNo;
+            }
+            ds.Tables.Add(dt);
+            #endregion 生成树目录.
+
+            #region 生成选择的数据.
+            Entities dot2Dots = ClassFactory.GetEns(dot2DotEnsName);
+            dot2Dots.Retrieve(vsM.AttrOfOneInMM, this.PKVal);
+
+            DataTable dtSelected = dot2Dots.ToDataTableField("DBMMs");
+
+            string attrOfMInMM = this.GetRequestVal("AttrOfMInMM");
+            string AttrOfOneInMM = this.GetRequestVal("AttrOfOneInMM");
+            
+            dtSelected.Columns[attrOfMInMM].ColumnName = "No";
+            dtSelected.Columns[attrOfMInMM+"Text"].ColumnName = "Name";
+            dtSelected.Columns.Remove(AttrOfOneInMM);
+            ds.Tables.Add(dtSelected); //已经选择的数据.
+            #endregion 生成选择的数据.
+
+            return BP.Tools.Json.ToJson(ds);
+        }
 
         /// <summary>
         /// 执行保存

@@ -723,7 +723,7 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState+" enName="+self.enName+" pkval="+self.pkval);
+                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState + " enName=" + self.enName + " pkval=" + self.pkval);
                 }
             });
         },
@@ -922,21 +922,19 @@ var Entity = (function () {
                 url: dynamicHandler + "?DoType=Entity_IsExits&EnName=" + self.enName + "&" + getParams1(self),
                 dataType: 'html',
                 success: function (data) {
-                    result = data;
+
                     if (data.indexOf("err@") != -1) {
                         alert(data);
                         return;
                     }
-                    try {
-                        var json = JSON.parse(data);
-                        result = json.IsExits;
-                    } catch (e) {
-                        result = "err@解析错误: " + data;
-                        alert(result);
-                    }
+
+                    if (data == "1")
+                        result = true;
+                    else
+                        result = false;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    result = "err@系统发生异常,IsExits, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
                     alert(result);
                 }
             });

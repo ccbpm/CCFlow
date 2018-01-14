@@ -38,30 +38,8 @@
         $(function () {
 
             $("#Msg").html("正在加载,请稍后......");
-
-            // 初始化加载数据源
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=SF5_Init&FK_MapData=" + GetQueryString("FK_MapData") + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-
-                    data = JSON.parse(data);
-
-                    //绑定数据源.
-                    GenerBindDDL("DDL_FK_DBSrc", data, "No", "Name", "local");
-
-                }
-            });
-
-            // 初始化加载数据格式
-            GenerBindDDL("DDL_CodeStruct", CONST_STRUCTS, "No", "Name", CONST_STRUCTS[0].No);
+         
+          
 
             $("#Msg").html("");
         });
@@ -118,7 +96,7 @@
     <form action="" id="cc">
         <table style="width: 95%; margin: 5px; padding: 5px;">
             <caption>
-                <a href="./Default.htm">返回</a> - SQL查询表
+                <a href="./Default.htm">返回</a> - 微服务Handler外部数据源,(需要重写\DataUser\SFTableHandler.ashx 文件.)
             </caption>
             <tr>
                 <th>项目</th>

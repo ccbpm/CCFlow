@@ -3,6 +3,8 @@
 <head>
     <title>创建本地类</title>
      <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/bootstrap.min.js"></script>
     <link href="../../../Scripts/easyUI/themes/default/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../../Scripts/easyUI/themes/icon.css" rel="stylesheet" type="text/css" />
     <script src="../../../Scripts/easyUI/jquery-1.8.0.min.js" type="text/javascript"></script>
@@ -10,11 +12,52 @@
     <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="../../../Scripts/config.js" type="text/javascript"></script>
     <script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="SFTable.js" type="text/javascript"></script>
     <base target="_self" />
+
+    <script  type="text/javascript">
+        $(function () {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_SFTable");
+            var data = handler.DoMethodReturnJSON("SF0_Init");
+
+            //绑定数据源.
+            GenerBindDDL("DDL_No", data, "No", "Name");
+
+            $("#Msg").html("");
+
+        });
+
+        function Save() {
+
+            $("#Msg").html("正在加载,请稍后......");
+
+            var no = $("#DDL_No").val() || "";
+            if (no == "") {
+                alert('请选择一个实体类.');
+                return;
+            }
+ 
+            var en = new Entity("BP.Sys.SFTable");
+            en.No = no;
+            en.SrcType = 0; //本地类.
+            
+            var i = en.Insert();
+            alert("注册成功...");
+            window.location.href = "Default.htm";
+
+            $("#Msg").html("");
+        }
+    </script>
 </head>
 <body>
+
+<div id="Msg"> </div>
+
 <table style="width:95%; margin:5px; padding:5px;">
-<caption><a href="./Default.htm">返回</a> -创建本类  </caption>
+<caption><a href="Default.htm">返回</a> -创建本类  </caption>
 
 <tr>
 <th> 说明 </th>
@@ -22,21 +65,29 @@
 <th> 备注 </th>
 </tr>
 
-
 <tr>
 <td> 编号 </td>
-<td> <select id></select>  </td>
-<td>   </td>
+<td> <select id="DDL_No" ></select>  </td>
+<td> 请选择一个类名  </td>
 </tr>
-
+<!--
 <tr>
 <td> 名称 </td>
-<td> <select id="" ></select>  </td>
-<td>   </td>
-</tr>
-
-
+<td> <input type=text value="" id="TB_Name" />  </td>
+<td>  默认为实体的类名称 </td>
+</tr>-->
 </table>
+
+<input type="button" value="Save"  onclick="Save()" class="easyui-linkbutton" data-options="iconCls:'icon-save'" />
+
+<fieldset>
+<legend>帮助</legend>
+<ul>
+<li>该数据源类型是采用bp类编译的实体作为数据源.</li>
+<li>优点：查询内容可以自定定义.</li>
+<li>缺点：不能可视化的编辑，需要代码实现.</li>
+</ul>
+</fieldset>
 
 
 </body>

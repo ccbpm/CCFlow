@@ -10,6 +10,7 @@
 	<script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
 	<script src="../../../Scripts/config.js" type="text/javascript"></script>
 	<script src="../../../Comm/Gener.js" type="text/javascript"></script>
+    <script src="SFTable.js" type="text/javascript"></script>
 	<base target="_self" />
 	<style type="text/css">
 		.style1
@@ -22,8 +23,8 @@
 		}
 	</style>
 	<script type="text/javascript" language="javascript">
-		function Save() {
-			$("#Msg").html("正在加载,请稍后......");
+	    function Save() {
+
 			var no = $("#TB_No").val() || "";
 			if (no == "") {
 				alert('请输入编号.');
@@ -31,29 +32,25 @@
 			}
 			var name = $("#TB_Name").val() || "";
 			if (name == "") {
-				alert('请输入名称.');
-				return;
+			    alert('请输入名称.');
+			    return;
 			}
-			var frmData = $("#cc").serialize();
-			$.ajax({
-				type: 'post',
-				data: frmData,
-				async: true,
-				url: Handler + "?DoType=SF7_JQuery_Save&m=" + Math.random(),
-				dataType: 'html',
-				success: function (data) {
-					if (data.indexOf('err@') == 0) {
-						alert(data);
-						return;
-					}
-					alert(data);
-					document.location.href = 'Default.htm?FK_MapData=' + GetQueryString("FK_MapData");;
-				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
-				}
-			});
-			$("#Msg").html("");
+
+			var en = new Entity("BP.Sys.SFTable");
+			en.CopyForm();
+
+			if (en.IsExits() == true) {
+			    alert("编号已经存在[" + en.No + "]请使用其他的编号.");
+			    return;
+			}
+
+			en.SrcType = 3; //自定义数据表.
+			en.FK_Val = "FK_" + en.No;
+			en.Insert();
+
+			alert("保存成功.");
+			window.location.href = "Default.htm";
+
 		}
 	</script>
 </head>
@@ -69,29 +66,32 @@
                 <th>备注</th>
             </tr>
             <tr>
-                <td class="GroupTitle">方法名</td>
+                <td >方法名</td>
                 <td class="style2"><input type="text" id="TB_No" name="TB_No" /></td>
                 <td>方法英文名.</td>
             </tr>
             <tr>
-                <td class="GroupTitle">方法描述</td>
+                <td >方法描述</td>
                 <td class="style2"><input type="text" id="TB_Name" name="TB_Name" /></td>
                 <td>方法中文名</td>
             </tr>
         </table>
-        <input type=button value="保存" onclick="Save()" />
+        <input type="button" value="保存" onclick="Save()" />
 
+        <font color=gray>
         <fieldset>
         <legend>帮助</legend>
         <ul>
-        <<li>首先在 \DataUser\SFTable.js 文件里写一个函数, 该文件可以被流程开发人员重写.</li>
-        <<li>该函数的格式要求，请参考SFTable.js 的头部文件.</li>
-        <<li>该功能界面是把外部数据源的js方法注册到Sys_SFTable里.</li>
-        <<li>方法名就是SFTable.js的函数名, 方法描述就填写一个中文描述. </li>
-        <<li>比如有一个 function XCLX() 的函数，方法名为XCLX 方法描述为行程类型.</li>
-        <<li>如果表单引用了该字段，该字段为下来框展示，但是他是外部数据源类型，在Sys_MapAttr里有两条记录分别为FiledName, FieldNameT .</li>
+        <li>首先在 \DataUser\SFTable.js 文件里写一个函数, 该文件可以被流程开发人员重写.</li>
+        <li>该函数的格式要求，请参考SFTable.js 的头部文件.</li>
+        <li>该功能界面是把外部数据源的js方法注册到Sys_SFTable里.</li>
+        <li>方法名就是SFTable.js的函数名, 方法描述就填写一个中文描述. </li>
+        <li>比如有一个 function XCLX() 的函数，方法名为XCLX 方法描述为行程类型.</li>
+        <li>如果表单引用了该字段，该字段为下来框展示，但是他是外部数据源类型，在Sys_MapAttr里有两条记录分别为FiledName, FieldNameT .</li>
         </ul>
         </fieldset>
+        </font>
+
     </form>
 </body>
 </html>

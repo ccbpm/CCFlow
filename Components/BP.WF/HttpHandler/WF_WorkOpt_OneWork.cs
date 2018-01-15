@@ -315,7 +315,7 @@ namespace BP.WF.HttpHandler
                     if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
                     {
                         string empFrom = dr[2].ToString();
-                        if (BP.Web.WebUser.No == empFrom)
+                        if (BP.Web.WebUser.No == empFrom || BP.Web.WebUser.No=="admin" )
                         {
                             CanPackUp = true;
                             break;

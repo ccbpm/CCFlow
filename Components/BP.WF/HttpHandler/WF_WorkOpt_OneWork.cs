@@ -298,7 +298,7 @@ namespace BP.WF.HttpHandler
             bool CanPackUp = false;
             if (SystemConfig.CustomerNo == "TianYe")
             {
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin==true )
                 {
                     CanPackUp=true;
                 }

@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>消息推送 </title>
+    
+    <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../../Scripts/bootstrap/js/jquery.min.js"></script>
+    <script src="../../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+
+    <base target="_self" />
+    <script type="text/javascript">
+        //页面启动函数.
+        $(function () {
+
+            var en = new Entity("BP.Sys.MapExt");
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.ExtType = "BindFunction";
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.Tag = GetQueryString("FK_Event");
+
+          //  document.getElementById("table1").title = en.Tag + " - 事件";
+
+            en.MyPK = en.ExtType + "_" + en.FK_MapData + "_" + en.AttrOfOper + "_" + en.Tag;
+            var i = en.RetrieveFromDBSources();
+
+
+            $("#Btn_Save").attr("value", "保存:" + GetQueryString("FK_Event")+"事件");
+
+
+            GenerFullAllCtrlsVal(en);
+
+            //设置按钮是否可以用?
+            if (i == 0)
+                $("#Btn_Delete").attr("disabled", true);
+            else
+                $("#Btn_Delete").removeAttr("disabled");
+
+            $("#table1").attr("title", en.Tag + " - 事件");
+
+        });
+
+        function Delete() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+            
+            var en = new Entity("BP.Sys.MapExt");
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.ExtType = "BindFunction";
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.Tag = GetQueryString("FK_Event");
+            en.MyPK = en.ExtType + "_" + en.FK_MapData + "_" + en.AttrOfOper + "_" + en.Tag;
+            en.Delete();
+
+            alert("删除成功.");
+
+            window.location.href = window.location.href;
+        }
+
+        function Save() {
+
+            var en = new Entity("BP.Sys.MapExt");
+
+            en.CopyURL();
+            en.CopyForm();
+
+            en.FK_MapData = GetQueryString("FK_MapData");
+            en.ExtType = "BindFunction";
+            en.AttrOfOper = GetQueryString("KeyOfEn");
+            en.Tag = GetQueryString("FK_Event");
+            if (en.Tag == "") {
+                alert("函数名不能为空.");
+                return;
+            }
+
+            en.MyPK = en.ExtType + "_" + en.FK_MapData + "_" + en.AttrOfOper + "_" + en.Tag;
+          var i=   en.Save();
+
+            alert("保存成功...");
+
+            window.location.href = window.location.href;
+
+            //window.location.href = "BindFunction.htm?FK_MapData=" + en.FK_MapData;
+        }
+
+        function BackTo() {
+            window.location.href = "BindFunction.htm?FK_MapData=" + GetQueryString("FK_MapData");
+        }
+    </script>
+    
+</head>
+<body   style="font-size: smaller">
+    <form method="post"   id="form1">  
+    <table id="table1" name="table1" style=" width:98%; "> 
+    <caption> 事件 </caption>
+
+    <tr>
+    <td>函数名称 </td>
+    <td> 
+    <input type="text" id="TB_Doc" name="TB_Doc" />
+     </td>
+    </tr>
+
+    
+    <tr>
+    <td>备注 </td>
+    <td> 
+    <input type="text" id="TB_Tag1" name="TB_Tag1" />
+     </td>
+    </tr>
+    </table>  
+
+    <input type="button" value="Save" id="Btn_Save" onclick="Save();" />
+    <input type="button" value="Delete" id="Btn_Delete" name="Btn_Delete" onclick="Delete();" />
+    <input type="button" value="Back" id="Back" name="Back" onclick="BackTo();" />
+
+    
+    </form>
+</body>
+</html>

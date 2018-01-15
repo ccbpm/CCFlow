@@ -5,6 +5,8 @@
     <script type="text/javascript" src="../../../Scripts/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="../../../Scripts/QueryString.js"></script>
     <script type="text/javascript" src="../../../Scripts/config.js"></script>
+    <script type="text/javascript" src="../../../Comm/Gener.js"></script>
+
     <link href="../../../../DataUser/Style/ccbpm.css" rel="stylesheet" />
     <script type="text/javascript">
         var sys_mapExt = null;
@@ -13,41 +15,29 @@
         var fk_mapdata = GetQueryString("FK_MapData"); //表单id.
         var keyOfEn = GetQueryString("KeyOfEn"); //字段
 
+      
         //初始加载
         $(function () {
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=RegularExpression_Init&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
 
-                    if (data == "")
-                        return;
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("RegularExpression_Init");
 
-                    data = JSON.parse(data);
+            data = JSON.parse(data);
+            sys_mapExt = data['Sys_MapExt']; // 已经保存的模版.
+            for (var j = 0; j < sys_mapExt.length; j++) {
+                $("#TB_Doc_" + sys_mapExt[j].Tag).val(sys_mapExt[j].Doc);
+                $("#TB_Tag1_" + sys_mapExt[j].Tag).val(sys_mapExt[j].Tag1);
+            }
 
-                    sys_mapExt = data['Sys_MapExt']; // 已经保存的模版.
-                    for (var j = 0; j < sys_mapExt.length; j++) {
-                        $("#TB_Doc_" + sys_mapExt[j].Tag).val(sys_mapExt[j].Doc);
-                        $("#TB_Tag1_" + sys_mapExt[j].Tag).val(sys_mapExt[j].Tag1);
-                    }
+            RE = data['RE']; //模版列表.
+            REDtl = data['REDtl']; //模版的详细信息.
+            for (var i = 0; i < RE.length; i++) {
+                var xh = i + 1;
+                var newRow = "<tr><td>" + xh + "</td><td style='bgcolor:red'>" + RE[i].No + "</td><td class=BigDoc><a href=\"javascript:Select('" + RE[i].No + "')\" >" + RE[i].Name + "</a> </td></tr>";
+                $("#Table1 tr:last").after(newRow);
+            }
 
-                    RE = data['RE']; //模版列表.
-                    REDtl = data['REDtl']; //模版的详细信息.
-                    for (var i = 0; i < RE.length; i++) {
-                        var xh = i + 1;
-                        var newRow = "<tr><td>" + xh + "</td><td style='bgcolor:red'>" + RE[i].No + "</td><td class=BigDoc><a href=\"javascript:Select('" + RE[i].No + "')\" >" + RE[i].Name + "</a> </td></tr>";
-                        $("#Table1 tr:last").after(newRow);
-                    }
-
-                },
-                error: function (xml, textSta, errorThrown) {
-                    alert(xml);
-                    alert(textSta);
-                    alert(errorThrown);
-                }
-            })
         })
         //选择模板
         function Select(id) {
@@ -56,6 +46,7 @@
 
                 if (REDtl[i].ItemNo != id)
                     continue;
+
                 var ev = REDtl[i].ForEvent;
                 var test = $("#TB_Doc_" + ev).val();
                 if (test == undefined) {
@@ -67,30 +58,20 @@
 
                 $("#TB_Doc_" + ev).val(REDtl[i].Exp);
                 $("#TB_Tag1_" + ev).val(REDtl[i].Msg);
-
-
             }
         }
         //保存
         function Save() {
 
-            var frmData = $("#cc").serialize();
-
-            //初始化表格.
-            $.ajax({
-                data: frmData,
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=RegularExpression_Save&FK_MapData=" + fk_mapdata + "&KeyOfEn=" + keyOfEn + "&m=" + Math.random(),
-                dataType: 'html',
-                success: function (data) {
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
-                    alert(data);
-                }
-            });
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_Admin_FoolFormDesigner_MapExt");
+            handler.AddUrlData();
+            handler.AddFormData();
+            var data = handler.DoMethodReturnString("RegularExpression_Save");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+            alert(data);
         }
     </script>
     <style type="text/css">

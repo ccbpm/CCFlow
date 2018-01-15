@@ -165,8 +165,35 @@ function AfterBindEn_DealMapExt(frmData) {
                 '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle(document.getElementById('TB_" + mapExt.AttrOfOper + "'),'" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
                 tb.parent().html(eleHtml);
                 break;
+            case "BindFunction": //控件绑定函数.
+                var ctrl = $('[name$=' + "TB_" + mapExt.AttrOfOper + ']');
+                if (ctrl.length == 1) {
+
+                    var funcName = mapExt.Doc;   //"Settime";
+                    var funcEvent = mapExt.Tag;  //"blur" , "click"; 
+
+                    //加载方法.
+                    ctrl.on(funcEvent, function () {
+                        try {
+                            eval(funcName + "()");
+                        } catch (e) {
+                            alert(funcName + "()不存在！");
+                        }
+                    });
+                    break;
+                }
+                break;
             case "RegularExpression": //正则表达式  统一在保存和提交时检查
+
+                if (mapExt.Tag == "onblur") {
+                    var tb = $('[name$=' + "TB_" + mapExt.AttrOfOper + ']');
+                    tb.blur(function () {  // 失去焦点 
+                    //    SetQingJiaTianShu();
+                    });
+                    return;
+                }
                 var tb = $('[name$=' + mapExt.AttrOfOper + ']');
+
                 //tb.attr(mapExt.Tag, "CheckRegInput('" + tb.attr('name') + "'," + mapExt.Doc.replace(/【/g, '[').replace(/】/g, ']').replace(/（/g, '(').replace(/）/g, ')').replace(/｛/g, '{').replace(/｝/g, '}') + ",'" + mapExt.Tag1 + "')");
 
                 if (tb.attr('class') != undefined && tb.attr('class').indexOf('CheckRegInput') > 0) {

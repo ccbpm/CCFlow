@@ -185,7 +185,7 @@ function PopTableSearch_Done(mapExt) {
     var url = 'Pop/TableSearch.htm?FK_MapExt=' + mapExt.MyPK + "&FK_MapData=" + mapExt.FK_MapData + "&PKVal=" + pkval + "&OID=" + pkval + "&KeyOfEn=" + mapExt.AttrOfOper;
 
     if (window.parent && window.parent.OpenBootStrapModal) {
-        window.parent.OpenBootStrapModal(url, "eudlgframe", mapExt.GetPara("Title"), mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
+        window.parent.OpenBootStrapModal(url, "eudlgframe", mapExt.GetPara("Title"), mapExt.W, mapExt.H, "icon-edit", false, function () { }, null, function () {
            
             // location = location;
 

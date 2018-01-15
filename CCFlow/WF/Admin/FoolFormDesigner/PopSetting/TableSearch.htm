@@ -23,6 +23,9 @@
             if (mapExt.GetPara("SelectType") == "")
                 mapExt.SetPara("SelectType", "1");
 
+            if (mapExt.W <= 400)
+                mapExt.W = 700;
+
             //alert(i);
 
             //批量为复制.
@@ -203,7 +206,7 @@ WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@X
 </textarea>
 </td>
 </tr>
- 
+ <!--
 <tr>
 <th colspan="2">
 <a href="javascript:ShowHidden('TablePage_Count')">总条数</a>
@@ -216,7 +219,6 @@ WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@X
  </ul>
  </div></th>
 </tr>
-
 <tr>
 <td colspan="2">
 <textarea id="TB_Tag3" name="TB_Tag3" style="width:99%; height: 23px;">
@@ -224,6 +226,7 @@ WHERE (Name LIKE '%@Key%' OR No LIKE '%@Key%') AND FK_BanJi=@FK_BanJi ANND XB=@X
 
 </td>
 </tr>
+-->
 
 <tr>
 <th colspan="2">

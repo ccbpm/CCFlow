@@ -260,26 +260,14 @@ function GenerFrm() {
             try {
                 var s = document.createElement('script');
                 s.type = 'text/javascript';
-                s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
+                s.src = "../../DataUser/JSLibData/" + enName + "_Self.js";
                 var tmp = document.getElementsByTagName('script')[0];
                 tmp.parentNode.insertBefore(s, tmp);
             }
             catch (err) {
 
             }
-
-            var jsSrc = '';
-            try {
-
-                var s = document.createElement('script');
-                s.type = 'text/javascript';
-                s.src = "../DataUser/JSLibData/" + enName + "_Self.js";
-                var tmp = document.getElementsByTagName('script')[0];
-                tmp.parentNode.insertBefore(s, tmp);
-            }
-            catch (err) {
-
-            }
+             
 
             if (isReadonly != "1") {
 
@@ -303,13 +291,13 @@ function GenerFrm() {
                 }
 
                 if ($('#DDL_' + mapAttr.KeyOfEn).length == 1) {
-					// 判断下拉框是否有对应option, 若没有则追加
-					if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
-						var mainTable = frmData.MainTable[0];
-						var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
-						$('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
-					}
-					//
+                    // 判断下拉框是否有对应option, 若没有则追加
+                    if ($("option[value='" + defValue + "']", '#DDL_' + mapAttr.KeyOfEn).length == 0) {
+                        var mainTable = frmData.MainTable[0];
+                        var selectText = mainTable[mapAttr.KeyOfEn + "Text"];
+                        $('#DDL_' + mapAttr.KeyOfEn).append("<option value='" + defValue + "'>" + selectText + "</option>");
+                    }
+                    //
                     $('#DDL_' + mapAttr.KeyOfEn).val(defValue);
                 }
 
@@ -332,13 +320,13 @@ function GenerFrm() {
 
             ShowTextBoxNoticeInfo();
 
-//            //初始化复选下拉框 
-//            var selectPicker = $('.selectpicker');
-//            $.each(selectPicker, function (i, selectObj) {
-//                var defVal = $(selectObj).attr('data-val');
-//                var defValArr = defVal.split(',');
-//                $(selectObj).selectpicker('val', defValArr);
-//            });
+            //            //初始化复选下拉框 
+            //            var selectPicker = $('.selectpicker');
+            //            $.each(selectPicker, function (i, selectObj) {
+            //                var defVal = $(selectObj).attr('data-val');
+            //                var defValArr = defVal.split(',');
+            //                $(selectObj).selectpicker('val', defValArr);
+            //            });
 
             //给富文本 创建编辑器
             var editor = document.activeEditor = UM.getEditor('editor', {

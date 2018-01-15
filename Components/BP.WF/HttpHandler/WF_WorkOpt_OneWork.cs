@@ -288,6 +288,9 @@ namespace BP.WF.HttpHandler
         {
             int wfState = BP.DA.DBAccess.RunSQLReturnValInt("SELECT WFState FROM WF_GenerWorkFlow WHERE WorkID=" + WorkID, 1);
             WFState wfstateEnum = (WFState)wfState;
+
+            Hashtable ht = new Hashtable();
+
             string json = "{";
             bool isCan;
 
@@ -332,6 +335,9 @@ namespace BP.WF.HttpHandler
             }
             #endregion 文件打印的权限判断，这里为天业集团做的特殊判断，现实的应用中，都可以打印.
 
+            ht.Add("CanPackUp", CanPackUp.ToString().ToLower());
+
+
             //是否可以打印.
             json += "\"CanPackUp\":" + CanPackUp.ToString().ToLower();
 
@@ -340,6 +346,8 @@ namespace BP.WF.HttpHandler
                 case WFState.Runing: /* 运行时*/
                     /*删除流程.*/
                     isCan = BP.WF.Dev2Interface.Flow_IsCanDeleteFlowInstance(this.FK_Flow, this.WorkID, WebUser.No);
+
+                    ht.Add("CanFlowOverByCoercion", isCan.ToString().ToLower());
 
                     json += ",\"CanFlowOverByCoercion\":" + isCan.ToString().ToLower() + ",";
 
@@ -357,11 +365,17 @@ namespace BP.WF.HttpHandler
                         {
                             isCan = true;
 
+                            ht.Add("TackBackFromNode", gwf.FK_Node);
+                            ht.Add("TackBackToNode", myNode);
                             para = "\"TackBackFromNode\": " + gwf.FK_Node + ",\"TackBackToNode\":" + myNode + ",";
                         }
                     }
 
+                    ht.Add("CanTackBack", isCan.ToString().ToLower() );
+
                     json += ",\"CanTackBack\":" + isCan.ToString().ToLower() + "," + para;
+
+                    ht.Add("CanHurry", "false");
 
                     /*催办*/
                     json += ",\"CanHurry\":false,";  //原逻辑，不能催办
@@ -378,6 +392,8 @@ namespace BP.WF.HttpHandler
                     info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
                     isCan = info.DoQuery() > 0;
 
+                    ht.Add("CanUnSend", isCan.ToString().ToLower());
+
                     json += ",\"CanUnSend\":" + isCan.ToString().ToLower();
                     break;
                 case WFState.Complete: // 完成.
@@ -386,19 +402,24 @@ namespace BP.WF.HttpHandler
                     isCan = WebUser.No == "admin";
                     json += ",\"CanRollBack\":" + isCan.ToString().ToLower();
 
-                    //判断是否可以打印.
+                    ht.Add("CanRollBack", isCan.ToString().ToLower());
 
+                    //判断是否可以打印.
                     break;
                 case WFState.HungUp: // 挂起.
                     /*撤销挂起*/
                     isCan = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(FK_Flow, FK_Node, WorkID, WebUser.No);
                     json += ",\"CanUnHungUp\":" + isCan.ToString().ToLower();
+
+                    ht.Add("CanUnHungUp", isCan.ToString().ToLower());
                     break;
                 default:
                     break;
             }
 
-            return json + "}";
+            return BP.Tools.Json.ToJson(ht);
+
+            //return json + "}";
         }
 
         /// <summary>

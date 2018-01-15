@@ -297,7 +297,7 @@ namespace BP.WF.HttpHandler
             {
                 // 判断是否可以打印.
                 //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";
-                string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID ;
+                string sql = "SELECT Distinct NDFrom, EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID ;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -315,8 +315,8 @@ namespace BP.WF.HttpHandler
                     BtnLab btn = new BtnLab(nodeid);
                     if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
                     {
-                        string empFrom = dr[2].ToString();
-                        if (BP.Web.WebUser.No == empFrom || BP.Web.WebUser.No=="admin" )
+                        string empFrom = dr[1].ToString();
+                        if (BP.Web.WebUser.No == empFrom || BP.Web.WebUser.No == "admin")
                         {
                             CanPackUp = true;
                             break;

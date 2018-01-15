@@ -95,10 +95,25 @@ namespace BP.WF.Port
                 if (this.No == "admin")
                     return true;
 
-                if (this.UserType == 1)
+                if (this.UserType == 1 && this.UseSta == 1)
                     return true;
 
                 return false;
+            }
+        }
+        
+        /// <summary>
+        /// 用户状态
+        /// </summary>
+        public int UseSta
+        {
+            get
+            {
+                return this.GetValIntByKey(AdminEmpAttr.UseSta);
+            }
+            set
+            {
+                SetValByKey(AdminEmpAttr.UseSta, value);
             }
         }
         /// <summary>

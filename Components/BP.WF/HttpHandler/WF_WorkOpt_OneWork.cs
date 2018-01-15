@@ -296,7 +296,8 @@ namespace BP.WF.HttpHandler
             if (SystemConfig.CustomerNo == "TianYe")
             {
                 // 判断是否可以打印.
-                string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND EmpFrom='" + BP.Web.WebUser.No + "'";
+                //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";
+                string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID ;
                 DataTable dt = DBAccess.RunSQLReturnTable(sql);
                 foreach (DataRow dr in dt.Rows)
                 {

@@ -298,36 +298,32 @@ namespace BP.WF.HttpHandler
             bool CanPackUp = false;
             if (SystemConfig.CustomerNo == "TianYe")
             {
-                // 判断是否可以打印.
-                //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";
-                string sql = "SELECT Distinct NDFrom, EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID ;
-                DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                foreach (DataRow dr in dt.Rows)
+                if (BP.Web.WebUser.No == "admin")
                 {
-                    //string ndName = dr[1].ToString();
-                    //if (ndName.Contains("备案")
-                    //    || ndName.Contains("反馈")
-                    //    || ndName.Contains("通知给申请人"))
-                    //{
-                    //    CanPackUp = true;
-                    //    break;
-                    //}
-
-                    //判断节点是否启用了按钮?
-                    int nodeid = int.Parse(dr[0].ToString());
-                    BtnLab btn = new BtnLab(nodeid);
-                    if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
+                    CanPackUp=true;
+                }
+                else
+                {
+                    // 判断是否可以打印.
+                    //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";
+                    string sql = "SELECT Distinct NDFrom, EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID;
+                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        string empFrom = dr[1].ToString();
-                        if (BP.Web.WebUser.No == empFrom || BP.Web.WebUser.No == "admin")
+                        //判断节点是否启用了按钮?
+                        int nodeid = int.Parse(dr[0].ToString());
+                        BtnLab btn = new BtnLab(nodeid);
+                        if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
                         {
-                            CanPackUp = true;
-                            break;
+                            string empFrom = dr[1].ToString();
+                            if (BP.Web.WebUser.No == empFrom || BP.Web.WebUser.No == "admin")
+                            {
+                                CanPackUp = true;
+                                break;
+                            }
                         }
                     }
                 }
-
-                // }
             }
             else
             {
@@ -337,10 +333,7 @@ namespace BP.WF.HttpHandler
 
             ht.Add("CanPackUp", CanPackUp.ToString().ToLower());
 
-
             //是否可以打印.
-            json += "\"CanPackUp\":" + CanPackUp.ToString().ToLower();
-
             switch (wfstateEnum)
             {
                 case WFState.Runing: /* 运行时*/
@@ -349,7 +342,6 @@ namespace BP.WF.HttpHandler
 
                     ht.Add("CanFlowOverByCoercion", isCan.ToString().ToLower());
 
-                    json += ",\"CanFlowOverByCoercion\":" + isCan.ToString().ToLower() + ",";
 
                     /*取回审批*/
                     isCan = false;
@@ -367,18 +359,12 @@ namespace BP.WF.HttpHandler
 
                             ht.Add("TackBackFromNode", gwf.FK_Node);
                             ht.Add("TackBackToNode", myNode);
-                            para = "\"TackBackFromNode\": " + gwf.FK_Node + ",\"TackBackToNode\":" + myNode + ",";
                         }
                     }
 
                     ht.Add("CanTackBack", isCan.ToString().ToLower() );
 
-                    json += ",\"CanTackBack\":" + isCan.ToString().ToLower() + "," + para;
 
-                    ht.Add("CanHurry", "false");
-
-                    /*催办*/
-                    json += ",\"CanHurry\":false,";  //原逻辑，不能催办
 
                     /*撤销发送*/
                     GenerWorkerLists workerlists = new GenerWorkerLists();
@@ -391,25 +377,18 @@ namespace BP.WF.HttpHandler
                     info.addAnd();
                     info.AddWhere(GenerWorkerListAttr.WorkID, this.WorkID);
                     isCan = info.DoQuery() > 0;
-
                     ht.Add("CanUnSend", isCan.ToString().ToLower());
-
-                    json += ",\"CanUnSend\":" + isCan.ToString().ToLower();
                     break;
                 case WFState.Complete: // 完成.
                 case WFState.Delete: // 逻辑删除..
                     /*恢复使用流程*/
                     isCan = WebUser.No == "admin";
-                    json += ",\"CanRollBack\":" + isCan.ToString().ToLower();
-
                     ht.Add("CanRollBack", isCan.ToString().ToLower());
-
                     //判断是否可以打印.
                     break;
                 case WFState.HungUp: // 挂起.
                     /*撤销挂起*/
                     isCan = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(FK_Flow, FK_Node, WorkID, WebUser.No);
-                    json += ",\"CanUnHungUp\":" + isCan.ToString().ToLower();
 
                     ht.Add("CanUnHungUp", isCan.ToString().ToLower());
                     break;

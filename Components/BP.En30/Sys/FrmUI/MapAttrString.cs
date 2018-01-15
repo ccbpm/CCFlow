@@ -167,6 +167,12 @@ namespace BP.Sys.FrmUI
                 map.AddRefMethod(rm);
 
                 rm = new RefMethod();
+                rm.Title = "事件绑函数";
+                rm.ClassMethodName = this.ToString() + ".BindFunction()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
+                rm = new RefMethod();
                 rm.Title = "超链接";
                 rm.ClassMethodName = this.ToString() + ".DoLink()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
@@ -251,7 +257,7 @@ namespace BP.Sys.FrmUI
 
                 rm = new RefMethod();
                 rm.GroupName = "Pop返回值2018";
-                rm.Title = "列表查询模式";
+                rm.Title = "表格条件查询";
                 rm.ClassMethodName = this.ToString() + ".DoTableSearch()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
@@ -307,6 +313,17 @@ namespace BP.Sys.FrmUI
         }
         #endregion
 
+        #region 基本功能.
+        /// <summary>
+        /// 绑定函数
+        /// </summary>
+        /// <returns></returns>
+        public string BindFunction()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        #endregion
+
         #region 方法执行 Pop自动完成.
         /// <summary>
         /// 简单列表模式
@@ -325,8 +342,7 @@ namespace BP.Sys.FrmUI
             return "../../Admin/FoolFormDesigner/MapExt/PopFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn + "&MyPK=TBFullCtrl_" + HttpUtility.UrlEncode(this.MyPK);
         }
         #endregion 方法执行 Pop填充自动完成.
-
-
+        
         #region 方法执行 pop返回值
         /// <summary>
         /// 自定义Url.

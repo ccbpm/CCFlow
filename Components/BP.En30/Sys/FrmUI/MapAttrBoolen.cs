@@ -137,11 +137,27 @@ namespace BP.Sys.FrmUI
                     "SELECT OID as No, Lab as Name FROM Sys_GroupField WHERE EnName='@FK_MapData' AND (CtrlType IS NULL OR CtrlType='')  ", true);
                 #endregion 傻瓜表单。
 
-              
+
+                RefMethod rm = new RefMethod();
+                rm.Title = "事件绑函数";
+                rm.ClassMethodName = this.ToString() + ".BindFunction()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
 
                 this._enMap = map;
                 return this._enMap;
             }
+        }
+        #endregion
+
+        #region 基本功能.
+        /// <summary>
+        /// 绑定函数
+        /// </summary>
+        /// <returns></returns>
+        public string BindFunction()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
         }
         #endregion
 

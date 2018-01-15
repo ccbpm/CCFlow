@@ -66,6 +66,10 @@ namespace BP.Sys
         /// </summary>
         public const string RegularExpression = "RegularExpression";
         /// <summary>
+        /// 绑定函数
+        /// </summary>
+        public const string BindFunction = "BindFunction";
+        /// <summary>
         /// WordFrm
         /// </summary>
         public const string WordFrm = "WordFrm";

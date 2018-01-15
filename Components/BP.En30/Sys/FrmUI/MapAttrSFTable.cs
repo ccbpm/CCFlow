@@ -157,6 +157,13 @@ namespace BP.Sys.FrmUI
                 rm.GroupName = "高级";
                 map.AddRefMethod(rm);
 
+
+                rm = new RefMethod();
+                rm.Title = "事件绑函数";
+                rm.ClassMethodName = this.ToString() + ".BindFunction()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
              
                 #endregion 执行的方法.
 
@@ -167,7 +174,14 @@ namespace BP.Sys.FrmUI
         #endregion
 
         #region 方法执行.
-      
+        /// <summary>
+        /// 绑定函数
+        /// </summary>
+        /// <returns></returns>
+        public string BindFunction()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
         /// <summary>
         /// 外键表属性
         /// </summary>

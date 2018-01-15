@@ -84,7 +84,7 @@ namespace BP.En
                 BP.Sys.SystemConfig.CS_AppSettings.Add(key, value);
             }
             // 增加特殊判断。
-            SystemConfig.AppCenterDSN = SystemConfig.AppCenterDSN.Replace("VisualFlowDesigner", "VisualFlow");
+          //  SystemConfig.AppCenterDSN = SystemConfig.AppCenterDSN.Replace("VisualFlowDesigner", "VisualFlow");
             #endregion
             return true;
         }

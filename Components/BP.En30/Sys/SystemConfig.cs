@@ -1231,19 +1231,20 @@ namespace BP.Sys
         }
 
         #region dsn
+        /// <summary>
+        /// 数据库连接
+        /// </summary>
         public static string AppCenterDSN
         {
             get
             {
-                string dsn = AppSettings["AppCenterDSN"];
-                return dsn;
+                return AppSettings["AppCenterDSN"];
             }
             set
             {
                 AppSettings["AppCenterDSN"] = value;
             }
         }
-
         public static string DBAccessOfOracle
         {
             get

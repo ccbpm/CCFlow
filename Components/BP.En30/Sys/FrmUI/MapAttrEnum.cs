@@ -160,13 +160,19 @@ namespace BP.Sys.FrmUI
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 map.AddRefMethod(rm);
 
-
                 rm = new RefMethod();
                 rm.Title = "高级JS设置";
                 rm.ClassMethodName = this.ToString() + ".DoRadioBtns()";
                 rm.RefMethodType = RefMethodType.RightFrameOpen;
                 rm.GroupName = "高级设置";
                 map.AddRefMethod(rm);
+
+                rm = new RefMethod();
+                rm.Title = "事件绑函数";
+                rm.ClassMethodName = this.ToString() + ".BindFunction()";
+                rm.RefMethodType = RefMethodType.RightFrameOpen;
+                map.AddRefMethod(rm);
+
 
                 #endregion 执行的方法.
 
@@ -194,6 +200,17 @@ namespace BP.Sys.FrmUI
         }
         #endregion
 
+        #region 基本功能.
+        /// <summary>
+        /// 绑定函数
+        /// </summary>
+        /// <returns></returns>
+        public string BindFunction()
+        {
+            return "../../Admin/FoolFormDesigner/MapExt/BindFunction.htm?FK_MapData=" + this.FK_MapData + "&KeyOfEn=" + this.KeyOfEn;
+        }
+        #endregion
+
         #region 方法执行.
         /// <summary>
         /// 编辑枚举值
@@ -201,7 +218,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoSysEnum()
         {
-            return "/WF/Admin/FoolFormDesigner/SysEnum.aspx?EnumKey=" + this.UIBindKey;
+            return "../../Admin/FoolFormDesigner/SysEnum.aspx?EnumKey=" + this.UIBindKey;
         }
         /// <summary>
         /// 设置自动填充
@@ -209,7 +226,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoDDLFullCtrl()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/DDLFullCtrl.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
         /// <summary>
         /// 设置自动填充
@@ -217,7 +234,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoAutoFull()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/AutoFullDLL.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/AutoFullDLL.aspx?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
         /// <summary>
         /// 高级设置
@@ -225,7 +242,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoRadioBtns()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/RadioBtns.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
         /// <summary>
         /// 设置级联
@@ -233,7 +250,7 @@ namespace BP.Sys.FrmUI
         /// <returns></returns>
         public string DoActiveDDL()
         {
-            return "/WF/Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
+            return "../../Admin/FoolFormDesigner/MapExt/ActiveDDL.htm?FK_MapData=" + this.FK_MapData + "&ExtType=AutoFull&KeyOfEn=" + HttpUtility.UrlEncode(this.KeyOfEn) + "&RefNo=" + HttpUtility.UrlEncode(this.MyPK);
         }
         #endregion 方法执行.
     }

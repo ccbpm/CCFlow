@@ -876,6 +876,9 @@ namespace BP.Sys
                 case MapExtXmlList.RegularExpression:
                     this.MyPK = MapExtXmlList.RegularExpression + "_" + this.FK_MapData + "_" + this.AttrOfOper + "_" + this.Tag;
                     break;
+                case MapExtXmlList.BindFunction:
+                    this.MyPK = MapExtXmlList.BindFunction + "_" + this.FK_MapData + "_" + this.AttrOfOper + "_" + this.Tag;
+                    break;
                 case MapExtXmlList.Link:
                     this.MyPK = MapExtXmlList.Link + "_" + this.FK_MapData + "_" + this.AttrOfOper;
                     break;

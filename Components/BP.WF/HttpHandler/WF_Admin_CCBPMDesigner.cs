@@ -477,7 +477,7 @@ namespace BP.WF.HttpHandler
                     return "err@您非管理员用户，不能登录.";
 
                 if (adminEmp.IsAdmin == false)
-                    return "err@您非管理员用户，不能登录.";
+                    return "err@您非管理员用户或已被禁用，不能登录.";
 
                 if (string.IsNullOrWhiteSpace(adminEmp.RootOfFlow) == true)
                     return "err@二级管理员用户没有设置流程树的权限..";

@@ -94,24 +94,27 @@
 		                if (ele == null || ele == undefined)
 		                    continue;
 
-		                if (ele.RefPKVal == en.No) {
+		                if (ele.Tag1 == en.No) {
 		                    isHave = true;
 		                    break;
 		                }
 		            }
 
 		            var lab = en.Name;
-		            if (isHave)
+					var checked = "";
+		            if (isHave) {
 		                lab = "<font color=green>" + en.Name + "</font>";
+						checked = "checked";
+					}
 
 		            myNum++;
 		            if (myNum == 0)
 		                html += "<TR>";
 
 		            if (isRB == true)
-		                html += "<td><input type='radio' name='RB' id='RB_" + en.No + "' value='" + en.No + "'/><label for='RB_" + en.No + "'>" + lab + "</label></td>";
+		                html += "<td><input type='radio' name='RB' id='RB_" + en.No + "' value='" + en.No + "' " + checked + " /><label for='RB_" + en.No + "'>" + lab + "</label></td>";
 		            else
-		                html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
+		                html += "<td><input type='checkbox' name='" + group.No + "' id='CB_" + en.No + "' value='" + en.No + "' " + checked + " /><label for='CB_" + en.No + "'>" + lab + "</label></td>";
 
 		            if (myNum == 2) {
 		                html += "</tr>";

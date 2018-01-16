@@ -113,7 +113,7 @@
                             msg = msg.replace('<BR>', '\t\n');
                         }
 
-                        html += "<textarea id='WorkCheck_Doc' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height='60px';this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
+                        html += "<textarea id='WorkCheck_Doc' maxlength='2000' placeholder='内容不能为空,请输入信息,或者使用常用短语选择,内容不超过2000字.' rows='3' style='width:98%;border-style:solid;margin:5px; padding:5px;' onblur='SaveWorkCheck()' onkeydown='this.style.height='60px';this.style.height=this.scrollHeight+\"px\";setIframeHeight();'>";
                         html += msg;
                         html += "</textarea>";
 
@@ -128,7 +128,7 @@
                         html += "<option value='同意,请领导批示.'>同意,请领导批示.</option>";
                         html += "<option value='情况属实报领导批准.'>情况属实报领导批准.</option>";
                         html += "<option value='不同意'>不同意</option>";
-                        html += "</select>";
+                        html += "</select><font color=Gray>内容不要超过2000字</font>"; 
                         html += "</div>";
                         html += "</td>";
                     }

@@ -342,7 +342,6 @@ namespace BP.WF.HttpHandler
 
                     ht.Add("CanFlowOverByCoercion", isCan.ToString().ToLower());
 
-
                     /*取回审批*/
                     isCan = false;
                     string para = "";

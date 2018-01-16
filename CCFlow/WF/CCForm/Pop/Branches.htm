@@ -263,9 +263,8 @@
                     nodeIds.push(item);
                 });
             } else {
-                var selectedRow = $("#viewGrid").bootstrapTable("getSelections");
-                alert(selectedRow.length);
-                $.each(window.selectedRows, function (i, row) {
+                var selectedRows = $("#viewGrid").bootstrapTable("getSelections");
+                $.each(selectedRows, function (i, row) {
                     var item = {};
                     item.No = row.No;
                     item.Name = row.Name;

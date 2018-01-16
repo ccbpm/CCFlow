@@ -59,7 +59,7 @@ function PopBranchesAndLeaf(mapExt) {
     $("#" + mapExt.AttrOfOper + "_mtags").mtags({
         "fit": true,
         "onUnselect": function (record) {
-            alert(JSON.stringify(record));
+            Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
             console.log("unselect: " + JSON.stringify(record));
         }
     });
@@ -163,9 +163,7 @@ function PopBranches(mapExt) {
         "fit": true,
         "onUnselect": function (record) {
             console.log("unselect: " + JSON.stringify(record));
-            var frmEleDB = new Entity("BP.Sys.FrmEleDB");
-            frmEleDB.MyPK = mapExt.AttrOfOper + "_" + oid + "_" + record.No;
-            frmEleDB.Delete();
+            Delete_FrmEleDB(mapExt.AttrOfOper, oid, record.No);
         }
     });
 

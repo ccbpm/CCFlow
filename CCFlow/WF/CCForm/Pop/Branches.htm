@@ -108,6 +108,7 @@
 
         //查询列表
         function loadViewGrid(gridUrl) {
+
             var global = window;
             var columns = mapExt.Tag;
             var searchTableColumns = [{
@@ -181,6 +182,7 @@
         }
 
         $(function () {
+
             // global
             var global = window;
             global.selectedNodes = [];
@@ -195,18 +197,21 @@
             $("#TB_Key").attr("placeholder", tip); //设置查询提示.
 
             mapExt.ShowCheckBox = selectType == "0" ? false : true;
+
             //跟节点编号.
             var rootNo = mapExt.Doc;
             if (rootNo == "WebUser.FK_Dept") {
                 rootNo = webUser.FK_Dept;
             }
+            if (rootNo == "")
+                rootNo = "0";
 
             //设置变量.
             global.FK_MapData = mapExt.FK_MapData;
             global.AttrOfOper = mapExt.AttrOfOper;
             global.oid = GetQueryString("OID");
 
-            var treeUrl = mapExt.Tag1;
+            var treeUrl = mapExt.Tag2;
             if (treeUrl == "") {
                 alert('配置错误:查询数据源，初始化树的数据源不能为空。');
                 return;
@@ -231,6 +236,7 @@
 
             $('#viewGrid_Panel').hide();
             $('#tree_Panel').show();
+
             // tree
             loadTree(treeUrl, rootNo, global);
 

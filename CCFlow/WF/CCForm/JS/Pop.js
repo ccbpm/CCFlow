@@ -57,10 +57,11 @@ function PopBranchesAndLeaf(mapExt) {
 	container.attr("id", mapExt.AttrOfOper + "_mtags");
 
 	$("#" + mapExt.AttrOfOper + "_mtags").mtags({
-		"fit" : true,
-		"onUnselect" : function (record) {
-			console.log("unselect: " + JSON.stringify(record));
-		}
+	    "fit": true,
+	    "onUnselect": function (record) {
+	        alert(JSON.stringify(record));
+	        console.log("unselect: " + JSON.stringify(record));
+	    }
 	});
 
 	var width = mapExt.W;
@@ -149,28 +150,84 @@ function PopBranchesAndLeaf_Deal()
 //树干模式.
 function PopBranches(mapExt) {
 
-    var tb = $("#TB_" + mapExt.AttrOfOper);
+    var target = $("#TB_" + mapExt.AttrOfOper);
+    target.hide();
 
-    //设置文本框只读.
-    tb.attr('readonly', 'true');
-    tb.attr('disabled', 'true');
+    var width = target.width();
+    var height = target.height();
+    var container = $("<div></div>");
+    target.after(container);
+    container.width(width);
+    container.css("height",height);
+    container.attr("id", mapExt.AttrOfOper + "_mtags");
+    
+    $("#" + mapExt.AttrOfOper + "_mtags").mtags({
+        "fit": true,
+        "onUnselect": function (record) {
+            console.log("unselect: " + JSON.stringify(record));
+            var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+            frmEleDB.MyPK = mapExt.AttrOfOper + "_" + oid + "_" + record.No;
+            frmEleDB.Delete();
+        }
+    });
 
-    // 把文本框的内容，按照逗号分开, 并且块状显示. 右上角出现删除叉叉.
+    var width = mapExt.W;
+	var height = mapExt.H;
+	var iframeId = mapExt.MyPK + mapExt.FK_MapData;
+	var title = mapExt.GetPara("Title");
+	var oid = GetPKVal(); 
+	
+	var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+	frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
+	var initJsonData = [];
+	$.each(frmEleDBs, function (i, o) {
+		initJsonData.push({
+			"No" : o.Tag1,
+			"Name" : o.Tag2
+		});
+	});
+	$("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
+	//这里需要相对路径.
+	var url = "../CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
+	container.on("dblclick", function () {
+	    if (window.parent && window.parent.OpenBootStrapModal) {
+	        window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+	            var iframe = document.getElementById(iframeId);
+	            if (iframe) {
+	                var nodes = iframe.contentWindow.GetCheckNodes();
+	                if ($.isArray(nodes)) {
+	                    var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
+	                    mtags.mtags("loadData", nodes);
+	                    $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+	                }
+	            }
+	        }, null, function () {
 
-    // 文本框尾部出现选择的图标.
-    icon = "glyphicon glyphicon-tree-deciduous";
-    var eleHtml = ' <div class="input-group form_tree">' + tb.parent().html()
-    eleHtml += '<span class="input-group-addon" onclick="' + "ReturnValCCFormPopValGoogle('TB_" + mapExt.AttrOfOper + "','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "', " + mapExt.W + "," + mapExt.H + ",'" + GepParaByName("Title", mapExt.AtPara) + "');" + '"><span class="' + icon + '"></span></span></div>';
-    tb.parent().html(eleHtml);
-
-    //在文本框双击，绑定弹出. DeptEmpModelAdv.htm的窗口.
-  //  tb.attr("onclick", "alert('ssssssssssssss');");
-
-    //    tb.attr("onclick", "ShowHelpDiv('TB_" + mapExt.AttrOfOper + "','','" + mapExt.MyPK + "','" + mapExt.FK_MapData + "','returnvalccformpopval');");
-    //窗口返回值的时候，重新计算文本块.
-
+	        });
+	        return;
+	    }
+	});
 }
 
+//删除数据.
+function Delete_FrmEleDB(keyOfEn, oid, No) {
+    var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+    frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + No;
+    frmEleDB.Delete();
+}
+//设置值.
+function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2) {
+    var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+    frmEleDB.MyPK = keyOfEn + "_" + oid + "_" + val1;
+    frmEleDB.FK_MapData = fk_mapdata;
+    frmEleDB.EleID = keyOfEn;
+    frmEleDB.RefPKVal = oid;
+    frmEleDB.Tag1 = val1;
+    frmEleDB.Tag2 = val2;
+    if (frmEleDB.Update() == 0) {
+        frmEleDB.Insert();
+    }
+}
 
 /******************************************  表格查询 **********************************/
 function PopTableSearch(mapExt) {

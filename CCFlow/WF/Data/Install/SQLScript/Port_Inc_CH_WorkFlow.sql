@@ -36,7 +36,7 @@ INSERT INTO Port_Station (No,Name,FK_StationType) VALUES('11','人力资源助�
 
 -- Port_Emp ;
 -- 总经理部 ;
-INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('admin','admin','pub','1')  ;
+INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('admin','admin','123','1')  ;
 INSERT INTO Port_Emp (No,Name,Pass,FK_Dept) VALUES('zhoupeng','周朋','123','1')  ;
 
 -- 市场部 ;

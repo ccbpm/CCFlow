@@ -174,11 +174,9 @@ function AfterBindEn_DealMapExt(frmData) {
 
                     //加载方法.
                     ctrl.on(funcEvent, function () {
-                        try {
-                            eval(funcName + "()");
-                        } catch (e) {
-                            alert(funcName + "()不存在！");
-                        }
+
+                        RunFunctionReturnStr(funcName);
+
                     });
                     break;
                 }

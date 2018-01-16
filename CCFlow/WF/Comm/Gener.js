@@ -1448,12 +1448,33 @@ var DBAccess = (function () {
 
         //执行方法名称返回json.
         if (dbType == 2 || dbType == "2") {
-            return DBAccess.RunFunctionReturnJSON(dbSrc);
+
+            var str = DBAccess.RunFunctionReturnStr(dbSrc);
+            if (str == null || str == undefined)
+                return null;
+
+            return JSON.prease(str);
         }
         //@谢 如何执行一个方法,
         //   alert("@没有处理执行方法。"); RunFunctionReturnJSON
-
     };
+
+    //执行方法名返回str.
+    DBAccess.RunFunctionReturnStr = function (funcName) {
+
+        try {
+
+            if (funcName.indexOf('(') == -1)
+                return eval(funcName + "()");
+            else
+                return eval(funcName);
+
+        } catch (e) {
+            alert("执行方法[" + funcName + "]错误:" + e.message);
+        }
+    };
+
+
 
     DBAccess.RunSQLReturnTable = function (sql) {
         //sql = replaceAll(sql, "~", "'");
@@ -1482,9 +1503,7 @@ var DBAccess = (function () {
                 alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
             }
         });
-
         return jsonString;
-
     };
 
     DBAccess.RunUrlReturnString = function (url) {
@@ -1535,7 +1554,7 @@ var DBAccess = (function () {
         }
 
         try {
-            
+
             jsonString = JSON.parse(jsonString);
 
         } catch (e) {

@@ -2,8 +2,11 @@
 function SelfUrl(mapExt) {
 
     var tb = $("#TB_" + mapExt.AttrOfOper);
-    if (tb.length == 0)
+    if (tb.length == 0) {
+        alert(mapExt.AttrOfOper + "字段删除了.");
+        mapExt.Delete();
         return; //有可能字段被删除了.
+    }
 
     //设置文本框只读.
     tb.attr('readonly', 'true');
@@ -13,7 +16,7 @@ function SelfUrl(mapExt) {
     tb.bind("click", function () { SelfUrl_Done(mapExt) });
 }
 
-function SelfUrl_Done(mapExtJson) {
+function SelfUrl_Done(mapExt) {
 
     //获得主键.
     var pkval = GetPKVal();
@@ -23,7 +26,17 @@ function SelfUrl_Done(mapExtJson) {
     var title = mapExt.GetPara("Title");
 
     if (window.parent && window.parent.OpenBootStrapModal) {
-        window.parent.OpenBootStrapModal(url, "eudlgframe", title, mapExt.H, mapExt.W, "icon-edit", false, function () { }, null, function () {
+
+        window.parent.OpenBootStrapModal(url, "eudlgframe", title, mapExt.H, mapExt.W,
+         "icon-edit", true, function () {
+             var iframe = document.getElementById("eudlgframe");
+             if (iframe) {
+                 var val = iframe.contentWindow.Btn_OK();
+                 $("#TB_" + mapExt.AttrOfOper).val(val);
+                 
+             }
+             
+         }, null, function () {
             //location = location;
         });
         return;

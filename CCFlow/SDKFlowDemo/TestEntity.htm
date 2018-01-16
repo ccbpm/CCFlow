@@ -200,7 +200,7 @@
         function ExecHttpHandlerMonthod() {
 
             //执行非静态的方法,有参数,仅仅传递指定的参数其他参数不处理.
-            var handler = CreateHttpHandler("BP.WF.HttpHandler.WF_AppClassic");
+            var handler = HttpHandler("BP.WF.HttpHandler.WF_AppClassic");
             handler.AddUrlData();  //把url参数加入里面去.
             handler.AddFormData(); //把form数据加入里面去.
 

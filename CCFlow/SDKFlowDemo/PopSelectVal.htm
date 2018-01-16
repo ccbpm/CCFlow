@@ -26,12 +26,18 @@
 		    $("#Msg").html("");
 		    $("#Msg").html(html);
 		}
+
+        //约定的方法名，不能变化.
+		function Btn_OK() {
+            var val = "我选择返回的值";
+            return val;
+		}
     </script>
      
 </head>
 <body>
 
-<div id="Msg" />
+<div id="Msg" name="Msg" > </div>
 
 </body>
 </html>

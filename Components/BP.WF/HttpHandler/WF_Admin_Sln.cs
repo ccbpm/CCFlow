@@ -408,7 +408,6 @@ namespace BP.WF.HttpHandler
         }
         #endregion 表单方案.
 
-
         #region 字段权限.
 
         public class FieldsAttrs
@@ -634,7 +633,6 @@ namespace BP.WF.HttpHandler
             return "";
         }
         #endregion 附件权限.
-
 
         #region 从表权限.
         public class DtlsAttrs

@@ -298,32 +298,30 @@ namespace BP.WF.HttpHandler
             bool CanPackUp = false;
             if (SystemConfig.CustomerNo == "TianYe")
             {
-                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin==true )
+                bool isAdmin = false;
+                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin == true)
+                    isAdmin = true;
+
+                // 判断是否可以打印.
+                //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";
+                string sql = "SELECT Distinct NDFrom, EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID;
+                DataTable dt = DBAccess.RunSQLReturnTable(sql);
+                foreach (DataRow dr in dt.Rows)
                 {
-                    CanPackUp=true;
-                }
-                else
-                {
-                    // 判断是否可以打印.
-                    //string sql = "SELECT NDFrom,NDFromT,EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID + " AND (EmpFrom='" + BP.Web.WebUser.No + "' OR  EmpTo='" + BP.Web.WebUser.No + "')  ";
-                    string sql = "SELECT Distinct NDFrom, EmpFrom FROM ND" + int.Parse(this.FK_Flow) + "Track WHERE WorkID=" + this.WorkID;
-                    DataTable dt = DBAccess.RunSQLReturnTable(sql);
-                    foreach (DataRow dr in dt.Rows)
+                    //判断节点是否启用了按钮?
+                    int nodeid = int.Parse(dr[0].ToString());
+                    BtnLab btn = new BtnLab(nodeid);
+                    if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
                     {
-                        //判断节点是否启用了按钮?
-                        int nodeid = int.Parse(dr[0].ToString());
-                        BtnLab btn = new BtnLab(nodeid);
-                        if (btn.PrintPDFEnable == true || btn.PrintZipEnable == true)
+                        string empFrom = dr[1].ToString();
+                        if ( isAdmin == true || BP.Web.WebUser.No == empFrom)
                         {
-                            string empFrom = dr[1].ToString();
-                            if (BP.Web.WebUser.No == empFrom || BP.Web.WebUser.No == "admin")
-                            {
-                                CanPackUp = true;
-                                break;
-                            }
+                            CanPackUp = true;
+                            break;
                         }
                     }
                 }
+
             }
             else
             {

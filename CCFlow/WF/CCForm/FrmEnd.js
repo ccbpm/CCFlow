@@ -175,7 +175,7 @@ function AfterBindEn_DealMapExt(frmData) {
                     //加载方法.
                     ctrl.on(funcEvent, function () {
 
-                        RunFunctionReturnStr(funcName);
+                       DBAccess.RunFunctionReturnStr(funcName);
 
                     });
                     break;

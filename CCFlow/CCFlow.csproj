@@ -333,7 +333,6 @@
     <Content Include="SDKFlowDemo\GuestFlow\Login.aspx" />
     <Content Include="SDKFlowDemo\LitJSON\help.htm" />
     <Content Include="SDKFlowDemo\MyForm.aspx" />
-    <Content Include="SDKFlowDemo\PopSelectVal.aspx" />
     <Content Include="SDKFlowDemo\Pub.ascx" />
     <Content Include="SDKFlowDemo\QingJia\S1_TianxieShenqingDan.aspx" />
     <Content Include="SDKFlowDemo\QingJia\S2_BumenJingliShenpi.aspx" />
@@ -6765,13 +6764,6 @@
     </Compile>
     <Compile Include="SDKFlowDemo\MyForm.aspx.designer.cs">
       <DependentUpon>MyForm.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="SDKFlowDemo\PopSelectVal.aspx.cs">
-      <DependentUpon>PopSelectVal.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="SDKFlowDemo\PopSelectVal.aspx.designer.cs">
-      <DependentUpon>PopSelectVal.aspx</DependentUpon>
     </Compile>
     <Compile Include="SDKFlowDemo\Pub.ascx.cs">
       <DependentUpon>Pub.ascx</DependentUpon>

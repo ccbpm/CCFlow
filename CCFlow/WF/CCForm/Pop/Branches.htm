@@ -48,7 +48,7 @@
                             "id": child.No,
                             "text": child.Name,
                             "nodes": [],
-                            "state": { checked: checked }
+                            "state": { checked: checked, disabled: checked }
                         });
                     } else {
                         appendToTree(o.nodes, child);
@@ -72,7 +72,7 @@
                             "id": o.No,
                             "text": o.Name,
                             "nodes": [],
-                            "state": { checked: checked }
+                            "state": { checked: checked, disabled: checked }
                         });
                     } else {
                         appendToTree(jsonTree, o);
@@ -134,8 +134,9 @@
                 formatter: function (value, row, index) {
                     if (row.checked) {
                         return {
-                            "checked": true
-                        };
+                            "checked": true,
+                            "disabled": row.disabled
+                        }
                     }
                 }
             }];
@@ -195,6 +196,10 @@
                         });
                         if (sel.length > 0) {
                             o.checked = true;
+                            //多选时才需要禁用已选
+                            if (mapExt.ShowCheckBox == true) {
+                                o.disabled = true;
+                            }
                         }
                     });
                 }

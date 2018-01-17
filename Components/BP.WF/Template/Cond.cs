@@ -744,6 +744,16 @@ namespace BP.WF.Template
                     if (SystemConfig.OSModel == OSModel.OneMore)
                     {
                         sts.Retrieve(BP.GPM.DeptEmpAttr.FK_Emp, this.SpecOper);
+
+                        //@于庆海.
+                        BP.Port.Emp emp = new BP.Port.Emp(this.SpecOper);
+                        emp.No = this.SpecOper;
+                        if (emp.RetrieveFromDBSources() == 1)
+                        {
+                            BP.GPM.DeptEmp de = new GPM.DeptEmp();
+                            de.FK_Dept = emp.FK_Dept;
+                            sts.AddEntity(de);
+                        }
                     }
                     else
                     {

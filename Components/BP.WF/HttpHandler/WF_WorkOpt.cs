@@ -369,7 +369,7 @@ namespace BP.WF.HttpHandler
             string sql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID='" + this.WorkID + "' AND IsPass=0";
             if (DBAccess.RunSQLReturnValInt(sql) == 0)
             {
-                gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianOver; //设置为会签状态.
+                gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态. 不能设置会签完成,不然其他的就没有办法处理了.
                 gwf.Update();
 
                 DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'");

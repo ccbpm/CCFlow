@@ -873,31 +873,6 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 按照部门条件计算CondByDept_Delete
-        /// <summary>
-        /// 按照部门条件计算.
-        /// </summary>
-        /// <returns></returns>
-        public string CondByDept_Init()
-        {
-            DataSet ds = new DataSet();
-
-            //部门
-            Depts depts = new Depts();
-            depts.RetrieveAllFromDBSource();
-            ds.Tables.Add(depts.ToDataTableField("Depts"));
-
-            //取有可能存盘的数据.
-            //int FK_MainNode = this.GetRequestValInt("FK_MainNode");
-            //int ToNodeID = this.GetRequestValInt("ToNodeID");
-            Cond cond = new Cond();
-            //CondType condType = (CondType)this.GetRequestValInt("CondType");
-            //string mypk = this.GetRequestValInt("FK_MainNode") + "_" + this.GetRequestValInt("ToNodeID") + "_" + condType.ToString() + "_" + ConnDataFrom.Depts.ToString();
-            cond.MyPK = this.GetRequestVal("MyPK"); ;
-            cond.RetrieveFromDBSources();
-            ds.Tables.Add(cond.ToDataTableField("Cond"));
-
-            return BP.Tools.Json.DataSetToJson(ds, false);
-        }
         public string CondByDept_Save()
         {
             int FK_MainNode = this.GetRequestValInt("FK_MainNode");
@@ -933,33 +908,13 @@ namespace BP.WF.HttpHandler
             {
                 cond.SpecOperPara = string.Empty;
             }
-            cond.HisDataFrom = ConnDataFrom.Stas;
+            cond.HisDataFrom = ConnDataFrom.Depts;
             cond.FK_Flow = this.FK_Flow;
             cond.HisCondType = CondType.Dir;
             cond.FK_Node = FK_MainNode;
 
-
-
             cond.ToNodeID = ToNodeID;
             cond.Update();
-
-            //switch (condType)
-            //{
-            //    case CondType.Flow:
-            //    case CondType.Node:
-            //        cond.Update();
-            //        break;
-            //    case CondType.Dir:
-            //        cond.ToNodeID = this.GetRequestValInt("ToNodeID");
-            //        cond.Update();
-            //        break;
-            //    case CondType.SubFlow:
-            //        cond.ToNodeID = this.GetRequestValInt("ToNodeID");
-            //        cond.Update();
-            //        break;
-            //    default:
-            //        throw new Exception("未设计的情况。");
-            //}
 
             return "保存成功!!";
         }

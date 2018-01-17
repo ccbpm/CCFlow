@@ -1394,8 +1394,9 @@ var DBAccess = (function () {
         $.ajax({
             type: 'post',
             async: false,
-            url: dynamicHandler + "?DoType=DBAccess_RunSQL&SQL=" + sql + "&t=" + new Date().getTime(),
+            url: dynamicHandler + "?DoType=DBAccess_RunSQL&t=" + new Date().getTime(),
             dataType: 'html',
+			data : "SQL=" + sql,
             success: function (data) {
                 count = parseInt(data);
                 if (isNaN(count)) {
@@ -1486,8 +1487,9 @@ var DBAccess = (function () {
         $.ajax({
             type: 'post',
             async: false,
-            url: dynamicHandler + "?DoType=DBAccess_RunSQLReturnTable&SQL=" + sql + "&t=" + new Date().getTime(),
+            url: dynamicHandler + "?DoType=DBAccess_RunSQLReturnTable" + "&t=" + new Date().getTime(),
             dataType: 'html',
+			data : "SQL=" + sql,
             success: function (data) {
                 if (data.indexOf("err@") != -1) {
                     alert(data);

@@ -13,12 +13,6 @@
     <base target="_self" />
     <script type="text/javascript">
 
-        function Esc() {
-            if (event.keyCode == 27)
-                window.close();
-            return true;
-        }
-
         //初始化页面函数.....
         $(function () {
 
@@ -29,64 +23,46 @@
             var toNodeID = GetQueryString("ToNodeID");
             var param = location.href.split("?")[1];
 
-            //初始化表格.
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=CondByDept_Init&FK_Node=" + fk_Node + "&m=" + Math.random() + "&" + param,
-                dataType: 'html',
-                success: function (data) {
+            var depts = new Entities("BP.Port.Depts");
+            depts.RetrieveAll();
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            var mypk = fk_Node + "_" + toNodeID + "_Dir_Depts";
+            var cond = new Entity("BP.WF.Template.Cond");
+            cond.MyPK = mypk;
+            cond.RetrieveFromDBSources();
 
-                    data = JSON.parse(data);
-
-
-                    //生成部门列表.
-                    //bgein
-                    var depts = data.Depts;
-
-                    var cond = data.Cond[0];
-                    $("#t1").append("<td colspan=3 class='GroupTitle' >部门选择</td>");
-                    for (var i = 0, len = depts.length; i < len; i++) {
-                        var td = "<td><input type='checkbox' id='dept_CB_" + depts[i].No + "' name='dept_CB_" + depts[i].No + "'/><label for='dept_CB_" + depts[i].No + "'>" + depts[i].Name + "</label></td>";
-                        if (i % 3 == 0) {
-                            $("#t1").append("<tr></tr>");
-                        }
-                        $("#t1 tr:last").append(td);
-                    }
-
-                    var initDepts = cond.OperatorValue.split("@");
-                    for (i = 0, len = initDepts.length; i < len; i++) {
-                        if (initDepts[i] == "") continue;
-                        document.getElementById("dept_CB_" + initDepts[i]).checked = true;
-                    }
-                    //TODO 条件参数
-                    var atpara = cond.AtPara;
-                    if (atpara != "") {
-                        var initDDL_SpecOperWay = atpara.split("@")[1].split("=")[1];
-                        document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
-                        document.getElementById("DDL_SpecOperWay").value = initDDL_SpecOperWay;
-
-                        var initTB_SpecOperPara = atpara.split("@")[2].split("=")[1];
-                        document.getElementById("TB_SpecOperPara").value = initTB_SpecOperPara;
-                        if (initDDL_SpecOperWay != 0) {
-                            document.getElementById("TB_SpecOperPara").disabled = "";
-                        }
-                        document.getElementById("initTB_SpecOperPara").value = initTB_SpecOperPara;
-                        $("#span" + initDDL_SpecOperWay).css("display", "inline-block");
-                        $("#span" + initDDL_SpecOperWay).siblings().css("display", "none");
-                    }
-                    //条件参数 end
-
-                    //end
-
-
+            $("#t1").append("<td colspan=3 class='GroupTitle' >部门选择</td>");
+            for (var i = 0, len = depts.length; i < len; i++) {
+                var td = "<td><input type='checkbox' id='dept_CB_" + depts[i].No + "' name='dept_CB_" + depts[i].No + "'/><label for='dept_CB_" + depts[i].No + "'>" + depts[i].Name + "</label></td>";
+                if (i % 3 == 0) {
+                    $("#t1").append("<tr></tr>");
                 }
-            });
+                $("#t1 tr:last").append(td);
+            }
+
+            var initDepts = cond.OperatorValue.split("@");
+            for (i = 0, len = initDepts.length; i < len; i++) {
+                if (initDepts[i] == "") continue;
+                document.getElementById("dept_CB_" + initDepts[i]).checked = true;
+            }
+            //TODO 条件参数
+            var atpara = cond.AtPara;
+            if (atpara != "") {
+                var initDDL_SpecOperWay = atpara.split("@")[1].split("=")[1];
+                document.getElementById("initDDL_SpecOperWay").value = initDDL_SpecOperWay;
+                document.getElementById("DDL_SpecOperWay").value = initDDL_SpecOperWay;
+
+                var initTB_SpecOperPara = atpara.split("@")[2].split("=")[1];
+                document.getElementById("TB_SpecOperPara").value = initTB_SpecOperPara;
+                if (initDDL_SpecOperWay != 0) {
+                    document.getElementById("TB_SpecOperPara").disabled = "";
+                }
+                document.getElementById("initTB_SpecOperPara").value = initTB_SpecOperPara;
+                $("#span" + initDDL_SpecOperWay).css("display", "inline-block");
+                $("#span" + initDDL_SpecOperWay).siblings().css("display", "none");
+            }
+            //条件参数 end
+            //end
         });
 
         //执行保存..CondByDept_Save
@@ -205,7 +181,7 @@
          }
     </style>
 </head>
-<body onkeypress="Esc();">
+<body >
     <form id="cc">
     <div style="overflow:auto">
         <div style="width: 100%;max-height: 600px;overflow:auto">

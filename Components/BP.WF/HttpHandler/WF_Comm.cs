@@ -92,11 +92,8 @@ namespace BP.WF.HttpHandler
             {
                 Entity en = ClassFactory.GetEn(this.EnName);
                 en.PKVal = this.PKVal;
-                int i= en.RetrieveFromDBSources(); //查询出来再删除.
-                if (i == 0)
-                    return "err@无此记录，无法删除."+this.EnName+" - "+en.PKVal;
-
-               return en.Delete().ToString(); //返回影响行数.
+                int i = en.RetrieveFromDBSources(); //查询出来再删除.
+                return en.Delete().ToString(); //返回影响行数.
             }
             catch (Exception ex)
             {

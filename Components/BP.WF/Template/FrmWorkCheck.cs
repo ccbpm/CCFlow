@@ -691,8 +691,8 @@ namespace BP.WF.Template
                 map.AddBoolean(FrmWorkCheckAttr.FWCIsFullInfo, true, "如果用户未审核是否按照默认意见填充？", true, true, true);
 
 
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_X, 5, "位置X", false, false);
-                map.AddTBFloat(FrmWorkCheckAttr.FWC_Y, 5, "位置Y", false, false);
+                map.AddTBFloat(FrmWorkCheckAttr.FWC_X, 300, "位置X", true, false);
+                map.AddTBFloat(FrmWorkCheckAttr.FWC_Y, 500, "位置Y", true, false);
 
                 map.AddTBFloat(FrmWorkCheckAttr.FWC_H, 300, "高度(0=100%)", true, false);
                 map.AddTBFloat(FrmWorkCheckAttr.FWC_W, 400, "宽度(0=100%)", true, false);

@@ -483,7 +483,7 @@ namespace BP.WF.HttpHandler
             {
                 gwlOfMe.FK_Emp = item.No;
                 gwlOfMe.FK_EmpText = item.Name;
-                gwlOfMe.IsPassInt = 0;
+                gwlOfMe.IsPassInt = -1; //设置不可以用.
                 gwlOfMe.FK_Dept = item.FK_Dept;
                 gwlOfMe.FK_DeptT = item.FK_DeptText; //部门名称.
                 gwlOfMe.IsRead = false;
@@ -574,7 +574,7 @@ namespace BP.WF.HttpHandler
 
             if (gwf.HuiQianTaskSta == HuiQianTaskSta.None)
             {
-                string mysql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND IsPass=0 AND FK_Emp!='" + BP.Web.WebUser.No + "'";
+                string mysql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND (IsPass=0 OR IsPass=-1) AND FK_Emp!='" + BP.Web.WebUser.No + "'";
                 if (DBAccess.RunSQLReturnValInt(mysql, 0) == 0)
                     return "info@您没有设置会签人，请在文本框输入会签人，或者选择会签人。";
             }
@@ -602,6 +602,10 @@ namespace BP.WF.HttpHandler
 
             //设置当前操作人员的状态.
             string sql = "UPDATE WF_GenerWorkerList SET IsPass=90 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND FK_Emp='" + WebUser.No + "'";
+            DBAccess.RunSQL(sql);
+
+            //恢复他的状态.
+            sql = "UPDATE WF_GenerWorkerList SET IsPass=0 WHERE WorkID=" + this.WorkID + " AND FK_Node=" + this.FK_Node + " AND IsPass=-1";
             DBAccess.RunSQL(sql);
 
             //删除以前执行的会签点,比如:该人多次执行会签，仅保留最后一个会签时间点.  

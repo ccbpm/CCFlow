@@ -83,6 +83,18 @@ namespace BP.WF
                     fnc.SetValByKey(FrmWorkCheckAttr.FWC_X, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_X));
                     fnc.SetValByKey(FrmWorkCheckAttr.FWC_Y, refFnc.GetValFloatByKey(FrmWorkCheckAttr.FWC_Y));
 
+                    if (fnc.GetValIntByKey(FrmWorkCheckAttr.FWC_H) <= 10)
+                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_H, 500);
+
+                    if (fnc.GetValIntByKey(FrmWorkCheckAttr.FWC_W) <= 10)
+                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_W, 600);
+
+                    if (fnc.GetValIntByKey(FrmWorkCheckAttr.FWC_X) <= 10)
+                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_X, 200);
+
+                    if (fnc.GetValIntByKey(FrmWorkCheckAttr.FWC_Y) <= 10)
+                        fnc.SetValByKey(FrmWorkCheckAttr.FWC_Y, 200);
+
 
                     fnc.SetValByKey(FrmSubFlowAttr.SF_H, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_H));
                     fnc.SetValByKey(FrmSubFlowAttr.SF_W, refFnc.GetValFloatByKey(FrmSubFlowAttr.SF_W));

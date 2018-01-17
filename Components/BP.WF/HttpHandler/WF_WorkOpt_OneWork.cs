@@ -321,7 +321,6 @@ namespace BP.WF.HttpHandler
                         }
                     }
                 }
-
             }
             else
             {

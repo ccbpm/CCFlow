@@ -594,10 +594,16 @@ function figure_Template_FigureFlowChart(wf_node) {
 function figure_Template_FigureFrmCheck(wf_node) {
 
     //审核组键FWCSta Sta,FWC_X X,FWC_Y Y,FWC_H H, FWC_W W from WF_Node
-
     var sta = wf_node.FWCSta;
     var x = wf_node.FWC_X;
+
+    if (x <= 20)
+        x = 200;
+
     var y = wf_node.FWC_Y;
+    if (y <= 20)
+        y = 500;
+
     var h = wf_node.FWC_H;
     var w = wf_node.FWC_W;
     if (sta == 0)

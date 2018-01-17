@@ -171,7 +171,16 @@ function figure_Template_FigureFrmCheck(wf_node, mapData) {
         h = parseFloat(pos.H);
         w = parseFloat(pos.W);
     }
+    if (x <= 10)
+        x = 100;
+    if (y <= 10)
+        y = 100;
 
+    if (h <= 10)
+        h = 100;
+
+    if (w <= 10)
+        w = 300;
 
     var src = "../WorkOpt/WorkCheck.htm?s=2";
     var fwcOnload = "";

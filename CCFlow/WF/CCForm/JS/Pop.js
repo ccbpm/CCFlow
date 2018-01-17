@@ -81,7 +81,8 @@ function PopBranchesAndLeaf(mapExt) {
     });
     $("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
     //解项羽 这里需要相对路径.
-    var url = "../CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
+    var localHref = GetLocalWFPreHref();
+    var url = localHref + "/WF/CCForm/Pop/BranchesAndLeaf.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
@@ -175,7 +176,8 @@ function PopBranches(mapExt) {
     //初始加载
     Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
     //这里需要相对路径.
-    var url = "../CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
+    var localHref = GetLocalWFPreHref();
+    var url = localHref + "/WF/CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
@@ -322,4 +324,14 @@ function PopGroupList_Done(mapExt) {
         });
         return;
     }
+}
+
+//获取WF之前路径
+function GetLocalWFPreHref() {
+    var url = window.location.href;
+    if (url.indexOf('/WF/') >= 0) {
+        var index = url.indexOf('/WF/');
+        url = url.substring(0, index);
+    }
+    return url;
 }

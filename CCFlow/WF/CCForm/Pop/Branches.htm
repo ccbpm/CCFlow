@@ -35,10 +35,20 @@
             var appendToTree = function (treeToAppend, child) {
                 $.each(treeToAppend, function (i, o) {
                     if (o.id == child.ParentNo) {
+                        var checked = false;
+                        var selectedNodes = window.selectedNodes;
+
+                        var sel = $.grep(selectedNodes, function (obj) {
+                            return child.No == obj.No;
+                        });
+                        if (sel.length > 0) {
+                            checked = true;
+                        }
                         o.nodes.push({
                             "id": child.No,
                             "text": child.Name,
-                            "nodes": []
+                            "nodes": [],
+                            "state": { checked: checked }
                         });
                     } else {
                         appendToTree(o.nodes, child);
@@ -50,10 +60,19 @@
             if ($.isArray(jsonArray) && typeof parentNo !== "undefined") {
                 $.each(jsonArray, function (i, o) {
                     if (o.ParentNo == parentNo) {
+                        var checked = false;
+                        var selectedNodes = window.selectedNodes;
+                        var sel = $.grep(selectedNodes, function (obj) {
+                            return o.No == obj.No;
+                        });
+                        if (sel.length > 0) {
+                            checked = true;
+                        }
                         jsonTree.push({
                             "id": o.No,
                             "text": o.Name,
-                            "nodes": []
+                            "nodes": [],
+                            "state": { checked: checked }
                         });
                     } else {
                         appendToTree(jsonTree, o);
@@ -79,7 +98,6 @@
         function loadTree(treeUrl, rootNo, global) {
             var json = DBAccess.RunDBSrc(treeUrl); //执行url返回json.
             var jsonTree = findChildren(json, rootNo);
-
             $('#tree').treeview({
                 data: jsonTree,         // 数据源
                 showCheckbox: mapExt.ShowCheckBox,   //是否显示复选框
@@ -108,7 +126,6 @@
 
         //查询列表
         function loadViewGrid(gridUrl) {
-
             var global = window;
             var columns = mapExt.Tag;
             var searchTableColumns = [{
@@ -170,6 +187,17 @@
             if ($.isArray(json)) {
                 $('#tree_Panel').hide();
                 $('#viewGrid_Panel').show();
+                var selectedRows = window.selectedNodes;
+                if ($.isArray(selectedRows)) {
+                    $.each(json, function (i, o) {
+                        var sel = $.grep(selectedRows, function (obj) {
+                            return o.No == obj.No;
+                        });
+                        if (sel.length > 0) {
+                            o.checked = true;
+                        }
+                    });
+                }
                 $('#viewGrid').bootstrapTable("load", json);
             }
         }
@@ -182,7 +210,6 @@
         }
 
         $(function () {
-
             // global
             var global = window;
             global.selectedNodes = [];
@@ -217,6 +244,16 @@
                 return;
             }
 
+            // 初始化加载
+            var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+            frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
+            $.each(frmEleDBs, function (i, o) {
+                global.selectedNodes.push({
+                    "No": o.Tag1,
+                    "Name": o.Tag2
+                });
+            });
+
             // search
             $("#TB_Key").on("keyup", function () {
                 var keyWord = $(this).val();
@@ -239,16 +276,6 @@
 
             // tree
             loadTree(treeUrl, rootNo, global);
-
-            // 初始化加载
-            var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
-            frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
-            $.each(frmEleDBs, function (i, o) {
-                global.selectedNodes.push({
-                    "No": o.Tag1,
-                    "Name": o.Tag2
-                });
-            });
         });
 
         ///获取已经勾选节点

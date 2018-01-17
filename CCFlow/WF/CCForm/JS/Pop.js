@@ -172,23 +172,19 @@ function PopBranches(mapExt) {
     var iframeId = mapExt.MyPK + mapExt.FK_MapData;
     var title = mapExt.GetPara("Title");
     var oid = GetPKVal();
-
-    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
-    frmEleDBs.Retrieve("FK_MapData", mapExt.FK_MapData, "EleID", mapExt.AttrOfOper, "RefPKVal", oid);
-    var initJsonData = [];
-    $.each(frmEleDBs, function (i, o) {
-        initJsonData.push({
-            "No": o.Tag1,
-            "Name": o.Tag2
-        });
-    });
-
-    $("#" + mapExt.AttrOfOper + "_mtags").mtags("loadData", initJsonData);
+    //初始加载
+    Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
     //这里需要相对路径.
     var url = "../CCForm/Pop/Branches.htm?MyPK=" + mapExt.MyPK + "&oid=" + oid + "&m=" + Math.random();
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+                var selectType = mapExt.GetPara("SelectType");
+                //单选清空数据
+                if (selectType == "0") {
+                    //清空数据
+                    Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
+                }
                 var iframe = document.getElementById(iframeId);
                 if (iframe) {
                     var nodes = iframe.contentWindow.GetCheckNodes();
@@ -196,9 +192,8 @@ function PopBranches(mapExt) {
                         $.each(nodes, function (i, node) {
                             SaveVal_FrmEleDB(mapExt.FK_MapData, mapExt.AttrOfOper, oid, node.No, node.Name);
                         });
-                        var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
-                        mtags.mtags("loadData", nodes);
-                        $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+                        //重新加载
+                        Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
                     }
                 }
             }, null, function () {
@@ -209,6 +204,16 @@ function PopBranches(mapExt) {
     });
 }
 
+//删除数据.
+function Delete_FrmEleDBs(FK_MapData, keyOfEn, oid) {
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", keyOfEn, "RefPKVal", oid);
+    $.each(frmEleDBs, function (i, obj) {
+        var frmEleDB = new Entity("BP.Sys.FrmEleDB");
+        frmEleDB.MyPK = obj.MyPK
+        frmEleDB.Delete();
+    });
+}
 //删除数据.
 function Delete_FrmEleDB(keyOfEn, oid, No) {
     var frmEleDB = new Entity("BP.Sys.FrmEleDB");
@@ -227,6 +232,19 @@ function SaveVal_FrmEleDB(fk_mapdata, keyOfEn, oid, val1, val2) {
     if (frmEleDB.Update() == 0) {
         frmEleDB.Insert();
     }
+}
+//刷新
+function Refresh_Mtags(FK_MapData, AttrOfOper, oid) {
+    var frmEleDBs = new Entities("BP.Sys.FrmEleDBs");
+    frmEleDBs.Retrieve("FK_MapData", FK_MapData, "EleID", AttrOfOper, "RefPKVal", oid);
+    var initJsonData = [];
+    $.each(frmEleDBs, function (i, o) {
+        initJsonData.push({
+            "No": o.Tag1,
+            "Name": o.Tag2
+        });
+    });
+    $("#" + AttrOfOper + "_mtags").mtags("loadData", initJsonData);
 }
 
 /******************************************  表格查询 **********************************/

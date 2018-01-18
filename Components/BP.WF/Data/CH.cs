@@ -52,6 +52,15 @@ namespace BP.WF.Data
         public const string FK_FlowT = "FK_FlowT";
 
         /// <summary>
+        /// 发送人
+        /// </summary>
+        public const string Sender = "Sender";
+        /// <summary>
+        /// 发送人名称
+        /// </summary>
+        public const string SenderT = "SenderT";
+
+        /// <summary>
         /// 节点
         /// </summary>
         public const string FK_Node = "FK_Node";
@@ -160,6 +169,31 @@ namespace BP.WF.Data
     public class CH : EntityMyPK
     {
         #region 基本属性
+        /// <summary>
+        /// 时间到
+        /// </summary>
+        public string Sender
+        {
+            get
+            {
+                return this.GetValStringByKey(CHAttr.Sender);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.Sender, value);
+            }
+        }
+        public string SenderT
+        {
+            get
+            {
+                return this.GetValStringByKey(CHAttr.SenderT);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.SenderT, value);
+            }
+        }
         /// <summary>
         /// 考核状态
         /// </summary>
@@ -581,6 +615,11 @@ namespace BP.WF.Data
 
                 map.AddTBInt(CHAttr.FK_Node, 0, "节点", false, false);
                 map.AddTBString(CHAttr.FK_NodeT, null, "节点名称", true, true, 0, 200, 5);
+
+
+                map.AddTBString(CHAttr.Sender, null, "发送人", false, false, 0, 200, 3);
+                map.AddTBString(CHAttr.SenderT, null, "发送人名称", true, true, 0, 200, 5);
+
 
                 map.AddTBString(CHAttr.FK_Emp, null, "当事人", true, true, 0, 30, 3);
                 map.AddTBString(CHAttr.FK_EmpT, null, "当事人名称", true, true, 0, 200, 5);

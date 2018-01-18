@@ -189,7 +189,7 @@ namespace BP.WF.Template
                         new BP.GPM.Stations(),
                       NodeStationAttr.FK_Node, NodeStationAttr.FK_Station,
                        "节点绑定岗位", BP.GPM.StationAttr.FK_StationType);
-                     
+
                     //判断是否为集团使用，集团时打开新页面以树形展示
                     if (BP.WF.Glo.IsUnit == true)
                     {
@@ -205,8 +205,19 @@ namespace BP.WF.Template
                         map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeDepts(), new BP.GPM.Depts(),
                             NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
             DeptAttr.No, "节点绑定部门", Dot2DotModel.TreeDept);
+
+                        //map.AttrsOfOneVSM.Add(new BP.WF.Template.NodeDepts(), new BP.GPM.Depts(),
+                        //NodeDeptAttr.FK_Node, NodeDeptAttr.FK_Dept, DeptAttr.Name,
+                        //DeptAttr.No, "节点绑定部门", Dot2DotModel.TreeDept);
                     }
                 }
+
+
+                //节点绑定人员. 使用树杆与叶子的模式绑定.
+                map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),
+                   BP.WF.Template.NodeDeptAttr.FK_Node,
+                   BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranchesAndLeaf(new BP.WF.Template.NodeEmps(), new BP.Port.Emps(),

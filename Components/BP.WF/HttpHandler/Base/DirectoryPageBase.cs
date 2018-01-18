@@ -66,20 +66,27 @@ namespace BP.WF.HttpHandler
         /// <returns>返回执行的结果，执行错误抛出异常</returns>
         public string DoMethod(DirectoryPageBase myEn, string methodName)
         {
-            Type tp = myEn.GetType();
-            MethodInfo mp = tp.GetMethod(methodName);
-
-            if (mp == null)
+            try
             {
-                /* 没有找到方法名字，就执行默认的方法. */
-                return myEn.DoDefaultMethod();
+                Type tp = myEn.GetType();
+                MethodInfo mp = tp.GetMethod(methodName);
+                if (mp == null)
+                {
+                    /* 没有找到方法名字，就执行默认的方法. */
+                    return myEn.DoDefaultMethod();
+                }
 
-                
+                //执行该方法.
+                object[] paras = null;
+                return mp.Invoke(this, paras) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
             }
-
-            //执行该方法.
-            object[] paras = null;
-            return mp.Invoke(this, paras) as string;  //调用由此 MethodInfo 实例反射的方法或构造函数。
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null)
+                    return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.InnerException;
+                else
+                    return "err@调用类:[" + myEn + "]方法:[" + methodName + "]出现错误:" + ex.Message;
+            }
         }
         /// <summary>
         /// 执行默认的方法名称

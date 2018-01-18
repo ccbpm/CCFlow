@@ -275,6 +275,30 @@ namespace BP.En
 			this.Add(en);				
 		}
         /// <summary>
+        /// 绑定树模式
+        /// </summary>
+        /// <param name="_ensOfMM">比如 BP.WF.NodeDepts </param>
+        /// <param name="_ensOfM">比如: BP.Port.Depts</param>
+        /// <param name="rootNo">跟节点</param>
+        /// <param name="AttrOfOneInMM">比如:FK_Node</param>
+        /// <param name="AttrOfMInMM">比如:FK_Dept</param>
+        /// <param name="desc">比如:节点绑定部门</param>
+        /// <param name="AttrOfMText">一般是Name</param>
+        /// <param name="AttrOfMValue">一般是No</param>
+        public void AddBranches(Entities _ensOfMM, Entities _ensOfM, string AttrOfOneInMM, string AttrOfMInMM,
+           string desc, string AttrOfMText = "Name", string AttrOfMValue = "No", string rootNo = "0")
+        {
+            //属性.
+            AttrOfOneVSM en = new AttrOfOneVSM(_ensOfMM, _ensOfM, AttrOfOneInMM,
+                AttrOfMInMM, AttrOfMText, AttrOfMValue, desc);
+
+            //工作模式.
+            en.Dot2DotModel = Dot2DotModel.TreeDept; //分组模式.
+
+            en.RootNo = rootNo; //默认的根目录.
+            this.Add(en);
+        }
+        /// <summary>
         /// 增加树杆叶子类型
         /// </summary>
         /// <param name="_ensOfMM"></param>

@@ -5945,7 +5945,19 @@ namespace BP.WF
                 //增加了两个默认值值 . 2016.11.15. 目的是让创建的节点，就可以使用.
                 nd.CondModel = CondModel.SendButtonSileSelect; //默认的发送方向.
                 nd.HisDeliveryWay = DeliveryWay.BySelected; //上一步发送人来选择.
+                //为创建节点设置默认值 @于庆海. 
+                string fileNewNode = SystemConfig.PathOfDataUser + "\\XML\\DefaultNewNodeAttr.xml";
+                if (System.IO.File.Exists(fileNewNode) == true)
+                {
+                    DataSet ds_NodeDef = new DataSet();
+                    ds_NodeDef.ReadXml(fileNewNode);
 
+                    DataTable dt = ds_NodeDef.Tables[0];
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        nd.SetValByKey(dc.ColumnName, dt.Rows[0][dc.ColumnName]);
+                    }
+                }
                 nd.Insert();
                 nd.CreateMap();
                 //nd.HisWork.CheckPhysicsTable(); //去掉，检查的时候会执行.

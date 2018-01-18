@@ -138,18 +138,18 @@
                     for (var i = 0; i < data.length; i++) {
 
                         if (groupBy == "ByNode") {
-                            if (str.indexOf('@' + data[i].NodeName) == -1)
-                                str += "@" + data[i].NodeName;
+                            if (str.indexOf('@' + data[i].NodeName + "@") == -1)
+                                str += "@" + data[i].NodeName + "@";
                         }
 
                         if (groupBy == "ByFlow") {
-                            if (str.indexOf('@' + data[i].FlowName) == -1)
-                                str += "@" + data[i].FlowName;
+                            if (str.indexOf('@' + data[i].FlowName + "@") == -1)
+                                str += "@" + data[i].FlowName + "@";
                         }
 
                         if (groupBy == "ByStarter") {
-                            if (str.indexOf('@' + data[i].StarterName) == -1)
-                                str += "@" + data[i].StarterName;
+                            if (str.indexOf('@' + data[i].StarterName + "@") == -1)
+                                str += "@" + data[i].StarterName + "@";
                         }
                     }
                     var strs = str.split("@"); //生成数组.

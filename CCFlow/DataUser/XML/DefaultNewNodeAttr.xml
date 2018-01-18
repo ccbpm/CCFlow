@@ -4,8 +4,15 @@
 
     <!-- 考核方式 0不考核,1,按时间考核.  -->
     <CHWay>1</CHWay>
-    <CHWay>1</CHWay>
-
+    <!-- 限期(天)  -->
+    <TimeLimit>1</TimeLimit>
+    <!-- 预警(天)  -->
+    <WarningDay>1</WarningDay>
+    <!-- 0=不计算节假日,1=计算节假日  -->
+    <TWay>1</TWay>
+    <!-- 扣分(每延期1小时)  -->
+    <TCent>2</TCent>
+    
     <!-- 退回规则 0不能退回,1,只能退回上一个节点, 2退回任意节点, 3指定的节点.  -->
     <ReturnRole>1</ReturnRole>
 

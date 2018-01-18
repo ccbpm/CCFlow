@@ -5751,6 +5751,8 @@ namespace BP.WF
                 this.rptGe.WFState = WFState.Complete;
                 this.rptGe.Update();
                 this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
+                //执行考核
+                Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
                 return this.HisMsgObjs;
             }
 
@@ -6139,6 +6141,8 @@ namespace BP.WF
                     this.rptGe.Update();
                     this.HisGenerWorkFlow.Update(); //added by liuxc,2016-10=24,最后节点更新Sender字段
                      * */
+                    //执行考核
+                    Glo.InitCH(this.HisFlow, this.HisNode, this.WorkID, 0, this.HisGenerWorkFlow.Title);
                     return HisMsgObjs;
                 }
 

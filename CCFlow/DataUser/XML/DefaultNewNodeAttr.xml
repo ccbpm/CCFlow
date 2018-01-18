@@ -1,0 +1,13 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Node>
+
+    <!-- 考核方式 0不考核,1,按时间考核.  -->
+    <CHWay>1</CHWay>
+    <CHWay>1</CHWay>
+
+    <!-- 退回规则 0不能退回,1,只能退回上一个节点, 2退回任意节点, 3指定的节点.  -->
+    <ReturnRole>1</ReturnRole>
+
+    </Node> 
+</NewDataSet>

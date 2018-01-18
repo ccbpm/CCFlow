@@ -4032,12 +4032,12 @@ namespace BP.WF
             #region 求参与人员 todoEmps ，应完成日期 sdt ，与工作派发日期 prvRDT.
             //参与人员.
             string todoEmps = "";
+            string dbstr = SystemConfig.AppCenterDBVarStr;
             if (nd.IsEndNode == true && gwl==null)
             {
                 /* 如果是最后一个节点，可以使用这样的方式来求人员信息 , */
 
                 #region 求应完成日期，与参与的人集合. 
-                string dbstr = SystemConfig.AppCenterDBVarStr;
                 Paras ps = new Paras();
                 switch (SystemConfig.AppCenterDBType)
                 {
@@ -4107,6 +4107,34 @@ namespace BP.WF
             }
             #endregion 求参与人员，应完成日期，与工作派发日期.
 
+            #region 求 preSender上一个发送人，preSenderText 发送人姓名
+            string preSender = "";
+            string preSenderText = "";
+            Paras pas = new Paras();
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                    pas.SQL = "SELECT TOP 1 EmpFrom,EmpFromT FROM ND" + int.Parse(fl.No) + "Track WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND NDFrom!=NDTo ORDER BY RDT DESC";
+                    break;
+                case DBType.Oracle:
+                    pas.SQL = "SELECT EmpFrom,EmpFromT FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND NDFrom!=NDTo AND ROWNUM=1 ORDER BY RDT DESC ";
+                    break;
+                case DBType.MySQL:
+                    pas.SQL = "SELECT EmpFrom,EmpFromT FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID AND NDTo=" + dbstr + "NDTo AND NDFrom!=NDTo ORDER BY RDT DESC limit 0,1 ";
+                    break;
+                default:
+                    break;
+            }
+            pas.Add("WorkID", workid);
+            pas.Add("NDTo", nd.NodeID);
+
+            DataTable dt_Sender = BP.DA.DBAccess.RunSQLReturnTable(pas);
+            if (dt_Sender.Rows.Count > 0)
+            {
+                preSender = dt_Sender.Rows[0][0].ToString();
+                preSenderText = dt_Sender.Rows[0][1].ToString();
+            }
+            #endregion
 
             #region 初始化基础数据.
             BP.WF.Data.CH ch = new CH();
@@ -4138,6 +4166,9 @@ namespace BP.WF
 
             // 处理相关联的当事人.
             ch.GroupEmpsNames = todoEmps;
+            //上一步发送人
+            ch.Sender = preSender;
+            ch.SenderT = preSenderText;
 
             //求参与人员数量.
             string[] strs = todoEmps.Split(';');

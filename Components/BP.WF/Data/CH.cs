@@ -170,7 +170,7 @@ namespace BP.WF.Data
     {
         #region 基本属性
         /// <summary>
-        /// 时间到
+        /// 发送人
         /// </summary>
         public string Sender
         {
@@ -183,6 +183,9 @@ namespace BP.WF.Data
                 this.SetValByKey(CHAttr.Sender, value);
             }
         }
+        /// <summary>
+        /// 发送人名称
+        /// </summary>
         public string SenderT
         {
             get

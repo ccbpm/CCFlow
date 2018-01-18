@@ -451,7 +451,8 @@ namespace BP.WF
                     return this.DoUnSendFeiLiu(gwf);
                 case NodeWorkType.WorkFL:
                 case NodeWorkType.StartWorkFL:
-                    return this.DoUnSendFeiLiu(gwf);
+                    //return this.DoUnSendFeiLiu(gwf);
+                    break;
                 case NodeWorkType.WorkHL:
                     if (this.IsMainFlow)
                     {

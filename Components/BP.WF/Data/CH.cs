@@ -134,6 +134,10 @@ namespace BP.WF.Data
         /// </summary>
         public const string FK_NY = "FK_NY";
         /// <summary>
+        /// 考核方式
+        /// </summary>
+        public const string DTSWay = "DTSWay";
+        /// <summary>
         /// 周
         /// </summary>
         public const string WeekNum = "WeekNum";
@@ -478,6 +482,20 @@ namespace BP.WF.Data
             }
         }
         /// <summary>
+        /// 考核方式
+        /// </summary>
+        public int DTSWay
+        {
+            get
+            {
+                return this.GetValIntByKey(CHAttr.DTSWay);
+            }
+            set
+            {
+                this.SetValByKey(CHAttr.DTSWay, value);
+            }
+        }
+        /// <summary>
         /// 周
         /// </summary>
         public int WeekNum
@@ -633,13 +651,14 @@ namespace BP.WF.Data
                 map.AddTBInt(CHAttr.GroupEmpsNum, 1, "相关当事人数量", false, false);
 
 
-                map.AddTBString(CHAttr.DTFrom, null, "时间从", true, true, 0, 50, 5);
-                map.AddTBString(CHAttr.DTTo, null, "到", true, true, 0, 50, 5);
+                map.AddTBString(CHAttr.DTFrom, null, "任务下达时间", true, true, 0, 50, 5);
+                map.AddTBString(CHAttr.DTTo, null, "任务处理时间", true, true, 0, 50, 5);
                 map.AddTBString(CHAttr.SDT, null, "应完成日期", true, true, 0, 50, 5);
 
                 map.AddTBString(CHAttr.FK_Dept, null, "隶属部门", true, true, 0, 50, 5);
                 map.AddTBString(CHAttr.FK_DeptT, null, "部门名称", true, true, 0, 500, 5);
                 map.AddTBString(CHAttr.FK_NY, null, "隶属月份", true, true, 0, 10, 10);
+                map.AddDDLSysEnum(CHAttr.DTSWay, 0, "考核方式", true, true, CHAttr.DTSWay, "@0=不考核@1=按照时效考核@2=按照工作量考核");
                 #endregion 基本属性.
 
                 #region 计算属性.

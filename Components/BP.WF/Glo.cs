@@ -4169,6 +4169,8 @@ namespace BP.WF
             //上一步发送人
             ch.Sender = preSender;
             ch.SenderT = preSenderText;
+            //考核状态
+            ch.DTSWay = (int)nd.HisCHWay;
 
             //求参与人员数量.
             string[] strs = todoEmps.Split(';');

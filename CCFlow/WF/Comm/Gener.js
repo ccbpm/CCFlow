@@ -1,4 +1,13 @@
-﻿/* 把一个 @XB=1@Age=25 转化成一个js对象.  */
+﻿//
+if (plant == "CCFlow") {
+    // CCFlow
+    dynamicHandler = "/WF/Comm/Handler.ashx";
+} else {
+    // JFlow
+    dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
+}
+
+/* 把一个 @XB=1@Age=25 转化成一个js对象.  */
 function AtParaToJson(json) {
     var jsObj = {};
     if (json) {
@@ -1274,13 +1283,7 @@ var Entities = (function () {
         return params;
     }
 
-    if (plant == "CCFlow") {
-        // CCFlow
-        dynamicHandler = "/WF/Comm/Handler.ashx";
-    } else {
-        // JFlow
-        dynamicHandler = basePath + "/WF/Comm/ProcessRequest.do";
-    }
+    
 
     Entities.prototype = {
 

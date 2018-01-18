@@ -4406,7 +4406,7 @@ namespace BP.WF
             if (DBAccess.IsExitsObject(this.PTable))
                 DBAccess.RunSQL("DELETE FROM " + this.PTable);
 
-            //DBAccess.RunSQL("DELETE FROM WF_WorkList WHERE FK_Flow='" + this.No + "'");
+            DBAccess.RunSQL("DELETE FROM WF_CH WHERE FK_Flow='" + this.No + "'");
             //DBAccess.RunSQL("DELETE FROM Sys_MapExt WHERE FK_MapData LIKE 'ND"+int.Parse(this.No)+"%'" );
 
             //删除节点数据。

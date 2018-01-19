@@ -34,9 +34,9 @@
     var modalContent = $("<div class='modal-content' style='border-radius:0px;text-align:left;'></div>");
     modalDialog.append(modalContent);
     //标题
-    var modalHead = $("<div class='modal-header'></div>");
+    var modalHead = $("<div class='modal-header' style='padding: 5px;'></div>");
     //关闭按钮
-    var btnClose = $("<button type='button' style='color:white;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>&times;</button>");
+    var btnClose = $("<button type='button' style='color:black;float: right;background: transparent;border: none;' data-dismiss='modal' aria-hidden='true'>&times;</button>");
     //标题
     var titleHead = $("<h4 class='modal-title'></h4>");
 

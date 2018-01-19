@@ -4062,31 +4062,11 @@ namespace BP.WF
                 #endregion 求应完成日期，与参与的人集合.
 
                 #region 求上一个节点的日期.
-                //求上一个时间点.
-                ps = new Paras();
-                switch (SystemConfig.AppCenterDBType)
-                {
-                    case DBType.MSSQL:
-                        ps.SQL = "SELECT TOP 1 RDT FROM ND" + int.Parse(fl.No) + "Track WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND NDFrom!=NDTo ORDER BY RDT DESC";
-                        break;
-                    case DBType.Oracle:
-                        ps.SQL = "SELECT  RDT FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND NDFrom!=NDTo AND ROWNUM=1 ORDER BY RDT DESC ";
-                        break;
-                    case DBType.MySQL:
-                        ps.SQL = "SELECT  RDT FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID AND NDTo=" + dbstr + "NDTo AND NDFrom!=NDTo ORDER BY RDT DESC limit 0,1 ";
-                        break;
-                    default:
-                        break;
-                }
-                ps.Add("WorkID", workid);
-                ps.Add("NDTo", nd.NodeID);
-
-                dt = BP.DA.DBAccess.RunSQLReturnTable(ps);
+                dt = Dev2Interface.Flow_GetPreviousNodeTrack(workid,nd.NodeID);
                 if (dt.Rows.Count == 0)
                     return;
-
                 //上一个节点的活动日期.
-                prvRDT = dt.Rows[0][0].ToString();
+                prvRDT = dt.Rows[0]["RDT"].ToString();
                 #endregion
             }
 
@@ -4110,29 +4090,11 @@ namespace BP.WF
             #region 求 preSender上一个发送人，preSenderText 发送人姓名
             string preSender = "";
             string preSenderText = "";
-            Paras pas = new Paras();
-            switch (SystemConfig.AppCenterDBType)
-            {
-                case DBType.MSSQL:
-                    pas.SQL = "SELECT TOP 1 EmpFrom,EmpFromT FROM ND" + int.Parse(fl.No) + "Track WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND NDFrom!=NDTo ORDER BY RDT DESC";
-                    break;
-                case DBType.Oracle:
-                    pas.SQL = "SELECT EmpFrom,EmpFromT FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND NDFrom!=NDTo AND ROWNUM=1 ORDER BY RDT DESC ";
-                    break;
-                case DBType.MySQL:
-                    pas.SQL = "SELECT EmpFrom,EmpFromT FROM ND" + int.Parse(fl.No) + "Track  WHERE WorkID=" + dbstr + "WorkID AND NDTo=" + dbstr + "NDTo AND NDFrom!=NDTo ORDER BY RDT DESC limit 0,1 ";
-                    break;
-                default:
-                    break;
-            }
-            pas.Add("WorkID", workid);
-            pas.Add("NDTo", nd.NodeID);
-
-            DataTable dt_Sender = BP.DA.DBAccess.RunSQLReturnTable(pas);
+            DataTable dt_Sender = Dev2Interface.Flow_GetPreviousNodeTrack(workid, nd.NodeID);            
             if (dt_Sender.Rows.Count > 0)
             {
-                preSender = dt_Sender.Rows[0][0].ToString();
-                preSenderText = dt_Sender.Rows[0][1].ToString();
+                preSender = dt_Sender.Rows[0]["EmpFrom"].ToString();
+                preSenderText = dt_Sender.Rows[0]["EmpFromT"].ToString();
             }
             #endregion
 

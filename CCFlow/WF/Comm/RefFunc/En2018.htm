@@ -24,8 +24,8 @@
     <link href="../../Scripts/bootstrap/css/font-awesome.css" rel="Stylesheet" />
     <link rel="stylesheet" href="../../Scripts/bootstrap/css/css.css" type="text/css" media="all" />
 
-    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. -->
-    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />
+    <!-- 该文件可以被集成厂商自己定义风格,可以自己修改,以达到流程设计器与自己的系统风格统一. 
+    <link href="../../../DataUser/Style/ccbpm.css" rel="Stylesheet" />-->
 
     <!--UEditor-->
     <link href="../../Comm/umeditor1.2.3-utf8/themes/default/css/umeditor.css" type="text/css" rel="stylesheet" />
@@ -34,6 +34,11 @@
     <script type="text/javascript" charset="utf-8" src="../../Comm/umeditor1.2.3-utf8/umeditor.min.js"></script>
     <script type="text/javascript" src="../../Comm/umeditor1.2.3-utf8/lang/zh-cn/zh-cn.js"></script>
 
+	<style type="text/css">
+		.row-margin-top {
+			margin-top: 20px;
+		}
+	</style>
     <!--杨玉慧 -->
     <script type="text/javascript">
 
@@ -158,6 +163,7 @@
             var gNames = groupName.split('@');
 
             //生成菜单.
+			/*
             var html = "<table>";
             for (var i = 0; i < gNames.length; i++) {
                 var gName = gNames[i];
@@ -193,6 +199,40 @@
 
             }
             html += "</table>";
+			*/
+			
+			var html = "";
+            for (var i = 0; i < gNames.length; i++) {
+                var gName = gNames[i];
+				if (gName == "") {
+					continue;
+				}
+				html += '<div class="panel panel-default">';
+				html += '	<div class="panel-heading">';
+				html += '		<h4 class="panel-title">';
+				html += '			<a data-toggle="collapse" data-parent="#Left" href="#collapse' + i + '">' + gName + '</a>';
+				html += '		</h4>';
+				html += '	</div>';
+				html += '	<div id="collapse' + i + '" class="panel-collapse collapse in">';
+                //填入菜单内容.
+                for (var idx = 0; idx < dtM.length; idx++) {
+
+                    var en = dtM[idx];
+                    var myName = en.GroupName;
+                    if (myName == null || myName == "")
+                        myName = "基本信息";
+
+                    if (gName != myName)
+                        continue;
+
+                    if (en.RefAttrKey != null || en.IsCanBatch == "1" || en.Visable == 0)
+                        continue;
+
+                    html += '<div class="panel-body">' + GenerRM(en) + "</div>";
+                }
+				html += "	</div>";
+				html += "</div>";
+            }
 
             $("#Left").append(html);
         }
@@ -205,18 +245,18 @@
 
             //权限控制.
             if (mapData.GetPara("IsInsert") == 1) {
-                html += "<input type='button' value='新建' id='Btn_New' onclick='New()' />";
+                html += "<input type='button' value='新建' id='Btn_New' onclick='New()' class='btn btn-default' />";
             }
             if (mapData.GetPara("IsUpdate") == 1) {
-                html += "<input type='button' value='保存' id='Btn_Save' onclick='Update()' />";
+                html += "<input type='button' value='保存' id='Btn_Save' onclick='Update()' class='btn btn-default' />";
             }
             if (mapData.GetPara("IsDelete") == 1) {
                 var pkVal = GetPKVal();
                 if (pkVal != null)
-                    html += "<input type='button' value='删除' id='Btn_Delete' onclick='Delete()' />";
+                    html += "<input type='button' value='删除' id='Btn_Delete' onclick='Delete()' class='btn btn-default' />";
             }
 
-            html += "<input type='button' value='关闭' id='close' onclick='CloseIt()' />";
+            html += "<input type='button' value='关闭' id='close' onclick='CloseIt()' class='btn btn-default' />";
 
             $("#Btns").append(html);
         }
@@ -228,23 +268,32 @@
             var mapAtrrs = frmData.Sys_MapAttr;
 
             var tableWidth = 800; //  w - 40;
-            var html = "<table style='width:" + tableWidth + "px;' >";
-
+            //var html = "<table style='width:" + tableWidth + "px;' >";
+			var html = '<div class="form-inline">';
             //遍历循环生成 listview
             for (var i = 0; i < Sys_GroupFields.length; i++) {
 
                 var gf = Sys_GroupFields[i];
                 //字段类的控件.
                 if (gf.CtrlType == '' || gf.CtrlType == null) {
-
-                    html += "<tr>";
-                    html += "  <th colspan=4>" + gf.Lab + "</th>";
-                    html += "</tr>";
+                    //html += "<tr>";
+                    //html += "  <th colspan=4>" + gf.Lab + "</th>";
+                    //html += "</tr>";
+					html += '<div class="row row-margin-top">';
+					html +=		'<div class="col-md-12">';
+					html += 		"<fieldset>";
+					html += 			"<legend>" + gf.Lab + "</legend>";
+					//html += 				'<div class="row">';
                     html += InitMapAttr(frmData.Sys_MapAttr, mainData, gf.OID);
+					//html +=					'</div>';
+					html += 		"</fieldset>";
+					html += 	'</div>';
+					html += '</div>';
                     continue;
                 }
             }
-            html += "</table>";
+            //html += "</table>";
+			html += "</div>";
 
             //加入隐藏控件.
             for (var i = 0; i < mapAtrrs.length; i++) {
@@ -314,88 +363,171 @@
                 }
 
                 //线性展示并且colspan=3
-                if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
-                    isDropTR = true;
-                    html += "<tr>";
-                    html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
-                    html += "<td colspan=3>";
-                    html += InitMapAttrOfCtrl(attr);
-                    html += "</td>";
-                    html += "</tr>";
-
-                    if (rm != null) {
-                        html += "<tr>";
-                        html += "<td class='FDesc' style='width:120px;'></td>";
-                        html += "<td colspan=3>";
-                        html += GenerRM(rm);
-                        html += "</td>";
-                        html += "</tr>";
-                        isDropTR = true;
-                    }
-                    continue;
-                }
+                //if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
+                //    isDropTR = true;
+                //    html += "<tr>";
+                //    html += "<td  class='FDesc' style='width:120px;'>" + lab + "</td>";
+                //    html += "<td colspan=3>";
+                //    html += InitMapAttrOfCtrl(attr);
+                //    html += "</td>";
+                //    html += "</tr>";
+                //
+                //    if (rm != null) {
+                //        html += "<tr>";
+                //        html += "<td class='FDesc' style='width:120px;'></td>";
+                //        html += "<td colspan=3>";
+                //        html += GenerRM(rm);
+                //        html += "</td>";
+                //        html += "</tr>";
+                //        isDropTR = true;
+                //    }
+                //    continue;
+                //}
 
                 //线性展示并且colspan=4
-                if (attr.ColSpan == 4) {
+                //if (attr.ColSpan == 4) {
+                //    isDropTR = true;
+                //    html += "<tr>";
+                //    html += "<td colspan='4'>" + lab + "</br>";
+                //    html += InitMapAttrOfCtrl(attr);
+                //    html += "</td>";
+                //    html += "</tr>";
+                //
+                //
+                //    if (rm != null) {
+                //        html += "<tr>";
+                //        html += "<td class='FDesc' style='width:120px;'></td>";
+                //        html += "<td colspan=3>";
+                //        html += GenerRM(rm);
+                //        html += "</td>";
+                //        html += "</tr>";
+                //        isDropTR = true;
+                //    }
+                //    continue;
+                //}
+
+                //if (isDropTR == true) {
+                //    html += "<tr>";
+                //    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                //    html += "<td class='FContext'  >";
+                //    html += InitMapAttrOfCtrl(attr);
+                //    html += "</td>";
+                //    isDropTR = !isDropTR;
+                //
+                //    if (rm != null) {
+                //        html += "<td colspan=2>";
+                //        html += GenerRM(rm);
+                //        html += "</td>";
+                //        html += "</tr>";
+                //        isDropTR = true;
+                //    }
+                //    continue;
+                //}
+
+				//if (isDropTR == false) {
+                //    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
+                //    html += "<td class='FContext'>";
+                //    html += InitMapAttrOfCtrl(attr);
+                //    html += "</td>";
+                //    html += "</tr>";
+                //    isDropTR = !isDropTR;
+                //    if (rm != null) {
+                //        html += "<tr>";
+                //        html += "<td class='FDesc' style='width:120px;'></td>";
+                //        html += "<td colspan=3>";
+                //        html += GenerRM(rm);
+                //        html += "</td>";
+                //        html += "</tr>";
+                //        isDropTR = true;
+                //    }
+                //    continue;
+                //}
+				
+				if (attr.ColSpan == 3 || (attr.ColSpan == 4 && attr.UIHeight < 40)) {
                     isDropTR = true;
-                    html += "<tr>";
-                    html += "<td colspan='4'>" + lab + "</br>";
-                    html += InitMapAttrOfCtrl(attr);
-                    html += "</td>";
-                    html += "</tr>";
-
-
+					html += '<div class="row row-margin-top">';
+					html += '	<div class="col-md-2 col-sm-2">';
+					html += 		lab;
+					html += '	</div>';
+					html += '	<div class="col-md-8 col-sm-8">';
+					html += 		InitMapAttrOfCtrl(attr);
+					html += '	</div>';
+					html += '</div>';
                     if (rm != null) {
-                        html += "<tr>";
-                        html += "<td class='FDesc' style='width:120px;'></td>";
-                        html += "<td colspan=3>";
-                        html += GenerRM(rm);
-                        html += "</td>";
-                        html += "</tr>";
+						html += '<div class="row row-margin-top">';
+                        html += '	<div class="col-md-2 col-sm-2"></div>';
+						html += '	<div class="col-md-8 col-sm-8">';
+						html += 		GenerRM(rm);
+						html += '	</div>';
+						html += '</div>';
                         isDropTR = true;
                     }
                     continue;
                 }
 
-                if (isDropTR == true) {
-                    html += "<tr>";
-                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-                    html += "<td class='FContext'  >";
-                    html += InitMapAttrOfCtrl(attr);
-                    html += "</td>";
+				if (attr.ColSpan == 4) {
+                    isDropTR = true;
+					html += '<div class="row row-margin-top">';
+					html += '	<div class="col-md-2 col-sm-2">';
+					html += 		lab;
+					html += '	</div>';
+					html += '	<div class="col-md-8 col-sm-8">';
+					html += 		InitMapAttrOfCtrl(attr);
+					html += '	</div>';
+					html += '</div>';
+                    if (rm != null) {
+						html += '<div class="row row-margin-top">';
+						html += '	<div class="col-md-2 col-sm-2"></div>';
+						html += '	<div class="col-md-8 col-sm-8">';
+						html += 		GenerRM(rm);
+						html += '	</div>';
+						html += '</div>';
+                        isDropTR = true;
+                    }
+                    continue;
+                }
+				if (isDropTR == true) {
+					html += '<div class="row row-margin-top">';
+					html += '	<div class="col-md-2 col-sm-2">';
+					html += 		lab;
+					html += '	</div>';
+					html += '	<div class="col-md-4 col-sm-4">';
+					html += 		InitMapAttrOfCtrl(attr);
+					html += '	</div>';
+
                     isDropTR = !isDropTR;
 
                     if (rm != null) {
-                        html += "<td colspan=2>";
-                        html += GenerRM(rm);
-                        html += "</td>";
-                        html += "</tr>";
+                        html += '	<div class="col-md-6 col-sm-6">';
+                        html += 		GenerRM(rm);
+						html += '	</div>';
+						html += '</div>';
                         isDropTR = true;
                     }
                     continue;
                 }
-
-                if (isDropTR == false) {
-
-                    html += "<td class='FDesc' style='width:120px;'>" + lab + "</td>";
-                    html += "<td class='FContext'>";
-                    html += InitMapAttrOfCtrl(attr);
-                    html += "</td>";
-                    html += "</tr>";
+				if (isDropTR == false) {
+					html += '	<div class="col-md-2 col-sm-2">';
+					html += 		lab;
+					html += '	</div>';
+					html += '	<div class="col-md-4 col-sm-4">';
+					html += 		InitMapAttrOfCtrl(attr);
+					html += '	</div>';
+					html += '</div>';
                     isDropTR = !isDropTR;
-
                     if (rm != null) {
-                        html += "<tr>";
-                        html += "<td class='FDesc' style='width:120px;'></td>";
-                        html += "<td colspan=3>";
-                        html += GenerRM(rm);
-                        html += "</td>";
-                        html += "</tr>";
+						html += '<div class="row row-margin-top">';
+                        html += '	<div class="col-md-6 col-sm-6">';
+                        html += 		GenerRM(rm);
+                        html += '	</div>';
+						html += '</div>';
                         isDropTR = true;
                     }
 
                     continue;
                 }
+
+                
             }
             return html;
         }
@@ -435,7 +567,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外键类型.
@@ -447,7 +579,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //外部数据类型.
@@ -459,7 +591,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             //添加文本框 ，日期控件等
@@ -472,11 +604,11 @@
                     if (mapAttr.UIIsEnable == 0)
                         enableAttr = "disabled='disabled'";
 
-                    return "<input maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;height:23px;' type='text'  " + enableAttr + " />";
+                    return "<input class='form-control' maxlength=" + mapAttr.MaxLen + "  name='TB_" + mapAttr.KeyOfEn + "' style='width:100%;' type='text'  " + enableAttr + " />";
                 }
 
                 //普通的大块文本.
-                return "<textarea maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
+                return "<textarea class='form-control' maxlength=" + mapAttr.MaxLen + " style='height:" + mapAttr.UIHeight + "px;width:100%;' name='TB_" + mapAttr.KeyOfEn + "' type='text'  " + (mapAttr.UIIsEnable == 1 ? '' : ' disabled="disabled"') + " />"
             }
 
             //日期类型.
@@ -487,7 +619,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input " + enableAttr + " style='width:80px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
+                return "<input class='form-control' " + enableAttr + " style='width:80px;' name='TB_" + mapAttr.KeyOfEn + "' type='text' />";
             }
 
             //时期时间类型.
@@ -499,7 +631,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<input  type='text'  style='width:120px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
+                return "<input class='form-control' type='text'  style='width:120px;' " + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "' />";
             }
 
             // boolen 类型.
@@ -518,7 +650,7 @@
 
                 checkedStr = "";  
 
-                return "<input " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
+                return "<input class='form-control' " + enableAttr + " " + (defValue == 1 ? "checked='checked'" : "") + " type='checkbox' id='CB_" + mapAttr.KeyOfEn + "'  name='CB_" + mapAttr.KeyOfEn + "' " + checkedStr + " /><label for='CB_" + mapAttr.KeyOfEn + "' >" + mapAttr.Name + "</label>";
             }
 
             //枚举类型.
@@ -528,7 +660,7 @@
                 else
                     enableAttr = "disabled='disabled'";
 
-                return "<select name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
+                return "<select class='form-control' name='DDL_" + mapAttr.KeyOfEn + "' " + (mapAttr.UIIsEnable == 1 ? '' : 'disabled="disabled"') + ">" + InitDDLOperation(frmData, mapAttr, defValue) + "</select>";
             }
 
             // AppDouble  AppFloat
@@ -539,7 +671,7 @@
                     enableAttr = "disabled='disabled'";
 
                 // alert(mapAttr.KeyOfEn);
-                return "<input style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                return "<input class='form-control' style='text-align:right;width:80px;'  onkeyup=" + '"' + "if(isNaN(value)) execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
             if ((mapAttr.MyDataType == 2)) { //AppInt
@@ -551,7 +683,7 @@
                     enableAttr = "disabled='disabled'";
                 }
 
-                return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                return "<input class='form-control' style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value) || (value%1 !== 0))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
             //AppMoney  AppRate
@@ -562,7 +694,7 @@
                 } else {
                     enableAttr = "disabled='disabled'";
                 }
-                return "<input style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
+                return "<input class='form-control' style='text-align:right;width:80px;' onkeyup=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " onafterpaste=" + '"' + "if(isNaN(value))execCommand('undo')" + '"' + " maxlength=" + mapAttr.MaxLen / 2 + "   type='text'" + enableAttr + " name='TB_" + mapAttr.KeyOfEn + "'/>";
             }
 
             alert(mapAttr.Name + "的类型没有判断.");
@@ -703,37 +835,39 @@
     </script>
 </head>
 <body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12 col-sm-12">
 
-     <div id="Btns"  >
+     <div id="Btns" class="form-inline">
      </div>
-       
+
+		</div>
+	</div>
                 <form id="divCCForm"  method="post">
-                    
-                    <table>
-                    <tr>
-                    <td  valign=top> 
-                    <!-- 左边的菜单 -->
-                    
-                    <div id="Left"></div>
 
-                     </td>
-
-                    <!-- 右边的内容 -->
-                    <td valign=top>
-                    
-                     <div id="CCForm" style="">
-                        <br />
-                        <img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
-                        <br />
-                    </div>
-                    
-                     </td>
-                    </tr>
-                   
-
-                    </table>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-4 col-sm-4">
+					<div id="Left" class="panel-group"></div>
+				</div>
+				<div class="col-md-8 col-sm-8">
+					<div class="row">
+						<div class="col-md-12">
+							<div id="CCForm" style="">
+								<br />
+								<img src='./../../Img/loading.gif' />正在初始化表单模板及数据，请耐心等待。。。
+								<br />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
                 </form>
-     
+</div>
 </body>
 </html>

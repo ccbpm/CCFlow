@@ -574,6 +574,12 @@ namespace BP.WF
             // 更新.
             gwf.FK_Node = cancelToNode.NodeID;
             gwf.NodeName = cancelToNode.Name;
+            //恢复上一步发送人
+            DataTable dtPrevTrack = Dev2Interface.Flow_GetPreviousNodeTrack(this.WorkID,cancelToNode.NodeID);
+            if(dtPrevTrack != null && dtPrevTrack.Rows.Count > 0)
+            {
+                gwf.Sender = dtPrevTrack.Rows[0]["EmpFrom"].ToString();
+            }
 
             if (cancelToNode.IsEnableTaskPool && Glo.IsEnableTaskPool)
                 gwf.TaskSta = TaskSta.Takeback;

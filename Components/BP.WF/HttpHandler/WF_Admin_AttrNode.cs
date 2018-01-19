@@ -10,6 +10,7 @@ using BP.DA;
 using BP.En;
 using BP.WF.Template;
 using BP.WF.XML;
+using System.IO;
 
 
 namespace BP.WF.HttpHandler
@@ -169,7 +170,9 @@ namespace BP.WF.HttpHandler
             if (HttpContext.Current.Request.Files.Count > 0)
             {
                 HttpPostedFile file = HttpContext.Current.Request.Files[0];
-                filepath = HttpContext.Current.Server.MapPath("\\DataUser\\CyclostyleFile\\" + file.FileName);
+                string FileName = Path.GetFileName(file.FileName);
+
+                filepath = HttpContext.Current.Server.MapPath("~\\DataUser\\CyclostyleFile\\" + FileName);
                 file.SaveAs(filepath);
             }
 

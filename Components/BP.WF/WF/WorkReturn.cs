@@ -694,6 +694,7 @@ namespace BP.WF
             gwf.NodeName = this.ReturnToNode.Name;
             gwf.Starter = toEmp;
             gwf.StarterName = toEmpName;
+            gwf.Sender = WebUser.No;
             gwf.Update();
 
             //找到当前的工作数据.
@@ -766,6 +767,7 @@ namespace BP.WF
             BP.WF.Dev2Interface.Port_SendMsg(toEmp, gwf.Title, Msg, "RE" + this.HisNode.NodeID + this.WorkID, BP.WF.SMSMsgType.ReturnAfter, ReturnToNode.FK_Flow, ReturnToNode.NodeID, this.WorkID, this.FID);
 
             gwf.WFState = WFState.ReturnSta;
+            gwf.Sender = WebUser.No;
             gwf.Update();
 
             // 返回退回信息.
@@ -865,11 +867,13 @@ namespace BP.WF
 
             // 改变当前待办工作节点
             Paras ps = new Paras();
-            ps.SQL = "UPDATE WF_GenerWorkFlow  SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode  WHERE  WorkID=" + dbStr + "WorkID";
+            ps.SQL = "UPDATE WF_GenerWorkFlow  SET WFState=" + dbStr + "WFState,FK_Node=" + dbStr + "FK_Node, NodeName=" + dbStr
+                + "NodeName, SDTOfNode=" + dbStr + "SDTOfNode,Sender=" + dbStr + "Sender WHERE  WorkID=" + dbStr + "WorkID";
             ps.Add(GenerWorkFlowAttr.WFState, (int)WFState.ReturnSta);
             ps.Add(GenerWorkFlowAttr.FK_Node, this.ReturnToNode.NodeID);
             ps.Add(GenerWorkFlowAttr.NodeName, this.ReturnToNode.Name);
             ps.Add(GenerWorkFlowAttr.SDTOfNode, sdt);
+            ps.Add(GenerWorkFlowAttr.Sender, WebUser.No);
             ps.Add(GenerWorkFlowAttr.WorkID, this.WorkID);
             DBAccess.RunSQL(ps);
 

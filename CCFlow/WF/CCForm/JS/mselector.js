@@ -184,7 +184,7 @@
             animteDown();
         });
 
-        search.blur(function () {
+        ul.blur(function () {
             setTimeout(function () {
                 animateUp(container, block);
             }, 200);
@@ -196,6 +196,7 @@
                 var li = $("<li></li>");
                 li.text(data[textField]);
                 li.data(datas[i]);
+				li.attr("tabindex", i);
                 ul.append(li);
             }
             callback(data, valueField);
@@ -246,6 +247,37 @@
                 }
             }
             updateDictionary(datas, addListener);
+			
+			/*
+			e = e || window.event;
+			var key = e.keyCode || e.which || e.charCode;
+			switch (key) {
+				case 38:
+					$(this).blur();
+					ul.children("li").removeClass("hover");
+					var scrollHeight = block.prop('scrollHeight');
+					block.scrollTop(scrollHeight);
+					ul.children("li:last").addClass("hover");
+					ul.children("li:last").focus();
+					ul.data({
+						"currentIndex" : 0
+					});
+					break;
+				case 40:
+					$(this).blur();
+					ul.children("li").removeClass("hover");
+					block.scrollTop(0);
+					ul.children("li:first").addClass("hover");
+					ul.children("li:first").focus();
+					//
+					var totalCount = ul.children("li").length;
+					ul.data({
+						"totalCount" : totalCount,
+						"currentIndex" : ul.children("li").length - 1
+					});
+					break;
+			}
+			*/
         });
 
         function addListener() {
@@ -266,6 +298,54 @@
                 search.val("");
                 animateUp();
             });
+
+			ul.children("li").on("mouseover", function () {
+				ul.children("li").removeClass("hover");
+				$(this).addClass("hover");
+			});
+
+			/*
+			ul.on("keyup", function (e) {
+				e = e || window.event;
+				var key = e.keyCode || e.which || e.charCode;
+				switch (key) {
+					case 13:
+						var currentIndex = ul.data().currentIndex;
+						ul.children("li").eq(currentIndex).trigger("click");
+						break;
+					case 38:
+						ul.children("li").removeClass("hover");
+						//
+						var totalCount = ul.data().totalCount;
+						var currentIndex = ul.data().currentIndex;
+						currentIndex--;
+						if (currentIndex < 0) {
+							currentIndex = totalCount - 1;
+						}
+						ul.children("li").eq(currentIndex).addClass("hover");
+						block.scrollTop(currentIndex * 24);
+						ul.data({
+							"currentIndex" : currentIndex
+						});
+						break;
+					case 40:
+						ul.children("li").removeClass("hover");
+						//
+						var totalCount = ul.data().totalCount;
+						var currentIndex = ul.data().currentIndex;
+						currentIndex++;
+						if (currentIndex >= totalCount) {
+							currentIndex = 0;
+						}
+						ul.children("li").eq(currentIndex).addClass("hover");
+						block.scrollTop(currentIndex * 24);
+						ul.data({
+							"currentIndex" : currentIndex
+						});
+						break;
+				}
+			});
+			*/
         }
 
         function animateUp() {

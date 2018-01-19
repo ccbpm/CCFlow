@@ -75,6 +75,7 @@ input.ccflow-search {
 	font-size: 14px;
 	padding: 2px 4px;
 }
-.ccflow-ul li:hover {
+/*.ccflow-ul li:hover,*/
+.ccflow-ul li.hover {
 	background-color: #eee;
 }

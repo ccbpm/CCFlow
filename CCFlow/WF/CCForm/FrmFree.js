@@ -445,7 +445,7 @@ function figure_MapAttr_Template(mapAttr) {
    //根据不同的类型控件，生成html.
     var ele = figure_MapAttr_TemplateEle(mapAttr);
 
-    eleHtml += mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
+    ele += mapAttr.UIIsInput == 1 ? '<span style="color:red" class="mustInput" data-keyofen="' + mapAttr.KeyOfEn + '">*</span>' : "";
 
     var eleHtml = $('<div>' + ele + '</div>');
 

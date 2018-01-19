@@ -4151,6 +4151,38 @@ namespace BP.WF
             return unSend.DoUnSend();
         }
         /// <summary>
+        /// 获得当前节点上一步发送日志记录
+        /// </summary>
+        /// <param name="WorkID">工作流程ID</param>
+        /// <param name="FK_Node">当前节点编号</param>
+        /// <returns>上一节点发送记录</returns>
+        public static DataTable Flow_GetPreviousNodeTrack(Int64 WorkID,int FK_Node)
+        {
+            GenerWorkFlow gwf = new GenerWorkFlow(WorkID);
+            if(gwf.RetrieveFromDBSources() == 0)
+                throw new Exception("没有查询到相关业务实例");
+
+            string dbstr = SystemConfig.AppCenterDBVarStr;
+            Paras pas = new Paras();
+            switch (SystemConfig.AppCenterDBType)
+            {
+                case DBType.MSSQL:
+                    pas.SQL = "SELECT TOP 1 * FROM ND" + int.Parse(gwf.FK_Flow) + "Track WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND (ActionType=1 OR ActionType=" + (int)ActionType.Skip + ") ORDER BY RDT DESC";
+                    break;
+                case DBType.Oracle:
+                    pas.SQL = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track  WHERE WorkID=" + dbstr + "WorkID  AND NDTo=" + dbstr + "NDTo AND (ActionType=1 OR ActionType=" + (int)ActionType.Skip + ") AND ROWNUM=1 ORDER BY RDT DESC ";
+                    break;
+                case DBType.MySQL:
+                    pas.SQL = "SELECT * FROM ND" + int.Parse(gwf.FK_Flow) + "Track  WHERE WorkID=" + dbstr + "WorkID AND NDTo=" + dbstr + "NDTo AND (ActionType=1 OR ActionType=" + (int)ActionType.Skip + ") ORDER BY RDT DESC limit 0,1 ";
+                    break;
+                default:
+                    break;
+            }
+            pas.Add("WorkID", WorkID);
+            pas.Add("NDTo", FK_Node);
+            return BP.DA.DBAccess.RunSQLReturnTable(pas);
+        }
+        /// <summary>
         /// 执行冻结
         /// </summary>
         /// <param name="flowNo">流程编号</param>

@@ -79,6 +79,8 @@ function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     if (projectName == "WF") {
         projectName = "";
     }
+    if (plant == "JFlow")
+        projectName = basePath;
     var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;
 
     if (typeof ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog) === "function") {

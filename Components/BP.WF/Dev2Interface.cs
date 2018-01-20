@@ -8110,7 +8110,9 @@ namespace BP.WF
             ps.Add("FK_Node", nodeID);
             ps.Add("FK_Emp", empNo);
             if (DBAccess.RunSQL(ps) == 0)
-                throw new Exception("设置的工作不存在，或者当前的登陆人员[" + empNo + "]已经改变，请重新登录。");
+            {
+               //throw new Exception("设置的工作不存在，或者当前的登陆人员[" + empNo + "]已经改变，请重新登录。");
+            }
 
             // 判断当前节点的已读回执.
             if (nd.ReadReceipts == ReadReceipts.None)
@@ -8122,13 +8124,13 @@ namespace BP.WF
 
             if (nd.ReadReceipts == ReadReceipts.BySysField)
             {
-                /*获取上一个节点ID*/
+                /*获取上一个节点ID */
                 Nodes fromNodes = nd.FromNodes;
                 int fromNodeID = 0;
                 foreach (Node item in fromNodes)
                 {
                     ps = new Paras();
-                    ps.SQL = "SELECT FK_Node FROM WF_GenerWorkerlist  WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ";
+                    ps.SQL = "SELECT FK_Node FROM WF_GenerWorkerlist WHERE WorkID=" + dbstr + "WorkID AND FK_Node=" + dbstr + "FK_Node ";
                     ps.Add("WorkID", workid);
                     ps.Add("FK_Node", item.NodeID);
                     DataTable dt = DBAccess.RunSQLReturnTable(ps);

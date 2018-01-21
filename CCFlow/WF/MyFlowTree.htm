@@ -220,6 +220,22 @@
                 }
             };
         }
+
+        //删除流程
+        function DeleteFlow() {
+
+            if (window.confirm('您确定要删除吗？') == false)
+                return;
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_MyFlow");
+            handler.AddPara("FK_Flow", GetQueryString("FK_Flow"));
+            handler.AddPara("FK_Node", GetQueryString("FK_Node"));
+            handler.AddPara("WorkID", GetQueryString("WorkID"));
+            var str = handler.DoMethodReturnString("DeleteFlow");
+            alert(str);
+            window.close();
+        }
+
     </script>
 
 	<style type="text/css">

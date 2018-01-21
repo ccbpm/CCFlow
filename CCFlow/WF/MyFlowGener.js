@@ -1649,6 +1649,7 @@ function CheckFWC() {
     return frm.contentWindow.IsCanSendWork();
 }
 
+
 //停止流程.
 function DoStop(msg, flowNo, workid) {
 

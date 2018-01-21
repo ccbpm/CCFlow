@@ -956,6 +956,9 @@ var Entity = (function () {
                 if (i > 0)
                     params.push(o);
             });
+
+
+
             var self = this;
             var string;
             $.ajax({
@@ -1048,88 +1051,6 @@ var Entity = (function () {
         },
 
         CopyForm: function () {
-            // 复制form中有但Entity对象中没有的属性
-            //var frmParas = [];
-            //            $("input[name^=TB_],input[name^=CB_]:checked,input[name^=RB_]:checked,[name^=DDL_]").each(function (i, o) {
-            //                var key = $(this).attr("name").replace(/^TB_|CB_|RB_|DDL_/, "");
-            //                var value = $(this).val();
-            //                frmParas.push("@" + key + "=" + value);
-            //            });
-            //            var formParams = frmParas.join("");
-            //            //
-            //            this.frmParas = formParams;
-            //            jsonString.frmParas = formParams;
-            //            // ----------
-            //            return;
-
-            // 老版本
-            //var self = this;
-            //$.each(self, function (attrKay, val) {
-            //
-            //    //alert(o);
-            //    //需要排除非参数属性.
-            //
-            //    //基本属性.
-            //    var target = $("#TB_" + attrKay);
-            //    if (target.length == 1) {
-            //        self[attrKay] = target.val();
-            //    }
-            //
-            //    var target = $("#DDL_" + attrKay);
-            //    if (target.length == 1) {
-            //        self[attrKay] = target.val();
-            //    }
-            //
-            //    //@解， 怎么设置如果没有选择就设置0? 
-            //    var target = $("input[name='CB_" + attrKay + "']:checked");
-            //    if (target.length > 0) {
-            //        self[attrKay] = "1";
-            //    }
-            //
-            //    var target = $("input[name^='RB_" + attrKay + "']:checked");
-            //    if (target.length == 1) {
-            //        self[attrKay] = target.val();
-            //    }
-            //
-            //    //参数属性.
-            //    var target = $("#TBPara_" + attrKay);
-            //    if (target.length == 1) {
-            //
-            //        var value = $(this).val();
-            //        //  alert(value);
-            //
-            //        self.SetPara(attrKay, value);
-            //        //frmParas.push("@" + n + "=" + value);
-            //    }
-            //
-            //    var target = $("#DDLPara_" + attrKay);
-            //    if (target.length == 1) {
-            //        var value = $(this).val();
-            //        self.SetPara(attrKay, value);
-            //        // frmParas.push("@" + n + "=" + value);
-            //    }
-            //
-            //    //@解， 怎么设置如果没有选择就设置0? 
-            //    var target = $("input[name='CB_" + attrKay + "']:checked");
-            //    if (target.length > 0) {
-            //
-            //        self.SetPara(attrKay, "1");
-            //        // frmParas.push("@" + n + "=1");
-            //    }
-            //
-            //    // 列表参数.
-            //    var target = $("input[name^='RBPara_" + attrKay + "']:checked");
-            //    if (target.length == 1) {
-            //        var value = $(this).val();
-            //        self.SetPara(attrKay, value);
-            //    }
-            //});
-            //
-            ////            this.frmParas = formParams;
-            ////            var formParams = frmParas.join("");
-            ////            this.frmParas = formParams;
-            ////            jsonString.frmParas = formParams;
-            //alert(JSON.stringify(self));
 
             $("input,select").each(function (i, e) {
                 if (typeof $(e).attr("name") === "undefined" || $(e).attr("name") == "") {
@@ -1283,8 +1204,6 @@ var Entities = (function () {
         return params;
     }
 
-    
-
     Entities.prototype = {
 
         constructor: Entities,
@@ -1296,8 +1215,6 @@ var Entities = (function () {
                 alert("在初始化实体期间EnsName没有赋值");
                 return;
             }
-
-
 
             $.ajax({
                 type: 'post',
@@ -1478,8 +1395,6 @@ var DBAccess = (function () {
         }
     };
 
-
-
     DBAccess.RunSQLReturnTable = function (sql) {
         //sql = replaceAll(sql, "~", "'");
 
@@ -1645,8 +1560,9 @@ var HttpHandler = (function () {
         DoMethodReturnString: function (methodName) {
 
             var self = this;
-
             var jsonString;
+
+           // alert(self.getParams());
 
             $.ajax({
                 type: 'post',

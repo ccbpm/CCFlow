@@ -254,12 +254,16 @@ namespace CCFlow.WF.CCForm
 								//执行保存.
                                 if (daDtl.OID > 100)
                                 {
+                                    daDtl.RefPK = pkValue;
                                     daDtl.Update();
                                 }
-
                                 if (daDtl.OID <= 100 && dtl.IsInsert == true) //从表【是否可新增行】.
                                 {
-                                    daDtl.InsertAsOID(DBAccess.GenerOID("Dtl"));
+                                    if (daDtl.IsBlank == false)
+                                    {
+                                        daDtl.RefPK = pkValue;
+                                        daDtl.InsertAsOID(DBAccess.GenerOID("Dtl"));
+                                    }
                                 }
 
 								#region 从表保存后处理事件。

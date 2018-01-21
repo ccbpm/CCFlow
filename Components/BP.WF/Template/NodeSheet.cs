@@ -216,7 +216,7 @@ namespace BP.WF.Template
                 //节点绑定人员. 使用树杆与叶子的模式绑定.
                 map.AttrsOfOneVSM.AddBranches(new BP.WF.Template.NodeDepts(), new BP.Port.Depts(),
                    BP.WF.Template.NodeDeptAttr.FK_Node,
-                   BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
+                   BP.WF.Template.NodeDeptAttr.FK_Dept, "节点绑定部门AddBranches", EmpAttr.Name, EmpAttr.No, "@WebUser.FK_Dept");
 
 
                 //节点绑定人员. 使用树杆与叶子的模式绑定.

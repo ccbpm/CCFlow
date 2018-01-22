@@ -21,6 +21,150 @@ namespace BP.WF.HttpHandler
     /// </summary>
     public class WF_CCForm : DirectoryPageBase
     {
+        #region 多附件.
+        public string Ath_Init()
+        {
+            try
+            {
+                DataSet ds = new DataSet();
+
+                FrmAttachment athDesc = this.GenerAthDesc();
+
+                //查询出来数据实体.
+                BP.Sys.FrmAttachmentDBs dbs = BP.WF.Glo.GenerFrmAttachmentDBs(athDesc, this.PKVal,this.FK_FrmAttachment); 
+
+                #region 如果图片显示.
+                if (athDesc.FileShowWay == FileShowWay.Pict)
+                {
+                    /* 如果是图片轮播，就在这里根据数据输出轮播的html代码.*/
+                    if (dbs.Count == 0 && athDesc.IsUpload == true)
+                    {
+                        /*没有数据并且，可以上传,就转到上传的界面上去.*/
+                        return "url@AthImg.htm?1=1" + this.RequestParas;
+                    }
+                }
+                #endregion 如果图片显示.
+
+                #region 执行装载模版.
+                if (dbs.Count == 0 && athDesc.IsWoEnableTemplete == true)
+                {
+                    /*如果数量为0,就检查一下是否有模版如果有就加载模版文件.*/
+                    string templetePath = BP.Sys.SystemConfig.PathOfDataUser + "AthTemplete\\" + athDesc.NoOfObj.Trim();
+                    if (Directory.Exists(templetePath) == false)
+                        Directory.CreateDirectory(templetePath);
+
+                    /*有模版文件夹*/
+                    DirectoryInfo mydir = new DirectoryInfo(templetePath);
+                    FileInfo[] fls = mydir.GetFiles();
+                    if (fls.Length == 0)
+                        throw new Exception("@流程设计错误，该多附件启用了模版组件，模版目录:" + templetePath + "里没有模版文件.");
+
+                    foreach (FileInfo fl in fls)
+                    {
+                        if (System.IO.Directory.Exists(athDesc.SaveTo) == false)
+                            System.IO.Directory.CreateDirectory(athDesc.SaveTo);
+
+                        int oid = BP.DA.DBAccess.GenerOID();
+                        string saveTo = athDesc.SaveTo + "\\" + oid + "." + fl.Name.Substring(fl.Name.LastIndexOf('.') + 1);
+                        if (saveTo.Contains("@") == true || saveTo.Contains("*") == true)
+                        {
+                            /*如果有变量*/
+                            saveTo = saveTo.Replace("*", "@");
+                            if (saveTo.Contains("@") && this.FK_Node != 0)
+                            {
+                                /*如果包含 @ */
+                                BP.WF.Flow flow = new BP.WF.Flow(this.FK_Flow);
+                                BP.WF.Data.GERpt myen = flow.HisGERpt;
+                                myen.OID = this.WorkID;
+                                myen.RetrieveFromDBSources();
+                                saveTo = BP.WF.Glo.DealExp(saveTo, myen, null);
+                            }
+                            if (saveTo.Contains("@") == true)
+                                throw new Exception("@路径配置错误,变量没有被正确的替换下来." + saveTo);
+                        }
+                        fl.CopyTo(saveTo);
+
+                        FileInfo info = new FileInfo(saveTo);
+                        FrmAttachmentDB dbUpload = new FrmAttachmentDB();
+
+                        dbUpload.CheckPhysicsTable();
+                        dbUpload.MyPK = athDesc.FK_MapData + oid.ToString();
+                        dbUpload.NodeID = FK_Node.ToString();
+                        dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
+
+                        if (athDesc.AthUploadWay == AthUploadWay.Inherit)
+                        {
+                            /*如果是继承，就让他保持本地的PK. */
+                            dbUpload.RefPKVal = this.PKVal.ToString();
+                        }
+
+                        if (athDesc.AthUploadWay == AthUploadWay.Interwork)
+                        {
+                            /*如果是协同，就让他是PWorkID. */
+                            string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + this.PKVal, 0).ToString();
+                            if (pWorkID == null || pWorkID == "0")
+
+                                pWorkID = this.PKVal;
+                            dbUpload.RefPKVal = pWorkID;
+                        }
+
+                        dbUpload.FK_MapData = athDesc.FK_MapData;
+                        dbUpload.FK_FrmAttachment = this.FK_FrmAttachment;
+
+                        dbUpload.FileExts = info.Extension;
+                        dbUpload.FileFullName = saveTo;
+                        dbUpload.FileName = fl.Name;
+                        dbUpload.FileSize = (float)info.Length;
+
+                        dbUpload.RDT = DataType.CurrentDataTime;
+                        dbUpload.Rec = BP.Web.WebUser.No;
+                        dbUpload.RecName = BP.Web.WebUser.Name;
+
+                        dbUpload.Insert();
+
+                        dbs.AddEntity(dbUpload);
+                    }
+                }
+                #endregion 执行装载模版.
+
+                #region 处理权限问题.
+                // 处理权限问题, 有可能当前节点是可以上传或者删除，但是当前节点上不能让此人执行工作。
+                // bool isDel = athDesc.IsDeleteInt == 0 ? false : true;
+                bool isDel = athDesc.HisDeleteWay == AthDeleteWay.None ? false : true;
+                bool isUpdate = athDesc.IsUpload;
+                if (isDel == true || isUpdate == true)
+                {
+                    if (this.WorkID != 0
+                        && string.IsNullOrEmpty(this.FK_Flow) == false
+                        && this.FK_Node != 0)
+                    {
+                        isDel = BP.WF.Dev2Interface.Flow_IsCanDoCurrentWork(this.FK_Flow, this.FK_Node, this.WorkID, WebUser.No);
+                        if (isDel == false)
+                            isUpdate = false;
+                    }
+                }
+                athDesc.IsUpload = isUpdate;
+                athDesc.HisDeleteWay = AthDeleteWay.DelAll; 
+                #endregion 处理权限问题.
+
+                //增加附件描述.
+                ds.Tables.Add(athDesc.ToDataTableField("AthDesc"));
+
+                //增加附件.
+                ds.Tables.Add(dbs.ToDataTableField("DBAths"));
+
+
+                //返回.
+                return BP.Tools.Json.ToJson(ds);
+            }
+            catch (Exception ex)
+            {
+                return "err@" + ex.Message;
+            }
+        }
+        #endregion 多附件.
+
+
         #region HanderMapExt
         /// <summary>
         /// 扩展处理.

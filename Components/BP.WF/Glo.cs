@@ -134,7 +134,7 @@ namespace BP.WF
         /// <summary>
         /// 当前版本号-为了升级使用.
         /// </summary>
-        public static int Ver = 20171230;
+        public static int Ver = 20180115;
         /// <summary>
         /// 执行升级
         /// </summary>
@@ -171,6 +171,9 @@ namespace BP.WF
             string msg = "";
             try
             {
+                 
+
+                #region 给city 设置拼音.
                 if (DBAccess.IsExitsObject("CN_City") == true)
                 {
                     if (DBAccess.IsExitsTableCol("CN_City", "PinYin") == true)
@@ -190,6 +193,7 @@ namespace BP.WF
                           }
                     }
                 }
+                #endregion 给city 设置拼音.
 
                 //增加列FlowStars
                 BP.WF.Port.WFEmp wfemp = new Port.WFEmp();
@@ -263,6 +267,7 @@ namespace BP.WF
                     sql = "UPDATE WF_GenerWorkFlow SET WeekNum=" + BP.DA.DataType.CurrentWeekGetWeekByDay(dr[1].ToString()) + " WHERE WorkID=" + dr[0].ToString();
                     BP.DA.DBAccess.RunSQL(sql);
                 }
+
                 //查询.
                 BP.WF.Data.CH ch = new CH();
                 ch.CheckPhysicsTable();

@@ -5093,16 +5093,7 @@ namespace BP.WF
                     this.HisGenerWorkFlow.TodoEmpsNum = 1;
                     this.HisGenerWorkFlow.TodoEmps = WebUser.Name + ";";
 
-                    //要把非主持人的IsEnable设置为 0 ,让其不可以用。
-                    foreach (GenerWorkerList item in gwls)
-                    {
-                        if (item.FK_Emp == WebUser.No)
-                        {
-                            item.IsHuiQian = true;
-                            item.Update();
-                            break;
-                        }
-                    }
+                   
                 }
                 return false; /*只有一个待办,说明自己就是最后的一个人.*/
             }
@@ -5114,16 +5105,7 @@ namespace BP.WF
                     continue;
 
                 //设置当前不可以用.
-                gwl.IsPassInt = 1;
-                if (this.HisGenerWorkFlow.HuiQianTaskSta != HuiQianTaskSta.None)
-                {
-                    if (this.HisGenerWorkFlow.HuiQianZhuChiRen != WebUser.No)
-                        gwl.IsHuiQian = true;
-                }
-                else
-                {
-                    gwl.IsHuiQian = true;
-                }
+                gwl.IsPassInt = 1;             
                 gwl.Update();
 
                 // 检查完成条件。

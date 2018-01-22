@@ -160,6 +160,9 @@ namespace BP.WF
     public class GenerWorkerList : Entity
     {
         #region 参数属性.
+        /// <summary>
+        /// 是否会签
+        /// </summary>
         public bool IsHuiQian
         {
             get

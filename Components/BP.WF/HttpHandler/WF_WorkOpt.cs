@@ -511,6 +511,8 @@ namespace BP.WF.HttpHandler
                 gwlOfMe.DTOfWarning = dtOfWarning.ToString(DataType.SysDataTimeFormat);
                 #endregion 计算会签时间.
 
+                gwlOfMe.Sender = BP.Web.WebUser.Name; //发送人为当前人.
+                gwlOfMe.IsHuiQian = true;
                 gwlOfMe.Insert(); //插入作为待办.
                 infos += "\t\n@" + item.No + "  " + item.Name;
 

@@ -798,7 +798,7 @@ namespace BP.Sys.FrmUI
                 map.AddDDLSysEnum(FrmAttachmentAttr.DeleteWay, 0, "附件删除规则", true, true, FrmAttachmentAttr.DeleteWay, 
                     "@0=不能删除@1=删除所有@2=只能删除自己上传的");
 
-                map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", false, false);
+                map.AddBoolean(FrmAttachmentAttr.IsUpload, true, "是否可以上传", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsDownload, true, "是否可以下载", true, true);
                 map.AddBoolean(FrmAttachmentAttr.IsOrder, false, "是否可以排序", true, true);
 

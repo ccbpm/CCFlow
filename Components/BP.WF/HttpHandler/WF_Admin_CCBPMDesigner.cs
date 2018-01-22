@@ -380,6 +380,10 @@ namespace BP.WF.HttpHandler
                 else
                     ht.Add("OSModel", "1");
 
+                //把系统信息加入里面去.
+                ht.Add("SysNo", SystemConfig.SysNo);
+                ht.Add("SysName", SystemConfig.SysName);
+
                 try
                 {
                     // 执行升级
@@ -404,6 +408,14 @@ namespace BP.WF.HttpHandler
         #endregion
 
         #region 登录窗口.
+        public string Login_InitInfo()
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("SysNo", SystemConfig.SysNo);
+            ht.Add("SysName", SystemConfig.SysName);
+
+            return BP.Tools.Json.ToJson(ht);
+        }
         /// <summary>
         /// 初始化登录界面.
         /// </summary>
@@ -440,7 +452,14 @@ namespace BP.WF.HttpHandler
                 string str = BP.WF.Glo.UpdataCCFlowVer();
                 if (str == null)
                     str = "ccbpm 准备完毕,欢迎登录,当前小版本号为:" + BP.WF.Glo.Ver;
+
                 return str;
+
+                //Hashtable ht = new Hashtable();
+                //ht.Add("Msg", str);
+                //ht.Add("Title", SystemConfig.SysName);
+                //return BP.Tools.Json.ToJson(ht);
+
             }
             catch (Exception ex)
             {

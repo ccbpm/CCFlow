@@ -1411,7 +1411,7 @@ namespace BP.WF.HttpHandler
         {
             try
             {
-                return BP.WF.Dev2Interface.Flow_DoDeleteFlowByFlag(this.FK_Flow, this.WorkID, "删除流程", false);
+                return BP.WF.Dev2Interface.Flow_DoDeleteFlowByReal(this.FK_Flow, this.WorkID,true);
             }
             catch (Exception ex)
             {

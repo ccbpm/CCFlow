@@ -737,6 +737,14 @@ var Entity = (function () {
             });
         },
 
+		SetValByKey : function (key, value) {
+			this[key] = value;
+		},
+
+		GetValByKey : function (key) {
+			return this[key];
+		},
+
         Insert: function () {
             var self = this;
             var params = getParams(self);

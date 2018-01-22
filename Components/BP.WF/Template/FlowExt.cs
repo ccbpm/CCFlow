@@ -17,6 +17,20 @@ namespace BP.WF.Template
     {
         #region 属性.
         /// <summary>
+        /// 流程类别
+        /// </summary>
+        public string FK_FlowSort
+        {
+            get
+            {
+                return this.GetValStringByKey(FlowAttr.FK_FlowSort);
+            }
+            set
+            {
+                this.SetValByKey(FlowAttr.FK_FlowSort, value);
+            }
+        }
+        /// <summary>
         /// 系统类别（第2级流程树节点编号）
         /// </summary>
         public string SysType
@@ -1525,13 +1539,24 @@ namespace BP.WF.Template
             #region 校验 flowmark 是不是唯一.
             if (this.FlowMark.Length > 0)
             {
-                /*校验该标记是否重复.*/
-                Flows fls = new Flows();
-                fls.Retrieve(FlowAttr.FlowMark, this.FlowMark);
-                foreach (Flow myfl in fls)
+                //如果是集团模式，则判断机构下的流程标记不可重复
+                if (Glo.IsUnit == true)
                 {
-                    if (myfl.No != this.No)
-                        throw new Exception("@该流程标记{" + this.FlowMark + "}已经存在.");
+                    FlowSort flSort = new FlowSort(this.FK_FlowSort);
+                    FlowSorts flowSorts = new FlowSorts();
+                    //同一机构下不允许标记重复
+                    flowSorts.RetrieveByAttr(FlowSortAttr.OrgNo, flSort.OrgNo);
+                    foreach (FlowSort flowSort in flowSorts)
+                    {
+                        /*校验该标记是否重复.*/
+                        Flows fls = new Flows();
+                        fls.Retrieve(FlowAttr.FK_FlowSort, flowSort.No, FlowAttr.FlowMark, this.FlowMark);
+                        foreach (Flow myfl in fls)
+                        {
+                            if (myfl.No != this.No)
+                                throw new Exception("@该流程标记{" + this.FlowMark + "}已经存在.");
+                        }
+                    }
                 }
             }
             #endregion 校验 flowmark 是不是唯一.

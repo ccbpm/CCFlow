@@ -515,10 +515,10 @@
 
         //执行保存
         function SaveDtlData() {
-            if (isChange == true) {
-                SaveWorkCheck();
-                isChange = false;
-            }
+            //  if (isChange == true) {
+            SaveWorkCheck();
+            //    isChange = false;
+            //}
         }
 
         function Load() {

@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="normalize/css/demo.css" />
     <link rel="stylesheet" type="text/css" href="normalize/css/ns-default.css" />
     <link rel="stylesheet" type="text/css" href="normalize/css/ns-style-bar.css" />
-    <script src="../../Scripts/config.js" type="text/javascript"></script>
+   
     <script type="text/javascript" src="normalize/js/modernizr.custom.js"></script>
     <link href="../../Scripts/easyUI15/themes/gray/easyui.css" rel="stylesheet" type="text/css" />
     <link href="../../Scripts/easyUI15/themes/gray/dialog.css" rel="stylesheet" type="text/css" />
@@ -19,9 +19,14 @@
     <script src="lib/browserReady.js" type="text/javascript"></script>
     <script src="js/CCBPMDesignerData.js" type="text/javascript"></script>
     <script src="../../Scripts/Cookie.js" type="text/javascript"></script>
-    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
     <script src="js/FuncTrees.js" type="text/javascript"></script>
     <script src="js/Left.js" type="text/javascript"></script>
+
+    <script src="../../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../../Scripts/config.js" type="text/javascript"></script>
+    <script src="../../Comm/Gener.js" type="text/javascript"></script>
+
+
     <style type="text/css">
         .icon-Search
         {
@@ -198,35 +203,29 @@
 
         $(function () {
 
+            var hander = new HttpHandler("BP.WF.HttpHandler.WF_Admin_CCBPMDesigner");
 
-            $.ajax({
-                type: 'post',
-                async: true,
-                url: Handler + "?DoType=Default_Init&m=" + Math.random()+"&SID="+GetQueryString("SID")+"&UserNo="+GetQueryString("UserNo"),
-                dataType: 'html',
-                success: function (data) {
+            hander.AddUrlData();
+            var data = hander.DoMethodReturnString("Default_Init");
 
-                    if (data.indexOf('err@') == 0) {
-                        alert(data);
-                        return;
-                    }
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
 
-                    if (data.indexOf('url@') == 0) {
-                        var url = data.replace('url@', '');
-                        window.location.href = url;  
-                        return;
-                    }
+            data = JSON.parse(data);
 
-                    data = JSON.parse(data);
+            document.title = data.SysName;
 
-                    var msg = data.Msg;
-                    osModel = data.OSModel;
-                    if (msg != "")
-                        alert(msg);
-                }
-            });
 
-            var content = createFrame('Wel.htm');
+            var msg = data.Msg;
+            osModel = data.OSModel;
+            if (msg != "")
+                alert(msg);
+
+
+            var content = createFrame('../../../DataUser/AppCoder/FlowDesignerWelcome.htm');
             $('#tabs').tabs('add', {
                 title: '首页',
                 id: 'WelCome',
@@ -234,6 +233,7 @@
                 iconCls: '',
                 closable: false
             });
+
         });
 
         function closeTab(title) {
@@ -387,7 +387,7 @@
             }
             var tabs = $('#tabs').tabs('tabs');
             if (tabs.length == 0) {
-                addTab("welcome", "首页", "Wel.htm", "");
+                addTab("welcome", "首页", "../../DataUser/AppCoder/FlowDesignerWelcome.htm", "");
             }
         }
 

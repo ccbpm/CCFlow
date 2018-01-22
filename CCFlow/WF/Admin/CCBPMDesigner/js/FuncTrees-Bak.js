@@ -93,6 +93,20 @@ functrees.push({
                 IconCls: "icon-flow1", MenuId: "mFlow", InheritForChild: [{ From: "@@id", To: "fk_flow"}], Inherits: ["fk_flow"], Url: "Designer.htm?FK_Flow=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID&Flow_V=1"
             }]
         }]
+    }, {
+        Type: "Node", Id: "FlowFunc", ParentId: null, Name: "流程应用", Opened: true, TType: "FLOWFUNC", DType: "-1", IconCls: "icon-app",
+        Nodes: [{
+            Type: "Node", Id: "FlowMonitor", ParentId: "FlowFunc", Name: "流程监控", Opened: false, TType: "FLOWMONITOR", DType: "-1", IconCls: "icon-tree_folder",
+            Nodes: [{
+                Type: "Node", Id: "WorkPanel", ParentId: "FlowMonitor", Name: "监控面板", TType: "WORKPANEL", DType: "-1", IconCls: "icon-Monitor", Url: "../CCBPMDesigner/App/Welcome.htm?anaTime=slMouth&flowSort=slFlow&"
+            }, {
+                Type: "Node", Id: "SynthSearch", ParentId: "FlowMonitor", Name: "综合查询", TType: "SYNTHSEARCH", DType: "-1", IconCls: "icon-Search", Url: "../../Comm/Search.htm?EnsName=BP.WF.Data.GenerWorkFlowViews"
+            }, {
+                Type: "Node", Id: "SynthAnalysis", ParentId: "FlowMonitor", Name: "综合分析", TType: "SYNTHANALYSIS", DType: "-1", IconCls: "icon-Group", Url: "../../Comm/Group.htm?EnsName=BP.WF.Data.GenerWorkFlowViews"
+            }, {
+                Type: "Node", Id: "DeleteLog", ParentId: "FlowMonitor", Name: "流程删除日志", TType: "DELETELOG", DType: "-1", IconCls: "icon-log", Url: "../../Comm/Search.htm?EnsName=BP.WF.WorkFlowDeleteLogs"
+            }]
+        }]
     }]
 });
 
@@ -109,6 +123,14 @@ functrees.push({
             Value: "FORMTYPE", ColDefine: "ParentNo", Defines: [{ Value: "0", IconCls: "icon-formtree", MenuId: "mFormRoot", Opened: true }, { IconCls: "icon-tree_folder", MenuId: "mFormSort"}]
         }, {
             Value: "FORM", IconCls: "icon-form", MenuId: "mForm", Url: "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=@@id&UserNo=@@WebUser.No&SID=@@WebUser.SID"
+        }]
+    }, {
+        Type: "Node", Id: "FormRef", ParentId: null, Name: "表单相关", Opened: true, TType: "FORMREF", IconCls: "icon-tree_folder",
+        Nodes: [{
+            Type: "Node", Id: "Tabs", ParentId: "FormRef", Name: "数据源表", TType: "ENUMS", IconCls: "icon-srctable", Url: "../CCFormDesigner/Tables.htm?t=" + Math.random()
+        }, {
+            Type: "Node", Id: "Enums", ParentId: "FormRef", Name: "枚举列表", TType: "ENUMS", IconCls: "icon-enum", Url: "../../Comm/Sys/EnumList.htm?t=" + Math.random()
+        }, { Type: "Node", Id: "JSLib", ParentId: "FormRef", Name: "JS验证库", TType: "JSLIB", IconCls: "icon-js", Url: "../../Comm/Sys/FuncLib.htm?t=" + Math.random()
         }]
     }]
 });

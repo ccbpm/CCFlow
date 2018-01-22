@@ -83,7 +83,7 @@ function InitPage() {
 
                 if (at == ActionType.Forward) {
                     doc += "<p><span>到达节点:</span><font color=green>" + track.NDToT + "</font><span>到达人员:</span><font color=green>" + track.EmpToT + "</font> </p>";
-                    doc += "<p><span><a href=\"javascript:OpenFrm('" + track.NDTo + "')\">表单</a></span></p>";
+                    doc += "<p><span><a href=\"javascript:OpenFrm('" + track.NDFrom + "')\">表单</a></span></p>";
 
 
                     //找到该节点，该人员的审核track, 如果没有，就输出Msg, 可能是焦点字段。

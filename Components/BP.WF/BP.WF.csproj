@@ -169,13 +169,14 @@
     <Compile Include="DTS\DocFieldAddLengthTo1000.cs" />
     <Compile Include="CCFlowAPI.cs" />
     <Compile Include="DTS\ResetSortMapAttr.cs" />
-    <Compile Include="DTS\GenerPinYinForEmp.cs" />
+    <Compile Include="DTS\ToImplement\GenerPinYinForEmp.cs" />
+    <Compile Include="DTS\ToImplement\GenerSubInc.cs" />
     <Compile Include="DTS\UpdatePort_EmpSigantureSta.cs" />
     <Compile Include="DTS\DTS_GenerWorkFlowTimeSpan.cs" />
     <Compile Include="DTS\DTS_SendMsgToWarningWorker.cs" />
     <Compile Include="DTS\DTS_DealDeferredWork.cs" />
     <Compile Include="DTS\DTS_GenerWorkFlowTodoSta.cs" />
-    <Compile Include="DTS\RelFlowTemplateToSubInc.cs" />
+    <Compile Include="DTS\ToImplement\RelFlowTemplateToSubInc.cs" />
     <Compile Include="Glo.cs" />
     <Compile Include="HttpHandler\Base\JsonResultInnerData.cs">
       <SubType>Code</SubType>
@@ -262,7 +263,7 @@
     <Compile Include="Template\NodeYGFlow.cs" />
     <Compile Include="Template\MapFrmNode.cs" />
     <Compile Include="WF\DynamicWebService.cs" />
-    <Compile Include="DTS\GenerTitle.cs" />
+    <Compile Include="DTS\Service\GenerTitle.cs" />
     <Compile Include="DTS\GenerDustbinData.cs" />
     <Compile Include="DTS\ClearRepLineLab.cs" />
     <Compile Include="DTS\UpTrack.cs" />
@@ -332,7 +333,7 @@
     <Compile Include="DTS\WFDTS.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DTS\ClearDB.cs" />
+    <Compile Include="DTS\ToImplement\ClearDB.cs" />
     <Compile Include="DTS\RepariNodeFrmMap.cs" />
     <Compile Include="DTS\DTSCheckFlowAll.cs" />
     <Compile Include="DTS\DTSDominInfo.cs" />
@@ -405,7 +406,7 @@
     <Compile Include="Template\BillTemplate.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DTS\RepariDB.cs" />
+    <Compile Include="DTS\ToImplement\RepariDB.cs" />
     <Compile Include="WF\FullSA.cs" />
     <Compile Include="WF\SendReturnObj.cs" />
     <Compile Include="WF\ShiftWork.cs">
@@ -539,6 +540,7 @@
       <Name>BP.En30</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

@@ -23,6 +23,8 @@ namespace BP.WF.DTS
             this.Help = "清除所有流程运行的数据，包括待办工作。";
             this.Warning = "此功能要在测试环境里执行，确认是测试环境吗？";
             this.Icon = "<img src='/WF/Img/Btn/Delete.gif'  border=0 />";
+
+            this.GroupName = "流程维护";
         }
         /// <summary>
         /// 设置执行变量

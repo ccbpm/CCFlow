@@ -189,7 +189,7 @@ namespace BP.En
         /// </summary>
         public string Title = null;
         public string Help = null;
-
+        public string GroupName = "基本方法";
         /// <summary>
         /// 操作前提示信息
         /// </summary>

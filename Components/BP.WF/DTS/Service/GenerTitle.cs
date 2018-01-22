@@ -20,6 +20,7 @@ namespace BP.WF.DTS
         {
             this.Title = "重新生成标题（为所有的流程，根据新的规则生成流程标题）";
             this.Help = "您也可以打开流程属性一个个的单独执行。";
+            this.GroupName = "流程维护";
         }
         /// <summary>
         /// 设置执行变量

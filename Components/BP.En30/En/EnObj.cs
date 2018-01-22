@@ -826,7 +826,7 @@ namespace BP.En
                         return int.Parse(attr.DefaultVal.ToString());
                 }
 
-                throw new Exception("@实体类[" + this.ToString() + "]@[" + this.EnMap.GetAttrByKey(key).Desc + "]请输入数字，您输入的是[" + this.GetValStrByKey(key) + "]。");
+                throw new Exception("@实体类[" + this.ToString() + "]@[" + this.EnMap.GetAttrByKey(key).Desc + "]请输入数字，您输入的是[" + this.GetValStrByKey(key) + "],错误信息:"+ex.Message);
             }
         }
         /// <summary>

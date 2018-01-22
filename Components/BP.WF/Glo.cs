@@ -4546,15 +4546,15 @@ namespace BP.WF
                     dir.Delete(true);
             }
         }
-        public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string PKVal, string FK_FrmAttachment)
+        public static BP.Sys.FrmAttachmentDBs GenerFrmAttachmentDBs(FrmAttachment athDesc, string pkval, string FK_FrmAttachment)
         {
 
             BP.Sys.FrmAttachmentDBs dbs = new BP.Sys.FrmAttachmentDBs();
             if (athDesc.HisCtrlWay == AthCtrlWay.PWorkID)
             {
-                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + PKVal, 0).ToString();
+                string pWorkID = BP.DA.DBAccess.RunSQLReturnValInt("SELECT PWorkID FROM WF_GenerWorkFlow WHERE WorkID=" + pkval, 0).ToString();
                 if (pWorkID == null || pWorkID == "0")
-                    pWorkID = PKVal;
+                    pWorkID = pkval;
 
                 if (athDesc.AthUploadWay == AthUploadWay.Inherit)
                 {
@@ -4562,7 +4562,7 @@ namespace BP.WF
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                     qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pWorkID);
                     qo.addOr();
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(PKVal));
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
                     qo.addOrderBy("RDT");
                     qo.DoQuery();
                 }
@@ -4579,7 +4579,7 @@ namespace BP.WF
                 BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
                 qo.AddWhere(FrmAttachmentDBAttr.NoOfObj, athDesc.NoOfObj);
                 qo.addAnd();
-                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(PKVal));
+                qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, int.Parse(pkval));
                 qo.addOrderBy("RDT");
                 qo.DoQuery();
             }
@@ -4590,7 +4590,7 @@ namespace BP.WF
                 {
                     /*如果是一个明细表的多附件，就直接按照传递过来的PK来查询.*/
                     BP.En.QueryObject qo = new BP.En.QueryObject(dbs);
-                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, PKVal);
+                    qo.AddWhere(FrmAttachmentDBAttr.RefPKVal, pkval);
                     qo.addAnd();
                     qo.AddWhere(FrmAttachmentDBAttr.FK_FrmAttachment, " LIKE ", "%AthMDtl");
                     num = qo.DoQuery();
@@ -4598,26 +4598,8 @@ namespace BP.WF
                 else
                 {
                     num = dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, FK_FrmAttachment,
-                       FrmAttachmentDBAttr.RefPKVal, PKVal, "RDT");
+                       FrmAttachmentDBAttr.RefPKVal, pkval, "RDT");
                 }
-
-                //if (num == 0 && this.IsCC == "1")
-                //{
-                //    /*是抄送的, 的情况. */
-                //    CCList cc = new CCList();
-                //    int nnn = cc.Retrieve(CCListAttr.FK_Node, this.FK_Node, CCListAttr.WorkID, this.WorkID,
-                //        CCListAttr.CCTo, WebUser.No);
-                //    if (cc.FK_Node != 0)
-                //    {
-                //        this._fk_node = cc.FK_Node;
-
-                //        dbs.Retrieve(FrmAttachmentDBAttr.FK_FrmAttachment, this.FK_FrmAttachmentExt,
-                //            FrmAttachmentDBAttr.FK_MapData, "ND" + cc.FK_Node, FrmAttachmentDBAttr.RefPKVal, this.WorkID.ToString());
-
-                //        //重新设置文件描述。
-                //        athDesc.Retrieve(FrmAttachmentAttr.FK_MapData, this.FK_MapData, FrmAttachmentAttr.NoOfObj, "DocMultiAth");
-                //    }
-                //}
             }
 
             return dbs;

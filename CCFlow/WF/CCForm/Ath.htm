@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>附件</title>
+    <meta charset="UTF-8"/>
+    <base target="_self" />
+    <script src="../Scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="../Scripts/QueryString.js" type="text/javascript"></script>
+    <script src="../Scripts/config.js" type="text/javascript"></script>
+    <link href="../../DataUser/Style/Dtl.css" rel="stylesheet" type="text/css" />
+    <script src="../Comm/Gener.js"  type="text/javascript" ></script>
+    <script src="AttachmentUpload.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript" >
+      
+        //页面启动函数.
+        $(function () {
+
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+            handler.AddUrlData();
+            var data = handler.DoMethodReturnString("Ath_Init");
+            if (data.indexOf('err@') == 0) {
+                alert(data);
+                return;
+            }
+
+            if (data.indexOf('url@') == 0) {
+                var url = data.replace('url@', '');
+                window.location.href = url;
+                return;
+            }
+
+            data = JSON.parse(data);
+
+            var athDesc = data["AthDesc"][0];
+            var dbs = data["DBAths"];
+          //  athDesc = new Entity(athDesc); //把当前的实体处理成entity.
+            if (athDesc.IsDownload && dbs.length > 0) {
+                $("#Opt").html("<a href='javascript:DownZip()' ><img src='../Img/FileType/zip.png' style='width:16px;height:16px;' />打包下载</a>");
+            } else {
+                $("#Opt").html("操作");
+            }
+
+            //输出附件..
+            for (var i = 0; i < dbs.length; i++) {
+
+                var db = dbs[i];
+
+                var newRow = "";
+                newRow = "<tr ><td class=Idx>" + i + "</td>";
+
+                newRow += "<td><a href=\"javascript:Down2017('" + db.MyPK + "');\" ><img src='../Img/FileType/" + db.FileExts + ".gif' border=0 onerror=\"src='../Img/FileType/Undefined.gif'\" />" + db.FileName + "</a></td>";
+                newRow += "<td>" + db.FileSize + "</td>";
+                newRow += "<td>" + db.RecName + "</td>";
+
+                newRow += "<td>";
+                newRow += "<a href=\"javascript:Delete('" + db.No + "')\"><img src='/WF/Img/Btn/Delete.gif' border=0 />删除</a>";
+                newRow += "</td>";
+
+                newRow += "</tr>";
+
+                $("#Table1 tr:last").after(newRow);
+            }
+
+        });
+          
+     </script>
+	 
+</head>
+<body  >
+    <form>
+         <div id="Msg"></div>
+
+         <table style="width:100%;" id="Table1" >
+         <tr>
+         <th>序</th>
+         <th>名称</th>
+         <th>大小</th>
+         <th>上传人</th>
+         <th><div id="Opt"></div></th>
+         </tr>
+
+         </table>
+
+    </form>
+</body>
+</html>

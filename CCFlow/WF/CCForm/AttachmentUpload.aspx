@@ -11,34 +11,6 @@
     <script src="AttachmentUpload.js" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 
-        function DownZip() {
-
-            var httphandle = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
-            httphandle.AddUrlData();
-
-            var data = httphandle.DoMethodReturnString("AttachmentUpload_DownZip");
-
-            if (data.indexOf('err@') == 0) {
-                alert(data); //如果是异常，就提提示.
-                console.log(data);
-                return;
-            }
-
-            if (data.indexOf('url@') == 0) {
-
-                data = data.replace('url@', ''); //如果返回url，就直接转向.
-
-                var i = data.indexOf('\DataUser');
-                var str = '/' + data.substring(i);
-                str = str.replace('\\\\', '\\');
-
-                window.open(str, "_blank", "width=800, height=600,toolbar=yes");
-                return;
-            }
-            alert(data);
-        }
-         
-
         function Del(fk_ath, pkVal, delPKVal) {
             if (window.confirm('您确定要删除吗？ ') == false)
                 return;

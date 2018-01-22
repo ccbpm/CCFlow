@@ -1,4 +1,6 @@
-﻿//点击右边的下载标签.
+﻿
+
+//点击右边的下载标签.
 function Down(fk_ath, pkVal, delPKVal) {
     window.location.href = 'AttachmentUpload.aspx?DoType=Down&DelPKVal=' + delPKVal + '&FK_FrmAttachment=' + fk_ath + '&PKVal=' + pkVal + '&FK_Node=<%=FK_Node %>&FK_Flow = <%=FK_Flow %>&FK_MapData=<%=FK_MapData %>&Ath=<%=Ath %>';
 }
@@ -38,6 +40,7 @@ function Down2017(mypk) {
         }
     });
 }
+
 
 /* 一下的方法从网上找到的，都不适用 . */
 
@@ -85,4 +88,31 @@ function downloadFile(url) {
     } catch (e) {
 
     }
+}
+
+function DownZip() {
+
+    var httphandle = new HttpHandler("BP.WF.HttpHandler.WF_CCForm");
+    httphandle.AddUrlData();
+
+    var data = httphandle.DoMethodReturnString("AttachmentUpload_DownZip");
+
+    if (data.indexOf('err@') == 0) {
+        alert(data); //如果是异常，就提提示.
+        console.log(data);
+        return;
+    }
+
+    if (data.indexOf('url@') == 0) {
+
+        data = data.replace('url@', ''); //如果返回url，就直接转向.
+
+        var i = data.indexOf('\DataUser');
+        var str = '/' + data.substring(i);
+        str = str.replace('\\\\', '\\');
+
+        window.open(str, "_blank", "width=800, height=600,toolbar=yes");
+        return;
+    }
+    alert(data);
 }

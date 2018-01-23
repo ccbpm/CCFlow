@@ -19,7 +19,6 @@ namespace CCFlow.SDKFlowDemo
             myHttpContext = context;
 
             string sql = "";
-
             string doType = context.Request.QueryString["DoType"];
 
             #region 开窗返回值的demo.

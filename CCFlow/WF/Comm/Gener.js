@@ -26,9 +26,7 @@ function AtParaToJson(json) {
 
 
 function GetPKVal() {
-
-    var val = GetQueryString("OID");
-
+    var val = GetQueryString("OID");         
     if (val==undefined || val=="")
         val = GetQueryString("No");
 

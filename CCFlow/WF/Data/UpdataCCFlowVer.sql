@@ -1,11 +1,15 @@
 ﻿
 /** -- ========================= 系统升级SQL (为了方便系统升级代码写入的问题,增加该SQL) 目的是为了方便JFlow CCFlow 的统一版本升级. **/
+
+
+UPDATE Sys_MapData SET FK_FormTree='' WHERE No LIKE 'ND%'
 DELETE FROM Sys_Enum WHERE EnumKey ='SelectorModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='SrcType';
 DELETE FROM Sys_Enum WHERE EnumKey ='CondModel';
 DELETE FROM Sys_Enum WHERE EnumKey ='FrmTrackSta'; 
 DELETE FROM Sys_Enum WHERE EnumKey ='EventDoType'; 
 DELETE FROM Sys_Enum WHERE EnumKey ='RowShowModel';  
+
 
 -- 更新枚举值;
 DELETE FROM Sys_Enum WHERE EnumKey ='CodeStruct';

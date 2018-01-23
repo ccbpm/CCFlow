@@ -236,6 +236,25 @@ function deleteFlowSort() {
         });
     });
 }
+
+/// <summary>流程树节点属性</summary>
+function viewFlowSort() {
+
+    var currSort = $('#flowTree').tree('getSelected');
+    var currSortId = "99";
+    if (currSort && currSort.attributes["ISPARENT"] != 0) {
+        currSortId = $('#flowTree').tree('getSelected').id;
+    }
+    var dgId = "iframDgView";
+    var url = "viewFlowShort.htm?sort=" + currSortId + "&s=" + Math.random();
+    OpenEasyUiDialog(url, dgId, '流程树节点属性', 420, 300, 'icon-flow', false, function () {
+
+        var win = document.getElementById(dgId).contentWindow;
+        //var newFlowInfo = win.getNewFlowInfo();
+
+    }, null);
+}
+
 //上移流程类别
 function moveUpFlowSort() {
     var currSort = $('#flowTree').tree('getSelected');
@@ -334,7 +353,7 @@ function AppendFlowToFlowSortTree(FK_FlowSort, FK_Flow, FlowName) {
             children: []
         }]
     });
-    
+
     $("#flowTree").tree("expand", flowSortNode.target);
     $('#flowTree').tree('select', $('#flowTree').tree('find', FK_Flow).target);
 
@@ -641,7 +660,7 @@ function AppendFrmToFormTree(FK_FormTree, No, Name) {
     });
     $("#formTree").tree("expand", sortNode.target);
     $('#formTree').tree('select', $('#formTree').tree('find', No).target);
-    
+
     //打开表单
     addTab("DesignerFreeFrm" + No, Name, "../CCFormDesigner/GoToFrmDesigner.htm?FK_MapData=" + No);
 }

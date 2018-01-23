@@ -303,11 +303,16 @@ namespace BP.WF.HttpHandler
         /// <returns></returns>
         public string Start_Init()
         {
-            //return Start_Init2016(); 
 
             //通用的处理器.
-            if (BP.Sys.SystemConfig.CustomerNo != "TianYe")
+            if (BP.Sys.SystemConfig.CustomerNo == "TianYe" || BP.Sys.SystemConfig.CustomerNo == "CZBank")
+            {
+
+            }
+            else
+            {
                 return Start_Init2016();
+            }
 
             //如果请求了刷新.
             if (this.GetRequestVal("IsRef") != null)

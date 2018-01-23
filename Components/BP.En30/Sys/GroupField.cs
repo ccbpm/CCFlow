@@ -63,7 +63,7 @@ namespace BP.Sys
             get
             {
                 UAC uac = new UAC();
-                if (BP.Web.WebUser.No == "admin")
+                if (BP.Web.WebUser.No == "admin" || BP.Web.WebUser.IsAdmin)
                 {
                     /* */
                     uac.IsDelete = true;

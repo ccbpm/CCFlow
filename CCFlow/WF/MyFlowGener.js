@@ -242,7 +242,7 @@ function initPageParam() {
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
-    pageData.IsReadOnly = GetQueryString("IsReadOnly"); //如果是IsReadOnly，就表示是查看页面，不是处理页面
+    pageData.IsReadonly = GetQueryString("IsReadonly"); //如果是IsReadonly，就表示是查看页面，不是处理页面
     pageData.IsStartFlow = GetQueryString("IsStartFlow"); //是否是启动流程页面 即发起流程
 
     pageData.DoType1 = GetQueryString("DoType")//View
@@ -267,8 +267,8 @@ function setAttachDisabled() {
     //附件设置
     var attachs = $('iframe[src*="AttachmentUpload.htm"]');
     $.each(attachs, function (i, attach) {
-        if (attach.src.indexOf('IsReadOnly') == -1) {
-            $(attach).attr('src', $(attach).attr('src') + "&IsReadOnly=1");
+        if (attach.src.indexOf('IsReadonly') == -1) {
+            $(attach).attr('src', $(attach).attr('src') + "&IsReadonly=1");
         }
     })
 }

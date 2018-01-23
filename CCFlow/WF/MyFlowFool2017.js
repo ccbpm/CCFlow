@@ -434,7 +434,7 @@ function Ele_Dtl(frmDtl) {
 
     if (frmDtl.ListShowModel == "0") {
         //表格模式
-        if (pageData.IsReadOnly) {
+        if (pageData.IsReadonly) {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
         } else {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
@@ -442,7 +442,7 @@ function Ele_Dtl(frmDtl) {
     }
     else if (frmDtl.ListShowModel == "1") {
         //卡片模式
-        if (pageData.IsReadOnly) {
+        if (pageData.IsReadonly) {
             src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
         } else {
             src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";

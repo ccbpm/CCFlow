@@ -513,14 +513,14 @@ function figure_Template_Dtl(frmDtl) {
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
     if (frmDtl.ListShowModel == "0") {
         //表格模式
-        if (pageData.IsReadOnly) {
+        if (pageData.IsReadonly) {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
         } else {
             src = "./CCForm/Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
         }
     } else if (frmDtl.ListShowModel == "1") {
         //卡片模式
-        if (pageData.IsReadOnly) {
+        if (pageData.IsReadonly) {
             src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=1";
         } else {
             src = "./CCForm/DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0&" + urlParam + "&Version=1";
@@ -531,7 +531,7 @@ function figure_Template_Dtl(frmDtl) {
     eleIframe = $("<iframe class='Fdtl' ID='F" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
                  "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
-    if (pageData.IsReadOnly) {
+    if (pageData.IsReadonly) {
 
     } else {
         if (frmDtl.DtlSaveModel == 0) {
@@ -712,7 +712,7 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
 //初始化框架
 function figure_Template_IFrame(fram) {
     var eleHtml = '';
-    var src = dealWithUrl(fram.src) + "IsReadOnly=0";
+    var src = dealWithUrl(fram.src) + "IsReadonly=0";
     eleHtml = $('<div id="iframe' + fram.MyPK + '">' + '</div>');
     var iframe = $(+"<iframe  style='width:" + fram.W + "px; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='no'></iframe>");
 

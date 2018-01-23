@@ -420,7 +420,7 @@ function initPageParam() {
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
-    pageData.IsReadOnly = GetQueryString("IsReadOnly");//如果是IsReadOnly，就表示是查看页面，不是处理页面
+    pageData.IsReadonly = GetQueryString("IsReadonly");//如果是IsReadonly，就表示是查看页面，不是处理页面
     pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
 
     pageData.DoType1 = GetQueryString("DoType")//View
@@ -541,8 +541,8 @@ function setAttachDisabled() {
     //附件设置
     var attachs = $('iframe[src*="AttachmentUpload.aspx"]');
     $.each(attachs, function (i, attach) {
-        if (attach.src.indexOf('IsReadOnly') == -1) {
-            $(attach).attr('src', $(attach).attr('src') + "&IsReadOnly=1");
+        if (attach.src.indexOf('IsReadonly') == -1) {
+            $(attach).attr('src', $(attach).attr('src') + "&IsReadonly=1");
         }
     })
 }
@@ -733,10 +733,10 @@ function initGroup(workNodeData, groupFiled) {
                         });
                         src = src.substr(0, src.indexOf('?')) + "?" + params.join('&');
                     }
-                    src += "&IsReadOnly=0";
+                    src += "&IsReadonly=0";
                 }
                 else {
-                    src += "?IsReadOnly=0";
+                    src += "?IsReadonly=0";
                 }
                 groupHtml += '<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none;"  id="group' + groupFiled.Idx + '">' + "<iframe  style='width:100%; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='no'></iframe>" + '</div>';
             }
@@ -1159,8 +1159,8 @@ function InitForm() {
         iframe[0].contentWindow.location.href = iframe[0].src;
     })
 
-    //如果是IsReadOnly，就表示是查看页面，不是处理页面
-    if (pageData.IsReadOnly != undefined && pageData.IsReadOnly == "1") {
+    //如果是IsReadonly，就表示是查看页面，不是处理页面
+    if (pageData.IsReadonly != undefined && pageData.IsReadonly == "1") {
         setAttachDisabled();
         setToobarUnVisible();
         setFormEleDisabled();

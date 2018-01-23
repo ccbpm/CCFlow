@@ -161,7 +161,7 @@ function initPageParam() {
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
-    pageData.IsReadOnly = GetQueryString("IsReadOnly"); //如果是IsReadOnly，就表示是查看页面，不是处理页面
+    pageData.IsReadonly = GetQueryString("IsReadonly"); //如果是IsReadonly，就表示是查看页面，不是处理页面
     pageData.IsStartFlow = GetQueryString("IsStartFlow"); //是否是启动流程页面 即发起流程
 
     pageData.DoType1 = GetQueryString("DoType")//View
@@ -182,8 +182,8 @@ function setAttachDisabled() {
     //附件设置
     var attachs = $('iframe[src*="AttachmentUpload.htm"]');
     $.each(attachs, function (i, attach) {
-        if (attach.src.indexOf('IsReadOnly') == -1) {
-            $(attach).attr('src', $(attach).attr('src') + "&IsReadOnly=1");
+        if (attach.src.indexOf('IsReadonly') == -1) {
+            $(attach).attr('src', $(attach).attr('src') + "&IsReadonly=1");
         }
     })
 }
@@ -905,7 +905,7 @@ function figure_Template_Dtl(frmDtl) {
     var urlParam = href.substring(href.indexOf('?') + 1, href.length);
     urlParam = urlParam.replace('&DoType=', '&DoTypeDel=xx');
     if (frmDtl.RowShowModel == "0") {
-        if (pageData.IsReadOnly) {
+        if (pageData.IsReadonly) {
 
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1&" + urlParam + "&Version=" + Math.random();
         } else {
@@ -913,7 +913,7 @@ function figure_Template_Dtl(frmDtl) {
         }
     }
     else if (frmDtl.RowShowModel == "1") {
-        if (pageData.IsReadOnly)
+        if (pageData.IsReadonly)
             src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=1" + strs;
         else
             src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.WorkID + "&IsReadonly=0" + strs;
@@ -923,7 +923,7 @@ function figure_Template_Dtl(frmDtl) {
     eleIframe = $("<iframe class='Fdtl' ID='F" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:100%; height:" + frmDtl.H +
                  "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling=auto /></iframe>");
-    if (pageData.IsReadOnly) {
+    if (pageData.IsReadonly) {
 
     } else {
         if (frmDtl.DtlSaveModel == 0) {
@@ -1060,7 +1060,7 @@ function figure_Template_FigureSubFlowDtl(wf_node) {
 //初始化框架
 function figure_Template_IFrame(fram) {
     var eleHtml = '';
-    var src = dealWithUrl(fram.src) + "IsReadOnly=0";
+    var src = dealWithUrl(fram.src) + "IsReadonly=0";
     eleHtml = $('<div id="iframe' + fram.MyPK + '">' + '</div>');
     var iframe = $(+"<iframe  style='width:" + fram.W + "px; height:" + fram.H + "'     src='" + src + "' frameborder=0  leftMargin='0'  topMargin='0' scrolling='no'></iframe>");
 

@@ -351,13 +351,13 @@ function figure_Template_Dtl(frmDtl, ext) {
     }
     var src = "";
     if (frmDtl.ListShowModel == "0") {
-        if (pageData.IsReadOnly) {
+        if (pageData.IsReadonly) {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         } else {
             src = "Dtl.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
         }
     } else if (frmDtl.ListShowModel == "1") {
-        if (pageData.IsReadOnly) {
+        if (pageData.IsReadonly) {
             src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=1" + strs;
         } else {
             src = "DtlCard.htm?EnsName=" + frmDtl.No + "&RefPKVal=" + this.pageData.OID + "&IsReadonly=0" + strs;
@@ -368,7 +368,7 @@ function figure_Template_Dtl(frmDtl, ext) {
     eleIframe = $("<iframe ID='F" + frmDtl.No + "' src='" + src +
                  "' frameborder=0  style='position:absolute;width:" + frmDtl.W + "px; height:" + frmDtl.H +
                  "px;text-align: left;'  leftMargin='0'  topMargin='0' scrolling='no' /></iframe>");
-    if (pageData.IsReadOnly) {
+    if (pageData.IsReadonly) {
 
     } else {
         if (frmDtl.DtlSaveModel == 0) {
@@ -428,7 +428,7 @@ function figure_Template_IFrame(fram) {
             strs += "&" + str + "=" + paras[str];
     }
 
-    var src = dealWithUrl(fram.URL) + "&IsReadOnly=0";
+    var src = dealWithUrl(fram.URL) + "&IsReadonly=0";
 
     var eleIframe = '<iframe></iframe>';
     eleIframe = $("<iframe ID='Fdg" + fram.MyPK + "' src='" + src +

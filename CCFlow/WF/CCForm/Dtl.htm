@@ -332,7 +332,7 @@
 
         //初始化数据.
         function InitPage() {
-
+            var isReadonly = GetQueryString("IsReadonly");
             var refPKVal = GetQueryString("RefPKVal");
             if (refPKVal == null) {
                 alert('@错误没有找到关联的主键.');
@@ -451,11 +451,11 @@
 
                         //<td><img src="../Img/Btn/Delete.png"  onclick="deleteRow(this)" /></td>
                         //如果能删除，就有删除按钮
-                        if (sys_MapDtl.IsReadonly=="0") {
+                        if (sys_MapDtl.IsReadonly == "0" && isReadonly != "1") {
                             delTh.data(delThData);
                         }
                         //可删除或者可新增时，有操作列
-                        if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate=="1") && sys_MapDtl.IsReadonly == "0") {
+                        if ((sys_MapDtl.IsDelete == "1" || sys_MapDtl.IsInsert == "1" || sys_MapDtl.IsUpdate == "1") && sys_MapDtl.IsReadonly == "0" && isReadonly!="1") {
                             threadTr.append(delTh);
                         }
 
@@ -479,7 +479,7 @@
 					// 表头over --------------------
 
                     //如果不能新增，就把新增按钮去掉.
-                    if (sys_MapDtl.IsInsert == "0" || sys_MapDtl.IsReadonly == "1" ) {
+                    if (sys_MapDtl.IsInsert == "0" || sys_MapDtl.IsReadonly == "1" || isReadonly== "1") {
                         document.getElementById('insertBtn').style.display = 'none';
                     }
 
@@ -580,7 +580,7 @@
                             })
 
                             //如果是只读的，全部设置成只读
-                            if (workNodeData.Sys_MapDtl[0].IsReadonly == "1") {
+                            if (workNodeData.Sys_MapDtl[0].IsReadonly == "1" || isReadonly == "1") {
                                 $('#dtlDiv div table tbody tr input[type=text]').attr('disabled', 'disabled');
                                 $('#dtlDiv div table tbody tr textarea').attr('disabled', 'disabled');
                                 $('#dtlDiv div table tbody tr select').attr('disabled', 'disabled');

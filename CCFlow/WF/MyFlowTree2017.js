@@ -3,7 +3,7 @@
 1,里面包含一些必备的数据.
 */
 var workNode = null;
-var IsReadOnly = "0";
+var IsReadonly = "0";
 
 function GenerTreeFrm(wn) {
     workNode = wn;
@@ -59,7 +59,7 @@ function FlowFormTree_Init() {
                     if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {
                         i++;
                         var isEdit = node.attributes.IsEdit;
-                        if ((IsCC && IsCC == "1") || IsReadOnly == "1") isEdit = "0";
+                        if ((IsCC && IsCC == "1") || IsReadonly == "1") isEdit = "0";
                         var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                         addTab(node.id, node.text, url);
                     }
@@ -69,7 +69,7 @@ function FlowFormTree_Init() {
             onClick: function (node) {
                 if (node.attributes.NodeType == "form|0" || node.attributes.NodeType == "form|1") {/*普通表单和必填表单*/
                     var isEdit = node.attributes.IsEdit;
-                    if ((IsCC && IsCC == "1") || IsReadOnly == "1") isEdit = "0";
+                    if ((IsCC && IsCC == "1") || IsReadonly == "1") isEdit = "0";
                     var url = "./CCForm/Frm.htm?FK_MapData=" + node.id + "&IsEdit=" + isEdit + "&IsPrint=0" + urlExt;
                     addTab(node.id, node.text, url);
                 } else if (node.attributes.NodeType == "tools|0") {/*工具栏按钮添加选项卡*/
@@ -106,7 +106,7 @@ function FlowFormTree_Init() {
 $(function () {
     var pageName = GetLocalPageName();
     if (pageName == "MyFlowTreeReadonly.htm") {
-        IsReadOnly = "1";
+        IsReadonly = "1";
         FlowFormTree_Init();
     }
 });
@@ -317,7 +317,7 @@ var urlExtFrm = function () {
     if (args.IsLoadData != "") {
         extUrl += "&IsLoadData=" + args.IsLoadData;
     }
-    extUrl += "&IsReadOnly=" + IsReadOnly;
+    extUrl += "&IsReadonly=" + IsReadonly;
 
     //获取其他参数
     var sHref = window.location.href;

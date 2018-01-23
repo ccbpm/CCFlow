@@ -471,7 +471,7 @@ function Ele_Dtl(frmDtl) {
     if (refPK == null)
         refPK = GetQueryString('WorkID');
 
-    var isReadonly = GetQueryString("IsReadOnly");
+    var isReadonly = GetQueryString("IsReadonly");
     if (isReadonly == "null" || isReadonly == "0" || isReadonly == null || isReadonly == undefined)
         isReadonly = "0";
     else

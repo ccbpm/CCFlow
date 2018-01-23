@@ -110,8 +110,8 @@ body{
 }
 #right{
     float: right;
-    width:195px;
-    /*overflow: scroll;*/
+    /*width:195px;
+    overflow: scroll;*/
 }
 
 #edit

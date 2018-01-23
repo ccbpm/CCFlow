@@ -3,7 +3,7 @@
   <Sys_GroupField>
     <OID>2816</OID>
     <Lab>基础信息</Lab>
-    <EnName>CCFrm_TEST</EnName>
+    <EnName>CCFrm_TEST2</EnName>
     <Idx>1</Idx>
     <GUID />
     <CtrlType />
@@ -13,17 +13,17 @@
   <Sys_GroupField>
     <OID>2818</OID>
     <Lab>从表1</Lab>
-    <EnName>CCFrm_TEST</EnName>
+    <EnName>CCFrm_TEST2</EnName>
     <Idx>2</Idx>
     <GUID />
     <CtrlType>Dtl</CtrlType>
-    <CtrlID>CCFrm_TESTDtl1</CtrlID>
+    <CtrlID>CCFrm_TEST2Dtl1</CtrlID>
     <AtPara />
   </Sys_GroupField>
   <Sys_GroupField>
     <OID>2820</OID>
     <Lab>基础信息</Lab>
-    <EnName>CCFrm_TESTDtl1</EnName>
+    <EnName>CCFrm_TEST2Dtl1</EnName>
     <Idx>1</Idx>
     <GUID />
     <CtrlType />
@@ -31,10 +31,10 @@
     <AtPara />
   </Sys_GroupField>
   <Sys_MapData>
-    <No>CCFrm_TEST</No>
+    <No>CCFrm_TEST2</No>
     <Name>Test</Name>
     <EnPK />
-    <PTable>CCFrm_TEST</PTable>
+    <PTable>CCFrm_TEST2</PTable>
     <Url />
     <Dtls />
     <FrmW>900</FrmW>
@@ -102,8 +102,8 @@
     <PTableModel>0</PTableModel>
   </Sys_MapData>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_OID</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_OID</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>主键</Name>
     <KeyOfEn>OID</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -144,8 +144,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_RDT</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_RDT</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>更新时间</Name>
     <KeyOfEn>RDT</KeyOfEn>
     <MyDataType>7</MyDataType>
@@ -186,8 +186,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_ZongJi</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_ZongJi</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>总计</Name>
     <KeyOfEn>ZongJi</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -228,8 +228,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_A</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_A</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>A</Name>
     <KeyOfEn>A</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -270,8 +270,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_B</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_B</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>B</Name>
     <KeyOfEn>B</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -312,8 +312,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_C</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_C</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>C</Name>
     <KeyOfEn>C</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -354,8 +354,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_T1</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_T1</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>T1</Name>
     <KeyOfEn>T1</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -396,8 +396,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_T2</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_T2</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>T2</Name>
     <KeyOfEn>T2</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -438,8 +438,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_T3</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_T3</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>T3</Name>
     <KeyOfEn>T3</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -480,8 +480,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_PingJun</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_PingJun</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>平均</Name>
     <KeyOfEn>PingJun</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -522,8 +522,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_J1</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_J1</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>J1</Name>
     <KeyOfEn>J1</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -564,8 +564,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_J2</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_J2</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>J2</Name>
     <KeyOfEn>J2</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -606,8 +606,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_J3</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_J3</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>J3</Name>
     <KeyOfEn>J3</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -648,8 +648,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_D1</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_D1</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>D1</Name>
     <KeyOfEn>D1</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -690,8 +690,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_D2</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_D2</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>D2</Name>
     <KeyOfEn>D2</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -732,8 +732,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_D3</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_D3</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>D3</Name>
     <KeyOfEn>D3</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -774,8 +774,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_X1</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_X1</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>X1</Name>
     <KeyOfEn>X1</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -816,8 +816,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_X2</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_X2</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>X2</Name>
     <KeyOfEn>X2</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -858,8 +858,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_X3</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_X3</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>X3</Name>
     <KeyOfEn>X3</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -900,8 +900,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_X4</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_X4</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>X4</Name>
     <KeyOfEn>X4</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -942,8 +942,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_Y1</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_Y1</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>Y1</Name>
     <KeyOfEn>Y1</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -984,8 +984,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_Y2</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_Y2</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>Y2</Name>
     <KeyOfEn>Y2</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -1026,8 +1026,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_Y3</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_Y3</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>Y3</Name>
     <KeyOfEn>Y3</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -1068,8 +1068,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TEST_Y4</mypk>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <mypk>CCFrm_TEST2_Y4</mypk>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Name>Y4</Name>
     <KeyOfEn>Y4</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -1110,8 +1110,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TESTDtl1_OID</mypk>
-    <FK_MapData>CCFrm_TESTDtl1</FK_MapData>
+    <mypk>CCFrm_TEST2Dtl1_OID</mypk>
+    <FK_MapData>CCFrm_TEST2Dtl1</FK_MapData>
     <Name>主键</Name>
     <KeyOfEn>OID</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -1152,8 +1152,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TESTDtl1_RefPK</mypk>
-    <FK_MapData>CCFrm_TESTDtl1</FK_MapData>
+    <mypk>CCFrm_TEST2Dtl1_RefPK</mypk>
+    <FK_MapData>CCFrm_TEST2Dtl1</FK_MapData>
     <Name>关联ID</Name>
     <KeyOfEn>RefPK</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -1194,8 +1194,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TESTDtl1_FID</mypk>
-    <FK_MapData>CCFrm_TESTDtl1</FK_MapData>
+    <mypk>CCFrm_TEST2Dtl1_FID</mypk>
+    <FK_MapData>CCFrm_TEST2Dtl1</FK_MapData>
     <Name>FID</Name>
     <KeyOfEn>FID</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -1236,8 +1236,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TESTDtl1_RDT</mypk>
-    <FK_MapData>CCFrm_TESTDtl1</FK_MapData>
+    <mypk>CCFrm_TEST2Dtl1_RDT</mypk>
+    <FK_MapData>CCFrm_TEST2Dtl1</FK_MapData>
     <Name>记录时间</Name>
     <KeyOfEn>RDT</KeyOfEn>
     <MyDataType>7</MyDataType>
@@ -1278,8 +1278,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TESTDtl1_Rec</mypk>
-    <FK_MapData>CCFrm_TESTDtl1</FK_MapData>
+    <mypk>CCFrm_TEST2Dtl1_Rec</mypk>
+    <FK_MapData>CCFrm_TEST2Dtl1</FK_MapData>
     <Name>记录人</Name>
     <KeyOfEn>Rec</KeyOfEn>
     <MyDataType>1</MyDataType>
@@ -1320,8 +1320,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TESTDtl1_ShuLiang</mypk>
-    <FK_MapData>CCFrm_TESTDtl1</FK_MapData>
+    <mypk>CCFrm_TEST2Dtl1_ShuLiang</mypk>
+    <FK_MapData>CCFrm_TEST2Dtl1</FK_MapData>
     <Name>数量</Name>
     <KeyOfEn>ShuLiang</KeyOfEn>
     <MyDataType>2</MyDataType>
@@ -1362,8 +1362,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TESTDtl1_DanJia</mypk>
-    <FK_MapData>CCFrm_TESTDtl1</FK_MapData>
+    <mypk>CCFrm_TEST2Dtl1_DanJia</mypk>
+    <FK_MapData>CCFrm_TEST2Dtl1</FK_MapData>
     <Name>单价</Name>
     <KeyOfEn>DanJia</KeyOfEn>
     <MyDataType>8</MyDataType>
@@ -1404,8 +1404,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapAttr>
-    <mypk>CCFrm_TESTDtl1_HeJi</mypk>
-    <FK_MapData>CCFrm_TESTDtl1</FK_MapData>
+    <mypk>CCFrm_TEST2Dtl1_HeJi</mypk>
+    <FK_MapData>CCFrm_TEST2Dtl1</FK_MapData>
     <Name>合计</Name>
     <KeyOfEn>HeJi</KeyOfEn>
     <MyDataType>3</MyDataType>
@@ -1447,8 +1447,8 @@
     <IsEnableInAPP>1</IsEnableInAPP>
   </Sys_MapAttr>
   <Sys_MapExt>
-    <MyPK>AutoFull_CCFrm_TESTDtl1_HeJi</MyPK>
-    <FK_MapData>CCFrm_TESTDtl1</FK_MapData>
+    <MyPK>AutoFull_CCFrm_TEST2Dtl1_HeJi</MyPK>
+    <FK_MapData>CCFrm_TEST2Dtl1</FK_MapData>
     <ExtType>AutoFull</ExtType>
     <DoWay>0</DoWay>
     <AttrOfOper>HeJi</AttrOfOper>
@@ -1467,14 +1467,14 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>AutoFullDtlField_CCFrm_TEST_ZongJi</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <MyPK>AutoFullDtlField_CCFrm_TEST2_ZongJi</MyPK>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <ExtType>AutoFullDtlField</ExtType>
     <DoWay>0</DoWay>
     <AttrOfOper>ZongJi</AttrOfOper>
     <AttrsOfActive />
     <FK_DBSrc />
-    <Doc>CCFrm_TESTDtl1.ShuLiang.Sum</Doc>
+    <Doc>CCFrm_TEST2Dtl1.ShuLiang.Sum</Doc>
     <Tag />
     <Tag1 />
     <Tag2 />
@@ -1487,8 +1487,8 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>AutoFull_CCFrm_TEST_C</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <MyPK>AutoFull_CCFrm_TEST2_C</MyPK>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <ExtType>AutoFull</ExtType>
     <DoWay>0</DoWay>
     <AttrOfOper>C</AttrOfOper>
@@ -1507,14 +1507,14 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>AutoFullDtlField_CCFrm_TEST_PingJun</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <MyPK>AutoFullDtlField_CCFrm_TEST2_PingJun</MyPK>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <ExtType>AutoFullDtlField</ExtType>
     <DoWay>0</DoWay>
     <AttrOfOper>PingJun</AttrOfOper>
     <AttrsOfActive />
     <FK_DBSrc />
-    <Doc>CCFrm_TESTDtl1.DanJia.Avg</Doc>
+    <Doc>CCFrm_TEST2Dtl1.DanJia.Avg</Doc>
     <Tag />
     <Tag1 />
     <Tag2 />
@@ -1527,8 +1527,8 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>AutoFull_CCFrm_TEST_T3</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <MyPK>AutoFull_CCFrm_TEST2_T3</MyPK>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <ExtType>AutoFull</ExtType>
     <DoWay>0</DoWay>
     <AttrOfOper>T3</AttrOfOper>
@@ -1547,8 +1547,8 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>AutoFull_CCFrm_TEST_J3</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <MyPK>AutoFull_CCFrm_TEST2_J3</MyPK>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <ExtType>AutoFull</ExtType>
     <DoWay>0</DoWay>
     <AttrOfOper>J3</AttrOfOper>
@@ -1567,8 +1567,8 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>AutoFull_CCFrm_TEST_D3</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <MyPK>AutoFull_CCFrm_TEST2_D3</MyPK>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <ExtType>AutoFull</ExtType>
     <DoWay>0</DoWay>
     <AttrOfOper>D3</AttrOfOper>
@@ -1587,8 +1587,8 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>AutoFull_CCFrm_TEST_X4</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <MyPK>AutoFull_CCFrm_TEST2_X4</MyPK>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <ExtType>AutoFull</ExtType>
     <DoWay>0</DoWay>
     <AttrOfOper>X4</AttrOfOper>
@@ -1607,8 +1607,8 @@
     <PRI>0</PRI>
   </Sys_MapExt>
   <Sys_MapExt>
-    <MyPK>AutoFull_CCFrm_TEST_Y4</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <MyPK>AutoFull_CCFrm_TEST2_Y4</MyPK>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <ExtType>AutoFull</ExtType>
     <DoWay>0</DoWay>
     <AttrOfOper>Y4</AttrOfOper>
@@ -1628,7 +1628,7 @@
   </Sys_MapExt>
   <Sys_FrmLab>
     <MyPK>F9A51007-11A2-9D42-3A56-2E37D2461469</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>从表1</Text>
     <X>75</X>
     <Y>175</Y>
@@ -1642,7 +1642,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>19EC22EF-AF13-FDC0-4E37-21AE3C1AE4E5</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>从表数量合计</Text>
     <X>30</X>
     <Y>369</Y>
@@ -1656,7 +1656,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>D4147991-85DD-51A6-6FFF-3D29158CE4FF</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text />
     <X>287.5</X>
     <Y>420.5</Y>
@@ -1670,7 +1670,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>D0583F78-F3E6-644B-C772-7D95654D5AE4</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>=</Text>
     <X>430.5</X>
     <Y>425.5</Y>
@@ -1684,7 +1684,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>727479C2-A2D4-2501-DBD7-0089CE94F18D</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>=</Text>
     <X>429.5</X>
     <Y>509</Y>
@@ -1698,7 +1698,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>C98F71E6-3509-49C4-E5CA-2D04E6BD6726</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>×</Text>
     <X>278.5</X>
     <Y>505.5</Y>
@@ -1712,7 +1712,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>4E58B83E-608D-E25B-1E93-A73CF21D3453</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>从表单价平均数</Text>
     <X>307.5</X>
     <Y>368</Y>
@@ -1726,7 +1726,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>EF63A6B4-7BA9-2231-3FEB-E48CDA40FE05</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>＋</Text>
     <X>275.5</X>
     <Y>424.5</Y>
@@ -1740,7 +1740,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>2F8CE3B6-55C2-E244-1B93-26B12F2C173A</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>－</Text>
     <X>275.9</X>
     <Y>464</Y>
@@ -1754,7 +1754,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>49A342CF-E991-FDE6-18DD-A1F1B782F378</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>=</Text>
     <X>430.17</X>
     <Y>463.67</Y>
@@ -1768,7 +1768,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>49BC6A8B-8A11-B0F7-9304-8CE22E1B6EC5</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>÷</Text>
     <X>282</X>
     <Y>552</Y>
@@ -1782,7 +1782,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>87066BC1-B4AF-4EF4-6069-E3329B8F47D6</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>=</Text>
     <X>429.5</X>
     <Y>550</Y>
@@ -1796,7 +1796,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>34AB7A06-0A41-3A8A-9161-83CDEC77D216</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>（</Text>
     <X>149.5</X>
     <Y>589</Y>
@@ -1810,7 +1810,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>339A78C1-C459-2B20-7653-6E941AB948C5</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>＋</Text>
     <X>277.5</X>
     <Y>596</Y>
@@ -1824,7 +1824,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>9CD02694-C463-9992-494A-4DA6FA99F923</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>）&amp;nbsp;×</Text>
     <X>391</X>
     <Y>591</Y>
@@ -1838,7 +1838,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>C7F94B75-2FFA-93B2-EDA8-3185553C1B09</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>=</Text>
     <X>530.63</X>
     <Y>594</Y>
@@ -1852,7 +1852,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>825BD755-28FF-245B-EC96-560597824697</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>×&amp;nbsp;（</Text>
     <X>263</X>
     <Y>633</Y>
@@ -1866,7 +1866,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>6DAC91F3-5521-DC0C-EBE4-9D43A758F095</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>－</Text>
     <X>394.5</X>
     <Y>633</Y>
@@ -1880,7 +1880,7 @@
   </Sys_FrmLab>
   <Sys_FrmLab>
     <MyPK>12254533-C178-0A68-484B-8C806ECE440E</MyPK>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <Text>）&amp;nbsp;=</Text>
     <X>514</X>
     <Y>635</Y>
@@ -1893,9 +1893,9 @@
     <IsItalic>0</IsItalic>
   </Sys_FrmLab>
   <Sys_MapDtl>
-    <No>CCFrm_TESTDtl1</No>
+    <No>CCFrm_TEST2Dtl1</No>
     <Name>从表1</Name>
-    <FK_MapData>CCFrm_TEST</FK_MapData>
+    <FK_MapData>CCFrm_TEST2</FK_MapData>
     <PTable />
     <GroupField />
     <RefPK />

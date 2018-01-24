@@ -599,7 +599,9 @@ namespace BP.WF.HttpHandler
                     drToNode.FK_Flow = flowNo;
                     drToNode.Node = int.Parse(nodes[0]);
                     drToNode.ToNode = int.Parse(nodes[1]);
-                    drToNode.Insert();
+
+                    drToNode.MyPK = drToNode.FK_Flow + "_" + drToNode.Node + "_" + drToNode.ToNode + "_" + drToNode.DirType;
+                    drToNode.Save();
                 }
             }
 
@@ -652,10 +654,8 @@ namespace BP.WF.HttpHandler
         public string Flow_ResetFlowVersion()
         {
             DBAccess.RunSQL("UPDATE WF_FLOW SET DType=0, FlowJson='' WHERE No='" + this.FK_Flow + "'");
-
             return "重置成功.";
         }
-
         /// <summary>
         /// 获取流程所有元素
         /// </summary>

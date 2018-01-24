@@ -2386,8 +2386,15 @@ namespace BP.WF.HttpHandler
 
                     //把文件临时保存到一个位置.
                     string temp = SystemConfig.PathOfTemp + "" + guid + ".tmp";
-
-                    file.SaveAs(temp);
+                    try
+                    {
+                        file.SaveAs(temp);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.IO.File.Delete(temp);
+                        file.SaveAs(temp);
+                    }
 
                   //  fu.SaveAs(temp);
 

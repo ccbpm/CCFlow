@@ -89,6 +89,8 @@ function newFlow() {
             $.messager.alert('错误', '信息填写不完整', 'error');
             return false;
         }
+
+        $("#mymask").show();
         //传入参数
         var params = {
             action: "NewFlow",
@@ -97,7 +99,7 @@ function newFlow() {
 
         //访问服务
         ajaxService(params, function (data) {
-
+            $("#mymask").hide();
             if (data.indexOf('err@') == 0) {
                 alert(data);
                 return;
@@ -1102,9 +1104,7 @@ function ShowSubDepts(node, treeid) {
 var treesObj;   //保存功能区处理对象
 
 $(function () {
-    $(".mymask").show();
     //InitUserInfo();
-
     var params = {
         action: "GetWebUserInfo"
     };
@@ -1127,8 +1127,6 @@ $(function () {
 
         treesObj = new FuncTrees("menuTab");
         treesObj.loadTrees();
-        //定义等待界面的位置
-        $(".mymaskContainer").offset({ left: ($(document).innerWidth() - 120) / 2, top: ($(document).innerHeight() - 50) / 2 });
         $(".mymask").hide();
     }, this);
 });

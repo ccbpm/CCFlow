@@ -730,7 +730,7 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState + " enName=" + self.enName + " pkval=" + self.pkval);
+                    alert("Entity_Init 系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState + " enName=" + self.enName + " pkval=" + self.pkval);
                 }
             });
         },
@@ -824,7 +824,7 @@ var Entity = (function () {
                     });
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    alert("Save 系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
                 }
             });
             return result;
@@ -853,7 +853,7 @@ var Entity = (function () {
                     setData(self);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    alert("Delete 系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
                 }
             });
             return result;
@@ -921,7 +921,7 @@ var Entity = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    result = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    result = "RetrieveFromDBSources err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
                     alert(result);
                 }
             });
@@ -976,7 +976,7 @@ var Entity = (function () {
                     string = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    string = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    string = "Entity.DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
                     alert(string);
                 }
             });
@@ -1245,7 +1245,7 @@ var Entities = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    alert("Entities_Init err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
                 }
             });
         },
@@ -1289,7 +1289,7 @@ var Entities = (function () {
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                    alert("RetrieveAll err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
                 }
             });
         }
@@ -1330,7 +1330,7 @@ var DBAccess = (function () {
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+                alert("RunSQL 系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
             }
         });
 
@@ -1580,7 +1580,7 @@ var HttpHandler = (function () {
                     jsonString = data;
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    jsonString = "err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
+                    jsonString = " Handler DoMethodReturnString err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState;
                     alert(jsonString);
                 }
             });
@@ -1642,7 +1642,7 @@ var WebUser = function () {
             }
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert("err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
+            alert("WebUser_Init err@系统发生异常, status: " + XMLHttpRequest.status + " readyState: " + XMLHttpRequest.readyState);
         }
     });
 

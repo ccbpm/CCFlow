@@ -102,7 +102,7 @@
             for (var i = 0; i < attrs.length; i++) {
                 var attr = attrs[i];
 				html += '<div class="form-group">';
-                html += 	"<label for='DDL_" + attr.Field + "'>" + attr.Name + "</label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "") + "</select>";
+                html += 	"&nbsp;<label for='DDL_" + attr.Field + "'>" + attr.Name + "</label><select class='form-control' name='DDL_" + attr.Field + "' ID='DDL_" + attr.Field + "'>" + InitDDLOperation(data, attr, "all") + "</select>";
 				html += '</div>';
             }
 
@@ -122,7 +122,7 @@
         function InitDDLOperation(frmData, mapAttr, defVal) {
 
             var operations = "";
-            operations += "<option value='all'>全部</option>";
+            operations += "<option value='all' selected='selected' >全部</option>";
 
             var ens = frmData[mapAttr.Field];
             for (var i = 0; i < ens.length; i++) {

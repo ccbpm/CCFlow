@@ -32,7 +32,10 @@ namespace CCFlow.WF.CCForm
         {
             get
             {
-                return this.Request.QueryString["FK_MapDtl"];
+                string _FK_MapDtl = this.Request.QueryString["FK_MapDtl"];
+                if (string.IsNullOrWhiteSpace(_FK_MapDtl))
+                    return this.Request.QueryString["EnsName"];
+                return _FK_MapDtl;
             }
         }
         protected void Page_Load(object sender, EventArgs e)
@@ -54,7 +57,7 @@ namespace CCFlow.WF.CCForm
                             continue;
                         break;
                     case "SelectItems":
-                        if (dtl.ImpModel == 0 )
+                        if (dtl.ImpModel == 0)
                             continue;
                         break;
                     default:
@@ -107,7 +110,7 @@ namespace CCFlow.WF.CCForm
             {
                 GEDtls dtls = new GEDtls(this.FK_MapDtl);
 
-                switch(dtl.DtlOpenType)
+                switch (dtl.DtlOpenType)
                 {
                     case DtlOpenType.ForEmp:
                     case DtlOpenType.ForWorkID:
@@ -132,7 +135,7 @@ namespace CCFlow.WF.CCForm
                 this.Pub1.AddFieldSetEnd();
             }
 
-            if (dtl.ImpModel!=0)
+            if (dtl.ImpModel != 0)
             {
                 this.Pub1.AddFieldSet("通过Excel导入:" + dtl.Name);
                 this.Pub1.Add("下载数据模版:利用数据模板导出一个数据模板，您可以在此基础上进行数据编辑，把编辑好的信息<br>在通过下面的功能导入进来，以提高工作效率。");
@@ -161,7 +164,7 @@ namespace CCFlow.WF.CCForm
                 this.Pub1.AddFieldSetEnd();
             }
 
-            if (dtl.ImpModel !=0)
+            if (dtl.ImpModel != 0)
             {
                 this.Pub1.AddFieldSet("从数据源导入:" + dtl.Name);
                 this.Pub1.Add("进入列表，选择一个或者多个记录，然后点确定按钮，执行导入。");

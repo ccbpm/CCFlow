@@ -234,6 +234,10 @@
                 iconCls: '',
                 closable: false
             });
+            if (data.CustomerNo == "TianYe" || data.CustomerNo == "TianYe1") {
+                $("#Login2App").html("");
+            }
+           // alert(data.CustomerNo);
         });
 
         function closeTab(title) {
@@ -503,6 +507,10 @@
 
         //登录,判断为天业BPM，转向到天业新版界面
         function Login2App() {
+
+            window.location.href = "../../AppClassic/Login.htm?DoType=Logout";
+            return;
+
             $.ajax({
                 type: 'post',
                 async: true,
@@ -564,7 +572,7 @@
         <div id="tabs" class="easyui-tabs" fit="true" border="false" data-options="tools:'#tab-tools',onBeforeClose:EventListener_TabClose,onClose:EventListener_TabCloseed">
         </div>
         <div id="tab-tools">
-            <a href="#" class="easyui-linkbutton" data-options="plain:true" onclick="Login2App()">
+            <a href="#" class="easyui-linkbutton" id="Login2App" data-options="plain:true" onclick="Login2App()">
                 <b style="color: Blue;">
                     <img alt='使用普通用户,登录前台demo系统' src='../../AppClassic/Img/Key.png' style="width: 14px;height: 14px;" />登录前台 
                 </b>

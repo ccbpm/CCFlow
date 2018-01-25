@@ -1151,21 +1151,13 @@ namespace BP.WF
             if (this.BillNoFormat.Length > 3)
             {
                 string billNoFormat = this.BillNoFormat.Clone() as string;
-
-                //if (billNoFormat.Contains("@"))
-                //{
-                //    foreach (string str in paras.Keys)
-                //        billNoFormat = billNoFormat.Replace("@" + str, paras[str].ToString());
-                //}
-
                 //生成单据编号.
                 rpt.BillNo = BP.WF.WorkFlowBuessRole.GenerBillNo(billNoFormat, rpt.OID, rpt, this.PTable);
-                //rpt.Update(GERptAttr.BillNo, rpt.BillNo);
                 if (wk.Row.ContainsKey(GERptAttr.BillNo) == true)
                 {
                     wk.SetValByKey(NDXRptBaseAttr.BillNo, rpt.BillNo);
-                    // wk.Update(GERptAttr.BillNo, rpt.BillNo);
                 }
+                rpt.Update();
             }
             #endregion 处理单据编号.
 
@@ -1223,17 +1215,8 @@ namespace BP.WF
             #region 给generworkflow初始化数据. add 2015-08-06
             GenerWorkFlow mygwf = new GenerWorkFlow();
             mygwf.WorkID = wk.OID;
-            mygwf.Title = rpt.Title;
-
-            if (mygwf.Title.Contains("@") == true)
-                mygwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, rpt);
-
             if (mygwf.RetrieveFromDBSources() == 0)
             {
-                mygwf.Starter = WebUser.No;
-                mygwf.StarterName = WebUser.Name;
-                mygwf.FK_Dept = BP.Web.WebUser.FK_Dept;
-                mygwf.DeptName = BP.Web.WebUser.FK_DeptName;
                 mygwf.FK_Flow = this.No;
                 mygwf.FK_FlowSort = this.FK_FlowSort;
                 mygwf.SysType = this.SysType;
@@ -1241,32 +1224,27 @@ namespace BP.WF
                 mygwf.WorkID = wk.OID;
                 mygwf.WFState = WFState.Blank;
                 mygwf.FlowName = this.Name;
-                mygwf.RDT = BP.DA.DataType.CurrentDataTime;
-
-                if (string.IsNullOrEmpty(PNodeIDStr) == false && string.IsNullOrEmpty(PWorkIDStr) == false)
-                {
-                    if (string.IsNullOrEmpty(PFIDStr) == false)
-                        mygwf.PFID = Int64.Parse(PFIDStr);
-                    mygwf.PEmp = rpt.PEmp;
-                    mygwf.PFlowNo = rpt.PFlowNo;
-                    mygwf.PNodeID = rpt.PNodeID;
-                    mygwf.PWorkID = rpt.PWorkID;
-                }
                 mygwf.Insert();
             }
-            else
+            mygwf.Starter = WebUser.No;
+            mygwf.StarterName = WebUser.Name;
+            mygwf.FK_Dept = BP.Web.WebUser.FK_Dept;
+            mygwf.DeptName = BP.Web.WebUser.FK_DeptName;
+            mygwf.RDT = BP.DA.DataType.CurrentDataTime;
+            mygwf.Title = rpt.Title;
+            mygwf.BillNo = rpt.BillNo;
+            if (mygwf.Title.Contains("@") == true)
+                mygwf.Title = BP.WF.WorkFlowBuessRole.GenerTitle(this, rpt);
+            if (string.IsNullOrEmpty(PNodeIDStr) == false && string.IsNullOrEmpty(PWorkIDStr) == false)
             {
-                if (string.IsNullOrEmpty(PNodeIDStr) == false && string.IsNullOrEmpty(PWorkIDStr) == false)
-                {
-                    if (string.IsNullOrEmpty(PFIDStr) == false)
-                        mygwf.PFID = Int64.Parse(PFIDStr);
-                    mygwf.PEmp = rpt.PEmp;
-                    mygwf.PFlowNo = rpt.PFlowNo;
-                    mygwf.PNodeID = rpt.PNodeID;
-                    mygwf.PWorkID = rpt.PWorkID;
-                    mygwf.DirectUpdate();
-                }
+                if (string.IsNullOrEmpty(PFIDStr) == false)
+                    mygwf.PFID = Int64.Parse(PFIDStr);
+                mygwf.PEmp = rpt.PEmp;
+                mygwf.PFlowNo = rpt.PFlowNo;
+                mygwf.PNodeID = rpt.PNodeID;
+                mygwf.PWorkID = rpt.PWorkID;
             }
+            mygwf.DirectUpdate();
             #endregion 给 generworkflow 初始化数据.
 
             return wk;

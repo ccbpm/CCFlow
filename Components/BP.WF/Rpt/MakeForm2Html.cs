@@ -1264,10 +1264,10 @@ namespace BP.WF
 
                     //替换模版尾部的打印说明信息.
                     string pathInfo = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\EndInfo\\" + flowNo + ".txt";
-                    if (System.IO.File.Exists(pathInfo) == true)
-                        docs = docs.Replace("@EndInfo", DataType.ReadTextFile(pathInfo));
-                    else
-                        docs = docs.Replace("@EndInfo", "");
+                    if (System.IO.File.Exists(pathInfo) == false)
+                        pathInfo = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\Template\\EndInfo\\Default.txt";
+
+                    docs = docs.Replace("@EndInfo", DataType.ReadTextFile(pathInfo));
                 }
 
                 string indexFile = SystemConfig.PathOfDataUser + "\\InstancePacketOfData\\" + frmID + "\\" + workid + "\\index.htm";

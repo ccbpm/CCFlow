@@ -377,7 +377,7 @@ namespace BP.WF.HttpHandler
             //从待办里移除.
             BP.Port.Emp myemp = new BP.Port.Emp(this.FK_Emp);
             string str = gwf.TodoEmps;
-            str = str.Replace(";" + myemp.Name + ";", "");
+            str = str.Replace(myemp.Name + ";", "");
             gwf.TodoEmps = str;
             gwf.Update();
 

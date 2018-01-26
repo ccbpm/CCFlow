@@ -83,8 +83,6 @@ namespace BP.App_Ctrl
                 }
             }
         }
-
-
         /// <summary>
         /// 直接将Sql语句（格式：id+name，两个字段）
         /// </summary>

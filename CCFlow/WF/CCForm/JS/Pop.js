@@ -93,6 +93,10 @@ function PopBranchesAndLeaf(mapExt) {
                         var mtags = $("#" + mapExt.AttrOfOper + "_mtags")
                         mtags.mtags("loadData", selectedRows);
                         $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
+						// 单选复制当前表单
+						if (selectedRows.length == 1) {
+							ValSetter(mapExt.Tag4, selectedRows[0].No);
+						}
                     }
                 }
             }, null, function () {
@@ -331,6 +335,11 @@ function PopGroupList_Done(mapExt) {
                     var selectVals = savefn();
                     $("#TB_" + mapExt.AttrOfOper).val(selectVals);
                 }
+				// 单选复制当前表单
+				var selectType = mapExt.GetPara("SelectType");
+				if (selectType == "0" && selectVals.length == 1) {
+					ValSetter(mapExt.Tag4, selectVals[0]);
+				}
             }
         }, null, function () {
 

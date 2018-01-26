@@ -378,7 +378,16 @@
                     var dbDtl = data["DBDtl"]; //从表数据.
 
                     $('#dtlDiv div table tbody').html('');//清空表格数据
-                    var sys_mapAttr = data["Sys_MapAttr"];
+
+					if (sys_MapDtl.ShowCols) {
+						var ShowCols = sys_MapDtl.ShowCols.split("@");
+						$.each(sys_mapAttr, function (i, o) {
+							if (o.UIVisible == 1 && ShowCols.indexOf(o.KeyOfEn) == -1) {
+								o.UIVisible = 0;
+							}
+						});
+					}
+
 					// 表头start --------------------
                     if ($('#dtlDiv div table thead tr').length == 0) {
                         var threadTr = $('<tr data-data="true"></tr>');

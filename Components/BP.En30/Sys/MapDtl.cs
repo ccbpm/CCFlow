@@ -1344,6 +1344,12 @@ namespace BP.Sys
                 //add 2014-02-21.
                 map.AddTBInt(MapDtlAttr.FK_Node, 0, "节点(用户独立表单权限控制)", false, false);
 
+
+                //要显示的列.
+                map.AddTBString(MapDtlAttr.ShowCols, null, "显示的列", true, false, 0, 500, 20, true);
+                map.SetHelperAlert(MapDtlAttr.ShowCols, "默认为空,全部显示,如果配置了就按照配置的计算,格式为:field1,field2");
+
+
                 #region 导入导出填充.
                 // 2014-07-17 for xinchang bank.
                 map.AddBoolean(MapDtlAttr.IsExp, true, "IsExp", false, false);

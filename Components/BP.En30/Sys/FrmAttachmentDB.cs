@@ -461,7 +461,7 @@ namespace BP.Sys
             }
             catch
             {
-                tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
+                //  tempFile = SystemConfig.PathOfTemp + System.Guid.NewGuid() + this.FileName;
             }
 
             FtpSupport.FtpConnection conn = new FtpSupport.FtpConnection(SystemConfig.FTPServerIP,

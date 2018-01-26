@@ -951,16 +951,12 @@ namespace BP.WF.Template
                 //map.AddBoolean(MapDtlAttr.IsEnableM2M, false, "是否启用M2M", true, true);
                 //map.AddBoolean(MapDtlAttr.IsEnableM2MM, false, "是否启用M2M2", true, true);
 
-
                 map.AddDDLSysEnum(MapDtlAttr.WhenOverSize, 0, "超出行数", true, true,MapDtlAttr.WhenOverSize, "@0=不处理@1=向下顺增行@2=次页显示");
 
                 // 为浙商银行设置从表打开.翻译.
                 map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", true, true,MapDtlAttr.ListShowModel, "@0=表格@1=卡片");
                 map.AddDDLSysEnum(MapDtlAttr.RowShowModel, 0, "编辑数据方式", true, true, MapDtlAttr.RowShowModel, "@0=无@1=傻瓜表单@2=自由表单");
                 map.SetHelperAlert(MapDtlAttr.RowShowModel, "格式为:第1种类型就要新建行,其他类型新建的时候弹出卡片.");
-
-              
-
 
                 //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
                 //map.AddTBFloat(MapDtlAttr.Y, 5, "距上", false, false);

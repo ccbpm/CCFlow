@@ -262,12 +262,10 @@ namespace BP.WF.Port
                  
                 map.AddTBMyNum();
 
-
                 //查询条件.
                 map.AddSearchAttr(AdminEmpAttr.UseSta);
                 map.AddSearchAttr(AdminEmpAttr.UserType);
                 map.AddSearchAttr(AdminEmpAttr.OrgNo);
-
 
 
                 RefMethod rm = new RefMethod();

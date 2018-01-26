@@ -106,7 +106,6 @@ namespace BP.WF.Template
                 map.AddTBString(NodeYGFlowAttr.CondExp, null, "条件表达式", true, false, 0, 500, 20, true);
                 map.AddTBInt(NodeYGFlowAttr.Idx, 0, "显示顺序", true, false);
 
-
                 this._enMap = map;
                 return this._enMap;
             }

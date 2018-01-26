@@ -366,12 +366,11 @@ namespace BP.WF.HttpHandler
                 GenerWorkerListAttr.FK_Node, this.FK_Node);
 
             //如果已经没有会签待办了,就设置当前人员状态为0.  增加这部分.
-            string sql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID='" + this.WorkID + "' AND IsPass=0";
+            string sql = "SELECT COUNT(WorkID) FROM WF_GenerWorkerList WHERE FK_Node=" + this.FK_Node + " AND WorkID='" + this.WorkID + "' AND IsPass=0 ";
             if (DBAccess.RunSQLReturnValInt(sql) == 0)
             {
-                gwf.HuiQianTaskSta = HuiQianTaskSta.HuiQianing; //设置为会签状态. 不能设置会签完成,不然其他的就没有办法处理了.
+                gwf.HuiQianTaskSta = HuiQianTaskSta.None; //设置为 None . 不能设置会签完成,不然其他的就没有办法处理了.
                 gwf.Update();
-
                 DBAccess.RunSQL("UPDATE WF_GenerWorkerList SET IsPass=0 WHERE FK_Node=" + this.FK_Node + " AND WorkID=" + this.WorkID + " AND FK_Emp='" + WebUser.No + "'");
             }
 

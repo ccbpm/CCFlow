@@ -258,6 +258,7 @@ namespace BP.WF.HttpHandler
             dt.Columns.Add("ValueField", typeof(string));
             dt.Columns.Add("TextField", typeof(string));
             dt.Columns.Add("ParentField", typeof(string));
+            dt.Columns.Add("W", typeof(string));
             string[] ctrls = md.RptSearchKeys.Split('*');
             DataTable dtNoName = null;
 
@@ -275,13 +276,13 @@ namespace BP.WF.HttpHandler
                 row["Id"] = ctrl;
                 row["Name"] = ar.Name;
                 row["DataType"] = ar.MyDataType;
+                row["W"] = ar.UIWidth; //宽度.
 
                 switch (ar.UIContralType)
                 {
                     case UIContralType.DDL:
                         row["Type"] = "combo";
                         fcid = "DDL_" + ar.KeyOfEn;
-
                         if (vals.ContainsKey(fcid))
                         {
                             if (vals[fcid] == "mvals")

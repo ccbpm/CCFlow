@@ -381,7 +381,7 @@ function Save() {
     });
 }
 
-//退回工作
+//调用后，就关闭刷新按钮.
 function returnWorkWindowClose(data) {
 
     if (data == "" || data == "取消") {

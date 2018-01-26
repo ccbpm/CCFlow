@@ -130,11 +130,21 @@
                 url: Handler + "?DoType=DoReturnWork&FK_Flow=" + pageData.FK_Flow + "&WorkID=" + pageData.WorkID + "&FID=" + pageData.FID + "&FK_Node=" + pageData.FK_Node + "&ReturnToNode=" + selectedNodeID + '&ReturnInfo=' + escape($('#TB_Doc').val()) + "&IsBack=" + isBack + "&m=" + Math.random(),
                 dataType: 'html',
                 success: function (data) {
+
                     if (window.parent != null && window.parent.returnWorkWindowClose != null) {
                         window.parent.returnWorkWindowClose(data);
+                    } else if (window.opener != undefined && window.opener.returnWorkWindowClose != undefined) {
+                        window.opener.returnWorkWindowClose(data);
                     } else {
-                        $('body').append($('<div>'+data+'</div>'));
+                        $('body').append($('<div>' + data + '</div>'));
+                        $('#btnOk').attr('disabled', true);
                     }
+
+//                    if (window.parent != null && window.parent.returnWorkWindowClose != null) {
+//                        window.parent.returnWorkWindowClose(data);
+//                    } else {
+//                        $('body').append($('<div>'+data+'</div>'));
+//                    }
                 }
             });
             $(".foot").hide();

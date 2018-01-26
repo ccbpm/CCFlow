@@ -84,238 +84,246 @@
                 pageSize: $("#dg").datagrid("options").pageSize
             };
 
-            Handler_AjaxQueryData(param, function (data) {
+            //调用查询返回数据.
+            var handler = new HttpHandler("BP.WF.HttpHandler.WF_RptDfine");
+            handler.AddPara("SearchType", searchType);
+            handler.AddPara("FK_Flow", fk_flow);
+            handler.AddPara("pageSize", $("#dg").datagrid("options").pageSize);
+            var data = handler.DoMethodReturnString("FlowSearch_Init");
 
-                if (data.indexOf("err@") != -1) {
-                    $.messager.alert("错误", data, "icon-error");
+            if (data.indexOf("err@") != -1) {
+                $.messager.alert("错误", data, "icon-error");
+                return;
+            }
+
+            var d = sinfo = eval("(" + data + ")");
+            md = d.Sys_MapData[0];
+
+            if (md.RptIsSearchKey == "1") {
+                $("#tb_main").prepend('<span class="con-span">关键字:</span><input type="text" id="tb_key" style="width:90px;" />');
+                $("#tb_key").textbox().textbox("setText", md.T_SearchKey);
+            }
+
+            if (md.RptDTSearchWay && md.RptDTSearchWay != 0) {
+
+                var dtLen = '100px';
+                if (md.RptDTSearchWay == 2) {
+                    var dtLen = '130px';
+                }
+
+
+                $("#btn_search").before('<span class="con-span">' + md.T_DateLabel + ',从: </span><input type="text" id="tb_dtFrom" style="width:' + dtLen + ';" />');
+                $("#tb_dtFrom").after('&nbsp;到:<input type="text" id="tb_dtTo" style="width:' + dtLen + ';" />');
+
+                if (md.RptDTSearchWay == 1) {
+                    $("#tb_dtFrom").datebox({ buttons: buttons }).datebox("setValue", md.T_DTFrom);
+                    $("#tb_dtTo").datebox({ buttons: buttons }).datebox("setValue", md.T_DTTo);
+                }
+                else {
+                    $("#tb_dtFrom").datetimebox().datetimebox("setValue", md.T_DTFrom);
+                    $("#tb_dtTo").datetimebox().datetimebox("setValue", md.T_DTTo);
+                }
+            }
+
+            $("#btn_search").show();
+            $("#btn_export").show();
+
+            if (md.RptIsSearchKey == "1" || (md.RptDTSearchWay && md.RptDTSearchWay != 0) || d.FilterCtrls.length > 0) {
+                $("#btn_reset").show();
+            }
+
+            $("#btn_export").linkbutton({
+                onClick: function () {
+                    window.open('../Do.htm?ActionType=DownFlowSearchExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
+                }
+            });
+
+            if (md.T_RptExportToTmp == "1") {
+                $("#btn_export").after(' <a href="javascript:void(0)" iconCls="icon-excel" id="btn_exportToTmp">导出至模板</a>');
+                $("#btn_exportToTmp").linkbutton({
+                    onClick: function () {
+                        window.open('../Do.htm?ActionType=DownFlowSearchToTmpExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
+                    }
+                });
+            }
+
+            $("#btn_reset").after('<span class="menu_sep"></span><a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
+            $("#btn_more").linkbutton();
+            $(".more").click(function () {
+                $(this).closest(".conditions").siblings().toggleClass("hide");
+                $("#dg").datagrid("resize");
+            });
+
+            //filters
+            var ctrl;
+            var fcId;
+
+            $.each(d.FilterCtrls, function (idx, c) {
+
+                ctrl = '&nbsp;' + c.Name + ':';
+                //ctrl = '<span class="con-span">' + c.Name + ':</span>';
+                switch (c.Type) {
+                    case "date":
+                        fcId = "D_" + c.Id;
+                        ctrl += '<input type="text" id="' + fcId + '" style="width:150px;" />';
+                        $("#filters").append(ctrl);
+                        $("#" + fcId).datebox({ buttons: buttons }).datebox("setValue", c.DefaultValue);
+                        FilterCtrls.push({ type: c.Type, id: fcId });
+                        break;
+                    case "datetime":
+                        fcId = "DT_" + c.Id;
+                        ctrl += '<input type="text" id="' + fcId + '" style="width:150px;" />';
+                        $("#filters").append(ctrl);
+                        $("#" + fcId).datetimebox().datetimebox("setValue", c.DefaultValue);
+                        FilterCtrls.push({ type: c.Type, id: fcId });
+                        break;
+                    case "text":
+                        ctrl += '<input type="text" id="' + fcId + '" style="width:"' + c.W + '"px;" />';
+                        $("#filters").append(ctrl);
+                        $("#" + fcId).textbox({
+                            icons: [{
+                                iconCls: 'icon-clear',
+                                handler: function (e) {
+                                    $(e.data.target).textbox('clear');
+                                }
+                            }]
+                        }).textbox("setText", c.DefaultValue);
+                        FilterCtrls.push({ type: c.Type, id: fcId });
+                        break;
+                    case "combo":
+                        fcId = "DDL_" + c.Id;
+                        ctrl += '<select id="' + fcId + '" style="width:150px;">';
+
+                        $.each(d[c.Id], function (idx1, item) {
+                            ctrl += '<option value="' + item[c.ValueField] + '">' + item[c.TextField] + '</option>';
+                        });
+
+                        ctrl += '</select>';
+                        $("#filters").append(ctrl);
+                        $("#" + fcId).combobox({
+                            multiple: true,
+                            onSelect: function (d) {
+                                var cmb = $(this);
+                                var vals = cmb.combobox('getValues');
+
+                                if (d.value == "all") {
+                                    $.each(vals, function (idx2, val) {
+                                        if (val == "all") {
+                                            return true;
+                                        }
+
+                                        cmb.combobox("unselect", val);
+                                    });
+                                }
+                                else {
+                                    cmb.combobox("unselect", "all");
+                                }
+                            }
+                        });
+
+                        if (c.DefaultValue) {
+                            if (c.DefaultValue.indexOf('..') != -1) {
+                                var vals = [];
+                                $.each(d[c.Id], function (idx1, item) {
+                                    if (c.DefaultValue.indexOf('.' + item[c.ValueField] + '.') != -1) {
+                                        vals.push(item[c.ValueField]);
+                                    }
+                                });
+
+                                $("#" + fcId).combobox("setValues", vals);
+                            }
+                            else {
+                                $("#" + fcId).combobox("setValue", c.DefaultValue);
+                            }
+                        }
+
+                        FilterCtrls.push({ type: c.Type, id: fcId });
+                        break;
+                    case "combotree":
+                        fcId = "DDL_" + c.Id;
+                        ctrl += '<select id="' + fcId + '" style="width:150px;"></select>';
+                        $("#filters").append(ctrl);
+                        $("#" + fcId).combotree({
+                            checkbox: true,
+                            multiple: true,
+                            data: d[c.Id]
+                        });
+
+                        if (c.DefaultValue) {
+                            if (c.DefaultValue.indexOf('..') != -1) {
+                                var vals = [];
+                                $.each(d[c.Id], function (idx1, item) {
+                                    if (c.DefaultValue.indexOf('.' + item[c.ValueField] + '.') != -1) {
+                                        vals.push(item[c.ValueField]);
+                                    }
+                                });
+
+                                $("#" + fcId).combotree("setValues", vals);
+                            }
+                            else {
+                                $("#" + fcId).combotree("setValue", c.DefaultValue);
+                            }
+                        }
+
+                        FilterCtrls.push({ type: c.Type, id: fcId });
+                        break;
+                    case "checkbox":
+                        fcId = "CB_" + c.Id;
+                        ctrl += '<input id="' + fcId + '" type="checkbox" />';
+                        $("#filters").append(ctrl);
+                        $("#" + fcId)[0].checked = c.DefaultValue;
+                        FilterCtrls.push({ type: c.Type, id: fcId });
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+
+            //形成数据
+            var cols = [];
+
+            //增加列
+            $.each(d.Sys_MapAttr, function (idx, c) {
+                if (c.No == "OID") {
                     return;
                 }
 
-                var d = sinfo = eval("(" + data + ")");
-                md = d.Sys_MapData[0];
+                //var width = getColumnWidth(c.No, c.Name, d.MainData, c.Width);
+                var width = c.Width; // getColumnWidth(c.No, c.Name, d.MainData, c.Width);
+                if (c.No == "Title")
+                    width = 300;
 
-                if (md.RptIsSearchKey == "1") {
-                    $("#tb_main").prepend('<span class="con-span">关键字:</span><input type="text" id="tb_key" style="width:90px;" />');
-                    $("#tb_key").textbox().textbox("setText", md.T_SearchKey);
-                }
+                //alert(JSON.stringify(c));
+                //alert(width + c.Name);
 
-                if (md.RptDTSearchWay && md.RptDTSearchWay != 0) {
-
-                    var dtLen = '100px';
-                    if (md.RptDTSearchWay == 2) {
-                        var dtLen = '130px';
-                    }
-
-
-                    $("#btn_search").before('<span class="con-span">' + md.T_DateLabel + ',从: </span><input type="text" id="tb_dtFrom" style="width:' + dtLen + ';" />');
-                    $("#tb_dtFrom").after('&nbsp;到:<input type="text" id="tb_dtTo" style="width:' + dtLen + ';" />');
-
-                    if (md.RptDTSearchWay == 1) {
-                        $("#tb_dtFrom").datebox({ buttons: buttons }).datebox("setValue", md.T_DTFrom);
-                        $("#tb_dtTo").datebox({ buttons: buttons }).datebox("setValue", md.T_DTTo);
-                    }
-                    else {
-                        $("#tb_dtFrom").datetimebox().datetimebox("setValue", md.T_DTFrom);
-                        $("#tb_dtTo").datetimebox().datetimebox("setValue", md.T_DTTo);
-                    }
-                }
-
-                $("#btn_search").show();
-                $("#btn_export").show();
-
-                if (md.RptIsSearchKey == "1" || (md.RptDTSearchWay && md.RptDTSearchWay != 0) || d.FilterCtrls.length > 0) {
-                    $("#btn_reset").show();
-                }
-
-                $("#btn_export").linkbutton({
-                    onClick: function () {
-                        window.open('../Do.htm?ActionType=DownFlowSearchExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
-                    }
+                cols.push({
+                    title: c.Name,
+                    field: c.No,
+                    width: width
                 });
 
-                if (md.T_RptExportToTmp == "1") {
-                    $("#btn_export").after(' <a href="javascript:void(0)" iconCls="icon-excel" id="btn_exportToTmp">导出至模板</a>');
-                    $("#btn_exportToTmp").linkbutton({
-                        onClick: function () {
-                            window.open('../Do.htm?ActionType=DownFlowSearchToTmpExcel&SearchType=' + searchType + '&FK_Flow=' + fk_flow, '_blank');
-                        }
-                    });
+                if (c.No == "Title") {
+                    cols[cols.length - 1].formatter = function (value, row, index) {
+                        return '<a href="javascript:void(0)" onclick="ViewFlow(' + index + ')">' + value + '</a>';
+                    }
                 }
+            });
 
-                if (d.FilterCtrls.length > 0) {
-                    $("#btn_reset").after('<span class="menu_sep"></span><a href="javascript:void(0)" class="more" iconCls="icon-more" id="btn_more">更多</a>');
-                    $("#btn_more").linkbutton();
+            $("#dg").datagrid({
+                columns: [cols],
+                resizable: true
+                //, fitColumns: true
+            });
+            LoadData(d.MainData, md.T_total, $("#dg").datagrid("options").pageSize, 1);
 
-                    $(".more").click(function () {
-                        $(this).closest(".conditions").siblings().toggleClass("hide");
-                        $("#dg").datagrid("resize");
-                    });
-
-                    //filters
-                    var ctrl;
-                    var fcId;
-                    $.each(d.FilterCtrls, function (idx, c) {
-
-                        ctrl = '&nbsp;' + c.Name + ':';
-
-                        //ctrl = '<span class="con-span">' + c.Name + ':</span>';
-
-                        switch (c.Type) {
-                            case "date":
-                                fcId = "D_" + c.Id;
-                                ctrl += '<input type="text" id="' + fcId + '" style="width:150px;" />';
-                                $("#filters").append(ctrl);
-                                $("#" + fcId).datebox({ buttons: buttons }).datebox("setValue", c.DefaultValue);
-                                FilterCtrls.push({ type: c.Type, id: fcId });
-                                break;
-                            case "datetime":
-                                fcId = "DT_" + c.Id;
-                                ctrl += '<input type="text" id="' + fcId + '" style="width:150px;" />';
-                                $("#filters").append(ctrl);
-                                $("#" + fcId).datetimebox().datetimebox("setValue", c.DefaultValue);
-                                FilterCtrls.push({ type: c.Type, id: fcId });
-                                break;
-                            case "text":
-                              //  fcId = "TB_" + c.Id;
-
-                                ctrl += '<input type="text" id="' + fcId + '" style="width:"' + c.UIWith + '"px;" />';
-                                $("#filters").append(ctrl);
-                                $("#" + fcId).textbox({
-                                    icons: [{
-                                        iconCls: 'icon-clear',
-                                        handler: function (e) {
-                                            $(e.data.target).textbox('clear');
-                                        }
-                                    }]
-                                }).textbox("setText", c.DefaultValue);
-                                FilterCtrls.push({ type: c.Type, id: fcId });
-                                break;
-                            case "combo":
-                                fcId = "DDL_" + c.Id;
-                                ctrl += '<select id="' + fcId + '" style="width:150px;">';
-
-                                $.each(d[c.Id], function (idx1, item) {
-                                    ctrl += '<option value="' + item[c.ValueField] + '">' + item[c.TextField] + '</option>';
-                                });
-
-                                ctrl += '</select>';
-                                $("#filters").append(ctrl);
-                                $("#" + fcId).combobox({
-                                    multiple: true,
-                                    onSelect: function (d) {
-                                        var cmb = $(this);
-                                        var vals = cmb.combobox('getValues');
-
-                                        if (d.value == "all") {
-                                            $.each(vals, function (idx2, val) {
-                                                if (val == "all") {
-                                                    return true;
-                                                }
-
-                                                cmb.combobox("unselect", val);
-                                            });
-                                        }
-                                        else {
-                                            cmb.combobox("unselect", "all");
-                                        }
-                                    }
-                                });
-
-                                if (c.DefaultValue) {
-                                    if (c.DefaultValue.indexOf('..') != -1) {
-                                        var vals = [];
-                                        $.each(d[c.Id], function (idx1, item) {
-                                            if (c.DefaultValue.indexOf('.' + item[c.ValueField] + '.') != -1) {
-                                                vals.push(item[c.ValueField]);
-                                            }
-                                        });
-
-                                        $("#" + fcId).combobox("setValues", vals);
-                                    }
-                                    else {
-                                        $("#" + fcId).combobox("setValue", c.DefaultValue);
-                                    }
-                                }
-
-                                FilterCtrls.push({ type: c.Type, id: fcId });
-                                break;
-                            case "combotree":
-                                fcId = "DDL_" + c.Id;
-                                ctrl += '<select id="' + fcId + '" style="width:150px;"></select>';
-                                $("#filters").append(ctrl);
-                                $("#" + fcId).combotree({
-                                    checkbox: true,
-                                    multiple: true,
-                                    data: d[c.Id]
-                                });
-
-                                if (c.DefaultValue) {
-                                    if (c.DefaultValue.indexOf('..') != -1) {
-                                        var vals = [];
-                                        $.each(d[c.Id], function (idx1, item) {
-                                            if (c.DefaultValue.indexOf('.' + item[c.ValueField] + '.') != -1) {
-                                                vals.push(item[c.ValueField]);
-                                            }
-                                        });
-
-                                        $("#" + fcId).combotree("setValues", vals);
-                                    }
-                                    else {
-                                        $("#" + fcId).combotree("setValue", c.DefaultValue);
-                                    }
-                                }
-
-                                FilterCtrls.push({ type: c.Type, id: fcId });
-                                break;
-                            case "checkbox":
-                                fcId = "CB_" + c.Id;
-                                ctrl += '<input id="' + fcId + '" type="checkbox" />';
-                                $("#filters").append(ctrl);
-                                $("#" + fcId)[0].checked = c.DefaultValue;
-                                FilterCtrls.push({ type: c.Type, id: fcId });
-                                break;
-                            default:
-                                break;
-                        }
-                    });
+            //btn events
+            $("#btn_search").linkbutton({
+                onClick: function () {
+                    Search($("#dg").datagrid("options").pageSize, 1);
                 }
+            });
 
-                //形成数据
-                var cols = [];
-
-                //增加列
-                $.each(d.Sys_MapAttr, function (idx, c) {
-                    if (c.No == "OID") {
-                        return;
-                    }
-                    var width = getColumnWidth(c.No, c.Name, d.MainData, c.Width);
-                    cols.push({
-                        title: c.Name,
-                        field: c.No,
-                        width: width
-                    });
-
-                    if (c.No == "Title") {
-                        cols[cols.length - 1].formatter = function (value, row, index) {
-                            return '<a href="javascript:void(0)" onclick="ViewFlow(' + index + ')">' + value + '</a>';
-                        }
-                    }
-                });
-
-                $("#dg").datagrid({
-                    columns: [cols],
-                    resizable: true
-                    //, fitColumns: true
-                });
-                LoadData(d.MainData, md.T_total, $("#dg").datagrid("options").pageSize, 1);
-
-                //btn events
-                $("#btn_search").linkbutton({
-                    onClick: function () {
-                        Search($("#dg").datagrid("options").pageSize, 1);
-                    }
-                });
-            }, this);
         });
 
         function getColumnWidth(field, title, datas, defaultWidth) {
@@ -331,8 +339,9 @@
             if ($.isArray(datas)) {
                 $.each(datas, function (i, o) {
                     var data = o[field];
+
                     if (typeof data == "string") {
-                        width.push(data.length);
+                        width.push(data.UIWidth);
                     } else {
                         width.push(String(data).length);
                     }
@@ -526,8 +535,13 @@
     <div id="tb" style="padding: 0 15px;">
         <div class="conditions" id="tb_main">
             <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-search"
-               id="btn_search" style="display:none; margin-left:5px;">查询</a> <a href="javascript:void(0)" class="easyui-linkbutton"
-               iconcls="icon-reset" id="btn_reset" style="display:none;" onclick="Reset()">重置</a><span class="menu_sep"></span><a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-excel" id="btn_export" style="display:none;">导出</a>
+               id="btn_search" style="display:none; margin-left:5px;">查询</a>
+               
+                <a href="javascript:void(0)" class="easyui-linkbutton"
+               iconcls="icon-reset" id="btn_reset" style="display:none;" onclick="Reset()">重置</a>
+               <span class="menu_sep"></span>
+               
+               <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-excel" id="btn_export" style="display:none;">导出</a>
         </div>
         <div class="conditions hide" id="filters">
         </div>

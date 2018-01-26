@@ -289,11 +289,9 @@
                     return;
                 }
 
-                //var width = getColumnWidth(c.No, c.Name, d.MainData, c.Width);
                 var width = c.Width; // getColumnWidth(c.No, c.Name, d.MainData, c.Width);
                 if (c.No == "Title")
                     width = 300;
-
                 //alert(JSON.stringify(c));
                 //alert(width + c.Name);
 
@@ -325,37 +323,6 @@
             });
 
         });
-
-        function getColumnWidth(field, title, datas, defaultWidth) {
-            if (!field) {
-                return defaultWidth;
-            }
-            var per = 8;
-            var offset = 20;
-            var width = [];
-            if (typeof title == "string") {
-                width.push(title.length * 1.3);
-            }
-            if ($.isArray(datas)) {
-                $.each(datas, function (i, o) {
-                    var data = o[field];
-
-                    if (typeof data == "string") {
-                        width.push(data.UIWidth);
-                    } else {
-                        width.push(String(data).length);
-                    }
-                });
-            }
-            if (width.length > 0) {
-                var maxWidth = Math.max.apply("", width);
-                return maxWidth * per + offset;
-                //return maxWidth * (per - Math.round(maxWidth / 10)) + offset;
-            }
-
-
-            return defaultWidth;
-        }
 
         function Search(pageSize, pageIdx) {
 			$("#Msg").show();

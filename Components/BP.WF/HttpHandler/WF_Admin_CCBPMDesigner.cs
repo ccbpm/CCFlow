@@ -384,6 +384,9 @@ namespace BP.WF.HttpHandler
                 ht.Add("SysNo", SystemConfig.SysNo);
                 ht.Add("SysName", SystemConfig.SysName);
 
+                ht.Add("CustomerNo", SystemConfig.CustomerNo);
+                ht.Add("CustomerName", SystemConfig.CustomerName);
+
                 try
                 {
                     // 执行升级
@@ -496,7 +499,7 @@ namespace BP.WF.HttpHandler
                     return "err@您非管理员用户，不能登录.";
 
                 if (adminEmp.IsAdmin == false)
-                    return "err@您非管理员用户或已被禁用，不能登录.";
+                    return "err@您非管理员用户或已被禁用,不能登录,请联系管理员初始化账户.";
 
                 if (string.IsNullOrWhiteSpace(adminEmp.RootOfFlow) == true)
                     return "err@二级管理员用户没有设置流程树的权限..";

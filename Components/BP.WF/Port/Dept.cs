@@ -85,12 +85,87 @@ namespace BP.WF.Port
                 map.AddTBString(DeptAttr.Name, null,"名称", true, false, 0, 60, 200);
                 map.AddTBString(DeptAttr.ParentNo, null, "父节点编号", true, false, 0, 30, 40);
               //  map.AddTBString(DeptAttr.FK_Unit, "1", "隶属单位", false, false, 0, 50, 10);
+
+                RefMethod rm = new RefMethod();
+                rm.Title = "初始化子公司二级管理员";
+                rm.Warning = "设置为子公司后，系统就会在流程树上分配一个目录节点.";
+                rm.ClassMethodName = this.ToString() + ".SetSubInc";
+                rm.HisAttrs.AddTBString("No", null, "子公司管理员编号", true, false, 0, 100, 100);
+                map.AddRefMethod(rm);
                 
                 this._enMap = map;
                 return this._enMap;
             }
 		}
 		#endregion
+
+        public string SetSubInc(string userNo)
+        {
+            //设置流程树权限.
+            BP.WF.Template.FlowSort fs = new WF.Template.FlowSort();
+            fs.No = "Inc" + this.No;
+            if (fs.RetrieveFromDBSources() != 0)
+            {
+                //AdminEmp ae = new AdminEmp();
+                //int i = ae.Retrieve(AdminEmpAttr.RootOfFlow, "Inc" + this.No);
+                //if (i == 0)
+                //    return "info@该部门[" + this.No + "," + this.Name + "]已经被设置过了子公司，但是没有指定管理员.";
+                //else
+                //    return "info@该部门[" + this.No + "," + this.Name + "]已经被设置过了子公司，管理员为:" + ae.No + "," + ae.Name;
+            }
+
+            //设置二级管理员.
+            AdminEmp ad = new AdminEmp();
+            ad.No = userNo;
+            if (ad.RetrieveFromDBSources() == 0)
+            {
+                BP.Port.Emp emp = new BP.Port.Emp();
+                emp.No = userNo;
+                if (emp.RetrieveFromDBSources() == 0)
+                    return "err@用户编号错误:" + userNo;
+
+                ad.Copy(emp);
+                ad.Insert();
+            }
+
+            ad.No = userNo;
+            ad.RootOfDept = this.No;
+            ad.RootOfFlow = "Inc" + this.No;
+            ad.RootOfForm = "Inc" + this.No;
+            ad.UserType = 1;
+            ad.UseSta = 1;
+            ad.Update();
+
+
+            //设置流程树权限.
+            fs.Name = this.Name;
+            fs.ParentNo = "00";
+            fs.OrgNo = this.No;
+            fs.Idx = 999;
+            fs.Save();
+
+            //设置流程树权限.
+            BP.Sys.FrmTree ft = new Sys.FrmTree();
+            ft.No = "Inc" + this.No;
+            if (ft.RetrieveFromDBSources() == 0)
+            {
+                ft.Name = this.Name;
+                ft.ParentNo = "1";
+                // ft.OrgNo = this.No;
+                ft.Idx = 999;
+                ft.Insert();
+            }
+            else
+            {
+                ft.Name = this.Name;
+                ft.ParentNo = "1";
+                //  ft.OrgNo = this.No;
+                ft.Idx = 999;
+                ft.Update();
+            }
+
+            return "设置成功,["+ad.No+","+ad.Name+"]重新登录就可以看到.";
+        }
 	}
 	/// <summary>
 	///部门集合

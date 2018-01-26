@@ -11,6 +11,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using BP.En;
 using BP.DA;
@@ -1524,9 +1525,78 @@ namespace BP.Sys
                 myStream.Close();
             }
         }
+        public static void DownloadFileV4(string filepath, string tempName)
+        {
+            //File exportFile = null;
+            //FileInputStream fis = null;
+            //try
+            //{
+            //    FileInfo oldFile = new FileInfo(filepath);
+            //   // exportFile = FileEncrypt.dencryptNoDenc(oldFile); // 生成临时文件
+
+            //    var httpServletResponse = HttpContext.Current.Response;
+
+            //    FileStream servletOutputStream = File.OpenRead(oldFile.FullName);
+
+            //    string fileName= oldFile.Name;
+
+
+            //    httpServletResponse.AddHeader("Content-Disposition","attachment;filename="+fileName);
+            //    httpServletResponse.ContentType="application/x-download"; 
+
+
+            //    // 此处只写文件名exportFile.getName()，不需绝对路径
+
+            //    httpServletResponse.setHeader(
+            //                    "Content-Disposition",
+            //                    );
+            //    httpServletResponse.setContentLength((int)exportFile.length());
+            //    httpServletResponse.setContentType("application/x-download");
+            //    byte[] b = new byte[4096];
+            //    int i = 0;
+            //    fis = new java.io.FileInputStream(exportFile);
+            //    while ((i = fis.read(b)) > 0)
+            //    {
+            //        servletOutputStream.write(b, 0, i);
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.error(e);
+            //}
+            //finally
+            //{
+            //    try
+            //    {
+            //        if (fis != null)
+            //        {
+            //            fis.close();
+            //        }
+            //        if (exportFile != null && exportFile.exists())
+            //        {
+            //            exportFile.delete();
+            //        }
+            //    }
+            //    catch (Exception ce)
+            //    {
+            //        logger.error(ce);
+            //    }
+            //}
+            //FacesContext.getCurrentInstance().responseComplete();
+
+        }
+        public static void DownloadFileV1(string filepath, string tempName)
+        {
+            HttpContext.Current.Response.ContentType = "application/x-zip-compressed";
+            HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;filename="+tempName);
+
+            //指定编码 防止中文文件名乱码
+            HttpContext.Current.Response.HeaderEncoding = System.Text.Encoding.GetEncoding("gb2312");
+            HttpContext.Current.Response.TransmitFile(filepath);            
+
+        }
         public static void DownloadFileV3(string filepath, string tempName)
         {
-
             FileInfo fileInfo = new FileInfo(filepath);
             HttpContext.Current.Response.Clear();
             HttpContext.Current.Response.ClearContent();
@@ -1545,28 +1615,28 @@ namespace BP.Sys
         {
 
             FileInfo fileInfo = new FileInfo(filepath);
-            if (fileInfo.Exists)
+            if (fileInfo.Exists == false)
+                return;
+            byte[] buffer = new byte[102400];
+            HttpContext.Current.Response.Clear();
+            using (FileStream iStream = File.OpenRead(fileInfo.FullName))
             {
-                byte[] buffer = new byte[102400];
-                HttpContext.Current.Response.Clear();
-                using (FileStream iStream = File.OpenRead(fileInfo.FullName))
+                long dataLengthToRead = iStream.Length; //获取下载的文件总大小
+                //HttpContext.Current.Response.ContentType = "application/octet-stream"; //此方法不可以.
+                HttpContext.Current.Response.ContentType = "application/x-download";
+
+                HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;  filename=" +
+                                   HttpUtility.UrlEncode(tempName, System.Text.Encoding.UTF8));
+                while (dataLengthToRead > 0 && HttpContext.Current.Response.IsClientConnected)
                 {
-                    long dataLengthToRead = iStream.Length; //获取下载的文件总大小
+                    int lengthRead = iStream.Read(buffer, 0, Convert.ToInt32(102400));//'读取的大小
 
-                    HttpContext.Current.Response.ContentType = "application/octet-stream";
-                    HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment;  filename=" +
-                                       HttpUtility.UrlEncode(tempName, System.Text.Encoding.UTF8));
-                    while (dataLengthToRead > 0 && HttpContext.Current.Response.IsClientConnected)
-                    {
-                        int lengthRead = iStream.Read(buffer, 0, Convert.ToInt32(102400));//'读取的大小
-
-                        HttpContext.Current.Response.OutputStream.Write(buffer, 0, lengthRead);
-                        HttpContext.Current.Response.Flush();
-                        dataLengthToRead = dataLengthToRead - lengthRead;
-                    }
-                    HttpContext.Current.Response.Close();
-                    HttpContext.Current.Response.End();
+                    HttpContext.Current.Response.OutputStream.Write(buffer, 0, lengthRead);
+                    HttpContext.Current.Response.Flush();
+                    dataLengthToRead = dataLengthToRead - lengthRead;
                 }
+                HttpContext.Current.Response.Close();
+                HttpContext.Current.Response.End();
             }
         }
         public static void OpenWordDoc(string filepath, string tempName)

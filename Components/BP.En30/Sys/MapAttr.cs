@@ -1392,9 +1392,6 @@ namespace BP.Sys
                 map.AddTBString(MapAttrAttr.Name, null, "描述", true, false, 0, 200, 20);
                 map.AddTBString(MapAttrAttr.DefVal, null, "默认值", false, false, 0, 400, 20);
 
-             //   map.AddDDLSysEnum(MapAttrAttr.UIContralType, 0, "空件类型", true, false, MapAttrAttr.UIContralType, "@0=文本框@1=下拉框");
-             //   map.AddDDLSysEnum(MapAttrAttr.MyDataType, 0, "数据类型", true, false, MapAttrAttr.MyDataType,
-               //     "@1=文本(String)@2=整型(Int)@3=浮点(Float)@4=布尔@5=Double@6=AppDate@7=AppDateTime@8=AppMoney@9=AppRate");
 
                 map.AddTBInt(MapAttrAttr.UIContralType, 0, "控件", true, false);
                 map.AddTBInt(MapAttrAttr.MyDataType, 1, "数据类型", true, false);
@@ -1412,29 +1409,22 @@ namespace BP.Sys
                 map.AddTBString(MapAttrAttr.UIRefKey, null, "绑定的Key", true, false, 0, 30, 20);
                 map.AddTBString(MapAttrAttr.UIRefKeyText, null, "绑定的Text", true, false, 0, 30, 20);
 
-                //map.AddTBInt(MapAttrAttr.UIVisible, 1, "是否可见", true, true);
-                //map.AddTBInt(MapAttrAttr.UIIsEnable, 1, "是否启用", true, true);
-                //map.AddTBInt(MapAttrAttr.UIIsLine, 0, "是否单独栏显示", true, true);
 
-                map.AddBoolean(MapAttrAttr.UIVisible, true, "是否可见", true, true);
-                map.AddBoolean(MapAttrAttr.UIIsEnable, true, "是否启用", true, true);
-                map.AddBoolean(MapAttrAttr.UIIsLine, false, "是否单独栏显示", true, true);
-                map.AddBoolean(MapAttrAttr.UIIsInput, false, "是否必填字段", true, true);
+                map.AddTBInt(MapAttrAttr.UIVisible, 1, "是否可见", true, true);
+                map.AddTBInt(MapAttrAttr.UIIsEnable, 1, "是否启用", true, true);
+                map.AddTBInt(MapAttrAttr.UIIsLine, 0, "是否单独栏显示", true, true);
+                map.AddTBInt(MapAttrAttr.UIIsInput, 0, "是否必填字段", true, true);
 
-               // map.AddTBString(MapAttrAttr.AutoFullDoc, null, "自动填写内容", false, false, 0, 500, 20);
-               //// map.AddDDLSysEnum(MapAttrAttr.AutoFullWay, 0, "自动填写方式", true, false, MapAttrAttr.AutoFullWay,
-               //  //   "@0=不设置@1=本表单中数据计算@2=利用SQL自动填充@3=本表单中外键列@4=对从表的列求值");
-               // map.AddTBInt(MapAttrAttr.AutoFullWay, 0, "自动填写方式", true, false);
-                //      map.AddTBInt(MapAttrAttr.TabIdx, 0, "Tab顺序键", true, false);
+                map.AddTBInt(MapAttrAttr.IsRichText, 0, "富文本", true, true);
+                map.AddTBInt(MapAttrAttr.IsSupperText, 0, "富文本", true, true);
+                map.AddTBInt(MapAttrAttr.FontSize, 0, "富文本", true, true);
 
                 // 是否是签字，操作员字段有效。2010-09-23 增加。 @0=无@1=图片签名@2=CA签名.
                 map.AddTBInt(MapAttrAttr.IsSigan, 0, "签字？", true, false);
              
                 map.AddTBFloat(MapAttrAttr.X, 5, "X", true, false);
                 map.AddTBFloat(MapAttrAttr.Y, 5, "Y", false, false);
-
                 map.AddTBString(FrmBtnAttr.GUID, null, "GUID", true, false, 0, 128, 20);
-
                 map.AddTBString(MapAttrAttr.Tag, null, "标识（存放临时数据）", true, false, 0, 100, 20);
                 map.AddTBInt(MapAttrAttr.EditType, 0, "编辑类型", true, false);
 

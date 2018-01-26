@@ -2415,7 +2415,7 @@ namespace BP.WF
         /// <returns></returns>
         public DataSet DoExpFlowXmlTemplete(string path)
         {
-            if (!Directory.Exists(path))
+            if (Directory.Exists(path)==false)
                 Directory.CreateDirectory(path);
             DataSet ds = GetFlow(path);
             if (ds != null)
@@ -2505,6 +2505,7 @@ namespace BP.WF
             string sql = "SELECT * FROM WF_Flow WHERE No='" + this.No + "'";
             DataTable dt = DBAccess.RunSQLReturnTable(sql);
             dt.TableName = "WF_Flow";
+            dt.Columns.Remove(FlowAttr.FlowJson); //删除json
             ds.Tables.Add(dt);
 
             // 节点信息
@@ -5339,7 +5340,6 @@ namespace BP.WF
                                     case "autofulldoc":
                                         if (val == null)
                                             continue;
-
                                         val = val.Replace("ND" + oldFlowID, "ND" + flowID);
                                         break;
                                     default:

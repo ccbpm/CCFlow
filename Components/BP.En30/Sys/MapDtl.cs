@@ -103,6 +103,10 @@ namespace BP.Sys
         /// </summary>
         public const string ColAutoExp = "ColAutoExp";
         /// <summary>
+        /// 显示列
+        /// </summary>
+        public const string ShowCols = "ShowCols";
+        /// <summary>
         /// 是否可见
         /// </summary>
         public const string IsView = "IsView";

@@ -2261,11 +2261,20 @@ namespace BP.En
 		#region 对文件的处理.
 		public void SaveBigTxtToDB(string saveToField, string bigTxt)
 		{
-			string temp = BP.Sys.SystemConfig.PathOfTemp + "\\" + this.EnMap.PhysicsTable + this.PKVal + ".tmp";
-			DataType.WriteFile(temp, bigTxt);
+            try
+            {
+                string temp = BP.Sys.SystemConfig.PathOfTemp + "\\" + this.EnMap.PhysicsTable + this.PKVal + ".tmp";
+                DataType.WriteFile(temp, bigTxt);
 
-			//写入数据库.
-			SaveFileToDB(saveToField, temp);
+                //写入数据库.
+                SaveFileToDB(saveToField, temp);
+            }
+            catch (Exception ex)
+            {
+                string err = "err@在保存大字段文本出现错误，类:" + this.ToString() + " 属性:" + saveToField + ".";
+                err += "@有可能是您的目录权限不够，请设置dataUser目录的访问权限,系统错误@"+ex.Message;
+                throw new Exception(err);
+            }
 		}
 		/// <summary>
 		/// 保存文件到数据库

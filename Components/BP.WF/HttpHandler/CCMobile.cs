@@ -267,13 +267,9 @@ namespace BP.WF.HttpHandler
             ds.Tables.Add(dtTSpan);
 
             if (this.FK_Flow == null)
-            {
                 sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
-            }
             else
-            {
                 sql = "SELECT  TSpan as No, COUNT(WorkID) as Num FROM WF_GenerWorkFlow WHERE FK_Flow='" + this.FK_Flow + "' AND Emps LIKE '%" + WebUser.No + "%' GROUP BY TSpan";
-            }
 
             DataTable dtTSpanNum = BP.DA.DBAccess.RunSQLReturnTable(sql);
             foreach (DataRow drEnum in dtTSpan.Rows)
@@ -310,7 +306,6 @@ namespace BP.WF.HttpHandler
             #endregion
 
             #region 3、处理流程实例列表.
-
             GenerWorkFlows gwfs = new GenerWorkFlows();
             BP.En.QueryObject qo = new QueryObject(gwfs);
             qo.AddWhere(GenerWorkFlowAttr.Emps, " LIKE ", "%" + BP.Web.WebUser.No + "%");
@@ -329,7 +324,6 @@ namespace BP.WF.HttpHandler
             qo.addOrderBy("WFSta");
             qo.addOrderByDesc("RDT");
             qo.Top = 50;
-
 
             DataTable mydt = null;
             if (SystemConfig.AppCenterDBType == DBType.Oracle)

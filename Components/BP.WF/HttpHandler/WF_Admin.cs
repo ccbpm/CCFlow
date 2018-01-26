@@ -49,8 +49,12 @@ namespace BP.WF.HttpHandler
             //清除缓存.
             BP.Sys.SystemConfig.DoClearCash();
 
+
+            if (BP.Web.WebUser.IsAdmin == false )
+                return "err@您不是管理员，无法执行该操作.";
+
             // 让admin 登录.
-            BP.WF.Dev2Interface.Port_Login("admin");
+         //   BP.WF.Dev2Interface.Port_Login("admin");
 
             if (this.RefNo != null)
             {
@@ -61,6 +65,13 @@ namespace BP.WF.HttpHandler
             }
 
             FlowExt fl = new FlowExt(this.FK_Flow);
+
+            if (BP.Web.WebUser.No != "admin" && fl.Tester.Length <= 1)
+            {
+                string msg= "err@二级管理员[" + BP.Web.WebUser.Name + "]您好,您尚未为该流程配置测试人员.";
+                msg += "您需要在流程属性里的底部[设置流程发起测试人]的属性里，设置可以发起的测试人员,多个人员用逗号分开.";
+                return msg;
+            }
 
             /* 检查是否设置了测试人员，如果设置了就按照测试人员身份进入
              * 设置测试人员的目的是太多了人员影响测试效率.

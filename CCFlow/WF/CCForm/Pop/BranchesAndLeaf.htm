@@ -65,6 +65,16 @@
 		            }
 		        });
 		    }
+			function removeAllSelectedData() {
+				var globalSelectedRows = selectedRows;
+				if (!$.isArray(globalSelectedRows) || !$.isArray(selectedRows)) {
+		            return;
+		        }
+				for (var index = 0; index < globalSelectedRows.length; index++) {
+					Delete(AttrOfOper, oid, globalSelectedRows[index].No);
+				}
+				selectedRows = [];
+			}
 		    function loadSelectGrid(dbSrc, selectedRows) {
 
 		        //获得json.
@@ -78,8 +88,10 @@
 		        }
 
 		        // 绑定内容列表.
-		        $('#selectGrid').bootstrapTable("hideAllColumns");
-		        $('#selectGrid').bootstrapTable("showColumn", "_checkbox");
+				$('#selectGrid').bootstrapTable("hideAllColumns");
+				if (selectType != "0") {
+					$('#selectGrid').bootstrapTable("showColumn", "_checkbox");
+				}
 
 		        $.each(json[0], function (n, o) {
 					var column = $.grep(searchTableColumns, function (val) {
@@ -164,7 +176,6 @@
 		                //alert(data.nodeId);
 		            },
 		            onNodeSelected: function (event, data) {
-
 		                var myurl = replaceAll(treeClickUrl, "@Key", data.id);
 		                loadSelectGrid(myurl, global.selectedRows);
 
@@ -215,17 +226,22 @@
 		            return;
 		        }
 
-		        global.searchTableColumns = [{
-		            field: "_checkbox",
-		            checkbox: true,
-		            formatter: function (value, row, index) {
-		                if (row.checked) {
-		                    return {
-		                        "checked": true
-		                    };
-		                }
-		            }
-		        }];
+				global.selectType = mapExt.GetPara("SelectType");
+
+				global.searchTableColumns = [];
+				if (selectType != "0") {
+					global.searchTableColumns.push({
+						field: "_checkbox",
+						checkbox: true,
+						formatter: function (value, row, index) {
+							if (row.checked) {
+								return {
+									"checked": true
+								};
+							}
+						}
+					});
+				}
 
 		        //显示列的中文名称.
 		        if (typeof mapExt.Tag == "string") {
@@ -272,7 +288,7 @@
 		        loadTree(treeUrl, treeClickUrl, rootNo, global);
 
 		        // grid1
-		        $('#selectGrid').bootstrapTable({
+				var options = {
 		            striped: true,
 		            cache: false,
 		            sortOrder: "asc",
@@ -284,24 +300,33 @@
 		            detailView: false,
 		            height: $(document).height() / 3,
 		            uniqueId: "No",
-		            columns: searchTableColumns,
-		            "onCheck": function (row, element) {
-		                addSelectedData(global.selectedRows, [row]);
-		                loadViewGrid(global.selectedRows);
-		            },
-		            "onUncheck": function (row, element) {
-		                removeSelectedData(global.selectedRows, [row]);
-		                loadViewGrid(global.selectedRows);
-		            },
-		            "onCheckAll": function (rows) {
-		                addSelectedData(global.selectedRows, rows);
-		                loadViewGrid(global.selectedRows);
-		            },
-		            "onUncheckAll": function (rows) {
-		                removeSelectedData(global.selectedRows, rows);
-		                loadViewGrid(global.selectedRows);
-		            }
-		        });
+		            columns: searchTableColumns
+		        };
+				if (selectType == "0") {
+					options.onClickRow = function (row, element) {
+						removeAllSelectedData();
+						addSelectedData(global.selectedRows, [row]);
+						loadViewGrid(global.selectedRows);
+					}
+				} else {
+					options.onCheck = function (row, element) {
+						addSelectedData(global.selectedRows, [row]);
+						loadViewGrid(global.selectedRows);
+					};
+					options.onUncheck = function (row, element) {
+						removeSelectedData(global.selectedRows, [row]);
+						loadViewGrid(global.selectedRows);
+					};
+					options.onCheckAll = function (rows) {
+						addSelectedData(global.selectedRows, rows);
+						loadViewGrid(global.selectedRows);
+					};
+					options.onUncheckAll = function (rows) {
+						removeSelectedData(global.selectedRows, rows);
+						loadViewGrid(global.selectedRows);
+					};
+				}
+		        $('#selectGrid').bootstrapTable(options);
 
 		        // grid2
 		        $('#viewGrid').bootstrapTable({

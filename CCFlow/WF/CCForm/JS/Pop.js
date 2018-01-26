@@ -86,6 +86,12 @@ function PopBranchesAndLeaf(mapExt) {
     container.on("dblclick", function () {
         if (window.parent && window.parent.OpenBootStrapModal) {
             window.parent.OpenBootStrapModal(url, iframeId, title, width, height, "icon-edit", true, function () {
+				var selectType = mapExt.GetPara("SelectType");
+                //单选清空数据
+                if (selectType == "0") {
+                    //清空数据
+                    Delete_FrmEleDBs(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
+                }
                 var iframe = document.getElementById(iframeId);
                 if (iframe) {
                     var selectedRows = iframe.contentWindow.selectedRows;
@@ -94,7 +100,7 @@ function PopBranchesAndLeaf(mapExt) {
                         mtags.mtags("loadData", selectedRows);
                         $("#TB_" + mapExt.AttrOfOper).val(mtags.mtags("getText"));
 						// 单选复制当前表单
-						if (selectedRows.length == 1) {
+						if (selectType == "0" && selectedRows.length == 1) {
 							ValSetter(mapExt.Tag4, selectedRows[0].No);
 						}
                     }

@@ -82,9 +82,13 @@
 		        $('#selectGrid').bootstrapTable("showColumn", "_checkbox");
 
 		        $.each(json[0], function (n, o) {
-		            $('#selectGrid').bootstrapTable("showColumn", n);
+					var column = $.grep(searchTableColumns, function (val) {
+						return val.field == n;
+					});
+					if (column.length > 0) {
+						$('#selectGrid').bootstrapTable("showColumn", n);
+					}
 		        });
-
 
 		        if ($.isArray(selectedRows)) {
 		            $.each(json, function (i, o) {
@@ -211,7 +215,7 @@
 		            return;
 		        }
 
-		        var searchTableColumns = [{
+		        global.searchTableColumns = [{
 		            field: "_checkbox",
 		            checkbox: true,
 		            formatter: function (value, row, index) {

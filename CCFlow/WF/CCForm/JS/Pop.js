@@ -147,6 +147,15 @@ function PopBranchesAndLeaf_Deal() {
 
 }
 
+function ValSetter(tag4, key) {
+	if (!tag4 || !key) {
+		return;
+	}
+	tag4 = tag4.replace(/@Key/g, key).replace(/~/g, "'");
+	var dt = DBAccess.RunSQLReturnTable(tag4);
+	GenerFullAllCtrlsVal(dt)
+}
+
 //树干模式.
 function PopBranches(mapExt) {
     var target = $("#TB_" + mapExt.AttrOfOper);
@@ -196,6 +205,10 @@ function PopBranches(mapExt) {
                         });
                         //重新加载
                         Refresh_Mtags(mapExt.FK_MapData, mapExt.AttrOfOper, oid);
+						// 单选复制当前表单
+						if (selectType == "0" && nodes.length == 1) {
+							ValSetter(mapExt.Tag4, nodes[0].No);
+						}
                     }
                 }
             }, null, function () {

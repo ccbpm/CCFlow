@@ -29,6 +29,10 @@ namespace BP.WF.Template
         /// 节点ID
         /// </summary>
         public const string FK_Node = "FK_Node";
+        /// <summary>
+        /// 条件表达式
+        /// </summary>
+        public const string CondExp = "CondExp";
         #endregion
     }
     /// <summary>
@@ -98,7 +102,10 @@ namespace BP.WF.Template
                 map.AddDDLEntities(NodeYGFlowAttr.FK_Flow, null, "延续子流程", new Flows(), true);
                 map.AddDDLSysEnum(NodeYGFlowAttr.YGWorkWay, 1, "工作方式", true, true, NodeYGFlowAttr.YGWorkWay,
                     "@0=停止当前节点等待延续子流程运行完毕后该节点自动向下运行@1=启动延续子流程运行到下一步骤上去");
+
+                map.AddTBString(NodeYGFlowAttr.CondExp, null, "条件表达式", true, false, 0, 500, 20, true);
                 map.AddTBInt(NodeYGFlowAttr.Idx, 0, "显示顺序", true, false);
+
 
                 this._enMap = map;
                 return this._enMap;

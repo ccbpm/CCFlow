@@ -844,6 +844,7 @@ namespace BP.WF.HttpHandler
 
             if (pk != 0)
                 return FrmGener_Init();
+            MapDtl dtl = new MapDtl(this.EnsName);
 
             GEEntity en = new GEEntity(this.EnsName);
             if (BP.Sys.SystemConfig.IsBSsystem == true)
@@ -860,7 +861,7 @@ namespace BP.WF.HttpHandler
             en.SetValByKey("RefPK", this.RefPKVal);
             en.Insert();
 
-            return "url@DtlFrm.htm?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&OID=" + en.OID;
+            return "url@DtlFrm.htm?EnsName=" + this.EnsName + "&RefPKVal=" + this.RefPKVal + "&FrmType=" + (int)dtl.HisEditModel + "&OID=" + en.OID;
         }
 
         public string DtlFrm_Delete()

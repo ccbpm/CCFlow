@@ -1190,6 +1190,7 @@ namespace BP.WF.Template
                         lab.MyPK = BP.DA.DBAccess.GenerGUID();
                         lab.FK_MapData = attr.FK_MapData;
                         lab.Text = attr.Name;
+                        lab.FontName = "Arial";
                         lab.X = 40;
                         lab.Y = maxEnd;
                         lab.Insert();
@@ -1204,6 +1205,7 @@ namespace BP.WF.Template
                         lab.MyPK = BP.DA.DBAccess.GenerGUID();
                         lab.FK_MapData = attr.FK_MapData;
                         lab.Text = attr.Name;
+                        lab.FontName = "Arial";
                         lab.X = 350;
                         lab.Y = maxEnd;
                         lab.Insert();
@@ -1226,6 +1228,7 @@ namespace BP.WF.Template
                     lab.MyPK = BP.DA.DBAccess.GenerGUID();
                     lab.FK_MapData = dtl.FK_MapData;
                     lab.Text = dtl.Name;
+                    lab.FontName = "Arial";
                     lab.X = 40;
                     lab.Y = maxEnd;
                     lab.Insert();

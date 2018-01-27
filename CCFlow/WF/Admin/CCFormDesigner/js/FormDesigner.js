@@ -897,7 +897,7 @@ function figure_Template_Label(frmLab) {
     var y = ((frmLab.FontSize + 5) * getYByteLen(labelText)) / 2 + frmLab.Y;
 
     var t2 = new Text(labelText, x, y, frmLab.FontName, frmLab.FontSize);
-    console.log(t2)
+    
     y = ((frmLab.FontSize + t2.lineSpacing) * getYByteLen(labelText)) / 2 + frmLab.Y;
     t2 = new Text(labelText, x, y, frmLab.FontName, frmLab.FontSize);
     

@@ -10,7 +10,7 @@
 var colVisibleJsonStr = ''
 var jsonStr = '';
 var IsChange = false;
-var webUser=null;
+var webUser = null;
 //初始化函数
 $(function () {
 
@@ -70,24 +70,24 @@ $(function () {
 });
 
 function numonly(e) {
-	if (navigator.userAgent.indexOf("Firefox") > 0) {
-		var code;
-		if (window.event) {
-			code = event.keyCode;
-		} else {
-			code = e.which;
-		}
-		if (code != 8 && code != 9 && code != 13 && code != 16 && code != 17 && code != 18) {
-			if (code < 45 || code > 57) {
-				if (window.event) {
-					event.returnValue = false;
-				} else {
-					e.preventDefault();
-					return false;
-				}
-			}
-		}
-	}
+    if (navigator.userAgent.indexOf("Firefox") > 0) {
+        var code;
+        if (window.event) {
+            code = event.keyCode;
+        } else {
+            code = e.which;
+        }
+        if (code != 8 && code != 9 && code != 13 && code != 16 && code != 17 && code != 18) {
+            if (code < 45 || code > 57) {
+                if (window.event) {
+                    event.returnValue = false;
+                } else {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        }
+    }
 }
 
 //设置不可以用.
@@ -128,7 +128,7 @@ function SetHegiht() {
             //$("#divCCForm").height(parseFloat(frmHeight) + allHeight);
             $("#TDWorkPlace").height(parseFloat(frmHeight) + allHeight - 10);
         }
-       
+
     }
     catch (e) {
     }
@@ -138,12 +138,11 @@ function SetHegiht() {
 function DtlFrm(ensName, refPKVal, pkVal, frmType, InitPage) {
     // model=1 自由表单, model=2傻瓜表单.
     var pathName = document.location.pathname;
-	var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-	if (projectName.startsWith("/WF")) {
-		projectName = "";
-	}
-	var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmTyp=" + frmType + '&OID=' + pkVal;
- 
+    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+    if (projectName.startsWith("/WF")) {
+        projectName = "";
+    }
+    var url = projectName + '/WF/CCForm/DtlFrm.htm?EnsName=' + ensName + '&RefPKVal=' + refPKVal + "&FrmType=" + frmType + '&OID=' + pkVal;
     if (typeof ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog) === "function") {
         ((parent && parent.OpenEasyUiDialog) || OpenEasyUiDialog)(url, "editSubGrid", '编辑', 1000, 550, "icon-property", false, null, null, null, function () {
             if (typeof InitPage === "function") {
@@ -267,7 +266,7 @@ function GenerFrm() {
             catch (err) {
 
             }
-             
+
 
             if (isReadonly != "1") {
 
@@ -351,28 +350,28 @@ function GenerFrm() {
 
 // V
 function getMapExt(Sys_MapExt, KeyOfEn) {
-	var ext = {};
-	for (var p in Sys_MapExt) {
-		if (KeyOfEn == Sys_MapExt[p].AttrOfOper) {
-			ext = Sys_MapExt[p];
-			break;
-		}
-	}
-	return ext;
+    var ext = {};
+    for (var p in Sys_MapExt) {
+        if (KeyOfEn == Sys_MapExt[p].AttrOfOper) {
+            ext = Sys_MapExt[p];
+            break;
+        }
+    }
+    return ext;
 }
 
 //打开从表的从表
 function DtlFoolFrm(dtl, refPK, refOID) {
 
     var url = 'DtlFoolFrm.htm?EnsDtl=' + dtl + '&RefPK=' + refPK + '&RefOID=' + refOID;
-    alert('这里没有实现打开iurl '+url);
+    alert('这里没有实现打开iurl ' + url);
 
     //引入了刘贤臣写的东西，一直缺少东西.可否改进一下，弄个稳定的？ @代国强.
     OpenEasyUiDialog(url, "eudlgframe", "编辑", 600, 450, "icon-edit", true, null, null, null, function () {
         //   window.location.href = window.location.href;
     });
 
-   // window.open(url);
+    // window.open(url);
     //alert('打开从表卡片');
 }
 
@@ -412,7 +411,7 @@ function Save() {
         }
     });
 }
-  
+
 
 //以下是软通写的
 //初始化网页URL参数
@@ -430,13 +429,13 @@ function initPageParam() {
     var oid = GetQueryString("WorkID");
     if (oid == null)
         oid = GetQueryString("OID");
-    pageData.OID = oid; 
+    pageData.OID = oid;
 
     pageData.IsRead = GetQueryString("IsRead");
     pageData.T = GetQueryString("T");
     pageData.Paras = GetQueryString("Paras");
-    pageData.IsReadonly = GetQueryString("IsReadonly");//如果是IsReadonly，就表示是查看页面，不是处理页面
-    pageData.IsStartFlow = GetQueryString("IsStartFlow");//是否是启动流程页面 即发起流程
+    pageData.IsReadonly = GetQueryString("IsReadonly"); //如果是IsReadonly，就表示是查看页面，不是处理页面
+    pageData.IsStartFlow = GetQueryString("IsStartFlow"); //是否是启动流程页面 即发起流程
 
     pageData.DoType1 = GetQueryString("DoType")//View
     pageData.FK_MapData = GetQueryString("FK_MapData")//View
@@ -447,7 +446,7 @@ function initPageParam() {
 function pageParamToUrl() {
     var paramUrlStr = '';
     for (var param in pageData) {
-        
+
         var val = pageData[param];
         if (val == null || val == undefined)
             continue;
@@ -456,7 +455,7 @@ function pageParamToUrl() {
     }
     return paramUrlStr;
 }
-  
+
 //设置附件为只读
 function setAttachDisabled() {
     //附件设置
@@ -467,8 +466,8 @@ function setAttachDisabled() {
         }
     })
 }
-  
-   
+
+
 //设置表单元素不可用
 function setFormEleDisabled() {
     //文本框等设置为不可用
@@ -526,7 +525,7 @@ function ShowViewNodeAth(athLab, atParamObj, src) {
     athFormTitle.text("上传附件：" + athLab);
     athModal.modal().show();
 }
- 
+
 //AtPara  @PopValSelectModel=0@PopValFormat=0@PopValWorkModel=0@PopValShowModel=0
 function GepParaByName(name, atPara) {
     var params = atPara.split('@');
@@ -550,14 +549,14 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
         if (data == undefined) {
             alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
             return;
-        } 
+        }
 
-		$.each(data, function (i, obj) {
-			operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-		});
-	}
-        
-  
+        $.each(data, function (i, obj) {
+            operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+        });
+    }
+
+
     //枚举类型.
     if (mapAttr.LGType == 1) {
         var enums = frmData.Sys_Enum;
@@ -575,27 +574,27 @@ function InitDDLOperation(frmData, mapAttr, defVal) {
     }
 
     //外部数据源类型 MyFlowGener.js.InitDDLOperation
-	if (mapAttr.LGType == 0) {
-		var fn;
-		try {
-			if (mapAttr.UIBindKey) {
-				fn = eval(mapAttr.UIBindKey);
-			}
-		} catch (e) {
-		}
-		if (typeof fn == "function") {
-		    $.each(fn.call(), function (i, obj) {
-		        operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
-		    });
-		} else if (typeof CommonHandler == "function") {
-		    CommonHandler.call("", mapAttr.UIBindKey, function (data) {
-		        GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
-		    })
-		} else {
-		    alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
-		    //alert('没有获得约定的数据源.');
-		}
-	}
+    if (mapAttr.LGType == 0) {
+        var fn;
+        try {
+            if (mapAttr.UIBindKey) {
+                fn = eval(mapAttr.UIBindKey);
+            }
+        } catch (e) {
+        }
+        if (typeof fn == "function") {
+            $.each(fn.call(), function (i, obj) {
+                operations += "<option " + (obj.No == defVal ? " selected='selected' " : "") + " value='" + obj.No + "'>" + obj.Name + "</option>";
+            });
+        } else if (typeof CommonHandler == "function") {
+            CommonHandler.call("", mapAttr.UIBindKey, function (data) {
+                GenerBindDDL("DDL_" + mapAttr.KeyOfEn, data, "No", "Name");
+            })
+        } else {
+            alert('没有获得约定的数据源..' + mapAttr.KeyOfEn + " " + mapAttr.UIBindKey);
+            //alert('没有获得约定的数据源.');
+        }
+    }
     return operations;
 }
 
@@ -675,20 +674,20 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
                         break;
                 }
                 break;
-            //下拉框 
+            //下拉框  
             case "SELECT":
                 formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
                 break;
 
-            //对于复选下拉框获取值得方法 
-//                if ($('[data-id=' + name + ']').length > 0) {
-//                    var val = $(disabledEle).val().join(',');
-//                    formArrResult.push(name + '=' + val);
-//                } else {
-//                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val());
-//                }
-//                break;
-            //文本区域 
+            //对于复选下拉框获取值得方法  
+            //                if ($('[data-id=' + name + ']').length > 0) { 
+            //                    var val = $(disabledEle).val().join(','); 
+            //                    formArrResult.push(name + '=' + val); 
+            //                } else { 
+            //                    formArrResult.push(name + '=' + $(disabledEle).children('option:checked').val()); 
+            //                } 
+            //                break; 
+            //文本区域  
             case "TEXTAREA":
                 formArrResult.push(name + '=' + $(disabledEle).val());
                 break;
@@ -745,7 +744,7 @@ function getFormData(isCotainTextArea, isCotainUrlParam) {
         formdataResultStr = formdataResultStr + ele + '=' + formDataResultObj[ele] + '&';
     }
     return formdataResultStr;
-} 
+}
 
 //根据下拉框选定的值，弹出提示信息  绑定那个元素显示，哪个元素不显示  
 function ShowNoticeInfo() {
@@ -755,7 +754,7 @@ function ShowNoticeInfo() {
     $("input[type=radio],select").bind('change', function (obj) {
         var needShowDDLids = [];
         var methodVal = obj.target.value;
-        
+
         for (var j = 0; j < data.length; j++) {
             var value = data[j].IntKey;
             var noticeInfo = data[j].Tip;
@@ -793,7 +792,7 @@ function ShowNoticeInfo() {
                             eleDiv = ele.parent();
                         }
                         switch (fieldConArr[1]) {
-                            case "1"://可用
+                            case "1": //可用
                                 if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
                                     needShowDDLids.push(ele[0].id);
                                 }
@@ -804,7 +803,7 @@ function ShowNoticeInfo() {
 
 
                                 break;
-                            case "2"://可见
+                            case "2": //可见
                                 if (labDiv.css('display').toUpperCase() == "NONE" && ele[0].id.indexOf('DDL_') == 0) {
                                     needShowDDLids.push(ele[0].id);
                                 }
@@ -812,7 +811,7 @@ function ShowNoticeInfo() {
                                 labDiv.css('display', 'block');
                                 eleDiv.css('display', 'block');
                                 break;
-                            case "3"://不可见
+                            case "3": //不可见
                                 labDiv.css('display', 'none');
                                 eleDiv.css('display', 'none');
                                 break;
@@ -1089,7 +1088,7 @@ function dealWithUrl(src) {
     }
     return src;
 }
- 
+
 
 //20160106 by 柳辉
 //获取页面参数
@@ -1112,7 +1111,7 @@ function GetPageParas(sArgName) {
     }
     return retval;
 }
- 
+
 // 设置值.
 function SetCtrlVal(ctrlID, val) {
     document.getElementById('TB_' + ctrlID).value = val;
@@ -1199,79 +1198,6 @@ function testExpression(exp) {
         return false;
     }
     return true;
-}
-
-/**
-* 表单计算(包括普通表单以及从表弹出页表单)
-*/
-function calculator(Sys_MapExt) {
-    $.each(Sys_MapExt, function (i, o) {
-        if (o.ExtType == "AutoFull") {
-            if (!testExpression(o.Doc)) {
-                console.log("MyPk: " + o.MyPK + ", 表达式: '" + o.Doc + "'格式错误");
-                return false;
-            }
-            var targets = [];
-            var index = -1;
-            for (var i = 0; i < o.Doc.length; i++) {	// 对于复杂表达式需要重点测试
-                var c = o.Doc.charAt(i);
-                if (c == "(") {
-                    index++;
-                } else if (c == ")") {
-                    targets.push(o.Doc.substring(index + 1, i));
-                    i++;
-                    index = i;
-                } else if (/[\+\-|*\/]/.test(c)) {
-                    targets.push(o.Doc.substring(index + 1, i));
-                    index = i;
-                }
-            }
-            if (index + 1 < o.Doc.length) {
-                targets.push(o.Doc.substring(index + 1, o.Doc.length));
-            }
-            //
-            var expression = {
-                "judgement": [],
-                "execute_judgement": [],
-                "calculate": o.Doc
-            };
-            $.each(targets, function (i, o) {
-                var target = o.replace("@", "");
-                var element = "$(':input[name=TB_" + target + "]')";
-                expression.judgement.push(element + ".length == 0");
-                expression.execute_judgement.push("!isNaN(parseFloat(" + element + ".val()))");
-                expression.calculate = expression.calculate.replace(o, "parseFloat(" + element + ".val())");
-            });
-            (function (targets, expression, resultTarget, pk, expDefined) {
-                $.each(targets, function (i, o) {
-                    var target = o.replace("@", "");
-                    $(":input[name=TB_" + target + "]").bind("change", function () {
-                        var evalExpression = " var result = ''; ";
-                        if (expression.judgement.length > 0) {
-                            evalExpression += " if ( " + expression.judgement.join(" || ") + " ) { ";
-                            evalExpression += " 	console.log(\"MyPk: " + pk + ", 表达式: '" + expDefined + "' " + "中有对象在当前页面不存在\");"
-                            evalExpression += " } ";
-                        }
-                        if (expression.execute_judgement.length > 0) {
-                            evalExpression += " else if ( " + expression.execute_judgement.join(" && ") + " ) { ";
-                        }
-                        if (expression.calculate.length > 0) {
-                            evalExpression += " 	result = " + expression.calculate + "; ";
-                        }
-                        if (expression.execute_judgement.length > 0) {
-                            evalExpression += " } ";
-                        }
-                        eval(evalExpression);
-                        $(":input[name=TB_" + resultTarget + "]").val(typeof result == "undefined" ? "" : result);
-                    });
-                    if (i == 0) {
-                        $(":input[name=TB_" + target + "]").trigger("change");
-                    }
-                });
-            })(targets, expression, o.AttrOfOper, o.MyPK, o.Doc);
-            $(":input[name=TB_" + o.AttrOfOper + "]").attr("disabled", true);
-        }
-    });
 }
 
  

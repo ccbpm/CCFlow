@@ -51,9 +51,10 @@
             var headTHs = [];
             var tableMinWidth = 0;
             var th = $("<th></th>");
+            var rowShowModel = sys_MapDtl.EditModel;
             //有新增权限，添加按钮
             if (sys_MapDtl.IsInsert == 1) {
-                th = $("<th><img src='../Img/Btn/Add.gif' style='cursor: pointer;' name='insertBtn' onclick='insertRow(1)' /></th>");
+                th = $("<th><img src='../Img/Btn/Add.gif' style='cursor: pointer;' name='insertBtn' onclick='insertRow(" + rowShowModel + ")' /></th>");
             }
             th.css('width', '30px');
             threadTr.append(th);
@@ -97,7 +98,7 @@
                 //添加操作列，删除、编辑
                 var optionTD = $("<td style='width:80px;'></td>");
                 if (sys_MapDtl.IsUpdate == 1) {
-                    var optionEdit = $("<img src='../Img/Btn/Edit.gif' onclick='updateRow(" + dataObj.OID + ", 1)' class='updateRow' titile='修改' style='cursor:pointer;'/>");
+                    var optionEdit = $("<img src='../Img/Btn/Edit.gif' onclick='updateRow(" + dataObj.OID + ", " + rowShowModel + ")' class='updateRow' titile='修改' style='cursor:pointer;'/>");
                     optionTD.append(optionEdit);
                     optionTD.append("&nbsp;&nbsp;");       
                 }
@@ -342,7 +343,7 @@
         }
         //插入行.
         function insertRow(EditModel) {
-            //判断插入行的模式 =0行模式. 1=自由表单卡片模式 2=傻瓜表单卡片模式.
+            //判断插入行的模式 =0行模式. 1=傻瓜表单卡片模式 2=自由表单卡片模式.
             if (EditModel != 0 && window.parent) {
                 var ensName = GetQueryString("EnsName");
                 var refPKVal = GetQueryString("RefPKVal");

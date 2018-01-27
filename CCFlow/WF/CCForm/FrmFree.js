@@ -9,8 +9,6 @@ function GenerFreeFrm(mapData, frmData) {
         $('#CCForm').append(eleHtml);
     }
 
-	calculator(frmData.Sys_MapExt);
-
     //循环FrmLab
     for (var i in frmData.Sys_FrmLab) {
         var frmLab = frmData.Sys_FrmLab[i];

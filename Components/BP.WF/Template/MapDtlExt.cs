@@ -1060,6 +1060,15 @@ namespace BP.WF.Template
                 rm.Target = "_blank";
                 map.AddRefMethod(rm);
 
+                rm = new RefMethod();
+                rm.Title = "设计自由表单"; // "设计表单";
+                rm.ClassMethodName = this.ToString() + ".DFreeFrm";
+                rm.Icon = "/WF/Img/Setting.png";
+                rm.Visable = true;
+                rm.RefMethodType = RefMethodType.LinkeWinOpen;
+                rm.Target = "_blank";
+                map.AddRefMethod(rm);
+
 
                 rm = new RefMethod();
                 rm.GroupName = "实验中的功能";
@@ -1144,6 +1153,92 @@ namespace BP.WF.Template
         public string DFoolFrm()
         {
             string url = "../../Admin/FoolFormDesigner/Designer.htm?FK_MapData=" + this.No + "&FromDtl=1&IsFirst=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
+            return url;
+        }
+
+        /// <summary>
+        /// 设计自由表单
+        /// </summary>
+        /// <returns></returns>
+        public string DFreeFrm()
+        {
+            FrmLabs labs = new Sys.FrmLabs(this.No);
+            if (labs.Count == 0)
+            {
+                //进行初始化控件位置及标签
+                MapData md = new MapData();
+                md.No = this.No;
+                md.RetrieveFromDBSources();
+                float maxEnd = 200;
+                bool isLeft = true;
+
+                #region 字段顺序调整
+                MapAttrs mapAttrs = new Sys.MapAttrs(md.No);
+                foreach (MapAttr attr in mapAttrs)
+                {
+                    if (attr.UIVisible == false)
+                        continue;
+
+                    //生成lab.
+                    FrmLab lab = null;
+                    if (isLeft == true)
+                    {
+                        maxEnd = maxEnd + 40;
+                        /* 是否是左边 */
+                        lab = new FrmLab();
+                        lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                        lab.FK_MapData = attr.FK_MapData;
+                        lab.Text = attr.Name;
+                        lab.X = 40;
+                        lab.Y = maxEnd;
+                        lab.Insert();
+
+                        attr.X = lab.X + 80;
+                        attr.Y = maxEnd;
+                        attr.Update();
+                    }
+                    else
+                    {
+                        lab = new FrmLab();
+                        lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                        lab.FK_MapData = attr.FK_MapData;
+                        lab.Text = attr.Name;
+                        lab.X = 350;
+                        lab.Y = maxEnd;
+                        lab.Insert();
+
+                        attr.X = lab.X + 80;
+                        attr.Y = maxEnd;
+                        attr.Update();
+                    }
+                    isLeft = !isLeft;
+                }
+                #endregion
+
+                #region 明细表重置排序
+                MapDtls mapDtls = new Sys.MapDtls(this.No);
+                foreach (MapDtl dtl in mapDtls)
+                {
+                    maxEnd = maxEnd + 40;
+                    /* 是否是左边 */
+                    FrmLab lab = new FrmLab();
+                    lab.MyPK = BP.DA.DBAccess.GenerGUID();
+                    lab.FK_MapData = dtl.FK_MapData;
+                    lab.Text = dtl.Name;
+                    lab.X = 40;
+                    lab.Y = maxEnd;
+                    lab.Insert();
+
+                    dtl.X = lab.X + 80;
+                    dtl.Y = maxEnd;
+                    dtl.Update();
+                    maxEnd = maxEnd + dtl.H;
+                }
+                #endregion
+
+                md.ResetMaxMinXY();
+            }
+            string url = "../../Admin/CCFormDesigner/FormDesigner.htm?FK_MapData=" + this.No + "&FromDtl=1&UserNo=" + BP.Web.WebUser.No + "&SID=" + Web.WebUser.SID + "&AppCenterDBType=" + BP.DA.DBAccess.AppCenterDBType + "&CustomerNo=" + BP.Sys.SystemConfig.CustomerNo;
             return url;
         }
 

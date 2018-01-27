@@ -790,11 +790,11 @@ namespace BP.Sys
         {
             get
             {
-                return (EditModel)this.GetValIntByKey(MapDtlAttr.ListShowModel);
+                return (EditModel)this.GetValIntByKey(MapDtlAttr.EditModel);
             }
             set
             {
-                this.SetValByKey(MapDtlAttr.ListShowModel, (int)value);
+                this.SetValByKey(MapDtlAttr.EditModel, (int)value);
             }
         }
         /// <summary>

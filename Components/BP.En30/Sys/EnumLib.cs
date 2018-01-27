@@ -6,6 +6,20 @@ using System.Text;
 namespace BP.Sys
 {
     /// <summary>
+    /// 从表显示模式
+    /// </summary>
+    public enum ListShowModel
+    {
+        /// <summary>
+        /// 表格模式
+        /// </summary>
+        Table,
+        /// <summary>
+        /// 傻瓜表单模式
+        /// </summary>
+        Card
+    }
+    /// <summary>
     /// 从表显示方式
     /// </summary>
     public enum EditModel

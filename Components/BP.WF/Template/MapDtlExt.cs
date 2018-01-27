@@ -956,8 +956,7 @@ namespace BP.WF.Template
                 // 为浙商银行设置从表打开.翻译.
                 map.AddDDLSysEnum(MapDtlAttr.ListShowModel, 0, "列表数据显示格式", true, true,MapDtlAttr.ListShowModel, "@0=表格@1=卡片");
 
-                map.AddDDLSysEnum(MapDtlAttr.EditModel, 0, "编辑数据方式", true, true, MapDtlAttr.EditModel, "@0=无@1=傻瓜表单@2=自由表单");
-
+                map.AddDDLSysEnum(MapDtlAttr.EditModel, 0, "编辑数据方式", true, true, MapDtlAttr.EditModel, "@0=表格模式@1=傻瓜表单@2=自由表单");
                 map.SetHelperAlert(MapDtlAttr.EditModel, "格式为:第1种类型就要新建行,其他类型新建的时候弹出卡片.");
 
                 //map.AddTBFloat(MapDtlAttr.X, 5, "距左", false, false);
